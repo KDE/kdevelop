@@ -71,10 +71,10 @@ class MemoryRangeSelector : public QWidget
         l->addLayout(formLayout);
 
         startAddressLineEdit = new QLineEdit(this);
-        formLayout->addRow(i18n("Start:"), startAddressLineEdit);
+        formLayout->addRow(i18nc("@label:textbox", "Start:"), startAddressLineEdit);
 
         amountLineEdit = new QLineEdit(this);
-        formLayout->addRow(i18n("Amount:"), amountLineEdit);
+        formLayout->addRow(i18nc("@label:textbox", "Amount:"), amountLineEdit);
 
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         l->addWidget(buttonBox);
@@ -101,7 +101,7 @@ MemoryView::MemoryView(QWidget* parent)
     m_memViewView(nullptr),
     m_debuggerState(0)
 {
-    setWindowTitle(i18n("Memory view"));
+    setWindowTitle(i18nc("@title:window", "Memory View"));
 
     initWidget();
 
@@ -267,7 +267,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
     bool app_running = !(m_debuggerState & s_appNotStarted);
 
-    QAction* reload = menu.addAction(i18n("&Reload"));
+    QAction* reload = menu.addAction(i18nc("@action::inmenu", "&Reload"));
     reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reload->setEnabled(app_running && !m_memData.isEmpty() );
 
@@ -276,25 +276,25 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     if (m_memViewModel && m_memViewView)
     {
         // make Format menu with action group
-        QMenu* formatMenu = menu.addMenu(i18n("&Format"));
+        QMenu* formatMenu = menu.addMenu(i18nc("@title:menu", "&Format"));
         formatGroup = new QActionGroup(formatMenu);
 
-        QAction *binary = formatGroup->addAction(i18n("&Binary"));
+        QAction *binary = formatGroup->addAction(i18nc("@item:inmenu display format", "&Binary"));
         binary->setData(Okteta::ByteArrayColumnView::BinaryCoding);
         binary->setShortcut(Qt::Key_B);
         formatMenu->addAction(binary);
 
-        QAction *octal = formatGroup->addAction(i18n("&Octal"));
+        QAction *octal = formatGroup->addAction(i18nc("@item:inmenu display format", "&Octal"));
         octal->setData(Okteta::ByteArrayColumnView::OctalCoding);
         octal->setShortcut(Qt::Key_O);
         formatMenu->addAction(octal);
 
-        QAction *decimal = formatGroup->addAction(i18n("&Decimal"));
+        QAction *decimal = formatGroup->addAction(i18nc("@item:inmenu display format", "&Decimal"));
         decimal->setData(Okteta::ByteArrayColumnView::DecimalCoding);
         decimal->setShortcut(Qt::Key_D);
         formatMenu->addAction(decimal);
 
-        QAction *hex = formatGroup->addAction(i18n("&Hexadecimal"));
+        QAction *hex = formatGroup->addAction(i18nc("@item:inmenu display format", "&Hexadecimal"));
         hex->setData(Okteta::ByteArrayColumnView::HexadecimalCoding);
         hex->setShortcut(Qt::Key_H);
         formatMenu->addAction(hex);
@@ -308,35 +308,35 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
 
 
         // make Grouping menu with action group
-        QMenu* groupingMenu = menu.addMenu(i18n("&Grouping"));
+        QMenu* groupingMenu = menu.addMenu(i18nc("@title:menu", "&Grouping"));
         groupingGroup = new QActionGroup(groupingMenu);
 
-        QAction *group0 = groupingGroup->addAction(i18n("&0"));
+        QAction *group0 = groupingGroup->addAction(i18nc("@item:inmenu no byte grouping", "&0"));
         group0->setData(0);
         group0->setShortcut(Qt::Key_0);
         groupingMenu->addAction(group0);
 
-        QAction *group1 = groupingGroup->addAction(i18n("&1"));
+        QAction *group1 = groupingGroup->addAction(i18nc("@item:inmenu byte group size", "&1"));
         group1->setData(1);
         group1->setShortcut(Qt::Key_1);
         groupingMenu->addAction(group1);
 
-        QAction *group2 = groupingGroup->addAction(i18n("&2"));
+        QAction *group2 = groupingGroup->addAction(i18nc("@item:inmenu byte group size", "&2"));
         group2->setData(2);
         group2->setShortcut(Qt::Key_2);
         groupingMenu->addAction(group2);
 
-        QAction *group4 = groupingGroup->addAction(i18n("&4"));
+        QAction *group4 = groupingGroup->addAction(i18nc("@item:inmenu byte group size", "&4"));
         group4->setData(4);
         group4->setShortcut(Qt::Key_4);
         groupingMenu->addAction(group4);
 
-        QAction *group8 = groupingGroup->addAction(i18n("&8"));
+        QAction *group8 = groupingGroup->addAction(i18nc("@item:inmenu byte group size", "&8"));
         group8->setData(8);
         group8->setShortcut(Qt::Key_8);
         groupingMenu->addAction(group8);
 
-        QAction *group16 = groupingGroup->addAction(i18n("1&6"));
+        QAction *group16 = groupingGroup->addAction(i18nc("@item:inmenu byte group size", "1&6"));
         group16->setData(16);
         group16->setShortcut(Qt::Key_6);
         groupingMenu->addAction(group16);
@@ -349,15 +349,15 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
         }
     }
 
-    QAction* write = menu.addAction(i18n("Write changes"));
+    QAction* write = menu.addAction(i18nc("@action:inmenu", "Write Changes"));
     write->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     write->setEnabled(app_running && m_memViewView && m_memViewView->isModified());
 
-    QAction* range = menu.addAction(i18n("Change memory range"));
+    QAction* range = menu.addAction(i18nc("@action:inmenu", "Change Memory Range"));
     range->setEnabled(app_running && !m_rangeSelector->isVisible());
     range->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
 
-    QAction* close = menu.addAction(i18n("Close this view"));
+    QAction* close = menu.addAction(i18nc("@action:inmenu", "Close View"));
     close->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
 
 
@@ -424,12 +424,12 @@ MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* p
 : QWidget(parent)
 {
     setWindowIcon(QIcon::fromTheme(QStringLiteral("server-database"), windowIcon()));
-    setWindowTitle(i18n("Memory viewer"));
+    setWindowTitle(i18nc("@title:window", "Memory Viewer"));
 
     auto * newMemoryViewerAction = new QAction(this);
     newMemoryViewerAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    newMemoryViewerAction->setText(i18n("New memory viewer"));
-    newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer."));
+    newMemoryViewerAction->setText(i18nc("@action", "New Memory Viewer"));
+    newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer"));
     newMemoryViewerAction->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
     connect(newMemoryViewerAction, &QAction::triggered, this , &MemoryViewerWidget::slotAddMemoryView);
     addAction(newMemoryViewerAction);

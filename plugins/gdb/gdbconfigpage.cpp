@@ -105,7 +105,7 @@ void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* )
 
 QString GdbConfigPage::title() const
 {
-    return i18n( "GDB Configuration" );
+    return i18nc("@title:tab", "GDB Configuration");
 }
 
 

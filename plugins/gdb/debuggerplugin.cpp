@@ -125,11 +125,11 @@ void CppDebuggerPlugin::setupToolViews()
     this, QStringLiteral("org.kdevelop.debugger.ConsoleView"),Qt::BottomDockWidgetArea);
 
     core()->uiController()->addToolView(
-        i18n("Disassemble/Registers"),
+        i18nc("@title:window", "Disassemble/Registers"),
         disassemblefactory);
 
     core()->uiController()->addToolView(
-        i18n("GDB"),
+        i18nc("@title:window", "GDB"),
         gdbfactory);
 
 #ifndef KDEV_WITH_MEMVIEW
@@ -138,7 +138,7 @@ void CppDebuggerPlugin::setupToolViews()
     memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget, CppDebuggerPlugin>(
     this, QStringLiteral("org.kdevelop.debugger.MemoryView"), Qt::BottomDockWidgetArea);
     core()->uiController()->addToolView(
-        i18n("Memory"),
+        i18nc("@title:window", "Memory"),
         memoryviewerfactory);
 #endif
 }

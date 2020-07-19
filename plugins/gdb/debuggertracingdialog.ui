@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Tracing Configuration</string>
+   <string comment="@title:window">Tracing Configuration</string>
   </property>
   <layout class="QGridLayout">
    <item row="4" column="0" colspan="2">
@@ -20,7 +20,7 @@
       <bool>false</bool>
      </property>
      <property name="whatsThis">
-      <string>&lt;b&gt;Custom format string&lt;/b&gt;
+      <string comment="@info:whatsthis">&lt;b&gt;Custom format string&lt;/b&gt;
 &lt;p&gt;Specify a C-style format string that will be used when printing the chosen expression. For example:
 &lt;p align=&quot;center&quot;&gt; &lt;tt&gt;Tracepoint 1: g = %d&lt;/tt&gt;&lt;/p&gt;
 If custom format string is not enabled, names and values of all expressions will be printed, using &quot;%d&quot; as format specifier for all expressions.</string>
@@ -33,7 +33,7 @@ If custom format string is not enabled, names and values of all expressions will
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Expressions to print:</string>
+      <string comment="@label">Expressions to print:</string>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -43,11 +43,11 @@ If custom format string is not enabled, names and values of all expressions will
    <item row="0" column="0" colspan="2">
     <widget class="QCheckBox" name="enable">
      <property name="whatsThis">
-      <string>&lt;b&gt;Enable tracing&lt;/b&gt;
+      <string comment="@info:whatthis">&lt;b&gt;Enable tracing&lt;/b&gt;
 &lt;p&gt;Tracing is a mechanism to automatically print values of the chosen expressions and continue execution when breakpoint is hit. You can think of it as printf debugging that does not require modifying the source.&lt;/p&gt;</string>
      </property>
      <property name="text">
-      <string>Enable tracing</string>
+      <string comment="@option:check">Enable tracing</string>
      </property>
     </widget>
    </item>
@@ -57,7 +57,7 @@ If custom format string is not enabled, names and values of all expressions will
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Custom format string</string>
+      <string comment="@option:check">Custom format string</string>
      </property>
     </widget>
    </item>

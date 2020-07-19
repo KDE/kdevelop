@@ -26,13 +26,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Debugger</string>
+      <string comment="@title:group">Debugger</string>
      </property>
      <layout class="QFormLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="gdbPath_label">
         <property name="text">
-         <string>Debugger e&amp;xecutable:</string>
+         <string comment="@label:chooser">Debugger e&amp;xecutable:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -45,26 +45,23 @@
       <item row="0" column="1">
        <widget class="KUrlRequester" name="kcfg_gdbPath" native="true">
         <property name="toolTip">
-         <string>Gdb executable</string>
+         <string comment="@info:tooltip">Gdb executable</string>
         </property>
         <property name="whatsThis">
-         <string>To run &quot;gdb&quot; executable from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
+         <string comment="@info:whatsthis">To run &quot;gdb&quot; executable from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
         </property>
         <property name="placeholderText" stdset="0">
-         <string>Override path to gdb executable</string>
+         <string comment="@info:placeholder">Override path to gdb executable...</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="debuggingShell_label">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>She&amp;ll script:</string>
+         <string comment="@label:chooser">She&amp;ll script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -77,10 +74,7 @@
       <item row="1" column="1">
        <widget class="KUrlRequester" name="kcfg_debuggingShell" native="true">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="whatsThis">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -90,7 +84,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Options</string>
+      <string comment="@title:group">Options</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -99,7 +93,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Display static &amp;members:</string>
+         <string comment="@option:check">Display static &amp;members:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_displayStaticMembers</cstring>
@@ -109,8 +103,8 @@
       <item row="0" column="1">
        <widget class="QCheckBox" name="kcfg_displayStaticMembers">
         <property name="whatsThis">
-         <string>Displaying static members makes GDB slower in
-producing data within KDE and Qt.
+         <string comment="@info:whatsthis">Displaying static members makes GDB slower in
+producing data with Qt-based code.
 It may change the &quot;signature&quot; of the data
 which QString and friends rely on,
 but if you need to debug into these values then
@@ -124,7 +118,7 @@ check this option.</string>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Display &amp;demangled names:</string>
+         <string comment="@option:check">Display &amp;demangled names:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_asmDemangle</cstring>
@@ -134,7 +128,7 @@ check this option.</string>
       <item row="1" column="1">
        <widget class="QCheckBox" name="kcfg_asmDemangle">
         <property name="whatsThis">
-         <string>When displaying the disassembled code you
+         <string comment="@info:whatthis">When displaying the disassembled code you
 can select to see the methods' mangled names.
 However, non-mangled names are easier to read.</string>
         </property>
@@ -146,7 +140,7 @@ However, non-mangled names are easier to read.</string>
       <item row="2" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>S&amp;tart debugger with:</string>
+         <string comment="@label:listbox">S&amp;tart debugger with:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_startWith</cstring>
@@ -157,17 +151,17 @@ However, non-mangled names are easier to read.</string>
        <widget class="QComboBox" name="kcfg_startWith">
         <item>
          <property name="text">
-          <string>Application Output</string>
+          <string comment="@item:inlistbox start debugger with">Application Output</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>GDB Console</string>
+          <string comment="@item:inlistbox start debugger with">GDB Console</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Frame Stack</string>
+          <string comment="@item:inlistbox start debugger with">Frame Stack</string>
          </property>
         </item>
        </widget>
@@ -178,22 +172,22 @@ However, non-mangled names are easier to read.</string>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="whatsThis">
-      <string>This script is intended for the actual commands needed to connect to a remotely running executable.
+      <string comment="@info:whatsthis">This script is intended for the actual commands needed to connect to a remotely running executable.
 	shell sleep 5	wait for remote program to start
 	target remote ...	connect to the remote debugger
 	continue	[optional] run debugging to the first breakpoint</string>
      </property>
      <property name="title">
-      <string>Remote Debugging</string>
+      <string comment="@title:group">Remote Debugging</string>
      </property>
      <layout class="QFormLayout">
       <item row="1" column="0">
        <widget class="QLabel" name="runShellScript_label">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string comment="Shell script to be executed at run time">R&amp;un shell script:</string>
+         <string comment="@label:chooser Shell script to be executed at run time">R&amp;un shell script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -206,20 +200,17 @@ However, non-mangled names are easier to read.</string>
       <item row="1" column="1">
        <widget class="KUrlRequester" name="kcfg_runShellScript" native="true">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="configGdbScript_label">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This script is sourced by gdb when the debugging starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">This script is sourced by gdb when the debugging starts.</string>
         </property>
         <property name="text">
-         <string>Gdb &amp;config script:</string>
+         <string comment="@label:chooser">Gdb &amp;config script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -232,20 +223,17 @@ However, non-mangled names are easier to read.</string>
       <item row="2" column="1">
        <widget class="KUrlRequester" name="kcfg_runGdbScript" native="true">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="runGdbScript_label">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string comment="Gdb script to be executed at run time.">Run &amp;gdb script:</string>
+         <string comment="@label:chooser Gdb script to be executed at run time.">Run &amp;gdb script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -258,10 +246,7 @@ However, non-mangled names are easier to read.</string>
       <item row="0" column="1">
        <widget class="KUrlRequester" name="kcfg_configGdbScript" native="true">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This script is sourced by gdb when the debugging starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
+         <string comment="@info:tooltip">This script is sourced by gdb when the debugging starts.</string>
         </property>
        </widget>
       </item>
