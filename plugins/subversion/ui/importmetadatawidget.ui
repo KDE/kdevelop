@@ -17,27 +17,24 @@
    <item row="0" column="0">
     <widget class="QLabel" name="labelForSrc">
      <property name="text">
-      <string>Source directory:</string>
+      <string comment="@label:textbox">Source directory:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Repository:</string>
+      <string comment="@label:textbox">Repository:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QLineEdit" name="dest">
      <property name="toolTip">
-      <string>Repository Location</string>
-     </property>
-     <property name="statusTip">
-      <string>Repository Location to import into</string>
+      <string comment="@info:tooltip">Repository location</string>
      </property>
      <property name="whatsThis">
-      <string>Choose the repository into which the source directory is imported</string>
+      <string comment="@info:whatsthis">Choose the repository into which the source directory is imported</string>
      </property>
     </widget>
    </item>
@@ -57,7 +54,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Commit message:</string>
+      <string comment="@label:textbox">Commit message:</string>
      </property>
     </widget>
    </item>

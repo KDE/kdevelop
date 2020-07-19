@@ -29,10 +29,10 @@ SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
 {
     d->ui.setupUi( this );
     d->temporarily = true;
-    setWindowTitle( i18n( "Ssl Server Certificate" ) );
+    setWindowTitle(i18nc("@title:window", "SSL Server Certificate"));
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel);
-    buttonBox->addButton(i18n("Trust Permanently"), QDialogButtonBox::YesRole);
-    buttonBox->addButton(i18n("Trust Temporarily"), QDialogButtonBox::AcceptRole)->setDefault(true);
+    buttonBox->addButton(i18nc("@action:button", "Trust Permanently"), QDialogButtonBox::YesRole);
+    buttonBox->addButton(i18nc("@action:button", "Trust Temporarily"), QDialogButtonBox::AcceptRole)->setDefault(true);
     auto layout = new QVBoxLayout();
     setLayout(layout);
     layout->addWidget(buttonBox);
@@ -63,7 +63,7 @@ void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
     d->ui.validUntil->setText( validuntil );
     d->ui.validFrom->setText( validfrom );
     d->ui.issuer->setText( issuerName );
-    setWindowTitle( i18n( "Ssl Server Certificate: %1", realm ) );
+    setWindowTitle(i18nc("@title:window", "SSL Server Certificate: %1", realm));
 
 }
 

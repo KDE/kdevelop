@@ -9,9 +9,6 @@
     <height>500</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>SSL Server Certificate</string>
-  </property>
   <layout class="QVBoxLayout" >
    <item>
     <widget class="QLabel" name="msgLabel" >
@@ -52,7 +49,7 @@ Do you want to trust this certificate?</string>
    <item>
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="title" >
-      <string>Certificate Information</string>
+      <string comment="@title:group">Certificate Information</string>
      </property>
      <layout class="QGridLayout" >
       <property name="horizontalSpacing" >
@@ -64,7 +61,7 @@ Do you want to trust this certificate?</string>
       <item row="0" column="0" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Hostname:</string>
+         <string comment="@label:textbox">Hostname:</string>
         </property>
        </widget>
       </item>
@@ -84,7 +81,7 @@ Do you want to trust this certificate?</string>
       <item row="1" column="0" >
        <widget class="QLabel" name="label_2" >
         <property name="text" >
-         <string>Issuer:</string>
+         <string comment="@label:textbox">Issuer:</string>
         </property>
        </widget>
       </item>
@@ -104,7 +101,7 @@ Do you want to trust this certificate?</string>
       <item row="2" column="0" >
        <widget class="QLabel" name="label_3" >
         <property name="text" >
-         <string>Valid From:</string>
+         <string comment="@label:textbox">Valid from:</string>
         </property>
        </widget>
       </item>
@@ -124,7 +121,7 @@ Do you want to trust this certificate?</string>
       <item row="3" column="0" >
        <widget class="QLabel" name="label_4" >
         <property name="text" >
-         <string>Valid Until:</string>
+         <string comment="@label:textbox">Valid until:</string>
         </property>
        </widget>
       </item>
@@ -144,7 +141,7 @@ Do you want to trust this certificate?</string>
       <item row="4" column="0" >
        <widget class="QLabel" name="label_5" >
         <property name="text" >
-         <string>Fingerprint:</string>
+         <string comment="@label:textbox">Fingerprint:</string>
         </property>
        </widget>
       </item>
