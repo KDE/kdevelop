@@ -106,7 +106,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     , m_proxy(new QSortFilterProxyModel(this))
 {
     setObjectName(QStringLiteral("Problem Reporter Tree"));
-    setWhatsThis(i18n("Problems"));
+    setWhatsThis(i18nc("@info:whatsthis", "Problems"));
     setItemDelegate(new ProblemTreeViewItemDelegate(this));
     setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -216,9 +216,9 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 
     QPointer<QMenu> m = new QMenu(this);
 
-    m->addSection(i18n("Problem"));
+    m->addSection(i18nc("@title:menu", "Problem"));
     auto copyDescriptionAction = m->addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
-                                              i18n("&Copy Description"));
+                                              i18nc("@action:inmenu", "&Copy Description"));
     connect(copyDescriptionAction, &QAction::triggered, this, [problem]() {
         QApplication::clipboard()->setText(descriptionFromProblem(problem), QClipboard::Clipboard);
     });
@@ -237,7 +237,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
         QString title = solution->title();
         title = KDevelop::htmlToPlainText(title);
         title.replace(QLatin1String("&apos;"), QLatin1String("\'"));
-        m->addSection(i18n("Solve: %1", title));
+        m->addSection(i18nc("@title:menu", "Solve: %1", title));
         m->addActions(actions);
     }
 

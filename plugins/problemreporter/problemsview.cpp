@@ -45,7 +45,7 @@ void ProblemsView::setupActions()
     {
         m_fullUpdateAction = new QAction(this);
         m_fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-        m_fullUpdateAction->setText(i18n("Force Full Update"));
+        m_fullUpdateAction->setText(i18nc("@action", "Force Full Update"));
         m_fullUpdateAction->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         connect(m_fullUpdateAction, &QAction::triggered, this, [this]() {
             currentView()->model()->forceFullUpdate();
@@ -62,24 +62,24 @@ void ProblemsView::setupActions()
         auto* scopeActions = new QActionGroup(this);
 
         m_currentDocumentAction = new QAction(this);
-        m_currentDocumentAction->setText(i18n("Current Document"));
+        m_currentDocumentAction->setText(i18nc("@option:check", "Current Document"));
         m_currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
         auto* openDocumentsAction = new QAction(this);
-        openDocumentsAction->setText(i18n("Open Documents"));
+        openDocumentsAction->setText(i18nc("@option:check", "Open Documents"));
         openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
         auto* currentProjectAction = new QAction(this);
-        currentProjectAction->setText(i18n("Current Project"));
+        currentProjectAction->setText(i18nc("@option:check", "Current Project"));
         currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
 
         auto* allProjectAction = new QAction(this);
-        allProjectAction->setText(i18n("All Projects"));
+        allProjectAction->setText(i18nc("@option:check", "All Projects"));
         allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
         m_showAllAction = new QAction(this);
-        m_showAllAction->setText(i18n("Show All"));
-        m_showAllAction->setToolTip(i18nc("@info:tooltip", "Display ALL problems"));
+        m_showAllAction->setText(i18nc("@option:check", "Show All"));
+        m_showAllAction->setToolTip(i18nc("@info:tooltip", "Display all problems"));
 
         QAction* const actions[] = {
             m_currentDocumentAction,
@@ -108,7 +108,7 @@ void ProblemsView::setupActions()
         addAction(m_showImportsAction);
         m_showImportsAction->setCheckable(true);
         m_showImportsAction->setChecked(false);
-        m_showImportsAction->setText(i18n("Show Imports"));
+        m_showImportsAction->setText(i18nc("@option:check", "Show Imports"));
         m_showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
         connect(m_showImportsAction, &QAction::triggered, this, [this](bool checked) {
             currentView()->model()->setShowImports(checked);
@@ -121,17 +121,17 @@ void ProblemsView::setupActions()
         m_errorSeverityAction = new QAction(this);
         m_errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors"));
         m_errorSeverityAction->setIcon(IProblem::iconForSeverity(IProblem::Error));
-        m_errorSeverityAction->setIconText(i18n("Show Errors"));
+        m_errorSeverityAction->setIconText(i18nc("@option:check", "Show Errors"));
 
         m_warningSeverityAction = new QAction(this);
         m_warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display warnings"));
         m_warningSeverityAction->setIcon(IProblem::iconForSeverity(IProblem::Warning));
-        m_warningSeverityAction->setIconText(i18n("Show Warnings"));
+        m_warningSeverityAction->setIconText(i18nc("@option:check", "Show Warnings"));
 
         m_hintSeverityAction = new QAction(this);
         m_hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display hints"));
         m_hintSeverityAction->setIcon(IProblem::iconForSeverity(IProblem::Hint));
-        m_hintSeverityAction->setIconText(i18n("Show Hints"));
+        m_hintSeverityAction->setIconText(i18nc("@option:check", "Show Hints"));
 
         QAction* const severityActionArray[] = { m_errorSeverityAction, m_warningSeverityAction, m_hintSeverityAction };
         for (auto* action : severityActionArray) {
@@ -151,14 +151,14 @@ void ProblemsView::setupActions()
     }
 
     {
-        m_groupingMenu = new KActionMenu(i18n("Grouping"), this);
+        m_groupingMenu = new KActionMenu(i18nc("@title:menu", "Grouping"), this);
         m_groupingMenu->setDelayed(false);
 
         auto* groupingActions = new QActionGroup(this);
 
-        auto* noGroupingAction = new QAction(i18n("None"), this);
-        auto* pathGroupingAction = new QAction(i18n("Path"), this);
-        auto* severityGroupingAction = new QAction(i18n("Severity"), this);
+        auto* noGroupingAction = new QAction(i18nc("@option:check", "None"), this);
+        auto* pathGroupingAction = new QAction(i18nc("@option:check", "Path"), this);
+        auto* severityGroupingAction = new QAction(i18nc("@option:check", "Severity"), this);
 
         QAction* const groupingActionArray[] = { noGroupingAction, pathGroupingAction, severityGroupingAction };
         for (auto* action : groupingActionArray) {
@@ -186,7 +186,7 @@ void ProblemsView::setupActions()
 
         m_filterEdit = new KExpandableLineEdit(this);
         m_filterEdit->setClearButtonEnabled(true);
-        m_filterEdit->setPlaceholderText(i18n("Search..."));
+        m_filterEdit->setPlaceholderText(i18nc("@info:placeholder", "Search..."));
 
         connect(m_filterEdit, &QLineEdit::textChanged,
                 filterTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
@@ -291,7 +291,7 @@ void ItemViewWalker::selectIndex(Direction direction)
 ProblemsView::ProblemsView(QWidget* parent)
     : QWidget(parent)
 {
-    setWindowTitle(i18n("Problems"));
+    setWindowTitle(i18nc("@title:window", "Problems"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("script-error"), windowIcon()));
 
     auto layout = new QVBoxLayout(this);
@@ -429,7 +429,7 @@ void ProblemsView::updateTab(int idx, int rows)
         return;
 
     const QString name = m_models[idx].name;
-    const QString tabText = i18nc("%1: tab name, %2: number of problems", "%1 (%2)", name, rows);
+    const QString tabText = i18nc("@title:tab %1: tab name, %2: number of problems", "%1 (%2)", name, rows);
     m_tabWidget->setTabText(idx, tabText);
 }
 
@@ -467,7 +467,7 @@ void ProblemsView::handleSeverityActionToggled()
 
 void ProblemsView::setScope(int scope)
 {
-    m_scopeMenu->setText(i18n("Scope: %1", m_scopeMenu->menu()->actions().at(scope)->text()));
+    m_scopeMenu->setText(i18nc("@title:menu", "Scope: %1", m_scopeMenu->menu()->actions().at(scope)->text()));
 
     currentView()->model()->setScope(scope);
 }
