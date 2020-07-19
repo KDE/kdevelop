@@ -172,7 +172,7 @@ QString ProjectFileData::project() const
     if (project) {
         return project->name();
     } else {
-        return i18n("none");
+        return i18nc("@item no project", "none");
     }
 }
 

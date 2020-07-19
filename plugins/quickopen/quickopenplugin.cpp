@@ -69,6 +69,23 @@ using namespace KDevelop;
 
 const bool noHtmlDestriptionInOutline = true;
 
+namespace {
+namespace Strings {
+QString scopeProjectName()       { return i18nc("@item quick open scope", "Project"); }
+QString scopeIncludesName()      { return i18nc("@item quick open scope", "Includes"); }
+QString scopeIncludersName()     { return i18nc("@item quick open scope", "Includers"); }
+QString scopeCurrentlyOpenName() { return i18nc("@item quick open scope", "Currently Open"); }
+
+QString typeFilesName()         { return i18nc("@item quick open item type", "Files"); }
+QString typeFunctionsName()     { return i18nc("@item quick open item type", "Functions"); }
+QString typeClassesName()       { return i18nc("@item quick open item type", "Classes"); }
+QString typeDocumentationName() { return i18nc("@item quick open item type", "Documentation"); }
+QString typeActionsName()       { return i18nc("@item quick open item type", "Actions"); }
+
+}
+}
+
+
 class QuickOpenWidgetCreator
 {
 public:
@@ -274,76 +291,76 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     xmlFile = QStringLiteral("kdevquickopen.rc");
 
     QAction* quickOpen = actions.addAction(QStringLiteral("quick_open"));
-    quickOpen->setText(i18n("&Quick Open"));
+    quickOpen->setText(i18nc("@action", "&Quick Open"));
     quickOpen->setIcon(QIcon::fromTheme(QStringLiteral("quickopen")));
     actions.setDefaultShortcut(quickOpen, Qt::CTRL | Qt::ALT | Qt::Key_Q);
     connect(quickOpen, &QAction::triggered, this, &QuickOpenPlugin::quickOpen);
 
     QAction* quickOpenFile = actions.addAction(QStringLiteral("quick_open_file"));
-    quickOpenFile->setText(i18n("Quick Open &File"));
+    quickOpenFile->setText(i18nc("@action", "Quick Open &File"));
     quickOpenFile->setIcon(QIcon::fromTheme(QStringLiteral("quickopen-file")));
     actions.setDefaultShortcut(quickOpenFile, Qt::CTRL | Qt::ALT | Qt::Key_O);
     connect(quickOpenFile, &QAction::triggered, this, &QuickOpenPlugin::quickOpenFile);
 
     QAction* quickOpenClass = actions.addAction(QStringLiteral("quick_open_class"));
-    quickOpenClass->setText(i18n("Quick Open &Class"));
+    quickOpenClass->setText(i18nc("@action", "Quick Open &Class"));
     quickOpenClass->setIcon(QIcon::fromTheme(QStringLiteral("quickopen-class")));
     actions.setDefaultShortcut(quickOpenClass, Qt::CTRL | Qt::ALT | Qt::Key_C);
     connect(quickOpenClass, &QAction::triggered, this, &QuickOpenPlugin::quickOpenClass);
 
     QAction* quickOpenFunction = actions.addAction(QStringLiteral("quick_open_function"));
-    quickOpenFunction->setText(i18n("Quick Open &Function"));
+    quickOpenFunction->setText(i18nc("@action", "Quick Open &Function"));
     quickOpenFunction->setIcon(QIcon::fromTheme(QStringLiteral("quickopen-function")));
     actions.setDefaultShortcut(quickOpenFunction, Qt::CTRL | Qt::ALT | Qt::Key_M);
     connect(quickOpenFunction, &QAction::triggered, this, &QuickOpenPlugin::quickOpenFunction);
 
     QAction* quickOpenAlreadyOpen = actions.addAction(QStringLiteral("quick_open_already_open"));
-    quickOpenAlreadyOpen->setText(i18n("Quick Open &Already Open File"));
+    quickOpenAlreadyOpen->setText(i18nc("@action", "Quick Open &Already Open File"));
     quickOpenAlreadyOpen->setIcon(QIcon::fromTheme(QStringLiteral("quickopen-file")));
     connect(quickOpenAlreadyOpen, &QAction::triggered, this, &QuickOpenPlugin::quickOpenOpenFile);
 
     QAction* quickOpenDocumentation = actions.addAction(QStringLiteral("quick_open_documentation"));
-    quickOpenDocumentation->setText(i18n("Quick Open &Documentation"));
+    quickOpenDocumentation->setText(i18nc("@action", "Quick Open &Documentation"));
     quickOpenDocumentation->setIcon(QIcon::fromTheme(QStringLiteral("quickopen-documentation")));
     actions.setDefaultShortcut(quickOpenDocumentation, Qt::CTRL | Qt::ALT | Qt::Key_D);
     connect(quickOpenDocumentation, &QAction::triggered, this, &QuickOpenPlugin::quickOpenDocumentation);
 
     QAction* quickOpenActions = actions.addAction(QStringLiteral("quick_open_actions"));
-    quickOpenActions->setText(i18n("Quick Open &Actions"));
+    quickOpenActions->setText(i18nc("@action", "Quick Open &Actions"));
     actions.setDefaultShortcut(quickOpenActions, Qt::CTRL | Qt::ALT | Qt::Key_A);
     connect(quickOpenActions, &QAction::triggered, this, &QuickOpenPlugin::quickOpenActions);
 
     m_quickOpenDeclaration = actions.addAction(QStringLiteral("quick_open_jump_declaration"));
-    m_quickOpenDeclaration->setText(i18n("Jump to Declaration"));
+    m_quickOpenDeclaration->setText(i18nc("@action", "Jump to Declaration"));
     m_quickOpenDeclaration->setIcon(QIcon::fromTheme(QStringLiteral("go-jump-declaration")));
     actions.setDefaultShortcut(m_quickOpenDeclaration, Qt::CTRL | Qt::Key_Period);
     connect(m_quickOpenDeclaration, &QAction::triggered, this, &QuickOpenPlugin::quickOpenDeclaration, Qt::QueuedConnection);
 
     m_quickOpenDefinition = actions.addAction(QStringLiteral("quick_open_jump_definition"));
-    m_quickOpenDefinition->setText(i18n("Jump to Definition"));
+    m_quickOpenDefinition->setText(i18nc("@action", "Jump to Definition"));
     m_quickOpenDefinition->setIcon(QIcon::fromTheme(QStringLiteral("go-jump-definition")));
     actions.setDefaultShortcut(m_quickOpenDefinition, Qt::CTRL | Qt::Key_Comma);
     connect(m_quickOpenDefinition, &QAction::triggered, this, &QuickOpenPlugin::quickOpenDefinition, Qt::QueuedConnection);
 
     auto* quickOpenLine = new QWidgetAction(this);
-    quickOpenLine->setText(i18n("Embedded Quick Open"));
+    quickOpenLine->setText(i18nc("@action", "Embedded Quick Open"));
     //     actions.setDefaultShortcut( quickOpenLine, Qt::CTRL | Qt::ALT | Qt::Key_E );
 //     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
     actions.addAction(QStringLiteral("quick_open_line"), quickOpenLine);
 
     QAction* quickOpenNextFunction = actions.addAction(QStringLiteral("quick_open_next_function"));
-    quickOpenNextFunction->setText(i18n("Next Function"));
+    quickOpenNextFunction->setText(i18nc("@action jump to", "Next Function"));
     actions.setDefaultShortcut(quickOpenNextFunction, Qt::CTRL | Qt::ALT | Qt::Key_PageDown);
     connect(quickOpenNextFunction, &QAction::triggered, this, &QuickOpenPlugin::nextFunction);
 
     QAction* quickOpenPrevFunction = actions.addAction(QStringLiteral("quick_open_prev_function"));
-    quickOpenPrevFunction->setText(i18n("Previous Function"));
+    quickOpenPrevFunction->setText(i18nc("@action jump to", "Previous Function"));
     actions.setDefaultShortcut(quickOpenPrevFunction, Qt::CTRL | Qt::ALT | Qt::Key_PageUp);
     connect(quickOpenPrevFunction, &QAction::triggered, this, &QuickOpenPlugin::previousFunction);
 
     QAction* quickOpenNavigateFunctions = actions.addAction(QStringLiteral("quick_open_outline"));
-    quickOpenNavigateFunctions->setText(i18n("Outline"));
+    quickOpenNavigateFunctions->setText(i18nc("@action open outline quick open menu", "Outline"));
     actions.setDefaultShortcut(quickOpenNavigateFunctions, Qt::CTRL | Qt::ALT | Qt::Key_N);
     connect(quickOpenNavigateFunctions, &QAction::triggered, this, &QuickOpenPlugin::quickOpenNavigateFunctions);
 }
@@ -357,46 +374,42 @@ QuickOpenPlugin::QuickOpenPlugin(QObject* parent,
 
     KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList{
-        i18n("Project"),
-        i18n("Includes"),
-        i18n("Includers"),
-        i18n("Currently Open")});
+        Strings::scopeProjectName(),
+        Strings::scopeIncludesName(),
+        Strings::scopeIncludersName(),
+        Strings::scopeCurrentlyOpenName(),
+    });
     lastUsedItems = quickopengrp.readEntry("SelectedItems", QStringList());
 
     {
         m_openFilesData = new OpenFilesDataProvider();
-        QStringList scopes, items;
-        scopes << i18n("Currently Open");
-        items << i18n("Files");
-        m_model->registerProvider(scopes, items, m_openFilesData);
+        const QStringList scopes(Strings::scopeCurrentlyOpenName());
+        const QStringList types(Strings::typeFilesName());
+        m_model->registerProvider(scopes, types, m_openFilesData);
     }
     {
         m_projectFileData = new ProjectFileDataProvider();
-        QStringList scopes, items;
-        scopes << i18n("Project");
-        items << i18n("Files");
-        m_model->registerProvider(scopes, items, m_projectFileData);
+        const QStringList scopes(Strings::scopeProjectName());
+        const QStringList types(Strings::typeFilesName());
+        m_model->registerProvider(scopes, types, m_projectFileData);
     }
     {
         m_projectItemData = new ProjectItemDataProvider(this);
-        QStringList scopes, items;
-        scopes << i18n("Project");
-        items << ProjectItemDataProvider::supportedItemTypes();
-        m_model->registerProvider(scopes, items, m_projectItemData);
+        const QStringList scopes(Strings::scopeProjectName());
+        const QStringList types = ProjectItemDataProvider::supportedItemTypes();
+        m_model->registerProvider(scopes, types, m_projectItemData);
     }
     {
         m_documentationItemData = new DocumentationQuickOpenProvider;
-        QStringList scopes, items;
-        scopes << i18n("Includes");
-        items << i18n("Documentation");
-        m_model->registerProvider(scopes, items, m_documentationItemData);
+        const QStringList scopes(Strings::scopeIncludesName());
+        const QStringList types(Strings::typeDocumentationName());
+        m_model->registerProvider(scopes, types, m_documentationItemData);
     }
     {
         m_actionsItemData = new ActionsQuickOpenProvider;
-        QStringList scopes, items;
-        scopes << i18n("Includes");
-        items << i18n("Actions");
-        m_model->registerProvider(scopes, items, m_actionsItemData);
+        const QStringList scopes(Strings::scopeIncludesName());
+        const QStringList types(Strings::typeActionsName());
+        m_model->registerProvider(scopes, types, m_actionsItemData);
     }
 }
 
@@ -453,8 +466,9 @@ void QuickOpenPlugin::showQuickOpen(const QStringList& items)
 
     QStringList useScopes = lastUsedScopes;
 
-    if (!useScopes.contains(i18n("Currently Open"))) {
-        useScopes << i18n("Currently Open");
+    const QString scopeCurrentlyOpenName = Strings::scopeCurrentlyOpenName();
+    if (!useScopes.contains(scopeCurrentlyOpenName)) {
+        useScopes << scopeCurrentlyOpenName;
     }
 
     showQuickOpenWidget(initialItems, useScopes, false);
@@ -468,15 +482,15 @@ void QuickOpenPlugin::showQuickOpen(ModelTypes modes)
 
     QStringList initialItems;
     if (modes & Files || modes & OpenFiles) {
-        initialItems << i18n("Files");
+        initialItems << Strings::typeFilesName();
     }
 
     if (modes & Functions) {
-        initialItems << i18n("Functions");
+        initialItems << Strings::typeFunctionsName();
     }
 
     if (modes & Classes) {
-        initialItems << i18n("Classes");
+        initialItems << Strings::typeClassesName();
     }
 
     QStringList useScopes;
@@ -484,8 +498,11 @@ void QuickOpenPlugin::showQuickOpen(ModelTypes modes)
         useScopes = lastUsedScopes;
     }
 
-    if ((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open"))) {
-        useScopes << i18n("Currently Open");
+    if ((modes & OpenFiles)) {
+        const QString currentlyOpen = Strings::scopeCurrentlyOpenName();
+        if (!useScopes.contains(currentlyOpen)) {
+            useScopes << currentlyOpen;
+        }
     }
 
     bool preselectText = (!(modes & Files) || modes == QuickOpenPlugin::All);
@@ -494,7 +511,7 @@ void QuickOpenPlugin::showQuickOpen(ModelTypes modes)
 
 void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStringList& scopes, bool preselectText)
 {
-    auto* dialog = new QuickOpenWidgetDialog(i18n("Quick Open"), m_model, items, scopes);
+    auto* dialog = new QuickOpenWidgetDialog(i18nc("@title:window", "Quick Open"), m_model, items, scopes);
     m_currentWidgetHandler = dialog;
     if (preselectText) {
         KDevelop::IDocument* currentDoc = core()->documentController()->activeDocument();
@@ -562,12 +579,16 @@ void QuickOpenPlugin::quickOpenOpenFile()
 
 void QuickOpenPlugin::quickOpenDocumentation()
 {
-    showQuickOpenWidget(QStringList(i18n("Documentation")), QStringList(i18n("Includes")), true);
+    const QStringList scopes(Strings::scopeIncludesName());
+    const QStringList types(Strings::typeDocumentationName());
+    showQuickOpenWidget(types, scopes, true);
 }
 
 void QuickOpenPlugin::quickOpenActions()
 {
-    showQuickOpenWidget(QStringList(i18n("Actions")), QStringList(i18n("Includes")), true);
+    const QStringList scopes(Strings::scopeIncludesName());
+    const QStringList types(Strings::typeActionsName());
+    showQuickOpenWidget(types, scopes, true);
 }
 
 QSet<KDevelop::IndexedString> QuickOpenPlugin::fileSet() const
@@ -830,7 +851,7 @@ struct CreateOutlineDialog
 
         model->registerProvider(QStringList(), QStringList(), new DeclarationListDataProvider(QuickOpenPlugin::self(), items, true));
 
-        dialog = new QuickOpenWidgetDialog(i18n("Outline"), model, QStringList(), QStringList(), true);
+        dialog = new QuickOpenWidgetDialog(i18nc("@title:window", "Outline"), model, QStringList(), QStringList(), true);
         dialog->widget()->setSortingEnabled(true);
 
         model->setParent(dialog->widget());
@@ -939,8 +960,8 @@ QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget
     setMaximumWidth(400);
 
     deactivate();
-    setPlaceholderText(i18n("Quick Open..."));
-    setToolTip(i18n("Search for files, classes, functions and more,"
+    setPlaceholderText(i18nc("@info:placeholder", "Quick Open..."));
+    setToolTip(i18nc("@info:tooltip", "Search for files, classes, functions and more,"
                     " allowing you to quickly navigate in your source code."));
     setObjectName(m_widgetCreator->objectNameForLine());
     setFocusPolicy(Qt::ClickFocus);

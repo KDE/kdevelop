@@ -358,8 +358,8 @@ uint ProjectItemDataProvider::unfilteredItemCount() const
 QStringList ProjectItemDataProvider::supportedItemTypes()
 {
     const QStringList ret{
-        i18n("Classes"),
-        i18n("Functions"),
+        i18nc("@item quick open item type", "Classes"),
+        i18nc("@item quick open item type", "Functions"),
     };
     return ret;
 }
@@ -367,12 +367,12 @@ QStringList ProjectItemDataProvider::supportedItemTypes()
 void ProjectItemDataProvider::enableData(const QStringList& items, const QStringList& scopes)
 {
     //FIXME: property support different scopes
-    if (scopes.contains(i18n("Project"))) {
+    if (scopes.contains(i18nc("@item quick open scope", "Project"))) {
         m_itemTypes = NoItems;
-        if (items.contains(i18n("Classes"))) {
+        if (items.contains(i18nc("@item quick open item type", "Classes"))) {
             m_itemTypes = ( ItemTypes )(m_itemTypes | Classes);
         }
-        if (items.contains(i18n("Functions"))) {
+        if (items.contains(i18nc("@item quick open item type", "Functions"))) {
             m_itemTypes = ( ItemTypes )(m_itemTypes | Functions);
         }
     } else {
