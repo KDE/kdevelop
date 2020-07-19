@@ -130,15 +130,24 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
 
 void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 {
-    KTextEditor::MarkInterface *iface =
-        qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+    Q_D(const BreakpointModel);
 
-    if (iface) {
+    KTextEditor::Document* const textDocument = doc->textDocument();
+
+    if (qobject_cast<KTextEditor::MarkInterface*>(textDocument)) {
         // can't use new signal slot syntax here, MarkInterface is not a QObject
-        connect(doc->textDocument(), SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
+        connect(textDocument, SIGNAL(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)),
                  this, SLOT(markChanged(KTextEditor::Document*,KTextEditor::Mark,KTextEditor::MarkInterface::MarkChangeAction)));
-        connect(doc->textDocument(), SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
+        connect(textDocument, SIGNAL(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
                 SLOT(markContextMenuRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
+    }
+
+    // markChanged() is not triggered for loaded breakpoints, so get them a moving cursor now
+    const QUrl docUrl = textDocument->url();
+    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
+        if (docUrl == breakpoint->url()) {
+            setupMovingCursor(textDocument, breakpoint);
+        }
     }
 }
 
@@ -183,15 +192,8 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
             if (b) {
                 b->setDeleted();
             } else {
-                Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
-                MovingInterface *moving = qobject_cast<MovingInterface*>(document);
-                if (moving) {
-                    MovingCursor* cursor = moving->newMovingCursor(Cursor(mark.line, 0));
-                    // can't use new signal/slot syntax here, MovingInterface is not a QObject
-                    connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(Document*)),
-                            this, SLOT(aboutToDeleteMovingInterfaceContent(Document*)), Qt::UniqueConnection);
-                    breakpoint->setMovingCursor(cursor);
-                }
+                Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
+                setupMovingCursor(document, breakpoint);
             }
         } else if (triggeredAction == enableAction) {
             b->setData(Breakpoint::EnableColumn, b->enabled() ? Qt::Unchecked : Qt::Checked);
@@ -379,15 +381,8 @@ void BreakpointModel::markChanged(
             b->setDeleted();
             return;
         }
-        Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
-        KTextEditor::MovingInterface *moving = qobject_cast<KTextEditor::MovingInterface*>(document);
-        if (moving) {
-            KTextEditor::MovingCursor* cursor = moving->newMovingCursor(KTextEditor::Cursor(mark.line, 0));
-            // can't use new signal/slot syntax here, MovingInterface is not a QObject
-            connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-                    this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
-            breakpoint->setMovingCursor(cursor);
-        }
+        Breakpoint* breakpoint = addCodeBreakpoint(document->url(), mark.line);
+        setupMovingCursor(document, breakpoint);
     } else {
         // Find this breakpoint and delete it
         Breakpoint *b = breakpoint(document->url(), mark.line);
@@ -713,4 +708,18 @@ Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) const
         return (b->url() == url && b->line() == line);
     });
     return (it != d->breakpoints.constEnd()) ? *it : nullptr;
+}
+
+void BreakpointModel::setupMovingCursor(KTextEditor::Document* document, Breakpoint* breakpoint) const
+{
+    Q_ASSERT(document->url() == breakpoint->url() && breakpoint->movingCursor() == nullptr);
+
+    auto* const movingInterface = qobject_cast<KTextEditor::MovingInterface*>(document);
+    if (movingInterface) {
+        auto* const cursor = movingInterface->newMovingCursor(KTextEditor::Cursor(breakpoint->line(), 0));
+        // can't use new signal/slot syntax here, MovingInterface is not a QObject
+        connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
+                this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
+        breakpoint->setMovingCursor(cursor);
+    }
 }
