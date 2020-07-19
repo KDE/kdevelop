@@ -111,7 +111,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
     setObjectName( i18n( "Konsole" ) );
 
     setWindowIcon( QIcon::fromTheme( QStringLiteral( "utilities-terminal" ), windowIcon() ) );
-    setWindowTitle( i18n( "Konsole" ) );
+    setWindowTitle(i18nc("@title:window", "Konsole"));
 
     d->m_vbox = new QVBoxLayout( this );
     d->m_vbox->setContentsMargins(0, 0, 0, 0);
