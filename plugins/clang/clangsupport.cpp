@@ -290,14 +290,14 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
     _xmlFile = xmlFile();
 
     QAction* renameDeclarationAction = actions.addAction(QStringLiteral("code_rename_declaration"));
-    renameDeclarationAction->setText( i18n("Rename Declaration") );
+    renameDeclarationAction->setText( i18nc("@action", "Rename Declaration") );
     renameDeclarationAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
     actions.setDefaultShortcut(renameDeclarationAction, Qt::CTRL | Qt::SHIFT | Qt::Key_R);
     connect(renameDeclarationAction, &QAction::triggered,
             m_refactoring, &ClangRefactoring::executeRenameAction);
 
     QAction* moveIntoSourceAction = actions.addAction(QStringLiteral("code_move_definition"));
-    moveIntoSourceAction->setText(i18n("Move into Source"));
+    moveIntoSourceAction->setText(i18nc("@action", "Move into Source"));
     actions.setDefaultShortcut(moveIntoSourceAction, Qt::CTRL | Qt::ALT | Qt::Key_S);
     connect(moveIntoSourceAction, &QAction::triggered,
             m_refactoring, &ClangRefactoring::executeMoveIntoSourceAction);

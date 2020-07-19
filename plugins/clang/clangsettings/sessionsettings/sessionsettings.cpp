@@ -50,12 +50,12 @@ void SessionSettings::apply()
 
 QString SessionSettings::name() const
 {
-    return i18n("C/C++ Helpers");
+    return i18nc("@title:tab", "C/C++ Helpers");
 }
 
 QString SessionSettings::fullName() const
 {
-    return i18n("Configure C/C++ Helpers");
+    return i18nc("@title:tab", "Configure C/C++ Helpers");
 }
 
 QIcon SessionSettings::icon() const

@@ -26,16 +26,16 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Code-completion</string>
+      <string comment="@title:group">Code Completion</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <widget class="QCheckBox" name="kcfg_macros">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If disabled, macros will not be included in the code-completion results. This can improve the responsiveness of code-completion in some cases.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">If disabled, macros will not be included in the code completion results. This can improve the responsiveness of code completion in some cases.</string>
         </property>
         <property name="text">
-         <string>Add macros to code-completion</string>
+         <string comment="@option:check">Add macros to code completion</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -48,7 +48,7 @@
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>Enable Look-ahead code-completion</string>
+         <string comment="@option:check">Enable Look-ahead code completion</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -61,13 +61,13 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Assistants</string>
+      <string comment="@title:group">Assistants</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
        <widget class="QCheckBox" name="kcfg_forwardDeclare">
         <property name="text">
-         <string>Forward declare assistant</string>
+         <string comment="@option:check">Forward declare assistant</string>
         </property>
         <property name="checked">
          <bool>true</bool>

@@ -96,7 +96,7 @@ void ClangRefactoring::fillContextMenu(ContextMenuExtension& extension, Context*
         return;
     }
 
-    auto action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), parent);
+    auto action = new QAction(i18nc("@action", "Rename %1", declaration->qualifiedIdentifier().toString()), parent);
     action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
     action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
     connect(action, &QAction::triggered, this, &ClangRefactoring::executeRenameAction);
