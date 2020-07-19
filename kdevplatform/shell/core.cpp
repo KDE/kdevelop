@@ -238,6 +238,11 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     qCDebug(SHELL) << "Initializing plugin controller (loading session plugins)";
     pluginController->initialize();
 
+    /* To make breakpoints show up in the UI, we need to make sure
+       DebugController is initialized and has loaded BreakpointModel
+       before UI is made visible. */
+    debugController->initialize();
+
     qCDebug(SHELL) << "Initializing working set controller";
     if(!(mode & Core::NoUi))
     {
@@ -256,7 +261,6 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     if (documentationController) {
         documentationController->initialize();
     }
-    debugController->initialize();
     testController->initialize();
     runtimeController->initialize();
 
