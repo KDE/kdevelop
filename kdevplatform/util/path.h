@@ -382,6 +382,5 @@ KDEVPLATFORMUTIL_EXPORT char* toString(const KDevelop::Path& path);
 Q_DECLARE_TYPEINFO(KDevelop::Path, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(KDevelop::Path)
 Q_DECLARE_TYPEINFO(KDevelop::Path::List, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(KDevelop::Path::List)
 
 #endif // KDEVELOP_PATH_H

@@ -230,7 +230,6 @@ struct StateChange
 };
 
 Q_DECLARE_METATYPE(StateChange)
-Q_DECLARE_METATYPE(QList<StateChange>)
 
 void TestAssistants::testRenameAssistant_data()
 {

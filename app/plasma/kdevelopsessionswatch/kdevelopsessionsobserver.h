@@ -42,6 +42,5 @@ public:
 };
 
 Q_DECLARE_INTERFACE(KDevelopSessionsObserver, "org.kdevelop.KDevelopSessionsObserver")
-Q_DECLARE_METATYPE(QVector<KDevelopSessionData>)
 
 #endif
