@@ -37,7 +37,6 @@
 using namespace KDevelop;
 
 using SafeProjectPointer = QPointer<KDevelop::IProject>;
-Q_DECLARE_METATYPE(SafeProjectPointer)
 
 VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel(parent)
 {
