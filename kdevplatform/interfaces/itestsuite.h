@@ -22,6 +22,8 @@
 
 #include "interfacesexport.h"
 
+#include <QMetaType>
+
 class KJob;
 class QString;
 class QStringList;
@@ -115,5 +117,7 @@ public:
 };
 
 }
+
+Q_DECLARE_METATYPE(KDevelop::ITestSuite*)
 
 #endif // KDEVPLATFORM_ITESTSUITE_H

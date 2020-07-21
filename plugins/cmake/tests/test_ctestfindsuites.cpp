@@ -43,8 +43,6 @@
 #include <QtTest>
 #include <KJob>
 
-Q_DECLARE_METATYPE(KDevelop::ITestSuite*)
-
 using namespace KDevelop;
 
 void waitForSuites(IProject* project, int count, int max)

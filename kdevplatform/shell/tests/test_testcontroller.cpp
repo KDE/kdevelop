@@ -37,7 +37,6 @@ const char* TestCaseNameOne = "TestTestCaseOne";
 const char* TestCaseNameTwo = "TestTestCaseTwo";
 
 Q_DECLARE_METATYPE(KDevelop::TestResult)
-Q_DECLARE_METATYPE(KDevelop::ITestSuite*)
 
 class FakeTestSuite : public KDevelop::ITestSuite
 {
