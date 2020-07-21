@@ -488,7 +488,6 @@ void RunController::setupActions()
 
     d->currentTargetAction = new KSelectAction( i18nc("@title:menu", "Current Launch Configuration"), this);
     d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current launch configuration"));
-    d->currentTargetAction->setStatusTip(i18n("Current launch Configuration"));
     d->currentTargetAction->setWhatsThis(i18nc("@info:whatsthis", "Select which launch configuration to run when run is invoked."));
     ac->addAction(QStringLiteral("run_default_target"), d->currentTargetAction);
 }
