@@ -533,7 +533,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 QRegularExpression MakeFileResolver::defineRegularExpression()
 {
   static const QRegularExpression pattern(
-    QStringLiteral("-D([^\\s=]+)(?:=(?:\"(.*?)(?<!\\\\)\"|([^\\s]*)))?")
+    QStringLiteral("-(D|U)([^\\s=]+)(?:=(?:\"(.*?)(?<!\\\\)\"|([^\\s]*)))?")
   );
   Q_ASSERT(pattern.isValid());
   return pattern;
@@ -555,18 +555,23 @@ static QString unescape(const QStringRef& input)
   return output;
 }
 
-QHash<QString, QString> MakeFileResolver::extractDefinesFromCompileFlags(const QString& compileFlags, StringInterner& stringInterner)
+QHash<QString, QString> MakeFileResolver::extractDefinesFromCompileFlags(const QString& compileFlags, StringInterner& stringInterner, QHash<QString, QString> defines)
 {
-  QHash<QString, QString> defines;
   const auto& defineRx = defineRegularExpression();
   auto it = defineRx.globalMatch(compileFlags);
   while (it.hasNext()) {
     const auto match = it.next();
+    const auto isUndefine = match.capturedRef(1) == QLatin1String("U");
+    const auto key = stringInterner.internString(match.captured(2));
+    if (isUndefine) {
+      defines.remove(key);
+      continue;
+    }
     QString value;
-    if (match.lastCapturedIndex() > 1) {
+    if (match.lastCapturedIndex() > 2) {
       value = unescape(match.capturedRef(match.lastCapturedIndex()));
     }
-    defines[stringInterner.internString(match.captured(1))] = stringInterner.internString(value);
+    defines[key] = stringInterner.internString(value);
   }
   return defines;
 }
@@ -604,7 +609,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
     }
   }
 
-  ret.defines = extractDefinesFromCompileFlags(fullOutput, m_stringInterner);
+  ret.defines = extractDefinesFromCompileFlags(fullOutput, m_stringInterner, ret.defines);
 
   return ret;
 }

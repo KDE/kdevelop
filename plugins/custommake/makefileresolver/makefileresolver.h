@@ -97,7 +97,7 @@ class MakeFileResolver
     PathResolutionResult processOutput(const QString& fullOutput, const QString& workingDirectory) const;
 
     static QRegularExpression defineRegularExpression();
-    static QHash<QString, QString> extractDefinesFromCompileFlags(const QString& compileFlags, StringInterner& stringInterner);
+    static QHash<QString, QString> extractDefinesFromCompileFlags(const QString& compileFlags, StringInterner& stringInterner, QHash<QString, QString> defines);
 
   private:
     PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );

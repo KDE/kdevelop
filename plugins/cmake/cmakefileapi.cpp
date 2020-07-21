@@ -158,11 +158,11 @@ static CMakeTarget parseTarget(const QJsonObject& target, StringInterner& string
         }
         cmakeFile.compileFlags = stringInterner.internString(cmakeFile.compileFlags);
 
-        cmakeFile.defines = MakeFileResolver::extractDefinesFromCompileFlags(cmakeFile.compileFlags, stringInterner);
         for (const auto& jsonDefine : compileGroup.value(QLatin1String("defines")).toArray()) {
             const auto define = jsonDefine.toObject();
             cmakeFile.addDefine(define.value(QLatin1String("define")).toString());
         }
+        cmakeFile.defines = MakeFileResolver::extractDefinesFromCompileFlags(cmakeFile.compileFlags, stringInterner, cmakeFile.defines);
 
         for (const auto& jsonInclude : compileGroup.value(QLatin1String("includes")).toArray()) {
             const auto include = jsonInclude.toObject();

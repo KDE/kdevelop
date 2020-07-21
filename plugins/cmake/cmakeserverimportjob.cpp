@@ -63,10 +63,10 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
 
                     file.language = fileGroup.value(QStringLiteral("language")).toString(),
                     file.compileFlags = fileGroup.value(QStringLiteral("compileFlags")).toString();
-                    file.defines = MakeFileResolver::extractDefinesFromCompileFlags(file.compileFlags, stringInterner);
                     for (const auto& jsonDefine : fileGroup.value(QStringLiteral("defines")).toArray()) {
                         file.addDefine(jsonDefine.toString());
                     }
+                    file.defines = MakeFileResolver::extractDefinesFromCompileFlags(file.compileFlags, stringInterner, file.defines);
 
                     // apparently some file groups do not contain build system information
                     // skip these, as they would produce bogus results for us and break the fallback
