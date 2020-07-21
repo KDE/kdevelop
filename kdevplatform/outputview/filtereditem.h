@@ -67,6 +67,7 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 
 } // namespace KDevelop
 
+Q_DECLARE_METATYPE( KDevelop::FilteredItem )
 Q_DECLARE_METATYPE( KDevelop::FilteredItem::FilteredOutputItemType )
 Q_DECLARE_TYPEINFO( KDevelop::FilteredItem, Q_MOVABLE_TYPE );
 

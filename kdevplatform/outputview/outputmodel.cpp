@@ -38,8 +38,6 @@
 #include <functional>
 #include <set>
 
-Q_DECLARE_METATYPE(QVector<KDevelop::FilteredItem>)
-
 namespace KDevelop
 {
 
