@@ -53,6 +53,7 @@ public:
         NativeAppErrorFilter,
         StaticAnalysisFilter
     };
+    Q_ENUM(OutputFilterStrategy)
 
     explicit OutputModel( const QUrl& builddir , QObject* parent = nullptr );
     explicit OutputModel( QObject* parent = nullptr );
@@ -92,7 +93,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE( KDevelop::OutputModel::OutputFilterStrategy )
-
 #endif
-

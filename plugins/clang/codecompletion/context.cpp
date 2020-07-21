@@ -822,6 +822,7 @@ public:
         DotToArrow,
         ArrowToDot
     };
+    Q_ENUM(Type)
 
 public Q_SLOTS:
     void replaceCurrentAccess(MemberAccessReplacer::Type type)
@@ -863,8 +864,6 @@ public Q_SLOTS:
 static MemberAccessReplacer s_memberAccessReplacer;
 
 }
-
-Q_DECLARE_METATYPE(MemberAccessReplacer::Type)
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
                                                        const ParseSessionData::Ptr& sessionData,
