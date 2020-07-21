@@ -73,8 +73,6 @@ namespace
 const int maximumFilesToOpenDirectly = 15;
 }
 
-Q_DECLARE_METATYPE( const Diff2::DiffModel* )
-
 void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
     try {
         qCDebug(PLUGIN_PATCHREVIEW) << forwards << fileName << fileName.isEmpty();

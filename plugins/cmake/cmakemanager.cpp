@@ -79,8 +79,6 @@
 #include <makefileresolver/makefileresolver.h>
 #include <sublime/message.h>
 
-Q_DECLARE_METATYPE(KDevelop::IProject*)
-
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportFactory, "kdevcmakemanager.json", registerPlugin<CMakeManager>(); )

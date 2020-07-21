@@ -119,7 +119,5 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(Sublime::View*)
-
 #endif
 

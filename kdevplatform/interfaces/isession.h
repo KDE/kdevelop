@@ -72,7 +72,5 @@ Q_SIGNALS:
 
 }
 
-Q_DECLARE_METATYPE( KDevelop::ISession* )
-
 #endif
 

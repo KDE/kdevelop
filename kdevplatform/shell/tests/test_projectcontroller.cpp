@@ -39,8 +39,6 @@
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(KDevelop::IProject*)
-
 namespace {
 
 class DialogProviderFake : public IProjectDialogProvider

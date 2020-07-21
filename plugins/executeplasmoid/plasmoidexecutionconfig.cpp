@@ -42,8 +42,6 @@
 #include <QLineEdit>
 class la;
 
-Q_DECLARE_METATYPE(KDevelop::IProject*)
-
 QIcon PlasmoidExecutionConfig::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("system-run"));

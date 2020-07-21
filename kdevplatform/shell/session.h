@@ -85,7 +85,6 @@ private:
 
 }
 
-Q_DECLARE_METATYPE( KDevelop::Session* )
 Q_DECLARE_TYPEINFO(KDevelop::SessionInfo, Q_MOVABLE_TYPE);
 
 #endif

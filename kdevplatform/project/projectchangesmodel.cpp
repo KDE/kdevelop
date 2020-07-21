@@ -42,8 +42,6 @@
 
 #include <array>
 
-Q_DECLARE_METATYPE(KDevelop::IProject*)
-
 using namespace KDevelop;
 
 ProjectChangesModel::ProjectChangesModel(QObject* parent)

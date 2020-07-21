@@ -50,8 +50,6 @@
 #include "toolviewdata.h"
 #include <debug.h>
 
-Q_DECLARE_METATYPE(QTreeView*)
-
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     : QWidget( parent )
     , m_tabwidget(nullptr)
