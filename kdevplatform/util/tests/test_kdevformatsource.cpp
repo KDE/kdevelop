@@ -167,19 +167,19 @@ void TestKdevFormatSource::testWildcardPathMatching_data()
         {},
         {"x", "a/b", "exclude", "x.c", "p q\tr", "v/l/p/a/t/h.x"}
     }, Row{"Single root format_sources with a single command",
-        {FormatInfo{"", "rd/* *include* *.h : true"}},
+        {FormatInfo{"", "rd/** **include* **.h : true"}},
         {"x", "r", "r.d", "includ", "includh", "rdh", "rd.h/x", "a/b.hh", "rc/x.h/y"},
         {"x.h", "rd/x", "rd/x.h", "aincludeb", "include", "include.h", "rd/a/b/c", "a/b/c.h", "a/include"}
     }, Row{"Single root format_sources with different commands",
-        {FormatInfo{"", "*inc/*:\n q/* *x?z:true \n dd/*: \n *.c:false \n *ab*:true"}},
+        {FormatInfo{"", "*inc/*:\n q/* **x?z:true \n dd/*: \n **.c:false \n **ab**:true"}},
         {"q", "a.b", "xz", "xyzc", "c", "ac", "inc", "inc-/x", "ayz", "xy", "add/s", "incc", "a./c", "x/yz", "a-b", "minc"},
-        {"xyz", "x.c", "incxyz", "ainc/b.c", "a/b/.c", "a/.c", "x/z", "a/x-z", "p/x.z", "asinc/v", "a/b/cab/d/e", "dd/d", "dd/.c"}
+        {"xyz", "x.c", "incxyz", "ainc/b.c", "a/b/.c", "a/.c", "x&z", "a/x-z", "p/x.z", "asinc/v", "a/b/cab/d/e", "dd/d", "dd/.c"}
     }, Row{"Multiple format_sources files",
-        {FormatInfo{"a/b/", "q/* *x?z : false"}, FormatInfo{"", "*.c *cab* : true"}},
+        {FormatInfo{"a/b/", "q/* **x?z : false"}, FormatInfo{"", "**.c **cab** : true"}},
         {"a/q", "a/xyz", "q/x", "xz", "a/b/qu", "a/bu/xyz", "ab/q/x", "a/b/qt/x", "a/bxyz", "a/x/z", "a/b/xz", "a/b/.c", "a/b/x-z.c"},
-        {"a/b/xyz", "x.c", "a/b/cdxyz", "a/b/cd/xyz", "a/b/q/x", "a/.c", "a/b/x/z", "exclude.c", "a/bcab/d/e"}
+        {"a/b/xyz", "x.c", "a/b/cdxyz", "a/b/cd/xyz", "a/b/q/x", "a/.c", "a/b/x,z", "exclude.c", "a/bcab/d/e"}
     }, Row{"Case sensitivity",
-        {FormatInfo{"", "pQ* *RS* : true"}},
+        {FormatInfo{"", "pQ** **RS* : true"}},
         {"a/b/CDE", "cdpq", "a/b/.e", "a/b/cDe", "prcpQ.Eqs"},
         {"a/b/pQrs", "a/b/c/d/pq/rs", "a/b/RSPQ", "pq", "uvrs", "PQa/b"}
     }};
