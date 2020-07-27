@@ -231,7 +231,7 @@ QStringList GrepFindFilesThread::parseExclude(const QString& excl)
     const auto excludesList = excl.splitRef(QRegExp(QStringLiteral(",|\\s")), Qt::SkipEmptyParts);
     exclude.reserve(excludesList.size());
     for (const auto& sub : excludesList) {
-        exclude << QStringLiteral("*%1*").arg(sub);
+        exclude << QStringLiteral("**%1**").arg(sub);
     }
     return exclude;
 }
