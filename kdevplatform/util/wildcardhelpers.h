@@ -7,23 +7,24 @@
 #ifndef KDEVPLATFORM_WILDCARDHELPERS_H
 #define KDEVPLATFORM_WILDCARDHELPERS_H
 
-#include <QRegExp>
+#include "utilexport.h"
+
 #include <QString>
 #include <QStringList>
 
 #include <algorithm>
 
 namespace WildcardHelpers {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+KDEVPLATFORMUTIL_EXPORT QString wildcardToRegularExpression(const QString& pattern);
+#endif
+
 /**
  * @note Unlike the QDir::match() overload with the same signature, this
  * function treats its first argument as a single pattern, not a filter with
  * multiple patterns separated by spaces or semicolons.
  */
-inline bool matchSinglePattern(const QString& pattern, const QString& fileName)
-{
-    QRegExp rx(pattern, Qt::CaseInsensitive, QRegExp::Wildcard);
-    return rx.exactMatch(fileName);
-}
+KDEVPLATFORMUTIL_EXPORT bool matchSinglePattern(const QString& pattern, const QString& fileName);
 
 /**
  *  @brief Works exactly as the QDir::match() overload with the same signature
