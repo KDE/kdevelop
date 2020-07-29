@@ -285,9 +285,6 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
         }
     }
 
-    if(!languages.isEmpty())
-        return languages;
-
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
     if(!languages.isEmpty() || QThread::currentThread() != thread())
