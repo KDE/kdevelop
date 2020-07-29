@@ -69,14 +69,7 @@ public:
         if (!url.isValid()) {
             return;
         }
-
-        activeLanguages.clear();
-
-        const QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
-        activeLanguages.reserve(languages.size());
-        for (const auto lang : languages) {
-            activeLanguages << lang;
-        }
+        activeLanguages = m_controller->languagesForUrl(url);
     }
 
     QList<ILanguageSupport*> activeLanguages;
