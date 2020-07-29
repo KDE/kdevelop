@@ -275,22 +275,26 @@ SourceFormatterStyle kdevFormatSource()
     result.setCaption(QStringLiteral("KDevelop: kdev_format_source"));
     result.setContent(QStringLiteral("kdev_format_source $FILE $TMPFILE"));
     result.setUsePreview(false);
-    result.setDescription(i18n("Description:<br />"
-                               "<b>kdev_format_source</b> is a script bundled with KDevelop "
-                               "which allows using fine-grained formatting rules by placing "
-                               "meta-files called <b>format_sources</b> into the file-system.<br /><br />"
-                               "Each line of the <b>format_sources</b> files defines a list of wildcards "
-                               "followed by a colon and the used formatting-command.<br /><br />"
-                               "The formatting-command should use <b>$TMPFILE</b> to reference the "
-                               "temporary file to reformat.<br /><br />"
-                               "Example:<br />"
-                               "<b>*.cpp *.h : myformatter $TMPFILE</b><br />"
-                               "This will reformat all files ending with <b>.cpp</b> or <b>.h</b> using "
-                               "the custom formatting script <b>myformatter</b>.<br /><br />"
-                               "Example: <br />"
-                               "<b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
-                               "This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
-                               "tool with the config-file <b>uncrustify.config</b>."));
+    result.setDescription(
+        i18n("Description:<br />"
+             "<b>kdev_format_source</b> is a script bundled with KDevelop "
+             "which allows using fine-grained formatting rules by placing "
+             "meta-files called <b>format_sources</b> into the file-system.<br /><br />"
+             "Each line of the <b>format_sources</b> files defines a list of wildcards "
+             "followed by a colon and the used formatting-command.<br /><br />"
+             "The formatting-command should use <b>$TMPFILE</b> to reference the "
+             "temporary file to reformat.<br /><br />"
+             "Example:<br />"
+             "<b>**.cpp **.h : myformatter $TMPFILE</b><br />"
+             "This will reformat all files ending with <b>.cpp</b> or <b>.h</b> using "
+             "the custom formatting script <b>myformatter</b>.<br />"
+             "The two asterisks match any number of any symbols, including path separators. "
+             "In order to reformat only files in the directory where the <b>format_sources</b> file "
+             "is located (without recursion), use a single asterisk, e.g. <b>*.cpp</b>.<br /><br />"
+             "Example: <br />"
+             "<b>subdir/** : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
+             "This will reformat all files in subdirectory <b>subdir</b> recursively using the "
+             "<b>uncrustify</b> tool with the config-file <b>uncrustify.config</b>."));
 
     result.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
     return result;
