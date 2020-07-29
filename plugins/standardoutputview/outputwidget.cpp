@@ -154,7 +154,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         m_filterInput = new KExpandableLineEdit(this);
         m_filterInput->setPlaceholderText(i18nc("@info:placeholder", "Search..."));
         m_filterInput->setClearButtonEnabled(true);
-        m_filterInput->setToolTip(i18nc("@info:tooltip", "Enter a wild card string to filter the output view"));
+        m_filterInput->setToolTip(i18nc("@info:tooltip",
+                                        "Enter a case-insensitive regular expression to filter the output view"));
         m_filterAction = new QWidgetAction(this);
         m_filterAction->setText(m_filterInput->placeholderText());
         connect(m_filterAction, &QAction::triggered, this, [this]() {m_filterInput->setFocus();});
