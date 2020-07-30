@@ -7,9 +7,14 @@
 
 #include "languagecontroller.h"
 
+#include <algorithm>
+#include <utility>
+#include <vector>
+
 #include <QHash>
 #include <QMimeDatabase>
 #include <QMutexLocker>
+#include <QRegularExpression>
 #include <QThread>
 
 #include <interfaces/idocument.h>
@@ -31,7 +36,95 @@
 namespace {
 QString KEY_SupportedMimeTypes() { return QStringLiteral("X-KDevelop-SupportedMimeTypes"); }
 QString KEY_ILanguageSupport() { return QStringLiteral("ILanguageSupport"); }
+
+bool containsWildcardCharacter(QString::const_iterator first, QString::const_iterator last)
+{
+    const auto isWildcardCharacter = [](QChar character) {
+        const auto u = character.unicode();
+        return u == '*' || u == '?' || u == '[';
+    };
+    return std::any_of(first, last, isWildcardCharacter);
 }
+
+using KDevelop::ILanguageSupport;
+
+class MimeTypeCache
+{
+public:
+    void addMimeType(const QString& mimeTypeName, ILanguageSupport* language);
+    QList<ILanguageSupport*> languagesForFileName(const QString& fileName) const;
+
+private:
+    void addGlobPattern(const QString& pattern, ILanguageSupport* language);
+
+    std::vector<std::pair<QString, ILanguageSupport*>> m_suffixes;        ///< contains e.g. ".cpp"
+    std::vector<std::pair<QString, ILanguageSupport*>> m_literalPatterns; ///< contains e.g. "CMakeLists.txt"
+    /// fallback, hopefully empty in practice
+    std::vector<std::pair<QRegularExpression, ILanguageSupport*>> m_regularExpressions;
+};
+
+void MimeTypeCache::addMimeType(const QString& mimeTypeName, ILanguageSupport* language)
+{
+    const QMimeType mime = QMimeDatabase().mimeTypeForName(mimeTypeName);
+    if (mime.isValid()) {
+        const auto globPatterns = mime.globPatterns();
+        for (const QString& pattern : globPatterns) {
+            addGlobPattern(pattern, language);
+        }
+    } else {
+        qCWarning(SHELL) << "could not create mime-type" << mimeTypeName;
+    }
+}
+
+QList<ILanguageSupport*> MimeTypeCache::languagesForFileName(const QString& fileName) const
+{
+    QList<ILanguageSupport*> languages;
+    // lastLanguageEquals() helps to improve performance by skipping checks for an already
+    // added language. It also prevents duplicate elements of languages when there are
+    // multiple equivalent glob patterns for a given language (for example, clangsupport
+    // plugin supports *.c from text/x-csrc and *.C from text/x-c++src).
+    const auto lastLanguageEquals = [&languages](const ILanguageSupport* lang) {
+        return !languages.empty() && languages.constLast() == lang;
+    };
+
+    for (const auto& p : m_suffixes) {
+        if (!lastLanguageEquals(p.second) && fileName.endsWith(p.first, Qt::CaseInsensitive)) {
+            languages.push_back(p.second);
+        }
+    }
+    for (const auto& p : m_literalPatterns) {
+        if (fileName.compare(p.first, Qt::CaseInsensitive) == 0 && !lastLanguageEquals(p.second)) {
+            languages.push_back(p.second);
+        }
+    }
+
+    for (const auto& p : m_regularExpressions) {
+        if (!lastLanguageEquals(p.second) && p.first.match(fileName).hasMatch()) {
+            languages.push_back(p.second);
+        }
+    }
+
+    return languages;
+}
+
+void MimeTypeCache::addGlobPattern(const QString& pattern, ILanguageSupport* language)
+{
+    if (pattern.startsWith(QLatin1Char{'*'})) {
+        if (!containsWildcardCharacter(pattern.cbegin() + 1, pattern.cend())) {
+            m_suffixes.emplace_back(pattern.mid(1), language);
+            return;
+        }
+    } else if (!containsWildcardCharacter(pattern.cbegin(), pattern.cend())) {
+        m_literalPatterns.emplace_back(pattern, language);
+        return;
+    }
+
+    QRegularExpression regularExpression(QRegularExpression::wildcardToRegularExpression(pattern),
+                                         QRegularExpression::CaseInsensitiveOption);
+    m_regularExpressions.emplace_back(std::move(regularExpression), language);
+}
+
+} // namespace
 
 namespace KDevelop {
 
@@ -66,8 +159,7 @@ public:
 
     LanguageHash languages; //Maps language-names to languages
     LanguageCache languageCache; //Maps mimetype-names to languages
-    using MimeTypeCache = QMultiHash<QMimeType, ILanguageSupport*>;
-    MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
+    MimeTypeCache mimeTypeCache; //Maps mimetype-glob-patterns to languages
 
     BackgroundParser* const backgroundParser;
     StaticAssistantsManager* staticAssistantsManager;
@@ -91,12 +183,7 @@ void LanguageControllerPrivate::addLanguageSupport(ILanguageSupport* languageSup
     for (const QString& mimeTypeName : mimetypes) {
         qCDebug(SHELL) << "adding supported mimetype:" << mimeTypeName << "language:" << languageSupport->name();
         languageCache[mimeTypeName] << languageSupport;
-        QMimeType mime = QMimeDatabase().mimeTypeForName(mimeTypeName);
-        if (mime.isValid()) {
-            mimeTypeCache.insert(mime, languageSupport);
-        } else {
-            qCWarning(SHELL) << "could not create mime-type" << mimeTypeName;
-        }
+        mimeTypeCache.addMimeType(mimeTypeName, languageSupport);
     }
 }
 
@@ -248,40 +335,11 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
 
     QMutexLocker lock(&d->dataMutex);
 
-    QList<ILanguageSupport*> languages;
-
     if(d->m_cleanedUp)
-        return languages;
+        return {};
 
-    const QString fileName = url.fileName();
-
-    ///TODO: cache regexp or simple string pattern for endsWith matching
-    QRegExp exp(QString(), Qt::CaseInsensitive, QRegExp::Wildcard);
     ///non-crashy part: Use the mime-types of known languages
-    for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin();
-        it != d->mimeTypeCache.constEnd(); ++it)
-    {
-        const auto globPatterns = it.key().globPatterns();
-        for (const QString& pattern : globPatterns) {
-            if(pattern.startsWith(QLatin1Char('*'))) {
-                const QStringRef subPattern = pattern.midRef(1);
-                if (!subPattern.contains(QLatin1Char('*'))) {
-                    //optimize: we can skip the expensive QRegExp in this case
-                    //and do a simple string compare (much faster)
-                    if (fileName.endsWith(subPattern)) {
-                        languages << *it;
-                    }
-                    continue;
-                }
-            }
-
-            exp.setPattern(pattern);
-            if(int position = exp.indexIn(fileName)) {
-                if(position != -1 && exp.matchedLength() + position == fileName.length())
-                    languages << *it;
-            }
-        }
-    }
+    auto languages = d->mimeTypeCache.languagesForFileName(url.fileName());
 
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
