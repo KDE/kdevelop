@@ -283,6 +283,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
 QStringList OpenProjectDialog::projectManagerForFile(const QString& file) const
 {
     QStringList ret;
+    qCritical() << "OpenProjectDialog::projectManagerForFile:" << file << m_projectFilters;
     for (auto it = m_projectFilters.begin(), end = m_projectFilters.end(); it != end; ++it) {
         const QString& manager = it.key();
         for (const QString& filterexp : it.value()) {

@@ -68,11 +68,19 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     m_filterModel->setFilterWildcard(QString());
     m_filterModel->sort(0, Qt::AscendingOrder);
 
+    // TODO: there will be a regression here in Qt6 (eb349930eee1ca8f31415dd2269a70d3dfd76257 migrated
+    // QSortFilterProxyModel::setFilterWildcard to QRegularExpression).
     //Changes in filter edit trigger filtering
     connect(m_ui->branchFilterEdit,
             &QLineEdit::textChanged,
             m_filterModel,
             &QSortFilterProxyModel::setFilterWildcard);
+
+    connect(m_ui->branchFilterEdit,
+            &QLineEdit::textChanged,
+            this, [](const QString& wildcard) {
+                qCritical() << "BranchManager::BranchManager - new filter wildcard:" << wildcard;
+            });
 
     m_ui->branchView->setModel(m_filterModel);
 

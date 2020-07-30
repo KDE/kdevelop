@@ -48,10 +48,14 @@
 #ifndef KDEVPLATFORM_WILDCARDHELPERS_H
 #define KDEVPLATFORM_WILDCARDHELPERS_H
 
-#include <QRegExp>
-#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+#include <QRegularExpression>
+#else
+#include <QRegExp>
+#endif
 
 #include <algorithm>
 
