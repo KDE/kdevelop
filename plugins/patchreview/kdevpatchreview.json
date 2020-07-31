@@ -109,7 +109,6 @@
     ],
     "X-KDevelop-Mode": "GUI",
     "X-KDevelop-SupportedMimeTypes": [
-        "text/x-diff",
         "text/x-patch"
     ]
 }
