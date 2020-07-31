@@ -12,6 +12,14 @@
 #include <QFileInfo>
 #include <QFileDialog>
 
+// QRegularExpression::wildcardToRegularExpression() returns an anchored regular expression since Qt 5.12.1.
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 1)
+#include <QRegularExpression>
+#define USE_QREGULAR_EXPRESSION
+#else
+#include <QRegExp>
+#endif
+
 #include <KColorScheme>
 #include <KIO/StatJob>
 #include <KIO/ListJob>
@@ -287,8 +295,14 @@ QStringList OpenProjectDialog::projectManagerForFile(const QString& file) const
     for (auto it = m_projectFilters.begin(), end = m_projectFilters.end(); it != end; ++it) {
         const QString& manager = it.key();
         for (const QString& filterexp : it.value()) {
+#ifdef USE_QREGULAR_EXPRESSION
+            const QRegularExpression regularExpression(
+                    QRegularExpression::wildcardToRegularExpression(filterexp));
+            if (regularExpression.match(file).hasMatch()) {
+#else
             QRegExp exp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard );
             if ( exp.exactMatch(file) ) {
+#endif
                 ret.append(manager);
             }
         }
