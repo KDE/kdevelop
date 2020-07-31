@@ -857,13 +857,10 @@ void ContextBrowserPlugin::updateForView(View* view)
         highlightPosition = KTextEditor::Cursor(view->cursorPosition());
 
     ///Pick a language
-    ILanguageSupport* language = nullptr;
-
-    if (ICore::self()->languageController()->languagesForUrl(url).isEmpty()) {
+    ILanguageSupport* const language = ICore::self()->languageController()->languagesForUrl(url).value(0);
+    if (!language) {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "found no language for document" << url;
         return;
-    } else {
-        language = ICore::self()->languageController()->languagesForUrl(url).front();
     }
 
     ///Check whether there is a special language object to highlight (for example a macro)
