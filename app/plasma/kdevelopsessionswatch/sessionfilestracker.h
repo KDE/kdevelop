@@ -24,6 +24,7 @@
 #include "kdevelopsessiondata.h"
 // Qt
 #include <QObject>
+#include <QVector>
 #include <QMutex>
 
 class KDirWatch;
