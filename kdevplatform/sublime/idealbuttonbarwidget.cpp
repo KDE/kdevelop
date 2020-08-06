@@ -86,7 +86,7 @@ private:
             refreshText();
         }
 
-        return QObject::eventFilter(watched, event);
+        return QAction::eventFilter(watched, event);
     }
 
     void refreshText()
