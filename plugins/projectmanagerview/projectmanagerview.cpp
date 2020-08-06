@@ -81,6 +81,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_ui->projectTreeView->installEventFilter(this);
 
     setWindowIcon( QIcon::fromTheme( QStringLiteral("project-development"), windowIcon() ) );
+    setWindowTitle(i18nc("@title:window", "Projects"));
 
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
     if (pmviewConfig.hasKey(splitterStateConfigKey)) {
