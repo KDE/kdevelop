@@ -77,6 +77,7 @@ private Q_SLOTS:
     void updateSyncAction();
     void open( const KDevelop::Path& );
     void toggleHideTargets(bool hidden);
+    void toggleSyncCurrentDocument(bool sync);
 
 private:
     QModelIndex indexFromView(const QModelIndex& index) const;
