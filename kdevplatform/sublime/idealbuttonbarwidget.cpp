@@ -290,6 +290,7 @@ void IdealButtonBarWidget::applyOrderToLayout()
         if (auto button = qobject_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
             addButtonToOrder(button);
             m_buttonsLayout->removeWidget(button);
+            --i;
         }
     }
 
