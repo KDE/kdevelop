@@ -392,7 +392,7 @@ public:
                 qCDebug(SHELL) << "Checking whether" << url << "is version controlled by" << iface->name();
                 if(iface->isVersionControlled(url))
                 {
-                    qDebug(SHELL) << "Detected that" << url << "is a" << iface->name() << "project";
+                    qCDebug(SHELL) << "Detected that" << url << "is a" << iface->name() << "project";
 
                     vcsPlugin = p;
                     projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo(p).pluginId());

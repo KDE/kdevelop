@@ -95,7 +95,7 @@ void openFiles(const QVector<UrlInfo>& infos)
 {
     for (const UrlInfo& info : infos) {
         if (!ICore::self()->documentController()->openDocument(info.url, info.cursor)) {
-            qWarning(APP) << i18n("Could not open %1", info.url.toDisplayString(QUrl::PreferLocalFile));
+            qCWarning(APP) << i18n("Could not open %1", info.url.toDisplayString(QUrl::PreferLocalFile));
         }
     }
 }
@@ -165,7 +165,7 @@ private Q_SLOTS:
         if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController()) {
             const auto activeSession = KDevelop::Core::self()->sessionController()->activeSession();
             if (!activeSession) {
-                qWarning(APP) << "No active session, can't save state";
+                qCWarning(APP) << "No active session, can't save state";
                 return;
             }
 
@@ -706,7 +706,7 @@ int main( int argc, char *argv[] )
         const KDevelop::SessionInfo* sessionData = findSessionInList(availableSessionInfos, session);
 
         if( !sessionData ) {
-            qCritical(APP) << "session not given or does not exist";
+            qCCritical(APP) << "session not given or does not exist";
             return 5;
         }
 
@@ -716,7 +716,7 @@ int main( int argc, char *argv[] )
             std::cout << pid << std::endl;
             return 0;
         } else {
-            qCritical(APP) << sessionData->uuid.toString() << sessionData->name << "is not running";
+            qCCritical(APP) << sessionData->uuid.toString() << sessionData->name << "is not running";
             return 5;
         }
     }
@@ -730,7 +730,7 @@ int main( int argc, char *argv[] )
         } else if (info.isDir()) {
             QDir dir(info.absoluteFilePath());
             const auto potentialProjectFiles = dir.entryList({QStringLiteral("*.kdev4")}, QDir::Files, QDir::Name);
-            qDebug(APP) << "Found these potential project files:" << potentialProjectFiles;
+            qCDebug(APP) << "Found these potential project files:" << potentialProjectFiles;
             if (!potentialProjectFiles.isEmpty()) {
                 projectUrl = QUrl::fromLocalFile(dir.absoluteFilePath(potentialProjectFiles.value(0)));
             }
@@ -740,19 +740,19 @@ int main( int argc, char *argv[] )
             return 1;
         }
 
-        qDebug(APP) << "Attempting to find a suitable session for project" << projectUrl;
+        qCDebug(APP) << "Attempting to find a suitable session for project" << projectUrl;
         const auto sessionInfos = findSessionsWithProject(availableSessionInfos, projectUrl);
-        qDebug(APP) << "Found matching sessions:" << sessionInfos.size();
+        qCDebug(APP) << "Found matching sessions:" << sessionInfos.size();
         if (!sessionInfos.isEmpty()) {
             // TODO: If there's more than one match: Allow the user to select which session to open?
-            qDebug(APP) << "Attempting to open session:" << sessionInfos.at(0).name;
+            qCDebug(APP) << "Attempting to open session:" << sessionInfos.at(0).name;
             session = sessionInfos.at(0).uuid.toString();
         }
     }
 
     KDevIDEExtension::init();
 
-    qDebug(APP) << "Attempting to initialize session:" << session;
+    qCDebug(APP) << "Attempting to initialize session:" << session;
     if(!Core::initialize(Core::Default, session))
         return 5;
 
