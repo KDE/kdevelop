@@ -414,7 +414,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
         // open the last opened tool view (or the first one) and focus it
         if (lastDock) {
             if (QAction *action = m_dockwidget_to_action.value(lastDock))
-                action->setChecked(show);
+                action->setChecked(true);
 
             lastDock->setFocus(Qt::ShortcutFocusReason);
             return;
@@ -422,7 +422,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 
         const auto barActions = bar->actions();
         if (!barActions.isEmpty())
-            barActions.first()->setChecked(show);
+            barActions.first()->setChecked(true);
     }
 }
 
