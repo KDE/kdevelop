@@ -55,7 +55,6 @@ private Q_SLOTS:
     void slotRemove();
 
 private:
-    Qt::Orientation m_orientation;
     Area *m_area;
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
