@@ -199,7 +199,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     }
 
     if (area == Qt::BottomDockWidgetArea || area == Qt::TopDockWidgetArea)
-        dock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | IdealDockWidget::DockWidgetVerticalTitleBar);
+        dock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetVerticalTitleBar);
     else
         dock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable);
 }
