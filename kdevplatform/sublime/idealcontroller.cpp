@@ -128,7 +128,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->setFocusProxy(dock->widget());
 
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
-        QAction* action = bar->addWidget(dock, static_cast<MainWindow*>(parent())->area(), view);
+        QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
 
         m_docks->addAction(action);
@@ -177,7 +177,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     docks.insert(dock);
 
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
-        QAction* action = bar->addWidget(dock, static_cast<MainWindow*>(parent())->area(), view);
+        QAction* action = bar->addWidget(dock, m_mainWindow->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
 
         // at this point the dockwidget is visible (user dragged it)
