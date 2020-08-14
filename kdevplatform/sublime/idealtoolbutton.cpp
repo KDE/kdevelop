@@ -181,9 +181,9 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
         QPixmap ic = icon().pixmap(option.iconSize, iconMode, QIcon::On);
         QTransform tf;
         if(_area == Qt::LeftDockWidgetArea) {
-            tf = tf.rotate(90);
+            tf.rotate(90);
         } else {
-            tf = tf.rotate(-90);
+            tf.rotate(-90);
         }
         option.icon = ic.transformed( tf, Qt::SmoothTransformation );
         painter.drawControl(QStyle::CE_ToolButtonLabel, option);
