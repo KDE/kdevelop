@@ -188,7 +188,7 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     //KDevelop needs to ensure that separators defined as <Separator style="visible" />
     //are always shown in the menubar. For those, we create special disabled actions
     //instead of calling QMenuBar::addSeparator() because menubar separators are ignored
-    if (element.tagName().toLower() == QLatin1String("separator")
+    if (element.tagName().compare(QLatin1String("separator"), Qt::CaseInsensitive) == 0
             && element.attribute(QStringLiteral("style")) == QLatin1String("visible")) {
         if ( auto* bar = qobject_cast<QMenuBar*>( parent ) ) {
             auto* separatorAction = new QAction(QStringLiteral("|"), this);
