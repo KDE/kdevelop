@@ -112,7 +112,15 @@ ImportData import(const Path& commandsFile, const Path &targetsFilePath, const Q
     //we don't have target type information in json, so we just announce all of them as exes
     const auto targets = CMake::enumerateTargets(targetsFilePath, sourceDir, buildPath);
     for(auto it = targets.constBegin(), itEnd = targets.constEnd(); it!=itEnd; ++it) {
-        cmakeTargets[it.key()] = kTransform<QVector<CMakeTarget>>(*it, [](const QString &targetName) { return CMakeTarget{CMakeTarget::Executable, targetName}; });
+        cmakeTargets[it.key()] = kTransform<QVector<CMakeTarget>>(*it, [](const QString &targetName) {
+            return CMakeTarget{
+                CMakeTarget::Executable,
+                targetName,
+                KDevelop::Path::List(),
+                KDevelop::Path::List(),
+                QString()
+            };
+        });
     }
 
     return ImportData {
@@ -168,7 +176,7 @@ void CMakeImportJsonJob::importCompileCommandsJsonFinished()
         return;
     }
 
-    m_data = {data.compilationData, data.targets, data.testSuites};
+    m_data = {data.compilationData, data.targets, data.testSuites, {}};
     qCDebug(CMAKE) << "Done importing, found" << data.compilationData.files.count() << "entries for" << project()->path();
 
     emitResult();

@@ -255,7 +255,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 auto plugins = projectManagerForFile(file);
                 if ( plugins.contains(QStringLiteral("<built-in>")) ) {
                     plugins.removeAll(QStringLiteral("<built-in>"));
-                    choices.append({i18nc("@item:inlistbox", "Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString()});
+                    choices.append({i18nc("@item:inlistbox", "Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString(), QString()});
                 }
                 choices.reserve(choices.size() + plugins.size());
                 for (const auto& plugin : qAsConst(plugins)) {
@@ -268,7 +268,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
             for (const auto& plugin : qAsConst(m_genericProjectPlugins)) {
                 qCDebug(SHELL) << plugin;
                 auto meta = m_projectPlugins.value(plugin);
-                choices.append({plugin, meta.pluginId(), meta.iconName()});
+                choices.append({plugin, meta.pluginId(), meta.iconName(), QString()});
             }
             page->populateProjectFileCombo(choices);
         }

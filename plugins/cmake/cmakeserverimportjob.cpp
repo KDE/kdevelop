@@ -96,6 +96,7 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                     target.value(QStringLiteral("name")).toString(),
                     kTransform<KDevelop::Path::List>(target[QLatin1String("artifacts")].toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toString()); }),
                     targetSources,
+                    QString()
                 };
 
                 // ensure we don't add the same target multiple times, for different projects

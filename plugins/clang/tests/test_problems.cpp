@@ -213,7 +213,7 @@ void TestProblems::testFixits_data()
     QTest::newRow("extra-tokens")
         << "#ifdef FOO\n#endif FOO\n"
         << 1
-        << QVector<ClangFixit>{ ClangFixit{"//", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 7, 1, 7)), QString()} };
+        << QVector<ClangFixit>{ ClangFixit{"//", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 7, 1, 7)), QString(), QString()} };
 
     const auto clangVersion9OrHigher = QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(9, 0, 0);
     // expected:
@@ -325,8 +325,8 @@ void TestProblems::testMissingInclude_data()
         << "int main() { A a; }\n"
         << QString()
         << QVector<ClangFixit>{
-            ClangFixit{"class A;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
-            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
+            ClangFixit{"class A;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString(), QString()},
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString(), QString()}
         };
 
     // cf. bug 375274
@@ -335,16 +335,16 @@ void TestProblems::testMissingInclude_data()
         << "#include <vector>\nint main() { Foo foo; }\n#include \"dummyInclude\"\n"
         << "/moc_fooXXXXXX.cpp"
         << QVector<ClangFixit>{
-            ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
-            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(1, 0, 1, 0)), QString()}
+            ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString(), QString()},
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(1, 0, 1, 0)), QString(), QString()}
         };
     QTest::newRow("ignore-moc-at-end2")
         << "class Foo {};\n"
         << "int main() { Foo foo; }\n#include \"dummyInclude\"\n"
         << "/fooXXXXXX.moc"
         << QVector<ClangFixit>{
-            ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
-            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
+            ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString(), QString()},
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString(), QString()}
         };
 }
 

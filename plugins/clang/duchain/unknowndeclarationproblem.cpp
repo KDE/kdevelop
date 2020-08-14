@@ -385,7 +385,7 @@ ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::L
     } else {
         directive = QStringLiteral("#include <%1>").arg(shortestDirective);
     }
-    return ClangFixit{directive + QLatin1Char('\n'), range, i18n("Insert \'%1\'", directive)};
+    return ClangFixit{directive + QLatin1Char('\n'), range, i18n("Insert \'%1\'", directive), QString()};
 }
 
 KDevelop::Path::List includePaths( const KDevelop::Path& file )
@@ -445,13 +445,15 @@ ClangFixits forwardDeclarations(const QVector<Declaration*>& matchingDeclaration
             case ClassDeclarationData::Class:
                 fixits += {
                     QLatin1String("class ") + name + QLatin1String(";\n"), range,
-                    i18n("Forward declare as 'class'")
+                    i18n("Forward declare as 'class'"),
+                    QString()
                 };
                 break;
             case ClassDeclarationData::Struct:
                 fixits += {
                     QLatin1String("struct ") + name + QLatin1String(";\n"), range,
-                    i18n("Forward declare as 'struct'")
+                    i18n("Forward declare as 'struct'"),
+                    QString()
                 };
                 break;
             default:
