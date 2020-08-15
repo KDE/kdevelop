@@ -574,7 +574,14 @@ void BreakpointModel::save()
 
     d->dirty = false;
 
-    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
+    auto* const activeSession = ICore::self()->activeSession();
+    if (!activeSession) {
+        qCDebug(DEBUGGER) << "Cannot save breakpoints because there is no active session. "
+                             "KDevelop must be exiting and already past SessionController::cleanup().";
+        return;
+    }
+
+    KConfigGroup breakpoints = activeSession->config()->group("Breakpoints");
     breakpoints.writeEntry("number", d->breakpoints.count());
     int i = 0;
     for (Breakpoint* b : qAsConst(d->breakpoints)) {
