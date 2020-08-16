@@ -94,6 +94,7 @@ public:
 
     // used to map urls to open docs
     QHash< QUrl, IDocument* > documents;
+    bool shuttingDown = false;
 
     QHash< QString, IDocumentFactory* > factories;
 
@@ -577,6 +578,8 @@ void DocumentController::cleanup()
 {
     Q_D(DocumentController);
 
+    d->shuttingDown = true;
+
     if (d->fileOpenRecent)
         d->fileOpenRecent->saveEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
@@ -698,6 +701,20 @@ IDocument* DocumentController::openDocument( const QUrl & inputUrl,
         const QString& encoding, IDocument* buddy)
 {
     Q_D(DocumentController);
+
+    if (d->shuttingDown) {
+        // When a user exits KDevelop during debugging, a code breakpoint can be hit,
+        // and as a consequence DebugController::showStepInSource() be called
+        // in the event loop started by Core::cleanup() => BackgroundParser::waitForIdle().
+        // Oblivious to the application state, DebugController then tries to open a document,
+        // which eventually results in a crash inside a slot connected to either
+        // &IDocumentController::textDocumentCreated or &IDocumentController::documentLoaded
+        // (these signals are emitted in the process of opening a document).
+        // Even had there been no crash, we should not open documents after cleanup(),
+        // because we will never close them.
+        qCDebug(SHELL) << "refusing to open document" << inputUrl << "after cleanup()";
+        return nullptr;
+    }
 
     return d->openDocumentInternal(inputUrl, QString(), range, encoding, activationParams, buddy);
 }
