@@ -114,7 +114,7 @@ public:
      ///Note: to retrieve the full path use Breakpoint::LocationRole, Qt::DisplayRole returns only a file's name
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
- 
+
     void toggleBreakpoint(const QUrl &url, const KTextEditor::Cursor& cursor);
 
 
@@ -190,6 +190,8 @@ private:
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
     uint breakpointType(Breakpoint *breakpoint) const;
     Breakpoint *breakpoint(const QUrl& url, int line) const;
+
+    void setupMovingCursor(KTextEditor::Document* document, Breakpoint* breakpoint) const;
 
 private:
     const QScopedPointer<class BreakpointModelPrivate> d_ptr;
