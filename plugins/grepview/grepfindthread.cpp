@@ -177,13 +177,6 @@ void GrepFindFilesThread::tryAbort()
     d->m_tryAbort.store(true, std::memory_order_relaxed);
 }
 
-bool GrepFindFilesThread::triesToAbort() const
-{
-    Q_D(const GrepFindFilesThread);
-
-    return d->m_tryAbort.load(std::memory_order_relaxed);
-}
-
 void GrepFindFilesThread::run()
 {
     Q_D(GrepFindFilesThread);

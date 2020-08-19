@@ -40,12 +40,7 @@ public:
      * Check this via QThread::isRunning() or QThread::isFinished().
      */
     void tryAbort();
-    /**
-     * @brief Check if the internal m_tryAbort flag is set
-     * @return Whether the thread is going to abort its work.
-     */
-    bool triesToAbort() const;
-    
+
     /**
      * @brief Parses include string to a list suitable for QDir::match
      */

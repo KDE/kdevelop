@@ -66,6 +66,8 @@ private:
     explicit GrepJob( QObject *parent = nullptr );
 
 public:
+    ~GrepJob() override;
+
     void setSettings(const GrepJobSettings& settings);
     GrepJobSettings settings() const;
 
@@ -77,8 +79,6 @@ public:
     QString statusName() const override;
 protected:
     bool doKill() override;
-
-//    GrepOutputModel* model() const;
 
 private Q_SLOTS:
     void slotFindFinished();
@@ -94,6 +94,8 @@ Q_SIGNALS:
 
 private:
     Q_INVOKABLE void slotWork();
+    void die();
+    void dieAfterCancellation();
 
     QList<QUrl> m_directoryChoice;
     QString m_errorMessage;
@@ -103,15 +105,17 @@ private:
     QPointer<GrepOutputModel> m_outputModel;
 
     enum {
+        WorkUnstarted,
+        WorkStarting,
         WorkCollectFiles,
         WorkGrep,
-        WorkIdle,
-        WorkCancelled
+        WorkCancelled,
+        WorkDead
     } m_workState;
 
     QList<QUrl> m_fileList;
     int m_fileIndex;
-    QPointer<GrepFindFilesThread> m_findThread;
+    GrepFindFilesThread* m_findThread;
 
     GrepJobSettings m_settings;
 

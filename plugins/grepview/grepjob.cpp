@@ -12,6 +12,8 @@
 #include "grepoutputmodel.h"
 #include "greputil.h"
 
+#include "debug.h"
+
 #include <QDebug>
 #include <QFile>
 #include <QList>
@@ -120,8 +122,9 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 
 GrepJob::GrepJob( QObject* parent )
     : KJob( parent )
-    , m_workState(WorkIdle)
+    , m_workState(WorkUnstarted)
     , m_fileIndex(0)
+    , m_findThread(nullptr)
     , m_findSomething(false)
 {
     qRegisterMetaType<GrepOutputItem::List>();
@@ -132,6 +135,11 @@ GrepJob::GrepJob( QObject* parent )
     connect(this, &GrepJob::result, this, &GrepJob::testFinishState);
 }
 
+GrepJob::~GrepJob()
+{
+    Q_ASSERT(m_workState == WorkDead);
+}
+
 QString GrepJob::statusName() const
 {
     return i18n("Find in Files");
@@ -139,29 +147,22 @@ QString GrepJob::statusName() const
 
 void GrepJob::slotFindFinished()
 {
-    if(m_findThread && !m_findThread->triesToAbort())
-    {
-        Q_ASSERT(m_findThread->isFinished());
-        m_fileList = m_findThread->takeFiles();
-        delete m_findThread;
-    }
-    else
-    {
-        m_fileList.clear();
-        emit hideProgress(this);
-        emit clearMessage(this);
-        m_errorMessage = i18n("Search aborted");
-        emitResult();
+    Q_ASSERT(m_findThread && m_findThread->isFinished());
+
+    if (m_workState == WorkCancelled) {
+        dieAfterCancellation();
         return;
     }
+    Q_ASSERT(m_workState == WorkCollectFiles);
+
+    m_fileList = m_findThread->takeFiles();
+    m_findThread->deleteLater();
+    m_findThread = nullptr;
+
     if(m_fileList.isEmpty())
     {
-        m_workState = WorkIdle;
-        emit hideProgress(this);
-        emit clearMessage(this);
         m_errorMessage = i18n("No files found matching the wildcard patterns");
-        //model()->slotFailed();
-        emitResult();
+        die();
         return;
     }
 
@@ -172,13 +173,10 @@ void GrepJob::slotFindFinished()
 
     if(m_settings.regexp && QRegExp(m_settings.pattern).captureCount() > 0)
     {
-        m_workState = WorkIdle;
-        emit hideProgress(this);
-        emit clearMessage(this);
         m_errorMessage = i18nc("Capture is the text which is \"captured\" with () in regular expressions "
                                     "see https://doc.qt.io/qt-5/qregexp.html#capturedTexts",
                                     "Captures are not allowed in pattern string");
-        emitResult();
+        die();
         return;
     }
 
@@ -209,18 +207,23 @@ void GrepJob::slotFindFinished()
 
 void GrepJob::slotWork()
 {
+    Q_ASSERT(!m_findThread);
+
     switch(m_workState)
     {
-        case WorkIdle:
+        case WorkUnstarted:
+        case WorkDead:
+            Q_UNREACHABLE();
+            break;
+        case WorkStarting:
             m_workState = WorkCollectFiles;
-            m_fileIndex = 0;
             emit showProgress(this, 0,0,0);
             QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             break;
         case WorkCollectFiles:
             m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_settings.depth, m_settings.files, m_settings.exclude, m_settings.projectFilesOnly);
             emit showMessage(this, i18n("Collecting files..."));
-            connect(m_findThread.data(), &GrepFindFilesThread::finished, this, &GrepJob::slotFindFinished);
+            connect(m_findThread, &GrepFindFilesThread::finished, this, &GrepJob::slotFindFinished);
             m_findThread->start();
             break;
         case WorkGrep:
@@ -243,32 +246,39 @@ void GrepJob::slotWork()
             }
             else
             {
-                emit hideProgress(this);
-                emit clearMessage(this);
-                m_workState = WorkIdle;
-                //model()->slotCompleted();
-                emitResult();
+                die();
             }
             break;
         case WorkCancelled:
-            emit hideProgress(this);
-            emit clearMessage(this);
-            emit showErrorMessage(i18n("Search aborted"), 5000);
-            emitResult();
+            dieAfterCancellation();
             break;
     }
 }
 
+void GrepJob::die()
+{
+    emit hideProgress(this);
+    emit clearMessage(this);
+    m_workState = WorkDead;
+    emitResult();
+}
+
+void GrepJob::dieAfterCancellation()
+{
+    Q_ASSERT(m_workState == WorkCancelled);
+    m_errorMessage = i18n("Search aborted");
+    die();
+}
+
 void GrepJob::start()
 {
-    if(m_workState!=WorkIdle)
+    if (m_workState != WorkUnstarted) {
+        qCWarning(PLUGIN_GREPVIEW) << "cannot start a grep job more than once, current state:" << m_workState;
         return;
+    }
 
-    m_fileList.clear();
-    m_workState = WorkIdle;
-    m_fileIndex = 0;
+    m_workState = WorkStarting;
 
-    m_findSomething = false;
     m_outputModel->clear();
 
     connect(this, &GrepJob::foundMatches,
@@ -279,21 +289,26 @@ void GrepJob::start()
 
 bool GrepJob::doKill()
 {
-    if(m_workState!=WorkIdle && !m_findThread.isNull())
-    {
-        m_workState = WorkIdle;
-        m_findThread->tryAbort();
-        return false;
+    if (m_workState == WorkUnstarted || m_workState == WorkDead) {
+        m_workState = WorkDead;
+        return true;
     }
-    else
-    {
+    if (m_workState != WorkCancelled) {
+        if (m_findThread) {
+            Q_ASSERT(m_workState == WorkCollectFiles);
+            m_findThread->tryAbort();
+        }
         m_workState = WorkCancelled;
     }
-    return true;
+    // Do not let KJob finish immediately if the state was neither Unstarted nor Dead:
+    // * If m_findThread != nullptr, let it finish first.
+    // * Otherwise, slotWork() is about to be invoked. Don't want this to be destroyed by KJob before that happens.
+    return false;
 }
 
 void GrepJob::testFinishState(KJob *job)
 {
+    Q_ASSERT(m_workState == WorkDead);
     if(!job->error())
     {
         if (!m_errorMessage.isEmpty()) {
