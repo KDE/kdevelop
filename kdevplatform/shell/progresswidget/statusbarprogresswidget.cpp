@@ -236,12 +236,17 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
 
 void StatusbarProgressWidget::connectSingleItem()
 {
+    auto* const singleItem = ProgressManager::instance()->singleItem();
+    if ( singleItem == mCurrentItem ) {
+        return; // No need to waste time reconnecting the same signal/slot pair.
+    }
+
     if ( mCurrentItem ) {
         disconnect ( mCurrentItem, &ProgressItem::progressItemProgress,
                      this, &StatusbarProgressWidget::slotProgressItemProgress );
         mCurrentItem = nullptr;
     }
-    mCurrentItem = ProgressManager::instance()->singleItem();
+    mCurrentItem = singleItem;
     if ( mCurrentItem ) {
         connect ( mCurrentItem, &ProgressItem::progressItemProgress,
                   this, &StatusbarProgressWidget::slotProgressItemProgress );
