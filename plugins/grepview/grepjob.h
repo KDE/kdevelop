@@ -10,14 +10,16 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPJOB_H
 #define KDEVPLATFORM_PLUGIN_GREPJOB_H
 
+#include <QList>
 #include <QPointer>
+#include <QRegExp>
+#include <QString>
 #include <QUrl>
 
 #include <KJob>
 
 #include <interfaces/istatus.h>
 
-#include "grepfindthread.h"
 #include "grepoutputmodel.h"
 
 namespace KDevelop
@@ -25,7 +27,7 @@ namespace KDevelop
     class IProject;
 }
 
-class QRegExp;
+class GrepFindFilesThread;
 class GrepViewPlugin;
 class FindReplaceTest; //FIXME: this is useful only for tests
 

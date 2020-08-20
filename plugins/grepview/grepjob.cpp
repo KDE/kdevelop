@@ -9,6 +9,7 @@
 */
 
 #include "grepjob.h"
+#include "grepfindthread.h"
 #include "grepoutputmodel.h"
 #include "greputil.h"
 
@@ -16,8 +17,6 @@
 
 #include <QDebug>
 #include <QFile>
-#include <QList>
-#include <QRegExp>
 #include <QTextStream>
 
 #include <KEncodingProber>
