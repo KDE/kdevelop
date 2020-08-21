@@ -50,7 +50,7 @@ public:
 public Q_SLOTS:
     /*! Shows an error message in the status bar.
         @p message The message
-        @p timeout The timeout in milliseconds how long to show the message */
+        @p timeout The timeout in seconds how long to show the message */
     void showErrorMessage(const QString& message, int timeout);
 
     virtual Q_SCRIPTABLE void ensureVisible();

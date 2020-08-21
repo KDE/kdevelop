@@ -50,7 +50,7 @@ Q_SIGNALS:
      * Request an error \a message to be shown for this plugin, with a given \a timeout.
      *
      * \param message Message to display
-     * \param timeout Timeout in milliseconds, or pass 0 for no timeout.
+     * \param timeout Timeout in seconds how long to show the message.
      */
     virtual void showErrorMessage(const QString & message, int timeout = 0) = 0;
 
