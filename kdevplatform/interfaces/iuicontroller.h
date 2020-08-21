@@ -127,7 +127,7 @@ public:
       *
       * @p message The message
       * @p timeout The timeout in seconds how long to show the message */
-    virtual void showErrorMessage(const QString& message, int timeout = 1) = 0;
+    virtual void showErrorMessage(const QString& message, int timeout = 5) = 0;
     // TODO: convert all these calls into postMessage
 
     /**

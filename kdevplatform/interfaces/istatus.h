@@ -52,7 +52,7 @@ Q_SIGNALS:
      * \param message Message to display
      * \param timeout Timeout in seconds how long to show the message.
      */
-    virtual void showErrorMessage(const QString & message, int timeout = 0) = 0;
+    virtual void showErrorMessage(const QString& message, int timeout = 5) = 0;
 
     /**
      * Hide the progress bar.

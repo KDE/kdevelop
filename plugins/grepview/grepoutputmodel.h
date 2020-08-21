@@ -84,8 +84,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void showMessage( KDevelop::IStatus*, const QString& message );
-    void showErrorMessage(const QString & message, int timeout = 0);
-    
+    void showErrorMessage(const QString& message);
+
 private:    
     void makeItemsCheckable(bool checkable, GrepOutputItem* item);
     

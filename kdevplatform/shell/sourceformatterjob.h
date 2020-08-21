@@ -43,7 +43,7 @@ protected: // KJob API
 Q_SIGNALS: // KDevelop::IStatus API
     void clearMessage(KDevelop::IStatus* status) override;
     void showMessage(KDevelop::IStatus* status, const QString& message, int timeout = 0) override;
-    void showErrorMessage(const QString& message, int timeout = 0) override;
+    void showErrorMessage(const QString& message, int timeout) override;
     void hideProgress(KDevelop::IStatus* status) override;
     void showProgress(KDevelop::IStatus* status, int minimum, int maximum, int value) override;
 

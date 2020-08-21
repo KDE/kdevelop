@@ -71,7 +71,7 @@ public:
 Q_SIGNALS:
     void clearMessage(KDevelop::IStatus*) override;
     void showMessage(KDevelop::IStatus*, const QString &message, int timeout = 0) override;
-    void showErrorMessage(const QString & message, int timeout = 0) override;
+    void showErrorMessage(const QString& message, int timeout) override;
     void hideProgress(KDevelop::IStatus*) override;
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
 
