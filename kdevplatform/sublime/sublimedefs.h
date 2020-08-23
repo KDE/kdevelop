@@ -42,12 +42,10 @@ namespace Sublime {
         AllPositions = Left|Right|Top|Bottom /**< all tool view positions */
     };
     Q_DECLARE_FLAGS(Positions, Position)
+    Q_DECLARE_OPERATORS_FOR_FLAGS(Positions)
 
     KDEVPLATFORMSUBLIME_EXPORT Position dockAreaToPosition(Qt::DockWidgetArea dockArea);
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Sublime::Positions)
-
 #endif
-

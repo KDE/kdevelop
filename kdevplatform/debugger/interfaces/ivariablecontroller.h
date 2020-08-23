@@ -92,9 +92,9 @@ private:
     const QScopedPointer<class IVariableControllerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(IVariableController)
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(IVariableController::UpdateTypes)
  
 } // namespace KDevelop
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IVariableController::UpdateTypes)
 
 #endif

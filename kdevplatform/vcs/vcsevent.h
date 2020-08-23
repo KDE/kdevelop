@@ -81,6 +81,8 @@ private:
     QSharedDataPointer<class VcsItemEventPrivate> d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(VcsItemEvent::Actions)
+
 /**
  * Small container class that contains information about a single revision.
  *
@@ -116,10 +118,9 @@ private:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsItemEvent::Actions )
 Q_DECLARE_METATYPE( KDevelop::VcsEvent )
 Q_DECLARE_TYPEINFO( KDevelop::VcsEvent, Q_MOVABLE_TYPE );
 Q_DECLARE_METATYPE( KDevelop::VcsItemEvent )
 Q_DECLARE_TYPEINFO( KDevelop::VcsItemEvent, Q_MOVABLE_TYPE );
-#endif
 
+#endif

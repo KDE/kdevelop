@@ -137,12 +137,10 @@ public:
     virtual Path compiler(KDevelop::ProjectTargetItem* p) const = 0;
 };
 
-}
+Q_DECLARE_OPERATORS_FOR_FLAGS(IBuildSystemManager::BuildFeatures)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IBuildSystemManager::BuildFeatures )
+}
 
 Q_DECLARE_INTERFACE( KDevelop::IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
 
 #endif
-
-

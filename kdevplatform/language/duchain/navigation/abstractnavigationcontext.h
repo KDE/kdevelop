@@ -54,6 +54,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
     Formatting m_formatting;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting)
+
 class AbstractNavigationContext;
 using NavigationContextPointer = QExplicitlySharedDataPointer<AbstractNavigationContext>;
 
@@ -169,8 +171,7 @@ private:
     const QScopedPointer<class AbstractNavigationContextPrivate> d_ptr;
     Q_DECLARE_PRIVATE(AbstractNavigationContext)
 };
-}
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::Colorizer::Formatting)
+}
 
 #endif

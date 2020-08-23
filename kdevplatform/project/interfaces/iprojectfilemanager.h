@@ -171,8 +171,9 @@ Q_SIGNALS:
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(IProjectFileManager::Features)
+
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IProjectFileManager::Features )
 
 Q_DECLARE_INTERFACE( KDevelop::IProjectFileManager, "org.kdevelop.IProjectFileManager")
 

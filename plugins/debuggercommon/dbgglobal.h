@@ -50,6 +50,7 @@ enum DBGStateFlag
 };
 Q_ENUM_NS(DBGStateFlag)
 Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(DBGStateFlags)
 
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
             typeStruct, typeArray, typeQString, typeWhitespace,
@@ -87,7 +88,5 @@ static const char LldbRemotePathEntry[] = "LLDB Remote Path";
 }
 
 } // end of namespace KDevMI
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevMI::DBGStateFlags)
 
 #endif // _DBGGLOBAL_H_

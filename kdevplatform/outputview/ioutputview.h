@@ -171,14 +171,13 @@ Q_SIGNALS:
     void outputRemoved(int toolViewId, int outputId);
 };
 
-} // namespace KDevelop
+Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
+Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Options)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Behaviours)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Options)
+} // namespace KDevelop
 
 Q_DECLARE_METATYPE(KDevelop::IOutputView::StandardToolView)
 
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
 
 #endif
-
