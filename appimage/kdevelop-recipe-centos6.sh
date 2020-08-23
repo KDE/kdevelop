@@ -22,17 +22,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 QTDIR=/opt/qt5
 
 if [ -z "$KDEVELOP_VERSION" ]; then
-    KDEVELOP_VERSION=5.5
+    KDEVELOP_VERSION=5.6
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.1
 fi
-# remove breezeicons-compatcmake3.6.patch for >5.69.0
-KF5_VERSION=v5.69.0
-PLASMA_VERSION=v5.18.5
-KDE_RELEASESERVICE_VERSION=v20.04.1
+KF5_VERSION=v5.73.0
+LIBKSYSGUARD_VERSION=v5.18.5 # 5.19 needs Qt 5.14
+BREEZESTYLE_VERSION=v5.19.4
+KDE_RELEASESERVICE_VERSION=v20.08.0
 GRANTLEE_VERSION=v5.2.0
-OKTETA_VERSION=v0.26.3
+OKTETA_VERSION=v0.26.4
 
 export LLVM_ROOT=/opt/llvm/
 export PATH=/opt/rh/python27/root/usr/bin/:$PATH
@@ -190,24 +190,23 @@ build_framework kparts
 build_framework kitemmodels
 build_framework threadweaver
 build_framework attica
+build_framework kpackage
 build_framework knewstuff
 build_framework syntax-highlighting
 build_framework ktexteditor
-build_framework kpackage
 build_framework kdeclarative
 build_framework kcmutils
 (PATCH_FILE=$SCRIPT_DIR/knotifications_no_phonon.patch build_framework knotifications)
 (PATCH_FILE=$SCRIPT_DIR/knotifyconfig_no_phonon.patch build_framework knotifyconfig)
 build_framework kdoctools
-(PATCH_FILE=$SCRIPT_DIR/breezeicons-compatcmake3.6.patch build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1)
+build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
 build_framework kpty
 build_framework kinit 
 fi
 
 # KDE Plasma
-build_kde_project plasma/libksysguard $PLASMA_VERSION
-build_kde_project plasma/kdecoration $PLASMA_VERSION # needed by breeze
-(PATCH_FILE=$SCRIPT_DIR/breeze-noconstexpr.patch build_kde_project plasma/breeze $PLASMA_VERSION)
+build_kde_project plasma/libksysguard $LIBKSYSGUARD_VERSION
+(PATCH_FILE=$SCRIPT_DIR/breeze-noconstexpr.patch build_kde_project plasma/breeze $BREEZESTYLE_VERSION -DWITH_DECORATIONS=OFF -DWITH_WALLPAPERS=OFF)
 
 # KDE Applications
 build_kde_project sdk/libkomparediff2 $KDE_RELEASESERVICE_VERSION

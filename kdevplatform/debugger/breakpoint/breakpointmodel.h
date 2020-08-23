@@ -198,8 +198,8 @@ private:
     Q_DECLARE_PRIVATE(BreakpointModel)
 };
 
-}
+Q_DECLARE_OPERATORS_FOR_FLAGS(BreakpointModel::ColumnFlags)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::BreakpointModel::ColumnFlags)
+}
 
 #endif

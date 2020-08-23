@@ -245,8 +245,9 @@ private:
     const QScopedPointer<class ParseJobPrivate> d_ptr;
     Q_DECLARE_PRIVATE(ParseJob)
 };
-}
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ParseJob::SequentialProcessingFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ParseJob::SequentialProcessingFlags)
+
+}
 
 #endif

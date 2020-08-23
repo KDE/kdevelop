@@ -117,8 +117,9 @@ protected:
 private:
     Declaration* clonePrivate() const override;
 };
-}
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassMemberDeclaration::StorageSpecifiers)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers)
+
+}
 
 #endif // KDEVPLATFORM_CLASSMEMBERDECLARATION_H

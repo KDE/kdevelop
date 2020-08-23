@@ -434,16 +434,12 @@ void MainWindow::documentActivated(const QPointer<KTextEditor::Document>& textDo
 
 void MainWindow::updateCaption()
 {
-    const auto activeSession = Core::self()->sessionController()->activeSession();
-    QString title = activeSession ? activeSession->description() : QString();
+    QString title;
     QString localFilePath;
     bool isDocumentModified = false;
 
     if(area()->activeView())
     {
-        if(!title.isEmpty())
-            title += QLatin1String(" - [ ");
-
         Sublime::Document* doc = area()->activeView()->document();
         auto* urlDoc = qobject_cast<Sublime::UrlDocument*>(doc);
         if(urlDoc)
@@ -461,9 +457,19 @@ void MainWindow::updateCaption()
             title += i18n(" (read only)");
         }
 
-        title += QLatin1String(" [*]]"); // [*] is placeholder for modifed state, cmp. QWidget::windowModified
+        title += QLatin1String(" [*]"); // [*] is placeholder for modifed state, cmp. QWidget::windowModified
 
         isDocumentModified = iDoc && (iDoc->state() != IDocument::Clean);
+    }
+
+    const auto activeSession = Core::self()->sessionController()->activeSession();
+    const QString sessionTitle = activeSession ? activeSession->description() : QString();
+    if (!sessionTitle.isEmpty()) {
+        if (title.isEmpty()) {
+            title = sessionTitle;
+        } else {
+            title = sessionTitle + QLatin1String(" - [ ") + title + QLatin1Char(']');
+        }
     }
 
     // Workaround for a bug observed on macOS with Qt 5.9.8 (TODO: test with newer Qt, report bug):

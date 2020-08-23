@@ -262,8 +262,8 @@ private:
     friend class OutputExecuteJobPrivate;
 };
 
-} // namespace KDevelop
+Q_DECLARE_OPERATORS_FOR_FLAGS(OutputExecuteJob::JobProperties)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::OutputExecuteJob::JobProperties)
+} // namespace KDevelop
 
 #endif // KDEVPLATFORM_OUTPUTEXECUTEJOB_H
