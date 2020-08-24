@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>KDevelop</name>
+  <name xml:lang="ar">مطوّرك</name>
   <name xml:lang="bs">KDevelop</name>
   <name xml:lang="ca">KDevelop</name>
   <name xml:lang="ca-valencia">KDevelop</name>
@@ -34,11 +35,13 @@
   <name xml:lang="zh-CN">KDevelop</name>
   <name xml:lang="zh-TW">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
+  <summary xml:lang="ar">بيئة تطوير متكاملة بمزايا عديدة ودعم للملحقات للغتي سي/سي++ ولغات البرمجة الأخرى</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="de">Eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
   <summary xml:lang="en-GB">Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
   <summary xml:lang="es">Entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
+  <summary xml:lang="et">C/C++ ja teiste programmeerimiskeelte omadusterohke ning pluginatega laiendatav IDE</summary>
   <summary xml:lang="fr">Environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
   <summary xml:lang="gl">Potente ambiente de desenvolvemento integrado para C, C++ e outras linguaxes de programación. As súas funcionalidades poden estenderse mediante complementos</summary>
   <summary xml:lang="id">Penuh fitur, IDE plugin yang dapat diekstensi C/C++ dan bahasa pemrograman lain</summary>
@@ -49,6 +52,7 @@
   <summary xml:lang="pt">IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação</summary>
   <summary xml:lang="pt-BR">IDE repleto de funcionalidades e expansível através de plugins, para C/C++ e outras linguagens de programação.</summary>
   <summary xml:lang="sk">Plne funkčné, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky</summary>
+  <summary xml:lang="sl">Zmogljivo integrirano razvojno okolje za C/C++ in druge programske jezike, ki je razširljivo z vstavki.</summary>
   <summary xml:lang="sv">Funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk</summary>
   <summary xml:lang="tr">Tam özellikli, eklenti ile geliştirilebilir C/C++ ve diğer programlama dilleri için tümleşik geliştirme ortamı.</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
@@ -56,11 +60,13 @@
   <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <description>
     <p>KDevelop is a Free and Open Source integrated development environment (IDE).</p>
+    <p xml:lang="ar">«مطوّرك» هي بيئة تطوير متكاملة (IDE) حرّة ومفتوحة المصدر.</p>
     <p xml:lang="ca">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
     <p xml:lang="ca-valencia">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
     <p xml:lang="de">KDevelop ist eine integrierte Entwicklungsumgebung (Frei und Open Source).</p>
     <p xml:lang="en-GB">KDevelop is a Free and Open Source integrated development environment (IDE).</p>
     <p xml:lang="es">KDevelop es un entorno de desarrollo integrado (IDE) libre y de código abierto.</p>
+    <p xml:lang="et">KDevelop on vaba ja avatud lähtekoodiga lõimitud arenduskeskkond (IDE)</p>
     <p xml:lang="fr">KDevelop est un environnement de développement intégré (IDE) libre et en open source.</p>
     <p xml:lang="gl">KDevelop é un ambiente integrado de desenvolvemento (IDE) libre e de código aberto.</p>
     <p xml:lang="id">KDevelop adalah sebuah IDE (integrated development environment) lingkungan pengembangan terintegrasi yang Gratis dan Bebas Terbuka.</p>
@@ -71,17 +77,20 @@
     <p xml:lang="pt">O KDevelop é um ambiente de desenvolvimento integrado (IDE) livre e em código aberto.</p>
     <p xml:lang="pt-BR">Ambiente de Desenvolvimento Integrado (IDE) em Software Livre e Código Aberto.</p>
     <p xml:lang="sk">KDevelop je slobodné a otvorené integrované vývojové prostredie (IDE).</p>
+    <p xml:lang="sl">KDevelop je prosto in odprtokodno integrirano razvojno okolje  (IDE).</p>
     <p xml:lang="sv">KDevelop är en fri integrerad utvecklingsmiljö (IDE) med öppen källkod för olika programvaruprojekt.</p>
     <p xml:lang="tr">KDevelop Özgür ve Açık Kaynaklı tümleşik geliştirme ortamıdır (IDE).</p>
     <p xml:lang="uk">KDevelop є вільним комплексним середовищем розробки (IDE) з відкритим кодом.</p>
     <p xml:lang="x-test">xxKDevelop is a Free and Open Source integrated development environment (IDE).xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
+    <p xml:lang="ar">توفّر البرمجيّة مزايا التّحرير والتّنقّل والتّنقيح لمختلف لغات البرمجة، إلى جانب التّكامل مع مختلف أنظمة البناء وأنظمة التّحكّم بالإصدارات، وذلك عبر البنية المعتمدة على الملحقات.</p>
     <p xml:lang="ca">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="ca-valencia">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="de">Funktionen zum Editieren, Navigieren und zur Fehlersuche für mehrere Programmiersprachen, dazu auch Integration von mehreren Build- und Versionskontrollsystemen auf der Basis einer modularen Architektur.</p>
     <p xml:lang="en-GB">It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
     <p xml:lang="es">Proporciona funciones de edición, navegación y depuración para varios lenguajes de programación, además de integración con diversos sistemas de compilación y de control de versiones, usando una arquitectura basada en complementos.</p>
+    <p xml:lang="et">See võimaldab redigeerida, liikuda ja siluda mitmes programmeerimiskeeles ning on pluginapõhise arhitektuuri abil lõiminud mitmeid ehitamis- ja versioonihaldussüsteeme.</p>
     <p xml:lang="fr">Il fournit des fonctionnalités d'édition, navigation et débogage pour plusieurs langages de programmation, ainsi que l'intégration de multiples systèmes de compilation et de gestion de révision, en utilisant une architecture extensible.</p>
     <p xml:lang="gl">Fornece funcionalidades de edición, navegación e depuración para varias linguaxes de programación, así como integración con varios sistemas de construción e sistemas de control de versións, usando unha arquitectura baseada en complementos.</p>
     <p xml:lang="id">Ini menyediakan fitur pengeditan, navigasi dan debugging untuk beberapa bahasa pemrograman, serta integrasi dengan sistem build multipel dan sistem kontrol versi, menggunakan arsitektur berbasis plugin.</p>
@@ -99,11 +108,13 @@
     <p xml:lang="x-test">xxIt provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.xx</p>
     <p xml:lang="zh-CN">它提供了多种编程语言的编辑、导航和调试功能，以及与多种构建系统和版本控制系统的集成，使用基于插件的体系结构。</p>
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
+    <p xml:lang="ar">لدى «مطوّرك» سندات تحليل للغات سي، وسي++، وجاڤاسكربت/QML كما وملحقات خارجيّة أخرى تدعم PHP أو پيثون.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="ca-valencia">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="de">KDevelop beinhaltet Parser-Module für  C, C++ und Javascript/QML, weitere externe Module unterstützten zum Beispiel PHP oder Python.</p>
     <p xml:lang="en-GB">KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="es">KDevelop dispone de motores de análisis sintáctico para C, C++ y JavaScript/QML, además de complementos externos (por ejemplo, para PHP o para Python).</p>
+    <p xml:lang="et">KDevelopil on C, C++ ja Javasripti/QML parsimise taustaprogrammid, väliste pluginate abil on toetatud ka näiteks PHP ja Python.</p>
     <p xml:lang="fr">KDevelop intègre des parseurs pour le C, le C++ et Javascript/QML, avec des modules externes pour prendre en charge PHP, Python, etc.</p>
     <p xml:lang="gl">KDevelop ten infraestruturas de análise para C, C++ e JavaScript/QML, con complementos externos adicionais que fornecen compatibilidade, por exemplo, con PHP e Python.</p>
     <p xml:lang="id">KDevelop memiliki pengurai backend untuk C, C++ dan Javascript/QML, dengan mendukung plugin eksternal lebih lanjut misal PHP atau Python.</p>
