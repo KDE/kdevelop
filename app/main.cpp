@@ -385,6 +385,12 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+    // Prevent SIGPIPE, then "ICE default IO error handler doing an exit(), pid = <PID>, errno = 32"
+    // crash when the first event loop starts at least 60 seconds after KDevelop launch. This can
+    // happen during a Debug Launch of KDevelop from KDevelop, especially if a breakpoint is hit
+    // before any event loop is entered.
+    QCoreApplication::processEvents();
+
     KLocalizedString::setApplicationDomain("kdevelop");
 
     KAboutData aboutData( QStringLiteral("kdevelop"), i18n("KDevelop"), QStringLiteral(KDEVELOP_VERSION_STRING),
