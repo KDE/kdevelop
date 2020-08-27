@@ -30,6 +30,7 @@
 
 #include "debuglog.h"
 #include "midebugger.h"
+#include "midebuggerplugin.h"
 #include "mivariable.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"

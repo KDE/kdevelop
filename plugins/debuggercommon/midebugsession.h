@@ -36,6 +36,7 @@
 #include "mi/micommand.h"
 
 #include <QMap>
+#include <QPointer>
 
 #include <memory>
 
@@ -358,7 +359,7 @@ protected:
     // Map from GDB varobj name to MIVariable.
     QMap<QString, MIVariable*> m_allVariables;
 
-    MIDebuggerPlugin *m_plugin;
+    QPointer<MIDebuggerPlugin> m_plugin;
 };
 
 template<class Handler>
