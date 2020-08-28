@@ -136,6 +136,8 @@ public:
 public Q_SLOTS:
     virtual void restartDebugger() = 0;
     virtual void stopDebugger() = 0;
+    /// @brief Kills the debugger process synchronously if it is still running.
+    virtual void killDebuggerNow() = 0;
     virtual void interruptDebugger() = 0;
     virtual void run() = 0;
     virtual void runToCursor() = 0;
