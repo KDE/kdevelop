@@ -262,8 +262,14 @@ private:
     friend class OutputExecuteJobPrivate;
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(OutputExecuteJob::JobProperties)
+#endif
 
 } // namespace KDevelop
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::OutputExecuteJob::JobProperties)
+#endif
 
 #endif // KDEVPLATFORM_OUTPUTEXECUTEJOB_H

@@ -96,7 +96,9 @@ private:
     virtual AbstractFunctionDeclarationData* dynamicData() = 0;
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractFunctionDeclaration::FunctionSpecifiers)
+#endif
 
 ///Use this to merge AbstractFunctionDeclaration into the class hierarchy. Base must be the base-class
 ///in the hierarchy, and Data must be the Data class of the following Declaration, and must be based on AbstractFunctionDeclarationData
@@ -132,5 +134,9 @@ private:
 };
 
 }
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers)
+#endif
 
 #endif // KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H

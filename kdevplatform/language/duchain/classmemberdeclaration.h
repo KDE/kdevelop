@@ -118,8 +118,14 @@ private:
     Declaration* clonePrivate() const override;
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(ClassMemberDeclaration::StorageSpecifiers)
+#endif
 
 }
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassMemberDeclaration::StorageSpecifiers)
+#endif
 
 #endif // KDEVPLATFORM_CLASSMEMBERDECLARATION_H

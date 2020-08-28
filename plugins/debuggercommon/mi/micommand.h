@@ -63,7 +63,9 @@ enum CommandFlag {
     CmdInterrupt = 1 << 4,
 };
 Q_DECLARE_FLAGS(CommandFlags, CommandFlag)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(CommandFlags)
+#endif
 
 //base class for handlers
 class MICommandHandler
@@ -374,5 +376,9 @@ CliCommand::CliCommand(
 
 } // end of namespace MI
 } // end of namespace KDevMI
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevMI::MI::CommandFlags)
+#endif
 
 #endif
