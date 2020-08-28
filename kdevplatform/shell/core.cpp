@@ -287,22 +287,6 @@ CorePrivate::~CorePrivate()
     delete workingSetController.data();
     delete testController.data();
     delete runtimeController.data();
-
-    selectionController.clear();
-    projectController.clear();
-    languageController.clear();
-    pluginController.clear();
-    uiController.clear();
-    partController.clear();
-    documentController.clear();
-    runController.clear();
-    sessionController.clear();
-    sourceFormatterController.clear();
-    documentationController.clear();
-    debugController.clear();
-    workingSetController.clear();
-    testController.clear();
-    runtimeController.clear();
 }
 
 bool Core::initialize(Setup mode, const QString& session)
