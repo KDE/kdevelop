@@ -137,9 +137,15 @@ public:
     virtual Path compiler(KDevelop::ProjectTargetItem* p) const = 0;
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(IBuildSystemManager::BuildFeatures)
+#endif
 
 }
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IBuildSystemManager::BuildFeatures)
+#endif
 
 Q_DECLARE_INTERFACE( KDevelop::IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
 

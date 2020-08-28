@@ -228,8 +228,14 @@ Q_SIGNALS:
     friend class IDocument;
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(IDocumentController::DocumentActivationParams)
+#endif
 
 } // namespace KDevelop
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IDocumentController::DocumentActivationParams)
+#endif
 
 #endif

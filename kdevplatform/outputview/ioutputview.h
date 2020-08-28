@@ -171,10 +171,17 @@ Q_SIGNALS:
     void outputRemoved(int toolViewId, int outputId);
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
 Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Options)
+#endif
 
 } // namespace KDevelop
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Behaviours)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Options)
+#endif
 
 Q_DECLARE_METATYPE(KDevelop::IOutputView::StandardToolView)
 

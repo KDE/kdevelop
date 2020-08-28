@@ -42,10 +42,16 @@ namespace Sublime {
         AllPositions = Left|Right|Top|Bottom /**< all tool view positions */
     };
     Q_DECLARE_FLAGS(Positions, Position)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
     Q_DECLARE_OPERATORS_FOR_FLAGS(Positions)
+#endif
 
     KDEVPLATFORMSUBLIME_EXPORT Position dockAreaToPosition(Qt::DockWidgetArea dockArea);
 
 }
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Sublime::Positions)
+#endif
 
 #endif

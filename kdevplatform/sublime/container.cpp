@@ -150,6 +150,8 @@ public:
     ContainerTabBar *tabBar;
     QStackedWidget *stack;
     KSqueezedTextLabel *fileNameCorner;
+    QSpacerItem* shortCutHelpLeftSpacerItem;
+    QSpacerItem* shortCutHelpRightSpacerItem;
     QLabel *shortcutHelpLabel;
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
@@ -343,11 +345,12 @@ Container::Container(QWidget *parent)
     font.setPointSize(font.pointSize() - 2);
     font.setItalic(true);
     d->shortcutHelpLabel->setFont(font);
-    d->layout->addSpacerItem(new QSpacerItem(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing), 0,
-                                             QSizePolicy::Fixed, QSizePolicy::Fixed));
+    d->shortCutHelpLeftSpacerItem = new QSpacerItem(0, 0); // fully set in setTabBarHidden()
+    d->layout->addSpacerItem(d->shortCutHelpLeftSpacerItem);
     d->shortcutHelpLabel->setAlignment(Qt::AlignCenter);
     d->layout->addWidget(d->shortcutHelpLabel);
-    d->layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    d->shortCutHelpRightSpacerItem = new QSpacerItem(0, 0); // fully set in setTabBarHidden()
+    d->layout->addSpacerItem(d->shortCutHelpRightSpacerItem);
     d->statusCorner = new StatusLabel(d->tabBar, this);
     d->layout->addWidget(d->statusCorner);
     l->addLayout(d->layout);
@@ -622,7 +625,10 @@ void Container::setTabBarHidden(bool hide)
     {
         d->tabBar->hide();
         d->fileStatus->show();
+        d->shortCutHelpLeftSpacerItem->changeSize(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing), 0,
+                                                  QSizePolicy::Fixed, QSizePolicy::Fixed);
         d->shortcutHelpLabel->show();
+        d->shortCutHelpRightSpacerItem->changeSize(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
         d->fileNameCorner->show();
     }
     else
@@ -630,8 +636,13 @@ void Container::setTabBarHidden(bool hide)
         d->fileNameCorner->hide();
         d->fileStatus->hide();
         d->tabBar->show();
+        d->shortCutHelpLeftSpacerItem->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
         d->shortcutHelpLabel->hide();
+        d->shortCutHelpRightSpacerItem->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     }
+    // have spacer item changes taken into account
+    d->layout->invalidate();
+
     View* v = currentView();
     if (v) {
         documentTitleChanged(v->document());
