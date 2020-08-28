@@ -89,6 +89,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void raiseFramestackViews();
+    void killAllDebuggersNow();
 
 private:
     void setupActions();
