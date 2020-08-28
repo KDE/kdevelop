@@ -383,66 +383,22 @@ DBGStateFlags MIDebugSession::debuggerState() const
 void MIDebugSession::setDebuggerStateOn(DBGStateFlags stateOn)
 {
     DBGStateFlags oldState = m_debuggerState;
-
-    debuggerStateChange(m_debuggerState, m_debuggerState | stateOn);
     m_debuggerState |= stateOn;
-
     handleDebuggerStateChange(oldState, m_debuggerState);
 }
 
 void MIDebugSession::setDebuggerStateOff(DBGStateFlags stateOff)
 {
     DBGStateFlags oldState = m_debuggerState;
-
-    debuggerStateChange(m_debuggerState, m_debuggerState & ~stateOff);
     m_debuggerState &= ~stateOff;
-
     handleDebuggerStateChange(oldState, m_debuggerState);
 }
 
 void MIDebugSession::setDebuggerState(DBGStateFlags newState)
 {
     DBGStateFlags oldState = m_debuggerState;
-
-    debuggerStateChange(m_debuggerState, newState);
     m_debuggerState = newState;
-
     handleDebuggerStateChange(oldState, m_debuggerState);
-}
-
-void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState)
-{
-    int delta = oldState ^ newState;
-    if (delta)
-    {
-        QString out;
-#define STATE_CHECK(name) \
-    do { \
-        if (delta & name) { \
-            out += ((newState & name) ? QLatin1String(" +") : QLatin1String(" -")) \
-                   + QLatin1String(#name); \
-            delta &= ~name; \
-        } \
-    } while (0)
-        STATE_CHECK(s_dbgNotStarted);
-        STATE_CHECK(s_appNotStarted);
-        STATE_CHECK(s_programExited);
-        STATE_CHECK(s_attached);
-        STATE_CHECK(s_core);
-        STATE_CHECK(s_shuttingDown);
-        STATE_CHECK(s_dbgBusy);
-        STATE_CHECK(s_appRunning);
-        STATE_CHECK(s_dbgNotListening);
-        STATE_CHECK(s_automaticContinue);
-#undef STATE_CHECK
-
-        for (unsigned int i = 0; delta != 0 && i < 32; ++i) {
-            if (delta & (1 << i))  {
-                delta &= ~(1 << i);
-                out += (((1 << i) & newState) ? QLatin1String(" +") : QLatin1String(" -")) + QString::number(i);
-            }
-        }
-    }
 }
 
 void MIDebugSession::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState)

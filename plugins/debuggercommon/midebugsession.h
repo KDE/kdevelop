@@ -304,8 +304,6 @@ protected:
     void setDebuggerStateOff(DBGStateFlags stateOff);
     void setDebuggerState(DBGStateFlags newState);
 
-    void debuggerStateChange(DBGStateFlags oldState, DBGStateFlags newState);
-
     /**
      * Manipulate the session state
      */
