@@ -63,10 +63,14 @@ using namespace KDevelop;
 using namespace KDevMI;
 using namespace KDevMI::MI;
 
+namespace {
+constexpr DBGStateFlags notStartedDebuggerFlags{s_dbgNotStarted | s_appNotStarted};
+}
+
 MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
-    , m_debuggerState(s_dbgNotStarted | s_appNotStarted)
+    , m_debuggerState{notStartedDebuggerFlags}
     , m_tty(nullptr)
     , m_plugin(plugin)
 {
@@ -528,8 +532,14 @@ void MIDebugSession::restartDebugger()
 void MIDebugSession::stopDebugger()
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
-        // we are force to stop even before debugger started, just reset
         qCDebug(DEBUGGERCOMMON) << "Stopping debugger when it's not started";
+        if (debuggerState() != notStartedDebuggerFlags) {
+            setDebuggerState(notStartedDebuggerFlags);
+        }
+        // Transition into EndedState to let DebugController destroy this session.
+        if (state() != EndedState) {
+            setSessionState(EndedState);
+        }
         return;
     }
 
@@ -583,7 +593,7 @@ void MIDebugSession::killDebuggerImpl()
 {
     Q_ASSERT(m_debugger);
     m_debugger->kill();
-    setDebuggerState(s_dbgNotStarted | s_appNotStarted);
+    setDebuggerState(notStartedDebuggerFlags);
     raiseEvent(debugger_exited);
 }
 
