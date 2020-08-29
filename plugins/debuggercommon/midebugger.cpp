@@ -131,6 +131,16 @@ void MIDebugger::kill()
 
 void MIDebugger::readyReadStandardOutput()
 {
+    auto* const core = KDevelop::ICore::self();
+    if (!core || !core->debugController()) {
+        const auto nullObject = core ? QLatin1String("the debug controller")
+                                     : QLatin1String("the KDevelop core");
+        qCDebug(DEBUGGERCOMMON).nospace().noquote()
+                << "Cannot process standard output without " << nullObject
+                << ". KDevelop must be exiting and " << nullObject << " already destroyed.";
+        return;
+    }
+
     m_process->setReadChannel(QProcess::StandardOutput);
 
     m_buffer += m_process->readAll();
