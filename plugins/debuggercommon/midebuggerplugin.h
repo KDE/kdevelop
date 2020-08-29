@@ -81,11 +81,6 @@ Q_SIGNALS:
 
 Q_SIGNALS:
     void reset();
-    void stopDebugger();
-    void attachTo(int pid);
-    void coreFile(const QString& core);
-    void runUntil(const QUrl &url, int line);
-    void jumpTo(const QUrl &url, int line);
     void addWatchVariable(const QString& var);
     void evaluateExpression(const QString& expr);
     void raiseDebuggerConsoleViews();
