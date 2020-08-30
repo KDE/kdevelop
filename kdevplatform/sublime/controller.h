@@ -146,8 +146,6 @@ public:
     /**@return the list of documents created in this controller.*/
     const QList<Document*> &documents() const;
 
-    void setStatusIcon(Document* document, const QIcon& icon);
-
     bool openAfterCurrent() const;
     bool arrangeBuddies() const;
 

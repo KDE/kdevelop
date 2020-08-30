@@ -433,11 +433,6 @@ void Controller::notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view)
     emit viewAdded(view);
 }
 
-void Controller::setStatusIcon(Document * document, const QIcon & icon)
-{
-    document->setStatusIcon(icon);
-}
-
 void Controller::loadSettings()
 {
     Q_D(Controller);

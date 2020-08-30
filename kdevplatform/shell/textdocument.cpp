@@ -117,7 +117,7 @@ public:
             }
 
         q->notifyStateChanged();
-        Core::self()->uiControllerInternal()->setStatusIcon(q, statusIcon);
+        q->setStatusIcon(statusIcon);
     }
 
     inline KConfigGroup katePartSettingsGroup() const
