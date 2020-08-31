@@ -459,9 +459,9 @@ void CMakeManager::watchProject(KDevelop::IProject* project)
             qCDebug(CMAKE).nospace()
                     << "Cannot reload a project. KDevelop must be exiting"
                     << (!core ? " and the KDevelop core already destroyed." : ".");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     };
 
     auto* reloadTimer = new QTimer(project);
