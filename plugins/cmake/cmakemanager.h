@@ -129,6 +129,7 @@ private Q_SLOTS:
     void projectClosing(KDevelop::IProject*);
 
 private:
+    void watchProject(KDevelop::IProject* project);
     void reloadProjects();
     CMakeFile fileInformation(KDevelop::ProjectBaseItem* item) const;
     CMakeTarget targetInformation(KDevelop::ProjectTargetItem* item) const;
