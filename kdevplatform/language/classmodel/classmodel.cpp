@@ -31,6 +31,8 @@
 #include "../../interfaces/iproject.h"
 #include "../../interfaces/iprojectcontroller.h"
 
+#include <debug.h>
+
 using namespace KDevelop;
 using namespace ClassModelNodes;
 
@@ -261,6 +263,14 @@ void ClassModel::nodesAdded(ClassModelNodes::Node*)
 
 void ClassModel::addProjectNode(IProject* project)
 {
+    const auto* const core = KDevelop::ICore::self();
+    if (Q_UNLIKELY(!core || core->shuttingDown())) {
+        qCDebug(LANGUAGE).nospace() << "Cannot add project node. KDevelop must be exiting"
+                                    << (!core ? " and the KDevelop core already destroyed."
+                                              : ".");
+        return;
+    }
+
     m_projectNodes[project] = new ClassModelNodes::FilteredProjectFolder(this, project);
     nodesLayoutAboutToBeChanged(m_projectNodes[project]);
     m_topNode->addNode(m_projectNodes[project]);
@@ -269,6 +279,12 @@ void ClassModel::addProjectNode(IProject* project)
 
 void ClassModel::removeProjectNode(IProject* project)
 {
-    m_topNode->removeNode(m_projectNodes[project]);
-    m_projectNodes.remove(project);
+    const auto it = m_projectNodes.find(project);
+    if (Q_UNLIKELY(it == m_projectNodes.end())) {
+        qCDebug(LANGUAGE) << "Cannot remove the nonexistent project node for"
+                          << project->name();
+        return;
+    }
+    m_topNode->removeNode(it.value());
+    m_projectNodes.erase(it);
 }

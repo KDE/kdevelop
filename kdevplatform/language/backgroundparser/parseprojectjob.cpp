@@ -187,9 +187,16 @@ void ParseProjectJob::start()
         ++processed;
         if (processed == processAfter) {
             QApplication::processEvents();
-            if (!crashGuard) {
+
+            const auto* const core = KDevelop::ICore::self();
+            if (Q_UNLIKELY(!core || core->shuttingDown() || !crashGuard)) {
+                qCDebug(LANGUAGE).nospace() << "Aborting project parse job start. KDevelop must be exiting"
+                                            << (!core ? " and the KDevelop core already destroyed."
+                                                      : !crashGuard ? " and this job already destroyed."
+                                                      : ".");
                 return;
             }
+
             processed = 0;
         }
     }

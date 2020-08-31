@@ -17,6 +17,7 @@
  */
 
 #include "projectfilequickopen.h"
+#include "debug.h"
 
 #include <QApplication>
 #include <QIcon>
@@ -250,6 +251,15 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
             QApplication::processEvents();
+
+            const auto* const core = KDevelop::ICore::self();
+            if (Q_UNLIKELY(!core || core->shuttingDown())) {
+                qCDebug(PLUGIN_QUICKOPEN).nospace()
+                        << "Aborting project parse job start. KDevelop must be exiting"
+                        << (!core ? " and the KDevelop core already destroyed." : ".");
+                return;
+            }
+
             processed = 0;
         }
     }

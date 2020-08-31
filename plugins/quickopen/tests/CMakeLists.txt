@@ -4,9 +4,13 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
+
 add_library(quickopentestbase STATIC
     quickopentestbase.cpp
-    ../projectfilequickopen.cpp)
+    ../projectfilequickopen.cpp
+    ${kdevquickopen_LOG_SRCS}
+)
 
 target_link_libraries(quickopentestbase PUBLIC
     KDev::Tests

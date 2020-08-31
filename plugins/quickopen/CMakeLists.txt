@@ -1,7 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevquickopen\")
-if(BUILD_TESTING)
-    add_subdirectory( tests )
-endif()
+
+declare_qt_logging_category(kdevquickopen_LOG_SRCS
+    TYPE PLUGIN
+    IDENTIFIER PLUGIN_QUICKOPEN
+    CATEGORY_BASENAME "quickopen"
+)
 
 set(kdevquickopen_PART_SRCS
     quickopenplugin.cpp
@@ -16,11 +19,7 @@ set(kdevquickopen_PART_SRCS
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp
-)
-declare_qt_logging_category(kdevquickopen_PART_SRCS
-    TYPE PLUGIN
-    IDENTIFIER PLUGIN_QUICKOPEN
-    CATEGORY_BASENAME "quickopen"
+    ${kdevquickopen_LOG_SRCS}
 )
 ki18n_wrap_ui(kdevquickopen_PART_SRCS
   quickopenwidget.ui
@@ -34,3 +33,7 @@ target_link_libraries(kdevquickopen
     KDev::Util
     KF5::GuiAddons
 )
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
