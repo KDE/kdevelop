@@ -93,7 +93,7 @@ public:
         return QTabBar::event(ev);
     }
     void mousePressEvent(QMouseEvent* event) override {
-        if (event->button() == Qt::MidButton) {
+        if (event->button() == Qt::MiddleButton) {
             // just close on midbutton, drag can still be done with left mouse button
 
             int tab = tabAt(event->pos());
@@ -116,7 +116,7 @@ public:
         if (event->type() == QEvent::MouseButtonDblClick) {
             // block tabBarDoubleClicked signals with RMB, see https://bugs.kde.org/show_bug.cgi?id=356016
             auto mouseEvent = static_cast<const QMouseEvent*>(event);
-            if (mouseEvent->button() == Qt::MidButton) {
+            if (mouseEvent->button() == Qt::MiddleButton) {
                 return true;
             }
         }

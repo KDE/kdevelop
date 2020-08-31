@@ -105,7 +105,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 
     if (event->modifiers() == Qt::NoModifier) {
         const bool actionOpen = event->button() == Qt::LeftButton;
-        const bool actionClose = event->button() == Qt::MidButton;
+        const bool actionClose = event->button() == Qt::MiddleButton;
         const bool action = actionOpen || actionClose;
 
         if (action) {

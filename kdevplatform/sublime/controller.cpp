@@ -364,7 +364,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
     if (ev->type() == QEvent::MouseButtonPress || ev->type() == QEvent::MouseButtonDblClick)
     {
         auto* mev = static_cast<QMouseEvent*>(ev);
-        int activationButtonMask = Qt::LeftButton | Qt::MidButton | Qt::RightButton;
+        int activationButtonMask = Qt::LeftButton | Qt::MiddleButton | Qt::RightButton;
         if ((mev->button() & activationButtonMask) == 0)
             return false;
     }
