@@ -78,13 +78,21 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
+    auto* const core = KDevelop::ICore::self();
+    if (Q_UNLIKELY(!core || core->shuttingDown())) {
+        qCDebug(CMAKE).nospace() << "Cannot add the test suite. KDevelop must be exiting"
+                                 << (!core ? " and the KDevelop core already destroyed."
+                                           : ".");
+        return;
+    }
+
     qCDebug(CMAKE) << "context update ready" << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 
     if (m_pendingFiles.isEmpty())
     {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
+        core->testController()->addTestSuite(m_suite);
         emitResult();
     }
 }
