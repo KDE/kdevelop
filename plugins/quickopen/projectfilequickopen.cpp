@@ -249,9 +249,9 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
             qCDebug(PLUGIN_QUICKOPEN).nospace()
                     << "Aborting adding files to set. KDevelop must be exiting"
                     << (!core ? " and the KDevelop core already destroyed." : ".");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     };
 
     if (exitingProgram()) {

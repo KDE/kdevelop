@@ -192,9 +192,9 @@ void ParseProjectJob::queueFilesToParse(TopDUContext::Features processingLevel)
                                         << (!core ? " and the KDevelop core already destroyed."
                                                   : !crashGuard ? " and this job already destroyed."
                                                   : ".");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     };
 
     if (exitingProgram()) {
