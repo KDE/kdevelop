@@ -20,12 +20,12 @@
 #define KDEVPLATFORM_PARSEPROJECTJOB_H
 
 #include <serialization/indexedstring.h>
+#include <language/duchain/topducontext.h>
 #include <language/languageexport.h>
 
 #include <KJob>
 
 namespace KDevelop {
-class ReferencedTopDUContext;
 class IProject;
 class ParseProjectJobPrivate;
 
@@ -54,6 +54,7 @@ private Q_SLOTS:
 
 private:
     void updateProgress();
+    void queueFilesToParse(TopDUContext::Features processingLevel);
 
 private:
     const QScopedPointer<class ParseProjectJobPrivate> d_ptr;

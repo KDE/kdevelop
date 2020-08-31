@@ -35,6 +35,7 @@
 #include <QApplication>
 #include <QPointer>
 #include <QSet>
+#include <QTimer>
 
 using namespace KDevelop;
 
@@ -174,12 +175,36 @@ void ParseProjectJob::start()
         return;
     }
 
+    // Avoid calling QApplication::processEvents() directly in start() to prevent a crash in RunController.
+    QTimer::singleShot(0, this, [=] { queueFilesToParse(processingLevel); });
+}
+
+void ParseProjectJob::queueFilesToParse(TopDUContext::Features processingLevel)
+{
+    Q_D(ParseProjectJob);
+
+    // guard against reentrancy issues, see also bug 345480
+    auto crashGuard = QPointer<ParseProjectJob> {this};
+    const auto exitingProgram = [&crashGuard] {
+        const auto* const core = KDevelop::ICore::self();
+        if (Q_UNLIKELY(!core || core->shuttingDown() || !crashGuard)) {
+            qCDebug(LANGUAGE).nospace() << "Aborting project parse job start. KDevelop must be exiting"
+                                        << (!core ? " and the KDevelop core already destroyed."
+                                                  : !crashGuard ? " and this job already destroyed."
+                                                  : ".");
+            return false;
+        }
+        return true;
+    };
+
+    if (exitingProgram()) {
+        return;
+    }
+
     // prevent UI-lockup by processing events after some files
     // esp. noticeable when dealing with huge projects
     const int processAfter = 1000;
     int processed = 0;
-    // guard against reentrancy issues, see also bug 345480
-    auto crashGuard = QPointer<ParseProjectJob> {this};
     for (const IndexedString& url : qAsConst(d->filesToParse)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(url, processingLevel,
                                                                              BackgroundParser::InitialParsePriority,
@@ -187,16 +212,9 @@ void ParseProjectJob::start()
         ++processed;
         if (processed == processAfter) {
             QApplication::processEvents();
-
-            const auto* const core = KDevelop::ICore::self();
-            if (Q_UNLIKELY(!core || core->shuttingDown() || !crashGuard)) {
-                qCDebug(LANGUAGE).nospace() << "Aborting project parse job start. KDevelop must be exiting"
-                                            << (!core ? " and the KDevelop core already destroyed."
-                                                      : !crashGuard ? " and this job already destroyed."
-                                                      : ".");
+            if (exitingProgram()) {
                 return;
             }
-
             processed = 0;
         }
     }

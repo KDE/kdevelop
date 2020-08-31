@@ -226,7 +226,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
     connect(projectController, &IProjectController::projectClosing,
             this, &ProjectFileDataProvider::projectClosing);
     connect(projectController, &IProjectController::projectOpened,
-            this, &ProjectFileDataProvider::projectOpened);
+            this, &ProjectFileDataProvider::projectOpened, Qt::QueuedConnection);
     const auto projects = projectController->projects();
     for (auto* project : projects) {
         projectOpened(project);
@@ -243,6 +243,26 @@ void ProjectFileDataProvider::projectClosing(IProject* project)
 
 void ProjectFileDataProvider::projectOpened(IProject* project)
 {
+    const auto exitingProgram = []() {
+        const auto* const core = KDevelop::ICore::self();
+        if (Q_UNLIKELY(!core || core->shuttingDown())) {
+            qCDebug(PLUGIN_QUICKOPEN).nospace()
+                    << "Aborting adding files to set. KDevelop must be exiting"
+                    << (!core ? " and the KDevelop core already destroyed." : ".");
+            return false;
+        }
+        return true;
+    };
+
+    if (exitingProgram()) {
+        return;
+    }
+
+    connect(project, &IProject::fileAddedToSet,
+            this, &ProjectFileDataProvider::fileAddedToSet);
+    connect(project, &IProject::fileRemovedFromSet,
+            this, &ProjectFileDataProvider::fileRemovedFromSet);
+
     const int processAfter = 1000;
     int processed = 0;
     const auto files = KDevelop::allFiles(project->projectItem());
@@ -251,23 +271,12 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
             QApplication::processEvents();
-
-            const auto* const core = KDevelop::ICore::self();
-            if (Q_UNLIKELY(!core || core->shuttingDown())) {
-                qCDebug(PLUGIN_QUICKOPEN).nospace()
-                        << "Aborting project parse job start. KDevelop must be exiting"
-                        << (!core ? " and the KDevelop core already destroyed." : ".");
+            if (exitingProgram()) {
                 return;
             }
-
             processed = 0;
         }
     }
-
-    connect(project, &IProject::fileAddedToSet,
-            this, &ProjectFileDataProvider::fileAddedToSet);
-    connect(project, &IProject::fileRemovedFromSet,
-            this, &ProjectFileDataProvider::fileRemovedFromSet);
 }
 
 void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* file)
