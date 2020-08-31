@@ -51,7 +51,7 @@ public:
     no sublime mainwindow is active.*/
     Sublime::Area *activeArea() override;
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
-    virtual Sublime::MainWindow *activeSublimeWindow();
+    Sublime::MainWindow *activeSublimeWindow();
     /** @return active sublime mainwindow or 0 if no such mainwindow is active.*/
     KParts::MainWindow *activeMainWindow() override;
 
