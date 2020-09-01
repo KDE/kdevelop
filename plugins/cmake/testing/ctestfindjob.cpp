@@ -86,6 +86,11 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
         return;
     }
 
+    if (Q_UNLIKELY(!m_suite->project())) {
+        qCDebug(CMAKE) << "Cannot add the test suite because its project is already destroyed (probably closed by the user).";
+        return;
+    }
+
     qCDebug(CMAKE) << "context update ready" << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
