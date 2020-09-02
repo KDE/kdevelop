@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QIcon>
 #include <QTextBrowser>
+#include <QTimer>
 
 #include <KLocalizedString>
 
@@ -226,7 +227,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
     connect(projectController, &IProjectController::projectClosing,
             this, &ProjectFileDataProvider::projectClosing);
     connect(projectController, &IProjectController::projectOpened,
-            this, &ProjectFileDataProvider::projectOpened, Qt::QueuedConnection);
+            this, &ProjectFileDataProvider::projectOpened);
     const auto projects = projectController->projects();
     for (auto* project : projects) {
         projectOpened(project);
@@ -235,6 +236,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing(IProject* project)
 {
+    m_projectsBeingAdded.removeAll(project);
     const auto files = KDevelop::allFiles(project->projectItem());
     for (ProjectFileItem* file : files) {
         fileRemovedFromSet(file);
@@ -243,18 +245,23 @@ void ProjectFileDataProvider::projectClosing(IProject* project)
 
 void ProjectFileDataProvider::projectOpened(IProject* project)
 {
-    const auto exitingProgram = []() {
-        const auto* const core = KDevelop::ICore::self();
-        if (Q_UNLIKELY(!core || core->shuttingDown())) {
-            qCDebug(PLUGIN_QUICKOPEN).nospace()
-                    << "Aborting adding project files to set. KDevelop must be exiting"
-                    << (!core ? " and the KDevelop core already destroyed." : ".");
+    Q_ASSERT(!m_projectsBeingAdded.contains(project));
+    m_projectsBeingAdded.push_back(project);
+    QTimer::singleShot(0, this, [=] { addProjectFilesToSet(project); });
+}
+
+void ProjectFileDataProvider::addProjectFilesToSet(IProject* project)
+{
+    const auto closingThisProject = [=] {
+        if (Q_UNLIKELY(!m_projectsBeingAdded.contains(project))) {
+            qCDebug(PLUGIN_QUICKOPEN) << "Aborting adding project files to set. "
+                                         "This project is (being) closed.";
             return true;
         }
         return false;
     };
 
-    if (exitingProgram()) {
+    if (closingThisProject()) {
         return;
     }
 
@@ -272,17 +279,15 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
             QApplication::processEvents();
-            if (exitingProgram()) {
-                return;
-            }
-            if (Q_UNLIKELY(!crashGuard)) {
-                qCDebug(PLUGIN_QUICKOPEN) << "Aborting adding project files to set. "
-                                             "This project must have been closed and is already destroyed.";
+            if (closingThisProject()) {
                 return;
             }
             processed = 0;
         }
     }
+
+    Q_ASSERT(m_projectsBeingAdded.contains(project));
+    m_projectsBeingAdded.removeAll(project);
 }
 
 void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* file)

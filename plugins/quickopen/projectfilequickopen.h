@@ -132,10 +132,12 @@ private Q_SLOTS:
     void fileAddedToSet(KDevelop::ProjectFileItem*);
     void fileRemovedFromSet(KDevelop::ProjectFileItem*);
 private:
+    void addProjectFilesToSet(KDevelop::IProject*);
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
     QVector<ProjectFile> m_projectFiles;
+    QVector<KDevelop::IProject*> m_projectsBeingAdded;
 };
 
 /**
