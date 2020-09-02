@@ -266,12 +266,18 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
     const int processAfter = 1000;
     int processed = 0;
     const auto files = KDevelop::allFiles(project->projectItem());
+    const QPointer<IProject> crashGuard{project}; // guard against reentrancy issues
     for (ProjectFileItem* file : files) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
             QApplication::processEvents();
             if (exitingProgram()) {
+                return;
+            }
+            if (Q_UNLIKELY(!crashGuard)) {
+                qCDebug(PLUGIN_QUICKOPEN) << "Aborting adding project files to set. "
+                                             "This project must have been closed and is already destroyed.";
                 return;
             }
             processed = 0;
