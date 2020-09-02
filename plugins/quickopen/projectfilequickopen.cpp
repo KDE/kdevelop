@@ -247,7 +247,7 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
         const auto* const core = KDevelop::ICore::self();
         if (Q_UNLIKELY(!core || core->shuttingDown())) {
             qCDebug(PLUGIN_QUICKOPEN).nospace()
-                    << "Aborting adding files to set. KDevelop must be exiting"
+                    << "Aborting adding project files to set. KDevelop must be exiting"
                     << (!core ? " and the KDevelop core already destroyed." : ".");
             return true;
         }

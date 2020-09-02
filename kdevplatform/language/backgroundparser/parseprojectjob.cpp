@@ -183,15 +183,11 @@ void ParseProjectJob::queueFilesToParse(TopDUContext::Features processingLevel)
 {
     Q_D(ParseProjectJob);
 
-    // guard against reentrancy issues, see also bug 345480
-    auto crashGuard = QPointer<ParseProjectJob> {this};
-    const auto exitingProgram = [&crashGuard] {
+    const auto exitingProgram = []() {
         const auto* const core = KDevelop::ICore::self();
-        if (Q_UNLIKELY(!core || core->shuttingDown() || !crashGuard)) {
-            qCDebug(LANGUAGE).nospace() << "Aborting project parse job start. KDevelop must be exiting"
-                                        << (!core ? " and the KDevelop core already destroyed."
-                                                  : !crashGuard ? " and this job already destroyed."
-                                                  : ".");
+        if (Q_UNLIKELY(!core || core->shuttingDown())) {
+            qCDebug(LANGUAGE).nospace() << "Aborting queuing project files to parse. KDevelop must be exiting"
+                                        << (!core ? " and the KDevelop core already destroyed." : ".");
             return true;
         }
         return false;
@@ -205,6 +201,8 @@ void ParseProjectJob::queueFilesToParse(TopDUContext::Features processingLevel)
     // esp. noticeable when dealing with huge projects
     const int processAfter = 1000;
     int processed = 0;
+    // guard against reentrancy issues, see also bug 345480
+    auto crashGuard = QPointer<ParseProjectJob> {this};
     for (const IndexedString& url : qAsConst(d->filesToParse)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(url, processingLevel,
                                                                              BackgroundParser::InitialParsePriority,
@@ -213,6 +211,11 @@ void ParseProjectJob::queueFilesToParse(TopDUContext::Features processingLevel)
         if (processed == processAfter) {
             QApplication::processEvents();
             if (exitingProgram()) {
+                return;
+            }
+            if (Q_UNLIKELY(!crashGuard)) {
+                qCDebug(LANGUAGE) << "Aborting queuing project files to parse. "
+                                     "This job must have been cancelled and is already destroyed.";
                 return;
             }
             processed = 0;
