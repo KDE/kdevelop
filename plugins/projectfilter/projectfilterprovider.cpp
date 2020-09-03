@@ -50,6 +50,8 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
     const auto * const projectController = core()->projectController();
     connect(projectController, &IProjectController::projectClosing,
             this, &ProjectFilterProvider::projectClosing);
+    connect(projectController, &IProjectController::projectOpeningAborted,
+            this, &ProjectFilterProvider::projectClosing);
     connect(projectController, &IProjectController::projectAboutToBeOpened,
             this, &ProjectFilterProvider::projectAboutToBeOpened);
 
