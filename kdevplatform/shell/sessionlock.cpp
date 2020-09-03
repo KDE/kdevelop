@@ -175,7 +175,6 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
             return QString();
         } else {
             qCWarning(SHELL) << i18nc("@info:shell", "Running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
-            qCWarning(SHELL) << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
         }
     }
 
