@@ -117,7 +117,7 @@ public:
      * Returns the view that was last stored through setActiveView(view), or zero
      * if the view was deleted or it was never set.
      */
-    View* activeView();
+    View* activeView() const;
     
     /**
      * Allows marking a view as active that can later be retrieved through activeView()

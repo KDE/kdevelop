@@ -160,9 +160,9 @@ void Area::initialize()
 
 Area::~Area() = default;
 
-View* Area::activeView()
+View* Area::activeView() const
 {
-    Q_D(Area);
+    Q_D(const Area);
 
     return d->activeView.data();
 }
