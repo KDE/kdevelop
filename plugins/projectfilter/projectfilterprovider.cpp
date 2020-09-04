@@ -47,7 +47,8 @@ K_PLUGIN_FACTORY_WITH_JSON(ProjectFilterProviderFactory, "kdevprojectfilter.json
 ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantList& /*args*/ )
     : IPlugin( QStringLiteral( "kdevprojectfilter" ), parent )
 {
-    const auto * const projectController = core()->projectController();
+    const auto* const projectController = core()->projectController();
+
     connect(projectController, &IProjectController::projectClosing,
             this, &ProjectFilterProvider::projectClosing);
     connect(projectController, &IProjectController::projectOpeningAborted,
