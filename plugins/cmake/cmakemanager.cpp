@@ -451,7 +451,11 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         reloadTimer->setSingleShot(true);
         reloadTimer->setInterval(1000);
         connect(reloadTimer, &QTimer::timeout, this, [project, this]() {
-            reload(project->projectItem());
+            if (m_projects.contains(project)) {
+                reload(project->projectItem());
+            } else {
+                qCDebug(CMAKE) << "cannot reload an already closed project" << project;
+            }
         });
         connect(projectWatcher(project), &KDirWatch::dirty, this, [this, project, reloadTimer](const QString& strPath) {
             Q_ASSERT_X(m_projects.contains(project), Q_FUNC_INFO,
