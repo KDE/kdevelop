@@ -453,6 +453,9 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
 
 void CMakeManager::watchProject(KDevelop::IProject* project)
 {
+    // Instead check that  m_projects contains project - only in the timeout lambda - in a separate commit
+    // there is no need for this new function after all! revert almost everything.
+    // projectWatcher is destroyed before the project is closed, so the context can be this instead of the timer.
     const auto exitingProgram = []() {
         const auto* const core = KDevelop::ICore::self();
         if (Q_UNLIKELY(!core || core->shuttingDown())) {
@@ -473,7 +476,7 @@ void CMakeManager::watchProject(KDevelop::IProject* project)
         }
     });
 
-    connect(projectWatcher(project), &KDirWatch::dirty, reloadTimer, [=](const QString& strPath) {
+    connect(projectWatcher(project), &KDirWatch::dirty, this, [=](const QString& strPath) {
         if (exitingProgram()) {
             return;
         }
