@@ -142,6 +142,7 @@ bool ExecuteCompositeJob::doKill()
         if (!j || j->kill()) {
             removeSubjob(j);
         } else {
+            qCDebug(UTIL) << "Failed to kill subjob" << j;
             return false;
         }
     }
