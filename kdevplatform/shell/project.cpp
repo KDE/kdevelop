@@ -165,18 +165,20 @@ public:
         progress->setDone();
         loading = false;
 
-        ProjectController* projCtrl = Core::self()->projectControllerInternal();
         if (job->error() == 0 && !Core::self()->shuttingDown()) {
-
             if(fullReload)
-                projCtrl->projectModel()->appendRow(topItem);
+                Core::self()->projectControllerInternal()->projectModel()->appendRow(topItem);
 
             if (scheduleReload) {
                 scheduleReload = false;
                 project->reloadModel();
             }
         } else {
-            projCtrl->abortOpeningProject(project);
+            // Print job->error() too because job->errorString() can be empty.
+            qCDebug(SHELL) << "Reloading project" << name << "failed:"
+                           << (job->error() == 0 ? QStringLiteral("KDevelop is shutting down.")
+                                                 : QString::number(job->error())
+                                                   + QLatin1String(" - ") + job->errorString());
         }
     }
 
