@@ -437,9 +437,10 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
       IPlugin( componentName, parent ),
       d_ptr(new AbstractFileManagerPluginPrivate(this))
 {
-    connect(core()->projectController(), &IProjectController::projectClosing,
+    auto* const projectController = core()->projectController();
+    connect(projectController, &IProjectController::projectClosing,
             this, [this] (IProject* project) { Q_D(AbstractFileManagerPlugin); d->projectClosing(project); });
-    connect(core()->projectController()->projectModel(), &ProjectModel::rowsAboutToBeRemoved,
+    connect(projectController->projectModel(), &ProjectModel::rowsAboutToBeRemoved,
             this, [this] (const QModelIndex& parent, int first, int last) {
                 Q_D(AbstractFileManagerPlugin);
                 // cleanup list jobs to remove about-to-be-dangling pointers
