@@ -442,53 +442,28 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
             }
         });
     } else if (!m_projects.contains(project)) {
-        watchProject(project);
+        auto* reloadTimer = new QTimer(project);
+        reloadTimer->setSingleShot(true);
+        reloadTimer->setInterval(1000);
+        connect(reloadTimer, &QTimer::timeout, this, [project, this]() {
+            reload(project->projectItem());
+        });
+        connect(projectWatcher(project), &KDirWatch::dirty, reloadTimer, [this, project, reloadTimer](const QString &strPath) {
+            const auto& cmakeFiles = m_projects[project].data.cmakeFiles;
+            KDevelop::Path path(strPath);
+            auto it = cmakeFiles.find(path);
+            if (it == cmakeFiles.end() || it->isGenerated || it->isExternal) {
+                return;
+            }
+            qCDebug(CMAKE) << "eventually starting reload due to change of" << strPath;
+            reloadTimer->start();
+        });
     }
 
     m_projects[project] = {data, server};
 
     populateTargets(project->projectItem(), data.targets);
     CTestUtils::createTestSuites(data.testSuites, data.targets, project);
-}
-
-void CMakeManager::watchProject(KDevelop::IProject* project)
-{
-    // Instead check that  m_projects contains project - only in the timeout lambda - in a separate commit
-    // there is no need for this new function after all! revert almost everything.
-    // projectWatcher is destroyed before the project is closed, so the context can be this instead of the timer.
-    const auto exitingProgram = []() {
-        const auto* const core = KDevelop::ICore::self();
-        if (Q_UNLIKELY(!core || core->shuttingDown())) {
-            qCDebug(CMAKE).nospace()
-                    << "Cannot reload a project. KDevelop must be exiting"
-                    << (!core ? " and the KDevelop core already destroyed." : ".");
-            return true;
-        }
-        return false;
-    };
-
-    auto* reloadTimer = new QTimer(project);
-    reloadTimer->setSingleShot(true);
-    reloadTimer->setInterval(1000);
-    connect(reloadTimer, &QTimer::timeout, this, [=]() {
-        if (!exitingProgram()) {
-            reload(project->projectItem());
-        }
-    });
-
-    connect(projectWatcher(project), &KDirWatch::dirty, this, [=](const QString& strPath) {
-        if (exitingProgram()) {
-            return;
-        }
-        const auto& cmakeFiles = m_projects[project].data.cmakeFiles;
-        KDevelop::Path path(strPath);
-        auto it = cmakeFiles.find(path);
-        if (it == cmakeFiles.end() || it->isGenerated || it->isExternal) {
-            return;
-        }
-        qCDebug(CMAKE) << "eventually starting reload due to change of" << strPath;
-        reloadTimer->start();
-    });
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
