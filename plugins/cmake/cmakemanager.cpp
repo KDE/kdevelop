@@ -97,7 +97,12 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 
-    connect(ICore::self()->projectController(), &IProjectController::projectClosing, this, &CMakeManager::projectClosing);
+    const auto* const projectController = ICore::self()->projectController();
+    // CMakeManager::integrateData() is normally invoked before projectController emits either
+    // projectOpened() (eventually followed by projectClosing()) or projectOpeningAborted() signal.
+    // We need to remove the about-to-de-destroyed project from m_projects if present.
+    connect(projectController, &IProjectController::projectOpeningAborted, this, &CMakeManager::projectClosing);
+    connect(projectController, &IProjectController::projectClosing, this, &CMakeManager::projectClosing);
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &CMakeManager::reloadProjects);
     connect(this, &KDevelop::AbstractFileManagerPlugin::folderAdded, this, &CMakeManager::folderAdded);
 }
