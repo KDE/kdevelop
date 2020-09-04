@@ -438,8 +438,14 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
       d_ptr(new AbstractFileManagerPluginPrivate(this))
 {
     auto* const projectController = core()->projectController();
+    // AbstractFileManagerPlugin::import() is called before projectController emits either
+    // projectOpened() (eventually followed by projectClosing()) or projectOpeningAborted().
+    // We need to remove our references to an about-to-de-destroyed project object
+    // in AbstractFileManagerPlugin::projectClosing(), provided such references exist.
+    connect(projectController, &IProjectController::projectOpeningAborted,
+            this, &AbstractFileManagerPlugin::projectClosing);
     connect(projectController, &IProjectController::projectClosing,
-            this, [this] (IProject* project) { Q_D(AbstractFileManagerPlugin); d->projectClosing(project); });
+            this, &AbstractFileManagerPlugin::projectClosing);
     connect(projectController->projectModel(), &ProjectModel::rowsAboutToBeRemoved,
             this, [this] (const QModelIndex& parent, int first, int last) {
                 Q_D(AbstractFileManagerPlugin);
@@ -699,6 +705,13 @@ KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
     Q_D(const AbstractFileManagerPlugin);
 
     return d->m_watchers.value( project, nullptr );
+}
+
+void KDevelop::AbstractFileManagerPlugin::projectClosing(IProject* project)
+{
+    Q_D(AbstractFileManagerPlugin);
+
+    d->projectClosing(project);
 }
 
 //END Plugin

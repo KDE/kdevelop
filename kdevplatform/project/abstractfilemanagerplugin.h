@@ -116,6 +116,9 @@ Q_SIGNALS:
     void fileRemoved(KDevelop::ProjectFileItem* file);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
+private Q_SLOTS:
+    void projectClosing(IProject* project);
+
 private:
     const QScopedPointer<class AbstractFileManagerPluginPrivate> d_ptr;
     Q_DECLARE_PRIVATE(AbstractFileManagerPlugin)
