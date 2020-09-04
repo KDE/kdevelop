@@ -353,7 +353,6 @@ public:
                          q, &ProjectController::projectAboutToBeOpened);
         if ( !project->open( Path(url) ) )
         {
-            m_currentlyOpening.removeAll(url);
             q->abortOpeningProject(project);
             project->deleteLater();
         }
