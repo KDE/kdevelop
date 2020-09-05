@@ -44,7 +44,7 @@ ImportJob::ImportJob(KDevelop::IProject* project, QObject* parent)
     setCapabilities(Killable);
 
     connect(&m_futureWatcher, &QFutureWatcher<CMakeProjectData>::finished, this, [this]() {
-        if (!m_futureWatcher.isCanceled()) {
+        if (Q_LIKELY(!m_futureWatcher.isCanceled())) {
             emit dataAvailable(m_futureWatcher.result());
             emitResult();
         }
