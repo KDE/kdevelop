@@ -253,7 +253,7 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
 
 void ProjectFileDataProvider::addProjectFilesToSet(IProject* project)
 {
-    const auto closingThisProject = [=] {
+    const auto currentProjectClosed = [=] {
         if (Q_UNLIKELY(!m_projectsBeingAdded.contains(project))) {
             qCDebug(PLUGIN_QUICKOPEN) << "Aborting adding project files to set. "
                                          "This project is (being) closed.";
@@ -262,7 +262,7 @@ void ProjectFileDataProvider::addProjectFilesToSet(IProject* project)
         return false;
     };
 
-    if (closingThisProject()) {
+    if (currentProjectClosed()) {
         return;
     }
 
@@ -285,7 +285,7 @@ void ProjectFileDataProvider::addProjectFilesToSet(IProject* project)
                                              "This plugin must have been unloaded and is already destroyed.";
                 return;
             }
-            if (closingThisProject()) {
+            if (currentProjectClosed()) {
                 return;
             }
             processed = 0;
