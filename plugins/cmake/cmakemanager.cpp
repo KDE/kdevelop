@@ -451,7 +451,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         reloadTimer->setSingleShot(true);
         reloadTimer->setInterval(1000);
         connect(reloadTimer, &QTimer::timeout, this, [project, this]() {
-            if (m_projects.contains(project)) {
+            if (Q_LIKELY(m_projects.contains(project))) {
                 reload(project->projectItem());
             } else {
                 qCDebug(CMAKE) << "cannot reload an already closed project" << project;
