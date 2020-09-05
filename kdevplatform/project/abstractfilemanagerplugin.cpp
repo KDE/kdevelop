@@ -484,6 +484,21 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
     ProjectFolderItem *projectRoot = createFolderItem( project, project->path(), nullptr );
     emit folderAdded( projectRoot );
     qCDebug(FILEMANAGER) << "imported new project" << project->name() << "at" << projectRoot->path();
+    addProject(project);
+    return projectRoot;
+}
+
+void AbstractFileManagerPlugin::addProject(IProject* project)
+{
+    Q_D(AbstractFileManagerPlugin);
+
+    if (d->m_watchers.contains(project)) {
+        // Only Project::reloadModel() imports the same project repeatedly.
+        Q_ASSERT_X(d->m_filters.isManaged(project), Q_FUNC_INFO,
+                   "watchers and filters must contain the same projects.");
+        qCDebug(FILEMANAGER) << "not adding project" << project->name() << "again";
+        return;
+    }
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
     if ( project->path().isLocalFile() ) {
@@ -515,8 +530,6 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
     }
 
     d->m_filters.add(project);
-
-    return projectRoot;
 }
 
 KJob* AbstractFileManagerPlugin::createImportJob(ProjectFolderItem* item)

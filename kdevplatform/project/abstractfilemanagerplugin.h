@@ -120,10 +120,11 @@ private Q_SLOTS:
     void projectClosing(IProject* project);
 
 private:
+    void addProject(IProject* project);
+
     const QScopedPointer<class AbstractFileManagerPluginPrivate> d_ptr;
     Q_DECLARE_PRIVATE(AbstractFileManagerPlugin)
     friend class AbstractFileManagerPluginPrivate;
-public:
     friend class AbstractFileManagerPluginImportBenchmark;
 };
 
