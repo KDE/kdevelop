@@ -123,7 +123,10 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     connect(this, &CustomMakeManager::reloadedFileItem,
             this, &CustomMakeManager::reloadMakefile);
 
-    connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+    const auto* const projectController = core()->projectController();
+    connect(projectController, &IProjectController::projectOpeningAborted,
+            this, &CustomMakeManager::projectClosing);
+    connect(projectController, &IProjectController::projectClosing,
             this, &CustomMakeManager::projectClosing);
 
 
