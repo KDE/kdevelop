@@ -456,9 +456,9 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         });
         connect(projectWatcher(project), &KDirWatch::dirty, this, [this, project, reloadTimer](const QString& strPath) {
             Q_ASSERT_X(m_projects.contains(project), Q_FUNC_INFO,
-                       "projectWatcher(project) is destroyed before project is closed.");
+                       "projectWatcher(project) must be destroyed before closing the project begins.");
             Q_ASSERT_X(reloadTimer, Q_FUNC_INFO,
-                       "reloadTimer is destroyed along with its parent project after it is closed.");
+                       "reloadTimer must be destroyed along with its parent project after it is closed.");
             const auto& cmakeFiles = m_projects[project].data.cmakeFiles;
             KDevelop::Path path(strPath);
             auto it = cmakeFiles.find(path);
