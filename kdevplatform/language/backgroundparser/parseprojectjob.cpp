@@ -175,7 +175,7 @@ void ParseProjectJob::start()
         return;
     }
 
-    // Avoid calling QApplication::processEvents() directly in start() to prevent a crash in RunController.
+    // Avoid calling QApplication::processEvents() directly in start() to prevent a crash in RunController::checkState().
     QTimer::singleShot(0, this, [=] { queueFilesToParse(processingLevel); });
 }
 
@@ -214,8 +214,7 @@ void ParseProjectJob::queueFilesToParse(TopDUContext::Features processingLevel)
                 return;
             }
             if (Q_UNLIKELY(!crashGuard)) {
-                qCDebug(LANGUAGE) << "Aborting queuing project files to parse. "
-                                     "This job must have been cancelled and is already destroyed.";
+                qCDebug(LANGUAGE) << "Aborting queuing project files to parse. This job is already destroyed.";
                 return;
             }
             processed = 0;
