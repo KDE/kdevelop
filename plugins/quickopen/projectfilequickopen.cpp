@@ -248,6 +248,9 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
 {
     Q_ASSERT(!m_projectsBeingAdded.contains(project));
     m_projectsBeingAdded.push_back(project);
+    // addProjectFilesToSet() can take a long time and calls QApplication::processEvents()
+    // => don't call it directly to avoid possible wrong ordering or crashes in other
+    // slots connected to the same signal and in the code after the signal emission.
     QTimer::singleShot(0, this, [=] { addProjectFilesToSet(project); });
 }
 
