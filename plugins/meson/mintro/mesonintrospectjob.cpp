@@ -212,34 +212,31 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
     auto buildOptionsJSON = rawData[QStringLiteral("buildoptions")];
     if (buildOptionsJSON.isArray()) {
         m_res_options = std::make_shared<MesonOptions>(buildOptionsJSON.toArray());
-        if (m_res_options) {
-            qCDebug(KDEV_Meson) << "MINTRO: Imported " << m_res_options->options().size() << " buildoptions";
-        } else {
-            qCWarning(KDEV_Meson) << "MINTRO: Failed to parse buildoptions";
-        }
+        qCDebug(KDEV_Meson) << "MINTRO: Imported" << m_res_options->options().size() << "buildoptions";
+    } else {
+        qCDebug(KDEV_Meson) << "MINTRO: Failed to parse buildoptions";
     }
 
     auto projectInfoJSON = rawData[QStringLiteral("projectinfo")];
     if (projectInfoJSON.isObject()) {
         m_res_projectInfo = std::make_shared<MesonProjectInfo>(projectInfoJSON.toObject());
-        if (!m_res_projectInfo) {
-            qCWarning(KDEV_Meson) << "MINTRO: Failed to parse projectinfo";
-        }
+    } else {
+        qCDebug(KDEV_Meson) << "MINTRO: Failed to parse projectinfo";
     }
 
     auto targetsJSON = rawData[QStringLiteral("targets")];
     if (targetsJSON.isArray()) {
         m_res_targets = std::make_shared<MesonTargets>(targetsJSON.toArray());
+    } else {
+        qCDebug(KDEV_Meson) << "MINTRO: Failed to parse targets";
     }
 
     auto testsJSON = rawData[QStringLiteral("tests")];
     if (testsJSON.isArray()) {
         m_res_tests = std::make_shared<MesonTestSuites>(testsJSON.toArray(), m_project);
-        if (m_res_tests) {
-            qCDebug(KDEV_Meson) << "MINTRO: Imported " << m_res_tests->testSuites().size() << " test suites";
-        } else {
-            qCWarning(KDEV_Meson) << "MINTRO: Failed to parse tests";
-        }
+        qCDebug(KDEV_Meson) << "MINTRO: Imported" << m_res_tests->testSuites().size() << "test suites";
+    } else {
+        qCDebug(KDEV_Meson) << "MINTRO: Failed to parse tests";
     }
 
     return QString();
