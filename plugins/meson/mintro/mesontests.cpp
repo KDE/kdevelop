@@ -27,6 +27,8 @@
 #include <outputview/outputexecutejob.h>
 #include <util/executecompositejob.h>
 
+#include <utility>
+
 using namespace std;
 using namespace KDevelop;
 
@@ -37,8 +39,6 @@ MesonTest::MesonTest(const QJsonObject& json, IProject* project)
 {
     fromJson(json);
 }
-
-MesonTest::~MesonTest() {}
 
 QString MesonTest::name() const
 {
@@ -73,7 +73,7 @@ KJob* MesonTest::job(ITestSuite::TestJobVerbosity verbosity)
         job->setWorkingDirectory(m_workDir.toUrl());
     }
     job->setJobName(m_name);
-    for (auto i = begin(m_env); i != end(m_env); ++i) {
+    for (auto i = cbegin(m_env); i != cend(m_env); ++i) {
         job->addEnvironmentOverride(i.key(), i.value());
     }
     return job;
@@ -84,11 +84,13 @@ void MesonTest::fromJson(const QJsonObject& json)
     m_name = json[QStringLiteral("name")].toString();
     m_workDir = Path(json[QStringLiteral("workdir")].toString());
 
-    QJsonArray cmd = json[QStringLiteral("cmd")].toArray();
-    QJsonArray suites = json[QStringLiteral("suite")].toArray();
-    QJsonObject env = json[QStringLiteral("env")].toObject();
+    const QJsonArray cmd = json[QStringLiteral("cmd")].toArray();
+    const QJsonArray suites = json[QStringLiteral("suite")].toArray();
+    const QJsonObject env = json[QStringLiteral("env")].toObject();
 
+    m_command.reserve(cmd.size());
     transform(begin(cmd), end(cmd), back_inserter(m_command), [](const auto& x) { return x.toString(); });
+    m_suites.reserve(suites.size());
     transform(begin(suites), end(suites), back_inserter(m_suites), [](const auto& x) { return x.toString(); });
 
     for (auto i = begin(env); i != end(env); ++i) {
@@ -101,7 +103,7 @@ void MesonTest::fromJson(const QJsonObject& json)
 // Class MesonTestSuite
 
 MesonTestSuite::MesonTestSuite(QString name, IProject* project)
-    : m_name(name)
+    : m_name(std::move(name))
     , m_project(project)
 {
     qCDebug(KDEV_Meson) << "MINTRO:   - New test suite" << m_name;
@@ -117,7 +119,8 @@ QString MesonTestSuite::name() const
 QStringList MesonTestSuite::cases() const
 {
     QStringList result;
-    for (auto i : m_tests) {
+    result.reserve(m_tests.size());
+    for (auto& i : m_tests) {
         result << i->name();
     }
     return result;
@@ -130,8 +133,8 @@ IProject* MesonTestSuite::project() const
 
 KJob* MesonTestSuite::launchCase(const QString& testCase, TestJobVerbosity verbosity)
 {
-    auto iter = m_tests.find(testCase);
-    if (iter == end(m_tests)) {
+    const auto iter = m_tests.constFind(testCase);
+    if (iter == cend(m_tests)) {
         return nullptr;
     }
 
@@ -141,13 +144,11 @@ KJob* MesonTestSuite::launchCase(const QString& testCase, TestJobVerbosity verbo
 KJob* MesonTestSuite::launchCases(const QStringList& testCases, TestJobVerbosity verbosity)
 {
     QList<KJob*> jobs;
+    jobs.reserve(testCases.size());
     for (const auto& i : testCases) {
-        auto iter = m_tests.find(i);
-        if (iter == end(m_tests)) {
-            continue;
+        if (auto* job = launchCase(i, verbosity)) {
+            jobs << job;
         }
-
-        jobs << (*iter)->job(verbosity);
     }
 
     return new ExecuteCompositeJob(m_project, jobs);
@@ -156,7 +157,8 @@ KJob* MesonTestSuite::launchCases(const QStringList& testCases, TestJobVerbosity
 KJob* MesonTestSuite::launchAllCases(TestJobVerbosity verbosity)
 {
     QList<KJob*> jobs;
-    for (auto& i : m_tests) {
+    jobs.reserve(m_tests.size());
+    for (auto& i : qAsConst(m_tests)) {
         jobs << i->job(verbosity);
     }
 
@@ -180,61 +182,23 @@ void MesonTestSuite::addTestCase(MesonTestPtr test)
         return;
     }
 
-    m_tests[test->name()] = test;
+    m_tests[test->name()] = std::move(test);
 }
 
-QHash<QString, MesonTestPtr> MesonTestSuite::tests()
+MesonTestSuites mesonTestSuitesFromJson(const QJsonArray& json, IProject* project)
 {
-    return m_tests;
-}
-
-// Class MesonTestSuites
-
-MesonTestSuites::MesonTestSuites(const QJsonArray& json, IProject* project)
-    : m_project(project)
-{
-    fromJSON(json);
-}
-
-MesonTestSuites::~MesonTestSuites() {}
-
-QHash<QString, MesonTestSuitePtr> MesonTestSuites::testSuites()
-{
-    return m_suites;
-}
-
-MesonTestSuitePtr MesonTestSuites::testSuite(QString name)
-{
-    auto iter = m_suites.find(name);
-    if (iter == end(m_suites)) {
-        return nullptr;
-    }
-    return *iter;
-}
-
-MesonTestSuitePtr MesonTestSuites::operator[](QString name)
-{
-    return testSuite(name);
-}
-
-void MesonTestSuites::fromJSON(const QJsonArray& json)
-{
-    QVector<MesonTestPtr> tests;
     qCDebug(KDEV_Meson) << "MINTRO: -- Loading tests from JSON...";
-    for (const auto& i : json) {
-        tests << make_shared<MesonTest>(i.toObject(), m_project);
-    }
-
-    qCDebug(KDEV_Meson) << "MINTRO: -- Adding tests to suites";
-    for (auto& i : tests) {
-        for (QString j : i->suites()) {
-            auto suite = testSuite(j);
+    MesonTestSuites testSuites;
+    for (const auto& jsonTest : json) {
+        const auto test = make_shared<MesonTest>(jsonTest.toObject(), project);
+        for (const QString& suiteName : test->suites()) {
+            auto& suite = testSuites[suiteName];
             if (!suite) {
-                suite = make_shared<MesonTestSuite>(j, m_project);
-                m_suites[j] = suite;
+                suite = make_shared<MesonTestSuite>(suiteName, project);
             }
-            suite->addTestCase(i);
-            qCDebug(KDEV_Meson) << "MINTRO:   - Added test" << i->name() << "to suite" << suite->name();
+            suite->addTestCase(test);
+            qCDebug(KDEV_Meson) << "MINTRO:   - Added test" << test->name() << "to suite" << suite->name();
         }
     }
+    return testSuites;
 }

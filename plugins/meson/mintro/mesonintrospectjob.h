@@ -58,7 +58,7 @@ public:
     MesonOptsPtr buildOptions();
     MesonProjectInfoPtr projectInfo();
     MesonTargetsPtr targets();
-    MesonTestSuitesPtr tests();
+    MesonTestSuites takeTests();
 
 private:
     QString importJSONFile(const Meson::BuildDir& buildDir, Type type, QJsonObject* out);
@@ -79,5 +79,5 @@ private:
     MesonOptsPtr m_res_options = nullptr;
     MesonProjectInfoPtr m_res_projectInfo = nullptr;
     MesonTargetsPtr m_res_targets = nullptr;
-    MesonTestSuitesPtr m_res_tests = nullptr;
+    MesonTestSuites m_res_tests;
 };

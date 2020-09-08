@@ -291,20 +291,18 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 
     connect(introJob, &KJob::result, this, [this, introJob, item, project]() {
         auto targets = introJob->targets();
-        auto tests = introJob->tests();
-        if (!targets || !tests) {
+        if (!targets) {
             return;
         }
 
         // Remove old test suites before deleting them
-        if (m_projectTestSuites[project]) {
-            for (auto i : m_projectTestSuites[project]->testSuites()) {
-                ICore::self()->testController()->removeTestSuite(i.get());
-            }
+        auto& tests = m_projectTestSuites[project];
+        for (auto& i : qAsConst(tests)) {
+            ICore::self()->testController()->removeTestSuite(i.get());
         }
 
         m_projectTargets[project] = targets;
-        m_projectTestSuites[project] = tests;
+        tests = introJob->takeTests();
         auto tgtList = targets->targets();
         QVector<MesonTarget*> tgtCopy;
         tgtCopy.reserve(tgtList.size());
@@ -313,7 +311,7 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         populateTargets(item, tgtCopy);
 
         // Add test suites
-        for (auto& i : tests->testSuites()) {
+        for (auto& i : qAsConst(tests)) {
             ICore::self()->testController()->addTestSuite(i.get());
         }
     });

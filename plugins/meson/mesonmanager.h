@@ -121,7 +121,7 @@ private:
 private:
     MesonBuilder* m_builder;
     QHash<KDevelop::IProject*, MesonTargetsPtr> m_projectTargets;
-    QHash<KDevelop::IProject*, MesonTestSuitesPtr> m_projectTestSuites;
+    QHash<KDevelop::IProject*, MesonTestSuites> m_projectTestSuites;
     QHash<KDevelop::IProject*, KDirWatchPtr> m_projectWatchers;
 
     MesonSourcePtr sourceFromItem(KDevelop::ProjectBaseItem* item) const;

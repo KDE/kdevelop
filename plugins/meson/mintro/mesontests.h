@@ -32,38 +32,36 @@ class QJsonObject;
 class QJsonArray;
 class MesonTest;
 class MesonTestSuite;
-class MesonTestSuites;
 using MesonTestPtr = std::shared_ptr<MesonTest>;
 using MesonTestSuitePtr = std::shared_ptr<MesonTestSuite>;
-using MesonTestSuitesPtr = std::shared_ptr<MesonTestSuites>;
+using MesonTestSuites = QHash<QString, MesonTestSuitePtr>;
 
 class MesonTest
 {
 public:
     explicit MesonTest(const QJsonObject& json, KDevelop::IProject* project);
-    virtual ~MesonTest();
 
     QString name() const;
     QStringList suites() const;
     KDevelop::IProject* project() const;
     KJob* job(KDevelop::ITestSuite::TestJobVerbosity verbosity);
 
+private:
     void fromJson(const QJsonObject& json);
 
-private:
     QString m_name;
     QStringList m_command;
     QStringList m_suites; // In meson one test can be part of multiple suites
     KDevelop::Path m_workDir;
     QHash<QString, QString> m_env;
-    KDevelop::IProject* m_project = nullptr;
+    KDevelop::IProject* const m_project = nullptr;
 };
 
 class MesonTestSuite : public KDevelop::ITestSuite
 {
 public:
     explicit MesonTestSuite(QString name, KDevelop::IProject* project);
-    virtual ~MesonTestSuite();
+    ~MesonTestSuite() override;
 
     // Implementing the ITestSuite interface
     QString name() const override;
@@ -79,27 +77,11 @@ public:
 
     // Custom functions
     void addTestCase(MesonTestPtr test);
-    QHash<QString, MesonTestPtr> tests();
 
 private:
-    QString m_name;
-    KDevelop::IProject* m_project = nullptr;
+    const QString m_name;
+    KDevelop::IProject* const m_project = nullptr;
     QHash<QString, MesonTestPtr> m_tests;
 };
 
-class MesonTestSuites
-{
-public:
-    explicit MesonTestSuites(const QJsonArray& json, KDevelop::IProject* project);
-    virtual ~MesonTestSuites();
-
-    QHash<QString, MesonTestSuitePtr> testSuites();
-    MesonTestSuitePtr testSuite(QString name);
-    MesonTestSuitePtr operator[](QString name);
-
-    void fromJSON(const QJsonArray& json);
-
-private:
-    KDevelop::IProject* m_project = nullptr;
-    QHash<QString, MesonTestSuitePtr> m_suites;
-};
+MesonTestSuites mesonTestSuitesFromJson(const QJsonArray& json, KDevelop::IProject* project);

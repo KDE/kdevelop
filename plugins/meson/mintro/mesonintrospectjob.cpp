@@ -33,6 +33,8 @@
 #include <QJsonObject>
 #include <QtConcurrentRun>
 
+#include <utility>
+
 using namespace Meson;
 using namespace KDevelop;
 
@@ -233,8 +235,8 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
 
     auto testsJSON = rawData[QStringLiteral("tests")];
     if (testsJSON.isArray()) {
-        m_res_tests = std::make_shared<MesonTestSuites>(testsJSON.toArray(), m_project);
-        qCDebug(KDEV_Meson) << "MINTRO: Imported" << m_res_tests->testSuites().size() << "test suites";
+        m_res_tests = mesonTestSuitesFromJson(testsJSON.toArray(), m_project);
+        qCDebug(KDEV_Meson) << "MINTRO: Imported" << m_res_tests.size() << "test suites";
     } else {
         qCDebug(KDEV_Meson) << "MINTRO: Failed to parse tests";
     }
@@ -286,7 +288,7 @@ MesonTargetsPtr MesonIntrospectJob::targets()
     return m_res_targets;
 }
 
-MesonTestSuitesPtr MesonIntrospectJob::tests()
+MesonTestSuites MesonIntrospectJob::takeTests()
 {
-    return m_res_tests;
+    return std::move(m_res_tests);
 }
