@@ -86,12 +86,13 @@ void TestController::addTestSuite(ITestSuite* suite)
 
 ITestSuite* TestController::findTestSuite(IProject* project, const QString& name) const
 {
-    const auto suites = testSuitesForProject(project);
-    auto it = std::find_if(suites.begin(), suites.end(), [&](ITestSuite* suite) {
-        return (suite->name() == name);
+    Q_D(const TestController);
+
+    const auto it = std::find_if(d->suites.cbegin(), d->suites.cend(), [&](ITestSuite* suite) {
+        return suite->project() == project && suite->name() == name;
     });
 
-    return (it != suites.end()) ? *it : nullptr;
+    return (it != d->suites.cend()) ? *it : nullptr;
 }
 
 
