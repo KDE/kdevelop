@@ -245,10 +245,18 @@ QStandardItem* TestView::itemForSuite(ITestSuite* suite)
 QStandardItem* TestView::itemForProject(IProject* project)
 {
     QList<QStandardItem*> itemsForProject = m_model->findItems(project->name());
-    if (!itemsForProject.isEmpty()) {
-        return itemsForProject.first();
+    return itemsForProject.empty() ? nullptr : itemsForProject.front();
+}
+
+QStandardItem* TestView::getOrAddItemForProject(IProject* project)
+{
+    auto* projectItem = itemForProject(project);
+    if (!projectItem) {
+        projectItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
+        projectItem->setData(project->name(), ProjectRole);
+        m_model->appendRow(projectItem);
     }
-    return addProject(project);
+    return projectItem;
 }
 
 
@@ -368,11 +376,7 @@ void TestView::showSource()
 
 void TestView::addTestSuite(ITestSuite* suite)
 {
-    QStandardItem* projectItem = itemForProject(suite->project());
-    Q_ASSERT(projectItem);
-
     auto* suiteItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("view-list-tree")), suite->name());
-
     suiteItem->setData(suite->name(), SuiteRole);
     const auto caseNames = suite->cases();
     for (const QString& caseName : caseNames) {
@@ -380,6 +384,8 @@ void TestView::addTestSuite(ITestSuite* suite)
         caseItem->setData(caseName, CaseRole);
         suiteItem->appendRow(caseItem);
     }
+
+    QStandardItem* const projectItem = getOrAddItemForProject(suite->project());
     projectItem->appendRow(suiteItem);
 }
 
@@ -389,18 +395,11 @@ void TestView::removeTestSuite(ITestSuite* suite)
     item->parent()->removeRow(item->row());
 }
 
-QStandardItem* TestView::addProject(IProject* project)
-{
-    auto* projectItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
-    projectItem->setData(project->name(), ProjectRole);
-    m_model->appendRow(projectItem);
-    return projectItem;
-}
-
 void TestView::removeProject(IProject* project)
 {
-    QStandardItem* projectItem = itemForProject(project);
-    m_model->removeRow(projectItem->row());
+    if (QStandardItem* projectItem = itemForProject(project)) {
+        m_model->removeRow(projectItem->row());
+    }
 }
 
 void TestView::doubleClicked(const QModelIndex& index)

@@ -48,7 +48,6 @@ public Q_SLOTS:
     void removeTestSuite(KDevelop::ITestSuite* suite);
     void updateTestSuite(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
     void notifyTestCaseStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases);
-    QStandardItem* addProject(KDevelop::IProject* project);
     void removeProject(KDevelop::IProject* project);
     void doubleClicked(const QModelIndex& index);
 
@@ -66,6 +65,7 @@ private:
     QIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
     QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);
     QStandardItem* itemForProject(KDevelop::IProject* project);
+    QStandardItem* getOrAddItemForProject(KDevelop::IProject* project);
 };
 
 #endif // KDEVPLATFORM_PLUGIN_TESTVIEW_H
