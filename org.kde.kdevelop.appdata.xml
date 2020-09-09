@@ -2,7 +2,7 @@
 <component type="desktop-application">
   <id>org.kde.kdevelop.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-2.0-or-later/project_license>
+  <project_license>GPL-2.0-or-later</project_license>
   <name>KDevelop</name>
   <name xml:lang="ar">مطوّرك</name>
   <name xml:lang="bs">KDevelop</name>
