@@ -82,13 +82,15 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
     KNotification* ev = nullptr;
     switch(breakpoint->kind()) {
         case Breakpoint::CodeBreakpoint:
-            ev = new KNotification(QStringLiteral("BreakpointHit"), ICore::self()->uiController()->activeMainWindow());
+            ev = new KNotification(QStringLiteral("BreakpointHit"));
+            ev->setWidget(ICore::self()->uiController()->activeMainWindow());
             ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()) + msg);
             break;
         case Breakpoint::WriteBreakpoint:
         case Breakpoint::ReadBreakpoint:
         case Breakpoint::AccessBreakpoint:
-            ev = new KNotification(QStringLiteral("WatchpointHit"), ICore::self()->uiController()->activeMainWindow());
+            ev = new KNotification(QStringLiteral("WatchpointHit"));
+            ev->setWidget(ICore::self()->uiController()->activeMainWindow());
             ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
             break;
         default:
