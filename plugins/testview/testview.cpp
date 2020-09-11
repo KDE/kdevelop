@@ -121,6 +121,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     setFocusProxy(edit);
 
     IProjectController* pc = ICore::self()->projectController();
+    connect (pc, &IProjectController::projectOpeningAborted, this, &TestView::removeProject);
     connect (pc, &IProjectController::projectClosed, this, &TestView::removeProject);
 
     ITestController* tc = ICore::self()->testController();
