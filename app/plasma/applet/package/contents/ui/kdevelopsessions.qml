@@ -158,8 +158,7 @@ Item {
             hover: true
         }
 
-        highlightMoveDuration: 250
-        highlightMoveVelocity: 1
+        highlightMoveDuration: PlasmaCore.Units.shortDuration
     }
 
     PlasmaComponents.ScrollBar {
