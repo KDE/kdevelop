@@ -429,16 +429,20 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
         case Qt::Key_Tab:
             if (keyEvent->modifiers() == Qt::NoModifier) {
                 // Tab should work just like Down
-                QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
-                QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Down, Qt::NoModifier));
+                QKeyEvent keyDownPress(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
+                QCoreApplication::sendEvent(ui.list, &keyDownPress);
+                QKeyEvent keyDownRelease(QEvent::KeyRelease, Qt::Key_Down, Qt::NoModifier);
+                QCoreApplication::sendEvent(ui.list, &keyDownRelease);
                 return true; // eat event
             }
             break;
         case Qt::Key_Backtab:
             if (keyEvent->modifiers() == Qt::ShiftModifier) {
                 // Shift + Tab should work just like Up
-                QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier));
-                QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Up, Qt::NoModifier));
+                QKeyEvent keyUpPress(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier);
+                QCoreApplication::sendEvent(ui.list, &keyUpPress);
+                QKeyEvent keyUpRelease(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier);
+                QCoreApplication::sendEvent(ui.list, &keyUpRelease);
                 return true; // eat event
             }
             break;
