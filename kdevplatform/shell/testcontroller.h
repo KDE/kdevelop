@@ -38,15 +38,18 @@ public:
     void initialize();
     void cleanup();
 
-    void removeTestSuite(KDevelop::ITestSuite* suite) override;
-    void addTestSuite(KDevelop::ITestSuite* suite) override;
+    void addTestSuite(std::unique_ptr<ITestSuite> suite) override;
+    void removeTestSuitesForProject(IProject* project) override;
 
     QList< KDevelop::ITestSuite* > testSuites() const override;
-    KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const override;
     QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const override;
 
     void notifyTestRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) override;
     void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) override;
+
+private Q_SLOTS:
+    void projectOpening(IProject* project);
+    void projectClosing(IProject* project);
 
 private:
     const QScopedPointer<class TestControllerPrivate> d_ptr;

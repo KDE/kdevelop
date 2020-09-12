@@ -29,6 +29,8 @@
 #include <iproject.h>
 #include <language/duchain/indexeddeclaration.h>
 
+#include <utility>
+
 using namespace KDevelop;
 
 const char* TestSuiteName = "TestTestSuite";
@@ -121,11 +123,11 @@ void TestTestController::cleanupTestCase()
     delete m_project;
     TestCore::shutdown();
 }
-
+#if 0
 void TestTestController::addSuite()
 {
-    FakeTestSuite suite(TestSuiteName, m_project);
-    m_testController->addTestSuite(&suite);
+    std::unique_ptr<ITestSuite*> suite(new FakeTestSuite(TestSuiteName, m_project));
+    m_testController->addTestSuite(std::move(suite));
 
     ITestSuite* found = m_testController->findTestSuite(m_project, TestSuiteName);
 
@@ -236,6 +238,6 @@ void TestTestController::testResults()
     delete suite;
     delete suiteTwo;
 }
-
+#endif
 
 QTEST_GUILESS_MAIN(TestTestController)

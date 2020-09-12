@@ -21,15 +21,28 @@
 #include "interfaces/itestsuite.h"
 #include "debug.h"
 #include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include <KLocalizedString>
+
+#include <QHash>
+#include <QList>
+#include <QtAlgorithms>
 
 using namespace KDevelop;
 
 class KDevelop::TestControllerPrivate
 {
 public:
-    QList<ITestSuite*> suites;
+    void assertRegistered(ITestSuite* suite) const {
+        Q_ASSERT_X(suite && suites.value(suite->project()).contains(suite), Q_FUNC_INFO,
+                   "Either this suite hasn't been added yet or it is already removed.");
+    }
+
+    // The test suites are owned and destroyed by this object, but stored as
+    // raw pointers to allow implementing testSuitesForProject() efficiently.
+    QHash<IProject*, QList<ITestSuite*>> suites;
 };
 
 TestController::TestController(QObject *parent)
@@ -38,88 +51,123 @@ TestController::TestController(QObject *parent)
 {
 }
 
-TestController::~TestController() = default;
+TestController::~TestController()
+{
+    Q_D(const TestController);
+
+    for (auto& list : qAsConst(d->suites)) {
+        qDeleteAll(list);
+    }
+}
 
 void TestController::initialize()
 {
+    Q_D(const TestController);
+    Q_ASSERT(d->suites.empty());
 
+    const auto* const projectController = ICore::self()->projectController();
+    Q_ASSERT_X(projectController->projectCount() == 0, Q_FUNC_INFO,
+              "If projects somehow get opened this early, we must add them to d->suites."
+              " But we cannot add projects that are currently being opened!"
+              " So we require that project opening begins after this initialization.");
+
+    connect(projectController, &IProjectController::projectAboutToBeOpened,
+            this, &TestController::projectOpening);
+    connect(projectController, &IProjectController::projectOpeningAborted,
+            this, &TestController::projectClosing);
+    connect(projectController, &IProjectController::projectClosing,
+            this, &TestController::projectClosing);
 }
 
 void TestController::cleanup()
 {
+    // Rely on ProjectController::cleanup() to close all projects and thus
+    // trigger the removal of all test suites.
+}
+
+void TestController::addTestSuite(std::unique_ptr<ITestSuite> suite)
+{
     Q_D(TestController);
 
-    d->suites.clear();
+    const auto it = d->suites.find(suite->project());
+    if (it == d->suites.end()) {
+        qCDebug(SHELL) << "Cannot add test suite" << suite->name()
+                       << "for unregistered project" << suite->project();
+        return;
+    }
+
+    auto* const addedSuite = suite.release();
+    it->push_back(addedSuite);
+    emit testSuiteAdded(addedSuite);
+}
+
+void TestController::removeTestSuitesForProject(IProject* project)
+{
+    Q_D(TestController);
+
+    const auto it = d->suites.find(project);
+    if (it == d->suites.end()) {
+        qCDebug(SHELL) << "Cannot remove test suites for unregistered project" << project;
+        return;
+    }
+
+    QList<ITestSuite*> suitesForProject;
+    // Remove project from d->suites only in projectClosing().
+    it->swap(suitesForProject);
+    emit testSuitesForProjectRemoved(project);
+    qDeleteAll(suitesForProject);
 }
 
 QList<ITestSuite*> TestController::testSuites() const
 {
     Q_D(const TestController);
 
-    return d->suites;
-}
-
-void TestController::removeTestSuite(ITestSuite* suite)
-{
-    Q_D(TestController);
-
-    d->suites.removeAll(suite);
-    emit testSuiteRemoved(suite);
-}
-
-void TestController::addTestSuite(ITestSuite* suite)
-{
-    Q_D(TestController);
-
-    if (ITestSuite* existingSuite = findTestSuite(suite->project(), suite->name()))
-    {
-        if (existingSuite == suite) {
-            return;
-        }
-        removeTestSuite(existingSuite);
-        delete existingSuite;
+    QList<ITestSuite*> allSuites;
+    for (auto& list : qAsConst(d->suites)) {
+        allSuites << list;
     }
-    d->suites.append(suite);
-    if(!ICore::self()->shuttingDown())
-        emit testSuiteAdded(suite);
+    return allSuites;
 }
-
-ITestSuite* TestController::findTestSuite(IProject* project, const QString& name) const
-{
-    Q_D(const TestController);
-
-    const auto it = std::find_if(d->suites.cbegin(), d->suites.cend(), [&](ITestSuite* suite) {
-        return suite->project() == project && suite->name() == name;
-    });
-
-    return (it != d->suites.cend()) ? *it : nullptr;
-}
-
 
 QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) const
 {
     Q_D(const TestController);
 
-    QList<ITestSuite*> suites;
-    for (ITestSuite* suite : qAsConst(d->suites)) {
-        if (suite->project() == project)
-        {
-            suites << suite;
-        }
-    }
-    return suites;
+    return d->suites.value(project);
 }
 
 void TestController::notifyTestRunFinished(ITestSuite* suite, const TestResult& result)
 {
+    Q_D(const TestController);
+    d->assertRegistered(suite);
+
     qCDebug(SHELL) << "Test run finished for suite" << suite->name();
     emit testRunFinished(suite, result);
 }
 
 void TestController::notifyTestRunStarted(ITestSuite* suite, const QStringList& test_cases)
 {
+    Q_D(const TestController);
+    d->assertRegistered(suite);
+
     qCDebug(SHELL) << "Test run started for suite" << suite->name();
     emit testRunStarted(suite, test_cases);
 }
 
+void TestController::projectOpening(IProject* project)
+{
+    Q_D(TestController);
 
+    Q_ASSERT(!d->suites.contains(project));
+    d->suites.insert(project, {});
+}
+
+void TestController::projectClosing(IProject* project)
+{
+    Q_D(TestController);
+
+    Q_ASSERT(d->suites.contains(project));
+    const auto suitesForProject = d->suites.take(project);
+    emit testSuitesForProjectRemoved(project);
+    qDeleteAll(suitesForProject);
+}

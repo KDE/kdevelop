@@ -36,14 +36,14 @@ class TestTestController : public QObject
 
 private Q_SLOTS:
     void initTestCase();
-
+#if 0
     void addSuite();
     void removeSuite();
     void replaceSuite();
 
     void findByProject();
     void testResults();
-
+#endif
     void cleanupTestCase();
 
 private:
