@@ -133,6 +133,8 @@ void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
     }
 #endif
     m_filters.remove(project);
+    qCritical() << "AbstractFileManagerPluginPrivate jobs" << m_projectJobs.keys();
+    qCritical() << "AbstractFileManagerPluginPrivate watchers" << m_watchers.keys();
 }
 
 KIO::Job* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderItem* item)

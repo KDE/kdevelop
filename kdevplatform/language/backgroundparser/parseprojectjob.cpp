@@ -65,6 +65,7 @@ bool ParseProjectJob::doKill()
 
 ParseProjectJob::~ParseProjectJob()
 {
+    qCritical() << "Destroying ParseProjectJob" << this;
     ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
 
     if (ICore::self()->runController()->currentJobs().contains(this))
@@ -74,6 +75,7 @@ ParseProjectJob::~ParseProjectJob()
 ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool forceAll)
     : d_ptr(new ParseProjectJobPrivate(project, forceUpdate, forceAll))
 {
+    qCritical() << "Creating ParseProjectJob" << this;
     Q_D(ParseProjectJob);
 
     connect(project, &IProject::destroyed, this, &ParseProjectJob::deleteNow);

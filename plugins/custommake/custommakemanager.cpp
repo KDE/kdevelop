@@ -282,6 +282,7 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
         m_projectPaths.insert(project->path().path());
     }
 
+    qCritical() << "CustomMakeManager::import()" << m_projectPaths;
     return AbstractFileManagerPlugin::import( project );
 }
 
@@ -326,6 +327,7 @@ void CustomMakeManager::projectClosing(IProject* project)
 {
     QWriteLocker lock(&m_provider->m_lock);
     m_projectPaths.remove(project->path().path());
+    qCritical() << "CustomMakeManager::projectClosing()" << m_projectPaths;
 }
 
 void CustomMakeManager::unload()

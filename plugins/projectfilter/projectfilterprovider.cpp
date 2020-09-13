@@ -70,6 +70,7 @@ QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* pro
 
 ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* context, QWidget* parent)
 {
+    qCritical() << "ProjectFilterProvider" << m_filters.keys();
     ContextMenuExtension ret;
     if (!context->hasType(Context::ProjectItemContext)) {
         return ret;
@@ -150,11 +151,13 @@ void ProjectFilterProvider::updateProjectFilters(IProject* project)
 void ProjectFilterProvider::projectAboutToBeOpened(IProject* project)
 {
     m_filters[project] = deserialize(readFilters(project->projectConfiguration()));
+    qCritical() << "ProjectFilterProvider" << m_filters.keys();
 }
 
 void ProjectFilterProvider::projectClosing(IProject* project)
 {
     m_filters.remove(project);
+    qCritical() << "ProjectFilterProvider" << m_filters.keys();
 }
 
 int ProjectFilterProvider::perProjectConfigPages() const

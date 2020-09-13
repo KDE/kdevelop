@@ -401,6 +401,7 @@ void TestView::removeProject(IProject* project)
     if (QStandardItem* projectItem = itemForProject(project)) {
         m_model->removeRow(projectItem->row());
     }
+    qCritical() << "TestView::removeProject()" << m_model->rowCount();
 }
 
 void TestView::doubleClicked(const QModelIndex& index)

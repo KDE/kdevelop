@@ -34,7 +34,7 @@
 #include "projectmodel.h"
 #include <util/kdevstringhandler.h>
 #include <QIcon>
-
+#include <QDebug>
 namespace KDevelop
 {
 
@@ -356,7 +356,7 @@ QList<BuildItem> ProjectBuildSetModel::items() const
 void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 {
     Q_D(ProjectBuildSetModel);
-
+    qCritical() << "ProjectBuildSetModel::projectClosed()" << project->name() << project;
     for (int i = d->items.count() - 1; i >= 0; --i) {
         if (d->items.at(i).itemProject() == project->name()) {
             beginRemoveRows( QModelIndex(), i, i );
@@ -368,6 +368,7 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
+    qCritical() << "ProjectBuildSetModel::projectClosing()" << project->name() << project;
     Q_D(const ProjectBuildSetModel);
 
     QVariantList paths;
@@ -382,6 +383,7 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 
 void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
+    qCritical() << "ProjectBuildSetModel::projectOpened()" << project->name() << project;
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
     if (base.hasKey("BuildItems")) {
         const QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();

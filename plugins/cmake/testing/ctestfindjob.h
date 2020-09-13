@@ -36,6 +36,7 @@ class CTestFindJob : public KJob
     
 public:
     explicit CTestFindJob(CTestSuite* suite, QObject* parent = nullptr);
+    ~CTestFindJob() override;
     void start() override;
     
 private Q_SLOTS:

@@ -33,6 +33,7 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
 {
+    qCritical() << "Creating CTestFindJob" << this;
     qCDebug(CMAKE) << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", suite->name()));
     setCapabilities(Killable);
@@ -42,6 +43,11 @@ void CTestFindJob::start()
 {
     qCDebug(CMAKE);
     QMetaObject::invokeMethod(this, "findTestCases", Qt::QueuedConnection);
+}
+
+CTestFindJob::~CTestFindJob()
+{
+    qCritical() << "Destroying CTestFindJob" << this;
 }
 
 void CTestFindJob::findTestCases()

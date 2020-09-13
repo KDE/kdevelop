@@ -689,6 +689,10 @@ void ProjectController::initialize()
              d->buildset, &ProjectBuildSetModel::saveToProject );
     connect( this, &ProjectController::projectClosed,
              d->buildset, &ProjectBuildSetModel::projectClosed );
+    connect(this, &ProjectController::projectAboutToBeOpened,
+        this, [](IProject* p) {qCritical() << "ProjectBuildSetModel::projectAboutToBeOpened()" << p->name() << p;} );
+    connect(this, &ProjectController::projectOpeningAborted,
+        this, [](IProject* p) {qCritical() << "ProjectBuildSetModel::projectOpeningAborted()" << p->name() << p;} );
 
     d->m_changesModel = new ProjectChangesModel(this);
 
@@ -1103,7 +1107,7 @@ void ProjectController::closeAllProjects()
 void ProjectController::abortOpeningProject(IProject* proj)
 {
     Q_D(ProjectController);
-
+qCritical() << "ProjectFilterProvider - aborting opening" << proj;
     d->m_currentlyOpening.removeAll(proj->projectFile().toUrl());
     emit projectOpeningAborted(proj);
 }
