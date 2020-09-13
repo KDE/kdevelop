@@ -25,6 +25,7 @@
 #include "mesonconfig.h"
 #include "mintro/mesonintrospectjob.h"
 #include "mintro/mesontargets.h"
+#include "mintro/mesontests.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
 #include "settings/mesonrewriterpage.h"
@@ -295,14 +296,7 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
             return;
         }
 
-        // Remove old test suites before deleting them
-        auto& tests = m_projectTestSuites[project];
-        for (auto& i : qAsConst(tests)) {
-            ICore::self()->testController()->removeTestSuite(i.get());
-        }
-
         m_projectTargets[project] = targets;
-        tests = introJob->takeTests();
         auto tgtList = targets->targets();
         QVector<MesonTarget*> tgtCopy;
         tgtCopy.reserve(tgtList.size());
@@ -310,8 +304,11 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 
         populateTargets(item, tgtCopy);
 
+        auto* const testController = core()->testController();
+        // Remove old test suites before deleting them
+        testController->removeTestSuitesForProject(project);
         // Add test suites
-        for (auto& i : qAsConst(tests)) {
+        for (auto& i : qAsConst(introJob->takeTests())) {
             ICore::self()->testController()->addTestSuite(i.get());
         }
     });

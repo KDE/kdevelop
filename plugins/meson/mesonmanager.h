@@ -21,7 +21,6 @@
 #pragma once
 
 #include "mesonconfig.h"
-#include "mintro/mesontests.h"
 
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -121,7 +120,6 @@ private:
 private:
     MesonBuilder* m_builder;
     QHash<KDevelop::IProject*, MesonTargetsPtr> m_projectTargets;
-    QHash<KDevelop::IProject*, MesonTestSuites> m_projectTestSuites;
     QHash<KDevelop::IProject*, KDirWatchPtr> m_projectWatchers;
 
     MesonSourcePtr sourceFromItem(KDevelop::ProjectBaseItem* item) const;

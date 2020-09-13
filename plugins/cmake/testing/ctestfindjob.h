@@ -23,6 +23,8 @@
 #include <KJob>
 #include <util/path.h>
 
+#include <memory>
+
 namespace KDevelop {
 class IndexedString;
 class ReferencedTopDUContext;
@@ -35,7 +37,7 @@ class CTestFindJob : public KJob
     Q_OBJECT
     
 public:
-    explicit CTestFindJob(CTestSuite* suite, QObject* parent = nullptr);
+    explicit CTestFindJob(std::unique_ptr<CTestSuite> suite, QObject* parent = nullptr);
     ~CTestFindJob() override;
     void start() override;
     
@@ -46,7 +48,7 @@ private Q_SLOTS:
 protected:
     bool doKill() override;
 private:
-    CTestSuite* m_suite;
+    std::unique_ptr<CTestSuite> m_suite;
     QList<KDevelop::Path> m_pendingFiles;
 };
 

@@ -126,7 +126,7 @@ void TestTestController::cleanupTestCase()
 #if 0
 void TestTestController::addSuite()
 {
-    std::unique_ptr<ITestSuite*> suite(new FakeTestSuite(TestSuiteName, m_project));
+    std::unique_ptr<ITestSuite*> suite{new FakeTestSuite(TestSuiteName, m_project)};
     m_testController->addTestSuite(std::move(suite));
 
     ITestSuite* found = m_testController->findTestSuite(m_project, TestSuiteName);

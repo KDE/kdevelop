@@ -36,6 +36,8 @@
 #include <tests/testcore.h>
 #include <testing/ctestsuite.h>
 
+#include <algorithm>
+
 QTEST_MAIN(TestCMakeManager)
 
 using namespace KDevelop;
@@ -385,6 +387,14 @@ void TestCMakeManager::testExecutableOutputPath()
 
     auto suites = ICore::self()->testController()->testSuites();
     QCOMPARE(suites.count(), prevSuitesCount + 1);
-    const CTestSuite* suite = static_cast<CTestSuite*>(ICore::self()->testController()->findTestSuite(project, "mytest"));
+
+    const auto suitesForProject = ICore::self()->testController()->testSuitesForProject(project);
+    const auto it = std::find_if(suitesForProject.cbegin(), suitesForProject.cend(), [](ITestSuite* suite) {
+        return suite->name() == "mytest";
+    });
+    QVERIFY(it != suitesForProject.cend());
+
+    auto suite = dynamic_cast<const CTestSuite*>(*it);
+    QCOMPARE(suite, static_cast<const CTestSuite*>(*it));
     QCOMPARE(suite->executable(), exePath);
 }

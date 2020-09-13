@@ -29,13 +29,15 @@
 
 #include <KLocalizedString>
 
-CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
+#include <utility>
+
+CTestFindJob::CTestFindJob(std::unique_ptr<CTestSuite> suite, QObject* parent)
 : KJob(parent)
-, m_suite(suite)
+, m_suite{std::move(suite)}
 {
     qCritical() << "Creating CTestFindJob" << this;
     qCDebug(CMAKE) << "Created a CTestFindJob";
-    setObjectName(i18n("Parse test suite %1", suite->name()));
+    setObjectName(i18n("Parse test suite %1", m_suite->name()));
     setCapabilities(Killable);
 }
 
@@ -54,7 +56,7 @@ void CTestFindJob::findTestCases()
 {
     if (!m_suite->arguments().isEmpty())
     {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
+        KDevelop::ICore::self()->testController()->addTestSuite(std::move(m_suite));
         emitResult();
         return;
     }
@@ -71,7 +73,7 @@ void CTestFindJob::findTestCases()
 
     if (m_pendingFiles.isEmpty())
     {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
+        KDevelop::ICore::self()->testController()->addTestSuite(std::move(m_suite));
         emitResult();
         return;
     }
@@ -103,7 +105,7 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
 
     if (m_pendingFiles.isEmpty())
     {
-        core->testController()->addTestSuite(m_suite);
+        core->testController()->addTestSuite(std::move(m_suite));
         emitResult();
     }
 }

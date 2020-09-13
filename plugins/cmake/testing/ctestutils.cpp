@@ -34,6 +34,8 @@
 #include <util/path.h>
 #include <QDir>
 
+#include <utility>
+
 using namespace KDevelop;
 
 static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const QString& name)
@@ -79,7 +81,7 @@ void CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites, const QH
 
         qCDebug(CMAKE) << "looking for tests in test" << test.name << "target" << target.name << "with sources" << target.sources;
 
-        auto* suite = new CTestSuite(test.name, executablePath, target.sources.toList(), project, test.arguments, test.properties);
-        ICore::self()->runController()->registerJob(new CTestFindJob(suite));
+        std::unique_ptr<CTestSuite> suite{new CTestSuite(test.name, executablePath, target.sources.toList(), project, test.arguments, test.properties)};
+        ICore::self()->runController()->registerJob(new CTestFindJob(std::move(suite)));
     }
 }
