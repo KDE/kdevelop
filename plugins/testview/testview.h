@@ -62,8 +62,12 @@ private:
     QList<QAction*> m_contextMenuActions;
 
     QIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
-    QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);
-    QStandardItem* itemForProject(KDevelop::IProject* project);
+
+    template <typename T>
+    QStandardItem* findItem(int role, T value, Qt::MatchFlags flags) const;
+
+    QStandardItem* itemForSuite(KDevelop::ITestSuite* suite) const;
+    QStandardItem* itemForProject(KDevelop::IProject* project) const;
     QStandardItem* getOrAddItemForProject(KDevelop::IProject* project);
 };
 

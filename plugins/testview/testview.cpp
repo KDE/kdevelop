@@ -90,15 +90,6 @@ QString testCaseFromItem(QStandardItem* item)
     Q_ASSERT(caseData.type() == QVariant::String);
     return std::move(caseData).toString();
 }
-
-template <typename T>
-QStandardItem* findItem(const QList<QStandardItem*>& items, CustomRoles role, T value)
-{
-    const auto it = std::find_if(items.cbegin(), items.cend(), [&](QStandardItem* item) {
-        return item->data(role).value<T>() == value;
-    });
-    return it == items.cend() ? nullptr : *it;
-}
 } // namespace
 
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
@@ -266,16 +257,24 @@ QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
     Q_UNREACHABLE();
 }
 
-QStandardItem* TestView::itemForSuite(ITestSuite* suite)
+template <typename T>
+QStandardItem* TestView::findItem(int role, T value, Qt::MatchFlags flags) const
 {
-    const auto items = m_model->findItems(suite->name(), Qt::MatchRecursive);
-    return findItem(items, SuiteRole, suite);
+    const auto indices = m_model->match(m_model->index(0, 0), role, QVariant::fromValue(value), 1, flags);
+    Q_ASSERT(indices.size() <= 1);
+    return indices.empty() ? nullptr : m_model->itemFromIndex(indices.front());
 }
 
-QStandardItem* TestView::itemForProject(IProject* project)
+QStandardItem* TestView::itemForSuite(ITestSuite* suite) const
 {
-    const auto projectItems = m_model->findItems(project->name());
-    return findItem(projectItems, ProjectRole, project);
+    Q_ASSERT(suite);
+    return findItem(SuiteRole, suite, Qt::MatchRecursive);
+}
+
+QStandardItem* TestView::itemForProject(IProject* project) const
+{
+    Q_ASSERT(project);
+    return findItem(ProjectRole, project, Qt::MatchExactly);
 }
 
 QStandardItem* TestView::getOrAddItemForProject(IProject* project)
