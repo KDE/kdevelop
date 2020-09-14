@@ -39,7 +39,7 @@ public:
     void cleanup();
 
     void addTestSuite(std::unique_ptr<ITestSuite> suite) override;
-    void removeTestSuitesForProject(IProject* project) override;
+    bool removeTestSuitesForProject(IProject* project) override;
 
     QList< KDevelop::ITestSuite* > testSuites() const override;
     QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const override;

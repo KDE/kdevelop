@@ -194,7 +194,7 @@ MesonTestSuites mesonTestSuitesFromJson(const QJsonArray& json, IProject* projec
         for (const QString& suiteName : test->suites()) {
             auto& suite = testSuites[suiteName];
             if (!suite) {
-                suite = make_shared<MesonTestSuite>(suiteName, project);
+                suite = new MesonTestSuite(suiteName, project);
             }
             suite->addTestCase(test);
             qCDebug(KDEV_Meson) << "MINTRO:   - Added test" << test->name() << "to suite" << suite->name();

@@ -33,7 +33,9 @@ class QJsonArray;
 class MesonTest;
 class MesonTestSuite;
 using MesonTestPtr = std::shared_ptr<MesonTest>;
-using MesonTestSuitePtr = std::shared_ptr<MesonTestSuite>;
+// TODO: switch from raw pointer to std::unique_ptr once we require Qt 6
+// and QHash supports move-only mapped_type.
+using MesonTestSuitePtr = MesonTestSuite*;
 using MesonTestSuites = QHash<QString, MesonTestSuitePtr>;
 
 class MesonTest

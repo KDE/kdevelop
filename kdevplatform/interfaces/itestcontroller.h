@@ -81,12 +81,16 @@ public:
 
     /**
      * Add a new test suite.
+     *
+     * @pre suite->project() must be valid and registered with this controller.
      */
     virtual void addTestSuite(std::unique_ptr<ITestSuite> suite) = 0;
     /**
      * Remove and destroy all test suites in @p project.
+     *
+     * @return true if @p project is registered; false otherwise (in this case nothing is changed).
      */
-    virtual void removeTestSuitesForProject(IProject* project) = 0;
+    virtual bool removeTestSuitesForProject(IProject* project) = 0;
 
     /**
      * Returns the list of all known test suites.

@@ -90,25 +90,21 @@ void TestController::addTestSuite(std::unique_ptr<ITestSuite> suite)
     Q_D(TestController);
 
     const auto it = d->suites.find(suite->project());
-    if (it == d->suites.end()) {
-        qCDebug(SHELL) << "Cannot add test suite" << suite->name()
-                       << "for unregistered project" << suite->project();
-        return;
-    }
+    Q_ASSERT_X(it != d->suites.end(), Q_FUNC_INFO,
+               "suite->project() must be registered as a precondition.");
 
     auto* const addedSuite = suite.release();
     it->push_back(addedSuite);
     emit testSuiteAdded(addedSuite);
 }
 
-void TestController::removeTestSuitesForProject(IProject* project)
+bool TestController::removeTestSuitesForProject(IProject* project)
 {
     Q_D(TestController);
 
     const auto it = d->suites.find(project);
     if (it == d->suites.end()) {
-        qCDebug(SHELL) << "Cannot remove test suites for unregistered project" << project;
-        return;
+        return false;
     }
 
     QList<ITestSuite*> suitesForProject;
@@ -116,6 +112,7 @@ void TestController::removeTestSuitesForProject(IProject* project)
     it->swap(suitesForProject);
     emit testSuitesForProjectRemoved(project);
     qDeleteAll(suitesForProject);
+    return true;
 }
 
 QList<ITestSuite*> TestController::testSuites() const

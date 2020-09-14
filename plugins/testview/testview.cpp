@@ -23,7 +23,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/itestsuite.h>
 #include <interfaces/iruncontroller.h>
@@ -56,13 +55,51 @@
 #include <QSortFilterProxyModel>
 #endif
 
+#include <utility>
+
 using namespace KDevelop;
 
+namespace {
 enum CustomRoles {
     ProjectRole = Qt::UserRole + 1,
     SuiteRole,
     CaseRole
 };
+
+IProject* projectFromItem(QStandardItem* item)
+{
+    Q_ASSERT_X(item && !item->parent(), Q_FUNC_INFO, "Not a project item.");
+    auto* result = item->data(ProjectRole).value<IProject*>();
+    Q_ASSERT(result);
+    return result;
+}
+
+ITestSuite* testSuiteFromItem(QStandardItem* item)
+{
+    Q_ASSERT_X(item && item->parent() && !item->parent()->parent(), Q_FUNC_INFO, "Not a suite item.");
+    auto* result = item->data(SuiteRole).value<ITestSuite*>();
+    Q_ASSERT(result);
+    return result;
+}
+
+QString testCaseFromItem(QStandardItem* item)
+{
+    Q_ASSERT_X(item && item->parent() && item->parent()->parent() && !item->parent()->parent()->parent(),
+               Q_FUNC_INFO, "Not a case item.");
+    auto caseData = item->data(CaseRole);
+    Q_ASSERT(caseData.type() == QVariant::String);
+    return std::move(caseData).toString();
+}
+
+template <typename T>
+QStandardItem* findItem(const QList<QStandardItem*>& items, CustomRoles role, T value)
+{
+    const auto it = std::find_if(items.cbegin(), items.cend(), [&](QStandardItem* item) {
+        return item->data(role).value<T>() == value;
+    });
+    return it == items.cend() ? nullptr : *it;
+}
+} // namespace
 
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QWidget(parent)
@@ -120,15 +157,11 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 
     setFocusProxy(edit);
 
-    IProjectController* pc = ICore::self()->projectController();
-    connect (pc, &IProjectController::projectOpeningAborted, this, &TestView::removeProject);
-    connect (pc, &IProjectController::projectClosed, this, &TestView::removeProject);
-
     ITestController* tc = ICore::self()->testController();
     connect (tc, &ITestController::testSuiteAdded,
              this, &TestView::addTestSuite);
-    connect (tc, &ITestController::testSuiteRemoved,
-             this, &TestView::removeTestSuite);
+    connect (tc, &ITestController::testSuitesForProjectRemoved,
+             this, &TestView::removeTestSuitesForProject);
     connect (tc, &ITestController::testRunFinished,
              this, &TestView::updateTestSuite);
     connect (tc, &ITestController::testRunStarted,
@@ -236,17 +269,13 @@ QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 QStandardItem* TestView::itemForSuite(ITestSuite* suite)
 {
     const auto items = m_model->findItems(suite->name(), Qt::MatchRecursive);
-    auto it = std::find_if(items.begin(), items.end(), [&](QStandardItem* item) {
-        return (item->parent() && item->parent()->text() == suite->project()->name()
-                && !item->parent()->parent());
-    });
-    return (it != items.end()) ? *it : nullptr;
+    return findItem(items, SuiteRole, suite);
 }
 
 QStandardItem* TestView::itemForProject(IProject* project)
 {
-    QList<QStandardItem*> itemsForProject = m_model->findItems(project->name());
-    return itemsForProject.empty() ? nullptr : itemsForProject.front();
+    const auto projectItems = m_model->findItems(project->name());
+    return findItem(projectItems, ProjectRole, project);
 }
 
 QStandardItem* TestView::getOrAddItemForProject(IProject* project)
@@ -254,7 +283,7 @@ QStandardItem* TestView::getOrAddItemForProject(IProject* project)
     auto* projectItem = itemForProject(project);
     if (!projectItem) {
         projectItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
-        projectItem->setData(project->name(), ProjectRole);
+        projectItem->setData(QVariant::fromValue(project), ProjectRole);
         m_model->appendRow(projectItem);
     }
     return projectItem;
@@ -296,8 +325,7 @@ void TestView::runSelectedTests()
         if (item->parent() == nullptr)
         {
             // A project was selected
-            IProject* project = ICore::self()->projectController()->findProjectByName(item->data(ProjectRole).toString());
-            const auto suites = tc->testSuitesForProject(project);
+            const auto suites = tc->testSuitesForProject(projectFromItem(item));
             for (ITestSuite* suite : suites) {
                 jobs << suite->launchAllCases(ITestSuite::Silent);
             }
@@ -305,17 +333,13 @@ void TestView::runSelectedTests()
         else if (item->parent()->parent() == nullptr)
         {
             // A suite was selected
-            IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
-            ITestSuite* suite =  tc->findTestSuite(project, item->data(SuiteRole).toString());
-            jobs << suite->launchAllCases(ITestSuite::Verbose);
+            jobs << testSuiteFromItem(item)->launchAllCases(ITestSuite::Verbose);
         }
         else
         {
             // This was a single test case
-            IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->parent()->data(ProjectRole).toString());
-            ITestSuite* suite =  tc->findTestSuite(project, item->parent()->data(SuiteRole).toString());
-            const QString testCase = item->data(CaseRole).toString();
-            jobs << suite->launchCase(testCase, ITestSuite::Verbose);
+            auto* const suite = testSuiteFromItem(item->parent());
+            jobs << suite->launchCase(testCaseFromItem(item), ITestSuite::Verbose);
         }
     }
 
@@ -337,7 +361,6 @@ void TestView::showSource()
     }
 
     IndexedDeclaration declaration;
-    ITestController* tc = ICore::self()->testController();
 
     QModelIndex index = m_filter->mapToSource(indexes.first());
     QStandardItem* item = m_model->itemFromIndex(index);
@@ -348,15 +371,12 @@ void TestView::showSource()
     }
     else if (item->parent()->parent() == nullptr)
     {
-        IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
-        ITestSuite* suite =  tc->findTestSuite(project, item->data(SuiteRole).toString());
-        declaration = suite->declaration();
+        declaration = testSuiteFromItem(item)->declaration();
     }
     else
     {
-        IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->parent()->data(ProjectRole).toString());
-        ITestSuite* suite =  tc->findTestSuite(project, item->parent()->data(SuiteRole).toString());
-        declaration = suite->caseDeclaration(item->data(CaseRole).toString());
+        const auto* const suite = testSuiteFromItem(item->parent());
+        declaration = suite->caseDeclaration(testCaseFromItem(item));
     }
 
     DUChainReadLocker locker;
@@ -378,7 +398,7 @@ void TestView::showSource()
 void TestView::addTestSuite(ITestSuite* suite)
 {
     auto* suiteItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("view-list-tree")), suite->name());
-    suiteItem->setData(suite->name(), SuiteRole);
+    suiteItem->setData(QVariant::fromValue(suite), SuiteRole);
     const auto caseNames = suite->cases();
     for (const QString& caseName : caseNames) {
         auto* caseItem = new QStandardItem(iconForTestResult(TestResult::NotRun), caseName);
@@ -390,13 +410,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     projectItem->appendRow(suiteItem);
 }
 
-void TestView::removeTestSuite(ITestSuite* suite)
-{
-    QStandardItem* item = itemForSuite(suite);
-    item->parent()->removeRow(item->row());
-}
-
-void TestView::removeProject(IProject* project)
+void TestView::removeTestSuitesForProject(IProject* project)
 {
     if (QStandardItem* projectItem = itemForProject(project)) {
         m_model->removeRow(projectItem->row());

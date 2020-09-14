@@ -305,11 +305,14 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         populateTargets(item, tgtCopy);
 
         auto* const testController = core()->testController();
-        // Remove old test suites before deleting them
-        testController->removeTestSuitesForProject(project);
-        // Add test suites
-        for (auto& i : qAsConst(introJob->takeTests())) {
-            ICore::self()->testController()->addTestSuite(i.get());
+        // Remove old test suites before adding the new ones
+        if (testController->removeTestSuitesForProject(project)) {
+            const auto tests = introJob->takeTests();
+            for (auto& testSuite : tests) {
+                testController->addTestSuite(std::unique_ptr<ITestSuite>(testSuite));
+            }
+        } else {
+            qCDebug(KDEV_Meson) << "Cannot add test suites for an unregistered project.";
         }
     });
 

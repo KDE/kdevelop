@@ -50,6 +50,8 @@ public:
     explicit MesonIntrospectJob(KDevelop::IProject* project, Meson::BuildDir buildDir, QVector<Type> types, Mode mode,
                                 QObject* parent);
 
+    ~MesonIntrospectJob() override;
+
     void start() override;
     bool doKill() override;
 

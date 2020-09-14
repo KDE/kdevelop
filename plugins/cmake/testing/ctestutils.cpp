@@ -29,6 +29,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/itestcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
@@ -64,6 +65,11 @@ static CMakeTarget targetByExe(const QHash< KDevelop::Path, QVector<CMakeTarget>
 
 void CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
+    if (!ICore::self()->testController()->removeTestSuitesForProject(project)) {
+        qCDebug(CMAKE) << "Cannot create test suites for an unregistered project.";
+        return;
+    }
+
     for (const CMakeTest& test : testSuites) {
         KDevelop::Path executablePath;
         CMakeTarget target;

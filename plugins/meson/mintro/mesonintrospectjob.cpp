@@ -31,9 +31,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QtAlgorithms>
 #include <QtConcurrentRun>
-
-#include <utility>
 
 using namespace Meson;
 using namespace KDevelop;
@@ -93,6 +92,11 @@ MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, Meson::Build
     Q_ASSERT(project);
     m_projectPath = project->path();
     connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
+}
+
+MesonIntrospectJob::~MesonIntrospectJob()
+{
+    qDeleteAll(m_res_tests);
 }
 
 QString MesonIntrospectJob::getTypeString(MesonIntrospectJob::Type type) const
@@ -290,5 +294,7 @@ MesonTargetsPtr MesonIntrospectJob::targets()
 
 MesonTestSuites MesonIntrospectJob::takeTests()
 {
-    return std::move(m_res_tests);
+    MesonTestSuites testSuites;
+    m_res_tests.swap(testSuites);
+    return testSuites;
 }

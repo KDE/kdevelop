@@ -45,10 +45,9 @@ public Q_SLOTS:
     void showSource();
 
     void addTestSuite(KDevelop::ITestSuite* suite);
-    void removeTestSuite(KDevelop::ITestSuite* suite);
+    void removeTestSuitesForProject(KDevelop::IProject* project);
     void updateTestSuite(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
     void notifyTestCaseStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases);
-    void removeProject(KDevelop::IProject* project);
     void doubleClicked(const QModelIndex& index);
 
     QList<QAction*> contextMenuActions();
