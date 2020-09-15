@@ -53,6 +53,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     static QString dependencyActionEntry;
     static QString projectTargetEntry;
     static QString killBeforeExecutingAgain;
+    static QString configuredByCTest;
     
     void unload() override;
     

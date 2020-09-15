@@ -53,7 +53,11 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
             m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section(QLatin1Char('/'), -1);
         }
-        m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel);
+        if (cfgGroup.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
+            m_killBeforeExecutingAgain = QMessageBox::Yes;
+        } else {
+            m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel);
+        }
     }
     setCapabilities(Killable);
 

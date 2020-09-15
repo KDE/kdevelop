@@ -96,7 +96,12 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
 
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
 
-    killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData( cfg.readEntry<int>( ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel ) ));
+    if (cfg.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
+        killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData(QMessageBox::Yes));
+        killBeforeStartingAgain->setDisabled(true);
+    } else {
+        killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData(cfg.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel)));
+    }
 }
 
 NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )

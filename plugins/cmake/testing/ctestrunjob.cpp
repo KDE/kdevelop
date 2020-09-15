@@ -56,7 +56,7 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 }
 
 
-static KJob* createTestJob(const QString& launchModeId, const QStringList& arguments, const QString &workingDirectory)
+static KJob* createTestJob(const QString& launchModeId, const QStringList& arguments, const QString &workingDirectory, IProject* project)
 {
     LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( QStringLiteral("Native Application") );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
@@ -74,11 +74,11 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
     }();
     Q_ASSERT(launcher);
 
-    auto ilaunch = [type]() {
+    auto ilaunch = [type, project]() {
         const auto launchConfigurations = ICore::self()->runController()->launchConfigurations();
         auto it = std::find_if(launchConfigurations.begin(), launchConfigurations.end(),
-                            [type](ILaunchConfiguration* l) {
-                                return (l->type() == type && l->config().readEntry("ConfiguredByCTest", false));
+                            [type, project](ILaunchConfiguration* l) {
+                                return (l->type() == type && l->project() == project && l->config().readEntry(QStringLiteral("ConfiguredByCTest"), false));
                             });
         return it == launchConfigurations.end() ? nullptr : *it;
     }();
@@ -86,9 +86,9 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
     if (!ilaunch) {
         ilaunch = ICore::self()->runController()->createLaunchConfiguration( type,
                                                 qMakePair( mode->id(), launcher->id() ),
-                                                nullptr, //TODO add project
+                                                project,
                                                 i18n("CTest") );
-        ilaunch->config().writeEntry("ConfiguredByCTest", true);
+        ilaunch->config().writeEntry(QStringLiteral("ConfiguredByCTest"), true);
         //qCDebug(CMAKE) << "created config, launching";
     } else {
         //qCDebug(CMAKE) << "reusing generated config, launching";
@@ -119,7 +119,7 @@ void CTestRunJob::start()
     arguments.prepend(m_suite->executable().toLocalFile());
     const QString workingDirectory = m_suite->properties().value(QStringLiteral("WORKING_DIRECTORY"), QString());
 
-    m_job = createTestJob(QStringLiteral("execute"), arguments, workingDirectory);
+    m_job = createTestJob(QStringLiteral("execute"), arguments, workingDirectory, m_suite->project());
 
     if (auto* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
         auto* outputJob = cjob->findChild<OutputJob*>();
