@@ -51,6 +51,8 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
     }
 
     setCapabilities(Killable);
+
+    //TODO!
 }
 
 

@@ -24,7 +24,6 @@
 #include <language/duchain/indexeddeclaration.h>
 #include <util/path.h>
 #include <QHash>
-#include <QPointer>
 
 namespace KDevelop {
 class ReferencedTopDUContext;
@@ -61,7 +60,7 @@ private:
     QStringList m_cases;
     QStringList m_args;
     QList<KDevelop::Path> m_files;
-    QPointer<KDevelop::IProject> m_project;
+    KDevelop::IProject* m_project;
 
     QHash<QString, KDevelop::IndexedDeclaration> m_declarations;
     QHash<QString, QString> m_properties;

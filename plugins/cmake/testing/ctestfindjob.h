@@ -27,6 +27,7 @@
 
 namespace KDevelop {
 class IndexedString;
+class IProject;
 class ReferencedTopDUContext;
 }
 
@@ -42,6 +43,7 @@ public:
     void start() override;
     
 private Q_SLOTS:
+    void testSuitesForProjectRemoved(KDevelop::IProject* project);
     void findTestCases();
     void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 

@@ -22,6 +22,7 @@
 #include <debug.h>
 
 #include <interfaces/icore.h>
+#include <interfaces/iproject.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/duchain.h>
@@ -31,6 +32,8 @@
 
 #include <utility>
 
+using namespace KDevelop;
+
 CTestFindJob::CTestFindJob(std::unique_ptr<CTestSuite> suite, QObject* parent)
 : KJob(parent)
 , m_suite{std::move(suite)}
@@ -39,6 +42,9 @@ CTestFindJob::CTestFindJob(std::unique_ptr<CTestSuite> suite, QObject* parent)
     qCDebug(CMAKE) << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", m_suite->name()));
     setCapabilities(Killable);
+
+    connect(ICore::self()->testController(), &ITestController::testSuitesForProjectRemoved,
+            this, &CTestFindJob::testSuitesForProjectRemoved);
 }
 
 void CTestFindJob::start()
@@ -52,11 +58,24 @@ CTestFindJob::~CTestFindJob()
     qCritical() << "Destroying CTestFindJob" << this;
 }
 
+void CTestFindJob::testSuitesForProjectRemoved(IProject* project)
+{
+    if (m_suite->project() == project) {
+        m_suite.reset();
+        kill();
+    }
+}
+
 void CTestFindJob::findTestCases()
 {
+    if (!m_suite) {
+        qCDebug(CMAKE) << "Cannot find test cases because the test suite's removal was requested.";
+        return;
+    }
+
     if (!m_suite->arguments().isEmpty())
     {
-        KDevelop::ICore::self()->testController()->addTestSuite(std::move(m_suite));
+        ICore::self()->testController()->addTestSuite(std::move(m_suite));
         emitResult();
         return;
     }
@@ -73,7 +92,7 @@ void CTestFindJob::findTestCases()
 
     if (m_pendingFiles.isEmpty())
     {
-        KDevelop::ICore::self()->testController()->addTestSuite(std::move(m_suite));
+        ICore::self()->testController()->addTestSuite(std::move(m_suite));
         emitResult();
         return;
     }
@@ -86,16 +105,8 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-    auto* const core = KDevelop::ICore::self();
-    if (Q_UNLIKELY(!core || core->shuttingDown())) {
-        qCDebug(CMAKE).nospace() << "Cannot add the test suite. KDevelop must be exiting"
-                                 << (!core ? " and the KDevelop core already destroyed."
-                                           : ".");
-        return;
-    }
-
-    if (Q_UNLIKELY(!m_suite->project())) {
-        qCDebug(CMAKE) << "Cannot add the test suite because its project is already destroyed (probably closed by the user).";
+    if (!m_suite) {
+        qCDebug(CMAKE) << "Cannot add the test suite because its removal was requested.";
         return;
     }
 
@@ -105,7 +116,7 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
 
     if (m_pendingFiles.isEmpty())
     {
-        core->testController()->addTestSuite(std::move(m_suite));
+        ICore::self()->testController()->addTestSuite(std::move(m_suite));
         emitResult();
     }
 }
