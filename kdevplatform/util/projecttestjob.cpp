@@ -20,6 +20,8 @@
  */
 
 #include "projecttestjob.h"
+#include "debug.h"
+
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
@@ -50,6 +52,10 @@ public:
 
 void ProjectTestJobPrivate::runNext()
 {
+    if (Q_UNLIKELY(m_suites.empty())) {
+        qCDebug(UTIL) << "No next text suite to run.";
+        return;
+    }
     m_currentSuite = m_suites.takeFirst();
     m_currentJob = m_currentSuite->launchAllCases(ITestSuite::Silent);
     m_currentJob->start();
@@ -79,6 +85,7 @@ void ProjectTestJobPrivate::gotResult(ITestSuite* suite, const TestResult& resul
         }
 
         if (m_suites.isEmpty()) {
+            m_currentJob = nullptr;
             q->emitResult();
         } else {
             runNext();
@@ -96,6 +103,11 @@ ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent)
     setObjectName(i18n("Run all tests in %1", project->name()));
 
     d->m_suites = ICore::self()->testController()->testSuitesForProject(project);
+    if (d->m_suites.empty()) {
+        emitResult();
+        return;
+    }
+
     connect(ICore::self()->testController(), &ITestController::testRunFinished,
             this, [this](ITestSuite* suite, const TestResult& result) {
         Q_D(ProjectTestJob);
@@ -119,9 +131,10 @@ bool ProjectTestJob::doKill()
     Q_D(ProjectTestJob);
     if (d->m_currentJob) {
         d->m_currentJob->kill();
-    } else {
-        d->m_suites.clear();
+        d->m_currentJob = nullptr;
     }
+    d->m_currentSuite = nullptr;
+    d->m_suites.clear();
     return true;
 }
 
