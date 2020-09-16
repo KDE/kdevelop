@@ -61,11 +61,12 @@ Q_SIGNALS:
     void showMessage(KDevelop::IStatus*, const QString& message, int timeout = 0) override;
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
 
+private Q_SLOTS:
+    void slotPercent(KJob* job, unsigned long percent);
+
 private:
     const QScopedPointer<class JobStatusPrivate> d_ptr;
     Q_DECLARE_PRIVATE(JobStatus)
-
-    Q_PRIVATE_SLOT(d_func(), void slotPercent(KJob*, unsigned long))
 };
 
 }

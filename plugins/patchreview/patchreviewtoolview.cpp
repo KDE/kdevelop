@@ -570,11 +570,11 @@ void PatchReviewToolView::runTests()
 
     auto* job = new ProjectTestJob(project, this);
     connect(job, &ProjectTestJob::finished, this, &PatchReviewToolView::testJobResult);
-    connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(testJobPercent(KJob*,ulong)));
+    connect(job, QOverload<KJob*, unsigned long>::of(&KJob::percent), this, &PatchReviewToolView::testJobPercent);
     ICore::self()->runController()->registerJob(job);
 }
 
-void PatchReviewToolView::testJobPercent(KJob* job, ulong percent)
+void PatchReviewToolView::testJobPercent(KJob* job, unsigned long percent)
 {
     Q_UNUSED(job);
     m_editPatch.testProgressBar->setValue(percent);

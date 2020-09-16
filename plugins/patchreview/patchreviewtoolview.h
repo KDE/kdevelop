@@ -103,7 +103,7 @@ public Q_SLOTS:
     void documentActivated( KDevelop::IDocument* );
     void customContextMenuRequested(const QPoint& p);
     void testJobResult(KJob* job);
-    void testJobPercent(KJob* job, ulong percent);
+    void testJobPercent(KJob* job, unsigned long percent);
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PATCHREVIEWTOOLVIEW_H

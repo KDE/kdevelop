@@ -196,8 +196,7 @@ void ProjectSourcePage::checkoutVcsProject()
     m_ui->get->setEnabled(false);
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     connect(job, &VcsJob::result, this, &ProjectSourcePage::projectReceived);
-    // Can't use new signal-slot syntax, KJob::percent is private :/
-    connect(job, SIGNAL(percent(KJob*,ulong)), SLOT(progressChanged(KJob*,ulong)));
+    connect(job, QOverload<KJob*, unsigned long>::of(&KJob::percent), this, &ProjectSourcePage::progressChanged);
     connect(job, &VcsJob::infoMessage, this, &ProjectSourcePage::infoMessage);
     ICore::self()->runController()->registerJob(job);
 }
