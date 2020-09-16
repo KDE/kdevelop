@@ -148,12 +148,19 @@ bool CTestRunJob::doKill()
     if (m_job)
     {
         m_job->kill();
+        m_job = nullptr;
     }
     return true;
 }
 
 void CTestRunJob::processFinished(KJob* job)
 {
+    if (!m_job) {
+        return; // this CTestRunJob has been killed.
+    }
+    Q_ASSERT(m_job == job);
+    m_job = nullptr;
+
     int error = job->error();
     auto finished = [this,error]() {
         TestResult result;
