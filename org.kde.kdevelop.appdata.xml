@@ -178,5 +178,11 @@
     <release version="5.5.0" date="2020-02-02"/>
     <release version="5.4.6" date="2020-01-06"/>
   </releases>
+  <custom>
+    <value key="KDE::irc">#kdevelop</value>
+    <value key="KDE::mailinglist">kdevelop@kde.org</value>
+    <value key="KDE::mailinglist-devel">kdevelop-devel@kde.org</value>
+    <value key="KDE::forum">218</value>
+  </custom>
   <update_contact>kdevelop-devel@kde.org</update_contact>
 </component>
