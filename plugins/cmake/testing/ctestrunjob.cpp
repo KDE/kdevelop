@@ -48,11 +48,6 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 , m_started{false}
 {
     Q_ASSERT(m_suite);
-
-    for (const QString& testCase : cases) {
-        m_caseResults[testCase] = TestResult::NotRun;
-    }
-
     setCapabilities(Killable);
 
     //TODO!
@@ -110,6 +105,9 @@ void CTestRunJob::start()
     }
 
     m_started = true;
+    for (const QString& testCase : m_cases) {
+        m_caseResults[testCase] = TestResult::NotRun;
+    }
 
 //     if (!m_suite->cases().isEmpty())
 //     {
