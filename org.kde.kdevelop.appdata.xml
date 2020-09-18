@@ -180,6 +180,7 @@
   </releases>
   <custom>
     <value key="KDE::irc">#kdevelop</value>
+    <value key="KDE::matrix">#kdevelop:kde.org</value>
     <value key="KDE::mailinglist">kdevelop@kde.org</value>
     <value key="KDE::mailinglist-devel">kdevelop-devel@kde.org</value>
     <value key="KDE::forum">218</value>
