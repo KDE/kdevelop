@@ -36,6 +36,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <utility>
+
 using namespace KDevelop;
 
 CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)
@@ -99,6 +101,7 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
 
 void CTestRunJob::start()
 {
+    Q_ASSERT(!m_started);
     if (!m_suite) {
         qCDebug(CMAKE) << "Cannot start running tests after being killed.";
         return;
@@ -153,6 +156,7 @@ void CTestRunJob::start()
 
 bool CTestRunJob::doKill()
 {
+    // Check m_started here so as to call notifyTestRunFinished() only if we have called notifyTestRunStarted().
     if (m_started) {
         if (m_job) {
             // Killing m_job invokes processFinished() => set m_job to nullptr before killing it.
@@ -163,13 +167,13 @@ bool CTestRunJob::doKill()
 
         if (m_suite) {
             qCDebug(CMAKE) << "Reporting incomplete test results because this job is being killed.";
-            TestResult result;
-            result.testCaseResults = m_caseResults;
-            result.suiteResult = TestResult::Error;
-            ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
-            m_suite = nullptr;
+            TestResult result{std::move(m_caseResults), TestResult::Error};
+            ICore::self()->testController()->notifyTestRunFinished(m_suite, std::move(result));
         }
     }
+
+    Q_ASSERT(!m_job);
+    m_suite = nullptr;
 
     return true;
 }
@@ -179,13 +183,14 @@ void CTestRunJob::processFinished(KJob* job)
     if (!m_job) {
         return; // this CTestRunJob has been killed.
     }
+    Q_ASSERT_X(m_suite, Q_FUNC_INFO, "Whenever m_suite is nullptr, m_job must be nullptr too.");
     Q_ASSERT(m_job == job);
     m_job = nullptr;
 
     int error = job->error();
     auto finished = [this,error]() {
         if (!m_suite) {
-            return; // This CTestRunJob has been killed.
+            return; // this CTestRunJob has been killed.
         }
 
         TestResult result;
@@ -224,7 +229,7 @@ void CTestRunJob::processFinished(KJob* job)
 void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
 {
     if (!m_suite) {
-        return; // This CTestRunJob has been killed.
+        return; // this CTestRunJob has been killed.
     }
 
     // This regular expression matches the name of the testcase (whatever between "::" and "(", indeed )
