@@ -39,6 +39,7 @@ CTestFindJob::CTestFindJob(std::unique_ptr<CTestSuite> suite, QObject* parent)
 , m_suite{std::move(suite)}
 {
     qCritical() << "Creating CTestFindJob" << this;
+    Q_ASSERT(m_suite);
     qCDebug(CMAKE) << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", m_suite->name()));
     setCapabilities(Killable);
@@ -60,7 +61,7 @@ CTestFindJob::~CTestFindJob()
 
 void CTestFindJob::testSuitesForProjectRemoved(IProject* project)
 {
-    if (m_suite->project() == project) {
+    if (m_suite && m_suite->project() == project) {
         m_suite.reset();
         kill();
     }
@@ -69,7 +70,8 @@ void CTestFindJob::testSuitesForProjectRemoved(IProject* project)
 void CTestFindJob::findTestCases()
 {
     if (!m_suite) {
-        qCDebug(CMAKE) << "Cannot find test cases because the test suite's removal was requested.";
+        qCDebug(CMAKE) << "Cannot find test cases because the test suite's removal "
+                          "has been requested or this job has been killed.";
         return;
     }
 
@@ -106,7 +108,8 @@ void CTestFindJob::findTestCases()
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
     if (!m_suite) {
-        qCDebug(CMAKE) << "Cannot add the test suite because its removal was requested.";
+        qCDebug(CMAKE) << "Cannot add the test suite because its removal "
+                          "has been requested or this job has been killed.";
         return;
     }
 
@@ -123,6 +126,7 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
 
 bool CTestFindJob::doKill()
 {
+    m_suite.reset();
     KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
     return true;
 }
