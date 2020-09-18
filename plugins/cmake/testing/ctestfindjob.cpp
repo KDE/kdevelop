@@ -62,7 +62,6 @@ CTestFindJob::~CTestFindJob()
 void CTestFindJob::testSuitesForProjectRemoved(IProject* project)
 {
     if (m_suite && m_suite->project() == project) {
-        m_suite.reset();
         kill();
     }
 }
@@ -70,8 +69,7 @@ void CTestFindJob::testSuitesForProjectRemoved(IProject* project)
 void CTestFindJob::findTestCases()
 {
     if (!m_suite) {
-        qCDebug(CMAKE) << "Cannot find test cases because the test suite's removal "
-                          "has been requested or this job has been killed.";
+        qCDebug(CMAKE) << "Cannot find test cases because this job has been finished.";
         return;
     }
 
@@ -108,8 +106,7 @@ void CTestFindJob::findTestCases()
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
     if (!m_suite) {
-        qCDebug(CMAKE) << "Cannot add the test suite because its removal "
-                          "has been requested or this job has been killed.";
+        qCDebug(CMAKE) << "Cannot add the test suite because this job has been finished.";
         return;
     }
 
@@ -126,7 +123,9 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
 
 bool CTestFindJob::doKill()
 {
-    m_suite.reset();
-    KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
+    if (m_suite) {
+        m_suite.reset();
+        KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
+    }
     return true;
 }
