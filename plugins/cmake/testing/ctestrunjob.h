@@ -51,6 +51,7 @@ private:
     KJob* m_job;
     KDevelop::OutputModel* m_outputModel;
     KDevelop::OutputJob::OutputJobVerbosity m_verbosity;
+    bool m_started;
 };
 
 #endif // CTESTRUNJOB_H

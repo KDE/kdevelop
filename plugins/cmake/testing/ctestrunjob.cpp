@@ -45,7 +45,10 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 , m_job(nullptr)
 , m_outputModel(nullptr)
 , m_verbosity(verbosity)
+, m_started{false}
 {
+    Q_ASSERT(m_suite);
+
     for (const QString& testCase : cases) {
         m_caseResults[testCase] = TestResult::NotRun;
     }
@@ -101,6 +104,13 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
 
 void CTestRunJob::start()
 {
+    if (!m_suite) {
+        qCDebug(CMAKE) << "Cannot start running tests after being killed.";
+        return;
+    }
+
+    m_started = true;
+
 //     if (!m_suite->cases().isEmpty())
 //     {
         // TODO: Find a better way of determining whether QTestLib is used by this test
@@ -145,11 +155,24 @@ void CTestRunJob::start()
 
 bool CTestRunJob::doKill()
 {
-    if (m_job)
-    {
-        m_job->kill();
-        m_job = nullptr;
+    if (m_started) {
+        if (m_job) {
+            // Killing m_job invokes processFinished() => set m_job to nullptr before killing it.
+            auto* const job = m_job;
+            m_job = nullptr;
+            job->kill();
+        }
+
+        if (m_suite) {
+            qCDebug(CMAKE) << "Reporting incomplete test results because this job is being killed.";
+            TestResult result;
+            result.testCaseResults = m_caseResults;
+            result.suiteResult = TestResult::Error;
+            ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
+            m_suite = nullptr;
+        }
     }
+
     return true;
 }
 
@@ -163,6 +186,10 @@ void CTestRunJob::processFinished(KJob* job)
 
     int error = job->error();
     auto finished = [this,error]() {
+        if (!m_suite) {
+            return; // This CTestRunJob has been killed.
+        }
+
         TestResult result;
         result.testCaseResults = m_caseResults;
         if (error == OutputJob::FailedShownError) {
@@ -181,6 +208,7 @@ void CTestRunJob::processFinished(KJob* job)
 
         qCDebug(CMAKE) << result.suiteResult << result.testCaseResults;
         ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
+        m_suite = nullptr;
         emitResult();
     };
 
@@ -197,6 +225,10 @@ void CTestRunJob::processFinished(KJob* job)
 
 void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
 {
+    if (!m_suite) {
+        return; // This CTestRunJob has been killed.
+    }
+
     // This regular expression matches the name of the testcase (whatever between "::" and "(", indeed )
     // For example, from:
     //      PASS   : ExpTest::testExp(sum)
