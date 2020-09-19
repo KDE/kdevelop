@@ -41,13 +41,12 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
 
     qCDebug(UTIL) << "execute composite" << jobs;
     for (KJob* job : jobs) {
-        if (!job) {
-            qCWarning(UTIL) << "Added null job!";
-            continue;
+        if (addSubjob(job)) {
+            if (objectName().isEmpty())
+                setObjectName(job->objectName());
+        } else {
+            qCWarning(UTIL) << "Failed to add subjob" << job;
         }
-        addSubjob(job);
-        if (objectName().isEmpty())
-            setObjectName(job->objectName());
     }
 }
 
@@ -79,6 +78,7 @@ bool ExecuteCompositeJob::addSubjob(KJob* job)
     const bool success = KCompositeJob::addSubjob(job);
     if (!success)
         return false;
+    Q_ASSERT_X(job, Q_FUNC_INFO, "KCompositeJob must fail to add null subjobs.");
 
     ++d->m_jobCount;
 
@@ -139,7 +139,7 @@ bool ExecuteCompositeJob::doKill()
     while (hasSubjobs()) {
         KJob* j = subjobs().first();
 
-        if (!j || j->kill()) {
+        if (j->kill()) {
             removeSubjob(j);
         } else {
             qCDebug(UTIL) << "Failed to kill subjob" << j;
