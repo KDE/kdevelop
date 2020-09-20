@@ -258,6 +258,7 @@ bool GrepJob::doKill()
 
 void GrepJob::testFinishState(KJob *job)
 {
+    Q_ASSERT(this == job);
     if(!job->error())
     {
         if (!m_errorMessage.isEmpty()) {
