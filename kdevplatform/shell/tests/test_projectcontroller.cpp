@@ -36,7 +36,7 @@
 #include <shell/projectcontroller.h>
 #include <shell/plugincontroller.h>
 #include <shell/project.h>
-
+#include <project/importprojectjob.h>
 using namespace KDevelop;
 
 namespace {
@@ -69,7 +69,10 @@ public:
         : IPlugin(QStringLiteral("FakeFileManager"), Core::self())
     {
     }
-
+KJob* createImportJob(ProjectFolderItem* item) override
+ {
+     return new ImportProjectJob( item, this );
+ }
     FakeFileManager()
         : IPlugin(QStringLiteral("FakeFileManager"), Core::self())
     {

@@ -29,10 +29,10 @@ IProjectFileManager::~IProjectFileManager()
 {
 }
 
-KJob* IProjectFileManager::createImportJob(ProjectFolderItem* item)
-{
-    return new ImportProjectJob( item, this );
-}
+// KJob* IProjectFileManager::createImportJob(ProjectFolderItem* item)
+// {
+//     return new ImportProjectJob( item, this );
+// }
 
 
 }

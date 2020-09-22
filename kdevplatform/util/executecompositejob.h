@@ -27,7 +27,14 @@ template<typename T> class QList;
 
 namespace KDevelop {
 class ExecuteCompositeJobPrivate;
-
+/**
+ * @class ExecuteCompositeJob
+ *
+ * The KDevelop class able to be composed of one or more subjobs.
+ *
+ * @note Takes ownership of its subjobs. The users of this class may not start,
+ * kill quietly or destroy the added subjobs.
+ */
 class KDEVPLATFORMUTIL_EXPORT ExecuteCompositeJob : public KCompositeJob
 {
     Q_OBJECT
@@ -41,9 +48,9 @@ public:
 
 public Q_SLOTS:
     bool addSubjob(KJob* job) override;
-    void slotResult(KJob* job) override;
 
 protected Q_SLOTS:
+    void slotResult(KJob* job) override;
     virtual void slotPercent(KJob* job, unsigned long percent);
 
 protected:

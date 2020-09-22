@@ -103,7 +103,7 @@ bool ImportProjectJob::doKill()
 
 void ImportProjectJob::aboutToShutdown()
 {
-    kill();
+    kill(EmitResult);
 }
 
 void ImportProjectJob::importCanceled()

@@ -92,7 +92,7 @@ public:
      *
      * @return a job that imports the project
      */
-    virtual KJob* createImportJob(ProjectFolderItem* item);
+    virtual KJob* createImportJob(ProjectFolderItem* item) = 0;
 
     /**
      * Add a folder to the project and create it on disk.

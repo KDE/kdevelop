@@ -31,6 +31,8 @@ public:
 
     int m_jobIndex = -1;
     int m_jobCount = 0;
+
+    KJob* m_currentJob = nullptr;
 };
 
 ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
@@ -54,6 +56,7 @@ ExecuteCompositeJob::~ExecuteCompositeJob() = default;
 
 void ExecuteCompositeJobPrivate::startNextJob(KJob* job)
 {
+    m_currentJob = job;
     ++m_jobIndex;
 
     qCDebug(UTIL) << "starting:" << job;
@@ -105,6 +108,9 @@ void ExecuteCompositeJob::slotResult(KJob* job)
 {
     Q_D(ExecuteCompositeJob);
 
+    if (d->m_currentJob != job) {
+        qCritical() << "ExecuteCompositeJob" << d->m_currentJob << "!=" << job;
+    }
     disconnect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(slotPercent(KJob*,ulong)));
 
     // jobIndex + 1 because this job just finished

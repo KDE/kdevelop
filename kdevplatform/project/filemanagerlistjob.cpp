@@ -207,7 +207,7 @@ void FileManagerListJob::abort()
 {
     m_aborted = true;
 
-    bool killed = kill();
+    bool killed = kill(EmitResult);
     Q_ASSERT(killed);
     Q_UNUSED(killed);
 }
