@@ -44,9 +44,6 @@ public:
 Q_SIGNALS:
     void dataAvailable(const CMakeProjectData& data);
 
-protected:
-    bool doKill() override;
-
 private:
     KDevelop::IProject* m_project = nullptr;
     QFutureWatcher<CMakeProjectData> m_futureWatcher;

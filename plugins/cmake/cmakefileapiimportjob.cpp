@@ -41,13 +41,9 @@ ImportJob::ImportJob(KDevelop::IProject* project, QObject* parent)
     : KJob(parent)
     , m_project(project)
 {
-    setCapabilities(Killable);
-
     connect(&m_futureWatcher, &QFutureWatcher<CMakeProjectData>::finished, this, [this]() {
-        if (!m_futureWatcher.isCanceled()) {
-            emit dataAvailable(m_futureWatcher.result());
-            emitResult();
-        }
+        emit dataAvailable(m_futureWatcher.result());
+        emitResult();
     });
 }
 
@@ -71,12 +67,6 @@ void ImportJob::start()
         return ret;
     });
     m_futureWatcher.setFuture(future);
-}
-
-bool ImportJob::doKill()
-{
-    m_futureWatcher.cancel();
-    return true;
 }
 }
 }
