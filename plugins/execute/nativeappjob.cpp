@@ -176,7 +176,7 @@ void NativeAppJob::start()
                 }
                 break;
             default: // cancel starting a new job
-                kill();
+                kill(EmitResult);
                 return;
         }
     }
