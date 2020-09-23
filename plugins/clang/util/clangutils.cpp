@@ -321,6 +321,15 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
         stream << " const";
     }
 
+    switch (clang_getCursorExceptionSpecificationType(cursor)) {
+        case CXCursor_ExceptionSpecificationKind_DynamicNone:
+            stream << " throw()";
+            break;
+        case CXCursor_ExceptionSpecificationKind_BasicNoexcept:
+            stream << " noexcept";
+            break;
+    }
+
     return ret;
 }
 
