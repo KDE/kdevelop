@@ -884,6 +884,14 @@ void TestCodeCompletion::testImplement_data()
         << "class Foo { int bar() const; };"
         << CompletionItems{{3, 1}, {"Foo::bar() const"}};
 
+    QTest::newRow("noexcept")
+        << "class Foo { int bar() noexcept; };"
+        << CompletionItems{{3, 1}, {"Foo::bar() noexcept"}};
+
+    QTest::newRow("throw()")
+        << "class Foo { int bar() throw(); };"
+        << CompletionItems{{3, 1}, {"Foo::bar() throw()"}};
+
     QTest::newRow("multiple-methods")
         << "class Foo { int bar(); void foo(); char asdf() const; };"
         << CompletionItems{{1, 1}, {"Foo::asdf() const", "Foo::bar()", "Foo::foo()"}};
