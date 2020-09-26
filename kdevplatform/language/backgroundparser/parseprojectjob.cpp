@@ -56,13 +56,11 @@ public:
 bool ParseProjectJob::doKill()
 {
     qCDebug(LANGUAGE) << "stopping project parse job";
+    ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
     return true;
 }
 
-ParseProjectJob::~ParseProjectJob()
-{
-    ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
-}
+ParseProjectJob::~ParseProjectJob() = default;
 
 ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool parseAllProjectSources)
     : d_ptr{new ParseProjectJobPrivate(forceUpdate, parseAllProjectSources)}
