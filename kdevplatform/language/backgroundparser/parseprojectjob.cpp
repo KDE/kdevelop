@@ -23,7 +23,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icompletionsettings.h>
 
@@ -42,15 +41,15 @@ using namespace KDevelop;
 class KDevelop::ParseProjectJobPrivate
 {
 public:
-    explicit ParseProjectJobPrivate(bool forceUpdate, bool forceAll)
+    explicit ParseProjectJobPrivate(bool forceUpdate, bool parseAllProjectSources)
         : forceUpdate(forceUpdate)
-        , forceAll(forceAll)
+        , parseAllProjectSources{parseAllProjectSources}
     {
     }
 
     int updated = 0;
     bool forceUpdate;
-    bool forceAll;
+    bool parseAllProjectSources;
     QSet<IndexedString> filesToParse;
 };
 
@@ -65,12 +64,12 @@ ParseProjectJob::~ParseProjectJob()
     ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
 }
 
-ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool forceAll)
-    : d_ptr{new ParseProjectJobPrivate(forceUpdate, forceAll)}
+ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool parseAllProjectSources)
+    : d_ptr{new ParseProjectJobPrivate(forceUpdate, parseAllProjectSources)}
 {
     Q_D(ParseProjectJob);
 
-    if (forceAll || ICore::self()->projectController()->parseAllProjectSources()) {
+    if (parseAllProjectSources) {
         d->filesToParse = project->fileSet();
     } else {
         // In case we don't want to parse the whole project, still add all currently open files that belong to the project to the background-parser
@@ -179,7 +178,7 @@ void ParseProjectJob::queueFilesToParse()
         }
     }
 
-    if (!d->forceAll && !ICore::self()->projectController()->parseAllProjectSources()) {
+    if (!d->parseAllProjectSources) {
         return;
     }
 

@@ -1381,7 +1381,7 @@ void ProjectController::reparseProject(IProject* project, bool forceUpdate, bool
     }
 
     auto& job = d->m_parseJobs[project];
-    job = new ParseProjectJob(project, forceUpdate, forceAll);
+    job = new ParseProjectJob(project, forceUpdate, forceAll || parseAllProjectSources());
     connect(job, &KJob::finished, this, [d, project](KJob* job) {
         const auto it = d->m_parseJobs.constFind(project);
         if (it != d->m_parseJobs.cend() && *it == job) {
