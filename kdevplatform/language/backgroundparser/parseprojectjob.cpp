@@ -41,17 +41,15 @@ using namespace KDevelop;
 class KDevelop::ParseProjectJobPrivate
 {
 public:
-    ParseProjectJobPrivate(IProject* project, bool forceUpdate, bool forceAll)
+    explicit ParseProjectJobPrivate(bool forceUpdate, bool forceAll)
         : forceUpdate(forceUpdate)
         , forceAll(forceAll)
-        , project(project)
     {
     }
 
     int updated = 0;
     bool forceUpdate;
     bool forceAll;
-    KDevelop::IProject* project;
     QSet<IndexedString> filesToParse;
 };
 
@@ -71,7 +69,7 @@ ParseProjectJob::~ParseProjectJob()
 }
 
 ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool forceAll)
-    : d_ptr(new ParseProjectJobPrivate(project, forceUpdate, forceAll))
+    : d_ptr{new ParseProjectJobPrivate(forceUpdate, forceAll)}
 {
     Q_D(ParseProjectJob);
 
@@ -92,7 +90,7 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool force
 
     setCapabilities(Killable);
 
-    setObjectName(i18np("Process 1 file in %2", "Process %1 files in %2", d->filesToParse.size(), d->project->name()));
+    setObjectName(i18np("Process 1 file in %2", "Process %1 files in %2", d->filesToParse.size(), project->name()));
 }
 
 void ParseProjectJob::deleteNow()
