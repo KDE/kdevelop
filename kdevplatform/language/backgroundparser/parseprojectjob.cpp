@@ -150,8 +150,8 @@ void ParseProjectJob::queueFilesToParse()
 
     if (auto currentDocument = ICore::self()->documentController()->activeDocument()) {
         const auto path = IndexedString(currentDocument->url());
-        auto fileIt = d->filesToParse.find(path);
-        if (fileIt != d->filesToParse.end()) {
+        const auto fileIt = d->filesToParse.constFind(path);
+        if (fileIt != d->filesToParse.cend()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path,
                                                                                  TopDUContext::AllDeclarationsContextsAndUses, BackgroundParser::BestPriority,
                                                                                  this);
@@ -163,8 +163,8 @@ void ParseProjectJob::queueFilesToParse()
     const auto documents = ICore::self()->documentController()->openDocuments();
     for (auto* document : documents) {
         const auto path = IndexedString(document->url());
-        auto fileIt = d->filesToParse.find(path);
-        if (fileIt != d->filesToParse.end()) {
+        const auto fileIt = d->filesToParse.constFind(path);
+        if (fileIt != d->filesToParse.cend()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path,
                                                                                  TopDUContext::AllDeclarationsContextsAndUses, 10,
                                                                                  this);
