@@ -87,10 +87,6 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool parse
     setObjectName(i18np("Process 1 file in %2", "Process %1 files in %2", d->filesToParse.size(), project->name()));
 }
 
-void ParseProjectJob::updateProgress()
-{
-}
-
 void ParseProjectJob::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
 {
     Q_D(ParseProjectJob);
@@ -98,9 +94,6 @@ void ParseProjectJob::updateReady(const IndexedString& url, const ReferencedTopD
     Q_UNUSED(url);
     Q_UNUSED(topContext);
     ++d->updated;
-    if (d->updated % ((d->filesToParse.size() / 100) + 1) == 0)
-        updateProgress();
-
     if (d->updated >= d->filesToParse.size())
         deleteLater();
 }

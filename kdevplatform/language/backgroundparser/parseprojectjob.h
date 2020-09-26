@@ -48,9 +48,6 @@ private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
 
 private:
-    void updateProgress();
-
-private:
     const QScopedPointer<class ParseProjectJobPrivate> d_ptr;
     Q_DECLARE_PRIVATE(ParseProjectJob)
 };
