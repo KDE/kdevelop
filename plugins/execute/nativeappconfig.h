@@ -73,6 +73,8 @@ public:
     NativeAppConfigType();
     ~NativeAppConfigType() override;
 
+    static QString sharedId();
+
     QString id() const override;
     QString name() const override;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;  

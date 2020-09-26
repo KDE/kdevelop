@@ -35,7 +35,6 @@
 #include <project/projectmodel.h>
 #include <util/kdevstringhandler.h>
 
-QString ExecuteScriptPlugin::_scriptAppConfigTypeId = QStringLiteral("Script Application");
 QString ExecuteScriptPlugin::interpreterEntry = QStringLiteral("Interpreter");
 QString ExecuteScriptPlugin::workingDirEntry = QStringLiteral("Working Directory");
 QString ExecuteScriptPlugin::executableEntry = QStringLiteral("Executable");
@@ -251,7 +250,7 @@ QUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg 
 
 QString ExecuteScriptPlugin::scriptAppConfigTypeId() const
 {
-    return _scriptAppConfigTypeId;
+    return ScriptAppConfigType::sharedId();
 }
 
 

@@ -40,7 +40,6 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     explicit ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
     ~ExecutePlugin() override;
 
-    static QString _nativeAppConfigTypeId;
     static QString workingDirEntry;
     static QString executableEntry;
     static QString argumentsEntry;

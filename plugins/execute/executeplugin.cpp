@@ -41,7 +41,6 @@
 #include <project/builderjob.h>
 #include <util/kdevstringhandler.h>
 
-QString ExecutePlugin::_nativeAppConfigTypeId = QStringLiteral("Native Application");
 QString ExecutePlugin::workingDirEntry = QStringLiteral("Working Directory");
 QString ExecutePlugin::executableEntry = QStringLiteral("Executable");
 QString ExecutePlugin::argumentsEntry = QStringLiteral("Arguments");
@@ -243,7 +242,7 @@ QUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) cons
 
 QString ExecutePlugin::nativeAppConfigTypeId() const
 {
-    return _nativeAppConfigTypeId;
+    return NativeAppConfigType::sharedId();
 }
 
 

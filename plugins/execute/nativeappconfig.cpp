@@ -259,9 +259,14 @@ QList<KDevelop::LaunchConfigurationPageFactory*> NativeAppConfigType::configPage
     return factoryList;
 }
 
+QString NativeAppConfigType::sharedId()
+{
+    return QStringLiteral("Native Application");
+}
+
 QString NativeAppConfigType::id() const
 {
-    return ExecutePlugin::_nativeAppConfigTypeId;
+    return sharedId();
 }
 
 QIcon NativeAppConfigType::icon() const

@@ -207,9 +207,14 @@ QList<KDevelop::LaunchConfigurationPageFactory*> ScriptAppConfigType::configPage
     return factoryList;
 }
 
+QString ScriptAppConfigType::sharedId()
+{
+    return QStringLiteral("Script Application");
+}
+
 QString ScriptAppConfigType::id() const
 {
-    return ExecuteScriptPlugin::_scriptAppConfigTypeId;
+    return sharedId();
 }
 
 QIcon ScriptAppConfigType::icon() const

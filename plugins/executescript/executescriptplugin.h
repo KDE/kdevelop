@@ -39,7 +39,6 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     explicit ExecuteScriptPlugin(QObject *parent, const QVariantList & = QVariantList() );
     ~ExecuteScriptPlugin() override;
 
-    static QString _scriptAppConfigTypeId;
     static QString interpreterEntry;
     static QString workingDirEntry;
     static QString executableEntry;
