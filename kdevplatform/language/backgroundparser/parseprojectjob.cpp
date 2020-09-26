@@ -22,7 +22,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -64,9 +63,6 @@ bool ParseProjectJob::doKill()
 ParseProjectJob::~ParseProjectJob()
 {
     ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
-
-    if (ICore::self()->runController()->currentJobs().contains(this))
-        ICore::self()->runController()->unregisterJob(this);
 }
 
 ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool forceAll)
