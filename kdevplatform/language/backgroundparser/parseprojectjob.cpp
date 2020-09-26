@@ -47,9 +47,9 @@ public:
     {
     }
 
-    int updated = 0;
     bool forceUpdate;
     bool parseAllProjectSources;
+    int fileCountLeftToParse = 0;
     QSet<IndexedString> filesToParse;
 };
 
@@ -81,6 +81,7 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool parse
             }
         }
     }
+    d->fileCountLeftToParse = d->filesToParse.size();
 
     setCapabilities(Killable);
 
@@ -93,9 +94,11 @@ void ParseProjectJob::updateReady(const IndexedString& url, const ReferencedTopD
 
     Q_UNUSED(url);
     Q_UNUSED(topContext);
-    ++d->updated;
-    if (d->updated >= d->filesToParse.size())
+    --d->fileCountLeftToParse;
+    Q_ASSERT(d->fileCountLeftToParse >= 0);
+    if (d->fileCountLeftToParse == 0) {
         deleteLater();
+    }
 }
 
 void ParseProjectJob::start()
