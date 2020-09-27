@@ -47,8 +47,8 @@ public:
     {
     }
 
-    bool forceUpdate;
-    bool parseAllProjectSources;
+    const bool forceUpdate;
+    const bool parseAllProjectSources;
     int fileCountLeftToParse = 0;
     QSet<IndexedString> filesToParse;
 };
