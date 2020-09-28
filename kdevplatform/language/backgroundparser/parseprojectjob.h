@@ -35,8 +35,6 @@ class ParseProjectJobPrivate;
 ///forceAll argument is true. That forceAll argument allows to
 ///trigger a full project reparse after the initial import, e.g.
 ///via the project manager's context menu.
-///ParseProjectJob instances delete themselves as soon as the project
-///is deleted or when a new job is started.
 class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob
     : public KJob
 {
@@ -49,7 +47,6 @@ public:
     bool doKill() override;
 
 private Q_SLOTS:
-    void deleteNow();
     void queueFilesToParse();
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
 

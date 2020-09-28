@@ -1067,6 +1067,9 @@ void ProjectController::takeProject(IProject* proj)
     // loading might have failed
     d->m_currentlyOpening.removeAll(proj->projectFile().toUrl());
     d->m_projects.removeAll(proj);
+    if (auto* job = d->m_parseJobs.value(proj)) {
+        job->kill(); // Removes job from m_parseJobs.
+    }
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
                                         // Now we can save settings for all of the Core

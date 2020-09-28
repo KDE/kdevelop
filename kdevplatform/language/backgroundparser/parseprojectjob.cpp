@@ -30,6 +30,7 @@
 
 #include <language/backgroundparser/backgroundparser.h>
 
+#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 
 #include <QApplication>
@@ -57,7 +58,6 @@ public:
 bool ParseProjectJob::doKill()
 {
     qCDebug(LANGUAGE) << "stopping project parse job";
-    deleteLater();
     return true;
 }
 
@@ -73,8 +73,6 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool force
     : d_ptr{new ParseProjectJobPrivate(forceUpdate, forceAll)}
 {
     Q_D(ParseProjectJob);
-
-    connect(project, &IProject::destroyed, this, &ParseProjectJob::deleteNow);
 
     if (forceAll || ICore::self()->projectController()->parseAllProjectSources()) {
         d->filesToParse = project->fileSet();
@@ -92,11 +90,6 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool force
     setCapabilities(Killable);
 
     setObjectName(i18np("Process 1 file in %2", "Process %1 files in %2", d->filesToParse.size(), project->name()));
-}
-
-void ParseProjectJob::deleteNow()
-{
-    delete this;
 }
 
 void ParseProjectJob::updateProgress()
@@ -121,10 +114,6 @@ void ParseProjectJob::start()
 {
     Q_D(ParseProjectJob);
 
-    if (ICore::self()->shuttingDown()) {
-        return;
-    }
-
     if (d->filesToParse.isEmpty()) {
         deleteLater();
         return;
@@ -139,6 +128,23 @@ void ParseProjectJob::start()
 void ParseProjectJob::queueFilesToParse()
 {
     Q_D(ParseProjectJob);
+
+    const auto isJobKilled = [this] {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 75, 0)
+        if (Q_UNLIKELY(isFinished())) {
+#else
+        if (Q_UNLIKELY(error() == KilledJobError)) {
+#endif
+            qCDebug(LANGUAGE) << "Aborting queuing project files to parse."
+                                 " This job has been killed:" << objectName();
+            return true;
+        }
+        return false;
+    };
+
+    if (isJobKilled()) {
+        return;
+    }
 
     TopDUContext::Features processingLevel = d->filesToParse.size() <
                                              ICore::self()->languageController()->completionSettings()->
@@ -194,7 +200,12 @@ void ParseProjectJob::queueFilesToParse()
         ++processed;
         if (processed == processAfter) {
             QApplication::processEvents();
-            if (!crashGuard) {
+            if (Q_UNLIKELY(!crashGuard)) {
+                qCDebug(LANGUAGE) << "Aborting queuing project files to parse."
+                                     " This job has been destroyed.";
+                return;
+            }
+            if (isJobKilled()) {
                 return;
             }
             processed = 0;
