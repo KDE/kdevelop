@@ -35,6 +35,7 @@
 #include <QApplication>
 #include <QPointer>
 #include <QSet>
+#include <QTimer>
 
 using namespace KDevelop;
 
@@ -130,6 +131,14 @@ void ParseProjectJob::start()
     }
 
     qCDebug(LANGUAGE) << "starting project parse job";
+    // Avoid calling QApplication::processEvents() directly in start() to prevent
+    // a crash in RunController::checkState().
+    QTimer::singleShot(0, this, &ParseProjectJob::queueFilesToParse);
+}
+
+void ParseProjectJob::queueFilesToParse()
+{
+    Q_D(ParseProjectJob);
 
     TopDUContext::Features processingLevel = d->filesToParse.size() <
                                              ICore::self()->languageController()->completionSettings()->

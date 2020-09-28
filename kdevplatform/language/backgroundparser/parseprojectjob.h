@@ -50,6 +50,7 @@ public:
 
 private Q_SLOTS:
     void deleteNow();
+    void queueFilesToParse();
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
 
 private:
