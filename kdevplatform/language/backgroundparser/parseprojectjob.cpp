@@ -140,12 +140,14 @@ void ParseProjectJob::queueFilesToParse()
                                              minFilesForSimplifiedParsing() ?
                                              TopDUContext::VisibleDeclarationsAndContexts : TopDUContext::
                                              SimplifiedVisibleDeclarationsAndContexts;
+    TopDUContext::Features openDocumentProcessingLevel{TopDUContext::AllDeclarationsContextsAndUses};
 
     if (d->forceUpdate) {
         if (processingLevel & TopDUContext::VisibleDeclarationsAndContexts) {
             processingLevel = TopDUContext::AllDeclarationsContextsAndUses;
         }
         processingLevel = ( TopDUContext::Features )(TopDUContext::ForceUpdate | processingLevel);
+        openDocumentProcessingLevel = TopDUContext::Features(TopDUContext::ForceUpdate | openDocumentProcessingLevel);
     }
 
     if (auto currentDocument = ICore::self()->documentController()->activeDocument()) {
@@ -153,8 +155,7 @@ void ParseProjectJob::queueFilesToParse()
         const auto fileIt = d->filesToParse.constFind(path);
         if (fileIt != d->filesToParse.cend()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path,
-                                                                                 TopDUContext::AllDeclarationsContextsAndUses, BackgroundParser::BestPriority,
-                                                                                 this);
+                    openDocumentProcessingLevel, BackgroundParser::BestPriority, this);
             d->filesToParse.erase(fileIt);
         }
     }
@@ -166,8 +167,7 @@ void ParseProjectJob::queueFilesToParse()
         const auto fileIt = d->filesToParse.constFind(path);
         if (fileIt != d->filesToParse.cend()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path,
-                                                                                 TopDUContext::AllDeclarationsContextsAndUses, 10,
-                                                                                 this);
+                    openDocumentProcessingLevel, 10, this);
             d->filesToParse.erase(fileIt);
         }
     }
