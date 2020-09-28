@@ -160,20 +160,25 @@ void ParseProjectJob::queueFilesToParse()
         }
     }
 
-    // Add all currently open files that belong to the project to the background-parser, so that they'll be parsed first of all
-    const auto documents = ICore::self()->documentController()->openDocuments();
-    for (auto* document : documents) {
-        const auto path = IndexedString(document->url());
-        const auto fileIt = d->filesToParse.constFind(path);
-        if (fileIt != d->filesToParse.cend()) {
-            ICore::self()->languageController()->backgroundParser()->addDocument(path,
-                    openDocumentProcessingLevel, 10, this);
-            d->filesToParse.erase(fileIt);
+    int priority{BackgroundParser::InitialParsePriority};
+    const int openDocumentPriority{10};
+    if (d->parseAllProjectSources) {
+        // Add all currently open files that belong to the project to the
+        // background-parser, so that they'll be parsed first of all.
+        const auto documents = ICore::self()->documentController()->openDocuments();
+        for (auto* document : documents) {
+            const auto path = IndexedString(document->url());
+            const auto fileIt = d->filesToParse.constFind(path);
+            if (fileIt != d->filesToParse.cend()) {
+                ICore::self()->languageController()->backgroundParser()->addDocument(path,
+                        openDocumentProcessingLevel, openDocumentPriority, this);
+                d->filesToParse.erase(fileIt);
+            }
         }
-    }
-
-    if (!d->parseAllProjectSources) {
-        return;
+    } else {
+        // In this case the constructor inserts only open documents into d->filesToParse.
+        processingLevel = openDocumentProcessingLevel;
+        priority = openDocumentPriority;
     }
 
     // prevent UI-lockup by processing events after some files
@@ -184,7 +189,7 @@ void ParseProjectJob::queueFilesToParse()
     auto crashGuard = QPointer<ParseProjectJob> {this};
     for (const IndexedString& url : qAsConst(d->filesToParse)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(url, processingLevel,
-                                                                             BackgroundParser::InitialParsePriority,
+                                                                             priority,
                                                                              this);
         ++processed;
         if (processed == processAfter) {
