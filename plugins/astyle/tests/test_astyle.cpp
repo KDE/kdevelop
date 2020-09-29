@@ -326,3 +326,62 @@ void TestAstyle::testForeach()
     QCOMPARE(formatted, expected);
 }
 
+void TestAstyle::testPointerAlignment()
+{
+    AStyleFormatter formatter;
+    formatter.setPointerAlignment(astyle::PTR_ALIGN_NAME);
+
+    const QString initial(QStringLiteral("int* a;\nint * b;\nint *c;\nint & d;\nconst double * const e;\n"));
+    const QString expected(QStringLiteral("int *a;\nint *b;\nint *c;\nint &d;\nconst double *const e;\n"));
+    const QString formatted = formatter.formatSource(initial);
+    QCOMPARE(formatted, expected);
+}
+
+void TestAstyle::testKdeFrameworks()
+{
+    AStyleFormatter formatter;
+    QVERIFY(formatter.predefinedStyle("KDELibs"));
+
+    QFETCH(QString, initial);
+    QFETCH(QString, leftContext);
+    QFETCH(QString, rightContext);
+    QFETCH(QString, expected);
+
+    const QString formatted = formatter.formatSource(initial, leftContext, rightContext);
+    QCOMPARE(formatted, expected);
+}
+
+void TestAstyle::testKdeFrameworks_data()
+{
+    QTest::addColumn<QString>("initial");
+    QTest::addColumn<QString>("leftContext");
+    QTest::addColumn<QString>("rightContext");
+    QTest::addColumn<QString>("expected");
+
+    const QString leftContext = QStringLiteral("int main()\n{\n");
+    const QString rightContext = QStringLiteral("\n}\n");
+
+    QString initial = QStringLiteral("\t int a;");
+    QString expected = QStringLiteral("    int a;");
+    QTest::newRow("indentation") << initial << leftContext << rightContext << expected;
+
+    initial = QStringLiteral("if(1);\n while (false);\nfor(int i=0; i<1; i++);\n");
+    expected = QStringLiteral("    if (1);\n    while (false);\n    for (int i = 0; i < 1; i++);\n");
+    QTest::newRow("space-after-keyword") << initial << leftContext << rightContext << expected;
+
+    initial = QStringLiteral("int* a;\nint * b;\nint *c;\nint & d;\nconst double * const e;\n");
+    expected = QStringLiteral("int *a;\nint *b;\nint *c;\nint &d;\nconst double *const e;\n");
+    QTest::newRow("pointer-alignment") << initial << QString() << QString() << expected;
+
+    initial = QStringLiteral("if (true)\n{\n}\n");
+    expected = QStringLiteral("    if (true) {\n    }\n");
+    QTest::newRow("brace-on-same-line") << initial << leftContext << rightContext << expected;
+
+    initial = QStringLiteral("void foo(void) {\n}\nclass a {\n};\nnamespace c\n{\n}\n");
+    expected = QStringLiteral("void foo(void)\n{\n}\nclass a\n{\n};\nnamespace c\n{\n}\n");
+    QTest::newRow("brace-on-new-line") << initial << QString() << QString() << expected;
+
+    initial = QStringLiteral("switch (myEnum)\n{\ncase Value1:\ndoSomething();}\n");
+    expected = QStringLiteral("    switch (myEnum) {\n    case Value1:\n        doSomething();\n    }\n");
+    QTest::newRow("switch-statement") << initial << leftContext << rightContext << expected;
+}

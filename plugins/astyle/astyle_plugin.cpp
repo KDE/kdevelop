@@ -311,7 +311,7 @@ QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles() const
         predefinedStyle(QStringLiteral("Whitesmith")),
         predefinedStyle(QStringLiteral("Banner")),
         predefinedStyle(QStringLiteral("1TBS")),
-        predefinedStyle(QStringLiteral("KDELibs")),
+        predefinedStyle(QStringLiteral("KDELibs"), QStringLiteral("KDE Frameworks")),
         predefinedStyle(QStringLiteral("Qt")),
     };
 }

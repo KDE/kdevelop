@@ -42,6 +42,9 @@ private Q_SLOTS:
     void testContext();
     void testTabIndentation();
     void testForeach();
+    void testPointerAlignment();
+    void testKdeFrameworks();
+    void testKdeFrameworks_data();
 
 private:
     std::unique_ptr<AStyleFormatter> m_formatter;
