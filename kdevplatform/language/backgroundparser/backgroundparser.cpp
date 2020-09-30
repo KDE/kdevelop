@@ -379,8 +379,6 @@ public:
 
             QObject::connect(decorator, &ThreadWeaver::QObjectDecorator::done,
                              m_parser, &BackgroundParser::parseComplete);
-            QObject::connect(decorator, &ThreadWeaver::QObjectDecorator::failed,
-                             m_parser, &BackgroundParser::parseComplete);
             QObject::connect(job, &ParseJob::progress,
                              m_parser, &BackgroundParser::parseProgress, Qt::QueuedConnection);
 
