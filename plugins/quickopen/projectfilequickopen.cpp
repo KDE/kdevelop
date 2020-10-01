@@ -234,6 +234,13 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing(IProject* project)
 {
+    // Once we remove all project's files from set, there is no need to listen
+    // to &IProject::fileRemovedFromSet signal from this project and waste time
+    // searching in m_projectFiles. No need to listen to &IProject::fileAddedToSet
+    // signal from this project either - we are not interested in hypothetical
+    // file additions to the project that is about to be closed and destroyed.
+    disconnect(project, nullptr, this, nullptr);
+
     KDevelop::forEachFile(project->projectItem(), [this](ProjectFileItem* file) {
         fileRemovedFromSet(file);
     });
