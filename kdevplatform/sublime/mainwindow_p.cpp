@@ -137,8 +137,9 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectPreviousDock);
     ac->addAction(QStringLiteral("select_previous_dock"), action);
 
-    action = new KActionMenu(i18nc("@title:menu", "Tool Views"), this);
-    ac->addAction(QStringLiteral("docks_submenu"), action);
+    auto* const toolViewsMenu = new KActionMenu(i18nc("@title:menu", "Tool Views"), this);
+    toolViewsMenu->setDelayed(false);
+    ac->addAction(QStringLiteral("docks_submenu"), toolViewsMenu);
 
     idealController = new IdealController(m_mainWindow);
 
