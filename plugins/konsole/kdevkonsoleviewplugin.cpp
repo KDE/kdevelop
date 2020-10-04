@@ -63,7 +63,7 @@ KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsoleFactory, QO
     if(!m_viewFactory) {
       setErrorDescription(i18n("Failed to load 'konsolepart' plugin"));
     } else {
-        core()->uiController()->addToolView(QStringLiteral("Konsole"), m_viewFactory);
+        core()->uiController()->addToolView(i18nc("@title:window", "Terminal"), m_viewFactory);
     }
 }
 
