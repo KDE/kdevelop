@@ -29,31 +29,23 @@ class ReferencedTopDUContext;
 class IProject;
 class ParseProjectJobPrivate;
 
-///A job that parses all project-files in the given project either
-///when KDevelop is configured to parse all files at project import
-///(see ProjectController:parseAllProjectSources()) or when the
-///forceAll argument is true. That forceAll argument allows to
-///trigger a full project reparse after the initial import, e.g.
-///via the project manager's context menu.
-///ParseProjectJob instances delete themselves as soon as the project
-///is deleted or when a new job is started.
+/// A job that parses currently open files that belong to the given project, or all
+/// files that belong to the project if the parseAllProjectSources argument is true.
 class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob
     : public KJob
 {
     Q_OBJECT
 
 public:
-    explicit ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false, bool forceAll = false);
+    explicit ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false,
+                             bool parseAllProjectSources = false);
     ~ParseProjectJob() override;
     void start() override;
     bool doKill() override;
 
 private Q_SLOTS:
-    void deleteNow();
+    void queueFilesToParse();
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
-
-private:
-    void updateProgress();
 
 private:
     const QScopedPointer<class ParseProjectJobPrivate> d_ptr;

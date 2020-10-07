@@ -480,6 +480,7 @@ void RunController::setupActions()
     Core::self()->uiControllerInternal()->area(0, QStringLiteral("debug"))->addAction(action);
 
     action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme(QStringLiteral("process-stop")), i18nc("@action", "Stop"), this);
+    d->stopJobsMenu->setDelayed(false);
     action->setIconText(i18nc("@action Short text for 'Stop' used in the toolbar", "Stop"));
     action->setToolTip(i18nc("@info:tooltip", "Menu allowing to stop individual jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "List of jobs that can be stopped individually."));
