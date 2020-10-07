@@ -40,6 +40,7 @@ class ProblemInlineNoteProvider : public KTextEditor::InlineNoteProvider
     Q_OBJECT
 public:
     explicit ProblemInlineNoteProvider(KTextEditor::Document* document);
+    ~ProblemInlineNoteProvider();
 
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
