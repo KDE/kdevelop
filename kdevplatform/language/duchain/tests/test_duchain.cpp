@@ -50,6 +50,7 @@
 #include <set>
 #include <algorithm>
 #include <iterator> // needed for std::insert_iterator on windows
+#include <type_traits>
 #include <QThread>
 
 //Extremely slow
@@ -59,6 +60,12 @@ QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
 using namespace Utils;
+
+static_assert(std::is_nothrow_move_assignable<TypePtr<AbstractType>>(), "Why would a move assignment operator throw?");
+static_assert(std::is_nothrow_move_constructible<TypePtr<AbstractType>>(), "Why would a move constructor throw?");
+
+static_assert(std::is_nothrow_move_assignable<DUChainPointer<DUContext>>(), "Why would a move assignment operator throw?");
+static_assert(std::is_nothrow_move_constructible<DUChainPointer<DUContext>>(), "Why would a move constructor throw?");
 
 using Index = BasicSetRepository::Index;
 

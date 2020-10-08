@@ -97,10 +97,8 @@ public:
     {
     }
 
-    DUChainPointer(const DUChainPointer& rhs)
-        : d(rhs.d)
-    {
-    }
+    DUChainPointer(const DUChainPointer&) = default;
+    DUChainPointer(DUChainPointer&&) = default;
 
     ///This constructor includes dynamic casting. If the object cannot be casted to the type, the constructed DUChainPointer will have value zero.
     template <class OtherType>
@@ -179,7 +177,8 @@ public:
         return static_cast<Type*>(d->base());
     }
 
-    DUChainPointer<Type>& operator=(const DUChainPointer<Type>& rhs) = default;
+    DUChainPointer<Type>& operator=(const DUChainPointer<Type>&) = default;
+    DUChainPointer<Type>& operator=(DUChainPointer<Type>&&) = default;
 
     DUChainPointer<Type>& operator=(Type* rhs)
     {

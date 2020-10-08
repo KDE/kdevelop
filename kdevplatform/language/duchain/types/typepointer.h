@@ -45,9 +45,11 @@ public:
     using Base::QExplicitlySharedDataPointer;
     TypePtr<T>() = default;
     TypePtr<T>(const TypePtr<T>&) = default;
+    TypePtr<T>(TypePtr<T>&&) = default;
 
     using Base::operator=;
     TypePtr<T>& operator=(const TypePtr<T>&) = default;
+    TypePtr<T>& operator=(TypePtr<T>&&) = default;
 
     ///Uses dynamic_cast to cast this pointer to the given type
     template <class U>
