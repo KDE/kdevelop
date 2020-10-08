@@ -41,6 +41,8 @@
 
 #include "../openwith/iopenwith.h"
 
+#include <utility>
+
 using namespace KDevelop;
 
 namespace {
@@ -274,7 +276,7 @@ void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* file)
     f.outsideOfProject = !f.projectPath.isParentOf(f.path);
     auto it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), f);
     if (it == m_projectFiles.end() || it->path != f.path) {
-        m_projectFiles.insert(it, f);
+        m_projectFiles.insert(it, std::move(f));
     }
 }
 
@@ -348,7 +350,7 @@ void OpenFilesDataProvider::reset()
         if (const IProject* project = projCtrl->findProjectForUrl(docUrl)) {
             f.projectPath = project->path();
         }
-        currentFiles << f;
+        currentFiles.push_back(std::move(f));
     }
 
     std::sort(currentFiles.begin(), currentFiles.end());
