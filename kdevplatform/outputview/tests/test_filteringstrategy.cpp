@@ -263,6 +263,17 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "a.out: /foo/bar/test.cpp:5: int main(): Assertion `false' failed."
         << "/foo/bar/test.cpp"
         << 4 << 0 << FilteredItem::ErrorItem;
+
+    // same filter, may also may match on custom assert messages
+    QTest::newRow("custom-assert")
+        << "code at: /osm2go/tests/osm_edit.cpp:47: int main(): Assertion foo = bar failed: foo = 5, bar = 4"
+        << "/osm2go/tests/osm_edit.cpp"
+        << 46 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("glibc assert_perror()")
+        << "a.out: /foo/bar/test.cpp:2009: int void {anonymous}::main(): Unexpected error: Broken pipe."
+        << "/foo/bar/test.cpp"
+        << 2008 << 0 << FilteredItem::ErrorItem;
     // END: C++
 
     // BEGIN: Qt
