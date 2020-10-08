@@ -112,7 +112,7 @@ public:
     explicit Path(const QUrl& url);
 
     /**
-     * Create a copy of @p base and optionally append a path segment @p subPath.
+     * Create a copy of @p base and append a path segment @p subPath.
      *
      * This implicitly shares the data of @p base and thus is very efficient
      * memory wise compared to creating two Paths from separate strings.
@@ -123,11 +123,7 @@ public:
      *
      * @sa addPath()
      */
-    Path(const Path& base, const QString& subPath = QString());
-
-    ~Path() = default;
-
-    inline Path& operator=(const Path& other) = default;
+    explicit Path(const Path& base, const QString& subPath);
 
     /**
      * Equality comparison between @p other and this Path.

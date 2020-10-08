@@ -28,9 +28,14 @@
 
 #include <QTest>
 
+#include <type_traits>
+
 QTEST_MAIN(TestPath)
 
 using namespace KDevelop;
+
+static_assert(std::is_nothrow_move_assignable<Path>(), "Why would a move assignment operator throw?");
+static_assert(std::is_nothrow_move_constructible<Path>(), "Why would a move constructor throw?");
 
 static const int FILES_PER_FOLDER = 10;
 static const int FOLDERS_PER_FOLDER = 5;
