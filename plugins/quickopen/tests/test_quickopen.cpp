@@ -25,9 +25,14 @@
 #include <QTest>
 #include <QTemporaryFile>
 
+#include <type_traits>
+
 QTEST_MAIN(TestQuickOpen)
 
 using namespace KDevelop;
+
+static_assert(std::is_nothrow_move_assignable<ProjectFile>(), "Why would a move assignment operator throw?");
+static_assert(std::is_nothrow_move_constructible<ProjectFile>(), "Why would a move constructor throw?");
 
 using ItemList = QVector<DUChainItem>;
 using StringList = QVector<QString>;
