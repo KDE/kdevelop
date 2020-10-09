@@ -336,6 +336,69 @@ void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
         << "/path/to/foo.qml"
         << 6 << 4 << FilteredItem::ErrorItem;
     // END: Qt
+
+    // BEGIN: glib
+    QTest::newRow("g_assert(0) with domain")
+        << "GIO:ERROR:/foo/test.cpp:46:int main(): assertion failed: (0)"
+        << "/foo/test.cpp"
+        << 45 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert(0) without domain")
+        << "ERROR:/foo/test.cpp:46:int main(): assertion failed: (0)"
+        << "/foo/test.cpp"
+        << 45 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_cmpint(1, ==, 2) with domain")
+        << "GIO:ERROR:/foo/test.cpp:2024: assertion failed (1 == 2): (1 == 2)"
+        << "/foo/test.cpp"
+        << 2023 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_cmpint(1, ==, 2) without domain")
+        << "ERROR:/foo/test.cpp:2024:int main(): assertion failed (1 == 2): (1 == 2)"
+        << "/foo/test.cpp"
+        << 2023 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_not_reached() with domain")
+        << "GIO:ERROR:/foo/test.cpp:2024:int main(): code should not be reached"
+        << "/foo/test.cpp"
+        << 2023 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_not_reached() without domain")
+        << "ERROR:/foo/test.cpp:2024: code should not be reached"
+        << "/foo/test.cpp"
+        << 2023 << 0 << FilteredItem::ErrorItem;
+
+    // with prefix, but without function name
+    QTest::newRow("g_assert_null() C")
+        << "GIO:ERROR:/foo/test.c:18: 'bar' should be NULL"
+        << "/foo/test.c"
+        << 17 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_null() C++")
+        << "ERROR:/foo/test.c:18:int main(): 'bar' should be NULL"
+        << "/foo/test.c"
+        << 17 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_nonnull() C")
+        << "ERROR:/foo/test.cpp:18:int main(): 'bar' should be nullptr"
+        << "/foo/test.cpp"
+        << 17 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_nonnull() C++")
+        << "GIO:ERROR:/foo/test.cpp:18:int main(): 'bar' should be nullptr"
+        << "/foo/test.cpp"
+        << 17 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_true()")
+        << "GIO:ERROR:/foo/test.cpp:42:int main(): 'bar' should be TRUE"
+        << "/foo/test.cpp"
+        << 41 << 0 << FilteredItem::ErrorItem;
+
+    QTest::newRow("g_assert_false()")
+        << "ERROR:/foo/test.c:42:int main(): 'bar' should be FALSE"
+        << "/foo/test.c"
+        << 41 << 0 << FilteredItem::ErrorItem;
+    // END: glib
 }
 
 void TestFilteringStrategy::testNativeAppErrorFilterStrategy()
