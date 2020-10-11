@@ -26,7 +26,7 @@
 #include "serialization/itemrepository.h"
 
 namespace KDevelop {
-bool doReferenceCounting = false;
+thread_local bool doReferenceCounting = false;
 
 //Protects the reference-counting data through a spin-lock
 QMutex refCountingLock;

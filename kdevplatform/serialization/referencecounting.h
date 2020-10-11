@@ -37,7 +37,7 @@ namespace KDevelop {
 ///Since shouldDoDUChainReferenceCounting is called extremely often, we export some internals into the header here,
 ///so the reference-counting code can be inlined.
 
-KDEVPLATFORMSERIALIZATION_EXPORT extern bool doReferenceCounting;
+KDEVPLATFORMSERIALIZATION_EXPORT extern thread_local bool doReferenceCounting;
 KDEVPLATFORMSERIALIZATION_EXPORT extern QMutex refCountingLock;
 KDEVPLATFORMSERIALIZATION_EXPORT extern QMap<void*, QPair<uint, uint>>* refCountingRanges;
 KDEVPLATFORMSERIALIZATION_EXPORT extern bool refCountingHasAdditionalRanges;
