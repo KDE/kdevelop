@@ -7,7 +7,7 @@
         "Description[de]": "Sprachunterstützung für C/C++ (Clang-basiert)",
         "Description[en_GB]": "C/C++ Language Support (Clang-based)",
         "Description[es]": "Implementación del lenguaje C/C++ (basado en Clang)",
-        "Description[et]": "C/C++ keele toetus (Clangi baasil)",
+        "Description[et]": "C/C++ keele toetus (põhineb Clangil)",
         "Description[fi]": "C/C++-kielituki (Clang-pohjainen)",
         "Description[fr]": "Prise en charge du langage C/C++ (utilisant Clang)",
         "Description[gl]": "Compatibilidade con C e C++ (baseada en Clang)",
