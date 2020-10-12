@@ -27,6 +27,8 @@
 
 #include <QList>
 
+#include <functional>
+
 class QMenu;
 
 namespace KDevelop {
@@ -47,10 +49,15 @@ private:
 };
 
 /**
+ * Runs the @p callback on all files that have @p projectItem as ancestor
+ */
+KDEVPLATFORMPROJECT_EXPORT void forEachFiles(const ProjectBaseItem* projectItem,
+                                             const std::function<void(ProjectFileItem*)>& callback);
+
+/**
  * Returns all the files that have @p projectItem as ancestor
  */
-KDEVPLATFORMPROJECT_EXPORT QList<ProjectFileItem*> allFiles(ProjectBaseItem* projectItem);
-
+KDEVPLATFORMPROJECT_EXPORT QList<ProjectFileItem*> allFiles(const ProjectBaseItem* projectItem);
 }
 
 #endif // KDEVPLATFORM_PROJECTUTILS_H

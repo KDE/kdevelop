@@ -234,25 +234,23 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing(IProject* project)
 {
-    const auto files = KDevelop::allFiles(project->projectItem());
-    for (ProjectFileItem* file : files) {
+    KDevelop::forEachFiles(project->projectItem(), [this](ProjectFileItem* file) {
         fileRemovedFromSet(file);
-    }
+    });
 }
 
 void ProjectFileDataProvider::projectOpened(IProject* project)
 {
     const int processAfter = 1000;
     int processed = 0;
-    const auto files = KDevelop::allFiles(project->projectItem());
-    for (ProjectFileItem* file : files) {
+    KDevelop::forEachFiles(project->projectItem(), [&](ProjectFileItem* file) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
             QApplication::processEvents();
             processed = 0;
         }
-    }
+    });
 
     connect(project, &IProject::fileAddedToSet,
             this, &ProjectFileDataProvider::fileAddedToSet);
