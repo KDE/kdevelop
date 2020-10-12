@@ -68,6 +68,33 @@ void BenchQuickOpen::benchProjectFileFilter_addRemoveProject_data()
     getData();
 }
 
+void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects()
+{
+    QFETCH(int, files);
+
+    ProjectFileDataProvider provider;
+
+    QTemporaryDir dir;
+    QScopedPointer<TestProject> projectA(getProjectWithFiles(files, Path(dir.filePath("a_project_dir/"))));
+    QScopedPointer<TestProject> projectB(getProjectWithFiles(files, Path(dir.filePath("b_project_dir/"))));
+    QScopedPointer<TestProject> projectC(getProjectWithFiles(files, Path(dir.filePath("c_project_dir/"))));
+
+    QBENCHMARK {
+        projectController->addProject(projectA.data());
+        projectController->addProject(projectB.data());
+        projectController->addProject(projectC.data());
+
+        projectController->takeProject(projectC.data());
+        projectController->takeProject(projectB.data());
+        projectController->takeProject(projectA.data());
+    }
+}
+
+void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects_data()
+{
+    getData();
+}
+
 void BenchQuickOpen::benchProjectFileFilter_reset()
 {
     QFETCH(int, files);

@@ -34,6 +34,8 @@ private:
 private Q_SLOTS:
     void benchProjectFileFilter_addRemoveProject();
     void benchProjectFileFilter_addRemoveProject_data();
+    void benchProjectFileFilter_addRemoveProjects();
+    void benchProjectFileFilter_addRemoveProjects_data();
     void benchProjectFileFilter_reset();
     void benchProjectFileFilter_reset_data();
     void benchProjectFileFilter_setFilter();
