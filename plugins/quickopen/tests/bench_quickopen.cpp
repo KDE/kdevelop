@@ -50,6 +50,15 @@ void BenchQuickOpen::getData()
     QTest::newRow("0500-f/b") << 500  << "f/b";
 }
 
+void BenchQuickOpen::getAddRemoveData()
+{
+    QTest::addColumn<int>("files");
+
+    for (auto files : {100, 500, 1000})
+        QTest::addRow("%d", files) << files;
+}
+
+
 void BenchQuickOpen::benchProjectFileFilter_addRemoveProject()
 {
     QFETCH(int, files);
@@ -65,7 +74,7 @@ void BenchQuickOpen::benchProjectFileFilter_addRemoveProject()
 
 void BenchQuickOpen::benchProjectFileFilter_addRemoveProject_data()
 {
-    getData();
+    getAddRemoveData();
 }
 
 void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects()
@@ -92,7 +101,7 @@ void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects()
 
 void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects_data()
 {
-    getData();
+    getAddRemoveData();
 }
 
 void BenchQuickOpen::benchProjectFileFilter_reset()
