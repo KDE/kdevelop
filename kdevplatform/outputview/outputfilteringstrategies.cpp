@@ -395,8 +395,17 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
     static const ErrorFormat NATIVE_APPLICATION_ERROR_FILTERS[] = {
         // BEGIN: C++
 
+        // assert(false)
         // a.out: test.cpp:5: int main(): Assertion `false' failed.
-        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .*: Assertion `.*' failed\\.$"), 1, 2, -1),
+
+        // this may also match custom assert message like this one from OSM2go:
+        // code at: /osm2go/tests/osm_edit.cpp:47: int main(): Assertion foo = bar failed: foo = 5, bar = 4
+        // If there is a technical reason not to do so: fine. But for the moment it's easy enough to catch it.
+        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .+: Assertion .+ failed"), 1, 2, -1),
+
+        // assert_perror(42)
+        // a.out: test.cpp:2009: void {anonymous}::test(): Unexpected error: Broken pipe.
+        ErrorFormat(QStringLiteral("^.+: (.+):([1-9][0-9]*): .+: Unexpected error: "), 1, 2, -1),
 
         // END: C++
 
@@ -430,6 +439,31 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         ErrorFormat(QStringLiteral("(file:\\/\\/(?:[^:]+)):([1-9][0-9]*): ([a-zA-Z]+)Error"), 1, 2, -1),
 
         // END: Qt
+
+        // BEGIN: glib
+
+        // all messages may have an initial entry like "GIO:" in case the log domain was set
+        // the function name after the line number may be missing
+
+        // g_assert(0)
+        // ERROR:/foo/test.cpp:46:int main(): assertion failed: (0)
+        ErrorFormat(QStringLiteral("^(.+:)?ERROR:(.+):([1-9][0-9]*):(.+:)? assertion failed"), 2, 3, -1),
+
+        // g_assert_not_reached()
+        // ERROR:/foo/test.cpp:2024:int main(): code should not be reached
+        ErrorFormat(QStringLiteral("^(.+:)?ERROR:(.+):([1-9][0-9]*):(.+:)? code should not be reached"), 2, 3, -1),
+
+        // g_assert_null() / g_assert_nonnull()
+        // ERROR:/foo/test.cpp:18:int main(): 'bar' should not be nullptr
+        // ERROR:/foo/test.c:18:int main(): 'bar' should not be NULL
+        ErrorFormat(QStringLiteral("^(.+:)?ERROR:(.+):([1-9][0-9]*):(.+:)? '.+' should (not )?be (nullptr|NULL)"), 2, 3, -1),
+
+        // g_assert_true() / g_assert_false()
+        // ERROR:/foo/test.cpp:18:int main(): 'foo' should be TRUE
+        // ERROR:/foo/test.cpp:18:int main(): 'foo' should be FALSE
+        ErrorFormat(QStringLiteral("^(.+:)?ERROR:(.+):([1-9][0-9]*):(.+:)? '.+' should be (TRUE|FALSE)"), 2, 3, -1),
+
+        // END: glib
     };
 
     return match(NATIVE_APPLICATION_ERROR_FILTERS, line);
