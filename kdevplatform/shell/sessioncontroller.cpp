@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QHash>
 #include <QStringList>
 #include <QAction>
-#include <QApplication>
+#include <QCoreApplication>
 #include <QDBusConnection>
 #include <QInputDialog>
 #include <QLabel>
@@ -237,7 +237,7 @@ public:
     static QString sessionBaseDirectory()
     {
         return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
-            + QLatin1Char('/') + qApp->applicationName() + QLatin1String("/sessions/");
+            + QLatin1Char('/') + QCoreApplication::applicationName() + QLatin1String("/sessions/");
     }
 
     QString ownSessionDirectory() const

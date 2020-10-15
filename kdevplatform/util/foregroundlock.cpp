@@ -19,7 +19,7 @@
 
 #include "foregroundlock.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QMutex>
 #include <QThread>
 
@@ -93,9 +93,11 @@ void KDevelop::ForegroundLock::relock()
 {
     Q_ASSERT(!m_locked);
 
-    if (!QApplication::instance() || // Initialization isn't complete yet
-        QThread::currentThread() == QApplication::instance()->thread() || // We're the main thread (deadlock might happen if we'd enter the trylock loop)
-        holderThread == QThread::currentThread()) { // We already have the foreground lock (deadlock might happen if we'd enter the trylock loop)
+    if (!QCoreApplication::instance() || // Initialization isn't complete yet
+        QThread::currentThread() == QCoreApplication::instance()->thread()
+        || // We're the main thread (deadlock might happen if we'd enter the trylock loop)
+        holderThread == QThread::currentThread()) { // We already have the foreground lock (deadlock might happen if
+                                                    // we'd enter the trylock loop)
         lockForegroundMutexInternal();
     } else {
         QMutexLocker lock(&tryLockMutex);
@@ -148,8 +150,8 @@ public:
 
 bool KDevelop::ForegroundLock::isLockedForThread()
 {
-    return QThread::currentThread() == holderThread ||
-           QThread::currentThread() == QApplication::instance()->thread();
+    return QThread::currentThread() == holderThread
+        || QThread::currentThread() == QCoreApplication::instance()->thread();
 }
 
 bool KDevelop::ForegroundLock::tryLock()
@@ -202,7 +204,7 @@ bool KDevelop::ForegroundLock::isLocked() const
 namespace KDevelop {
 void DoInForeground::doIt()
 {
-    if (QThread::currentThread() == QApplication::instance()->thread()) {
+    if (QThread::currentThread() == QCoreApplication::instance()->thread()) {
         // We're already in the foreground, just call the handler code
         doInternal();
     } else {
@@ -218,7 +220,7 @@ DoInForeground::~DoInForeground()
 
 DoInForeground::DoInForeground()
 {
-    moveToThread(QApplication::instance()->thread());
+    moveToThread(QCoreApplication::instance()->thread());
 }
 
 void DoInForeground::doInternalSlot()

@@ -37,7 +37,7 @@
 #include <KAboutData>
 #include <KLocalizedString>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QTextStream>
@@ -191,7 +191,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
     qerr.setCodec("UTF-8");
     qin.setCodec("UTF-8");
 
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     KAboutData::setApplicationData(aboutData);
 

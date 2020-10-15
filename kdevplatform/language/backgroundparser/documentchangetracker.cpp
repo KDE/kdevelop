@@ -32,7 +32,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/MovingInterface>
 
-#include <QApplication>
+#include <QCoreApplication>
 
 // Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.
 // #define ALWAYS_UPDATE
@@ -313,7 +313,7 @@ RevisionLockerAndClearerPrivate::RevisionLockerAndClearerPrivate(DocumentChangeT
 {
     VERIFY_FOREGROUND_LOCKED
 
-        moveToThread(QApplication::instance()->thread());
+    moveToThread(QCoreApplication::instance()->thread());
 
     // Lock the revision
     m_tracker->lockRevision(revision);

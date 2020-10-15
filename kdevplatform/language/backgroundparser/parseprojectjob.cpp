@@ -31,7 +31,7 @@
 #include <kcoreaddons_version.h>
 #include <KLocalizedString>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QPointer>
 #include <QSet>
 #include <QTimer>
@@ -109,7 +109,7 @@ void ParseProjectJob::start()
     }
 
     qCDebug(LANGUAGE) << "starting project parse job";
-    // Avoid calling QApplication::processEvents() directly in start() to prevent
+    // Avoid calling QCoreApplication::processEvents() directly in start() to prevent
     // a crash in RunController::checkState().
     QTimer::singleShot(0, this, &ParseProjectJob::queueFilesToParse);
 }
@@ -193,7 +193,7 @@ void ParseProjectJob::queueFilesToParse()
                                                                              this);
         ++processed;
         if (processed == processAfter) {
-            QApplication::processEvents();
+            QCoreApplication::processEvents();
             if (Q_UNLIKELY(!crashGuard)) {
                 qCDebug(LANGUAGE) << "Aborting queuing project files to parse."
                                      " This job has been destroyed.";

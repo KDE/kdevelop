@@ -75,7 +75,7 @@ void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)
     if (_session.isEmpty()) {
         // use a distinct session name for unit test sessions
         // they are temporary (see below) but still - we want to make sure
-        session = QLatin1String("test-") + qApp->applicationName();
+        session = QLatin1String("test-") + QCoreApplication::applicationName();
     }
 
     d->initialize(mode, session);

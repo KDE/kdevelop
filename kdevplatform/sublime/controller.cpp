@@ -22,7 +22,7 @@
 #include <QList>
 #include <QEvent>
 #include <QMouseEvent>
-#include <QApplication>
+#include <QCoreApplication>
 
 #include <KSharedConfig>
 
@@ -105,7 +105,7 @@ Controller::Controller(QObject *parent)
 void Controller::init()
 {
     loadSettings();
-    qApp->installEventFilter(this);
+    QCoreApplication::instance()->installEventFilter(this);
 }
 
 Controller::~Controller()

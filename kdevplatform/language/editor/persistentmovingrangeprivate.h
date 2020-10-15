@@ -24,7 +24,7 @@
 #include <backgroundparser/documentchangetracker.h>
 #include <KTextEditor/MovingRange>
 #include <QObject>
-#include <QApplication>
+#include <QCoreApplication>
 
 namespace KDevelop {
 class PersistentMovingRangePrivate
@@ -33,10 +33,7 @@ class PersistentMovingRangePrivate
     Q_OBJECT
 
 public:
-    PersistentMovingRangePrivate()
-    {
-        moveToThread(QApplication::instance()->thread());
-    }
+    PersistentMovingRangePrivate() { moveToThread(QCoreApplication::instance()->thread()); }
 
     void connectTracker();
 

@@ -20,7 +20,7 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QHash>
 #include <QMultiMap>
 #include <QProcessEnvironment>
@@ -1243,7 +1243,7 @@ QString DUChain::repositoryPathForSession(const KDevelop::ISessionLock::Ptr& ses
     QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
     cacheDir += QLatin1String("/kdevduchain");
     QString baseDir = QProcessEnvironment::systemEnvironment().value(QStringLiteral("KDEV_DUCHAIN_DIR"), cacheDir);
-    baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName(), session->id());
+    baseDir += QStringLiteral("/%1-%2").arg(QCoreApplication::applicationName(), session->id());
     return baseDir;
 }
 
@@ -1831,7 +1831,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
         }
 
         QMetaObject::invokeMethod(ICore::self()->languageController()->backgroundParser(), "parseDocuments");
-        QApplication::processEvents();
+        QCoreApplication::processEvents();
         QThread::usleep(1000);
     }
 

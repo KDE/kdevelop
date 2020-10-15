@@ -35,7 +35,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QDebug>
@@ -256,14 +256,14 @@ QSet<QUrl> Manager::waiting()
 void Manager::finish()
 {
     std::cerr << "ready" << std::endl;
-    QApplication::quit();
+    QCoreApplication::quit();
 }
 
 using namespace KDevelop;
 
 int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     KAboutData aboutData(QStringLiteral("duchainify"), i18n("duchainify"),
         QStringLiteral("1"), i18n("DUChain builder application"), KAboutLicense::GPL,
