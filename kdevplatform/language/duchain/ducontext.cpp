@@ -429,43 +429,47 @@ DUContext::~DUContext()
 {
     TopDUContext* top = topContext();
 
-    if (!top->deleting() || !top->isOnDisk()) {
-        DUCHAIN_D_DYNAMIC(DUContext);
+    if (top != this) {
+        const auto doCleanup = !top->deleting() || !top->isOnDisk();
 
-        if (d->m_owner.declaration())
-            d->m_owner.declaration()->setInternalContext(nullptr);
+        if (doCleanup) {
+            DUCHAIN_D_DYNAMIC(DUContext);
 
-        while (d->m_importersSize() != 0) {
-            if (d->m_importers()[0].data())
-                d->m_importers()[0].data()->removeImportedParentContext(this);
-            else {
-                qCDebug(LANGUAGE) << "importer disappeared";
-                d->m_importersList().removeOne(d->m_importers()[0]);
+            if (d->m_owner.declaration())
+                d->m_owner.declaration()->setInternalContext(nullptr);
+
+            while (d->m_importersSize() != 0) {
+                if (d->m_importers()[0].data())
+                    d->m_importers()[0].data()->removeImportedParentContext(this);
+                else {
+                    qCDebug(LANGUAGE) << "importer disappeared";
+                    d->m_importersList().removeOne(d->m_importers()[0]);
+                }
             }
+
+            clearImportedParentContexts();
         }
 
-        clearImportedParentContexts();
-    }
+        deleteChildContextsRecursively();
 
-    deleteChildContextsRecursively();
+        if (doCleanup)
+            deleteUses();
 
-    if (!topContext()->deleting() || !topContext()->isOnDisk())
-        deleteUses();
+        deleteLocalDeclarations();
 
-    deleteLocalDeclarations();
-
-    //If the top-context is being delete, we don't need to spend time rebuilding the inner structure.
-    //That's expensive, especially when the data is not dynamic.
-    if (!top->deleting() || !top->isOnDisk()) {
-        if (m_dynamicData->m_parentContext)
+        //If the top-context is being delete, we don't need to spend time rebuilding the inner structure.
+        //That's expensive, especially when the data is not dynamic.
+        if (doCleanup && m_dynamicData->m_parentContext) {
             m_dynamicData->m_parentContext->m_dynamicData->removeChildContext(this);
+        }
+
+        top->m_dynamicData->clearContextIndex(this);
+
+        Q_ASSERT(d_func()->isDynamic() ==
+                (doCleanup ||
+                top->m_dynamicData->isTemporaryContextIndex(m_dynamicData->m_indexInTopContext)));
     }
 
-    top->m_dynamicData->clearContextIndex(this);
-
-    Q_ASSERT(d_func()->isDynamic() ==
-             (!top->deleting() || !top->isOnDisk() ||
-              top->m_dynamicData->isTemporaryContextIndex(m_dynamicData->m_indexInTopContext)));
     delete m_dynamicData;
 }
 
