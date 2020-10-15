@@ -45,13 +45,10 @@
 
 using namespace KDevelop;
 
-void waitForSuites(IProject* project, int count, int max)
+void waitForSuites(IProject* project, int count, int secondsTimeout)
 {
     auto testController = ICore::self()->testController();
-    for(int i = 0; testController->testSuitesForProject(project).size() < count && i < max * 10; ++i) {
-        QSignalSpy spy(testController, &ITestController::testSuiteAdded);
-        QVERIFY(spy.wait(5000));
-    }
+    QTRY_COMPARE_WITH_TIMEOUT(testController->testSuitesForProject(project).size(), count, secondsTimeout * 1000);
 }
 
 void TestCTestFindSuites::initTestCase()
@@ -126,11 +123,7 @@ void TestCTestFindSuites::testQtTestCases()
     IProject* project = loadProject( "unit_tests_kde" );
     QVERIFY2(project, "Project was not opened");
 
-    QSignalSpy spy(ICore::self()->testController(), &ITestController::testSuiteAdded);
-    QVERIFY(spy.isValid());
-
-    // Background parsing can take a long time, so we need a long timeout
-    QVERIFY(spy.wait(30 * 1000));
+    waitForSuites(project, 1, 60);
 
     const QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
     QCOMPARE(suites.size(), 1);
