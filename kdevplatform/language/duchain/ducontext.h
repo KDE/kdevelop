@@ -894,6 +894,7 @@ protected:
     virtual bool shouldSearchInParent(SearchFlags flags) const;
 
 private:
+    void initFromTopContext();
     void rebuildDynamicData(DUContext* parent, uint ownIndex) override;
 
     friend class TopDUContext;

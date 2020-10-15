@@ -360,8 +360,6 @@ DUContext::DUContext(const RangeInRevision& range, DUContext* parent, bool anony
     d_func_dynamic()->setClassId(this);
     if (parent)
         m_dynamicData->m_topContext = parent->topContext();
-    else
-        m_dynamicData->m_topContext = static_cast<TopDUContext*>(this);
 
     d_func_dynamic()->setClassId(this);
     DUCHAIN_D_DYNAMIC(DUContext);
@@ -393,14 +391,19 @@ bool DUContext::isAnonymous() const
            (m_dynamicData->m_parentContext && m_dynamicData->m_parentContext->isAnonymous());
 }
 
+void DUContext::initFromTopContext()
+{
+    Q_ASSERT(dynamic_cast<TopDUContext*>(this));
+    m_dynamicData->m_topContext = static_cast<TopDUContext*>(this);
+}
+
 DUContext::DUContext(DUContextData& dd, const RangeInRevision& range, DUContext* parent, bool anonymous)
     : DUChainBase(dd, range)
     , m_dynamicData(new DUContextDynamicData(this))
 {
     if (parent)
         m_dynamicData->m_topContext = parent->topContext();
-    else
-        m_dynamicData->m_topContext = static_cast<TopDUContext*>(this);
+    // else initTopContext must be called, doing a static_cast here is UB
 
     DUCHAIN_D_DYNAMIC(DUContext);
     d->m_contextType = Other;
