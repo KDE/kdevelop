@@ -92,7 +92,3 @@ target_link_libraries(kdevqtc-qmlsupport
         Qt5::Network
         Qt5::Xml
 )
-set_target_properties(kdevqtc-qmlsupport PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED YES
-)

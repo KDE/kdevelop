@@ -8,6 +8,9 @@ set(KDEVELOP_SOVERSION 57)
 # plugin version as used e.g. in plugin installation path
 set(KDEV_PLUGIN_VERSION 35)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+
 # we need some parts of the ECM CMake helpers
 find_package (ECM 5.50.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})

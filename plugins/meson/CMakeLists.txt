@@ -68,8 +68,3 @@ target_link_libraries(kdevmesonmanager
     KDev::Util
     KDev::OutputView
 )
-
-set_target_properties(kdevmesonmanager PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED YES
-)
