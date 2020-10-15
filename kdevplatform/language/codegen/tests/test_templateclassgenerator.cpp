@@ -43,6 +43,20 @@ QCOMPARE(QString(one.readAll()), QString(two.readAll()))    \
 
 using namespace KDevelop;
 
+namespace
+{
+void setLowercaseFileNames(std::unique_ptr<TemplateClassGenerator>& generator)
+{
+    QHash<QString, QUrl> urls = generator->fileUrls();
+    QHash<QString, QUrl>::const_iterator it = urls.constBegin();
+    for (; it != urls.constEnd(); ++it) {
+        QString fileName = it.value().fileName().toLower();
+        QUrl base = it.value().resolved(QUrl(QStringLiteral("./%1").arg(fileName)));
+        generator->setFileUrl(it.key(), base);
+    }
+}
+}
+
 void TestTemplateClassGenerator::initTestCase()
 {
     AutoTestShell::init();
@@ -80,7 +94,7 @@ void TestTemplateClassGenerator::cleanupTestCase()
 
 void TestTemplateClassGenerator::fileLabelsCpp()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_cpp"));
+    auto generator = loadTemplate(QStringLiteral("test_cpp"));
     QHash<QString,QString> labels = generator->fileLabels();
     QCOMPARE(labels.size(), 2);
 
@@ -96,7 +110,7 @@ void TestTemplateClassGenerator::fileLabelsCpp()
 
 void TestTemplateClassGenerator::fileLabelsYaml()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
+    auto generator = loadTemplate(QStringLiteral("test_yaml"));
     QHash<QString,QString> labels = generator->fileLabels();
     QCOMPARE(labels.size(), 1);
 
@@ -106,7 +120,7 @@ void TestTemplateClassGenerator::fileLabelsYaml()
 
 void TestTemplateClassGenerator::defaultFileUrlsCpp()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_cpp"));
+    auto generator = loadTemplate(QStringLiteral("test_cpp"));
     QHash<QString,QUrl> files = generator->fileUrls();
     QCOMPARE(files.size(), 2);
 
@@ -119,7 +133,7 @@ void TestTemplateClassGenerator::defaultFileUrlsCpp()
 
 void TestTemplateClassGenerator::defaultFileUrlsYaml()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
+    auto generator = loadTemplate(QStringLiteral("test_yaml"));
     QHash<QString,QUrl> files = generator->fileUrls();
     QCOMPARE(files.size(), 1);
 
@@ -129,7 +143,7 @@ void TestTemplateClassGenerator::defaultFileUrlsYaml()
 
 void TestTemplateClassGenerator::customOptions()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
+    auto generator = loadTemplate(QStringLiteral("test_yaml"));
     QCOMPARE(generator->sourceFileTemplate().hasCustomOptions(), false);
 
     generator = loadTemplate(QStringLiteral("test_options"));
@@ -184,7 +198,7 @@ void TestTemplateClassGenerator::customOptions()
 
 void TestTemplateClassGenerator::templateVariablesCpp()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_cpp"));
+    auto generator = loadTemplate(QStringLiteral("test_cpp"));
     setLowercaseFileNames(generator);
 
     QVariantHash variables = generator->renderer()->variables();
@@ -196,7 +210,7 @@ void TestTemplateClassGenerator::templateVariablesCpp()
 
 void TestTemplateClassGenerator::templateVariablesYaml()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
+    auto generator = loadTemplate(QStringLiteral("test_yaml"));
     setLowercaseFileNames(generator);
 
     QVariantHash variables = generator->renderer()->variables();
@@ -208,7 +222,7 @@ void TestTemplateClassGenerator::templateVariablesYaml()
 
 void TestTemplateClassGenerator::codeDescription()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
+    auto generator = loadTemplate(QStringLiteral("test_yaml"));
 
     QVariantHash variables = generator->renderer()->variables();
 
@@ -239,7 +253,7 @@ void TestTemplateClassGenerator::codeDescription()
 
 void TestTemplateClassGenerator::generate()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_cpp"));
+    auto generator = loadTemplate(QStringLiteral("test_cpp"));
 
     DocumentChangeSet changes = generator->generate();
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
@@ -252,7 +266,7 @@ void TestTemplateClassGenerator::generate()
 
 void TestTemplateClassGenerator::cppOutput()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_cpp"));
+    auto generator = loadTemplate(QStringLiteral("test_cpp"));
     setLowercaseFileNames(generator);
     DocumentChangeSet changes = generator->generate();
     changes.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
@@ -275,7 +289,7 @@ void TestTemplateClassGenerator::cppOutput()
 
 void TestTemplateClassGenerator::yamlOutput()
 {
-    TemplateClassGenerator* generator = loadTemplate(QStringLiteral("test_yaml"));
+    auto generator = loadTemplate(QStringLiteral("test_yaml"));
     setLowercaseFileNames(generator);
     generator->generate().applyAllChanges();
 
@@ -287,7 +301,7 @@ void TestTemplateClassGenerator::yamlOutput()
     COMPARE_FILES(yaml, testYaml);
 }
 
-TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString& name)
+std::unique_ptr<TemplateClassGenerator> TestTemplateClassGenerator::loadTemplate(const QString& name)
 {
     QDir dir(baseUrl.toLocalFile());
     const auto files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
@@ -295,7 +309,7 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
         dir.remove(fileName);
     }
 
-    auto* generator = new TemplateClassGenerator(baseUrl);
+    auto generator = std::make_unique<TemplateClassGenerator>(baseUrl);
 
     QString tplDescription = QStringLiteral(CODEGEN_DATA_DIR) + "/kdevcodegentest/templates/" + name + "/" + name + ".desktop";
     Q_ASSERT(!tplDescription.isEmpty());
@@ -310,18 +324,5 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
     generator->setLicense(QStringLiteral("This is just a test.\nYou may do with it as you please."));
     return generator;
 }
-
-void TestTemplateClassGenerator::setLowercaseFileNames(TemplateClassGenerator* generator)
-{
-    QHash<QString, QUrl> urls = generator->fileUrls();
-    QHash<QString, QUrl>::const_iterator it = urls.constBegin();
-    for (; it != urls.constEnd(); ++it)
-    {
-        QString fileName = it.value().fileName().toLower();
-        QUrl base = it.value().resolved(QUrl(QStringLiteral("./%1").arg(fileName)));
-        generator->setFileUrl(it.key(), base);
-    }
-}
-
 
 QTEST_GUILESS_MAIN(TestTemplateClassGenerator)

@@ -26,6 +26,8 @@
 #include <QTemporaryDir>
 #include <QUrl>
 
+#include <memory>
+
 #include "language/codegen/codedescription.h"
 
 namespace KDevelop
@@ -55,13 +57,12 @@ private Q_SLOTS:
     void yamlOutput();
 
 private:
-    KDevelop::TemplateClassGenerator* loadTemplate(const QString& name);
+    std::unique_ptr<KDevelop::TemplateClassGenerator> loadTemplate(const QString& name);
 
 private:
     QUrl baseUrl;
     QTemporaryDir tempDir;
     KDevelop::ClassDescription description;
-    void setLowercaseFileNames(KDevelop::TemplateClassGenerator* generator);
 };
 
 
