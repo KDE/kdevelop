@@ -1,2 +1,10 @@
 # FIXME: itemrepository does not take alignment into account at all
 alignment:*
+
+# seems like UBSAN gets confused by plugin loading
+# or maybe KPluginLoader / QPluginLoader really do exhibit UB
+# we have to investigate that at some point too
+vptr:plugincontroller.cpp
+vptr:iplugin.cpp
+vptr:qobject.h
+vptr:kpluginfactory.h
