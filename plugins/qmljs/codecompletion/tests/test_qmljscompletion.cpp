@@ -265,13 +265,14 @@ void QmlCompletionTest::testContainsDeclaration_data()
     QTest::newRow("qml_module_alias") << "import QtQuick 2.2 as Foo\n Item { id: a\n %INVOKE }" << "Foo.%CURSOR" << "OpacityAnimator" << true;
 
     // Built-in QML types
-    QTest::newRow("qml_builtin_types") <<
-        "import QtQuick 1.0\n"    // Test QtQuick 1.0, not always 2.0, so that we ensure that both versions work
-        "\n"
-        "Text {\n"
-        " id: foo\n"
-        " %INVOKE\n"
-        "}\n" << "font.%CURSOR" << "family" << true;
+    QTest::newRow("qml_builtin_types") << "import QtQuick 2.0\n"
+                                          "\n"
+                                          "Text {\n"
+                                          " id: foo\n"
+                                          " %INVOKE\n"
+                                          "}\n"
+                                       << "font.%CURSOR"
+                                       << "family" << true;
 }
 
 void QmlCompletionTest::testDoesNotContainDeclaration()

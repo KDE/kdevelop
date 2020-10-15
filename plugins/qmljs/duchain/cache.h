@@ -52,6 +52,11 @@ public:
     static Cache& instance();
 
     /**
+     * List of the paths in which the modules will be looked for
+     */
+    KDevelop::Path::List libraryPaths(const KDevelop::IndexedString& baseFile) const;
+
+    /**
      * Path corresponding to a module name
      *
      * The path returned can either be the one of a module file shipped with
@@ -62,9 +67,8 @@ public:
      * @param version If not null, the file being looked for is "uri_version.qml".
      *                If null, then the untouched uri is used for searching.
      */
-    QString modulePath(const KDevelop::IndexedString& baseFile,
-                       const QString& uri,
-                       const QString& version = QStringLiteral("1.0"));
+    QString modulePath(const KDevelop::IndexedString& baseFile, const QString& uri,
+                       const QString& version = QStringLiteral("2.0"));
 
     /**
      * Return the list of the paths of the given files.
@@ -103,6 +107,8 @@ public:
     void setUpToDate(const KDevelop::IndexedString& file, bool upToDate);
 
 private:
+    KDevelop::Path::List libraryPaths_internal(const KDevelop::IndexedString& baseFile) const;
+
     struct PluginDumpExecutable {
         QString executable;
         QString quickVersion;       // Version of QtQuick that should be imported when this qmlplugindump is used
@@ -112,7 +118,7 @@ private:
         {}
     };
 
-    QMutex m_mutex;
+    mutable QMutex m_mutex;
     QHash<QString, QString> m_modulePaths;
     QList<PluginDumpExecutable> m_pluginDumpExecutables;
     QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_dependees;

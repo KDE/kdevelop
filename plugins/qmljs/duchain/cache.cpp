@@ -53,19 +53,16 @@ QmlJS::Cache& QmlJS::Cache::instance()
     return *c;
 }
 
-QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
-                                 const QString& uri,
-                                 const QString& version)
+KDevelop::Path::List QmlJS::Cache::libraryPaths(const KDevelop::IndexedString& baseFile) const
 {
     QMutexLocker lock(&m_mutex);
-    QString cacheKey = uri + version;
-    QString path = m_modulePaths.value(cacheKey, QString());
+    return libraryPaths_internal(baseFile);
+}
 
-    if (!path.isEmpty()) {
-        return path;
-    }
+KDevelop::Path::List QmlJS::Cache::libraryPaths_internal(const KDevelop::IndexedString& baseFile) const
+{
+    Q_ASSERT(!m_mutex.try_lock());
 
-    // List of the paths in which the modules will be looked for
     KDevelop::Path::List paths;
 
     const auto& libraryPaths = QCoreApplication::instance()->libraryPaths();
@@ -78,6 +75,18 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     }
 
     paths << m_includeDirs[baseFile];
+    return paths;
+}
+
+QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile, const QString& uri, const QString& version)
+{
+    QMutexLocker lock(&m_mutex);
+    QString cacheKey = uri + version;
+    QString path = m_modulePaths.value(cacheKey, QString());
+
+    if (!path.isEmpty()) {
+        return path;
+    }
 
     // Find the path for which <path>/u/r/i exists
     QString fragment = QString(uri).replace(QLatin1Char('.'), QDir::separator());
@@ -91,13 +100,15 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         QStringLiteral("QtQuick.XmlListModel"),
     };
 
-    if (!version.isEmpty() && !isVersion1 && !modulesWithoutVersionSuffix.contains(uri)) {
+    if (!isVersion1 && !fragment.isEmpty() && !fragment.endsWith(QLatin1Char('/')) && !version.isEmpty()
+        && !modulesWithoutVersionSuffix.contains(uri)) {
         // Modules having a version greater or equal to 2 are stored in a directory
         // name like QtQuick.2
         fragment += QLatin1Char('.') + version.section(QLatin1Char('.'), 0, 0);
     }
 
-    for (auto& p : qAsConst(paths)) {
+    const auto paths = libraryPaths_internal(baseFile);
+    for (auto& p : paths) {
         QString pathString = p.cd(fragment).path();
 
         // HACK: QtQuick 1.0 is put in $LIB/qt5/imports/builtins.qmltypes. The "QtQuick"
