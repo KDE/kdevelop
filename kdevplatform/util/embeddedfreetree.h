@@ -810,7 +810,7 @@ public:
     {
         uint maxFreeItems = ((m_itemCount / increaseFraction) * 3) / 2 + 1;
         //First we approximate the count of free items using the insertion depth
-        if ((1u << m_insertedAtDepth) >= maxFreeItems) {
+        if (m_insertedAtDepth >= 32 || (1u << m_insertedAtDepth) >= maxFreeItems) {
             uint freeCount = countFreeItems(*m_centralFreeItem);
             if (freeCount > maxFreeItems || freeCount == m_itemCount) {
                 return m_itemCount - freeCount;
