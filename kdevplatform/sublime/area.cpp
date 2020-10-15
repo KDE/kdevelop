@@ -154,8 +154,10 @@ void Area::initialize()
     // Functor will be called after destructor has run -> capture controller pointer by value
     // otherwise we crash because we access the already freed pointer this->d
     auto controller = d->controller;
-    connect(this, &Area::destroyed, controller,
-            [controller] (QObject* obj) { controller->removeArea(static_cast<Area*>(obj)); });
+    connect(this, &Area::destroyed, controller, [this, controller](QObject* obj) {
+        Q_ASSERT(obj == this);
+        controller->removeArea(this);
+    });
 }
 
 Area::~Area() = default;
