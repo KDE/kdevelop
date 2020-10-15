@@ -343,9 +343,9 @@ void OpenFilesDataProvider::reset()
     currentFiles.reserve(docs.size());
     for (IDocument* doc : docs) {
         ProjectFile f;
-        f.path = Path(doc->url());
-        IProject* project = projCtrl->findProjectForUrl(doc->url());
-        if (project) {
+        const QUrl docUrl = doc->url();
+        f.path = Path(docUrl);
+        if (const IProject* project = projCtrl->findProjectForUrl(docUrl)) {
             f.projectPath = project->path();
         }
         currentFiles << f;
