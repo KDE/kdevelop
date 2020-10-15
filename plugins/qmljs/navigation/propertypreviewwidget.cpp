@@ -152,9 +152,9 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc,
     , property(property)
 {
     //setup kdeclarative library
+    KDeclarative::KDeclarative::setupEngine(view->engine());
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(view->engine());
-    kdeclarative.setupEngine(view->engine());
     kdeclarative.setupContext();
 
     // Configure layout

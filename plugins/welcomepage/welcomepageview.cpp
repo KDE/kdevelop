@@ -47,10 +47,10 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
 
     //setup kdeclarative library
+    KDeclarative::KDeclarative::setupEngine(engine());
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine());
     kdeclarative.setTranslationDomain(QStringLiteral("kdevwelcomepage"));
-    kdeclarative.setupEngine(engine());
     kdeclarative.setupContext();
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);
