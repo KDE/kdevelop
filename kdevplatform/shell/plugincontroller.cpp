@@ -148,6 +148,14 @@ struct Dependency
     QString pluginName;
 };
 
+QVector<QString> pluginIds(const QVector<KPluginMetaData> &plugins)
+{
+    QVector<QString> ids(plugins.size());
+    std::transform(plugins.begin(), plugins.end(), ids.begin(), [](const KPluginMetaData &meta) {
+        return meta.pluginId();
+    });
+    return ids;
+}
 }
 
 namespace KDevelop {
@@ -284,6 +292,39 @@ public:
         return (enabledState(info) >= FirstEnabledState);
     }
 
+    void initKTextEditorIntegration()
+    {
+        if (core->setupFlags() == Core::NoUi) {
+            qCDebug(SHELL) << "Skipping KTextEditor integration in Core::NoUi mode";
+            return;
+        }
+
+        KTextEditorIntegration::initialize();
+        const auto ktePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData& md) {
+            return md.serviceTypes().contains(QStringLiteral("KTextEditor/Plugin"))
+                && md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
+        });
+
+        qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
+
+        plugins.reserve(plugins.size() + ktePlugins.size());
+        for (const auto& info : ktePlugins) {
+            auto data = info.rawData();
+            // temporary workaround for Kate's ctags plugin being enabled by default
+            // see https://mail.kde.org/pipermail/kwrite-devel/2019-July/004821.html
+            if (info.pluginId() == QLatin1String("katectagsplugin")) {
+                auto kpluginData = data[KEY_KPlugin()].toObject();
+                kpluginData[KEY_EnabledByDefault()] = false;
+                data[KEY_KPlugin()] = kpluginData;
+            }
+            // add some KDevelop specific JSON data
+            data[KEY_Category()] = KEY_Global();
+            data[KEY_Mode()] = KEY_Gui();
+            data[KEY_Version()] = KDEVELOP_PLUGIN_VERSION;
+            plugins.append({data, info.fileName(), info.metaDataFileName()});
+        }
+    }
+
     Core* const core;
 };
 
@@ -295,10 +336,8 @@ PluginController::PluginController(Core *core)
 
     setObjectName(QStringLiteral("PluginController"));
 
-    QSet<QString> foundPlugins;
     auto newPlugins = KPluginLoader::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)), [&](const KPluginMetaData& meta) {
         if (meta.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"))) {
-            foundPlugins.insert(meta.pluginId());
             return true;
         } else {
             qCWarning(SHELL) << "Plugin" << meta.fileName() << "is installed into the kdevplatform plugin directory, but does not have"
@@ -307,7 +346,7 @@ PluginController::PluginController(Core *core)
         }
     });
 
-    qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << foundPlugins;
+    qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << pluginIds(newPlugins);
     if (newPlugins.isEmpty()) {
         qCWarning(SHELL) << "Did not find any plugins, check your environment.";
         qCWarning(SHELL) << "  Note: QT_PLUGIN_PATH is set to:" << qgetenv("QT_PLUGIN_PATH");
@@ -315,34 +354,7 @@ PluginController::PluginController(Core *core)
 
     d->plugins = newPlugins;
 
-    KTextEditorIntegration::initialize();
-    const QVector<KPluginMetaData> ktePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData & md) {
-        return md.serviceTypes().contains(QStringLiteral("KTextEditor/Plugin"))
-            && md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
-    });
-
-    foundPlugins.clear();
-    std::for_each(ktePlugins.cbegin(), ktePlugins.cend(), [&foundPlugins](const KPluginMetaData& data) {
-        foundPlugins << data.pluginId();
-    });
-    qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << foundPlugins;
-
-    d->plugins.reserve(d->plugins.size() + ktePlugins.size());
-    for (const auto& info : ktePlugins) {
-        auto data = info.rawData();
-        // temporary workaround for Kate's ctags plugin being enabled by default
-        // see https://mail.kde.org/pipermail/kwrite-devel/2019-July/004821.html
-        if (info.pluginId() == QLatin1String("katectagsplugin")) {
-            auto kpluginData = data[KEY_KPlugin()].toObject();
-            kpluginData[KEY_EnabledByDefault()] = false;
-            data[KEY_KPlugin()] = kpluginData;
-        }
-        // add some KDevelop specific JSON data
-        data[KEY_Category()] = KEY_Global();
-        data[KEY_Mode()] = KEY_Gui();
-        data[KEY_Version()] = KDEVELOP_PLUGIN_VERSION;
-        d->plugins.append({data, info.fileName(), info.metaDataFileName()});
-    }
+    d->initKTextEditorIntegration();
 
     d->cleanupMode = PluginControllerPrivate::Running;
     // Register the KDevelop::IPlugin* metatype so we can properly unload it
