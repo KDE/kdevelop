@@ -62,10 +62,10 @@ namespace QTest {
 template <>
 inline char* toString(const KDevelop::DocumentRange& documentRange)
 {
-    QByteArray ba = "DocumentRange[range=" +
-                    QByteArray(QTest::toString(*static_cast<const KTextEditor::Range*>(&documentRange)))
-                    + ", document=" + documentRange.document.toUrl().toDisplayString().toLatin1()
-                    + "]";
+    auto range = QTest::toString(*static_cast<const KTextEditor::Range*>(&documentRange));
+    QByteArray ba = "DocumentRange[range=" + QByteArray::fromRawData(range, strlen(range))
+        + ", document=" + documentRange.document.toUrl().toDisplayString().toLatin1() + "]";
+    delete[] range;
     return qstrdup(ba.data());
 }
 }
