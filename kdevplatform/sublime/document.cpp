@@ -87,8 +87,11 @@ View *Document::createView()
     Q_D(Document);
 
     View *view = newView(this);
-    connect(view, &View::destroyed,
-            this, [this] (QObject* obj) { Q_D(Document); d->removeView(static_cast<View*>(obj)); });
+    connect(view, &View::destroyed, this, [this, view](QObject* obj) {
+        Q_D(Document);
+        Q_ASSERT(obj == view);
+        d->removeView(view);
+    });
     d->views.append(view);
     return view;
 }
