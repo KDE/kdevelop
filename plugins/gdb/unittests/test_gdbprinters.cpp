@@ -145,24 +145,29 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("run");
     gdb.execute(QStringLiteral("break 'doStuff<%1>()'").arg(container).toLocal8Bit());
     gdb.execute("cont");
+
+    auto runToLine = [&](int line) {
+        gdb.execute("tbreak qlistcontainer.cpp:" + QByteArray::number(line));
+        gdb.execute("cont");
+    };
+
     { // <int>
-    gdb.execute("break qlistcontainer.cpp:34");
-    gdb.execute("cont");
-    QByteArray out = gdb.execute("print intList");
-    qWarning() << "FOO" << out;
-    QVERIFY(out.contains(QString("%1<int> (size = 0)").arg(container).toLocal8Bit()));
-    gdb.execute("next");
-    out = gdb.execute("print intList");
-    QVERIFY(out.contains(QString("%1<int> (size = 2)").arg(container).toLocal8Bit()));
-    if (container != QLatin1String("QSet")) {
-        QVERIFY(out.contains("[0] = 10"));
-        QVERIFY(out.contains("[1] = 20"));
-        QVERIFY(!out.contains("[2] = 30"));
-    } else { // QSet order is undefined
-        QVERIFY(out.contains("] = 10"));
-        QVERIFY(out.contains("] = 20"));
-        QVERIFY(!out.contains("] = 30"));
-    }
+        runToLine(34);
+        QByteArray out = gdb.execute("print intList");
+        qWarning() << "FOO" << out;
+        QVERIFY(out.contains(QString("%1<int> (size = 0)").arg(container).toLocal8Bit()));
+        gdb.execute("next");
+        out = gdb.execute("print intList");
+        QVERIFY(out.contains(QString("%1<int> (size = 2)").arg(container).toLocal8Bit()));
+        if (container != QLatin1String("QSet")) {
+            QVERIFY(out.contains("[0] = 10"));
+            QVERIFY(out.contains("[1] = 20"));
+            QVERIFY(!out.contains("[2] = 30"));
+        } else { // QSet order is undefined
+            QVERIFY(out.contains("] = 10"));
+            QVERIFY(out.contains("] = 20"));
+            QVERIFY(!out.contains("] = 30"));
+        }
     gdb.execute("next");
     out = gdb.execute("print intList");
     QVERIFY(out.contains(QString("%1<int> (size = 3)").arg(container).toLocal8Bit()));
@@ -177,21 +182,21 @@ void QtPrintersTest::testQListContainer()
     }
     }
     { // <QString>
-    gdb.execute("next");
-    QByteArray out = gdb.execute("print stringList");
-    QVERIFY(out.contains(QString("%1<QString> (size = 0)").arg(container).toLocal8Bit()));
-    gdb.execute("next");
-    out = gdb.execute("print stringList");
-    QVERIFY(out.contains(QString("%1<QString> (size = 2)").arg(container).toLocal8Bit()));
-    if (container != QLatin1String("QSet")) {
-        QVERIFY(out.contains("[0] = \"a\""));
-        QVERIFY(out.contains("[1] = \"bc\""));
-        QVERIFY(!out.contains("[2] = \"d\""));
-    } else { // QSet order is undefined
-        QVERIFY(out.contains("] = \"a\""));
-        QVERIFY(out.contains("] = \"bc\""));
-        QVERIFY(!out.contains("] = \"d\""));
-    }
+        runToLine(38);
+        QByteArray out = gdb.execute("print stringList");
+        QVERIFY(out.contains(QString("%1<QString> (size = 0)").arg(container).toLocal8Bit()));
+        gdb.execute("next");
+        out = gdb.execute("print stringList");
+        QVERIFY(out.contains(QString("%1<QString> (size = 2)").arg(container).toLocal8Bit()));
+        if (container != QLatin1String("QSet")) {
+            QVERIFY(out.contains("[0] = \"a\""));
+            QVERIFY(out.contains("[1] = \"bc\""));
+            QVERIFY(!out.contains("[2] = \"d\""));
+        } else { // QSet order is undefined
+            QVERIFY(out.contains("] = \"a\""));
+            QVERIFY(out.contains("] = \"bc\""));
+            QVERIFY(!out.contains("] = \"d\""));
+        }
     gdb.execute("next");
     out = gdb.execute("print stringList");
     QVERIFY(out.contains(QString("%1<QString> (size = 3)").arg(container).toLocal8Bit()));
@@ -206,54 +211,53 @@ void QtPrintersTest::testQListContainer()
     }
     }
     { // <struct A>
-    gdb.execute("next");
-    QByteArray out = gdb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A> (size = 0)").arg(container).toLocal8Bit()));
-    gdb.execute("next");
-    out = gdb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A> (size = 1)").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[0] = {"));
-    QVERIFY(out.contains("a = \"a\""));
-    QVERIFY(out.contains("b = \"b\""));
-    QVERIFY(out.contains("c = 100"));
-    QVERIFY(out.contains("d = -200"));
-    gdb.execute("next");
-    out = gdb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A> (size = 2)").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[1] = {"));
+        runToLine(42);
+        QByteArray out = gdb.execute("print structList");
+        QVERIFY(out.contains(QString("%1<A> (size = 0)").arg(container).toLocal8Bit()));
+        gdb.execute("next");
+        out = gdb.execute("print structList");
+        QVERIFY(out.contains(QString("%1<A> (size = 1)").arg(container).toLocal8Bit()));
+        QVERIFY(out.contains("[0] = {"));
+        QVERIFY(out.contains("a = \"a\""));
+        QVERIFY(out.contains("b = \"b\""));
+        QVERIFY(out.contains("c = 100"));
+        QVERIFY(out.contains("d = -200"));
+        gdb.execute("next");
+        out = gdb.execute("print structList");
+        QVERIFY(out.contains(QString("%1<A> (size = 2)").arg(container).toLocal8Bit()));
+        QVERIFY(out.contains("[1] = {"));
     }
     { // <int*>
-    gdb.execute("next");
-    QByteArray out = gdb.execute("print pointerList");
-    QVERIFY(out.contains(QString("%1<int *> (size = 0)").arg(container).toLocal8Bit()));
-    gdb.execute("next");
-    out = gdb.execute("print pointerList");
-    QVERIFY(out.contains(QString("%1<int *> (size = 2)").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[0] = 0x"));
-    QVERIFY(out.contains("[1] = 0x"));
-    QVERIFY(!out.contains("[2] = 0x"));
-    gdb.execute("next");
-    out = gdb.execute("print pointerList");
-    QVERIFY(out.contains(QString("%1<int *> (size = 3)").arg(container).toLocal8Bit()));
-    QVERIFY(out.contains("[0] = 0x"));
-    QVERIFY(out.contains("[1] = 0x"));
-    QVERIFY(out.contains("[2] = 0x"));
-	gdb.execute("next");
+        runToLine(46);
+        QByteArray out = gdb.execute("print pointerList");
+        QVERIFY(out.contains(QString("%1<int *> (size = 0)").arg(container).toLocal8Bit()));
+        gdb.execute("next");
+        out = gdb.execute("print pointerList");
+        QVERIFY(out.contains(QString("%1<int *> (size = 2)").arg(container).toLocal8Bit()));
+        QVERIFY(out.contains("[0] = 0x"));
+        QVERIFY(out.contains("[1] = 0x"));
+        QVERIFY(!out.contains("[2] = 0x"));
+        gdb.execute("next");
+        out = gdb.execute("print pointerList");
+        QVERIFY(out.contains(QString("%1<int *> (size = 3)").arg(container).toLocal8Bit()));
+        QVERIFY(out.contains("[0] = 0x"));
+        QVERIFY(out.contains("[1] = 0x"));
+        QVERIFY(out.contains("[2] = 0x"));
     }
     { // <QPair<int, int> >
-    gdb.execute("next");
-    QByteArray out = gdb.execute("print pairList");
-    QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 0)").arg(container).toLocal8Bit()));
-    gdb.execute("next");
-    out = gdb.execute("print pairList");
-    QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 2)").arg(container).toLocal8Bit()));
-    if (container != QLatin1String("QSet")) {
-        QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
-        QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
-    } else { // order is undefined in QSet
-        QVERIFY(out.contains("] = {\n    first = 1,\n    second = 2\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 2,\n    second = 3\n  }"));
-    }
+        runToLine(51);
+        QByteArray out = gdb.execute("print pairList");
+        QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 0)").arg(container).toLocal8Bit()));
+        gdb.execute("next");
+        out = gdb.execute("print pairList");
+        QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 2)").arg(container).toLocal8Bit()));
+        if (container != QLatin1String("QSet")) {
+            QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
+            QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
+        } else { // order is undefined in QSet
+            QVERIFY(out.contains("] = {\n    first = 1,\n    second = 2\n  }"));
+            QVERIFY(out.contains("] = {\n    first = 2,\n    second = 3\n  }"));
+        }
     QVERIFY(!out.contains("[2] = "));
     gdb.execute("next");
     out = gdb.execute("print pairList");
