@@ -44,7 +44,11 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     s.addExampleQuery(QStringLiteral("kdevelop :q:"));
     addSyntax(s);
 
+#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 76, 0)
+    addSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
+#else
     setDefaultSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
+#endif
 }
 
 KDevelopSessions::~KDevelopSessions()
