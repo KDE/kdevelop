@@ -51,8 +51,8 @@ private:
 /**
  * Runs the @p callback on all files that have @p projectItem as ancestor
  */
-KDEVPLATFORMPROJECT_EXPORT void forEachFiles(const ProjectBaseItem* projectItem,
-                                             const std::function<void(ProjectFileItem*)>& callback);
+KDEVPLATFORMPROJECT_EXPORT void forEachFile(const ProjectBaseItem* projectItem,
+                                            const std::function<void(ProjectFileItem*)>& callback);
 
 /**
  * Returns all the files that have @p projectItem as ancestor

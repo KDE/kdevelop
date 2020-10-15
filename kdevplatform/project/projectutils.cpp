@@ -46,7 +46,7 @@ QList<QUrl> ProjectItemContextImpl::urls() const
 /**
  * Runs the @p callback on all files that have @p projectItem as ancestor
  */
-void forEachFiles(const ProjectBaseItem* projectItem,
+void forEachFile(const ProjectBaseItem* projectItem,
                   const std::function<void(ProjectFileItem*)>& callback)
 {
     if (auto* file = projectItem->file()) {
@@ -56,14 +56,14 @@ void forEachFiles(const ProjectBaseItem* projectItem,
 
     const auto children = projectItem->children();
     for (const auto *child : children) {
-        forEachFiles(child, callback);
+        forEachFile(child, callback);
     }
 }
 
 QList<ProjectFileItem*> allFiles(const ProjectBaseItem* projectItem)
 {
     QList<ProjectFileItem*> files;
-    forEachFiles(projectItem, [&files](ProjectFileItem *fileItem) {
+    forEachFile(projectItem, [&files](ProjectFileItem *fileItem) {
         files.append(fileItem);
     });
     return files;

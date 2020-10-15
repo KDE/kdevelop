@@ -234,7 +234,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing(IProject* project)
 {
-    KDevelop::forEachFiles(project->projectItem(), [this](ProjectFileItem* file) {
+    KDevelop::forEachFile(project->projectItem(), [this](ProjectFileItem* file) {
         fileRemovedFromSet(file);
     });
 }
@@ -243,7 +243,7 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
 {
     const int processAfter = 1000;
     int processed = 0;
-    KDevelop::forEachFiles(project->projectItem(), [&](ProjectFileItem* file) {
+    KDevelop::forEachFile(project->projectItem(), [&](ProjectFileItem* file) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
