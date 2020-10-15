@@ -18,6 +18,7 @@ SpacesInCStyleCastParentheses: false
 SpaceAfterControlStatementKeyword: true
 SpaceBeforeAssignmentOperators: true
 ContinuationIndentWidth: 4
+SortIncludes: false
 # Only for newer clang-format versions
 #MacroBlockBegin: BEGINTESTFUNCIMPL
 #MacroBlockEnd: ENDTESTFUNCIMPL
