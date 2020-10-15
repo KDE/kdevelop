@@ -21,10 +21,13 @@
 
 #include <QQuickWidget>
 #include <QQuickItem>
+#include <QQmlContext>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QStandardPaths>
+
 #include <KLocalizedString>
+#include <KLocalizedContext>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KDeclarative/KDeclarative>
@@ -153,9 +156,9 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc,
 {
     //setup kdeclarative library
     KDeclarative::KDeclarative::setupEngine(view->engine());
-    KDeclarative::KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(view->engine());
-    kdeclarative.setupContext();
+    KLocalizedContext *localizedContextObject = new KLocalizedContext(view->engine());
+    localizedContextObject->setTranslationDomain(QStringLiteral("kdevqmljs"));
+    view->engine()->rootContext()->setContextObject(localizedContextObject);
 
     // Configure layout
     auto l = new QHBoxLayout;

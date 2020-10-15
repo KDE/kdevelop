@@ -22,6 +22,7 @@
 #include "sessionsmodel.h"
 
 #include <KDeclarative/KDeclarative>
+#include <KLocalizedContext>
 
 #include <QQmlContext>
 #include <QQmlComponent>
@@ -48,10 +49,9 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
 
     //setup kdeclarative library
     KDeclarative::KDeclarative::setupEngine(engine());
-    KDeclarative::KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(engine());
-    kdeclarative.setTranslationDomain(QStringLiteral("kdevwelcomepage"));
-    kdeclarative.setupContext();
+    KLocalizedContext *localizedContextObject = new KLocalizedContext(engine());
+    localizedContextObject->setTranslationDomain(QStringLiteral("kdevwelcomepage"));
+    engine()->rootContext()->setContextObject(localizedContextObject);
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 
