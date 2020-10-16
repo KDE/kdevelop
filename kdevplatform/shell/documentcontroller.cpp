@@ -572,6 +572,9 @@ DocumentController::DocumentController( QObject *parent )
 
 void DocumentController::initialize()
 {
+    Q_D(DocumentController);
+
+    d->shuttingDown = false; // required by test_documentcontroller
 }
 
 void DocumentController::cleanup()
