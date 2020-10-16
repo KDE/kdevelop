@@ -36,6 +36,7 @@
 #include "mi/micommand.h"
 
 #include <QMap>
+#include <QPointer>
 
 #include <memory>
 
@@ -138,6 +139,7 @@ public:
 public Q_SLOTS:
     void restartDebugger() override;
     void stopDebugger() override;
+    void killDebuggerNow() override;
     void interruptDebugger() override;
     void run() override;
     void runToCursor() override;
@@ -356,7 +358,10 @@ protected:
     // Map from GDB varobj name to MIVariable.
     QMap<QString, MIVariable*> m_allVariables;
 
-    MIDebuggerPlugin *m_plugin;
+    QPointer<MIDebuggerPlugin> m_plugin;
+
+private:
+    void killDebuggerImpl();
 };
 
 template<class Handler>

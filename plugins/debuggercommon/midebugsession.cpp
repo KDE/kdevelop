@@ -30,6 +30,7 @@
 
 #include "debuglog.h"
 #include "midebugger.h"
+#include "midebuggerplugin.h"
 #include "mivariable.h"
 #include "mi/mi.h"
 #include "mi/micommand.h"
@@ -62,10 +63,14 @@ using namespace KDevelop;
 using namespace KDevMI;
 using namespace KDevMI::MI;
 
+namespace {
+constexpr DBGStateFlags notStartedDebuggerFlags{s_dbgNotStarted | s_appNotStarted};
+}
+
 MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
-    , m_debuggerState(s_dbgNotStarted | s_appNotStarted)
+    , m_debuggerState{notStartedDebuggerFlags}
     , m_tty(nullptr)
     , m_plugin(plugin)
 {
@@ -483,8 +488,14 @@ void MIDebugSession::restartDebugger()
 void MIDebugSession::stopDebugger()
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
-        // we are force to stop even before debugger started, just reset
         qCDebug(DEBUGGERCOMMON) << "Stopping debugger when it's not started";
+        if (debuggerState() != notStartedDebuggerFlags) {
+            setDebuggerState(notStartedDebuggerFlags);
+        }
+        // Transition into EndedState to let DebugController destroy this session.
+        if (state() != EndedState) {
+            setSessionState(EndedState);
+        }
         return;
     }
 
@@ -519,13 +530,27 @@ void MIDebugSession::stopDebugger()
     QTimer::singleShot(5000, this, [this]() {
         if (!debuggerStateIsOn(s_programExited) && debuggerStateIsOn(s_shuttingDown)) {
             qCDebug(DEBUGGERCOMMON) << "debugger not shutdown - killing";
-            m_debugger->kill();
-            setDebuggerState(s_dbgNotStarted | s_appNotStarted);
-            raiseEvent(debugger_exited);
+            killDebuggerImpl();
         }
     });
 
     emit reset();
+}
+
+void MIDebugSession::killDebuggerNow()
+{
+    if (!debuggerStateIsOn(s_dbgNotStarted)) {
+        qCDebug(DEBUGGERCOMMON) << "killing debugger now";
+        killDebuggerImpl();
+    }
+}
+
+void MIDebugSession::killDebuggerImpl()
+{
+    Q_ASSERT(m_debugger);
+    m_debugger->kill();
+    setDebuggerState(notStartedDebuggerFlags);
+    raiseEvent(debugger_exited);
 }
 
 void MIDebugSession::interruptDebugger()

@@ -477,11 +477,18 @@ void KDevelop::BreakpointModel::updateMarks()
     if (d->dontUpdateMarks)
         return;
 
+    const auto* const documentController = ICore::self()->documentController();
+    if (!documentController) {
+        qCDebug(DEBUGGER) << "Cannot update marks without the document controller. "
+                             "KDevelop must be exiting and the document controller already destroyed.";
+        return;
+    }
+
     //add marks
     for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
         if (breakpoint->line() == -1) continue;
-        IDocument *doc = ICore::self()->documentController()->documentForUrl(breakpoint->url());
+        IDocument *doc = documentController->documentForUrl(breakpoint->url());
         if (!doc) continue;
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
@@ -502,7 +509,7 @@ void KDevelop::BreakpointModel::updateMarks()
     }
 
     //remove marks
-    const auto documents = ICore::self()->documentController()->openDocuments();
+    const auto documents = documentController->openDocuments();
     for (IDocument* doc : documents) {
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
@@ -574,7 +581,14 @@ void BreakpointModel::save()
 
     d->dirty = false;
 
-    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
+    auto* const activeSession = ICore::self()->activeSession();
+    if (!activeSession) {
+        qCDebug(DEBUGGER) << "Cannot save breakpoints because there is no active session. "
+                             "KDevelop must be exiting and already past SessionController::cleanup().";
+        return;
+    }
+
+    KConfigGroup breakpoints = activeSession->config()->group("Breakpoints");
     breakpoints.writeEntry("number", d->breakpoints.count());
     int i = 0;
     for (Breakpoint* b : qAsConst(d->breakpoints)) {
