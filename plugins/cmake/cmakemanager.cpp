@@ -347,22 +347,51 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 
 static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets)
 {
-    static QSet<QString> standardTargets = {
-        QStringLiteral("edit_cache"), QStringLiteral("rebuild_cache"),
-        QStringLiteral("list_install_components"),
-        QStringLiteral("test"), //not really standard, but applicable for make and ninja
-        QStringLiteral("install")
-
-    };
     auto isValidTarget = [](const CMakeTarget& target) -> bool {
-        return target.type != CMakeTarget::Custom ||
-              (!target.name.endsWith(QLatin1String("_automoc"))
-            && !target.name.endsWith(QLatin1String("_autogen"))
-            && !standardTargets.contains(target.name)
-            && !target.name.startsWith(QLatin1String("install/"))
-            // utility targets with empty sources are strange (e.g. _QCH) -> skip them
-            && !target.sources.isEmpty()
-              );
+        if (target.type != CMakeTarget::Custom)
+            return true;
+
+        // utility targets with empty sources are strange (e.g. _QCH) -> skip them
+        if (target.sources.isEmpty())
+            return false;
+
+        auto match
+            = [](const auto& needles, auto&& op) { return std::any_of(std::begin(needles), std::end(needles), op); };
+        auto startsWith = [&](const auto& needle) { return target.name.startsWith(needle); };
+        auto endsWith = [&](const auto& needle) { return target.name.endsWith(needle); };
+        auto equals = [&](const auto& needle) { return target.name == needle; };
+
+        const auto invalidPrefixes = { QLatin1String("install/") };
+        const auto invalidSuffixes
+            = { QLatin1String("_automoc"), QLatin1String("_autogen"), QLatin1String("_autogen_timestamp_deps") };
+        const auto standardTargets
+            = { QLatin1String("edit_cache"), QLatin1String("rebuild_cache"), QLatin1String("list_install_components"),
+                QLatin1String("test"), // not really standard, but applicable for make and ninja
+                QLatin1String("install") };
+        return !match(invalidPrefixes, startsWith) && !match(invalidSuffixes, endsWith)
+            && !match(standardTargets, equals);
+    };
+
+    auto isValidTargetSource = [](const Path& source) {
+        const auto& segments = source.segments();
+        const auto lastSegment = source.lastPathSegment();
+        // skip non-existent cmake internal rule files
+        if (lastSegment.endsWith(QLatin1String(".rule"))) {
+            return false;
+        }
+
+        const auto secondToLastSegment = segments.value(segments.size() - 2);
+        // ignore generated cmake-internal files
+        if (secondToLastSegment == QLatin1String("CMakeFiles")) {
+            return false;
+        }
+
+        // also skip *_autogen/timestamp files
+        if (lastSegment == QLatin1String("timestamp") && secondToLastSegment.endsWith(QLatin1String("_autogen"))) {
+            return false;
+        }
+
+        return true;
     };
 
     // start by deleting all targets, the type may have changed anyways
@@ -404,8 +433,7 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         }();
 
         for (const auto& source : target.sources) {
-            // skip non-existent cmake internal rule files
-            if (source.lastPathSegment().endsWith(QLatin1String(".rule"))) {
+            if (!isValidTargetSource(source)) {
                 continue;
             }
             new ProjectFileItem(folder->project(), source, targetItem);
