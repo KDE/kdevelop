@@ -476,7 +476,7 @@ void TestPath::testPathAddData_data()
                               << QStringLiteral("../foo/./bar")
                               << QStringLiteral("../../../../../../../invalid");
     for (const QString& path : paths) {
-        QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
+        QTest::addRow("%s", qPrintable(path)) << path;
     }
 }
 
@@ -568,28 +568,39 @@ void TestPath::testPathCd_data()
         QStringLiteral("http://foo.com/"), QStringLiteral("http://foo.com/foo"), QStringLiteral(
             "http://foo.com/foo/bar/asdf")
     };
-    for (const QString& base : bases) {
-        QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
-        QTest::newRow(qstrdup(qPrintable(base + "-.."))) << base << "..";
-        QTest::newRow(qstrdup(qPrintable(base + "-../"))) << base << "../";
-        QTest::newRow(qstrdup(qPrintable(base + "v../foo"))) << base << "../foo";
-        QTest::newRow(qstrdup(qPrintable(base + "-."))) << base << ".";
-        QTest::newRow(qstrdup(qPrintable(base + "-./"))) << base << "./";
-        QTest::newRow(qstrdup(qPrintable(base + "-./foo"))) << base << "./foo";
-        QTest::newRow(qstrdup(qPrintable(base + "-./foo/bar"))) << base << "./foo/bar";
-        QTest::newRow(qstrdup(qPrintable(base + "-foo/.."))) << base << "foo/..";
-        QTest::newRow(qstrdup(qPrintable(base + "-foo/"))) << base << "foo/";
-        QTest::newRow(qstrdup(qPrintable(base + "-foo/../bar"))) << base << "foo/../bar";
-#ifdef Q_OS_WIN
-        if (!base.startsWith("C:/")) {
-            // only add next rows for remote URLs on Windows
-#endif
-        QTest::newRow(qstrdup(qPrintable(base + "-/foo"))) << base << "/foo";
-        QTest::newRow(qstrdup(qPrintable(base + "-/foo/../bar"))) << base << "/foo/../bar";
-#ifdef Q_OS_WIN
-    }
 
+    const QVector<QString> suffixes {
+        QString(),
+        QStringLiteral(".."),
+        QStringLiteral("../"),
+        QStringLiteral("../foo"),
+        QStringLiteral("."),
+        QStringLiteral("./"),
+        QStringLiteral("./foo"),
+        QStringLiteral("./foo/bar"),
+        QStringLiteral("./foo/.."),
+        QStringLiteral("./foo/"),
+        QStringLiteral("./foo/../bar"),
+    };
+
+    const QVector<QString> extraSuffixes {
+        QStringLiteral("/foo"),
+        QStringLiteral("/foo/../bar"),
+    };
+
+    for (const QString& base : bases) {
+        for (const auto& suffix : suffixes) {
+            QTest::addRow("%s-%s", qPrintable(base), qPrintable(suffix)) << base << suffix;
+        }
+#ifdef Q_OS_WIN
+        // only add next rows for remote URLs on Windows
+        if (base.startsWith("C:/")) {
+            continue;
+        }
 #endif
+        for (const auto& suffix : extraSuffixes) {
+            QTest::addRow("%s-%s", qPrintable(base), qPrintable(suffix)) << base << suffix;
+        }
     }
 }
 
