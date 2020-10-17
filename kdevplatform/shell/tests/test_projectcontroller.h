@@ -25,6 +25,8 @@
 
 #include "util/path.h"
 
+#include <memory>
+
 class QSignalSpy;
 namespace KDevelop
 {
@@ -61,9 +63,9 @@ private Q_SLOTS:
 private:
     KDevelop::Path writeProjectConfig(const QString& name);
 
-    QSignalSpy* createOpenedSpy();
-    QSignalSpy* createClosedSpy();
-    QSignalSpy* createClosingSpy();
+    std::unique_ptr<QSignalSpy> createOpenedSpy();
+    std::unique_ptr<QSignalSpy> createClosedSpy();
+    std::unique_ptr<QSignalSpy> createClosingSpy();
 
     void assertProjectOpened(const QString& name, KDevelop::IProject*& proj);
     void assertSpyCaughtProject(QSignalSpy* spy, KDevelop::IProject* proj);
