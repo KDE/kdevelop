@@ -159,17 +159,6 @@ void DebugController::cleanup()
 
 DebugController::~DebugController()
 {
-    // The longest possible time interval has been allotted for previous and
-    // the current debug sessions to stop their debugger processes: stopDebugger()
-    // was called on the sessions in addSession() and cleanup() respectively.
-    // Now is the last safe moment for a DebugSession to finalize its state and
-    // invoke DebugController::debuggerStateChanged(), which in turn schedules the
-    // session's deletion. This finalization not only ensures that debug sessions
-    // are destroyed, but also prevents crashes: a DebugSession's state transition
-    // signals lead to accesses to DebugController and its children, such as a
-    // call to BreakpointModel::updateState(). Therefore we must force all debug
-    // sessions to synchronously finalize their states now.
-    emit killAllDebuggersNow();
 }
 
 BreakpointModel* DebugController::breakpointModel()
@@ -311,7 +300,6 @@ void DebugController::addSession(IDebugSession* session)
     connect(session, &IDebugSession::showStepInSource, this, &DebugController::showStepInSource);
     connect(session, &IDebugSession::clearExecutionPoint, this, &DebugController::clearExecutionPoint);
     connect(session, &IDebugSession::raiseFramestackViews, this, &DebugController::raiseFramestackViews);
-    connect(this, &DebugController::killAllDebuggersNow, session, &IDebugSession::killDebuggerNow);
 
     updateDebuggerState(session->state(), session);
 
@@ -331,14 +319,8 @@ void DebugController::addSession(IDebugSession* session)
 
 void DebugController::clearExecutionPoint()
 {
-    const auto* const documentController = KDevelop::ICore::self()->documentController();
-    if (!documentController) {
-        qCDebug(SHELL) << "Cannot clear execution point without the document controller. "
-                          "KDevelop must be exiting and the document controller already destroyed.";
-        return;
-    }
-
-    const auto documents = documentController->openDocuments();
+    qCDebug(SHELL);
+    const auto documents = KDevelop::ICore::self()->documentController()->openDocuments();
     for (KDevelop::IDocument* document : documents) {
         auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
         if (!iface)
