@@ -8,3 +8,4 @@ vptr:plugincontroller.cpp
 vptr:iplugin.cpp
 vptr:qobject.h
 vptr:kpluginfactory.h
+vptr:kpluginfactory.cpp
