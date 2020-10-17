@@ -139,6 +139,7 @@ public:
 public Q_SLOTS:
     void restartDebugger() override;
     void stopDebugger() override;
+    void killDebuggerNow() override;
     void interruptDebugger() override;
     void run() override;
     void runToCursor() override;
@@ -358,6 +359,9 @@ protected:
     QMap<QString, MIVariable*> m_allVariables;
 
     QPointer<MIDebuggerPlugin> m_plugin;
+
+private:
+    void killDebuggerImpl();
 };
 
 template<class Handler>
