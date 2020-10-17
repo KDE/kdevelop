@@ -90,7 +90,6 @@ public:
 public Q_SLOTS:
     void restartDebugger() override;
     void stopDebugger() override;
-    void killDebuggerNow() override;
     void interruptDebugger() override;
     void run() override;
     void runToCursor() override;

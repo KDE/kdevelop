@@ -105,11 +105,6 @@ void TestDebugSession::stopDebugger()
     m_sessionState = StoppedState;
 }
 
-void TestDebugSession::killDebuggerNow()
-{
-    m_sessionState = StoppedState;
-}
-
 void TestDebugSession::interruptDebugger()
 {
     m_sessionState = StoppedState;

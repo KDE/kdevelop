@@ -574,27 +574,13 @@ void MIDebugSession::stopDebugger()
     QTimer::singleShot(5000, this, [this]() {
         if (!debuggerStateIsOn(s_programExited) && debuggerStateIsOn(s_shuttingDown)) {
             qCDebug(DEBUGGERCOMMON) << "debugger not shutdown - killing";
-            killDebuggerImpl();
+            m_debugger->kill();
+            setDebuggerState(s_dbgNotStarted | s_appNotStarted);
+            raiseEvent(debugger_exited);
         }
     });
 
     emit reset();
-}
-
-void MIDebugSession::killDebuggerNow()
-{
-    if (!debuggerStateIsOn(s_dbgNotStarted)) {
-        qCDebug(DEBUGGERCOMMON) << "killing debugger now";
-        killDebuggerImpl();
-    }
-}
-
-void MIDebugSession::killDebuggerImpl()
-{
-    Q_ASSERT(m_debugger);
-    m_debugger->kill();
-    setDebuggerState(notStartedDebuggerFlags);
-    raiseEvent(debugger_exited);
 }
 
 void MIDebugSession::interruptDebugger()
