@@ -150,7 +150,11 @@ ProgressManager::ProgressManager()
 
 }
 
-ProgressManager::~ProgressManager() {}
+ProgressManager::~ProgressManager()
+{
+    for (auto* item : mTransactions)
+        delete item;
+}
 
 ProgressManager *ProgressManager::instance()
 {
