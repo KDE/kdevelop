@@ -52,6 +52,7 @@ public:
      * Constructs a status bar.
      */
     explicit StatusBar(QWidget* parent);
+    ~StatusBar() override;
 
     void registerStatus(QObject* status);
 

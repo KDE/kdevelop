@@ -71,6 +71,8 @@ StatusBar::StatusBar(QWidget* parent)
     addPermanentWidget(m_progressWidget, 0);
 }
 
+StatusBar::~StatusBar() = default;
+
 void StatusBar::removeError(QWidget* w)
 {
     removeWidget(w);
