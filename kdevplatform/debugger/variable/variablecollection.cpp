@@ -506,15 +506,13 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     if (m_textHintProvidedViews.contains(view)) {
         return;
     }
-    connect(view, &View::destroyed, this, &VariableCollection::viewDestroyed);
+    connect(view, &View::destroyed, this, [this, view](QObject* obj) {
+        Q_ASSERT(obj == view);
+        m_textHintProvidedViews.removeOne(view);
+    });
 
     iface->registerTextHintProvider(&m_textHintProvider);
     m_textHintProvidedViews.append(view);
-}
-
-void VariableCollection::viewDestroyed(QObject* obj)
-{
-    m_textHintProvidedViews.removeOne(static_cast<KTextEditor::View*>(obj));
 }
 
 Locals* VariableCollection::locals(const QString &name) const

@@ -238,7 +238,6 @@ private Q_SLOTS:
 
     void textDocumentCreated( KDevelop::IDocument*);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
-    void viewDestroyed(QObject* obj);
 
 private:
     VariablesRoot* m_universe;
