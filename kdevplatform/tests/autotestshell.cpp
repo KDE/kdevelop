@@ -32,5 +32,7 @@ void KDevelop::AutoTestShell::init(const QStringList& plugins)
 #endif
     qputenv("CLEAR_DUCHAIN_DIR", "1"); // Always clear duchain dir (also to avoid popups asking the user to clear it)
 
-    s_instance = new AutoTestShell(plugins);
+    static auto instance = AutoTestShell(plugins);
+    Q_ASSERT(instance.m_plugins == plugins);
+    s_instance = &instance;
 }
