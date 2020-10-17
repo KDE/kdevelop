@@ -515,7 +515,7 @@ QString SessionController::cloneSession( const QString& nameOrid )
     KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
     copyJob->exec();
 
-    auto* newSession = new Session(id.toString());
+    auto* newSession = new Session(id.toString(), this);
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
     d->addSession(newSession);
     updateXmlGuiActionList();
