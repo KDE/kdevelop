@@ -156,7 +156,7 @@ struct DocumentParsePlan
     TopDUContext::Features features() const
     {
         //Pick the best features
-        auto ret = ( TopDUContext::Features )0;
+        TopDUContext::Features ret{};
         for (const DocumentParseTarget& target : targets) {
             ret |= target.features;
         }

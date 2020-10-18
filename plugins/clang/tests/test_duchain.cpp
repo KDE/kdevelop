@@ -1080,8 +1080,8 @@ void TestDUChain::testReparseOnDocumentActivated()
     {
         DUChainReadLocker lock;
         auto ctx = file.topContext();
-        QCOMPARE(static_cast<int>(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses),
-                 static_cast<int>(TopDUContext::AllDeclarationsContextsAndUses));
+        QCOMPARE(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses,
+                 TopDUContext::AllDeclarationsContextsAndUses);
         QVERIFY(ctx->topContext()->ast());
     }
 }

@@ -274,7 +274,7 @@ bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeature
         const auto imports = this->imports();
         for (const ParsingEnvironmentFilePointer& import : imports) {
             if (!import->featuresMatch(minimumFeatures &
-                                       TopDUContext::Recursive ? minimumFeatures : (( TopDUContext::Features )0),
+                                       TopDUContext::Recursive ? minimumFeatures : TopDUContext::Features{},
                                        checked))
                 return false;
         }
