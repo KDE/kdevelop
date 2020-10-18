@@ -24,6 +24,8 @@
 #include <QIcon>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <kio_version.h>
 #include <KIO/StatJob>

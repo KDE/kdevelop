@@ -20,30 +20,25 @@
  */
 
 #include "referencecounting.h"
-#include <QMutex>
 #include <QMap>
 #include <QAtomicInt>
 #include "serialization/itemrepository.h"
 
 namespace KDevelop {
-thread_local bool doReferenceCounting = false;
 
-//Protects the reference-counting data through a spin-lock
-QMutex refCountingLock;
-
-QMap<void*, QPair<uint, uint>>* refCountingRanges = new QMap<void*, QPair<uint, uint>>();     //ptr, <size, count>, leaked intentionally!
-bool refCountingHasAdditionalRanges = false;   //Whether 'refCountingRanges' is non-empty
-
-//Speedup: In most cases there is only exactly one reference-counted range active,
-//so the first reference-counting range can be marked here.
-void* refCountingFirstRangeStart = nullptr;
-QPair<uint, uint> refCountingFirstRangeExtent = qMakePair(0u, 0u);
+DUChainReferenceCounting::DUChainReferenceCounting()
+    : doReferenceCounting{false}
+    , refCountingHasAdditionalRanges{false} //Whether 'refCountingRanges' is non-empty
+    , refCountingRanges{new QMap<void*, QPair<uint, uint>>} //ptr, <size, count>, leaked intentionally!
+    //Speedup: In most cases there is only exactly one reference-counted range active,
+    //so the first reference-counting range can be marked here.
+    , refCountingFirstRangeStart{nullptr}
+    , refCountingFirstRangeExtent{0u, 0u}
+{
 }
 
-void KDevelop::disableDUChainReferenceCounting(void* start)
+void DUChainReferenceCounting::disableDUChainReferenceCounting(void* start)
 {
-    QMutexLocker lock(&refCountingLock);
-
     if (refCountingFirstRangeStart &&
         reinterpret_cast<char*>(refCountingFirstRangeStart) <= reinterpret_cast<char*>(start) &&
         reinterpret_cast<char*>(start) < reinterpret_cast<char*>(refCountingFirstRangeStart) + refCountingFirstRangeExtent.first) {
@@ -77,10 +72,8 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
         doReferenceCounting = false;
 }
 
-void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
+void DUChainReferenceCounting::enableDUChainReferenceCounting(void* start, unsigned int size)
 {
-    QMutexLocker lock(&refCountingLock);
-
     doReferenceCounting = true;
 
     if (refCountingFirstRangeStart &&
@@ -136,6 +129,19 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
     Q_ASSERT(shouldDoDUChainReferenceCounting(start));
     Q_ASSERT(shouldDoDUChainReferenceCounting(reinterpret_cast<char*>(start) + (size - 1)));
 #endif
+}
+
+thread_local DUChainReferenceCounting duchainReferenceCounting;
+
+void enableDUChainReferenceCounting(void* start, unsigned int size)
+{
+    duchainReferenceCounting.enableDUChainReferenceCounting(start, size);
+}
+
+void disableDUChainReferenceCounting(void* start)
+{
+    duchainReferenceCounting.disableDUChainReferenceCounting(start);
+}
 }
 
 #ifdef TEST_REFERENCE_COUNTING

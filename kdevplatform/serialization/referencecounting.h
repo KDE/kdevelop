@@ -25,7 +25,6 @@
 
 #include <QMap>
 #include <QPair>
-#include <QMutexLocker>
 
 #include <utility>
 
@@ -36,18 +35,35 @@
 namespace KDevelop {
 ///Since shouldDoDUChainReferenceCounting is called extremely often, we export some internals into the header here,
 ///so the reference-counting code can be inlined.
+class KDEVPLATFORMSERIALIZATION_EXPORT DUChainReferenceCounting
+{
+    Q_DISABLE_COPY(DUChainReferenceCounting)
+public:
+    DUChainReferenceCounting();
+    bool shouldDoDUChainReferenceCounting(void* item) const;
+    void enableDUChainReferenceCounting(void* start, unsigned int size);
+    void disableDUChainReferenceCounting(void* start);
 
-KDEVPLATFORMSERIALIZATION_EXPORT extern thread_local bool doReferenceCounting;
-KDEVPLATFORMSERIALIZATION_EXPORT extern QMutex refCountingLock;
-KDEVPLATFORMSERIALIZATION_EXPORT extern QMap<void*, QPair<uint, uint>>* refCountingRanges;
-KDEVPLATFORMSERIALIZATION_EXPORT extern bool refCountingHasAdditionalRanges;
-KDEVPLATFORMSERIALIZATION_EXPORT extern void* refCountingFirstRangeStart;
-KDEVPLATFORMSERIALIZATION_EXPORT extern QPair<uint, uint> refCountingFirstRangeExtent;
+private:
+    bool shouldDoDUChainReferenceCountingInternal(void* item) const;
+
+    bool doReferenceCounting;
+    bool refCountingHasAdditionalRanges;
+    QMap<void*, QPair<uint, uint>>* const refCountingRanges;
+    void* refCountingFirstRangeStart;
+    QPair<uint, uint> refCountingFirstRangeExtent;
+};
+
+KDEVPLATFORMSERIALIZATION_EXPORT extern thread_local DUChainReferenceCounting duchainReferenceCounting;
 
 KDEVPLATFORMSERIALIZATION_EXPORT void initReferenceCounting();
 
-///@internal The spin-lock ,must already be locked
-inline bool shouldDoDUChainReferenceCountingInternal(void* item)
+inline bool shouldDoDUChainReferenceCounting(void* item)
+{
+    return duchainReferenceCounting.shouldDoDUChainReferenceCounting(item);
+}
+
+inline bool DUChainReferenceCounting::shouldDoDUChainReferenceCountingInternal(void* item) const
 {
     auto it = std::as_const(*refCountingRanges).upperBound(item);
     if (it != refCountingRanges->constBegin()) {
@@ -60,12 +76,10 @@ inline bool shouldDoDUChainReferenceCountingInternal(void* item)
 }
 
 ///This is used by indexed items to decide whether they should do reference-counting
-inline bool shouldDoDUChainReferenceCounting(void* item)
+inline bool DUChainReferenceCounting::shouldDoDUChainReferenceCounting(void* item) const
 {
     if (!doReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
         return false;
-
-    QMutexLocker lock(&refCountingLock);
 
     if (refCountingFirstRangeStart &&
         (reinterpret_cast<char*>(refCountingFirstRangeStart) <= reinterpret_cast<char*>(item)) &&

@@ -30,6 +30,8 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QRegularExpression>
 #include <QRegExp>
 

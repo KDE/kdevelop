@@ -20,6 +20,8 @@
 
 #include <QString>
 #include <QFileInfo>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <serialization/indexedstring.h>
 #include "modificationrevisionset.h"
