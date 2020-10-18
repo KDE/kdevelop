@@ -27,17 +27,13 @@
 #include <QPair>
 #include <QMutexLocker>
 
+#include <utility>
+
 //When this is enabled, the duchain unloading is disabled as well, and you should start
 //with a cleared ~/.kdevduchain
 // #define TEST_REFERENCE_COUNTING
 
 namespace KDevelop {
-template <typename T>
-const T* make_const(const T* argument)
-{
-    return argument;
-}
-
 ///Since shouldDoDUChainReferenceCounting is called extremely often, we export some internals into the header here,
 ///so the reference-counting code can be inlined.
 
@@ -53,7 +49,7 @@ KDEVPLATFORMSERIALIZATION_EXPORT void initReferenceCounting();
 ///@internal The spin-lock ,must already be locked
 inline bool shouldDoDUChainReferenceCountingInternal(void* item)
 {
-    auto it = make_const(refCountingRanges)->upperBound(item);
+    auto it = std::as_const(*refCountingRanges).upperBound(item);
     if (it != refCountingRanges->constBegin()) {
         --it;
         return reinterpret_cast<char*>(it.key()) <= reinterpret_cast<char*>(item) &&
