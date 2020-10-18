@@ -217,20 +217,16 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
         return; // we are only interested in top level items
     }
 
-    bool itemUsesBusyIndicator = item->usesBusyIndicator();
     item->deleteLater();
     item = nullptr;
 
     connectSingleItem(); // if going back to 1 item
     if ( ProgressManager::instance()->isEmpty() ) { // No item
-        // If completed item uses busy indicator and progress manager doesn't have any
-        // other items, then we should set it progress to 100% to indicate finishing.
-        // Without this fix we will show busy indicator for already finished item
-        // for next 5s.
-        if ( itemUsesBusyIndicator ) {
-            activateSingleItemMode( 100 );
-        }
-
+        // If the progress manager doesn't have other progress items, set the progress to 100%
+        // to indicate completion. Otherwise, if @p item uses a busy indicator, or had been running
+        // for less than a second and was preceded by a different item that uses a busy indicator,
+        // we could be showing a busy indicator for 5 seconds without any task in progress.
+        activateSingleItemMode( 100 );
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
         mCleanTimer->start();
     } else if ( mCurrentItem ) { // Exactly one item
@@ -240,12 +236,17 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
 
 void StatusbarProgressWidget::connectSingleItem()
 {
+    auto* const singleItem = ProgressManager::instance()->singleItem();
+    if ( singleItem == mCurrentItem ) {
+        return; // No need to waste time reconnecting the same signal/slot pair.
+    }
+
     if ( mCurrentItem ) {
         disconnect ( mCurrentItem, &ProgressItem::progressItemProgress,
                      this, &StatusbarProgressWidget::slotProgressItemProgress );
         mCurrentItem = nullptr;
     }
-    mCurrentItem = ProgressManager::instance()->singleItem();
+    mCurrentItem = singleItem;
     if ( mCurrentItem ) {
         connect ( mCurrentItem, &ProgressItem::progressItemProgress,
                   this, &StatusbarProgressWidget::slotProgressItemProgress );
