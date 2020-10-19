@@ -114,7 +114,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 
 //         session.reparseImporters(context);
 
-        if ( context && minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
+        if ( context && (minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses) ) {
             UseBuilder useBuilder(context);
             CMakeContentIterator it(package);
             useBuilder.startVisiting(&it);

@@ -156,7 +156,7 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
             return;
         }
 
-        if ( context && minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
+        if ( context && (minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses) ) {
             UseBuilder useBuilder(&session);
             useBuilder.buildUses(session.ast());
         }
