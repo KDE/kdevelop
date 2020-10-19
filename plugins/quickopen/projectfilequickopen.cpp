@@ -41,6 +41,8 @@
 
 #include "../openwith/iopenwith.h"
 
+#include <algorithm>
+#include <iterator>
 #include <utility>
 
 using namespace KDevelop;
@@ -307,17 +309,13 @@ void ProjectFileDataProvider::reset()
 {
     clearFilter();
 
-    QVector<ProjectFile> projectFiles = m_projectFiles;
-
+    QVector<ProjectFile> projectFiles;
+    projectFiles.reserve(m_projectFiles.size());
     const auto& open = openFiles();
-    for (QVector<ProjectFile>::iterator it = projectFiles.begin();
-         it != projectFiles.end(); ) {
-        if (open.contains(it->indexedPath)) {
-            it = projectFiles.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    std::remove_copy_if(m_projectFiles.cbegin(), m_projectFiles.cend(),
+                        std::back_inserter(projectFiles), [&open](const ProjectFile& f) {
+                                                              return open.contains(f.indexedPath);
+                                                          });
 
     setItems(projectFiles);
 }
