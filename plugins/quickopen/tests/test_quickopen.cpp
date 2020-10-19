@@ -26,6 +26,7 @@
 #include <QTemporaryFile>
 
 #include <type_traits>
+#include <utility>
 
 QTEST_MAIN(TestQuickOpen)
 
@@ -102,7 +103,7 @@ void TestQuickOpen::testAbbreviations()
     QFETCH(StringList, filtered);
 
     PathTestFilter filterItems;
-    filterItems.setItems(items);
+    filterItems.setItems(std::move(items));
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     filterItems.setFilter(filter.split('/', Qt::SkipEmptyParts));
 #else
@@ -140,7 +141,7 @@ void TestQuickOpen::testSorting()
     const auto filterList = filter.split('/', QString::SkipEmptyParts);
 #endif
     PathTestFilter filterItems;
-    filterItems.setItems(items);
+    filterItems.setItems(std::move(items));
     filterItems.setFilter(filterList);
     QEXPECT_FAIL("bar7", "empty parts are skipped", Abort);
     if (filterItems.filteredItems() != filtered)

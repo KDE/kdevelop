@@ -42,7 +42,6 @@
 #include "../openwith/iopenwith.h"
 
 #include <algorithm>
-#include <iterator>
 #include <utility>
 
 using namespace KDevelop;
@@ -307,15 +306,27 @@ void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
 
 void ProjectFileDataProvider::reset()
 {
-    QVector<ProjectFile> projectFiles;
-    projectFiles.reserve(m_projectFiles.size());
-    const auto& open = openFiles();
-    std::remove_copy_if(m_projectFiles.cbegin(), m_projectFiles.cend(),
-                        std::back_inserter(projectFiles), [&open](const ProjectFile& f) {
-                                                              return open.contains(f.indexedPath);
-                                                          });
+    updateItems([this](QVector<ProjectFile>& closedFiles) {
+        const auto open = openFiles();
+        // Don't "optimize" by assigning m_projectFiles to closedFiles and
+        // returning early if there are no open files. Such an optimization may
+        // speed up this call to reset() sometimes - if the destruction of the
+        // previous data of closedFiles doesn't take long for some reason. But
+        // this "optimization" will discard the current elements and capacity of
+        // closedFiles, eventually will trigger an extra allocation and
+        // construction of many ProjectFile objects: when a project is opened or
+        // closed, when a file is added to/removed from a project, or when a
+        // file is opened and reset() is called again. See also the
+        // documentation of PathFilter::updateItems().
 
-    setItems(projectFiles);
+        closedFiles.resize(m_projectFiles.size());
+        const auto logicalEnd = std::remove_copy_if(
+                m_projectFiles.cbegin(), m_projectFiles.cend(),
+                closedFiles.begin(), [&open](const ProjectFile& f) {
+                                         return open.contains(f.indexedPath);
+                                     });
+        closedFiles.erase(logicalEnd, closedFiles.end());
+    });
 }
 
 QSet<IndexedString> ProjectFileDataProvider::files() const
@@ -332,25 +343,23 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 
 void OpenFilesDataProvider::reset()
 {
-    IProjectController* projCtrl = ICore::self()->projectController();
-    IDocumentController* docCtrl = ICore::self()->documentController();
-    const QList<IDocument*>& docs = docCtrl->openDocuments();
+    updateItems([](QVector<ProjectFile>& currentFiles) {
+        const auto* const projCtrl = ICore::self()->projectController();
+        const auto docs = ICore::self()->documentController()->openDocuments();
 
-    QVector<ProjectFile> currentFiles;
-    currentFiles.reserve(docs.size());
-    for (IDocument* doc : docs) {
-        ProjectFile f;
-        const QUrl docUrl = doc->url();
-        f.path = Path(docUrl);
-        if (const IProject* project = projCtrl->findProjectForUrl(docUrl)) {
-            f.projectPath = project->path();
-        }
-        currentFiles.push_back(std::move(f));
-    }
-
-    std::sort(currentFiles.begin(), currentFiles.end());
-
-    setItems(currentFiles);
+        currentFiles.resize(docs.size());
+        std::transform(docs.cbegin(), docs.cend(), currentFiles.begin(),
+                       [projCtrl](const IDocument* doc) {
+                           ProjectFile f;
+                           const QUrl docUrl = doc->url();
+                           f.path = Path(docUrl);
+                           if (const IProject* project = projCtrl->findProjectForUrl(docUrl)) {
+                               f.projectPath = project->path();
+                           }
+                           return f;
+                       });
+        std::sort(currentFiles.begin(), currentFiles.end());
+    });
 }
 
 QSet<IndexedString> OpenFilesDataProvider::files() const
