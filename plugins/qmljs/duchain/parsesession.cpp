@@ -270,8 +270,7 @@ void ParseSession::reparseImporters()
 void ParseSession::scheduleForParsing(const IndexedString& url, int priority)
 {
     BackgroundParser* bgparser = KDevelop::ICore::self()->languageController()->backgroundParser();
-    auto features = (TopDUContext::Features)
-        (TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses);
+    const auto features = TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses;
 
     if (bgparser->isQueued(url)) {
         bgparser->removeDocument(url);

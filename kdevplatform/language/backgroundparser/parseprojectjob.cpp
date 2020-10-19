@@ -146,8 +146,8 @@ void ParseProjectJob::queueFilesToParse()
         if (processingLevel & TopDUContext::VisibleDeclarationsAndContexts) {
             processingLevel = TopDUContext::AllDeclarationsContextsAndUses;
         }
-        processingLevel = ( TopDUContext::Features )(TopDUContext::ForceUpdate | processingLevel);
-        openDocumentProcessingLevel = TopDUContext::Features(TopDUContext::ForceUpdate | openDocumentProcessingLevel);
+        processingLevel |= TopDUContext::ForceUpdate;
+        openDocumentProcessingLevel |= TopDUContext::ForceUpdate;
     }
 
     if (auto currentDocument = ICore::self()->documentController()->activeDocument()) {

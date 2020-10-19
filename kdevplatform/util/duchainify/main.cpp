@@ -88,7 +88,7 @@ void Manager::init()
         QCoreApplication::exit(1);
     }
 
-    uint features = TopDUContext::VisibleDeclarationsAndContexts;
+    TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts;
     if (m_args->isSet(QStringLiteral("features"))) {
         QString featuresStr = m_args->value(QStringLiteral("features"));
         if (featuresStr == QLatin1String("visible-declarations")) {
@@ -139,7 +139,7 @@ void Manager::init()
 
     const auto files = m_args->positionalArguments();
     for (const auto& file : files) {
-        addToBackgroundParser(file, ( TopDUContext::Features )features);
+        addToBackgroundParser(file, features);
     }
 
     m_allFilesAdded = 1;

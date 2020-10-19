@@ -234,11 +234,11 @@ struct InsertIntoDUChain
      * @param features The features that should be requested for the top-context
      * @param update Whether the top-context should be updated if it already exists. Else it will be deleted.
      */
-    void parse(uint features = TopDUContext::AllDeclarationsContextsAndUses, bool update = false)
+    void parse(TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses, bool update = false)
     {
         if (!update)
             release();
-        m_topContext = DUChain::self()->waitForUpdate(m_insertedCode.file(), ( TopDUContext::Features )features, false);
+        m_topContext = DUChain::self()->waitForUpdate(m_insertedCode.file(), features, false);
         Q_ASSERT(m_topContext);
         DUChainReadLocker lock;
         Q_ASSERT(!m_topContext->parsingEnvironmentFile()->isProxyContext());

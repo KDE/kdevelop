@@ -398,7 +398,7 @@ void TestDUChain::testReparse()
             file.setFileContents(QStringLiteral("int main()\n{\nfloat i = 13; return i - 5;\n}\n"));
         }
 
-        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+        file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive);
     }
 }
 
@@ -418,7 +418,7 @@ void TestDUChain::testReparseError()
             QCOMPARE(file.topContext()->problems().size(), 0);
         }
 
-        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+        file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive);
     }
 }
 
@@ -628,7 +628,7 @@ void TestDUChain::testReparseBaseClasses()
         QVERIFY(bDecl->isPublicBaseClass(aDecl, file.topContext(), &distance));
         QCOMPARE(distance, 1);
 
-        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+        file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive);
     }
 }
 
@@ -657,7 +657,7 @@ void TestDUChain::testReparseBaseClassesTemplates()
         QVERIFY(bDecl->isPublicBaseClass(aDecl, file.topContext(), &distance));
         QCOMPARE(distance, 1);
 
-        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+        file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive);
     }
 }
 
@@ -776,7 +776,7 @@ void TestDUChain::testParsingEnvironment()
     ClangParsingEnvironment lastEnv;
     {
         TestFile file(QStringLiteral("int main() {}\n"), QStringLiteral("cpp"));
-        auto astFeatures = static_cast<TopDUContext::Features>(features | TopDUContext::AST);
+        const auto astFeatures = features | TopDUContext::AST;
         file.parse(astFeatures);
         file.setKeepDUChainData(true);
         QVERIFY(file.waitForParsed());
@@ -875,7 +875,7 @@ void TestDUChain::testActiveDocumentHasASTAttached()
     ClangParsingEnvironment lastEnv;
     {
         TestFile file(QStringLiteral("int main() {}\n"), QStringLiteral("cpp"));
-        auto astFeatures = static_cast<TopDUContext::Features>(features | TopDUContext::AST);
+        const auto astFeatures = features | TopDUContext::AST;
         file.parse(astFeatures);
         file.setKeepDUChainData(true);
         QVERIFY(file.waitForParsed());
@@ -1080,7 +1080,8 @@ void TestDUChain::testReparseOnDocumentActivated()
     {
         DUChainReadLocker lock;
         auto ctx = file.topContext();
-        QCOMPARE(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses, static_cast<int>(TopDUContext::AllDeclarationsContextsAndUses));
+        QCOMPARE(static_cast<int>(ctx->features() & TopDUContext::AllDeclarationsContextsAndUses),
+                 static_cast<int>(TopDUContext::AllDeclarationsContextsAndUses));
         QVERIFY(ctx->topContext()->ast());
     }
 }
@@ -1092,7 +1093,7 @@ void TestDUChain::testReparseInclude()
                   "int main() { return foo(); }", QStringLiteral("cpp"), &header);
 
     // Use TopDUContext::AST to imitate that document is opened in the editor, so that ClangParseJob can store translation unit, that'll be used for reparsing.
-    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsAndContexts|TopDUContext::AST));
+    impl.parse(TopDUContext::AllDeclarationsAndContexts | TopDUContext::AST);
     QVERIFY(impl.waitForParsed(5000));
     {
         DUChainReadLocker lock;
@@ -1101,7 +1102,7 @@ void TestDUChain::testReparseInclude()
         QCOMPARE(implCtx->importedParentContexts().size(), 1);
     }
 
-    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    impl.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST);
     QVERIFY(impl.waitForParsed(5000));
 
     DUChainReadLocker lock;
@@ -1139,7 +1140,7 @@ void TestDUChain::testReparseChangeEnvironment()
     uint hashes[3] = {0, 0, 0};
 
     for (int i = 0; i < 3; ++i) {
-        impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+        impl.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
         QVERIFY(impl.waitForParsed(5000));
 
         {
@@ -1192,7 +1193,7 @@ void TestDUChain::testMacroDependentHeader()
                   "int bqm = bq.m;\n"
                   , QStringLiteral("cpp"), &header);
 
-    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    impl.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
     QVERIFY(impl.waitForParsed(500000));
 
     DUChainReadLocker lock;
@@ -1246,7 +1247,7 @@ void TestDUChain::testHeaderParsingOrder1()
                   "#include \"" + header.url().str() + "\"\n"
                   "B c;", QStringLiteral("cpp"), &header);
 
-    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    impl.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
     QVERIFY(impl.waitForParsed(500000));
 
     DUChainReadLocker lock;
@@ -1286,7 +1287,7 @@ void TestDUChain::testHeaderParsingOrder2()
                   "#include \"" + header2.url().str() + "\"\n"
                   "B c;", QStringLiteral("cpp"), &header);
 
-    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    impl.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
     QVERIFY(impl.waitForParsed(500000));
 
     DUChainReadLocker lock;
@@ -1441,7 +1442,7 @@ void TestDUChain::testEnvironmentWithDifferentOrderOfElements()
 
     uint previousHash = 0;
     for (int i: {0, 1, 2, 3}) {
-        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+        file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
 
         QVERIFY(file.waitForParsed(5000));
 
@@ -1487,7 +1488,7 @@ void TestDUChain::testEnvironmentWithDifferentOrderOfElements()
 void TestDUChain::testReparseMacro()
 {
     TestFile file(QStringLiteral("#define DECLARE(a) typedef struct a##_ {} *a;\nDECLARE(D);\nD d;"), QStringLiteral("cpp"));
-    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST);
     QVERIFY(file.waitForParsed(5000));
 
     {
@@ -1495,7 +1496,7 @@ void TestDUChain::testReparseMacro()
         QVERIFY(file.topContext());
     }
 
-    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
     QVERIFY(file.waitForParsed(5000));
 
     DUChainReadLocker lock;
@@ -1602,13 +1603,13 @@ void TestDUChain::testReparseIncludeGuard()
     TestFile header(QStringLiteral("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n"), QStringLiteral("h"));
     TestFile impl("#include \"" + header.url().str() + "\"\n", QStringLiteral("cpp"), &header);
 
-    QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  )));
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST));
     {
         DUChainReadLocker lock;
         QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
             importedParentContexts().first().context(impl.topContext()))->problems().size(), 0);
     }
-    QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive)));
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     {
         DUChainReadLocker lock;
         QCOMPARE(static_cast<TopDUContext*>(impl.topContext()->
@@ -1623,7 +1624,7 @@ void TestDUChain::testIncludeGuardHeaderHeaderOnly()
     // test that we do NOT get a warning for single standalone header file with include guards
     TestFile header(code, QStringLiteral("h"));
 
-    QVERIFY(header.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST)));
+    QVERIFY(header.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST));
     {
         DUChainReadLocker lock;
         QCOMPARE(header.topContext()->problems().size(), 0);
@@ -1653,7 +1654,7 @@ void TestDUChain::testIncludeGuardHeaderWarning()
     TestFile header(QStringLiteral("int something;\n"), QStringLiteral("h"));
     TestFile impl("#include \"" + header.url().str() + "\"\n", QStringLiteral("cpp"));
 
-    QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate)));
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate));
     {
         DUChainReadLocker lock;
         QVERIFY(impl.topContext());
@@ -1769,10 +1770,10 @@ void TestDUChain::testReparseUnchanged()
         QVERIFY(implCtx->problems().isEmpty());
     };
 
-    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  ));
+    impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST);
     checkProblems(false);
 
-    impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive);
     checkProblems(true);
 }
 
@@ -1803,7 +1804,7 @@ void TestDUChain::testDeclarationsInsideMacroExpansion()
     TestFile header(QStringLiteral("#define DECLARE(a) typedef struct a##__ {int var;} *a\nDECLARE(D);\n"), QStringLiteral("h"));
     TestFile file("#include \"" + header.url().str() + "\"\nint main(){\nD d; d->var;}\n", QStringLiteral("cpp"));
 
-    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST);
     QVERIFY(file.waitForParsed(5000));
 
     {
@@ -1811,7 +1812,7 @@ void TestDUChain::testDeclarationsInsideMacroExpansion()
         QVERIFY(file.topContext());
     }
 
-    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
     QVERIFY(file.waitForParsed(5000));
 
     DUChainReadLocker lock;

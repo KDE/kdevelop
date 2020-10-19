@@ -187,7 +187,8 @@ public:
         Identity = 4
     };
 
-    enum Features : quint16 {
+    using FeaturesUnderlyingType = quint16;
+    enum Features : FeaturesUnderlyingType {
         ///Top-context features standard that can be requested from the duchain, and that are stored in the features() member.
         Empty = 0, //Only the top-context structure (imports etc.) is built, but no declarations and no contexts
         SimplifiedVisibleDeclarationsAndContexts = 2, //The top-context should only contain publically simplified accessible declarations and contexts, without doing type look-up,
@@ -207,6 +208,13 @@ public:
         ///You can define own language-dependent features behind this flag
         LastFeature = 512
     };
+    friend Features operator~(Features f) { return static_cast<Features>(~static_cast<FeaturesUnderlyingType>(f)); }
+    friend Features operator|(Features a, Features b) { return static_cast<Features>(static_cast<FeaturesUnderlyingType>(a)
+                                                                                   | static_cast<FeaturesUnderlyingType>(b)); }
+    friend Features operator&(Features a, Features b) { return static_cast<Features>(static_cast<FeaturesUnderlyingType>(a)
+                                                                                   & static_cast<FeaturesUnderlyingType>(b)); }
+    friend Features& operator|=(Features& a, Features b) { return a = a | b; }
+    friend Features& operator&=(Features& a, Features b) { return a = a & b; }
 
     ///Returns the currently active features of this top-context. The features will include AST if ast() is valid.
     Features features() const;

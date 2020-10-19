@@ -209,7 +209,7 @@ TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
     const auto featuresIt = ::staticMinimumFeatures.constFind(url);
     if (featuresIt != ::staticMinimumFeatures.constEnd())
         for (const TopDUContext::Features f : *featuresIt)
-            features = ( TopDUContext::Features )(features | f);
+            features |= f;
 
     return features;
 }
@@ -218,7 +218,7 @@ TopDUContext::Features ParseJob::minimumFeatures() const
 {
     Q_D(const ParseJob);
 
-    return ( TopDUContext::Features )(d->features | staticMinimumFeatures(d->url));
+    return d->features | staticMinimumFeatures(d->url);
 }
 
 void ParseJob::setDuChain(const ReferencedTopDUContext& duChain)

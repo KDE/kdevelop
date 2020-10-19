@@ -604,19 +604,19 @@ void TopDUContext::deleteSelf()
 
 TopDUContext::Features TopDUContext::features() const
 {
-    uint ret = d_func()->m_features;
+    auto ret = d_func()->m_features;
 
     if (ast())
         ret |= TopDUContext::AST;
 
-    return ( TopDUContext::Features )ret;
+    return ret;
 }
 
 void TopDUContext::setFeatures(Features features)
 {
-    features = ( TopDUContext::Features )(features & (~Recursive)); //Remove the "Recursive" flag since that's only for searching
-    features = ( TopDUContext::Features )(features & (~ForceUpdateRecursive)); //Remove the update flags
-    features = ( TopDUContext::Features )(features & (~AST)); //Remove the AST flag, it's only used while updating
+    features &= ~Recursive; //Remove the "Recursive" flag since that's only for searching
+    features &= ~ForceUpdateRecursive; //Remove the update flags
+    features &= ~AST; //Remove the AST flag, it's only used while updating
     d_func_dynamic()->m_features = features;
 
     //Replicate features to ParsingEnvironmentFile

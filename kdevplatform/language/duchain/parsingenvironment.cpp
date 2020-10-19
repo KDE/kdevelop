@@ -260,12 +260,10 @@ bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeature
 
     checked.insert(this);
 
-    TopDUContext::Features localRequired =
-        ( TopDUContext::Features ) (minimumFeatures | ParseJob::staticMinimumFeatures(url()));
+    auto localRequired = minimumFeatures | ParseJob::staticMinimumFeatures(url());
 
     //Check other 'local' requirements
-    localRequired =
-        ( TopDUContext::Features )(localRequired & (TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST));
+    localRequired &= (TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST);
 
     if (!satisfied(features(), localRequired))
         return false;

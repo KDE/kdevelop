@@ -1659,13 +1659,8 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
         if (needsUpdate || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
             ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()),
-                                                                                 ( TopDUContext::Features )(TopDUContext
-                                                                                                            ::
-                                                                                                            AllDeclarationsContextsAndUses
-                                                                                                            |
-                                                                                                            TopDUContext
-                                                                                                            ::
-                                                                                                            ForceUpdate));
+                                                                                 TopDUContext::AllDeclarationsContextsAndUses
+                                                                                 | TopDUContext::ForceUpdate);
             return;
         }
     }
@@ -1686,10 +1681,8 @@ void DUChain::documentRenamed(KDevelop::IDocument* doc)
         qCWarning(LANGUAGE) << "Strange, url of renamed document is invalid!";
     } else {
         ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()),
-                                                                             ( TopDUContext::Features )(TopDUContext::
-                                                                                                        AllDeclarationsContextsAndUses
-                                                                                                        | TopDUContext::
-                                                                                                        ForceUpdate));
+                                                                             TopDUContext::AllDeclarationsContextsAndUses
+                                                                             | TopDUContext::ForceUpdate);
     }
 }
 

@@ -426,7 +426,7 @@ void TestProblems::testProblemsForIncludedFiles()
     TestFile header(QStringLiteral("#pragma once\n//TODO: header\n"), QStringLiteral("h"));
     TestFile file("#include \"" + header.url().str() + "\"\n//TODO: source\n", QStringLiteral("cpp"));
 
-    file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST | TopDUContext::ForceUpdate));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate);
     QVERIFY(file.waitForParsed(5000));
 
     {

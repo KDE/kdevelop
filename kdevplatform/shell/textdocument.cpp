@@ -326,7 +326,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(d->document.data(), &KTextEditor::Document::reloaded,
                 this, [] (KTextEditor::Document* document) {
             ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(document->url()),
-                    (TopDUContext::Features) ( TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate ),
+                    TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate,
                     BackgroundParser::BestPriority, nullptr);
         });
 

@@ -108,8 +108,7 @@ void ProblemReporterModel::forceFullUpdate()
         if (documents.size() == 1)
             updateType = TopDUContext::ForceUpdateRecursive;
         DUChain::self()->updateContextForUrl(
-            document,
-            (TopDUContext::Features)(updateType | TopDUContext::VisibleDeclarationsAndContexts));
+            document, updateType | TopDUContext::VisibleDeclarationsAndContexts);
     }
 }
 
