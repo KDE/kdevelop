@@ -307,8 +307,6 @@ void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
 
 void ProjectFileDataProvider::reset()
 {
-    clearFilter();
-
     QVector<ProjectFile> projectFiles;
     projectFiles.reserve(m_projectFiles.size());
     const auto& open = openFiles();
@@ -334,7 +332,6 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 
 void OpenFilesDataProvider::reset()
 {
-    clearFilter();
     IProjectController* projCtrl = ICore::self()->projectController();
     IDocumentController* docCtrl = ICore::self()->documentController();
     const QList<IDocument*>& docs = docCtrl->openDocuments();

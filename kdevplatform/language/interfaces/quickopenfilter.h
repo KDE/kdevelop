@@ -146,13 +146,6 @@ template <class Item, class Parent>
 class PathFilter
 {
 public:
-    ///Clears the filter, but not the data.
-    void clearFilter()
-    {
-        m_filtered = m_items;
-        m_oldFilterText.clear();
-    }
-
     ///Clears the filter and sets new data. The filter-text will be lost.
     void setItems(const QVector<Item>& data)
     {
@@ -221,6 +214,13 @@ public:
     }
 
 private:
+    ///Clears the filter, but not the data.
+    void clearFilter()
+    {
+        m_filtered = m_items;
+        m_oldFilterText.clear();
+    }
+
     QStringList m_oldFilterText;
     QVector<Item> m_filtered;
     QVector<Item> m_items;
