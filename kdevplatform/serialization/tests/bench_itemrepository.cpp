@@ -25,6 +25,7 @@
 #include <serialization/indexedstring.h>
 
 #include <algorithm>
+#include <random>
 #include <QTest>
 
 QTEST_GUILESS_MAIN(BenchItemRepository)
@@ -203,8 +204,7 @@ void BenchItemRepository::lookupKey()
     TestDataRepository repo("TestDataRepositoryLookupKey");
     const QVector<QString> data = generateData();
     QVector<uint> indices = insertData(data, repo);
-    srand(0);
-    std::random_shuffle(indices.begin(), indices.end());
+    std::shuffle(indices.begin(), indices.end(), std::default_random_engine(0));
     QBENCHMARK {
         for (uint index : qAsConst(indices)) {
             repo.itemFromIndex(index);
@@ -217,8 +217,7 @@ void BenchItemRepository::lookupValue()
     TestDataRepository repo("TestDataRepositoryLookupValue");
     const QVector<QString> data = generateData();
     QVector<uint> indices = insertData(data, repo);
-    srand(0);
-    std::random_shuffle(indices.begin(), indices.end());
+    std::shuffle(indices.begin(), indices.end(), std::default_random_engine(0));
     QBENCHMARK {
         for (const QString& item : data) {
             const QByteArray byteArray = item.toUtf8();
