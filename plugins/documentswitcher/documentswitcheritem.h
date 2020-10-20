@@ -16,58 +16,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERPLUGIN_H
-#define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERPLUGIN_H
 
-#include <interfaces/iplugin.h>
-#include <QVariant>
+#ifndef KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERITEM_H
+#define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERITEM_H
 
-namespace Sublime
-{
-    class MainWindow;
-}
+#include <QStandardItem>
 
 namespace KDevelop
 {
     class IDocument;
 }
 
-class DocumentSwitcherTreeView;
-
-class QStandardItemModel;
-class QModelIndex;
-class QAction;
-
-class DocumentSwitcherPlugin: public KDevelop::IPlugin {
-    Q_OBJECT
+/** Helper for list model items.
+ * Extracts icon and text from document.
+ */
+class DocumentSwitcherItem : public QStandardItem
+{
 public:
-    explicit DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
-    ~DocumentSwitcherPlugin() override;
-
-    void unload() override;
-public Q_SLOTS:
-    void itemActivated( const QModelIndex& );
-    void switchToClicked(const QModelIndex& );
-    void walkForward();
-    void walkBackward();
-    void documentOpened(KDevelop::IDocument *document);
-    void documentActivated(KDevelop::IDocument *document);
-    void documentClosed(KDevelop::IDocument *document);
-protected:
-    bool eventFilter( QObject*, QEvent* ) override;
-private:
-    void setViewGeometry(Sublime::MainWindow* window);
-    void enableActions();
-    void fillModel();
-    void walk(const int from, const int to);
-
-    // List of opened document sorted activation.
-    QList<KDevelop::IDocument *> documentLists;
-    DocumentSwitcherTreeView* view;
-    QStandardItemModel* model;
-    QAction* forwardAction;
-    QAction* backwardAction;
+    explicit DocumentSwitcherItem(KDevelop::IDocument *document);
+    ~DocumentSwitcherItem() override;
 };
 
-#endif
-
+#endif // KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERITEM_H

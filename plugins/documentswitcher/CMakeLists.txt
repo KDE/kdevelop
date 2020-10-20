@@ -3,6 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevdocumentswitcher\")
 ########### next target ###############
 
 set(kdevdocumentswitcher_PART_SRCS
+    documentswitcheritem.cpp
     documentswitcherplugin.cpp
     documentswitchertreeview.cpp
 )
