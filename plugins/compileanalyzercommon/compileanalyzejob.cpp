@@ -125,6 +125,7 @@ void CompileAnalyzeJob::start()
         QStringLiteral("make"),
         QStringLiteral("-j"),
         QString::number(m_parallelJobCount),
+        QStringLiteral("-k"), // keep-going
         QStringLiteral("-f"),
         m_makeFilePath,
     };
