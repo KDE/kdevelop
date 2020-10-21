@@ -6,7 +6,7 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
-if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
+if(BUILD_BENCHMARKS)
     ecm_add_test(bench_itemrepository.cpp LINK_LIBRARIES
         LINK_LIBRARIES Qt5::Test KDev::Serialization KDev::Tests)
     set_tests_properties(bench_itemrepository PROPERTIES TIMEOUT 30)

@@ -103,7 +103,7 @@ LINK_LIBRARIES
     KDevClangPrivate
 )
 
-if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
+if(BUILD_BENCHMARKS)
     ecm_add_test(bench_codecompletion.cpp
         TEST_NAME bench_codecompletion
         LINK_LIBRARIES

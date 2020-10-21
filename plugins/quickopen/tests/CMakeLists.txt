@@ -17,7 +17,7 @@ target_link_libraries(quickopentestbase PUBLIC
 
 ecm_add_test(test_quickopen.cpp LINK_LIBRARIES quickopentestbase)
 
-if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
+if(BUILD_BENCHMARKS)
     ecm_add_test(bench_quickopen.cpp LINK_LIBRARIES quickopentestbase)
     set_tests_properties(bench_quickopen PROPERTIES TIMEOUT 30)
 endif()
