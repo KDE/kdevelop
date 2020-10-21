@@ -96,11 +96,11 @@ void TestProblemStoreNode::testLabelNode()
     QString s1 = QStringLiteral("TEST1");
     QString s2 = QStringLiteral("TEST2");
 
-    auto *node = new LabelNode(nullptr, s1);
-    QCOMPARE(node->label(), s1);
+    auto node = LabelNode(nullptr, s1);
+    QCOMPARE(node.label(), s1);
 
-    node->setLabel(s2);
-    QCOMPARE(node->label(), s2);
+    node.setLabel(s2);
+    QCOMPARE(node.label(), s2);
 }
 
 void TestProblemStoreNode::testProblemNode()
