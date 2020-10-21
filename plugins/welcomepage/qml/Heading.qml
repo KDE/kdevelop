@@ -23,9 +23,11 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 Label {
-    Label { id: instance }
     property real scale: 1.4
 
     height: 2 * implicitHeight
-    font.pointSize: instance.font.pointSize * scale
+
+    Component.onCompleted: {
+        font.pointSize = font.pointSize * scale;
+    }
 }
