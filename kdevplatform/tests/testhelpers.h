@@ -31,6 +31,18 @@
 
 #include <QTest>
 
+#define QVERIFY_RETURN(statement, retval)                                                                              \
+    do {                                                                                                               \
+        if (!QTest::qVerify(static_cast<bool>(statement), #statement, "", __FILE__, __LINE__))                         \
+            return retval;                                                                                             \
+    } while (false)
+
+#define QCOMPARE_RETURN(actual, expected, retval)                                                                      \
+    do {                                                                                                               \
+        if (!QTest::qCompare(actual, expected, #actual, #expected, __FILE__, __LINE__))                                \
+            return retval;                                                                                             \
+    } while (false)
+
 namespace QTest {
 template<>
 inline char* toString(const KDevelop::CursorInRevision& c)

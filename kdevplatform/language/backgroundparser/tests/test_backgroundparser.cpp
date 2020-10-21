@@ -34,6 +34,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testlanguagecontroller.h>
+#include <tests/testhelpers.h>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -45,10 +46,6 @@
 #include "testparsejob.h"
 
 QTEST_MAIN(TestBackgroundparser)
-
-#define QVERIFY_RETURN(statement, retval) \
-    do { if (!QTest::qVerify((statement), # statement, "", __FILE__, __LINE__)) \
-             return retval; } while (0)
 
 using namespace KDevelop;
 
