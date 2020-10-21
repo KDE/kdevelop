@@ -147,31 +147,11 @@ void MIDebuggerPlugin::setupActions()
 
 void MIDebuggerPlugin::setupDBus()
 {
-    QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
-    const auto& registeredServiceNames = dbusInterface->registeredServiceNames().value();
-    for (const auto& service : registeredServiceNames) {
-        slotDBusOwnerChanged(service, QString(), QStringLiteral("n"));
-    }
-
-    connect(dbusInterface, &QDBusConnectionInterface::serviceOwnerChanged,
-            this, &MIDebuggerPlugin::slotDBusOwnerChanged);
-}
-
-void MIDebuggerPlugin::unload()
-{
-    unloadToolViews();
-}
-
-MIDebuggerPlugin::~MIDebuggerPlugin()
-{
-}
-
-void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QString& oldOwner, const QString& newOwner)
-{
-    if (oldOwner.isEmpty() && service.startsWith(QLatin1String("org.kde.drkonqi"))) {
-        if (m_drkonqis.contains(service)) {
+    auto serviceRegistered = [this](const QString& service) {
+        if (!service.startsWith(QLatin1String("org.kde.drkonqi")))
             return;
-        }
+        if (m_drkonqis.contains(service))
+            return;
         // New registration
         const QString name = i18n("KDevelop (%1) - %2", m_displayName, core()->activeSession()->name());
         auto drkonqiProxy = new DBusProxy(service, name, this);
@@ -182,7 +162,10 @@ void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QStrin
                 this, &MIDebuggerPlugin::slotDebugExternalProcess);
 
         drkonqiProxy->interface()->call(QStringLiteral("registerDebuggingApplication"), name, QCoreApplication::applicationPid());
-    } else if (newOwner.isEmpty() && service.startsWith(QLatin1String("org.kde.drkonqi"))) {
+    };
+    auto serviceUnregistered = [this](const QString& service) {
+        if (!service.startsWith(QLatin1String("org.kde.drkonqi")))
+            return;
         // Deregistration
         const auto proxyIt = m_drkonqis.find(service);
         if (proxyIt != m_drkonqis.end()) {
@@ -191,8 +174,24 @@ void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QStrin
             proxy->Invalidate();
             delete proxy;
         }
+    };
+
+    auto* dbusInterface = QDBusConnection::sessionBus().interface();
+    const auto& registeredServiceNames = dbusInterface->registeredServiceNames().value();
+    for (const auto& service : registeredServiceNames) {
+        serviceRegistered(service);
     }
+
+    connect(dbusInterface, &QDBusConnectionInterface::serviceRegistered, this, serviceRegistered);
+    connect(dbusInterface, &QDBusConnectionInterface::serviceUnregistered, this, serviceUnregistered);
 }
+
+void MIDebuggerPlugin::unload()
+{
+    unloadToolViews();
+}
+
+MIDebuggerPlugin::~MIDebuggerPlugin() { }
 
 void MIDebuggerPlugin::slotDebugExternalProcess(DBusProxy* proxy)
 {

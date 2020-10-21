@@ -94,8 +94,6 @@ protected Q_SLOTS:
     void slotAttachProcess();
 #endif
 
-    void slotDBusOwnerChanged(const QString& service, const QString& oldOwner, const QString& newOwner);
-
 protected:
     void setupActions();
     void setupDBus();
