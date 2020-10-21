@@ -25,6 +25,9 @@
 #include <QRandomGenerator>
 #endif
 
+#include <memory>
+#include <vector>
+
 #include "../foregroundlock.h"
 
 QTEST_MAIN(KDevelop::TestForegroundLock)
@@ -68,23 +71,23 @@ void TestForegroundLock::testTryLock_data()
 void TestForegroundLock::testTryLock()
 {
     QFETCH(int, numThreads);
-    QList<TryLockThread*> threads;
+    std::vector<std::unique_ptr<TryLockThread>> threads;
+    threads.reserve(numThreads);
     for (int i = 0; i < numThreads; ++i) {
-        threads << new TryLockThread;
+        threads.push_back(std::make_unique<TryLockThread>());
     }
 
     ForegroundLock lock(true);
 
-    for (TryLockThread* thread : qAsConst(threads)) {
+    for (auto& thread : threads) {
         thread->start();
     }
 
     lock.unlock();
 
     while (true) {
-        const bool running = std::any_of(threads.constBegin(), threads.constEnd(), [](TryLockThread* thread) {
-            return thread->isRunning();
-        });
+        const bool running
+            = std::any_of(threads.cbegin(), threads.cend(), [](const auto& thread) { return thread->isRunning(); });
 
         if (!running) {
             break;
