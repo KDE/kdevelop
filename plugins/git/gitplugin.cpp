@@ -78,7 +78,7 @@ QVariant runSynchronously(KDevelop::VcsJob* job)
 namespace
 {
 
-QDir dotGitDirectory(const QUrl& dirPath)
+QDir dotGitDirectory(const QUrl& dirPath, bool silent = false)
 {
     const QFileInfo finfo(dirPath.toLocalFile());
     QDir dir = finfo.isDir() ? QDir(finfo.filePath()): finfo.absoluteDir();
@@ -86,7 +86,7 @@ QDir dotGitDirectory(const QUrl& dirPath)
     const QString gitDir = QStringLiteral(".git");
     while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
 
-    if (dir.isRoot()) {
+    if (!silent && dir.isRoot()) {
         qCWarning(PLUGIN_GIT) << "couldn't find the git root for" << dirPath;
     }
 
@@ -286,7 +286,7 @@ QUrl GitPlugin::repositoryRoot(const QUrl& path)
 
 bool GitPlugin::isValidDirectory(const QUrl & dirPath)
 {
-    QDir dir=dotGitDirectory(dirPath);
+    QDir dir = dotGitDirectory(dirPath, true);
     QFile dotGitPotentialFile(dir.filePath(QStringLiteral(".git")));
     // if .git is a file, we may be in a git worktree
     QFileInfo dotGitPotentialFileInfo(dotGitPotentialFile);
