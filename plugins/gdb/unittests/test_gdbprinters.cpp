@@ -456,10 +456,31 @@ void QtPrintersTest::testQUuid()
 void QtPrintersTest::testQVariant()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qvariant"));
-    gdb.execute("break qvariant.cpp:5");
+
+    auto printNext = [&]() {
+        gdb.execute("next");
+        return gdb.execute("print v");
+    };
+
+    gdb.execute("break qvariant.cpp:13");
     gdb.execute("run");
-    QByteArray data = gdb.execute("print v");
-    QVERIFY(data.contains("QVariant(QString, \"KDevelop\")"));
+
+    QVERIFY(printNext().contains("QVariant(NULL)"));
+    QVERIFY(printNext().contains("QVariant(QString, \"KDevelop (QString)\")"));
+    QVERIFY(printNext().contains("QVariant(QByteArray, \"KDevelop (QByteArray)\" = {"));
+    QVERIFY(printNext().contains("QVariant(signed char, -8"));
+    QVERIFY(printNext().contains("QVariant(uchar, 8"));
+    QVERIFY(printNext().contains("QVariant(short, -16)"));
+    QVERIFY(printNext().contains("QVariant(ushort, 16)"));
+    QVERIFY(printNext().contains("QVariant(int, -32)"));
+    QVERIFY(printNext().contains("QVariant(uint, 32)"));
+    QVERIFY(printNext().contains("QVariant(qlonglong, -64)"));
+    QVERIFY(printNext().contains("QVariant(qulonglong, 64)"));
+    QVERIFY(printNext().contains("QVariant(bool, true)"));
+    QVERIFY(printNext().contains("QVariant(float, 4.5)"));
+    QVERIFY(printNext().contains("QVariant(double, 42.5)"));
+    QVERIFY(printNext().contains("QVariant(QObject*, 0x"));
+    QVERIFY(printNext().contains("QVariant(SomeCustomType, {\n  foo = 42\n})"));
 }
 
 void QtPrintersTest::testKTextEditorTypes()
