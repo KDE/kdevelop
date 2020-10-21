@@ -25,7 +25,7 @@
 
 #include <KAboutData>
 
-
+#include <tests/testhelpers.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -219,8 +219,7 @@ void TestProjectController::openProject()
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     QCOMPARE(m_projCtrl->projectCount(), 1);
-    IProject* proj;
-    assertProjectOpened(m_projName, proj);QVERIFY(proj);
+    auto* proj = assertProjectOpened(m_projName);
     assertSpyCaughtProject(spy.get(), proj);
     QCOMPARE(proj->projectFile(), m_projFilePath);
     QCOMPARE(proj->path(), Path(m_scratchDir.absolutePath()+'/'));
@@ -249,15 +248,14 @@ void TestProjectController::openCloseOpen()
 {
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    IProject* proj;
-    assertProjectOpened(m_projName, proj);
+    auto* proj = assertProjectOpened(m_projName);
     m_projCtrl->closeProject(proj);
     auto spy = createOpenedSpy();
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
     QCOMPARE(m_projCtrl->projectCount(), 1);
-    assertProjectOpened(m_projName, proj);
+    proj = assertProjectOpened(m_projName);
     assertSpyCaughtProject(spy.get(), proj);
 }
 
@@ -271,8 +269,7 @@ void TestProjectController::reopen()
     WAIT_FOR_OPEN_SIGNAL;
     QCOMPARE(m_projCtrl->projectCount(), 1);
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
-    IProject* proj;
-    assertProjectOpened(m_projName, proj);
+    auto* proj = assertProjectOpened(m_projName);
     assertSpyCaughtProject(spy.get(), proj);
 }
 
@@ -289,8 +286,7 @@ void TestProjectController::reopenWhileLoading()
     QSignalSpy signal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)));
     QVERIFY2(!signal.wait(100), "Received 2 projectOpened signals.");
     QCOMPARE(m_projCtrl->projectCount(), 1);
-    IProject* proj;
-    assertProjectOpened(m_projName, proj);
+    auto* proj = assertProjectOpened(m_projName);
     assertSpyCaughtProject(spy.get(), proj);
 }
 
@@ -305,9 +301,8 @@ void TestProjectController::openMultiple()
     WAIT_FOR_OPEN_SIGNAL;
 
     QCOMPARE(m_projCtrl->projectCount(), 2);
-    IProject *proj1, *proj2;
-    assertProjectOpened(m_projName, proj1);
-    assertProjectOpened(secondProj, proj2);
+    auto* proj1 = assertProjectOpened(m_projName);
+    auto* proj2 = assertProjectOpened(secondProj);
 
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
     QVERIFY(m_projCtrl->isProjectNameUsed(QStringLiteral("bar")));
@@ -368,8 +363,7 @@ void TestProjectController::emptyProject()
 
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    Project* proj;
-    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+    auto* proj = assertProjectOpened(m_projName);
 
     FakeFileManager* fileMng = createFileManager();
     Q_ASSERT(fileMng);
@@ -395,8 +389,7 @@ void TestProjectController::singleFile()
 
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    Project* proj;
-    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+    auto* proj = assertProjectOpened(m_projName);
 
     FakeFileManager* fileMng = createFileManager();
     proj->setManagerPlugin(fileMng);
@@ -425,8 +418,7 @@ void TestProjectController::singleDirectory()
 
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    Project* proj;
-    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+    auto* proj = assertProjectOpened(m_projName);
 
     Path folderPath = Path(m_projFolder, QStringLiteral("foobar/"));
     FakeFileManager* fileMng = createFileManager();
@@ -453,8 +445,7 @@ void TestProjectController::fileInSubdirectory()
 
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    Project* proj;
-    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+    auto* proj = assertProjectOpened(m_projName);
 
     Path folderPath = Path(m_projFolder, QStringLiteral("foobar/"));
     FakeFileManager* fileMng = createFileManager();
@@ -495,8 +486,7 @@ void TestProjectController::prettyFileName()
 
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    Project* proj;
-    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+    auto* proj = assertProjectOpened(m_projName);
 
     FakeFileManager* fileMng = createFileManager();
     proj->setManagerPlugin(fileMng);
@@ -523,10 +513,15 @@ Path TestProjectController::writeProjectConfig(const QString& name)
 
 ////////////////// Custom assertions /////////////////////////////////////////
 
-void TestProjectController::assertProjectOpened(const QString& name, IProject*& proj)
+KDevelop::Project* TestProjectController::assertProjectOpened(const QString& name)
 {
-    QVERIFY(proj = m_projCtrl->findProjectByName(name));
-    QVERIFY(m_projCtrl->projects().contains(proj));
+    auto* projRaw = m_projCtrl->findProjectByName(name);
+    QVERIFY_RETURN(projRaw, nullptr);
+    QVERIFY_RETURN(m_projCtrl->projects().contains(projRaw), nullptr);
+
+    auto proj = dynamic_cast<KDevelop::Project*>(projRaw);
+    QVERIFY_RETURN(projRaw, nullptr);
+    return proj;
 }
 
 void TestProjectController::assertSpyCaughtProject(QSignalSpy* spy, IProject* proj)

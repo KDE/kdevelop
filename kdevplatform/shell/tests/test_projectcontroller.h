@@ -32,6 +32,7 @@ namespace KDevelop
 {
 class Core;
 class IProject;
+class Project;
 class ProjectController;
 }
 
@@ -67,7 +68,7 @@ private:
     std::unique_ptr<QSignalSpy> createClosedSpy();
     std::unique_ptr<QSignalSpy> createClosingSpy();
 
-    void assertProjectOpened(const QString& name, KDevelop::IProject*& proj);
+    KDevelop::Project* assertProjectOpened(const QString& name);
     void assertSpyCaughtProject(QSignalSpy* spy, KDevelop::IProject* proj);
     void assertProjectClosed(KDevelop::IProject* proj);
     void assertEmptyProjectModel();
