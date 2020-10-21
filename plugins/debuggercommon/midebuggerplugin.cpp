@@ -167,10 +167,7 @@ void MIDebuggerPlugin::setupDBus()
         if (!service.startsWith(QLatin1String("org.kde.drkonqi")))
             return;
         // Deregistration
-        const auto proxyIt = m_drkonqis.find(service);
-        if (proxyIt != m_drkonqis.end()) {
-            auto proxy = *proxyIt;
-            m_drkonqis.erase(proxyIt);
+        if (auto* proxy = m_drkonqis.take(service)) {
             proxy->Invalidate();
             delete proxy;
         }
