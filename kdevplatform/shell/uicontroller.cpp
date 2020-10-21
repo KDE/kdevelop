@@ -234,7 +234,12 @@ UiController::UiController(Core *core)
     setupActions();
 }
 
-UiController::~UiController() = default;
+UiController::~UiController()
+{
+    // disconnect early to prevent UB due to accessing partially destroyed UiController
+    // in the focusChanged handler above
+    disconnect(qApp, nullptr, this, nullptr);
+}
 
 void UiController::setupActions()
 {
