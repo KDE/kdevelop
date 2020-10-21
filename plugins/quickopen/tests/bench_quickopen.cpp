@@ -22,6 +22,8 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
 
 #include <QIcon>
 #include <QTest>
@@ -30,8 +32,17 @@ QTEST_MAIN(BenchQuickOpen)
 
 using namespace KDevelop;
 
+namespace
+{
+void openAnyDocument(IProject* project)
+{
+    const auto url = project->fileSet().begin()->toUrl();
+    QVERIFY(ICore::self()->documentController()->openDocument(url));
+}
+}
+
 BenchQuickOpen::BenchQuickOpen(QObject* parent)
-    : QuickOpenTestBase(Core::NoUi, parent)
+    : QuickOpenTestBase(Core::Default, parent)
 {
 }
 
@@ -88,6 +99,8 @@ void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects()
     QScopedPointer<TestProject> projectB(getProjectWithFiles(files, Path(dir.filePath("b_project_dir/"))));
     QScopedPointer<TestProject> projectC(getProjectWithFiles(files, Path(dir.filePath("c_project_dir/"))));
 
+    openAnyDocument(projectA.data());
+
     QBENCHMARK {
         projectController->addProject(projectA.data());
         projectController->addProject(projectB.data());
@@ -114,6 +127,8 @@ void BenchQuickOpen::benchProjectFileFilter_reset()
     provider.setFilterText(filter);
 
     projectController->addProject(project);
+    openAnyDocument(project);
+
     QBENCHMARK {
         provider.reset();
     }
