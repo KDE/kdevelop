@@ -72,6 +72,10 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
     // Warning as error may cause problem to the clang parser.
     const auto asError = QByteArrayLiteral("-Werror=");
     const auto documentation = QByteArrayLiteral("-Wdocumentation");
+    // Silence common warning that arises when we parse as a GCC-lookalike.
+    // Note how clang warns us about emulating GCC, which is exactly what we want here.
+    const auto noGnuZeroVaridicMacroArguments = QByteArrayLiteral("-Wno-gnu-zero-variadic-macro-arguments");
+    bool noGnuZeroVaridicMacroArgumentsFound = false;
     for (auto& argument : arguments) {
         if (argument == "-Werror") {
             argument.clear();
@@ -80,12 +84,18 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
             argument.remove(2, asError.length() - 2);
         }
 #if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
-        if (argument == documentation) {
+        else if (argument == documentation) {
             argument.clear();
         }
 #endif
+        else if (!noGnuZeroVaridicMacroArgumentsFound && argument == noGnuZeroVaridicMacroArguments) {
+            noGnuZeroVaridicMacroArgumentsFound = true;
+        }
     }
 
+    if (!noGnuZeroVaridicMacroArgumentsFound) {
+        arguments.append(noGnuZeroVaridicMacroArguments);
+    }
 }
 
 QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Options options, const ParserSettings& parserSettings)
