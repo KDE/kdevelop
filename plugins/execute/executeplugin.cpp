@@ -55,6 +55,7 @@ QString ExecutePlugin::userIdToRunEntry = QStringLiteral("User Id to Run");
 QString ExecutePlugin::dependencyActionEntry = QStringLiteral("Dependency Action");
 QString ExecutePlugin::projectTargetEntry = QStringLiteral("Project Target");
 QString ExecutePlugin::killBeforeExecutingAgain = QStringLiteral("Kill Before Executing Again");
+QString ExecutePlugin::configuredByCTest = QStringLiteral("ConfiguredByCTest");
 
 using namespace KDevelop;
 

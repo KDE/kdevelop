@@ -22,6 +22,8 @@
 
 #include <outputview/outputexecutejob.h>
 
+#include <QMessageBox>
+
 namespace KDevelop
 {
 class ILaunchConfiguration;
@@ -36,11 +38,16 @@ public:
 
     void start() override;
 
+    // Actions for what to do when a job is already running
+    static constexpr auto startAnother = QMessageBox::Yes;
+    static constexpr auto killAllInstances = QMessageBox::No;
+    static constexpr auto askIfRunning = QMessageBox::Cancel;
+
 Q_SIGNALS:
     void killBeforeExecutingAgainChanged(int killBeforeExecutingAgainChanged);
 private:
     QString m_name;
-    int m_killBeforeExecutingAgain = -1;
+    int m_killBeforeExecutingAgain = startAnother;
 };
 
 #endif

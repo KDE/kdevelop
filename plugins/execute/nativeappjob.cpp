@@ -53,7 +53,9 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
             m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section(QLatin1Char('/'), -1);
         }
-        m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel);
+        if (!cfgGroup.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
+            m_killBeforeExecutingAgain = cfgGroup.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, askIfRunning);
+        }
     }
     setCapabilities(Killable);
 
@@ -147,29 +149,29 @@ void NativeAppJob::start()
     }
 
     if (!currentJobs.isEmpty()) {
-        int killAllInstances = m_killBeforeExecutingAgain;
-        if (killAllInstances == QMessageBox::Cancel) {
+        int oldJobAction = m_killBeforeExecutingAgain;
+        if (oldJobAction == askIfRunning) {
             QMessageBox msgBox(QMessageBox::Question,
                         i18nc("@title:window", "Job Already Running"),
                         i18n("'%1' is already being executed.", m_name),
-                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-            msgBox.button(QMessageBox::No)->setText(i18nc("@action:button", "Kill All Instances"));
-            msgBox.button(QMessageBox::Yes)->setText(i18nc("@action:button", "Start Another"));
+                        startAnother | killAllInstances | QMessageBox::Cancel /* aka askIfRunning */);
+            msgBox.button(killAllInstances)->setText(i18nc("@action:button", "Kill All Instances"));
+            msgBox.button(startAnother)->setText(i18nc("@action:button", "Start Another"));
             msgBox.setDefaultButton(QMessageBox::Cancel);
 
             QCheckBox* remember = new QCheckBox(i18nc("@option:check", "Remember choice"));
             msgBox.setCheckBox(remember);
 
-            killAllInstances = msgBox.exec();
-            if (remember->isChecked() && killAllInstances != QMessageBox::Cancel) {
-                Q_EMIT killBeforeExecutingAgainChanged(killAllInstances);
+            oldJobAction = msgBox.exec();
+            if (remember->isChecked() && oldJobAction != QMessageBox::Cancel) {
+                Q_EMIT killBeforeExecutingAgainChanged(oldJobAction);
             }
         }
 
-        switch (killAllInstances) {
-            case QMessageBox::Yes: // simply start another job
+        switch (oldJobAction) {
+            case startAnother:
                 break;
-            case QMessageBox::No: // kill the running instance
+            case killAllInstances:
                 for (auto & job : currentJobs) {
                     if (job)
                         job->kill(EmitResult);

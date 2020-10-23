@@ -40,7 +40,6 @@
 
 #include <QIcon>
 #include <QMenu>
-#include <QMessageBox>
 
 #include <KConfigGroup>
 #include <KLineEdit>
@@ -96,7 +95,12 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
 
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
 
-    killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData( cfg.readEntry<int>( ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel ) ));
+    if (cfg.readEntry<bool>(ExecutePlugin::configuredByCTest, false)) {
+        killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData(NativeAppJob::startAnother));
+        killBeforeStartingAgain->setDisabled(true);
+    } else {
+        killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData(cfg.readEntry<int>(ExecutePlugin::killBeforeExecutingAgain, NativeAppJob::askIfRunning)));
+    }
 }
 
 NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
@@ -109,9 +113,9 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(2, QStringLiteral("Install"));
     dependencyAction->setItemData(3, QStringLiteral("SudoInstall"));
 
-    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Ask If Running"), QMessageBox::Cancel);
-    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Kill All Instances"), QMessageBox::No);
-    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Start Another"), QMessageBox::Yes);
+    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Ask If Running"), NativeAppJob::askIfRunning);
+    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Kill All Instances"), NativeAppJob::killAllInstances);
+    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Start Another"), NativeAppJob::startAnother);
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
