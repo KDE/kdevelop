@@ -56,7 +56,7 @@ QString inlineYaml(const Job::Parameters& parameters)
 QStringList commandLineArgs(const Job::Parameters& parameters)
 {
     QStringList args{
-        parameters.executablePath,
+        QLatin1Char('\"') + parameters.executablePath + QLatin1Char('\"'),
         QLatin1String("-p=\"") + parameters.buildDir + QLatin1Char('\"'),
         // don't add statistics we are not interested in to parse anyway
         QStringLiteral("-quiet"),
