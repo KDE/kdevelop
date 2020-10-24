@@ -110,7 +110,7 @@ void CompileAnalyzeJob::generateMakefile()
 
     scriptStream << QLatin1String("\t@echo '") << m_toolDisplayName << QLatin1String(" check started  for $@'\n");
     // Wrap filename ($@) with quotas to handle "whitespaced" file names.
-    scriptStream << QLatin1String("\t$(COMMAND) '$@'\n");
+    scriptStream << QLatin1String("\t$(COMMAND) \"$@\"\n");
     scriptStream << QLatin1String("\t@echo '") << m_toolDisplayName << QLatin1String(" check finished for $@'\n");
 
     makefile.close();
