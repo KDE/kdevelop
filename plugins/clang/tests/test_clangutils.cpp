@@ -65,12 +65,15 @@ CXSourceRange toCXRange(CXTranslationUnit unit, const DocumentRange& range)
     return clang_getRange(begin, end);
 }
 
-void parse(const QByteArray& code, CXTranslationUnit* unit, QString* fileName = nullptr)
-{
-    Q_ASSERT(unit);
+struct DisposeTranslationUnit {
+    void operator()(CXTranslationUnit unit) { clang_disposeTranslationUnit(unit); }
+};
+using TranslationUnit = std::unique_ptr<CXTranslationUnitImpl, DisposeTranslationUnit>;
 
+TranslationUnit parse(const QByteArray& code, QString* fileName = nullptr)
+{
     QTemporaryFile tempFile;
-    QVERIFY(tempFile.open());
+    QVERIFY_RETURN(tempFile.open(), {});
     tempFile.write(code);
     tempFile.flush();
 
@@ -80,30 +83,26 @@ void parse(const QByteArray& code, CXTranslationUnit* unit, QString* fileName = 
 
     std::unique_ptr<void, void(*)(CXIndex)> index(clang_createIndex(1, 1), clang_disposeIndex);
     const QVector<const char*> args = {"-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
-    *unit = clang_parseTranslationUnit(
-        index.get(), qPrintable(tempFile.fileName()),
-        args.data(), args.size(),
-        nullptr, 0,
-        CXTranslationUnit_None
-    );
-    QVERIFY(*unit);
+    auto unit = TranslationUnit(clang_parseTranslationUnit(index.get(), qPrintable(tempFile.fileName()), args.data(),
+                                                           args.size(), nullptr, 0, CXTranslationUnit_None));
+    QVERIFY_RETURN(unit, {});
+    return unit;
 }
 
-template<typename Visitor>
-void runVisitor(const QByteArray& code, Visitor& visitor)
+TranslationUnit runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData data)
 {
-    runVisitor(code, &Visitor::visit, &visitor);
+    auto unit = parse(code);
+    const auto startCursor = clang_getTranslationUnitCursor(unit.get());
+    QVERIFY_RETURN(!clang_Cursor_isNull(startCursor), {});
+    QVERIFY_RETURN(clang_visitChildren(startCursor, visitor, data) == 0, {});
+    return unit;
 }
 
-void runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData data)
+template <typename Visitor>
+TranslationUnit runVisitor(const QByteArray& code, Visitor& visitor)
 {
-    CXTranslationUnit unit;
-    parse(code, &unit);
-    const auto startCursor = clang_getTranslationUnitCursor(unit);
-    QVERIFY(!clang_Cursor_isNull(startCursor));
-    QVERIFY(clang_visitChildren(startCursor, visitor, data) == 0);
+    return runVisitor(code, &Visitor::visit, &visitor);
 }
-
 }
 
 void TestClangUtils::initTestCase()
@@ -125,7 +124,7 @@ void TestClangUtils::testGetScope()
     QFETCH(QString, expectedScope);
 
     CursorCollectorVisitor visitor;
-    runVisitor(code, visitor);
+    auto unit = runVisitor(code, visitor);
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
     clangDebug() << "Found decl:" << clang_getCursorSpelling(cursor) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
@@ -174,7 +173,7 @@ void TestClangUtils::testTemplateArgumentTypes()
     QFETCH(QStringList, expectedTypes);
 
     CursorCollectorVisitor visitor;
-    runVisitor(code, visitor);
+    auto unit = runVisitor(code, visitor);
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
     const QStringList types = ClangUtils::templateArgumentTypes(cursor);
@@ -230,13 +229,12 @@ void TestClangUtils::testGetRawContents()
     QFETCH(KTextEditor::Range, range);
     QFETCH(QString, expectedContents);
 
-    CXTranslationUnit unit;
     QString fileName;
-    parse(code, &unit, &fileName);
+    auto unit = parse(code, &fileName);
 
     DocumentRange documentRange{IndexedString(fileName), range};
-    auto cxRange = toCXRange(unit, documentRange);
-    const QString contents = ClangUtils::getRawContents(unit, cxRange);
+    auto cxRange = toCXRange(unit.get(), documentRange);
+    const QString contents = ClangUtils::getRawContents(unit.get(), cxRange);
     QCOMPARE(contents, expectedContents);
 }
 
