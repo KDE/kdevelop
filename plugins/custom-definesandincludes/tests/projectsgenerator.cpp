@@ -41,10 +41,10 @@ namespace
 /// @param projectFile projectName.kdev4 file
 IProject* loadProject( const QString& projectFile, const QString& projectName )
 {
-    auto* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)) );
+    KDevSignalSpy projectSpy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
     ICore::self()->projectController()->openProject( QUrl::fromLocalFile(projectFile) );
 
-    if( !projectSpy->wait( 5000 ) ) {
+    if (!projectSpy.wait(5000)) {
         qFatal("Expected project to be loaded within 5 seconds, but this didn't happen");
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( projectName );
