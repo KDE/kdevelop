@@ -280,9 +280,14 @@ public:
     QString remotePrefix() const;
 
     /**
-     * @return an implicitly shared copy of the internal data.
+     * @return a const reference to the internal data.
+     *
+     * @note Returning a reference to rather than a copy of QVector can substantially
+     * improve performance of a tight loop that calls this function.
+     *
+     * TODO: return std::span once we can rely on C++20.
      */
-    inline QVector<QString> segments() const
+    inline const QVector<QString>& segments() const
     {
         return m_data;
     }
