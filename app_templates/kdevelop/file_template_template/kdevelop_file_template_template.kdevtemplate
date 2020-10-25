@@ -1,0 +1,5 @@
+[General]
+Name=KDevelop File Template
+Comment=Setup for KDevelop File template which is packaged using CMake
+Category=KDevelop/Template
+ShowFilesAfterGeneration=%{APPNAMELC}/%{APPNAMELC}.desktop
