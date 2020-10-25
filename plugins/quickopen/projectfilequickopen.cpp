@@ -244,9 +244,12 @@ void ProjectFileDataProvider::projectClosing(IProject* project)
     // file additions to the project that is about to be closed and destroyed.
     disconnect(project, nullptr, this, nullptr);
 
-    KDevelop::forEachFile(project->projectItem(), [this](ProjectFileItem* file) {
-        fileRemovedFromSet(file);
-    });
+    const Path projectPath = project->path();
+    const auto logicalEnd = std::remove_if(m_projectFiles.begin(), m_projectFiles.end(),
+                                           [&projectPath](const ProjectFile& f) {
+                                               return f.projectPath == projectPath;
+                                           });
+    m_projectFiles.erase(logicalEnd, m_projectFiles.end());
 }
 
 void ProjectFileDataProvider::projectOpened(IProject* project)
