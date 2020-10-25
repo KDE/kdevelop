@@ -244,6 +244,14 @@ void ProjectFileDataProvider::projectClosing(IProject* project)
     // file additions to the project that is about to be closed and destroyed.
     disconnect(project, nullptr, this, nullptr);
 
+    if (ICore::self()->projectController()->projectCount() == 0) {
+        // No open projects left => just remove all files. This is a little faster
+        // than the algorithm below. Releasing the memory here would slow down the
+        // next call to projectOpened() => keep the capacity of m_projectFiles.
+        m_projectFiles.clear();
+        return;
+    }
+
     const Path projectPath = project->path();
     const auto logicalEnd = std::remove_if(m_projectFiles.begin(), m_projectFiles.end(),
                                            [&projectPath](const ProjectFile& f) {
