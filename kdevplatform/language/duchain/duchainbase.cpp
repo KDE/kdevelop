@@ -79,11 +79,14 @@ void DUChainBase::setData(DUChainBaseData* data, bool constructorCalled)
     Q_ASSERT(data);
     Q_ASSERT(d_ptr);
 
-    if (constructorCalled)
+    if (d_ptr->m_dynamic) {
+        Q_ASSERT(constructorCalled);
+        DUChainItemSystem::self().deleteDynamicData(d_ptr);
+    } else if (constructorCalled) {
+        // If the data object isn't dynamic, then it is part of a central repository, and cannot be deleted here.
+        // we still need to call the destructor though
         KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
-
-    if (d_ptr->m_dynamic) // If the data object isn't dynamic, then it is part of a central repository, and cannot be deleted here.
-        delete d_ptr;
+    }
 
     d_ptr = data;
 }
@@ -94,8 +97,7 @@ DUChainBase::~DUChainBase()
         m_ptr->m_base = nullptr;
 
     if (d_ptr->m_dynamic) {
-        KDevelop::DUChainItemSystem::self().callDestructor(d_ptr);
-        delete d_ptr;
+        DUChainItemSystem::self().deleteDynamicData(d_ptr);
         d_ptr = nullptr;
     }
 }

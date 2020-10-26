@@ -60,6 +60,13 @@ void DUChainItemSystem::freeDynamicData(KDevelop::DUChainBaseData* data) const
     m_factories[data->classId]->freeDynamicData(data);
 }
 
+void DUChainItemSystem::deleteDynamicData(DUChainBaseData* data) const
+{
+    if (uint(m_factories.size()) <= data->classId || m_factories[data->classId] == nullptr)
+        return;
+    m_factories[data->classId]->deleteDynamicData(data);
+}
+
 uint DUChainItemSystem::dynamicSize(const DUChainBaseData& data) const
 {
     if (uint(m_factories.size()) <= data.classId || m_factories[data.classId] == nullptr)

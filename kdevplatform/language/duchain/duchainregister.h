@@ -34,6 +34,7 @@ public:
     virtual DUChainBase* create(DUChainBaseData* data) const = 0;
     virtual void callDestructor(DUChainBaseData* data) const = 0;
     virtual void freeDynamicData(DUChainBaseData* data) const = 0;
+    virtual void deleteDynamicData(DUChainBaseData* data) const = 0;
     virtual void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const = 0;
     virtual DUChainBaseData* cloneData(const DUChainBaseData& data) const = 0;
     virtual uint dynamicSize(const DUChainBaseData& data) const = 0;
@@ -81,6 +82,12 @@ public:
     {
         Q_ASSERT(data->classId == T::Identity);
         static_cast<Data*>(data)->freeDynamicData();
+    }
+
+    void deleteDynamicData(DUChainBaseData* data) const override
+    {
+        Q_ASSERT(data->classId == T::Identity);
+        delete static_cast<Data*>(data);
     }
 
     uint dynamicSize(const DUChainBaseData& data) const override
@@ -163,6 +170,9 @@ public:
     ///Does not call the destructor, but frees all special data associated to dynamic data(the appendedlists stuff)
     ///This needs to be called whenever a dynamic duchain data-pointer is being deleted.
     void freeDynamicData(DUChainBaseData* data) const;
+
+    /// Call delete on @p data
+    void deleteDynamicData(DUChainBaseData* data) const;
 
     /// Access the static DUChainItemSystem instance.
     static DUChainItemSystem& self();
