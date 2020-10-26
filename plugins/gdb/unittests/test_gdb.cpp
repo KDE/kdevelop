@@ -944,7 +944,13 @@ void GdbTest::testStackDeactivateAndActive()
     QCOMPARE(stackModel->rowCount(tIdx), 1);
     COMPARE_DATA(stackModel->index(0, 0, tIdx), "0");
     COMPARE_DATA(stackModel->index(0, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(0, 2, tIdx), debugeeFileName+":31");
+    // depending on the compiler and gdb version, we may either end up in
+    // one line or the other
+    const auto last = stackModel->index(0, 2, tIdx).data().toString();
+    if (last.endsWith(":30"))
+        QCOMPARE(last, debugeeFileName + ":30");
+    else
+        QCOMPARE(last, debugeeFileName + ":31");
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
