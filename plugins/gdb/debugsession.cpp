@@ -52,6 +52,8 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QGuiApplication>
+#include <QRegularExpression>
+#include <QVersionNumber>
 
 using namespace KDevMI::GDB;
 using namespace KDevMI::MI;
@@ -278,20 +280,20 @@ bool DebugSession::loadCoreFile(KDevelop::ILaunchConfiguration*,
 
 void DebugSession::handleVersion(const QStringList& s)
 {
-    qCDebug(DEBUGGERGDB) << s.first();
+    const auto response = s.value(0);
+    qCDebug(DEBUGGERGDB) << response;
     // minimal version is 7.0,0
-    QRegExp rx(QStringLiteral("([7-9]+)\\.([0-9]+)(\\.([0-9]+))?"));
-    int idx = rx.indexIn(s.first());
-    if (idx == -1)
-    {
+    QRegularExpression rx(QStringLiteral("([0-9]+)\\.([0-9]+)(\\.([0-9]+))?"));
+    const auto match = rx.match(response);
+    if (!match.hasMatch() || QVersionNumber::fromString(match.capturedRef(0)) < QVersionNumber(7, 0, 0)) {
         if (!qobject_cast<QGuiApplication*>(qApp))  {
             //for unittest
             qFatal("You need a graphical application.");
         }
 
-        const QString messageText =
-            i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
-                 "You are using: %1", s.first());
+        const QString messageText = i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
+                                         "You are using: %1",
+                                         response);
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
         ICore::self()->uiController()->postMessage(message);
         stopDebugger();
