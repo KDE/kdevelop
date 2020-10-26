@@ -19,12 +19,11 @@
 
 #include "autotestshell.h"
 
-KDevelop::AutoTestShell::AutoTestShell(const QStringList& plugins)
-    : m_plugins(plugins)
-{
-}
+using namespace KDevelop;
 
-void KDevelop::AutoTestShell::init(const QStringList& plugins)
+AutoTestShell::~AutoTestShell() = default;
+
+void AutoTestShell::init(const QStringList& plugins)
 {
     // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
@@ -32,7 +31,7 @@ void KDevelop::AutoTestShell::init(const QStringList& plugins)
 #endif
     qputenv("CLEAR_DUCHAIN_DIR", "1"); // Always clear duchain dir (also to avoid popups asking the user to clear it)
 
-    static auto instance = AutoTestShell(plugins);
-    Q_ASSERT(instance.m_plugins == plugins);
+    static auto instance = AutoTestShell();
+    instance.m_plugins = plugins;
     s_instance = &instance;
 }

@@ -47,7 +47,7 @@ class KDEVPLATFORMTESTS_EXPORT AutoTestShell
     : public KDevelop::ShellExtension
 {
 public:
-    explicit AutoTestShell(const QStringList& plugins);
+    ~AutoTestShell();
 
     QString xmlFile() override { return QString(); }
     QString executableFilePath() override { return QString(); };
@@ -72,6 +72,7 @@ public:
     static void init(const QStringList& plugins = QStringList());
 
 private:
+    AutoTestShell() = default;
     QStringList m_plugins;
 };
 }
