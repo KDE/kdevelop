@@ -51,21 +51,18 @@ void BenchQuickOpen::getData()
     QTest::addColumn<int>("files");
     QTest::addColumn<QString>("filter");
 
-    QTest::newRow("0100-___") << 100  << "";
-    QTest::newRow("0500-___") << 500  << "";
-    QTest::newRow("0100-bar") << 100  << "bar";
-    QTest::newRow("0500-bar") << 500  << "bar";
-    QTest::newRow("0100-1__") << 100  << "1";
-    QTest::newRow("0500-1__") << 500  << "1";
-    QTest::newRow("0100-f/b") << 100  << "f/b";
-    QTest::newRow("0500-f/b") << 500  << "f/b";
+    for (auto files : { 1000, 10000 }) {
+        for (auto pattern : { "", "bar", "1", "f/b" }) {
+            QTest::addRow("%5d-%3s", files, pattern) << files << QString::fromUtf8(pattern);
+        }
+    }
 }
 
 void BenchQuickOpen::getAddRemoveData()
 {
     QTest::addColumn<int>("files");
 
-    for (auto files : {100, 500, 1000})
+    for (auto files : { 1000, 10000 })
         QTest::addRow("%d", files) << files;
 }
 
@@ -129,8 +126,13 @@ void BenchQuickOpen::benchProjectFileFilter_reset()
     projectController->addProject(project);
     openAnyDocument(project);
 
-    QBENCHMARK {
-        provider.reset();
+    // don't use QBENCHMARK directly as the code below is too fast
+    // and then QBENCHMARK runs the setup code above multiple times which is overly slow
+    QBENCHMARK_ONCE
+    {
+        for (int i = 0; i < 1000; ++i) {
+            provider.reset();
+        }
     }
 }
 
@@ -175,9 +177,14 @@ void BenchQuickOpen::benchProjectFileFilter_providerData()
     provider.setFilterText(filter);
     QVERIFY(provider.itemCount());
     const int itemIdx = provider.itemCount() - 1;
-    QBENCHMARK {
-        QuickOpenDataPointer data = provider.data(itemIdx);
-        data->text();
+    // don't use QBENCHMARK directly as the code below is too fast
+    // and then QBENCHMARK runs the setup code above multiple times which is overly slow
+    QBENCHMARK_ONCE
+    {
+        for (int i = 0; i < 100000; ++i) {
+            QuickOpenDataPointer data = provider.data(itemIdx);
+            data->text();
+        }
     }
 }
 
@@ -199,9 +206,14 @@ void BenchQuickOpen::benchProjectFileFilter_providerDataIcon()
     provider.setFilterText(filter);
     QVERIFY(provider.itemCount());
     const int itemIdx = provider.itemCount() - 1;
-    QBENCHMARK {
-        QuickOpenDataPointer data = provider.data(itemIdx);
-        data->icon();
+    // don't use QBENCHMARK directly as the code below is too fast
+    // and then QBENCHMARK runs the setup code above multiple times which is overly slow
+    QBENCHMARK_ONCE
+    {
+        for (int i = 0; i < 100000; ++i) {
+            QuickOpenDataPointer data = provider.data(itemIdx);
+            data->icon();
+        }
     }
 }
 
