@@ -10,27 +10,12 @@
         <comment>OpenCL C source code</comment>
         <comment xml:lang="ca">Codi font en C per a OpenCL</comment>
         <comment xml:lang="ca@valencia">Codi font en C per a OpenCL</comment>
-        <comment xml:lang="cs">Zdrojový kód OpenCL C</comment>
-        <comment xml:lang="de">OpenCL C Quelltext</comment>
-        <comment xml:lang="el">OpenCL C πηγαίος κώδικας</comment>
-        <comment xml:lang="en_GB">OpenCL C source code</comment>
         <comment xml:lang="es">Código fuente de OpenCL C</comment>
-        <comment xml:lang="et">OpenCL C lähtekood</comment>
-        <comment xml:lang="fr">Code source C OpenCL</comment>
-        <comment xml:lang="gl">Código fonte en C de OpenCL</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
-        <comment xml:lang="ko">OpenCL C 소스 코드</comment>
         <comment xml:lang="nl">OpenCL C broncode</comment>
-        <comment xml:lang="pl">Kod źródłowy OpenCL C</comment>
         <comment xml:lang="pt">Código-fonte em C do OpenCL</comment>
-        <comment xml:lang="pt_BR">Código-fonte em C do OpenCL</comment>
-        <comment xml:lang="ru">Исходный код OpenCL C</comment>
-        <comment xml:lang="sk">Zdrojový kód OpenCL C</comment>
         <comment xml:lang="sv">OpenCL C-källkod</comment>
-        <comment xml:lang="tr">OpenCL C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C OpenCL</comment>
-        <comment xml:lang="zh_CN">OpenCL C 源代码</comment>
-        <comment xml:lang="zh_TW">OpenCL C 來源程式碼</comment>
         <acronym>OpenCL</acronym>
         <expanded-acronym>Open Computing Language</expanded-acronym>
         <sub-class-of type="text/x-csrc"/>
@@ -43,27 +28,12 @@
         <comment>NVIDIA CUDA C source code</comment>
         <comment xml:lang="ca">Codi font en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="ca@valencia">Codi font en C per a CUDA de NVIDIA</comment>
-        <comment xml:lang="cs">Zdrojový kód NVIDIA CUDA C</comment>
-        <comment xml:lang="de">NVIDIA CUDA C Quelltext</comment>
-        <comment xml:lang="el">NVIDIA CUDA C πηγαίος κώδικας</comment>
-        <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
         <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
-        <comment xml:lang="et">NVIDIA CUDA C lähtekood</comment>
-        <comment xml:lang="fr">Code source C CUDA NVIDIA</comment>
-        <comment xml:lang="gl">Código fonte en C de NVIDIA CUDA</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
-        <comment xml:lang="ko">NVIDIA CUDA C 소스 코드</comment>
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
-        <comment xml:lang="pl">Kod źródłowy NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
-        <comment xml:lang="pt_BR">Código-fonte em CUDA C da NVIDIA</comment>
-        <comment xml:lang="ru">Исходный код NVIDIA CUDA C</comment>
-        <comment xml:lang="sk">Zdrojový kód NVIDIA CUDA C</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
-        <comment xml:lang="tr">NVIDIA CUDA C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
-        <comment xml:lang="zh_CN">NVIDIA CUDA C 源代码</comment>
-        <comment xml:lang="zh_TW">NVIDIA CUDA C 來源程式碼</comment>
         <sub-class-of type="text/x-c++src"/>
         <glob pattern="*.cu"/>
     </mime-type>
@@ -72,26 +42,12 @@
         <comment>NVIDIA CUDA C header</comment>
         <comment xml:lang="ca">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="ca@valencia">Capçalera en C per a CUDA de NVIDIA</comment>
-        <comment xml:lang="cs">Hlavičkový soubor NVIDIA CUDA C</comment>
-        <comment xml:lang="de">NVIDIA CUDA C Header</comment>
-        <comment xml:lang="el">NVIDIA CUDA C κεφαλίδα</comment>
-        <comment xml:lang="en_GB">NVIDIA CUDA C header</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
-        <comment xml:lang="et">NVIDIA CUDA C päis</comment>
-        <comment xml:lang="fr">En-tête C CUDA NVIDIA</comment>
-        <comment xml:lang="gl">Cabeceira en C de NVIDIA CUDA</comment>
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
-        <comment xml:lang="ko">NVIDIA CUDA C 헤더</comment>
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
-        <comment xml:lang="pl">Nagłówek NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
-        <comment xml:lang="pt_BR">Cabeçalho C da NVIDIA CUDA</comment>
-        <comment xml:lang="ru">Заголовочный файл NVIDIA CUDA C</comment>
-        <comment xml:lang="sk">Hlavička NVIDIA CUDA C</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
-        <comment xml:lang="zh_CN">NVIDIA CUDA C 头文件</comment>
-        <comment xml:lang="zh_TW">NVIDIA CUDA C 標頭檔</comment>
         <sub-class-of type="text/x-c++hdr"/>
         <glob pattern="*.cuh"/>
     </mime-type>
