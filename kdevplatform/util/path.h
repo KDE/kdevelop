@@ -29,6 +29,8 @@
 #include <QVector>
 #include <QUrl>
 
+#include <algorithm>
+
 namespace KDevelop {
 
 /**
@@ -132,7 +134,14 @@ public:
      */
     inline bool operator==(const Path& other) const
     {
-        return m_data == other.m_data;
+        if (other.m_data.data() == m_data.data())
+            return true; // fast path when both containers point to the same shared data
+        // The size check here is a bit faster than calling std::equal with 4 arguments.
+        if (other.m_data.size() != m_data.size())
+            return false;
+        // Optimization: compare in reverse order as often the mismatch is at the end,
+        // while the first few path segments are usually the same in different paths.
+        return std::equal(m_data.rbegin(), m_data.rend(), other.m_data.rbegin());
     }
 
     /**
