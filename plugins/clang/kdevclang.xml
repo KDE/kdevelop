@@ -11,6 +11,7 @@
         <comment xml:lang="ca">Codi font en C per a OpenCL</comment>
         <comment xml:lang="ca@valencia">Codi font en C per a OpenCL</comment>
         <comment xml:lang="es">Código fuente de OpenCL C</comment>
+        <comment xml:lang="eu">OpenCL C sorburu-kodea</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
         <comment xml:lang="nl">OpenCL C broncode</comment>
         <comment xml:lang="pt">Código-fonte em C do OpenCL</comment>
@@ -29,6 +30,7 @@
         <comment xml:lang="ca">Codi font en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="ca@valencia">Codi font en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
+        <comment xml:lang="eu">NVIDIA CUDA C sorburu-kodea</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
@@ -43,6 +45,7 @@
         <comment xml:lang="ca">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="ca@valencia">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
+        <comment xml:lang="eu">NVIDIA CUDA C goiburua</comment>
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
