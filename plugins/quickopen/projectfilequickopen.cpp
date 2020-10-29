@@ -33,6 +33,7 @@
 #include <language/duchain/duchainlock.h>
 #include <serialization/indexedstring.h>
 #include <language/duchain/parsingenvironment.h>
+#include <util/algorithm.h>
 #include <util/texteditorhelpers.h>
 
 #include <project/projectmodel.h>
@@ -43,7 +44,9 @@
 #include <timsort/timsort.hpp>
 
 #include <algorithm>
+#include <iterator>
 #include <utility>
+#include <vector>
 
 using namespace KDevelop;
 
@@ -369,14 +372,19 @@ void ProjectFileDataProvider::reset()
 
 QSet<IndexedString> ProjectFileDataProvider::files() const
 {
-    QSet<IndexedString> ret;
-
     const auto projects = ICore::self()->projectController()->projects();
-    for (IProject* project : projects) {
-        ret += project->fileSet();
+    if (projects.empty()) {
+        return {}; // don't call openFiles() needlessly
     }
 
-    return ret - openFiles();
+    std::vector<QSet<IndexedString>> sets;
+    sets.reserve(projects.size());
+    std::transform(projects.cbegin(), projects.cend(), std::back_inserter(sets),
+                   [](const IProject* project) {
+                       return project->fileSet();
+                   });
+
+    return Algorithm::unite(std::move(sets)) - openFiles();
 }
 
 void OpenFilesDataProvider::reset()

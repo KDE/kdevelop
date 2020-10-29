@@ -24,6 +24,10 @@
 
 #include <KTextEditor/CodeCompletionModel>
 #include <typeinfo>
+#include <utility>
+#include <vector>
+
+#include <util/algorithm.h>
 
 #include "expandingtree/expandingtree.h"
 #include "projectfilequickopen.h"
@@ -444,18 +448,16 @@ QuickOpenDataPointer QuickOpenModel::getItem(int row, bool noReset) const
 
 QSet<IndexedString> QuickOpenModel::fileSet() const
 {
-    QSet<IndexedString> merged;
+    std::vector<QSet<IndexedString>> sets;
     for (const ProviderEntry& provider : m_providers) {
         if (m_enabledScopes.isEmpty() || !(m_enabledScopes & provider.scopes).isEmpty()) {
             if (auto* iface = qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
-                QSet<IndexedString> ifiles = iface->files();
+                sets.push_back(iface->files());
                 //qCDebug(PLUGIN_QUICKOPEN) << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
-                merged += ifiles;
             }
         }
     }
-
-    return merged;
+    return Algorithm::unite(std::move(sets));
 }
 
 QTreeView* QuickOpenModel::treeView() const

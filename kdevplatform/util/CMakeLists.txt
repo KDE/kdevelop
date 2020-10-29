@@ -68,6 +68,7 @@ install(FILES .zshrc PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXEC
 ########### install files ###############
 
 install( FILES
+    algorithm.h
     autoorientedsplitter.h
     filesystemhelpers.h
     foregroundlock.h
