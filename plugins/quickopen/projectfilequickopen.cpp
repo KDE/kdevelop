@@ -384,7 +384,9 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
                        return project->fileSet();
                    });
 
-    return Algorithm::unite(std::move(sets)) - openFiles();
+    auto result = Algorithm::unite(std::move(sets));
+    result.subtract(openFiles());
+    return result;
 }
 
 void OpenFilesDataProvider::reset()
