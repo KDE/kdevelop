@@ -217,8 +217,8 @@ void BenchHashes::remove_data()
 
 struct TypeRepoTestData
 {
-    size_t size;
-    void* ptr;
+    size_t size = 0;
+    void* ptr = nullptr;
 };
 
 /**
@@ -248,6 +248,7 @@ void BenchHashes::typeRepo()
                 }
             }
         }
+        qDeleteAll(v);
     } else if (type == 3) {
         QHash<int, TypeRepoTestData*> v;
         for (int i = 0; i < 100; ++i) {
@@ -259,6 +260,7 @@ void BenchHashes::typeRepo()
                 v.value(i)->size++;
             }
         }
+        qDeleteAll(v);
     } else if (type == 4) {
         QMap<int, TypeRepoTestData*> v;
         for (int i = 0; i < 100; ++i) {
@@ -270,6 +272,7 @@ void BenchHashes::typeRepo()
                 v.value(i)->size++;
             }
         }
+        qDeleteAll(v);
     } else if (type == 5) {
         std::unordered_map<int, TypeRepoTestData*> v;
         for (int i = 0; i < 100; ++i) {
@@ -280,6 +283,9 @@ void BenchHashes::typeRepo()
             for (int i = 0; i < 100; ++i) {
                 v.at(i)->size++;
             }
+        }
+        for (const auto& [key, value] : v) {
+            delete value;
         }
     } else if (type == 6) {
         // for the idea, look at c++'s lexer.cpp
@@ -300,6 +306,11 @@ void BenchHashes::typeRepo()
                         break;
                     }
                 }
+            }
+        }
+        for (const auto& inner : v) {
+            for (const auto& [key, value] : inner) {
+                delete value;
             }
         }
     } else if (type == 0) {
