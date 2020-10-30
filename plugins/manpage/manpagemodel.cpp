@@ -129,15 +129,15 @@ void ManPageModel::indexLoaded(KJob* job)
 
     emit sectionListUpdated();
 
-    iterator = new QListIterator<ManSection>(m_sectionList);
-    if (iterator->hasNext()) {
+    Q_ASSERT(m_nbSectionLoaded == 0);
+    if (!m_sectionList.isEmpty()) {
         initSection();
     }
 }
 
 void ManPageModel::initSection()
 {
-    const QString sectionUrl = iterator->peekNext().first;
+    const QString sectionUrl = m_sectionList.at(m_nbSectionLoaded).first;
     m_manMap[sectionUrl].clear();
     auto list = KIO::listDir(QUrl(sectionUrl), KIO::HideProgressInfo);
     connect(list, &KIO::ListJob::entries, this, &ManPageModel::sectionEntries);
@@ -146,7 +146,7 @@ void ManPageModel::initSection()
 
 void ManPageModel::sectionEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entries)
 {
-    const QString sectionUrl = iterator->peekNext().first;
+    const QString sectionUrl = m_sectionList.at(m_nbSectionLoaded).first;
     auto& pages = m_manMap[sectionUrl];
     pages.reserve(pages.size() + entries.size());
     for (const KIO::UDSEntry& entry : entries) {
@@ -156,10 +156,9 @@ void ManPageModel::sectionEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& en
 
 void ManPageModel::sectionLoaded()
 {
-    iterator->next();
     m_nbSectionLoaded++;
     emit sectionParsed();
-    if (iterator->hasNext()) {
+    if (m_nbSectionLoaded < m_sectionList.size()) {
         initSection();
     } else {
         // End of init
@@ -171,7 +170,6 @@ void ManPageModel::sectionLoaded()
         m_index.sort();
         m_index.removeDuplicates();
         m_indexModel->setStringList(m_index);
-        delete iterator;
         emit manPagesLoaded();
     }
 }

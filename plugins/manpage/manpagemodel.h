@@ -84,8 +84,7 @@ private:
     QString manPage(const QString &sectionUrl, int position) const;
     void initSection();
 
-    QListIterator<ManSection> *iterator = nullptr;
-    QList<ManSection> m_sectionList;
+    QVector<ManSection> m_sectionList;
     QHash<QString, QVector<QString> > m_manMap;
     QStringList m_index;
     QStringListModel* m_indexModel;

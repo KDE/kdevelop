@@ -43,19 +43,16 @@ private Q_SLOTS:
 void TestManPageModel::testModel()
 {
     ManPageModel model;
-    QSignalSpy spy(&model, SIGNAL(manPagesLoaded()));
-    spy.wait();
 
-    if (model.isLoaded()) {
-        QVERIFY(model.rowCount() > 0);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-        new QAbstractItemModelTester(&model, this);
+    new QAbstractItemModelTester(&model, this);
 #else
-        new ModelTest(&model);
+    new ModelTest(&model);
 #endif
-    } else {
-        QCOMPARE(model.rowCount(), 0);
-    }
+
+    QTRY_VERIFY(model.isLoaded() || model.hasError());
+    if (model.isLoaded())
+        QVERIFY(model.rowCount() > 0);
 }
 
 void TestManPageModel::testDocumentation()
