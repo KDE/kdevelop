@@ -41,9 +41,6 @@ public:
 
 private:
     QString m_path;
-
-private Q_SLOTS:
-    void lookupDone(int code);
 };
 
 #endif // QTHELPQTDOC_H
