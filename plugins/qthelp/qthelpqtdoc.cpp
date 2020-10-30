@@ -62,6 +62,7 @@ QtHelpQtDoc::~QtHelpQtDoc() = default;
 
 void QtHelpQtDoc::registerDocumentations()
 {
+    Q_ASSERT(!m_isInitialized);
     const QString qmake = qmakeCandidate();
     if (!qmake.isEmpty()) {
         auto* p = new QProcess(this);
@@ -78,8 +79,11 @@ void QtHelpQtDoc::registerDocumentations()
             }
 
             p->deleteLater();
+            m_isInitialized = true;
         });
         p->start();
+    } else {
+        m_isInitialized = true;
     }
 }
 

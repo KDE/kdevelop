@@ -63,6 +63,7 @@ void TestQtHelpPlugin::init()
     // write default config and read it
     qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), true);
     m_plugin->readConfig();
+    QTRY_VERIFY(m_plugin->isQtHelpQtDocLoaded());
 }
 
 void TestQtHelpPlugin::cleanup()

@@ -39,8 +39,12 @@ public:
     /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
     QStringList qchFiles() const;
 
+    /** @return true once the async initialization has finished */
+    bool isInitialized() const { return m_isInitialized; }
+
 private:
     QString m_path;
+    bool m_isInitialized = false;
 };
 
 #endif // QTHELPQTDOC_H

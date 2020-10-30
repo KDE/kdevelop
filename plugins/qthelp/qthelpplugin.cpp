@@ -159,7 +159,7 @@ QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
 
 bool QtHelpPlugin::isQtHelpQtDocLoaded() const
 {
-    return m_loadSystemQtDoc;
+    return m_loadSystemQtDoc && m_qtDoc->isInitialized();
 }
 
 bool QtHelpPlugin::isQtHelpAvailable() const
