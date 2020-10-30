@@ -27,21 +27,23 @@
 class QtHelpQtDoc : public QtHelpProviderAbstract
 {
     Q_OBJECT
-    public:
-        QtHelpQtDoc(QObject *parent, const QVariantList &args);
-        QIcon icon() const override;
-        QString name() const override;
-        void registerDocumentations();
-        void loadDocumentation();
-        void unloadDocumentation();
-        /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
-        QStringList qchFiles() const;
+public:
+    explicit QtHelpQtDoc(QObject* parent, const QVariantList& args);
+    ~QtHelpQtDoc();
 
-    private:
-        QString m_path;
+    QIcon icon() const override;
+    QString name() const override;
+    void registerDocumentations();
+    void loadDocumentation();
+    void unloadDocumentation();
+    /** @return local paths to all QCH files found in QT_INSTALL_DOCS directory **/
+    QStringList qchFiles() const;
 
-    private Q_SLOTS:
-        void lookupDone(int code);
+private:
+    QString m_path;
+
+private Q_SLOTS:
+    void lookupDone(int code);
 };
 
 #endif // QTHELPQTDOC_H

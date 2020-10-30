@@ -58,6 +58,8 @@ QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
     registerDocumentations();
 }
 
+QtHelpQtDoc::~QtHelpQtDoc() = default;
+
 void QtHelpQtDoc::registerDocumentations()
 {
     const QString qmake = qmakeCandidate();
