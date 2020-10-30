@@ -424,14 +424,14 @@ void GdbTest::testDeleteBreakpoint()
     //add breakpoint before startDebugging
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 21);
     QCOMPARE(breakpoints()->rowCount(), 1);
-    breakpoints()->removeRow(0);
+    QVERIFY(breakpoints()->removeRow(0));
     QCOMPARE(breakpoints()->rowCount(), 0);
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 22);
 
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    breakpoints()->removeRow(0);
+    QVERIFY(breakpoints()->removeRow(0));
     session->run();
 
     WAIT_FOR_STATE(session, DebugSession::EndedState);

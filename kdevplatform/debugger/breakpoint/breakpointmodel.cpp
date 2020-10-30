@@ -74,6 +74,10 @@ public:
     bool dirty = false;
     bool dontUpdateMarks = false;
     QList<Breakpoint*> breakpoints;
+    /// FIXME: this is just an ugly workaround to not leak deleted breakpoints
+    ///        a real fix would make sure that we actually delete breakpoints
+    ///        right when we delete them... aka remove Breakpoint::{set}deleted
+    QList<Breakpoint*> deletedBreakpoints;
 };
 
 BreakpointModel::BreakpointModel(QObject* parent)
@@ -108,6 +112,7 @@ BreakpointModel::~BreakpointModel()
     Q_D(BreakpointModel);
 
     qDeleteAll(d->breakpoints);
+    qDeleteAll(d->deletedBreakpoints);
 }
 
 void BreakpointModel::slotPartAdded(KParts::Part* part)
@@ -280,6 +285,9 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
         b->m_model = nullptr;
         // To be changed: the controller is currently still responsible for deleting the breakpoint
         // object
+        // FIXME: this whole notion of m_deleted is utterly broken and needs to be fixed properly
+        // for now just prevent a leak...
+        d->deletedBreakpoints.append(b);
     }
     endRemoveRows();
     updateMarks();
