@@ -14,6 +14,7 @@
         <comment xml:lang="eu">OpenCL C sorburu-kodea</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
         <comment xml:lang="nl">OpenCL C broncode</comment>
+        <comment xml:lang="nn">OpenCL C-kjeldekode</comment>
         <comment xml:lang="pt">Código-fonte em C do OpenCL</comment>
         <comment xml:lang="sv">OpenCL C-källkod</comment>
         <comment xml:lang="uk">початковий код C OpenCL</comment>
@@ -33,6 +34,7 @@
         <comment xml:lang="eu">NVIDIA CUDA C sorburu-kodea</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
+        <comment xml:lang="nn">NVIDIA CUDA C-kjeldekode</comment>
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
         <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
@@ -48,6 +50,7 @@
         <comment xml:lang="eu">NVIDIA CUDA C goiburua</comment>
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
+        <comment xml:lang="nn">NVIDIA CUDA C-deklarasjonsfil</comment>
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
