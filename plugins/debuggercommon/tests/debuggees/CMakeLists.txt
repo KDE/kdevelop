@@ -9,7 +9,9 @@ function(add_debuggable_executable target)
         # COMPILE_FLAGS_DEBUG should already have the desired flags
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS_RELEASE "/DEBUG /Od")
     else()
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+        # explicitly disable sanitizers, in case they got enabled globally
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-g -O0 -fno-sanitize=address,undefined")
+        set_target_properties(${target} PROPERTIES LINK_FLAGS "-g -O0 -fno-sanitize=address,undefined")
     endif()
     set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 endfunction()
