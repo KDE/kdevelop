@@ -214,15 +214,13 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
         const auto tty = m_tty->getSlave();
         const auto options = QString(QLatin1String(">") + tty + QLatin1String("  2>&1 <") + tty);
 
-        auto *proc = new QProcess;
         const QStringList arguments {
             QStringLiteral("-c"),
             KShell::quoteArg(runShellScript.toLocalFile()) + QLatin1Char(' ') + KShell::quoteArg(executable) + options,
         };
 
         qCDebug(DEBUGGERGDB) << "starting sh" << arguments;
-        proc->start(QStringLiteral("sh"), arguments);
-        //PORTING TODO QProcess::DontCare);
+        QProcess::startDetached(QStringLiteral("sh"), arguments);
     }
 
     if (runGdbScript.isValid()) {
