@@ -20,6 +20,7 @@
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
         <comment xml:lang="ko">OpenCL C 소스 코드</comment>
         <comment xml:lang="nl">OpenCL C broncode</comment>
+        <comment xml:lang="nn">OpenCL C-kjeldekode</comment>
         <comment xml:lang="pl">Kod źródłowy OpenCL C</comment>
         <comment xml:lang="pt">Código-fonte em C do OpenCL</comment>
         <comment xml:lang="pt_BR">Código fonte C do OpenCL</comment>
@@ -52,6 +53,7 @@
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
         <comment xml:lang="ko">NVIDIA CUDA C 소스 코드</comment>
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
+        <comment xml:lang="nn">NVIDIA CUDA C-kjeldekode</comment>
         <comment xml:lang="pl">Kod źródłowy NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="pt_BR">Código fonte C da NVIDIA CUDA</comment>
@@ -80,6 +82,7 @@
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
         <comment xml:lang="ko">NVIDIA CUDA C 헤더</comment>
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
+        <comment xml:lang="nn">NVIDIA CUDA C-deklarasjonsfil</comment>
         <comment xml:lang="pl">Nagłówek NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
         <comment xml:lang="pt_BR">Cabeçalho C da NVIDIA CUDA</comment>
