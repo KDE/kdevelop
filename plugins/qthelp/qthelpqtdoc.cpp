@@ -64,7 +64,7 @@ void QtHelpQtDoc::registerDocumentations()
 {
     const QString qmake = qmakeCandidate();
     if (!qmake.isEmpty()) {
-        auto *p = new QProcess;
+        auto* p = new QProcess(this);
         p->setProcessChannelMode(QProcess::MergedChannels);
         p->setProgram(qmake);
         p->setArguments({QLatin1String("-query"), QLatin1String("QT_INSTALL_DOCS")});
