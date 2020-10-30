@@ -24,10 +24,12 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
+#include <tests/testhelpers.h>
 
 #include <QIcon>
 #include <QTest>
 #include <QStandardPaths>
+#include <QVector>
 
 QTEST_MAIN(BenchQuickOpen)
 
@@ -35,10 +37,11 @@ using namespace KDevelop;
 
 namespace
 {
-void openAnyDocument(IProject* project)
+QUrl openAnyDocument(IProject* project)
 {
-    const auto url = project->fileSet().begin()->toUrl();
-    QVERIFY(ICore::self()->documentController()->openDocument(url));
+    auto url = project->fileSet().begin()->toUrl();
+    QVERIFY_RETURN(ICore::self()->documentController()->openDocument(url), url);
+    return url;
 }
 }
 
@@ -222,4 +225,62 @@ void BenchQuickOpen::benchProjectFileFilter_providerDataIcon()
 void BenchQuickOpen::benchProjectFileFilter_providerDataIcon_data()
 {
     getData();
+}
+
+void BenchQuickOpen::benchProjectFileFilter_files()
+{
+    QFETCH(QVector<int>, fileCounts);
+
+    ProjectFileDataProvider provider;
+
+    QTemporaryDir dir;
+    for (int i = 0; i < fileCounts.size(); ++i) {
+        const Path path{dir.filePath(QStringLiteral("project dir %1").arg(i))};
+        projectController->addProject(getProjectWithFiles(fileCounts.at(i), path));
+    }
+    const auto projects = projectController->projects();
+
+    QFETCH(bool, openSomeDocument);
+    QUrl openedDocument;
+    if (openSomeDocument && !projects.empty()) {
+        openedDocument = openAnyDocument(projects.front());
+    }
+
+    // don't use QBENCHMARK directly as the code below is too fast
+    // and then QBENCHMARK runs the setup code above multiple times which is overly slow
+    QBENCHMARK_ONCE
+    {
+        for (int i = 0; i < 100; ++i) {
+            provider.files();
+        }
+    }
+
+    // Verify that the computed result is correct.
+    QSet<IndexedString> allFiles;
+    for (const auto* project : projects) {
+        allFiles += project->fileSet();
+    }
+    if (!openedDocument.isEmpty()) {
+        allFiles -= IndexedString{openedDocument};
+    }
+    QCOMPARE(provider.files(), allFiles);
+}
+
+void BenchQuickOpen::benchProjectFileFilter_files_data()
+{
+    using FileCounts = QVector<int>;
+    QTest::addColumn<FileCounts>("fileCounts");
+    QTest::addColumn<bool>("openSomeDocument");
+
+    const int files{10000};
+    QTest::addRow("%d", files) << FileCounts{files} << false;
+
+    for (int files1 : { 1000, 10000 }) {
+        const int files2{10000};
+        QTest::addRow("%d, %d", files1, files2) << FileCounts{files1, files2} << false;
+    }
+
+    const FileCounts fileCounts{100, 5000, 800, 244, 5432, 0, 5, 2222};
+    QTest::addRow("%d projects", fileCounts.size()) << fileCounts << false;
+    QTest::addRow("%d projects and one open file", fileCounts.size()) << fileCounts << true;
 }

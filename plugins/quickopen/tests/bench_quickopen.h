@@ -45,6 +45,8 @@ private Q_SLOTS:
     void benchProjectFileFilter_providerData_data();
     void benchProjectFileFilter_providerDataIcon();
     void benchProjectFileFilter_providerDataIcon_data();
+    void benchProjectFileFilter_files();
+    void benchProjectFileFilter_files_data();
 };
 
 #endif // KDEVPLATFORM_PLUGIN_BENCH_QUICKOPEN_H
