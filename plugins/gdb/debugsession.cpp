@@ -211,13 +211,13 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
     // FIXME: have a check box option that controls remote debugging
     if (runShellScript.isValid()) {
         // Special for remote debug, the remote inferior is started by this shell script
-        QByteArray tty(m_tty->getSlave().toLatin1());
-        QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
+        const auto tty = m_tty->getSlave();
+        const auto options = QString(QLatin1String(">") + tty + QLatin1String("  2>&1 <") + tty);
 
         auto *proc = new QProcess;
-        const QStringList arguments{
+        const QStringList arguments {
             QStringLiteral("-c"),
-            KShell::quoteArg(runShellScript.toLocalFile()) + QLatin1Char(' ') + KShell::quoteArg(executable) + QString::fromLatin1(options),
+            KShell::quoteArg(runShellScript.toLocalFile()) + QLatin1Char(' ') + KShell::quoteArg(executable) + options,
         };
 
         qCDebug(DEBUGGERGDB) << "starting sh" << arguments;
