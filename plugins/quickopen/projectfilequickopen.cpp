@@ -18,7 +18,6 @@
 
 #include "projectfilequickopen.h"
 
-#include <QApplication>
 #include <QIcon>
 #include <QTextBrowser>
 
@@ -262,15 +261,8 @@ void ProjectFileDataProvider::projectClosing(IProject* project)
 
 void ProjectFileDataProvider::projectOpened(IProject* project)
 {
-    const int processAfter = 1000;
-    int processed = 0;
     KDevelop::forEachFile(project->projectItem(), [&](ProjectFileItem* file) {
         fileAddedToSet(file);
-        if (++processed == processAfter) {
-            // prevent UI-lockup when a huge project was imported
-            QApplication::processEvents();
-            processed = 0;
-        }
     });
 
     connect(project, &IProject::fileAddedToSet,
