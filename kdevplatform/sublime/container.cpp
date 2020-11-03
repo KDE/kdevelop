@@ -709,6 +709,9 @@ void Container::contextMenu( const QPoint& pos )
     int currentTab = d->tabBar->tabAt(pos);
 
     QMenu menu;
+    // Polish before creating a native window below. The style could want change the surface format
+    // of the window which will have no effect when the native window has already been created.
+    menu.ensurePolished();
     // At least for positioning on Wayland the window the menu belongs to
     // needs to be set. We cannot set senderWidget as parent because some actions (e.g. split view)
     // result in sync destruction of the senderWidget, which then would also prematurely
