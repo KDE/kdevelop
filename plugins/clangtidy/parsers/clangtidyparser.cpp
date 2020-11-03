@@ -64,8 +64,8 @@ QString verboseMessageToHtml(const QString& input)
 
 ClangTidyParser::ClangTidyParser(QObject* parent)
     : QObject(parent)
-      //                              (1/2 filename                          ) (3ln) (4cl)  (5se)  (6d) (7expln)
-    , m_hitRegExp(QStringLiteral(R"aw((([A-Za-z]:\\|\/).+\.[ch]{1,2}[px]{0,2}):(\d+):(\d+): (.+?): (.+) (\[.+\]))aw"))
+      //                            (1 filename                              ) (2ln) (3cl)  (4se)  (5d) (6expln)
+    , m_hitRegExp(QStringLiteral(R"(((?:[A-Za-z]:\\|\/).+\.[ch]{1,2}[px]{0,2}):(\d+):(\d+): (.+?): (.+) (\[.+\]))"))
 {
 }
 
@@ -82,16 +82,16 @@ void ClangTidyParser::addData(const QStringList& stdoutList)
 
         IProblem::Ptr problem(new DetectedProblem());
         problem->setSource(IProblem::Plugin);
-        problem->setDescription(smatch.captured(6));
-        problem->setExplanation(smatch.captured(7));
+        problem->setDescription(smatch.captured(5));
+        problem->setExplanation(smatch.captured(6));
 
         DocumentRange range;
         range.document = IndexedString(smatch.captured(1));
-        range.setBothColumns(smatch.capturedRef(4).toInt() - 1);
-        range.setBothLines(smatch.capturedRef(3).toInt() - 1);
+        range.setBothColumns(smatch.capturedRef(3).toInt() - 1);
+        range.setBothLines(smatch.capturedRef(2).toInt() - 1);
         problem->setFinalLocation(range);
 
-        const auto sev = smatch.capturedRef(5);
+        const auto sev = smatch.capturedRef(4);
         const IProblem::Severity erity =
             (sev == QLatin1String("error")) ?   IProblem::Error :
             (sev == QLatin1String("warning")) ? IProblem::Warning :
