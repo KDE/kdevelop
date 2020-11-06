@@ -398,11 +398,7 @@ bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
     KDevelop::ProjectBaseItem::ProjectItemType leftType=baseType(type()), rightType=baseType(item->type());
     if(leftType==rightType)
     {
-        if(leftType==KDevelop::ProjectBaseItem::File)
-        {
-            return file()->fileName().compare(item->file()->fileName(), Qt::CaseInsensitive) < 0;
-        }
-        return this->text()<item->text();
+        return text().compare(item->text(), Qt::CaseInsensitive) < 0;
     }
     else
     {
