@@ -246,9 +246,11 @@ void BenchItemRepository::shouldDoReferenceCounting()
     constexpr std::size_t valueCount{100'000'000};
     std::vector<Type> values(valueCount);
 
+    const auto referenceCountingStart = &values.front();
+    constexpr auto referenceCountingSize = valueCount * sizeof(Type);
     QFETCH(bool, enableReferenceCounting);
     if (enableReferenceCounting) {
-        enableDUChainReferenceCounting(&values.front(), values.size() * sizeof(Type));
+        enableDUChainReferenceCounting(referenceCountingStart, referenceCountingSize);
     }
 
     // NOTE: switching CountType from int to std::size_t slows down the "disabled" benchmark
@@ -263,7 +265,7 @@ void BenchItemRepository::shouldDoReferenceCounting()
     }
 
     if (enableReferenceCounting) {
-        disableDUChainReferenceCounting(&values.front());
+        disableDUChainReferenceCounting(referenceCountingStart, referenceCountingSize);
         QCOMPARE(count, static_cast<CountType>(values.size()));
     } else {
         QCOMPARE(count, 0);

@@ -1191,7 +1191,7 @@ void StringSetRepository::itemRemovedFromSets(uint index)
 
     KDevelop::enableDUChainReferenceCounting(&string, sizeof(KDevelop::IndexedString));
     string.~IndexedString(); //Call destructor with enabled reference-counting
-    KDevelop::disableDUChainReferenceCounting(&string);
+    KDevelop::disableDUChainReferenceCounting(&string, sizeof(KDevelop::IndexedString));
 }
 
 void StringSetRepository::itemAddedToSets(uint index)
@@ -1204,6 +1204,6 @@ void StringSetRepository::itemAddedToSets(uint index)
 
     KDevelop::enableDUChainReferenceCounting(data, sizeof(KDevelop::IndexedString));
     new (data) KDevelop::IndexedString(string); //Call constructor with enabled reference-counting
-    KDevelop::disableDUChainReferenceCounting(data);
+    KDevelop::disableDUChainReferenceCounting(data, sizeof(KDevelop::IndexedString));
 }
 }

@@ -19,6 +19,7 @@
 #ifndef KDEVPLATFORM_APPENDEDLIST_H
 #define KDEVPLATFORM_APPENDEDLIST_H
 
+#include <QList>
 #include <QMutex>
 #include <QVector>
 

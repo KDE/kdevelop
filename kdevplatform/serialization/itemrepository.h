@@ -321,13 +321,14 @@ public:
             Q_ASSERT(m_objectMap[localHash] == 0);
             m_objectMap[localHash] = insertedAt;
 
+            const auto referenceCountingSize = dataSize();
             if (markForReferenceCounting)
-                enableDUChainReferenceCounting(m_data, dataSize());
+                enableDUChainReferenceCounting(m_data, referenceCountingSize);
 
             request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
 
             if (markForReferenceCounting)
-                disableDUChainReferenceCounting(m_data);
+                disableDUChainReferenceCounting(m_data, referenceCountingSize);
 
             return insertedAt;
         }
@@ -436,13 +437,14 @@ public:
 #endif
 
         //Last thing we do, because createItem may recursively do even more transformation of the repository
+        const auto referenceCountingSize = dataSize();
         if (markForReferenceCounting)
-            enableDUChainReferenceCounting(m_data, dataSize());
+            enableDUChainReferenceCounting(m_data, referenceCountingSize);
 
         request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
 
         if (markForReferenceCounting)
-            disableDUChainReferenceCounting(m_data);
+            disableDUChainReferenceCounting(m_data, referenceCountingSize);
 
 #ifdef DEBUG_CREATEITEM_EXTENTS
         if (m_available >= 8) {
@@ -559,13 +561,14 @@ public:
 
         Item* item = const_cast<Item*>(itemFromIndex(index));
 
+        const auto referenceCountingSize = dataSize();
         if (markForReferenceCounting)
-            enableDUChainReferenceCounting(m_data, dataSize());
+            enableDUChainReferenceCounting(m_data, referenceCountingSize);
 
         ItemRequest::destroy(item, repository);
 
         if (markForReferenceCounting)
-            disableDUChainReferenceCounting(m_data);
+            disableDUChainReferenceCounting(m_data, referenceCountingSize);
 
 #ifndef QT_NO_DEBUG
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
@@ -1047,9 +1050,10 @@ class DynamicItem
 public:
     DynamicItem(Item* i, void* start, uint size) : m_item(i)
         , m_start(start)
+        , m_size{size}
     {
         if (markForReferenceCounting)
-            enableDUChainReferenceCounting(m_start, size);
+            enableDUChainReferenceCounting(m_start, m_size);
 //       qDebug() << "enabling" << i << "to" << (void*)(((char*)i)+size);
     }
 
@@ -1058,7 +1062,7 @@ public:
         if (m_start) {
 //         qDebug() << "destructor-disabling" << m_item;
             if (markForReferenceCounting)
-                disableDUChainReferenceCounting(m_start);
+                disableDUChainReferenceCounting(m_start, m_size);
         }
     }
 
@@ -1081,6 +1085,7 @@ public:
 
 private:
     mutable void* m_start;
+    const unsigned m_size;
 };
 
 ///@tparam Item See ExampleItem

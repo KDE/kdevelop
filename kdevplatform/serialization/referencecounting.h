@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
+ * Copyright 2020 Igor Kushnir <igorkuo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -23,10 +24,9 @@
 
 #include "serializationexport.h"
 
-#include <QMap>
-#include <QPair>
+#include <QtGlobal>
 
-#include <utility>
+#include <cstddef>
 
 //When this is enabled, the duchain unloading is disabled as well, and you should start
 //with a cleared ~/.kdevduchain
@@ -37,11 +37,17 @@ namespace KDevelop {
 ///so the reference-counting code can be inlined.
 class KDEVPLATFORMSERIALIZATION_EXPORT DUChainReferenceCounting
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    Q_DISABLE_COPY_MOVE(DUChainReferenceCounting)
+#else
     Q_DISABLE_COPY(DUChainReferenceCounting)
+#endif
 public:
-    bool shouldDoDUChainReferenceCounting(void* item) const;
-    void enableDUChainReferenceCounting(void* start, unsigned int size);
-    void disableDUChainReferenceCounting(void* start);
+    using Pointer = const std::byte*;
+
+    bool shouldDo(Pointer item) const noexcept;
+    void enable(Pointer start, unsigned size);
+    void disable(Pointer start, unsigned size);
 
     static DUChainReferenceCounting& instance()
     {
@@ -50,51 +56,43 @@ public:
     }
 
 private:
-    DUChainReferenceCounting();
+    DUChainReferenceCounting() = default;
 
-    bool shouldDoDUChainReferenceCountingInternal(void* item) const;
+    struct Interval {
+        Pointer start;
+        unsigned size;
+        unsigned refCount;
 
-    bool doReferenceCounting;
-    bool refCountingHasAdditionalRanges;
-    QMap<void*, QPair<uint, uint>>* const refCountingRanges;
-    void* refCountingFirstRangeStart;
-    QPair<uint, uint> refCountingFirstRangeExtent;
+        constexpr bool contains(Pointer item) const noexcept { return item >= start && item < start + size; }
+        void assign(Pointer newStart, unsigned newSize) noexcept;
+    };
+
+    Interval* findInterval(Pointer start, unsigned size) noexcept;
+
+    // I have never encountered more than 2 intervals at a time during my tests.
+    // So the maximum interval count of 3 should be more than enough for every practical use.
+    static constexpr std::size_t maxIntervalCount = 3;
+
+    std::size_t count = 0;
+    Interval intervals[maxIntervalCount];
 };
 
-KDEVPLATFORMSERIALIZATION_EXPORT void initReferenceCounting();
-
-inline bool shouldDoDUChainReferenceCounting(void* item)
+inline bool DUChainReferenceCounting::shouldDo(Pointer item) const noexcept
 {
-    return DUChainReferenceCounting::instance().shouldDoDUChainReferenceCounting(item);
-}
-
-inline bool DUChainReferenceCounting::shouldDoDUChainReferenceCountingInternal(void* item) const
-{
-    auto it = std::as_const(*refCountingRanges).upperBound(item);
-    if (it != refCountingRanges->constBegin()) {
-        --it;
-        return reinterpret_cast<char*>(it.key()) <= reinterpret_cast<char*>(item) &&
-               reinterpret_cast<char*>(item) < reinterpret_cast<char*>(it.key()) + it.value().first;
+    for (std::size_t i = 0; i != count; ++i) {
+        if (intervals[i].contains(item)) {
+            return true;
+        }
     }
-
     return false;
 }
 
+KDEVPLATFORMSERIALIZATION_EXPORT void initReferenceCounting();
+
 ///This is used by indexed items to decide whether they should do reference-counting
-inline bool DUChainReferenceCounting::shouldDoDUChainReferenceCounting(void* item) const
+inline bool shouldDoDUChainReferenceCounting(const void* item) noexcept
 {
-    if (!doReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
-        return false;
-
-    if (refCountingFirstRangeStart &&
-        (reinterpret_cast<char*>(refCountingFirstRangeStart) <= reinterpret_cast<char*>(item)) &&
-        (reinterpret_cast<char*>(item) < reinterpret_cast<char*>(refCountingFirstRangeStart) + refCountingFirstRangeExtent.first))
-        return true;
-
-    if (refCountingHasAdditionalRanges)
-        return shouldDoDUChainReferenceCountingInternal(item);
-    else
-        return false;
+    return DUChainReferenceCounting::instance().shouldDo(reinterpret_cast<DUChainReferenceCounting::Pointer>(item));
 }
 
 ///Enable reference-counting for the given range
@@ -105,11 +103,12 @@ inline bool DUChainReferenceCounting::shouldDoDUChainReferenceCounting(void* ite
 ///not care about this stuff at all.
 ///@param start Position where to start the reference-counting
 ///@param size Size of the area in bytes
-KDEVPLATFORMSERIALIZATION_EXPORT void enableDUChainReferenceCounting(void* start, unsigned int size);
+KDEVPLATFORMSERIALIZATION_EXPORT void enableDUChainReferenceCounting(const void* start, unsigned size);
 ///Must be called as often as enableDUChainReferenceCounting, with the same ranges
 ///Must never be called for the same range twice, and not for overlapping ranges
 ///@param start Position where the reference-counting was started
-KDEVPLATFORMSERIALIZATION_EXPORT void disableDUChainReferenceCounting(void* start);
+///@param size Size of the area where the reference-counting was started in bytes
+KDEVPLATFORMSERIALIZATION_EXPORT void disableDUChainReferenceCounting(const void* start, unsigned size);
 
 ///Use this as local variable within the object that maintains the reference-count,
 ///and use

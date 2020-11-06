@@ -135,12 +135,12 @@ void DUChainBase::makeDynamic()
     if (!d_func()->m_dynamic) {
         Q_ASSERT(d_func()->classId);
         DUChainBaseData* newData = DUChainItemSystem::self().cloneData(*d_func());
-        enableDUChainReferenceCounting(d_ptr,
-                                       DUChainItemSystem::self().dynamicSize(*static_cast<DUChainBaseData*>(d_ptr)));
+        const auto referenceCountingSize = DUChainItemSystem::self().dynamicSize(*static_cast<DUChainBaseData*>(d_ptr));
+        enableDUChainReferenceCounting(d_ptr, referenceCountingSize);
         //We don't delete the previous data, because it's embedded in the top-context when it isn't dynamic.
         //However we do call the destructor, to keep semantic stuff like reference-counting within the data class working correctly.
         KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
-        disableDUChainReferenceCounting(d_ptr);
+        disableDUChainReferenceCounting(d_ptr, referenceCountingSize);
         d_ptr = newData;
         Q_ASSERT(d_ptr);
         Q_ASSERT(d_func()->m_dynamic);

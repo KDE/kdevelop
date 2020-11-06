@@ -84,7 +84,7 @@ void saveDUChainItem(QVector<TopDUContextDynamicData::ArrayWithPosition>& data, 
         if (!isSharedDataItem) {
             item.setData(&target);
         }
-        disableDUChainReferenceCounting(data.back().array.data());
+        disableDUChainReferenceCounting(data.back().array.data(), data.back().array.size());
     } else {
         //Just copy the data into another place, expensive copy constructors are not needed
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
