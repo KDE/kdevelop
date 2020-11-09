@@ -28,6 +28,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <util/path.h>
 
+#include <QString>
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
@@ -61,16 +62,12 @@ void createFile( QFile& file )
 }
 }
 
+namespace KDevelop {
 IProject* ProjectsGenerator::GenerateSimpleProject()
 {
-    // directory structure:
-    // ./simpleproject.kdev4
-    // ./src/main.cpp
-    // ./.kdev4/simpleproject.kdev4
-
     const QString sp = QStringLiteral( "simpleproject" );
     auto rootFolder = QDir::temp();
-    QDir(rootFolder.absolutePath() + "/" + sp).removeRecursively();
+    QDir(rootFolder.absolutePath() + QStringLiteral( "/" ) + sp).removeRecursively();
     rootFolder.mkdir( sp );
     rootFolder.cd( sp );
     rootFolder.mkdir( QStringLiteral("src") );
@@ -102,20 +99,14 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
         "[Project]\n" <<
         "VersionControlSupport=\n";
     }
-    return loadProject( QDir::tempPath() + "/simpleproject/simpleproject.kdev4", QStringLiteral("SimpleProject") );
+    return loadProject( QDir::tempPath() + QStringLiteral( "/simpleproject/simpleproject.kdev4" ), QStringLiteral("SimpleProject") );
 }
 
 IProject* ProjectsGenerator::GenerateMultiPathProject()
 {
-    // directory structure:
-    // ./multipathproject.kdev4
-    // ./src/main.cpp
-    // ./anotherFolder/tst.h
-    // ./.kdev4/multipathproject.kdev4
-
     const QString mp = QStringLiteral( "multipathproject" );
     auto rootFolder = QDir::temp();
-    QDir(rootFolder.absolutePath() + "/" + mp).removeRecursively();
+    QDir(rootFolder.absolutePath() + QStringLiteral( "/" ) + mp).removeRecursively();
     rootFolder.mkdir( mp );
     rootFolder.cd( mp );
     rootFolder.mkdir( QStringLiteral("src") );
@@ -161,7 +152,7 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
         "[Project]\n" <<
         "VersionControlSupport=\n";
     }
-    return loadProject( QDir::tempPath() + "/multipathproject/multipathproject.kdev4", QStringLiteral("MultiPathProject") );
+    return loadProject( QDir::tempPath() + QStringLiteral( "/multipathproject/multipathproject.kdev4" ), QStringLiteral("MultiPathProject") );
 }
 
 IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
@@ -175,20 +166,16 @@ IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
     QFile file(rootFolder.filePath(includePaths));
     createFile(file);
     QTextStream stream( &file );
-    stream << "." + QDir::separator() + "include1.h\n" << rootFolder.canonicalPath() + QDir::separator() + "include2.h";
+    stream << QStringLiteral(".") + QDir::separator() + QStringLiteral("include1.h") << endl << rootFolder.canonicalPath() + QDir::separator() + QStringLiteral("include2.h");
 
     return project;
 }
 
 IProject* ProjectsGenerator::GenerateEmptyProject()
 {
-    // directory structure:
-    // ./emptyproject.kdev4
-    // ./.kdev4/emptyproject.kdev4
-
     const QString ep = QStringLiteral("emptyproject");
     auto rootFolder = QDir::temp();
-    QDir(rootFolder.absolutePath() + "/" + ep).removeRecursively();
+    QDir(rootFolder.absolutePath() + QStringLiteral("/") + ep).removeRecursively();
     rootFolder.mkdir(ep);
     rootFolder.cd(ep);
     rootFolder.mkdir(QStringLiteral(".kdev4"));
@@ -206,5 +193,6 @@ IProject* ProjectsGenerator::GenerateEmptyProject()
         QTextStream stream(&file);
         stream << "[Project]\n" << "VersionControlSupport=\n";
     }
-    return loadProject(QDir::tempPath() + "/emptyproject/emptyproject.kdev4", QStringLiteral("EmptyProject"));
+    return loadProject(QDir::tempPath() + QStringLiteral( "/emptyproject/emptyproject.kdev4" ), QStringLiteral("EmptyProject"));
 }
+} // KDevelop

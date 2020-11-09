@@ -29,6 +29,7 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/projectsgenerator.h>
 
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
@@ -40,7 +41,6 @@
 
 #include "../compilerprovider.h"
 #include "../settingsmanager.h"
-#include "../tests/projectsgenerator.h"
 
 using namespace KDevelop;
 

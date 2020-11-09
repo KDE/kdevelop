@@ -18,7 +18,6 @@
  ************************************************************************/
 
 #include "test_definesandincludes.h"
-#include "projectsgenerator.h"
 
 #include <QTest>
 
@@ -28,12 +27,15 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
+#include <tests/projectsgenerator.h>
 
 #include "idefinesandincludesmanager.h"
 
 using namespace KDevelop;
 
-static IProject* s_currentProject = nullptr;
+void TestDefinesAndIncludes::init()
+{
+}
 
 void TestDefinesAndIncludes::cleanupTestCase()
 {
@@ -48,18 +50,18 @@ void TestDefinesAndIncludes::initTestCase()
 
 void TestDefinesAndIncludes::cleanup()
 {
-    ICore::self()->projectController()->closeProject( s_currentProject );
+    ICore::self()->projectController()->closeProject( m_currentProject );
 }
 
 void TestDefinesAndIncludes::loadSimpleProject()
 {
-    s_currentProject = ProjectsGenerator::GenerateSimpleProject();
-    QVERIFY( s_currentProject );
+    m_currentProject = ProjectsGenerator::GenerateSimpleProject();
+    QVERIFY( m_currentProject );
 
     auto manager = IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
-    const auto actualIncludes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
-    const auto actualDefines = manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
+    const auto actualIncludes = manager->includes( m_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
+    const auto actualDefines = manager->defines( m_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
 
     qDebug() << actualDefines << actualIncludes;
 
@@ -70,13 +72,13 @@ void TestDefinesAndIncludes::loadSimpleProject()
     defines.insert( QStringLiteral("VARIABLE"), QStringLiteral("VALUE") );
     QCOMPARE( actualDefines, defines );
 
-    QVERIFY(!manager->parserArguments(s_currentProject->path().path() + "/src/main.cpp").isEmpty());
+    QVERIFY(!manager->parserArguments(m_currentProject->path().path() + "/src/main.cpp").isEmpty());
 }
 
 void TestDefinesAndIncludes::loadMultiPathProject()
 {
-    s_currentProject = ProjectsGenerator::GenerateMultiPathProject();
-    QVERIFY( s_currentProject );
+    m_currentProject = ProjectsGenerator::GenerateMultiPathProject();
+    QVERIFY( m_currentProject );
 
     auto manager = IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
@@ -86,13 +88,13 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     defines.insert(QStringLiteral("SOURCE"), QStringLiteral("CONTENT"));
     defines.insert(QStringLiteral("_COPY"), QString());
 
-    QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
-    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
+    QCOMPARE( manager->includes( m_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
+    QCOMPARE( manager->defines( m_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
     ProjectBaseItem* mainfile = nullptr;
-    const auto& fileSet = s_currentProject->fileSet();
+    const auto& fileSet = m_currentProject->fileSet();
     for (const auto& file : fileSet) {
-        const auto& files = s_currentProject->filesForPath(file);
+        const auto& files = m_currentProject->filesForPath(file);
         for (auto i: files) {
             if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
@@ -113,36 +115,36 @@ void TestDefinesAndIncludes::loadMultiPathProject()
 
 void TestDefinesAndIncludes::testNoProjectIncludeDirectories()
 {
-    s_currentProject = ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles();
-    QVERIFY(s_currentProject);
+    m_currentProject = ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles();
+    QVERIFY(m_currentProject);
 
     auto manager = KDevelop::IDefinesAndIncludesManager::manager();
     QVERIFY(manager);
 
-    auto projectIncludes = manager->includes(s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined);
+    auto projectIncludes = manager->includes(m_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined);
 
-    Path includePath1(s_currentProject->path().path() + QDir::separator() + "include1.h");
-    Path includePath2(s_currentProject->path().path() + QDir::separator() + "include2.h");
+    Path includePath1(m_currentProject->path().path() + QDir::separator() + "include1.h");
+    Path includePath2(m_currentProject->path().path() + QDir::separator() + "include2.h");
 
     QVERIFY(!projectIncludes.contains(includePath1));
     QVERIFY(!projectIncludes.contains(includePath2));
 
-    auto noProjectIncludes = manager->includes(s_currentProject->path().path() + "/src/main.cpp");
+    auto noProjectIncludes = manager->includes(m_currentProject->path().path() + "/src/main.cpp");
     QVERIFY(noProjectIncludes.contains(includePath1));
     QVERIFY(noProjectIncludes.contains(includePath2));
 }
 
 void TestDefinesAndIncludes::testEmptyProject()
 {
-    s_currentProject = ProjectsGenerator::GenerateEmptyProject();
-    QVERIFY(s_currentProject);
+    m_currentProject = ProjectsGenerator::GenerateEmptyProject();
+    QVERIFY(m_currentProject);
 
     auto manager = KDevelop::IDefinesAndIncludesManager::manager();
     QVERIFY(manager);
 
-    auto projectIncludes = manager->includes(s_currentProject->projectItem());
-    auto projectDefines = manager->defines(s_currentProject->projectItem());
-    auto parserArguments = manager->parserArguments(s_currentProject->projectItem());
+    auto projectIncludes = manager->includes(m_currentProject->projectItem());
+    auto projectDefines = manager->defines(m_currentProject->projectItem());
+    auto parserArguments = manager->parserArguments(m_currentProject->projectItem());
 
     QVERIFY(projectIncludes.isEmpty());
     QVERIFY(projectDefines.isEmpty());

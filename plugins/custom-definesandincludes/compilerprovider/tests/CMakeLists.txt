@@ -8,7 +8,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../..)
 
 set(test_compilerprovider_SRCS
     test_compilerprovider.cpp
-    ../../tests/projectsgenerator.cpp
 )
 
 ecm_add_test(${test_compilerprovider_SRCS}

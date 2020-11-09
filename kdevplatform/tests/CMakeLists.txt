@@ -1,6 +1,7 @@
 set(kdevtests_LIB_SRCS
     autotestshell.cpp
     kdevsignalspy.cpp
+    projectsgenerator.cpp
     testcore.cpp
     testproject.cpp
     testfile.cpp
@@ -36,6 +37,7 @@ PRIVATE
 install(FILES
     autotestshell.h
     kdevsignalspy.h
+    projectsgenerator.h
     testcore.h
     testproject.h
     testfile.h
