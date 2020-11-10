@@ -20,6 +20,7 @@
 
 #include "tests/debuggers-tests-config.h"
 
+#include <QCoreApplication>
 #include <QTest>
 #include <QProcess>
 #include <QDebug>
@@ -103,6 +104,10 @@ public:
 void QtPrintersTest::initTestCase()
 {
     QStandardPaths::setTestModeEnabled(true);
+
+    // Prevent SIGPIPE, then "ICE default IO error handler doing an exit(), pid = <PID>, errno = 32"
+    // crash when the test runs for at least 60 seconds. This is a workaround for QTBUG-58709.
+    QCoreApplication::processEvents();
 }
 
 void QtPrintersTest::testQString()
