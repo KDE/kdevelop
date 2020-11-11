@@ -16,6 +16,7 @@
     <comment xml:lang="pt_BR">Arquivo de projeto do KDevelop</comment>
     <comment xml:lang="sv">KDevelop-projektfil</comment>
     <comment xml:lang="uk">файл проєкту KDevelop</comment>
+    <comment xml:lang="zh_CN">KDevelop 工程文件</comment>
     <glob pattern="*.kdev4"/>
     <generic-icon name="kdevelop"/>
     <sub-class-of type="text/plain"/>
