@@ -2,6 +2,13 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-kdevelop">
     <comment>KDevelop Project File</comment>
+    <comment xml:lang="ca">Fitxer de projecte del KDevelop</comment>
+    <comment xml:lang="es">Archivo de proyecto de KDevelop</comment>
+    <comment xml:lang="it">File di progetto di KDevelop</comment>
+    <comment xml:lang="nl">Projectbestand van KDevelop</comment>
+    <comment xml:lang="nn">KDevelop-prosjektfil</comment>
+    <comment xml:lang="sv">KDevelop-projektfil</comment>
+    <comment xml:lang="uk">файл проєкту KDevelop</comment>
     <glob pattern="*.kdev4"/>
     <generic-icon name="kdevelop"/>
     <sub-class-of type="text/plain"/>

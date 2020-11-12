@@ -8,6 +8,13 @@
     -->
     <mime-type type="text/x-opencl-src">
         <comment>OpenCL C source code</comment>
+        <comment xml:lang="ca">Codi font en C per a OpenCL</comment>
+        <comment xml:lang="es">Código fuente de OpenCL C</comment>
+        <comment xml:lang="it">Codice sorgente OpenCL C</comment>
+        <comment xml:lang="nl">OpenCL C broncode</comment>
+        <comment xml:lang="nn">OpenCL C-kjeldekode</comment>
+        <comment xml:lang="sv">OpenCL C-källkod</comment>
+        <comment xml:lang="uk">початковий код C OpenCL</comment>
         <acronym>OpenCL</acronym>
         <expanded-acronym>Open Computing Language</expanded-acronym>
         <sub-class-of type="text/x-csrc"/>
@@ -18,12 +25,26 @@
     <!-- Not yet registered, mimetype based on proposal in https://bugs.freedesktop.org/show_bug.cgi?id=23700 -->
     <mime-type type="text/vnd.nvidia.cuda.csrc">
         <comment>NVIDIA CUDA C source code</comment>
+        <comment xml:lang="ca">Codi font en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
+        <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
+        <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
+        <comment xml:lang="nn">NVIDIA CUDA C-kjeldekode</comment>
+        <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
+        <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
         <sub-class-of type="text/x-c++src"/>
         <glob pattern="*.cu"/>
     </mime-type>
 
     <mime-type type="text/vnd.nvidia.cuda.chdr">
         <comment>NVIDIA CUDA C header</comment>
+        <comment xml:lang="ca">Capçalera en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
+        <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
+        <comment xml:lang="nl">NVIDIA CUDA C header</comment>
+        <comment xml:lang="nn">NVIDIA CUDA C-deklarasjonsfil</comment>
+        <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
+        <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
         <sub-class-of type="text/x-c++hdr"/>
         <glob pattern="*.cuh"/>
     </mime-type>
