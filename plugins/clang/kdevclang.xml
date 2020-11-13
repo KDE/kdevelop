@@ -9,6 +9,7 @@
     <mime-type type="text/x-opencl-src">
         <comment>OpenCL C source code</comment>
         <comment xml:lang="ca">Codi font en C per a OpenCL</comment>
+        <comment xml:lang="en_GB">OpenCL C source code</comment>
         <comment xml:lang="es">Código fuente de OpenCL C</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
         <comment xml:lang="nl">OpenCL C broncode</comment>
@@ -26,6 +27,7 @@
     <mime-type type="text/vnd.nvidia.cuda.csrc">
         <comment>NVIDIA CUDA C source code</comment>
         <comment xml:lang="ca">Codi font en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
         <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
@@ -39,6 +41,7 @@
     <mime-type type="text/vnd.nvidia.cuda.chdr">
         <comment>NVIDIA CUDA C header</comment>
         <comment xml:lang="ca">Capçalera en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="en_GB">NVIDIA CUDA C header</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
