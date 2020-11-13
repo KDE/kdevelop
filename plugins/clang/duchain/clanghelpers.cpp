@@ -386,7 +386,8 @@ QString ClangHelpers::clangVersion()
         // samples:
         //   clang version 6.0.1 (trunk 321709) (git@github.com:llvm-mirror/llvm.git 5136df4d089a086b70d452160ad5451861269498)
         //   clang version 7.0.0-svn341916-1~exp1~20180911115939.26 (branches/release_70)
-        QRegularExpression re(QStringLiteral("^clang version (\\d+\\.\\d+\\.\\d+)"));
+        //   Ubuntu clang version 11.0.0-2
+        QRegularExpression re(QStringLiteral("clang version (\\d+\\.\\d+\\.\\d+)"));
         const auto match = re.match(version.toString());
         if (!match.hasMatch())
             return {};
