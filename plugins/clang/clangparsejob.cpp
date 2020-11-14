@@ -333,9 +333,9 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
         return;
     }
 
-    auto context = ClangHelpers::buildDUChain(session.mainFile(), imports, session,
-                                              minimumFeatures(), includedFiles,
-                                              clang()->index(), [this] { return abortRequested(); });
+    auto context
+        = ClangHelpers::buildDUChain(session.mainFile(), imports, session, minimumFeatures(), includedFiles,
+                                     m_unsavedRevisions, clang()->index(), [this] { return abortRequested(); });
     setDuChain(context);
 
     if (abortRequested()) {
@@ -362,16 +362,6 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
     for (const auto& context : qAsConst(includedFiles)) {
         if (!context) {
             continue;
-        }
-        {
-            // prefer the editor modification revision, instead of the on-disk revision
-            auto it = m_unsavedRevisions.find(context->url());
-            if (it != m_unsavedRevisions.end()) {
-                DUChainWriteLocker lock;
-                auto file = parsingEnvironmentFile(context);
-                Q_ASSERT(file);
-                file->setModificationRevision(it.value());
-            }
         }
         if (trackerForUrl(context->url())) {
             if (clang()->index()->translationUnitForUrl(context->url()) == m_environment.translationUnitUrl()) {

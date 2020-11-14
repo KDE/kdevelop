@@ -112,7 +112,8 @@ bool importLocationLessThan(const Import& lhs, const Import& rhs)
 
 ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
                                                   TopDUContext::Features features, IncludeFileContexts& includedFiles,
-                                                  ClangIndex* index, const std::function<bool()>& abortFunction)
+                                                  const UnsavedRevisions& unsavedRevisions, ClangIndex* index,
+                                                  const std::function<bool()>& abortFunction)
 {
     if (includedFiles.contains(file)) {
         return {};
@@ -130,7 +131,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     std::sort(sortedImports.begin(), sortedImports.end(), importLocationLessThan);
 
     for (const auto& import : qAsConst(sortedImports)) {
-        buildDUChain(import.file, imports, session, features, includedFiles, index, abortFunction);
+        buildDUChain(import.file, imports, session, features, includedFiles, unsavedRevisions, index, abortFunction);
     }
 
     const QFileInfo pathInfo(ClangString(clang_getFileName(file)).toString());
@@ -155,29 +156,31 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
 
         includedFiles.insert(file, context);
-        if (update) {
-            auto envFile = ClangParsingEnvironmentFile::Ptr(dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data()));
-            Q_ASSERT(envFile);
-            if (!envFile)
-                return context;
 
+        auto envFile = dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
+        Q_ASSERT(envFile);
+        if (!envFile)
+            return context;
+
+        if (update) {
             /* NOTE: When we are here, then either the translation unit or one of its headers was changed.
              *       Thus we must always update the translation unit to propagate the change(s).
              *       See also: https://bugs.kde.org/show_bug.cgi?id=356327
              *       This assumes that headers are independent, we may need to improve that in the future
              *       and also update header files more often when other files included therein got updated.
              */
-            if (path != environment.translationUnitUrl() && !envFile->needsUpdate(&environment) && envFile->featuresSatisfied(features)) {
+            if (path != environment.translationUnitUrl() && !envFile->needsUpdate(&environment)
+                && envFile->featuresSatisfied(features)) {
                 return context;
-            } else {
-                //TODO: don't attempt to update if this environment is worse quality than the outdated one
-                if (index && envFile->environmentQuality() < environment.quality()) {
-                    index->pinTranslationUnitForUrl(environment.translationUnitUrl(), path);
-                }
-                envFile->setEnvironment(environment);
-                envFile->setModificationRevision(ModificationRevision::revisionForFile(context->url()));
             }
 
+            // TODO: don't attempt to update if this environment is worse quality than the outdated one
+            if (index && envFile->environmentQuality() < environment.quality()) {
+                index->pinTranslationUnitForUrl(environment.translationUnitUrl(), path);
+            }
+            envFile->setEnvironment(environment);
+
+            envFile->clearModificationRevisions();
             context->clearImportedParentContexts();
         }
         context->setFeatures(features);
@@ -189,8 +192,17 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
                 continue;
             }
             context->addImportedParentContext(ctx, import.location);
+            envFile->addModificationRevisions(ctx->parsingEnvironmentFile()->allModificationRevisions());
         }
         context->updateImportsCache();
+
+        // prefer the editor modification revision, instead of the on-disk revision
+        auto it = unsavedRevisions.find(path);
+        if (it == unsavedRevisions.end()) {
+            envFile->setModificationRevision(ModificationRevision::revisionForFile(path));
+        } else {
+            envFile->setModificationRevision(*it);
+        }
     }
 
     const auto problems = session.problemsForFile(file);
