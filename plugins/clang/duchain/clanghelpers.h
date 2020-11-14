@@ -84,8 +84,8 @@ KDEVCLANGPRIVATE_EXPORT Imports tuImports(CXTranslationUnit tu);
 KDEVCLANGPRIVATE_EXPORT KDevelop::ReferencedTopDUContext
 buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
              KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles,
-             const UnsavedRevisions& unsavedRevisions, ClangIndex* index = nullptr,
-             const std::function<bool()>& abortFunction = {});
+             const UnsavedRevisions& unsavedRevisions, const KDevelop::IndexedString& parseDocument,
+             ClangIndex* index = nullptr, const std::function<bool()>& abortFunction = {});
 
 /**
  * @return List of possible header extensions used for definition/declaration fallback switching
