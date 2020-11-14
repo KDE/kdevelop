@@ -133,7 +133,8 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         buildDUChain(import.file, imports, session, features, includedFiles, index, abortFunction);
     }
 
-    const IndexedString path(QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath());
+    const QFileInfo pathInfo(ClangString(clang_getFileName(file)).toString());
+    const IndexedString path(pathInfo.canonicalFilePath());
     if (path.isEmpty()) {
         // may happen when the file gets removed before the job is run
         return {};
