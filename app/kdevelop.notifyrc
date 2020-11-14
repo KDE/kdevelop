@@ -532,6 +532,13 @@ Comment[x-test]=xxA Breakpoint has been hit by the debuggerxx
 Comment[zh_CN]=调试器命中了一个断点
 Comment[zh_TW]=除錯器進行遇到中斷點
 
+[Event/BreakpointError]
+Contexts=debugger
+Action=Popup
+IconName=script-error
+Name=Breakpoint Error
+Comment=An error was reported by the debugger
+
 [Event/WatchpointHit]
 Contexts=debugger
 Action=Popup
