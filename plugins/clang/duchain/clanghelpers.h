@@ -34,6 +34,11 @@
 class ParseSession;
 class ClangIndex;
 
+namespace KDevelop
+{
+class ModificationRevision;
+}
+
 struct Import
 {
     CXFile file;
@@ -44,6 +49,7 @@ Q_DECLARE_TYPEINFO(Import, Q_MOVABLE_TYPE);
 
 using Imports = QMultiHash<CXFile, Import>;
 using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
+using UnsavedRevisions = QHash<KDevelop::IndexedString, KDevelop::ModificationRevision>;
 
 namespace ClangHelpers {
 
@@ -75,10 +81,11 @@ KDEVCLANGPRIVATE_EXPORT Imports tuImports(CXTranslationUnit tu);
  * The resulting contexts are placed in @a includedFiles.
  * @returns the context created for @a file
  */
-KDEVCLANGPRIVATE_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
-    CXFile file, const Imports& imports, const ParseSession& session,
-    KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles,
-    ClangIndex* index = nullptr, const std::function<bool()>& abortFunction = {});
+KDEVCLANGPRIVATE_EXPORT KDevelop::ReferencedTopDUContext
+buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
+             KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles,
+             const UnsavedRevisions& unsavedRevisions, ClangIndex* index = nullptr,
+             const std::function<bool()>& abortFunction = {});
 
 /**
  * @return List of possible header extensions used for definition/declaration fallback switching
