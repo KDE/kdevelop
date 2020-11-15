@@ -34,6 +34,7 @@
 #include <KActionMenu>
 #include <KJobWidgets>
 #include <KConfigGroup>
+#include <kwidgetsaddons_version.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
@@ -136,7 +137,11 @@ void FileManager::updateNav( const QUrl& url )
 void FileManager::setupActions()
 {
     auto* acmBookmarks = new KActionMenu(QIcon::fromTheme(QStringLiteral("bookmarks")), i18nc("@title:menu", "Bookmarks"), this);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
+    acmBookmarks->setPopupMode(QToolButton::InstantPopup);
+#else
     acmBookmarks->setDelayed(false);
+#endif
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 

@@ -21,6 +21,7 @@
 
 #include <KActionMenu>
 #include <KLocalizedString>
+#include <kwidgetsaddons_version.h>
 
 #include <QAction>
 #include <QLineEdit>
@@ -55,7 +56,11 @@ void ProblemsView::setupActions()
 
     {
         m_scopeMenu = new KActionMenu(this);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
+        m_scopeMenu->setPopupMode(QToolButton::InstantPopup);
+#else
         m_scopeMenu->setDelayed(false);
+#endif
         m_scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
         m_scopeMenu->setObjectName(QStringLiteral("scopeMenu"));
 
@@ -152,7 +157,11 @@ void ProblemsView::setupActions()
 
     {
         m_groupingMenu = new KActionMenu(i18nc("@title:menu", "Grouping"), this);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
+        m_groupingMenu->setPopupMode(QToolButton::InstantPopup);
+#else
         m_groupingMenu->setDelayed(false);
+#endif
 
         auto* groupingActions = new QActionGroup(this);
 
