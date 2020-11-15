@@ -24,6 +24,7 @@
 #include <kdevelopsessionsobserver.h>
 // KF
 #include <KRunner/AbstractRunner>
+#include <krunner_version.h>
 
 
 class KDevelopSessions : public Plasma::AbstractRunner
@@ -33,7 +34,11 @@ class KDevelopSessions : public Plasma::AbstractRunner
     Q_INTERFACES(KDevelopSessionsObserver)
 
 public:
+#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 77, 0)
+    KDevelopSessions(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
+#else
     KDevelopSessions(QObject *parent, const QVariantList& args);
+#endif
     ~KDevelopSessions() override;
 
 public:

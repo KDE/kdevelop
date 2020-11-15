@@ -23,7 +23,6 @@
 #include <kdevelopsessionswatch.h>
 // KF
 #include <KLocalizedString>
-#include <krunner_version.h>
 // Qt
 #include <QDebug>
 #include <QCollator>
@@ -34,8 +33,13 @@ K_EXPORT_PLASMA_RUNNER_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
 K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
 #endif
 
+#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 77, 0)
+KDevelopSessions::KDevelopSessions(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
+    : Plasma::AbstractRunner(parent, metaData, args)
+#else
 KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     : Plasma::AbstractRunner(parent, args)
+#endif
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
     setIgnoredTypes(Plasma::RunnerContext::File | Plasma::RunnerContext::Directory | Plasma::RunnerContext::NetworkLocation);
