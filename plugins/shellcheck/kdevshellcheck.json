@@ -1,0 +1,17 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Morten Danielsen Volden"
+            }
+        ],
+        "Description": "Provides KDevelop Integration with ShellCheck. A static analysis and linting tool for sh/bash scripts.",
+        "Id": "kdevshellcheck",
+        "Name": "kdevshellcheck",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Analyzers",
+    "X-KDevelop-Mode": "GUI"
+}
