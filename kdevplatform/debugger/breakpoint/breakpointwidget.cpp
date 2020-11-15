@@ -358,8 +358,9 @@ void BreakpointWidget::showBreakpointError(const QString& msg)
 {
     Q_D(BreakpointWidget);
 
-    auto * const errorPopup = new KNotification(QStringLiteral("BreakpointError"), d->breakpointsView);
+    auto * const errorPopup = new KNotification(QStringLiteral("BreakpointError"));
     connect(errorPopup, &KNotification::closed, this, &BreakpointWidget::breakpointErrorPopupClosed);
+    errorPopup->setWidget(d->breakpointsView);
     errorPopup->setText(msg);
     errorPopup->sendEvent();
     d->breakpointErrorMessageVisibile = true;
