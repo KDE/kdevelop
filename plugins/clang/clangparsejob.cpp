@@ -154,7 +154,7 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     return file;
 }
 
-ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
+[[maybe_unused]] ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
 {
     return dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
 }
