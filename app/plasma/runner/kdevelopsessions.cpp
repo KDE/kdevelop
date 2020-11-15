@@ -42,7 +42,6 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
 #endif
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
-    setIgnoredTypes(Plasma::RunnerContext::File | Plasma::RunnerContext::Directory | Plasma::RunnerContext::NetworkLocation);
 
     Plasma::RunnerSyntax s(QStringLiteral(":q:"), i18n("Finds KDevelop sessions matching :q:."));
     s.addExampleQuery(QStringLiteral("kdevelop :q:"));
