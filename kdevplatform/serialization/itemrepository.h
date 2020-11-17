@@ -296,6 +296,11 @@ public:
         unsigned short index = m_objectMap[localHash];
         unsigned short insertedAt = 0;
 
+        const auto createInsertedItem = [&]() {
+            const OptionalDUChainReferenceCountingEnabler<markForReferenceCounting> optionalRc(m_data, dataSize());
+            request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
+        };
+
         unsigned short follower = 0;
         //Walk the chain of items with the same local hash
         while (index && (follower = followerIndex(index)) && !(request.equals(itemFromIndex(index))))
@@ -320,16 +325,7 @@ public:
             setFollowerIndex(insertedAt, 0);
             Q_ASSERT(m_objectMap[localHash] == 0);
             m_objectMap[localHash] = insertedAt;
-
-            const auto referenceCountingSize = dataSize();
-            if (markForReferenceCounting)
-                enableDUChainReferenceCounting(m_data, referenceCountingSize);
-
-            request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
-
-            if (markForReferenceCounting)
-                disableDUChainReferenceCounting(m_data, referenceCountingSize);
-
+            createInsertedItem();
             return insertedAt;
         }
 
@@ -437,14 +433,7 @@ public:
 #endif
 
         //Last thing we do, because createItem may recursively do even more transformation of the repository
-        const auto referenceCountingSize = dataSize();
-        if (markForReferenceCounting)
-            enableDUChainReferenceCounting(m_data, referenceCountingSize);
-
-        request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
-
-        if (markForReferenceCounting)
-            disableDUChainReferenceCounting(m_data, referenceCountingSize);
+        createInsertedItem();
 
 #ifdef DEBUG_CREATEITEM_EXTENTS
         if (m_available >= 8) {
@@ -561,14 +550,10 @@ public:
 
         Item* item = const_cast<Item*>(itemFromIndex(index));
 
-        const auto referenceCountingSize = dataSize();
-        if (markForReferenceCounting)
-            enableDUChainReferenceCounting(m_data, referenceCountingSize);
-
-        ItemRequest::destroy(item, repository);
-
-        if (markForReferenceCounting)
-            disableDUChainReferenceCounting(m_data, referenceCountingSize);
+        {
+            const OptionalDUChainReferenceCountingEnabler<markForReferenceCounting> optionalRc(m_data, dataSize());
+            ItemRequest::destroy(item, repository);
+        }
 
 #ifndef QT_NO_DEBUG
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
@@ -1043,38 +1028,20 @@ private:
 ///stored in the repository. It is needed to correctly track the reference counting
 ///within disk-storage.
 template <class Item, bool markForReferenceCounting>
-class DynamicItem
+class DynamicItem : public OptionalDUChainReferenceCountingEnabler<markForReferenceCounting>
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
-    Q_DISABLE_COPY_MOVE(DynamicItem)
-#else
-    Q_DISABLE_COPY(DynamicItem)
-#endif
 public:
-    explicit DynamicItem(Item* i, const void* start, unsigned size) : m_item(i)
-        , m_start(start)
-        , m_size{size}
+    explicit DynamicItem(Item* i, const void* start, unsigned size)
+        : OptionalDUChainReferenceCountingEnabler<markForReferenceCounting>(start, size)
+        , m_item{i}
     {
-        if (markForReferenceCounting)
-            enableDUChainReferenceCounting(m_start, m_size);
 //       qDebug() << "enabling" << i << "to" << (void*)(((char*)i)+size);
-    }
-
-    ~DynamicItem()
-    {
-        if (m_start) {
-//         qDebug() << "destructor-disabling" << m_item;
-            if (markForReferenceCounting)
-                disableDUChainReferenceCounting(m_start, m_size);
-        }
     }
 
     Item* operator->() const { return m_item; }
 
 private:
     Item* const m_item;
-    const void* const m_start;
-    const unsigned m_size;
 };
 
 ///@tparam Item See ExampleItem

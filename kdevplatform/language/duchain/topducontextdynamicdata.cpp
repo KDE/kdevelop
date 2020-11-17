@@ -77,14 +77,12 @@ void saveDUChainItem(QVector<TopDUContextDynamicData::ArrayWithPosition>& data, 
 
     if (item.d_func()->isDynamic()) {
         //Change from dynamic data to constant data
-
-        enableDUChainReferenceCounting(data.back().array.data(), data.back().array.size());
+        const DUChainReferenceCountingEnabler rcEnabler(data.back().array.data(), data.back().array.size());
         DUChainItemSystem::self().copy(*item.d_func(), target, true);
         Q_ASSERT(!target.isDynamic());
         if (!isSharedDataItem) {
             item.setData(&target);
         }
-        disableDUChainReferenceCounting(data.back().array.data(), data.back().array.size());
     } else {
         //Just copy the data into another place, expensive copy constructors are not needed
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)

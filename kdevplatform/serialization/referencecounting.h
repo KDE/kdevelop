@@ -110,6 +110,43 @@ KDEVPLATFORMSERIALIZATION_EXPORT void enableDUChainReferenceCounting(const void*
 ///@param size Size of the area where the reference-counting was started in bytes
 KDEVPLATFORMSERIALIZATION_EXPORT void disableDUChainReferenceCounting(const void* start, unsigned size);
 
+class DUChainReferenceCountingEnabler
+{
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    Q_DISABLE_COPY_MOVE(DUChainReferenceCountingEnabler)
+#else
+    Q_DISABLE_COPY(DUChainReferenceCountingEnabler)
+#endif
+public:
+    explicit DUChainReferenceCountingEnabler(const void* start, unsigned size)
+        : m_start{start}
+        , m_size{size}
+    {
+        enableDUChainReferenceCounting(m_start, m_size);
+    }
+
+    ~DUChainReferenceCountingEnabler()
+    {
+        disableDUChainReferenceCounting(m_start, m_size);
+    }
+
+private:
+    const void* const m_start;
+    const unsigned m_size;
+};
+
+template <bool markForReferenceCounting>
+struct OptionalDUChainReferenceCountingEnabler
+{
+    explicit OptionalDUChainReferenceCountingEnabler(const void*, unsigned) {}
+};
+
+template<>
+struct OptionalDUChainReferenceCountingEnabler<true> : DUChainReferenceCountingEnabler
+{
+    using DUChainReferenceCountingEnabler::DUChainReferenceCountingEnabler;
+};
+
 ///Use this as local variable within the object that maintains the reference-count,
 ///and use
 struct ReferenceCountManager
