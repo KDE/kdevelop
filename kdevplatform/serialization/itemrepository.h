@@ -1042,13 +1042,16 @@ private:
 ///This object needs to be kept alive as long as you change the contents of an item
 ///stored in the repository. It is needed to correctly track the reference counting
 ///within disk-storage.
-///@warning You can not freely copy this around, when you create a copy, the copy source
-///         becomes invalid
 template <class Item, bool markForReferenceCounting>
 class DynamicItem
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    Q_DISABLE_COPY_MOVE(DynamicItem)
+#else
+    Q_DISABLE_COPY(DynamicItem)
+#endif
 public:
-    DynamicItem(Item* i, void* start, uint size) : m_item(i)
+    explicit DynamicItem(Item* i, const void* start, unsigned size) : m_item(i)
         , m_start(start)
         , m_size{size}
     {
@@ -1066,25 +1069,11 @@ public:
         }
     }
 
-    DynamicItem(const DynamicItem& rhs) : m_item(rhs.m_item)
-        , m_start(rhs.m_start)
-    {
-//         qDebug() << "stealing" << m_item;
-        Q_ASSERT(rhs.m_start);
-        rhs.m_start = nullptr;
-    }
-
-    DynamicItem& operator=(const DynamicItem&) = delete;
-
-    Item* operator->()
-    {
-        return m_item;
-    }
-
-    Item* m_item;
+    Item* operator->() const { return m_item; }
 
 private:
-    mutable void* m_start;
+    Item* const m_item;
+    const void* const m_start;
     const unsigned m_size;
 };
 
