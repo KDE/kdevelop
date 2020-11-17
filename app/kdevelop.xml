@@ -3,6 +3,7 @@
   <mime-type type="application/x-kdevelop">
     <comment>KDevelop Project File</comment>
     <comment xml:lang="ca">Fitxer de projecte del KDevelop</comment>
+    <comment xml:lang="ca@valencia">Fitxer de projecte del KDevelop</comment>
     <comment xml:lang="en_GB">KDevelop Project File</comment>
     <comment xml:lang="es">Archivo de proyecto de KDevelop</comment>
     <comment xml:lang="it">File di progetto di KDevelop</comment>
