@@ -14,48 +14,44 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
-#ifndef SHELLCHECK_H
-#define SHELLCHECK_H
 
-#include <interfaces/iplugin.h>
-//#include <shell/problemmodel.h>
+#include "globalconfigpage.h"
+#include "ui_globalconfigpage.h"
 
+#include "globalsettings.h"
 
-class QMimeType;
-
-namespace KDevelop
+namespace shellcheck
 {
-class IProject;
+
+GlobalConfigPage::GlobalConfigPage(KDevelop::IPlugin* plugin, QWidget* parent)
+    : ConfigPage(plugin, GlobalSettings::self(), parent)
+{
+    Ui::GlobalConfigPage ui;
+    ui.setupUi(this);
 }
 
-namespace shellcheck {
-
-class ShellCheck : public KDevelop::IPlugin
+GlobalConfigPage::~GlobalConfigPage()
 {
-    Q_OBJECT
+}
 
-public:
-    // KPluginFactory-based plugin wants constructor with this signature
-    explicit ShellCheck(QObject* parent, const QVariantList& args);
+KDevelop::ConfigPage::ConfigPageType GlobalConfigPage::configPageType() const
+{
+    return KDevelop::ConfigPage::AnalyzerConfigPage;
+}
 
-    ~ShellCheck() override;
-    
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
-    
-    void runShellcheck(KDevelop::IProject* project, const QString& path);
-    bool isRunning() const;
+QString GlobalConfigPage::name() const
+{
+    return i18nc("@title:tab", "Shellcheck");
+}
 
-private:
-    bool isSupportedMimeType(const QMimeType& mimeType) const;
-    void runShellcheck(bool /*checkProject*/);
-    
-    KDevelop::IProject* m_currentProject;
-    
-    QAction* m_contextActionFile;
-    QAction* m_menuActionFile;
-    
-    //QScopedPointer<KDevelop::ProblemModel> m_model;
-};
+QString GlobalConfigPage::fullName() const
+{
+    return i18nc("@title:tab", "Configure Shellcheck Settings");
+}
+
+QIcon GlobalConfigPage::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("shellcheck"));
+}
 
 }
-#endif // SHELLCHECK_H

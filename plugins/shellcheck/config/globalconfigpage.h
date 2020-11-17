@@ -14,48 +14,30 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
-#ifndef SHELLCHECK_H
-#define SHELLCHECK_H
 
-#include <interfaces/iplugin.h>
-//#include <shell/problemmodel.h>
+#ifndef SHELLCHECK_GLOBAL_CONFIG_PAGE_H
+#define SHELLCHECK_GLOBAL_CONFIG_PAGE_H
 
+#include <interfaces/configpage.h>
 
-class QMimeType;
-
-namespace KDevelop
+namespace shellcheck
 {
-class IProject;
-}
 
-namespace shellcheck {
-
-class ShellCheck : public KDevelop::IPlugin
+class GlobalConfigPage: public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    // KPluginFactory-based plugin wants constructor with this signature
-    explicit ShellCheck(QObject* parent, const QVariantList& args);
+    GlobalConfigPage(KDevelop::IPlugin* plugin, QWidget* parent);
+    ~GlobalConfigPage() override;
 
-    ~ShellCheck() override;
-    
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
-    
-    void runShellcheck(KDevelop::IProject* project, const QString& path);
-    bool isRunning() const;
+    KDevelop::ConfigPage::ConfigPageType configPageType() const override;
 
-private:
-    bool isSupportedMimeType(const QMimeType& mimeType) const;
-    void runShellcheck(bool /*checkProject*/);
-    
-    KDevelop::IProject* m_currentProject;
-    
-    QAction* m_contextActionFile;
-    QAction* m_menuActionFile;
-    
-    //QScopedPointer<KDevelop::ProblemModel> m_model;
+    QString name() const override;
+    QString fullName() const override;
+    QIcon icon() const override;
 };
 
 }
-#endif // SHELLCHECK_H
+
+#endif
