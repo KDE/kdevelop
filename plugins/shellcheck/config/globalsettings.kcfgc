@@ -1,0 +1,4 @@
+File=globalsettings.kcfg
+NameSpace=shellcheck
+ClassName=GlobalSettings
+Singleton=true

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+  <include>"parameters.h"</include>
+  <kcfgfile />
+
+  <group name="shellcheck">
+
+    <entry name="executablePath" key="executablePath" type="Path">
+        <default code="true">QStandardPaths::findExecutable(QStringLiteral("shellcheck"))</default>
+    </entry>
+
+    <entry name="hideOutputView" key="hideOutputView" type="Bool">
+        <default code="true">defaults::hideOutputView</default>
+    </entry>
+
+  </group>
+</kcfg>

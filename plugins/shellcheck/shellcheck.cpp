@@ -26,12 +26,10 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/context.h>
 //#include <language/interfaces/editorcontext.h>
 
-//#include <project/projectconfigpage.h>
-//#include <project/projectmodel.h>
-//#include <util/jobstatus.h>
-
+#include <KActionCollection>
 #include <KPluginFactory>
 #include <KLocalizedString>
 
@@ -39,21 +37,35 @@
 #include <QMimeDatabase>
 
 
-K_PLUGIN_FACTORY_WITH_JSON(KdevshellcheckFactory, "kdevshellcheck.json", registerPlugin<ShellCheck>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KdevshellcheckFactory, "kdevshellcheck.json", registerPlugin<shellcheck::ShellCheck>(); )
+
+namespace shellcheck {
 
 ShellCheck::ShellCheck(QObject *parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("kdevshellcheck"), parent)
     , m_currentProject(nullptr)
 {
-    QIcon shellcheckIcon = QIcon::fromTheme(QStringLiteral("cppcheck"));
-
     Q_UNUSED(args);
-    /// FIXME: some check here to disable the plugin, if shellcheck is not installed.
     qCDebug(PLUGIN_SHELLCHECK) << "Loading shellcheck plugin";
+    setXMLFile(QStringLiteral("kdevshellcheck.rc"));
+
+    QIcon shellcheckIcon = QIcon::fromTheme(QStringLiteral("shellcheck"));
+
+    /// FIXME: some check here to disable the plugin, if shellcheck is not installed.
+
+    m_menuActionFile = new QAction(shellcheckIcon, i18nc("@action", "Analyze Current File with Cppcheck"), this);
+    connect(m_menuActionFile, &QAction::triggered, this, [this](){
+        runShellcheck(false);
+    });
+
     m_contextActionFile = new QAction(shellcheckIcon, i18nc("@item:inmenu", "ShellCheck"), this);
     connect(m_contextActionFile, &QAction::triggered, this, [this]() {
         runShellcheck(false);
     });
+}
+
+ShellCheck::~ShellCheck() noexcept
+{
 }
 
 
@@ -61,15 +73,15 @@ KDevelop::ContextMenuExtension ShellCheck::contextMenuExtension(KDevelop::Contex
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
-//     if (context->hasType(KDevelop::Context::EditorContext) && m_currentProject && !isRunning()) {
-//         auto eContext = static_cast<KDevelop::EditorContext*>(context);
-//         QMimeDatabase db;
-//         const auto mime = db.mimeTypeForUrl(eContext->url());
-// 
-//         if (isSupportedMimeType(mime)) {
-//             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, m_contextActionFile);
-//         }
-//     }
+    if (context->hasType(KDevelop::Context::EditorContext) && m_currentProject && !isRunning()) {
+        //auto eContext = static_cast<KDevelop::EditorContext*>(context);
+        QMimeDatabase db;
+        const auto mime = db.mimeTypeForUrl(context->urls().first());
+
+        if (isSupportedMimeType(mime)) {
+            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, m_contextActionFile);
+        }
+    }
 
     return extension;
 }
@@ -86,6 +98,8 @@ bool ShellCheck::isSupportedMimeType(const QMimeType& mimeType) const
 
 void ShellCheck::runShellcheck(KDevelop::IProject* project, const QString& path) 
 {    
+    Q_UNUSED(project)
+    Q_UNUSED(path)
     //m_model->modelReset();
     
 }
@@ -98,6 +112,7 @@ void ShellCheck::runShellcheck(bool /*checkProject*/)
     runShellcheck(m_currentProject, doc->url().toLocalFile());
 }
 
+} // end namespace
 
 // needed for QObject class created from K_PLUGIN_FACTORY_WITH_JSON
 #include "shellcheck.moc"
