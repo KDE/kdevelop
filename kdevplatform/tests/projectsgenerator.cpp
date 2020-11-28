@@ -67,7 +67,7 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
 {
     const QString sp = QStringLiteral( "simpleproject" );
     auto rootFolder = QDir::temp();
-    QDir(rootFolder.absolutePath() + QStringLiteral( "/" ) + sp).removeRecursively();
+    QDir(rootFolder.absolutePath() + QLatin1Char('/') + sp).removeRecursively();
     rootFolder.mkdir( sp );
     rootFolder.cd( sp );
     rootFolder.mkdir( QStringLiteral("src") );
@@ -106,7 +106,7 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
 {
     const QString mp = QStringLiteral( "multipathproject" );
     auto rootFolder = QDir::temp();
-    QDir(rootFolder.absolutePath() + QStringLiteral( "/" ) + mp).removeRecursively();
+    QDir(rootFolder.absolutePath() + QLatin1Char('/') + mp).removeRecursively();
     rootFolder.mkdir( mp );
     rootFolder.cd( mp );
     rootFolder.mkdir( QStringLiteral("src") );
@@ -166,7 +166,7 @@ IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
     QFile file(rootFolder.filePath(includePaths));
     createFile(file);
     QTextStream stream( &file );
-    stream << QStringLiteral(".") + QDir::separator() + QStringLiteral("include1.h") << endl << rootFolder.canonicalPath() + QDir::separator() + QStringLiteral("include2.h");
+    stream << QLatin1Char('.') + QDir::separator() + QStringLiteral("include1.h") << endl << rootFolder.canonicalPath() + QDir::separator() + QStringLiteral("include2.h");
 
     return project;
 }
@@ -175,7 +175,7 @@ IProject* ProjectsGenerator::GenerateEmptyProject()
 {
     const QString ep = QStringLiteral("emptyproject");
     auto rootFolder = QDir::temp();
-    QDir(rootFolder.absolutePath() + QStringLiteral("/") + ep).removeRecursively();
+    QDir(rootFolder.absolutePath() + QLatin1Char('/') + ep).removeRecursively();
     rootFolder.mkdir(ep);
     rootFolder.cd(ep);
     rootFolder.mkdir(QStringLiteral(".kdev4"));
