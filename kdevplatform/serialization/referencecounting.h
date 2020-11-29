@@ -39,12 +39,19 @@ class KDEVPLATFORMSERIALIZATION_EXPORT DUChainReferenceCounting
 {
     Q_DISABLE_COPY(DUChainReferenceCounting)
 public:
-    DUChainReferenceCounting();
     bool shouldDoDUChainReferenceCounting(void* item) const;
     void enableDUChainReferenceCounting(void* start, unsigned int size);
     void disableDUChainReferenceCounting(void* start);
 
+    static DUChainReferenceCounting& instance()
+    {
+        static thread_local DUChainReferenceCounting duchainReferenceCounting;
+        return duchainReferenceCounting;
+    }
+
 private:
+    DUChainReferenceCounting();
+
     bool shouldDoDUChainReferenceCountingInternal(void* item) const;
 
     bool doReferenceCounting;
@@ -54,13 +61,11 @@ private:
     QPair<uint, uint> refCountingFirstRangeExtent;
 };
 
-KDEVPLATFORMSERIALIZATION_EXPORT extern thread_local DUChainReferenceCounting duchainReferenceCounting;
-
 KDEVPLATFORMSERIALIZATION_EXPORT void initReferenceCounting();
 
 inline bool shouldDoDUChainReferenceCounting(void* item)
 {
-    return duchainReferenceCounting.shouldDoDUChainReferenceCounting(item);
+    return DUChainReferenceCounting::instance().shouldDoDUChainReferenceCounting(item);
 }
 
 inline bool DUChainReferenceCounting::shouldDoDUChainReferenceCountingInternal(void* item) const

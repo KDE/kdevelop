@@ -20,9 +20,12 @@
  */
 
 #include "referencecounting.h"
+#include "itemrepository.h"
+#include "debug.h"
+
 #include <QMap>
 #include <QAtomicInt>
-#include "serialization/itemrepository.h"
+#include <QThread>
 
 namespace KDevelop {
 
@@ -35,6 +38,7 @@ DUChainReferenceCounting::DUChainReferenceCounting()
     , refCountingFirstRangeStart{nullptr}
     , refCountingFirstRangeExtent{0u, 0u}
 {
+    qCDebug(SERIALIZATION).nospace() << "Creating DUChainReferenceCounting(" << this << ") in " << QThread::currentThread();
 }
 
 void DUChainReferenceCounting::disableDUChainReferenceCounting(void* start)
@@ -131,16 +135,14 @@ void DUChainReferenceCounting::enableDUChainReferenceCounting(void* start, unsig
 #endif
 }
 
-thread_local DUChainReferenceCounting duchainReferenceCounting;
-
 void enableDUChainReferenceCounting(void* start, unsigned int size)
 {
-    duchainReferenceCounting.enableDUChainReferenceCounting(start, size);
+    DUChainReferenceCounting::instance().enableDUChainReferenceCounting(start, size);
 }
 
 void disableDUChainReferenceCounting(void* start)
 {
-    duchainReferenceCounting.disableDUChainReferenceCounting(start);
+    DUChainReferenceCounting::instance().disableDUChainReferenceCounting(start);
 }
 }
 
