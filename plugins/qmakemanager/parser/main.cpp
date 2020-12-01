@@ -30,14 +30,14 @@ int main(int argc, char* argv[])
 {
     QCoreApplication app(argc, argv);
 
-    KAboutData aboutData(QLatin1String("QMake Parser"), "qmake-parser", QLatin1String("1.0"));
-    aboutData.setShortDescription("Parse QMake project files");
+    KAboutData aboutData(QLatin1String("QMake Parser"), QLatin1String("qmake-parser"), QLatin1String("1.0"));
+    aboutData.setShortDescription(QLatin1String("Parse QMake project files"));
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
-    parser.addOption(QCommandLineOption(QLatin1String("debug"), "Enable output of the debug AST"));
-    parser.addPositionalArgument("files", "QMake project files");
+    parser.addOption(QCommandLineOption(QLatin1String("debug"), QLatin1String("Enable output of the debug AST")));
+    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("QMake project files"));
 
     parser.process(app);
     aboutData.processCommandLine(&parser);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    const bool debug = parser.isSet("debug");
+    const bool debug = parser.isSet(QLatin1String("debug"));
 
     foreach (const auto arg, parser.positionalArguments()) {
         QMake::Driver driver;
