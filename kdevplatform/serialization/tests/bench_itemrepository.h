@@ -40,6 +40,9 @@ private Q_SLOTS:
     void lookupKey();
     void lookupValue();
 
+    void shouldDoReferenceCounting_data();
+    void shouldDoReferenceCounting();
+
 private:
     const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_itemrepository");
 };

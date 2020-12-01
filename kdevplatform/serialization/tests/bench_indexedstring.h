@@ -44,6 +44,9 @@ private Q_SLOTS:
     void bench_kdevhash();
     void bench_qSet();
 
+    void bench_create();
+    void bench_destroy();
+
 private:
     const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_indexedstring");
 };

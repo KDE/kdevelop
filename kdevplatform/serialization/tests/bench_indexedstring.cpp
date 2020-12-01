@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2012-2013 Milian Wolff <mail@milianw.de>
+ * Copyright 2020 Igor Kushnir <igorkuo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,8 +25,12 @@
 #include <language/util/kdevhash.h>
 #include <serialization/itemrepositoryregistry.h>
 #include <serialization/indexedstring.h>
+#include <tests/testhelpers.h>
+
 #include <QTest>
 #include <QStandardPaths>
+
+#include <vector>
 
 QTEST_GUILESS_MAIN(BenchIndexedString)
 
@@ -179,5 +184,61 @@ void BenchIndexedString::bench_qSet()
         for (uint index : indices) {
             set.insert(IndexedString::fromIndex(index));
         }
+    }
+}
+
+static std::vector<IndexedString> createIndexedStrings(std::size_t count)
+{
+    std::vector<IndexedString> result;
+    // result.reserve(count) is called after verifying that count is not too great.
+
+    constexpr char first{33};
+    constexpr char last{127};
+    constexpr std::size_t dataSize{4};
+
+    std::size_t maxCount{1};
+    for (std::size_t i = 0; i < dataSize; ++i) {
+        maxCount *= (last - first);
+    }
+    // Subtract 1 to account for the fact that count is checked at the beginning
+    // of the innermost loop in order to support count == 0.
+    --maxCount;
+    QVERIFY_RETURN(count <= maxCount, result);
+
+    result.reserve(count);
+
+    char data[dataSize + 1] = {};
+    QCOMPARE_RETURN(data[dataSize], 0, result);
+    for (char a = first; a != last; ++a) {
+        data[0] = a;
+        for (char b = first; b != last; ++b) {
+            data[1] = b;
+            for (char c = first; c != last; ++c) {
+                data[2] = c;
+                for (char d = first; d != last; ++d) {
+                    if (count-- == 0) {
+                        return result;
+                    }
+                    data[3] = d;
+                    result.emplace_back(data, dataSize);
+                }
+            }
+        }
+    }
+    Q_UNREACHABLE();
+}
+
+void BenchIndexedString::bench_create()
+{
+    QBENCHMARK_ONCE {
+        createIndexedStrings(1'000'000);
+    }
+}
+
+void BenchIndexedString::bench_destroy()
+{
+    auto strings = createIndexedStrings(10'000'000);
+    QBENCHMARK_ONCE {
+        strings = {};
     }
 }
