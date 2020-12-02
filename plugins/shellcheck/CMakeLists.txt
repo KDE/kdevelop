@@ -1,6 +1,6 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevshellcheck\")
 
-#find_package(???? QUIET)
+#find_package(shellcheck QUIET)
 #set_package_properties(shellcheck PROPERTIES
 #    DESCRIPTION "A static analysis and linting tool for sh/bash scripts"
 #    URL "https://www.shellcheck.net/"
@@ -9,10 +9,17 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevshellcheck\")
 #)
 
 
+set(kdevshellcheck_core_SRCS
+    job.cpp
+    parameters.cpp
+    outputparser.cpp
+)
+
 ecm_qt_declare_logging_category(kdevshellcheck_core_SRCS
-    HEADER debug.h
+    HEADER shellcheckdebug.h
     IDENTIFIER PLUGIN_SHELLCHECK
     CATEGORY_NAME "kdevelop.plugins.shellcheck"
+    DESCRIPTION  "shellcheck static analyzer of shell scripts"
 )
 
 kconfig_add_kcfg_files(kdevshellcheck_core_SRCS
@@ -25,6 +32,9 @@ add_library(kdevshellcheck_core STATIC
 
 target_link_libraries(kdevshellcheck_core
     KDev::Interfaces
+    KDev::Project
+    KDev::Shell
+
 )
 
 set(kdevshellcheck_SRCS
@@ -53,3 +63,6 @@ target_link_libraries(kdevshellcheck
 ecm_install_icons(ICONS icons/128-apps-shellcheck.png
                   DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

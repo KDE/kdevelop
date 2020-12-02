@@ -19,43 +19,36 @@
  * License along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "globalconfigpage.h"
-#include "ui_globalconfigpage.h"
+#ifndef OUTPUTPARSER_H
+#define OUTPUTPARSER_H
 
-#include "globalsettings.h"
+#include <interfaces/iproblem.h>
 
-namespace shellcheck
+#include <QVector>
+#include <QStringList>
+
+namespace shellcheck 
 {
-
-GlobalConfigPage::GlobalConfigPage(KDevelop::IPlugin* plugin, QWidget* parent)
-    : ConfigPage(plugin, GlobalSettings::self(), parent)
+/**
+ * Parses the (Json) output from shellcheck and converts it into 
+ * Problems that can be displayed in KDevelop's problem view 
+ */
+class OutputParser
 {
-    Ui::GlobalConfigPage ui;
-    ui.setupUi(this);
-}
+public:
+    OutputParser();
+    ~OutputParser();
+    
+    QVector<KDevelop::IProblem::Ptr> parse();
+    
+    void add(QStringList const& lines);
+    void clear();
 
-GlobalConfigPage::~GlobalConfigPage()
-{
-}
-
-KDevelop::ConfigPage::ConfigPageType GlobalConfigPage::configPageType() const
-{
-    return KDevelop::ConfigPage::AnalyzerConfigPage;
-}
-
-QString GlobalConfigPage::name() const
-{
-    return i18nc("@title:tab", "Shellcheck");
-}
-
-QString GlobalConfigPage::fullName() const
-{
-    return i18nc("@title:tab", "Configure Shellcheck Settings");
-}
-
-QIcon GlobalConfigPage::icon() const
-{
-    return QIcon::fromTheme(QStringLiteral("shellcheck"));
-}
+    
+private:
+    KDevelop::IProblem::Severity getSeverityFromString(QString const& str);
+    QByteArray m_shellcheckoutput;
+};
 
 }
+#endif // OUTPUTPARSER_H

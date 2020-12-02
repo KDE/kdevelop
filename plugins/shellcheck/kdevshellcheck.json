@@ -6,12 +6,13 @@
             }
         ],
         "Description": "Provides KDevelop Integration with ShellCheck. A static analysis and linting tool for sh/bash scripts.",
+        "Icon": "shellcheck",
         "Id": "kdevshellcheck",
-        "Name": "kdevshellcheck",
+        "Name": "Shellcheck Support",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
     },
-    "X-KDevelop-Category": "Analyzers",
+    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
 }
