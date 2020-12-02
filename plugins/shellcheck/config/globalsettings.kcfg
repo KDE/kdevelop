@@ -17,5 +17,28 @@
         <default code="true">defaults::hideOutputView</default>
     </entry>
 
+    <entry name="checkSourced" key="checkSourced" type="Bool">
+        <default code="true">defaults::checkSourced</default>
+    </entry>
+
+    <entry name="includeChecks" key="includeChecks" type="String">
+        <default code="true">defaults::includeChecks</default>
+    </entry>
+
+    <entry name="excludeChecks" key="excludeChecks" type="String">
+        <default code="true">defaults::excludeChecks</default>
+    </entry>
+
+    <entry name="includeOptionalChecks" key="includeOptionalChecks" type="String">
+        <default code="true">defaults::includeOptionalChecks</default>
+    </entry>
+
+    <entry name="shellDialect" key="shellDialect" type="String">
+        <default code="true">defaults::shellDialect</default>
+    </entry>
+
+    <entry name="severityLevel" key="severityLevel" type="String">
+        <default code="true">defaults::severityLevel</default>
+    </entry>
   </group>
 </kcfg>

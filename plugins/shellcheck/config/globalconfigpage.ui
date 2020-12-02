@@ -11,9 +11,6 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QGroupBox" name="pathsGroupBox">
      <property name="title">
@@ -52,6 +49,167 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="kcfg_checkSourced">
+        <property name="toolTip">
+         <string>Include warnings from sourced files</string>
+        </property>
+        <property name="text">
+         <string comment="@option:check">Check sourced files</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="5" column="0" colspan="2">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Output severity</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLineEdit" name="kcfg_optionalChecks">
+          <property name="toolTip">
+           <string>Include optional checks. Specified by comma separated names, or 'all'</string>
+          </property>
+          <property name="placeholderText">
+           <string>e.g. quote-safe-variables,require-variable-braces</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Exclude checks</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Include checks</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLineEdit" name="kcfg_sourcePaths">
+          <property name="toolTip">
+           <string>Specify path when looking for sourced files (&quot;SCRIPTDIR&quot; for script's dir)</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QComboBox" name="kcfg_severityLevel">
+          <property name="toolTip">
+           <string>Minimum severity of errors to consider (error, warning, info, style)</string>
+          </property>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">Style</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">Info</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">Warning</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">Error</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Source paths</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="kcfg_excludeChecks">
+          <property name="toolTip">
+           <string>Exclude given checks. Specified by comma separated check-code numbers</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>e.g. 2154,2086</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLineEdit" name="kcfg_includeChecks">
+          <property name="toolTip">
+           <string>Only do given types of checks. Specified by comma separated check-code numbers</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>e.g. 2154,2086</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Shell Dialect</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QComboBox" name="kcfg_shellDialect">
+          <property name="toolTip">
+           <string>Specify dialect (sh, bash, dash, ksh) empty and shellcheck will try and autodetect from the shebang</string>
+          </property>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">Auto</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">sh</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">bash</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">dash</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string comment="@item:inlistbox">ksh</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Include optional</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
@@ -74,7 +232,7 @@
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>KUrlRequester</header>
+   <header>kurlrequester.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

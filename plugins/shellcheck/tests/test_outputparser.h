@@ -19,43 +19,25 @@
  * License along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "globalconfigpage.h"
-#include "ui_globalconfigpage.h"
+#ifndef TEST_OUTPUTPARSER_H
+#define TEST_OUTPUTPARSER_H
 
-#include "globalsettings.h"
+#include <QObject>
 
-namespace shellcheck
+class TestOutputParser : public QObject
 {
+    Q_OBJECT
 
-GlobalConfigPage::GlobalConfigPage(KDevelop::IPlugin* plugin, QWidget* parent)
-    : ConfigPage(plugin, GlobalSettings::self(), parent)
-{
-    Ui::GlobalConfigPage ui;
-    ui.setupUi(this);
-}
+private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
 
-GlobalConfigPage::~GlobalConfigPage()
-{
-}
+    void init();
+    void cleanup();
 
-KDevelop::ConfigPage::ConfigPageType GlobalConfigPage::configPageType() const
-{
-    return KDevelop::ConfigPage::AnalyzerConfigPage;
-}
+    void testParserEmptyShellOutput();
+    void testParser();
+    void testParserFaultyJson();
+};
 
-QString GlobalConfigPage::name() const
-{
-    return i18nc("@title:tab", "Shellcheck");
-}
-
-QString GlobalConfigPage::fullName() const
-{
-    return i18nc("@title:tab", "Configure Shellcheck Settings");
-}
-
-QIcon GlobalConfigPage::icon() const
-{
-    return QIcon::fromTheme(QStringLiteral("shellcheck"));
-}
-
-}
+#endif // TEST_OUTPUTPARSER_H
