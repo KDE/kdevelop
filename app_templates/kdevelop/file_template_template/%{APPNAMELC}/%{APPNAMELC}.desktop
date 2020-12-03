@@ -1,0 +1,14 @@
+[General]
+# See https://techbase.kde.org/KDevelop5/File_template_specification for documentation
+Name=%{APPNAME}
+Comment=
+Category=MyCategory/Subcategory
+Type=Other
+Language=MyProgrammingLanguage
+Files=MyFile
+OptionsFile=options.kcfg
+
+[MyFile]
+Name=Demo File
+File=DemoFile.txt
+OutputFile={{ name }}.txt

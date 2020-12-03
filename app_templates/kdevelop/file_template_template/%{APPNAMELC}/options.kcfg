@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile arg="true"/>
+    <group name="">
+        <entry name="example" type="String">
+            <tooltip>Example tooltip (optional)</tooltip>
+            <label>Example</label>
+            <default>Default Value</default>
+        </entry>
+    </group>
+</kcfg>
