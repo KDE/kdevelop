@@ -24,9 +24,11 @@
 
 QTEST_MAIN(TestAstyle)
 
+TestAstyle::~TestAstyle() = default;
+
 void TestAstyle::initTestCase()
 {
-    m_formatter = new AStyleFormatter;
+    m_formatter = std::make_unique<AStyleFormatter>();
     ///TODO: probably all settings should be covered by tests
     ///      or at least set so we can be sure about what we
     ///      actually test...

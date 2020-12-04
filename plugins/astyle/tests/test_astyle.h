@@ -19,11 +19,15 @@
 
 #include <QObject>
 
+#include <memory>
+
 class AStyleFormatter;
 
 class TestAstyle : public QObject
 {
     Q_OBJECT
+public:
+    ~TestAstyle();
 
 private Q_SLOTS:
     void initTestCase();
@@ -40,7 +44,7 @@ private Q_SLOTS:
     void testForeach();
 
 private:
-    AStyleFormatter* m_formatter;
+    std::unique_ptr<AStyleFormatter> m_formatter;
 };
 
 #endif // TEST_ASTYLE_H
