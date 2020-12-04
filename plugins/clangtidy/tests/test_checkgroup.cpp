@@ -25,6 +25,7 @@
 #include "config/checkgroup.h"
 // Qt
 #include <QTest>
+#include <QStandardPaths>
 
 struct CheckGroupData
 {
@@ -34,6 +35,11 @@ struct CheckGroupData
     QVector<CheckGroupData> subGroups;
 };
 Q_DECLARE_METATYPE(CheckGroupData)
+
+void TestCheckGroup::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestCheckGroup::testFromPlainList_data()
 {

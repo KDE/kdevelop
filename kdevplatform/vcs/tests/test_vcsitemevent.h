@@ -34,6 +34,7 @@ class TestVcsItemEvent : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testCopyConstructor();
     void testAssignOperator();
 

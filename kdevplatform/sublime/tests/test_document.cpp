@@ -20,12 +20,18 @@
 
 #include <QTextEdit>
 #include <QTest>
+#include <QStandardPaths>
 
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>
 
 using namespace Sublime;
+
+void TestDocument::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestDocument::viewDeletion()
 {

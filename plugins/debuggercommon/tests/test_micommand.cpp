@@ -24,6 +24,7 @@
 #include <mi/micommand.h>
 // Qt
 #include <QTest>
+#include <QStandardPaths>
 
 class TestCommandHandler : public QObject, public KDevMI::MI::MICommandHandler
 {
@@ -75,6 +76,11 @@ void TestCommandResultHandler::handleResult(const KDevMI::MI::ResultRecord& reco
     QCOMPARE(record.reason, QStringLiteral("reason"));
 
     ++m_recordsHandled;
+}
+
+void TestMICommand::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestMICommand::testUserCommand()

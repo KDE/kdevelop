@@ -18,7 +18,7 @@
 
 #include <QObject>
 #include <QTest>
-
+#include <QStandardPaths>
 #include <QDebug>
 
 #include "../kdevvarlengtharray.h"
@@ -43,6 +43,8 @@ class TestKDevVarLengthArray : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase() { QStandardPaths::setTestModeEnabled(true); }
+
     /**
      * Make sure that valgrind does not report any warnings here
      * about uninitialized member variables.

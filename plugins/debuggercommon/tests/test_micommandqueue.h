@@ -28,6 +28,7 @@ class TestMICommandQueue : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testConstructor();
     void testDestructor();
     void addAndTake_data();

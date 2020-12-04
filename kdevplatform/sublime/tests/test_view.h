@@ -24,6 +24,7 @@
 class TestView: public QObject {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void widgetDeletion();
     void viewReimplementation();
 };

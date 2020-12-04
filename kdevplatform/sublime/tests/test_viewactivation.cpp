@@ -25,6 +25,7 @@
 #include <QTextEdit>
 #include <QDockWidget>
 #include <QFocusEvent>
+#include <QStandardPaths>
 
 #include <sublime/view.h>
 #include <sublime/area.h>
@@ -51,6 +52,7 @@ public:
 
 void TestViewActivation::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
     qRegisterMetaType<View*>("View*");
 }
 

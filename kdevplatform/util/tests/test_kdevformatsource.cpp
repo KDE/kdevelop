@@ -31,6 +31,7 @@
 #include <QStringList>
 #include <QTemporaryDir>
 #include <QTextStream>
+#include <QStandardPaths>
 
 #include <vector>
 
@@ -65,6 +66,11 @@ TestKdevFormatSource::TestKdevFormatSource()
 
 TestKdevFormatSource::~TestKdevFormatSource()
 {
+}
+
+void TestKdevFormatSource::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestKdevFormatSource::testNotFound_data()

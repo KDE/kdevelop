@@ -34,6 +34,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTemporaryDir>
+#include <QStandardPaths>
 
 #include <algorithm>
 
@@ -93,6 +94,11 @@ QHash<QString, QString> setDefaultMKSpec(QMakeProjectFile& file)
     file.setMkSpecs(mkspecs);
 
     return qmvars;
+}
+
+void TestQMakeFile::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestQMakeFile::varResolution()

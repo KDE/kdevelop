@@ -25,6 +25,7 @@
 #include <serialization/itemrepositoryregistry.h>
 #include <serialization/indexedstring.h>
 #include <QTest>
+#include <QStandardPaths>
 
 #include <utility>
 
@@ -34,6 +35,7 @@ using namespace KDevelop;
 
 void TestIndexedString::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
     ItemRepositoryRegistry::initialize(m_repositoryPath);
 }
 

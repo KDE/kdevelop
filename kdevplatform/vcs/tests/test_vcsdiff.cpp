@@ -21,10 +21,16 @@
 #include "test_vcsdiff.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <vcs/vcslocation.h>
 
 using namespace KDevelop;
+
+void TestVcsDiff::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestVcsDiff::setDiff(VcsDiff& diff,
                           const QString& diffString,

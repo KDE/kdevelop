@@ -29,6 +29,8 @@ class TestPath : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+
     void bench_qurl();
     void bench_qstringlist();
     void bench_path();

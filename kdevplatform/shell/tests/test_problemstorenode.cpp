@@ -18,6 +18,7 @@
  */
 
 #include <QTest>
+#include <QStandardPaths>
 #include <shell/problemstorenode.h>
 #include <shell/problem.h>
 
@@ -42,6 +43,7 @@ private:
 
 void TestProblemStoreNode::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
     m_root.reset(new ProblemStoreNode());
 }
 

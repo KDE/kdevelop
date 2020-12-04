@@ -24,10 +24,16 @@
 #include "objectlist.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_MAIN(TestObjectList)
 
 using namespace KDevelop;
+
+void TestObjectList::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestObjectList::testBasicInterface()
 {

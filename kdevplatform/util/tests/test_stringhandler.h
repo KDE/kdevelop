@@ -29,6 +29,8 @@ class TestStringHandler : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testHtmlToPlainText();
     void testHtmlToPlainText_data();
 

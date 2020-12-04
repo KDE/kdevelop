@@ -30,8 +30,14 @@
 #include <QTest>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QStandardPaths>
 
 using namespace Sublime;
+
+void TestAggregateModel::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestAggregateModel::modelAggregationInASingleView()
 {

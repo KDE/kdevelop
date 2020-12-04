@@ -24,6 +24,7 @@
 #include <mi/miparser.h>
 // Qt
 #include <QTest>
+#include <QStandardPaths>
 
 struct ResultData
 {
@@ -60,6 +61,10 @@ struct StreamRecordData
 };
 Q_DECLARE_METATYPE(StreamRecordData)
 
+void TestMIParser::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestMIParser::testParseLine_data()
 {

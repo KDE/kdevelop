@@ -24,10 +24,16 @@
 #include "texteditorhelpers.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_MAIN(TestKTextEditorHelpers)
 
 using namespace KDevelop;
+
+void TestKTextEditorHelpers::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestKTextEditorHelpers::testExtractCursor()
 {

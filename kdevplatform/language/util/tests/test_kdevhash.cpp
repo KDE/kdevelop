@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QTest>
+#include <QStandardPaths>
 
 #include <vector>
 #include <algorithm>
@@ -60,6 +61,8 @@ class TestKDevHash
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase() { QStandardPaths::setTestModeEnabled(true); }
+
     void benchHash_int()
     {
         runBench<int>();

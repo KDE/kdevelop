@@ -20,6 +20,7 @@
 
 #include <QTextEdit>
 #include <QTest>
+#include <QStandardPaths>
 
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>
@@ -59,6 +60,11 @@ protected:
     QWidget *createViewWidget(QWidget *parent = nullptr) override { return new QWidget(parent); }
     View *newView(Document *doc) override { return new Test(doc); }
 };
+
+void TestView::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestView::viewReimplementation()
 {

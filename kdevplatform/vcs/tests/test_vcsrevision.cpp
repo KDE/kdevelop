@@ -21,10 +21,16 @@
 #include "test_vcsrevision.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <vcs/vcsrevision.h>
 
 using namespace KDevelop;
+
+void TestVcsRevision::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestVcsRevision::testCopyConstructor()
 {

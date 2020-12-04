@@ -31,6 +31,7 @@ class TestMIParser : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testParseLine_data();
     void testParseLine();
 

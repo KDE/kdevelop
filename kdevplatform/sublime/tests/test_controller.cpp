@@ -21,6 +21,7 @@
 #include <QTextEdit>
 #include <QTest>
 #include <QDebug>
+#include <QStandardPaths>
 
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>
@@ -28,6 +29,11 @@
 #include <sublime/area.h>
 
 using namespace Sublime;
+
+void TestController::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestController::documentDeletion()
 {

@@ -27,6 +27,7 @@
 #include <KIO/Global>
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <type_traits>
 
@@ -108,6 +109,11 @@ void runBenchmark()
         const T base = stringToUrl<T>("/tmp/foo/bar");
         generateData(base, 0);
     }
+}
+
+void TestPath::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestPath::bench_qurl()

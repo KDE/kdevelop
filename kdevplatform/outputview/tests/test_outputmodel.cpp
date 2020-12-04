@@ -21,6 +21,7 @@
 #include "../outputmodel.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_MAIN(KDevelop::TestOutputModel)
 
@@ -29,6 +30,7 @@ namespace KDevelop
 
 TestOutputModel::TestOutputModel(QObject* parent): QObject(parent)
 {
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 QStringList generateLines()

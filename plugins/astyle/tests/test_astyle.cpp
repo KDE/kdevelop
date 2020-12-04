@@ -18,6 +18,7 @@
 
 #include <QTest>
 #include <QDebug>
+#include <QStandardPaths>
 
 #include "../astyle_formatter.h"
 #include <util/formattinghelpers.h>
@@ -28,6 +29,7 @@ TestAstyle::~TestAstyle() = default;
 
 void TestAstyle::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
     m_formatter = std::make_unique<AStyleFormatter>();
     ///TODO: probably all settings should be covered by tests
     ///      or at least set so we can be sure about what we

@@ -42,6 +42,7 @@ using StringList = QVector<QString>;
 TestQuickOpen::TestQuickOpen(QObject* parent)
     : QuickOpenTestBase(Core::Default, parent)
 {
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestQuickOpen::testDuchainFilter()

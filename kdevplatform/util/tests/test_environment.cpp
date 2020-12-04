@@ -25,10 +25,16 @@
 
 #include <QTest>
 #include <QProcessEnvironment>
+#include <QStandardPaths>
 
 QTEST_MAIN(TestEnvironment)
 
 using ProcEnv = QMap<QString, QString>;
+
+void TestEnvironment::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestEnvironment::testExpandVariables_data()
 {

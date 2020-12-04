@@ -22,12 +22,18 @@
 #include "test_stringhelpers.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <language/duchain/stringhelpers.h>
 
 QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
+
+void TestDUChain::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestDUChain::testFormatComment_data()
 {

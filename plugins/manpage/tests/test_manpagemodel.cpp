@@ -30,12 +30,14 @@
 #include <QDebug>
 #include <QSignalSpy>
 #include <QTest>
+#include <QStandardPaths>
 
 class TestManPageModel : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase() { QStandardPaths::setTestModeEnabled(true); }
     void testModel();
     void testDocumentation();
 };

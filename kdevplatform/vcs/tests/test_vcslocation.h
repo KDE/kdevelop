@@ -30,6 +30,7 @@ class TestVcsLocation : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testDefaultConstructor();
     void testLocalUrlConstructor();
     void testRepositoryServerConstructor();

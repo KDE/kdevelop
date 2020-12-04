@@ -21,10 +21,16 @@
 #include "test_vcsitemevent.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <vcs/vcsrevision.h>
 
 using namespace KDevelop;
+
+void TestVcsItemEvent::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestVcsItemEvent::setItemEvent(VcsItemEvent& itemEvent,
                                     const QString& repositoryLocation,

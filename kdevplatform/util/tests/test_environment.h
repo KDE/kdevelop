@@ -28,6 +28,8 @@ class TestEnvironment : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testExpandVariables_data();
     void testExpandVariables();
 };

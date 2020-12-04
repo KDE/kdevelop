@@ -29,6 +29,8 @@ class TestObjectList : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testBasicInterface();
     void testDeleteAll();
     void testBehaviorOnDestruction();

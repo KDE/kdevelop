@@ -28,6 +28,8 @@ class TestFormattingHelpers : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testFuzzyMatching();
     void testFuzzyMatching_data();
 };

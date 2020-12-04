@@ -20,6 +20,7 @@
 
 #include <QStringList>
 #include <QTest>
+#include <QStandardPaths>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -51,6 +52,11 @@ struct AreaStopper {
     QStringList list;
     QString m_stopAt;
 };
+
+void TestAreaWalker::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestAreaWalker::viewWalkerModes()
 {

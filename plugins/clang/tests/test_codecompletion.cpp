@@ -51,6 +51,7 @@
 #include <KConfigGroup>
 
 #include <QVersionNumber>
+#include <QStandardPaths>
 
 QTEST_MAIN(TestCodeCompletion)
 

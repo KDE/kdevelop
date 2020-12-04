@@ -23,6 +23,7 @@
 
 #include <QTest>
 #include <QSignalSpy>
+#include <QStandardPaths>
 
 #include <util/executecompositejob.h>
 
@@ -39,6 +40,11 @@ struct JobSpy
     QSignalSpy finished;
     QSignalSpy result;
 };
+
+void TestExecuteCompositeJob::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestExecuteCompositeJob::runOneJob()
 {

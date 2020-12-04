@@ -36,6 +36,7 @@ class TestCheckGroup : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testFromPlainList_data();
     void testFromPlainList();
     void testSetEnabledChecks_data();

@@ -27,6 +27,7 @@ class TestFilteringStrategy : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testNoFilterStrategy_data();
     void testNoFilterStrategy();
     void testCompilerFilterStrategy_data();

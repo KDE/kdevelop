@@ -25,10 +25,16 @@
 
 #include <QString>
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_MAIN(TestFormattingHelpers)
 
 using namespace KDevelop;
+
+void TestFormattingHelpers::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestFormattingHelpers::testFuzzyMatching()
 {

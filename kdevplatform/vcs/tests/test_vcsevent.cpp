@@ -21,10 +21,16 @@
 #include "test_vcsevent.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <vcs/vcsrevision.h>
 
 using namespace KDevelop;
+
+void TestVcsEvent::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestVcsEvent::setEvent(VcsEvent& event,
                             const VcsRevision& revision,

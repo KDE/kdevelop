@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QStandardPaths>
 
 const QString BINARY_PATH(DEBUGGEE_BIN_DIR);
 
@@ -98,6 +99,11 @@ public:
         return out;
     }
 };
+
+void QtPrintersTest::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void QtPrintersTest::testQString()
 {

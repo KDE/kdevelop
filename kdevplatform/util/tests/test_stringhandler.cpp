@@ -24,12 +24,18 @@
 #include "kdevstringhandler.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_MAIN(TestStringHandler)
 
 using namespace KDevelop;
 
 Q_DECLARE_METATYPE(HtmlToPlainTextMode)
+
+void TestStringHandler::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestStringHandler::testHtmlToPlainText()
 {

@@ -1,5 +1,6 @@
 #include <QObject>
 #include <QTest>
+#include <QStandardPaths>
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 #include <cstdlib>
@@ -118,6 +119,7 @@ class TestItemRepository
 private Q_SLOTS:
     void initTestCase()
     {
+        QStandardPaths::setTestModeEnabled(true);
         ItemRepositoryRegistry::initialize(m_repositoryPath);
     }
     void cleanupTestCase()

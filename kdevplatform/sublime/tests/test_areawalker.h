@@ -23,6 +23,7 @@
 class TestAreaWalker: public QObject {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void viewWalkerModes();
     void toolViewWalkerModes();
 };

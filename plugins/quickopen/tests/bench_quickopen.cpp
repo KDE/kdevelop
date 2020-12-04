@@ -27,6 +27,7 @@
 
 #include <QIcon>
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_MAIN(BenchQuickOpen)
 
@@ -44,6 +45,7 @@ void openAnyDocument(IProject* project)
 BenchQuickOpen::BenchQuickOpen(QObject* parent)
     : QuickOpenTestBase(Core::Default, parent)
 {
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void BenchQuickOpen::getData()

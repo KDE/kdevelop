@@ -21,8 +21,14 @@
 #include "test_vcsstatusinfo.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 using namespace KDevelop;
+
+void TestVcsStatusInfo::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestVcsStatusInfo::testCopyConstructor()
 {

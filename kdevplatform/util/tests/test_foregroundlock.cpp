@@ -19,7 +19,7 @@
 #include "test_foregroundlock.h"
 
 #include <QTest>
-
+#include <QStandardPaths>
 #include <QThread>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QRandomGenerator>
@@ -59,6 +59,11 @@ public:
         }
     }
 };
+
+void TestForegroundLock::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestForegroundLock::testTryLock_data()
 {

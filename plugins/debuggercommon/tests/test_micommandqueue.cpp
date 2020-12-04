@@ -26,6 +26,7 @@
 // Qt
 #include <QTest>
 #include <QSignalSpy>
+#include <QStandardPaths>
 
 Q_DECLARE_METATYPE(KDevMI::MI::CommandFlags)
 
@@ -41,6 +42,11 @@ TestDummyCommand::TestDummyCommand(KDevMI::MI::CommandType type, const QString& 
                                    KDevMI::MI::CommandFlags flags)
     : KDevMI::MI::MICommand(type, args, flags)
 {
+}
+
+void TestMICommandQueue::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestMICommandQueue::testConstructor()

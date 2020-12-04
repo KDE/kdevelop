@@ -50,6 +50,11 @@ struct ViewCounter {
     int count = 0;
 };
 
+void TestAreaOperation::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
+
 void TestAreaOperation::init()
 {
     m_controller = new Controller(this);

@@ -21,11 +21,17 @@
 #include "test_vcsannotation.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 #include <vcs/vcsannotation.h>
 #include <vcs/vcsrevision.h>
 
 using namespace KDevelop;
+
+void TestVcsAnnotation::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 static
 VcsAnnotationLine createAnnotationLine(int lineNumber,

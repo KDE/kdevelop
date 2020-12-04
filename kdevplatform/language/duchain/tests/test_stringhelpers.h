@@ -30,6 +30,8 @@ class TestDUChain
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testFormatComment_data();
     void testFormatComment();
 

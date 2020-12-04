@@ -23,6 +23,8 @@
 #include <outputview/filtereditem.h>
 #include <util/path.h>
 
+#include <QStandardPaths>
+
 using namespace KDevelop;
 
 QTEST_GUILESS_MAIN(TestFilteringStrategy)
@@ -67,6 +69,11 @@ inline QTestData& newRowForPathType(const char *dataTag, TestPathType pathType)
     Q_UNREACHABLE();
 }
 
+}
+
+void TestFilteringStrategy::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void TestFilteringStrategy::testNoFilterStrategy_data()

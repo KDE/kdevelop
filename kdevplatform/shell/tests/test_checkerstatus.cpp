@@ -19,6 +19,7 @@
 
 #include <QTest>
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <shell/checkerstatus.h>
 
 #include <KLocalizedString>
@@ -56,6 +57,7 @@ TestCheckerStatus::TestCheckerStatus()
 
 void TestCheckerStatus::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
     m_status.reset(new CheckerStatus());
 }
 

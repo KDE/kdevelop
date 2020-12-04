@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <random>
 #include <QTest>
+#include <QStandardPaths>
 
 QTEST_GUILESS_MAIN(BenchItemRepository)
 
@@ -111,6 +112,7 @@ using TestDataRepository = ItemRepository<TestData, TestDataRepositoryItemReques
 
 void BenchItemRepository::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
     ItemRepositoryRegistry::initialize(m_repositoryPath);
 }
 

@@ -21,8 +21,14 @@
 #include "test_vcslocation.h"
 
 #include <QTest>
+#include <QStandardPaths>
 
 using namespace KDevelop;
+
+void TestVcsLocation::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestVcsLocation::setServerLocation(VcsLocation& serverLocation,
                                         const QString& repositoryModule,

@@ -41,6 +41,8 @@ public:
     ~TestKdevFormatSource() override;
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testNotFound();
     void testNotFound_data();
 

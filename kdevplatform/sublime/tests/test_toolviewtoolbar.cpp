@@ -25,6 +25,7 @@
 
 #include <QTextEdit>
 #include <QToolBar>
+#include <QStandardPaths>
 
 #include <sublime/view.h>
 #include <sublime/area.h>
@@ -56,6 +57,11 @@ public:
 private:
     QList<QAction*> actionList;
 };
+
+void TestToolViewToolBar::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
 
 void TestToolViewToolBar::init()
 {
