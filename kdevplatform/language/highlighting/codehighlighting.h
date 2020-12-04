@@ -212,8 +212,6 @@ private Q_SLOTS:
     void clearHighlightingForDocument(const KDevelop::IndexedString& document);
     void applyHighlighting(void* highlighting);
 
-    void trackerDestroyed(QObject* object);
-
     /// when the colors change we must invalidate our local caches
     void adaptToColorChanges();
 
