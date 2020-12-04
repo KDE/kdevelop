@@ -150,6 +150,8 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
                            CustomTestFunction customTestFunction = {})
 {
     DUChainReadLocker lock;
+    QVERIFY(top);
+    QVERIFY(top->ast());
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
     lock.unlock();
