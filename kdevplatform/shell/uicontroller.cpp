@@ -228,18 +228,10 @@ UiController::UiController(Core *core)
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
         return;
 
-    connect(qApp, &QApplication::focusChanged,
-            this, [this] (QWidget* old, QWidget* now) { Q_D(UiController); d->widgetChanged(old, now); } );
-
     setupActions();
 }
 
-UiController::~UiController()
-{
-    // disconnect early to prevent UB due to accessing partially destroyed UiController
-    // in the focusChanged handler above
-    disconnect(qApp, nullptr, this, nullptr);
-}
+UiController::~UiController() = default;
 
 void UiController::setupActions()
 {
@@ -448,8 +440,12 @@ MainWindow *UiController::defaultMainWindow()
 void UiController::initialize()
 {
     defaultMainWindow()->initialize();
-}
 
+    connect(qApp, &QApplication::focusChanged, this, [this](QWidget* old, QWidget* now) {
+        Q_D(UiController);
+        d->widgetChanged(old, now);
+    });
+}
 
 void UiController::cleanup()
 {
@@ -457,6 +453,10 @@ void UiController::cleanup()
         w->saveSettings();
     }
     saveAllAreas(KSharedConfig::openConfig());
+
+    // disconnect early to prevent UB due to accessing partially destroyed UiController
+    // in the focusChanged handler above
+    disconnect(qApp, nullptr, this, nullptr);
 }
 
 void UiController::selectNewToolViewToAdd(MainWindow *mw)

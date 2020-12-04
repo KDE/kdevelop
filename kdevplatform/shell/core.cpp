@@ -367,8 +367,11 @@ void Core::cleanup()
 
         d->debugController->cleanup();
         d->selectionController->cleanup();
-        // Save the layout of the ui here, so run it first
-        d->uiController->cleanup();
+
+        if (!(d->m_mode & Core::NoUi)) {
+            // Save the layout of the ui here, so run it first
+            d->uiController->cleanup();
+        }
 
         if (d->workingSetController)
             d->workingSetController->cleanup();
