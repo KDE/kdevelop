@@ -482,9 +482,6 @@ void Declaration::setDeclarationIsDefinition(bool dd)
     ENSURE_CAN_WRITE
         DUCHAIN_D_DYNAMIC(Declaration);
     d->m_isDefinition = dd;
-//   if (d->m_isDefinition && definition()) {
-//     setDefinition(0);
-//   }
 }
 
 bool Declaration::isAutoDeclaration() const
