@@ -79,7 +79,7 @@ IndexedString fetchImplementationFileForClass(const Declaration& targetClass)
     for (Declaration* decl : declarations) {
         ///@todo check for static variable instantiation as well
         if (auto* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl))
-            if (FunctionDefinition* def = FunctionDefinition::definition(classFun)) {
+            if (auto* def = FunctionDefinition::definition(classFun)) {
                 qCDebug(LANGUAGE) << "Definition For declaration in:" << def->url().toUrl();
                 ++implementationsInFile[def->url()];
             }

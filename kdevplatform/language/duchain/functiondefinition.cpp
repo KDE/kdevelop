@@ -82,7 +82,7 @@ void FunctionDefinition::setDeclaration(Declaration* declaration)
     }
 }
 
-FunctionDefinition* FunctionDefinition::definition(const Declaration* decl)
+Declaration* FunctionDefinition::definition(const Declaration* decl)
 {
     ENSURE_CHAIN_READ_LOCKED
     if (!decl) {
@@ -90,13 +90,13 @@ FunctionDefinition* FunctionDefinition::definition(const Declaration* decl)
     }
 
     if (decl->isFunctionDeclaration() && decl->isDefinition()) {
-        return const_cast<FunctionDefinition *>(static_cast<const FunctionDefinition *>(decl));
+        return const_cast<Declaration*>(decl);
     }
 
     const KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(decl->id());
     for (const IndexedDeclaration decl : allDefinitions) {
         if (decl.data()) ///@todo Find better ways of deciding which definition to use
-            return dynamic_cast<FunctionDefinition*>(decl.data());
+            return decl.data();
     }
 
     return nullptr;

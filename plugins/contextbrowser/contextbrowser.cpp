@@ -782,7 +782,7 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
         }
     }
 
-    if (FunctionDefinition* def = FunctionDefinition::definition(decl)) {
+    if (auto* def = FunctionDefinition::definition(decl)) {
         highlights.highlights << def->createRangeMoving();
         highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
         highlights.highlights.back()->setZDepth(highlightingZDepth);

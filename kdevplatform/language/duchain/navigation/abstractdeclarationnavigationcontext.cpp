@@ -305,7 +305,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += QStringLiteral(" ");
         //modifyHtml() += "<br />";
         if (!dynamic_cast<FunctionDefinition*>(d->m_declaration.data())) {
-            if (FunctionDefinition* definition = FunctionDefinition::definition(d->m_declaration.data())) {
+            if (auto* definition = FunctionDefinition::definition(d->m_declaration.data())) {
                 modifyHtml() += labelHighlight(i18n(" Def.: "));
                 makeLink(QStringLiteral("%1 :%2").arg(definition->url().toUrl().fileName()).arg(definition->
                                                                                                 rangeInCurrentRevision()

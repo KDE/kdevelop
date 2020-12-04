@@ -161,10 +161,7 @@ void ClassBrowserPlugin::showDefinition(const DeclarationPointer& declaration)
     Declaration* decl = declaration.data();
     // If it's a function, find the function definition to go to the actual declaration.
     if (decl && decl->isFunctionDeclaration()) {
-        auto* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
-        if (funcDefinition == nullptr)
-            funcDefinition = FunctionDefinition::definition(decl);
-        if (funcDefinition)
+        if (auto* funcDefinition = FunctionDefinition::definition(decl))
             decl = funcDefinition;
     }
 

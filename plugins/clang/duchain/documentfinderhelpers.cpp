@@ -60,7 +60,7 @@ public:
 
         if (mode == Header && decl->isFunctionDeclaration()) {
             // Search for definitions of our declarations
-            FunctionDefinition* def = FunctionDefinition::definition(decl);
+            auto* def = FunctionDefinition::definition(decl);
             if (def) {
                 vote(def->url().toUrl());
             }

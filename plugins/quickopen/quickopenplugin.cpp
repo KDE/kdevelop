@@ -704,7 +704,7 @@ void QuickOpenPlugin::quickOpenDefinition()
 
     IndexedString u = decl->url();
     KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
-    if (FunctionDefinition* def = FunctionDefinition::definition(decl)) {
+    if (auto* def = FunctionDefinition::definition(decl)) {
         def->activateSpecialization();
         u = def->url();
         c = def->rangeInCurrentRevision().start();

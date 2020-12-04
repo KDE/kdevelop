@@ -192,7 +192,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
                 }
                 qCDebug(CMAKE) << "Found test case function declaration" << function->identifier().toString();
 
-                FunctionDefinition* def = FunctionDefinition::definition(decl);
+                auto* def = FunctionDefinition::definition(decl);
                 m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
             }
         }

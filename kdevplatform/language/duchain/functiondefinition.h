@@ -65,7 +65,7 @@ public:
      *
      * \returns the definition matching this declaration, otherwise null if no matching definition has been found.
      * */
-    static FunctionDefinition* definition(const Declaration* decl);
+    static Declaration* definition(const Declaration* decl);
 
 protected:
     FunctionDefinition (const FunctionDefinition& rhs);
