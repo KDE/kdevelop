@@ -312,8 +312,9 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     }
 
     if (context->type() == DUContext::Other || context->type() == DUContext::Function) {
-        m_functionColorsForDeclarations[IndexedDUContext(context)] = colorsForDeclarations;
-        m_functionDeclarationsForColors[IndexedDUContext(context)] = declarationsForColors;
+        const auto indexed = IndexedDUContext(context);
+        m_functionColorsForDeclarations[indexed] = colorsForDeclarations;
+        m_functionDeclarationsForColors[indexed] = declarationsForColors;
     }
 
     const QVector<DUContext*> children = context->childContexts();
