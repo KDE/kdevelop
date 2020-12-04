@@ -48,6 +48,8 @@ void TestContexts::initTestCase()
 
 void TestContexts::cleanupTestCase()
 {
+    QmlJS::unregisterDUChainItems();
+
     TestCore::shutdown();
 }
 

@@ -52,6 +52,8 @@ void TestDeclarations::initTestCase()
 
 void TestDeclarations::cleanupTestCase()
 {
+    QmlJS::unregisterDUChainItems();
+
     TestCore::shutdown();
 }
 
