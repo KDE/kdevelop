@@ -53,7 +53,7 @@ private Q_SLOTS:
     void testCString();
 
 private:
-    QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_indexedstring");
+    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_indexedstring");
 };
 
 #endif // TESTINDEXEDSTRING_H

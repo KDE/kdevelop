@@ -41,7 +41,7 @@ private Q_SLOTS:
     void lookupValue();
 
 private:
-    QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_itemrepository");
+    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_itemrepository");
 };
 
 #endif // TESTITEMREPOSITORY_H

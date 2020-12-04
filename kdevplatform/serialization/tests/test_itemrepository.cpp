@@ -388,7 +388,7 @@ private Q_SLOTS:
     }
 
 private:
-    QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_itemrepository");
+    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_itemrepository");
 };
 
 #include "test_itemrepository.moc"
