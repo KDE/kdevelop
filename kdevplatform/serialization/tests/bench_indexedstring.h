@@ -19,13 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTINDEXEDSTRING_H
-#define TESTINDEXEDSTRING_H
+#ifndef BENCH_INDEXEDSTRING_H
+#define BENCH_INDEXEDSTRING_H
 
 #include <QDir>
 #include <QObject>
 
-class TestIndexedString
+class BenchIndexedString
     : public QObject
 {
     Q_OBJECT
@@ -34,16 +34,18 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-    void testUrl_data();
-    void testUrl();
-
-    void test();
-    void test_data();
-
-    void testCString();
+    void bench_index();
+    void bench_length();
+    void bench_qstring();
+    void bench_kurl();
+    void bench_qhashQString();
+    void bench_qhashIndexedString();
+    void bench_hashString();
+    void bench_kdevhash();
+    void bench_qSet();
 
 private:
-    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_indexedstring");
+    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_indexedstring");
 };
 
-#endif // TESTINDEXEDSTRING_H
+#endif // BENCH_INDEXEDSTRING_H
