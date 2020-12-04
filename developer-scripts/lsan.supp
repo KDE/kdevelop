@@ -1,2 +1,3 @@
 # fixme: this looks like an actual leak upstream, report, investigate and/or fix it there
 leak:editorconfig_parse
+leak:KDevelop::DUChainReferenceCounting::DUChainReferenceCounting
