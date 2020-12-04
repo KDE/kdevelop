@@ -40,7 +40,7 @@ public:
     {
         QLoggingCategory::setFilterRules(QStringLiteral("default.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
 
-        AutoTestShell::init();
+        AutoTestShell::init({ "KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView" });
         TestCore::initialize();
     }
 
