@@ -108,22 +108,41 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
                 range.setStart(startCursor);
                 range.setEnd(endCursor);
 
-                //currentProblem[QStringLiteral("fix")].toString();
+                if (!currentProblem[QStringLiteral("fix")].isNull())
+                {
+                    qWarning(PLUGIN_SHELLCHECK) << "There is a fix associated with this problem: ";
+                    QJsonObject fix = currentProblem[QStringLiteral("fix")].toObject();
+                    QJsonArray replacementArray = fix[QStringLiteral("replacements")].toArray();
+                    for( auto const replaceElement : replacementArray ) {
+                        if(replaceElement.isObject()) {
+                            QJsonObject replacement = replaceElement.toObject();
+                            qWarning(PLUGIN_SHELLCHECK) << " Replacement: ";
+                            qWarning(PLUGIN_SHELLCHECK) << "   column " << replacement[QStringLiteral("column")].toInt();
+                            qWarning(PLUGIN_SHELLCHECK) << "   endColumn " << replacement[QStringLiteral("endColumn")].toInt();
+                            qWarning(PLUGIN_SHELLCHECK) << "   endLine " << replacement[QStringLiteral("endLine")].toInt();
+                            qWarning(PLUGIN_SHELLCHECK) << "   insertionPoint " << replacement[QStringLiteral("insertionPoint")].toString();
+                            qWarning(PLUGIN_SHELLCHECK) << "   line " << replacement[QStringLiteral("line")].toInt();
+                            qWarning(PLUGIN_SHELLCHECK) << "   precedence " << replacement[QStringLiteral("precedence")].toString();
+                            qWarning(PLUGIN_SHELLCHECK) << "   replacement " << replacement[QStringLiteral("replacement")].toString();
+                        }
+                    }
+                } else {
+                    qWarning(PLUGIN_SHELLCHECK) << "Fix is null. No fix associated with this problem";
+                }
                 problem->setFinalLocation(range);
-                problem->setFinalLocationMode(KDevelop::IProblem::TrimmedLine);
+                problem->setFinalLocationMode(KDevelop::IProblem::Range);
                 problem->setSeverity(getSeverityFromString(currentProblem[QStringLiteral("level")].toString()));
                 problem->setSource(KDevelop::IProblem::Plugin);
                 problem->setDescription(currentProblem[QStringLiteral("message")].toString());
+                problem->setExplanation(currentProblem[QStringLiteral("message")].toString());
 
                 result.push_back(problem);
             } else {
-                qWarning(PLUGIN_SHELLCHECK) << "UNEXPECTED!! The element is a:" << element.type();
+                qWarning(PLUGIN_SHELLCHECK) << "This shellcheck output element is a:" << element.type() << " we expected it to be an object. Cannot parse this";
             }
         }
-        qWarning(PLUGIN_SHELLCHECK) << "Writing out the array:  " << array;
+        //qWarning(PLUGIN_SHELLCHECK) << "Writing out the array:  " << array;
     }
-
-    
     return result;
 }
 
