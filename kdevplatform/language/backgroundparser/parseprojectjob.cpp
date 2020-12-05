@@ -206,4 +206,6 @@ void ParseProjectJob::queueFilesToParse()
             processed = 0;
         }
     }
+
+    d->filesToParse = {}; // free memory or prevent detaching
 }
