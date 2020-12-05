@@ -72,9 +72,10 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool parse
     } else {
         // In case we don't want to parse the whole project, still add all currently open files that belong to the project to the background-parser
         const auto documents = ICore::self()->documentController()->openDocuments();
+        const auto projectFiles = project->fileSet();
         for (auto* document : documents) {
             const auto path = IndexedString(document->url());
-            if (project->fileSet().contains(path)) {
+            if (projectFiles.contains(path)) {
                 d->filesToParse.insert(path);
             }
         }
