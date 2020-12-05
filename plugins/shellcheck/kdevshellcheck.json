@@ -5,6 +5,7 @@
                 "Name": "Morten Danielsen Volden"
             }
         ],
+        "Category": "Analyzers",
         "Description": "Provides KDevelop Integration with ShellCheck. A static analysis and linting tool for sh/bash scripts.",
         "Icon": "shellcheck",
         "Id": "kdevshellcheck",
