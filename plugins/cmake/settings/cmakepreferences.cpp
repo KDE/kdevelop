@@ -114,13 +114,20 @@ void CMakePreferences::initAdvanced()
     m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment(m_project) );
     m_prefsUi->installationPrefix->setText(CMake::currentInstallDir(m_project).toLocalFile());
     m_prefsUi->installationPrefix->setMode(KFile::Directory);
-    const QString buildType = CMake::currentBuildType(m_project);
+    setBuildType(CMake::currentBuildType(m_project));
+    m_prefsUi->extraArguments->setEditText(CMake::currentExtraArguments(m_project));
+    m_prefsUi->cMakeExecutable->setText(CMake::currentCMakeExecutable(m_project).toLocalFile());
+}
+
+void CMakePreferences::setBuildType(const QString& buildType)
+{
+    if (m_prefsUi->buildType->currentText() == buildType)
+        return;
+
     if (m_prefsUi->buildType->findText(buildType) == -1) {
         m_prefsUi->buildType->addItem(buildType);
     }
     m_prefsUi->buildType->setCurrentIndex(m_prefsUi->buildType->findText(buildType));
-    m_prefsUi->extraArguments->setEditText(CMake::currentExtraArguments(m_project));
-    m_prefsUi->cMakeExecutable->setText(CMake::currentCMakeExecutable(m_project).toLocalFile());
 }
 
 void CMakePreferences::reset()
@@ -158,10 +165,7 @@ void CMakePreferences::apply()
 
     CMake::setCurrentInstallDir( m_project, Path(m_prefsUi->installationPrefix->text()) );
     const QString buildType = m_prefsUi->buildType->currentText();
-    if (m_prefsUi->buildType->findText(buildType) == -1) {
-        m_prefsUi->buildType->addItem(buildType);
-    }
-    CMake::setCurrentBuildType( m_project, buildType );
+    CMake::setCurrentBuildType(m_project, buildType);
     CMake::setCurrentExtraArguments( m_project, m_prefsUi->extraArguments->currentText() );
     CMake::setCurrentCMakeExecutable( m_project, Path(m_prefsUi->cMakeExecutable->text()) );
 
@@ -223,6 +227,20 @@ void CMakePreferences::updateCache(const Path &newBuildDir)
                 this, &CMakePreferences::configureCacheView);
         connect(m_prefsUi->cacheList->selectionModel(), &QItemSelectionModel::currentChanged,
                 this, &CMakePreferences::listSelectionChanged);
+        connect(m_currentModel, &CMakeCacheModel::valueChanged, this,
+                [this](const QString& name, const QString& value) {
+                    if (name == QLatin1String("CMAKE_BUILD_TYPE")) {
+                        setBuildType(value);
+                    }
+                });
+        connect(m_prefsUi->buildType, &QComboBox::currentTextChanged, m_currentModel, [this](const QString& value) {
+            if (!m_currentModel)
+                return;
+            const auto items = m_currentModel->findItems(QStringLiteral("CMAKE_BUILD_TYPE"));
+            for (auto* item : items) {
+                m_currentModel->setData(m_currentModel->index(item->row(), 2), value);
+            }
+        });
     }
     else
     {

@@ -64,7 +64,8 @@ class CMakePreferences : public KDevelop::ConfigPage
     private:
         void configure();
         void initAdvanced();
-        
+        void setBuildType(const QString& buildType);
+
         KDevelop::IProject* m_project;
         KDevelop::Path m_srcFolder;
         KDevelop::Path m_subprojFolder;

@@ -146,7 +146,9 @@ bool CMakeCacheModel::setData(const QModelIndex& index, const QVariant& value, i
 {
     bool ret = QStandardItemModel::setData(index, value, role);
     if (ret) {
-        m_modifiedRows.insert(index.row());
+        const auto i = index.row();
+        m_modifiedRows.insert(i);
+        emit valueChanged(item(i, 0)->text(), item(i, 2)->text());
     }
     return ret;
 }
