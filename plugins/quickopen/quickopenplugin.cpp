@@ -860,18 +860,19 @@ struct CreateOutlineDialog
     {
         //Select the declaration that contains the cursor
         if (cursorDecl && dialog) {
-            int num = 0;
-            for (const DUChainItem& item : qAsConst(items)) {
-                if (item.m_item.data() == cursorDecl) {
-                    QModelIndex index(model->index(num, 0, QModelIndex()));
-                    // Need to invoke the scrolling later. If we did it now, then it wouldn't have any effect,
-                    // apparently because the widget internals aren't initialized yet properly (although we've
-                    // already called 'widget->show()'.
-                    auto list = dialog->widget()->ui.list;
-                    QMetaObject::invokeMethod(list, "setCurrentIndex", Qt::QueuedConnection, Q_ARG(QModelIndex, index));
-                    QMetaObject::invokeMethod(list, "scrollTo", Qt::QueuedConnection, Q_ARG(QModelIndex, index), Q_ARG(QAbstractItemView::ScrollHint, QAbstractItemView::PositionAtCenter));
-                }
-                ++num;
+            auto it = std::find_if(items.constBegin(), items.constEnd(),
+                                   [this](const DUChainItem& item) { return item.m_item.data() == cursorDecl; });
+            if (it != items.constEnd()) {
+                // Need to invoke the scrolling later. If we did it now, then it wouldn't have any effect,
+                // apparently because the widget internals aren't initialized yet properly (although we've
+                // already called 'widget->show()'.
+                auto list = dialog->widget()->ui.list;
+                const auto num = std::distance(items.constBegin(), it);
+                QTimer::singleShot(0, list, [list, num]() {
+                    const auto index = list->model()->index(num, 0, {});
+                    list->setCurrentIndex(index);
+                    list->scrollTo(index, QAbstractItemView::PositionAtCenter);
+                });
             }
         }
     }
