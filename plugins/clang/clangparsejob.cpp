@@ -199,6 +199,9 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     projectPaths.reserve(projects.size());
     for (auto project : projects) {
         projectPaths.append(project->path());
+        if (auto* bsm = project->buildSystemManager()) {
+            projectPaths.append(bsm->buildDirectory(project->projectItem()));
+        }
     }
     m_environment.setProjectPaths(projectPaths);
 
