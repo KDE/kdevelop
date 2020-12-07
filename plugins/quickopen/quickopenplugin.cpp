@@ -808,12 +808,6 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
 
 struct CreateOutlineDialog
 {
-    CreateOutlineDialog() : dialog(nullptr)
-        , cursorDecl(nullptr)
-        , model(nullptr)
-    {
-    }
-
     void start()
     {
         if (!QuickOpenPlugin::self()->freeModel()) {
@@ -826,7 +820,7 @@ struct CreateOutlineDialog
             return;
         }
 
-        KDevelop::DUChainReadLocker lock(DUChain::lock());
+        DUChainReadLocker lock;
 
         TopDUContext* context = DUChainUtils::standardContextForUrl(doc->url());
 
@@ -859,9 +853,9 @@ struct CreateOutlineDialog
     void finish()
     {
         //Select the declaration that contains the cursor
-        if (cursorDecl && dialog) {
+        if (cursorDecl.isValid() && dialog) {
             auto it = std::find_if(items.constBegin(), items.constEnd(),
-                                   [this](const DUChainItem& item) { return item.m_item.data() == cursorDecl; });
+                                   [this](const DUChainItem& item) { return item.m_item == cursorDecl; });
             if (it != items.constEnd()) {
                 // Need to invoke the scrolling later. If we did it now, then it wouldn't have any effect,
                 // apparently because the widget internals aren't initialized yet properly (although we've
@@ -877,9 +871,9 @@ struct CreateOutlineDialog
         }
     }
     QPointer<QuickOpenWidgetDialog> dialog;
-    Declaration* cursorDecl;
+    IndexedDeclaration cursorDecl;
     QVector<DUChainItem> items;
-    QuickOpenModel* model;
+    QuickOpenModel* model = nullptr;
 };
 
 class OutlineQuickopenWidgetCreator
