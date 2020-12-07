@@ -283,7 +283,7 @@ void DebugSession::handleVersion(const QStringList& s)
     // minimal version is 7.0,0
     QRegularExpression rx(QStringLiteral("([0-9]+)\\.([0-9]+)(\\.([0-9]+))?"));
     const auto match = rx.match(response);
-    if (!match.hasMatch() || QVersionNumber::fromString(match.capturedRef(0)) < QVersionNumber(7, 0, 0)) {
+    if (!match.hasMatch() || QVersionNumber::fromString(match.capturedRef(0).toString()) < QVersionNumber(7, 0, 0)) {
         if (!qobject_cast<QGuiApplication*>(qApp))  {
             //for unittest
             qFatal("You need a graphical application.");

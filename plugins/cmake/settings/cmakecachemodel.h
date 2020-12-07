@@ -51,7 +51,10 @@ class CMakeCacheModel : public QStandardItemModel
         KDevelop::Path filePath() const;
         void read();
         QVariantMap changedValues() const;
-        
+
+    Q_SIGNALS:
+        void valueChanged(const QString& name, const QString& value) const;
+
     public Q_SLOTS:
         void reset();
         
