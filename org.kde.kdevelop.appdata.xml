@@ -147,6 +147,7 @@
     <!-- Note: KDE website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the
                last actual release -->
+    <release version="5.6.1" date="2020-12-08"/>
     <release version="5.6.0" date="2020-09-07">
       <description>
         <p>This release brings half a year of work, focused mainly on stability, performance, and future maintainability. Many existing features have received small improvements again, and there is one highly-visible addition: optional display of inline notes for problems at the end of the line.</p>
