@@ -71,6 +71,10 @@ namespace KDevMI { namespace GDB {
 
 void GdbTest::initTestCase()
 {
+#ifdef Q_OS_WIN
+    QSKIP("apparently this test is killing processes, but is leaving kdeinit5, dbus-daemon and klauncher running, "
+          "breaking the Windows CI builder");
+#endif
     AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
