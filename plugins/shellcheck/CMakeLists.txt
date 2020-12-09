@@ -11,8 +11,12 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevshellcheck\")
 
 set(kdevshellcheck_core_SRCS
     job.cpp
-    parameters.cpp
+    fixit.cpp
+    fixitassistant.cpp
+    fixitaction.cpp
     outputparser.cpp
+    parameters.cpp
+    shellcheckproblem.cpp
 )
 
 ecm_qt_declare_logging_category(kdevshellcheck_core_SRCS
