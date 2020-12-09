@@ -91,6 +91,10 @@ ShellCheck::ShellCheck(QObject *parent, const QVariantList&)
     m_model->clearProblems();
     KDevelop::ICore::self()->languageController()->problemModelSet()->addModel(QStringLiteral("ShellCheck"), i18n("ShellCheck"), m_model.data());
 
+    QString tooltip;
+    tooltip = i18nc("@info:tooltip", "Re-run last ShellCheck analysis");
+
+    m_model->setFullUpdateTooltip(tooltip);
     
     updateActions();
 }
