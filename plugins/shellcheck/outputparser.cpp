@@ -20,9 +20,11 @@
  */
 
 #include "outputparser.h"
+#include "shellcheckproblem.h"
 #include "shellcheckdebug.h"
 
-#include "shell/problem.h"
+
+//#include "shell/problem.h"
 #include "language/editor/documentrange.h"
 
 #include "ktexteditor/cursor.h"
@@ -95,7 +97,7 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
             if(element.isObject()) {
                 // convert to object and start extracting the problems
                 QJsonObject currentProblem = element.toObject();
-                KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem(i18n("ShellCheck")));
+                ShellCheckProblem::Ptr problem(new ShellCheckProblem());
                 KDevelop::DocumentRange range;
                 KTextEditor::Cursor startCursor;
                 KTextEditor::Cursor endCursor;
@@ -108,14 +110,36 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
                 range.setStart(startCursor);
                 range.setEnd(endCursor);
 
+                problem->setFinalLocation(range);
+                problem->setFinalLocationMode(KDevelop::IProblem::Range);
+                problem->setSeverity(getSeverityFromString(currentProblem[QStringLiteral("level")].toString()));
+                problem->setSource(KDevelop::IProblem::Plugin);
+                QString problemMessage = currentProblem[QStringLiteral("message")].toString();
+                problem->setDescription(problemMessage);
+                problem->setExplanation(problemMessage);
+
                 if (!currentProblem[QStringLiteral("fix")].isNull())
                 {
                     qWarning(PLUGIN_SHELLCHECK) << "There is a fix associated with this problem: ";
                     QJsonObject fix = currentProblem[QStringLiteral("fix")].toObject();
                     QJsonArray replacementArray = fix[QStringLiteral("replacements")].toArray();
+                    QVector<Fixit> fixes;
                     for( auto const replaceElement : replacementArray ) {
                         if(replaceElement.isObject()) {
                             QJsonObject replacement = replaceElement.toObject();
+                            KTextEditor::Cursor fixStartCursor(replacement[QStringLiteral("line")].toInt() - 1,
+                                replacement[QStringLiteral("column")].toInt() - 1);
+                            KTextEditor::Cursor fixEndCursor(replacement[QStringLiteral("endLine")].toInt() -1,
+                                replacement[QStringLiteral("endColumn")].toInt());
+                            KDevelop::DocumentRange fixRange;
+                            fixRange.document = KDevelop::IndexedString(currentProblem[QStringLiteral("file")].toString());
+                            fixRange.setStart(fixStartCursor);
+                            fixRange.setEnd(fixEndCursor);
+                            Fixit newFix(problemMessage, fixRange,
+                                         replacement[QStringLiteral("precedence")].toString(),
+                                         replacement[QStringLiteral("replacement")].toString());
+                            fixes.push_back(newFix);
+
                             qWarning(PLUGIN_SHELLCHECK) << " Replacement: ";
                             qWarning(PLUGIN_SHELLCHECK) << "   column " << replacement[QStringLiteral("column")].toInt();
                             qWarning(PLUGIN_SHELLCHECK) << "   endColumn " << replacement[QStringLiteral("endColumn")].toInt();
@@ -126,16 +150,10 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
                             qWarning(PLUGIN_SHELLCHECK) << "   replacement " << replacement[QStringLiteral("replacement")].toString();
                         }
                     }
+                    problem->setFixits(fixes);
                 } else {
                     qWarning(PLUGIN_SHELLCHECK) << "Fix is null. No fix associated with this problem";
                 }
-                problem->setFinalLocation(range);
-                problem->setFinalLocationMode(KDevelop::IProblem::Range);
-                problem->setSeverity(getSeverityFromString(currentProblem[QStringLiteral("level")].toString()));
-                problem->setSource(KDevelop::IProblem::Plugin);
-                problem->setDescription(currentProblem[QStringLiteral("message")].toString());
-                problem->setExplanation(currentProblem[QStringLiteral("message")].toString());
-
                 result.push_back(problem);
             } else {
                 qWarning(PLUGIN_SHELLCHECK) << "This shellcheck output element is a:" << element.type() << " we expected it to be an object. Cannot parse this";

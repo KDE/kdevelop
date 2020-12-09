@@ -184,7 +184,7 @@ void ShellCheck::runShellcheck()
 
 void ShellCheck::runShellcheck(const QString& path) 
 {    
-    //m_model->modelReset();
+    m_model->clearProblems();
     
     Parameters params;
     params.shellFileToCheck = path;
