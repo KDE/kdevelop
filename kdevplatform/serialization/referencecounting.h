@@ -56,7 +56,7 @@ public:
     }
 
 private:
-    DUChainReferenceCounting() = default;
+    constexpr DUChainReferenceCounting() noexcept = default;
 
     struct Interval {
         Pointer start;
@@ -74,7 +74,7 @@ private:
     static constexpr std::size_t maxIntervalCount = 3;
 
     std::size_t count = 0;
-    Interval intervals[maxIntervalCount];
+    Interval intervals[maxIntervalCount] = {};
 };
 
 inline bool DUChainReferenceCounting::shouldDo(Pointer item) const noexcept
