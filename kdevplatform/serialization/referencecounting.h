@@ -79,7 +79,14 @@ private:
 
 inline bool DUChainReferenceCounting::shouldDo(Pointer item) const noexcept
 {
-    for (std::size_t i = 0; i != count; ++i) {
+    // count == 0 means that no place has been marked for reference counting, occurs in ~99% of cases.
+    // Q_UNLIKELY somewhat speeds up BenchIndexedString::bench_qhashIndexedString(),
+    // slightly speeds up BenchIndexedString::bench_create() and BenchIndexedString::bench_destroy()
+    // but substantially slows down BenchItemRepository::shouldDoReferenceCounting(enabled).
+    // However, while the three affected BenchIndexedString benchmarks are more or less realistic,
+    // BenchItemRepository::shouldDoReferenceCounting(enabled) is highly synthetic and extremely
+    // sensitive to the performance of this function.
+    for (std::size_t i = 0; Q_UNLIKELY(i != count); ++i) {
         if (intervals[i].contains(item)) {
             return true;
         }
