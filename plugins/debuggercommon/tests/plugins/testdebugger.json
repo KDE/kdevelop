@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Category": "Utilities",
+        "Description": "Test Debugger",
+        "Id": "testdebugger",
+        "Name": "Test Debugger",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-Mode": "NoGUI"
+}

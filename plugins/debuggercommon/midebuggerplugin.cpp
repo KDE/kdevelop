@@ -51,6 +51,7 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
+#include <QDBusServiceWatcher>
 #include <QPointer>
 #include <QTimer>
 
@@ -148,8 +149,6 @@ void MIDebuggerPlugin::setupActions()
 void MIDebuggerPlugin::setupDBus()
 {
     auto serviceRegistered = [this](const QString& service) {
-        if (!service.startsWith(QLatin1String("org.kde.drkonqi")))
-            return;
         if (m_drkonqis.contains(service))
             return;
         // New registration
@@ -164,8 +163,6 @@ void MIDebuggerPlugin::setupDBus()
         drkonqiProxy->interface()->call(QStringLiteral("registerDebuggingApplication"), name, QCoreApplication::applicationPid());
     };
     auto serviceUnregistered = [this](const QString& service) {
-        if (!service.startsWith(QLatin1String("org.kde.drkonqi")))
-            return;
         // Deregistration
         if (auto* proxy = m_drkonqis.take(service)) {
             proxy->Invalidate();
@@ -173,18 +170,16 @@ void MIDebuggerPlugin::setupDBus()
         }
     };
 
-    auto* dbusInterface = QDBusConnection::sessionBus().interface();
-    const auto& registeredServiceNames = dbusInterface->registeredServiceNames().value();
-    for (const auto& service : registeredServiceNames) {
-        serviceRegistered(service);
-    }
-
-    connect(dbusInterface, &QDBusConnectionInterface::serviceRegistered, this, serviceRegistered);
-    connect(dbusInterface, &QDBusConnectionInterface::serviceUnregistered, this, serviceUnregistered);
+    m_watcher = new QDBusServiceWatcher(QStringLiteral("org.kde.drkonqi*"), QDBusConnection::sessionBus(),
+                                        QDBusServiceWatcher::WatchForOwnerChange, this);
+    connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, serviceRegistered);
+    connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, serviceUnregistered);
 }
 
 void MIDebuggerPlugin::unload()
 {
+    qDeleteAll(m_drkonqis.values());
+    m_drkonqis.clear();
     unloadToolViews();
 }
 
@@ -198,7 +193,9 @@ void MIDebuggerPlugin::slotDebugExternalProcess(DBusProxy* proxy)
                 proxy, &DBusProxy::debuggingFinished);
     }
 
-    core()->uiController()->activeMainWindow()->raise();
+    if (auto* mainWindow = core()->uiController()->activeMainWindow()) {
+        mainWindow->raise();
+    }
 }
 
 ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QWidget* parent)

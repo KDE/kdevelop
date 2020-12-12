@@ -31,3 +31,14 @@ ecm_add_test(test_micommand
 ecm_add_test(test_micommandqueue
     LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
 )
+
+set(TEST_PLUGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/testplugindir")
+configure_file("plugins/testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+
+kdevplatform_add_plugin(testdebugger JSON plugins/testdebugger.json SKIP_INSTALL SOURCES plugins/testdebugger.cpp)
+target_link_libraries(testdebugger kdevdebuggercommon)
+set_target_properties(testdebugger PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
+
+ecm_add_test(test_midbus
+    LINK_LIBRARIES Qt5::Test Qt5::DBus Qt5::Core kdevdebuggercommon KDevPlatformTests
+)

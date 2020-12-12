@@ -36,6 +36,7 @@
 
 #include <QHash>
 
+class QDBusServiceWatcher;
 class QUrl;
 
 namespace KDevelop {
@@ -104,6 +105,7 @@ protected:
 private:
     QHash<QString, DBusProxy*> m_drkonqis;
     const QString m_displayName;
+    QDBusServiceWatcher* m_watcher = nullptr;
 };
 
 template<class T, class Plugin = MIDebuggerPlugin>
