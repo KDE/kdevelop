@@ -2,6 +2,7 @@
 Name=KDevelop File Template
 Name[ca]=Plantilla de fitxer del KDevelop
 Name[ca@valencia]=Plantilla de fitxer del KDevelop
+Name[en_GB]=KDevelop File Template
 Name[es]=Plantilla de archivo de KDevelop
 Name[nl]=Bestandssjabloon van KDevelop
 Name[pt]=Modelo de Ficheiros do KDevelop
@@ -12,6 +13,7 @@ Name[x-test]=xxKDevelop File Templatexx
 Comment=Setup for KDevelop File Template which is packaged using CMake
 Comment[ca]=Configuració per a la plantilla de fitxer del KDevelop que empaqueta usant CMake
 Comment[ca@valencia]=Configuració per a la plantilla de fitxer del KDevelop que empaqueta usant CMake
+Comment[en_GB]=Setup for KDevelop File Template which is packaged using CMake
 Comment[es]=Configuración para plantilla de archivo de KDevelop, que se empaqueta usando CMake
 Comment[nl]=Opzet voor bestandssjabloon van KDevelop dat in ingepakt met gebruik van CMake
 Comment[pt]=Configuração do Modelo de Ficheiro do KDevelop cujo pacote é gerido com o CMake
