@@ -38,7 +38,7 @@
 
 #include <algorithm>
 
-QTEST_MAIN(TestQMakeFile)
+QTEST_GUILESS_MAIN(TestQMakeFile)
 
 using DefineHash = QHash<QString, QString>;
 

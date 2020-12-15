@@ -22,7 +22,7 @@
 #include "qmakelexer.h"
 #include "qmakeparser.h"
 
-QTEST_MAIN(LexerTest)
+QTEST_GUILESS_MAIN(LexerTest)
 
 LexerTest::LexerTest(QObject* parent)
     : QObject(parent)

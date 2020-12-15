@@ -44,7 +44,7 @@ scopename:  (no statement, is accepted by qmake)
 #include "ast.h"
 #include "testhelpers.h"
 
-QTEST_MAIN(ParseTest)
+QTEST_GUILESS_MAIN(ParseTest)
 
 ParseTest::ParseTest(QObject* parent)
     : QObject(parent)

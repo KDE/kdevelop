@@ -25,7 +25,7 @@
 
 #include "testhelpers.h"
 
-QTEST_MAIN(AssignmentTest)
+QTEST_GUILESS_MAIN(AssignmentTest)
 
 AssignmentTest::AssignmentTest(QObject* parent)
     : QObject(parent)

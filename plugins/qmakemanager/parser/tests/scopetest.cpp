@@ -23,7 +23,7 @@
 #include "qmakedriver.h"
 #include "testhelpers.h"
 
-QTEST_MAIN(ScopeTest)
+QTEST_GUILESS_MAIN(ScopeTest)
 
 ScopeTest::ScopeTest(QObject* parent)
     : QObject(parent)
