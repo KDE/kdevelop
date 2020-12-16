@@ -81,6 +81,8 @@ bool Driver::parse(ProjectAST** qmast)
             DebugVisitor d(&qmakeparser);
             d.visitProject(ast);
         }
+        if (*qmast)
+            delete *qmast;
         *qmast = new ProjectAST();
         BuildASTVisitor d(&qmakeparser, *qmast);
         d.visitProject(ast);

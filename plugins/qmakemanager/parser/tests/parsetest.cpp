@@ -100,6 +100,7 @@ DATAFUNCIMPL(ParseTest, failFullProject, "#Comment\n"
 
 void ParseTest::init()
 {
+    QVERIFY(ast == nullptr);
     ast = new QMake::ProjectAST();
     QVERIFY(ast != nullptr);
 }
