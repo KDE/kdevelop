@@ -62,19 +62,19 @@ char* toString(const QStringList& list)
 template <>
 char* toString(const QMakeFile::VariableMap& variables)
 {
-    QByteArray ba = "VariableMap(";
+    QByteArray ba;
+    QTextStream out(&ba);
+    out << "VariableMap(";
     QMakeFile::VariableMap::const_iterator it = variables.constBegin();
     while (it != variables.constEnd()) {
-        ba += "[";
-        ba += it.key().toLocal8Bit();
-        ba += "] = ";
-        ba += toString(it.value());
+        out << "[" << it.key() << "] = " << it.value().join(", ");
         ++it;
         if (it != variables.constEnd()) {
-            ba += ", ";
+            out << ", ";
         }
     }
-    ba += ")";
+    out << ")";
+    out.flush();
     return qstrdup(ba.data());
 }
 }
