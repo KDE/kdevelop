@@ -64,7 +64,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
 #ifdef Q_OS_MACOS
     // Qt/Mac swaps the Ctrl and Meta (Command) keys by default, so that shortcuts defined as Ctrl+X
     // become the platform-standard Command+X . Ideally we would map the document switcher shortcut to
-    // Control+Tab (and thus Qt::META+Qt::Key_Tab) everywhere because Command+Tab and Command+Shift+Tab
+    // Control+Tab (and thus Qt::META|Qt::Key_Tab) everywhere because Command+Tab and Command+Shift+Tab
     // are reserved system shortcuts that bring up the application switcher. The Control+Tab shortcut is 
     // inoperable on Mac, so we resort to the Alt (Option) key, unless the AA_MacDontSwapCtrlAndMeta
     // attribute is set.

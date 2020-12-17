@@ -58,7 +58,7 @@ public:
         : q( w )
     {
         m_copyAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18nc("@action:inmenu", "Copy Revision Id"), q);
-        m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
+        m_copyAction->setShortcut(Qt::CTRL | Qt::Key_C);
         QObject::connect(m_copyAction, &QAction::triggered, q, [&] { copyRevision(); });
     }
 

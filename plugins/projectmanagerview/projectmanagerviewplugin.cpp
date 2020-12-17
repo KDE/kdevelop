@@ -166,7 +166,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_install = new QAction(i18nc("@action", "Install Selection"), this);
     d->m_install->setIconText(i18nc("@action:intoolbar", "Install"));
     d->m_install->setIcon(QIcon::fromTheme(QStringLiteral("run-build-install")));
-    actionCollection()->setDefaultShortcut( d->m_install, Qt::SHIFT + Qt::Key_F8 );
+    actionCollection()->setDefaultShortcut(d->m_install, Qt::SHIFT | Qt::Key_F8);
     d->m_install->setEnabled( false );
     connect( d->m_install, &QAction::triggered, this, &ProjectManagerViewPlugin::installProjectItems );
     actionCollection()->addAction( QStringLiteral("project_install"), d->m_install );

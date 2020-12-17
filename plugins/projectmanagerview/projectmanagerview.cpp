@@ -104,7 +104,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_syncAction->setText(i18nc("@action", "Locate Current Document"));
     m_syncAction->setToolTip(i18nc("@info:tooltip", "Locates the current document in the project tree and selects it."));
     m_syncAction->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
-    m_syncAction->setShortcut(Qt::ControlModifier + Qt::Key_Less);
+    m_syncAction->setShortcut(Qt::CTRL | Qt::Key_Less);
     connect(m_syncAction, &QAction::triggered, this, &ProjectManagerView::toggleSyncCurrentDocument);
     connect(ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this, [this]{
         if (m_syncAction->isChecked()) {

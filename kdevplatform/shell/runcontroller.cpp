@@ -447,14 +447,14 @@ void RunController::setupActions()
 
     d->runAction = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18nc("@action", "Execute Launch"), this);
     d->runAction->setIconText( i18nc("@action Short text for 'Execute Launch' used in the toolbar", "Execute") );
-    ac->setDefaultShortcut( d->runAction, Qt::SHIFT + Qt::Key_F9);
+    ac->setDefaultShortcut(d->runAction, Qt::SHIFT | Qt::Key_F9);
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
     ac->addAction(QStringLiteral("run_execute"), d->runAction);
     connect(d->runAction, &QAction::triggered, this, &RunController::slotExecute);
 
     d->dbgAction = new QAction( QIcon::fromTheme(QStringLiteral("debug-run")), i18nc("@action", "Debug Launch"), this);
-    ac->setDefaultShortcut( d->dbgAction, Qt::ALT + Qt::Key_F9);
+    ac->setDefaultShortcut(d->dbgAction, Qt::ALT | Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("@action Short text for 'Debug Launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));

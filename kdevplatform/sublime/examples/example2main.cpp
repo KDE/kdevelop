@@ -30,10 +30,10 @@ Example2Main::Example2Main(Sublime::Controller *controller, Qt::WindowFlags flag
     :Sublime::MainWindow(controller, flags)
 {
     auto* windowMenu = new QMenu(QStringLiteral("Window"), this);
-    windowMenu->addAction(QStringLiteral("Split Top/Bottom"), this, SLOT(splitVertical()), Qt::CTRL + Qt::Key_T);
-    windowMenu->addAction(QStringLiteral("Split Left/Right"), this, SLOT(splitHorizontal()), Qt::CTRL + Qt::Key_L);
+    windowMenu->addAction(QStringLiteral("Split Top/Bottom"), this, SLOT(splitVertical()), Qt::CTRL | Qt::Key_T);
+    windowMenu->addAction(QStringLiteral("Split Left/Right"), this, SLOT(splitHorizontal()), Qt::CTRL | Qt::Key_L);
     windowMenu->addSeparator();
-    windowMenu->addAction(QStringLiteral("Close"), this, SLOT(close()), Qt::CTRL + Qt::Key_W);
+    windowMenu->addAction(QStringLiteral("Close"), this, SLOT(close()), Qt::CTRL | Qt::Key_W);
     menuBar()->addMenu(windowMenu);
 }
 

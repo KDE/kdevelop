@@ -606,7 +606,7 @@ void DocumentController::setupActions()
 
     action = ac->addAction( QStringLiteral("file_open") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-    ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_O );
+    ac->setDefaultShortcut(action, Qt::CTRL | Qt::Key_O);
     action->setText(i18nc("@action",  "&Open..." ) );
     connect(action, &QAction::triggered,
             this, [this] { Q_D(DocumentController); d->chooseDocument(); } );
@@ -624,7 +624,7 @@ void DocumentController::setupActions()
     connect( action, &QAction::triggered, this, &DocumentController::slotSaveAllDocuments );
     action->setToolTip( i18nc("@info:tooltip", "Save all open documents" ) );
     action->setWhatsThis( i18nc("@info:whatsthis", "Save all open documents, prompting for additional information when necessary." ) );
-    ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL + Qt::Key_L) );
+    ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL | Qt::Key_L));
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( QStringLiteral("file_revert_all") );
@@ -637,7 +637,7 @@ void DocumentController::setupActions()
 
     action = d->close = ac->addAction( QStringLiteral("file_close") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
-    ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_W );
+    ac->setDefaultShortcut(action, Qt::CTRL | Qt::Key_W);
     action->setText( i18nc("@action", "&Close" ) );
     connect( action, &QAction::triggered, this, &DocumentController::fileClose );
     action->setToolTip( i18nc("@info:tooltip", "Close file" ) );
@@ -654,7 +654,7 @@ void DocumentController::setupActions()
 
     action = d->closeAllOthers = ac->addAction( QStringLiteral("file_closeother") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
-    ac->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_W );
+    ac->setDefaultShortcut(action, Qt::CTRL | Qt::SHIFT | Qt::Key_W);
     action->setText(i18nc("@action", "Close All Ot&hers" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllOtherDocuments );
     action->setToolTip( i18nc("@info:tooltip", "Close all other documents" ) );
