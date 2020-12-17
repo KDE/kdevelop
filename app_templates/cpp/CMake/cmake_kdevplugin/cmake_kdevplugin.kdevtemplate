@@ -52,4 +52,4 @@ Comment[x-test]=xxGenerate a general KDevelop plugin, using CMake and C++xx
 Comment[zh_CN]=生成一个使用 CMake 和 C++ 的一般的 KDevelop 插件
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp,README.md
 Category=KDevelop/Plugin
-ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_]+$
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_-]+$

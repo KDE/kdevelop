@@ -259,7 +259,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     //prepare variable substitution hash
     m_variables.clear();
     m_variables[QStringLiteral("APPNAME")] = info.name;
-    m_variables[QStringLiteral("APPNAMEUC")] = info.name.toUpper();
+    m_variables[QStringLiteral("APPNAMEUC")] = generateIdentifier(info.name.toUpper());
     m_variables[QStringLiteral("APPNAMELC")] = info.name.toLower();
     m_variables[QStringLiteral("APPNAMEID")] = generateIdentifier(info.name);
     m_variables[QStringLiteral("PROJECTDIR")] = dest.toLocalFile();

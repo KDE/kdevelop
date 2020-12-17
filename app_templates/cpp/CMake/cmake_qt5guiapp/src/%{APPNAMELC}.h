@@ -5,19 +5,19 @@
 #include <QScopedPointer>
 
 namespace Ui {
-class %{APPNAME};
+class %{APPNAMEID};
 }
 
-class %{APPNAME} : public QMainWindow
+class %{APPNAMEID} : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit %{APPNAME}(QWidget *parent = nullptr);
-    ~%{APPNAME}() override;
+    explicit %{APPNAMEID}(QWidget *parent = nullptr);
+    ~%{APPNAMEID}() override;
 
 private:
-    QScopedPointer<Ui::%{APPNAME}> m_ui;
+    QScopedPointer<Ui::%{APPNAMEID}> m_ui;
 };
 
 #endif // %{APPNAMEUC}_H

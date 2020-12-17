@@ -57,4 +57,4 @@ Comment[zh_CN]=生成基于 CMake/Qt5 的图形应用程序 (跨平台兼容)
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
 Category=Qt/Graphical
 Icon=cmake_qt5guiapp.png
-ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_]+$
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_-]+$

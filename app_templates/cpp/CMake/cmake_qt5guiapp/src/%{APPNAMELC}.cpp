@@ -1,11 +1,11 @@
 #include "%{APPNAMELC}.h"
 #include "ui_%{APPNAMELC}.h"
 
-%{APPNAME}::%{APPNAME}(QWidget *parent) :
+%{APPNAMEID}::%{APPNAMEID}(QWidget *parent) :
     QMainWindow(parent),
-    m_ui(new Ui::%{APPNAME})
+    m_ui(new Ui::%{APPNAMEID})
 {
     m_ui->setupUi(this);
 }
 
-%{APPNAME}::~%{APPNAME}() = default;
+%{APPNAMEID}::~%{APPNAMEID}() = default;
