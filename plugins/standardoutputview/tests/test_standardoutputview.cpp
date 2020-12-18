@@ -116,8 +116,8 @@ void StandardOutputViewTest::testActions()
     QVERIFY(!toolViewPointer(toolViewTitle));
 
     QList<QAction*> addedActions;
-    addedActions.append(new QAction(QStringLiteral("Action1"), nullptr));
-    addedActions.append(new QAction(QStringLiteral("Action2"), nullptr));
+    addedActions.append(new QAction(QStringLiteral("Action1"), this));
+    addedActions.append(new QAction(QStringLiteral("Action2"), this));
     toolViewId = m_stdOutputView->registerToolView(toolViewTitle, KDevelop::IOutputView::HistoryView,
                                                    QIcon(),
                                                    KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction,
