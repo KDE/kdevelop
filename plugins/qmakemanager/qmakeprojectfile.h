@@ -59,6 +59,7 @@ public:
     QString getTemplate() const;
 
     void setMkSpecs( QMakeMkSpecs* mkspecs );
+    void setOwnMkSpecs(bool own);
     QMakeMkSpecs* mkSpecs() const;
     void setQMakeCache( QMakeCache* cache );
     QMakeCache* qmakeCache() const;
@@ -84,6 +85,7 @@ private:
     QString m_qtVersion;
     // On OS X, QT_INSTALL_LIBS is typically a framework directory and should thus be added to the framework search path
     QString m_qtLibDir;
+    bool m_ownMkSpecs = false;
 };
 
 #endif

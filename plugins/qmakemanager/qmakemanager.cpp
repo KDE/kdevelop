@@ -151,6 +151,11 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
 
     auto item = new QMakeFolderItem(project, path);
 
+    const auto projectfiles = dir.entryList(QStringList() << QStringLiteral("*.pro"));
+    if (projectfiles.isEmpty()) {
+        return item;
+    }
+
     QHash<QString, QString> qmvars = QMakeUtils::queryQMake(project);
     const QString mkSpecFile = QMakeConfig::findBasicMkSpec(qmvars);
     Q_ASSERT(!mkSpecFile.isEmpty());
@@ -163,13 +168,13 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
         cache->read();
     }
 
-    QStringList projectfiles = dir.entryList(QStringList() << QStringLiteral("*.pro"));
     for (const auto& projectfile : projectfiles) {
         Path proPath(path, projectfile);
         /// TODO: use Path in QMakeProjectFile
         auto* scope = new QMakeProjectFile(proPath.toLocalFile());
         scope->setProject(project);
         scope->setMkSpecs(mkspecs);
+        scope->setOwnMkSpecs(true);
         if (cache) {
             scope->setQMakeCache(cache);
         }

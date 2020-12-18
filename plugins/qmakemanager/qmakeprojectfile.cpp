@@ -68,6 +68,11 @@ void QMakeProjectFile::setMkSpecs(QMakeMkSpecs* mkspecs)
     m_mkspecs = mkspecs;
 }
 
+void QMakeProjectFile::setOwnMkSpecs(bool own)
+{
+    m_ownMkSpecs = own;
+}
+
 bool QMakeProjectFile::read()
 {
     // default values
@@ -380,6 +385,8 @@ QStringList QMakeProjectFile::targets() const
 QMakeProjectFile::~QMakeProjectFile()
 {
     // TODO: delete cache, specs, ...?
+    if (m_ownMkSpecs)
+        delete m_mkspecs;
 }
 
 QStringList QMakeProjectFile::resolveVariable(const QString& variable, VariableInfo::VariableType type) const
