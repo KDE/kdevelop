@@ -505,7 +505,9 @@ void QtPrintersTest::testKDevelopTypes()
 {
     GdbProcess gdb(QStringLiteral("debuggee_kdeveloptypes"));
     gdb.execute("break kdeveloptypes.cpp:12");
-    gdb.execute("run");
+    const auto runMessage = gdb.execute("run");
+    if (runMessage.contains("ASan runtime does not come first"))
+        QSKIP("cannot run this test in an ASan build configuration");
 
     QVERIFY(gdb.execute("print path1").contains("(\"tmp\", \"foo\")"));
     QVERIFY(gdb.execute("print path2").contains("(\"http://www.test.com\", \"tmp\", \"asdf.txt\")"));
