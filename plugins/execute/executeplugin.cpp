@@ -50,7 +50,6 @@ QString ExecutePlugin::dependencyEntry = QStringLiteral("Dependencies");
 QString ExecutePlugin::environmentProfileEntry = QStringLiteral("EnvironmentGroup");
 QString ExecutePlugin::useTerminalEntry = QStringLiteral("Use External Terminal");
 QString ExecutePlugin::terminalEntry = QStringLiteral("External Terminal");
-QString ExecutePlugin::userIdToRunEntry = QStringLiteral("User Id to Run");
 QString ExecutePlugin::dependencyActionEntry = QStringLiteral("Dependency Action");
 QString ExecutePlugin::projectTargetEntry = QStringLiteral("Project Target");
 QString ExecutePlugin::killBeforeExecutingAgain = QStringLiteral("Kill Before Executing Again");

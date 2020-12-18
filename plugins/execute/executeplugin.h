@@ -48,7 +48,6 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     static QString environmentProfileEntry;
     static QString useTerminalEntry;
     static QString terminalEntry;
-    static QString userIdToRunEntry;
     static QString dependencyActionEntry;
     static QString projectTargetEntry;
     static QString killBeforeExecutingAgain;

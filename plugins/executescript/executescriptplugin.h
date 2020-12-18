@@ -46,11 +46,8 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString remoteHostEntry;
     static QString runCurrentFileEntry;
     static QString argumentsEntry;
-    static QString isExecutableEntry;
     static QString environmentProfileEntry;
     //static QString useTerminalEntry;
-    static QString userIdToRunEntry;
-    static QString projectTargetEntry;
     static QString outputFilteringEntry;
     
     void unload() override;

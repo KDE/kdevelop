@@ -42,12 +42,9 @@ QString ExecuteScriptPlugin::executeOnRemoteHostEntry = QStringLiteral("Execute 
 QString ExecuteScriptPlugin::runCurrentFileEntry = QStringLiteral("Run current file");
 QString ExecuteScriptPlugin::remoteHostEntry = QStringLiteral("Remote Host");
 QString ExecuteScriptPlugin::argumentsEntry = QStringLiteral("Arguments");
-QString ExecuteScriptPlugin::isExecutableEntry = QStringLiteral("isExecutable");
 // TODO: migrate to more consistent key term "EnvironmentProfile"
 QString ExecuteScriptPlugin::environmentProfileEntry = QStringLiteral("EnvironmentGroup");
 //QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
-QString ExecuteScriptPlugin::userIdToRunEntry = QStringLiteral("User Id to Run");
-QString ExecuteScriptPlugin::projectTargetEntry = QStringLiteral("Project Target");
 QString ExecuteScriptPlugin::outputFilteringEntry = QStringLiteral("Output Filtering Mode");
 
 using namespace KDevelop;
