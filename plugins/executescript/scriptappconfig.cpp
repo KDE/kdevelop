@@ -86,7 +86,6 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() ) );
     environment->setCurrentProfile(cfg.readEntry(ExecuteScriptPlugin::environmentProfileEntry, QString()));
     outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 2u ));
-    //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
 }
 
 ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
@@ -108,7 +107,6 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     connect( workingDirectory, &KUrlRequester::urlSelected, this, &ScriptAppConfigPage::changed );
     connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
     connect( environment, &EnvironmentSelectionWidget::currentProfileChanged, this, &ScriptAppConfigPage::changed );
-    //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
 void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
@@ -123,7 +121,6 @@ void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecuteScriptPlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecuteScriptPlugin::environmentProfileEntry, environment->currentProfile() );
     cfg.writeEntry( ExecuteScriptPlugin::outputFilteringEntry, outputFilteringMode->currentIndex() );
-    //cfg.writeEntry( ExecuteScriptPlugin::useTerminalEntry, runInTerminal->isChecked() );
 }
 
 QString ScriptAppConfigPage::title() const

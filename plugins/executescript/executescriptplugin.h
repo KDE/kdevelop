@@ -47,7 +47,6 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString runCurrentFileEntry;
     static QString argumentsEntry;
     static QString environmentProfileEntry;
-    //static QString useTerminalEntry;
     static QString outputFilteringEntry;
     
     void unload() override;
@@ -58,7 +57,6 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const override;
     QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const override;
     QString environmentProfileName(KDevelop::ILaunchConfiguration*) const override;
-    //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const override;
     int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const override;
     bool runCurrentFile(KDevelop::ILaunchConfiguration*) const override;

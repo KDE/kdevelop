@@ -49,7 +49,6 @@ public:
     virtual QStringList arguments( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString environmentProfileName(KDevelop::ILaunchConfiguration*) const = 0;
-    //virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString scriptAppConfigTypeId() const = 0;
     virtual int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual bool runCurrentFile( KDevelop::ILaunchConfiguration* ) const = 0;

@@ -44,7 +44,6 @@ QString ExecuteScriptPlugin::remoteHostEntry = QStringLiteral("Remote Host");
 QString ExecuteScriptPlugin::argumentsEntry = QStringLiteral("Arguments");
 // TODO: migrate to more consistent key term "EnvironmentProfile"
 QString ExecuteScriptPlugin::environmentProfileEntry = QStringLiteral("EnvironmentGroup");
-//QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
 QString ExecuteScriptPlugin::outputFilteringEntry = QStringLiteral("Output Filtering Mode");
 
 using namespace KDevelop;
@@ -221,18 +220,6 @@ QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, Q
     }
     return interpreter;
 }
-
-/*
-bool ExecuteScriptPlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) const
-{
-    if( !cfg )
-    {
-        return false;
-    }
-
-    return cfg->config().readEntry( ExecuteScriptPlugin::useTerminalEntry, false );
-}
-*/
 
 QUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
 {
