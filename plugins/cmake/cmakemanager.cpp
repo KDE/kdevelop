@@ -31,6 +31,8 @@
 #include "icmakedocumentation.h"
 #include "cmakemodelitems.h"
 #include "testing/ctestutils.h"
+#include "testing/ctestsuite.h"
+#include "testing/ctestfindjob.h"
 #include "cmakeserverimportjob.h"
 #include "cmakeserver.h"
 #include "cmakefileapi.h"
@@ -62,6 +64,7 @@
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iruntime.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/itestcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -441,6 +444,17 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 }
 
+static void cleanupTestSuites(const QVector<CTestSuite*>& testSuites, const QVector<CTestFindJob*>& testSuiteJobs)
+{
+    for (auto* testSuiteJob : testSuiteJobs) {
+        testSuiteJob->kill(KJob::Quietly);
+    }
+    for (auto* testSuite : testSuites) {
+        ICore::self()->testController()->removeTestSuite(testSuite);
+        delete testSuite;
+    }
+}
+
 void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProject* project, const QSharedPointer<CMakeServer>& server)
 {
     if (server) {
@@ -488,10 +502,27 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         });
     }
 
-    m_projects[project] = {data, server};
+    auto& projectData = m_projects[project];
+    cleanupTestSuites(projectData.testSuites, projectData.testSuiteJobs);
 
+    QVector<CTestSuite*> testSuites;
+    QVector<CTestFindJob*> testSuiteJobs;
+    for (auto& suite : CTestUtils::createTestSuites(data.testSuites, data.targets, project)) {
+        auto* testSuite = suite.release();
+        testSuites.append(testSuite);
+        auto* job = new CTestFindJob(testSuite);
+        connect(job, &KJob::result, this, [this, job, project, testSuite]() {
+            if (!job->error()) {
+                ICore::self()->testController()->addTestSuite(testSuite);
+            }
+            m_projects[project].testSuiteJobs.removeOne(job);
+        });
+        ICore::self()->runController()->registerJob(job);
+        testSuiteJobs.append(job);
+    }
+
+    projectData = { data, server, std::move(testSuites), std::move(testSuiteJobs) };
     populateTargets(project->projectItem(), data.targets);
-    CTestUtils::createTestSuites(data.testSuites, data.targets, project);
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
@@ -638,7 +669,11 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* /*project*/
 
 void CMakeManager::projectClosing(IProject* p)
 {
-    m_projects.remove(p);
+    auto it = m_projects.find(p);
+    if (it != m_projects.end()) {
+        cleanupTestSuites(it->testSuites, it->testSuiteJobs);
+        m_projects.erase(it);
+    }
 }
 
 ProjectFilterManager* CMakeManager::filterManager() const

@@ -63,8 +63,9 @@ void TestController::removeTestSuite(ITestSuite* suite)
 {
     Q_D(TestController);
 
-    d->suites.removeAll(suite);
-    emit testSuiteRemoved(suite);
+    if (d->suites.removeAll(suite)) {
+        emit testSuiteRemoved(suite);
+    }
 }
 
 void TestController::addTestSuite(ITestSuite* suite)

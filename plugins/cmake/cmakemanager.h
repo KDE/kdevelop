@@ -60,6 +60,8 @@ namespace KDevelop
 }
 
 class CMakeFolderItem;
+class CTestSuite;
+class CTestFindJob;
 
 class CMakeManager
     : public KDevelop::AbstractFileManagerPlugin
@@ -144,6 +146,8 @@ private:
     {
         CMakeProjectData data;
         QSharedPointer<CMakeServer> server;
+        QVector<CTestSuite*> testSuites;
+        QVector<CTestFindJob*> testSuiteJobs;
     };
     QHash<KDevelop::IProject*, PerProjectData> m_projects;
     KDevelop::ProjectFilterManager* m_filter;

@@ -27,8 +27,6 @@
 #include <debug.h>
 
 #include <interfaces/iproject.h>
-#include <interfaces/icore.h>
-#include <interfaces/iruncontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
@@ -60,8 +58,12 @@ static CMakeTarget targetByExe(const QHash< KDevelop::Path, QVector<CMakeTarget>
     return {};
 }
 
-void CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
+std::vector<std::unique_ptr<CTestSuite>>
+CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites,
+                             const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
+    std::vector<std::unique_ptr<CTestSuite>> suites;
+    suites.reserve(testSuites.size());
     for (const CMakeTest& test : testSuites) {
         KDevelop::Path executablePath;
         CMakeTarget target;
@@ -79,7 +81,8 @@ void CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites, const QH
 
         qCDebug(CMAKE) << "looking for tests in test" << test.name << "target" << target.name << "with sources" << target.sources;
 
-        auto* suite = new CTestSuite(test.name, executablePath, target.sources.toList(), project, test.arguments, test.properties);
-        ICore::self()->runController()->registerJob(new CTestFindJob(suite));
+        suites.push_back(std::make_unique<CTestSuite>(test.name, executablePath, target.sources.toList(), project,
+                                                      test.arguments, test.properties));
     }
+    return suites;
 }

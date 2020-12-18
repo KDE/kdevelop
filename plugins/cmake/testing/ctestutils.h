@@ -22,14 +22,21 @@
 
 #include "cmakeprojectdata.h"
 
+#include <memory>
+#include <vector>
+
 namespace KDevelop
 {
 class IProject;
 }
 
+class CTestSuite;
+
 namespace CTestUtils
 {
-    void createTestSuites(const QVector<CMakeTest>& testSuites, const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets, KDevelop::IProject* project);
+std::vector<std::unique_ptr<CTestSuite>> createTestSuites(const QVector<CMakeTest>& testSuites,
+                                                          const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets,
+                                                          KDevelop::IProject* project);
 }
 
 #endif // CTESTUTILS_H

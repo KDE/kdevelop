@@ -22,7 +22,6 @@
 #include <debug.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/itestcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/duchain.h>
 #include <language/backgroundparser/backgroundparser.h>
@@ -47,9 +46,7 @@ void CTestFindJob::start()
 
 void CTestFindJob::findTestCases()
 {
-    if (!m_suite->arguments().isEmpty())
-    {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
+    if (!m_suite->arguments().isEmpty()) {
         emitResult();
         return;
     }
@@ -64,9 +61,7 @@ void CTestFindJob::findTestCases()
     }
     qCDebug(CMAKE) << "Source files to update:" << m_pendingFiles;
 
-    if (m_pendingFiles.isEmpty())
-    {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
+    if (m_pendingFiles.isEmpty()) {
         emitResult();
         return;
     }
@@ -99,9 +94,7 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 
-    if (m_pendingFiles.isEmpty())
-    {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
+    if (m_pendingFiles.isEmpty()) {
         emitResult();
     }
 }
