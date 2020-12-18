@@ -121,20 +121,22 @@ void CTestRunJob::start()
 
     if (auto* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
         auto* outputJob = cjob->findChild<OutputJob*>();
-        Q_ASSERT(outputJob);
-        outputJob->setVerbosity(m_verbosity);
+        if (outputJob) {
+            outputJob->setVerbosity(m_verbosity);
 
-        QString testName = m_suite->name();
-        QString title;
-        if (cases_selected.count() == 1)
-            title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
-        else
-            title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)", cases_selected.count(), testName);
+            QString testName = m_suite->name();
+            QString title;
+            if (cases_selected.count() == 1)
+                title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
+            else
+                title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)",
+                               cases_selected.count(), testName);
 
-        outputJob->setTitle(title);
+            outputJob->setTitle(title);
 
-        m_outputModel = qobject_cast<OutputModel*>(outputJob->model());
-        connect(m_outputModel, &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
+            m_outputModel = qobject_cast<OutputModel*>(outputJob->model());
+            connect(m_outputModel, &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
+        }
     }
     connect(m_job, &KJob::finished, this, &CTestRunJob::processFinished);
 

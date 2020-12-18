@@ -24,6 +24,8 @@
 #include <interfaces/itestsuite.h>
 #include <interfaces/itestcontroller.h>
 
+#include <QPointer>
+
 class CTestSuite;
 
 namespace KDevelop {
@@ -48,7 +50,7 @@ private:
     CTestSuite* m_suite;
     QStringList m_cases;
     QHash<QString, KDevelop::TestResult::TestCaseResult> m_caseResults;
-    KJob* m_job;
+    QPointer<KJob> m_job;
     KDevelop::OutputModel* m_outputModel;
     KDevelop::OutputJob::OutputJobVerbosity m_verbosity;
 };
