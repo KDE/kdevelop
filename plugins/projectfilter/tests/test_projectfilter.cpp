@@ -56,19 +56,13 @@ void addTests(const QString& tag, const TestProject& project, const TestFilter& 
 {
     for (uint i = 0; i < numTests; ++i) {
         const MatchTest& test = tests[i];
-        QTest::newRow(qstrdup(qPrintable(tag + ':' + test.path)))
-            << filter
-            << Path(project.path(), test.path)
-            << test.isFolder
-            << test.shouldMatch;
+        QTest::addRow("%ls:%ls", qUtf16Printable(tag), qUtf16Printable(test.path))
+            << filter << Path(project.path(), test.path) << test.isFolder << test.shouldMatch;
 
         if (test.isFolder) {
             // also test folder with trailing slash - should not make a difference
-            QTest::newRow(qstrdup(qPrintable(tag + ':' + test.path + '/')))
-                << filter
-                << Path(project.path(), test.path)
-                << test.isFolder
-                << test.shouldMatch;
+            QTest::addRow("%ls:%ls/", qUtf16Printable(tag), qUtf16Printable(test.path))
+                << filter << Path(project.path(), test.path) << test.isFolder << test.shouldMatch;
         }
     }
 }
