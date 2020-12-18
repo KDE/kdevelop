@@ -41,20 +41,6 @@
 #include <project/builderjob.h>
 #include <util/kdevstringhandler.h>
 
-QString ExecutePlugin::workingDirEntry = QStringLiteral("Working Directory");
-QString ExecutePlugin::executableEntry = QStringLiteral("Executable");
-QString ExecutePlugin::argumentsEntry = QStringLiteral("Arguments");
-QString ExecutePlugin::isExecutableEntry = QStringLiteral("isExecutable");
-QString ExecutePlugin::dependencyEntry = QStringLiteral("Dependencies");
-// TODO: migrate to more consistent key term "EnvironmentProfile"
-QString ExecutePlugin::environmentProfileEntry = QStringLiteral("EnvironmentGroup");
-QString ExecutePlugin::useTerminalEntry = QStringLiteral("Use External Terminal");
-QString ExecutePlugin::terminalEntry = QStringLiteral("External Terminal");
-QString ExecutePlugin::dependencyActionEntry = QStringLiteral("Dependency Action");
-QString ExecutePlugin::projectTargetEntry = QStringLiteral("Project Target");
-QString ExecutePlugin::killBeforeExecutingAgain = QStringLiteral("Kill Before Executing Again");
-QString ExecutePlugin::configuredByCTest = QStringLiteral("ConfiguredByCTest");
-
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecute.json", registerPlugin<ExecutePlugin>();)

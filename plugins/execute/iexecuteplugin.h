@@ -39,6 +39,14 @@ class QStringList;
 class IExecutePlugin
 {
 public:
+    static constexpr const char* isExecutableEntry = "isExecutable";
+    static constexpr const char* executableEntry = "Executable";
+    static constexpr const char* workingDirEntry = "Working Directory";
+    // TODO: migrate to more consistent key term "EnvironmentProfile"
+    static constexpr const char* environmentProfileEntry = "EnvironmentGroup";
+    static constexpr const char* useTerminalEntry = "Use External Terminal";
+    static constexpr const char* terminalEntry = "External Terminal";
+
     virtual ~IExecutePlugin() {}
 
     virtual QUrl executable( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;

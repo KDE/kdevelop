@@ -186,9 +186,9 @@ TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const Q
     static constexpr const char* groupName = "launch";
     c->deleteGroup(groupName);
     cfg = c->group(groupName);
-    cfg.writeEntry("isExecutable", true);
-    cfg.writeEntry("Executable", executable);
-    cfg.writeEntry("Working Directory", workingDirectory);
+    cfg.writeEntry(IExecutePlugin::isExecutableEntry, true);
+    cfg.writeEntry(IExecutePlugin::executableEntry, executable);
+    cfg.writeEntry(IExecutePlugin::workingDirEntry, workingDirectory);
 }
 
 namespace {
@@ -208,7 +208,7 @@ void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
 {
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeechoenv"));
 
-    cfg.config().writeEntry("EnvironmentGroup", profileName);
+    cfg.config().writeEntry(IExecutePlugin::environmentProfileEntry, profileName);
 
     WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
     envProfiles.removeProfile(profileName);

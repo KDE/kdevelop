@@ -1922,8 +1922,8 @@ void GdbTest::testDebugInExternalTerminal()
 
         session = new TestDebugSession();
 
-        cfg.config().writeEntry("External Terminal"/*ExecutePlugin::terminalEntry*/, console);
-        cfg.config().writeEntry("Use External Terminal"/*ExecutePlugin::useTerminalEntry*/, true);
+        cfg.config().writeEntry(IExecutePlugin::useTerminalEntry, true);
+        cfg.config().writeEntry(IExecutePlugin::terminalEntry, console);
 
         KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 28);
 

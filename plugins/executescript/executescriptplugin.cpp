@@ -35,17 +35,6 @@
 #include <project/projectmodel.h>
 #include <util/kdevstringhandler.h>
 
-QString ExecuteScriptPlugin::interpreterEntry = QStringLiteral("Interpreter");
-QString ExecuteScriptPlugin::workingDirEntry = QStringLiteral("Working Directory");
-QString ExecuteScriptPlugin::executableEntry = QStringLiteral("Executable");
-QString ExecuteScriptPlugin::executeOnRemoteHostEntry = QStringLiteral("Execute on Remote Host");
-QString ExecuteScriptPlugin::runCurrentFileEntry = QStringLiteral("Run current file");
-QString ExecuteScriptPlugin::remoteHostEntry = QStringLiteral("Remote Host");
-QString ExecuteScriptPlugin::argumentsEntry = QStringLiteral("Arguments");
-// TODO: migrate to more consistent key term "EnvironmentProfile"
-QString ExecuteScriptPlugin::environmentProfileEntry = QStringLiteral("EnvironmentGroup");
-QString ExecuteScriptPlugin::outputFilteringEntry = QStringLiteral("Output Filtering Mode");
-
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecutescript.json", registerPlugin<ExecuteScriptPlugin>();)
