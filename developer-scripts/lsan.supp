@@ -1,2 +1,6 @@
 # fixme: this looks like an actual leak upstream, report, investigate and/or fix it there
 leak:editorconfig_parse
+# leaks when using -platform offscreen
+leak:libqoffscreen.so
+leak:QDesktopWidget
+leak:QOpenGLContext::setScreen
