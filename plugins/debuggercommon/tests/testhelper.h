@@ -30,7 +30,6 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include <QDebug>
 #include <QPointer>
 #include <QString>
 #include <QElapsedTimer>
@@ -99,16 +98,7 @@ public:
         : TestLaunchConfiguration(findExecutable(executable), workingDirectory)
     {}
 
-    explicit TestLaunchConfiguration(const QUrl& executable, const QUrl& workingDirectory)
-    {
-        qDebug() << "FIND" << executable;
-        c = KSharedConfig::openConfig();
-        c->deleteGroup("launch");
-        cfg = c->group("launch");
-        cfg.writeEntry("isExecutable", true);
-        cfg.writeEntry("Executable", executable);
-        cfg.writeEntry("Working Directory", workingDirectory);
-    }
+    explicit TestLaunchConfiguration(const QUrl& executable, const QUrl& workingDirectory);
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
     QString name() const override { return QStringLiteral("Test-Launch"); }

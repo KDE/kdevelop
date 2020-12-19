@@ -179,6 +179,18 @@ bool TestWaiter::waitUnless(bool ok)
     return true;
 }
 
+TestLaunchConfiguration::TestLaunchConfiguration(const QUrl& executable, const QUrl& workingDirectory)
+{
+    qDebug() << "FIND" << executable;
+    c = KSharedConfig::openConfig();
+    static constexpr const char* groupName = "launch";
+    c->deleteGroup(groupName);
+    cfg = c->group(groupName);
+    cfg.writeEntry("isExecutable", true);
+    cfg.writeEntry("Executable", executable);
+    cfg.writeEntry("Working Directory", workingDirectory);
+}
+
 namespace {
 class WritableEnvironmentProfileList : public KDevelop::EnvironmentProfileList
 {
