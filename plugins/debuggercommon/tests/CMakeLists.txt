@@ -21,15 +21,15 @@ target_link_libraries(kdevdbg_testhelper
 )
 
 ecm_add_test(test_miparser
-    LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
+    LINK_LIBRARIES Qt5::Test kdevdebuggercommon
 )
 
 ecm_add_test(test_micommand
-    LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
+    LINK_LIBRARIES Qt5::Test kdevdebuggercommon
 )
 
 ecm_add_test(test_micommandqueue
-    LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
+    LINK_LIBRARIES Qt5::Test kdevdebuggercommon
 )
 
 set(TEST_PLUGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/testplugindir")
