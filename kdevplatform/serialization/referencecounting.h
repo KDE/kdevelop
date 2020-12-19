@@ -49,7 +49,7 @@ public:
     void enable(Pointer start, unsigned size);
     void disable(Pointer start, unsigned size);
 
-    static DUChainReferenceCounting& instance()
+    static DUChainReferenceCounting& instance() noexcept
     {
         static thread_local DUChainReferenceCounting duchainReferenceCounting;
         return duchainReferenceCounting;
