@@ -26,12 +26,14 @@
 #include "debuggers-tests-config.h"
 #include "midebugsession.h"
 
-#include <QApplication>
+#include <QAbstractItemModel>
 #include <QDebug>
-#include <QDir>
+#include <QFile>
 #include <QFileInfo>
+#include <QModelIndex>
 #include <QRegularExpression>
 #include <QTest>
+#include <QVariant>
 
 namespace KDevMI {
 

@@ -26,6 +26,7 @@
 #include "controllers/variablecontroller.h"
 #include "debugsession.h"
 #include "stringhelpers.h"
+#include "tests/debuggers-tests-config.h"
 #include "tests/testhelper.h"
 
 #include <execute/iexecuteplugin.h>

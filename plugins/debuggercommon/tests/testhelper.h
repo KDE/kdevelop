@@ -23,8 +23,6 @@
 #ifndef KDEVDBG_TESTHELPER_H
 #define KDEVDBG_TESTHELPER_H
 
-#include "debuggers-tests-config.h"
-
 #include <debugger/interfaces/idebugsession.h>
 
 #include <QPointer>
@@ -32,8 +30,9 @@
 #include <QElapsedTimer>
 #include <QUrl>
 
-namespace KDevMI
-{
+class QModelIndex;
+
+namespace KDevMI {
 
 class MIDebugSession;
 
