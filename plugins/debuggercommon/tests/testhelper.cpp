@@ -194,7 +194,7 @@ public:
 void testEnvironmentSet(MIDebugSession* session, const QString& profileName,
                         IExecutePlugin* executePlugin)
 {
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeechoenv")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeechoenv"));
 
     cfg.config().writeEntry("EnvironmentGroup", profileName);
 

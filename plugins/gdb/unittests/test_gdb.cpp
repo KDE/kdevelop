@@ -538,7 +538,7 @@ void GdbTest::testBreakOnAccessBreakpoint()
 void GdbTest::testInsertBreakpointWhileRunning()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     session->startDebugging(&cfg, m_iface);
@@ -559,7 +559,7 @@ void GdbTest::testInsertBreakpointWhileRunning()
 void GdbTest::testInsertBreakpointWhileRunningMultiple()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     session->startDebugging(&cfg, m_iface);
@@ -718,7 +718,7 @@ void GdbTest::testStack()
 void GdbTest::testStackFetchMore()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeerecursion")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile(QStringLiteral("debugeerecursion.cpp"));
 
     TestFrameStackModel *stackModel = session->frameStackModel();
@@ -823,7 +823,7 @@ void GdbTest::testStackDeactivateAndActive()
 void GdbTest::testStackSwitchThread()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeethreads")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
 
     TestFrameStackModel *stackModel = session->frameStackModel();
@@ -1319,7 +1319,7 @@ void GdbTest::testSegfaultDebugee()
 {
     auto *session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_crash")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_crash"));
     QString fileName = findSourceFile(QStringLiteral("debugeecrash.cpp"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 23);
@@ -1365,7 +1365,7 @@ void GdbTest::testSwitchFrameGdbConsole()
 void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
     session->startDebugging(&cfg, m_iface);
@@ -1383,7 +1383,7 @@ void GdbTest::testCommandOrderFastStepping()
 {
     auto *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeqt")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeqt"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1653,7 +1653,7 @@ void GdbTest::testBreakpointWithSpaceInPath()
 {
     auto *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeespace")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeespace"));
     KConfigGroup grp = cfg.config();
     QString fileName = findSourceFile(QStringLiteral("debugee space.cpp"));
 
@@ -1695,7 +1695,7 @@ void GdbTest::testCatchpoint()
     auto *session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeexception")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeexception"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile(QStringLiteral("debugeeexception.cpp"))), 29);
 
@@ -1731,7 +1731,7 @@ void GdbTest::testThreadAndFrameInfo()
     // Check if --thread is added to user commands
 
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeethreads")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile(QStringLiteral("debugeethreads.cpp"));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 38);
@@ -1788,7 +1788,7 @@ void GdbTest::testMultipleLocationsBreakpoint()
 {
     auto *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeemultilocbreakpoint")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeemultilocbreakpoint"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("aPlusB"));
 
@@ -1852,7 +1852,7 @@ void GdbTest::testMultipleBreakpoint()
         auto *session = new TestDebugSession;
 
         //there'll be about 3-4 breakpoints, but we treat it like one.
-        TestLaunchConfiguration c(findExecutable(QStringLiteral("debuggee_debugeemultiplebreakpoint")));
+        TestLaunchConfiguration c(QStringLiteral("debuggee_debugeemultiplebreakpoint"));
         KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeemultiplebreakpoint.cpp:52"));
         session->startDebugging(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -1867,7 +1867,7 @@ void GdbTest::testRegularExpressionBreakpoint()
 {
         auto *session = new TestDebugSession;
 
-        TestLaunchConfiguration c(findExecutable(QStringLiteral("debuggee_debugeemultilocbreakpoint")));
+        TestLaunchConfiguration c(QStringLiteral("debuggee_debugeemultilocbreakpoint"));
         breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
         session->startDebugging(&c, m_iface);
         WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -1886,7 +1886,7 @@ void GdbTest::testChangeBreakpointWhileRunning() {
 
     auto *session = new TestDebugSession;
 
-    TestLaunchConfiguration c(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
     KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:30"));
     session->startDebugging(&c, m_iface);
 

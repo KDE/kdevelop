@@ -94,13 +94,12 @@ private:
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    explicit TestLaunchConfiguration(const QString& executable)
-        : TestLaunchConfiguration(findExecutable(executable), QUrl{})
+    explicit TestLaunchConfiguration(const QString& executable = QStringLiteral("debuggee_debugee"),
+                                     const QUrl& workingDirectory = QUrl{})
+        : TestLaunchConfiguration(findExecutable(executable), workingDirectory)
     {}
 
-    explicit TestLaunchConfiguration(
-            const QUrl& executable = findExecutable(QStringLiteral("debuggee_debugee")),
-            const QUrl& workingDirectory = QUrl{})
+    explicit TestLaunchConfiguration(const QUrl& executable, const QUrl& workingDirectory)
     {
         qDebug() << "FIND" << executable;
         c = KSharedConfig::openConfig();

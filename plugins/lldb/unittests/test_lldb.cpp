@@ -599,7 +599,7 @@ void LldbTest::testBreakOnAccessBreakpoint()
 void LldbTest::testInsertBreakpointWhileRunning()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -623,7 +623,7 @@ void LldbTest::testInsertBreakpointWhileRunning()
 void LldbTest::testInsertBreakpointWhileRunningMultiple()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -713,7 +713,7 @@ void LldbTest::testManualBreakpoint()
 void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
 
     QString fileName = findSourceFile("debugeeslow.cpp");
 
@@ -781,7 +781,7 @@ void LldbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 void LldbTest::testBreakpointWithSpaceInPath()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeespace")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeespace"));
 
     KConfigGroup grp = cfg.config();
     QString fileName = findSourceFile("debugee space.cpp");
@@ -826,7 +826,7 @@ void LldbTest::testBreakpointDisabledOnStart()
 void LldbTest::testMultipleLocationsBreakpoint()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeemultilocbreakpoint")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeemultilocbreakpoint"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("aPlusB"));
 
@@ -849,7 +849,7 @@ void LldbTest::testMultipleBreakpoint()
     auto *session = new TestDebugSession;
 
     //there'll be about 3-4 breakpoints, but we treat it like one.
-    TestLaunchConfiguration c(findExecutable(QStringLiteral("debuggee_debugeemultiplebreakpoint")));
+    TestLaunchConfiguration c(QStringLiteral("debuggee_debugeemultiplebreakpoint"));
     auto b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeemultiplebreakpoint.cpp:52"));
 
     QVERIFY(session->startDebugging(&c, m_iface));
@@ -867,7 +867,7 @@ void LldbTest::testRegularExpressionBreakpoint()
     QSKIP("Skipping... lldb has only one breakpoint for multiple locations"
           " (and lldb-mi returns the first one), not support this yet");
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration c(findExecutable(QStringLiteral("debuggee_debugeemultilocbreakpoint")));
+    TestLaunchConfiguration c(QStringLiteral("debuggee_debugeemultilocbreakpoint"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&c, m_iface));
@@ -889,7 +889,7 @@ void LldbTest::testChangeBreakpointWhileRunning()
 {
     QSKIP("Skipping... lldb-mi command -break-enable doesn't enable breakpoint");
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration c(findExecutable(QStringLiteral("debuggee_debugeeslow")));
+    TestLaunchConfiguration c(QStringLiteral("debuggee_debugeeslow"));
 
     KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(QStringLiteral("debugeeslow.cpp:25"));
     QVERIFY(session->startDebugging(&c, m_iface));
@@ -922,7 +922,7 @@ void LldbTest::testChangeBreakpointWhileRunning()
 void LldbTest::testCatchpoint()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeexception")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeexception"));
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
     TestFrameStackModel* fsModel = session->frameStackModel();
@@ -1042,7 +1042,7 @@ void LldbTest::testStack()
 void LldbTest::testStackFetchMore()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeerecursion")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeerecursion"));
     QString fileName = findSourceFile("debugeerecursion.cpp");
 
     TestFrameStackModel *stackModel = session->frameStackModel();
@@ -1151,7 +1151,7 @@ void LldbTest::testStackSwitchThread()
 {
     QSKIP("Skipping... lldb-mi crashes when break at a location with multiple threads running");
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeethreads")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeethreads"));
     QString fileName = findSourceFile("debugeethreads.cpp");
 
     TestFrameStackModel *stackModel = session->frameStackModel();
@@ -1643,7 +1643,7 @@ void LldbTest::testSwitchFrameLldbConsole()
 void LldbTest::testSegfaultDebugee()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_crash")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_crash"));
 
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
@@ -1667,7 +1667,7 @@ void LldbTest::testSegfaultDebugee()
 void LldbTest::testCommandOrderFastStepping()
 {
     auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeqt")));
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeqt"));
 
     breakpoints()->addCodeBreakpoint(QStringLiteral("main"));
     QVERIFY(session->startDebugging(&cfg, m_iface));
@@ -1800,7 +1800,7 @@ void KDevMI::LLDB::LldbTest::testEnvironmentCd()
     QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
 
     auto path = KIO::upUrl(findExecutable(QStringLiteral("path with space/debuggee_spacedebugee")));
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeepath")), path);
+    TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeepath"), path);
 
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
