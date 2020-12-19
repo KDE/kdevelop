@@ -20,8 +20,9 @@
 #ifndef GDBTEST_H
 #define GDBTEST_H
 
-#include <debugsession.h>
 #include <QObject>
+
+class IExecutePlugin;
 
 namespace KDevelop {
 class TestCore;
@@ -99,10 +100,6 @@ private Q_SLOTS:
     void testPathWithSpace();
 
 private:
-    bool waitForState(DebugSession *session,
-                      KDevelop::IDebugSession::DebuggerState state,
-                      const char *file, int line,
-                      bool waitForIdle = false);
     IExecutePlugin* m_iface;
 };
 

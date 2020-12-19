@@ -54,7 +54,6 @@
 #include <QSignalSpy>
 #include <QTest>
 #include <QTemporaryFile>
-#include <QElapsedTimer>
 
 #define SKIP_IF_ATTACH_FORBIDDEN() \
     do { \
@@ -187,50 +186,6 @@ private:
     TestFrameStackModel* m_frameStackModel;
 };
 
-class TestWaiter
-{
-public:
-    TestWaiter(DebugSession * session_, const char * condition_, const char * file_, int line_)
-        : session(session_)
-        , condition(condition_)
-        , file(file_)
-        , line(line_)
-    {
-        stopWatch.start();
-    }
-
-    bool waitUnless(bool ok)
-    {
-        if (ok) {
-            qDebug() << "Condition " << condition << " reached in " << file << ':' << line;
-            return false;
-        }
-
-        if (stopWatch.elapsed() > 5000) {
-            QTest::qFail(qPrintable(QString("Timeout before reaching condition %0").arg(condition)),
-                file, line);
-            return false;
-        }
-
-        QTest::qWait(100);
-
-        if (!session) {
-            QTest::qFail(qPrintable(QString("Session ended without reaching condition %0").arg(condition)),
-                file, line);
-            return false;
-        }
-
-        return true;
-    }
-
-private:
-    QElapsedTimer stopWatch;
-    QPointer<DebugSession> session;
-    const char * condition;
-    const char * file;
-    int line;
-};
-
 #define WAIT_FOR_STATE(session, state) \
     do { if (!waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
 
@@ -245,18 +200,6 @@ private:
 
 #define COMPARE_DATA(index, expected) \
     do { if(!compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
-
-bool compareData(const QModelIndex& index, const QString& expected, const char *file, int line)
-{
-    QString s = index.model()->data(index, Qt::DisplayRole).toString();
-    if (s != expected) {
-        QTest::qFail(qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
-                                .arg(s, expected, file).arg(line)),
-                     file, line);
-        return false;
-    }
-    return true;
-}
 
 static const QString debugeeFileName = findSourceFile(QStringLiteral("debugee.cpp"));
 
@@ -2096,39 +2039,6 @@ void GdbTest::testPathWithSpace()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-bool GdbTest::waitForState(DebugSession *session, DebugSession::DebuggerState state,
-                            const char *file, int line, bool waitForIdle)
-{
-    QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
-    QElapsedTimer stopWatch;
-    stopWatch.start();
-
-    // legacy behavior for tests that implicitly may require waiting for idle,
-    // but which were written before waitForIdle was added
-    waitForIdle = waitForIdle || state != MIDebugSession::EndedState;
-
-    while (s && (s->state() != state || (waitForIdle && s->debuggerStateIsOn(s_dbgBusy)))) {
-        if (stopWatch.elapsed() > 5000) {
-            qWarning() << "current state" << s->state() << "waiting for" << state;
-            QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
-                         file, line);
-            return false;
-        }
-        QTest::qWait(20);
-    }
-
-    // NOTE: don't wait anymore after leaving the loop. Waiting re-enters event loop and
-    // may change session state.
-
-    if (!s && state != MIDebugSession::EndedState) {
-        QTest::qFail(qPrintable(QString("Session ended before reaching state %0").arg(state)),
-                     file, line);
-        return false;
-    }
-
-    qDebug() << "Reached state " << state << " in " << file << ':' << line;
-    return true;
-}
 } // end of namespace GDB
 } // end of namespace KDevMI
 

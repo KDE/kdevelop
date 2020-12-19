@@ -1,5 +1,6 @@
 /*
  * Common helpers for MI debugger unit tests
+ * Copyright 2009 Niko Sams <niko.sams@gmail.com>
  * Copyright 2016  Aetf <aetf@unlimitedcodeworks.xyz>
  *
  * This program is free software; you can redistribute it and/or
