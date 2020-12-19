@@ -32,11 +32,9 @@
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <KConfig>
 #include <KConfigGroup>
 #include <KSharedConfig>
 
@@ -48,26 +46,11 @@
 #include <algorithm>
 #include <vector>
 
-#define WAIT_FOR_STATE(session, state) \
-    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
-
-#define WAIT_FOR_STATE_AND_IDLE(session, state) \
-    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
-
 #define WAIT_FOR_A_WHILE_AND_IDLE(session, ms) \
     do { if (!KDevMI::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; \
          if (!KDevMI::waitForState((session), DebugSession::PausedState, __FILE__, __LINE__, true)) \
              return; \
     } while (0)
-
-#define WAIT_FOR(session, condition) \
-    do { \
-        KDevMI::TestWaiter w((session), #condition, __FILE__, __LINE__); \
-        while (w.waitUnless((condition))) /* nothing */ ; \
-    } while(0)
-
-#define COMPARE_DATA(index, expected) \
-    do { if (!KDevMI::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
 
 #define VERIFY_LOCAL(row, name, summary, children) \
     do { \
@@ -87,31 +70,7 @@ using KDevMI::findExecutable;
 using KDevMI::findSourceFile;
 using KDevMI::findFile;
 using KDevMI::compareData;
-
-class TestLaunchConfiguration : public ILaunchConfiguration
-{
-public:
-    explicit TestLaunchConfiguration(const QString& executable,
-                            const QUrl& workingDirectory = QUrl()) {
-        auto execPath = findExecutable(executable);
-        qDebug() << "FIND" << execPath;
-        c = KSharedConfig::openConfig();
-        c->deleteGroup("launch");
-        cfg = c->group("launch");
-        cfg.writeEntry("isExecutable", true);
-        cfg.writeEntry("Executable", execPath);
-        cfg.writeEntry("Working Directory", workingDirectory);
-    }
-    const KConfigGroup config() const override { return cfg; }
-    KConfigGroup config() override { return cfg; };
-    QString name() const override { return QStringLiteral("Test-Launch"); }
-    KDevelop::IProject* project() const override { return nullptr; }
-    KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
-
-private:
-    KConfigGroup cfg;
-    KSharedConfigPtr c;
-};
+using KDevMI::TestLaunchConfiguration;
 
 class TestDebugSession : public DebugSession
 {

@@ -15,8 +15,11 @@ target_link_libraries(kdevdbg_testhelper
     PUBLIC
     kdevdebuggercommon
     KDev::Debugger
+    KDev::IExecute
+    KDev::Interfaces
     Qt5::Core
     PRIVATE
+    KDev::Util
     Qt5::Test
 )
 

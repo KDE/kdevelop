@@ -33,11 +33,9 @@
 #include <debugger/breakpoint/breakpointmodel.h>
 #include <debugger/variable/variablecollection.h>
 #include <interfaces/idebugcontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-#include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
 #include <KIO/Global>
@@ -52,29 +50,8 @@
 #include <QUrl>
 #include <QDir>
 
-#define WAIT_FOR_STATE(session, state) \
-    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
-
-#define WAIT_FOR_STATE_AND_IDLE(session, state) \
-    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
-
 #define WAIT_FOR_A_WHILE(session, ms) \
     do { if (!KDevMI::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; } while (0)
-
-#define WAIT_FOR(session, condition) \
-    do { \
-        KDevMI::TestWaiter w((session), #condition, __FILE__, __LINE__); \
-        while (w.waitUnless((condition))) /* nothing */ ; \
-    } while(0)
-
-#define COMPARE_DATA(index, expected) \
-    do { if (!KDevMI::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
-
-#define SKIP_IF_ATTACH_FORBIDDEN() \
-    do { \
-        if (KDevMI::isAttachForbidden(__FILE__, __LINE__)) \
-            return; \
-    } while(0)
 
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
@@ -83,40 +60,6 @@ using KDevMI::findFile;
 using KDevMI::findSourceFile;
 
 namespace {
-class WritableEnvironmentProfileList : public EnvironmentProfileList
-{
-public:
-    explicit WritableEnvironmentProfileList(KConfig* config) : EnvironmentProfileList(config) {}
-
-    using EnvironmentProfileList::variables;
-    using EnvironmentProfileList::saveSettings;
-    using EnvironmentProfileList::removeProfile;
-};
-
-class TestLaunchConfiguration : public ILaunchConfiguration
-{
-public:
-    explicit TestLaunchConfiguration(const QUrl& executable = findExecutable(QStringLiteral("debuggee_debugee")),
-                            const QUrl& workingDirectory = QUrl()) {
-        qDebug() << "FIND" << executable;
-        c = KSharedConfig::openConfig();
-        c->deleteGroup("launch");
-        cfg = c->group("launch");
-        cfg.writeEntry("isExecutable", true);
-        cfg.writeEntry("Executable", executable);
-        cfg.writeEntry("Working Directory", workingDirectory);
-    }
-    const KConfigGroup config() const override { return cfg; }
-    KConfigGroup config() override { return cfg; };
-    QString name() const override { return QStringLiteral("Test-Launch"); }
-    KDevelop::IProject* project() const override { return nullptr; }
-    KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
-
-    KConfig* rootConfig() { return c.data(); }
-private:
-    KConfigGroup cfg;
-    KSharedConfigPtr c;
-};
 
 class TestFrameStackModel : public LldbFrameStackModel
 {
@@ -266,34 +209,7 @@ void LldbTest::testStdout()
 
 void LldbTest::testEnvironmentSet()
 {
-    auto *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(findExecutable(QStringLiteral("debuggee_debugeeechoenv")));
-
-    cfg.config().writeEntry("EnvironmentGroup", "LldbTestGroup");
-
-    WritableEnvironmentProfileList envProfiles(cfg.rootConfig());
-    envProfiles.removeProfile(QStringLiteral("LldbTestGroup"));
-    auto &envs = envProfiles.variables(QStringLiteral("LldbTestGroup"));
-    envs[QStringLiteral("VariableA")] = QStringLiteral("-A' \" complex --value");
-    envs[QStringLiteral("VariableB")] = QStringLiteral("-B' \" complex --value");
-    envProfiles.saveSettings(cfg.rootConfig());
-
-    QSignalSpy outputSpy(session, &TestDebugSession::inferiorStdoutLines);
-
-    QVERIFY(session->startDebugging(&cfg, m_iface));
-    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
-
-    QVERIFY(outputSpy.count() > 0);
-
-    QStringList outputLines;
-    while (outputSpy.count() > 0) {
-        const QList<QVariant> arguments = outputSpy.takeFirst();
-        for (const auto &item : arguments) {
-            outputLines.append(item.toStringList());
-        }
-    }
-    QCOMPARE(outputLines, QStringList() << "-A' \" complex --value"
-                                        << "-B' \" complex --value");
+    KDevMI::testEnvironmentSet(new TestDebugSession, QStringLiteral("LldbTestGroup"), m_iface);
 }
 
 void LldbTest::testBreakpoint()
