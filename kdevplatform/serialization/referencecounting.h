@@ -56,7 +56,9 @@ public:
     }
 
 private:
-    constexpr DUChainReferenceCounting() noexcept = default;
+    // This defaulted default constructor is implicitly noexcept. Marking it as noexcept explicitly, however,
+    // doesn't compile with Clang version < 9.0 because of https://bugs.llvm.org/show_bug.cgi?id=33736.
+    constexpr DUChainReferenceCounting() = default;
 
     struct Interval {
         Pointer start;
