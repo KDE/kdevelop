@@ -44,7 +44,7 @@ struct TestProjectPaths {
     KDevelop::Path configFile;
 };
 
-TestProjectPaths projectPaths(const QString& project, const QString& name = QString())
+inline TestProjectPaths projectPaths(const QString& project, const QString& name = QString())
 {
     TestProjectPaths paths;
     if(QDir::isRelativePath(project)) {
@@ -77,7 +77,7 @@ TestProjectPaths projectPaths(const QString& project, const QString& name = QStr
  * this prevents the dialog to popup asking for user interaction
  * which should never happen in an automated unit test
  */
-void defaultConfigure(const TestProjectPaths& paths)
+inline void defaultConfigure(const TestProjectPaths& paths)
 {
     KConfig config(paths.configFile.toLocalFile());
     // clear config
@@ -114,7 +114,7 @@ void defaultConfigure(const TestProjectPaths& paths)
     config.sync();
 }
 
-KDevelop::IProject* loadProject(const QString& name, const QString& relative = QString())
+inline KDevelop::IProject* loadProject(const QString& name, const QString& relative = QString())
 {
     qRegisterMetaType<KDevelop::IProject*>();
 
