@@ -25,9 +25,9 @@
 #include <cmakeconfiggroupkeys.h>
 #include <KConfig>
 #include <KConfigGroup>
+#include <QFile>
 #include <QFileInfo>
 #include <QDir>
-#include <QDebug>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

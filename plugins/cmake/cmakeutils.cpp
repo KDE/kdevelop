@@ -27,8 +27,6 @@
 #include <QTemporaryDir>
 #include <QRegularExpression>
 
-#include <KShell>
-#include <KLocalizedString>
 #include <KConfigGroup>
 
 #include <project/projectmodel.h>
