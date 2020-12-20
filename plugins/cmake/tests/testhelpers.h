@@ -22,6 +22,7 @@
 
 #include "cmake-test-paths.h"
 #include <cmakebuilddirchooser.h>
+#include <cmakeconfiggroupkeys.h>
 #include <KConfig>
 #include <KConfigGroup>
 #include <QFileInfo>
@@ -33,17 +34,6 @@
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iruntime.h>
 #include <QSignalSpy>
-
-static QString currentBuildDirKey = QStringLiteral("Build Directory Path");
-static QString currentCMakeExecutableKey = QStringLiteral("CMake Binary");
-static QString currentBuildTypeKey = QStringLiteral("Build Type");
-static QString currentInstallDirKey = QStringLiteral("Install Directory");
-static QString currentExtraArgumentsKey = QStringLiteral("Extra Arguments");
-static QString currentBuildDirectoryIndexKey = QStringLiteral("Current Build Directory Index");
-static QString projectBuildDirectoryCount = QStringLiteral("Build Directory Count");
-static QString projectRootRelativeKey = QStringLiteral("ProjectRootRelative");
-static QString projectBuildDirs = QStringLiteral("BuildDirs");
-static const QString buildDirRuntime = QStringLiteral("Runtime");
 
 struct TestProjectPaths {
     // foo/
@@ -91,7 +81,7 @@ void defaultConfigure(const TestProjectPaths& paths)
 {
     KConfig config(paths.configFile.toLocalFile());
     // clear config
-    config.deleteGroup("CMake");
+    config.deleteGroup(Config::groupName);
 
     // apply default configuration
     CMakeBuildDirChooser bd;
@@ -99,7 +89,7 @@ void defaultConfigure(const TestProjectPaths& paths)
     bd.setBuildFolder(KDevelop::Path(CMAKE_TESTS_BINARY_DIR + QStringLiteral("/build-") + paths.sourceDir.lastPathSegment()));
     // we don't want to execute, just pick the defaults from the dialog
 
-    KConfigGroup cmakeGrp = config.group("CMake");
+    KConfigGroup cmakeGroup = config.group(Config::groupName);
     {
         QDir buildFolder( bd.buildFolder().toLocalFile() );
         if ( !buildFolder.exists() ) {
@@ -109,17 +99,17 @@ void defaultConfigure(const TestProjectPaths& paths)
         }
     }
 
-    cmakeGrp.writeEntry( projectBuildDirectoryCount, 1);
-    cmakeGrp.writeEntry( currentBuildDirectoryIndexKey, 0);
+    cmakeGroup.writeEntry(Config::buildDirCountKey, 1);
+    cmakeGroup.writeEntry(Config::globalBuildDirIndexKey(), 0);
 
-    KConfigGroup buildDirGrp = cmakeGrp.group(QStringLiteral("CMake Build Directory 0"));
-    buildDirGrp.writeEntry( currentBuildDirKey, bd.buildFolder().toLocalFile() );
-    buildDirGrp.writeEntry( currentCMakeExecutableKey, bd.cmakeExecutable().toLocalFile() );
-    buildDirGrp.writeEntry( currentInstallDirKey, bd.installPrefix().toLocalFile() );
-    buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
-    buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
-    buildDirGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
-    buildDirGrp.writeEntry( buildDirRuntime, KDevelop::ICore::self()->runtimeController()->currentRuntime()->name());
+    KConfigGroup buildDirGroup = cmakeGroup.group(Config::groupNameBuildDir(0));
+    buildDirGroup.writeEntry(Config::Specific::buildDirPathKey, bd.buildFolder().toLocalFile());
+    buildDirGroup.writeEntry(Config::Specific::cmakeBinaryKey, bd.cmakeExecutable().toLocalFile());
+    buildDirGroup.writeEntry(Config::Specific::cmakeInstallDirKey, bd.installPrefix().toLocalFile());
+    buildDirGroup.writeEntry(Config::Specific::cmakeArgumentsKey, bd.extraArguments());
+    buildDirGroup.writeEntry(Config::Specific::cmakeBuildTypeKey, bd.buildType());
+    buildDirGroup.writeEntry(Config::Old::projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
+    buildDirGroup.writeEntry(Config::Specific::buildDirRuntime, KDevelop::ICore::self()->runtimeController()->currentRuntime()->name());
 
     config.sync();
 }
