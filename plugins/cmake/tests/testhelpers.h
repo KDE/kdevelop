@@ -104,7 +104,7 @@ inline void defaultConfigure(const TestProjectPaths& paths)
 
     KConfigGroup buildDirGroup = cmakeGroup.group(Config::groupNameBuildDir(0));
     buildDirGroup.writeEntry(Config::Specific::buildDirPathKey, bd.buildFolder().toLocalFile());
-    buildDirGroup.writeEntry(Config::Specific::cmakeBinaryKey, bd.cmakeExecutable().toLocalFile());
+    buildDirGroup.writeEntry(Config::Specific::cmakeExecutableKey, bd.cmakeExecutable().toLocalFile());
     buildDirGroup.writeEntry(Config::Specific::cmakeInstallDirKey, bd.installPrefix().toLocalFile());
     buildDirGroup.writeEntry(Config::Specific::cmakeArgumentsKey, bd.extraArguments());
     buildDirGroup.writeEntry(Config::Specific::cmakeBuildTypeKey, bd.buildType());
