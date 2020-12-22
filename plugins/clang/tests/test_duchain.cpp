@@ -35,6 +35,7 @@
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/typealiastype.h>
+#include <language/duchain/types/typeutils.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
@@ -2306,4 +2307,122 @@ void TestDUChain::testSameFunctionDefinition()
     checkFunctionDefinition(file3);
 
     m_projectController->closeAllProjects();
+}
+
+void TestDUChain::testSizeAlignOf()
+{
+    TestFile file(QStringLiteral(R"(
+        template<typename T>
+        struct Foo { T arg; };
+
+        using Bar = Foo<int>;
+        Bar asdf;
+        Foo<double> blub;
+        template<typename F>
+        using Asdf = Foo<F>;
+        Asdf<char> c;
+
+        struct MyClass {
+            int i;
+            int j;
+        };
+        void *ptr = nullptr;
+
+        enum E { A, B };
+        E e = A;
+        enum class E2 : int { A, B };
+        E2 e2 = E2::A;
+        enum class E3 : long { A, B };
+        E3 e3 = E3::A;
+
+        int i = 0;
+        int& ref = i;
+        struct ref_struct { int& ref; };
+
+        int fun();
+
+        namespace myns { struct bar { int foo; }; }
+        myns::bar myns_use;
+
+        struct MyClass c_struct;
+    )"),
+                  QStringLiteral("cpp"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(1000));
+
+    DUChainReadLocker lock;
+    const auto top = file.topContext();
+    QVERIFY(top);
+    QVERIFY(top->problems().isEmpty());
+
+    const auto decs = top->localDeclarations();
+    QCOMPARE(decs.size(), 21);
+
+    auto check = [&](int i, const QString& id, qint64 sizeOf, qint64 alignOf) {
+        QCOMPARE(decs[i]->identifier().toString(), id);
+        const auto type = TypeUtils::unAliasedType(decs[i]->abstractType());
+        QVERIFY(type);
+        QCOMPARE(type->sizeOf(), sizeOf);
+        QCOMPARE(type->alignOf(), alignOf);
+    };
+    check(0, "Foo< T >", -1, -1);
+    check(1, "Bar", 4, 4);
+    check(2, "asdf", 4, 4);
+    check(3, "blub", 8, 8);
+    check(4, "Asdf", -1, -1);
+    check(5, "c", 1, 1);
+    check(6, "MyClass", 8, 4);
+    check(7, "ptr", 8, 8);
+    check(8, "E", 4, 4);
+    check(9, "e", 4, 4);
+    check(10, "E2", 4, 4);
+    check(11, "e2", 4, 4);
+    check(12, "E3", 8, 8);
+    check(13, "e3", 8, 8);
+    check(14, "i", 4, 4);
+    // unexpected, but apparently correct
+    // https://stackoverflow.com/questions/26631169/why-does-sizeof-a-reference-type-give-you-the-sizeof-the-type
+    check(15, "ref", 4, 4);
+    check(16, "ref_struct", 8, 8);
+    check(17, "fun", -1, -1);
+    check(19, "myns_use", 4, 4);
+    check(20, "c_struct", 8, 4);
+}
+
+void TestDUChain::testSizeAlignOfUpdate()
+{
+    TestFile file(QStringLiteral(R"(
+        struct foo { int i; };
+    )"),
+                  QStringLiteral("cpp"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(1000));
+
+    {
+        DUChainReadLocker lock;
+        const auto top = file.topContext();
+        QVERIFY(top);
+        QVERIFY(top->problems().isEmpty());
+        QCOMPARE(top->localDeclarations().size(), 1);
+        const auto type = top->localDeclarations().constFirst()->abstractType();
+        QCOMPARE(type->sizeOf(), 4);
+        QCOMPARE(type->alignOf(), 4);
+    }
+
+    file.setFileContents(QStringLiteral(R"(
+        struct foo { char i[124]; };
+    )"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate);
+    QVERIFY(file.waitForParsed(1000));
+
+    {
+        DUChainReadLocker lock;
+        const auto top = file.topContext();
+        QVERIFY(top);
+        QVERIFY(top->problems().isEmpty());
+        QCOMPARE(top->localDeclarations().size(), 1);
+        const auto type = top->localDeclarations().constFirst()->abstractType();
+        QCOMPARE(type->sizeOf(), 124);
+        QCOMPARE(type->alignOf(), 1);
+    }
 }

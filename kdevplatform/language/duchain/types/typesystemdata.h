@@ -73,11 +73,21 @@ public:
         typeClassId = T::Identity;
     }
 
-    /// Reference-count for this type within the repository. Not used for comparison or hashes.
-    uint refCount = 0;
+    /// Stores sizeOf in bytes or -1 if unknown.
+    int64_t m_sizeOf = -1;
+
+    /**
+     * Since alignOf must be integral power of 2, we only need to store the power.
+     * The max value (63) represents unknown alignment.
+     */
+    unsigned m_alignOfExponent : 6;
+    static constexpr unsigned MaxAlignOfExponent = 63;
 
     /// Type modifier flags
     quint32 m_modifiers = AbstractType::NoModifiers;
+
+    /// Reference-count for this type within the repository. Not used for comparison or hashes.
+    uint refCount = 0;
 
     /// Remember which type this data was created for. \sa setTypeClassId()
     quint16 typeClassId;

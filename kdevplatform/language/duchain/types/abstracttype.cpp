@@ -56,6 +56,38 @@ void AbstractType::setModifiers(quint32 modifiers)
     d_func_dynamic()->m_modifiers = modifiers;
 }
 
+int64_t AbstractType::sizeOf() const
+{
+    return d_func()->m_sizeOf;
+}
+
+void AbstractType::setSizeOf(int64_t sizeOf)
+{
+    d_func_dynamic()->m_sizeOf = sizeOf;
+}
+
+int64_t AbstractType::alignOf() const
+{
+    if (d_func()->m_alignOfExponent == AbstractTypeData::MaxAlignOfExponent) {
+        return -1;
+    } else {
+        return Q_INT64_C(1) << d_func()->m_alignOfExponent;
+    }
+}
+
+void AbstractType::setAlignOf(int64_t alignedTo)
+{
+    if (alignedTo <= 0) {
+        d_func_dynamic()->m_alignOfExponent = AbstractTypeData::MaxAlignOfExponent;
+        return;
+    }
+
+    unsigned int alignOfExponent = 0;
+    while (alignedTo >>= 1)
+        alignOfExponent++;
+    d_func_dynamic()->m_alignOfExponent = alignOfExponent;
+}
+
 AbstractType::AbstractType()
     : d_ptr(&createData<AbstractType>())
 {
@@ -102,12 +134,15 @@ IndexedType AbstractType::indexed() const
 bool AbstractType::equals(const AbstractType* rhs) const
 {
     //qCDebug(LANGUAGE) << this << rhs << modifiers() << rhs->modifiers();
-    return d_func()->typeClassId == rhs->d_func()->typeClassId && modifiers() == rhs->modifiers();
+    return d_func()->typeClassId == rhs->d_func()->typeClassId && d_func()->m_modifiers == rhs->d_func()->m_modifiers
+        && d_func()->m_sizeOf == rhs->d_func()->m_sizeOf
+        && d_func()->m_alignOfExponent == rhs->d_func()->m_alignOfExponent;
 }
 
 uint AbstractType::hash() const
 {
-    return KDevHash() << d_func()->typeClassId << d_func()->m_modifiers;
+    return KDevHash() << d_func()->typeClassId << d_func()->m_modifiers << d_func()->m_sizeOf
+                      << d_func()->m_alignOfExponent;
 }
 
 QString AbstractType::toString() const

@@ -381,6 +381,7 @@ struct Visitor
         auto kdevType = createType<TK>(type, cursor);
         if (kdevType) {
             setTypeModifiers<TK>(type, kdevType);
+            setTypeSize(type, kdevType);
         }
         return kdevType;
     }
@@ -466,6 +467,9 @@ struct Visitor
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         auto type = createType<CK>(cursor);
+        if (type) {
+            setTypeSize(clang_getCursorType(cursor), type);
+        }
 
         DUChainWriteLocker lock;
         if (context)
@@ -871,6 +875,7 @@ struct Visitor
 
     template<CXTypeKind TK>
     void setTypeModifiers(CXType type, AbstractType* kdevType) const;
+    void setTypeSize(CXType type, AbstractType* kdevType) const;
 
     const CXFile m_file;
     const IncludeFileContexts &m_includes;
@@ -918,6 +923,25 @@ void Visitor::setTypeModifiers(CXType type, AbstractType* kdevType) const
     kdevType->setModifiers(modifiers);
 }
 //END setTypeModifiers
+
+void Visitor::setTypeSize(CXType type, AbstractType* kdevType) const
+{
+    if (kdevType->whichType() == AbstractType::TypeFunction)
+        return;
+    if (type.kind == CXType_Elaborated)
+        return;
+
+    auto sizeOf = clang_Type_getSizeOf(type);
+    if (sizeOf >= 0) {
+        kdevType->setSizeOf(sizeOf);
+
+        // clang_Type_getAlignOf sometimes crashes, so better guard
+        // it and only call it when we got a size
+        auto alignOf = clang_Type_getAlignOf(type);
+        if (alignOf >= 0)
+            kdevType->setAlignOf(alignOf);
+    }
+}
 
 //BEGIN dispatchCursor
 
@@ -1057,17 +1081,8 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
 
 #if CINDEX_VERSION_MINOR >= 30
     auto offset = clang_Cursor_getOffsetOfField(cursor);
-    if (offset >= 0) { // don't add this info to the json tests, it invalidates the comment structure
-        auto type = clang_getCursorType(cursor);
-        auto sizeOf = clang_Type_getSizeOf(type);
-        auto alignOf = clang_Type_getAlignOf(type);
-
-        if (sizeOf >= 0)
-            decl->setSizeOf(sizeOf);
-        if (offset >= 0)
-            decl->setBitOffsetOf(offset);
-        if (alignOf >= 0)
-            decl->setAlignOf(alignOf);
+    if (offset >= 0) {
+        decl->setBitOffsetOf(offset);
     }
 #endif
 
@@ -1102,17 +1117,6 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
     if (clang_isCursorDefinition(cursor)) {
         decl->setDeclarationIsDefinition(true);
     }
-
-#if CINDEX_VERSION_MINOR >= 30
-    auto type = clang_getCursorType(cursor);
-    auto sizeOf = clang_Type_getSizeOf(type);
-    auto alignOf = clang_Type_getAlignOf(type);
-
-    if (sizeOf >= 0)
-        decl->setSizeOf(sizeOf);
-    if (alignOf >= 0)
-        decl->setAlignOf(alignOf);
-#endif
 }
 
 template<CXCursorKind CK>

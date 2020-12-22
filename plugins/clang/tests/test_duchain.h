@@ -110,6 +110,8 @@ private Q_SLOTS:
     void testHasInclude();
 
     void testSameFunctionDefinition();
+    void testSizeAlignOf();
+    void testSizeAlignOfUpdate();
 
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;

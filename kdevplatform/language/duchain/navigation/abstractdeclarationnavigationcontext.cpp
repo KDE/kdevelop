@@ -863,46 +863,44 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
     if (!decl) {
         return {};
     }
+    const auto type = TypeUtils::unAliasedType(decl->abstractType());
+    if (!type) {
+        return {};
+    }
 
-    if (decl->isTypeAlias()) {
+    if (type->sizeOf() > 0 || type->alignOf() > 0) {
+        QString sizeInfo = QStringLiteral("<p>");
+        const auto memberDecl = decl.dynamicCast<ClassMemberDeclaration>();
+        if (memberDecl && memberDecl->bitOffsetOf() > 0) {
+            const auto byteOffset = memberDecl->bitOffsetOf() / 8;
+            const auto bitOffset = memberDecl->bitOffsetOf() % 8;
+            const QString byteOffsetStr = i18np("1 Byte", "%1 Bytes", byteOffset);
+            const QString bitOffsetStr = bitOffset ? i18np("1 Bit", "%1 Bits", bitOffset) : QString();
+            sizeInfo
+                += i18n("offset in parent: %1",
+                        bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr)
+                + QLatin1String("; ");
+        }
+
+        if (type->sizeOf() > 0) {
+            sizeInfo += i18n("size: %1 Bytes", type->sizeOf()) + QLatin1String("; ");
+        }
+
+        if (type->alignOf() > 0) {
+            sizeInfo += i18n("aligned to: %1 Bytes", type->alignOf());
+        }
+
+        sizeInfo += QLatin1String("</p>");
+        return sizeInfo;
+    } else if (decl->isTypeAlias()) {
         // show size information for underlying type of aliases / typedefs etc.
-        const auto type = TypeUtils::targetType(decl->abstractType(), topContext);
         if (const auto* idType = dynamic_cast<const IdentifiedType*>(type.data())) {
             DeclarationPointer ptr(idType->declaration(topContext));
             if (ptr != decl) {
                 return declarationSizeInformation(ptr, topContext);
             }
         }
-        return {};
     }
-    // Note that ClassMemberDeclaration also includes ClassDeclaration, which uses the sizeOf and alignOf fields,
-    // but normally leaves the bitOffsetOf unset (-1).
-    const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
-    if (memberDecl && (memberDecl->bitOffsetOf() > 0 || memberDecl->sizeOf() > 0 || memberDecl->alignOf() > 0)) {
-        QString sizeInfo = QStringLiteral("<p>");
-
-        if (memberDecl->bitOffsetOf() >= 0) {
-            const auto byteOffset = memberDecl->bitOffsetOf() / 8;
-            const auto bitOffset = memberDecl->bitOffsetOf() % 8;
-            const QString byteOffsetStr = i18np("1 Byte", "%1 Bytes", byteOffset);
-            const QString bitOffsetStr = bitOffset ? i18np("1 Bit", "%1 Bits", bitOffset) : QString();
-            sizeInfo +=
-                i18n("offset in parent: %1", bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr,
-                                                               bitOffsetStr) : byteOffsetStr) + QLatin1String("; ");
-        }
-
-        if (memberDecl->sizeOf() >= 0) {
-            sizeInfo += i18n("size: %1 Bytes", memberDecl->sizeOf()) + QLatin1String("; ");
-        }
-
-        if (memberDecl->alignOf() >= 0) {
-            sizeInfo += i18n("aligned to: %1 Bytes", memberDecl->alignOf());
-        }
-
-        sizeInfo += QLatin1String("</p>");
-
-        return sizeInfo;
-    }
-    return QString();
+    return {};
 }
 }

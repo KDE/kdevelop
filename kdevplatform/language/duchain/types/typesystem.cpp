@@ -27,7 +27,8 @@
 
 namespace KDevelop {
 AbstractTypeData::AbstractTypeData()
-    : inRepository(false)
+    : m_alignOfExponent(AbstractTypeData::MaxAlignOfExponent)
+    , inRepository(false)
 {
     initializeAppendedLists(true);
 }
@@ -49,8 +50,10 @@ unsigned int AbstractTypeData::hash() const
 }
 
 AbstractTypeData::AbstractTypeData(const AbstractTypeData& rhs)
-    : refCount(0)
+    : m_sizeOf(rhs.m_sizeOf)
+    , m_alignOfExponent(rhs.m_alignOfExponent)
     , m_modifiers(rhs.m_modifiers)
+    , refCount(0)
     , inRepository(false)
 {
     initializeAppendedLists(!rhs.m_dynamic); //This type will be dynamic exactly if the copied one is not.
