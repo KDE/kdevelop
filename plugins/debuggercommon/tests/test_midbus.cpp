@@ -70,9 +70,8 @@ class DrKonqiAdaptor : public QDBusAbstractAdaptor
 public:
     DrKonqiAdaptor(QObject* parent) : QDBusAbstractAdaptor(parent)
     {
-        if (QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.drkonqi.PID0"))) {
-            QDBusConnection::sessionBus().registerObject(QStringLiteral("/debugger"), parent);
-        }
+        QVERIFY(QDBusConnection::sessionBus().registerService(QStringLiteral("org.kde.drkonqi.PID0")));
+        QVERIFY(QDBusConnection::sessionBus().registerObject(QStringLiteral("/debugger"), parent));
     }
 
     QString registeredName;
@@ -87,6 +86,10 @@ public Q_SLOTS:
     }
     Q_NOREPLY void registerDebuggingApplication(const QString &name, qint64 pid = 0)
     {
+        if (pid != QCoreApplication::applicationPid()) {
+            qDebug() << "ignoring other app:" << name << pid;
+            return;
+        }
         registeredName = name;
         registeredPid = pid;
     }
@@ -115,8 +118,7 @@ void TestMIDBus::initTestCase()
     QVERIFY(m_plugin);
     connect(m_plugin, &KDevMI::MIDebuggerPlugin::showMessage, this, &TestMIDBus::message);
 
-    QTest::qWait(500);
-    QVERIFY(QTest::qWaitFor([this]() { return m_adaptor->registeredPid == QApplication::applicationPid(); }));
+    QTRY_COMPARE(m_adaptor->registeredPid, QApplication::applicationPid());
 }
 
 void TestMIDBus::debug()
