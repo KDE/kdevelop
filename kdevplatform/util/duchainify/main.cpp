@@ -299,10 +299,10 @@ int main(int argc, char** argv)
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-symboltable")},
                                         i18n(
                                             "Print complete DUChain PersistentSymbolTable repository on successful parse")});
-    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-depth")},
-                                        i18n(
-                                            "Number defining the maximum depth where declaration details are printed"),
-                                        QStringLiteral("depth")});
+    parser.addOption(
+        QCommandLineOption { QStringList { QStringLiteral("dump-depth") },
+                             i18n("Number defining the maximum depth where declaration details are printed"),
+                             QStringLiteral("depth"), QStringLiteral("100") });
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("dump-graph")},
                                         i18n("Dump DUChain graph (in .dot format)")});
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("d"), QStringLiteral("dump-errors")},
