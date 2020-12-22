@@ -22,7 +22,6 @@
 #include "cmakeprojectdata.h"
 
 #include <QFileInfo>
-#include <QDir>
 #include <QProcess>
 #include <QTemporaryDir>
 #include <QRegularExpression>
@@ -531,58 +530,6 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex)
             buildDirGrp.writeEntry( key, it.value() );
         }
     }
-}
-
-void attemptMigrate( KDevelop::IProject* project )
-{
-    if ( !baseGroup(project).hasKey( Config::Old::projectBuildDirs ) )
-    {
-        qCDebug(CMAKE) << "CMake settings migration: already done, exiting";
-        return;
-    }
-
-    KConfigGroup baseGrp = baseGroup(project);
-
-    KDevelop::Path buildDir( baseGrp.readEntry( Config::Old::currentBuildDirKey, QString() ) );
-    int buildDirIndex = -1;
-    const QStringList existingBuildDirs = baseGrp.readEntry( Config::Old::projectBuildDirs, QStringList() );
-    {
-        // also, find current build directory in this list (we need an index, not path)
-        QString currentBuildDirCanonicalPath = QDir( buildDir.toLocalFile() ).canonicalPath();
-
-        for( int i = 0; i < existingBuildDirs.count(); ++i )
-        {
-            const QString& nextBuildDir = existingBuildDirs.at(i);
-            if( QDir(nextBuildDir).canonicalPath() == currentBuildDirCanonicalPath )
-            {
-                buildDirIndex = i;
-            }
-        }
-    }
-    int buildDirsCount = existingBuildDirs.count();
-
-    qCDebug(CMAKE) << "CMake settings migration: existing build directories" << existingBuildDirs;
-    qCDebug(CMAKE) << "CMake settings migration: build directory count" << buildDirsCount;
-    qCDebug(CMAKE) << "CMake settings migration: current build directory" << buildDir << "(index" << buildDirIndex << ")";
-
-    baseGrp.writeEntry( Config::buildDirCountKey, buildDirsCount );
-    baseGrp.writeEntry( Config::buildDirIndexKey(), buildDirIndex );
-
-    for (int i = 0; i < buildDirsCount; ++i)
-    {
-        qCDebug(CMAKE) << "CMake settings migration: writing group" << i << ": path" << existingBuildDirs.at(i);
-
-        KConfigGroup buildDirGrp = buildDirGroup( project, i );
-        buildDirGrp.writeEntry( Config::Specific::buildDirPathKey, existingBuildDirs.at(i) );
-    }
-
-    baseGrp.deleteEntry( Config::Old::currentBuildDirKey );
-    baseGrp.deleteEntry( Config::Old::currentCMakeExecutableKey );
-    baseGrp.deleteEntry( Config::Old::currentBuildTypeKey );
-    baseGrp.deleteEntry( Config::Old::currentInstallDirKey );
-    baseGrp.deleteEntry( Config::Old::currentEnvironmentKey );
-    baseGrp.deleteEntry( Config::Old::currentExtraArgumentsKey );
-    baseGrp.deleteEntry( Config::Old::projectBuildDirs );
 }
 
 void setOverrideBuildDirIndex( KDevelop::IProject* project, int overrideBuildDirIndex )

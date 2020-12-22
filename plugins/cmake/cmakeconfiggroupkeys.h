@@ -31,14 +31,7 @@ namespace Config
 {
 namespace Old
 {
-inline constexpr const char* currentBuildDirKey = "CurrentBuildDir";
-inline constexpr const char* currentBuildTypeKey = "CurrentBuildType";
-inline constexpr const char* currentInstallDirKey = "CurrentInstallDir";
-inline constexpr const char* currentEnvironmentKey = "CurrentEnvironment";
-inline constexpr const char* currentExtraArgumentsKey = "Extra Arguments";
-inline constexpr const char* currentCMakeExecutableKey = "Current CMake Binary";
 inline constexpr const char* projectRootRelativeKey = "ProjectRootRelative";
-inline constexpr const char* projectBuildDirs = "BuildDirs";
 }
 
 inline QString globalBuildDirIndexKey() { return QStringLiteral("Current Build Directory Index"); }

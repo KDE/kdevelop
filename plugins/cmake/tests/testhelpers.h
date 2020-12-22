@@ -108,7 +108,6 @@ inline void defaultConfigure(const TestProjectPaths& paths)
     buildDirGroup.writeEntry(Config::Specific::cmakeInstallDirKey, bd.installPrefix().toLocalFile());
     buildDirGroup.writeEntry(Config::Specific::cmakeArgumentsKey, bd.extraArguments());
     buildDirGroup.writeEntry(Config::Specific::cmakeBuildTypeKey, bd.buildType());
-    buildDirGroup.writeEntry(Config::Old::projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
     buildDirGroup.writeEntry(Config::Specific::buildDirRuntime, KDevelop::ICore::self()->runtimeController()->currentRuntime()->name());
 
     config.sync();

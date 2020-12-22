@@ -197,12 +197,6 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QStringList allBuildDirs(KDevelop::IProject* project);
 
     /**
-     * Attempts to migrate the CMake configuration to per-builddir format.
-     * Silently returns if the migration has already been performed.
-     */
-    KDEVCMAKECOMMON_EXPORT void attemptMigrate( KDevelop::IProject* project );
-
-    /**
      * Attempts to update CMake configuration keys from the cache data (CMakeCache.txt)
      *
      * The model is created based on build directory path for the given index @p buildDirectory
