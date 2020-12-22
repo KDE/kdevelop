@@ -100,7 +100,7 @@ inline void defaultConfigure(const TestProjectPaths& paths)
     }
 
     cmakeGroup.writeEntry(Config::buildDirCountKey, 1);
-    cmakeGroup.writeEntry(Config::globalBuildDirIndexKey(), 0);
+    cmakeGroup.writeEntry(Config::buildDirIndexKey(), 0);
 
     KConfigGroup buildDirGroup = cmakeGroup.group(Config::groupNameBuildDir(0));
     buildDirGroup.writeEntry(Config::Specific::buildDirPathKey, bd.buildFolder().toLocalFile());
