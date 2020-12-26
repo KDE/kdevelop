@@ -1,5 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
-
 declare_qt_logging_category(custom_LOG_SRCS
     TYPE PLUGIN
     IDENTIFIER CUSTOMBUILDSYSTEM
@@ -25,6 +24,7 @@ target_link_libraries(kdevcustombuildsystem
       KDev::Interfaces
       KDev::Util
       KDev::OutputView
+      KDev::Tests
 )
 
 ## Unittests

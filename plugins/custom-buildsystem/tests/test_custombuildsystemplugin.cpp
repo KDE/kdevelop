@@ -25,6 +25,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/kdevsignalspy.h>
+#include <tests/projectsgenerator.h>
 #include <shell/sessioncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
@@ -42,6 +43,7 @@ using KDevelop::IProject;
 using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
+using KDevelop::ProjectsGenerator;
 using KDevelop::Path;
 
 QTEST_MAIN(TestCustomBuildSystemPlugin)
@@ -56,49 +58,36 @@ void TestCustomBuildSystemPlugin::initTestCase()
     TestCore::initialize();
 }
 
+void TestCustomBuildSystemPlugin::cleanup()
+{
+    ICore::self()->projectController()->closeAllProjects( );
+}
+
 void TestCustomBuildSystemPlugin::loadSimpleProject()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4" );
-    KDevSignalSpy projectSpy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
-    ICore::self()->projectController()->openProject( projecturl );
-    // Wait for the project to be opened
-    QVERIFY(projectSpy.wait(10000));
-    IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("SimpleProject") );
-    QVERIFY( project );
-
-    QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ),
-              Path( "file:///home/andreas/projects/testcustom/build/" ) );
+    m_currentProject = ProjectsGenerator::GenerateSimpleProject();
+    QVERIFY( m_currentProject );
+    QCOMPARE( m_currentProject->buildSystemManager()->buildDirectory( m_currentProject->projectItem() ),
+              Path( QStringLiteral("file:///") + QDir::temp().absolutePath() + QStringLiteral("/simpleproject/build/") ) );
 }
 
 void TestCustomBuildSystemPlugin::buildDirProject()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/builddirproject/builddirproject.kdev4" );
-    KDevSignalSpy projectSpy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
-    ICore::self()->projectController()->openProject( projecturl );
-    // Wait for the project to be opened
-    QVERIFY(projectSpy.wait(10000));
-    IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("BuilddirProject") );
-    QVERIFY( project );
-
-    Path currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
-
-    QCOMPARE( currentBuilddir, Path( projecturl ).parent() );
+    m_currentProject = ProjectsGenerator::GenerateEmptyBuildDirProject();
+    QVERIFY( m_currentProject );
+    QCOMPARE( m_currentProject->buildSystemManager()->buildDirectory( m_currentProject->projectItem() ),
+              Path( QStringLiteral("file:///") + QDir::temp().absolutePath() + QStringLiteral("/simpleproject/build/") ) );
 }
-
 
 void TestCustomBuildSystemPlugin::loadMultiPathProject()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
-    KDevSignalSpy projectSpy(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
-    ICore::self()->projectController()->openProject( projecturl );
-    // Wait for the project to be opened
-    QVERIFY(projectSpy.wait(10000));
-    IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("MultiPathProject") );
-    QVERIFY( project );
+    m_currentProject = ProjectsGenerator::GenerateMultiPathProject();
+    QVERIFY( m_currentProject );
+
     KDevelop::ProjectBaseItem* mainfile = nullptr;
-    const auto& files = project->fileSet();
+    const auto& files = m_currentProject->fileSet();
     for (const auto& file : files) {
-        const auto& filesForPath = project->filesForPath(file);
+        const auto& filesForPath = m_currentProject->filesForPath(file);
         for (auto i: filesForPath) {
             if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
@@ -108,7 +97,7 @@ void TestCustomBuildSystemPlugin::loadMultiPathProject()
     }
     QVERIFY(mainfile);
 
-    QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ),
-              Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
+    QCOMPARE( m_currentProject->buildSystemManager()->buildDirectory( mainfile ),
+              Path( QStringLiteral("file:///") + QDir::temp().absolutePath() + QStringLiteral("/multipathproject/build/src") ) );
 }
 

@@ -25,6 +25,7 @@
 namespace KDevelop
 {
 class TestCore;
+class IProject;
 }
 
 class TestCustomBuildSystemPlugin : public QObject
@@ -33,9 +34,12 @@ Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void cleanup();
     void loadSimpleProject();
     void buildDirProject();
     void loadMultiPathProject();
+private:
+    KDevelop::IProject* m_currentProject = nullptr;
 };
 
 #endif

@@ -26,11 +26,6 @@
 
 #include <QObject>
 
-namespace KDevelop
-{
-    class ProjectsGenerator;
-}
-
 class TestCompilerProvider : public QObject
 {
     Q_OBJECT
@@ -42,8 +37,6 @@ private Q_SLOTS:
     void testStorageBackwardsCompatible();
     void testCompilerIncludesAndDefinesForProject();
     void testStorageNewSystem();
-private:
-    KDevelop::ProjectsGenerator* m_projectGenerator = nullptr;
 };
 
 #endif

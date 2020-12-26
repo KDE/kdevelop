@@ -25,14 +25,12 @@ namespace KDevelop
 {
 class TestCore;
 class IProject;
-class ProjectsGenerator;
 }
 
 class TestDefinesAndIncludes : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void init();
     void initTestCase();
     void cleanupTestCase();
     void cleanup();

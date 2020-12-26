@@ -33,10 +33,6 @@
 
 using namespace KDevelop;
 
-void TestDefinesAndIncludes::init()
-{
-}
-
 void TestDefinesAndIncludes::cleanupTestCase()
 {
     TestCore::shutdown();

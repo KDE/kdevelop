@@ -75,6 +75,16 @@ public:
      * Files are located in the OS temporary folder, subfolder 'emptyproject'
      */
     static KDevelop::IProject* GenerateEmptyProject();
+
+    /**
+     * Generates a pointer to a project with the following directory structure:
+     * ./emptybuilddirproject.kdev4
+     * ./src/main.cpp
+     * ./.kdev4/emptybuilddirproject.kdev4
+     *
+     * Files are located in the OS temporary folder, subfolder 'emptybuilddirproject'
+     */
+    static KDevelop::IProject* GenerateEmptyBuildDirProject();
 };
 
 }

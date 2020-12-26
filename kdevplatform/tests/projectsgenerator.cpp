@@ -88,7 +88,13 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
         createFile( file );
         QTextStream stream( &file );
         stream << "[Buildset]\n" <<
-        "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x1a\\x00S\\x00i\\x00m\\x00p\\x00l\\x00e\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n" <<
+        "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x1a\\x00S\\x00i\\x00m\\x00p\\x00l\\x00e\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n\n" <<
+        "[CustomBuildSystem]\n" <<
+        "CurrentConfiguration=BuildConfig0\n\n" <<
+        "[CustomBuildSystem][BuildConfig0]\n" <<
+        "BuildDir=file:///" << rootFolder.absolutePath() << "/build\n" <<
+        "Title=mainbuild\n\n" <<
+
         "[CustomDefinesAndIncludes][ProjectPath0]\n" <<
         "Path=/\n" <<
         "[CustomDefinesAndIncludes][ProjectPath0][Defines]\n" <<
@@ -131,7 +137,11 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
         createFile( file );
         QTextStream stream( &file );
         stream << "[Buildset]\n" <<
-        "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00 \\x00M\\x00u\\x00l\\x00t\\x00i\\x00P\\x00a\\x00t\\x00h\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n" <<
+        "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00 \\x00M\\x00u\\x00l\\x00t\\x00i\\x00P\\x00a\\x00t\\x00h\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n\n" <<
+        "[CustomBuildSystem]\n" <<
+        "CurrentConfiguration=BuildConfig0\n\n" <<
+        "[CustomBuildSystem][BuildConfig0]\n" <<
+        "BuildDir=file:///" << rootFolder.absolutePath() << "/build\n" <<
         "[CustomDefinesAndIncludes][ProjectPath0]\n" <<
         "Path=.\n" <<
         "[CustomDefinesAndIncludes][ProjectPath0][Defines]\n" <<
@@ -196,4 +206,51 @@ IProject* ProjectsGenerator::GenerateEmptyProject()
     }
     return loadProject(QDir::tempPath() + QStringLiteral( "/emptyproject/emptyproject.kdev4" ), QStringLiteral("EmptyProject"));
 }
+
+IProject* ProjectsGenerator::GenerateEmptyBuildDirProject()
+{
+    const QString ebp = QStringLiteral( "emptybuilddirproject" );
+    auto rootFolder = QDir::temp();
+    QDir(rootFolder.absolutePath() + QStringLiteral( "/" ) + ebp).removeRecursively();
+    rootFolder.mkdir( ebp );
+    rootFolder.cd( ebp );
+    rootFolder.mkdir( QStringLiteral("src") );
+    rootFolder.mkdir( QStringLiteral(".kdev4") );
+
+    {
+        QFile file( rootFolder.filePath( QStringLiteral("emptybuilddirproject.kdev4") ) );
+        createFile( file );
+        QTextStream stream1( &file );
+        stream1 << "[Project]\nName=EmptyBuildDirProject\nManager=KDevCustomBuildSystem";
+    }
+    {
+        QFile file( rootFolder.filePath( QStringLiteral("src/main.cpp") ) );
+        createFile( file );
+    }
+    {
+        QFile file( rootFolder.filePath( QStringLiteral(".kdev4/emptybuilddirproject.kdev4") ) );
+        createFile( file );
+        QTextStream stream( &file );
+        stream << "[Buildset]\n" <<
+        "BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00(\x00E\x00m\x00p\x00t\x00y\x00B\x00u\x00i\x00l\x00d\x00d\x00i\x00r\x00P\x00r\x00o\x00j\x00e\x00c\x00t)\n\n" <<
+        "[CustomBuildSystem]\n" <<
+        "CurrentConfiguration=BuildConfig0\n\n" <<
+        "[CustomBuildSystem][BuildConfig0]\n" <<
+        "BuildDir=" <<
+        "Title=mainbuild\n\n" <<
+
+        "[CustomDefinesAndIncludes][ProjectPath0]\n" <<
+        "Path=/\n" <<
+        "[CustomDefinesAndIncludes][ProjectPath0][Defines]\n" <<
+        "_DEBUG=\n" <<
+        "VARIABLE=VALUE\n" <<
+        "[CustomDefinesAndIncludes][ProjectPath0][Includes]\n" <<
+        "1=" << QDir::rootPath() << "usr/include/mydir\n" <<
+        "[Project]\n" <<
+        "VersionControlSupport=\n";
+    }
+    return loadProject( QDir::tempPath() + QStringLiteral( "/simpleproject/simpleproject.kdev4" ), QStringLiteral("SimpleProject") );
+}
+
+
 } // KDevelop
