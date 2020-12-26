@@ -42,4 +42,16 @@ bool Fixit::operator==(const Fixit& other) const
     && m_currentText == other.m_currentText;
 }
 
+QDebug operator<<(QDebug stream, const Fixit& obj)
+{
+    stream << QStringLiteral("Fixit[")
+        << QStringLiteral("replacementText=") << obj.m_replacementText
+        << QStringLiteral(", range=") << obj.m_range
+        << QStringLiteral(", description=") << obj.m_description
+        << QStringLiteral(", currentText=") << obj.m_currentText
+        << QStringLiteral("]");
+    return stream;
+}
+
+
 }
