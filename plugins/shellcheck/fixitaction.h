@@ -34,6 +34,8 @@ namespace shellcheck {
 class FixitAction :  public KDevelop::IAssistantAction
 {
     Q_OBJECT
+
+    friend class TestOutputParser;
 public:
     FixitAction(const Fixit& fixit);
 
