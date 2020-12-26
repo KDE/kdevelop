@@ -29,6 +29,9 @@
 
 namespace shellcheck 
 {
+
+class Fixit;
+
 /**
  * Parses the (Json) output from shellcheck and converts it into 
  * Problems that can be displayed in KDevelop's problem view 
@@ -47,6 +50,17 @@ public:
     
 private:
     KDevelop::IProblem::Severity getSeverityFromString(QString const& str);
+
+    /**
+     * Parse the json and return a fixit if the Json only has one replacement
+     */
+    Fixit getFixFromOneReplacement(QJsonArray replacementArray, KDevelop::DocumentRange problemRange, QString problemDescription);
+
+    /**
+     * Parse the json and return a fixit if the Json multiple replacements
+     */
+    Fixit getFixFromMultipleReplacements(QJsonArray replacementArray, KDevelop::DocumentRange problemRange, QString problemDescription);
+
     QByteArray m_shellcheckoutput;
 };
 
