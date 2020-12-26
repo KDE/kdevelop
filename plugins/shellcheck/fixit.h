@@ -49,6 +49,8 @@ public:
      */
     bool operator==(const Fixit& other) const;
 
+    friend QDebug operator<<(QDebug stream, const Fixit& obj);
+
     QString m_description;
     KDevelop::DocumentRange m_range;
     QString m_currentText;
