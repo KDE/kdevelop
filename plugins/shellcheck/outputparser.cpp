@@ -27,8 +27,12 @@
 //#include "shell/problem.h"
 #include "language/editor/documentrange.h"
 
+#include <interfaces/idocumentcontroller.h>
+#include "icore.h"
+
 #include "ktexteditor/cursor.h"
 
+#include <KTextEditor/Document>
 #include <KLocalizedString>
 
 #include <QString>
@@ -36,7 +40,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-namespace shellcheck 
+namespace shellcheck
 {
 
 OutputParser::OutputParser()
@@ -69,16 +73,78 @@ KDevelop::IProblem::Severity OutputParser::getSeverityFromString(const QString& 
     return KDevelop::IProblem::NoSeverity;
 }
 
+Fixit OutputParser::getFixFromOneReplacement(QJsonArray replacementArray,
+                                             KDevelop::DocumentRange problemRange, QString problemDescription)
+{
+    Q_ASSERT(replacementArray.size() == 1);
+    Fixit ret;
+    QJsonValue replaceElement = replacementArray.first();
+    if(replaceElement.isObject()) {
+        QJsonObject replacement = replaceElement.toObject();
+        KTextEditor::Cursor fixStartCursor(replacement[QStringLiteral("line")].toInt() - 1,
+            replacement[QStringLiteral("column")].toInt() - 1);
+        KTextEditor::Cursor fixEndCursor(replacement[QStringLiteral("endLine")].toInt() -1,
+            replacement[QStringLiteral("endColumn")].toInt());
+
+        QString currentDocText = KDevelop::ICore::self()->documentController()->activeDocument()->text(problemRange);
+
+        KDevelop::DocumentRange fixRange;
+        fixRange.document = problemRange.document;
+        fixRange.setStart(fixStartCursor);
+        fixRange.setEnd(fixEndCursor);
+        Fixit newFix(problemDescription, fixRange,
+                     currentDocText,
+                     replacement[QStringLiteral("replacement")].toString());
+        //fixes.push_back(newFix);
+        qWarning(PLUGIN_SHELLCHECK) << newFix;
+        ret = newFix;
+    }
+    return ret;
+}
+
+Fixit shellcheck::OutputParser::getFixFromMultipleReplacements(QJsonArray replacementArray,
+                                                               KDevelop::DocumentRange problemRange, QString problemDescription)
+{
+    Q_ASSERT(replacementArray.size() > 1);
+    Fixit ret;
+    for( auto const replaceElement : replacementArray ) {
+        if(replaceElement.isObject()) {
+            QJsonObject replacement = replaceElement.toObject();
+            KTextEditor::Cursor fixStartCursor(replacement[QStringLiteral("line")].toInt() - 1,
+                replacement[QStringLiteral("column")].toInt() - 1);
+            KTextEditor::Cursor fixEndCursor(replacement[QStringLiteral("endLine")].toInt() -1,
+                replacement[QStringLiteral("endColumn")].toInt());
+            KDevelop::DocumentRange fixRange;
+            fixRange.document = KDevelop::IndexedString(problemRange.document.str());
+            fixRange.setStart(fixStartCursor);
+            fixRange.setEnd(fixEndCursor);
+            QString currentDocText = QStringLiteral("/hej/sa/Messages.sh");
+            //KDevelop::ICore::self()->documentController()->activeDocument()->text(problemRange);
+            qWarning(PLUGIN_SHELLCHECK) << "We are in getFixFromMultipleReplacements,and the problemDescription: " << problemDescription;
+            qWarning(PLUGIN_SHELLCHECK) << "and the file: " << problemRange.document.str();
+
+            Fixit newFix(problemDescription, fixRange,
+                            currentDocText,
+                            replacement[QStringLiteral("replacement")].toString());
+
+            ret = newFix;
+            qWarning(PLUGIN_SHELLCHECK) << newFix;
+        }
+    }
+
+    return ret;
+}
+
 
 QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
 {
     QVector<KDevelop::IProblem::Ptr> result;
     if(m_shellcheckoutput.isEmpty())
         return result;
-    
+
     QJsonParseError error;
-    QJsonDocument outputJsonDoc = QJsonDocument::fromJson(m_shellcheckoutput, &error);    
-    if(error.error != QJsonParseError::NoError) 
+    QJsonDocument outputJsonDoc = QJsonDocument::fromJson(m_shellcheckoutput, &error);
+    if(error.error != QJsonParseError::NoError)
     {
         qWarning(PLUGIN_SHELLCHECK) << "Not possible to get any problems from shellcheck output. Parse error at " << error.offset << ":" << error.errorString();
         qWarning(PLUGIN_SHELLCHECK) << m_shellcheckoutput;
@@ -87,7 +153,7 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
 
     QJsonObject jsonObj;
     jsonObj = outputJsonDoc.object();
-    
+
     QJsonValue jsonVal;
     jsonVal = jsonObj.value(QStringLiteral("comments"));
     if(jsonVal.isArray())
@@ -114,42 +180,26 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
                 problem->setFinalLocationMode(KDevelop::IProblem::Range);
                 problem->setSeverity(getSeverityFromString(currentProblem[QStringLiteral("level")].toString()));
                 problem->setSource(KDevelop::IProblem::Plugin);
+                QString problemCode = QString::number( currentProblem[QStringLiteral("code")].toInt());
                 QString problemMessage = currentProblem[QStringLiteral("message")].toString();
-                problem->setDescription(problemMessage);
+                problem->setDescription(problemCode);
                 problem->setExplanation(problemMessage);
 
                 if (!currentProblem[QStringLiteral("fix")].isNull())
                 {
-                    qWarning(PLUGIN_SHELLCHECK) << "There is a fix associated with this problem: ";
                     QJsonObject fix = currentProblem[QStringLiteral("fix")].toObject();
                     QJsonArray replacementArray = fix[QStringLiteral("replacements")].toArray();
+                    qWarning(PLUGIN_SHELLCHECK) << "There are " << replacementArray.size() << " fix(es) associated with this problem: ";
                     QVector<Fixit> fixes;
-                    for( auto const replaceElement : replacementArray ) {
-                        if(replaceElement.isObject()) {
-                            QJsonObject replacement = replaceElement.toObject();
-                            KTextEditor::Cursor fixStartCursor(replacement[QStringLiteral("line")].toInt() - 1,
-                                replacement[QStringLiteral("column")].toInt() - 1);
-                            KTextEditor::Cursor fixEndCursor(replacement[QStringLiteral("endLine")].toInt() -1,
-                                replacement[QStringLiteral("endColumn")].toInt());
-                            KDevelop::DocumentRange fixRange;
-                            fixRange.document = KDevelop::IndexedString(currentProblem[QStringLiteral("file")].toString());
-                            fixRange.setStart(fixStartCursor);
-                            fixRange.setEnd(fixEndCursor);
-                            Fixit newFix(problemMessage, fixRange,
-                                         replacement[QStringLiteral("precedence")].toString(),
-                                         replacement[QStringLiteral("replacement")].toString());
-                            fixes.push_back(newFix);
-
-                            qWarning(PLUGIN_SHELLCHECK) << " Replacement: ";
-                            qWarning(PLUGIN_SHELLCHECK) << "   column " << replacement[QStringLiteral("column")].toInt();
-                            qWarning(PLUGIN_SHELLCHECK) << "   endColumn " << replacement[QStringLiteral("endColumn")].toInt();
-                            qWarning(PLUGIN_SHELLCHECK) << "   endLine " << replacement[QStringLiteral("endLine")].toInt();
-                            qWarning(PLUGIN_SHELLCHECK) << "   insertionPoint " << replacement[QStringLiteral("insertionPoint")].toString();
-                            qWarning(PLUGIN_SHELLCHECK) << "   line " << replacement[QStringLiteral("line")].toInt();
-                            qWarning(PLUGIN_SHELLCHECK) << "   precedence " << replacement[QStringLiteral("precedence")].toString();
-                            qWarning(PLUGIN_SHELLCHECK) << "   replacement " << replacement[QStringLiteral("replacement")].toString();
-                        }
+                    Fixit fixForCurrentProblem;
+                    if(replacementArray.size() == 1) {
+                        fixForCurrentProblem = getFixFromOneReplacement(replacementArray, range, problemMessage);
+                    } else if (replacementArray.size() == 2) {
+                        fixForCurrentProblem = getFixFromMultipleReplacements(replacementArray, range, problemMessage);
                     }
+
+                    fixes.push_back(fixForCurrentProblem);
+
                     problem->setFixits(fixes);
                 } else {
                     qWarning(PLUGIN_SHELLCHECK) << "Fix is null. No fix associated with this problem";
@@ -171,3 +221,4 @@ void OutputParser::clear()
 
 
 }
+

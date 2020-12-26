@@ -23,6 +23,7 @@
 #define TEST_OUTPUTPARSER_H
 
 #include <QObject>
+namespace shellcheck {
 
 class TestOutputParser : public QObject
 {
@@ -39,5 +40,5 @@ private Q_SLOTS:
     void testParser();
     void testParserFaultyJson();
 };
-
+}
 #endif // TEST_OUTPUTPARSER_H
