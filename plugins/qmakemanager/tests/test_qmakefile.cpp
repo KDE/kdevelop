@@ -147,8 +147,9 @@ void TestQMakeFile::varResolution_data()
     {
         QMakeFile::VariableMap variables;
 
-        variables[QStringLiteral("VAR1")] = QStringList() << QProcessEnvironment::systemEnvironment().value(QStringLiteral("USER"));
-        QTest::newRow("qmakeshell") << "VAR1 = $$(USER)\n" << variables;
+        qputenv("BLA", "BLUB");
+        variables[QStringLiteral("VAR1")] = QStringList { QStringLiteral("BLUB") };
+        QTest::newRow("qmakeshell") << "VAR1 = $$(BLA)\n" << variables;
     }
     {
         QMakeFile::VariableMap variables;
