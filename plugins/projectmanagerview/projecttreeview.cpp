@@ -162,7 +162,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             QString seq = QKeySequence( Qt::ShiftModifier ).toString();
             seq.chop(1); // chop superfluous '+'
             auto* move = new QAction(i18nc("@action:inmenu", "&Move Here") + QLatin1Char('\t') + seq, &dropMenu);
-            move->setIcon(QIcon::fromTheme(QStringLiteral("go-jump")));
+            move->setIcon(QIcon::fromTheme(QStringLiteral("edit-move"), QIcon::fromTheme(QStringLiteral("go-jump"))));
             dropMenu.addAction(move);
 
             seq = QKeySequence( Qt::ControlModifier ).toString();
