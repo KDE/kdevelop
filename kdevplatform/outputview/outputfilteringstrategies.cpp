@@ -99,23 +99,16 @@ CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDi
 
 Path CompilerFilterStrategyPrivate::pathForFile(const QString& filename) const
 {
-    QFileInfo fi( filename );
-    Path currentPath;
-    if( fi.isRelative() ) {
-        if( m_currentDirs.isEmpty() ) {
-            return Path(m_buildDir, filename );
-        }
-
-        auto it = m_currentDirs.constEnd() - 1;
-        do {
-            currentPath = Path(*it, filename);
-        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo::exists(currentPath.toLocalFile()) );
-
-        return currentPath;
-    } else {
-        currentPath = Path(filename);
+    if (QFileInfo{filename}.isAbsolute()) {
+        return Path{filename};
     }
-    return currentPath;
+    for (auto it = m_currentDirs.crbegin(); it != m_currentDirs.crend(); ++it) {
+        Path path(*it, filename);
+        if (QFileInfo::exists(path.toLocalFile())) {
+            return path;
+        }
+    }
+    return Path(m_buildDir, filename);
 }
 
 bool CompilerFilterStrategyPrivate::isMultiLineCase(const KDevelop::ErrorFormat& curErrFilter) const

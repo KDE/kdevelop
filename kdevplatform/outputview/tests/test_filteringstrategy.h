@@ -44,6 +44,8 @@ private Q_SLOTS:
     void testStaticAnalysisFilterStrategy();
     void testExtractionOfLineAndColumn_data();
     void testExtractionOfLineAndColumn();
+    void testExtractionOfUrl_data();
+    void testExtractionOfUrl();
 
     void benchMarkCompilerFilterAction();
 };

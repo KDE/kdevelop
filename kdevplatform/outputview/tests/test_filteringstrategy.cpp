@@ -21,9 +21,16 @@
 
 #include <outputview/outputfilteringstrategies.h>
 #include <outputview/filtereditem.h>
+#include <tests/testfilesystemhelpers.h>
 #include <util/path.h>
 
+#include <QDir>
+#include <QMetaType>
 #include <QStandardPaths>
+#include <QString>
+#include <QTemporaryDir>
+#include <QUrl>
+#include <QVector>
 
 using namespace KDevelop;
 
@@ -626,7 +633,10 @@ warning: \"SOME_MACRO\" redefined" << "/path/to/file.h" << 59 << 0 << FilteredIt
         << "/path/class.java" << 446 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("cmake-error")
         << "CMake Error at somesubdir/CMakeLists.txt:214:"
-        << "/some/path/to/a/somesubdir/CMakeLists.txt" << 213 << 0 << FilteredItem::ErrorItem;
+        // CompilerFilterStrategyPrivate::pathForFile() looks for
+        // /some/path/to/a/somesubdir/CMakeLists.txt first. This file does not exist, so the
+        // following fallback path is returned (even though no file is present there either):
+        << projectPath() + "/somesubdir/CMakeLists.txt" << 213 << 0 << FilteredItem::ErrorItem;
 #endif
 }
 
@@ -644,4 +654,51 @@ void TestFilteringStrategy::testExtractionOfLineAndColumn()
     QCOMPARE(KDevelop::toUrlOrLocalFile(item1.url), file);
     QCOMPARE(item1.lineNo , lineNr);
     QCOMPARE(item1.columnNo , column);
+}
+
+namespace {
+struct OutputLine
+{
+    QString outputLine;
+    QString filePath;
+    int line;
+    int column;
+    FilteredItem::FilteredOutputItemType itemType;
+};
+}
+Q_DECLARE_METATYPE(OutputLine)
+
+void TestFilteringStrategy::testExtractionOfUrl_data()
+{
+    QTest::addColumn<QVector<OutputLine>>("outputLines");
+
+    QTest::newRow("gcc-warning-after-cmake-warning") << QVector<OutputLine>{
+        {"CMake Warning at plugins/welcomepage/CMakeLists.txt:33 (message):",
+         "plugins/welcomepage/CMakeLists.txt", 32, 0, FilteredItem::WarningItem},
+        {"../kdevplatform/project/projectutils.cpp:30:6: warning: unused variable ‘a’ [-Wunused-variable]",
+         "kdevplatform/project/projectutils.cpp", 29, 5, FilteredItem::WarningItem}
+    };
+}
+
+void TestFilteringStrategy::testExtractionOfUrl()
+{
+    QFETCH(QVector<OutputLine>, outputLines);
+
+    const QTemporaryDir tmpDir;
+    QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
+    const QDir projectRootDir(tmpDir.filePath("PROJECT DIR"));
+
+    for (auto& outputLine : outputLines) {
+        MAKE_ABSOLUTE_AND_CREATE(projectRootDir.path(), outputLine.filePath);
+    }
+
+    const QUrl buildDir = QUrl::fromLocalFile(projectRootDir.filePath("IN-TREE BUILD DIR"));
+    CompilerFilterStrategy testee(buildDir);
+    for (const auto& ol : outputLines) {
+        const FilteredItem item = testee.errorInLine(ol.outputLine);
+        QCOMPARE(item.type, ol.itemType);
+        QCOMPARE(KDevelop::toUrlOrLocalFile(item.url), ol.filePath);
+        QCOMPARE(item.lineNo, ol.line);
+        QCOMPARE(item.columnNo, ol.column);
+    }
 }
