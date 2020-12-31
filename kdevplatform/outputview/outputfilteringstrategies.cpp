@@ -85,9 +85,9 @@ public:
     bool isMultiLineCase(const ErrorFormat& curErrFilter) const;
     void putDirAtEnd(const Path& pathToInsert);
 
-    QVector<Path> m_currentDirs;
-    Path m_buildDir;
+    const Path m_buildDir;
 
+    QVector<Path> m_currentDirs;
     using PositionMap = QHash<Path, int>;
     PositionMap m_positionInCurrentDirs;
 };
