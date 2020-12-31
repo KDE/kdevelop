@@ -26,6 +26,7 @@
 #include <QFileInfo>
 
 #include <algorithm>
+#include <utility>
 
 namespace KDevelop
 {
@@ -80,11 +81,14 @@ FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 class CompilerFilterStrategyPrivate
 {
 public:
-    explicit CompilerFilterStrategyPrivate(const QUrl& buildDir);
+    explicit CompilerFilterStrategyPrivate(Path projectRootDir, Path buildDir);
+    /// @todo Remove this constructor along with CompilerFilterStrategy(const QUrl&).
+    explicit CompilerFilterStrategyPrivate(Path buildDir);
     Path pathForFile( const QString& ) const;
     bool isMultiLineCase(const ErrorFormat& curErrFilter) const;
     void putDirAtEnd(const Path& pathToInsert);
 
+    const Path m_projectRootDir;
     const Path m_buildDir;
 
     QVector<Path> m_currentDirs;
@@ -93,8 +97,14 @@ public:
     bool m_cmakeRootInCurrentDirs = false;
 };
 
-CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
-    : m_buildDir(buildDir)
+CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(Path projectRootDir, Path buildDir)
+    : m_projectRootDir{std::move(projectRootDir)}
+    , m_buildDir{std::move(buildDir)}
+{
+}
+
+CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(Path buildDir)
+    : CompilerFilterStrategyPrivate{buildDir.parent(), std::move(buildDir)}
 {
 }
 
@@ -135,8 +145,13 @@ void CompilerFilterStrategyPrivate::putDirAtEnd(const Path& pathToInsert)
     }
 }
 
+CompilerFilterStrategy::CompilerFilterStrategy(Path projectRootDir, Path buildDir)
+    : d_ptr(new CompilerFilterStrategyPrivate{std::move(projectRootDir), std::move(buildDir)})
+{
+}
+
 CompilerFilterStrategy::CompilerFilterStrategy(const QUrl& buildDir)
-    : d_ptr(new CompilerFilterStrategyPrivate(buildDir))
+    : d_ptr(new CompilerFilterStrategyPrivate{Path{buildDir}})
 {
 }
 
@@ -333,8 +348,14 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             if(curErrFilter.fileGroup > 0) {
                 if( curErrFilter.compiler == QLatin1String("cmake") ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
                     if( d->m_currentDirs.empty() ) {
+                        // This happens when a generator calls cmake: the CMake "cd" action does not occur
+                        // in the output and the project root directory is not appended to m_currentDirs.
+                        // CMake error/warning messages contain paths relative to the project root directory,
+                        // not the pathForFile()'s fallback (build directory). Let us append the project root
+                        // directory to m_currentDirs before calling pathForFile() so that the correct file
+                        // is opened when the user clicks on the CMake error/warning line.
                         d->m_cmakeRootInCurrentDirs = true;
-                        d->putDirAtEnd( d->m_buildDir.parent() );
+                        d->putDirAtEnd(d->m_projectRootDir);
                     }
                 }
                 item.url = d->pathForFile( match.captured( curErrFilter.fileGroup ) ).toUrl();

@@ -27,6 +27,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <util/path.h>
 
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -78,14 +79,14 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
     , m_signal(signal)
     , m_plugin(parent)
 {
-    auto bsm = item->project()->buildSystemManager();
-    auto buildDir = bsm->buildDirectory(item);
+    const auto* const project = item->project();
 
     setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
     setStandardToolView(KDevelop::IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setFilteringStrategy(new NinjaJobCompilerFilterStrategy(buildDir.toUrl()));
+    setFilteringStrategy(new NinjaJobCompilerFilterStrategy{
+                            project->path(), project->buildSystemManager()->buildDirectory(item)});
     setProperties(NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput);
 
     // hardcode the ninja output format so we can parse it reliably

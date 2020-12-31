@@ -36,6 +36,7 @@
 
 namespace KDevelop
 {
+class Path;
 class CompilerFilterStrategyPrivate;
 
 /**
@@ -62,6 +63,15 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrat
 {
 
 public:
+    explicit CompilerFilterStrategy(Path projectRootDir, Path buildDir);
+    /**
+     * @note This constructor sets projectRootDir to @p buildDir's parent directory,
+     * which is correct only for in-tree builds. The constructor with the two
+     * parameters above is called where convenient, which works well in practice.
+     * But while this single-parameter constructor is still used, there is a risk
+     * of wrong behavior for out-of-tree builds.
+     * @todo Port all usages to the other constructor and remove this one.
+     */
     explicit CompilerFilterStrategy(const QUrl& buildDir);
     ~CompilerFilterStrategy() override;
 

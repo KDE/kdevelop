@@ -37,6 +37,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <outputview/outputfilteringstrategies.h>
+#include <util/path.h>
 
 #include "makebuilder.h"
 #include "makebuilderpreferences.h"
@@ -80,12 +81,12 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
     , m_overrideTargets(overrideTargets)
     , m_variables(variables)
 {
-    auto bsm = item->project()->buildSystemManager();
-    auto buildDir = bsm->buildDirectory(item);
+    const auto* const project = item->project();
 
     Q_ASSERT(item && item->model() && m_idx.isValid() && this->item() == item);
     setCapabilities( Killable );
-    setFilteringStrategy(new MakeJobCompilerFilterStrategy(buildDir.toUrl()));
+    setFilteringStrategy(new MakeJobCompilerFilterStrategy{
+                            project->path(), project->buildSystemManager()->buildDirectory(item)});
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
 
     QString title;

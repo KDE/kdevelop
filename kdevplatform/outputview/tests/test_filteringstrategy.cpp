@@ -22,6 +22,7 @@
 #include <outputview/outputfilteringstrategies.h>
 #include <outputview/filtereditem.h>
 #include <tests/testfilesystemhelpers.h>
+#include <tests/testhelpers.h>
 #include <util/path.h>
 
 #include <QDir>
@@ -669,12 +670,34 @@ struct OutputLine
 }
 Q_DECLARE_METATYPE(OutputLine)
 
+namespace {
+using OutputLines = QVector<OutputLine>;
+void testOutputLines(CompilerFilterStrategy& testee, const OutputLines& outputLines)
+{
+     for (const auto& ol : outputLines) {
+        FilteredItem item = testee.errorInLine(ol.outputLine);
+        if (item.type == FilteredItem::InvalidItem) {
+            item = testee.actionInLine(ol.outputLine);
+        }
+        QCOMPARE(item.type, ol.itemType);
+        QCOMPARE(KDevelop::toUrlOrLocalFile(item.url), ol.filePath);
+        QCOMPARE(item.lineNo, ol.line);
+        QCOMPARE(item.columnNo, ol.column);
+    }
+}
+#define TEST_OUTPUT_LINES(testee, outputLines) \
+    DO_AND_RETURN_IF_TEST_FAILED(testOutputLines(testee, outputLines))
+}
+
 void TestFilteringStrategy::testExtractionOfUrl_data()
 {
+    constexpr bool inTreeBuild = false;
+    constexpr bool outOfTreeBuild = true;
+    QTest::addColumn<bool>("outOfTreeBuild");
     QTest::addColumn<QStringList>("extraFilesToCreate");
-    QTest::addColumn<QVector<OutputLine>>("outputLines");
+    QTest::addColumn<OutputLines>("outputLines");
 
-    QTest::newRow("gcc-warning-after-cmake-warning") << QStringList{} << QVector<OutputLine>{
+    QTest::newRow("gcc-warning-after-cmake-warning") << inTreeBuild << QStringList{} << OutputLines{
         {"CMake Warning at plugins/welcomepage/CMakeLists.txt:33 (message):",
          "plugins/welcomepage/CMakeLists.txt", 32, 0, FilteredItem::WarningItem},
         {"../kdevplatform/project/projectutils.cpp:30:6: warning: unused variable ‘a’ [-Wunused-variable]",
@@ -682,15 +705,15 @@ void TestFilteringStrategy::testExtractionOfUrl_data()
     };
 
     const QStringList extraFileAtProjectRootLevel{"../x.cpp"};
-    const QVector<OutputLine> cmakeCd{
+    const OutputLines cmakeCd{
         {"/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Debug $project-root-dir",
          "", -1, -1, FilteredItem::ActionItem}
     };
-    const QVector<OutputLine> cmakeWarning{
+    const OutputLines cmakeWarning{
         {"CMake Warning at CMakeLists.txt:3 (message):",
          "CMakeLists.txt", 2, 0, FilteredItem::WarningItem}
     };
-    const QVector<OutputLine> gccErrorAfterCMakeIsDone {
+    const OutputLines gccErrorAfterCMakeIsDone {
         {"-- Generating done", "", -1, -1, FilteredItem::ActionItem},
         {"../x.cpp:23:1: error: ‘t’ does not name a type",
          // Even though the file /path/to/project/../x.cpp exists, /path/to/project is removed
@@ -698,18 +721,24 @@ void TestFilteringStrategy::testExtractionOfUrl_data()
          // is encountered, and the path /path/to/project/x.cpp is returned.
          "x.cpp", 22, 0, FilteredItem::ErrorItem}
     };
-    QTest::newRow("gcc-error-after-cmake-cd-done") << extraFileAtProjectRootLevel
+    QTest::newRow("gcc-error-after-cmake-cd-done") << inTreeBuild << extraFileAtProjectRootLevel
                                                    << cmakeCd + gccErrorAfterCMakeIsDone;
-    QTest::newRow("gcc-error-after-cmake-warning-done") << extraFileAtProjectRootLevel
+    QTest::newRow("gcc-error-after-cmake-warning-done") << inTreeBuild << extraFileAtProjectRootLevel
                                                         << cmakeWarning + gccErrorAfterCMakeIsDone;
-    QTest::newRow("gcc-error-after-cmake-cd-and-warning-done") << extraFileAtProjectRootLevel
+    QTest::newRow("gcc-error-after-cmake-cd-and-warning-done") << inTreeBuild << extraFileAtProjectRootLevel
                                                 << cmakeCd + cmakeWarning + gccErrorAfterCMakeIsDone;
+
+    QTest::newRow("cmake-warning-out-of-tree-build") << outOfTreeBuild << QStringList{}
+                                                     << cmakeWarning;
+    QTest::newRow("cmake-cd-and-warning-out-of-tree-build") << outOfTreeBuild << QStringList{}
+                                                            << cmakeCd + cmakeWarning;
 }
 
 void TestFilteringStrategy::testExtractionOfUrl()
 {
+    QFETCH(bool, outOfTreeBuild);
     QFETCH(QStringList, extraFilesToCreate);
-    QFETCH(QVector<OutputLine>, outputLines);
+    QFETCH(OutputLines, outputLines);
 
     const QTemporaryDir tmpDir;
     QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
@@ -723,17 +752,15 @@ void TestFilteringStrategy::testExtractionOfUrl()
         }
     }
 
-    const QUrl buildDir = QUrl::fromLocalFile(projectRootDir.filePath("IN-TREE BUILD DIR"));
-    CompilerFilterStrategy testee(buildDir);
     for (auto& ol : outputLines) {
         ol.outputLine.replace("$project-root-dir", projectRootDir.path());
-        FilteredItem item = testee.errorInLine(ol.outputLine);
-        if (item.type == FilteredItem::InvalidItem) {
-            item = testee.actionInLine(ol.outputLine);
-        }
-        QCOMPARE(item.type, ol.itemType);
-        QCOMPARE(KDevelop::toUrlOrLocalFile(item.url), ol.filePath);
-        QCOMPARE(item.lineNo, ol.line);
-        QCOMPARE(item.columnNo, ol.column);
     }
+    const QUrl buildDir = QUrl::fromLocalFile(outOfTreeBuild ? tmpDir.filePath("OUT-OF-TREE BUILD DIR")
+                                                             : projectRootDir.filePath("IN-TREE BUILD DIR"));
+    if (!outOfTreeBuild) {
+        CompilerFilterStrategy testee1(buildDir);
+        TEST_OUTPUT_LINES(testee1, outputLines);
+    }
+    CompilerFilterStrategy testee2(Path{projectRootDir.path()}, Path{buildDir});
+    TEST_OUTPUT_LINES(testee2, outputLines);
 }
