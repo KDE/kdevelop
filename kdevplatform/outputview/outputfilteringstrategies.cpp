@@ -90,6 +90,7 @@ public:
     QVector<Path> m_currentDirs;
     using PositionMap = QHash<Path, int>;
     PositionMap m_positionInCurrentDirs;
+    bool m_cmakeRootInCurrentDirs = false;
 };
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
@@ -200,30 +201,54 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
                       QStringLiteral("(Waf|scons): Entering directory (\\`|\\')(.+)'"), 3)
     };
 
+    const auto removeCMakeRootFromCurrentDirs = [d]() {
+        d->m_cmakeRootInCurrentDirs = false;
+        if (d->m_currentDirs.size() == 1) {
+            Q_ASSERT(d->m_positionInCurrentDirs.size() == 1);
+            d->m_currentDirs.clear();
+            d->m_positionInCurrentDirs.clear();
+        } // else: can this happen? If yes, what should be done then?
+    };
+
     FilteredItem item(line);
     for (const auto& curActFilter : ACTION_FILTERS) {
         const auto match = curActFilter.expression.match(line);
-        if( match.hasMatch() ) {
-            item.type = FilteredItem::ActionItem;
-
-            if( curActFilter.tool == QLatin1String("cd") ) {
-                const Path path(match.captured(curActFilter.fileGroup));
-                d->m_currentDirs.push_back( path );
-                d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
-            }
-
-            // Special case for cmake: we parse the "Compiling <objectfile>" expression
-            // and use it to find out about the build paths encountered during a build.
-            // They are later searched by pathForFile to find source files corresponding to
-            // compiler errors.
-            // Note: CMake objectfile has the format: "/path/to/four/CMakeFiles/file.o"
-            if ( curActFilter.fileGroup != -1 && curActFilter.tool == QLatin1String("cmake") && line.contains(QLatin1String("Building"))) {
-                const auto objectFile = match.captured(curActFilter.fileGroup);
-                const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
-                d->putDirAtEnd(Path(d->m_buildDir, dir));
-            }
-            break;
+        if (!match.hasMatch()) {
+            continue;
         }
+        item.type = FilteredItem::ActionItem;
+
+        if (curActFilter.tool == QLatin1String("cd")) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            if (match.capturedView().startsWith(QLatin1String("cmake"))) {
+#else
+            if (match.capturedRef().startsWith(QLatin1String("cmake"))) {
+#endif
+                d->m_cmakeRootInCurrentDirs = true;
+            }
+            const Path path(match.captured(curActFilter.fileGroup));
+            d->m_currentDirs.push_back( path );
+            d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
+        } else if (curActFilter.tool == QLatin1String("cmake")) {
+            if (curActFilter.fileGroup == -1) {
+                if (d->m_cmakeRootInCurrentDirs && line == QLatin1String("-- Generating done")) {
+                    // This is the boundary between CMake and compiler errors/warnings.
+                    removeCMakeRootFromCurrentDirs();
+                }
+            } else {
+                // Special case for cmake: we parse the "Compiling <objectfile>" expression
+                // and use it to find out about the build paths encountered during a build.
+                // They are later searched by pathForFile to find source files corresponding to
+                // compiler errors.
+                // Note: CMake objectfile has the format: "/path/to/four/CMakeFiles/file.o"
+                if (line.contains(QLatin1String("Building"))) {
+                    const auto objectFile = match.captured(curActFilter.fileGroup);
+                    const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
+                    d->putDirAtEnd(Path(d->m_buildDir, dir));
+                }
+            }
+        }
+        break;
     }
     return item;
 }
@@ -308,6 +333,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             if(curErrFilter.fileGroup > 0) {
                 if( curErrFilter.compiler == QLatin1String("cmake") ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
                     if( d->m_currentDirs.empty() ) {
+                        d->m_cmakeRootInCurrentDirs = true;
                         d->putDirAtEnd( d->m_buildDir.parent() );
                     }
                 }

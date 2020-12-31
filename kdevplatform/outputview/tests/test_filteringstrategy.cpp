@@ -28,6 +28,7 @@
 #include <QMetaType>
 #include <QStandardPaths>
 #include <QString>
+#include <QStringList>
 #include <QTemporaryDir>
 #include <QUrl>
 #include <QVector>
@@ -670,32 +671,66 @@ Q_DECLARE_METATYPE(OutputLine)
 
 void TestFilteringStrategy::testExtractionOfUrl_data()
 {
+    QTest::addColumn<QStringList>("extraFilesToCreate");
     QTest::addColumn<QVector<OutputLine>>("outputLines");
 
-    QTest::newRow("gcc-warning-after-cmake-warning") << QVector<OutputLine>{
+    QTest::newRow("gcc-warning-after-cmake-warning") << QStringList{} << QVector<OutputLine>{
         {"CMake Warning at plugins/welcomepage/CMakeLists.txt:33 (message):",
          "plugins/welcomepage/CMakeLists.txt", 32, 0, FilteredItem::WarningItem},
         {"../kdevplatform/project/projectutils.cpp:30:6: warning: unused variable ‘a’ [-Wunused-variable]",
          "kdevplatform/project/projectutils.cpp", 29, 5, FilteredItem::WarningItem}
     };
+
+    const QStringList extraFileAtProjectRootLevel{"../x.cpp"};
+    const QVector<OutputLine> cmakeCd{
+        {"/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Debug $project-root-dir",
+         "", -1, -1, FilteredItem::ActionItem}
+    };
+    const QVector<OutputLine> cmakeWarning{
+        {"CMake Warning at CMakeLists.txt:3 (message):",
+         "CMakeLists.txt", 2, 0, FilteredItem::WarningItem}
+    };
+    const QVector<OutputLine> gccErrorAfterCMakeIsDone {
+        {"-- Generating done", "", -1, -1, FilteredItem::ActionItem},
+        {"../x.cpp:23:1: error: ‘t’ does not name a type",
+         // Even though the file /path/to/project/../x.cpp exists, /path/to/project is removed
+         // from CompilerFilterStrategyPrivate::m_currentDirs when the line "-- Generating done"
+         // is encountered, and the path /path/to/project/x.cpp is returned.
+         "x.cpp", 22, 0, FilteredItem::ErrorItem}
+    };
+    QTest::newRow("gcc-error-after-cmake-cd-done") << extraFileAtProjectRootLevel
+                                                   << cmakeCd + gccErrorAfterCMakeIsDone;
+    QTest::newRow("gcc-error-after-cmake-warning-done") << extraFileAtProjectRootLevel
+                                                        << cmakeWarning + gccErrorAfterCMakeIsDone;
+    QTest::newRow("gcc-error-after-cmake-cd-and-warning-done") << extraFileAtProjectRootLevel
+                                                << cmakeCd + cmakeWarning + gccErrorAfterCMakeIsDone;
 }
 
 void TestFilteringStrategy::testExtractionOfUrl()
 {
+    QFETCH(QStringList, extraFilesToCreate);
     QFETCH(QVector<OutputLine>, outputLines);
 
     const QTemporaryDir tmpDir;
     QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
     const QDir projectRootDir(tmpDir.filePath("PROJECT DIR"));
 
+    MAKE_ABSOLUTE_AND_CREATE(projectRootDir.path(), extraFilesToCreate);
     for (auto& outputLine : outputLines) {
-        MAKE_ABSOLUTE_AND_CREATE(projectRootDir.path(), outputLine.filePath);
+        // An empty file path means that the FilteredItem has no associated URL => nothing to create.
+        if (!outputLine.filePath.isEmpty()) {
+            MAKE_ABSOLUTE_AND_CREATE(projectRootDir.path(), outputLine.filePath);
+        }
     }
 
     const QUrl buildDir = QUrl::fromLocalFile(projectRootDir.filePath("IN-TREE BUILD DIR"));
     CompilerFilterStrategy testee(buildDir);
-    for (const auto& ol : outputLines) {
-        const FilteredItem item = testee.errorInLine(ol.outputLine);
+    for (auto& ol : outputLines) {
+        ol.outputLine.replace("$project-root-dir", projectRootDir.path());
+        FilteredItem item = testee.errorInLine(ol.outputLine);
+        if (item.type == FilteredItem::InvalidItem) {
+            item = testee.actionInLine(ol.outputLine);
+        }
         QCOMPARE(item.type, ol.itemType);
         QCOMPARE(KDevelop::toUrlOrLocalFile(item.url), ol.filePath);
         QCOMPARE(item.lineNo, ol.line);
