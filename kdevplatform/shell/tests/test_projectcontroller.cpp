@@ -160,7 +160,8 @@ private:
 
 void TestProjectController::initTestCase()
 {
-    AutoTestShell::init({{}});
+    AutoTestShell::init({ "KDevCMakeManager", "KDevCMakeBuilder",
+                          "KDevMakeBuilder", "KDevStandardOutputView" });
     auto* testCore = new TestCore;
     testCore->setPluginController( new FakePluginController(testCore) );
     testCore->initialize();
