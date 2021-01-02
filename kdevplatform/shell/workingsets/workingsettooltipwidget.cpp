@@ -208,7 +208,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     connect(set, &WorkingSet::setChangedSignificantly, this, &WorkingSetToolTipWidget::updateFileButtons);
     connect(mainwindow->area(), &Sublime::Area::changedWorkingSet, this, &WorkingSetToolTipWidget::updateFileButtons, Qt::QueuedConnection);
 
-    QMetaObject::invokeMethod(this, "updateFileButtons");
+    QMetaObject::invokeMethod(this, &WorkingSetToolTipWidget::updateFileButtons);
 }
 
 void WorkingSetToolTipWidget::nextDocument()

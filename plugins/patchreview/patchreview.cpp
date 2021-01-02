@@ -402,7 +402,7 @@ void PatchReviewPlugin::startReview( IPatchSource* patch, IPatchReview::ReviewMo
     Q_UNUSED( mode );
     emit startingNewReview();
     setPatch( patch );
-    QMetaObject::invokeMethod( this, "updateReview", Qt::QueuedConnection );
+    QMetaObject::invokeMethod(this, &PatchReviewPlugin::updateReview, Qt::QueuedConnection);
 }
 
 void PatchReviewPlugin::switchToEmptyReviewArea()
@@ -497,11 +497,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 
     if( m_patch ) {
         disconnect( m_patch.data(), &IPatchSource::patchChanged, this, &PatchReviewPlugin::notifyPatchChanged );
-        if ( qobject_cast<LocalPatchSource*>( m_patch ) ) {
-            // make sure we don't leak this
-            // TODO: what about other patch sources?
-            m_patch->deleteLater();
-        }
+        m_patch->deleteLater();
     }
     m_patch = patch;
 

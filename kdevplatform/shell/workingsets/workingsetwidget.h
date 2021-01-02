@@ -30,9 +30,6 @@ class Area;
 
 namespace KDevelop {
 
-class WorkingSetController;
-class WorkingSet;
-
 /**
  * One instance of this widget is created per area switcher tab, showing
  * the currently opened working set for this area.
