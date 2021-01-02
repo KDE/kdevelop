@@ -44,6 +44,10 @@ struct TestProjectPaths {
     KDevelop::Path configFile;
 };
 
+/// TODO: replace Q_ASSERT with QFAIL, QVERIFY, QCOMPARE in the functions below;
+/// define and use a macro based on DO_AND_RETURN_IF_TEST_FAILED for the void function;
+/// insert RETURN_IF_TEST_FAILED after each usage of these functions.
+
 inline TestProjectPaths projectPaths(const QString& project, const QString& name = QString())
 {
     TestProjectPaths paths;

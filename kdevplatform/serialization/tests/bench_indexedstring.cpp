@@ -238,6 +238,7 @@ void BenchIndexedString::bench_create()
 void BenchIndexedString::bench_destroy()
 {
     auto strings = createIndexedStrings(10'000'000);
+    RETURN_IF_TEST_FAILED
     QBENCHMARK_ONCE {
         strings = {};
     }

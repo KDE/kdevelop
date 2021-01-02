@@ -49,6 +49,20 @@
             return retval;                                                                                             \
     } while (false)
 
+#define RETURN_IF_TEST_FAILED if (QTest::currentTestFailed()) return;
+
+#define RETURN_VALUE_IF_TEST_FAILED(retval)                                                                            \
+    do {                                                                                                               \
+        if (QTest::currentTestFailed())                                                                                \
+            return retval;                                                                                             \
+    } while (false)
+
+#define DO_AND_RETURN_IF_TEST_FAILED(statement)                                                                        \
+    do {                                                                                                               \
+        statement;                                                                                                     \
+        RETURN_IF_TEST_FAILED                                                                                          \
+    } while (false)
+
 namespace QTest {
 template<>
 inline char* toString(const KDevelop::CursorInRevision& c)

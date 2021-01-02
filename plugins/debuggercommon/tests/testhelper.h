@@ -26,6 +26,7 @@
 
 #include <debugger/interfaces/idebugsession.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <tests/testhelpers.h>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -48,6 +49,7 @@ class QModelIndex;
     do { \
         KDevMI::TestWaiter w((session), #condition, __FILE__, __LINE__); \
         while (w.waitUnless((condition))) /* nothing */ ; \
+        RETURN_IF_TEST_FAILED \
     } while(0)
 
 #define COMPARE_DATA(index, expected) \

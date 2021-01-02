@@ -70,7 +70,7 @@ public:
     void addJob(const JobPrototype& job);
 
     void addJobsToParser();
-    bool runJobs(int timeoutMS);
+    void runJobs(int timeoutMS);
 
     void clear();
 

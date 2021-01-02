@@ -27,6 +27,7 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testhelpers.h>
 
 #include <KLocalizedString>
 
@@ -61,8 +62,8 @@ private Q_SLOTS:
 
 private:
     // Severity grouping testing
-    bool checkCounts(int error, int warning, int hint);
-    bool checkNodeLabels();
+    void checkCounts(int error, int warning, int hint);
+    void checkNodeLabels();
     // ---------------------------
 
     void generateProblems();
@@ -71,16 +72,6 @@ private:
     QVector<IProblem::Ptr> m_problems;
     IProblem::Ptr m_diagnosticTestProblem;
 };
-
-
-
-#define MYCOMPARE(actual, expected) \
-    if (!QTest::qCompare(actual, expected, #actual, #expected, __FILE__, __LINE__)) \
-    return false
-
-#define MYVERIFY(statement) \
-    if (!QTest::qVerify((statement), #statement, "", __FILE__, __LINE__))\
-        return false
 
 void TestFilteredProblemStore::initTestCase()
 {
@@ -154,28 +145,29 @@ void TestFilteredProblemStore::testGrouping()
 }
 
 // Compares the node and it's children to a reference problem and it's diagnostics
-bool checkDiagnodes(const ProblemStoreNode *node, const IProblem::Ptr &reference)
+static void checkDiagNodes(const ProblemStoreNode *node, const IProblem::Ptr &reference)
 {
     const auto *problemNode = dynamic_cast<const ProblemNode*>(node);
-    MYVERIFY(problemNode);
-    MYCOMPARE(problemNode->problem()->description(), reference->description());
-    MYCOMPARE(problemNode->problem()->finalLocation().document.str(), reference->finalLocation().document.str());
-    MYCOMPARE(problemNode->count(), 1);
+    QVERIFY(problemNode);
+    QCOMPARE(problemNode->problem()->description(), reference->description());
+    QCOMPARE(problemNode->problem()->finalLocation().document.str(), reference->finalLocation().document.str());
+    QCOMPARE(problemNode->count(), 1);
 
     const IProblem::Ptr diag = reference->diagnostics().at(0);
     const auto *diagNode = dynamic_cast<const ProblemNode*>(problemNode->child(0));
-    MYVERIFY(diagNode);
-    MYCOMPARE(diagNode->problem()->description(), diag->description());
-    MYCOMPARE(diagNode->count(), 1);
+    QVERIFY(diagNode);
+    QCOMPARE(diagNode->problem()->description(), diag->description());
+    QCOMPARE(diagNode->count(), 1);
 
     const IProblem::Ptr diagdiag = diag->diagnostics().at(0);
     const auto *diagdiagNode = dynamic_cast<const ProblemNode*>(diagNode->child(0));
-    MYVERIFY(diagdiagNode);
-    MYCOMPARE(diagdiagNode->problem()->description(), diagdiag->description());
-    MYCOMPARE(diagdiagNode->count(), 0);
-
-    return true;
+    QVERIFY(diagdiagNode);
+    QCOMPARE(diagdiagNode->problem()->description(), diagdiag->description());
+    QCOMPARE(diagdiagNode->count(), 0);
 }
+
+#define CHECK_DIAG_NODES(node, reference)   \
+    DO_AND_RETURN_IF_TEST_FAILED(checkDiagNodes(node, reference))
 
 void TestFilteredProblemStore::testNoGrouping()
 {
@@ -290,29 +282,35 @@ void TestFilteredProblemStore::testNoGrouping()
     // Check if diagnostics are added properly
     m_store->addProblem(m_diagnosticTestProblem);
     QCOMPARE(m_store->count(), 1);
-    QVERIFY(checkDiagnodes(m_store->findNode(0), m_diagnosticTestProblem));
+    CHECK_DIAG_NODES(m_store->findNode(0), m_diagnosticTestProblem);
 }
 
 
-bool checkNodeLabel(const ProblemStoreNode *node, const QString &label)
+static void checkNodeLabel(const ProblemStoreNode *node, const QString &label)
 {
     const auto *parent = dynamic_cast<const LabelNode*>(node);
-
-    MYVERIFY(parent);
-    MYCOMPARE(parent->label(), label);
-
-    return true;
+    QVERIFY(parent);
+    QCOMPARE(parent->label(), label);
 }
 
-bool checkNodeDescription(const ProblemStoreNode *node, const QString &descr)
+static void checkNodeDescription(const ProblemStoreNode *node, const QString &descr)
 {
     const auto *n = dynamic_cast<const ProblemNode*>(node);
-
-    MYVERIFY(n);
-    MYCOMPARE(n->problem()->description(), descr);
-
-    return true;
+    QVERIFY(n);
+    QCOMPARE(n->problem()->description(), descr);
 }
+
+#define CHECK_NODE_LABEL(node, label)       \
+    DO_AND_RETURN_IF_TEST_FAILED(checkNodeLabel(node, label))
+
+#define CHECK_NODE_DESCRIPTION(node, descr) \
+    DO_AND_RETURN_IF_TEST_FAILED(checkNodeDescription(node, descr))
+
+#define CHECK_COUNTS(error, warning, hint)  \
+    DO_AND_RETURN_IF_TEST_FAILED(checkCounts(error, warning, hint))
+
+#define CHECK_NODE_LABELS()                 \
+    DO_AND_RETURN_IF_TEST_FAILED(checkNodeLabels())
 
 void TestFilteredProblemStore::testPathGrouping()
 {
@@ -330,10 +328,9 @@ void TestFilteredProblemStore::testPathGrouping()
 
     for (int i = 0; i < 3; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-
-        checkNodeDescription(node->child(0), m_problems[i]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i]->description());
     }
 
 
@@ -348,19 +345,17 @@ void TestFilteredProblemStore::testPathGrouping()
     // Check the first 2 top-nodes
     for (int i = 0; i < 2; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-
-        checkNodeDescription(node->child(0), m_problems[i]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i]->description());
     }
 
     // check the last one, and check the added problem is at the right place
     {
         const ProblemStoreNode *node = m_store->findNode(2);
-        checkNodeLabel(node, m_problems[2]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[2]->finalLocation().document.str());
         QCOMPARE(node->count(), 2);
-
-        checkNodeDescription(node->child(1), p->description());
+        CHECK_NODE_DESCRIPTION(node->child(1), p->description());
     }
 
     m_store->clear();
@@ -373,9 +368,9 @@ void TestFilteredProblemStore::testPathGrouping()
     QCOMPARE(m_store->count(), ErrorFilterProblemCount);
     {
         const ProblemStoreNode *node = m_store->findNode(0);
-        checkNodeLabel(node, m_problems[0]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[0]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[0]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[0]->description());
     }
 
     // Warning filter
@@ -383,9 +378,9 @@ void TestFilteredProblemStore::testPathGrouping()
     QCOMPARE(m_store->count(), WarningFilterProblemCount);
     for (int i = 0; i < WarningFilterProblemCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i]->description());
     }
 
     // Hint filter
@@ -393,9 +388,9 @@ void TestFilteredProblemStore::testPathGrouping()
     QCOMPARE(m_store->count(), HintFilterProblemCount);
     for (int i = 0; i < HintFilterProblemCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i]->description());
     }
 
     // Check new severity filtering
@@ -403,27 +398,27 @@ void TestFilteredProblemStore::testPathGrouping()
     m_store->setSeverities(IProblem::Error);
     for (int i = 0; i < ErrorCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i]->description());
     }
 
     // Warning filter
     m_store->setSeverities(IProblem::Warning);
     for (int i = 0; i < WarningCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i+ErrorCount]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i+ErrorCount]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i+ErrorCount]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i+ErrorCount]->description());
     }
 
     // Hint filter
     m_store->setSeverities(IProblem::Hint);
     for (int i = 0; i < HintCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i+ErrorCount+WarningCount]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i+ErrorCount+WarningCount]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i+ErrorCount+WarningCount]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i+ErrorCount+WarningCount]->description());
     }
 
     //Error + Hint filter
@@ -431,15 +426,15 @@ void TestFilteredProblemStore::testPathGrouping()
     QCOMPARE(m_store->count(), HintCount + ErrorCount);
     for (int i = 0; i < ErrorCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i]->description());
     }
     for (int i = ErrorCount; i < ErrorCount+HintCount; i++) {
         const ProblemStoreNode *node = m_store->findNode(i);
-        checkNodeLabel(node, m_problems[i+WarningCount]->finalLocation().document.str());
+        CHECK_NODE_LABEL(node, m_problems[i+WarningCount]->finalLocation().document.str());
         QCOMPARE(node->count(), 1);
-        checkNodeDescription(node->child(0), m_problems[i+WarningCount]->description());
+        CHECK_NODE_DESCRIPTION(node->child(0), m_problems[i+WarningCount]->description());
     }
 
     m_store->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
@@ -451,7 +446,7 @@ void TestFilteredProblemStore::testPathGrouping()
     const auto *node = dynamic_cast<const LabelNode*>(m_store->findNode(0));
     QVERIFY(node);
     QCOMPARE(node->label(), m_diagnosticTestProblem->finalLocation().document.str());
-    QVERIFY(checkDiagnodes(node->child(0), m_diagnosticTestProblem));
+    CHECK_DIAG_NODES(node->child(0), m_diagnosticTestProblem);
 }
 
 void TestFilteredProblemStore::testSeverityGrouping()
@@ -482,120 +477,116 @@ void TestFilteredProblemStore::testSeverityGrouping()
         QCOMPARE(m_store->findNode(severityType)->count(), addedCountOfCurrentSeverityType);
     }
 
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(ErrorCount, WarningCount, HintCount));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
-    checkNodeDescription(warningNode->child(0), m_problems[1]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, WarningCount, HintCount);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_DESCRIPTION(warningNode->child(0), m_problems[1]->description());
+    CHECK_NODE_DESCRIPTION(hintNode->child(0), m_problems[3]->description());
 
     // Clear
     m_store->clear();
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkCounts(0,0,0));
+    CHECK_COUNTS(0, 0, 0);
 
     // Set problems
     m_store->setProblems(m_problems);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(ErrorCount, WarningCount, HintCount));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
-    checkNodeDescription(warningNode->child(0), m_problems[1]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, WarningCount, HintCount);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_DESCRIPTION(warningNode->child(0), m_problems[1]->description());
+    CHECK_NODE_DESCRIPTION(hintNode->child(0), m_problems[3]->description());
 
     // Check severity filter
     // old-style setSeverity
     // Error filter
     m_store->setSeverity(IProblem::Error);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(ErrorCount, 0, 0));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, 0, 0);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
 
     // Warning filter
     m_store->setSeverity(IProblem::Warning);
     QCOMPARE(m_store->count(), 3);
-    checkNodeLabels();
-    QVERIFY(checkCounts(ErrorCount, WarningCount, 0));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
-    checkNodeDescription(warningNode->child(0), m_problems[1]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, WarningCount, 0);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_DESCRIPTION(warningNode->child(0), m_problems[1]->description());
 
     // Hint filter
     m_store->setSeverity(IProblem::Hint);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(ErrorCount, WarningCount, HintCount));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
-    checkNodeDescription(warningNode->child(0), m_problems[1]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, WarningCount, HintCount);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_DESCRIPTION(warningNode->child(0), m_problems[1]->description());
+    CHECK_NODE_DESCRIPTION(hintNode->child(0), m_problems[3]->description());
 
     // Check severity filter
     // Error filter
     m_store->setSeverities(IProblem::Error);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(ErrorCount, 0, 0));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, 0, 0);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
 
     // Warning filter
     m_store->setSeverities(IProblem::Warning);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(0, WarningCount, 0));
-    checkNodeDescription(warningNode->child(0), m_problems[1]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(0, WarningCount, 0);
+    CHECK_NODE_DESCRIPTION(warningNode->child(0), m_problems[1]->description());
 
     // Hint filter
     m_store->setSeverities(IProblem::Hint);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(0, 0, HintCount));
-    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(0, 0, HintCount);
+    CHECK_NODE_DESCRIPTION(hintNode->child(0), m_problems[3]->description());
 
     // Error + Hint filter
     m_store->setSeverities(IProblem::Error | IProblem::Hint);
     QCOMPARE(m_store->count(), 3);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(ErrorCount, 0, HintCount));
-    checkNodeDescription(errorNode->child(0), m_problems[0]->description());
-    checkNodeDescription(hintNode->child(0), m_problems[3]->description());
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(ErrorCount, 0, HintCount);
+    CHECK_NODE_DESCRIPTION(errorNode->child(0), m_problems[0]->description());
+    CHECK_NODE_DESCRIPTION(hintNode->child(0), m_problems[3]->description());
 
     m_store->setSeverities(IProblem::Error | IProblem::Warning | IProblem::Hint);
 
     m_store->clear();
     // Check if diagnostics are added properly
     m_store->addProblem(m_diagnosticTestProblem);
-    QVERIFY(checkNodeLabels());
-    QVERIFY(checkCounts(1, 0, 0));
-    QVERIFY(checkDiagnodes(m_store->findNode(0)->child(0), m_diagnosticTestProblem));
+    CHECK_NODE_LABELS();
+    CHECK_COUNTS(1, 0, 0);
+    CHECK_DIAG_NODES(m_store->findNode(0)->child(0), m_diagnosticTestProblem);
 }
 
-bool TestFilteredProblemStore::checkCounts(int error, int warning, int hint)
+void TestFilteredProblemStore::checkCounts(int error, int warning, int hint)
 {
     const ProblemStoreNode *errorNode = m_store->findNode(0);
     const ProblemStoreNode *warningNode = m_store->findNode(1);
     const ProblemStoreNode *hintNode = m_store->findNode(2);
 
-    MYVERIFY(errorNode);
-    MYVERIFY(warningNode);
-    MYVERIFY(hintNode);
+    QVERIFY(errorNode);
+    QVERIFY(warningNode);
+    QVERIFY(hintNode);
 
-    MYCOMPARE(errorNode->count(), error);
-    MYCOMPARE(warningNode->count(), warning);
-    MYCOMPARE(hintNode->count(), hint);
-
-    return true;
+    QCOMPARE(errorNode->count(), error);
+    QCOMPARE(warningNode->count(), warning);
+    QCOMPARE(hintNode->count(), hint);
 }
 
-bool TestFilteredProblemStore::checkNodeLabels()
+void TestFilteredProblemStore::checkNodeLabels()
 {
     const ProblemStoreNode *errorNode = m_store->findNode(0);
     const ProblemStoreNode *warningNode = m_store->findNode(1);
     const ProblemStoreNode *hintNode = m_store->findNode(2);
 
-    MYCOMPARE(checkNodeLabel(errorNode, i18n("Error")), true);
-    MYCOMPARE(checkNodeLabel(warningNode, i18n("Warning")), true);
-    MYCOMPARE(checkNodeLabel(hintNode, i18n("Hint")), true);
-
-    return true;
+    CHECK_NODE_LABEL(errorNode, i18n("Error"));
+    CHECK_NODE_LABEL(warningNode, i18n("Warning"));
+    CHECK_NODE_LABEL(hintNode, i18n("Hint"));
 }
 
 // Generate 3 problems, all with different paths, different severity

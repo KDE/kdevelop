@@ -92,6 +92,7 @@ TranslationUnit parse(const QByteArray& code, QString* fileName = nullptr)
 TranslationUnit runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData data)
 {
     auto unit = parse(code);
+    RETURN_VALUE_IF_TEST_FAILED({});
     const auto startCursor = clang_getTranslationUnitCursor(unit.get());
     QVERIFY_RETURN(!clang_Cursor_isNull(startCursor), {});
     QVERIFY_RETURN(clang_visitChildren(startCursor, visitor, data) == 0, {});
@@ -125,6 +126,7 @@ void TestClangUtils::testGetScope()
 
     CursorCollectorVisitor visitor;
     auto unit = runVisitor(code, visitor);
+    RETURN_IF_TEST_FAILED
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
     clangDebug() << "Found decl:" << clang_getCursorSpelling(cursor) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
@@ -174,6 +176,7 @@ void TestClangUtils::testTemplateArgumentTypes()
 
     CursorCollectorVisitor visitor;
     auto unit = runVisitor(code, visitor);
+    RETURN_IF_TEST_FAILED
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
     const QStringList types = ClangUtils::templateArgumentTypes(cursor);
@@ -231,6 +234,7 @@ void TestClangUtils::testGetRawContents()
 
     QString fileName;
     auto unit = parse(code, &fileName);
+    RETURN_IF_TEST_FAILED
 
     DocumentRange documentRange{IndexedString(fileName), range};
     auto cxRange = toCXRange(unit.get(), documentRange);

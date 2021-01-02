@@ -29,6 +29,9 @@
 
 const QString BINARY_PATH(DEBUGGEE_BIN_DIR);
 
+/// TODO: replace Q_ASSERT with QFAIL, QVERIFY, QCOMPARE in GdbProcess;
+/// consider defining and using macros based on DO_AND_RETURN_IF_TEST_FAILED;
+/// insert RETURN_IF_TEST_FAILED after each usage of fail-able GdbProcess' member functions.
 class GdbProcess : private QProcess
 {
     Q_OBJECT

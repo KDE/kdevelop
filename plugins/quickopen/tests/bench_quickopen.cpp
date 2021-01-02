@@ -24,6 +24,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
+#include <tests/testhelpers.h>
 
 #include <QIcon>
 #include <QTest>
@@ -99,6 +100,7 @@ void BenchQuickOpen::benchProjectFileFilter_addRemoveProjects()
     QScopedPointer<TestProject> projectC(getProjectWithFiles(files, Path(dir.filePath("c_project_dir/"))));
 
     openAnyDocument(projectA.data());
+    RETURN_IF_TEST_FAILED
 
     QBENCHMARK {
         projectController->addProject(projectA.data());
@@ -127,6 +129,7 @@ void BenchQuickOpen::benchProjectFileFilter_reset()
 
     projectController->addProject(project);
     openAnyDocument(project);
+    RETURN_IF_TEST_FAILED
 
     // don't use QBENCHMARK directly as the code below is too fast
     // and then QBENCHMARK runs the setup code above multiple times which is overly slow

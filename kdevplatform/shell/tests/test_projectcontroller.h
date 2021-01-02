@@ -70,6 +70,8 @@ private:
 
     KDevelop::Project* assertProjectOpened(const QString& name);
     void assertSpyCaughtProject(QSignalSpy* spy, KDevelop::IProject* proj);
+    KDevelop::Project* assertProjectOpenedAndCaught(
+            const QString& name, const std::unique_ptr<QSignalSpy>& spy);
     void assertProjectClosed(KDevelop::IProject* proj);
     void assertEmptyProjectModel();
 

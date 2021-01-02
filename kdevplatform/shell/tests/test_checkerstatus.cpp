@@ -26,10 +26,6 @@
 
 using namespace KDevelop;
 
-#define MYCOMPARE(actual, expected) \
-    if (!QTest::qCompare(actual, expected, #actual, #expected, __FILE__, __LINE__)) \
-    return false
-
 class TestCheckerStatus : public QObject
 {
     Q_OBJECT
@@ -75,13 +71,11 @@ void TestCheckerStatus::testName()
     QCOMPARE(m_status->statusName(), s);
 }
 
-bool checkValues(const QList<QVariant> &signal, int min, int max, int value)
+static void checkValues(const QList<QVariant> &signal, int min, int max, int value)
 {
-    MYCOMPARE(qvariant_cast<int>(signal[1]), min);
-    MYCOMPARE(qvariant_cast<int>(signal[2]), max);
-    MYCOMPARE(qvariant_cast<int>(signal[3]), value);
-
-    return true;
+    QCOMPARE(qvariant_cast<int>(signal[1]), min);
+    QCOMPARE(qvariant_cast<int>(signal[2]), max);
+    QCOMPARE(qvariant_cast<int>(signal[3]), value);
 }
 
 void TestCheckerStatus::testStart()
@@ -92,7 +86,7 @@ void TestCheckerStatus::testStart()
     m_status->start();
 
     QCOMPARE(spy.count(), 1);
-    QVERIFY(checkValues(spy.takeFirst(), 0, 100, 0));
+    checkValues(spy.takeFirst(), 0, 100, 0);
 }
 
 void TestCheckerStatus::testItemChecked()
@@ -102,7 +96,7 @@ void TestCheckerStatus::testItemChecked()
     m_status->itemChecked();
 
     QCOMPARE(spy.count(), 1);
-    QVERIFY(checkValues(spy.takeFirst(), 0, 100, 1));
+    checkValues(spy.takeFirst(), 0, 100, 1);
 }
 
 void TestCheckerStatus::testStop()
@@ -112,7 +106,7 @@ void TestCheckerStatus::testStop()
     m_status->stop();
 
     QCOMPARE(spy.count(), 1);
-    QVERIFY(checkValues(spy.takeFirst(), 0, 100, 100));
+    checkValues(spy.takeFirst(), 0, 100, 100);
 }
 
 QTEST_MAIN(TestCheckerStatus)
