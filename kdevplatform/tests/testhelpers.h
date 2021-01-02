@@ -31,6 +31,12 @@
 
 #include <QTest>
 
+#define QFAIL_RETURN(message, retval)                                                                                  \
+    do {                                                                                                               \
+        QTest::qFail(static_cast<const char *>(message), __FILE__, __LINE__);                                          \
+        return retval;                                                                                                 \
+    } while (false)
+
 #define QVERIFY_RETURN(statement, retval)                                                                              \
     do {                                                                                                               \
         if (!QTest::qVerify(static_cast<bool>(statement), #statement, "", __FILE__, __LINE__))                         \

@@ -225,7 +225,7 @@ static std::vector<IndexedString> createIndexedStrings(std::size_t count)
             }
         }
     }
-    Q_UNREACHABLE();
+    QFAIL_RETURN("Unreachable because of the maxCount check above.", result);
 }
 
 void BenchIndexedString::bench_create()
