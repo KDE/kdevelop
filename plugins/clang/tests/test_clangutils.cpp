@@ -74,8 +74,8 @@ TranslationUnit parse(const QByteArray& code, QString* fileName = nullptr)
 {
     QTemporaryFile tempFile;
     QVERIFY_RETURN(tempFile.open(), {});
-    tempFile.write(code);
-    tempFile.flush();
+    QCOMPARE_RETURN(tempFile.write(code), code.size(), {});
+    QVERIFY_RETURN(tempFile.flush(), {});
 
     if (fileName) {
         *fileName = tempFile.fileName();
