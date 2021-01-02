@@ -23,7 +23,6 @@
 #define KDEVPLATFORM_CLOSEDWORKINGSETSWIDGET_H
 
 #include <QWidget>
-#include <QHBoxLayout>
 #include <QMap>
 #include <QPointer>
 
@@ -59,7 +58,6 @@ private Q_SLOTS:
 
 private:
     MainWindow* const m_mainWindow;
-    QHBoxLayout* m_layout;
     QPointer<Sublime::Area> m_connectedArea;
     QMap<WorkingSet*, WorkingSetToolButton*> m_buttons;
 };

@@ -48,7 +48,9 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     layout()->addWidget(m_separator);
 
     layout()->setContentsMargins(0, 0, 0, 0);
-    layout()->addWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow));
+    auto closedWorkingSets = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow);
+    closedWorkingSets->setParent(this);
+    layout()->addWidget(closedWorkingSets);
 
     m_button = new QToolButton(this);
     m_button->setToolTip(i18n(
@@ -99,9 +101,13 @@ bool AreaDisplay::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::Show) {
         m_separator->setVisible(true);
+        // Recalculate menu bar widget sizes after showing the working set button (not done automatically)
+        QMetaObject::invokeMethod(m_mainWindow->menuBar(), &QMenuBar::adjustSize, Qt::QueuedConnection);
     } else if (event->type() == QEvent::Hide) {
         m_separator->setVisible(false);
+        QMetaObject::invokeMethod(m_mainWindow->menuBar(), &QMenuBar::adjustSize, Qt::QueuedConnection);
     }
+
     return QObject::eventFilter(obj, event);
 }
 
