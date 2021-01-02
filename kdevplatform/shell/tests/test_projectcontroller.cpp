@@ -232,7 +232,7 @@ void TestProjectController::closeProject()
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     IProject* proj = m_projCtrl->findProjectByName(m_projName);
-    Q_ASSERT(proj);
+    QVERIFY(proj);
 
     auto spy1 = createClosedSpy();
     auto spy2 = createClosingSpy();
@@ -367,7 +367,7 @@ void TestProjectController::emptyProject()
     auto* proj = assertProjectOpened(m_projName);
 
     FakeFileManager* fileMng = createFileManager();
-    Q_ASSERT(fileMng);
+    QVERIFY(fileMng);
 
     proj->setManagerPlugin(fileMng);
     proj->reloadModel();
@@ -542,7 +542,7 @@ void TestProjectController::assertProjectClosed(IProject* proj)
 void TestProjectController::assertEmptyProjectModel()
 {
     ProjectModel* m = m_projCtrl->projectModel();
-    Q_ASSERT(m);
+    QVERIFY(m);
     QCOMPARE(m->rowCount(), 0);
 }
 
