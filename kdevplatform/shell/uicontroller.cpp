@@ -600,7 +600,7 @@ void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
     area->save(group);
     if (!area->workingSet().isEmpty()) {
         WorkingSet* set = Core::self()->workingSetControllerInternal()->workingSet(area->workingSet());
-        set->saveFromArea(area, area->rootIndex());
+        set->saveFromArea(area);
     }
 }
 
