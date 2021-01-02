@@ -53,6 +53,7 @@ public:
      , shownToolViews(p.shownToolViews)
      , iconName(p.iconName)
      , workingSet(p.workingSet)
+     , workingSetPersists(p.workingSetPersists)
      , m_actions(p.m_actions)
     {
     }
@@ -95,6 +96,7 @@ public:
     QMap<Sublime::Position, QStringList> shownToolViews;
     QString iconName;
     QString workingSet;
+    bool workingSetPersists = true;
     QPointer<View> activeView;
     QList<QAction*> m_actions;
 };
@@ -113,8 +115,6 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     d->title = title;
     d->controller = controller;
     d->iconName = QStringLiteral("kdevelop");
-    d->workingSet.clear();
-    qCDebug(SUBLIME) << "initial working-set:" << d->workingSet;
     initialize();
 }
 
@@ -451,8 +451,14 @@ QString Area::workingSet() const
     return d->workingSet;
 }
 
+bool Area::workingSetPersistent() const
+{
+    Q_D(const Area);
 
-void Area::setWorkingSet(const QString& name)
+    return d->workingSetPersists;
+}
+
+void Area::setWorkingSet(const QString& name, bool persistent)
 {
     Q_D(Area);
 
@@ -461,6 +467,7 @@ void Area::setWorkingSet(const QString& name)
         QString oldName = d->workingSet;
         emit changingWorkingSet(this, oldName, name);
         d->workingSet = name;
+        d->workingSetPersists = persistent;
         emit changedWorkingSet(this, oldName, name);
     }
 }

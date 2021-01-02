@@ -173,14 +173,17 @@ public:
     /**@return the controller for this area.*/
     Controller *controller() const;
 
-    ///Returns the currently set working-set for this area. The working-set is persistent
+    ///Returns the currently set working-set for this area.
     QString workingSet() const;
+    ///Returns if the currently set working-set is persistent.
+    ///@note This is just a hint and not synchronized with the actual working set.
+    bool workingSetPersistent() const;
     ///Sets the working-set for this area. The working-set is just a marker, and does nothing
     ///within Area.
     ///The actual view management has to be implemented in the entity that knows more
     ///about possible views, documents, etc. (kdevplatform/shell)
     ///@warning (KDevelop): Before calling this, make sure that all views are saved! (see IDocumentController::saveAllDocumentsForWindow)
-    void setWorkingSet(const QString& name);
+    void setWorkingSet(const QString& name, bool persistent = true);
     
     /**Walker mode to determine the behavior of area walkers.*/
     enum WalkerMode {

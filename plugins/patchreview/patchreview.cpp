@@ -369,10 +369,16 @@ void PatchReviewPlugin::closeReview()
         } else
             emit patchChanged();
 
-        Sublime::Area* area = ICore::self()->uiController()->activeArea();
-        if( area->objectName() == QLatin1String("review") ) {
-            if( ICore::self()->documentController()->saveAllDocuments() )
-                ICore::self()->uiController()->switchToArea( QStringLiteral("code"), KDevelop::IUiController::ThisWindow );
+        auto oldArea = ICore::self()->uiController()->activeArea();
+        if (oldArea->objectName() == QLatin1String("review")) {
+            if (ICore::self()->documentController()->saveAllDocumentsForWindow(ICore::self()->uiController()->activeMainWindow(),
+                                                                               IDocument::Default, true))
+            {
+                ICore::self()->uiController()->switchToArea(QStringLiteral("code"), KDevelop::IUiController::ThisWindow);
+                if (oldArea->workingSetPersistent()) {
+                    ICore::self()->uiController()->activeArea()->setWorkingSet(oldArea->workingSet(), true);
+                }
+            }
         }
     }
 }
@@ -403,7 +409,7 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
     const auto allAreas = ICore::self()->uiController()->allAreas();
     for (Sublime::Area* area : allAreas) {
         if (area->objectName() == QLatin1String("review")) {
-            area->clearDocuments();
+            area->setWorkingSet(QString(), false);
         }
     }
 

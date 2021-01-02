@@ -308,9 +308,10 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
         m_changingWorkingSet = true;
         WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
         qCDebug(SHELL) << "Spawned new working-set" << set->id() << "because a view was added";
+        set->setPersistent(area->workingSetPersistent());
         set->connectArea(area);
         set->saveFromArea(area, area->rootIndex());
-        area->setWorkingSet(set->id());
+        area->setWorkingSet(set->id(), area->workingSetPersistent());
         m_changingWorkingSet = false;
     }
 }

@@ -77,7 +77,9 @@ void ClosedWorkingSetsWidget::areaChanged( Sublime::Area* area )
     // add sets from new area
     const auto allWorkingSets = Core::self()->workingSetControllerInternal()->allWorkingSets();
     for (WorkingSet* set : allWorkingSets) {
-        addWorkingSet(set);
+        if (!set->hasConnectedArea(area) && set->isPersistent()) {
+            addWorkingSet(set);
+        }
     }
 }
 
@@ -107,12 +109,6 @@ void ClosedWorkingSetsWidget::removeWorkingSet( WorkingSet* set )
 void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
 {
     if (m_buttons.contains(set)) {
-        return;
-    }
-
-    // Don't show working-sets that are active in an area belong to this main-window, as those
-    // can be activated directly through the icons in the tabs
-    if (set->hasConnectedAreas(m_mainWindow->areas())) {
         return;
     }
 

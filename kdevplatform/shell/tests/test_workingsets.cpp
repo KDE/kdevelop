@@ -108,12 +108,12 @@ void TestWorkingSetController::createWorkingSet()
     m_documentCtrl->openDocumentFromText(text);
 
     // Create and activate a non-persistent working set
-    m_area->setWorkingSet(setName3);
+    m_area->setWorkingSet(setName3, false);
     QCOMPARE(m_workingSetCtrl->allWorkingSets().size(), 2);
     m_documentCtrl->openDocumentFromText(text);
 
     // Create and activate another non-persistent working set
-    m_area->setWorkingSet(setName2);
+    m_area->setWorkingSet(setName2, false);
     QCOMPARE(m_workingSetCtrl->allWorkingSets().size(), 3);
     const auto id2 = m_workingSetCtrl->workingSet(m_area->workingSet())->id();
     m_documentCtrl->openDocumentFromText(text);
@@ -186,7 +186,7 @@ void TestWorkingSetController::switchArea()
 
     Core::self()->uiController()->switchToArea(QStringLiteral("debug"), IUiController::ThisWindow);
     m_area_debug = Core::self()->uiControllerInternal()->activeArea();
-    m_area_debug->setWorkingSet(setName); // explicitly set the current working set, as in DebugController::addSession
+    m_area_debug->setWorkingSet(setName, m_area->workingSetPersistent()); // explicitly set the current working set, as in DebugController::addSession
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 1); // working set 2
 
@@ -195,7 +195,7 @@ void TestWorkingSetController::switchArea()
     QCOMPARE(m_closedSets->layout()->count(), 1); // working set 1, BUG 375446
 
     Core::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
-    m_area->setWorkingSet(setName2); // explicitly set the current working set, as in DebugController::debuggerStateChanged
+    m_area->setWorkingSet(setName2, m_area_debug->workingSetPersistent()); // explicitly set the current working set, as in DebugController::debuggerStateChanged
     m_area->setWorkingSet(setName);
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 1); // working set 2, BUG 375446

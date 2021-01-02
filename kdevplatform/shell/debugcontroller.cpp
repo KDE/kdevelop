@@ -321,10 +321,10 @@ void DebugController::addSession(IDebugSession* session)
 
 
     Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
-    if (mainWindow->area()->objectName() != QLatin1String("debug")) {
-        QString workingSet = mainWindow->area()->workingSet();
+    auto oldArea = mainWindow->area();
+    if (oldArea->objectName() != QLatin1String("debug")) {
         ICore::self()->uiController()->switchToArea(QStringLiteral("debug"), IUiController::ThisWindow);
-        mainWindow->area()->setWorkingSet(workingSet);
+        mainWindow->area()->setWorkingSet(oldArea->workingSet(), oldArea->workingSetPersistent());
         connect(mainWindow, &Sublime::MainWindow::areaChanged, this, &DebugController::areaChanged);
     }
 }
@@ -396,9 +396,10 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
             if (!Core::self()->shuttingDown()) {
                 Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
                 if (mainWindow && mainWindow->area()->objectName() != QLatin1String("code")) {
-                    QString workingSet = mainWindow->area()->workingSet();
+                    auto oldArea = mainWindow->area();
+                    QString workingSet = oldArea->workingSet();
                     ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
-                    mainWindow->area()->setWorkingSet(workingSet);
+                    mainWindow->area()->setWorkingSet(workingSet, oldArea->workingSetPersistent());
                 }
                 ICore::self()->uiController()->findToolView(i18nc("@title:window", "Debug"), nullptr, IUiController::Raise);
             }
