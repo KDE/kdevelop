@@ -504,7 +504,7 @@ Path TestProjectController::writeProjectConfig(const QString& name)
 {
     Path configPath = Path(m_scratchDir.absolutePath() + '/' + name + ".kdev4");
     QFile f(configPath.pathOrUrl());
-    f.open(QIODevice::WriteOnly);
+    QVERIFY_RETURN(f.open(QIODevice::WriteOnly), configPath);
     QTextStream str(&f);
     str << "[Project]\n"
         << "Name=" << name << "\n";
