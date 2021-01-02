@@ -47,6 +47,21 @@ ecm_add_test(test_pluginenabling.cpp
 ecm_add_test(test_testcontroller.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests)
 
+ecm_add_test(
+    test_workingsets.cpp
+    ../workingsetcontroller.cpp
+    ../workingsets/workingset.cpp
+    ../workingsets/workingsetfilelabel.cpp
+    ../workingsets/workingsettoolbutton.cpp
+    ../workingsets/workingsettooltipwidget.cpp
+    ../workingsets/workingsetwidget.cpp
+    ../workingsets/closedworkingsetswidget.cpp
+    ../workingsets/workingsethelpers.cpp
+    ../debug.cpp
+
+    TEST_NAME test_workingsets
+    LINK_LIBRARIES Qt5::Test KF5::KIOWidgets KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
+
 ecm_add_test(test_ktexteditorpluginintegration.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
 
