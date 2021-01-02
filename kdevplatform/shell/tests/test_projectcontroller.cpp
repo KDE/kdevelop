@@ -521,7 +521,7 @@ KDevelop::Project* TestProjectController::assertProjectOpened(const QString& nam
     QVERIFY_RETURN(m_projCtrl->projects().contains(projRaw), nullptr);
 
     auto proj = dynamic_cast<KDevelop::Project*>(projRaw);
-    QVERIFY_RETURN(projRaw, nullptr);
+    QVERIFY_RETURN(proj, nullptr);
     return proj;
 }
 
