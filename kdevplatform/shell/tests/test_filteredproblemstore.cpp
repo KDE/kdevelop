@@ -306,8 +306,11 @@ static void checkNodeDescription(const ProblemStoreNode *node, const QString &de
 #define CHECK_NODE_DESCRIPTION(node, descr) \
     DO_AND_RETURN_IF_TEST_FAILED(checkNodeDescription(node, descr))
 
-#define CHECK_COUNTS(error, warning, hint)  \
-    DO_AND_RETURN_IF_TEST_FAILED(checkCounts(error, warning, hint))
+#define CHECK_COUNTS(error, warning, hint)      \
+    do {                                        \
+        checkCounts(error, warning, hint);      \
+        QVERIFY(!QTest::currentTestFailed());   \
+    } while (false)
 
 #define CHECK_NODE_LABELS()                 \
     DO_AND_RETURN_IF_TEST_FAILED(checkNodeLabels())
