@@ -49,7 +49,7 @@
             return retval;                                                                                             \
     } while (false)
 
-#define RETURN_IF_TEST_FAILED if (QTest::currentTestFailed()) return;
+#define RETURN_IF_TEST_FAILED QVERIFY2(!QTest::currentTestFailed(), "test helper function failed");
 
 #define RETURN_VALUE_IF_TEST_FAILED(retval)                                                                            \
     do {                                                                                                               \
