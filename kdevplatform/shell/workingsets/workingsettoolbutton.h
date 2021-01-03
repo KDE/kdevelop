@@ -43,7 +43,7 @@ public:
     void setWorkingSet(WorkingSet* set);
 
 public Q_SLOTS:
-    void closeSet(bool ask = false);
+    void closeSet();
     void loadSet();
     void duplicateSet();
     void mergeSet();

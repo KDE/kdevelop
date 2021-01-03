@@ -115,14 +115,14 @@ void WorkingSetToolButton::loadSet()
     mainWindow()->area()->setWorkingSet(QString(m_set->id()));
 }
 
-void WorkingSetToolButton::closeSet(bool ask)
+void WorkingSetToolButton::closeSet()
 {
     Q_ASSERT(m_set);
 
     m_set->setPersistent(true);
     m_set->saveFromArea(mainWindow()->area());
 
-    if(ask && !Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
         return;
     mainWindow()->area()->setWorkingSet(QString());
 }
