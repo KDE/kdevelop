@@ -5,6 +5,7 @@ set(kdevtests_LIB_SRCS
     testcore.cpp
     testproject.cpp
     testfile.cpp
+    testfilesystemhelpers.cpp
     testlanguagecontroller.cpp
     testhelpers.cpp
     testplugincontroller.cpp
@@ -41,6 +42,7 @@ install(FILES
     testcore.h
     testproject.h
     testfile.h
+    testfilesystemhelpers.h
     testlanguagecontroller.h
     testhelpers.h
     testplugincontroller.h

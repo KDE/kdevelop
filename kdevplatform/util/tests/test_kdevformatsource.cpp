@@ -18,7 +18,8 @@
 
 #include "test_kdevformatsource.h"
 #include "../kdevformatfile.h"
-#include "../filesystemhelpers.h"
+
+#include <tests/testfilesystemhelpers.h>
 
 #include <QTest>
 #include <QByteArray>
@@ -235,19 +236,12 @@ void TestKdevFormatSource::testWildcardPathMatching()
     QTemporaryDir tmpDir;
     QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
 
-    using FilesystemHelpers::makeAbsoluteCreateAndWrite;
-
     for (auto& dir : formatDirs) {
         dir = QFileInfo{QDir{dir}, "format_sources"}.filePath();
     }
-    QString errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), formatDirs, formatContents);
-    QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create or write to temporary file or directory " + errorPath));
-
-    errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), unmatchedPaths);
-    if (errorPath.isEmpty()) {
-        errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), matchedPaths);
-    }
-    QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create temporary file or directory " + errorPath));
+    MAKE_ABSOLUTE_CREATE_AND_WRITE(tmpDir.path(), formatDirs, formatContents);
+    MAKE_ABSOLUTE_AND_CREATE(tmpDir.path(), unmatchedPaths);
+    MAKE_ABSOLUTE_AND_CREATE(tmpDir.path(), matchedPaths);
 
     bool expectedFormattingResult = false; // for unmatchedPaths
     for (const auto& paths : { unmatchedPaths, matchedPaths }) {

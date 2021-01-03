@@ -36,7 +36,7 @@ ecm_add_test(
     test_kdevformatsource.cpp 
 
     TEST_NAME test_kdevformatsource
-    LINK_LIBRARIES Qt5::Test KDev::Util
+    LINK_LIBRARIES Qt5::Test KDev::Tests
 )
 
 ecm_add_test(test_formattinghelpers.cpp

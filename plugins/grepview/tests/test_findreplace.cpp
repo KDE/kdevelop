@@ -23,7 +23,7 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
-#include <util/filesystemhelpers.h>
+#include <tests/testfilesystemhelpers.h>
 
 #include "../grepjob.h"
 #include "../grepviewplugin.h"
@@ -167,13 +167,8 @@ void FindReplaceTest::testIncludeExcludeFilters()
     QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
 
     const QByteArray commonFileContents = "x";
-
-    using FilesystemHelpers::makeAbsoluteCreateAndWrite;
-    QString errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), unmatchedPaths, commonFileContents);
-    if (errorPath.isEmpty()) {
-        errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), matchedPaths, commonFileContents);
-    }
-    QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create or write to temporary file or directory " + errorPath));
+    MAKE_ABSOLUTE_CREATE_AND_WRITE(tmpDir.path(), unmatchedPaths, commonFileContents);
+    MAKE_ABSOLUTE_CREATE_AND_WRITE(tmpDir.path(), matchedPaths, commonFileContents);
 
     GrepJob job;
     GrepOutputModel model;
