@@ -162,6 +162,9 @@ void TestFilteringStrategy::testCompilerFilterStrategy_data()
         << buildCmakeConfigureMultiLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("cmake-warning-line", pathType)
         << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("cmake-deprecation-warning-line", pathType)
+        << "CMake Deprecation Warning at plugins/debuggercommon/CMakeLists.txt:62 (cmake_policy):"
+        << FilteredItem::WarningItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("cmake-automoc-error", pathType)
         << buildAutoMocLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("cmake-automoc4-error", pathType)

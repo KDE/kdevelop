@@ -300,7 +300,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         // cmake - multiline expression
         ErrorFormat( QStringLiteral("((^\\/|^[a-zA-Z]:)[\\w|\\/| |\\.]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
         // cmake
-        ErrorFormat( QStringLiteral("CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)"), 4, 5, 1, QStringLiteral("cmake") ),
+        ErrorFormat( QStringLiteral("CMake (Error|Warning|Deprecation Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)"), 4, 5, 1, QStringLiteral("cmake") ),
         // cmake/automoc
         // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
         // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
