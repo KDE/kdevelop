@@ -57,7 +57,7 @@ KDEVPLATFORMTESTS_EXPORT void createNewFileAndWrite(const QString& filePath,
 /**
  * @brief Creates all necessary parent directories and a new file at a specified path.
  * @param dirPath An absolute path to a directory, the beginning of the path to the new file.
- * @param[in,out] filePath A relative path from @p dirPath to the location of the new file.
+ * @param[in,out] filePath A non-empty relative path from @p dirPath to the location of the new file.
  *                         On return this path is made absolute by prepending @p dirPath to it.
  * @param fileContents Data to be written into the new file.
  */

@@ -59,6 +59,7 @@ void TestFilesystemHelpers::createNewFileAndWrite(const QString& filePath,
 void TestFilesystemHelpers::makeAbsoluteCreateAndWrite(const QString& dirPath, QString& filePath,
                                                        const QByteArray& fileContents)
 {
+    QVERIFY2(!filePath.isEmpty(), qPrintable(dirPath));
     const QFileInfo info{QDir{dirPath}, filePath};
     QVERIFY2(QDir{}.mkpath(info.absolutePath()), qPrintable(info.absolutePath()));
     filePath = info.absoluteFilePath();
