@@ -499,22 +499,10 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
 #endif
     ) {
         const QString basepath = projectPath(pathType);
-        QTest::newRowForPathType("cmake-line1", pathType)
-        << "[ 25%] Building CXX object path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" ) << pathType;
-        QTest::newRowForPathType("cmake-line2", pathType)
-        << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two") << pathType;
-        QTest::newRowForPathType("cmake-line3", pathType)
-        << "[ 26%] Building CXX object path/to/three/CMakeFiles/file.o" << QString( basepath + "/path/to/three") << pathType;
-        QTest::newRowForPathType("cmake-line4", pathType)
-        << "[ 26%] Building CXX object path/to/four/CMakeFiles/file.o" << QString( basepath + "/path/to/four") << pathType;
-        QTest::newRowForPathType("cmake-line5", pathType)
-        << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two") << pathType;
         QTest::newRowForPathType("cd-line6", pathType)
         << QString("make[4]: Entering directory '" + basepath + "/path/to/one/'") << QString( basepath + "/path/to/one") << pathType;
         QTest::newRowForPathType("waf-cd", pathType)
         << QString("Waf: Entering directory `" + basepath + "/path/to/two/'") << QString( basepath + "/path/to/two") << pathType;
-        QTest::newRowForPathType("cmake-line7", pathType)
-        << QStringLiteral("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath) << pathType;
         QTest::newRowForPathType("cmake-cd-line8", pathType)
         << QString("> /usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Debug " + basepath) << QString( basepath ) << pathType;
     }

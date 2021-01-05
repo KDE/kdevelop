@@ -188,8 +188,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         ActionFormat( 2, QStringLiteral("^linking (.*)") ),
         //cmake
         ActionFormat( 1, QStringLiteral("\\[.+%\\] Built target (.*)") ),
-        ActionFormat( QStringLiteral("cmake"),
-                      QStringLiteral("\\[.+%\\] Building .* object (.*)"), 1 ),
+        ActionFormat( 1, QStringLiteral("\\[.+%\\] Building .* object (.*)") ),
         ActionFormat( 1, QStringLiteral("\\[.+%\\] Generating (.*)") ),
         ActionFormat( 1, QStringLiteral("^Linking (.*)") ),
         ActionFormat( QStringLiteral("cmake"),
@@ -245,22 +244,9 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             d->m_currentDirs.push_back( path );
             d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
         } else if (curActFilter.tool == QLatin1String("cmake")) {
-            if (curActFilter.fileGroup == -1) {
-                if (d->m_cmakeRootInCurrentDirs && line == QLatin1String("-- Generating done")) {
-                    // This is the boundary between CMake and compiler errors/warnings.
-                    removeCMakeRootFromCurrentDirs();
-                }
-            } else {
-                // Special case for cmake: we parse the "Compiling <objectfile>" expression
-                // and use it to find out about the build paths encountered during a build.
-                // They are later searched by pathForFile to find source files corresponding to
-                // compiler errors.
-                // Note: CMake objectfile has the format: "/path/to/four/CMakeFiles/file.o"
-                if (line.contains(QLatin1String("Building"))) {
-                    const auto objectFile = match.captured(curActFilter.fileGroup);
-                    const auto dir = objectFile.section(QStringLiteral("CMakeFiles/"), 0, 0);
-                    d->putDirAtEnd(Path(d->m_buildDir, dir));
-                }
+            if (d->m_cmakeRootInCurrentDirs && line == QLatin1String("-- Generating done")) {
+                // This is the boundary between CMake and compiler errors/warnings.
+                removeCMakeRootFromCurrentDirs();
             }
         }
         break;
