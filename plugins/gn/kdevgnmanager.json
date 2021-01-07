@@ -1,0 +1,73 @@
+{
+    "KPlugin": {
+        "Authors": [{"Email": "bogdan@kde.org", "Name": "BogDan Vatra"}],
+        "License": "GPL",
+        "Category": "Project Management",
+        "Description": "Imports and edits GN projects",
+        "Description[ca@valencia]": "Importa i edita projectes del GN",
+        "Description[ca]": "Importa i edita projectes del GN",
+        "Description[cs]": "Importuje a upravuje vlastní projekty GN",
+        "Description[de]": "Import und Bearbeitung von benutzerdefinierten GN-Projekten",
+        "Description[el]": "Εισάγει και επεξεργάζεται έργά GN",
+        "Description[en_GB]": "Imports and edits GN projects",
+        "Description[es]": "Importa y edita proyectos GN",
+        "Description[et]": "GNi projektide importimine ja muutmine",
+        "Description[eu]": "GN proiektuak inportatu eta editatzen ditu",
+        "Description[fr]": "Importe et édite des projets GN",
+        "Description[gl]": "Importa e edita proxectos GN",
+        "Description[it]": "Importa e modifica i progetti GN",
+        "Description[ko]": "GN 프로젝트를 가져오고 관리하기",
+        "Description[nl]": "Importeert en bewerkt GN-projecten",
+        "Description[pl]": "Importuje i edytuje projekty GN",
+        "Description[pt]": "Importa e edita os projectos do GN",
+        "Description[pt_BR]": "Importa e edita os projetos do GN",
+        "Description[sk]": "Importuje a upravuje projekty GN",
+        "Description[sv]": "Importerar och redigerar GN-projekt",
+        "Description[uk]": "Імпортує і дає змогу редагувати проєкти GN",
+        "Description[x-test]": "xxImports and edits GN projectsxx",
+        "Description[zh_CN]": "倒入并编辑 GN 工程",
+        "Icon": "run-build",
+        "Id": "KDevGNManager",
+        "Name": "GN Project Manager",
+        "Name[ca@valencia]": "Gestor de projectes GN",
+        "Name[ca]": "Gestor de projectes GN",
+        "Name[cs]": "Správce projektů GN",
+        "Name[de]": "GN-Projektverwaltung",
+        "Name[el]": "Διαχειριστής έργου GN",
+        "Name[en_GB]": "GN Project Manager",
+        "Name[es]": "Gestor de proyectos GN",
+        "Name[et]": "GNi projektihaldur",
+        "Name[eu]": "GN proiektu-kudeatzailea",
+        "Name[fr]": "Gestionnaire de projet GN",
+        "Name[gl]": "Xestor de proxectos GN",
+        "Name[it]": "Gestore progetto GN",
+        "Name[ko]": "GN 프로젝트 관리자",
+        "Name[nl]": "GN projectbeheerder",
+        "Name[pl]": "Zarządzanie projektami GN",
+        "Name[pt]": "Gestor de Projectos do GN",
+        "Name[pt_BR]": "Gerenciador de projetos do GN",
+        "Name[sk]": "Správca projektov GN",
+        "Name[sv]": "GN projekthanterare",
+        "Name[uk]": "Керування проєктами GN",
+        "Name[x-test]": "xxGN Project Managerxx",
+        "Name[zh_CN]": "GN 工程管理器",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Project",
+    "X-KDevelop-FileManager": "GN",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IProjectBuilder"
+    ],
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.IBuildSystemManager",
+        "org.kdevelop.IProjectFileManager"
+    ],
+    "X-KDevelop-Mode": "NoGUI",
+    "X-KDevelop-ProjectFilesFilter": [
+        ".gn",
+        "BUILD.gn"
+    ],
+    "X-KDevelop-ProjectFilesFilterDescription": "GN Project Files"
+}

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GNAdvancedSettings</class>
+ <widget class="QWidget" name="GNAdvancedSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>250</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QPushButton" name="b_showAdvanced">
+     <property name="text">
+      <string comment="@action:button">Show Advanced Configuration</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="container">
+     <property name="title">
+      <string comment="@title:group">Advanced Configuration</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <widget class="QLabel" name="l_gnExe">
+          <property name="text">
+           <string comment="@label:chooser">GN executable:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="l_gnArgs">
+          <property name="text">
+           <string comment="@label:textbox">Extra GN arguments:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="KLineEdit" name="i_gnArgs">
+          <property name="toolTip">
+           <string comment="@info:tooltip">Changing this will reset the build options.</string>
+          </property>
+          <property name="showClearButton" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="KUrlRequester" name="i_gnExe" native="true">
+          <property name="placeholderText" stdset="0">
+           <string comment="@info:placeholder">/path/to/gnexecutable</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_hideAdvanced">
+        <property name="text">
+         <string comment="@action:button">Hide Advanced Configuration</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>b_showAdvanced</sender>
+   <signal>clicked()</signal>
+   <receiver>container</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_showAdvanced</sender>
+   <signal>clicked()</signal>
+   <receiver>b_showAdvanced</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_hideAdvanced</sender>
+   <signal>clicked()</signal>
+   <receiver>container</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_hideAdvanced</sender>
+   <signal>clicked()</signal>
+   <receiver>b_showAdvanced</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i_gnArgs</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>GNAdvancedSettings</receiver>
+   <slot>updated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>327</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i_gnExe</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>GNAdvancedSettings</receiver>
+   <slot>updated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>327</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>configChanged()</signal>
+  <slot>updated()</slot>
+ </slots>
+</ui>

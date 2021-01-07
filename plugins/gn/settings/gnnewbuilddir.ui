@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GNNewBuildDir</class>
+ <widget class="QDialog" name="GNNewBuildDir">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>470</width>
+    <height>89</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="hl_buildDir">
+     <item>
+      <widget class="QLabel" name="l_buildDir">
+       <property name="text">
+        <string>Build directory:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KUrlRequester" name="i_buildDir" native="true">
+       <property name="placeholderText" stdset="0">
+        <string>Full Path to the new build directory</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="GNAdvancedSettings" name="advanced" native="true"/>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hl_bottomBar">
+     <item>
+      <widget class="QLabel" name="l_statusMessage">
+       <property name="text">
+        <string>Status message...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="b_buttonBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GNAdvancedSettings</class>
+   <extends>QWidget</extends>
+   <header>settings/gnadvancedsettings.h</header>
+   <container>1</container>
+   <slots>
+    <signal>configChanged()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>b_buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>GNNewBuildDir</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>643</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>GNNewBuildDir</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>643</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advanced</sender>
+   <signal>configChanged()</signal>
+   <receiver>GNNewBuildDir</receiver>
+   <slot>updated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>324</x>
+     <y>571</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i_buildDir</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>GNNewBuildDir</receiver>
+   <slot>updated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>resetFields()</slot>
+  <slot>updated()</slot>
+ </slots>
+</ui>

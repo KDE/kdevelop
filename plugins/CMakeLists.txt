@@ -58,6 +58,7 @@ if (CLANG_FOUND)
 endif()
 # END: Languages
 
+
 # BEGIN: Project builders
 add_subdirectory(makebuilder)
 add_subdirectory(ninjabuilder)
@@ -72,6 +73,7 @@ ecm_optional_add_subdirectory(cmake)
 ecm_optional_add_subdirectory(custommake)
 ecm_optional_add_subdirectory(custom-buildsystem)
 add_subdirectory(meson)
+add_subdirectory(gn)
 if (KDevelop-PG-Qt_FOUND)
     ecm_optional_add_subdirectory(qmakemanager)
 endif()

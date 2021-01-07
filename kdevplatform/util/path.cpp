@@ -403,10 +403,10 @@ static QVarLengthArray<QString, 16> splitPath(const QString& source)
     return list;
 }
 
-void Path::addPath(const QString& path)
+Path &Path::addPath(const QString& path)
 {
     if (path.isEmpty()) {
-        return;
+        return *this;
     }
 
     const auto& newData = splitPath(path);
@@ -415,7 +415,7 @@ void Path::addPath(const QString& path)
             // this represents the root path, we just turned an invalid path into it
             m_data << QString();
         }
-        return;
+        return *this;
     }
 
     auto it = newData.begin();
@@ -427,6 +427,7 @@ void Path::addPath(const QString& path)
 
     std::copy(it, newData.end(), std::back_inserter(m_data));
     cleanPath(&m_data, isRemote());
+    return *this;
 }
 
 Path Path::parent() const

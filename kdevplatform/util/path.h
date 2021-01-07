@@ -327,7 +327,7 @@ public:
      * NOTE: If @p path starts with a slash, this function ignores it.
      *       I.e. you cannot set the path this way. @sa QUrl::addPath
      */
-    void addPath(const QString& path);
+    Path &addPath(const QString& path);
 
     /**
      * @return the path pointing to the parent folder of this path.

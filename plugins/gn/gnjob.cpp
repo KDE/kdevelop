@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2018 Daniel Mensinger <daniel@mensinger-ka.de>
+    Copyright 2021 BogDan Vatra <bogdan@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,9 +18,9 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "mesonjob.h"
+#include "gnjob.h"
 
-#include "mesonconfig.h"
+#include "gnconfig.h"
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
@@ -28,41 +29,25 @@
 
 using namespace KDevelop;
 
-MesonJob::MesonJob(const Meson::BuildDir& buildDir, IProject* project, MesonJob::CommandType commandType,
-                   const QStringList& arguments, QObject* parent)
+GNJob::GNJob(const GN::BuildDir& buildDir, IProject* project, QObject* parent)
     : OutputExecuteJob(parent)
     , m_project(project)
-    , m_commandType(commandType)
-    , m_arguments(arguments)
 {
     Q_ASSERT(m_project);
 
-    setToolTitle(i18n("Meson"));
+    setToolTitle(i18n("GN"));
     setCapabilities(Killable);
     setStandardToolView(KDevelop::IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setProperties(NeedWorkingDirectory | PortableMessages | DisplayStdout | DisplayStderr);
 
-    *this << buildDir.mesonExecutable.toLocalFile();
-
-    switch (m_commandType) {
-    case CONFIGURE:
-        *this << QStringLiteral("--backend") << buildDir.mesonBackend;
-        break;
-    case RE_CONFIGURE:
-        *this << QStringLiteral("--reconfigure");
-        break;
-    case SET_CONFIG:
-        *this << QStringLiteral("configure");
-        break;
-    }
-
-    *this << m_arguments;
-    *this << QProcess::splitCommand(buildDir.mesonArgs);
-    *this << buildDir.buildDir.toLocalFile();
+    *this << buildDir.gnExecutable.toLocalFile()
+          << QStringLiteral("-ide=json")
+          << QProcess::splitCommand(buildDir.gnArgs)
+          << QStringLiteral("gen") << buildDir.buildDir.toLocalFile();
 }
 
-QUrl MesonJob::workingDirectory() const
+QUrl GNJob::workingDirectory() const
 {
     return m_project->path().toUrl();
 }

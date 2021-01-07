@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GNConfigPage</class>
+ <widget class="QWidget" name="GNConfigPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>670</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="hl_buildDir">
+     <item>
+      <widget class="QComboBox" name="i_buildDirs">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="b_addDir">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-add">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="b_rmDir">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-delete">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="GNAdvancedSettings" name="advanced" native="true"/>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hl_status">
+     <item>
+      <widget class="QLabel" name="l_status">
+       <property name="text">
+        <string>Status message...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GNAdvancedSettings</class>
+   <extends>QWidget</extends>
+   <header>settings/gnadvancedsettings.h</header>
+   <container>1</container>
+   <slots>
+    <signal>configChanged()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>b_addDir</sender>
+   <signal>clicked()</signal>
+   <receiver>GNConfigPage</receiver>
+   <slot>addBuildDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>529</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>295</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_rmDir</sender>
+   <signal>clicked()</signal>
+   <receiver>GNConfigPage</receiver>
+   <slot>removeBuildDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>567</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>295</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i_buildDirs</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>GNConfigPage</receiver>
+   <slot>changeBuildDirIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>295</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i_buildDirs</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>GNConfigPage</receiver>
+   <slot>emitChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>255</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>293</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advanced</sender>
+   <signal>configChanged()</signal>
+   <receiver>GNConfigPage</receiver>
+   <slot>emitChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>293</x>
+     <y>487</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>293</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addBuildDir()</slot>
+  <slot>removeBuildDir()</slot>
+  <slot>changeBuildDirIndex(int)</slot>
+  <slot>emitChanged()</slot>
+ </slots>
+</ui>
