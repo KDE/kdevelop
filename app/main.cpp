@@ -385,6 +385,14 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+
+    // Make sure the application dir path is the first path that we search for plugins,
+    // this way when we run it from its build dir it will load the local plugins first.
+    QStringList libraryPaths = app.libraryPaths();
+    libraryPaths.removeAll(app.applicationDirPath());
+    libraryPaths.prepend(app.applicationDirPath());
+    app.setLibraryPaths(libraryPaths);
+
     // Prevent SIGPIPE, then "ICE default IO error handler doing an exit(), pid = <PID>, errno = 32"
     // crash when the first event loop starts at least 60 seconds after KDevelop launch. This can
     // happen during a Debug Launch of KDevelop from KDevelop, especially if a breakpoint is hit

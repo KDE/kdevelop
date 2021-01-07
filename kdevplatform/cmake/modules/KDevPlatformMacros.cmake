@@ -99,7 +99,7 @@ endmacro(kdevplatform_add_template _installDirectory _templateName)
 macro(kdevplatform_add_app_templates _templateNames)
     foreach(_templateName ${ARGV})
         kdevplatform_add_template(${KDE_INSTALL_DATADIR}/kdevappwizard/templates ${_templateName})
-    endforeach(_templateName ${ARGV}) 
+    endforeach(_templateName ${ARGV})
 endmacro(kdevplatform_add_app_templates _templateNames)
 
 macro(kdevplatform_add_file_templates _templateNames)
@@ -123,6 +123,10 @@ function(kdevplatform_add_plugin plugin)
 
     add_library(${plugin} MODULE ${KDEV_ADD_PLUGIN_SOURCES})
     set_property(TARGET ${plugin} APPEND PROPERTY AUTOGEN_TARGET_DEPENDS ${json})
+
+    set_target_properties(${plugin} PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/kdevplatform/${KDEV_PLUGIN_VERSION}/
+    )
 
     if (NOT KDEV_ADD_PLUGIN_SKIP_INSTALL)
         install(TARGETS ${plugin} DESTINATION ${KDE_INSTALL_PLUGINDIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
