@@ -1,8 +1,8 @@
 <gui version="1" name="kdevelop">
   <ActionProperties>
-    <Action shortcut="Ctrl+X" name="edit_cut"/>
-    <Action shortcut="Ctrl+V" name="edit_paste"/>
-    <Action shortcut="Ctrl+C" name="edit_copy"/>
+    <Action shortcut="Ctrl+X;Shift+Del" name="edit_cut"/>
+    <Action shortcut="Ctrl+V;Shift+Ins" name="edit_paste"/>
+    <Action shortcut="Ctrl+C;Ctrl+Ins" name="edit_copy"/>
     <Action shortcut="Ctrl+S" name="file_save"/>
     <Action shortcut="Ctrl+Z" name="edit_undo"/>
     <Action shortcut="Ctrl+Shift+Z" name="edit_redo"/>
@@ -44,7 +44,6 @@
     <Action shortcut="Shift+PgUp" name="select_page_up"/>
     <Action shortcut="PgDown" name="scroll_page_down"/>
     <Action shortcut="Shift+PgDown" name="select_page_down"/>
-    <Action shortcut="Shift+Del" name="delete_line"/>
     <Action shortcut="Ctrl+Backspace" name="delete_word_left"/>
     <Action shortcut="Ctrl+Del" name="delete_word_right"/>
     <Action shortcut="Del" name="delete_next_character"/>
@@ -57,6 +56,7 @@
     <Action shortcut="F7" name="next_use"/>
     <Action shortcut="Ctrl+Shift+U" name="find_uses"/>
     <Action shortcut="Ctrl+Shift+F" name="edit_grep"/>
+    <Action shortcut="F9" name="debug_toggle_breakpoint"/>
     <Action shortcut="F10" name="debug_stepover"/>
     <Action shortcut="F11" name="debug_stepinto"/>
     <Action shortcut="Shift+F11" name="debug_stepout"/>
