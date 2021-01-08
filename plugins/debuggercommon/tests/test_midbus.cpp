@@ -38,9 +38,6 @@ class DrKonqiAdaptor;
 class TestMIDBus : public QObject
 {
     Q_OBJECT
-private:
-    DrKonqiAdaptor* m_adaptor;
-    KDevMI::MIDebuggerPlugin* m_plugin;
 
 private Q_SLOTS:
     void initTestCase();
@@ -100,6 +97,8 @@ public Q_SLOTS:
     Q_NOREPLY void debuggerClosed(const QString&)
     {
         closed = true;
+        finished = false;
+        registeredPid = 0;
     }
 
 Q_SIGNALS:
@@ -112,32 +111,56 @@ void TestMIDBus::initTestCase()
 
     KDevelop::AutoTestShell::init({QStringLiteral("testdebugger")});
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
-
-    m_adaptor = new DrKonqiAdaptor(this);
-    m_plugin = dynamic_cast<KDevMI::MIDebuggerPlugin*>(KDevelop::ICore::self()->pluginController()->loadPlugin(QStringLiteral("testdebugger")));
-    QVERIFY(m_plugin);
-    connect(m_plugin, &KDevMI::MIDebuggerPlugin::showMessage, this, &TestMIDBus::message);
-
-    QTRY_COMPARE(m_adaptor->registeredPid, QApplication::applicationPid());
 }
 
 void TestMIDBus::debug()
 {
-    emit m_adaptor->acceptDebuggingApplication(QStringLiteral("KDevelop (Test) - test-test_midbus"));
+    auto plugin = dynamic_cast<KDevMI::MIDebuggerPlugin*>(KDevelop::ICore::self()->pluginController()->loadPlugin(QStringLiteral("testdebugger")));
+    QVERIFY(plugin);
+    connect(plugin, &KDevMI::MIDebuggerPlugin::showMessage, this, &TestMIDBus::message);
 
-    QVERIFY(QTest::qWaitFor([this]() { return !m_lastMessage.isEmpty(); }));
+    // Start the adaptor (DrKonqi) after KDevelop was started
+    auto adaptor = new DrKonqiAdaptor(this);
+
+    QTRY_COMPARE(adaptor->registeredPid, QApplication::applicationPid());
+
+    emit adaptor->acceptDebuggingApplication(QStringLiteral("KDevelop (Test) - test-test_midbus"));
+
+    QTRY_VERIFY(!m_lastMessage.isEmpty());
     QCOMPARE(m_lastMessage, QStringLiteral("Attaching to process 123"));
 
-    QVERIFY(!m_adaptor->finished);
-    QVERIFY(QTest::qWaitFor([this]() { return m_adaptor->finished; }));
+    QVERIFY(!adaptor->finished);
+    QTRY_VERIFY(adaptor->finished);
+
+    QVERIFY(!adaptor->closed);
+    plugin->unload();
+    QTRY_VERIFY(adaptor->closed);
+
+    // Shut down KDevelop, but let the adaptor continue.
+    KDevelop::TestCore::shutdown();
+    m_lastMessage.clear();
+
+    // Now restart KDevelop with the adaptor (DrKonqi) already running
+    KDevelop::AutoTestShell::init({QStringLiteral("testdebugger")});
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+
+    plugin = dynamic_cast<KDevMI::MIDebuggerPlugin*>(KDevelop::ICore::self()->pluginController()->loadPlugin(QStringLiteral("testdebugger")));
+    QVERIFY(plugin);
+    connect(plugin, &KDevMI::MIDebuggerPlugin::showMessage, this, &TestMIDBus::message);
+
+    QTRY_COMPARE(adaptor->registeredPid, QApplication::applicationPid());
+
+    emit adaptor->acceptDebuggingApplication(QStringLiteral("KDevelop (Test) - test-test_midbus"));
+
+    QTRY_VERIFY(!m_lastMessage.isEmpty());
+    QCOMPARE(m_lastMessage, QStringLiteral("Attaching to process 123"));
+
+    QVERIFY(!adaptor->finished);
+    QTRY_VERIFY(adaptor->finished);
 }
 
 void TestMIDBus::cleanupTestCase()
 {
-    QVERIFY(!m_adaptor->closed);
-    m_plugin->unload();
-    QVERIFY(QTest::qWaitFor([this]() { return m_adaptor->closed; }));
-
     KDevelop::TestCore::shutdown();
 }
 

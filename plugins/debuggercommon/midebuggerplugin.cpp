@@ -174,6 +174,16 @@ void MIDebuggerPlugin::setupDBus()
                                         QDBusServiceWatcher::WatchForOwnerChange, this);
     connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, serviceRegistered);
     connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, serviceUnregistered);
+
+    auto registeredServiceNames = QDBusConnection::sessionBus().interface()->registeredServiceNames();
+    if (!registeredServiceNames.isValid()) {
+        return;
+    }
+    for (const auto &serviceName : registeredServiceNames.value()) {
+        if (serviceName.startsWith(QStringLiteral("org.kde.drkonqi."))) {
+            serviceRegistered(serviceName);
+        }
+    }
 }
 
 void MIDebuggerPlugin::unload()
