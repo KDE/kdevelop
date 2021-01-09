@@ -24,7 +24,6 @@ target_link_libraries(kdevcustombuildsystem
       KDev::Interfaces
       KDev::Util
       KDev::OutputView
-      KDev::Tests
 )
 
 ## Unittests
