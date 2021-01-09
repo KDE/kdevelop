@@ -155,6 +155,15 @@ public:
     }
 
     /**
+     * Compares *this with @p other and returns an integer less than, equal to,
+     * or greater than zero if *this is less than, equal to, or greater than @p other.
+     *
+     * If @p cs is Qt::CaseSensitive, the comparison is case sensitive;
+     * otherwise the comparison is case insensitive.
+    */
+    int compare(const Path& other, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
+    /**
      * Less-than path comparison between @p other and this Path.
      *
      * @return true if this Path is less than @p other.

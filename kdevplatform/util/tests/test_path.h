@@ -42,8 +42,8 @@ private Q_SLOTS:
     void testPath_data();
     void testPathInvalid();
     void testPathInvalid_data();
-    void testPathOperators();
-    void testPathOperators_data();
+    void testPathComparison();
+    void testPathComparison_data();
     void testPathAddData();
     void testPathAddData_data();
     void testPathBaseCtor();

@@ -366,19 +366,26 @@ void TestPath::testPathInvalid_data()
     QTest::newRow("remote-nopath") << "http://www.test.com";
 }
 
-void TestPath::testPathOperators()
+void TestPath::testPathComparison()
 {
     QFETCH(Path, left);
     QFETCH(Path, right);
+    QFETCH(int, leftCompareRight);
+    QFETCH(int, leftCompareRightCi);
 
-    QFETCH(bool, equal);
-    QFETCH(bool, less);
-    bool greater = !equal && !less;
+    const bool equal = leftCompareRight == 0;
+    const bool less = leftCompareRight < 0;
+    const bool greater = leftCompareRight > 0;
 
     QVERIFY(left == left);
     QVERIFY(right == right);
     QCOMPARE(left == right, equal);
     QCOMPARE(right == left, equal);
+
+    QVERIFY(!(left != left));
+    QVERIFY(!(right != right));
+    QCOMPARE(left != right, !equal);
+    QCOMPARE(right != left, !equal);
 
     QCOMPARE(left < right, less);
     QCOMPARE(left <= right, less || equal);
@@ -389,14 +396,29 @@ void TestPath::testPathOperators()
     QCOMPARE(right <= left, greater || equal);
     QCOMPARE(right > left, less);
     QCOMPARE(right >= left, less || equal);
+
+    QCOMPARE(left.compare(left), 0);
+    QCOMPARE(right.compare(right), 0);
+    QCOMPARE(left.compare(right) < 0, leftCompareRight < 0);
+    QCOMPARE(right.compare(left) < 0, leftCompareRight > 0);
+
+    QCOMPARE(left.compare(left, Qt::CaseSensitive), 0);
+    QCOMPARE(right.compare(right, Qt::CaseSensitive), 0);
+    QCOMPARE(left.compare(right, Qt::CaseSensitive) < 0, leftCompareRight < 0);
+    QCOMPARE(right.compare(left, Qt::CaseSensitive) < 0, leftCompareRight > 0);
+
+    QCOMPARE(left.compare(left, Qt::CaseInsensitive), 0);
+    QCOMPARE(right.compare(right, Qt::CaseInsensitive), 0);
+    QCOMPARE(left.compare(right, Qt::CaseInsensitive) < 0, leftCompareRightCi < 0);
+    QCOMPARE(right.compare(left, Qt::CaseInsensitive) < 0, leftCompareRightCi > 0);
 }
 
-void TestPath::testPathOperators_data()
+void TestPath::testPathComparison_data()
 {
     QTest::addColumn<Path>("left");
     QTest::addColumn<Path>("right");
-    QTest::addColumn<bool>("equal");
-    QTest::addColumn<bool>("less");
+    QTest::addColumn<int>("leftCompareRight");
+    QTest::addColumn<int>("leftCompareRightCi");
 
     Path a(QStringLiteral("/tmp/a"));
     Path b(QStringLiteral("/tmp/b"));
@@ -406,12 +428,29 @@ void TestPath::testPathOperators_data()
     Path f(QStringLiteral("/tmp/"));
     Path invalid;
 
-    QTest::newRow("a-b") << a << b << false << true;
-    QTest::newRow("a-copy") << a << Path(a) << true << false;
-    QTest::newRow("c-a") << c << a << false << false;
-    QTest::newRow("c-invalid") << c << invalid << false << false;
-    QTest::newRow("c-d") << c << d << false << false;
-    QTest::newRow("e-f") << e << f << true << false;
+    QTest::newRow("a-b") << a << b << -1 << -1;
+    QTest::newRow("a-copy") << a << Path(a) << 0 << 0;
+    QTest::newRow("c-a") << c << a << 1 << 1;
+    QTest::newRow("c-invalid") << c << invalid << 1 << 1;
+    QTest::newRow("c-d") << c << d << 1 << 1;
+    QTest::newRow("e-f") << e << f << 0 << 0;
+
+    Path A(QStringLiteral("/tmp/A"));
+    Path B(QStringLiteral("/tmp/B"));
+    Path C(QStringLiteral("/tmp/aC"));
+    Path D(QStringLiteral("/D"));
+    Path E(QStringLiteral("/TMP"));
+    Path F(QStringLiteral("/TmP/F"));
+
+    QTest::newRow("a-A") << a << A << 1 << 0;
+    QTest::newRow("a-B") << a << B << 1 << -1;
+    QTest::newRow("A-b") << A << b << -1 << -1;
+    QTest::newRow("A-C") << A << C << -1 << -1;
+    QTest::newRow("c-C") << c << C << 1 << 0;
+    QTest::newRow("d-D") << d << D << 1 << 0;
+    QTest::newRow("F-A") << F << A << -1 << 1;
+    QTest::newRow("f-E") << f << E << 1 << 0;
+    QTest::newRow("E-F") << E << F << -1 << -1;
 }
 
 void TestPath::testPathAddData()
