@@ -91,15 +91,10 @@ void WorkingSetController::initialize()
 
 void WorkingSetController::cleanup()
 {
-    const auto windows = Core::self()->uiControllerInternal()->mainWindows();
-    for (Sublime::MainWindow* window : windows) {
-        const auto areas = window->areas();
-        for (Sublime::Area* area : areas) {
-            if (!area->workingSet().isEmpty()) {
-                Q_ASSERT(m_workingSets.contains(area->workingSet()));
-                m_workingSets[area->workingSet()]->saveFromArea(area);
-            }
-        }
+    auto area = Core::self()->uiControllerInternal()->activeArea();
+    if (area && !area->workingSet().isEmpty()) {
+        Q_ASSERT(m_workingSets.contains(area->workingSet()));
+        m_workingSets[area->workingSet()]->saveFromArea(area);
     }
 
     const auto oldWorkingSet = m_workingSets;
@@ -279,32 +274,40 @@ void WorkingSetController::areaCreated( Sublime::Area* area )
             this, &WorkingSetController::clearWorkingSet);
 }
 
-void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
+void WorkingSetController::saveArea(Sublime::Area* area)
 {
-    qCDebug(SHELL) << "changing working-set from" << from << "to" << to << "area" << area;
+    if (area && !area->workingSet().isEmpty()) {
+        workingSet(area->workingSet())->saveFromArea(area);
+    }
+}
+
+void WorkingSetController::changingWorkingSet(Sublime::Area *area, Sublime::Area *oldArea, const QString &from, const QString &to)
+{
+    qCDebug(SHELL) << "changing working-set from" << from << oldArea << "to" << to << area;
     if (from == to)
         return;
 
     if (!from.isEmpty()) {
         WorkingSet* oldSet = workingSet(from);
         oldSet->disconnectArea(area);
-        if (!oldSet->id().isEmpty()) {
+        if (!oldSet->id().isEmpty() && area == oldArea) {
             oldSet->saveFromArea(area);
         }
     }
 }
 
-void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
+void WorkingSetController::changedWorkingSet(Sublime::Area *area, Sublime::Area *oldArea, const QString &from, const QString &to)
 {
     qCDebug(SHELL) << "changed working-set from" << from << "to" << to << "area" << area;
-    if (from == to || m_changingWorkingSet)
+    if ((oldArea == area && from == to) || m_changingWorkingSet) {
         return;
+    }
 
     if (!to.isEmpty()) {
         WorkingSet* newSet = workingSet(to);
         newSet->connectArea(area);
         newSet->loadToArea(area);
-    }else{
+    } else {
         // Clear silently, any user-interaction should have happened before
         area->clearViews(true);
     }

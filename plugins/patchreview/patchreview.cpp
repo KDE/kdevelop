@@ -376,7 +376,7 @@ void PatchReviewPlugin::closeReview()
             {
                 ICore::self()->uiController()->switchToArea(QStringLiteral("code"), KDevelop::IUiController::ThisWindow);
                 if (oldArea->workingSetPersistent()) {
-                    ICore::self()->uiController()->activeArea()->setWorkingSet(oldArea->workingSet(), true);
+                    ICore::self()->uiController()->activeArea()->setWorkingSet(oldArea->workingSet(), true, oldArea);
                 }
             }
         }

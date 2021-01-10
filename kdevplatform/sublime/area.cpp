@@ -458,17 +458,18 @@ bool Area::workingSetPersistent() const
     return d->workingSetPersists;
 }
 
-void Area::setWorkingSet(const QString& name, bool persistent)
+void Area::setWorkingSet(const QString &name, bool persistent, Area *oldArea)
 {
     Q_D(Area);
 
-    if(name != d->workingSet) {
+    oldArea = oldArea ? oldArea : this;
+    if (oldArea != this || name != d->workingSet) {
         qCDebug(SUBLIME) << this << "setting new working-set" << name;
         QString oldName = d->workingSet;
-        emit changingWorkingSet(this, oldName, name);
+        emit changingWorkingSet(this, oldArea, oldName, name);
         d->workingSet = name;
         d->workingSetPersists = persistent;
-        emit changedWorkingSet(this, oldName, name);
+        emit changedWorkingSet(this, oldArea, oldName, name);
     }
 }
 

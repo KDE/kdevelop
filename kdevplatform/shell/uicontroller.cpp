@@ -241,6 +241,7 @@ void UiController::mainWindowAdded(Sublime::MainWindow* mainWindow)
 {
     connect(mainWindow, &MainWindow::activeToolViewChanged, this, &UiController::slotActiveToolViewChanged);
     connect(mainWindow, &MainWindow::areaChanged, this, &UiController::slotAreaChanged); // also check after area reconstruction
+    connect(mainWindow, &MainWindow::areaCleared, Core::self()->workingSetControllerInternal(), &WorkingSetController::saveArea);
 }
 
 // FIXME: currently, this always create new window. Probably,

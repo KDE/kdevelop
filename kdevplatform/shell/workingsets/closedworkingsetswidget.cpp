@@ -88,7 +88,7 @@ void ClosedWorkingSetsWidget::areaChanged( Sublime::Area* area )
     }
 }
 
-void ClosedWorkingSetsWidget::changedWorkingSet( Sublime::Area* area, const QString& from, const QString& to )
+void ClosedWorkingSetsWidget::changedWorkingSet(Sublime::Area *area, Sublime::Area*, const QString &from, const QString &to)
 {
     Q_ASSERT(area == m_connectedArea);
     Q_UNUSED(area);

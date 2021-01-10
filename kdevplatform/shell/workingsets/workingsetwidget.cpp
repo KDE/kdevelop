@@ -49,7 +49,7 @@ WorkingSetWidget::WorkingSetWidget(Sublime::Area* area, QWidget* parent)
 
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 
-    changingWorkingSet(m_area, QString(), area->workingSet());
+    changingWorkingSet(m_area, nullptr, QString(), area->workingSet());
 }
 
 void WorkingSetWidget::setVisible( bool visible )
@@ -60,7 +60,7 @@ void WorkingSetWidget::setVisible( bool visible )
     QWidget::setVisible( visible && (workingSet() && !workingSet()->isEmpty()) );
 }
 
-void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /*from*/, const QString& newSet)
+void WorkingSetWidget::changingWorkingSet(Sublime::Area* area, Sublime::Area* /*oldArea*/, const QString& /*from*/, const QString& newSet)
 {
     qCDebug(SHELL) << "re-creating widget" << m_area;
 

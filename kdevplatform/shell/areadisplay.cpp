@@ -80,7 +80,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
     if (currentArea->objectName() != QLatin1String("code")) {
         if(!m->actions().isEmpty())
             m->addSeparator();
-        m->addAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18nc("@action:inmenu", "Back to Code"), this, SLOT(backToCode()), QKeySequence(Qt::AltModifier | Qt::Key_Backspace));
+        m->addAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18nc("@action:inmenu", "Back to Code"), this, &AreaDisplay::backToCode, QKeySequence(Qt::AltModifier | Qt::Key_Backspace));
     }
     m_button->setMenu(m);
 
@@ -113,7 +113,10 @@ bool AreaDisplay::eventFilter(QObject* obj, QEvent* event)
 
 void AreaDisplay::backToCode()
 {
+    auto oldArea = m_mainWindow->area();
+    QString workingSet = oldArea->workingSet();
     ICore::self()->uiController()->switchToArea(QStringLiteral("code"), IUiController::ThisWindow);
+    m_mainWindow->area()->setWorkingSet(workingSet, oldArea->workingSetPersistent(), oldArea);
 }
 
 QSize AreaDisplay::minimumSizeHint() const

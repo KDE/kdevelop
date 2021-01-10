@@ -52,7 +52,7 @@ public:
 
 private Q_SLOTS:
     void areaChanged(Sublime::Area* area);
-    void changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
+    void changedWorkingSet(Sublime::Area *area, Sublime::Area*, const QString &from, const QString &to);
     void addWorkingSet(WorkingSet* set);
     void removeWorkingSet( WorkingSet* );
 

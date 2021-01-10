@@ -82,6 +82,9 @@ Q_SIGNALS:
     // Emitted after a working-set in a main-window was switched
     void workingSetSwitched();
 
+public Q_SLOTS:
+    void saveArea(Sublime::Area* area);
+
 private Q_SLOTS:
     void areaCreated(Sublime::Area* area);
 
@@ -92,11 +95,11 @@ private Q_SLOTS:
     /**
      * Disconnect @p oldSet from @p area and save it. Connect @p newSet with @p area.
      */
-    void changingWorkingSet( Sublime::Area* area, const QString& oldSet, const QString& newSet);
+    void changingWorkingSet(Sublime::Area *area, Sublime::Area *oldArea, const QString &oldSet, const QString &newSet);
     /**
      * Notify about working set change and setup @p area with contents of @p newSet.
      */
-    void changedWorkingSet( Sublime::Area* area, const QString& oldSet, const QString& newSet );
+    void changedWorkingSet(Sublime::Area *area, Sublime::Area *oldArea, const QString &oldSet, const QString &newSet);
     /**
      * Spawn new WorkingSet when we don't have one already for the view.
      */

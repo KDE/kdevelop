@@ -183,7 +183,7 @@ public:
     ///The actual view management has to be implemented in the entity that knows more
     ///about possible views, documents, etc. (kdevplatform/shell)
     ///@warning (KDevelop): Before calling this, make sure that all views are saved! (see IDocumentController::saveAllDocumentsForWindow)
-    void setWorkingSet(const QString& name, bool persistent = true);
+    void setWorkingSet(const QString &name, bool persistent = true, Area *oldArea = nullptr);
     
     /**Walker mode to determine the behavior of area walkers.*/
     enum WalkerMode {
@@ -263,9 +263,9 @@ Q_SIGNALS:
     /**Emitted when a tool view is moved to a different position.*/
     void toolViewMoved(Sublime::View*, Sublime::Position);
     /**Emitted before the working-set is changed.*/
-    void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
+    void changingWorkingSet(Sublime::Area* area, Sublime::Area* oldArea, const QString& from, const QString& to);
     /**Emitted after the working-set was changed.*/
-    void changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
+    void changedWorkingSet(Sublime::Area* area, Sublime::Area* oldArea, const QString& from, const QString& to);
     /** notifies the working set that it should clear */
     void clearWorkingSet(Sublime::Area* area);
 

@@ -45,7 +45,7 @@ public:
     void setVisible( bool visible ) override;
 
 private Q_SLOTS:
-    void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
+    void changingWorkingSet(Sublime::Area* area, Sublime::Area* oldArea, const QString& from, const QString& to);
     void setChangedSignificantly();
 
 private:
