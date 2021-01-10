@@ -374,7 +374,8 @@ void PatchReviewPlugin::closeReview()
             if (ICore::self()->documentController()->saveAllDocumentsForWindow(ICore::self()->uiController()->activeMainWindow(),
                                                                                IDocument::Default, true))
             {
-                ICore::self()->uiController()->switchToArea(QStringLiteral("code"), KDevelop::IUiController::ThisWindow);
+                ICore::self()->uiController()->switchToArea(m_lastArea.isEmpty() ? QStringLiteral("code") : m_lastArea,
+                                                            KDevelop::IUiController::ThisWindow);
                 if (oldArea->workingSetPersistent()) {
                     ICore::self()->uiController()->activeArea()->setWorkingSet(oldArea->workingSet(), true, oldArea);
                 }
@@ -413,8 +414,13 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
         }
     }
 
-    if ( ICore::self()->uiController()->activeArea()->objectName() != QLatin1String("review") )
-        ICore::self()->uiController()->switchToArea( QStringLiteral("review"), KDevelop::IUiController::ThisWindow );
+    QString areaName = ICore::self()->uiController()->activeArea()->objectName();
+    if (areaName != QLatin1String("review")) {
+        m_lastArea = areaName;
+        ICore::self()->uiController()->switchToArea(QStringLiteral("review"), KDevelop::IUiController::ThisWindow);
+    } else {
+        m_lastArea.clear();
+    }
 }
 
 QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )

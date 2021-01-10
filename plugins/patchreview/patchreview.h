@@ -133,6 +133,7 @@ private:
     uint m_depth = 0; // depth of the patch represented by m_modelList
     using HighlightMap = QMap<QUrl, QPointer<PatchHighlighter>>;
     HighlightMap m_highlighters;
+    QString m_lastArea;
 
     friend class PatchReviewToolView; // to access slot exporterSelected();
 };

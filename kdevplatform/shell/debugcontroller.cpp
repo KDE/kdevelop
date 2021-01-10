@@ -559,7 +559,7 @@ void DebugController::stepOut() {
 
 void DebugController::areaChanged(Sublime::Area* newArea)
 {
-    if (newArea->objectName()!=QLatin1String("debug")) {
+    if (newArea->objectName() != QLatin1String("debug") && newArea->objectName() != QLatin1String("review")) {
         stopDebugger();
     }
 }
