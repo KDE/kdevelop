@@ -312,7 +312,9 @@ void VcsPluginHelper::diffToBase()
     Q_D(VcsPluginHelper);
 
     SINGLEURL_SETUP_VARS
-    ICore::self()->documentController()->saveAllDocuments();
+    if (!ICore::self()->documentController()->saveAllDocuments()) {
+        return;
+    }
 
     auto* patch =new VCSDiffPatchSource(new VCSStandardDiffUpdater(iface, url));
     showVcsDiff(patch);
