@@ -66,6 +66,15 @@ void TestWorkingSetController::initTestCase()
     m_closedSets = areaDisplay->layout()->itemAt(2)->widget();
 }
 
+void TestWorkingSetController::init()
+{
+    m_file.setFileTemplate(m_tempDir.path() + "/tmp_XXXXXX.txt");
+    if(!m_file.open()) {
+        QFAIL("Cannot create temp file");
+    }
+}
+
+
 void TestWorkingSetController::cleanup()
 {
     // Activate the default (in the context of these tests) working set
@@ -104,19 +113,20 @@ void TestWorkingSetController::createWorkingSet()
     QCOMPARE(workingSets.size(), 1);
     const auto id = workingSets.first()->id();
     workingSets.first()->setPersistent(true);
+    QVERIFY(workingSets.first()->isPersistent());
     // Open a document such that the working set is not empty
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     // Create and activate a non-persistent working set
     m_area->setWorkingSet(setName3, false);
     QCOMPARE(m_workingSetCtrl->allWorkingSets().size(), 2);
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     // Create and activate another non-persistent working set
     m_area->setWorkingSet(setName2, false);
     QCOMPARE(m_workingSetCtrl->allWorkingSets().size(), 3);
     const auto id2 = m_workingSetCtrl->workingSet(m_area->workingSet())->id();
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 2); // working sets 1 + 3 (2 is active)
 
@@ -144,13 +154,13 @@ void TestWorkingSetController::deleteWorkingSet()
     m_area->setWorkingSet(setName2);
     auto set2 = m_workingSetCtrl->workingSet(m_area->workingSet());
     set2->setPersistent(true);
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     // Create and activate another persistent working set
     m_area->setWorkingSet(setName);
     auto set = m_workingSetCtrl->workingSet(m_area->workingSet());
     set->setPersistent(true);
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 1); // working set 2 (1 is active)
 
@@ -176,13 +186,13 @@ void TestWorkingSetController::switchArea()
     m_area->setWorkingSet(setName2);
     auto set2 = m_workingSetCtrl->workingSet(m_area->workingSet());
     set2->setPersistent(true);
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     // Create and activate another persistent working set
     m_area->setWorkingSet(setName);
     auto set = m_workingSetCtrl->workingSet(m_area->workingSet());
     set->setPersistent(true);
-    m_documentCtrl->openDocumentFromText(text);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
 
     Core::self()->uiController()->switchToArea(QStringLiteral("debug"), IUiController::ThisWindow);
     m_area_debug = Core::self()->uiControllerInternal()->activeArea();

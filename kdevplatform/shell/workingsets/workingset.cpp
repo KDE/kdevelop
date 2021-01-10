@@ -24,8 +24,6 @@
 #include <sublime/mainwindow.h>
 #include <sublime/view.h>
 
-#include <QPainter>
-
 #include <KProtocolInfo>
 #include <KTextEditor/View>
 
@@ -36,6 +34,9 @@
 #include <util/pushvalue.h>
 #include <documentcontroller.h>
 #include <workingsetcontroller.h>
+
+#include <QFileInfo>
+#include <QPainter>
 
 #define SYNC_OFTEN
 
@@ -162,7 +163,12 @@ void loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex, const
                 recycle.erase(it);
                 continue;
             }
-            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(specifier),
+            auto url = QUrl::fromUserInput(specifier);
+            if (url.isLocalFile() && !QFileInfo::exists(url.path())) {
+                qCWarning(SHELL) << "Unable to find file" << specifier;
+                continue;
+            }
+            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(url,
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             if (auto document = dynamic_cast<Sublime::Document*>(doc)) {
                 Sublime::View *view = document->createView();
@@ -308,7 +314,10 @@ void loadFileList(QStringList& ret, const KConfigGroup& group)
         ret.reserve(ret.size() + viewCount);
         for (int i = 0; i < viewCount; ++i) {
             QString specifier = group.readEntry(QStringLiteral("View %1").arg(i), QString());
-
+            auto url = QUrl::fromUserInput(specifier);
+            if (url.isLocalFile() && !QFileInfo::exists(url.path())) {
+                continue;
+            }
             ret << specifier;
         }
     }

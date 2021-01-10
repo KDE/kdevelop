@@ -21,6 +21,8 @@
 #define KDEVPLATFORM_TEST_WORKINGSETS_H
 
 #include <QObject>
+#include <QTemporaryDir>
+#include <QTemporaryFile>
 
 class QWidget;
 
@@ -40,6 +42,7 @@ class TestWorkingSetController : public QObject
 Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
+    void init();
     void cleanup();
     void cleanupTestCase();
     void createWorkingSet();
@@ -48,11 +51,15 @@ private Q_SLOTS:
 
 private:
     void restartSession();
+
     QWidget* m_closedSets;
     KDevelop::WorkingSetController* m_workingSetCtrl;
     Sublime::Area* m_area;
     Sublime::Area* m_area_debug;
     KDevelop::IDocumentController* m_documentCtrl;
+
+    QTemporaryDir m_tempDir;
+    QTemporaryFile m_file;
 };
 
 #endif // KDEVPLATFORM_TEST_WORKINGSETS_H
