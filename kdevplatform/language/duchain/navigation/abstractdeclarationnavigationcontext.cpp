@@ -139,6 +139,11 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
                                                                        d->m_declaration).toHtmlEscaped(),
                                                                    d->m_declaration);
 
+            const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(d->m_declaration.data());
+            if (memberDecl && memberDecl->bitWidth() > 0) {
+                modifyHtml() += QLatin1String(" :") + QString::number(memberDecl->bitWidth());
+            }
+
             if (auto integralType = d->m_declaration->type<ConstantIntegralType>()) {
                 const QString plainValue = integralType->valueAsString();
                 if (!plainValue.isEmpty()) {

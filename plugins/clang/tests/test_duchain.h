@@ -112,6 +112,8 @@ private Q_SLOTS:
     void testSameFunctionDefinition();
     void testSizeAlignOf();
     void testSizeAlignOfUpdate();
+    void testBitWidth();
+    void testBitWidthUpdate();
 
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;

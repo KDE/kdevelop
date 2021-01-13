@@ -42,6 +42,9 @@ public:
     bool m_isExtern : 1;
     bool m_isMutable : 1;
 
+    /// Stores bitWidth in bits or -1 if unknown.
+    int16_t m_bitWidth;
+
     /// Stores bitOffsetOf in bits or -1 if unknown.
     int64_t m_bitOffsetOf;
 };

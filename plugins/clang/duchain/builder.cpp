@@ -1086,6 +1086,10 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
     }
 #endif
 
+#if CINDEX_VERSION_MINOR >= 16
+    decl->setBitWidth(clang_getFieldDeclBitWidth(cursor));
+#endif
+
     if (clang_isCursorDefinition(cursor)) {
         decl->setDeclarationIsDefinition(true);
     }

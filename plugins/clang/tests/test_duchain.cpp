@@ -2426,3 +2426,124 @@ void TestDUChain::testSizeAlignOfUpdate()
         QCOMPARE(type->alignOf(), 1);
     }
 }
+
+void TestDUChain::testBitWidth()
+{
+#if CINDEX_VERSION_MINOR >= 16
+    TestFile file(QStringLiteral(R"(
+        struct foo {
+            int a;
+            unsigned int b:1;
+            unsigned char c:7;
+            int d:32;
+            int e[2];
+
+            // error case
+            int f:0;
+            int g:-1;
+            int h:33;
+        };)"), QStringLiteral("cpp"));
+
+    QVERIFY(file.parseAndWait());
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+        QCOMPARE(file.topContext()->childContexts().size(), 1);
+
+        auto fooContext = file.topContext()->childContexts().first();
+        QVERIFY(fooContext);
+        QCOMPARE(fooContext->type(), DUContext::Class);
+        QCOMPARE(fooContext->localDeclarations().size(), 8);
+        QCOMPARE(fooContext->childContexts().size(), 0);
+
+        auto varA = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(0));
+        QVERIFY(varA);
+        QCOMPARE(varA->bitWidth(), -1);
+        auto varB = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(1));
+        QVERIFY(varB);
+        QCOMPARE(varB->bitWidth(), 1);
+        auto varC = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(2));
+        QVERIFY(varC);
+        QCOMPARE(varC->bitWidth(), 7);
+        auto varD = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(3));
+        QVERIFY(varD);
+        QCOMPARE(varD->bitWidth(), 32);
+        auto varE = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(4));
+        QVERIFY(varE);
+        QCOMPARE(varE->bitWidth(), -1);
+
+        // error case
+        auto top = file.topContext();
+        QVERIFY(top);
+        QCOMPARE(top->problems().count(), 3);
+
+        // error: named bit-field 'f' has zero width
+        auto varF = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(5));
+        QVERIFY(varF);
+        QCOMPARE(varF->bitWidth(), -1);
+        // error: bit-field 'g' has negative width (-1)
+        auto varG = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(6));
+        QVERIFY(varG);
+        QCOMPARE(varG->bitWidth(), -1);
+        // warning: width of bit-field 'h' (33 bits) exceeds the width of its type; value will be truncated to 32 bits
+        auto varH = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(7));
+        QVERIFY(varH);
+        QCOMPARE(varH->bitWidth(), 33);
+    }
+#endif
+}
+
+void TestDUChain::testBitWidthUpdate()
+{
+#if CINDEX_VERSION_MINOR >= 16
+    TestFile file(QStringLiteral(R"(
+        struct foo { int i:7; };
+    )"),
+                  QStringLiteral("cpp"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(1000));
+
+    {
+        DUChainReadLocker lock;
+        const auto top = file.topContext();
+        QVERIFY(top);
+        QVERIFY(top->problems().isEmpty());
+        QCOMPARE(top->localDeclarations().size(), 1);
+        QCOMPARE(top->childContexts().size(), 1);
+
+        const auto fooContext = top->childContexts().first();
+        QVERIFY(fooContext);
+        QCOMPARE(fooContext->type(), DUContext::Class);
+        QCOMPARE(fooContext->localDeclarations().size(), 1);
+        QCOMPARE(fooContext->childContexts().size(), 0);
+
+        const auto varI = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(0));
+        QCOMPARE(varI->bitWidth(), 7);
+    }
+
+    file.setFileContents(QStringLiteral(R"(
+        struct foo { int i; };
+    )"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate);
+    QVERIFY(file.waitForParsed(1000));
+
+    {
+        DUChainReadLocker lock;
+        const auto top = file.topContext();
+        QVERIFY(top);
+        QVERIFY(top->problems().isEmpty());
+        QCOMPARE(top->localDeclarations().size(), 1);
+        QCOMPARE(top->childContexts().size(), 1);
+
+        const auto fooContext = top->childContexts().first();
+        QVERIFY(fooContext);
+        QCOMPARE(fooContext->type(), DUContext::Class);
+        QCOMPARE(fooContext->localDeclarations().size(), 1);
+        QCOMPARE(fooContext->childContexts().size(), 0);
+
+        const auto varI = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(0));
+        QCOMPARE(varI->bitWidth(), -1);
+    }
+#endif
+}

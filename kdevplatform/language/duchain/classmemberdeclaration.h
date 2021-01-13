@@ -83,6 +83,16 @@ public:
      */
     void setBitOffsetOf(int64_t bitOffsetOf);
 
+    /**
+     * \returns The width in bits or -1 if unknown or not applicable.
+     */
+    int bitWidth() const;
+
+    /**
+     * Set the width to given number of bits. Use -1 to represent unknown offset.
+     */
+    void setBitWidth(int bitWidth);
+
     enum {
         Identity = 9
     };

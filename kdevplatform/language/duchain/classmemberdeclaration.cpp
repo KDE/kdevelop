@@ -33,6 +33,7 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
     , m_isRegister(false)
     , m_isExtern(false)
     , m_isMutable(false)
+    , m_bitWidth(-1)
     , m_bitOffsetOf(-1)
 {
 }
@@ -160,5 +161,15 @@ int64_t ClassMemberDeclaration::bitOffsetOf() const
 void ClassMemberDeclaration::setBitOffsetOf(int64_t bitOffsetOf)
 {
     d_func_dynamic()->m_bitOffsetOf = bitOffsetOf;
+}
+
+int ClassMemberDeclaration::bitWidth() const
+{
+    return d_func()->m_bitWidth;
+}
+
+void ClassMemberDeclaration::setBitWidth(int bitWidth)
+{
+    d_func_dynamic()->m_bitWidth = bitWidth;
 }
 }
