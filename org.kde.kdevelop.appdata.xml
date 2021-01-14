@@ -173,4 +173,5 @@
     <release version="5.4.6" date="2020-01-06"/>
   </releases>
   <update_contact>kdevelop-devel@kde.org</update_contact>
+  <content_rating type="oars-1.1" />
 </component>
