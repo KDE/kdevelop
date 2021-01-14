@@ -187,4 +187,5 @@
     <value key="KDE::forum">218</value>
   </custom>
   <update_contact>kdevelop-devel@kde.org</update_contact>
+  <content_rating type="oars-1.1" />
 </component>
