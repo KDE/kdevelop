@@ -30,7 +30,8 @@
 #include <QJsonObject>
 #include <QLoggingCategory>
 #include <QProcess>
-#include <QtTest>
+#include <QSignalSpy>
+#include <QTest>
 
 using namespace KDevelop;
 

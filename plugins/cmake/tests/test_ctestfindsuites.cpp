@@ -40,7 +40,7 @@
 #include <project/projectmodel.h>
 
 #include <QDir>
-#include <QtTest>
+#include <QTest>
 #include <KJob>
 
 using namespace KDevelop;

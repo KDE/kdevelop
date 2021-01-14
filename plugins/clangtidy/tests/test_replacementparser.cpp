@@ -27,7 +27,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 // Qt
-#include <QtTest>
+#include <QTest>
 
 using namespace KDevelop;
 using namespace ClangTidy;
