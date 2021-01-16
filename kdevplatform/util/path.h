@@ -187,7 +187,7 @@ public:
      */
     inline bool operator<=(const Path& other) const
     {
-        return *this < other || other == *this;
+        return !(other < *this);
     }
 
     /**
@@ -197,7 +197,7 @@ public:
      */
     inline bool operator>=(const Path& other) const
     {
-        return other < *this || other == *this;
+        return !(*this < other);
     }
 
     /**
