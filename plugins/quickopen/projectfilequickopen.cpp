@@ -313,7 +313,7 @@ void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* fileItem)
 {
     ProjectFile f(fileItem);
     auto it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), f);
-    if (it == m_projectFiles.end() || it->path != f.path) {
+    if (it == m_projectFiles.end() || it->indexedPath != f.indexedPath) {
         m_projectFiles.insert(it, std::move(f));
     }
 }
@@ -322,12 +322,13 @@ void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
 {
     ProjectFile item;
     item.path = file->path();
+    item.indexedPath = file->indexedPath();
 
     // fast-path for non-generated files
     // NOTE: figuring out whether something is generated is expensive... and since
     // generated files are rare we apply this two-step algorithm here
     auto it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), item);
-    if (it != m_projectFiles.end() && !(item < *it)) {
+    if (it != m_projectFiles.end() && it->indexedPath == item.indexedPath) {
         m_projectFiles.erase(it);
         return;
     }
@@ -335,7 +336,7 @@ void ProjectFileDataProvider::fileRemovedFromSet(ProjectFileItem* file)
     // last try: maybe it was generated
     item.outsideOfProject = true;
     it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), item);
-    if (it != m_projectFiles.end() && !(item < *it)) {
+    if (it != m_projectFiles.end() && it->indexedPath == item.indexedPath) {
         m_projectFiles.erase(it);
         return;
     }
