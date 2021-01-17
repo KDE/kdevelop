@@ -35,8 +35,9 @@ class ProjectFileItem;
  */
 struct ProjectFile
 {
-    ProjectFile()
-    {}
+    ProjectFile() = default;
+    explicit ProjectFile(const KDevelop::ProjectFileItem*);
+
     KDevelop::Path path;
     // project root folder url
     KDevelop::Path projectPath;

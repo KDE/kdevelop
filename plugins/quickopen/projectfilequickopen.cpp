@@ -71,6 +71,14 @@ QString iconNameForUrl(const IndexedString& url)
 }
 }
 
+ProjectFile::ProjectFile(const ProjectFileItem* fileItem)
+    : path{fileItem->path()}
+    , projectPath{fileItem->project()->path()}
+    , indexedPath{fileItem->indexedPath()}
+    , outsideOfProject{!projectPath.isParentOf(path)}
+{
+}
+
 ProjectFileData::ProjectFileData(const ProjectFile& file)
     : m_file(file)
 {
@@ -261,23 +269,42 @@ void ProjectFileDataProvider::projectClosing(IProject* project)
 
 void ProjectFileDataProvider::projectOpened(IProject* project)
 {
-    KDevelop::forEachFile(project->projectItem(), [&](ProjectFileItem* file) {
-        fileAddedToSet(file);
-    });
-
     connect(project, &IProject::fileAddedToSet,
             this, &ProjectFileDataProvider::fileAddedToSet);
     connect(project, &IProject::fileRemovedFromSet,
             this, &ProjectFileDataProvider::fileRemovedFromSet);
+
+    // Collect the opened project's files.
+    const auto oldSize = m_projectFiles.size();
+    KDevelop::forEachFile(project->projectItem(), [this](ProjectFileItem* fileItem) {
+        m_projectFiles.push_back(ProjectFile{fileItem});
+    });
+    const auto justAddedBegin = m_projectFiles.begin() + oldSize;
+
+    // Sort the opened project's files.
+    // Sorting stability is not useful here, but std::stable_sort vastly outperforms
+    // the standard std::sort and std::make_heap+std::sort_heap alternatives on the
+    // files of large real-life projects, because KDevelop::forEachFile() collects
+    // files in an almost sorted order.
+    std::stable_sort(justAddedBegin, m_projectFiles.end());
+
+    // Merge the sorted ranges of files belonging to previously opened projects
+    // and to the just opened project.
+    std::inplace_merge(m_projectFiles.begin(), justAddedBegin, m_projectFiles.end());
+
+    // Remove duplicates across all open projects. Usually different projects have no
+    // common files. But since a file can belong to multiple targets within one project,
+    // a single call to KDevelop::forEachFile() often produces many duplicates.
+    const auto equalFiles = [](const ProjectFile& a, const ProjectFile& b) {
+        return a.indexedPath == b.indexedPath;
+    };
+    m_projectFiles.erase(std::unique(m_projectFiles.begin(), m_projectFiles.end(), equalFiles),
+                         m_projectFiles.end());
 }
 
-void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* file)
+void ProjectFileDataProvider::fileAddedToSet(ProjectFileItem* fileItem)
 {
-    ProjectFile f;
-    f.projectPath = file->project()->path();
-    f.path = file->path();
-    f.indexedPath = file->indexedPath();
-    f.outsideOfProject = !f.projectPath.isParentOf(f.path);
+    ProjectFile f(fileItem);
     auto it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), f);
     if (it == m_projectFiles.end() || it->path != f.path) {
         m_projectFiles.insert(it, std::move(f));
