@@ -928,6 +928,8 @@ void Visitor::setTypeSize(CXType type, AbstractType* kdevType) const
 {
     if (kdevType->whichType() == AbstractType::TypeFunction)
         return;
+
+    type = clang_getCanonicalType(type);
     if (type.kind == CXType_Elaborated)
         return;
 
