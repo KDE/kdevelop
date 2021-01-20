@@ -1,0 +1,19 @@
+Files LICENSE and timsort.hpp were copied from the official cpp-TimSort library.
+
+cpp-TimSort project URL: https://github.com/timsort/cpp-TimSort
+
+You should *not* touch this code, besides updating the files from an official
+TimSort release. When you find a bug, fix it upstream (the project URL above).
+
+gfx::timsort and gfx::timmerge can be used in place of std::stable_sort and
+std::inplace_merge respectively for optimization. Timsort performs much better
+than sorting algorithms from the standard library when the range is close to
+sorted or contains "runs" of consecutive ordered elements. Timmerge vastly
+outperforms merging algorithms from the standard library when the two sorted
+subranges are sparsely overlapping.
+
+https://en.wikipedia.org/wiki/Timsort and
+https://svn.python.org/projects/python/trunk/Objects/listsort.txt describe the
+Timsort algorithm in detail. Merging sorted subranges efficiently is a major
+part of the Timsort algorithm. This subalgorithm is (not commonly) called
+Timmerge and is naturally described as part of Timsort at the links above.

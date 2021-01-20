@@ -157,6 +157,8 @@ option(BUILD_BENCHMARKS "Whether benchmarks should be compiled or not" ${COMPILE
 configure_file(config-kdevelop.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kdevelop.h)
 include_directories(${KDevelop_BINARY_DIR}) # for config-kdevelop.h
 
+add_subdirectory(3rdparty/timsort)
+
 add_subdirectory(kdevplatform)
 add_subdirectory(plugins)
 
