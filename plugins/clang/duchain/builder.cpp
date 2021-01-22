@@ -926,6 +926,12 @@ void Visitor::setTypeModifiers(CXType type, AbstractType* kdevType) const
 
 void Visitor::setTypeSize(CXType type, AbstractType* kdevType) const
 {
+    if (CINDEX_VERSION_MINOR < 59) {
+        // clang_Type_getSizeOf is unstable, see https://bugs.kde.org/show_bug.cgi?id=431391
+        return;
+    }
+
+
     if (kdevType->whichType() == AbstractType::TypeFunction)
         return;
 
