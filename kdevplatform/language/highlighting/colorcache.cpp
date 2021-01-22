@@ -37,6 +37,7 @@
 #include <debug.h>
 #include "widgetcolorizer.h"
 
+#include <ktexteditor_version.h>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
@@ -188,10 +189,18 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
     if (KTextEditor::View* view = m_view.data()) {
         Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
         // we only listen to a single view, i.e. the active one
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5, 79, 0)
+        disconnect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
+#else
         disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+#endif
     }
     Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5, 79, 0)
+    connect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
+#else
     connect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+#endif
     m_view = view;
 
     if (!foreground.isValid()) {
