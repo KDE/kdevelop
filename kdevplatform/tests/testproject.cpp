@@ -61,7 +61,7 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
     if (m_root) {
         ICore::self()->projectController()->projectModel()->removeRow(m_root->row());
         m_root = nullptr;
-        m_path.clear();
+        m_path = Path{};
     }
     if (item) {
         m_root = item;

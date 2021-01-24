@@ -351,11 +351,6 @@ public:
     bool hasParent() const;
 
     /**
-     * Clear the path, i.e. make it invalid and empty.
-     */
-    void clear();
-
-    /**
      * Change directory by relative path @p dir.
      *
      * NOTE: This is expensive.

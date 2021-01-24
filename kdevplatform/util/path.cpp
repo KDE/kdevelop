@@ -454,11 +454,6 @@ bool Path::hasParent() const
     return m_data.size() > rootIdx && !m_data[rootIdx].isEmpty();
 }
 
-void Path::clear()
-{
-    m_data.clear();
-}
-
 Path Path::cd(const QString& dir) const
 {
     if (!isValid()) {

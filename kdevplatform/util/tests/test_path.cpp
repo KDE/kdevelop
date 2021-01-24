@@ -313,7 +313,7 @@ void TestPath::testPath()
     QVERIFY(c.isDirectParentOf(a));
 #endif
 
-    optUrl.clear();
+    optUrl = Path{};
     url.clear();
     QCOMPARE(optUrl.toUrl(), url);
 }
