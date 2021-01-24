@@ -81,7 +81,7 @@ public:
     /**
      * Construct an empty, invalid Path.
      */
-    Path();
+    Path() = default;
 
     /**
      * Create a Path out of a string representation of a path or URL.

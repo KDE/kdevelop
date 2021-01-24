@@ -72,11 +72,6 @@ QString KDevelop::toUrlOrLocalFile(const QUrl& url, QUrl::FormattingOptions opti
     return str;
 }
 
-Path::Path()
-{
-
-}
-
 Path::Path(const QString& pathOrUrl)
     : Path(QUrl::fromUserInput(pathOrUrl, QString(), QUrl::DefaultResolution))
 {
