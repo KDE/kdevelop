@@ -168,7 +168,10 @@ public:
      *
      * @return true if this Path is less than @p other.
      */
-    bool operator<(const Path& other) const;
+    bool operator<(const Path& other) const
+    {
+        return compare(other, Qt::CaseSensitive) < 0;
+    }
 
     /**
      * Greater-than path comparison between @p other and this Path.

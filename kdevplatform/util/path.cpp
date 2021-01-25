@@ -311,11 +311,6 @@ int Path::compare(const Path& other, Qt::CaseSensitivity cs) const
     return size - otherSize;
 }
 
-bool Path::operator<(const Path& other) const
-{
-    return compare(other, Qt::CaseSensitive) < 0;
-}
-
 QUrl Path::toUrl() const
 {
     return QUrl::fromUserInput(pathOrUrl());
