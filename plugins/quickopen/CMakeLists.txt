@@ -32,5 +32,6 @@ target_link_libraries(kdevquickopen
     KDev::Interfaces
     KDev::Project
     KDev::Util
+    gfx::timsort
     KF5::GuiAddons
 )

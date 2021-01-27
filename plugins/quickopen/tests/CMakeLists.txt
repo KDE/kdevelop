@@ -12,6 +12,7 @@ target_link_libraries(quickopentestbase PUBLIC
     KDev::Tests
     KDev::Project
     KDev::Language
+    gfx::timsort
     Qt5::Test
 )
 

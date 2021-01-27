@@ -40,6 +40,8 @@
 
 #include "../openwith/iopenwith.h"
 
+#include <timsort/timsort.hpp>
+
 #include <algorithm>
 #include <utility>
 
@@ -282,15 +284,20 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
     const auto justAddedBegin = m_projectFiles.begin() + oldSize;
 
     // Sort the opened project's files.
-    // Sorting stability is not useful here, but std::stable_sort vastly outperforms
-    // the standard std::sort and std::make_heap+std::sort_heap alternatives on the
-    // files of large real-life projects, because KDevelop::forEachFile() collects
-    // files in an almost sorted order.
-    std::stable_sort(justAddedBegin, m_projectFiles.end());
+    // Sorting stability is not useful here, but timsort vastly outperforms all
+    // std and boost sorting algorithms (boost::sort::flat_stable_sort is the
+    // second best) on the files of large real-life projects, because
+    // KDevelop::forEachFile() collects files in an almost sorted order.
+    gfx::timsort(justAddedBegin, m_projectFiles.end());
 
     // Merge the sorted ranges of files belonging to previously opened projects
     // and to the just opened project.
-    std::inplace_merge(m_projectFiles.begin(), justAddedBegin, m_projectFiles.end());
+    // Since the file sets from different projects usually don't overlap or overlap
+    // very little, timmerge is the perfect merge algorithm. Furthermore, the
+    // comparison of ProjectFile objects is expensive and cache-unfriendly. This
+    // aspect lets timmerge outperform std::inplace_merge even more here. This same
+    // aspect also helps timsort outperform other sorting algorithms.
+    gfx::timmerge(m_projectFiles.begin(), justAddedBegin, m_projectFiles.end());
 
     // Remove duplicates across all open projects. Usually different projects have no
     // common files. But since a file can belong to multiple targets within one project,
