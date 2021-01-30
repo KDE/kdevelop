@@ -216,10 +216,6 @@ inline void deref(IndexedString* string)
 }
 }
 
-IndexedString::IndexedString()
-{
-}
-
 ///@param str must be a utf8 encoded string, does not need to be 0-terminated.
 ///@param length must be its length in bytes.
 IndexedString::IndexedString(const char* str, unsigned short length, uint hash)

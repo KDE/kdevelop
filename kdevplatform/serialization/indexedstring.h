@@ -52,7 +52,7 @@ namespace KDevelop {
 class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString
 {
 public:
-    IndexedString();
+    IndexedString() = default;
     /**
      * @param str must be a utf8 encoded string, does not need to be 0-terminated.
      * @param length must be its length in bytes.
