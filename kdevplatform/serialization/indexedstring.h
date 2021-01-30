@@ -72,6 +72,8 @@ public:
 
     explicit IndexedString(char c);
 
+    explicit IndexedString(bool) = delete;
+
     /**
      * When the information is already available, try using the other constructor.
      *
@@ -244,7 +246,6 @@ public:
     static uint indexForString(const QString& str, uint hash = 0);
 
 private:
-    explicit IndexedString(bool);
     uint m_index = 0;
 };
 
