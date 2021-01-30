@@ -48,6 +48,15 @@ namespace KDevelop {
  *
  * @note Strings of length one are not put into the repository, but are encoded directly within
  * the index: They are encoded like @c 0xffff00bb where @c bb is the byte of the character.
+ *
+ * @note Move constructor and move assignment operator are deliberately not implemented for
+ * IndexedString. The move operations are tricky to implement correctly and more efficiently
+ * in practice than the copy operations, seeing that more than 99% of arguments of the copy/move
+ * operations are not disk-reference-counted. Moreover, according to test runs at the time of
+ * this writing, the copied- or moved-from IndexedString is never disk-reference-counted in
+ * practice, so the moved-from string's reference count cannot be stolen. IndexedString's copy
+ * constructor and copy assignment operator are noexcept to allow noexcept move operations in
+ * classes that contain IndexedString as a data member.
  */
 class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString
 {
@@ -88,12 +97,6 @@ public:
      */
     explicit IndexedString(const QByteArray& str);
 
-    IndexedString(IndexedString&& o) Q_DECL_NOEXCEPT
-        : m_index(o.m_index)
-    {
-        o.m_index = 0;
-    }
-
     /**
      * Returns a not reference-counted IndexedString that represents the given index.
      *
@@ -113,7 +116,7 @@ public:
      */
     static int lengthFromIndex(unsigned int index);
 
-    IndexedString(const IndexedString&);
+    IndexedString(const IndexedString&) noexcept;
 
     ~IndexedString();
 
@@ -174,14 +177,7 @@ public:
      */
     QByteArray byteArray() const;
 
-    IndexedString& operator=(const IndexedString&);
-
-    IndexedString& operator=(IndexedString&& o) Q_DECL_NOEXCEPT
-    {
-        m_index = o.m_index;
-        o.m_index = 0;
-        return *this;
-    }
+    IndexedString& operator=(const IndexedString&) noexcept;
 
     /**
      * Fast index-based comparison

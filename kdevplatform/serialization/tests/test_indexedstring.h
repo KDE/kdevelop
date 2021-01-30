@@ -40,6 +40,7 @@ private Q_SLOTS:
     void test();
     void test_data();
 
+    void testMoveAssignment();
     void testSwap();
     void testSwap_data();
 

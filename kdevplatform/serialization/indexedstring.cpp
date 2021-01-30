@@ -265,18 +265,26 @@ IndexedString::IndexedString(const QByteArray& str)
     : IndexedString(str.constData(), str.length())
 {}
 
+// NOTE: the definitions of ref() and deref() are so complex that they can throw exceptions
+// for many reasons. Yet the functions below, which call ref() and/or deref(), are
+// implicitly (the destructor) or explicitly (the rest) noexcept. The noexcept-ness of
+// these functions is important for correctness and performance. This is safe at the moment,
+// because the entire KDevPlatformSerialization library, that contains IndexedString, is
+// compiled with exceptions disabled (-fno-exceptions), which already prevents exception
+// propagation to a caller of any non-inline function in this library.
+
 IndexedString::~IndexedString()
 {
     deref(this);
 }
 
-IndexedString::IndexedString(const IndexedString& rhs)
+IndexedString::IndexedString(const IndexedString& rhs) noexcept
     : m_index(rhs.m_index)
 {
     ref(this);
 }
 
-IndexedString& IndexedString::operator=(const IndexedString& rhs)
+IndexedString& IndexedString::operator=(const IndexedString& rhs) noexcept
 {
     if (m_index == rhs.m_index) {
         return *this;

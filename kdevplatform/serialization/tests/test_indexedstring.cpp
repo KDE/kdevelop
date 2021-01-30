@@ -90,8 +90,6 @@ void TestIndexedString::test()
     QCOMPARE(indexed.index(), IndexedString::indexForString(byteArrayData.data(), byteArrayData.length()));
 
     IndexedString moved = std::move(indexed);
-    QCOMPARE(indexed, IndexedString());
-    QVERIFY(indexed.isEmpty());
     QCOMPARE(moved.str(), data);
 }
 
@@ -104,6 +102,34 @@ void TestIndexedString::test_data()
     QTest::newRow("char-utf8") << QStringLiteral("ä");
     QTest::newRow("string-ascii") << QStringLiteral("asdf()?=");
     QTest::newRow("string-utf8") << QStringLiteral("æſðđäöü");
+}
+
+void TestIndexedString::testMoveAssignment()
+{
+    // Deliberately make no assumptions about the value of the moved-from object.
+
+    const QString text = QStringLiteral("random text");
+    IndexedString movedFrom(text);
+    QCOMPARE(movedFrom.str(), text);
+
+    IndexedString notRefCounted;
+    notRefCounted = std::move(movedFrom);
+    QCOMPARE(notRefCounted.str(), text);
+
+    movedFrom = std::move(notRefCounted);
+    QCOMPARE(movedFrom.str(), text);
+
+    const QString toBeDerefed = QStringLiteral("to-be-derefed");
+
+    // Enable reference counting throughout refCounted's lifetime.
+    std::byte indexedStringData[sizeof(IndexedString)];
+    const DUChainReferenceCountingEnabler rcEnabler(indexedStringData, sizeof(IndexedString));
+    IndexedString* const refCounted = new (indexedStringData) IndexedString(toBeDerefed);
+    QCOMPARE(refCounted->str(), toBeDerefed);
+
+    *refCounted = std::move(movedFrom);
+    QCOMPARE(refCounted->str(), text);
+    refCounted->~IndexedString();
 }
 
 void TestIndexedString::testSwap()
