@@ -393,11 +393,10 @@ int main( int argc, char *argv[] )
 
     KLocalizedString::setApplicationDomain("kdevelop");
 
-    KAboutData aboutData( QStringLiteral("kdevelop"), i18n("KDevelop"), QStringLiteral(KDEVELOP_VERSION_STRING),
-                          i18n("The KDevelop Integrated Development Environment"),
-                          KAboutLicense::GPL,
-                          i18n("Copyright 1999-%1, The KDevelop developers", QStringLiteral("2020")),
-                          QString(), QStringLiteral("https://www.kdevelop.org/"));
+    KAboutData aboutData(QStringLiteral("kdevelop"), i18n("KDevelop"), QStringLiteral(KDEVELOP_VERSION_STRING),
+                         i18n("The KDevelop Integrated Development Environment"), KAboutLicense::GPL,
+                         i18n("Copyright 1999-%1, The KDevelop developers", QStringLiteral("2021")), QString(),
+                         QStringLiteral("https://www.kdevelop.org/"));
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop"));
     aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website" ), QStringLiteral("kfunk@kde.org") );
     aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), QStringLiteral("svenbrauch@gmail.com") );
