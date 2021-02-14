@@ -15,6 +15,7 @@
 #include <KDirOperator>
 #include <KFileItem>
 #include <KFileWidget>
+#include <kio_version.h>
 #include <KLocalizedString>
 #include <KUrlComboBox>
 
@@ -50,8 +51,12 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filte
     // Emitted when clicking on a file in the fileview area
     connect( fileWidget, &KFileWidget::fileHighlighted, this, &OpenProjectPage::highlightFile );
 
+#if KIO_VERSION < QT_VERSION_CHECK(5, 79, 0)
     connect(fileWidget->dirOperator()->dirLister(), QOverload<const QUrl&>::of(&KDirLister::completed),
             this, &OpenProjectPage::dirChanged);
+#else
+    connect(fileWidget->dirOperator()->dirLister(), &KDirLister::listingDirCompleted, this, &OpenProjectPage::dirChanged);
+#endif
 
     connect( fileWidget, &KFileWidget::accepted, this, &OpenProjectPage::accepted);
 }
