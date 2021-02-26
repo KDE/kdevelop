@@ -39,6 +39,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <idocumentationcontroller.h>
 
 namespace shellcheck
 {
@@ -50,6 +51,21 @@ OutputParser::OutputParser()
 OutputParser::~OutputParser()
 {
 }
+
+QString textToHtml( const QString & input )
+{
+    QString output(QStringLiteral("<html>%1</html>").arg(input.toHtmlEscaped()));
+
+    output.replace(QLatin1String("\\012"), QLatin1String("\n"));
+
+    if (output.count(QLatin1Char('\n')) >= 2) {
+        output.replace(output.indexOf(QLatin1Char('\n')), 1, QStringLiteral("<pre>") );
+        output.replace(output.lastIndexOf(QLatin1Char('\n')), 1, QStringLiteral("</pre><br>") );
+    }
+
+    return output;
+}
+
 
 void OutputParser::add(const QStringList& lines)
 {
@@ -118,8 +134,12 @@ Fixit shellcheck::OutputParser::getFixFromMultipleReplacements(QJsonArray replac
             fixRange.document = KDevelop::IndexedString(problemRange.document.str());
             fixRange.setStart(fixStartCursor);
             fixRange.setEnd(fixEndCursor);
-            QString currentDocText = QStringLiteral("/hej/sa/Messages.sh");
-            //KDevelop::ICore::self()->documentController()->activeDocument()->text(problemRange);
+            //QString currentDocText = QStringLiteral("/hej/sa/Messages.sh");
+            auto* test = KDevelop::ICore::self()->documentController()->activeDocument();
+            if(test == nullptr) {
+                qWarning(PLUGIN_SHELLCHECK) << "--- We need to have an active document in the documentController during unittesting";
+            }
+            QString currentDocText = KDevelop::ICore::self()->documentController()->activeDocument()->text(problemRange);
             qWarning(PLUGIN_SHELLCHECK) << "We are in getFixFromMultipleReplacements,and the problemDescription: " << problemDescription;
             qWarning(PLUGIN_SHELLCHECK) << "and the file: " << problemRange.document.str();
 
@@ -180,10 +200,11 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
                 problem->setFinalLocationMode(KDevelop::IProblem::Range);
                 problem->setSeverity(getSeverityFromString(currentProblem[QStringLiteral("level")].toString()));
                 problem->setSource(KDevelop::IProblem::Plugin);
+                QString problemText = currentProblem[QStringLiteral("message")].toString();
                 QString problemCode = QString::number( currentProblem[QStringLiteral("code")].toInt());
-                QString problemMessage = currentProblem[QStringLiteral("message")].toString();
-                problem->setDescription(problemCode);
-                problem->setExplanation(problemMessage);
+                QString problemMessage = problemCode + QLatin1String(": ") + problemText;
+                problem->setDescription(problemMessage);
+                problem->setExplanation(textToHtml(problemText));
 
                 if (!currentProblem[QStringLiteral("fix")].isNull())
                 {
@@ -193,9 +214,9 @@ QVector<KDevelop::IProblem::Ptr> OutputParser::parse()
                     QVector<Fixit> fixes;
                     Fixit fixForCurrentProblem;
                     if(replacementArray.size() == 1) {
-                        fixForCurrentProblem = getFixFromOneReplacement(replacementArray, range, problemMessage);
+                        fixForCurrentProblem = getFixFromOneReplacement(replacementArray, range, textToHtml(problemText));
                     } else if (replacementArray.size() == 2) {
-                        fixForCurrentProblem = getFixFromMultipleReplacements(replacementArray, range, problemMessage);
+                        fixForCurrentProblem = getFixFromMultipleReplacements(replacementArray, range, textToHtml(problemText));
                     }
 
                     fixes.push_back(fixForCurrentProblem);

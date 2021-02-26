@@ -28,25 +28,24 @@
 
 #include <language/editor/documentrange.h>
 #include <interfaces/iassistant.h>
-#include <interfaces/idocumentcontroller.h>
 #include <shell/problem.h>
 
 #include "fixitaction.h"
 #include "outputparser.h"
+#include <ilanguagecontroller.h>
+#include <backgroundparser/backgroundparser.h>
 
-
-QTEST_GUILESS_MAIN(shellcheck::TestOutputParser)
+QTEST_MAIN(shellcheck::TestOutputParser)
 namespace shellcheck {
+
 
 void TestOutputParser::initTestCase()
 {
     KDevelop::AutoTestShell::init({QStringLiteral("kdevshellcheck")});
-    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
-
-//     auto* core = new KDevelop::TestCore;
-//     core->setDocumentController(new TestDocumentController());
-//     core->initialize(KDevelop::Core::NoUi);
-
+    KDevelop::TestCore::initialize();
+    KDevelop::Core::self()->languageController()->backgroundParser()->disableProcessing();
+    m_documentController = ICore::self()->documentController();
+    m_documentController->openDocument(QUrl::fromLocalFile(QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh")));
 }
 
 void TestOutputParser::cleanupTestCase()
@@ -56,7 +55,6 @@ void TestOutputParser::cleanupTestCase()
 
 void TestOutputParser::init()
 {
-    // Called before each testfunction is executed
 }
 
 void TestOutputParser::cleanup()
@@ -272,8 +270,8 @@ void TestOutputParser::testParser()
 
     // Verify the first two and the last problems
     KDevelop::IProblem::Ptr p = problems[0];
-    QCOMPARE(p->description(), QStringLiteral("2046"));
-    QCOMPARE(p->explanation(), QStringLiteral("Quote this to prevent word splitting."));
+    QCOMPARE(p->description(), QStringLiteral("2046: Quote this to prevent word splitting."));
+    QCOMPARE(p->explanation(), QStringLiteral("<html>Quote this to prevent word splitting.</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
     QCOMPARE(p->finalLocation().start().line(), 1);
     QCOMPARE(p->finalLocation().start().column(), 11);
@@ -281,10 +279,9 @@ void TestOutputParser::testParser()
     QCOMPARE(p->finalLocation().end().column(), 31);
     QCOMPARE(p->severity(), KDevelop::IProblem::Warning);
     QCOMPARE(p->source(), KDevelop::IProblem::Plugin);
-
     p = problems[1];
-    QCOMPARE(p->description(), QStringLiteral("2006"));
-    QCOMPARE(p->explanation(), QStringLiteral("Use $(...) notation instead of legacy backticked `...`."));
+    QCOMPARE(p->description(), QStringLiteral("2006: Use $(...) notation instead of legacy backticked `...`."));
+    QCOMPARE(p->explanation(), QStringLiteral("<html>Use $(...) notation instead of legacy backticked `...`.</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
     QCOMPARE(p->finalLocation().start().line(), 1);
     QCOMPARE(p->finalLocation().start().column(), 11);
@@ -300,25 +297,24 @@ void TestOutputParser::testParser()
     QCOMPARE(assistant->actions().size(), 1);
     KDevelop::IAssistantAction::Ptr action = assistant->actions().first();
     FixitAction* fixitAction = static_cast<FixitAction*>(action.data());
-    KTextEditor::Range expectedRange(2,13,2,32);
-    KDevelop::IndexedString expectedDoc(QStringLiteral("/hej/sa/Messages.sh"));
+    KTextEditor::Range expectedRange(1,30,1,32);
+    KDevelop::IndexedString expectedDoc(QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
     KDevelop::DocumentRange expectedDocRange(expectedDoc, expectedRange);
-    Fixit expectedFixit(QStringLiteral("Use $(...) notation instead of legacy backticked `...`."),
+    Fixit expectedFixit(QStringLiteral("<html>Use $(...) notation instead of legacy backticked `...`.</html>"),
         expectedDocRange,
         QStringLiteral("`find . -name \\*.ui`"),
         QStringLiteral("$(find . -name \\*.ui)")
     );
-    QVERIFY(fixitAction->m_fixit == expectedFixit);
-//     QCOMPARE(fa->m_fixit.m_currentText, QStringLiteral(""));
-//     QCOMPARE(fa->m_fixit.m_range.document.str(), QStringLiteral(""));
-//     QCOMPARE(fa->m_fixit.m_currentText, QStringLiteral(""));
-//     QCOMPARE(fa->m_fixit.m_currentText, QStringLiteral(""));
-//
-//     QVERIFY(a->toQAction() != nullptr);
+    QCOMPARE(fixitAction->m_fixit.m_currentText, QStringLiteral("`find . -name \\*.rc`"));
+    QCOMPARE(fixitAction->m_fixit.m_range.toString(), QStringLiteral("[(1, 30), (1, 32)]"));
+
+    QCOMPARE(fixitAction->m_fixit.m_range.document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
+    QCOMPARE(fixitAction->m_fixit.m_replacementText, QStringLiteral(")"));
+    //QVERIFY(fixitAction->m_fixit == expectedFixit);
 
     p = problems[7];
-    QCOMPARE(p->description(), QStringLiteral("2086"));
-    QCOMPARE(p->explanation(), QStringLiteral("Double quote to prevent globbing and word splitting."));
+    QCOMPARE(p->description(), QStringLiteral("2086: Double quote to prevent globbing and word splitting."));
+    QCOMPARE(p->explanation(), QStringLiteral("<html>Double quote to prevent globbing and word splitting.</html>"));
     QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
     QCOMPARE(p->finalLocation().start().line(), 2);
     QCOMPARE(p->finalLocation().start().column(), 64);
