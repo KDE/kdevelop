@@ -22,6 +22,9 @@
 #ifndef TEST_OUTPUTPARSER_H
 #define TEST_OUTPUTPARSER_H
 
+#include <interfaces/idocumentcontroller.h>
+
+
 #include <QObject>
 namespace shellcheck {
 
@@ -39,6 +42,8 @@ private Q_SLOTS:
     void testParserEmptyShellOutput();
     void testParser();
     void testParserFaultyJson();
+private:
+    KDevelop::IDocumentController *m_documentController;
 };
 }
 #endif // TEST_OUTPUTPARSER_H
