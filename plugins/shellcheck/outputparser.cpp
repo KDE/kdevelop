@@ -118,41 +118,65 @@ Fixit OutputParser::getFixFromOneReplacement(QJsonArray replacementArray,
     return ret;
 }
 
+int shellcheck::OutputParser::findOffsetFromInsertionPoint(QString const& str) {
+    if(str == QStringLiteral("afterEnd")) {
+        return -1;
+    }
+    return 0;
+}
+
 Fixit shellcheck::OutputParser::getFixFromMultipleReplacements(QJsonArray replacementArray,
                                                                KDevelop::DocumentRange problemRange, QString problemDescription)
 {
     Q_ASSERT(replacementArray.size() > 1);
-    Fixit ret;
+    QString currentDocText = KDevelop::ICore::self()->documentController()->activeDocument()->text(problemRange);
+    QVector<Fixit> changeVec;
     for( auto const replaceElement : replacementArray ) {
         if(replaceElement.isObject()) {
             QJsonObject replacement = replaceElement.toObject();
+            int insertionPointOffset = findOffsetFromInsertionPoint(replacement[QStringLiteral("insertionPoint")].toString());
             KTextEditor::Cursor fixStartCursor(replacement[QStringLiteral("line")].toInt() - 1,
-                replacement[QStringLiteral("column")].toInt() - 1);
-            KTextEditor::Cursor fixEndCursor(replacement[QStringLiteral("endLine")].toInt() -1,
-                replacement[QStringLiteral("endColumn")].toInt());
+                replacement[QStringLiteral("column")].toInt() - 1 + insertionPointOffset);
+            KTextEditor::Cursor fixEndCursor(replacement[QStringLiteral("endLine")].toInt() -1 ,
+                replacement[QStringLiteral("endColumn")].toInt() + insertionPointOffset);
             KDevelop::DocumentRange fixRange;
             fixRange.document = KDevelop::IndexedString(problemRange.document.str());
             fixRange.setStart(fixStartCursor);
             fixRange.setEnd(fixEndCursor);
-            //QString currentDocText = QStringLiteral("/hej/sa/Messages.sh");
-            auto* test = KDevelop::ICore::self()->documentController()->activeDocument();
-            if(test == nullptr) {
-                qWarning(PLUGIN_SHELLCHECK) << "--- We need to have an active document in the documentController during unittesting";
-            }
-            QString currentDocText = KDevelop::ICore::self()->documentController()->activeDocument()->text(problemRange);
-            qWarning(PLUGIN_SHELLCHECK) << "We are in getFixFromMultipleReplacements,and the problemDescription: " << problemDescription;
-            qWarning(PLUGIN_SHELLCHECK) << "and the file: " << problemRange.document.str();
+            QString replacementText = replacement[QStringLiteral("replacement")].toString();
+
+            //qWarning(PLUGIN_SHELLCHECK) << "We are in getFixFromMultipleReplacements,and the problemDescription: " << problemDescription;
+            //qWarning(PLUGIN_SHELLCHECK) << "and the file: " << problemRange.document.str();
+            //qWarning(PLUGIN_SHELLCHECK) << "-- and want to do the replacement: " << replacementText;
 
             Fixit newFix(problemDescription, fixRange,
                             currentDocText,
-                            replacement[QStringLiteral("replacement")].toString());
+                            replacementText);
 
-            ret = newFix;
+            changeVec.push_back(newFix);
+
             qWarning(PLUGIN_SHELLCHECK) << newFix;
         }
     }
 
-    return ret;
+    QString finalDocReplacementText = currentDocText;
+    auto changeItr = changeVec.end();
+    while(changeItr != changeVec.begin()) {
+        --changeItr;
+        int columnOffset = problemRange.start().column();
+        int columnToChangeStart = std::max(0 , changeItr->m_range.start().column() - columnOffset);
+        int columnToChangeEnd = changeItr->m_range.end().column() - columnOffset;
+        finalDocReplacementText.replace(columnToChangeStart, columnToChangeEnd - columnToChangeStart, changeItr->m_replacementText);
+        qWarning(PLUGIN_SHELLCHECK) << "changeStart: " << changeItr->m_range.start().column() << "Problem Start: " << problemRange.start().column();
+        qWarning(PLUGIN_SHELLCHECK) << "changeEnd: " << changeItr->m_range.end().column() << "Problem End: " << problemRange.end().column();
+        qWarning(PLUGIN_SHELLCHECK) << "finalDocReplacementText looks like this: " << finalDocReplacementText;
+    }
+
+    Fixit finalFix(problemDescription, problemRange,
+                            currentDocText,
+                            finalDocReplacementText);
+
+    return finalFix;
 }
 
 

@@ -302,14 +302,14 @@ void TestOutputParser::testParser()
     KDevelop::DocumentRange expectedDocRange(expectedDoc, expectedRange);
     Fixit expectedFixit(QStringLiteral("<html>Use $(...) notation instead of legacy backticked `...`.</html>"),
         expectedDocRange,
-        QStringLiteral("`find . -name \\*.ui`"),
-        QStringLiteral("$(find . -name \\*.ui)")
+        QStringLiteral("`find . -name \\*.rc`"),
+        QStringLiteral("$(find . -name \\*.rc)")
     );
     QCOMPARE(fixitAction->m_fixit.m_currentText, QStringLiteral("`find . -name \\*.rc`"));
-    QCOMPARE(fixitAction->m_fixit.m_range.toString(), QStringLiteral("[(1, 30), (1, 32)]"));
+    QCOMPARE(fixitAction->m_fixit.m_range.toString(), QStringLiteral("[(1, 11), (1, 31)]"));
 
     QCOMPARE(fixitAction->m_fixit.m_range.document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
-    QCOMPARE(fixitAction->m_fixit.m_replacementText, QStringLiteral(")"));
+    QCOMPARE(fixitAction->m_fixit.m_replacementText, QStringLiteral("$(find . -name \\*.rc)"));
     //QVERIFY(fixitAction->m_fixit == expectedFixit);
 
     p = problems[7];

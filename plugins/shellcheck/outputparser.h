@@ -49,6 +49,11 @@ public:
 
     
 private:
+    /**
+     * Determine if we insert before or after given column and change the offset accordingly
+     */
+    int findOffsetFromInsertionPoint(QString const& str);
+
     KDevelop::IProblem::Severity getSeverityFromString(QString const& str);
 
     /**
