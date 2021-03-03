@@ -549,6 +549,7 @@ Name[pt_BR]=Erro no ponto de interrupção
 Name[sv]=Brytpunktsfel
 Name[uk]=Помилка, пов'язана із точкою зупинки
 Name[x-test]=xxBreakpoint Errorxx
+Name[zh_CN]=断点错误
 Comment=An error was reported by the debugger
 Comment[ca]=El depurador ha notificat un error
 Comment[ca@valencia]=El depurador ha notificat un error
@@ -562,6 +563,7 @@ Comment[pt_BR]=Um erro foi relatado pelo depurador
 Comment[sv]=Ett fel rapporterades av avlusaren
 Comment[uk]=Засіб діагностики повідомив про помилку
 Comment[x-test]=xxAn error was reported by the debuggerxx
+Comment[zh_CN]=调试器报告了错误
 
 [Event/WatchpointHit]
 Contexts=debugger
