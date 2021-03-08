@@ -173,9 +173,10 @@ void BranchManager::checkoutBranch()
     qCDebug(VCS) << "Switching to" << branch << "in" << m_repository;
     KDevelop::VcsJob *branchJob = m_dvcPlugin->switchBranch(QUrl::fromLocalFile(m_repository), branch);
 //     connect(branchJob, SIGNAL(finished(KJob*)), m_model, SIGNAL(resetCurrent()));
-
-    ICore::self()->runController()->registerJob(branchJob);
-    close();
+    if (branchJob) {
+        ICore::self()->runController()->registerJob(branchJob);
+        close();
+    }
 }
 
 void BranchManager::mergeBranch()

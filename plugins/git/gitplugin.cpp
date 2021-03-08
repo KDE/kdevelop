@@ -728,9 +728,14 @@ VcsJob* GitPlugin::switchBranch(const QUrl &repository, const QString &branch)
 {
     QDir d=urlDir(repository);
 
-    if(hasModifications(d) && KMessageBox::questionYesNo(nullptr, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
-        QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
-        stash->exec();
+    if(hasModifications(d)) {
+        auto answer = KMessageBox::questionYesNoCancel(nullptr, i18n("There are pending changes, do you want to stash them first?"));
+        if (answer == KMessageBox::Yes) {
+            QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
+            stash->exec();
+        } else if (answer == KMessageBox::Cancel) {
+            return nullptr;
+        }
     }
 
     auto* job = new DVcsJob(d, this);
