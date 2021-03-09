@@ -339,7 +339,6 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     m_quickOpenDefinition = actions.addAction(QStringLiteral("quick_open_jump_definition"));
     m_quickOpenDefinition->setText(i18nc("@action", "Jump to Definition"));
     m_quickOpenDefinition->setIcon(QIcon::fromTheme(QStringLiteral("go-jump-definition")));
-    actions.setDefaultShortcut(m_quickOpenDefinition, Qt::CTRL | Qt::Key_Comma);
     connect(m_quickOpenDefinition, &QAction::triggered, this, &QuickOpenPlugin::quickOpenDefinition, Qt::QueuedConnection);
 
     auto* quickOpenLine = new QWidgetAction(this);
