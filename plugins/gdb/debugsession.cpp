@@ -205,7 +205,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
 
     // handle remote debug
     if (configGdbScript.isValid()) {
-        addCommand(MI::NonMI, QLatin1String("source ") + KShell::quoteArg(configGdbScript.toLocalFile()));
+        addCommand(MI::NonMI, QLatin1String("source ") + configGdbScript.toLocalFile());
     }
 
     // FIXME: have a check box option that controls remote debugging
@@ -240,7 +240,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
             breakpointController()->setDeleteDuplicateBreakpoints(true);
             qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(runGdbScript.toLocalFile());
 
-            addCommand(MI::NonMI, QLatin1String("source ") + KShell::quoteArg(runGdbScript.toLocalFile()),
+            addCommand(MI::NonMI, QLatin1String("source ") + runGdbScript.toLocalFile(),
                        [this](const MI::ResultRecord&) {
                            breakpointController()->setDeleteDuplicateBreakpoints(false);
                        },
