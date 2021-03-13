@@ -22,6 +22,7 @@
         <comment xml:lang="pt">Código-fonte em C do OpenCL</comment>
         <comment xml:lang="pt_BR">Código-fonte em C do OpenCL</comment>
         <comment xml:lang="sv">OpenCL C-källkod</comment>
+        <comment xml:lang="tr">OpenCL C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C OpenCL</comment>
         <comment xml:lang="zh_CN">OpenCL C 源代码</comment>
         <acronym>OpenCL</acronym>
@@ -48,6 +49,7 @@
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="pt_BR">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
+        <comment xml:lang="tr">NVIDIA CUDA C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
         <comment xml:lang="zh_CN">NVIDIA CUDA C 源代码</comment>
         <sub-class-of type="text/x-c++src"/>
@@ -70,6 +72,7 @@
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
         <comment xml:lang="pt_BR">Cabeçalho C da NVIDIA CUDA</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
+        <comment xml:lang="tr">NVIDIA CUDA C  başlığı</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
         <comment xml:lang="zh_CN">NVIDIA CUDA C 头文件</comment>
         <sub-class-of type="text/x-c++hdr"/>
