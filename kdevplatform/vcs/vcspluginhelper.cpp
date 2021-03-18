@@ -85,17 +85,20 @@ public:
     QAction* pullAction;
 
     void createActions(VcsPluginHelper* parent) {
-        commitAction = new QAction(QIcon::fromTheme(QStringLiteral("svn-commit")), i18nc("@action:inmenu", "Commit..."), parent);
-        updateAction = new QAction(QIcon::fromTheme(QStringLiteral("svn-update")), i18nc("@action:inmenu", "Update"), parent);
+        auto iconWithFallback = [] (const QString &icon, const QString &fallback) {
+            return QIcon::fromTheme(icon, QIcon::fromTheme(fallback));
+        };
+        commitAction = new QAction(iconWithFallback(QStringLiteral("vcs-commit"), QStringLiteral("svn-commit")), i18nc("@action:inmenu", "Commit..."), parent);
+        updateAction = new QAction(iconWithFallback(QStringLiteral("vcs-pull"), QStringLiteral("svn-update")), i18nc("@action:inmenu", "Update"), parent);
         addAction = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18nc("@action:inmenu", "Add"), parent);
-        diffToBaseAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")), i18nc("@action:inmenu", "Show Differences..."), parent);
+        diffToBaseAction = new QAction(iconWithFallback(QStringLiteral("vcs-diff"), QStringLiteral("text-x-patch")), i18nc("@action:inmenu", "Show Differences..."), parent);
         revertAction = new QAction(QIcon::fromTheme(QStringLiteral("archive-remove")), i18nc("@action:inmenu", "Revert"), parent);
         historyAction = new QAction(QIcon::fromTheme(QStringLiteral("view-history")), i18nc("@action:inmenu revision history", "History..."), parent);
         annotationAction = new QAction(QIcon::fromTheme(QStringLiteral("user-properties")), i18nc("@action:inmenu", "Annotation..."), parent);
-        diffForRevAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")), i18nc("@action:inmenu", "Show Diff..."), parent);
-        diffForRevGlobalAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")), i18nc("@action:inmenu", "Show Diff (All Files)..."), parent);
-        pushAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-up-double")), i18nc("@action:inmenu", "Push"), parent);
-        pullAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-down-double")), i18nc("@action:inmenu", "Pull"), parent);
+        diffForRevAction = new QAction(iconWithFallback(QStringLiteral("vcs-diff"), QStringLiteral("text-x-patch")), i18nc("@action:inmenu", "Show Diff..."), parent);
+        diffForRevGlobalAction = new QAction(iconWithFallback(QStringLiteral("vcs-diff"), QStringLiteral("text-x-patch")), i18nc("@action:inmenu", "Show Diff (All Files)..."), parent);
+        pushAction = new QAction(iconWithFallback(QStringLiteral("vcs-push"), QStringLiteral("arrow-up-double")), i18nc("@action:inmenu", "Push"), parent);
+        pullAction = new QAction(iconWithFallback(QStringLiteral("vcs-pull"), QStringLiteral("arrow-down-double")), i18nc("@action:inmenu", "Pull"), parent);
 
         QObject::connect(commitAction, &QAction::triggered, parent, &VcsPluginHelper::commit);
         QObject::connect(addAction, &QAction::triggered, parent, &VcsPluginHelper::add);

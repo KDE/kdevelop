@@ -59,6 +59,14 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     m_ui->setupUi(w);
     mainLayout->addWidget(w);
 
+    auto iconWithFallback = [] (const QString &icon, const QString &fallback) {
+        return QIcon::fromTheme(icon, QIcon::fromTheme(fallback));
+    };
+    m_ui->newButton->setIcon(iconWithFallback(QStringLiteral("vcs-branch"), QStringLiteral("list-add")));
+    m_ui->deleteButton->setIcon(iconWithFallback(QStringLiteral("vcs-branch-delete"), QStringLiteral("edit-delete")));
+    m_ui->diffButton->setIcon(iconWithFallback(QStringLiteral("vcs-diff"), QStringLiteral("text-x-patch")));
+    m_ui->mergeButton->setIcon(iconWithFallback(QStringLiteral("vcs-merge"), QStringLiteral("merge")));
+
     auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &BranchManager::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &BranchManager::reject);

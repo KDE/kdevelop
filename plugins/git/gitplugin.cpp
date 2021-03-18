@@ -236,8 +236,8 @@ void GitPlugin::additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls)
     menu->addAction(i18nc("@action:inmenu", "Rebase"), this, SLOT(ctxRebase()));
     menu->addSeparator()->setText(i18nc("@title:menu", "Git Stashes"));
     menu->addAction(i18nc("@action:inmenu", "Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(hasSt);
-    menu->addAction(i18nc("@action:inmenu", "Push Stash"), this, SLOT(ctxPushStash()));
-    menu->addAction(i18nc("@action:inmenu", "Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(hasSt);
+    menu->addAction(QIcon::fromTheme(QStringLiteral("vcs-stash")), i18nc("@action:inmenu", "Push Stash"), this, SLOT(ctxPushStash()));
+    menu->addAction(QIcon::fromTheme(QStringLiteral("vcs-stash-pop")), i18nc("@action:inmenu", "Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(hasSt);
 }
 
 void GitPlugin::ctxRebase()

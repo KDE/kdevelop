@@ -33,9 +33,6 @@
        <property name="text">
         <string comment="@action:button new branch">New</string>
        </property>
-       <property name="icon">
-        <iconset theme="list-add"/>
-       </property>
       </widget>
      </item>
      <item>
@@ -45,9 +42,6 @@
        </property>
        <property name="text">
         <string comment="@action:button">Delete</string>
-       </property>
-       <property name="icon">
-        <iconset theme="edit-delete"/>
        </property>
       </widget>
      </item>
@@ -85,9 +79,6 @@
        <property name="text">
         <string comment="@action:button">Compare to Branch</string>
        </property>
-       <property name="icon">
-        <iconset theme="text-x-patch"/>
-       </property>
       </widget>
      </item>
      <item>
@@ -123,9 +114,6 @@
       <widget class="QPushButton" name="mergeButton">
        <property name="text">
         <string comment="@action:button merge a branch">Merge</string>
-       </property>
-       <property name="icon">
-        <iconset theme="merge"/>
        </property>
       </widget>
      </item>
