@@ -28,6 +28,7 @@
 #include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
+#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 #include <KShell>
 
@@ -78,7 +79,11 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
     m_process->start();
 
     qCDebug(DEBUGGERLLDB) << "Starting LLDB with command" << m_debuggerExecutable + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 78, 0)
     qCDebug(DEBUGGERLLDB) << "LLDB process pid:" << m_process->pid();
+#else
+    qCDebug(DEBUGGERLLDB) << "LLDB process pid:" << m_process->processId();
+#endif
     emit userCommandOutput(m_debuggerExecutable + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
 
     return true;

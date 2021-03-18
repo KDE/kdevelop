@@ -38,6 +38,7 @@
 #include <tests/testcore.h>
 
 #include <KConfigGroup>
+#include <kcoreaddons_version.h>
 #include <KIO/Global>
 #include <KSharedConfig>
 
@@ -1193,7 +1194,11 @@ void LldbTest::testAttach()
     QTest::qWait(100);
 
     auto *session = new TestDebugSession;
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 78, 0)
     session->attachToProcess(debugeeProcess.pid());
+#else
+    session->attachToProcess(debugeeProcess.processId());
+#endif
 
     WAIT_FOR_A_WHILE(session, 100);
 

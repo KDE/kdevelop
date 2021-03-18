@@ -30,6 +30,7 @@
 #include <interfaces/iuicontroller.h>
 #include <sublime/message.h>
 
+#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -108,7 +109,11 @@ bool MIDebugger::isReady() const
 void MIDebugger::interrupt()
 {
 #ifndef Q_OS_WIN
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 78, 0)
     int pid = m_process->pid();
+#else
+    int pid = m_process->processId();
+#endif
     if (pid != 0) {
         ::kill(pid, SIGINT);
     }
@@ -167,7 +172,11 @@ void MIDebugger::readyReadStandardError()
 void MIDebugger::processLine(const QByteArray& line)
 {
     if (line != "(gdb) ") {
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 78, 0)
         qCDebug(DEBUGGERCOMMON) << "Debugger output (pid =" << m_process->pid() << "): " << line;
+#else
+        qCDebug(DEBUGGERCOMMON) << "Debugger output (pid =" << m_process->processId() << "): " << line;
+#endif
     }
 
     FileSymbol file;
