@@ -21,6 +21,7 @@
 
 #include "jobstatus.h"
 
+#include <kcoreaddons_version.h>
 #include <KJob>
 #include <KLocalizedString>
 
@@ -46,7 +47,11 @@ JobStatus::JobStatus(KJob* job, const QString& statusName, QObject* parent)
         emit hideProgress(this);
         deleteLater();
     });
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 80, 0)
     connect(job, QOverload<KJob*, unsigned long>::of(&KJob::percent), this, &JobStatus::slotPercent);
+#else
+    connect(job, &KJob::percentChanged, this, &JobStatus::slotPercent);
+#endif
 }
 
 JobStatus::~JobStatus()
