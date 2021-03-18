@@ -19,6 +19,9 @@
      <property name="text">
       <string comment="@action:button">Apply</string>
      </property>
+     <property name="icon">
+      <iconset theme="dialog-ok-apply"/>
+     </property>
     </widget>
    </item>
    <item row="2" column="1">
@@ -29,6 +32,9 @@
      <property name="text">
       <string comment="@action:button">Pop</string>
      </property>
+     <property name="icon">
+      <iconset theme="vcs-stash-pop"/>
+     </property>
     </widget>
    </item>
    <item row="3" column="1">
@@ -38,6 +44,9 @@
      </property>
      <property name="text">
       <string comment="@action:button">Branch</string>
+     </property>
+     <property name="icon">
+      <iconset theme="vcs-branch"/>
      </property>
     </widget>
    </item>
@@ -62,6 +71,9 @@
      <property name="text">
       <string comment="@action:button">Drop</string>
      </property>
+     <property name="icon">
+      <iconset theme="edit-delete"/>
+     </property>
     </widget>
    </item>
    <item row="0" column="1">
@@ -71,6 +83,9 @@
      </property>
      <property name="text">
       <string comment="@action:button">Show</string>
+     </property>
+     <property name="icon">
+      <iconset theme="document-preview"/>
      </property>
     </widget>
    </item>
