@@ -32,6 +32,9 @@
 class KDirWatch;
 class QDir;
 
+class RepoStatusModel;
+class CommitToolViewFactory;
+
 namespace KDevelop
 {
     class VcsJob;
@@ -43,15 +46,15 @@ class StandardJob : public KDevelop::VcsJob
     Q_OBJECT
     public:
         StandardJob(KDevelop::IPlugin* parent, KJob* job, OutputJobVerbosity verbosity);
-        
+
         QVariant fetchResults() override { return QVariant(); }
         void start() override;
         JobStatus status() const override { return m_status; }
         KDevelop::IPlugin* vcsPlugin() const override { return m_plugin; }
-        
+
     public Q_SLOTS:
         void result(KJob*);
-    
+
     private:
         KJob* m_job;
         KDevelop::IPlugin* m_plugin;
@@ -70,17 +73,73 @@ class GitPlugin: public KDevelop::DistributedVersionControlPlugin, public KDevel
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl KDevelop::IContentAwareVersionControl)
     friend class GitInitTest;
 public:
+
+    enum ExtendedState {
+        /* Unchanged in index (no staged changes) */
+        GitXX = KDevelop::VcsStatusInfo::ItemUserState, // No changes in worktree
+
+               // Changed in worktree, not staged for commit
+        GitXM, // Modified in worktree
+        GitXD, // Deleted in worktree
+        GitXR, // Renamed in worktree
+        GitXC, // Copied in worktree
+
+        /* Changes in index (staged changes) */
+        GitMX, // No changes in worktree
+                  // Changed in worktree, not staged for commit
+        GitMM, // Modified in worktree
+        GitMD, // Deleted in worktree
+
+        /* Added to index (new item) */
+        GitAX, // No changes in worktree
+                  // Changes in worktree, not staged for commit
+        GitAM, // Modified in worktree
+        GitAD, // Deleted in worktree
+
+        /* Deleted from index */
+        GitDX, // No changes in worktree (deleted in wt)
+        GitDR, // Renamed in worktree
+        GitDC, // Copied in worktree
+
+        /* Renamed in index */
+        GitRX, // No changes in worktree
+        GitRM, // Modified in worktree
+        GitRD, // Deleted in worktree
+
+        /* Copied in index */
+        GitCX, // No changes in worktree
+        GitCM, // Modified in worktree
+        GitCD, // Deleted in worktree
+
+        /* Special states */
+        GitUntracked, // ? ? --- untracked files
+        GitConflicts, // U, AA, DD --- conflicts
+        GitInvalid = -1, // not really a state
+    };
+
+    /**
+     * Enums with values which are used as function arguments
+     * instead of bools for better readability.
+     *
+     * The enums are named ${function_name}Params.
+     */
+    enum ApplyParams {
+        Index = 0,
+        WorkTree = 2,
+    };
+
+
     explicit GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin() override;
-   
+
     QString name() const override;
 
     bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;
     bool isVersionControlled(const QUrl &path) override;
-    
+
     KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;
     KDevelop::VcsJob* move(const QUrl& localLocationSrc, const QUrl& localLocationDst) override;
-    
+
     //TODO
     KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation) override;
     KDevelop::VcsJob* push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst) override;
@@ -103,13 +162,49 @@ public:
                              const QList<QUrl>& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive) override;
 
+    /**
+     * Commits staged changes to the repo located at repoUrl.
+     *
+     * @param message the commit message
+     * @param repoUrl the url pointing to the repo directory (or a file in the repo)
+     */
+    KDevelop::VcsJob* commitStaged(const QString& message, const QUrl& repoUrl);
+
     KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                                    RecursionMode recursion) override;
+    /**
+     * Shows a diff of changes between srcRevision and dstRevision.
+     *
+     * @param repoPath a path pointing somewhere inside the repo
+     * @param srcRevision the source revision
+     * @param dstRevision the destination revision
+     *
+     * @note: This differs from the @ref:diff method in @ref:IBasicVersionControl in that it does not require
+     * a list of files but automatically shows all changed files
+     */
+    KDevelop::VcsJob* diff(const QUrl& repoPath, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision);
 
     KDevelop::VcsJob* log( const QUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit) override;
     KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit) override;
     KDevelop::VcsJob* annotate(const QUrl &localLocation, const KDevelop::VcsRevision &rev) override;
     KDevelop::VcsJob* revert(const QList<QUrl>& localLocations, RecursionMode recursion) override;
+
+    /**
+     * Resets all changes in the specified files which were "staged for commit".
+     *
+     * @param localLocations the local files/dirs changes to which should be reset
+     * @param recursion defines whether changes should be reset recursively in all files
+     * in a directory, if localLocations contain a directory
+     */
+    KDevelop::VcsJob* reset(const QList<QUrl>& localLocations, RecursionMode recursion);
+
+    /**
+     * Applies the patch given by a diff to the repo
+     *
+     * @param diff the patch
+     * @param applyTo where to apply the patch (index or worktree)
+     */
+    KDevelop::VcsJob* apply(const KDevelop::VcsDiff& diff, ApplyParams applyTo = WorkTree);
 
     // Begin:  KDevelop::IDistributedVersionControl
     KDevelop::VcsJob* init(const QUrl & directory) override;
@@ -133,9 +228,9 @@ public:
                         QVector<KDevelop::DVcsEvent>& commits) const override;
 
     void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls) override;
-    
+
     KDevelop::DVcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
-    
+
     bool hasStashes(const QDir& repository);
     bool hasModifications(const QDir& repository);
     bool hasModifications(const QDir& repo, const QUrl& file);
@@ -160,9 +255,9 @@ public:
         m_usePrefix = p;
     }
 protected:
-  
+
     QUrl repositoryRoot(const QUrl& path);
-  
+
     bool isValidDirectory(const QUrl &dirPath) override;
 
     KDevelop::DVcsJob* lsFiles(const QDir &repository,
@@ -184,7 +279,7 @@ private Q_SLOTS:
     void parseGitVersionOutput(KDevelop::DVcsJob* job);
     void parseGitBranchOutput(KDevelop::DVcsJob* job);
     void parseGitCurrentBranch(KDevelop::DVcsJob* job);
-    
+
     void ctxRebase();
     void ctxPushStash();
     void ctxPopStash();
@@ -199,7 +294,7 @@ Q_SIGNALS:
 private:
     bool ensureValidGitIdentity(const QDir& dir);
     void addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files);
-    
+
     //commit dialog "main" helper
     QStringList getLsFiles(const QDir &directory, const QStringList &args,
         KDevelop::OutputJob::OutputJobVerbosity verbosity);
@@ -207,17 +302,36 @@ private:
 
     void initBranchHash(const QString &repo);
 
-    static KDevelop::VcsStatusInfo::State messageToState(const QStringRef& ch);
+    /**
+     * Parses a git status --porcelain line
+     *
+     * @param statusLine a line as returned by `git status --porcelain`
+     * @returns the appropriate extended status
+     */
+    static ExtendedState parseGitState(const QStringRef& statusLine);
+
+    /**
+     * Maps an extended state to a basic state
+     *
+     * @param state the extended state as provided by git (i.e. describing the combined status in the index & worktree)
+     */
+    static KDevelop::VcsStatusInfo::State extendedStateToBasic(const ExtendedState state);
 
     QList<QStringList> branchesShas;
     QList<QUrl> m_urls;
-    
+
     /** Tells if it's older than 1.7.0 or not */
     bool m_oldVersion;
 
     KDirWatch* m_watcher;
     QList<QUrl> m_branchesChange;
     bool m_usePrefix;
+
+    /** A tree model tracking and classifying changes into staged, unstaged and untracked */
+    RepoStatusModel* m_repoStatusModel;
+
+    /** A factory for constructing the tool view for preparing commits */
+    CommitToolViewFactory* m_commitToolViewFactory;
 };
 
 QVariant runSynchronously(KDevelop::VcsJob* job);

@@ -22,6 +22,9 @@
 
 #include "gitplugin.h"
 
+#include "repostatusmodel.h"
+#include "committoolview.h"
+
 #include <QDateTime>
 #include <QProcess>
 #include <QDir>
@@ -30,9 +33,12 @@
 #include <QTimer>
 #include <QRegularExpression>
 #include <QPointer>
+#include <QTemporaryFile>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/iuicontroller.h>
 
 #include <util/path.h>
 
@@ -44,7 +50,6 @@
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "gitclonejob.h"
-#include <interfaces/iruncontroller.h>
 #include "rebasedialog.h"
 #include "stashmanagerdialog.h"
 
@@ -180,12 +185,21 @@ QDir urlDir(const QList<QUrl>& urls) { return urlDir(urls.first()); } //TODO: co
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit")), m_oldVersion(false), m_usePrefix(true)
+    : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit")), m_oldVersion(false), m_usePrefix(true),
+    m_repoStatusModel(new RepoStatusModel(this)),
+    m_commitToolViewFactory(new CommitToolViewFactory(m_repoStatusModel))
 {
     if (QStandardPaths::findExecutable(QStringLiteral("git")).isEmpty()) {
         setErrorDescription(i18n("Unable to find git executable. Is it installed on the system?"));
         return;
     }
+
+    // FIXME: Is this needed (I don't quite understand the comment
+    // in vcsstatusinfo.h which says we need to do this if we want to
+    // use VcsStatusInfo in queued signals/slots)
+    qRegisterMetaType<VcsStatusInfo>();
+
+    ICore::self()->uiController()->addToolView(i18n("Git Commit"), m_commitToolViewFactory);
 
     setObjectName(QStringLiteral("Git"));
 
@@ -401,7 +415,19 @@ KDevelop::VcsJob* GitPlugin::status(const QList<QUrl>& localLocations, KDevelop:
 VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                         IBasicVersionControl::RecursionMode recursion)
 {
-    DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
+    DVcsJob* job = static_cast<DVcsJob*>(diff(fileOrDirectory, srcRevision, dstRevision));
+    *job << "--";
+    if (recursion == IBasicVersionControl::Recursive) {
+        *job << fileOrDirectory;
+    } else {
+        *job << preventRecursion(QList<QUrl>() << fileOrDirectory);
+    }
+    return job;
+}
+
+KDevelop::VcsJob * GitPlugin::diff(const QUrl& repoPath, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision)
+{
+    DVcsJob* job = new GitJob(dotGitDirectory(repoPath), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-color" << "--no-ext-diff";
     if (!usePrefix()) {
@@ -422,17 +448,45 @@ VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision
         if(!revstr.isEmpty())
             *job << revstr;
     }
-
-    *job << "--";
-    if (recursion == IBasicVersionControl::Recursive) {
-        *job << fileOrDirectory;
-    } else {
-        *job << preventRecursion(QList<QUrl>() << fileOrDirectory);
-    }
-
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitDiffOutput);
     return job;
 }
+
+
+KDevelop::VcsJob * GitPlugin::reset ( const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion )
+{
+    if(localLocations.isEmpty() )
+        return errorsFound(i18n("Could not reset changes (empty list of paths)"), OutputJob::Verbose);
+
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
+    job->setType(VcsJob::Reset);
+    *job << "git" << "reset" << "--";
+    *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    return job;
+}
+
+KDevelop::VcsJob * GitPlugin::apply(const KDevelop::VcsDiff& diff, const ApplyParams applyTo)
+{
+    DVcsJob* job = new GitJob(dotGitDirectory(diff.baseDiff()), this);
+    job->setType(VcsJob::Apply);
+    *job << "git" << "apply";
+    if (applyTo == Index) {
+        *job << "--index";   // Applies the diff also to the index
+        *job << "--cached";  // Does not touch the work tree
+    }
+    auto* diffFile = new QTemporaryFile(this);
+    if (diffFile->open()) {
+        *job << diffFile->fileName();
+        diffFile->write(diff.diff().toUtf8());
+        diffFile->close();
+        connect(job, &KDevelop::VcsJob::resultsReady, [=](){delete diffFile;});
+    } else {
+        job->cancel();
+        delete diffFile;
+    }
+    return job;
+}
+
 
 VcsJob* GitPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
@@ -486,6 +540,21 @@ VcsJob* GitPlugin::commit(const QString& message,
     *job << "--" << files;
     return job;
 }
+
+KDevelop::VcsJob * GitPlugin::commitStaged(const QString& message, const QUrl& repoUrl)
+{
+    if (message.isEmpty())
+        return errorsFound(i18n("No message specified"));
+    const QDir dir = dotGitDirectory(repoUrl);
+    if (!ensureValidGitIdentity(dir)) {
+        return errorsFound(i18n("Email or name for Git not specified"));
+    }
+    auto* job = new DVcsJob(dir, this);
+    job->setType(VcsJob::Commit);
+    *job << "git" << "commit" << "-m" << message;
+    return job;
+}
+
 
 bool GitPlugin::ensureValidGitIdentity(const QDir& dir)
 {
@@ -1288,8 +1357,10 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         }
 
         VcsStatusInfo status;
+        ExtendedState ex_state = parseGitState(state);
         status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString())));
-        status.setState(messageToState(state));
+        status.setExtendedState(ex_state);
+        status.setState(extendedStateToBasic(ex_state));
         processedFiles.append(status.url());
 
         qCDebug(PLUGIN_GIT) << "Checking git status for " << line << curr << status.state();
@@ -1378,43 +1449,119 @@ DVcsJob* GitPlugin::gitRevList(const QString& directory, const QStringList& args
     }
 }
 
-VcsStatusInfo::State GitPlugin::messageToState(const QStringRef& msg)
+constexpr int _pair(char a, char b) { return a*256 + b;}
+
+GitPlugin::ExtendedState GitPlugin::parseGitState(const QStringRef& msg)
 {
     Q_ASSERT(msg.size()==1 || msg.size()==2);
-    VcsStatusInfo::State ret = VcsStatusInfo::ItemUnknown;
+    ExtendedState ret = GitInvalid;
 
     if(msg.contains(QLatin1Char('U')) || msg == QLatin1String("AA") || msg == QLatin1String("DD"))
-        ret = VcsStatusInfo::ItemHasConflicts;
-    else switch(msg.at(0).toLatin1())
+        ret = GitConflicts;
+    else switch(_pair(msg.at(0).toLatin1(), msg.at(1).toLatin1()))
     {
-        case 'M':
-            ret = VcsStatusInfo::ItemModified;
+        case _pair(' ', ' '):
+            ret = GitXX;
             break;
-        case 'A':
-            ret = VcsStatusInfo::ItemAdded;
+        case _pair(' ','M'):
+            ret = GitXM;
             break;
-        case 'R':
-            ret = VcsStatusInfo::ItemModified;
+        case _pair ( ' ','D' ) :
+            ret = GitXD;
             break;
-        case 'C':
-            ret = VcsStatusInfo::ItemHasConflicts;
+        case _pair ( ' ','R' ) :
+            ret = GitXR;
             break;
-        case ' ':
-            ret = msg.at(1) == QLatin1Char('M') ? VcsStatusInfo::ItemModified : VcsStatusInfo::ItemDeleted;
+        case _pair ( ' ','C' ) :
+            ret = GitXC;
             break;
-        case 'D':
-            ret = VcsStatusInfo::ItemDeleted;
+        case _pair ( 'M',' ' ) :
+            ret = GitMX;
             break;
-        case '?':
-            ret = VcsStatusInfo::ItemUnknown;
+        case _pair ( 'M','M' ) :
+            ret = GitMM;
+            break;
+        case _pair ( 'M','D' ) :
+            ret = GitMD;
+            break;
+        case _pair ( 'A',' ' ) :
+            ret = GitAX;
+            break;
+        case _pair ( 'A','M' ) :
+            ret = GitAM;
+            break;
+        case _pair ( 'A','D' ) :
+            ret = GitAD;
+            break;
+        case _pair ( 'D',' ' ) :
+            ret = GitDX;
+            break;
+        case _pair ( 'D','R' ) :
+            ret = GitDR;
+            break;
+        case _pair ( 'D','C' ) :
+            ret = GitDC;
+            break;
+        case _pair ( 'R',' ' ) :
+            ret = GitRX;
+            break;
+        case _pair ( 'R','M' ) :
+            ret = GitRM;
+            break;
+        case _pair ( 'R','D' ) :
+            ret = GitRD;
+            break;
+        case _pair ( 'C',' ' ) :
+            ret = GitCX;
+            break;
+        case _pair ( 'C','M' ) :
+            ret = GitCM;
+            break;
+        case _pair ( 'C','D' ) :
+            ret = GitCD;
+            break;
+        case _pair ( '?','?' ) :
+            ret = GitUntracked;
             break;
         default:
             qCDebug(PLUGIN_GIT) << "Git status not identified:" << msg;
+            ret = GitInvalid;
             break;
     }
 
     return ret;
 }
+
+KDevelop::VcsStatusInfo::State GitPlugin::extendedStateToBasic(const GitPlugin::ExtendedState state)
+{
+    switch(state) {
+        case GitXX: return VcsStatusInfo::ItemUpToDate;
+        case GitXM: return VcsStatusInfo::ItemModified;
+        case GitXD: return VcsStatusInfo::ItemDeleted;
+        case GitXR: return VcsStatusInfo::ItemModified;
+        case GitXC: return VcsStatusInfo::ItemModified;
+        case GitMX: return VcsStatusInfo::ItemModified;
+        case GitMM: return VcsStatusInfo::ItemModified;
+        case GitMD: return VcsStatusInfo::ItemDeleted;
+        case GitAX: return VcsStatusInfo::ItemAdded;
+        case GitAM: return VcsStatusInfo::ItemAdded;
+        case GitAD: return VcsStatusInfo::ItemAdded;
+        case GitDX: return VcsStatusInfo::ItemDeleted;
+        case GitDR: return VcsStatusInfo::ItemDeleted;
+        case GitDC: return VcsStatusInfo::ItemDeleted;
+        case GitRX: return VcsStatusInfo::ItemModified;
+        case GitRM: return VcsStatusInfo::ItemModified;
+        case GitRD: return VcsStatusInfo::ItemDeleted;
+        case GitCX: return VcsStatusInfo::ItemModified;
+        case GitCM: return VcsStatusInfo::ItemModified;
+        case GitCD: return VcsStatusInfo::ItemDeleted;
+        case GitUntracked: return VcsStatusInfo::ItemUnknown;
+        case GitConflicts: return VcsStatusInfo::ItemHasConflicts;
+        case GitInvalid: return VcsStatusInfo::ItemUnknown;
+    }
+    return VcsStatusInfo::ItemUnknown;
+}
+
 
 StandardJob::StandardJob(IPlugin* parent, KJob* job,
                                  OutputJob::OutputJobVerbosity verbosity)

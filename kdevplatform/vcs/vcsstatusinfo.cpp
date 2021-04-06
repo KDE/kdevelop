@@ -31,6 +31,7 @@ class VcsStatusInfoPrivate : public QSharedData
 {
 public:
     int state;
+    int extendedState;
     QUrl url;
 };
 
@@ -38,6 +39,7 @@ VcsStatusInfo::VcsStatusInfo()
     : d( new VcsStatusInfoPrivate)
 {
     d->state = VcsStatusInfo::ItemUnknown;
+    d->extendedState = VcsStatusInfo::ItemUnknown;
 }
 
 VcsStatusInfo::~VcsStatusInfo() = default;
@@ -70,7 +72,7 @@ void VcsStatusInfo::setUrl( const QUrl& url )
 
 void VcsStatusInfo::setExtendedState( int newstate )
 {
-    d->state = newstate;
+    d->extendedState = newstate;
 }
 
 void VcsStatusInfo::setState( VcsStatusInfo::State state )
@@ -80,7 +82,7 @@ void VcsStatusInfo::setState( VcsStatusInfo::State state )
 
 int VcsStatusInfo::extendedState() const
 {
-    return d->state;
+    return d->extendedState;
 }
 
 QUrl VcsStatusInfo::url() const

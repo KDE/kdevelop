@@ -58,7 +58,9 @@ public:
         ItemModified      = 3    /**< Item was modified locally. */,
         ItemDeleted       = 4    /**< Item is scheduled to be deleted. */,
         ItemHasConflicts  = 8    /**< Local version has conflicts that need to be resolved before commit. */,
-        ItemUserState     = 1000 /**< special states for individual vcs implementations should use this as base. */
+
+        ItemUserState     = 1000 /**< special states for individual vcs implementations should use this as base. */,
+
     };
 
     VcsStatusInfo();
@@ -79,7 +81,15 @@ public:
     VcsStatusInfo::State state() const;
     void setState( VcsStatusInfo::State );
 
+    /**
+     * @returns the extended state which may be set by individual vcs implementations
+     */
     int extendedState() const;
+
+    /**
+     * Individual vcs implementations may use this function to set a special vcs status.
+     * They should also always set an appropriate basic state, if possible.
+     */
     void setExtendedState( int );
 
     VcsStatusInfo& operator=( const VcsStatusInfo& rhs);

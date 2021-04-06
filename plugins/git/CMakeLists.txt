@@ -6,6 +6,10 @@ declare_qt_logging_category(kdevgit_LOG_PART_SRCS
     CATEGORY_BASENAME "git"
 )
 set(kdevgit_PART_SRCS
+    repostatusmodel.cpp
+    committoolview.cpp
+    diffviewsctrl.cpp
+    simplecommitform.cpp
     rebasedialog.cpp
     stashmanagerdialog.cpp
     stashpatchsource.cpp
@@ -28,6 +32,7 @@ target_link_libraries(kdevgit
     KDev::Vcs
     KDev::Project
     KF5::SonnetUi
+    KF5::TextEditor
 )
 
 if(BUILD_TESTING)

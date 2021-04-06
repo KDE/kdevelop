@@ -1,0 +1,148 @@
+commit f75d5b21dbb75788d6c4a4c7aa63edfb2a73935a
+Author: Jonathan L. Verner <jonathan.verner@matfyz.cz>
+Date:   Thu Apr 30 00:55:13 2020 +0200
+
+    Document the methods in VcsDiff and add comments to impl.
+
+diff --git a/kdevplatform/vcs/vcsdiff.cpp b/kdevplatform/vcs/vcsdiff.cpp
+index 28d925f2d2..e54862a1b9 100644
+--- a/kdevplatform/vcs/vcsdiff.cpp
++++ b/kdevplatform/vcs/vcsdiff.cpp
+@@ -39,7 +39,7 @@ public:
+        , oldCount
+        , newStart
+        , newCount
+-       , firstLineIdx
++       , firstLineIdx  /**< The 0-based line number (in the whole diff) of the hunk header line (the one starting with `@@`) */
+        ;
+     QString srcFile    /**< The source filename */
+           , tgtFile    /**< The target filename */
+@@ -50,8 +50,25 @@ public:
+     uint lastLineIdx() const { return firstLineIdx+lines.size()-1; }
+     bool containsDiffLine( uint lineIdx ) const {return firstLineIdx < lineIdx && lineIdx <= lastLineIdx();}
+ 
++    /**
++     * A helper method to construct a hunk header from the provided info
++     *
++     * A hunk header has the following form:
++     *
++     *      @@ oldStart,oldCount newStart,newCount @@ heading
++     * e.g.
++     *      @@ -36,14 +36,28 @@ public:
++     *
++     * @returns the hunk header
++     */
+     static QString formatHeader(uint oldStart, uint oldCount, uint newStart, uint newCount, QString head);
+ 
++    /**
++     * The following operators define a PARTIAL order on the hunks list.
++     * A hunk H is strictly below a hunk K iff the endline of H is strictly below
++     * the start line of K. In particular, the only non-overlapping hunks are
++     * ordered.
++     */
+     bool operator<( const DiffHunk& b ){return lastLineIdx() < b.firstLineIdx;}
+     bool operator<( uint line ) {return lastLineIdx() < line;}
+     bool operator<=( const KDevelop::DiffHunk& b ){return lastLineIdx() <= b.firstLineIdx;}
+@@ -64,6 +81,7 @@ public:
+ 
+ /* RegExp matching a hunk header line */
+ static const auto HUNK_HEADER_RE = QRegularExpression(QString::fromLatin1("^@@ -([0-9,]+) \\+([0-9,]+) @@(.*)"));
++/* RegExp matching a meta line containing a source of target filename */
+ static const auto DIFF_FILENAME_RE = QRegularExpression(QString::fromLatin1("^[-+]{3} [ab]/(.*)"));
+ /* RegExp matching a meta line (hunk header, filename, other info) */
+ static const auto META_LINE_RE = QRegularExpression(QString::fromLatin1("(^[-+]{3})|^[^-+ ]"));
+@@ -92,8 +110,12 @@ QString DiffHunk::formatHeader(uint oldStart, uint oldCount, uint newStart, uint
+          + head;
+ }
+ 
+-/* Parses a diff into a list of hunks (each hunk starts with a line starting with @@
+- * and represents a collection of localized changes */
++/**
++ * Parses a diff into a list of hunks (each hunk starts with a line starting with @@
++ * and represents a collection of localized changes
++ *
++ * @returns a list of hunk structures
++ */
+ QList<KDevelop::DiffHunk *> parseHunks(VcsDiff& diff)
+ {
+     QList<KDevelop::DiffHunk*> ret;
+@@ -242,12 +264,12 @@ KDevelop::VcsDiff VcsDiff::subDiff( const uint startLine, const uint endLine, Di
+             }
+ 
+             if (lnIdx < startLine || endLine < lnIdx) {
+-                // skip additions that are not in range
++                // skip additions (or deletions if reverse) that are not in range
+                 if (tp == ADD) {
+                     prevSkipped=true;
+                     continue;
+                 }
+-                // change deletions that are not in range into context
++                // change deletions (or additions if reverse) that are not in range into context
+                 if (tp == DEL) tp=CTX;
+             }
+ 
+@@ -343,10 +365,6 @@ int VcsDiff::diffLineToTgtLine ( const uint line ) const
+     return -1;
+ }
+ 
+-
+-
+-
+-
+ VcsDiff::VcsDiff()
+     : d(new VcsDiffPrivate)
+ {
+diff --git a/kdevplatform/vcs/vcsdiff.h b/kdevplatform/vcs/vcsdiff.h
+index becb8247da..f7e79f6b78 100644
+--- a/kdevplatform/vcs/vcsdiff.h
++++ b/kdevplatform/vcs/vcsdiff.h
+@@ -137,15 +137,45 @@ public:
+     /** @returns whether or not there are changes in the diff */
+     bool isEmpty() const;
+ 
+-    /** @returns a diff containing only the changes from the current diff
+-     *  which are in the range startLine-endLine (in the diff text) */
++    /**
++     * Creates a standalone diff containing the differences in a given range.
++     *
++     * @returns a diff containing only the changes from the current diff
++     *  which are in the range startLine-endLine (in the diff text)
++     *
++     * @param startLine 0-based line number (in the diff) of the first line in the range
++     * @param endLine 0-based line number (in the diff) of the last line in the range
++     * @param dir if set to Reverse, the role of src and tgt are reversed, i.e. a diff is
++     *            generated which can be applied to the target to get the source.
++     */
+     VcsDiff subDiff(const uint startLine, const uint endLine, DiffDirection dir = Normal);
+ 
+-    /** @returns a diff containing only the changes from hunk containing
+-     * the line the line */
++    /**
++     * Creates a new standalone diff from a single hunk identified by a containing line.
++     *
++     * @returns a diff containing only the changes from hunk containing
++     * the line the line
++     *
++     * @param line 0-based line number (in the diff) of the line in the hunk
++     * @param dir if set to Reverse, the role of src and tgt are reversed, i.e. a diff is
++     *            generated which can be applied to the target to get the source.
++     */
+     VcsDiff subDiffHunk(const uint line, DiffDirection dir = Normal);
+ 
++    /**
++     * Maps a line position in the diff to a corresponding line position in the source file.
++     *
++     * @param line a 0-based line position in the diff
++     * @returns the 0-based line position in the source file or -1 if no such position exists.
++     */
+     int diffLineToSrcLine(const uint line) const;
++
++    /**
++     * Maps a line position in the diff to a corresponding line position in the source file.
++     *
++     * @param line a 0-based line position in the diff
++     * @returns the 0-based line position in the source file or -1 if no such position exists.
++     */
+     int diffLineToTgtLine(const uint line) const;
+ 
+     /**

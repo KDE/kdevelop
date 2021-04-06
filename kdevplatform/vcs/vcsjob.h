@@ -74,6 +74,8 @@ public:
         Status = 16     /**< A status job */,
         Revert = 17     /**< A revert job */,
         Cat = 18        /**< A cat job */,
+        Reset = 19      /**< A reset job */,
+        Apply = 20      /**< An apply job */,
         UserType = 1000 /**< A custom job */
     };
 

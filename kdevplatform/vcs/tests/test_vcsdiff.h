@@ -33,8 +33,14 @@ private Q_SLOTS:
     void initTestCase();
     void testCopyConstructor();
     void testAssignOperator();
+    void testFileNames();
+    void testSubDiff();
+    void testLineMapping();
+    void testConflicts();
 
 private:
+    QString sampleDiff;
+
     void setDiff(KDevelop::VcsDiff& diff,
                  const QString& diffString,
                  const QUrl& baseDiff,

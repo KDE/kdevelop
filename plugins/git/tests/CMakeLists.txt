@@ -16,6 +16,10 @@ if (GIT_FOUND)
 
     set(gittest_SRCS
         test_git.cpp
+        ../repostatusmodel.cpp
+        ../committoolview.cpp
+        ../diffviewsctrl.cpp
+        ../simplecommitform.cpp
         ../gitplugin.cpp
         ../gitclonejob.cpp
         ../stashmanagerdialog.cpp
