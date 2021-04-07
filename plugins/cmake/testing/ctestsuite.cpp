@@ -23,53 +23,19 @@
 
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
-#include <language/duchain/indexeddeclaration.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/use.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/indexeddeclaration.h>
+#include <language/duchain/classdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
-#include <language/duchain/duchainutils.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/pointertype.h>
+#include <language/duchain/types/referencetype.h>
 #include <language/duchain/types/structuretype.h>
-#include <project/projectmodel.h>
-
-using namespace KDevelop;
-
-Declaration* findTestClassDeclaration(const CursorInRevision& c, DUContext* ctx, RangeInRevision::ContainsBehavior behavior)
-{
-    /*
-     * This code is mostly copied from DUChainUtils::itemUnderCursorInternal.
-     * However, it is simplified because we are only looking for uses of the test class,
-     * so we can skip the search through local declarations, which speeds up the search.
-     * Additionally, we are only interested in the declaration itself, not in its context
-     * or range.
-     */
-
-    const auto subContexts = ctx->childContexts();
-    for (DUContext* subCtx : subContexts) {
-        //This is a little hacky, but we need it in case of foreach macros and similar stuff
-        if(subCtx->range().contains(c, behavior) || subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line)
-        {
-            Declaration *d = findTestClassDeclaration(c, subCtx, behavior);
-            if (d)
-            {
-                return d;
-            }
-        }
-    }
-
-    for(int a = 0; a < ctx->usesCount(); ++a)
-    {
-        if(ctx->uses()[a].m_range.contains(c, behavior))
-        {
-            return ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex);
-        }
-    }
-
-    return nullptr;
-}
 
 using namespace KDevelop;
 
@@ -90,112 +56,116 @@ CTestSuite::~CTestSuite()
 
 }
 
+bool CTestSuite::findCaseDeclarations(const QVector<Declaration*> &classDeclarations)
+{
+    for (Declaration* decl : classDeclarations) {
+        qCDebug(CMAKE) << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
+
+        const auto* const function = dynamic_cast<ClassFunctionDeclaration*>(decl);
+        if (!function || !(function->accessPolicy() == Declaration::Private && function->isSlot())) {
+            continue;
+        }
+        QString name = function->qualifiedIdentifier().last().toString();
+        qCDebug(CMAKE) << "Found private slot in test" << name;
+
+        if (name.endsWith(QLatin1String("_data"))) {
+            continue;
+        }
+
+        const auto functionType = function->type<FunctionType>();
+        if (!functionType || functionType->indexedArgumentsSize() > 0) {
+            // function declarations with arguments are not valid test functions
+            continue;
+        }
+        qCDebug(CMAKE) << "Found test case function declaration" << function->identifier().toString();
+
+        if (name != QLatin1String("initTestCase") && name != QLatin1String("cleanupTestCase") &&
+            name != QLatin1String("init") && name != QLatin1String("cleanup"))
+        {
+            m_cases << name;
+        } else {
+            continue;
+        }
+
+        const auto* def = FunctionDefinition::definition(decl);
+        m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
+    }
+    return !m_declarations.isEmpty();
+}
+
 void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop::ReferencedTopDUContext& ref)
 {
     DUChainReadLocker locker(DUChain::lock());
     TopDUContext* topContext = DUChainUtils::contentContextFromProxyContext(ref.data());
-    if (!topContext)
-    {
+    if (!topContext) {
         qCDebug(CMAKE) << "No top context in" << document.str();
         return;
     }
 
     Declaration* testClass = nullptr;
-
     const auto mainId = Identifier(QStringLiteral("main"));
     const auto mainDeclarations = topContext->findLocalDeclarations(mainId);
+    DUContext* tmpInternalContext;
     for (Declaration* declaration : mainDeclarations) {
-        if (declaration->isDefinition())
-        {
-            qCDebug(CMAKE) << "Found a definition for a function 'main()' at" << declaration->range();
+        if (!declaration->isDefinition() || !(tmpInternalContext = declaration->internalContext())) {
+            continue;
+        }
+        RangeInRevision contextRange = tmpInternalContext->range();
+        qCDebug(CMAKE) << "Found a definition for a function 'main()' at" << contextRange;
 
-            /*
-             * This is a rather hacky solution to get the test class for a Qt test.
-             *
-             * The class is used as the argument to the QTEST_MAIN or QTEST_GUILESS_MAIN macro.
-             * This macro expands to a main() function with a variable declaration with 'tc' as
-             * the name and with the test class as the type.
-             *
-             * Unfortunately, we cannot get to the function body context in order to find
-             * this variable declaration.
-             * Instead, we find the cursor to the beginning of the main() function, offset
-             * the cursor to the inside of the QTEST_MAIN(x) call, and find the declaration there.
-             * If it is a type declaration, that type is the main test class.
-             */
+        /*
+            * This function tries to deduce the test class from the main function definition of
+            * the test source file. To do so, the cursor is set before the end of the internal
+            * context. Going backwards from there, the first variable declaration of a class
+            * type with private slots is assumed to be the test class.
+            * This method finds test classes passed to QTEST_MAIN or QTEST_GUILESS_MAIN, but
+            * also some classes which are used in manual implementations with a similar structure
+            * as in the Qt macros.
+            * If no such class is found, the main function definition is linked to the test suite
+            * and no test cases are added to the test suite.
+        */
 
-            CursorInRevision cursor = declaration->range().start;
-            Declaration* testClassDeclaration = nullptr;
-            int mainDeclarationColumn = cursor.column;
+        --contextRange.end.column; // set cursor before the end of the definition
+        const auto innerContext = topContext->findContextAt(contextRange.end, true);
+        if (!innerContext) {
+            continue;
+        }
+        const auto mainDeclarations = innerContext->localDeclarations(topContext);
+        for (auto it = mainDeclarations.rbegin(); it != mainDeclarations.rend(); ++it) {
+            qCDebug(CMAKE) << "Main declaration" << (*it)->toString();
 
-            // cursor points to the start of QTEST_MAIN(x) invocation, we offset it to point inside it
-            cursor.column += 12;
-            testClassDeclaration = findTestClassDeclaration(cursor, topContext, RangeInRevision::Default);
-
-            while (!testClassDeclaration || testClassDeclaration->kind() != Declaration::Kind::Type)
-            {
-                // If the first found declaration was not a type, the macro may be QTEST_GUILESS_MAIN rather than QTEST_MAIN.
-                // Alternatively, it may be called as QTEST_MAIN(KDevelop::TestCase), or something similar.
-                // So we just try a couple of different positions.
-                cursor.column += 8;
-                if (cursor.column > mainDeclarationColumn + 60)
-                {
-                    break;
+            auto type = (*it)->abstractType();
+            // Strip pointer and reference types to finally get to the structure type of the test class
+            while (type && (type->whichType() == AbstractType::TypePointer || type->whichType() == AbstractType::TypeReference)) {
+                if (const auto ptype = TypePtr<PointerType>::dynamicCast(type)) {
+                    type = ptype->baseType();
+                } else if (const auto rtype = TypePtr<ReferenceType>::dynamicCast(type)) {
+                    type = rtype->baseType();
+                } else {
+                    type = nullptr;
                 }
-                testClassDeclaration = findTestClassDeclaration(cursor, topContext, RangeInRevision::Default);
+            }
+            const auto structureType = TypePtr<StructureType>::dynamicCast(type);
+            if (!structureType) {
+                continue;
             }
 
-            if (testClassDeclaration && testClassDeclaration->kind() == Declaration::Kind::Type)
-            {
-                qCDebug(CMAKE) << "Found test class declaration" << testClassDeclaration->identifier().toString() << testClassDeclaration->kind();
-                if (StructureType::Ptr type = testClassDeclaration->type<StructureType>())
-                {
-                    testClass = type->declaration(topContext);
-                    if (testClass && testClass->internalContext())
-                    {
-                        break;
-                    }
-                }
+            testClass = structureType->declaration(topContext);
+            if (!testClass || !(tmpInternalContext = testClass->internalContext())) {
+                continue;
+            }
+
+            if (findCaseDeclarations(tmpInternalContext->localDeclarations(topContext))) {
+                break;
             }
         }
+        testClass = declaration;
     }
 
-    if (!testClass || !testClass->internalContext())
-    {
-        qCDebug(CMAKE) << "No test class found or internal context missing in " << document.str();
-        return;
-    }
-
-    if (!m_suiteDeclaration.data())
-    {
+    if (testClass && testClass->internalContext()) {
         m_suiteDeclaration = IndexedDeclaration(testClass);
-    }
-
-    const auto testClassDeclarations = testClass->internalContext()->localDeclarations(topContext);
-    for (Declaration* decl : testClassDeclarations) {
-        qCDebug(CMAKE) << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
-        if (auto* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
-        {
-            if (function->accessPolicy() == Declaration::Private && function->isSlot())
-            {
-                QString name = function->qualifiedIdentifier().last().toString();
-                qCDebug(CMAKE) << "Found private slot in test" << name;
-
-                if (name.endsWith(QLatin1String("_data")))
-                {
-                    continue;
-                }
-
-                if (name != QLatin1String("initTestCase") && name != QLatin1String("cleanupTestCase")
-                    && name != QLatin1String("init") && name != QLatin1String("cleanup"))
-                {
-                    m_cases << name;
-                }
-                qCDebug(CMAKE) << "Found test case function declaration" << function->identifier().toString();
-
-                auto* def = FunctionDefinition::definition(decl);
-                m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
-            }
-        }
+    } else {
+        qCDebug(CMAKE) << "No test class found or internal context missing in " << document.str();
     }
 }
 

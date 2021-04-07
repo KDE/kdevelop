@@ -40,17 +40,12 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 
 void CTestFindJob::start()
 {
-    qCDebug(CMAKE);
-    QMetaObject::invokeMethod(this, "findTestCases", Qt::QueuedConnection);
+    qCDebug(CMAKE) << "Finding test cases";
+    QMetaObject::invokeMethod(this, &CTestFindJob::findTestCases, Qt::QueuedConnection);
 }
 
 void CTestFindJob::findTestCases()
 {
-    if (!m_suite->arguments().isEmpty()) {
-        emitResult();
-        return;
-    }
-
     m_pendingFiles.clear();
     const auto& sourceFiles = m_suite->sourceFiles();
     for (const auto& file : sourceFiles) {

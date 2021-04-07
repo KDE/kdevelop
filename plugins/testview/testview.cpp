@@ -87,10 +87,10 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_tree->setIndentation(10);
     m_tree->setEditTriggers(QTreeView::NoEditTriggers);
     m_tree->setSelectionBehavior(QTreeView::SelectRows);
-    m_tree->setSelectionMode(QTreeView::SingleSelection);
+    m_tree->setSelectionMode(QTreeView::ExtendedSelection);
     m_tree->setExpandsOnDoubleClick(false);
     m_tree->sortByColumn(0, Qt::AscendingOrder);
-    connect(m_tree, &QTreeView::activated, this, &TestView::doubleClicked);
+    connect(m_tree, &QTreeView::doubleClicked, this, &TestView::doubleClicked);
 
     m_model = new QStandardItemModel(this);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)

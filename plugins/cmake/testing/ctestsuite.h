@@ -28,6 +28,7 @@
 
 namespace KDevelop {
 class ReferencedTopDUContext;
+class Declaration;
 }
 
 class CTestSuite : public KDevelop::ITestSuite
@@ -56,6 +57,8 @@ public:
     void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 
 private:
+    bool findCaseDeclarations(const QVector<KDevelop::Declaration*> &classDeclarations);
+
     KDevelop::Path m_executable;
     QString m_name;
     QStringList m_cases;
