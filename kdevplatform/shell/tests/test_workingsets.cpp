@@ -27,6 +27,8 @@
 #include "../workingsets/workingset.h"
 
 #include <sublime/area.h>
+#include <sublime/document.h>
+#include <sublime/view.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -38,6 +40,7 @@
 #include <QLayout>
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QSplitter>
 
 #include <algorithm>
 
@@ -57,9 +60,8 @@ void TestWorkingSetController::initTestCase()
     m_area = uiController->activeArea();
     m_area_debug = nullptr;
     m_documentCtrl = Core::self()->documentController();
-    QMainWindow *mainWindow;
-    QVERIFY(mainWindow = uiController->activeMainWindow());
-    auto areaDisplay = mainWindow->menuBar()->cornerWidget(Qt::TopRightCorner);
+    QVERIFY(m_mainWindow = uiController->activeMainWindow());
+    auto areaDisplay = m_mainWindow->menuBar()->cornerWidget(Qt::TopRightCorner);
     // active working set + separator + closed working sets + tool button
     QCOMPARE(areaDisplay->layout()->count(), 4);
     // widget that contains the buttons of the currently closed working sets
@@ -76,6 +78,7 @@ void TestWorkingSetController::init()
 
 void TestWorkingSetController::cleanupTestCase()
 {
+    m_mainWindow->close();
     TestCore::shutdown();
 }
 
@@ -196,6 +199,90 @@ void TestWorkingSetController::switchArea()
     m_area->setWorkingSet(setName);
 
     QTRY_COMPARE(m_closedSets->layout()->count(), 1); // working set 2, BUG 375446
+}
+
+void TestWorkingSetController::restoreSplits()
+{
+    // we need to show the window to calculate actual widget sizes
+    m_mainWindow->show();
+
+    // Create a persistent working set with 4 split views
+    m_area->setWorkingSet(setName);
+    auto set2 = m_workingSetCtrl->workingSet(m_area->workingSet());
+    set2->setPersistent(true);
+    auto doc = m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
+
+    // Split view
+    auto view_bottom_left = dynamic_cast<Sublime::Document*>(doc)->createView();
+    m_area->addView(view_bottom_left, m_area->activeView(), Qt::Vertical);
+    auto view_top_right = dynamic_cast<Sublime::Document*>(doc)->createView();
+    m_area->addView(view_top_right, m_area->activeView(), Qt::Horizontal);
+    auto view_bottom_right = dynamic_cast<Sublime::Document*>(doc)->createView();
+    m_area->addView(view_bottom_right, view_bottom_left, Qt::Horizontal);
+
+    // required to arrange the view widgets in the window
+    QApplication::processEvents();
+
+    QSet<Sublime::AreaIndex*> indices;
+    for (auto &view : m_area->views()) {
+        indices.insert(m_area->indexOf(view));
+    }
+    QCOMPARE(indices.size(), 4); // number of view containers
+
+    auto *splitter_bottom = qobject_cast<QSplitter*>(view_bottom_left->widget()
+                                                         ->parentWidget()
+                                                         ->parentWidget()   // view container
+                                                         ->parentWidget()   // splitter containing a single container
+                                                         ->parentWidget()); // splitter containing lower containers
+    QVERIFY(splitter_bottom);
+    splitter_bottom->repaint();
+    splitter_bottom->setSizes({1, 1000});
+    auto sizes_bottom = splitter_bottom->sizes();
+    QVERIFY(sizes_bottom.at(0) < sizes_bottom.at(1));
+
+    auto *splitter_mid = qobject_cast<QSplitter*>(splitter_bottom->parentWidget());
+    QVERIFY(splitter_mid);
+    splitter_mid->setSizes({1, 1000});
+    auto sizes_mid = splitter_mid->sizes();
+    QVERIFY(sizes_mid.at(0) < sizes_mid.at(1));
+
+    QVERIFY(!qobject_cast<QSplitter*>(splitter_mid->parentWidget()));
+
+    // Create and activate another persistent working set with a single view
+    m_area->setWorkingSet(setName2);
+    auto set = m_workingSetCtrl->workingSet(m_area->workingSet());
+    set->setPersistent(true);
+    m_documentCtrl->openDocument(QUrl::fromLocalFile(m_file.fileName()));
+
+    indices.clear();
+    for (auto &view : m_area->views()) {
+        indices.insert(m_area->indexOf(view));
+    }
+    QCOMPARE(indices.size(), 1);
+
+    m_area->setWorkingSet(setName);
+
+    QApplication::processEvents();
+
+    indices.clear();
+    for (auto &view : m_area->views()) {
+        indices.insert(m_area->indexOf(view));
+    }
+    QCOMPARE(indices.size(), 4);
+    view_bottom_left = m_area->views().at(2);
+
+    // check if the splitter sizes are restored
+    splitter_bottom = qobject_cast<QSplitter*>(view_bottom_left->widget()
+                                                   ->parentWidget()
+                                                   ->parentWidget()   // view container
+                                                   ->parentWidget()   // splitter containing a single container
+                                                   ->parentWidget()); // splitter containing lower containers
+    QVERIFY(splitter_bottom);
+    QCOMPARE(splitter_bottom->sizes(), sizes_bottom);
+
+    splitter_mid = qobject_cast<QSplitter*>(splitter_bottom->parentWidget());
+    QVERIFY(splitter_mid);
+    QCOMPARE(splitter_mid->sizes(), sizes_mid);
 }
 
 QTEST_MAIN(TestWorkingSetController)

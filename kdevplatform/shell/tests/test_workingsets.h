@@ -24,6 +24,7 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 
+class QMainWindow;
 class QWidget;
 
 namespace KDevelop
@@ -44,9 +45,11 @@ private Q_SLOTS:
     void initTestCase();
     void init();
     void cleanupTestCase();
+
     void createWorkingSet();
     void deleteWorkingSet();
     void switchArea();
+    void restoreSplits();
 
 private:
     void restartSession();
@@ -56,6 +59,8 @@ private:
     Sublime::Area* m_area;
     Sublime::Area* m_area_debug;
     KDevelop::IDocumentController* m_documentCtrl;
+
+    QMainWindow* m_mainWindow;
 
     QTemporaryDir m_tempDir;
     QTemporaryFile m_file;

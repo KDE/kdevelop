@@ -37,6 +37,7 @@
 
 #include <QFileInfo>
 #include <QPainter>
+#include <QSplitter>
 
 #define SYNC_OFTEN
 
@@ -120,28 +121,33 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
     return QIcon(QPixmap::fromImage(pixmap));
 }
 
-void loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex, const KConfigGroup &setGroup, QMultiMap<QString, Sublime::View*> &recycle)
+QSplitter* loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex, const KConfigGroup &setGroup, QMultiMap<QString, Sublime::View*> &recycle)
 {
     Q_ASSERT(!areaIndex->isSplit());
+
+    QSplitter *parentSplitter = nullptr;
+
     if (setGroup.hasKey("Orientation")) {
         QStringList subgroups = setGroup.groupList();
-        /// @todo also save and restore the ratio
-
-        if (subgroups.contains(QStringLiteral("0")) && subgroups.contains(QStringLiteral("1"))) {
-            Qt::Orientation orientation = setGroup.readEntry("Orientation", "Horizontal") == QLatin1String("Vertical") ? Qt::Vertical : Qt::Horizontal;
-            if (!areaIndex->isSplit()) {
-                areaIndex->split(orientation);
-            } else {
-                areaIndex->setOrientation(orientation);
+        if (!subgroups.contains(QStringLiteral("0"))) {
+            if (subgroups.contains(QStringLiteral("1"))) {
+                parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, "1"), recycle);
             }
+        } else if (!subgroups.contains(QStringLiteral("1"))) {
+            parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, "0"), recycle);
+        } else {
+            areaIndex->split(setGroup.readEntry("Orientation", "Horizontal") == QLatin1String("Vertical") ? Qt::Vertical : Qt::Horizontal);
 
-            loadToAreaPrivate(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), recycle);
-            loadToAreaPrivate(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), recycle);
-
-            if (areaIndex->first()->viewCount() == 0) {
+            parentSplitter = loadToAreaPrivate(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), recycle);
+            if (!parentSplitter) {
                 areaIndex->unsplit(areaIndex->first());
-            } else if (areaIndex->second()->viewCount() == 0) {
+                parentSplitter = loadToAreaPrivate(area, areaIndex, KConfigGroup(&setGroup, "1"), recycle);
+            } else if (auto *splitter = loadToAreaPrivate(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), recycle)) {
+                splitter->setSizes(setGroup.readEntry("Sizes", QList<int>({1, 1})));
+                parentSplitter = qobject_cast<QSplitter*>(splitter->parent());
+            } else {
                 areaIndex->unsplit(areaIndex->second());
+                emit area->viewAdded(areaIndex, nullptr);
             }
         }
     } else {
@@ -180,6 +186,7 @@ void loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex, const
         }
 
         //Load state
+        int activeIndex = setGroup.readEntry(QStringLiteral("Active View"), -1);
         for (int i = 0; i < viewCount; ++i) {
             if (!createdViews[i]) {
                 continue;
@@ -196,29 +203,57 @@ void loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex, const
                     }
                 }
             }
+            if (i == activeIndex) {
+                area->setActiveView(createdViews[i]);
+            }
+            if (!parentSplitter) {
+                auto p = createdViews[i]->widget()->parentWidget();
+                while (p && !(parentSplitter = qobject_cast<QSplitter*>(p))) {
+                    p = p->parentWidget();
+                }
+                if (parentSplitter) {
+                    parentSplitter = qobject_cast<QSplitter*>(parentSplitter->parent());
+                }
+            }
         }
     }
+
+    return parentSplitter;
 }
 
-void saveFromAreaPrivate(Sublime::AreaIndex *area, KConfigGroup setGroup)
+QSplitter* saveFromAreaPrivate(Sublime::AreaIndex *area, KConfigGroup setGroup, const Sublime::View *activeView)
 {
+    QSplitter *parentSplitter = nullptr;
+
     if (area->isSplit()) {
-        setGroup.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
-
-        if (area->first()) {
-            saveFromAreaPrivate(area->first(), KConfigGroup(&setGroup, "0"));
-        }
-
-        if (area->second()) {
-            saveFromAreaPrivate(area->second(), KConfigGroup(&setGroup, "1"));
+        if (!area->first()) {
+            parentSplitter = saveFromAreaPrivate(area->second(), setGroup, activeView);
+        } else if (!area->second()) {
+            parentSplitter = saveFromAreaPrivate(area->first(), setGroup, activeView);
+        } else {
+            parentSplitter = saveFromAreaPrivate(area->first(), KConfigGroup(&setGroup, "0"), activeView);
+            if (!parentSplitter) {
+                parentSplitter = saveFromAreaPrivate(area->second(), setGroup, activeView);
+            } else if (saveFromAreaPrivate(area->second(), KConfigGroup(&setGroup, "1"), activeView)) {
+                setGroup.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
+                setGroup.writeEntry("Sizes", parentSplitter->sizes());
+            } else {
+                // move up settings of group "0"
+                KConfigGroup(&setGroup, "0").copyTo(&setGroup);
+                setGroup.deleteGroup("0");
+            }
         }
     } else {
-        setGroup.writeEntry("View Count", area->viewCount());
         int index = 0;
+        int activeIndex = -1;
         const auto views = area->views();
         for (Sublime::View *view : views) {
             //The working set config gets an updated list of files
             QString docSpec = view->document()->documentSpecifier();
+
+            if (view == activeView) {
+                activeIndex = index;
+            }
 
             //only save the documents from protocols KIO understands
             //otherwise we try to load kdev:// too early
@@ -239,8 +274,23 @@ void saveFromAreaPrivate(Sublime::AreaIndex *area, KConfigGroup setGroup)
                 }
             }
             ++index;
+
+            if (!parentSplitter) {
+                auto p = view->widget()->parentWidget();
+                while (p && !(parentSplitter = qobject_cast<QSplitter*>(p))) {
+                    p = p->parentWidget();
+                }
+            }
+        }
+        if (index > 0) {
+            setGroup.writeEntry("View Count", index);
+            if (activeIndex >= 0) {
+                setGroup.writeEntry(QStringLiteral("Active View"), std::min(activeIndex, index - 1));
+            }
         }
     }
+
+    return parentSplitter ? qobject_cast<QSplitter*>(parentSplitter->parent()) : nullptr;
 }
 
 
@@ -361,7 +411,7 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
         recycle.insert( view->document()->documentSpecifier(), area->removeView(view) );
     }
 
-    qCDebug(SHELL) << "recycling" << recycle.size() << "old views";
+    qCDebug(SHELL) << "recycling up to" << recycle.size() << "old views";
 
     Q_ASSERT( area->views().empty() );
 
@@ -406,32 +456,21 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
     loadToAreaPrivate(area, area->rootIndex(), setGroup, recycle);
 
     // Delete views which were not recycled
-    qCDebug(SHELL) << "deleting " << recycle.size() << " old views";
+    qCDebug(SHELL) << "deleting" << recycle.size() << "old views";
     qDeleteAll(recycle);
 
-    area->setActiveView(nullptr);
-
-    //activate view in the working set
-    /// @todo correctly select one out of multiple equal views
-    QString activeView = setGroup.readEntry("Active View", QString());
-    const auto viewsAfter = area->views();
-    for (Sublime::View* v : viewsAfter) {
-        if (v->document()->documentSpecifier() == activeView) {
-            area->setActiveView(v);
-            break;
-        }
+    if (area->views().isEmpty()) {
+        return;
     }
 
-    if (!area->activeView() && !area->views().isEmpty()) {
+    if (!area->activeView()) {
         area->setActiveView(area->views().at(0));
     }
 
-    if (area->activeView()) {
-        const auto windows = Core::self()->uiControllerInternal()->mainWindows();
-        for (Sublime::MainWindow* window : windows) {
-            if (window->area() == area) {
-                window->activateView(area->activeView());
-            }
+    const auto windows = Core::self()->uiControllerInternal()->mainWindows();
+    for (Sublime::MainWindow* window : windows) {
+        if (window->area() == area) {
+            window->activateView(area->activeView());
         }
     }
 }
@@ -480,15 +519,9 @@ void WorkingSet::saveFromArea(Sublime::Area* area)
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
 
     KConfigGroup setGroup = setConfig.group(m_id);
-    QString lastActiveView = setGroup.readEntry("Active View", "");
     deleteGroupRecursive(setGroup);
 
-    if (area->activeView() && area->activeView()->document())
-        setGroup.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
-    else
-        setGroup.writeEntry("Active View", lastActiveView);
-
-    saveFromAreaPrivate(area->rootIndex(), setGroup);
+    saveFromAreaPrivate(area->rootIndex(), setGroup, area->activeView());
 
     if (isEmpty()) {
         deleteGroupRecursive(setGroup);
