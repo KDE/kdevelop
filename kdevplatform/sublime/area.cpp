@@ -350,7 +350,6 @@ void Area::save(KConfigGroup& group) const
     group.writeEntry("view on right", shownToolViews(Sublime::Right));
     group.writeEntry("view on top", shownToolViews(Sublime::Top));
     group.writeEntry("view on bottom", shownToolViews(Sublime::Bottom));
-    group.writeEntry("working set", d->workingSet);
 }
 
 void Area::load(const KConfigGroup& group)
@@ -381,7 +380,6 @@ void Area::load(const KConfigGroup& group)
     setShownToolViews(Sublime::Top, group.readEntry("view on top", QStringList()));
     setShownToolViews(Sublime::Bottom,
                      group.readEntry("view on bottom", QStringList()));
-    setWorkingSet(group.readEntry("working set", d->workingSet));
 }
 
 bool Area::wantToolView(const QString& id)
@@ -470,6 +468,8 @@ void Area::setWorkingSet(const QString &name, bool persistent, Area *oldArea)
         d->workingSet = name;
         d->workingSetPersists = persistent;
         emit changedWorkingSet(this, oldArea, oldName, name);
+    } else if (name.isEmpty()) {
+        d->workingSetPersists = persistent;
     }
 }
 

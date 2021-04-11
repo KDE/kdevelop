@@ -47,6 +47,7 @@
 #include "editorconfigpage.h"
 #include "shellextension.h"
 #include "plugincontroller.h"
+#include "session.h"
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
@@ -599,9 +600,15 @@ KParts::MainWindow *UiController::activeMainWindow()
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
     area->save(group);
-    if (!area->workingSet().isEmpty()) {
-        WorkingSet* set = Core::self()->workingSetControllerInternal()->workingSet(area->workingSet());
+    auto workingSet = area->workingSet();
+    if (!workingSet.isEmpty()) {
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->workingSet(workingSet);
         set->saveFromArea(area);
+    }
+    for (auto w : mainWindows()) {
+        if (area == w->area()) {
+            Core::self()->activeSession()->config()->group("Working File Sets").writeEntry("Active Working Set", workingSet);
+        }
     }
 }
 
@@ -705,6 +712,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
 
         // Force reload of the changes.
         showAreaInternal(mw->area(), mw);
+        mw->area()->setWorkingSet(Core::self()->activeSession()->config()->group("Working File Sets").readEntry("Active Working Set", QString()));
 
         mw->enableAreaSettingsSave();
     }

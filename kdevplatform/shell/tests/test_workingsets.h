@@ -43,7 +43,6 @@ Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
     void init();
-    void cleanup();
     void cleanupTestCase();
     void createWorkingSet();
     void deleteWorkingSet();

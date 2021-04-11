@@ -74,21 +74,6 @@ void TestWorkingSetController::init()
     }
 }
 
-
-void TestWorkingSetController::cleanup()
-{
-    // Activate the default (in the context of these tests) working set
-    // which will remain in the persistent QtTest config file
-    m_area->setWorkingSet(setName);
-    if (m_area_debug) {
-        m_area_debug->setWorkingSet(setName);
-    }
-    for (auto set : m_workingSetCtrl->allWorkingSets()) {
-        set->deleteSet(true);
-    }
-}
-
-
 void TestWorkingSetController::cleanupTestCase()
 {
     TestCore::shutdown();
