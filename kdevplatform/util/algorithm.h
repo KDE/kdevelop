@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <iterator>
 #include <type_traits>
+#include <vector>
 
 namespace Algorithm {
 /**
@@ -61,8 +62,8 @@ auto unite(ForwardIt first, ForwardIt last)
 /**
  * This is an overloaded convenience function.
  */
-template <typename T, template<typename> class Container>
-QSet<T> unite(Container<QSet<T>>&& sets)
+template <typename T>
+QSet<T> unite(std::vector<QSet<T>>&& sets)
 {
     return unite(std::make_move_iterator(sets.begin()),
                  std::make_move_iterator(sets.end()));
