@@ -5,14 +5,6 @@ if(BUILD_TESTING)
 endif()
 
 set(KDevPlatformShell_LIB_SRCS
-    workingsetcontroller.cpp
-    workingsets/workingset.cpp
-    workingsets/workingsetfilelabel.cpp
-    workingsets/workingsettoolbutton.cpp
-    workingsets/workingsettooltipwidget.cpp
-    workingsets/workingsetwidget.cpp
-    workingsets/closedworkingsetswidget.cpp
-    workingsets/workingsethelpers.cpp
     mainwindow.cpp
     mainwindow_p.cpp
     plugincontroller.cpp
@@ -125,6 +117,35 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
 )
 
 qt5_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
+
+
+add_library(kdevworkingsets OBJECT
+    workingsetcontroller.cpp
+    workingsets/workingset.cpp
+    workingsets/workingsetfilelabel.cpp
+    workingsets/workingsettoolbutton.cpp
+    workingsets/workingsettooltipwidget.cpp
+    workingsets/workingsetwidget.cpp
+    workingsets/closedworkingsetswidget.cpp
+    workingsets/workingsethelpers.cpp
+)
+
+target_link_libraries(kdevworkingsets
+PUBLIC
+    KDev::Sublime
+    KDev::Interfaces
+PRIVATE
+    KDev::Util
+    KF5::TextEditor
+)
+
+declare_qt_logging_category(kdevworkingsets
+    HEADER debug_workingset.h
+    TYPE LIBRARY
+    CATEGORY_BASENAME "workingset"
+)
+
+
 kdevplatform_add_library(KDevPlatformShell SOURCES ${KDevPlatformShell_LIB_SRCS})
 target_link_libraries(KDevPlatformShell
 PUBLIC
@@ -153,6 +174,7 @@ PRIVATE
     KF5::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
     KF5::NewStuff # template config page
     KF5::Archive # template config page
+    kdevworkingsets
 )
 if(APPLE)
     target_link_libraries(KDevPlatformShell PRIVATE "-framework AppKit")

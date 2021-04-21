@@ -23,7 +23,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "debug.h"
+#include "debug_workingset.h"
 #include "core.h"
 #include "documentcontroller.h"
 #include "mainwindow.h"
@@ -220,7 +220,7 @@ void WorkingSetToolTipWidget::nextDocument()
 
     if(active == -1)
     {
-        qCWarning(SHELL) << "Found no active document";
+        qCWarning(WORKINGSET) << "Found no active document";
         return;
     }
 
@@ -240,7 +240,7 @@ void WorkingSetToolTipWidget::previousDocument()
 
     if(active == -1)
     {
-        qCWarning(SHELL) << "Found no active document";
+        qCWarning(WORKINGSET) << "Found no active document";
         return;
     }
 

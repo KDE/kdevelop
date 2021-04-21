@@ -17,7 +17,7 @@
 */
 
 #include "workingset.h"
-#include "debug.h"
+#include "debug_workingset.h"
 
 #include <sublime/area.h>
 #include <sublime/document.h>
@@ -33,7 +33,6 @@
 #include <uicontroller.h>
 #include <util/pushvalue.h>
 #include <documentcontroller.h>
-#include <workingsetcontroller.h>
 
 #include <QFileInfo>
 #include <QPainter>
@@ -171,7 +170,7 @@ QSplitter* loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex,
             }
             auto url = QUrl::fromUserInput(specifier);
             if (url.isLocalFile() && !QFileInfo::exists(url.path())) {
-                qCWarning(SHELL) << "Unable to find file" << specifier;
+                qCWarning(WORKINGSET) << "Unable to find file" << specifier;
                 continue;
             }
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(url,
@@ -181,7 +180,7 @@ QSplitter* loadToAreaPrivate(Sublime::Area *area, Sublime::AreaIndex *areaIndex,
                 area->addView(view, areaIndex, previousView);
                 createdViews[i] = view;
             } else {
-                qCWarning(SHELL) << "Unable to create view" << specifier;
+                qCWarning(WORKINGSET) << "Unable to create view" << specifier;
             }
         }
 
@@ -402,7 +401,7 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
     /// split-view configurations and switching between them. Re-enabling the updates doesn't help.
 //     DisableMainWindowUpdatesFromArea updatesDisabler(area);
 
-    qCDebug(SHELL) << "loading working-set" << m_id << "into area" << area;
+    qCDebug(WORKINGSET) << "loading working-set" << m_id << "into area" << area;
 
     QMultiMap<QString, Sublime::View*> recycle;
 
@@ -411,7 +410,7 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
         recycle.insert( view->document()->documentSpecifier(), area->removeView(view) );
     }
 
-    qCDebug(SHELL) << "recycling up to" << recycle.size() << "old views";
+    qCDebug(WORKINGSET) << "recycling up to" << recycle.size() << "old views";
 
     Q_ASSERT( area->views().empty() );
 
@@ -456,7 +455,7 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
     loadToAreaPrivate(area, area->rootIndex(), setGroup, recycle);
 
     // Delete views which were not recycled
-    qCDebug(SHELL) << "deleting" << recycle.size() << "old views";
+    qCDebug(WORKINGSET) << "deleting" << recycle.size() << "old views";
     qDeleteAll(recycle);
 
     if (area->views().isEmpty()) {
@@ -476,7 +475,7 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
 }
 
 void deleteGroupRecursive(KConfigGroup group) {
-//     qCDebug(SHELL) << "deleting" << group.name();
+//     qCDebug(WORKINGSET) << "deleting" << group.name();
     const auto entryMap = group.entryMap();
     for (auto it = entryMap.begin(), end = entryMap.end(); it != end; ++it) {
         group.deleteEntry(it.key());
@@ -512,7 +511,7 @@ void WorkingSet::deleteSet(bool force, bool silent)
 
 void WorkingSet::saveFromArea(Sublime::Area* area)
 {
-    qCDebug(SHELL) << "saving" << m_id << "from area";
+    qCDebug(WORKINGSET) << "saving" << m_id << "from area";
 
     bool wasPersistent = isPersistent();
 
@@ -541,9 +540,9 @@ void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
     Q_ASSERT(area);
     Q_ASSERT(area->workingSet() == m_id);
 
-    qCDebug(SHELL) << "added view in" << area << ", id" << m_id;
+    qCDebug(WORKINGSET) << "added view in" << area << ", id" << m_id;
     if (m_loading) {
-        qCDebug(SHELL) << "doing nothing because loading";
+        qCDebug(WORKINGSET) << "doing nothing because loading";
         return;
     }
 
@@ -555,9 +554,9 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View* view) {
     Q_ASSERT(area);
     Q_ASSERT(area->workingSet() == m_id);
 
-    qCDebug(SHELL) << "removed view in" << area << ", id" << m_id;
+    qCDebug(WORKINGSET) << "removed view in" << area << ", id" << m_id;
     if (m_loading) {
-        qCDebug(SHELL) << "doing nothing because loading";
+        qCDebug(WORKINGSET) << "doing nothing because loading";
         return;
     }
 
@@ -589,7 +588,7 @@ void WorkingSet::setPersistent(bool persistent) {
 #ifdef SYNC_OFTEN
     group.sync();
 #endif
-    qCDebug(SHELL) << "setting" << m_id << "persistent:" << persistent;
+    qCDebug(WORKINGSET) << "setting" << m_id << "persistent:" << persistent;
 }
 
 bool WorkingSet::isPersistent() const {
@@ -626,11 +625,11 @@ bool WorkingSet::hasConnectedArea(Sublime::Area *area) const
 void WorkingSet::connectArea( Sublime::Area* area )
 {
   if ( m_areas.contains( area ) ) {
-    qCDebug(SHELL) << "tried to double-connect area";
+    qCDebug(WORKINGSET) << "tried to double-connect area";
     return;
   }
 
-  qCDebug(SHELL) << "connecting" << m_id << "to area" << area;
+  qCDebug(WORKINGSET) << "connecting" << m_id << "to area" << area;
 
 //         Q_ASSERT(area->workingSet() == m_id);
 
@@ -642,11 +641,11 @@ void WorkingSet::connectArea( Sublime::Area* area )
 void WorkingSet::disconnectArea( Sublime::Area* area )
 {
   if ( !m_areas.contains( area ) ) {
-    qCDebug(SHELL) << "tried to disconnect not connected area";
+    qCDebug(WORKINGSET) << "tried to disconnect not connected area";
     return;
   }
 
-  qCDebug(SHELL) << "disconnecting" << m_id << "from area" << area;
+  qCDebug(WORKINGSET) << "disconnecting" << m_id << "from area" << area;
 
 //         Q_ASSERT(area->workingSet() == m_id);
 
@@ -665,7 +664,7 @@ void WorkingSet::changed( Sublime::Area* area )
     //Do not capture changes done while loading
     PushValue<bool> enableLoading( m_loading, true );
 
-    qCDebug(SHELL) << "recording change done to" << m_id;
+    qCDebug(WORKINGSET) << "recording change done to" << m_id;
     saveFromArea(area);
   }
 

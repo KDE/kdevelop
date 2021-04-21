@@ -41,7 +41,7 @@
 #include "workingsets/workingsetwidget.h"
 #include "workingsets/closedworkingsetswidget.h"
 #include "core.h"
-#include "debug.h"
+#include "debug_workingset.h"
 
 using namespace KDevelop;
 
@@ -99,9 +99,9 @@ void WorkingSetController::cleanup()
 
     const auto oldWorkingSet = m_workingSets;
     for (WorkingSet* set : oldWorkingSet) {
-        qCDebug(SHELL) << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
+        qCDebug(WORKINGSET) << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
         if(!set->isPersistent() && !set->hasConnectedAreas()) {
-            qCDebug(SHELL) << "deleting";
+            qCDebug(WORKINGSET) << "deleting";
             set->deleteSet(true, true);
         }
         delete set;
@@ -283,7 +283,7 @@ void WorkingSetController::saveArea(Sublime::Area* area)
 
 void WorkingSetController::changingWorkingSet(Sublime::Area *area, Sublime::Area *oldArea, const QString &from, const QString &to)
 {
-    qCDebug(SHELL) << "changing working-set from" << from << oldArea << "to" << to << area;
+    qCDebug(WORKINGSET) << "changing working-set from" << from << oldArea << "to" << to << area;
     if (from == to)
         return;
 
@@ -298,7 +298,7 @@ void WorkingSetController::changingWorkingSet(Sublime::Area *area, Sublime::Area
 
 void WorkingSetController::changedWorkingSet(Sublime::Area *area, Sublime::Area *oldArea, const QString &from, const QString &to)
 {
-    qCDebug(SHELL) << "changed working-set from" << from << "to" << to << "area" << area;
+    qCDebug(WORKINGSET) << "changed working-set from" << from << "to" << to << "area" << area;
     if ((oldArea == area && from == to) || m_changingWorkingSet) {
         return;
     }
@@ -324,7 +324,7 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
         //Spawn a new working-set
         m_changingWorkingSet = true;
         WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
-        qCDebug(SHELL) << "Spawned new working-set" << set->id() << "because a view was added";
+        qCDebug(WORKINGSET) << "Spawned new working-set" << set->id() << "because a view was added";
         set->setPersistent(area->workingSetPersistent());
         set->connectArea(area);
         set->saveFromArea(area);
