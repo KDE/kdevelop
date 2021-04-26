@@ -52,6 +52,7 @@ target_link_libraries(KDevPlatformUtil
 PUBLIC
     KDev::Interfaces
 PRIVATE
+    KF5::I18n
     KF5::ItemModels
     KF5::GuiAddons
 )

@@ -26,6 +26,7 @@ kdevplatform_add_plugin(kdevperforce JSON kdevperforce.json SOURCES ${kdevperfor
 target_link_libraries(kdevperforce
    KDev::Interfaces
    KDev::Vcs
+   KF5::I18n
 )
 
 if(BUILD_TESTING)

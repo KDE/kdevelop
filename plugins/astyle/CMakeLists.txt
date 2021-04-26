@@ -30,6 +30,7 @@ kdevplatform_add_plugin(kdevastyle JSON kdevastyle.json SOURCES ${kdevastyle_PAR
 target_link_libraries(kdevastyle
     astylelib
 
+    KF5::I18n
     KF5::Parts
     KF5::KIOWidgets
     KF5::TextEditor

@@ -23,6 +23,7 @@ target_link_libraries(kdevstandardoutputview
     KDev::Sublime
     KDev::Util
     KDev::OutputView
+    KF5::I18n
 )
 
 if(BUILD_TESTING)

@@ -24,6 +24,7 @@ PUBLIC
 PRIVATE
     KDev::Interfaces
     KDev::Util
+    KF5::I18n
 )
 
 install(FILES

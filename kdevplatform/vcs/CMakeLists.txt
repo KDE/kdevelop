@@ -65,6 +65,8 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
+    KF5::I18n
+    KF5::TextWidgets
     KF5::KIOWidgets
     KF5::Parts
 )

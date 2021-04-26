@@ -40,6 +40,8 @@ target_link_libraries(KDevPlatformSublime
 PUBLIC
     KF5::Parts
 PRIVATE
+    KF5::I18n
+    KF5::TextWidgets
     KF5::KIOWidgets
 )
 

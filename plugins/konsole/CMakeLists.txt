@@ -12,4 +12,4 @@ declare_qt_logging_category(kdevkonsoleview_PART_SRCS
     CATEGORY_BASENAME "konsole"
 )
 kdevplatform_add_plugin(kdevkonsoleview JSON kdevkonsoleview.json SOURCES ${kdevkonsoleview_PART_SRCS})
-target_link_libraries(kdevkonsoleview KF5::Parts KDev::Interfaces KDev::Util)
+target_link_libraries(kdevkonsoleview KF5::I18n KF5::Parts KDev::Interfaces KDev::Util)

@@ -65,6 +65,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Parts
   Service
   TextEditor
+  TextWidgets
   ThreadWeaver
   XmlGui
   WindowSystem

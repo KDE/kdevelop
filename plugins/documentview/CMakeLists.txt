@@ -17,5 +17,6 @@ kdevplatform_add_plugin(kdevdocumentview JSON kdevdocumentview.json SOURCES ${kd
 target_link_libraries(kdevdocumentview
     KDev::Interfaces
     KDev::Util
+    KF5::I18n
     KF5::TextEditor
 )

@@ -10,4 +10,5 @@ target_link_libraries(kdevvcschangesviewplugin
     KDev::Interfaces
     KDev::Project
     KDev::Vcs
+    KF5::I18n
 )

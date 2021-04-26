@@ -15,6 +15,7 @@ kdevplatform_add_plugin(kdevfilemanager JSON kdevfilemanager.json SOURCES ${kdev
 target_link_libraries(kdevfilemanager
     KDev::Interfaces
     KDev::Sublime
+    KF5::I18n
     KF5::Bookmarks
     KF5::KIOCore
     KF5::KIOFileWidgets

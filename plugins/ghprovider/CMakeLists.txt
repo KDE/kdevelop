@@ -20,6 +20,7 @@ declare_qt_logging_category(kdevghprovider_PART_SRCS
 
 kdevplatform_add_plugin(kdevghprovider JSON kdevghprovider.json	SOURCES ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider
+  KF5::I18n
   KF5::KIOWidgets
   KDev::Interfaces
   KDev::Vcs

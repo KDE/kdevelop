@@ -31,6 +31,7 @@ PUBLIC
     KDev::Util
 PRIVATE
     KDev::Sublime
+    KF5::I18n
     KF5::Notifications
     KF5::TextEditor
 )

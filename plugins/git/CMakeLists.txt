@@ -32,6 +32,7 @@ target_link_libraries(kdevgit
     KDev::Vcs
     KDev::Project
     KF5::SonnetUi
+    KF5::TextWidgets
     KF5::TextEditor
 )
 

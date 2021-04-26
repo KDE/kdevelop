@@ -25,4 +25,5 @@ target_link_libraries(kdevscratchpad
     KDev::Sublime
     KDev::Util
     KDev::OutputView
+    KF5::I18n
 )

@@ -47,6 +47,8 @@ target_link_libraries(kdevfiletemplates
     KDev::Language
     KDev::Project
     KDev::Util
+    KF5::I18n
+    KF5::TextWidgets
     KF5::NewStuff
     KF5::TextEditor
 )
@@ -98,6 +100,7 @@ if(BUILD_TESTING)
         KDev::Project
         KDev::Util
         KDev::Tests
+        KF5::TextWidgets
         KF5::NewStuff
     )
 

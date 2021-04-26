@@ -34,6 +34,7 @@ PUBLIC
     KDev::Interfaces
 PRIVATE
     KDev::Util
+    KF5::I18n
 )
 
 if(USE_QTWEBKIT)

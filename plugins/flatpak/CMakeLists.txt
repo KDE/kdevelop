@@ -13,6 +13,7 @@ qt5_add_resources(flatpakplugin_SRCS kdevflatpakplugin.qrc)
 kdevplatform_add_plugin(kdevflatpak JSON kdevflatpak.json SOURCES flatpakplugin.cpp flatpakruntime.cpp ${flatpakplugin_SRCS})
 target_link_libraries(kdevflatpak
     KF5::CoreAddons
+    KF5::I18n
     KDev::Interfaces
     KDev::Util
     KDev::OutputView
