@@ -42,6 +42,8 @@ private:
     struct DefinesIncludes {
         KDevelop::Defines definedMacros;
         KDevelop::Path::List includePaths;
+        bool hasCachedMacros = false;
+        bool hasCachedIncludes = false;
     };
 
     /// List of defines/includes per arguments

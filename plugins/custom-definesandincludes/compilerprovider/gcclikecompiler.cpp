@@ -87,9 +87,12 @@ QString languageStandard(const QString& arguments, Utils::LanguageType type)
 Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& arguments) const
 {
     auto& data = m_definesIncludes[type][arguments];
-    if (!data.definedMacros.isEmpty() ) {
+    if (data.hasCachedMacros) {
         return data.definedMacros;
     }
+
+    // we don't want to run the below code more than once, even if it errors out
+    data.hasCachedMacros = true;
 
     // #define a 1
     // #define a
@@ -136,9 +139,12 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
 Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& arguments) const
 {
     auto& data = m_definesIncludes[type][arguments];
-    if ( !data.includePaths.isEmpty() ) {
+    if (data.hasCachedIncludes) {
         return data.includePaths;
     }
+
+    // we don't want to run the below code more than once, even if it errors out
+    data.hasCachedIncludes = true;
 
     const auto rt = ICore::self()->runtimeController()->currentRuntime();
     QProcess proc;
