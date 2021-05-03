@@ -184,10 +184,10 @@ QDir urlDir(const QList<QUrl>& urls) { return urlDir(urls.first()); } //TODO: co
 
 }
 
-GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit")), m_oldVersion(false), m_usePrefix(true),
-    m_repoStatusModel(new RepoStatusModel(this)),
-    m_commitToolViewFactory(new CommitToolViewFactory(m_repoStatusModel))
+GitPlugin::GitPlugin(QObject* parent, const QVariantList&)
+    : DistributedVersionControlPlugin(parent, QStringLiteral("kdevgit"))
+    , m_repoStatusModel(new RepoStatusModel(this))
+    , m_commitToolViewFactory(new CommitToolViewFactory(m_repoStatusModel))
 {
     if (QStandardPaths::findExecutable(QStringLiteral("git")).isEmpty()) {
         setErrorDescription(i18n("Unable to find git executable. Is it installed on the system?"));

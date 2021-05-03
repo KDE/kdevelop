@@ -321,11 +321,11 @@ private:
     QList<QUrl> m_urls;
 
     /** Tells if it's older than 1.7.0 or not */
-    bool m_oldVersion;
+    bool m_oldVersion = false;
 
     KDirWatch* m_watcher;
     QList<QUrl> m_branchesChange;
-    bool m_usePrefix;
+    bool m_usePrefix = true;
 
     /** A tree model tracking and classifying changes into staged, unstaged and untracked */
     RepoStatusModel* m_repoStatusModel;
