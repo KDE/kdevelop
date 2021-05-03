@@ -21,7 +21,7 @@
 #include "gitclonejob.h"
 
 GitCloneJob::GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, OutputJobVerbosity verbosity)
-    : DVcsJob(d, parent, verbosity)
+    : GitJob(d, parent, verbosity)
     , m_steps(0)
 {
     connect(this, &GitCloneJob::resultsReady, this, &GitCloneJob::processResult);

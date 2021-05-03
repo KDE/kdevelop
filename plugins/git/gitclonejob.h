@@ -21,9 +21,9 @@
 #ifndef KDEVPLATFORM_PLUGIN_GITCLONEJOB_H
 #define KDEVPLATFORM_PLUGIN_GITCLONEJOB_H
 
-#include <vcs/dvcs/dvcsjob.h>
+#include "gitjob.h"
 
-class GitCloneJob : public KDevelop::DVcsJob
+class GitCloneJob : public GitJob
 {
     Q_OBJECT
     public:
