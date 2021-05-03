@@ -34,6 +34,7 @@
 #include <QRegularExpression>
 #include <QPointer>
 #include <QTemporaryFile>
+#include <QVersionNumber>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -1393,28 +1394,12 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
     const auto output = job->output().trimmed();
-    auto versionString = output.midRef(output.lastIndexOf(QLatin1Char(' '))).split(QLatin1Char('.'));
-    static const std::array<int, 2> minimumVersion = {1, 7};
-    qCDebug(PLUGIN_GIT) << "checking git version" << versionString << "against" << minimumVersion[0] << minimumVersion[1];
-    m_oldVersion = false;
-    if (static_cast<uint>(versionString.size()) < minimumVersion.size()) {
-        m_oldVersion = true;
-        qCWarning(PLUGIN_GIT) << "invalid git version string:" << job->output().trimmed();
-        return;
-    }
-    for (int num : minimumVersion) {
-        QStringRef curr = versionString.takeFirst();
-        int valcurr = curr.toInt();
-        if (valcurr < num) {
-            m_oldVersion = true;
-            break;
-        }
-        if (valcurr > num) {
-            m_oldVersion = false;
-            break;
-        }
-    }
-    qCDebug(PLUGIN_GIT) << "the current git version is old: " << m_oldVersion;
+    auto versionString = output.midRef(output.lastIndexOf(QLatin1Char(' ')));
+    const auto minimumVersion = QVersionNumber(1, 7);
+    const auto actualVersion = QVersionNumber::fromString(versionString);
+    m_oldVersion = actualVersion < minimumVersion;
+    qCDebug(PLUGIN_GIT) << "checking git version" << versionString << actualVersion << "against" << minimumVersion
+                        << m_oldVersion;
 }
 
 QStringList GitPlugin::getLsFiles(const QDir &directory, const QStringList &args,
