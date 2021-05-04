@@ -62,7 +62,7 @@ OpenDocumentRevisionsMap& openDocumentsRevisionMap()
 
 QDateTime fileModificationTimeCached(const IndexedString& fileName)
 {
-    const auto currentTime = QDateTime::currentDateTime();
+    const auto currentTime = QDateTime::currentDateTimeUtc();
 
     auto it = fileModificationCache().constFind(fileName);
     if (it != fileModificationCache().constEnd()) {

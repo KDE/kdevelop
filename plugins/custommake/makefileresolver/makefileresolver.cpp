@@ -318,17 +318,19 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
           return ret;
         } else {
           //We have a cached failed result. We should use that for some time but then try again. Return the failed result if: (there were too many tries within this folder OR this file was already tried) AND The last tries have not expired yet
-          if (/*(it->failedFiles.size() > 3 || it->failedFiles.find(file) != it->failedFiles.end()) &&*/ it->failTime.secsTo(QDateTime::currentDateTime()) < CACHE_FAIL_FOR_SECONDS) {
-            PathResolutionResult ret(false); //Fake that the result is ok
-            ret.errorMessage = i18n("Cached: %1", it->errorMessage);
-            ret.longErrorMessage = it->longErrorMessage;
-            ret.paths = it->paths;
-            ret.frameworkDirectories = it->frameworkDirectories;
-            ret.defines = it->defines;
-            ret.mergeWith(resultOnFail);
-            return ret;
+          if (/*(it->failedFiles.size() > 3 || it->failedFiles.find(file) != it->failedFiles.end()) &&*/ it->failTime
+                  .secsTo(QDateTime::currentDateTimeUtc())
+              < CACHE_FAIL_FOR_SECONDS) {
+              PathResolutionResult ret(false); // Fake that the result is ok
+              ret.errorMessage = i18n("Cached: %1", it->errorMessage);
+              ret.longErrorMessage = it->longErrorMessage;
+              ret.paths = it->paths;
+              ret.frameworkDirectories = it->frameworkDirectories;
+              ret.defines = it->defines;
+              ret.mergeWith(resultOnFail);
+              return ret;
           } else {
-            //Try getting a correct result again
+              // Try getting a correct result again
           }
         }
       }
@@ -400,7 +402,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
       ce.failed = true;
       ce.errorMessage = res.errorMessage;
       ce.longErrorMessage = res.longErrorMessage;
-      ce.failTime = QDateTime::currentDateTime();
+      ce.failTime = QDateTime::currentDateTimeUtc();
       ce.failedFiles[file] = true;
     } else {
       ce.failed = false;

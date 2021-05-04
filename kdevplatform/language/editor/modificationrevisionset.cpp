@@ -247,7 +247,7 @@ static bool nodeNeedsUpdate(uint index)
     if (!index)
         return false;
 
-    const auto currentTime = QDateTime::currentDateTime();
+    const auto currentTime = QDateTime::currentDateTimeUtc();
 
     auto cached = needsUpdateCache.constFind(index);
     if (cached != needsUpdateCache.constEnd()) {
