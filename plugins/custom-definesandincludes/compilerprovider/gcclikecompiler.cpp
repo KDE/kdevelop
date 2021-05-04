@@ -27,6 +27,8 @@
 #include <QProcess>
 #include <QRegularExpression>
 #include <QMap>
+#include <QScopeGuard>
+
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 
@@ -86,21 +88,11 @@ QString languageStandard(const QString& arguments, Utils::LanguageType type)
 
 Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& arguments) const
 {
+    // first do a lookup by type and arguments
     auto& data = m_definesIncludes[type][arguments];
-    if (data.hasCachedMacros) {
-        return data.definedMacros;
+    if (data.definedMacros.wasCached) {
+        return data.definedMacros.data;
     }
-
-    // we don't want to run the below code more than once, even if it errors out
-    data.hasCachedMacros = true;
-
-    // #define a 1
-    // #define a
-    QRegExp defineExpression(QStringLiteral("#define\\s+(\\S+)(?:\\s+(.*)\\s*)?"));
-
-    const auto rt = ICore::self()->runtimeController()->currentRuntime();
-    QProcess proc;
-    proc.setProcessChannelMode( QProcess::MergedChannels );
 
     // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
     const QStringList compilerArguments{
@@ -110,6 +102,25 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
         QStringLiteral("-E"),
         QStringLiteral("-"),
     };
+
+    // if that fails, do a lookup based on the actual compiler arguments
+    // often these are much less variable than the arguments passed per TU
+    // so here we can better exploit the cache by doing this two-phase lookup
+    auto& cachedData = m_defines[compilerArguments];
+    auto updateDataOnExit = qScopeGuard([&] {
+        // we don't want to run the below code more than once
+        // even if it errors out
+        cachedData.wasCached = true;
+        data.definedMacros = cachedData;
+    });
+
+    if (cachedData.wasCached) {
+        return cachedData.data;
+    }
+
+    const auto rt = ICore::self()->runtimeController()->currentRuntime();
+    QProcess proc;
+    proc.setProcessChannelMode(QProcess::MergedChannels);
     proc.setStandardInputFile(QProcess::nullDevice());
     proc.setProgram(path());
     proc.setArguments(compilerArguments);
@@ -125,26 +136,48 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
         return {};
     }
 
+    // #define a 1
+    // #define a
+    QRegExp defineExpression(QStringLiteral("#define\\s+(\\S+)(?:\\s+(.*)\\s*)?"));
+
     while ( proc.canReadLine() ) {
         auto line = proc.readLine();
 
         if ( defineExpression.indexIn(QString::fromUtf8(line)) != -1 ) {
-            data.definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
+            cachedData.data[defineExpression.cap(1)] = defineExpression.cap(2).trimmed();
         }
     }
 
-    return data.definedMacros;
+    return cachedData.data;
 }
 
 Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& arguments) const
 {
+    // first do a lookup by type and arguments
     auto& data = m_definesIncludes[type][arguments];
-    if (data.hasCachedIncludes) {
-        return data.includePaths;
+    if (data.includePaths.wasCached) {
+        return data.includePaths.data;
     }
 
-    // we don't want to run the below code more than once, even if it errors out
-    data.hasCachedIncludes = true;
+    const QStringList compilerArguments {
+        languageOption(type), languageStandard(arguments, type), QStringLiteral("-E"), QStringLiteral("-v"),
+        QStringLiteral("-"),
+    };
+
+    // if that fails, do a lookup based on the actual compiler arguments
+    // often these are much less variable than the arguments passed per TU
+    // so here we can better exploit the cache by doing this two-phase lookup
+    auto& cachedData = m_includes[compilerArguments];
+    auto updateDataOnExit = qScopeGuard([&] {
+        // we don't want to run the below code more than once
+        // even if it errors out
+        cachedData.wasCached = true;
+        data.includePaths = cachedData;
+    });
+
+    if (cachedData.wasCached) {
+        return cachedData.data;
+    }
 
     const auto rt = ICore::self()->runtimeController()->currentRuntime();
     QProcess proc;
@@ -162,14 +195,6 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-
-    const QStringList compilerArguments{
-        languageOption(type),
-        languageStandard(arguments, type),
-        QStringLiteral("-E"),
-        QStringLiteral("-v"),
-        QStringLiteral("-"),
-    };
 
     proc.setStandardInputFile(QProcess::nullDevice());
     proc.setProgram(path());
@@ -219,7 +244,7 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
                     auto hostPath = rt->pathInHost(Path(QFileInfo(line.trimmed().toString()).canonicalFilePath()));
                     // but skip folders with compiler builtins, we cannot parse these with clang
                     if (!QFile::exists(hostPath.toLocalFile() + QLatin1String("/cpuid.h"))) {
-                        data.includePaths << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
+                        cachedData.data << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
                     }
                 }
                 break;
@@ -231,7 +256,7 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
         }
     }
 
-    return data.includePaths;
+    return cachedData.data;
 }
 
 void GccLikeCompiler::invalidateCache()
