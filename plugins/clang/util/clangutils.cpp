@@ -66,12 +66,10 @@ QVector<UnsavedFile> ClangUtils::unsavedFiles()
         auto textDocument = document->textDocument();
         // TODO: Introduce a cache so we don't have to re-read all the open documents
         // which were not changed since the last run
-        if (!textDocument || !textDocument->url().isLocalFile()
-            || !DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType()))
-        {
+        if (!textDocument || !textDocument->url().isLocalFile() || !textDocument->isModified()) {
             continue;
         }
-        if (!textDocument->isModified()) {
+        if (!DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType())) {
             continue;
         }
         ret << UnsavedFile(textDocument->url().toLocalFile(),
