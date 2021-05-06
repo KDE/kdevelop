@@ -37,6 +37,8 @@ namespace KDevelop
 
 class ContextPrivate
 {
+public:
+    virtual ~ContextPrivate() = default;
 };
 
 Context::Context()
