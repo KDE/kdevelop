@@ -44,6 +44,7 @@ private Q_SLOTS:
     void testParserFaultyJson();
 private:
     KDevelop::IDocumentController *m_documentController;
+    QString m_shellFileName;
 };
 }
 #endif // TEST_OUTPUTPARSER_H

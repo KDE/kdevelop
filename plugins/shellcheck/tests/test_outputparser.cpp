@@ -41,11 +41,22 @@ namespace shellcheck {
 
 void TestOutputParser::initTestCase()
 {
+    QTemporaryFile shellFile(QDir::tempPath() + QLatin1String("/Messages.sh"));
+    shellFile.open();
+    QTextStream t2(&shellFile);
+    t2 << "#!/bin/sh\n";
+    t2 << "$EXTRACTRC `find . -name \\*.rc` `find . -name \\*.ui` >>rc.cpp\n";
+    t2 << "$XGETTEXT `find . -name \\*.cc -o -name \\*.cpp -o -name \\*.h` -o $podir/kdevshellcheck.pot\n";
+    t2 << "rm -f rc.cpp\n";
+    shellFile.close();
+
+    m_shellFileName = shellFile.fileName();
+
     KDevelop::AutoTestShell::init({QStringLiteral("kdevshellcheck")});
     KDevelop::TestCore::initialize();
     KDevelop::Core::self()->languageController()->backgroundParser()->disableProcessing();
     m_documentController = ICore::self()->documentController();
-    m_documentController->openDocument(QUrl::fromLocalFile(QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh")));
+    m_documentController->openDocument(QUrl::fromLocalFile(m_shellFileName));
 }
 
 void TestOutputParser::cleanupTestCase()
@@ -84,7 +95,7 @@ void TestOutputParser::testParser()
     lines.append(QStringLiteral("{"));
     lines.append(QStringLiteral("    \"comments\": ["));
     lines.append(QStringLiteral("    {"));
-    lines.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    lines.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     lines.append(QStringLiteral("    \"line\": 2,"));
     lines.append(QStringLiteral("    \"endLine\": 2,"));
     lines.append(QStringLiteral("    \"column\": 12,"));
@@ -95,7 +106,7 @@ void TestOutputParser::testParser()
     lines.append(QStringLiteral("    \"fix\": null"));
     lines.append(QStringLiteral("    },"));
     lines.append(QStringLiteral("    {"));
-    lines.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    lines.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     lines.append(QStringLiteral("    \"line\": 2,"));
     lines.append(QStringLiteral("    \"endLine\": 2,"));
     lines.append(QStringLiteral("    \"column\": 12,"));
@@ -127,7 +138,7 @@ void TestOutputParser::testParser()
     lines.append(QStringLiteral("    }"));
     lines.append(QStringLiteral("    },"));
     lines.append(QStringLiteral("    {"));
-    lines.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    lines.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     lines.append(QStringLiteral("    \"line\": 2,"));
     lines.append(QStringLiteral("    \"endLine\": 2,"));
     lines.append(QStringLiteral("    \"column\": 33,"));
@@ -138,7 +149,7 @@ void TestOutputParser::testParser()
     lines.append(QStringLiteral("    \"fix\": null"));
     lines.append(QStringLiteral("    },"));
     lines.append(QStringLiteral("    {"));
-    lines.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    lines.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     lines.append(QStringLiteral("    \"line\": 2,"));
     lines.append(QStringLiteral("    \"endLine\": 2,"));
     lines.append(QStringLiteral("    \"column\": 33,"));
@@ -172,7 +183,7 @@ void TestOutputParser::testParser()
 
     linesSecond.append(QStringLiteral("    {"));
 
-    linesThird.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    linesThird.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     linesThird.append(QStringLiteral("    \"line\": 3,"));
     linesThird.append(QStringLiteral("    \"endLine\": 3,"));
     linesThird.append(QStringLiteral("    \"column\": 11,"));
@@ -183,7 +194,7 @@ void TestOutputParser::testParser()
     linesThird.append(QStringLiteral("    \"fix\": null"));
     linesThird.append(QStringLiteral("    },"));
     linesThird.append(QStringLiteral("    {"));
-    linesThird.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    linesThird.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     linesThird.append(QStringLiteral("    \"line\": 3,"));
     linesThird.append(QStringLiteral("    \"endLine\": 3,"));
     linesThird.append(QStringLiteral("    \"column\": 11,"));
@@ -215,7 +226,7 @@ void TestOutputParser::testParser()
     linesThird.append(QStringLiteral("    }"));
     linesThird.append(QStringLiteral("    },"));
     linesThird.append(QStringLiteral("    {"));
-    linesThird.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    linesThird.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     linesThird.append(QStringLiteral("    \"line\": 3,"));
     linesThird.append(QStringLiteral("    \"endLine\": 3,"));
     linesThird.append(QStringLiteral("    \"column\": 65,"));
@@ -226,7 +237,7 @@ void TestOutputParser::testParser()
     linesThird.append(QStringLiteral("    \"fix\": null"));
     linesThird.append(QStringLiteral("    },"));
     linesThird.append(QStringLiteral("    {"));
-    linesThird.append(QStringLiteral("    \"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\","));
+    linesThird.append(QStringLiteral("    \"file\": \"") + m_shellFileName + QStringLiteral("\","));
     linesThird.append(QStringLiteral("    \"line\": 3,"));
     linesThird.append(QStringLiteral("    \"endLine\": 3,"));
     linesThird.append(QStringLiteral("    \"column\": 65,"));
@@ -272,7 +283,7 @@ void TestOutputParser::testParser()
     KDevelop::IProblem::Ptr p = problems[0];
     QCOMPARE(p->description(), QStringLiteral("2046: Quote this to prevent word splitting."));
     QCOMPARE(p->explanation(), QStringLiteral("<html>Quote this to prevent word splitting.</html>"));
-    QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
+    QCOMPARE(p->finalLocation().document.str(), m_shellFileName);
     QCOMPARE(p->finalLocation().start().line(), 1);
     QCOMPARE(p->finalLocation().start().column(), 11);
     QCOMPARE(p->finalLocation().end().line(), 1);
@@ -282,7 +293,7 @@ void TestOutputParser::testParser()
     p = problems[1];
     QCOMPARE(p->description(), QStringLiteral("2006: Use $(...) notation instead of legacy backticked `...`."));
     QCOMPARE(p->explanation(), QStringLiteral("<html>Use $(...) notation instead of legacy backticked `...`.</html>"));
-    QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
+    QCOMPARE(p->finalLocation().document.str(), m_shellFileName);
     QCOMPARE(p->finalLocation().start().line(), 1);
     QCOMPARE(p->finalLocation().start().column(), 11);
     QCOMPARE(p->finalLocation().end().line(), 1);
@@ -298,7 +309,7 @@ void TestOutputParser::testParser()
     KDevelop::IAssistantAction::Ptr action = assistant->actions().first();
     FixitAction* fixitAction = static_cast<FixitAction*>(action.data());
     KTextEditor::Range expectedRange(1,30,1,32);
-    KDevelop::IndexedString expectedDoc(QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
+    KDevelop::IndexedString expectedDoc(m_shellFileName);
     KDevelop::DocumentRange expectedDocRange(expectedDoc, expectedRange);
     Fixit expectedFixit(QStringLiteral("<html>Use $(...) notation instead of legacy backticked `...`.</html>"),
         expectedDocRange,
@@ -308,14 +319,14 @@ void TestOutputParser::testParser()
     QCOMPARE(fixitAction->m_fixit.m_currentText, QStringLiteral("`find . -name \\*.rc`"));
     QCOMPARE(fixitAction->m_fixit.m_range.toString(), QStringLiteral("[(1, 11), (1, 31)]"));
 
-    QCOMPARE(fixitAction->m_fixit.m_range.document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
+    QCOMPARE(fixitAction->m_fixit.m_range.document.str(), m_shellFileName);
     QCOMPARE(fixitAction->m_fixit.m_replacementText, QStringLiteral("$(find . -name \\*.rc)"));
     //QVERIFY(fixitAction->m_fixit == expectedFixit);
 
     p = problems[7];
     QCOMPARE(p->description(), QStringLiteral("2086: Double quote to prevent globbing and word splitting."));
     QCOMPARE(p->explanation(), QStringLiteral("<html>Double quote to prevent globbing and word splitting.</html>"));
-    QCOMPARE(p->finalLocation().document.str(), QStringLiteral("/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh"));
+    QCOMPARE(p->finalLocation().document.str(),m_shellFileName);
     QCOMPARE(p->finalLocation().start().line(), 2);
     QCOMPARE(p->finalLocation().start().column(), 64);
     QCOMPARE(p->finalLocation().end().line(), 2);
@@ -329,7 +340,7 @@ void TestOutputParser::testParserFaultyJson()
     shellcheck::OutputParser testee;
 
     QStringList lines;
-    lines.append(QStringLiteral("{\"comments\": [{\"file\": \"/home/mvo/kde/src/kdevelop/plugins/shellcheck/Messages.sh\",\"line\": 2,\"endLine\": 2,\"column\": 12,\"endColumn\": 32,\"level\": \"warning\"\": 2046,THIS DOCUMENT IS BROKEN!!!!! prevent word splitting.\",\"fix\": null}]}"));
+    lines.append(QStringLiteral("{\"comments\": [{\"file\": \"/tmp/Messages.sh\",\"line\": 2,\"endLine\": 2,\"column\": 12,\"endColumn\": 32,\"level\": \"warning\"\": 2046,THIS DOCUMENT IS BROKEN!!!!! prevent word splitting.\",\"fix\": null}]}"));
     testee.add(lines);
 
     const auto problems = testee.parse();
