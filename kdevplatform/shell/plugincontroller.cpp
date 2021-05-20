@@ -301,8 +301,7 @@ public:
 
         KTextEditorIntegration::initialize();
         const auto ktePlugins = KPluginLoader::findPlugins(QStringLiteral("ktexteditor"), [](const KPluginMetaData& md) {
-            return md.serviceTypes().contains(QStringLiteral("KTextEditor/Plugin"))
-                && md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
+            return md.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"));
         });
 
         qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << pluginIds(ktePlugins);
