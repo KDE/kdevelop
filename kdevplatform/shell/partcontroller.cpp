@@ -205,14 +205,22 @@ KParts::Part* PartController::createPart( const QUrl & url, const QString& prefe
         mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
     KParts::Part* part = createPart( mimeType, preferredPart );
-    if( part )
-    {
-        // only ReadOnlyParts are supported by PartController
-        static_cast<KParts::ReadOnlyPart*>(part)->openUrl(url);
-        return part;
+    if (!part) {
+        return nullptr;
     }
 
-    return nullptr;
+    // only ReadOnlyParts are supported by PartController
+    static_cast<KParts::ReadOnlyPart*>(part)->openUrl(url);
+
+    // restrict keyboard shortcuts to the KParts view
+    const auto actions = part->actionCollection()->actions();
+    for (auto* action : actions) {
+        if (action->shortcutContext() != Qt::WidgetShortcut) {
+            action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        }
+    }
+
+    return part;
 }
 
 void PartController::loadSettings( bool projectIsLoaded )
