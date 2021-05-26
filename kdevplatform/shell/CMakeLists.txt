@@ -119,7 +119,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
 qt5_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
 
 
-add_library(kdevworkingsets OBJECT
+set(kdevworkingsets_SRCS
     workingsetcontroller.cpp
     workingsets/workingset.cpp
     workingsets/workingsetfilelabel.cpp
@@ -130,6 +130,16 @@ add_library(kdevworkingsets OBJECT
     workingsets/workingsethelpers.cpp
 )
 
+declare_qt_logging_category(kdevworkingsets_SRCS
+    HEADER debug_workingset.h
+    TYPE LIBRARY
+    CATEGORY_BASENAME "workingset"
+)
+
+add_library(kdevworkingsets OBJECT
+    ${kdevworkingsets_SRCS}
+)
+
 target_link_libraries(kdevworkingsets
 PUBLIC
     KDev::Sublime
@@ -137,12 +147,6 @@ PUBLIC
 PRIVATE
     KDev::Util
     KF5::TextEditor
-)
-
-declare_qt_logging_category(kdevworkingsets
-    HEADER debug_workingset.h
-    TYPE LIBRARY
-    CATEGORY_BASENAME "workingset"
 )
 
 
