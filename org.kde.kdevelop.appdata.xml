@@ -164,7 +164,7 @@
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage">
           <location>https://download.kde.org/stable/kdevelop/5.6.0/bin/linux/KDevelop-5.6.0-x86_64.AppImage</location>
-          <checksum type="sha256">6e7fb09ad3827ff16b901c3ed14d943e32dd566bd508f2fe5f2897b76d325e6fdf8fb1a4f84a832a677e245ecf8790ff</checksum>
+          <checksum type="sha256">ef40329b0442904b46139c71129ba63c785555cb704c8462aac621a6d8c6b014</checksum>
           <size type="download">130231688</size>
           <bundle type="appimage">KDevelop-5.6.0</bundle>
         </artifact>
