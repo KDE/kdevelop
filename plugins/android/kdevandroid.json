@@ -90,9 +90,6 @@
         "Name[uk]": "Підтримка Android",
         "Name[x-test]": "xxAndroid Supportxx",
         "Name[zh_CN]": "Android 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

@@ -3,10 +3,7 @@
         "Description": "This plugin is purely for unit-test",
         "Id": "test_nonguiinterface",
         "License": "LGPL",
-        "Name": "NonGuiInterface",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name": "NonGuiInterface"
     },
     "X-KDevelop-Interfaces": [
         "org.kdevelop.ITestNonGuiInterface"

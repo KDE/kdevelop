@@ -50,10 +50,7 @@
         "Name[sv]": "Meson projekthanterare",
         "Name[uk]": "Керування проєктами Meson",
         "Name[x-test]": "xxMeson Project Managerxx",
-        "Name[zh_CN]": "Meson 工程管理器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "Meson 工程管理器"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "Meson",

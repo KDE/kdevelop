@@ -87,10 +87,7 @@
         "Name[tr]": "Heaptrack Desteği",
         "Name[uk]": "Підтримка Heaptrack",
         "Name[x-test]": "xxHeaptrack Supportxx",
-        "Name[zh_CN]": "Heaptrack 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "Heaptrack 支持"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

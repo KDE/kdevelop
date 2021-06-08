@@ -93,10 +93,7 @@
         "Name[tr]": "CMake Proje Yöneticisi",
         "Name[uk]": "Керування проєктами CMake",
         "Name[x-test]": "xxCMake Project Managerxx",
-        "Name[zh_CN]": "CMake 工程管理器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "CMake 工程管理器"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-IRequired": [

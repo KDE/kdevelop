@@ -60,10 +60,7 @@
         "Name[uk]": "Перемикання на споріднений",
         "Name[x-test]": "xxSwitch to Buddyxx",
         "Name[zh_CN]": "切换至伙伴文件",
-        "Name[zh_TW]": "切換到相關文件",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "切換到相關文件"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

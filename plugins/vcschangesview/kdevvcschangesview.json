@@ -101,10 +101,7 @@
         "Name[uk]": "Інтеграція з системами керування версіями",
         "Name[x-test]": "xxVCS Integrationxx",
         "Name[zh_CN]": "VCS 工程集成",
-        "Name[zh_TW]": "版本控制系統整合",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "版本控制系統整合"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

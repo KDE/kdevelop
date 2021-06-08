@@ -56,10 +56,7 @@
         "Name[tr]": "QMake Proje Yöneticisi",
         "Name[uk]": "Керування проєктами QMake",
         "Name[x-test]": "xxQMake Project Managerxx",
-        "Name[zh_CN]": "QMake 工程管理器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "QMake 工程管理器"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "QMake",

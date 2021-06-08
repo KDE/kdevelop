@@ -66,10 +66,7 @@
         "Name[uk]": "Перегляд виводу",
         "Name[x-test]": "xxOutput Viewxx",
         "Name[zh_CN]": "输出视图",
-        "Name[zh_TW]": "輸出檢視",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "輸出檢視"
     },
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IOutputView"

@@ -55,10 +55,7 @@
         "Name[tr]": "Özel Tanımlama ve İçerme Yöneticisi",
         "Name[uk]": "Керування нетиповими визначеннями і включеннями",
         "Name[x-test]": "xxCustom Defines And Includes Managerxx",
-        "Name[zh_CN]": "自定义定义和包含管理器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "自定义定义和包含管理器"
     },
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IDefinesAndIncludesManager"

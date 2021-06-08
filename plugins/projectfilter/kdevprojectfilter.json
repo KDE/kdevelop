@@ -94,10 +94,7 @@
         "Name[uk]": "Фільтр проєкту",
         "Name[x-test]": "xxProject Filterxx",
         "Name[zh_CN]": "工程过滤器",
-        "Name[zh_TW]": "專案過濾器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "專案過濾器"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-Interfaces": [

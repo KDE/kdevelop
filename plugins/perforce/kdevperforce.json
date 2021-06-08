@@ -88,9 +88,6 @@
         "Name[uk]": "Підтримка Perforce",
         "Name[x-test]": "xxPerforce Supportxx",
         "Name[zh_CN]": "Perforce 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "5.0"
     },
     "X-KDevelop-Category": "Global",

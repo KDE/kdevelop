@@ -67,10 +67,7 @@
         "Name[uk]": "Пошук або заміна у файлах",
         "Name[x-test]": "xxFind/Replace In Filesxx",
         "Name[zh_CN]": "在文件中查找/替换",
-        "Name[zh_TW]": "在檔案中尋找/取代",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "在檔案中尋找/取代"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

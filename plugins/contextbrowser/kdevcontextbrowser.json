@@ -101,10 +101,7 @@
         "Name[uk]": "Переглядач коду",
         "Name[x-test]": "xxCode Browserxx",
         "Name[zh_CN]": "代码浏览器",
-        "Name[zh_TW]": "源碼瀏覽器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "源碼瀏覽器"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

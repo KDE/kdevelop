@@ -99,10 +99,7 @@
         "Name[uk]": "Переглядач класів",
         "Name[x-test]": "xxClass Browserxx",
         "Name[zh_CN]": "类浏览器",
-        "Name[zh_TW]": "類別瀏覽器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "類別瀏覽器"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

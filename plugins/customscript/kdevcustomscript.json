@@ -90,10 +90,7 @@
         "Name[tr]": "Özel Betik Biçimlendirici Arka Ucu",
         "Name[uk]": "Сервер скриптів нетипового форматування",
         "Name[x-test]": "xxCustom Script Formatter Backendxx",
-        "Name[zh_CN]": "自定义脚本格式化器后端",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "自定义脚本格式化器后端"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

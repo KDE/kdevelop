@@ -93,10 +93,7 @@
         "Name[tr]": "CMake Belgelendirmesi",
         "Name[uk]": "Документація з CMake",
         "Name[x-test]": "xxCMake Documentationxx",
-        "Name[zh_CN]": "CMake 文档",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "CMake 文档"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

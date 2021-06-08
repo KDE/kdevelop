@@ -98,9 +98,6 @@
         "Name[x-test]": "xxFile Templates Configurationxx",
         "Name[zh_CN]": "文件模板配置",
         "Name[zh_TW]": "檔案樣本設定",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

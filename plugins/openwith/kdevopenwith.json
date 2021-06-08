@@ -99,10 +99,7 @@
         "Name[uk]": "Відкриття у зовнішніх програмах",
         "Name[x-test]": "xxOpen Withxx",
         "Name[zh_CN]": "打开方式",
-        "Name[zh_TW]": "開啟方式",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "開啟方式"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

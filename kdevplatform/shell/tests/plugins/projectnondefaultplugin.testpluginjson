@@ -4,10 +4,7 @@
         "Id": "test_projectnondefault",
         "License": "LGPL",
         "Name": "ProjectNonDefaultPlugin",
-        "EnabledByDefault": false,
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "EnabledByDefault": false
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-Mode": "NoGUI"

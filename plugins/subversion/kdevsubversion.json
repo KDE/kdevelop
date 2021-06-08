@@ -96,10 +96,7 @@
         "Name[uk]": "Підтримка Subversion",
         "Name[x-test]": "xxSubversion Supportxx",
         "Name[zh_CN]": "Subversion 支持",
-        "Name[zh_TW]": "Subversion 支援",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "Subversion 支援"
     },
     "X-KDevelop-IRequired": [
         "org.kdevelop.IOutputView"

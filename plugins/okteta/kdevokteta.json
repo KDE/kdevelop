@@ -89,9 +89,6 @@
         "Name[uk]": "Шістнадцятковий редактор",
         "Name[x-test]": "xxHex Editorxx",
         "Name[zh_CN]": "十六进制编辑器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1.0"
     },
     "X-KDevelop-Category": "Global",

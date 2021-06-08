@@ -100,10 +100,7 @@
         "Name[uk]": "Виконання програм",
         "Name[x-test]": "xxExecute Programsxx",
         "Name[zh_CN]": "执行程序",
-        "Name[zh_TW]": "執行程式",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "執行程式"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

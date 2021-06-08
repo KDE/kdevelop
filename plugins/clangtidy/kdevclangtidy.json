@@ -110,9 +110,6 @@
         "Name[uk]": "Підтримка Clang-Tidy",
         "Name[x-test]": "xxClang-Tidy Supportxx",
         "Name[zh_CN]": "Clang-Tidy 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.3.3"
     },
     "X-KDevelop-Category": "Global",

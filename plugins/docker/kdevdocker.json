@@ -89,9 +89,6 @@
         "Name[uk]": "Підтримка Docker",
         "Name[x-test]": "xxDocker Supportxx",
         "Name[zh_CN]": "Docker 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

@@ -100,10 +100,7 @@
         "Name[uk]": "Зовнішні скрипти",
         "Name[x-test]": "xxExternal Scriptsxx",
         "Name[zh_CN]": "外部脚本",
-        "Name[zh_TW]": "外部文稿",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "外部文稿"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

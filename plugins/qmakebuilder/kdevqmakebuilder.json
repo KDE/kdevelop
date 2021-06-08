@@ -56,10 +56,7 @@
         "Name[tr]": "QMake Proje Oluşturucu",
         "Name[uk]": "Засіб збирання проєктів QMake",
         "Name[x-test]": "xxQMake Project Builderxx",
-        "Name[zh_CN]": "QMake 工程构建器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "QMake 工程构建器"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-IRequired": [

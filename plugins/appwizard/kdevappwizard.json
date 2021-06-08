@@ -100,9 +100,6 @@
         "Name[x-test]": "xxNew Project Wizardxx",
         "Name[zh_CN]": "新工程向导",
         "Name[zh_TW]": "新增專案精靈",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

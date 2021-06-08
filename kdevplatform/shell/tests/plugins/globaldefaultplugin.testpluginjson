@@ -3,10 +3,7 @@
         "Description": "This plugin is purely for unit-test",
         "Id": "test_globaldefault",
         "License": "LGPL",
-        "Name": "GlobalDefaultPlugin",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name": "GlobalDefaultPlugin"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI"

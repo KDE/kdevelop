@@ -67,10 +67,7 @@
         "Name[uk]": "Інтеграція з Konsole",
         "Name[x-test]": "xxKonsole Integrationxx",
         "Name[zh_CN]": "Konsole 整合",
-        "Name[zh_TW]": "Konsole 整合",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "Konsole 整合"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

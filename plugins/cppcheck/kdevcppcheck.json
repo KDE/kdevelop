@@ -89,10 +89,7 @@
         "Name[tr]": "Cppcheck Desteği",
         "Name[uk]": "Підтримка Cppcheck",
         "Name[x-test]": "xxCppcheck Supportxx",
-        "Name[zh_CN]": "Cppcheck 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "Cppcheck 支持"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

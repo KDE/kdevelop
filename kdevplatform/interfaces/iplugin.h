@@ -56,7 +56,6 @@ class IPluginPrivate;
  * Name=
  * Comment=
  * Icon=
- * ServiceTypes=KDevelop/Plugin
  * X-KDE-Library=
  * X-KDE-PluginInfo-Name=
  * X-KDE-PluginInfo-Author=

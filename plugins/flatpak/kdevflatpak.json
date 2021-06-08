@@ -89,9 +89,6 @@
         "Name[uk]": "Підтримка Flatpak",
         "Name[x-test]": "xxFlatpak Supportxx",
         "Name[zh_CN]": "Flatpak 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

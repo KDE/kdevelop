@@ -87,10 +87,7 @@
         "Name[tr]": "Çerçeve",
         "Name[uk]": "Схема",
         "Name[x-test]": "xxOutlinexx",
-        "Name[zh_CN]": "轮廓",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "轮廓"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

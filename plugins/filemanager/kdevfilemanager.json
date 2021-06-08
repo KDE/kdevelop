@@ -101,9 +101,6 @@
         "Name[x-test]": "xxKDE File Manager Integrationxx",
         "Name[zh_CN]": "KDE 文件管理器整合",
         "Name[zh_TW]": "KDE 檔案管理員整合",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

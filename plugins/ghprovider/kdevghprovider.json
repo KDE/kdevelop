@@ -88,10 +88,7 @@
         "Name[tr]": "GitHub Sağlayıcı",
         "Name[uk]": "Надавач даних GitHub",
         "Name[x-test]": "xxGitHub Providerxx",
-        "Name[zh_CN]": "GitHub 提供者",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "GitHub 提供者"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

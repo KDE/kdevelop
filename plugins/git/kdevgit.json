@@ -100,9 +100,6 @@
         "Name[x-test]": "xxGit Supportxx",
         "Name[zh_CN]": "Git 支持",
         "Name[zh_TW]": "Git 支援",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.9"
     },
     "X-KDevelop-Interfaces": [

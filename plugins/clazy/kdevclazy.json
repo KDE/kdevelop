@@ -83,10 +83,7 @@
         "Name[sv]": "Clazy-stöd",
         "Name[uk]": "Підтримка Clazy",
         "Name[x-test]": "xxClazy Supportxx",
-        "Name[zh_CN]": "Clazy 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "Clazy 支持"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [

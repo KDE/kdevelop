@@ -4,10 +4,7 @@
         "Id": "test_globalnondefault",
         "License": "LGPL",
         "Name": "GlobalNonDefaultPlugin",
-        "EnabledByDefault": false,
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "EnabledByDefault": false
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI"

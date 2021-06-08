@@ -59,10 +59,7 @@
         "Name[tr]": "Kılavuz Sayfaları",
         "Name[uk]": "Сторінки man",
         "Name[x-test]": "xxMan Pagesxx",
-        "Name[zh_CN]": "Man 手册",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "Man 手册"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

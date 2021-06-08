@@ -3,10 +3,7 @@
         "Category": "Utilities",
         "Description": "Test Debugger",
         "Id": "testdebugger",
-        "Name": "Test Debugger",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name": "Test Debugger"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI"

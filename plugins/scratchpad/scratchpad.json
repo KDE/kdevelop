@@ -45,10 +45,7 @@
         "Name[sv]": "Kladdblock",
         "Name[uk]": "Нотатник для чернеток",
         "Name[x-test]": "xxScratchpadxx",
-        "Name[zh_CN]": "刮板",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "刮板"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

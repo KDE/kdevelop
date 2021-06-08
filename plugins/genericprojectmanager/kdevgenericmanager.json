@@ -97,10 +97,7 @@
         "Name[uk]": "Звичайний засіб керування проєктом",
         "Name[x-test]": "xxGeneric Project Managerxx",
         "Name[zh_CN]": "常规工程管理器",
-        "Name[zh_TW]": "一般專案管理員",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "一般專案管理員"
     },
     "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "None",

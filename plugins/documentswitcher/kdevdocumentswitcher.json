@@ -99,9 +99,6 @@
         "Name[x-test]": "xxMost-Recently-Used Document Switcherxx",
         "Name[zh_CN]": "最近经常使用文档切换器",
         "Name[zh_TW]": "最近使用的文件切換器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",

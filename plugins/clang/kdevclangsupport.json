@@ -58,10 +58,7 @@
         "Name[tr]": "C++ Desteği",
         "Name[uk]": "Підтримка C++",
         "Name[x-test]": "xxC++ Supportxx",
-        "Name[zh_CN]": "C++ 支持",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "C++ 支持"
     },
     "X-KDevelop-Interfaces": [
         "ILanguageSupport"

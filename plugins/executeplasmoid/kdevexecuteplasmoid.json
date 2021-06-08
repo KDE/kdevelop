@@ -91,10 +91,7 @@
         "Name[tr]": "Plazmoid Başlatıcısı",
         "Name[uk]": "Засіб запуску плазмоїдів",
         "Name[x-test]": "xxPlasmoid Launcherxx",
-        "Name[zh_CN]": "部件启动器",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "部件启动器"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [

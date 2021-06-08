@@ -65,10 +65,7 @@
         "Name[uk]": "Допоміжні засоби",
         "Name[x-test]": "xxCode Utilitiesxx",
         "Name[zh_CN]": "代码工具",
-        "Name[zh_TW]": "寫程式實用工具",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_TW]": "寫程式實用工具"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"

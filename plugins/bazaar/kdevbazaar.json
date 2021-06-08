@@ -101,9 +101,6 @@
         "Name[x-test]": "xxBazaar Supportxx",
         "Name[zh_CN]": "Bazaar 支持",
         "Name[zh_TW]": "Bazaar 支援",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ],
         "Version": "1.0"
     },
     "X-KDevelop-Interfaces": [

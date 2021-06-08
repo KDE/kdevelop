@@ -55,10 +55,7 @@
         "Name[tr]": "KDevelop Karşılama Sayfası",
         "Name[uk]": "Сторінка вітання KDevelop",
         "Name[x-test]": "xxKDevelop Welcome Pagexx",
-        "Name[zh_CN]": "KDevelop 欢迎页面",
-        "ServiceTypes": [
-            "KDevelop/Plugin"
-        ]
+        "Name[zh_CN]": "KDevelop 欢迎页面"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
