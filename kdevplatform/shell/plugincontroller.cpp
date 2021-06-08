@@ -335,15 +335,7 @@ PluginController::PluginController(Core *core)
 
     setObjectName(QStringLiteral("PluginController"));
 
-    auto newPlugins = KPluginLoader::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)), [&](const KPluginMetaData& meta) {
-        if (meta.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"))) {
-            return true;
-        } else {
-            qCWarning(SHELL) << "Plugin" << meta.fileName() << "is installed into the kdevplatform plugin directory, but does not have"
-                " \"KDevelop/Plugin\" set as the service type. This plugin will not be loaded.";
-            return false;
-        }
-    });
+    auto newPlugins = KPluginLoader::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)));
 
     qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << pluginIds(newPlugins);
     if (newPlugins.isEmpty()) {
