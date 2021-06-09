@@ -62,6 +62,7 @@
         "Id": "kdevdocker",
         "License": "GPL",
         "Name": "Docker Support",
+        "Name[az]": "Docker dəstəyi",
         "Name[ca@valencia]": "Implementació del Docker",
         "Name[ca]": "Implementació del Docker",
         "Name[cs]": "Podpora Dockeru",

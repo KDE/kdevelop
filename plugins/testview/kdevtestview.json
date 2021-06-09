@@ -62,6 +62,7 @@
         "Id": "kdevtestview",
         "License": "GPL",
         "Name": "Unit Test View",
+        "Name[az]": "Vahid test görünüşü",
         "Name[bs]": "Pogled testa jedinica",
         "Name[ca@valencia]": "Vista de proves unitàries",
         "Name[ca]": "Vista de proves unitàries",

@@ -63,6 +63,7 @@
         "Id": "kdevcustomscript",
         "License": "LGPL",
         "Name": "Custom Script Formatter Backend",
+        "Name[az]": "Fərdi skript formatlama modulu",
         "Name[bs]": "Pozadinski program za formatiranje vlastitih skripti",
         "Name[ca@valencia]": "Dorsal de l'script formatador personalitzat",
         "Name[ca]": "Dorsal de l'script formatador personalitzat",

@@ -62,6 +62,7 @@
         "Id": "kdevqthelp",
         "License": "GPL",
         "Name": "Qt Documentation",
+        "Name[az]": "Qt sənədləşməsi",
         "Name[ca@valencia]": "Documentació de les Qt",
         "Name[ca]": "Documentació de les Qt",
         "Name[cs]": "Dokumentace Qt",

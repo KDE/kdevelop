@@ -84,6 +84,7 @@
         "Id": "kdevclangtidy",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
+        "Name[az]": "Clang-Tidy dəstəyi",
         "Name[ca@valencia]": "Implementació de Clang-Tidy",
         "Name[ca]": "Implementació de Clang-Tidy",
         "Name[cs]": "Podpora Clang-Tidy",

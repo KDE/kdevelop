@@ -61,6 +61,7 @@
         "Icon": "kdevelop",
         "Id": "KDevGenericManager",
         "Name": "Generic Project Manager",
+        "Name[az]": "Əsas layihə meneceri",
         "Name[bg]": "Най-общ манипулатор на проект",
         "Name[ca@valencia]": "Gestor de projectes genèric",
         "Name[ca]": "Gestor de projectes genèric",

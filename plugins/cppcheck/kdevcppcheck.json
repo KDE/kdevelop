@@ -62,6 +62,7 @@
         "Id": "kdevcppcheck",
         "License": "GPL",
         "Name": "Cppcheck Support",
+        "Name[az]": "Cppcheck dəstəyi",
         "Name[ca@valencia]": "Implementació de Cppcheck",
         "Name[ca]": "Implementació de Cppcheck",
         "Name[cs]": "Podpora Cppcheck",

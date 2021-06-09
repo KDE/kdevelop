@@ -61,6 +61,7 @@
         "Id": "kdevghprovider",
         "License": "GPL",
         "Name": "GitHub Provider",
+        "Name[az]": "GitHub təminatçısı",
         "Name[ca@valencia]": "Proveïdor de GitHub",
         "Name[ca]": "Proveïdor de GitHub",
         "Name[cs]": "Poskytovatel GitHubu",

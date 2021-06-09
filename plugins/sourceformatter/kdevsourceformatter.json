@@ -28,6 +28,7 @@
         "Icon": "text-field",
         "Id": "kdevsourceformatter",
         "Name": "Source Formatter",
+        "Name[az]": "Mənbə formatlayıcı",
         "Name[bg]": "Форматиращ модул за програмен текст",
         "Name[ca@valencia]": "Formatador del codi font",
         "Name[ca]": "Formatador del codi font",

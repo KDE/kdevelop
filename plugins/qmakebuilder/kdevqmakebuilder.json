@@ -30,6 +30,7 @@
         "Icon": "qtlogo",
         "Id": "KDevQMakeBuilder",
         "Name": "QMake Project Builder",
+        "Name[az]": "QMake layihə qurucusu",
         "Name[ca@valencia]": "Constructor de projecte QMake",
         "Name[ca]": "Constructor de projecte QMake",
         "Name[cs]": "Překladač projektů QMake",

@@ -62,6 +62,7 @@
         "Id": "kdevdocumentview",
         "License": "LGPL",
         "Name": "Document View",
+        "Name[az]": "Sənədə baxış",
         "Name[bg]": "Изглед за документи",
         "Name[ca@valencia]": "Visor de document",
         "Name[ca]": "Visor de document",

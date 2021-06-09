@@ -29,6 +29,7 @@
         "Icon": "kdevelop",
         "Id": "KDevCustomBuildSystem",
         "Name": "Custom Build System",
+        "Name[az]": "Fərdi qurma sistemi",
         "Name[ca@valencia]": "Sistema de construcció personalitzat",
         "Name[ca]": "Sistema de construcció personalitzat",
         "Name[cs]": "Vlastní systém pro sestavení",

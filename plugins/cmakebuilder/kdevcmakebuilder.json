@@ -31,6 +31,7 @@
         "Icon": "cmake",
         "Id": "KDevCMakeBuilder",
         "Name": "CMake Project Builder",
+        "Name[az]": "CMake layihə qurucusu",
         "Name[bs]": "CMake graditelj projekta",
         "Name[ca@valencia]": "Constructor de projecte CMake",
         "Name[ca]": "Constructor de projecte CMake",

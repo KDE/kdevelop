@@ -31,6 +31,7 @@
         "Id": "kdevgdb",
         "License": "GPL",
         "Name": "GDB Support",
+        "Name[az]": "GDB dəstəyi",
         "Name[bs]": "GDB podrška",
         "Name[ca@valencia]": "Implementació del GDB",
         "Name[ca]": "Implementació del GDB",

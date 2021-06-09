@@ -29,6 +29,7 @@
         "Icon": "text-x-c++src",
         "Id": "kdevclangsupport",
         "Name": "C++ Support",
+        "Name[az]": "C++ dəstəyi",
         "Name[bs]": "C++ Podrška",
         "Name[ca@valencia]": "Implementació de C++",
         "Name[ca]": "Implementació de C++",

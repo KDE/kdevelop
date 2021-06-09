@@ -63,6 +63,7 @@
         "Id": "kdevastyle",
         "License": "LGPL",
         "Name": "AStyle Formatter Backend",
+        "Name[az]": "AStyle formatlama modulu",
         "Name[bs]": "AStyle formater pozadine",
         "Name[ca@valencia]": "Dorsal del formatador AStyle",
         "Name[ca]": "Dorsal del formatador AStyle",

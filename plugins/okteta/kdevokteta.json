@@ -62,6 +62,7 @@
         "Id": "kdevokteta",
         "License": "GPL",
         "Name": "Hex Editor",
+        "Name[az]": "Hex redaktoru",
         "Name[ca@valencia]": "Editor hexadecimal",
         "Name[ca]": "Editor hexadecimal",
         "Name[cs]": "Hexa editor",

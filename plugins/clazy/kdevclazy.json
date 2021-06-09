@@ -59,6 +59,7 @@
         "Id": "kdevclazy",
         "License": "GPL",
         "Name": "Clazy Support",
+        "Name[az]": "Clazy dəstəyi",
         "Name[ca@valencia]": "Implementació de Clazy",
         "Name[ca]": "Implementació de Clazy",
         "Name[cs]": "Podpora Clazy",

@@ -62,6 +62,7 @@
         "Id": "kdevflatpak",
         "License": "GPL",
         "Name": "Flatpak Support",
+        "Name[az]": "Flatpak dəstəyi",
         "Name[ca@valencia]": "Implementació del Flatpak",
         "Name[ca]": "Implementació del Flatpak",
         "Name[cs]": "Podpora pro Flatpak",

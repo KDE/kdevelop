@@ -30,6 +30,7 @@
         "Icon": "kdevelop",
         "Id": "KDevDefinesAndIncludesManager",
         "Name": "Custom Defines And Includes Manager",
+        "Name[az]": "Fərdi təyinetmə və daxiletmə meneceri",
         "Name[ca@valencia]": "Gestor per a personalitzar les definicions i inclusions",
         "Name[ca]": "Gestor per a personalitzar les definicions i inclusions",
         "Name[de]": "Verwaltung benutzerdefinierter Definitionen und Includes",

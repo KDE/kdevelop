@@ -32,6 +32,7 @@
         "Id": "kdevgrepview",
         "Name": "Find/Replace In Files",
         "Name[ar]": "اعثر واستبدل في الملفّات",
+        "Name[az]": "Fayllarda tapın/əvəzləyin",
         "Name[bg]": "Търсене и заместване във файлове",
         "Name[bs]": "Nađi/zamijeni u datotekama",
         "Name[ca@valencia]": "Cerca i substitució en fitxers",

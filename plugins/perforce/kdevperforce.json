@@ -61,6 +61,7 @@
         "Id": "kdevperforce",
         "License": "GPL",
         "Name": "Perforce Support",
+        "Name[az]": "Perforce dəstəyi",
         "Name[ca@valencia]": "Implementació del Perforce",
         "Name[ca]": "Implementació del Perforce",
         "Name[cs]": "Podpora Perforce",

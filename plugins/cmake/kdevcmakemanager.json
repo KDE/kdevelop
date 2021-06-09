@@ -65,6 +65,7 @@
         "Id": "KDevCMakeManager",
         "License": "GPL",
         "Name": "CMake Project Manager",
+        "Name[az]": "CMake layihə meneceri",
         "Name[bs]": "Cmake menadžer projekta",
         "Name[ca@valencia]": "Gestor de projectes CMake",
         "Name[ca]": "Gestor de projectes CMake",

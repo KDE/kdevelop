@@ -62,6 +62,7 @@
         "Id": "kdevexecuteplasmoid",
         "License": "GPL",
         "Name": "Plasmoid Launcher",
+        "Name[az]": "Plasmoid başladıcı",
         "Name[bs]": "Pokretač plazmoida",
         "Name[ca@valencia]": "Llançador de plasmoide",
         "Name[ca]": "Llançador de plasmoide",

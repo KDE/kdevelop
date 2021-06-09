@@ -32,6 +32,7 @@
         "Id": "KDevManPage",
         "License": "GPL",
         "Name": "Man Pages",
+        "Name[az]": "Təlimat səhifələri",
         "Name[bs]": "Man stgranice",
         "Name[ca@valencia]": "Pàgines «man»",
         "Name[ca]": "Pàgines «man»",

@@ -29,6 +29,7 @@
         "Icon": "kdevelop",
         "Id": "KDevNinjaBuilder",
         "Name": "Ninja Project Builder",
+        "Name[az]": "Ninja layihəsi qurucusu",
         "Name[ca@valencia]": "Constructor de projectes Ninja",
         "Name[ca]": "Constructor de projectes Ninja",
         "Name[cs]": "Překladač projektů Ninja",

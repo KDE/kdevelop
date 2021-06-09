@@ -29,6 +29,7 @@
         "Icon": "document-multiple",
         "Id": "kdevswitchtobuddy",
         "Name": "Switch to Buddy",
+        "Name[az]": "Əlaqəli olana keçin",
         "Name[bs]": "Pređi na prijatelja",
         "Name[ca@valencia]": "Commuta a associat",
         "Name[ca]": "Commuta a associat",

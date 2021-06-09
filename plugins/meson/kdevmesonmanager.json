@@ -27,6 +27,7 @@
         "Icon": "run-build",
         "Id": "KDevMesonManager",
         "Name": "Meson Project Manager",
+        "Name[az]": "Meson layihəsi meneceri",
         "Name[ca@valencia]": "Gestor de projectes Meson",
         "Name[ca]": "Gestor de projectes Meson",
         "Name[cs]": "Správce projektů Meson",

@@ -61,6 +61,7 @@
         "Id": "kdevheaptrack",
         "License": "GPL",
         "Name": "Heaptrack Support",
+        "Name[az]": "Heaptrack dəstəyi",
         "Name[ca@valencia]": "Implementació del Heaptrack",
         "Name[ca]": "Implementació del Heaptrack",
         "Name[cs]": "Podpora Heaptracku",

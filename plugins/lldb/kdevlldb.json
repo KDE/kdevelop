@@ -30,6 +30,7 @@
         "Id": "kdevlldb",
         "License": "GPL",
         "Name": "LLDB Support",
+        "Name[az]": "LLDB dəstəyi",
         "Name[ca@valencia]": "Implementació del LLDB",
         "Name[ca]": "Implementació del LLDB",
         "Name[cs]": "Podpora LLDB",

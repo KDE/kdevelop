@@ -65,6 +65,7 @@
         "Id": "KDevCMakeDocumentation",
         "License": "GPL",
         "Name": "CMake Documentation",
+        "Name[az]": "CMake sənədləşməsi",
         "Name[bs]": "CMake Dokumentacija",
         "Name[ca@valencia]": "Documentació de CMake",
         "Name[ca]": "Documentació de CMake",

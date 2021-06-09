@@ -61,6 +61,7 @@
         "Id": "kdevsubversion",
         "License": "GPL",
         "Name": "Subversion Support",
+        "Name[az]": "Subversion dəstəyi",
         "Name[bg]": "Поддръжка на Subversion",
         "Name[ca@valencia]": "Implementació del Subversion",
         "Name[ca]": "Implementació del Subversion",
