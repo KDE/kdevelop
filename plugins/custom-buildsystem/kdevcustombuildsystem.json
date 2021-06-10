@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Allows to use custom buildsystems for KDevelop projects",
+        "Description[az]": "Fərdi inşaetmə sistemlərini (buildsistems) KDevelop layihələri üçün istifadə etməyə imkan verir",
         "Description[bs]": "DOpušta korištene vlastitih sistema za gradnju KDevelop projekata",
         "Description[ca@valencia]": "Permet utilitzar sistemes de construcció personalitzats per a projectes del KDevelop",
         "Description[ca]": "Permet utilitzar sistemes de construcció personalitzats per a projectes del KDevelop",

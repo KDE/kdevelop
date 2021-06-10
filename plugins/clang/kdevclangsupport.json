@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "C/C++ Language Support (Clang-based)",
+        "Description[az]": "C/C++ Dil dəstəyi (Clang-əsaslı)",
         "Description[ca@valencia]": "Implementació del llenguatge C/C++ (basat en Clang)",
         "Description[ca]": "Implementació del llenguatge C/C++ (basat en Clang)",
         "Description[cs]": "Podpora jazyka C/C++ (založeno na Clang)",

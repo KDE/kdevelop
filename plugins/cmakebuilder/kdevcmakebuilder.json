@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Builds CMake Projects",
+        "Description[az]": "CMake layihələrini qurur",
         "Description[bs]": "Gradi CMake projekte",
         "Description[ca@valencia]": "Construeix projectes CMake",
         "Description[ca]": "Construeix projectes CMake",

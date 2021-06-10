@@ -35,6 +35,7 @@
         ],
         "Category": "Documentation",
         "Description": "Allows KDevelop to provide CMake documentation",
+        "Description[az]": "KDevelop'a CMake sənədlərini təqdim etməyə imkan verir",
         "Description[bs]": "Dopišta KDevelopu da obezbjedi CMake dokumentaciju",
         "Description[ca@valencia]": "Permet al KDevelop proporcionar documentació de CMake",
         "Description[ca]": "Permet al KDevelop proporcionar documentació de CMake",

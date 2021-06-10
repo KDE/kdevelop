@@ -34,6 +34,7 @@
         ],
         "Category": "Utilities",
         "Description": "A plugin for formatting C files using custom scripts",
+        "Description[az]": "Xüsusi skriptdən istifadə edərək C fayllarının formatlanması üçün qoşma",
         "Description[bs]": "Dodatak za formatiranje C datoteka koristeći vlastite skripte",
         "Description[ca@valencia]": "Un connector per a formatar fitxers C emprant scripts personalitzats",
         "Description[ca]": "Un connector per a formatar fitxers C emprant scripts personalitzats",

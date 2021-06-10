@@ -34,6 +34,7 @@
         ],
         "Category": "Analyzers",
         "Description": "This plugin integrates Cppcheck (static analysis tool) to KDevelop",
+        "Description[az]": "Bu qoşma, Cppcheck'i (statik təhlil alıti) KDevelop'a inteqrasiya edir",
         "Description[ca@valencia]": "Aquest connector integra el Cppcheck (eina per a l'anàlisi estàtica) al KDevelop",
         "Description[ca]": "Aquest connector integra el Cppcheck (eina per a l'anàlisi estàtica) al KDevelop",
         "Description[cs]": "Tento modul integruje Cppcheck (statický analytický nástroj) do KDevelop",
