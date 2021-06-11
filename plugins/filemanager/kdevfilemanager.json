@@ -34,6 +34,7 @@
         "Category": "Core",
         "Description": "This plugin brings a filemanager to KDevelop.",
         "Description[ar]": "تجلب هذه الملحقة مدير ملفّات إلى مطوّرك.",
+        "Description[az]": "Bu qoşma, fayl bələdçisini KDevelop'a daşıyır",
         "Description[ca@valencia]": "Aquest connector proporciona un gestor de fitxers al KDevelop.",
         "Description[ca]": "Aquest connector proporciona un gestor de fitxers al KDevelop.",
         "Description[cs]": "Tento modul do KDevelop přináší správce souborů.",

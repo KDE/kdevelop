@@ -34,6 +34,7 @@
         "Category": "Core",
         "Description": "Manages templates for source files",
         "Description[ar]": "تدير قوالب الملفّات المصدريّة",
+        "Description[az]": "Mənbə faylı üçün şablonları idarə edir",
         "Description[ca@valencia]": "Gestiona les plantilles dels fitxers de codi font",
         "Description[ca]": "Gestiona les plantilles dels fitxers de codi font",
         "Description[cs]": "Spravuje šablony pro zdrojové soubory",

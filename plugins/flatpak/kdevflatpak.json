@@ -35,6 +35,7 @@
         ],
         "Category": "Runtimes",
         "Description": "Exposes Flatpak runtimes",
+        "Description[az]": "Flatpak işləmə vaxtını göstərir",
         "Description[ca@valencia]": "Exposa el temps d'execució del Flatpak",
         "Description[ca]": "Exposa el temps d'execució del Flatpak",
         "Description[de]": "Stellt Flatpak-Laufzeitumgebungen bereit",

@@ -34,6 +34,7 @@
         ],
         "Category": "Utilities",
         "Description": "This plugin helps to obtain projects from GitHub",
+        "Description[az]": "Bu qoşma, GitHub'dan layihələri almağa kömək edir",
         "Description[ca@valencia]": "Aquest connector ajuda a obtindre els projectes des de GitHub",
         "Description[ca]": "Aquest connector ajuda a obtenir els projectes des de GitHub",
         "Description[de]": "Dieses Modul hilft dabei, GitHub-Projekte zu beziehen",

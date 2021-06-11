@@ -33,6 +33,7 @@
         ],
         "Category": "Project Management",
         "Description": "Allow KDevelop to manage generic projects",
+        "Description[az]": "KDevelop'a əsas layihələri idarə etməyə imkan verir",
         "Description[ca@valencia]": "Permet al KDevelop gestionar projectes genèrics",
         "Description[ca]": "Permet al KDevelop gestionar projectes genèrics",
         "Description[cs]": "Umožní KDevelopu spravovat obecné projekty",
