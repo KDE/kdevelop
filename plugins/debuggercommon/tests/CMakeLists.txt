@@ -23,15 +23,15 @@ target_link_libraries(kdevdbg_testhelper
     Qt5::Test
 )
 
-ecm_add_test(test_miparser
+ecm_add_test(test_miparser.cpp
     LINK_LIBRARIES Qt5::Test kdevdebuggercommon
 )
 
-ecm_add_test(test_micommand
+ecm_add_test(test_micommand.cpp
     LINK_LIBRARIES Qt5::Test kdevdebuggercommon
 )
 
-ecm_add_test(test_micommandqueue
+ecm_add_test(test_micommandqueue.cpp
     LINK_LIBRARIES Qt5::Test kdevdebuggercommon
 )
 
@@ -42,6 +42,6 @@ kdevplatform_add_plugin(testdebugger JSON plugins/testdebugger.json SKIP_INSTALL
 target_link_libraries(testdebugger kdevdebuggercommon)
 set_target_properties(testdebugger PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
 
-ecm_add_test(test_midbus
+ecm_add_test(test_midbus.cpp
     LINK_LIBRARIES Qt5::Test Qt5::DBus Qt5::Core kdevdebuggercommon KDevPlatformTests
 )

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.16)
 project(KDevelop VERSION 5.6.40)
 
 # KDevelop SOVERSION
@@ -10,15 +10,16 @@ set(KDEV_PLUGIN_VERSION 35)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(QT_MIN_VERSION "5.15.0")
+set(KF5_DEP_VERSION "5.82.0")
 
 # we need some parts of the ECM CMake helpers
-find_package (ECM 5.50.0 REQUIRED NO_MODULE)
+find_package (ECM ${KF5_DEP_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
-
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
 include(ECMAddAppIcon)
@@ -27,28 +28,19 @@ include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(ECMQtDeclareLoggingCategory)
-
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
-
 include(KDevelopMacrosInternal)
 
-if(POLICY CMP0071)
-  # CMake 3.10 generates warnings when projects combine AUTOMOC with qt5_wrap_ui() or qt5_add_resources()
-  # Avoid that by setting this policy (cf. https://bugreports.qt.io/browse/QTBUG-63442)
-  # Note: Once we depend on a Qt which has this fix (likely Qt 5.9.4+), remove this
-  cmake_policy(SET CMP0071 OLD)
-endif()
 
-set(QT_MIN_VERSION "5.9.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
 if(BUILD_TESTING)
   find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
-set(KF5_DEP_VERSION "5.50.0")
+
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
   Declarative
@@ -114,12 +106,8 @@ add_definitions(
     -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
     -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x053200
     -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
+    -DQT_NO_FOREACH
 )
-if(NOT Qt5_VERSION VERSION_LESS "5.12.0" AND NOT KF5_VERSION VERSION_LESS "5.56.0")
-    add_definitions(
-        -DQT_NO_FOREACH
-    )
-endif()
 
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: https://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html

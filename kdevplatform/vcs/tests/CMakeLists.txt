@@ -4,34 +4,34 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY
 )
 
-ecm_add_test(test_vcsrevision
+ecm_add_test(test_vcsrevision.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcsannotationline
+ecm_add_test(test_vcsannotationline.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcsannotation
+ecm_add_test(test_vcsannotation.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcsitemevent
+ecm_add_test(test_vcsitemevent.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcsevent
+ecm_add_test(test_vcsevent.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcsstatusinfo
+ecm_add_test(test_vcsstatusinfo.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcsdiff
+ecm_add_test(test_vcsdiff.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
 
-ecm_add_test(test_vcslocation
+ecm_add_test(test_vcslocation.cpp
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
