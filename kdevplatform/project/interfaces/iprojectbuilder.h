@@ -25,7 +25,7 @@ class ProjectBaseItem;
 
 @short IProjectBuilder Base class for the Project Builders
 
-Provides an interface that will bre useful to perform tasks upon projects,
+Provides an interface that will be useful to perform tasks upon projects,
 inspired on the unix-style way to build projects:
 
 configure -> make -> make install

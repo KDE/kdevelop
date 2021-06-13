@@ -120,7 +120,7 @@ void TestViewActivation::viewActivation()
     controller->addMainWindow(mw);
 
     controller->showArea(area, mw);
-    //we should have an active view immediatelly after the area is shown
+    //we should have an active view immediately after the area is shown
     QCOMPARE(mw->activeView(), view211);
 
     //add some widgets that are not in layout

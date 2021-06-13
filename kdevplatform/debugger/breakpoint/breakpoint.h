@@ -41,7 +41,7 @@ public:
     };
     ///Custom roles for retrieving data from breakpoint model.
     enum BreakpointRole{
-        LocationRole = Qt::UserRole + 1 ///< Retrieves breakpoint's full path unlike Qt::DisplayRole. Note: it's only appliable to LocationColumn.
+        LocationRole = Qt::UserRole + 1 ///< Retrieves breakpoint's full path unlike Qt::DisplayRole. Note: it's only applicable to LocationColumn.
     };
 
     Breakpoint(BreakpointModel *model, BreakpointKind kind);

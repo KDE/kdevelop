@@ -23,7 +23,7 @@ class MacroDefinitionData;
  * #define FOO_BAR(x) do_something_with(x)
  * @endcode
  *
- * In this example, the identifer is 'FOO_BAR', and the macro is function-like
+ * In this example, the identifier is 'FOO_BAR', and the macro is function-like
  *
  * @note API designed after of https://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
  */

@@ -38,7 +38,7 @@ KDEVCLANGPRIVATE_EXPORT QVector<QUrl> potentialBuddies(const QUrl& url, bool che
 /**
  * Returns path to the source file for given @p headerPath
  *
- * If no source file exists or @p headerPath is not a header an empty sting is returned
+ * If no source file exists or @p headerPath is not a header an empty string is returned
  */
 KDEVCLANGPRIVATE_EXPORT QString sourceForHeader(const QString& headerPath);
 }

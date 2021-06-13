@@ -32,7 +32,7 @@ KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetType(const KDevelo
                                                                    const KDevelop::TopDUContext* topContext,
                                                                    bool* constant = nullptr);
 /**
- * Same as targetType(..), ecept that it does not un-aliases TypeAliasTypes
+ * Same as targetType(..), except that it does not un-aliases TypeAliasTypes
  * Modifiers of aliases ore references are pushed into the targets.
  */
 KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetTypeKeepAliases(const KDevelop::AbstractType::Ptr& type,

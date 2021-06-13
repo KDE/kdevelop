@@ -83,7 +83,7 @@ public:
     ///If that signal is emitted, the new declaration is navigated in the navigation-wdiget.
     virtual QWidget* widget() const;
 
-    ///Whether the widget returned by widget() should take the maximum possible spsace.
+    ///Whether the widget returned by widget() should take the maximum possible space.
     ///The default implementation returns true.
     virtual bool isWidgetMaximized() const;
 

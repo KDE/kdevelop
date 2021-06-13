@@ -880,7 +880,7 @@ private:
         }
 
         //Now go down the chain, always into the items direction
-        ///@todo make the structure better: Don't just put left/right child, but also swap when neede
+        ///@todo make the structure better: Don't just put left/right child, but also swap when needed
         ///      to balance the tree
         while (1) {
             Q_ASSERT(removeIndex != currentItem);

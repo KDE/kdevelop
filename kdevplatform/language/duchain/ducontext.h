@@ -74,7 +74,7 @@ public:
      *
      * @param anonymous Whether the context should be added as an anonymous context to the parent. That way the context can never be found through any of the parent's member-functions.
      *
-     * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
+     * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You need a write-lock to the DUChain then
      */
     explicit DUContext(const RangeInRevision& range, DUContext* parent = nullptr, bool anonymous = false);
     explicit DUContext(DUContextData&);

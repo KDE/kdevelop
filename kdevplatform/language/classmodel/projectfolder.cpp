@@ -51,7 +51,7 @@ void FilteredProjectFolder::updateFilterString(const QString& a_newFilterString)
     if (isPopulated()) {
 #if 1 // Choose speed over correctness.
         // Close the node and re-open it should be quicker than reload each document
-        // and remove individual nodes (at the cost of loosing the current selection).
+        // and remove individual nodes (at the cost of losing the current selection).
         performPopulateNode(true);
 #else
         bool hadChanges = false;

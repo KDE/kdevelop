@@ -77,7 +77,7 @@ void MIVariable::setVarobj(const QString& v)
     }
     if (!m_varobj.isEmpty()) {
         // this should not happen
-        // but apperently it does when attachMaybe is called a second time before
+        // but apparently it does when attachMaybe is called a second time before
         // the first -var-create call returned
         m_debugSession->variableMapping().remove(m_varobj);
     }
@@ -218,7 +218,7 @@ public:
         return false;
     }
     bool autoDelete() override {
-        // we delete ourselve
+        // we delete ourselves
         return false;
     }
 

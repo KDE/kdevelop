@@ -468,7 +468,7 @@ protected:
     }
 
     /**
-     * Remember that a specific item has been encoutered while parsing.
+     * Remember that a specific item has been encountered while parsing.
      * All items that are not encountered will be deleted at some stage.
      *
      * \param item duchain item that was encountered.

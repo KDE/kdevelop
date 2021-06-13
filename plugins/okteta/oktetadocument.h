@@ -65,7 +65,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
 
   protected Q_SLOTS:
     void onByteArrayDocumentChanged();
-    // Moc is too primitive to know about namespace aliase
+    // Moc is too primitive to know about namespace aliases
     void onByteArrayDocumentLoaded( Kasten::AbstractDocument* document );
 
   private:

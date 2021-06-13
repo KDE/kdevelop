@@ -25,7 +25,7 @@ class TemplateRendererPrivate;
  * The TemplateRenderer provides easy access to common template operations.
  * Internally, it encapsulates a Grantlee::Engine and a Grantlee::Context.
  *
- * It is used by adding a set of variables, and then renderering a template string
+ * It is used by adding a set of variables, and then rendering a template string
  * @code
  * TemplateRenderer renderer;
  * renderer.addVariable("greeting", "Hello");

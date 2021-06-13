@@ -19,7 +19,7 @@ namespace KDevelop
 struct FilteredItem;
 
 /**
-* Interface class for filtering output. Filtered output is divided into two catagories: Errors
+* Interface class for filtering output. Filtered output is divided into two categories: Errors
 * and Actions. Use this interface if you want to write a filter for the outputview.
 *
 * @author Morten Danielsen Volden

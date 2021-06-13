@@ -218,7 +218,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         return false;
     }
 
-    // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
+    // Only dummy err here, actual errors have been checked already in the job and we don't get here if there were any
     QString err;
     QString executable = iexec->executable(cfg, err).toLocalFile();
     configInferior(cfg, iexec, executable);
@@ -738,7 +738,7 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
 
 // Fairly obvious that we'll add whatever command you give me to a queue
 // Not quite so obvious though is that if we are going to run again. then any
-// information requests become redundent and must be removed.
+// information requests become redundant and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
 void MIDebugSession::queueCmd(std::unique_ptr<MICommand> cmd)
@@ -969,7 +969,7 @@ void MIDebugSession::slotDebuggerExited(bool abnormal, const QString &msg)
             i18n("Debugger exited abnormally"));
         */
         // FIXME: not sure if the following still applies.
-        // Note: we don't stop the debugger here, becuse that will hide gdb
+        // Note: we don't stop the debugger here, because that will hide gdb
         // window and prevent the user from finding the exact reason of the
         // problem.
     }

@@ -59,7 +59,7 @@ void DebuggerTracingDialog::enableOrDisableCustomFormat(int state)
 void DebuggerTracingDialog::accept()
 {
     // Check that if we use format string,
-    // the number of expression is not larget than the number of
+    // the number of expressions is not greater than the number of
     // format specifiers
     bool ok = true;
 

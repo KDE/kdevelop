@@ -390,4 +390,4 @@ Struct('Reflect').members(
     Var(_int, 'BYTES_PER_ELEMENT'),
 ) for a in ['Int8', 'Uint8', 'Uint8Clamped', 'Int16', 'Uint16', 'Int32', 'Uint32', 'Float32', 'Float64']]
 ).print()
-# Realm, Loader and Proxy not decribed for now
+# Realm, Loader and Proxy not described for now

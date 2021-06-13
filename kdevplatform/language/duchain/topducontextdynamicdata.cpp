@@ -377,7 +377,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::itemForIndex(uint index)
     if (realIndex < ( uint )offsets.size() && offsets[realIndex].dataOffset) {
         Q_ASSERT(!data->m_itemRetrievalForbidden);
 
-        //Construct the context, and eventuall its parent first
+        //Construct the context, and eventually its parent first
         ///TODO: ugly, remove need for const_cast
         auto itemData = const_cast<DUChainBaseData*>(
             reinterpret_cast<const DUChainBaseData*>(data->pointerInData(offsets[realIndex].dataOffset))

@@ -22,7 +22,7 @@ QString quoteExpression(const QString& expr);
 QString unquoteExpression(const QString& expr);
 
 /**
- * Qoute the string, using quoteCh
+ * Quote the string, using quoteCh
  */
 QString quote(const QString& str, QChar quoteCh = QLatin1Char('"'));
 

@@ -346,7 +346,7 @@ way to open files in KDevelop until DocumentController is ported.
   - code editing area with split editor windows \n
     (with kate/konqueror-like splitting)
   - debugging area \n
-    (Xcode-like debugger window with only one editor view by default but with possiblility to show more)
+    (Xcode-like debugger window with only one editor view by default but with possibility to show more)
   - profiling area \n
     (like KCacheGrind)
   - user interface design area \n
@@ -369,7 +369,7 @@ way to open files in KDevelop until DocumentController is ported.
 \subsection sublime_architecture Brief Architecture Overview
 
 Sublime::Controller is the central point of the whole Sublime infrastructure. It contains areas,
-documents, and controlls mainwindows. \n
+documents, and controls mainwindows. \n
 Sublime::Controller::showArea() is the only way to show an area in the mainwindow.
 
 Sublime::MainWindow is just a KParts::MainWindow which knows how to "reconstruct" the area

@@ -14,7 +14,7 @@ e) during parsing, evaluate all the known functions, so we automatically
 dive into include() directives, can do variable substitution and also
 the list-stuff qmake supports
 
-Thats the theory, whats there right now is a full qmake parser (no known
+That's the theory, what's there right now is a full qmake parser (no known
 bugs or missing features from qmake) and the start of some basic
 evaluation. I've actually started with the variable substitution.
 

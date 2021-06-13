@@ -27,7 +27,7 @@ public:
     virtual IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const = 0;
 
     /** @returns an IDocumentation instance for the specified URL if the provider has a concept of
-     *  mappping URLS to Documentations and has a Documentation related to the queried URL. Otherwise
+     *  mapping URLS to Documentations and has a Documentation related to the queried URL. Otherwise
      *  returns a null pointer. */
     virtual IDocumentation::Ptr documentation(const QUrl& url) const = 0;
 

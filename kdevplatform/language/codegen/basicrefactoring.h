@@ -63,7 +63,7 @@ public:
     };
 
     /**
-     * @return Suggestion for new filename based on the current file's name @p current and new identifer @p newName
+     * @return Suggestion for new filename based on the current file's name @p current and new identifier @p newName
      */
     virtual QString newFileName(const QUrl& current, const QString& newName);
 

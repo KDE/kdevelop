@@ -178,10 +178,10 @@ public:
     enum Feature : quint16 {
         ///Top-context features standard that can be requested from the duchain, and that are stored in the features() member.
         Empty = 0, //Only the top-context structure (imports etc.) is built, but no declarations and no contexts
-        SimplifiedVisibleDeclarationsAndContexts = 2, //The top-context should only contain publically simplified accessible declarations and contexts, without doing type look-up,
+        SimplifiedVisibleDeclarationsAndContexts = 2, //The top-context should only contain publicly simplified accessible declarations and contexts, without doing type look-up,
         //without extended information like function-argument declarations, etc., imported contexts can be parsed with 'Empty' features
         //This flag essentially leads to a ctags-like processing level.
-        VisibleDeclarationsAndContexts = SimplifiedVisibleDeclarationsAndContexts + 4, //Default: The top-context should only contain publically accessible declarations and contexts
+        VisibleDeclarationsAndContexts = SimplifiedVisibleDeclarationsAndContexts + 4, //Default: The top-context should only contain publicly accessible declarations and contexts
         AllDeclarationsAndContexts = VisibleDeclarationsAndContexts + 8, //The top-context should also contain non-public declarations and contexts, but no uses
         AllDeclarationsContextsAndUses = 16 + AllDeclarationsAndContexts, //The top-context should contain uses and all declarations + contexts
         AST = 32,         //Signalizes that the ast() should be filled

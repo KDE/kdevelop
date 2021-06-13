@@ -445,7 +445,7 @@ void MainWindow::updateCaption()
             title += i18n(" (read only)");
         }
 
-        title += QLatin1String(" [*]"); // [*] is placeholder for modifed state, cmp. QWidget::windowModified
+        title += QLatin1String(" [*]"); // [*] is placeholder for modified state, cmp. QWidget::windowModified
 
         isDocumentModified = iDoc && (iDoc->state() != IDocument::Clean);
     }
@@ -463,7 +463,7 @@ void MainWindow::updateCaption()
     // Workaround for a bug observed on macOS with Qt 5.9.8 (TODO: test with newer Qt, report bug):
     // Ensure to call setCaption() (thus implicitly setWindowTitle()) before
     // setWindowModified() & setWindowFilePath().
-    // Otherwise, if the state will change "modifed" from true to false as well change the title string,
+    // Otherwise, if the state will change "modified" from true to false as well change the title string,
     // calling setWindowTitle() last results in the "modified" indicator==asterisk becoming part of the
     // displayed window title somehow.
     // Other platforms so far not known to be affected, any order of calls seems fine.

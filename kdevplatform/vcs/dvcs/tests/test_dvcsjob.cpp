@@ -32,7 +32,7 @@ void TestDVcsJob::testJob()
     QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
 
     //try the command like "echo -n test"
-    //should fail, because command and arg are in one string. We can change opearator<<(QString) to split,
+    //should fail, because command and arg are in one string. We can change operator<<(QString) to split,
     //but it will be a wrong style to work with jobs.
     const QString echoCommand(QStringLiteral("echo -n test"));
     *job << echoCommand;

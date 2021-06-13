@@ -106,7 +106,7 @@ struct TestItemRequest
     }
 };
 
-uint smallItemsFraction = 20; //Fraction of items betwen 0 and 1 kb
+uint smallItemsFraction = 20; //Fraction of items between 0 and 1 kb
 uint largeItemsFraction = 1; //Fraction of items between 0 and 200 kb
 uint cycles = 10000;
 uint deletionProbability = 1; //Percentual probability that a checked item is deleted. Per-cycle probability must be multiplied with checksPerCycle.

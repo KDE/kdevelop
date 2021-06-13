@@ -259,7 +259,7 @@ void StandardDocumentationView::finishSearch()
 {
     Q_D(StandardDocumentationView);
 
-    // passing emptry string to reset search, as told in API docs
+    // passing empty string to reset search, as told in API docs
     d->m_view->page()->findText(QString());
 }
 

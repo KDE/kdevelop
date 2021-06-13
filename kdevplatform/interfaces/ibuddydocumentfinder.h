@@ -25,7 +25,7 @@ namespace KDevelop {
  * The implementation also determines the order of the tabs in the tabbar.
  *
  * For finding a buddy document, the DocumentController addresses the
- * IBuddyDocumentFinder object that is registerd for this mimetype:
+ * IBuddyDocumentFinder object that is registered for this mimetype:
  *
  * This class provides static "registry" functions to handle a specific buddy finding
  * method (i.e. an object of class IBuddyDocumentFinder) for different

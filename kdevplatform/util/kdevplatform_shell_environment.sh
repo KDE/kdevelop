@@ -645,7 +645,7 @@ function getHostFromSSHCommand {
     done
 
     # After cleaning, the result should only consist of the host-name followed by an optional command.
-    # Select the host-name, by extracting the forst column.
+    # Select the host-name, by extracting the first column.
     echo $CLEANED | cut --delimiter=" " -f 1
 }
 

@@ -67,7 +67,7 @@ public:
     QList<AbstractType::Ptr> arguments () const;
 
     /**
-     * Returns the same arguemtns as arguments(), but without converting them to a QList.
+     * Returns the same arguments as arguments(), but without converting them to a QList.
      * This is much faster, and should be preferred for very tight loops when the performance counts.
      * \return an array that contains the arguments. For the count of arguments, call indexedArgumentsSize
      */

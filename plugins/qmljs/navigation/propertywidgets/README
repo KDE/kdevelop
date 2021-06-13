@@ -1,4 +1,4 @@
-This folder contians the implementations for the "edit a property with a slider-style" widgets
+This folder contains the implementations for the "edit a property with a slider-style" widgets
 which show up when you move the cursor over certain properties in a QML document.
 When creating a new widget, you MUST:
     * create a new QML file in this folder, named like whatever you want
@@ -28,7 +28,7 @@ You usually do the following in your widget then:
 Widgets only displaying stuff are fine too, see e.g. FontFamily.qml.
 Such a "read-only" widget must still have a value property and a valueChanged signal defined!
 
-Altough it might seem obvious, you do not have to restart KDevelop to test these widgets, just running "make install"
+Although it might seem obvious, you do not have to restart KDevelop to test these widgets, just running "make install"
 and re-opening the widget is enough. You can even specify the path to your kdev-qml/navigation/propertywidgets folder
 in the propertypreviewwidget class temporarily (instead of the one determined by kstandarddirs), then you can
 test without re-running installation.

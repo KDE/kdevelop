@@ -48,7 +48,7 @@ KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(const Declaration* dec);
 KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const QUrl& url,
                                                                           bool preferProxyContext = false);
 /**
- * Returns the content-context associated to the given proxy-contex.
+ * Returns the content-context associated to the given proxy-context.
  * Returns the same context if it is not a proxy-context.
  * Returns zero if no content-context could be acquired.
  * */

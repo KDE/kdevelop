@@ -189,7 +189,7 @@ void TestDUChain::testElaboratedType()
 #endif
     QVERIFY(functionType->returnType()->whichType() != AbstractType::TypeDelayed);
 #if CINDEX_VERSION_MINOR < 34
-    QEXPECT_FAIL("typedef", "After using clang_getCanonicalType on ElaboratedType all typedef information get's stripped away", Continue);
+    QEXPECT_FAIL("typedef", "After using clang_getCanonicalType on ElaboratedType all typedef information gets stripped away", Continue);
 #endif
     QCOMPARE(functionType->returnType()->whichType(), type);
 }

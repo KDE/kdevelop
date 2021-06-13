@@ -35,9 +35,9 @@ spawning a new Thread for each and every action.
 
 4. Finishing
 
-When the internaljob's run() method is exited ThreadWeaver emits an apropriate signal
+When the internaljob's run() method is exited ThreadWeaver emits an appropriate signal
 which is connected to the Job subclass. This in turn changes its state and emits
-the apropriate KJob signals by calling the KJob methods for that.
+the appropriate KJob signals by calling the KJob methods for that.
 
 If the Job class received a result it will immediately emit a resultsReady signal and
 as soon as the result is fetched via fetchResults will remove the fetched results.

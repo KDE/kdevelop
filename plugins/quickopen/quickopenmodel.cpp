@@ -198,7 +198,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
             continue;
         }
 
-        ///Always reset providers that implement QuickOpenFileSetInterface and have some matchign scopes, because they may be needed by other providers.
+        ///Always reset providers that implement QuickOpenFileSetInterface and have some matching scopes, because they may be needed by other providers.
         if (m_enabledScopes.isEmpty() || !(m_enabledScopes & provider.scopes).isEmpty()) {
             provider.provider->reset();
         }

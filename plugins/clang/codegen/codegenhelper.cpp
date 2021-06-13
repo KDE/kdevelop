@@ -270,7 +270,7 @@ AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
 
                 newTypeName = decl->qualifiedIdentifier();
 
-                //Strip unneded prefixes of the scope
+                //Strip unneeded prefixes of the scope
                 QualifiedIdentifier candidate = newTypeName;
                 while (candidate.count() > 1) {
                     candidate = candidate.mid(1);

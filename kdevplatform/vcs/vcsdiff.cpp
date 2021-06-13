@@ -62,7 +62,7 @@ namespace
         /**
          * Returns the index of the line within the hunk
          *
-         * @param diffLineIdx the 0-based indes of the line in the diff
+         * @param diffLineIdx the 0-based index of the line in the diff
          *
          * @note assumes that the line is contained within the hunk
          * @note if the line is a header line, -1 is returned; otherwise the returned

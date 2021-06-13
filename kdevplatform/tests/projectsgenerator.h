@@ -29,7 +29,7 @@ public:
     static KDevelop::IProject* GenerateSimpleProject();
 
     /**
-     * This actually does create the same directory structure as genereate simple project.
+     * This actually creates the same directory structure as GenerateSimpleProject().
      * However, the .kdev_include_paths file is also included in this project, so the structure
      * becomes:
      * ./simpleproject.kdev4

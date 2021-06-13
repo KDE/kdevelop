@@ -83,7 +83,7 @@ module window {
         void setPosition(in Node node, in long offset)
             raises(DOMException);
 
-        // IE extentions
+        // IE extensions
         // http://msdn.microsoft.com/en-us/library/ms535869(VS.85).aspx
         void empty();
     };

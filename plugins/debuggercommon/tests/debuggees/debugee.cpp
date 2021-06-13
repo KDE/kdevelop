@@ -23,7 +23,7 @@ void foo() {
     ++i; int j = i;
     noop();
     noop();
-    (void)j; // Supress unused j warning
+    (void)j; // Suppress unused j warning
 }
 int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;

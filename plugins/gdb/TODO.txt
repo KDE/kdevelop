@@ -39,7 +39,7 @@ TODO:
 
       - Hiding of static members.
 
-      - No horizonal scrollbar in the variables widget.
+      - No horizontal scrollbar in the variables widget.
 
       - Debugging optimized binaries
 
@@ -97,7 +97,7 @@ TODO:
 
        - Test loading of read watchpoints from session file.
 
-       - Change "toogle watchpoint" into checkbox.
+       - Change "toggle watchpoint" into checkbox.
 
        - "Read watchpoint triggered" message disappears too soon.
 
@@ -147,7 +147,7 @@ TODO:
 
        - Test that modifying breakpoint while application is running works.        
 
-       - If remembered expresion includes dereferences pointer as a child,
+       - If remembered expression includes dereferences pointer as a child,
           that child is still updated as we step.        
 
        - Error in 'finish' command (e.g. on the outer frame) hides the 
@@ -191,7 +191,7 @@ BUGS/ISSUES found:
    - Varobj broken:
 
        - When entering new scope, we need to issue -stack-list-locals
-         to get names of new varaibles in that scope.
+         to get names of new variables in that scope.
 
    - When stopping inside undebuggable code (say, on watchpoint hit), 
      -file-list-exec-source-file reports the last valid source file.

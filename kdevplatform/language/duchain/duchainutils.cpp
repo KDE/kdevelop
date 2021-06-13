@@ -136,7 +136,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
 }
 /**We have to construct the item from the pixmap, else the icon will be marked as "load on demand",
  * and for some reason will be loaded every time it's used(this function returns a QIcon marked "load on demand"
- * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be ment to be that slow.
+ * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be meant to be that slow.
  */
 #define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon( \
       QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/pics/" name ".png"))\

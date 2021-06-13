@@ -74,15 +74,15 @@
 
 - File bug to lldb-mi
     * HIGH PRIORITY: -break-insert
-        + [SUBMITED] pending breakpoints set with '-f' not got resolved after file loaded
+        + [SUBMITTED] pending breakpoints set with '-f' not got resolved after file loaded
             - https://llvm.org/bugs/show_bug.cgi?id=28702
-        + [SUBMITED] pending breakpoints '-f' can only be last flag switch
+        + [SUBMITTED] pending breakpoints '-f' can only be last flag switch
             - https://llvm.org/bugs/show_bug.cgi?id=28698
-        + [SUBMITED] create disabled breakpoint with '-d' not working when combined with '-f'
+        + [SUBMITTED] create disabled breakpoint with '-d' not working when combined with '-f'
             - https://llvm.org/bugs/show_bug.cgi?id=28703
-        + [SUBMITED] -break-enable has no effect
+        + [SUBMITTED] -break-enable has no effect
             - https://llvm.org/bugs/show_bug.cgi?id=28857
-    * [SUBMITED] breakpoint hit doesn't generate corresponding breakpoint-modified notification
+    * [SUBMITTED] breakpoint hit doesn't generate corresponding breakpoint-modified notification
         - https://llvm.org/bugs/show_bug.cgi?id=28860
       (needed to update hitCount)
     * -break-watch command not supported
@@ -90,28 +90,28 @@
     * when hit watch point, nothing is output, which confuses the controller
     * thread-info returns malformated result
         + there should be only one 'frame' key for each thread in the list
-        + [FIXED] there shoule be a current-thread-id field (Fixed at least in revision 265858)
+        + [FIXED] there should be a current-thread-id field (Fixed at least in revision 265858)
     * [FIXED] lldb-mi crashes when break on a point where multiple threads running. (Fixed at least in revision 265858)
     * var-update doesn't support * as variable name
     * can't have space in environment cd
     * -inferior-tty-set only has dummy implementation
     * 'process launch' doesn't provide thread-group-started notification
-    * [SUBMITED] sliently stop when attaching to process, which confuses the controller
+    * [SUBMITTED] silently stop when attaching to process, which confuses the controller
         - https://llvm.org/bugs/show_bug.cgi?id=28858
-    * [SUBMITED] sliently stop when request stop at start
+    * [SUBMITTED] silently stop when request stop at start
         - https://llvm.org/bugs/show_bug.cgi?id=25000
-    * [SUBMITED] [PATCHED] cli output not wrapped in console stream record
-    * [SUBMITED][PATCHED] -data-disassemble start and end address parameter doesn't accept expressions
+    * [SUBMITTED] [PATCHED] cli output not wrapped in console stream record
+    * [SUBMITTED][PATCHED] -data-disassemble start and end address parameter doesn't accept expressions
         - https://llvm.org/bugs/show_bug.cgi?id=28859
     * -gdb-set not fully implemented
         + environment
-        + [SUBMITED] [PATCHED] disassembly-flavor
+        + [SUBMITTED] [PATCHED] disassembly-flavor
             - https://llvm.org/bugs/show_bug.cgi?id=28718
     * -gdb-show not fully implemented
-        + [SUBMITED] [PATCHED] disassembly-flavor
+        + [SUBMITTED] [PATCHED] disassembly-flavor
             - https://llvm.org/bugs/show_bug.cgi?id=28718
     * -data-list-register-values output format doesn't conform to spec
-    * [SUBMITED] -stack-list-locals shows empty list
+    * [SUBMITTED] -stack-list-locals shows empty list
         - https://llvm.org/bugs/show_bug.cgi?id=28621
     * File bug to lldb-mi for other missing commands
 
@@ -139,7 +139,7 @@
     * Attach to process
         + works internally, but there's no way to access it in the UI currently.
 
-relavent lldb settings:
+relevant lldb settings:
 
 disassembly-format
 thread-format

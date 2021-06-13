@@ -191,7 +191,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(const SourceFormatterStyle& st
 
     int tabWidth = 4;
     if ((!leftContext.isEmpty() || !rightContext.isEmpty()) && (text.contains(QLatin1Char('	')) || output.contains(QLatin1Char('\t')))) {
-        // If we have to do contex-matching with tabs, determine the correct tab-width so that the context
+        // If we have to do context-matching with tabs, determine the correct tab-width so that the context
         // can be matched correctly
         const auto indent = indentation(style, url, mime);
         if (indent.indentationTabWidth > 0) {

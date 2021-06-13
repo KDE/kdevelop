@@ -217,7 +217,7 @@ private:
      *
      * The keys are formed by concatenating the url of the document
      * being diffed with ':' followed by the RepoStatusModel::Areas
-     * enum value identifing what type of diff it is (i.e. showing
+     * enum value identifying what type of diff it is (i.e. showing
      * staged/unstaged changes).
      */
     std::map<QString, ViewData> m_views;

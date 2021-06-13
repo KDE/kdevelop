@@ -263,7 +263,7 @@ def QByteArraySummaryProvider(valobj, internal_dict):
         # Something wrong with our synthetic provider, get the content by ourselves
         printable, _, _ = printableQByteArray(valobj)
         if printable is not None:
-            # first replace " to \", and suround by "", no need to escape other things which
+            # first replace " to \", and surround by "", no need to escape other things which
             # are handled in printableQByteArray.
             return 'b"{}"'.format(printable.replace('"', '\\"'))
     return '<Invalid>'
@@ -288,7 +288,7 @@ class QByteArrayFormatter(HiddenMemberProvider):
                                                          self._char_type)
                 self._addChild(var)
 
-            # first replace " to \", and suround by "", no need to escape other things which
+            # first replace " to \", and surround by "", no need to escape other things which
             # are handled in printableQByteArray.
             printable = b'"{}"'.format(printable.replace(b'"', b'\\"'))
             self._addChild(('(content)', printable), hidden=True)
@@ -686,14 +686,14 @@ class BasicMapFormatter(HiddenMemberProvider):
 
 
 class QMapFormatter(BasicMapFormatter):
-    """lldb synthethic provider for QMap"""
+    """lldb synthetic provider for QMap"""
 
     def __init__(self, valobj, internal_dict):
         super(QMapFormatter, self).__init__(valobj, internal_dict)
 
 
 class QMultiMapFormatter(BasicMapFormatter):
-    """lldb synthethic provider for QMap"""
+    """lldb synthetic provider for QMap"""
 
     def __init__(self, valobj, internal_dict):
         super(QMultiMapFormatter, self).__init__(valobj.GetChildAtIndex(0), internal_dict)
@@ -799,14 +799,14 @@ class BasicHashFormatter(HiddenMemberProvider):
 
 
 class QHashFormatter(BasicHashFormatter):
-    """lldb synthethic provider for QHash"""
+    """lldb synthetic provider for QHash"""
 
     def __init__(self, valobj, internal_dict):
         super(QHashFormatter, self).__init__(valobj, internal_dict)
 
 
 class QMultiHashFormatter(BasicHashFormatter):
-    """lldb synthethic provider for QHash"""
+    """lldb synthetic provider for QHash"""
 
     def __init__(self, valobj, internal_dict):
         super(QMultiHashFormatter, self).__init__(valobj.GetChildAtIndex(0), internal_dict)

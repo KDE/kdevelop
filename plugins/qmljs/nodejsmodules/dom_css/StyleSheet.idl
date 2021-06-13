@@ -36,7 +36,7 @@ module stylesheets {
         readonly attribute MediaList        media;
 
 #if defined(LANGUAGE_CPP) && LANGUAGE_CPP
-        // Extra WebCore methods exposed to allowe compile-time casting in C++
+        // Extra WebCore methods exposed to allow compile-time casting in C++
         boolean isCSSStyleSheet();
 #endif
 

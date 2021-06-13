@@ -37,7 +37,7 @@ using namespace KTextEditor;
  *  - All changes within a local function (or function parameter context): Update only the context (and all its importers)
  *
  * @todo: Prevent recursive updates after insignificant changes
- *             (whitespace changes, or changes that don't affect publically visible stuff, eg. local incremental changes)
+ *             (whitespace changes, or changes that don't affect publicly visible stuff, eg. local incremental changes)
  *             -> Maybe alter the file-modification caches directly
  * */
 

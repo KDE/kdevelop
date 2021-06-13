@@ -63,7 +63,7 @@ public:
 
     QSet<KDevelop::IndexedString> fileSet() const override;
 
-    //Frees the model by closing active quickopen dialoags, and retuns whether successful.
+    //Frees the model by closing active quickopen dialoags, and returns whether successful.
     bool freeModel();
 
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;

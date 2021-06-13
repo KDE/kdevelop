@@ -69,7 +69,7 @@ OutputWidget* StandardOutputViewTest::toolViewPointer(const QString& toolViewTit
         auto* doc = qobject_cast<Sublime::ToolDocument*>(view->document());
         if(doc) {
             if(doc->title() == toolViewTitle && view->hasWidget()) {
-                // cannot use qobject_cast here, test code currently slighty fragile due to
+                // cannot use qobject_cast here, test code currently slightly fragile due to
                 // duplicated compilation of OutputWidget, here & loaded plugin
                 // cmp. comment in CMakeLists.txt
                 return dynamic_cast<OutputWidget*>(view->widget());

@@ -57,7 +57,7 @@ public:
     };
 
     /**
-     * @return The type of this config page. Default implementaion returns DefaultConfigPageType
+     * @return The type of this config page. Default implementation returns DefaultConfigPageType
      */
     virtual ConfigPageType configPageType() const;
 

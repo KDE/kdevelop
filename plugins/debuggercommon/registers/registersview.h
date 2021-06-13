@@ -34,7 +34,7 @@ public Q_SLOTS:
     void updateRegisters();
 
 protected:
-    ///Allows to choose register formates/modes.
+    ///Allows to choose register formats/modes.
     void contextMenuEvent(QContextMenuEvent* e) override;
 
 private:
@@ -51,7 +51,7 @@ private:
     void setNameForTable(int idx, const QString& name);
 
 private Q_SLOTS:
-    ///Changes register formates/modes to @p formatOrMode.
+    ///Changes register formats/modes to @p formatOrMode.
     void menuTriggered(const QString& formatOrMode);
 
 private:

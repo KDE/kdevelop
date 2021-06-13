@@ -41,7 +41,7 @@ Gdb will reply with a number of "out-of-band" responses, followed by one
 
 The "done"/"error" response, when using MI interface, is a tree-line structure
 that's parsed with into GDBMI::ResultRecord structure, that is then passed
-to callback assocaited with the current command. Say, for "get me value of
+to callback associated with the current command. Say, for "get me value of
 expression" command, MI response includes textual "value" field that can be
 used by any part of GUI to show the value. After callback is called,
 controller deletes the current command and then tries to execute next one from

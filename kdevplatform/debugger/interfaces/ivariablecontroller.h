@@ -32,7 +32,7 @@ public:
     explicit IVariableController(IDebugSession* parent);
     ~IVariableController() override;
 
-    /* Create a variable for the specified expression in the currentl
+    /* Create a variable for the specified expression in the current
        thread and frame.  */     
     virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
                                      const QString& expression,
