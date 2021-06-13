@@ -1,5 +1,6 @@
 [General]
 Name=GObject with private pointer
+Name[az]=Gizli göstərici ilə GObject
 Name[bs]=GObject s privatnim pokazivačem
 Name[ca]=GObject amb apuntador privat
 Name[ca@valencia]=GObject amb apuntador privat
@@ -32,6 +33,7 @@ Name[x-test]=xxGObject with private pointerxx
 Name[zh_CN]=带有私有指针的 GObject
 Name[zh_TW]=GObject 含私密指標
 Comment=A GObject subclass with a private pointer
+Comment[az]=Gizli gösətrici ilə bir GObject alt sinifi
 Comment[bs]=Podklasa GObject s privatnim pokazivačem
 Comment[ca]=Una subclasse GObject amb un apuntador privat
 Comment[ca@valencia]=Una subclasse GObject amb un apuntador privat
@@ -65,6 +67,7 @@ Comment[zh_CN]=一个带有私有指针的 GObject 子类
 Comment[zh_TW]=GObject 子類別，含私密指標
 Category=C/GLib
 Language=C
+Language[az]=C
 Language[bs]=C
 Language[ca]=C
 Language[ca@valencia]=C
@@ -109,6 +112,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
@@ -148,6 +152,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

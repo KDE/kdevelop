@@ -4,6 +4,7 @@
             {
                 "Email": "aleixpol@kde.org",
                 "Name": "Aleix Pol",
+                "Name[az]": "Aleix Pol",
                 "Name[ca@valencia]": "Aleix Pol",
                 "Name[ca]": "Aleix Pol",
                 "Name[cs]": "Aleix Pol",
@@ -36,6 +37,7 @@
         "Category": "Version Control",
         "Description": "This plugin provides integration between the projects and their VCS infrastructure",
         "Description[ar]": "توفّر هذه الملحقة التّكامل بين مشاريعك ومركزيّة VCS",
+        "Description[az]": "Bu qoşma, layihələr və onların VCS infrastrukturları arasında inteqrasiyanı təmin edir",
         "Description[ca@valencia]": "Aquest connector proporciona la integració entre els projectes i la seua infraestructura de VCS",
         "Description[ca]": "Aquest connector proporciona la integració entre els projectes i la seva infraestructura de VCS",
         "Description[de]": "Dieses Modul stellt eine Integration zwischen Projekten und ihrer VCS-Infrastruktur her.",

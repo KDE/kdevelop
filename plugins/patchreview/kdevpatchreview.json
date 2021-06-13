@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "David Nolden",
+                "Name[az]": "David Nolden",
                 "Name[ca@valencia]": "David Nolden",
                 "Name[ca]": "David Nolden",
                 "Name[cs]": "David Nolden",
@@ -35,6 +36,7 @@
         "Category": "Utilities",
         "Description": "This plugin allows reviewing patches directly in the editor.",
         "Description[ar]": "تسمح هذه الملحقة بمراجعة الرّقعة مباشرةً في المحرّر.",
+        "Description[az]": "Bu qoşma. yamaqların birbaşa redaktor daxilində gözdən keçirilməsini təmin edir.",
         "Description[ca@valencia]": "Aquest connector permet revisar pedaços directament en l'editor.",
         "Description[ca]": "Aquest connector permet revisar pedaços directament en l'editor.",
         "Description[cs]": "Tento zásuvný modul umožňuje prohlížení záplat přímo v editoru.",

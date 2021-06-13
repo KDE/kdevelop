@@ -4,6 +4,7 @@
             {
                 "Email": "arichardson.kde@gmail.com",
                 "Name": "Alex Richardson",
+                "Name[az]": "Alex Richardson",
                 "Name[ca@valencia]": "Alex Richardson",
                 "Name[ca]": "Alex Richardson",
                 "Name[cs]": "Alex Richardson",
@@ -34,6 +35,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin provides a view to show the outline of the currently open document.",
+        "Description[az]": "Bu qoşma, cari açıq sənədin çərçivələrinin görünməsini təmin edir.",
         "Description[ca@valencia]": "Aquest connector proporciona una visualització que mostra una visió general del document obert actualment.",
         "Description[ca]": "Aquest connector proporciona una visualització que mostra una visió general del document obert actualment.",
         "Description[de]": "Dieses Modul zeigt eine Ansicht der Funktions-Kurzinfos im aktuell geöffneten Dokument.",

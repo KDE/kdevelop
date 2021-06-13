@@ -1,5 +1,6 @@
 [General]
 Name=GObject
+Name[az]=GObject
 Name[bs]=GObject
 Name[ca]=GObject
 Name[ca@valencia]=GObject
@@ -35,6 +36,7 @@ Name[x-test]=xxGObjectxx
 Name[zh_CN]=GObject
 Name[zh_TW]=GObject
 Comment=A simple GObject subclass
+Comment[az]=Sadə GObject alt sinifi
 Comment[bs]=Prosta GObject podklasa
 Comment[ca]=Una subclasse GObject senzilla
 Comment[ca@valencia]=Una subclasse GObject senzilla
@@ -68,6 +70,7 @@ Comment[zh_CN]=一个简单的 GObject 子类
 Comment[zh_TW]=簡單的 GObject 子類別
 Category=C/GLib
 Language=C
+Language[az]=C
 Language[bs]=C
 Language[ca]=C
 Language[ca@valencia]=C
@@ -112,6 +115,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
@@ -151,6 +155,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

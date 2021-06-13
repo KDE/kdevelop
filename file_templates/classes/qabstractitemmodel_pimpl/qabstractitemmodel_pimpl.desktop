@@ -1,5 +1,6 @@
 [General]
 Name=QAbstractItemModel pimpl subclass
+Name[az]=QAbstractItemModel pimpl alt sinifi
 Name[ca]=Subclasse QAbstractItemModel «pimpl»
 Name[ca@valencia]=Subclasse QAbstractItemModel «pimpl»
 Name[de]=QAbstractItemModel-Unterklasse (pimpl)
@@ -24,6 +25,7 @@ Name[uk]=Підклас pimpl QAbstractItemModel
 Name[x-test]=xxQAbstractItemModel pimpl subclassxx
 Name[zh_CN]=QAbstractItemModel pimpl 子类
 Comment=QAbstractItemModel subclass with private implementation
+Comment[az]=Gizli tətbiqetmə ilə QAbstractItemModel alt sinifi
 Comment[ca]=Una subclasse QAbstractItemModel amb implementació privada
 Comment[ca@valencia]=Una subclasse QAbstractItemModel amb implementació privada
 Comment[de]=Eine QAbstractItemModel-Unterklasse mit privater Implementierung
@@ -48,6 +50,7 @@ Comment[x-test]=xxQAbstractItemModel subclass with private implementationxx
 Comment[zh_CN]=有私有实现的 QAbstractItemModel 子类
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -94,6 +97,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Header
+Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
@@ -133,6 +137,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada
 Name[ca@valencia]=Capçalera privada
@@ -169,6 +174,7 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

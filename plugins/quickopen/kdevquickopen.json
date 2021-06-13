@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "David Nolden",
+                "Name[az]": "David Nolden",
                 "Name[ca@valencia]": "David Nolden",
                 "Name[ca]": "David Nolden",
                 "Name[cs]": "David Nolden",
@@ -35,6 +36,7 @@
         "Category": "Core",
         "Description": "This plugin allows quick access to project files and language-items like classes/functions.",
         "Description[ar]": "تسمح هذه الملحقة بالوصول السريع إلى ملفّات المشروع وعناصر اللغة كالأصناف والدّوال.",
+        "Description[az]": "Bu qoşma, layihə fayllarına və siniflər/funksiyalar kimi dil elementlərinə cəld girişi təmin edir.",
         "Description[ca@valencia]": "Aquest connector permet un ràpid accés als fitxers del projecte i a elements del llenguatge com classes/funcions.",
         "Description[ca]": "Aquest connector permet un ràpid accés als fitxers del projecte i a elements del llenguatge com classes/funcions.",
         "Description[cs]": "Tento zásuvný modul umožňuje rychlý přístup k souborům projektu a položkám jazyka jako jsou třídy a funkce.",

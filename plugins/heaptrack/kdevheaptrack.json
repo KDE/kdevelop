@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Anton Anikin",
+                "Name[az]": "Anton Anikin",
                 "Name[ca@valencia]": "Anton Anikin",
                 "Name[ca]": "Anton Anikin",
                 "Name[cs]": "Anton Anikin",
@@ -33,6 +34,7 @@
         ],
         "Category": "Analyzers",
         "Description": "This plugin integrates Heaptrack to KDevelop",
+        "Description[az]": "Bu qoşma, Heaptrack'ı KDevelop'a inteqrasiya edir",
         "Description[ca@valencia]": "Aquest connector integra el Heaptrack al KDevelop",
         "Description[ca]": "Aquest connector integra el Heaptrack al KDevelop",
         "Description[cs]": "Tento modul integruje Heaptrack do KDevelop",

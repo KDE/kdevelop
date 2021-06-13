@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KDevelop Sessions
 Name[ar]=جلسات مطوّرك
+Name[az]=KDevelop sessiyası
 Name[bs]=KDevelop sesije
 Name[ca]=Sessions del KDevelop
 Name[ca@valencia]=Sessions del KDevelop
@@ -40,6 +41,7 @@ Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=List and launch KDevelop sessions
 Comment[ar]=اعرض جلسات مطوّرك وأطلقها
+Comment[az]=KDevelop sessiyalarını sıralayın və başladın
 Comment[bs]=Listanje i pokretanje KDevelop sesija
 Comment[ca]=Llista i llança sessions del KDevelop
 Comment[ca@valencia]=Llista i llança sessions del KDevelop

@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Miha Čančula",
+                "Name[az]": "Miha Čančula",
                 "Name[ca@valencia]": "Miha Čančula",
                 "Name[ca]": "Miha Čančula",
                 "Name[cs]": "Miha Čančula",
@@ -33,6 +34,7 @@
         ],
         "Category": "Testing",
         "Description": "Lets you see and run unit tests.",
+        "Description[az]": "Modul testlərini görməyə və işə salanıza omkan verir.",
         "Description[ca@valencia]": "Vos permet veure i executar proves unitàries.",
         "Description[ca]": "Us permet veure i executar proves unitàries.",
         "Description[cs]": "Umožňuje vám zobrazit a spouštět unit testy.",

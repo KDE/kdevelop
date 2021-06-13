@@ -47,6 +47,7 @@ Comment[x-test]=xxQWidget subclass with a separate Qt Designer file and private 
 Comment[zh_CN]=包含一个独立的 Qt Designer 文件和私有实现的 QWidget 子类
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -92,6 +93,7 @@ Files=Header,PrivateHeader,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
@@ -128,6 +130,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada
 Name[ca@valencia]=Capçalera privada
@@ -164,6 +167,7 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
@@ -203,6 +207,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[az]=İstifaddəçi İnterfeysi
 Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari

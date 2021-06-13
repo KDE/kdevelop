@@ -1,5 +1,6 @@
 [General]
 Name=QAbstractItemModel subclass
+Name[az]=QAbstractItemModel alt sinifi
 Name[ca]=Subclasse QAbstractItemModel
 Name[ca@valencia]=Subclasse QAbstractItemModel
 Name[cs]=Podtřída QAbstractItemModel
@@ -24,6 +25,7 @@ Name[uk]=Підклас QAbstractItemModel
 Name[x-test]=xxQAbstractItemModel subclassxx
 Name[zh_CN]=QAbstractItemModel 子类
 Comment=QAbstractItemModel subclass with properties
+Comment[az]=Gizli xüsusiyyətləri ilə QAbstractItemModel alt sinifi
 Comment[ca]=Subclasse QAbstractItemModel amb propietats
 Comment[ca@valencia]=Subclasse QAbstractItemModel amb propietats
 Comment[de]=Eine QAbstractItemModel-Unterklasse mit Properties
@@ -48,6 +50,7 @@ Comment[x-test]=xxQAbstractItemModel subclass with propertiesxx
 Comment[zh_CN]=带属性的 QAbstractItemModel 子类
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -94,6 +97,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
@@ -130,6 +134,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

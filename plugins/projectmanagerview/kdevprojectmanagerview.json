@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Roberto Raggi",
+                "Name[az]": "Roberto Raggi",
                 "Name[ca@valencia]": "Roberto Raggi",
                 "Name[ca]": "Roberto Raggi",
                 "Name[cs]": "Roberto Raggi",
@@ -34,6 +35,7 @@
         "Category": "Core",
         "Description": "Lets you manage the project contents.",
         "Description[ar]": "يتيح لك إدارة محتويات المشروع.",
+        "Description[az]": "Layihənin tərkibindəkiləri idarə etməyə sizə imkan verir.",
         "Description[ca@valencia]": "Vos permet gestionar els continguts del projecte.",
         "Description[ca]": "Us permet gestionar els continguts del projecte.",
         "Description[cs]": "Umožňuje spravovat obsah projektu.",

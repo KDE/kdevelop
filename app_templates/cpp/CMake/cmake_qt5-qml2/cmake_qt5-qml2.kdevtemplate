@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=QtQuick 2 Application
+Name[az]=QtQuick 2 tətbiqi
 Name[ca]=Aplicació QtQuick 2
 Name[ca@valencia]=Aplicació QtQuick 2
 Name[cs]=Aplikace QtQuick2
@@ -27,6 +28,7 @@ Name[x-test]=xxQtQuick 2 Applicationxx
 Name[zh_CN]=QtQuick 2 应用程序
 
 Comment=A Qt5 and QtQuick2 basic application using CMake
+Comment[az]=CMake istifadə edən Qt5 və QtQuick2 əsaslı tətbiq
 Comment[ca]=Una aplicació bàsica en Qt5 i QtQuick2 usant el CMake
 Comment[ca@valencia]=Una aplicació bàsica en Qt5 i QtQuick2 usant el CMake
 Comment[cs]=Základní aplikace Qt5 a QtQuick2 pomocí CMake

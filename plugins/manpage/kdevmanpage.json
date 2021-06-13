@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Documentation",
         "Description": "This plugin provides Manual Pages integration",
+        "Description[az]": "Bu qoşma, Təlimat Səhifələrinin inteqrasiyasını təmin edir",
         "Description[bs]": "Ovaj dodatak omogućava integraciju sa stranicama uputstava",
         "Description[ca@valencia]": "Aquest connector proporciona la integració de les pàgines del manual",
         "Description[ca]": "Aquest connector proporciona la integració de les pàgines del manual",

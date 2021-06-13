@@ -1,5 +1,6 @@
 [General]
 Name=KDevelop File Template
+Name[az]=KDevelop fayl şablonu
 Name[ca]=Plantilla de fitxer del KDevelop
 Name[ca@valencia]=Plantilla de fitxer del KDevelop
 Name[cs]=Soubor šablony KDevelop
@@ -18,6 +19,7 @@ Name[uk]=Шаблон файла KDevelop
 Name[x-test]=xxKDevelop File Templatexx
 Name[zh_CN]=KDevelop 文件模板
 Comment=Setup for KDevelop File Template which is packaged using CMake
+Comment[az]=CMake istifadə edilərək paketlənmiş KDevelop fayl şablonları üçün ayarlar
 Comment[ca]=Configuració per a la plantilla de fitxer del KDevelop que empaqueta usant CMake
 Comment[ca@valencia]=Configuració per a la plantilla de fitxer del KDevelop que empaqueta usant CMake
 Comment[en_GB]=Setup for KDevelop File Template which is packaged using CMake

@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Milian Wolff",
+                "Name[az]": "Milian Wolff",
                 "Name[ca@valencia]": "Milian Wolff",
                 "Name[ca]": "Milian Wolff",
                 "Name[cs]": "Milian Wolff",
@@ -34,6 +35,7 @@
         "Category": "Project Management",
         "Description": "Configure which files and folders inside the project folder should be included or excluded.",
         "Description[ar]": "اضبط أيّ الملفّات والمجلّدات داخل مجلّد المشروع يجب تضمينها أو استثنائها.",
+        "Description[az]": "Hansı faylların və qovluqların layiyə qovluğuna daxil edilib edilməyəcəyini tənzimləyin.",
         "Description[ca@valencia]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.",
         "Description[ca]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.",
         "Description[de]": "Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.",

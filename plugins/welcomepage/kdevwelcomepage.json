@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Provides the welcome page visible in an empty session",
+        "Description[az]": "Bo sessiyada salamlama səhifəsinin görünə bilməsini təmin edir",
         "Description[ca@valencia]": "Proporciona la visibilitat de la pàgina de benvinguda en una sessió buida",
         "Description[ca]": "Proporciona la visibilitat de la pàgina de benvinguda en una sessió buida",
         "Description[cs]": "Poskytuje uvítací obrazovku viditelnou v prázdném sezení",

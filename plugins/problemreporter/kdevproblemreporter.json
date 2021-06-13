@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Hamish Rodda",
+                "Name[az]": "Hamish Rodda",
                 "Name[ca@valencia]": "Hamish Rodda",
                 "Name[ca]": "Hamish Rodda",
                 "Name[cs]": "Hamish Rodda",
@@ -34,6 +35,7 @@
         "Category": "Utilities",
         "Description": "This plugin shows errors in source code.",
         "Description[ar]": "تظهر هذه الملحقة الأخطاء في الشِّفرة المصدريّة.",
+        "Description[az]": "Bu qoşma, qaynaq kodundakı xətaları göstərir.",
         "Description[ca@valencia]": "Aquest connector permet mostrar errors en el codi font.",
         "Description[ca]": "Aquest connector permet mostrar errors en el codi font.",
         "Description[cs]": "Tento zásuvný modul ukazuje chyby ve zdrojovém kódu.",

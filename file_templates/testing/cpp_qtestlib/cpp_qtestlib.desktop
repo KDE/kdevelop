@@ -66,6 +66,7 @@ Comment[zh_CN]=一个使用 QTest 库且不含图形界面的单元测试套件
 Comment[zh_TW]=單元測試套件，用 QTest 函式庫，但不含使用者介面
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -111,6 +112,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Header
+Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
@@ -150,6 +152,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

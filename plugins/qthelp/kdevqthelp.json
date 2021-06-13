@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Aleix Pol",
+                "Name[az]": "Aleix Pol",
                 "Name[ca@valencia]": "Aleix Pol",
                 "Name[ca]": "Aleix Pol",
                 "Name[cs]": "Aleix Pol",
@@ -34,6 +35,7 @@
         ],
         "Category": "Documentation",
         "Description": "This plugin provides QtHelp integration",
+        "Description[az]": "Bu qoşma, QtHelp inteqrasiyasını təmin edir",
         "Description[ca@valencia]": "Aquest connector proveeix la integració amb QtHelp",
         "Description[ca]": "Aquest connector proveeix la integració amb QtHelp",
         "Description[de]": "Dieses Modul integriert QtHelp in KDevelop",

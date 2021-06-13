@@ -1,5 +1,6 @@
 [General]
 Name=Private Pointer
+Name[az]=Gizli göstərici
 Name[bs]=Privatni pokazivač
 Name[ca]=Apuntador privat
 Name[ca@valencia]=Apuntador privat
@@ -32,6 +33,7 @@ Name[x-test]=xxPrivate Pointerxx
 Name[zh_CN]=私有指针
 Name[zh_TW]=私密指標
 Comment=C++ Class with a private D-pointer
+Comment[az]=Bir gizli D-göstəricisi ilə C++ Class
 Comment[bs]=C++ klasa s privatnim D-pokazivačem
 Comment[ca]=Classe C++ amb un apuntador-D privat
 Comment[ca@valencia]=Classe C++ amb un apuntador-D privat
@@ -65,6 +67,7 @@ Comment[zh_CN]=带有一个私有 D-指针的 C++ 类
 Comment[zh_TW]=C++ 類別，含私密指標
 Category=C++/Basic
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -110,6 +113,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
@@ -146,6 +150,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada
 Name[ca@valencia]=Capçalera privada
@@ -182,6 +187,7 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

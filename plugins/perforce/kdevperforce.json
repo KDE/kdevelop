@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Morten Danielsen Volden",
+                "Name[az]": "Morten Danielsen Volden",
                 "Name[ca@valencia]": "Morten Danielsen Volden",
                 "Name[ca]": "Morten Danielsen Volden",
                 "Name[cs]": "Morten Danielsen Volden",
@@ -33,6 +34,7 @@
         ],
         "Category": "Version Control",
         "Description": "Provides Integration with Perforce Version Control System",
+        "Description[az]": "Perforce ilə Versiyaya Nəzarət Sisteminin inteqrasiyasını təmin edir",
         "Description[ca@valencia]": "Proporciona integració amb el sistema de control de versions Perforce",
         "Description[ca]": "Proporciona integració amb el sistema de control de versions Perforce",
         "Description[cs]": "Poskytuje integraci Perforce Version Control System",

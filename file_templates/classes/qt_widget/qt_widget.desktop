@@ -1,5 +1,6 @@
 [General]
 Name=Widget with a UI File
+Name[az]=Bir İİ faylı ilə vidjet
 Name[bs]=Grafička kontrola s UI datotekom
 Name[ca]=Giny amb un fitxer IU
 Name[ca@valencia]=Giny amb un fitxer IU
@@ -65,6 +66,7 @@ Comment[zh_CN]=带有一个单独的 Qt 设计师文件的 QWidget 子类
 Comment[zh_TW]=QWidget 子類別，含個別的 Qt 設計師檔
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -110,6 +112,7 @@ Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
@@ -146,6 +149,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
@@ -185,6 +189,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[az]=İstifaddəçi İnterfeysi
 Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari

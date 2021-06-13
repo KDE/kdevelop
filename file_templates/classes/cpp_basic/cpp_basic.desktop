@@ -1,5 +1,6 @@
 [General]
 Name=Basic
+Name[az]=Əsas
 Name[bs]=Basic
 Name[ca]=Bàsica
 Name[ca@valencia]=Bàsica
@@ -36,6 +37,7 @@ Name[x-test]=xxBasicxx
 Name[zh_CN]=基本
 Name[zh_TW]=基本
 Comment=Basic C++ Class
+Comment[az]=Əsas C++ Class
 Comment[bs]=Osnovna C++ Cklasa
 Comment[ca]=Classe C++ bàsica
 Comment[ca@valencia]=Classe C++ bàsica
@@ -70,6 +72,7 @@ Comment[zh_CN]=基本 C++ 类
 Comment[zh_TW]=基本 C++ 類別
 Category=C++/Basic
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -114,6 +117,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
@@ -153,6 +157,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

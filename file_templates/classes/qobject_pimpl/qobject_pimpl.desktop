@@ -1,5 +1,6 @@
 [General]
 Name=QObject pimpl subclass
+Name[az]=QObject pimpl alt sinifi
 Name[ca]=Subclasse QObject «pimpl»
 Name[ca@valencia]=Subclasse QObject «pimpl»
 Name[cs]=Podtřída QObject pimpl
@@ -26,6 +27,7 @@ Name[uk]=Підклас pimpl QObject
 Name[x-test]=xxQObject pimpl subclassxx
 Name[zh_CN]=QObject pimpl 子类
 Comment=QObject subclass with private implementation
+Comment[az]=Xüsusi tətbiqetmə ilə QObject alt sinifi
 Comment[ca]=Una subclasse QObject amb implementació privada
 Comment[ca@valencia]=Una subclasse QObject amb implementació privada
 Comment[de]=QObject-Unterklasse mit privater Implementierung
@@ -51,6 +53,7 @@ Comment[x-test]=xxQObject subclass with private implementationxx
 Comment[zh_CN]=有私有实现的 QObject 子类
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -96,6 +99,7 @@ Files=Header,PrivateHeader,Implementation
 
 [Header]
 Name=Header
+Name[az]=Başlıq
 Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
@@ -135,6 +139,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[az]=Gizli başlıq
 Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada
 Name[ca@valencia]=Capçalera privada
@@ -171,6 +176,7 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

@@ -1,5 +1,6 @@
 [General]
 Name=Basic
+Name[az]=Əsas
 Name[bs]=Basic
 Name[ca]=Bàsica
 Name[ca@valencia]=Bàsica
@@ -36,6 +37,7 @@ Name[x-test]=xxBasicxx
 Name[zh_CN]=基本
 Name[zh_TW]=基本
 Comment=Basic Python Class
+Comment[az]=Əsas Python sinifi
 Comment[bs]=Osnovna Python klasa
 Comment[ca]=Classe Python bàsica
 Comment[ca@valencia]=Classe Python bàsica
@@ -70,6 +72,7 @@ Comment[zh_CN]=基本 Python 类
 Comment[zh_TW]=基本 Python 類別
 Category=Python/Basic
 Language=Python
+Language[az]=Python
 Language[bs]=Python
 Language[ca]=Python
 Language[ca@valencia]=Python
@@ -114,6 +117,7 @@ Files=Definition
 
 [Definition]
 Name=Definition
+Name[az]=Təyinat
 Name[bs]=Definicija
 Name[ca]=Definició
 Name[ca@valencia]=Definició

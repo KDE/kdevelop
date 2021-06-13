@@ -4,6 +4,7 @@
             {
                 "Email": "kossebau@kde.org",
                 "Name": "Friedrich W. H. Kossebau",
+                "Name[az]": "Friedrich W. H. Kossebau",
                 "Name[ca@valencia]": "Friedrich W. H. Kossebau",
                 "Name[ca]": "Friedrich W. H. Kossebau",
                 "Name[cs]": "Friedrich W. H. Kossebau",
@@ -35,6 +36,7 @@
         ],
         "Category": "Utilities",
         "Description": "Enables viewing and editing of the raw data of files (Okteta-based)",
+        "Description[az]": "Faylların xam məlumatlarınının oxunmasını və onlara düzəliş edilməsini aktiv edir (Okteta-əsaslı)",
         "Description[ca@valencia]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en l'Okteta)",
         "Description[ca]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en l'Okteta)",
         "Description[de]": "Ermöglicht das Betrachten und Bearbeiten der Rohdaten von Dateien (basiert auf Okteta)",

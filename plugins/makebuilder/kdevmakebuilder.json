@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "KDevelop Make Builder",
+        "Description[az]": "KDevelop Make qurucusu",
         "Description[bs]": "KDevelop Make izgraditelj",
         "Description[ca@valencia]": "Constructor Make del KDevelop",
         "Description[ca]": "Constructor Make del KDevelop",

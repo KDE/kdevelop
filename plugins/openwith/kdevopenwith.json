@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Andreas Pakulat",
+                "Name[az]": "Andreas Pakulat",
                 "Name[ca@valencia]": "Andreas Pakulat",
                 "Name[ca]": "Andreas Pakulat",
                 "Name[cs]": "Andreas Pakulat",
@@ -33,6 +34,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin allows one to open files with associated external applications.",
+        "Description[az]": "Bu qoşma, xarici tətbiqlər ilə əlaqəli faylları açmağa imkan verir.",
         "Description[ca@valencia]": "Aquest connector permet obrir fitxers amb les aplicacions externes associades.",
         "Description[ca]": "Aquest connector permet obrir fitxers amb les aplicacions externes associades.",
         "Description[cs]": "Tento modul umožňuje otevření souborů přiřazenými externími aplikacemi.",

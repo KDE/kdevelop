@@ -1,5 +1,6 @@
 [General]
 Name=Dialog with a UI File
+Name[az]=İİ faylı ilə dialoq
 Name[ca]=Diàleg amb un fitxer IU
 Name[ca@valencia]=Diàleg amb un fitxer IU
 Name[de]=Dialog mit einer UI-Datei
@@ -23,6 +24,7 @@ Name[uk]=Діалогове вікно із файлом UI
 Name[x-test]=xxDialog with a UI Filexx
 Name[zh_CN]=带 UI 文件的对话框
 Comment=QDialog subclass with a separate Qt Designer file
+Comment[az]=Ayrıca t Designer faylı ilə QDialog alt sinifi
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer
 Comment[ca@valencia]=Subclasse QDialog amb un fitxer separat del Qt Designer
 Comment[de]=QDialog-Subklasse mit einer separaten Qt-Designer-Datei
@@ -47,6 +49,7 @@ Comment[x-test]=xxQDialog subclass with a separate Qt Designer filexx
 Comment[zh_CN]=带单独 Qt Designer 文件的 QDialog 子类
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -93,6 +96,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
@@ -129,6 +133,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
@@ -168,6 +173,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[az]=İstifaddəçi İnterfeysi
 Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari

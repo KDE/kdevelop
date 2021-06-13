@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Builds QMake Projects",
+        "Description[az]": "QMake layihələrini qurur",
         "Description[ca@valencia]": "Construeix projectes QMake",
         "Description[ca]": "Construeix projectes QMake",
         "Description[cs]": "Překládá projekty QMake",

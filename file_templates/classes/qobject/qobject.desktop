@@ -1,5 +1,6 @@
 [General]
 Name=QObject subclass
+Name[az]=QObject alt sinifi
 Name[bs]=QObject podklasa
 Name[ca]=Subclasse QObject
 Name[ca@valencia]=Subclasse QObject
@@ -34,6 +35,7 @@ Name[x-test]=xxQObject subclassxx
 Name[zh_CN]=QObject 子类
 Name[zh_TW]=QObject 子類別
 Comment=QObject subclass with properties
+Comment[az]=Xüsusiyətləri ilə QObject alt sinifi
 Comment[bs]=QObject podklasa s svojstvima
 Comment[ca]=Subclasse QObject amb propietats
 Comment[ca@valencia]=Subclasse QObject amb propietats
@@ -68,6 +70,7 @@ Comment[zh_CN]=带有属性的 QObject 子类
 Comment[zh_TW]=QObject 子類別含屬性
 Category=C++/Qt
 Language=C++
+Language[az]=C++
 Language[bs]=C++
 Language[ca]=C++
 Language[ca@valencia]=C++
@@ -113,6 +116,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[az]=Açıq başlıq
 Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
@@ -149,6 +153,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

@@ -69,6 +69,7 @@ Comment[zh_CN]=一个使用 PyUnit 框架的单元测试
 Comment[zh_TW]=使用 PyUnit 框架的單元測試套件
 Category=Python/Basic
 Language=Python
+Language[az]=Python
 Language[bs]=Python
 Language[ca]=Python
 Language[ca@valencia]=Python
@@ -113,6 +114,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[az]=Tətbiq olunma
 Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació

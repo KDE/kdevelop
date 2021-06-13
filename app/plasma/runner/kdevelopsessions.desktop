@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KDevelop Sessions
 Name[ar]=جلسات مطوّرك
+Name[az]=KDevelop sessiyası
 Name[bs]=KDevelop sesije
 Name[ca]=Sessions del KDevelop
 Name[ca@valencia]=Sessions del KDevelop
@@ -40,6 +41,7 @@ Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=Matches KDevelop Sessions
 Comment[ar]=يطابق جلسات مطوّرك
+Comment[az]=KDevelop sessiyaları uyğun gəlir
 Comment[bs]=Usaglašuje KDevelop Sesije
 Comment[ca]=Concorda amb sessions del KDevelop
 Comment[ca@valencia]=Concorda amb sessions del KDevelop

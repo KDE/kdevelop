@@ -1,5 +1,6 @@
 [General]
 Name=Empty
+Name[az]=Boş
 Name[ca]=Buit
 Name[ca@valencia]=Buit
 Name[cs]=Prázdné
@@ -28,6 +29,7 @@ Name[uk]=Порожній
 Name[x-test]=xxEmptyxx
 Name[zh_CN]=清空
 Comment=A project to fill with your ideas
+Comment[az]=İdeyalarınız ilə dolduracağınız layihə
 Comment[ca]=Un projecte per a omplir amb les vostres idees
 Comment[ca@valencia]=Un projecte per a omplir amb les vostres idees
 Comment[de]=Ein Projekt, das Sie mit Ihren Ideen füllen

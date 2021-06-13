@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake C
+Name[az]=CMake C
 Name[ca]=CMake C
 Name[ca@valencia]=CMake C
 Name[cs]=CMake C
@@ -24,6 +25,7 @@ Name[uk]=CMake C
 Name[x-test]=xxCMake Cxx
 Name[zh_CN]=CMake C
 Comment=Simple CMake-based C application
+Comment[az]=Sadə CMake əsaslı C tətbiqi
 Comment[ca]=Aplicació senzilla en C basada en CMake
 Comment[ca@valencia]=Aplicació senzilla en C basada en CMake
 Comment[cs]=Jednoduchá aplikace C založená na CMake
