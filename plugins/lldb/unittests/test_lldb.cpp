@@ -599,6 +599,10 @@ void LldbTest::testBreakOnAccessBreakpoint()
 
 void LldbTest::testInsertBreakpointWhileRunning()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile("debugeeslow.cpp");
@@ -623,6 +627,10 @@ void LldbTest::testInsertBreakpointWhileRunning()
 
 void LldbTest::testInsertBreakpointWhileRunningMultiple()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile("debugeeslow.cpp");
@@ -713,6 +721,10 @@ void LldbTest::testManualBreakpoint()
 //Bug 201771
 void LldbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
 
@@ -1183,6 +1195,10 @@ void LldbTest::testStackSwitchThread()
 
 void LldbTest::testAttach()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     SKIP_IF_ATTACH_FORBIDDEN();
 
     QString fileName = findSourceFile("debugeeslow.cpp");

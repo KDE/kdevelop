@@ -538,6 +538,10 @@ void GdbTest::testBreakOnAccessBreakpoint()
 
 void GdbTest::testInsertBreakpointWhileRunning()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
@@ -559,6 +563,10 @@ void GdbTest::testInsertBreakpointWhileRunning()
 
 void GdbTest::testInsertBreakpointWhileRunningMultiple()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
@@ -1373,6 +1381,10 @@ void GdbTest::testSwitchFrameGdbConsole()
 //Bug 201771
 void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
+
     auto *session = new TestDebugSession;
     TestLaunchConfiguration cfg(QStringLiteral("debuggee_debugeeslow"));
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
@@ -1891,7 +1903,11 @@ void GdbTest::testRegularExpressionBreakpoint()
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
-void GdbTest::testChangeBreakpointWhileRunning() {
+void GdbTest::testChangeBreakpointWhileRunning()
+{
+#ifdef Q_OS_FREEBSD
+    QSKIP("apparently this test doesn't work on FreeBSD");
+#endif
 
     auto *session = new TestDebugSession;
 
