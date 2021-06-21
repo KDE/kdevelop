@@ -3,7 +3,6 @@ Icon=kdevelop
 Type=Service
 ServiceTypes=KCModule
 
-X-KDE-ModuleType=Library
 X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kcm/kcm_kdevcustombuildsystem
 X-KDE-ParentApp=kdevplatformproject
 X-KDE-ParentComponents=KDevCustomBuildSystem

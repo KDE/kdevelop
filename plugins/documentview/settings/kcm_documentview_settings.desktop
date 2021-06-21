@@ -3,7 +3,6 @@ Icon=kdevelop
 Type=Service
 ServiceTypes=KCModule
 
-X-KDE-ModuleType=Library
 X-KDE-Library=kcm_documentview_settings
 X-KDE-FactoryName=kcm_documentview_settings
 X-KDE-ParentApp=kdevelop
