@@ -5,6 +5,7 @@ MimeType=x-scheme-handler/bzr;x-scheme-handler/bzr+ssh;x-scheme-handler/lp;
 Icon=kdevelop
 Terminal=false
 Name=KDevelop (Fetch Bazaar Project)
+Name[az]=KDevelop (Bazaar layihəsi alaraq)
 Name[ca]=KDevelop (obtenir un projecte de Bazaar)
 Name[ca@valencia]=KDevelop (obtindre un projecte de Bazaar)
 Name[de]=KDevelop (Bazaar-Projekt holen)

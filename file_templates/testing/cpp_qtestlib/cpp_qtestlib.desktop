@@ -1,5 +1,6 @@
 [General]
 Name=Test Suite
+Name[az]=Test dəsti
 Name[bs]=Testno okruženje
 Name[ca]=Conjunt de proves
 Name[ca@valencia]=Conjunt de proves
@@ -33,6 +34,7 @@ Name[x-test]=xxTest Suitexx
 Name[zh_CN]=测试套件
 Name[zh_TW]=測試套件
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[az]=Qrafik istifadəçi interfeysi olmadan QTest kitabxanasına əsaslanan modul testi
 Comment[bs]=Testno okruženje jedinica koje koristi QTest biblioteku bez grafičkog interfejsa
 Comment[ca]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[ca@valencia]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari

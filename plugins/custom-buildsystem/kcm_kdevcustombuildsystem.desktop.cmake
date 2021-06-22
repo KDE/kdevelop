@@ -9,6 +9,7 @@ X-KDE-ParentComponents=KDevCustomBuildSystem
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
+Name[az]=Xüsusi sistem qurulması
 Name[bs]=Vlasititi sistem gradnje
 Name[ca]=BuildSystem personalitzat
 Name[ca@valencia]=BuildSystem personalitzat
