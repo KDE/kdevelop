@@ -125,7 +125,7 @@ QWidget* errorMessage(QWidget* parent, const QString& text)
     auto* label = new KSqueezedTextLabel(parent);
     KStatefulBrush red(KColorScheme::Window, KColorScheme::NegativeText);
     QPalette pal = label->palette();
-    pal.setBrush(QPalette::WindowText, red.brush(label));
+    pal.setBrush(QPalette::WindowText, red.brush(label->palette()));
     label->setPalette(pal);
     label->setAlignment(Qt::AlignRight);
     label->setText(text);
