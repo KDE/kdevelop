@@ -865,11 +865,6 @@ void GdbTest::testStackSwitchThread()
 void GdbTest::testAttach()
 {
     SKIP_IF_ATTACH_FORBIDDEN();
-#ifdef Q_OS_FREEBSD
-    // Despite successful attach GDB MI spits out a error message "Can't allocate registers". This gets caught by KDevMI layer and gets interpreted as error.
-    // Upstream PR: https://sourceware.org/bugzilla/show_bug.cgi?id=23464
-    QSKIP("GDB on FreeBSD produces an unexpected error message, on which KDevelop chokes");
-#endif
 
     QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
 
@@ -903,11 +898,6 @@ void GdbTest::testAttach()
 void GdbTest::testManualAttach()
 {
     SKIP_IF_ATTACH_FORBIDDEN();
-#ifdef Q_OS_FREEBSD
-    // Despite successful attach GDB MI spits out a error message "Can't allocate registers". This gets caught by KDevMI layer and gets interpreted as error.
-    // Upstream PR: https://sourceware.org/bugzilla/show_bug.cgi?id=23464
-    QSKIP("GDB on FreeBSD produces an unexpected error message, on which KDevelop chokes");
-#endif
 
     KProcess debugeeProcess;
     debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile();
