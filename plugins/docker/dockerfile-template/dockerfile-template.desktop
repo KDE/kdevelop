@@ -1,5 +1,6 @@
 [General]
 Name=Dockerfile
+Name[az]=Dockerfile
 Name[ca]=Dockerfile
 Name[ca@valencia]=Dockerfile
 Name[cs]=Dockerfile
@@ -26,6 +27,7 @@ Name[uk]=Dockerfile
 Name[x-test]=xxDockerfilexx
 Name[zh_CN]=Dockerfile
 Comment=A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image
+Comment[az]=Dockerfile, istifadəçinin, bir disk sürəti yığmaq üçün əmr sətrindən çağıra biləcəyi əmrlərin toplusundan ibarət bir mətn sənədidir
 Comment[ca]=Un Dockerfile és un document de text que conté totes les ordres que un usuari hauria de cridar des de la línia d'ordres per a muntar una imatge
 Comment[ca@valencia]=Un Dockerfile és un document de text que conté totes les ordres que un usuari hauria de cridar des de la línia d'ordres per a muntar una imatge
 Comment[de]=Eine Docker-Datei ist ein Textdokument, das alle Befehle für das Erstellen des Speicherabbilds eines Containers enthält
@@ -51,6 +53,7 @@ Comment[x-test]=xxA Dockerfile is a text document that contains all the commands
 Comment[zh_CN]=Dockerfile 是一个包含构建镜像时用户可以在命令行调用的所有命令的文本文档
 Category=Docker/Dockerfile
 Language=JSON
+Language[az]=JSON
 Language[ca]=JSON
 Language[ca@valencia]=JSON
 Language[cs]=JSON

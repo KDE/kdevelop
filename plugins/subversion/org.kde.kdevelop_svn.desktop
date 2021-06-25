@@ -5,6 +5,7 @@ MimeType=x-scheme-handler/svn;x-scheme-handler/svn+ssh;
 Icon=kdevelop
 Terminal=false
 Name=KDevelop (Fetch Subversion Project)
+Name[az]=KDevelop (Subversion layihəsi alaraq)
 Name[ca]=KDevelop (obtenir un projecte de Subversion)
 Name[ca@valencia]=KDevelop (obtindre un projecte de Subversion)
 Name[de]=KDevelop (Subversion-Projekt holen)

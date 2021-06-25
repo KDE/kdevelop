@@ -43,6 +43,7 @@ Name[x-test]=xxCustom BuildSystemxx
 Name[zh_CN]=自定义构建系统
 Name[zh_TW]=自訂編譯系統
 Comment=Configure a projects custom build tool and includes/defines for the language support.
+Comment[az]=Xüsusi layihə yaradılması vasitəsini ayarlayır və dil dəstəyini daxil edir və ya təyin edir.
 Comment[bs]=Konfiguriši vlastite alate za gradnju i uključivanja/definicije za jezičku podršku.
 Comment[ca]=Configura una eina de construcció personalitzada de projectes i les inclusions/definicions per a la implementació del llenguatge.
 Comment[ca@valencia]=Configura una eina de construcció personalitzada de projectes i les inclusions/definicions per a la implementació del llenguatge.

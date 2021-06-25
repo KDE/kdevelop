@@ -5,6 +5,7 @@ MimeType=x-scheme-handler/git;x-scheme-handler/git+ssh;
 Icon=kdevelop
 Terminal=false
 Name=KDevelop (Fetch git Project)
+Name[az]=KDevelop (Git layihəsi alaraq)
 Name[ca]=KDevelop (obtenir un projecte de Git)
 Name[ca@valencia]=KDevelop (obtindre un projecte de Git)
 Name[de]=KDevelop (Git-Projekt holen)
