@@ -17,7 +17,7 @@ kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )
 
 #add_library(kdevmakebuilder MODULE ${kdevmakebuilder_SRCS})
 qt5_add_resources(kdevmakebuilder_SRCS kdevmakebuilder.qrc)
-kdevplatform_add_plugin(kdevmakebuilder JSON kdevmakebuilder.json SOURCES ${kdevmakebuilder_SRCS})
+kdevplatform_add_plugin(kdevmakebuilder SOURCES ${kdevmakebuilder_SRCS})
 target_link_libraries(kdevmakebuilder
         KF5::TextEditor
         KDev::Interfaces

@@ -47,7 +47,6 @@ qt5_add_resources(kdevcppcheck_SRCS
     kdevcppcheck.qrc
 )
 kdevplatform_add_plugin(kdevcppcheck
-    JSON kdevcppcheck.json
     SOURCES ${kdevcppcheck_SRCS}
 )
 target_link_libraries(kdevcppcheck

@@ -62,7 +62,6 @@ kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS
 )
 
 kdevplatform_add_plugin(kdevclangtidy
-    JSON kdevclangtidy.json
     SOURCES ${kdevclangtidy_PART_SRCS}
 )
 

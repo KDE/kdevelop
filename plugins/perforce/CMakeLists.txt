@@ -21,7 +21,7 @@ set(kdevperforce_PART_SRCS
     ${kdevperforce_LOG_PART_SRCS}
 )
 ki18n_wrap_ui(kdevperforce_PART_SRCS ${kdevperforce_UIS})
-kdevplatform_add_plugin(kdevperforce JSON kdevperforce.json SOURCES ${kdevperforce_PART_SRCS})
+kdevplatform_add_plugin(kdevperforce SOURCES ${kdevperforce_PART_SRCS})
 
 target_link_libraries(kdevperforce
    KDev::Interfaces

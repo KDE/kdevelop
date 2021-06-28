@@ -44,7 +44,6 @@ target_link_libraries(kdevheaptrack_config
     KDev::Shell
 )
 kdevplatform_add_plugin(kdevheaptrack
-    JSON kdevheaptrack.json
     SOURCES ${kdevheaptrack_SRCS}
 )
 target_link_libraries(kdevheaptrack

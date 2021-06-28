@@ -25,7 +25,7 @@ set(kdevgit_PART_SRCS
 ki18n_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
 ki18n_wrap_ui(kdevgit_PART_SRCS gitnameemaildialog.ui)
 ki18n_wrap_ui(kdevgit_PART_SRCS rebasedialog.ui)
-kdevplatform_add_plugin(kdevgit JSON kdevgit.json SOURCES ${kdevgit_PART_SRCS})
+kdevplatform_add_plugin(kdevgit SOURCES ${kdevgit_PART_SRCS})
 target_link_libraries(kdevgit
     KDev::Util
     KDev::Interfaces

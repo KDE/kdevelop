@@ -12,7 +12,7 @@ set(kdevdocumentview_PART_SRCS
 )
 
 qt5_add_resources(kdevdocumentview_PART_SRCS kdevdocumentview.qrc)
-kdevplatform_add_plugin(kdevdocumentview JSON kdevdocumentview.json SOURCES ${kdevdocumentview_PART_SRCS})
+kdevplatform_add_plugin(kdevdocumentview SOURCES ${kdevdocumentview_PART_SRCS})
 
 target_link_libraries(kdevdocumentview
     KDev::Interfaces

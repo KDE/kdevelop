@@ -17,7 +17,7 @@ declare_qt_logging_category(kdevexecute_PART_SRCS
 
 ki18n_wrap_ui( kdevexecute_PART_SRCS nativeappconfig.ui)
 
-kdevplatform_add_plugin(kdevexecute JSON kdevexecute.json SOURCES ${kdevexecute_PART_SRCS})
+kdevplatform_add_plugin(kdevexecute SOURCES ${kdevexecute_PART_SRCS})
 
 target_link_libraries(kdevexecute
     KF5::KCMUtils

@@ -11,7 +11,7 @@ declare_qt_logging_category(kdevcustommakemanager_PART_SRCS
     CATEGORY_BASENAME "custommake"
 )
 qt5_add_resources(kdevcustommakemanager_PART_SRCS kdevcustommakemanager.qrc)
-kdevplatform_add_plugin(kdevcustommakemanager JSON kdevcustommakemanager.json SOURCES ${kdevcustommakemanager_PART_SRCS})
+kdevplatform_add_plugin(kdevcustommakemanager SOURCES ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries(kdevcustommakemanager
     KF5::KIOWidgets
     KDev::Interfaces KDev::Project KDev::Util KDev::Language KDev::IMakeBuilder KDev::DefinesAndIncludesManager

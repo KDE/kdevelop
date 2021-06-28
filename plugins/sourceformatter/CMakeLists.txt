@@ -18,7 +18,6 @@ set(kdevsourceformatter_SRCS
 )
 
 kdevplatform_add_plugin(kdevsourceformatter
-    JSON kdevsourceformatter.json
     SOURCES ${kdevsourceformatter_SRCS}
 )
 

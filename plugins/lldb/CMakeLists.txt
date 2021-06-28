@@ -42,7 +42,7 @@ target_link_libraries(kdevlldb_static
 )
 
 # The actual plugin
-kdevplatform_add_plugin(kdevlldb JSON kdevlldb.json SOURCES debuggerplugin.cpp)
+kdevplatform_add_plugin(kdevlldb SOURCES debuggerplugin.cpp)
 target_link_libraries(kdevlldb
     PUBLIC
     kdevlldb_static

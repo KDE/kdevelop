@@ -12,7 +12,7 @@ declare_qt_logging_category(kdevcodeutils_PART_SRCS
     CATEGORY_BASENAME "codeutils"
 )
 qt5_add_resources(kdevcodeutils_PART_SRCS kdevcodeutils.qrc)
-kdevplatform_add_plugin(kdevcodeutils JSON kdevcodeutils.json SOURCES ${kdevcodeutils_PART_SRCS})
+kdevplatform_add_plugin(kdevcodeutils SOURCES ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
     KF5::Parts

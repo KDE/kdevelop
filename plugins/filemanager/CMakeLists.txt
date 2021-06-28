@@ -11,7 +11,7 @@ declare_qt_logging_category(kdevfilemanager_PART_SRCS
     CATEGORY_BASENAME "filemanager"
 )
 qt5_add_resources(kdevfilemanager_PART_SRCS kdevfilemanager.qrc)
-kdevplatform_add_plugin(kdevfilemanager JSON kdevfilemanager.json SOURCES ${kdevfilemanager_PART_SRCS})
+kdevplatform_add_plugin(kdevfilemanager SOURCES ${kdevfilemanager_PART_SRCS})
 target_link_libraries(kdevfilemanager
     KDev::Interfaces
     KDev::Sublime

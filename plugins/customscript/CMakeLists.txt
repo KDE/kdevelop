@@ -8,7 +8,7 @@ declare_qt_logging_category(kdevcustomscript_PART_SRCS
     IDENTIFIER CUSTOMSCRIPT
     CATEGORY_BASENAME "customscript"
 )
-kdevplatform_add_plugin(kdevcustomscript JSON kdevcustomscript.json SOURCES ${kdevcustomscript_PART_SRCS})
+kdevplatform_add_plugin(kdevcustomscript SOURCES ${kdevcustomscript_PART_SRCS})
 target_link_libraries(kdevcustomscript
     KDev::Interfaces
     KDev::Language

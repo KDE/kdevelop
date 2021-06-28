@@ -39,7 +39,7 @@ set(kdevqmakemanager_PART_SRCS
     qmakemodelitems.cpp
     qmakejob.cpp
 )
-kdevplatform_add_plugin(kdevqmakemanager JSON kdevqmakemanager.json SOURCES ${kdevqmakemanager_PART_SRCS})
+kdevplatform_add_plugin(kdevqmakemanager SOURCES ${kdevqmakemanager_PART_SRCS})
 target_link_libraries(kdevqmakemanager
     KDev::Interfaces
     KDev::Project

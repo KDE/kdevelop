@@ -8,7 +8,7 @@ declare_qt_logging_category(kdevninja_SRCS
 ki18n_wrap_ui(kdevninja_SRCS ninjaconfig.ui)
 kconfig_add_kcfg_files(kdevninja_SRCS ninjabuilderconfig.kcfgc)
 
-kdevplatform_add_plugin(kdevninja JSON kdevninja.json SOURCES ${kdevninja_SRCS})
+kdevplatform_add_plugin(kdevninja SOURCES ${kdevninja_SRCS})
 
 target_link_libraries(kdevninja
     KDev::Interfaces

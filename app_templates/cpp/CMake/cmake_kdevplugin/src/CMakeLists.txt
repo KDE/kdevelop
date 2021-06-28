@@ -11,7 +11,6 @@ ecm_qt_declare_logging_category(%{APPNAMELC}_SRCS
 )
 
 kdevplatform_add_plugin(%{APPNAMELC}
-    JSON %{APPNAMELC}.json
     SOURCES ${%{APPNAMELC}_SRCS}
 )
 

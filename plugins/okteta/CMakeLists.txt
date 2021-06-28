@@ -15,7 +15,7 @@ endif()
 configure_file(config-kdevokteta.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kdevokteta.h)
 
 qt5_add_resources(kdevokteta_PART_SRCS kdevokteta.qrc)
-kdevplatform_add_plugin(kdevokteta JSON kdevokteta.json SOURCES
+kdevplatform_add_plugin(kdevokteta SOURCES
 	${kdevokteta_PART_SRCS})
 
 TARGET_LINK_LIBRARIES( kdevokteta

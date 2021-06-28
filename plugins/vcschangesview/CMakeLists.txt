@@ -5,7 +5,7 @@ set(vcschangesview_SRCS
     vcschangesviewplugin.cpp
 )
 
-kdevplatform_add_plugin(kdevvcschangesviewplugin JSON kdevvcschangesview.json SOURCES ${vcschangesview_SRCS})
+kdevplatform_add_plugin(kdevvcschangesviewplugin SOURCES ${vcschangesview_SRCS})
 target_link_libraries(kdevvcschangesviewplugin
     KDev::Interfaces
     KDev::Project

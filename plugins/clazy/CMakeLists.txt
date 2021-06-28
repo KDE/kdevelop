@@ -61,7 +61,6 @@ qt5_add_resources(kdevclazy_SRCS
     kdevclazy.qrc
 )
 kdevplatform_add_plugin(kdevclazy
-    JSON kdevclazy.json
     SOURCES ${kdevclazy_SRCS}
 )
 target_link_libraries(kdevclazy

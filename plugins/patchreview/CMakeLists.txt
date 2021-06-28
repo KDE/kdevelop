@@ -41,7 +41,7 @@ declare_qt_logging_category(patchreview_PART_SRCS
 ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 qt5_add_resources(patchreview_PART_SRCS kdevpatchreview.qrc)
-kdevplatform_add_plugin(kdevpatchreview JSON kdevpatchreview.json SOURCES ${patchreview_PART_SRCS})
+kdevplatform_add_plugin(kdevpatchreview SOURCES ${patchreview_PART_SRCS})
 target_link_libraries(kdevpatchreview
     KDev::Project
     KDev::Interfaces

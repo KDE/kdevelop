@@ -12,7 +12,7 @@ declare_qt_logging_category(kdevoutlineview_SRCS
     IDENTIFIER PLUGIN_OUTLINE
     CATEGORY_BASENAME "outline"
 )
-kdevplatform_add_plugin(kdevoutlineview JSON kdevoutlineview.json SOURCES ${kdevoutlineview_SRCS})
+kdevplatform_add_plugin(kdevoutlineview SOURCES ${kdevoutlineview_SRCS})
 target_link_libraries(kdevoutlineview
     KDev::Interfaces
     KDev::Language

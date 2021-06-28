@@ -9,7 +9,7 @@ set(kdevbazaar_SRCS
     copyjob.cpp
 )
 
-kdevplatform_add_plugin(kdevbazaar JSON kdevbazaar.json SOURCES ${kdevbazaar_SRCS})
+kdevplatform_add_plugin(kdevbazaar SOURCES ${kdevbazaar_SRCS})
 
 target_link_libraries(kdevbazaar
     KDev::Vcs

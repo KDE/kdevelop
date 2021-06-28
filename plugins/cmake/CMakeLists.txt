@@ -112,7 +112,7 @@ target_link_libraries(kdevcmakemanagernosettings
     Qt5::Concurrent
 )
 
-kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
+kdevplatform_add_plugin(kdevcmakemanager SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
 target_link_libraries(kdevcmakemanager
     KDevCMakeCommon
     KDev::Util
@@ -126,7 +126,7 @@ target_link_libraries(kdevcmakemanager
     Qt5::Concurrent
 )
 
-kdevplatform_add_plugin(kdevcmakedocumentation JSON kdevcmakedocumentation.json SOURCES ${cmakedoc_SRCS})
+kdevplatform_add_plugin(kdevcmakedocumentation SOURCES ${cmakedoc_SRCS})
 target_link_libraries( kdevcmakedocumentation
     KDevCMakeCommon
     KDev::Interfaces

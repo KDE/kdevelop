@@ -13,7 +13,7 @@ declare_qt_logging_category(kdevexecutescript_PART_SRCS
 ki18n_wrap_ui(kdevexecutescript_PART_SRCS
     scriptappconfig.ui
 )
-kdevplatform_add_plugin(kdevexecutescript JSON kdevexecutescript.json SOURCES ${kdevexecutescript_PART_SRCS})
+kdevplatform_add_plugin(kdevexecutescript SOURCES ${kdevexecutescript_PART_SRCS})
 target_link_libraries(kdevexecutescript
     KDev::Interfaces
     KDev::Util

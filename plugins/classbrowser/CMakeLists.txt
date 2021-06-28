@@ -20,5 +20,5 @@ declare_qt_logging_category(kdevclassbrowser_PART_SRCS
     CATEGORY_BASENAME "classbrowser"
 )
 qt5_add_resources(kdevclassbrowser_PART_SRCS kdevclassbrowser.qrc)
-kdevplatform_add_plugin(kdevclassbrowser JSON kdevclassbrowser.json SOURCES ${kdevclassbrowser_PART_SRCS})
+kdevplatform_add_plugin(kdevclassbrowser SOURCES ${kdevclassbrowser_PART_SRCS})
 target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language KDev::Interfaces)

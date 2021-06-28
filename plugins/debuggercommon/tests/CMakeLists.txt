@@ -38,7 +38,7 @@ ecm_add_test(test_micommandqueue.cpp
 set(TEST_PLUGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/testplugindir")
 configure_file("plugins/testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 
-kdevplatform_add_plugin(testdebugger JSON plugins/testdebugger.json SKIP_INSTALL SOURCES plugins/testdebugger.cpp)
+kdevplatform_add_plugin(testdebugger SKIP_INSTALL SOURCES plugins/testdebugger.cpp)
 target_link_libraries(testdebugger kdevdebuggercommon)
 set_target_properties(testdebugger PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
 

@@ -57,7 +57,6 @@ ecm_qt_declare_logging_category(mesonbuilder_SRCS
 )
 
 kdevplatform_add_plugin(kdevmesonmanager
-                        JSON kdevmesonmanager.json
                         SOURCES ${mesonbuilder_SRCS})
 
 target_link_libraries(kdevmesonmanager

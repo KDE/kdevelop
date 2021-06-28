@@ -26,7 +26,7 @@ ki18n_wrap_ui(kdevquickopen_PART_SRCS
   quickopenwidget.ui
 )
 qt5_add_resources(kdevquickopen_PART_SRCS kdevquickopen.qrc)
-kdevplatform_add_plugin(kdevquickopen JSON kdevquickopen.json SOURCES ${kdevquickopen_PART_SRCS})
+kdevplatform_add_plugin(kdevquickopen SOURCES ${kdevquickopen_PART_SRCS})
 target_link_libraries(kdevquickopen
     KDev::Language
     KDev::Interfaces

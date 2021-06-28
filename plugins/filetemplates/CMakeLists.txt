@@ -40,7 +40,7 @@ qt5_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplatesknsrc.qrc)
 endif()
 qt5_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplates.qrc)
 
-kdevplatform_add_plugin(kdevfiletemplates JSON kdevfiletemplates.json SOURCES ${kdevfiletemplates_PART_SRCS})
+kdevplatform_add_plugin(kdevfiletemplates SOURCES ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
     KDev::Interfaces

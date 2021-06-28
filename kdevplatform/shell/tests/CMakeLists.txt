@@ -27,7 +27,7 @@ set(TEST_PLUGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/testplugindir")
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 
 macro(KDEVSHELL_ADD_TEST_PLUGIN _PLUGIN_NAME)
-    kdevplatform_add_plugin(${_PLUGIN_NAME} JSON plugins/${_PLUGIN_NAME}.testpluginjson SKIP_INSTALL SOURCES plugins/${_PLUGIN_NAME}.cpp)
+    kdevplatform_add_plugin(${_PLUGIN_NAME} SKIP_INSTALL SOURCES plugins/${_PLUGIN_NAME}.cpp)
     target_link_libraries(${_PLUGIN_NAME} Qt5::Core KDev::Interfaces)
     set_target_properties(${_PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
 endmacro()

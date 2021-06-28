@@ -26,7 +26,7 @@ set(astyle_preferences_UI
 )
 
 ki18n_wrap_ui(kdevastyle_PART_SRCS ${astyle_preferences_UI} )
-kdevplatform_add_plugin(kdevastyle JSON kdevastyle.json SOURCES ${kdevastyle_PART_SRCS})
+kdevplatform_add_plugin(kdevastyle SOURCES ${kdevastyle_PART_SRCS})
 target_link_libraries(kdevastyle
     astylelib
 

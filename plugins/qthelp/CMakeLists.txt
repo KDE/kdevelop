@@ -28,7 +28,7 @@ else()
 qt5_add_resources(kdevqthelp_SRCS kdevqthelp.qrc)
 endif()
 
-kdevplatform_add_plugin(kdevqthelp JSON kdevqthelp.json SOURCES ${kdevqthelp_SRCS})
+kdevplatform_add_plugin(kdevqthelp SOURCES ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
     KF5::KCMUtils KF5::I18n KF5::KIOWidgets KF5::TextEditor KF5::IconThemes Qt5::Help KF5::NewStuff
     KDev::Language KDev::Documentation KDev::Interfaces)

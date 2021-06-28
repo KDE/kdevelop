@@ -15,6 +15,6 @@ declare_qt_logging_category(kdevdocumentswitcher_PART_SRCS
 )
 
 qt5_add_resources(kdevdocumentswitcher_PART_SRCS kdevdocumentswitcher.qrc)
-kdevplatform_add_plugin(kdevdocumentswitcher JSON kdevdocumentswitcher.json SOURCES ${kdevdocumentswitcher_PART_SRCS})
+kdevplatform_add_plugin(kdevdocumentswitcher SOURCES ${kdevdocumentswitcher_PART_SRCS})
 
 target_link_libraries(kdevdocumentswitcher KDev::Interfaces KDev::Sublime KDev::Interfaces KDev::Util KDev::Project )

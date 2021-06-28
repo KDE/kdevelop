@@ -118,7 +118,7 @@ set(kdevclangsupport_SRCS
 
 qt5_add_resources(kdevclangsupport_SRCS kdevclangsupport.qrc)
 
-kdevplatform_add_plugin(kdevclangsupport JSON kdevclangsupport.json SOURCES ${kdevclangsupport_SRCS})
+kdevplatform_add_plugin(kdevclangsupport SOURCES ${kdevclangsupport_SRCS})
 target_link_libraries(kdevclangsupport
     KDevClangPrivate
 

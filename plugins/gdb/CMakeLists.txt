@@ -65,7 +65,7 @@ set(kdevgdbplugin_UI
     gdbconfigpage.ui
 )
 ki18n_wrap_ui(kdevgdbplugin_SRCS ${kdevgdbplugin_UI})
-kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES ${kdevgdbplugin_SRCS})
+kdevplatform_add_plugin(kdevgdb SOURCES ${kdevgdbplugin_SRCS})
 target_link_libraries(kdevgdb kdevgdb_static)
 
 if(BUILD_TESTING)

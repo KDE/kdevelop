@@ -30,7 +30,7 @@ else()
 qt5_add_resources(kdevappwizard_PART_SRCS kdevappwizardknsrc.qrc)
 endif()
 qt5_add_resources(kdevappwizard_PART_SRCS kdevappwizard.qrc)
-kdevplatform_add_plugin(kdevappwizard JSON kdevappwizard.json SOURCES ${kdevappwizard_PART_SRCS})
+kdevplatform_add_plugin(kdevappwizard SOURCES ${kdevappwizard_PART_SRCS})
 
 target_link_libraries(kdevappwizard
     KDev::Interfaces

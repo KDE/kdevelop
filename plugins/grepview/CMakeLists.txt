@@ -29,7 +29,7 @@ set(kdevgrepview_PART_UI
 ki18n_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
 
 qt5_add_resources(kdevgrepview_PART_SRCS kdevgrepview.qrc)
-kdevplatform_add_plugin(kdevgrepview JSON kdevgrepview.json SOURCES ${kdevgrepview_PART_SRCS})
+kdevplatform_add_plugin(kdevgrepview SOURCES ${kdevgrepview_PART_SRCS})
 
 target_link_libraries(kdevgrepview
     KF5::Parts

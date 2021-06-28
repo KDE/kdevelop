@@ -16,7 +16,6 @@ declare_qt_logging_category(scratchpad_SRCS
 )
 
 kdevplatform_add_plugin(kdevscratchpad
-    JSON scratchpad.json
     SOURCES ${scratchpad_SRCS}
 )
 
