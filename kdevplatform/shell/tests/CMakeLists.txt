@@ -73,3 +73,19 @@ ecm_add_test(test_problemmodel.cpp
 
 ecm_add_test(test_checkerstatus.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell)
+
+add_library(languagecontrollertestbase STATIC
+    languagecontrollertestbase.cpp)
+target_link_libraries(languagecontrollertestbase PUBLIC
+    Qt5::Test KDev::Tests)
+
+ecm_add_test(test_languagecontroller.cpp LINK_LIBRARIES languagecontrollertestbase)
+if(NOT WIN32)
+    find_package(Threads REQUIRED)
+    target_link_libraries(test_languagecontroller Threads::Threads)
+endif()
+
+if(BUILD_BENCHMARKS)
+    ecm_add_test(bench_languagecontroller.cpp LINK_LIBRARIES languagecontrollertestbase)
+    set_tests_properties(bench_languagecontroller PROPERTIES TIMEOUT 30)
+endif()

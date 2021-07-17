@@ -125,14 +125,24 @@ void LanguageController::initialize()
 {
     Q_D(LanguageController);
 
+    d->activeLanguages = {};
+    d->languages = {};
+    d->languageCache = {};
+    d->mimeTypeCache = {};
+
     d->backgroundParser->loadSettings();
+
+    delete d->staticAssistantsManager;
     d->staticAssistantsManager = new StaticAssistantsManager(this);
+
+    d->m_cleanedUp = false;
 
     // make sure the DUChain is setup before we try to access it from different threads at the same time
     DUChain::self();
 
     connect(Core::self()->documentController(), &IDocumentController::documentActivated,
-            this, [this] (IDocument* document) { Q_D(LanguageController); d->documentActivated(document); });
+            this, [this] (IDocument* document) { Q_D(LanguageController); d->documentActivated(document); },
+            Qt::UniqueConnection);
 }
 
 void LanguageController::cleanup()
