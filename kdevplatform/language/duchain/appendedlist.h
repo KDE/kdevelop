@@ -260,20 +260,27 @@ private:
 
 #define APPENDED_LIST_COMMON(container, type, name) \
     uint name ## Data; \
-    unsigned int name ## Size() const { if ((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) \
-                                            return 0; if (!appendedListsDynamic()) \
-                                            return name ## Data; else \
-                                            return temporaryHash ## container ## name().item(name ## Data).size(); } \
-    KDevVarLengthArray<type, 10>& name ## List() { name ## NeedDynamicList(); \
-                                                   return temporaryHash ## container ## name().item(name ## Data); } \
-    template <class T> bool name ## Equals(const T &rhs) const { unsigned int size = name ## Size(); \
-                                                                 if (size != rhs.name ## Size()) \
-                                                                     return false; for (uint a = 0; a < size; \
-                                                                                        ++a) {if (!(name()[a] == \
-                                                                                                    rhs.name()[a])) \
-                                                                                                  return \
-                                                                                                      false; \
-                                                                 } return true;  } \
+    unsigned int name ## Size() const { \
+        if ((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) \
+            return 0; \
+        if (!appendedListsDynamic()) \
+            return name ## Data; \
+        return temporaryHash ## container ## name().item(name ## Data).size(); \
+    } \
+    KDevVarLengthArray<type, 10>& name ## List() { \
+        name ## NeedDynamicList(); \
+        return temporaryHash ## container ## name().item(name ## Data); \
+    } \
+    template <class T> bool name ## Equals(const T &rhs) const { \
+        unsigned int size = name ## Size(); \
+        if (size != rhs.name ## Size()) \
+            return false; \
+        for (uint a = 0; a < size; ++a) { \
+            if (!(name()[a] == rhs.name()[a])) \
+                return false; \
+        } \
+        return true; \
+    } \
     template <class T> void name ## CopyFrom(const T &rhs) { \
         if (rhs.name ## Size() == 0 && (name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) \
             return; \
