@@ -274,7 +274,7 @@ QSplitter* saveFromAreaPrivate(Sublime::AreaIndex *area, KConfigGroup setGroup, 
             }
             ++index;
 
-            if (!parentSplitter) {
+            if (!parentSplitter && view->hasWidget()) {
                 auto p = view->widget()->parentWidget();
                 while (p && !(parentSplitter = qobject_cast<QSplitter*>(p))) {
                     p = p->parentWidget();
