@@ -13,6 +13,7 @@
 
 #include <QHash>
 #include <QMimeDatabase>
+#include <QMultiHash>
 #include <QMutexLocker>
 #include <QRegularExpression>
 #include <QThread>
@@ -47,24 +48,6 @@ bool containsWildcardCharacter(QString::const_iterator first, QString::const_ite
 }
 
 using KDevelop::ILanguageSupport;
-using StringLanguagePair = std::pair<QString, ILanguageSupport*>;
-
-struct LastCharacterLess {
-    bool operator()(const StringLanguagePair& a, const StringLanguagePair& b) const {
-        return checkedLess(a.first.back(), b.first.back());
-    }
-    bool operator()(const StringLanguagePair& a, QChar b) const {
-        return checkedLess(a.first.back(), b);
-    }
-    bool operator()(QChar a, const StringLanguagePair& b) const {
-        return checkedLess(a, b.first.back());
-    }
-private:
-    static bool checkedLess(QChar a, QChar b) {
-        Q_ASSERT(!a.isUpper() && !b.isUpper());
-        return a < b;
-    }
-};
 
 class MimeTypeCache
 {
@@ -75,9 +58,13 @@ public:
 private:
     void addGlobPattern(const QString& pattern, ILanguageSupport* language);
 
-    // Suffixes are stored lower-case and sorted with LastCharacterLess to speed up matching.
-    std::vector<StringLanguagePair> m_suffixes;        ///< contains e.g. ".cpp"
-    std::vector<StringLanguagePair> m_literalPatterns; ///< contains e.g. "CMakeLists.txt"
+    using StringLanguagePair = std::pair<QString, ILanguageSupport*>;
+
+    /// key() is the lower-cased last character of the suffix; value().first is e.g. ".cpp".
+    /// The last character key performs better than the entire lower-cased (last) extension key. Perhaps
+    /// because no lower-cased temporary fileName's extension string is created in languagesForFileName().
+    QMultiHash<QChar, StringLanguagePair> m_suffixes;
+    std::vector<StringLanguagePair> m_literalPatterns; ///< contains e.g. "CMakeLists.txt" as front().first
     /// fallback, hopefully empty in practice
     std::vector<std::pair<QRegularExpression, ILanguageSupport*>> m_regularExpressions;
 };
@@ -90,16 +77,9 @@ void MimeTypeCache::addMimeType(const QString& mimeTypeName, ILanguageSupport* l
         return;
     }
 
-    const auto suffixCount = m_suffixes.size();
     const auto globPatterns = mime.globPatterns();
     for (const QString& pattern : globPatterns) {
         addGlobPattern(pattern, language);
-    }
-    if (m_suffixes.size() != suffixCount) {
-        Q_ASSERT(std::none_of(m_suffixes.cbegin(), m_suffixes.cend(), [](const StringLanguagePair& p) {
-            return p.first.back().isUpper();
-        }));
-        std::sort(m_suffixes.begin(), m_suffixes.end(), LastCharacterLess{});
     }
 }
 
@@ -108,21 +88,19 @@ QList<ILanguageSupport*> MimeTypeCache::languagesForFileName(const QString& file
     Q_ASSERT(!fileName.isEmpty());
 
     QList<ILanguageSupport*> languages;
-    // lastLanguageEquals() helps to improve performance by skipping checks for an already
-    // added language. It also prevents duplicate elements of languages when there are
-    // multiple equivalent glob patterns for a given language (for example, clangsupport
-    // plugin supports *.c from text/x-csrc and *.C from text/x-c++src).
+    // lastLanguageEquals() helps to improve performance by skipping checks for an already added language.
     const auto lastLanguageEquals = [&languages](const ILanguageSupport* lang) {
         return !languages.empty() && languages.constLast() == lang;
     };
 
-    const auto possibleSuffixes = std::equal_range(m_suffixes.cbegin(), m_suffixes.cend(),
-                                                   fileName.back().toLower(), LastCharacterLess{});
-    for (auto it = possibleSuffixes.first; it != possibleSuffixes.second; ++it) {
-        if (!lastLanguageEquals(it->second) && fileName.endsWith(it->first, Qt::CaseInsensitive)) {
-            languages.push_back(it->second);
+    const auto lastChar = fileName.back().toLower();
+    for (auto it = m_suffixes.constFind(lastChar); it != m_suffixes.cend() && it.key() == lastChar; ++it) {
+        const auto lang = it.value().second;
+        if (!lastLanguageEquals(lang) && fileName.endsWith(it.value().first, Qt::CaseInsensitive)) {
+            languages.push_back(lang);
         }
     }
+
     for (const auto& p : m_literalPatterns) {
         if (fileName.compare(p.first, Qt::CaseInsensitive) == 0 && !lastLanguageEquals(p.second)) {
             languages.push_back(p.second);
@@ -146,10 +124,12 @@ void MimeTypeCache::addGlobPattern(const QString& pattern, ILanguageSupport* lan
     }
 
     if (pattern.front() == QLatin1Char{'*'}) {
-        // Check `pattern.size() > 1` because storing an empty string in m_suffixes
-        // would break LastCharacterLess comparison.
         if (pattern.size() > 1 && !containsWildcardCharacter(pattern.cbegin() + 1, pattern.cend())) {
-            m_suffixes.emplace_back(pattern.mid(1).toLower(), language);
+            const auto lastChar = pattern.back().toLower();
+            StringLanguagePair suffix{pattern.mid(1).toLower(), language};
+            if (!m_suffixes.contains(lastChar, suffix)) {
+                m_suffixes.insert(lastChar, std::move(suffix));
+            }
             return;
         }
     } else if (!containsWildcardCharacter(pattern.cbegin(), pattern.cend())) {
