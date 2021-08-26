@@ -63,7 +63,7 @@
     <Action shortcut="Ctrl+K" name="quick_open"/>
     <Action shortcut="F2" name="quick_open_jump_declaration"/>
     <Action shortcut="Ctrl+B" name="project_buildall"/>
-    <Action shortcut="Ctrl+&lt;" name="locate_document"/>
+    <Action shortcut="Ctrl+Shift+L" name="locate_document"/>
     <Action shortcut="F4" name="switch_definition_declaration"/>
     <Action shortcut="Ctrl+Q" name="quit"/>
     <Action shortcut="F6" name="next_error"/>
