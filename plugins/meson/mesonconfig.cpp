@@ -165,7 +165,7 @@ bool Meson::BuildDir::isValid() const
 
 void Meson::BuildDir::canonicalizePaths()
 {
-    for (auto* i : { &buildDir, &mesonExecutable }) {
+    for (auto* i : { &buildDir }) {
         // canonicalFilePath checks if the file / directory exists and returns "" if it doesn't.
         QString tmp = QFileInfo(i->toLocalFile()).canonicalFilePath();
         if (!tmp.isEmpty()) {
