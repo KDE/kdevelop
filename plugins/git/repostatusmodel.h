@@ -144,7 +144,7 @@ public:
      * Returns the ProjectItem structure (containing the project, index, worktree,
      * conflicts & untracked items) for project `p`.
      *
-     * @note: The project must be present in the model.
+     * @note: Returns a default-constructed ProjectItem{} if @p p is absent from the model.
      *
      * @param p the project
      */

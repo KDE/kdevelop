@@ -155,7 +155,9 @@ QStandardItem* findItemChild(const QStandardItem* parent, const QVariant& value,
 RepoStatusModel::ProjectItem RepoStatusModel::projectItem(IProject* p) const
 {
     auto proj = findItemChild(invisibleRootItem(), p->name(), RepoStatusModel::NameRole);
-    Q_ASSERT(proj);
+    if (!proj) {
+        return {}; // This occurs when the project has another VCS or no VCS configured.
+    }
     ProjectItem pi;
     pi.project = proj, pi.index = findItemChild(proj, RepoStatusModel::IndexRoot, RepoStatusModel::AreaRole);
     pi.worktree = findItemChild(proj, RepoStatusModel::WorkTreeRoot, RepoStatusModel::AreaRole);
