@@ -235,14 +235,18 @@ void ProjectManagerView::toggleSyncCurrentDocument(bool sync)
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
     pmviewConfig.writeEntry<bool>(syncCurrentDocumentKey, sync);
     if (sync) {
-        locateCurrentDocument();
+        raiseAndLocateCurrentDocument();
     }
+}
+
+void ProjectManagerView::raiseAndLocateCurrentDocument()
+{
+    ICore::self()->uiController()->raiseToolView(this);
+    locateCurrentDocument();
 }
 
 void ProjectManagerView::locateCurrentDocument()
 {
-    ICore::self()->uiController()->raiseToolView(this);
-
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
 
     if (!doc) {

@@ -60,13 +60,14 @@ protected:
 
 private Q_SLOTS:
     void selectionChanged();
-    void locateCurrentDocument();
+    void raiseAndLocateCurrentDocument();
     void updateSyncAction();
     void open( const KDevelop::Path& );
     void toggleHideTargets(bool hidden);
     void toggleSyncCurrentDocument(bool sync);
 
 private:
+    void locateCurrentDocument();
     QModelIndex indexFromView(const QModelIndex& index) const;
     QModelIndex indexToView(const QModelIndex& index) const;
 
