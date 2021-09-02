@@ -177,10 +177,14 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_prune->setEnabled( false );
     connect( d->m_prune, &QAction::triggered, this, &ProjectManagerViewPlugin::pruneProjectItems );
     actionCollection()->addAction( QStringLiteral("project_prune"), d->m_prune );
+
     // only add the action so that its known in the actionCollection
     // and so that it's shortcut etc. pp. is restored
     // apparently that is not possible to be done in the view itself *sigh*
-    actionCollection()->addAction( QStringLiteral("locate_document") );
+    auto locateDocumentAction = actionCollection()->addAction(QStringLiteral("locate_document"));
+    locateDocumentAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    actionCollection()->setDefaultShortcut(locateDocumentAction, Qt::CTRL | Qt::Key_Less);
+
     setXMLFile( QStringLiteral("kdevprojectmanagerview.rc") );
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView(i18nc("@title:window", "Projects"), d->factory);
