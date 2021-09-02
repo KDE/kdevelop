@@ -14,6 +14,7 @@
 #include <QUrl>
 
 #include <KActionCollection>
+#include <KActionMenu>
 #include <KLocalizedString>
 
 #include <interfaces/iselectioncontroller.h>
@@ -83,21 +84,36 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     // keep the project tree view from collapsing (would confuse users)
     m_ui->splitter->setCollapsible(0, false);
 
-    m_syncAction = plugin->actionCollection()->action(QStringLiteral("locate_document"));
-    Q_ASSERT(m_syncAction);
-    m_syncAction->setCheckable(true);
-    m_syncAction->setChecked(pmviewConfig.readEntry<bool>(syncCurrentDocumentKey, true));
-    m_syncAction->setText(i18nc("@action", "Locate Current Document"));
-    m_syncAction->setToolTip(i18nc("@info:tooltip", "Locates the current document in the project tree and selects it."));
-    m_syncAction->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
-    connect(m_syncAction, &QAction::triggered, this, &ProjectManagerView::toggleSyncCurrentDocument);
-    connect(ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this, [this]{
-        if (m_syncAction->isChecked()) {
+    auto* const syncActionMenu = new KActionMenu(this);
+    auto* const syncSubAction = plugin->actionCollection()->action(QStringLiteral("locate_document"));
+    Q_ASSERT(syncSubAction);
+    for (QAction* action : {static_cast<QAction*>(syncActionMenu), syncSubAction}) {
+        action->setText(i18nc("@action", "Locate Current Document"));
+        action->setToolTip(i18nc("@info:tooltip", "Locates the current document in the project tree and selects it."));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
+        connect(action, &QAction::triggered, this, &ProjectManagerView::raiseAndLocateCurrentDocument);
+    }
+    syncActionMenu->addAction(syncSubAction);
+
+    auto* const autoSyncSubAction = new QAction(i18nc("@action", "Auto-Select Current Document"), this);
+    autoSyncSubAction->setToolTip(i18nc("@info:tooltip", "Automatically select the current document in the project tree."));
+    autoSyncSubAction->setCheckable(true);
+    autoSyncSubAction->setChecked(pmviewConfig.readEntry<bool>(syncCurrentDocumentKey, true));
+    connect(autoSyncSubAction, &QAction::triggered, this, &ProjectManagerView::toggleSyncCurrentDocument);
+    connect(ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this, [autoSyncSubAction, this] {
+        if (autoSyncSubAction->isChecked()) {
             locateCurrentDocument();
         }
     });
-    addAction(m_syncAction);
-    updateSyncAction();
+    syncActionMenu->addAction(autoSyncSubAction);
+
+    const auto updateSyncAction = [syncActionMenu, syncSubAction, autoSyncSubAction] {
+        const bool enable = KDevelop::ICore::self()->documentController()->activeDocument();
+        syncActionMenu->setEnabled(enable);
+        syncSubAction->setEnabled(enable);
+        autoSyncSubAction->setEnabled(enable);
+    };
+    addAction(syncActionMenu);
 
     m_toggleTargetsAction = new QAction(i18nc("@action", "Show Build Targets"), this);
     m_toggleTargetsAction->setCheckable(true);
@@ -125,15 +141,16 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     connect( m_ui->projectTreeView->selectionModel(), &QItemSelectionModel::selectionChanged,
              this, &ProjectManagerView::selectionChanged );
     connect( KDevelop::ICore::self()->documentController(), &IDocumentController::documentClosed,
-             this, &ProjectManagerView::updateSyncAction);
+             this, updateSyncAction);
     connect( KDevelop::ICore::self()->documentController(), &IDocumentController::documentActivated,
-             this, &ProjectManagerView::updateSyncAction);
+             this, updateSyncAction);
     connect( qobject_cast<Sublime::MainWindow*>(KDevelop::ICore::self()->uiController()->activeMainWindow()), &Sublime::MainWindow::areaChanged,
-             this, &ProjectManagerView::updateSyncAction);
+             this, updateSyncAction);
     selectionChanged();
 
+    updateSyncAction();
     //Update the "sync" button after the initialization has completed, to see whether there already is some open documents
-    QMetaObject::invokeMethod(this, "updateSyncAction", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, updateSyncAction, Qt::QueuedConnection);
 
     // Need to set this to get horizontal scrollbar. Also needs to be done after
     // the setModel call
@@ -174,11 +191,6 @@ void ProjectManagerView::selectionChanged()
     }
     selected.removeAll(nullptr);
     KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectManagerViewItemContext( selected, this ) );
-}
-
-void ProjectManagerView::updateSyncAction()
-{
-    m_syncAction->setEnabled( KDevelop::ICore::self()->documentController()->activeDocument() );
 }
 
 ProjectManagerView::~ProjectManagerView()
