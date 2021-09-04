@@ -16,6 +16,7 @@
 #include <KTextEditor/Application>
 
 #include <sublime/area.h>
+#include <sublime/container.h>
 #include <sublime/view.h>
 #include <sublime/viewbarcontainer.h>
 
@@ -23,6 +24,7 @@
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "plugincontroller.h"
+#include "sessioncontroller.h"
 #include "mainwindow.h"
 #include "textdocument.h"
 
@@ -216,6 +218,18 @@ KTextEditor::Document *Application::openUrl(const QUrl &url, const QString &enco
     return doc->textDocument();
 }
 
+KTextEditor::Document *Application::findUrl(const QUrl &url) const
+{
+    auto doc = Core::self()->documentControllerInternal()->documentForUrl(url);
+    return doc ? doc->textDocument() : nullptr;
+}
+
+bool Application::quit() const
+{
+    Core::self()->sessionController()->emitQuitSession();
+    return true;
+}
+
 MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
     : QObject(mainWindow)
     , m_mainWindow(mainWindow)
@@ -296,6 +310,68 @@ KTextEditor::View *MainWindow::activateView(KTextEditor::Document *doc)
     }
 
     return activeView();
+}
+
+bool MainWindow::closeView(KTextEditor::View *kteView)
+{
+    if (!kteView) {
+        return false;
+    }
+
+    const auto areas = m_mainWindow->areas();
+    for (auto* area : areas) {
+        const auto views = area->views();
+        for (auto* view : views) {
+            if (toKteView(view) == kteView) {
+                area->closeView(view);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool MainWindow::closeSplitView(KTextEditor::View *kteView)
+{
+    return closeView(kteView);
+}
+
+bool MainWindow::viewsInSameSplitView(KTextEditor::View *kteView1, KTextEditor::View *kteView2) const
+{
+    if (!kteView1 || !kteView2) {
+        return false;
+    }
+    if (kteView1 == kteView2) {
+        return true;
+    }
+
+    bool view1Found = false;
+    bool view2Found = false;
+    const auto containers = m_mainWindow->containers();
+    for (const auto* container : containers) {
+        const auto views = container->views();
+        for (auto* view : views) {
+            const KTextEditor::View *kteView = toKteView(view);
+            if (kteView == kteView1) {
+                view1Found = true;
+            } else if (kteView == kteView2) {
+                view2Found = true;
+            }
+
+            if (view1Found && view2Found) {
+                // both views found in the same container
+                return true;
+            }
+        }
+
+        if (view1Found != view2Found) {
+            // only one view being found implies that the other is in a different container
+            return false;
+        }
+    }
+
+    return false;
 }
 
 QObject *MainWindow::pluginView(const QString &id) const

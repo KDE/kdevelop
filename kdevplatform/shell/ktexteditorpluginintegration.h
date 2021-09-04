@@ -42,8 +42,11 @@ public Q_SLOTS:
     QList<KTextEditor::Document *> documents();
 
     KTextEditor::Document *openUrl(const QUrl &url, const QString &encoding = QString());
+    KTextEditor::Document *findUrl(const QUrl &url) const;
 
     bool closeDocument(KTextEditor::Document *document) const;
+
+    bool quit() const;
 };
 
 class MainWindow : public QObject
@@ -69,6 +72,9 @@ public Q_SLOTS:
 
     QObject *pluginView(const QString &id) const;
     void splitView(Qt::Orientation orientation);
+    bool closeView(KTextEditor::View *kteView);
+    bool closeSplitView(KTextEditor::View *kteView);
+    bool viewsInSameSplitView(KTextEditor::View* kteView1, KTextEditor::View* kteView2) const;
 
     QWidget *createViewBar(KTextEditor::View *view);
     void deleteViewBar(KTextEditor::View *view);
