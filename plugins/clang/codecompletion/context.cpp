@@ -511,11 +511,12 @@ QString& elideStringRight(QString& str, int length)
  * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0.0, 10.0] (the higher the better)
  *
  * See https://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html for list of priorities
- * They (currently) have a range from [-3, 80] (the lower, the better)
+ * They (currently) have a range from [-3, 80] (the lower, the better). Nevertheless, we are only setting priority
+ * until CCP_SuperCompletion (20), so we better build the value around it.
  */
 int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
 {
-    return 10u - qBound(0u, completionPriority, 80u) / 8;
+    return 10 - qBound<int>(0, (10 * completionPriority) / CCP_SuperCompletion, 10);
 }
 
 int adjustPriorityForType(const AbstractType::Ptr& type, int completionPriority)
