@@ -39,7 +39,6 @@
 #include "cmakebuilderconfig.h"
 #include <debug.h>
 #include <cmakeutils.h>
-#include <cmakefileapi.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
@@ -385,13 +384,6 @@ void CMakePreferences::removeBuildDir()
 
 void CMakePreferences::configure()
 {
-    if (CMake::FileApi::supported(CMake::currentCMakeExecutable(m_project).toLocalFile())) {
-        // the file api already does a configure internally when we reload the model
-        // so don't do it twice
-        m_project->reloadModel();
-        return;
-    }
-
     IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
     if( m_currentModel ) {

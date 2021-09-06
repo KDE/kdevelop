@@ -53,7 +53,7 @@ private Q_SLOTS:
         QVERIFY(!versionStr.isEmpty());
         const auto version = QVersionNumber::fromString(versionStr);
         QVERIFY(!version.isNull());
-        const bool versionWithServer = version >= QVersionNumber(3, 8);
+        const bool versionWithServer = (version >= QVersionNumber(3, 8) && version < QVersionNumber(3, 20));
         if (!versionWithServer)
             QSKIP("cmake server not supported");
     }
