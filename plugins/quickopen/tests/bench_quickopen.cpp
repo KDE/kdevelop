@@ -24,12 +24,15 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
+#include <project/projectutils.h>
 #include <tests/testhelpers.h>
 
 #include <QIcon>
 #include <QTest>
 #include <QStandardPaths>
 #include <QVector>
+
+#include <utility>
 
 QTEST_MAIN(BenchQuickOpen)
 
@@ -71,6 +74,22 @@ void BenchQuickOpen::getAddRemoveData()
         QTest::addRow("%d", files) << files;
 }
 
+void BenchQuickOpen::benchProjectFile_swap()
+{
+    QScopedPointer<TestProject> project(getProjectWithFiles(2));
+    QVector<ProjectFile> projectFiles;
+    KDevelop::forEachFile(project->projectItem(), [&projectFiles](ProjectFileItem* fileItem) {
+        projectFiles.push_back(ProjectFile{fileItem});
+    });
+    QCOMPARE(projectFiles.size(), 2);
+
+    ProjectFile a = projectFiles.at(0);
+    ProjectFile b = projectFiles.at(1);
+    QBENCHMARK {
+        using std::swap;
+        swap(a, b);
+    }
+}
 
 void BenchQuickOpen::benchProjectFileFilter_addRemoveProject()
 {

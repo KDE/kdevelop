@@ -46,6 +46,7 @@ private Q_SLOTS:
 
     void bench_create();
     void bench_destroy();
+    void bench_swap();
 
 private:
     const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_indexedstring");

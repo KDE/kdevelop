@@ -40,6 +40,9 @@ private Q_SLOTS:
     void test();
     void test_data();
 
+    void testSwap();
+    void testSwap_data();
+
     void testCString();
 
 private:

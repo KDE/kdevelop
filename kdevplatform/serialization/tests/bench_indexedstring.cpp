@@ -30,6 +30,7 @@
 #include <QTest>
 #include <QStandardPaths>
 
+#include <utility>
 #include <vector>
 
 QTEST_GUILESS_MAIN(BenchIndexedString)
@@ -240,5 +241,15 @@ void BenchIndexedString::bench_destroy()
     auto strings = createIndexedStrings(10'000'000);
     QBENCHMARK_ONCE {
         strings = {};
+    }
+}
+
+void BenchIndexedString::bench_swap()
+{
+    IndexedString a("foo");
+    IndexedString b("bar");
+    QBENCHMARK {
+        using std::swap;
+        swap(a, b);
     }
 }

@@ -23,9 +23,11 @@
 
 #include <serialization/itemrepositoryregistry.h>
 #include <serialization/indexedstring.h>
+#include <serialization/referencecounting.h>
 #include <QTest>
 #include <QStandardPaths>
 
+#include <cstddef>
 #include <utility>
 
 QTEST_GUILESS_MAIN(TestIndexedString)
@@ -102,6 +104,71 @@ void TestIndexedString::test_data()
     QTest::newRow("char-utf8") << QStringLiteral("ä");
     QTest::newRow("string-ascii") << QStringLiteral("asdf()?=");
     QTest::newRow("string-utf8") << QStringLiteral("æſðđäöü");
+}
+
+void TestIndexedString::testSwap()
+{
+    QFETCH(bool, lhsRcEnabled);
+    QFETCH(bool, rhsRcEnabled);
+
+    class OptionallyRcString
+    {
+    public:
+        explicit OptionallyRcString(bool rcEnabled, const QString& initText)
+            : m_rcEnabled{rcEnabled}
+            , m_initText{initText}
+            , m_notRefCounted{m_initText}
+            , m_refCountedData{}
+            , m_rcEnabler{m_refCountedData, sizeof(IndexedString)}
+            , m_string{m_rcEnabled ? new (m_refCountedData) IndexedString(m_initText) : &m_notRefCounted}
+        {
+            QCOMPARE(m_string->str(), m_initText);
+        }
+
+        ~OptionallyRcString()
+        {
+            if (m_rcEnabled) {
+                m_string->~IndexedString();
+            }
+        }
+
+        const QString& initText() const { return m_initText; }
+        IndexedString& string() { return *m_string; }
+
+    private:
+        const bool m_rcEnabled;
+        const QString m_initText;
+
+        IndexedString m_notRefCounted;
+        std::byte m_refCountedData[sizeof(IndexedString)];
+        const DUChainReferenceCountingEnabler m_rcEnabler;
+
+        IndexedString* const m_string = nullptr;
+    };
+
+    OptionallyRcString lhs(lhsRcEnabled, QStringLiteral("1st text"));
+    OptionallyRcString rhs(rhsRcEnabled, QStringLiteral("another string"));
+
+    using std::swap;
+
+    swap(lhs.string(), rhs.string());
+    QCOMPARE(lhs.string().str(), rhs.initText());
+    QCOMPARE(rhs.string().str(), lhs.initText());
+
+    swap(lhs.string(), rhs.string());
+    QCOMPARE(lhs.string().str(), lhs.initText());
+    QCOMPARE(rhs.string().str(), rhs.initText());
+}
+
+void TestIndexedString::testSwap_data()
+{
+    QTest::addColumn<bool>("lhsRcEnabled");
+    QTest::addColumn<bool>("rhsRcEnabled");
+
+    QTest::newRow("no reference counting") << false << false;
+    QTest::newRow("lhs reference-counted") << true << false;
+    QTest::newRow("rhs reference-counted") << false << true;
+    QTest::newRow("both reference-counted") << true << true;
 }
 
 void TestIndexedString::testCString()

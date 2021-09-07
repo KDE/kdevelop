@@ -36,6 +36,7 @@ private Q_SLOTS:
     void bench_path();
     void bench_fromLocalPath();
     void bench_fromLocalPath_data();
+    void bench_swap();
     void bench_hash();
 
     void testPath();
@@ -44,6 +45,7 @@ private Q_SLOTS:
     void testPathInvalid_data();
     void testPathComparison();
     void testPathComparison_data();
+    void testPathSwap();
     void testPathAddData();
     void testPathAddData_data();
     void testPathBaseCtor();

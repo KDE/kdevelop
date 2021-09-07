@@ -33,6 +33,7 @@ private:
     void getData();
     void getAddRemoveData();
 private Q_SLOTS:
+    void benchProjectFile_swap();
     void benchProjectFileFilter_addRemoveProject();
     void benchProjectFileFilter_addRemoveProject_data();
     void benchProjectFileFilter_addRemoveProjects();

@@ -30,6 +30,7 @@
 #include <QStandardPaths>
 
 #include <type_traits>
+#include <utility>
 
 QTEST_MAIN(TestPath)
 
@@ -162,6 +163,16 @@ void TestPath::bench_fromLocalPath_data()
 
     QTest::newRow("QUrl::fromLocalFile") << 1;
     QTest::newRow("QString") << 2;
+}
+
+void TestPath::bench_swap()
+{
+    Path a(QStringLiteral("/foo/a.cpp"));
+    Path b(QStringLiteral("/bar/b.cc"));
+    QBENCHMARK {
+        using std::swap;
+        swap(a, b);
+    }
 }
 
 void TestPath::bench_hash()
@@ -451,6 +462,23 @@ void TestPath::testPathComparison_data()
     QTest::newRow("F-A") << F << A << -1 << 1;
     QTest::newRow("f-E") << f << E << 1 << 0;
     QTest::newRow("E-F") << E << F << -1 << -1;
+}
+
+void TestPath::testPathSwap()
+{
+    Path a(QStringLiteral("/foo/22/x.C"));
+    Path b(QStringLiteral("/home/bar/at.7z"));
+    QVERIFY(!(a == b));
+
+    const auto aCopy = a;
+    const auto bCopy = b;
+    QCOMPARE(aCopy, a);
+    QCOMPARE(bCopy, b);
+
+    using std::swap;
+    swap(a, b);
+    QCOMPARE(a, bCopy);
+    QCOMPARE(b, aCopy);
 }
 
 void TestPath::testPathAddData()

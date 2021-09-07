@@ -20,6 +20,7 @@
 
 #include "test_quickopen.h"
 #include <interfaces/idocumentcontroller.h>
+#include <project/projectutils.h>
 
 #include <QTemporaryDir>
 #include <QTest>
@@ -43,6 +44,53 @@ TestQuickOpen::TestQuickOpen(QObject* parent)
     : QuickOpenTestBase(Core::Default, parent)
 {
     QStandardPaths::setTestModeEnabled(true);
+}
+
+void TestQuickOpen::testProjectFileSwap()
+{
+    QScopedPointer<TestProject> project(getProjectWithFiles(2));
+    QVector<ProjectFile> projectFiles;
+    KDevelop::forEachFile(project->projectItem(), [&projectFiles](ProjectFileItem* fileItem) {
+        projectFiles.push_back(ProjectFile{fileItem});
+    });
+    QCOMPARE(projectFiles.size(), 2);
+
+    const auto equivalent = [](const ProjectFile &x, const ProjectFile &y) {
+        return !(x < y) && !(y < x);
+    };
+
+    ProjectFile a = projectFiles.at(0);
+    ProjectFile b = projectFiles.at(1);
+    QCOMPARE(a.projectPath, b.projectPath);
+    QVERIFY(!equivalent(a, b));
+
+    const auto aCopy = a;
+    const auto bCopy = b;
+    QCOMPARE(aCopy.projectPath, a.projectPath);
+    QVERIFY(equivalent(aCopy, a));
+    QCOMPARE(bCopy.projectPath, b.projectPath);
+    QVERIFY(equivalent(bCopy, b));
+
+    using std::swap;
+
+    swap(a, b);
+    QCOMPARE(a.projectPath, bCopy.projectPath);
+    QVERIFY(equivalent(a, bCopy));
+    QCOMPARE(b.projectPath, aCopy.projectPath);
+    QVERIFY(equivalent(b, aCopy));
+
+    const QString anotherProjectPath = QStringLiteral("/some/special/path/to/a-project");
+    a.projectPath = Path{anotherProjectPath};
+    QCOMPARE(a.projectPath.pathOrUrl(), anotherProjectPath);
+
+    swap(a, b);
+    QCOMPARE(a.projectPath, aCopy.projectPath);
+    QVERIFY(equivalent(a, aCopy));
+    QCOMPARE(b.projectPath.pathOrUrl(), anotherProjectPath);
+    QVERIFY(equivalent(b, bCopy));
+
+    QVERIFY(a.projectPath != b.projectPath);
+    QVERIFY(!equivalent(a, b));
 }
 
 void TestQuickOpen::testDuchainFilter()

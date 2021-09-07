@@ -30,6 +30,7 @@ class TestQuickOpen
 public:
     explicit TestQuickOpen(QObject* parent = nullptr);
 private Q_SLOTS:
+    void testProjectFileSwap();
     void testSorting();
     void testSorting_data();
     void testStableSort();
