@@ -127,6 +127,11 @@ public:
      */
     explicit Path(const Path& base, const QString& subPath);
 
+    friend void swap(Path& a, Path& b) noexcept
+    {
+        a.m_data.swap(b.m_data);
+    }
+
     /**
      * Equality comparison between @p other and this Path.
      *
