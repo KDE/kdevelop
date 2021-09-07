@@ -25,6 +25,7 @@
 
 #include <util/path.h>
 
+#include <utility>
 #include <vector>
 
 namespace KDevelop {
@@ -50,6 +51,15 @@ struct ProjectFile
     // this happens e.g. for generated files in out-of-source build folders
     bool outsideOfProject = false;
 };
+
+inline void swap(ProjectFile& a, ProjectFile& b) noexcept
+{
+    using std::swap;
+    swap(a.path, b.path);
+    swap(a.projectPath, b.projectPath);
+    swap(a.indexedPath, b.indexedPath);
+    swap(a.outsideOfProject, b.outsideOfProject);
+}
 
 inline bool operator<(const ProjectFile& left, const ProjectFile& right)
 {
