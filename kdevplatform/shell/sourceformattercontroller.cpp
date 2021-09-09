@@ -149,22 +149,17 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
     d->formatTextAction = actionCollection()->addAction(QStringLiteral("edit_reformat_source"));
     d->formatTextAction->setText(i18nc("@action", "&Reformat Source"));
-    d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat source using AStyle"));
-    d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis", "Source reformatting functionality using <b>astyle</b> library."));
-    d->formatTextAction->setEnabled(false);
     connect(d->formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
 
     d->formatLine = actionCollection()->addAction(QStringLiteral("edit_reformat_line"));
     d->formatLine->setText(i18nc("@action", "Reformat Line"));
-    d->formatLine->setToolTip(i18nc("@info:tooltip", "Reformat current line using AStyle"));
-    d->formatLine->setWhatsThis(i18nc("@info:whatsthis", "Source reformatting of line under cursor using <b>astyle</b> library."));
-    d->formatLine->setEnabled(false);
     connect(d->formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
     d->formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
     d->formatFilesAction->setText(i18nc("@action", "Reformat Files..."));
-    d->formatFilesAction->setToolTip(i18nc("@info:tooltip", "Format file(s) using the current theme"));
-    d->formatFilesAction->setWhatsThis(i18nc("@info:whatsthis", "Formatting functionality using <b>astyle</b> library."));
+    d->formatFilesAction->setToolTip(i18nc("@info:tooltip", "Format file(s) using the configured source formatter(s)"));
+    d->formatFilesAction->setWhatsThis(i18nc("@info:whatsthis",
+                                             "Formatting functionality using the configured source formatter(s)."));
     d->formatFilesAction->setEnabled(false);
     connect(d->formatFilesAction, &QAction::triggered,
             this, QOverload<>::of(&SourceFormatterController::formatFiles));
@@ -501,16 +496,45 @@ void SourceFormatterController::updateFormatTextAction()
     bool enabled = false;
 
     if (!d->sourceFormatters.isEmpty()) {
-        IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument();
+        const auto* doc = KDevelop::ICore::self()->documentController()->activeDocument();
         if (doc) {
-            QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
-            if (isMimeTypeSupported(mime))
+            const auto mime = QMimeDatabase().mimeTypeForUrl(doc->url());
+            const auto* formatter = formatterForUrl(doc->url(), mime);
+            if (formatter) {
                 enabled = true;
+                const auto style = styleForUrl(doc->url(), mime).name();
+                const auto tool = formatter->caption();
+
+                d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat source using <i>%1</i> (<b>%2</b>)",
+                                                      tool, style));
+                d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
+                                                        "Source reformatting functionality using <i>%1</i> tool with <b>%2</b> style.",
+                                                        tool, style));
+                d->formatLine->setToolTip(i18nc("@info:tooltip",
+                                                "Reformat current line using <i>%1</i> (<b>%2</b>)",
+                                                tool,
+                                                style));
+                d->formatLine->setWhatsThis(i18nc("@info:whatsthis",
+                                                  "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> style.",
+                                                  tool,
+                                                  style));
+            }
         }
     }
 
-    d->formatLine->setEnabled(enabled);
+    if (!enabled) {
+        d->formatTextAction->setToolTip(i18nc("@info:tooltip",
+                                              "Reformat source using the configured source formatter"));
+        d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
+                                                "Source reformatting functionality using the configured source formatter."));
+        d->formatLine->setToolTip(i18nc("@info:tooltip",
+                                        "Reformat current line using the configured source formatter"));
+        d->formatLine->setWhatsThis(i18nc("@info:whatsthis",
+                                          "Source reformatting of line under cursor using the configured source formatter."));
+    }
+
     d->formatTextAction->setEnabled(enabled);
+    d->formatLine->setEnabled(enabled);
 }
 
 void SourceFormatterController::beautifySource()
@@ -619,6 +643,7 @@ void SourceFormatterController::settingsChanged()
     for (KDevelop::IDocument* doc : documents) {
         adaptEditorIndentationMode(doc->textDocument(), formatterForUrl(doc->url()), doc->url());
     }
+    updateFormatTextAction();
 }
 
 /**
