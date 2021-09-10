@@ -22,6 +22,8 @@
 
 #include "referencecounting.h"
 
+#include <utility>
+
 using namespace KDevelop;
 
 namespace {
@@ -297,6 +299,27 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs) noexcept
     ref(this);
 
     return *this;
+}
+
+void KDevelop::swap(IndexedString& a, IndexedString& b) noexcept
+{
+    using std::swap;
+    const bool aRc = shouldDoDUChainReferenceCounting(&a);
+    const bool bRc = shouldDoDUChainReferenceCounting(&b);
+
+    if (aRc == bRc) {
+        swap(a.m_index, b.m_index);
+    } else if (aRc) {
+        Q_ASSERT(!bRc);
+        deref(&a);
+        swap(a.m_index, b.m_index);
+        ref(&a);
+    } else {
+        Q_ASSERT(!aRc && bRc);
+        deref(&b);
+        swap(a.m_index, b.m_index);
+        ref(&b);
+    }
 }
 
 QUrl IndexedString::toUrl() const

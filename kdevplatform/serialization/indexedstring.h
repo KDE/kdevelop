@@ -179,6 +179,8 @@ public:
 
     IndexedString& operator=(const IndexedString&) noexcept;
 
+    friend KDEVPLATFORMSERIALIZATION_EXPORT void swap(IndexedString&, IndexedString&) noexcept;
+
     /**
      * Fast index-based comparison
      */
