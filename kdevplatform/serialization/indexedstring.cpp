@@ -193,27 +193,21 @@ auto editRepo(EditAction action)->decltype(action(globalIndexedStringRepository(
     return action(repo);
 }
 
-inline void ref(IndexedString* string)
+inline void ref(unsigned index)
 {
-    const uint index = string->index();
     if (index && !isSingleCharIndex(index)) {
-        if (shouldDoDUChainReferenceCounting(string)) {
-            editRepo([index](IndexedStringRepository* repo) {
-                    increase(repo->dynamicItemFromIndexSimple(index)->refCount);
-                });
-        }
+        editRepo([index](IndexedStringRepository* repo) {
+                increase(repo->dynamicItemFromIndexSimple(index)->refCount);
+            });
     }
 }
 
-inline void deref(IndexedString* string)
+inline void deref(unsigned index)
 {
-    const uint index = string->index();
     if (index && !isSingleCharIndex(index)) {
-        if (shouldDoDUChainReferenceCounting(string)) {
-            editRepo([index](IndexedStringRepository* repo) {
-                    decrease(repo->dynamicItemFromIndexSimple(index)->refCount);
-                });
-        }
+        editRepo([index](IndexedStringRepository* repo) {
+                decrease(repo->dynamicItemFromIndexSimple(index)->refCount);
+            });
     }
 }
 }
@@ -277,13 +271,17 @@ IndexedString::IndexedString(const QByteArray& str)
 
 IndexedString::~IndexedString()
 {
-    deref(this);
+    if (shouldDoDUChainReferenceCounting(this)) {
+        deref(m_index);
+    }
 }
 
 IndexedString::IndexedString(const IndexedString& rhs) noexcept
     : m_index(rhs.m_index)
 {
-    ref(this);
+    if (shouldDoDUChainReferenceCounting(this)) {
+        ref(m_index);
+    }
 }
 
 IndexedString& IndexedString::operator=(const IndexedString& rhs) noexcept
@@ -292,34 +290,38 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs) noexcept
         return *this;
     }
 
-    deref(this);
+    if (shouldDoDUChainReferenceCounting(this)) {
+        deref(m_index);
+        ref(rhs.m_index);
+    }
 
     m_index = rhs.m_index;
-
-    ref(this);
-
     return *this;
 }
 
 void KDevelop::swap(IndexedString& a, IndexedString& b) noexcept
 {
     using std::swap;
+
+    if (a.m_index == b.m_index) {
+        return;
+    }
+    swap(a.m_index, b.m_index);
+
     const bool aRc = shouldDoDUChainReferenceCounting(&a);
     const bool bRc = shouldDoDUChainReferenceCounting(&b);
 
     if (aRc == bRc) {
-        swap(a.m_index, b.m_index);
-    } else if (aRc) {
-        Q_ASSERT(!bRc);
-        deref(&a);
-        swap(a.m_index, b.m_index);
-        ref(&a);
-    } else {
-        Q_ASSERT(!aRc && bRc);
-        deref(&b);
-        swap(a.m_index, b.m_index);
-        ref(&b);
+        return;
     }
+
+    auto noLongerRefCountedIndex = b.m_index;
+    auto newlyRefCountedIndex = a.m_index;
+    if (bRc) {
+        swap(noLongerRefCountedIndex, newlyRefCountedIndex);
+    }
+    deref(noLongerRefCountedIndex);
+    ref(newlyRefCountedIndex);
 }
 
 QUrl IndexedString::toUrl() const
