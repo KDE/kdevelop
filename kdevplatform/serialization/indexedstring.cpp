@@ -52,16 +52,6 @@ struct IndexedStringData
     }
 };
 
-inline void increase(uint& val)
-{
-    ++val;
-}
-
-inline void decrease(uint& val)
-{
-    --val;
-}
-
 struct IndexedStringRepositoryItemRequest
 {
     //The text is supposed to be utf8 encoded
@@ -193,22 +183,48 @@ auto editRepo(EditAction action)->decltype(action(globalIndexedStringRepository(
     return action(repo);
 }
 
+class ReferenceCountChanger
+{
+public:
+    static ReferenceCountChanger increase(unsigned index)
+    {
+        return {index, 1};
+    }
+    static ReferenceCountChanger decrease(unsigned index)
+    {
+        return {index, static_cast<Summand>(-1)}; // unsigned integer overflow is fine
+    }
+
+    void editRepo() const
+    {
+        if (m_index && !isSingleCharIndex(m_index)) {
+            ::editRepo(*this);
+        }
+    }
+
+    void operator()(IndexedStringRepository* repo) const
+    {
+        repo->dynamicItemFromIndexSimple(m_index)->refCount += m_summand;
+    }
+
+private:
+    using Summand = decltype(IndexedStringData::refCount);
+
+    ReferenceCountChanger(unsigned i, Summand s)
+        : m_index{i}
+        , m_summand{s}
+    {}
+
+    unsigned m_index;
+    Summand m_summand;
+};
 inline void ref(unsigned index)
 {
-    if (index && !isSingleCharIndex(index)) {
-        editRepo([index](IndexedStringRepository* repo) {
-                increase(repo->dynamicItemFromIndexSimple(index)->refCount);
-            });
-    }
+    ReferenceCountChanger::increase(index).editRepo();
 }
-
 inline void deref(unsigned index)
 {
-    if (index && !isSingleCharIndex(index)) {
-        editRepo([index](IndexedStringRepository* repo) {
-                decrease(repo->dynamicItemFromIndexSimple(index)->refCount);
-            });
-    }
+    ReferenceCountChanger::decrease(index).editRepo();
 }
 }
 
@@ -226,7 +242,7 @@ IndexedString::IndexedString(const char* str, unsigned short length, uint hash)
         m_index = editRepo([request, refcount](IndexedStringRepository* repo) {
             auto index = repo->index(request);
             if (refcount) {
-                increase(repo->dynamicItemFromIndexSimple(index)->refCount);
+                ReferenceCountChanger::increase(index)(repo);
             }
             return index;
         });
