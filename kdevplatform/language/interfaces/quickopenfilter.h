@@ -181,6 +181,11 @@ public:
 
         if (m_oldFilterText.isEmpty()) {
             filterBase = m_items;
+            // m_filtered either hasn't been modified after construction or is shared with m_items after a call
+            // to clearFilter(). Assign a default-initialized value to m_filtered in order to avoid detaching
+            // it and copying its items to a new buffer when m_filtered is resized below. This copying would be
+            // a waste of CPU time, because new values are immediately assigned to all elements of m_filtered.
+            m_filtered = {};
         } else if (m_oldFilterText.mid(0, m_oldFilterText.count() - 1) == text.mid(0, text.count() - 1)
                    && text.last().startsWith(m_oldFilterText.last())) {
             //Good, the prefix is the same, and the last item has been extended
