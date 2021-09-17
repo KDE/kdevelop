@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 # SPDX-FileCopyrightText: 2011 David Nolden <david.nolden.kdevelop@art-master.de>
 #
 # SPDX-License-Identifier: LGPL-2.0-or-later
 
-if [ -z "$ZDOTDIR" ]; then _shell=bash; else _shell=zsh; fi
+_shell=$(ps -cp $$ -o command="")
 
 # Since this runs as a replacement for the init-files, we need to chain in the 'real' rcs.
 # We ignore profile, login & logout rcs, as we want no login shells.
@@ -47,9 +47,7 @@ fi
 # Takes a list of tools, and prints a warning of one of them is not available in the path
 function checkToolsInPath {
     for TOOL in $@; do
-        if ! [ "$(which $TOOL 2> /dev/null)" ]; then
-            echo "The utility $TOOL is not in your path, the shell integration will not work properly."
-        fi
+        command -v $TOOL &> /dev/null || echo "The utility $TOOL is not in your path, the shell integration will not work properly."
     done
 }
 
@@ -58,9 +56,9 @@ checkToolsInPath sed ls cut dirname mktemp basename readlink hostname
 
 # special handling for qdbus variants
 _qdbus=qdbus-qt5
-if ! [ "$(which $_qdbus 2> /dev/null)" ]; then
+if ! command -v $_qdbus &> /dev/null; then
     _qdbus=qdbus
-    if ! [ "$(which $_qdbus 2> /dev/null)" ]; then
+    if ! command -v $_qdbus &> /dev/null; then
         echo "The utility qdbus (or qdbus-qt5) is not in your path, the shell integration will not work properly."
     fi
 fi
