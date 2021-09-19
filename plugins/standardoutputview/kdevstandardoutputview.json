@@ -26,7 +26,7 @@
         "Description[tr]": "Derleyici iletileri gibi şeyleri göstermek amacıyla,diğer eklentilerin kullanması için araç görünümünde bir metin çıkışı sağlar.",
         "Description[uk]": "Забезпечує роботу панелі показу текстових даних інших додатків, зокрема попереджень компілятора.",
         "Description[x-test]": "xxProvides a text output tool view for other plugins to use, to show things like compiler messages.xx",
-        "Description[zh_CN]": "提供让其它插件使用的文本输出工具视图，以便显示诸如编译器消息的信息。",
+        "Description[zh_CN]": "提供让其他插件使用的文本输出工具视图，以便显示诸如编译器消息的信息。",
         "Icon": "kdevelop",
         "Id": "KDevStandardOutputView",
         "Name": "Output View",
