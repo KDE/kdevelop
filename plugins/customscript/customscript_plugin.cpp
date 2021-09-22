@@ -30,7 +30,6 @@
 #include <util/path.h>
 #include <debug.h>
 
-#include <algorithm>
 #include <memory>
 
 using namespace KDevelop;
@@ -313,15 +312,6 @@ QVector<SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() const
     auto styles = stylesFromLanguagePlugins();
     styles += builtInStyles; // Use operator+= rather than operator+ to avoid detaching.
     return styles;
-}
-
-SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name) const
-{
-    const auto styles = predefinedStyles();
-    const auto it = std::find_if(styles.cbegin(), styles.cend(), [&name](const SourceFormatterStyle& style) {
-        return style.name() == name;
-    });
-    return it == styles.cend() ? SourceFormatterStyle{name} : *it;
 }
 
 KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime) const

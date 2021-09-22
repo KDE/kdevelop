@@ -173,6 +173,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual QVector<SourceFormatterStyle> predefinedStyles() const = 0;
 
+		/** \return A predefined style with the specified name or SourceFormatterStyle{name}
+		* if this formatter has no such predefined style.
+		*/
+		SourceFormatterStyle predefinedStyle(const QString& name) const;
+
 		/** \return The widget to edit a style.
 		*/
 		virtual SettingsWidget* editStyleWidget(const QMimeType &mime) const = 0;

@@ -11,6 +11,8 @@
 #include <QVariant>
 #include <QMimeType>
 
+#include <algorithm>
+
 namespace KDevelop
 {
 
@@ -155,6 +157,15 @@ void SourceFormatterStyle::copyDataFrom(SourceFormatterStyle *other)
 	m_content = other->content();
 	m_mimeTypes = other->mimeTypes();
 	m_overrideSample = other->overrideSample();
+}
+
+SourceFormatterStyle ISourceFormatter::predefinedStyle(const QString& name) const
+{
+    const auto styles = predefinedStyles();
+    const auto it = std::find_if(styles.cbegin(), styles.cend(), [&name](const SourceFormatterStyle& style) {
+        return style.name() == name;
+    });
+    return it == styles.cend() ? SourceFormatterStyle{name} : *it;
 }
 
 QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)

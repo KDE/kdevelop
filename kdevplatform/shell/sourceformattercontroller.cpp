@@ -50,6 +50,7 @@
 
 #include <algorithm>
 #include <tuple>
+#include <utility>
 
 namespace {
 
@@ -515,8 +516,13 @@ void SourceFormatterController::updateFormatTextAction()
         }
 
         const auto style = styleForUrl(url, mime);
+        auto styleCaption = style.caption();
+        if (styleCaption.isEmpty()) {
+            // This could be an incomplete predefined style, for which only the name is stored in config.
+            styleCaption = formatter->predefinedStyle(style.name()).caption();
+        }
 
-        return std::tuple { true, formatter->caption(), style.name() };
+        return std::tuple { true, formatter->caption(), std::move(styleCaption) };
     }();
 
     d->formatTextAction->setEnabled(enabled);

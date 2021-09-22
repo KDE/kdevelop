@@ -60,7 +60,6 @@ public:
 
 private:
     QStringList computeIndentationFromSample(const QUrl& url) const;
-    KDevelop::SourceFormatterStyle predefinedStyle(const QString& name) const;
 };
 
 class CustomScriptPreferences

@@ -258,7 +258,7 @@ QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const Q
     return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
-SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
+static SourceFormatterStyle createPredefinedStyle(const QString& name, const QString& caption = QString())
 {
     SourceFormatterStyle st = SourceFormatterStyle( name );
     st.setCaption( caption.isEmpty() ? name : caption );
@@ -273,18 +273,18 @@ SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption
 QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles() const
 {
     static const QVector<SourceFormatterStyle> list = {
-        predefinedStyle(QStringLiteral("ANSI")),
-        predefinedStyle(QStringLiteral("GNU")),
-        predefinedStyle(QStringLiteral("Java")),
-        predefinedStyle(QStringLiteral("K&R"), QStringLiteral("Kernighan & Ritchie")),
-        predefinedStyle(QStringLiteral("Linux")),
-        predefinedStyle(QStringLiteral("Stroustrup")),
-        predefinedStyle(QStringLiteral("Horstmann")),
-        predefinedStyle(QStringLiteral("Whitesmith")),
-        predefinedStyle(QStringLiteral("Banner")),
-        predefinedStyle(QStringLiteral("1TBS")),
-        predefinedStyle(QStringLiteral("KDELibs"), QStringLiteral("KDE Frameworks")),
-        predefinedStyle(QStringLiteral("Qt")),
+        createPredefinedStyle(QStringLiteral("ANSI")),
+        createPredefinedStyle(QStringLiteral("GNU")),
+        createPredefinedStyle(QStringLiteral("Java")),
+        createPredefinedStyle(QStringLiteral("K&R"), QStringLiteral("Kernighan & Ritchie")),
+        createPredefinedStyle(QStringLiteral("Linux")),
+        createPredefinedStyle(QStringLiteral("Stroustrup")),
+        createPredefinedStyle(QStringLiteral("Horstmann")),
+        createPredefinedStyle(QStringLiteral("Whitesmith")),
+        createPredefinedStyle(QStringLiteral("Banner")),
+        createPredefinedStyle(QStringLiteral("1TBS")),
+        createPredefinedStyle(QStringLiteral("KDELibs"), QStringLiteral("KDE Frameworks")),
+        createPredefinedStyle(QStringLiteral("Qt")),
     };
     return list;
 }
