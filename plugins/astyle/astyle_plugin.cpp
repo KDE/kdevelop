@@ -258,21 +258,6 @@ QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const Q
     return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
-static SourceFormatterStyle::MimeList supportedMimeTypes()
-{
-    return {
-        {QStringLiteral("text/x-c++src"), QStringLiteral("C++")},
-        {QStringLiteral("text/x-csrc"), QStringLiteral("C")},
-        {QStringLiteral("text/x-chdr"), QStringLiteral("C")},
-        {QStringLiteral("text/x-c++hdr"), QStringLiteral("C++")},
-        {QStringLiteral("text/x-java"), QStringLiteral("Java")},
-        {QStringLiteral("text/x-csharp"), QStringLiteral("C#")},
-        {QStringLiteral("text/x-objcsrc"), QStringLiteral("Objective-C")},
-        {QStringLiteral("text/x-objc++src"), QStringLiteral("Objective-C++")},
-        {QStringLiteral("text/x-objchdr"), QStringLiteral("Objective-C")},
-    };
-}
-
 SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
 {
     SourceFormatterStyle st = SourceFormatterStyle( name );
@@ -280,7 +265,7 @@ SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption
     AStyleFormatter fmt;
     fmt.predefinedStyle( name );
     st.setContent( fmt.saveStyle() );
-    st.setMimeTypes(supportedMimeTypes());
+    st.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
     st.setUsePreview(true);
     return st;
 }

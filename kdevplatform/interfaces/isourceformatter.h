@@ -211,6 +211,10 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		static QMap<QString, QVariant> stringToOptionMap(const QString &option);
 
+		/** \return The shared list of MIME types supported by each built-in style.
+		*/
+		static SourceFormatterStyle::MimeList mimeTypesSupportedByBuiltInStyles();
+
 		/** \return A message to display when an executable needed by a
 		* plugin is missing. This should be returned as description
 		* if a needed executable is not found.
