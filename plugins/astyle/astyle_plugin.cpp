@@ -272,7 +272,7 @@ SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption
 
 QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles() const
 {
-    return {
+    static const QVector<SourceFormatterStyle> list = {
         predefinedStyle(QStringLiteral("ANSI")),
         predefinedStyle(QStringLiteral("GNU")),
         predefinedStyle(QStringLiteral("Java")),
@@ -286,6 +286,7 @@ QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles() const
         predefinedStyle(QStringLiteral("KDELibs"), QStringLiteral("KDE Frameworks")),
         predefinedStyle(QStringLiteral("Qt")),
     };
+    return list;
 }
 
 SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime) const
