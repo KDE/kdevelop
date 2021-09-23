@@ -48,6 +48,9 @@
 #include "sourceformatterjob.h"
 #include "textdocument.h"
 
+#include <algorithm>
+#include <tuple>
+
 namespace {
 
 namespace Strings {
@@ -493,36 +496,44 @@ void SourceFormatterController::updateFormatTextAction()
 {
     Q_D(SourceFormatterController);
 
-    bool enabled = false;
-
-    if (!d->sourceFormatters.isEmpty()) {
-        const auto* doc = KDevelop::ICore::self()->documentController()->activeDocument();
-        if (doc) {
-            const auto mime = QMimeDatabase().mimeTypeForUrl(doc->url());
-            const auto* formatter = formatterForUrl(doc->url(), mime);
-            if (formatter) {
-                enabled = true;
-                const auto style = styleForUrl(doc->url(), mime).name();
-                const auto tool = formatter->caption();
-
-                d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat source using <i>%1</i> (<b>%2</b>)",
-                                                      tool, style));
-                d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
-                                                        "Source reformatting functionality using <i>%1</i> tool with <b>%2</b> style.",
-                                                        tool, style));
-                d->formatLine->setToolTip(i18nc("@info:tooltip",
-                                                "Reformat current line using <i>%1</i> (<b>%2</b>)",
-                                                tool,
-                                                style));
-                d->formatLine->setWhatsThis(i18nc("@info:whatsthis",
-                                                  "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> style.",
-                                                  tool,
-                                                  style));
-            }
+    const auto [enabled, tool, style] = [this, d] {
+        auto disabled = std::tuple { false, QString(), QString() };
+        if (d->sourceFormatters.empty()) {
+            return disabled;
         }
-    }
 
-    if (!enabled) {
+        const auto* doc = KDevelop::ICore::self()->documentController()->activeDocument();
+        if (!doc) {
+            return disabled;
+        }
+
+        const auto url = doc->url();
+        const auto mime = QMimeDatabase().mimeTypeForUrl(url);
+        const auto* const formatter = formatterForUrl(url, mime);
+        if (!formatter) {
+            return disabled;
+        }
+
+        const auto style = styleForUrl(url, mime);
+
+        return std::tuple { true, formatter->caption(), style.name() };
+    }();
+
+    d->formatTextAction->setEnabled(enabled);
+    d->formatLine->setEnabled(enabled);
+
+    if (enabled) {
+        d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat source using <i>%1</i> (<b>%2</b>)",
+                                              tool, style));
+        d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
+                                                "Source reformatting functionality using <i>%1</i> tool with <b>%2</b> style.",
+                                                tool, style));
+        d->formatLine->setToolTip(i18nc("@info:tooltip", "Reformat current line using <i>%1</i> (<b>%2</b>)",
+                                        tool, style));
+        d->formatLine->setWhatsThis(i18nc("@info:whatsthis",
+                                          "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> style.",
+                                          tool, style));
+    } else {
         d->formatTextAction->setToolTip(i18nc("@info:tooltip",
                                               "Reformat source using the configured source formatter"));
         d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
@@ -532,9 +543,6 @@ void SourceFormatterController::updateFormatTextAction()
         d->formatLine->setWhatsThis(i18nc("@info:whatsthis",
                                           "Source reformatting of line under cursor using the configured source formatter."));
     }
-
-    d->formatTextAction->setEnabled(enabled);
-    d->formatLine->setEnabled(enabled);
 }
 
 void SourceFormatterController::beautifySource()
