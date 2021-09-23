@@ -15,7 +15,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
-#include <memory>
 #include <QDir>
 #include <QTimer>
 
@@ -30,6 +29,9 @@
 #include <interfaces/ilanguagesupport.h>
 #include <util/path.h>
 #include <debug.h>
+
+#include <algorithm>
+#include <memory>
 
 using namespace KDevelop;
 
@@ -202,7 +204,8 @@ QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, c
     return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
-static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
+namespace {
+QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
 {
     QVector<KDevelop::SourceFormatterStyle> styles;
     const auto loadedLanguages = ICore::self()->languageController()->loadedLanguages();
@@ -218,74 +221,107 @@ static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
     return styles;
 }
 
-KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name) const
+namespace BuiltInStyles {
+SourceFormatterStyle gnuIndentGnu()
 {
-	const auto& langStyles = stylesFromLanguagePlugins();
-    for (auto& langStyle: langStyles) {
-        qCDebug(CUSTOMSCRIPT) << "looking at style from language with custom sample" << langStyle.description() << langStyle.overrideSample();
-        if (langStyle.name() == name) {
-            return langStyle;
-        }
-    }
-
-    SourceFormatterStyle result(name);
-    if (name == QLatin1String("GNU_indent_GNU")) {
-        result.setCaption(i18n("Gnu Indent: GNU"));
-        result.setContent(QStringLiteral("indent"));
-        result.setUsePreview(true);
-    } else if (name == QLatin1String("GNU_indent_KR")) {
-        result.setCaption(i18n("Gnu Indent: Kernighan & Ritchie"));
-        result.setContent(QStringLiteral("indent -kr"));
-        result.setUsePreview(true);
-    } else if (name == QLatin1String("GNU_indent_orig")) {
-        result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
-        result.setContent(QStringLiteral("indent -orig"));
-        result.setUsePreview(true);
-    } else if (name == QLatin1String("clang_format")) {
-        result.setCaption(i18n("Clang Format"));
-        result.setContent(QStringLiteral("clang-format -assume-filename=\"$FILE\""));
-        result.setUsePreview(false);
-        result.setDescription(i18n("Description:<br /><br />"
-                                   "<b>clang-format</b> is an automatic source formater by the LLVM "
-                                   "project. It supports a variety of formatting style options via "
-                                   "a <b>.clang-format</b> configuration file, usually located in "
-                                   "the project root directory."));
-    } else if (name == QLatin1String("kdev_format_source")) {
-        result.setCaption(QStringLiteral("KDevelop: kdev_format_source"));
-        result.setContent(QStringLiteral("kdev_format_source $FILE $TMPFILE"));
-        result.setUsePreview(false);
-        result.setDescription(i18n("Description:<br />"
-                                   "<b>kdev_format_source</b> is a script bundled with KDevelop "
-                                   "which allows using fine-grained formatting rules by placing "
-                                   "meta-files called <b>format_sources</b> into the file-system.<br /><br />"
-                                   "Each line of the <b>format_sources</b> files defines a list of wildcards "
-                                   "followed by a colon and the used formatting-command.<br /><br />"
-                                   "The formatting-command should use <b>$TMPFILE</b> to reference the "
-                                   "temporary file to reformat.<br /><br />"
-                                   "Example:<br />"
-                                   "<b>*.cpp *.h : myformatter $TMPFILE</b><br />"
-                                   "This will reformat all files ending with <b>.cpp</b> or <b>.h</b> using "
-                                   "the custom formatting script <b>myformatter</b>.<br /><br />"
-                                   "Example: <br />"
-                                   "<b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
-                                   "This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
-                                   "tool with the config-file <b>uncrustify.config</b>."));
-    }
+    SourceFormatterStyle result(QStringLiteral("GNU_indent_GNU"));
+    result.setCaption(i18n("Gnu Indent: GNU"));
+    result.setContent(QStringLiteral("indent"));
+    result.setUsePreview(true);
 
     result.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
     return result;
 }
 
-QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() const
+SourceFormatterStyle gnuIndentKr()
 {
-    const QVector<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins() + QVector<KDevelop::SourceFormatterStyle>{
-        predefinedStyle(QStringLiteral("kdev_format_source")),
-        predefinedStyle(QStringLiteral("clang_format")),
-        predefinedStyle(QStringLiteral("GNU_indent_GNU")),
-        predefinedStyle(QStringLiteral("GNU_indent_KR")),
-        predefinedStyle(QStringLiteral("GNU_indent_orig")),
+    SourceFormatterStyle result(QStringLiteral("GNU_indent_KR"));
+    result.setCaption(i18n("Gnu Indent: Kernighan & Ritchie"));
+    result.setContent(QStringLiteral("indent -kr"));
+    result.setUsePreview(true);
+
+    result.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
+    return result;
+}
+
+SourceFormatterStyle gnuIndentOrig()
+{
+    SourceFormatterStyle result(QStringLiteral("GNU_indent_orig"));
+    result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
+    result.setContent(QStringLiteral("indent -orig"));
+    result.setUsePreview(true);
+
+    result.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
+    return result;
+}
+
+SourceFormatterStyle clangFormat()
+{
+    SourceFormatterStyle result(QStringLiteral("clang_format"));
+    result.setCaption(i18n("Clang Format"));
+    result.setContent(QStringLiteral("clang-format -assume-filename=\"$FILE\""));
+    result.setUsePreview(false);
+    result.setDescription(i18n("Description:<br /><br />"
+                               "<b>clang-format</b> is an automatic source formater by the LLVM "
+                               "project. It supports a variety of formatting style options via "
+                               "a <b>.clang-format</b> configuration file, usually located in "
+                               "the project root directory."));
+
+    result.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
+    return result;
+}
+
+SourceFormatterStyle kdevFormatSource()
+{
+    SourceFormatterStyle result(QStringLiteral("kdev_format_source"));
+    result.setCaption(QStringLiteral("KDevelop: kdev_format_source"));
+    result.setContent(QStringLiteral("kdev_format_source $FILE $TMPFILE"));
+    result.setUsePreview(false);
+    result.setDescription(i18n("Description:<br />"
+                               "<b>kdev_format_source</b> is a script bundled with KDevelop "
+                               "which allows using fine-grained formatting rules by placing "
+                               "meta-files called <b>format_sources</b> into the file-system.<br /><br />"
+                               "Each line of the <b>format_sources</b> files defines a list of wildcards "
+                               "followed by a colon and the used formatting-command.<br /><br />"
+                               "The formatting-command should use <b>$TMPFILE</b> to reference the "
+                               "temporary file to reformat.<br /><br />"
+                               "Example:<br />"
+                               "<b>*.cpp *.h : myformatter $TMPFILE</b><br />"
+                               "This will reformat all files ending with <b>.cpp</b> or <b>.h</b> using "
+                               "the custom formatting script <b>myformatter</b>.<br /><br />"
+                               "Example: <br />"
+                               "<b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
+                               "This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
+                               "tool with the config-file <b>uncrustify.config</b>."));
+
+    result.setMimeTypes(ISourceFormatter::mimeTypesSupportedByBuiltInStyles());
+    return result;
+}
+}
+} // unnamed namespace
+
+QVector<SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() const
+{
+    static const QVector<SourceFormatterStyle> builtInStyles = {
+        BuiltInStyles::kdevFormatSource(),
+        BuiltInStyles::clangFormat(),
+        BuiltInStyles::gnuIndentGnu(),
+        BuiltInStyles::gnuIndentKr(),
+        BuiltInStyles::gnuIndentOrig(),
     };
+
+    auto styles = stylesFromLanguagePlugins();
+    styles += builtInStyles; // Use operator+= rather than operator+ to avoid detaching.
     return styles;
+}
+
+SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name) const
+{
+    const auto styles = predefinedStyles();
+    const auto it = std::find_if(styles.cbegin(), styles.cend(), [&name](const SourceFormatterStyle& style) {
+        return style.name() == name;
+    });
+    return it == styles.cend() ? SourceFormatterStyle{name} : *it;
 }
 
 KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime) const
