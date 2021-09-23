@@ -516,10 +516,15 @@ void SourceFormatterController::updateFormatTextAction()
         }
 
         const auto style = styleForUrl(url, mime);
+        const auto styleName = style.name();
+        if (styleName.isEmpty()) {
+            return disabled; // A valid style's name is never empty => no style is configured for url.
+        }
+
         auto styleCaption = style.caption();
         if (styleCaption.isEmpty()) {
             // This could be an incomplete predefined style, for which only the name is stored in config.
-            styleCaption = formatter->predefinedStyle(style.name()).caption();
+            styleCaption = formatter->predefinedStyle(styleName).caption();
         }
 
         return std::tuple { true, formatter->caption(), std::move(styleCaption) };
