@@ -50,6 +50,7 @@
         "Description[pt]": "Expõe os ambientes de execução do Docker",
         "Description[pt_BR]": "Expõe as bibliotecas do Docker",
         "Description[sk]": "Vystavuje Docker runtimes",
+        "Description[sl]": "Izpostavi izvajalne knjižnice za Docker",
         "Description[sv]": "Exponerar Docker-körtidsprogram",
         "Description[tr]": "Docker çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Docker",
