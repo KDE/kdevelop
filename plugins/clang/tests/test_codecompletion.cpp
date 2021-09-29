@@ -239,10 +239,15 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
         auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
         auto inheritanceDepth = declarationItem->inheritanceDepth();
 
-        if(!declaration.failMessage.isEmpty()){
+        const bool expectFail = !declaration.failMessage.isEmpty();
+        if (expectFail) {
             QEXPECT_FAIL("", declaration.failMessage.toUtf8().constData(), Continue);
         }
-        QVERIFY(matchQuality == declaration.matchQuality && inheritanceDepth == declaration.inheritanceDepth);
+        QCOMPARE(matchQuality, declaration.matchQuality);
+        if (expectFail) {
+            QEXPECT_FAIL("", "\u3003", Continue); // the same reason/comment as above
+        }
+        QCOMPARE(inheritanceDepth, declaration.inheritanceDepth);
     }
 }
 
