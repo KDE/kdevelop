@@ -1231,32 +1231,32 @@ void TestCodeCompletion::testCompletionPriority_data()
 
     QTest::newRow("pointer")
         << "class A{}; class B{}; class C : public B{}; int main(){A* a; B* b; C* c; b =\n "
-        << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 9, 0},
-        {"c", 8, 0, QStringLiteral("Pointer to derived class is not added to the Best Matches group")}}};
+        << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 6, 0},
+        {"c", 2, 0, QStringLiteral("Pointer to derived class is not added to the Best Matches group")}}};
 
     QTest::newRow("class")
         << "class A{}; class B{}; class C : public B{}; int main(){A a; B b; C c; b =\n "
-        << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 9, 0},
-        {"c", 8, 0, QStringLiteral("Derived class is not added to the Best Matches group")}}};
+        << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 6, 0},
+        {"c", 2, 0, QStringLiteral("Derived class is not added to the Best Matches group")}}};
 
     QTest::newRow("primary-types")
         << "class A{}; int main(){A a; int b; bool c = \n "
-        << CompletionPriorityItems{{1,0}, {{"a", 0, 34}, {"b", 8, 0}}};
+        << CompletionPriorityItems{{1,0}, {{"a", 0, 34}, {"b", 2, 0}}};
 
     QTest::newRow("reference")
         << "class A{}; class B{}; class C : public B{};"
            "int main(){A tmp; A& a = tmp; C tmp2; C& c = tmp2; B& b =\n ;}"
         << CompletionPriorityItems{{1,0}, {{"a", 0, 21},
-        {"c", 8, 0, QStringLiteral("Reference to derived class is not added to the Best Matches group")}}};
+        {"c", 2, 0, QStringLiteral("Reference to derived class is not added to the Best Matches group")}}};
 
     QTest::newRow("typedef")
         << "struct A{}; struct B{}; typedef A AA; typedef B BB; void f(A p);"
            "int main(){ BB b; AA a; f(\n }"
-        << CompletionPriorityItems{{1,0}, {{"a", 9, 0}, {"b", 0, 21}}};
+        << CompletionPriorityItems{{1,0}, {{"a", 6, 0}, {"b", 0, 21}}};
 
     QTest::newRow("returnType")
         << "struct A{}; struct B{}; struct Test{A f();B g(); Test() { A a =\n }};"
-        << CompletionPriorityItems{{1,0}, {{"f", 9, 0}, {"g", 0, 21}}};
+        << CompletionPriorityItems{{1,0}, {{"f", 6, 0}, {"g", 0, 21}}};
 
     QTest::newRow("template")
         << "template <typename T> class Class{}; template <typename T> class Class2{};"
