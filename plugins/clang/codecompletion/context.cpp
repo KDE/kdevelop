@@ -507,16 +507,26 @@ QString& elideStringRight(QString& str, int length)
     return str;
 }
 
+constexpr int maxBestMatchCompletionPriority = CCP_SuperCompletion;
+
 /**
- * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0.0, 10.0] (the higher the better)
+ * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0, 10] (the higher the better)
  *
  * See https://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html for list of priorities
- * They (currently) have a range from [-3, 80] (the lower, the better). Nevertheless, we are only setting priority
- * until CCP_SuperCompletion (20), so we better build the value around it.
+ * They (currently) are in the range [0, 80] (the lower, the better). Nevertheless, we are only setting priority
+ * until maxBestMatchCompletionPriority (20), so we better build the value around it.
  */
-int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
+int matchQualityFromBestMatchCompletionPriority(int completionPriority)
 {
-    return 10 - qBound<int>(0, (10 * completionPriority) / CCP_SuperCompletion, 10);
+    Q_ASSERT(completionPriority >= 0);
+    Q_ASSERT(completionPriority <= maxBestMatchCompletionPriority);
+
+    constexpr int maxMatchQuality = 10;
+    const auto matchQuality = maxMatchQuality - maxMatchQuality * completionPriority / maxBestMatchCompletionPriority;
+
+    Q_ASSERT(matchQuality >= 0);
+    Q_ASSERT(matchQuality <= maxMatchQuality);
+    return matchQuality;
 }
 
 int adjustPriorityForType(const AbstractType::Ptr& type, int completionPriority)
@@ -547,7 +557,7 @@ int adjustPriorityForType(const AbstractType::Ptr& type, int completionPriority)
 }
 
 /// Adjusts priority for the @p decl
-int adjustPriorityForDeclaration(Declaration* decl, unsigned int completionPriority)
+int adjustPriorityForDeclaration(Declaration* decl, int completionPriority)
 {
     if(completionPriority < CCP_LocalDeclarationSimiliar || completionPriority > CCP_SuperCompletion){
         return completionPriority;
@@ -1244,13 +1254,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     declarationItem = new DeclarationItem(found, typed, resultType, replacement);
                 }
 
-                const unsigned int completionPriority = adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
-                const bool bestMatch = completionPriority <= CCP_SuperCompletion;
+                const auto completionPriority =
+                    adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
+                const bool bestMatch = completionPriority <= maxBestMatchCompletionPriority;
 
                 //don't set best match property for internal identifiers, also prefer declarations from current file
                 const auto isInternal = found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__"));
                 if (bestMatch && !isInternal) {
-                    const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
+                    const auto matchQuality = matchQualityFromBestMatchCompletionPriority(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
 
                     // TODO: LibClang missing API to determine expected code completion type.
