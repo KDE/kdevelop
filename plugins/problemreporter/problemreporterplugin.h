@@ -46,6 +46,7 @@ public:
 private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext&);
     void updateHighlight(const KDevelop::IndexedString& url);
+    void documentClosed(KDevelop::IDocument*);
     void textDocumentCreated(KDevelop::IDocument* document);
     void documentActivated(KDevelop::IDocument* document);
     void showModel(const QString& id);
@@ -58,8 +59,6 @@ private:
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
     QHash<KDevelop::IndexedString, ProblemInlineNoteProvider*> m_inlineNoteProviders;
     QSet<KDevelop::IndexedString> m_reHighlightNeeded;
-public Q_SLOTS:
-    void documentClosed(KDevelop::IDocument*);
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROBLEMREPORTERPLUGIN_H
