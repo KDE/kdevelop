@@ -66,6 +66,25 @@ public:
     QString id() const override { return QStringLiteral("org.kdevelop.ProblemReporterView"); }
 };
 
+class ProblemReporterPlugin::ProblemVisualizer
+{
+public:
+    explicit ProblemVisualizer(KTextEditor::Document* document)
+        : m_highlighter(document)
+        , m_inlineNoteProvider(document)
+    {}
+
+    void setProblems(const QVector<IProblem::Ptr>& problems)
+    {
+        m_highlighter.setProblems(problems);
+        m_inlineNoteProvider.setProblems(problems);
+    }
+
+private:
+    ProblemHighlighter m_highlighter;
+    ProblemInlineNoteProvider m_inlineNoteProvider;
+};
+
 ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevproblemreporter"), parent)
     , m_factory(new ProblemReporterFactory)
@@ -92,8 +111,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList
 
 ProblemReporterPlugin::~ProblemReporterPlugin()
 {
-    qDeleteAll(m_highlighters);
-    qDeleteAll(m_inlineNoteProviders);
+    qDeleteAll(m_visualizers);
 }
 
 ProblemReporterModel* ProblemReporterPlugin::model() const
@@ -114,18 +132,19 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
     if (!doc->textDocument())
         return;
 
-    IndexedString url(doc->url());
-    delete m_highlighters.take(url);
-    delete m_inlineNoteProviders.take(url);
+    const IndexedString url(doc->url());
+    delete m_visualizers.take(url);
     m_reHighlightNeeded.remove(url);
 }
 
 void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
     Q_ASSERT(document->textDocument());
-    IndexedString documentUrl(document->url());
-    m_highlighters.insert(documentUrl, new ProblemHighlighter(document->textDocument()));
-    m_inlineNoteProviders.insert(documentUrl, new ProblemInlineNoteProvider(document->textDocument()));
+    const IndexedString documentUrl(document->url());
+
+    Q_ASSERT(!m_visualizers.contains(documentUrl));
+    m_visualizers.insert(documentUrl, new ProblemVisualizer{document->textDocument()});
+
     DUChain::self()->updateContextForUrl(documentUrl,
                                          KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
@@ -149,8 +168,8 @@ void ProblemReporterPlugin::updateReady(const IndexedString& url, const KDevelop
 
 void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
 {
-    ProblemHighlighter* ph = m_highlighters.value(url);
-    if (!ph)
+    auto* const visualizer = m_visualizers.value(url);
+    if (!visualizer)
         return;
 
     KDevelop::ProblemModelSet* pms(core()->languageController()->problemModelSet());
@@ -161,8 +180,7 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
         documentProblems += modelData.model->problems({url});
     }
 
-    ph->setProblems(documentProblems);
-    m_inlineNoteProviders.value(url)->setProblems(documentProblems);
+    visualizer->setProblems(documentProblems);
 }
 
 void ProblemReporterPlugin::showModel(const QString& id)

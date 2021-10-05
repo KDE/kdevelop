@@ -15,17 +15,11 @@
 #include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 
-namespace KTextEditor
-{
-class Document;
-}
 namespace KDevelop
 {
 class IDocument;
 }
 
-class ProblemHighlighter;
-class ProblemInlineNoteProvider;
 class ProblemReporterModel;
 
 class ProblemReporterPlugin : public KDevelop::IPlugin
@@ -56,8 +50,8 @@ private:
     class ProblemReporterFactory* m_factory;
     ProblemReporterModel* m_model;
 
-    QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
-    QHash<KDevelop::IndexedString, ProblemInlineNoteProvider*> m_inlineNoteProviders;
+    class ProblemVisualizer;
+    QHash<KDevelop::IndexedString, ProblemVisualizer*> m_visualizers;
     QSet<KDevelop::IndexedString> m_reHighlightNeeded;
 };
 
