@@ -82,6 +82,9 @@ ProblemInlineNoteProvider::ProblemInlineNoteProvider(KTextEditor::Document* docu
 
 ProblemInlineNoteProvider::~ProblemInlineNoteProvider()
 {
+    if (!m_document) {
+        return;
+    }
     for (auto* view : m_document->views()) {
         auto* inlineNoteIface = qobject_cast<KTextEditor::InlineNoteInterface*>(view);
         if(inlineNoteIface) {

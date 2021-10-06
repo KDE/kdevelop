@@ -24,8 +24,6 @@
 
 #include <grantlee/engine.h>
 
-#include <grantlee/grantlee_version.h>
-
 namespace KDevelop {
 class TemplateEnginePrivate
 {
