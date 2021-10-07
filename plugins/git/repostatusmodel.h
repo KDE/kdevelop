@@ -129,6 +129,9 @@ public:
 
     /**
      * Returns a list of items corresponding to project roots.
+     *
+     * @note we return a const so that the result can be used in for-range
+     * loops without detaching the container.
      */
     const QList<QStandardItem*> projectRoots() const;
 
@@ -139,6 +142,9 @@ public:
      * @param area    the area to get the items from
      *
      * @returns a list of items in the given area of the project
+     *
+     * @note we return a const so that the result can be used in for-range
+     * loops without detaching the container.
      */
     const QList<QStandardItem*> items(const QStandardItem* project, Areas area) const;
 
@@ -263,7 +269,7 @@ private:
      *
      * @param project the project
      */
-    const QList<QUrl> childUrls(const ProjectItem project) const;
+    QList<QUrl> childUrls(const ProjectItem& project) const;
 
     /**
      * A helper function to recursively compute all the descendants of
@@ -272,6 +278,9 @@ private:
      *
      * @param parent the node whose children will be returned (if it is
      * null all non-root nodes will be returned)
+     *
+     * @note we return a const so that the result can be used in for-range
+     * loops without detaching the container.
      */
     const QList<QStandardItem*> allItems(const QStandardItem* parent = nullptr) const;
 

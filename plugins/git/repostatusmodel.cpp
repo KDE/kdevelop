@@ -327,7 +327,7 @@ void RepoStatusModel::removeUrl(const QUrl& url, const QStandardItem* parent)
     }
 }
 
-const QList<QUrl> RepoStatusModel::childUrls(const ProjectItem pItem) const
+QList<QUrl> RepoStatusModel::childUrls(const ProjectItem& pItem) const
 {
     Q_ASSERT(pItem.project);
     if (!pItem.project) {
