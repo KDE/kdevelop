@@ -104,7 +104,7 @@ public:
      * @param p the project the item belongs to
      * @param status the status data
      */
-    void updateState(KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);
+    void updateState(const KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);
 
     /**
      * Runs a job to fetches the statuses of elements (given by `urls`)
@@ -150,7 +150,7 @@ public:
      *
      * @param p the project
      */
-    ProjectItem projectItem(KDevelop::IProject* p) const;
+    ProjectItem projectItem(const KDevelop::IProject* p) const;
 
     /**
      * Returns the ProjectItem structure (containing the project, index, worktree,
@@ -170,7 +170,7 @@ public:
      * should never be present in the model and so this function
      * returns False for them.
      */
-    bool ourProject(KDevelop::IProject* p) const;
+    bool ourProject(const KDevelop::IProject* p) const;
 
 public Q_SLOTS:
 
@@ -199,14 +199,14 @@ public Q_SLOTS:
      *
      * @param p the project to add.
      */
-    void addProject(KDevelop::IProject* p);
+    void addProject(const KDevelop::IProject* p);
 
     /**
      * Removes a project from the model (e.g. when a project is closed).
      *
      * @param p the project to remove
      */
-    void removeProject(KDevelop::IProject* p);
+    void removeProject(const KDevelop::IProject* p);
 
     /**
      * Processes the result of a job started by `fetchStatusesForUrls`
@@ -222,7 +222,7 @@ public Q_SLOTS:
      * @param doc the document (the item(s) corresponding to this will be
      * updated)
      */
-    void documentSaved(KDevelop::IDocument* doc);
+    void documentSaved(const KDevelop::IDocument* doc);
 
     /**
      * A handler called when items are added to a project

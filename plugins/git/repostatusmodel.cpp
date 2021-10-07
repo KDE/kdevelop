@@ -68,22 +68,22 @@ RepoStatusModel::RepoStatusModel(QObject* parent)
 
 RepoStatusModel::~RepoStatusModel() {}
 
-void RepoStatusModel::addProject(IProject* p)
+void RepoStatusModel::addProject(const IProject* p)
 {
-    if (GitPlugin* plugin = p->versionControlPlugin()->extension<GitPlugin>()) {
-        auto projectIt = new QStandardItem(p->name());
-        auto indexIt
+    if (const GitPlugin* const plugin = p->versionControlPlugin()->extension<GitPlugin>()) {
+        const auto projectIt = new QStandardItem(p->name());
+        const auto indexIt
             = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-green")),
                                 i18nc("Files in a vcs which have changes staged for commit", "Staged changes"));
-        auto worktreeIt = new QStandardItem(
+        const auto worktreeIt = new QStandardItem(
             QIcon::fromTheme(QStringLiteral("flag-yellow")),
             i18nc("Files in a vcs which have changes not yet staged for commit", "Unstaged changes"));
-        auto conflictIt
+        const auto conflictIt
             = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-red")),
                                 i18nc("Files in a vcs which have unresolved (merge) conflits", "Conflicts"));
-        auto untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
-                                             i18nc("Files which are not tracked by a vcs", "Untracked files"));
-        auto pluginInfo = ICore::self()->pluginController()->pluginInfo(plugin);
+        const auto untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
+                                                   i18nc("Files which are not tracked by a vcs", "Untracked files"));
+        const auto pluginInfo = ICore::self()->pluginController()->pluginInfo(plugin);
         const auto pathUrl = p->path().toUrl();
 
         projectIt->setData(p->name(), RepoStatusModel::NameRole);
@@ -130,7 +130,7 @@ void RepoStatusModel::addProject(IProject* p)
     }
 }
 
-void RepoStatusModel::removeProject(IProject* p)
+void RepoStatusModel::removeProject(const IProject* p)
 {
     QStandardItem* it = projectItem(p).project;
     if (!it) {
@@ -156,7 +156,7 @@ QStandardItem* findItemChild(const QStandardItem* parent, const QVariant& value,
     return nullptr;
 }
 
-RepoStatusModel::ProjectItem RepoStatusModel::projectItem(IProject* p) const
+RepoStatusModel::ProjectItem RepoStatusModel::projectItem(const IProject* p) const
 {
     if (!p)
         return {};
@@ -354,7 +354,7 @@ const QList<QUrl> RepoStatusModel::childUrls(const ProjectItem pItem) const
     return ret;
 }
 
-void RepoStatusModel::updateState(IProject* p, const VcsStatusInfo& status)
+void RepoStatusModel::updateState(const IProject* p, const VcsStatusInfo& status)
 {
     ProjectItem pItem = projectItem(p);
     Q_ASSERT(pItem.project);
@@ -464,7 +464,7 @@ void RepoStatusModel::statusReady(KJob* job)
     const QList<QVariant> states = status->fetchResults().toList();
     auto* project = job->property("project").value<IProject*>();
 
-    ProjectItem itProject = projectItem(project);
+    const auto itProject = projectItem(project);
     if (!itProject.isValid())
         return;
 
@@ -498,7 +498,7 @@ void RepoStatusModel::statusReady(KJob* job)
     }
 }
 
-void RepoStatusModel::documentSaved(IDocument* document)
+void RepoStatusModel::documentSaved(const IDocument* document)
 {
     reload({ document->url() });
 }
@@ -595,8 +595,8 @@ void RepoStatusModel::repositoryBranchChanged(const QUrl& url)
 
 void RepoStatusModel::branchNameReady(VcsJob* job)
 {
-    auto* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
-    auto pItem = projectItem(project);
+    auto* const project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
+    const auto pItem = projectItem(project);
     if (!pItem.isValid())
         return;
 
@@ -613,7 +613,7 @@ void RepoStatusModel::branchNameReady(VcsJob* job)
     reload(QList<IProject*>() << project);
 }
 
-bool RepoStatusModel::ourProject(IProject* p) const
+bool RepoStatusModel::ourProject(const IProject* p) const
 {
     return projectItem(p).isValid();
 }
