@@ -138,6 +138,7 @@ public:
      */
     struct ProjectItem {
         QStandardItem *project, *index, *worktree, *conflicts, *untracked;
+        bool isValid() const {return project;}
     };
 
     /**
@@ -145,6 +146,7 @@ public:
      * conflicts & untracked items) for project `p`.
      *
      * @note: Returns a default-constructed ProjectItem{} if @p p is absent from the model.
+     *        This includes the case when @p p is null.
      *
      * @param p the project
      */
@@ -158,6 +160,17 @@ public:
      * @param p_item the ProjectRoot item
      */
     ProjectItem projectItem(QStandardItem* p_item) const;
+
+    /**
+     * Returns true if the project is present in the model.
+     *
+     * @param p the project
+     *
+     * For example, projects with no VCS or VCS other than git
+     * should never be present in the model and so this function
+     * returns False for them.
+     */
+    bool ourProject(KDevelop::IProject* p) const;
 
 public Q_SLOTS:
 

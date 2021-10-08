@@ -135,6 +135,8 @@ void RepoStatusModel::removeProject(IProject* p)
     if (!it) {
         // when the project is closed before it was fully populated, we won't ever see a
         // projectOpened signal - handle this gracefully by just ignoring the remove request
+        // Also, we need to ignore this for projects which don't have a git VCS and thus were
+        // never added
         return;
     }
     removeRow(it->row());
@@ -154,10 +156,14 @@ QStandardItem* findItemChild(const QStandardItem* parent, const QVariant& value,
 
 RepoStatusModel::ProjectItem RepoStatusModel::projectItem(IProject* p) const
 {
+    if (! p) return {};
+
     auto proj = findItemChild(invisibleRootItem(), p->name(), RepoStatusModel::NameRole);
+
     if (!proj) {
         return {}; // This occurs when the project has another VCS or no VCS configured.
     }
+
     ProjectItem pi;
     pi.project = proj, pi.index = findItemChild(proj, RepoStatusModel::IndexRoot, RepoStatusModel::AreaRole);
     pi.worktree = findItemChild(proj, RepoStatusModel::WorkTreeRoot, RepoStatusModel::AreaRole);
@@ -442,11 +448,9 @@ void RepoStatusModel::statusReady(KJob* job)
 
     const QList<QVariant> states = status->fetchResults().toList();
     auto* project = job->property("project").value<IProject*>();
-    if (!project)
-        return;
 
     ProjectItem itProject = projectItem(project);
-    if (!itProject.project)
+    if (!itProject.isValid())
         return;
 
     QSet<QUrl> foundUrls;
@@ -494,7 +498,7 @@ void RepoStatusModel::itemsAdded(const QModelIndex& parent, int start, int end)
 
     IProject* project = item->project();
 
-    if (!project)
+    if (!project || !ourProject(project))
         return;
 
     QList<QUrl> urls;
@@ -515,7 +519,9 @@ void RepoStatusModel::itemsAdded(const QModelIndex& parent, int start, int end)
 void RepoStatusModel::reload(const QList<IProject*>& projects)
 {
     for (IProject* project : projects) {
-        fetchStatusesForUrls(project, { project->path().toUrl() }, IBasicVersionControl::Recursive);
+        if (ourProject(project)) {
+            fetchStatusesForUrls(project, { project->path().toUrl() }, IBasicVersionControl::Recursive);
+        }
     }
 }
 
@@ -524,7 +530,7 @@ void RepoStatusModel::reload(const QList<QUrl>& urls)
     for (const QUrl& url : urls) {
         IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
 
-        if (project) {
+        if (project && ourProject(project)) {
             // FIXME: merge multiple urls of the same project
             fetchStatusesForUrls(project, { url }, IBasicVersionControl::NonRecursive);
         }
@@ -560,7 +566,7 @@ void RepoStatusModel::jobUnregistered(KJob* job)
 void RepoStatusModel::repositoryBranchChanged(const QUrl& url)
 {
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    if (project) {
+    if (project && ourProject(project)) {
         IPlugin* v = project->versionControlPlugin();
         Q_ASSERT(v);
         auto* branching = v->extension<IBranchingVersionControl>();
@@ -575,17 +581,23 @@ void RepoStatusModel::repositoryBranchChanged(const QUrl& url)
 void RepoStatusModel::branchNameReady(VcsJob* job)
 {
     auto* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
+    auto pItem = projectItem(project);
+    if (! pItem.isValid() ) return;
+
     if (job->status() == VcsJob::JobSucceeded) {
         QString name = job->fetchResults().toString();
         QString branchName = name.isEmpty() ? i18n("no branch") : name;
-        auto* pItem = projectItem(project).project;
-        pItem->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), branchName));
-        pItem->setData(branchName, RepoStatusModel::BranchNameRole);
+        pItem.project->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), branchName));
+        pItem.project->setData(branchName, RepoStatusModel::BranchNameRole);
     } else {
-        auto* pItem = projectItem(project).project;
-        pItem->setData(QStringLiteral("unknown"), RepoStatusModel::BranchNameRole);
-        pItem->setText(project->name());
+        pItem.project->setData(QStringLiteral("unknown"), RepoStatusModel::BranchNameRole);
+        pItem.project->setText(project->name());
     }
 
     reload(QList<IProject*>() << project);
+}
+
+bool RepoStatusModel::ourProject(IProject* p) const
+{
+    return projectItem(p).isValid();
 }
