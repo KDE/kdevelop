@@ -162,17 +162,6 @@ public:
      */
     ProjectItem projectItem(QStandardItem* p_item) const;
 
-    /**
-     * Returns true if the project is present in the model.
-     *
-     * @param p the project
-     *
-     * For example, projects with no VCS or VCS other than git
-     * should never be present in the model and so this function
-     * returns False for them.
-     */
-    bool ourProject(const KDevelop::IProject* p) const;
-
 public Q_SLOTS:
 
     /**
@@ -285,6 +274,14 @@ private:
      * null all non-root nodes will be returned)
      */
     const QList<QStandardItem*> allItems(const QStandardItem* parent = nullptr) const;
+
+    /**
+     * A helper function to find the model item corresponding to the project
+     * @p project
+     *
+     * Returns a nullptr if the project is not in the model (e.g. it does not use git)
+     */
+    QStandardItem* findProject(const KDevelop::IProject* project) const;
 };
 
 #endif
