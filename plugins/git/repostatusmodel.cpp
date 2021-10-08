@@ -71,17 +71,18 @@ RepoStatusModel::~RepoStatusModel() {}
 void RepoStatusModel::addProject(IProject* p)
 {
     if (GitPlugin* plugin = p->versionControlPlugin()->extension<GitPlugin>()) {
-        auto projectIt
-            = new QStandardItem(p->name()),
-            indexIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-green")),
-                                        i18nc("Files in a vcs which have changes staged for commit", "Staged changes")),
-            worktreeIt = new QStandardItem(
-                QIcon::fromTheme(QStringLiteral("flag-yellow")),
-                i18nc("Files in a vcs which have changes not yet staged for commit", "Unstaged changes")),
-            conflictIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-red")),
-                                           i18nc("Files in a vcs which have unresolved (merge) conflits", "Conflicts")),
-            untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
-                                            i18nc("Files which are not tracked by a vcs", "Untracked files"));
+        auto projectIt = new QStandardItem(p->name());
+        auto indexIt
+            = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-green")),
+                                i18nc("Files in a vcs which have changes staged for commit", "Staged changes"));
+        auto worktreeIt = new QStandardItem(
+            QIcon::fromTheme(QStringLiteral("flag-yellow")),
+            i18nc("Files in a vcs which have changes not yet staged for commit", "Unstaged changes"));
+        auto conflictIt
+            = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-red")),
+                                i18nc("Files in a vcs which have unresolved (merge) conflits", "Conflicts"));
+        auto untrackedIt = new QStandardItem(QIcon::fromTheme(QStringLiteral("flag-black")),
+                                             i18nc("Files which are not tracked by a vcs", "Untracked files"));
         auto pluginInfo = ICore::self()->pluginController()->pluginInfo(plugin);
         const auto pathUrl = p->path().toUrl();
 
@@ -151,12 +152,14 @@ QStandardItem* findItemChild(const QStandardItem* parent, const QVariant& value,
         if (curr->data(role) == value)
             return curr;
     }
+
     return nullptr;
 }
 
 RepoStatusModel::ProjectItem RepoStatusModel::projectItem(IProject* p) const
 {
-    if (! p) return {};
+    if (!p)
+        return {};
 
     auto proj = findItemChild(invisibleRootItem(), p->name(), RepoStatusModel::NameRole);
 
@@ -165,7 +168,8 @@ RepoStatusModel::ProjectItem RepoStatusModel::projectItem(IProject* p) const
     }
 
     ProjectItem pi;
-    pi.project = proj, pi.index = findItemChild(proj, RepoStatusModel::IndexRoot, RepoStatusModel::AreaRole);
+    pi.project = proj;
+    pi.index = findItemChild(proj, RepoStatusModel::IndexRoot, RepoStatusModel::AreaRole);
     pi.worktree = findItemChild(proj, RepoStatusModel::WorkTreeRoot, RepoStatusModel::AreaRole);
     pi.conflicts = findItemChild(proj, RepoStatusModel::ConflictRoot, RepoStatusModel::AreaRole);
     pi.untracked = findItemChild(proj, RepoStatusModel::UntrackedRoot, RepoStatusModel::AreaRole);
@@ -176,7 +180,8 @@ RepoStatusModel::ProjectItem RepoStatusModel::projectItem(QStandardItem* proj) c
 {
     Q_ASSERT(proj);
     ProjectItem pi;
-    pi.project = proj, pi.index = findItemChild(proj, RepoStatusModel::IndexRoot, RepoStatusModel::AreaRole);
+    pi.project = proj;
+    pi.index = findItemChild(proj, RepoStatusModel::IndexRoot, RepoStatusModel::AreaRole);
     pi.worktree = findItemChild(proj, RepoStatusModel::WorkTreeRoot, RepoStatusModel::AreaRole);
     pi.conflicts = findItemChild(proj, RepoStatusModel::ConflictRoot, RepoStatusModel::AreaRole);
     pi.untracked = findItemChild(proj, RepoStatusModel::UntrackedRoot, RepoStatusModel::AreaRole);
@@ -248,24 +253,30 @@ QString extendedStateToStr(const GitPlugin::ExtendedState state)
     case GitPlugin::GitMD:
         return i18nc("@item file has staged changes and was deleted in worktree", "Modified (unstaged deletion)");
     case GitPlugin::GitAM:
-        return i18nc("@item file was added to versioncontrolsystem and has unstaged changes", "Added (unstaged changes)");
+        return i18nc("@item file was added to versioncontrolsystem and has unstaged changes",
+                     "Added (unstaged changes)");
     case GitPlugin::GitAD:
-        return i18nc("@item file was added to versioncontrolsystem and deleted in worktree", "Added (unstaged deletion)");
+        return i18nc("@item file was added to versioncontrolsystem and deleted in worktree",
+                     "Added (unstaged deletion)");
     case GitPlugin::GitDR:
-        return i18nc("@item file was deleted from versioncontrolsystem and renamed in worktree", "Deleted (unstaged rename)");
+        return i18nc("@item file was deleted from versioncontrolsystem and renamed in worktree",
+                     "Deleted (unstaged rename)");
     case GitPlugin::GitDC:
-        return i18nc("@item file was deleted from versioncontrolsystem and copied in worktree", "Deleted (unstaged copy)");
+        return i18nc("@item file was deleted from versioncontrolsystem and copied in worktree",
+                     "Deleted (unstaged copy)");
     case GitPlugin::GitRX:
         return i18nc("@item file was renamed in versioncontrolsystem", "Renamed (staged)");
     case GitPlugin::GitRM:
-        return i18nc("@item file was renamed in versioncontrolsystem and has unstaged changes", "Renamed (unstaged changes)");
+        return i18nc("@item file was renamed in versioncontrolsystem and has unstaged changes",
+                     "Renamed (unstaged changes)");
     case GitPlugin::GitRD:
         return i18nc("@item file was renamed in versioncontrolsystem and was deleted in worktree",
                      "Renamed (unstaged deletion)");
     case GitPlugin::GitCX:
         return i18nc("@item file was copied in versioncontrolsystem", "Copied");
     case GitPlugin::GitCM:
-        return i18nc("@item file was copied in versioncontrolsystem and has unstaged changes", "Copied (unstaged changes)");
+        return i18nc("@item file was copied in versioncontrolsystem and has unstaged changes",
+                     "Copied (unstaged changes)");
     case GitPlugin::GitCD:
         return i18nc("@item file was copied in versioncontrolsystem and was deleted in worktree",
                      "Copied (unstaged deletion)");
@@ -311,6 +322,7 @@ const QList<QStandardItem*> RepoStatusModel::allItems(const QStandardItem* paren
         ret << parent->child(i);
         ret += allItems(child);
     }
+
     return ret;
 }
 
@@ -338,6 +350,7 @@ const QList<QUrl> RepoStatusModel::childUrls(const ProjectItem pItem) const
     for (const auto ch : children) {
         ret << indexFromItem(ch).data(UrlRole).toUrl();
     }
+
     return ret;
 }
 
@@ -427,6 +440,7 @@ const QList<QStandardItem*> RepoStatusModel::projectRoots() const
         if (child->data(AreaRole) == ProjectRoot)
             ret << child;
     }
+
     return ret;
 }
 
@@ -437,6 +451,7 @@ const QList<QStandardItem*> RepoStatusModel::items(const QStandardItem* project,
         if ((RepoStatusModel::Areas)it->data(RepoStatusModel::AreaRole).toInt() == area)
             ret << it;
     }
+
     return ret;
 }
 
@@ -582,7 +597,8 @@ void RepoStatusModel::branchNameReady(VcsJob* job)
 {
     auto* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
     auto pItem = projectItem(project);
-    if (! pItem.isValid() ) return;
+    if (!pItem.isValid())
+        return;
 
     if (job->status() == VcsJob::JobSucceeded) {
         QString name = job->fetchResults().toString();
