@@ -92,6 +92,14 @@ public:
         None,           /**< None of the above */
     };
 
+    /**
+     * A structure containing the collection of top-level items (i.e. the ones not containing file items)
+     * corresponding to a project.
+     */
+    struct ProjectItem {
+        QStandardItem *project, *index, *worktree, *conflicts, *untracked;
+        bool isValid() const {return project;}
+    };
 
     explicit RepoStatusModel(QObject* parent);
     ~RepoStatusModel() override;
@@ -101,10 +109,12 @@ public:
      * item(s) corresponding to status.url to the respective areas and
      * sets their area role data.
      *
-     * @param p the project the item belongs to
+     * @param pItem the model item for the project that the items belongs to
      * @param status the status data
+     *
+     * @note the @p pItem must be valid!
      */
-    void updateState(const KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);
+    void updateState(const ProjectItem& pItem, const KDevelop::VcsStatusInfo& status);
 
     /**
      * Runs a job to fetches the statuses of elements (given by `urls`)
@@ -131,15 +141,6 @@ public:
      * @returns a list of items in the given area of the project
      */
     const QList<QStandardItem*> items(const QStandardItem* project, Areas area) const;
-
-    /**
-     * The collection of top-level items (i.e. the ones not containing file items)
-     * corresponding to a project.
-     */
-    struct ProjectItem {
-        QStandardItem *project, *index, *worktree, *conflicts, *untracked;
-        bool isValid() const {return project;}
-    };
 
     /**
      * Returns the ProjectItem structure (containing the project, index, worktree,

@@ -354,9 +354,8 @@ const QList<QUrl> RepoStatusModel::childUrls(const ProjectItem pItem) const
     return ret;
 }
 
-void RepoStatusModel::updateState(const IProject* p, const VcsStatusInfo& status)
+void RepoStatusModel::updateState(const ProjectItem& pItem, const VcsStatusInfo& status)
 {
-    ProjectItem pItem = projectItem(p);
     Q_ASSERT(pItem.project);
 
     /* To make the code cleaner, we remove the item from the
@@ -473,7 +472,7 @@ void RepoStatusModel::statusReady(KJob* job)
     for (const auto& state : states) {
         const VcsStatusInfo st = state.value<VcsStatusInfo>();
         foundUrls += st.url();
-        updateState(project, st);
+        updateState(itProject, st);
     }
 
     IBasicVersionControl::RecursionMode mode = IBasicVersionControl::RecursionMode(job->property("mode").toInt());
