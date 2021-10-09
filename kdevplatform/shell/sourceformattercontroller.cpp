@@ -534,10 +534,10 @@ void SourceFormatterController::updateFormatTextAction()
     d->formatLine->setEnabled(enabled);
 
     if (enabled) {
-        d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat source using <i>%1</i> (<b>%2</b>)",
+        d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat selection or file using <i>%1</i> (<b>%2</b>)",
                                               tool, style));
         d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
-                                                "Source reformatting functionality using <i>%1</i> tool with <b>%2</b> style.",
+                                                "Reformats selected text or the entire file if nothing is selected, using <i>%1</i> tool with <b>%2</b> style.",
                                                 tool, style));
         d->formatLine->setToolTip(i18nc("@info:tooltip", "Reformat current line using <i>%1</i> (<b>%2</b>)",
                                         tool, style));
@@ -546,9 +546,9 @@ void SourceFormatterController::updateFormatTextAction()
                                           tool, style));
     } else {
         d->formatTextAction->setToolTip(i18nc("@info:tooltip",
-                                              "Reformat source using the configured source formatter"));
+                                              "Reformat selection or file using the configured source formatter"));
         d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis",
-                                                "Source reformatting functionality using the configured source formatter."));
+                                                "Reformats selected text or the entire file if nothing is selected, using the configured source formatter."));
         d->formatLine->setToolTip(i18nc("@info:tooltip",
                                         "Reformat current line using the configured source formatter"));
         d->formatLine->setWhatsThis(i18nc("@info:whatsthis",
