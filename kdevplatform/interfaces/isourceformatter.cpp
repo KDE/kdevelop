@@ -208,7 +208,6 @@ SourceFormatterStyle::MimeList ISourceFormatter::mimeTypesSupportedByBuiltInStyl
         {QStringLiteral("text/x-csharp"), QStringLiteral("C#")},
         {QStringLiteral("text/x-objcsrc"), QStringLiteral("Objective-C")},
         {QStringLiteral("text/x-objc++src"), QStringLiteral("Objective-C++")},
-        {QStringLiteral("text/x-objchdr"), QStringLiteral("Objective-C")},
     };
     return list;
 }
