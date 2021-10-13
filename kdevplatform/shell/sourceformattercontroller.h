@@ -11,7 +11,6 @@
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
 
-#include <QSet>
 #include <QVector>
 #include <QMimeType>
 
@@ -46,18 +45,7 @@ struct SourceFormatter
     // style name -> style. style objects owned by this
     using StyleMap = QMap<QString,KDevelop::SourceFormatterStyle*>;
     StyleMap styles;
-    // Get a list of supported mime types from the style map.
-    QSet<QString> supportedMimeTypes() const
-    {
-        QSet<QString> supported;
-        for ( auto style: styles ) {
-            const auto mimeTypes = style->mimeTypes();
-            for (auto& item : mimeTypes) {
-                supported.insert(item.mimeType);
-            }
-        }
-        return supported;
-    }
+
     SourceFormatter() = default;
     ~SourceFormatter()
     {
@@ -99,9 +87,6 @@ public:
     */
     ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) override;
     bool hasFormatters() const override;
-    /** \return Whether this mime type is supported by any plugin.
-    */
-    bool isMimeTypeSupported(const QMimeType& mime) override;
 
     /**
     * @brief Instantiate a Formatter for the given plugin and load its configuration.
@@ -110,11 +95,6 @@ public:
     * @return KDevelop::SourceFormatter* the SourceFormatter instance for the plugin, including config items
     */
     SourceFormatter* createFormatterForPlugin(KDevelop::ISourceFormatter* ifmt) const;
-
-    /**
-    * @brief Find the first formatter which supports a given mime type.
-    */
-    ISourceFormatter* findFirstFormatterForMimeType(const QMimeType& mime) const;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent);
 

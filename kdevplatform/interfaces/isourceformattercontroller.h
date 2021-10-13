@@ -47,9 +47,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		virtual ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) = 0;
 		///\return @c true if there are formatters at all, @c false otherwise
 		virtual bool hasFormatters() const = 0;
-		/** \return Whether this mime type is supported by any plugin.
-		*/
-		virtual bool isMimeTypeSupported(const QMimeType &mime) = 0;
 
 		virtual KDevelop::SourceFormatterStyle styleForUrl(const QUrl& url, const QMimeType& mime) = 0;
 
