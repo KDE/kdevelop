@@ -162,7 +162,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 * Its a bit of a hassle that this needs to be public API, but I can't find a better way
 		 * to do this.
 		 */
-		virtual QString formatSourceWithStyle( SourceFormatterStyle,
+		virtual QString formatSourceWithStyle( const SourceFormatterStyle& style,
 											   const QString& text,
 											   const QUrl& url,
 											   const QMimeType &mime,

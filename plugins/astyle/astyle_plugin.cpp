@@ -232,7 +232,12 @@ QString AStylePlugin::description() const
         "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
 }
 
-QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const QUrl& /*url*/, const QMimeType& mime, const QString& leftContext, const QString& rightContext ) const
+QString AStylePlugin::formatSourceWithStyle(const SourceFormatterStyle& style,
+                                            const QString& text,
+                                            const QUrl& /*url*/,
+                                            const QMimeType& mime,
+                                            const QString& leftContext,
+                                            const QString& rightContext) const
 {
     if(mime.inherits(QStringLiteral("text/x-java")))
         m_formatter->setJavaStyle();
@@ -241,14 +246,12 @@ QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QStri
     else
         m_formatter->setCStyle();
 
-    if( s.content().isEmpty() )
-    {
-        m_formatter->predefinedStyle( s.name() );
-    } else
-    {
-        m_formatter->loadStyle( s.content() );
+    if (style.content().isEmpty()) {
+        m_formatter->predefinedStyle(style.name());
+    } else {
+        m_formatter->loadStyle(style.content());
     }
-    
+
     return m_formatter->formatSource(text, leftContext, rightContext);
 }
 

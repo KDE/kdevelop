@@ -99,20 +99,28 @@ QString CustomScriptPlugin::usageHint() const
                  "to be installed. Otherwise, code will not be formatted.");
 }
 
-QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const QUrl& url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext) const
+QString CustomScriptPlugin::formatSourceWithStyle(const SourceFormatterStyle& style,
+                                                  const QString& text,
+                                                  const QUrl& url,
+                                                  const QMimeType& /*mime*/,
+                                                  const QString& leftContext,
+                                                  const QString& rightContext) const
 {
     KProcess proc;
     QTextStream ios(&proc);
 
     std::unique_ptr<QTemporaryFile> tmpFile;
 
-    if (style.content().isEmpty()) {
-        style = predefinedStyle(style.name());
-        if (style.content().isEmpty()) {
+    QString styleContent = style.content();
+    if (styleContent.isEmpty()) {
+        styleContent = predefinedStyle(style.name()).content();
+        if (styleContent.isEmpty()) {
             qCWarning(CUSTOMSCRIPT) << "Empty contents for style" << style.name() << "for indent plugin";
             return text;
         }
     }
+    // NOTE: from now on, only one member function of @p style may be called: name(), because only the
+    // name of an incomplete style is guaranteed to match that of the corresponding predefined style.
 
     QString useText = text;
     useText = leftContext + useText + rightContext;
@@ -123,7 +131,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
         projectVariables[project->name()] = project->path().toUrl().toLocalFile();
     }
 
-    QString command = style.content();
+    QString command = styleContent;
 
     // Replace ${<project name>} with the project path
     command = replaceVariables(command, projectVariables);
@@ -180,7 +188,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
         output = ios.readAll();
     }
     if (output.isEmpty()) {
-        qCWarning(CUSTOMSCRIPT) << "indent returned empty text for style" << style.name() << style.content();
+        qCWarning(CUSTOMSCRIPT) << styleContent << "command returned empty text for style" << style.name();
         return text;
     }
 

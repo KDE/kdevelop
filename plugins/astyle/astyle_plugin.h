@@ -40,11 +40,12 @@ public:
     */
     KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) const override;
 
-    QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
-                                            const QUrl &url,
-                                            const QMimeType& mime,
-                                            const QString& leftContext = QString(),
-                                            const QString& rightContext = QString()) const override;
+    QString formatSourceWithStyle(const KDevelop::SourceFormatterStyle& style,
+                                  const QString& text,
+                                  const QUrl &url,
+                                  const QMimeType& mime,
+                                  const QString& leftContext = QString(),
+                                  const QString& rightContext = QString()) const override;
 
     /** \return The text used in the config dialog to preview the current style.
     */
