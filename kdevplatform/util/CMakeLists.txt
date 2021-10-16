@@ -91,6 +91,7 @@ install( FILES
     convenientfreelist.h
     multilevellistview.h
     objectlist.h
+    owningrawpointercontainer.h
     placeholderitemproxymodel.h
     projecttestjob.h
     widgetcolorizer.h
