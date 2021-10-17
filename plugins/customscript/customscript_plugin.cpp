@@ -416,7 +416,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) co
 {
     QStringList ret;
 
-    auto languages = ICore::self()->languageController()->languagesForUrl(url);
+    const auto languages = ICore::self()->languageController()->languagesForUrl(url);
     if (languages.isEmpty()) {
         return ret;
     }
