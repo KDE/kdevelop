@@ -231,7 +231,8 @@ static QString expandVariable(const QString &key, const QString &value,
         if (environment.contains(variable)) {
             return environment.value(variable);
         } else if (variable == key) {
-            qCWarning(UTIL) << "recursive variable expansion" << variable;
+            // This must be a reference to a system environment variable of the
+            // same name, which happens to be unset. Treat it as empty.
             return QString();
         } else if (input.contains(variable)) {
             return expandVariable(variable, input.value(variable), output, input, environment);
