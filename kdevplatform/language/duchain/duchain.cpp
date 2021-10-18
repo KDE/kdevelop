@@ -1664,11 +1664,11 @@ void DUChain::documentRenamed(KDevelop::IDocument* doc)
     if (sdDUChainPrivate->m_destroyed)
         return;
 
-    if (!doc->url().isValid()) {
-        ///Maybe this happens when a file was deleted?
-        qCWarning(LANGUAGE) << "Strange, url of renamed document is invalid!";
-    } else {
-        ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()),
+    const auto url = doc->url();
+    // url is invalid when a file open in KDevelop is deleted externally, then the user
+    // closes the file by clicking the Close File button on KTextEditor's prompt.
+    if (url.isValid()) {
+        ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString{url},
                                                                              TopDUContext::AllDeclarationsContextsAndUses
                                                                              | TopDUContext::ForceUpdate);
     }
