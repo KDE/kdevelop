@@ -361,10 +361,17 @@ void QtPrintersTest::testQDateTime()
 void QtPrintersTest::testQUrl()
 {
     GdbProcess gdb(QStringLiteral("debuggee_qurl"));
-    gdb.execute("break qurl.cpp:5");
+    gdb.execute("break qurl.cpp:7");
     gdb.execute("run");
+
     QByteArray out = gdb.execute("print u");
     QVERIFY(out.contains("http://user@www.kdevelop.org:12345/foo?xyz=bar#asdf"));
+
+    const auto localFile = gdb.execute("print localFile");
+    QVERIFY(localFile.contains("file:///usr/bin/kdevelop"));
+
+    const auto defaultConstructed = gdb.execute("print defaultConstructed");
+    QVERIFY(defaultConstructed.contains("<invalid>"));
 }
 
 void QtPrintersTest::testQHashInt()

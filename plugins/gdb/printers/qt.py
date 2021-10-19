@@ -553,6 +553,8 @@ class QUrlPrinter:
             string_pointer = string_type.pointer()
 
             addr = self.val['d'].cast(gdb.lookup_type('char').pointer())
+            if not addr:
+                return "<invalid>"
             # skip QAtomicInt ref
             addr += int_type.sizeof
             # handle int port
