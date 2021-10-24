@@ -109,7 +109,7 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
             this, &SourceFormatterSelectionEdit::removeSourceFormatter);
     const auto& formatters = controller->formatters();
     for (auto* formatter : formatters) {
-        addSourceFormatter(formatter);
+        addSourceFormatterNoUi(formatter); // loadSettings() calls resetUi() once later
     }
 }
 
@@ -126,7 +126,7 @@ static void selectAvailableStyle(LanguageSettings& lang)
     lang.selectedStyle = *lang.selectedFormatter->styles.begin();
 }
 
-void SourceFormatterSelectionEdit::addSourceFormatter(ISourceFormatter* ifmt)
+void SourceFormatterSelectionEdit::addSourceFormatterNoUi(ISourceFormatter* ifmt)
 {
     Q_D(SourceFormatterSelectionEdit);
 
@@ -161,7 +161,11 @@ void SourceFormatterSelectionEdit::addSourceFormatter(ISourceFormatter* ifmt)
             }
         }
     }
+}
 
+void SourceFormatterSelectionEdit::addSourceFormatter(ISourceFormatter* ifmt)
+{
+    addSourceFormatterNoUi(ifmt);
     resetUi();
 }
 

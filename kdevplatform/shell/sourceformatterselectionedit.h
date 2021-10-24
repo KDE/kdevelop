@@ -49,6 +49,7 @@ private Q_SLOTS:
     void styleNameChanged(QListWidgetItem* );
 
 private:
+    void addSourceFormatterNoUi(KDevelop::ISourceFormatter* ifmt);
     void resetUi();
     void updatePreview();
     QListWidgetItem* addStyle(const KDevelop::SourceFormatterStyle& s);
