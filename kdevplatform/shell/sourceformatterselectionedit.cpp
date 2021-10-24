@@ -15,8 +15,6 @@
 #include "plugincontroller.h"
 
 #include <util/scopeddialog.h>
-#include <language/interfaces/ilanguagesupport.h>
-#include <interfaces/ilanguagecontroller.h>// TODO: remove later
 
 #include <KMessageBox>
 #include <KTextEditor/Editor>
@@ -28,6 +26,8 @@
 
 #include <QMimeDatabase>
 
+#include <algorithm>
+#include <array>
 
 #define STYLE_ROLE (Qt::UserRole+1)
 
@@ -62,7 +62,41 @@ public:
     FormatterMap formatters;
     KTextEditor::Document* document;
     KTextEditor::View* view;
+
+    /**
+     * Add the keys of @a languages to @a ui.cbLanguages.
+     */
+    void fillLanguageCombobox();
 };
+
+void SourceFormatterSelectionEditPrivate::fillLanguageCombobox()
+{
+    // Move the languages not supported by KDevelop to the bottom of the combobox.
+    // Use std::array to avoid extra memory allocations.
+
+    constexpr std::array unsupportedLanguages{
+        QLatin1String("C#", 2),
+        QLatin1String("Java", 4),
+    };
+    Q_ASSERT(std::is_sorted(unsupportedLanguages.cbegin(), unsupportedLanguages.cend()));
+    std::array<QString, unsupportedLanguages.size()> skippedLanguages{};
+
+    for (auto langIt = languages.keyBegin(); langIt != languages.keyEnd(); ++langIt) {
+        const auto& name = *langIt;
+        const auto unsupportedIt = std::find(unsupportedLanguages.cbegin(), unsupportedLanguages.cend(), name);
+        if (unsupportedIt == unsupportedLanguages.cend()) {
+            ui.cbLanguages->addItem(name);
+        } else {
+            skippedLanguages[unsupportedIt - unsupportedLanguages.cbegin()] = name;
+        }
+    }
+
+    for (const auto& name : skippedLanguages) {
+        if (!name.isEmpty()) {
+            ui.cbLanguages->addItem(name);
+        }
+    }
+}
 
 SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
     : QWidget(parent)
@@ -251,26 +285,6 @@ void SourceFormatterSelectionEdit::resetUi()
 
     qCDebug(SHELL) << "Resetting UI";
 
-    // Create a sorted list of the languages, preferring firstly active, then loaded languages, then others
-    QList<QString> sortedLanguages;
-
-    for (const auto& languages : {ICore::self()->languageController()->activeLanguages(),
-                                ICore::self()->languageController()->loadedLanguages()}) {
-        for (const auto* language : languages) {
-            const auto languageName = language->name();
-            if (d->languages.contains(languageName) && !sortedLanguages.contains(languageName)) {
-                sortedLanguages.append(languageName);
-            }
-        }
-    }
-
-    for (auto it = d->languages.constBegin(); it != d->languages.constEnd(); ++it) {
-        const auto& languageName = it.key();
-        if (!sortedLanguages.contains(languageName)) {
-            sortedLanguages.append(languageName);
-        }
-    }
-
     bool b = blockSignals( true );
     d->ui.cbLanguages->blockSignals(!b);
     d->ui.cbFormatters->blockSignals(!b);
@@ -278,9 +292,8 @@ void SourceFormatterSelectionEdit::resetUi()
     d->ui.cbLanguages->clear();
     d->ui.cbFormatters->clear();
     d->ui.styleList->clear();
-    for (const auto& language : sortedLanguages) {
-        d->ui.cbLanguages->addItem(language);
-    }
+
+    d->fillLanguageCombobox();
     if (d->ui.cbLanguages->count() == 0) {
         d->ui.cbLanguages->setEnabled(false);
         selectLanguage( -1 );
