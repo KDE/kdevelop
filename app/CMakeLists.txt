@@ -10,7 +10,9 @@ endif()
 option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
 
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp)
-
+set_source_files_properties(main.cpp PROPERTIES
+    COMPILE_DEFINITIONS "RELEASE_SERVICE_VERSION_STRING=\"${RELEASE_SERVICE_VERSION}\""
+)
 declare_qt_logging_category(kdevelop_SRCS
     IDENTIFIER APP
     TYPE APP

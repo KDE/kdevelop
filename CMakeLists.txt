@@ -1,12 +1,29 @@
 cmake_minimum_required(VERSION 3.16)
-project(KDevelop VERSION 5.6.40)
+
+# KDE Gear version, managed by release service script
+set(RELEASE_SERVICE_VERSION_MAJOR "21")
+set(RELEASE_SERVICE_VERSION_MINOR "11")
+set(RELEASE_SERVICE_VERSION_MICRO "70")
+
+set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
+
+# generate patch level from release service version
+set(_micro ${RELEASE_SERVICE_VERSION_MICRO})
+if (_micro LESS "10")
+    string(PREPEND _micro "0") # pad with 0
+endif()
+set(RELEASE_SERVICE_BASED_PATCHLEVEL "${RELEASE_SERVICE_VERSION_MAJOR}${RELEASE_SERVICE_VERSION_MINOR}${_micro}")
+
+project(KDevelop VERSION "5.7.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
 
 # KDevelop SOVERSION
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
-set(KDEVELOP_SOVERSION 57)
+set(KDEVELOP_SOVERSION "${KDevelop_VERSION_MAJOR}${KDevelop_VERSION_MINOR}")
 
 # plugin version as used e.g. in plugin installation path
-set(KDEV_PLUGIN_VERSION 35)
+# started off as 30 when 5.2 was released, incremented along the SO version so far
+# TODO: perhaps switch directly to KDEVELOP_SOVERSION?
+math(EXPR KDEV_PLUGIN_VERSION "30 + ${KDEVELOP_SOVERSION} - 52")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
