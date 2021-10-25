@@ -350,6 +350,11 @@ QPair<QWidget*, KTextEditor::Range> ClangSupport::specialLanguageObjectNavigatio
     return {nullptr, KTextEditor::Range::invalid()};
 }
 
+QString ClangSupport::indentationSample() const
+{
+    return QStringLiteral("class C{\n class D {\n void c() {\n int m;\n }\n }\n};\n");
+}
+
 TopDUContext* ClangSupport::standardContext(const QUrl &url, bool /*proxyContext*/)
 {
     ClangParsingEnvironment env;

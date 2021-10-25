@@ -56,6 +56,8 @@ public:
     QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url,
                                                                               const KTextEditor::Cursor& position) override;
 
+    QString indentationSample() const override;
+
     ClangIndex* index();
 
     KDevelop::TopDUContext* standardContext(const QUrl &url, bool proxyContext = false) override;
