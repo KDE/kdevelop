@@ -413,8 +413,13 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) co
     if (languages.isEmpty()) {
         return ret;
     }
-
-    QString sample = languages[0]->indentationSample();
+    const auto& language = *languages.constFirst();
+    const auto sample = language.indentationSample();
+    if (sample.isEmpty()) {
+        qCWarning(CUSTOMSCRIPT) << "Cannot compute indentation because of missing indentation sample in language plugin"
+                                << language.name();
+        return ret;
+    }
     QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
     const QStringList lines = formattedSample.split(QLatin1Char('\n'));
