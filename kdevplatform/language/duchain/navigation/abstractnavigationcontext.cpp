@@ -264,6 +264,17 @@ NavigationContextPointer AbstractNavigationContext::registerChild(const Declarat
 {
     Q_D(AbstractNavigationContext);
 
+    // Lock the DUChain for reading, since the createNavigationWidget
+    // method will eventually need read access to the DUChain and
+    // does not lock it itself.
+    DUChainReadLocker lock;
+
+    // Check that declaration and its context are still valid
+    // (they might have been deleted while we were waiting for the lock)
+    if (!declaration || !declaration->context()) {
+        return NavigationContextPointer(this);
+    }
+
     //We create a navigation-widget here, and steal its context.. evil ;)
     QScopedPointer<AbstractNavigationWidget> navigationWidget(
         declaration->context()->createNavigationWidget(declaration.data()));
