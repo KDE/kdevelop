@@ -19,15 +19,9 @@
 # See https://clang.llvm.org/docs/InternalsManual.html for full list of libraries
 
 #=============================================================================
-# Copyright 2014-2015 Kevin Funk <kfunk@kde.org>
+# SPDX-FileCopyrightText: 2014-2015 Kevin Funk <kfunk@kde.org>
 #
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
-
+# SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
 set(KNOWN_VERSIONS 13 12 11 10 9 8 7 6.0 5.0 4.0 3.9 3.8)

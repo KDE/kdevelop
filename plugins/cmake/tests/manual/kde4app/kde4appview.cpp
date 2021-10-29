@@ -1,8 +1,9 @@
 /*
- * kde4appview.cpp
- *
- * Copyright (C) 2008 %{AUTHOR} <%{EMAIL}>
- */
+    kde4appview.cpp
+
+    SPDX-FileCopyrightText: 2008 %{AUTHOR} <%{EMAIL}>
+*/
+
 #include "kde4appview.h"
 #include "settings.h"
 

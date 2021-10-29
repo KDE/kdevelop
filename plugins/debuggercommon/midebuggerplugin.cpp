@@ -1,29 +1,12 @@
 /*
- * Common code for MI debugger support
- *
- * Copyright 1999-2001 John Birch <jbb@kdevelop.org>
- * Copyright 2001 by Bernd Gehrmann <bernd@kdevelop.org>
- * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
- * Copyright 2007 Hamish Rodda <rodda@kde.org>
- * Copyright 2016  Aetf <aetf@unlimitedcodeworks.xyz>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+    SPDX-FileCopyrightText: 1999-2001 John Birch <jbb@kdevelop.org>
+    SPDX-FileCopyrightText: 2001 Bernd Gehrmann <bernd@kdevelop.org>
+    SPDX-FileCopyrightText: 2006 Vladimir Prus <ghost@cs.msu.su>
+    SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
+    SPDX-FileCopyrightText: 2016 Aetf <aetf@unlimitedcodeworks.xyz>
+
+    SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+*/
 
 #include "midebuggerplugin.h"
 

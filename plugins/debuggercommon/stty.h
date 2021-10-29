@@ -1,26 +1,16 @@
-/***************************************************************************
-    begin                : Mon Sep 13 1999
-    copyright            : (C) 1999 by John Birch
-    email                : jbb@kdevelop.org
+/*
+    SPDX-FileCopyrightText: 1999 John Birch <jbb@kdevelop.org>
 
-  This code was originally written by Judin Maxim, from the
-	KDEStudio project.
+    This code was copied originally from the KDEStudio project:
+    SPDX-FileCopyrightText: Judin Maxim
 
-  It was then updated with later code from konsole (KDE).
+    It was then updated with later code from konsole (KDE).
 
-	It has also been enhanced with an idea from the code in kdbg
-	written by Johannes Sixt<Johannes.Sixt@telecom.at>
+    It has also been enhanced with an idea from the code in kdbg:
+    SPDX-FileCopyrightText: Johannes Sixt<Johannes.Sixt@telecom.at>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef _STTY_H_
 #define _STTY_H_

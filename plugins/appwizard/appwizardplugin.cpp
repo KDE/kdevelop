@@ -1,16 +1,13 @@
-/***************************************************************************
- *   Copyright 2001 Bernd Gehrmann <bernd@kdevelop.org>                    *
- *   Copyright 2004-2005 Sascha Cunz <sascha@kdevelop.org>                 *
- *   Copyright 2005 Ian Reinhart Geiser <ian@geiseri.com>                  *
- *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>                    *
- *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+    SPDX-FileCopyrightText: 2001 Bernd Gehrmann <bernd@kdevelop.org>
+    SPDX-FileCopyrightText: 2004-2005 Sascha Cunz <sascha@kdevelop.org>
+    SPDX-FileCopyrightText: 2005 Ian Reinhart Geiser <ian@geiseri.com>
+    SPDX-FileCopyrightText: 2007 Alexander Dymo <adymo@kdevelop.org>
+    SPDX-FileCopyrightText: 2008 Evgeniy Ivanov <powerfox@kde.ru>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "appwizardplugin.h"
 
 #include <QAction>

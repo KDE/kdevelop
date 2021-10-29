@@ -16,8 +16,9 @@
 #    Parameters should be the json file with plugin metadata and the sources of the plugin.
 #    In case the plugin should not be installed, pass SKIP_INSTALL.
 #
-# Copyright 2007 Andreas Pakulat <apaku@gmx.de>
-# Redistribution and use is allowed according to the terms of the BSD license.
+# SPDX-FileCopyrightText: 2007 Andreas Pakulat <apaku@gmx.de>
+#
+# SPDX-License-Identifier: BSD-3-Clause
 
 include(CMakeParseArguments)
 

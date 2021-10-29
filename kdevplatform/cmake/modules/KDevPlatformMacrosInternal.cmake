@@ -6,8 +6,9 @@
 #  KDEVPLATFORM_ADD_LIBRARY( <targetname> SOURCES <src1> [<src2> [...]] )
 #    Use this to add libraries part of the KDevPlatform
 #
-# Copyright 2007 Andreas Pakulat <apaku@gmx.de>
-# Redistribution and use is allowed according to the terms of the BSD license.
+# SPDX-FileCopyrightText: 2007 Andreas Pakulat <apaku@gmx.de>
+#
+# SPDX-License-Identifier: BSD-3-Clause
 
 include(CMakeParseArguments)
 

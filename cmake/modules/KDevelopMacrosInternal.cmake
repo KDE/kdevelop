@@ -11,16 +11,12 @@
 #   install_qt_logging_categories(TYPE LIBRARY|APP_PLUGIN)
 #   kdevelop_add_private_library(<target> SOURCES <source1> [<source2> [...]])
 #
+
 #=============================================================================
-# Copyright 2018, 2020 Friedrich W. H. Kossebau <kossebau@kde.org>
-#           2007 Andreas Pakulat <apaku@gmx.de>
+# SPDX-FileCopyrightText: 2018, 2020 Friedrich W. H. Kossebau <kossebau@kde.org>
+# SPDX-FileCopyrightText: 2007 Andreas Pakulat <apaku@gmx.de>
 #
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
+# SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
 include(CMakeParseArguments)

@@ -1,31 +1,13 @@
+/*
+    SPDX-FileCopyrightText: 2004 Till Adam <adam@kde.org>
+    SPDX-FileCopyrightText: 2004 Don Sanders
+    SPDX-FileCopyrightText: 2004 David Faure <faure@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
 #ifndef KDEVPLATFORM_STATUSBARPROGRESSWIDGET_H
 #define KDEVPLATFORM_STATUSBARPROGRESSWIDGET_H
-/***************************************************************************
- *      (C) 2004 Till Adam <adam@kde.org>                                  *
- *              Don Sanders                                                *
- *              David Faure <dfaure@kde.org>                               *
- *      Copyright 2004 David Faure <faure@kde.org>                         *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
- ***************************************************************************/
-
-/**
-  *  A specialized progress widget class, heavily based on
-  *  kio_littleprogress_dlg (it looks similar)
-  */
 
 #include <QFrame>
 
@@ -40,6 +22,10 @@ namespace KDevelop {
 class ProgressItem;
 class ProgressDialog;
 
+/**
+  *  A specialized progress widget class, heavily based on
+  *  kio_littleprogress_dlg (it looks similar)
+  */
 class StatusbarProgressWidget : public QFrame {
 
     Q_OBJECT

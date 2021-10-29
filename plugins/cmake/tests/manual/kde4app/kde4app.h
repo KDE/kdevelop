@@ -1,11 +1,11 @@
 /*
- * kde4app.h
- *
- * Copyright (C) 2008 %{AUTHOR} <%{EMAIL}>
- */
+    kde4app.h
+
+    SPDX-FileCopyrightText: 2008 %{AUTHOR} <%{EMAIL}>
+*/
+
 #ifndef KDE4APP_H
 #define KDE4APP_H
-
 
 #include <kxmlguiwindow.h>
 

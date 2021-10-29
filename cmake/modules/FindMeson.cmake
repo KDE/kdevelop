@@ -5,14 +5,9 @@
 #  Meson_VERSION    - version of the found meson executable
 
 #=============================================================================
-# Copyright 2019 Daniel Mensinger <daniel@mensinger-ka.de>
+# SPDX-FileCopyrightText: 2019 Daniel Mensinger <daniel@mensinger-ka.de>
 #
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
+# SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
 find_program(Meson_EXECUTABLE NAMES meson meson.py)

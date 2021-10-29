@@ -1,8 +1,9 @@
 /*
- * kde4appview.h
- *
- * Copyright (C) 2007 %{AUTHOR} <%{EMAIL}>
- */
+    kde4appview.h
+
+    SPDX-FileCopyrightText: 2007 %{AUTHOR} <%{EMAIL}>
+*/
+
 #ifndef KDE4APPVIEW_H
 #define KDE4APPVIEW_H
 
