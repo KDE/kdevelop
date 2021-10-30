@@ -229,6 +229,8 @@ CommitToolView::CommitToolView ( QWidget* parent, RepoStatusModel* repostatusmod
     m_revertFilesAct
         = m_toolviewMenu->addAction(QIcon::fromTheme(QStringLiteral("edit-undo")), i18n("Revert unstaged edits"));
 
+    m_toolviewMenu->addAction(m_refreshModelAct);
+
     // Refresh diffs when documents are saved
     connect(ICore::self()->documentController(), &IDocumentController::documentSaved, this,
             [=](KDevelop::IDocument* doc) {
