@@ -38,7 +38,7 @@
         "Description[az]": "Verilmiş qaydalara uyğun mənbə kodunun formatlanması üçün qoşma",
         "Description[bs]": "Dodatak za formatiranje izvornog koda prema određenom nizu pravila",
         "Description[ca@valencia]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles",
-        "Description[ca]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles",
+        "Description[ca]": "Un connector per a formatar el codi font d'acord amb un conjunt especificat de regles",
         "Description[de]": "Modul zum Formatieren von Quelltext nach bestimmten Vorschriften",
         "Description[el]": "Ένα πρόσθετο για τη διαμόρφωση πηγαίου κώδικα σύμφωνα με ένα ορισμένο σύνολο κανόνων",
         "Description[en_GB]": "A plugin for formatting of sourcecode according to a specified set of rules",
