@@ -33,7 +33,7 @@
         ],
         "Category": "Utilities",
         "Description": "A plugin for formatting of sourcecode according to a specified set of rules",
-        "Description[ca@valencia]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles",
+        "Description[ca@valencia]": "Un connector per a formatar el codi font d'acord amb un conjunt especificat de regles",
         "Description[ca]": "Un connector per a formatar el codi font d'acord amb un conjunt especificat de regles",
         "Description[de]": "Modul zum Formatieren von Quelltext nach bestimmten Vorschriften",
         "Description[en_GB]": "A plugin for formatting of sourcecode according to a specified set of rules",
