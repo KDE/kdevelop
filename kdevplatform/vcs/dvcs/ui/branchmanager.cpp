@@ -75,19 +75,7 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     m_model = new BranchesListModel(this);
     m_model->initialize(m_dvcPlugin, QUrl::fromLocalFile(repository));
 
-    // Filter Model
-    m_filterModel = new QSortFilterProxyModel();
-    m_filterModel->setSourceModel(m_model);
-    m_filterModel->setFilterWildcard(QString());
-    m_filterModel->sort(0, Qt::AscendingOrder);
-
-    //Changes in filter edit trigger filtering
-    connect(m_ui->branchFilterEdit,
-            &QLineEdit::textChanged,
-            m_filterModel,
-            &QSortFilterProxyModel::setFilterWildcard);
-
-    m_ui->branchView->setModel(m_filterModel);
+    m_ui->branchView->setModel(m_model);
 
     QString branchName = m_model->currentBranch();
     // apply initial selection

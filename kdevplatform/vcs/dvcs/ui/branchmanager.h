@@ -60,7 +60,6 @@ private:
 
     Ui::BranchDialogBase* m_ui;
     KDevelop::BranchesListModel* m_model;
-    QSortFilterProxyModel* m_filterModel;
 };
 
 #endif
