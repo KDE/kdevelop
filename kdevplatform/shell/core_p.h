@@ -10,6 +10,7 @@
 #include <core.h>
 
 #include <QPointer>
+#include <QString>
 
 namespace KDevelop
 {
@@ -54,6 +55,7 @@ public:
     QPointer<RuntimeController> runtimeController;
 
     Core* const m_core = nullptr;
+    QString m_sessionTemporaryDirectoryPath;
     bool m_cleanedUp = false;
     bool m_shuttingDown = false;
     Core::Setup m_mode = Core::Default;

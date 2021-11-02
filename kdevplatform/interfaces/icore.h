@@ -92,6 +92,9 @@ public:
     /** @return the session lock for the active session */
     virtual KDevelop::ISessionLock::Ptr activeSessionLock() = 0;
 
+    /** @return the active session's temporary directory path */
+    virtual QString sessionTemporaryDirectoryPath() const = 0;
+
     /** @return the sourceformatter controller */
     virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
 

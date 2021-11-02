@@ -36,6 +36,13 @@
 #include "runtimecontroller.h"
 #include "debug.h"
 
+#include <KUser>
+
+#include <QDir>
+#include <QFile>
+#include <QStandardPaths>
+#include <QUuid>
+
 #include <csignal>
 
 namespace {
@@ -71,7 +78,69 @@ void installSignalHandler()
     std::signal(SIGTERM, shutdownGracefully);
 #endif
 }
+
+/**
+ * Initialize per-session temporary directory and ensure its cleanup.
+ *
+ * When KDevelop crashes, it leaves many files, some of which are huge, in the temporary directory.
+ * These files are not automatically removed until system restart. No space may be left in the
+ * temporary directory after multiple crashes. This function removes the temporary directory for the
+ * active session on KDevelop start. Removing the session temporary directory on KDevelop exit is
+ * risky because some temporary files might still be in use. A user is likely to restart a crashed
+ * KDevelop session to continue working, so clearing on start is almost perfect.
+ *
+ * @param session the currently active session
+ *
+ * @return the active session's temporary directory path
+ *         or the system temporary directory path in case of error.
+ */
+QString setupSessionTemporaryDirectory(const KDevelop::ISession& session)
+{
+    QString systemTempDirPath = QDir::tempPath();
+
+    // Session IDs are generated via QUuid::createUuid(), so they should be unique across all users in a system.
+    // However, users could copy/share session directories and thus get equal session IDs. If two users are logged
+    // in a system and have equal-ID KDevelop sessions open, the per-session temporary directory paths would coincide.
+    // Prevent such conflicts by including the real user ID in the temporary directory path.
+    const QString userId = KUserId::currentUserId().toString();
+
+    // The temporary directory path does not contain the session ID in test mode, because most KDevelop
+    // tests create a temporary session with a unique id on each run. Such temporary sessions are never
+    // loaded again, and so their temporary files cannot possibly be removed on next start. Including
+    // session IDs in temporary directory names for test sessions are only harmful then: empty directories
+    // accumulate (and even nonempty directories as some tests don't remove their files during cleanup).
+    // The session name is used in place of the session ID in test mode. TestCore::initializeNonStatic() sets most
+    // test session names to "test-" + <test executable name>. The few custom test session names are also sufficiently
+    // verbose and unique. Separate temporary directories for different tests allow running tests concurrently.
+    // QStandardPaths::isTestModeEnabled() is undocumented internal API. But KSharedConfig::openConfig() relies on it.
+    // So we venture to use this API here despite the risk of removal without notice in a future Qt version.
+    const QString subdirName = QStandardPaths::isTestModeEnabled() ? session.name() : session.id().toString();
+
+    QString tempDirPath = QLatin1String("%1/kdevelop-%2/%3").arg(systemTempDirPath, userId, subdirName);
+    QDir tempDir(tempDirPath);
+
+    // Remove files left after a possible previous crash of this session.
+    if (!tempDir.removeRecursively()) {
+        qCWarning(SHELL) << "couldn't delete the session temporary directory" << tempDirPath;
+        return systemTempDirPath;
+    }
+
+    // Create the session temporary directory.
+    if (!tempDir.mkpath(tempDirPath)) {
+        qCWarning(SHELL) << "couldn't create the session temporary directory" << tempDirPath;
+        return systemTempDirPath;
+    }
+
+    // Allow only the owner to access the temporary directory, just like QTemporaryDir() does.
+    if (!QFile::setPermissions(tempDirPath, QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner)) {
+        qCWarning(SHELL) << "couldn't set permissions for the session temporary directory" << tempDirPath;
+        return systemTempDirPath;
+    }
+
+    qCDebug(SHELL) << "set up the session temporary directory" << tempDirPath;
+    return tempDirPath;
 }
+} // unnamed namespace
 
 namespace KDevelop {
 
@@ -190,6 +259,7 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     if( !sessionController->activeSessionLock() ) {
         return false;
     }
+    m_sessionTemporaryDirectoryPath = setupSessionTemporaryDirectory(*sessionController->activeSession());
 
     // TODO: Is this early enough, or should we put the loading of the session into
     // the controller construct
@@ -408,6 +478,11 @@ ISession* Core::activeSession()
 ISessionLock::Ptr Core::activeSessionLock()
 {
     return sessionController()->activeSessionLock();
+}
+
+QString Core::sessionTemporaryDirectoryPath() const
+{
+    return d->m_sessionTemporaryDirectoryPath;
 }
 
 SessionController *Core::sessionController()

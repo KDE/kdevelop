@@ -72,6 +72,7 @@ public:
     IRuntimeController* runtimeController() override;
     ISession *activeSession() override;
     ISessionLock::Ptr activeSessionLock() override;
+    QString sessionTemporaryDirectoryPath() const override;
 
     /// The following methods may only be used within the shell.
 

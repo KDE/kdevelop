@@ -10,6 +10,8 @@
 #include "clangparsingenvironment.h"
 #include "documentfinderhelpers.h"
 
+#include <interfaces/icore.h>
+
 #include <util/path.h>
 #include <util/clangtypes.h>
 #include <util/clangdebug.h>
@@ -21,15 +23,53 @@
 
 using namespace KDevelop;
 
-ClangIndex::ClangIndex()
-    // NOTE: We don't exclude PCH declarations. That way we could retrieve imports manually, as clang_getInclusions returns nothing on reparse with CXTranslationUnit_PrecompiledPreamble flag.
-    : m_index(clang_createIndex(0 /*Exclude PCH Decls*/, qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DIAGS") /*Display diags*/))
+namespace {
+
+CXIndex createIndex()
 {
-    // demote the priority of the clang parse threads to reduce potential UI lockups
-    // but the code completion threads still retain their normal priority to return
-    // the results as quickly as possible
-    clang_CXIndex_setGlobalOptions(m_index, clang_CXIndex_getGlobalOptions(m_index)
-        | CXGlobalOpt_ThreadBackgroundPriorityForIndexing);
+    // NOTE: We don't exclude PCH declarations. That way we could retrieve imports manually,
+    // as clang_getInclusions returns nothing on reparse with CXTranslationUnit_PrecompiledPreamble flag.
+    const auto excludeDeclarationsFromPCH = false;
+    const auto displayDiagnostics = qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DIAGS");
+
+    CXIndex index;
+#if CINDEX_VERSION_MINOR >= 64
+    // When KDevelop crashes, libclang leaves preamble-*.pch files in its temporary directory.
+    // These files occupy from tens of megabytes to gigabytes and are not automatically removed
+    // until system restart. Set the preamble storage path to the active session's temporary
+    // directory in order to remove all PCH files for the active session on KDevelop start.
+    // See also https://github.com/llvm/llvm-project/issues/51847
+    const auto preambleStoragePath = ICore::self()->sessionTemporaryDirectoryPath().toUtf8();
+
+    CXIndexOptions options = {sizeof(CXIndexOptions)};
+    // Demote the priority of the clang parse threads to reduce potential UI lockups.
+    // The code completion threads still retain their normal priority to return the results as quickly as possible.
+    options.ThreadBackgroundPriorityForIndexing = CXChoice_Enabled;
+    options.ExcludeDeclarationsFromPCH = excludeDeclarationsFromPCH;
+    options.DisplayDiagnostics = displayDiagnostics;
+    options.PreambleStoragePath = preambleStoragePath.constData();
+
+    index = clang_createIndexWithOptions(&options);
+    if (index) {
+        return index;
+    }
+    qCWarning(KDEV_CLANG) << "clang_createIndexWithOptions() failed. CINDEX_VERSION_MINOR =" << CINDEX_VERSION_MINOR
+                          << ", sizeof(CXIndexOptions) =" << options.Size;
+    // Fall back to using older API. Setting the preamble storage path is not essential.
+#endif
+    index = clang_createIndex(excludeDeclarationsFromPCH, displayDiagnostics);
+    // Demote the priority of the clang parse threads to reduce potential UI lockups.
+    // The code completion threads still retain their normal priority to return the results as quickly as possible.
+    clang_CXIndex_setGlobalOptions(
+        index, clang_CXIndex_getGlobalOptions(index) | CXGlobalOpt_ThreadBackgroundPriorityForIndexing);
+    return index;
+}
+
+} // unnamed namespace
+
+ClangIndex::ClangIndex()
+    : m_index(createIndex())
+{
 }
 
 CXIndex ClangIndex::index() const
