@@ -124,7 +124,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
     QString command = style.content();
 
-    // Replace ${Project} with the project path
+    // Replace ${<project name>} with the project path
     command = replaceVariables(command, projectVariables);
     command.replace(QLatin1String("$FILE"), url.toLocalFile());
 
@@ -564,8 +564,8 @@ void CustomScriptPreferences::moreVariablesClicked(bool)
                                   "The contents of the file must not be modified, changes are allowed <br />"
                                   "only in $TMPFILE.<br />"
                                   "<br />"
-                                  "<b>${PROJECT_NAME}</b> will be replaced by the path of <br />"
-                                  "the currently open project with the matching name."
+                                  "<b>${&lt;project name&gt;}</b> will be replaced by the path of <br />"
+                                  "a currently open project whose name is &lt;project name&gt;."
 
                                   ), i18nc("@title:window", "Variable Replacements"));
 }
