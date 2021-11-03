@@ -28,7 +28,7 @@ public:
 
 protected:
     void init();
-    void updatePreviewText(bool emitChangedSignal = true);
+    void updatePreviewText();
     void setItemChecked(int idx, bool checked);
     void updateWidgets();
 

@@ -240,9 +240,8 @@ void AStylePreferences::setItemChecked(int idx, bool checked)
         item->setCheckState(Qt::Unchecked);
 }
 
-void AStylePreferences::updatePreviewText(bool emitChangedSignal)
+void AStylePreferences::updatePreviewText()
 {
-    Q_UNUSED(emitChangedSignal);
     if(tabWidget->currentIndex() == 0)
         emit previewTextChanged(AStylePlugin::indentingSample(m_currentLanguage));
     else
@@ -251,7 +250,7 @@ void AStylePreferences::updatePreviewText(bool emitChangedSignal)
 
 void AStylePreferences::currentTabChanged()
 {
-    updatePreviewText(false);
+    updatePreviewText();
 }
 
 void AStylePreferences::indentChanged()
