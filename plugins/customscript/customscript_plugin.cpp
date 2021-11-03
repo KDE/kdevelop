@@ -518,8 +518,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const SourceForm
 void CustomScriptPreferences::updateTimeout()
 {
     const QString& text = indentPluginSingleton.data()->previewText(m_style, QMimeType());
-    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle(m_style, text, QUrl(), QMimeType());
-    emit previewTextChanged(formatted);
+    emit previewTextChanged(text);
 }
 
 CustomScriptPreferences::CustomScriptPreferences()

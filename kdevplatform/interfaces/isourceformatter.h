@@ -108,12 +108,14 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		virtual QString save() = 0;
 
 	Q_SIGNALS:
-		/** Emits this signal when a setting was changed and the preview
-		* needs to be updated. \arg text is the text that will be shown in the
-		* editor. One might want to show different text
-		* according to the different pages shown in the widget.
-		* Text should already be formatted.
-		*/
+		/**
+		 * This signal is emitted whenever a setting changes and the preview needs to be updated.
+		 *
+		 * @param text code sample to be formatted and displayed as style preview
+		 *
+		 * @note The preview text may depend on the current page shown in the widget.
+		 *       So @p text may be different each time this signal is emitted.
+		 */
 		void previewTextChanged(const QString &text);
 };
 
