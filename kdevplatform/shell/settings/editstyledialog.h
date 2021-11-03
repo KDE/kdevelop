@@ -38,13 +38,12 @@ public:
      */
     QString content();
 
-protected:
-    void init();
-
-public Q_SLOTS:
+private Q_SLOTS:
     void updatePreviewText(const QString &text);
 
 private:
+    void init();
+
     KDevelop::ISourceFormatter* m_sourceFormatter;
     KTextEditor::View* m_view;
     KTextEditor::Document* m_document;
