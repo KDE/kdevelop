@@ -42,6 +42,7 @@ namespace KDevelop {
 template<typename DialogType>
 class ScopedDialog
 {
+    Q_DISABLE_COPY_MOVE(ScopedDialog)
 public:
     /// Construct the dialog with any set of allowed arguments
     /// for the construction of DialogType
@@ -77,8 +78,6 @@ public:
     }
 
 private:
-    Q_DISABLE_COPY(ScopedDialog)
-
     QPointer<DialogType> ptr;
 };
 
