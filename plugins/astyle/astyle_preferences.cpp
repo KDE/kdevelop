@@ -118,11 +118,7 @@ void AStylePreferences::init()
 
 void AStylePreferences::load(const SourceFormatterStyle &style)
 {
-    if(!style.content().isEmpty())
-        m_formatter->loadStyle(style.content());
-    else
-        m_formatter->predefinedStyle(style.name());
-
+    m_formatter->loadStyle(style.content());
     updateWidgets();
     updatePreviewText();
 }

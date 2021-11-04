@@ -87,8 +87,6 @@ void EditStyleDialog::init()
         iface->setConfigValue(QStringLiteral("icon-bar"), false);
         iface->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
     }
-
-    updatePreviewText(m_sourceFormatter.previewText(m_style, m_mimeType));
 }
 
 void EditStyleDialog::updatePreviewText(const QString &text)

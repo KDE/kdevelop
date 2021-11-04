@@ -96,11 +96,12 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		~SettingsWidget() override;
 
 		/** This function is called after the creation of the dialog.
-		* it should initialise the widgets with the values corresponding to
-		* the predefined style \arg name if it's not empty, or
-		* to the string \arg content.
-		*/
-		virtual void load(const SourceFormatterStyle&) = 0;
+		 *
+		 * @param style a custom, not predefined, style to be edited
+		 *
+		 * @note This function must emit previewTextChanged().
+		 */
+		virtual void load(const SourceFormatterStyle& style) = 0;
 
 		/** \return A string representing the state of the config.
 		*/
