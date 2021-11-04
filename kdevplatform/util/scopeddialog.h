@@ -9,6 +9,8 @@
 
 #include <QPointer>
 
+#include <utility>
+
 namespace KDevelop {
 
 /**
@@ -44,7 +46,8 @@ public:
     /// Construct the dialog with any set of allowed arguments
     /// for the construction of DialogType
     template<typename ... Arguments>
-    explicit ScopedDialog(Arguments ... args) : ptr(new DialogType(args ...))
+    explicit ScopedDialog(Arguments&& ... args)
+        : ptr{new DialogType(std::forward<Arguments>(args)...)}
     {
     }
     /// Automatically deletes the dialog if it is still present
