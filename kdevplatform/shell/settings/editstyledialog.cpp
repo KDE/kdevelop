@@ -29,6 +29,8 @@ EditStyleDialog::EditStyleDialog(const ISourceFormatter& formatter, const QMimeT
     , m_mimeType(mime)
     , m_style(style)
 {
+    Q_ASSERT_X(formatter.hasEditStyleWidget(), Q_FUNC_INFO, "Precondition");
+
     m_content = new QWidget();
     m_ui.setupUi(m_content);
 
@@ -42,12 +44,9 @@ EditStyleDialog::EditStyleDialog(const ISourceFormatter& formatter, const QMimeT
     connect(buttonBox, &QDialogButtonBox::rejected, this, &EditStyleDialog::reject);
     mainLayout->addWidget(buttonBox);
 
-    m_settingsWidget = m_sourceFormatter.editStyleWidget(m_mimeType).release();
     init();
 
-    if (m_settingsWidget) {
-        m_settingsWidget->load(style);
-    }
+    m_settingsWidget->load(style);
 }
 
 EditStyleDialog::~EditStyleDialog()
@@ -57,14 +56,17 @@ EditStyleDialog::~EditStyleDialog()
 void EditStyleDialog::init()
 {
     // add plugin settings widget
-    if (m_settingsWidget) {
-        auto* layout = new QVBoxLayout(m_ui.settingsWidgetParent);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(m_settingsWidget);
-        m_ui.settingsWidgetParent->setLayout(layout);
-        connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
-                this, &EditStyleDialog::updatePreviewText);
-    }
+    auto* layout = new QVBoxLayout(m_ui.settingsWidgetParent);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    m_settingsWidget = m_sourceFormatter.editStyleWidget(m_mimeType).release();
+    Q_ASSERT_X(m_settingsWidget, Q_FUNC_INFO, "hasEditStyleWidget() is inconsistent with editStyleWidget().");
+    layout->addWidget(m_settingsWidget);
+    Q_ASSERT_X(m_settingsWidget->parent(), Q_FUNC_INFO, "QBoxLayout::addWidget must reparent its argument.");
+
+    m_ui.settingsWidgetParent->setLayout(layout);
+    connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
+            this, &EditStyleDialog::updatePreviewText);
 
     m_document = KTextEditor::Editor::instance()->createDocument(this);
     m_document->setReadWrite(false);
@@ -101,10 +103,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 
 QString EditStyleDialog::content()
 {
-    if (m_settingsWidget) {
-        return m_settingsWidget->save();
-    }
-    return QString();
+    return m_settingsWidget->save();
 }
 
 #include "moc_editstyledialog.cpp"

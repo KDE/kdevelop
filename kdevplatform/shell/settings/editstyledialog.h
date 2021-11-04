@@ -30,6 +30,9 @@ class EditStyleDialog
     Q_OBJECT
 
 public:
+    /**
+     * @pre @p formatter.hasEditStyleWidget() == @c true
+     */
     EditStyleDialog(const KDevelop::ISourceFormatter& formatter, const QMimeType& mime,
                     const KDevelop::SourceFormatterStyle&, QWidget* parent = nullptr);
     ~EditStyleDialog() override;
