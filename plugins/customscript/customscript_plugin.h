@@ -43,6 +43,8 @@ public:
      */
     QVector<KDevelop::SourceFormatterStyle> predefinedStyles() const override;
 
+    bool hasEditStyleWidget() const override;
+
     /** \return The widget to edit a style.
      */
     KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) const override;

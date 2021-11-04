@@ -168,6 +168,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		SourceFormatterStyle predefinedStyle(const QString& name) const;
 
+		/**
+		 * @return whether editStyleWidget() returns a valid pointer
+		 */
+		virtual bool hasEditStyleWidget() const = 0;
+
 		/** \return The widget to edit a style.
 		*/
 		virtual SettingsWidget* editStyleWidget(const QMimeType &mime) const = 0;

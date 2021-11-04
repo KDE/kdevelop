@@ -304,6 +304,11 @@ QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles() const
     return list;
 }
 
+bool AStylePlugin::hasEditStyleWidget() const
+{
+    return true;
+}
+
 SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime) const
 {
     AStylePreferences::Language lang = AStylePreferences::CPP;

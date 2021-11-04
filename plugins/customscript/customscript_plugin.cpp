@@ -313,6 +313,11 @@ QVector<SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() const
     return styles;
 }
 
+bool CustomScriptPlugin::hasEditStyleWidget() const
+{
+    return true;
+}
+
 KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime) const
 {
     Q_UNUSED(mime);

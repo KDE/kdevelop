@@ -365,7 +365,7 @@ void SourceFormatterSelectionEdit::enableStyleButtons()
         const LanguageSettings& l = it.value();
         Q_ASSERT(l.selectedFormatter);
         ISourceFormatter* fmt = l.selectedFormatter->formatter;
-        hasEditWidget = ( fmt && QScopedPointer<QObject>(fmt->editStyleWidget( l.mimetypes.first() )) );
+        hasEditWidget = fmt && fmt->hasEditStyleWidget();
     }
     d->ui.btnDelStyle->setEnabled(userEntry);
     d->ui.btnEditStyle->setEnabled(userEntry && hasEditWidget);
@@ -505,9 +505,8 @@ void SourceFormatterSelectionEdit::editStyle()
     LanguageSettings& l = d->languages[language];
     SourceFormatter* fmt = l.selectedFormatter;
 
-    QMimeType mimetype = l.mimetypes.first();
-    if( QScopedPointer<QObject>(fmt->formatter->editStyleWidget( mimetype )) ) {
-        KDevelop::ScopedDialog<EditStyleDialog> dlg(*fmt->formatter, mimetype, *l.selectedStyle, this);
+    if (fmt->formatter->hasEditStyleWidget()) {
+        KDevelop::ScopedDialog<EditStyleDialog> dlg(*fmt->formatter, l.mimetypes.constFirst(), *l.selectedStyle, this);
         if( dlg->exec() == QDialog::Accepted )
         {
             l.selectedStyle->setContent(dlg->content());
