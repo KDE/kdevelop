@@ -22,7 +22,7 @@
 
 using namespace KDevelop;
 
-EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& mime,
+EditStyleDialog::EditStyleDialog(const ISourceFormatter& formatter, const QMimeType& mime,
                                  const SourceFormatterStyle& style, QWidget* parent)
     : QDialog(parent)
     , m_sourceFormatter(formatter)
@@ -42,7 +42,7 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& m
     connect(buttonBox, &QDialogButtonBox::rejected, this, &EditStyleDialog::reject);
     mainLayout->addWidget(buttonBox);
 
-    m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
+    m_settingsWidget = m_sourceFormatter.editStyleWidget(m_mimeType);
     init();
 
     if (m_settingsWidget) {
@@ -86,21 +86,14 @@ void EditStyleDialog::init()
         iface->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
     }
 
-    if (m_sourceFormatter) {
-        QString text = m_sourceFormatter->previewText(m_style, m_mimeType);
-        updatePreviewText(text);
-    }
+    updatePreviewText(m_sourceFormatter.previewText(m_style, m_mimeType));
 }
 
 void EditStyleDialog::updatePreviewText(const QString &text)
 {
     m_document->setReadWrite(true);
     m_style.setContent(content());
-    if (m_sourceFormatter) {
-        m_document->setText(m_sourceFormatter->formatSourceWithStyle(m_style, text, QUrl(), m_mimeType));
-    } else {
-        m_document->setText(i18n("No Source Formatter available"));
-    }
+    m_document->setText(m_sourceFormatter.formatSourceWithStyle(m_style, text, QUrl(), m_mimeType));
 
     m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     m_document->setReadWrite(false);

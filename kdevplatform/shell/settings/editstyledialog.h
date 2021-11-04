@@ -30,7 +30,7 @@ class EditStyleDialog
     Q_OBJECT
 
 public:
-    EditStyleDialog(KDevelop::ISourceFormatter* formatter, const QMimeType& mime,
+    EditStyleDialog(const KDevelop::ISourceFormatter& formatter, const QMimeType& mime,
                     const KDevelop::SourceFormatterStyle&, QWidget* parent = nullptr);
     ~EditStyleDialog() override;
 
@@ -44,7 +44,7 @@ private Q_SLOTS:
 private:
     void init();
 
-    KDevelop::ISourceFormatter* m_sourceFormatter;
+    const KDevelop::ISourceFormatter& m_sourceFormatter;
     KTextEditor::View* m_view;
     KTextEditor::Document* m_document;
     KDevelop::SettingsWidget* m_settingsWidget;

@@ -507,7 +507,7 @@ void SourceFormatterSelectionEdit::editStyle()
 
     QMimeType mimetype = l.mimetypes.first();
     if( QScopedPointer<QObject>(fmt->formatter->editStyleWidget( mimetype )) ) {
-        KDevelop::ScopedDialog<EditStyleDialog> dlg(fmt->formatter, mimetype, *l.selectedStyle, this);
+        KDevelop::ScopedDialog<EditStyleDialog> dlg(*fmt->formatter, mimetype, *l.selectedStyle, this);
         if( dlg->exec() == QDialog::Accepted )
         {
             l.selectedStyle->setContent(dlg->content());
