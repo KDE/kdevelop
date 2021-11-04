@@ -65,6 +65,16 @@ void EditStyleDialog::init()
     Q_ASSERT_X(m_settingsWidget->parent(), Q_FUNC_INFO, "QBoxLayout::addWidget must reparent its argument.");
 
     m_ui.settingsWidgetParent->setLayout(layout);
+
+    if (m_style.usePreview()) {
+        initPreview();
+    } else {
+        delete m_ui.previewArea;
+    }
+}
+
+void EditStyleDialog::initPreview()
+{
     connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
             this, &EditStyleDialog::updatePreviewText);
 

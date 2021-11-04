@@ -46,6 +46,7 @@ private Q_SLOTS:
 
 private:
     void init();
+    void initPreview();
 
     const KDevelop::ISourceFormatter& m_sourceFormatter;
     KTextEditor::View* m_view;
