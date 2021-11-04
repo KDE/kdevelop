@@ -24,14 +24,29 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QWidget" name="settingsWidgetParent" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QWidget" name="settingsWidgetParent" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="showPreviewCheckBox">
+       <property name="toolTip">
+        <string>Toggle preview visibility for this style.
+Preview should be disabled for styles whose formatting depends on the file path.</string>
+       </property>
+       <property name="text">
+        <string>Show Preview</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QWidget" name="previewArea" native="true">

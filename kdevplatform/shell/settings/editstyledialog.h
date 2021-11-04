@@ -41,18 +41,27 @@ public:
      */
     QString content();
 
+    /**
+     * @return whether the style uses preview
+     */
+    bool usePreview() const;
+
 private Q_SLOTS:
     void updatePreviewText(const QString &text);
 
 private:
     void init();
     void initPreview();
+    void showPreview(const QString& text);
+    void previewVisibilityChanged(bool visible);
 
     const KDevelop::ISourceFormatter& m_sourceFormatter;
-    KTextEditor::View* m_view;
-    KTextEditor::Document* m_document;
+    KTextEditor::View* m_view = nullptr;
+    KTextEditor::Document* m_document = nullptr;
+    /// the settings widget becomes valid in constructor, never changes afterwards
     KDevelop::SettingsWidget* m_settingsWidget;
     QMimeType m_mimeType;
+    QString m_pendingPreviewText; ///< if empty, m_document->text() is up to date
     Ui::EditStyle m_ui;
     KDevelop::SourceFormatterStyle m_style;
 };

@@ -111,7 +111,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		/**
 		 * This signal is emitted whenever a setting changes and the preview needs to be updated.
 		 *
-		 * @param text code sample to be formatted and displayed as style preview
+		 * @param text non-empty code sample to be formatted and displayed as style preview
 		 *
 		 * @note The preview text may depend on the current page shown in the widget.
 		 *       So @p text may be different each time this signal is emitted.

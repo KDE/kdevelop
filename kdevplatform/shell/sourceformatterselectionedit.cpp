@@ -510,6 +510,7 @@ void SourceFormatterSelectionEdit::editStyle()
         if( dlg->exec() == QDialog::Accepted )
         {
             l.selectedStyle->setContent(dlg->content());
+            l.selectedStyle->setUsePreview(dlg->usePreview());
         }
         updatePreview();
         emit changed();

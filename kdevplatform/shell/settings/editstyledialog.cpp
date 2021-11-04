@@ -66,18 +66,20 @@ void EditStyleDialog::init()
 
     m_ui.settingsWidgetParent->setLayout(layout);
 
-    if (m_style.usePreview()) {
-        initPreview();
-    } else {
-        delete m_ui.previewArea;
-    }
+    connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
+            this, &EditStyleDialog::updatePreviewText);
+
+    m_ui.showPreviewCheckBox->setChecked(m_style.usePreview());
+    connect(m_ui.showPreviewCheckBox, &QCheckBox::toggled, this, [this](bool show) {
+        m_style.setUsePreview(show);
+        previewVisibilityChanged(show);
+    });
+
+    previewVisibilityChanged(m_style.usePreview());
 }
 
 void EditStyleDialog::initPreview()
 {
-    connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
-            this, &EditStyleDialog::updatePreviewText);
-
     m_document = KTextEditor::Editor::instance()->createDocument(this);
     m_document->setReadWrite(false);
     m_document->setHighlightingMode(m_style.modeForMimetype(m_mimeType));
@@ -101,6 +103,16 @@ void EditStyleDialog::initPreview()
 
 void EditStyleDialog::updatePreviewText(const QString &text)
 {
+    Q_ASSERT_X(!text.isEmpty(), Q_FUNC_INFO, "Empty m_pendingPreviewText has a special meaning.");
+    if (m_style.usePreview()) {
+        showPreview(text);
+    } else {
+        m_pendingPreviewText = text;
+    }
+}
+
+void EditStyleDialog::showPreview(const QString& text)
+{
     m_document->setReadWrite(true);
     m_style.setContent(content());
     m_document->setText(m_sourceFormatter.formatSourceWithStyle(m_style, text, QUrl(), m_mimeType));
@@ -109,9 +121,29 @@ void EditStyleDialog::updatePreviewText(const QString &text)
     m_document->setReadWrite(false);
 }
 
+void EditStyleDialog::previewVisibilityChanged(bool visible)
+{
+    Q_ASSERT(m_style.usePreview() == visible);
+    if (visible) {
+        if (!m_document) {
+            initPreview();
+        }
+        if (!m_pendingPreviewText.isEmpty()) {
+            showPreview(m_pendingPreviewText);
+            m_pendingPreviewText = QString{};
+        }
+    }
+    m_ui.previewArea->setVisible(visible);
+}
+
 QString EditStyleDialog::content()
 {
     return m_settingsWidget->save();
+}
+
+bool EditStyleDialog::usePreview() const
+{
+    return m_style.usePreview();
 }
 
 #include "moc_editstyledialog.cpp"
