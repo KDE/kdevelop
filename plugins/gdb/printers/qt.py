@@ -674,7 +674,7 @@ class QUuidPrinter:
         self.val = val
 
     def to_string(self):
-        return "QUuid({%x-%x-%x-%x%x-%x%x%x%x%x%x})" % (int(self.val['data1']), int(self.val['data2']), int(self.val['data3']),
+        return "QUuid({%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x})" % (int(self.val['data1']), int(self.val['data2']), int(self.val['data3']),
                                             int(self.val['data4'][0]), int(self.val['data4'][1]),
                                             int(self.val['data4'][2]), int(self.val['data4'][3]),
                                             int(self.val['data4'][4]), int(self.val['data4'][5]),
