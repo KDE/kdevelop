@@ -47,7 +47,7 @@ public:
 
     /** \return The widget to edit a style.
      */
-    KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) const override;
+    KDevelop::SettingsWidgetPtr editStyleWidget(const QMimeType& mime) const override;
 
     /** \return The text used in the config dialog to preview the current style.
      */

@@ -318,10 +318,10 @@ bool CustomScriptPlugin::hasEditStyleWidget() const
     return true;
 }
 
-KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime) const
+SettingsWidgetPtr CustomScriptPlugin::editStyleWidget(const QMimeType& mime) const
 {
     Q_UNUSED(mime);
-    return new CustomScriptPreferences();
+    return SettingsWidgetPtr{new CustomScriptPreferences()};
 }
 
 static QString defaultSample()

@@ -36,7 +36,7 @@ public:
 
     /** \return The widget to edit a style.
     */
-    KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) const override;
+    KDevelop::SettingsWidgetPtr editStyleWidget(const QMimeType& mime) const override;
 
     QString formatSourceWithStyle(const KDevelop::SourceFormatterStyle& style,
                                   const QString& text,

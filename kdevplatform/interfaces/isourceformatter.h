@@ -11,6 +11,8 @@
 
 #include "interfacesexport.h"
 
+#include <memory>
+
 class QUrl;
 class QMimeType;
 class QStringList;
@@ -114,6 +116,8 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		void previewTextChanged(const QString &text);
 };
 
+using SettingsWidgetPtr = std::unique_ptr<SettingsWidget>;
+
 /**
  * @short An interface for a source beautifier
  * An example of a plugin using an external executable to do
@@ -175,7 +179,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return The widget to edit a style.
 		*/
-		virtual SettingsWidget* editStyleWidget(const QMimeType &mime) const = 0;
+		virtual SettingsWidgetPtr editStyleWidget(const QMimeType &mime) const = 0;
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/

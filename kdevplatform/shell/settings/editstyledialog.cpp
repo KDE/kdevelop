@@ -42,7 +42,7 @@ EditStyleDialog::EditStyleDialog(const ISourceFormatter& formatter, const QMimeT
     connect(buttonBox, &QDialogButtonBox::rejected, this, &EditStyleDialog::reject);
     mainLayout->addWidget(buttonBox);
 
-    m_settingsWidget = m_sourceFormatter.editStyleWidget(m_mimeType);
+    m_settingsWidget = m_sourceFormatter.editStyleWidget(m_mimeType).release();
     init();
 
     if (m_settingsWidget) {
