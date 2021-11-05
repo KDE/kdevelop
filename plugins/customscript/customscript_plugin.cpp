@@ -319,7 +319,7 @@ KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& m
     return new CustomScriptPreferences();
 }
 
-static QString formattingSample()
+static QString defaultSample()
 {
     return QStringLiteral(
         "// Formatting\n"
@@ -353,12 +353,9 @@ static QString formattingSample()
         "  }\n"
         "}\n"
         "}\n"
-        "}\n");
-}
+        "}\n"
 
-static QString indentingSample()
-{
-    return QStringLiteral(
+        "\n\n"
         "// Indentation\n"
         "#define foobar(A)\\\n"
         "{Foo();Bar();}\n"
@@ -418,7 +415,7 @@ QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const
     if (!style.overrideSample().isEmpty()) {
         return style.overrideSample();
     }
-    return formattingSample() + QLatin1String("\n\n") + indentingSample();
+    return defaultSample();
 }
 
 QStringList CustomScriptPlugin::computeIndentationFromSample(const SourceFormatterStyle& style, const QUrl& url,
