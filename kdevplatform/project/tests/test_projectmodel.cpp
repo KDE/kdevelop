@@ -25,15 +25,10 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QSignalSpy>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 #include <QAbstractItemModelTester>
-#endif
 
 #include <projectmodel.h>
 #include <projectproxymodel.h>
-#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
-#include <tests/modeltest.h>
-#endif
 #include <tests/testproject.h>
 #include <tests/kdevsignalspy.h>
 #include <tests/autotestshell.h>
@@ -58,17 +53,9 @@ void TestProjectModel::initTestCase()
 
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = ICore::self()->projectController()->projectModel();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     new QAbstractItemModelTester( model, this );
-#else
-    new ModelTest( model, this );
-#endif
     proxy = new ProjectProxyModel( model );
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     new QAbstractItemModelTester(proxy, proxy);
-#else
-    new ModelTest(proxy, proxy);
-#endif
     proxy->setSourceModel(model);
 }
 

@@ -19,14 +19,8 @@
 
 #include "../manpagedocumentation.h"
 #include "../manpagemodel.h"
-// KDevPlatform
-#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
-#include <tests/modeltest.h>
-#endif
 // Qt
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 #include <QAbstractItemModelTester>
-#endif
 #include <QDebug>
 #include <QSignalSpy>
 #include <QTest>
@@ -46,11 +40,7 @@ void TestManPageModel::testModel()
 {
     ManPageModel model;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     new QAbstractItemModelTester(&model, this);
-#else
-    new ModelTest(&model);
-#endif
 
     QTRY_VERIFY(model.isLoaded() || model.hasError());
     if (model.isLoaded())
