@@ -464,7 +464,7 @@ void CommitToolView::commitActiveProject()
                 msg += QStringLiteral("\n\n") + extended;
             VcsJob* job = vcs->commitStaged(msg, proj->projectItem()->path().toUrl());
             m_commitForm->disable();
-            connect(job, &VcsJob::resultsReady, m_commitForm, [=]{
+            connect(job, &VcsJob::finished, m_commitForm, [=]{
                 if (job->status() == VcsJob::JobSucceeded){
                     m_commitForm->clear();
                     emit updateProjectDiffs(proj);
