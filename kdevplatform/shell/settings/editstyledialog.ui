@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>EditStyle</class>
- <widget class="QWidget" name="EditStyle" >
-  <property name="geometry" >
+ <widget class="QWidget" name="EditStyle">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -23,9 +24,9 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QWidget" native="1" name="settingsWidgetParent" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
+    <widget class="QWidget" name="settingsWidgetParent" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -33,23 +34,23 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout" >
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="lblPreview" >
-       <property name="text" >
+      <widget class="QLabel" name="lblPreview">
+       <property name="text">
         <string comment="@label">Preview:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QWidget" native="1" name="textEditor" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+      <widget class="QWidget" name="textEditor" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>2</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>300</width>
          <height>0</height>
