@@ -91,6 +91,13 @@ QString CustomScriptPlugin::description() const
                 "can be easily shared by all team members, independent of their preferred IDE.");
 }
 
+QString CustomScriptPlugin::usageHint() const
+{
+    return i18nc("@info formatter usage hint",
+                 "Note: each custom script style requires a certain tool executable "
+                 "to be installed. Otherwise, code will not be formatted.");
+}
+
 QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const QUrl& url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext) const
 {
     KProcess proc;

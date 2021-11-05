@@ -139,6 +139,14 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual QString description() const = 0;
 
+		/**
+		 * @return important information to display in style configuration UI
+		 *
+		 * @note The default implementation returns an empty string, which conveniently
+		 *       saves UI space if there is no important information to display.
+		 */
+		virtual QString usageHint() const;
+
 		/** Formats using the current style.
 		 * @param text The text to format
 		 * @param url The URL to which the text belongs (its contents must not be changed).

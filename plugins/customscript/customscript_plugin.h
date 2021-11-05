@@ -30,6 +30,7 @@ public:
     QString name() const override;
     QString caption() const override;
     QString description() const override;
+    QString usageHint() const override;
 
     /** Formats using the current style.
      */

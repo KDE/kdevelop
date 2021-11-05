@@ -400,6 +400,15 @@ void SourceFormatterSelectionEdit::selectFormatter( int idx )
         l.selectedFormatter = formatterIter.value();
         l.selectedStyle = nullptr;    // will hold 0 until a style is picked
     }
+
+    const auto usageHint = l.selectedFormatter->formatter->usageHint();
+    if (usageHint.isEmpty()) {
+        d->ui.usageHintLabel->hide(); // save UI space
+    } else {
+        d->ui.usageHintLabel->setText(usageHint);
+        d->ui.usageHintLabel->show();
+    }
+
     for (const SourceFormatterStyle* style : qAsConst(formatterIter.value()->styles)) {
         if (!style->supportsLanguage(d->ui.cbLanguages->currentText())) {
             // do not list items which do not support the selected language

@@ -27,6 +27,11 @@ ISourceFormatter::~ISourceFormatter()
 {
 }
 
+QString ISourceFormatter::usageHint() const
+{
+    return QString();
+}
+
 SourceFormatterStyle::SourceFormatterStyle()
 {
 }
