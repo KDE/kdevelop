@@ -7,18 +7,14 @@
 #ifndef TESTINDEXEDSTRING_H
 #define TESTINDEXEDSTRING_H
 
-#include <QDir>
-#include <QObject>
+#include "itemrepositorytestbase.h"
 
 class TestIndexedString
-    : public QObject
+    : public ItemRepositoryTestBase
 {
     Q_OBJECT
 
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void testUrl_data();
     void testUrl();
 
@@ -30,9 +26,6 @@ private Q_SLOTS:
     void testSwap_data();
 
     void testCString();
-
-private:
-    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_indexedstring");
 };
 
 #endif // TESTINDEXEDSTRING_H

@@ -15,7 +15,6 @@
 #include <random>
 #include <vector>
 #include <QTest>
-#include <QStandardPaths>
 
 QTEST_GUILESS_MAIN(BenchItemRepository)
 
@@ -97,17 +96,6 @@ struct TestDataRepositoryItemRequest
 };
 
 using TestDataRepository = ItemRepository<TestData, TestDataRepositoryItemRequest, false, true>;
-
-void BenchItemRepository::initTestCase()
-{
-    QStandardPaths::setTestModeEnabled(true);
-    ItemRepositoryRegistry::initialize(m_repositoryPath);
-}
-
-void BenchItemRepository::cleanupTestCase()
-{
-    ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
-}
 
 static QVector<QString> generateData()
 {

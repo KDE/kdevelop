@@ -6,11 +6,10 @@
 
 #include "test_indexedstring.h"
 
-#include <serialization/itemrepositoryregistry.h>
 #include <serialization/indexedstring.h>
 #include <serialization/referencecounting.h>
+
 #include <QTest>
-#include <QStandardPaths>
 
 #include <cstddef>
 #include <utility>
@@ -18,17 +17,6 @@
 QTEST_GUILESS_MAIN(TestIndexedString)
 
 using namespace KDevelop;
-
-void TestIndexedString::initTestCase()
-{
-    QStandardPaths::setTestModeEnabled(true);
-    ItemRepositoryRegistry::initialize(m_repositoryPath);
-}
-
-void TestIndexedString::cleanupTestCase()
-{
-    ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
-}
 
 void TestIndexedString::testUrl_data()
 {

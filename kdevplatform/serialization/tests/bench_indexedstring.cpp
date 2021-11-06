@@ -8,12 +8,10 @@
 #include "bench_indexedstring.h"
 
 #include <language/util/kdevhash.h>
-#include <serialization/itemrepositoryregistry.h>
 #include <serialization/indexedstring.h>
 #include <tests/testhelpers.h>
 
 #include <QTest>
-#include <QStandardPaths>
 
 #include <utility>
 #include <vector>
@@ -21,17 +19,6 @@
 QTEST_GUILESS_MAIN(BenchIndexedString)
 
 using namespace KDevelop;
-
-void BenchIndexedString::initTestCase()
-{
-    QStandardPaths::setTestModeEnabled(true);
-    ItemRepositoryRegistry::initialize(m_repositoryPath);
-}
-
-void BenchIndexedString::cleanupTestCase()
-{
-    ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
-}
 
 static QVector<QString> generateData()
 {

@@ -1,6 +1,6 @@
-#include <QObject>
+#include "itemrepositorytestbase.h"
+
 #include <QTest>
-#include <QStandardPaths>
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 #include <cstdlib>
@@ -112,21 +112,11 @@ TestItem* createItem(uint id, uint size)
 ///@todo Add a test where the complete content is deleted again, and make sure the result has a nice structure
 ///@todo More consistency and lost-space tests, especially about monster-buckets. Make sure their space is re-claimed
 class TestItemRepository
-    : public QObject
+    : public ItemRepositoryTestBase
 {
     Q_OBJECT
 
 private Q_SLOTS:
-    void initTestCase()
-    {
-        QStandardPaths::setTestModeEnabled(true);
-        ItemRepositoryRegistry::initialize(m_repositoryPath);
-    }
-    void cleanupTestCase()
-    {
-        ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
-    }
-
     void testItemRepository()
     {
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
@@ -386,9 +376,6 @@ private Q_SLOTS:
          * be done correctly using only Bucket::hasClashingItem as of now.
          */
     }
-
-private:
-    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_itemrepository");
 };
 
 #include "test_itemrepository.moc"

@@ -7,18 +7,14 @@
 #ifndef BENCH_INDEXEDSTRING_H
 #define BENCH_INDEXEDSTRING_H
 
-#include <QDir>
-#include <QObject>
+#include "itemrepositorytestbase.h"
 
 class BenchIndexedString
-    : public QObject
+    : public ItemRepositoryTestBase
 {
     Q_OBJECT
 
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void bench_index();
     void bench_length();
     void bench_qstring();
@@ -32,9 +28,6 @@ private Q_SLOTS:
     void bench_create();
     void bench_destroy();
     void bench_swap();
-
-private:
-    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_indexedstring");
 };
 
 #endif // BENCH_INDEXEDSTRING_H

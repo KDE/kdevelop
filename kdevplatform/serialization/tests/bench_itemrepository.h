@@ -7,18 +7,14 @@
 #ifndef BENCHITEMREPOSITORY_H
 #define BENCHITEMREPOSITORY_H
 
-#include <QDir>
-#include <QObject>
+#include "itemrepositorytestbase.h"
 
 class BenchItemRepository
-    : public QObject
+    : public ItemRepositoryTestBase
 {
     Q_OBJECT
 
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void insert();
     void remove();
     void removeDisk();
@@ -27,9 +23,6 @@ private Q_SLOTS:
 
     void shouldDoReferenceCounting_data();
     void shouldDoReferenceCounting();
-
-private:
-    const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_itemrepository");
 };
 
 #endif // BENCHITEMREPOSITORY_H
