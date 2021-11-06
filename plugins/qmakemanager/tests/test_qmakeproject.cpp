@@ -43,6 +43,9 @@ void TestQMakeProject::initTestCase()
 {
     AutoTestShell::init({ "KDevQMakeManager", "KDevQMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView" });
     TestCore::initialize();
+
+    // Verify m_buildDir after initialization. Otherwise cleanupTestCase() crashes if the check fails.
+    QVERIFY2(m_buildDir.isValid(), qPrintable("couldn't create temporary directory: " + m_buildDir.errorString()));
 }
 
 void TestQMakeProject::cleanupTestCase()
@@ -73,8 +76,6 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, target);
     QFETCH(QString, expected);
 
-    const QString buildDir = QDir::rootPath() + QStringLiteral("tmp/some/path"); // some dummy directory to build (nothing will be built anyway)
-
     foreach (IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
     }
@@ -88,12 +89,12 @@ void TestQMakeProject::testBuildDirectory()
         KConfig cfg(fileName);
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
 
-        group.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir);
+        group.writeEntry(QMakeConfig::BUILD_FOLDER, m_buildDir.path());
         group.writeEntry(QMakeConfig::QMAKE_EXECUTABLE, QMAKE_TESTS_QMAKE_EXECUTABLE);
         group.sync();
 
         /// create subgroup for one build dir
-        KConfigGroup buildDirGroup = KConfigGroup(&cfg, QMakeConfig::CONFIG_GROUP).group(buildDir);
+        KConfigGroup buildDirGroup = KConfigGroup(&cfg, QMakeConfig::CONFIG_GROUP).group(m_buildDir.path());
         buildDirGroup.writeEntry(QMakeConfig::QMAKE_EXECUTABLE, QMAKE_TESTS_QMAKE_EXECUTABLE);
         buildDirGroup.sync();
 
@@ -113,7 +114,7 @@ void TestQMakeProject::testBuildDirectory()
     IProject* project = ICore::self()->projectController()->findProjectByName(projectName);
 
     // adds expected directory to our base path
-    Path expectedPath(Path(buildDir), expected);
+    const Path expectedPath(Path{m_buildDir.path()}, expected);
 
     // path for files to build
     Path buildUrl(QStringLiteral("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR, projectName, target));

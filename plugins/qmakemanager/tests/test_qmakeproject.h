@@ -8,6 +8,7 @@
 #define TEST_QMAKEPROJECT_H
 
 #include <QObject>
+#include <QTemporaryDir>
 
 /**
  * Test project handling related features. Very basic at moment, should be completed.
@@ -27,6 +28,9 @@ private Q_SLOTS:
 
     void testBuildDirectory_data();
     void testBuildDirectory();
+
+private:
+    const QTemporaryDir m_buildDir;
 };
 
 #endif
