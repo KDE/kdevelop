@@ -4,8 +4,8 @@
     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 */
 
-#ifndef TESTITEMREPOSITORY_H
-#define TESTITEMREPOSITORY_H
+#ifndef BENCHITEMREPOSITORY_H
+#define BENCHITEMREPOSITORY_H
 
 #include <QDir>
 #include <QObject>
@@ -32,4 +32,4 @@ private:
     const QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_itemrepository");
 };
 
-#endif // TESTITEMREPOSITORY_H
+#endif // BENCHITEMREPOSITORY_H
