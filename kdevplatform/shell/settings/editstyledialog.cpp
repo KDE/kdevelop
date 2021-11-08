@@ -31,11 +31,11 @@ EditStyleDialog::EditStyleDialog(const ISourceFormatter& formatter, const QMimeT
 {
     Q_ASSERT_X(formatter.hasEditStyleWidget(), Q_FUNC_INFO, "Precondition");
 
-    m_content = new QWidget();
-    m_ui.setupUi(m_content);
+    auto* const mainWidget = new QWidget();
+    m_ui.setupUi(mainWidget);
 
     auto* mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(m_content);
+    mainLayout->addWidget(mainWidget);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);

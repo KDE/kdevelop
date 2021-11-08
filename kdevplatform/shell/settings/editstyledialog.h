@@ -53,7 +53,6 @@ private:
     KTextEditor::Document* m_document;
     KDevelop::SettingsWidget* m_settingsWidget;
     QMimeType m_mimeType;
-    QWidget* m_content;
     Ui::EditStyle m_ui;
     KDevelop::SourceFormatterStyle m_style;
 };
