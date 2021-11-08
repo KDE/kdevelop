@@ -605,17 +605,17 @@ int main( int argc, char *argv[] )
 
         if(candidates.size() == 1 && parser.isSet(QStringLiteral("pid")))
         {
-            session = candidates[0].uuid.toString();
+            session = candidates.constFirst().uuid.toString();
         }else{
             for(int i = 0; i < candidates.size(); ++i)
-                qerr << "[" << i << "]: " << candidates[i].description << QLatin1Char('\n');
+                qerr << "[" << i << "]: " << candidates.at(i).description << QLatin1Char('\n');
             qerr.flush();
 
             int chosen;
             std::cin >> chosen;
             if(std::cin.good() && (chosen >= 0 && chosen < candidates.size()))
             {
-                session = candidates[chosen].uuid.toString();
+                session = candidates.at(chosen).uuid.toString();
             }else{
                 qerr << "invalid selection" << QLatin1Char('\n');
                 return 1;
