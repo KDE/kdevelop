@@ -609,6 +609,7 @@ int main( int argc, char *argv[] )
         }else{
             for(int i = 0; i < candidates.size(); ++i)
                 qerr << "[" << i << "]: " << candidates[i].description << QLatin1Char('\n');
+            qerr.flush();
 
             int chosen;
             std::cin >> chosen;
