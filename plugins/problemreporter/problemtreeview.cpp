@@ -94,6 +94,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     setWhatsThis(i18nc("@info:whatsthis", "Problems"));
     setItemDelegate(new ProblemTreeViewItemDelegate(this));
     setSelectionBehavior(QAbstractItemView::SelectRows);
+    setUniformRowHeights(true);
 
     m_proxy->setSortRole(ProblemModel::SeverityRole);
     m_proxy->setDynamicSortFilter(true);
