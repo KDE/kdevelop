@@ -17,6 +17,8 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 
+#include <QFileInfo>
+
 namespace KDevelop
 {
 
@@ -426,6 +428,21 @@ bool DocumentsInPathSet::include(const IndexedString& path) const
     }
 
     return path.str().contains(m_path, Qt::CaseInsensitive);
+}
+
+DocumentsInCurrentPathSet::DocumentsInCurrentPathSet(const IndexedString& document, QObject* parent)
+    : DocumentsInPathSet(QFileInfo(document.str()).path(), parent)
+{
+}
+
+ProblemScope DocumentsInCurrentPathSet::scope() const
+{
+    return DocumentsInCurrentPath;
+}
+
+void DocumentsInCurrentPathSet::setCurrentDocument(const IndexedString& document)
+{
+    setPath(QFileInfo(document.str()).path());
 }
 
 BypassSet::BypassSet(QObject* parent)

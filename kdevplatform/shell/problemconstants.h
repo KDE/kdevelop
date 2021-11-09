@@ -18,6 +18,7 @@ enum ProblemScope {
     CurrentProject,
     AllProjects,
     DocumentsInPath,
+    DocumentsInCurrentPath, // basically combination of DocumentsInPath and CurrentDocument
     BypassScopeFilter // Special setting. Bypasses the filter in FilteredProblemStore
 };
 

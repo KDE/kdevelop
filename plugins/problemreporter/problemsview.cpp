@@ -73,13 +73,18 @@ void ProblemsView::setupActions()
         documentsInPathAction->setText(i18nc("@option:check", "Documents In Path"));
         documentsInPathAction->setToolTip(i18nc("@info:tooltip", "Display problems from all files in a specific path"));
 
+        auto* documentsInCurrentPathAction = new QAction(this);
+        documentsInCurrentPathAction->setText(i18nc("@option:check", "Documents In Current Path"));
+        documentsInCurrentPathAction->setToolTip(
+            i18nc("@info:tooltip", "Display problems from all files in the path of the current document"));
+
         m_showAllAction = new QAction(this);
         m_showAllAction->setText(i18nc("@option:check", "Show All"));
         m_showAllAction->setToolTip(i18nc("@info:tooltip", "Display all problems"));
 
         QAction* const actions[] = {
-            m_currentDocumentAction, openDocumentsAction,   currentProjectAction,
-            allProjectAction,        documentsInPathAction, m_showAllAction,
+            m_currentDocumentAction, openDocumentsAction,          currentProjectAction, allProjectAction,
+            documentsInPathAction,   documentsInCurrentPathAction, m_showAllAction,
         };
 
         for (QAction* action : actions) {
@@ -118,6 +123,8 @@ void ProblemsView::setupActions()
         connect(currentProjectAction, &QAction::triggered, this, [this](){ setScope(CurrentProject); });
         connect(allProjectAction, &QAction::triggered, this, [this](){ setScope(AllProjects); });
         connect(documentsInPathAction, &QAction::triggered, this, [this]() { setScope(DocumentsInPath); });
+        connect(documentsInCurrentPathAction, &QAction::triggered, this,
+                [this]() { setScope(DocumentsInCurrentPath); });
         connect(m_showAllAction, &QAction::triggered, this, [this](){ setScope(BypassScopeFilter); });
     }
 

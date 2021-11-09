@@ -228,6 +228,9 @@ void ProblemStore::setScope(ProblemScope scope)
     case DocumentsInPath:
         d->m_documents = new DocumentsInPathSet(d->m_pathForDocumentsInPathScope, this);
         break;
+    case DocumentsInCurrentPath:
+        d->m_documents = new DocumentsInCurrentPathSet(d->m_currentDocument, this);
+        break;
     case BypassScopeFilter:
         d->m_documents = new BypassSet(this);
         break;

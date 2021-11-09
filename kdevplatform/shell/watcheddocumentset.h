@@ -147,6 +147,15 @@ private:
     QString m_path;
 };
 
+class DocumentsInCurrentPathSet : public DocumentsInPathSet
+{
+    Q_OBJECT
+public:
+    explicit DocumentsInCurrentPathSet(const IndexedString& document, QObject* parent);
+    ProblemScope scope() const override;
+    void setCurrentDocument(const IndexedString& url) override;
+};
+
 class BypassSet : public WatchedDocumentSet
 {
     Q_OBJECT
