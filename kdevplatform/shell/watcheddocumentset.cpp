@@ -312,12 +312,12 @@ void ProjectSet::trackProjectFiles(const IProject* project)
         auto* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
         if (fileManager) {
             // can't use new signal/slot syntax here, IProjectFileManager is no a QObject
-            connect(fileManager, SIGNAL(fileAdded(ProjectFileItem*)),
-                    this, SLOT(fileAdded(ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRemoved(ProjectFileItem*)),
-                    this, SLOT(fileRemoved(ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRenamed(Path,ProjectFileItem*)),
-                    this, SLOT(fileRenamed(Path,ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileAdded(KDevelop::ProjectFileItem*)), this,
+                    SLOT(fileAdded(KDevelop::ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRemoved(KDevelop::ProjectFileItem*)), this,
+                    SLOT(fileRemoved(KDevelop::ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)), this,
+                    SLOT(fileRenamed(KDevelop::Path, KDevelop::ProjectFileItem*)));
         }
     }
 }

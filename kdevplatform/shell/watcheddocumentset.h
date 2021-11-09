@@ -93,9 +93,9 @@ protected:
     void trackProjectFiles(const IProject* project);
 
 protected Q_SLOTS:
-    void fileAdded(ProjectFileItem*);
-    void fileRemoved(ProjectFileItem* file);
-    void fileRenamed(const Path& oldFile, ProjectFileItem* newFile);
+    void fileAdded(KDevelop::ProjectFileItem*);
+    void fileRemoved(KDevelop::ProjectFileItem* file);
+    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
 protected:
     virtual bool include(const IndexedString& /*url*/) const { return true; }
