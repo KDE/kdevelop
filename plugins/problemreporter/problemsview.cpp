@@ -69,16 +69,17 @@ void ProblemsView::setupActions()
         allProjectAction->setText(i18nc("@option:check", "All Projects"));
         allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
+        auto* documentsInPathAction = new QAction(this);
+        documentsInPathAction->setText(i18nc("@option:check", "Documents In Path"));
+        documentsInPathAction->setToolTip(i18nc("@info:tooltip", "Display problems from all files in a specific path"));
+
         m_showAllAction = new QAction(this);
         m_showAllAction->setText(i18nc("@option:check", "Show All"));
         m_showAllAction->setToolTip(i18nc("@info:tooltip", "Display all problems"));
 
         QAction* const actions[] = {
-            m_currentDocumentAction,
-            openDocumentsAction,
-            currentProjectAction,
-            allProjectAction,
-            m_showAllAction,
+            m_currentDocumentAction, openDocumentsAction,   currentProjectAction,
+            allProjectAction,        documentsInPathAction, m_showAllAction,
         };
 
         for (QAction* action : actions) {
@@ -88,10 +89,35 @@ void ProblemsView::setupActions()
         }
         addAction(m_scopeMenu);
 
+        {
+            auto* updatePathTimer = new QTimer(this);
+            updatePathTimer->setSingleShot(true);
+            updatePathTimer->setInterval(500);
+
+            auto* pathEdit = new KExpandableLineEdit(this);
+            pathEdit->setClearButtonEnabled(true);
+            pathEdit->setPlaceholderText(i18nc("@info:placeholder", "Path Filter..."));
+
+            connect(updatePathTimer, &QTimer::timeout, this,
+                    [this, pathEdit]() { currentView()->model()->setPathForDocumentsInPathScope(pathEdit->text()); });
+
+            connect(pathEdit, &QLineEdit::textChanged, updatePathTimer,
+                    static_cast<void (QTimer::*)()>(&QTimer::start));
+
+            auto* pathForForDocumentsInPathAction = new QWidgetAction(this);
+            pathForForDocumentsInPathAction->setDefaultWidget(pathEdit);
+
+            addAction(pathForForDocumentsInPathAction);
+
+            connect(documentsInPathAction, &QAction::toggled, pathForForDocumentsInPathAction, &QAction::setVisible);
+            pathForForDocumentsInPathAction->setVisible(false);
+        }
+
         connect(m_currentDocumentAction, &QAction::triggered, this, [this](){ setScope(CurrentDocument); });
         connect(openDocumentsAction, &QAction::triggered, this, [this](){ setScope(OpenDocuments); });
         connect(currentProjectAction, &QAction::triggered, this, [this](){ setScope(CurrentProject); });
         connect(allProjectAction, &QAction::triggered, this, [this](){ setScope(AllProjects); });
+        connect(documentsInPathAction, &QAction::triggered, this, [this]() { setScope(DocumentsInPath); });
         connect(m_showAllAction, &QAction::triggered, this, [this](){ setScope(BypassScopeFilter); });
     }
 

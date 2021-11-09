@@ -96,6 +96,9 @@ protected Q_SLOTS:
     void fileAdded(ProjectFileItem*);
     void fileRemoved(ProjectFileItem* file);
     void fileRenamed(const Path& oldFile, ProjectFileItem* newFile);
+
+protected:
+    virtual bool include(const IndexedString& /*url*/) const { return true; }
 };
 
 /**
@@ -120,6 +123,28 @@ class AllProjectSet : public ProjectSet
 public:
     explicit AllProjectSet(QObject* parent);
     ProblemScope scope() const override;
+
+protected:
+    enum class InitFlag {
+        LoadOnInit,
+        SkipLoadOnInit,
+    };
+    explicit AllProjectSet(InitFlag initFlag, QObject* parent);
+    void reload();
+};
+
+class DocumentsInPathSet : public AllProjectSet
+{
+    Q_OBJECT
+public:
+    explicit DocumentsInPathSet(const QString& path, QObject* parent);
+    ProblemScope scope() const override;
+    void setPath(const QString& path);
+
+private:
+    bool include(const IndexedString& url) const override;
+
+    QString m_path;
 };
 
 class BypassSet : public WatchedDocumentSet

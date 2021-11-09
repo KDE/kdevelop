@@ -17,7 +17,8 @@ enum ProblemScope {
     OpenDocuments,
     CurrentProject,
     AllProjects,
-    BypassScopeFilter    // Special setting. Bypasses the filter in FilteredProblemStore
+    DocumentsInPath,
+    BypassScopeFilter // Special setting. Bypasses the filter in FilteredProblemStore
 };
 
 // How should problems be grouped

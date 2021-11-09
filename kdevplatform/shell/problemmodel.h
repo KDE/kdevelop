@@ -167,6 +167,9 @@ public Q_SLOTS:
     /// Sets the scope filter
     void setScope(ProblemScope scope);
 
+    /// Sets the path filter for the DocumentsInPath scope
+    void setPathForDocumentsInPathScope(const QString& path);
+
     /// Sets the severity filter
     void setSeverity(int severity);///old-style severity filtering
 

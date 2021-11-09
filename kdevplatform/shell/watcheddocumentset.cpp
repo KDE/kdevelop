@@ -117,6 +117,13 @@ public:
         getImportsFromDUChain();
     }
 
+    void clear()
+    {
+        m_documents.clear();
+        m_imports.clear();
+        emit m_documentSet->changed();
+    }
+
 private:
     void getImportsFromDU(TopDUContext* context, QSet<TopDUContext*>& visitedContexts)
     {
@@ -275,7 +282,10 @@ void ProjectSet::fileAdded(ProjectFileItem* file)
 {
     Q_D(WatchedDocumentSet);
 
-    d->addDocument(IndexedString(file->indexedPath()), DoUpdate | DoEmit);
+    const auto path = IndexedString(file->indexedPath());
+    if (include(path)) {
+        d->addDocument(path, DoUpdate | DoEmit);
+    }
 }
 
 void ProjectSet::fileRemoved(ProjectFileItem* file)
@@ -290,7 +300,7 @@ void ProjectSet::fileRenamed(const Path& oldFile, ProjectFileItem* newFile)
     Q_D(WatchedDocumentSet);
 
     d->delDocument(IndexedString(oldFile.pathOrUrl()));
-    d->addDocument(IndexedString(newFile->indexedPath()), DoUpdate | DoEmit);
+    fileAdded(newFile);
 }
 
 void ProjectSet::trackProjectFiles(const IProject* project)
@@ -341,19 +351,43 @@ ProblemScope CurrentProjectSet::scope() const
 }
 
 AllProjectSet::AllProjectSet(QObject* parent)
+    : AllProjectSet(InitFlag::LoadOnInit, parent)
+{
+}
+
+AllProjectSet::AllProjectSet(InitFlag initFlag, QObject* parent)
     : ProjectSet(parent)
 {
+    switch (initFlag) {
+    case InitFlag::LoadOnInit:
+        reload();
+        break;
+    case InitFlag::SkipLoadOnInit:
+        break;
+    }
+}
+
+void AllProjectSet::reload()
+{
     Q_D(WatchedDocumentSet);
+
+    d->clear();
 
     const auto projects = ICore::self()->projectController()->projects();
     for (const IProject* project : projects) {
         const auto fileSet = project->fileSet();
         for (const IndexedString& indexedString : fileSet) {
-            d->addDocument(indexedString);
+            if (include(indexedString)) {
+                d->addDocument(indexedString);
+            }
         }
-        d->addDocument(IndexedString(project->path().toLocalFile()));
+        const auto projectPath = IndexedString(project->path().toLocalFile());
+        if (include(projectPath)) {
+            d->addDocument(projectPath);
+        }
         trackProjectFiles(project);
     }
+
     d->updateImports();
     emit changed();
 }
@@ -361,6 +395,37 @@ AllProjectSet::AllProjectSet(QObject* parent)
 ProblemScope AllProjectSet::scope() const
 {
     return AllProjects;
+}
+
+DocumentsInPathSet::DocumentsInPathSet(const QString& path, QObject* parent)
+    : AllProjectSet(InitFlag::SkipLoadOnInit, parent)
+    , m_path(path)
+{
+    reload();
+}
+
+ProblemScope DocumentsInPathSet::scope() const
+{
+    return DocumentsInPath;
+}
+
+void DocumentsInPathSet::setPath(const QString& path)
+{
+    if (m_path == path) {
+        return;
+    }
+
+    m_path = path;
+    reload();
+}
+
+bool DocumentsInPathSet::include(const IndexedString& path) const
+{
+    if (m_path.isEmpty()) {
+        return true;
+    }
+
+    return path.str().contains(m_path, Qt::CaseInsensitive);
 }
 
 BypassSet::BypassSet(QObject* parent)

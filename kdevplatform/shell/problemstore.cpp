@@ -35,6 +35,9 @@ public:
     /// Path of the currently open document
     KDevelop::IndexedString m_currentDocument;
 
+    /// Path for the DocumentsInPath scope
+    QString m_pathForDocumentsInPathScope;
+
     /// All stored problems
     QVector<KDevelop::IProblem::Ptr> m_allProblems;
 };
@@ -222,6 +225,9 @@ void ProblemStore::setScope(ProblemScope scope)
     case AllProjects:
         d->m_documents = new AllProjectSet(this);
         break;
+    case DocumentsInPath:
+        d->m_documents = new DocumentsInPathSet(d->m_pathForDocumentsInPathScope, this);
+        break;
     case BypassScopeFilter:
         d->m_documents = new BypassSet(this);
         break;
@@ -280,6 +286,23 @@ const KDevelop::IndexedString& ProblemStore::currentDocument() const
     return d->m_currentDocument;
 }
 
+void ProblemStore::setPathForDocumentsInPathScope(const QString& path)
+{
+    Q_D(ProblemStore);
+
+    d->m_pathForDocumentsInPathScope = path;
+
+    if (d->m_documents->scope() == DocumentsInPath) {
+        static_cast<DocumentsInPathSet*>(d->m_documents)->setPath(path);
+    }
+}
+
+QString ProblemStore::pathForDocumentsInPathScope() const
+{
+    Q_D(const ProblemStore);
+
+    return d->m_pathForDocumentsInPathScope;
+}
 
 void ProblemStore::onDocumentSetChanged()
 {

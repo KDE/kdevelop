@@ -390,6 +390,13 @@ void ProblemModel::setScope(ProblemScope scope)
     d->m_problems->setScope(scope);
 }
 
+void ProblemModel::setPathForDocumentsInPathScope(const QString& path)
+{
+    Q_D(ProblemModel);
+
+    d->m_problems->setPathForDocumentsInPathScope(path);
+}
+
 void ProblemModel::setSeverity(int severity)
 {
     switch (severity)

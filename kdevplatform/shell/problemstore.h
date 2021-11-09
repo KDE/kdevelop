@@ -117,6 +117,12 @@ public:
     /// Retrieves the path of the current document
     const KDevelop::IndexedString& currentDocument() const;
 
+    /// Sets the path to a folder to be used by the ProblemScope::DocumentsInPath scope
+    void setPathForDocumentsInPathScope(const QString& path);
+
+    /// Retrieves the path to the folder to be used by the ProblemScope::DocumentsInPath scope
+    QString pathForDocumentsInPathScope() const;
+
 Q_SIGNALS:
     /// Emitted when any store setting (grouping, scope, severity, document) is changed
     void changed();
