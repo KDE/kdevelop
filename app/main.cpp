@@ -589,7 +589,6 @@ int main( int argc, char *argv[] )
     // sessions are running.
     if(parser.isSet(QStringLiteral("pss")) || (parser.isSet(QStringLiteral("pid")) && !parser.isSet(QStringLiteral("open-session")) && !parser.isSet(QStringLiteral("ps")) && nRunningSessions > 1))
     {
-        QTextStream qerr(stderr);
         SessionInfos candidates;
         for (const KDevelop::SessionInfo& si : availableSessionInfos) {
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || parser.isSet(QStringLiteral("pid"))) &&
@@ -599,23 +598,27 @@ int main( int argc, char *argv[] )
 
         if(candidates.size() == 0)
         {
+            QTextStream qerr(stderr);
             qerr << "no session available" << QLatin1Char('\n');
             return 1;
         }
 
         if(candidates.size() == 1 && parser.isSet(QStringLiteral("pid")))
         {
-            session = candidates[0].uuid.toString();
+            session = candidates.constFirst().uuid.toString();
         }else{
+            QTextStream qout(stdout);
             for(int i = 0; i < candidates.size(); ++i)
-                qerr << "[" << i << "]: " << candidates[i].description << QLatin1Char('\n');
+                qout << "[" << i << "]: " << candidates.at(i).description << QLatin1Char('\n');
+            qout.flush();
 
             int chosen;
             std::cin >> chosen;
             if(std::cin.good() && (chosen >= 0 && chosen < candidates.size()))
             {
-                session = candidates[chosen].uuid.toString();
+                session = candidates.at(chosen).uuid.toString();
             }else{
+                QTextStream qerr(stderr);
                 qerr << "invalid selection" << QLatin1Char('\n');
                 return 1;
             }
