@@ -3,7 +3,7 @@
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
     SPDX-FileCopyrightText: 2008 Vladimir Prus <ghost@cs.msu.su>
 
-    SPDX-License-Identifier: LicenseRef-KDevelop-Ideal
+    SPDX-License-Identifier: LicenseRef-MIT-KDevelop-Ideal
 */
 
 #include "ideallayout.h"

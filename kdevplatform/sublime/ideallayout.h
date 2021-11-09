@@ -2,7 +2,7 @@
     SPDX-FileCopyrightText: 2007 Roberto Raggi <roberto@kdevelop.org>
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
 
-    SPDX-License-Identifier: LicenseRef-KDevelop-Ideal
+    SPDX-License-Identifier: LicenseRef-MIT-KDevelop-Ideal
 */
 
 #ifndef KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H

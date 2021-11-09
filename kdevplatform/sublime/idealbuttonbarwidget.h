@@ -3,7 +3,7 @@
     SPDX-FileCopyrightText: 2007 Hamish Rodda <rodda@kde.org>
     SPDX-FileCopyrightText: 2011 Alexander Dymo <adymo@kdevelop.org>
 
-    SPDX-License-Identifier: LicenseRef-KDevelop-Ideal
+    SPDX-License-Identifier: LicenseRef-MIT-KDevelop-Ideal
 */
 
 #ifndef IDEALBUTTONBARWIDGET_H
