@@ -4,7 +4,7 @@
     SPDX-FileCopyrightText: 2011 Alexander Dymo <adymo@kdevelop.org>
     SPDX-FileCopyrightText: 2018 Amish Naidu <amhndu@gmail.com>
 
-    SPDX-License-Identifier: LicenseRef-KDevelop-Ideal
+    SPDX-License-Identifier: LicenseRef-MIT-KDevelop-Ideal
 */
 
 #include "idealtoolbutton.h"
