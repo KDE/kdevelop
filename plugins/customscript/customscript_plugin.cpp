@@ -130,7 +130,6 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
     if (command.contains(QLatin1String("$TMPFILE"))) {
         tmpFile.reset(new QTemporaryFile(QDir::tempPath() + QLatin1String("/code")));
-        tmpFile->setAutoRemove(false);
         if (tmpFile->open()) {
             qCDebug(CUSTOMSCRIPT) << "using temporary file" << tmpFile->fileName();
             command.replace(QLatin1String("$TMPFILE"), tmpFile->fileName());
