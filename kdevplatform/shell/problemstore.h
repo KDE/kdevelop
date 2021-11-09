@@ -11,6 +11,8 @@
 #include <shell/shellexport.h>
 #include <interfaces/iproblem.h>
 
+#include "problemconstants.h"
+
 namespace KDevelop
 {
 
@@ -95,10 +97,10 @@ public:
     WatchedDocumentSet* documents() const;
 
     /// Sets the scope filter
-    void setScope(int scope);
+    void setScope(ProblemScope scope);
 
     /// Returns the current scope
-    int scope() const;
+    ProblemScope scope() const;
 
     /// Sets the grouping method
     virtual void setGrouping(int grouping);

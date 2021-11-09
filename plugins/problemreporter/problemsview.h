@@ -9,6 +9,8 @@
 
 #include <interfaces/itoolviewactionlistener.h>
 
+#include <problemconstants.h>
+
 #include <QWidget>
 
 class ProblemTreeView;
@@ -73,7 +75,7 @@ private:
     void updateActions();
 
     void handleSeverityActionToggled();
-    void setScope(int scope);
+    void setScope(ProblemScope scope);
 
     /// Create a view for the model and add to the tabbed widget
     void addModel(const ModelData& data);

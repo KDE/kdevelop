@@ -461,7 +461,7 @@ void ProblemsView::handleSeverityActionToggled()
                             (m_hintSeverityAction->isChecked() ? IProblem::Hint : IProblem::Severities()) );
 }
 
-void ProblemsView::setScope(int scope)
+void ProblemsView::setScope(ProblemScope scope)
 {
     m_scopeMenu->setText(i18nc("@title:menu", "Scope: %1", m_scopeMenu->menu()->actions().at(scope)->text()));
 

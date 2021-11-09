@@ -13,8 +13,10 @@
 #include <shell/problem.h>
 #include <language/editor/documentrange.h>
 
+#include "problemconstants.h"
+
 namespace KDevelop {
-    class IDocument;
+class IDocument;
 class IndexedString;
 class ProblemStore;
 class ProblemModelPrivate;
@@ -163,7 +165,7 @@ public Q_SLOTS:
     void setShowImports(bool showImports);
 
     /// Sets the scope filter
-    void setScope(int scope);
+    void setScope(ProblemScope scope);
 
     /// Sets the severity filter
     void setSeverity(int severity);///old-style severity filtering

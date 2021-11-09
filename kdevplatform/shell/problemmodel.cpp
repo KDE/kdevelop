@@ -377,7 +377,7 @@ bool ProblemModel::showImports() const
     return d->m_problems->showImports();
 }
 
-void ProblemModel::setScope(int scope)
+void ProblemModel::setScope(ProblemScope scope)
 {
     Q_D(ProblemModel);
 

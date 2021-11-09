@@ -195,22 +195,21 @@ WatchedDocumentSet* ProblemStore::documents() const
     return d->m_documents;
 }
 
-void ProblemStore::setScope(int scope)
+void ProblemStore::setScope(ProblemScope scope)
 {
     Q_D(ProblemStore);
 
-    auto cast_scope = static_cast<ProblemScope>(scope);
     bool showImports = false;
 
     if (d->m_documents) {
-        if(cast_scope == d->m_documents->scope())
+        if (scope == d->m_documents->scope())
             return;
 
         showImports = d->m_documents->showImports();
         delete d->m_documents;
     }
 
-    switch (cast_scope) {
+    switch (scope) {
     case CurrentDocument:
         d->m_documents = new CurrentDocumentSet(d->m_currentDocument, this);
         break;
@@ -237,7 +236,7 @@ void ProblemStore::setScope(int scope)
     emit changed();
 }
 
-int ProblemStore::scope() const
+ProblemScope ProblemStore::scope() const
 {
     Q_D(const ProblemStore);
 
