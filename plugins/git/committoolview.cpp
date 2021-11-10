@@ -463,11 +463,14 @@ void CommitToolView::commitActiveProject()
             if (extended.length() > 0)
                 msg += QStringLiteral("\n\n") + extended;
             VcsJob* job = vcs->commitStaged(msg, proj->projectItem()->path().toUrl());
+            m_commitForm->clearError();
             m_commitForm->disable();
             connect(job, &VcsJob::finished, m_commitForm, [=]{
                 if (job->status() == VcsJob::JobSucceeded){
                     m_commitForm->clear();
                     emit updateProjectDiffs(proj);
+                } else {
+                    m_commitForm->showError(i18n("Committing failed. See Version Control tool view."));
                 }
                 m_commitForm->enable();
             });

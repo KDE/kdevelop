@@ -8,6 +8,7 @@
 
 #include <KColorScheme>
 #include <KLocalizedString>
+#include <KMessageWidget>
 
 #include <QAction>
 #include <QFontDatabase>
@@ -39,6 +40,7 @@ SimpleCommitForm::SimpleCommitForm(QWidget* parent)
     , m_commitBtn(new QPushButton(i18n("Commit")))
     , m_summaryEdit(new QLineEdit)
     , m_messageEdit(new QTextEdit)
+    , m_inlineError(new KMessageWidget)
     , m_disabled(false)
 {
     QHBoxLayout* _hlayout = new QHBoxLayout();
@@ -49,8 +51,14 @@ SimpleCommitForm::SimpleCommitForm(QWidget* parent)
     QVBoxLayout* _vlayout = new QVBoxLayout(this);
     _vlayout->setSpacing(2);
     _vlayout->setMargin(0);
+    _vlayout->addWidget(m_inlineError);
     _vlayout->addLayout(_hlayout);
     _vlayout->addWidget(m_messageEdit);
+
+    m_inlineError->setHidden(true);
+    m_inlineError->setMessageType(KMessageWidget::Error);
+    m_inlineError->setCloseButtonVisible(true);
+    m_inlineError->setWordWrap(true);
 
     auto monospace = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     monospace.setStyleHint(QFont::TypeWriter);
@@ -185,6 +193,7 @@ void SimpleCommitForm::clear()
 {
     m_summaryEdit->clear();
     m_messageEdit->clear();
+    clearError();
 }
 
 
@@ -196,4 +205,17 @@ void SimpleCommitForm::setBranchName(const QString& branchName)
 void SimpleCommitForm::setProjectName(const QString& projName)
 {
     m_projectName = projName;
+}
+
+void SimpleCommitForm::showError(const QString& error)
+{
+    m_inlineError->setText(error);
+    m_inlineError->animatedShow();
+}
+
+void SimpleCommitForm::clearError()
+{
+    if (!m_inlineError->isHidden() && !m_inlineError->isHideAnimationRunning()) {
+        m_inlineError->animatedHide();
+    }
 }
