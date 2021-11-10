@@ -287,6 +287,8 @@ void CommitToolView::activateProject(const QModelIndex& idx)
         }
         m_commitForm->setProjectName(idx.data(RepoStatusModel::NameRole).toString());
         m_commitForm->setBranchName(idx.data(RepoStatusModel::BranchNameRole).toString());
+        m_commitForm->clearError();
+        m_commitForm->enable();
         if (m_statusmodel->projectItem(m_statusmodel->itemFromIndex(repoIdx)).index->rowCount() == 0)
             m_commitForm->disableCommitButton();
         else

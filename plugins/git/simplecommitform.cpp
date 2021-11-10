@@ -118,8 +118,9 @@ SimpleCommitForm::SimpleCommitForm(QWidget* parent)
 
     connect(m_commitBtn, &QPushButton::clicked, this, &SimpleCommitForm::committed);
     setLayout(_vlayout);
-    m_commitBtn->setDisabled(true);
-    m_commitBtn->setToolTip(i18n("To commit changes, please write a commit message first"));
+
+    m_commitBtn->setToolTip(i18n("To commit changes, please select a project first"));
+    disable();
 }
 
 QString SimpleCommitForm::extendedDescription(int wrapAtColumn) const
