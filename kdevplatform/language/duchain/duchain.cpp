@@ -1827,20 +1827,34 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures,
                                   QObject* notifyReady, int priority) const
 {
-    DUChainReadLocker lock(DUChain::lock());
-    TopDUContext* standardContext = DUChainUtils::standardContextForUrl(document.toUrl());
-    if (standardContext && standardContext->parsingEnvironmentFile() &&
-        !standardContext->parsingEnvironmentFile()->needsUpdate() &&
-        standardContext->parsingEnvironmentFile()->featuresSatisfied(minFeatures)) {
-        lock.unlock();
-        if (notifyReady)
-            QMetaObject::invokeMethod(notifyReady, "updateReady", Qt::DirectConnection,
-                                      Q_ARG(KDevelop::IndexedString, document),
-                                      Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext(standardContext)));
-    } else {
-        ///Start a parse-job for the given document
-        ICore::self()->languageController()->backgroundParser()->addDocument(document, minFeatures, priority,
-                                                                             notifyReady);
+    // the call to DUChainUtils::standardContextForUrl(...) takes surprisingly long
+    // however if a document is already scheduled for parsing, we know it needs parsing and can
+    // skip the expansive check.
+    auto* backgroundParser = ICore::self()->languageController()->backgroundParser();
+    // atomically check if the document is already scheduled and if so add a new listener:
+    bool listenerAdded = backgroundParser->addListenerToDocumentIfExist(document, minFeatures, priority, notifyReady);
+    // if the document isn't already scheduled and the listener was added:
+    if (!listenerAdded)
+    {
+        DUChainReadLocker lock(DUChain::lock());
+        // check if the document needs parsing
+        TopDUContext* standardContext = DUChainUtils::standardContextForUrl(document.toUrl());
+        if (standardContext && standardContext->parsingEnvironmentFile() &&
+            !standardContext->parsingEnvironmentFile()->needsUpdate() &&
+            standardContext->parsingEnvironmentFile()->featuresSatisfied(minFeatures)) {
+            // if the document doesn't need parsing we can immedistely return the already parsed context to the listener
+            lock.unlock();
+            if (notifyReady) {
+                // do not remove qualification KDevelop:: or invokeMethod will not find the proper method
+                QMetaObject::invokeMethod(notifyReady, "updateReady", Qt::DirectConnection,
+                                Q_ARG(KDevelop::IndexedString, document),
+                                Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext(standardContext)));
+            }
+        } else {
+            ///Start a parse-job for the given document
+            lock.unlock();
+            backgroundParser->addDocument(document, minFeatures, priority, notifyReady);
+        }
     }
 }
 

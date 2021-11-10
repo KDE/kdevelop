@@ -141,7 +141,6 @@ public Q_SLOTS:
 
     /// Reverts all requests that were made for the given notification-target.
     /// priorities and requested features will be reverted as well.
-    /// When @p notifyWhenReady is set to a nullptr, all requests will be reverted.
     void revertAllRequests(QObject* notifyWhenReady);
 
     /**
@@ -157,6 +156,19 @@ public Q_SLOTS:
      *                 ILanguageSupport::ReparseDelaySpecialValues enum.
      */
     void addDocument(const IndexedString& url,
+                     TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts,
+                     int priority = 0,
+                     QObject* notifyWhenReady = nullptr,
+                     ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing,
+                     int delay_ms = ILanguageSupport::DefaultDelay);
+
+    /**
+     * try to add a listener to an existing document
+     * @see addDocument(...) for parameter description
+     * @returns true if the document existed and a listener was added
+     */
+    [[nodiscard]]
+    bool addListenerToDocumentIfExist(const IndexedString& url,
                      TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts,
                      int priority = 0,
                      QObject* notifyWhenReady = nullptr,

@@ -110,39 +110,27 @@ inline uint qHash(const DocumentParseTarget& target)
            + static_cast<uint>(reinterpret_cast<quintptr>(target.notifyWhenReady.data()));
 }
 
-struct DocumentParsePlan
+class DocumentParsePlan
 {
-    QSet<DocumentParseTarget> targets;
-
+public:
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags() const
     {
         //Pick the strictest possible flags
         ParseJob::SequentialProcessingFlags ret = ParseJob::IgnoresSequentialProcessing;
-        for (const DocumentParseTarget& target : targets) {
+        for (const DocumentParseTarget& target : m_targets) {
             ret |= target.sequentialProcessingFlags;
         }
 
         return ret;
     }
 
-    int priority() const
-    {
-        //Pick the best priority
-        int ret = BackgroundParser::WorstPriority;
-        for (const DocumentParseTarget& target : targets) {
-            if (target.priority < ret) {
-                ret = target.priority;
-            }
-        }
-
-        return ret;
-    }
+    int priority() const { return m_priority; }
 
     TopDUContext::Features features() const
     {
         //Pick the best features
         TopDUContext::Features ret{};
-        for (const DocumentParseTarget& target : targets) {
+        for (const DocumentParseTarget& target : m_targets) {
             ret |= target.features;
         }
 
@@ -153,13 +141,45 @@ struct DocumentParsePlan
     {
         QVector<QPointer<QObject>> ret;
 
-        for (const DocumentParseTarget& target : targets) {
+        for (const DocumentParseTarget& target : m_targets) {
             if (target.notifyWhenReady)
                 ret << target.notifyWhenReady;
         }
 
         return ret;
     }
+    const QSet<const DocumentParseTarget>& targets() const
+    {
+        return m_targets;
+    }
+
+    void addTarget(const DocumentParseTarget& target)
+    {
+        if (target.priority < m_priority) {
+            m_priority = target.priority;
+        }
+        m_targets.insert(target);
+    }
+
+    void removeTargetsForListener(QObject* notifyWhenReady)
+    {
+        m_priority = BackgroundParser::WorstPriority;
+        for (auto it = m_targets.cbegin(), end = m_targets.cend(); it != end;) {
+            if (it->notifyWhenReady.data() == notifyWhenReady) {
+                it = m_targets.erase(it);
+            } else {
+                if (it->priority < m_priority) {
+                   m_priority = it->priority;
+                }
+                ++it;
+            }
+        }
+    }
+
+private:
+    QSet<const DocumentParseTarget> m_targets;
+    int m_priority = BackgroundParser::WorstPriority;
+
 };
 
 Q_DECLARE_TYPEINFO(DocumentParseTarget, Q_MOVABLE_TYPE);
@@ -168,6 +188,13 @@ Q_DECLARE_TYPEINFO(DocumentParsePlan, Q_MOVABLE_TYPE);
 class KDevelop::BackgroundParserPrivate
 {
 public:
+    enum class AddBehavior
+    {
+        AddIfMissing,
+        OnlyUpdateExisting,
+    };
+
+
     BackgroundParserPrivate(BackgroundParser* parser, ILanguageController* languageController)
         : m_parser(parser)
         , m_languageController(languageController)
@@ -299,7 +326,7 @@ public:
             const auto parsePlanIt = m_documents.find(url);
             if (parsePlanIt != m_documents.end()) {
                 // Remove all mentions of this document.
-                for (const auto& target : qAsConst(parsePlanIt->targets)) {
+                for (const auto& target : parsePlanIt->targets()) {
                     m_documentsForPriority[target.priority].remove(url);
                 }
 
@@ -452,6 +479,50 @@ public:
         m_weaver.resume();
     }
 
+
+    bool addDocumentListener(const IndexedString& url, TopDUContext::Features features, int priority,
+                             QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags, int delay,
+                             AddBehavior addBehavior)
+    {
+        qCDebug(LANGUAGE) << "BackgroundParserPrivate::addDocumentListener" << url << url.toUrl();
+        Q_ASSERT(isValidURL(url));
+        DocumentParseTarget target;
+        target.priority = priority;
+        target.features = features;
+        target.sequentialProcessingFlags = flags;
+        target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
+
+        {
+            QMutexLocker lock(&m_mutex);
+            auto it = m_documents.find(url);
+
+            if (it != m_documents.end()) {
+                //Update the stored plan
+                auto currentPrio = it.value().priority();
+                it.value().addTarget(target);
+                if (currentPrio > target.priority) {
+                    m_documentsForPriority[currentPrio].remove(url);
+                    m_documentsForPriority[target.priority].insert(url);
+                }
+            } else if (addBehavior == AddBehavior::AddIfMissing) {
+    //             qCDebug(LANGUAGE) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
+                auto& doc = m_documents[url];
+                doc.addTarget(target);
+                m_documentsForPriority[doc.priority()].insert(url);
+                ++m_maxParseJobs; //So the progress-bar waits for this document
+            } else {
+                return false;
+            }
+
+            if (delay == ILanguageSupport::DefaultDelay) {
+                delay = m_delay;
+            }
+        }
+        startTimerThreadSafe(delay);
+        return true;
+    }
+
+
     BackgroundParser* m_parser;
     ILanguageController* m_languageController;
 
@@ -558,20 +629,16 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, const
 
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
+    Q_ASSERT(notifyWhenReady != nullptr);
     Q_D(BackgroundParser);
 
     QMutexLocker lock(&d->m_mutex);
     for (auto it = d->m_documents.begin(); it != d->m_documents.end();) {
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
-        const auto oldTargets = (*it).targets;
-        for (const DocumentParseTarget& target : oldTargets) {
-            if (notifyWhenReady && target.notifyWhenReady.data() == notifyWhenReady) {
-                (*it).targets.remove(target);
-            }
-        }
+        it->removeTargetsForListener(notifyWhenReady);
 
-        if ((*it).targets.isEmpty()) {
+        if ((*it).targets().isEmpty()) {
             it = d->m_documents.erase(it);
             --d->m_maxParseJobs;
 
@@ -583,41 +650,21 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
     }
 }
 
+bool BackgroundParser::addListenerToDocumentIfExist(const IndexedString& url, TopDUContext::Features features, int priority,
+                                           QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags,
+                                           int delay)
+{
+    Q_D(BackgroundParser);
+    return d->addDocumentListener(url, features, priority, notifyWhenReady, flags, delay,
+                                  BackgroundParserPrivate::AddBehavior::OnlyUpdateExisting);
+}
+
 void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority,
                                    QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags, int delay)
 {
     Q_D(BackgroundParser);
-
-    qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url << url.toUrl();
-    Q_ASSERT(isValidURL(url));
-    QMutexLocker lock(&d->m_mutex);
-    {
-        DocumentParseTarget target;
-        target.priority = priority;
-        target.features = features;
-        target.sequentialProcessingFlags = flags;
-        target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
-
-        auto it = d->m_documents.find(url);
-
-        if (it != d->m_documents.end()) {
-            //Update the stored plan
-
-            d->m_documentsForPriority[it.value().priority()].remove(url);
-            it.value().targets << target;
-            d->m_documentsForPriority[it.value().priority()].insert(url);
-        } else {
-//             qCDebug(LANGUAGE) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
-            d->m_documents[url].targets << target;
-            d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
-            ++d->m_maxParseJobs; //So the progress-bar waits for this document
-        }
-
-        if (delay == ILanguageSupport::DefaultDelay) {
-            delay = d->m_delay;
-        }
-        d->startTimerThreadSafe(delay);
-    }
+    d->addDocumentListener(url, features, priority, notifyWhenReady, flags, delay,
+                           BackgroundParserPrivate::AddBehavior::AddIfMissing);
 }
 
 void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyWhenReady)
@@ -633,14 +680,9 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
         auto& documentParsePlan = *documentParsePlanIt;
         d->m_documentsForPriority[documentParsePlan.priority()].remove(url);
 
-        const auto oldTargets = documentParsePlan.targets;
-        for (const DocumentParseTarget& target : oldTargets) {
-            if (target.notifyWhenReady.data() == notifyWhenReady) {
-                documentParsePlan.targets.remove(target);
-            }
-        }
+        documentParsePlan.removeTargetsForListener(notifyWhenReady);
 
-        if (documentParsePlan.targets.isEmpty()) {
+        if (documentParsePlan.targets().isEmpty()) {
             d->m_documents.erase(documentParsePlanIt);
             --d->m_maxParseJobs;
         } else {
