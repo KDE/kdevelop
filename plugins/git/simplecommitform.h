@@ -16,17 +16,16 @@ class QToolButton;
 class KMessageWidget;
 
 /**
- * A widget for preparing the commit message. It has a
- *  - an (initially hidden) KMessageWidget to show
- *    potential errors
- *  - lineedit for editing the commit message summary
+ * A widget for preparing the commit message. It has
+ *
+ *  - an (initially hidden) KMessageWidget to show potential errors
+ *  - a lineedit for editing the commit message summary
  *    (the first line of the commit message);
- *  - textedit for editing the rest of the commit message
+ *  - a textedit for editing the rest of the commit message
  *  - a button for committing
  *
- * Also, the lineedit shows the number of characters in
- * the summary on the right and, if it is >= 80, indicates
- * this with a red background.
+ * Also, the lineedit shows the number of characters in the summary
+ * on the right and, if it is >= 80, indicates this with a red background.
  */
 class SimpleCommitForm : public QWidget
 {
