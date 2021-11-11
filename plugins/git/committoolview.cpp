@@ -289,6 +289,8 @@ void CommitToolView::activateProject(const QModelIndex& idx)
         }
         m_commitForm->setProjectName(idx.data(RepoStatusModel::NameRole).toString());
         m_commitForm->setBranchName(idx.data(RepoStatusModel::BranchNameRole).toString());
+        m_commitForm->clearError();
+        m_commitForm->enable();
         if (m_statusmodel->projectItem(m_statusmodel->itemFromIndex(repoIdx)).index->rowCount() == 0)
             m_commitForm->disableCommitButton();
         else
@@ -465,11 +467,14 @@ void CommitToolView::commitActiveProject()
             if (extended.length() > 0)
                 msg += QStringLiteral("\n\n") + extended;
             VcsJob* job = vcs->commitStaged(msg, proj->projectItem()->path().toUrl());
+            m_commitForm->clearError();
             m_commitForm->disable();
-            connect(job, &VcsJob::resultsReady, m_commitForm, [=]{
+            connect(job, &VcsJob::finished, m_commitForm, [=]{
                 if (job->status() == VcsJob::JobSucceeded){
                     m_commitForm->clear();
                     emit updateProjectDiffs(proj);
+                } else {
+                    m_commitForm->showError(i18n("Committing failed. See Version Control tool view."));
                 }
                 m_commitForm->enable();
             });

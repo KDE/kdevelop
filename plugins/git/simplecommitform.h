@@ -13,17 +13,19 @@ class QLineEdit;
 class QPushButton;
 class QTextEdit;
 class QToolButton;
+class KMessageWidget;
 
 /**
- * A widget for preparing the commit message. It has a
- *  - lineedit for editing the commit message summary
+ * A widget for preparing the commit message. It has
+ *
+ *  - an (initially hidden) KMessageWidget to show potential errors
+ *  - a lineedit for editing the commit message summary
  *    (the first line of the commit message);
- *  - textedit for editing the rest of the commit message
+ *  - a textedit for editing the rest of the commit message
  *  - a button for committing
  *
- * Also, the lineedit shows the number of characters in
- * the summary on the right and, if it is >= 80, indicates
- * this with a red background.
+ * Also, the lineedit shows the number of characters in the summary
+ * on the right and, if it is >= 80, indicates this with a red background.
  */
 class SimpleCommitForm : public QWidget
 {
@@ -85,6 +87,8 @@ public Q_SLOTS:
 
     /**
      * Clear the commit form (summary & description)
+     *
+     * @note: Also hides the inline error message if shown.
      */
     void clear();
 
@@ -102,6 +106,19 @@ public Q_SLOTS:
      */
     void setBranchName(const QString& branchName);
 
+    /**
+     * Shows an error message using the inline KMessageWidget
+     *
+     * (Use e.g. when git commit fails)
+     */
+    void showError(const QString& error);
+
+    /**
+     * Hides the inline error message if shown.
+     */
+    void clearError();
+
+
 Q_SIGNALS:
 
     /**
@@ -113,6 +130,7 @@ private:
     QPushButton* m_commitBtn;
     QLineEdit* m_summaryEdit;
     QTextEdit* m_messageEdit;
+    KMessageWidget* m_inlineError;
 
     /**
      * true if the commit button is disabled by calling disable();
