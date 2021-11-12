@@ -12,12 +12,16 @@
 #define PERFORCEPLUGIN_TEST_H
 
 #include <QObject>
+#include <QString>
 
 class PerforcePlugin;
 
 class PerforcePluginTest : public QObject
 {
     Q_OBJECT
+public:
+    PerforcePluginTest();
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
@@ -36,9 +40,20 @@ private Q_SLOTS:
     void testCommit();
     void testDiff();
 private:
-    PerforcePlugin* m_plugin;
     void removeTempDirsIfAny();
     void createNewTempDirs();
+
+    PerforcePlugin* m_plugin = nullptr;
+
+    const QString tempDir;
+    const QString perforceTestBaseDirNoSlash;
+    const QString perforceTestBaseDir;
+    const QString perforceConfigFileName;
+
+    const QString perforceSrcDir;
+    const QString perforceTest_FileName;
+    const QString perforceTest_FileName2;
+    const QString perforceTest_FileName3;
 };
 
 #endif

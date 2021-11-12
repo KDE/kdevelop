@@ -31,15 +31,18 @@
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
 
-const QString tempDir = QDir::tempPath();
-const QString bazaarTest_BaseDir(tempDir + "/kdevBazaar_testdir/");
-const QString bazaarRepo(bazaarTest_BaseDir + ".bzr");
-const QString bazaarSrcDir(bazaarTest_BaseDir + "src/");
-const QString bazaarTest_FileName(QStringLiteral("testfile"));
-const QString bazaarTest_FileName2(QStringLiteral("foo"));
-const QString bazaarTest_FileName3(QStringLiteral("bar"));
-
 using namespace KDevelop;
+
+TestBazaar::TestBazaar()
+    : tempDir{QDir::tempPath()}
+    , bazaarTest_BaseDir{tempDir + QLatin1String("/kdevBazaar_testdir/")}
+    , bazaarRepo{bazaarTest_BaseDir + QLatin1String(".bzr")}
+    , bazaarSrcDir{bazaarTest_BaseDir + QLatin1String("src/")}
+    , bazaarTest_FileName{QStringLiteral("testfile")}
+    , bazaarTest_FileName2{QStringLiteral("foo")}
+    , bazaarTest_FileName3{QStringLiteral("bar")}
+{
+}
 
 void TestBazaar::initTestCase()
 {

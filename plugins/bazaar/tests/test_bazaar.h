@@ -15,6 +15,7 @@
 #define KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H
 
 #include <QObject>
+#include <QString>
 
 class BazaarPlugin;
 
@@ -26,6 +27,8 @@ namespace KDevelop
 class TestBazaar: public QObject
 {
     Q_OBJECT
+public:
+    TestBazaar();
 
 private:
     void repoInit();
@@ -49,8 +52,17 @@ private Q_SLOTS:
     void testRemoveFolderContainingUnversionedFiles();
 
 private:
-    BazaarPlugin* m_plugin;
     void removeTempDirs();
+
+    BazaarPlugin* m_plugin = nullptr;
+
+    const QString tempDir;
+    const QString bazaarTest_BaseDir;
+    const QString bazaarRepo;
+    const QString bazaarSrcDir;
+    const QString bazaarTest_FileName;
+    const QString bazaarTest_FileName2;
+    const QString bazaarTest_FileName3;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H
