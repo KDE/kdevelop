@@ -29,4 +29,5 @@ void ItemRepositoryTestBase::cleanupTestCase()
         return; // the repository has not been initialized => skip the cleanup
     }
     ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryDir.path());
+    globalItemRepositoryRegistry().shutdown();
 }
