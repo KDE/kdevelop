@@ -205,5 +205,6 @@ install(FILES org.kde.kdevelop.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR
 
 # Make it possible to use the po files fetched by the fetch-translations step
 ki18n_install(po)
+kdoctools_install(po)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
