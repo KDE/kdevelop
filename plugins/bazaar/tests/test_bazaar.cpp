@@ -33,7 +33,6 @@ do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::
 
 const QString tempDir = QDir::tempPath();
 const QString bazaarTest_BaseDir(tempDir + "/kdevBazaar_testdir/");
-const QString bazaarTest_BaseDir2(tempDir + "/kdevBazaar_testdir2/");
 const QString bazaarRepo(bazaarTest_BaseDir + ".bzr");
 const QString bazaarSrcDir(bazaarTest_BaseDir + "src/");
 const QString bazaarTest_FileName(QStringLiteral("testfile"));
@@ -63,7 +62,6 @@ void TestBazaar::init()
     QDir tmpdir(tempDir);
     tmpdir.mkdir(bazaarTest_BaseDir);
     tmpdir.mkdir(bazaarSrcDir);
-    tmpdir.mkdir(bazaarTest_BaseDir2);
 }
 
 void TestBazaar::cleanup()
@@ -339,10 +337,6 @@ void TestBazaar::removeTempDirs()
     if (QFileInfo::exists(bazaarTest_BaseDir))
         if (!(KIO::del(QUrl::fromLocalFile(bazaarTest_BaseDir))->exec()))
             qDebug() << "KIO::del(" << bazaarTest_BaseDir << ") returned false";
-
-    if (QFileInfo::exists(bazaarTest_BaseDir2))
-        if (!(KIO::del(QUrl::fromLocalFile(bazaarTest_BaseDir2))->exec()))
-            qDebug() << "KIO::del(" << bazaarTest_BaseDir2 << ") returned false";
 }
 
 QTEST_MAIN(TestBazaar)

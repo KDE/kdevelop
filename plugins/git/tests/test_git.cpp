@@ -25,7 +25,6 @@ do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::
 
 inline QString tempDir() { return QDir::tempPath(); }
 inline QString gitTest_BaseDir() { return tempDir() + "/kdevGit_testdir/"; }
-inline QString gitTest_BaseDir2() { return tempDir() + "/kdevGit_testdir2/"; }
 inline QString gitRepo() { return gitTest_BaseDir() + ".git"; }
 inline QString gitSrcDir() { return gitTest_BaseDir() + "src/"; }
 inline QString gitTest_FileName() { return QStringLiteral("testfile"); }
@@ -69,7 +68,6 @@ void GitInitTest::init()
     QDir tmpdir(tempDir());
     tmpdir.mkdir(gitTest_BaseDir());
     tmpdir.mkdir(gitSrcDir());
-    tmpdir.mkdir(gitTest_BaseDir2());
 }
 
 void GitInitTest::cleanup()
@@ -542,11 +540,10 @@ void GitInitTest::testRemoveFolderContainingUnversionedFiles()
 
 void GitInitTest::removeTempDirs()
 {
-    for (const auto& dirPath : {gitTest_BaseDir(), gitTest_BaseDir2()}) {
-        QDir dir(dirPath);
-        if (dir.exists() && !dir.removeRecursively()) {
-            qDebug() << "QDir::removeRecursively(" << dirPath << ") returned false";
-        }
+    const auto dirPath = gitTest_BaseDir();
+    QDir dir(dirPath);
+    if (dir.exists() && !dir.removeRecursively()) {
+        qDebug() << "QDir::removeRecursively(" << dirPath << ") returned false";
     }
 }
 

@@ -28,7 +28,6 @@
 const QString tempDir = QDir::tempPath();
 const QString perforceTestBaseDirNoSlash(tempDir + "/kdevPerforce_testdir");
 const QString perforceTestBaseDir(tempDir + "/kdevPerforce_testdir/");
-const QString perforceTestBaseDir2(tempDir + "/kdevPerforce_testdir2/");
 const QString perforceConfigFileName(QStringLiteral("p4config.txt"));
 
 const QString perforceSrcDir(perforceTestBaseDir + "src/");
@@ -94,9 +93,7 @@ void PerforcePluginTest::createNewTempDirs()
     }
     g.close();
 
-
     tmpdir.mkdir(perforceSrcDir);
-    tmpdir.mkdir(perforceTestBaseDir2);
 }
 
 
@@ -105,10 +102,6 @@ void PerforcePluginTest::removeTempDirsIfAny()
     QDir dir(perforceTestBaseDir);
     if (dir.exists() && !dir.removeRecursively())
         qDebug() << "QDir::removeRecursively(" << perforceTestBaseDir << ") returned false";
-
-    QDir dir2(perforceTestBaseDir);
-    if (dir2.exists() && !dir2.removeRecursively())
-        qDebug() << "QDir::removeRecursively(" << perforceTestBaseDir2 << ") returned false";
 }
 
 
