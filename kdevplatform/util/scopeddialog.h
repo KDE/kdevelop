@@ -39,11 +39,20 @@ namespace KDevelop {
   \endcode
   without need to manually clean up afterwards.
  */
+// This class template is final, because inheriting it shouldn't be useful, and
+// the forwarding-reference constructor would be invoked in places where slicing
+// normally occurs.
 template<typename DialogType>
-class ScopedDialog
+class ScopedDialog final
 {
     Q_DISABLE_COPY_MOVE(ScopedDialog)
 public:
+    // Explicitly delete unconventional overloads of copy and move constructors
+    // to prevent a compiler from using the forwarding-reference constructor in
+    // places where a copy or a move constructor are normally invoked.
+    ScopedDialog(ScopedDialog&) = delete;
+    ScopedDialog(const ScopedDialog&&) = delete;
+
     /// Construct the dialog with any set of allowed arguments
     /// for the construction of DialogType
     template<typename ... Arguments>
