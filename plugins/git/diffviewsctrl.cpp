@@ -404,11 +404,12 @@ void DiffViewsCtrl::gotoSrcLine()
     auto last_line = vData.ktDoc->documentEnd().line();
     int delta = 0;
     while(diffLn - delta >= 1 || diffLn + delta < last_line) {
-        auto srcLn = diff.diffLineToTargetLine(diffLn-delta);
-        if ( srcLn < 0 ) srcLn = diff.diffLineToTargetLine(diffLn+delta);
-        if ( srcLn >= 0 ) {
-            if (auto* srcDoc = docCtrl->openDocument(vData.url)) {
-                srcDoc->setCursorPosition(KTextEditor::Cursor(srcLn, diffCol-1));
+        auto src = diff.diffLineToTarget(diffLn-delta);
+        if ( src.line < 0 ) src = diff.diffLineToTarget(diffLn+delta);
+        if ( src.line >= 0 ) {
+            auto path = KDevelop::Path(vData.project->path(), src.path);
+            if (auto* srcDoc = docCtrl->openDocument(path.toUrl())) {
+                srcDoc->setCursorPosition(KTextEditor::Cursor(src.line, diffCol-1));
                 docCtrl->activateDocument(srcDoc);
             }
             return;

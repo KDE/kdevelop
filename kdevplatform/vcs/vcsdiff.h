@@ -149,20 +149,37 @@ public:
     VcsDiff subDiffHunk(const uint line, DiffDirection dir = Normal) const;
 
     /**
-     * Maps a line position in the diff to a corresponding line position in the source file.
+     * A struct representing a position in a source file.
      *
-     * @param line a 0-based line position in the diff
-     * @returns the 0-based line position in the source file or -1 if no such position exists.
+     * @note This should eventually be replaced with a @ref KDevelop::DocumentCursor,
+     * which, however, currently cannot be used in this file.
      */
-    int diffLineToSourceLine (const uint line) const;
+    struct SourceLocation {
+        /* Path to the source file (may be relative) */
+        QString path = {};
+        /* 0-based line number in the source file */
+        int line = -1;
+    };
 
     /**
      * Maps a line position in the diff to a corresponding line position in the source file.
      *
      * @param line a 0-based line position in the diff
-     * @returns the 0-based line position in the source file or -1 if no such position exists.
+     * @returns a @ref SourceLocation whose path is the target file path (relative to diff root)
+     *          and line the 0-based line position in the target file or {"", -1} if no such
+     *          position exists.
      */
-    int diffLineToTargetLine (const uint line) const;
+    SourceLocation diffLineToSource (const uint line) const;
+
+    /**
+     * Maps a line position in the diff to a corresponding line position in the target file.
+     *
+     * @param line a 0-based line position in the diff
+     * @returns a @ref SourceLocation whose path is the source file path (relative to diff root)
+     *          and line the 0-based line position in the source file or {"", -1} if no such
+     *          position exists.
+     */
+    SourceLocation diffLineToTarget (const uint line) const;
 
     /**
      * Represents a pair of files which are compared

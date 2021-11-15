@@ -128,11 +128,11 @@ yadayadayada                10     5
 >>>>>>> commit              11
 - second deletion           12  3
 )diff");
-    QCOMPARE(conflictDiff.diffLineToSourceLine(8), 2);
-    QCOMPARE(conflictDiff.diffLineToTargetLine(10), 5);
-    QCOMPARE(conflictDiff.diffLineToSourceLine(7), -1);
-    QCOMPARE(conflictDiff.diffLineToSourceLine(9), -1);
-    QCOMPARE(conflictDiff.diffLineToSourceLine(11), -1);
+    QCOMPARE(conflictDiff.diffLineToSource(8).line, 2);
+    QCOMPARE(conflictDiff.diffLineToTarget(10).line, 5);
+    QCOMPARE(conflictDiff.diffLineToSource(7).line, -1);
+    QCOMPARE(conflictDiff.diffLineToSource(9).line, -1);
+    QCOMPARE(conflictDiff.diffLineToSource(11).line, -1);
 }
 
 
@@ -141,15 +141,20 @@ void TestVcsDiff::testLineMapping()
     VcsDiff diff;
     diff.setDiff(sampleDiff);
 
+    auto src = QStringLiteral("kdevplatform/vcs/vcsdiff.cpp");
+    auto tgt = QStringLiteral("kdevplatform/vcs/vcsdiff.h");
+    QCOMPARE(diff.diffLineToSource(15-1).path, src);
+    QCOMPARE(diff.diffLineToTarget(147-1).path, tgt);
+
     // We have no way to map the headings
-    QCOMPARE(diff.diffLineToSourceLine(169-1), -1);
-    QCOMPARE(diff.diffLineToTargetLine(169-1), -1);
+    QCOMPARE(diff.diffLineToSource(169-1).line, -1);
+    QCOMPARE(diff.diffLineToTarget(169-1).line, -1);
 
-    QCOMPARE(diff.diffLineToSourceLine(15-1), 42-1);
-    QCOMPARE(diff.diffLineToTargetLine(15-1), -1);
+    QCOMPARE(diff.diffLineToSource(15-1).line, 42-1);
+    QCOMPARE(diff.diffLineToTarget(15-1).line, -1);
 
-    QCOMPARE(diff.diffLineToTargetLine(147-1), 180-1);
-    QCOMPARE(diff.diffLineToSourceLine(147-1), 150-1);
+    QCOMPARE(diff.diffLineToTarget(147-1).line, 180-1);
+    QCOMPARE(diff.diffLineToSource(147-1).line, 150-1);
 }
 
 

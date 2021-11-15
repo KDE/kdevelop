@@ -302,9 +302,11 @@ public:
      * @param line a 0-based line position in the diff
      * @param dest specifies the destination file to map to:
      *             either SRC (the source file, '-') or TGT (the target file, '+')
-     * @returns the 0-based line position in the destination file or -1 if no such position exists.
+     * @returns a @ref VcsDiff::SourceLocation whose path is the (relative to diff root)
+     *          destination file path and line the 0-based line position in the
+     *          destination file or {"", -1} if no such position exists.
      */
-    int mapDiffLine ( const uint line, const Dest dest ) const
+    VcsDiff::SourceLocation mapDiffLine ( const uint line, const Dest dest ) const
     {
         const QLatin1Char skipChar = (dest == SRC) ? QLatin1Char(TGT) : QLatin1Char(SRC);
         for(auto h: hunks) {
@@ -313,7 +315,7 @@ public:
 
                 // The line refers to the heading line
                 if (hunkPos < 0)
-                    return -1;
+                    return {};
 
                 // Any lines in the diff hunk which come before line and come from the opposite
                 // of dest should not be counted (they are not present in the dest)
@@ -356,21 +358,21 @@ public:
                 // This works around the fact that inConflict is set even if hunkPos
                 // ends up hitting a conflict marker
                 if (CONFLICT_RE->match(ln).hasMatch())
-                    return -1;
+                    return {};
 
                 if (ln.startsWith(dest) || ln.startsWith(QLatin1Char(' ')) || ln.isEmpty() || inConflict) {
                     if (dest == SRC)
                         // The -1 accounts for the fact that srcStart is 1-based
                         // but we need to return 0-based line numbers
-                        return h->srcStart-1+hunkPos-skipCount;
+                        return {h->srcFile, static_cast<int>(h->srcStart-1+hunkPos-skipCount)};
                     else
                         // The -1 accounts for the fact that srcStart is 1-based
                         // but we need to return 0-based line numbers
-                        return h->tgtStart-1+hunkPos-skipCount;
-                } else return -1;
+                        return {h->tgtFile, static_cast<int>(h->tgtStart-1+hunkPos-skipCount)};
+                } else return {};
             }
         }
-        return -1;
+        return {};
     }
 };
 
@@ -528,12 +530,12 @@ const QVector<VcsDiff::FilePair> VcsDiff::fileNames() const
 }
 
 
-int VcsDiff::diffLineToSourceLine ( const uint line ) const
+VcsDiff::SourceLocation VcsDiff::diffLineToSource ( const uint line ) const
 {
     return d->mapDiffLine(line, VcsDiffPrivate::SRC);
 }
 
-int VcsDiff::diffLineToTargetLine ( const uint line ) const
+VcsDiff::SourceLocation VcsDiff::diffLineToTarget ( const uint line ) const
 {
     return d->mapDiffLine(line, VcsDiffPrivate::TGT);
 }
