@@ -23,6 +23,9 @@
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
 
+#define VERIFYJOBFAILURE(j) \
+do { QVERIFY(j); QVERIFY(((!j->exec()) || ((j)->status() != KDevelop::VcsJob::JobSucceeded))); } while(0)
+
 inline QString tempDir() { return QDir::tempPath(); }
 inline QString gitTest_BaseDir() { return tempDir() + "/kdevGit_testdir/"; }
 inline QString gitRepo() { return gitTest_BaseDir() + ".git"; }
@@ -298,6 +301,17 @@ void GitInitTest::testBranch(const QString& newBranch)
     j = m_plugin->deleteBranch(baseUrl, oldBranch);
     VERIFYJOB(j);
     QVERIFY(!runSynchronously(m_plugin->branches(baseUrl)).toStringList().contains(oldBranch));
+
+    // Test that we can't delete branch on which we currently are
+    j = m_plugin->deleteBranch(baseUrl, newBranch);
+    VERIFYJOBFAILURE(j);
+    QVERIFY(runSynchronously(m_plugin->branches(baseUrl)).toStringList().contains(newBranch));
+
+    // Test branching off HEAD
+    rev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head);
+    j = m_plugin->branch(baseUrl, rev, newBranch+QStringLiteral("-new"));
+    VERIFYJOB(j);
+    QVERIFY(runSynchronously(m_plugin->branches(baseUrl)).toStringList().contains(newBranch+QStringLiteral("-new")));
 }
 
 void GitInitTest::testMerge()

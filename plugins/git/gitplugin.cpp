@@ -875,8 +875,11 @@ VcsJob* GitPlugin::branch(const QUrl& repository, const KDevelop::VcsRevision& r
     auto* job = new GitJob(urlDir(repository), this);
     *job << "git" << "branch" << "--" << branchName;
 
-    if(!rev.prettyValue().isEmpty())
+    if(rev.revisionType() == VcsRevision::Special && rev.specialType() == VcsRevision::Head) {
+        *job << "HEAD";
+    } else if(!rev.prettyValue().isEmpty()) {
         *job << rev.revisionValue().toString();
+    }
     return job;
 }
 
