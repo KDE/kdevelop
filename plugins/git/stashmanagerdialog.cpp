@@ -29,9 +29,8 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
 {
     setWindowTitle(i18nc("@title:window", "Stash Manager"));
 
-    m_mainWidget = new QWidget(this);
     m_ui = new Ui::StashManager;
-    m_ui->setupUi(m_mainWidget);
+    m_ui->setupUi(this);
 
     auto* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);
@@ -45,7 +44,7 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
 
     connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this, &StashManagerDialog::reject);
 
-    m_mainWidget->setEnabled(false); //we won't enable it until we have the model with data and selection
+    setEnabled(false); //we won't enable it until we have the model with data and selection
 }
 
 StashManagerDialog::~StashManagerDialog()
@@ -57,14 +56,14 @@ void StashManagerDialog::stashesFound()
 {
     QModelIndex firstIdx=m_ui->stashView->model()->index(0, 0);
     m_ui->stashView->setCurrentIndex(firstIdx);
-    m_mainWidget->setEnabled(true);
+    setEnabled(true);
 }
 
 QString StashManagerDialog::selection() const
 {
     QModelIndex idx = m_ui->stashView->currentIndex();
     Q_ASSERT(idx.isValid());
-    return idx.data().toString();
+    return idx.data(StashModel::RefRole).toString();
 }
 
 void StashManagerDialog::runStash(const QStringList& arguments)
@@ -72,7 +71,7 @@ void StashManagerDialog::runStash(const QStringList& arguments)
     VcsJob* job = m_plugin->gitStash(m_dir, arguments, OutputJob::Verbose);
     connect(job, &VcsJob::result, this, &StashManagerDialog::accept);
 
-    m_mainWidget->setEnabled(false);
+    setEnabled(false);
 
     ICore::self()->runController()->registerJob(job);
 }
@@ -136,26 +135,29 @@ void StashManagerDialog::branchClicked()
 StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
     : QStandardItemModel(parent)
 {
-    VcsJob* job=git->gitStash(dir, QStringList(QStringLiteral("list")), OutputJob::Silent);
+    auto job = git->stashList(dir, OutputJob::Silent);
     connect(job, &VcsJob::finished, this, &StashModel::stashListReady);
-
     ICore::self()->runController()->registerJob(job);
 }
 
 void StashModel::stashListReady(KJob* _job)
 {
-    auto* job = qobject_cast<DVcsJob*>(_job);
-    const QList<QByteArray> output = job->rawOutput().split('\n');
+    auto* job = qobject_cast<VcsJob*>(_job);
 
-    for (const QByteArray& line : output) {
-        const QList<QByteArray> fields = line.split(':');
-
-        QList<QStandardItem*> elements;
-        elements.reserve(fields.size());
-        for (const QByteArray& field : fields) {
-            elements += new QStandardItem(QString::fromUtf8(field.trimmed()));
-        }
-
-        appendRow(elements);
-    }
+    for(const auto& s_item: job->fetchResults().value<QList<GitPlugin::StashItem>>()) {
+        const QString itemValue = i18nc("%1: stack depth, %2: branch, %3: parent description", "%1. %2: %3",
+                                        QString::number(s_item.stackDepth), s_item.branch, s_item.parentDescription);
+        auto* item = new QStandardItem(itemValue);
+        item->setData(s_item.shortRef, StashModel::RefRole);
+        item->setData(s_item.parentSHA, StashModel::CommitHashRole);
+        item->setData(s_item.parentDescription, StashModel::CommitDescRole);
+        item->setData(s_item.branch, StashModel::BranchRole);
+        item->setData(s_item.message, StashModel::MessageRole);
+        item->setData(s_item.creationTime, StashModel::DateRole);
+        item->setData(
+            i18n("%1 created on %2", s_item.branch, s_item.creationTime.toString()),
+            Qt::ToolTipRole
+        );
+        appendRow(item);
+    };
 }

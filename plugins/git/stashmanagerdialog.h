@@ -36,7 +36,6 @@ class StashManagerDialog : public QDialog
         void runStash(const QStringList& arguments);
         
         Ui::StashManager* m_ui;
-        QWidget* m_mainWidget;
         GitPlugin* m_plugin;
         QDir m_dir;
 };
@@ -45,6 +44,14 @@ class StashModel : public QStandardItemModel
 {
     Q_OBJECT
     public:
+        enum ItemRoles {
+            RefRole = Qt::UserRole+1, /**< the stash item ref*/
+            MessageRole,              /**< the message associated with the stash item (possibly empty)**/
+            CommitHashRole,           /**< a short hash of the commit on which the stash was made */
+            CommitDescRole,           /**< a brief description of the commit on which the stash was made (possibly empty) */
+            BranchRole,               /**< the name of the branch on which the stash was made (possibly empty)*/
+            DateRole,                 /**< the date when the stash was created */
+        };
         explicit StashModel(const QDir& dir, GitPlugin* git, QObject* parent = nullptr);
         
     private Q_SLOTS:

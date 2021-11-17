@@ -6,21 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>354</width>
-    <height>244</height>
+    <width>558</width>
+    <height>445</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
-    <widget class="QPushButton" name="apply">
+   <item row="5" column="1">
+    <widget class="QPushButton" name="drop">
      <property name="toolTip">
-      <string comment="@info:tooltip">Apply stash's patch</string>
+      <string comment="@info:tooltip">Remove the selected stash</string>
      </property>
      <property name="text">
-      <string comment="@action:button">Apply</string>
+      <string comment="@action:button">Drop</string>
      </property>
      <property name="icon">
-      <iconset theme="dialog-ok-apply"/>
+      <iconset theme="edit-delete">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
@@ -33,46 +40,8 @@
       <string comment="@action:button">Pop</string>
      </property>
      <property name="icon">
-      <iconset theme="vcs-stash-pop"/>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="branch">
-     <property name="toolTip">
-      <string comment="@info:tooltip">Create a new branch and apply the stash there, then drop the stash</string>
-     </property>
-     <property name="text">
-      <string comment="@action:button">Branch</string>
-     </property>
-     <property name="icon">
-      <iconset theme="vcs-branch"/>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>77</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="1">
-    <widget class="QPushButton" name="drop">
-     <property name="toolTip">
-      <string comment="@info:tooltip">Remove the selected branch</string>
-     </property>
-     <property name="text">
-      <string comment="@action:button">Drop</string>
-     </property>
-     <property name="icon">
-      <iconset theme="edit-delete"/>
+      <iconset theme="vcs-stash-pop">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
@@ -85,21 +54,69 @@
       <string comment="@action:button">Show</string>
      </property>
      <property name="icon">
-      <iconset theme="document-preview"/>
+      <iconset theme="document-preview">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" rowspan="5">
+   <item row="7" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="8">
     <widget class="QListView" name="stashView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close</set>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="apply">
+     <property name="toolTip">
+      <string comment="@info:tooltip">Apply stash's patch</string>
+     </property>
+     <property name="text">
+      <string comment="@action:button">Apply</string>
+     </property>
+     <property name="icon">
+      <iconset theme="dialog-ok-apply">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>77</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="branch">
+     <property name="toolTip">
+      <string comment="@info:tooltip">Create a new branch and apply the stash there, then drop the stash</string>
+     </property>
+     <property name="text">
+      <string comment="@action:button">Branch</string>
+     </property>
+     <property name="icon">
+      <iconset theme="vcs-branch">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
