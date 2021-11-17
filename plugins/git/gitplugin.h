@@ -15,6 +15,8 @@
 #include <outputview/outputjob.h>
 #include <vcs/vcsjob.h>
 
+#include <QDateTime>
+
 class KDirWatch;
 class QDir;
 
@@ -215,7 +217,43 @@ public:
 
     void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls) override;
 
-    KDevelop::DVcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
+    // Stash Management
+
+    /**
+     * Structure to hold information about an item on the stash stack
+     */
+    struct StashItem {
+        int stackDepth = -1;        /* Position on the stack */
+        QString shortRef;           /* The reflog selector (e.g. stash@{0}) */
+        QString parentSHA;          /* The short SHA of the commit on which the stash was made */
+        QString parentDescription;  /* A short description of the commit on which the stash was made */
+        QString branch;             /* The branch on which the stash was made */
+        QString message;            /* The message with which the stash was made */
+        QDateTime creationTime;     /* The date-time the stash item was committed */
+    };
+
+    /**
+     * Returns a job to run `git stash` in the repository @p repository with
+     * additional arguments @p args.
+     *
+     * The @p verbosity parameter will determine whether the job output will
+     * be shown in the VCS Output ToolView.
+     *
+     * For example, a job to silently apply the top-most stashed item to the current
+     * tree would be created as follows:
+     *
+     *      gitStash(repoDir, {QStringLiteral("apply")}, KDevelop::OutputJob::Silent)
+     *
+     */
+    KDevelop::VcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
+
+    /**
+     * The result (job->fetchResults()) will be a @ref QList of @ref StashItem s
+     *
+     * @p repository is the repository to work on
+     * @p verbosity  determines whether the job output will be shown in the VCS Output ToolView
+     */
+    KDevelop::VcsJob* stashList(const QDir& repository, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Silent);
 
     bool hasStashes(const QDir& repository);
     bool hasModifications(const QDir& repository);
@@ -265,6 +303,7 @@ private Q_SLOTS:
     void parseGitVersionOutput(KDevelop::DVcsJob* job);
     void parseGitBranchOutput(KDevelop::DVcsJob* job);
     void parseGitCurrentBranch(KDevelop::DVcsJob* job);
+    void parseGitStashList(KDevelop::VcsJob* job);
 
     void ctxRebase();
     void ctxPushStash();
@@ -319,6 +358,8 @@ private:
     /** A factory for constructing the tool view for preparing commits */
     CommitToolViewFactory* m_commitToolViewFactory;
 };
+
+Q_DECLARE_METATYPE(GitPlugin::StashItem)
 
 QVariant runSynchronously(KDevelop::VcsJob* job);
 

@@ -566,6 +566,95 @@ void GitInitTest::testDiff()
     QVERIFY(QDir().exists(path+"/.git"));
 }
 
+void GitInitTest::testStash()
+{
+    repoInit();
+    addFiles();
+    commitFiles();
+    const QVector<KDevelop::DVcsEvent> commits = m_plugin->allCommits(gitTest_BaseDir());
+    QVERIFY(!commits.isEmpty());
+    QStringList logMessages;
+
+    for (auto& commit : commits)
+        logMessages << commit.log();
+
+    auto repo_url = QUrl::fromLocalFile(gitTest_BaseDir());
+
+    // No stash
+    QVERIFY(!m_plugin->hasStashes(gitTest_BaseDir()));
+    VcsJob* j = m_plugin->stashList(gitTest_BaseDir());
+    VERIFYJOB(j);
+    QVERIFY(j->fetchResults().value<QList<GitPlugin::StashItem>>().isEmpty());
+
+    // Do some changes
+    QVERIFY(writeFile(gitTest_BaseDir() + gitTest_FileName(), QStringLiteral("NEW CONTENT TO STASH")));
+    QVERIFY(writeFile(gitTest_BaseDir() + gitTest_FileName2(), QStringLiteral("No, REALLY NEW FOOO()!")));
+
+    // Verify stashing works
+    j = m_plugin->gitStash(gitTest_BaseDir(), {}, OutputJob::Silent);
+    VERIFYJOB(j);
+    QVERIFY(m_plugin->hasStashes(gitTest_BaseDir()));
+
+    // Verify stash list gives us the single stash
+    j = m_plugin->stashList(gitTest_BaseDir());
+    VERIFYJOB(j);
+    auto items = j->fetchResults().value<QList<GitPlugin::StashItem>>();
+    QVERIFY(items.length() == 1);
+    QVERIFY(items[0].stackDepth == 0);
+    QVERIFY(items[0].branch == runSynchronously(m_plugin->currentBranch(repo_url)).toString());
+    QVERIFY(commits[0].commit() == items[0].parentSHA);
+
+    // Verify stash on new branch gives us correct parent branch
+    //
+    // 1. switch to a new branch
+    auto rev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head);
+    j = m_plugin->branch(repo_url, rev, QStringLiteral("my-new-branch"));
+    VERIFYJOB(j);
+    j = m_plugin->switchBranch(repo_url, QStringLiteral("my-new-branch"));
+    VERIFYJOB(j);
+
+    // 2. Do more changes & stash them
+    QString testFileContent = QStringLiteral("2. NEW CONTENT TO STASH");
+    QVERIFY(writeFile(gitTest_BaseDir() + gitTest_FileName(), testFileContent));
+    QVERIFY(writeFile(gitTest_BaseDir() + gitTest_FileName2(), QStringLiteral("2. No, REALLY NEW FOOO()!")));
+    j = m_plugin->gitStash(gitTest_BaseDir(), {}, OutputJob::Silent);
+    VERIFYJOB(j);
+    QFile testFile(gitTest_BaseDir() + gitTest_FileName());
+    testFile.open(QIODevice::ReadOnly);
+    auto testFileContentAfterStash = QString::fromUtf8(testFile.readAll());
+    testFile.close();
+    QVERIFY(testFileContent != testFileContentAfterStash);
+
+
+    // 3. Verify stash list gives us a new stash
+    j = m_plugin->stashList(gitTest_BaseDir());
+    VERIFYJOB(j);
+    items = j->fetchResults().value<QList<GitPlugin::StashItem>>();
+    QVERIFY(items.length() == 2);
+
+    // 4. Find the newest stash
+    bool found = false;
+    for(const auto& item : items) {
+        if (item.stackDepth != 0) continue;
+        // 5. Verify that the new branch is parent of the new stash
+        QVERIFY(item.branch == QStringLiteral("my-new-branch"));
+        found = true;
+    }
+    QVERIFY(found);
+
+    // Verify that stash pop recreates the contents and drops the stash item
+    j = m_plugin->gitStash(gitTest_BaseDir(), {QStringLiteral("pop")}, OutputJob::Silent);
+    VERIFYJOB(j);
+    testFile.open(QIODevice::ReadOnly);
+    auto testFileContentAfterPop = QString::fromUtf8(testFile.readAll());
+    QVERIFY(testFileContentAfterPop == testFileContent);
+    j = m_plugin->stashList(gitTest_BaseDir());
+    VERIFYJOB(j);
+    items = j->fetchResults().value<QList<GitPlugin::StashItem>>();
+    QVERIFY(items.length() == 1);
+
+}
+
 QTEST_MAIN(GitInitTest)
 
 // #include "gittest.moc"

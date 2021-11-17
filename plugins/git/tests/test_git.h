@@ -49,6 +49,7 @@ private Q_SLOTS:
     void testRemoveUnindexedFile();
     void testRemoveFolderContainingUnversionedFiles();
     void testDiff();
+    void testStash();
 
 private:
     GitPlugin* m_plugin;

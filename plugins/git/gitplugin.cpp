@@ -215,7 +215,11 @@ bool emptyOutput(DVcsJob* job)
 
 bool GitPlugin::hasStashes(const QDir& repository)
 {
-    return !emptyOutput(gitStash(repository, QStringList(QStringLiteral("list")), KDevelop::OutputJob::Silent));
+    if (auto *job = qobject_cast<DVcsJob*>(gitStash(repository, QStringList(QStringLiteral("list")), KDevelop::OutputJob::Silent))) {
+        return !emptyOutput(job);
+    }
+    Q_ASSERT(false); // gitStash should always return a DVcsJob !
+    return false;
 }
 
 bool GitPlugin::hasModifications(const QDir& d)
@@ -767,11 +771,71 @@ DVcsJob* GitPlugin::lsFiles(const QDir &repository, const QStringList &args,
     return job;
 }
 
-DVcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, OutputJob::OutputJobVerbosity verbosity)
+VcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, OutputJob::OutputJobVerbosity verbosity)
 {
     auto* job = new GitJob(repository, this, verbosity);
     *job << "git" << "stash" << args;
     return job;
+}
+
+VcsJob* GitPlugin::stashList(const QDir& repository,
+                                       KDevelop::OutputJob::OutputJobVerbosity verbosity)
+{
+    /* The format returns 4 fields separated by a 0-byte character (%x00):
+     *
+     *   %gd ... shortened reflog selector
+     *   %p  ... abbreviated parent hashes (separated by a space, the first is the commit
+     *                                      on which the stash was made)
+     *   %s  ... subject (the stash message)
+     *   %ct ... committer timestamp
+     *
+     * see man git-log, PRETTY FORMATS section and man git-stash for details.
+     */
+    auto* job=qobject_cast<DVcsJob*>(gitStash(repository, QStringList({
+        QStringLiteral("list"),
+        QStringLiteral("--format=format:%gd%x00%P%x00%s%x00%ct"),
+    }), verbosity));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitStashList);
+    return job;
+}
+
+void GitPlugin::parseGitStashList(KDevelop::VcsJob* _job)
+{
+    auto* job = qobject_cast<DVcsJob*>(_job);
+    const QList<QByteArray> output = job->rawOutput().split('\n');
+    QList<StashItem> results;
+
+    for (const QByteArray& line : output) {
+        if (line.isEmpty()) continue;
+
+        const QList<QByteArray> fields = line.split('\x00');
+
+        /* Extract the fields */
+        Q_ASSERT(fields.length() >= 4);
+        const auto message = QString::fromUtf8(fields[2]);
+        const auto parentHash = QString::fromUtf8(fields[1].split(' ')[0]);
+        const auto creationTime = QDateTime::fromSecsSinceEpoch(fields[3].toInt());
+        const auto shortRef = QString::fromUtf8(fields[0]);
+        const auto stackDepth = fields[0].mid(7, fields[0].indexOf('}')-7).toInt();
+        QStringRef branch {};
+        QStringRef parentCommitDesc {};
+        if (message.startsWith(QStringLiteral("WIP on "))) {
+            const int colPos = message.indexOf(QLatin1Char(':'), 7);
+            branch = message.midRef(7, colPos-7);
+            parentCommitDesc = message.midRef(colPos+2);
+        }
+
+        results << StashItem {
+            stackDepth,
+            shortRef,
+            parentHash,
+            parentCommitDesc.toString(),
+            branch.toString(),
+            message,
+            creationTime,
+        };
+    }
+    job->setResults(QVariant::fromValue(results));
 }
 
 VcsJob* GitPlugin::tag(const QUrl& repository, const QString& commitMessage, const VcsRevision& rev, const QString& tagName)
@@ -792,7 +856,7 @@ VcsJob* GitPlugin::switchBranch(const QUrl &repository, const QString &branch)
                                                        KGuiItem(i18nc("@action:button", "Stash"), QStringLiteral("vcs-stash")),
                                                        KGuiItem(i18nc("@action:button", "Keep"), QStringLiteral("dialog-cancel")));
         if (answer == KMessageBox::Yes) {
-            QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
+            QScopedPointer<VcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
             stash->exec();
         } else if (answer == KMessageBox::Cancel) {
             return nullptr;
