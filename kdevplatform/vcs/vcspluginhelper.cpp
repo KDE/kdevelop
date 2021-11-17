@@ -118,14 +118,6 @@ public:
 
     QMenu* createMenu(QWidget* parent)
     {
-        bool allVersioned=true;
-        for (const QUrl& url : qAsConst(ctxUrls)) {
-            allVersioned=allVersioned && vcs->isVersionControlled(url);
-
-            if(!allVersioned)
-                break;
-        }
-
         auto* menu = new QMenu(vcs->name(), parent);
         menu->setIcon(QIcon::fromTheme(ICore::self()->pluginController()->pluginInfo(plugin).iconName()));
         menu->addAction(commitAction);
@@ -143,7 +135,7 @@ public:
         menu->addAction(annotationAction);
         menu->addAction(diffToBaseAction);
 
-        const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
+        const bool singleVersionedFile = ctxUrls.size() == 1 && vcs->isVersionControlled(ctxUrls.constFirst());
         historyAction->setEnabled(singleVersionedFile);
         annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
         diffToBaseAction->setEnabled(singleVersionedFile);
