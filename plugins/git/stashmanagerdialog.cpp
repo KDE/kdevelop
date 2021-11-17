@@ -11,6 +11,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <vcs/dvcs/dvcsjob.h>
 
 #include <QDialogButtonBox>
@@ -19,6 +20,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KTextEditor/Document>
 
 using namespace KDevelop;
 
@@ -77,10 +79,26 @@ void StashManagerDialog::runStash(const QStringList& arguments)
 
 void StashManagerDialog::showStash()
 {
-    auto * review = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>();
     IPatchSource::Ptr stashPatch(new StashPatchSource(selection(), m_plugin, m_dir));
 
-    review->startReview(stashPatch);
+    if (auto * review = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>()) {
+        review->startReview(stashPatch);
+    } else {
+        auto* docCtrl = ICore::self()->documentController();
+        connect(stashPatch, &StashPatchSource::patchChanged, docCtrl, [=] {
+            auto* doc = docCtrl->openDocument(
+                stashPatch->file(),
+                KTextEditor::Range::invalid(),
+                IDocumentController::DoNotAddToRecentOpen
+            );
+            doc->setPrettyName(stashPatch->name());
+            doc->textDocument()->setReadWrite(false);
+            doc->textDocument()->setMode(QStringLiteral("diff"));
+            doc->textDocument()->setHighlightingMode(QStringLiteral("diff"));
+            docCtrl->activateDocument(doc);
+            connect(ICore::self(), &ICore::aboutToShutdown, docCtrl, [=] {doc->close();});
+        });
+    }
     accept();
 }
 
