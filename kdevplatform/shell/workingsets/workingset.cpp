@@ -454,24 +454,6 @@ void WorkingSet::loadToArea(Sublime::Area* area) {
     }
 }
 
-void deleteGroupRecursive(KConfigGroup group) {
-//     qCDebug(WORKINGSET) << "deleting" << group.name();
-    const auto entryMap = group.entryMap();
-    for (auto it = entryMap.begin(), end = entryMap.end(); it != end; ++it) {
-        group.deleteEntry(it.key());
-    }
-    Q_ASSERT(group.entryMap().isEmpty());
-
-    const auto groupList = group.groupList();
-    for (const QString& subGroup : groupList) {
-        deleteGroupRecursive(group.group(subGroup));
-        group.deleteGroup(subGroup);
-    }
-    //Why doesn't this work?
-//     Q_ASSERT(group.groupList().isEmpty());
-    group.deleteGroup();
-}
-
 void WorkingSet::deleteSet(bool force, bool silent)
 {
     if(m_areas.isEmpty() || force) {
@@ -479,7 +461,7 @@ void WorkingSet::deleteSet(bool force, bool silent)
 
         KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
         KConfigGroup group = setConfig.group(m_id);
-        deleteGroupRecursive(group);
+        group.deleteGroup();
 #ifdef SYNC_OFTEN
         setConfig.sync();
 #endif
@@ -498,12 +480,12 @@ void WorkingSet::saveFromArea(Sublime::Area* area)
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
 
     KConfigGroup setGroup = setConfig.group(m_id);
-    deleteGroupRecursive(setGroup);
+    setGroup.deleteGroup();
 
     saveFromAreaPrivate(area->rootIndex(), setGroup, area->activeView());
 
     if (isEmpty()) {
-        deleteGroupRecursive(setGroup);
+        setGroup.deleteGroup();
     } else {
         setPersistent(wasPersistent);
     }
