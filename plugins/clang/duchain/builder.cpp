@@ -1348,6 +1348,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_ULong);
     UseKind(CXType_LongLong);
     UseKind(CXType_ULongLong);
+    UseKind(CXType_Half);
     UseKind(CXType_Float);
     UseKind(CXType_LongDouble);
     UseKind(CXType_Double);

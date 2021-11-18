@@ -191,6 +191,7 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
 {
     return TK == CXType_Void    ? IntegralType::TypeVoid
     : TK == CXType_Bool         ? IntegralType::TypeBoolean
+    : TK == CXType_Half         ? IntegralType::TypeHalf
     : TK == CXType_Float        ? IntegralType::TypeFloat
     : TK == CXType_Char16       ? IntegralType::TypeChar16_t
     : TK == CXType_Char32       ? IntegralType::TypeChar32_t

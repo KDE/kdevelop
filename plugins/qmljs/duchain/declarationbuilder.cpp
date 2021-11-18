@@ -1349,6 +1349,8 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         type = IntegralType::TypeBoolean;
     } else if (name == QLatin1String("int")) {
         type = IntegralType::TypeInt;
+    } else if (name == QLatin1String("half")) {
+        type = IntegralType::TypeHalf;
     } else if (name == QLatin1String("float")) {
         type = IntegralType::TypeFloat;
     } else if (name == QLatin1String("double") || name == QLatin1String("real")) {
@@ -1465,6 +1467,7 @@ static bool isNumeric(const IntegralType::Ptr& type)
 {
     return type->dataType() == IntegralType::TypeInt
         || type->dataType() == IntegralType::TypeIntegral
+        || type->dataType() == IntegralType::TypeHalf
         || type->dataType() == IntegralType::TypeFloat
         || type->dataType() == IntegralType::TypeDouble;
 }

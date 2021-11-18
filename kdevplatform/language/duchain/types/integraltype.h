@@ -49,6 +49,7 @@ public:
         TypeMixed,
         TypeChar16_t,
         TypeChar32_t,
+        TypeHalf,
         TypeLanguageSpecific = 200
     };
 

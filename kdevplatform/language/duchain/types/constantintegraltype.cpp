@@ -84,6 +84,9 @@ QString ConstantIntegralType::toString() const
     case TypeInt:
         ret = (modifiers() & UnsignedModifier) ? QStringLiteral("unsigned") : QStringLiteral("int");
         break;
+    case TypeHalf:
+        ret = QStringLiteral("half");
+        break;
     case TypeFloat:
         ret = QStringLiteral("float");
         break;
@@ -120,6 +123,7 @@ QString ConstantIntegralType::valueAsString() const
         return (modifiers() & UnsignedModifier) ?
                QString::number(( uint )d_func()->m_value) :
                QString::number(( int )d_func()->m_value);
+    case TypeHalf:
     case TypeFloat:
         return QString::number(value<float>());
     case TypeDouble:

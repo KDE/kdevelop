@@ -44,6 +44,8 @@ public:
     {
         if (AbstractType::modifiers() & UnsignedModifier)
             setValueInternal<quint64>(value);
+        else if (IntegralType::dataType() == TypeHalf)
+            setValueInternal<float>(value);
         else if (IntegralType::dataType() == TypeFloat)
             setValueInternal<float>(value);
         else if (IntegralType::dataType() == TypeDouble)
@@ -62,6 +64,8 @@ public:
     {
         if (modifiers() & UnsignedModifier) {
             return constant_value<quint64>(&d_func()->m_value);
+        } else if (dataType() == TypeHalf) {
+            return constant_value<float>(&d_func()->m_value);
         } else if (dataType() == TypeFloat) {
             return constant_value<float>(&d_func()->m_value);
         } else if (dataType() == TypeDouble) {

@@ -209,6 +209,7 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
                         baseClass = QStringLiteral("String");
                         break;
                     case IntegralType::TypeInt:
+                    case IntegralType::TypeHalf:
                     case IntegralType::TypeFloat:
                     case IntegralType::TypeDouble:
                         baseClass = QStringLiteral("Number");
