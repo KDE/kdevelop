@@ -818,6 +818,8 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
             details << i18nc("a variable that won't change, const", "constant");
         if (t->modifiers() & AbstractType::VolatileModifier)
             details << QStringLiteral("volatile");
+        if (t->modifiers() & AbstractType::AtomicModifier)
+            details << QStringLiteral("_Atomic");
     }
     if (function) {
         if (function->isInline())

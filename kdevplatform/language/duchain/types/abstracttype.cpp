@@ -139,32 +139,31 @@ QString AbstractType::toString() const
 QString AbstractType::toString(bool spaceOnLeft) const
 {
     // TODO complete
-    if (!spaceOnLeft) {
-        if (modifiers() & ConstModifier) {
-            if (modifiers() & VolatileModifier) {
-                return QStringLiteral("const volatile ");
-            } else {
-                return QStringLiteral("const ");
-            }
-        } else {
-            if (modifiers() & VolatileModifier)
-                return QStringLiteral("volatile ");
-            else
-                return QString();
-        }
-    } else {
-        if (modifiers() & ConstModifier) {
-            if (modifiers() & VolatileModifier) {
-                return QStringLiteral(" const volatile");
-            } else {
-                return QStringLiteral(" const");
-            }
-        } else {
-            if (modifiers() & VolatileModifier)
-                return QStringLiteral(" volatile");
-            else
-                return QString();
-        }
+    QString modifiersStr;
+
+    if (modifiers() & ConstModifier) {
+        modifiersStr.append(QStringLiteral("const"));
     }
+
+    if (modifiers() & VolatileModifier) {
+        if (!modifiersStr.isEmpty())
+            modifiersStr.append(QStringLiteral(" "));
+        modifiersStr.append(QStringLiteral("volatile"));
+    }
+
+    if (modifiers() & AtomicModifier) {
+        if (!modifiersStr.isEmpty())
+            modifiersStr.append(QStringLiteral(" "));
+        modifiersStr.append(QStringLiteral("_Atomic"));
+    }
+
+    if (!modifiersStr.isEmpty()) {
+        if (spaceOnLeft)
+            modifiersStr.prepend(QStringLiteral(" "));
+        else
+            modifiersStr.append(QStringLiteral(" "));
+    }
+
+    return modifiersStr;
 }
 }

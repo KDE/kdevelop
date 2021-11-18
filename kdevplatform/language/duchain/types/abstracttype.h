@@ -102,8 +102,9 @@ public:
         LongLongModifier            = 1 << 9,
         SignedModifier              = 1 << 10,
         UnsignedModifier            = 1 << 11,
+        AtomicModifier              = 1 << 12,
 
-        LanguageSpecificModifier    = 1 << 12
+        LanguageSpecificModifier    = 1 << 13
     };
 
     /// Constructor.
