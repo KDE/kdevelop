@@ -612,8 +612,8 @@ struct Visitor
         return t;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Complex> = dummy>
-    AbstractType *createType(CXType type, CXCursor /*parent*/)
+    template <CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_ExtVector || TK == CXType_Complex> = dummy>
+    AbstractType* createType(CXType type, CXCursor /*parent*/)
     {
         return createDelayedType(type);
     }
@@ -1365,6 +1365,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_Int128);
     UseKind(CXType_UInt128);
     UseKind(CXType_Vector);
+    UseKind(CXType_ExtVector);
     UseKind(CXType_Unexposed);
     UseKind(CXType_WChar);
     UseKind(CXType_ObjCInterface);
