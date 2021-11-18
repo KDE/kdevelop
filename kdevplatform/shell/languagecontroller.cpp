@@ -154,8 +154,7 @@ class LanguageControllerPrivate
 {
 public:
     explicit LanguageControllerPrivate(LanguageController *controller)
-        : dataMutex(QMutex::Recursive)
-        , backgroundParser(new BackgroundParser(controller))
+        : backgroundParser(new BackgroundParser(controller))
         , staticAssistantsManager(nullptr)
         , m_cleanedUp(false)
         , problemModelSet(new ProblemModelSet(controller))
@@ -173,7 +172,7 @@ public:
 
     QList<ILanguageSupport*> activeLanguages;
 
-    mutable QMutex dataMutex;
+    mutable QRecursiveMutex dataMutex;
 
     LanguageHash languages; //Maps language-names to languages
     LanguageCache languageCache; //Maps mimetype-names to languages

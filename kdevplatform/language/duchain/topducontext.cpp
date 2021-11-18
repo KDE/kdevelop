@@ -77,7 +77,7 @@ DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_problems, LocalIndexedProblem)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
-QMutex importStructureMutex(QMutex::Recursive);
+QRecursiveMutex importStructureMutex;
 
 //Contains data that is not shared among top-contexts that share their duchain entries
 class TopDUContextLocalPrivate

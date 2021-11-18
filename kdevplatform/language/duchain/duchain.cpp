@@ -322,9 +322,8 @@ private:
     };
 
 public:
-    DUChainPrivate() : m_chainsMutex(QMutex::Recursive)
-        , m_cleanupMutex(QMutex::Recursive)
-        , instance(nullptr)
+    DUChainPrivate()
+        : instance(nullptr)
         , m_cleanupDisabled(false)
         , m_destroyed(false)
         , m_environmentListInfo(QStringLiteral("Environment Lists"))
@@ -452,9 +451,9 @@ public:
 
     ///Must be locked before accessing content of this class.
     ///Should be released during expensive disk-operations and such.
-    QMutex m_chainsMutex;
+    QRecursiveMutex m_chainsMutex;
 
-    QMutex m_cleanupMutex;
+    QRecursiveMutex m_cleanupMutex;
 
     CleanupThread* m_cleanup;
 
@@ -723,10 +722,7 @@ public:
         }
     }
 
-    QMutex& cleanupMutex()
-    {
-        return m_cleanupMutex;
-    }
+    QRecursiveMutex& cleanupMutex() { return m_cleanupMutex; }
 
     /// defines how we interact with the ongoing language parse jobs
     enum LockFlag {

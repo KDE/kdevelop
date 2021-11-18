@@ -12,7 +12,7 @@
 #include <QScopedPointer>
 
 class QString;
-class QMutex;
+class QRecursiveMutex;
 class QAtomicInt;
 
 namespace KDevelop {
@@ -83,7 +83,7 @@ public:
 
     /// @returns The global item-repository mutex.
     /// @note    Can be used to protect the initialization.
-    QMutex& mutex();
+    QRecursiveMutex& mutex();
 
 private:
     explicit ItemRepositoryRegistry(const QString& repositoryPath);

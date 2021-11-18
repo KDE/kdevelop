@@ -103,13 +103,12 @@ public:
     QString m_path;
     QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
-    mutable QMutex m_mutex;
+    mutable QRecursiveMutex m_mutex;
 
     explicit ItemRepositoryRegistryPrivate(ItemRepositoryRegistry* owner)
         : m_owner(owner)
         , m_shallDelete(false)
         , m_wasShutdown(false)
-        , m_mutex(QMutex::Recursive)
     {
     }
 
@@ -172,7 +171,7 @@ void ItemRepositoryRegistry::deleteRepositoryFromDisk(const QString& repositoryP
     }
 }
 
-QMutex& ItemRepositoryRegistry::mutex()
+QRecursiveMutex& ItemRepositoryRegistry::mutex()
 {
     Q_D(ItemRepositoryRegistry);
 

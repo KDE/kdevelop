@@ -45,7 +45,6 @@ CodeHighlighting::CodeHighlighting(QObject* parent)
     : QObject(parent)
     , m_localColorization(true)
     , m_globalColorization(true)
-    , m_dataMutex(QMutex::Recursive)
 {
     qRegisterMetaType<KDevelop::IndexedString>("KDevelop::IndexedString");
 

@@ -199,7 +199,6 @@ public:
         : m_parser(parser)
         , m_languageController(languageController)
         , m_shuttingDown(false)
-        , m_mutex(QMutex::Recursive)
     {
         parser->d_ptr = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
@@ -549,7 +548,7 @@ public:
     ThreadWeaver::Queue m_weaver;
 
     // generic high-level mutex
-    mutable QMutex m_mutex;
+    mutable QRecursiveMutex m_mutex;
 
     // local mutex only protecting m_managed
     mutable QMutex m_managedMutex;

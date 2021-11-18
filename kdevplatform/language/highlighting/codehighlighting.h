@@ -191,7 +191,7 @@ private:
     // Should be used to enable/disable the colorization of global types and their uses
     bool m_globalColorization;
 
-    mutable QMutex m_dataMutex;
+    mutable QRecursiveMutex m_dataMutex;
 
 private Q_SLOTS:
     void clearHighlightingForDocument(const KDevelop::IndexedString& document);

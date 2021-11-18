@@ -15,11 +15,8 @@ using namespace KDevelop;
 namespace {
 struct PerUrlData
 {
-    PerUrlData()
     // TODO: make this non-recursive
-        : mutex(QMutex::Recursive)
-    {}
-    QMutex mutex;
+    QRecursiveMutex mutex;
     // how many people are (trying to) parse this url
     // we use this to delete the entry once no-one needs it anymore
     uint ref = 0;
