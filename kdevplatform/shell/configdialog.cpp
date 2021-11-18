@@ -39,7 +39,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     };
 
     connect(button(QDialogButtonBox::Apply), &QPushButton::clicked, onApplyClicked);
-    connect(button(QDialogButtonBox::Ok), &QPushButton::clicked, onApplyClicked);
+    connect(button(QDialogButtonBox::Ok), &QPushButton::clicked, [this, onApplyClicked] {
+        if (m_currentPageHasChanges) {
+            onApplyClicked();
+        }
+    });
     connect(button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, [this]() {
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());
         Q_ASSERT(page);
@@ -187,6 +191,7 @@ void ConfigDialog::onPageChanged()
 
 void ConfigDialog::applyChanges(ConfigPage* page)
 {
+    Q_ASSERT(m_currentPageHasChanges);
     // must set this to false before calling apply, otherwise we get the confirmation dialog
     // whenever we enable/disable plugins.
     // This is because KPageWidget then emits currentPageChanged("Plugins", nullptr), which seems like a bug to me,
