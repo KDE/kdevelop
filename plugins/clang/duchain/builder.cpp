@@ -514,6 +514,12 @@ struct Visitor
         return new IntegralType(CursorKindTraits::integralType(TK));
     }
 
+    template <CXTypeKind TK, EnableIf<CursorKindTraits::isOpenCLType(TK)> = dummy>
+    AbstractType* createType(CXType, CXCursor)
+    {
+        return new StructureType();
+    }
+
     template <CXTypeKind TK, EnableIf<TK == CXType_Atomic> = dummy>
     AbstractType* createType(CXType type, CXCursor parent)
     {
@@ -1395,6 +1401,46 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
 #endif
     UseKind(CXType_Atomic);
     UseKind(CXType_Complex);
+    UseKind(CXType_OCLImage1dRO);
+    UseKind(CXType_OCLImage1dArrayRO);
+    UseKind(CXType_OCLImage1dBufferRO);
+    UseKind(CXType_OCLImage2dRO);
+    UseKind(CXType_OCLImage2dArrayRO);
+    UseKind(CXType_OCLImage2dDepthRO);
+    UseKind(CXType_OCLImage2dArrayDepthRO);
+    UseKind(CXType_OCLImage2dMSAARO);
+    UseKind(CXType_OCLImage2dArrayMSAARO);
+    UseKind(CXType_OCLImage2dMSAADepthRO);
+    UseKind(CXType_OCLImage2dArrayMSAADepthRO);
+    UseKind(CXType_OCLImage3dRO);
+    UseKind(CXType_OCLImage1dWO);
+    UseKind(CXType_OCLImage1dArrayWO);
+    UseKind(CXType_OCLImage1dBufferWO);
+    UseKind(CXType_OCLImage2dWO);
+    UseKind(CXType_OCLImage2dArrayWO);
+    UseKind(CXType_OCLImage2dDepthWO);
+    UseKind(CXType_OCLImage2dArrayDepthWO);
+    UseKind(CXType_OCLImage2dMSAAWO);
+    UseKind(CXType_OCLImage2dArrayMSAAWO);
+    UseKind(CXType_OCLImage2dMSAADepthWO);
+    UseKind(CXType_OCLImage2dArrayMSAADepthWO);
+    UseKind(CXType_OCLImage3dWO);
+    UseKind(CXType_OCLImage1dRW);
+    UseKind(CXType_OCLImage1dArrayRW);
+    UseKind(CXType_OCLImage1dBufferRW);
+    UseKind(CXType_OCLImage2dRW);
+    UseKind(CXType_OCLImage2dArrayRW);
+    UseKind(CXType_OCLImage2dDepthRW);
+    UseKind(CXType_OCLImage2dArrayDepthRW);
+    UseKind(CXType_OCLImage2dMSAARW);
+    UseKind(CXType_OCLImage2dArrayMSAARW);
+    UseKind(CXType_OCLImage2dMSAADepthRW);
+    UseKind(CXType_OCLImage2dArrayMSAADepthRW);
+    UseKind(CXType_OCLImage3dRW);
+    UseKind(CXType_OCLSampler);
+    UseKind(CXType_OCLEvent);
+    UseKind(CXType_OCLQueue);
+    UseKind(CXType_OCLReserveID);
     case CXType_Invalid:
         return nullptr;
     default:

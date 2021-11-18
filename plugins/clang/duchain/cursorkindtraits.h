@@ -233,6 +233,51 @@ constexpr bool isPointerType(CXTypeKind TK)
         || TK == CXType_ObjCObjectPointer;
 }
 
+
+constexpr bool isOpenCLType(CXTypeKind CK)
+{
+    return (CK == CXType_OCLImage1dRO ||
+        CK == CXType_OCLImage1dArrayRO ||
+        CK == CXType_OCLImage1dBufferRO ||
+        CK == CXType_OCLImage2dRO ||
+        CK == CXType_OCLImage2dArrayRO ||
+        CK == CXType_OCLImage2dDepthRO ||
+        CK == CXType_OCLImage2dArrayDepthRO ||
+        CK == CXType_OCLImage2dMSAARO ||
+        CK == CXType_OCLImage2dArrayMSAARO ||
+        CK == CXType_OCLImage2dMSAADepthRO ||
+        CK == CXType_OCLImage2dArrayMSAADepthRO ||
+        CK == CXType_OCLImage3dRO ||
+        CK == CXType_OCLImage1dWO ||
+        CK == CXType_OCLImage1dArrayWO ||
+        CK == CXType_OCLImage1dBufferWO ||
+        CK == CXType_OCLImage2dWO ||
+        CK == CXType_OCLImage2dArrayWO ||
+        CK == CXType_OCLImage2dDepthWO ||
+        CK == CXType_OCLImage2dArrayDepthWO ||
+        CK == CXType_OCLImage2dMSAAWO ||
+        CK == CXType_OCLImage2dArrayMSAAWO ||
+        CK == CXType_OCLImage2dMSAADepthWO ||
+        CK == CXType_OCLImage2dArrayMSAADepthWO ||
+        CK == CXType_OCLImage3dWO ||
+        CK == CXType_OCLImage1dRW ||
+        CK == CXType_OCLImage1dArrayRW ||
+        CK == CXType_OCLImage1dBufferRW ||
+        CK == CXType_OCLImage2dRW ||
+        CK == CXType_OCLImage2dArrayRW ||
+        CK == CXType_OCLImage2dDepthRW ||
+        CK == CXType_OCLImage2dArrayDepthRW ||
+        CK == CXType_OCLImage2dMSAARW ||
+        CK == CXType_OCLImage2dArrayMSAARW ||
+        CK == CXType_OCLImage2dMSAADepthRW ||
+        CK == CXType_OCLImage2dArrayMSAADepthRW ||
+        CK == CXType_OCLImage3dRW ||
+        CK == CXType_OCLSampler ||
+        CK == CXType_OCLEvent ||
+        CK == CXType_OCLQueue ||
+        CK == CXType_OCLReserveID);
+}
+
 constexpr bool isAliasType(CXCursorKind CK)
 {
     return CK == CXCursor_TypedefDecl || CK == CXCursor_TypeAliasDecl;
