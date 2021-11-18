@@ -21,6 +21,11 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget* parent)
 {
     setupUi(this);
 
+    // Widgets are managed manually, so we must notify ConfigDialog when something
+    // changes. Otherwise it will not enable "Apply" button and won't call apply().
+    for (auto* checkbox : {chkKateOverrideIndentation, chkKateModelines}) {
+        connect(checkbox, &QCheckBox::toggled, this, &SourceFormatterSettings::changed);
+    }
     connect(formatterSelectionEdit, &SourceFormatterSelectionEdit::changed,
             this, &SourceFormatterSettings::changed);
 }
