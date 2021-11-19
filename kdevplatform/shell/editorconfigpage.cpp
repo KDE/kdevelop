@@ -67,6 +67,14 @@ public Q_SLOTS:
         m_page->reset();
     }
 
+protected:
+    bool needsResetDuringInitialization() const override
+    {
+        // Optimization: KateThemeConfigPage::reset() is very slow (takes about 600 ms);
+        // neither KTextEditor nor Kate calls reset() after creating a KTextEditor::ConfigPage.
+        return false;
+    }
+
 private:
     KTextEditor::ConfigPage* const m_page;
 };

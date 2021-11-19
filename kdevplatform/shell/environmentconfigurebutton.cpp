@@ -41,7 +41,6 @@ public:
 
         // TODO: This should be implicit when constructing EnvironmentPreferences
         prefs->initConfigManager();
-        prefs->reset();
 
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                      | QDialogButtonBox::Cancel);

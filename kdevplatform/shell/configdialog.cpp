@@ -162,8 +162,7 @@ void ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page
     item->setHeader(page->fullName());
     item->setIcon(page->icon());
     page->initConfigManager();
-    page->reset(); // make sure all widgets are in the correct state
-    // make sure that we only connect to changed after calling reset()
+    // connect to changed() *after* calling initConfigManager(), which may call reset()
     connect(page, &ConfigPage::changed, this, &ConfigDialog::onPageChanged);
     m_pages.append(item);
     for (int i = 0; i < page->childPages(); ++i) {

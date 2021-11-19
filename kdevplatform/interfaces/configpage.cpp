@@ -74,6 +74,23 @@ void ConfigPage::initConfigManager()
     if (d->configManager) {
         d->configManager->addWidget(this);
     }
+
+    if (needsResetDuringInitialization()) {
+        reset();
+    }
+}
+
+bool ConfigPage::needsResetDuringInitialization() const
+{
+    // Potentially slow but safe default: makes sure all widgets are in the correct state.
+    // Many Kate classes derived from KTextEditor::ConfigPage call reset() in their constructors.
+    // TODO: update KDevelop classes derived from KTextEditor::ConfigPage one by one as follows:
+    // 1) override needsResetDuringInitialization() to return false;
+    // 2) call reset() in constructor(s) if needed.
+    // Once all KDevelop and KDevelop plugin ConfigPage-derived classes return false from
+    // needsResetDuringInitialization() (verify by making this function pure virtual), remove
+    // needsResetDuringInitialization() and its overrides, never call reset() in initConfigManager().
+    return true;
 }
 
 KCoreConfigSkeleton* ConfigPage::configSkeleton() const

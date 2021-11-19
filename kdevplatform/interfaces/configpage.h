@@ -90,6 +90,12 @@ public Q_SLOTS:
     void defaults() override;
     void reset() override;
 
+protected:
+    /**
+     * @return whether this page needs reset() to be called during initialization
+     */
+    virtual bool needsResetDuringInitialization() const;
+
 private:
     const QScopedPointer<class ConfigPagePrivate> d_ptr;
     Q_DECLARE_PRIVATE(ConfigPage)
