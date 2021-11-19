@@ -567,8 +567,6 @@ void UiController::showSettingsDialog()
         addPluginPages(plugin);
     }
 
-    // TODO: only load settings if a UI related page was changed?
-    connect(&cfgDlg, &ConfigDialog::configSaved, activeSublimeWindow(), &Sublime::MainWindow::loadSettings);
     // make sure that pages get added whenever a new plugin is loaded (probably from the plugin selection dialog)
     // removal on plugin unload is already handled in ConfigDialog
     connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded, &cfgDlg, addPluginPages);
