@@ -164,7 +164,7 @@ public:
     void removeTargetsForListener(QObject* notifyWhenReady)
     {
         m_priority = BackgroundParser::WorstPriority;
-        for (auto it = m_targets.cbegin(), end = m_targets.cend(); it != end;) {
+        for (auto it = m_targets.cbegin(); it != m_targets.cend();) {
             if (it->notifyWhenReady.data() == notifyWhenReady) {
                 it = m_targets.erase(it);
             } else {
