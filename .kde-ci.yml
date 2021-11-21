@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
+
+Dependencies:
+- 'on': ['@all']
+  'require':
+    'sdk/libkomparediff2': '@stable'
+    'utilities/okteta': '@stable'
+    'plasma/libksysguard': '@stable'
+    'kdevelop/kdevelop-pg-qt': '@same'
