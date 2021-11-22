@@ -303,7 +303,8 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs) noexcept
     return *this;
 }
 
-void KDevelop::swap(IndexedString& a, IndexedString& b) noexcept
+namespace KDevelop {
+void swap(IndexedString& a, IndexedString& b) noexcept
 {
     using std::swap;
 
@@ -326,6 +327,7 @@ void KDevelop::swap(IndexedString& a, IndexedString& b) noexcept
     }
     deref(noLongerRefCountedIndex);
     ref(newlyRefCountedIndex);
+}
 }
 
 QUrl IndexedString::toUrl() const
