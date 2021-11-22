@@ -1131,6 +1131,7 @@ public:
 
         if (foundIndexInBucket) {
             // 'request' is already present, return the existing index
+            Q_ASSERT(m_currentBucket < m_buckets.size());
             return createIndex(lastBucketWalked, foundIndexInBucket);
         }
 
@@ -1345,6 +1346,7 @@ public:
                 if (reOrderFreeSpaceBucketIndex != -1)
                     updateFreeSpaceOrder(reOrderFreeSpaceBucketIndex);
 
+                Q_ASSERT(m_currentBucket < m_buckets.size());
                 return createIndex(useBucket, indexInBucket);
             } else {
                 //This should never happen when we picked a bucket for re-use
@@ -1455,6 +1457,8 @@ public:
         } else {
             putIntoFreeList(bucket, bucketPtr);
         }
+
+        Q_ASSERT(m_currentBucket < m_buckets.size());
     }
 
     using MyDynamicItem = DynamicItem<Item, markForReferenceCounting>;
@@ -1523,6 +1527,7 @@ public:
             bucketPtr = m_buckets.at(bucket);
         }
         unsigned short indexInBucket = index & 0xffff;
+        Q_ASSERT(m_currentBucket < m_buckets.size());
         return bucketPtr->itemFromIndex(indexInBucket);
     }
 
@@ -1589,6 +1594,7 @@ public:
 
     Statistics statistics() const
     {
+        Q_ASSERT(m_currentBucket < m_buckets.size());
         Statistics ret;
         uint loadedBuckets = 0;
         for (auto* bucket : m_buckets) {
