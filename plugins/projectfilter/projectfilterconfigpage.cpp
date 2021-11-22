@@ -61,11 +61,19 @@ ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider
     connect(m_ui->filters->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &ProjectFilterConfigPage::selectionChanged);
     connect(this, &ProjectFilterConfigPage::changed, this, &ProjectFilterConfigPage::selectionChanged);
-    connect(m_model, &FilterModel::dataChanged, this, &ProjectFilterConfigPage::emitChanged);
-    connect(m_model, &FilterModel::rowsInserted, this, &ProjectFilterConfigPage::emitChanged);
-    connect(m_model, &FilterModel::rowsRemoved, this, &ProjectFilterConfigPage::emitChanged);
-    connect(m_model, &FilterModel::modelReset, this, &ProjectFilterConfigPage::emitChanged);
-    connect(m_model, &FilterModel::rowsMoved, this, &ProjectFilterConfigPage::emitChanged);
+
+    connect(m_model, &FilterModel::modelReset, this, &ProjectFilterConfigPage::checkFiltersAndEmitChanged);
+    connect(m_model, &FilterModel::dataChanged, this, &ProjectFilterConfigPage::checkFiltersAndEmitChanged);
+    connect(m_model, &FilterModel::rowsRemoved, this, &ProjectFilterConfigPage::checkFiltersAndEmitChanged);
+    // Don't recheck filters when a row is:
+    // 1. Inserted - because existing errors remain. And if there were no errors, a new
+    //    empty-pattern error would be shown - annoyingly and uselessly - on each insertion, before
+    //    the user had a chance to enter a new pattern.
+    // 2. Moved - because neither existing errors disappear nor new ones appear after this operation.
+    //    When there are multiple errors, the row order determines which error message is shown.
+    //    But the message choice in this corner case is not important enough to recheck all filters.
+    connect(m_model, &FilterModel::rowsInserted, this, &ProjectFilterConfigPage::changed);
+    connect(m_model, &FilterModel::rowsMoved, this, &ProjectFilterConfigPage::changed);
 
     connect(m_ui->add, &QPushButton::clicked, this, &ProjectFilterConfigPage::add);
     connect(m_ui->remove, &QPushButton::clicked, this, &ProjectFilterConfigPage::remove);
@@ -159,12 +167,11 @@ void ProjectFilterConfigPage::checkFilters()
     // check for errors, only show one error at once
     QString errorText;
     const auto filters = m_model->filters();
-    for (const Filter& filter : filters) {
-        const QString &pattern = filter.pattern.pattern();
-        if (pattern.isEmpty()) {
+    for (const auto& filter : filters) {
+        if (filter.pattern.isEmpty()) {
             errorText = i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit.");
             break;
-        } else if (pattern.endsWith(QLatin1Char('/')) && filter.targets == Filter::Files) {
+        } else if (filter.pattern.endsWith(QLatin1Char('/')) && filter.targets == Filter::Files) {
             errorText = i18n("A filter ending on <code>\"/\"</code> can never match a file.");
             break;
         }
@@ -179,7 +186,7 @@ void ProjectFilterConfigPage::checkFilters()
     }
 }
 
-void ProjectFilterConfigPage::emitChanged()
+void ProjectFilterConfigPage::checkFiltersAndEmitChanged()
 {
     checkFilters();
 

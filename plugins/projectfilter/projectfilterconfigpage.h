@@ -43,7 +43,7 @@ private Q_SLOTS:
     void moveUp();
     void moveDown();
     void selectionChanged();
-    void emitChanged();
+    void checkFiltersAndEmitChanged();
 
 public Q_SLOTS:
     void apply() override;
