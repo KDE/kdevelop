@@ -4,6 +4,10 @@
 Dependencies:
 - 'on': ['@all']
   'require':
+    'frameworks/kitemmodels': '@stable'
+    'frameworks/knotifyconfig': '@stable'
+    'frameworks/ktexteditor': '@stable'
+    'frameworks/threadweaver': '@stable'
     'sdk/libkomparediff2': '@stable'
     'utilities/okteta': '@stable'
     'plasma/libksysguard': '@stable'
