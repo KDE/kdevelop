@@ -510,7 +510,7 @@ QString& elideStringRight(QString& str, int length)
 constexpr int maxBestMatchCompletionPriority = CCP_SuperCompletion;
 
 /**
- * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0, 10] (the higher the better)
+ * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [1, 10] (the higher the better)
  *
  * See https://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html for list of priorities
  * They (currently) are in the range [0, 80] (the lower, the better). Nevertheless, we are only setting priority
@@ -522,9 +522,16 @@ int matchQualityFromBestMatchCompletionPriority(int completionPriority)
     Q_ASSERT(completionPriority <= maxBestMatchCompletionPriority);
 
     constexpr int maxMatchQuality = 10;
-    const auto matchQuality = maxMatchQuality - maxMatchQuality * completionPriority / maxBestMatchCompletionPriority;
-
+    auto matchQuality = maxMatchQuality - maxMatchQuality * completionPriority / maxBestMatchCompletionPriority;
     Q_ASSERT(matchQuality >= 0);
+
+    // KTextEditor considers a completion with matchQuality == 0 not suitable.
+    // DeclarationItem::data() considers matchQuality == 0 invalid and does not return it.
+    // Avoid zero special case by increasing matchQuality 0 to 1.
+    constexpr int minSuitableMatchQuality = 1;
+    matchQuality = std::max(minSuitableMatchQuality, matchQuality);
+
+    Q_ASSERT(matchQuality >= minSuitableMatchQuality);
     Q_ASSERT(matchQuality <= maxMatchQuality);
     return matchQuality;
 }
