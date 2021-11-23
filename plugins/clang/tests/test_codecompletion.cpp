@@ -460,10 +460,15 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "main", "pInstance", "pInstance->classItem",
         }};
     QTest::newRow("look-ahead function primary type argument")
-        << "struct LookAhead {double doubleItem;}; void function(double double);"
+        << "struct LookAhead {double doubleItem;}; void function(double d);"
            "int main() {LookAhead* pInstance; LookAhead instance; function(\n }"
         << CompletionItems{{1, 0}, {
-            "LookAhead", "function", "instance",
+            "LookAhead",
+            "function",
+#if CINDEX_VERSION_MINOR >= 30
+            "function",
+#endif
+            "instance",
             "instance.doubleItem", "main",
             "pInstance", "pInstance->doubleItem",
         }};
