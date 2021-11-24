@@ -232,7 +232,12 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
     auto tester = ClangCodeCompletionItemTester(context);
 
     for(const auto& declaration : expectedCompletionItems.completions){
+        qDebug() << "verifying declaration:" << declaration.name;
+
         const auto declarationItem = tester.findItem(declaration.name);
+        if (!declarationItem || !declarationItem->declaration()) {
+            qDebug() << "names of all completion-items:" << tester.names;
+        }
         QVERIFY(declarationItem);
         QVERIFY(declarationItem->declaration());
 
