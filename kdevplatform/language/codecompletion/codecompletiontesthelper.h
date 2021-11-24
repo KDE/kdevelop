@@ -84,8 +84,8 @@ struct CodeCompletionItemTester
         return false;
     }
 
-    QList<Item> items; // All items retrieved
-    QStringList names; // Names of all completion-items
+    QList<Item> items; ///< All items retrieved
+    QStringList names; ///< Names of all completion-items
     Context completionContext;
 
     //Convenience-function to retrieve data from completion-items by name
