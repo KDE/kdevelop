@@ -244,15 +244,15 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
         auto matchQuality = tester.itemData(declarationItem, KTextEditor::CodeCompletionModel::Name, KTextEditor::CodeCompletionModel::MatchQuality).toInt();
         auto inheritanceDepth = declarationItem->inheritanceDepth();
 
-        const bool expectFail = !declaration.failMessage.isEmpty();
-        if (expectFail) {
+        if (!declaration.failMessage.isEmpty()) {
             QEXPECT_FAIL("", declaration.failMessage.toUtf8().constData(), Continue);
         }
-        QCOMPARE(matchQuality, declaration.matchQuality);
-        if (expectFail) {
-            QEXPECT_FAIL("", "\u3003", Continue); // the same reason/comment as above
-        }
-        QCOMPARE(inheritanceDepth, declaration.inheritanceDepth);
+        QVERIFY2(matchQuality == declaration.matchQuality && inheritanceDepth == declaration.inheritanceDepth,
+                 qPrintable(QStringLiteral("%1 == %2 && %3 == %4")
+                                .arg(matchQuality)
+                                .arg(declaration.matchQuality)
+                                .arg(inheritanceDepth)
+                                .arg(declaration.inheritanceDepth)));
     }
 }
 
@@ -1244,13 +1244,65 @@ void TestCodeCompletion::testCompletionPriority_data()
         << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 6, 0},
         {"c", 2, 0, QStringLiteral("Pointer to derived class is not added to the Best Matches group")}}};
 
+    QTest::newRow("look-ahead pointer") << "class A{}; class B{}; struct LookAhead {A* a; B* b;}; "
+                                           "int main() {LookAhead* pInstance; LookAhead instance; A* a; B* b; b =\n "
+                                        << CompletionPriorityItems{{1, 0},
+                                                                   {{"a", 0, 21},
+                                                                    {"b", 6, 0},
+                                                                    {"pInstance", 0, 21},
+                                                                    {"instance", 0, 34},
+                                                                    {"pInstance->b", 6, 0},
+                                                                    {"instance.b", 6, 0}}};
+
     QTest::newRow("class")
         << "class A{}; class B{}; class C : public B{}; int main(){A a; B b; C c; b =\n "
         << CompletionPriorityItems{{1,0}, {{"a", 0, 21}, {"b", 6, 0},
         {"c", 2, 0, QStringLiteral("Derived class is not added to the Best Matches group")}}};
 
+    QTest::newRow("look-ahead class") << "class A{}; class B{}; struct LookAhead {A a; B b;}; "
+                                         "int main() {LookAhead* pInstance; LookAhead instance; A a; B b; b =\n "
+                                      << CompletionPriorityItems{{1, 0},
+                                                                 {{"a", 0, 21},
+                                                                  {"B", 4, 0},
+                                                                  {"b", 6, 0},
+                                                                  {"pInstance", 0, 34},
+                                                                  {"instance", 0, 21},
+                                                                  {"pInstance->b", 6, 0},
+                                                                  {"instance.b", 6, 0}}};
+
+    QTest::newRow("look-ahead class, no local variable of the type")
+        << "class A{}; class B{}; struct LookAhead {A a; B b;}; "
+           "int main() {LookAhead* pInstance; LookAhead instance; A a; B b =\n "
+        << CompletionPriorityItems{{1, 0},
+                                   {{"a", 0, 21},
+                                    {"B", 4, 0},
+                                    {"pInstance", 0, 34},
+                                    {"instance", 0, 21},
+                                    {"pInstance->b", 6, 0,
+                                     QStringLiteral("No local variable with high match quality => look-ahead "
+                                                    "match quality equals that of \"class B\" declaration")}}};
+
     QTest::newRow("primary-types") << "class A{}; int main(){A a; int b; bool c; bool d = \n "
                                    << CompletionPriorityItems{{1, 0}, {{"a", 0, 34}, {"b", 2, 0}, {"c", 6, 0}}};
+
+    QTest::newRow("look-ahead primary-types")
+        << "class A{}; struct LookAhead {A t; int x; bool y; unsigned z;}; "
+           "int main() {LookAhead* pInstance; LookAhead instance; A a; int b; bool c; bool d = \n "
+        << CompletionPriorityItems{{1, 0},
+                                   {{"a", 0, 34},
+                                    {"b", 2, 0},
+                                    {"c", 6, 0},
+                                    {"pInstance", 0, 34},
+                                    {"instance", 0, 34},
+                                    {"pInstance->x", 2, 0},
+                                    {"instance.x", 2, 0},
+                                    {"pInstance->y", 6, 0},
+                                    {"instance.y", 6, 0}
+#if 0
+        // This fails, not just xfails, because "instance.z" is not among completion-items.
+        , {"instance.z", 2, 0, QStringLiteral("No local variable with the type")}
+#endif
+                                   }};
 
     QTest::newRow("reference")
         << "class A{}; class B{}; class C : public B{};"
@@ -1266,6 +1318,17 @@ void TestCodeCompletion::testCompletionPriority_data()
     QTest::newRow("returnType")
         << "struct A{}; struct B{}; struct Test{A f();B g(); Test() { A a =\n }};"
         << CompletionPriorityItems{{1,0}, {{"f", 6, 0}, {"g", 0, 21}}};
+
+    QTest::newRow("look-ahead returnType")
+        << "struct A{}; struct B{}; struct LookAhead {A a; B b;}; "
+           "struct Test{A f();B g(); Test() { LookAhead* pInstance; LookAhead instance; A a =\n }};"
+        << CompletionPriorityItems{{1, 0},
+                                   {{"f", 6, 0},
+                                    {"g", 0, 21},
+                                    {"pInstance", 0, 34},
+                                    {"instance", 0, 21},
+                                    {"pInstance->a", 6, 0},
+                                    {"instance.a", 6, 0}}};
 
     QTest::newRow("template")
         << "template <typename T> class Class{}; template <typename T> class Class2{};"

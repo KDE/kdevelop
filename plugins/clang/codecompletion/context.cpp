@@ -7,7 +7,9 @@
 
 #include "context.h"
 
+#include <QHash>
 #include <QRegularExpression>
+#include <QSet>
 #include <QStandardPaths>
 
 #include <interfaces/icore.h>
@@ -735,26 +737,35 @@ public:
 
     /// Add type for matching. This type'll be used for filtering look-ahead items
     /// Only items with @p type will be returned through @sa matchedItems
-    void addMatchedType(const IndexedType& type)
+    /// @param matchQuality @p type's match quality
+    void addMatchedType(const IndexedType& type, int matchQuality)
     {
-        if (type.isValid()) {
-            matchedTypes.insert(type);
+        Q_ASSERT_X(matchQuality > 0, Q_FUNC_INFO, "The completion must be suitable.");
+        if (!type.isValid()) {
+            return;
         }
+        auto& lookAheadMatchQuality = matchedTypeToMatchQuality[type];
+        // Use the highest among match qualities associated with the type, because currently
+        // supported look-ahead completions are as useful as CCP_LocalDeclaration, and the
+        // corresponding match quality is unlikely to be lower than @p matchQuality.
+        // The following statement correctly assigns @p matchQuality if @p type was just inserted into
+        // matchedTypeToMatchQuality, because then lookAheadMatchQuality == int{} == 0 < matchQuality.
+        lookAheadMatchQuality = std::max(lookAheadMatchQuality, matchQuality);
     }
 
     /// @return look-ahead items that math given types. @sa addMatchedType
-    QList<CompletionTreeItemPointer> matchedItems()
+    QList<CompletionTreeItemPointer> matchedItems() const
     {
         QList<CompletionTreeItemPointer> lookAheadItems;
         for (const auto& pair: qAsConst(possibleLookAheadDeclarations)) {
             auto decl = pair.first;
-            if (matchedTypes.contains(decl->indexedType())) {
+            if (const auto matchQuality = matchedTypeToMatchQuality.value(decl->indexedType())) {
                 auto parent = pair.second;
                 const QLatin1String access = (parent->abstractType()->whichType() == AbstractType::TypePointer)
                                  ? QLatin1String("->") : QLatin1String(".");
                 const QString text = parent->identifier().toString() + access + decl->identifier().toString();
                 auto item = new DeclarationItem(decl, text, {}, text);
-                item->setMatchQuality(8);
+                item->setMatchQuality(matchQuality);
                 lookAheadItems.append(CompletionTreeItemPointer(item));
             }
         }
@@ -810,8 +821,8 @@ private:
     // Declaration and it's context
     using DeclarationContext = QPair<Declaration*, Declaration*>;
 
-    /// Types of declarations that look-ahead completion items can have
-    QSet<IndexedType> matchedTypes;
+    /// Types of declarations that look-ahead completion items can have and their match qualities
+    QHash<IndexedType, int> matchedTypeToMatchQuality;
 
     // List of declarations that can be added to the Look Ahead group
     // Second declaration represents context
@@ -1273,9 +1284,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
                     // TODO: LibClang missing API to determine expected code completion type.
                     if (auto functionType = found->type<FunctionType>()) {
-                        lookAheadMatcher.addMatchedType(IndexedType(functionType->returnType()));
+                        lookAheadMatcher.addMatchedType(IndexedType(functionType->returnType()), matchQuality);
                     }
-                    lookAheadMatcher.addMatchedType(found->indexedType());
+                    lookAheadMatcher.addMatchedType(found->indexedType(), matchQuality);
                 } else {
                     declarationItem->setInheritanceDepth(completionPriority);
 
