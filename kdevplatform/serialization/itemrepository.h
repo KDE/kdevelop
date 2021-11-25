@@ -1249,17 +1249,17 @@ public:
                     //Create a new monster-bucket at the end of the data
                     int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
                     Q_ASSERT(needMonsterExtent);
-                    if (m_currentBucket + needMonsterExtent + 1 >= m_buckets.size()) {
-                        m_buckets.resize(m_buckets.size() + 10 + needMonsterExtent + 1);
+                    const auto currentBucketIncrease = needMonsterExtent + 1;
+                    if (m_currentBucket + currentBucketIncrease >= m_buckets.size()) {
+                        m_buckets.resize(m_buckets.size() + 10 + currentBucketIncrease);
                     }
                     useBucket = m_currentBucket;
 
                     convertMonsterBucket(useBucket, needMonsterExtent);
-                    m_currentBucket += 1 + needMonsterExtent;
+                    m_currentBucket += currentBucketIncrease;
                     Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
-                    Q_ASSERT(m_buckets[m_currentBucket - 1 - needMonsterExtent] &&
-                             m_buckets[m_currentBucket - 1 - needMonsterExtent]->monsterBucketExtent() ==
-                             needMonsterExtent);
+                    Q_ASSERT(m_buckets[useBucket]);
+                    Q_ASSERT(m_buckets[useBucket]->monsterBucketExtent() == needMonsterExtent);
                 }
                 Q_ASSERT(useBucket);
                 bucketPtr = bucketForIndex(useBucket);
