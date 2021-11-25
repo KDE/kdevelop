@@ -1249,7 +1249,7 @@ public:
                     //Create a new monster-bucket at the end of the data
                     int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
                     Q_ASSERT(needMonsterExtent);
-                    if (m_currentBucket + needMonsterExtent + 1 > m_buckets.size()) {
+                    if (m_currentBucket + needMonsterExtent + 1 >= m_buckets.size()) {
                         m_buckets.resize(m_buckets.size() + 10 + needMonsterExtent + 1);
                     }
                     useBucket = m_currentBucket;
