@@ -11,6 +11,11 @@
 
 #include "language/duchain/ducontext.h"
 
+#include <QMap>
+#include <QVariant>
+
+#include <functional>
+
 namespace KDevelop {
 class DeclarationValidatorPrivate;
 
@@ -18,7 +23,8 @@ class KDEVPLATFORMTESTS_EXPORT DeclarationValidator
     : public DUChainVisitor
 {
 public:
-    DeclarationValidator();
+    using TestDataEditor = std::function<void(QVariantMap& testData)>;
+    explicit DeclarationValidator(TestDataEditor testDataAdjuster = nullptr);
     ~DeclarationValidator() override;
 
     virtual bool testsPassed() const;

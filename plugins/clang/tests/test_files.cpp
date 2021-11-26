@@ -29,6 +29,7 @@
 #include <QTest>
 #include <QLoggingCategory>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QVersionNumber>
 
 using namespace KDevelop;
@@ -40,7 +41,52 @@ bool isCudaAvailable()
 {
     return QProcess::execute(QStringLiteral("clang"), {QStringLiteral("-xcuda"), QStringLiteral("-fsyntax-only"), QProcess::nullDevice()}) == 0;
 }
+
+QRegularExpression rangeRegularExpression()
+{
+    const auto capturedCursorRegexp = QStringLiteral("(\\(\\d+, \\d+\\))");
+    const auto rangeRegexp = QStringLiteral("\\[%1, %2\\]").arg(capturedCursorRegexp, capturedCursorRegexp);
+    return QRegularExpression{QRegularExpression::anchoredPattern(rangeRegexp)};
 }
+
+void adjustTestData(QVariantMap& testData)
+{
+    const auto idIt = testData.find("identifier");
+    if (idIt == testData.end()) {
+        return; // nothing to adjust
+    }
+
+    static const QLatin1String testFilesDirVariableName("${TEST_FILES_DIR}");
+
+    QCOMPARE(idIt->userType(), QMetaType::QString);
+    auto identifier = idIt->toString();
+    if (!identifier.contains(testFilesDirVariableName)) {
+        return; // nothing to adjust
+    }
+
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(13, 0, 0)) {
+        *idIt = identifier.replace(testFilesDirVariableName, TEST_FILES_DIR);
+        return; // done
+    }
+
+    // Older Clang versions return an empty identifier for unnamed struct and anonymous union.
+    *idIt = QString();
+
+    // KDevelop's Visitor::createDeclarationCommon() assigns the range's end to its start when
+    // the identifier is empty, so the same is done below.
+    const auto rangeIt = testData.find("range");
+    if (rangeIt == testData.end()) {
+        return; // no range => nothing left to adjust
+    }
+
+    QCOMPARE(rangeIt->userType(), QMetaType::QString);
+    auto range = rangeIt->toString();
+
+    static const auto regexp = rangeRegularExpression();
+    QVERIFY(range.contains(regexp));
+    *rangeIt = range.replace(regexp, "[\\1, \\1]");
+}
+} // unnamed namespace
 
 void TestFiles::initTestCase()
 {
@@ -103,7 +149,7 @@ void TestFiles::testFiles()
 
     QVERIFY(top);
     DUChainReadLocker lock;
-    DeclarationValidator validator;
+    DeclarationValidator validator(adjustTestData);
     top->visit(validator);
 
     const auto problems = top->problems();

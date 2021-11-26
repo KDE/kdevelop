@@ -12,12 +12,14 @@
 
 #include <QJsonDocument>
 
+#include <utility>
+
 namespace KDevelop {
 class DeclarationValidatorPrivate
 {
 public:
-    DeclarationValidatorPrivate() : testsPassed(true) {}
-    bool testsPassed;
+    DeclarationValidator::TestDataEditor testDataAdjuster{};
+    bool testsPassed = true;
 };
 
 QByteArray preprocess(QByteArray json)
@@ -36,8 +38,8 @@ QByteArray preprocess(QByteArray json)
     return '{' + json + '}';
 }
 
-DeclarationValidator::DeclarationValidator()
-    : d_ptr(new DeclarationValidatorPrivate)
+DeclarationValidator::DeclarationValidator(TestDataEditor testDataAdjuster)
+    : d_ptr(new DeclarationValidatorPrivate{std::move(testDataAdjuster)})
 {
 }
 DeclarationValidator::~DeclarationValidator()
@@ -62,7 +64,9 @@ void DeclarationValidator::visit(Declaration* declaration)
 
     if (error.error == 0) {
         QVariantMap testData = doc.toVariant().toMap();
-
+        if (d->testDataAdjuster) {
+            d->testDataAdjuster(testData);
+        }
         if (!KDevelop::runTests(testData, declaration))
             d->testsPassed = false;
     } else

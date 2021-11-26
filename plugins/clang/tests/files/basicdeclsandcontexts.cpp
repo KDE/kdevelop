@@ -93,8 +93,14 @@ namespace bar
     };
 }
 
-/// "identifier" : "", "range" : "[(96, 0), (96, 0)]"
+/**
+ * "identifier" : "(unnamed struct at ${TEST_FILES_DIR}/basicdeclsandcontexts.cpp:100:1)",
+ * "range" : "[(99, 0), (99, 6)]"
+ */
 struct {} unnamedStructObject;
 
-/// "identifier" : "", "range" : "[(99, 0), (99, 0)]"
+/**
+ * "identifier" : "(unnamed union at ${TEST_FILES_DIR}/basicdeclsandcontexts.cpp:106:1)",
+ * "range" : "[(105, 0), (105, 5)]"
+ */
 union {} unnamedUnionObject;
