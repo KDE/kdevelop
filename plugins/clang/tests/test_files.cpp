@@ -141,12 +141,6 @@ void TestFiles::testFiles()
     const IndexedString indexedFileName(fileName);
     ReferencedTopDUContext top =
         DUChain::self()->waitForUpdate(indexedFileName, TopDUContext::AllDeclarationsContextsAndUses);
-    if (strcmp("test.cl", QTest::currentDataTag()) == 0) {
-        if (!top) {
-            QSKIP("Likely outdated shared-mime-info around, which doesn't know about the text/x-opencl-src mime type");
-        }
-    }
-
     QVERIFY(top);
     DUChainReadLocker lock;
     DeclarationValidator validator(adjustTestData);
