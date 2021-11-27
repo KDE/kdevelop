@@ -10,6 +10,8 @@
 #include <QProcessEnvironment>
 #include <QCoreApplication>
 #include <QDataStream>
+#include <QMutexLocker>
+#include <QRecursiveMutex>
 #include <QStandardPaths>
 
 #include <KLocalizedString>

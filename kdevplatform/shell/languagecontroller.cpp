@@ -15,6 +15,7 @@
 #include <QMimeDatabase>
 #include <QMultiHash>
 #include <QMutexLocker>
+#include <QRecursiveMutex>
 #include <QRegularExpression>
 #include <QThread>
 

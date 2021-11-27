@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QRecursiveMutex>
 
 #include <serialization/indexedstring.h>
 #include <language/duchain/ducontext.h>

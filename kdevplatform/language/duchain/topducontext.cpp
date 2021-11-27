@@ -28,6 +28,9 @@
 
 #include <language/interfaces/iastcontainer.h>
 
+#include <QMutexLocker>
+#include <QRecursiveMutex>
+
 // #define DEBUG_SEARCH
 
 const uint maxApplyAliasesRecursion = 100;

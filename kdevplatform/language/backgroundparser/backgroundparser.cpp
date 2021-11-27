@@ -13,6 +13,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
+#include <QRecursiveMutex>
 #include <QTimer>
 #include <QThread>
 

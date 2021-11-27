@@ -8,7 +8,8 @@
 #include "urlparselock.h"
 
 #include <QHash>
-#include <QMutex>
+#include <QMutexLocker>
+#include <QRecursiveMutex>
 
 using namespace KDevelop;
 
