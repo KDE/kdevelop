@@ -254,11 +254,16 @@ void BasicRefactoring::executeRenameAction()
     auto* action = qobject_cast<QAction*>(sender());
     if (action) {
         IndexedDeclaration decl = action->data().value<IndexedDeclaration>();
-        if (!decl.isValid())
-            decl = declarationUnderCursor();
+        
+        {
+            DUChainReadLocker lock;
+            
+            if (!decl.isValid())
+                decl = declarationUnderCursor();
 
-        if (!decl.isValid())
-            return;
+            if (!decl.isValid())
+                return;
+        }
 
         startInteractiveRename(decl);
     }
