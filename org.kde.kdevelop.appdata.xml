@@ -151,34 +151,12 @@
     <category>IDE</category>
   </categories>
   <releases>
+    <release version="5.7.211200" date="2021-12-09"/>
     <!-- Note: KDE website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the
                last actual release -->
     <release version="5.6.2" date="2021-02-01"/>
     <release version="5.6.1" date="2020-12-08"/>
-    <release version="5.6.0" date="2020-09-07">
-      <description>
-        <p>This release brings half a year of work, focused mainly on stability, performance, and future maintainability. Many existing features have received small improvements again, and there is one highly-visible addition: optional display of inline notes for problems at the end of the line.</p>
-      </description>
-      <url>https://www.kdevelop.org/news/kdevelop-560-released</url>
-      <artifacts>
-        <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/kdevelop/5.6.0/bin/linux/KDevelop-5.6.0-x86_64.AppImage</location>
-          <checksum type="sha256">ef40329b0442904b46139c71129ba63c785555cb704c8462aac621a6d8c6b014</checksum>
-          <size type="download">130231688</size>
-          <bundle type="appimage">KDevelop-5.6.0</bundle>
-        </artifact>
-        <artifact type="source">
-          <location>https://download.kde.org/stable/kdevelop/5.6.0/src/kdevelop-5.6.0.tar.xz</location>
-          <checksum type="sha256">38adc7d4c4cf2f0fb4191650001e979b5e1b5a3476db28737020baf2fb56f532</checksum>
-          <size type="download">7116544</size>
-        </artifact>
-      </artifacts>
-    </release>
-    <release version="5.5.2" date="2020-06-02"/>
-    <release version="5.5.1" date="2020-05-05"/>
-    <release version="5.5.0" date="2020-02-02"/>
-    <release version="5.4.6" date="2020-01-06"/>
   </releases>
   <custom>
     <value key="KDE::irc">#kdevelop</value>
