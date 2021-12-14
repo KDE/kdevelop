@@ -105,7 +105,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 
 		/** \return A string representing the state of the config.
 		*/
-		virtual QString save() = 0;
+		virtual QString save() const = 0;
 
 	Q_SIGNALS:
 		/**

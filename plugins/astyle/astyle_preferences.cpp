@@ -123,7 +123,7 @@ void AStylePreferences::load(const SourceFormatterStyle &style)
     updatePreviewText();
 }
 
-QString AStylePreferences::save()
+QString AStylePreferences::save() const
 {
     return m_formatter->saveStyle();
 }

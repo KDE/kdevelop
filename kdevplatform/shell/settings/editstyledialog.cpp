@@ -136,7 +136,7 @@ void EditStyleDialog::previewVisibilityChanged(bool visible)
     m_ui.previewArea->setVisible(visible);
 }
 
-QString EditStyleDialog::content()
+QString EditStyleDialog::content() const
 {
     return m_settingsWidget->save();
 }

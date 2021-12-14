@@ -571,7 +571,7 @@ void CustomScriptPreferences::load(const KDevelop::SourceFormatterStyle& style)
     updateTimeout();
 }
 
-QString CustomScriptPreferences::save()
+QString CustomScriptPreferences::save() const
 {
     return m_commandEdit->text();
 }

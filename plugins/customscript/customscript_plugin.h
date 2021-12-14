@@ -70,7 +70,7 @@ public:
 
     void load (const KDevelop::SourceFormatterStyle& style) override;
 
-    QString save() override;
+    QString save() const override;
 private:
     QVBoxLayout* m_vLayout;
     QLabel* m_captionLabel;

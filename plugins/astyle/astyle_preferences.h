@@ -24,7 +24,7 @@ public:
     ~AStylePreferences() override;
 
     void load(const KDevelop::SourceFormatterStyle &style) override;
-    QString save() override;
+    QString save() const override;
 
 protected:
     void init();

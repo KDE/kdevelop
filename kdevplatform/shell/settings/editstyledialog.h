@@ -39,7 +39,7 @@ public:
 
     /** \return The string representing the style given by the \ref SettingsWidget.
      */
-    QString content();
+    QString content() const;
 
     /**
      * @return whether the style uses preview
