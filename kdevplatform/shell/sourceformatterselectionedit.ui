@@ -44,7 +44,10 @@
     </layout>
    </item>
    <item row="0" column="2" rowspan="4">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+     <property name="spacing">
+      <number>12</number>
+     </property>
      <item>
       <widget class="QLabel" name="descriptionLabel">
        <property name="sizePolicy">
@@ -63,19 +66,6 @@
         <bool>true</bool>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>10</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QWidget" name="previewArea" native="true">
