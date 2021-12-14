@@ -556,8 +556,7 @@ void SourceFormatterSelectionEditPrivate::updatePreview()
 {
     if (languages.empty() || !currentStyle()) {
         ui.descriptionLabel->hide();
-        ui.previewLabel->hide();
-        ui.textEditor->hide();
+        ui.previewArea->hide();
         return;
     }
 
@@ -566,8 +565,7 @@ void SourceFormatterSelectionEditPrivate::updatePreview()
     updateLabel(*ui.descriptionLabel, currentStyle.description());
 
     if (!currentStyle.usePreview()) {
-        ui.previewLabel->hide();
-        ui.textEditor->hide();
+        ui.previewArea->hide();
         return;
     }
 
@@ -594,8 +592,7 @@ void SourceFormatterSelectionEditPrivate::updatePreview()
         iface->setConfigValue(replaceTabsConfigKey, oldReplaceTabsConfigValue);
     }
 
-    ui.previewLabel->show();
-    ui.textEditor->show();
+    ui.previewArea->show();
     view->setCursorPosition(KTextEditor::Cursor(0, 0));
 
     document->setReadWrite(false);

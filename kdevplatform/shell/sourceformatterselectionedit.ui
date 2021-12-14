@@ -44,7 +44,7 @@
     </layout>
    </item>
    <item row="0" column="2" rowspan="4">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,3">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
      <item>
       <widget class="QLabel" name="descriptionLabel">
        <property name="sizePolicy">
@@ -78,20 +78,38 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="previewLabel">
-       <property name="text">
-        <string comment="@label">Preview:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="textEditor" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="QWidget" name="previewArea" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="previewLabel">
+          <property name="text">
+           <string comment="@label">Preview:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="textEditor" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
