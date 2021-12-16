@@ -7,6 +7,7 @@
 #ifndef KDEVPLATFORM_ISOURCEFORMATTER_H
 #define KDEVPLATFORM_ISOURCEFORMATTER_H
 
+#include <QMetaType>
 #include <QWidget>
 
 #include "interfacesexport.h"
@@ -78,6 +79,12 @@ private:
 	QString m_overrideSample;
 	MimeList m_mimeTypes;
 };
+
+inline bool operator==(const SourceFormatterStyle::MimeHighlightPair& a,
+                       const SourceFormatterStyle::MimeHighlightPair& b)
+{
+    return a.mimeType == b.mimeType && a.highlightMode == b.highlightMode;
+}
 
 KDEVPLATFORMINTERFACES_EXPORT QDebug operator<<(QDebug dbg, const SourceFormatterStyle& style);
 
@@ -244,6 +251,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 }
 
 Q_DECLARE_INTERFACE(KDevelop::ISourceFormatter, "org.kdevelop.ISourceFormatter")
+Q_DECLARE_METATYPE(KDevelop::SourceFormatterStyle*)
 Q_DECLARE_TYPEINFO(KDevelop::SourceFormatterStyle::MimeHighlightPair, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::SourceFormatterStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::SourceFormatterStyleItem, Q_MOVABLE_TYPE);

@@ -10,7 +10,7 @@
     <height>344</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="mainLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>

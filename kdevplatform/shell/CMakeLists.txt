@@ -201,6 +201,7 @@ install(FILES
     session.h
     sessioncontroller.h
     sessionlock.h
+    sourceformatterconfig.h
     sourceformattercontroller.h
     selectioncontroller.h
     runcontroller.h

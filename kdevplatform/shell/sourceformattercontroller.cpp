@@ -50,6 +50,7 @@
 #include "core.h"
 #include "debug.h"
 #include "plugincontroller.h"
+#include "sourceformatterconfig.h"
 #include "sourceformatterjob.h"
 #include "textdocument.h"
 
@@ -139,27 +140,18 @@ FormatterData readFormatterData(const KConfigGroup& sourceFormatterConfig, const
 {
     FormatterData result{};
 
-    QString entry = sourceFormatterConfig.readEntry(mimeTypeName, QString{});
-    if (entry.isEmpty()) {
+    SourceFormatter::ConfigForMimeType parser(sourceFormatterConfig, mimeTypeName);
+    if (!parser.isValid()) {
         return result;
     }
 
-    const QLatin1String delimiter{"||"};
-    const int formatterEndPos = entry.indexOf(delimiter);
-    const int stylePos = formatterEndPos + delimiter.size();
-    if (formatterEndPos <= 0 || stylePos >= entry.size()) {
-        qCDebug(SHELL) << "Broken formatting entry for mime type" << mimeTypeName << ":" << entry;
-        return result;
-    }
-
-    const auto it =
-        std::find_if(formatters.cbegin(), formatters.cend(),
-                     [formatterName = QStringView{entry.constData(), formatterEndPos}](const ISourceFormatter* f) {
-                         return f->name() == formatterName;
-                     });
+    const auto it = std::find_if(formatters.cbegin(), formatters.cend(),
+                                 [formatterName = parser.formatterName()](const ISourceFormatter* f) {
+                                     return f->name() == formatterName;
+                                 });
     if (it != formatters.cend()) {
         result.formatter = *it;
-        result.styleName = std::move(entry.remove(0, stylePos));
+        result.styleName = std::move(parser).takeStyleName();
     }
 
     return result;
@@ -405,28 +397,41 @@ KConfigGroup SourceFormatterController::globalConfig() const
     return Config::globalConfig();
 }
 
-SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceFormatter *ifmt) const
+auto SourceFormatterController::stylesForFormatter(const ISourceFormatter& formatter) const -> StyleMap
 {
-    auto* formatter = new SourceFormatter();
-    formatter->formatter = ifmt;
+    StyleMap styles;
 
-    // Inserted a new formatter. Now fill it with styles
-    const auto predefinedStyles = ifmt->predefinedStyles();
-    for (const KDevelop::SourceFormatterStyle& style : predefinedStyles) {
-        formatter->styles[ style.name() ] = new SourceFormatterStyle(style);
+    const auto predefinedStyles = formatter.predefinedStyles();
+    for (const auto& style : predefinedStyles) {
+        const auto [it, inserted] = styles.try_emplace(style.name(), style);
+        Q_ASSERT(it->second.name() == it->first);
+        Q_ASSERT_X(inserted, Q_FUNC_INFO, "Duplicate predefined style!");
     }
-    KConfigGroup grp = globalConfig();
-    if( grp.hasGroup( ifmt->name() ) ) {
-        KConfigGroup fmtgrp = grp.group( ifmt->name() );
-        const auto subgroups = fmtgrp.groupList();
+
+    const auto commonConfig = globalConfig();
+    const QString formatterKey = formatter.name();
+    if (commonConfig.hasGroup(formatterKey)) {
+        const auto formatterConfig = commonConfig.group(formatterKey);
+        const auto subgroups = formatterConfig.groupList();
         for (const QString& subgroup : subgroups) {
-            auto* s = new SourceFormatterStyle( subgroup );
-            KConfigGroup stylegrp = fmtgrp.group( subgroup );
-            Config::populateStyleFromConfig(*s, stylegrp);
-            formatter->styles[ s->name() ] = s;
+            const auto [it, inserted] = styles.insert_or_assign(subgroup, SourceFormatterStyle{subgroup});
+            Q_ASSERT(it->second.name() == it->first);
+            if (!inserted) {
+                // This overriding is an undocumented and possibly unintentional feature, which has existed
+                // for more than 10 years. Source Formatter configuration UI creates styles named "UserN",
+                // which cannot override predefined styles. But if the user edits kdeveloprc manually and
+                // renames a style, it correctly overrides the predefined style for all intents and purposes.
+                qCDebug(SHELL).noquote() << QStringLiteral(
+                                                "A user-defined style config group [%1][%2][%3] "
+                                                "overrides a predefined style with the same name.")
+                                                .arg(QString::fromLatin1(Config::Strings::sourceFormatter()),
+                                                     formatterKey, subgroup);
+            }
+            Config::populateStyleFromConfig(it->second, formatterConfig.group(subgroup));
         }
     }
-    return formatter;
+
+    return styles;
 }
 
 SourceFormatterController::FileFormatter::FileFormatter(QUrl url)

@@ -15,9 +15,7 @@
 class KConfigGroup;
 class QListWidgetItem;
 
-namespace KDevelop
-{
-class SourceFormatterStyle;
+namespace KDevelop {
 class ISourceFormatter;
 class SourceFormatterSelectionEditPrivate;
 
@@ -45,15 +43,12 @@ private Q_SLOTS:
     void newStyle();
     void selectLanguage(int );
     void selectFormatter(int );
-    void selectStyle(int );
+    void styleSelectionChanged();
     void styleNameChanged(QListWidgetItem* );
 
 private:
     void addSourceFormatterNoUi(KDevelop::ISourceFormatter* ifmt);
     void resetUi();
-    void updatePreview();
-    QListWidgetItem* addStyle(const KDevelop::SourceFormatterStyle& s);
-    void enableStyleButtons();
 
 private:
     const QScopedPointer<class SourceFormatterSelectionEditPrivate> d_ptr;

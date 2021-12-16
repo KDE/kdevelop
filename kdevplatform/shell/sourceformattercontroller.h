@@ -21,6 +21,9 @@
 
 #include "shellexport.h"
 
+#include <functional>
+#include <map>
+
 namespace KTextEditor {
 class Document;
 }
@@ -38,22 +41,6 @@ class TextDocument;
 class ISourceFormatter;
 class IPlugin;
 class SourceFormatterControllerPrivate;
-
-struct SourceFormatter
-{
-    KDevelop::ISourceFormatter* formatter;
-    // style name -> style. style objects owned by this
-    using StyleMap = QMap<QString,KDevelop::SourceFormatterStyle*>;
-    StyleMap styles;
-
-    SourceFormatter() = default;
-    ~SourceFormatter()
-    {
-        qDeleteAll(styles);
-    };
-private:
-    Q_DISABLE_COPY(SourceFormatter)
-};
 
 /** \short A singleton class managing all source formatter plugins
 */
@@ -80,13 +67,13 @@ public:
     FileFormatterPtr fileFormatter(const QUrl& url) const override;
     bool hasFormatters() const override;
 
+    /// style name -> style; heterogeneous lookup is enabled
+    using StyleMap = std::map<QString, SourceFormatterStyle, std::less<>>;
+
     /**
-    * @brief Instantiate a Formatter for the given plugin and load its configuration.
-    *
-    * @param ifmt The ISourceFormatter interface of the plugin
-    * @return KDevelop::SourceFormatter* the SourceFormatter instance for the plugin, including config items
-    */
-    SourceFormatter* createFormatterForPlugin(KDevelop::ISourceFormatter* ifmt) const;
+     * @return all styles that belong to @p formatter
+     */
+    StyleMap stylesForFormatter(const KDevelop::ISourceFormatter& formatter) const;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent);
 
