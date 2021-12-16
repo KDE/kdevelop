@@ -538,7 +538,7 @@ void SourceFormatterSelectionEdit::newStyle()
     if( item ) {
         SourceFormatterStyle* existstyle = fmt->styles[ item->data( STYLE_ROLE ).toString() ];
         s->setCaption( i18n( "New %1", existstyle->caption() ) );
-        s->copyDataFrom( existstyle );
+        s->copyDataFrom( *existstyle );
     } else {
         s->setCaption( i18n( "New Style" ) );
     }

@@ -65,7 +65,7 @@ public:
 	QString modeForMimetype(const QMimeType& mime) const;
 
 	/// Copy content, mime types and code sample from @p other.
-    void copyDataFrom(SourceFormatterStyle *other);
+	void copyDataFrom(const SourceFormatterStyle& other);
 
 private:
 	bool m_usePreview = false;

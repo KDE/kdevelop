@@ -152,12 +152,12 @@ QString SourceFormatterStyle::modeForMimetype(const QMimeType& mime) const
 	return QString();
 }
 
-void SourceFormatterStyle::copyDataFrom(SourceFormatterStyle *other)
+void SourceFormatterStyle::copyDataFrom(const SourceFormatterStyle& other)
 {
-	m_usePreview = other->usePreview();
-	m_content = other->content();
-	m_mimeTypes = other->mimeTypes();
-	m_overrideSample = other->overrideSample();
+    m_usePreview = other.m_usePreview;
+    m_content = other.m_content;
+    m_mimeTypes = other.m_mimeTypes;
+    m_overrideSample = other.m_overrideSample;
 }
 
 QDebug operator<<(QDebug dbg, const SourceFormatterStyle& style)
