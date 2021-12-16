@@ -31,11 +31,17 @@ public:
 
 	SourceFormatterStyle();
 	explicit SourceFormatterStyle( const QString& name );
+
+	const QString& name() const
+	{
+		return m_name;
+	}
+
 	void setContent( const QString& content );
 	void setCaption( const QString& caption );
 	QString content() const;
 	QString caption() const;
-	QString name() const;
+
 	QString description() const;
 	void setDescription( const QString& desc );
 	bool usePreview() const;
@@ -62,6 +68,7 @@ public:
 
 private:
 	bool m_usePreview = false;
+	/// logically const: is modified only in compiler-generated special member functions
 	QString m_name;
 	QString m_caption;
 	QString m_content;
