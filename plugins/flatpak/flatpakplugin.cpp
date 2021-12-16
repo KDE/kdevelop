@@ -136,7 +136,7 @@ static QStringList availableArches(const KDevelop::Path& url)
         }
     });
 
-    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("list"), QStringLiteral("--runtime") });
+    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("list"), QStringLiteral("--runtime"), QStringLiteral("-d") });
     supportedArchesProcess.waitForFinished();
     return ret;
 }
