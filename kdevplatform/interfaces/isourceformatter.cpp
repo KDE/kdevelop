@@ -95,7 +95,11 @@ void SourceFormatterStyle::setMimeTypes(const QStringList& types)
 {
 	for (auto& t : types) {
 		auto items = t.split(QLatin1Char('|'));
-		if ( items.size() != 2 ) {
+		if (items.size() != 2 || items.at(0).isEmpty() || items.at(1).isEmpty()) {
+			// An empty MIME type name is invalid and not useful.
+			// Language names are displayed in a combobox. So an empty language name is unacceptable.
+			qWarning() << "Skipping invalid Mime/Highlight pair in MimeTypes config entry for"
+			           << *this << ':' << t;
 			continue;
 		}
 		m_mimeTypes << MimeHighlightPair{items.at(0), items.at(1)};
