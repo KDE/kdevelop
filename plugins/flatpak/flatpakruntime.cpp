@@ -73,7 +73,11 @@ void FlatpakRuntime::refreshJson()
     const QString runtimeVersion = doc.value(QLatin1String("runtime-version")).toString();
     const QString usedRuntime = sdkName + QLatin1Char('/') + m_arch + QLatin1Char('/') + runtimeVersion;
 
-    m_sdkPath = KDevelop::Path(QLatin1String("/var/lib/flatpak/runtime/") + usedRuntime + QLatin1String("/active/files"));
+    //First check if local user has flatpak runtime before checking system runtimes.
+    m_sdkPath = KDevelop::Path(QDir::homePath() + QLatin1String("/.local/share/flatpak/runtime/") + usedRuntime + QLatin1String("/active/files"));
+    if(!QFile::exists(m_sdkPath.toLocalFile())) {
+        m_sdkPath = KDevelop::Path(QLatin1String("/var/lib/flatpak/runtime/") + usedRuntime + QLatin1String("/active/files"));
+    }
     qCDebug(FLATPAK) << "flatpak runtime path..." << name() << m_sdkPath;
     Q_ASSERT(QFile::exists(m_sdkPath.toLocalFile()));
 
