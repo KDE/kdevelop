@@ -945,6 +945,11 @@ void SourceFormatterSelectionEdit::deleteStyle()
             otherLanguages.push_back(&lang);
         }
     }
+    // The deleted style can be used in other sessions or projects. But we show the warning dialog only if it
+    // is selected for another language in the current session or project model (!otherLanguageNames.empty()).
+    // Checking style selections in all other sessions is complicated, in all other projects - impossible.
+    // Showing the warning dialog every time a style is deleted, even if the user just created it, can be
+    // annoying. So the current behavior makes sense.
     if (!otherLanguageNames.empty()
         && KMessageBox::warningContinueCancel(
                this,
