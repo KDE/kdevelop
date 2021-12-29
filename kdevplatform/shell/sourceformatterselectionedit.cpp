@@ -910,11 +910,19 @@ void SourceFormatterSelectionEdit::selectFormatter(int index)
     Q_ASSERT(index >= 0);
     Q_ASSERT(d->ui.cbFormatters->currentIndex() == index);
 
+    const bool styleWasSelected = d->currentLanguage().selectedStyle();
+
     Q_ASSERT(&d->currentLanguage().selectedFormatter() != &d->formatterSelectedInUi());
     d->currentLanguage().setSelectedFormatter(d->formatterSelectedInUi());
 
     d->updateUiForCurrentFormatter();
-    emit changed();
+
+    // Switching between formatters does not affect configuration if style remains
+    // unselected => don't emit changed() then.
+    Q_ASSERT(!d->currentLanguage().selectedStyle());
+    if (styleWasSelected) {
+        emit changed();
+    }
 }
 
 void SourceFormatterSelectionEdit::styleSelectionChanged()
