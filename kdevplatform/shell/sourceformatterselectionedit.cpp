@@ -999,8 +999,14 @@ void SourceFormatterSelectionEdit::editStyle()
         return; // nothing changed
     }
 
-    currentStyle.setContent(dlg->content());
-    currentStyle.setUsePreview(dlg->usePreview());
+    QString updatedContent = dlg->content();
+    const bool updatedUsePreview = dlg->usePreview();
+    if (updatedUsePreview == currentStyle.usePreview() && updatedContent == currentStyle.content()) {
+        return; // nothing changed
+    }
+
+    currentStyle.setContent(std::move(updatedContent));
+    currentStyle.setUsePreview(updatedUsePreview);
 
     // Don't call updateStyleButtons(), because editing a style doesn't affect the buttons.
     d->updatePreview();
