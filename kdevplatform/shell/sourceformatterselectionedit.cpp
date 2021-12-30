@@ -450,6 +450,8 @@ private:
 
 Q_DECLARE_METATYPE(FormatterData*)
 
+enum class NewItemPosition { Bottom, Top };
+
 class KDevelop::SourceFormatterSelectionEditPrivate
 {
     Q_DISABLE_COPY_MOVE(SourceFormatterSelectionEditPrivate)
@@ -568,7 +570,8 @@ public:
     /// @pre languages.empty() OR model-UI matches: language, formatter, style
     void updatePreview();
 
-    QListWidgetItem& addStyleItem(SourceFormatterStyle& style, StyleCategory category);
+    QListWidgetItem& addStyleItem(SourceFormatterStyle& style, StyleCategory category,
+                                  NewItemPosition position = NewItemPosition::Bottom);
 
     /**
      * Add the names of @a languages to @a ui.cbLanguages.
@@ -697,7 +700,8 @@ void SourceFormatterSelectionEditPrivate::updatePreview()
     document->setReadWrite(false);
 }
 
-QListWidgetItem& SourceFormatterSelectionEditPrivate::addStyleItem(SourceFormatterStyle& style, StyleCategory category)
+QListWidgetItem& SourceFormatterSelectionEditPrivate::addStyleItem(SourceFormatterStyle& style, StyleCategory category,
+                                                                   NewItemPosition position)
 {
     Q_ASSERT_X((category == StyleCategory::UserDefined) == isUserDefinedStyle(style), Q_FUNC_INFO,
                "Wrong style category!");
@@ -707,7 +711,16 @@ QListWidgetItem& SourceFormatterSelectionEditPrivate::addStyleItem(SourceFormatt
     if (category == StyleCategory::UserDefined) {
         item->setFlags(item->flags() | Qt::ItemIsEditable);
     }
-    ui.styleList->addItem(item);
+
+    switch (position) {
+    case NewItemPosition::Bottom:
+        ui.styleList->addItem(item);
+        break;
+    case NewItemPosition::Top:
+        ui.styleList->insertItem(0, item);
+        break;
+    }
+
     return *item;
 }
 
@@ -1126,7 +1139,14 @@ void SourceFormatterSelectionEdit::newStyle()
 
     d->currentLanguage().setSelectedStyle(&newStyle);
 
-    auto& newStyleItem = d->addStyleItem(newStyle, StyleCategory::UserDefined);
+    // Don't insert the new item into the correct ordered position, because the user will probably enter a
+    // different caption (which affects ordering) right away. Note that when the user renames a style, it is
+    // not immediately moved into its new ordered position to avoid the "jumping" of the renamed style.
+    // Always keeping style items in their correct UI order positions is not trivial to implement, which is
+    // another reason not to do it.
+    // User-defined styles are displayed on top of predefined styles, so the eventual ordered position of
+    // the new item is most likely closer to the top than to the bottom => place it at the top of the list.
+    auto& newStyleItem = d->addStyleItem(newStyle, StyleCategory::UserDefined, NewItemPosition::Top);
     {
         const QSignalBlocker blocker(d->ui.styleList);
         // An edited item is not automatically selected, which results in weird UI behavior:
