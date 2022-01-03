@@ -64,7 +64,8 @@ public:
 	/// get the language / highlight mode for a given @p mime
 	QString modeForMimetype(const QMimeType& mime) const;
 
-	/// Copy content, mime types and code sample from @p other.
+	/// Copy everything but name, caption and description from @p other to *this.
+	/// Call this function to set up a new user-defined style based on an existing style.
 	void copyDataFrom(const SourceFormatterStyle& other);
 
 private:
