@@ -60,7 +60,7 @@ private:
     KTextEditor::Document* m_document = nullptr;
     /// the settings widget becomes valid in constructor, never changes afterwards
     KDevelop::SettingsWidget* m_settingsWidget;
-    QMimeType m_mimeType;
+    const QMimeType m_mimeType;
     QString m_pendingPreviewText; ///< if empty, m_document->text() is up to date
     Ui::EditStyle m_ui;
     KDevelop::SourceFormatterStyle m_style;
