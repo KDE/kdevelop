@@ -13,6 +13,7 @@
 
 #include <memory>
 
+class QDebug;
 class QUrl;
 class QMimeType;
 class QStringList;
@@ -76,6 +77,8 @@ private:
 	QString m_overrideSample;
 	MimeList m_mimeTypes;
 };
+
+KDEVPLATFORMINTERFACES_EXPORT QDebug operator<<(QDebug dbg, const SourceFormatterStyle& style);
 
 /**
  * @brief An object describing a style associated with a plugin

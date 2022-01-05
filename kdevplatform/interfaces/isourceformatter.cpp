@@ -8,6 +8,8 @@
 
 #include <KLocalizedString>
 
+#include <QDebug>
+#include <QDebugStateSaver>
 #include <QVariant>
 #include <QMimeType>
 
@@ -152,6 +154,17 @@ void SourceFormatterStyle::copyDataFrom(SourceFormatterStyle *other)
 	m_content = other->content();
 	m_mimeTypes = other->mimeTypes();
 	m_overrideSample = other->overrideSample();
+}
+
+QDebug operator<<(QDebug dbg, const SourceFormatterStyle& style)
+{
+    QDebugStateSaver saver(dbg);
+    // For a given formatter, a style is uniquely identified by its name. But style names never appear in
+    // the UI, only in config files. Style captions feature prominently in the UI. However, multiple styles
+    // can have equal captions. Print both the name and the caption to allow quick and easy style
+    // recognition by caption and reliable identification by name.
+    dbg.nospace() << "SourceFormatterStyle{name=" << style.name() << ", caption=" << style.caption() << '}';
+    return dbg;
 }
 
 SourceFormatterStyle ISourceFormatter::predefinedStyle(const QString& name) const
