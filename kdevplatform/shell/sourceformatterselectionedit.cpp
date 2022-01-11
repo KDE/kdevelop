@@ -32,6 +32,7 @@
 #include <QString>
 #include <QStringView>
 #include <QVariant>
+#include <QWhatsThis>
 
 #include <algorithm>
 #include <array>
@@ -615,6 +616,7 @@ private:
 
 void SourceFormatterSelectionEditPrivate::updateUiForCurrentFormatter()
 {
+    ui.formatterDescriptionButton->setWhatsThis(currentFormatter().formatter().description());
     updateLabel(*ui.usageHintLabel, currentFormatter().formatter().usageHint());
 
     {
@@ -804,6 +806,14 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
     connect(d->ui.btnEditStyle, &QPushButton::clicked, this, &SourceFormatterSelectionEdit::editStyle);
     connect(d->ui.styleList, &QListWidget::itemChanged, this, &SourceFormatterSelectionEdit::styleNameChanged);
 
+    const auto showWhatsThisOnClick = [](QAbstractButton* button) {
+        connect(button, &QAbstractButton::clicked, button, [button] {
+            QWhatsThis::showText(button->mapToGlobal(QPoint{0, 0}), button->whatsThis(), button);
+        });
+    };
+    showWhatsThisOnClick(d->ui.usageHelpButton);
+    showWhatsThisOnClick(d->ui.formatterDescriptionButton);
+
     d->document = KTextEditor::Editor::instance()->createDocument(this);
     d->document->setReadWrite(false);
 
@@ -938,6 +948,7 @@ void SourceFormatterSelectionEdit::resetUi()
             const QSignalBlocker blocker(d->ui.cbFormatters);
             d->ui.cbFormatters->clear();
         }
+        d->ui.formatterDescriptionButton->setWhatsThis(QString{});
         d->ui.usageHintLabel->hide();
         {
             const QSignalBlocker blocker(d->ui.styleList);

@@ -39,6 +39,30 @@
    <item row="0" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
+      <widget class="QToolButton" name="usageHelpButton">
+       <property name="toolTip">
+        <string>How to configure formatting styles</string>
+       </property>
+       <property name="whatsThis">
+        <string>&lt;p&gt;Select languages you use one by one from the &lt;i&gt;Language&lt;/i&gt; combobox below, pick the desired formatter and style for each. &lt;i&gt;Ctrl+Click&lt;/i&gt; a selected style to unselect it.&lt;/p&gt;
+&lt;p&gt;Configuring the right formatter and style for each used language is very important: not only explicit &lt;i&gt;Reformat Source&lt;/i&gt;/&lt;i&gt;Line&lt;/i&gt;/&lt;i&gt;Files...&lt;/i&gt; actions are affected, but also the formatting of auto-generated, auto-refactored or auto-fixed code (for example, &lt;i&gt;Rename&lt;/i&gt; context menu action).&lt;/p&gt;
+&lt;p&gt;Note that KDevelop formats all &lt;i&gt;*.h&lt;/i&gt; files with formatter and style configured for &lt;i&gt;C&lt;/i&gt; language, even C++ headers that belong to a pure C++ project. This occurs because source formatter maps MIME types to languages.&lt;/p&gt;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="dialog-question"/>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="KComboBox" name="cbLanguages"/>
      </item>
     </layout>
@@ -121,6 +145,25 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="KComboBox" name="cbFormatters"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="formatterDescriptionButton">
+       <property name="toolTip">
+        <string>Description of a selected formatter</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="dialog-information"/>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
