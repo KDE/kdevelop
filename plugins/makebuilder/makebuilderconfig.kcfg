@@ -21,7 +21,7 @@
         <default>false</default>
     </entry>
     <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
-        <default>2</default>
+        <default>1</default>
     </entry>
     <!-- TODO: migrate to more generic & consistent key term "Make Executable" -->
     <entry name="makeExecutable" key="Make Binary" type="String">
