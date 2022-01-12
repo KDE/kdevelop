@@ -245,9 +245,14 @@ QString AStylePlugin::caption() const
 
 QString AStylePlugin::description() const
 {
-    return i18n("<b>Artistic Style</b> is a source code indenter, formatter,"
-        " and beautifier for the C, C++, C# and Java programming languages.<br />"
-        "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
+    return i18n(
+        "<b>Artistic Style</b> is a source code indenter, formatter,"
+        " and beautifier for the C, C++, C# and Java programming languages."
+        // Use <p> to prevent a line break within the link in QWhatsThis. Apparently the following excerpt
+        // from QToolTip class documentation applies to QWhatsThis too: "Rich text displayed in a tool tip
+        // is implicitly word-wrapped unless specified differently with <p style='white-space:pre'>."
+        "<p style='margin-top:0;white-space:pre'>"
+        "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a></p>");
 }
 
 QString AStylePlugin::formatSourceWithStyle(const SourceFormatterStyle& style,
