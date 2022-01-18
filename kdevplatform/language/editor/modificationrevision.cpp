@@ -17,10 +17,9 @@
 /// @todo Listen to filesystem changes (together with the project manager)
 /// and call fileModificationCache().clear(...) when a file has changed
 
-using namespace KDevelop;
-
 const int KDevelop::cacheModificationTimesForSeconds = 30;
 
+using namespace KDevelop;
 namespace
 {
 struct FileModificationCache
@@ -29,8 +28,8 @@ struct FileModificationCache
     QDateTime m_modificationTime;
 };
 
-using FileModificationMap = QHash<KDevelop::IndexedString, FileModificationCache>;
-using OpenDocumentRevisionsMap = QHash<KDevelop::IndexedString, int>;
+using FileModificationMap = QHash<IndexedString, FileModificationCache>;
+using OpenDocumentRevisionsMap = QHash<IndexedString, int>;
 
 // data protected by the mutex in the StaticCacheData below
 struct CacheData {
@@ -104,14 +103,14 @@ ModificationRevision ModificationRevision::revisionForFile(const IndexedString& 
     return cacheData().op([&url](CacheData& data) { return data.revisionForFile(url); });
 }
 
-void ModificationRevision::clearEditorRevisionForFile(const KDevelop::IndexedString& url)
+void ModificationRevision::clearEditorRevisionForFile(const IndexedString& url)
 {
     ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
     return cacheData().op([&url](CacheData& data) { data.openRevisionsCache.remove(url); });
 }
 
-void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedString& url, int revision)
+void ModificationRevision::setEditorRevisionForFile(const IndexedString& url, int revision)
 {
     ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
