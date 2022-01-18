@@ -23,51 +23,74 @@ using namespace KDevelop;
 
 const int KDevelop::cacheModificationTimesForSeconds = 30;
 
-QMutex* fileModificationTimeCacheMutex()
+namespace
 {
-    static QMutex mutex;
-    return &mutex;
-}
-
 struct FileModificationCache
 {
     QDateTime m_readTime;
     QDateTime m_modificationTime;
 };
-Q_DECLARE_TYPEINFO(FileModificationCache, Q_MOVABLE_TYPE);
 
 using FileModificationMap = QHash<KDevelop::IndexedString, FileModificationCache>;
-
-FileModificationMap& fileModificationCache()
-{
-    static FileModificationMap cache;
-    return cache;
-}
-
 using OpenDocumentRevisionsMap = QHash<KDevelop::IndexedString, int>;
 
-OpenDocumentRevisionsMap& openDocumentsRevisionMap()
-{
-    static OpenDocumentRevisionsMap map;
-    return map;
-}
+// data protected by the mutex in the StaticCacheData below
+struct CacheData {
+    FileModificationMap fileModificationCache;
+    OpenDocumentRevisionsMap openRevisionsCache;
 
-QDateTime fileModificationTimeCached(const IndexedString& fileName)
-{
-    const auto currentTime = QDateTime::currentDateTimeUtc();
+    QDateTime fileModificationTimeCached(const IndexedString& fileName)
+    {
+        const auto currentTime = QDateTime::currentDateTimeUtc();
 
-    auto it = fileModificationCache().constFind(fileName);
-    if (it != fileModificationCache().constEnd()) {
-        ///Use the cache for X seconds
-        if (it.value().m_readTime.secsTo(currentTime) < cacheModificationTimesForSeconds) {
-            return it.value().m_modificationTime;
+        auto it = fileModificationCache.constFind(fileName);
+        if (it != fileModificationCache.constEnd()) {
+            /// Use the cache for X seconds
+            if (it.value().m_readTime.secsTo(currentTime) < cacheModificationTimesForSeconds) {
+                return it.value().m_modificationTime;
+            }
         }
+
+        QFileInfo fileInfo(fileName.str());
+        FileModificationCache data = { currentTime, fileInfo.lastModified() };
+        fileModificationCache.insert(fileName, data);
+        return data.m_modificationTime;
     }
 
-    QFileInfo fileInfo(fileName.str());
-    FileModificationCache data = {currentTime, fileInfo.lastModified()};
-    fileModificationCache().insert(fileName, data);
-    return data.m_modificationTime;
+    ModificationRevision revisionForFile(const IndexedString& url)
+    {
+        ModificationRevision ret(fileModificationTimeCached(url));
+
+        OpenDocumentRevisionsMap::const_iterator it = openRevisionsCache.constFind(url);
+        if (it != openRevisionsCache.constEnd()) {
+            ret.revision = it.value();
+        }
+
+        return ret;
+    }
+};
+
+// protects CacheData with a mutex and only allows thread safe access
+class StaticCacheData
+{
+public:
+    template <typename Op>
+    auto op(Op&& op)
+    {
+        QMutexLocker lock(&m_mutex);
+        return op(m_cacheData);
+    }
+
+private:
+    QMutex m_mutex;
+    CacheData m_cacheData;
+};
+
+StaticCacheData& cacheData()
+{
+    static StaticCacheData cacheData;
+    return cacheData;
+}
 }
 
 void ModificationRevision::clearModificationCache(const IndexedString& fileName)
@@ -75,46 +98,29 @@ void ModificationRevision::clearModificationCache(const IndexedString& fileName)
     ///@todo Make the cache management more clever (don't clear the whole)
     ModificationRevisionSet::clearCache();
 
-    QMutexLocker lock(fileModificationTimeCacheMutex());
-
-    fileModificationCache().remove(fileName);
-}
-
-static ModificationRevision revisionForFile_locked(const IndexedString& url, const QMutexLocker& lock)
-{
-    Q_ASSERT(lock.mutex() == fileModificationTimeCacheMutex());
-
-    ModificationRevision ret(fileModificationTimeCached(url));
-
-    OpenDocumentRevisionsMap::const_iterator it = openDocumentsRevisionMap().constFind(url);
-    if (it != openDocumentsRevisionMap().constEnd()) {
-        ret.revision = it.value();
-    }
-
-    return ret;
+    cacheData().op([&fileName](CacheData& data) { data.fileModificationCache.remove(fileName); });
 }
 
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url)
 {
-    QMutexLocker lock(fileModificationTimeCacheMutex());
-    return revisionForFile_locked(url, lock);
+    return cacheData().op([&url](CacheData& data) { return data.revisionForFile(url); });
 }
 
 void ModificationRevision::clearEditorRevisionForFile(const KDevelop::IndexedString& url)
 {
     ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
-    QMutexLocker lock(fileModificationTimeCacheMutex());
-    openDocumentsRevisionMap().remove(url);
+    return cacheData().op([&url](CacheData& data) { data.openRevisionsCache.remove(url); });
 }
 
 void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedString& url, int revision)
 {
     ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
-    QMutexLocker lock(fileModificationTimeCacheMutex());
-    openDocumentsRevisionMap().insert(url, revision);
-    Q_ASSERT(revisionForFile_locked(url, lock).revision == revision);
+    return cacheData().op([&url, revision](CacheData& data) {
+        data.openRevisionsCache.insert(url, revision);
+        Q_ASSERT(data.revisionForFile(url).revision == revision);
+    });
 }
 
 ModificationRevision::ModificationRevision(const QDateTime& modTime, int revision_)
