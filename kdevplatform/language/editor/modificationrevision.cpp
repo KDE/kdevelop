@@ -23,7 +23,11 @@ using namespace KDevelop;
 
 const int KDevelop::cacheModificationTimesForSeconds = 30;
 
-QMutex fileModificationTimeCacheMutex(QMutex::Recursive);
+QMutex* fileModificationTimeCacheMutex()
+{
+    static QMutex mutex;
+    return &mutex;
+}
 
 struct FileModificationCache
 {
@@ -71,14 +75,14 @@ void ModificationRevision::clearModificationCache(const IndexedString& fileName)
     ///@todo Make the cache management more clever (don't clear the whole)
     ModificationRevisionSet::clearCache();
 
-    QMutexLocker lock(&fileModificationTimeCacheMutex);
+    QMutexLocker lock(fileModificationTimeCacheMutex());
 
     fileModificationCache().remove(fileName);
 }
 
-ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url)
+static ModificationRevision revisionForFile_locked(const IndexedString& url, const QMutexLocker& lock)
 {
-    QMutexLocker lock(&fileModificationTimeCacheMutex);
+    Q_ASSERT(lock.mutex() == fileModificationTimeCacheMutex());
 
     ModificationRevision ret(fileModificationTimeCached(url));
 
@@ -90,11 +94,17 @@ ModificationRevision ModificationRevision::revisionForFile(const IndexedString& 
     return ret;
 }
 
+ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url)
+{
+    QMutexLocker lock(fileModificationTimeCacheMutex());
+    return revisionForFile_locked(url, lock);
+}
+
 void ModificationRevision::clearEditorRevisionForFile(const KDevelop::IndexedString& url)
 {
     ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
-    QMutexLocker lock(&fileModificationTimeCacheMutex);
+    QMutexLocker lock(fileModificationTimeCacheMutex());
     openDocumentsRevisionMap().remove(url);
 }
 
@@ -102,9 +112,9 @@ void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedStrin
 {
     ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
-    QMutexLocker lock(&fileModificationTimeCacheMutex);
+    QMutexLocker lock(fileModificationTimeCacheMutex());
     openDocumentsRevisionMap().insert(url, revision);
-    Q_ASSERT(revisionForFile(url).revision == revision);
+    Q_ASSERT(revisionForFile_locked(url, lock).revision == revision);
 }
 
 ModificationRevision::ModificationRevision(const QDateTime& modTime, int revision_)
