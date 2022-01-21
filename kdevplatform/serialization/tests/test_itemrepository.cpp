@@ -119,7 +119,7 @@ class TestItemRepository
 private Q_SLOTS:
     void testItemRepository()
     {
-        auto mutex = QMutex(QMutex::Recursive);
+        QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
         uint itemId = 0;
         QHash<uint, TestItem*> realItemsByIndex;
@@ -213,7 +213,7 @@ private Q_SLOTS:
     }
     void testLeaks()
     {
-        auto mutex = QMutex(QMutex::Recursive);
+        QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
         QList<TestItem*> items;
         for (int i = 0; i < 10000; ++i) {
@@ -241,7 +241,7 @@ private Q_SLOTS:
     }
     void deleteClashingMonsterBucket()
     {
-        auto mutex = QMutex(QMutex::Recursive);
+        QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
         const uint hash = 1235;
 
@@ -273,11 +273,11 @@ private Q_SLOTS:
     }
     void usePermissiveModuloWhenRemovingClashLinks()
     {
-        auto mutex = QMutex(QMutex::Recursive);
+        QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("PermissiveModulo"), &mutex);
 
-        const uint bucketHashSize = decltype(repository)::bucketHashSize;
-        const uint nextBucketHashSize = decltype(repository)::MyBucket::NextBucketHashSize;
+        const uint bucketHashSize = decltype(repository)::Private::bucketHashSize;
+        const uint nextBucketHashSize = decltype(repository)::Private::MyBucket::NextBucketHashSize;
         auto bucketNumberForIndex = [](const uint index) {
                                         return index >> 16;
                                     };

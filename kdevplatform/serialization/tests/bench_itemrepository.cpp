@@ -123,7 +123,7 @@ static QVector<uint> insertData(const QVector<QString>& data, TestDataRepository
 
 void BenchItemRepository::insert()
 {
-    auto mutex = QMutex(QMutex::Recursive);
+    QMutex mutex;
     TestDataRepository repo("TestDataRepositoryInsert", &mutex);
     const QVector<QString> data = generateData();
     QVector<uint> indices;
@@ -137,7 +137,7 @@ void BenchItemRepository::insert()
 
 void BenchItemRepository::remove()
 {
-    auto mutex = QMutex(QMutex::Recursive);
+    QMutex mutex;
     TestDataRepository repo("TestDataRepositoryRemove", &mutex);
     const QVector<QString> data = generateData();
     const QVector<uint> indices = insertData(data, repo);
@@ -162,7 +162,7 @@ void BenchItemRepository::removeDisk()
 {
     const QVector<QString> data = generateData();
     QVector<uint> indices;
-    auto mutex = QMutex(QMutex::Recursive);
+    QMutex mutex;
     {
         TestDataRepository repo("TestDataRepositoryRemoveDisk", &mutex);
         indices = insertData(data, repo);
@@ -182,7 +182,7 @@ void BenchItemRepository::removeDisk()
 
 void BenchItemRepository::lookupKey()
 {
-    auto mutex = QMutex(QMutex::Recursive);
+    QMutex mutex;
     TestDataRepository repo("TestDataRepositoryLookupKey", &mutex);
     const QVector<QString> data = generateData();
     QVector<uint> indices = insertData(data, repo);
@@ -196,7 +196,7 @@ void BenchItemRepository::lookupKey()
 
 void BenchItemRepository::lookupValue()
 {
-    auto mutex = QMutex(QMutex::Recursive);
+    QMutex mutex;
     TestDataRepository repo("TestDataRepositoryLookupValue", &mutex);
     const QVector<QString> data = generateData();
     QVector<uint> indices = insertData(data, repo);

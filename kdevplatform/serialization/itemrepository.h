@@ -540,7 +540,7 @@ public:
 
         {
             const OptionalDUChainReferenceCountingEnabler<markForReferenceCounting> optionalRc(m_data, dataSize());
-            ItemRequest::destroy(item, repository);
+            ItemRequest::destroy(item, repository.itemRepository());
         }
 
 #ifndef QT_NO_DEBUG
@@ -1032,22 +1032,17 @@ private:
     Item* const m_item;
 };
 
-///@tparam Item See ExampleItem
-///@tparam ItemRequest See ExampleReqestItem
-///@tparam fixedItemSize When this is true, all inserted items must have the same size.
-///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
-///@tparam markForReferenceCounting Whether the data within the repository should be marked for reference-counting.
-///                                This costs a bit of performance, but must be enabled if there may be data in the repository
-///                                that does on-disk reference counting, like IndexedString, IndexedIdentifier, etc.
-///@tparam threadSafe Whether class access should be thread-safe. Disabling this is dangerous when you do multi-threading.
-///                  You have to make sure that mutex() is locked whenever the repository is accessed.
-template <class Item, class ItemRequest, bool markForReferenceCounting = true, bool threadSafe = true,
-    uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288 * 2>
-class ItemRepository
-    : public AbstractItemRepository
+/**
+ * The internal implementation of the ItemRepository
+ *
+ * Access to this structure is assumed to happen in a thread safe manner, e.g.
+ * by locking a mutex externally. The private API can then call itself without
+ * having to re-lock anything internally, thus is capable to work with a non-recursive mutex.
+ */
+template <class ItemRepository, class Item, class ItemRequest, bool markForReferenceCounting, uint fixedItemSize,
+          unsigned int targetBucketHashSize>
+class ItemRepositoryPrivate
 {
-    using ThisLocker = Locker<threadSafe>;
-
     using MyBucket = Bucket<Item, ItemRequest, markForReferenceCounting, fixedItemSize>;
 
     enum {
@@ -1061,19 +1056,13 @@ class ItemRepository
     };
 
 public:
-    ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
-    ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
-    ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
-    explicit ItemRepository(const QString& repositoryName, QMutex* mutex,
-                            ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
-                            uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
-        : m_mutex(mutex)
-        , m_repositoryName(repositoryName)
-        , m_registry(registry)
+    explicit ItemRepositoryPrivate(ItemRepository& itemRepository, const QString& repositoryName,
+                                   uint repositoryVersion = 1)
+        : m_repositoryName(repositoryName)
         , m_file(nullptr)
         , m_dynamicFile(nullptr)
         , m_repositoryVersion(repositoryVersion)
-        , m_manager(manager)
+        , m_itemRepository(itemRepository)
     {
         m_unloadingEnabled = true;
         m_metaDataChanged = true;
@@ -1084,16 +1073,11 @@ public:
 
         m_statBucketHashClashes = m_statItemCount = 0;
         m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
-        if (m_registry)
-            m_registry->registerRepository(this, m_manager);
     }
 
-    ~ItemRepository() override
-    {
-        if (m_registry)
-            m_registry->unRegisterRepository(this);
-        close();
-    }
+    ~ItemRepositoryPrivate() { close(); }
+
+    ItemRepository& itemRepository() { return m_itemRepository; }
 
     ///Unloading of buckets is enabled by default. Use this to disable it. When unloading is enabled, the data
     ///gotten from must only itemFromIndex must not be used for a long time.
@@ -1107,8 +1091,6 @@ public:
     ///@param request Item to retrieve the index from
     unsigned int index(const ItemRequest& request)
     {
-        ThisLocker lock(m_mutex);
-
         const uint hash = request.hash();
         const uint size = request.itemSize();
 
@@ -1370,8 +1352,6 @@ public:
     ///Returns zero if the item is not in the repository yet
     unsigned int findIndex(const ItemRequest& request)
     {
-        ThisLocker lock(m_mutex);
-
         return walkBucketChain(request.hash(), [this, &request](ushort bucketIdx, const MyBucket* bucketPtr) {
                 const ushort indexInBucket = bucketPtr->findIndex(request);
                 return indexInBucket ? createIndex(bucketIdx, indexInBucket) : 0u;
@@ -1382,7 +1362,6 @@ public:
     void deleteItem(unsigned int index)
     {
         verifyIndex(index);
-        ThisLocker lock(m_mutex);
 
         m_metaDataChanged = true;
 
@@ -1471,8 +1450,6 @@ public:
     {
         verifyIndex(index);
 
-        ThisLocker lock(m_mutex);
-
         unsigned short bucket = (index >> 16);
 
         MyBucket* bucketPtr = m_buckets.at(bucket);
@@ -1497,8 +1474,6 @@ public:
     {
         verifyIndex(index);
 
-        ThisLocker lock(m_mutex);
-
         unsigned short bucket = (index >> 16);
 
         MyBucket* bucketPtr = m_buckets.at(bucket);
@@ -1515,8 +1490,6 @@ public:
     const Item* itemFromIndex(unsigned int index) const
     {
         verifyIndex(index);
-
-        ThisLocker lock(m_mutex);
 
         unsigned short bucket = (index >> 16);
 
@@ -1586,14 +1559,10 @@ public:
         }
     };
 
-    QString printStatistics() const override
-    {
-        return statistics().print();
-    }
+    QString printStatistics() const { return statistics().print(); }
 
     Statistics statistics() const
     {
-        QMutexLocker lock(m_mutex);
         Q_ASSERT(m_currentBucket < m_buckets.size());
         Statistics ret;
         uint loadedBuckets = 0;
@@ -1714,7 +1683,6 @@ public:
     template <class Visitor>
     void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const
     {
-        ThisLocker lock(m_mutex);
         for (int a = 1; a <= m_currentBucket; ++a) {
             if (!onlyInMemory || m_buckets.at(a)) {
                 if (bucketForIndex(a) && !bucketForIndex(a)->visitAllItems(visitor))
@@ -1725,9 +1693,8 @@ public:
 
     ///Synchronizes the state on disk to the one in memory, and does some memory-management.
     ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
-    void store() override
+    void store()
     {
-        QMutexLocker lock(m_mutex);
         if (m_file) {
             if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
                 qFatal("cannot re-open repository file for storing");
@@ -1782,20 +1749,160 @@ public:
         }
     }
 
-    ///This mutex is used for the thread-safe locking when threadSafe is true. Even if threadSafe is false, it is
-    ///always locked before storing to or loading from disk.
-    ///@warning If threadSafe is false, and you sometimes call store() from within another thread(As happens in duchain),
-    ///         you must always make sure that this mutex is locked before you access this repository.
-    ///         Else you will get crashes and inconsistencies.
-    ///         In KDevelop This means: Make sure you _always_ lock this mutex before accessing the repository.
-    QMutex* mutex() const
+    QString repositoryName() const { return m_repositoryName; }
+
+    bool open(const QString& path)
     {
-        return m_mutex;
+        close();
+        // qDebug() << "opening repository" << m_repositoryName << "at" << path;
+        QDir dir(path);
+        m_file = new QFile(dir.absoluteFilePath(m_repositoryName));
+        m_dynamicFile = new QFile(dir.absoluteFilePath(m_repositoryName + QLatin1String("_dynamic")));
+        if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
+            delete m_file;
+            m_file = nullptr;
+            delete m_dynamicFile;
+            m_dynamicFile = nullptr;
+            return false;
+        }
+
+        m_metaDataChanged = true;
+        if (m_file->size() == 0) {
+            m_file->resize(0);
+            m_file->write(reinterpret_cast<const char*>(&m_repositoryVersion), sizeof(uint));
+            uint hashSize = bucketHashSize;
+            m_file->write(reinterpret_cast<const char*>(&hashSize), sizeof(uint));
+            uint itemRepositoryVersion = staticItemRepositoryVersion();
+            m_file->write(reinterpret_cast<const char*>(&itemRepositoryVersion), sizeof(uint));
+
+            m_statBucketHashClashes = m_statItemCount = 0;
+
+            m_file->write(reinterpret_cast<const char*>(&m_statBucketHashClashes), sizeof(uint));
+            m_file->write(reinterpret_cast<const char*>(&m_statItemCount), sizeof(uint));
+
+            m_buckets.resize(10);
+            m_buckets.fill(nullptr);
+            uint bucketCount = m_buckets.size();
+            m_file->write(reinterpret_cast<const char*>(&bucketCount), sizeof(uint));
+
+            memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
+
+            m_currentBucket
+                = 1; // Skip the first bucket, we won't use it so we have the zero indices for special purposes
+            m_file->write(reinterpret_cast<const char*>(&m_currentBucket), sizeof(uint));
+            m_file->write(reinterpret_cast<const char*>(m_firstBucketForHash),
+                          sizeof(short unsigned int) * bucketHashSize);
+            // We have completely initialized the file now
+            if (m_file->pos() != BucketStartOffset) {
+                KMessageBox::error(nullptr,
+                                   i18n("Failed writing to %1, probably the disk is full", m_file->fileName()));
+                abort();
+            }
+
+            const uint freeSpaceBucketsSize = 0;
+            m_dynamicFile->write(reinterpret_cast<const char*>(&freeSpaceBucketsSize), sizeof(uint));
+            m_freeSpaceBuckets.clear();
+        } else {
+            m_file->close();
+            bool res = m_file->open(QFile::ReadOnly); // Re-open in read-only mode, so we create a read-only m_fileMap
+            VERIFY(res);
+            // Check that the version is correct
+            uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
+
+            m_file->read(reinterpret_cast<char*>(&storedVersion), sizeof(uint));
+            m_file->read(reinterpret_cast<char*>(&hashSize), sizeof(uint));
+            m_file->read(reinterpret_cast<char*>(&itemRepositoryVersion), sizeof(uint));
+            m_file->read(reinterpret_cast<char*>(&m_statBucketHashClashes), sizeof(uint));
+            m_file->read(reinterpret_cast<char*>(&m_statItemCount), sizeof(uint));
+
+            if (storedVersion != m_repositoryVersion || hashSize != bucketHashSize
+                || itemRepositoryVersion != staticItemRepositoryVersion()) {
+                qDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName()
+                         << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version"
+                         << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize"
+                         << bucketHashSize << "repository-version" << staticItemRepositoryVersion();
+                delete m_file;
+                m_file = nullptr;
+                delete m_dynamicFile;
+                m_dynamicFile = nullptr;
+                return false;
+            }
+            m_metaDataChanged = false;
+
+            uint bucketCount = 0;
+            m_file->read(reinterpret_cast<char*>(&bucketCount), sizeof(uint));
+            m_buckets.resize(bucketCount);
+            m_file->read(reinterpret_cast<char*>(&m_currentBucket), sizeof(uint));
+
+            m_file->read(reinterpret_cast<char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
+
+            Q_ASSERT(m_file->pos() == BucketStartOffset);
+
+            uint freeSpaceBucketsSize = 0;
+            m_dynamicFile->read(reinterpret_cast<char*>(&freeSpaceBucketsSize), sizeof(uint));
+            m_freeSpaceBuckets.resize(freeSpaceBucketsSize);
+            m_dynamicFile->read(reinterpret_cast<char*>(m_freeSpaceBuckets.data()),
+                                sizeof(uint) * freeSpaceBucketsSize);
+        }
+
+        m_fileMapSize = 0;
+        m_fileMap = nullptr;
+
+#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
+        if (m_file->size() > BucketStartOffset) {
+            m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
+            Q_ASSERT(m_file->isOpen());
+            Q_ASSERT(m_file->size() >= BucketStartOffset);
+            if (m_fileMap) {
+                m_fileMapSize = m_file->size() - BucketStartOffset;
+            } else {
+                qWarning() << "mapping" << m_file->fileName() << "FAILED!";
+            }
+        }
+#endif
+        // To protect us from inconsistency due to crashes. flush() is not enough.
+        m_file->close();
+        m_dynamicFile->close();
+
+        return true;
     }
 
-    QString repositoryName() const override
+    ///@warning by default, this does not store the current state to disk.
+    void close(bool doStore = false)
     {
-        return m_repositoryName;
+        if (doStore)
+            store();
+
+        if (m_file)
+            m_file->close();
+        delete m_file;
+        m_file = nullptr;
+        m_fileMap = nullptr;
+        m_fileMapSize = 0;
+
+        if (m_dynamicFile)
+            m_dynamicFile->close();
+        delete m_dynamicFile;
+        m_dynamicFile = nullptr;
+
+        qDeleteAll(m_buckets);
+        m_buckets.clear();
+
+        memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
+    }
+
+    int finalCleanup()
+    {
+        int changed = 0;
+        for (int a = 1; a <= m_currentBucket; ++a) {
+            MyBucket* bucket = bucketForIndex(a);
+            if (bucket && bucket->dirty()) { ///@todo Faster dirty check, without loading bucket
+                changed += bucket->finalCleanup(*this);
+            }
+            a += bucket->monsterBucketExtent(); // Skip buckets that are attached as tail to monster-buckets
+        }
+
+        return changed;
     }
 
 private:
@@ -1961,171 +2068,28 @@ private:
         return bucketPtr;
     }
 
-    bool open(const QString& path) override
-    {
-        QMutexLocker lock(m_mutex);
-
-        close();
-        //qDebug() << "opening repository" << m_repositoryName << "at" << path;
-        QDir dir(path);
-        m_file = new QFile(dir.absoluteFilePath(m_repositoryName));
-        m_dynamicFile = new QFile(dir.absoluteFilePath(m_repositoryName + QLatin1String("_dynamic")));
-        if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
-            delete m_file;
-            m_file = nullptr;
-            delete m_dynamicFile;
-            m_dynamicFile = nullptr;
-            return false;
-        }
-
-        m_metaDataChanged = true;
-        if (m_file->size() == 0) {
-            m_file->resize(0);
-            m_file->write(reinterpret_cast<const char*>(&m_repositoryVersion), sizeof(uint));
-            uint hashSize = bucketHashSize;
-            m_file->write(reinterpret_cast<const char*>(&hashSize), sizeof(uint));
-            uint itemRepositoryVersion  = staticItemRepositoryVersion();
-            m_file->write(reinterpret_cast<const char*>(&itemRepositoryVersion), sizeof(uint));
-
-            m_statBucketHashClashes = m_statItemCount = 0;
-
-            m_file->write(reinterpret_cast<const char*>(&m_statBucketHashClashes), sizeof(uint));
-            m_file->write(reinterpret_cast<const char*>(&m_statItemCount), sizeof(uint));
-
-            m_buckets.resize(10);
-            m_buckets.fill(nullptr);
-            uint bucketCount = m_buckets.size();
-            m_file->write(reinterpret_cast<const char*>(&bucketCount), sizeof(uint));
-
-            memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
-
-            m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
-            m_file->write(reinterpret_cast<const char*>(&m_currentBucket), sizeof(uint));
-            m_file->write(reinterpret_cast<const char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
-            //We have completely initialized the file now
-            if (m_file->pos() != BucketStartOffset) {
-                KMessageBox::error(nullptr,
-                                   i18n("Failed writing to %1, probably the disk is full", m_file->fileName()));
-                abort();
-            }
-
-            const uint freeSpaceBucketsSize = 0;
-            m_dynamicFile->write(reinterpret_cast<const char*>(&freeSpaceBucketsSize), sizeof(uint));
-            m_freeSpaceBuckets.clear();
-        } else {
-            m_file->close();
-            bool res = m_file->open(QFile::ReadOnly); //Re-open in read-only mode, so we create a read-only m_fileMap
-            VERIFY(res);
-            //Check that the version is correct
-            uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
-
-            m_file->read(reinterpret_cast<char*>(&storedVersion), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&hashSize), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&itemRepositoryVersion), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&m_statBucketHashClashes), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&m_statItemCount), sizeof(uint));
-
-            if (storedVersion != m_repositoryVersion || hashSize != bucketHashSize ||
-                itemRepositoryVersion != staticItemRepositoryVersion()) {
-                qDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() <<
-                    ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" <<
-                    itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" <<
-                    bucketHashSize << "repository-version" << staticItemRepositoryVersion();
-                delete m_file;
-                m_file = nullptr;
-                delete m_dynamicFile;
-                m_dynamicFile = nullptr;
-                return false;
-            }
-            m_metaDataChanged = false;
-
-            uint bucketCount = 0;
-            m_file->read(reinterpret_cast<char*>(&bucketCount), sizeof(uint));
-            m_buckets.resize(bucketCount);
-            m_file->read(reinterpret_cast<char*>(&m_currentBucket), sizeof(uint));
-
-            m_file->read(reinterpret_cast<char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
-
-            Q_ASSERT(m_file->pos() == BucketStartOffset);
-
-            uint freeSpaceBucketsSize = 0;
-            m_dynamicFile->read(reinterpret_cast<char*>(&freeSpaceBucketsSize), sizeof(uint));
-            m_freeSpaceBuckets.resize(freeSpaceBucketsSize);
-            m_dynamicFile->read(reinterpret_cast<char*>(m_freeSpaceBuckets.data()), sizeof(uint) * freeSpaceBucketsSize);
-        }
-
-        m_fileMapSize = 0;
-        m_fileMap = nullptr;
-
-#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
-        if (m_file->size() > BucketStartOffset) {
-            m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
-            Q_ASSERT(m_file->isOpen());
-            Q_ASSERT(m_file->size() >= BucketStartOffset);
-            if (m_fileMap) {
-                m_fileMapSize = m_file->size() - BucketStartOffset;
-            } else {
-                qWarning() << "mapping" << m_file->fileName() << "FAILED!";
-            }
-        }
-#endif
-        //To protect us from inconsistency due to crashes. flush() is not enough.
-        m_file->close();
-        m_dynamicFile->close();
-
-        return true;
-    }
-
-    ///@warning by default, this does not store the current state to disk.
-    void close(bool doStore = false) override
-    {
-        QMutexLocker lock(m_mutex);
-        if (doStore)
-            store();
-
-        if (m_file)
-            m_file->close();
-        delete m_file;
-        m_file = nullptr;
-        m_fileMap = nullptr;
-        m_fileMapSize = 0;
-
-        if (m_dynamicFile)
-            m_dynamicFile->close();
-        delete m_dynamicFile;
-        m_dynamicFile = nullptr;
-
-        qDeleteAll(m_buckets);
-        m_buckets.clear();
-
-        memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
-    }
-
-    struct AllItemsReachableVisitor
-    {
-        explicit AllItemsReachableVisitor(ItemRepository* rep) : repository(rep)
+    struct AllItemsReachableVisitor {
+        explicit AllItemsReachableVisitor(ItemRepositoryPrivate* rep)
+            : repository(rep)
         {
         }
 
-        bool operator()(const Item* item)
-        {
-            return repository->itemReachable(item);
-        }
+        bool operator()(const Item* item) { return repository->itemReachable(item); }
 
-        ItemRepository* repository;
+        ItemRepositoryPrivate* repository;
     };
 
-    //Returns whether the given item is reachable through its hash
+    // Returns whether the given item is reachable through its hash
     bool itemReachable(const Item* item) const
     {
         const uint hash = item->hash();
 
-        return walkBucketChain(hash, [ = ](ushort /*bucketIndex*/, const MyBucket* bucketPtr) {
-                return bucketPtr->itemReachable(item, hash);
-            });
+        return walkBucketChain(hash, [=](ushort /*bucketIndex*/, const MyBucket* bucketPtr) {
+            return bucketPtr->itemReachable(item, hash);
+        });
     }
 
-    //Returns true if all items in the given bucket are reachable through their hashes
+    // Returns true if all items in the given bucket are reachable through their hashes
     bool allItemsReachable(unsigned short bucket)
     {
         if (!bucket)
@@ -2135,22 +2099,6 @@ private:
 
         AllItemsReachableVisitor visitor(this);
         return bucketPtr->visitAllItems(visitor);
-    }
-
-    int finalCleanup() override
-    {
-        QMutexLocker lock(m_mutex);
-
-        int changed = 0;
-        for (int a = 1; a <= m_currentBucket; ++a) {
-            MyBucket* bucket = bucketForIndex(a);
-            if (bucket && bucket->dirty()) { ///@todo Faster dirty check, without loading bucket
-                changed += bucket->finalCleanup(*this);
-            }
-            a += bucket->monsterBucketExtent(); //Skip buckets that are attached as tail to monster-buckets
-        }
-
-        return changed;
     }
 
     inline void initializeBucket(int bucketNumber) const
@@ -2303,7 +2251,6 @@ private:
     }
 
     bool m_metaDataChanged;
-    mutable QMutex* m_mutex;
     QString m_repositoryName;
     mutable int m_currentBucket;
     //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
@@ -2313,7 +2260,6 @@ private:
     //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
     short unsigned int m_firstBucketForHash[bucketHashSize];
 
-    ItemRepositoryRegistry* m_registry;
     //File that contains the buckets
     QFile* m_file;
     uchar* m_fileMap;
@@ -2321,8 +2267,182 @@ private:
     //File that contains more dynamic data, like the list of buckets with deleted items
     QFile* m_dynamicFile;
     uint m_repositoryVersion;
+    ItemRepository& m_itemRepository;
     bool m_unloadingEnabled;
-    AbstractRepositoryManager* m_manager;
+    friend class ::TestItemRepository;
+};
+
+///@tparam Item See ExampleItem
+///@tparam ItemRequest See ExampleReqestItem
+///@tparam fixedItemSize When this is true, all inserted items must have the same size.
+///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
+///@tparam markForReferenceCounting Whether the data within the repository should be marked for reference-counting.
+///                                This costs a bit of performance, but must be enabled if there may be data in the
+///                                repository that does on-disk reference counting, like IndexedString,
+///                                IndexedIdentifier, etc.
+///@tparam threadSafe Whether class access should be thread-safe. Disabling this is dangerous when you do
+/// multi-threading.
+///                  You have to make sure that mutex() is locked whenever the repository is accessed.
+template <class Item, class ItemRequest, bool markForReferenceCounting = true, bool threadSafe = true,
+          uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288 * 2>
+class ItemRepository : public AbstractItemRepository
+{
+    using ThisLocker = Locker<threadSafe>;
+
+public:
+    using Private = ItemRepositoryPrivate<
+        ItemRepository<Item, ItemRequest, markForReferenceCounting, threadSafe, fixedItemSize, targetBucketHashSize>,
+        Item, ItemRequest, markForReferenceCounting, fixedItemSize, targetBucketHashSize>;
+
+    ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will
+    /// register itself to that registry.
+    ///                If this is zero, you have to care about storing the data using store() and/or close() by
+    ///                yourself. It does not happen automatically. For the global standard registry, the storing/loading
+    ///                is triggered from within duchain, so you don't need to care about it.
+    explicit ItemRepository(const QString& repositoryName, QMutex* mutex,
+                            ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
+                            uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
+        : m_mutex(mutex)
+        , m_registry(registry)
+        , m_d(*this, repositoryName, repositoryVersion)
+    {
+        if (m_registry)
+            m_registry->registerRepository(this, manager);
+    }
+
+    ~ItemRepository() override
+    {
+        if (m_registry)
+            m_registry->unRegisterRepository(this);
+    }
+
+    /// Unloading of buckets is enabled by default. Use this to disable it. When unloading is enabled, the data
+    /// gotten from must only itemFromIndex must not be used for a long time.
+    void setUnloadingEnabled(bool enabled) { m_d.setUnloadingEnabled(enabled); }
+
+    /// Returns the index for the given item. If the item is not in the repository yet, it is inserted.
+    /// The index can never be zero. Zero is reserved for your own usage as invalid
+    ///@param request Item to retrieve the index from
+    unsigned int index(const ItemRequest& request)
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.index(request);
+    }
+
+    /// Returns zero if the item is not in the repository yet
+    unsigned int findIndex(const ItemRequest& request)
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.findIndex(request);
+    }
+
+    /// Deletes the item from the repository.
+    void deleteItem(unsigned int index)
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.deleteItem(index);
+    }
+
+    using MyDynamicItem = DynamicItem<Item, markForReferenceCounting>;
+
+    /// This returns an editable version of the item. @warning: Never change an entry that affects the hash,
+    /// or the equals(..) function. That would completely destroy the consistency.
+    ///@param index The index. It must be valid(match an existing item), and nonzero.
+    ///@warning If you use this, make sure you lock mutex() before calling,
+    ///          and hold it until you're ready using/changing the data..
+    MyDynamicItem dynamicItemFromIndex(unsigned int index)
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.dynamicItemFromIndex(index);
+    }
+
+    /// This returns an editable version of the item. @warning: Never change an entry that affects the hash,
+    /// or the equals(..) function. That would completely destroy the consistency.
+    ///@param index The index. It must be valid(match an existing item), and nonzero.
+    ///@warning If you use this, make sure you lock mutex() before calling,
+    ///          and hold it until you're ready using/changing the data..
+    ///@warning If you change contained complex items that depend on reference-counting, you
+    ///          must use dynamicItemFromIndex(..) instead of dynamicItemFromIndexSimple(..)
+    Item* dynamicItemFromIndexSimple(unsigned int index)
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.dynamicItemFromIndexSimple(index);
+    }
+
+    ///@param index The index. It must be valid(match an existing item), and nonzero.
+    const Item* itemFromIndex(unsigned int index) const
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.itemFromIndex(index);
+    }
+
+    QString printStatistics() const override
+    {
+        QMutexLocker lock(m_mutex);
+        return m_d.printStatistics();
+    }
+
+    using Statistics = typename Private::Statistics;
+    Statistics statistics() const
+    {
+        ThisLocker lock(m_mutex);
+        return m_d.statistics();
+    }
+
+    /// This can be used to safely iterate through all items in the repository
+    ///@param visitor Should be an instance of a class that has a bool operator()(const Item*) member function,
+    ///                that returns whether more items are wanted.
+    ///@param onlyInMemory If this is true, only items are visited that are currently in memory.
+    template <class Visitor>
+    void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const
+    {
+        ThisLocker lock(m_mutex);
+        m_d.visitAllItems(visitor, onlyInMemory);
+    }
+
+    /// Synchronizes the state on disk to the one in memory, and does some memory-management.
+    /// Should be called on a regular basis. Can be called centrally from the global item repository registry.
+    void store() override
+    {
+        QMutexLocker lock(m_mutex);
+        m_d.store();
+    }
+
+    /// This mutex is used for the thread-safe locking when threadSafe is true. Even if threadSafe is false, it is
+    /// always locked before storing to or loading from disk.
+    ///@warning If threadSafe is false, and you sometimes call store() from within another thread(As happens in
+    /// duchain),
+    ///          you must always make sure that this mutex is locked before you access this repository.
+    ///          Else you will get crashes and inconsistencies.
+    ///          In KDevelop This means: Make sure you _always_ lock this mutex before accessing the repository.
+    QMutex* mutex() const { return m_mutex; }
+
+    QString repositoryName() const override { return m_d.repositoryName(); }
+
+private:
+    bool open(const QString& path) override
+    {
+        QMutexLocker lock(m_mutex);
+        return m_d.open(path);
+    }
+
+    ///@warning by default, this does not store the current state to disk.
+    void close(bool doStore = false) override
+    {
+        QMutexLocker lock(m_mutex);
+        m_d.close(doStore);
+    }
+
+    int finalCleanup() override
+    {
+        QMutexLocker lock(m_mutex);
+        return m_d.finalCleanup();
+    }
+
+    mutable QMutex* m_mutex;
+    ItemRepositoryRegistry* m_registry;
+    Private m_d;
+
     friend class ::TestItemRepository;
 };
 }
