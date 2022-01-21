@@ -105,9 +105,9 @@ public:
 class ImportersPrivate
 {
 public:
+    mutable QMutex m_mutex;
     //Maps declaration-ids to Importers
-    using Repo = ItemRepository<ImportersItem, ImportersRequestItem>;
-    QMutex m_mutex = QMutex(QMutex::Recursive);
+    using Repo = ItemRepository<ImportersItem, ImportersRequestItem, true, false>;
     // mutable as things like findIndex are not const
     mutable Repo m_importers{QStringLiteral("Importer Map"), &m_mutex};
 };
@@ -128,6 +128,7 @@ void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use
     item.importersList().append(use);
     ImportersRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_importers.findIndex(item);
 
     if (index) {
@@ -154,6 +155,7 @@ void Importers::removeImporter(const DeclarationId& id, const IndexedDUContext& 
     item.declaration = id;
     ImportersRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_importers.findIndex(item);
 
     if (index) {
@@ -182,6 +184,7 @@ KDevVarLengthArray<IndexedDUContext> Importers::importers(const DeclarationId& i
     item.declaration = id;
     ImportersRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_importers.findIndex(item);
 
     if (index) {
