@@ -2336,6 +2336,16 @@ public:
         return m_d.findIndex(request);
     }
 
+    const Item* findItem(const ItemRequest& request)
+    {
+        ThisLocker lock(m_mutex);
+        auto index = m_d.findIndex(request);
+        if (!index) {
+            return nullptr;
+        }
+        return m_d.itemFromIndex(index);
+    }
+
     /// Deletes the item from the repository.
     void deleteItem(unsigned int index)
     {
