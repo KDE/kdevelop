@@ -105,9 +105,9 @@ public:
 class UsesPrivate
 {
 public:
+    mutable QMutex m_mutex;
     //Maps declaration-ids to Uses
-    using Repo = ItemRepository<UsesItem, UsesRequestItem>;
-    QMutex m_mutex = QMutex(QMutex::Recursive);
+    using Repo = ItemRepository<UsesItem, UsesRequestItem, true, false>;
     // mutable as things like findIndex are not const
     mutable Repo m_uses{QStringLiteral("Use Map"), &m_mutex};
 };
@@ -128,6 +128,7 @@ void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
     item.usesList().append(use);
     UsesRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_uses.findIndex(item);
 
     if (index) {
@@ -154,6 +155,7 @@ void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
     item.declaration = id;
     UsesRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_uses.findIndex(item);
 
     if (index) {
@@ -178,6 +180,8 @@ bool Uses::hasUses(const DeclarationId& id) const
 
     UsesItem item;
     item.declaration = id;
+
+    QMutexLocker lock(&d->m_mutex);
     return ( bool ) d->m_uses.findIndex(item);
 }
 
@@ -191,6 +195,7 @@ KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) cons
     item.declaration = id;
     UsesRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_uses.findIndex(item);
 
     if (index) {
