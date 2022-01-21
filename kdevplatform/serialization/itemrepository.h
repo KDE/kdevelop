@@ -1064,11 +1064,10 @@ public:
     ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
     ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
     ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
-    explicit ItemRepository(const QString& repositoryName,
-                            ItemRepositoryRegistry* registry  = & globalItemRepositoryRegistry(),
+    explicit ItemRepository(const QString& repositoryName, QMutex* mutex,
+                            ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
                             uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
-        : m_ownMutex(QMutex::Recursive)
-        , m_mutex(&m_ownMutex)
+        : m_mutex(mutex)
         , m_repositoryName(repositoryName)
         , m_registry(registry)
         , m_file(nullptr)
@@ -1805,12 +1804,6 @@ public:
         return m_mutex;
     }
 
-    ///With this, you can replace the internal mutex with another one.
-    void setMutex(QMutex* mutex)
-    {
-        m_mutex = mutex;
-    }
-
     QString repositoryName() const override
     {
         return m_repositoryName;
@@ -2309,7 +2302,6 @@ private:
     }
 
     bool m_metaDataChanged;
-    mutable QMutex m_ownMutex;
     mutable QMutex* m_mutex;
     QString m_repositoryName;
     mutable int m_currentBucket;

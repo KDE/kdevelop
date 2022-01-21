@@ -139,9 +139,8 @@ class IndexedStringRepositoryManager
 {
 public:
     IndexedStringRepositoryManager()
-        : IndexedStringRepositoryManagerBase(QStringLiteral("String Index"))
+        : IndexedStringRepositoryManagerBase(QStringLiteral("String Index"), &m_mutex)
     {
-        repository()->setMutex(&m_mutex);
     }
 
 private:

@@ -150,7 +150,8 @@ struct IdentifierItemRequest
 using IdentifierRepository = RepositoryManager<ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest>, false>;
 static IdentifierRepository& identifierRepository()
 {
-    static IdentifierRepository identifierRepositoryObject(QStringLiteral("Identifier Repository"));
+    static auto mutex = QMutex(QMutex::Recursive);
+    static IdentifierRepository identifierRepositoryObject(QStringLiteral("Identifier Repository"), &mutex);
     return identifierRepositoryObject;
 }
 
@@ -322,10 +323,8 @@ using QualifiedIdentifierRepository = RepositoryManager<ItemRepository<ConstantQ
 
 static QualifiedIdentifierRepository& qualifiedidentifierRepository()
 {
-    static QualifiedIdentifierRepository repo(QStringLiteral("Qualified Identifier Repository"), 1,
-        []() -> AbstractRepositoryManager* {
-        return &identifierRepository();
-            });
+    static QualifiedIdentifierRepository repo(QStringLiteral("Qualified Identifier Repository"),
+                                              identifierRepository().repositoryMutex());
     return repo;
 }
 

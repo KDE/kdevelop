@@ -123,7 +123,8 @@ static QVector<uint> insertData(const QVector<QString>& data, TestDataRepository
 
 void BenchItemRepository::insert()
 {
-    TestDataRepository repo("TestDataRepositoryInsert");
+    auto mutex = QMutex(QMutex::Recursive);
+    TestDataRepository repo("TestDataRepositoryInsert", &mutex);
     const QVector<QString> data = generateData();
     QVector<uint> indices;
     QBENCHMARK_ONCE {
@@ -136,7 +137,8 @@ void BenchItemRepository::insert()
 
 void BenchItemRepository::remove()
 {
-    TestDataRepository repo("TestDataRepositoryRemove");
+    auto mutex = QMutex(QMutex::Recursive);
+    TestDataRepository repo("TestDataRepositoryRemove", &mutex);
     const QVector<QString> data = generateData();
     const QVector<uint> indices = insertData(data, repo);
     repo.store();
@@ -160,12 +162,13 @@ void BenchItemRepository::removeDisk()
 {
     const QVector<QString> data = generateData();
     QVector<uint> indices;
+    auto mutex = QMutex(QMutex::Recursive);
     {
-        TestDataRepository repo("TestDataRepositoryRemoveDisk");
+        TestDataRepository repo("TestDataRepositoryRemoveDisk", &mutex);
         indices = insertData(data, repo);
         repo.store();
     }
-    TestDataRepository repo("TestDataRepositoryRemoveDisk");
+    TestDataRepository repo("TestDataRepositoryRemoveDisk", &mutex);
     QVERIFY(repo.statistics().totalItems == static_cast<uint>(data.size()));
     QBENCHMARK_ONCE {
         for (uint index : qAsConst(indices)) {
@@ -179,7 +182,8 @@ void BenchItemRepository::removeDisk()
 
 void BenchItemRepository::lookupKey()
 {
-    TestDataRepository repo("TestDataRepositoryLookupKey");
+    auto mutex = QMutex(QMutex::Recursive);
+    TestDataRepository repo("TestDataRepositoryLookupKey", &mutex);
     const QVector<QString> data = generateData();
     QVector<uint> indices = insertData(data, repo);
     std::shuffle(indices.begin(), indices.end(), std::default_random_engine(0));
@@ -192,7 +196,8 @@ void BenchItemRepository::lookupKey()
 
 void BenchItemRepository::lookupValue()
 {
-    TestDataRepository repo("TestDataRepositoryLookupValue");
+    auto mutex = QMutex(QMutex::Recursive);
+    TestDataRepository repo("TestDataRepositoryLookupValue", &mutex);
     const QVector<QString> data = generateData();
     QVector<uint> indices = insertData(data, repo);
     std::shuffle(indices.begin(), indices.end(), std::default_random_engine(0));

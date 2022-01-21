@@ -165,13 +165,11 @@ public:
 class CodeModelPrivate
 {
 public:
-
-    CodeModelPrivate() : m_repository(QStringLiteral("Code Model"))
-    {
-    }
+    QMutex m_mutex = QMutex(QMutex::Recursive);
     //Maps declaration-ids to items
+    using Repo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem>;
     // mutable as things like findIndex are not const
-    mutable ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem> m_repository;
+    mutable Repo m_repository{QStringLiteral("Code Model"), &m_mutex};
 };
 
 CodeModel::CodeModel()

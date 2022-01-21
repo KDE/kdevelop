@@ -105,13 +105,11 @@ public:
 class UsesPrivate
 {
 public:
-
-    UsesPrivate() : m_uses(QStringLiteral("Use Map"))
-    {
-    }
     //Maps declaration-ids to Uses
+    using Repo = ItemRepository<UsesItem, UsesRequestItem>;
+    QMutex m_mutex = QMutex(QMutex::Recursive);
     // mutable as things like findIndex are not const
-    mutable ItemRepository<UsesItem, UsesRequestItem> m_uses;
+    mutable Repo m_uses{QStringLiteral("Use Map"), &m_mutex};
 };
 
 Uses::Uses()

@@ -87,8 +87,9 @@ public:
 //The object is created in a function, to prevent initialization-order issues
 static RepositoryManager<ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepository()
 {
-    static RepositoryManager<ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> repository(QStringLiteral(
-            "Type Repository"));
+    static auto mutex = QMutex(QMutex::Recursive);
+    static RepositoryManager<ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> repository(
+        QStringLiteral("Type Repository"), &mutex);
     return repository;
 }
 

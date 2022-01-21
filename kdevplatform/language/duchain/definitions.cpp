@@ -149,13 +149,11 @@ private:
 class DefinitionsPrivate
 {
 public:
-
-    DefinitionsPrivate() : m_definitions(QStringLiteral("Definition Map"))
-    {
-    }
+    QMutex m_mutex = QMutex(QMutex::Recursive);
     //Maps declaration-ids to definitions
+    using Repo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
     // mutable as things like findIndex are not const
-    mutable ItemRepository<DefinitionsItem, DefinitionsRequestItem> m_definitions;
+    mutable Repo m_definitions{QStringLiteral("Definition Map"), &m_mutex};
 };
 
 Definitions::Definitions()

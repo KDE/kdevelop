@@ -54,7 +54,8 @@ DeclarationData::DeclarationData()
 ///@todo Use reference counting
 static Repositories::StringRepository& commentRepository()
 {
-    static Repositories::StringRepository commentRepositoryObject(QStringLiteral("Comment Repository"));
+    static auto mutex = QMutex(QMutex::Recursive);
+    static Repositories::StringRepository commentRepositoryObject(QStringLiteral("Comment Repository"), &mutex);
     return commentRepositoryObject;
 }
 

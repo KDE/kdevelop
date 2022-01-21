@@ -328,8 +328,8 @@ public:
         : instance(nullptr)
         , m_cleanupDisabled(false)
         , m_destroyed(false)
-        , m_environmentListInfo(QStringLiteral("Environment Lists"))
-        , m_environmentInfo(QStringLiteral("Environment Information"))
+        , m_environmentListInfo(QStringLiteral("Environment Lists"), &m_environmentListInfoMutex)
+        , m_environmentInfo(QStringLiteral("Environment Information"), &m_environmentInfoMutex)
     {
 #if defined(TEST_NO_CLEANUP)
         m_cleanupDisabled = true;
@@ -1185,8 +1185,10 @@ private:
     ///The following repositories are thread-safe, and m_chainsMutex should not be locked when using them, because
     ///they may trigger I/O. Still it may be required to lock their local mutexes.
     ///Maps filenames to a list of top-contexts/environment-information.
+    QMutex m_environmentListInfoMutex = QMutex(QMutex::Recursive);
     ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest> m_environmentListInfo;
     ///Maps top-context-indices to environment-information item.
+    QMutex m_environmentInfoMutex = QMutex(QMutex::Recursive);
     ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
 

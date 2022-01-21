@@ -105,13 +105,11 @@ public:
 class ImportersPrivate
 {
 public:
-
-    ImportersPrivate() : m_importers(QStringLiteral("Importer Map"))
-    {
-    }
     //Maps declaration-ids to Importers
+    using Repo = ItemRepository<ImportersItem, ImportersRequestItem>;
+    QMutex m_mutex = QMutex(QMutex::Recursive);
     // mutable as things like findIndex are not const
-    mutable ItemRepository<ImportersItem, ImportersRequestItem> m_importers;
+    mutable Repo m_importers{QStringLiteral("Importer Map"), &m_mutex};
 };
 
 Importers::Importers()

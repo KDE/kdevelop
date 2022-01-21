@@ -97,8 +97,8 @@ using FileModificationPairRepository = KDevelop::ItemRepository<FileModification
 
 static FileModificationPairRepository& fileModificationPairRepository()
 {
-    static FileModificationPairRepository rep(QStringLiteral("file modification repository"));
-    rep.setMutex(&modificationRevisionSetMutex);
+    static FileModificationPairRepository rep(QStringLiteral("file modification repository"),
+                                              &modificationRevisionSetMutex);
     return rep;
 }
 
@@ -119,8 +119,9 @@ void ModificationRevisionSet::clearCache()
 struct FileModificationSetRepository
     : public Utils::BasicSetRepository
 {
-    FileModificationSetRepository() : Utils::BasicSetRepository(QStringLiteral(
-                "file modification sets"), &globalItemRepositoryRegistry(), true)
+    FileModificationSetRepository(QMutex *mutex)
+        : Utils::BasicSetRepository(QStringLiteral("file modification sets"), mutex,
+                                    &globalItemRepositoryRegistry(), true)
     {
     }
     void itemRemovedFromSets(uint index) override;
@@ -132,7 +133,8 @@ struct FileModificationSetRepositoryRepresenter
 {
     static FileModificationSetRepository& repository()
     {
-        static FileModificationSetRepository fileModificationSetRepository;
+        static QMutex mutex(QMutex::Recursive);
+        static FileModificationSetRepository fileModificationSetRepository(&mutex);
         return fileModificationSetRepository;
     }
 };

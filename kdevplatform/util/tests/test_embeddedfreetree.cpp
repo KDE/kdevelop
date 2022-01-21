@@ -328,7 +328,8 @@ struct StaticRepository
 {
     static Utils::BasicSetRepository* repository()
     {
-        static Utils::BasicSetRepository repository(QStringLiteral("test repository"));
+        static auto mutex = QMutex(QMutex::Recursive);
+        static Utils::BasicSetRepository repository(QStringLiteral("test repository"), &mutex);
         return &repository;
     }
 };

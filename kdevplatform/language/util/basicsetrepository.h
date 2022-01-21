@@ -179,7 +179,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SetDataRepository
     : public SetDataRepositoryBase
 {
     SetDataRepository(BasicSetRepository* _setRepository, const QString& name,
-                      KDevelop::ItemRepositoryRegistry* registry) : SetDataRepositoryBase(name, registry)
+                      KDevelop::ItemRepositoryRegistry* registry, QMutex* mutex)
+        : SetDataRepositoryBase(name, mutex, registry)
         , setRepository(_setRepository)
     {
     }
@@ -271,8 +272,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT BasicSetRepository
 public:
     ///@param name The name must be unique, and is used for loading and storing the data
     ///@param registry Where the repository should be registered. If you give zero, it won't be registered, and thus won't be saved to disk.
-    explicit BasicSetRepository(const QString& name,
-                                KDevelop::ItemRepositoryRegistry* registry = & KDevelop::globalItemRepositoryRegistry(),
+    explicit BasicSetRepository(const QString& name, QMutex* mutex,
+                                KDevelop::ItemRepositoryRegistry* registry = &KDevelop::globalItemRepositoryRegistry(),
                                 bool delayedDeletion = delayedDeletionByDefault);
     virtual ~BasicSetRepository();
     using Index = unsigned int;

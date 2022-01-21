@@ -125,9 +125,10 @@ AbstractRepositoryManager* returnTypeRepository()
 static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation,
         AppendedListItemRequest<InstantiationInformation>>>& instantiationInformationRepository()
 {
-    static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation,
-            AppendedListItemRequest<InstantiationInformation>>> instantiationInformationRepositoryObject(QStringLiteral(
-            "Instantiation Information Repository"), 1, &returnTypeRepository);
+    static KDevelop::RepositoryManager<
+        KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation>>>
+        instantiationInformationRepositoryObject(QStringLiteral("Instantiation Information Repository"),
+                                                 returnTypeRepository()->repositoryMutex());
     return instantiationInformationRepositoryObject;
 }
 

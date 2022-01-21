@@ -19,14 +19,12 @@ struct RepositoryManager
 {
 public:
     ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
-    explicit RepositoryManager(const QString& name,
-                               int version = 1,
-                               AbstractRepositoryManager*(*shareMutex)() = nullptr,
-                               ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) :
-        m_name(name)
+    explicit RepositoryManager(const QString& name, QMutex* mutex, int version = 1,
+                               ItemRepositoryRegistry& registry = globalItemRepositoryRegistry())
+        : m_name(name)
         , m_version(version)
         , m_registry(registry)
-        , m_shareMutex(shareMutex)
+        , m_mutex(mutex)
     {
         if (!lazy) {
             createRepository();
@@ -51,10 +49,7 @@ public:
         return repository();
     }
 
-    QMutex* repositoryMutex() const override
-    {
-        return (*this)->mutex();
-    }
+    QMutex* repositoryMutex() const override { return m_mutex; }
 
 private:
     void createRepository() const
@@ -62,11 +57,8 @@ private:
         if (!m_repository) {
             QMutexLocker lock(&m_registry.mutex());
             if (!m_repository) {
-                m_repository =
-                    new ItemRepositoryType(m_name, &m_registry, m_version, const_cast<RepositoryManager*>(this));
-                if (m_shareMutex) {
-                    (*this)->setMutex(m_shareMutex()->repositoryMutex());
-                }
+                m_repository = new ItemRepositoryType(m_name, m_mutex, &m_registry, m_version,
+                                                      const_cast<RepositoryManager*>(this));
                 (*this)->setUnloadingEnabled(unloadingEnabled);
             }
         }
@@ -75,7 +67,7 @@ private:
     QString m_name;
     int m_version;
     ItemRepositoryRegistry& m_registry;
-    AbstractRepositoryManager* (* m_shareMutex)();
+    QMutex* m_mutex;
 };
 }
 
