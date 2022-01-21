@@ -113,6 +113,8 @@ void TestFiles::testFiles()
 
     if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(9, 0, 0))
         QEXPECT_FAIL("lambdas.cpp", "capture with identifier and initializer aren't visited apparently", Abort);
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(13, 0, 0))
+        QEXPECT_FAIL("unnamed.cpp", "unnamed unions/structs get an identifier referencing the absolute file path", Abort);
     QVERIFY(validator.testsPassed());
 
     if (!QTest::currentDataTag() || strcmp("invalid.cpp", QTest::currentDataTag()) != 0) {

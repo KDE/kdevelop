@@ -92,9 +92,3 @@ namespace bar
         }
     };
 }
-
-/// "identifier" : "", "range" : "[(96, 0), (96, 0)]"
-struct {} unnamedStructObject;
-
-/// "identifier" : "", "range" : "[(99, 0), (99, 0)]"
-union {} unnamedUnionObject;
