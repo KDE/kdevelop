@@ -4,6 +4,7 @@
             {
                 "Email": "aleixpol@kde.org",
                 "Name": "Aleix Pol",
+                "Name[ar]": "Aleix Pol",
                 "Name[az]": "Aleix Pol",
                 "Name[ca@valencia]": "Aleix Pol",
                 "Name[ca]": "Aleix Pol",
@@ -64,6 +65,7 @@
         "Id": "kdevandroid",
         "License": "GPL",
         "Name": "Android Support",
+        "Name[ar]": "دعم أندرويد",
         "Name[az]": "Android dəstəyi",
         "Name[ca@valencia]": "Implementació de l'Android",
         "Name[ca]": "Implementació de l'Android",

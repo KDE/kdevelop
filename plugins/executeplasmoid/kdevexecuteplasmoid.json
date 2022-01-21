@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Aleix Pol Gonzalez",
+                "Name[ar]": "Aleix Pol Gonzalez",
                 "Name[az]": "Aleix Pol Gonzalez",
                 "Name[ca@valencia]": "Aleix Pol Gonzalez",
                 "Name[ca]": "Aleix Pol Gonzalez",
@@ -64,6 +65,7 @@
         "Id": "kdevexecuteplasmoid",
         "License": "GPL",
         "Name": "Plasmoid Launcher",
+        "Name[ar]": "مُطلق البلازمويد",
         "Name[az]": "Plasmoid başladıcı",
         "Name[bs]": "Pokretač plazmoida",
         "Name[ca@valencia]": "Llançador de plasmoide",

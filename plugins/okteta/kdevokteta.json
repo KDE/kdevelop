@@ -4,6 +4,7 @@
             {
                 "Email": "kossebau@kde.org",
                 "Name": "Friedrich W. H. Kossebau",
+                "Name[ar]": "Friedrich W. H. Kossebau",
                 "Name[az]": "Friedrich W. H. Kossebau",
                 "Name[ca@valencia]": "Friedrich W. H. Kossebau",
                 "Name[ca]": "Friedrich W. H. Kossebau",
@@ -64,6 +65,7 @@
         "Id": "kdevokteta",
         "License": "GPL",
         "Name": "Hex Editor",
+        "Name[ar]": "محرّر ستّ-عشريّ",
         "Name[az]": "Hex redaktoru",
         "Name[ca@valencia]": "Editor hexadecimal",
         "Name[ca]": "Editor hexadecimal",

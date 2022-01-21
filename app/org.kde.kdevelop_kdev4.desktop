@@ -5,6 +5,7 @@ MimeType=application/x-kdevelop;
 Icon=kdevelop
 Terminal=false
 Name=KDevelop
+Name[ar]=مطوّرك
 Name[az]=KDevelop
 Name[ca]=KDevelop
 Name[ca@valencia]=KDevelop
