@@ -26,11 +26,8 @@ namespace {
 QDebug fromTextStream(const QTextStream& out)
 {
     if (out.device())
-        return {
-                   out.device()
-        }; return {
-               out.string()
-    };
+        return {out.device()};
+    return {out.string()};
 }
 }
 
