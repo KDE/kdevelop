@@ -391,6 +391,10 @@ static inline bool dec(Item* item)
 template <typename Item>
 static inline void setIndex(Item* item, unsigned int& m_index, unsigned int index)
 {
+    if (m_index == index) {
+        return;
+    }
+
     if (shouldDoDUChainReferenceCounting(item)) {
         auto& repo = repoForItem(item);
 
@@ -411,6 +415,10 @@ static inline void setIndex(Item* item, unsigned int& m_index, unsigned int inde
 template <typename Item>
 static void moveIndex(Item* lhs, unsigned int& lhs_index, Item* rhs, unsigned int& rhs_index, unsigned int emptyIndex)
 {
+    if (lhs == rhs) {
+        return;
+    }
+
     const auto lhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(lhs);
     const auto rhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(rhs);
 
