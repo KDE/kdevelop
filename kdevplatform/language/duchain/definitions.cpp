@@ -149,9 +149,9 @@ private:
 class DefinitionsPrivate
 {
 public:
-    QMutex m_mutex = QMutex(QMutex::Recursive);
+    mutable QMutex m_mutex;
     //Maps declaration-ids to definitions
-    using Repo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
+    using Repo = ItemRepository<DefinitionsItem, DefinitionsRequestItem, true, false>;
     // mutable as things like findIndex are not const
     mutable Repo m_definitions{QStringLiteral("Definition Map"), &m_mutex};
 };
@@ -172,6 +172,7 @@ void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaratio
     item.definitionsList().append(definition);
     DefinitionsRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_definitions.findIndex(item);
 
     if (index) {
@@ -198,6 +199,7 @@ void Definitions::removeDefinition(const DeclarationId& id, const IndexedDeclara
     item.declaration = id;
     DefinitionsRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_definitions.findIndex(item);
 
     if (index) {
@@ -226,12 +228,15 @@ KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const Declaratio
     item.declaration = id;
     DefinitionsRequestItem request(item);
 
-    uint index = d->m_definitions.findIndex(item);
+    {
+        QMutexLocker lock(&d->m_mutex);
+        uint index = d->m_definitions.findIndex(item);
 
-    if (index) {
-        const DefinitionsItem* repositoryItem = d->m_definitions.itemFromIndex(index);
-        FOREACH_FUNCTION(const IndexedDeclaration &decl, repositoryItem->definitions)
-        ret.append(decl);
+        if (index) {
+            const DefinitionsItem* repositoryItem = d->m_definitions.itemFromIndex(index);
+            FOREACH_FUNCTION(const IndexedDeclaration& decl, repositoryItem->definitions)
+            ret.append(decl);
+        }
     }
 
     return ret;
@@ -241,7 +246,7 @@ void Definitions::dump(const QTextStream& out)
 {
     Q_D(Definitions);
 
-    QMutexLocker lock(d->m_definitions.mutex());
+    QMutexLocker lock(&d->m_mutex);
     DefinitionsVisitor v(this, out);
     d->m_definitions.visitAllItems(v);
 }
