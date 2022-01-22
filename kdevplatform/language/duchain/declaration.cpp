@@ -54,9 +54,17 @@ DeclarationData::DeclarationData()
 ///@todo Use reference counting
 static Repositories::StringRepository& commentRepository()
 {
-    static auto mutex = QMutex(QMutex::Recursive);
+    static QMutex mutex;
     static Repositories::StringRepository commentRepositoryObject(QStringLiteral("Comment Repository"), &mutex);
     return commentRepositoryObject;
+}
+
+template <typename Op>
+static auto commentRepositoryOp(Op&& op)
+{
+    auto& repo = commentRepository();
+    QMutexLocker lock(repo.mutex());
+    return op(repo);
 }
 
 void initDeclarationRepositories()
@@ -167,22 +175,25 @@ QByteArray Declaration::comment() const
 {
     DUCHAIN_D(Declaration);
     if (!d->m_comment)
-        return nullptr;
-    else
-        return Repositories::arrayFromItem(commentRepository().itemFromIndex(d->m_comment));
+        return QByteArray();
+
+    return commentRepositoryOp([d](const Repositories::StringRepository& repo) {
+        return Repositories::arrayFromItem(repo.itemFromIndex(d->m_comment));
+    });
 }
 
 void Declaration::setComment(const QByteArray& str)
 {
     DUCHAIN_D_DYNAMIC(Declaration);
-    if (str.isEmpty())
+    if (str.isEmpty()) {
         d->m_comment = 0;
-    else
-        d->m_comment =
-            commentRepository().index(Repositories::StringRepositoryItemRequest(str.constData(),
-                                                                                IndexedString::hashString(str.constData(),
-                                                                                                          str.length()),
-                                                                                str.length()));
+        return;
+    }
+
+    const auto request = Repositories::StringRepositoryItemRequest(
+        str.constData(), IndexedString::hashString(str.constData(), str.length()), str.length());
+
+    d->m_comment = commentRepositoryOp([&](Repositories::StringRepository& repo) { return repo.index(request); });
 }
 
 void Declaration::setComment(const QString& str)

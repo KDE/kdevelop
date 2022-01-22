@@ -93,7 +93,7 @@ struct StringRepositoryItemRequest
     const char* m_text;
 };
 
-using StringRepository = ItemRepository<StringData, StringRepositoryItemRequest, false, true>;
+using StringRepository = ItemRepository<StringData, StringRepositoryItemRequest, false, false>;
 
 ///@param item must be valid(nonzero)
 inline QString stringFromItem(const StringData* item)
