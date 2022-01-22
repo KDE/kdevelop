@@ -1055,6 +1055,7 @@ class ItemRepositoryPrivate
         BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
     };
 
+    Q_DISABLE_COPY(ItemRepositoryPrivate)
 public:
     explicit ItemRepositoryPrivate(ItemRepository& itemRepository, const QString& repositoryName,
                                    uint repositoryVersion = 1)
@@ -2289,6 +2290,7 @@ class ItemRepository : public AbstractItemRepository
 {
     using ThisLocker = Locker<threadSafe>;
 
+    Q_DISABLE_COPY(ItemRepository)
 public:
     using Private = ItemRepositoryPrivate<
         ItemRepository<Item, ItemRequest, markForReferenceCounting, threadSafe, fixedItemSize, targetBucketHashSize>,
