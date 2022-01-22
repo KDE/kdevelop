@@ -340,6 +340,104 @@ static const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifie
     return &item;
 }
 
+auto& managerForItem(IndexedIdentifier*)
+{
+    return identifierRepository();
+}
+
+auto& managerForItem(IndexedQualifiedIdentifier*)
+{
+    return qualifiedidentifierRepository();
+}
+
+template <typename Item>
+auto& repoForItem(Item* item)
+{
+    return *managerForItem(item).repository();
+}
+
+template <typename Item>
+static inline bool inc(Item* item)
+{
+    if (!shouldDoDUChainReferenceCounting(item)) {
+        return false;
+    }
+
+    auto& repo = repoForItem(item);
+    auto index = item->index();
+
+    QMutexLocker lock(repo.mutex());
+    ifDebug(qCDebug(LANGUAGE) << "increasing");
+    item->increase(repo.dynamicItemFromIndexSimple(index)->m_refCount, index);
+    return true;
+}
+
+template <typename Item>
+static inline bool dec(Item* item)
+{
+    if (!shouldDoDUChainReferenceCounting(item)) {
+        return false;
+    }
+
+    auto& repo = repoForItem(item);
+    auto index = item->index();
+
+    QMutexLocker lock(repo.mutex());
+    ifDebug(qCDebug(LANGUAGE) << "decreasing");
+    item->decrease(repo.dynamicItemFromIndexSimple(index)->m_refCount, index);
+    return true;
+}
+
+template <typename Item>
+static inline void setIndex(Item* item, unsigned int& m_index, unsigned int index)
+{
+    if (shouldDoDUChainReferenceCounting(item)) {
+        auto& repo = repoForItem(item);
+
+        QMutexLocker lock(repo.mutex());
+
+        ifDebug(qCDebug(LANGUAGE) << "decreasing");
+        item->decrease(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+
+        m_index = index;
+
+        ifDebug(qCDebug(LANGUAGE) << "increasing");
+        item->increase(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    } else {
+        m_index = index;
+    }
+}
+
+template <typename Item>
+static void moveIndex(Item* lhs, unsigned int& lhs_index, Item* rhs, unsigned int& rhs_index, unsigned int emptyIndex)
+{
+    const auto lhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(lhs);
+    const auto rhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(rhs);
+
+    if (!lhsShouldDoDUChainReferenceCounting && !rhsShouldDoDUChainReferenceCounting) {
+        lhs_index = rhs_index;
+        rhs_index = emptyIndex;
+        return;
+    }
+
+    auto& repo = repoForItem(lhs);
+
+    QMutexLocker lock(repo.mutex());
+
+    if (lhsShouldDoDUChainReferenceCounting) {
+        lhs->decrease(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
+    } else if (rhsShouldDoDUChainReferenceCounting) {
+        rhs->decrease(repo.dynamicItemFromIndexSimple(rhs_index)->m_refCount, rhs_index);
+    }
+
+    lhs_index = rhs_index;
+    rhs_index = emptyIndex;
+
+    if (lhsShouldDoDUChainReferenceCounting && !rhsShouldDoDUChainReferenceCounting) {
+        lhs->increase(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
+    }
+}
+
 Identifier::Identifier(const Identifier& rhs)
 {
     rhs.makeConstant();
@@ -1274,10 +1372,7 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isE
 IndexedIdentifier::IndexedIdentifier(unsigned int index)
     : m_index(index)
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    inc(this);
 }
 
 IndexedIdentifier::IndexedIdentifier()
@@ -1303,23 +1398,12 @@ IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
 
 IndexedIdentifier::~IndexedIdentifier()
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        decrease(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    dec(this);
 }
 
 IndexedIdentifier& IndexedIdentifier::operator=(unsigned int index)
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        decrease(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-        m_index = index;
-        increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    } else {
-        m_index = index;
-    }
-
+    setIndex(this, m_index, index);
     return *this;
 }
 
@@ -1330,28 +1414,7 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
 
 IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-
-        decrease(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    } else if (shouldDoDUChainReferenceCounting(&rhs)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-
-        decrease(identifierRepository()->dynamicItemFromIndexSimple(rhs.m_index)->m_refCount, rhs.m_index);
-    }
-
-    m_index = rhs.m_index;
-    rhs.m_index = emptyConstantIdentifierPrivateIndex();
-
-    if (shouldDoDUChainReferenceCounting(this) && !(shouldDoDUChainReferenceCounting(&rhs))) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "increasing");
-
-        increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
-
+    moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantIdentifierPrivateIndex());
     return *this;
 }
 
@@ -1412,13 +1475,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(unsigned int index)
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
-    if (shouldDoDUChainReferenceCounting(this)) {
-        ifDebug(qCDebug(LANGUAGE) << "increasing");
-
-        //qCDebug(LANGUAGE) << "(" << ++cnt << ")" << this << identifier().toString() << "inc" << index;
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    inc(this);
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier()
@@ -1446,20 +1503,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(unsigned int i
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-        decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-
-        m_index = index;
-
-        ifDebug(qCDebug(LANGUAGE) << m_index << "increasing");
-        increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    } else {
-        m_index = index;
-    }
-
+    setIndex(this, m_index, index);
     return *this;
 }
 
@@ -1475,39 +1519,14 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-
-        decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    } else if (shouldDoDUChainReferenceCounting(&rhs)) {
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-
-        decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(rhs.m_index)->m_refCount, rhs.m_index);
-    }
-
-    m_index = rhs.m_index;
-    rhs.m_index = emptyConstantQualifiedIdentifierPrivateIndex();
-
-    if (shouldDoDUChainReferenceCounting(this) && !(shouldDoDUChainReferenceCounting(&rhs))) {
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "increasing");
-
-        increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
-
+    moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantQualifiedIdentifierPrivateIndex());
     return *this;
 }
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier()
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << index);
-    if (shouldDoDUChainReferenceCounting(this)) {
-        ifDebug(qCDebug(LANGUAGE) << index << "decreasing");
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    dec(this);
 }
 
 bool IndexedQualifiedIdentifier::operator==(const IndexedQualifiedIdentifier& rhs) const
