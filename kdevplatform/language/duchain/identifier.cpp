@@ -1271,31 +1271,28 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isE
     , m_pointerConstMask(0)
 { }
 
-IndexedIdentifier::IndexedIdentifier()
-    : m_index(emptyConstantIdentifierPrivateIndex())
+IndexedIdentifier::IndexedIdentifier(unsigned int index)
+    : m_index(index)
 {
     if (shouldDoDUChainReferenceCounting(this)) {
         QMutexLocker lock(identifierRepository()->mutex());
         increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
     }
+}
+
+IndexedIdentifier::IndexedIdentifier()
+    : IndexedIdentifier(emptyConstantIdentifierPrivateIndex())
+{
 }
 
 IndexedIdentifier::IndexedIdentifier(const Identifier& id)
-    : m_index(id.index())
+    : IndexedIdentifier(id.index())
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
 }
 
 IndexedIdentifier::IndexedIdentifier(const IndexedIdentifier& rhs)
-    : m_index(rhs.m_index)
+    : IndexedIdentifier(rhs.m_index)
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
 }
 
 IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
@@ -1312,20 +1309,25 @@ IndexedIdentifier::~IndexedIdentifier()
     }
 }
 
-IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
+IndexedIdentifier& IndexedIdentifier::operator=(unsigned int index)
 {
     if (shouldDoDUChainReferenceCounting(this)) {
         QMutexLocker lock(identifierRepository()->mutex());
         decrease(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
     }
 
-    m_index = id.index();
+    m_index = index;
 
     if (shouldDoDUChainReferenceCounting(this)) {
         QMutexLocker lock(identifierRepository()->mutex());
         increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
     }
     return *this;
+}
+
+IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
+{
+    return operator=(id.index());
 }
 
 IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
@@ -1357,18 +1359,7 @@ IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) Q_DECL_
 
 IndexedIdentifier& IndexedIdentifier::operator=(const IndexedIdentifier& id)
 {
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        decrease(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
-
-    m_index = id.m_index;
-
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
-        increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
-    return *this;
+    return operator=(id.m_index);
 }
 
 bool IndexedIdentifier::operator==(const IndexedIdentifier& rhs) const
@@ -1418,8 +1409,8 @@ void IndexedTypeIdentifier::setIdentifier(const IndexedQualifiedIdentifier& id)
     m_identifier = id;
 }
 
-IndexedQualifiedIdentifier::IndexedQualifiedIdentifier()
-    : m_index(emptyConstantQualifiedIdentifierPrivateIndex())
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(unsigned int index)
+    : m_index(index)
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
@@ -1432,29 +1423,19 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier()
     }
 }
 
-IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier& id)
-    : m_index(id.index())
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier()
+    : IndexedQualifiedIdentifier(emptyConstantQualifiedIdentifierPrivateIndex())
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
+}
 
-    if (shouldDoDUChainReferenceCounting(this)) {
-        ifDebug(qCDebug(LANGUAGE) << "increasing");
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier& id)
+    : IndexedQualifiedIdentifier(id.index())
+{
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& id)
-    : m_index(id.m_index)
+    : IndexedQualifiedIdentifier(id.m_index)
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
-
-    if (shouldDoDUChainReferenceCounting(this)) {
-        ifDebug(qCDebug(LANGUAGE) << "increasing");
-
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT
@@ -1463,7 +1444,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifie
     rhs.m_index = emptyConstantQualifiedIdentifierPrivateIndex();
 }
 
-IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const QualifiedIdentifier& id)
+IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(unsigned int index)
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
@@ -1473,36 +1454,25 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const Qualifie
         ifDebug(qCDebug(LANGUAGE) << "decreasing");
         decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
 
-        m_index = id.index();
+        m_index = index;
 
         ifDebug(qCDebug(LANGUAGE) << m_index << "increasing");
         increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
     } else {
-        m_index = id.index();
+        m_index = index;
     }
 
     return *this;
 }
 
+IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const QualifiedIdentifier& id)
+{
+    return operator=(id.index());
+}
+
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQualifiedIdentifier& rhs)
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
-
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(qualifiedidentifierRepository()->mutex());
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-
-        decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-
-        m_index = rhs.m_index;
-
-        ifDebug(qCDebug(LANGUAGE) << m_index << "increasing");
-        increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    } else {
-        m_index = rhs.m_index;
-    }
-
-    return *this;
+    return operator=(rhs.m_index);
 }
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT

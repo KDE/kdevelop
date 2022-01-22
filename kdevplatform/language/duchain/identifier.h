@@ -67,6 +67,9 @@ public:
     }
 
 private:
+    explicit IndexedIdentifier(unsigned int index);
+    IndexedIdentifier& operator=(unsigned int index);
+
     unsigned int m_index;
 };
 
@@ -112,6 +115,8 @@ public:
     }
 
 private:
+    explicit IndexedQualifiedIdentifier(unsigned int index);
+    IndexedQualifiedIdentifier& operator=(unsigned int index);
     unsigned int m_index;
 };
 
