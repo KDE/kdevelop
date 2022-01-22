@@ -1314,14 +1314,12 @@ IndexedIdentifier& IndexedIdentifier::operator=(unsigned int index)
     if (shouldDoDUChainReferenceCounting(this)) {
         QMutexLocker lock(identifierRepository()->mutex());
         decrease(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
-
-    m_index = index;
-
-    if (shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(identifierRepository()->mutex());
+        m_index = index;
         increase(identifierRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    } else {
+        m_index = index;
     }
+
     return *this;
 }
 
