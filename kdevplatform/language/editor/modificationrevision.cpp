@@ -27,7 +27,11 @@ struct FileModificationCache
     QDateTime m_readTime;
     QDateTime m_modificationTime;
 };
+}
+Q_DECLARE_TYPEINFO(FileModificationCache, Q_MOVABLE_TYPE);
 
+namespace
+{
 using FileModificationMap = QHash<IndexedString, FileModificationCache>;
 using OpenDocumentRevisionsMap = QHash<IndexedString, int>;
 
