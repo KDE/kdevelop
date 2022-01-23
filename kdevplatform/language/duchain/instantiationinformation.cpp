@@ -159,9 +159,22 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedIn
     ItemRepositoryUtils::inc(this);
 }
 
+IndexedInstantiationInformation::IndexedInstantiationInformation(IndexedInstantiationInformation&& rhs) noexcept
+    : m_index(rhs.m_index)
+{
+    rhs.m_index = standardInstantiationInformationIndex();
+}
+
 IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs)
 {
     ItemRepositoryUtils::setIndex(this, m_index, rhs.m_index);
+    return *this;
+}
+
+IndexedInstantiationInformation&
+IndexedInstantiationInformation::operator=(IndexedInstantiationInformation&& rhs) noexcept
+{
+    ItemRepositoryUtils::moveIndex(this, m_index, &rhs, rhs.m_index, standardInstantiationInformationIndex());
     return *this;
 }
 

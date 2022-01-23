@@ -28,7 +28,9 @@ public:
     IndexedInstantiationInformation() noexcept = default;
     explicit IndexedInstantiationInformation(uint index);
     IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs);
+    IndexedInstantiationInformation(IndexedInstantiationInformation&& rhs) noexcept;
     IndexedInstantiationInformation& operator=(const IndexedInstantiationInformation& rhs);
+    IndexedInstantiationInformation& operator=(IndexedInstantiationInformation&& rhs) noexcept;
     ~IndexedInstantiationInformation();
 
     const InstantiationInformation& information() const;
