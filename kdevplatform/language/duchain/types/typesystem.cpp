@@ -7,8 +7,6 @@
 */
 
 #include "typesystem.h"
-#include "typerepository.h"
-#include "typesystemdata.h"
 #include "typeregister.h"
 #include "integraltype.h"
 #include "structuretype.h"

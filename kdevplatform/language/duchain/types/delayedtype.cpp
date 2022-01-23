@@ -8,8 +8,6 @@
 
 #include "delayedtype.h"
 
-#include "typerepository.h"
-#include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"
 

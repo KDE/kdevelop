@@ -8,10 +8,8 @@
 
 #include "abstracttype.h"
 
-#include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"
-#include "typerepository.h"
 #include <debug.h>
 
 namespace KDevelop {
