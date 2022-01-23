@@ -145,10 +145,6 @@ void initInstantiationInformationRepository()
     standardInstantiationInformationIndex();
 }
 
-IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(0)
-{
-}
-
 IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m_index(index)
 {
     if (m_index == standardInstantiationInformationIndex())
