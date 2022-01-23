@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -59,6 +61,7 @@
 // #define DEBUG_WRITING_EXTENTS
 
 class TestItemRepository;
+class BenchItemRepository;
 
 namespace KDevelop {
 /**
@@ -540,7 +543,7 @@ public:
 
         {
             const OptionalDUChainReferenceCountingEnabler<markForReferenceCounting> optionalRc(m_data, dataSize());
-            ItemRequest::destroy(item, repository.itemRepository());
+            ItemRequest::destroy(item, repository);
         }
 
 #ifndef QT_NO_DEBUG
@@ -986,32 +989,6 @@ private:
     mutable int m_lastUsed = 0; //How many ticks ago this bucket was last accessed
 };
 
-template <bool lock>
-struct Locker   //This is a dummy that does nothing
-{
-    template <class T>
-    explicit Locker(const T& /*t*/)
-    {
-    }
-};
-template <>
-struct Locker<true>
-{
-    explicit Locker(QMutex* mutex) : m_mutex(mutex)
-    {
-        m_mutex->lock();
-    }
-    ~Locker()
-    {
-        m_mutex->unlock();
-    }
-
-private:
-    Q_DISABLE_COPY(Locker)
-
-    QMutex* m_mutex;
-};
-
 ///This object needs to be kept alive as long as you change the contents of an item
 ///stored in the repository. It is needed to correctly track the reference counting
 ///within disk-storage.
@@ -1033,15 +1010,30 @@ private:
 };
 
 /**
- * The internal implementation of the ItemRepository
+ * The ItemRepository is essentially an on-disk key/value hash map
  *
  * Access to this structure is assumed to happen in a thread safe manner, e.g.
- * by locking a mutex externally. The private API can then call itself without
- * having to re-lock anything internally, thus is capable to work with a non-recursive mutex.
+ * by locking a mutex externally. The API can then call itself without having
+ * to re-lock anything internally, thus is capable to work with a non-recursive mutex.
+ * If desired, a recursive mutex can be used too though as needed.
+ *
+ * Note that the mutex will be locked internally when the repo is accessed through the AbstractItemRepository API.
+ *
+ * @tparam Item See ExampleItem
+ * @tparam ItemRequest See ExampleReqestItem
+ * @tparam fixedItemSize When this is true, all inserted items must have the same size.
+ *                      This greatly simplifies and speeds up the task of managing free items within the buckets.
+ * @tparam markForReferenceCounting Whether the data within the repository should be marked for reference-counting.
+ *                                 This costs a bit of performance, but must be enabled if there may be data in the
+ *                                 repository that does on-disk reference counting, like IndexedString,
+ *                                 IndexedIdentifier, etc.
+ * @tparam mutex The mutex type to use internally. It has to be locked externally before accessing the item repository
+ *               from multiple threads. Except for the store
  */
-template <class ItemRepository, class Item, class ItemRequest, bool markForReferenceCounting, uint fixedItemSize,
-          unsigned int targetBucketHashSize>
-class ItemRepositoryPrivate
+
+template <class Item, class ItemRequest, bool markForReferenceCounting = true, typename Mutex = QMutex,
+          uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288 * 2>
+class ItemRepository : public AbstractItemRepository
 {
     using MyBucket = Bucket<Item, ItemRequest, markForReferenceCounting, fixedItemSize>;
 
@@ -1055,15 +1047,22 @@ class ItemRepositoryPrivate
         BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
     };
 
-    Q_DISABLE_COPY(ItemRepositoryPrivate)
+    Q_DISABLE_COPY_MOVE(ItemRepository)
 public:
-    explicit ItemRepositoryPrivate(ItemRepository& itemRepository, const QString& repositoryName,
-                                   uint repositoryVersion = 1)
+    ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will
+    /// register itself to that registry.
+    ///                If this is zero, you have to care about storing the data using store() and/or close() by
+    ///                yourself. It does not happen automatically. For the global standard registry, the storing/loading
+    ///                is triggered from within duchain, so you don't need to care about it.
+    explicit ItemRepository(const QString& repositoryName, Mutex* mutex,
+                            ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
+                            uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
         : m_repositoryName(repositoryName)
         , m_file(nullptr)
         , m_dynamicFile(nullptr)
         , m_repositoryVersion(repositoryVersion)
-        , m_itemRepository(itemRepository)
+        , m_mutex(mutex)
+        , m_registry(registry)
     {
         m_unloadingEnabled = true;
         m_metaDataChanged = true;
@@ -1074,11 +1073,18 @@ public:
 
         m_statBucketHashClashes = m_statItemCount = 0;
         m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
+
+        if (m_registry)
+            m_registry->registerRepository(this, manager);
     }
 
-    ~ItemRepositoryPrivate() { close(); }
+    ~ItemRepository() override
+    {
+        if (m_registry)
+            m_registry->unRegisterRepository(this);
 
-    ItemRepository& itemRepository() { return m_itemRepository; }
+        close();
+    }
 
     ///Unloading of buckets is enabled by default. Use this to disable it. When unloading is enabled, the data
     ///gotten from must only itemFromIndex must not be used for a long time.
@@ -1351,12 +1357,22 @@ public:
     }
 
     ///Returns zero if the item is not in the repository yet
-    unsigned int findIndex(const ItemRequest& request)
+    unsigned int findIndex(const ItemRequest& request) const
     {
         return walkBucketChain(request.hash(), [this, &request](ushort bucketIdx, const MyBucket* bucketPtr) {
                 const ushort indexInBucket = bucketPtr->findIndex(request);
                 return indexInBucket ? createIndex(bucketIdx, indexInBucket) : 0u;
             });
+    }
+
+    /// Returns nullptr if the item is not in the repository yet
+    const Item* findItem(const ItemRequest& request) const
+    {
+        auto index = findIndex(request);
+        if (!index) {
+            return nullptr;
+        }
+        return itemFromIndex(index);
     }
 
     ///Deletes the item from the repository.
@@ -1560,7 +1576,12 @@ public:
         }
     };
 
-    QString printStatistics() const { return statistics().print(); }
+    QString printStatistics() const override
+    {
+        // lock for usage from ItemRepositoryRegistry, will be cleaned up in follow up patch
+        QMutexLocker lock(m_mutex);
+        return statistics().print();
+    }
 
     Statistics statistics() const
     {
@@ -1692,10 +1713,16 @@ public:
         }
     }
 
+    QString repositoryName() const override { return m_repositoryName; }
+
+    Mutex* mutex() const { return m_mutex; }
+
+private:
     ///Synchronizes the state on disk to the one in memory, and does some memory-management.
     ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
-    void store()
+    void store() override
     {
+        QMutexLocker lock(m_mutex);
         if (m_file) {
             if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
                 qFatal("cannot re-open repository file for storing");
@@ -1750,11 +1777,10 @@ public:
         }
     }
 
-    QString repositoryName() const { return m_repositoryName; }
-
-    bool open(const QString& path)
+    bool open(const QString& path) override
     {
-        close();
+        QMutexLocker lock(m_mutex);
+        closeLocked();
         // qDebug() << "opening repository" << m_repositoryName << "at" << path;
         QDir dir(path);
         m_file = new QFile(dir.absoluteFilePath(m_repositoryName));
@@ -1869,7 +1895,14 @@ public:
     }
 
     ///@warning by default, this does not store the current state to disk.
-    void close(bool doStore = false)
+    void close(bool doStore = false) override
+    {
+        QMutexLocker lock(m_mutex);
+        closeLocked(doStore);
+    }
+
+    ///@warning by default, this does not store the current state to disk.
+    void closeLocked(bool doStore = false)
     {
         if (doStore)
             store();
@@ -1892,8 +1925,9 @@ public:
         memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
     }
 
-    int finalCleanup()
+    int finalCleanup() override
     {
+        QMutexLocker lock(m_mutex);
         int changed = 0;
         for (int a = 1; a <= m_currentBucket; ++a) {
             MyBucket* bucket = bucketForIndex(a);
@@ -1906,7 +1940,6 @@ public:
         return changed;
     }
 
-private:
     uint usedMemory() const
     {
         uint used = 0;
@@ -1919,7 +1952,7 @@ private:
         return used;
     }
 
-    uint createIndex(ushort bucketIndex, ushort indexInBucket)
+    uint createIndex(ushort bucketIndex, ushort indexInBucket) const
     {
         //Combine the index in the bucket, and the bucket number into one index
         const uint index = (bucketIndex << 16) + indexInBucket;
@@ -2070,14 +2103,14 @@ private:
     }
 
     struct AllItemsReachableVisitor {
-        explicit AllItemsReachableVisitor(ItemRepositoryPrivate* rep)
+        explicit AllItemsReachableVisitor(ItemRepository* rep)
             : repository(rep)
         {
         }
 
         bool operator()(const Item* item) { return repository->itemReachable(item); }
 
-        ItemRepositoryPrivate* repository;
+        ItemRepository* repository;
     };
 
     // Returns whether the given item is reachable through its hash
@@ -2267,195 +2300,13 @@ private:
     uint m_fileMapSize;
     //File that contains more dynamic data, like the list of buckets with deleted items
     QFile* m_dynamicFile;
-    uint m_repositoryVersion;
-    ItemRepository& m_itemRepository;
+    const uint m_repositoryVersion;
+    Mutex* const m_mutex;
+    ItemRepositoryRegistry* const m_registry;
+
     bool m_unloadingEnabled;
     friend class ::TestItemRepository;
-};
-
-///@tparam Item See ExampleItem
-///@tparam ItemRequest See ExampleReqestItem
-///@tparam fixedItemSize When this is true, all inserted items must have the same size.
-///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
-///@tparam markForReferenceCounting Whether the data within the repository should be marked for reference-counting.
-///                                This costs a bit of performance, but must be enabled if there may be data in the
-///                                repository that does on-disk reference counting, like IndexedString,
-///                                IndexedIdentifier, etc.
-///@tparam threadSafe Whether class access should be thread-safe. Disabling this is dangerous when you do
-/// multi-threading.
-///                  You have to make sure that mutex() is locked whenever the repository is accessed.
-template <class Item, class ItemRequest, bool markForReferenceCounting = true, bool threadSafe = true,
-          uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288 * 2>
-class ItemRepository : public AbstractItemRepository
-{
-    using ThisLocker = Locker<threadSafe>;
-
-    Q_DISABLE_COPY(ItemRepository)
-public:
-    using Private = ItemRepositoryPrivate<
-        ItemRepository<Item, ItemRequest, markForReferenceCounting, threadSafe, fixedItemSize, targetBucketHashSize>,
-        Item, ItemRequest, markForReferenceCounting, fixedItemSize, targetBucketHashSize>;
-
-    ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will
-    /// register itself to that registry.
-    ///                If this is zero, you have to care about storing the data using store() and/or close() by
-    ///                yourself. It does not happen automatically. For the global standard registry, the storing/loading
-    ///                is triggered from within duchain, so you don't need to care about it.
-    explicit ItemRepository(const QString& repositoryName, QMutex* mutex,
-                            ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
-                            uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
-        : m_mutex(mutex)
-        , m_registry(registry)
-        , m_d(*this, repositoryName, repositoryVersion)
-    {
-        if (m_registry)
-            m_registry->registerRepository(this, manager);
-    }
-
-    ~ItemRepository() override
-    {
-        if (m_registry)
-            m_registry->unRegisterRepository(this);
-    }
-
-    /// Unloading of buckets is enabled by default. Use this to disable it. When unloading is enabled, the data
-    /// gotten from must only itemFromIndex must not be used for a long time.
-    void setUnloadingEnabled(bool enabled) { m_d.setUnloadingEnabled(enabled); }
-
-    /// Returns the index for the given item. If the item is not in the repository yet, it is inserted.
-    /// The index can never be zero. Zero is reserved for your own usage as invalid
-    ///@param request Item to retrieve the index from
-    unsigned int index(const ItemRequest& request)
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.index(request);
-    }
-
-    /// Returns zero if the item is not in the repository yet
-    unsigned int findIndex(const ItemRequest& request)
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.findIndex(request);
-    }
-
-    const Item* findItem(const ItemRequest& request)
-    {
-        ThisLocker lock(m_mutex);
-        auto index = m_d.findIndex(request);
-        if (!index) {
-            return nullptr;
-        }
-        return m_d.itemFromIndex(index);
-    }
-
-    /// Deletes the item from the repository.
-    void deleteItem(unsigned int index)
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.deleteItem(index);
-    }
-
-    using MyDynamicItem = DynamicItem<Item, markForReferenceCounting>;
-
-    /// This returns an editable version of the item. @warning: Never change an entry that affects the hash,
-    /// or the equals(..) function. That would completely destroy the consistency.
-    ///@param index The index. It must be valid(match an existing item), and nonzero.
-    ///@warning If you use this, make sure you lock mutex() before calling,
-    ///          and hold it until you're ready using/changing the data..
-    MyDynamicItem dynamicItemFromIndex(unsigned int index)
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.dynamicItemFromIndex(index);
-    }
-
-    /// This returns an editable version of the item. @warning: Never change an entry that affects the hash,
-    /// or the equals(..) function. That would completely destroy the consistency.
-    ///@param index The index. It must be valid(match an existing item), and nonzero.
-    ///@warning If you use this, make sure you lock mutex() before calling,
-    ///          and hold it until you're ready using/changing the data..
-    ///@warning If you change contained complex items that depend on reference-counting, you
-    ///          must use dynamicItemFromIndex(..) instead of dynamicItemFromIndexSimple(..)
-    Item* dynamicItemFromIndexSimple(unsigned int index)
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.dynamicItemFromIndexSimple(index);
-    }
-
-    ///@param index The index. It must be valid(match an existing item), and nonzero.
-    const Item* itemFromIndex(unsigned int index) const
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.itemFromIndex(index);
-    }
-
-    QString printStatistics() const override
-    {
-        QMutexLocker lock(m_mutex);
-        return m_d.printStatistics();
-    }
-
-    using Statistics = typename Private::Statistics;
-    Statistics statistics() const
-    {
-        ThisLocker lock(m_mutex);
-        return m_d.statistics();
-    }
-
-    /// This can be used to safely iterate through all items in the repository
-    ///@param visitor Should be an instance of a class that has a bool operator()(const Item*) member function,
-    ///                that returns whether more items are wanted.
-    ///@param onlyInMemory If this is true, only items are visited that are currently in memory.
-    template <class Visitor>
-    void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const
-    {
-        ThisLocker lock(m_mutex);
-        m_d.visitAllItems(visitor, onlyInMemory);
-    }
-
-    /// Synchronizes the state on disk to the one in memory, and does some memory-management.
-    /// Should be called on a regular basis. Can be called centrally from the global item repository registry.
-    void store() override
-    {
-        QMutexLocker lock(m_mutex);
-        m_d.store();
-    }
-
-    /// This mutex is used for the thread-safe locking when threadSafe is true. Even if threadSafe is false, it is
-    /// always locked before storing to or loading from disk.
-    ///@warning If threadSafe is false, and you sometimes call store() from within another thread(As happens in
-    /// duchain),
-    ///          you must always make sure that this mutex is locked before you access this repository.
-    ///          Else you will get crashes and inconsistencies.
-    ///          In KDevelop This means: Make sure you _always_ lock this mutex before accessing the repository.
-    QMutex* mutex() const { return m_mutex; }
-
-    QString repositoryName() const override { return m_d.repositoryName(); }
-
-private:
-    bool open(const QString& path) override
-    {
-        QMutexLocker lock(m_mutex);
-        return m_d.open(path);
-    }
-
-    ///@warning by default, this does not store the current state to disk.
-    void close(bool doStore = false) override
-    {
-        QMutexLocker lock(m_mutex);
-        m_d.close(doStore);
-    }
-
-    int finalCleanup() override
-    {
-        QMutexLocker lock(m_mutex);
-        return m_d.finalCleanup();
-    }
-
-    mutable QMutex* m_mutex;
-    ItemRepositoryRegistry* m_registry;
-    Private m_d;
-
-    friend class ::TestItemRepository;
+    friend class ::BenchItemRepository;
 };
 
 template <typename Item>

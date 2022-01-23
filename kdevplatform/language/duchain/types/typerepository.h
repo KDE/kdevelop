@@ -9,7 +9,7 @@
 
 #include <language/duchain/types/abstracttype.h>
 
-class QMutex;
+class QRecursiveMutex;
 
 namespace KDevelop {
 struct ReferenceCountManager;
@@ -25,7 +25,7 @@ public:
     static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
 };
 
-QMutex* typeRepositoryMutex();
+QRecursiveMutex* typeRepositoryMutex();
 }
 
 #endif

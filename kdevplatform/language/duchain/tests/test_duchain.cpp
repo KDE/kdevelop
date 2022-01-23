@@ -88,7 +88,7 @@ void TestDUChain::testStringSets()
     const unsigned int choiceCount = 40;
     const unsigned int itemCount = 120;
 
-    auto mutex = QMutex(QMutex::Recursive);
+    QRecursiveMutex mutex;
     BasicSetRepository rep(QStringLiteral("test repository"), &mutex);
 
 //  qDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();

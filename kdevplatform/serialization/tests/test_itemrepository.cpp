@@ -276,8 +276,8 @@ private Q_SLOTS:
         QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("PermissiveModulo"), &mutex);
 
-        const uint bucketHashSize = decltype(repository)::Private::bucketHashSize;
-        const uint nextBucketHashSize = decltype(repository)::Private::MyBucket::NextBucketHashSize;
+        const uint bucketHashSize = decltype(repository)::bucketHashSize;
+        const uint nextBucketHashSize = decltype(repository)::MyBucket::NextBucketHashSize;
         auto bucketNumberForIndex = [](const uint index) {
                                         return index >> 16;
                                     };

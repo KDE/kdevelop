@@ -167,7 +167,7 @@ class CodeModelPrivate
 public:
     mutable QMutex m_mutex;
     //Maps declaration-ids to items
-    using Repo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem, true, false>;
+    using Repo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem>;
     // mutable as things like findIndex are not const
     mutable Repo m_repository{QStringLiteral("Code Model"), &m_mutex};
 };

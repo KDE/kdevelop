@@ -7,9 +7,9 @@
 #ifndef ABSTRACTITEMREPOSITORY_H
 #define ABSTRACTITEMREPOSITORY_H
 
-#include <QMutex>
-
 #include "serializationexport.h"
+
+#include <QtGlobal>
 
 class QString;
 
@@ -43,8 +43,6 @@ public:
     virtual ~AbstractRepositoryManager();
 
     void deleteRepository();
-
-    virtual QMutex* repositoryMutex() const = 0;
 
 protected:
     mutable AbstractItemRepository* m_repository = nullptr;

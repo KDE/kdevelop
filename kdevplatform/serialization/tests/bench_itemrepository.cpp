@@ -95,7 +95,7 @@ struct TestDataRepositoryItemRequest
     unsigned int m_hash;
 };
 
-using TestDataRepository = ItemRepository<TestData, TestDataRepositoryItemRequest, false, true>;
+using TestDataRepository = ItemRepository<TestData, TestDataRepositoryItemRequest, false>;
 
 static QVector<QString> generateData()
 {

@@ -10,6 +10,11 @@
 #include "abstractitemrepository.h"
 #include "itemrepositoryregistry.h"
 
+#include <QMutexLocker>
+
+#include <type_traits>
+#include <utility>
+
 namespace KDevelop {
 /// This class helps managing the lifetime of a global item repository, and protecting the consistency.
 /// Especially it helps doing thread-safe lazy repository-creation.
@@ -18,8 +23,9 @@ struct RepositoryManager
     : public AbstractRepositoryManager
 {
 public:
+    using Mutex = std::decay_t<decltype(*std::declval<ItemRepositoryType>().mutex())>;
     ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
-    explicit RepositoryManager(const QString& name, QMutex* mutex, int version = 1,
+    explicit RepositoryManager(const QString& name, Mutex* mutex, int version = 1,
                                ItemRepositoryRegistry& registry = globalItemRepositoryRegistry())
         : m_name(name)
         , m_version(version)
@@ -49,8 +55,6 @@ public:
         return repository();
     }
 
-    QMutex* repositoryMutex() const override { return m_mutex; }
-
 private:
     void createRepository() const
     {
@@ -67,7 +71,7 @@ private:
     QString m_name;
     int m_version;
     ItemRepositoryRegistry& m_registry;
-    QMutex* m_mutex;
+    Mutex* m_mutex;
 };
 }
 

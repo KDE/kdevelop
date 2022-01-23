@@ -1193,11 +1193,10 @@ private:
     ///they may trigger I/O. Still it may be required to lock their local mutexes.
     ///Maps filenames to a list of top-contexts/environment-information.
     QMutex m_environmentListInfoMutex;
-    ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest, true, false>
-        m_environmentListInfo;
+    ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest> m_environmentListInfo;
     ///Maps top-context-indices to environment-information item.
     QMutex m_environmentInfoMutex;
-    ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest, true, false> m_environmentInfo;
+    ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
 
 Q_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)

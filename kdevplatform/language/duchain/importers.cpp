@@ -107,7 +107,7 @@ class ImportersPrivate
 public:
     mutable QMutex m_mutex;
     //Maps declaration-ids to Importers
-    using Repo = ItemRepository<ImportersItem, ImportersRequestItem, true, false>;
+    using Repo = ItemRepository<ImportersItem, ImportersRequestItem>;
     // mutable as things like findIndex are not const
     mutable Repo m_importers{QStringLiteral("Importer Map"), &m_mutex};
 };

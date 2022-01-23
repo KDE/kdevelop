@@ -532,7 +532,7 @@ private:
 struct KDEVPLATFORMLANGUAGE_EXPORT StringSetRepository
     : public Utils::BasicSetRepository
 {
-    explicit StringSetRepository(const QString& name, QMutex* mutex);
+    explicit StringSetRepository(const QString& name, QRecursiveMutex* mutex);
     void itemRemovedFromSets(uint index) override;
     void itemAddedToSets(uint index) override;
 };

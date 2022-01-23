@@ -147,14 +147,14 @@ struct IdentifierItemRequest
     const DynamicIdentifierPrivate& m_identifier;
 };
 
-using IdentifierRepository = ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest, true, false>;
+using IdentifierRepository = ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest, true, QRecursiveMutex>;
 using IdentifierRepositoryManager = RepositoryManager<IdentifierRepository, false>;
 
 template <>
 struct ItemRepositoryForItemType<IndexedIdentifier> {
     static IdentifierRepository& repo()
     {
-        static QMutex mutex(QMutex::Recursive);
+        static QRecursiveMutex mutex;
         static IdentifierRepositoryManager manager(QStringLiteral("Identifier Repository"), &mutex);
         return *manager.repository();
     }
@@ -325,7 +325,7 @@ struct QualifiedIdentifierItemRequest
 };
 
 using QualifiedIdentifierRepository
-    = ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest, true, false>;
+    = ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest, true, QRecursiveMutex>;
 using QualifiedIdentifierRepositoryManager = RepositoryManager<QualifiedIdentifierRepository, false>;
 
 template <>

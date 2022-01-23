@@ -38,7 +38,7 @@ const uint maxApplyAliasesRecursion = 100;
 namespace KDevelop {
 Utils::BasicSetRepository* RecursiveImportRepository::repository()
 {
-    static auto mutex = QMutex(QMutex::Recursive);
+    static QRecursiveMutex mutex;
     static Utils::BasicSetRepository recursiveImportRepositoryObject(QStringLiteral("Recursive Imports"), &mutex,
                                                                      &KDevelop::globalItemRepositoryRegistry());
     return &recursiveImportRepositoryObject;

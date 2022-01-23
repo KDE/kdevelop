@@ -84,13 +84,13 @@ public:
     const AbstractType& m_item;
 };
 
-QMutex* typeRepositoryMutex()
+QRecursiveMutex* typeRepositoryMutex()
 {
-    static auto mutex = QMutex(QMutex::Recursive);
+    static QRecursiveMutex mutex;
     return &mutex;
 }
 
-using TypeItemRepository = ItemRepository<AbstractTypeData, AbstractTypeDataRequest, true, false>;
+using TypeItemRepository = ItemRepository<AbstractTypeData, AbstractTypeDataRequest, true, QRecursiveMutex>;
 
 // The object is created in a function, to prevent initialization-order issues
 static TypeItemRepository& typeRepository()

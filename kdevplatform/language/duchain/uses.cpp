@@ -107,7 +107,7 @@ class UsesPrivate
 public:
     mutable QMutex m_mutex;
     //Maps declaration-ids to Uses
-    using Repo = ItemRepository<UsesItem, UsesRequestItem, true, false>;
+    using Repo = ItemRepository<UsesItem, UsesRequestItem>;
     // mutable as things like findIndex are not const
     mutable Repo m_uses{QStringLiteral("Use Map"), &m_mutex};
 };

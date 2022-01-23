@@ -941,8 +941,8 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices)
     return createSetFromIndices(indicesVector);
 }
 
-BasicSetRepository::BasicSetRepository(const QString& name, QMutex* mutex, KDevelop::ItemRepositoryRegistry* registry,
-                                       bool delayedDeletion)
+BasicSetRepository::BasicSetRepository(const QString& name, QRecursiveMutex* mutex,
+                                       KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion)
     : m_dataRepository(this, name, registry, mutex)
     , m_mutex(nullptr)
     , m_delayedDeletion(delayedDeletion)
@@ -1173,7 +1173,7 @@ void Set::staticUnref()
     unrefNode(m_tree);
 }
 
-StringSetRepository::StringSetRepository(const QString& name, QMutex* mutex)
+StringSetRepository::StringSetRepository(const QString& name, QRecursiveMutex* mutex)
     : Utils::BasicSetRepository(name, mutex)
 {
 }

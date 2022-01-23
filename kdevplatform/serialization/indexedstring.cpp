@@ -132,7 +132,7 @@ inline char indexToChar(uint index)
     return static_cast<char>(index & 0xff);
 }
 
-using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, false>;
+using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false>;
 using IndexedStringRepositoryManagerBase = RepositoryManager<IndexedStringRepository, true, false>;
 class IndexedStringRepositoryManager
     : public IndexedStringRepositoryManagerBase

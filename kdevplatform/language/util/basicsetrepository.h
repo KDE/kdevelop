@@ -120,8 +120,8 @@ public:
     }
 };
 
-using SetDataRepositoryBase =
-    KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false, false, sizeof(SetNodeData)>;
+using SetDataRepositoryBase
+    = KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false, QRecursiveMutex, sizeof(SetNodeData)>;
 
 struct SetDataRepository;
 
@@ -179,7 +179,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SetDataRepository
     : public SetDataRepositoryBase
 {
     SetDataRepository(BasicSetRepository* _setRepository, const QString& name,
-                      KDevelop::ItemRepositoryRegistry* registry, QMutex* mutex)
+                      KDevelop::ItemRepositoryRegistry* registry, QRecursiveMutex* mutex)
         : SetDataRepositoryBase(name, mutex, registry)
         , setRepository(_setRepository)
     {
@@ -272,7 +272,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT BasicSetRepository
 public:
     ///@param name The name must be unique, and is used for loading and storing the data
     ///@param registry Where the repository should be registered. If you give zero, it won't be registered, and thus won't be saved to disk.
-    explicit BasicSetRepository(const QString& name, QMutex* mutex,
+    explicit BasicSetRepository(const QString& name, QRecursiveMutex* mutex,
                                 KDevelop::ItemRepositoryRegistry* registry = &KDevelop::globalItemRepositoryRegistry(),
                                 bool delayedDeletion = delayedDeletionByDefault);
     virtual ~BasicSetRepository();
@@ -332,7 +332,7 @@ private:
     friend class Set;
     friend class Set::Iterator;
     SetDataRepository m_dataRepository;
-    QMutex* m_mutex;
+    QRecursiveMutex* m_mutex;
     bool m_delayedDeletion;
 
 //   SetNode

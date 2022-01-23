@@ -151,7 +151,7 @@ class DefinitionsPrivate
 public:
     mutable QMutex m_mutex;
     //Maps declaration-ids to definitions
-    using Repo = ItemRepository<DefinitionsItem, DefinitionsRequestItem, true, false>;
+    using Repo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
     // mutable as things like findIndex are not const
     mutable Repo m_definitions{QStringLiteral("Definition Map"), &m_mutex};
 };

@@ -42,7 +42,7 @@ constexpr TextStreamFunction endl = ::endl;
 
 Utils::BasicSetRepository* RecursiveImportCacheRepository::repository()
 {
-    static auto mutex = QMutex(QMutex::Recursive);
+    static QRecursiveMutex mutex;
     static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"),
                                                                           &mutex, nullptr, false);
     return &recursiveImportCacheRepositoryObject;
@@ -154,7 +154,7 @@ class PersistentSymbolTablePrivate
 public:
     QMutex m_mutex;
     //Maps declaration-ids to declarations
-    using Repo = ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, true, false>;
+    using Repo = ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem>;
     // mutable as things like findIndex are not const
     mutable Repo m_declarations{QStringLiteral("Persistent Declaration Table"), &m_mutex};
 

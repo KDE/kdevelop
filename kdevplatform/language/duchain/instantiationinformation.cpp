@@ -118,7 +118,8 @@ uint InstantiationInformation::hash() const
 }
 
 using InstantiationInformationRepository
-    = ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation>, true, false>;
+    = ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation>, true,
+                     QRecursiveMutex>;
 using InstantiationInformationRepositoryManager = RepositoryManager<InstantiationInformationRepository>;
 
 template <>
