@@ -13,7 +13,6 @@
 
 #include "types/abstracttype.h"
 #include "duchainbase.h"
-#include "instantiationinformation.h"
 #include "identifier.h"
 #include "indexeddeclaration.h"
 
@@ -28,6 +27,7 @@ class DeclarationId;
 class Declaration;
 class IndexedTopDUContext;
 class TopDUContext;
+class IndexedInstantiationInformation;
 
 /**
  * \short Represents a single declaration in a definition-use chain.

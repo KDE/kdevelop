@@ -9,8 +9,6 @@
 
 #include <QHash>
 
-#include "instantiationinformation.h"
-
 #include <language/languageexport.h>
 
 namespace KDevelop {
@@ -18,6 +16,7 @@ class DeclarationId;
 class Declaration;
 class DUContext;
 class TopDUContext;
+class IndexedInstantiationInformation;
 
 /**
  * This class allows dynamic management of "current" specializations for declarations.
