@@ -1058,22 +1058,10 @@ public:
                             ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
                             uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
         : m_repositoryName(repositoryName)
-        , m_file(nullptr)
-        , m_dynamicFile(nullptr)
         , m_repositoryVersion(repositoryVersion)
         , m_mutex(mutex)
         , m_registry(registry)
     {
-        m_unloadingEnabled = true;
-        m_metaDataChanged = true;
-        m_buckets.resize(10);
-        m_buckets.fill(nullptr);
-
-        memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
-
-        m_statBucketHashClashes = m_statItemCount = 0;
-        m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
-
         if (m_registry)
             m_registry->registerRepository(this, manager);
     }
@@ -2284,27 +2272,31 @@ private:
         Q_UNUSED(index);
     }
 
-    bool m_metaDataChanged;
-    QString m_repositoryName;
-    mutable int m_currentBucket;
+    bool m_metaDataChanged = true;
+    bool m_unloadingEnabled = true;
+    // Skip the first bucket, we won't use it so we have the zero indices for special purposes
+    mutable int m_currentBucket = 1;
+
     //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
     QVector<uint> m_freeSpaceBuckets;
-    mutable QVector<MyBucket*> m_buckets;
-    uint m_statBucketHashClashes, m_statItemCount;
+    mutable QVector<MyBucket*> m_buckets = QVector<MyBucket*>(10, nullptr);
+    uint m_statBucketHashClashes = 0;
+    uint m_statItemCount = 0;
     //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
-    short unsigned int m_firstBucketForHash[bucketHashSize];
+    short unsigned int m_firstBucketForHash[bucketHashSize] = { 0 };
 
     //File that contains the buckets
-    QFile* m_file;
-    uchar* m_fileMap;
-    uint m_fileMapSize;
+    QFile* m_file = nullptr;
+    uchar* m_fileMap = nullptr;
+    uint m_fileMapSize = 0;
     //File that contains more dynamic data, like the list of buckets with deleted items
-    QFile* m_dynamicFile;
+    QFile* m_dynamicFile = nullptr;
+
+    const QString m_repositoryName;
     const uint m_repositoryVersion;
     Mutex* const m_mutex;
     ItemRepositoryRegistry* const m_registry;
 
-    bool m_unloadingEnabled;
     friend class ::TestItemRepository;
     friend class ::BenchItemRepository;
 };
