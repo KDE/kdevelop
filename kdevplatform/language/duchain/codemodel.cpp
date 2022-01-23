@@ -165,9 +165,9 @@ public:
 class CodeModelPrivate
 {
 public:
-    QMutex m_mutex = QMutex(QMutex::Recursive);
+    mutable QMutex m_mutex;
     //Maps declaration-ids to items
-    using Repo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem>;
+    using Repo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem, true, false>;
     // mutable as things like findIndex are not const
     mutable Repo m_repository{QStringLiteral("Code Model"), &m_mutex};
 };
@@ -191,12 +191,13 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     item.file = file;
     CodeModelRequestItem request(item);
 
-    uint index = d->m_repository.findIndex(item);
-
     CodeModelItem newItem;
     newItem.id = id;
     newItem.kind = kind;
     newItem.referenceCount = 1;
+
+    QMutexLocker lock(&d->m_mutex);
+    uint index = d->m_repository.findIndex(item);
 
     if (index) {
         const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
@@ -204,8 +205,6 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
             oldItem->itemsSize(), oldItem->centralFreeItem);
 
         int listIndex = alg.indexOf(newItem);
-
-        QMutexLocker lock(d->m_repository.mutex());
 
         DynamicItem<CodeModelRepositoryItem, true> editableItem = d->m_repository.dynamicItemFromIndex(index);
         auto* items = const_cast<CodeModelItem*>(editableItem->items());
@@ -265,11 +264,11 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_repository.findIndex(item);
 
     if (index) {
         //Check whether the item is already in the mapped list, else copy the list into the new created item
-        QMutexLocker lock(d->m_repository.mutex());
         DynamicItem<CodeModelRepositoryItem, true> oldItem = d->m_repository.dynamicItemFromIndex(index);
 
         EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(),
@@ -301,13 +300,13 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     item.file = file;
     CodeModelRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_repository.findIndex(item);
 
     if (index) {
         CodeModelItem searchItem;
         searchItem.id = id;
 
-        QMutexLocker lock(d->m_repository.mutex());
         DynamicItem<CodeModelRepositoryItem, true> oldItem = d->m_repository.dynamicItemFromIndex(index);
 
         EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(),
@@ -361,6 +360,7 @@ void CodeModel::items(const IndexedString& file, uint& count, const CodeModelIte
     item.file = file;
     CodeModelRequestItem request(item);
 
+    QMutexLocker lock(&d->m_mutex);
     uint index = d->m_repository.findIndex(item);
 
     if (index) {
