@@ -1038,8 +1038,7 @@ void DUContext::deleteLocalDeclarations()
     if (d_func()->m_localDeclarations()) {
         indexedLocal.append(d_func()->m_localDeclarations(), d_func()->m_localDeclarationsSize());
     }
-    const auto currentLocalDeclarations = m_dynamicData->m_localDeclarations;
-    for (const LocalIndexedDeclaration& indexed : currentLocalDeclarations) {
+    for (const LocalIndexedDeclaration& indexed : indexedLocal) {
         delete indexed.data(topContext());
     }
 
@@ -1468,8 +1467,7 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
     if (d_func()->m_localDeclarations()) {
         indexedLocal.append(d_func()->m_localDeclarations(), d_func()->m_localDeclarationsSize());
     }
-    const auto currentLocalDeclarations = m_dynamicData->m_localDeclarations;
-    for (const LocalIndexedDeclaration& indexed : currentLocalDeclarations) {
+    for (const LocalIndexedDeclaration& indexed : indexedLocal) {
         auto dec = indexed.data(topContext());
         if (dec && !encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses())) {
             delete dec;
