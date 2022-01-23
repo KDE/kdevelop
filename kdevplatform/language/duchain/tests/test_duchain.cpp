@@ -572,7 +572,7 @@ uint collectNaiveNodeCount(uint currentNode)
 void TestDUChain::testImportStructure()
 {
     Timer total;
-    qDebug() << "before: " << KDevelop::RecursiveImportRepository::repository()->dataRepository().statistics().print();
+    qDebug() << "before: " << KDevelop::RecursiveImportRepository::repository()->statistics().print();
 
     ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
     int cycles = 5;
@@ -631,14 +631,14 @@ void TestDUChain::testImportStructure()
         }
 
         qDebug() << "after: " <<
-            KDevelop::RecursiveImportRepository::repository()->dataRepository().statistics().print();
+            KDevelop::RecursiveImportRepository::repository()->statistics().print();
 
         for (int a = 0; a < contextCount; ++a)
             delete allContexts[a];
 
         allContexts.clear();
         qDebug() << "after cleanup: " <<
-            KDevelop::RecursiveImportRepository::repository()->dataRepository().statistics().print();
+            KDevelop::RecursiveImportRepository::repository()->statistics().print();
     }
 
     qDebug() << "total ns needed for import-structure test:" << float( total.elapsed());

@@ -295,6 +295,10 @@ public:
     Set createSet(Index i);
 
     void printStatistics() const;
+    SetDataRepository::Statistics statistics() const
+    {
+        return m_dataRepository.statistics();
+    }
 
     ///Is called when this index is not part of any set any more
     virtual void itemRemovedFromSets(uint index);
@@ -308,17 +312,6 @@ public:
             return m_dataRepository.itemFromIndex(index);
         else
             return nullptr;
-    }
-
-    inline QMutex* mutex() const
-    {
-        return m_mutex;
-    }
-
-    ///Only public to get statistics and such
-    const SetDataRepository& dataRepository() const
-    {
-        return m_dataRepository;
     }
 
     ///Set whether set-nodes with reference-count zero should be deleted only after a delay
