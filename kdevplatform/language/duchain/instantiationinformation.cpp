@@ -117,18 +117,13 @@ uint InstantiationInformation::hash() const
     return kdevhash << previousInstantiationInformation.index();
 }
 
-AbstractRepositoryManager* returnTypeRepository()
-{
-    return typeRepositoryManager();
-}
-
 static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation,
         AppendedListItemRequest<InstantiationInformation>>>& instantiationInformationRepository()
 {
     static KDevelop::RepositoryManager<
         KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation>>>
         instantiationInformationRepositoryObject(QStringLiteral("Instantiation Information Repository"),
-                                                 returnTypeRepository()->repositoryMutex());
+                                                 typeRepositoryMutex());
     return instantiationInformationRepositoryObject;
 }
 

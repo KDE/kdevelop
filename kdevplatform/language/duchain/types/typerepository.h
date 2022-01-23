@@ -9,9 +9,10 @@
 
 #include <language/duchain/types/abstracttype.h>
 
+class QMutex;
+
 namespace KDevelop {
 struct ReferenceCountManager;
-class AbstractRepositoryManager;
 
 class TypeRepository
 {
@@ -24,7 +25,7 @@ public:
     static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
 };
 
-AbstractRepositoryManager* typeRepositoryManager();
+QMutex* typeRepositoryMutex();
 }
 
 #endif

@@ -84,23 +84,23 @@ public:
     const AbstractType& m_item;
 };
 
-//The object is created in a function, to prevent initialization-order issues
-static RepositoryManager<ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepository()
+QMutex* typeRepositoryMutex()
 {
     static auto mutex = QMutex(QMutex::Recursive);
+    return &mutex;
+}
+
+// The object is created in a function, to prevent initialization-order issues
+static RepositoryManager<ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepository()
+{
     static RepositoryManager<ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> repository(
-        QStringLiteral("Type Repository"), &mutex);
+        QStringLiteral("Type Repository"), typeRepositoryMutex());
     return repository;
 }
 
 void initTypeRepository()
 {
     typeRepository();
-}
-
-AbstractRepositoryManager* typeRepositoryManager()
-{
-    return &typeRepository();
 }
 
 uint TypeRepository::indexForType(const AbstractType::Ptr& input)
