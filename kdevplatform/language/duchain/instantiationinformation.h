@@ -135,6 +135,7 @@ public:
 
 private:
     friend class IndexedInstantiationInformation;
+    friend struct ItemRepositoryUtils;
     uint m_refCount;
 };
 

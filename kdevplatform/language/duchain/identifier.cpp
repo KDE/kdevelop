@@ -150,11 +150,8 @@ struct IdentifierItemRequest
 using IdentifierRepository = ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest, true, false>;
 using IdentifierRepositoryManager = RepositoryManager<IdentifierRepository, false>;
 
-template <typename Item>
-struct RepoForItem;
-
 template <>
-struct RepoForItem<IndexedIdentifier> {
+struct ItemRepositoryForItemType<IndexedIdentifier> {
     static IdentifierRepository& repo()
     {
         static QMutex mutex(QMutex::Recursive);
@@ -163,18 +160,9 @@ struct RepoForItem<IndexedIdentifier> {
     }
 };
 
-template <typename Item, typename Op>
-static auto repositoryOp(Op&& op)
-{
-    auto& repo = RepoForItem<Item>::repo();
-
-    QMutexLocker lock(repo.mutex());
-    return op(repo);
-}
-
 static uint emptyConstantIdentifierPrivateIndex()
 {
-    static const uint index = repositoryOp<IndexedIdentifier>(
+    static const uint index = itemRepositoryOp<IndexedIdentifier>(
         [](IdentifierRepository& repo) { return repo.index(DynamicIdentifierPrivate()); });
     return index;
 }
@@ -341,18 +329,19 @@ using QualifiedIdentifierRepository
 using QualifiedIdentifierRepositoryManager = RepositoryManager<QualifiedIdentifierRepository, false>;
 
 template <>
-struct RepoForItem<IndexedQualifiedIdentifier> {
+struct ItemRepositoryForItemType<IndexedQualifiedIdentifier> {
     static QualifiedIdentifierRepository& repo()
     {
-        static QualifiedIdentifierRepositoryManager manager(QStringLiteral("Qualified Identifier Repository"),
-                                                            RepoForItem<IndexedIdentifier>::repo().mutex());
+        static QualifiedIdentifierRepositoryManager manager(
+            QStringLiteral("Qualified Identifier Repository"),
+            ItemRepositoryForItemType<IndexedIdentifier>::repo().mutex());
         return *manager.repository();
     }
 };
 
 static uint emptyConstantQualifiedIdentifierPrivateIndex()
 {
-    static const uint index = repositoryOp<IndexedQualifiedIdentifier>(
+    static const uint index = itemRepositoryOp<IndexedQualifiedIdentifier>(
         [](QualifiedIdentifierRepository& repo) { return repo.index(DynamicQualifiedIdentifierPrivate()); });
     return index;
 }
@@ -361,92 +350,6 @@ static const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifie
 {
     static const ConstantQualifiedIdentifierPrivate item;
     return &item;
-}
-
-template <typename Item>
-static inline bool inc(Item* item)
-{
-    if (!shouldDoDUChainReferenceCounting(item)) {
-        return false;
-    }
-
-    auto index = item->index();
-
-    repositoryOp<Item>([&](auto& repo) {
-        ifDebug(qCDebug(LANGUAGE) << "increasing");
-        item->increase(repo.dynamicItemFromIndexSimple(index)->m_refCount, index);
-    });
-    return true;
-}
-
-template <typename Item>
-static inline bool dec(Item* item)
-{
-    if (!shouldDoDUChainReferenceCounting(item)) {
-        return false;
-    }
-
-    auto index = item->index();
-
-    repositoryOp<Item>([&](auto& repo) {
-        ifDebug(qCDebug(LANGUAGE) << "decreasing");
-        item->decrease(repo.dynamicItemFromIndexSimple(index)->m_refCount, index);
-    });
-    return true;
-}
-
-template <typename Item>
-static inline void setIndex(Item* item, unsigned int& m_index, unsigned int index)
-{
-    if (m_index == index) {
-        return;
-    }
-
-    if (shouldDoDUChainReferenceCounting(item)) {
-        repositoryOp<Item>([&](auto& repo) {
-            ifDebug(qCDebug(LANGUAGE) << "decreasing");
-            item->decrease(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-
-            m_index = index;
-
-            ifDebug(qCDebug(LANGUAGE) << "increasing");
-            item->increase(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-        });
-    } else {
-        m_index = index;
-    }
-}
-
-template <typename Item>
-static void moveIndex(Item* lhs, unsigned int& lhs_index, Item* rhs, unsigned int& rhs_index, unsigned int emptyIndex)
-{
-    if (lhs == rhs) {
-        return;
-    }
-
-    const auto lhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(lhs);
-    const auto rhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(rhs);
-
-    if (!lhsShouldDoDUChainReferenceCounting && !rhsShouldDoDUChainReferenceCounting) {
-        lhs_index = rhs_index;
-        rhs_index = emptyIndex;
-        return;
-    }
-
-    repositoryOp<Item>([&](auto& repo) {
-        if (lhsShouldDoDUChainReferenceCounting) {
-            lhs->decrease(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
-        } else if (rhsShouldDoDUChainReferenceCounting) {
-            rhs->decrease(repo.dynamicItemFromIndexSimple(rhs_index)->m_refCount, rhs_index);
-        }
-
-        lhs_index = rhs_index;
-        rhs_index = emptyIndex;
-
-        if (lhsShouldDoDUChainReferenceCounting && !rhsShouldDoDUChainReferenceCounting) {
-            lhs->increase(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
-        }
-    });
 }
 
 Identifier::Identifier(const Identifier& rhs)
@@ -460,7 +363,7 @@ Identifier::Identifier(uint index)
     : m_index(index)
 {
     Q_ASSERT(m_index);
-    cd = repositoryOp<IndexedIdentifier>([index](IdentifierRepository& repo) { return repo.itemFromIndex(index); });
+    cd = itemRepositoryOp<IndexedIdentifier>([index](IdentifierRepository& repo) { return repo.itemFromIndex(index); });
 }
 
 Identifier::Identifier(const IndexedString& str)
@@ -726,7 +629,7 @@ void Identifier::makeConstant() const
     if (m_index)
         return;
 
-    repositoryOp<IndexedIdentifier>([&](IdentifierRepository& repo) {
+    itemRepositoryOp<IndexedIdentifier>([&](IdentifierRepository& repo) {
         m_index = repo.index(IdentifierItemRequest(*dd));
         delete dd;
         cd = repo.itemFromIndex(m_index);
@@ -753,14 +656,14 @@ bool QualifiedIdentifier::inRepository() const
     if (m_index)
         return true;
 
-    return repositoryOp<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
+    return itemRepositoryOp<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
         return static_cast<bool>(repo.findIndex(QualifiedIdentifierItemRequest(*dd)));
     });
 }
 
 QualifiedIdentifier::QualifiedIdentifier(uint index)
     : m_index(index)
-    , cd(repositoryOp<IndexedQualifiedIdentifier>(
+    , cd(itemRepositoryOp<IndexedQualifiedIdentifier>(
           [index](QualifiedIdentifierRepository& repo) { return repo.itemFromIndex(index); }))
 {
 }
@@ -1229,7 +1132,7 @@ void QualifiedIdentifier::makeConstant() const
     if (m_index)
         return;
 
-    repositoryOp<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
+    itemRepositoryOp<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
         m_index = repo.index(QualifiedIdentifierItemRequest(*dd));
         delete dd;
         cd = repo.itemFromIndex(m_index);
@@ -1392,7 +1295,7 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isE
 IndexedIdentifier::IndexedIdentifier(unsigned int index)
     : m_index(index)
 {
-    inc(this);
+    ItemRepositoryUtils::inc(this);
 }
 
 IndexedIdentifier::IndexedIdentifier()
@@ -1418,12 +1321,12 @@ IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
 
 IndexedIdentifier::~IndexedIdentifier()
 {
-    dec(this);
+    ItemRepositoryUtils::dec(this);
 }
 
 IndexedIdentifier& IndexedIdentifier::operator=(unsigned int index)
 {
-    setIndex(this, m_index, index);
+    ItemRepositoryUtils::setIndex(this, m_index, index);
     return *this;
 }
 
@@ -1434,7 +1337,7 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
 
 IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
 {
-    moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantIdentifierPrivateIndex());
+    ItemRepositoryUtils::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantIdentifierPrivateIndex());
     return *this;
 }
 
@@ -1495,7 +1398,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(unsigned int index)
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
-    inc(this);
+    ItemRepositoryUtils::inc(this);
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier()
@@ -1523,7 +1426,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(unsigned int i
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
-    setIndex(this, m_index, index);
+    ItemRepositoryUtils::setIndex(this, m_index, index);
     return *this;
 }
 
@@ -1539,14 +1442,14 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT
 {
-    moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantQualifiedIdentifierPrivateIndex());
+    ItemRepositoryUtils::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantQualifiedIdentifierPrivateIndex());
     return *this;
 }
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier()
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << index);
-    dec(this);
+    ItemRepositoryUtils::dec(this);
 }
 
 bool IndexedQualifiedIdentifier::operator==(const IndexedQualifiedIdentifier& rhs) const

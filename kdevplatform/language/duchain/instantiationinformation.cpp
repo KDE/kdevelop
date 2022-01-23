@@ -117,19 +117,26 @@ uint InstantiationInformation::hash() const
     return kdevhash << previousInstantiationInformation.index();
 }
 
-static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation,
-        AppendedListItemRequest<InstantiationInformation>>>& instantiationInformationRepository()
-{
-    static KDevelop::RepositoryManager<
-        KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation>>>
-        instantiationInformationRepositoryObject(QStringLiteral("Instantiation Information Repository"),
-                                                 typeRepositoryMutex());
-    return instantiationInformationRepositoryObject;
-}
+using InstantiationInformationRepository
+    = ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation>, true, false>;
+using InstantiationInformationRepositoryManager = RepositoryManager<InstantiationInformationRepository>;
+
+template <>
+struct ItemRepositoryForItemType<IndexedInstantiationInformation> {
+    static InstantiationInformationRepository& repo()
+    {
+        static InstantiationInformationRepositoryManager manager(QStringLiteral("Instantiation Information Repository"),
+                                                                 typeRepositoryMutex());
+        return *manager.repository();
+    }
+};
 
 uint standardInstantiationInformationIndex()
 {
-    static uint idx = instantiationInformationRepository()->index(InstantiationInformation());
+    static uint idx = itemRepositoryOp<IndexedInstantiationInformation>(
+        [standardInstantiationInformation = InstantiationInformation()](InstantiationInformationRepository& repo) {
+            return repo.index(standardInstantiationInformation);
+        });
     return idx;
 }
 
@@ -147,43 +154,24 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m
     if (m_index == standardInstantiationInformationIndex())
         m_index = 0;
 
-    if (m_index && shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(instantiationInformationRepository()->mutex());
-        increase(instantiationInformationRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    ItemRepositoryUtils::inc(this);
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) : m_index(
         rhs.m_index)
 {
-    if (m_index && shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(instantiationInformationRepository()->mutex());
-        increase(instantiationInformationRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    ItemRepositoryUtils::inc(this);
 }
 
 IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs)
 {
-    if (m_index && shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(instantiationInformationRepository()->mutex());
-        decrease(instantiationInformationRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
-
-    m_index = rhs.m_index;
-
-    if (m_index && shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(instantiationInformationRepository()->mutex());
-        increase(instantiationInformationRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    ItemRepositoryUtils::setIndex(this, m_index, rhs.m_index);
     return *this;
 }
 
 IndexedInstantiationInformation::~IndexedInstantiationInformation()
 {
-    if (m_index && shouldDoDUChainReferenceCounting(this)) {
-        QMutexLocker lock(instantiationInformationRepository()->mutex());
-        decrease(instantiationInformationRepository()->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
-    }
+    ItemRepositoryUtils::dec(this);
 }
 
 bool IndexedInstantiationInformation::isValid() const
@@ -193,12 +181,16 @@ bool IndexedInstantiationInformation::isValid() const
 
 const InstantiationInformation& IndexedInstantiationInformation::information() const
 {
-    return *instantiationInformationRepository()->itemFromIndex(
-        m_index ? m_index : standardInstantiationInformationIndex());
+    auto index = m_index ? m_index : standardInstantiationInformationIndex();
+    // TODO: it's probably unsafe to return the const& here, as the repo won't be locked during access anymore
+    return *itemRepositoryOp<IndexedInstantiationInformation>(
+        [index](InstantiationInformationRepository& repo) { return repo.itemFromIndex(index); });
 }
 
 IndexedInstantiationInformation InstantiationInformation::indexed() const
 {
-    return IndexedInstantiationInformation(instantiationInformationRepository()->index(*this));
+    auto index = itemRepositoryOp<IndexedInstantiationInformation>(
+        [this](InstantiationInformationRepository& repo) { return repo.index(*this); });
+    return IndexedInstantiationInformation(index);
 }
 }
