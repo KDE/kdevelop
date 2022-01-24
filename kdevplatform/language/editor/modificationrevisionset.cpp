@@ -119,8 +119,8 @@ void ModificationRevisionSet::clearCache()
 struct FileModificationSetRepository
     : public Utils::BasicSetRepository
 {
-    FileModificationSetRepository(QMutex *mutex)
-        : Utils::BasicSetRepository(QStringLiteral("file modification sets"), mutex,
+    FileModificationSetRepository()
+        : Utils::BasicSetRepository(QStringLiteral("file modification sets"), &modificationRevisionSetMutex,
                                     &globalItemRepositoryRegistry(), true)
     {
     }
@@ -133,8 +133,7 @@ struct FileModificationSetRepositoryRepresenter
 {
     static FileModificationSetRepository& repository()
     {
-        static QMutex mutex(QMutex::Recursive);
-        static FileModificationSetRepository fileModificationSetRepository(&mutex);
+        static FileModificationSetRepository fileModificationSetRepository;
         return fileModificationSetRepository;
     }
 };
