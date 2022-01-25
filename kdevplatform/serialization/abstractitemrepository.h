@@ -33,6 +33,11 @@ public:
     virtual int finalCleanup() = 0;
     virtual QString repositoryName() const = 0;
     virtual QString printStatistics() const = 0;
+
+    /// lock the repository
+    virtual void lock() = 0;
+    /// unlock the repository
+    virtual void unlock() = 0;
 };
 
 /// Internal helper class that wraps around a repository object and manages its lifetime.

@@ -21,6 +21,8 @@
 #include "abstractitemrepository.h"
 #include "debug.h"
 
+#include <mutex>
+
 using namespace KDevelop;
 
 namespace {
@@ -204,6 +206,7 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
     QMutexLocker lock(&d->m_mutex);
     d->m_repositories.insert(repository, manager);
     if (!d->m_path.isEmpty()) {
+        std::scoped_lock repoLock(*repository);
         if (!repository->open(d->m_path)) {
             d->deleteDataDirectory(d->m_path);
             qCritical() << "failed to open a repository";
@@ -257,7 +260,10 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
 
     QMutexLocker lock(&d->m_mutex);
     Q_ASSERT(d->m_repositories.contains(repository));
-    repository->close();
+    {
+        std::scoped_lock repoLock(*repository);
+        repository->close();
+    }
     d->m_repositories.remove(repository);
 }
 
@@ -295,7 +301,9 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
     QDir().mkpath(path);
 
     for (auto it = m_repositories.constBegin(), end = m_repositories.constEnd(); it != end; ++it) {
-        if (!it.key()->open(path)) {
+        auto* const repository = it.key();
+        std::scoped_lock repoLock(*repository);
+        if (!repository->open(path)) {
             deleteDataDirectory(path);
             qCritical() << "failed to open a repository";
             abort();
@@ -327,7 +335,9 @@ void ItemRepositoryRegistry::store()
 
     QMutexLocker lock(&d->m_mutex);
     for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
-        it.key()->store();
+        auto* const repository = it.key();
+        std::scoped_lock repoLock(*repository);
+        repository->store();
     }
 
     QFile versionFile(d->m_path + QStringLiteral("/version_%1").arg(staticItemRepositoryVersion()));
@@ -360,6 +370,7 @@ void ItemRepositoryRegistry::printAllStatistics() const
     QMutexLocker lock(&d->m_mutex);
     for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
         AbstractItemRepository* repository = it.key();
+        std::scoped_lock repoLock(*repository);
         qCDebug(SERIALIZATION) << "statistics in" << repository->repositoryName() << ":";
         qCDebug(SERIALIZATION) << repository->printStatistics();
     }
@@ -373,6 +384,7 @@ int ItemRepositoryRegistry::finalCleanup()
     int changed = false;
     for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
         AbstractItemRepository* repository = it.key();
+        std::scoped_lock repoLock(*repository);
         int added = repository->finalCleanup();
         changed += added;
         qCDebug(SERIALIZATION) << "cleaned in" << repository->repositoryName() << ":" << added;
@@ -386,7 +398,9 @@ void ItemRepositoryRegistryPrivate::close()
     QMutexLocker lock(&m_mutex);
 
     for (auto it = m_repositories.constBegin(), end = m_repositories.constEnd(); it != end; ++it) {
-        it.key()->close();
+        auto* const repository = it.key();
+        std::scoped_lock repoLock(*repository);
+        repository->close();
     }
 
     m_path.clear();

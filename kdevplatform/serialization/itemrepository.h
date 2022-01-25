@@ -1017,8 +1017,6 @@ private:
  * to re-lock anything internally, thus is capable to work with a non-recursive mutex.
  * If desired, a recursive mutex can be used too though as needed.
  *
- * Note that the mutex will be locked internally when the repo is accessed through the AbstractItemRepository API.
- *
  * @tparam Item See ExampleItem
  * @tparam ItemRequest See ExampleReqestItem
  * @tparam fixedItemSize When this is true, all inserted items must have the same size.
@@ -1028,7 +1026,7 @@ private:
  *                                 repository that does on-disk reference counting, like IndexedString,
  *                                 IndexedIdentifier, etc.
  * @tparam mutex The mutex type to use internally. It has to be locked externally before accessing the item repository
- *               from multiple threads. Except for the store
+ *               from multiple threads.
  */
 
 template <class Item, class ItemRequest, bool markForReferenceCounting = true, typename Mutex = QMutex,
@@ -1566,8 +1564,6 @@ public:
 
     QString printStatistics() const final
     {
-        // lock for usage from ItemRepositoryRegistry, will be cleaned up in follow up patch
-        QMutexLocker lock(m_mutex);
         return statistics().print();
     }
 
@@ -1705,12 +1701,14 @@ public:
 
     Mutex* mutex() const { return m_mutex; }
 
+    void lock() final { m_mutex->lock(); }
+    void unlock() final { m_mutex->unlock(); }
+
 private:
     ///Synchronizes the state on disk to the one in memory, and does some memory-management.
     ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
     void store() final
     {
-        QMutexLocker lock(m_mutex);
         if (m_file) {
             if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
                 qFatal("cannot re-open repository file for storing");
@@ -1767,8 +1765,7 @@ private:
 
     bool open(const QString& path) final
     {
-        QMutexLocker lock(m_mutex);
-        closeLocked();
+        close();
         // qDebug() << "opening repository" << m_repositoryName << "at" << path;
         QDir dir(path);
         m_file = new QFile(dir.absoluteFilePath(m_repositoryName));
@@ -1885,13 +1882,6 @@ private:
     ///@warning by default, this does not store the current state to disk.
     void close(bool doStore = false) final
     {
-        QMutexLocker lock(m_mutex);
-        closeLocked(doStore);
-    }
-
-    ///@warning by default, this does not store the current state to disk.
-    void closeLocked(bool doStore = false)
-    {
         if (doStore)
             store();
 
@@ -1915,7 +1905,6 @@ private:
 
     int finalCleanup() final
     {
-        QMutexLocker lock(m_mutex);
         int changed = 0;
         for (int a = 1; a <= m_currentBucket; ++a) {
             MyBucket* bucket = bucketForIndex(a);
