@@ -2138,7 +2138,7 @@ private:
 
     int finalCleanup() override
     {
-        ThisLocker lock(m_mutex);
+        QMutexLocker lock(m_mutex);
 
         int changed = 0;
         for (int a = 1; a <= m_currentBucket; ++a) {
