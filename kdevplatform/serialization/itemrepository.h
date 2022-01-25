@@ -1593,6 +1593,7 @@ public:
 
     Statistics statistics() const
     {
+        QMutexLocker lock(m_mutex);
         Q_ASSERT(m_currentBucket < m_buckets.size());
         Statistics ret;
         uint loadedBuckets = 0;
@@ -2079,6 +2080,7 @@ private:
     ///@warning by default, this does not store the current state to disk.
     void close(bool doStore = false) override
     {
+        QMutexLocker lock(m_mutex);
         if (doStore)
             store();
 
