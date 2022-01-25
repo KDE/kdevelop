@@ -1564,7 +1564,7 @@ public:
         }
     };
 
-    QString printStatistics() const override
+    QString printStatistics() const final
     {
         // lock for usage from ItemRepositoryRegistry, will be cleaned up in follow up patch
         QMutexLocker lock(m_mutex);
@@ -1701,14 +1701,14 @@ public:
         }
     }
 
-    QString repositoryName() const override { return m_repositoryName; }
+    QString repositoryName() const final { return m_repositoryName; }
 
     Mutex* mutex() const { return m_mutex; }
 
 private:
     ///Synchronizes the state on disk to the one in memory, and does some memory-management.
     ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
-    void store() override
+    void store() final
     {
         QMutexLocker lock(m_mutex);
         if (m_file) {
@@ -1765,7 +1765,7 @@ private:
         }
     }
 
-    bool open(const QString& path) override
+    bool open(const QString& path) final
     {
         QMutexLocker lock(m_mutex);
         closeLocked();
@@ -1883,7 +1883,7 @@ private:
     }
 
     ///@warning by default, this does not store the current state to disk.
-    void close(bool doStore = false) override
+    void close(bool doStore = false) final
     {
         QMutexLocker lock(m_mutex);
         closeLocked(doStore);
@@ -1913,7 +1913,7 @@ private:
         memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
     }
 
-    int finalCleanup() override
+    int finalCleanup() final
     {
         QMutexLocker lock(m_mutex);
         int changed = 0;
