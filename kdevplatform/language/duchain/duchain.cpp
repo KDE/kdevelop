@@ -70,10 +70,10 @@ const uint cleanupEverySeconds = 200;
 ///Approximate maximum count of top-contexts that are checked during final cleanup
 const uint maxFinalCleanupCheckContexts = 2000;
 const uint minimumFinalCleanupCheckContextsPercentage = 10; //Check at least n% of all top-contexts during cleanup
-//Set to true as soon as the duchain is deleted
 }
 
 namespace KDevelop {
+/// Set to true as soon as the duchain is deleted
 bool DUChain::m_deleted = false;
 
 ///Must be locked through KDevelop::SpinLock before using chainsByIndex
