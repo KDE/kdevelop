@@ -6,8 +6,8 @@
 */
 
 #include "indexedstring.h"
-#include "serialization/stringrepository.h"
 
+#include "itemrepository.h"
 #include "referencecounting.h"
 
 #include <utility>
