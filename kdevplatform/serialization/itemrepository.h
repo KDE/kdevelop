@@ -1707,18 +1707,6 @@ public:
         return ret;
     }
 
-    uint usedMemory() const
-    {
-        uint used = 0;
-        for (auto* bucket : m_buckets) {
-            if (bucket) {
-                used += bucket->usedMemory();
-            }
-        }
-
-        return used;
-    }
-
     ///This can be used to safely iterate through all items in the repository
     ///@param visitor Should be an instance of a class that has a bool operator()(const Item*) member function,
     ///               that returns whether more items are wanted.
@@ -1811,6 +1799,17 @@ public:
     }
 
 private:
+    uint usedMemory() const
+    {
+        uint used = 0;
+        for (auto* bucket : m_buckets) {
+            if (bucket) {
+                used += bucket->usedMemory();
+            }
+        }
+
+        return used;
+    }
 
     uint createIndex(ushort bucketIndex, ushort indexInBucket)
     {
