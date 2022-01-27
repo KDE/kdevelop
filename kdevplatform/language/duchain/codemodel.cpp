@@ -162,18 +162,24 @@ public:
     const CodeModelRepositoryItem& m_item;
 };
 
+// Maps declaration-ids to items
+using CodeModelRepo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem>;
+template <>
+struct ItemRepositoryFor<CodeModel> {
+    static CodeModelRepo& repo()
+    {
+        static QMutex mutex;
+        static CodeModelRepo repo { QStringLiteral("Code Model"), &mutex };
+        return repo;
+    }
+};
+
 class CodeModelPrivate
 {
-public:
-    mutable QMutex m_mutex;
-    //Maps declaration-ids to items
-    using Repo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem>;
-    // mutable as things like findIndex are not const
-    mutable Repo m_repository{QStringLiteral("Code Model"), &m_mutex};
 };
 
 CodeModel::CodeModel()
-    : d_ptr(new CodeModelPrivate())
+    : d_ptr(nullptr)
 {
 }
 
@@ -181,8 +187,6 @@ CodeModel::~CodeModel() = default;
 
 void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
 {
-    Q_D(CodeModel);
-
     ifDebug(qCDebug(LANGUAGE) << "addItem" << file.str() << id.identifier().toString() << id.index; )
 
     if (!id.isValid())
@@ -196,60 +200,59 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_repository.findIndex(item);
+    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
-        EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(),
-            oldItem->itemsSize(), oldItem->centralFreeItem);
+        if (index) {
+            const CodeModelRepositoryItem* oldItem = repo.itemFromIndex(index);
+            EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(),
+                                                                            oldItem->centralFreeItem);
 
-        int listIndex = alg.indexOf(newItem);
+            int listIndex = alg.indexOf(newItem);
 
-        DynamicItem<CodeModelRepositoryItem, true> editableItem = d->m_repository.dynamicItemFromIndex(index);
-        auto* items = const_cast<CodeModelItem*>(editableItem->items());
+            DynamicItem<CodeModelRepositoryItem, true> editableItem = repo.dynamicItemFromIndex(index);
+            auto* items = const_cast<CodeModelItem*>(editableItem->items());
 
-        if (listIndex != -1) {
-            //Only update the reference-count
-            ++items[listIndex].referenceCount;
-            items[listIndex].kind = kind;
-            return;
-        } else {
-            //Add the item to the list
-            EmbeddedTreeAddItem<CodeModelItem, CodeModelItemHandler> add(items,
-                editableItem->itemsSize(), editableItem->centralFreeItem, newItem);
-
-            if (add.newItemCount() != editableItem->itemsSize()) {
-                //The data needs to be transferred into a bigger list. That list is within "item".
-
-                item.itemsList().resize(add.newItemCount());
-                add.transferData(item.itemsList().data(), item.itemsList().size(), &item.centralFreeItem);
-
-                d->m_repository.deleteItem(index);
-            } else {
-                //We're fine: The item fits into the existing list.
+            if (listIndex != -1) {
+                // Only update the reference-count
+                ++items[listIndex].referenceCount;
+                items[listIndex].kind = kind;
                 return;
+            } else {
+                // Add the item to the list
+                EmbeddedTreeAddItem<CodeModelItem, CodeModelItemHandler> add(items, editableItem->itemsSize(),
+                                                                             editableItem->centralFreeItem, newItem);
+
+                if (add.newItemCount() != editableItem->itemsSize()) {
+                    // The data needs to be transferred into a bigger list. That list is within "item".
+
+                    item.itemsList().resize(add.newItemCount());
+                    add.transferData(item.itemsList().data(), item.itemsList().size(), &item.centralFreeItem);
+
+                    repo.deleteItem(index);
+                } else {
+                    // We're fine: The item fits into the existing list.
+                    return;
+                }
             }
+        } else {
+            // We're creating a new index
+            item.itemsList().append(newItem);
         }
-    } else {
-        //We're creating a new index
-        item.itemsList().append(newItem);
-    }
 
-    Q_ASSERT(!d->m_repository.findIndex(request));
+        Q_ASSERT(!repo.findIndex(request));
 
-    //This inserts the changed item
-    const uint newIndex = d->m_repository.index(request);
-    Q_UNUSED(newIndex);
-    ifDebug(qCDebug(LANGUAGE) << "new index" << newIndex; )
+        // This inserts the changed item
+        const uint newIndex = repo.index(request);
+        Q_UNUSED(newIndex);
+        ifDebug(qCDebug(LANGUAGE) << "new index" << newIndex;)
 
-    Q_ASSERT(d->m_repository.findIndex(request));
+        Q_ASSERT(repo.findIndex(request));
+    });
 }
 
 void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
 {
-    Q_D(CodeModel);
-
     ifDebug(qCDebug(LANGUAGE) << file.str() << id.identifier().toString() << kind; )
 
     if (!id.isValid())
@@ -264,34 +267,32 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_repository.findIndex(item);
+    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        DynamicItem<CodeModelRepositoryItem, true> oldItem = d->m_repository.dynamicItemFromIndex(index);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            DynamicItem<CodeModelRepositoryItem, true> oldItem = repo.dynamicItemFromIndex(index);
 
-        EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(),
-            oldItem->itemsSize(), oldItem->centralFreeItem);
-        int listIndex = alg.indexOf(newItem);
-        Q_ASSERT(listIndex != -1);
+            EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(),
+                                                                            oldItem->centralFreeItem);
+            int listIndex = alg.indexOf(newItem);
+            Q_ASSERT(listIndex != -1);
 
-        auto* items = const_cast<CodeModelItem*>(oldItem->items());
+            auto* items = const_cast<CodeModelItem*>(oldItem->items());
 
-        Q_ASSERT(items[listIndex].id == id);
-        items[listIndex].kind = kind;
+            Q_ASSERT(items[listIndex].id == id);
+            items[listIndex].kind = kind;
 
-        return;
-    }
+            return;
+        }
 
-    Q_ASSERT(0); //The updated item as not in the symbol table!
+        Q_ASSERT(0); // The updated item as not in the symbol table!
+    });
 }
 
 void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIdentifier& id)
-//void CodeModel::removeDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
-    Q_D(CodeModel);
-
     if (!id.isValid())
         return;
 
@@ -300,79 +301,79 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     item.file = file;
     CodeModelRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_repository.findIndex(item);
+    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        CodeModelItem searchItem;
-        searchItem.id = id;
+        if (index) {
+            CodeModelItem searchItem;
+            searchItem.id = id;
 
-        DynamicItem<CodeModelRepositoryItem, true> oldItem = d->m_repository.dynamicItemFromIndex(index);
+            DynamicItem<CodeModelRepositoryItem, true> oldItem = repo.dynamicItemFromIndex(index);
 
-        EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(),
-            oldItem->itemsSize(), oldItem->centralFreeItem);
+            EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(),
+                                                                            oldItem->centralFreeItem);
 
-        int listIndex = alg.indexOf(searchItem);
-        if (listIndex == -1)
-            return;
-
-        auto* items = const_cast<CodeModelItem*>(oldItem->items());
-
-        --items[listIndex].referenceCount;
-
-        if (oldItem->items()[listIndex].referenceCount)
-            return; //Nothing to remove, there's still a reference-count left
-
-        //We have reduced the reference-count to zero, so remove the item from the list
-
-        EmbeddedTreeRemoveItem<CodeModelItem, CodeModelItemHandler> remove(items,
-            oldItem->itemsSize(), oldItem->centralFreeItem, searchItem);
-
-        uint newItemCount = remove.newItemCount();
-        if (newItemCount != oldItem->itemsSize()) {
-            if (newItemCount == 0) {
-                //Has become empty, delete the item
-                d->m_repository.deleteItem(index);
-
+            int listIndex = alg.indexOf(searchItem);
+            if (listIndex == -1)
                 return;
-            } else {
-                //Make smaller
-                item.itemsList().resize(newItemCount);
-                remove.transferData(item.itemsList().data(), item.itemsSize(), &item.centralFreeItem);
 
-                //Delete the old list
-                d->m_repository.deleteItem(index);
-                //Add the new list
-                d->m_repository.index(request);
-                return;
+            auto* items = const_cast<CodeModelItem*>(oldItem->items());
+
+            --items[listIndex].referenceCount;
+
+            if (oldItem->items()[listIndex].referenceCount)
+                return; // Nothing to remove, there's still a reference-count left
+
+            // We have reduced the reference-count to zero, so remove the item from the list
+
+            EmbeddedTreeRemoveItem<CodeModelItem, CodeModelItemHandler> remove(items, oldItem->itemsSize(),
+                                                                               oldItem->centralFreeItem, searchItem);
+
+            uint newItemCount = remove.newItemCount();
+            if (newItemCount != oldItem->itemsSize()) {
+                if (newItemCount == 0) {
+                    // Has become empty, delete the item
+                    repo.deleteItem(index);
+
+                    return;
+                } else {
+                    // Make smaller
+                    item.itemsList().resize(newItemCount);
+                    remove.transferData(item.itemsList().data(), item.itemsSize(), &item.centralFreeItem);
+
+                    // Delete the old list
+                    repo.deleteItem(index);
+                    // Add the new list
+                    repo.index(request);
+                    return;
+                }
             }
         }
-    }
+    });
 }
 
 void CodeModel::items(const IndexedString& file, uint& count, const CodeModelItem*& items) const
 {
-    Q_D(const CodeModel);
-
     ifDebug(qCDebug(LANGUAGE) << "items" << file.str(); )
 
     CodeModelRepositoryItem item;
     item.file = file;
     CodeModelRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_repository.findIndex(item);
+    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        const CodeModelRepositoryItem* repositoryItem = d->m_repository.itemFromIndex(index);
-        ifDebug(qCDebug(LANGUAGE) << "found index" << index << repositoryItem->itemsSize(); )
-        count = repositoryItem->itemsSize();
-        items = repositoryItem->items();
-    } else {
-        ifDebug(qCDebug(LANGUAGE) << "found no index"; )
-        count = 0;
-        items = nullptr;
-    }
+        if (index) {
+            const CodeModelRepositoryItem* repositoryItem = repo.itemFromIndex(index);
+            ifDebug(qCDebug(LANGUAGE) << "found index" << index << repositoryItem->itemsSize();)
+            count = repositoryItem->itemsSize();
+            items = repositoryItem->items();
+        } else {
+            ifDebug(qCDebug(LANGUAGE) << "found no index";)
+            count = 0;
+            items = nullptr;
+        }
+    });
 }
 
 CodeModel& CodeModel::self()
