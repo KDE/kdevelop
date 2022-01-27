@@ -717,11 +717,10 @@ public:
             //Access the data in the repository, so the bucket isn't unloaded
             {
                 QMutexLocker lock(&m_environmentListInfoMutex);
-                uint index = m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url));
-                if (index) {
-                    m_environmentListInfo.itemFromIndex(index);
-                } else {
-                    lock.unlock();
+                const auto foundItem
+                    = static_cast<bool>(m_environmentListInfo.findItem(EnvironmentInformationListRequest(url)));
+                lock.unlock();
+                if (!foundItem) {
                     QMutexLocker chainLock(&m_chainsMutex);
                     qCDebug(LANGUAGE) << "Did not find stored item for" << url.str()
                                       << "count:" << m_fileEnvironmentInformations.values(url);
