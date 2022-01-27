@@ -7,6 +7,7 @@
 #include "instantiationinformation.h"
 #include "identifier.h"
 #include "serialization/itemrepository.h"
+#include "serialization/itemrepositoryreferencecounting.h"
 #include "types/typeutils.h"
 #include <typeinfo>
 #include "types/typealiastype.h"
@@ -151,13 +152,13 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m
     if (m_index == standardInstantiationInformationIndex())
         m_index = 0;
 
-    ItemRepositoryUtils::inc(this);
+    ItemRepositoryReferenceCounting::inc(this);
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) : m_index(
         rhs.m_index)
 {
-    ItemRepositoryUtils::inc(this);
+    ItemRepositoryReferenceCounting::inc(this);
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation(IndexedInstantiationInformation&& rhs) noexcept
@@ -168,20 +169,20 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(IndexedInstanti
 
 IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs)
 {
-    ItemRepositoryUtils::setIndex(this, m_index, rhs.m_index);
+    ItemRepositoryReferenceCounting::setIndex(this, m_index, rhs.m_index);
     return *this;
 }
 
 IndexedInstantiationInformation&
 IndexedInstantiationInformation::operator=(IndexedInstantiationInformation&& rhs) noexcept
 {
-    ItemRepositoryUtils::moveIndex(this, m_index, &rhs, rhs.m_index, standardInstantiationInformationIndex());
+    ItemRepositoryReferenceCounting::moveIndex(this, m_index, &rhs, rhs.m_index, standardInstantiationInformationIndex());
     return *this;
 }
 
 IndexedInstantiationInformation::~IndexedInstantiationInformation()
 {
-    ItemRepositoryUtils::dec(this);
+    ItemRepositoryReferenceCounting::dec(this);
 }
 
 bool IndexedInstantiationInformation::isValid() const

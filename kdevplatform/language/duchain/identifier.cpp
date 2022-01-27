@@ -11,6 +11,7 @@
 #include "stringhelpers.h"
 #include "appendedlist_static.h"
 #include "serialization/itemrepository.h"
+#include "serialization/itemrepositoryreferencecounting.h"
 #include "util/kdevhash.h"
 #include <debug.h>
 
@@ -1295,7 +1296,7 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isE
 IndexedIdentifier::IndexedIdentifier(unsigned int index)
     : m_index(index)
 {
-    ItemRepositoryUtils::inc(this);
+    ItemRepositoryReferenceCounting::inc(this);
 }
 
 IndexedIdentifier::IndexedIdentifier()
@@ -1321,12 +1322,12 @@ IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
 
 IndexedIdentifier::~IndexedIdentifier()
 {
-    ItemRepositoryUtils::dec(this);
+    ItemRepositoryReferenceCounting::dec(this);
 }
 
 IndexedIdentifier& IndexedIdentifier::operator=(unsigned int index)
 {
-    ItemRepositoryUtils::setIndex(this, m_index, index);
+    ItemRepositoryReferenceCounting::setIndex(this, m_index, index);
     return *this;
 }
 
@@ -1337,7 +1338,7 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
 
 IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
 {
-    ItemRepositoryUtils::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantIdentifierPrivateIndex());
+    ItemRepositoryReferenceCounting::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantIdentifierPrivateIndex());
     return *this;
 }
 
@@ -1398,7 +1399,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(unsigned int index)
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
-    ItemRepositoryUtils::inc(this);
+    ItemRepositoryReferenceCounting::inc(this);
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier()
@@ -1426,7 +1427,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(unsigned int i
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
 
-    ItemRepositoryUtils::setIndex(this, m_index, index);
+    ItemRepositoryReferenceCounting::setIndex(this, m_index, index);
     return *this;
 }
 
@@ -1442,14 +1443,14 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT
 {
-    ItemRepositoryUtils::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantQualifiedIdentifierPrivateIndex());
+    ItemRepositoryReferenceCounting::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantQualifiedIdentifierPrivateIndex());
     return *this;
 }
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier()
 {
     ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << index);
-    ItemRepositoryUtils::dec(this);
+    ItemRepositoryReferenceCounting::dec(this);
 }
 
 bool IndexedQualifiedIdentifier::operator==(const IndexedQualifiedIdentifier& rhs) const

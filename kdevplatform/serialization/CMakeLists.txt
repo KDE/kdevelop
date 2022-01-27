@@ -28,6 +28,7 @@ install(FILES
     itemrepositoryexampleitem.h
     itemrepository.h
     itemrepositoryregistry.h
+    itemrepositoryreferencecounting.h
     repositorymanager.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/serialization COMPONENT Devel
 )
