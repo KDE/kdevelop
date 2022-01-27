@@ -152,7 +152,7 @@ using IdentifierRepository = ItemRepository<ConstantIdentifierPrivate, Identifie
 using IdentifierRepositoryManager = RepositoryManager<IdentifierRepository, false>;
 
 template <>
-struct ItemRepositoryForItemType<IndexedIdentifier> {
+struct ItemRepositoryFor<IndexedIdentifier> {
     static IdentifierRepository& repo()
     {
         static QRecursiveMutex mutex;
@@ -330,12 +330,11 @@ using QualifiedIdentifierRepository
 using QualifiedIdentifierRepositoryManager = RepositoryManager<QualifiedIdentifierRepository, false>;
 
 template <>
-struct ItemRepositoryForItemType<IndexedQualifiedIdentifier> {
+struct ItemRepositoryFor<IndexedQualifiedIdentifier> {
     static QualifiedIdentifierRepository& repo()
     {
-        static QualifiedIdentifierRepositoryManager manager(
-            QStringLiteral("Qualified Identifier Repository"),
-            ItemRepositoryForItemType<IndexedIdentifier>::repo().mutex());
+        static QualifiedIdentifierRepositoryManager manager(QStringLiteral("Qualified Identifier Repository"),
+                                                            ItemRepositoryFor<IndexedIdentifier>::repo().mutex());
         return *manager.repository();
     }
 };

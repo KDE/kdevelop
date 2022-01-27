@@ -2291,12 +2291,12 @@ private:
 };
 
 template <typename Item>
-struct ItemRepositoryForItemType;
+struct ItemRepositoryFor;
 
 template <typename Item, typename Op>
 static auto itemRepositoryOp(Op&& op)
 {
-    auto& repo = ItemRepositoryForItemType<Item>::repo();
+    auto& repo = ItemRepositoryFor<Item>::repo();
 
     QMutexLocker lock(repo.mutex());
     return op(repo);

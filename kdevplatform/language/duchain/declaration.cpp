@@ -51,33 +51,22 @@ DeclarationData::DeclarationData()
 {
 }
 
-namespace {
-///@todo Use reference counting
-class CommentRepository
-{
-public:
-    template <typename Op>
-    auto op(Op&& op)
-    {
-        QMutexLocker lock(&m_mutex);
-        return op(m_comments);
-    }
-
-private:
-    QMutex m_mutex;
-    Repositories::StringRepository m_comments{QStringLiteral("Comment Repository"), &m_mutex};
+struct DeclarationComment {
 };
-
-CommentRepository& commentRepository()
-{
-    static CommentRepository comments;
-    return comments;
-}
-} // unnamed namespace
+template <>
+struct ItemRepositoryFor<DeclarationComment> {
+    static auto& repo()
+    {
+        static QMutex mutex;
+        ///@todo Use reference counting
+        static Repositories::StringRepository repo(QStringLiteral("Comment Repository"), &mutex);
+        return repo;
+    }
+};
 
 void initDeclarationRepositories()
 {
-    commentRepository();
+    ItemRepositoryFor<DeclarationComment>::repo();
 }
 
 Declaration::Kind Declaration::kind() const
@@ -185,7 +174,7 @@ QByteArray Declaration::comment() const
     if (!d->m_comment)
         return QByteArray();
 
-    return commentRepository().op([d](const Repositories::StringRepository& repo) {
+    return itemRepositoryOp<DeclarationComment>([d](const Repositories::StringRepository& repo) {
         return Repositories::arrayFromItem(repo.itemFromIndex(d->m_comment));
     });
 }
@@ -201,7 +190,8 @@ void Declaration::setComment(const QByteArray& str)
     const auto request = Repositories::StringRepositoryItemRequest(
         str.constData(), IndexedString::hashString(str.constData(), str.length()), str.length());
 
-    d->m_comment = commentRepository().op([&](Repositories::StringRepository& repo) { return repo.index(request); });
+    d->m_comment = itemRepositoryOp<DeclarationComment>(
+        [&](Repositories::StringRepository& repo) { return repo.index(request); });
 }
 
 void Declaration::setComment(const QString& str)

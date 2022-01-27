@@ -124,7 +124,7 @@ using InstantiationInformationRepository
 using InstantiationInformationRepositoryManager = RepositoryManager<InstantiationInformationRepository>;
 
 template <>
-struct ItemRepositoryForItemType<IndexedInstantiationInformation> {
+struct ItemRepositoryFor<IndexedInstantiationInformation> {
     static InstantiationInformationRepository& repo()
     {
         static InstantiationInformationRepositoryManager manager(QStringLiteral("Instantiation Information Repository"),
