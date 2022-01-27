@@ -605,7 +605,7 @@ ParamIterator& ParamIterator::operator ++()
     } else {
         //Iterate on through parameters
         d->m_cur = d->m_curEnd + 1;
-        if (d->m_cur < ( int ) d->m_source.length()) {
+        if (d->m_cur < d->m_source.length()) {
             d->m_curEnd = d->next();
         }
     }
@@ -623,7 +623,7 @@ ParamIterator::operator bool() const
 {
     Q_D(const ParamIterator);
 
-    return d->m_cur < ( int ) d->m_end;
+    return d->m_cur < d->m_end;
 }
 
 QString ParamIterator::prefix() const
