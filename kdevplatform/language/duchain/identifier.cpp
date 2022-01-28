@@ -1448,7 +1448,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifi
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier()
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << index);
+    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
     ItemRepositoryReferenceCounting::dec(this);
 }
 
