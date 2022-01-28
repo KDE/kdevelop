@@ -1396,7 +1396,7 @@ void IndexedTypeIdentifier::setIdentifier(const IndexedQualifiedIdentifier& id)
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(unsigned int index)
     : m_index(index)
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
+    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ") Creating" << identifier().toString() << m_index);
 
     ItemRepositoryReferenceCounting::inc(this);
 }
@@ -1424,7 +1424,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifie
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(unsigned int index)
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
+    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ") Assigning to" << identifier().toString() << m_index);
 
     ItemRepositoryReferenceCounting::setIndex(this, m_index, index);
     return *this;
@@ -1448,7 +1448,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifi
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier()
 {
-    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ")" << identifier().toString() << m_index);
+    ifDebug(qCDebug(LANGUAGE) << "(" << ++cnt << ") Destroying" << identifier().toString() << m_index);
     ItemRepositoryReferenceCounting::dec(this);
 }
 
