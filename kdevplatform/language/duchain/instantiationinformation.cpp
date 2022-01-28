@@ -124,7 +124,9 @@ using InstantiationInformationRepository
 using InstantiationInformationRepositoryManager = RepositoryManager<InstantiationInformationRepository>;
 
 template <>
-struct ItemRepositoryFor<IndexedInstantiationInformation> {
+class ItemRepositoryFor<IndexedInstantiationInformation>
+{
+    friend struct LockedItemRepository;
     static InstantiationInformationRepository& repo()
     {
         static InstantiationInformationRepositoryManager manager(QStringLiteral("Instantiation Information Repository"),
@@ -135,7 +137,7 @@ struct ItemRepositoryFor<IndexedInstantiationInformation> {
 
 uint standardInstantiationInformationIndex()
 {
-    static uint idx = itemRepositoryOp<IndexedInstantiationInformation>(
+    static uint idx = LockedItemRepository::op<IndexedInstantiationInformation>(
         [standardInstantiationInformation = InstantiationInformation()](InstantiationInformationRepository& repo) {
             return repo.index(standardInstantiationInformation);
         });
@@ -194,13 +196,13 @@ const InstantiationInformation& IndexedInstantiationInformation::information() c
 {
     auto index = m_index ? m_index : standardInstantiationInformationIndex();
     // TODO: it's probably unsafe to return the const& here, as the repo won't be locked during access anymore
-    return *itemRepositoryOp<IndexedInstantiationInformation>(
+    return *LockedItemRepository::op<IndexedInstantiationInformation>(
         [index](InstantiationInformationRepository& repo) { return repo.itemFromIndex(index); });
 }
 
 IndexedInstantiationInformation InstantiationInformation::indexed() const
 {
-    auto index = itemRepositoryOp<IndexedInstantiationInformation>(
+    auto index = LockedItemRepository::op<IndexedInstantiationInformation>(
         [this](InstantiationInformationRepository& repo) { return repo.index(*this); });
     return IndexedInstantiationInformation(index);
 }

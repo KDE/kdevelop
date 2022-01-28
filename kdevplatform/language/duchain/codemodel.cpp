@@ -165,11 +165,13 @@ public:
 // Maps declaration-ids to items
 using CodeModelRepo = ItemRepository<CodeModelRepositoryItem, CodeModelRequestItem>;
 template <>
-struct ItemRepositoryFor<CodeModel> {
+class ItemRepositoryFor<CodeModel>
+{
+    friend struct LockedItemRepository;
     static CodeModelRepo& repo()
     {
         static QMutex mutex;
-        static CodeModelRepo repo { QStringLiteral("Code Model"), &mutex };
+        static CodeModelRepo repo(QStringLiteral("Code Model"), &mutex);
         return repo;
     }
 };
@@ -200,7 +202,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
-    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -267,7 +269,7 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
-    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -301,7 +303,7 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     item.file = file;
     CodeModelRequestItem request(item);
 
-    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -360,7 +362,7 @@ void CodeModel::items(const IndexedString& file, uint& count, const CodeModelIte
     item.file = file;
     CodeModelRequestItem request(item);
 
-    itemRepositoryOp<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {

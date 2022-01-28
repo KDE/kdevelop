@@ -152,18 +152,23 @@ using IdentifierRepository = ItemRepository<ConstantIdentifierPrivate, Identifie
 using IdentifierRepositoryManager = RepositoryManager<IdentifierRepository, false>;
 
 template <>
-struct ItemRepositoryFor<IndexedIdentifier> {
+class ItemRepositoryFor<IndexedIdentifier>
+{
+    friend struct LockedItemRepository;
     static IdentifierRepository& repo()
     {
         static QRecursiveMutex mutex;
         static IdentifierRepositoryManager manager(QStringLiteral("Identifier Repository"), &mutex);
         return *manager.repository();
     }
+
+public:
+    static auto* mutex() { return repo().mutex(); }
 };
 
 static uint emptyConstantIdentifierPrivateIndex()
 {
-    static const uint index = itemRepositoryOp<IndexedIdentifier>(
+    static const uint index = LockedItemRepository::op<IndexedIdentifier>(
         [](IdentifierRepository& repo) { return repo.index(DynamicIdentifierPrivate()); });
     return index;
 }
@@ -330,18 +335,20 @@ using QualifiedIdentifierRepository
 using QualifiedIdentifierRepositoryManager = RepositoryManager<QualifiedIdentifierRepository, false>;
 
 template <>
-struct ItemRepositoryFor<IndexedQualifiedIdentifier> {
+class ItemRepositoryFor<IndexedQualifiedIdentifier>
+{
+    friend struct LockedItemRepository;
     static QualifiedIdentifierRepository& repo()
     {
         static QualifiedIdentifierRepositoryManager manager(QStringLiteral("Qualified Identifier Repository"),
-                                                            ItemRepositoryFor<IndexedIdentifier>::repo().mutex());
+                                                            ItemRepositoryFor<IndexedIdentifier>::mutex());
         return *manager.repository();
     }
 };
 
 static uint emptyConstantQualifiedIdentifierPrivateIndex()
 {
-    static const uint index = itemRepositoryOp<IndexedQualifiedIdentifier>(
+    static const uint index = LockedItemRepository::op<IndexedQualifiedIdentifier>(
         [](QualifiedIdentifierRepository& repo) { return repo.index(DynamicQualifiedIdentifierPrivate()); });
     return index;
 }
@@ -363,7 +370,8 @@ Identifier::Identifier(uint index)
     : m_index(index)
 {
     Q_ASSERT(m_index);
-    cd = itemRepositoryOp<IndexedIdentifier>([index](IdentifierRepository& repo) { return repo.itemFromIndex(index); });
+    cd = LockedItemRepository::op<IndexedIdentifier>(
+        [index](IdentifierRepository& repo) { return repo.itemFromIndex(index); });
 }
 
 Identifier::Identifier(const IndexedString& str)
@@ -629,7 +637,7 @@ void Identifier::makeConstant() const
     if (m_index)
         return;
 
-    itemRepositoryOp<IndexedIdentifier>([&](IdentifierRepository& repo) {
+    LockedItemRepository::op<IndexedIdentifier>([&](IdentifierRepository& repo) {
         m_index = repo.index(IdentifierItemRequest(*dd));
         delete dd;
         cd = repo.itemFromIndex(m_index);
@@ -656,14 +664,14 @@ bool QualifiedIdentifier::inRepository() const
     if (m_index)
         return true;
 
-    return itemRepositoryOp<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
+    return LockedItemRepository::op<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
         return static_cast<bool>(repo.findIndex(QualifiedIdentifierItemRequest(*dd)));
     });
 }
 
 QualifiedIdentifier::QualifiedIdentifier(uint index)
     : m_index(index)
-    , cd(itemRepositoryOp<IndexedQualifiedIdentifier>(
+    , cd(LockedItemRepository::op<IndexedQualifiedIdentifier>(
           [index](QualifiedIdentifierRepository& repo) { return repo.itemFromIndex(index); }))
 {
 }
@@ -1132,7 +1140,7 @@ void QualifiedIdentifier::makeConstant() const
     if (m_index)
         return;
 
-    itemRepositoryOp<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
+    LockedItemRepository::op<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
         m_index = repo.index(QualifiedIdentifierItemRequest(*dd));
         delete dd;
         cd = repo.itemFromIndex(m_index);

@@ -21,7 +21,7 @@ struct ItemRepositoryReferenceCounting {
             return false;
         }
 
-        itemRepositoryOp<Item>(
+        LockedItemRepository::op<Item>(
             [&](auto& repo) { item->increase(repo.dynamicItemFromIndexSimple(index)->m_refCount, index); });
         return true;
     }
@@ -35,7 +35,7 @@ struct ItemRepositoryReferenceCounting {
             return false;
         }
 
-        itemRepositoryOp<Item>(
+        LockedItemRepository::op<Item>(
             [&](auto& repo) { item->decrease(repo.dynamicItemFromIndexSimple(index)->m_refCount, index); });
         return true;
     }
@@ -48,7 +48,7 @@ struct ItemRepositoryReferenceCounting {
         }
 
         if (shouldDoDUChainReferenceCounting(item)) {
-            itemRepositoryOp<Item>([&](auto& repo) {
+            LockedItemRepository::op<Item>([&](auto& repo) {
                 if (m_index) {
                     item->decrease(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
                 }
@@ -81,7 +81,7 @@ struct ItemRepositoryReferenceCounting {
             return;
         }
 
-        itemRepositoryOp<Item>([&](auto& repo) {
+        LockedItemRepository::op<Item>([&](auto& repo) {
             if (lhs_index && lhsShouldDoDUChainReferenceCounting) {
                 lhs->decrease(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
             } else if (rhs_index && rhsShouldDoDUChainReferenceCounting && !lhsShouldDoDUChainReferenceCounting) {
