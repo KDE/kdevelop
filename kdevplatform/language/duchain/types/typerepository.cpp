@@ -92,25 +92,24 @@ QRecursiveMutex* typeRepositoryMutex()
 
 using TypeItemRepository = ItemRepository<AbstractTypeData, AbstractTypeDataRequest, true, QRecursiveMutex>;
 
-// The object is created in a function, to prevent initialization-order issues
-static TypeItemRepository& typeRepository()
+template <>
+class ItemRepositoryFor<AbstractTypeData>
 {
-    static RepositoryManager<TypeItemRepository, false> repository(QStringLiteral("Type Repository"),
-                                                                   typeRepositoryMutex());
-    return *repository.repository();
-}
+    friend struct LockedItemRepository;
+    static TypeItemRepository& repo()
+    {
+        static RepositoryManager<TypeItemRepository, false> manager(QStringLiteral("Type Repository"),
+                                                                    typeRepositoryMutex());
+        return *manager.repository();
+    }
 
-template <typename Op>
-static auto typeRepositoryOp(Op&& op)
-{
-    auto& repo = typeRepository();
-    QMutexLocker lock(repo.mutex());
-    return op(repo);
-}
+public:
+    static void init() { repo(); }
+};
 
 void initTypeRepository()
 {
-    typeRepository();
+    ItemRepositoryFor<AbstractTypeData>::init();
 }
 
 uint TypeRepository::indexForType(const AbstractType::Ptr& input)
@@ -118,7 +117,7 @@ uint TypeRepository::indexForType(const AbstractType::Ptr& input)
     if (!input)
         return 0;
 
-    uint i = typeRepositoryOp(
+    uint i = LockedItemRepository::op<AbstractTypeData>(
         [request = AbstractTypeDataRequest(*input)](TypeItemRepository& repo) { return repo.index(request); });
 #ifdef DEBUG_TYPE_REPOSITORY
     AbstractType::Ptr t = typeForIndex(i);
@@ -140,7 +139,7 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index)
     if (index == 0)
         return AbstractType::Ptr();
 
-    return typeRepositoryOp([index](TypeItemRepository& repo) {
+    return LockedItemRepository::op<AbstractTypeData>([index](TypeItemRepository& repo) {
         auto item = repo.itemFromIndex(index);
         return AbstractType::Ptr(TypeSystem::self().create(const_cast<AbstractTypeData*>(item)));
     });
@@ -151,7 +150,7 @@ void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* m
     if (!index)
         return;
 
-    typeRepositoryOp([&](TypeItemRepository& repo) {
+    LockedItemRepository::op<AbstractTypeData>([&](TypeItemRepository& repo) {
         AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
         Q_ASSERT(data);
         if (manager)
@@ -166,7 +165,7 @@ void TypeRepository::decreaseReferenceCount(uint index, ReferenceCountManager* m
     if (!index)
         return;
 
-    typeRepositoryOp([&](TypeItemRepository& repo) {
+    LockedItemRepository::op<AbstractTypeData>([&](TypeItemRepository& repo) {
         AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
         Q_ASSERT(data);
         Q_ASSERT(data->refCount > 0);
