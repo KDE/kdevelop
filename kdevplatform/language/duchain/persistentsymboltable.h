@@ -140,7 +140,6 @@ public:
     void dump(const QTextStream& out);
 
     //Clears the internal cache. Should be called regularly to save memory
-    //The duchain must be read-locked
     void clearCache();
 
 private:
