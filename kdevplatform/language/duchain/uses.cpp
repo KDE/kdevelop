@@ -102,107 +102,114 @@ public:
     const UsesItem& m_item;
 };
 
+// Maps declaration-ids to Uses
+using UsesRepo = ItemRepository<UsesItem, UsesRequestItem>;
+template <>
+class ItemRepositoryFor<UsesItem>
+{
+    friend struct LockedItemRepository;
+    static UsesRepo& repo()
+    {
+        static QMutex mutex;
+        static UsesRepo repo { QStringLiteral("Use Map"), &mutex };
+        return repo;
+    }
+
+public:
+    static void init() { repo(); }
+};
+
 class UsesPrivate
 {
-public:
-    mutable QMutex m_mutex;
-    //Maps declaration-ids to Uses
-    using Repo = ItemRepository<UsesItem, UsesRequestItem>;
-    // mutable as things like findIndex are not const
-    mutable Repo m_uses{QStringLiteral("Use Map"), &m_mutex};
 };
 
 Uses::Uses()
-    : d_ptr(new UsesPrivate())
+    : d_ptr(nullptr)
 {
+    ItemRepositoryFor<UsesItem>::init();
 }
 
 Uses::~Uses() = default;
 
 void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {
-    Q_D(Uses);
-
     UsesItem item;
     item.declaration = id;
     item.usesList().append(use);
     UsesRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_uses.findIndex(item);
+    LockedItemRepository::op<UsesItem>([&](UsesRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        const UsesItem* oldItem = d->m_uses.itemFromIndex(index);
-        for (unsigned int a = 0; a < oldItem->usesSize(); ++a) {
-            if (oldItem->uses()[a] == use)
-                return; //Already there
-            item.usesList().append(oldItem->uses()[a]);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            const UsesItem* oldItem = repo.itemFromIndex(index);
+            for (unsigned int a = 0; a < oldItem->usesSize(); ++a) {
+                if (oldItem->uses()[a] == use)
+                    return; // Already there
+                item.usesList().append(oldItem->uses()[a]);
+            }
+
+            repo.deleteItem(index);
         }
 
-        d->m_uses.deleteItem(index);
-    }
-
-    //This inserts the changed item
-    d->m_uses.index(request);
+        // This inserts the changed item
+        repo.index(request);
+    });
 }
 
 void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {
-    Q_D(Uses);
-
     UsesItem item;
     item.declaration = id;
     UsesRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_uses.findIndex(item);
+    LockedItemRepository::op<UsesItem>([&](UsesRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        const UsesItem* oldItem = d->m_uses.itemFromIndex(index);
-        for (unsigned int a = 0; a < oldItem->usesSize(); ++a)
-            if (!(oldItem->uses()[a] == use))
-                item.usesList().append(oldItem->uses()[a]);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            const UsesItem* oldItem = repo.itemFromIndex(index);
+            for (unsigned int a = 0; a < oldItem->usesSize(); ++a)
+                if (!(oldItem->uses()[a] == use))
+                    item.usesList().append(oldItem->uses()[a]);
 
-        d->m_uses.deleteItem(index);
-        Q_ASSERT(d->m_uses.findIndex(item) == 0);
+            repo.deleteItem(index);
+            Q_ASSERT(repo.findIndex(item) == 0);
 
-        //This inserts the changed item
-        if (item.usesSize() != 0)
-            d->m_uses.index(request);
-    }
+            // This inserts the changed item
+            if (item.usesSize() != 0)
+                repo.index(request);
+        }
+    });
 }
 
 bool Uses::hasUses(const DeclarationId& id) const
 {
-    Q_D(const Uses);
-
     UsesItem item;
     item.declaration = id;
 
-    QMutexLocker lock(&d->m_mutex);
-    return ( bool ) d->m_uses.findIndex(item);
+    return LockedItemRepository::op<UsesItem>(
+        [&item](const UsesRepo& repo) { return static_cast<bool>(repo.findIndex(item)); });
 }
 
 KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) const
 {
-    Q_D(const Uses);
-
     KDevVarLengthArray<IndexedTopDUContext> ret;
 
     UsesItem item;
     item.declaration = id;
     UsesRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_uses.findIndex(item);
+    LockedItemRepository::op<UsesItem>([&](const UsesRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        const UsesItem* repositoryItem = d->m_uses.itemFromIndex(index);
-        FOREACH_FUNCTION(const IndexedTopDUContext &decl, repositoryItem->uses)
-        ret.append(decl);
-    }
+        if (index) {
+            const UsesItem* repositoryItem = repo.itemFromIndex(index);
+            FOREACH_FUNCTION(const IndexedTopDUContext& decl, repositoryItem->uses)
+            ret.append(decl);
+        }
+    });
 
     return ret;
 }
