@@ -146,108 +146,113 @@ private:
     const QTextStream& out;
 };
 
+// Maps declaration-ids to definitions
+using DefinitionsRepo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
+
+template <>
+class ItemRepositoryFor<DefinitionsItem>
+{
+    friend struct LockedItemRepository;
+    static DefinitionsRepo& repo()
+    {
+        static QMutex mutex;
+        static DefinitionsRepo repo { QStringLiteral("Definition Map"), &mutex };
+        return repo;
+    }
+
+public:
+    static void init() { repo(); }
+};
+
 class DefinitionsPrivate
 {
-public:
-    mutable QMutex m_mutex;
-    //Maps declaration-ids to definitions
-    using Repo = ItemRepository<DefinitionsItem, DefinitionsRequestItem>;
-    // mutable as things like findIndex are not const
-    mutable Repo m_definitions{QStringLiteral("Definition Map"), &m_mutex};
 };
 
 Definitions::Definitions()
-    : d_ptr(new DefinitionsPrivate())
+    : d_ptr(nullptr)
 {
+    ItemRepositoryFor<DefinitionsItem>::init();
 }
 
 Definitions::~Definitions() = default;
 
 void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaration& definition)
 {
-    Q_D(Definitions);
-
     DefinitionsItem item;
     item.declaration = id;
     item.definitionsList().append(definition);
     DefinitionsRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_definitions.findIndex(item);
+    LockedItemRepository::op<DefinitionsItem>([&](DefinitionsRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        const DefinitionsItem* oldItem = d->m_definitions.itemFromIndex(index);
-        for (unsigned int a = 0; a < oldItem->definitionsSize(); ++a) {
-            if (oldItem->definitions()[a] == definition)
-                return; //Already there
-            item.definitionsList().append(oldItem->definitions()[a]);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            const DefinitionsItem* oldItem = repo.itemFromIndex(index);
+            for (unsigned int a = 0; a < oldItem->definitionsSize(); ++a) {
+                if (oldItem->definitions()[a] == definition)
+                    return; // Already there
+                item.definitionsList().append(oldItem->definitions()[a]);
+            }
+
+            repo.deleteItem(index);
         }
 
-        d->m_definitions.deleteItem(index);
-    }
-
-    //This inserts the changed item
-    d->m_definitions.index(request);
+        // This inserts the changed item
+        repo.index(request);
+    });
 }
 
 void Definitions::removeDefinition(const DeclarationId& id, const IndexedDeclaration& definition)
 {
-    Q_D(Definitions);
-
     DefinitionsItem item;
     item.declaration = id;
     DefinitionsRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_definitions.findIndex(item);
+    LockedItemRepository::op<DefinitionsItem>([&](DefinitionsRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        const DefinitionsItem* oldItem = d->m_definitions.itemFromIndex(index);
-        for (unsigned int a = 0; a < oldItem->definitionsSize(); ++a)
-            if (!(oldItem->definitions()[a] == definition))
-                item.definitionsList().append(oldItem->definitions()[a]);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            const DefinitionsItem* oldItem = repo.itemFromIndex(index);
+            for (unsigned int a = 0; a < oldItem->definitionsSize(); ++a)
+                if (!(oldItem->definitions()[a] == definition))
+                    item.definitionsList().append(oldItem->definitions()[a]);
 
-        d->m_definitions.deleteItem(index);
-        Q_ASSERT(d->m_definitions.findIndex(item) == 0);
+            repo.deleteItem(index);
+            Q_ASSERT(repo.findIndex(item) == 0);
 
-        //This inserts the changed item
-        if (item.definitionsSize() != 0)
-            d->m_definitions.index(request);
-    }
+            // This inserts the changed item
+            if (item.definitionsSize() != 0)
+                repo.index(request);
+        }
+    });
 }
 
 KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const DeclarationId& id) const
 {
-    Q_D(const Definitions);
-
     KDevVarLengthArray<IndexedDeclaration> ret;
 
     DefinitionsItem item;
     item.declaration = id;
     DefinitionsRequestItem request(item);
 
-    {
-        QMutexLocker lock(&d->m_mutex);
-        uint index = d->m_definitions.findIndex(item);
+    LockedItemRepository::op<DefinitionsItem>([&](const DefinitionsRepo& repo) {
+        uint index = repo.findIndex(item);
 
         if (index) {
-            const DefinitionsItem* repositoryItem = d->m_definitions.itemFromIndex(index);
+            const DefinitionsItem* repositoryItem = repo.itemFromIndex(index);
             FOREACH_FUNCTION(const IndexedDeclaration& decl, repositoryItem->definitions)
             ret.append(decl);
         }
-    }
+    });
 
     return ret;
 }
 
 void Definitions::dump(const QTextStream& out)
 {
-    Q_D(Definitions);
-
-    QMutexLocker lock(&d->m_mutex);
     DefinitionsVisitor v(this, out);
-    d->m_definitions.visitAllItems(v);
+    LockedItemRepository::op<DefinitionsItem>([&](const DefinitionsRepo& repo) { repo.visitAllItems(v); });
 }
 }
