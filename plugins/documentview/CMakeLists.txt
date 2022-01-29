@@ -1,7 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevdocumentview\")
-#add_subdirectory(settings)
-
-########### next target ###############
 
 set(kdevdocumentview_PART_SRCS
     kdevdocumentview.cpp
