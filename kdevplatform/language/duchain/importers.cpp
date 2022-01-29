@@ -102,96 +102,106 @@ public:
     const ImportersItem& m_item;
 };
 
+// Maps declaration-ids to Importers
+using ImportersRepo = ItemRepository<ImportersItem, ImportersRequestItem>;
+
+template <>
+class ItemRepositoryFor<ImportersItem>
+{
+    friend struct LockedItemRepository;
+    static ImportersRepo& repo()
+    {
+        static QMutex mutex;
+        static ImportersRepo repo { QStringLiteral("Importer Map"), &mutex };
+        return repo;
+    }
+
+public:
+    static void init() { repo(); }
+};
+
 class ImportersPrivate
 {
-public:
-    mutable QMutex m_mutex;
-    //Maps declaration-ids to Importers
-    using Repo = ItemRepository<ImportersItem, ImportersRequestItem>;
-    // mutable as things like findIndex are not const
-    mutable Repo m_importers{QStringLiteral("Importer Map"), &m_mutex};
 };
 
 Importers::Importers()
-    : d_ptr(new ImportersPrivate())
+    : d_ptr(nullptr)
 {
+    ItemRepositoryFor<ImportersItem>::init();
 }
 
 Importers::~Importers() = default;
 
 void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use)
 {
-    Q_D(Importers);
-
     ImportersItem item;
     item.declaration = id;
     item.importersList().append(use);
     ImportersRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_importers.findIndex(item);
+    LockedItemRepository::op<ImportersItem>([&](ImportersRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        const ImportersItem* oldItem = d->m_importers.itemFromIndex(index);
-        for (unsigned int a = 0; a < oldItem->importersSize(); ++a) {
-            if (oldItem->importers()[a] == use)
-                return; //Already there
-            item.importersList().append(oldItem->importers()[a]);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            const ImportersItem* oldItem = repo.itemFromIndex(index);
+            for (unsigned int a = 0; a < oldItem->importersSize(); ++a) {
+                if (oldItem->importers()[a] == use)
+                    return; // Already there
+                item.importersList().append(oldItem->importers()[a]);
+            }
+
+            repo.deleteItem(index);
         }
 
-        d->m_importers.deleteItem(index);
-    }
-
-    //This inserts the changed item
-    d->m_importers.index(request);
+        // This inserts the changed item
+        repo.index(request);
+    });
 }
 
 void Importers::removeImporter(const DeclarationId& id, const IndexedDUContext& use)
 {
-    Q_D(Importers);
-
     ImportersItem item;
     item.declaration = id;
     ImportersRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_importers.findIndex(item);
+    LockedItemRepository::op<ImportersItem>([&](ImportersRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        //Check whether the item is already in the mapped list, else copy the list into the new created item
-        const ImportersItem* oldItem = d->m_importers.itemFromIndex(index);
-        for (unsigned int a = 0; a < oldItem->importersSize(); ++a)
-            if (!(oldItem->importers()[a] == use))
-                item.importersList().append(oldItem->importers()[a]);
+        if (index) {
+            // Check whether the item is already in the mapped list, else copy the list into the new created item
+            const ImportersItem* oldItem = repo.itemFromIndex(index);
+            for (unsigned int a = 0; a < oldItem->importersSize(); ++a)
+                if (!(oldItem->importers()[a] == use))
+                    item.importersList().append(oldItem->importers()[a]);
 
-        d->m_importers.deleteItem(index);
-        Q_ASSERT(d->m_importers.findIndex(item) == 0);
+            repo.deleteItem(index);
+            Q_ASSERT(repo.findIndex(item) == 0);
 
-        //This inserts the changed item
-        if (item.importersSize() != 0)
-            d->m_importers.index(request);
-    }
+            // This inserts the changed item
+            if (item.importersSize() != 0)
+                repo.index(request);
+        }
+    });
 }
 
 KDevVarLengthArray<IndexedDUContext> Importers::importers(const DeclarationId& id) const
 {
-    Q_D(const Importers);
-
     KDevVarLengthArray<IndexedDUContext> ret;
 
     ImportersItem item;
     item.declaration = id;
     ImportersRequestItem request(item);
 
-    QMutexLocker lock(&d->m_mutex);
-    uint index = d->m_importers.findIndex(item);
+    LockedItemRepository::op<ImportersItem>([&](ImportersRepo& repo) {
+        uint index = repo.findIndex(item);
 
-    if (index) {
-        const ImportersItem* repositoryItem = d->m_importers.itemFromIndex(index);
-        FOREACH_FUNCTION(const IndexedDUContext &decl, repositoryItem->importers)
-        ret.append(decl);
-    }
+        if (index) {
+            const ImportersItem* repositoryItem = repo.itemFromIndex(index);
+            FOREACH_FUNCTION(const IndexedDUContext& decl, repositoryItem->importers)
+            ret.append(decl);
+        }
+    });
 
     return ret;
 }
