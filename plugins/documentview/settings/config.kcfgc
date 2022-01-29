@@ -1,5 +1,0 @@
-File=config.kcfg
-ClassName=DocumentViewSettings
-Singleton=true
-Inherits=KDevelop::ConfigSkeleton
-IncludeFiles="kdevconfigskeleton.h"
