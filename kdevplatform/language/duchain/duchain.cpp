@@ -287,6 +287,46 @@ public:
     const EnvironmentInformationListItem* m_item;
 };
 
+/// NOTE: The following two repositories are thread-safe, and DUChainPrivate::m_chainsMutex should not be locked when
+/// using them, because they may trigger I/O.
+
+/// Maps filenames to a list of top-contexts/environment-information.
+using EnvironmentInformationListRepo
+    = ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest>;
+
+template <>
+class ItemRepositoryFor<EnvironmentInformationListItem>
+{
+    friend struct LockedItemRepository;
+    static EnvironmentInformationListRepo& repo()
+    {
+        static QMutex mutex;
+        static EnvironmentInformationListRepo repo(QStringLiteral("Environment Lists"), &mutex);
+        return repo;
+    }
+
+public:
+    static void init() { repo(); }
+};
+
+/// Maps top-context-indices to environment-information item.
+using EnvironmentInformationRepo = ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest>;
+
+template <>
+class ItemRepositoryFor<EnvironmentInformationItem>
+{
+    friend struct LockedItemRepository;
+    static EnvironmentInformationRepo& repo()
+    {
+        static QMutex mutex;
+        static EnvironmentInformationRepo repo(QStringLiteral("Environment Information"), &mutex);
+        return repo;
+    }
+
+public:
+    static void init() { repo(); }
+};
+
 class DUChainPrivate;
 static DUChainPrivate* duChainPrivateSelf = nullptr;
 class DUChainPrivate
@@ -328,8 +368,6 @@ public:
         : instance(nullptr)
         , m_cleanupDisabled(false)
         , m_destroyed(false)
-        , m_environmentListInfo(QStringLiteral("Environment Lists"), &m_environmentListInfoMutex)
-        , m_environmentInfo(QStringLiteral("Environment Information"), &m_environmentInfoMutex)
     {
 #if defined(TEST_NO_CLEANUP)
         m_cleanupDisabled = true;
@@ -485,10 +523,8 @@ public:
     void addEnvironmentInformation(ParsingEnvironmentFilePointer info)
     {
         Q_ASSERT(!findInformation(info->indexedTopContext().index()));
-        Q_ASSERT([&]() {
-            QMutexLocker lock(&m_environmentInfoMutex);
-            return m_environmentInfo.findIndex(info->indexedTopContext().index()) == 0;
-        }());
+        Q_ASSERT(LockedItemRepository::op<EnvironmentInformationItem>(
+            [&](EnvironmentInformationRepo& repo) { return repo.findIndex(info->indexedTopContext().index()) == 0; }));
 
         QMutexLocker lock(&m_chainsMutex);
         m_fileEnvironmentInformations.insert(info->url(), info);
@@ -512,30 +548,32 @@ public:
             removed2 = m_indexEnvironmentInformations.remove(info->indexedTopContext().index());
         }
 
-        {
+        LockedItemRepository::op<EnvironmentInformationListItem>([&info](EnvironmentInformationListRepo& repo) {
             //Remove it from the environment information lists if it was there
-            QMutexLocker lock(&m_environmentListInfoMutex);
-            uint index = m_environmentListInfo.findIndex(info->url());
+            uint index = repo.findIndex(info->url());
 
             if (index) {
-                EnvironmentInformationListItem item(*m_environmentListInfo.itemFromIndex(index));
+                EnvironmentInformationListItem item(*repo.itemFromIndex(index));
                 if (item.itemsList().removeOne(info->indexedTopContext().index())) {
-                    m_environmentListInfo.deleteItem(index);
+                    repo.deleteItem(index);
                     if (!item.itemsList().isEmpty())
-                        m_environmentListInfo.index(EnvironmentInformationListRequest(info->url(), item));
+                        repo.index(EnvironmentInformationListRequest(info->url(), item));
                 }
             }
-        }
+        });
 
-        QMutexLocker lock(&m_environmentInfoMutex);
-        uint index = m_environmentInfo.findIndex(info->indexedTopContext().index());
-        if (index) {
-            m_environmentInfo.deleteItem(index);
-        }
+        LockedItemRepository::op<EnvironmentInformationItem>(
+            [&info, removed, removed2](EnvironmentInformationRepo& repo) {
+                uint index = repo.findIndex(info->indexedTopContext().index());
+                if (index) {
+                    repo.deleteItem(index);
+                }
 
-        Q_UNUSED(removed);
-        Q_UNUSED(removed2);
-        Q_ASSERT(index || (removed && removed2));
+                Q_UNUSED(removed);
+                Q_UNUSED(removed2);
+                Q_ASSERT(index || (removed && removed2));
+            });
+
         Q_ASSERT(!findInformation(info->indexedTopContext().index()));
     }
 
@@ -546,18 +584,16 @@ public:
 
         {
             KDevVarLengthArray<uint> topContextIndices;
-
-            {
-                //First store all the possible indices into the KDevVarLengthArray, so we can unlock the mutex before processing them.
-
-                QMutexLocker lock(&m_environmentListInfoMutex); // Lock the mutex to make sure the item isn't changed
-                                                                // while it's being iterated
-                const EnvironmentInformationListItem* item = m_environmentListInfo.findItem(url);
-                if (item) {
-                    FOREACH_FUNCTION(uint topContextIndex, item->items)
-                    topContextIndices << topContextIndex;
-                }
-            }
+            // First store all the possible indices into the KDevVarLengthArray, so we can process them without holding
+            // a mutex locked
+            LockedItemRepository::op<EnvironmentInformationListItem>(
+                [&topContextIndices, &url](EnvironmentInformationListRepo& repo) {
+                    const EnvironmentInformationListItem* item = repo.findItem(url);
+                    if (item) {
+                        FOREACH_FUNCTION(uint topContextIndex, item->items)
+                        topContextIndices << topContextIndex;
+                    }
+                });
 
             // Process the indices in a separate step after copying them from the array, so we don't need
             // m_environmentListInfoMutex locked, and can call loadInformation(..) safely, which else might lead to a
@@ -672,36 +708,36 @@ public:
 
             for (const ParsingEnvironmentFilePointer& file : qAsConst(check)) {
                 EnvironmentInformationRequest req(file.data());
-                QMutexLocker lock(&m_environmentInfoMutex);
-                uint index = m_environmentInfo.findIndex(req);
 
-                if (file->d_func()->isDynamic()) {
-                    //This item has been changed, or isn't in the repository yet
+                LockedItemRepository::op<EnvironmentInformationItem>([&](EnvironmentInformationRepo& repo) {
+                    uint index = repo.findIndex(req);
 
-                    //Eventually remove an old entry
-                    if (index)
-                        m_environmentInfo.deleteItem(index);
+                    if (file->d_func()->isDynamic()) {
+                        // This item has been changed, or isn't in the repository yet
 
-                    //Add the new entry to the item repository
-                    index = m_environmentInfo.index(req);
-                    Q_ASSERT(index);
+                        // Eventually remove an old entry
+                        if (index)
+                            repo.deleteItem(index);
 
-                    auto* item =
-                        const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
-                    auto* theData =
-                        reinterpret_cast<DUChainBaseData*>(reinterpret_cast<char*>(item) +
-                                                           sizeof(EnvironmentInformationItem));
+                        // Add the new entry to the item repository
+                        index = repo.index(req);
+                        Q_ASSERT(index);
 
-                    Q_ASSERT(theData->m_range == file->d_func()->m_range);
-                    Q_ASSERT(theData->m_dynamic == false);
-                    Q_ASSERT(theData->classId == file->d_func()->classId);
+                        auto* item = const_cast<EnvironmentInformationItem*>(repo.itemFromIndex(index));
+                        auto* theData = reinterpret_cast<DUChainBaseData*>(reinterpret_cast<char*>(item)
+                                                                           + sizeof(EnvironmentInformationItem));
 
-                    file->setData(theData);
+                        Q_ASSERT(theData->m_range == file->d_func()->m_range);
+                        Q_ASSERT(theData->m_dynamic == false);
+                        Q_ASSERT(theData->classId == file->d_func()->classId);
 
-                    ++cnt;
-                } else {
-                    m_environmentInfo.itemFromIndex(index); //Prevent unloading of the data, by accessing the item
-                }
+                        file->setData(theData);
+
+                        ++cnt;
+                    } else {
+                        repo.itemFromIndex(index); // Prevent unloading of the data, by accessing the item
+                    }
+                });
             }
 
             ///We must not release the lock while holding a reference to a ParsingEnvironmentFilePointer, else we may miss the deletion of an
@@ -715,17 +751,16 @@ public:
             storeInformationList(url);
 
             //Access the data in the repository, so the bucket isn't unloaded
-            {
-                QMutexLocker lock(&m_environmentListInfoMutex);
-                const auto foundItem
-                    = static_cast<bool>(m_environmentListInfo.findItem(EnvironmentInformationListRequest(url)));
-                lock.unlock();
-                if (!foundItem) {
-                    QMutexLocker chainLock(&m_chainsMutex);
-                    qCDebug(LANGUAGE) << "Did not find stored item for" << url.str()
-                                      << "count:" << m_fileEnvironmentInformations.values(url);
-                }
+            const auto foundItem
+                = LockedItemRepository::op<EnvironmentInformationListItem>([&](EnvironmentInformationListRepo& repo) {
+                      return static_cast<bool>(repo.findItem(EnvironmentInformationListRequest(url)));
+                  });
+            if (!foundItem) {
+                QMutexLocker chainLock(&m_chainsMutex);
+                qCDebug(LANGUAGE) << "Did not find stored item for" << url.str()
+                                  << "count:" << m_fileEnvironmentInformations.values(url);
             }
+
             if (!atomic) {
                 locker.unlock();
                 locker.lock();
@@ -1000,12 +1035,12 @@ unloadContexts:
         if (alreadyLoaded)
             return alreadyLoaded;
 
-        //Step two: Check if it is on disk, and if is, load it
-        const EnvironmentInformationItem* item = nullptr;
-        {
-            QMutexLocker lock(&m_environmentInfoMutex);
-            item = m_environmentInfo.findItem(EnvironmentInformationRequest(topContextIndex));
-        }
+        // Step two: Check if it is on disk, and if is, load it
+        //  TODO: this looks pretty dubious, shouldn't we keep the repo locked while operating on the item?
+        const auto item = LockedItemRepository::op<EnvironmentInformationItem>(
+            [req = EnvironmentInformationRequest(topContextIndex)](EnvironmentInformationRepo& repo) {
+                return repo.findItem(req);
+            });
         if (!item) {
             //No environment-information stored for this top-context
             return nullptr;
@@ -1052,10 +1087,8 @@ unloadContexts:
         qCDebug(LANGUAGE) << "cleaning top-contexts";
         CleanupListVisitor visitor;
         uint startPos = 0;
-        {
-            QMutexLocker environmentInfoLock(&m_environmentInfoMutex);
-            m_environmentInfo.visitAllItems(visitor);
-        }
+        LockedItemRepository::op<EnvironmentInformationItem>(
+            [&visitor](EnvironmentInformationRepo& repo) { repo.visitAllItems(visitor); });
 
         int checkContextsCount = maxFinalCleanupCheckContexts;
         int percentageOfContexts = (visitor.checkContexts.size() * 100) / minimumFinalCleanupCheckContextsPercentage;
@@ -1152,50 +1185,43 @@ private:
             }
         }
 
-        QMutexLocker lock(&m_environmentListInfoMutex);
-        uint index = m_environmentListInfo.findIndex(url);
+        LockedItemRepository::op<EnvironmentInformationListItem>([&](EnvironmentInformationListRepo& repo) {
+            uint index = repo.findIndex(url);
 
-        if (index) {
-            //We only handle adding items here, since we can never be sure whether everything is loaded
-            //Removal is handled directly in removeEnvironmentInformation
+            if (index) {
+                // We only handle adding items here, since we can never be sure whether everything is loaded
+                // Removal is handled directly in removeEnvironmentInformation
 
-            const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(index);
-            QSet<uint> oldItems;
-            FOREACH_FUNCTION(uint topContextIndex, item->items) {
-                oldItems.insert(topContextIndex);
-                if (!newItems.contains(topContextIndex)) {
-                    newItems.insert(topContextIndex);
-                    newItem.itemsList().append(topContextIndex);
+                const EnvironmentInformationListItem* item = repo.itemFromIndex(index);
+                QSet<uint> oldItems;
+                FOREACH_FUNCTION(uint topContextIndex, item->items)
+                {
+                    oldItems.insert(topContextIndex);
+                    if (!newItems.contains(topContextIndex)) {
+                        newItems.insert(topContextIndex);
+                        newItem.itemsList().append(topContextIndex);
+                    }
                 }
+
+                if (oldItems == newItems)
+                    return;
+
+                /// Update/insert a new list
+                repo.deleteItem(index); // Remove the previous item
             }
 
-            if (oldItems == newItems)
-                return;
+            Q_ASSERT(repo.findIndex(EnvironmentInformationListRequest(url)) == 0);
 
-            ///Update/insert a new list
-            m_environmentListInfo.deleteItem(index); //Remove the previous item
-        }
+            // Insert the new item
+            repo.index(EnvironmentInformationListRequest(url, newItem));
 
-        Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)) == 0);
-
-        //Insert the new item
-        m_environmentListInfo.index(EnvironmentInformationListRequest(url, newItem));
-
-        Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)));
+            Q_ASSERT(repo.findIndex(EnvironmentInformationListRequest(url)));
+        });
     }
 
     //Loaded environment information. Protected by m_chainsMutex
     QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
     QHash<uint, ParsingEnvironmentFilePointer> m_indexEnvironmentInformations;
-
-    ///The following repositories are thread-safe, and m_chainsMutex should not be locked when using them, because
-    ///they may trigger I/O. Still it may be required to lock their local mutexes.
-    ///Maps filenames to a list of top-contexts/environment-information.
-    QMutex m_environmentListInfoMutex;
-    ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest> m_environmentListInfo;
-    ///Maps top-context-indices to environment-information item.
-    QMutex m_environmentInfoMutex;
-    ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
 
 Q_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
@@ -1257,6 +1283,9 @@ void DUChain::initialize()
     // read. See https://bugs.kde.org/show_bug.cgi?id=250779
     RecursiveImportRepository::repository();
     RecursiveImportCacheRepository::repository();
+
+    ItemRepositoryFor<EnvironmentInformationListItem>::init();
+    ItemRepositoryFor<EnvironmentInformationItem>::init();
 
     // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
     initDeclarationRepositories();
