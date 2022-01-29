@@ -174,6 +174,11 @@ class ItemRepositoryFor<CodeModel>
         static CodeModelRepo repo(QStringLiteral("Code Model"), &mutex);
         return repo;
     }
+public:
+    static void init()
+    {
+        repo();
+    }
 };
 
 class CodeModelPrivate
@@ -183,6 +188,7 @@ class CodeModelPrivate
 CodeModel::CodeModel()
     : d_ptr(nullptr)
 {
+    ItemRepositoryFor<CodeModel>::init();
 }
 
 CodeModel::~CodeModel() = default;

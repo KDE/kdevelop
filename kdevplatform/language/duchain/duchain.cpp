@@ -50,6 +50,7 @@
 #include "serialization/itemrepository.h"
 #include "waitforupdate.h"
 #include "importers.h"
+#include "codemodel.h"
 
 #if HAVE_MALLOC_TRIM
 #include "malloc.h"
@@ -1296,6 +1297,7 @@ void DUChain::initialize()
     initInstantiationInformationRepository();
 
     Importers::self();
+    CodeModel::self();
 
     globalImportIdentifier();
     globalIndexedImportIdentifier();
