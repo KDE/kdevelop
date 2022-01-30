@@ -11,4 +11,4 @@ Dependencies:
     'sdk/libkomparediff2': '@stable'
     'utilities/okteta': '@stable'
     'plasma/libksysguard': '@stable'
-    'kdevelop/kdevelop-pg-qt': '@same'
+    'kdevelop/kdevelop-pg-qt': '@stable'
