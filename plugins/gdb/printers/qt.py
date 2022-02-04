@@ -25,8 +25,11 @@ class QStringPrinter:
         # and the following 2 lines might throw memory access error. Hence the try/catch.
         try:
             isQt4 = has_field(self.val['d'], 'data') # Qt4 has d->data, Qt5 doesn't.
+            isQt6 = has_field(self.val['d'], 'ptr') # Qt6 has d->ptr, Qt5 doesn't.
             if isQt4:
                 dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
+            elif isQt6:
+                dataAsCharPointer = self.val['d']['ptr'].cast(gdb.lookup_type("char").pointer())
             else:
                 dataAsCharPointer = (self.val['d'] + 1).cast(gdb.lookup_type("char").pointer())
             ret = dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
