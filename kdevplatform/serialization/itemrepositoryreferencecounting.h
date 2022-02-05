@@ -15,7 +15,8 @@ struct ItemRepositoryReferenceCounting {
     template <typename Item>
     static inline bool inc(Item* item)
     {
-        auto index = item->index();
+        Q_ASSERT(item);
+        const auto index = item->index();
 
         if (!index || !shouldDoDUChainReferenceCounting(item)) {
             return false;
@@ -29,7 +30,8 @@ struct ItemRepositoryReferenceCounting {
     template <typename Item>
     static inline bool dec(Item* item)
     {
-        auto index = item->index();
+        Q_ASSERT(item);
+        const auto index = item->index();
 
         if (!index || !shouldDoDUChainReferenceCounting(item)) {
             return false;
@@ -43,6 +45,7 @@ struct ItemRepositoryReferenceCounting {
     template <typename Item>
     static inline void setIndex(Item* item, unsigned int& m_index, unsigned int index)
     {
+        Q_ASSERT(item);
         if (m_index == index) {
             return;
         }
@@ -68,6 +71,8 @@ struct ItemRepositoryReferenceCounting {
     static void moveIndex(Item* lhs, unsigned int& lhs_index, Item* rhs, unsigned int& rhs_index,
                           unsigned int emptyIndex)
     {
+        Q_ASSERT(lhs);
+        Q_ASSERT(rhs);
         Q_ASSERT_X(lhs != rhs, Q_FUNC_INFO, "Self-assignment is not valid for move assignment.");
 
         const auto lhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(lhs);
