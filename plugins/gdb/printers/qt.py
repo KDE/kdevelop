@@ -18,12 +18,15 @@ class QStringPrinter:
         self.val = val
 
     def to_string(self):
-        size = self.val['d']['size']
         ret = ""
 
-        # The QString object might be not yet initialized. In this case size is a bogus value
-        # and the following 2 lines might throw memory access error. Hence the try/catch.
+        # The QString object may not be initialized yet. In this case 'size' is a bogus value
+        # or in case of Qt5, 'd' is an invalid pointer and the following lines might throw memory
+        # access error. Hence the try/catch.
         try:
+            size = self.val['d']['size']
+            if size == 0:
+                return ret
             isQt4 = has_field(self.val['d'], 'data') # Qt4 has d->data, Qt5 doesn't.
             isQt6 = has_field(self.val['d'], 'ptr') # Qt6 has d->ptr, Qt5 doesn't.
             if isQt4:
