@@ -9,8 +9,6 @@
 
 #include "identifier.h"
 
-#include <QScopedPointer>
-
 namespace KDevelop {
 class Declaration;
 class IndexedDeclaration;
@@ -18,7 +16,6 @@ class DeclarationId;
 class TopDUContext;
 class QualifiedIdentifier;
 class IndexedString;
-class CodeModelPrivate;
 
 struct CodeModelItem
 {
@@ -53,10 +50,9 @@ struct CodeModelItem
  */
 class KDEVPLATFORMLANGUAGE_EXPORT CodeModel
 {
+    Q_DISABLE_COPY_MOVE(CodeModel)
 public:
     CodeModel();
-    ~CodeModel();
-
     /**
      * There can only be one item for each identifier.
      * If an item with this identifier already exists, the kind is updated.
@@ -81,10 +77,6 @@ public:
     void items(const IndexedString& file, uint& count, const CodeModelItem*& items) const;
 
     static CodeModel& self();
-
-private:
-    const QScopedPointer<class CodeModelPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(CodeModel)
 };
 }
 

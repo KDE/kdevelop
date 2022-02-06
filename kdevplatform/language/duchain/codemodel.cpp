@@ -181,17 +181,10 @@ public:
     }
 };
 
-class CodeModelPrivate
-{
-};
-
 CodeModel::CodeModel()
-    : d_ptr(nullptr)
 {
     ItemRepositoryFor<CodeModel>::init();
 }
-
-CodeModel::~CodeModel() = default;
 
 void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
 {

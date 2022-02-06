@@ -120,17 +120,10 @@ public:
     static void init() { repo(); }
 };
 
-class ImportersPrivate
-{
-};
-
 Importers::Importers()
-    : d_ptr(nullptr)
 {
     ItemRepositoryFor<ImportersItem>::init();
 }
-
-Importers::~Importers() = default;
 
 void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use)
 {

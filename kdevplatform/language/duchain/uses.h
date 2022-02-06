@@ -10,12 +10,9 @@
 #include <language/languageexport.h>
 #include <util/kdevvarlengtharray.h>
 
-#include <QScopedPointer>
-
 namespace KDevelop {
 class DeclarationId;
 class IndexedTopDUContext;
-class UsesPrivate;
 
 /**
  * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.
@@ -24,11 +21,9 @@ class UsesPrivate;
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT Uses
 {
+    Q_DISABLE_COPY_MOVE(Uses)
 public:
-    /// Constructor.
     Uses();
-    /// Destructor.
-    ~Uses();
     /**
      * Adds a top-context to the users-list of the given id
      * */
@@ -44,10 +39,6 @@ public:
 
     ///Gets the top-contexts of all users assigned to the declaration-id
     KDevVarLengthArray<IndexedTopDUContext> uses(const DeclarationId& id) const;
-
-private:
-    const QScopedPointer<class UsesPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Uses)
 };
 }
 

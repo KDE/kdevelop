@@ -119,17 +119,10 @@ public:
     static void init() { repo(); }
 };
 
-class UsesPrivate
-{
-};
-
 Uses::Uses()
-    : d_ptr(nullptr)
 {
     ItemRepositoryFor<UsesItem>::init();
 }
-
-Uses::~Uses() = default;
 
 void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {

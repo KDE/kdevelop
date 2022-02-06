@@ -11,8 +11,6 @@
 #include <language/languageexport.h>
 #include <util/kdevvarlengtharray.h>
 
-#include <QScopedPointer>
-
 class QTextStream;
 
 namespace KDevelop {
@@ -20,18 +18,15 @@ class Declaration;
 class IndexedDeclaration;
 class DeclarationId;
 class TopDUContext;
-class DefinitionsPrivate;
 
 /**
  * Global mapping of one Declaration-Ids to multiple Definitions, protected through DUChainLock.
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT Definitions
 {
+    Q_DISABLE_COPY_MOVE(Definitions)
 public:
-    /// Constructor.
     Definitions();
-    /// Destructor.
-    ~Definitions();
     /**
      * Assigns @param definition to the given @p id
      * */
@@ -44,10 +39,6 @@ public:
 
     /// Dump contents of the definitions repository to stream @p out
     void dump(const QTextStream& out);
-
-private:
-    const QScopedPointer<class DefinitionsPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Definitions)
 };
 }
 

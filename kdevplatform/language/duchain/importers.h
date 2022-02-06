@@ -10,12 +10,9 @@
 #include <language/languageexport.h>
 #include "declarationid.h"
 
-#include <QScopedPointer>
-
 namespace KDevelop {
 class DeclarationId;
 class IndexedDUContext;
-class ImportersPrivate;
 
 /**
  * Global mapping of Declaration-Ids to contexts that import the associated context, protected through DUChainLock.
@@ -28,11 +25,9 @@ class ImportersPrivate;
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT Importers
 {
+    Q_DISABLE_COPY_MOVE(Importers)
 public:
-    /// Constructor.
     Importers();
-    /// Destructor.
-    ~Importers();
     /**
      * Adds a top-context to the users-list of the given id
      * */
@@ -46,10 +41,6 @@ public:
     KDevVarLengthArray<IndexedDUContext> importers(const DeclarationId& id) const;
 
     static Importers& self();
-
-private:
-    const QScopedPointer<class ImportersPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(Importers)
 };
 }
 

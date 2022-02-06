@@ -164,17 +164,10 @@ public:
     static void init() { repo(); }
 };
 
-class DefinitionsPrivate
-{
-};
-
 Definitions::Definitions()
-    : d_ptr(nullptr)
 {
     ItemRepositoryFor<DefinitionsItem>::init();
 }
-
-Definitions::~Definitions() = default;
 
 void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaration& definition)
 {
