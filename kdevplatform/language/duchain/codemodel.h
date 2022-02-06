@@ -51,8 +51,8 @@ struct CodeModelItem
 class KDEVPLATFORMLANGUAGE_EXPORT CodeModel
 {
     Q_DISABLE_COPY_MOVE(CodeModel)
-public:
     CodeModel();
+public:
     /**
      * There can only be one item for each identifier.
      * If an item with this identifier already exists, the kind is updated.

@@ -122,6 +122,8 @@ public:
  */
 class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem
 {
+    Q_DISABLE_COPY_MOVE(TypeSystem)
+    TypeSystem() = default;
 public:
     /**
      * Register a new AbstractType subclass.

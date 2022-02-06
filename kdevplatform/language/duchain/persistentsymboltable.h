@@ -92,10 +92,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT PersistentSymbolTable
 {
-public:
-    /// Constructor.
+    Q_DISABLE_COPY_MOVE(PersistentSymbolTable)
     PersistentSymbolTable();
-    /// Destructor.
+public:
     ~PersistentSymbolTable();
 
     ///Adds declaration @p declaration with id @p id to the symbol table

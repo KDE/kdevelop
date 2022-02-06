@@ -26,8 +26,8 @@ class IndexedDUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT Importers
 {
     Q_DISABLE_COPY_MOVE(Importers)
-public:
     Importers();
+public:
     /**
      * Adds a top-context to the users-list of the given id
      * */

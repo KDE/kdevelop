@@ -74,6 +74,7 @@ public:
                                    bool recursive = true);
 
 private:
+    Q_DISABLE_COPY_MOVE(SpecializationStore)
     SpecializationStore();
     ~SpecializationStore();
     QHash<DeclarationId, IndexedInstantiationInformation> m_specializations;

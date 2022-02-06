@@ -30,8 +30,8 @@ class ClassModelNodesController
 {
     Q_OBJECT
 
-public:
     ClassModelNodesController();
+public:
     ~ClassModelNodesController() override;
 
     static ClassModelNodesController& self();
