@@ -1008,6 +1008,63 @@ private:
     Item* const m_item;
 };
 
+struct ItemRepositoryStatistics {
+    uint loadedBuckets = -1;
+    uint currentBucket = -1;
+    uint usedMemory = -1;
+    uint loadedMonsterBuckets = -1;
+    uint usedSpaceForBuckets = -1;
+    uint freeSpaceInBuckets = -1;
+    uint lostSpace = -1;
+    uint freeUnreachableSpace = -1;
+    uint hashClashedItems = -1;
+    uint totalItems = -1;
+    uint emptyBuckets;
+    uint hashSize = -1; // How big the hash is
+    uint hashUse = -1; // How many slots in the hash are used
+    uint averageInBucketHashSize = -1;
+    uint averageInBucketUsedSlotCount = -1;
+    float averageInBucketSlotChainLength = -1;
+    uint longestInBucketChain = -1;
+
+    uint longestNextBucketChain = -1;
+    uint totalBucketFollowerSlots = -1; // Total count of used slots in the nextBucketForHash structure
+    float averageNextBucketForHashSequenceLength
+        = -1; // Average sequence length of a nextBucketForHash sequence(If not empty)
+
+    QString print() const
+    {
+        QString ret;
+        ret += QStringLiteral("loaded buckets: %1 current bucket: %2 used memory: %3 loaded monster buckets: %4")
+                   .arg(loadedBuckets)
+                   .arg(currentBucket)
+                   .arg(usedMemory)
+                   .arg(loadedMonsterBuckets);
+        ret += QStringLiteral("\nbucket hash clashed items: %1 total items: %2").arg(hashClashedItems).arg(totalItems);
+        ret += QStringLiteral("\nused space for buckets: %1 free space in buckets: %2 lost space: %3")
+                   .arg(usedSpaceForBuckets)
+                   .arg(freeSpaceInBuckets)
+                   .arg(lostSpace);
+        ret += QStringLiteral("\nfree unreachable space: %1 empty buckets: %2")
+                   .arg(freeUnreachableSpace)
+                   .arg(emptyBuckets);
+        ret += QStringLiteral("\nhash size: %1 hash slots used: %2").arg(hashSize).arg(hashUse);
+        ret += QStringLiteral("\naverage in-bucket hash size: %1 average in-bucket used hash slot count: %2 average "
+                              "in-bucket slot chain length: %3 longest in-bucket follower chain: %4")
+                   .arg(averageInBucketHashSize)
+                   .arg(averageInBucketUsedSlotCount)
+                   .arg(averageInBucketSlotChainLength)
+                   .arg(longestInBucketChain);
+        ret += QStringLiteral("\ntotal count of used next-bucket-for-hash slots: %1 average next-bucket-for-hash "
+                              "sequence length: %2 longest next-bucket chain: %3")
+                   .arg(totalBucketFollowerSlots)
+                   .arg(averageNextBucketForHashSequenceLength)
+                   .arg(longestNextBucketChain);
+        return ret;
+    }
+    operator QString() const { return print(); }
+};
+
 /**
  * The ItemRepository is essentially an on-disk key/value hash map
  *
@@ -1505,71 +1562,15 @@ public:
         return bucketPtr->itemFromIndex(indexInBucket);
     }
 
-    struct Statistics
-    {
-        Statistics()
-        {
-        }
-
-        uint loadedBuckets = -1;
-        uint currentBucket = -1;
-        uint usedMemory = -1;
-        uint loadedMonsterBuckets = -1;
-        uint usedSpaceForBuckets = -1;
-        uint freeSpaceInBuckets = -1;
-        uint lostSpace = -1;
-        uint freeUnreachableSpace = -1;
-        uint hashClashedItems = -1;
-        uint totalItems = -1;
-        uint emptyBuckets;
-        uint hashSize = -1; //How big the hash is
-        uint hashUse = -1; //How many slots in the hash are used
-        uint averageInBucketHashSize = -1;
-        uint averageInBucketUsedSlotCount = -1;
-        float averageInBucketSlotChainLength = -1;
-        uint longestInBucketChain = -1;
-
-        uint longestNextBucketChain = -1;
-        uint totalBucketFollowerSlots = -1; //Total count of used slots in the nextBucketForHash structure
-        float averageNextBucketForHashSequenceLength = -1; //Average sequence length of a nextBucketForHash sequence(If not empty)
-
-        QString print() const
-        {
-            QString ret;
-            ret +=
-                QStringLiteral("loaded buckets: %1 current bucket: %2 used memory: %3 loaded monster buckets: %4").arg(
-                    loadedBuckets).arg(currentBucket).arg(usedMemory).arg(loadedMonsterBuckets);
-            ret += QStringLiteral("\nbucket hash clashed items: %1 total items: %2").arg(hashClashedItems).arg(
-                totalItems);
-            ret += QStringLiteral("\nused space for buckets: %1 free space in buckets: %2 lost space: %3").arg(
-                usedSpaceForBuckets).arg(freeSpaceInBuckets).arg(lostSpace);
-            ret += QStringLiteral("\nfree unreachable space: %1 empty buckets: %2").arg(freeUnreachableSpace).arg(
-                emptyBuckets);
-            ret += QStringLiteral("\nhash size: %1 hash slots used: %2").arg(hashSize).arg(hashUse);
-            ret += QStringLiteral(
-                "\naverage in-bucket hash size: %1 average in-bucket used hash slot count: %2 average in-bucket slot chain length: %3 longest in-bucket follower chain: %4")
-                   .arg(averageInBucketHashSize).arg(averageInBucketUsedSlotCount).arg(averageInBucketSlotChainLength).
-                   arg(
-                longestInBucketChain);
-            ret += QStringLiteral(
-                "\ntotal count of used next-bucket-for-hash slots: %1 average next-bucket-for-hash sequence length: %2 longest next-bucket chain: %3")
-                   .arg(totalBucketFollowerSlots).arg(averageNextBucketForHashSequenceLength).arg(longestNextBucketChain);
-            return ret;
-        }
-        operator QString() const {
-            return print();
-        }
-    };
-
     QString printStatistics() const final
     {
         return statistics().print();
     }
 
-    Statistics statistics() const
+    ItemRepositoryStatistics statistics() const
     {
         Q_ASSERT(m_currentBucket < m_buckets.size());
-        Statistics ret;
+        ItemRepositoryStatistics ret;
         uint loadedBuckets = 0;
         for (auto* bucket : m_buckets) {
             if (bucket) {

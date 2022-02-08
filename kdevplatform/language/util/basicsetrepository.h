@@ -295,7 +295,7 @@ public:
     Set createSet(Index i);
 
     void printStatistics() const;
-    SetDataRepository::Statistics statistics() const
+    KDevelop::ItemRepositoryStatistics statistics() const
     {
         return m_dataRepository.statistics();
     }

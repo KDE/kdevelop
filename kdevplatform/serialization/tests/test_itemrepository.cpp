@@ -206,7 +206,7 @@ private Q_SLOTS:
         qDebug() << "total insertions:" << totalInsertions << "total deletions:" << totalDeletions <<
         "average item size:" << (totalSize / totalInsertions) << "biggest item size:" << maxSize;
 
-        ItemRepository<TestItem, TestItemRequest>::Statistics stats = repository.statistics();
+        const auto stats = repository.statistics();
         qDebug() << stats;
         QVERIFY(stats.freeUnreachableSpace < stats.freeSpaceInBuckets / 100); // < 1% of the free space is unreachable
         QVERIFY(stats.freeSpaceInBuckets < stats.usedSpaceForBuckets); // < 20% free space
