@@ -106,6 +106,12 @@ void QtPrintersTest::testQString()
     QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211\""));
     gdb.execute("next");
     QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211x\""));
+
+    const auto isEmptyGdbString = [](const QString& str) { return str.contains("= \"\""); };
+    gdb.execute("next");
+    QVERIFY(isEmptyGdbString(gdb.execute("print nullString")));
+    gdb.execute("next");
+    QVERIFY(isEmptyGdbString(gdb.execute("print emptyString")));
 }
 
 void QtPrintersTest::testQByteArray()
