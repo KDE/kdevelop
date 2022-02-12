@@ -206,7 +206,7 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
     QMutexLocker lock(&d->m_mutex);
     d->m_repositories.insert(repository, manager);
     if (!d->m_path.isEmpty()) {
-        std::scoped_lock repoLock(*repository);
+        // Locking the repository is documented as the caller's responsibility.
         if (!repository->open(d->m_path)) {
             d->deleteDataDirectory(d->m_path);
             qCritical() << "failed to open a repository";
