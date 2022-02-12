@@ -12,6 +12,7 @@
 #include "appendedlist_static.h"
 #include "serialization/itemrepository.h"
 #include "serialization/itemrepositoryreferencecounting.h"
+#include <serialization/repositorymanager.h>
 #include "util/kdevhash.h"
 #include <debug.h>
 

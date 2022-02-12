@@ -18,7 +18,6 @@
 
 #include "referencecounting.h"
 #include "abstractitemrepository.h"
-#include "repositorymanager.h"
 #include "itemrepositoryregistry.h"
 
 //#define DEBUG_MONSTERBUCKETS
@@ -1110,14 +1109,14 @@ public:
     ///                is triggered from within duchain, so you don't need to care about it.
     explicit ItemRepository(const QString& repositoryName, Mutex* mutex,
                             ItemRepositoryRegistry* registry = &globalItemRepositoryRegistry(),
-                            uint repositoryVersion = 1, AbstractRepositoryManager* manager = nullptr)
+                            uint repositoryVersion = 1)
         : m_repositoryName(repositoryName)
         , m_repositoryVersion(repositoryVersion)
         , m_mutex(mutex)
         , m_registry(registry)
     {
         if (m_registry)
-            m_registry->registerRepository(this, manager);
+            m_registry->registerRepository(this);
     }
 
     ~ItemRepository() override

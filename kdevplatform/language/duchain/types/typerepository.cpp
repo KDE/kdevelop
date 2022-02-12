@@ -14,6 +14,7 @@
 #include "../types/typeregister.h"
 #include <serialization/referencecounting.h>
 #include <serialization/itemrepository.h>
+#include <serialization/repositorymanager.h>
 
 #define DEBUG_TYPE_REPOSITORY
 #define ASSERT_ON_PROBLEM

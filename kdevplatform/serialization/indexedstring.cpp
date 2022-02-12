@@ -9,6 +9,7 @@
 
 #include "itemrepository.h"
 #include "referencecounting.h"
+#include "repositorymanager.h"
 
 #include <utility>
 

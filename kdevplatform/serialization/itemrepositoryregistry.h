@@ -17,7 +17,6 @@ class QAtomicInt;
 
 namespace KDevelop {
 class ISession;
-class AbstractRepositoryManager;
 class AbstractItemRepository;
 class ItemRepositoryRegistryPrivate;
 
@@ -48,7 +47,7 @@ public:
     /// Add a new repository.
     /// It will automatically be opened with the current path, if one is set.
     /// @note A caller of this function, other than @p repository's constructor, must hold @p repository's mutex lock.
-    void registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager);
+    void registerRepository(AbstractItemRepository* repository);
 
     /// Remove a repository.
     /// @note Unregistering does not close @p repository.

@@ -17,18 +17,4 @@ uint staticItemRepositoryVersion()
 AbstractItemRepository::~AbstractItemRepository()
 {
 }
-
-AbstractRepositoryManager::AbstractRepositoryManager()
-{
-}
-
-AbstractRepositoryManager::~AbstractRepositoryManager()
-{
-}
-
-void AbstractRepositoryManager::deleteRepository()
-{
-    delete m_repository;
-    m_repository = nullptr;
-}
 }

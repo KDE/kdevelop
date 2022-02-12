@@ -39,19 +39,6 @@ public:
     /// unlock the repository
     virtual void unlock() = 0;
 };
-
-/// Internal helper class that wraps around a repository object and manages its lifetime.
-class KDEVPLATFORMSERIALIZATION_EXPORT AbstractRepositoryManager
-{
-public:
-    AbstractRepositoryManager();
-    virtual ~AbstractRepositoryManager();
-
-    void deleteRepository();
-
-protected:
-    mutable AbstractItemRepository* m_repository = nullptr;
-};
 }
 
 #endif // ABSTRACTITEMREPOSITORY_H

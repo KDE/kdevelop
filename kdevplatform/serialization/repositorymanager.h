@@ -20,7 +20,6 @@ namespace KDevelop {
 /// Especially it helps doing thread-safe lazy repository-creation.
 template <class ItemRepositoryType, bool unloadingEnabled = true, bool lazy = true>
 struct RepositoryManager
-    : public AbstractRepositoryManager
 {
 public:
     using Mutex = std::decay_t<decltype(*std::declval<ItemRepositoryType>().mutex())>;
@@ -36,8 +35,6 @@ public:
             createRepository();
         }
     }
-
-    ~RepositoryManager() override = default;
 
     Q_DISABLE_COPY(RepositoryManager)
 
@@ -61,8 +58,7 @@ private:
         if (!m_repository) {
             QMutexLocker lock(&m_registry.mutex());
             if (!m_repository) {
-                m_repository = new ItemRepositoryType(m_name, m_mutex, &m_registry, m_version,
-                                                      const_cast<RepositoryManager*>(this));
+                m_repository = new ItemRepositoryType(m_name, m_mutex, &m_registry, m_version);
                 (*this)->setUnloadingEnabled(unloadingEnabled);
             }
         }
@@ -72,6 +68,7 @@ private:
     int m_version;
     ItemRepositoryRegistry& m_registry;
     Mutex* m_mutex;
+    mutable AbstractItemRepository* m_repository = nullptr;
 };
 }
 

@@ -8,6 +8,7 @@
 #include "identifier.h"
 #include "serialization/itemrepository.h"
 #include "serialization/itemrepositoryreferencecounting.h"
+#include <serialization/repositorymanager.h>
 #include "types/typeutils.h"
 #include <typeinfo>
 #include "types/typealiastype.h"
