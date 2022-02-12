@@ -250,10 +250,6 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(bool recreate)
 {
     QMutexLocker lock(&m_mutex);
 
-    //lockForWriting creates a file, that prevents any other KDevelop instance from using the directory as it is.
-    //Instead, the other instance will try to delete the directory as well.
-    lockForWriting();
-
     bool result = QDir(m_path).removeRecursively();
     Q_ASSERT(result);
     Q_UNUSED(result);
