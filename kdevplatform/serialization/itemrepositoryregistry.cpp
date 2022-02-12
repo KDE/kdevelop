@@ -101,43 +101,29 @@ namespace KDevelop {
 class ItemRepositoryRegistryPrivate
 {
 public:
-    ItemRepositoryRegistry* m_owner;
-    bool m_shallDelete;
-    bool m_wasShutdown;
+    bool m_shallDelete = false;
+    bool m_wasShutdown = false;
     QString m_path;
     QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
     mutable QRecursiveMutex m_mutex;
 
-    explicit ItemRepositoryRegistryPrivate(ItemRepositoryRegistry* owner)
-        : m_owner(owner)
-        , m_shallDelete(false)
-        , m_wasShutdown(false)
-    {
-    }
+    /// @param path  A shared directory-path that the item-repositories are to be loaded from.
+    /// @note        Currently the given path must reference a hidden directory, just to make sure we're
+    ///              not accidentally deleting something important.
+    explicit ItemRepositoryRegistryPrivate(ItemRepositoryRegistry& owner, const QString& path);
 
     void lockForWriting();
     void unlockForWriting();
     void deleteDataDirectory(const QString& path, bool recreate = true);
-
-    /// @param path  A shared directory-path that the item-repositories are to be loaded from.
-    /// @returns     Whether the repository registry has been opened successfully.
-    ///              If @c false, then all registered repositories should have been deleted.
-    /// @note        Currently the given path must reference a hidden directory, just to make sure we're
-    ///              not accidentally deleting something important.
-    bool open(const QString& path);
 };
 
 //The global item-repository registry
 ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = nullptr;
 
 ItemRepositoryRegistry::ItemRepositoryRegistry(const QString& repositoryPath)
-    : d_ptr(new ItemRepositoryRegistryPrivate(this))
+    : d_ptr(new ItemRepositoryRegistryPrivate(*this, repositoryPath))
 {
-    Q_D(ItemRepositoryRegistry);
-
-    Q_ASSERT(!repositoryPath.isEmpty());
-    d->open(repositoryPath);
 }
 
 void ItemRepositoryRegistry::initialize(const QString& repositoryPath)
@@ -277,12 +263,9 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(const QString& path, boo
     }
 }
 
-bool ItemRepositoryRegistryPrivate::open(const QString& path)
+ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(ItemRepositoryRegistry& owner, const QString& path)
 {
-    QMutexLocker mlock(&m_mutex);
-    if (m_path == path) {
-        return true;
-    }
+    Q_ASSERT(!path.isEmpty());
 
     // Check if the repository shall be cleared
     if (shouldClear(path)) {
@@ -291,16 +274,6 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
     }
 
     QDir().mkpath(path);
-
-    for (auto it = m_repositories.constBegin(), end = m_repositories.constEnd(); it != end; ++it) {
-        auto* const repository = it.key();
-        std::scoped_lock repoLock(*repository);
-        if (!repository->open(path)) {
-            deleteDataDirectory(path);
-            qCritical() << "failed to open a repository";
-            abort();
-        }
-    }
 
     QFile f(path + QLatin1String("/Counters"));
     if (f.open(QIODevice::ReadOnly)) {
@@ -312,13 +285,11 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
             stream >> counterName;
             int counterValue;
             stream >> counterValue;
-            m_owner->customCounter(counterName, 0) = counterValue;
+            owner.customCounter(counterName, 0) = counterValue;
         }
     }
 
     m_path = path;
-
-    return true;
 }
 
 void ItemRepositoryRegistry::store()
