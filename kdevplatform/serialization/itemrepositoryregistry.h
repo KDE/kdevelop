@@ -29,6 +29,9 @@ class ItemRepositoryRegistryPrivate;
 class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry
 {
 public:
+    /// Closes all contained repositories.
+    /// @warning The current state is not stored to disk.
+    /// @note Currently the destructor is never invoked.
     ~ItemRepositoryRegistry();
 
     /**

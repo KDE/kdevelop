@@ -126,10 +126,6 @@ public:
     /// @note        Currently the given path must reference a hidden directory, just to make sure we're
     ///              not accidentally deleting something important.
     bool open(const QString& path);
-
-    /// Close all contained repositories.
-    /// @warning The current state is not stored to disk.
-    void close();
 };
 
 //The global item-repository registry
@@ -389,25 +385,16 @@ int ItemRepositoryRegistry::finalCleanup()
     return changed;
 }
 
-void ItemRepositoryRegistryPrivate::close()
+ItemRepositoryRegistry::~ItemRepositoryRegistry()
 {
-    QMutexLocker lock(&m_mutex);
+    Q_D(const ItemRepositoryRegistry);
 
-    for (auto it = m_repositories.constBegin(), end = m_repositories.constEnd(); it != end; ++it) {
+    for (auto it = d->m_repositories.cbegin(), end = d->m_repositories.cend(); it != end; ++it) {
         auto* const repository = it.key();
         std::scoped_lock repoLock(*repository);
         repository->close();
     }
 
-    m_path.clear();
-}
-
-ItemRepositoryRegistry::~ItemRepositoryRegistry()
-{
-    Q_D(ItemRepositoryRegistry);
-
-    QMutexLocker lock(&d->m_mutex);
-    d->close();
     for (QAtomicInt* counter : qAsConst(d->m_customCounters)) {
         delete counter;
     }
@@ -422,6 +409,8 @@ void ItemRepositoryRegistry::shutdown()
 
     // FIXME: we don't close since this can trigger crashes at shutdown
     //        since some items are still referenced, e.g. in static variables
+    // NOTE: ItemRepositoryRegistryPrivate::close() used to close all contained repositories and clear d->m_path
+    //       under d->m_mutex lock before its code was moved into ~ItemRepositoryRegistry().
 //   d->close();
 
     if (d->m_shallDelete) {
