@@ -267,7 +267,7 @@ ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(ItemRepositoryRegis
     // Check if the repository shall be cleared
     if (shouldClear(path)) {
         qCWarning(SERIALIZATION) << QStringLiteral("The data-repository at %1 has to be cleared.").arg(path);
-        deleteDataDirectory();
+        deleteDataDirectory(false);
     }
 
     QDir().mkpath(path);
