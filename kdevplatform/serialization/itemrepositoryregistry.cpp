@@ -115,7 +115,7 @@ public:
 
     void lockForWriting();
     void unlockForWriting();
-    void deleteDataDirectory(const QString& path, bool recreate = true);
+    void deleteDataDirectory(bool recreate = true);
 };
 
 //The global item-repository registry
@@ -190,7 +190,7 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
     if (!d->m_path.isEmpty()) {
         // Locking the repository is documented as the caller's responsibility.
         if (!repository->open(d->m_path)) {
-            d->deleteDataDirectory(d->m_path);
+            d->deleteDataDirectory();
             qCritical() << "failed to open a repository";
             abort();
         }
@@ -246,7 +246,7 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
 }
 
 //After calling this, the data-directory may be a new one
-void ItemRepositoryRegistryPrivate::deleteDataDirectory(const QString& path, bool recreate)
+void ItemRepositoryRegistryPrivate::deleteDataDirectory(bool recreate)
 {
     QMutexLocker lock(&m_mutex);
 
@@ -254,23 +254,24 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(const QString& path, boo
     //Instead, the other instance will try to delete the directory as well.
     lockForWriting();
 
-    bool result = QDir(path).removeRecursively();
+    bool result = QDir(m_path).removeRecursively();
     Q_ASSERT(result);
     Q_UNUSED(result);
     // Just recreate the directory then; leave old path (as it is dependent on appname and session only).
     if (recreate) {
-        QDir().mkpath(path);
+        QDir().mkpath(m_path);
     }
 }
 
 ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(ItemRepositoryRegistry& owner, const QString& path)
+    : m_path(path)
 {
     Q_ASSERT(!path.isEmpty());
 
     // Check if the repository shall be cleared
     if (shouldClear(path)) {
         qCWarning(SERIALIZATION) << QStringLiteral("The data-repository at %1 has to be cleared.").arg(path);
-        deleteDataDirectory(path);
+        deleteDataDirectory();
     }
 
     QDir().mkpath(path);
@@ -288,8 +289,6 @@ ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(ItemRepositoryRegis
             owner.customCounter(counterName, 0) = counterValue;
         }
     }
-
-    m_path = path;
 }
 
 void ItemRepositoryRegistry::store()
@@ -376,18 +375,18 @@ void ItemRepositoryRegistry::shutdown()
     Q_D(ItemRepositoryRegistry);
 
     QMutexLocker lock(&d->m_mutex);
-    QString path = d->m_path;
 
     // FIXME: we don't close since this can trigger crashes at shutdown
     //        since some items are still referenced, e.g. in static variables
     // NOTE: ItemRepositoryRegistryPrivate::close() used to close all contained repositories and clear d->m_path
     //       under d->m_mutex lock before its code was moved into ~ItemRepositoryRegistry().
+    //       If this closing is ever uncommented, d->m_path could be cleared after its use in the code below.
 //   d->close();
 
     if (d->m_shallDelete) {
-        d->deleteDataDirectory(path, false);
+        d->deleteDataDirectory(false);
     } else {
-        QFile::remove(path + QLatin1String("/crash_counter"));
+        QFile::remove(d->m_path + QLatin1String("/crash_counter"));
     }
 
     d->m_wasShutdown = true;
