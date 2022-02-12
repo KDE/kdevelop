@@ -47,7 +47,7 @@ public:
     void registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager);
 
     /// Remove a repository.
-    /// It will automatically be closed (if it was open).
+    /// @note Unregistering does not close @p repository.
     void unRegisterRepository(AbstractItemRepository* repository);
 
     /// @returns The path to item-repositories.

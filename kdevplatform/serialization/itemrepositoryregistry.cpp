@@ -260,10 +260,6 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
 
     QMutexLocker lock(&d->m_mutex);
     Q_ASSERT(d->m_repositories.contains(repository));
-    {
-        std::scoped_lock repoLock(*repository);
-        repository->close();
-    }
     d->m_repositories.remove(repository);
 }
 
