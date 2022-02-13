@@ -548,19 +548,23 @@ public:
             removed2 = m_indexEnvironmentInformations.remove(info->indexedTopContext().index());
         }
 
-        LockedItemRepository::write<EnvironmentInformationListItem>([&info](EnvironmentInformationListRepo& repo) {
-            //Remove it from the environment information lists if it was there
-            uint index = repo.findIndex(info->url());
+        LockedItemRepository::write<EnvironmentInformationListItem>(
+            [&info,
+             request = EnvironmentInformationListRequest(info->url())](EnvironmentInformationListRepo& repo) mutable {
+                // Remove it from the environment information lists if it was there
+                uint index = repo.findIndex(request);
 
-            if (index) {
-                EnvironmentInformationListItem item(*repo.itemFromIndex(index));
-                if (item.itemsList().removeOne(info->indexedTopContext().index())) {
-                    repo.deleteItem(index);
-                    if (!item.itemsList().isEmpty())
-                        repo.index(EnvironmentInformationListRequest(info->url(), item));
+                if (index) {
+                    EnvironmentInformationListItem item(*repo.itemFromIndex(index));
+                    if (item.itemsList().removeOne(info->indexedTopContext().index())) {
+                        repo.deleteItem(index);
+                        if (!item.itemsList().empty()) {
+                            request.m_item = &item;
+                            repo.index(request);
+                        }
+                    }
                 }
-            }
-        });
+            });
 
         LockedItemRepository::write<EnvironmentInformationItem>(
             [&info, removed, removed2](EnvironmentInformationRepo& repo) {
@@ -587,8 +591,9 @@ public:
             // First store all the possible indices into the KDevVarLengthArray, so we can process them without holding
             // a mutex locked
             LockedItemRepository::read<EnvironmentInformationListItem>(
-                [&topContextIndices, &url](const EnvironmentInformationListRepo& repo) {
-                    const EnvironmentInformationListItem* item = repo.findItem(url);
+                [&topContextIndices,
+                 request = EnvironmentInformationListRequest(url)](const EnvironmentInformationListRepo& repo) {
+                    const EnvironmentInformationListItem* item = repo.findItem(request);
                     if (item) {
                         FOREACH_FUNCTION(uint topContextIndex, item->items)
                         topContextIndices << topContextIndex;
@@ -752,8 +757,8 @@ public:
 
             //Access the data in the repository, so the bucket isn't unloaded
             const auto foundItem = LockedItemRepository::read<EnvironmentInformationListItem>(
-                [&](const EnvironmentInformationListRepo& repo) {
-                    return static_cast<bool>(repo.findItem(EnvironmentInformationListRequest(url)));
+                [request = EnvironmentInformationListRequest(url)](const EnvironmentInformationListRepo& repo) {
+                    return static_cast<bool>(repo.findItem(request));
                 });
             if (!foundItem) {
                 QMutexLocker chainLock(&m_chainsMutex);
@@ -1185,38 +1190,40 @@ private:
             }
         }
 
-        LockedItemRepository::write<EnvironmentInformationListItem>([&](EnvironmentInformationListRepo& repo) {
-            uint index = repo.findIndex(url);
+        LockedItemRepository::write<EnvironmentInformationListItem>(
+            [&, request = EnvironmentInformationListRequest(url)](EnvironmentInformationListRepo& repo) mutable {
+                uint index = repo.findIndex(request);
 
-            if (index) {
-                // We only handle adding items here, since we can never be sure whether everything is loaded
-                // Removal is handled directly in removeEnvironmentInformation
+                if (index) {
+                    // We only handle adding items here, since we can never be sure whether everything is loaded
+                    // Removal is handled directly in removeEnvironmentInformation
 
-                const EnvironmentInformationListItem* item = repo.itemFromIndex(index);
-                QSet<uint> oldItems;
-                FOREACH_FUNCTION(uint topContextIndex, item->items)
-                {
-                    oldItems.insert(topContextIndex);
-                    if (!newItems.contains(topContextIndex)) {
-                        newItems.insert(topContextIndex);
-                        newItem.itemsList().append(topContextIndex);
+                    const EnvironmentInformationListItem* item = repo.itemFromIndex(index);
+                    QSet<uint> oldItems;
+                    FOREACH_FUNCTION(uint topContextIndex, item->items)
+                    {
+                        oldItems.insert(topContextIndex);
+                        if (!newItems.contains(topContextIndex)) {
+                            newItems.insert(topContextIndex);
+                            newItem.itemsList().append(topContextIndex);
+                        }
                     }
+
+                    if (oldItems == newItems)
+                        return;
+
+                    /// Update/insert a new list
+                    repo.deleteItem(index); // Remove the previous item
                 }
 
-                if (oldItems == newItems)
-                    return;
+                Q_ASSERT(repo.findIndex(request) == 0);
 
-                /// Update/insert a new list
-                repo.deleteItem(index); // Remove the previous item
-            }
+                // Insert the new item
+                request.m_item = &newItem;
+                repo.index(request);
 
-            Q_ASSERT(repo.findIndex(EnvironmentInformationListRequest(url)) == 0);
-
-            // Insert the new item
-            repo.index(EnvironmentInformationListRequest(url, newItem));
-
-            Q_ASSERT(repo.findIndex(EnvironmentInformationListRequest(url)));
-        });
+                Q_ASSERT(repo.findIndex(EnvironmentInformationListRequest(url)));
+            });
     }
 
     //Loaded environment information. Protected by m_chainsMutex
