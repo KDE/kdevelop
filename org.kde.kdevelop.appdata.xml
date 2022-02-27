@@ -151,12 +151,10 @@
     <category>IDE</category>
   </categories>
   <releases>
+    <release version="5.7.211203" date="2022-03-03"/>
     <release version="5.7.211202" date="2022-02-03"/>
     <release version="5.7.211201" date="2022-01-06"/>
     <release version="5.7.211200" date="2021-12-09"/>
-    <!-- Note: KDE website infrastructure uses the appstream file from the master branch
-               to determine the last release, so this entry must always reflect the
-               last actual release -->
   </releases>
   <custom>
     <value key="KDE::irc">#kdevelop</value>
