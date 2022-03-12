@@ -1407,6 +1407,7 @@ GitPlugin::ExtendedState GitPlugin::parseGitState(const QStringRef& msg)
         case _pair(' ', ' '):
             ret = GitXX;
             break;
+        case _pair(' ','T'): // Typechange
         case _pair(' ','M'):
             ret = GitXM;
             break;
@@ -1419,6 +1420,7 @@ GitPlugin::ExtendedState GitPlugin::parseGitState(const QStringRef& msg)
         case _pair ( ' ','C' ) :
             ret = GitXC;
             break;
+        case _pair ( 'T',' ' ) : // Typechange
         case _pair ( 'M',' ' ) :
             ret = GitMX;
             break;
