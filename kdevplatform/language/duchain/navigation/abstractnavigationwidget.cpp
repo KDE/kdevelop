@@ -16,6 +16,9 @@
 #include <KLocalizedString>
 
 #include "../duchainlock.h"
+
+#include <util/widgetcolorizer.h>
+
 #include <debug.h>
 
 namespace {
@@ -84,13 +87,6 @@ void AbstractNavigationWidget::initBrowser(int height)
     Q_ASSERT(!d->m_browser);
     Q_UNUSED(height);
     d->m_browser = new QTextBrowser;
-
-    // since we can embed arbitrary HTML we have to make sure it stays readable by forcing a black-white palette
-    QPalette p;
-    p.setColor(QPalette::AlternateBase, Qt::white);
-    p.setColor(QPalette::Base, Qt::white);
-    p.setColor(QPalette::Text, Qt::black);
-    d->m_browser->setPalette(p);
 
     d->m_browser->setOpenLinks(false);
     d->m_browser->setOpenExternalLinks(false);
@@ -203,6 +199,8 @@ void AbstractNavigationWidget::update()
         }
 
         d->m_browser->setHtml(html);
+
+        WidgetColorizer::convertDocumentToDarkTheme(d->m_browser->document());
 
         d->m_currentText = html;
 

@@ -16,6 +16,7 @@ class QPainter;
 class QRect;
 class QPalette;
 class QTreeView;
+class QTextDocument;
 
 namespace KDevelop {
 
@@ -68,6 +69,11 @@ KDEVPLATFORMUTIL_EXPORT QColor colorForId(uint id, const QPalette& activePalette
  * files belonging to projects.
  */
 KDEVPLATFORMUTIL_EXPORT bool colorizeByProject();
+
+/**
+ * Convert colors in the @p doc to make them readable if the current palette is using a dark theme
+ */
+KDEVPLATFORMUTIL_EXPORT void convertDocumentToDarkTheme(QTextDocument* doc);
 }
 
 }

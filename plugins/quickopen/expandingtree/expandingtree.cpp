@@ -40,16 +40,18 @@ void ExpandingTree::drawRow(QPainter* painter, const QStyleOptionViewItem& optio
     if (eModel->isPartiallyExpanded(sourceIndex) != ExpandingWidgetModel::ExpansionType::NotExpanded) {
         QRect rect = eModel->partialExpandRect(sourceIndex);
         if (rect.isValid()) {
-            painter->fillRect(rect, QBrush(0xffffffff));
-
+            QStyleOption opt;
             QAbstractTextDocumentLayout::PaintContext ctx;
-            // since arbitrary HTML can be shown use a black on white color scheme here
-            ctx.palette = QPalette(Qt::black, Qt::white);
+
+            opt.rect = rect;
+            style()->drawPrimitive(QStyle::PE_FrameLineEdit, &opt, painter);
+
             ctx.clip = QRectF(0, 0, rect.width(), rect.height());
             painter->setViewTransformEnabled(true);
             painter->translate(rect.left(), rect.top());
 
             m_drawText.setHtml(eModel->partialExpandText(sourceIndex));
+            WidgetColorizer::convertDocumentToDarkTheme(&m_drawText);
             m_drawText.setPageSize(QSizeF(rect.width(), rect.height()));
             m_drawText.documentLayout()->draw(painter, ctx);
 
