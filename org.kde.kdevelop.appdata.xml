@@ -51,6 +51,7 @@
   <summary xml:lang="pl">Jest to w pełni funkcjonalne, z możliwością rozszerzenia przy użyciu wtyczek, zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania.</summary>
   <summary xml:lang="pt">IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação</summary>
   <summary xml:lang="pt-BR">IDE repleto de funcionalidades e expansível através de plugins, para C/C++ e outras linguagens de programação.</summary>
+  <summary xml:lang="ru">Интегрированная среда разработки с широкими функциональными возможностями и поддержкой расширений для C/C++ и других языков программирования</summary>
   <summary xml:lang="sk">Plne funkčné, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky</summary>
   <summary xml:lang="sl">Zmogljivo integrirano razvojno okolje za C/C++ in druge programske jezike, ki je razširljivo z vstavki.</summary>
   <summary xml:lang="sv">Funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk</summary>
@@ -76,6 +77,7 @@
     <p xml:lang="pl">KDevelop to darmowe i otwartoźródłowe zintegrowane środkowisko programistyczne (IDE).</p>
     <p xml:lang="pt">O KDevelop é um ambiente de desenvolvimento integrado (IDE) livre e em código aberto.</p>
     <p xml:lang="pt-BR">Ambiente de Desenvolvimento Integrado (IDE) em Software Livre e Código Aberto.</p>
+    <p xml:lang="ru">KDevelop — свободная интегрированная среда разработки с открытым исходным кодом.</p>
     <p xml:lang="sk">KDevelop je slobodné a otvorené integrované vývojové prostredie (IDE).</p>
     <p xml:lang="sl">KDevelop je prosto in odprtokodno integrirano razvojno okolje  (IDE).</p>
     <p xml:lang="sv">KDevelop är en fri integrerad utvecklingsmiljö (IDE) med öppen källkod för olika programvaruprojekt.</p>
@@ -100,6 +102,7 @@
     <p xml:lang="pl">Zapewnia możliwość edycji, poruszania się po projekcie i diagnozowania błędów dla kilku języków programistycznych, a także integrację z wieloma systemami budowania i zarządzania wersjami poprzez wbudowaną architekturę wtyczek.</p>
     <p xml:lang="pt">Oferece capacidades de edição, navegação e depuração para diversas linguagens de programação, assim como a integração com diversos sistemas de compilação e de controlo de versões, usando uma arquitectura baseada em 'plugins'.</p>
     <p xml:lang="pt-BR">Oferece capacidades de edição, navegação e depuração para diversas linguagens de programação, assim como a integração com diversos sistemas de compilação e de controle de versões, usando uma arquitetura baseada em plugins.</p>
+    <p xml:lang="ru">В программе предусмотрены возможности редактирования, навигации и отладки для нескольких языков программирования, а также интеграция с различными системами сборки и управления версиями. Используется архитектура с расширениями.</p>
     <p xml:lang="sk">Poskytuje funkcie editovania, navigácie a ladenia pre niektoré programovacie jazyky, ako aj integráciu s viacerými zostavovacími systémami a systémami na správu verzií pomocou pluginovej architektúry.</p>
     <p xml:lang="sl">S pomočjo vstavkov omogoča urejanje, krmarjenje in razhroščevanje za številne programske jezike, hkrati pa ponuja podporo več sistemom za izgradnjo in nadzor različic.</p>
     <p xml:lang="sv">Den tillhandahåller redigerings-, navigerings- och avlusningsfunktioner för flera olika programspråk, samt integrering med ett flertal byggsystem och versionskontrollsystem, med användning av en insticksbaserad arkitektur.</p>
@@ -124,6 +127,7 @@
     <p xml:lang="pl">KDevelop ma silniki do przetwarzania składni C, C++ oraz Javascript/QML, a także inne jak np. PHP lub Python dodawane przy użyciu zewnętrznych wtyczek.</p>
     <p xml:lang="pt">O KDevelop tem infra-estruturas de processamento para C, C++ e Javascript/QML, com mais 'plugins' externos que suportam p.ex. PHP ou Python.</p>
     <p xml:lang="pt-BR">O KDevelop tem infraestruturas de processamento para C, C++ e Javascript/QML, com mais plugins externos que tem suporte a, por exemplo, PHP ou Python.</p>
+    <p xml:lang="ru">В KDevelop предусмотрены модули обработки кода на языках C, C++ и Javascript/QML и внешние расширения для поддержки кода на других языках программирования, например PHP и Python.</p>
     <p xml:lang="sk">KDevelop má backendy parsera pre C, C++ a Javascript/QML, s ďalšími externými pluginmi podporujúcimi napr. PHP alebo Python.</p>
     <p xml:lang="sl">KDevelop vsebuje razčlenjevalna zaledja za C, C++ in Javascript/QML, zunanji vstavki pa podpirajo tudi npr. PHP ali Python.</p>
     <p xml:lang="sv">KDevelop har gränssnitt för tolkning av C, C++ och Javascript/QML, med ytterligare externa insticksprogram som stöder t.ex. PHP eller Python.</p>
