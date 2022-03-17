@@ -55,6 +55,7 @@
         "Description[pl]": "Wplata obsługę zarządzania wersjami do projektów",
         "Description[pt]": "Este 'plugin' oferece a integração entre os projectos e a sua infra-estrutura de controlo de versões",
         "Description[pt_BR]": "Este plugin fornece a integração entre os projetos e sua infraestrutura de VCS",
+        "Description[ru]": "Это расширение обеспечивает интеграцию проектов с инфраструктурой VCS",
         "Description[sk]": "Tento plugin poskytuje integráciu medzi projektami a ich VCS infraštruktúrou",
         "Description[sl]": "Ta vstavek ponuja most med projekti in njihovo infrastrukturo nadzora različic",
         "Description[sv]": "Det här insticksprogrammet tillhandahåller integrering mellan projekten och deras VCS infrastruktur",

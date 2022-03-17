@@ -21,6 +21,7 @@
         "Description[pl]": "Udostępnia interfejs do GDB, programu diagnostycznego dla C, C++ i innych języków.",
         "Description[pt]": "Este 'plugin' oferece uma interface para o GDB, um depurador de código para C, C++, entre outros.",
         "Description[pt_BR]": "Este plugin oferece uma interface para o GDB, um depurador em nível de código-fonte para C, C++, entre outros.",
+        "Description[ru]": "Это расширение предоставляет интерфейс к GDB, отладчику исходного кода для C, C++ и других языков",
         "Description[sk]": "Tento modul poskytuje rozhranie pre GDB, zdrojový debuger pre C, C++ a ďalšie.",
         "Description[sl]": "Ta vstavek prinaša začelje za GDB, razhroščevalnik na ravni izvorne kode za C, C++ in več.",
         "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till GDB, en källkodsavlusare för C, C++ med mera.",

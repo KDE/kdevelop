@@ -19,6 +19,7 @@
         "Description[pl]": "Określa wygląd stosowany do formatowania kodu źródłowego w projekcie.",
         "Description[pt]": "Configure o estilo que deverá ser usado na formatação do código-fonte num projecto.",
         "Description[pt_BR]": "Configura o estilo que deverá ser usado na formatação do código-fonte em um projeto.",
+        "Description[ru]": "Настройка стиля, который будет использоваться для форматирования исходного кода в проекте",
         "Description[sk]": "Nastavte, aký štýl sa má použiť na formátovanie zdrojového kódu v projekte.",
         "Description[sl]": "Nastavite, kateri slog naj bo v projektu uporabljen za oblikovanje izvorne kode.",
         "Description[sv]": "Anpassa vilken stil som ska användas för att formatera källkoden i ett projekt.",
