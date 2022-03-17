@@ -20,6 +20,7 @@
         "Description[pl]": "Udostępnia widok wyniku dla innych wtyczek, aby pokazywały np. dane z kompilatora.",
         "Description[pt]": "Oferece uma área de texto para os outros 'plugins' usarem, para apresentar algumas coisas, como as mensagens do compilador.",
         "Description[pt_BR]": "Oferece uma área de resultados de texto para os outros plugins usarem, de modo a mostrar coisas como as mensagens do compilador.",
+        "Description[ru]": "Предоставляет другим расширениям средство вывода текста для показа, например сообщений компилятора",
         "Description[sk]": "Poskytuje nástroj textového výstupu na použitie pre iné doplnky, napríklad na zobrazenie správ prekladača.",
         "Description[sl]": "Drugim vstavkom ponuja okno za prikaz besedilnega izhoda, na primer za sporočila izgrajevalnika.",
         "Description[sv]": "Tillhandahåller en verktygsvy för textutmatning som andra insticksprogram kan använda för att visa saker som kompilatormeddelanden.",

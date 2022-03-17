@@ -19,6 +19,7 @@
         "Description[pl]": "Przełącza pomiędzy stowarzyszonymi dokumentami takimi jak pliki implementacji i nagłówków.",
         "Description[pt]": "Permite a alternância entre os documentos associados, como o ficheiro de implementação ou o de inclusão.",
         "Description[pt_BR]": "Permite a mudança de documentos associados, como os arquivos de implementação e de inclusão.",
+        "Description[ru]": "Позволяет переключаться между связанными документами, например файлом реализации и заголовочным файлом",
         "Description[sk]": "Umožňuje prepínanie medzi dokumentmi priateľov ako súbor implementácie a hlavičky.",
         "Description[sl]": "Omogoča preklapljanje med prijateljskimi dokumenti kot na primer izvedbo in datoteko glave.",
         "Description[sv]": "Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.",

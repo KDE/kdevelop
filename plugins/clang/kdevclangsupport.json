@@ -20,6 +20,7 @@
         "Description[pl]": "Obsługa języka C/C++ (oparta na Clang)",
         "Description[pt]": "Suporte para a Linguagem C/C++ (baseado no Clang)",
         "Description[pt_BR]": "Suporte à linguagem C/C++ (baseado no Clang)",
+        "Description[ru]": "Поддержка языка C/C++ (на основе Clang)",
         "Description[sk]": "Podpora jazyka C/C++ (založená na triedach)",
         "Description[sl]": "Podpora jeziku C/C++ (temelječa na Clang)",
         "Description[sv]": "C/C++ språkstöd (Clang-baserat)",

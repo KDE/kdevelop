@@ -53,6 +53,7 @@
         "Description[pl]": "Określa uwzględniane i wykluczane pliki i katalogi w projekcie.",
         "Description[pt]": "Configurar os ficheiros ou pastas, dentro da pasta do projecto, que deverão ser incluídos ou excluídos.",
         "Description[pt_BR]": "Configura os arquivos e pastas, dentro da pasta do projeto, que devem ser incluídos ou excluídos.",
+        "Description[ru]": "Определяет, какие файлы и папки внутри папки проекта будут включены или исключены из него",
         "Description[sk]": "Nastaviť, ktoré súbory a priečinky v priečinku projektu majú byť zahrnuté alebo vylúčené.",
         "Description[sl]": "Nastavi katere datoteke in mape znotraj mape projekta naj bodo vključene ali izključene.",
         "Description[sv]": "Anpassa vilka filer och kataloger inne i projektkatalogen som ska inkluderas eller exkluderas.",
