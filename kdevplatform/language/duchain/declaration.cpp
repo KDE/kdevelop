@@ -179,7 +179,7 @@ QByteArray Declaration::comment() const
     if (!d->m_comment)
         return QByteArray();
 
-    return LockedItemRepository::op<DeclarationComment>([d](const Repositories::StringRepository& repo) {
+    return LockedItemRepository::read<DeclarationComment>([d](const Repositories::StringRepository& repo) {
         return Repositories::arrayFromItem(repo.itemFromIndex(d->m_comment));
     });
 }
@@ -195,7 +195,7 @@ void Declaration::setComment(const QByteArray& str)
     const auto request = Repositories::StringRepositoryItemRequest(
         str.constData(), IndexedString::hashString(str.constData(), str.length()), str.length());
 
-    d->m_comment = LockedItemRepository::op<DeclarationComment>(
+    d->m_comment = LockedItemRepository::write<DeclarationComment>(
         [&](Repositories::StringRepository& repo) { return repo.index(request); });
 }
 

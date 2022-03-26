@@ -137,7 +137,7 @@ class ItemRepositoryFor<IndexedInstantiationInformation>
 
 uint standardInstantiationInformationIndex()
 {
-    static uint idx = LockedItemRepository::op<IndexedInstantiationInformation>(
+    static uint idx = LockedItemRepository::write<IndexedInstantiationInformation>(
         [standardInstantiationInformation = InstantiationInformation()](InstantiationInformationRepository& repo) {
             return repo.index(standardInstantiationInformation);
         });
@@ -196,13 +196,13 @@ const InstantiationInformation& IndexedInstantiationInformation::information() c
 {
     auto index = m_index ? m_index : standardInstantiationInformationIndex();
     // TODO: it's probably unsafe to return the const& here, as the repo won't be locked during access anymore
-    return *LockedItemRepository::op<IndexedInstantiationInformation>(
-        [index](InstantiationInformationRepository& repo) { return repo.itemFromIndex(index); });
+    return *LockedItemRepository::read<IndexedInstantiationInformation>(
+        [index](const InstantiationInformationRepository& repo) { return repo.itemFromIndex(index); });
 }
 
 IndexedInstantiationInformation InstantiationInformation::indexed() const
 {
-    auto index = LockedItemRepository::op<IndexedInstantiationInformation>(
+    auto index = LockedItemRepository::write<IndexedInstantiationInformation>(
         [this](InstantiationInformationRepository& repo) { return repo.index(*this); });
     return IndexedInstantiationInformation(index);
 }

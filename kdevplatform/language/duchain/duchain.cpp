@@ -524,8 +524,9 @@ public:
     void addEnvironmentInformation(ParsingEnvironmentFilePointer info)
     {
         Q_ASSERT(!findInformation(info->indexedTopContext().index()));
-        Q_ASSERT(LockedItemRepository::op<EnvironmentInformationItem>(
-            [&](EnvironmentInformationRepo& repo) { return repo.findIndex(info->indexedTopContext().index()) == 0; }));
+        Q_ASSERT(LockedItemRepository::read<EnvironmentInformationItem>([&](const EnvironmentInformationRepo& repo) {
+            return repo.findIndex(info->indexedTopContext().index()) == 0;
+        }));
 
         QMutexLocker lock(&m_chainsMutex);
         m_fileEnvironmentInformations.insert(info->url(), info);
@@ -549,7 +550,7 @@ public:
             removed2 = m_indexEnvironmentInformations.remove(info->indexedTopContext().index());
         }
 
-        LockedItemRepository::op<EnvironmentInformationListItem>([&info](EnvironmentInformationListRepo& repo) {
+        LockedItemRepository::write<EnvironmentInformationListItem>([&info](EnvironmentInformationListRepo& repo) {
             //Remove it from the environment information lists if it was there
             uint index = repo.findIndex(info->url());
 
@@ -563,7 +564,7 @@ public:
             }
         });
 
-        LockedItemRepository::op<EnvironmentInformationItem>(
+        LockedItemRepository::write<EnvironmentInformationItem>(
             [&info, removed, removed2](EnvironmentInformationRepo& repo) {
                 uint index = repo.findIndex(info->indexedTopContext().index());
                 if (index) {
@@ -587,8 +588,8 @@ public:
             KDevVarLengthArray<uint> topContextIndices;
             // First store all the possible indices into the KDevVarLengthArray, so we can process them without holding
             // a mutex locked
-            LockedItemRepository::op<EnvironmentInformationListItem>(
-                [&topContextIndices, &url](EnvironmentInformationListRepo& repo) {
+            LockedItemRepository::read<EnvironmentInformationListItem>(
+                [&topContextIndices, &url](const EnvironmentInformationListRepo& repo) {
                     const EnvironmentInformationListItem* item = repo.findItem(url);
                     if (item) {
                         FOREACH_FUNCTION(uint topContextIndex, item->items)
@@ -710,7 +711,7 @@ public:
             for (const ParsingEnvironmentFilePointer& file : qAsConst(check)) {
                 EnvironmentInformationRequest req(file.data());
 
-                LockedItemRepository::op<EnvironmentInformationItem>([&](EnvironmentInformationRepo& repo) {
+                LockedItemRepository::write<EnvironmentInformationItem>([&](EnvironmentInformationRepo& repo) {
                     uint index = repo.findIndex(req);
 
                     if (file->d_func()->isDynamic()) {
@@ -752,10 +753,10 @@ public:
             storeInformationList(url);
 
             //Access the data in the repository, so the bucket isn't unloaded
-            const auto foundItem
-                = LockedItemRepository::op<EnvironmentInformationListItem>([&](EnvironmentInformationListRepo& repo) {
-                      return static_cast<bool>(repo.findItem(EnvironmentInformationListRequest(url)));
-                  });
+            const auto foundItem = LockedItemRepository::read<EnvironmentInformationListItem>(
+                [&](const EnvironmentInformationListRepo& repo) {
+                    return static_cast<bool>(repo.findItem(EnvironmentInformationListRequest(url)));
+                });
             if (!foundItem) {
                 QMutexLocker chainLock(&m_chainsMutex);
                 qCDebug(LANGUAGE) << "Did not find stored item for" << url.str()
@@ -1038,8 +1039,8 @@ unloadContexts:
 
         // Step two: Check if it is on disk, and if is, load it
         //  TODO: this looks pretty dubious, shouldn't we keep the repo locked while operating on the item?
-        const auto item = LockedItemRepository::op<EnvironmentInformationItem>(
-            [req = EnvironmentInformationRequest(topContextIndex)](EnvironmentInformationRepo& repo) {
+        const auto item = LockedItemRepository::read<EnvironmentInformationItem>(
+            [req = EnvironmentInformationRequest(topContextIndex)](const EnvironmentInformationRepo& repo) {
                 return repo.findItem(req);
             });
         if (!item) {
@@ -1088,7 +1089,7 @@ unloadContexts:
         qCDebug(LANGUAGE) << "cleaning top-contexts";
         CleanupListVisitor visitor;
         uint startPos = 0;
-        LockedItemRepository::op<EnvironmentInformationItem>(
+        LockedItemRepository::write<EnvironmentInformationItem>(
             [&visitor](EnvironmentInformationRepo& repo) { repo.visitAllItems(visitor); });
 
         int checkContextsCount = maxFinalCleanupCheckContexts;
@@ -1186,7 +1187,7 @@ private:
             }
         }
 
-        LockedItemRepository::op<EnvironmentInformationListItem>([&](EnvironmentInformationListRepo& repo) {
+        LockedItemRepository::write<EnvironmentInformationListItem>([&](EnvironmentInformationListRepo& repo) {
             uint index = repo.findIndex(url);
 
             if (index) {

@@ -2295,7 +2295,16 @@ class ItemRepositoryFor;
 
 struct LockedItemRepository {
     template <typename Item, typename Op>
-    static auto op(Op&& op)
+    static auto read(Op&& op)
+    {
+        const auto& repo = ItemRepositoryFor<Item>::repo();
+
+        QMutexLocker lock(repo.mutex());
+        return op(repo);
+    }
+
+    template <typename Item, typename Op>
+    static auto write(Op&& op)
     {
         auto& repo = ItemRepositoryFor<Item>::repo();
 

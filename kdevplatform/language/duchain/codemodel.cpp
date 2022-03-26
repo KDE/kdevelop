@@ -208,7 +208,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
-    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::write<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -275,7 +275,7 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     newItem.kind = kind;
     newItem.referenceCount = 1;
 
-    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::write<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -309,7 +309,7 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     item.file = file;
     CodeModelRequestItem request(item);
 
-    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::write<CodeModel>([&](CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -368,7 +368,7 @@ void CodeModel::items(const IndexedString& file, uint& count, const CodeModelIte
     item.file = file;
     CodeModelRequestItem request(item);
 
-    LockedItemRepository::op<CodeModel>([&](CodeModelRepo& repo) {
+    LockedItemRepository::read<CodeModel>([&](const CodeModelRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {

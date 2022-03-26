@@ -183,7 +183,7 @@ void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaratio
     item.definitionsList().append(definition);
     DefinitionsRequestItem request(item);
 
-    LockedItemRepository::op<DefinitionsItem>([&](DefinitionsRepo& repo) {
+    LockedItemRepository::write<DefinitionsItem>([&](DefinitionsRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -209,7 +209,7 @@ void Definitions::removeDefinition(const DeclarationId& id, const IndexedDeclara
     item.declaration = id;
     DefinitionsRequestItem request(item);
 
-    LockedItemRepository::op<DefinitionsItem>([&](DefinitionsRepo& repo) {
+    LockedItemRepository::write<DefinitionsItem>([&](DefinitionsRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -237,7 +237,7 @@ KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const Declaratio
     item.declaration = id;
     DefinitionsRequestItem request(item);
 
-    LockedItemRepository::op<DefinitionsItem>([&](const DefinitionsRepo& repo) {
+    LockedItemRepository::read<DefinitionsItem>([&](const DefinitionsRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -253,6 +253,6 @@ KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const Declaratio
 void Definitions::dump(const QTextStream& out)
 {
     DefinitionsVisitor v(this, out);
-    LockedItemRepository::op<DefinitionsItem>([&](const DefinitionsRepo& repo) { repo.visitAllItems(v); });
+    LockedItemRepository::read<DefinitionsItem>([&](const DefinitionsRepo& repo) { repo.visitAllItems(v); });
 }
 }

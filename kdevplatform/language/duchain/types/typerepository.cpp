@@ -117,7 +117,7 @@ uint TypeRepository::indexForType(const AbstractType::Ptr& input)
     if (!input)
         return 0;
 
-    uint i = LockedItemRepository::op<AbstractTypeData>(
+    uint i = LockedItemRepository::write<AbstractTypeData>(
         [request = AbstractTypeDataRequest(*input)](TypeItemRepository& repo) { return repo.index(request); });
 #ifdef DEBUG_TYPE_REPOSITORY
     AbstractType::Ptr t = typeForIndex(i);
@@ -139,7 +139,7 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index)
     if (index == 0)
         return AbstractType::Ptr();
 
-    return LockedItemRepository::op<AbstractTypeData>([index](TypeItemRepository& repo) {
+    return LockedItemRepository::read<AbstractTypeData>([index](const TypeItemRepository& repo) {
         auto item = repo.itemFromIndex(index);
         return AbstractType::Ptr(TypeSystem::self().create(const_cast<AbstractTypeData*>(item)));
     });
@@ -150,7 +150,7 @@ void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* m
     if (!index)
         return;
 
-    LockedItemRepository::op<AbstractTypeData>([&](TypeItemRepository& repo) {
+    LockedItemRepository::write<AbstractTypeData>([&](TypeItemRepository& repo) {
         AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
         Q_ASSERT(data);
         if (manager)
@@ -165,7 +165,7 @@ void TypeRepository::decreaseReferenceCount(uint index, ReferenceCountManager* m
     if (!index)
         return;
 
-    LockedItemRepository::op<AbstractTypeData>([&](TypeItemRepository& repo) {
+    LockedItemRepository::write<AbstractTypeData>([&](TypeItemRepository& repo) {
         AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
         Q_ASSERT(data);
         Q_ASSERT(data->refCount > 0);

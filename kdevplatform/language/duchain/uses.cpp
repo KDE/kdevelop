@@ -138,7 +138,7 @@ void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
     item.usesList().append(use);
     UsesRequestItem request(item);
 
-    LockedItemRepository::op<UsesItem>([&](UsesRepo& repo) {
+    LockedItemRepository::write<UsesItem>([&](UsesRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -164,7 +164,7 @@ void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
     item.declaration = id;
     UsesRequestItem request(item);
 
-    LockedItemRepository::op<UsesItem>([&](UsesRepo& repo) {
+    LockedItemRepository::write<UsesItem>([&](UsesRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -189,7 +189,7 @@ bool Uses::hasUses(const DeclarationId& id) const
     UsesItem item;
     item.declaration = id;
 
-    return LockedItemRepository::op<UsesItem>(
+    return LockedItemRepository::read<UsesItem>(
         [&item](const UsesRepo& repo) { return static_cast<bool>(repo.findIndex(item)); });
 }
 
@@ -201,7 +201,7 @@ KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) cons
     item.declaration = id;
     UsesRequestItem request(item);
 
-    LockedItemRepository::op<UsesItem>([&](const UsesRepo& repo) {
+    LockedItemRepository::read<UsesItem>([&](const UsesRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {

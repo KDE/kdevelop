@@ -139,7 +139,7 @@ void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use
     item.importersList().append(use);
     ImportersRequestItem request(item);
 
-    LockedItemRepository::op<ImportersItem>([&](ImportersRepo& repo) {
+    LockedItemRepository::write<ImportersItem>([&](ImportersRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -165,7 +165,7 @@ void Importers::removeImporter(const DeclarationId& id, const IndexedDUContext& 
     item.declaration = id;
     ImportersRequestItem request(item);
 
-    LockedItemRepository::op<ImportersItem>([&](ImportersRepo& repo) {
+    LockedItemRepository::write<ImportersItem>([&](ImportersRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -193,7 +193,7 @@ KDevVarLengthArray<IndexedDUContext> Importers::importers(const DeclarationId& i
     item.declaration = id;
     ImportersRequestItem request(item);
 
-    LockedItemRepository::op<ImportersItem>([&](ImportersRepo& repo) {
+    LockedItemRepository::read<ImportersItem>([&](const ImportersRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
