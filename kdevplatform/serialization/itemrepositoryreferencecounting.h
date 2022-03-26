@@ -68,9 +68,7 @@ struct ItemRepositoryReferenceCounting {
     static void moveIndex(Item* lhs, unsigned int& lhs_index, Item* rhs, unsigned int& rhs_index,
                           unsigned int emptyIndex)
     {
-        if (lhs == rhs) {
-            return;
-        }
+        Q_ASSERT_X(lhs != rhs, Q_FUNC_INFO, "Self-assignment is not valid for move assignment.");
 
         const auto lhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(lhs);
         const auto rhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(rhs);
