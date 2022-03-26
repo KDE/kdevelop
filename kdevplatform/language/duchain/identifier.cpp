@@ -637,11 +637,12 @@ void Identifier::makeConstant() const
     if (m_index)
         return;
 
-    LockedItemRepository::write<IndexedIdentifier>([&](IdentifierRepository& repo) {
-        m_index = repo.index(IdentifierItemRequest(*dd));
-        delete dd;
-        cd = repo.itemFromIndex(m_index);
-    });
+    LockedItemRepository::write<IndexedIdentifier>(
+        [&, request = IdentifierItemRequest(*dd)](IdentifierRepository& repo) {
+            m_index = repo.index(request);
+            delete dd;
+            cd = repo.itemFromIndex(m_index);
+        });
 }
 
 void Identifier::prepareWrite()
@@ -664,9 +665,10 @@ bool QualifiedIdentifier::inRepository() const
     if (m_index)
         return true;
 
-    return LockedItemRepository::read<IndexedQualifiedIdentifier>([&](const QualifiedIdentifierRepository& repo) {
-        return static_cast<bool>(repo.findIndex(QualifiedIdentifierItemRequest(*dd)));
-    });
+    return LockedItemRepository::read<IndexedQualifiedIdentifier>(
+        [&, request = QualifiedIdentifierItemRequest(*dd)](const QualifiedIdentifierRepository& repo) {
+            return static_cast<bool>(repo.findIndex(request));
+        });
 }
 
 QualifiedIdentifier::QualifiedIdentifier(uint index)
@@ -1140,11 +1142,12 @@ void QualifiedIdentifier::makeConstant() const
     if (m_index)
         return;
 
-    LockedItemRepository::write<IndexedQualifiedIdentifier>([&](QualifiedIdentifierRepository& repo) {
-        m_index = repo.index(QualifiedIdentifierItemRequest(*dd));
-        delete dd;
-        cd = repo.itemFromIndex(m_index);
-    });
+    LockedItemRepository::write<IndexedQualifiedIdentifier>(
+        [&, request = QualifiedIdentifierItemRequest(*dd)](QualifiedIdentifierRepository& repo) {
+            m_index = repo.index(request);
+            delete dd;
+            cd = repo.itemFromIndex(m_index);
+        });
 }
 
 void QualifiedIdentifier::prepareWrite()
