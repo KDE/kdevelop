@@ -97,7 +97,7 @@ private:
 
     QRegExp m_regExp;
     QString m_regExpSimple;
-    GrepOutputModel *m_outputModel;
+    QPointer<GrepOutputModel> m_outputModel;
 
     enum {
         WorkCollectFiles,
