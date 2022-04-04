@@ -197,29 +197,17 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
     auto* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
-    const int magicModifier = Qt::Key_Alt;
 
     KTextEditor::View* view = viewFromWidget(widget);
 
     //Eventually start key-browsing
-    if (keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey &&
+    if (keyEvent && (keyEvent->key() == browseKey) && !m_browsingByKey &&
         keyEvent->type() == QEvent::KeyPress) {
         m_delayedBrowsingTimer->start(); // always start the timer, to get consistent behavior regarding the ALT key and the menu activation
         m_browsingByKey = keyEvent->key();
 
         if (!view) {
             return false;
-        }
-
-        if (keyEvent->key() == magicModifier) {
-            if (qobject_cast<KTextEditor::CodeCompletionInterface*>(view) &&
-                qobject_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive()) {
-                //Completion is active.
-                avoidMenuAltFocus();
-                m_delayedBrowsingTimer->stop();
-            } else {
-                m_browsingStartedInView = view;
-            }
         }
     }
 
