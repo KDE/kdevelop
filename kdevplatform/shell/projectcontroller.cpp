@@ -559,12 +559,12 @@ void ProjectController::setupActions()
     d->m_openProject = action = ac->addAction( QStringLiteral("project_open") );
     action->setText(i18nc( "@action", "Open / Import Project..." ) );
     action->setToolTip( i18nc( "@info:tooltip", "Open or import project" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "Open an existing KDevelop 4 project or import "
-                                                    "an existing Project into KDevelop 4. This entry "
-                                                    "allows one to select a KDevelop4 project file "
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Open an existing KDevelop project or import "
+                                                    "an existing Project into KDevelop. This entry "
+                                                    "allows one to select a KDevelop project file "
                                                     "or an existing directory to open it in KDevelop. "
                                                     "When opening an existing directory that does "
-                                                    "not yet have a KDevelop4 project file, the file "
+                                                    "not yet have a KDevelop project file, the file "
                                                     "will be created." ) );
     action->setIcon(QIcon::fromTheme(QStringLiteral("project-open")));
     connect(action, &QAction::triggered, this, [&] { openProject(); });
@@ -574,7 +574,7 @@ void ProjectController::setupActions()
     action->setIcon( QIcon::fromTheme( QStringLiteral("edit-download") ) );
     action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
-                                                    "and then imports it into KDevelop 4." ) );
+                                                    "and then imports it into KDevelop." ) );
 //     action->setIcon(QIcon::fromTheme("project-open"));
     connect( action, &QAction::triggered, this, &ProjectController::fetchProject );
 
