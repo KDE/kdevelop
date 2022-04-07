@@ -10,5 +10,8 @@ Dependencies:
     'frameworks/threadweaver': '@stable'
     'sdk/libkomparediff2': '@stable'
     'utilities/okteta': '@stable'
-    'plasma/libksysguard': '@stable'
     'kdevelop/kdevelop-pg-qt': '@stable'
+
+- 'on': ['Linux', 'FreeBSD']
+  'require':
+    'plasma/libksysguard': '@stable'
