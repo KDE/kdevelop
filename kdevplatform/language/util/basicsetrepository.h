@@ -171,7 +171,7 @@ public:
 
     uint m_hash;
     SetDataRepository& repository;
-    mutable BasicSetRepository* setRepository; //May be zero when no notifications are wanted
+    BasicSetRepository* setRepository; //May be zero when no notifications are wanted
     mutable bool m_created;
 };
 
@@ -254,7 +254,7 @@ private:
     friend class BasicSetRepository;
 
     uint m_tree = 0;
-    mutable BasicSetRepository* m_repository = nullptr;
+    BasicSetRepository* m_repository = nullptr;
 };
 
 /**
