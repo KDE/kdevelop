@@ -540,23 +540,25 @@ public:
     {
         info->makeDynamic(); //By doing this, we make sure the data is actually being destroyed in the destructor
 
+        const auto infoIndex = info->indexedTopContext().index();
+
         bool removed = false;
         bool removed2 = false;
         {
             QMutexLocker lock(&m_chainsMutex);
             removed = m_fileEnvironmentInformations.remove(info->url(), info);
-            removed2 = m_indexEnvironmentInformations.remove(info->indexedTopContext().index());
+            removed2 = m_indexEnvironmentInformations.remove(infoIndex);
         }
 
         LockedItemRepository::write<EnvironmentInformationListItem>(
-            [&info,
+            [infoIndex,
              request = EnvironmentInformationListRequest(info->url())](EnvironmentInformationListRepo& repo) mutable {
                 // Remove it from the environment information lists if it was there
                 uint index = repo.findIndex(request);
 
                 if (index) {
                     EnvironmentInformationListItem item(*repo.itemFromIndex(index));
-                    if (item.itemsList().removeOne(info->indexedTopContext().index())) {
+                    if (item.itemsList().removeOne(infoIndex)) {
                         repo.deleteItem(index);
                         if (!item.itemsList().empty()) {
                             request.m_item = &item;
@@ -567,8 +569,8 @@ public:
             });
 
         LockedItemRepository::write<EnvironmentInformationItem>(
-            [&info, removed, removed2](EnvironmentInformationRepo& repo) {
-                uint index = repo.findIndex(info->indexedTopContext().index());
+            [infoIndex, removed, removed2](EnvironmentInformationRepo& repo) {
+                uint index = repo.findIndex(infoIndex);
                 if (index) {
                     repo.deleteItem(index);
                 }
@@ -578,7 +580,7 @@ public:
                 Q_ASSERT(index || (removed && removed2));
             });
 
-        Q_ASSERT(!findInformation(info->indexedTopContext().index()));
+        Q_ASSERT(!findInformation(infoIndex));
     }
 
     ///m_chainsMutex should _not_ be locked, because this may trigger I/O
