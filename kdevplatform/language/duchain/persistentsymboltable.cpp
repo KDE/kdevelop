@@ -324,6 +324,8 @@ struct DeclarationCacheVisitor
     KDevVarLengthArray<IndexedDeclaration>& cache;
 };
 
+// TODO: the return value is a wrapper around raw items and thus must only be accessed while locking the repo
+//       so far this happens implicitly via the duchain lock, but really we should clean this up and make it explicit
 PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filteredDeclarations(
     const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const
 {
@@ -377,6 +379,8 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filter
     }
 }
 
+// TODO: the return value is a wrapper around raw items and thus must only be accessed while locking the repo
+//       so far this happens implicitly via the duchain lock, but really we should clean this up and make it explicit
 PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id) const
 {
     ENSURE_CHAIN_READ_LOCKED
@@ -397,6 +401,8 @@ PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const In
     });
 }
 
+// TODO: the out params are raw items and thus must only be accessed while locking the repo
+//       so far this happens implicitly via the duchain lock, but really we should clean this up and make it explicit
 void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget,
                                          const IndexedDeclaration*& declarationsTarget) const
 {
