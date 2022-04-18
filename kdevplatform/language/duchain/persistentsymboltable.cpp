@@ -175,14 +175,6 @@ public:
 
     //We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache utilization
     mutable QHash<TopDUContext::IndexedRecursiveImports, PersistentSymbolTable::CachedIndexedRecursiveImports> m_importsCache;
-
-    void addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration);
-    void removeDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration);
-    void declarations(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
-    PersistentSymbolTable::Declarations declarations(const IndexedQualifiedIdentifier& id) const;
-    PersistentSymbolTable::FilteredDeclarationIterator
-    filteredDeclarations(const IndexedQualifiedIdentifier& id,
-                         const TopDUContext::IndexedRecursiveImports& visibility) const;
 };
 
 void PersistentSymbolTable::clearCache()
@@ -212,17 +204,11 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
 {
     Q_D(PersistentSymbolTable);
 
-    d->addDeclaration(id, declaration);
-}
-
-void PersistentSymbolTablePrivate::addDeclaration(const IndexedQualifiedIdentifier& id,
-                                                  const IndexedDeclaration& declaration)
-{
     ENSURE_CHAIN_WRITE_LOCKED
 
     {
-        QMutexLocker cacheLock(&m_cacheMutex);
-        m_declarationsCache.remove(id);
+        QMutexLocker cacheLock(&d->m_cacheMutex);
+        d->m_declarationsCache.remove(id);
     }
 
     PersistentSymbolTableItem item;
@@ -273,18 +259,12 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
 {
     Q_D(PersistentSymbolTable);
 
-    d->removeDeclaration(id, declaration);
-}
-
-void PersistentSymbolTablePrivate::removeDeclaration(const IndexedQualifiedIdentifier& id,
-                                                     const IndexedDeclaration& declaration)
-{
     ENSURE_CHAIN_WRITE_LOCKED
 
     {
-        QMutexLocker cacheLock(&m_cacheMutex);
-        m_declarationsCache.remove(id);
-        Q_ASSERT(!m_declarationsCache.contains(id));
+        QMutexLocker cacheLock(&d->m_cacheMutex);
+        d->m_declarationsCache.remove(id);
+        Q_ASSERT(!d->m_declarationsCache.contains(id));
     }
 
     PersistentSymbolTableItem item;
@@ -349,31 +329,24 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filter
 {
     Q_D(const PersistentSymbolTable);
 
-    return d->filteredDeclarations(id, visibility);
-}
-
-PersistentSymbolTable::FilteredDeclarationIterator
-PersistentSymbolTablePrivate::filteredDeclarations(const IndexedQualifiedIdentifier& id,
-                                                   const TopDUContext::IndexedRecursiveImports& visibility) const
-{
     ENSURE_CHAIN_READ_LOCKED
 
     PersistentSymbolTable::Declarations decls = declarations(id).iterator();
 
     PersistentSymbolTable::CachedIndexedRecursiveImports cachedImports;
 
-    QMutexLocker cacheLock(&m_cacheMutex);
-    auto it = m_importsCache.constFind(visibility);
-    if (it != m_importsCache.constEnd()) {
+    QMutexLocker cacheLock(&d->m_cacheMutex);
+    auto it = d->m_importsCache.constFind(visibility);
+    if (it != d->m_importsCache.constEnd()) {
         cachedImports = *it;
     } else {
         cachedImports = PersistentSymbolTable::CachedIndexedRecursiveImports(visibility.set().stdSet());
-        m_importsCache.insert(visibility, cachedImports);
+        d->m_importsCache.insert(visibility, cachedImports);
     }
 
     if (decls.dataSize() > MinimumCountForCache) {
         //Do visibility caching
-        CacheEntry<IndexedDeclaration>& cached(m_declarationsCache[id]);
+        CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
         CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.constFind(visibility);
         if (cacheIt != cached.m_hash.constEnd())
             return PersistentSymbolTable::FilteredDeclarationIterator(
@@ -406,14 +379,6 @@ PersistentSymbolTablePrivate::filteredDeclarations(const IndexedQualifiedIdentif
 
 PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id) const
 {
-    Q_D(const PersistentSymbolTable);
-
-    return d->declarations(id);
-}
-
-PersistentSymbolTable::Declarations
-PersistentSymbolTablePrivate::declarations(const IndexedQualifiedIdentifier& id) const
-{
     ENSURE_CHAIN_READ_LOCKED
 
     PersistentSymbolTableItem item;
@@ -434,14 +399,6 @@ PersistentSymbolTablePrivate::declarations(const IndexedQualifiedIdentifier& id)
 
 void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget,
                                          const IndexedDeclaration*& declarationsTarget) const
-{
-    Q_D(const PersistentSymbolTable);
-
-    return d->declarations(id, countTarget, declarationsTarget);
-}
-
-void PersistentSymbolTablePrivate::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget,
-                                                const IndexedDeclaration*& declarationsTarget) const
 {
     ENSURE_CHAIN_READ_LOCKED
 
