@@ -132,8 +132,6 @@ struct FileModificationSetRepository
     void itemRemovedFromSets(uint index) override;
 };
 
-//FileModificationSetRepository fileModificationSetRepository;
-
 struct FileModificationSetRepositoryRepresenter
 {
     static FileModificationSetRepository& repository()
