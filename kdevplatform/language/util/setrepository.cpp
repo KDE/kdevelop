@@ -1193,7 +1193,7 @@ void StringSetRepository::itemAddedToSets(uint index)
 
     KDevelop::IndexedString string = KDevelop::IndexedString::fromIndex(index);
 
-    char data[sizeof(KDevelop::IndexedString)];
+    char data[sizeof(KDevelop::IndexedString)] = {};
 
     const KDevelop::DUChainReferenceCountingEnabler rcEnabler(data, sizeof(KDevelop::IndexedString));
     new (data) KDevelop::IndexedString(string); //Call constructor with enabled reference-counting
