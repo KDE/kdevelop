@@ -3,7 +3,7 @@
         "Category": "Language Support",
         "Description": "QML/JS language support (based on qmljs from QtCreator)",
         "Description[az]": "QML/JS dil dəstəyi (r-Creator'dan qmljs əsasında)",
-        "Description[ca@valencia]": "Implementació dels llenguatges QML/JS (basats en el «qmljs» del QtCreator)",
+        "Description[ca@valencia]": "Implementació dels llenguatges QML/JS (basats en «qmljs» del QtCreator)",
         "Description[ca]": "Implementació dels llenguatges QML/JS (basats en el «qmljs» del QtCreator)",
         "Description[de]": "Sprachunterstützung für QML/JS auf der Grundlage von qmljs von QtCreator",
         "Description[el]": "Υποστήριξη γλώσσας QML/JS (με βάση το qmljs από το QtCreator)",
