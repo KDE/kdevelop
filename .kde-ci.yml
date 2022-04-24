@@ -8,7 +8,7 @@ Dependencies:
     'frameworks/knotifyconfig': '@stable'
     'frameworks/ktexteditor': '@stable'
     'frameworks/threadweaver': '@stable'
-    'sdk/libkomparediff2': '@stable'
+    'sdk/libkomparediff2': '@same'
     'utilities/okteta': '@stable'
     'kdevelop/kdevelop-pg-qt': '@stable'
 
