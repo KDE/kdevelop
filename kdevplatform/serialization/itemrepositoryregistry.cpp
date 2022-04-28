@@ -114,8 +114,9 @@ public:
     /// @param path  A shared directory-path that the item-repositories are to be loaded from.
     /// @note        Currently the given path must reference a hidden directory, just to make sure we're
     ///              not accidentally deleting something important.
-    explicit ItemRepositoryRegistryPrivate(ItemRepositoryRegistry& owner, const QString& path);
+    explicit ItemRepositoryRegistryPrivate(const QString& path);
 
+    QAtomicInt& customCounter(const QString& identity, int initialValue);
     void lockForWriting();
     void unlockForWriting();
     void deleteDataDirectory(bool recreate = true);
@@ -125,7 +126,7 @@ public:
 ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = nullptr;
 
 ItemRepositoryRegistry::ItemRepositoryRegistry(const QString& repositoryPath)
-    : d_ptr(new ItemRepositoryRegistryPrivate(*this, repositoryPath))
+    : d_ptr(new ItemRepositoryRegistryPrivate(repositoryPath))
 {
 }
 
@@ -167,15 +168,20 @@ QRecursiveMutex& ItemRepositoryRegistry::mutex()
     return d->m_mutex;
 }
 
+QAtomicInt& ItemRepositoryRegistryPrivate::customCounter(const QString& identity, int initialValue)
+{
+    auto customCounterIt = m_customCounters.find(identity);
+    if (customCounterIt == m_customCounters.end()) {
+        customCounterIt = m_customCounters.insert(identity, new QAtomicInt(initialValue));
+    }
+    return **customCounterIt;
+}
+
 QAtomicInt& ItemRepositoryRegistry::customCounter(const QString& identity, int initialValue)
 {
     Q_D(ItemRepositoryRegistry);
 
-    auto customCounterIt = d->m_customCounters.find(identity);
-    if (customCounterIt == d->m_customCounters.end()) {
-        customCounterIt = d->m_customCounters.insert(identity, new QAtomicInt(initialValue));
-    }
-    return **customCounterIt;
+    return d->customCounter(identity, initialValue);
 }
 
 ///The global item-repository registry that is used by default
@@ -262,7 +268,7 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(bool recreate)
     }
 }
 
-ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(ItemRepositoryRegistry& owner, const QString& path)
+ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(const QString& path)
     : m_path(path)
 {
     Q_ASSERT(!path.isEmpty());
@@ -285,7 +291,7 @@ ItemRepositoryRegistryPrivate::ItemRepositoryRegistryPrivate(ItemRepositoryRegis
             stream >> counterName;
             int counterValue;
             stream >> counterValue;
-            owner.customCounter(counterName, 0) = counterValue;
+            customCounter(counterName, 0) = counterValue;
         }
     }
 }
