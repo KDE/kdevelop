@@ -21,16 +21,20 @@ class QualifiedIdentifier;
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
 
+/**
+ * @note Move constructor and move assignment operator are deliberately not implemented for
+ * IndexedInstantiationInformation. The move operations are tricky to implement correctly and more
+ * efficiently in practice than the copy operations. swap() could be specialized for this class,
+ * but it would never be called in practice. See a similar note for class IndexedString.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedInstantiationInformation
     : public ReferenceCountManager
 {
 public:
     IndexedInstantiationInformation() noexcept = default;
     explicit IndexedInstantiationInformation(uint index);
-    IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs);
-    IndexedInstantiationInformation(IndexedInstantiationInformation&& rhs) noexcept;
-    IndexedInstantiationInformation& operator=(const IndexedInstantiationInformation& rhs);
-    IndexedInstantiationInformation& operator=(IndexedInstantiationInformation&& rhs) noexcept;
+    IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) noexcept;
+    IndexedInstantiationInformation& operator=(const IndexedInstantiationInformation& rhs) noexcept;
     ~IndexedInstantiationInformation();
 
     const InstantiationInformation& information() const;

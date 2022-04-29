@@ -31,6 +31,13 @@ class IdentifierPrivate;
 class IndexedString;
 
 /**
+ * @note Move constructor and move assignment operator are deliberately not implemented for
+ * Indexed[Qualified]Identifier. The move operations are tricky to implement correctly and more
+ * efficiently in practice than the copy operations. swap() could be specialized for these two
+ * classes, but it would never be called in practice. See a similar note for class IndexedString.
+ */
+
+/**
  * A helper-class to store an identifier by index in a type-safe way.
  *
  * The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
@@ -46,11 +53,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier
 public:
     IndexedIdentifier();
     explicit IndexedIdentifier(const Identifier& id);
-    IndexedIdentifier(const IndexedIdentifier& rhs);
-    IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+    IndexedIdentifier(const IndexedIdentifier& rhs) noexcept;
     IndexedIdentifier& operator=(const Identifier& id);
-    IndexedIdentifier& operator=(const IndexedIdentifier& rhs);
-    IndexedIdentifier& operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+    IndexedIdentifier& operator=(const IndexedIdentifier& rhs) noexcept;
     ~IndexedIdentifier();
     bool operator==(const IndexedIdentifier& rhs) const;
     bool operator!=(const IndexedIdentifier& rhs) const;
@@ -89,11 +94,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier
 public:
     IndexedQualifiedIdentifier();
     IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
-    IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& rhs);
-    IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+    IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& rhs) noexcept;
     IndexedQualifiedIdentifier& operator=(const QualifiedIdentifier& id);
-    IndexedQualifiedIdentifier& operator=(const IndexedQualifiedIdentifier& id);
-    IndexedQualifiedIdentifier& operator=(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT;
+    IndexedQualifiedIdentifier& operator=(const IndexedQualifiedIdentifier& id) noexcept;
     ~IndexedQualifiedIdentifier();
     bool operator==(const IndexedQualifiedIdentifier& rhs) const;
     bool operator==(const QualifiedIdentifier& id) const;

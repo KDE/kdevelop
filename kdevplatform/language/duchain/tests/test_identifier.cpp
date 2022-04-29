@@ -81,7 +81,6 @@ void TestIdentifier::testIdentifier()
     QCOMPARE(moved, copy);
 
     IndexedIdentifier movedIndexed = std::move(indexedId);
-    QVERIFY(indexedId.isEmpty());
     QCOMPARE(movedIndexed, indexedCopy);
 }
 
@@ -153,7 +152,6 @@ void TestIdentifier::testQualifiedIdentifier()
     QCOMPARE(moved, copy);
 
     IndexedQualifiedIdentifier movedIndexed = std::move(indexedId);
-    QVERIFY(indexedId.isEmpty());
     QCOMPARE(movedIndexed, indexedCopy);
 
     copy.clear();

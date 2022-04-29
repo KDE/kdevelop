@@ -1304,6 +1304,14 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isE
     , m_pointerConstMask(0)
 { }
 
+// NOTE: the definitions of ItemRepositoryReferenceCounting's inc(), dec() and setIndex() are so
+// complex that they can throw exceptions for many reasons. Yet some special member functions of
+// Indexed[Qualified]Identifier, which call them, are implicitly (the destructors) or explicitly
+// noexcept. The noexcept-ness of these functions is important for correctness and performance.
+// This is safe at the moment, because the entire KDevPlatformLanguage library, that contains these
+// classes, is compiled with exceptions disabled (-fno-exceptions), which already prevents exception
+// propagation to a caller of any non-inline function in this library.
+
 IndexedIdentifier::IndexedIdentifier(unsigned int index)
     : m_index(index)
 {
@@ -1320,15 +1328,9 @@ IndexedIdentifier::IndexedIdentifier(const Identifier& id)
 {
 }
 
-IndexedIdentifier::IndexedIdentifier(const IndexedIdentifier& rhs)
+IndexedIdentifier::IndexedIdentifier(const IndexedIdentifier& rhs) noexcept
     : IndexedIdentifier(rhs.m_index)
 {
-}
-
-IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
-    : m_index(rhs.m_index)
-{
-    rhs.m_index = emptyConstantIdentifierPrivateIndex();
 }
 
 IndexedIdentifier::~IndexedIdentifier()
@@ -1347,13 +1349,7 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
     return operator=(id.index());
 }
 
-IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) Q_DECL_NOEXCEPT
-{
-    ItemRepositoryReferenceCounting::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantIdentifierPrivateIndex());
-    return *this;
-}
-
-IndexedIdentifier& IndexedIdentifier::operator=(const IndexedIdentifier& id)
+IndexedIdentifier& IndexedIdentifier::operator=(const IndexedIdentifier& id) noexcept
 {
     return operator=(id.m_index);
 }
@@ -1423,15 +1419,9 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier
 {
 }
 
-IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& id)
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& id) noexcept
     : IndexedQualifiedIdentifier(id.m_index)
 {
-}
-
-IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT
-    : m_index(rhs.m_index)
-{
-    rhs.m_index = emptyConstantQualifiedIdentifierPrivateIndex();
 }
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(unsigned int index)
@@ -1447,15 +1437,9 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const Qualifie
     return operator=(id.index());
 }
 
-IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQualifiedIdentifier& rhs)
+IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQualifiedIdentifier& rhs) noexcept
 {
     return operator=(rhs.m_index);
-}
-
-IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs) Q_DECL_NOEXCEPT
-{
-    ItemRepositoryReferenceCounting::moveIndex(this, m_index, &rhs, rhs.m_index, emptyConstantQualifiedIdentifierPrivateIndex());
-    return *this;
 }
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier()

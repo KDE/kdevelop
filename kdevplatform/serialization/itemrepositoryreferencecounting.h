@@ -66,39 +66,6 @@ struct ItemRepositoryReferenceCounting {
             m_index = index;
         }
     }
-
-    template <typename Item>
-    static void moveIndex(Item* lhs, unsigned int& lhs_index, Item* rhs, unsigned int& rhs_index,
-                          unsigned int emptyIndex)
-    {
-        Q_ASSERT(lhs);
-        Q_ASSERT(rhs);
-        Q_ASSERT_X(lhs != rhs, Q_FUNC_INFO, "Self-assignment is not valid for move assignment.");
-
-        const auto lhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(lhs);
-        const auto rhsShouldDoDUChainReferenceCounting = shouldDoDUChainReferenceCounting(rhs);
-
-        if (!lhsShouldDoDUChainReferenceCounting && !rhsShouldDoDUChainReferenceCounting) {
-            lhs_index = rhs_index;
-            rhs_index = emptyIndex;
-            return;
-        }
-
-        LockedItemRepository::write<Item>([&](auto& repo) {
-            if (lhs_index && lhsShouldDoDUChainReferenceCounting) {
-                lhs->decrease(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
-            } else if (rhs_index && rhsShouldDoDUChainReferenceCounting && !lhsShouldDoDUChainReferenceCounting) {
-                rhs->decrease(repo.dynamicItemFromIndexSimple(rhs_index)->m_refCount, rhs_index);
-            }
-
-            lhs_index = rhs_index;
-            rhs_index = emptyIndex;
-
-            if (lhs_index && lhsShouldDoDUChainReferenceCounting && !rhsShouldDoDUChainReferenceCounting) {
-                lhs->increase(repo.dynamicItemFromIndexSimple(lhs_index)->m_refCount, lhs_index);
-            }
-        });
-    }
 };
 
 }

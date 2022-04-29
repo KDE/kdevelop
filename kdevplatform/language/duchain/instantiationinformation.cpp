@@ -158,28 +158,23 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m
     ItemRepositoryReferenceCounting::inc(this);
 }
 
-IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) : m_index(
-        rhs.m_index)
+// NOTE: the definitions of ItemRepositoryReferenceCounting's inc(), dec() and setIndex() are so
+// complex that they can throw exceptions for many reasons. Yet some special member functions of
+// IndexedInstantiationInformation, which call them, are implicitly (the destructor) or explicitly
+// noexcept. The noexcept-ness of these functions is important for correctness and performance.
+// This is safe at the moment, because the entire KDevPlatformLanguage library, that contains
+// IndexedInstantiationInformation, is compiled with exceptions disabled (-fno-exceptions), which
+// already prevents exception propagation to a caller of any non-inline function in this library.
+
+IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) noexcept
+    : m_index(rhs.m_index)
 {
     ItemRepositoryReferenceCounting::inc(this);
 }
 
-IndexedInstantiationInformation::IndexedInstantiationInformation(IndexedInstantiationInformation&& rhs) noexcept
-    : m_index(rhs.m_index)
-{
-    rhs.m_index = standardInstantiationInformationIndex();
-}
-
-IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs)
+IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs) noexcept
 {
     ItemRepositoryReferenceCounting::setIndex(this, m_index, rhs.m_index);
-    return *this;
-}
-
-IndexedInstantiationInformation&
-IndexedInstantiationInformation::operator=(IndexedInstantiationInformation&& rhs) noexcept
-{
-    ItemRepositoryReferenceCounting::moveIndex(this, m_index, &rhs, rhs.m_index, standardInstantiationInformationIndex());
     return *this;
 }
 
