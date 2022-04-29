@@ -17,8 +17,9 @@ struct ItemRepositoryReferenceCounting {
     {
         Q_ASSERT(item);
         const auto index = item->index();
+        Q_ASSERT(index);
 
-        if (!index || !shouldDoDUChainReferenceCounting(item)) {
+        if (!shouldDoDUChainReferenceCounting(item)) {
             return false;
         }
 
@@ -32,8 +33,9 @@ struct ItemRepositoryReferenceCounting {
     {
         Q_ASSERT(item);
         const auto index = item->index();
+        Q_ASSERT(index);
 
-        if (!index || !shouldDoDUChainReferenceCounting(item)) {
+        if (!shouldDoDUChainReferenceCounting(item)) {
             return false;
         }
 
@@ -42,8 +44,17 @@ struct ItemRepositoryReferenceCounting {
         return true;
     }
 
-    template <typename Item>
-    static inline void setIndex(Item* item, unsigned int& m_index, unsigned int index)
+    struct AssumeValidIndex {
+        bool operator()(unsigned int index) const
+        {
+            Q_ASSERT(index);
+            return true;
+        }
+    };
+
+    template <typename Item, typename CheckIndex = AssumeValidIndex>
+    static inline void setIndex(Item* item, unsigned int& m_index, unsigned int index,
+                                CheckIndex checkIndex = AssumeValidIndex{})
     {
         Q_ASSERT(item);
         if (m_index == index) {
@@ -52,13 +63,13 @@ struct ItemRepositoryReferenceCounting {
 
         if (shouldDoDUChainReferenceCounting(item)) {
             LockedItemRepository::write<Item>([&](auto& repo) {
-                if (m_index) {
+                if (checkIndex(m_index)) {
                     item->decrease(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
                 }
 
                 m_index = index;
 
-                if (m_index) {
+                if (checkIndex(m_index)) {
                     item->increase(repo.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
                 }
             });

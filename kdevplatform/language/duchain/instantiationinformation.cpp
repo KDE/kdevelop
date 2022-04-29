@@ -155,7 +155,9 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m
     if (m_index == standardInstantiationInformationIndex())
         m_index = 0;
 
-    ItemRepositoryReferenceCounting::inc(this);
+    if (m_index) {
+        ItemRepositoryReferenceCounting::inc(this);
+    }
 }
 
 // NOTE: the definitions of ItemRepositoryReferenceCounting's inc(), dec() and setIndex() are so
@@ -169,18 +171,23 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m
 IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) noexcept
     : m_index(rhs.m_index)
 {
-    ItemRepositoryReferenceCounting::inc(this);
+    if (m_index) {
+        ItemRepositoryReferenceCounting::inc(this);
+    }
 }
 
 IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs) noexcept
 {
-    ItemRepositoryReferenceCounting::setIndex(this, m_index, rhs.m_index);
+    const auto checkIndex = [](unsigned int index) { return index != 0; };
+    ItemRepositoryReferenceCounting::setIndex(this, m_index, rhs.m_index, checkIndex);
     return *this;
 }
 
 IndexedInstantiationInformation::~IndexedInstantiationInformation()
 {
-    ItemRepositoryReferenceCounting::dec(this);
+    if (m_index) {
+        ItemRepositoryReferenceCounting::dec(this);
+    }
 }
 
 bool IndexedInstantiationInformation::isValid() const
