@@ -146,34 +146,37 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index)
     });
 }
 
-void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* manager)
+template <typename RefCountChanger>
+static void changeReferenceCount(uint index, RefCountChanger changeRefCount)
 {
     if (!index)
         return;
 
-    LockedItemRepository::write<AbstractTypeData>([&](TypeItemRepository& repo) {
+    LockedItemRepository::write<AbstractTypeData>([index, changeRefCount](TypeItemRepository& repo) {
         AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
         Q_ASSERT(data);
+        changeRefCount(data->refCount);
+    });
+}
+
+void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* manager)
+{
+    changeReferenceCount(index, [index, manager](uint& refCount) {
         if (manager)
-            manager->increase(data->refCount, index);
+            manager->increase(refCount, index);
         else
-            ++data->refCount;
+            ++refCount;
     });
 }
 
 void TypeRepository::decreaseReferenceCount(uint index, ReferenceCountManager* manager)
 {
-    if (!index)
-        return;
-
-    LockedItemRepository::write<AbstractTypeData>([&](TypeItemRepository& repo) {
-        AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
-        Q_ASSERT(data);
-        Q_ASSERT(data->refCount > 0);
+    changeReferenceCount(index, [index, manager](uint& refCount) {
+        Q_ASSERT(refCount > 0);
         if (manager)
-            manager->decrease(data->refCount, index);
+            manager->decrease(refCount, index);
         else
-            --data->refCount;
+            --refCount;
     });
 }
 }
