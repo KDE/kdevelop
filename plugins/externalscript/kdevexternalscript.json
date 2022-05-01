@@ -37,7 +37,7 @@
         "Description": "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.",
         "Description[ar]": "شغّل سكرِبتات أو تطبيقات خارجيّة للتّلاعب بمحتويات المحرّر أو عمل إجراءات اعتباطيّة أخرى.",
         "Description[az]": "Redaktorun tərkiblərini idarə etmək xarici skriptləri və tətbiqləri başladın və ya digər ixtiyari əməlləri yerinə yetirin.",
-        "Description[ca@valencia]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.",
+        "Description[ca@valencia]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o atres accions arbitràries.",
         "Description[ca]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.",
         "Description[cs]": "Spouštějte externí skripty nebo aplikace a pracujte s obsahem editoru nebo dělejte jiné libovolné akce.",
         "Description[de]": "Führen Sie externe Skripte oder Programme zum Verändern des Editorinhalts oder für beliebige andere Aktionen aus.",
