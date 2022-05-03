@@ -777,6 +777,8 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
 Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor::Cursor& position, bool mouseHighlight)
 {
     Q_UNUSED(mouseHighlight);
+    ENSURE_CHAIN_READ_LOCKED
+
     Declaration* foundDeclaration = nullptr;
     if (m_useDeclaration.data()) {
         foundDeclaration = m_useDeclaration.data();
@@ -788,7 +790,6 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor
         if (foundDeclaration && foundDeclaration->kind() == Declaration::Alias) {
             auto* alias = dynamic_cast<AliasDeclaration*>(foundDeclaration);
             Q_ASSERT(alias);
-            DUChainReadLocker lock;
             foundDeclaration = alias->aliasedDeclaration().declaration();
         }
     }
@@ -1071,7 +1072,6 @@ void ContextBrowserPlugin::switchUse(bool forward)
             if (decl && decl->kind() == Declaration::Alias) {
                 auto* alias = dynamic_cast<AliasDeclaration*>(decl);
                 Q_ASSERT(alias);
-                DUChainReadLocker lock;
                 decl = alias->aliasedDeclaration().declaration();
             }
 
