@@ -20,6 +20,10 @@ project(KDevelop VERSION "5.9.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
 set(KDEVELOP_SOVERSION "${KDevelop_VERSION_MAJOR}${KDevelop_VERSION_MINOR}")
 
+# On macOS KDevelop_VERSION_MINOR is modified below. But KDEV_ITEMREPOSITORY_VERSION should depend
+# on the original minor version on all platforms. So we store the original version in a variable.
+set(KDEVELOP_OWN_MINOR_VERSION "${KDevelop_VERSION_MINOR}")
+
 if (APPLE)
     ###################################################################################
     # Kludge for bug #448152: ld: malformed 64-bit a.b.c.d.e version number: 5.7.211201

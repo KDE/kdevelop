@@ -3,7 +3,7 @@
 set(KDEVPLATFORM_SOVERSION ${KDEVELOP_SOVERSION})
 
 # Increase this to reset incompatible item-repositories.
-# Changing KDEVELOP_VERSION automatically resets the itemrepository as well.
+# Changing KDevelop's major or minor version automatically resets the itemrepository as well.
 set(KDEV_ITEMREPOSITORY_INCREMENT 3)
 
 set(KDevPlatform_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
