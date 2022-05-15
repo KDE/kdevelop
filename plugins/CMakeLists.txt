@@ -80,6 +80,7 @@ ecm_optional_add_subdirectory(genericprojectmanager)
 
 # BEGIN: Runtimes
 add_subdirectory(android)
+add_subdirectory(craft)
 if (UNIX)
     add_subdirectory(docker)
     add_subdirectory(flatpak)

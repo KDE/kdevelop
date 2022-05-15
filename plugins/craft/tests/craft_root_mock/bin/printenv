@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+
+print("PYTHONPATH=/usr/lib/python3/site-packages")
+print("BAD LINE")
+print("FOO=")

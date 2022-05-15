@@ -1,0 +1,22 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "arrowd@FreeBSD.org",
+                "Name": "Gleb Popov",
+                "Name[ru]": "Глеб Попов"
+            }
+        ],
+        "Category": "Runtimes",
+        "Description": "Exposes KDE Craft environment as a runtime",
+        "Description[ru]": "Представляет среду KDE Craft как среду выполнения KDevelop",
+        "Icon": "kdevelop",
+        "Id": "kdevcraft",
+        "License": "BSD3",
+        "Name": "Craft runtime",
+        "Name[ru]": "Поддержка Craft",
+        "Version": "0.1"
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-Mode": "GUI"
+}

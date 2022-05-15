@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+import os
+
+for var in os.environ:
+    print(var + "=" + os.environ[var])
