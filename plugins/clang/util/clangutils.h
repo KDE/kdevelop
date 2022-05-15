@@ -16,6 +16,8 @@
 
 #include <language/duchain/classfunctiondeclaration.h>
 
+#include <functional>
+
 namespace ClangUtils
 {
     /**
@@ -84,7 +86,7 @@ namespace ClangUtils
      * @param scope The scope of the cursor (e.g. "SomeNS::SomeClass")
      * @return A QString of the function's signature
      */
-    QString getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs = QVector<QString>());
+    KDEVCLANGPRIVATE_EXPORT QString getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs = QVector<QString>());
 
     /**
      * Given a cursor representing the template argument list, return a
@@ -124,6 +126,12 @@ namespace ClangUtils
      * we don't need to know the difference.
      */
     bool isExplicitlyDefaultedOrDeleted(CXCursor cursor);
+
+
+    /**
+     * @brief run clang_visitChildren using given visitor function
+     */
+    KDEVCLANGPRIVATE_EXPORT void visitChildren(CXCursor parent, std::function<CXChildVisitResult(CXCursor cursor, CXCursor parent)> visitor);
 
     /**
     * Extract the range of the path-spec inside the include-directive in line @p line

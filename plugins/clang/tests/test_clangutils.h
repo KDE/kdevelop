@@ -24,6 +24,8 @@ private Q_SLOTS:
     void testGetRawContents();
     void testGetRawContents_data();
     void testRangeForIncludePathSpec();
+    void testGetCursorSignature();
+    void testGetCursorSignature_data();
 };
 
 #endif // TESTCLANGUTILS_H

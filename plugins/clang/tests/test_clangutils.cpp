@@ -261,3 +261,46 @@ void TestClangUtils::testRangeForIncludePathSpec()
     QCOMPARE(ClangUtils::rangeForIncludePathSpec("#include \"foo\\\".h\""), KTextEditor::Range(0, 10, 0, 17));
     QCOMPARE(ClangUtils::rangeForIncludePathSpec("#include \"foo<>.h\""), KTextEditor::Range(0, 10, 0, 17));
 }
+
+void TestClangUtils::testGetCursorSignature()
+{
+    QFETCH(QByteArray, code);
+    QFETCH(QString, expectedSignature);
+
+    QString fileName;
+    auto unit = parse(code, &fileName);
+    CXCursor functionCursor = clang_getNullCursor();
+    const auto startCursor = clang_getTranslationUnitCursor(unit.get());
+    ClangUtils::visitChildren(startCursor, [&](CXCursor cursor, CXCursor){
+        switch (clang_getCursorKind(cursor))
+        {
+            case CXCursor_FunctionDecl:
+            case CXCursor_CXXMethod:
+            case CXCursor_FunctionTemplate:
+                functionCursor = cursor;
+                return CXChildVisit_Break;
+            default:
+                return CXChildVisit_Recurse;
+        }
+    });
+    QVERIFY2(! clang_Cursor_isNull(functionCursor), "function not found");
+    auto scope = ClangUtils::getScope(functionCursor, startCursor);
+    auto signature = ClangUtils::getCursorSignature(functionCursor, scope, {});
+    QCOMPARE(signature, expectedSignature);
+}
+
+void TestClangUtils::testGetCursorSignature_data()
+{
+    QTest::addColumn<QByteArray>("code");
+    QTest::addColumn<QString>("expectedSignature");
+
+    QTest::newRow("global-less")
+        << QByteArray("class klass {}; bool operator < (const klass&, const klass&);")
+        << "bool operator<(const klass&, const klass&)";
+    QTest::newRow("member-less")
+        << QByteArray("class klass { bool operator < (const klass&); };")
+        << "bool klass::operator<(const klass&)";
+    QTest::newRow("template-member-less")
+        << QByteArray("class klass { template<typename T> bool operator < (const T&); };")
+        << "bool klass::operator<(const T&)";
+}

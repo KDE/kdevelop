@@ -232,7 +232,7 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
     }
 
     QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
-    if (functionName.contains(QLatin1Char('<'))) {
+    if (functionName.contains(QLatin1Char('<')) && ! functionName.startsWith(QStringLiteral("operator<"))) {
         stream << functionName.leftRef(functionName.indexOf(QLatin1Char('<')));
     } else {
         stream << functionName;
@@ -359,6 +359,15 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
         return true;
     }
     return false;
+}
+
+void ClangUtils::visitChildren(CXCursor parent, std::function<CXChildVisitResult(CXCursor, CXCursor)> visitor)
+{
+    static constexpr CXCursorVisitor cVisitor = [](CXCursor cursor, CXCursor parent, CXClientData client_data)
+    {
+        return (*static_cast<std::function<CXChildVisitResult(CXCursor, CXCursor)>*>(client_data))(cursor, parent);
+    };
+    clang_visitChildren(parent, cVisitor, &visitor);
 }
 
 KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
