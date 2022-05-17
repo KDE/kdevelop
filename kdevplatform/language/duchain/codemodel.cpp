@@ -353,6 +353,7 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     });
 }
 
+// FIXME: this API is unsafe, we should return a KDevVarLengthArray of values instead
 void CodeModel::items(const IndexedString& file, uint& count, const CodeModelItem*& items) const
 {
     ifDebug(qCDebug(LANGUAGE) << "items" << file.str(); )
