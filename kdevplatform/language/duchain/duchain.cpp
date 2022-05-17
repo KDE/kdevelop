@@ -1304,6 +1304,7 @@ void DUChain::initialize()
     initTypeRepository();
     initInstantiationInformationRepository();
 
+    PersistentSymbolTable::self();
     Importers::self();
     CodeModel::self();
 
