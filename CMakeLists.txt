@@ -20,6 +20,17 @@ project(KDevelop VERSION "5.8.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
 set(KDEVELOP_SOVERSION "${KDevelop_VERSION_MAJOR}${KDevelop_VERSION_MINOR}")
 
+if (APPLE)
+    ###################################################################################
+    # Kludge for bug #448152: ld: malformed 64-bit a.b.c.d.e version number: 5.7.211201
+    # Apple's linker uses the project version (not the SOVERSION) to calculate an
+    # unsigned int in such a way that places restrictions on the magnitude of each tier
+    # of the version string.
+    # See here: https://www.sicpers.info/2013/03/how-to-version-a-mach-o-library/
+    ###################################################################################
+    project(KDevelop VERSION "${KDevelop_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${_micro}")
+endif()
+
 # plugin version as used e.g. in plugin installation path
 # started off as 30 when 5.2 was released, incremented along the SO version so far
 # TODO: perhaps switch directly to KDEVELOP_SOVERSION?
@@ -180,7 +191,7 @@ configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.
                                   "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfig.cmake"
                                   INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 )
-ecm_setup_version(${KDevelop_VERSION_MAJOR}.${KDevelop_VERSION_MINOR}.${KDevelop_VERSION_PATCH}
+ecm_setup_version(PROJECT
                   VARIABLE_PREFIX KDEVELOP
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevelop_version.h"
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfigVersion.cmake"
