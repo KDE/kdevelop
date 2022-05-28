@@ -28,6 +28,8 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWidge
     Q_OBJECT
     Q_DISABLE_COPY(StandardDocumentationView)
 public:
+    static void registerCustomUrlSchemes();
+
     explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = nullptr );
     ~StandardDocumentationView() override;
 

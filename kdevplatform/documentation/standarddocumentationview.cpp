@@ -30,6 +30,7 @@
 #include <QWebEngineView>
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
+#include <QWebEngineUrlScheme>
 #include <QWebEngineUrlSchemeHandler>
 #include <QWebEngineUrlRequestJob>
 #include <QWebEngineProfile>
@@ -38,6 +39,9 @@
 using namespace KDevelop;
 
 #ifndef USE_QTWEBKIT
+namespace {
+auto qtHelpSchemeName() { return QByteArrayLiteral("qthelp"); }
+
 class StandardDocumentationPage : public QWebEnginePage
 {
     Q_OBJECT
@@ -66,7 +70,17 @@ private:
     KDevelop::StandardDocumentationView* const m_view;
     bool m_isDelegating = false;
 };
+
+} // unnamed namespace
 #endif
+
+void StandardDocumentationView::registerCustomUrlSchemes()
+{
+#ifndef USE_QTWEBKIT
+    QWebEngineUrlScheme scheme(qtHelpSchemeName());
+    QWebEngineUrlScheme::registerScheme(scheme);
+#endif
+}
 
 class KDevelop::StandardDocumentationViewPrivate
 {
@@ -346,7 +360,7 @@ void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccess
 #ifdef USE_QTWEBKIT
     d->m_view->page()->setNetworkAccessManager(manager);
 #else
-    d->m_view->page()->profile()->installUrlSchemeHandler("qthelp", new CustomSchemeHandler(manager, this));
+    d->m_view->page()->profile()->installUrlSchemeHandler(qtHelpSchemeName(), new CustomSchemeHandler(manager, this));
 #endif
 }
 

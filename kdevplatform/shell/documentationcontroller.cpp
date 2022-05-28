@@ -33,6 +33,7 @@
 #include <language/duchain/types/identifiedtype.h>
 #include <language/duchain/types/typeutils.h>
 #include <documentation/documentationview.h>
+#include <documentation/standarddocumentationview.h>
 
 using namespace KDevelop;
 
@@ -107,6 +108,8 @@ private:
 DocumentationController::DocumentationController(Core* core)
     : m_factory(new DocumentationViewFactory)
 {
+    StandardDocumentationView::registerCustomUrlSchemes();
+
     m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction(QStringLiteral("showDocumentation"));
     m_showDocumentation->setText(i18nc("@action", "Show Documentation"));
     m_showDocumentation->setIcon(QIcon::fromTheme(QStringLiteral("documentation")));
