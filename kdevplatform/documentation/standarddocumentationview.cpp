@@ -27,6 +27,7 @@
 #else
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QPointer>
 #include <QWebEngineView>
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
@@ -338,7 +339,21 @@ public:
     void requestStarted(QWebEngineUrlRequestJob *job) override {
         const QUrl url = job->requestUrl();
 
-        auto reply = m_nam->get(QNetworkRequest(url));
+        auto* const reply = m_nam->get(QNetworkRequest(url));
+
+        // Deliberately don't use job as context in this connection: if job is destroyed
+        // before reply is finished, reply would be leaked. Using reply as context does
+        // not impact behavior, but silences Clazy checker connect-3arg-lambda (level1).
+        connect(reply, &QNetworkReply::finished, reply, [reply, job = QPointer{job}] {
+            // At this point reply is no longer written to and can be safely
+            // destroyed once job ends reading from it.
+            if (job) {
+                connect(job, &QObject::destroyed, reply, &QObject::deleteLater);
+            } else {
+                reply->deleteLater();
+            }
+        });
+
         job->reply(reply->header(QNetworkRequest::ContentTypeHeader).toByteArray(), reply);
     }
 
