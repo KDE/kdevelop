@@ -12,7 +12,6 @@
 #include <QList>
 #include <QMap>
 #include <QUrl>
-#include <QPointer>
 #include <QAction>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
 #include <QHelpLink>
@@ -24,7 +23,6 @@ namespace KDevelop { class StandardDocumentationView; }
 class QModelIndex;
 class QNetworkAccessManager;
 class QtHelpProviderAbstract;
-class QTemporaryFile;
 
 class QtHelpDocumentation : public KDevelop::IDocumentation
 {
@@ -37,8 +35,6 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info);
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key);
 #endif
-
-        ~QtHelpDocumentation() override;
 
         QString name() const override { return m_name; }
 
@@ -84,7 +80,6 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 #endif
 
         KDevelop::StandardDocumentationView* lastView;
-        QPointer<QTemporaryFile> m_lastStyleSheet;
 };
 
 class HomeDocumentation : public KDevelop::IDocumentation

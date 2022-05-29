@@ -19,6 +19,9 @@ private Q_SLOTS:
     void testHtmlToPlainText();
     void testHtmlToPlainText_data();
 
+    void testEscapeJavaScriptString();
+    void testEscapeJavaScriptString_data();
+
     void testFindAsciiIdentifierLength();
     void testFindAsciiIdentifierLength_data();
     void testFindAsciiIdentifierLengthNoMatch();

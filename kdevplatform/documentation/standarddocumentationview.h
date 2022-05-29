@@ -45,7 +45,18 @@ public:
 
     void setDocumentation(const IDocumentation::Ptr& doc);
 
-    void setOverrideCss(const QUrl &url);
+    /**
+     * Specifies the location of a user stylesheet to load with every web page
+     *
+     * @note each call to this function or setOverrideCssCode() overwrites any previously specified style
+     */
+    void setOverrideCssFile(const QString& cssFilePath);
+    /**
+     * Inject the specified UTF-8-encoded CSS code into each web page
+     *
+     * @note each call to this function or setOverrideCssFile() overwrites any previously specified style
+     */
+    void setOverrideCssCode(const QByteArray& cssCode);
 
     void load(const QUrl &url);
     void setHtml(const QString &html);

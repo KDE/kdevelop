@@ -15,7 +15,6 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QMouseEvent>
-#include <QTemporaryFile>
 #include <QRegularExpression>
 
 #include <KLocalizedString>
@@ -69,11 +68,6 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString
     : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(nullptr)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 #endif
-
-QtHelpDocumentation::~QtHelpDocumentation()
-{
-    delete m_lastStyleSheet.data();
-}
 
 QString QtHelpDocumentation::description() const
 {
@@ -196,20 +190,12 @@ QString QtHelpDocumentation::description() const
 
 void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
 {
-    auto* file = new QTemporaryFile(view);
-    file->open();
-
-    QTextStream ts(file);
-    ts << "html { background: white !important; }\n";
+    auto cssCode = QByteArrayLiteral("html { background: white !important; }\n");
     if (url.scheme() == QLatin1String("qthelp") && url.host().startsWith(QLatin1String("com.trolltech.qt."))) {
-       ts << ".content .toc + .title + p { clear:left; }\n"
-          << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
+        cssCode += ".content .toc + .title + p { clear:left; }\n"
+                   "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
     }
-    file->close();
-    view->setOverrideCss(QUrl::fromLocalFile(file->fileName()));
-
-    delete m_lastStyleSheet.data();
-    m_lastStyleSheet = file;
+    view->setOverrideCssCode(cssCode);
 }
 
 QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)

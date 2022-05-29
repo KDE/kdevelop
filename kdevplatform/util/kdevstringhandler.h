@@ -53,6 +53,13 @@ enum HtmlToPlainTextMode {
 KDEVPLATFORMUTIL_EXPORT QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode = FastMode);
 
 /**
+ * Replace special JavaScript characters with escape sequences
+ *
+ * @return a string ready to be enclosed in single or double quotes and used in JavaScript
+ */
+KDEVPLATFORMUTIL_EXPORT QByteArray escapeJavaScriptString(const QByteArray& str);
+
+/**
  * Match a prefix of @p str to an ASCII-only identifier, i.e. [a-zA-Z_][a-zA-Z0-9_]*
  *
  * @return The length of the matched prefix or 0 if there is no match

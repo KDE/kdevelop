@@ -46,6 +46,39 @@ void TestStringHandler::testHtmlToPlainText_data()
         << KDevelop::CompleteMode << "bar() \na\nfoo";
 }
 
+void TestStringHandler::testEscapeJavaScriptString()
+{
+    QFETCH(QByteArray, unescaped);
+    QFETCH(QByteArray, escaped);
+
+    const auto actual = escapeJavaScriptString(unescaped);
+    QCOMPARE(actual, escaped);
+}
+
+void TestStringHandler::testEscapeJavaScriptString_data()
+{
+    QTest::addColumn<QByteArray>("unescaped");
+    QTest::addColumn<QByteArray>("escaped");
+
+    const auto nothingToEscape = QByteArrayLiteral("html { background: white !important; }");
+    QTest::newRow("nothing to escape") << nothingToEscape << nothingToEscape;
+
+    QTest::newRow("newlines and single quotes")
+        << QByteArrayLiteral("body {\nfont-family: 'Liberation Serif', sans-serif;\n }\n")
+        << QByteArrayLiteral("body {\\nfont-family: \\'Liberation Serif\\', sans-serif;\\n }\\n");
+
+    QTest::newRow("HTML and double quotes") << QByteArrayLiteral(R"(<img src="my-icon (2).png" alt="[app icon]">)")
+                                            << QByteArrayLiteral(R"(<img src=\"my-icon (2).png\" alt=\"[app icon]\">)");
+
+    // Prevent '\0' from terminating the string.
+    constexpr char allUnescaped[] = "\\ \0\" \b\f\n\r\t\v '";
+    const auto allUnescapedSize = sizeof(allUnescaped) / sizeof(char) - 1;
+    constexpr char allEscaped[] = "\\\\ \\0\\\" \\b\\f\\n\\r\\t\\v \\'";
+    const auto allEscapedSize = sizeof(allEscaped) / sizeof(char) - 1;
+    QTest::newRow("all special characters") << QByteArray(allUnescaped, allUnescapedSize)
+                                            << QByteArray(allEscaped, allEscapedSize);
+}
+
 namespace {
 void addAsciiIdentifierData()
 {

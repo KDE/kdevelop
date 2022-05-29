@@ -18,6 +18,7 @@
 #include <QContextMenuEvent>
 #include <QMouseEvent>
 #include <QMenu>
+#include <QUrl>
 
 #ifdef USE_QTWEBKIT
 #include <QFontDatabase>
@@ -25,6 +26,8 @@
 #include <QWebFrame>
 #include <QWebSettings>
 #else
+#include <util/kdevstringhandler.h>
+#include <QFile>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QPointer>
@@ -35,6 +38,8 @@
 #include <QWebEngineUrlSchemeHandler>
 #include <QWebEngineUrlRequestJob>
 #include <QWebEngineProfile>
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
 #endif
 
 using namespace KDevelop;
@@ -288,21 +293,64 @@ void StandardDocumentationView::update()
         qCDebug(DOCUMENTATION) << "calling StandardDocumentationView::update() on an uninitialized view";
 }
 
-void KDevelop::StandardDocumentationView::setOverrideCss(const QUrl& url)
+
+void KDevelop::StandardDocumentationView::setOverrideCssFile(const QString& cssFilePath)
+{
+#ifdef USE_QTWEBKIT
+    Q_D(StandardDocumentationView);
+
+    d->m_view->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFilePath));
+#else
+    QFile file(cssFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qCWarning(DOCUMENTATION) << "cannot read CSS file" << cssFilePath << ':' << file.error() << file.errorString();
+        return;
+    }
+    const auto cssCode = file.readAll();
+    setOverrideCssCode(cssCode);
+#endif
+}
+
+void StandardDocumentationView::setOverrideCssCode(const QByteArray& cssCode)
 {
     Q_D(StandardDocumentationView);
 
 #ifdef USE_QTWEBKIT
-    d->m_view->settings()->setUserStyleSheetUrl(url);
+    // Experiments show that Base64UrlEncoding or Base64UrlEncoding|OmitTrailingEquals flags
+    // must not be passed to the QByteArray::toBase64() call here: when the difference between
+    // these encoding variants matters and the flag(s) are passed, the CSS code is not applied.
+    const QByteArray dataUrl = "data:text/css;charset=utf-8;base64," + cssCode.toBase64();
+    d->m_view->settings()->setUserStyleSheetUrl(QUrl::fromEncoded(dataUrl));
 #else
-    d->m_view->page()->runJavaScript(QLatin1String(
-        "var link = document.createElement( 'link' );"
-        "link.href = '") + url.toString() + QLatin1String("';"
-        "link.type = 'text/css';"
-        "link.rel = 'stylesheet';"
-        "link.media = 'screen,print';"
-        "document.getElementsByTagName( 'head' )[0].appendChild( link );")
-    );
+    const auto scriptName = QStringLiteral("OverrideCss");
+    auto& scripts = d->m_view->page()->scripts();
+
+    const auto oldScript = scripts.findScript(scriptName);
+    scripts.remove(oldScript);
+
+    if (cssCode.isEmpty()) {
+        return;
+    }
+
+    // The loading of CSS via JavaScript has a downside: pages are first loaded as is, then
+    // reloaded with the style applied. When a page is large, the reloading is conspicuous
+    // or causes flickering. For example, this can be seen on cmake-modules man page.
+    // This cannot be fixed by specifying an earlier injection point - DocumentCreation -
+    // because, according to QWebEngineScript documentation, this is not suitable for any
+    // DOM operation. So with the DocumentCreation injection point the CSS style is not
+    // applied and the following error appears in KDevelop's output:
+    // js: Uncaught TypeError: Cannot read property 'appendChild' of null
+    QWebEngineScript script;
+    script.setInjectionPoint(QWebEngineScript::DocumentReady);
+    script.setName(scriptName);
+    script.setRunsOnSubFrames(false);
+    script.setSourceCode(QLatin1String("const css = document.createElement('style');"
+                                       "css.innerText = '%1';"
+                                       "document.head.appendChild(css);")
+                             .arg(QString::fromUtf8(escapeJavaScriptString(cssCode))));
+    script.setWorldId(QWebEngineScript::ApplicationWorld);
+
+    scripts.insert(script);
 #endif
 }
 

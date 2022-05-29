@@ -59,7 +59,10 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
 
     // apply custom style-sheet to normalize look of the page
     const QString cssFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevmanpage/manpagedocumentation.css"));
-    view->setOverrideCss(QUrl::fromLocalFile(cssFile));
+    if (!cssFile.isEmpty()) {
+        view->setOverrideCssFile(cssFile);
+    }
+
     return view;
 }
 
