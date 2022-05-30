@@ -23,7 +23,6 @@ struct RepositoryManager
 {
 public:
     using Mutex = std::decay_t<decltype(*std::declval<ItemRepositoryType>().mutex())>;
-    ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
     explicit RepositoryManager(const QString& name, Mutex* mutex, int version = 1,
                                ItemRepositoryRegistry& registry = globalItemRepositoryRegistry())
         : m_name(name)
