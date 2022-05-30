@@ -1080,7 +1080,7 @@ struct ItemRepositoryStatistics {
  *                                 This costs a bit of performance, but must be enabled if there may be data in the
  *                                 repository that does on-disk reference counting, like IndexedString,
  *                                 IndexedIdentifier, etc.
- * @tparam mutex The mutex type to use internally. It has to be locked externally before accessing the item repository
+ * @tparam Mutex The mutex type to use internally. It has to be locked externally before accessing the item repository
  *               from multiple threads.
  */
 
