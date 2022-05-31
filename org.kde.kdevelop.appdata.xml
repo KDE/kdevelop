@@ -117,7 +117,7 @@
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="ar">لدى «مطوّرك» سندات تحليل للغات سي، وسي++، وجاڤاسكربت/QML كما وملحقات خارجيّة أخرى تدعم PHP أو پيثون.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
-    <p xml:lang="ca-valencia">KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb atres connectors externs que implementen, p. ex., PHP o Python.</p>
+    <p xml:lang="ca-valencia">KDevelop disposa de dorsals d'analisador per a C, C ++ i Javascript/QML, amb atres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="de">KDevelop beinhaltet Parser-Module für  C, C++ und Javascript/QML, weitere externe Module unterstützten zum Beispiel PHP oder Python.</p>
     <p xml:lang="en-GB">KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="es">KDevelop dispone de motores de análisis sintáctico para C, C++ y JavaScript/QML, además de complementos externos (por ejemplo, para PHP o para Python).</p>
