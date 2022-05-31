@@ -1,9 +1,16 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevmanpage\")
+
+declare_qt_logging_category(kdevmanpage_LOG_SRCS
+    TYPE PLUGIN
+    IDENTIFIER MANPAGE
+    CATEGORY_BASENAME "manpage"
+)
 set(kdevmanpage_SRCS
     manpagedocumentation.cpp
     manpageplugin.cpp
     manpagemodel.cpp
     manpagedocumentationwidget.cpp
+    ${kdevmanpage_LOG_SRCS}
 )
 
 kdevplatform_add_plugin(kdevmanpage SOURCES ${kdevmanpage_SRCS})

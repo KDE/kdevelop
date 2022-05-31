@@ -9,11 +9,17 @@
 #include "manpagemodel.h"
 #include "manpageplugin.h"
 #include "manpagedocumentation.h"
+#include "debug.h"
+
+#include "../openwith/iopenwith.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
+#include <QDesktopServices>
 #include <QStringListModel>
+#include <QTimer>
+
 #include <limits>
 
 namespace {
@@ -172,14 +178,31 @@ void ManPageModel::showItem(const QModelIndex& idx)
 
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
+    qCDebug(MANPAGE) << "showing" << url.toDisplayString(QUrl::PreferLocalFile);
+
     auto doc = ManPageDocumentation::s_provider->documentation(url);
     IDocumentationController* const controller = ICore::self()->documentationController();
     if (!doc) {
         doc = controller->documentation(url);
         if (!doc) {
-            // Ignore the unsupported link and stay on the current documentation page
-            // instead of displaying a blank page. Even if this is an external link we can
+            // Open the unsupported link externally and stay on the current
+            // documentation page. Even if this is an external link we can
             // download the contents of, our support for website navigation is very poor.
+            if (url.isLocalFile()) {
+                // This is usually a system header file => open it in the internal editor.
+                // HACK: the timer delay works around an inexplicable bug that temporarily
+                // scales current Documentation view's QWebEnginePage as if its zoomFactor
+                // equals 1 when the call to IOpenWith::openFiles() ends up opening a
+                // document in DocumentController.
+                QTimer::singleShot(100, [url] { IOpenWith::openFiles({url}); });
+            } else {
+                // This is usually a website or mailto link. IOpenWith::openFiles()
+                // tends to open it in the internal editor, which is not nice. Let us
+                // bypass IOpenWith and open the link in the user's preferred application.
+                if (!QDesktopServices::openUrl(url)) {
+                    qCWarning(MANPAGE) << "couldn't open URL" << url;
+                }
+            }
             return;
         }
     }
