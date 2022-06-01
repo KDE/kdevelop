@@ -97,7 +97,7 @@ public:
     {
     }
 
-    EnvironmentInformationItem& operator=(const EnvironmentInformationItem& rhs) = delete;
+    Q_DISABLE_COPY_MOVE(EnvironmentInformationItem)
 
     unsigned int hash() const
     {
@@ -193,7 +193,7 @@ public:
         initializeAppendedLists(true);
     }
 
-    EnvironmentInformationListItem(const EnvironmentInformationListItem& rhs, bool dynamic = true)
+    explicit EnvironmentInformationListItem(const EnvironmentInformationListItem& rhs, bool dynamic)
     {
         initializeAppendedLists(dynamic);
         m_file = rhs.m_file;
@@ -205,7 +205,7 @@ public:
         freeAppendedLists();
     }
 
-    EnvironmentInformationListItem& operator=(const EnvironmentInformationListItem& rhs) = delete;
+    Q_DISABLE_COPY_MOVE(EnvironmentInformationListItem)
 
     unsigned int hash() const
     {
@@ -557,7 +557,7 @@ public:
                 const uint index = repo.findIndex(request);
 
                 if (index) {
-                    EnvironmentInformationListItem item(*repo.itemFromIndex(index));
+                    EnvironmentInformationListItem item(*repo.itemFromIndex(index), true);
                     if (item.itemsList().removeOne(infoIndex)) {
                         repo.deleteItem(index);
                         if (!item.itemsList().empty()) {
