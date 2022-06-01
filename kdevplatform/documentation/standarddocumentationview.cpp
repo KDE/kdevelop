@@ -122,12 +122,6 @@ public:
 #endif
         m_view->setContextMenuPolicy(Qt::NoContextMenu);
 
-        // workaround for Qt::NoContextMenu broken with QWebEngineView, contextmenu event is always eaten
-        // see https://bugreports.qt.io/browse/QTBUG-62345
-        // we have to enforce deferring of event ourselves in the event filter.
-        // TODO: remove the context menu workaround (most of this comment and ContextMenu-related code in
-        // StandardDocumentationView::eventFilter()) once we require Qt 5.10 or later, because
-        // QTBUG-62345 was fixed in Qt 5.10.0 Beta 4.
         // The event filter is necessary for handling mouse events since they are swallowed by
         // QWebView and QWebEngineView.
         m_view->installEventFilter(parent);
@@ -398,16 +392,11 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
     Q_D(StandardDocumentationView);
 #ifndef USE_QTWEBKIT
     if (object == d->m_view) {
-        // help QWebEngineView properly behave like expected as if Qt::NoContextMenu was set
-        if (event->type() == QEvent::ContextMenu) {
-            event->ignore();
-            return true;
-        }
         /* HACK / Workaround for QTBUG-43602
          * Need to set an eventFilter on the child of WebengineView because it swallows
          * mouse events.
          */
-        else if (event->type() == QEvent::ChildAdded) {
+        if (event->type() == QEvent::ChildAdded) {
             QObject* child = static_cast<QChildEvent*>(event)->child();
             if(qobject_cast<QWidget*>(child)) {
                 child->installEventFilter(this);
