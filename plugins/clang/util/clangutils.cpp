@@ -232,7 +232,7 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
     }
 
     QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
-    if (functionName.contains(QLatin1Char('<')) && ! functionName.startsWith(QStringLiteral("operator<"))) {
+    if (functionName.contains(QLatin1Char('<')) && !functionName.startsWith(QStringLiteral("operator<"))) {
         stream << functionName.leftRef(functionName.indexOf(QLatin1Char('<')));
     } else {
         stream << functionName;

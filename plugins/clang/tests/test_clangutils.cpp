@@ -283,7 +283,7 @@ void TestClangUtils::testGetCursorSignature()
                 return CXChildVisit_Recurse;
         }
     });
-    QVERIFY2(! clang_Cursor_isNull(functionCursor), "function not found");
+    QVERIFY2(!clang_Cursor_isNull(functionCursor), "function not found");
     auto scope = ClangUtils::getScope(functionCursor, startCursor);
     auto signature = ClangUtils::getCursorSignature(functionCursor, scope, {});
     QCOMPARE(signature, expectedSignature);
