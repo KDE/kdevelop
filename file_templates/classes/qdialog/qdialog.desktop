@@ -2,7 +2,7 @@
 Name=Dialog with a UI File
 Name[az]=İİ faylı ilə dialoq
 Name[ca]=Diàleg amb un fitxer IU
-Name[ca@valencia]=Diàleg amb un fitxer IU
+Name[ca@valencia]=Diàlec amb un ficher IU
 Name[de]=Dialog mit einer UI-Datei
 Name[el]=Διάλογος με UI αρχείο
 Name[en_GB]=Dialogue with a UI File
@@ -27,7 +27,7 @@ Name[zh_CN]=带 UI 文件的对话框
 Comment=QDialog subclass with a separate Qt Designer file
 Comment[az]=Ayrıca t Designer faylı ilə QDialog alt sinifi
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer
-Comment[ca@valencia]=Subclasse QDialog amb un fitxer separat de Qt Designer
+Comment[ca@valencia]=Subclasse QDialog amb un ficher separat de Qt Designer
 Comment[de]=QDialog-Subklasse mit einer separaten Qt-Designer-Datei
 Comment[el]=QDialog subclass με χωριστό Qt Designer αρχείο
 Comment[en_GB]=QDialog subclass with a separate Qt Designer file

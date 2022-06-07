@@ -36,7 +36,7 @@
         "Category": "Utilities",
         "Description": "This plugin displays a graphical view of all documents currently loaded and separates them by mimetype.",
         "Description[az]": "Bu qoşma, mime növü tərəfindən hal-hazırda yüklənmiş və ayrılmış bütün sənədlərin qrafik görünüşünü əks etdirir.",
-        "Description[ca@valencia]": "Este connector mostra una visualisació gràfica de tots els documents carregats actualment, separats pel tipus MIME.",
+        "Description[ca@valencia]": "Este conector mostra una visualisació gràfica de tots els documents carregats actualment, separats pel tipus MIME.",
         "Description[ca]": "Aquest connector mostra una visualització gràfica de tots els documents carregats actualment, separats pel tipus MIME.",
         "Description[cs]": "Tento zásuvný modul zobrazuje grafický pohled všech aktuálně načtených dokumentů a odděluje je podle typu MIME.",
         "Description[de]": "Dieses Modul zeigt alle aktuell geladenen Dokumente getrennt nach ihren MIME-Typen an.",
