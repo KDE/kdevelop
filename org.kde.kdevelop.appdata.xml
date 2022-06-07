@@ -37,7 +37,7 @@
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
   <summary xml:lang="ar">بيئة تطوير متكاملة بمزايا عديدة ودعم للملحقات للغتي سي/سي++ ولغات البرمجة الأخرى</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació</summary>
-  <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i atres llenguatges de programació</summary>
+  <summary xml:lang="ca-valencia">És un IDE, extensible amb conectors, amb totes les característiques per a C/C++ i atres llenguatges de programació</summary>
   <summary xml:lang="de">Eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
   <summary xml:lang="en-GB">Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
   <summary xml:lang="es">Entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
@@ -88,7 +88,7 @@
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
     <p xml:lang="ar">توفّر البرمجيّة مزايا التّحرير والتّنقّل والتّنقيح لمختلف لغات البرمجة، إلى جانب التّكامل مع مختلف أنظمة البناء وأنظمة التّحكّم بالإصدارات، وذلك عبر البنية المعتمدة على الملحقات.</p>
     <p xml:lang="ca">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
-    <p xml:lang="ca-valencia">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, aixina com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
+    <p xml:lang="ca-valencia">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, aixina com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en conectors.</p>
     <p xml:lang="de">Funktionen zum Editieren, Navigieren und zur Fehlersuche für mehrere Programmiersprachen, dazu auch Integration von mehreren Build- und Versionskontrollsystemen auf der Basis einer modularen Architektur.</p>
     <p xml:lang="en-GB">It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
     <p xml:lang="es">Proporciona funciones de edición, navegación y depuración para varios lenguajes de programación, además de integración con diversos sistemas de compilación y de control de versiones, usando una arquitectura basada en complementos.</p>
@@ -113,7 +113,7 @@
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="ar">لدى «مطوّرك» سندات تحليل للغات سي، وسي++، وجاڤاسكربت/QML كما وملحقات خارجيّة أخرى تدعم PHP أو پيثون.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
-    <p xml:lang="ca-valencia">KDevelop disposa de dorsals d'analisador per a C, C ++ i Javascript/QML, amb atres connectors externs que implementen, p. ex., PHP o Python.</p>
+    <p xml:lang="ca-valencia">KDevelop disposa de dorsals d'analisador per a C, C ++ i Javascript/QML, amb atres conectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="de">KDevelop beinhaltet Parser-Module für  C, C++ und Javascript/QML, weitere externe Module unterstützten zum Beispiel PHP oder Python.</p>
     <p xml:lang="en-GB">KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="es">KDevelop dispone de motores de análisis sintáctico para C, C++ y JavaScript/QML, además de complementos externos (por ejemplo, para PHP o para Python).</p>
