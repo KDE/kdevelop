@@ -38,7 +38,7 @@
         "Category": "Documentation",
         "Description": "This plugin provides QtHelp integration",
         "Description[az]": "Bu qoşma, QtHelp inteqrasiyasını təmin edir",
-        "Description[ca@valencia]": "Este conector proveeix la integració amb QtHelp",
+        "Description[ca@valencia]": "Este connector proveeix la integració amb QtHelp",
         "Description[ca]": "Aquest connector proveeix la integració amb QtHelp",
         "Description[de]": "Dieses Modul integriert QtHelp in KDevelop",
         "Description[el]": "Αυτό το πρόσθετο παρέχει ενσωμάτωση του QtHelp",

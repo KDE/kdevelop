@@ -36,7 +36,7 @@
         "Category": "Analyzers",
         "Description": "This plugin integrates Clazy to KDevelop",
         "Description[az]": "Bu qoşma Clazy'ni KDevelop'a inteqrasiya edir",
-        "Description[ca@valencia]": "Este conector integra Clazy a KDevelop",
+        "Description[ca@valencia]": "Este connector integra Clazy a KDevelop",
         "Description[ca]": "Aquest connector integra el Clazy al KDevelop",
         "Description[cs]": "Tento modul integruje podporu pro Clazy v KDevelop",
         "Description[de]": "Dieses Modul integriert Clazy in KDevelop",
