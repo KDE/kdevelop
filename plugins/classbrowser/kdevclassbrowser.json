@@ -37,7 +37,7 @@
         "Description": "This plugin provides a browsable model of the currently parsed classes and other items.",
         "Description[ar]": "توفّر هذه الملحقة طرازًا قابلًا للتّصفّح للأصناف المحلّلة حاليًّا والعناصر الأخرى.",
         "Description[az]": "Bu qoşma, cari təhlil edilmiş sinifləri və digər elementlərin baxılabilən modelini təqdim edir.",
-        "Description[ca@valencia]": "Este conector proporciona un model navegable de les classes analisades actualment i atres elements.",
+        "Description[ca@valencia]": "Este connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
         "Description[ca]": "Aquest connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
         "Description[de]": "Dieses Modul bietet eine Liste der aktuell eingelesenen Klassen und anderer Elemente.",
         "Description[el]": "Αυτό το πρόσθετο προσφέρει ένα μοντέλο περιήγησης των αναλυμένων κλάσεων και άλλων αντικειμένων.",

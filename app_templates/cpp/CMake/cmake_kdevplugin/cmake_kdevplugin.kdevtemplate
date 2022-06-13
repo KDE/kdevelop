@@ -3,7 +3,7 @@
 Name=Simple KDevelop Plugin
 Name[az]=Sadə KDevelop qoşması
 Name[ca]=Connector senzill del KDevelop
-Name[ca@valencia]=Conector senzill de KDevelop
+Name[ca@valencia]=Connector senzill de KDevelop
 Name[cs]=Jednoduchý modul pro KDevelop
 Name[de]=Einfaches KDevelop-Modul
 Name[el]=Απλό πρόσθετο του KDevelop
@@ -31,7 +31,7 @@ Name[zh_CN]=简单的 KDevelop 插件
 Comment=Generate a general KDevelop plugin, using CMake and C++
 Comment[az]=CMake və C++ istifadə edərək bir əsas KDevelop qoşması yaradın
 Comment[ca]=Genera un connector del KDevelop general, usant CMake i C++
-Comment[ca@valencia]=Genera un conector de KDevelop general, utilisant CMake i C++
+Comment[ca@valencia]=Genera un connector de KDevelop general, utilitzant CMake i C++
 Comment[de]=erstellt ein allgemeines KDevelop-Modul mit CMake und C++
 Comment[el]=Δημιουργία ενός γενικού πρόσθετου KDevelop, με χρήση CMake και C++
 Comment[en_GB]=Generate a general KDevelop plugin, using CMake and C++
