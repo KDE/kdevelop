@@ -36,6 +36,8 @@ public:
 
     /**
      * Makes @p runtimes available to be used.
+     * If @p runtimes has no parent, the controller will become its parent
+     * and will remove it when needed.
      */
     virtual void addRuntimes(KDevelop::IRuntime* runtimes) = 0;
 
