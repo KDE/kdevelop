@@ -91,6 +91,7 @@ private Q_SLOTS:
     void testProblemRequestedHereSameFile();
     void testProblemRequestedHereChain();
 
+    void testGccCompatibility_data();
     void testGccCompatibility();
     void testQtIntegration();
     void testHasInclude();

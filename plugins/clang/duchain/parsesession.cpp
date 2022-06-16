@@ -61,6 +61,9 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
     // Note how clang warns us about emulating GCC, which is exactly what we want here.
     const auto noGnuZeroVaridicMacroArguments = QByteArrayLiteral("-Wno-gnu-zero-variadic-macro-arguments");
     bool noGnuZeroVaridicMacroArgumentsFound = false;
+    bool isCpp = false;
+    const auto sizedDealloc = QByteArrayLiteral("-fsized-deallocation");
+    bool sizedDeallocFound = false;
     for (auto& argument : arguments) {
         if (argument == "-Werror") {
             argument.clear();
@@ -75,11 +78,20 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
 #endif
         else if (!noGnuZeroVaridicMacroArgumentsFound && argument == noGnuZeroVaridicMacroArguments) {
             noGnuZeroVaridicMacroArgumentsFound = true;
+        } else if (!isCpp && argument == "-xc++") {
+            isCpp = true;
+        } else if (!sizedDeallocFound && argument == sizedDealloc) {
+            sizedDeallocFound = true;
         }
     }
 
     if (!noGnuZeroVaridicMacroArgumentsFound) {
         arguments.append(noGnuZeroVaridicMacroArguments);
+    }
+    if (isCpp && !sizedDeallocFound) {
+        // see e.g.
+        // https://youtrack.jetbrains.com/issue/CPP-29091/In-template-call-to-builtinoperatordelete-selects-non-usual-deallocation-function-gcc-12#focus=Comments-27-6067190.0-0
+        arguments.append(sizedDealloc);
     }
 }
 

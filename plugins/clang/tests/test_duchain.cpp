@@ -2096,24 +2096,46 @@ int main()
     QCOMPARE(top->localDeclarations().count(), 3);
 }
 
+void TestDUChain::testGccCompatibility_data()
+{
+    QTest::addColumn<QString>("parserArguments");
+    QTest::addColumn<QString>("code");
+
+    QTest::newRow("x86intrin") << QString() << QStringLiteral(R"(
+            #include <x86intrin.h>
+
+            int main() { return 0; }
+        )");
+    QTest::newRow("sized-dealloc") << QStringLiteral("-Wall -std=c++14") << QStringLiteral(R"(
+            #include <memory>
+
+            int main() {
+                auto test = std::make_shared<uint32_t>();
+                return 0;
+            }
+        )");
+}
+
 void TestDUChain::testGccCompatibility()
 {
+    QFETCH(QString, parserArguments);
+    QFETCH(QString, code);
+
     // TODO: make it easier to change the compiler provider for testing purposes
     QTemporaryDir dir;
     auto project = new TestProject(Path(dir.path()), this);
     auto definesAndIncludesConfig = project->projectConfiguration()->group("CustomDefinesAndIncludes");
     auto pathConfig = definesAndIncludesConfig.group("ProjectPath0");
     pathConfig.writeEntry("Path", ".");
+    if (!parserArguments.isEmpty()) {
+        pathConfig.writeEntry("parserArguments", parserArguments);
+    }
     pathConfig.group("Compiler").writeEntry("Name", "GCC");
     m_projectController->addProject(project);
 
     {
         // TODO: Also test in C mode. Currently it doesn't work (some intrinsics missing?)
-        TestFile file(QStringLiteral(R"(
-            #include <x86intrin.h>
-
-            int main() { return 0; }
-        )"), QStringLiteral("cpp"), project, dir.path());
+        TestFile file(code, QStringLiteral("cpp"), project, dir.path());
 
         file.parse();
         QVERIFY(file.waitForParsed(50000));
