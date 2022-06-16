@@ -141,11 +141,11 @@ endif()
 
 if (LLVM_FIND_REQUIRED AND NOT LLVM_FOUND)
   message(FATAL_ERROR "Could not find LLVM: ${_LLVM_ERROR_MESSAGE}")
-elseif(_LLVM_ERROR_MESSAGE)
+elseif(_LLVM_ERROR_MESSAGE AND NOT LLVM_FIND_QUIETLY)
   message(STATUS "Could not find LLVM: ${_LLVM_ERROR_MESSAGE}")
 endif()
 
-if (LLVM_FOUND)
+if(LLVM_FOUND AND NOT LLVM_FIND_QUIETLY)
   message(STATUS "Found LLVM (version: ${LLVM_VERSION}): (using ${LLVM_CONFIG_EXECUTABLE})")
   message(STATUS "  Include dirs:   ${LLVM_INCLUDE_DIRS}")
   message(STATUS "  LLVM libraries: ${LLVM_LIBS}")
