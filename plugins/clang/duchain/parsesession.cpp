@@ -275,7 +275,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     smartArgs << ClangHelpers::clangBuiltinIncludePath().toUtf8();
     clangArguments << "-isystem" << smartArgs.last().constData();
 
-    if (!environment.defines().isEmpty()) {
+    {
         smartArgs << writeDefinesFile(environment.defines());
         clangArguments << "-imacros" << smartArgs.last().constData();
     }
@@ -356,6 +356,19 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
                 continue;
             }
             definesStream << QLatin1String("#define ") << it.key() << ' ' << it.value() << '\n';
+        }
+        if (!defines.contains(QStringLiteral("__clang__")) && defines.value(QStringLiteral("__GNUC__")).toInt() >= 11) {
+            /* fake GCC compatibility for __malloc__ attribute with arguments to silence warnings like this:
+
+             /usr/include/stdlib.h:566:5: error: use of undeclared identifier '__builtin_free'; did you mean
+             '__builtin_frexp'? /usr/include/stdlib.h:566:5: note: '__builtin_frexp' declared here
+             /usr/include/stdlib.h:566:5: error: '__malloc__' attribute takes no arguments
+             /usr/include/stdlib.h:570:14: error: '__malloc__' attribute takes no arguments
+             /usr/include/stdlib.h:799:6: error: use of undeclared identifier '__builtin_free'; did you mean
+             '__builtin_frexp'? /usr/include/stdlib.h:566:5: note: '__builtin_frexp' declared here
+             /usr/include/stdlib.h:799:6: error: '__malloc__' attribute takes no arguments
+             */
+            definesStream << QLatin1String("#define __malloc__(...) __malloc__\n");
         }
     }
     m_definesFile.close();
