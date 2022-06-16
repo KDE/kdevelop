@@ -27,9 +27,10 @@
 set(KNOWN_VERSIONS 14 13 12 11 10 9 8 7 6.0 5.0 4.0 3.9 3.8)
 
 foreach(version ${KNOWN_VERSIONS})
-    if (LLVM_DIR OR (DEFINED Clang_FIND_VERSION AND Clang_FIND_VERSION VERSION_GREATER version))
+    if(LLVM_FOUND OR (DEFINED Clang_FIND_VERSION AND Clang_FIND_VERSION VERSION_GREATER version))
+        # already found or version doesn't match
         break()
-    endif ()
+    endif()
 
     find_package(LLVM ${version})
 endforeach()
