@@ -167,7 +167,7 @@ void Parser::tokenize( const QString& contents )
 
         if( m_debug )
         {
-            qCDebug(KDEV_QMAKE) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end);
+            qCDebug(KDEV_QMAKE) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end) << (tokenStream->size()-1);
         }
 
     }
@@ -193,11 +193,18 @@ void Parser::reportProblem( Parser::ProblemType type, const QString& message )
 
 
 // custom error recovery
-void Parser::expectedToken(int /*expected*/, qint64 /*where*/, const QString& name)
+void Parser::expectedToken(int actualToken, qint64 expectedToken, const QString& name)
 {
+    qint64 line;
+    qint64 col;
+    size_t index = tokenStream->index()-1;
+    tokenStream->startPosition(index, &line, &col);
+
     reportProblem(
         Parser::Error,
-        QStringLiteral("Expected token \"%1\"").arg(name));
+        QStringLiteral("Expected token \"%1\" (%2) instead of %3 at line: %4 col: %5, token index %6")
+            .arg(name, QString::number(expectedToken), QString::number(actualToken),
+                 QString::number(line), QString::number(col), QString::number(index)));
 }
 
 void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
