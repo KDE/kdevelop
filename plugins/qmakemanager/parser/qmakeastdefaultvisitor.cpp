@@ -44,7 +44,10 @@ void ASTDefaultVisitor::visitFunctionCall(FunctionCallAST* node)
 
 void ASTDefaultVisitor::visitScopeBody(ScopeBodyAST* node)
 {
-    foreach (StatementAST* stmt, node->statements) {
+    foreach (StatementAST* stmt, node->ifStatements) {
+        visitNode(stmt);
+    }
+    foreach (StatementAST* stmt, node->elseStatements) {
         visitNode(stmt);
     }
 }

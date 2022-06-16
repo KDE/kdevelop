@@ -85,8 +85,8 @@ void classname::funcname()\
 
 #define TESTSCOPEBODY(scope, teststmts, stmtcount)                                                                     \
     QVERIFY(scope->body != nullptr);                                                                                   \
-    QVERIFY(scope->body->statements.count() == stmtcount);                                                             \
-    matchScopeBodies(scope->body->statements, teststmts);                                                              \
+    QVERIFY(scope->body->ifStatements.count() == stmtcount);                                                           \
+    matchScopeBodies(scope->body->ifStatements, teststmts);                                                            \
     qDeleteAll(teststmts);
 
 #define TESTSCOPEAST( scope, testscope ) \

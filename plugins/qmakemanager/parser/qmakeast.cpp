@@ -61,8 +61,10 @@ ScopeBodyAST::ScopeBodyAST(AST* parent, AST::Type type)
 
 ScopeBodyAST::~ScopeBodyAST()
 {
-    qDeleteAll(statements);
-    statements.clear();
+    qDeleteAll(ifStatements);
+    ifStatements.clear();
+    qDeleteAll(elseStatements);
+    elseStatements.clear();
 }
 
 FunctionCallAST::FunctionCallAST(AST* parent)
@@ -91,12 +93,14 @@ OrAST::~OrAST()
 }
 
 ProjectAST::ProjectAST()
-    : ScopeBodyAST(nullptr, AST::Project)
+    : AST(nullptr, AST::Project)
 {
 }
 
 ProjectAST::~ProjectAST()
 {
+    qDeleteAll(statements);
+    statements.clear();
 }
 
 ScopeAST::ScopeAST(AST* parent, AST::Type type)

@@ -57,7 +57,20 @@ void DebugVisitor::visitScope(ScopeAst* node)
     indent++;
     visitNode(node->functionArguments);
     visitNode(node->orOperator);
-    visitNode(node->scopeBody);
+    visitNode(node->ifElse);
+    indent--;
+    m_out << getIndent() << "END(scope)(" << getTokenInfo(node->endToken) << ")\n";
+}
+
+void DebugVisitor::visitIfElse(IfElseAst* node)
+{
+    m_out << getIndent() << "BEGIN(scope)(" << getTokenInfo(node->startToken) << ")\n";
+    indent++;
+    visitNode(node->ifBody);
+    if (node->elseBody) {
+        m_out << getIndent() << "ELSE:\n";
+        visitNode(node->elseBody);
+    }
     indent--;
     m_out << getIndent() << "END(scope)(" << getTokenInfo(node->endToken) << ")\n";
 }

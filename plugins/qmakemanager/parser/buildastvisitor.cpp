@@ -10,6 +10,8 @@
 #include "qmakeparser.h"
 #include "ast.h"
 
+#include <QScopedValueRollback>
+
 #include <debug.h>
 
 namespace QMake {
@@ -112,13 +114,26 @@ void BuildASTVisitor::visitScope(ScopeAst* node)
             aststack.push(simple);
         }
     }
-    if (node->scopeBody) {
+    if (node->ifElse) {
         auto* scopebody = createAst<ScopeBodyAST>(node, aststack.top());
         auto* scope = stackTop<ScopeAST>();
         scope->body = scopebody;
         aststack.push(scopebody);
-        visitNode(node->scopeBody);
+        visitNode(node->ifElse);
         aststack.pop();
+    }
+}
+
+void BuildASTVisitor::visitIfElse(IfElseAst* node)
+{
+    auto* scopeBody = stackTop<ScopeBodyAST>();
+    {
+        auto guard = QScopedValueRollback(m_currentStatements, &scopeBody->ifStatements);
+        visitNode(node->ifBody);
+    }
+    {
+        auto guard = QScopedValueRollback(m_currentStatements, &scopeBody->elseStatements);
+        visitNode(node->elseBody);
     }
 }
 
@@ -134,6 +149,8 @@ void BuildASTVisitor::visitOp(OpAst* node)
 
 void BuildASTVisitor::visitProject(ProjectAst* node)
 {
+    auto* project = stackTop<ProjectAST>();
+    auto guard = QScopedValueRollback(m_currentStatements, &project->statements);
     DefaultVisitor::visitProject(node);
 }
 
@@ -159,9 +176,7 @@ void BuildASTVisitor::visitStatement(StatementAst* node)
         }
         setIdentifierForStatement(stmt, val);
 
-        auto* scope = stackTop<ScopeBodyAST>();
-        //         qCDebug(KDEV_QMAKE) << "scope:" << scope;
-        scope->statements.append(stmt);
+        m_currentStatements->append(stmt);
     }
 }
 

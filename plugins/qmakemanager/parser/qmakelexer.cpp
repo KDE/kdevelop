@@ -85,13 +85,14 @@ int Lexer::nextTokenKind()
         it = ignoreWhitespaceAndComment(it);
         m_tokenBegin = m_curpos;
         if (m_curpos < m_contentSize) {
-            if (it->unicode() == '\n') {
+            if (it->unicode() == '}') {
+                popState();
+                token = Parser::Token_RBRACE;
+            } else if (it->unicode() == '\n') {
                 popState();
                 createNewline(m_curpos);
                 token = Parser::Token_NEWLINE;
-            } else if (it->unicode() == '\\' && isCont(it))
-
-            {
+            } else if (it->unicode() == '\\' && isCont(it)) {
                 pushState(ContState);
                 token = Parser::Token_CONT;
             } else if (it->unicode() == '"') {
@@ -216,6 +217,8 @@ int Lexer::nextTokenKind()
                 }
                 if (!isEndIdentifierCharacter((it - 1))) {
                     token = Parser::Token_INVALID;
+                } else if (m_content.midRef(m_tokenBegin, m_curpos - m_tokenBegin) == QLatin1String("else")) {
+                    token = Parser::Token_ELSE;
                 }
                 m_curpos--;
             } else {

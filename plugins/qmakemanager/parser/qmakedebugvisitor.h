@@ -27,6 +27,7 @@ public:
     void visitOrOperator( OrOperatorAst *node ) override;
     void visitItem( ItemAst *node ) override;
     void visitScope( ScopeAst *node ) override;
+    void visitIfElse(IfElseAst* node) override;
     void visitOp( OpAst *node ) override;
     void visitProject( ProjectAst *node ) override;
     void visitScopeBody( ScopeBodyAst *node ) override;

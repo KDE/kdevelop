@@ -38,6 +38,8 @@ class ScopeTest : public QObject
         void missingColon();
         void missingColon_data();
         void strangeScopeNames();
+        void testIfElse();
+
     private:
         QMake::ProjectAST* ast = nullptr;
 

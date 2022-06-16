@@ -65,7 +65,7 @@ namespace QMake
        TILDEEQ("tildeeq") ;;
 
 %token COLON("colon"), COMMA("comma"), CONT("cont"), EXCLAM("exclam"),
-       NEWLINE("newline"), OR("or") ;;
+       NEWLINE("newline"), OR("or"), ELSE("else") ;;
 
 %token IDENTIFIER("identifier"), VALUE("value") ;;
 
@@ -95,8 +95,8 @@ namespace QMake
 -> statement [ member variable isNewline: bool;
           member variable isExclam: bool; ] ;;
 
-   functionArguments=functionArguments ( scopeBody=scopeBody | orOperator=orOperator scopeBody=scopeBody | 0 )
-   | ( orOperator=orOperator | 0 ) scopeBody=scopeBody
+   functionArguments=functionArguments ( ifElse=ifElse | orOperator=orOperator ifElse=ifElse | 0 )
+   | ( orOperator=orOperator | 0 ) ifElse=ifElse
 -> scope ;;
 
    ( OR #item=item )+
@@ -125,6 +125,12 @@ namespace QMake
 
     LBRACE ( NEWLINE | 0 ) ( #statements=statement )* RBRACE | COLON #statements=statement
 -> scopeBody ;;
+
+    ELSE body=scopeBody
+-> elseBody ;;
+
+    ifBody=scopeBody ( elseBody=elseBody | 0 )
+-> ifElse ;;
 
 -----------------------------------------------------------------
 -- Code segments copied to the implementation (.cpp) file.

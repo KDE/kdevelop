@@ -12,7 +12,7 @@
 
 void matchScopeBodies(const QList<QMake::StatementAST*>& realbody, const QList<QMake::StatementAST*>& testbody)
 {
-    QVERIFY(realbody.count() == testbody.count());
+    QCOMPARE(realbody.count(), testbody.count());
     int i = 0;
     QMake::AssignmentAST* assign;
     QMake::ScopeAST* scope;
@@ -38,13 +38,10 @@ void matchScopeBodies(const QList<QMake::StatementAST*>& realbody, const QList<Q
             } else if (orop && testorop) {
                 TESTOROPAST(orop, testorop)
             }
-            QVERIFY((scope->body && testscope->body) || (!scope->body && !testscope->body));
+            QCOMPARE(static_cast<bool>(scope->body), static_cast<bool>(testscope->body));
             if (scope->body && testscope->body) {
-                QList<QMake::StatementAST*> bodylist;
-                QList<QMake::StatementAST*> testbodylist;
-                bodylist = scope->body->statements;
-                testbodylist = testscope->body->statements;
-                matchScopeBodies(bodylist, testbodylist);
+                matchScopeBodies(scope->body->ifStatements, testscope->body->ifStatements);
+                matchScopeBodies(scope->body->elseStatements, testscope->body->elseStatements);
             }
         }
         assign = dynamic_cast<QMake::AssignmentAST*>(ast);

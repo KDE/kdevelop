@@ -155,7 +155,7 @@ BEGINTESTFUNCIMPL(FunctionScopeTest, oneStatementSubScope, 1)
     val->value = QStringLiteral("val2");
     tst->values.append(val);
 
-    body->statements.insert(0, tst);
+    body->ifStatements.insert(0, tst);
     call->body = body;
     teststmts.append(call);
     TESTSCOPEBODY(scope, teststmts, 1)
@@ -236,7 +236,7 @@ BEGINTESTFUNCIMPL(FunctionScopeTest, multiLineScopeFuncCall, 1)
     val = new QMake::ValueAST(tst);
     val->value = QStringLiteral("val2");
     tst->values.append(val);
-    body->statements.insert(0, tst);
+    body->ifStatements.insert(0, tst);
     call->body = body;
     teststmts.append(call);
     TESTSCOPEBODY(scope, teststmts, 2)

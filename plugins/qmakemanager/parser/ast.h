@@ -62,17 +62,17 @@ class KDEVQMAKEPARSER_EXPORT ScopeBodyAST: public AST
 public:
     explicit ScopeBodyAST( AST* parent, AST::Type type = AST::ScopeBody );
     ~ScopeBodyAST() override;
-    QList<StatementAST*> statements;
+    QList<StatementAST*> ifStatements;
+    QList<StatementAST*> elseStatements;
 };
 
-class KDEVQMAKEPARSER_EXPORT ProjectAST : public ScopeBodyAST
+class KDEVQMAKEPARSER_EXPORT ProjectAST : public AST
 {
 public:
     explicit ProjectAST();
     ~ProjectAST() override;
     QString filename;
-
-
+    QList<StatementAST*> statements;
 };
 
 class KDEVQMAKEPARSER_EXPORT AssignmentAST : public StatementAST

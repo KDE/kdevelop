@@ -92,7 +92,7 @@ BEGINTESTFUNCIMPL(ScopeTest, nestedScope, 1)
     val = new QMake::ValueAST(tst);
     val->value = QStringLiteral("FOO");
     tst->values.append(val);
-    body->statements.append(tst);
+    body->ifStatements.append(tst);
     simple->body = body;
     testlist.append(simple);
 
@@ -117,6 +117,14 @@ void ScopeTest::strangeScopeNames()
 {
     QMake::Driver d;
     d.setContent(QStringLiteral("linux-gcc++-* {\n  VARIABLE = FOO\n}\n"));
+    bool ret = d.parse(&ast);
+    QVERIFY(ret);
+}
+
+void ScopeTest::testIfElse()
+{
+    QMake::Driver d;
+    d.setContent(QStringLiteral("isEmpty(foo) { A = 1 } else { B = 2 }\n"));
     bool ret = d.parse(&ast);
     QVERIFY(ret);
 }
