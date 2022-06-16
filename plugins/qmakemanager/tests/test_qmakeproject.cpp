@@ -29,6 +29,26 @@ QTEST_MAIN(TestQMakeProject)
 
 using namespace KDevelop;
 
+namespace
+{
+ProjectTargetItem* findTarget(const ProjectFolderItem* folder, const QString& name)
+{
+    const auto items = folder->children();
+    for (const auto* item : items) {
+        if (item->target() && item->baseName() == name) {
+            return item->target();
+        } else if (item->folder()) {
+            auto ret = findTarget(item->folder(), name);
+            if (ret) {
+                return ret;
+            }
+        }
+    }
+    return nullptr;
+}
+
+}
+
 TestQMakeProject::TestQMakeProject(QObject* parent)
     : QObject(parent)
 {
@@ -62,12 +82,12 @@ void TestQMakeProject::testBuildDirectory_data()
     QTest::newRow("Basic Project") << "basic_project"
                                    << ""
                                    << "";
-    QTest::newRow("Subdirs Project (root)") << "subdirs_project"
-                                            << ""
-                                            << "";
     QTest::newRow("Subdirs Project (dir_a)") << "subdirs_project"
                                              << "dir_a"
                                              << "dir_a";
+    QTest::newRow("Subdirs Project (dir_b)") << "subdirs_project"
+                                             << "dir_b"
+                                             << "dir_b";
 }
 
 void TestQMakeProject::testBuildDirectory()
@@ -116,15 +136,12 @@ void TestQMakeProject::testBuildDirectory()
     // adds expected directory to our base path
     const Path expectedPath(Path{m_buildDir.path()}, expected);
 
-    // path for files to build
-    Path buildUrl(QStringLiteral("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR, projectName, target));
-    QList<ProjectFolderItem*> buildItems = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
-    QCOMPARE(buildItems.size(), 1);
+    auto targetItem = findTarget(project->projectItem(), target.isEmpty() ? projectName : target);
+    QVERIFY(targetItem);
+
     IBuildSystemManager* buildManager = project->buildSystemManager();
-    const auto buildFolder = buildItems.first();
 
-    const Path actual = buildManager->buildDirectory(buildFolder);
-
+    const Path actual = buildManager->buildDirectory(targetItem);
     QCOMPARE(actual, expectedPath);
 
     auto buildJob = buildManager->builder()->configure(project);
