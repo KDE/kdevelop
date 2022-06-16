@@ -29,7 +29,7 @@ target_link_libraries(kdevwelcomepage
     KF5::Declarative
 )
 # see https://bugs.launchpad.net/ubuntu/+source/gcc-5/+bug/1568899
-if (UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if (UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "6.0.0")
     message(WARNING "Applying workaround for https://bugs.launchpad.net/ubuntu/+source/gcc-5/+bug/1568899")
     target_link_libraries(kdevwelcomepage gcc_s gcc)
 endif()
