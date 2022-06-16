@@ -10,6 +10,8 @@
 #include "qmakedefaultvisitor.h"
 #include "qmakeparser.h"
 
+#include <QTextStream>
+
 namespace QMake
 {
 
@@ -35,6 +37,7 @@ public:
     QString getTokenInfo(qint64 idx);
     QString getIndent();
 private:
+    QTextStream m_out;
     QMake::Parser* m_parser;
     int indent;
 };
