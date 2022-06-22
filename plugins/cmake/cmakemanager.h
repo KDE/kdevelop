@@ -127,6 +127,8 @@ private:
 
     void showConfigureErrorMessage(const QString& projectName, const QString& errorMessage) const;
 
+    KJob* createImportJob(KDevelop::ProjectFolderItem* item, bool forceConfigure);
+
 private:
     struct PerProjectData
     {

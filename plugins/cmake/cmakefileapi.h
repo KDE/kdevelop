@@ -6,7 +6,9 @@
 
 #pragma once
 
-class QJsonObject;
+#include <QJsonObject>
+#include <QDateTime>
+
 class QString;
 
 #include <cmakecommonexport.h>
@@ -33,19 +35,24 @@ KDEVCMAKECOMMON_EXPORT bool supported(const QString &cmakeExecutable);
  */
 KDEVCMAKECOMMON_EXPORT void writeClientQueryFile(const QString &buildDirectory);
 
+struct ReplyIndex {
+    QDateTime lastModified;
+    QJsonObject data;
+};
+
 /**
  * Read and parse latest available reply index file that corresponds to our query in @p buildDirectory.
  *
  * See also: https://cmake.org/cmake/help/latest/manual/cmake-file-api.7.html#v1-reply-index-file
  */
-KDEVCMAKECOMMON_EXPORT QJsonObject findReplyIndexFile(const QString &buildDirectory);
+KDEVCMAKECOMMON_EXPORT ReplyIndex findReplyIndexFile(const QString& buildDirectory);
 
 /**
  * Read and parse the code model referenced by the given @p replyIndex
  *
  * See also: https://cmake.org/cmake/help/latest/manual/cmake-file-api.7.html#id11
  */
-KDEVCMAKECOMMON_EXPORT CMakeProjectData parseReplyIndexFile(const QJsonObject& replyIndex,
+KDEVCMAKECOMMON_EXPORT CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex,
                                                             const KDevelop::Path& sourceDirectory,
                                                             const KDevelop::Path& buildDirectory);
 }

@@ -69,7 +69,8 @@ private Q_SLOTS:
         QVERIFY(configureJob->exec());
 
         const auto index = CMake::FileApi::findReplyIndexFile(buildDir);
-        QVERIFY(!index.isEmpty());
+        QVERIFY(index.lastModified.isValid());
+        QVERIFY(!index.data.isEmpty());
 
         const auto projectData = CMake::FileApi::parseReplyIndexFile(index, project->path(), buildPath);
         QVERIFY(projectData.compilationData.isValid);
@@ -97,6 +98,10 @@ private Q_SLOTS:
 
         QVERIFY(projectData.cmakeFiles.contains(Path(project->path(), "CMakeLists.txt")));
         QVERIFY(projectData.cmakeFiles.contains(Path(subDirPath, "CMakeLists.txt")));
+
+        QCOMPARE(projectData.lastModifiedProjectData, index.lastModified);
+        QVERIFY(projectData.lastModifiedCMakeFile.isValid());
+        QVERIFY(projectData.lastModifiedCMakeFile < projectData.lastModifiedProjectData);
     }
 };
 

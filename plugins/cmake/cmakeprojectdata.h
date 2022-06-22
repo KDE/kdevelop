@@ -10,8 +10,10 @@
 #include <QSharedPointer>
 #include <QStringList>
 #include <QHash>
-#include <util/path.h>
 #include <QDebug>
+#include <QDateTime>
+
+#include <util/path.h>
 
 #include <cmakecommonexport.h>
 
@@ -108,6 +110,8 @@ struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
         bool isCMake = false;
     };
     QHash<KDevelop::Path, CMakeFileFlags> cmakeFiles;
+    QDateTime lastModifiedCMakeFile;
+    QDateTime lastModifiedProjectData;
 };
 
 #endif

@@ -92,13 +92,13 @@ static QDir toReplyDir(const QString& buildDirectory)
     return replyDir;
 }
 
-QJsonObject findReplyIndexFile(const QString& buildDirectory)
+ReplyIndex findReplyIndexFile(const QString& buildDirectory)
 {
     const auto replyDir = toReplyDir(buildDirectory);
     for (const auto& entry : replyDir.entryInfoList({QStringLiteral("index-*.json")}, QDir::Files, QDir::Name | QDir::Reversed)) {
         const auto object = parseFile(entry.absoluteFilePath());
         if (isKDevelopClientResponse(object)) {
-            return object;
+            return {entry.lastModified(), object};
         }
     }
     qCWarning(CMAKE) << "no cmake-file-api reply index file found in" << replyDir.absolutePath();
@@ -214,8 +214,8 @@ static CMakeProjectData parseCodeModel(const QJsonObject& codeModel, const QDir&
     return ret;
 }
 
-static QHash<Path, CMakeProjectData::CMakeFileFlags> parseCMakeFiles(const QJsonObject& cmakeFiles,
-                                                                     PathInterner& sourcePathInterner)
+static QHash<Path, CMakeProjectData::CMakeFileFlags>
+parseCMakeFiles(const QJsonObject& cmakeFiles, PathInterner& sourcePathInterner, QDateTime* lastModifiedCMakeFile)
 {
     QHash<Path, CMakeProjectData::CMakeFileFlags> ret;
     for (const auto& jsonInput : cmakeFiles.value(QLatin1String("inputs")).toArray()) {
@@ -226,15 +226,19 @@ static QHash<Path, CMakeProjectData::CMakeFileFlags> parseCMakeFiles(const QJson
         flags.isExternal = input.value(QLatin1String("isExternal")).toBool();
         flags.isCMake = input.value(QLatin1String("isCMake")).toBool();
         ret[path] = flags;
+
+        if (path.isLocalFile()) {
+            const auto info = QFileInfo(path.toLocalFile());
+            *lastModifiedCMakeFile = std::max(info.lastModified(), *lastModifiedCMakeFile);
+        }
     }
     return ret;
 }
 
-CMakeProjectData parseReplyIndexFile(const QJsonObject& replyIndex,
-                                     const Path& sourceDirectory,
+CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& sourceDirectory,
                                      const Path& buildDirectory)
 {
-    const auto reply = replyIndex.value(QLatin1String("reply")).toObject();
+    const auto reply = replyIndex.data.value(QLatin1String("reply")).toObject();
     const auto clientKDevelop = reply.value(QLatin1String("client-kdevelop")).toObject();
     const auto query = clientKDevelop.value(QLatin1String("query.json")).toObject();
     const auto responses = query.value(QLatin1String("responses")).toArray();
@@ -256,15 +260,17 @@ CMakeProjectData parseReplyIndexFile(const QJsonObject& replyIndex,
             codeModel = parseCodeModel(parseFile(jsonFilePath), replyDir,
                                        stringInterner, sourcePathInterner, buildPathInterner);
         } else if (kind == QLatin1String("cmakeFiles")) {
-            cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner);
+            cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner, &codeModel.lastModifiedCMakeFile);
         }
     }
 
     if (!codeModel.compilationData.isValid) {
-        qCWarning(CMAKE) << "failed to find code model in reply index" << sourceDirectory << buildDirectory << replyIndex;
+        qCWarning(CMAKE) << "failed to find code model in reply index" << sourceDirectory << buildDirectory
+                         << replyIndex.data;
         return {};
     }
 
+    codeModel.lastModifiedProjectData = replyIndex.lastModified;
     codeModel.cmakeFiles = cmakeFiles;
     return codeModel;
 }

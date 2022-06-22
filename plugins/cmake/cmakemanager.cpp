@@ -119,32 +119,24 @@ class ChooseCMakeInterfaceJob : public ExecuteCompositeJob
 {
     Q_OBJECT
 public:
-    ChooseCMakeInterfaceJob(IProject* project, CMakeManager* manager)
+    ChooseCMakeInterfaceJob(IProject* project, CMakeManager* manager, bool forceConfigure)
         : ExecuteCompositeJob(manager, {})
         , project(project)
         , manager(manager)
+        , forceConfigure(forceConfigure)
     {
     }
 
     void start() override {
-        auto tryCMakeServer = [this]() {
-            qCDebug(CMAKE) << "try cmake server for import";
-            server.reset(new CMakeServer(project));
-            connect(server.data(), &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
-            connect(server.data(), &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
-        };
         if (CMake::FileApi::supported(CMake::currentCMakeExecutable(project).toLocalFile())) {
             qCDebug(CMAKE) << "Using cmake-file-api for import of" << project->path();
-            addSubjob(manager->builder()->configure(project));
-            auto* importJob = new CMake::FileApi::ImportJob(project, this);
-            connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this, tryCMakeServer](const CMakeProjectData& data) {
-                if (!data.compilationData.isValid) {
-                    tryCMakeServer();
-                } else {
-                    manager->integrateData(data, project);
-                }
-            });
-            addSubjob(importJob);
+
+            // try to import the data directly, if possible and not outdated
+            if (forceConfigure) {
+                reconfigureThenImport();
+            } else {
+                tryDirectImport();
+            }
             ExecuteCompositeJob::start();
         } else {
             tryCMakeServer();
@@ -152,6 +144,14 @@ public:
     }
 
 private:
+    void tryCMakeServer()
+    {
+        qCDebug(CMAKE) << "try cmake server for import";
+        server.reset(new CMakeServer(project));
+        connect(server.data(), &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
+        connect(server.data(), &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
+    }
+
     void successfulConnection() {
         auto job = new CMakeServerImportJob(project, server, this);
         connect(job, &CMakeServerImportJob::result, this, [this, job](){
@@ -188,19 +188,57 @@ private:
         ExecuteCompositeJob::start();
     }
 
+    void reconfigureThenImport()
+    {
+        addSubjob(manager->builder()->configure(project));
+        auto* importJob = new CMake::FileApi::ImportJob(project, this);
+        connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, &ChooseCMakeInterfaceJob::fileImportDone);
+        addSubjob(importJob);
+    }
+
+    void tryDirectImport()
+    {
+        auto* importJob = new CMake::FileApi::ImportJob(project, this);
+        connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this](const CMakeProjectData& data) {
+            if (!data.compilationData.isValid || data.lastModifiedCMakeFile > data.lastModifiedProjectData) {
+                qCDebug(CMAKE) << "reconfigure, project data is outdated" << data.lastModifiedCMakeFile
+                               << data.lastModifiedProjectData;
+
+                reconfigureThenImport();
+            } else {
+                qCDebug(CMAKE) << "skip configure, project data is up to date" << data.lastModifiedCMakeFile
+                               << data.lastModifiedProjectData;
+
+                fileImportDone(data);
+            }
+        });
+        addSubjob(importJob);
+    }
+
+    void fileImportDone(const CMakeProjectData& data)
+    {
+        if (!data.compilationData.isValid) {
+            tryCMakeServer();
+        } else {
+            manager->integrateData(data, project);
+        }
+    }
+
     QSharedPointer<CMakeServer> server;
     IProject* const project;
     CMakeManager* const manager;
+    const bool forceConfigure;
 };
 
-KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
+KJob* CMakeManager::createImportJob(ProjectFolderItem* item, bool forceConfigure)
 {
     auto project = item->project();
 
-    auto job = new ChooseCMakeInterfaceJob(project, this);
-    connect(job, &KJob::result, this, [this, job, project](){
+    auto job = new ChooseCMakeInterfaceJob(project, this, forceConfigure);
+    connect(job, &KJob::result, this, [this, job, project]() {
         if (job->error() != 0) {
-            qCWarning(CMAKE) << "couldn't load project successfully" << project->name() << job->error() << job->errorText();
+            qCWarning(CMAKE) << "couldn't load project successfully" << project->name() << job->error()
+                             << job->errorText();
             showConfigureErrorMessage(project->name(), job->errorText());
         }
     });
@@ -212,9 +250,14 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 
     Q_ASSERT(!jobs.contains(nullptr));
     auto* composite = new ExecuteCompositeJob(this, jobs);
-//     even if the cmake call failed, we want to load the project so that the project can be worked on
+    // even if the cmake call failed, we want to load the project so that the project can be worked on
     composite->setAbortOnError(false);
     return composite;
+}
+
+KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
+{
+    return createImportJob(item, false);
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
@@ -318,7 +361,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     if (!project->isReady())
         return false;
 
-    KJob *job = createImportJob(folder);
+    KJob* job = createImportJob(folder, true);
     project->setReloadJob(job);
     ICore::self()->runController()->registerJob( job );
     if (folder == project->projectItem()) {

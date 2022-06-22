@@ -42,7 +42,7 @@ void ImportJob::start()
     const auto buildDirectory = bsm->buildDirectory(m_project->projectItem());
     auto future = QtConcurrent::run([sourceDirectory, buildDirectory]() -> CMakeProjectData {
         const auto replyIndex = findReplyIndexFile(buildDirectory.toLocalFile());
-        if (replyIndex.isEmpty()) {
+        if (replyIndex.data.isEmpty()) {
             return {};
         }
         auto ret = parseReplyIndexFile(replyIndex, sourceDirectory, buildDirectory);
