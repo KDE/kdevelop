@@ -56,12 +56,8 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 75, 0)
-    if (Q_UNLIKELY(isFinished())) {
-#else
-    if (Q_UNLIKELY(error() == KilledJobError)) {
-#endif
-        qCDebug(CMAKE) << "Cannot add test suite" << m_suite->name() << ": this job has been killed.";
+    if (!m_suite) {
+        // killed or done already
         return;
     }
 
@@ -77,12 +73,14 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
     m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 
     if (m_pendingFiles.isEmpty()) {
+        m_suite = nullptr;
         emitResult();
     }
 }
 
 bool CTestFindJob::doKill()
 {
+    m_suite = nullptr;
     KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
     return true;
 }
