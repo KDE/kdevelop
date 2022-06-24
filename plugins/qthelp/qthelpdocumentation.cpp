@@ -188,16 +188,6 @@ QString QtHelpDocumentation::description() const
     return titles.join(QLatin1String(", "));
 }
 
-void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
-{
-    auto cssCode = QByteArrayLiteral("html { background: white !important; }\n");
-    if (url.scheme() == QLatin1String("qthelp") && url.host().startsWith(QLatin1String("com.trolltech.qt."))) {
-        cssCode += ".content .toc + .title + p { clear:left; }\n"
-                   "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
-    }
-    view->setOverrideCssCode(cssCode);
-}
-
 QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
 {
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
@@ -211,7 +201,6 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
 
-        setUserStyleSheet(view, currentUrl());
         view->load(currentUrl());
         lastView = view;
         return view;

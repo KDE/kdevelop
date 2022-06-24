@@ -45,6 +45,10 @@ public:
 
     void setDocumentation(const IDocumentation::Ptr& doc);
 
+    // NOTE: prefer overriding CSS by embedding a <style> element into HTML code directly instead of calling
+    //       setOverrideCss*(). These functions, in case of Qt WebEngine, inject CSS code via JavaScript, which
+    //       causes reloading and flickering of large pages. See for example kdevmanpage's class StyleSheetFixer.
+
     /**
      * Specifies the location of a user stylesheet to load with every web page
      *

@@ -59,7 +59,6 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         void jumpedTo(const QUrl& newUrl);
 
     private:
-        void setUserStyleSheet(KDevelop::StandardDocumentationView* view, const QUrl& url);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         const QUrl& currentUrl() const { return m_current->url; }
         const QString& currentTitle() const { return m_current->title; }

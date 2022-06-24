@@ -9,14 +9,85 @@
 
 #include "manpageplugin.h"
 #include "manpagedocumentationwidget.h"
+#include "debug.h"
 
 #include <documentation/standarddocumentationview.h>
 
 #include <KIO/TransferJob>
 #include <KLocalizedString>
 
+#include <QFile>
 #include <QStandardPaths>
 
+namespace {
+class StyleSheetFixer
+{
+public:
+    static void process(QString& htmlPage)
+    {
+        static StyleSheetFixer instance;
+        instance.fix(htmlPage);
+    }
+
+private:
+    /**
+     * Read the file contents and return it wrapped in a &lt;style&gt; HTML element.
+     *
+     * @return The &lt;style&gt; HTML element or an empty string in case of error.
+     *
+     * @note Referencing a local file via absolute path or file:// URL inside a &lt;link&gt;
+     *       HTML element does not work because Qt WebEngine forbids such file system access.
+     */
+    static QString readStyleSheet(const QString& fileName)
+    {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qCWarning(MANPAGE) << "cannot read CSS file" << fileName << ':' << file.error() << file.errorString();
+            return QString();
+        }
+        const auto cssCode = file.readAll();
+        return QString::fromUtf8("<style>" + cssCode + "</style>");
+    }
+
+    static QString readCustomStyleSheet()
+    {
+        const auto customStyleSheetFile = QStringLiteral("kdevmanpage/manpagedocumentation.css");
+        const QString cssFilePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, customStyleSheetFile);
+        if (cssFilePath.isEmpty()) {
+            qCWarning(MANPAGE) << "couldn't find" << customStyleSheetFile;
+            return QString();
+        }
+        return readStyleSheet(cssFilePath);
+    }
+
+    StyleSheetFixer()
+        : m_customStyleSheet{readCustomStyleSheet()}
+    {
+    }
+
+    void fix(QString& htmlPage)
+    {
+        if (m_customStyleSheet.isEmpty()) {
+            return; // nothing to do
+        }
+
+        const QLatin1String headEndTag("</head>");
+        const auto headEndTagPos = htmlPage.indexOf(headEndTag, 0, Qt::CaseInsensitive);
+        if (headEndTagPos == -1) {
+            qCWarning(MANPAGE) << "missing" << headEndTag << "on the HTML page.";
+            return;
+        }
+
+        // Apply our custom style sheet to normalize look of the page. Embed the <style> element
+        // into the HTML code directly rather than inject it with JavaScript to avoid reloading
+        // and flickering of large pages such as cmake-modules man page.
+        htmlPage.insert(headEndTagPos, m_customStyleSheet);
+    }
+
+    /// The style sheet does not change => read it once and store in a constant.
+    const QString m_customStyleSheet;
+};
+} // unnamed namespace
 
 ManPagePlugin* ManPageDocumentation::s_provider=nullptr;
 
@@ -33,6 +104,7 @@ void ManPageDocumentation::finished(KJob* j)
     auto* job = qobject_cast<KIO::StoredTransferJob*>(j);
     if(job && job->error()==0) {
         m_description = QString::fromUtf8(job->data());
+        StyleSheetFixer::process(m_description);
     } else {
         m_description.clear();
     }
@@ -56,13 +128,6 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
     view->setDocumentation(IDocumentation::Ptr(this));
     view->setDelegateLinks(true);
     QObject::connect(view, &KDevelop::StandardDocumentationView::linkClicked, ManPageDocumentation::s_provider->model(), &ManPageModel::showItemFromUrl);
-
-    // apply custom style-sheet to normalize look of the page
-    const QString cssFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevmanpage/manpagedocumentation.css"));
-    if (!cssFile.isEmpty()) {
-        view->setOverrideCssFile(cssFile);
-    }
-
     return view;
 }
 
