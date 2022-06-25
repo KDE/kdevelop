@@ -217,6 +217,7 @@ static CMakeProjectData parseCodeModel(const QJsonObject& codeModel, const QDir&
 static QHash<Path, CMakeProjectData::CMakeFileFlags>
 parseCMakeFiles(const QJsonObject& cmakeFiles, PathInterner& sourcePathInterner, QDateTime* lastModifiedCMakeFile)
 {
+    Q_ASSERT(lastModifiedCMakeFile);
     QHash<Path, CMakeProjectData::CMakeFileFlags> ret;
     for (const auto& jsonInput : cmakeFiles.value(QLatin1String("inputs")).toArray()) {
         const auto input = jsonInput.toObject();
