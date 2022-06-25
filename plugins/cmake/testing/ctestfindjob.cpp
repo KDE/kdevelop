@@ -47,6 +47,7 @@ void CTestFindJob::findTestCases()
     qCDebug(CMAKE) << "Source files to update:" << m_pendingFiles;
 
     if (m_pendingFiles.isEmpty()) {
+        m_suite = nullptr;
         emitResult();
         return;
     }
