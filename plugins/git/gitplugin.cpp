@@ -42,6 +42,7 @@
 
 #include <KDirWatch>
 #include <KIO/CopyJob>
+#include <KIO/DeleteJob>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KTextEdit>
@@ -629,16 +630,16 @@ VcsJob* GitPlugin::remove(const QList<QUrl>& files)
                 i.remove();
             }
 
-            auto trashJob = KIO::trash(otherFiles);
-            trashJob->exec();
+            auto deleteJob = KIO::del(otherFiles);
+            deleteJob->exec();
             qCDebug(PLUGIN_GIT) << "other files" << otherFiles;
         }
 
         if (fileInfo.isDir()) {
             if (isEmptyDirStructure(QDir(file.toLocalFile()))) {
                 //remove empty folders, git doesn't do that
-                auto trashJob = KIO::trash(file);
-                trashJob->exec();
+                auto deleteJob = KIO::del(file);
+                deleteJob->exec();
                 qCDebug(PLUGIN_GIT) << "empty folder, removing" << file;
                 //we already deleted it, don't use git rm on it
                 i.remove();
