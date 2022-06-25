@@ -252,6 +252,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
     CMakeProjectData codeModel;
     QHash<Path, CMakeProjectData::CMakeFileFlags> cmakeFiles;
 
+    QDateTime lastModifiedCMakeFile;
     for (const auto& responseValue : responses) {
         const auto response = responseValue.toObject();
         const auto kind = response.value(QLatin1String("kind"));
@@ -261,7 +262,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
             codeModel = parseCodeModel(parseFile(jsonFilePath), replyDir,
                                        stringInterner, sourcePathInterner, buildPathInterner);
         } else if (kind == QLatin1String("cmakeFiles")) {
-            cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner, &codeModel.lastModifiedCMakeFile);
+            cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner, &lastModifiedCMakeFile);
         }
     }
 
@@ -271,6 +272,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
         return {};
     }
 
+    codeModel.lastModifiedCMakeFile = lastModifiedCMakeFile;
     codeModel.lastModifiedProjectData = replyIndex.lastModified;
     codeModel.cmakeFiles = cmakeFiles;
     return codeModel;
