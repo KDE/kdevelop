@@ -33,6 +33,9 @@ void CTestFindJob::start()
 
 void CTestFindJob::findTestCases()
 {
+    if (!m_suite)
+        return;
+
     m_pendingFiles.clear();
     const auto& sourceFiles = m_suite->sourceFiles();
     for (const auto& file : sourceFiles) {
