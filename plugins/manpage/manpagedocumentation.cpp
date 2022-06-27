@@ -17,7 +17,11 @@
 #include <KLocalizedString>
 
 #include <QFile>
+#include <QHash>
+#include <QRegularExpression>
 #include <QStandardPaths>
+#include <QStringView>
+#include <QUrl>
 
 namespace {
 class StyleSheetFixer
@@ -30,6 +34,16 @@ public:
     }
 
 private:
+    template <typename Location>
+    static QString styleElementWithCode(const QByteArray& cssCode, const Location& location)
+    {
+        if (cssCode.isEmpty()) {
+            qCWarning(MANPAGE) << "empty CSS file" << location;
+            return QString();
+        }
+        return QString::fromUtf8("<style>" + cssCode + "</style>");
+    }
+
     /**
      * Read the file contents and return it wrapped in a &lt;style&gt; HTML element.
      *
@@ -46,7 +60,24 @@ private:
             return QString();
         }
         const auto cssCode = file.readAll();
-        return QString::fromUtf8("<style>" + cssCode + "</style>");
+        return styleElementWithCode(cssCode, fileName);
+    }
+
+    /**
+     * Get the URL contents and return it wrapped in a &lt;style&gt; HTML element.
+     *
+     * @return The &lt;style&gt; HTML element or an empty string in case of error.
+     */
+    static QString getStyleSheetContents(const QUrl& url)
+    {
+        auto* const job = KIO::storedGet(url, KIO::NoReload, KIO::HideProgressInfo);
+        if (!job->exec()) {
+            qCWarning(MANPAGE) << "couldn't get the contents of CSS file" << url << ':'
+                               << job->error() << job->errorString();
+            return QString();
+        }
+        const auto cssCode = job->data();
+        return styleElementWithCode(cssCode, url);
     }
 
     static QString readCustomStyleSheet()
@@ -67,10 +98,6 @@ private:
 
     void fix(QString& htmlPage)
     {
-        if (m_customStyleSheet.isEmpty()) {
-            return; // nothing to do
-        }
-
         const QLatin1String headEndTag("</head>");
         const auto headEndTagPos = htmlPage.indexOf(headEndTag, 0, Qt::CaseInsensitive);
         if (headEndTagPos == -1) {
@@ -81,11 +108,86 @@ private:
         // Apply our custom style sheet to normalize look of the page. Embed the <style> element
         // into the HTML code directly rather than inject it with JavaScript to avoid reloading
         // and flickering of large pages such as cmake-modules man page.
-        htmlPage.insert(headEndTagPos, m_customStyleSheet);
+        if (!m_customStyleSheet.isEmpty()) {
+            htmlPage.insert(headEndTagPos, m_customStyleSheet);
+        }
+
+        expandUnsupportedLinks(htmlPage, headEndTagPos);
+    }
+
+    void expandUnsupportedLinks(QString& htmlPage, int endPos)
+    {
+        Q_ASSERT(endPos >= 0);
+
+        static const QRegularExpression linkElement(QStringLiteral(R"(<link\s[^>]*rel="stylesheet"[^>]*>)"),
+                                                    QRegularExpression::CaseInsensitiveOption);
+        int startPos = 0;
+        while (true) {
+            const auto remainingPartOfThePage = QStringView{htmlPage}.mid(startPos, endPos - startPos);
+            const auto linkElementMatch = linkElement.match(remainingPartOfThePage);
+            if (!linkElementMatch.hasMatch()) {
+                break; // no more links to expand
+            }
+            startPos += linkElementMatch.capturedEnd();
+
+            static const QRegularExpression hrefAttribute(QStringLiteral(R"|(\shref="([^"]*)")|"),
+                                                          QRegularExpression::CaseInsensitiveOption);
+            const auto hrefAttributeMatch = hrefAttribute.match(linkElementMatch.capturedView());
+            if (!hrefAttributeMatch.hasMatch()) {
+                qCWarning(MANPAGE) << "missing href attribute in a stylesheet <link> element.";
+                continue;
+            }
+
+            const QUrl url{hrefAttributeMatch.captured(1)};
+            const auto styleSheet = expandStyleSheet(url);
+            if (styleSheet.isEmpty()) {
+                continue; // no code => skip this <link> element as expanding it won't make a difference
+            }
+
+            const auto linkElementLength = linkElementMatch.capturedLength();
+            const auto linkElementPos = startPos - linkElementLength;
+            htmlPage.replace(linkElementPos, linkElementLength, styleSheet);
+
+            const auto htmlPageSizeIncrement = styleSheet.size() - linkElementLength;
+            startPos += htmlPageSizeIncrement;
+            endPos += htmlPageSizeIncrement;
+        }
+    }
+
+    QString expandStyleSheet(const QUrl& url)
+    {
+        const bool isLocalFile = url.isLocalFile();
+        const bool isHelpUrl = !isLocalFile && url.scheme() == QLatin1String{"help"};
+        if (!isLocalFile && !isHelpUrl) {
+            qCDebug(MANPAGE) << "not expanding CSS file URL with scheme" << url.scheme();
+            return QString();
+        }
+
+        // Must do it this way because when an empty string is the value stored
+        // for url, it should be returned rather than re-read from disk.
+        const auto alreadyExpanded = m_expandedStyleSheets.constFind(url);
+        if (alreadyExpanded != m_expandedStyleSheets.cend()) {
+            return alreadyExpanded.value();
+        }
+
+        QString newlyExpanded;
+        if (isLocalFile) {
+            newlyExpanded = readStyleSheet(url.toLocalFile());
+        } else {
+            Q_ASSERT(isHelpUrl);
+            // Neither Qt WebKit nor Qt WebEngine knows about the help protocol and URL scheme.
+            // Expand the file contents at the help URL to apply the style sheet.
+            newlyExpanded = getStyleSheetContents(url);
+        }
+
+        m_expandedStyleSheets.insert(url, newlyExpanded);
+        return newlyExpanded;
     }
 
     /// The style sheet does not change => read it once and store in a constant.
     const QString m_customStyleSheet;
+    /// Referenced style sheets should be few and rarely modified => read them once and store in this cache.
+    QHash<QUrl, QString> m_expandedStyleSheets;
 };
 } // unnamed namespace
 
