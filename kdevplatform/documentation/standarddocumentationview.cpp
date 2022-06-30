@@ -60,7 +60,13 @@ public:
 
     bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame) override
     {
-        qCDebug(DOCUMENTATION) << "navigating to..." << url << type;
+        if (DOCUMENTATION().isDebugEnabled()) {
+            if (url.scheme() == QLatin1String("data")) {
+                qCDebug(DOCUMENTATION) << "navigating to a manually constructed page because" << type;
+            } else {
+                qCDebug(DOCUMENTATION) << "navigating to" << url << "because" << type;
+            }
+        }
 
         if (type == NavigationTypeLinkClicked && m_isDelegating) {
             emit m_view->linkClicked(url);
