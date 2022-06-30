@@ -9,6 +9,9 @@
 #include "dbgglobal.h"
 #include "debuglog.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 #include <util/environmentprofilelist.h>
 
 #include <KConfigGroup>
@@ -60,7 +63,7 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
     // Start!
     m_process->setProcessEnvironment(processEnv);
     m_process->setProgram(m_debuggerExecutable, arguments);
-    m_process->start();
+    ICore::self()->runtimeController()->currentRuntime()->startProcess(m_process);
 
     qCDebug(DEBUGGERLLDB) << "Starting LLDB with command" << m_debuggerExecutable + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
 #if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 78, 0)
