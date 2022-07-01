@@ -230,9 +230,10 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
 
     QList<Declaration*> takeFreeColors;
 
+    bool noRainbow = ICore::self()->languageController()->completionSettings()->localColorizationLevel() == 0;
     const auto localDeclarations = context->localDeclarations();
     for (Declaration* dec : localDeclarations) {
-        if (!useRainbowColor(dec)) {
+        if (noRainbow || !useRainbowColor(dec)) {
             highlightDeclaration(dec, QColor(QColor::Invalid));
             continue;
         }
@@ -402,10 +403,19 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
         //Determine the class we're in
         Declaration* klass = localClassFromCodeContext(context);
         if (klass) {
-            if (klass->internalContext() == dec->context())
-                type = LocalClassMemberType; //Using Member of the local class
-            else if (klass->internalContext() && klass->internalContext()->imports(dec->context()))
-                type = InheritedClassMemberType; //Using Member of an inherited class
+            if (klass->internalContext() == dec->context()) {
+                //Using Member of the local class
+                if (dec->type<KDevelop::FunctionType>())
+                    type = LocalMemberFunctionType;
+                else
+                    type = LocalClassMemberType;
+            } else if (klass->internalContext() && klass->internalContext()->imports(dec->context())) {
+                //Using Member of an inherited clas
+                if (dec->type<KDevelop::FunctionType>())
+                    type = InheritedMemberFunctionType;
+                else
+                    type = InheritedClassMemberType;
+            }
         }
     }
 

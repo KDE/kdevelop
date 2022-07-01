@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language
+    name="Semantic Colors"
+    section="KDevelop"
+    version="1"
+    kateversion="5.0"
+    mimetype=""
+    extensions=""
+    author="Martin Seher (martin.seher@gmail.com)"
+    hidden="true"
+  >
+  <highlighting>
+    <contexts>
+      <context attribute="Class" lineEndContext="#stay" name="Normal">
+      </context>
+    </contexts>
+    <itemDatas>
+      <itemData name="Class" defStyleNum="dsDataType" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Local Member Variable" defStyleNum="dsVariable" spellChecking="false" />
+      <itemData name="Local Member Function" defStyleNum="dsFunction" spellChecking="false" />
+      <itemData name="Inherited Member Variable" defStyleNum="dsVariable" spellChecking="false" />
+      <itemData name="Inherited Member Function" defStyleNum="dsFunction" spellChecking="false" />
+      <itemData name="Function" defStyleNum="dsFunction" spellChecking="false" />
+      <itemData name="Function Argument" defStyleNum="dsNormal" spellChecking="false" />
+      <itemData name="Type Alias" defStyleNum="dsDataType" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Forward Declaration" defStyleNum="dsNormal" spellChecking="false" />
+      <itemData name="Namespace" defStyleNum="dsNormal" spellChecking="false" />
+      <itemData name="Local Variable" defStyleNum="dsVariable" spellChecking="false" />
+      <itemData name="Global Variable" defStyleNum="dsVariable" spellChecking="false" />
+      <itemData name="Member Variable" defStyleNum="dsVariable" spellChecking="false" />
+      <itemData name="Namespace Variable" defStyleNum="dsVariable" spellChecking="false" />
+      <itemData name="Enumeration" defStyleNum="dsNormal" spellChecking="false" />
+      <itemData name="Enumerator" defStyleNum="dsNormal" spellChecking="false" />
+      <itemData name="Macro" defStyleNum="dsPreprocessor" spellChecking="false" />
+      <itemData name="Macro Function" defStyleNum="dsPreprocessor" spellChecking="false" />
+      <itemData name="Highlight Uses" defStyleNum="dsNormal" spellChecking="false" />
+      <itemData name="Error Variable" defStyleNum="dsError" spellChecking="false" />
+    </itemDatas>
+  </highlighting>
+</language>
+<!-- kate: indent-width 2; tab-width 2; -->
