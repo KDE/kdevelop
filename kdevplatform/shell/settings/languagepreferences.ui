@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>599</width>
-    <height>592</height>
+    <height>709</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -29,6 +29,19 @@
       <string comment="@title:group">Code Completion</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="toolTip">
+         <string comment="@info:tooltip">If disabled, the code completion widget will never show automatically.</string>
+        </property>
+        <property name="text">
+         <string comment="@label">Enable automatic invocation:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_automaticInvocation</cstring>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="QCheckBox" name="kcfg_automaticInvocation">
         <property name="toolTip">
@@ -39,6 +52,19 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="toolTip">
+         <string comment="@info:tooltip">Choose whether to display additional information for the currently selected codecompletion item.</string>
+        </property>
+        <property name="text">
+         <string comment="@label">Additional information for current item:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_showMultiLineSelectionInformation</cstring>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="1">
        <widget class="QCheckBox" name="kcfg_showMultiLineSelectionInformation">
         <property name="toolTip">
@@ -46,6 +72,19 @@
         </property>
         <property name="text">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="toolTip">
+         <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
+        </property>
+        <property name="text">
+         <string comment="@label">Detailed completion:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_completionDetail</cstring>
         </property>
        </widget>
       </item>
@@ -72,36 +111,6 @@
           <string comment="@item:inlistbox">Always</string>
          </property>
         </item>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label">
-        <property name="toolTip">
-         <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
-        </property>
-        <property name="text">
-         <string comment="@label">Detailed completion:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="toolTip">
-         <string comment="@info:tooltip">If disabled, the code completion widget will never show automatically.</string>
-        </property>
-        <property name="text">
-         <string comment="@label">Enable automatic invocation:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="toolTip">
-         <string comment="@info:tooltip">Choose whether to display additional information for the currently selected codecompletion item.</string>
-        </property>
-        <property name="text">
-         <string comment="@label">Additional information for current item:</string>
-        </property>
        </widget>
       </item>
      </layout>
@@ -151,20 +160,37 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="globalColorizationLabel">
+      <item row="2" column="1">
+       <widget class="QComboBox" name="kcfg_globalColorSource">
         <property name="toolTip">
-         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
+         <string>&lt;p&gt;By default, the global colors for types, functions, namespaces and so forth are auto-generated and will adapt to the selected editor theme based on the global colorization intensity. If you want to have full control over the colors, you can instead use the editor theme as color source. You can then fine tune the colors in the settings under Editor &amp;gt; Color Themes &amp;gt; Highlight Text Styles &amp;gt; KDevelop/Semantic Colors.&lt;/p&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Auto-Generated</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>From Editor Theme</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="toolTip">
+         <string>&lt;p&gt;By default, the global colors for types, functions, namespaces and so forth are auto-generated and will adapt to the selected editor theme based on the global colorization intensity. If you want to have full control over the colors, you can instead use the editor theme as color source. You can then fine tune the colors in the settings under Editor &amp;gt; Color Themes &amp;gt; Highlight Text Styles &amp;gt; KDevelop/Semantic Colors.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string comment="@label:slider">Global colorization intensity:</string>
+         <string>Global colors:</string>
         </property>
         <property name="buddy">
-         <cstring>kcfg_localColorization</cstring>
+         <cstring>kcfg_globalColorSource</cstring>
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
+      <item row="3" column="1">
        <widget class="QSlider" name="kcfg_globalColorization">
         <property name="toolTip">
          <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
@@ -186,7 +212,20 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="0">
+      <item row="3" column="0">
+       <widget class="QLabel" name="globalColorizationLabel">
+        <property name="toolTip">
+         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
+        </property>
+        <property name="text">
+         <string comment="@label:slider">Global colorization intensity:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_globalColorization</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
        <widget class="QLabel" name="label_4">
         <property name="toolTip">
          <string>&lt;p&gt;Highlight semantic problems, such as non-existent or inaccessible declarations.&lt;/p&gt;</string>
@@ -194,9 +233,12 @@
         <property name="text">
          <string comment="@label">Highlight semantic problems:</string>
         </property>
+        <property name="buddy">
+         <cstring>kcfg_highlightSemanticProblems</cstring>
+        </property>
        </widget>
       </item>
-      <item row="9" column="1">
+      <item row="4" column="1">
        <widget class="QCheckBox" name="kcfg_highlightSemanticProblems">
         <property name="toolTip">
          <string>&lt;p&gt;Highlight semantic problems, such as non-existent or inaccessible declarations.&lt;/p&gt;</string>
@@ -206,7 +248,7 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="label_5">
         <property name="toolTip">
          <string>&lt;p&gt;When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.&lt;/p&gt;</string>
@@ -214,9 +256,12 @@
         <property name="text">
          <string comment="@label">Highlight problematic lines:</string>
         </property>
+        <property name="buddy">
+         <cstring>kcfg_highlightProblematicLines</cstring>
+        </property>
        </widget>
       </item>
-      <item row="11" column="1">
+      <item row="5" column="1">
        <widget class="QCheckBox" name="kcfg_highlightProblematicLines">
         <property name="toolTip">
          <string>&lt;p&gt;When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.&lt;/p&gt;</string>
@@ -226,27 +271,7 @@
         </property>
        </widget>
       </item>
-      <item row="14" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="toolTip">
-         <string comment="@info:tooltip">Space-separated list of words that make a comment represent a TODO item</string>
-        </property>
-        <property name="text">
-         <string comment="@label:textbox">TODO marker words:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="1">
-       <widget class="QLineEdit" name="kcfg_todoMarkerWords">
-        <property name="toolTip">
-         <string comment="@info:tooltip">Space-separated list of words that make a comment represent a TODO item.</string>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="boldDeclarationsLabel">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use bold font for declarations such as classes, functions, local variables, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -254,12 +279,25 @@
         <property name="text">
          <string comment="@label">Bold font for declarations:</string>
         </property>
+        <property name="buddy">
+         <cstring>kcfg_boldDeclarations</cstring>
+        </property>
        </widget>
       </item>
-      <item row="12" column="1">
+      <item row="6" column="1">
        <widget class="QCheckBox" name="kcfg_boldDeclarations"/>
       </item>
-      <item row="13" column="1">
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string comment="@label:listbox">Problems shown as inline notes:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_problemInlineNotesLevel</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
        <widget class="QComboBox" name="kcfg_problemInlineNotesLevel">
         <item>
          <property name="text">
@@ -283,10 +321,26 @@
         </item>
        </widget>
       </item>
-      <item row="13" column="0">
-       <widget class="QLabel" name="label_8">
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="toolTip">
+         <string comment="@info:tooltip">Space-separated list of words that make a comment represent a TODO item</string>
+        </property>
         <property name="text">
-         <string comment="@label:listbox">Problems shown as inline notes:</string>
+         <string comment="@label:textbox">TODO marker words:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_todoMarkerWords</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="kcfg_todoMarkerWords">
+        <property name="toolTip">
+         <string comment="@info:tooltip">Space-separated list of words that make a comment represent a TODO item.</string>
+        </property>
+        <property name="placeholderText">
+         <string/>
         </property>
        </widget>
       </item>
@@ -305,6 +359,8 @@
      <zorder>boldDeclarationsLabel</zorder>
      <zorder>kcfg_boldDeclarations</zorder>
      <zorder>label_8</zorder>
+     <zorder>kcfg_globalColorSource</zorder>
+     <zorder>label_9</zorder>
     </widget>
    </item>
    <item>
@@ -324,6 +380,9 @@ parsed in simplified mode, increasing the efficiency by gathering less informati
         </property>
         <property name="text">
          <string comment="@label:spinbox">Minimum project size for simplified parsing:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_minFilesForSimplifiedParsing</cstring>
         </property>
        </widget>
       </item>
@@ -365,6 +424,27 @@ parsed in simplified mode, increasing the efficiency by gathering less informati
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPluralHandlingSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kpluralhandlingspinbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>kcfg_automaticInvocation</tabstop>
+  <tabstop>kcfg_showMultiLineSelectionInformation</tabstop>
+  <tabstop>kcfg_completionDetail</tabstop>
+  <tabstop>kcfg_localColorization</tabstop>
+  <tabstop>kcfg_globalColorSource</tabstop>
+  <tabstop>kcfg_globalColorization</tabstop>
+  <tabstop>kcfg_highlightSemanticProblems</tabstop>
+  <tabstop>kcfg_highlightProblematicLines</tabstop>
+  <tabstop>kcfg_boldDeclarations</tabstop>
+  <tabstop>kcfg_problemInlineNotesLevel</tabstop>
+  <tabstop>kcfg_todoMarkerWords</tabstop>
+  <tabstop>kcfg_minFilesForSimplifiedParsing</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

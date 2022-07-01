@@ -12,7 +12,14 @@
 #include <QColor>
 #include <QPointer>
 
+#include <KSyntaxHighlighting/Repository>
+
+#include <interfaces/icompletionsettings.h>
 #include <language/languageexport.h>
+
+namespace KSyntaxHighlighting {
+class Theme;
+}
 
 namespace KTextEditor {
 class Document;
@@ -126,6 +133,10 @@ private:
     /// @see generateColors(), updateColorsFromScheme()
     void updateColorsFromView(KTextEditor::View* view);
 
+    bool updateColorsFromTheme(const KSyntaxHighlighting::Theme& theme);
+
+    void updateDefaultColorsFromSource();
+
     /// the default colors for the different types
     ConfigurableHighlightingColors* m_defaultColors;
 
@@ -153,11 +164,15 @@ private:
     /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
     uchar m_globalColorRatio;
 
+    ICompletionSettings::GlobalColorSource m_globalColorSource;
+
     /// Whether declarations have to be rendered with a bold style or not.
     bool m_boldDeclarations;
 
     /// The view we are listening to for setting changes.
     QPointer<KTextEditor::View> m_view;
+
+    KSyntaxHighlighting::Repository m_schemeRepo;
 };
 }
 
