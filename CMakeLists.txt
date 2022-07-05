@@ -122,7 +122,7 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
     TYPE RECOMMENDED
 )
 
-find_package(SharedMimeInfo REQUIRED)
+find_package(SharedMimeInfo 1.9 REQUIRED)
 
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
