@@ -24,6 +24,15 @@
 #include <QUrl>
 
 namespace {
+/**
+ * This class makes sure that CSS embedded in man pages works and applies a custom style sheet on top.
+ *
+ * TODO: once Qt WebKit support is dropped, register with Qt WebEngine the "man" and "help" URL schemes as
+ *       local; handle them. This will also make file:// links work properly. So this class would no longer
+ *       have to fix embedded links and only need to embed our custom manpagedocumentation.css style like
+ *       this: "<link href='file://%1' rel='stylesheet'>". Registering and handling the schemes might even
+ *       allow to simplify the whole kdevmanpage plugin implementation.
+ */
 class StyleSheetFixer
 {
 public:
@@ -51,6 +60,9 @@ private:
      *
      * @note Referencing a local file via absolute path or file:// URL inside a &lt;link&gt;
      *       HTML element does not work because Qt WebEngine forbids such file system access.
+     *       A comment under QTBUG-55902 proposes a workaround: pass "file://" as the baseUrl
+     *       argument to QWebEnginePage::setHtml(). Unfortunately this base URL does not persist
+     *       during back/forward web history navigation, so such navigation loads unstyled pages.
      */
     static QString readStyleSheet(const QString& fileName)
     {
