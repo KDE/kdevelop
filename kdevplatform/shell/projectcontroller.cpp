@@ -471,14 +471,10 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
 
         if ( shouldAsk )
         {
-            KGuiItem yes = KStandardGuiItem::yes();
-            yes.setText(i18nc("@action:button", "Override"));
+            KGuiItem yes(i18nc("@action:button", "Override"));
             yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration"));
-            yes.setIcon(QIcon());
-            KGuiItem no = KStandardGuiItem::no();
-            no.setText(i18nc("@action:button", "Open Existing File"));
+            KGuiItem no(i18nc("@action:button", "Open Existing File"));
             no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration"));
-            no.setIcon(QIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
             cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project"));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
