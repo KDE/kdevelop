@@ -60,9 +60,7 @@ CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : Configurable
     ADD_COLOR(FunctionType, 0x21005A) //Navy blue
     ADD_COLOR(MemberVariableType, 0x443069) //Dark Burple (blue/purple)
     ADD_COLOR(LocalClassMemberType, 0xae7d00) //Light orange
-    ADD_COLOR(LocalMemberFunctionType, 0xae7d00)
     ADD_COLOR(InheritedClassMemberType, 0x705000) //Dark orange
-    ADD_COLOR(InheritedMemberFunctionType, 0x705000)
     ADD_COLOR(LocalVariableType, 0x0C4D3C)
     ADD_COLOR(FunctionVariableType, 0x300085) //Less dark navy blue
     ADD_COLOR(NamespaceVariableType, 0x9F3C5F) //Rose
@@ -72,6 +70,5 @@ CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : Configurable
     ADD_COLOR(ForwardDeclarationType, 0x5C5C5C) //Gray
     ADD_COLOR(MacroType, 0xA41239)
     ADD_COLOR(MacroFunctionLikeType, 0x008080)
-    ADD_COLOR(HighlightUsesType, 0xffffff)
 }
 }

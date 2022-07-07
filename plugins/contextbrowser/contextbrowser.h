@@ -108,8 +108,8 @@ public:
 
     void showUses(const KDevelop::DeclarationPointer& declaration) override;
 
-    KTextEditor::Attribute::Ptr highlightedUseAttribute() const;
-    KTextEditor::Attribute::Ptr highlightedSpecialObjectAttribute() const;
+    KTextEditor::Attribute::Ptr highlightedUseAttribute(KTextEditor::View* view) const;
+    KTextEditor::Attribute::Ptr highlightedSpecialObjectAttribute(KTextEditor::View* view) const;
 
 public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);

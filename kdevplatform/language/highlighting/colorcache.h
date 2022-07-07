@@ -11,13 +11,8 @@
 #include <QVector>
 #include <QColor>
 #include <QPointer>
-#include <KSyntaxHighlighting/Repository>
 
 #include <language/languageexport.h>
-
-namespace KSyntaxHighlighting {
-class Theme;
-}
 
 namespace KTextEditor {
 class Document;
@@ -131,8 +126,6 @@ private:
     /// @see generateColors(), updateColorsFromScheme()
     void updateColorsFromView(KTextEditor::View* view);
 
-    bool updateColorsFromTheme(const KSyntaxHighlighting::Theme& theme);
-
     /// the default colors for the different types
     CodeHighlightingColors* m_defaultColors;
 
@@ -165,8 +158,6 @@ private:
 
     /// The view we are listening to for setting changes.
     QPointer<KTextEditor::View> m_view;
-
-    KSyntaxHighlighting::Repository m_schemeRepo;
 };
 }
 

@@ -35,9 +35,7 @@ struct HighlightingEnumContainer
         UnknownType,
         //Primary highlighting:
         LocalClassMemberType,
-        LocalMemberFunctionType,
         InheritedClassMemberType,
-        InheritedMemberFunctionType,
         LocalVariableType,
 
         //Other highlighting:
@@ -54,7 +52,6 @@ struct HighlightingEnumContainer
         MemberVariableType,
         NamespaceVariableType,
         GlobalVariableType,
-        HighlightUsesType,
 
         //Most of these are currently not used:
         ArgumentType,
