@@ -97,7 +97,9 @@ void StashManagerDialog::popClicked()
 void StashManagerDialog::dropClicked()
 {
     QString sel = selection();
-    int ret = KMessageBox::questionYesNo(this, i18n("Are you sure you want to drop the stash '%1'?", sel));
+    int ret = KMessageBox::questionYesNo(this, i18n("Are you sure you want to drop the stash '%1'?", sel), {},
+                                         KGuiItem(i18nc("@action:button", "Drop"), QStringLiteral("edit-delete")),
+                                         KStandardGuiItem::cancel());
 
     if(ret == KMessageBox::Yes)
         runStash(QStringList{QStringLiteral("drop"), sel});
