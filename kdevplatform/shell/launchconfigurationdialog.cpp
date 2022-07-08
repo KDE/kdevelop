@@ -248,7 +248,9 @@ void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected,
             disconnect(l, &LaunchConfiguration::nameChanged, this,  &LaunchConfigurationDialog::updateNameLabel);
             if( currentPageChanged )
             {
-                if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18nc("@title:window", "Unsaved Changes") ) == KMessageBox::Yes )
+                if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18nc("@title:window", "Unsaved Changes"),
+                                                KStandardGuiItem::save(),
+                                                KStandardGuiItem::discard()) == KMessageBox::Yes )
                 {
                     saveConfig( deselected.indexes().first() );
                 } else {
