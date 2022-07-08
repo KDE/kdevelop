@@ -27,8 +27,6 @@ public:
 
     int globalColorizationLevel() const override;
 
-    GlobalColorSource globalColorSource() const override;
-
     bool highlightSemanticProblems() const override;
 
     bool highlightProblematicLines() const override;
@@ -56,7 +54,6 @@ private:
     const bool m_boldDeclarations = true;
     const int m_localColorizationLevel = 170;
     const int m_globalColorizationLevel = 255;
-    const GlobalColorSource m_globalColorSource = GlobalColorSource::FromTheme;
     const int m_minFilesForSimplifiedParsing = 100000;
     const QString m_todoMarkerWords;
 

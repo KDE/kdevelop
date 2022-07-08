@@ -11,10 +11,8 @@
 #include <QVector>
 #include <QColor>
 #include <QPointer>
-
 #include <KSyntaxHighlighting/Repository>
 
-#include <interfaces/icompletionsettings.h>
 #include <language/languageexport.h>
 
 namespace KSyntaxHighlighting {
@@ -161,8 +159,6 @@ private:
     /// How global colors (i.e. for types, uses, etc.) should be mixed with the foreground color.
     /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
     uchar m_globalColorRatio;
-
-    ICompletionSettings::GlobalColorSource m_globalColorSource;
 
     /// Whether declarations have to be rendered with a bold style or not.
     bool m_boldDeclarations;
