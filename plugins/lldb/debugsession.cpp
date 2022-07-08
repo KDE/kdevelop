@@ -390,8 +390,8 @@ void DebugSession::handleVersion(const QStringList& s)
                  "Debugger console will be disabled to prevent crash.<br/>"
                  "Do you want to continue?"),
             i18n("LLDB Version Unsupported"),
-            KStandardGuiItem::yes(),
-            KStandardGuiItem::no(),
+            KStandardGuiItem::cont(),
+            KStandardGuiItem::cancel(),
             QStringLiteral("unsupported-lldb-debugger"));
         if (ans == KMessageBox::ButtonCode::No) {
             programFinished(QStringLiteral("Stopped because of unsupported LLDB version"));
