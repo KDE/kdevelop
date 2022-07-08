@@ -34,7 +34,7 @@ ColorCache* ColorCache::m_self = nullptr;
 
 ColorCache::ColorCache(QObject* parent)
     : QObject(parent)
-    , m_defaultColors(nullptr)
+    , m_defaultColors(new ConfigurableHighlightingColors)
     , m_validColorCount(0)
     , m_colorOffset(0)
     , m_localColorRatio(0)
@@ -91,11 +91,7 @@ ColorCache* ColorCache::self()
 
 void ColorCache::generateColors()
 {
-    if (m_defaultColors) {
-        delete m_defaultColors;
-    }
-
-    m_defaultColors = new CodeHighlightingColors(this);
+    m_defaultColors->reset(this);
 
     // Primary colors taken from: http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
     const QColor colors[] = {
@@ -302,9 +298,8 @@ QColor ColorCache::blendLocalColor(QColor color) const
     return blend(color, m_localColorRatio);
 }
 
-CodeHighlightingColors* ColorCache::defaultColors() const
+ConfigurableHighlightingColors* ColorCache::defaultColors() const
 {
-    Q_ASSERT(m_defaultColors);
     return m_defaultColors;
 }
 

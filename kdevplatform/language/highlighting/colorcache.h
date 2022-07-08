@@ -20,7 +20,7 @@ class View;
 }
 
 namespace KDevelop {
-class CodeHighlightingColors;
+class ConfigurableHighlightingColors;
 class IDocument;
 
 /**
@@ -62,7 +62,7 @@ public:
     QColor blendGlobalColor(QColor color) const;
 
     /// access the default colors
-    CodeHighlightingColors* defaultColors() const;
+    ConfigurableHighlightingColors* defaultColors() const;
 
     /**
      * @returns a primary color if @p num less primaryColorCount and a supplementary color if @p num >= primaryColorCount and < validColorCount
@@ -127,7 +127,7 @@ private:
     void updateColorsFromView(KTextEditor::View* view);
 
     /// the default colors for the different types
-    CodeHighlightingColors* m_defaultColors;
+    ConfigurableHighlightingColors* m_defaultColors;
 
     /// the generated colors
     QVector<QColor> m_colors;

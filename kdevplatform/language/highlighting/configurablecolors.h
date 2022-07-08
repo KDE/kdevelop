@@ -22,29 +22,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors
 {
 public:
     explicit ConfigurableHighlightingColors();
+    ~ConfigurableHighlightingColors();
 
-    void addAttribute(CodeHighlightingType type, const KTextEditor::Attribute::Ptr& attribute);
+    void reset(ColorCache* cache);
 
     KTextEditor::Attribute::Ptr attribute(CodeHighlightingType type) const;
 
-    void setDefaultAttribute(const KTextEditor::Attribute::Ptr& defaultAttrib);
-
-    KTextEditor::Attribute::Ptr defaultAttribute() const;
-
 private:
-    KTextEditor::Attribute::Ptr m_defaultAttribute;
-    QHash<int, KTextEditor::Attribute::Ptr> m_attributes;
     QHash<CodeHighlightingType, KTextEditor::Attribute::Ptr> m_attributes;
-    QString m_highlightingName;
-};
-
-// ######### start CodeHighlightingColors
-
-class CodeHighlightingColors
-    : public ConfigurableHighlightingColors
-{
-public:
-    explicit CodeHighlightingColors(ColorCache* cache);
 };
 }
 
