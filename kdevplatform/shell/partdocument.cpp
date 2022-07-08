@@ -110,8 +110,10 @@ bool PartDocument::askForCloseFeedback()
         code = KMessageBox::warningYesNoCancel(
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes and was modified by an external process.\n"
-                 "Do you want to override the external changes?", url().toLocalFile()),
-            i18nc("@title:window", "Close Document"));
+                 "Do you want to overwrite the external changes?", url().toLocalFile()),
+            i18nc("@title:window", "Close Document"),
+            KGuiItem(i18nc("@action:button", "Overwrite External Changes"), QStringLiteral("document-save")),
+            KStandardGuiItem::discard());
     }
 
     if (code >= 0) {

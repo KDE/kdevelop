@@ -436,7 +436,9 @@ bool TextDocument::save(DocumentSaveMode mode)
                     i18n("The file \"%1\" is modified on disk.\n\nAre "
                         "you sure you want to overwrite it? (External "
                         "changes will be lost.)", d->document->url().toLocalFile()),
-                    i18nc("@title:window", "Document Externally Modified"));
+                    i18nc("@title:window", "Document Externally Modified"),
+                    KGuiItem(i18nc("@action:button", "Overwrite External Changes"), QStringLiteral("document-save")),
+                    KStandardGuiItem::discard());
                 if (code != KMessageBox::Yes)
                     return false;
             }
