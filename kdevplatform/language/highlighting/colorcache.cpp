@@ -152,6 +152,12 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
         return;
     }
 
+    auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view);
+    Q_ASSERT(iface);
+
+    const auto highlightUsesColor = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
+    m_defaultColors->attribute(CodeHighlightingType::HighlightUses)->setBackground(highlightUsesColor);
+
     QColor foreground(QColor::Invalid);
     QColor background(QColor::Invalid);
 
@@ -161,14 +167,9 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
         background = style->background().color();
     }
 
-    // FIXME: this is in kateview
-//     qCDebug(LANGUAGE) << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
-//NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
-
     // the signal is not defined in ConfigInterface, but according to the docs it should be
     // can't use new signal slot syntax here, since ConfigInterface is not a QObject
     if (KTextEditor::View* view = m_view.data()) {
-        Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
         // we only listen to a single view, i.e. the active one
 #if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5, 79, 0)
         disconnect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
@@ -176,7 +177,6 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
         disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
 #endif
     }
-    Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
 #if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5, 79, 0)
     connect(view, &KTextEditor::View::configChanged, this, &ColorCache::slotViewSettingsChanged);
 #else
