@@ -514,7 +514,9 @@ bool ProjectDialogProvider::userWantsReopen()
 {
     Q_ASSERT(d);
     return (KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Reopen the current project?" ) )
+                                        i18n( "Reopen the current project?" ), {},
+                                        KGuiItem(i18nc("@action:button", "Reopen"), QStringLiteral("view-refresh")),
+                                        KStandardGuiItem::cancel())
                 == KMessageBox::No) ? false : true;
 }
 
