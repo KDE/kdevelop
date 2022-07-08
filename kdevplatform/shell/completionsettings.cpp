@@ -7,8 +7,11 @@
 
 #include "completionsettings.h"
 #include "languageconfig.h"
+
 #include <KShell>
 #include <KSharedConfig>
+
+#include <QMetaEnum>
 
 namespace KDevelop
 {
@@ -68,6 +71,15 @@ bool CompletionSettings::boldDeclarations() const
 int CompletionSettings::globalColorizationLevel() const
 {
     return m_languageGroup.readEntry("globalColorization", m_globalColorizationLevel);
+}
+
+CompletionSettings::GlobalColorSource CompletionSettings::globalColorSource() const
+{
+    const auto metaEnum = QMetaEnum::fromType<GlobalColorSource>();
+    const auto globalColorSource = m_languageGroup.readEntry("globalColorSource", QByteArray());
+    bool ok = false;
+    auto value = metaEnum.keyToValue(globalColorSource.constData(), &ok);
+    return ok ? static_cast<GlobalColorSource>(value) : m_globalColorSource;
 }
 
 int CompletionSettings::localColorizationLevel() const

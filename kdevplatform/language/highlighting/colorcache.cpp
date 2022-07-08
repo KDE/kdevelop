@@ -340,15 +340,24 @@ void ColorCache::updateColorsFromScheme()
 
 void ColorCache::updateColorsFromSettings()
 {
-    int localRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
-    int globalRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
-    bool boldDeclartions = ICore::self()->languageController()->completionSettings()->boldDeclarations();
+    auto settings = ICore::self()->languageController()->completionSettings();
+    const auto globalColorSource = settings->globalColorSource();
+    const auto globalColorSourceChanged = globalColorSource != m_globalColorSource;
+    if (globalColorSourceChanged) {
+        delete m_defaultColors;
+        m_defaultColors = new CodeHighlightingColors(this);
+        m_globalColorSource = globalColorSource;
+    }
+
+    int localRatio = settings->localColorizationLevel();
+    int globalRatio = settings->globalColorizationLevel();
+    bool boldDeclartions = settings->boldDeclarations();
     bool globalRatioChanged = globalRatio != m_globalColorRatio;
 
-    if (localRatio != m_localColorRatio || globalRatioChanged) {
+    if (localRatio != m_localColorRatio || globalRatioChanged || globalColorSourceChanged) {
         m_localColorRatio = localRatio;
         m_globalColorRatio = globalRatio;
-        if (m_view && globalRatioChanged) {
+        if (m_view && (globalRatioChanged || globalColorSourceChanged)) {
             updateColorsFromTheme(m_view->theme());
         }
         update();
