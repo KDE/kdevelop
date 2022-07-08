@@ -17,11 +17,11 @@ class ClangHighlighting::Instance : public KDevelop::CodeHighlightingInstance
 public:
     explicit Instance(const KDevelop::CodeHighlighting* highlighting);
 
-    KDevelop::HighlightingEnumContainer::Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const override
+    CodeHighlightingType typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const override
     {
         if (auto macro = dynamic_cast<MacroDefinition*>(dec)) {
             if (macro->isFunctionLike()) {
-                return KDevelop::HighlightingEnumContainer::MacroFunctionLikeType;
+                return CodeHighlightingType::MacroFunctionLike;
             }
         }
 

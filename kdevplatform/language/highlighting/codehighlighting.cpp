@@ -73,20 +73,22 @@ void CodeHighlighting::adaptToColorChanges()
     m_referenceAttributes.clear();
 }
 
-KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType(Types type, Contexts context, const QColor& color) const
+KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType(CodeHighlightingType type,
+                                                               CodeHighlightingContext context,
+                                                               const QColor& color) const
 {
     QMutexLocker lock(&m_dataMutex);
     KTextEditor::Attribute::Ptr a;
     switch (context) {
-    case DefinitionContext:
+    case CodeHighlightingContext::Definition:
         a = m_definitionAttributes[type];
         break;
 
-    case DeclarationContext:
+    case CodeHighlightingContext::Declaration:
         a = m_declarationAttributes[type];
         break;
 
-    case ReferenceContext:
+    case CodeHighlightingContext::Reference:
         a = m_referenceAttributes[type];
         break;
     }
@@ -95,7 +97,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType(Types type, Conte
         a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*ColorCache::self()->defaultColors()->attribute(
                                                                        type)));
 
-        if (context == DefinitionContext || context == DeclarationContext) {
+        if (context == CodeHighlightingContext::Definition || context == CodeHighlightingContext::Declaration) {
             if (ICore::self()->languageController()->completionSettings()->boldDeclarations()) {
                 a->setFontBold();
             }
@@ -106,13 +108,13 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType(Types type, Conte
 //       a->setBackground(QColor(mix(0xffffff-color, backgroundColor(), 255-backgroundTinting)));
         } else {
             switch (context) {
-            case DefinitionContext:
+            case CodeHighlightingContext::Definition:
                 m_definitionAttributes.insert(type, a);
                 break;
-            case DeclarationContext:
+            case CodeHighlightingContext::Declaration:
                 m_declarationAttributes.insert(type, a);
                 break;
-            case ReferenceContext:
+            case CodeHighlightingContext::Reference:
                 m_referenceAttributes.insert(type, a);
                 break;
             }
@@ -373,7 +375,7 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
     return decl;
 }
 
-CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Declaration* dec, DUContext* context) const
+CodeHighlightingType CodeHighlightingInstance::typeForDeclaration(Declaration* dec, DUContext* context) const
 {
     /**
      * We highlight in 3 steps by priority:
@@ -388,14 +390,14 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
 //       return ErrorVariableType;
 
     if (!dec)
-        return ErrorVariableType;
+        return CodeHighlightingType::ErrorVariable;
 
-    Types type = LocalVariableType;
+    auto type = CodeHighlightingType::LocalVariable;
     if (dec->kind() == Declaration::Namespace)
-        return NamespaceType;
+        return CodeHighlightingType::Namespace;
 
     if (dec->kind() == Declaration::Macro) {
-        return MacroType;
+        return CodeHighlightingType::Macro;
     }
 
     if (context && dec->context() && dec->context()->type() == DUContext::Class) {
@@ -404,43 +406,43 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
         Declaration* klass = localClassFromCodeContext(context);
         if (klass) {
             if (klass->internalContext() == dec->context())
-                type = LocalClassMemberType; //Using Member of the local class
+                type = CodeHighlightingType::LocalClassMember; // Using Member of the local class
             else if (klass->internalContext() && klass->internalContext()->imports(dec->context()))
-                type = InheritedClassMemberType; //Using Member of an inherited class
+                type = CodeHighlightingType::InheritedClassMember; // Using Member of an inherited class
         }
     }
 
-    if (type == LocalVariableType) {
+    if (type == CodeHighlightingType::LocalVariable) {
         if (dec->kind() == Declaration::Type || dec->type<KDevelop::FunctionType>() ||
             dec->type<KDevelop::EnumeratorType>()) {
             if (dec->isForwardDeclaration())
-                type = ForwardDeclarationType;
+                type = CodeHighlightingType::ForwardDeclaration;
             else if (dec->type<KDevelop::FunctionType>())
-                type = FunctionType;
+                type = CodeHighlightingType::Function;
             else if (dec->type<StructureType>())
-                type = ClassType;
+                type = CodeHighlightingType::Class;
             else if (dec->type<KDevelop::TypeAliasType>())
-                type = TypeAliasType;
+                type = CodeHighlightingType::TypeAlias;
             else if (dec->type<EnumerationType>())
-                type = EnumType;
+                type = CodeHighlightingType::Enum;
             else if (dec->type<KDevelop::EnumeratorType>())
-                type = EnumeratorType;
+                type = CodeHighlightingType::Enumerator;
         }
     }
 
-    if (type == LocalVariableType) {
+    if (type == CodeHighlightingType::LocalVariable) {
         switch (dec->context()->type()) {
         case DUContext::Namespace:
-            type = NamespaceVariableType;
+            type = CodeHighlightingType::NamespaceVariable;
             break;
         case DUContext::Class:
-            type = MemberVariableType;
+            type = CodeHighlightingType::MemberVariable;
             break;
         case DUContext::Function:
-            type = FunctionVariableType;
+            type = CodeHighlightingType::FunctionVariable;
             break;
         case DUContext::Global:
-            type = GlobalVariableType;
+            type = CodeHighlightingType::GlobalVariable;
             break;
         default:
             break;
@@ -460,22 +462,23 @@ void CodeHighlightingInstance::highlightDeclaration(Declaration* declaration, co
 {
     HighlightedRange h;
     h.range = declaration->range();
-    h.attribute = m_highlighting->attributeForType(typeForDeclaration(declaration, nullptr), DeclarationContext, color);
+    h.attribute = m_highlighting->attributeForType(typeForDeclaration(declaration, nullptr),
+                                                   CodeHighlightingContext::Declaration, color);
     m_highlight.push_back(h);
 }
 
 void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const QColor& color)
 {
-    Types type = ErrorVariableType;
+    auto type = CodeHighlightingType::ErrorVariable;
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
 
     type = typeForDeclaration(decl, context);
 
-    if (type != ErrorVariableType ||
-        ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
+    if (type != CodeHighlightingType::ErrorVariable
+        || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
         HighlightedRange h;
         h.range = context->uses()[index].m_range;
-        h.attribute = m_highlighting->attributeForType(type, ReferenceContext, color);
+        h.attribute = m_highlighting->attributeForType(type, CodeHighlightingContext::Reference, color);
         m_highlight.push_back(h);
     }
 }

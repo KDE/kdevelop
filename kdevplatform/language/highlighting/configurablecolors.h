@@ -9,6 +9,8 @@
 #ifndef KDEVPLATFORM_CONFIGURABLECOLORS_H
 #define KDEVPLATFORM_CONFIGURABLECOLORS_H
 
+#include "codehighlighting.h"
+
 #include <language/languageexport.h>
 
 #include <KTextEditor/Attribute>
@@ -21,9 +23,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors
 public:
     explicit ConfigurableHighlightingColors();
 
-    void addAttribute(int number, const KTextEditor::Attribute::Ptr& attribute);
+    void addAttribute(CodeHighlightingType type, const KTextEditor::Attribute::Ptr& attribute);
 
-    KTextEditor::Attribute::Ptr attribute(int number) const;
+    KTextEditor::Attribute::Ptr attribute(CodeHighlightingType type) const;
 
     void setDefaultAttribute(const KTextEditor::Attribute::Ptr& defaultAttrib);
 
@@ -32,6 +34,7 @@ public:
 private:
     KTextEditor::Attribute::Ptr m_defaultAttribute;
     QHash<int, KTextEditor::Attribute::Ptr> m_attributes;
+    QHash<CodeHighlightingType, KTextEditor::Attribute::Ptr> m_attributes;
     QString m_highlightingName;
 };
 
