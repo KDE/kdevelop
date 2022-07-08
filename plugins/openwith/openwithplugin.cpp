@@ -282,7 +282,8 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
             i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
                  m_mimeType, service->name() ),
             i18nc("@title:window", "Set as Default?"),
-            KStandardGuiItem::yes(), KStandardGuiItem::no(),
+            KGuiItem(i18nc("@action:button", "Set as Default"), QStringLiteral("dialog-ok")),
+            KGuiItem(i18nc("@action:button", "Do Not Set"), QStringLiteral("dialog-cancel")),
             QStringLiteral("OpenWith-%1").arg(m_mimeType)
         );
         if (setDefault == KMessageBox::Yes) {
