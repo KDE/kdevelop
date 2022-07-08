@@ -91,8 +91,9 @@ bool ensureWritable(const QList<QUrl>& urls)
                                                           "You don't have write permissions for the following files; add write permissions for owner before saving?") +
                                                       QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
                                                       i18nc("@title:window", "Some Files are Write-Protected"),
-                                                      KStandardGuiItem::yes(),
-                                                      KStandardGuiItem::no(), KStandardGuiItem::cancel());
+                                                      KGuiItem(i18nc("@action:button", "Set Write Permissions"), QStringLiteral("dialog-ok")),
+                                                      KGuiItem(i18nc("@action:button", "Ignore"), QStringLiteral("dialog-cancel")),
+                                                      KStandardGuiItem::cancel());
         if (answer == KMessageBox::Yes) {
             bool success = true;
             for (const QString& filename : qAsConst(notWritable)) {
