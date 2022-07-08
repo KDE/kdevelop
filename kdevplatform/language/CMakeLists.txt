@@ -151,7 +151,6 @@ set(KDevPlatformLanguage_LIB_SRCS
     highlighting/colorcache.cpp
     highlighting/configurablecolors.cpp
     highlighting/codehighlighting.cpp
-    highlighting/syntax/syntax.qrc
 
     checks/dataaccessrepository.cpp checks/dataaccess.cpp
     checks/controlflowgraph.cpp checks/controlflownode.cpp

@@ -26,59 +26,11 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
-#include <KSyntaxHighlighting/Definition>
-#include <KSyntaxHighlighting/Format>
 
 #define ifDebug(x)
 
 namespace KDevelop {
 ColorCache* ColorCache::m_self = nullptr;
-
-CodeHighlightingType getHighlightingTypeFromName(const QString& name)
-{
-    if (name == QLatin1String("Class")) {
-        return CodeHighlightingType::Class;
-    } else if (name == QLatin1String("Local Member Variable")) {
-        return CodeHighlightingType::LocalClassMember;
-    } else if (name == QLatin1String("Local Member Function")) {
-        return CodeHighlightingType::LocalMemberFunction;
-    } else if (name == QLatin1String("Inherited Member Variable")) {
-        return CodeHighlightingType::InheritedClassMember;
-    } else if (name == QLatin1String("Inherited Member Function")) {
-        return CodeHighlightingType::InheritedMemberFunction;
-    } else if (name == QLatin1String("Function")) {
-        return CodeHighlightingType::Function;
-    } else if (name == QLatin1String("Function Argument")) {
-        return CodeHighlightingType::FunctionVariable;
-    } else if (name == QLatin1String("Type Alias")) {
-        return CodeHighlightingType::TypeAlias;
-    } else if (name == QLatin1String("Forward Declaration")) {
-        return CodeHighlightingType::ForwardDeclaration;
-    } else if (name == QLatin1String("Namespace")) {
-        return CodeHighlightingType::Namespace;
-    } else if (name == QLatin1String("Local Variable")) {
-        return CodeHighlightingType::LocalVariable;
-    } else if (name == QLatin1String("Global Variable")) {
-        return CodeHighlightingType::GlobalVariable;
-    } else if (name == QLatin1String("Member Variable")) {
-        return CodeHighlightingType::MemberVariable;
-    } else if (name == QLatin1String("Namespace Variable")) {
-        return CodeHighlightingType::NamespaceVariable;
-    } else if (name == QLatin1String("Enumeration")) {
-        return CodeHighlightingType::Enum;
-    } else if (name == QLatin1String("Enumerator")) {
-        return CodeHighlightingType::Enumerator;
-    } else if (name == QLatin1String("Macro")) {
-        return CodeHighlightingType::Macro;
-    } else if (name == QLatin1String("Macro Function")) {
-        return CodeHighlightingType::MacroFunctionLike;
-    } else if (name == QLatin1String("Highlight Uses")) {
-        return CodeHighlightingType::HighlightUses;
-    } else if (name == QLatin1String("Error Variable")) {
-        return CodeHighlightingType::ErrorVariable;
-    }
-    return CodeHighlightingType::Unknown;
-}
 
 ColorCache::ColorCache(QObject* parent)
     : QObject(parent)
@@ -139,8 +91,7 @@ ColorCache* ColorCache::self()
 
 void ColorCache::generateColors()
 {
-    // FIXME:
-    // m_defaultColors->reset(this);
+    m_defaultColors->reset(this);
 
     // Primary colors taken from: http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
     const QColor colors[] = {
@@ -233,7 +184,6 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
 #endif
     m_view = view;
 
-    bool anyAttrChanged = false;
     if (!foreground.isValid()) {
         // fallback to colorscheme variant
         ifDebug(qCDebug(LANGUAGE) << "updating from scheme"; )
@@ -241,87 +191,10 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
     } else if (m_foregroundColor != foreground || m_backgroundColor != background) {
         m_foregroundColor = foreground;
         m_backgroundColor = background;
-        anyAttrChanged = true;
-    }
 
-    anyAttrChanged |= updateColorsFromTheme(view->theme());
-
-    if (anyAttrChanged) {
         ifDebug(qCDebug(LANGUAGE) << "updating from document"; )
         update();
     }
-}
-
-bool ColorCache::updateColorsFromTheme(const KSyntaxHighlighting::Theme& theme)
-{
-    // from ktexteditor/src/syntax/kateextendedattribute.h
-    static const int SelectedBackground = QTextFormat::UserProperty + 2;
-
-    const auto schemeDefinition = m_schemeRepo.definitionForName(QStringLiteral("Semantic Colors"));
-    const auto formats = schemeDefinition.formats();
-    const bool blendColors = m_globalColorRatio < 255;
-    bool anyAttrChanged = false;
-    for (const auto& format : formats) {
-        const auto type = getHighlightingTypeFromName(format.name());
-        const auto attr = m_defaultColors->attribute(type);
-
-        auto fg = format.textColor(theme);
-        auto selFg = format.selectedTextColor(theme);
-        if (blendColors) {
-            fg = blendGlobalColor(fg);
-            selFg = blendGlobalColor(selFg);
-        }
-        if (attr->fontBold() != format.isBold(theme)) {
-            attr->setFontBold(format.isBold(theme));
-            anyAttrChanged = true;
-        }
-        if (attr->fontItalic() != format.isItalic(theme)) {
-            attr->setFontItalic(format.isItalic(theme));
-            anyAttrChanged = true;
-        }
-        if (attr->fontUnderline() != format.isUnderline(theme)) {
-            attr->setFontUnderline(format.isUnderline(theme));
-            anyAttrChanged = true;
-        }
-        if (attr->fontStrikeOut() != format.isStrikeThrough(theme)) {
-            attr->setFontStrikeOut(format.isStrikeThrough(theme));
-            anyAttrChanged = true;
-        }
-        if (attr->foreground().color() != fg) {
-            attr->setForeground(fg);
-            anyAttrChanged = true;
-        }
-        if (attr->selectedForeground().color() != selFg) {
-            attr->setSelectedForeground(selFg);
-            anyAttrChanged = true;
-        }
-        if (format.hasBackgroundColor(theme)) {
-            if (attr->background().color() != format.backgroundColor(theme)) {
-                attr->setBackground(format.backgroundColor(theme));
-                anyAttrChanged = true;
-            }
-        } else if (type == CodeHighlightingType::HighlightUsesType ) {
-            auto background = QColor(theme.editorColor(KSyntaxHighlighting::Theme::SearchHighlight));
-            if (attr->background().color() != background) {
-                attr->setBackground(background);
-                anyAttrChanged = true;
-            }
-        } else if (attr->background() != QBrush()) {
-            attr->setBackground(QBrush());
-            anyAttrChanged = true;
-        }
-        // from KSyntaxHighlighting::Format::isDefaultTextStyle
-        if (format.selectedBackgroundColor(theme).rgba() != theme.selectedBackgroundColor(KSyntaxHighlighting::Theme::Normal)) {
-            if (attr->selectedBackground().color() != format.selectedBackgroundColor(theme)) {
-                attr->setSelectedBackground(format.selectedBackgroundColor(theme));
-                anyAttrChanged = true;
-            }
-        } else if (attr->hasProperty(SelectedBackground)) {
-            attr->clearProperty(SelectedBackground);
-            anyAttrChanged = true;
-        }
-    }
-    return anyAttrChanged;
 }
 
 void ColorCache::updateColorsFromScheme()
@@ -343,14 +216,10 @@ void ColorCache::updateColorsFromSettings()
     int localRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
     int globalRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
     bool boldDeclartions = ICore::self()->languageController()->completionSettings()->boldDeclarations();
-    bool globalRatioChanged = globalRatio != m_globalColorRatio;
 
-    if (localRatio != m_localColorRatio || globalRatioChanged) {
+    if (localRatio != m_localColorRatio || globalRatio != m_globalColorRatio) {
         m_localColorRatio = localRatio;
         m_globalColorRatio = globalRatio;
-        if (m_view && globalRatioChanged) {
-            updateColorsFromTheme(m_view->theme());
-        }
         update();
     }
     if (boldDeclartions != m_boldDeclarations) {
