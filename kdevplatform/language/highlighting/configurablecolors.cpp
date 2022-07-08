@@ -35,8 +35,7 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache)
         KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
         a->setForeground(cache ? cache->blendGlobalColor(color) : color);
         m_attributes[type] = a;
-        ifDebug(qCDebug(LANGUAGE) << #type << "color: " << #color_ << "->" << a->foreground().color().name());
-        return a;
+        ifDebug(qCDebug(LANGUAGE) << #type << "color: " << #color_ << "->" << a->foreground().color().name();)
     };
     // TODO: The set of colors doesn't work very well. Many colors simply too dark (even on the maximum "Global colorization intensity" they hardly distinguishable from grey) and look alike.
     addColor(CodeHighlightingType::Class, 0x005912); // Dark green
@@ -58,12 +57,5 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache)
     addColor(CodeHighlightingType::ForwardDeclaration, 0x5C5C5C); // Gray
     addColor(CodeHighlightingType::Macro, 0xA41239);
     addColor(CodeHighlightingType::MacroFunctionLike, 0x008080);
-
-    {
-        auto highlightUses = addColor(CodeHighlightingType::HighlightUses, 0xffffff);
-        highlightUses->setDefaultStyle(KTextEditor::dsNormal);
-        highlightUses->setForeground(highlightUses->selectedForeground());
-        highlightUses->setBackgroundFillWhitespace(true);
-    }
 }
 }

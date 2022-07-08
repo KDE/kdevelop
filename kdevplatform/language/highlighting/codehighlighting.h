@@ -52,7 +52,6 @@ enum class CodeHighlightingType {
     MemberVariable,
     NamespaceVariable,
     GlobalVariable,
-    HighlightUses,
 
     // Most of these are currently not used:
     Argument,

@@ -42,8 +42,6 @@
 #include <language/interfaces/iquickopen.h>
 
 #include <language/highlighting/colorcache.h>
-#include <language/highlighting/configurablecolors.h>
-#include <language/highlighting/codehighlighting.h>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/ducontext.h>
@@ -714,10 +712,17 @@ void ContextBrowserPlugin::clearMouseHover()
     m_mouseHoverDocument.clear();
 }
 
-Attribute::Ptr ContextBrowserPlugin::highlightedUseAttribute() const
+Attribute::Ptr ContextBrowserPlugin::highlightedUseAttribute(KTextEditor::View* view) const
 {
     if (!m_highlightAttribute) {
-        m_highlightAttribute = ColorCache::self()->defaultColors()->attribute(CodeHighlightingType::HighlightUses);
+        m_highlightAttribute = Attribute::Ptr(new Attribute());
+        m_highlightAttribute->setDefaultStyle(KTextEditor::dsNormal);
+        m_highlightAttribute->setForeground(m_highlightAttribute->selectedForeground());
+        m_highlightAttribute->setBackgroundFillWhitespace(true);
+
+        auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view);
+        auto background = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
+        m_highlightAttribute->setBackground(background);
     }
     return m_highlightAttribute;
 }
@@ -727,9 +732,9 @@ void ContextBrowserPlugin::colorSetupChanged()
     m_highlightAttribute = Attribute::Ptr();
 }
 
-Attribute::Ptr ContextBrowserPlugin::highlightedSpecialObjectAttribute() const
+Attribute::Ptr ContextBrowserPlugin::highlightedSpecialObjectAttribute(KTextEditor::View* view) const
 {
-    return highlightedUseAttribute();
+    return highlightedUseAttribute(view);
 }
 
 void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
@@ -745,7 +750,7 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
 
     // Highlight the declaration
     highlights.highlights << decl->createRangeMoving();
-    highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+    highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
     highlights.highlights.back()->setZDepth(highlightingZDepth);
 
     // Highlight uses
@@ -756,7 +761,7 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
             const auto& documentUses = fileIt.value();
             for (auto& use : documentUses) {
                 highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(use, document));
-                highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+                highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
                 highlights.highlights.back()->setZDepth(highlightingZDepth);
             }
         }
@@ -764,7 +769,7 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
 
     if (auto* def = FunctionDefinition::definition(decl)) {
         highlights.highlights << def->createRangeMoving();
-        highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+        highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
         highlights.highlights.back()->setZDepth(highlightingZDepth);
     }
 }
@@ -854,7 +859,7 @@ void ContextBrowserPlugin::updateForView(View* view)
         if (allowHighlight) {
             highlights.highlights <<
                 PersistentMovingRange::Ptr(new PersistentMovingRange(specialRange, IndexedString(url)));
-            highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute());
+            highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute(view));
             highlights.highlights.back()->setZDepth(highlightingZDepth);
         }
         if (updateBrowserView)
