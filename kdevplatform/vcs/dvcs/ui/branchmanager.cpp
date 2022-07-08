@@ -133,13 +133,15 @@ void BranchManager::deleteBranch()
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
                                     i18n("Currently at the branch \"%1\".\n"
-                                            "To remove it, please change to another branch.",
+                                            "To delete it, please change to another branch.",
                                             baseBranch));
         return;
     }
 
-    int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo,
-                                      i18n("Are you sure you want to irreversibly remove the branch '%1'?", baseBranch));
+    int ret = KMessageBox::warningYesNo(this,
+                                        i18n("Are you sure you want to irreversibly delete the branch '%1'?", baseBranch), {},
+                                        KStandardGuiItem::del(),
+                                        KStandardGuiItem::cancel());
     if (ret == KMessageBox::Yes)
         m_model->removeBranch(baseBranch);
 }
