@@ -321,7 +321,9 @@ void GrepOutputView::onApply()
         // ask a confirmation before an empty string replacement
         if(replacementCombo->currentText().length() == 0 &&
            KMessageBox::questionYesNo(this, i18n("Do you want to replace with an empty string?"),
-                                            i18nc("@title:window", "Start Replacement")) == KMessageBox::No)
+                                            i18nc("@title:window", "Start Replacement"),
+                                      KGuiItem(i18nc("@action:button", "Replace"), QStringLiteral("dialog-ok-apply")),
+                                      KStandardGuiItem::cancel()) == KMessageBox::No)
         {
             return;
         }
