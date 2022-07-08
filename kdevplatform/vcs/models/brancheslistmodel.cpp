@@ -64,8 +64,10 @@ class BranchItem : public QStandardItem
                     return;
                 }
 
-                int ret = KMessageBox::messageBox(nullptr, KMessageBox::WarningYesNo,
-                                                i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
+                int ret = KMessageBox::warningYesNo(nullptr,
+                                                    i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch), {},
+                                                    KGuiItem(i18nc("@action:button", "Rename"), QStringLiteral("edit-rename")),
+                                                    KStandardGuiItem::cancel());
                 if (ret == KMessageBox::No) {
                     return; // ignore event
                 }
