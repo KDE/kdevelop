@@ -145,7 +145,9 @@ void ExternalScriptView::removeScript()
                                              "<p>Do you really want to remove the external script configuration for <i>%1</i>?</p>"
                                              "<p><i>Note:</i> The script itself will not be removed.</p>",
                                              item->text()),
-                                         i18nc("@title:window", "Confirm External Script Removal")
+                                         i18nc("@title:window", "Confirm External Script Removal"),
+                                         KGuiItem(i18nc("@action:button", "Remove"), QStringLiteral("document-close")),
+                                         KStandardGuiItem::cancel()
               );
     if (ret == KMessageBox::Yes) {
         m_plugin->model()->removeRow(
