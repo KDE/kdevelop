@@ -91,7 +91,7 @@ ColorCache* ColorCache::self()
 
 void ColorCache::generateColors()
 {
-    m_defaultColors->reset(this);
+    m_defaultColors->reset(this, m_view.data());
 
     // Primary colors taken from: http://colorbrewer2.org/?type=qualitative&scheme=Paired&n=12
     const QColor colors[] = {

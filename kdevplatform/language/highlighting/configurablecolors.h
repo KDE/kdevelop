@@ -15,6 +15,11 @@
 
 #include <KTextEditor/Attribute>
 
+namespace KTextEditor
+{
+class View;
+}
+
 namespace KDevelop {
 class ColorCache;
 
@@ -24,7 +29,7 @@ public:
     explicit ConfigurableHighlightingColors();
     ~ConfigurableHighlightingColors();
 
-    void reset(ColorCache* cache);
+    void reset(ColorCache* cache, KTextEditor::View* view);
 
     KTextEditor::Attribute::Ptr attribute(CodeHighlightingType type) const;
 
