@@ -45,7 +45,9 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache)
     addColor(CodeHighlightingType::Function, 0x21005A); // Navy blue
     addColor(CodeHighlightingType::MemberVariable, 0x443069); // Dark Burple (blue/purple)
     addColor(CodeHighlightingType::LocalClassMember, 0xae7d00); // Light orange
+    addColor(CodeHighlightingType::LocalMemberFunction, 0xae7d00);
     addColor(CodeHighlightingType::InheritedClassMember, 0x705000); // Dark orange
+    addColor(CodeHighlightingType::InheritedMemberFunction, 0x705000);
     addColor(CodeHighlightingType::LocalVariable, 0x0C4D3C);
     addColor(CodeHighlightingType::FunctionVariable, 0x300085); // Less dark navy blue
     addColor(CodeHighlightingType::NamespaceVariable, 0x9F3C5F); // Rose

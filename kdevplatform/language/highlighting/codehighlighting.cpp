@@ -405,10 +405,19 @@ CodeHighlightingType CodeHighlightingInstance::typeForDeclaration(Declaration* d
         //Determine the class we're in
         Declaration* klass = localClassFromCodeContext(context);
         if (klass) {
-            if (klass->internalContext() == dec->context())
-                type = CodeHighlightingType::LocalClassMember; // Using Member of the local class
-            else if (klass->internalContext() && klass->internalContext()->imports(dec->context()))
-                type = CodeHighlightingType::InheritedClassMember; // Using Member of an inherited class
+            if (klass->internalContext() == dec->context()) {
+                // Using Member of the local class
+                if (dec->type<KDevelop::FunctionType>())
+                    type = CodeHighlightingType::LocalMemberFunction;
+                else
+                    type = CodeHighlightingType::LocalClassMember;
+            } else if (klass->internalContext() && klass->internalContext()->imports(dec->context())) {
+                // Using Member of an inherited clas
+                if (dec->type<KDevelop::FunctionType>())
+                    type = CodeHighlightingType::InheritedMemberFunction;
+                else
+                    type = CodeHighlightingType::InheritedClassMember;
+            }
         }
     }
 

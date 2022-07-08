@@ -33,7 +33,9 @@ enum class CodeHighlightingType {
     Unknown,
     // Primary highlighting:
     LocalClassMember,
+    LocalMemberFunction,
     InheritedClassMember,
+    InheritedMemberFunction,
     LocalVariable,
 
     // Other highlighting:
