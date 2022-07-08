@@ -230,9 +230,10 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
 
     QList<Declaration*> takeFreeColors;
 
+    bool noRainbow = ICore::self()->languageController()->completionSettings()->localColorizationLevel() == 0;
     const auto localDeclarations = context->localDeclarations();
     for (Declaration* dec : localDeclarations) {
-        if (!useRainbowColor(dec)) {
+        if (noRainbow || !useRainbowColor(dec)) {
             highlightDeclaration(dec, QColor(QColor::Invalid));
             continue;
         }
