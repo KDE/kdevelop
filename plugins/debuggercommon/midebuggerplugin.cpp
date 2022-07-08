@@ -240,7 +240,9 @@ void MIDebuggerPlugin::slotExamineCore()
         KMessageBox::ButtonCode answer = KMessageBox::warningYesNo(
             core()->uiController()->activeMainWindow(),
             i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue?"));
+                 "currently running debug session and continue?"), {},
+            KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+            KStandardGuiItem::cancel());
         if (answer == KMessageBox::No)
             return;
     }
@@ -258,7 +260,9 @@ void MIDebuggerPlugin::slotAttachProcess()
         KMessageBox::ButtonCode answer = KMessageBox::warningYesNo(
             core()->uiController()->activeMainWindow(),
             i18n("A program is already being debugged. Do you want to abort the "
-                 "currently running debug session and continue?"));
+                 "currently running debug session and continue?"), {},
+            KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+            KStandardGuiItem::cancel());
         if (answer == KMessageBox::No)
             return;
     }

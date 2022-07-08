@@ -131,7 +131,9 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
             KMessageBox::ButtonCode answer = KMessageBox::warningYesNo(
                 nullptr,
                 i18n("A program is already being debugged. Do you want to abort the "
-                     "currently running debug session and continue with the launch?"));
+                     "currently running debug session and continue with the launch?"), {},
+                KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+                KStandardGuiItem::cancel());
             if (answer == KMessageBox::No)
                 return nullptr;
         }

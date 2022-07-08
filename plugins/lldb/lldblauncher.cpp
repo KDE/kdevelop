@@ -71,7 +71,9 @@ KJob *LldbLauncher::start(const QString &launchMode, KDevelop::ILaunchConfigurat
         if (ICore::self()->debugController()->currentSession()) {
             auto ans = KMessageBox::warningYesNo(qApp->activeWindow(),
                 i18n("A program is already being debugged. Do you want to abort the "
-                     "currently running debug session and continue with the launch?"));
+                     "currently running debug session and continue with the launch?"), {},
+                KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+                KStandardGuiItem::cancel());
             if (ans == KMessageBox::No)
                 return nullptr;
         }
