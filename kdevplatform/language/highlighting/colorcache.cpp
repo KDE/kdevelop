@@ -34,7 +34,7 @@
 namespace KDevelop {
 ColorCache* ColorCache::m_self = nullptr;
 
-CodeHighlightingType getHighlightingTypeFromName(const QString& name)
+CodeHighlightingType highlightingTypeFromName(const QString& name)
 {
     if (name == QLatin1String("Class")) {
         return CodeHighlightingType::Class;
@@ -264,7 +264,7 @@ bool ColorCache::updateColorsFromTheme(const KSyntaxHighlighting::Theme& theme)
 
     bool anyAttrChanged = false;
     for (const auto& format : formats) {
-        const auto type = getHighlightingTypeFromName(format.name());
+        const auto type = highlightingTypeFromName(format.name());
         const auto attr = m_defaultColors->attribute(type);
 
         auto forwardProperty = [&](auto formatGetter, auto attrProperty, auto attrSetter) {
