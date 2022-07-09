@@ -266,6 +266,9 @@ bool ColorCache::updateColorsFromTheme(const KSyntaxHighlighting::Theme& theme)
     for (const auto& format : formats) {
         const auto type = highlightingTypeFromName(format.name());
         const auto attr = m_defaultColors->attribute(type);
+        if (!attr) {
+            continue;
+        }
 
         auto forwardProperty = [&](auto formatGetter, auto attrProperty, auto attrSetter) {
             auto formatProperty = (format.*formatGetter)(theme);
