@@ -31,39 +31,28 @@ class CodeHighlighting;
 
 enum class CodeHighlightingType {
     Unknown,
-    // Primary highlighting:
+
     LocalClassMember,
     LocalMemberFunction,
     InheritedClassMember,
     InheritedMemberFunction,
     LocalVariable,
+    MemberVariable,
+    NamespaceVariable,
+    GlobalVariable,
+    FunctionVariable,
+    ErrorVariable,
 
-    // Other highlighting:
     Class,
+    Namespace,
     Function,
     ForwardDeclaration,
     Enum,
     Enumerator,
     TypeAlias,
-    Macro, /// Declaration of a macro such as "#define FOO"
-    MacroFunctionLike, /// Declaration of a function like macro such as "#define FOO()"
-
-    // If none of the above match:
-    MemberVariable,
-    NamespaceVariable,
-    GlobalVariable,
+    Macro, ///< Declaration of a macro such as "#define FOO"
+    MacroFunctionLike, ///< Declaration of a function like macro such as "#define FOO()"
     HighlightUses,
-
-    // Most of these are currently not used:
-    Argument,
-    Code,
-    File,
-    Namespace,
-    Scope,
-    Template,
-    TemplateParameter,
-    FunctionVariable,
-    ErrorVariable,
 };
 
 inline uint qHash(CodeHighlightingType type, uint seed = 0) noexcept
