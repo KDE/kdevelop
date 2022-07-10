@@ -16,24 +16,24 @@
       </context>
     </contexts>
     <itemDatas>
-      <itemData name="Class" defStyleNum="dsDataType" spellChecking="false" bold="0" italic="0" />
-      <itemData name="Local Member Variable" defStyleNum="dsVariable" spellChecking="false" />
-      <itemData name="Local Member Function" defStyleNum="dsFunction" spellChecking="false" />
-      <itemData name="Inherited Member Variable" defStyleNum="dsVariable" spellChecking="false" />
-      <itemData name="Inherited Member Function" defStyleNum="dsFunction" spellChecking="false" />
-      <itemData name="Function" defStyleNum="dsFunction" spellChecking="false" />
-      <itemData name="Function Argument" defStyleNum="dsNormal" spellChecking="false" />
-      <itemData name="Type Alias" defStyleNum="dsDataType" spellChecking="false" bold="0" italic="0" />
-      <itemData name="Forward Declaration" defStyleNum="dsNormal" spellChecking="false" />
-      <itemData name="Namespace" defStyleNum="dsNormal" spellChecking="false" />
-      <itemData name="Local Variable" defStyleNum="dsVariable" spellChecking="false" />
-      <itemData name="Global Variable" defStyleNum="dsVariable" spellChecking="false" />
-      <itemData name="Member Variable" defStyleNum="dsVariable" spellChecking="false" />
-      <itemData name="Namespace Variable" defStyleNum="dsVariable" spellChecking="false" />
-      <itemData name="Enumeration" defStyleNum="dsNormal" spellChecking="false" />
-      <itemData name="Enumerator" defStyleNum="dsNormal" spellChecking="false" />
-      <itemData name="Macro" defStyleNum="dsPreprocessor" spellChecking="false" />
-      <itemData name="Macro Function" defStyleNum="dsPreprocessor" spellChecking="false" />
+      <!-- NOTE: the defStyleNum have no semantic meaning, we just use them to get different colors by default -->
+      <itemData name="Type Alias" defStyleNum="dsSpecialChar" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Enumeration" defStyleNum="dsString" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Enumerator" defStyleNum="dsVerbatimString" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Namespace" defStyleNum="dsString" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Namespace Variable" defStyleNum="dsString" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Global Variable" defStyleNum="dsDataType" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Local Variable" defStyleNum="dsVariable" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Function" defStyleNum="dsFunction" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Class" defStyleNum="dsOthers" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Member Variable" defStyleNum="dsDataType" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Local Member Variable" defStyleNum="dsDecVal" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Local Member Function" defStyleNum="dsOperator" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Inherited Member Variable" defStyleNum="dsConstant" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Inherited Member Function" defStyleNum="dsAnnotation" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Forward Declaration" defStyleNum="dsComment" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Macro" defStyleNum="dsPreprocessor" spellChecking="false" bold="0" italic="0" />
+      <itemData name="Macro Function" defStyleNum="dsExtension" spellChecking="false" bold="0" italic="0" />
     </itemDatas>
   </highlighting>
 </language>
