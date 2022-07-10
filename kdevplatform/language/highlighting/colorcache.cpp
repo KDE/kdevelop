@@ -72,8 +72,6 @@ CodeHighlightingType highlightingTypeFromName(const QString& name)
         return CodeHighlightingType::Macro;
     } else if (name == QLatin1String("Macro Function")) {
         return CodeHighlightingType::MacroFunctionLike;
-    } else if (name == QLatin1String("Highlight Uses")) {
-        return CodeHighlightingType::HighlightUses;
     } else if (name == QLatin1String("Error Variable")) {
         return CodeHighlightingType::ErrorVariable;
     }

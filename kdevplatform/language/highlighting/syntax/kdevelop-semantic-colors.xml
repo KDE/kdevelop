@@ -34,7 +34,6 @@
       <itemData name="Enumerator" defStyleNum="dsNormal" spellChecking="false" />
       <itemData name="Macro" defStyleNum="dsPreprocessor" spellChecking="false" />
       <itemData name="Macro Function" defStyleNum="dsPreprocessor" spellChecking="false" />
-      <itemData name="Highlight Uses" defStyleNum="dsNormal" spellChecking="false" />
       <itemData name="Error Variable" defStyleNum="dsError" spellChecking="false" />
     </itemDatas>
   </highlighting>
