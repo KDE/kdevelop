@@ -77,6 +77,8 @@ void TestDUChain::cleanup()
     if (m_provider) {
         IDefinesAndIncludesManager::manager()->unregisterBackgroundProvider(m_provider.data());
     }
+    // process delayed events
+    QTest::qWait(0);
 }
 
 void TestDUChain::init()
