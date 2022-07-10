@@ -254,6 +254,12 @@ CommitToolView::CommitToolView ( QWidget* parent, RepoStatusModel* repostatusmod
             m_commitForm->enableCommitButton();
     });
 }
+
+CommitToolView::~CommitToolView()
+{
+    delete m_styleDelegate;
+}
+
 KDevelop::IProject* CommitToolView::activeProject() const
 {
     auto* proj_item = activeProjectItem();

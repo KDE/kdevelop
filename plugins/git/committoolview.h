@@ -84,6 +84,7 @@ public:
      * to delete it before the CommitToolView is deleted)
      */
     CommitToolView(QWidget* parent, RepoStatusModel* m_statusmodel);
+    ~CommitToolView() override;
 
     /**
      * @returns the currently active project (i.e. the one that
