@@ -50,10 +50,11 @@ namespace {
 constexpr DBGStateFlags notStartedDebuggerFlags{s_dbgNotStarted | s_appNotStarted};
 }
 
-MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
-    : m_procLineMaker(new ProcessLineMaker(this))
+MIDebugSession::MIDebugSession(MIDebuggerPlugin* plugin)
+    : KDevelop::IDebugSession(plugin)
+    , m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
-    , m_debuggerState{notStartedDebuggerFlags}
+    , m_debuggerState { notStartedDebuggerFlags }
     , m_tty(nullptr)
     , m_plugin(plugin)
 {
@@ -80,7 +81,10 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
 
 MIDebugSession::~MIDebugSession()
 {
+    m_shuttingDown = true;
+
     qCDebug(DEBUGGERCOMMON) << "Destroying MIDebugSession";
+
     // Deleting the session involves shutting down gdb nicely.
     // When were attached to a process, we must first detach so that the process
     // can continue running as it was before being attached. gdb is quite slow to
@@ -894,7 +898,9 @@ void MIDebugSession::raiseEvent(event_t e)
         qCDebug(DEBUGGERCOMMON) << "State reload in progress\n";
     }
 
-    IDebugSession::raiseEvent(e);
+    if (!m_shuttingDown) {
+        IDebugSession::raiseEvent(e);
+    }
 
     if (e == program_state_changed) {
         m_stateReloadInProgress = false;

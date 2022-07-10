@@ -332,6 +332,7 @@ protected:
 
     bool m_stateReloadInProgress = false;
     bool m_stateReloadNeeded = false;
+    bool m_shuttingDown = false;
 
     std::unique_ptr<STTY> m_tty;
 
