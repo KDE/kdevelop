@@ -4,3 +4,4 @@ leak:editorconfig_parse
 leak:libqoffscreen.so
 leak:QDesktopWidget
 leak:QOpenGLContext::setScreen
+leak:QScroller::grabGesture
