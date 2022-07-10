@@ -194,7 +194,7 @@ void MemoryView::slotChangeMemoryRange()
     if(amount.isEmpty())
         amount = QStringLiteral("sizeof(%1)").arg(m_rangeSelector->startAddressLineEdit->text());
 
-    session->addCommand(new MI::ExpressionValueCommand(amount, this, &MemoryView::sizeComputed));
+    session->addCommand(std::make_unique<MI::ExpressionValueCommand>(amount, this, &MemoryView::sizeComputed));
 }
 
 void MemoryView::sizeComputed(const QString& size)

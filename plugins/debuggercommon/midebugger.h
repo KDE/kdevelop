@@ -16,6 +16,8 @@
 #include <QByteArray>
 #include <QObject>
 
+#include <memory>
+
 class KConfigGroup;
 class KProcess;
 
@@ -43,7 +45,7 @@ public:
         for 'ready' as well.
 
         The ownership of 'command' is transferred to the debugger.  */
-    void execute(MI::MICommand* command);
+    void execute(std::unique_ptr<MI::MICommand> command);
 
     /** Returns true if 'execute' can be called immediately.  */
     bool isReady() const;
@@ -123,7 +125,7 @@ protected:
     QString m_debuggerExecutable;
     KProcess* m_process = nullptr;
 
-    MI::MICommand* m_currentCmd = nullptr;
+    std::unique_ptr<MI::MICommand> m_currentCmd;
     MI::MIParser m_parser;
 
     /** The unprocessed output from debugger. Output is

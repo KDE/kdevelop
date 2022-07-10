@@ -135,8 +135,8 @@ void MIFrameStackModel::fetchFrames(int threadNumber, int from, int to)
 {
     //to+1 so we know if there are more
     QString arg = QStringLiteral("%1 %2").arg(from).arg(to+1);
-    MICommand *c = session()->createCommand(StackListFrames, arg);
+    auto c = session()->createCommand(StackListFrames, arg);
     c->setHandler(new FrameListHandler(this, threadNumber, to));
     c->setThread(threadNumber);
-    session()->addCommand(c);
+    session()->addCommand(std::move(c));
 }

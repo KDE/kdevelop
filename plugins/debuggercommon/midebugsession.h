@@ -172,9 +172,9 @@ public Q_SLOTS:
     bool attachToProcess(int pid);
 
 public:
-    virtual MI::MICommand *createCommand(MI::CommandType type, const QString& arguments,
-                                         MI::CommandFlags flags = {}) const;
-    virtual MI::MICommand *createUserCommand(const QString &cmd) const;
+    virtual std::unique_ptr<MI::MICommand> createCommand(MI::CommandType type, const QString& arguments,
+                                                         MI::CommandFlags flags = {}) const;
+    virtual std::unique_ptr<MI::MICommand> createUserCommand(const QString& cmd) const;
     /** Adds a command to the end of queue of commands to be executed
         by debugger. The command will be actually sent to debugger only when
         replies from all previous commands are received and full processed.
@@ -186,7 +186,7 @@ public:
     */
     void addUserCommand(const QString &cmd);
 
-    void addCommand(MI::MICommand* cmd);
+    void addCommand(std::unique_ptr<MI::MICommand> cmd);
 
     /** Same as above, but internally constructs MICommand using createCommand() */
     void addCommand(MI::CommandType type, const QString& arguments = QString(),
@@ -239,7 +239,7 @@ protected Q_SLOTS:
     void handleInferiorFinished(const QString &msg);
 
 protected:
-    void queueCmd(MI::MICommand *cmd);
+    void queueCmd(std::unique_ptr<MI::MICommand> cmd);
 
     /** Try to execute next command in the queue.  If GDB is not
         busy with previous command, and there's a command in the
@@ -356,7 +356,7 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
 {
     auto cmd = createCommand(type, arguments, flags);
     cmd->setHandler(handler_this, handler_method);
-    queueCmd(cmd);
+    queueCmd(std::move(cmd));
 }
 
 } // end of namespace KDevMI

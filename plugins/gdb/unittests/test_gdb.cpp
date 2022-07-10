@@ -318,7 +318,7 @@ void GdbTest::testUpdateBreakpoint()
 
     // breakpoint 2: real line 32: const char *x = "Hello";
     //insert custom command as user might do it using GDB console
-    session->addCommand(new MI::UserCommand(MI::NonMI, "break "+debugeeFileName+":32"));
+    session->addCommand(std::make_unique<MI::UserCommand>(MI::NonMI, "break " + debugeeFileName + ":32"));
 
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop at breakpoint 1, with custom command handled
     QCOMPARE(session->currentLine(), 28);
@@ -1729,8 +1729,8 @@ void GdbTest::testThreadAndFrameInfo()
 
     QSignalSpy outputSpy(session, &TestDebugSession::debuggerUserCommandOutput);
 
-    session->addCommand(new MI::UserCommand(MI::ThreadInfo, QString()));
-    session->addCommand(new MI::UserCommand(MI::StackListLocals, QStringLiteral("0")));
+    session->addCommand(std::make_unique<MI::UserCommand>(MI::ThreadInfo, QString()));
+    session->addCommand(std::make_unique<MI::UserCommand>(MI::StackListLocals, QStringLiteral("0")));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // wait for command finish
 
     // outputs should be

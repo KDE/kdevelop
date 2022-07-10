@@ -122,13 +122,14 @@ LldbDebugger *DebugSession::createDebugger() const
     return new LldbDebugger;
 }
 
-MICommand *DebugSession::createCommand(MI::CommandType type, const QString& arguments,
-                                       MI::CommandFlags flags) const
+std::unique_ptr<MICommand> DebugSession::createCommand(MI::CommandType type, const QString& arguments,
+                                                       MI::CommandFlags flags) const
 {
-    return new LldbCommand(type, arguments, flags);
+    // using protected ctor, cannot use make_unique
+    return std::unique_ptr<MICommand>(new LldbCommand(type, arguments, flags));
 }
 
-MICommand *DebugSession::createUserCommand(const QString& cmd) const
+std::unique_ptr<MICommand> DebugSession::createUserCommand(const QString& cmd) const
 {
     if (m_hasCorrectCLIOutput)
         return MIDebugSession::createUserCommand(cmd);
@@ -148,7 +149,7 @@ void DebugSession::initializeDebugger()
     //addCommand(MI::EnableTimings, "yes");
 
     // Check version
-    addCommand(new CliCommand(MI::NonMI, QStringLiteral("version"), this, &DebugSession::handleVersion));
+    addCommand(std::make_unique<CliCommand>(MI::NonMI, QStringLiteral("version"), this, &DebugSession::handleVersion));
 
     // load data formatter
     auto formatterPath = m_formatterPath;
@@ -257,40 +258,42 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, con
     // Start inferior
     bool remoteDebugging = grp.readEntry(Config::LldbRemoteDebuggingEntry, false);
     QUrl configLldbScript = grp.readEntry(Config::LldbConfigScriptEntry, QUrl());
-    addCommand(new SentinelCommand([this, remoteDebugging, configLldbScript]() {
-        // setup inferior I/O redirection
-        if (!remoteDebugging) {
-            // FIXME: a hacky way to emulate tty setting on linux. Not sure if this provides all needed
-            // functionalities of a pty. Should make this conditional on other platforms.
+    addCommand(std::make_unique<SentinelCommand>(
+        [this, remoteDebugging, configLldbScript]() {
+            // setup inferior I/O redirection
+            if (!remoteDebugging) {
+                // FIXME: a hacky way to emulate tty setting on linux. Not sure if this provides all needed
+                // functionalities of a pty. Should make this conditional on other platforms.
 
-            // no need to quote, settings set takes 'raw' input
-            addCommand(MI::NonMI, QStringLiteral("settings set target.input-path %0").arg(m_tty->getSlave()));
-            addCommand(MI::NonMI, QStringLiteral("settings set target.output-path %0").arg(m_tty->getSlave()));
-            addCommand(MI::NonMI, QStringLiteral("settings set target.error-path %0").arg(m_tty->getSlave()));
-        } else {
-            // what is the expected behavior for using external terminal when doing remote debugging?
-        }
+                // no need to quote, settings set takes 'raw' input
+                addCommand(MI::NonMI, QStringLiteral("settings set target.input-path %0").arg(m_tty->getSlave()));
+                addCommand(MI::NonMI, QStringLiteral("settings set target.output-path %0").arg(m_tty->getSlave()));
+                addCommand(MI::NonMI, QStringLiteral("settings set target.error-path %0").arg(m_tty->getSlave()));
+            } else {
+                // what is the expected behavior for using external terminal when doing remote debugging?
+            }
 
-        // send breakpoints already in our breakpoint model to lldb
-        auto bc = breakpointController();
-        bc->initSendBreakpoints();
+            // send breakpoints already in our breakpoint model to lldb
+            auto bc = breakpointController();
+            bc->initSendBreakpoints();
 
-        qCDebug(DEBUGGERLLDB) << "Turn on delete duplicate mode";
-        // turn on delete duplicate breakpoints model, so that breakpoints created by user command in
-        // the script and returned as a =breakpoint-created notification won't get duplicated with the
-        // one already in our model.
-        // we will turn this model off once we first reach a paused state, and from that time on,
-        // the user can create duplicated breakpoints using normal command.
-        bc->setDeleteDuplicateBreakpoints(true);
-        // run custom config script right before we starting the inferior,
-        // so the user has the freedom to change everything.
-        if (configLldbScript.isValid()) {
-            addCommand(MI::NonMI, QLatin1String("command source -s 0 ") + KShell::quoteArg(configLldbScript.toLocalFile()));
-        }
+            qCDebug(DEBUGGERLLDB) << "Turn on delete duplicate mode";
+            // turn on delete duplicate breakpoints model, so that breakpoints created by user command in
+            // the script and returned as a =breakpoint-created notification won't get duplicated with the
+            // one already in our model.
+            // we will turn this model off once we first reach a paused state, and from that time on,
+            // the user can create duplicated breakpoints using normal command.
+            bc->setDeleteDuplicateBreakpoints(true);
+            // run custom config script right before we starting the inferior,
+            // so the user has the freedom to change everything.
+            if (configLldbScript.isValid()) {
+                addCommand(MI::NonMI,
+                           QLatin1String("command source -s 0 ") + KShell::quoteArg(configLldbScript.toLocalFile()));
+            }
 
-        addCommand(MI::ExecRun, QString(), new ExecRunHandler(this),
-                   CmdMaybeStartsRunning | CmdHandlesError);
-    }, CmdMaybeStartsRunning));
+            addCommand(MI::ExecRun, QString(), new ExecRunHandler(this), CmdMaybeStartsRunning | CmdHandlesError);
+        },
+        CmdMaybeStartsRunning));
     return true;
 }
 
@@ -302,9 +305,8 @@ bool DebugSession::loadCoreFile(ILaunchConfiguration *,
                CmdHandlesError);
     raiseEvent(connected_to_program);
 
-    addCommand(new CliCommand(NonMI, QLatin1String("target create -c ") + Utils::quote(corefile),
-                              this, &DebugSession::handleCoreFile,
-                              CmdHandlesError));
+    addCommand(std::make_unique<CliCommand>(NonMI, QLatin1String("target create -c ") + Utils::quote(corefile), this,
+                                            &DebugSession::handleCoreFile, CmdHandlesError));
     return true;
 }
 

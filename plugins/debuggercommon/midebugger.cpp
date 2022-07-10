@@ -64,9 +64,9 @@ MIDebugger::~MIDebugger()
     }
 }
 
-void MIDebugger::execute(MICommand* command)
+void MIDebugger::execute(std::unique_ptr<MICommand> command)
 {
-    m_currentCmd = command;
+    m_currentCmd = std::move(command);
     QString commandText = m_currentCmd->cmdToSend();
 
     qCDebug(DEBUGGERCOMMON) << "SEND:" << commandText.trimmed();
@@ -74,7 +74,7 @@ void MIDebugger::execute(MICommand* command)
     QByteArray commandUtf8 = commandText.toUtf8();
 
     m_process->write(commandUtf8);
-    command->markAsSubmitted();
+    m_currentCmd->markAsSubmitted();
 
     QString prettyCmd = m_currentCmd->cmdToSend();
     prettyCmd.remove(QRegExp(QStringLiteral("set prompt \032.\n")));
@@ -111,7 +111,7 @@ void MIDebugger::interrupt()
 
 MICommand* MIDebugger::currentCommand() const
 {
-    return m_currentCmd;
+    return m_currentCmd.get();
 }
 
 void MIDebugger::kill()
@@ -250,8 +250,7 @@ void MIDebugger::processLine(const QByteArray& line)
                 qCDebug(DEBUGGERCOMMON) << "Unhandled result code: " << result.reason;
             }
 
-            delete m_currentCmd;
-            m_currentCmd = nullptr;
+            m_currentCmd.reset();
             emit ready();
             break;
         }

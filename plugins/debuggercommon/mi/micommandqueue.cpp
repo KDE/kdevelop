@@ -12,16 +12,10 @@
 
 using namespace KDevMI::MI;
 
-CommandQueue::CommandQueue()
-{
-}
+CommandQueue::CommandQueue() = default;
+CommandQueue::~CommandQueue() = default;
 
-CommandQueue::~CommandQueue()
-{
-    qDeleteAll(m_commandList);
-}
-
-void CommandQueue::enqueue(MICommand* command)
+void CommandQueue::enqueue(std::unique_ptr<MICommand> command)
 {
     ++m_tokenCounter;
     if (m_tokenCounter == 0)
@@ -31,20 +25,20 @@ void CommandQueue::enqueue(MICommand* command)
     // take the time when this command was added to the command queue
     command->markAsEnqueued();
 
-    m_commandList.append(command);
-
     if (command->flags() & (CmdImmediately | CmdInterrupt))
         ++m_immediatelyCounter;
 
-    rationalizeQueue(command);
+    m_commandList.push_back(std::move(command));
+
+    rationalizeQueue(m_commandList.back().get());
     dumpQueue();
 }
 
 void CommandQueue::dumpQueue() const
 {
-    qCDebug(DEBUGGERCOMMON) << "Pending commands" << m_commandList.count();
+    qCDebug(DEBUGGERCOMMON) << "Pending commands" << m_commandList.size();
     unsigned commandNum = 0;
-    for (const MICommand* command : m_commandList) {
+    for (const auto& command : m_commandList) {
         qCDebug(DEBUGGERCOMMON) << "Command" << commandNum << command->initialString();
         ++commandNum;
     }
@@ -54,60 +48,38 @@ void CommandQueue::rationalizeQueue(MICommand* command)
 {
     if ((command->type() >= ExecAbort && command->type() <= ExecUntil) &&
          command->type() != ExecArguments ) {
-        // Changing execution location, abort any variable updates
-        removeVariableUpdates();
-        // ... and stack list updates
-        removeStackListUpdates();
-    }
-}
+        // Changing execution location, abort any variable updates and stack list updates
 
-void CommandQueue::removeVariableUpdates()
-{
-    QMutableListIterator<MICommand*> it = m_commandList;
-
-    while (it.hasNext()) {
-        MICommand* command = it.next();
-        CommandType type = command->type();
-        if ((type >= VarEvaluateExpression && type <= VarListChildren) || type == VarUpdate) {
-            if (command->flags() & (CmdImmediately | CmdInterrupt))
-                --m_immediatelyCounter;
-            it.remove();
-            delete command;
-        }
-    }
-}
-
-void CommandQueue::removeStackListUpdates()
-{
-    QMutableListIterator<MICommand*> it = m_commandList;
-
-    while (it.hasNext()) {
-        MICommand* command = it.next();
-        CommandType type = command->type();
-        if (type >= StackListArguments && type <= StackListLocals) {
-            if (command->flags() & (CmdImmediately | CmdInterrupt))
-                --m_immediatelyCounter;
-            it.remove();
-            delete command;
-        }
+        auto predicate = [this](const auto& command) {
+            const auto type = command->type();
+            const auto isVariableUpdate
+                = (type >= VarEvaluateExpression && type <= VarListChildren) || type == VarUpdate;
+            const auto isStackListUpdate = type >= StackListArguments && type <= StackListLocals;
+            if (isVariableUpdate || isStackListUpdate) {
+                if (command->flags() & (CmdImmediately | CmdInterrupt))
+                    --m_immediatelyCounter;
+                return true;
+            }
+            return false;
+        };
+        m_commandList.erase(std::remove_if(m_commandList.begin(), m_commandList.end(), predicate), m_commandList.end());
     }
 }
 
 void CommandQueue::clear()
 {
-    qDeleteAll(m_commandList);
     m_commandList.clear();
     m_immediatelyCounter = 0;
 }
 
 int CommandQueue::count() const
 {
-    return m_commandList.count();
+    return m_commandList.size();
 }
 
 bool CommandQueue::isEmpty() const
 {
-    return m_commandList.isEmpty();
+    return m_commandList.empty();
 }
 
 bool CommandQueue::haveImmediateCommand() const
@@ -115,12 +87,13 @@ bool CommandQueue::haveImmediateCommand() const
     return m_immediatelyCounter > 0;
 }
 
-MICommand* CommandQueue::nextCommand()
+std::unique_ptr<MICommand> CommandQueue::nextCommand()
 {
-    if (m_commandList.isEmpty())
-        return nullptr;
+    if (m_commandList.empty())
+        return {};
 
-    MICommand* command = m_commandList.takeAt(0);
+    auto command = std::exchange(m_commandList.front(), {});
+    m_commandList.pop_front();
 
     if (command->flags() & (CmdImmediately | CmdInterrupt))
         --m_immediatelyCounter;

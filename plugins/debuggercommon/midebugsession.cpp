@@ -307,8 +307,7 @@ bool MIDebugSession::attachToProcess(int pid)
                this, &MIDebugSession::handleTargetAttach,
                CmdHandlesError);
 
-    addCommand(new SentinelCommand(breakpointController(),
-                                   &MIBreakpointController::initSendBreakpoints));
+    addCommand(std::make_unique<SentinelCommand>(breakpointController(), &MIBreakpointController::initSendBreakpoints));
 
     raiseEvent(connected_to_program);
 
@@ -672,7 +671,7 @@ void MIDebugSession::addUserCommand(const QString& cmd)
     if (!usercmd)
         return;
 
-    queueCmd(usercmd);
+    queueCmd(std::move(usercmd));
     // User command can theoretically modify absolutely everything,
     // so need to force a reload.
 
@@ -683,28 +682,27 @@ void MIDebugSession::addUserCommand(const QString& cmd)
         raiseEvent(program_state_changed);
 }
 
-MICommand *MIDebugSession::createUserCommand(const QString &cmd) const
+std::unique_ptr<MICommand> MIDebugSession::createUserCommand(const QString& cmd) const
 {
-    MICommand *res = nullptr;
     if (!cmd.isEmpty() && cmd[0].isDigit()) {
         // Add a space to the beginning, so debugger won't get confused if the
         // command starts with a number (won't mix it up with command token added)
-        res = new UserCommand(MI::NonMI, QLatin1Char(' ') + cmd);
+        return std::make_unique<UserCommand>(MI::NonMI, QLatin1Char(' ') + cmd);
     } else {
-        res = new UserCommand(MI::NonMI, cmd);
+        return std::make_unique<UserCommand>(MI::NonMI, cmd);
     }
-    return res;
 }
 
-MICommand *MIDebugSession::createCommand(CommandType type, const QString& arguments,
-                                         CommandFlags flags) const
+std::unique_ptr<MICommand> MIDebugSession::createCommand(CommandType type, const QString& arguments,
+                                                         CommandFlags flags) const
 {
-    return new MICommand(type, arguments, flags);
+    // uses protected ctor, only accessible to MIDebugSession via friendship - cannot use make_unique :(
+    return std::unique_ptr<MICommand>(new MICommand(type, arguments, flags));
 }
 
-void MIDebugSession::addCommand(MICommand* cmd)
+void MIDebugSession::addCommand(std::unique_ptr<MICommand> cmd)
 {
-    queueCmd(cmd);
+    queueCmd(std::move(cmd));
 }
 
 void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments, MI::CommandFlags flags)
@@ -718,7 +716,7 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
 {
     auto cmd = createCommand(type, arguments, flags);
     cmd->setHandler(handler);
-    queueCmd(cmd);
+    queueCmd(std::move(cmd));
 }
 
 void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
@@ -727,7 +725,7 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
 {
     auto cmd = createCommand(type, arguments, flags);
     cmd->setHandler(callback);
-    queueCmd(cmd);
+    queueCmd(std::move(cmd));
 }
 
 // Fairly obvious that we'll add whatever command you give me to a queue
@@ -735,7 +733,7 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
 // information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
-void MIDebugSession::queueCmd(MICommand *cmd)
+void MIDebugSession::queueCmd(std::unique_ptr<MICommand> cmd)
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
         const QString messageText =
@@ -748,8 +746,6 @@ void MIDebugSession::queueCmd(MICommand *cmd)
 
     if (m_stateReloadInProgress)
         cmd->setStateReloading(true);
-
-    m_commandQueue->enqueue(cmd);
 
     qCDebug(DEBUGGERCOMMON) << "QUEUE: " << cmd->initialString()
                             << (m_stateReloadInProgress ? "(state reloading)" : "")
@@ -769,6 +765,8 @@ void MIDebugSession::queueCmd(MICommand *cmd)
         if (cmd->frame() == -1)
             qCDebug(DEBUGGERCOMMON) << "\t--frame will be added on execution";
     }
+
+    m_commandQueue->enqueue(std::move(cmd));
 
     setDebuggerStateOn(s_dbgBusy);
     raiseEvent(debugger_busy);
@@ -790,7 +788,7 @@ void MIDebugSession::executeCmd()
     if (!m_debugger->isReady())
         return;
 
-    MICommand* currentCmd = m_commandQueue->nextCommand();
+    auto currentCmd = m_commandQueue->nextCommand();
     if (!currentCmd)
         return;
 
@@ -833,18 +831,14 @@ void MIDebugSession::executeCmd()
     if (length == 0) {
         // The command might decide it's no longer necessary to send
         // it.
-        if (auto* sc = dynamic_cast<SentinelCommand*>(currentCmd))
-        {
+        if (auto* sc = dynamic_cast<SentinelCommand*>(currentCmd.get())) {
             qCDebug(DEBUGGERCOMMON) << "SEND: sentinel command, not sending";
             sc->invokeHandler();
-        }
-        else
-        {
+        } else {
             qCDebug(DEBUGGERCOMMON) << "SEND: command " << currentCmd->initialString()
                           << "changed its mind, not sending";
         }
 
-        delete currentCmd;
         executeCmd();
         return;
     } else {
@@ -862,7 +856,7 @@ void MIDebugSession::executeCmd()
         return;
     }
 
-    m_debugger->execute(currentCmd);
+    m_debugger->execute(std::move(currentCmd));
 }
 
 void MIDebugSession::ensureDebuggerListening()

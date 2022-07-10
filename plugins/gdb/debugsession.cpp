@@ -88,7 +88,8 @@ void DebugSession::initializeDebugger()
 {
     //addCommand(new GDBCommand(GDBMI::EnableTimings, "yes"));
 
-    addCommand(new CliCommand(MI::GdbShow, QStringLiteral("version"), this, &DebugSession::handleVersion));
+    addCommand(
+        std::make_unique<CliCommand>(MI::GdbShow, QStringLiteral("version"), this, &DebugSession::handleVersion));
 
     // This makes gdb pump a variable out on one line.
     addCommand(MI::GdbSet, QStringLiteral("width 0"));
@@ -219,19 +220,20 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
-        addCommand(new SentinelCommand([this, runGdbScript]() {
-            breakpointController()->initSendBreakpoints();
+        addCommand(std::make_unique<SentinelCommand>(
+            [this, runGdbScript]() {
+                breakpointController()->initSendBreakpoints();
 
-            breakpointController()->setDeleteDuplicateBreakpoints(true);
-            qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(runGdbScript.toLocalFile());
+                breakpointController()->setDeleteDuplicateBreakpoints(true);
+                qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(runGdbScript.toLocalFile());
 
-            addCommand(MI::NonMI, QLatin1String("source ") + runGdbScript.toLocalFile(),
-                       [this](const MI::ResultRecord&) {
-                           breakpointController()->setDeleteDuplicateBreakpoints(false);
-                       },
-                       CmdMaybeStartsRunning);
-            raiseEvent(connected_to_program);
-        }, CmdMaybeStartsRunning));
+                addCommand(
+                    MI::NonMI, QLatin1String("source ") + runGdbScript.toLocalFile(),
+                    [this](const MI::ResultRecord&) { breakpointController()->setDeleteDuplicateBreakpoints(false); },
+                    CmdMaybeStartsRunning);
+                raiseEvent(connected_to_program);
+            },
+            CmdMaybeStartsRunning));
     } else {
         // normal local debugging
         addCommand(MI::FileExecAndSymbols, KShell::quoteArg(executable),
@@ -239,10 +241,12 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
                    CmdHandlesError);
         raiseEvent(connected_to_program);
 
-        addCommand(new SentinelCommand([this]() {
-            breakpointController()->initSendBreakpoints();
-            addCommand(MI::ExecRun, QString(), CmdMaybeStartsRunning);
-        }, CmdMaybeStartsRunning));
+        addCommand(std::make_unique<SentinelCommand>(
+            [this]() {
+                breakpointController()->initSendBreakpoints();
+                addCommand(MI::ExecRun, QString(), CmdMaybeStartsRunning);
+            },
+            CmdMaybeStartsRunning));
     }
     return true;
 }

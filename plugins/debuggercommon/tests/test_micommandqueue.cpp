@@ -50,14 +50,14 @@ void TestMICommandQueue::testDestructor()
     auto* commandQueue = new KDevMI::MI::CommandQueue;
 
     // prepare
-    auto* command1 = new TestDummyCommand(KDevMI::MI::NonMI, QString(), KDevMI::MI::CmdImmediately);
-    auto* command2 = new TestDummyCommand(KDevMI::MI::NonMI, QString(), {});
+    auto command1 = std::make_unique<TestDummyCommand>(KDevMI::MI::NonMI, QString(), KDevMI::MI::CmdImmediately);
+    auto command2 = std::make_unique<TestDummyCommand>(KDevMI::MI::NonMI, QString(), KDevMI::MI::CommandFlags {});
 
-    QSignalSpy command1Spy(command1, &QObject::destroyed);
-    QSignalSpy command2Spy(command2, &QObject::destroyed);
+    QSignalSpy command1Spy(command1.get(), &QObject::destroyed);
+    QSignalSpy command2Spy(command2.get(), &QObject::destroyed);
 
-    commandQueue->enqueue(command1);
-    commandQueue->enqueue(command2);
+    commandQueue->enqueue(std::move(command1));
+    commandQueue->enqueue(std::move(command2));
 
     // execute
     delete commandQueue;
@@ -90,19 +90,20 @@ void TestMICommandQueue::addAndTake()
     KDevMI::MI::CommandQueue commandQueue;
 
     auto command = std::make_unique<TestDummyCommand>(KDevMI::MI::NonMI, QString(), flags);
+    auto c = command.get();
 
     // add
-    commandQueue.enqueue(command.get());
+    commandQueue.enqueue(std::move(command));
     // check
-    QVERIFY(command->token() != 0);
+    QVERIFY(c->token() != 0);
     QCOMPARE(commandQueue.count(), 1);
     QCOMPARE(commandQueue.isEmpty(), false);
     QCOMPARE(commandQueue.haveImmediateCommand(), isImmediate);
 
     // take
-    auto* nextCommand = commandQueue.nextCommand();
+    auto nextCommand = commandQueue.nextCommand();
     // check
-    QCOMPARE(nextCommand, command.get());
+    QCOMPARE(nextCommand.get(), c);
     QVERIFY(nextCommand->token() != 0);
     QCOMPARE(commandQueue.count(), 0);
     QCOMPARE(commandQueue.isEmpty(), true);
@@ -114,14 +115,14 @@ void TestMICommandQueue::clearQueue()
     KDevMI::MI::CommandQueue commandQueue;
 
     // prepare
-    auto* command1 = new TestDummyCommand(KDevMI::MI::NonMI, QString(), KDevMI::MI::CmdImmediately);
-    auto* command2 = new TestDummyCommand(KDevMI::MI::NonMI, QString(), {});
+    auto command1 = std::make_unique<TestDummyCommand>(KDevMI::MI::NonMI, QString(), KDevMI::MI::CmdImmediately);
+    auto command2 = std::make_unique<TestDummyCommand>(KDevMI::MI::NonMI, QString(), KDevMI::MI::CommandFlags {});
 
-    QSignalSpy command1Spy(command1, &QObject::destroyed);
-    QSignalSpy command2Spy(command2, &QObject::destroyed);
+    QSignalSpy command1Spy(command1.get(), &QObject::destroyed);
+    QSignalSpy command2Spy(command2.get(), &QObject::destroyed);
 
-    commandQueue.enqueue(command1);
-    commandQueue.enqueue(command2);
+    commandQueue.enqueue(std::move(command1));
+    commandQueue.enqueue(std::move(command2));
 
     // execute
     commandQueue.clear();

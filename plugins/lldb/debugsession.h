@@ -38,9 +38,9 @@ public:
     VariableController * variableController() const override;
     LldbFrameStackModel * frameStackModel() const override;
 
-    MI::MICommand *createCommand(MI::CommandType type, const QString &arguments,
-                                 MI::CommandFlags flags) const override;
-    MI::MICommand *createUserCommand(const QString & cmd) const override;
+    std::unique_ptr<MI::MICommand> createCommand(MI::CommandType type, const QString& arguments,
+                                                 MI::CommandFlags flags) const override;
+    std::unique_ptr<MI::MICommand> createUserCommand(const QString& cmd) const override;
 
     void updateAllVariables();
 
