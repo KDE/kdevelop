@@ -13,7 +13,7 @@
 #include <debug.h>
 
 #include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
+#include <KSyntaxHighlighting/Theme>
 
 #define ifDebug(x)
 
@@ -68,11 +68,9 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache, KTextEditor::View*
         highlightUses->setForeground(highlightUses->selectedForeground());
         highlightUses->setBackground(highlightUses->selectedBackground());
         highlightUses->setBackgroundFillWhitespace(true);
-
-        if (auto iface = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
-            const auto highlightUsesColor
-                = iface->configValue(QStringLiteral("search-highlight-color")).value<QColor>();
-            highlightUses->setBackground(highlightUsesColor);
+        if (view) {
+            const auto searchHighlight = view->theme().editorColor(KSyntaxHighlighting::Theme::SearchHighlight);
+            highlightUses->setBackground(QColor::fromRgb(searchHighlight));
         }
     }
 }
