@@ -163,7 +163,7 @@
       <item row="2" column="1">
        <widget class="QComboBox" name="kcfg_globalColorSource">
         <property name="toolTip">
-         <string>&lt;p&gt;By default, the global colors for types, functions, namespaces and so forth are auto-generated and will adapt to the selected editor theme based on the global colorization intensity. If you want to have full control over the colors, you can instead use the editor theme as color source. You can then fine tune the colors in the settings under Editor &amp;gt; Color Themes &amp;gt; Highlight Text Styles &amp;gt; KDevelop/Semantic Colors.&lt;/p&gt;</string>
+         <string>&lt;p&gt;By default, the global colors for types, functions, namespaces and so forth are auto-generated and will adapt to the selected editor theme based on the global colorization intensity. If you want to have full control over the colors, you can instead use the editor theme as color source. You can then fine tune the colors in the settings under Editor &amp;gt; Color Themes &amp;gt; Highlighting Text Styles &amp;gt; KDevelop/Semantic Colors.&lt;/p&gt;</string>
         </property>
         <item>
          <property name="text">
@@ -180,7 +180,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_9">
         <property name="toolTip">
-         <string>&lt;p&gt;By default, the global colors for types, functions, namespaces and so forth are auto-generated and will adapt to the selected editor theme based on the global colorization intensity. If you want to have full control over the colors, you can instead use the editor theme as color source. You can then fine tune the colors in the settings under Editor &amp;gt; Color Themes &amp;gt; Highlight Text Styles &amp;gt; KDevelop/Semantic Colors.&lt;/p&gt;</string>
+         <string>&lt;p&gt;By default, the global colors for types, functions, namespaces and so forth are auto-generated and will adapt to the selected editor theme based on the global colorization intensity. If you want to have full control over the colors, you can instead use the editor theme as color source. You can then fine tune the colors in the settings under Editor &amp;gt; Color Themes &amp;gt; Highlighting Text Styles &amp;gt; KDevelop/Semantic Colors.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Global colors:</string>
