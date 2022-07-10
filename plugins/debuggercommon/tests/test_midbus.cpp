@@ -93,7 +93,7 @@ Q_SIGNALS:
 
 void TestMIDBus::initTestCase()
 {
-    qApp->addLibraryPath(QStringLiteral(TEST_PLUGIN_DIR));
+    QCoreApplication::addLibraryPath(QStringLiteral(TEST_PLUGIN_DIR));
 
     KDevelop::AutoTestShell::init({QStringLiteral("testdebugger")});
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
