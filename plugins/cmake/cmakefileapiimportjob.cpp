@@ -18,6 +18,7 @@ using namespace KDevelop;
 #include <util/path.h>
 
 #include <QtConcurrentRun>
+#include <QFile>
 #include <QJsonObject>
 
 namespace CMake {
@@ -40,7 +41,14 @@ void ImportJob::start()
     const auto* bsm = m_project->buildSystemManager();
     const auto sourceDirectory = m_project->path();
     const auto buildDirectory = bsm->buildDirectory(m_project->projectItem());
+
     auto future = QtConcurrent::run([sourceDirectory, buildDirectory]() -> CMakeProjectData {
+        // don't import data when no suitable CMakeCache file exists, which could happen
+        // because our prune job didn't use to delete the .cmake folder
+        if (!QFile::exists(Path(buildDirectory, QStringLiteral("CMakeCache.txt")).toLocalFile())) {
+            return {};
+        }
+
         const auto replyIndex = findReplyIndexFile(buildDirectory.toLocalFile());
         if (replyIndex.data.isEmpty()) {
             return {};
