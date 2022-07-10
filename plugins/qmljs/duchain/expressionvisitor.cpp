@@ -356,33 +356,30 @@ bool ExpressionVisitor::encounterDeclarationInNodeModule(const QualifiedIdentifi
 
 bool ExpressionVisitor::encounterGlobalDeclaration(const QualifiedIdentifier& id)
 {
+    bool ret = false;
     // Use the persistent symbol table to find this declaration, even if it is in another file
-    uint count = 0;
-    const IndexedDeclaration* declarations = nullptr;
+    // Explore the declarations and filter-out those that come from a file outside the current directory
+    PersistentSymbolTable::self().visitDeclarations(
+        IndexedQualifiedIdentifier(id), [&](const IndexedDeclaration& decl) {
+            if (!m_currentDir.isValid()) {
+                m_currentDir = Path(m_context->topContext()->url().str()).parent();
+            }
 
-    PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(id), count, declarations);
+            IndexedTopDUContext declTopContext = decl.indexedTopContext();
 
-    if (count && !m_currentDir.isValid()) {
-        m_currentDir = Path(m_context->topContext()->url().str()).parent();
-    }
+            if (!declTopContext.isValid()) {
+                return PersistentSymbolTable::VisitorState::Continue;
+            }
 
-    // Explore the declarations and filter-out those that come from a file
-    // outside the current directory
-    for (uint i=0; i<count; ++i) {
-        const IndexedDeclaration& decl = declarations[i];
-        IndexedTopDUContext declTopContext = decl.indexedTopContext();
+            if (m_currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
+                encounterLvalue(DeclarationPointer(decl.declaration()));
+                ret = true;
+                return PersistentSymbolTable::VisitorState::Break;
+            }
+            return PersistentSymbolTable::VisitorState::Continue;
+        });
 
-        if (!declTopContext.isValid()) {
-            continue;
-        }
-
-        if (m_currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
-            encounterLvalue(DeclarationPointer(decl.declaration()));
-            return true;
-        }
-    }
-
-    return false;
+    return ret;
 }
 
 void ExpressionVisitor::encounterFieldMember(const QString& name)

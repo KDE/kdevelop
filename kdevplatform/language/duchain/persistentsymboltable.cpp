@@ -17,35 +17,82 @@
 #include "topducontext.h"
 #include "duchain.h"
 #include "duchainlock.h"
+
+#include <util/convenientfreelist.h>
 #include <util/embeddedfreetree.h>
 
-//For now, just _always_ use the cache
-const uint MinimumCountForCache = 1;
-
-namespace {
-QDebug fromTextStream(const QTextStream& out)
-{
-    if (out.device())
-        return {out.device()};
-    return {out.string()};
-}
-}
+#include <language/util/setrepository.h>
 
 namespace KDevelop {
 
+namespace {
+// For now, just _always_ use the cache
+const uint MinimumCountForCache = 1;
+
 using TextStreamFunction = QTextStream& (*)(QTextStream&);
+
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 constexpr TextStreamFunction endl = Qt::endl;
 #else
 constexpr TextStreamFunction endl = ::endl;
 #endif
 
-Utils::BasicSetRepository* RecursiveImportCacheRepository::repository()
+QDebug fromTextStream(const QTextStream& out)
 {
-    static QRecursiveMutex mutex;
-    static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"),
-                                                                          &mutex, nullptr, false);
-    return &recursiveImportCacheRepositoryObject;
+    if (out.device())
+        return {out.device()};
+    return {out.string()};
+}
+
+struct IndexedDeclarationHandler {
+    inline static int leftChild(const IndexedDeclaration& m_data) { return ((int)(m_data.dummyData().first)) - 1; }
+    inline static void setLeftChild(IndexedDeclaration& m_data, int child)
+    {
+        m_data.setDummyData(qMakePair((uint)(child + 1), m_data.dummyData().second));
+    }
+    inline static int rightChild(const IndexedDeclaration& m_data) { return ((int)m_data.dummyData().second) - 1; }
+    inline static void setRightChild(IndexedDeclaration& m_data, int child)
+    {
+        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child + 1)));
+    }
+    inline static void createFreeItem(IndexedDeclaration& data)
+    {
+        data = IndexedDeclaration();
+        data.setIsDummy(true);
+        data.setDummyData(qMakePair(0u, 0u)); // Since we subtract 1, this equals children -1, -1
+    }
+    // Copies this item into the given one
+    inline static void copyTo(const IndexedDeclaration& m_data, IndexedDeclaration& data) { data = m_data; }
+
+    inline static bool isFree(const IndexedDeclaration& m_data) { return m_data.isDummy(); }
+
+    inline static bool equals(const IndexedDeclaration& m_data, const IndexedDeclaration& rhs) { return m_data == rhs; }
+};
+
+struct DeclarationTopContextExtractor {
+    inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) { return decl.indexedTopContext(); }
+};
+
+struct DUContextTopContextExtractor {
+    inline static IndexedTopDUContext extract(const IndexedDUContext& ctx) { return ctx.indexedTopContext(); }
+};
+
+struct RecursiveImportCacheRepository {
+    static Utils::BasicSetRepository* repository()
+    {
+        static QRecursiveMutex mutex;
+        static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"),
+                                                                              &mutex, nullptr, false);
+        return &recursiveImportCacheRepositoryObject;
+    }
+};
+
+struct CacheEntry {
+    using Data = KDevVarLengthArray<IndexedDeclaration>;
+    using DataHash = QHash<TopDUContext::IndexedRecursiveImports, Data>;
+
+    DataHash m_hash;
+};
 }
 
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
@@ -140,17 +187,25 @@ public:
     const PersistentSymbolTableItem& m_item;
 };
 
-template <class ValueType>
-struct CacheEntry
+using Declarations = ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler>;
+using CachedIndexedRecursiveImports =
+    Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true>;
+using FilteredDeclarationIterator =
+    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext,
+                                            CachedIndexedRecursiveImports, DeclarationTopContextExtractor>;
+
+// Maps declaration-ids to declarations, together with some caches
+class PersistentSymbolTableRepo : public ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem>
 {
-    using Data = KDevVarLengthArray<ValueType>;
-    using DataHash = QHash<TopDUContext::IndexedRecursiveImports, Data>;
+    using ItemRepository::ItemRepository;
 
-    DataHash m_hash;
+public:
+    QHash<IndexedQualifiedIdentifier, CacheEntry> declarationsCache;
+
+    // We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache
+    // utilization
+    QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports> importsCache;
 };
-
-// Maps declaration-ids to declarations
-using PersistentSymbolTableRepo = ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem>;
 
 template <>
 class ItemRepositoryFor<PersistentSymbolTableItem>
@@ -167,54 +222,32 @@ public:
     static void init() { repo(); }
 };
 
-class PersistentSymbolTablePrivate
-{
-public:
-    mutable QMutex m_cacheMutex;
-    mutable QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDeclaration>> m_declarationsCache;
-
-    //We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache utilization
-    mutable QHash<TopDUContext::IndexedRecursiveImports, PersistentSymbolTable::CachedIndexedRecursiveImports> m_importsCache;
-};
-
 void PersistentSymbolTable::clearCache()
 {
-    Q_D(PersistentSymbolTable);
-
-    QMutexLocker cacheLock(&d->m_cacheMutex);
-    d->m_importsCache.clear();
-    d->m_declarationsCache.clear();
+    LockedItemRepository::write<PersistentSymbolTableItem>([](PersistentSymbolTableRepo& repo) {
+        repo.importsCache.clear();
+        repo.declarationsCache.clear();
+    });
 }
 
 PersistentSymbolTable::PersistentSymbolTable()
-    : d_ptr(new PersistentSymbolTablePrivate())
 {
     ItemRepositoryFor<PersistentSymbolTableItem>::init();
+    RecursiveImportCacheRepository::repository();
 }
 
-PersistentSymbolTable::~PersistentSymbolTable()
-{
-    //Workaround for a strange destruction-order related crash duing shutdown
-    //We just let the data leak. This doesn't hurt, as there is no meaningful destructors.
-    // TODO: analyze and fix it
-//   delete d;
-}
+PersistentSymbolTable::~PersistentSymbolTable() = default;
 
 void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
-    Q_D(PersistentSymbolTable);
-
     ENSURE_CHAIN_WRITE_LOCKED
-
-    {
-        QMutexLocker cacheLock(&d->m_cacheMutex);
-        d->m_declarationsCache.remove(id);
-    }
 
     PersistentSymbolTableItem item;
     item.id = id;
 
     LockedItemRepository::write<PersistentSymbolTableItem>([&item, &declaration](PersistentSymbolTableRepo& repo) {
+        repo.declarationsCache.remove(item.id);
+
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -257,20 +290,14 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
 void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& id,
                                               const IndexedDeclaration& declaration)
 {
-    Q_D(PersistentSymbolTable);
-
     ENSURE_CHAIN_WRITE_LOCKED
-
-    {
-        QMutexLocker cacheLock(&d->m_cacheMutex);
-        d->m_declarationsCache.remove(id);
-        Q_ASSERT(!d->m_declarationsCache.contains(id));
-    }
 
     PersistentSymbolTableItem item;
     item.id = id;
 
     LockedItemRepository::write<PersistentSymbolTableItem>([&item, &declaration](PersistentSymbolTableRepo& repo) {
+        repo.declarationsCache.remove(item.id);
+
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -309,121 +336,100 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     });
 }
 
-struct DeclarationCacheVisitor
-{
-    explicit DeclarationCacheVisitor(KDevVarLengthArray<IndexedDeclaration>& _cache) : cache(_cache)
-    {
-    }
-
-    bool operator()(const IndexedDeclaration& decl) const
-    {
-        cache.append(decl);
-        return true;
-    }
-
-    KDevVarLengthArray<IndexedDeclaration>& cache;
-};
-
-// TODO: the return value is a wrapper around raw items and thus must only be accessed while locking the repo
-//       so far this happens implicitly via the duchain lock, but really we should clean this up and make it explicit
-PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filteredDeclarations(
-    const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const
-{
-    Q_D(const PersistentSymbolTable);
-
-    ENSURE_CHAIN_READ_LOCKED
-
-    PersistentSymbolTable::Declarations decls = declarations(id).iterator();
-
-    PersistentSymbolTable::CachedIndexedRecursiveImports cachedImports;
-
-    QMutexLocker cacheLock(&d->m_cacheMutex);
-    auto it = d->m_importsCache.constFind(visibility);
-    if (it != d->m_importsCache.constEnd()) {
-        cachedImports = *it;
-    } else {
-        cachedImports = PersistentSymbolTable::CachedIndexedRecursiveImports(visibility.set().stdSet());
-        d->m_importsCache.insert(visibility, cachedImports);
-    }
-
-    if (decls.dataSize() > MinimumCountForCache) {
-        //Do visibility caching
-        CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
-        CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.constFind(visibility);
-        if (cacheIt != cached.m_hash.constEnd())
-            return PersistentSymbolTable::FilteredDeclarationIterator(
-                PersistentSymbolTable::Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1),
-                cachedImports);
-
-        CacheEntry<IndexedDeclaration>::DataHash::iterator insertIt = cached.m_hash.insert(visibility,
-                                                                                           KDevVarLengthArray<IndexedDeclaration>());
-
-        KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
-
-        {
-            using FilteredDeclarationCacheVisitor
-                = ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler,
-                                                         IndexedTopDUContext,
-                                                         PersistentSymbolTable::CachedIndexedRecursiveImports,
-                                                         DeclarationTopContextExtractor, DeclarationCacheVisitor>;
-
-            //The visitor visits all the declarations from within its constructor
-            DeclarationCacheVisitor v(cache);
-            FilteredDeclarationCacheVisitor visitor(v, decls.iterator(), cachedImports);
-        }
-
-        return PersistentSymbolTable::FilteredDeclarationIterator(
-            PersistentSymbolTable::Declarations::Iterator(cache.constData(), cache.size(), -1), cachedImports, true);
-    } else {
-        return PersistentSymbolTable::FilteredDeclarationIterator(decls.iterator(), cachedImports);
-    }
-}
-
-// TODO: the return value is a wrapper around raw items and thus must only be accessed while locking the repo
-//       so far this happens implicitly via the duchain lock, but really we should clean this up and make it explicit
-PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id) const
+void PersistentSymbolTable::visitDeclarations(const IndexedQualifiedIdentifier& id,
+                                              const DeclarationVisitor& visitor) const
 {
     ENSURE_CHAIN_READ_LOCKED
 
     PersistentSymbolTableItem item;
     item.id = id;
 
-    return LockedItemRepository::read<PersistentSymbolTableItem>([&item](const PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::read<PersistentSymbolTableItem>([&item, &visitor](const PersistentSymbolTableRepo& repo) {
         uint index = repo.findIndex(item);
 
-        if (index) {
-            const PersistentSymbolTableItem* repositoryItem = repo.itemFromIndex(index);
-            return PersistentSymbolTable::Declarations(
-                repositoryItem->declarations(), repositoryItem->declarationsSize(), repositoryItem->centralFreeItem);
-        } else {
-            return PersistentSymbolTable::Declarations();
+        if (!index) {
+            return;
+        }
+
+        const PersistentSymbolTableItem* repositoryItem = repo.itemFromIndex(index);
+
+        const auto numDeclarations = repositoryItem->declarationsSize();
+        const auto declarations = repositoryItem->declarations();
+        for (uint i = 0; i < numDeclarations; ++i) {
+            if (visitor(declarations[i]) == VisitorState::Break) {
+                break;
+            }
         }
     });
 }
 
-// TODO: the out params are raw items and thus must only be accessed while locking the repo
-//       so far this happens implicitly via the duchain lock, but really we should clean this up and make it explicit
-void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget,
-                                         const IndexedDeclaration*& declarationsTarget) const
+void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIdentifier& id,
+                                                      const TopDUContext::IndexedRecursiveImports& visibility,
+                                                      const DeclarationVisitor& visitor) const
 {
     ENSURE_CHAIN_READ_LOCKED
 
     PersistentSymbolTableItem item;
     item.id = id;
 
-    LockedItemRepository::read<PersistentSymbolTableItem>(
-        [&item, &countTarget, &declarationsTarget](const PersistentSymbolTableRepo& repo) {
-            uint index = repo.findIndex(item);
+    LockedItemRepository::write<PersistentSymbolTableItem>([&](PersistentSymbolTableRepo& repo) {
+        uint index = repo.findIndex(item);
+        if (!index) {
+            return;
+        }
 
-            if (index) {
-                const PersistentSymbolTableItem* repositoryItem = repo.itemFromIndex(index);
-                countTarget = repositoryItem->declarationsSize();
-                declarationsTarget = repositoryItem->declarations();
+        const PersistentSymbolTableItem* repositoryItem = repo.itemFromIndex(index);
+        const auto declarations = Declarations(repositoryItem->declarations(), repositoryItem->declarationsSize(),
+                                               repositoryItem->centralFreeItem);
+
+        CachedIndexedRecursiveImports cachedImports;
+        auto it = repo.importsCache.constFind(visibility);
+        if (it != repo.importsCache.constEnd()) {
+            cachedImports = *it;
+        } else {
+            cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
+            repo.importsCache.insert(visibility, cachedImports);
+        }
+
+        auto filterIterator = [&]() {
+            if (declarations.dataSize() > MinimumCountForCache) {
+                // Do visibility caching
+                auto& cached = repo.declarationsCache[id];
+                auto cacheIt = cached.m_hash.constFind(visibility);
+                if (cacheIt != cached.m_hash.constEnd()) {
+                    return FilteredDeclarationIterator(
+                        Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
+                }
+
+                auto insertIt = cached.m_hash.insert(visibility, {});
+                auto& cache = *insertIt;
+                {
+                    auto cacheVisitor = [&cache](const IndexedDeclaration& decl) {
+                        cache.append(decl);
+                    };
+
+                    using FilteredDeclarationCacheVisitor =
+                        ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler,
+                                                               IndexedTopDUContext, CachedIndexedRecursiveImports,
+                                                               DeclarationTopContextExtractor, decltype(cacheVisitor)>;
+
+                    // The visitor visits all the declarations from within its constructor
+                    FilteredDeclarationCacheVisitor visitor(cacheVisitor, declarations.iterator(), cachedImports);
+                }
+
+                return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1),
+                                                   cachedImports, true);
             } else {
-                countTarget = 0;
-                declarationsTarget = nullptr;
+                return FilteredDeclarationIterator(declarations.iterator(), cachedImports);
             }
-        });
+        }();
+
+        for (; filterIterator; ++filterIterator) {
+            if (visitor(*filterIterator) == VisitorState::Break) {
+                break;
+            }
+        }
+    });
 }
 
 struct DebugVisitor

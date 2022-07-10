@@ -175,25 +175,24 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
                     modifyHtml() += i18n("(unresolved forward-declaration) ");
                     QualifiedIdentifier id = forwardDec->qualifiedIdentifier();
                     const auto& forwardDecFile = forwardDec->topContext()->parsingEnvironmentFile();
-                    uint count;
-                    const IndexedDeclaration* decls;
-                    PersistentSymbolTable::self().declarations(id, count, decls);
-                    for (uint a = 0; a < count; ++a) {
-                        auto dec = decls[a].data();
+                    auto visitor = [&](const IndexedDeclaration& indexedDec) {
+                        auto dec = indexedDec.data();
                         if (!dec || dec->isForwardDeclaration()) {
-                            continue;
+                            return PersistentSymbolTable::VisitorState::Continue;
                         }
                         const auto& decFile = forwardDec->topContext()->parsingEnvironmentFile();
                         if ((static_cast<bool>(decFile) != static_cast<bool>(forwardDecFile)) ||
                             (decFile && forwardDecFile && decFile->language() != forwardDecFile->language())) {
                             // the language of the declarations must match
-                            continue;
+                            return PersistentSymbolTable::VisitorState::Continue;
                         }
                         modifyHtml() += QStringLiteral("<br />");
                         makeLink(i18n("possible resolution from"), DeclarationPointer(
                                      dec), NavigationAction::NavigateDeclaration);
                         modifyHtml() += QLatin1Char(' ') + dec->url().str();
-                    }
+                        return PersistentSymbolTable::VisitorState::Continue;
+                    };
+                    PersistentSymbolTable::self().visitDeclarations(id, visitor);
                 }
             }
             modifyHtml() += QStringLiteral("<br />");

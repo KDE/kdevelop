@@ -629,13 +629,10 @@ void DUContext::findLocalDeclarationsInternal(const IndexedIdentifier& identifie
 
         TopDUContext* top = topContext();
 
-        uint count;
-        const IndexedDeclaration* declarations;
-        PersistentSymbolTable::self().declarations(id, count, declarations);
-        for (uint a = 0; a < count; ++a) {
+        PersistentSymbolTable::self().visitDeclarations(id, [&](const IndexedDeclaration& indexedDecl) {
             ///@todo Eventually do efficient iteration-free filtering
-            if (declarations[a].topContextIndex() == top->ownIndex()) {
-                Declaration* decl = declarations[a].declaration();
+            if (indexedDecl.topContextIndex() == top->ownIndex()) {
+                Declaration* decl = indexedDecl.declaration();
                 if (decl && contextIsChildOrEqual(decl->context(), this)) {
                     Declaration* checked = checker.check(decl);
                     if (checked) {
@@ -643,7 +640,8 @@ void DUContext::findLocalDeclarationsInternal(const IndexedIdentifier& identifie
                     }
                 }
             }
-        }
+            return PersistentSymbolTable::VisitorState::Continue;
+        });
     } else {
         //Iterate through all declarations
         DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);

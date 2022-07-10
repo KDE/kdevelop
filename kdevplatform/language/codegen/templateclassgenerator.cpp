@@ -319,25 +319,25 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
     cd.baseClasses << desc;
     setDescription(cd);
 
-    DUChainReadLocker lock;
-
-    PersistentSymbolTable::Declarations decl =
-        PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType)));
-
     //Search for all super classes
-    for (PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it) {
-        DeclarationPointer declaration = DeclarationPointer(it->declaration());
+    auto visitor = [&](const IndexedDeclaration& indexedDeclaration) {
+        auto declaration = DeclarationPointer(indexedDeclaration.declaration());
         if (!declaration || declaration->isForwardDeclaration()) {
-            continue;
+            return PersistentSymbolTable::VisitorState::Continue;
         }
 
         // Check if it's a class/struct/etc
         if (declaration->type<StructureType>()) {
             d->fetchSuperClasses(declaration);
             d->directBaseClasses << declaration;
-            break;
+            return PersistentSymbolTable::VisitorState::Break;
         }
-    }
+        return PersistentSymbolTable::VisitorState::Continue;
+    };
+    const auto id = IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType));
+
+    DUChainReadLocker lock;
+    PersistentSymbolTable::self().visitDeclarations(id, visitor);
 }
 
 void TemplateClassGenerator::setBaseClasses(const QList<QString>& bases)

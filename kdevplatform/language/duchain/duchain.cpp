@@ -1291,7 +1291,6 @@ void DUChain::initialize()
     // being 0 and hence crashes at some point later when accessing the contents via
     // read. See https://bugs.kde.org/show_bug.cgi?id=250779
     RecursiveImportRepository::repository();
-    RecursiveImportCacheRepository::repository();
 
     ItemRepositoryFor<EnvironmentInformationListItem>::init();
     ItemRepositoryFor<EnvironmentInformationItem>::init();

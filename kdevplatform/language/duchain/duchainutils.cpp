@@ -437,18 +437,20 @@ KDevelop::DUContext* DUChainUtils::argumentContext(KDevelop::Declaration* decl) 
 }
 
 QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
-  QList<IndexedDeclaration> ret;
-  ret << IndexedDeclaration(decl);
+    const auto indexedDecl = IndexedDeclaration(decl);
 
-  if(decl->inSymbolTable())
-  {
-    uint count;
-    const IndexedDeclaration* allDeclarations;
-    PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
-    for(uint a = 0; a < count; ++a)
-      if(!(allDeclarations[a] == IndexedDeclaration(decl)))
-        ret << allDeclarations[a];
-  }
+    QList<IndexedDeclaration> ret;
+    ret << indexedDecl;
+
+    if (decl->inSymbolTable()) {
+        auto visitor = [&](const IndexedDeclaration& indexed) {
+            if (indexed != indexedDecl) {
+                ret << indexed;
+            }
+            return PersistentSymbolTable::VisitorState::Continue;
+        };
+        PersistentSymbolTable::self().visitDeclarations(decl->qualifiedIdentifier(), visitor);
+    }
 
   return ret;
 }
@@ -483,19 +485,20 @@ static QList<Declaration*> inheritersInternal(const Declaration* decl, uint& max
   }
 
   if(collectVersions && decl->inSymbolTable()) {
-    uint count;
-    const IndexedDeclaration* allDeclarations;
-    PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
-    for(uint a = 0; a < count; ++a) {
-      ++maxAllowedSteps;
+      auto visitor = [&](const IndexedDeclaration& indexedDeclaration) {
+          ++maxAllowedSteps;
+          auto declaration = indexedDeclaration.data();
+          if (declaration && declaration != decl) {
+              ret += inheritersInternal(declaration, maxAllowedSteps, false);
+          }
 
-      if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
-        ret += inheritersInternal(allDeclarations[a].data(), maxAllowedSteps, false);
-      }
-
-      if(maxAllowedSteps == 0)
-        return ret;
-    }
+          if (maxAllowedSteps == 0) {
+              return PersistentSymbolTable::VisitorState::Break;
+          } else {
+              return PersistentSymbolTable::VisitorState::Continue;
+          }
+      };
+      PersistentSymbolTable::self().visitDeclarations(decl->qualifiedIdentifier(), visitor);
   }
 
   return ret;

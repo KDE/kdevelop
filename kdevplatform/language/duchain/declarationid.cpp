@@ -90,35 +90,29 @@ KDevVarLengthArray<Declaration*> DeclarationId::declarations(const TopDUContext*
         //Find the declaration by its qualified identifier and additionalIdentity
         QualifiedIdentifier id(m_indirectData.identifier);
 
+        auto visitDeclaration = [&](const IndexedDeclaration& indexedDecl) {
+            auto decl = indexedDecl.data();
+            if (decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
+                // Hit
+                ret.append(decl);
+            }
+            return PersistentSymbolTable::VisitorState::Continue;
+        };
+
         if (top) {
             //Do filtering
-            PersistentSymbolTable::FilteredDeclarationIterator filter =
-                PersistentSymbolTable::self().filteredDeclarations(id, top->recursiveImportIndices());
-            for (; filter; ++filter) {
-                Declaration* decl = filter->data();
-                if (decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
-                    //Hit
-                    ret.append(decl);
-                }
-            }
+            PersistentSymbolTable::self().visitFilteredDeclarations(id, top->recursiveImportIndices(),
+                                                                    visitDeclaration);
         } else {
             //Just accept anything
-            PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().declarations(id);
-            PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
-            for (; decl; ++decl) {
-                const IndexedDeclaration& iDecl(*decl);
-
+            PersistentSymbolTable::self().visitDeclarations(id, [&](const IndexedDeclaration& indexedDecl) {
                 ///@todo think this over once we don't pull in all imported top-context any more
                 //Don't trigger loading of top-contexts from here, it will create a lot of problems
-                if ((!DUChain::self()->isInMemory(iDecl.topContextIndex())))
-                    continue;
-
-                Declaration* decl = iDecl.data();
-                if (decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
-                    //Hit
-                    ret.append(decl);
+                if (DUChain::self()->isInMemory(indexedDecl.topContextIndex())) {
+                    return visitDeclaration(indexedDecl);
                 }
-            }
+                return PersistentSymbolTable::VisitorState::Continue;
+            });
         }
     } else {
         Declaration* decl = m_directData.declaration();
@@ -147,39 +141,32 @@ Declaration* DeclarationId::declaration(const TopDUContext* top, bool instantiat
         //Find the declaration by its qualified identifier and additionalIdentity
         QualifiedIdentifier id(m_indirectData.identifier);
 
-        if (top) {
-            //Do filtering
-            PersistentSymbolTable::FilteredDeclarationIterator filter =
-                PersistentSymbolTable::self().filteredDeclarations(id, top->recursiveImportIndices());
-            for (; filter; ++filter) {
-                Declaration* decl = filter->data();
-                if (decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
-                    //Hit
-                    ret = decl;
-                    if (!ret->isForwardDeclaration())
-                        break;
+        auto visitDeclaration = [&](const IndexedDeclaration& indexedDecl) {
+            auto decl = indexedDecl.data();
+            if (decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
+                // Hit
+                ret = decl;
+                if (!ret->isForwardDeclaration()) {
+                    return PersistentSymbolTable::VisitorState::Break;
                 }
             }
+            return PersistentSymbolTable::VisitorState::Continue;
+        };
+
+        if (top) {
+            // Do filtering
+            PersistentSymbolTable::self().visitFilteredDeclarations(id, top->recursiveImportIndices(),
+                                                                    visitDeclaration);
         } else {
             //Just accept anything
-            PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().declarations(id);
-            PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
-            for (; decl; ++decl) {
-                const IndexedDeclaration& iDecl(*decl);
-
+            PersistentSymbolTable::self().visitDeclarations(id, [&](const IndexedDeclaration& indexedDecl) {
                 ///@todo think this over once we don't pull in all imported top-context any more
                 //Don't trigger loading of top-contexts from here, it will create a lot of problems
-                if ((!DUChain::self()->isInMemory(iDecl.topContextIndex())))
-                    continue;
-
-                Declaration* decl = iDecl.data();
-                if (decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
-                    //Hit
-                    ret = decl;
-                    if (!ret->isForwardDeclaration())
-                        break;
+                if (DUChain::self()->isInMemory(indexedDecl.topContextIndex())) {
+                    return visitDeclaration(indexedDecl);
                 }
-            }
+                return PersistentSymbolTable::VisitorState::Continue;
+            });
         }
     } else {
         //Find the declaration by m_topContext and m_declaration

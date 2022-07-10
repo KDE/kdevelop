@@ -42,6 +42,8 @@ public:
         return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
     }
 
+    inline bool operator!=(const IndexedDeclaration& rhs) const { return !operator==(rhs); }
+
     inline uint hash() const
     {
         if (isDummy())

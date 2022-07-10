@@ -460,17 +460,13 @@ QVector<Declaration*> findMatchingDeclarations(const QVector<QualifiedIdentifier
     matchingDeclarations.reserve(identifiers.size());
     for (const auto& declaration : identifiers) {
         clangDebug() << "Considering candidate declaration" << declaration;
-        const IndexedDeclaration* declarations;
-        uint declarationCount;
-        PersistentSymbolTable::self().declarations( declaration , declarationCount, declarations );
-
-        for (uint i = 0; i < declarationCount; ++i) {
-            // Skip if the declaration is invalid or if it is an alias declaration -
-            // we want the actual declaration (and its file)
-            if (auto decl = declarations[i].declaration()) {
+        PersistentSymbolTable::self().visitDeclarations(declaration, [&](const IndexedDeclaration& indexedDecl) {
+            // Skip if the declaration is invalid
+            if (auto decl = indexedDecl.declaration()) {
                 matchingDeclarations << decl;
             }
-        }
+            return PersistentSymbolTable::VisitorState::Continue;
+        });
     }
     return matchingDeclarations;
 }

@@ -267,25 +267,23 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
 
                     DUChainReadLocker readLock(DUChain::lock());
 
-                    uint declsCount = 0;
-                    const IndexedDeclaration* decls;
-                    PersistentSymbolTable::self().declarations(parentIdentifier, declsCount, decls);
+                    PersistentSymbolTable::self().visitDeclarations(
+                        parentIdentifier, [&](const IndexedDeclaration& indexedDeclaration) {
+                            // Look for the first valid declaration.
+                            if (auto declaration = indexedDeclaration.declaration()) {
+                                // See if it should be namespaced.
+                                if (declaration->kind() == Declaration::Namespace) {
+                                    // This should create the namespace folder and add it to the cache.
+                                    parentNode = namespaceFolder(parentIdentifier);
 
-                    for (uint i = 0; i < declsCount; ++i) {
-                        // Look for the first valid declaration.
-                        if (auto decl = decls[i].declaration()) {
-                            // See if it should be namespaced.
-                            if (decl->kind() == Declaration::Namespace) {
-                                // This should create the namespace folder and add it to the cache.
-                                parentNode = namespaceFolder(parentIdentifier);
+                                    // Add to the locally created namespaces.
+                                    declaredNamespaces.insert(parentIdentifier);
+                                }
 
-                                // Add to the locally created namespaces.
-                                declaredNamespaces.insert(parentIdentifier);
+                                return PersistentSymbolTable::VisitorState::Break;
                             }
-
-                            break;
-                        }
-                    }
+                            return PersistentSymbolTable::VisitorState::Continue;
+                        });
                 }
             } else
             {
@@ -297,16 +295,15 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
             if (parentNode != nullptr) {
                 // Create the new node and add it.
                 IndexedDeclaration decl;
-                uint count = 0;
-                const IndexedDeclaration* declarations;
                 DUChainReadLocker lock;
-                PersistentSymbolTable::self().declarations(item.id, count, declarations);
-                for (uint i = 0; i < count; ++i) {
-                    if (declarations[i].indexedTopContext().url() == a_file) {
-                        decl = declarations[i];
-                        break;
-                    }
-                }
+                PersistentSymbolTable::self().visitDeclarations(
+                    item.id, [&](const IndexedDeclaration& indexedDeclaration) {
+                        if (indexedDeclaration.indexedTopContext().url() == a_file) {
+                            decl = indexedDeclaration;
+                            return PersistentSymbolTable::VisitorState::Break;
+                        }
+                        return PersistentSymbolTable::VisitorState::Continue;
+                    });
 
                 if (decl.isValid()) {
                     newNode = new ClassNode(decl.declaration(), m_model);

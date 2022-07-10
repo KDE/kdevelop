@@ -604,39 +604,46 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
 
 Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, QSet<Declaration*>& handled)
 {
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().declarations(qid);
-
-    const auto top = ctx->topContext();
-    const auto& importedContexts = top->importedParentContexts();
-
-    for (auto it = decl.iterator(); it; ++it) {
+    Declaration* ret = nullptr;
+    const auto& importedContexts = ctx->topContext()->importedParentContexts();
+    auto visitor = [&](const IndexedDeclaration& indexedDeclaration) {
         // if the context is not included, then this match is not correct for our consideration
         // this fixes issues where we used to include matches from files that did not have
         // anything to do with the current TU, e.g. the main from a different file or stuff like that
         // it also reduces the chance of us picking up a function of the same name from somewhere else
         // also, this makes sure the context has the correct language and we don't get confused by stuff
         // from other language plugins
-        if (std::none_of(importedContexts.begin(), importedContexts.end(), [it] (const DUContext::Import& import) {
-            return import.topContextIndex() == it->indexedTopContext().index();
-        })) {
-            continue;
+        if (std::none_of(importedContexts.begin(), importedContexts.end(),
+                         [indexedDeclaration](const DUContext::Import& import) {
+                             return import.topContextIndex() == indexedDeclaration.indexedTopContext().index();
+                         })) {
+            return PersistentSymbolTable::VisitorState::Continue;
         }
 
-        auto declaration = it->declaration();
+        auto declaration = indexedDeclaration.declaration();
         if (!declaration) {
             // Mitigate problems such as: Cannot load a top-context from file "/home/kfunk/.cache/kdevduchain/kdevelop-{foo}/topcontexts/6085"
             //  - the required language-support for handling ID 55 is probably not loaded
             qCWarning(KDEV_CLANG) << "Detected an invalid declaration for" << qid;
-            continue;
+
+            return PersistentSymbolTable::VisitorState::Continue;
         }
 
         if (declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration()) {
-            break;
+            return PersistentSymbolTable::VisitorState::Break;
         }
         if (!handled.contains(declaration)) {
             handled.insert(declaration);
-            return declaration;
+
+            ret = declaration;
+            return PersistentSymbolTable::VisitorState::Break;
         }
+
+        return PersistentSymbolTable::VisitorState::Continue;
+    };
+    PersistentSymbolTable::self().visitDeclarations(qid, visitor);
+    if (ret) {
+        return ret;
     }
 
     const auto foundDeclarations = ctx->findDeclarations(qid, position);

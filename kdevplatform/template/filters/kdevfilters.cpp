@@ -123,25 +123,25 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
 QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*argument*/,
                                        bool /*autoescape*/) const
 {
-    QString type = safeString(input);
+    auto type = safeString(input);
 
-    DUChainReadLocker locker(DUChain::lock());
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)));
-
-    for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
-    {
-        auto declaration = it->declaration();
+    auto visit = [&type](const IndexedDeclaration& indexedDeclaration) {
+        auto declaration = indexedDeclaration.declaration();
         if (!declaration || declaration->isForwardDeclaration()) {
-            continue;
+            return PersistentSymbolTable::VisitorState::Continue;
         }
 
         // Check if it's a class/struct/etc
-        if(declaration->type<StructureType>())
-        {
-            QString refType = QStringLiteral("const %1&").arg(type);
-            return Grantlee::SafeString(refType);
+        if (declaration->type<StructureType>()) {
+            type = QLatin1String("const %1&").arg(type);
+            return PersistentSymbolTable::VisitorState::Break;
         }
-    }
+
+        return PersistentSymbolTable::VisitorState::Continue;
+    };
+
+    DUChainReadLocker locker(DUChain::lock());
+    PersistentSymbolTable::self().visitDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)), visit);
 
     return Grantlee::SafeString(type);
 }

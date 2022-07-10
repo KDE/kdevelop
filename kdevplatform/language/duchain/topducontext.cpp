@@ -659,35 +659,14 @@ struct TopDUContext::FindDeclarationsAcceptor
         qCDebug(LANGUAGE) << "accepting" << id.toString();
 #endif
 
-        PersistentSymbolTable::Declarations allDecls;
-
-        //This iterator efficiently filters the visible declarations out of all declarations
-        PersistentSymbolTable::FilteredDeclarationIterator filter;
-
-        //This is used if filtering is disabled
-        PersistentSymbolTable::Declarations::Iterator unchecked;
-        if (check.flags & DUContext::NoImportsCheck) {
-            allDecls = PersistentSymbolTable::self().declarations(id);
-            unchecked = allDecls.iterator();
-        } else
-            filter = PersistentSymbolTable::self().filteredDeclarations(id, top->recursiveImportIndices());
-
-        while (filter || unchecked) {
-            IndexedDeclaration iDecl;
-            if (filter) {
-                iDecl = *filter;
-                ++filter;
-            } else {
-                iDecl = *unchecked;
-                ++unchecked;
-            }
+        auto visitDeclaration = [&](const IndexedDeclaration& iDecl) {
             Declaration* decl = iDecl.data();
 
             if (!decl)
-                continue;
+                return PersistentSymbolTable::VisitorState::Continue;
 
             if (!check(decl))
-                continue;
+                return PersistentSymbolTable::VisitorState::Continue;
 
             if (!(flags & DontResolveAliases) && decl->kind() == Declaration::Alias) {
                 //Apply alias declarations
@@ -700,6 +679,14 @@ struct TopDUContext::FindDeclarationsAcceptor
             }
 
             target.append(decl);
+            return PersistentSymbolTable::VisitorState::Continue;
+        };
+
+        if (check.flags & DUContext::NoImportsCheck) {
+            PersistentSymbolTable::self().visitDeclarations(id, visitDeclaration);
+        } else {
+            PersistentSymbolTable::self().visitFilteredDeclarations(id, top->recursiveImportIndices(),
+                                                                    visitDeclaration);
         }
 
         check.createVisibleCache = nullptr;
@@ -799,28 +786,26 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
 #endif
 
         if (aliasId.inRepository()) {
-            //This iterator efficiently filters the visible declarations out of all declarations
-            PersistentSymbolTable::FilteredDeclarationIterator filter =
-                PersistentSymbolTable::self().filteredDeclarations(aliasId, recursiveImportIndices());
+            DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
 
-            if (filter) {
-                DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
-
-                //The first part of the identifier has been found as a namespace-alias.
-                //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-                for (; filter; ++filter) {
-                    Declaration* aliasDecl = filter->data();
+            bool isDone = false;
+            // The first part of the identifier has been found as a namespace-alias.
+            // In c++, we only need the first alias. However, just to be correct, follow them all for now.
+            // This efficiently filters the visible declarations out of all declarations
+            PersistentSymbolTable::self().visitFilteredDeclarations(
+                aliasId, recursiveImportIndices(), [&](const IndexedDeclaration& indexedAliasDecl) {
+                    auto* aliasDecl = indexedAliasDecl.data();
                     if (!aliasDecl)
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
 
                     if (!check(aliasDecl))
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
 
                     if (aliasDecl->kind() != Declaration::NamespaceAlias)
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
 
                     if (foundAlias)
-                        break;
+                        return PersistentSymbolTable::VisitorState::Break;
 
                     Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
 
@@ -832,27 +817,37 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
 
                     if (importIdentifier.isEmpty()) {
                         qCDebug(LANGUAGE) << "found empty import";
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
                     }
 
-                    if (buddy && buddy->alreadyImporting(importIdentifier))
-                        continue; //This import has already been applied to this search
+                    if (buddy && buddy->alreadyImporting(importIdentifier)) {
+                        // This import has already been applied to this search
+                        return PersistentSymbolTable::VisitorState::Continue;
+                    }
 
                     ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
 
                     if (identifier->next.isEmpty()) {
-                        //Just insert the aliased namespace identifier
-                        if (!accept(importIdentifier))
-                            return false;
+                        // Just insert the aliased namespace identifier
+                        if (!accept(importIdentifier)) {
+                            isDone = true;
+                            return PersistentSymbolTable::VisitorState::Break;
+                        }
                     } else {
-                        //Create an identifiers where namespace-alias part is replaced with the alias target
+                        // Create an identifiers where namespace-alias part is replaced with the alias target
                         for (const SearchItem::Ptr& item : qAsConst(identifier->next)) {
                             if (!applyAliases(importIdentifier, item, accept, position, canBeNamespace, &info,
-                                              recursionDepth + 1))
-                                return false;
+                                              recursionDepth + 1)) {
+                                isDone = true;
+                                return PersistentSymbolTable::VisitorState::Break;
+                            }
                         }
                     }
-                }
+                    return PersistentSymbolTable::VisitorState::Continue;
+                });
+
+            if (isDone) {
+                return false;
             }
         }
     }
@@ -883,49 +878,54 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
 #endif
 
         if (importId.inRepository()) {
+            DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
+            bool isDone = false;
             //This iterator efficiently filters the visible declarations out of all declarations
-            PersistentSymbolTable::FilteredDeclarationIterator filter =
-                PersistentSymbolTable::self().filteredDeclarations(importId, recursiveImportIndices());
-
-            if (filter) {
-                DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
-
-                for (; filter; ++filter) {
-                    Declaration* importDecl = filter->data();
+            PersistentSymbolTable::self().visitFilteredDeclarations(
+                importId, recursiveImportIndices(), [&](const IndexedDeclaration& indexedImportDecl) {
+                    Declaration* importDecl = indexedImportDecl.data();
                     if (!importDecl)
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
 
                     //We must never break or return from this loop, because else we might be creating a bad cache
                     if (!check(importDecl))
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
 
                     //Search for the identifier with the import-identifier prepended
                     Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
                     auto* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
 
-  #ifdef DEBUG_SEARCH
+#ifdef DEBUG_SEARCH
                     qCDebug(LANGUAGE) << "found import of" << alias->importIdentifier().toString();
-  #endif
+#endif
 
                     QualifiedIdentifier importIdentifier = alias->importIdentifier();
 
                     if (importIdentifier.isEmpty()) {
                         qCDebug(LANGUAGE) << "found empty import";
-                        continue;
+                        return PersistentSymbolTable::VisitorState::Continue;
                     }
 
-                    if (buddy && buddy->alreadyImporting(importIdentifier))
-                        continue; //This import has already been applied to this search
+                    if (buddy && buddy->alreadyImporting(importIdentifier)) {
+                        // This import has already been applied to this search
+                        return PersistentSymbolTable::VisitorState::Continue;
+                    }
 
                     ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
 
-                    if (previous != importIdentifier)
+                    if (previous != importIdentifier) {
                         if (!applyAliases(importIdentifier, identifier, accept,
                                           importDecl->topContext() == this ? importDecl->range().start : position,
-                                          canBeNamespace,
-                                          &info, recursionDepth + 1))
-                            return false;
-                }
+                                          canBeNamespace, &info, recursionDepth + 1)) {
+                            isDone = true;
+                            return PersistentSymbolTable::VisitorState::Break;
+                        }
+                    }
+                    return PersistentSymbolTable::VisitorState::Continue;
+                });
+
+            if (isDone) {
+                return false;
             }
         }
     }
