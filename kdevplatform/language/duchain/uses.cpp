@@ -104,8 +104,8 @@ public:
 
 // Maps declaration-ids to Uses
 using UsesRepo = ItemRepository<UsesItem, UsesRequestItem>;
-template <>
-class ItemRepositoryFor<UsesItem>
+template<>
+class ItemRepositoryFor<Uses>
 {
     friend struct LockedItemRepository;
     static UsesRepo& repo()
@@ -121,7 +121,7 @@ public:
 
 Uses::Uses()
 {
-    ItemRepositoryFor<UsesItem>::init();
+    ItemRepositoryFor<Uses>::init();
 }
 
 void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
@@ -131,7 +131,7 @@ void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
     item.usesList().append(use);
     UsesRequestItem request(item);
 
-    LockedItemRepository::write<UsesItem>([&](UsesRepo& repo) {
+    LockedItemRepository::write<Uses>([&](UsesRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -157,7 +157,7 @@ void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
     item.declaration = id;
     UsesRequestItem request(item);
 
-    LockedItemRepository::write<UsesItem>([&](UsesRepo& repo) {
+    LockedItemRepository::write<Uses>([&](UsesRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -182,8 +182,9 @@ bool Uses::hasUses(const DeclarationId& id) const
     UsesItem item;
     item.declaration = id;
 
-    return LockedItemRepository::read<UsesItem>(
-        [&item](const UsesRepo& repo) { return static_cast<bool>(repo.findIndex(item)); });
+    return LockedItemRepository::read<Uses>([&item](const UsesRepo& repo) {
+        return static_cast<bool>(repo.findIndex(item));
+    });
 }
 
 KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) const
@@ -194,7 +195,7 @@ KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) cons
     item.declaration = id;
     UsesRequestItem request(item);
 
-    LockedItemRepository::read<UsesItem>([&](const UsesRepo& repo) {
+    LockedItemRepository::read<Uses>([&](const UsesRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {

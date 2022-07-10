@@ -295,8 +295,10 @@ public:
 using EnvironmentInformationListRepo
     = ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest>;
 
-template <>
-class ItemRepositoryFor<EnvironmentInformationListItem>
+struct EnvironmentInformationList {
+};
+template<>
+class ItemRepositoryFor<EnvironmentInformationList>
 {
     friend struct LockedItemRepository;
     static EnvironmentInformationListRepo& repo()
@@ -313,8 +315,10 @@ public:
 /// Maps top-context-indices to environment-information item.
 using EnvironmentInformationRepo = ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest>;
 
-template <>
-class ItemRepositoryFor<EnvironmentInformationItem>
+struct EnvironmentInformation {
+};
+template<>
+class ItemRepositoryFor<EnvironmentInformation>
 {
     friend struct LockedItemRepository;
     static EnvironmentInformationRepo& repo()
@@ -522,7 +526,7 @@ public:
     void addEnvironmentInformation(ParsingEnvironmentFilePointer info)
     {
         Q_ASSERT(!findInformation(info->indexedTopContext().index()));
-        Q_ASSERT(LockedItemRepository::read<EnvironmentInformationItem>([&](const EnvironmentInformationRepo& repo) {
+        Q_ASSERT(LockedItemRepository::read<EnvironmentInformation>([&](const EnvironmentInformationRepo& repo) {
             return repo.findIndex(info->indexedTopContext().index()) == 0;
         }));
 
@@ -550,7 +554,7 @@ public:
             removed2 = m_indexEnvironmentInformations.remove(infoIndex);
         }
 
-        LockedItemRepository::write<EnvironmentInformationListItem>(
+        LockedItemRepository::write<EnvironmentInformationList>(
             [infoIndex,
              request = EnvironmentInformationListRequest(info->url())](EnvironmentInformationListRepo& repo) mutable {
                 // Remove it from the environment information lists if it was there
@@ -568,7 +572,7 @@ public:
                 }
             });
 
-        LockedItemRepository::write<EnvironmentInformationItem>(
+        LockedItemRepository::write<EnvironmentInformation>(
             [infoIndex, removed, removed2](EnvironmentInformationRepo& repo) {
                 const uint index = repo.findIndex(infoIndex);
                 if (index) {
@@ -592,7 +596,7 @@ public:
             KDevVarLengthArray<uint> topContextIndices;
             // First store all the possible indices into the KDevVarLengthArray, so we can process them without holding
             // a mutex locked
-            LockedItemRepository::read<EnvironmentInformationListItem>(
+            LockedItemRepository::read<EnvironmentInformationList>(
                 [&topContextIndices,
                  request = EnvironmentInformationListRequest(url)](const EnvironmentInformationListRepo& repo) {
                     const EnvironmentInformationListItem* item = repo.findItem(request);
@@ -716,7 +720,7 @@ public:
             for (const ParsingEnvironmentFilePointer& file : qAsConst(check)) {
                 EnvironmentInformationRequest req(file.data());
 
-                LockedItemRepository::write<EnvironmentInformationItem>([&](EnvironmentInformationRepo& repo) {
+                LockedItemRepository::write<EnvironmentInformation>([&](EnvironmentInformationRepo& repo) {
                     uint index = repo.findIndex(req);
 
                     if (file->d_func()->isDynamic()) {
@@ -758,7 +762,7 @@ public:
             storeInformationList(url);
 
             //Access the data in the repository, so the bucket isn't unloaded
-            const auto foundItem = LockedItemRepository::read<EnvironmentInformationListItem>(
+            const auto foundItem = LockedItemRepository::read<EnvironmentInformationList>(
                 [request = EnvironmentInformationListRequest(url)](const EnvironmentInformationListRepo& repo) {
                     return static_cast<bool>(repo.findItem(request));
                 });
@@ -1044,7 +1048,7 @@ unloadContexts:
 
         // Step two: Check if it is on disk, and if is, load it
         //  TODO: this looks pretty dubious, shouldn't we keep the repo locked while operating on the item?
-        const auto item = LockedItemRepository::read<EnvironmentInformationItem>(
+        const auto item = LockedItemRepository::read<EnvironmentInformation>(
             [req = EnvironmentInformationRequest(topContextIndex)](const EnvironmentInformationRepo& repo) {
                 return repo.findItem(req);
             });
@@ -1094,8 +1098,9 @@ unloadContexts:
         qCDebug(LANGUAGE) << "cleaning top-contexts";
         CleanupListVisitor visitor;
         uint startPos = 0;
-        LockedItemRepository::write<EnvironmentInformationItem>(
-            [&visitor](EnvironmentInformationRepo& repo) { repo.visitAllItems(visitor); });
+        LockedItemRepository::write<EnvironmentInformation>([&visitor](EnvironmentInformationRepo& repo) {
+            repo.visitAllItems(visitor);
+        });
 
         int checkContextsCount = maxFinalCleanupCheckContexts;
         int percentageOfContexts = (visitor.checkContexts.size() * 100) / minimumFinalCleanupCheckContextsPercentage;
@@ -1192,7 +1197,7 @@ private:
             }
         }
 
-        LockedItemRepository::write<EnvironmentInformationListItem>(
+        LockedItemRepository::write<EnvironmentInformationList>(
             [&, request = EnvironmentInformationListRequest(url)](EnvironmentInformationListRepo& repo) mutable {
                 const uint index = repo.findIndex(request);
 
@@ -1292,8 +1297,8 @@ void DUChain::initialize()
     // read. See https://bugs.kde.org/show_bug.cgi?id=250779
     RecursiveImportRepository::repository();
 
-    ItemRepositoryFor<EnvironmentInformationListItem>::init();
-    ItemRepositoryFor<EnvironmentInformationItem>::init();
+    ItemRepositoryFor<EnvironmentInformationList>::init();
+    ItemRepositoryFor<EnvironmentInformation>::init();
 
     // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
     initDeclarationRepositories();

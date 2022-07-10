@@ -93,8 +93,8 @@ QRecursiveMutex* typeRepositoryMutex()
 
 using TypeItemRepository = ItemRepository<AbstractTypeData, AbstractTypeDataRequest, true, QRecursiveMutex>;
 
-template <>
-class ItemRepositoryFor<AbstractTypeData>
+template<>
+class ItemRepositoryFor<AbstractType>
 {
     friend struct LockedItemRepository;
     static TypeItemRepository& repo()
@@ -110,7 +110,7 @@ public:
 
 void initTypeRepository()
 {
-    ItemRepositoryFor<AbstractTypeData>::init();
+    ItemRepositoryFor<AbstractType>::init();
 }
 
 uint TypeRepository::indexForType(const AbstractType::Ptr& input)
@@ -118,8 +118,10 @@ uint TypeRepository::indexForType(const AbstractType::Ptr& input)
     if (!input)
         return 0;
 
-    uint i = LockedItemRepository::write<AbstractTypeData>(
-        [request = AbstractTypeDataRequest(*input)](TypeItemRepository& repo) { return repo.index(request); });
+    uint i = LockedItemRepository::write<AbstractType>(
+        [request = AbstractTypeDataRequest(*input)](TypeItemRepository& repo) {
+            return repo.index(request);
+        });
 #ifdef DEBUG_TYPE_REPOSITORY
     AbstractType::Ptr t = typeForIndex(i);
     if (!t->equals(input.data())) {
@@ -140,7 +142,7 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index)
     if (index == 0)
         return AbstractType::Ptr();
 
-    return LockedItemRepository::read<AbstractTypeData>([index](const TypeItemRepository& repo) {
+    return LockedItemRepository::read<AbstractType>([index](const TypeItemRepository& repo) {
         auto item = repo.itemFromIndex(index);
         return AbstractType::Ptr(TypeSystem::self().create(const_cast<AbstractTypeData*>(item)));
     });
@@ -152,7 +154,7 @@ static void changeReferenceCount(uint index, RefCountChanger changeRefCount)
     if (!index)
         return;
 
-    LockedItemRepository::write<AbstractTypeData>([index, changeRefCount](TypeItemRepository& repo) {
+    LockedItemRepository::write<AbstractType>([index, changeRefCount](TypeItemRepository& repo) {
         AbstractTypeData* data = repo.dynamicItemFromIndexSimple(index);
         Q_ASSERT(data);
         changeRefCount(data->refCount);

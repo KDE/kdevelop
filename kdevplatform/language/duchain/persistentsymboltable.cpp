@@ -207,8 +207,8 @@ public:
     QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports> importsCache;
 };
 
-template <>
-class ItemRepositoryFor<PersistentSymbolTableItem>
+template<>
+class ItemRepositoryFor<PersistentSymbolTable>
 {
     friend struct LockedItemRepository;
     static PersistentSymbolTableRepo& repo()
@@ -224,7 +224,7 @@ public:
 
 void PersistentSymbolTable::clearCache()
 {
-    LockedItemRepository::write<PersistentSymbolTableItem>([](PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::write<PersistentSymbolTable>([](PersistentSymbolTableRepo& repo) {
         repo.importsCache.clear();
         repo.declarationsCache.clear();
     });
@@ -232,7 +232,7 @@ void PersistentSymbolTable::clearCache()
 
 PersistentSymbolTable::PersistentSymbolTable()
 {
-    ItemRepositoryFor<PersistentSymbolTableItem>::init();
+    ItemRepositoryFor<PersistentSymbolTable>::init();
     RecursiveImportCacheRepository::repository();
 }
 
@@ -245,7 +245,7 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
     PersistentSymbolTableItem item;
     item.id = id;
 
-    LockedItemRepository::write<PersistentSymbolTableItem>([&item, &declaration](PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::write<PersistentSymbolTable>([&item, &declaration](PersistentSymbolTableRepo& repo) {
         repo.declarationsCache.remove(item.id);
 
         uint index = repo.findIndex(item);
@@ -295,7 +295,7 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     PersistentSymbolTableItem item;
     item.id = id;
 
-    LockedItemRepository::write<PersistentSymbolTableItem>([&item, &declaration](PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::write<PersistentSymbolTable>([&item, &declaration](PersistentSymbolTableRepo& repo) {
         repo.declarationsCache.remove(item.id);
 
         uint index = repo.findIndex(item);
@@ -344,7 +344,7 @@ void PersistentSymbolTable::visitDeclarations(const IndexedQualifiedIdentifier& 
     PersistentSymbolTableItem item;
     item.id = id;
 
-    LockedItemRepository::read<PersistentSymbolTableItem>([&item, &visitor](const PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::read<PersistentSymbolTable>([&item, &visitor](const PersistentSymbolTableRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (!index) {
@@ -372,7 +372,7 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
     PersistentSymbolTableItem item;
     item.id = id;
 
-    LockedItemRepository::write<PersistentSymbolTableItem>([&](PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::write<PersistentSymbolTable>([&](PersistentSymbolTableRepo& repo) {
         uint index = repo.findIndex(item);
         if (!index) {
             return;
@@ -493,7 +493,7 @@ void PersistentSymbolTable::dump(const QTextStream& out)
     QDebug qout = fromTextStream(out);
     DebugVisitor v(out);
 
-    LockedItemRepository::read<PersistentSymbolTableItem>([&](const PersistentSymbolTableRepo& repo) {
+    LockedItemRepository::read<PersistentSymbolTable>([&](const PersistentSymbolTableRepo& repo) {
         repo.visitAllItems(v);
 
         qout << "Statistics:" << endl;

@@ -105,8 +105,8 @@ public:
 // Maps declaration-ids to Importers
 using ImportersRepo = ItemRepository<ImportersItem, ImportersRequestItem>;
 
-template <>
-class ItemRepositoryFor<ImportersItem>
+template<>
+class ItemRepositoryFor<Importers>
 {
     friend struct LockedItemRepository;
     static ImportersRepo& repo()
@@ -122,7 +122,7 @@ public:
 
 Importers::Importers()
 {
-    ItemRepositoryFor<ImportersItem>::init();
+    ItemRepositoryFor<Importers>::init();
 }
 
 void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use)
@@ -132,7 +132,7 @@ void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use
     item.importersList().append(use);
     ImportersRequestItem request(item);
 
-    LockedItemRepository::write<ImportersItem>([&](ImportersRepo& repo) {
+    LockedItemRepository::write<Importers>([&](ImportersRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -158,7 +158,7 @@ void Importers::removeImporter(const DeclarationId& id, const IndexedDUContext& 
     item.declaration = id;
     ImportersRequestItem request(item);
 
-    LockedItemRepository::write<ImportersItem>([&](ImportersRepo& repo) {
+    LockedItemRepository::write<Importers>([&](ImportersRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {
@@ -186,7 +186,7 @@ KDevVarLengthArray<IndexedDUContext> Importers::importers(const DeclarationId& i
     item.declaration = id;
     ImportersRequestItem request(item);
 
-    LockedItemRepository::read<ImportersItem>([&](const ImportersRepo& repo) {
+    LockedItemRepository::read<Importers>([&](const ImportersRepo& repo) {
         uint index = repo.findIndex(item);
 
         if (index) {

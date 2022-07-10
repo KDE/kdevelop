@@ -2289,23 +2289,23 @@ private:
     friend class ::BenchItemRepository;
 };
 
-template <typename Item>
+template<typename Context>
 class ItemRepositoryFor;
 
 struct LockedItemRepository {
-    template <typename Item, typename Op>
+    template<typename Context, typename Op>
     static auto read(Op&& op)
     {
-        const auto& repo = ItemRepositoryFor<Item>::repo();
+        const auto& repo = ItemRepositoryFor<Context>::repo();
 
         QMutexLocker lock(repo.mutex());
         return op(repo);
     }
 
-    template <typename Item, typename Op>
+    template<typename Context, typename Op>
     static auto write(Op&& op)
     {
-        auto& repo = ItemRepositoryFor<Item>::repo();
+        auto& repo = ItemRepositoryFor<Context>::repo();
 
         QMutexLocker lock(repo.mutex());
         return op(repo);
