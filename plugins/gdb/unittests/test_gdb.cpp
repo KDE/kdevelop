@@ -834,9 +834,7 @@ void GdbTest::testStackSwitchThread()
     tIdx = stackModel->index(1,0);
     QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at "));
     stackModel->setCurrentThread(2);
-    QTest::qWait(200);
-    int rows = stackModel->rowCount(tIdx);
-    QVERIFY(rows > 3);
+    QTRY_VERIFY(stackModel->rowCount(tIdx) > 3);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
