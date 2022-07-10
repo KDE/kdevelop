@@ -33,13 +33,16 @@ KTextEditor::Attribute::Ptr ConfigurableHighlightingColors::attribute(CodeHighli
 void ConfigurableHighlightingColors::reset(ColorCache* cache, KTextEditor::View* view)
 {
     m_attributes.clear();
-    auto addColor = [&](CodeHighlightingType type, QRgb color_) {
-        auto color = QColor::fromRgb(color_);
+    auto createAttribute = [&](CodeHighlightingType type) {
         KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-        a->setForeground(cache ? cache->blendGlobalColor(color) : color);
         m_attributes[type] = a;
-        ifDebug(qCDebug(LANGUAGE) << #type << "color: " << #color_ << "->" << a->foreground().color().name());
         return a;
+    };
+    auto addColor = [&](CodeHighlightingType type, QRgb color_) {
+        auto a = createAttribute(type);
+        auto color = QColor::fromRgb(color_);
+        a->setForeground(cache ? cache->blendGlobalColor(color) : color);
+        ifDebug(qCDebug(LANGUAGE) << #type << "color: " << #color_ << "->" << a->foreground().color().name());
     };
     // TODO: The set of colors doesn't work very well. Many colors simply too dark (even on the maximum "Global colorization intensity" they hardly distinguishable from grey) and look alike.
     addColor(CodeHighlightingType::Class, 0x005912); // Dark green
@@ -57,13 +60,12 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache, KTextEditor::View*
     addColor(CodeHighlightingType::NamespaceVariable, 0x9F3C5F); // Rose
     addColor(CodeHighlightingType::GlobalVariable, 0x12762B); // Grass green
     addColor(CodeHighlightingType::Namespace, 0x6B2840); // Dark rose
-    addColor(CodeHighlightingType::ErrorVariable, 0x8b0019); // Pure red
     addColor(CodeHighlightingType::ForwardDeclaration, 0x5C5C5C); // Gray
     addColor(CodeHighlightingType::Macro, 0xA41239);
     addColor(CodeHighlightingType::MacroFunctionLike, 0x008080);
 
     {
-        auto highlightUses = addColor(CodeHighlightingType::HighlightUses, 0xffffff);
+        auto highlightUses = createAttribute(CodeHighlightingType::HighlightUses);
         highlightUses->setDefaultStyle(KTextEditor::dsNormal);
         highlightUses->setForeground(highlightUses->selectedForeground());
         highlightUses->setBackground(highlightUses->selectedBackground());
@@ -72,6 +74,10 @@ void ConfigurableHighlightingColors::reset(ColorCache* cache, KTextEditor::View*
             const auto searchHighlight = view->theme().editorColor(KSyntaxHighlighting::Theme::SearchHighlight);
             highlightUses->setBackground(QColor::fromRgb(searchHighlight));
         }
+    }
+    {
+        auto error = createAttribute(CodeHighlightingType::Error);
+        error->setDefaultStyle(KTextEditor::dsError);
     }
 }
 }

@@ -385,12 +385,8 @@ CodeHighlightingType CodeHighlightingInstance::typeForDeclaration(Declaration* d
      *
      * */
 
-//   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(dec))
-//     if(!Cpp::isAccessible(context, classMember))
-//       return ErrorVariableType;
-
     if (!dec)
-        return CodeHighlightingType::ErrorVariable;
+        return CodeHighlightingType::Error;
 
     auto type = CodeHighlightingType::LocalVariable;
     if (dec->kind() == Declaration::Namespace)
@@ -478,12 +474,11 @@ void CodeHighlightingInstance::highlightDeclaration(Declaration* declaration, co
 
 void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const QColor& color)
 {
-    auto type = CodeHighlightingType::ErrorVariable;
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
 
-    type = typeForDeclaration(decl, context);
+    auto type = typeForDeclaration(decl, context);
 
-    if (type != CodeHighlightingType::ErrorVariable
+    if (type != CodeHighlightingType::Error
         || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
         HighlightedRange h;
         h.range = context->uses()[index].m_range;

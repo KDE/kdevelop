@@ -72,10 +72,8 @@ CodeHighlightingType highlightingTypeFromName(const QString& name)
         return CodeHighlightingType::Macro;
     } else if (name == QLatin1String("Macro Function")) {
         return CodeHighlightingType::MacroFunctionLike;
-    } else if (name == QLatin1String("Error Variable")) {
-        return CodeHighlightingType::ErrorVariable;
     }
-    return CodeHighlightingType::Unknown;
+    return CodeHighlightingType::Error;
 }
 
 ColorCache::ColorCache(QObject* parent)
@@ -263,10 +261,11 @@ bool ColorCache::updateColorsFromTheme(const KSyntaxHighlighting::Theme& theme)
     bool anyAttrChanged = false;
     for (const auto& format : formats) {
         const auto type = highlightingTypeFromName(format.name());
-        const auto attr = m_defaultColors->attribute(type);
-        if (!attr) {
+        if (type == CodeHighlightingType::Error) {
             continue;
         }
+        const auto attr = m_defaultColors->attribute(type);
+        Q_ASSERT(attr);
 
         auto forwardProperty = [&](auto formatGetter, auto attrProperty, auto attrSetter) {
             auto formatProperty = (format.*formatGetter)(theme);

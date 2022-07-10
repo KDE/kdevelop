@@ -30,7 +30,7 @@ using ColorMap = QVector<KDevelop::Declaration*>;
 class CodeHighlighting;
 
 enum class CodeHighlightingType {
-    Unknown,
+    Error,
 
     LocalClassMember,
     LocalMemberFunction,
@@ -41,7 +41,6 @@ enum class CodeHighlightingType {
     NamespaceVariable,
     GlobalVariable,
     FunctionVariable,
-    ErrorVariable,
 
     Class,
     Namespace,
