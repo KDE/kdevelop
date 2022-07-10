@@ -44,17 +44,16 @@ bool DiffViewsCtrl::ViewData::isValid() const
     return (project != nullptr && vcs != nullptr && doc != nullptr && ktDoc != nullptr );
 }
 
-
 DiffViewsCtrl::DiffViewsCtrl(QObject* parent)
     : QObject(parent)
     , m_stageSelectedAct(
-          new QAction(QIcon::fromTheme(QStringLiteral("view-add")), i18n("Stage selected lines or hunk")))
+          new QAction(QIcon::fromTheme(QStringLiteral("view-add")), i18n("Stage selected lines or hunk"), this))
     , m_unstageSelectedAct(
-          new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Unstage selected lines or hunk")))
+          new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Unstage selected lines or hunk"), this))
     , m_revertSelectedAct(
-          new QAction(QIcon::fromTheme(QStringLiteral("list-remove")), i18n("Revert selected lines or hunk")))
-    , m_gotoSrcLineAct(new QAction(QIcon::fromTheme(QStringLiteral("go-parent-folder")), i18n("Go to line in source")))
-
+          new QAction(QIcon::fromTheme(QStringLiteral("list-remove")), i18n("Revert selected lines or hunk"), this))
+    , m_gotoSrcLineAct(
+          new QAction(QIcon::fromTheme(QStringLiteral("go-parent-folder")), i18n("Go to line in source"), this))
 
 {
     // Setup style attributes for highlighting diffs
