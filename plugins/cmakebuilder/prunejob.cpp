@@ -49,7 +49,7 @@ void PruneJob::start()
 
     QDir d( builddir.toLocalFile() );
     QList<QUrl> urls;
-    const auto entries = d.entryList( QDir::NoDotAndDotDot | QDir::AllEntries );
+    const auto entries = d.entryList(QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
     urls.reserve(entries.size());
     for (const auto& entry : entries) {
         urls << Path(builddir, entry).toUrl();
