@@ -30,6 +30,8 @@
 #include "codecompletion/includepathcompletioncontext.h"
 #include "../clangsettings/clangsettingsmanager.h"
 
+#include "sanitizer_test_init.h"
+
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -39,7 +41,11 @@
 #include <QVersionNumber>
 #include <QStandardPaths>
 
-QTEST_MAIN(TestCodeCompletion)
+int main(int argc, char** argv)
+{
+    KDevelop::sanitizerTestInit(argv);
+    QTEST_MAIN_IMPL(TestCodeCompletion)
+}
 
 static const auto NoMacroOrBuiltin = ClangCodeCompletionContext::ContextFilters(
     ClangCodeCompletionContext::NoBuiltins | ClangCodeCompletionContext::NoMacros);

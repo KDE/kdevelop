@@ -43,10 +43,16 @@
 
 #include <clang-c/Index.h>
 
+#include "sanitizer_test_init.h"
+
 using namespace KDevelop;
 using namespace KTextEditor;
 
-QTEST_MAIN(TestAssistants)
+int main(int argc, char** argv)
+{
+    KDevelop::sanitizerTestInit(argv);
+    QTEST_MAIN_IMPL(TestAssistants)
+}
 
 ForegroundLock *globalTestLock = nullptr;
 StaticAssistantsManager *staticAssistantsManager() { return Core::self()->languageController()->staticAssistantsManager(); }

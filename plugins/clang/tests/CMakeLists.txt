@@ -13,6 +13,9 @@ target_link_libraries(clang-parser
     KDevClangPrivate
 )
 
+add_library(sanitizer_test_init STATIC sanitizer_test_init.cpp)
+target_link_libraries(sanitizer_test_init PRIVATE Qt5::Core)
+
 add_library(codecompletiontestbase STATIC codecompletiontestbase.cpp)
 target_link_libraries(codecompletiontestbase PUBLIC
     KDev::Tests
@@ -39,6 +42,7 @@ ecm_add_test(test_codecompletion.cpp
     TEST_NAME test_codecompletion
     LINK_LIBRARIES
         codecompletiontestbase
+        sanitizer_test_init
 )
 
 ecm_add_test(test_assistants.cpp
@@ -47,6 +51,7 @@ ecm_add_test(test_assistants.cpp
         KDev::Tests
         Qt5::Test
         KDevClangPrivate
+        sanitizer_test_init
 )
 
 ecm_add_test(test_clangutils.cpp
