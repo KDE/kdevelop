@@ -4,7 +4,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This file got automatically created by ECM, do not edit
 # See https://clang.llvm.org/docs/ClangFormatStyleOptions.html for the config options
 # and https://community.kde.org/Policies/Frameworks_Coding_Style#Clang-format_automatic_code_formatting
 # for clang-format tips & tricks
@@ -27,7 +26,8 @@ Standard: Cpp11
 TabWidth: 4
 
 # 2 * 80 wide lines
-ColumnLimit: 160
+#KDevelop overrides ColumnLimit: 160
+ColumnLimit: 120
 
 # sort includes inside line separated groups
 SortIncludes: true
@@ -36,7 +36,8 @@ SortIncludes: true
 BreakBeforeBraces: Linux
 
 # CrlInstruction *a;
-PointerAlignment: Right
+#KDevelop overrides PointerAlignment: Right
+PointerAlignment: Left
 
 # horizontally aligns arguments after an open bracket.
 AlignAfterOpenBracket: Align
@@ -45,7 +46,8 @@ AlignAfterOpenBracket: Align
 AllowAllParametersOfDeclarationOnNextLine: false
 
 # no single line functions
-AllowShortFunctionsOnASingleLine: None
+#KDevelop overrides AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: Inline
 
 # always break before you encounter multi line strings
 AlwaysBreakBeforeMultilineStrings: true
