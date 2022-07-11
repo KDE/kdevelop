@@ -18,5 +18,5 @@ target_link_libraries(KDevelopSessionsWatch
     PUBLIC
         Qt5::Core
     PRIVATE
-        KF5::Service
+        KF5::KIOGui
 )

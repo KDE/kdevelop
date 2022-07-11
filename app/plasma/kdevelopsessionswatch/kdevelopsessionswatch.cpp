@@ -9,7 +9,7 @@
 // lib
 #include "sessionfilestracker.h"
 // KF
-#include <KToolInvocation>
+#include <KIO/CommandLauncherJob>
 
 namespace KDevelopSessionsWatch {
 
@@ -29,7 +29,9 @@ void openSession(const QString& sessionId)
         QStringLiteral("--open-session"),
         sessionId,
     };
-    KToolInvocation::kdeinitExec(QStringLiteral("kdevelop"), args);
+    auto *job = new KIO::CommandLauncherJob(QStringLiteral("kdevelop"), args);
+    job->setDesktopName(QStringLiteral("org.kde.kdevelop"));
+    job->start();
 }
 
 }
