@@ -345,23 +345,17 @@ void DiffViewsCtrl::applySelected(DiffViewsCtrl::ApplyAction act)
 
     if (vData.area != RepoStatusModel::None) {
         // Setup arguments to subDiff & apply based on the required action
-        VcsDiff::DiffDirection direction;
-        GitPlugin::ApplyParams params;
-
-        switch (act) {
-        case Stage:
-            direction = VcsDiff::Normal;
-            params = GitPlugin::Index;
-            break;
-        case Unstage:
-            direction = VcsDiff::Reverse;
-            params = GitPlugin::Index;
-            break;
-        case Revert:
-            direction = VcsDiff::Reverse;
-            params = GitPlugin::WorkTree;
-            break;
-        }
+        auto [direction, params] = [act]() -> std::pair<VcsDiff::DiffDirection, GitPlugin::ApplyParams> {
+            switch (act) {
+            case Stage:
+                return { VcsDiff::Normal, GitPlugin::Index };
+            case Unstage:
+                return { VcsDiff::Reverse, GitPlugin::Index };
+            case Revert:
+                return { VcsDiff::Reverse, GitPlugin::WorkTree };
+            }
+            Q_UNREACHABLE();
+        }();
 
         // Construct the selected diff (either from the selected lines
         // or the hunk containing the current cursor position)
