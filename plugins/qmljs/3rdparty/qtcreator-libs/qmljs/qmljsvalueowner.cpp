@@ -95,6 +95,7 @@ public:
     ObjectValue *_mathObject;
     ObjectValue *_qtObject;
     ObjectValue *_qmlFontObject;
+    ObjectValue *_qmlPaletteObject;
     ObjectValue *_qmlPointObject;
     ObjectValue *_qmlSizeObject;
     ObjectValue *_qmlRectObject;
@@ -130,7 +131,7 @@ SharedValueOwner *ValueOwner::sharedValueOwner(QString kind)
 SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     : ValueOwner(this) // need to avoid recursing in ValueOwner ctor
 {
-    _objectPrototype   = newObject(/*prototype = */ 0);
+    _objectPrototype   = newObject(/*prototype = */ nullptr);
     _functionPrototype = newObject(_objectPrototype);
     _numberPrototype   = newObject(_objectPrototype);
     _booleanPrototype  = newObject(_objectPrototype);
@@ -409,7 +410,7 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     _globalObject->setMember(QLatin1String("Date"), dateCtor());
     _globalObject->setMember(QLatin1String("RegExp"), regexpCtor());
 
-    Function *f = 0;
+    Function *f = nullptr;
 
     // XMLHttpRequest
     ObjectValue *xmlHttpRequest = newObject();
@@ -477,7 +478,7 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     _globalObject->setMember(QLatin1String("JSON"), json);
 
     // QML objects
-    _qmlFontObject = newObject(/*prototype =*/ 0);
+    _qmlFontObject = newObject(/*prototype =*/ nullptr);
     _qmlFontObject->setClassName(QLatin1String("font"));
     _qmlFontObject->setMember(QLatin1String("family"), stringValue());
     _qmlFontObject->setMember(QLatin1String("styleName"), stringValue());
@@ -496,24 +497,46 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     _qmlFontObject->setMember(QLatin1String("kerning"), booleanValue());
     _qmlFontObject->setMember(QLatin1String("preferShaping"), booleanValue());
 
-    _qmlPointObject = newObject(/*prototype =*/ 0);
+    _qmlPaletteObject = newObject(/* prototype = */ nullptr);
+    _qmlPaletteObject->setClassName(QLatin1String("palette"));
+    _qmlPaletteObject->setMember(QLatin1String("alternateBase"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("base"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("brightText"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("button"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("buttonText"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("dark"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("highlight"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("highlightedText"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("light"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("link"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("linkVisited"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("mid"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("midlight"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("shadow"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("text"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("toolTipBase"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("toolTipText"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("window"), colorValue());
+    _qmlPaletteObject->setMember(QLatin1String("windowText"), colorValue());
+
+    _qmlPointObject = newObject(/*prototype =*/ nullptr);
     _qmlPointObject->setClassName(QLatin1String("Point"));
     _qmlPointObject->setMember(QLatin1String("x"), numberValue());
     _qmlPointObject->setMember(QLatin1String("y"), numberValue());
 
-    _qmlSizeObject = newObject(/*prototype =*/ 0);
+    _qmlSizeObject = newObject(/*prototype =*/ nullptr);
     _qmlSizeObject->setClassName(QLatin1String("Size"));
     _qmlSizeObject->setMember(QLatin1String("width"), numberValue());
     _qmlSizeObject->setMember(QLatin1String("height"), numberValue());
 
-    _qmlRectObject = newObject(/*prototype =*/ 0);
+    _qmlRectObject = newObject(/*prototype =*/ nullptr);
     _qmlRectObject->setClassName(QLatin1String("Rect"));
     _qmlRectObject->setMember(QLatin1String("x"), numberValue());
     _qmlRectObject->setMember(QLatin1String("y"), numberValue());
     _qmlRectObject->setMember(QLatin1String("width"), numberValue());
     _qmlRectObject->setMember(QLatin1String("height"), numberValue());
 
-    _qmlVector2DObject = newObject(/*prototype =*/ 0);
+    _qmlVector2DObject = newObject(/*prototype =*/ nullptr);
     _qmlVector2DObject->setClassName(QLatin1String("Vector2D"));
     _qmlVector2DObject->setMember(QLatin1String("x"), realValue());
     _qmlVector2DObject->setMember(QLatin1String("y"), realValue());
@@ -527,7 +550,7 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     addFunction(_qmlVector2DObject, QLatin1String("toVector4d"), _qmlVector4DObject, 0);
     addFunction(_qmlVector2DObject, QLatin1String("fuzzyEquals"), booleanValue(), 1, 1);
 
-    _qmlVector3DObject = newObject(/*prototype =*/ 0);
+    _qmlVector3DObject = newObject(/*prototype =*/ nullptr);
     _qmlVector3DObject->setClassName(QLatin1String("Vector3D"));
     _qmlVector3DObject->setMember(QLatin1String("x"), realValue());
     _qmlVector3DObject->setMember(QLatin1String("y"), realValue());
@@ -542,7 +565,7 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     addFunction(_qmlVector3DObject, QLatin1String("toVector4d"), _qmlVector4DObject, 0);
     addFunction(_qmlVector3DObject, QLatin1String("fuzzyEquals"), booleanValue(), 1, 1);
 
-    _qmlVector4DObject = newObject(/*prototype =*/ 0);
+    _qmlVector4DObject = newObject(/*prototype =*/ nullptr);
     _qmlVector4DObject->setClassName(QLatin1String("Vector4D"));
     _qmlVector4DObject->setMember(QLatin1String("x"), realValue());
     _qmlVector4DObject->setMember(QLatin1String("y"), realValue());
@@ -558,14 +581,14 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     addFunction(_qmlVector4DObject, QLatin1String("toVector3d"), _qmlVector3DObject, 0);
     addFunction(_qmlVector4DObject, QLatin1String("fuzzyEquals"), booleanValue(), 1, 1);
 
-    _qmlQuaternionObject = newObject(/*prototype =*/ 0);
+    _qmlQuaternionObject = newObject(/*prototype =*/ nullptr);
     _qmlQuaternionObject->setClassName(QLatin1String("Quaternion"));
     _qmlQuaternionObject->setMember(QLatin1String("scalar"), realValue());
     _qmlQuaternionObject->setMember(QLatin1String("x"), realValue());
     _qmlQuaternionObject->setMember(QLatin1String("y"), realValue());
     _qmlQuaternionObject->setMember(QLatin1String("z"), realValue());
 
-    _qmlMatrix4x4Object = newObject(/*prototype =*/ 0);
+    _qmlMatrix4x4Object = newObject(/*prototype =*/ nullptr);
     _qmlMatrix4x4Object->setClassName(QLatin1String("Matrix4x4"));
     for (int i = 1; i < 5; ++i)
         for (int j = 1; j < 5; ++j)
@@ -634,7 +657,7 @@ SharedValueOwner::SharedValueOwner(SharedValueOwnerKind kind)
     _globalObject->setMember(QLatin1String("Qt"), _qtObject);
 
     // firebug/webkit compat
-    ObjectValue *consoleObject = newObject(/*prototype */ 0);
+    ObjectValue *consoleObject = newObject(/*prototype */ nullptr);
     addFunction(consoleObject, QLatin1String("log"), 1, 0, true);
     addFunction(consoleObject, QLatin1String("debug"), 1, 0, true);
     if (kind == Qt5Kind) {
@@ -896,6 +919,11 @@ const ObjectValue *ValueOwner::qmlFontObject()
     return _shared->_qmlFontObject;
 }
 
+const ObjectValue *ValueOwner::qmlPaletteObject()
+{
+    return _shared->_qmlPaletteObject;
+}
+
 const ObjectValue *ValueOwner::qmlPointObject()
 {
     return _shared->_qmlPointObject;
@@ -954,6 +982,12 @@ const Value *ValueOwner::defaultValueForBuiltinType(const QString &name) const
         return colorValue();
     } else if (name == QLatin1String("date")) {
         return datePrototype();
+    } else if (name == QLatin1String("vector2d")) {
+        return _shared->_qmlVector2DObject;
+    } else if (name == QLatin1String("vector3d")) {
+        return _shared->_qmlVector3DObject;
+    } else if (name == QLatin1String("vector4d")) {
+        return _shared->_qmlVector4DObject;
     } else if (name == QLatin1String("var")
                || name == QLatin1String("variant")) {
         return unknownValue();

@@ -25,18 +25,17 @@
 
 #include "json.h"
 
-#include <utils/qtcassert.h>
-#include <utils/fileutils.h>
+#include "fileutils.h"
+#include "qtcassert.h"
 
 #include <QDir>
-#include <QDebug>
 #include <QJsonDocument>
 
 using namespace Utils;
 
 JsonMemoryPool::~JsonMemoryPool()
 {
-    foreach (char *obj, _objs) {
+    for (char *obj : qAsConst(_objs)) {
         reinterpret_cast<JsonValue *>(obj)->~JsonValue();
         delete[] obj;
     }
@@ -46,14 +45,13 @@ JsonValue::JsonValue(Kind kind)
     : m_kind(kind)
 {}
 
-JsonValue::~JsonValue()
-{}
+JsonValue::~JsonValue() = default;
 
 JsonValue *JsonValue::create(const QString &s, JsonMemoryPool *pool)
 {
     const QJsonDocument document = QJsonDocument::fromJson(s.toUtf8());
     if (document.isNull())
-        return 0;
+        return nullptr;
 
     return build(document.toVariant(), pool);
 }
@@ -92,14 +90,15 @@ JsonValue *JsonValue::build(const QVariant &variant, JsonMemoryPool *pool)
     switch (variant.type()) {
 
     case QVariant::List: {
-        JsonArrayValue *newValue = new (pool) JsonArrayValue;
-        foreach (const QVariant &element, variant.toList())
+        auto newValue = new (pool) JsonArrayValue;
+        const QList<QVariant> list = variant.toList();
+        for (const QVariant &element : list)
             newValue->addElement(build(element, pool));
         return newValue;
     }
 
     case QVariant::Map: {
-        JsonObjectValue *newValue = new (pool) JsonObjectValue;
+        auto newValue = new (pool) JsonObjectValue;
         const QVariantMap variantMap = variant.toMap();
         for (QVariantMap::const_iterator it = variantMap.begin(); it != variantMap.end(); ++it)
             newValue->addMember(it.key(), build(it.value(), pool));
@@ -125,7 +124,7 @@ JsonValue *JsonValue::build(const QVariant &variant, JsonMemoryPool *pool)
         break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -205,7 +204,8 @@ QStringList JsonSchema::validTypes(JsonObjectValue *v)
         return validTypes(ov);
 
     if (JsonArrayValue *av = getArrayValue(kType(), v)) {
-        foreach (JsonValue *v, av->elements()) {
+        const QList<JsonValue *> elements = av->elements();
+        for (JsonValue *v : elements) {
             if (JsonStringValue *sv = v->toString())
                 all.append(sv->value());
             else if (JsonObjectValue *ov = v->toObject())
@@ -226,17 +226,13 @@ bool JsonSchema::typeMatches(const QString &expected, const QString &actual)
 
 bool JsonSchema::isCheckableType(const QString &s)
 {
-    if (s == QLatin1String("string")
-            || s == QLatin1String("number")
-            || s == QLatin1String("integer")
-            || s == QLatin1String("boolean")
-            || s == QLatin1String("object")
-            || s == QLatin1String("array")
-            || s == QLatin1String("null")) {
-        return true;
-    }
-
-    return false;
+    return s == QLatin1String("string")
+        || s == QLatin1String("number")
+        || s == QLatin1String("integer")
+        || s == QLatin1String("boolean")
+        || s == QLatin1String("object")
+        || s == QLatin1String("array")
+        || s == QLatin1String("null");
 }
 
 QStringList JsonSchema::validTypes() const
@@ -295,7 +291,7 @@ JsonObjectValue *JsonSchema::propertySchema(const QString &property,
     if (JsonObjectValue *base = resolveBase(v))
         return propertySchema(property, base);
 
-    return 0;
+    return nullptr;
 }
 
 bool JsonSchema::hasPropertySchema(const QString &property) const
@@ -526,14 +522,14 @@ bool JsonSchema::maybeSchemaName(const QString &s)
 
 JsonObjectValue *JsonSchema::rootValue() const
 {
-    QTC_ASSERT(!m_schemas.isEmpty(), return 0);
+    QTC_ASSERT(!m_schemas.isEmpty(), return nullptr);
 
     return m_schemas.first().m_value;
 }
 
 JsonObjectValue *JsonSchema::currentValue() const
 {
-    QTC_ASSERT(!m_schemas.isEmpty(), return 0);
+    QTC_ASSERT(!m_schemas.isEmpty(), return nullptr);
 
     return m_schemas.last().m_value;
 }
@@ -616,14 +612,14 @@ JsonObjectValue *JsonSchema::resolveBase(JsonObjectValue *ov) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 JsonStringValue *JsonSchema::getStringValue(const QString &name, JsonObjectValue *value)
 {
     JsonValue *v = value->member(name);
     if (!v)
-        return 0;
+        return nullptr;
 
     return v->toString();
 }
@@ -632,7 +628,7 @@ JsonObjectValue *JsonSchema::getObjectValue(const QString &name, JsonObjectValue
 {
     JsonValue *v = value->member(name);
     if (!v)
-        return 0;
+        return nullptr;
 
     return v->toObject();
 }
@@ -641,7 +637,7 @@ JsonBooleanValue *JsonSchema::getBooleanValue(const QString &name, JsonObjectVal
 {
     JsonValue *v = value->member(name);
     if (!v)
-        return 0;
+        return nullptr;
 
     return v->toBoolean();
 }
@@ -650,7 +646,7 @@ JsonArrayValue *JsonSchema::getArrayValue(const QString &name, JsonObjectValue *
 {
     JsonValue *v = value->member(name);
     if (!v)
-        return 0;
+        return nullptr;
 
     return v->toArray();
 }
@@ -659,7 +655,7 @@ JsonDoubleValue *JsonSchema::getDoubleValue(const QString &name, JsonObjectValue
 {
     JsonValue *v = value->member(name);
     if (!v)
-        return 0;
+        return nullptr;
 
     return v->toDouble();
 }
@@ -670,19 +666,20 @@ JsonDoubleValue *JsonSchema::getDoubleValue(const QString &name, JsonObjectValue
 JsonSchemaManager::JsonSchemaManager(const QStringList &searchPaths)
     : m_searchPaths(searchPaths)
 {
-    foreach (const QString &path, m_searchPaths) {
+    for (const QString &path : searchPaths) {
         QDir dir(path);
         if (!dir.exists())
             continue;
         dir.setNameFilters(QStringList(QLatin1String("*.json")));
-        foreach (const QFileInfo &fi, dir.entryInfoList())
+        const QList<QFileInfo> entries = dir.entryInfoList();
+        for (const QFileInfo &fi : entries)
             m_schemas.insert(fi.baseName(), JsonSchemaData(fi.absoluteFilePath()));
     }
 }
 
 JsonSchemaManager::~JsonSchemaManager()
 {
-    foreach (const JsonSchemaData &schemaData, m_schemas)
+    for (const JsonSchemaData &schemaData : qAsConst(m_schemas))
         delete schemaData.m_schema;
 }
 
@@ -706,7 +703,7 @@ JsonSchema *JsonSchemaManager::schemaByName(const QString &baseName) const
 {
     QHash<QString, JsonSchemaData>::iterator it = m_schemas.find(baseName);
     if (it == m_schemas.end()) {
-        foreach (const QString &path, m_searchPaths) {
+        for (const QString &path : m_searchPaths) {
             QFileInfo candidate(path + baseName + ".json");
             if (candidate.exists()) {
                 m_schemas.insert(baseName, candidate.absoluteFilePath());
@@ -717,7 +714,7 @@ JsonSchema *JsonSchemaManager::schemaByName(const QString &baseName) const
 
     it = m_schemas.find(baseName);
     if (it == m_schemas.end())
-        return 0;
+        return nullptr;
 
     JsonSchemaData *schemaData = &it.value();
     if (!schemaData->m_schema) {
@@ -736,12 +733,12 @@ JsonSchema *JsonSchemaManager::schemaByName(const QString &baseName) const
 JsonSchema *JsonSchemaManager::parseSchema(const QString &schemaFileName) const
 {
     FileReader reader;
-    if (reader.fetch(schemaFileName, QIODevice::Text)) {
+    if (reader.fetch(FilePath::fromString(schemaFileName), QIODevice::Text)) {
         const QString &contents = QString::fromUtf8(reader.data());
         JsonValue *json = JsonValue::create(contents, &m_pool);
         if (json && json->kind() == JsonValue::Object)
             return new JsonSchema(json->toObject(), this);
     }
 
-    return 0;
+    return nullptr;
 }

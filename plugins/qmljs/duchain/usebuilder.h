@@ -37,6 +37,8 @@ protected:
 private:
     void useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range = KDevelop::RangeInRevision::invalid());
 
+    void throwRecursionDepthError() override;
+
 private:
     KDevelop::Stack<QmlJS::AST::Node*> m_nodesThatOpenedContexts;
 };

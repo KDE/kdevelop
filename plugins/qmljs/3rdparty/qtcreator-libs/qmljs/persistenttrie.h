@@ -34,7 +34,6 @@
 #include <utility>
 
 QT_FORWARD_DECLARE_CLASS(QString)
-QT_FORWARD_DECLARE_CLASS(QStringList)
 QT_FORWARD_DECLARE_CLASS(QDebug)
 
 namespace QmlJS {
@@ -79,7 +78,6 @@ class QMLJS_EXPORT Trie
 public:
     Trie();
     Trie(const TrieNode::Ptr &t);
-    Trie(const Trie &o);
 
     QStringList complete(const QString &root, const QString &base = QString(),
         LookupFlags flags = LookupFlags(CaseInsensitive|Partial)) const;
@@ -100,8 +98,8 @@ public:
     bool operator==(const Trie &o);
     bool operator!=(const Trie &o);
 
-    friend QMLJS_EXPORT QDebug &operator<<(QDebug &dbg, const TrieNode::Ptr &trie);
-    friend QMLJS_EXPORT QDebug &operator<<(QDebug &dbg, const Trie &trie);
+    friend QMLJS_EXPORT QDebug operator<<(QDebug dbg, const TrieNode::Ptr &trie);
+    friend QMLJS_EXPORT QDebug operator<<(QDebug dbg, const Trie &trie);
 
     TrieNode::Ptr trie;
 };
@@ -122,8 +120,8 @@ template <typename T> void enumerateTrieNode(const TrieNode::Ptr &trie, T &t,
 QMLJS_EXPORT int matchStrength(const QString &searchStr, const QString &str);
 QMLJS_EXPORT QStringList matchStrengthSort(const QString &searchString, QStringList &res);
 
-QMLJS_EXPORT QDebug &operator<<(QDebug &dbg, const TrieNode::Ptr &trie);
-QMLJS_EXPORT QDebug &operator<<(QDebug &dbg, const Trie &trie);
+QMLJS_EXPORT QDebug operator<<(QDebug dbg, const TrieNode::Ptr &trie);
+QMLJS_EXPORT QDebug operator<<(QDebug dbg, const Trie &trie);
 
 } // end namespace PersistentTrie
 } // end namespace QmlJS

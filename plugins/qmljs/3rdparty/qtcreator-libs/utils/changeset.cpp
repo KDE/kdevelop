@@ -53,11 +53,9 @@ static bool overlaps(int posA, int lengthA, int posB, int lengthB) {
     }
 }
 
-bool ChangeSet::hasOverlap(int pos, int length)
+bool ChangeSet::hasOverlap(int pos, int length) const
 {
-    QListIterator<EditOp> i(m_operationList);
-    while (i.hasNext()) {
-        const EditOp &cmd = i.next();
+    for (const EditOp &cmd : m_operationList) {
 
         switch (cmd.type) {
         case EditOp::Replace:
@@ -116,8 +114,8 @@ QList<ChangeSet::EditOp> ChangeSet::operationList() const
 
 void ChangeSet::clear()
 {
-    m_string = 0;
-    m_cursor = 0;
+    m_string = nullptr;
+    m_cursor = nullptr;
     m_operationList.clear();
     m_error = false;
 }
@@ -251,9 +249,7 @@ void ChangeSet::doReplace(const EditOp &op, QList<EditOp> *replaceList)
     Q_ASSERT(op.type == EditOp::Replace);
 
     {
-        QMutableListIterator<EditOp> i(*replaceList);
-        while (i.hasNext()) {
-            EditOp &c = i.next();
+        for (EditOp &c : *replaceList) {
             if (op.pos1 <= c.pos1)
                 c.pos1 += op.text.size();
             if (op.pos1 < c.pos1)
@@ -325,7 +321,7 @@ void ChangeSet::convertToReplace(const EditOp &op, QList<EditOp> *replaceList)
     }
 }
 
-bool ChangeSet::hadErrors()
+bool ChangeSet::hadErrors() const
 {
     return m_error;
 }
@@ -334,14 +330,14 @@ void ChangeSet::apply(QString *s)
 {
     m_string = s;
     apply_helper();
-    m_string = 0;
+    m_string = nullptr;
 }
 
 void ChangeSet::apply(QTextCursor *textCursor)
 {
     m_cursor = textCursor;
     apply_helper();
-    m_cursor = 0;
+    m_cursor = nullptr;
 }
 
 QString ChangeSet::textAt(int pos, int length)

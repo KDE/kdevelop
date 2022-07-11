@@ -56,8 +56,6 @@ protected:
                          const KDevelop::RangeInRevision& parametersRange,
                          QmlJS::AST::Node* body,
                          const KDevelop::RangeInRevision& bodyRange);
-    template<typename Node>
-    void declareParameters(Node* node, QmlJS::AST::UiQualifiedId* Node::*typeFunc);
     void endVisitFunction();    // Set the return type of the function to void if no return statement has been encountered
 
     bool visit(QmlJS::AST::FunctionDeclaration* node) override;
@@ -72,8 +70,8 @@ protected:
     /// NOTE: this visits the @p base node and its children
     void inferArgumentsFromCall(QmlJS::AST::Node* base,
                                 QmlJS::AST::ArgumentList* arguments);
-    bool visit(QmlJS::AST::VariableDeclaration* node) override;
-    void endVisit(QmlJS::AST::VariableDeclaration* node) override;
+    bool visit(QmlJS::AST::PatternElement* node) override;
+    void endVisit(QmlJS::AST::PatternElement* node) override;
     bool visit(QmlJS::AST::BinaryExpression* node) override;
     bool visit(QmlJS::AST::CallExpression* node) override;
     bool visit(QmlJS::AST::NewMemberExpression* node) override;
@@ -82,14 +80,14 @@ protected:
     void declareFieldMember(const KDevelop::DeclarationPointer& declaration,
                             const QString& member,
                             QmlJS::AST::Node* node,
-                            const QmlJS::AST::SourceLocation& location);
+                            const QmlJS::SourceLocation& location);
     bool visit(QmlJS::AST::FieldMemberExpression* node) override;
     bool visit(QmlJS::AST::ArrayMemberExpression* node) override;
 
-    bool visit(QmlJS::AST::ObjectLiteral* node) override;
-    bool visit(QmlJS::AST::PropertyNameAndValue* node) override;
-    void endVisit(QmlJS::AST::PropertyNameAndValue* node) override;
-    void endVisit(QmlJS::AST::ObjectLiteral* node) override;
+    bool visit(QmlJS::AST::ObjectPattern* node) override;
+    bool visit(QmlJS::AST::PatternProperty* node) override;
+    void endVisit(QmlJS::AST::PatternProperty* node) override;
+    void endVisit(QmlJS::AST::ObjectPattern* node) override;
 
     // plugin.qmltypes
     void declareComponent(QmlJS::AST::UiObjectInitializer* node,
@@ -132,6 +130,8 @@ protected:
 
     bool visit(QmlJS::AST::UiPublicMember* node) override;
     void endVisit(QmlJS::AST::UiPublicMember* node) override;
+
+    void throwRecursionDepthError() override;
 
 protected:
     template<class DeclarationT>

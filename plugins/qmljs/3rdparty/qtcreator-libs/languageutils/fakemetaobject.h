@@ -43,7 +43,6 @@ namespace LanguageUtils {
 class LANGUAGEUTILS_EXPORT FakeMetaEnum {
     QString m_name;
     QStringList m_keys;
-    QList<int> m_values;
 
 public:
     FakeMetaEnum();
@@ -54,7 +53,7 @@ public:
     QString name() const;
     void setName(const QString &name);
 
-    void addKey(const QString &key, int value);
+    void addKey(const QString &key);
     QString key(int index) const;
     int keyCount() const;
     QStringList keys() const;
@@ -171,6 +170,7 @@ private:
     QList<FakeMetaMethod> m_methods;
     QString m_defaultPropertyName;
     QString m_attachedTypeName;
+    QString m_extensionTypeName;
     QByteArray m_fingerprint;
     bool m_isSingleton;
     bool m_isCreatable;
@@ -213,6 +213,8 @@ public:
 
     QString attachedTypeName() const;
     void setAttachedTypeName(const QString &name);
+    QString extensionTypeName() const;
+    void setExtensionTypeName(const QString &name);
     QByteArray calculateFingerprint() const;
     void updateFingerprint();
     QByteArray fingerprint() const;

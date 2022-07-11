@@ -26,6 +26,7 @@
 #include "qmljsscopeastpath.h"
 
 #include "parser/qmljsast_p.h"
+#include <QDebug>
 
 using namespace QmlJS;
 using namespace AST;
@@ -57,6 +58,12 @@ bool ScopeAstPath::preVisit(Node *node)
         return containsOffset(exp->firstSourceLocation(), exp->lastSourceLocation());
     else if (UiObjectMember *ui = node->uiObjectMemberCast())
         return containsOffset(ui->firstSourceLocation(), ui->lastSourceLocation());
+    return true;
+}
+
+bool ScopeAstPath::visit(AST::TemplateLiteral *node)
+{
+    Node::accept(node->expression, this);
     return true;
 }
 
@@ -110,6 +117,11 @@ bool ScopeAstPath::visit(FunctionExpression *node)
     _result.append(node);
     accept(node->body);
     return false;
+}
+
+void ScopeAstPath::throwRecursionDepthError()
+{
+    qWarning("ScopeAstPath hit the maximum recursion limit while visiting the AST.");
 }
 
 bool ScopeAstPath::containsOffset(SourceLocation start, SourceLocation end)

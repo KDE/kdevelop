@@ -28,7 +28,9 @@
 #include "qmljs_global.h"
 
 #include <utils/fileutils.h>
+#include <utils/porting.h>
 
+#include <QDebug>
 #include <QString>
 
 namespace QmlJS {
@@ -72,17 +74,14 @@ private:
     Enum m_dialect;
 };
 
-QMLJS_EXPORT uint qHash(const Dialect &o);
+QMLJS_EXPORT Utils::QHashValueType qHash(const Dialect &o);
 
 QMLJS_EXPORT QDebug operator << (QDebug &dbg, const Dialect &dialect);
 
 class QMLJS_EXPORT PathAndLanguage {
 public:
-    PathAndLanguage(const Utils::FileName &path = Utils::FileName(), Dialect language = Dialect::AnyLanguage);
-    PathAndLanguage(const PathAndLanguage &o)
-        : m_path(o.path()), m_language(o.language())
-    { }
-    Utils::FileName path() const {
+    PathAndLanguage(const Utils::FilePath &path = Utils::FilePath(), Dialect language = Dialect::AnyLanguage);
+    Utils::FilePath path() const {
         return m_path;
     }
     Dialect language() const {
@@ -91,7 +90,7 @@ public:
     bool operator ==(const PathAndLanguage &other) const;
     bool operator < (const PathAndLanguage &other) const;
 private:
-    Utils::FileName m_path;
+    Utils::FilePath m_path;
     Dialect m_language;
 };
 
@@ -130,11 +129,8 @@ public:
     explicit PathsAndLanguages(const QList<PathAndLanguage> &list)
         : m_list(list)
     { }
-    PathsAndLanguages(const PathsAndLanguages &o)
-        : m_list(o.m_list)
-    { }
 
-    bool maybeInsert(const Utils::FileName &path, Dialect language = Dialect::AnyLanguage) {
+    bool maybeInsert(const Utils::FilePath &path, Dialect language = Dialect::AnyLanguage) {
         return maybeInsert(PathAndLanguage(path, language));
     }
 

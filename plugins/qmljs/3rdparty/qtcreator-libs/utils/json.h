@@ -27,12 +27,14 @@
 
 #include "utils_global.h"
 
-#include <QHash>
-#include <QVector>
-#include <QStringList>
 #include <QDateTime>
+#include <QHash>
+#include <QStringList>
+#include <QVector>
 
-QT_FORWARD_DECLARE_CLASS(QVariant)
+QT_BEGIN_NAMESPACE
+class QVariant;
+QT_END_NAMESPACE
 
 namespace Utils {
 
@@ -51,7 +53,7 @@ public:
 
     inline void *allocate(size_t size)
     {
-        char *obj = new char[size];
+        auto obj = new char[size];
         _objs.append(obj);
         return obj;
     }

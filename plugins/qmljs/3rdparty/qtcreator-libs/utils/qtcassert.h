@@ -27,7 +27,10 @@
 
 #include "utils_global.h"
 
-namespace Utils { QTCREATOR_UTILS_EXPORT void writeAssertLocation(const char *msg); }
+namespace Utils {
+QTCREATOR_UTILS_EXPORT void writeAssertLocation(const char *msg);
+QTCREATOR_UTILS_EXPORT void dumpBacktrace(int maxdepth);
+} // Utils
 
 #define QTC_ASSERT_STRINGIFY_HELPER(x) #x
 #define QTC_ASSERT_STRINGIFY(x) QTC_ASSERT_STRINGIFY_HELPER(x)
@@ -37,6 +40,6 @@ namespace Utils { QTCREATOR_UTILS_EXPORT void writeAssertLocation(const char *ms
 // The 'do {...} while (0)' idiom is not used for the main block here to be
 // able to use 'break' and 'continue' as 'actions'.
 
-#define QTC_ASSERT(cond, action) if (cond) {} else { QTC_ASSERT_STRING(#cond); action; } do {} while (0)
-#define QTC_CHECK(cond) if (cond) {} else { QTC_ASSERT_STRING(#cond); } do {} while (0)
-#define QTC_GUARD(cond) ((cond) ? true : (QTC_ASSERT_STRING(#cond), false))
+#define QTC_ASSERT(cond, action) if (Q_LIKELY(cond)) {} else { QTC_ASSERT_STRING(#cond); action; } do {} while (0)
+#define QTC_CHECK(cond) if (Q_LIKELY(cond)) {} else { QTC_ASSERT_STRING(#cond); } do {} while (0)
+#define QTC_GUARD(cond) ((Q_LIKELY(cond)) ? true : (QTC_ASSERT_STRING(#cond), false))

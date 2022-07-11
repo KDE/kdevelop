@@ -20,11 +20,10 @@ public:
 
     void startVisiting(QmlJS::AST::Node* node);
 
-    static QString stringForAstKind(int kind);
-
 protected:
     void postVisit(QmlJS::AST::Node* node) override;
     bool preVisit(QmlJS::AST::Node* node) override;
+    void throwRecursionDepthError() override;
 
 private:
     QString indent() const;

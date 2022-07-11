@@ -27,7 +27,11 @@
 
 #include "utils_global.h"
 
-#include <QTemporaryFile>
+#include <QFile>
+
+QT_BEGIN_NAMESPACE
+class QTemporaryFile;
+QT_END_NAMESPACE
 
 #include <memory>
 
@@ -51,8 +55,7 @@ public:
 private:
     const QString m_finalFileName;
     std::unique_ptr<QTemporaryFile> m_tempFile;
-    bool m_finalized;
-    static QFile::Permissions m_umask;
+    bool m_finalized = true;
 };
 
 } // namespace Utils

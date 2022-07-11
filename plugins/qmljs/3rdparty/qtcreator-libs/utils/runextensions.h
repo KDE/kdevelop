@@ -25,9 +25,10 @@
 
 #pragma once
 
+#include "utils_global.h"
+
 #include "functiontraits.h"
 #include "optional.h"
-#include "utils_global.h"
 
 #include <QCoreApplication>
 #include <QFuture>
@@ -59,7 +60,7 @@ struct hasCallOperator
 
 namespace Utils {
 
-using StackSizeInBytes = Utils::optional<uint>;
+using StackSizeInBytes = optional<uint>;
 
 namespace Internal {
 
@@ -238,30 +239,30 @@ private:
 
 // void function that does not take QFutureInterface
 template <typename ResultType, typename Function, typename... Args>
-void runAsyncReturnVoidDispatch(std::true_type, QFutureInterface<ResultType>, Function &&function, Args&&... args)
+void runAsyncReturnVoidDispatch(std::true_type, QFutureInterface<ResultType> &, Function &&function, Args&&... args)
 {
     function(std::forward<Args>(args)...);
 }
 
 // non-void function that does not take QFutureInterface
 template <typename ResultType, typename Function, typename... Args>
-void runAsyncReturnVoidDispatch(std::false_type, QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
+void runAsyncReturnVoidDispatch(std::false_type, QFutureInterface<ResultType> &futureInterface, Function &&function, Args&&... args)
 {
     futureInterface.reportResult(function(std::forward<Args>(args)...));
 }
 
 // function that takes QFutureInterface
 template <typename ResultType, typename Function, typename... Args>
-void runAsyncQFutureInterfaceDispatch(std::true_type, QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
+void runAsyncQFutureInterfaceDispatch(std::true_type, QFutureInterface<ResultType> &futureInterface, Function &&function, Args&&... args)
 {
     function(futureInterface, std::forward<Args>(args)...);
 }
 
 // function that does not take QFutureInterface
 template <typename ResultType, typename Function, typename... Args>
-void runAsyncQFutureInterfaceDispatch(std::false_type, QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
+void runAsyncQFutureInterfaceDispatch(std::false_type, QFutureInterface<ResultType> &futureInterface, Function &&function, Args&&... args)
 {
-    runAsyncReturnVoidDispatch(std::is_void<std::result_of_t<Function(Args...)>>(),
+    runAsyncReturnVoidDispatch(std::is_void<std::invoke_result_t<Function, Args...>>(),
                                futureInterface, std::forward<Function>(function), std::forward<Args>(args)...);
 }
 
@@ -269,7 +270,7 @@ void runAsyncQFutureInterfaceDispatch(std::false_type, QFutureInterface<ResultTy
 template <typename ResultType, typename Function, typename... Args,
           typename = std::enable_if_t<!std::is_member_pointer<std::decay_t<Function>>::value>
          >
-void runAsyncMemberDispatch(QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
+void runAsyncMemberDispatch(QFutureInterface<ResultType> &futureInterface, Function &&function, Args&&... args)
 {
     runAsyncQFutureInterfaceDispatch(functionTakesArgument<Function, 0, QFutureInterface<ResultType>&>(),
                                      futureInterface, std::forward<Function>(function), std::forward<Args>(args)...);
@@ -279,7 +280,7 @@ void runAsyncMemberDispatch(QFutureInterface<ResultType> futureInterface, Functi
 template <typename ResultType, typename Function, typename Obj, typename... Args,
           typename = std::enable_if_t<std::is_member_pointer<std::decay_t<Function>>::value>
          >
-void runAsyncMemberDispatch(QFutureInterface<ResultType> futureInterface, Function &&function, Obj &&obj, Args&&... args)
+void runAsyncMemberDispatch(QFutureInterface<ResultType> &futureInterface, Function &&function, Obj &&obj, Args&&... args)
 {
     // Wrap member function with object into callable
     runAsyncImpl(futureInterface,
@@ -289,7 +290,7 @@ void runAsyncMemberDispatch(QFutureInterface<ResultType> futureInterface, Functi
 
 // cref to function/callable
 template <typename ResultType, typename Function, typename... Args>
-void runAsyncImpl(QFutureInterface<ResultType> futureInterface,
+void runAsyncImpl(QFutureInterface<ResultType> &futureInterface,
                   std::reference_wrapper<Function> functionWrapper, Args&&... args)
 {
     runAsyncMemberDispatch(futureInterface, functionWrapper.get(), std::forward<Args>(args)...);
@@ -297,7 +298,7 @@ void runAsyncImpl(QFutureInterface<ResultType> futureInterface,
 
 // function/callable, no cref
 template <typename ResultType, typename Function, typename... Args>
-void runAsyncImpl(QFutureInterface<ResultType> futureInterface,
+void runAsyncImpl(QFutureInterface<ResultType> &futureInterface,
                   Function &&function, Args&&... args)
 {
     runAsyncMemberDispatch(futureInterface, std::forward<Function>(function),
@@ -481,7 +482,7 @@ runAsync(QThread::Priority priority, Function &&function, Args&&... args)
 template<typename Function,
          typename... Args,
          typename ResultType = typename Internal::resultType<Function>::type>
-QFuture<ResultType> runAsync(Utils::StackSizeInBytes stackSize, Function &&function, Args &&... args)
+QFuture<ResultType> runAsync(StackSizeInBytes stackSize, Function &&function, Args &&... args)
 {
     return Internal::runAsync_internal(static_cast<QThreadPool *>(nullptr),
                                        stackSize,
@@ -500,7 +501,7 @@ QFuture<ResultType> runAsync(Utils::StackSizeInBytes stackSize, Function &&funct
 template<typename Function,
          typename... Args,
          typename ResultType = typename Internal::resultType<Function>::type>
-QFuture<ResultType> runAsync(Utils::StackSizeInBytes stackSize,
+QFuture<ResultType> runAsync(StackSizeInBytes stackSize,
                              QThread::Priority priority,
                              Function &&function,
                              Args &&... args)
@@ -600,4 +601,59 @@ const QFuture<T> &onResultReady(const QFuture<T> &future, Function f)
     return future;
 }
 
-} // Utils
+/*!
+    Adds a handler for when the future is finished.
+    This creates a new QFutureWatcher. Do not use if you intend to react on multiple conditions
+    or create a QFutureWatcher already for other reasons.
+*/
+template<typename R, typename T>
+const QFuture<T> &onFinished(const QFuture<T> &future,
+                             R *receiver,
+                             void (R::*member)(const QFuture<T> &))
+{
+    auto watcher = new QFutureWatcher<T>();
+    QObject::connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    QObject::connect(watcher,
+                     &QFutureWatcherBase::finished,
+                     receiver,
+                     [receiver, member, watcher]() { (receiver->*member)(watcher->future()); });
+    watcher->setFuture(future);
+    return future;
+}
+
+/*!
+    Adds a handler for when the future is finished. The guard object determines the lifetime of
+    the connection.
+    This creates a new QFutureWatcher. Do not use if you intend to react on multiple conditions
+    or create a QFutureWatcher already for other reasons.
+*/
+template<typename T, typename Function>
+const QFuture<T> &onFinished(const QFuture<T> &future, QObject *guard, Function f)
+{
+    auto watcher = new QFutureWatcher<T>();
+    QObject::connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    QObject::connect(watcher, &QFutureWatcherBase::finished, guard, [f, watcher]() {
+        f(watcher->future());
+    });
+    watcher->setFuture(future);
+    return future;
+}
+
+/*!
+    Adds a handler for when the future is finished.
+    This creates a new QFutureWatcher. Do not use if you intend to react on multiple conditions
+    or create a QFutureWatcher already for other reasons.
+*/
+template<typename T, typename Function>
+const QFuture<T> &onFinished(const QFuture<T> &future, Function f)
+{
+    auto watcher = new QFutureWatcher<T>();
+    QObject::connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    QObject::connect(watcher, &QFutureWatcherBase::finished, [f, watcher]() {
+        f(watcher->future());
+    });
+    watcher->setFuture(future);
+    return future;
+}
+
+} // namespace Utils

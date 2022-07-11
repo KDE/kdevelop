@@ -185,31 +185,6 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
     closeContext();
 }
 
-template<typename Node>
-void DeclarationBuilder::declareParameters(Node* node, QmlJS::AST::UiQualifiedId* Node::*typeFunc)
-{
-    for (Node *plist = node; plist; plist = plist->next) {
-        const Identifier name(plist->name.toString());
-        const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
-
-        AbstractType::Ptr type = (typeFunc ?
-            typeFromName((plist->*typeFunc)->name.toString()) :             // The typeAttribute attribute of plist contains the type name of the argument
-            AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed))    // No type information, use mixed
-        );
-
-        {
-            DUChainWriteLocker lock;
-            openDeclaration<Declaration>(name, range);
-        }
-        openType(type);
-        closeAndAssignType();
-
-        if (QmlJS::FunctionType::Ptr funType = currentType<QmlJS::FunctionType>()) {
-            funType->addArgument(type);
-        }
-    }
-}
-
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
     declareFunction<QmlJS::FunctionDeclaration>(
@@ -244,14 +219,46 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
-    declareParameters(node, (QmlJS::AST::UiQualifiedId* QmlJS::AST::FormalParameterList::*)nullptr);
+    for (auto *plist = node; plist; plist = plist->next) {
+        const Identifier name(plist->element->bindingIdentifier.toString());
+        const RangeInRevision range = m_session->locationToRange(plist->element->identifierToken);
+
+        AbstractType::Ptr type = AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+
+        {
+            DUChainWriteLocker lock;
+            openDeclaration<Declaration>(name, range);
+        }
+        openType(type);
+        closeAndAssignType();
+
+        if (QmlJS::FunctionType::Ptr funType = currentType<QmlJS::FunctionType>()) {
+            funType->addArgument(type);
+        }
+    }
 
     return DeclarationBuilderBase::visit(node);
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiParameterList* node)
 {
-    declareParameters(node, &QmlJS::AST::UiParameterList::type);
+    for (auto *plist = node; plist; plist = plist->next) {
+        const Identifier name(plist->name.toString());
+        const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
+
+        AbstractType::Ptr type = typeFromName(plist->type->name.toString());
+
+        {
+            DUChainWriteLocker lock;
+            openDeclaration<Declaration>(name, range);
+        }
+        openType(type);
+        closeAndAssignType();
+
+        if (QmlJS::FunctionType::Ptr funType = currentType<QmlJS::FunctionType>()) {
+            funType->addArgument(type);
+        }
+    }
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -380,13 +387,18 @@ void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
     return;
 }
 
-bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
+bool DeclarationBuilder::visit(QmlJS::AST::PatternElement* node)
 {
+    if (!node->isVariableDeclaration()) {
+        return DeclarationBuilderBase::visit(node);
+    }
+
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
-    const Identifier name(node->name.toString());
+    const Identifier name(node->bindingIdentifier.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
-    const AbstractType::Ptr type = findType(node->expression).type;
+    // TODO: node->expression?
+    const AbstractType::Ptr type = findType(node->initializer).type;
 
     {
         DUChainWriteLocker lock;
@@ -397,11 +409,13 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
     return false;   // findType has already explored node
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
+void DeclarationBuilder::endVisit(QmlJS::AST::PatternElement* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeAndAssignType();
+    if (node->isVariableDeclaration()) {
+        closeAndAssignType();
+    }
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
@@ -475,7 +489,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::NewMemberExpression* node)
 void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& declaration,
                                             const QString& member,
                                             QmlJS::AST::Node* node,
-                                            const QmlJS::AST::SourceLocation& location)
+                                            const QmlJS::SourceLocation& location)
 {
     if (QmlJS::isPrototypeIdentifier(member)) {
         // Don't declare "prototype", this is a special member
@@ -568,7 +582,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ArrayMemberExpression* node)
     return false;       // findType has already visited node->base, and we have just visited node->expression
 }
 
-bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
+bool DeclarationBuilder::visit(QmlJS::AST::ObjectPattern* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
@@ -604,11 +618,11 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
     return DeclarationBuilderBase::visit(node);
 }
 
-bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
+bool DeclarationBuilder::visit(QmlJS::AST::PatternProperty* node)
 {
     setComment(node);
 
-    if (!node->name || !node->value) {
+    if (!node->name /* TODO || !node->value*/) {
         return DeclarationBuilderBase::visit(node);
     }
 
@@ -620,6 +634,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
     ExpressionType type;
     bool inSymbolTable = false;
 
+    /* TODO
     if (currentContext()->type() == DUContext::Enum) {
         // This is an enumeration value
         auto value = QmlJS::AST::cast<QmlJS::AST::NumericLiteral*>(node->value);
@@ -638,6 +653,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
         // Normal value
         type = findType(node->value);
     }
+    */
 
     // If a function is assigned to an object member, set the prototype context
     // of the function to the object containing the member
@@ -662,14 +678,14 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
     return false;   // findType has already explored node->expression
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::PropertyNameAndValue* node)
+void DeclarationBuilder::endVisit(QmlJS::AST::PatternProperty* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
     closeAndAssignType();
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
+void DeclarationBuilder::endVisit(QmlJS::AST::ObjectPattern* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
@@ -911,7 +927,7 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
         return res;
     }
 
-    auto exportslist = QmlJS::AST::cast<QmlJS::AST::ArrayLiteral*>(exports->expression);
+    auto exportslist = QmlJS::AST::cast<QmlJS::AST::ArrayPattern*>(exports->expression);
 
     if (!exportslist) {
         return res;
@@ -921,8 +937,12 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
     // having a version compatible with the one of this module
     QSet<QString> knownNames;
 
-    for (auto it = exportslist->elements; it && it->expression; it = it->next) {
-        auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
+    for (auto it = exportslist->elements; it && it->element; it = it->next) {
+        if (it->element->type != QmlJS::AST::PatternElement::Literal) {
+            continue;
+        }
+        // TODO: ?!
+        auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->element->expressionCast());
 
         if (!stringliteral) {
             continue;
@@ -1059,7 +1079,7 @@ void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
     }
 
     // Version of the import
-    QString version = m_session->symbolAt(node->versionToken);
+    QString version = QStringLiteral("%1.%2").arg(node->version->majorVersion, node->version->minorVersion);
 
     // Import the directory containing the module
     QString modulePath = QmlJS::Cache::instance().modulePath(m_session->url(), uri, version);
@@ -1254,7 +1274,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 
     RangeInRevision range = m_session->locationToRange(node->identifierToken);
     Identifier id(node->name.toString());
-    QString typeName = node->memberTypeName().toString();
+    QString typeName = node->memberType->name.toString();
     bool res = DeclarationBuilderBase::visit(node);
 
     // Build the type of the public member
@@ -1527,4 +1547,9 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
     }
 
     return a->equals(b.constData());
+}
+
+void DeclarationBuilder::throwRecursionDepthError()
+{
+    m_session->addProblem(nullptr, i18n("Recursion depth error"), IProblem::Error);
 }

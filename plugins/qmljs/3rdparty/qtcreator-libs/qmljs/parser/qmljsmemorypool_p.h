@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2021 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
@@ -37,12 +37,10 @@
 //
 
 #include "qmljsglobal_p.h"
+#include <QtCore/qstring.h>
+#include <QtCore/qvector.h>
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qshareddata.h>
-#include <QtCore/qdebug.h>
-
-#include <cstring>
+#include <cstdlib>
 
 QT_QML_BEGIN_NAMESPACE
 
@@ -50,20 +48,12 @@ namespace QmlJS {
 
 class Managed;
 
-class QML_PARSER_EXPORT MemoryPool : public QSharedData
+class MemoryPool
 {
-    MemoryPool(const MemoryPool &other);
-    void operator =(const MemoryPool &other);
+    Q_DISABLE_COPY_MOVE(MemoryPool);
 
 public:
-    MemoryPool()
-        : _blocks(0),
-          _allocatedBlocks(0),
-          _blockCount(-1),
-          _ptr(0),
-          _end(0)
-    { }
-
+    MemoryPool() = default;
     ~MemoryPool()
     {
         if (_blocks) {
@@ -74,11 +64,12 @@ public:
 
             free(_blocks);
         }
+        qDeleteAll(strings);
     }
 
     inline void *allocate(size_t size)
     {
-        size = (size + 7) & ~7;
+        size = (size + 7) & ~size_t(7);
         if (Q_LIKELY(_ptr && (_ptr + size < _end))) {
             void *addr = _ptr;
             _ptr += size;
@@ -90,15 +81,24 @@ public:
     void reset()
     {
         _blockCount = -1;
-        _ptr = _end = 0;
+        _ptr = _end = nullptr;
     }
 
     template <typename Tp> Tp *New() { return new (this->allocate(sizeof(Tp))) Tp(); }
+    template <typename Tp, typename... Ta> Tp *New(Ta... args)
+    { return new (this->allocate(sizeof(Tp))) Tp(args...); }
+
+    QStringView newString(const QString &string) {
+        strings.append(new QString(string));
+        return QStringView(*strings.last());
+    }
 
 private:
     Q_NEVER_INLINE void *allocate_helper(size_t size)
     {
-        Q_ASSERT(size < BLOCK_SIZE);
+        size_t currentBlockSize = DEFAULT_BLOCK_SIZE;
+        while (Q_UNLIKELY(size >= currentBlockSize))
+            currentBlockSize *= 2;
 
         if (++_blockCount == _allocatedBlocks) {
             if (! _allocatedBlocks)
@@ -106,22 +106,22 @@ private:
             else
                 _allocatedBlocks *= 2;
 
-            _blocks = (char **) realloc(_blocks, sizeof(char *) * _allocatedBlocks);
+            _blocks = reinterpret_cast<char **>(realloc(_blocks, sizeof(char *) * size_t(_allocatedBlocks)));
             Q_CHECK_PTR(_blocks);
 
             for (int index = _blockCount; index < _allocatedBlocks; ++index)
-                _blocks[index] = 0;
+                _blocks[index] = nullptr;
         }
 
         char *&block = _blocks[_blockCount];
 
         if (! block) {
-            block = (char *) malloc(BLOCK_SIZE);
+            block = reinterpret_cast<char *>(malloc(currentBlockSize));
             Q_CHECK_PTR(block);
         }
 
         _ptr = block;
-        _end = _ptr + BLOCK_SIZE;
+        _end = _ptr + currentBlockSize;
 
         void *addr = _ptr;
         _ptr += size;
@@ -129,27 +129,26 @@ private:
     }
 
 private:
-    char **_blocks;
-    int _allocatedBlocks;
-    int _blockCount;
-    char *_ptr;
-    char *_end;
+    char **_blocks = nullptr;
+    int _allocatedBlocks = 0;
+    int _blockCount = -1;
+    char *_ptr = nullptr;
+    char *_end = nullptr;
+    QVector<QString*> strings;
 
     enum
     {
-        BLOCK_SIZE = 8 * 1024,
+        DEFAULT_BLOCK_SIZE = 8 * 1024,
         DEFAULT_BLOCK_COUNT = 8
     };
 };
 
-class QML_PARSER_EXPORT Managed
+class Managed
 {
-    Managed(const Managed &other);
-    void operator = (const Managed &other);
-
+    Q_DISABLE_COPY(Managed)
 public:
-    Managed() {}
-    ~Managed() {}
+    Managed() = default;
+    ~Managed() = default;
 
     void *operator new(size_t size, MemoryPool *pool) { return pool->allocate(size); }
     void operator delete(void *) {}

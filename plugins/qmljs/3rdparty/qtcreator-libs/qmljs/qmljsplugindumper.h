@@ -29,13 +29,15 @@
 
 #include <QObject>
 #include <QHash>
-#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 class QDir;
+class QProcess;
 QT_END_NAMESPACE
 
-namespace Utils { class FileSystemWatcher; }
+namespace Utils {
+class FileSystemWatcher;
+}
 
 namespace QmlJS {
 
@@ -50,43 +52,53 @@ public:
     void loadPluginTypes(const QString &libraryPath, const QString &importPath,
                          const QString &importUri, const QString &importVersion);
     void scheduleRedumpPlugins();
-    void scheduleMaybeRedumpBuiltins(const QmlJS::ModelManagerInterface::ProjectInfo &info);
 
 private:
     Q_INVOKABLE void onLoadBuiltinTypes(const QmlJS::ModelManagerInterface::ProjectInfo &info,
                                         bool force = false);
     Q_INVOKABLE void onLoadPluginTypes(const QString &libraryPath, const QString &importPath,
                                        const QString &importUri, const QString &importVersion);
-    Q_INVOKABLE void dumpBuiltins(const QmlJS::ModelManagerInterface::ProjectInfo &info);
     Q_INVOKABLE void dumpAllPlugins();
-    void qmlPluginTypeDumpDone(int exitCode);
-    void qmlPluginTypeDumpError(QProcess::ProcessError error);
+    void qmlPluginTypeDumpDone(QProcess *process);
     void pluginChanged(const QString &pluginLibrary);
 
 private:
     class Plugin {
     public:
-        QString qmldirPath;
+        Utils::FilePath qmldirPath;
         QString importPath;
         QString importUri;
         QString importVersion;
-        QStringList typeInfoPaths;
+        Utils::FilePaths typeInfoPaths;
     };
 
-    void runQmlDump(const QmlJS::ModelManagerInterface::ProjectInfo &info, const QStringList &arguments, const QString &importPath);
+    class QmlTypeDescription {
+    public:
+        QStringList errors;
+        QStringList warnings;
+        QList<LanguageUtils::FakeMetaObject::ConstPtr> objects;
+        QList<ModuleApiInfo> moduleApis;
+        QStringList dependencies;
+    };
+
+    class DependencyInfo {
+    public:
+        QStringList errors;
+        QStringList warnings;
+        QList<LanguageUtils::FakeMetaObject::ConstPtr> objects;
+    };
+
+    void runQmlDump(const QmlJS::ModelManagerInterface::ProjectInfo &info, const QStringList &arguments,
+                    const Utils::FilePath &importPath);
     void dump(const Plugin &plugin);
-    void loadQmlTypeDescription(const QStringList &path, QStringList &errors, QStringList &warnings,
-                                QList<LanguageUtils::FakeMetaObject::ConstPtr> &objects,
-                                QList<ModuleApiInfo> *moduleApi,
-                                QStringList *dependencies) const;
+    QFuture<QmlTypeDescription> loadQmlTypeDescription(const Utils::FilePaths &path) const;
     QString buildQmltypesPath(const QString &name) const;
-    void loadDependencies(const QStringList &dependencies,
-                          QStringList &errors,
-                          QStringList &warnings,
-                          QList<LanguageUtils::FakeMetaObject::ConstPtr> &objects,
-                          QSet<QString> *visited=0) const;
-    void loadQmltypesFile(const QStringList &qmltypesFilePaths,
-                          const QString &libraryPath,
+
+    QFuture<PluginDumper::DependencyInfo> loadDependencies(const Utils::FilePaths &dependencies,
+                                                           QSharedPointer<QSet<Utils::FilePath> > visited) const;
+
+    void loadQmltypesFile(const Utils::FilePaths &qmltypesFilePaths,
+                          const Utils::FilePath &libraryPath,
                           QmlJS::LibraryInfo libraryInfo);
     QString resolvePlugin(const QDir &qmldirPath, const QString &qmldirPluginPath,
                           const QString &baseName);
@@ -96,10 +108,17 @@ private:
 
 private:
     Utils::FileSystemWatcher *pluginWatcher();
+    void prepareLibraryInfo(LibraryInfo &libInfo,
+                            const Utils::FilePath &libraryPath,
+                            const QStringList &deps,
+                            const QStringList &errors,
+                            const QStringList &warnings,
+                            const QList<ModuleApiInfo> &moduleApis,
+                            QList<LanguageUtils::FakeMetaObject::ConstPtr> &objects);
 
     ModelManagerInterface *m_modelManager;
     Utils::FileSystemWatcher *m_pluginWatcher;
-    QHash<QProcess *, QString> m_runningQmldumps;
+    QHash<QProcess *, Utils::FilePath> m_runningQmldumps;
     QList<Plugin> m_plugins;
     QHash<QString, int> m_libraryToPluginIndex;
     QHash<QString, QmlJS::ModelManagerInterface::ProjectInfo> m_qtToInfo;

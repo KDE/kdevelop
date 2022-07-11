@@ -39,6 +39,11 @@ void ExpressionVisitor::postVisit(QmlJS::AST::Node* node)
     QmlJS::AST::Visitor::postVisit(node);
 }
 
+void ExpressionVisitor::throwRecursionDepthError()
+{
+
+}
+
 bool ExpressionVisitor::isPrototype() const
 {
     return m_prototypeDepth == 1;
@@ -91,13 +96,13 @@ bool ExpressionVisitor::visit(QmlJS::AST::FalseLiteral*)
 /*
  * Object and arrays
  */
-bool ExpressionVisitor::visit(QmlJS::AST::ArrayLiteral*)
+bool ExpressionVisitor::visit(QmlJS::AST::ArrayPattern*)
 {
     encounter(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
     return false;
 }
 
-bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral* node)
+bool ExpressionVisitor::visit(QmlJS::AST::ObjectPattern* node)
 {
     encounterObjectAtLocation(node->lbraceToken);
     return false;
@@ -404,7 +409,7 @@ void ExpressionVisitor::encounterFieldMember(const QString& name)
     }
 }
 
-void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::AST::SourceLocation& location)
+void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::SourceLocation& location)
 {
     DUChainReadLocker lock;
 

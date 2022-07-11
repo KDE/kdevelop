@@ -286,12 +286,9 @@ public:
     ReplaceInTrie() { }
     void operator()(QString s)
     {
-        QHashIterator<QString, QString> i(replacements);
         QString res = s;
-        while (i.hasNext()) {
-            i.next();
+        for (auto i = replacements.cbegin(), end = replacements.cend(); i != end; ++i)
             res.replace(i.key(), i.value());
-        }
         trie = TrieNode::insertF(trie,res);
     }
 };
@@ -312,7 +309,7 @@ std::pair<TrieNode::Ptr,int> TrieNode::intersectF(
     typedef TrieNode::Ptr P;
     typedef QMap<QString,int>::const_iterator MapIterator;
     if (v1.isNull() || v2.isNull())
-        return std::make_pair(P(0), ((v1.isNull()) ? 1 : 0) | ((v2.isNull()) ? 2 : 0));
+        return std::make_pair(P(nullptr), ((v1.isNull()) ? 1 : 0) | ((v2.isNull()) ? 2 : 0));
     QString::const_iterator i = v1->prefix.constBegin()+index1, iEnd = v1->prefix.constEnd();
     QString::const_iterator j = v2->prefix.constBegin(), jEnd = v2->prefix.constEnd();
     while (i != iEnd && j != jEnd) {
@@ -348,7 +345,7 @@ std::pair<TrieNode::Ptr,int> TrieNode::intersectF(
                 foreach (P t2, v2->postfixes)
                     if (t2->prefix.isEmpty())
                         return std::make_pair(v1,1);
-                return std::make_pair(P(0), 0);
+                return std::make_pair(P(nullptr), 0);
             }
             QMap<QString,int> p1, p2;
             QList<P> p3;
@@ -430,7 +427,7 @@ std::pair<TrieNode::Ptr,int> TrieNode::intersectF(
             switch (sameV1V2) {
             case 0:
                 if (p3.isEmpty())
-                   return std::make_pair(P(0),0);
+                   return std::make_pair(P(nullptr),0);
                 else
                     return std::make_pair(TrieNode::create(v1->prefix,p3),0);
             case 2:
@@ -454,7 +451,7 @@ std::pair<TrieNode::Ptr,int> TrieNode::intersectF(
                         v1->prefix.left(index1).append(res.first->prefix),
                         res.first->postfixes), 0);
             }
-        return std::make_pair(P(0), 0);
+        return std::make_pair(P(nullptr), 0);
     } else {
         // i != iEnd && j == jEnd
         foreach (P t2, v2->postfixes)
@@ -462,7 +459,7 @@ std::pair<TrieNode::Ptr,int> TrieNode::intersectF(
                 std::pair<P,int> res = intersectF(v1,t2,i-v1->prefix.constBegin());
                 return std::make_pair(res.first, (res.second & 1));
             }
-        return std::make_pair(P(0), 0);
+        return std::make_pair(P(nullptr), 0);
     }
 }
 
@@ -529,14 +526,14 @@ QDebug &TrieNode::describe(QDebug &dbg, const TrieNode::Ptr &trie,
     return dbg;
 }
 
-QDebug &operator<<(QDebug &dbg, const TrieNode::Ptr &trie)
+QDebug operator<<(QDebug dbg, const TrieNode::Ptr &trie)
 {
     dbg.nospace()<<"Trie{\n";
     TrieNode::describe(dbg,trie,0);
     dbg << "}";
     return dbg.space();
 }
-QDebug &operator<<(QDebug &dbg, const Trie &trie)
+QDebug operator<<(QDebug dbg, const Trie &trie)
 {
     dbg.nospace()<<"Trie{\n";
     TrieNode::describe(dbg,trie.trie,0);
@@ -545,7 +542,6 @@ QDebug &operator<<(QDebug &dbg, const Trie &trie)
 }
 Trie::Trie() {}
 Trie::Trie(const TrieNode::Ptr &trie) : trie(trie) {}
-Trie::Trie(const Trie &o) : trie(o.trie){}
 
 QStringList Trie::complete(const QString &root, const QString &base,
     LookupFlags flags) const

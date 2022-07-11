@@ -42,7 +42,7 @@ using namespace QmlJS::AST;
 using namespace LanguageUtils;
 
 TypeDescriptionReader::TypeDescriptionReader(const QString &fileName, const QString &data)
-    : _fileName (fileName), _source(data), _objects(0)
+    : _fileName (fileName), _source(data), _objects(nullptr)
 {
 }
 
@@ -107,15 +107,12 @@ void TypeDescriptionReader::readDocument(UiProgram *ast)
     }
 
     ComponentVersion version;
-    const QString versionString = _source.mid(import->versionToken.offset, import->versionToken.length);
-    const int dotIdx = versionString.indexOf(QLatin1Char('.'));
-    if (dotIdx != -1) {
-        version = ComponentVersion(versionString.leftRef(dotIdx).toInt(),
-                                   versionString.midRef(dotIdx + 1).toInt());
-    }
-    if (version.majorVersion() != 1) {
-        addError(import->versionToken, tr("Major version different from 1 not supported."));
-        return;
+    if (UiVersionSpecifier *uiVersion = import->version) {
+        version = ComponentVersion(import->version->majorVersion, import->version->minorVersion);
+        if (version.majorVersion() != 1) {
+            addError(uiVersion->majorToken, tr("Major version different from 1 not supported."));
+            return;
+        }
     }
 
     if (!ast->members || !ast->members->member || ast->members->next) {
@@ -189,13 +186,14 @@ void TypeDescriptionReader::readDependencies(UiScriptBinding *ast)
         addError(ast->statement->firstSourceLocation(), tr("Expected dependency definitions"));
         return;
     }
-    ArrayLiteral *exp = AST::cast<ArrayLiteral *>(stmt->expression);
+    ArrayPattern *exp = AST::cast<ArrayPattern *>(stmt->expression);
     if (!exp) {
         addError(stmt->expression->firstSourceLocation(), tr("Expected dependency definitions"));
         return;
     }
-    for (ElementList *l = exp->elements; l; l = l->next) {
-        StringLiteral *str = AST::cast<StringLiteral *>(l->expression);
+    for (PatternElementList *l = exp->elements; l; l = l->next) {
+        //StringLiteral *str = AST::cast<StringLiteral *>(l->element->initializer);
+        StringLiteral *str = AST::cast<StringLiteral *>(l->element->initializer);
         *_dependencies << str->value.toString();
     }
 }
@@ -216,10 +214,6 @@ void TypeDescriptionReader::readComponent(UiObjectDefinition *ast)
                 readSignalOrMethod(component, name == QLatin1String("Method"), fmo);
             else if (name == QLatin1String("Enum"))
                 readEnum(component, fmo);
-            else
-                addWarning(component->firstSourceLocation(),
-                           tr("Expected only Property, Method, Signal and Enum object definitions, not \"%1\".")
-                           .arg(name));
         } else if (script) {
             QString name = toString(script->qualifiedId);
             if (name == QLatin1String("name")) {
@@ -234,20 +228,15 @@ void TypeDescriptionReader::readComponent(UiObjectDefinition *ast)
                 readMetaObjectRevisions(script, fmo);
             } else if (name == QLatin1String("attachedType")) {
                 fmo->setAttachedTypeName(readStringBinding(script));
+            } else if (name == QLatin1String("extension")) {
+                fmo->setExtensionTypeName(readStringBinding(script));
             } else if (name == QLatin1String("isSingleton")) {
                 fmo->setIsSingleton(readBoolBinding(script));
             } else if (name == QLatin1String("isCreatable")) {
                 fmo->setIsCreatable(readBoolBinding(script));
             } else if (name == QLatin1String("isComposite")) {
                 fmo->setIsComposite(readBoolBinding(script));
-            } else {
-                addWarning(script->firstSourceLocation(),
-                           tr("Expected only name, prototype, defaultProperty, attachedType, exports, "
-                              "isSingleton, isCreatable, isComposite and exportMetaObjectRevisions "
-                              "script bindings, not \"%1\".").arg(name));
             }
-        } else {
-            addWarning(member->firstSourceLocation(), tr("Expected only script bindings and object definitions."));
         }
     }
 
@@ -278,12 +267,7 @@ void TypeDescriptionReader::readModuleApi(UiObjectDefinition *ast)
                 apiInfo.version = readNumericVersionBinding(script);
             } else if (name == QLatin1String("name")) {
                 apiInfo.cppName = readStringBinding(script);
-            } else {
-                addWarning(script->firstSourceLocation(),
-                           tr("Expected only uri, version and name script bindings."));
             }
-        } else {
-            addWarning(member->firstSourceLocation(), tr("Expected only script bindings."));
         }
     }
 
@@ -313,8 +297,6 @@ void TypeDescriptionReader::readSignalOrMethod(UiObjectDefinition *ast, bool isM
             QString name = toString(component->qualifiedTypeNameId);
             if (name == QLatin1String("Parameter"))
                 readParameter(component, &fmm);
-            else
-                addWarning(component->firstSourceLocation(), tr("Expected only Parameter object definitions."));
         } else if (script) {
             QString name = toString(script->qualifiedId);
             if (name == QLatin1String("name"))
@@ -323,11 +305,6 @@ void TypeDescriptionReader::readSignalOrMethod(UiObjectDefinition *ast, bool isM
                 fmm.setReturnType(readStringBinding(script));
             else if (name == QLatin1String("revision"))
                 fmm.setRevision(readIntBinding(script));
-            else
-                addWarning(script->firstSourceLocation(), tr("Expected only name and type script bindings."));
-
-        } else {
-            addWarning(member->firstSourceLocation(), tr("Expected only script bindings and object definitions."));
         }
     }
 
@@ -369,8 +346,6 @@ void TypeDescriptionReader::readProperty(UiObjectDefinition *ast, FakeMetaObject
             isList = readBoolBinding(script);
         else if (id == QLatin1String("revision"))
             revision = readIntBinding(script);
-        else
-            addWarning(script->firstSourceLocation(), tr("Expected only type, name, revision, isPointer, isReadonly and isList script bindings."));
     }
 
     if (name.isEmpty() || type.isEmpty()) {
@@ -398,8 +373,6 @@ void TypeDescriptionReader::readEnum(UiObjectDefinition *ast, FakeMetaObject::Pt
             fme.setName(readStringBinding(script));
         else if (name == QLatin1String("values"))
             readEnumValues(script, &fme);
-        else
-            addWarning(script->firstSourceLocation(), tr("Expected only name and values script bindings."));
     }
 
     fmo->addEnum(fme);
@@ -429,8 +402,6 @@ void TypeDescriptionReader::readParameter(UiObjectDefinition *ast, FakeMetaMetho
             // ### unhandled
         } else if (id == QLatin1String("isList")) {
             // ### unhandled
-        } else {
-            addWarning(script->firstSourceLocation(), tr("Expected only name and type script bindings."));
         }
     }
 
@@ -562,14 +533,14 @@ void TypeDescriptionReader::readExports(UiScriptBinding *ast, FakeMetaObject::Pt
         return;
     }
 
-    ArrayLiteral *arrayLit = AST::cast<ArrayLiteral *>(expStmt->expression);
+    ArrayPattern *arrayLit = AST::cast<ArrayPattern *>(expStmt->expression);
     if (!arrayLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected array of strings after colon."));
         return;
     }
 
-    for (ElementList *it = arrayLit->elements; it; it = it->next) {
-        StringLiteral *stringLit = AST::cast<StringLiteral *>(it->expression);
+    for (PatternElementList *it = arrayLit->elements; it; it = it->next) {
+        StringLiteral *stringLit = AST::cast<StringLiteral *>(it->element->initializer);
         if (!stringLit) {
             addError(arrayLit->firstSourceLocation(), tr("Expected array literal with only string literal members."));
             return;
@@ -608,7 +579,7 @@ void TypeDescriptionReader::readMetaObjectRevisions(UiScriptBinding *ast, FakeMe
         return;
     }
 
-    ArrayLiteral *arrayLit = AST::cast<ArrayLiteral *>(expStmt->expression);
+    ArrayPattern *arrayLit = AST::cast<ArrayPattern *>(expStmt->expression);
     if (!arrayLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected array of numbers after colon."));
         return;
@@ -616,8 +587,8 @@ void TypeDescriptionReader::readMetaObjectRevisions(UiScriptBinding *ast, FakeMe
 
     int exportIndex = 0;
     const int exportCount = fmo->exports().size();
-    for (ElementList *it = arrayLit->elements; it; it = it->next, ++exportIndex) {
-        NumericLiteral *numberLit = cast<NumericLiteral *>(it->expression);
+    for (PatternElementList *it = arrayLit->elements; it; it = it->next, ++exportIndex) {
+        NumericLiteral *numberLit = cast<NumericLiteral *>(it->element->initializer);
         if (!numberLit) {
             addError(arrayLit->firstSourceLocation(), tr("Expected array literal with only number literal members."));
             return;
@@ -648,39 +619,34 @@ void TypeDescriptionReader::readEnumValues(AST::UiScriptBinding *ast, LanguageUt
         return;
     }
 
-    ExpressionStatement *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
+    auto *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
     if (!expStmt) {
-        addError(ast->statement->firstSourceLocation(), tr("Expected object literal after colon."));
+        addError(ast->statement->firstSourceLocation(), tr("Expected expression after colon."));
         return;
     }
 
-    ObjectLiteral *objectLit = AST::cast<ObjectLiteral *>(expStmt->expression);
-    if (!objectLit) {
-        addError(expStmt->firstSourceLocation(), tr("Expected object literal after colon."));
-        return;
-    }
-
-    for (PropertyAssignmentList *it = objectLit->properties; it; it = it->next) {
-        PropertyNameAndValue *assignement = AST::cast<PropertyNameAndValue *>(it->assignment);
-        if (assignement) {
-            StringLiteralPropertyName *propName = AST::cast<StringLiteralPropertyName *>(assignement->name);
-            NumericLiteral *value = AST::cast<NumericLiteral *>(assignement->value);
-            UnaryMinusExpression *minus = AST::cast<UnaryMinusExpression *>(assignement->value);
-            if (minus)
-                value = AST::cast<NumericLiteral *>(minus->expression);
-            if (!propName || !value) {
-                addError(objectLit->firstSourceLocation(), tr("Expected object literal to contain only 'string: number' elements."));
-                continue;
+    if (auto *objectLit = AST::cast<ObjectPattern *>(expStmt->expression)) {
+        for (PatternPropertyList *it = objectLit->properties; it; it = it->next) {
+            if (PatternProperty *assignement = it->property) {
+                if (auto *name = AST::cast<StringLiteralPropertyName *>(assignement->name)) {
+                    fme->addKey(name->id.toString());
+                    continue;
+                }
             }
-
-            double v = value->value;
-            if (minus)
-                v = -v;
-            fme->addKey(propName->id.toString(), v);
-            continue;
+            addError(it->firstSourceLocation(), tr("Expected strings as enum keys."));
         }
-        PropertyGetterSetter *getterSetter = AST::cast<PropertyGetterSetter *>(it->assignment);
-        if (getterSetter)
-            addError(objectLit->firstSourceLocation(), tr("Enum should not contain getter and setters, but only 'string: number' elements."));
+    } else if (auto *arrayLit = AST::cast<ArrayPattern *>(expStmt->expression)) {
+        for (PatternElementList *it = arrayLit->elements; it; it = it->next) {
+            if (PatternElement *element = it->element) {
+                if (auto *name = AST::cast<StringLiteral *>(element->initializer)) {
+                    fme->addKey(name->value.toString());
+                    continue;
+                }
+            }
+            addError(it->firstSourceLocation(), tr("Expected strings as enum keys."));
+        }
+    } else {
+        addError(ast->statement->firstSourceLocation(),
+                 tr("Expected either array or object literal as enum definition."));
     }
 }

@@ -24,36 +24,49 @@
 ****************************************************************************/
 
 #pragma once
-#include "qmljs_global.h"
 
-#include <QMap>
+#include "utils_global.h"
+#include "utils/filepath.h"
+
 #include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 
-QT_FORWARD_DECLARE_CLASS(QLocale)
+QT_BEGIN_NAMESPACE
+class QLocale;
+template <typename K, typename V>
+class QMap;
+QT_END_NAMESPACE
 
-namespace QmlJS {
+namespace Utils {
 
 namespace Internal {
 class QrcParserPrivate;
 class QrcCachePrivate;
 }
 
-class QMLJS_EXPORT QrcParser
+class QTCREATOR_UTILS_EXPORT QrcParser
 {
 public:
+    struct MatchResult
+    {
+        int matchDepth = {};
+        QStringList reversedPaths;
+        QList<Utils::FilePath> sourceFiles;
+    };
+
     typedef QSharedPointer<QrcParser> Ptr;
     typedef QSharedPointer<const QrcParser> ConstPtr;
     ~QrcParser();
     bool parseFile(const QString &path, const QString &contents);
     QString firstFileAtPath(const QString &path, const QLocale &locale) const;
-    void collectFilesAtPath(const QString &path, QStringList *res, const QLocale *locale = 0) const;
-    bool hasDirAtPath(const QString &path, const QLocale *locale = 0) const;
-    void collectFilesInPath(const QString &path, QMap<QString,QStringList> *res, bool addDirs = false,
-                            const QLocale *locale = 0) const;
+    void collectFilesAtPath(const QString &path, QStringList *res, const QLocale *locale = nullptr) const;
+    MatchResult longestReverseMatches(const QString &) const;
+    bool hasDirAtPath(const QString &path, const QLocale *locale = nullptr) const;
+    void collectFilesInPath(const QString &path, QMap<QString, QStringList> *res, bool addDirs = false,
+                            const QLocale *locale = nullptr) const;
     void collectResourceFilesForSourceFile(const QString &sourceFile, QStringList *results,
-                                           const QLocale *locale = 0) const;
+                                           const QLocale *locale = nullptr) const;
 
     QStringList errorMessages() const;
     QStringList languages() const;
@@ -69,7 +82,7 @@ private:
     Internal::QrcParserPrivate *d;
 };
 
-class QMLJS_EXPORT QrcCache
+class QTCREATOR_UTILS_EXPORT QrcCache
 {
 public:
     QrcCache();

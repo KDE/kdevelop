@@ -27,9 +27,12 @@
 
 #include "utils_global.h"
 
+#include "optional.h"
 #include "osspecificaspects.h"
 
-#include <QString>
+QT_BEGIN_NAMESPACE
+class QString;
+QT_END_NAMESPACE
 
 #ifdef Q_OS_WIN
 #define QTC_HOST_EXE_SUFFIX QTC_WIN_EXE_SUFFIX
@@ -58,7 +61,7 @@ public:
     }
 
     enum HostArchitecture { HostArchitectureX86, HostArchitectureAMD64, HostArchitectureItanium,
-                            HostArchitectureArm, HostArchitectureUnknown };
+                            HostArchitectureArm, HostArchitectureArm64, HostArchitectureUnknown };
     static HostArchitecture hostArchitecture();
 
     static constexpr bool isWindowsHost() { return hostOs() == OsTypeWindows; }
@@ -72,6 +75,8 @@ public:
         return false;
 #endif
     }
+
+    static bool isRunningUnderRosetta();
 
     static QString withExecutableSuffix(const QString &executable)
     {
@@ -99,6 +104,8 @@ public:
     }
 
     static bool canCreateOpenGLContext(QString *errorMessage);
+
+    static optional<quint64> totalMemoryInstalledInBytes();
 
 private:
     static Qt::CaseSensitivity m_overrideFileNameCaseSensitivity;

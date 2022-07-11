@@ -97,7 +97,7 @@ public:
     QString path() const;
     QString componentName() const;
 
-    QList<AST::SourceLocation> jsDirectives() const;
+    QList<SourceLocation> jsDirectives() const;
 
 private:
     bool parse_helper(int kind);
@@ -111,7 +111,7 @@ private:
     QString _path;
     QString _componentName;
     QString _source;
-    QList<AST::SourceLocation> _jsdirectives;
+    QList<SourceLocation> _jsdirectives;
     QWeakPointer<Document> _ptr;
     QByteArray _fingerprint;
     int _editorRevision;
@@ -150,23 +150,27 @@ public:
     };
 
 private:
-    Status _status;
+    Status _status = NotScanned;
     QList<QmlDirParser::Component> _components;
     QList<QmlDirParser::Plugin> _plugins;
-    QList<QmlDirParser::TypeInfo> _typeinfos;
+    QStringList _typeinfos;
     typedef QList<LanguageUtils::FakeMetaObject::ConstPtr> FakeMetaObjectList;
     FakeMetaObjectList _metaObjects;
     QList<ModuleApiInfo> _moduleApis;
-    QStringList _dependencies;
+    QStringList _dependencies; // from qmltypes "dependencies: [...]"
+    QList<QmlDirParser::Import> _imports; // from qmldir "import" commands
     QByteArray _fingerprint;
 
-    PluginTypeInfoStatus _dumpStatus;
+    PluginTypeInfoStatus _dumpStatus = NoTypeInfo;
     QString _dumpError;
 
 public:
-    explicit LibraryInfo(Status status = NotScanned);
+    LibraryInfo();
+    explicit LibraryInfo(Status status);
+    explicit LibraryInfo(const QString &typeInfo);
     explicit LibraryInfo(const QmlDirParser &parser, const QByteArray &fingerprint = QByteArray());
-    ~LibraryInfo();
+    ~LibraryInfo() = default;
+    LibraryInfo(const LibraryInfo &other) = default;
 
     QByteArray calculateFingerprint() const;
     void updateFingerprint();
@@ -179,7 +183,7 @@ public:
     QList<QmlDirParser::Plugin> plugins() const
     { return _plugins; }
 
-    QList<QmlDirParser::TypeInfo> typeInfos() const
+    QStringList typeInfos() const
     { return _typeinfos; }
 
     FakeMetaObjectList metaObjects() const
@@ -199,6 +203,12 @@ public:
 
     void setDependencies(const QStringList &deps)
     { _dependencies = deps; }
+
+    QList<QmlDirParser::Import> imports() const
+    { return _imports; }
+
+    void setImports(const QList<QmlDirParser::Import> &imports)
+    { _imports = imports; }
 
     bool isValid() const
     { return _status == Found; }
@@ -229,7 +239,6 @@ class QMLJS_EXPORT Snapshot
 
 public:
     Snapshot();
-    Snapshot(const Snapshot &o);
     ~Snapshot();
 
     typedef Base::iterator iterator;
@@ -247,7 +256,8 @@ public:
 
     Document::Ptr document(const QString &fileName) const;
     QList<Document::Ptr> documentsInDirectory(const QString &path) const;
-    LibraryInfo libraryInfo(const QString &path) const;
+    LibraryInfo libraryInfo(const QString &path) const; // FIXME: Remove
+    LibraryInfo libraryInfo(const Utils::FilePath &path) const;
 
     Document::MutablePtr documentFromSource(const QString &code,
                                      const QString &fileName,

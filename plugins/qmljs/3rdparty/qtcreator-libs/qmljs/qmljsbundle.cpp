@@ -35,11 +35,6 @@
 namespace QmlJS {
 typedef PersistentTrie::Trie Trie;
 
-QmlBundle::QmlBundle(const QmlBundle &o)
-    : m_name(o.m_name), m_searchPaths(o.searchPaths()), m_installPaths(o.installPaths()),
-      m_supportedImports(o.m_supportedImports), m_implicitImports(o.m_implicitImports)
-{ }
-
 QmlBundle::QmlBundle()
 { }
 
@@ -157,15 +152,13 @@ void QmlBundle::printEscaped(QTextStream &s, const QString &str)
             iEnd = str.constEnd();
     while (i != iEnd) {
         if ((*i) != QLatin1Char('"')) {
-            s << QStringRef(&str, static_cast<int>(iLast - str.constBegin())
-                            , static_cast<int>(i - iLast) ).toString()
+            s << str.mid(static_cast<int>(iLast - str.constBegin()), static_cast<int>(i - iLast))
               << QLatin1Char('\\');
             iLast = i;
         }
         ++i;
     }
-    s << QStringRef(&str, static_cast<int>(iLast - str.constBegin())
-                    , static_cast<int>(i - iLast) ).toString();
+    s << str.mid(static_cast<int>(iLast - str.constBegin()), static_cast<int>(i - iLast));
 }
 
 void QmlBundle::writeTrie(QTextStream &stream, const Trie &t, const QString &indent) {
@@ -224,11 +217,11 @@ QStringList QmlBundle::maybeReadTrie(Trie &trie, Utils::JsonObjectValue *config,
         return res;
     }
     Utils::JsonValue *imp0 = config->member(propertyName);
-    Utils::JsonArrayValue *imp = ((imp0 != 0) ? imp0->toArray() : 0);
-    if (imp != 0) {
+    Utils::JsonArrayValue *imp = ((imp0 != nullptr) ? imp0->toArray() : nullptr);
+    if (imp != nullptr) {
         foreach (Utils::JsonValue *v, imp->elements()) {
-            Utils::JsonStringValue *impStr = ((v != 0) ? v->toString() : 0);
-            if (impStr != 0) {
+            Utils::JsonStringValue *impStr = ((v != nullptr) ? v->toString() : nullptr);
+            if (impStr != nullptr) {
                 trie.insert(impStr->value());
             } else {
                 res.append(QString::fromLatin1("Expected all elements of array in property \"%1\" "
@@ -256,7 +249,7 @@ bool QmlBundle::readFrom(QString path, QStringList *errors)
         return false;
     }
     JsonObjectValue *config = JsonValue::create(QString::fromUtf8(f.readAll()), &pool)->toObject();
-    if (config == 0) {
+    if (config == nullptr) {
         if (errors)
             (*errors) << QString::fromLatin1("Could not parse json object in file at %1 .").arg(path);
         return false;
@@ -264,8 +257,8 @@ bool QmlBundle::readFrom(QString path, QStringList *errors)
     QStringList errs;
     if (config->hasMember(QLatin1String("name"))) {
         JsonValue *n0 = config->member(QLatin1String("name"));
-        JsonStringValue *n = ((n0 != 0) ? n0->toString() : 0);
-        if (n != 0)
+        JsonStringValue *n = ((n0 != nullptr) ? n0->toString() : nullptr);
+        if (n != nullptr)
             m_name = n->value();
         else
             errs.append(QString::fromLatin1("Property \"name\" in QmlBundle at %1 is expected "

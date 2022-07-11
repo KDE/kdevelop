@@ -44,6 +44,7 @@ protected:
     using Visitor::visit;
 
     bool preVisit(AST::Node *node) override;
+    bool visit(AST::TemplateLiteral *node) override;
     bool visit(AST::UiPublicMember *node) override;
     bool visit(AST::UiScriptBinding *node) override;
     bool visit(AST::UiObjectDefinition *node) override;
@@ -51,8 +52,9 @@ protected:
     bool visit(AST::FunctionDeclaration *node) override;
     bool visit(AST::FunctionExpression *node) override;
 
+    void throwRecursionDepthError() override;
 private:
-    bool containsOffset(AST::SourceLocation start, AST::SourceLocation end);
+    bool containsOffset(SourceLocation start, SourceLocation end);
 
     QList<AST::Node *> _result;
     Document::Ptr _doc;

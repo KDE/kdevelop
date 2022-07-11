@@ -434,7 +434,7 @@ Stack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expres
         case QmlJSGrammar::T_LBRACE:
         case QmlJSGrammar::T_LBRACKET:
         case QmlJSGrammar::T_LPAREN:
-            entry.startPosition = lexer.tokenEndColumn() - 1;
+            entry.startPosition = lexer.tokenStartColumn() + lexer.tokenLength() - 1;
             entry.operatorStart = entry.startPosition;
             entry.operatorEnd = entry.startPosition;
             entry.commas = 0;
@@ -460,7 +460,7 @@ Stack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expres
             // so that "A = foo." can know that attributes of foo having the same
             // type as A should be highlighted.
             stack.top().operatorStart = lexer.tokenStartColumn() - 1;
-            stack.top().operatorEnd = lexer.tokenEndColumn() - 1;
+            stack.top().operatorEnd = lexer.tokenStartColumn() + lexer.tokenLength() - 1;
             break;
         }
     }

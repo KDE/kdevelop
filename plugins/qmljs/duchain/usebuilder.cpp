@@ -83,7 +83,7 @@ bool UseBuilder::visit(QmlJS::AST::UiPublicMember* node)
 {
     // node->memberType can contain a type name (if node is a property), use it
     DeclarationPointer decl = QmlJS::getDeclaration(
-        QualifiedIdentifier(node->memberTypeName().toString()),
+        QualifiedIdentifier(node->memberType->name.toString()),
         currentContext()
     );
 
@@ -114,3 +114,5 @@ void UseBuilder::useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeI
         );
     }
 }
+
+void UseBuilder::throwRecursionDepthError() { }

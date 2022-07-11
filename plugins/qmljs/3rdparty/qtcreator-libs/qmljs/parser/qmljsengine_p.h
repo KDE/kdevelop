@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2021 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
@@ -37,8 +37,9 @@
 //
 
 #include "qmljsglobal_p.h"
-#include "qmljsastfwd_p.h"
-#include "qmljsmemorypool_p.h"
+#include "qmljs/parser/qmljssourcelocation_p.h"
+
+#include "qmljs/parser/qmljsmemorypool_p.h"
 
 #include <QString>
 #include <QSet>
@@ -49,63 +50,77 @@ QT_QML_BEGIN_NAMESPACE
 namespace QmlJS {
 
 class Lexer;
-class Directives;
 class MemoryPool;
 
-class QML_PARSER_EXPORT DiagnosticMessage
-{
+class QML_PARSER_EXPORT Directives {
 public:
-    DiagnosticMessage()
-        : kind(Severity::Error) {}
+    virtual ~Directives() {}
 
-    DiagnosticMessage(Severity::Enum kind, const AST::SourceLocation &loc, const QString &message)
-        : kind(kind), loc(loc), message(message) {}
+    virtual void pragmaLibrary()
+    {
+    }
 
-    bool isWarning() const
-    { return kind == Severity::Warning; }
+    virtual void importFile(const QString &jsfile, const QString &module, int line, int column)
+    {
+        Q_UNUSED(jsfile);
+        Q_UNUSED(module);
+        Q_UNUSED(line);
+        Q_UNUSED(column);
+    }
 
-    bool isError() const
-    { return kind == Severity::Error; }
-
-    Severity::Enum kind;
-    AST::SourceLocation loc;
-    QString message;
+    virtual void importModule(const QString &uri, const QString &version, const QString &module, int line, int column)
+    {
+        Q_UNUSED(uri);
+        Q_UNUSED(version);
+        Q_UNUSED(module);
+        Q_UNUSED(line);
+        Q_UNUSED(column);
+    }
 };
 
-class QML_PARSER_EXPORT Engine
+class Engine
 {
-    Lexer *_lexer;
-    Directives *_directives;
+    Lexer *_lexer = nullptr;
+    Directives *_directives = nullptr;
     MemoryPool _pool;
-    QList<AST::SourceLocation> _comments;
-    QString _extraCode;
+    QList<SourceLocation> _comments;
+    QStringList _extraCode;
     QString _code;
 
 public:
-    Engine();
-    ~Engine();
-
-    void setCode(const QString &code);
+    void setCode(const QString &code) { _code = code; }
     const QString &code() const { return _code; }
 
-    void addComment(int pos, int len, int line, int col);
-    QList<AST::SourceLocation> comments() const;
+    void addComment(int pos, int len, int line, int col)
+    {
+        if (len > 0)
+            _comments.append(QmlJS::SourceLocation(pos, len, line, col));
+    }
 
-    Lexer *lexer() const;
-    void setLexer(Lexer *lexer);
+    QList<SourceLocation> comments() const { return _comments; }
 
-    Directives *directives() const;
-    void setDirectives(Directives *directives);
+    Lexer *lexer() const { return _lexer; }
+    void setLexer(Lexer *lexer) { _lexer = lexer; }
 
-    MemoryPool *pool();
+    Directives *directives() const { return _directives; }
+    void setDirectives(Directives *directives) { _directives = directives; }
 
-    inline QStringRef midRef(int position, int size) { return _code.midRef(position, size); }
+    MemoryPool *pool() { return &_pool; }
+    const MemoryPool *pool() const { return &_pool; }
 
-    QStringRef newStringRef(const QString &s);
-    QStringRef newStringRef(const QChar *chars, int size);
+    QStringView midRef(int position, int size) { return QStringView{_code}.mid(position, size); }
+
+    QStringView newStringRef(const QString &text)
+    {
+        _extraCode.append(text);
+        return QStringView{_extraCode.last()};
+    }
+
+    QStringView newStringRef(const QChar *chars, int size)
+    {
+        return newStringRef(QString(chars, size));
+    }
 };
-
-double integerFromString(const char *buf, int size, int radix);
 
 } // end of namespace QmlJS
 

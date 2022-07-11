@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2021 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
@@ -44,7 +44,7 @@
 
 #  ifdef QMLJS_LIBRARY
 #    define QML_PARSER_EXPORT Q_DECL_EXPORT
-#  elif QML_BUILD_STATIC_LIB
+#  elif QMLJS_STATIC_LIBRARY
 #    define QML_PARSER_EXPORT
 #  else
 #    define QML_PARSER_EXPORT Q_DECL_IMPORT

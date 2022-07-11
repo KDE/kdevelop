@@ -31,11 +31,11 @@
 #include <qmljs/parser/qmljsastfwd_p.h>
 
 #include <languageutils/fakemetaobject.h>
+#include <utils/porting.h>
 
 #include <QFileInfoList>
 #include <QHash>
 #include <QList>
-#include <QMutex>
 #include <QSet>
 #include <QSharedPointer>
 #include <QString>
@@ -163,163 +163,163 @@ template <typename RetTy> const RetTy *value_cast(const Value *)
 template <> Q_INLINE_TEMPLATE const NullValue *value_cast(const Value *v)
 {
     if (v) return v->asNullValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const UndefinedValue *value_cast(const Value *v)
 {
     if (v) return v->asUndefinedValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const UnknownValue *value_cast(const Value *v)
 {
     if (v) return v->asUnknownValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const NumberValue *value_cast(const Value *v)
 {
     if (v) return v->asNumberValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const IntValue *value_cast(const Value *v)
 {
     if (v) return v->asIntValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const RealValue *value_cast(const Value *v)
 {
     if (v) return v->asRealValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const BooleanValue *value_cast(const Value *v)
 {
     if (v) return v->asBooleanValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const StringValue *value_cast(const Value *v)
 {
     if (v) return v->asStringValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const UrlValue *value_cast(const Value *v)
 {
     if (v) return v->asUrlValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ObjectValue *value_cast(const Value *v)
 {
     if (v) return v->asObjectValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ASTFunctionValue *value_cast(const Value *v)
 {
     if (v) return v->asAstFunctionValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const FunctionValue *value_cast(const Value *v)
 {
     if (v) return v->asFunctionValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const Reference *value_cast(const Value *v)
 {
     if (v) return v->asReference();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ColorValue *value_cast(const Value *v)
 {
     if (v) return v->asColorValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const AnchorLineValue *value_cast(const Value *v)
 {
     if (v) return v->asAnchorLineValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const CppComponentValue *value_cast(const Value *v)
 {
     if (v) return v->asCppComponentValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ASTObjectValue *value_cast(const Value *v)
 {
     if (v) return v->asAstObjectValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const QmlEnumValue *value_cast(const Value *v)
 {
     if (v) return v->asQmlEnumValue();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const QmlPrototypeReference *value_cast(const Value *v)
 {
     if (v) return v->asQmlPrototypeReference();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ASTPropertyReference *value_cast(const Value *v)
 {
     if (v) return v->asAstPropertyReference();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const Internal::QtObjectPrototypeReference *value_cast(const Value *v)
 {
     if (v) return v->asQtObjectPrototypeReference();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ASTVariableReference *value_cast(const Value *v)
 {
     if (v) return v->asAstVariableReference();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const Function *value_cast(const Value *v)
 {
     if (v) return v->asFunction();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const MetaFunction *value_cast(const Value *v)
 {
     if (v) return v->asMetaFunction();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const JSImportScope *value_cast(const Value *v)
 {
     if (v) return v->asJSImportScope();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const TypeScope *value_cast(const Value *v)
 {
     if (v) return v->asTypeScope();
-    else   return 0;
+    else   return nullptr;
 }
 
 template <> Q_INLINE_TEMPLATE const ASTSignal *value_cast(const Value *v)
 {
     if (v) return v->asAstSignal();
-    else   return 0;
+    else   return nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -480,7 +480,7 @@ class QMLJS_EXPORT PropertyData {
 public:
     const Value *value;
     PropertyInfo propertyInfo;
-    PropertyData(const Value *value = 0,
+    PropertyData(const Value *value = nullptr,
                  PropertyInfo propertyInfo = PropertyInfo(PropertyInfo::Default))
         : value(value), propertyInfo(propertyInfo)
     { }
@@ -508,14 +508,15 @@ public:
     virtual void processMembers(MemberProcessor *processor) const;
 
     virtual void setMember(const QString &name, const Value *value);
+    virtual void setMember(QStringView name, const Value *value);
     virtual void setPropertyInfo(const QString &name, const PropertyInfo &propertyInfo);
     virtual void removeMember(const QString &name);
 
     virtual const Value *lookupMember(const QString &name, const Context *context,
-                                      const ObjectValue **foundInObject = 0,
+                                      const ObjectValue **foundInObject = nullptr,
                                       bool examinePrototypes = true) const;
     virtual const Value *lookupMember(const QString &name, const ContextPtr &context,
-                              const ObjectValue **foundInObject = 0,
+                              const ObjectValue **foundInObject = nullptr,
                               bool examinePrototypes = true) const
     { return lookupMember(name, context.data(), foundInObject, examinePrototypes); }
 
@@ -524,10 +525,6 @@ public:
     void accept(ValueVisitor *visitor) const override;
     QString originId() const
     { return m_originId; }
-
-
-private:
-    bool checkPrototype(const ObjectValue *prototype, QSet<const ObjectValue *> *processed) const;
 
 private:
     ValueOwner *m_valueOwner;
@@ -619,8 +616,8 @@ public:
     bool hasLocalProperty(const QString &typeName) const;
     bool hasProperty(const QString &typeName) const;
 
-    LanguageUtils::FakeMetaEnum getEnum(const QString &typeName, const CppComponentValue **foundInScope = 0) const;
-    const QmlEnumValue *getEnumValue(const QString &typeName, const CppComponentValue **foundInScope = 0) const;
+    LanguageUtils::FakeMetaEnum getEnum(const QString &typeName, const CppComponentValue **foundInScope = nullptr) const;
+    const QmlEnumValue *getEnumValue(const QString &typeName, const CppComponentValue **foundInScope = nullptr) const;
 
     const ObjectValue *signalScope(const QString &signalName) const;
 protected:
@@ -738,7 +735,7 @@ public:
     bool operator ==(const FakeMetaObjectWithOrigin &o) const;
 };
 
-QMLJS_EXPORT uint qHash(const FakeMetaObjectWithOrigin &fmoo);
+QMLJS_EXPORT Utils::QHashValueType qHash(const FakeMetaObjectWithOrigin &fmoo);
 
 class QMLJS_EXPORT CppQmlTypes
 {
@@ -884,14 +881,14 @@ private:
 
 class QMLJS_EXPORT ASTVariableReference: public Reference
 {
-    AST::VariableDeclaration *m_ast;
+    AST::PatternElement *m_ast;
     const Document *m_doc;
 
 public:
-    ASTVariableReference(AST::VariableDeclaration *ast, const Document *doc, ValueOwner *valueOwner);
+    ASTVariableReference(AST::PatternElement *ast, const Document *doc, ValueOwner *valueOwner);
     ~ASTVariableReference();
     const ASTVariableReference *asAstVariableReference() const override;
-    const AST::VariableDeclaration *ast() const;
+    const AST::PatternElement *ast() const;
 private:
     const Value *value(ReferenceContext *referenceContext) const override;
     bool getSourceLocation(QString *fileName, int *line, int *column) const override;
@@ -999,11 +996,11 @@ public:
     ImportInfo();
 
     static ImportInfo moduleImport(QString uri, LanguageUtils::ComponentVersion version,
-                                   const QString &as, AST::UiImport *ast = 0);
+                                   const QString &as, AST::UiImport *ast = nullptr);
     static ImportInfo pathImport(const QString &docPath, const QString &path,
                                  LanguageUtils::ComponentVersion version,
-                                 const QString &as, AST::UiImport *ast = 0);
-    static ImportInfo invalidImport(AST::UiImport *ast = 0);
+                                 const QString &as, AST::UiImport *ast = nullptr);
+    static ImportInfo invalidImport(AST::UiImport *ast = nullptr);
     static ImportInfo implicitDirectoryImport(const QString &directory);
     static ImportInfo qrcDirectoryImport(const QString &directory);
 
@@ -1037,6 +1034,7 @@ class QMLJS_EXPORT Import {
 public:
     Import();
     Import(const Import &other);
+    Import &operator=(const Import &other);
 
     // const!
     ObjectValue *object;
@@ -1057,7 +1055,7 @@ public:
     TypeScope(const Imports *imports, ValueOwner *valueOwner);
 
     virtual const Value *lookupMember(const QString &name, const Context *context,
-                                      const ObjectValue **foundInObject = 0,
+                                      const ObjectValue **foundInObject = nullptr,
                                       bool examinePrototypes = true) const override;
     void processMembers(MemberProcessor *processor) const override;
     const TypeScope *asTypeScope() const override;
@@ -1071,7 +1069,7 @@ public:
     JSImportScope(const Imports *imports, ValueOwner *valueOwner);
 
     virtual const Value *lookupMember(const QString &name, const Context *context,
-                                      const ObjectValue **foundInObject = 0,
+                                      const ObjectValue **foundInObject = nullptr,
                                       bool examinePrototypes = true) const override;
     void processMembers(MemberProcessor *processor) const override;
     const JSImportScope *asJSImportScope() const override;
@@ -1092,9 +1090,12 @@ public:
     bool importFailed() const;
 
     const QList<Import> &all() const;
+    const ObjectValue *aliased(const QString &name) const;
 
     const TypeScope *typeScope() const;
     const JSImportScope *jsImportScope() const;
+
+    const ObjectValue *resolveAliasAndMarkUsed(const QString &name) const;
 
 #ifdef QT_DEBUG
     void dump() const;
@@ -1104,6 +1105,7 @@ private:
     // holds imports in the order they appeared,
     // lookup order is back to front
     QList<Import> m_imports;
+    QHash<QString, ObjectValue *> m_aliased;
     TypeScope *m_typeScope;
     JSImportScope *m_jsImportScope;
     bool m_importFailed;

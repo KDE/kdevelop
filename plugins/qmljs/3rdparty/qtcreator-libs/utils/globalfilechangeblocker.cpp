@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2019 Orgad Shaneh <orgads@gmail.com>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
@@ -23,47 +23,48 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "globalfilechangeblocker.h"
+#include "qtcassert.h"
 
-#include <QtCore/qurl.h>
-#include <QtCore/qstring.h>
+#include <QApplication>
 
-QT_BEGIN_NAMESPACE
+namespace Utils {
 
-// ### Qt 6: should this be called QmlMessage, since it can have a message type?
-class QDebug;
-class QmlErrorPrivate;
-class QmlError
+GlobalFileChangeBlocker::GlobalFileChangeBlocker()
 {
-public:
-    QmlError();
-    QmlError(const QmlError &);
-    QmlError &operator=(const QmlError &);
-    ~QmlError();
+    m_blockedState = QApplication::applicationState() != Qt::ApplicationActive;
+    qApp->installEventFilter(this);
+}
 
-    bool isValid() const;
+GlobalFileChangeBlocker *GlobalFileChangeBlocker::instance()
+{
+    static GlobalFileChangeBlocker blocker;
+    return &blocker;
+}
 
-    QUrl url() const;
-    void setUrl(const QUrl &);
-    QString description() const;
-    void setDescription(const QString &);
-    int line() const;
-    void setLine(int);
-    int column() const;
-    void setColumn(int);
-    QObject *object() const;
-    void setObject(QObject *);
-    QtMsgType messageType() const;
-    void setMessageType(QtMsgType messageType);
+void GlobalFileChangeBlocker::forceBlocked(bool blocked)
+{
+    if (blocked)
+        ++m_forceBlocked;
+    else if (QTC_GUARD(m_forceBlocked > 0))
+        --m_forceBlocked;
+    emitIfChanged();
+}
 
-    QString toString() const;
-private:
-    QmlErrorPrivate *d;
-};
+bool GlobalFileChangeBlocker::eventFilter(QObject *obj, QEvent *e)
+{
+    if (obj == qApp && e->type() == QEvent::ApplicationStateChange)
+        emitIfChanged();
+    return false;
+}
 
-QDebug operator<<(QDebug debug, const QmlError &error);
+void GlobalFileChangeBlocker::emitIfChanged()
+{
+    const bool blocked = m_forceBlocked || (QApplication::applicationState() != Qt::ApplicationActive);
+    if (blocked != m_blockedState) {
+        emit stateChanged(blocked);
+        m_blockedState = blocked;
+    }
+}
 
-Q_DECLARE_TYPEINFO(QmlError, Q_MOVABLE_TYPE);
-
-QT_END_NAMESPACE
-
+} // namespace Utils

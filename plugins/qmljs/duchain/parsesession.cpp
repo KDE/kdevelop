@@ -28,7 +28,7 @@ IndexedString ParseSession::languageString()
     return langString;
 }
 
-bool isSorted(const QList<QmlJS::AST::SourceLocation>& locations)
+bool isSorted(const QList<QmlJS::SourceLocation>& locations)
 {
     if (locations.size() <= 1) {
         return true;
@@ -99,7 +99,9 @@ void ParseSession::addProblem(QmlJS::AST::Node* node,
     p->setDescription(message);
     p->setSeverity(severity);
     p->setSource(IProblem::SemanticAnalysis);
-    p->setFinalLocation(DocumentRange(m_url, editorFindRange(node, node).castToSimpleRange()));
+    if (node) {
+        p->setFinalLocation(DocumentRange(m_url, editorFindRange(node, node).castToSimpleRange()));
+    }
 
     m_problems << p;
 }
@@ -122,7 +124,7 @@ QList<ProblemPointer> ParseSession::problems() const
     return problems;
 }
 
-QString ParseSession::symbolAt(const QmlJS::AST::SourceLocation& location) const
+QString ParseSession::symbolAt(const QmlJS::SourceLocation& location) const
 {
     return m_doc->source().mid(location.offset, location.length);
 }
@@ -132,16 +134,16 @@ QmlJS::Dialect ParseSession::language() const
     return m_doc->language();
 }
 
-bool compareSourceLocation(const QmlJS::AST::SourceLocation& l,
-                           const QmlJS::AST::SourceLocation& r)
+bool compareSourceLocation(const QmlJS::SourceLocation& l,
+                           const QmlJS::SourceLocation& r)
 {
     return l.begin() < r.begin();
 }
 
-QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& location) const
+QString ParseSession::commentForLocation(const QmlJS::SourceLocation& location) const
 {
     // find most recent comment in sorted list of comments
-    const QList< QmlJS::AST::SourceLocation >& comments = m_doc->engine()->comments();
+    const QList< QmlJS::SourceLocation >& comments = m_doc->engine()->comments();
     auto it = std::lower_bound(
         comments.constBegin(),
         comments.constEnd(),
@@ -165,22 +167,22 @@ QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& locat
     return formatComment(symbolAt(*it));
 }
 
-RangeInRevision ParseSession::locationToRange(const QmlJS::AST::SourceLocation& location) const
+RangeInRevision ParseSession::locationToRange(const QmlJS::SourceLocation& location) const
 {
     const int linesInLocation = m_doc->source().midRef(location.offset, location.length).count(QLatin1Char('\n'));
     return RangeInRevision(location.startLine - 1, location.startColumn - 1,
                            location.startLine - 1 + linesInLocation, location.startColumn - 1 + location.length);
 }
 
-RangeInRevision ParseSession::locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
-                                               const QmlJS::AST::SourceLocation& locationTo) const
+RangeInRevision ParseSession::locationsToRange(const QmlJS::SourceLocation& locationFrom,
+                                               const QmlJS::SourceLocation& locationTo) const
 {
     return RangeInRevision(locationToRange(locationFrom).start,
                            locationToRange(locationTo).end);
 }
 
-RangeInRevision ParseSession::locationsToInnerRange(const QmlJS::AST::SourceLocation& locationFrom,
-                                                    const QmlJS::AST::SourceLocation& locationTo) const
+RangeInRevision ParseSession::locationsToInnerRange(const QmlJS::SourceLocation& locationFrom,
+                                                    const QmlJS::SourceLocation& locationTo) const
 {
     return RangeInRevision(locationToRange(locationFrom).end,
                            locationToRange(locationTo).start);

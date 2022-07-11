@@ -245,7 +245,7 @@ Declaration* getOwnerOfContext(const DUContext* context)
     }
 }
 
-RangeInRevision emptyRangeOnLine(const AST::SourceLocation& location)
+RangeInRevision emptyRangeOnLine(const SourceLocation& location)
 {
     return RangeInRevision(location.startLine - 1, 0, location.startLine - 1, 0);
 }

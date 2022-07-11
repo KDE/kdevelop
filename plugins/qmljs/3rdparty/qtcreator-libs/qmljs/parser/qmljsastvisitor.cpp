@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2021 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
@@ -29,11 +29,13 @@ QT_QML_BEGIN_NAMESPACE
 
 namespace QmlJS { namespace AST {
 
-Visitor::Visitor()
+Visitor::Visitor(quint16 parentRecursionDepth) : BaseVisitor(parentRecursionDepth)
 {
 }
 
-Visitor::~Visitor()
+BaseVisitor::BaseVisitor(quint16 parentRecursionDepth) : m_recursionDepth(parentRecursionDepth) {}
+
+BaseVisitor::~BaseVisitor()
 {
 }
 

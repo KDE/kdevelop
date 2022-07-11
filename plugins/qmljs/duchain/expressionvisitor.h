@@ -54,8 +54,8 @@ protected:
     bool visit(QmlJS::AST::TrueLiteral* node) override;
     bool visit(QmlJS::AST::FalseLiteral* node) override;
 
-    bool visit(QmlJS::AST::ArrayLiteral* node) override;
-    bool visit(QmlJS::AST::ObjectLiteral* node) override;
+    bool visit(QmlJS::AST::ArrayPattern* node) override;
+    bool visit(QmlJS::AST::ObjectPattern* node) override;
     bool visit(QmlJS::AST::ArrayMemberExpression* node) override;
     bool visit(QmlJS::AST::FieldMemberExpression* node) override;
 
@@ -69,6 +69,7 @@ protected:
     bool visit(QmlJS::AST::NewMemberExpression* node) override;
 
     void postVisit(QmlJS::AST::Node* node) override;
+    void throwRecursionDepthError() override;
 
 private:
     using KDevelop::DynamicLanguageExpressionVisitor::encounter;
@@ -85,7 +86,7 @@ private:
     bool encounterGlobalDeclaration(const KDevelop::QualifiedIdentifier& id);
 
     void encounterFieldMember(const QString &name);
-    void encounterObjectAtLocation(const QmlJS::AST::SourceLocation &location);
+    void encounterObjectAtLocation(const QmlJS::SourceLocation &location);
     void instantiateCurrentDeclaration();   /*!< @brief Encounter a StructureType whose declaration is currentDeclaration() */
 
 private:

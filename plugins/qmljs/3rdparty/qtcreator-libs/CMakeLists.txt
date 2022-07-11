@@ -7,34 +7,38 @@ remove_definitions(
 )
 
 qt5_wrap_ui(uifiles_SRCS
-	utils/projectintropage.ui
-	utils/filewizardpage.ui
-	utils/newclasswidget.ui
+    utils/projectintropage.ui
+    utils/filewizardpage.ui
+    utils/newclasswidget.ui
 )
 
 add_library(kdevqtc-qmlsupport STATIC
-	${uifiles_SRCS}
-	languageutils/componentversion.cpp
-	languageutils/fakemetaobject.cpp
-	qmljs/parser/qmldirparser.cpp
-	qmljs/parser/qmlerror.cpp
-	qmljs/parser/qmljsast.cpp
-	qmljs/parser/qmljsastvisitor.cpp
-	qmljs/parser/qmljsengine_p.cpp
-	qmljs/parser/qmljsgrammar.cpp
-	qmljs/parser/qmljslexer.cpp
-	qmljs/parser/qmljsparser.cpp
-	qmljs/qmljsdocument.cpp
-	qmljs/qmljsutils.cpp
-	utils/changeset.cpp
-	utils/fileutils.cpp
-	utils/qtcassert.cpp
-	utils/savefile.cpp
-	utils/json.cpp
-	utils/filesystemwatcher.cpp
-	utils/environment.cpp
-	utils/hostosinfo.cpp
-	utils/runextensions.cpp
+    ${uifiles_SRCS}
+    languageutils/componentversion.cpp
+    languageutils/fakemetaobject.cpp
+    qmljs/parser/qmldirparser.cpp
+    qmljs/parser/qmljsast.cpp
+    qmljs/parser/qmljsastvisitor.cpp
+    qmljs/parser/qmljsgrammar.cpp
+    qmljs/parser/qmljslexer.cpp
+    qmljs/parser/qmljsparser.cpp
+    qmljs/qmljsdocument.cpp
+    qmljs/qmljsutils.cpp
+    utils/changeset.cpp
+    utils/fileutils.cpp
+    utils/qtcassert.cpp
+    utils/savefile.cpp
+    utils/json.cpp
+    utils/filesystemwatcher.cpp
+    utils/environment.cpp
+    utils/hostosinfo.cpp
+    utils/runextensions.cpp
+    utils/qrcparser.cpp
+    utils/globalfilechangeblocker.cpp
+    utils/filepath.cpp
+    utils/futuresynchronizer.cpp
+    utils/namevaluedictionary.cpp
+    utils/namevalueitem.cpp
 
     qmljs/persistenttrie.cpp
     qmljs/qmljsbind.cpp
@@ -46,13 +50,11 @@ add_library(kdevqtc-qmlsupport STATIC
     qmljs/qmljsinterpreter.cpp
     qmljs/qmljsmodelmanagerinterface.cpp
     qmljs/qmljsplugindumper.cpp
-    qmljs/qmljsqrcparser.cpp
     qmljs/qmljsscopeastpath.cpp
     qmljs/qmljsscopebuilder.cpp
     qmljs/qmljsscopechain.cpp
     qmljs/qmljstypedescriptionreader.cpp
     qmljs/qmljsvalueowner.cpp
-    qmljs/qmljsviewercontext.cpp
 )
 
 if (APPLE) 
@@ -80,7 +82,7 @@ if (MSVC)
     target_compile_options(kdevqtc-qmlsupport PRIVATE "/wd4996") # C4996: warns about deprecated declarations
 endif()
 
-target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_LIBRARY -DUTILS_LIBRARY -DQT_CREATOR -DQML_BUILD_STATIC_LIB)
+target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_LIBRARY -DUTILS_LIBRARY -DQT_CREATOR -DQML_BUILD_STATIC_LIB QMLJS_STATIC_LIBRARY)
 # add as SYSTEM include dir so compiler does not emit warnings for the lib headers
 target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # optional.hpp needs -fexceptions

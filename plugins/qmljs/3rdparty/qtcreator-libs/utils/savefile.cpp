@@ -24,8 +24,12 @@
 ****************************************************************************/
 
 #include "savefile.h"
+
+#include "filepath.h"
 #include "qtcassert.h"
-#include "fileutils.h"
+
+#include <QTemporaryFile>
+
 #ifdef Q_OS_WIN
 #  include <windows.h>
 #  include <io.h>
@@ -36,10 +40,10 @@
 
 namespace Utils {
 
-QFile::Permissions SaveFile::m_umask = 0;
+static QFile::Permissions m_umask;
 
 SaveFile::SaveFile(const QString &filename) :
-    m_finalFileName(filename), m_finalized(true)
+    m_finalFileName(filename)
 {
 }
 
@@ -118,8 +122,7 @@ bool SaveFile::commit()
         return false;
     }
 
-    QString finalFileName
-            = FileUtils::resolveSymlinks(FileName::fromString(m_finalFileName)).toString();
+    QString finalFileName = FilePath::fromString(m_finalFileName).resolveSymlinks().toString();
 
 #ifdef Q_OS_WIN
     // Release the file lock
@@ -186,7 +189,8 @@ bool SaveFile::commit()
         const QString &renameError = m_tempFile->errorString();
         m_tempFile->remove();
         setErrorString(renameError);
-        result = false;
+        QFile::rename(backupName, finalFileName); // rollback to backup if possible ...
+        return false; // ... or keep the backup copy at least
     }
 
     QFile::remove(backupName);
@@ -206,15 +210,15 @@ void SaveFile::initializeUmask()
     mode_t mask = umask(0); // get current umask
     umask(mask); // set it back
 
-    m_umask = ((mask & S_IRUSR) ? QFile::ReadOwner  : QFlags<QFile::Permission>(0))
-            | ((mask & S_IWUSR) ? QFile::WriteOwner : QFlags<QFile::Permission>(0))
-            | ((mask & S_IXUSR) ? QFile::ExeOwner   : QFlags<QFile::Permission>(0))
-            | ((mask & S_IRGRP) ? QFile::ReadGroup  : QFlags<QFile::Permission>(0))
-            | ((mask & S_IWGRP) ? QFile::WriteGroup : QFlags<QFile::Permission>(0))
-            | ((mask & S_IXGRP) ? QFile::ExeGroup   : QFlags<QFile::Permission>(0))
-            | ((mask & S_IROTH) ? QFile::ReadOther  : QFlags<QFile::Permission>(0))
-            | ((mask & S_IWOTH) ? QFile::WriteOther : QFlags<QFile::Permission>(0))
-            | ((mask & S_IXOTH) ? QFile::ExeOther   : QFlags<QFile::Permission>(0));
+    m_umask = ((mask & S_IRUSR) ? QFile::ReadOwner  : QFlags<QFile::Permission>())
+            | ((mask & S_IWUSR) ? QFile::WriteOwner : QFlags<QFile::Permission>())
+            | ((mask & S_IXUSR) ? QFile::ExeOwner   : QFlags<QFile::Permission>())
+            | ((mask & S_IRGRP) ? QFile::ReadGroup  : QFlags<QFile::Permission>())
+            | ((mask & S_IWGRP) ? QFile::WriteGroup : QFlags<QFile::Permission>())
+            | ((mask & S_IXGRP) ? QFile::ExeGroup   : QFlags<QFile::Permission>())
+            | ((mask & S_IROTH) ? QFile::ReadOther  : QFlags<QFile::Permission>())
+            | ((mask & S_IWOTH) ? QFile::WriteOther : QFlags<QFile::Permission>())
+            | ((mask & S_IXOTH) ? QFile::ExeOther   : QFlags<QFile::Permission>());
 #endif
 }
 

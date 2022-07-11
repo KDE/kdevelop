@@ -29,7 +29,7 @@ using namespace KDevelop;
     struct QMLAttributeValue
     {
         QString value;
-        AST::SourceLocation location;
+        SourceLocation location;
     };
 
     /**
@@ -90,7 +90,7 @@ using namespace KDevelop;
     /**
      * Build a zero-length range on the line of the given SourceLocation
      */
-    KDEVQMLJSDUCHAIN_EXPORT RangeInRevision emptyRangeOnLine(const AST::SourceLocation& location);
+    KDEVQMLJSDUCHAIN_EXPORT RangeInRevision emptyRangeOnLine(const SourceLocation& location);
 
     /**
      * Import the internal context of a declaration in a context.

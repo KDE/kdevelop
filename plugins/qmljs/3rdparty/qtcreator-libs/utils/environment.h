@@ -25,125 +25,156 @@
 
 #pragma once
 
-#include "fileutils.h"
-#include "hostosinfo.h"
 #include "utils_global.h"
 
-#include <QMap>
-#include <QStringList>
+#include "environmentfwd.h"
+#include "filepath.h"
+#include "namevaluedictionary.h"
+#include "optional.h"
 
 #include <functional>
 
-QT_FORWARD_DECLARE_CLASS(QDebug)
-QT_FORWARD_DECLARE_CLASS(QProcessEnvironment)
+QT_BEGIN_NAMESPACE
+class QProcessEnvironment;
+QT_END_NAMESPACE
 
 namespace Utils {
-class Environment;
 
-class QTCREATOR_UTILS_EXPORT EnvironmentItem
+class QTCREATOR_UTILS_EXPORT Environment final
 {
 public:
-    enum Operation { Set, Unset, Prepend, Append };
+    Environment() : m_dict(HostOsInfo::hostOs()) {}
+    explicit Environment(OsType osType) : m_dict(osType) {}
+    explicit Environment(const QStringList &env, OsType osType = HostOsInfo::hostOs())
+        : m_dict(env, osType) {}
+    explicit Environment(const NameValuePairs &nameValues) : m_dict(nameValues) {}
+    explicit Environment(const NameValueDictionary &dict) : m_dict(dict) {}
 
-    EnvironmentItem(const QString &n, const QString &v, Operation op = Set)
-            : name(n), value(v), operation(op)
-    {}
+    QString value(const QString &key) const { return m_dict.value(key); }
+    bool hasKey(const QString &key) const { return m_dict.hasKey(key); }
 
-    void apply(Environment *e) const { apply(e, operation); }
+    void set(const QString &key, const QString &value, bool enabled = true) { m_dict.set(key, value, enabled); }
+    void unset(const QString &key) { m_dict.unset(key); }
+    void modify(const NameValueItems &items) { m_dict.modify(items); }
 
-    QString name;
-    QString value;
-    Operation operation;
+    int isValid() const;
+    void clear() { return m_dict.clear(); }
 
-    bool operator==(const EnvironmentItem &other) const
-    {
-        return operation == other.operation && name == other.name && value == other.value;
-    }
-
-    bool operator!=(const EnvironmentItem &other) const
-    {
-        return !(*this == other);
-    }
-
-    static void sort(QList<EnvironmentItem> *list);
-    static QList<EnvironmentItem> fromStringList(const QStringList &list);
-    static QStringList toStringList(const QList<EnvironmentItem> &list);
-    static QList<EnvironmentItem> itemsFromVariantList(const QVariantList &list);
-    static QVariantList toVariantList(const QList<EnvironmentItem> &list);
-    static EnvironmentItem itemFromVariantList(const QVariantList &list);
-    static QVariantList toVariantList(const EnvironmentItem &item);
-
-private:
-    void apply(Environment *e, Operation op) const;
-};
-
-QTCREATOR_UTILS_EXPORT QDebug operator<<(QDebug debug, const EnvironmentItem &i);
-
-class QTCREATOR_UTILS_EXPORT Environment
-{
-public:
-    typedef QMap<QString, QString>::const_iterator const_iterator;
-
-    explicit Environment(OsType osType = HostOsInfo::hostOs()) : m_osType(osType) {}
-    explicit Environment(const QStringList &env, OsType osType = HostOsInfo::hostOs());
-    static Environment systemEnvironment();
-    static void setupEnglishOutput(Environment *environment);
-    static void setupEnglishOutput(QProcessEnvironment *environment);
-    static void setupEnglishOutput(QStringList *environment);
-
-    QStringList toStringList() const;
+    QStringList toStringList() const { return m_dict.toStringList(); }
     QProcessEnvironment toProcessEnvironment() const;
-    QString value(const QString &key) const;
-    void set(const QString &key, const QString &value);
-    void unset(const QString &key);
-    void modify(const QList<EnvironmentItem> &list);
-    /// Return the Environment changes necessary to modify this into the other environment.
-    QList<EnvironmentItem> diff(const Environment &other, bool checkAppendPrepend = false) const;
-    bool hasKey(const QString &key) const;
-    OsType osType() const;
-
-    QString userName() const;
 
     void appendOrSet(const QString &key, const QString &value, const QString &sep = QString());
     void prependOrSet(const QString &key, const QString &value, const QString &sep = QString());
 
-    void appendOrSetPath(const QString &value);
-    void prependOrSetPath(const QString &value);
+    void appendOrSetPath(const FilePath &value);
+    void prependOrSetPath(const FilePath &value);
 
-    void prependOrSetLibrarySearchPath(const QString &value);
-    void prependOrSetLibrarySearchPaths(const QStringList &values);
+    void prependOrSetLibrarySearchPath(const FilePath &value);
+    void prependOrSetLibrarySearchPaths(const FilePaths &values);
 
-    void clear();
-    int size() const;
+    void setupEnglishOutput();
 
-    QString key(Environment::const_iterator it) const;
-    QString value(Environment::const_iterator it) const;
-
-    Environment::const_iterator constBegin() const;
-    Environment::const_iterator constEnd() const;
-    Environment::const_iterator constFind(const QString &name) const;
-
-    using PathFilter = std::function<bool(const FileName &)>;
-    FileName searchInPath(const QString &executable,
-                          const FileNameList &additionalDirs = FileNameList(),
+    using PathFilter = std::function<bool(const FilePath &)>;
+    FilePath searchInPath(const QString &executable,
+                          const FilePaths &additionalDirs = FilePaths(),
                           const PathFilter &func = PathFilter()) const;
+    FilePath searchInDirectories(const QString &executable,
+                                 const FilePaths &dirs) const;
+    FilePaths findAllInPath(const QString &executable,
+                               const FilePaths &additionalDirs = FilePaths(),
+                               const PathFilter &func = PathFilter()) const;
 
-    FileNameList path() const;
+    FilePaths path() const;
+    FilePaths pathListValue(const QString &varName) const;
     QStringList appendExeExtensions(const QString &executable) const;
 
     bool isSameExecutable(const QString &exe1, const QString &exe2) const;
 
+    QString expandedValueForKey(const QString &key) const;
     QString expandVariables(const QString &input) const;
+    FilePath expandVariables(const FilePath &input) const;
     QStringList expandVariables(const QStringList &input) const;
 
-    bool operator!=(const Environment &other) const;
-    bool operator==(const Environment &other) const;
+    OsType osType() const { return m_dict.osType(); }
+    QString userName() const;
+
+    using const_iterator = NameValueMap::const_iterator; // FIXME: avoid
+    NameValueDictionary toDictionary() const { return m_dict; } // FIXME: avoid
+    NameValueItems diff(const Environment &other, bool checkAppendPrepend = false) const; // FIXME: avoid
+
+    QString key(const_iterator it) const { return m_dict.key(it); } // FIXME: avoid
+    QString value(const_iterator it) const { return m_dict.value(it); } // FIXME: avoid
+    bool isEnabled(const_iterator it) const { return m_dict.isEnabled(it); } // FIXME: avoid
+
+    const_iterator constBegin() const { return m_dict.constBegin(); } // FIXME: avoid
+    const_iterator constEnd() const { return m_dict.constEnd(); } // FIXME: avoid
+    const_iterator constFind(const QString &name) const { return m_dict.constFind(name); } // FIXME: avoid
+
+    friend bool operator!=(const Environment &first, const Environment &second)
+    {
+        return first.m_dict != second.m_dict;
+    }
+
+    friend bool operator==(const Environment &first, const Environment &second)
+    {
+        return first.m_dict == second.m_dict;
+    }
+
+    static Environment systemEnvironment();
+
+    static void modifySystemEnvironment(const EnvironmentItems &list); // use with care!!!
+    static void setSystemEnvironment(const Environment &environment);  // don't use at all!!!
 
 private:
-    FileName searchInDirectory(const QStringList &execs, const FileName &directory,
-                               QSet<FileName> &alreadyChecked) const;
-    QMap<QString, QString> m_values;
-    OsType m_osType;
+    NameValueDictionary m_dict;
+};
+
+class QTCREATOR_UTILS_EXPORT EnvironmentChange final
+{
+public:
+    EnvironmentChange() = default;
+
+    class Item final
+    {
+    public:
+        enum Type {
+            SetSystemEnvironment,
+            SetFixedEnvironment,
+            SetValue,
+            UnsetValue,
+            PrependToPath,
+            AppendToPath,
+        };
+
+        Type type;
+        QVariant data;
+    };
+
+    static EnvironmentChange fromFixedEnvironment(const Environment &fixedEnv);
+
+    void applyToEnvironment(Environment &) const;
+
+    void addSetValue(const QString &key, const QString &value);
+    void addUnsetValue(const QString &key);
+    void addPrependToPath(const FilePaths &values);
+    void addAppendToPath(const FilePaths &values);
+
+private:
+    QList<Item> m_changeItems;
+};
+
+class QTCREATOR_UTILS_EXPORT EnvironmentProvider
+{
+public:
+    QByteArray id;
+    QString displayName;
+    std::function<Environment()> environment;
+
+    static void addProvider(EnvironmentProvider &&provider);
+    static const QVector<EnvironmentProvider> providers();
+    static optional<EnvironmentProvider> provider(const QByteArray &id);
 };
 
 } // namespace Utils
+
+Q_DECLARE_METATYPE(Utils::Environment)

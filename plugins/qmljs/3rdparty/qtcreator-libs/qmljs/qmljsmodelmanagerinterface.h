@@ -28,11 +28,13 @@
 #include "qmljs_global.h"
 #include "qmljsbundle.h"
 #include "qmljsdocument.h"
-#include "qmljsqrcparser.h"
 #include "qmljsdialect.h"
 
 // #include <cplusplus/CppDocument.h>
 #include <utils/environment.h>
+#include <utils/futuresynchronizer.h>
+#include <utils/qrcparser.h>
+#include <utils/filepath.h>
 
 #include <QFuture>
 #include <QHash>
@@ -49,53 +51,38 @@ namespace QmlJS {
 class Snapshot;
 class PluginDumper;
 
-class QMLJS_EXPORT ModelManagerInterface: public QObject
+class QMLJS_EXPORT ModelManagerInterface : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ModelManagerInterface)
 
 public:
+    ModelManagerInterface(ModelManagerInterface &&) = delete;
+    ModelManagerInterface &operator=(ModelManagerInterface &&) = delete;
+
     enum QrcResourceSelector {
         ActiveQrcResources,
         AllQrcResources
     };
 
-    class ProjectInfo
+    struct ProjectInfo
     {
-    public:
-        ProjectInfo()
-            : tryQmlDump(false), qmlDumpHasRelocatableFlag(true)
-        { }
-
-        ProjectInfo(QPointer<ProjectExplorer::Project> project)
-            : project(project)
-            , tryQmlDump(false), qmlDumpHasRelocatableFlag(true)
-        { }
-
-        explicit operator bool() const
-        { return ! project.isNull(); }
-
-        bool isValid() const
-        { return ! project.isNull(); }
-
-        bool isNull() const
-        { return project.isNull(); }
-
-    public: // attributes
         QPointer<ProjectExplorer::Project> project;
         QStringList sourceFiles;
         PathsAndLanguages importPaths;
         QStringList activeResourceFiles;
         QStringList allResourceFiles;
         QHash<QString, QString> resourceFileContents;
+        QStringList applicationDirectories;
+        QHash<QString, QString> moduleMappings; // E.g.: QtQuick.Controls -> MyProject.MyControls
 
         // whether trying to run qmldump makes sense
-        bool tryQmlDump;
-        bool qmlDumpHasRelocatableFlag;
-        QString qmlDumpPath;
-        ::Utils::Environment qmlDumpEnvironment;
+        bool tryQmlDump = false;
+        bool qmlDumpHasRelocatableFlag = true;
+        Utils::FilePath qmlDumpPath;
+        Utils::Environment qmlDumpEnvironment;
 
-        QString qtImportsPath;
-        QString qtQmlPath;
+        Utils::FilePath qtQmlPath;
         QString qtVersionString;
         QmlJS::QmlLanguageBundles activeBundle;
         QmlJS::QmlLanguageBundles extendedBundle;
@@ -104,44 +91,43 @@ public:
     class WorkingCopy
     {
     public:
-        typedef QHash<QString, QPair<QString, int> > Table;
+        using Table = QHash<QString, QPair<QString, int>>;
 
         void insert(const QString &fileName, const QString &source, int revision = 0)
-        { _elements.insert(fileName, {source, revision}); }
+        { m_elements.insert(fileName, {source, revision}); }
 
         bool contains(const QString &fileName) const
-        { return _elements.contains(fileName); }
+        { return m_elements.contains(fileName); }
 
         QString source(const QString &fileName) const
-        { return _elements.value(fileName).first; }
+        { return m_elements.value(fileName).first; }
 
         QPair<QString, int> get(const QString &fileName) const
-        { return _elements.value(fileName); }
+        { return m_elements.value(fileName); }
 
         Table all() const
-        { return _elements; }
+        { return m_elements; }
 
     private:
-        Table _elements;
+        Table m_elements;
     };
 
-    class CppData
+    struct CppData
     {
-    public:
         QList<LanguageUtils::FakeMetaObject::ConstPtr> exportedTypes;
         QHash<QString, QString> contextProperties;
     };
 
-    typedef QHash<QString, CppData> CppDataHash;
-    typedef QHashIterator<QString, CppData> CppDataHashIterator;
+    using CppDataHash = QHash<QString, CppData>;
 
 public:
-    ModelManagerInterface(QObject *parent = 0);
+    ModelManagerInterface(QObject *parent = nullptr);
     ~ModelManagerInterface() override;
 
     static Dialect guessLanguageOfFile(const QString &fileName);
-    static QStringList globPatternsForLanguages(const QList<Dialect> languages);
+    static QStringList globPatternsForLanguages(const QList<Dialect> &languages);
     static ModelManagerInterface *instance();
+    static ModelManagerInterface *instanceForFuture(const QFuture<void> &future);
     static void writeWarning(const QString &msg);
     static WorkingCopy workingCopy();
 
@@ -153,30 +139,30 @@ public:
                            bool emitDocumentOnDiskChanged);
     void fileChangedOnDisk(const QString &path);
     void removeFiles(const QStringList &files);
-    QStringList qrcPathsForFile(const QString &file, const QLocale *locale = 0,
-                                ProjectExplorer::Project *project = 0,
+    QStringList qrcPathsForFile(const QString &file, const QLocale *locale = nullptr,
+                                ProjectExplorer::Project *project = nullptr,
                                 QrcResourceSelector resources = AllQrcResources);
-    QStringList filesAtQrcPath(const QString &path, const QLocale *locale = 0,
-                               ProjectExplorer::Project *project = 0,
+    QStringList filesAtQrcPath(const QString &path, const QLocale *locale = nullptr,
+                               ProjectExplorer::Project *project = nullptr,
                                QrcResourceSelector resources = AllQrcResources);
-    QMap<QString,QStringList> filesInQrcPath(const QString &path,
-                                             const QLocale *locale = 0,
-                                             ProjectExplorer::Project *project = 0,
-                                             bool addDirs = false,
-                                             QrcResourceSelector resources = AllQrcResources);
+    QMap<QString, QStringList> filesInQrcPath(const QString &path,
+                                              const QLocale *locale = nullptr,
+                                              ProjectExplorer::Project *project = nullptr,
+                                              bool addDirs = false,
+                                              QrcResourceSelector resources = AllQrcResources);
+    Utils::FilePath fileToSource(const Utils::FilePath &file);
 
     QList<ProjectInfo> projectInfos() const;
-    ProjectInfo projectInfo(ProjectExplorer::Project *project,
-                            const ModelManagerInterface::ProjectInfo &defaultValue = ProjectInfo()) const;
+    bool containsProject(ProjectExplorer::Project *project) const;
+    ProjectInfo projectInfo(ProjectExplorer::Project *project) const;
     void updateProjectInfo(const ProjectInfo &pinfo, ProjectExplorer::Project *p);
 
-    void updateDocument(QmlJS::Document::Ptr doc);
-    void updateLibraryInfo(const QString &path, const QmlJS::LibraryInfo &info);
+    void updateDocument(const QmlJS::Document::Ptr& doc);
+    void updateLibraryInfo(const Utils::FilePath &path, const QmlJS::LibraryInfo &info);
     void emitDocumentChangedOnDisk(QmlJS::Document::Ptr doc);
     void updateQrcFile(const QString &path);
     ProjectInfo projectInfoForPath(const QString &path) const;
     QList<ProjectInfo> allProjectInfosForPath(const QString &path) const;
-    bool isIdle() const ;
 
     QStringList importPathsNames() const;
     QmlJS::QmlLanguageBundles activeBundles() const;
@@ -188,24 +174,29 @@ public:
     CppDataHash cppData() const;
     LibraryInfo builtins(const Document::Ptr &doc) const;
     ViewerContext completeVContext(const ViewerContext &vCtx,
-                                   const Document::Ptr &doc = Document::Ptr(0)) const;
+                                   const Document::Ptr &doc = Document::Ptr(nullptr)) const;
     ViewerContext defaultVContext(Dialect language = Dialect::Qml,
-                                  const Document::Ptr &doc = Document::Ptr(0),
+                                  const Document::Ptr &doc = Document::Ptr(nullptr),
                                   bool autoComplete = true) const;
+    ViewerContext projectVContext(Dialect language, const Document::Ptr &doc) const;
+
     void setDefaultVContext(const ViewerContext &vContext);
     virtual ProjectInfo defaultProjectInfo() const;
     virtual ProjectInfo defaultProjectInfoForProject(ProjectExplorer::Project *project) const;
 
 
-    // Blocks until all parsing threads are done. Used for testing.
-    void joinAllThreads();
+    // Blocks until all parsing threads are done. Use for testing only!
+    void test_joinAllThreads();
+
+    template <typename T>
+    void addFuture(const QFuture<T> &future) { addFuture(QFuture<void>(future)); }
+    void addFuture(const QFuture<void> &future);
 
     QmlJS::Document::Ptr ensuredGetDocumentForPath(const QString &filePath);
-    static void importScan(QFutureInterface<void> &future,
-                    WorkingCopy workingCopyInternal,
-                    PathsAndLanguages paths,
-                    ModelManagerInterface *modelManager,
-                    bool emitDocChangedOnDisk, bool libOnly = true, bool forceRescan = false);
+    static void importScan(QFutureInterface<void> &future, const WorkingCopy& workingCopyInternal,
+                           const PathsAndLanguages& paths, ModelManagerInterface *modelManager,
+                           bool emitDocChangedOnDisk, bool libOnly = true,
+                           bool forceRescan = false);
 
     virtual void resetCodeModel();
     void removeProjectInfo(ProjectExplorer::Project *project);
@@ -227,25 +218,27 @@ protected:
     virtual QHash<QString,Dialect> languageForSuffix() const;
     virtual void writeMessageInternal(const QString &msg) const;
     virtual WorkingCopy workingCopyInternal() const;
-    virtual void addTaskInternal(QFuture<void> result, const QString &msg, const char *taskId) const;
+    virtual void addTaskInternal(const QFuture<void> &result, const QString &msg,
+                                 const char *taskId) const;
 
     QFuture<void> refreshSourceFiles(const QStringList &sourceFiles,
                                      bool emitDocumentOnDiskChanged);
 
     static void parseLoop(QSet<QString> &scannedPaths, QSet<QString> &newLibraries,
-                          WorkingCopy workingCopyInternal, QStringList files, ModelManagerInterface *modelManager,
+                          const WorkingCopy &workingCopyInternal, QStringList files,
+                          ModelManagerInterface *modelManager,
                           QmlJS::Dialect mainLanguage, bool emitDocChangedOnDisk,
-                          std::function<bool (qreal)> reportProgress);
+                          const std::function<bool(qreal)> &reportProgress);
     static void parse(QFutureInterface<void> &future,
-                      WorkingCopy workingCopyInternal,
+                      const WorkingCopy &workingCopyInternal,
                       QStringList files,
                       ModelManagerInterface *modelManager,
                       QmlJS::Dialect mainLanguage,
                       bool emitDocChangedOnDisk);
-//     static void updateCppQmlTypes(QFutureInterface<void> &futureInterface,
-//                                   ModelManagerInterface *qmlModelManager,
-//                                   CPlusPlus::Snapshot snapshot,
-//                                   QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > documents);
+//     static void updateCppQmlTypes(
+//             QFutureInterface<void> &futureInterface, ModelManagerInterface *qmlModelManager,
+//             const CPlusPlus::Snapshot &snapshot,
+//             const QHash<QString, QPair<CPlusPlus::Document::Ptr, bool>> &documents);
 
     void maybeScan(const PathsAndLanguages &importPaths);
     void updateImportPaths();
@@ -253,43 +246,47 @@ protected:
     void setDefaultProject(const ProjectInfo &pInfo, ProjectExplorer::Project *p);
 
 private:
-    void cleanupFutures();
+    void joinAllThreads(bool cancelOnWait = false);
     void iterateQrcFiles(ProjectExplorer::Project *project,
                          QrcResourceSelector resources,
-                         std::function<void(QrcParser::ConstPtr)> callback);
+                         const std::function<void(Utils::QrcParser::ConstPtr)> &callback);
+    ViewerContext getVContext(const ViewerContext &vCtx, const Document::Ptr &doc, bool limitToProject) const;
 
     mutable QMutex m_mutex;
     QmlJS::Snapshot m_validSnapshot;
     QmlJS::Snapshot m_newestSnapshot;
     PathsAndLanguages m_allImportPaths;
+    QList<Utils::FilePath> m_applicationPaths;
     QStringList m_defaultImportPaths;
     QmlJS::QmlLanguageBundles m_activeBundles;
     QmlJS::QmlLanguageBundles m_extendedBundles;
     QHash<Dialect, QmlJS::ViewerContext> m_defaultVContexts;
-    bool m_shouldScanImports;
+    bool m_shouldScanImports = false;
     QSet<QString> m_scannedPaths;
 
-    QTimer *m_updateCppQmlTypesTimer;
-    QTimer *m_asyncResetTimer;
-//     QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > m_queuedCppDocuments;
+    QTimer *m_updateCppQmlTypesTimer = nullptr;
+    QTimer *m_asyncResetTimer = nullptr;
+//     QHash<QString, QPair<CPlusPlus::Document::Ptr, bool>> m_queuedCppDocuments;
     QFuture<void> m_cppQmlTypesUpdater;
-    QrcCache m_qrcCache;
+    Utils::QrcCache m_qrcCache;
     QHash<QString, QString> m_qrcContents;
 
     CppDataHash m_cppDataHash;
-//     QHash<QString, QList<CPlusPlus::Document::Ptr> > m_cppDeclarationFiles;
+//     QHash<QString, QList<CPlusPlus::Document::Ptr>> m_cppDeclarationFiles;
     mutable QMutex m_cppDataMutex;
 
     // project integration
     QMap<ProjectExplorer::Project *, ProjectInfo> m_projects;
     ProjectInfo m_defaultProjectInfo;
-    ProjectExplorer::Project *m_defaultProject;
+    ProjectExplorer::Project *m_defaultProject = nullptr;
     QMultiHash<QString, ProjectExplorer::Project *> m_fileToProject;
 
-    PluginDumper *m_pluginDumper;
+    PluginDumper *m_pluginDumper = nullptr;
 
-    QList<QFuture<void>> m_futures;
-    bool m_indexerEnabled;
+    mutable QMutex m_futuresMutex;
+    Utils::FutureSynchronizer m_futureSynchronizer;
+
+    bool m_indexerDisabled = false;
 };
 
 } // namespace QmlJS
