@@ -33,7 +33,24 @@ ColumnLimit: 120
 SortIncludes: true
 
 # break before braces on function, namespace and class definitions.
-BreakBeforeBraces: Linux
+#KDevelop overrides BreakBeforeBraces: Linux
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterCaseLabel: false
+    AfterClass: true
+    AfterControlStatement: false
+    AfterEnum: false
+    AfterFunction: true
+    AfterNamespace: false
+    AfterStruct: false
+    AfterUnion: false
+    AfterExternBlock: false
+    BeforeCatch: false
+    BeforeElse: false
+    IndentBraces: false
+    SplitEmptyFunction: true
+    SplitEmptyRecord: true
+    SplitEmptyNamespace: true
 
 # CrlInstruction *a;
 #KDevelop overrides PointerAlignment: Right
