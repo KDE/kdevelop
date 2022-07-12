@@ -70,10 +70,12 @@ AllowShortFunctionsOnASingleLine: Inline
 AlwaysBreakBeforeMultilineStrings: true
 
 # don't move arguments to own lines if they are not all on the same
-BinPackArguments: false
+#KDevelop overrides BinPackArguments: false
+BinPackArguments: true
 
 # don't move parameters to own lines if they are not all on the same
-BinPackParameters: false
+#KDevelop overrides BinPackParameters: false
+BinPackParameters: true
 
 # In case we have an if statement with multiple lines the operator should be at the beginning of the line
 # but we do not want to break assignments
