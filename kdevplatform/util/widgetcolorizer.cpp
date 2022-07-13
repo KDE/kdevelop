@@ -19,6 +19,8 @@
 #include <QTextCharFormat>
 #include <QTextFrame>
 
+#include <optional>
+
 using namespace KDevelop;
 
 QColor WidgetColorizer::blendForeground(QColor color, float ratio,
@@ -87,14 +89,28 @@ QColor invertColor(const QColor& color)
     return QColor::fromHsv(hue, color.hsvSaturation(), 255 - color.value());
 }
 
+std::optional<QColor> foregroundColor(const QTextFormat& format)
+{
+    if (!format.hasProperty(QTextFormat::ForegroundBrush))
+        return std::nullopt;
+    return format.foreground().color();
+}
+
+std::optional<QColor> backgroundColor(const QTextFormat& format)
+{
+    if (!format.hasProperty(QTextFormat::BackgroundBrush))
+        return std::nullopt;
+    return format.background().color();
+}
+
 void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcolor, bool bgSet,
                    std::vector<FormatRange>& ranges)
 {
     for (auto it = frame->begin(); it != frame->end(); ++it) {
         if (auto frame = it.currentFrame()) {
             auto fmt = it.currentFrame()->frameFormat();
-            if (fmt.hasProperty(QTextFormat::BackgroundBrush)) {
-                collectRanges(frame, fgcolor, fmt.background().color(), true, ranges);
+            if (auto background = backgroundColor(fmt)) {
+                collectRanges(frame, fgcolor, *background, true, ranges);
             } else {
                 collectRanges(frame, fgcolor, bgcolor, bgSet, ranges);
             }
@@ -106,20 +122,20 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                 auto text = fragment.text().trimmed();
                 if (!text.isEmpty()) {
                     auto fmt = fragment.charFormat();
+                    auto foreground = foregroundColor(fmt);
+                    auto background = backgroundColor(fmt);
 
-                    if (!bgSet && !fmt.hasProperty(QTextFormat::BackgroundBrush)) {
-                        if (!fmt.hasProperty(QTextFormat::ForegroundBrush) || fmt.foreground().color() == Qt::black)
+                    if (!bgSet && !background) {
+                        if (!foreground || foreground == Qt::black) {
                             fmt.setForeground(fgcolor);
-                        else if (fmt.foreground().color().valueF() < 0.7)
-                            fmt.setForeground(WidgetColorizer::blendForeground(fmt.foreground().color(), 1.0, fgcolor,
-                                                                               fmt.background().color()));
-
+                        } else if (foreground->valueF() < 0.7) {
+                            fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, *background));
+                        }
                     } else {
-                        QColor bg = fmt.hasProperty(QTextFormat::BackgroundBrush) ? fmt.background().color() : bgcolor;
-                        QColor fg = fmt.hasProperty(QTextFormat::ForegroundBrush) ? fmt.foreground().color() : fgcolor;
+                        auto bg = background.value_or(bgcolor);
+                        auto fg = foreground.value_or(fgcolor);
                         if (bg.valueF() > 0.3) {
-                            if (fmt.hasProperty(QTextFormat::BackgroundBrush) && bg.valueF() > 0.5
-                                && bg.hsvSaturationF() < 0.08) {
+                            if (background && bg.valueF() > 0.5 && bg.hsvSaturationF() < 0.08) {
                                 bg = invertColor(bg);
                                 fmt.setBackground(bg);
                                 if (fg.valueF() < 0.7) {
