@@ -130,7 +130,7 @@ QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*
 
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
     {
-        DeclarationPointer declaration = DeclarationPointer(it->declaration());
+        auto declaration = it->declaration();
         if(declaration->isForwardDeclaration())
         {
             continue;
