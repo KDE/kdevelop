@@ -140,17 +140,15 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                     } else {
                         auto bg = background.value_or(bgcolor);
                         auto fg = foreground.value_or(fgcolor);
-                        if (bg.valueF() > 0.3) {
-                            if (background && isBrightColor(bg)) {
-                                bg = invertColor(bg);
-                                fmt.setBackground(bg);
-                                if (fg.valueF() < 0.7) {
-                                    fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
-                                }
-                            } else if (isBrightColor(fg)) {
-                                fg = invertColor(fg);
-                                fmt.setForeground(fg);
+                        if (background && isBrightColor(bg)) {
+                            bg = invertColor(bg);
+                            fmt.setBackground(bg);
+                            if (fg.valueF() < 0.7) {
+                                fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
                             }
+                        } else if (bg.valueF() > 0.3 && isBrightColor(fg)) {
+                            fg = invertColor(fg);
+                            fmt.setForeground(fg);
                         }
                     }
                     ranges.push_back({fragment.position(), fragment.position() + fragment.length(), fmt});
