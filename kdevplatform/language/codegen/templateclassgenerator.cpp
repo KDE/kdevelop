@@ -327,7 +327,7 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
     //Search for all super classes
     for (PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it) {
         DeclarationPointer declaration = DeclarationPointer(it->declaration());
-        if (declaration->isForwardDeclaration()) {
+        if (!declaration || declaration->isForwardDeclaration()) {
             continue;
         }
 
