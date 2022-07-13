@@ -69,6 +69,66 @@ bool WidgetColorizer::colorizeByProject()
     return KSharedConfig::openConfig()->group("UiSettings").readEntry("ColorizeByProject", true);
 }
 
+namespace
+{
+struct FormatRange {
+    int start = 0;
+    int end = 0;
+    QTextCharFormat format;
+};
+
+void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcolor, bool bgSet,
+                   std::vector<FormatRange>& ranges)
+{
+    for (auto it = frame->begin(); it != frame->end(); ++it) {
+        if (auto frame = it.currentFrame()) {
+            auto fmt = it.currentFrame()->frameFormat();
+            if (fmt.hasProperty(QTextFormat::BackgroundBrush)) {
+                collectRanges(frame, fgcolor, fmt.background().color(), true, ranges);
+            } else {
+                collectRanges(frame, fgcolor, bgcolor, bgSet, ranges);
+            }
+        }
+
+        if (it.currentBlock().isValid()) {
+            for (auto jt = it.currentBlock().begin(); jt != it.currentBlock().end(); ++jt) {
+                auto fragment = jt.fragment();
+                auto text = fragment.text().trimmed();
+                if (!text.isEmpty()) {
+                    auto fmt = fragment.charFormat();
+
+                    if (!bgSet && !fmt.hasProperty(QTextFormat::BackgroundBrush)) {
+                        if (!fmt.hasProperty(QTextFormat::ForegroundBrush) || fmt.foreground().color() == Qt::black)
+                            fmt.setForeground(fgcolor);
+                        else if (fmt.foreground().color().valueF() < 0.7)
+                            fmt.setForeground(WidgetColorizer::blendForeground(fmt.foreground().color(), 1.0, fgcolor,
+                                                                               fmt.background().color()));
+
+                    } else {
+                        QColor bg = fmt.hasProperty(QTextFormat::BackgroundBrush) ? fmt.background().color() : bgcolor;
+                        QColor fg = fmt.hasProperty(QTextFormat::ForegroundBrush) ? fmt.foreground().color() : fgcolor;
+                        if (bg.valueF() > 0.3) {
+                            if (fmt.hasProperty(QTextFormat::BackgroundBrush) && bg.valueF() > 0.5
+                                && bg.hsvSaturationF() < 0.08) {
+                                bg = QColor::fromHsv(bg.hsvHue(), bg.hsvSaturation(), 255 - bg.value());
+                                fmt.setBackground(bg);
+                                if (fg.valueF() < 0.7) {
+                                    fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
+                                }
+                            } else if (fg.valueF() > 0.5 && fg.hsvSaturationF() < 0.08) {
+                                fg = QColor::fromHsv(fg.hsvHue(), fg.hsvSaturation(), 255 - fg.value());
+                                fmt.setForeground(fg);
+                            }
+                        }
+                    }
+                    ranges.push_back({fragment.position(), fragment.position() + fragment.length(), fmt});
+                }
+            }
+        }
+    }
+};
+}
+
 void WidgetColorizer::convertDocumentToDarkTheme(QTextDocument* doc)
 {
     const auto palette = QApplication::palette();
@@ -78,60 +138,13 @@ void WidgetColorizer::convertDocumentToDarkTheme(QTextDocument* doc)
     if (fgcolor.value() < bgcolor.value())
         return;
 
+    std::vector<FormatRange> ranges;
+    collectRanges(doc->rootFrame(), fgcolor, bgcolor, false, ranges);
+
     auto cur = QTextCursor(doc);
-    std::vector<std::pair<QTextCursor, QTextCharFormat> > cursors;
-
-    std::function<void(QTextFrame*, QColor, QColor, bool)> iterateFrame = [&iterateFrame, &cur, &cursors](QTextFrame* frame, QColor fgcolor, QColor bgcolor, bool bgSet) {
-        for (auto it = frame->begin(); it != frame->end(); ++it) {
-            if (auto frame = it.currentFrame()) {
-                auto fmt = it.currentFrame()->frameFormat();
-                if (fmt.hasProperty(QTextFormat::BackgroundBrush)) {
-                    auto bg = fmt.background().color();
-
-                    iterateFrame(frame, fgcolor, bg, true);
-                } else {
-                    iterateFrame(frame, fgcolor, bgcolor, bgSet);
-                }
-            }
-            if (it.currentBlock().isValid()) {
-                for (auto jt = it.currentBlock().begin(); jt != it.currentBlock().end(); ++jt) {
-                    auto fragment = jt.fragment();
-                    auto text = fragment.text().trimmed();
-                    if (!text.isEmpty()) {
-                        auto fmt = fragment.charFormat();
-
-                        if (!bgSet && !fmt.hasProperty(QTextFormat::BackgroundBrush)) {
-                            if (!fmt.hasProperty(QTextFormat::ForegroundBrush) || fmt.foreground().color() == Qt::black)
-                                fmt.setForeground(fgcolor);
-                            else if (fmt.foreground().color().valueF() < 0.7)
-                                fmt.setForeground(WidgetColorizer::blendForeground(fmt.foreground().color(), 1.0, fgcolor, fmt.background().color()));
-
-                        } else {
-                            QColor bg = fmt.hasProperty(QTextFormat::BackgroundBrush) ? fmt.background().color() : bgcolor;
-                            QColor fg = fmt.hasProperty(QTextFormat::ForegroundBrush) ? fmt.foreground().color() : fgcolor;
-                            if (bg.valueF() > 0.3) {
-                                if (fmt.hasProperty(QTextFormat::BackgroundBrush) && bg.valueF() > 0.5 && bg.hsvSaturationF() < 0.08) {
-                                    bg = QColor::fromHsv(bg.hsvHue(), bg.hsvSaturation(), 255 - bg.value() );
-                                    fmt.setBackground(bg);
-                                    if (fg.valueF() < 0.7) {
-                                        fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
-                                    }
-                                } else if (fg.valueF() > 0.5 && fg.hsvSaturationF() < 0.08) {
-                                    fg = QColor::fromHsv(fg.hsvHue(), fg.hsvSaturation(), 255 - fg.value() );
-                                    fmt.setForeground(fg);
-                                }
-                            }
-                        }
-                        cur.setPosition(fragment.position());
-                        cur.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
-                        cursors.push_back(std::make_pair(cur, fmt));
-                    }
-                }
-            }
-        }
-    };
-    iterateFrame(doc->rootFrame(), fgcolor, bgcolor, false);
-
-    for (auto p : cursors)
-        p.first.setCharFormat(p.second);
+    for (const auto& [start, end, format] : ranges) {
+        cur.setPosition(start);
+        cur.setPosition(end, QTextCursor::KeepAnchor);
+        cur.setCharFormat(format);
+    }
 }
