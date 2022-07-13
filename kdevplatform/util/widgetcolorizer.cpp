@@ -135,7 +135,7 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                         if (!foreground || foreground == Qt::black) {
                             fmt.setForeground(fgcolor);
                         } else if (foreground->valueF() < 0.7) {
-                            fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, *background));
+                            fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, bgcolor));
                         }
                     } else {
                         auto bg = background.value_or(bgcolor);
