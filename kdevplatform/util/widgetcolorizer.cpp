@@ -77,6 +77,16 @@ struct FormatRange {
     QTextCharFormat format;
 };
 
+QColor invertColor(const QColor& color)
+{
+    auto hue = color.hsvHue();
+    if (hue == -1) {
+        // achromatic color
+        hue = 0;
+    }
+    return QColor::fromHsv(hue, color.hsvSaturation(), 255 - color.value());
+}
+
 void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcolor, bool bgSet,
                    std::vector<FormatRange>& ranges)
 {
@@ -110,13 +120,13 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                         if (bg.valueF() > 0.3) {
                             if (fmt.hasProperty(QTextFormat::BackgroundBrush) && bg.valueF() > 0.5
                                 && bg.hsvSaturationF() < 0.08) {
-                                bg = QColor::fromHsv(bg.hsvHue(), bg.hsvSaturation(), 255 - bg.value());
+                                bg = invertColor(bg);
                                 fmt.setBackground(bg);
                                 if (fg.valueF() < 0.7) {
                                     fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
                                 }
                             } else if (fg.valueF() > 0.5 && fg.hsvSaturationF() < 0.08) {
-                                fg = QColor::fromHsv(fg.hsvHue(), fg.hsvSaturation(), 255 - fg.value());
+                                fg = invertColor(fg);
                                 fmt.setForeground(fg);
                             }
                         }
