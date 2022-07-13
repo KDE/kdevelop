@@ -122,37 +122,40 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
             }
         }
 
-        if (it.currentBlock().isValid()) {
-            for (auto jt = it.currentBlock().begin(); jt != it.currentBlock().end(); ++jt) {
-                auto fragment = jt.fragment();
-                auto text = QStringView(fragment.text()).trimmed();
-                if (!text.isEmpty()) {
-                    auto fmt = fragment.charFormat();
-                    auto foreground = foregroundColor(fmt);
-                    auto background = backgroundColor(fmt);
+        const auto block = it.currentBlock();
+        if (!block.isValid()) {
+            continue;
+        }
 
-                    if (!bgSet && !background) {
-                        if (!foreground || foreground == Qt::black) {
-                            fmt.setForeground(fgcolor);
-                        } else if (foreground->valueF() < 0.7) {
-                            fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, bgcolor));
-                        }
-                    } else {
-                        auto bg = background.value_or(bgcolor);
-                        auto fg = foreground.value_or(fgcolor);
-                        if (background && isBrightColor(bg)) {
-                            bg = invertColor(bg);
-                            fmt.setBackground(bg);
-                            if (fg.valueF() < 0.7) {
-                                fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
-                            }
-                        } else if (bg.valueF() > 0.3 && isBrightColor(fg)) {
-                            fg = invertColor(fg);
-                            fmt.setForeground(fg);
-                        }
+        for (auto jt = block.begin(); jt != block.end(); ++jt) {
+            auto fragment = jt.fragment();
+            auto text = QStringView(fragment.text()).trimmed();
+            if (!text.isEmpty()) {
+                auto fmt = fragment.charFormat();
+                auto foreground = foregroundColor(fmt);
+                auto background = backgroundColor(fmt);
+
+                if (!bgSet && !background) {
+                    if (!foreground || foreground == Qt::black) {
+                        fmt.setForeground(fgcolor);
+                    } else if (foreground->valueF() < 0.7) {
+                        fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, bgcolor));
                     }
-                    ranges.push_back({fragment.position(), fragment.position() + fragment.length(), fmt});
+                } else {
+                    auto bg = background.value_or(bgcolor);
+                    auto fg = foreground.value_or(fgcolor);
+                    if (background && isBrightColor(bg)) {
+                        bg = invertColor(bg);
+                        fmt.setBackground(bg);
+                        if (fg.valueF() < 0.7) {
+                            fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
+                        }
+                    } else if (bg.valueF() > 0.3 && isBrightColor(fg)) {
+                        fg = invertColor(fg);
+                        fmt.setForeground(fg);
+                    }
                 }
+                ranges.push_back({fragment.position(), fragment.position() + fragment.length(), fmt});
             }
         }
     }
