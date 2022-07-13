@@ -87,14 +87,6 @@ struct RecursiveImportCacheRepository {
     }
 };
 
-struct CacheEntry {
-    using Data = KDevVarLengthArray<IndexedDeclaration>;
-    using DataHash = QHash<TopDUContext::IndexedRecursiveImports, Data>;
-
-    DataHash m_hash;
-};
-}
-
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
 
 class PersistentSymbolTableItem
@@ -187,6 +179,8 @@ public:
     const PersistentSymbolTableItem& m_item;
 };
 
+using CachedDeclarations = KDevVarLengthArray<IndexedDeclaration>;
+using CachedDeclarationsByImports = QHash<TopDUContext::IndexedRecursiveImports, CachedDeclarations>;
 using Declarations = ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler>;
 using CachedIndexedRecursiveImports =
     Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true>;
@@ -200,12 +194,13 @@ class PersistentSymbolTableRepo : public ItemRepository<PersistentSymbolTableIte
     using ItemRepository::ItemRepository;
 
 public:
-    QHash<IndexedQualifiedIdentifier, CacheEntry> declarationsCache;
+    QHash<IndexedQualifiedIdentifier, CachedDeclarationsByImports> declarationsCache;
 
     // We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache
     // utilization
     QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports> importsCache;
 };
+}
 
 template<>
 class ItemRepositoryFor<PersistentSymbolTable>
@@ -395,13 +390,13 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
             if (declarations.dataSize() > MinimumCountForCache) {
                 // Do visibility caching
                 auto& cached = repo.declarationsCache[id];
-                auto cacheIt = cached.m_hash.constFind(visibility);
-                if (cacheIt != cached.m_hash.constEnd()) {
+                auto cacheIt = cached.constFind(visibility);
+                if (cacheIt != cached.constEnd()) {
                     return FilteredDeclarationIterator(
                         Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
                 }
 
-                auto insertIt = cached.m_hash.insert(visibility, {});
+                auto insertIt = cached.insert(visibility, {});
                 auto& cache = *insertIt;
                 {
                     auto cacheVisitor = [&cache](const IndexedDeclaration& decl) {
