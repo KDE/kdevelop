@@ -103,6 +103,12 @@ std::optional<QColor> backgroundColor(const QTextFormat& format)
     return format.background().color();
 }
 
+bool isBrightColor(const QColor& color)
+{
+    // TODO: what's the saturation check doing here? add comment!
+    return color.valueF() > 0.5 && color.hsvSaturationF() < 0.08;
+}
+
 void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcolor, bool bgSet,
                    std::vector<FormatRange>& ranges)
 {
@@ -135,13 +141,13 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                         auto bg = background.value_or(bgcolor);
                         auto fg = foreground.value_or(fgcolor);
                         if (bg.valueF() > 0.3) {
-                            if (background && bg.valueF() > 0.5 && bg.hsvSaturationF() < 0.08) {
+                            if (background && isBrightColor(bg)) {
                                 bg = invertColor(bg);
                                 fmt.setBackground(bg);
                                 if (fg.valueF() < 0.7) {
                                     fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
                                 }
-                            } else if (fg.valueF() > 0.5 && fg.hsvSaturationF() < 0.08) {
+                            } else if (isBrightColor(fg)) {
                                 fg = invertColor(fg);
                                 fmt.setForeground(fg);
                             }
