@@ -110,8 +110,7 @@ QString AbstractNavigationContext::createLink(const QString& name, const QString
 
     QString str = name.toHtmlEscaped();
     if (d->m_linkCount == d->m_selectedLink)
-        str = QLatin1String("<font style=\"background-color:#f1f1f1;\" color=\"#880088\">") + str + QLatin1String(
-            "</font>");
+        str = QLatin1String("<font color=\"#880088\">") + str + QLatin1String("</font>");
 
     QString ret = QLatin1String("<a href=\"") + hrefId + QLatin1Char('\"') +
                   ((d->m_linkCount == d->m_selectedLink &&
