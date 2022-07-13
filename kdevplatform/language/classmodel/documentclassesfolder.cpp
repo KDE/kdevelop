@@ -273,9 +273,9 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
 
                     for (uint i = 0; i < declsCount; ++i) {
                         // Look for the first valid declaration.
-                        if (decls->declaration()) {
+                        if (auto decl = decls[i].declaration()) {
                             // See if it should be namespaced.
-                            if (decls->declaration()->kind() == Declaration::Namespace) {
+                            if (decl->kind() == Declaration::Namespace) {
                                 // This should create the namespace folder and add it to the cache.
                                 parentNode = namespaceFolder(parentIdentifier);
 
