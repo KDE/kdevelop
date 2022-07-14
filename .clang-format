@@ -30,7 +30,8 @@ TabWidth: 4
 ColumnLimit: 120
 
 # sort includes inside line separated groups
-SortIncludes: true
+#TODO: set back to true just before reformatting all KDevelop sources.
+SortIncludes: false
 
 # break before braces on function, namespace and class definitions.
 #KDevelop overrides BreakBeforeBraces: Linux
