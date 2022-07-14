@@ -17,6 +17,7 @@ namespace KDevelop
 {
 namespace
 {
+#if defined(Q_OS_UNIX)
     /**
      * LLVM and ASAN don't play well together, see [1].
      * We have to disable sigaltstack or we crash.
@@ -39,6 +40,7 @@ namespace
 
         execv(argv[0], argv);
     }
+#endif
 }
 
 void sanitizerTestInit([[maybe_unused]] char** argv)
