@@ -43,7 +43,7 @@ BraceWrapping:
     AfterEnum: false
     AfterFunction: true
     AfterNamespace: false
-    AfterStruct: false
+    AfterStruct: true
     AfterUnion: false
     AfterExternBlock: false
     BeforeCatch: false
@@ -64,8 +64,7 @@ AlignAfterOpenBracket: Align
 AllowAllParametersOfDeclarationOnNextLine: false
 
 # no single line functions
-#KDevelop overrides AllowShortFunctionsOnASingleLine: None
-AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: None
 
 # always break before you encounter multi line strings
 AlwaysBreakBeforeMultilineStrings: true
@@ -108,3 +107,9 @@ AllowShortLambdasOnASingleLine: Empty
 
 # We do not want clang-format to put all arguments on a new line
 AllowAllArgumentsOnNextLine: false
+
+#KDevelop adds:
+
+# Prevent clang-format from inserting a space after `//`. There are plenty of comments like
+# `//comment` in KDevelop code. We don't want to change them all just to insert this space.
+CommentPragmas: '^[^ ]'
