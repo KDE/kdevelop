@@ -231,7 +231,11 @@ PersistentSymbolTable::PersistentSymbolTable()
     RecursiveImportCacheRepository::repository();
 }
 
-PersistentSymbolTable::~PersistentSymbolTable() = default;
+PersistentSymbolTable::~PersistentSymbolTable()
+{
+    // clear cache early to ensure we don't keep items referenced from other repositories
+    clearCache();
+}
 
 void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
