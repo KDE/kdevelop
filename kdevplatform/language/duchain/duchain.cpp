@@ -846,7 +846,6 @@ public:
         }
 
         QTime startTime = QTime::currentTime();
-        PersistentSymbolTable::self().clearCache();
 
         storeAllInformation(!retries, writeLock); //Puts environment-information into a repository
 
