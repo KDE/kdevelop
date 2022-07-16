@@ -227,15 +227,13 @@ void PersistentSymbolTable::clearCache()
 
 PersistentSymbolTable::PersistentSymbolTable()
 {
-    ItemRepositoryFor<PersistentSymbolTable>::init();
+    // PersistentSymbolTableRepo::importsCache uses RecursiveImportCacheRepository, so the cache repository must be
+    // destroyed after and therefore created before the persistent symbol table repository.
     RecursiveImportCacheRepository::repository();
+    ItemRepositoryFor<PersistentSymbolTable>::init();
 }
 
-PersistentSymbolTable::~PersistentSymbolTable()
-{
-    // clear cache early to ensure we don't keep items referenced from other repositories
-    clearCache();
-}
+PersistentSymbolTable::~PersistentSymbolTable() = default;
 
 void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
