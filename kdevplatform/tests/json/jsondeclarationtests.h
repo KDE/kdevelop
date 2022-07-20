@@ -38,6 +38,7 @@
  *   unaliasedType : TypeTestObject
  *   targetType : TypeTestObject
  *   returnType : TypeTestObject
+ *   isAtomic : bool
  *   isAbstract : bool
  *   isMutable : bool
  *   isVirtual : bool
@@ -187,6 +188,16 @@ DeclarationTest(identifiedTypeDeclaration)
 
     return testObject(idDecl, value, QStringLiteral("IdentifiedType's declaration"));
 }
+
+///JSON type: bool
+///@returns whether the declaration's isAtomic matches the given value
+DeclarationTest(isAtomic)
+{
+    AbstractType::Ptr type = TypeUtils::targetType(decl->abstractType(), decl->topContext());
+
+    return compareValues((type->modifiers() & AbstractType::AtomicModifier) != 0, value, QStringLiteral("Declaration's atomic modifier"));
+}
+
 ///JSON type: bool
 ///@returns whether the (function) declaration's isVirtual matches the given value
 DeclarationTest(isVirtual)
