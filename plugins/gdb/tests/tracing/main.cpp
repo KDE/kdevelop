@@ -1,5 +1,5 @@
 
-// Алгоритм Евклида вычисления наибольшего общего делителя	
+// Euclid's algorithm for calculating the greatest common divisor
 int main()
 {	
     int i, j;
