@@ -155,7 +155,7 @@ bool LicensePagePrivate::saveLicense()
 
     if(newFile.exists())
     {
-        KMessageBox::sorry(page, i18n("The specified license already exists. "
+        KMessageBox::error(page, i18n("The specified license already exists. "
                                       "Please provide a different name."));
         return false;
     }
@@ -167,7 +167,7 @@ bool LicensePagePrivate::saveLicense()
 
     if(result == -1)
     {
-        KMessageBox::sorry(page, i18n("Failed to write custom license template to file %1.", fullPath));
+        KMessageBox::error(page, i18n("Failed to write custom license template to file %1.", fullPath));
         return false;
     }
 

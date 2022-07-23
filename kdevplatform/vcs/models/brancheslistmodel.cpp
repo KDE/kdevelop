@@ -60,7 +60,7 @@ class BranchItem : public QStandardItem
                 auto* bmodel = qobject_cast<BranchesListModel*>(model());
                 if(!bmodel->findItems(newBranch).isEmpty())
                 {
-                    KMessageBox::messageBox(nullptr, KMessageBox::Sorry, i18n("Branch \"%1\" already exists.", newBranch));
+                    KMessageBox::error(nullptr, i18n("Branch \"%1\" already exists.", newBranch));
                     return;
                 }
 

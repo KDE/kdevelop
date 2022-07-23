@@ -556,7 +556,7 @@ void Project::close()
         if (!copyJob->exec()) {
             qCDebug(SHELL) << "Job failed:" << copyJob->errorString();
 
-            KMessageBox::sorry(Core::self()->uiController()->activeMainWindow(),
+            KMessageBox::error(Core::self()->uiController()->activeMainWindow(),
                                i18n("Could not store developer specific project configuration.\n"
                                     "Attention: The project settings you changed will be lost."));
         }

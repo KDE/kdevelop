@@ -116,10 +116,9 @@ void BranchManager::createBranch()
 
     if (!m_model->findItems(newBranch).isEmpty())
     {
-        KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                i18n("Branch \"%1\" already exists.\n"
-                                        "Please, choose another name.",
-                                        newBranch));
+        KMessageBox::error(this, i18n("Branch \"%1\" already exists.\n"
+                                      "Please, choose another name.",
+                                      newBranch));
     }
     else
         m_model->createBranch(baseBranch, newBranch);
@@ -131,10 +130,9 @@ void BranchManager::deleteBranch()
 
     if (baseBranch == m_model->currentBranch())
     {
-        KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                    i18n("Currently at the branch \"%1\".\n"
-                                            "To delete it, please change to another branch.",
-                                            baseBranch));
+        KMessageBox::error(this, i18n("Currently at the branch \"%1\".\n"
+                                      "To delete it, please change to another branch.",
+                                      baseBranch));
         return;
     }
 
@@ -160,9 +158,7 @@ void BranchManager::checkoutBranch()
     QString branch = m_ui->branchView->currentIndex().data().toString();
     if (branch == m_model->currentBranch())
     {
-        KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                i18n("Already on branch \"%1\"\n",
-                                        branch));
+        KMessageBox::information(this, i18n("Already on branch \"%1\"\n", branch));
         return;
     }
 
@@ -183,9 +179,8 @@ void BranchManager::mergeBranch()
         QString branchToMerge = branchToMergeIdx.data().toString();
 
         if (m_model->findItems(branchToMerge).isEmpty()) {
-            KMessageBox::messageBox(this, KMessageBox::Sorry, i18n("Branch \"%1\" doesn't exists.\n"
-                                                                   "Please, choose another name.",
-                                                                   branchToMerge));
+            KMessageBox::error(this, i18n("Branch \"%1\" doesn't exists.\n"
+                                          "Please, choose another name.", branchToMerge));
         } else {
             KDevelop::VcsJob* branchJob = m_dvcPlugin->mergeBranch(QUrl::fromLocalFile(m_repository), branchToMerge);
             ICore::self()->runController()->registerJob(branchJob);

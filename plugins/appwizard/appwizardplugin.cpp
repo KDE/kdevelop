@@ -467,7 +467,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
             if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path() + QLatin1Char('/') + file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
-                KMessageBox::sorry(nullptr, i18n("The file %1 cannot be created.", dest));
+                KMessageBox::error(nullptr, i18n("The file %1 cannot be created.", dest));
                 return false;
             }
         }

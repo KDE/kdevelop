@@ -123,7 +123,7 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
         m_text->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         m_text->setText(invalidAccountText());
         m_account->setName(QString());
-        KMessageBox::sorry(this, i18n("Authentication failed. Please try again.\n\n"
+        KMessageBox::error(this, i18n("Authentication failed. Please try again.\n\n"
                                       "Could not create token: \"%1\"\n%2", tokenName,
                                       tokenLinkStatementText()),
                                  i18nc("@title:window", "GitHub Authorization Failed"));
