@@ -11,6 +11,7 @@
 #include <QHash>
 #include <QStringList>
 #include <QAction>
+#include <QActionGroup>
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QInputDialog>

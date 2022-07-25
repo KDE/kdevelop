@@ -16,6 +16,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QRegularExpression>
+#include <QActionGroup>
 
 #include <KLocalizedString>
 

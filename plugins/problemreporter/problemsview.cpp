@@ -11,6 +11,7 @@
 #include <kwidgetsaddons_version.h>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QLineEdit>
 #include <QMenu>
 #include <QTabWidget>

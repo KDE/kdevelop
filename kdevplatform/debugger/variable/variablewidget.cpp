@@ -9,6 +9,7 @@
 
 #include <QApplication>
 #include <QAction>
+#include <QActionGroup>
 #include <QClipboard>
 #include <QContextMenuEvent>
 #include <QMenu>

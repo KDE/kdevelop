@@ -22,6 +22,7 @@
 #include <QDialogButtonBox>
 #include <QToolBar>
 #include <QVBoxLayout>
+#include <QActionGroup>
 
 using namespace Sublime;
 
