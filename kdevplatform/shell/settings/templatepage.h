@@ -30,7 +30,6 @@ public:
 private Q_SLOTS:
     void loadFromFile();
     void getMoreTemplates();
-    void shareTemplates();
     void currentIndexChanged(const QModelIndex& index);
     void extractTemplate();
 
