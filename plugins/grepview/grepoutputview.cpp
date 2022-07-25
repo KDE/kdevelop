@@ -133,7 +133,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     applyButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
 
     connect(replacementCombo, &KComboBox::editTextChanged, this, &GrepOutputView::replacementTextChanged);
-    connect(replacementCombo, QOverload<>::of(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
+    connect(replacementCombo, QOverload<const QString&>::of(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 

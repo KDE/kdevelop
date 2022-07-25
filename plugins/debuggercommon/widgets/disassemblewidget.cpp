@@ -45,7 +45,7 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
             this, &SelectAddressDialog::validateInput);
-    connect(m_ui.comboBox, QOverload<>::of(&KHistoryComboBox::returnPressed),
+    connect(m_ui.comboBox, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
             this, &SelectAddressDialog::itemSelected);
 }
 
