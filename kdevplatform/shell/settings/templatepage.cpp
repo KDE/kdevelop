@@ -13,7 +13,6 @@
 #include <language/codegen/templatesmodel.h>
 
 #include <KNS3/DownloadDialog>
-#include <KNS3/UploadDialog>
 #include <KArchive>
 #include <KZip>
 #include <KTar>
@@ -29,10 +28,6 @@ m_provider(provider)
     ui->getNewButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
     connect(ui->getNewButton, &QPushButton::clicked,
             this, &TemplatePage::getMoreTemplates);
-
-    ui->shareButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
-    connect(ui->shareButton, &QPushButton::clicked,
-            this, &TemplatePage::shareTemplates);
 
     ui->loadButton->setVisible(!m_provider->supportedMimeTypes().isEmpty());
     connect(ui->loadButton, &QPushButton::clicked,
@@ -83,12 +78,6 @@ void TemplatePage::getMoreTemplates()
     {
         m_provider->reload();
     }
-}
-
-void TemplatePage::shareTemplates()
-{
-    KDevelop::ScopedDialog<KNS3::UploadDialog> dialog(m_provider->knsConfigurationFile(), this);
-    dialog->exec();
 }
 
 void TemplatePage::currentIndexChanged(const QModelIndex& index)

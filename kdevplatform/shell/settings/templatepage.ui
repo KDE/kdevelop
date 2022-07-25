@@ -45,18 +45,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="shareButton">
-       <property name="text">
-        <string comment="@action:button">Share Templates</string>
-       </property>
-       <property name="icon">
-        <iconset theme="get-hot-new-stuff">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="extractButton">
        <property name="text">
         <string comment="@action:button">Clone Template</string>
