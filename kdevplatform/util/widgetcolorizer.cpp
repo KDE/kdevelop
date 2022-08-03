@@ -110,7 +110,7 @@ std::optional<QColor> backgroundColor(const QTextFormat& format)
  * whites are inverted in blacks (below 0.5) and exactly 0.5 can stay the same.
  * The 0.08 saturation covered all the white tones found in the color schemes tested.
  */
-bool canInvertColor(const QColor& color)
+bool canInvertBrightColor(const QColor& color)
 {
     // this check here determines if the color can be considered close to white
     return color.valueF() > 0.5 && color.hsvSaturationF() < 0.08;
@@ -127,10 +127,15 @@ bool canBlendForegroundColor(const QColor& color)
     return color.valueF() < 0.7;
 }
 
-bool isDarkBackgroundColor(const QColor& color)
+bool isBrightBackgroundColor(const QColor& color)
 {
     // NOTE that foreground contrast and background contrast work differently
     return color.valueF() > 0.3;
+}
+
+bool canInvertDarkColor(const QColor& color)
+{
+    return !isBrightBackgroundColor(color);
 }
 
 void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcolor, bool bgSet,
@@ -162,19 +167,23 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                 if (!bgSet && !background) {
                     if (!foreground || foreground == Qt::black) {
                         fmt.setForeground(fgcolor);
+                    } else if (canInvertDarkColor(*foreground)) {
+                        fmt.setForeground(invertColor(*foreground));
                     } else if (canBlendForegroundColor(*foreground)) {
                         fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, bgcolor));
                     }
                 } else {
                     auto bg = background.value_or(bgcolor);
                     auto fg = foreground.value_or(fgcolor);
-                    if (background && canInvertColor(bg)) {
+                    if (background && canInvertBrightColor(bg)) {
                         bg = invertColor(bg);
                         fmt.setBackground(bg);
-                        if (canBlendForegroundColor(fg)) {
+                        if (canInvertDarkColor(fg)) {
+                            fmt.setForeground(invertColor(fg));
+                        } else if (canBlendForegroundColor(fg)) {
                             fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
                         }
-                    } else if (isDarkBackgroundColor(bg) && canInvertColor(fg)) {
+                    } else if (isBrightBackgroundColor(bg) && canInvertBrightColor(fg)) {
                         fg = invertColor(fg);
                         fmt.setForeground(fg);
                     }
