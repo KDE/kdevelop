@@ -103,10 +103,34 @@ std::optional<QColor> backgroundColor(const QTextFormat& format)
     return format.background().color();
 }
 
-bool isBrightColor(const QColor& color)
+/**
+ * Inverting is used for white colors, because it is assumed white in light color scheme
+ * should be black in dark color scheme. White inverted will give you black, but blending
+ * would give you a grey color depending on the ratio. Above 0.5 (middle) will ensure all
+ * whites are inverted in blacks (below 0.5) and exactly 0.5 can stay the same.
+ * The 0.08 saturation covered all the white tones found in the color schemes tested.
+ */
+bool canInvertColor(const QColor& color)
 {
-    // TODO: what's the saturation check doing here? add comment!
+    // this check here determines if the color can be considered close to white
     return color.valueF() > 0.5 && color.hsvSaturationF() < 0.08;
+}
+
+/**
+ * Blending is used for non white (colorful?) colors to increase contrast (get a brighter color).
+ * Inverting is not possible for non white/black colors and would just create a different color
+ * not guaranteed to be brighter.
+ */
+bool canBlendForegroundColor(const QColor& color)
+{
+    // a foreground color with other hsv values will give bad contrast against a dark background
+    return color.valueF() < 0.7;
+}
+
+bool isDarkBackgroundColor(const QColor& color)
+{
+    // NOTE that foreground contrast and background contrast work differently
+    return color.valueF() > 0.3;
 }
 
 void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcolor, bool bgSet,
@@ -138,19 +162,19 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
                 if (!bgSet && !background) {
                     if (!foreground || foreground == Qt::black) {
                         fmt.setForeground(fgcolor);
-                    } else if (foreground->valueF() < 0.7) {
+                    } else if (canBlendForegroundColor(*foreground)) {
                         fmt.setForeground(WidgetColorizer::blendForeground(*foreground, 1.0, fgcolor, bgcolor));
                     }
                 } else {
                     auto bg = background.value_or(bgcolor);
                     auto fg = foreground.value_or(fgcolor);
-                    if (background && isBrightColor(bg)) {
+                    if (background && canInvertColor(bg)) {
                         bg = invertColor(bg);
                         fmt.setBackground(bg);
-                        if (fg.valueF() < 0.7) {
+                        if (canBlendForegroundColor(fg)) {
                             fmt.setForeground(WidgetColorizer::blendForeground(fg, 1.0, fgcolor, bg));
                         }
-                    } else if (bg.valueF() > 0.3 && isBrightColor(fg)) {
+                    } else if (isDarkBackgroundColor(bg) && canInvertColor(fg)) {
                         fg = invertColor(fg);
                         fmt.setForeground(fg);
                     }
@@ -162,6 +186,7 @@ void collectRanges(QTextFrame* frame, const QColor& fgcolor, const QColor& bgcol
 };
 }
 
+// see also: https://invent.kde.org/kdevelop/kdevelop/-/merge_requests/370#note_487717
 void WidgetColorizer::convertDocumentToDarkTheme(QTextDocument* doc)
 {
     const auto palette = QApplication::palette();
