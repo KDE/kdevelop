@@ -174,16 +174,11 @@ class ItemRepositoryFor<CodeModel>
         static CodeModelRepo repo(QStringLiteral("Code Model"), &mutex);
         return repo;
     }
-public:
-    static void init()
-    {
-        repo();
-    }
 };
 
 CodeModel::CodeModel()
 {
-    ItemRepositoryFor<CodeModel>::init();
+    LockedItemRepository::initialize<CodeModel>();
 }
 
 void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)

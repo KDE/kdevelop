@@ -64,14 +64,11 @@ class ItemRepositoryFor<DeclarationComment>
         static Repositories::StringRepository repo(QStringLiteral("Comment Repository"), &mutex);
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 void initDeclarationRepositories()
 {
-    ItemRepositoryFor<DeclarationComment>::init();
+    LockedItemRepository::initialize<DeclarationComment>();
 }
 
 Declaration::Kind Declaration::kind() const

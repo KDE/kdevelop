@@ -212,9 +212,6 @@ class ItemRepositoryFor<PersistentSymbolTable>
         static PersistentSymbolTableRepo repo { QStringLiteral("Persistent Declaration Table"), &mutex };
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 void PersistentSymbolTable::clearCache()
@@ -230,7 +227,7 @@ PersistentSymbolTable::PersistentSymbolTable()
     // PersistentSymbolTableRepo::importsCache uses RecursiveImportCacheRepository, so the cache repository must be
     // destroyed after and therefore created before the persistent symbol table repository.
     RecursiveImportCacheRepository::repository();
-    ItemRepositoryFor<PersistentSymbolTable>::init();
+    LockedItemRepository::initialize<PersistentSymbolTable>();
 }
 
 PersistentSymbolTable::~PersistentSymbolTable() = default;

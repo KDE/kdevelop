@@ -2310,6 +2310,12 @@ struct LockedItemRepository {
         QMutexLocker lock(repo.mutex());
         return op(repo);
     }
+
+    template<typename Context>
+    static void initialize()
+    {
+        ItemRepositoryFor<Context>::repo();
+    }
 };
 }
 

@@ -149,9 +149,6 @@ class ItemRepositoryFor<IndexedString>
                                                                                  &mutex };
         return *manager.repository();
     }
-
-public:
-    static void init() { repo(); }
 };
 }
 

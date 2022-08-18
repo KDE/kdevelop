@@ -307,9 +307,6 @@ class ItemRepositoryFor<EnvironmentInformationList>
         static EnvironmentInformationListRepo repo(QStringLiteral("Environment Lists"), &mutex);
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 /// Maps top-context-indices to environment-information item.
@@ -327,9 +324,6 @@ class ItemRepositoryFor<EnvironmentInformation>
         static EnvironmentInformationRepo repo(QStringLiteral("Environment Information"), &mutex);
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 class DUChainPrivate;
@@ -1296,8 +1290,8 @@ void DUChain::initialize()
     // read. See https://bugs.kde.org/show_bug.cgi?id=250779
     RecursiveImportRepository::repository();
 
-    ItemRepositoryFor<EnvironmentInformationList>::init();
-    ItemRepositoryFor<EnvironmentInformation>::init();
+    LockedItemRepository::initialize<EnvironmentInformationList>();
+    LockedItemRepository::initialize<EnvironmentInformation>();
 
     // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
     initDeclarationRepositories();

@@ -115,14 +115,11 @@ class ItemRepositoryFor<Importers>
         static ImportersRepo repo { QStringLiteral("Importer Map"), &mutex };
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 Importers::Importers()
 {
-    ItemRepositoryFor<Importers>::init();
+    LockedItemRepository::initialize<Importers>();
 }
 
 void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use)

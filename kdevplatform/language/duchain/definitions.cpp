@@ -159,14 +159,11 @@ class ItemRepositoryFor<Definitions>
         static DefinitionsRepo repo { QStringLiteral("Definition Map"), &mutex };
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 Definitions::Definitions()
 {
-    ItemRepositoryFor<Definitions>::init();
+    LockedItemRepository::initialize<Definitions>();
 }
 
 void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaration& definition)

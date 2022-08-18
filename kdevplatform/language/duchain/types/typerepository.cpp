@@ -103,14 +103,11 @@ class ItemRepositoryFor<AbstractType>
                                                                     typeRepositoryMutex());
         return *manager.repository();
     }
-
-public:
-    static void init() { repo(); }
 };
 
 void initTypeRepository()
 {
-    ItemRepositoryFor<AbstractType>::init();
+    LockedItemRepository::initialize<AbstractType>();
 }
 
 uint TypeRepository::indexForType(const AbstractType::Ptr& input)

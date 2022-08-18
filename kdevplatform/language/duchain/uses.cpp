@@ -114,14 +114,11 @@ class ItemRepositoryFor<Uses>
         static UsesRepo repo { QStringLiteral("Use Map"), &mutex };
         return repo;
     }
-
-public:
-    static void init() { repo(); }
 };
 
 Uses::Uses()
 {
-    ItemRepositoryFor<Uses>::init();
+    LockedItemRepository::initialize<Uses>();
 }
 
 void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
