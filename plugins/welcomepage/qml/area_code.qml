@@ -46,6 +46,7 @@ StandardBackground {
             Layout.fillHeight: true
         }
 
+ /** FIXME: News section is currently unmaintained, also unconditional ping-back to KDE violating privacy
         Heading {
             id: newsHeading
 
@@ -69,6 +70,7 @@ StandardBackground {
             Layout.fillWidth: true
             height: 10
         }
+*/
 
         Heading {
             text: i18n("Need Help?")
