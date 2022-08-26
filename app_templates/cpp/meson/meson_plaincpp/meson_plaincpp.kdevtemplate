@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Name=Meson C++
+Comment=Simple Meson-based C++ application
+Category=Standard/Terminal
+Icon=default-kdevelop
+ShowFilesAfterGeneration=main.cpp
+ValidProjectName=^[a-zA-Z_][a-zA-Z0-9_-]+$

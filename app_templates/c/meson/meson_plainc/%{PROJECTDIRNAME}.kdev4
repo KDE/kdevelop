@@ -1,0 +1,5 @@
+[Project]
+CreatedFrom=meson.build
+Manager=KDevMesonManager
+Name=%{APPNAME}
+

@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: KDevelop
+Upstream-Contact: KDE Community
+Source: https://invent.kde.org/kdevelop/kdevelop
+
+Files: app_templates/c/meson/meson_plainc/*
+Copyright: Morten Danielsen Volden <mvolden2@gmail.com>
+License: LGPL-2.1-or-later
+
+Files: app_templates/cpp/meson/meson_plaincpp/*
+Copyright: Morten Danielsen Volden <mvolden2@gmail.com>
+License: LGPL-2.1-or-later
