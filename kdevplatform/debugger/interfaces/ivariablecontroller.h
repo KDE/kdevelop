@@ -79,14 +79,7 @@ private:
     Q_DECLARE_PRIVATE(IVariableController)
 };
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(IVariableController::UpdateTypes)
-#endif
-
 } // namespace KDevelop
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IVariableController::UpdateTypes)
-#endif
 
 #endif

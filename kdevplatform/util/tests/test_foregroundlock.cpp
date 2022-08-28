@@ -9,9 +9,7 @@
 #include <QTest>
 #include <QStandardPaths>
 #include <QThread>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QRandomGenerator>
-#endif
 
 #include <memory>
 #include <vector>
@@ -32,18 +30,12 @@ public:
     void run() override
     {
         ForegroundLock lock(false);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         auto* randomGenerator = QRandomGenerator::global();
-#endif
         for (int i = 0; i < 1000; ++i) {
             if (lock.tryLock()) {
                 lock.unlock();
             }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             QThread::usleep(randomGenerator->bounded(20));
-#else
-            QThread::usleep(qrand() % 20);
-#endif
         }
     }
 };

@@ -196,19 +196,8 @@ void TestKdevFormatSource::testWildcardPathMatching_data()
             formatDirs.push_back(info.dir);
             formatContents.push_back(info.contents);
         }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         const QStringList unmatchedPaths(row.unmatchedPaths.cbegin(), row.unmatchedPaths.cend());
         const QStringList matchedPaths(row.matchedPaths.cbegin(), row.matchedPaths.cend());
-#else
-        const auto vectorToList = [](const std::vector<const char*>& vec) {
-            QStringList result;
-            for (const char* s : vec)
-                result.push_back(s);
-            return result;
-        };
-        const QStringList unmatchedPaths = vectorToList(row.unmatchedPaths);
-        const QStringList matchedPaths = vectorToList(row.matchedPaths);
-#endif
         QTest::newRow(row.dataTag) << formatDirs << formatContents << unmatchedPaths << matchedPaths;
     }
 }

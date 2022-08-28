@@ -180,21 +180,13 @@ QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 
 QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &options)
 {
-	QMap<QString, QVariant> map;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QMap<QString, QVariant> map;
     const auto pairs = options.splitRef(QLatin1Char(','), Qt::SkipEmptyParts);
     for (auto& pair : pairs) {
         const int pos = pair.indexOf(QLatin1Char('='));
         map.insert(pair.left(pos).toString(), pair.mid(pos+1).toString());
-	}
-#else
-	const QStringList pairs = options.split(QLatin1Char(','), QString::SkipEmptyParts);
-	for (auto& pair : pairs) {
-		const QStringList bits = pair.split(QLatin1Char('='));
-		map[bits[0]] = bits[1];
-	}
-#endif
-	return map;
+    }
+    return map;
 }
 
 SourceFormatterStyle::MimeList ISourceFormatter::mimeTypesSupportedByBuiltInStyles()

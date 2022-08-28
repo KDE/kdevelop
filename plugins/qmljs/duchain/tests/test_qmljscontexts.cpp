@@ -15,9 +15,7 @@
 #include <tests/testhelpers.h>
 
 #include <QTest>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QRandomGenerator>
-#endif
 
 QTEST_GUILESS_MAIN(TestContexts)
 
@@ -44,11 +42,7 @@ void TestContexts::testFunctionContext()
     QFETCH(RangeInRevision, argCtxRange);
     QFETCH(RangeInRevision, bodyCtxRange);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     const auto random = QRandomGenerator::global()->generate();
-#else
-    const auto random = qrand();
-#endif
     const IndexedString file(QUrl(QStringLiteral("file:///internal/%1-functionContext.js").arg(random)));
     ParseSession session(file, code, 0);
     QVERIFY(session.ast());

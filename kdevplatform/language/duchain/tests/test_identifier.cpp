@@ -97,11 +97,7 @@ void TestIdentifier::testIdentifier_data()
 void TestIdentifier::testQualifiedIdentifier()
 {
     QFETCH(QString, stringId);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     const QStringList list = stringId.split(QStringLiteral("::"), Qt::SkipEmptyParts);
-#else
-    const QStringList list = stringId.split(QStringLiteral("::"), QString::SkipEmptyParts);
-#endif
     QualifiedIdentifier id(stringId);
     QCOMPARE(id.isEmpty(), stringId.isEmpty());
     QCOMPARE(id, QualifiedIdentifier(stringId));

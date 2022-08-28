@@ -141,23 +141,18 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     m_debugger->setParent(this);
 
     // output signals
-    connect(m_debugger, &MIDebugger::applicationOutput,
-            this, [this](const QString &output) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-                auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
-#else
-                auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), QString::SkipEmptyParts);
-#endif
-                for (auto &line : lines) {
-                    int p = line.length();
-                    while (p >= 1 && (line[p-1] == QLatin1Char('\r') || line[p-1] == QLatin1Char('\n'))) {
-                        p--;
-                    }
-                    if (p != line.length())
-                        line.truncate(p);
-                }
-                emit inferiorStdoutLines(lines);
-            });
+    connect(m_debugger, &MIDebugger::applicationOutput, this, [this](const QString& output) {
+        auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
+        for (auto& line : lines) {
+            int p = line.length();
+            while (p >= 1 && (line[p - 1] == QLatin1Char('\r') || line[p - 1] == QLatin1Char('\n'))) {
+                p--;
+            }
+            if (p != line.length())
+                line.truncate(p);
+        }
+        emit inferiorStdoutLines(lines);
+    });
     connect(m_debugger, &MIDebugger::userCommandOutput, this, &MIDebugSession::debuggerUserCommandOutput);
     connect(m_debugger, &MIDebugger::internalCommandOutput, this, &MIDebugSession::debuggerInternalCommandOutput);
     connect(m_debugger, &MIDebugger::debuggerInternalOutput, this, &MIDebugSession::debuggerInternalOutput);

@@ -40,17 +40,10 @@ struct FakeAtomic
         return true; //Always return true, because we handle the deleting by ourself
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     inline int loadRelaxed() const
     {
         return m_real.ref.loadRelaxed();
     }
-#else
-    inline int load() const
-    {
-        return m_real.ref.load();
-    }
-#endif
 
     QObject& m_object;
     QSharedData& m_real;

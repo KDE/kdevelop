@@ -198,30 +198,18 @@ void EnvironmentProfileModel::setVariablesFromString(const QString& plainText)
     variables.clear();
     m_varsByIndex.clear();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     const auto lines = plainText.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#else
-    const auto lines = plainText.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#endif
     for (const auto& line : lines) {
         const int pos = line.indexOf(QLatin1Char('='));
         // has a = and at least 1 char
         if (pos < 0) {
             continue;
         }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         const QString variableName = line.left(pos).trimmed().toString();
-#else
-        const QString variableName = line.leftRef(pos).trimmed().toString();
-#endif
         if (variableName.isEmpty()) {
             continue;
         }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        const QString value = line.mid(pos+1).trimmed().toString();
-#else
-        const QString value = line.midRef(pos+1).trimmed().toString();
-#endif
+        const QString value = line.mid(pos + 1).trimmed().toString();
         m_varsByIndex << variableName;
         variables.insert(variableName, value);
     }

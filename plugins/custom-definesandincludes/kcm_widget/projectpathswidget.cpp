@@ -55,19 +55,9 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->projectPaths, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ProjectPathsWidget::projectPathSelected );
     connect( pathsModel, &ProjectPathsModel::dataChanged, this, &ProjectPathsWidget::changed );
     connect( pathsModel, &ProjectPathsModel::rowsInserted, this, &ProjectPathsWidget::changed );
-    connect( pathsModel, &ProjectPathsModel::rowsRemoved, this, &ProjectPathsWidget::changed );
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    connect( ui->compiler, &QComboBox::textActivated,
-#else
-    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated),
-#endif
-             this, &ProjectPathsWidget::changed );
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    connect( ui->compiler, &QComboBox::textActivated,
-#else
-    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated),
-#endif
-             this, &ProjectPathsWidget::changeCompilerForPath );
+    connect(pathsModel, &ProjectPathsModel::rowsRemoved, this, &ProjectPathsWidget::changed);
+    connect(ui->compiler, &QComboBox::textActivated, this, &ProjectPathsWidget::changed);
+    connect(ui->compiler, &QComboBox::textActivated, this, &ProjectPathsWidget::changeCompilerForPath);
 
     connect( ui->includesWidget, QOverload<const QStringList&>::of(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
     connect( ui->definesWidget, QOverload<const KDevelop::Defines&>::of(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
@@ -245,22 +235,14 @@ void ProjectPathsWidget::batchEdit()
     }
 
     if (includesTab) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         auto includes = be.textEdit->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#else
-        auto includes = be.textEdit->toPlainText().split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#endif
         for (auto& s : includes) {
             s = s.trimmed();
         }
 
         pathsModel->setData(midx, includes, ProjectPathsModel::IncludesDataRole);
     } else {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         auto list = be.textEdit->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#else
-        auto list = be.textEdit->toPlainText().split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#endif
         Defines defines;
 
         for (auto& d : list) {

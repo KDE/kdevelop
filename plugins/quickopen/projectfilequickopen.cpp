@@ -200,11 +200,7 @@ void BaseFileDataProvider::setFilterText(const QString& text)
             path = Path(Path(doc->url()).parent(), path).pathOrUrl();
         }
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     setFilter(path.split(QLatin1Char('/'), Qt::SkipEmptyParts));
-#else
-    setFilter(path.split(QLatin1Char('/'), QString::SkipEmptyParts));
-#endif
 }
 
 uint BaseFileDataProvider::itemCount() const

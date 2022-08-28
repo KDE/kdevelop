@@ -72,11 +72,7 @@ std::pair<Path::List, QHash<QString, QString>>
     QFile f(pathToFile);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         const QString fileContent = QString::fromLocal8Bit(f.readAll());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         const auto lines = fileContent.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#else
-        const auto lines = fileContent.splitRef(QLatin1Char('\n'), QString::SkipEmptyParts);
-#endif
         QFileInfo dir(pathToFile);
         const QChar dirSeparator = QDir::separator();
         for (const auto& line : lines) {

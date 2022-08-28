@@ -12,18 +12,12 @@
 #include "checklistmodel.h"
 #include <checkset.h>
 #include <debug.h>
-// KF
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-#include <KRecursiveFilterProxyModel>
-#endif
 // Qt
 #include <QEvent>
 #include <QVBoxLayout>
 #include <QTreeView>
 #include <QHeaderView>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QSortFilterProxyModel>
-#endif
 
 namespace ClangTidy
 {
@@ -50,12 +44,8 @@ CheckSelection::CheckSelection(QWidget* parent)
 
     setLayout(layout);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     m_checksFilterProxyModel = new QSortFilterProxyModel(this);
     m_checksFilterProxyModel->setRecursiveFilteringEnabled(true);
-#else
-    m_checksFilterProxyModel = new KRecursiveFilterProxyModel(this);
-#endif
     checkFilterEdit->setFilterProxyModel(m_checksFilterProxyModel);
     m_checksFilterProxyModel->setSourceModel(m_checkListModel);
     m_checksFilterProxyModel->setFilterKeyColumn(CheckListModel::NameColumnId);
@@ -106,11 +96,7 @@ void CheckSelection::expandSubGroupsWithExplicitlyEnabledStates(const QModelInde
 
 void CheckSelection::setChecks(const QString& checks)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), Qt::SkipEmptyParts));
-#else
-    m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), QString::SkipEmptyParts));
-#endif
     expandSubGroupsWithExplicitlyEnabledStates();
 }
 

@@ -100,11 +100,9 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
 
 Path::List MsvcCompiler::includes(Utils::LanguageType, const QString&) const
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const QStringList _includePaths = QProcessEnvironment::systemEnvironment().value(QStringLiteral("INCLUDE")).split(QLatin1Char(';'), Qt::SkipEmptyParts);
-#else
-    const QStringList _includePaths = QProcessEnvironment::systemEnvironment().value(QStringLiteral("INCLUDE")).split(QLatin1Char(';'), QString::SkipEmptyParts);
-#endif
+    const QStringList _includePaths = QProcessEnvironment::systemEnvironment()
+                                          .value(QStringLiteral("INCLUDE"))
+                                          .split(QLatin1Char(';'), Qt::SkipEmptyParts);
     Path::List includePaths;
     includePaths.reserve(_includePaths.size());
     for (const QString& include : _includePaths) {

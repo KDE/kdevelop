@@ -51,13 +51,9 @@ public:
     /**Use this to create views for an area.*/
     class ViewCreator {
     public:
-        explicit ViewCreator(MainWindowPrivate *_d, const QList<View*>& _topViews = QList<View*>())
+        explicit ViewCreator(MainWindowPrivate* _d, const QList<View*>& _topViews = QList<View*>())
             : d(_d)
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
             , topViews(_topViews.begin(), _topViews.end())
-#else
-            , topViews(_topViews.toSet())
-#endif
         {}
         Area::WalkerMode operator() (AreaIndex *index);
     private:

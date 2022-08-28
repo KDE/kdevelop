@@ -999,12 +999,8 @@ void TopDUContext::clearProblems()
 QVector<DUContext*> TopDUContext::importers() const
 {
     ENSURE_CAN_READ
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     const QSet<DUContext*>& directImporters = m_local->m_directImporters;
     return QVector<DUContext*>(directImporters.begin(), directImporters.end());
-#else
-    return QVector<DUContext*>::fromList(m_local->m_directImporters.values());
-#endif
 }
 
 QList<DUContext*> TopDUContext::loadedImporters() const

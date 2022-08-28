@@ -152,14 +152,8 @@ void DebugVisitor::printNode(QmlJS::AST::Node* node, Position position)
 
     static QTextStream qout(stdout);
 
-    qout << indent() << stringForAstKind(node->kind)
-         << " [(" << start.startLine << ", " << start.startColumn << "), "
+    qout << indent() << stringForAstKind(node->kind) << " [(" << start.startLine << ", " << start.startColumn << "), "
          << "(" << end.startLine << ", " << (end.startColumn + end.length) << ")]"
-         << " \"" << m_session->symbolAt(location) << "\""
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-         << Qt::endl;
-#else
-         << endl;
-#endif
+         << " \"" << m_session->symbolAt(location) << "\"" << Qt::endl;
 }
 

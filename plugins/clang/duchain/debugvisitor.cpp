@@ -83,11 +83,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
         }
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     (*data->out) << Qt::endl;
-#else
-    (*data->out) << endl;
-#endif
 
     ClientData childData{data->out, data->session, data->file, data->depth + 1};
     clang_visitChildren(cursor, &visitCursor, &childData);

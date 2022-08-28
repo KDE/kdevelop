@@ -219,11 +219,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
         }
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     const QStringList ret = value.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-    QStringList ret = value.split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
     ifDebug(qCDebug(KDEV_QMAKE) << "resolved variable" << var << "to" << ret;) return ret;
 }
 

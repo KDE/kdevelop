@@ -107,11 +107,7 @@ void ChecksWidget::setChecks(const QString& checks)
         setState(m_ui->checksTree->topLevelItem(i), Qt::Unchecked);
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     const auto checksList = checks.splitRef(QLatin1Char(','), Qt::SkipEmptyParts);
-#else
-    const auto checksList = checks.splitRef(QLatin1Char(','), QString::SkipEmptyParts);
-#endif
     for (auto& rawCheckName : checksList) {
         QString checkName = rawCheckName.trimmed().toString();
         if (checkName == QLatin1String("manual")) {

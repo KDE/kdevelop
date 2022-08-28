@@ -61,17 +61,7 @@ QString UseDefault() { return QStringLiteral("UseDefault"); }
 
 }
 
-namespace KDevelop
-{
-
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
-
+namespace KDevelop {
 class SourceFormatterControllerPrivate
 {
 public:
@@ -464,11 +454,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
             qCDebug(SHELL) << "Found a kate modeline: " << line;
             modelinefound = true;
             QString options = kateModeline.cap(1);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
             const QStringList optionList = options.split(QLatin1Char(';'), Qt::SkipEmptyParts);
-#else
-            const QStringList optionList = options.split(QLatin1Char(';'), QString::SkipEmptyParts);
-#endif
 
             os <<  modeline;
             for (QString s : optionList) {
@@ -479,13 +465,13 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
                     qCDebug(SHELL) << "Found unknown option: " << s;
                 }
             }
-            os << endl;
+            os << Qt::endl;
         } else
-            os << line << endl;
+            os << line << Qt::endl;
     }
 
     if (!modelinefound)
-        os << modeline << endl;
+        os << modeline << Qt::endl;
     return output;
 }
 

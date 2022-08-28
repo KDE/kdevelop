@@ -168,11 +168,8 @@ VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, con
 void BazaarPlugin::parseBzrLog(DVcsJob* job)
 {
     QVariantList result;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const auto parts = job->output().split(QStringLiteral("------------------------------------------------------------"), Qt::SkipEmptyParts);
-#else
-    const auto parts = job->output().split(QStringLiteral("------------------------------------------------------------"), QString::SkipEmptyParts);
-#endif
+    const auto parts = job->output().split(
+        QStringLiteral("------------------------------------------------------------"), Qt::SkipEmptyParts);
     for (const QString& part : parts) {
         auto event = BazaarUtils::parseBzrLogPart(part);
         if (event.revision().revisionType() != VcsRevision::Invalid)

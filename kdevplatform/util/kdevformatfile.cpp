@@ -65,11 +65,7 @@ bool KDevFormatFile::read()
         } else {
             // We found the correct syntax with "wildcards : command"
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
             QStringList wildcards = line.section(delimiter, 0, 0).split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-            QStringList wildcards = line.section(delimiter, 0, 0).split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
             QString command = line.section(delimiter, 1).trimmed();
 
             if (wildcards.isEmpty()) {

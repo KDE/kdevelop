@@ -23,11 +23,7 @@ namespace KDevelop {
 ///so the reference-counting code can be inlined.
 class KDEVPLATFORMSERIALIZATION_EXPORT DUChainReferenceCounting
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
     Q_DISABLE_COPY_MOVE(DUChainReferenceCounting)
-#else
-    Q_DISABLE_COPY(DUChainReferenceCounting)
-#endif
 public:
     using Pointer = const std::byte*;
 
@@ -107,11 +103,7 @@ KDEVPLATFORMSERIALIZATION_EXPORT void disableDUChainReferenceCounting(const void
 
 class DUChainReferenceCountingEnabler
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
     Q_DISABLE_COPY_MOVE(DUChainReferenceCountingEnabler)
-#else
-    Q_DISABLE_COPY(DUChainReferenceCountingEnabler)
-#endif
 public:
     explicit DUChainReferenceCountingEnabler(const void* start, unsigned size)
         : m_start{start}

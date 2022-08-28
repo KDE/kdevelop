@@ -111,9 +111,6 @@ public:
 
     void newSession()
     {
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-        qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toSecsSinceEpoch()));
-#endif
         auto* session = new Session(QUuid::createUuid().toString());
 
         KProcess::startDetached(ShellExtension::getInstance()->executableFilePath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
@@ -404,10 +401,7 @@ Session* SessionController::createSession( const QString& name )
     Session* s;
     if(name.startsWith(QLatin1Char('{'))) {
         s = new Session( QUuid(name).toString(), this );
-    }else{
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-        qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toSecsSinceEpoch()));
-#endif
+    } else {
         s = new Session( QUuid::createUuid().toString(), this );
         s->setName( name );
     }
@@ -493,10 +487,7 @@ QString SessionController::cloneSession( const QString& nameOrid )
 {
     Q_D(SessionController);
 
-    Session* origSession = session( nameOrid );
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toSecsSinceEpoch()));
-#endif
+    Session* origSession = session(nameOrid);
     QUuid id = QUuid::createUuid();
     auto copyJob = KIO::copy(QUrl::fromLocalFile(sessionDirectory(origSession->id().toString())),
                              QUrl::fromLocalFile(sessionDirectory( id.toString())));
@@ -659,9 +650,6 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
     const QString selectedSessionId = selected.sibling(selected.row(), 0).data().toString();
     if (selectedSessionId.isEmpty()) {
         // "Create New Session" item selected, return a fresh UUID
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-        qsrand(static_cast<uint>(QDateTime::currentDateTimeUtc().toSecsSinceEpoch()));
-#endif
         return QUuid::createUuid().toString();
     }
     return selectedSessionId;

@@ -380,15 +380,8 @@ inline uint qHash(const ReferencedTopDUContext& ctx)
     return ctx.hash();
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TopDUContext::Features)
-#endif
-
 }
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::TopDUContext::Features)
-#endif
 
 Q_DECLARE_TYPEINFO(KDevelop::ReferencedTopDUContext, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)

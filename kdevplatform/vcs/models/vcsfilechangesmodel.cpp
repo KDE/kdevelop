@@ -261,11 +261,7 @@ void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<QUrl>& ur
     if(!d->allowSelection)
         return;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     const QSet<QUrl> urlSet(urls.begin(), urls.end());
-#else
-    const QSet<QUrl> urlSet(urls.toSet());
-#endif
     for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
         item->setCheckState(urlSet.contains(indexFromItem(item).data(UrlRole).toUrl()) ?

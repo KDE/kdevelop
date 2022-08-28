@@ -135,19 +135,8 @@ void FindReplaceTest::testIncludeExcludeFilters_data()
     QTest::addColumn<QStringList>("matchedPaths");
 
     for (const Row& row : dataRows) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         const QStringList unmatchedPaths(row.unmatchedPaths.cbegin(), row.unmatchedPaths.cend());
         const QStringList matchedPaths(row.matchedPaths.cbegin(), row.matchedPaths.cend());
-#else
-        const auto vectorToList = [](const std::vector<const char*>& vec) {
-            QStringList result;
-            for (const char* s : vec)
-                result.push_back(s);
-            return result;
-        };
-        const QStringList unmatchedPaths = vectorToList(row.unmatchedPaths);
-        const QStringList matchedPaths = vectorToList(row.matchedPaths);
-#endif
         QTest::newRow(row.dataTag) << QString{row.files} << QString{row.exclude} << unmatchedPaths << matchedPaths;
     }
 }

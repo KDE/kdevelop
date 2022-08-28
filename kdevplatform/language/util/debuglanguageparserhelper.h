@@ -55,13 +55,6 @@ template <class SessionT, class TokenStreamT, class TokenT, class LexerT,
     class StartAstT, class DebugVisitorT, TokenTextFunc TokenTextT>
 class DebugLanguageParserHelper
 {
-    using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    static constexpr TextStreamFunction endl = Qt::endl;
-#else
-    static constexpr TextStreamFunction endl = ::endl;
-#endif
-
 public:
     DebugLanguageParserHelper(const bool printAst, const bool printTokens)
         : m_printAst(printAst)
@@ -74,10 +67,10 @@ public:
     void parseFile(const QString& fileName)
     {
         if (!m_session.readFile(fileName, "utf-8")) {
-            qerr << "Can't open file " << fileName << endl;
+            qerr << "Can't open file " << fileName << Qt::endl;
             std::exit(255);
         } else {
-            qout << "Parsing file " << fileName << endl;
+            qout << "Parsing file " << fileName << Qt::endl;
         }
         runSession();
     }
@@ -87,7 +80,7 @@ public:
     {
         m_session.setContents(code);
 
-        qout << "Parsing input" << endl;
+        qout << "Parsing input" << Qt::endl;
         runSession();
     }
 
@@ -121,9 +114,9 @@ private:
 
         StartAstT* ast = 0;
         if (!m_session.parse(&ast)) {
-            qerr << "no AST tree could be generated" << endl;
+            qerr << "no AST tree could be generated" << Qt::endl;
         } else {
-            qout << "AST tree successfully generated" << endl;
+            qout << "AST tree successfully generated" << Qt::endl;
             if (m_printAst) {
                 DebugVisitorT debugVisitor(m_session.tokenStream(), m_session.contents());
                 debugVisitor.visitStart(ast);
@@ -131,12 +124,12 @@ private:
         }
         const auto problems = m_session.problems();
         if (!problems.isEmpty()) {
-            qout << endl << "problems encountered during parsing:" << endl;
+            qout << endl << "problems encountered during parsing:" << Qt::endl;
             for (auto& p : problems) {
-                qout << p->description() << endl;
+                qout << p->description() << Qt::endl;
             }
         } else {
-            qout << "no problems encountered during parsing" << endl;
+            qout << "no problems encountered during parsing" << Qt::endl;
         }
 
         if (!ast) {
@@ -148,8 +141,8 @@ private:
     {
         int begin = lexer.tokenBegin();
         int end = lexer.tokenEnd();
-        qout << m_session.contents().mid(begin, end - begin + 1).replace('\n', "\\n")
-             << ' ' << TokenTextT(token) << endl;
+        qout << m_session.contents().mid(begin, end - begin + 1).replace('\n', "\\n") << ' ' << TokenTextT(token)
+             << Qt::endl;
     }
 
     SessionT m_session;
@@ -221,11 +214,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
         if (fileName == "-") {
 #ifndef Q_OS_WIN
             if (isatty(STDIN_FILENO)) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
                 qerr << "no STDIN given" << Qt::endl;
-#else
-                qerr << "no STDIN given" << endl;
-#endif
                 return 255;
             }
 #endif

@@ -244,12 +244,7 @@ GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    connect(searchPaths, &KComboBox::textActivated,
-#else
-    connect(searchPaths, QOverload<const QString&>::of(&KComboBox::activated),
-#endif
-            this, &GrepDialog::setSearchLocations);
+    connect(searchPaths, &KComboBox::textActivated, this, &GrepDialog::setSearchLocations);
 
     directorySelector->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );

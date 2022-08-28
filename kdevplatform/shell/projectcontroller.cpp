@@ -999,13 +999,8 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
         otherProjectPlugins << _list;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QSet<IPlugin*> pluginsForProjSet(pluginsForProj.begin(), pluginsForProj.end());
     QSet<IPlugin*> otherPrjPluginsSet(otherProjectPlugins.constBegin(), otherProjectPlugins.constEnd());
-#else
-    QSet<IPlugin*> pluginsForProjSet = QSet<IPlugin*>::fromList( pluginsForProj );
-    QSet<IPlugin*> otherPrjPluginsSet = QSet<IPlugin*>::fromList( otherProjectPlugins );
-#endif
     // loaded - target = tobe unloaded.
     const QSet<IPlugin*> tobeRemoved = pluginsForProjSet.subtract( otherPrjPluginsSet );
     for (IPlugin* _plugin : tobeRemoved) {

@@ -142,11 +142,7 @@ void BenchItemRepository::remove()
     const QVector<QString> data = generateData();
     const QVector<uint> indices = insertData(data, repo);
     repo.store();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QVERIFY(indices.size() == QSet<uint>(indices.begin(), indices.end()).size());
-#else
-    QVERIFY(indices.size() == indices.toList().toSet().size());
-#endif
     QVERIFY(indices.size() == data.size());
     QBENCHMARK_ONCE {
         for (uint index : indices) {

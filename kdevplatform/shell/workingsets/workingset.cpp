@@ -47,12 +47,8 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
         {9, 1, 5, 5},
         {9, 9, 5, 5},
     };
-    if ( params.swapDiagonal ) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+    if (params.swapDiagonal) {
         rects.swapItemsAt(1, 2);
-#else
-        rects.swap(1, 2);
-#endif
     }
 
     QPainter painter(&pixmap);
@@ -373,11 +369,7 @@ QStringList WorkingSet::fileList() const
 QSet<QString> WorkingSet::fileSet() const
 {
     const QStringList fileList = this->fileList();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     return QSet<QString>(fileList.begin(), fileList.end());
-#else
-    return fileList.toSet();
-#endif
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area) {

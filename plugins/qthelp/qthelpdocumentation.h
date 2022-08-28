@@ -13,9 +13,7 @@
 #include <QMap>
 #include <QUrl>
 #include <QAction>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
 #include <QHelpLink>
-#endif
 
 #include <interfaces/idocumentation.h>
 
@@ -27,16 +25,14 @@ class QtHelpProviderAbstract;
 class QtHelpDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
-    public:
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info);
-        QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info, const QString& key);
-#else
-        QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info);
-        QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key);
-#endif
+public:
+    QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info);
+    QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info, const QString& key);
 
-        QString name() const override { return m_name; }
+    QString name() const override
+    {
+        return m_name;
+    }
 
         QString description() const override;
 
@@ -44,11 +40,10 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 
         KDevelop::IDocumentationProvider* provider() const override;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        QList<QHelpLink> info() const { return m_info; }
-#else
-        QMap<QString, QUrl> info() const { return m_info; }
-#endif
+        QList<QHelpLink> info() const
+        {
+            return m_info;
+        }
 
         static QtHelpProviderAbstract* s_provider;
 
@@ -59,24 +54,17 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         void jumpedTo(const QUrl& newUrl);
 
     private:
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         const QUrl& currentUrl() const { return m_current->url; }
-        const QString& currentTitle() const { return m_current->title; }
-#else
-        const QUrl& currentUrl() const { return m_current.value(); }
-        const QString& currentTitle() const { return m_current.key(); }
-#endif
+        const QString& currentTitle() const
+        {
+            return m_current->title;
+        }
 
     private:
         QtHelpProviderAbstract *m_provider;
         const QString m_name;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         const QList<QHelpLink> m_info;
         const QList<QHelpLink>::const_iterator m_current;
-#else
-        const QMap<QString, QUrl> m_info;
-        const QMap<QString, QUrl>::const_iterator m_current;
-#endif
 
         KDevelop::StandardDocumentationView* lastView;
 };

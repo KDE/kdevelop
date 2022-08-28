@@ -130,11 +130,7 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
     m_addedItems.clear();
     m_addedItemsCountCache.markDirty();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     QStringList search(text.split(QStringLiteral("::"), Qt::SkipEmptyParts));
-#else
-    QStringList search(text.split(QStringLiteral("::"), QString::SkipEmptyParts));
-#endif
     for (auto& s : search) {
         if (s.endsWith(QLatin1Char(':'))) { //Don't get confused while the :: is being typed
             s.chop(1);

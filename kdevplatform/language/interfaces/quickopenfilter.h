@@ -89,11 +89,7 @@ public:
 
         m_filtered.clear();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         QStringList typedFragments = text.split(QStringLiteral("::"), Qt::SkipEmptyParts);
-#else
-        QStringList typedFragments = text.split(QStringLiteral("::"), QString::SkipEmptyParts);
-#endif
         if (typedFragments.isEmpty()) {
             clearFilter();
             return;

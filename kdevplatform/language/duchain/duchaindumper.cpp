@@ -40,15 +40,6 @@ QDebug fromTextStream(const QTextStream& out)
 }
 
 namespace KDevelop {
-
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
-
 QString typeToString(DUContext::ContextType type)
 {
     switch (type) {
@@ -115,13 +106,13 @@ void DUChainDumperPrivate::dumpProblems(TopDUContext* top, QTextStream& out)
     QDebug qout = fromTextStream(out);
 
     if (!top->problems().isEmpty()) {
-        qout << top->problems().size() << "problems encountered:" << endl;
+        qout << top->problems().size() << "problems encountered:" << Qt::endl;
         const auto problems = top->problems();
         for (const ProblemPointer& p : problems) {
-            qout << Indent(m_indent * 2) << p->description() << p->explanation() << p->finalLocation() << endl;
+            qout << Indent(m_indent * 2) << p->description() << p->explanation() << p->finalLocation() << Qt::endl;
         }
 
-        qout << endl;
+        qout << Qt::endl;
     }
 }
 
@@ -131,15 +122,14 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
 
     qout << Indent(m_indent * 2) << (isFromImport ? " ==import==>" : "")
          << (dynamic_cast<TopDUContext*>(context) ? "Top-Context" : "Context") << typeToString(context->type())
-         << "(owner: " << context->owner() << ")"
-         << context << context->localScopeIdentifier() << "[" << context->scopeIdentifier(true) << "]"
-         << context->range().castToSimpleRange()
+         << "(owner: " << context->owner() << ")" << context << context->localScopeIdentifier() << "["
+         << context->scopeIdentifier(true) << "]" << context->range().castToSimpleRange()
          << (dynamic_cast<TopDUContext*>(context) ? static_cast<TopDUContext*>(context)->url().byteArray() : "")
-         << endl;
+         << Qt::endl;
 
     if (m_visitedContexts.contains(context)) {
-        qout << Indent((m_indent + 2) * 2) << "(Skipping" << context->scopeIdentifier(true) <<
-            "because it was already printed)" << endl;
+        qout << Indent((m_indent + 2) * 2) << "(Skipping" << context->scopeIdentifier(true)
+             << "because it was already printed)" << Qt::endl;
         return;
     }
 
@@ -151,26 +141,26 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
         for (Declaration* dec : localDeclarations) {
             //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
 
-            qout << Indent((m_indent + 2) * 2) << "Declaration:" << dec->toString() << "[" <<
-                dec->qualifiedIdentifier() << "]"
-                 << dec << "(internal ctx:" << dec->internalContext() << ")" << dec->range().castToSimpleRange() << ","
+            qout << Indent((m_indent + 2) * 2) << "Declaration:" << dec->toString() << "[" << dec->qualifiedIdentifier()
+                 << "]" << dec << "(internal ctx:" << dec->internalContext() << ")" << dec->range().castToSimpleRange()
+                 << ","
                  << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, "))
-                 << dec->uses().count() << "use(s)." << endl;
+                 << dec->uses().count() << "use(s)." << Qt::endl;
             if (FunctionDefinition::definition(dec)) {
-                qout << Indent((m_indent + 2) * 2 + 1) << "Definition:" <<
-                    FunctionDefinition::definition(dec)->range().castToSimpleRange() << endl;
+                qout << Indent((m_indent + 2) * 2 + 1)
+                     << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange() << Qt::endl;
             }
             const auto uses = dec->uses();
             for (auto it = uses.constBegin(); it != uses.constEnd(); ++it) {
-                qout << Indent((m_indent + 3) * 2) << "File:" << it.key().str() << endl;
+                qout << Indent((m_indent + 3) * 2) << "File:" << it.key().str() << Qt::endl;
                 for (const RangeInRevision range : qAsConst(*it)) {
-                    qout << Indent((m_indent + 4) * 2) << "Use:" << range.castToSimpleRange() << endl;
+                    qout << Indent((m_indent + 4) * 2) << "Use:" << range.castToSimpleRange() << Qt::endl;
                 }
             }
         }
     } else {
-        qout << Indent((m_indent + 2) * 2) << context->localDeclarations(top).count()
-             << "Declarations," << context->childContexts().size() << "child-contexts" << endl;
+        qout << Indent((m_indent + 2) * 2) << context->localDeclarations(top).count() << "Declarations,"
+             << context->childContexts().size() << "child-contexts" << Qt::endl;
     }
 
     ++m_indent;
@@ -180,7 +170,7 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
            for (const DUContext::Import& parent : importedParentContexts) {
            DUContext* import = parent.context(top);
            if(!import) {
-              qout << Indent((m_indent+2) * 2+1) << "Could not get parent, is it registered in the DUChain?" << endl;
+              qout << Indent((m_indent+2) * 2+1) << "Could not get parent, is it registered in the DUChain?" << Qt::endl;
               continue;
            }
 
@@ -203,7 +193,7 @@ void DUChainDumper::dump(DUContext* context, int allowedDepth, QTextStream& out)
     d->m_visitedContexts.clear();
 
     if (!context) {
-        out << "Error: Null context" << endl;
+        out << "Error: Null context" << Qt::endl;
         return;
     }
 

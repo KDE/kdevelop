@@ -159,15 +159,8 @@ Q_SIGNALS:
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 };
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 Q_DECLARE_OPERATORS_FOR_FLAGS(IProjectFileManager::Features)
-#endif
-
 }
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IProjectFileManager::Features)
-#endif
 
 Q_DECLARE_INTERFACE( KDevelop::IProjectFileManager, "org.kdevelop.IProjectFileManager")
 

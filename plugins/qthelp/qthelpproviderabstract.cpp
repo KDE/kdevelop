@@ -30,12 +30,7 @@ using namespace KDevelop;
 namespace {
 IDocumentation::Ptr documentationPtrFromUrl(const QUrl& url)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const QList<QHelpLink> info {{url, url.toString()}};
-#else
-    QMap<QString, QUrl> info;
-    info.insert(url.toString(), url);
-#endif
+    const QList<QHelpLink> info{{url, url.toString()}};
     return IDocumentation::Ptr(new QtHelpDocumentation(url.toString(), info));
 }
 }
@@ -49,9 +44,7 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &c
     if( !m_engine.setupData() ) {
         qCWarning(QTHELP) << "Couldn't setup QtHelp Collection file";
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     m_engine.setUsesFilterEngine(true);
-#endif
 }
 
 
@@ -74,12 +67,7 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
         }
 
         if (!id.isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
             const QList<QHelpLink> links = m_engine.documentsForIdentifier(id);
-#else
-            QMap<QString, QUrl> links = m_engine.linksForIdentifier(id);
-#endif
-
             if(!links.isEmpty())
                 return IDocumentation::Ptr(new QtHelpDocumentation(id, links));
         }
@@ -105,12 +93,8 @@ QAbstractItemModel* QtHelpProviderAbstract::indexModel() const
 IDocumentation::Ptr QtHelpProviderAbstract::documentationForIndex(const QModelIndex& idx) const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
-    QString name=idx.data(Qt::DisplayRole).toString();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QString name = idx.data(Qt::DisplayRole).toString();
     return IDocumentation::Ptr(new QtHelpDocumentation(name, m_engine.documentsForKeyword(name)));
-#else
-    return IDocumentation::Ptr(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
-#endif
 }
 
 void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl)

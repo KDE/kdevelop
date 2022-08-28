@@ -15,16 +15,6 @@
 #include "serialization/itemrepository.h"
 
 namespace KDevelop {
-
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
-
-
 DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration)
 
 class DefinitionsItem
@@ -130,11 +120,11 @@ public:
         auto id = item->declaration;
         const auto allDefinitions = definitions->definitions(id);
 
-        qout << "Definitions for" << id.qualifiedIdentifier() << endl;
+        qout << "Definitions for" << id.qualifiedIdentifier() << Qt::endl;
         for (const IndexedDeclaration& decl : allDefinitions) {
             if (decl.data()) {
-                qout << " " << decl.data()->qualifiedIdentifier() << "in" << decl.data()->url().byteArray() << "at" <<
-                    decl.data()->rangeInCurrentRevision() << endl;
+                qout << " " << decl.data()->qualifiedIdentifier() << "in" << decl.data()->url().byteArray() << "at"
+                     << decl.data()->rangeInCurrentRevision() << Qt::endl;
             }
         }
 

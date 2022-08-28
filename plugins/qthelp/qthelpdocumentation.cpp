@@ -32,7 +32,6 @@ using namespace KDevelop;
 
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=nullptr;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info)
     : m_provider(s_provider)
     , m_name(name)
@@ -60,15 +59,6 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpL
 {
     Q_ASSERT(m_current!=m_info.constEnd());
 }
-#else
-QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(nullptr)
-{}
-
-QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(nullptr)
-{ Q_ASSERT(m_current!=m_info.constEnd()); }
-#endif
 
 QString QtHelpDocumentation::description() const
 {
@@ -177,15 +167,11 @@ QString QtHelpDocumentation::description() const
         return thisFragment;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     QStringList titles;
     titles.reserve(m_info.size());
     for (auto& link : qAsConst(m_info)) {
         titles.append(link.title);
     }
-#else
-    const QStringList titles = m_info.keys();
-#endif
     return titles.join(QLatin1String(", "));
 }
 
@@ -223,11 +209,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 
         auto* actionGroup = new QActionGroup(menu);
         for (auto it = m_info.constBegin(), end = m_info.constEnd(); it != end; ++it) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
             const QString& name = it->title;
-#else
-            const QString& name = it.key();
-#endif
             auto* act=new QtHelpAlternativeLink(name, this, actionGroup);
             act->setCheckable(true);
             act->setChecked(name==currentTitle());
@@ -284,12 +266,7 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
     QHelpContentModel* model = m_provider->engine()->contentModel();
     QHelpContentItem* it=model->contentItemAt(idx);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const QList<QHelpLink> info {{it->url(), it->title()}};
-#else
-    QMap<QString, QUrl> info;
-    info.insert(it->title(), it->url());
-#endif
+    const QList<QHelpLink> info{{it->url(), it->title()}};
     IDocumentation::Ptr newDoc(new QtHelpDocumentation(it->title(), info));
     ICore::self()->documentationController()->showDocumentation(newDoc);
 }

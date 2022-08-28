@@ -68,13 +68,8 @@ QStringList QuickOpenModel::allTypes() const
 void QuickOpenModel::registerProvider(const QStringList& scopes, const QStringList& types, KDevelop::QuickOpenDataProviderBase* provider)
 {
     ProviderEntry e;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     e.scopes = QSet<QString>(scopes.begin(), scopes.end());
     e.types = QSet<QString>(types.begin(), types.end());
-#else
-    e.scopes = QSet<QString>::fromList(scopes);
-    e.types = QSet<QString>::fromList(types);
-#endif
     e.provider = provider;
 
     m_providers << e; //.insert( types, e );
@@ -103,13 +98,8 @@ bool QuickOpenModel::removeProvider(KDevelop::QuickOpenDataProviderBase* provide
 
 void QuickOpenModel::enableProviders(const QStringList& _items, const QStringList& _scopes)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     const QSet<QString> items(_items.begin(), _items.end());
     const QSet<QString> scopes(_scopes.begin(), _scopes.end());
-#else
-    const QSet<QString> items = QSet<QString>::fromList(_items);
-    const QSet<QString> scopes = QSet<QString>::fromList(_scopes);
-#endif
     if (m_enabledItems == items && m_enabledScopes == scopes && !items.isEmpty() && !scopes.isEmpty()) {
         return;
     }

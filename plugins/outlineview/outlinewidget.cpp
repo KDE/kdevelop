@@ -12,14 +12,9 @@
 #include <QLineEdit>
 #include <QIcon>
 #include <QWidgetAction>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QSortFilterProxyModel>
-#endif
 
 #include <KLocalizedString>
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-#include <KRecursiveFilterProxyModel>
-#endif
 
 #include "outlineviewplugin.h"
 #include "outlinemodel.h"
@@ -31,20 +26,14 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     , m_plugin(plugin)
     , m_model(new OutlineModel(this))
     , m_tree(new QTreeView(this))
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     , m_proxy(new QSortFilterProxyModel(this))
-#else
-    , m_proxy(new KRecursiveFilterProxyModel(this))
-#endif
     , m_filter(new QLineEdit(this))
 {
     setObjectName(QStringLiteral("Outline View"));
     setWindowTitle(i18nc("@title:window", "Outline"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon())); //TODO: better icon?
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     m_proxy->setRecursiveFilteringEnabled(true);
-#endif
     m_proxy->setSourceModel(m_model);
     m_proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_proxy->setSortCaseSensitivity(Qt::CaseInsensitive);

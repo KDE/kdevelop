@@ -96,16 +96,9 @@ MesonBuilder::DirectoryStatus MesonBuilder::evaluateBuildDirectory(const Path& p
     }
 
     QDir dir(path.toLocalFile());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     if (dir.isEmpty(QDir::NoDotAndDotDot | QDir::Hidden | QDir::AllEntries)) {
         return CLEAN;
     }
-#else
-    dir.setFilter(QDir::NoDotAndDotDot | QDir::Hidden | QDir::AllEntries);
-    if (dir.count() == 0) {
-        return CLEAN;
-    }
-#endif
 
     // Check if the directory is a meson directory
     const static QStringList mesonPaths = { QStringLiteral("meson-logs"), QStringLiteral("meson-private") };

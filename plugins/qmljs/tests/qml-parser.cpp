@@ -14,14 +14,8 @@
 using namespace KDevelop;
 using namespace KDevelopUtils;
 
-class QmlParser {
-    using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    static constexpr TextStreamFunction endl = Qt::endl;
-#else
-    static constexpr TextStreamFunction endl = ::endl;
-#endif
-
+class QmlParser
+{
 public:
     QmlParser(const bool printAst, const bool printTokens)
       : m_printAst(printAst), m_printTokens(printTokens)
@@ -51,16 +45,16 @@ private:
     void runSession()
     {
         if (!m_session->isParsedCorrectly()) {
-            qerr << "failed to parse code" << endl;
+            qerr << "failed to parse code" << Qt::endl;
         }
         if (m_printTokens) {
-            qerr << "token cannot be printed for qml/js source..." << endl;
+            qerr << "token cannot be printed for qml/js source..." << Qt::endl;
         }
 
         if (!m_session->ast()) {
-            qerr << "no AST tree could be generated" << endl;
+            qerr << "no AST tree could be generated" << Qt::endl;
         } else {
-            qout << "AST tree successfully generated" << endl;
+            qout << "AST tree successfully generated" << Qt::endl;
             if (m_printAst) {
                 ///FIXME:
                 DebugVisitor visitor(m_session.data());
@@ -68,12 +62,12 @@ private:
             }
         }
         if (!m_session->problems().isEmpty()) {
-            qerr << endl << "problems encountered during parsing:" << endl;
+            qerr << endl << "problems encountered during parsing:" << Qt::endl;
             foreach(const ProblemPointer problem, m_session->problems()) {
                 qerr << problem->toString();
             }
         } else {
-            qout << "no problems encountered during parsing" << endl;
+            qout << "no problems encountered during parsing" << Qt::endl;
         }
 
         if (!m_session->ast()) {

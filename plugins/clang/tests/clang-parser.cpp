@@ -16,14 +16,8 @@
 using namespace KDevelop;
 using namespace KDevelopUtils;
 
-class ClangParser {
-    using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    static constexpr TextStreamFunction endl = Qt::endl;
-#else
-    static constexpr TextStreamFunction endl = ::endl;
-#endif
-
+class ClangParser
+{
 public:
     ClangParser(const bool printAst, const bool printTokens)
       : m_session({})
@@ -36,7 +30,7 @@ public:
     void parseFile( const QString &fileName )
     {
         if (!QFile::exists(fileName)) {
-            qerr << "File to parse does not exist: " << fileName << endl;
+            qerr << "File to parse does not exist: " << fileName << Qt::endl;
             return;
         }
         m_session.setData(ParseSessionData::Ptr(new ParseSessionData({}, &m_index, environment(fileName))));
@@ -68,7 +62,7 @@ private:
     void runSession()
     {
         if (!m_session.unit()) {
-            qerr << "failed to parse code" << endl;
+            qerr << "failed to parse code" << Qt::endl;
         }
         if (m_printTokens) {
             CXTranslationUnit TU = m_session.unit();
@@ -77,18 +71,18 @@ private:
             const ClangTokens tokens(TU, range);
             for (CXToken token : tokens) {
                 CXString spelling = clang_getTokenSpelling(TU, token);
-                qout << "token= " << clang_getCString(spelling) << endl;
+                qout << "token= " << clang_getCString(spelling) << Qt::endl;
                 clang_disposeString(spelling);
             }
         }
 
         if (!m_session.unit()) {
-            qerr << "no AST tree could be generated" << endl;
+            qerr << "no AST tree could be generated" << Qt::endl;
             exit(255);
             return;
         }
 
-        qout << "AST tree successfully generated" << endl;
+        qout << "AST tree successfully generated" << Qt::endl;
         auto file = m_session.mainFile();
 
         if (m_printAst) {
@@ -98,12 +92,12 @@ private:
 
         const auto problems = m_session.problemsForFile(file);
         if (!problems.isEmpty()) {
-            qerr << endl << "problems encountered during parsing:" << endl;
+            qerr << Qt::endl << "problems encountered during parsing:" << Qt::endl;
             for (const ProblemPointer& problem : problems) {
-                qerr << problem->toString() << endl;
+                qerr << problem->toString() << Qt::endl;
             }
         } else {
-            qout << "no problems encountered during parsing" << endl;
+            qout << "no problems encountered during parsing" << Qt::endl;
         }
     }
 

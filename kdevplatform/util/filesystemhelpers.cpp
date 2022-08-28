@@ -20,17 +20,7 @@ bool FilesystemHelpers::createNewFileAndWrite(const QString& filePath,
 {
     QFile file(filePath);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    constexpr auto mode = QIODevice::NewOnly;
-#else
-    constexpr auto mode = QIODevice::WriteOnly;
-    if (file.exists()) {
-        qCritical() << Q_FUNC_INFO << "File already exists";
-        return false;
-    }
-#endif
-
-    if (!file.open(mode)) {
+    if (!file.open(QIODevice::NewOnly)) {
         qCritical() << Q_FUNC_INFO << file.error() << file.errorString();
         return false;
     }

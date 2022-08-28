@@ -34,14 +34,6 @@
 using namespace KDevelop;
 
 namespace KDevelop {
-
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
 // wrap the ProjectController to make its addProject() method public
 class ProjectControllerWrapper : public ProjectController
 {
@@ -71,14 +63,13 @@ public:
     void start()
     {
         m_projectNumber = s_numBenchmarksRunning++;
-        m_out << "Starting import of project " << m_project->path().toLocalFile() << endl;
+        m_out << "Starting import of project " << m_project->path().toLocalFile() << Qt::endl;
         auto *projectController = qobject_cast<ProjectControllerWrapper*>(m_core->projectController());
         projectController->addProject(m_project);
         m_timer.start();
         auto root = m_manager->import(m_project);
         int elapsed = m_timer.elapsed();
-        m_out << "\tcreating dirwatcher took "
-            << elapsed / 1000.0 << " seconds" << endl;
+        m_out << "\tcreating dirwatcher took " << elapsed / 1000.0 << " seconds" << Qt::endl;
         auto import = m_manager->createImportJob(root);
         connect(import, &KJob::finished,
             this, &AbstractFileManagerPluginImportBenchmark::projectImportDone);
@@ -103,9 +94,8 @@ private Q_SLOTS:
     {
         Q_UNUSED(job);
         int elapsed = m_timer.elapsed();
-        m_out << "importing " << m_project->fileSet().size()
-            << " items into project #" << m_projectNumber
-            << " took " << elapsed / 1000.0 << " seconds" << endl;
+        m_out << "importing " << m_project->fileSet().size() << " items into project #" << m_projectNumber << " took "
+              << elapsed / 1000.0 << " seconds" << Qt::endl;
 
         s_numBenchmarksRunning -= 1;
         if (s_numBenchmarksRunning <= 0) {
@@ -144,7 +134,7 @@ int main(int argc, char** argv)
     auto manager = new AbstractFileManagerPlugin({}, core);
 
     const char *kdwMethod[] = {"FAM", "Inotify", "Stat", "QFSWatch"};
-    qout << "KDirWatch backend: " << kdwMethod[KDirWatch().internalMethod()] << KDevelop::endl;
+    qout << "KDirWatch backend: " << kdwMethod[KDirWatch().internalMethod()] << Qt::endl;
 
     QList<AbstractFileManagerPluginImportBenchmark*> benchmarks;
 

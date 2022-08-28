@@ -29,14 +29,6 @@ namespace {
 // For now, just _always_ use the cache
 const uint MinimumCountForCache = 1;
 
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
 QDebug fromTextStream(const QTextStream& out)
 {
     if (out.device())
@@ -447,21 +439,21 @@ struct DebugVisitor
             IndexedDeclaration decl(item->declarations()[a]);
             if (!decl.isDummy()) {
                 if (declarations.contains(decl)) {
-                    qout << "declaration found for multiple identifiers. Previous identifier:" <<
-                        declarations[decl].toString() << "current identifier:" << id.toString() << endl;
+                    qout << "declaration found for multiple identifiers. Previous identifier:"
+                         << declarations[decl].toString() << "current identifier:" << id.toString() << Qt::endl;
                 } else {
                     declarations.insert(decl, id);
                 }
             }
             if (decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier()) {
-                qout << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() <<
-                    "is registered as" << item->id.identifier() << endl;
+                qout << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier()
+                     << "is registered as" << item->id.identifier() << Qt::endl;
             }
 
             const QString url = IndexedTopDUContext(decl.topContextIndex()).url().str();
             if (!decl.data() && !decl.isDummy()) {
-                qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << decl.localIndex() <<
-                    "- url:" << url << endl;
+                qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << decl.localIndex()
+                     << "- url:" << url << Qt::endl;
             } else {
                 qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" <<
                     url;
@@ -470,7 +462,7 @@ struct DebugVisitor
                 } else {
                     qout << "- null declaration";
                 }
-                qout << endl;
+                qout << Qt::endl;
             }
         }
 
@@ -490,8 +482,8 @@ void PersistentSymbolTable::dump(const QTextStream& out)
     LockedItemRepository::read<PersistentSymbolTable>([&](const PersistentSymbolTableRepo& repo) {
         repo.visitAllItems(v);
 
-        qout << "Statistics:" << endl;
-        qout << repo.statistics() << endl;
+        qout << "Statistics:" << Qt::endl;
+        qout << repo.statistics() << Qt::endl;
     });
 }
 

@@ -275,20 +275,11 @@ void VcsAnnotationItemDelegate::paint(QPainter* painter, const KTextEditor::Styl
         const auto date = annotationLine.date();
         if (date.isValid()) {
             ageText = ageOfDate(date.date());
-            ageRect = QRect(QPoint(0, 0),
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-                            QSize(option.fontMetrics.horizontalAdvance(ageText), option.rect.height()));
-#else
-                            QSize(option.fontMetrics.width(ageText), option.rect.height()));
-#endif
+            ageRect = QRect(QPoint(0, 0), QSize(option.fontMetrics.horizontalAdvance(ageText), option.rect.height()));
         }
         const auto messageText = annotationLine.commitMessage();
-        auto messageRect = QRect(QPoint(0, 0),
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-                                 QSize(option.fontMetrics.horizontalAdvance(messageText), option.rect.height()));
-#else
-                                 QSize(option.fontMetrics.width(messageText), option.rect.height()));
-#endif
+        auto messageRect =
+            QRect(QPoint(0, 0), QSize(option.fontMetrics.horizontalAdvance(messageText), option.rect.height()));
 
         doMessageLineLayout(option, &messageRect, &ageRect);
 
@@ -297,12 +288,8 @@ void VcsAnnotationItemDelegate::paint(QPainter* painter, const KTextEditor::Styl
         const auto author = annotationLine.author();
         if (!author.isEmpty()) {
             const auto authorText = i18nc("By: commit author", "By: %1", author);
-            auto authorRect = QRect(QPoint(0, 0),
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-                                    QSize(option.fontMetrics.horizontalAdvance(authorText), option.rect.height()));
-#else
-                                    QSize(option.fontMetrics.width(authorText), option.rect.height()));
-#endif
+            auto authorRect =
+                QRect(QPoint(0, 0), QSize(option.fontMetrics.horizontalAdvance(authorText), option.rect.height()));
 
             doAuthorLineLayout(option, &authorRect);
 

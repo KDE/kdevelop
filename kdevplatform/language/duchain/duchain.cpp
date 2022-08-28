@@ -20,9 +20,7 @@
 #include <QMutexLocker>
 #include <QRecursiveMutex>
 #include <QTimer>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QRandomGenerator>
-#endif
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
@@ -950,11 +948,7 @@ unloadContexts:
                  it != m_fileEnvironmentInformations.end();) {
                 ParsingEnvironmentFile* f = it->data();
                 Q_ASSERT(f->d_func()->classId);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
                 if (f->ref.loadRelaxed() == 1) {
-#else
-                if (f->ref.load() == 1) {
-#endif
                     Q_ASSERT(!f->d_func()->isDynamic()); //It cannot be dynamic, since we have stored before
                     //The ParsingEnvironmentFilePointer is only referenced once. This means that it does not belong to any
                     //loaded top-context, so just remove it to save some memory and processing time.
@@ -1101,12 +1095,8 @@ unloadContexts:
         if (checkContextsCount < percentageOfContexts)
             checkContextsCount = percentageOfContexts;
 
-        if (visitor.checkContexts.size() > ( int )checkContextsCount)
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        if (visitor.checkContexts.size() > (int)checkContextsCount)
             startPos = QRandomGenerator::global()->bounded(visitor.checkContexts.size() - checkContextsCount);
-#else
-            startPos = qrand() % (visitor.checkContexts.size() - checkContextsCount);
-#endif
 
         int endPos = startPos + maxFinalCleanupCheckContexts;
         if (endPos > visitor.checkContexts.size())

@@ -15,13 +15,8 @@ static QSet<QString> initCommands()
     if (ids.isEmpty()) {
         return {};
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     const auto secondIt = ids.constBegin() + 1;
     return QSet<QString>(secondIt, ids.constEnd());
-#else
-    ids.removeFirst();
-    return ids.toSet();
-#endif
 }
 
 // TODO: maybe share this again with codecompletionmodel and documentation

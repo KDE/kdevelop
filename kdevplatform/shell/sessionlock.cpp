@@ -17,14 +17,6 @@
 #include <QDir>
 
 namespace KDevelop {
-
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
 QString lockFileForSession( const QString& id )
 {
     return SessionController::sessionDirectory( id ) + QLatin1String("/lock");
@@ -156,7 +148,11 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
                                                                     timeout_ms );
         if( reply.type() == QDBusMessage::ReplyMessage ) {
             QTextStream out(stdout);
-            out << i18nc( "@info:shell", "Running %1 instance (PID: %2) detected, making this one visible instead of starting a new one", runInfo.holderApp, runInfo.holderPid ) << endl;
+            out << i18nc(
+                "@info:shell",
+                "Running %1 instance (PID: %2) detected, making this one visible instead of starting a new one",
+                runInfo.holderApp, runInfo.holderPid)
+                << Qt::endl;
             return QString();
         } else {
             qCWarning(SHELL) << i18nc("@info:shell", "Running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);

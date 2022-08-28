@@ -18,17 +18,6 @@
 #include <KParts/MainWindow>
 
 namespace KDevelop {
-
-using TextStreamFunction = QTextStream& (*)(QTextStream&);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-constexpr TextStreamFunction flush = Qt::flush;
-constexpr TextStreamFunction endl = Qt::endl;
-#else
-constexpr TextStreamFunction flush = ::flush;
-constexpr TextStreamFunction endl = ::endl;
-#endif
-
-
 bool askUser(const QString& mainText,
              const QString& ttyPrompt,
              const QString& mboxTitle,
@@ -40,14 +29,14 @@ bool askUser(const QString& mainText,
     if (!qobject_cast<QGuiApplication*>(qApp)) {
         // no ui-mode e.g. for duchainify and other tools
         QTextStream out(stdout);
-        out << mainText << endl;
+        out << mainText << Qt::endl;
         QTextStream in(stdin);
         QString input;
         forever {
             if (ttyDefaultToYes) {
-                out << ttyPrompt << QLatin1String(": [Y/n] ") << flush;
+                out << ttyPrompt << QLatin1String(": [Y/n] ") << Qt::flush;
             } else {
-                out << ttyPrompt << QLatin1String(": [y/N] ") << flush;
+                out << ttyPrompt << QLatin1String(": [y/N] ") << Qt::flush;
             }
             input = in.readLine().trimmed();
             if (input.isEmpty()) {

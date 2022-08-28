@@ -69,11 +69,7 @@ QStringList resolveShellGlobbingInternal(const QString& pattern, const QString& 
     QDir dir_(pattern.startsWith(QLatin1Char('/')) ? QStringLiteral("/") : dir);
 
     // break up pattern into path segments
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), Qt::SkipEmptyParts), dir_);
-#else
-    return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), QString::SkipEmptyParts), dir_);
-#endif
 }
 
 QMakeFile::QMakeFile(QString file)

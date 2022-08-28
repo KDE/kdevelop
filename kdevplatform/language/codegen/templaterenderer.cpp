@@ -123,11 +123,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name)
     }
 
     if (d->emptyLinesPolicy == TrimEmptyLines && output.contains(QLatin1Char('\n'))) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         QStringList lines = output.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
-#else
-        QStringList lines = output.split(QLatin1Char('\n'), QString::KeepEmptyParts);
-#endif
         QMutableStringListIterator it(lines);
 
         // Remove empty lines from the start of the document
@@ -182,11 +178,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name)
 
         output = lines.join(QLatin1Char('\n'));
     } else if (d->emptyLinesPolicy == RemoveEmptyLines) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         QStringList lines = output.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#else
-        QStringList lines = output.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#endif
         QMutableStringListIterator it(lines);
         while (it.hasNext()) {
             if (it.next().trimmed().isEmpty()) {

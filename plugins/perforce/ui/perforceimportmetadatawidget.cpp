@@ -154,17 +154,13 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
         return false;
     }
     if(!processStdout.isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        const QStringList clientCmdOutput = processStdout.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#else
-        const QStringList clientCmdOutput = processStdout.split(QLatin1Char('\n'),QString::SkipEmptyParts);
-#endif
+        const auto clientCmdOutput = processStdout.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
         QStringList clientItems;
         clientItems.reserve(clientCmdOutput.size());
-        for(QString const& clientLine : clientCmdOutput) {
-            QStringList wordsInLine = clientLine.split(QLatin1Char(' '));
+        for (const auto& clientLine : clientCmdOutput) {
+            const auto wordsInLine = clientLine.split(QLatin1Char(' '));
             // Client mvo_testkdevinteg 2017/05/22 root C:\P4repo 'Created by mvo. ' -- Line would be expected to look like so
-            clientItems.append(wordsInLine.at(1));
+            clientItems.append(wordsInLine.at(1).toString());
         }
         m_ui->p4clientEdit->addItems(clientItems);
     }

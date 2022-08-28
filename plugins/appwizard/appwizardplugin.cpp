@@ -93,11 +93,8 @@ void AppWizardPlugin::slotNewProject()
 
             KConfig templateConfig(dlg->appInfo().appTemplate);
             KConfigGroup general(&templateConfig, "General");
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-            const QStringList fileArgs = general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), Qt::SkipEmptyParts);
-#else
-            const QStringList fileArgs = general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), QString::SkipEmptyParts);
-#endif
+            const QStringList fileArgs =
+                general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), Qt::SkipEmptyParts);
             for (const auto& fileArg : fileArgs) {
                 QString file = KMacroExpander::expandMacros(fileArg.trimmed(), m_variables);
                 if (QDir::isRelativePath(file)) {

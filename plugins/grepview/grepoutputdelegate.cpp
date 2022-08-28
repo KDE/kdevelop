@@ -133,19 +133,12 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
         font.setBold(true);
         QFontMetrics bMetrics(font);
         const KTextEditor::Range rng = item->change()->m_range;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-        int width = metrics.horizontalAdvance(item->text().left(rng.start().column())) +
-                    metrics.horizontalAdvance(item->text().mid(rng.end().column())) +
-                    bMetrics.horizontalAdvance(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
-                    option.fontMetrics.horizontalAdvance(i18n("Line %1: ",item->lineNumber())) +
-                    std::max(option.decorationSize.width(), 0);
-#else
-        int width = metrics.width(item->text().left(rng.start().column())) +
-                    metrics.width(item->text().mid(rng.end().column())) +
-                    bMetrics.width(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
-                    option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
-                    std::max(option.decorationSize.width(), 0);
-#endif
+        int width = metrics.horizontalAdvance(item->text().left(rng.start().column()))
+            + metrics.horizontalAdvance(item->text().mid(rng.end().column()))
+            + bMetrics.horizontalAdvance(
+                item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()))
+            + option.fontMetrics.horizontalAdvance(i18n("Line %1: ", item->lineNumber()))
+            + std::max(option.decorationSize.width(), 0);
         ret.setWidth(width);
     }else{
         // This is only used for titles, so not very performance critical

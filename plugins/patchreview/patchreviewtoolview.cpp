@@ -326,14 +326,8 @@ void PatchReviewToolView::seekFile(bool forwards)
         else
             newUrl = checkedUrls.back();
         qCDebug(PLUGIN_PATCHREVIEW) << "jumping from patch";
-    }
-    else
-    {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    } else {
         QSet<QUrl> checkedUrlsSet(checkedUrls.begin(), checkedUrls.end());
-#else
-        QSet<QUrl> checkedUrlsSet( checkedUrls.toSet() );
-#endif
         for(int offset = 1; offset < allUrls.size(); ++offset)
         {
             int pos;
