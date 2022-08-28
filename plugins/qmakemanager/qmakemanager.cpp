@@ -104,7 +104,8 @@ Path QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
             dir = QMakeConfig::buildDirFromSrc(qmakeItem->project(), qmakeItem->path());
         } else {
             // build sub-item
-            foreach (QMakeProjectFile* pro, qmakeItem->projectFiles()) {
+            const auto proFiles = qmakeItem->projectFiles();
+            for (QMakeProjectFile* pro : proFiles) {
                 if (QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->path().toUrl().toLocalFile() + QLatin1Char('/')).absoluteDir()
                     || pro->hasSubProject(qmakeItem->path().toUrl().toLocalFile())) {
                     // get path from project root and it to buildDir
@@ -195,7 +196,8 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
 
         // TODO: multiple includes by different .pro's
         QMakeProjectFile* parentPro = nullptr;
-        foreach (QMakeProjectFile* p, qmakeParent->projectFiles()) {
+        const auto proFiles = qmakeParent->projectFiles();
+        for (QMakeProjectFile* p : proFiles) {
             if (p->hasSubProject(absFile)) {
                 parentPro = p;
                 break;
@@ -258,15 +260,18 @@ void QMakeProjectManager::slotFolderAdded(ProjectFolderItem* folder)
     }
 
     qCDebug(KDEV_QMAKE) << "adding targets for" << folder->path();
-    foreach (QMakeProjectFile* pro, qmakeParent->projectFiles()) {
-        foreach (const QString& s, pro->targets()) {
+    const auto proFiles = qmakeParent->projectFiles();
+    for (QMakeProjectFile* pro : proFiles) {
+        const auto targets = pro->targets();
+        for (const auto& s : targets) {
             if (!isValid(Path(folder->path(), s), false, folder->project())) {
                 continue;
             }
             qCDebug(KDEV_QMAKE) << "adding target:" << s;
             Q_ASSERT(!s.isEmpty());
             auto target = new QMakeTargetItem(pro, folder->project(), s, folder);
-            foreach (const QString& path, pro->filesForTarget(s)) {
+            const auto files = pro->filesForTarget(s);
+            for (const auto& path : files) {
                 new ProjectFileItem(folder->project(), Path(path), target);
                 /// TODO: signal?
             }
@@ -314,9 +319,11 @@ void QMakeProjectManager::slotDirty(const QString& path)
     }
 
     bool finished = false;
-    foreach (ProjectFolderItem* folder, project->foldersForPath(IndexedString(KIO::upUrl(url)))) {
+    const auto folders = project->foldersForPath(IndexedString(KIO::upUrl(url)));
+    for (ProjectFolderItem* folder : folders) {
         if (auto* qmakeFolder = dynamic_cast<QMakeFolderItem*>(folder)) {
-            foreach (QMakeProjectFile* pro, qmakeFolder->projectFiles()) {
+            const auto proFiles = qmakeFolder->projectFiles();
+            for (QMakeProjectFile* pro : proFiles) {
                 if (pro->absoluteFile() == path) {
                     // TODO: children
                     // TODO: cache added
@@ -366,7 +373,8 @@ Path::List QMakeProjectManager::collectDirectories(ProjectBaseItem* item, const 
     Path::List list;
     QMakeFolderItem* folder = findQMakeFolderParent(item);
     if (folder) {
-        foreach (QMakeProjectFile* pro, folder->projectFiles()) {
+        const auto proFiles = folder->projectFiles();
+        for (QMakeProjectFile* pro : proFiles) {
             if (pro->files().contains(item->path().toLocalFile())) {
                 const QStringList directories = collectIncludes ? pro->includeDirectories() : pro->frameworkDirectories();
                 for (const QString& dir : directories) {
@@ -379,7 +387,8 @@ Path::List QMakeProjectManager::collectDirectories(ProjectBaseItem* item, const 
         }
         if (list.isEmpty()) {
             // fallback for new files, use all possible include dirs
-            foreach (QMakeProjectFile* pro, folder->projectFiles()) {
+            const auto proFiles = folder->projectFiles();
+            for (QMakeProjectFile* pro : proFiles) {
                 const QStringList directories = collectIncludes ? pro->includeDirectories() : pro->frameworkDirectories();
                 for (const QString& dir : directories) {
                     Path path(dir);
@@ -416,8 +425,10 @@ QHash<QString, QString> QMakeProjectManager::defines(ProjectBaseItem* item) cons
         // happens for bad qmake configurations
         return d;
     }
-    foreach (QMakeProjectFile* pro, folder->projectFiles()) {
-        foreach (QMakeProjectFile::DefinePair def, pro->defines()) {
+    const auto proFiles = folder->projectFiles();
+    for (QMakeProjectFile* pro : proFiles) {
+        const auto defines = pro->defines();
+        for (const auto& def : defines) {
             d.insert(def.first, def.second);
         }
     }
@@ -433,7 +444,8 @@ QString QMakeProjectManager::extraArguments(KDevelop::ProjectBaseItem *item) con
     }
 
     QStringList d;
-    foreach (QMakeProjectFile* pro, folder->projectFiles()) {
+    const auto proFiles = folder->projectFiles();
+    for (QMakeProjectFile* pro : proFiles) {
         d << pro->extraArguments();
     }
     return d.join(QLatin1Char(' '));

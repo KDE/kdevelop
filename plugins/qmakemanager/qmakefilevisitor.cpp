@@ -94,7 +94,8 @@ void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
         ifDebug(qCDebug(KDEV_QMAKE) << "successfully read:" << read;) if (read)
         {
             // TODO: optimize by using variableMap and iterator, don't compare values
-            foreach (const QString& var, includefile.variables()) {
+            const auto vars = includefile.variables();
+            for (const auto& var : vars) {
                 if (m_variableValues.value(var) != includefile.variableValues(var)) {
                     m_variableValues[var] = includefile.variableValues(var);
                 }
@@ -167,14 +168,15 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
         qCWarning(KDEV_QMAKE) << "Couldn't parse" << var << "to replace variables in it";
         return QStringList() << var;
     }
-    if (parser.variableReferences().isEmpty()) {
+    const auto variableReferences = parser.variableReferences();
+    if (variableReferences.isEmpty()) {
         return QStringList() << var;
     }
 
     /// TODO: multiple vars in one place will make the offsets go bonkers
     QString value = var;
-    foreach (const QString& variable, parser.variableReferences()) {
-        VariableInfo vi = parser.variableInfo(variable);
+    for (const auto& variable : variableReferences) {
+        const auto vi = parser.variableInfo(variable);
         QString varValue;
 
         switch (vi.type) {
@@ -200,7 +202,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
         case VariableInfo::FunctionCall: {
             QStringList arguments;
             arguments.reserve(vi.positions.size());
-            foreach (const VariableInfo::Position& pos, vi.positions) {
+            for (const auto& pos : vi.positions) {
                 int start = pos.start + 3 + variable.length();
                 QString args = value.mid(start, pos.end - start);
                 varValue = resolveVariables(args).join(QLatin1Char(' '));
@@ -214,7 +216,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
             continue;
         }
 
-        foreach (const VariableInfo::Position& pos, vi.positions) {
+        for (const auto& pos : vi.positions) {
             value.replace(pos.start, pos.end - pos.start + 1, varValue);
         }
     }

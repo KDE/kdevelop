@@ -71,17 +71,16 @@ bool QMakeProjectFile::read()
     }
 
     Q_ASSERT(m_mkspecs);
-    foreach (const QString& var, m_mkspecs->variables()) {
-        if (!m_variableValues.contains(var)) {
-            m_variableValues[var] = m_mkspecs->variableValues(var);
-        }
-    }
-    if (m_cache) {
-        foreach (const QString& var, m_cache->variables()) {
-            if (!m_variableValues.contains(var)) {
-                m_variableValues[var] = m_cache->variableValues(var);
+    auto addVars = [&](const auto& vars) {
+        for (auto it = vars.begin(), end = vars.end(); it != end; ++it) {
+            if (!m_variableValues.contains(it.key())) {
+                m_variableValues.insert(it.key(), it.value());
             }
         }
+    };
+    addVars(m_mkspecs->variableMap());
+    if (m_cache) {
+        addVars(m_cache->variableMap());
     }
 
     /// TODO: more special variables
@@ -143,7 +142,8 @@ QStringList QMakeProjectFile::subProjects() const
 
 bool QMakeProjectFile::hasSubProject(const QString& file) const
 {
-    foreach (const QString& sub, subProjects()) {
+    const auto subs = subProjects();
+    for (const auto& sub : subs) {
         if (sub == file) {
             return true;
         } else if (QFileInfo(file).absoluteDir() == sub) {
@@ -189,7 +189,7 @@ QStringList QMakeProjectFile::includeDirectories() const
         }
 
         // TODO: This is all very fragile, should rather read QMake module .pri files (e.g. qt_lib_core_private.pri)
-        foreach (const QString& module, modules) {
+        for (const auto& module : std::as_const(modules)) {
             QString pattern = module;
 
             bool isPrivate = false;
@@ -259,7 +259,8 @@ QStringList QMakeProjectFile::frameworkDirectories() const
     QStringList fwDirs;
     for (const auto& var : variablesToCheck) {
         bool storeArg = false;
-        foreach (const auto& arg, variableValues(var)) {
+        const auto values = variableValues(var);
+        for (const auto& arg : values) {
             if (arg == fOption || arg == iframeworkOption) {
                 // detached -F/-iframework arg; set a warrant to store the next argument
                 storeArg = true;
@@ -288,7 +289,8 @@ QStringList QMakeProjectFile::extraArguments() const
     const auto prefixes = { "-F", "-iframework", "-I", "-D" };
     QStringList args;
     for (const auto& var : variablesToCheck) {
-        foreach (const auto& arg, variableValues(var)) {
+        const auto values = variableValues(var);
+        for (const auto& arg : values) {
             auto argHasPrefix = [&arg](const char* prefix) {
                 return arg.startsWith(QLatin1String(prefix));
             };
@@ -305,8 +307,9 @@ QStringList QMakeProjectFile::files() const
     ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files";)
 
         QStringList list;
-    foreach (const QString& variable, QMakeProjectFile::FileVariables) {
-        foreach (const QString& value, variableValues(variable)) {
+    for (const auto& variable : QMakeProjectFile::FileVariables) {
+        const auto values = variableValues(variable);
+        for (const auto& value : values) {
             list += resolveFileName(value);
         }
     }
@@ -325,8 +328,9 @@ QStringList QMakeProjectFile::filesForTarget(const QString& s) const
         }
     }
     if (!variableValues(QStringLiteral("INSTALLS")).contains(s) || s == QLatin1String("target")) {
-        foreach (const QString& variable, QMakeProjectFile::FileVariables) {
-            foreach (const QString& value, variableValues(variable)) {
+        for (const QString& variable : QMakeProjectFile::FileVariables) {
+            const auto values = variableValues(variable);
+            for (const QString& value : values) {
                 list += QStringList(resolveFileName(value));
             }
         }

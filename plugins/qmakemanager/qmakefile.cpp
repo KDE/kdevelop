@@ -33,8 +33,9 @@ QStringList resolveShellGlobbingInternal(const QStringList& segments, QDir& dir,
         pathPattern.contains(QLatin1Char('?')) ||
         pathPattern.contains(QLatin1Char('['))) {
         // pattern contains globbing chars
-        foreach (const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern,
-                                                           QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
+        const auto dirEntries =
+            dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted);
+        for (const auto& match : dirEntries) {
             resolveShellGlobbingInternal(entries, segments, match, dir, offset);
         }
     } else {

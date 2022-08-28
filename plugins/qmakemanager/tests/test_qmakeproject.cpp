@@ -96,7 +96,8 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, target);
     QFETCH(QString, expected);
 
-    foreach (IProject* p, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         ICore::self()->projectController()->closeProject(p);
     }
 

@@ -21,7 +21,8 @@ void QMakeCache::setMkSpecs(QMakeMkSpecs* specs)
 
 bool QMakeCache::read()
 {
-    foreach (const QString& var, m_mkspecs->variables()) {
+    const auto vars = m_mkspecs->variables();
+    for (const auto& var : vars) {
         m_variableValues[var] = m_mkspecs->variableValues(var);
     }
     return QMakeFile::read();

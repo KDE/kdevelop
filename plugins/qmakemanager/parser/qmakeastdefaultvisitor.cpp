@@ -15,7 +15,7 @@ ASTDefaultVisitor::~ASTDefaultVisitor()
 
 void ASTDefaultVisitor::visitProject(ProjectAST* node)
 {
-    foreach (StatementAST* stmt, node->statements) {
+    for (StatementAST* stmt : std::as_const(node->statements)) {
         visitNode(stmt);
     }
 }
@@ -24,7 +24,7 @@ void ASTDefaultVisitor::visitAssignment(AssignmentAST* node)
 {
     visitNode(node->identifier);
     visitNode(node->op);
-    foreach (ValueAST* value, node->values) {
+    for (ValueAST* value : std::as_const(node->values)) {
         visitNode(value);
     }
 }
@@ -36,7 +36,7 @@ void ASTDefaultVisitor::visitValue(ValueAST*)
 void ASTDefaultVisitor::visitFunctionCall(FunctionCallAST* node)
 {
     visitNode(node->identifier);
-    foreach (ValueAST* value, node->args) {
+    for (ValueAST* value : std::as_const(node->args)) {
         visitNode(value);
     }
     visitNode(node->body);
@@ -44,17 +44,17 @@ void ASTDefaultVisitor::visitFunctionCall(FunctionCallAST* node)
 
 void ASTDefaultVisitor::visitScopeBody(ScopeBodyAST* node)
 {
-    foreach (StatementAST* stmt, node->ifStatements) {
+    for (StatementAST* stmt : std::as_const(node->ifStatements)) {
         visitNode(stmt);
     }
-    foreach (StatementAST* stmt, node->elseStatements) {
+    for (StatementAST* stmt : std::as_const(node->elseStatements)) {
         visitNode(stmt);
     }
 }
 
 void ASTDefaultVisitor::visitOr(OrAST* node)
 {
-    foreach (ScopeAST* scope, node->scopes) {
+    for (ScopeAST* scope : std::as_const(node->scopes)) {
         visitNode(scope);
     }
     visitNode(node->body);

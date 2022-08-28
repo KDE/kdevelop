@@ -300,7 +300,7 @@ void TestQMakeFile::replaceFunctions()
         QCOMPARE(file.variableValues(it.key()), it.value());
         ++it;
     }
-    foreach (const QString& var, undefinedVariables) {
+    for (const auto& var : std::as_const(undefinedVariables)) {
         QVERIFY(!file.containsVariable(var));
     }
 }
@@ -347,7 +347,7 @@ void TestQMakeFile::qtIncludeDirs_data()
                 << QStringLiteral("qaxserver")
                 << QStringLiteral("dbus")
                 << QStringLiteral("declarative");
-        foreach (const QString& module, modules) {
+        for (const auto& module : std::as_const(modules)) {
             QStringList expected;
             expected << module;
             if (module != QLatin1String("core")) {
@@ -414,7 +414,7 @@ void TestQMakeFile::qtIncludeDirs()
         if (shouldBeIncluded) {
             shouldBeIncluded = modules.contains(it.key());
             if (!shouldBeIncluded) {
-                foreach (const QString& module, modules) {
+                for (const auto& module : std::as_const(modules)) {
                     if (module != it.key() && moduleMap.value(module) == it.value()) {
                         shouldBeIncluded = true;
                         break;
@@ -569,7 +569,7 @@ void TestQMakeFile::globbing()
     QDir tempDirDir(tempDir.path());
     QVERIFY(tempDir.isValid());
 
-    foreach (const QString& file, files) {
+    for (const auto& file : std::as_const(files)) {
         QVERIFY(tempDirDir.mkpath(QFileInfo(file).path()));
         QFile f(tempDir.path() + '/' + file);
         QVERIFY(f.open(QIODevice::WriteOnly));
@@ -590,7 +590,8 @@ void TestQMakeFile::globbing()
     QVERIFY(pro.read());
 
     QStringList actual;
-    foreach (QString path, pro.files()) {
+    const auto proFiles = pro.files();
+    for (auto path : proFiles) {
         actual << path.remove(tempDir.path() + '/');
     }
     std::sort(actual.begin(), actual.end());

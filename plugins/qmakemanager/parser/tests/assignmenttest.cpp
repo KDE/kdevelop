@@ -66,7 +66,7 @@ BEGINTESTFUNCIMPL(AssignmentTest, quotedValEscapeQuote, 1)
     QMake::AssignmentAST* assignment;
     assignment = dynamic_cast<QMake::AssignmentAST*>(ast->statements.first());
     qDebug() << assignment->values.count();
-    foreach (QMake::ValueAST* v, assignment->values)
+    for (QMake::ValueAST* v : std::as_const(assignment->values))
         qDebug() << v->value;
     TESTASSIGNMENT(assignment, "VARIABLE", "+=", 1)
 ENDTESTFUNCIMPL

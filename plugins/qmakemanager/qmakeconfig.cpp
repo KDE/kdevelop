@@ -116,7 +116,7 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
     if (qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS"))) {
         // qt4
         const auto mkspecDirs = qmakeVars[QStringLiteral("QMAKE_MKSPECS")].split(QDir::listSeparator());
-        foreach (const QString& dir, mkspecDirs) {
+        for (const auto& dir : mkspecDirs) {
             paths << dir + QLatin1String("/default/qmake.conf");
         }
     } else if (!qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS")) && qmakeVars.contains(QStringLiteral("QMAKE_SPEC"))) {
@@ -141,7 +141,7 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
         paths << path;
     }
 
-    foreach (const QString& path, paths) {
+    for (const auto& path : std::as_const(paths)) {
         QFileInfo fi(path);
         if (fi.exists())
             return fi.absoluteFilePath();

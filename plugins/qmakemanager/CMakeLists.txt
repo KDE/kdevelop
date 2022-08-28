@@ -1,7 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevqmakemanager\")
-remove_definitions(
-    -DQT_NO_FOREACH
-)
 
 declare_qt_logging_category(qmakecommon_LOG_SRCS
     TYPE PLUGIN
