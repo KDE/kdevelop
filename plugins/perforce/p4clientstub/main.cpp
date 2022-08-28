@@ -218,15 +218,15 @@ int main(int argc, char** argv)
     } else if (qstrcmp(argv[1], "diff") == 0) {
         return fakeDiffOutput();
     } else if (qstrcmp(argv[1], "filelog") == 0) {
-        return fakeFileLogOutput(argv[3]);
+        return fakeFileLogOutput(QString::fromUtf8(argv[3]));
     } else if (qstrcmp(argv[1], "annotate") == 0) {
         return fakeAnnotateOutput();
     } else if (qstrcmp(argv[1], "edit") == 0) {
-        return fakeEditOutput(QString(argv[2]));
+        return fakeEditOutput(QString::fromUtf8(argv[2]));
     } else if (qstrcmp(argv[1], "fstat") == 0) {
-        return fakeFstatOutput(QString(argv[2]));
+        return fakeFstatOutput(QString::fromUtf8(argv[2]));
     } else if (qstrcmp(argv[1], "add") == 0) {
-        return fakeAddOutput(QString(argv[2]));
+        return fakeAddOutput(QString::fromUtf8(argv[2]));
     }
     return -1;
 }

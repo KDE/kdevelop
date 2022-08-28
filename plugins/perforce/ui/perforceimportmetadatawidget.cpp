@@ -21,15 +21,18 @@ PerforceImportMetadataWidget::PerforceImportMetadataWidget(QWidget* parent)
 {
     m_ui->setupUi(this);
 
-    m_ui->executableLoc->setText("/usr/bin/p4");
-    m_ui->p4portEdit->setText("perforce:1666");
+    m_ui->executableLoc->setText(QStringLiteral("/usr/bin/p4"));
+    m_ui->p4portEdit->setText(QStringLiteral("perforce:1666"));
 
     QProcessEnvironment curEnv = QProcessEnvironment::systemEnvironment();
-    m_ui->p4configEdit->setText(curEnv.contains("P4CONFIG") ? curEnv.value("P4CONFIG") : "");
-    m_ui->p4portEdit->setText(curEnv.contains("P4PORT") ? curEnv.value("P4PORT") : "");
-    m_ui->p4userEdit->setText(curEnv.contains("P4USER") ? curEnv.value("P4USER") : "");
-    curEnv.contains("P4CONFIG") ? m_ui->radioButtonConfig->setChecked(true) : m_ui->radioButtonVariables->setChecked(true);
-    curEnv.contains("P4CONFIG") ? m_ui->p4configEdit->setEnabled(true) : m_ui->p4configEdit->setEnabled(false);
+    m_ui->p4configEdit->setText(curEnv.value(QStringLiteral("P4CONFIG")));
+    m_ui->p4portEdit->setText(curEnv.value(QStringLiteral("P4PORT")));
+    m_ui->p4userEdit->setText(curEnv.value(QStringLiteral("P4USER")));
+
+    const auto hasP4Config = curEnv.contains(QStringLiteral("P4CONFIG"));
+    m_ui->radioButtonConfig->setChecked(hasP4Config);
+    m_ui->radioButtonVariables->setChecked(!hasP4Config);
+    m_ui->p4configEdit->setEnabled(hasP4Config);
 
     m_ui->sourceLoc->setEnabled(false);
     m_ui->sourceLoc->setMode(KFile::Directory);
@@ -117,7 +120,8 @@ void PerforceImportMetadataWidget::testP4setup()
 bool PerforceImportMetadataWidget::validateP4executable()
 {
     if (QStandardPaths::findExecutable(m_ui->executableLoc->url().toLocalFile()).isEmpty()) {
-        m_ui->errorMsg->setText("Unable to find perforce executable. Is it installed on the system? Is it in your PATH?");
+        m_ui->errorMsg->setText(
+            i18n("Unable to find perforce executable. Is it installed on the system? Is it in your PATH?"));
         return false;
     }
     return true;
@@ -127,7 +131,7 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
 {
     QProcess exec;
     QProcessEnvironment p4execEnvironment;
-    p4execEnvironment.insert(QString("P4PORT"), m_ui->p4portEdit->displayText());
+    p4execEnvironment.insert(QStringLiteral("P4PORT"), m_ui->p4portEdit->displayText());
     exec.setWorkingDirectory(projectDir);
     exec.setProcessEnvironment(p4execEnvironment);
     exec.start(m_ui->executableLoc->url().toLocalFile(), QStringList{QStringLiteral("workspaces"),
@@ -135,19 +139,17 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
     );
     exec.waitForFinished();
 
-    QString processStdout(exec.readAllStandardOutput());
-    QString processStderr(exec.readAllStandardError());
+    const auto processStdout = QString::fromUtf8(exec.readAllStandardOutput());
+    const auto processStderr = QString::fromUtf8(exec.readAllStandardError());
 
-//     std::cout << "Exited with code: " << exec.exitCode() << std::endl;
-//     std::cout << "Exited with stdout" << processStdout.toStdString() << std::endl;
-//     std::cout << "Exited with stderr" << processStderr.toStdString() << std::endl;
+    //     std::cout << "Exited with code: " << exec.exitCode() << std::endl;
+    //     std::cout << "Exited with stdout" << processStdout.toStdString() << std::endl;
+    //     std::cout << "Exited with stderr" << processStderr.toStdString() << std::endl;
     if (exec.exitCode() != 0) {
         if(!processStderr.isEmpty()) {
             m_ui->errorMsg->setText(processStderr);
         } else {
-            QString msg("P4 Client failed with exit code: ");
-            msg += QString::number(exec.exitCode());
-            m_ui->errorMsg->setText(msg);
+            m_ui->errorMsg->setText(i18n("P4 Client failed with exit code: %1", exec.exitCode()));
         }
         return false;
     }
@@ -173,7 +175,7 @@ bool PerforceImportMetadataWidget::validateP4port(const QString&  projectDir) co
 {
     QProcess exec;
     QProcessEnvironment p4execEnvironment;
-    p4execEnvironment.insert(QString("P4PORT"), m_ui->p4portEdit->displayText());
+    p4execEnvironment.insert(QStringLiteral("P4PORT"), m_ui->p4portEdit->displayText());
     QTextStream out(stdout);
     const auto& env = p4execEnvironment.toStringList();
     for (const QString& x : env) {
@@ -186,7 +188,7 @@ bool PerforceImportMetadataWidget::validateP4port(const QString&  projectDir) co
     exec.start(m_ui->executableLoc->url().toLocalFile(), QStringList() << QStringLiteral("info"));
     exec.waitForFinished();
     //QString processStdout(exec.readAllStandardOutput());
-    QString processStderr(exec.readAllStandardError());
+    const auto processStderr = QString::fromUtf8(exec.readAllStandardError());
 
     //std::cout << "Exited with code: " << exec.exitCode() << std::endl;
     //std::cout << "Exited with stdout" << processStdout.toStdString() << std::endl;
@@ -195,9 +197,7 @@ bool PerforceImportMetadataWidget::validateP4port(const QString&  projectDir) co
         if(!processStderr.isEmpty()) {
             m_ui->errorMsg->setText(processStderr);
         } else {
-            QString msg("P4 Client failed with error code: ");
-            msg += QString::number(exec.exitCode());
-            m_ui->errorMsg->setText(msg);
+            m_ui->errorMsg->setText(i18n("P4 Client failed with error code: %1", exec.exitCode()));
         }
         return false;
     }

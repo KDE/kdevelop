@@ -47,13 +47,14 @@ void PerforcePluginTest::initTestCase()
     m_plugin = new PerforcePlugin(TestCore::self());
 
     /// During test we are setting the executable the plugin uses to our own stub
-    QDirIterator it(P4_BINARY_DIR , QStringList() << QStringLiteral("*"), QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    QDirIterator it(QString::fromUtf8(P4_BINARY_DIR), QStringList() << QStringLiteral("*"),
+                    QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
     QStringList pathsToSearch;
     while (it.hasNext()) {
         it.next();
         pathsToSearch << it.filePath();
     }
-    QString p4stubPath = QStandardPaths::findExecutable("p4clientstub", pathsToSearch);
+    QString p4stubPath = QStandardPaths::findExecutable(QStringLiteral("p4clientstub"), pathsToSearch);
     qDebug() << "found p4stub executable :" << p4stubPath;
     QVERIFY(!p4stubPath.isEmpty());
 

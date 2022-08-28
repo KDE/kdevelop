@@ -182,11 +182,7 @@ QString PerforcePlugin::getRepositoryName(const QFileInfo& curFile)
     QScopedPointer<DVcsJob> job(p4fstatJob(curFile, KDevelop::OutputJob::Silent));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
         if (!job->output().isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-            const QStringList outputLines = job->output().split('\n', Qt::SkipEmptyParts);
-#else
-            const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
-#endif
+            const QStringList outputLines = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
             for (const QString& line : outputLines) {
                 int idx(line.indexOf(DEPOT_FILE_STR));
                 if (idx != -1) {
@@ -273,7 +269,7 @@ KDevelop::VcsJob* PerforcePlugin::update(const QList<QUrl>& localLocations, cons
     //*job << m_perforceExecutable << "-p" << "127.0.0.1:1666" << "info"; - Let's keep this for now it's very handy for debugging
     QString fileOrDirectory;
     if (curFile.isDir())
-        fileOrDirectory = curFile.absolutePath() + "/...";
+        fileOrDirectory = curFile.absolutePath() + QLatin1String("/...");
     else
         fileOrDirectory = curFile.fileName();
     *job << m_perforceExecutable << "sync" << fileOrDirectory;
@@ -342,14 +338,14 @@ KDevelop::VcsJob* PerforcePlugin::log(const QUrl& localLocation, const KDevelop:
         *job << QStringLiteral("-m %1").arg(limit);
     
     if (curFile.isDir()) {
-        localLocationAndRevStr.append("/...");
+        localLocationAndRevStr.append(QLatin1String("/..."));
     } 
     QString revStr = toRevisionName(rev, QString());
     if(!revStr.isEmpty()) {
         // This is not too nice, but perforce argument for restricting output from filelog does not Work :-(
         // So putting this in so we do not end up in infinite loop calling log,
         if(revStr == lastSeenChangeList) {
-            localLocationAndRevStr.append("#none");
+            localLocationAndRevStr.append(QLatin1String("#none"));
             lastSeenChangeList.clear();
         } else { 
             localLocationAndRevStr.append(revStr);
@@ -506,34 +502,35 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
     int changeNumber = 0;
     
     for (const QString& line : outputLines) {
-        if (!line.startsWith(LOGENTRY_START) && !line.startsWith(DEPOTMESSAGE_START)  && !line.startsWith('\t')) {
+        if (!line.startsWith(LOGENTRY_START) && !line.startsWith(DEPOTMESSAGE_START)
+            && !line.startsWith(QLatin1Char('\t'))) {
             currentFileName = line;
         }
         if(line.indexOf(LOGENTRY_START) != -1)
         {
             // expecting the Logentry line to be of the form:
             //... #5 change 10 edit on 2010/12/06 12:07:31 by mvo@testbed (text)
-            changeNumberStr = line.section(' ', 3, 3 ); // We use global change number
+            changeNumberStr = line.section(QLatin1Char(' '), 3, 3); // We use global change number
             changeNumber = changeNumberStr.toInt();
-            author = line.section(' ', 9, 9);
-            changeDescription = line.section(' ' , 4, 4 );
-            indexofAt = author.indexOf('@');
+            author = line.section(QLatin1Char(' '), 9, 9);
+            changeDescription = line.section(QLatin1Char(' '), 4, 4);
+            indexofAt = author.indexOf(QLatin1Char('@'));
             author.remove(indexofAt, author.size()); // Only keep the username itself
             rev.setRevisionValue(changeNumberStr, KDevelop::VcsRevision::GlobalNumber);
             
             changes[changeNumber].setRevision(rev);
             changes[changeNumber].setAuthor(author);
-            changes[changeNumber].setDate(QDateTime::fromString(line.section(' ', 6, 7), QStringLiteral("yyyy/MM/dd hh:mm:ss")));
+            changes[changeNumber].setDate(
+                QDateTime::fromString(line.section(QLatin1Char(' '), 6, 7), QStringLiteral("yyyy/MM/dd hh:mm:ss")));
             currentRepoFile.setRepositoryLocation(currentFileName);
             currentRepoFile.setActions( actionsFromString(changeDescription) );
             changes[changeNumber].addItem(currentRepoFile);
             commitMessage.clear(); // We have a new entry, clear message
         }
-        if (line.startsWith('\t') || line.startsWith(DEPOTMESSAGE_START)) {
-            commitMessage += line.trimmed() + '\n';
+        if (line.startsWith(QLatin1Char('\t')) || line.startsWith(DEPOTMESSAGE_START)) {
+            commitMessage += line.trimmed() + QLatin1Char('\n');
             changes[changeNumber].setMessage(commitMessage);
-        }       
-        
+        }
     }
     
     for(const auto& item : qAsConst(changes)) {
@@ -544,11 +541,7 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
 
 void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const QStringList outputLines = job->output().split('\n', Qt::SkipEmptyParts);
-#else
-    const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
-#endif
+    const QStringList outputLines = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
     QVariantList statuses;
     const QString ACTION_STR(QStringLiteral("... action "));
     const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
@@ -584,11 +577,7 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 
 void PerforcePlugin::parseP4LogOutput(KDevelop::DVcsJob* job)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    QList<QVariant> commits(getQvariantFromLogOutput(job->output().split('\n', Qt::SkipEmptyParts)));
-#else
-    QList<QVariant> commits(getQvariantFromLogOutput(job->output().split('\n', QString::SkipEmptyParts)));
-#endif
+    QList<QVariant> commits(getQvariantFromLogOutput(job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts)));
 
     job->setResults(commits);
 }
@@ -625,11 +614,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     QList<QVariant> commits;
     if (logJob->exec() && logJob->status() == KDevelop::VcsJob::JobSucceeded) {
         if (!job->output().isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-            commits = getQvariantFromLogOutput(logJob->output().split('\n', Qt::SkipEmptyParts));
-#else
-            commits = getQvariantFromLogOutput(logJob->output().split('\n', QString::SkipEmptyParts));
-#endif
+            commits = getQvariantFromLogOutput(logJob->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts));
         }
     }
     
@@ -643,7 +628,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
         globalCommits.insert(item.revision().revisionValue().toLongLong(), item);
     }
 
-    const QStringList lines = job->output().split('\n');
+    const QStringList lines = job->output().split(QLatin1Char('\n'));
 
     int lineNumber = 0;
     QMap<qlonglong, VcsEvent>::iterator currentEvent;
@@ -655,7 +640,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
             continue;
         }
 
-        globalRevision = line.left(line.indexOf(':'));
+        globalRevision = line.left(line.indexOf(QLatin1Char(':')));
 
         VcsAnnotationLine annotation;
         annotation.setLineNumber(lineNumber);
