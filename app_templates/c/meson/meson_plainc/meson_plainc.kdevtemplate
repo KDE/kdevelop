@@ -1,7 +1,18 @@
 # KDE Config File
 [General]
 Name=Meson C
+Name[ca]=Meson C
+Name[ca@valencia]=Meson C
+Name[ka]=Meson C
+Name[nl]=Meson C
+Name[uk]=Meson C
+Name[x-test]=xxMeson Cxx
 Comment=Simple Meson-based C application
+Comment[ca]=Aplicació senzilla en C basada en el Meson
+Comment[ca@valencia]=Aplicació senzilla en C basada en Meson
+Comment[nl]=Eenvoudig op Meson gebaseerd C programma
+Comment[uk]=Проста заснована на Meson програма C
+Comment[x-test]=xxSimple Meson-based C applicationxx
 Category=Standard/Terminal
 Icon=default-kdevelop
 ShowFilesAfterGeneration=main.c
