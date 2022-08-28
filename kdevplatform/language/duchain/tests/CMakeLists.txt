@@ -1,3 +1,7 @@
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+)
+
 ecm_add_test(test_duchain.cpp
     LINK_LIBRARIES KF5::TextEditor Qt5::Test KDev::Tests KDev::Language)
 

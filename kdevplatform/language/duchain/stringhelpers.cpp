@@ -23,7 +23,7 @@ int strip_impl(const T& str, T& from)
     int s = from.length();
 
     for (int a = 0; a < s; a++) {
-        if (QChar(from[a]).isSpace()) {
+        if (QChar::fromLatin1(from[a]).isSpace()) {
             continue;
         } else {
             if (from[a] == str[i]) {
@@ -54,7 +54,8 @@ int rStrip_impl(const T& str, T& from)
     int s = from.length();
 
     for (int a = s - 1; a >= 0; a--) {
-        if (QChar(from[a]).isSpace()) {  ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
+        if (QChar::fromLatin1(from[a])
+                .isSpace()) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
             continue;
         } else {
             if (from[a] == str[i]) {
@@ -72,61 +73,6 @@ int rStrip_impl(const T& str, T& from)
         from = from.left(ip);
     }
     return s - from.length();
-}
-
-template <typename T>
-T formatComment_impl(const T& comment)
-{
-    if (comment.isEmpty())
-        return comment;
-
-    T ret;
-
-    QList<T> lines = comment.split('\n');
-
-    // remove common leading & trailing chars from the lines
-    for (T &l : lines) {
-        // don't trigger repeated temporary allocations here
-
-        // possible comment starts, sorted from longest to shortest
-        static const T startMatches[] = {
-            "//!<", "/*!<", "/**<", "///<",
-            "///", "//!", "/**", "/*!",
-            "//", "/*",
-            "/", "*"
-        };
-
-        // possible comment ends, sorted from longest to shortest
-        static const T endMatches[] = {
-           "**/", "*/"
-        };
-
-        l = l.trimmed();
-
-        // check for ends first, as the starting pattern "*" might interfere with the ending pattern
-        for (T const & m : endMatches) {
-            if (l.endsWith(m)) {
-                l.chop(m.length());
-                break;
-            }
-        }
-
-        for (T const & m : startMatches) {
-            if (l.startsWith(m)) {
-                l.remove(0, m.length());
-                break;
-            }
-        }
-    }
-
-    // TODO add method with QStringList specialisation
-    for (const T& line : qAsConst(lines)) {
-        if (!ret.isEmpty())
-            ret += '\n';
-        ret += line;
-    }
-
-    return ret.trimmed();
 }
 }
 
@@ -382,11 +328,11 @@ QString stripFinalWhitespace(const QString& str)
 QString clearComments(const QString& str_, QChar replacement)
 {
     QString str(str_);
-    QString withoutStrings = clearStrings(str, '$');
+    QString withoutStrings = clearStrings(str, QLatin1Char('$'));
 
     int pos = -1, newlinePos = -1, endCommentPos = -1, nextPos = -1, dest = -1;
     while ((pos = str.indexOf(QLatin1Char('/'), pos + 1)) != -1) {
-        newlinePos = withoutStrings.indexOf('\n', pos);
+        newlinePos = withoutStrings.indexOf(QLatin1Char('\n'), pos);
 
         if (withoutStrings[pos + 1] == QLatin1Char('/')) {
             //C style comment
@@ -423,7 +369,7 @@ QString clearStrings(const QString& str_, QChar replacement)
         if (!inString && pos + 1 < str.length() && str[pos] == QLatin1Char('/') && str[pos + 1] == QLatin1Char('*')) {
             pos += 2;
             while (pos + 1 < str.length()) {
-                if (str[pos] == '*' && str[pos + 1] == QLatin1Char('/')) {
+                if (str[pos] == QLatin1Char('*') && str[pos + 1] == QLatin1Char('/')) {
                     ++pos;
                     break;
                 }
@@ -499,14 +445,100 @@ int rStrip(const QByteArray& str, QByteArray& from)
     return rStrip_impl<QByteArray>(str, from);
 }
 
+// NOTE: keep in sync with QString overload below
 QByteArray formatComment(const QByteArray& comment)
 {
-    return formatComment_impl<QByteArray>(comment);
+    if (comment.isEmpty())
+        return comment;
+
+    auto lines = comment.split('\n');
+    // remove common leading & trailing chars from the lines
+    for (auto& l : lines) {
+        // don't trigger repeated temporary allocations here
+
+        // possible comment starts, sorted from longest to shortest
+        static const QByteArray startMatches[] = {
+            QByteArrayLiteral("//!<"), QByteArrayLiteral("/*!<"), QByteArrayLiteral("/**<"), QByteArrayLiteral("///<"),
+            QByteArrayLiteral("///"),  QByteArrayLiteral("//!"),  QByteArrayLiteral("/**"),  QByteArrayLiteral("/*!"),
+            QByteArrayLiteral("//"),   QByteArrayLiteral("/*"),   QByteArrayLiteral("/"),    QByteArrayLiteral("*")};
+
+        // possible comment ends, sorted from longest to shortest
+        static const QByteArray endMatches[] = {QByteArrayLiteral("**/"), QByteArrayLiteral("*/")};
+
+        l = l.trimmed();
+
+        // check for ends first, as the starting pattern "*" might interfere with the ending pattern
+        for (const auto& m : endMatches) {
+            if (l.endsWith(m)) {
+                l.chop(m.length());
+                break;
+            }
+        }
+
+        for (const auto& m : startMatches) {
+            if (l.startsWith(m)) {
+                l.remove(0, m.length());
+                break;
+            }
+        }
+    }
+
+    QByteArray ret;
+    for (const auto& line : qAsConst(lines)) {
+        if (!ret.isEmpty())
+            ret += '\n';
+        ret += line;
+    }
+    return ret.trimmed();
 }
 
+// NOTE: keep in sync with QByteArray overload above
 QString formatComment(const QString& comment)
 {
-    return formatComment_impl<QString>(comment);
+    if (comment.isEmpty())
+        return comment;
+
+    auto lines = comment.splitRef(QLatin1Char('\n'));
+
+    // remove common leading & trailing chars from the lines
+    for (auto& l : lines) {
+        // don't trigger repeated temporary allocations here
+
+        // possible comment starts, sorted from longest to shortest
+        static const QString startMatches[] = {QStringLiteral("//!<"), QStringLiteral("/*!<"), QStringLiteral("/**<"),
+                                               QStringLiteral("///<"), QStringLiteral("///"),  QStringLiteral("//!"),
+                                               QStringLiteral("/**"),  QStringLiteral("/*!"),  QStringLiteral("//"),
+                                               QStringLiteral("/*"),   QStringLiteral("/"),    QStringLiteral("*")};
+
+        // possible comment ends, sorted from longest to shortest
+        static const QString endMatches[] = {QStringLiteral("**/"), QStringLiteral("*/")};
+
+        l = l.trimmed();
+
+        // check for ends first, as the starting pattern "*" might interfere with the ending pattern
+        for (const auto& m : endMatches) {
+            if (l.endsWith(m)) {
+                l.chop(m.length());
+                break;
+            }
+        }
+
+        for (const auto& m : startMatches) {
+            if (l.startsWith(m)) {
+                l = l.mid(m.length());
+                break;
+            }
+        }
+    }
+
+    QString ret;
+    for (const auto& line : qAsConst(lines)) {
+        if (!ret.isEmpty())
+            ret += QLatin1Char('\n');
+        ret += line;
+    }
+
+    return ret.trimmed();
 }
 
 QString removeWhitespace(const QString& str)
