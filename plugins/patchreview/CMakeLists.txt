@@ -1,4 +1,4 @@
-find_package(LibKompareDiff2 5.0 CONFIG)
+find_package(LibKompareDiff2 5.1 CONFIG)
 set_package_properties(LibKompareDiff2 PROPERTIES
     PURPOSE "Required for building the patch review plugin."
     TYPE REQUIRED
@@ -18,13 +18,6 @@ endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevpatchreview\")
 kde_enable_exceptions()
-
-if(LibKompareDiff2_VERSION VERSION_LESS 5.1)
-    remove_definitions(
-        -DQT_NO_CAST_FROM_ASCII
-        -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-    )
-endif()
 
 set(patchreview_PART_SRCS
     patchreview.cpp
