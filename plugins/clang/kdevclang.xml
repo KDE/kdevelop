@@ -52,7 +52,7 @@
         <comment xml:lang="sk">Hlavička NVIDIA CUDA C</comment>
         <comment xml:lang="sl">Glava NVIDIA CUDA C</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
-        <comment xml:lang="tr">NVIDIA CUDA C  başlığı</comment>
+        <comment xml:lang="tr">NVIDIA CUDA C üstbilgisi</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
         <comment xml:lang="zh_CN">NVIDIA CUDA C 头文件</comment>
         <sub-class-of type="text/x-c++hdr"/>
