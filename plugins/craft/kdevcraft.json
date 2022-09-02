@@ -3,15 +3,30 @@
         "Authors": [
             {
                 "Email": "arrowd@FreeBSD.org",
-                "Name": "Gleb Popov"
+                "Name": "Gleb Popov",
+                "Name[ca]": "Gleb Popov",
+                "Name[nl]": "Gleb Popov",
+                "Name[pt]": "Gleb Popov",
+                "Name[uk]": "Gleb Popov",
+                "Name[x-test]": "xxGleb Popovxx"
             }
         ],
         "Category": "Runtimes",
         "Description": "Exposes KDE Craft environment as a runtime",
+        "Description[ca]": "Exposa l'entorn Craft de KDE com a entorn d'execució",
+        "Description[nl]": "Omgeving van KDE Craft blootstellen als runtime",
+        "Description[pt]": "Expõe o ambiente do Craft no KDE como ambiente de execução",
+        "Description[uk]": "Розкриває середовище KDE Craft, як середовище виконання",
+        "Description[x-test]": "xxExposes KDE Craft environment as a runtimexx",
         "Icon": "kdevelop",
         "Id": "kdevcraft",
         "License": "BSD3",
         "Name": "Craft runtime",
+        "Name[ca]": "Entorn d'execució Craft",
+        "Name[nl]": "Runtime van Craft ",
+        "Name[pt]": "Ambiente de execução do Craft",
+        "Name[uk]": "Середовище виконання Craft",
+        "Name[x-test]": "xxCraft runtimexx",
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",
