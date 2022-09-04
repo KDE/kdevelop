@@ -212,10 +212,6 @@ install(EXPORT KDevelopTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" NAMESPAC
 # kdebugsettings file
 install_qt_logging_categories(TYPE APP_PLUGIN)
 
-# CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
-# in the KDE build system, this is the same as CMAKE_BINARY_DIR.
-configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
-
 install(FILES org.kde.kdevelop.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 # Make it possible to use the po files fetched by the fetch-translations step
