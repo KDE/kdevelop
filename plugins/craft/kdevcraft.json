@@ -9,6 +9,7 @@
                 "Name[fr]": "Gleb Popov",
                 "Name[nl]": "Gleb Popov",
                 "Name[pt]": "Gleb Popov",
+                "Name[tr]": "Gleb Popov",
                 "Name[uk]": "Gleb Popov",
                 "Name[x-test]": "xxGleb Popovxx"
             }
@@ -19,6 +20,7 @@
         "Description[ca]": "Exposa l'entorn Craft de KDE com a entorn d'execució",
         "Description[nl]": "Omgeving van KDE Craft blootstellen als runtime",
         "Description[pt]": "Expõe o ambiente do Craft no KDE como ambiente de execução",
+        "Description[tr]": "KDE Craft ortamını bir çalışma zamanı olarak açığa çıkarır",
         "Description[uk]": "Розкриває середовище KDE Craft, як середовище виконання",
         "Description[x-test]": "xxExposes KDE Craft environment as a runtimexx",
         "Icon": "kdevelop",
@@ -29,6 +31,7 @@
         "Name[ca]": "Entorn d'execució Craft",
         "Name[nl]": "Runtime van Craft ",
         "Name[pt]": "Ambiente de execução do Craft",
+        "Name[tr]": "Craft çalıştırma ortamı",
         "Name[uk]": "Середовище виконання Craft",
         "Name[x-test]": "xxCraft runtimexx",
         "Version": "0.1"

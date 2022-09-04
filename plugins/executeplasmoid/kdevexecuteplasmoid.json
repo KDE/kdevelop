@@ -59,7 +59,7 @@
         "Description[sk]": "Umožní vám vidieť plazmoid",
         "Description[sl]": "Vam omogoča ogled plasmoida",
         "Description[sv]": "Låter dig visa en Plasmoid",
-        "Description[tr]": "Bir plazmoid görüntülemenize izin verir",
+        "Description[tr]": "Bir Plasmoid görüntülemenize izin verir",
         "Description[uk]": "Надає вам змогу переглядати роботу плазмоїдів",
         "Description[x-test]": "xxLets you view a plasmoidxx",
         "Description[zh_CN]": "让您查看一个 plasmoid",
@@ -94,7 +94,7 @@
         "Name[sk]": "Spúšťač plazmoidov",
         "Name[sl]": "Zaganjalnik plasmoidov",
         "Name[sv]": " Plasmoid-startprogram",
-        "Name[tr]": "Plazmoid Başlatıcısı",
+        "Name[tr]": "Plasmoid Başlatıcı",
         "Name[uk]": "Засіб запуску плазмоїдів",
         "Name[x-test]": "xxPlasmoid Launcherxx",
         "Name[zh_CN]": "部件启动器"

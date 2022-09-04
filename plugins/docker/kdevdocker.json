@@ -59,7 +59,7 @@
         "Description[sk]": "Vystavuje Docker runtimes",
         "Description[sl]": "Izpostavi izvajalne knjižnice za Docker",
         "Description[sv]": "Exponerar Docker-körtidsprogram",
-        "Description[tr]": "Docker çalışma zamanlarını gösterir",
+        "Description[tr]": "Docker çalışma zamanlarını açığa çıkarır",
         "Description[uk]": "Надає доступ до середовищ виконання Docker",
         "Description[x-test]": "xxExposes Docker runtimesxx",
         "Description[zh_CN]": "暴露 Docker 运行时",
