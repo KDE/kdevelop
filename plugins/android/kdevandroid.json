@@ -60,7 +60,7 @@
         "Description[sk]": "Vystavuje Android runtime",
         "Description[sl]": "Izpostavi izvajalne knjižnice za Android",
         "Description[sv]": "Exponerar Android-körtidsprogram",
-        "Description[tr]": "Android çalışma zamanlarını gösterir",
+        "Description[tr]": "Android çalışma zamanlarını açığa çıkarır",
         "Description[uk]": "Надає доступ до середовищ виконання Android",
         "Description[x-test]": "xxExposes Android runtimesxx",
         "Description[zh_CN]": "暴露 Android 运行时",

@@ -59,7 +59,7 @@
         "Description[sk]": "Vystavuje Flatpak runtimes",
         "Description[sl]": "Izpostavi izvajalne knjižnice za Flatpak",
         "Description[sv]": "Exponerar Flatpak-körtidsprogram",
-        "Description[tr]": "Flatpak çalışma zamanlarını gösterir",
+        "Description[tr]": "Flatpak çalışma zamanlarını açığa çıkarır",
         "Description[uk]": "Надає доступ до середовищ виконання Flatpak",
         "Description[x-test]": "xxExposes Flatpak runtimesxx",
         "Description[zh_CN]": "暴露 Flatpak 运行时",

@@ -25,7 +25,7 @@
         "Description[sk]": "Podpora jazyka C/C++ (založená na triedach)",
         "Description[sl]": "Podpora jeziku C/C++ (temelječa na Clang)",
         "Description[sv]": "C/C++ språkstöd (Clang-baserat)",
-        "Description[tr]": "C/C++ Dil Desteği (Clang-tabanlı)",
+        "Description[tr]": "C/C++ Dil Desteği (Clang tabanlı)",
         "Description[uk]": "Підтримка мови C/C++ на основі Clang",
         "Description[x-test]": "xxC/C++ Language Support (Clang-based)xx",
         "Description[zh_CN]": "C/C++ 语言支持 (基于 Clang)",

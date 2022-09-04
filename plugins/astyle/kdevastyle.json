@@ -60,7 +60,7 @@
         "Description[sk]": "Modul pre formátovanie zdrojového kódu podľa špecifických pravidiel",
         "Description[sl]": "Vstavek za oblikovanje izvorne kode po določenih pravilih",
         "Description[sv]": "Ett insticksprogram för formatering av källkod enligt en angiven uppsättning regler",
-        "Description[tr]": "Belli kurallara göre kaynak kodları biçimlendirmeye yarayan bir eklenti",
+        "Description[tr]": "Belirli kurallara göre kaynak kodları biçimlendirmeye yarayan bir eklenti",
         "Description[uk]": "Додаток для форматування коду у відповідності до вказаного набору правил",
         "Description[x-test]": "xxA plugin for formatting of sourcecode according to a specified set of rulesxx",
         "Description[zh_CN]": "一个根据指定规则设定格式化源代码的插件",
