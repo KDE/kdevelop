@@ -9,7 +9,7 @@
 
 #include <QObject>
 
-class TestDUChain
+class TestStringHelpers
     : public QObject
 {
     Q_OBJECT

@@ -11,16 +11,16 @@
 
 #include <language/duchain/stringhelpers.h>
 
-QTEST_MAIN(TestDUChain)
+QTEST_MAIN(TestStringHelpers)
 
 using namespace KDevelop;
 
-void TestDUChain::initTestCase()
+void TestStringHelpers::initTestCase()
 {
     QStandardPaths::setTestModeEnabled(true);
 }
 
-void TestDUChain::testFormatComment_data()
+void TestStringHelpers::testFormatComment_data()
 {
     QTest::addColumn<QByteArray>("input");
     QTest::addColumn<QByteArray>("output");
@@ -106,7 +106,7 @@ void TestDUChain::testFormatComment_data()
     ) << QByteArrayLiteral("line1\n line2");
 }
 
-void TestDUChain::testFormatComment()
+void TestStringHelpers::testFormatComment()
 {
     QFETCH(QByteArray, input);
     QFETCH(QByteArray, output);
@@ -114,7 +114,7 @@ void TestDUChain::testFormatComment()
     QCOMPARE(formatComment(input), output);
 }
 
-void TestDUChain::benchFormatComment()
+void TestStringHelpers::benchFormatComment()
 {
     QBENCHMARK {
         formatComment(QByteArrayLiteral(
