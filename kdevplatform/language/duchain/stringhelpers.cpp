@@ -29,7 +29,7 @@ int strip_impl(const T& str, T& from)
             if (from[a] == str[i]) {
                 i++;
                 ip = a + 1;
-                if (i == ( int )str.length())
+                if (i == str.length())
                     break;
             } else {
                 break;
@@ -61,7 +61,7 @@ int rStrip_impl(const T& str, T& from)
             if (from[a] == str[i]) {
                 i++;
                 ip = a;
-                if (i == ( int )str.length())
+                if (i == str.length())
                     break;
             } else {
                 break;
@@ -69,7 +69,7 @@ int rStrip_impl(const T& str, T& from)
         }
     }
 
-    if (ip != ( int )from.length()) {
+    if (ip != from.length()) {
         from = from.left(ip);
     }
     return s - from.length();
@@ -113,7 +113,7 @@ int findClose(const QString& str, int pos)
     QList<QChar> st;
     QChar last = QLatin1Char(' ');
 
-    for (int a = pos; a < ( int )str.length(); a++) {
+    for (int a = pos; a < str.length(); a++) {
         switch (str[a].unicode()) {
         case '<':
         case '(':
@@ -137,7 +137,7 @@ int findClose(const QString& str, int pos)
         case '"':
             last = str[a];
             a++;
-            while (a < ( int )str.length() && (str[a] != QLatin1Char('"') || last == QLatin1Char('\\'))) {
+            while (a < str.length() && (str[a] != QLatin1Char('"') || last == QLatin1Char('\\'))) {
                 last = str[a];
                 a++;
             }
@@ -145,7 +145,7 @@ int findClose(const QString& str, int pos)
         case '\'':
             last = str[a];
             a++;
-            while (a < ( int )str.length() && (str[a] != QLatin1Char('\'') || last == QLatin1Char('\\'))) {
+            while (a < str.length() && (str[a] != QLatin1Char('\'') || last == QLatin1Char('\\'))) {
                 last = str[a];
                 a++;
             }
@@ -164,7 +164,7 @@ int findClose(const QString& str, int pos)
 
 int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
 {
-    for (int a = pos; a < ( int )str.length(); a++) {
+    for (int a = pos; a < str.length(); a++) {
         switch (str[a].unicode())
         {
         case '"':
