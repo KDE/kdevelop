@@ -49,8 +49,11 @@ public:
 
     virtual KDevelop::SourceFormatterStyle styleForUrl(const QUrl& url, const QMimeType& mime) = 0;
 
-    ///Set whether or not source formatting is disabled with \arg disable
-    virtual void disableSourceFormatting(bool disable) = 0;
+    /**
+     * Disable source formatting
+     * Once disabled, source formatting cannot be reenabled. Call this from within tests.
+     */
+    virtual void disableSourceFormatting() = 0;
     ///\return Whether or not source formatting is enabled
     virtual bool sourceFormattingEnabled() = 0;
 

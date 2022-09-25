@@ -106,7 +106,7 @@ public:
 
     void settingsChanged();
 
-    void disableSourceFormatting(bool disable) override;
+    void disableSourceFormatting() override;
     bool sourceFormattingEnabled() override;
 
     QVector<KDevelop::ISourceFormatter*> formatters() const;

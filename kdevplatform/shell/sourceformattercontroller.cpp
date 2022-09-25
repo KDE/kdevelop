@@ -234,7 +234,7 @@ void SourceFormatterController::pluginLoaded(IPlugin* plugin)
 
     auto* sourceFormatter = plugin->extension<ISourceFormatter>();
 
-    if (!sourceFormatter) {
+    if (!sourceFormatter || !d->enabled) {
         return;
     }
 
@@ -255,7 +255,7 @@ void SourceFormatterController::unloadingPlugin(IPlugin* plugin)
 
     auto* sourceFormatter = plugin->extension<ISourceFormatter>();
 
-    if (!sourceFormatter) {
+    if (!sourceFormatter || !d->enabled) {
         return;
     }
 
@@ -798,11 +798,28 @@ SourceFormatterStyle SourceFormatterController::styleForUrl(const QUrl& url, con
     return s;
 }
 
-void SourceFormatterController::disableSourceFormatting(bool disable)
+void SourceFormatterController::disableSourceFormatting()
 {
     Q_D(SourceFormatterController);
 
-    d->enabled = !disable;
+    d->enabled = false;
+
+    if (d->sourceFormatters.empty()) {
+        return;
+    }
+
+    decltype(d->sourceFormatters) loadedFormatters{};
+    d->sourceFormatters.swap(loadedFormatters);
+
+    resetUi();
+
+    for (auto* formatter : std::as_const(loadedFormatters)) {
+        emit formatterUnloading(formatter);
+    }
+
+    Q_ASSERT(!loadedFormatters.empty());
+    Q_ASSERT(d->sourceFormatters.empty());
+    emit hasFormattersChanged(false);
 }
 
 bool SourceFormatterController::sourceFormattingEnabled()

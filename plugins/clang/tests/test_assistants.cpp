@@ -69,7 +69,7 @@ void TestAssistants::initTestCase()
     TestCore::initialize();
     DUChain::self()->disablePersistentStorage();
     Core::self()->languageController()->backgroundParser()->setDelay(0);
-    Core::self()->sourceFormatterController()->disableSourceFormatting(true);
+    Core::self()->sourceFormatterController()->disableSourceFormatting();
     CodeRepresentation::setDiskChangesForbidden(true);
 
     globalTestLock = new ForegroundLock;
