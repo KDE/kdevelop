@@ -28,10 +28,6 @@ public:
     QString caption() const override;
     QString description() const override;
 
-    /** Formats using the current style.
-    */
-    QString formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const override;
-
     /** \return A map of predefined styles (a key and a caption for each type)
     */
     QVector<KDevelop::SourceFormatterStyle> predefinedStyles() const override;
@@ -51,9 +47,8 @@ public:
     */
     QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) const override;
 
-    /** \return The indentation type of the currently selected style.
-    */
-    Indentation indentation(const QUrl &url) const override;
+    Indentation indentation(const KDevelop::SourceFormatterStyle& style, const QUrl& url,
+                            const QMimeType& mime) const override;
 
     static QString formattingSample(AStylePreferences::Language lang);
     static QString indentingSample(AStylePreferences::Language lang);

@@ -7,17 +7,14 @@
 
 #include "astyle_plugin.h"
 
-#include <QMimeDatabase>
-
 #include <KPluginFactory>
-
-#include <interfaces/icore.h>
-#include <interfaces/isourceformattercontroller.h>
 
 #include "astyle_formatter.h"
 #include "astyle_stringiterator.h"
 #include "astyle_preferences.h"
 #include <KLocalizedString>
+
+#include <QMimeType>
 #include <QUrl>
 
 static const char formattingCxxSample[] =
@@ -255,12 +252,6 @@ QString AStylePlugin::formatSourceWithStyle(const SourceFormatterStyle& style,
     return m_formatter->formatSource(text, leftContext, rightContext);
 }
 
-QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const
-{
-    auto style = ICore::self()->sourceFormatterController()->styleForUrl(url, mime);
-    return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
-}
-
 static SourceFormatterStyle createPredefinedStyle(const QString& name, const QString& caption = QString())
 {
     SourceFormatterStyle st = SourceFormatterStyle( name );
@@ -322,10 +313,11 @@ QString AStylePlugin::previewText(const SourceFormatterStyle& /*style*/, const Q
       formattingSample(lang);
 }
 
-AStylePlugin::Indentation AStylePlugin::indentation(const QUrl& url) const
+AStylePlugin::Indentation AStylePlugin::indentation(const SourceFormatterStyle& style, const QUrl& url,
+                                                    const QMimeType& mime) const
 {
-    // Call formatSource first, to initialize the m_formatter data structures according to the URL
-    formatSource(QString(), url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
+    // Call formatSourceWithStyle() first to initialize the m_formatter data structures according to the arguments.
+    formatSourceWithStyle(style, QString(), url, mime, QString(), QString());
 
     Indentation ret;
 

@@ -147,16 +147,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 */
 		virtual QString usageHint() const;
 
-		/** Formats using the current style.
-		 * @param text The text to format
-		 * @param url The URL to which the text belongs (its contents must not be changed).
-		 * @param leftContext The context at the left side of the text. If it is in another line, it must end with a newline.
-		 * @param rightContext The context at the right side of the text. If it is in the next line, it must start with a newline.
-		 *
-		 * If the source-formatter cannot work correctly with the context, it will just return the input text.
-		*/
-		virtual QString formatSource(const QString &text, const QUrl& url, const QMimeType &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) const = 0;
-
 		/**
 		 * Format with the given style, this is mostly for the kcm to format the preview text
 		 * Its a bit of a hassle that this needs to be public API, but I can't find a better way
@@ -203,9 +193,10 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 			int indentWidth = 0;
 		};
 
-		/** \return The indentation of the style applicable for the given url.
+		/** \return The indentation of @p style applicable for @p url and its MIME type @p mime
 		*/
-		virtual Indentation indentation(const QUrl& url) const = 0;
+		virtual Indentation indentation(const SourceFormatterStyle& style, const QUrl& url,
+		                                const QMimeType& mime) const = 0;
 
 		/** \return A string representing the map. Values are written in the form
 		* key=value and separated with ','.

@@ -8,16 +8,37 @@
 #ifndef KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 #define KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 
-#include <QObject>
-
 #include "interfacesexport.h"
 
+#include <QObject>
+#include <QString>
+
+#include <memory>
+
 class QUrl;
-class QMimeType;
 
 namespace KDevelop {
-class ISourceFormatter;
-class SourceFormatterStyle;
+class IFileFormatter
+{
+    Q_DISABLE_COPY_MOVE(IFileFormatter)
+public:
+    IFileFormatter() = default;
+    virtual ~IFileFormatter() = default;
+
+    /**
+     * Format text using packaged source formatter and style.
+     * @param text the text to format
+     * @param leftContext the context at the left side of the text.
+     *        If it is in another line, it must end with a newline.
+     * @param rightContext the context at the right side of the text.
+     *        If it is in the next line, it must start with a newline.
+     *
+     * @note If the source formatter cannot work correctly with the context,
+     *       it will just return the input text.
+     */
+    virtual QString format(const QString& text, const QString& leftContext = QString(),
+                           const QString& rightContext = QString()) const = 0;
+};
 
 /** \short An interface to the controller managing all source formatter plugins
  */
@@ -29,25 +50,18 @@ public:
     explicit ISourceFormatterController(QObject* parent = nullptr);
     ~ISourceFormatterController() override;
 
-    /** \return The formatter corresponding to the language
-     * of the document corresponding to the \p url.
-     * The language is then activated and the style is loaded.
-     * The source formatter is then ready to use.
-     * If mimetype of url is known already, use
-     * formatterForUrl(const QUrl& url, const QMimeType& mime) instead.
+    using FileFormatterPtr = std::unique_ptr<IFileFormatter>;
+
+    /**
+     * Read user configuration for the given URL and package it into a file formatter object.
+     * @param url the URL of a document to be formatted
+     * @return the requested file formatter object or nullptr if no formatter is
+     *         configured for @p url
      */
-    virtual ISourceFormatter* formatterForUrl(const QUrl& url) = 0;
-    /** \return The formatter corresponding to the language
-     * of the document corresponding to the \p url.
-     * The language is then activated and the style is loaded.
-     * The source formatter is then ready to use.
-     * @param mime known mimetype of the url
-     */
-    virtual ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) = 0;
+    virtual FileFormatterPtr fileFormatter(const QUrl& url) const = 0;
+
     ///\return @c true if there are formatters at all, @c false otherwise
     virtual bool hasFormatters() const = 0;
-
-    virtual KDevelop::SourceFormatterStyle styleForUrl(const QUrl& url, const QMimeType& mime) = 0;
 
     /**
      * Disable source formatting

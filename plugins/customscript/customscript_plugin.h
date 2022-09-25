@@ -32,10 +32,6 @@ public:
     QString description() const override;
     QString usageHint() const override;
 
-    /** Formats using the current style.
-     */
-    QString formatSource(const QString& text, const QUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const override;
-
     QString formatSourceWithStyle(const KDevelop::SourceFormatterStyle& style,
                                   const QString& text,
                                   const QUrl& url,
@@ -55,12 +51,12 @@ public:
      */
     QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) const override;
 
-    /** \return The indentation of the currently selected style.
-     */
-    Indentation indentation(const QUrl& url) const override;
+    Indentation indentation(const KDevelop::SourceFormatterStyle& style, const QUrl& url,
+                            const QMimeType& mime) const override;
 
 private:
-    QStringList computeIndentationFromSample(const QUrl& url) const;
+    QStringList computeIndentationFromSample(const KDevelop::SourceFormatterStyle& style, const QUrl& url,
+                                             const QMimeType& mime) const;
 };
 
 class CustomScriptPreferences

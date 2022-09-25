@@ -7,11 +7,8 @@
 
 #include "sourcemanipulation.h"
 
-#include <QMimeDatabase>
-
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <interfaces/isourceformatter.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -232,12 +229,9 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
     int line = findInsertionPoint();
 
     decl = QLatin1String("\n\n") + applySubScope(decl);
-    const auto url = declaration->url().toUrl();
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForUrl(url);
-    auto i = ICore::self()->sourceFormatterController()->formatterForUrl(url, mime);
-    if (i) {
-        decl = i->formatSource(decl, url, mime);
+    const auto formatter = ICore::self()->sourceFormatterController()->fileFormatter(declaration->url().toUrl());
+    if (formatter) {
+        decl = formatter->format(decl);
     }
 
     return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(line), QString(), decl));

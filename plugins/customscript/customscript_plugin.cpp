@@ -10,10 +10,8 @@
 #include <KPluginFactory>
 #include <QTextStream>
 #include <QTemporaryFile>
-#include <QMimeDatabase>
 #include <KProcess>
 #include <interfaces/icore.h>
-#include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
 #include <QDir>
 #include <QTimer>
@@ -29,6 +27,8 @@
 #include <interfaces/ilanguagesupport.h>
 #include <util/path.h>
 #include <debug.h>
+
+#include <QMimeType>
 
 #include <memory>
 
@@ -99,11 +99,8 @@ QString CustomScriptPlugin::usageHint() const
                  "to be installed. Otherwise, code will not be formatted.");
 }
 
-QString CustomScriptPlugin::formatSourceWithStyle(const SourceFormatterStyle& style,
-                                                  const QString& text,
-                                                  const QUrl& url,
-                                                  const QMimeType& /*mime*/,
-                                                  const QString& leftContext,
+QString CustomScriptPlugin::formatSourceWithStyle(const SourceFormatterStyle& style, const QString& text,
+                                                  const QUrl& url, const QMimeType& mime, const QString& leftContext,
                                                   const QString& rightContext) const
 {
     KProcess proc;
@@ -196,19 +193,13 @@ QString CustomScriptPlugin::formatSourceWithStyle(const SourceFormatterStyle& st
     if ((!leftContext.isEmpty() || !rightContext.isEmpty()) && (text.contains(QLatin1Char('	')) || output.contains(QLatin1Char('\t')))) {
         // If we have to do contex-matching with tabs, determine the correct tab-width so that the context
         // can be matched correctly
-        Indentation indent = indentation(url);
+        const auto indent = indentation(style, url, mime);
         if (indent.indentationTabWidth > 0) {
             tabWidth = indent.indentationTabWidth;
         }
     }
 
     return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, tabWidth);
-}
-
-QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const
-{
-	auto style = KDevelop::ICore::self()->sourceFormatterController()->styleForUrl(url, mime);
-    return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
 namespace {
@@ -430,7 +421,8 @@ QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const
     return formattingSample() + QLatin1String("\n\n") + indentingSample();
 }
 
-QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) const
+QStringList CustomScriptPlugin::computeIndentationFromSample(const SourceFormatterStyle& style, const QUrl& url,
+                                                             const QMimeType& mime) const
 {
     QStringList ret;
 
@@ -445,7 +437,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) co
                                 << language.name();
         return ret;
     }
-    QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
+    const QString formattedSample = formatSourceWithStyle(style, sample, url, mime, QString(), QString());
 
     const QStringList lines = formattedSample.split(QLatin1Char('\n'));
     for (const QString& line : lines) {
@@ -468,10 +460,11 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) co
     return ret;
 }
 
-CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url) const
+CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const SourceFormatterStyle& style, const QUrl& url,
+                                                                const QMimeType& mime) const
 {
     Indentation ret;
-    QStringList indent = computeIndentationFromSample(url);
+    const QStringList indent = computeIndentationFromSample(style, url, mime);
     if (indent.isEmpty()) {
         qCDebug(CUSTOMSCRIPT) << "failed extracting a valid indentation from sample for url" << url;
         return ret; // No valid indentation could be extracted

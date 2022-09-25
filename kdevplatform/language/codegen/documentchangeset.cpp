@@ -12,7 +12,6 @@
 #include <algorithm>
 
 #include <QStringList>
-#include <QMimeDatabase>
 
 #include <KLocalizedString>
 
@@ -28,7 +27,6 @@
 #include <language/editor/modificationrevisionset.h>
 
 #include <interfaces/isourceformattercontroller.h>
-#include <interfaces/isourceformatter.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
@@ -382,12 +380,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     //Create the actual new modified file
     QStringList textLines = repr->text().split(QLatin1Char('\n'));
 
-    QUrl url = file.toUrl();
-
-    QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
-
-    auto core = ICore::self();
-    ISourceFormatter* formatter = core ? core->sourceFormatterController()->formatterForUrl(file.toUrl(), mime) : nullptr;
+    ISourceFormatterController::FileFormatterPtr formatter;
+    if (formatPolicy != DocumentChangeSet::NoAutoFormat) {
+        formatter = ICore::self()->sourceFormatterController()->fileFormatter(file.toUrl());
+    }
 
     QVector<int> removedLines;
 
@@ -404,10 +400,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             QString rightContext = QStringList(textLines.mid(change.m_range.end().line())).join(QLatin1Char('\n')).mid(
                 change.m_range.end().column());
 
-            if (formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges
-                              || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation)) {
+            if (formatter) {
                 QString oldNewText = change.m_newText;
-                change.m_newText = formatter->formatSource(change.m_newText, url, mime, leftContext, rightContext);
+                change.m_newText = formatter->format(change.m_newText, leftContext, rightContext);
 
                 if (formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation) {
                     // Reproduce the previous indentation

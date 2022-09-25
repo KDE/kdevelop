@@ -12,7 +12,6 @@
 
 #include <debug.h>
 
-#include <QMimeDatabase>
 #include <QTextStream>
 
 #include <KIO/StoredTransferJob>
@@ -21,7 +20,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/isourceformatter.h>
 #include <sublime/message.h>
 
 using namespace KDevelop;
@@ -104,18 +102,17 @@ void SourceFormatterJob::setFiles(const QList<QUrl>& fileList)
 
 void SourceFormatterJob::formatFile(const QUrl& url)
 {
-    // check mimetype
-    QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
-    qCDebug(SHELL) << "Checking file " << url << " of mime type " << mime.name();
-    auto formatter = m_sourceFormatterController->formatterForUrl(url, mime);
-    if (!formatter) // unsupported mime type
-        return;
+    qCDebug(SHELL) << "Checking whether to format file" << url;
+    SourceFormatterController::FileFormatter ff(url);
+    if (!ff.readFormatterAndStyle(m_sourceFormatterController->formatters())) {
+        return; // unsupported MIME type or no configured formatter for it
+    }
 
     // if the file is opened in the editor, format the text in the editor without saving it
     auto doc = ICore::self()->documentController()->documentForUrl(url);
     if (doc) {
         qCDebug(SHELL) << "Processing file " << url << "opened in editor";
-        m_sourceFormatterController->formatDocument(doc, formatter, mime);
+        ff.formatDocument(*doc);
         return;
     }
 
@@ -125,8 +122,8 @@ void SourceFormatterJob::formatFile(const QUrl& url)
     if (getJob->exec()) {
         // TODO: really fromLocal8Bit/toLocal8Bit? no encoding detection? added in b8062f736a2bf2eec098af531a7fda6ebcdc7cde
         QString text = QString::fromLocal8Bit(getJob->data());
-        text = formatter->formatSource(text, url, mime);
-        text = m_sourceFormatterController->addModelineForCurrentLang(text, url, mime);
+        text = ff.format(text);
+        text = ff.addModeline(text);
 
         auto putJob = KIO::storedPut(text.toLocal8Bit(), url, -1, KIO::Overwrite);
         // see getJob
