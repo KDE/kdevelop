@@ -21,6 +21,9 @@ private Q_SLOTS:
     void testFormatComment();
 
     void benchFormatComment();
+
+    void testParamIterator_data();
+    void testParamIterator();
 };
 
 #endif // KDEVPLATFORM_TEST_STRINGHELPERS_H

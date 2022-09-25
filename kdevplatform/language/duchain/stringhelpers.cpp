@@ -74,6 +74,26 @@ int rStrip_impl(const T& str, T& from)
     }
     return s - from.length();
 }
+
+bool isOperator(const QString& str, int pos)
+{
+    const auto c = str[pos];
+    Q_ASSERT(c == QLatin1Char('<') || c == QLatin1Char('>'));
+
+    --pos;
+
+    // handle `operator<<` and `operator>>`
+    if (pos > 0 && str[pos] == c) {
+        --pos;
+    }
+
+    // skip spaces, e.g. `operator <`
+    while (pos > 0 && str[pos].isSpace()) {
+        --pos;
+    }
+
+    return QStringView(str).mid(0, pos + 1).endsWith(QLatin1String("operator"));
+}
 }
 
 namespace KDevelop {
@@ -116,6 +136,9 @@ int findClose(const QString& str, int pos)
     for (int a = pos; a < str.length(); a++) {
         switch (str[a].unicode()) {
         case '<':
+            if (isOperator(str, a))
+                break;
+            [[fallthrough]];
         case '(':
         case '[':
         case '{':
@@ -123,6 +146,8 @@ int findClose(const QString& str, int pos)
             depth++;
             break;
         case '>':
+            if (isOperator(str, a))
+                break;
             if (last == QLatin1Char('-'))
                 break;
             [[fallthrough]];
@@ -165,23 +190,28 @@ int findClose(const QString& str, int pos)
 int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
 {
     for (int a = pos; a < str.length(); a++) {
-        switch (str[a].unicode())
-        {
+        switch (str[a].unicode()) {
+        case '<':
+            if (isOperator(str, a))
+                break;
+            [[fallthrough]];
         case '"':
         case '(':
         case '[':
         case '{':
-        case '<':
             a = findClose(str, a);
             if (a == -1)
                 return str.length();
             break;
+        case '>':
+            if (isOperator(str, a))
+                break;
+            [[fallthrough]];
         case ')':
         case ']':
         case '}':
-        case '>':
             if (validEnd != QLatin1Char(' ') && validEnd != str[a])
-                continue;
+                break;
             [[fallthrough]];
         case ',':
             return a;
