@@ -13,6 +13,7 @@
                 "Name[nl]": "Gleb Popov",
                 "Name[pt]": "Gleb Popov",
                 "Name[sl]": "Gleb Popov",
+                "Name[sv]": "Gleb Popov",
                 "Name[tr]": "Gleb Popov",
                 "Name[uk]": "Gleb Popov",
                 "Name[x-test]": "xxGleb Popovxx"
@@ -29,6 +30,7 @@
         "Description[nl]": "Omgeving van KDE Craft blootstellen als runtime",
         "Description[pt]": "Expõe o ambiente do Craft no KDE como ambiente de execução",
         "Description[sl]": "Izpostavi izvajanje v okolju KDE Craft",
+        "Description[sv]": "Exponerar KDE Craft-miljön som körtidsprogram",
         "Description[tr]": "KDE Craft ortamını bir çalışma zamanı olarak açığa çıkarır",
         "Description[uk]": "Розкриває середовище KDE Craft, як середовище виконання",
         "Description[x-test]": "xxExposes KDE Craft environment as a runtimexx",
@@ -45,6 +47,7 @@
         "Name[nl]": "Runtime van Craft ",
         "Name[pt]": "Ambiente de execução do Craft",
         "Name[sl]": "izvajanje Craft",
+        "Name[sv]": "Craft körtidsprogram",
         "Name[tr]": "Craft çalıştırma ortamı",
         "Name[uk]": "Середовище виконання Craft",
         "Name[x-test]": "xxCraft runtimexx",
