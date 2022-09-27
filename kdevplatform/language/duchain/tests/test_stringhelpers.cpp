@@ -163,6 +163,9 @@ void TestStringHelpers::testParamIterator_data()
     addTest("Y<decltype(&X::operator->), Z<&X::operator->>>", {"decltype(&X::operator->)", "Z<&X::operator->>"});
     addTest("Y<decltype(&X::operator--), &X::operator-->", {"decltype(&X::operator--)", "&X::operator--"});
     addTest("Y<decltype(&X::operator--), Z<&X::operator-->>", {"decltype(&X::operator--)", "Z<&X::operator-->"});
+    addTest("Y<decltype(&X::operator<=), Z<&X::operator<=>>", {"decltype(&X::operator<=)", "Z<&X::operator<=>"});
+    // NOTE: this identifier here is invalid but we shouldn't trigger UB either, so the test is just that we get _something_ (even if it's wrong)
+    addTest("bogus<_Tp, _Up, invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>", {"_Tp", "_Up", "invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>"});
 }
 
 void TestStringHelpers::testParamIterator()

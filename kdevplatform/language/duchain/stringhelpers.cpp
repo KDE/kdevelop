@@ -657,7 +657,10 @@ ParamIterator& ParamIterator::operator ++()
 
     Q_ASSERT(*this);
 
-    if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
+    if (d->m_curEnd >= d->m_source.size()) {
+        //We have reached the end-paren. Stop iterating.
+        d->m_cur = d->m_end = d->m_curEnd;
+    } else if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
         //We have reached the end-paren. Stop iterating.
         d->m_cur = d->m_end = d->m_curEnd + 1;
     } else {
