@@ -10,6 +10,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QVarLengthArray>
 
 namespace {
 template <typename T>
@@ -130,7 +131,7 @@ bool parenFits(QChar c1, QChar c2)
 int findClose(const QString& str, int pos)
 {
     int depth = 0;
-    QList<QChar> st;
+    QVarLengthArray<QChar, 16> st;
     QChar last = QLatin1Char(' ');
 
     for (int a = pos; a < str.length(); a++) {
@@ -142,7 +143,7 @@ int findClose(const QString& str, int pos)
         case '(':
         case '[':
         case '{':
-            st.push_front(str[a]);
+            st.insert(0, str[a]);
             depth++;
             break;
         case '>':
@@ -156,7 +157,7 @@ int findClose(const QString& str, int pos)
         case '}':
             if (!st.isEmpty() && parenFits(st.front(), str[a])) {
                 depth--;
-                st.pop_front();
+                st.remove(0);
             }
             break;
         case '"':
