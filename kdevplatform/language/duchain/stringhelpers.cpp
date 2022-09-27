@@ -76,6 +76,15 @@ int rStrip_impl(const T& str, T& from)
     return s - from.length();
 }
 
+bool endsWithWordBoundary(QStringView str)
+{
+    if (str.isEmpty()) {
+        return true;
+    }
+    const auto boundary = str.last();
+    return !boundary.isLetterOrNumber() && boundary != QLatin1Char('_');
+}
+
 bool isOperator(const QString& str, int pos)
 {
     const auto c = str[pos];
@@ -93,7 +102,14 @@ bool isOperator(const QString& str, int pos)
         --pos;
     }
 
-    return QStringView(str).mid(0, pos + 1).endsWith(QLatin1String("operator"));
+    auto prefix = QStringView(str).left(pos + 1);
+    const auto op = QLatin1String("operator");
+    if (!prefix.endsWith(op)) {
+        return false;
+    }
+
+    prefix.chop(op.size());
+    return endsWithWordBoundary(prefix);
 }
 
 int skipStringOrCharLiteral(const QString& str, int pos)

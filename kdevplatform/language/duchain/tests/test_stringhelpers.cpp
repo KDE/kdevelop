@@ -157,6 +157,7 @@ void TestStringHelpers::testParamIterator_data()
             {"_Tp", "foo<bar>", "__void_t<decltype(std::declval<_Tp>().operator->(std::declval<_Up>()))>"});
     addTest("A<\">\\\">\">", {"\">\\\">\""});
     addTest("A<'>'>", {"'>'"});
+    addTest("myoperator<anoperator<anotheroperator>, my_operator>", {"anoperator<anotheroperator>", "my_operator"});
 }
 
 void TestStringHelpers::testParamIterator()
