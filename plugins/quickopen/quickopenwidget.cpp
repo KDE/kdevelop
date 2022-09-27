@@ -452,7 +452,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                 }
                 break;
             }
-            Q_FALLTHROUGH();
+            [[fallthrough]];
         case Qt::Key_PageUp:
         case Qt::Key_PageDown:
             if (watched == ui.list) {

@@ -194,7 +194,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
             browser->showUses(action.decl);
             return NavigationContextPointer(this);
         }
-        Q_FALLTHROUGH();
+        [[fallthrough]];
     }
     case NavigationAction::ShowUses: {
         return registerChild(new UsesNavigationContext(action.decl.data(), this));

@@ -147,7 +147,7 @@ add_compile_flag_if_supported(-Wno-missing-field-initializers)
 add_compile_flag_if_supported(-Werror=switch)
 add_compile_flag_if_supported(-Werror=undefined-bool-conversion)
 add_compile_flag_if_supported(-Werror=tautological-undefined-compare)
-add_compile_flag_if_supported(-Werror=implicit-fallthrough)    # Use Q_FALLTHROUGH for false positives.
+add_compile_flag_if_supported(-Werror=implicit-fallthrough)    # Use [[fallthrough]] for false positives.
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_flag_if_supported(-Wdocumentation)
     add_compile_flag_if_supported(-Wcovered-switch-default)

@@ -153,7 +153,7 @@ void ProviderWidget::searchRepo()
     case 2: /* Known organization */
         text = m_combo->currentText();
         enabled = false;
-        Q_FALLTHROUGH();
+        [[fallthrough]];
     default:/* Looking for some organization's repo. */
         uri = QStringLiteral("/orgs/%1/repos").arg(text);
         break;

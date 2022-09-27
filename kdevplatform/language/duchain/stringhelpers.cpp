@@ -125,7 +125,7 @@ int findClose(const QString& str, int pos)
         case '>':
             if (last == QLatin1Char('-'))
                 break;
-            Q_FALLTHROUGH();
+            [[fallthrough]];
         case ')':
         case ']':
         case '}':
@@ -182,7 +182,7 @@ int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
         case '>':
             if (validEnd != QLatin1Char(' ') && validEnd != str[a])
                 continue;
-            Q_FALLTHROUGH();
+            [[fallthrough]];
         case ',':
             return a;
         }
