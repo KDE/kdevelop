@@ -158,6 +158,8 @@ void TestStringHelpers::testParamIterator_data()
     addTest("A<\">\\\">\">", {"\">\\\">\""});
     addTest("A<'>'>", {"'>'"});
     addTest("myoperator<anoperator<anotheroperator>, my_operator>", {"anoperator<anotheroperator>", "my_operator"});
+    addTest("Y<decltype(&X::operator<=), &X::operator<=>", {"decltype(&X::operator<=)", "&X::operator<="});
+    addTest("Y<decltype(&X::operator--), &X::operator-->", {"decltype(&X::operator--)", "&X::operator--"});
 }
 
 void TestStringHelpers::testParamIterator()
