@@ -112,6 +112,13 @@ bool isOperator(const QString& str, int pos)
     return endsWithWordBoundary(prefix);
 }
 
+// check for operator-> but don't get confused by operator-->
+bool isArrowOperator(const QString& str, int pos)
+{
+    Q_ASSERT(str[pos] == QLatin1Char('>'));
+    return pos > 0 && str[pos - 1] == QLatin1Char('-') && (pos == 1 || str[pos - 2] != QLatin1Char('-'));
+}
+
 int skipStringOrCharLiteral(const QString& str, int pos)
 {
     const auto quote = str[pos];
@@ -163,8 +170,6 @@ int findClose(const QString& str, int pos)
     QVarLengthArray<QChar, 16> st;
     st.append(str[pos]);
 
-    QChar last = QLatin1Char(' ');
-
     for (int a = pos + 1; a < str.length(); a++) {
         switch (str[a].unicode()) {
         case '<':
@@ -178,10 +183,9 @@ int findClose(const QString& str, int pos)
             depth++;
             break;
         case '>':
-            if (isOperator(str, a))
+            if (isOperator(str, a) || isArrowOperator(str, a))
                 break;
-            if (last == QLatin1Char('-'))
-                break;
+
             [[fallthrough]];
         case ')':
         case ']':
@@ -194,11 +198,8 @@ int findClose(const QString& str, int pos)
         case '"':
         case '\'':
             a = skipStringOrCharLiteral(str, a);
-            last = str[a - 1];
             break;
         }
-
-        last = str[a];
 
         if (depth == 0) {
             return a;
@@ -228,8 +229,9 @@ int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
                 return str.length();
             break;
         case '>':
-            if (isOperator(str, a))
+            if (isOperator(str, a) || isArrowOperator(str, a))
                 break;
+
             [[fallthrough]];
         case ')':
         case ']':
