@@ -629,6 +629,8 @@ ParamIterator& ParamIterator::operator ++()
 {
     Q_D(ParamIterator);
 
+    Q_ASSERT(*this);
+
     if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
         //We have reached the end-paren. Stop iterating.
         d->m_cur = d->m_end = d->m_curEnd + 1;
@@ -645,6 +647,8 @@ ParamIterator& ParamIterator::operator ++()
 QString ParamIterator::operator *()
 {
     Q_D(ParamIterator);
+
+    Q_ASSERT(*this);
 
     return d->m_source.mid(d->m_cur, d->m_curEnd - d->m_cur).trimmed();
 }
