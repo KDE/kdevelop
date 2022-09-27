@@ -155,6 +155,8 @@ void TestStringHelpers::testParamIterator_data()
             {"_Tp", "foo<bar>", "__void_t<decltype(std::declval<_Tp>().operator<=>(std::declval<_Up>()))>"});
     addTest("__not_overloaded2<_Tp, foo<bar>, __void_t<decltype(std::declval<_Tp>().operator->(std::declval<_Up>()))>>",
             {"_Tp", "foo<bar>", "__void_t<decltype(std::declval<_Tp>().operator->(std::declval<_Up>()))>"});
+    addTest("A<\">\\\">\">", {"\">\\\">\""});
+    addTest("A<'>'>", {"'>'"});
 }
 
 void TestStringHelpers::testParamIterator()

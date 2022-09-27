@@ -95,6 +95,19 @@ bool isOperator(const QString& str, int pos)
 
     return QStringView(str).mid(0, pos + 1).endsWith(QLatin1String("operator"));
 }
+
+int skipStringOrCharLiteral(const QString& str, int pos)
+{
+    const auto quote = str[pos];
+    Q_ASSERT(quote == QLatin1Char('\'') || quote == QLatin1Char('"'));
+
+    const auto end = str.size();
+    pos++;
+    while (pos < end && (str[pos] != quote || str[pos - 1] == QLatin1Char('\\'))) {
+        pos++;
+    }
+    return pos;
+}
 }
 
 namespace KDevelop {
@@ -130,11 +143,13 @@ bool parenFits(QChar c1, QChar c2)
 
 int findClose(const QString& str, int pos)
 {
-    int depth = 0;
+    int depth = 1;
     QVarLengthArray<QChar, 16> st;
+    st.append(str[pos]);
+
     QChar last = QLatin1Char(' ');
 
-    for (int a = pos; a < str.length(); a++) {
+    for (int a = pos + 1; a < str.length(); a++) {
         switch (str[a].unicode()) {
         case '<':
             if (isOperator(str, a))
@@ -161,21 +176,10 @@ int findClose(const QString& str, int pos)
             }
             break;
         case '"':
-            last = str[a];
-            a++;
-            while (a < str.length() && (str[a] != QLatin1Char('"') || last == QLatin1Char('\\'))) {
-                last = str[a];
-                a++;
-            }
-            continue;
         case '\'':
-            last = str[a];
-            a++;
-            while (a < str.length() && (str[a] != QLatin1Char('\'') || last == QLatin1Char('\\'))) {
-                last = str[a];
-                a++;
-            }
-            continue;
+            a = skipStringOrCharLiteral(str, a);
+            last = str[a - 1];
+            break;
         }
 
         last = str[a];
@@ -192,11 +196,14 @@ int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
 {
     for (int a = pos; a < str.length(); a++) {
         switch (str[a].unicode()) {
+        case '"':
+        case '\'':
+            a = skipStringOrCharLiteral(str, a);
+            break;
         case '<':
             if (isOperator(str, a))
                 break;
             [[fallthrough]];
-        case '"':
         case '(':
         case '[':
         case '{':
