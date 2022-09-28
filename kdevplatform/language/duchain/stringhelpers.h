@@ -14,7 +14,6 @@
 
 class QByteArray;
 class QString;
-class QStringList;
 
 namespace KDevelop {
 class ParamIteratorPrivate;
@@ -33,15 +32,6 @@ int KDEVPLATFORMLANGUAGE_EXPORT findClose(const QString& str, int pos);
  * @return  On fail, str.length() is returned, else the position of the closing character.
  */
 int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(const QString& str, int pos, QChar validEnd = QLatin1Char( ' ' ));
-
-/**
- * Skips in the string backwards over function-arguments, and stops at the right side of a "("
- * @param str string to skip
- * @param skippedArguments Will contain all skipped arguments
- * @param argumentsStart Should be set to the position where the seeking should start, will be changed to the right side of a "(" when found. Should be at the right side of a '(', and may be max. str.length()
- */
-void KDEVPLATFORMLANGUAGE_EXPORT skipFunctionArguments(const QString& str, QStringList& skippedArguments,
-                                                       int& argumentsStart);
 
 /**
  * Removes white space at the beginning and end, and replaces contiguous inner white-spaces with single white-spaces. Newlines are treated as whitespaces, the returned text will have no more newlines.

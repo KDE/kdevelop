@@ -9,7 +9,6 @@
 #include "debuglog.h"
 
 #include <language/duchain/stringhelpers.h>
-#include <language/duchain/safetycounter.h>
 
 #include <QChar>
 #include <QString>

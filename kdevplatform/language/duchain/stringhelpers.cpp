@@ -5,11 +5,9 @@
 */
 
 #include "stringhelpers.h"
-#include "safetycounter.h"
 #include <debug.h>
 
 #include <QString>
-#include <QStringList>
 #include <QVarLengthArray>
 
 namespace {
@@ -245,100 +243,6 @@ int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
     }
 
     return str.length();
-}
-
-QString reverse(const QString& str)
-{
-    QString ret;
-    int len = str.length();
-    ret.reserve(len);
-    for (int a = len - 1; a >= 0; --a) {
-        switch (str[a].unicode()) {
-        case '(':
-            ret += QLatin1Char(')');
-            continue;
-        case '[':
-            ret += QLatin1Char(']');
-            continue;
-        case '{':
-            ret += QLatin1Char('}');
-            continue;
-        case '<':
-            ret += QLatin1Char('>');
-            continue;
-        case ')':
-            ret += QLatin1Char('(');
-            continue;
-        case ']':
-            ret += QLatin1Char('[');
-            continue;
-        case '}':
-            ret += QLatin1Char('{');
-            continue;
-        case '>':
-            ret += QLatin1Char('<');
-            continue;
-        default:
-            ret += str[a];
-            continue;
-        }
-    }
-
-    return ret;
-}
-
-///@todo this hackery sucks
-QString escapeForBracketMatching(QString str)
-{
-    str.replace(QLatin1String("<<"),   QLatin1String("$&"));
-    str.replace(QLatin1String(">>"),   QLatin1String("$$"));
-    str.replace(QLatin1String("\\\""), QLatin1String("$!"));
-    str.replace(QLatin1String("->"),   QLatin1String("$?"));
-    return str;
-}
-
-QString escapeFromBracketMatching(QString str)
-{
-    str.replace(QLatin1String("$&"), QLatin1String("<<"));
-    str.replace(QLatin1String("$$"), QLatin1String(">>"));
-    str.replace(QLatin1String("$!"), QLatin1String("\\\""));
-    str.replace(QLatin1String("$?"), QLatin1String("->"));
-    return str;
-}
-
-void skipFunctionArguments(const QString& str_, QStringList& skippedArguments, int& argumentsStart)
-{
-    QString withStrings = escapeForBracketMatching(str_);
-    QString str = escapeForBracketMatching(clearStrings(str_));
-
-    //Blank out everything that can confuse the bracket-matching algorithm
-    QString reversed = reverse(str.left(argumentsStart));
-    QString withStringsReversed = reverse(withStrings.left(argumentsStart));
-    //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
-    SafetyCounter s(1000);
-
-    int pos = 0;
-    int len = reversed.length();
-    //we are searching for an opening-brace, but the reversion has also reversed the brace
-    while (pos < len && s) {
-        int lastPos = pos;
-        pos = KDevelop::findCommaOrEnd(reversed, pos);
-        if (pos > lastPos) {
-            QString arg = reverse(withStringsReversed.mid(lastPos, pos - lastPos)).trimmed();
-            if (!arg.isEmpty())
-                skippedArguments.push_front(escapeFromBracketMatching(arg)); //We are processing the reversed reverseding, so push to front
-        }
-        if (reversed[pos] == QLatin1Char(')') || reversed[pos] == QLatin1Char('>'))
-            break;
-        else
-            ++pos;
-    }
-
-    if (!s) {
-        qCDebug(LANGUAGE) << "skipFunctionArguments: Safety-counter triggered";
-    }
-
-    argumentsStart -= pos;
 }
 
 QString reduceWhiteSpace(const QString& str_)

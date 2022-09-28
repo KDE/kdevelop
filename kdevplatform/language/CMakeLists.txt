@@ -272,7 +272,6 @@ install(FILES
     duchain/abstractfunctiondeclaration.h
     duchain/functiondeclaration.h
     duchain/stringhelpers.h
-    duchain/safetycounter.h
     duchain/namespacealiasdeclaration.h
     duchain/aliasdeclaration.h
     duchain/dumpdotgraph.h
