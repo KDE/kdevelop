@@ -38,7 +38,6 @@
 #include <KPluginFactory>
 #include <QUrl>
 #include <QAction>
-#include <KMessageBox>
 #include <KTextEditor/Document>
 #include <KDirWatch>
 

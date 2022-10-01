@@ -14,11 +14,11 @@
 #include <QStringList>
 #include <QUrl>
 #include <QPointer>
+#include <QMessageBox>
 
 #include <KActionCollection>
 #include <KIO/StoredTransferJob>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KTextEditor/Command>
 #include <KTextEditor/Document>
 #include <KTextEditor/Editor>

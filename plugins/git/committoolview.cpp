@@ -28,7 +28,6 @@
 #include <KActionCollection>
 #include <KColorScheme>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KTextEditor/Document>
 #include <KTextEditor/MovingInterface>
 #include <KTextEditor/MovingRange>
