@@ -1,0 +1,369 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-10-04 20:17+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "사용자 정의 패치"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "패치"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr "기본 디렉터리:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr "/path/to/patch/base"
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, kde-format
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "파일에서"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr "/path/to/patch"
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "명령에서"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr "출력을 캡처할 명령 입력..."
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "로컬 버전에 패치가 이미 적용됨"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, kde-format
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "이미 적용됨"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">충돌</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "적용됨.<br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "삽입<br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, kde-format
+msgid "Removal<br/>"
+msgstr "삭제<br/>"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "이전:<br/>"
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "되돌림.<br/>"
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "대안:<br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr "변경 사항을 적용할 수 없습니다: 텍스트가 \"%1\"이어야 하지만 \"%2\"임."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, kde-format
+msgctxt "@item"
+msgid "Insertion"
+msgstr "삽입"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, kde-format
+msgctxt "@item"
+msgid "Removal"
+msgstr "삭제"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, kde-format
+msgctxt "@item"
+msgid "Change"
+msgstr "변경"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, kde-format
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Kompare 모델 업데이트"
+
+#: patchreview.cpp:457
+#, kde-format
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "요약"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, kde-format
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "패치 검토"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr "패치의 기반 디렉터리는 절대 경로여야 합니다."
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, kde-format
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "검토 끝내기"
+
+#: patchreview.cpp:603
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "패치 검토"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "이전 파일"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "이전 차이점"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "다음 차이점"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "다음 파일"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Update"
+msgstr "업데이트"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "테스트 실행"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, kde-format
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Diff 내보내기..."
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "검토 취소"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, kde-format
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "검토 끝내기"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, kde-format
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "변경"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2(hunk %1개)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr "<qt>다음에서 새 요청을 찾을 수 있습니다:<br /><a href='%1'>%1</a></qt>"
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+"패치를 내보낼 수 없습니다.\n"
+"%1"
+
+#: patchreviewtoolview.cpp:255
+#, kde-format
+msgctxt "@action"
+msgid "Select All"
+msgstr "모두 선택"
+
+#: patchreviewtoolview.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "모두 선택 해제"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "테스트 실행 중: %p%"
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "모든 테스트 %1개 통과함"
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "테스트 결과: 통과 %1개, 실패 %2개, 오류 %3개"
+
+#~ msgid "Base:"
+#~ msgstr "기반:"
+
+#~ msgid "Patch base..."
+#~ msgstr "패치 기반..."
+
+#~ msgid "Patch location..."
+#~ msgstr "패치 위치..."
+
+#~ msgid "Command's output..."
+#~ msgstr "명령의 출력..."
+
+#~ msgid "Error exporting"
+#~ msgstr "내보내기 오류"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Save As..."
+#~ msgstr "다른 이름으로 저장..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>모델이나 차이점이 없습니다. 파일 <b>%1</b>이(가) 올바른 변경점 파일이 "
+#~ "아닙니다.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>파일 <b>%2</b>에 변경 사항 <b>%1</b>을(를) 적용하는 중 오류가 발생하였"
+#~ "습니다.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>폴더 <b>%2</b>에 변경 사항 <b>%1</b>을(를) 적용하는 중 오류가 발생하였"
+#~ "습니다.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "임시 파일을 열 수 없습니다."
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>대상 디렉터리 <b>%1</b>을(를) 만들 수 없습니다.\n"
+#~ "파일이 저장되지 않았습니다.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>임시 파일을 대상 위치 <b>%1</b>에 업로드할 수 없습니다. 임시 파일은 다"
+#~ "음 위치에 저장되어 있습니다: <b>%2</b>. 직접 업로드할 수 있습니다.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "diff 출력을 처리할 수 없습니다."
+
+#~ msgid "The files are identical."
+#~ msgstr "파일이 같습니다."

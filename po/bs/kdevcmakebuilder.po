@@ -1,0 +1,154 @@
+# Bosnian translation for kdevelop
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-01-12 22:04+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:08+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr ""
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr ""
+
+#: cmakebuilder.cpp:195
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot install"
+msgid "No build directory configured, cannot install"
+msgstr "Nema konfigurisanog direktorija za gradnju, ne može se instalirati"
+
+#: cmakebuilder.cpp:205
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot configure"
+msgid "No build directory configured, cannot configure"
+msgstr "Nema konfigurisanog direktorija za gradnju, ne može se konfigurisati"
+
+#: cmakebuilderpreferences.cpp:40
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, fuzzy, kde-format
+#| msgid "Generator:"
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Stvaratelj:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr ""
+
+#: cmakejob.cpp:63
+#, fuzzy, kde-format
+#| msgid "Wrong build directory, cannot clear the build directory"
+msgid "Failed to create build directory %1."
+msgstr "Pogrešan direktorij za gradnju, ne mogu očistiti direktorij za gradnju"
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot clear builddir"
+msgid "No build directory configured, cannot clear the build directory"
+msgstr ""
+"Nema konfigurisanog direktorija za gradnju, ne može se očistiti taj "
+"direktorij"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Pogrešan direktorij za gradnju, ne mogu očistiti direktorij za gradnju"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Kresanje uspjelol **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Kresanje neuspjelo: %1 **"
+
+#, fuzzy
+#~| msgid "Aborting build"
+#~ msgid "Aborting"
+#~ msgstr "Prekid gradnje"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Prekid konfigurisanja"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "Nema konfigurisanog direktorija za gradnju, ne može se izgraditi"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Nema konfigurisanog direktorija za gradnju, ne može se očistiti"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Prekid čišćenja"
+
+#~ msgid "Aborting install"
+#~ msgstr "Prekid instalacije"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid "CMake Builder"
+#~ msgstr "CMake gradilac"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Podrška za gradnju CMake projekata"

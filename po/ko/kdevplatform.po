@@ -1,0 +1,6249 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-24 00:43+0000\n"
+"PO-Revision-Date: 2022-07-13 13:28+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "박신조"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde@peremen.name"
+
+#: debugger/breakpoint/breakpoint.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Error"
+msgstr "오류"
+
+# 디버거에 전달되지 않은 중단점
+#: debugger/breakpoint/breakpoint.cpp:150
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Dirty"
+msgstr "전달되지 않음"
+
+#: debugger/breakpoint/breakpoint.cpp:152
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pending"
+msgstr "대기 중"
+
+#: debugger/breakpoint/breakpoint.cpp:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clean"
+msgstr "정리"
+
+#: debugger/breakpoint/breakpoint.cpp:186
+#, kde-format
+msgctxt "location (address)"
+msgid "%1 (%2)"
+msgstr "%1(%2)"
+
+#: debugger/breakpoint/breakpointdetails.cpp:48
+#: debugger/breakpoint/breakpointdetails.cpp:127
+#, kde-format
+msgid "Not hit yet"
+msgstr "아직 도달하지 않음"
+
+#: debugger/breakpoint/breakpointdetails.cpp:52
+#, kde-format
+msgid "Ignore"
+msgstr "무시"
+
+#: debugger/breakpoint/breakpointdetails.cpp:60
+#, kde-format
+msgid "next hits"
+msgstr "다음 도달"
+
+#: debugger/breakpoint/breakpointdetails.cpp:112
+#, kde-format
+msgid "Breakpoint is <a href=\"pending\">pending</a>"
+msgstr "중단점이 <a href=\"pending\">대기 중</a>"
+
+#: debugger/breakpoint/breakpointdetails.cpp:115
+#, kde-format
+msgid "Breakpoint is <a href=\"dirty\">dirty</a>"
+msgstr "중단점이 <a href=\"dirty\">전달되지 않음</a>"
+
+#: debugger/breakpoint/breakpointdetails.cpp:118
+#, kde-format
+msgid "Breakpoint is active"
+msgstr "중단점이 활성화됨"
+
+#: debugger/breakpoint/breakpointdetails.cpp:125
+#, kde-format
+msgid "Hit %1 time"
+msgid_plural "Hit %1 times"
+msgstr[0] "%1회 도달함"
+
+#: debugger/breakpoint/breakpointdetails.cpp:129
+#, kde-format
+msgid "Breakpoint has errors"
+msgstr "중단점에 오류가 있음"
+
+#: debugger/breakpoint/breakpointdetails.cpp:142
+#, kde-format
+msgid ""
+"<b>Breakpoint is pending</b><p>Pending breakpoints are those that have been "
+"passed to GDB, but which are not yet installed in the target, because GDB "
+"cannot find the function or file to which the breakpoint refers. The most "
+"common case is a breakpoint in a shared library: GDB will insert this "
+"breakpoint only when the library is loaded.</p>"
+msgstr ""
+"<b>중단점이 보류 중</b><p>보류 중인 중단점은 GDB에 전달했지만 중단점이 참조하"
+"는 함수나 파일을 찾을 수 없어서 대상에 아직 지정되지 않은 중단점입니다. 가장 "
+"일반적인 경우는 공유 라이브러리에 설정한 중단점입니다. GDB에서는 라이브러리"
+"를 불러올 때 이 중단점을 지정합니다. </p>"
+
+#: debugger/breakpoint/breakpointdetails.cpp:155
+#, kde-format
+msgid ""
+"<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
+"debugger.</p>"
+msgstr ""
+"<b>중단점이 전달되지 않음</b><p>중단점이 아직 디버거로 전달되지 않았습니다.</"
+"p>"
+
+#: debugger/breakpoint/breakpointmodel.cpp:114
+#, kde-format
+msgid "Breakpoint"
+msgstr "중단점"
+
+#: debugger/breakpoint/breakpointmodel.cpp:156
+#, kde-format
+msgid "Breakpoint not found"
+msgstr "중단점을 찾을 수 없음"
+
+#: debugger/breakpoint/breakpointmodel.cpp:156
+#, kde-format
+msgid "Couldn't find breakpoint at %1:%2"
+msgstr "%1:%2에서 중단점을 찾을 수 없음"
+
+#: debugger/breakpoint/breakpointmodel.cpp:162
+#, kde-format
+msgid "&Breakpoint"
+msgstr "중단점(&B)"
+
+#: debugger/breakpoint/breakpointmodel.cpp:168
+#, kde-format
+msgid "&Disable Breakpoint"
+msgstr "중단점 사용 안 함(&B)"
+
+#: debugger/breakpoint/breakpointmodel.cpp:169
+#, kde-format
+msgid "&Enable Breakpoint"
+msgstr "중단점 사용함(&E)"
+
+#: debugger/breakpoint/breakpointmodel.cpp:172
+#, kde-format
+msgid "&Bookmark"
+msgstr "책갈피(&B)"
+
+#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variabletooltip.cpp:81
+#, kde-format
+msgid "Type"
+msgstr "형식"
+
+#: debugger/breakpoint/breakpointmodel.cpp:217
+#, kde-format
+msgid "Location"
+msgstr "위치"
+
+#: debugger/breakpoint/breakpointmodel.cpp:218
+#, kde-format
+msgid "Condition"
+msgstr "조건"
+
+#: debugger/breakpoint/breakpointmodel.cpp:222
+#, kde-format
+msgid "Active status"
+msgstr "활성 상태"
+
+#: debugger/breakpoint/breakpointmodel.cpp:223
+#, kde-format
+msgid "State"
+msgstr "상태"
+
+#: debugger/breakpoint/breakpointwidget.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Breakpoints"
+msgstr "디버거 중단점"
+
+#: debugger/breakpoint/breakpointwidget.cpp:63
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displays a list of breakpoints with their current status. Clicking on a "
+"breakpoint item allows you to change the breakpoint and will take you to the "
+"source in the editor window."
+msgstr ""
+"현재 상태와 함께 중단점의 목록을 표시합니다. 중단점 항목을 클릭하여 중단점을 "
+"변경할 수 있으며, 편집기 창에서 해당하는 소스 코드를 표시합니다."
+
+#: debugger/breakpoint/breakpointwidget.cpp:75
+#, kde-format
+msgid "Breakpoint Details"
+msgstr "중단점 자세한 정보"
+
+#: debugger/breakpoint/breakpointwidget.cpp:84
+#, kde-format
+msgid "New code breakpoint ..."
+msgstr "새 코드 중단점..."
+
+#: debugger/breakpoint/breakpointwidget.cpp:85
+#, kde-format
+msgid "Enter condition ..."
+msgstr "진입 조건..."
+
+#: debugger/breakpoint/breakpointwidget.cpp:117
+#, kde-format
+msgctxt "New breakpoint"
+msgid "&New"
+msgstr "새로 만들기(&N)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:121
+#, kde-format
+msgctxt "Code breakpoint"
+msgid "&Code"
+msgstr "코드(&C)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:129
+#, kde-format
+msgctxt "Data breakpoint"
+msgid "Data &Write"
+msgstr "데이터 쓰기(&W)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:132
+#, kde-format
+msgctxt "Data read breakpoint"
+msgid "Data &Read"
+msgstr "데이터 읽기(&R)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:135
+#, kde-format
+msgctxt "Data access breakpoint"
+msgid "Data &Access"
+msgstr "데이터 접근(&A)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:140
+#, kde-format
+msgid "&Delete"
+msgstr "삭제(&D)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:149
+#, kde-format
+msgid "Disable &All"
+msgstr "모두 비활성화(&A)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:150
+#, kde-format
+msgid "&Enable All"
+msgstr "모두 활성화(&E)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:151
+#, kde-format
+msgid "&Remove All"
+msgstr "모두 삭제(&R)"
+
+#: debugger/breakpoint/breakpointwidget.cpp:333
+#, kde-format
+msgid "%2"
+msgid_plural "%2 (repeated %1 times)"
+msgstr[0] "%2(%1회 반복됨)"
+
+#: debugger/framestack/framestackmodel.cpp:178
+#, kde-format
+msgctxt "#thread-id at function-name or address"
+msgid "#%1 at %2 (crashed)"
+msgstr "#%1, 위치: %2(충돌함)"
+
+#: debugger/framestack/framestackmodel.cpp:180
+#, kde-format
+msgctxt "#thread-id at function-name or address"
+msgid "#%1 at %2"
+msgstr "#%1, 위치: %2"
+
+#: debugger/framestack/framestackmodel.cpp:279
+#, kde-format
+msgid "Depth"
+msgstr "깊이"
+
+#: debugger/framestack/framestackmodel.cpp:281
+#: language/duchain/navigation/abstractnavigationcontext.cpp:520
+#, kde-format
+msgid "Function"
+msgstr "함수"
+
+#: debugger/framestack/framestackmodel.cpp:283
+#, kde-format
+msgid "Source"
+msgstr "소스"
+
+#: debugger/framestack/framestackwidget.cpp:66
+#, kde-format
+msgid ""
+"<b>Frame stack</b>Often referred to as the \"call stack\", this is a list "
+"showing which function is currently active, and what called each function to "
+"get to this point in your program. By clicking on an item you can see the "
+"values in any of the previous calling functions."
+msgstr ""
+"<b>프레임 스택</b>보통 \"호출 스택\"으로 불리며, 현재 활성 함수와 프로그램의 "
+"해당 지점까지 진행하려고 호출한 함수를 나타내는 목록입니다. 항목을 클릭하면 "
+"이전 호출 함수의 인자를 볼 수 있습니다."
+
+#: debugger/framestack/framestackwidget.cpp:102
+#, kde-format
+msgid "Threads:"
+msgstr "스레드:"
+
+#: debugger/framestack/framestackwidget.cpp:223
+#, kde-format
+msgctxt "#frame function() at file"
+msgid "#%1 %2() at %3\n"
+msgstr "#%1 %2(), 파일: %3\n"
+
+#: debugger/framestack/framestackwidget.cpp:226
+#, kde-format
+msgctxt "#frame function() at file:line"
+msgid "#%1 %2() at %3:%4\n"
+msgstr "#%1 %2(), 파일: %3:%4\n"
+
+#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#, kde-format
+msgid "Breakpoint hit: %1"
+msgstr "중단점 도달: %1"
+
+#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#, kde-format
+msgid "Watchpoint hit: %1"
+msgstr "관찰점 도달: %1"
+
+#: debugger/util/pathmappings.cpp:86
+#, kde-format
+msgid "Remote Path"
+msgstr "원격 경로"
+
+#: debugger/util/pathmappings.cpp:88
+#, kde-format
+msgid "Local Path"
+msgstr "로컬 경로"
+
+#: debugger/util/pathmappings.cpp:217
+#, kde-format
+msgid "Delete"
+msgstr "삭제"
+
+#: debugger/variable/variablecollection.cpp:209
+#: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
+#, kde-format
+msgid "Error"
+msgstr "오류"
+
+#: debugger/variable/variablecollection.cpp:233
+#, kde-format
+msgid "Auto"
+msgstr "자동"
+
+#. i18n: ectx: property (text), widget (QLabel, configName)
+#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variabletooltip.cpp:81
+#: shell/launchconfigurationdialog.ui:114
+#, kde-format
+msgid "Name"
+msgstr "이름"
+
+#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variabletooltip.cpp:81
+#, kde-format
+msgid "Value"
+msgstr "값"
+
+#: debugger/variable/variablecollection.cpp:505
+#, kde-format
+msgid "Locals"
+msgstr "지역 변수"
+
+#: debugger/variable/variabletooltip.cpp:119
+#, kde-format
+msgid "Watch This"
+msgstr "관찰 목록에 추가"
+
+#: debugger/variable/variabletooltip.cpp:121
+#, kde-format
+msgid "Stop on Change"
+msgstr "변경 시 정지"
+
+#: debugger/variable/variablewidget.cpp:71
+#, kde-format
+msgid "Debugger Variables"
+msgstr "디버거 변수"
+
+#: debugger/variable/variablewidget.cpp:93
+#, kde-format
+msgid ""
+"<b>Variable tree</b>The variable tree allows you to see the values of local "
+"variables and arbitrary expressions.<br />Local variables are displayed "
+"automatically and are updated as you step through your program. For each "
+"expression you enter, you can either evaluate it once, or \"watch\" it (make "
+"it auto-updated). Expressions that are not auto-updated can be updated "
+"manually from the context menu. Expressions can be renamed to more "
+"descriptive names by clicking on the name column.<br />To change the value "
+"of a variable or an expression, click on the value.<br />"
+msgstr ""
+"<b>변수 트리</b>변수 트리에서 지역 변수와 임의의 표현식의 값을 볼 수 있습니"
+"다.<br />지역 변수는 자동으로 표시되며 프로그램 실행에 따라 변경됩니다. 입력"
+"한 표현식은 값을 한 번만 계산하거나 자동으로 업데이트하도록 \"관찰\" 목록에 "
+"추가할 수 있습니다. 자동으로 업데이트되지 않는 표현식은 콘텍스트 메뉴에서 수"
+"동으로 업데이트할 수 있습니다. 표현식의 이름 열을 클릭해서 표현식의 이름을 바"
+"꿀 수 있습니다.<br />변수나 표현식의 값을 변경하려면 값을 클릭하십시오.<br />"
+
+#: debugger/variable/variablewidget.cpp:107
+#, kde-format
+msgid "<b>Expression entry</b>Type in expression to watch."
+msgstr "<b>표현식 항목</b>관찰할 표현식을 입력하십시오."
+
+#: debugger/variable/variablewidget.cpp:194
+#, kde-format
+msgid "&Format"
+msgstr "형식(&F)"
+
+#: debugger/variable/variablewidget.cpp:199
+#, kde-format
+msgid "&Natural"
+msgstr "자연스럽게(&N)"
+
+#: debugger/variable/variablewidget.cpp:204
+#, kde-format
+msgid "&Binary"
+msgstr "2진수(&B)"
+
+#: debugger/variable/variablewidget.cpp:209
+#, kde-format
+msgid "&Octal"
+msgstr "8진수(&O)"
+
+#: debugger/variable/variablewidget.cpp:214
+#, kde-format
+msgid "&Decimal"
+msgstr "10진수(&D)"
+
+#: debugger/variable/variablewidget.cpp:219
+#, kde-format
+msgid "&Hexadecimal"
+msgstr "16진수(&H)"
+
+#: debugger/variable/variablewidget.cpp:234
+#, kde-format
+msgid "Remove Watch Variable"
+msgstr "원격 관찰 변수"
+
+#: debugger/variable/variablewidget.cpp:241
+#, kde-format
+msgid "&Copy Value"
+msgstr "값 복사(&C)"
+
+#: debugger/variable/variablewidget.cpp:246
+#, kde-format
+msgid "&Stop on Change"
+msgstr "변경 시 정지(&S)"
+
+#: debugger/variable/variablewidget.cpp:327
+#, kde-format
+msgid "Recent Expressions"
+msgstr "최근 사용한 표현식"
+
+#: debugger/variable/variablewidget.cpp:328
+#, kde-format
+msgid "Remove All"
+msgstr "모두 삭제"
+
+#: debugger/variable/variablewidget.cpp:329
+#, kde-format
+msgid "Re-evaluate All"
+msgstr "모두 다시 계산"
+
+#: debugger/variable/variablewidget.cpp:375
+#, kde-format
+msgid "Remember Value"
+msgstr "값 기억"
+
+#: debugger/variable/variablewidget.cpp:380
+#, kde-format
+msgid "Watch Variable"
+msgstr "변수 관찰"
+
+#: debugger/variable/variablewidget.cpp:385
+#, kde-format
+msgid "Reevaluate Expression"
+msgstr "표현식 다시 계산"
+
+#: debugger/variable/variablewidget.cpp:387
+#, kde-format
+msgid "Remove Expression"
+msgstr "표현식 삭제"
+
+#: debugger/variable/variablewidget.cpp:393
+#, kde-format
+msgid "Data write breakpoint"
+msgstr "데이터 쓰기 중단점"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: documentation/documentationfindwidget.ui:43
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Find:"
+msgstr "찾기:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
+#: documentation/documentationfindwidget.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to next match"
+msgstr "다음 일치로 이동"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
+#: documentation/documentationfindwidget.ui:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to previous match"
+msgstr "이전 일치로 이동"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
+#: documentation/documentationfindwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Match case sensitive"
+msgstr "대소문자 구분"
+
+#: documentation/documentationview.cpp:38
+#: shell/settings/documentationpreferences.cpp:25
+#, kde-format
+msgid "Documentation"
+msgstr "문서"
+
+#: documentation/documentationview.cpp:69
+#, kde-format
+msgctxt "@action go back"
+msgid "Back"
+msgstr "뒤로"
+
+#: documentation/documentationview.cpp:74
+#, kde-format
+msgctxt "@action go forward"
+msgid "Forward"
+msgstr "앞으로"
+
+#: documentation/documentationview.cpp:79
+#, kde-format
+msgctxt "@action go to start page"
+msgid "Home"
+msgstr "홈"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
+#: vcs/dvcs/ui/branchmanager.ui:143
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "찾기..."
+
+#: documentation/documentationview.cpp:111
+#, kde-format
+msgctxt "@action"
+msgid "Find in Text..."
+msgstr "텍스트에서 찾기..."
+
+#: documentation/documentationview.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Find in text of current documentation page"
+msgstr "현재 문서 페이지의 텍스트에서 찾기"
+
+#: interfaces/contextmenuextension.cpp:133
+#, kde-format
+msgctxt "@title:menu"
+msgid "Debug"
+msgstr "디버그"
+
+#: interfaces/contextmenuextension.cpp:134
+#, kde-format
+msgctxt "@title:menu"
+msgid "Refactor"
+msgstr "리팩토링"
+
+#: interfaces/contextmenuextension.cpp:136
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr "다음으로 현재 파일 분석"
+
+#: interfaces/contextmenuextension.cpp:137
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr "다음으로 현재 프로젝트 분석"
+
+#: interfaces/isourceformatter.cpp:209
+#, kde-format
+msgid ""
+"The executable %1 cannot be found. Please make sure it is installed and can "
+"be executed. <br />The plugin will not work until you fix this problem."
+msgstr ""
+"%1 실행 파일을 찾을 수 없습니다. 설치되어 있으며 실행 가능한지 확인하십시오."
+"<br />이 문제를 해결하기 전까지는 플러그인이 작동하지 않습니다."
+
+#: language/assistant/renameaction.cpp:69
+#, kde-format
+msgid "Rename \"%1\" to \"%2\""
+msgstr "\"%1\"의 이름을 \"%2\"(으)로 바꾸기"
+
+#: language/assistant/renameaction.cpp:109
+#: language/assistant/renamefileaction.cpp:76
+#: language/codegen/basicrefactoring.cpp:341
+#: language/codegen/basicrefactoring.cpp:351
+#: language/codegen/basicrefactoring.cpp:365
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "변경 사항을 적용할 수 없음: %1"
+
+#: language/assistant/renameassistant.cpp:106
+#, kde-format
+msgid "Rename"
+msgstr "이름 바꾸기"
+
+#: language/assistant/renamefileaction.cpp:50
+#, kde-format
+msgid "Rename file from \"%1\" to \"%2\"."
+msgstr "파일의 이름을 \"%1\"에서 \"%2\"(으)로 바꿉니다."
+
+#: language/backgroundparser/backgroundparser.cpp:305
+#, kde-format
+msgid "Parsing: %1"
+msgstr "처리 중: %1"
+
+#: language/backgroundparser/backgroundparser.cpp:610
+#: shell/settings/bgpreferences.cpp:68
+#, kde-format
+msgid "Background Parser"
+msgstr "백그라운드 파서"
+
+#: language/backgroundparser/parsejob.cpp:313
+#, kde-format
+msgctxt "%1: filename"
+msgid "Skipped file that is too large: '%1'"
+msgstr "너무 큰 파일을 건너뜀: '%1'"
+
+#: language/backgroundparser/parsejob.cpp:315
+#, kde-format
+msgctxt "%1: file size, %2: limit file size"
+msgid "The file is %1 and exceeds the limit of %2."
+msgstr "파일 크기가 %1이며 한계 %2를 초과합니다."
+
+#: language/backgroundparser/parsejob.cpp:327
+#, kde-format
+msgid "Could not open file '%1'"
+msgstr "파일 '%1'을(를) 열 수 없음"
+
+#: language/backgroundparser/parsejob.cpp:330
+#, kde-format
+msgid "File could not be read from disk."
+msgstr "파일에서 읽을 수 없습니다."
+
+#: language/backgroundparser/parsejob.cpp:333
+#, kde-format
+msgid "File could not be opened."
+msgstr "파일을 열 수 없습니다."
+
+#: language/backgroundparser/parsejob.cpp:336
+#, kde-format
+msgid "File could not be read from disk due to permissions."
+msgstr "권한이 없어서 디스크에서 파일을 읽을 수 없습니다."
+
+#: language/backgroundparser/parseprojectjob.cpp:75
+#, kde-format
+msgid "Process 1 file in %2"
+msgid_plural "Process %1 files in %2"
+msgstr[0] "%2의 파일 %1개 처리 중"
+
+#: language/classmodel/allclassesfolder.cpp:22
+#, kde-format
+msgid "All projects classes"
+msgstr "모든 프로젝트 클래스"
+
+#: language/classmodel/classmodelnode.cpp:343
+#, kde-format
+msgid "Base classes"
+msgstr "기반 클래스"
+
+#: language/classmodel/classmodelnode.cpp:374
+#, kde-format
+msgid "Derived classes"
+msgstr "파생 클래스"
+
+#: language/classmodel/projectfolder.cpp:18
+#, kde-format
+msgid "Classes in project %1"
+msgstr "%1 프로젝트의 클래스"
+
+#: language/codecompletion/codecompletionitem.cpp:126
+#, kde-format
+msgid "not implemented"
+msgstr "구현되지 않음"
+
+#: language/codegen/basicrefactoring.cpp:90
+#, kde-format
+msgctxt "@action"
+msgid "Rename \"%1\"..."
+msgstr "\"%1\" 이름 바꾸기..."
+
+#: language/codegen/basicrefactoring.cpp:220
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "커서 아래에 선언 없음"
+
+#: language/codegen/basicrefactoring.cpp:226
+#, kde-format
+msgid "Declaration is located in non-writable file %1."
+msgstr "선언이 기록할 수 없는 파일 %1에 있습니다."
+
+#: language/codegen/basicrefactoring.cpp:295
+#, kde-format
+msgctxt "@title:window Renaming some declaration"
+msgid "Rename \"%1\""
+msgstr "\"%1\" 이름 바꾸기"
+
+#: language/codegen/basicrefactoring.cpp:299
+#, kde-format
+msgctxt "@title:tab"
+msgid "Uses"
+msgstr "사용함"
+
+#: language/codegen/basicrefactoring.cpp:301
+#, kde-format
+msgctxt "@title:tab"
+msgid "Declaration Info"
+msgstr "선언 정보"
+
+#: language/codegen/basicrefactoring.cpp:308
+#, kde-format
+msgid "Renaming \"%1\" to \"%2\""
+msgstr "\"%1\"의 이름을 \"%2\"(으)로 바꾸는 중"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
+#: language/codegen/basicrefactoring.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename"
+msgstr "이름 바꾸기"
+
+#. i18n: ectx: property (text), widget (QLabel, newNameLabel)
+#: language/codegen/basicrefactoring.ui:22
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&New name:"
+msgstr "새로운 이름(&N):"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
+#: language/codegen/basicrefactoring.ui:35
+#, kde-format
+msgid ""
+"<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
+"forward-declarations, etc. will be renamed too&quot;</p></body></html>"
+msgstr ""
+"<html><head/><body><p>&quot;참고: 재정의된 모든 함수, 재정의, 전방 선언 등의 "
+"이름도 바뀝니다&quot;</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, goButton)
+#: language/codegen/basicrefactoring.ui:38
+#, kde-format
+msgctxt "@action:button"
+msgid "&Rename"
+msgstr "이름 바꾸기(&R)"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: language/codegen/basicrefactoring.ui:45
+#, kde-format
+msgctxt "@action:button"
+msgid "&Cancel"
+msgstr "취소(&C)"
+
+#: language/codegen/codegenerator.cpp:133
+#, kde-format
+msgid "Could not find an open document"
+msgstr "열린 문서를 찾을 수 없음"
+
+#: language/codegen/codegenerator.cpp:150
+#, kde-format
+msgid "Could not find the chain for the selected document: %1"
+msgstr "선택한 문서의 체인을 찾을 수 없음: %1"
+
+#: language/codegen/codegenerator.cpp:167
+#, kde-format
+msgid "Error finding context for selection range"
+msgstr "선택 범위의 콘텍스트 찾기 오류"
+
+#: language/codegen/codegenerator.cpp:172
+#, kde-format
+msgid "Error checking conditions to generate code: %1"
+msgstr "코드 생성 조건 확인 오류: %1"
+
+#: language/codegen/codegenerator.cpp:179
+#, kde-format
+msgid "Error Gathering user information: %1"
+msgstr "사용자 정보 수집 오류: %1"
+
+#: language/codegen/codegenerator.cpp:186
+#, kde-format
+msgid "Error generating code: %1"
+msgstr "코드 생성 오류: %1"
+
+#: language/codegen/documentchangeset.cpp:114
+#, kde-format
+msgctxt "text range line:column->line:column"
+msgid "%1:%2->%3:%4"
+msgstr "%1:%2->%3:%4"
+
+#: language/codegen/documentchangeset.cpp:254
+#, kde-format
+msgid "Could not rename '%1' to '%2'"
+msgstr "'%1'의 이름을 '%2'(으)로 바꿀 수 없음"
+
+#: language/codegen/documentchangeset.cpp:344
+#, kde-format
+msgctxt ""
+"Inconsistent change in <filename> between <range>, found <oldText> "
+"(encountered <foundText>) -> <newText>"
+msgid ""
+"Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
+msgstr "%1의 %2 내에 일관성 없는 변경, %3 찾음(\"%4\" 발견함) -> \"%5\""
+
+#: language/codegen/documentchangeset.cpp:365
+#, kde-format
+msgid "Could not replace text in the document: %1"
+msgstr "문서의 텍스트를 바꿀 수 없음: %1"
+
+#: language/codegen/documentchangeset.cpp:472
+#, kde-format
+msgctxt ""
+"Inconsistent change in <document> at <range> = <oldText> (encountered "
+"<encountered>) -> <newText>"
+msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
+msgstr "%1의 %2 내에 일관성 없는 변경, %3 찾음(\"%4\" 발견함) -> \"%5\""
+
+#: language/codegen/documentchangeset.cpp:544
+#, kde-format
+msgctxt ""
+"Inconsistent change-request at <document>:intersecting changes: <previous-"
+"oldText> -> <previous-newText> @<range> & <new-oldText> -> <new-newText> "
+"@<range>"
+msgid ""
+"Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
+"\"%5\"->\"%6\"@%7 "
+msgstr ""
+"%1에 일관성 없는 변경 요청, 교차하는 변경 사항: \"%2\"->\"%3\"@%4 및 \"%5\"->"
+"\"%6\"@%7 "
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
+#: language/codegen/progressdialogs/refactoringdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Refactoring"
+msgstr "리팩토링"
+
+#. i18n: ectx: property (text), widget (QPushButton, abortButton)
+#: language/codegen/progressdialogs/refactoringdialog.ui:27
+#, kde-format
+msgctxt "@action:button"
+msgid "&Abort"
+msgstr "정지(&A)"
+
+#: language/duchain/aliasdeclaration.cpp:47
+#, kde-format
+msgid "Alias %1 as %2"
+msgstr "%1의 별명을 %2(으)로 지정"
+
+#: language/duchain/aliasdeclaration.cpp:50
+#, kde-format
+msgid "Lost alias %1"
+msgstr "별명 %1을(를) 잃어버림"
+
+#: language/duchain/classfunctiondeclaration.cpp:94
+#, kde-format
+msgid "invalid member-function %1 type %2"
+msgstr "잘못된 멤버 함수 %1 형식 %2"
+
+#: language/duchain/declarationid.cpp:204
+#, kde-format
+msgid "(unknown direct declaration)"
+msgstr "(알 수 없는 직접 선언)"
+
+#: language/duchain/declarationid.cpp:207
+#, kde-format
+msgid "(missing)"
+msgstr "(없음)"
+
+#: language/duchain/forwarddeclaration.cpp:50
+#, kde-format
+msgid "context-free forward-declaration %1"
+msgstr "문맥 없는 전방 선언 %1"
+
+#: language/duchain/namespacealiasdeclaration.cpp:94
+#, kde-format
+msgid "Import %1 as %2"
+msgstr "%1을(를) %2(으)로 가져옴"
+
+#: language/duchain/namespacealiasdeclaration.cpp:96
+#, kde-format
+msgid "Import %1"
+msgstr "%1 가져옴"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:88
+#, kde-format
+msgid "lost declaration"
+msgstr "선언 잃어버림"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:95
+#, kde-format
+msgid "Back to %1<br />"
+msgstr "%1(으)로 돌아가기<br />"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:115
+#, kde-format
+msgid "enumerator "
+msgstr "열거자"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
+#, kde-format
+msgid "namespace %1 "
+msgstr "네임스페이스 %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
+#, kde-format
+msgid "enumeration %1 "
+msgstr "열거형 %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
+#, kde-format
+msgid "(resolved forward-declaration: "
+msgstr "(해결된 전방 선언: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:173
+#, kde-format
+msgid ") "
+msgstr ") "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
+#, kde-format
+msgid "(unresolved forward-declaration) "
+msgstr "(해결되지 않은 전방 선언)"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
+#, kde-format
+msgid "possible resolution from"
+msgstr "가능한 해결책:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:205
+#, kde-format
+msgid "Returns: "
+msgstr "반환:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:207
+#, kde-format
+msgid "Type: "
+msgstr "형식:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:226
+#, kde-format
+msgid "Enum: "
+msgstr "Enum:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:228
+#, kde-format
+msgid "Container: "
+msgstr "컨테이너:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
+#, kde-format
+msgid "Scope: %1 "
+msgstr "범위: %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:254
+#, kde-format
+msgid "Access: %1 "
+msgstr "접근: %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:273
+#, kde-format
+msgid "Kind: %1 %2 "
+msgstr "종류: %1 %2"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:275
+#, kde-format
+msgid "Kind: %1 "
+msgstr "종류: %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#, kde-format
+msgid "Deprecated"
+msgstr "용도 폐기됨"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#, kde-format
+msgid "Status: %1 "
+msgstr "상태: %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:289
+#, kde-format
+msgid "Def.: "
+msgstr "정의:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:291
+#, kde-format
+msgid "Decl.: "
+msgstr "선언:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:301
+#, kde-format
+msgid " Def.: "
+msgstr " 정의: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:311
+#, kde-format
+msgid " Decl.: "
+msgstr " 선언: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
+#, kde-format
+msgid "Show uses"
+msgstr "사용하는 곳 표시"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:357
+#, kde-format
+msgid "Show documentation for "
+msgstr "다음의 문서 표시:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:463
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<익명>"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
+#, kde-format
+msgid "Overrides a "
+msgstr "재정의:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:481
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:508
+#, kde-format
+msgid "function"
+msgstr "함수"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:483
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:511
+#, kde-format
+msgid " from "
+msgstr " 원본: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:507
+#, kde-format
+msgid "Hides a "
+msgstr "숨김:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:531
+#, kde-format
+msgid "Overridden in "
+msgstr "다음에서 재정의됨:"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
+#, kde-format
+msgid "Overriders possible, show all"
+msgstr "재정의하는 곳 있음, 모두 표시"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
+#, kde-format
+msgid "More overriders possible, show all"
+msgstr "더 많은 재정의하는 곳 있음, 모두 표시"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#, kde-format
+msgid "Inherited by "
+msgstr "상속: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
+#, kde-format
+msgid "Inheriters possible, show all"
+msgstr "상속하는 곳 있음, 모두 표시"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:575
+#, kde-format
+msgid "More inheriters possible, show all"
+msgstr "더 많은 상속하는 곳 있음, 모두 표시"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:782
+#, kde-format
+msgctxt "A declaration that is unknown"
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:808
+#, kde-format
+msgctxt "tells if a declaration is defining the variable's value"
+msgid "definition"
+msgstr "정의"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:813
+#, kde-format
+msgctxt "as in c++ forward declaration"
+msgid "forward"
+msgstr "전방"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#, kde-format
+msgctxt "a variable that won't change, const"
+msgid "constant"
+msgstr "상수"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:871
+#, kde-format
+msgid "1 Byte"
+msgid_plural "%1 Bytes"
+msgstr[0] "%1바이트"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:872
+#, kde-format
+msgid "1 Bit"
+msgid_plural "%1 Bits"
+msgstr[0] "%1비트"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:874
+#, kde-format
+msgid "offset in parent: %1"
+msgstr "부모에서의 위치: %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:875
+#, kde-format
+msgctxt "%1: bytes, %2: bits"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
+#, kde-format
+msgid "size: %1 Bytes"
+msgstr "크기: %1바이트"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#, kde-format
+msgid "aligned to: %1 Bytes"
+msgstr "정렬: %1바이트"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
+#, kde-format
+msgid "Declarations:"
+msgstr "선언:"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:93
+#, kde-format
+msgid "not parsed yet"
+msgstr "아직 해석되지 않음"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:103
+#, kde-format
+msgctxt "Files included into this file"
+msgid "Includes"
+msgstr "포함함"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
+#, kde-format
+msgctxt "Count of files this file was included into"
+msgid "Included by"
+msgstr "다음에 포함됨"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:502
+#, kde-format
+msgid "Typedef"
+msgstr "형식 정의"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:505
+#, kde-format
+msgid "Class"
+msgstr "클래스"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:507
+#, kde-format
+msgid "Variable"
+msgstr "변수"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:509
+#, kde-format
+msgid "Namespace"
+msgstr "네임스페이스"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:514
+#, kde-format
+msgid "Namespace import"
+msgstr "네임스페이스 가져오기"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:516
+#, kde-format
+msgid "Namespace alias"
+msgstr "네임스페이스 별명"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:523
+#, kde-format
+msgid "Forward Declaration"
+msgstr "전방 선언"
+
+#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#, kde-format
+msgid ""
+"(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
+"<em>Enter</em>)"
+msgstr ""
+"(<em>Alt</em> 키를 누르고 있으면 표시합니다. 화살표 키를 눌러서 탐색할 수 있"
+"으며 <em>Enter</em> 키를 누르면 활성화합니다)"
+
+#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#, kde-format
+msgid "(Hold <em>Alt</em> to show this tooltip)"
+msgstr "(이 풍선 도움말을 표시하려면 <em>Alt</em> 키를 누르십시오)"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:85
+#, kde-format
+msgid "Problem"
+msgstr "문제점"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:114
+#, kde-format
+msgid "Problem in <i>%1</i>"
+msgstr "<i>%1</i>의 문제점"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:118
+#, kde-format
+msgid "Location: "
+msgstr "위치: "
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:156
+#: language/duchain/navigation/problemnavigationcontext.cpp:166
+#, kde-format
+msgid "<br>See: "
+msgstr "<br>참조:"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:159
+#, kde-format
+msgid " in "
+msgstr " 파일: "
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:196
+#, kde-format
+msgid "Solution (%1)"
+msgstr "해결 방법(%1)"
+
+#: language/duchain/navigation/usescollector.cpp:414
+#, kde-format
+msgid "%1 still needs an update!"
+msgstr "%1에 여전히 업데이트가 필요합니다!"
+
+#: language/duchain/navigation/usesnavigationcontext.cpp:41
+#, kde-format
+msgid "Uses of "
+msgstr "다음의 사용: "
+
+#: language/duchain/navigation/usesnavigationcontext.cpp:46
+#, kde-format
+msgid "Uses of %1"
+msgstr "%1의 사용"
+
+#: language/duchain/navigation/useswidget.cpp:129
+#, kde-format
+msgctxt "refers to a line in source code"
+msgid "Line <b>%1</b>:"
+msgstr "<b>%1</b>줄:"
+
+#: language/duchain/navigation/useswidget.cpp:210
+#: language/duchain/navigation/useswidget.cpp:217
+#, kde-format
+msgctxt "Refers to a line in source code"
+msgid "Line <b>%1</b>:"
+msgstr "<b>%1</b>줄:"
+
+#: language/duchain/navigation/useswidget.cpp:397
+#, kde-format
+msgid "Unknown context"
+msgstr "알 수 없는 문맥"
+
+#: language/duchain/navigation/useswidget.cpp:404
+#: shell/launchconfigurationdialog.cpp:480
+#, kde-format
+msgid "Global"
+msgstr "전역"
+
+#: language/duchain/navigation/useswidget.cpp:429
+#, kde-format
+msgctxt "%1: source file"
+msgid "In %1"
+msgstr "파일 %1"
+
+#: language/duchain/navigation/useswidget.cpp:459
+#, kde-format
+msgid "Definition"
+msgstr "정의"
+
+#: language/duchain/navigation/useswidget.cpp:459
+#, kde-format
+msgid "Declaration"
+msgstr "선언"
+
+#: language/duchain/navigation/useswidget.cpp:497
+#, kde-format
+msgctxt "%1: number of uses, %2: filename with uses"
+msgid "%2: 1 use"
+msgid_plural "%2: %1 uses"
+msgstr[0] "%2: %1곳에서 사용함"
+
+#: language/duchain/navigation/useswidget.cpp:503
+#: language/duchain/navigation/useswidget.cpp:544
+#, kde-format
+msgctxt "Refers to closing a UI element"
+msgid "Collapse"
+msgstr "축소"
+
+#: language/duchain/navigation/useswidget.cpp:540
+#, kde-format
+msgctxt "Refers to opening a UI element"
+msgid "Expand"
+msgstr "확장"
+
+#: language/duchain/navigation/useswidget.cpp:625
+#, kde-format
+msgid "1 use found"
+msgid_plural "%1 uses found"
+msgstr[0] "사용하는 곳 %1개 찾음"
+
+#: language/duchain/navigation/useswidget.cpp:627
+#, kde-format
+msgid "Expand all"
+msgstr "모두 펴기"
+
+#: language/duchain/navigation/useswidget.cpp:629
+#, kde-format
+msgid "Collapse all"
+msgstr "모두 접기"
+
+#: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
+#, kde-format
+msgid "Warning"
+msgstr "경고"
+
+#: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
+#, kde-format
+msgid "Hint"
+msgstr "힌트"
+
+#: language/duchain/problem.cpp:203 shell/problem.cpp:76
+#, kde-format
+msgid "Disk"
+msgstr "디스크"
+
+#: language/duchain/problem.cpp:205 shell/problem.cpp:77
+#, kde-format
+msgid "Preprocessor"
+msgstr "전처리기"
+
+#: language/duchain/problem.cpp:207 shell/problem.cpp:78
+#, kde-format
+msgid "Lexer"
+msgstr "렉서"
+
+#: language/duchain/problem.cpp:209 shell/problem.cpp:79
+#, kde-format
+msgid "Parser"
+msgstr "파서"
+
+#: language/duchain/problem.cpp:211
+#, kde-format
+msgid "Definition-Use Chain"
+msgstr "정의-사용 체인"
+
+#: language/duchain/problem.cpp:213 shell/problem.cpp:81
+#, kde-format
+msgid "Semantic analysis"
+msgstr "시맨틱 분석"
+
+#: language/duchain/problem.cpp:215
+#, kde-format
+msgid "To-do"
+msgstr "할 일"
+
+#: language/duchain/problem.cpp:218 shell/problem.cpp:75
+#, kde-format
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: language/duchain/problem.cpp:225
+#, kde-format
+msgctxt ""
+"<severity>: <description> in <url>:[<range>]: <explanation> (found by "
+"<source>)"
+msgid "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
+msgstr "%1: %2, 파일: %3:[(%4,%5),(%6,%7)]: %8 (%9에서 찾음)"
+
+#: language/duchain/problem.cpp:233
+#, kde-format
+msgid "<no explanation>"
+msgstr "<설명 없음>"
+
+#: language/duchain/types/containertypes.cpp:74
+#, kde-format
+msgid "%1 of %2"
+msgstr "%1, %2 형식"
+
+#: language/duchain/types/containertypes.cpp:84
+#: language/duchain/types/containertypes.cpp:85
+#, kde-format
+msgid "unknown"
+msgstr "알 수 없음"
+
+#: language/duchain/types/containertypes.cpp:87
+#, kde-format
+msgid "%1 of %2 : %3"
+msgstr "%1, %2 형식: %3"
+
+#: language/util/debuglanguageparserhelper.h:183
+#, kde-format
+msgid ""
+"files or - to read from STDIN, the latter is the default if nothing is "
+"provided"
+msgstr "파일을 지정하거나 -를 지정하면 표준 입력에서 읽습니다(기본값)"
+
+#: language/util/debuglanguageparserhelper.h:186
+#, kde-format
+msgid "print generated AST tree"
+msgstr "생성된 AST 트리 출력"
+
+#: language/util/debuglanguageparserhelper.h:187
+#, kde-format
+msgid "print generated token stream"
+msgstr "생성된 토큰 스트림 출력"
+
+#: language/util/debuglanguageparserhelper.h:188
+#, kde-format
+msgid "code to parse"
+msgstr "해석할 코드"
+
+#: outputview/outputexecutejob.cpp:194
+#, kde-format
+msgid "No build directory specified for a builder job."
+msgstr "빌더 작업에 빌드 디렉터리를 지정하지 않았습니다."
+
+#: outputview/outputexecutejob.cpp:196
+#, kde-format
+msgid "No working directory specified for a process."
+msgstr "프로세스에 지정한 작업 디렉터리가 없습니다."
+
+#: outputview/outputexecutejob.cpp:208
+#, kde-format
+msgid "Invalid build directory '%1'"
+msgstr "잘못된 빌드 디렉터리 '%1'"
+
+#: outputview/outputexecutejob.cpp:210
+#, kde-format
+msgid "Invalid working directory '%1'"
+msgstr "잘못된 작업 디렉터리 '%1'"
+
+#: outputview/outputexecutejob.cpp:217
+#, kde-format
+msgid "Build directory '%1' is not a local path"
+msgstr "빌드 디렉터리 '%1'이(가) 로컬 경로가 아님"
+
+#: outputview/outputexecutejob.cpp:219
+#, kde-format
+msgid "Working directory '%1' is not a local path"
+msgstr "작업 디렉터리 '%1'이(가) 로컬 경로가 아님"
+
+#: outputview/outputexecutejob.cpp:238
+#, kde-format
+msgid "Build directory '%1' does not exist or is not a directory"
+msgstr "빌드 디렉터리 '%1'이(가) 없거나 디렉터리가 아님"
+
+#: outputview/outputexecutejob.cpp:240
+#, kde-format
+msgid "Working directory '%1' does not exist or is not a directory"
+msgstr "작업 디렉터리 '%1'이(가) 없거나 디렉터리가 아님"
+
+#: outputview/outputexecutejob.cpp:301
+#, kde-format
+msgid "Failed to specify program to start: %1"
+msgstr "시작할 프로그램을 지정할 수 없음: %1"
+
+#: outputview/outputexecutejob.cpp:302
+#, kde-format
+msgid "*** %1 ***"
+msgstr "*** %1 ***"
+
+#: outputview/outputexecutejob.cpp:328
+#, kde-format
+msgid "*** Killed process ***"
+msgstr "*** 프로세스가 죽었음 ***"
+
+#: outputview/outputexecutejob.cpp:332
+#, kde-format
+msgid "*** Warning: could not kill the process ***"
+msgstr "*** 경고: 프로세스를 죽일 수 없음 ***"
+
+#: outputview/outputexecutejob.cpp:353
+#, kde-format
+msgid "%1 has failed to start"
+msgstr "%1을(를) 시작할 수 없음"
+
+#: outputview/outputexecutejob.cpp:357
+#, kde-format
+msgid "%1 has crashed"
+msgstr "%1이(가) 충돌함"
+
+#: outputview/outputexecutejob.cpp:361
+#, kde-format
+msgid "Read error"
+msgstr "읽기 오류"
+
+#: outputview/outputexecutejob.cpp:365
+#, kde-format
+msgid "Write error"
+msgstr "쓰기 오류"
+
+#: outputview/outputexecutejob.cpp:369
+#, kde-format
+msgid "Waiting for the process has timed out"
+msgstr "프로세스 대기 시간이 초과됨"
+
+#: outputview/outputexecutejob.cpp:373
+#, kde-format
+msgid "Exit code %1"
+msgstr "종료 코드 %1"
+
+#: outputview/outputexecutejob.cpp:386
+#, kde-format
+msgid "*** Failure: %1 ***"
+msgstr "*** 실패: %1 ***"
+
+#: outputview/outputexecutejob.cpp:404
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** 완료됨 ***"
+
+#: project/abstractfilemanagerplugin.cpp:325
+#, kde-format
+msgid ""
+"The base folder of project <b>%1</b> got deleted or moved outside of "
+"KDevelop.\n"
+"The project has to be closed."
+msgstr ""
+"<b>%1</b> 프로젝트의 기본 폴더가 삭제되었거나 KDevelop 외부로 이동되었습니"
+"다.\n"
+"프로젝트를 닫아야 합니다."
+
+#: project/abstractfilemanagerplugin.cpp:328
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Folder Deleted"
+msgstr "프로젝트 폴더 삭제됨"
+
+#: project/abstractfilemanagerplugin.cpp:354
+#, kde-format
+msgid ""
+"You tried to rename '%1' to '%2', but the latter is filtered and will be "
+"hidden.\n"
+"Do you want to continue?"
+msgstr ""
+"'%1'의 이름을 '%2'(으)로 바꾸려고 했지만, 해당 이름은 필터링되어 숨겨집니"
+"다.\n"
+"계속 진행하시겠습니까?"
+
+#: project/builderjob.cpp:76
+#, kde-format
+msgctxt "@info:status"
+msgid "build"
+msgstr "빌드"
+
+#: project/builderjob.cpp:78
+#, kde-format
+msgctxt "@info:status"
+msgid "clean"
+msgstr "청소"
+
+#: project/builderjob.cpp:80
+#, kde-format
+msgctxt "@info:status"
+msgid "configure"
+msgstr "설정"
+
+#: project/builderjob.cpp:82
+#, kde-format
+msgctxt "@info:status"
+msgid "install"
+msgstr "설치"
+
+#: project/builderjob.cpp:84
+#, kde-format
+msgctxt "@info:status"
+msgid "prune"
+msgstr "가지 치기"
+
+#: project/builderjob.cpp:234
+#, kde-format
+msgctxt "Unspecified set of build items (e. g. projects, targets)"
+msgid "Various items"
+msgstr "다양한 항목"
+
+#: project/helper.cpp:72
+#, kde-format
+msgid "Cannot remove folder <i>%1</i>."
+msgstr "<i>%1</i> 폴더를 삭제할 수 없습니다."
+
+#: project/helper.cpp:73
+#, kde-format
+msgid "Cannot remove file <i>%1</i>."
+msgstr "<i>%1</i> 파일을 삭제할 수 없습니다."
+
+#: project/helper.cpp:95
+#, kde-format
+msgid "The file <i>%1</i> already exists."
+msgstr "<i>%1</i> 파일이 이미 존재합니다."
+
+#: project/helper.cpp:105
+#, kde-format
+msgid "Cannot create file <i>%1</i>."
+msgstr "<i>%1</i> 파일을 만들 수 없습니다."
+
+#: project/helper.cpp:124
+#, kde-format
+msgid "Cannot create folder <i>%1</i>."
+msgstr "<i>%1</i> 폴더를 만들 수 없습니다."
+
+#: project/importprojectjob.cpp:53
+#, kde-format
+msgid "Project Import: %1"
+msgstr "프로젝트 가져오기: %1"
+
+#: project/importprojectjob.cpp:85
+#, kde-format
+msgid "Project import canceled."
+msgstr "프로젝트 가져오기를 취소했습니다."
+
+#: project/projectbuildsetmodel.cpp:286
+#, kde-format
+msgctxt "@title:column buildset item name"
+msgid "Name"
+msgstr "이름"
+
+#: project/projectbuildsetmodel.cpp:288
+#, kde-format
+msgctxt "@title:column buildset item path"
+msgid "Path"
+msgstr "경로"
+
+#: project/projectchangesmodel.cpp:274
+#, kde-format
+msgctxt "@item:intext"
+msgid "no branch"
+msgstr "브랜치 없음"
+
+#: project/projectchangesmodel.cpp:275
+#, kde-format
+msgctxt "project name (branch name)"
+msgid "%1 (%2)"
+msgstr "%1(%2)"
+
+#: project/projectitemlineedit.cpp:156
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter the path to an item from the projects tree..."
+msgstr "프로젝트 트리 항목의 경로 입력..."
+
+#: project/projectitemlineedit.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Select..."
+msgstr "선택..."
+
+#: project/projectitemlineedit.cpp:182
+#, kde-format
+msgctxt "@title:window"
+msgid "Select an Item"
+msgstr "항목 선택"
+
+#: project/projectitemlineedit.cpp:192
+#, kde-format
+msgid "Select the item you want to get the path from."
+msgstr "경로를 가져올 항목을 선택하십시오."
+
+#. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
+#: project/widgets/dependencieswidget.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a dependency to add to the list"
+msgstr "목록에 추가할 의존성 입력"
+
+#. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
+#: project/widgets/dependencieswidget.ui:35
+#, kde-format
+msgctxt "@info:placedholder"
+msgid "Enter a dependency to add to the list..."
+msgstr "목록에 추가할 의존성 입력..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
+#: project/widgets/dependencieswidget.ui:55
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add the listed target to the dependency list"
+msgstr "목록에 있는 대상을 의존성 목록에 추가"
+
+#. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
+#: project/widgets/dependencieswidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "List of indirect dependent targets."
+msgstr "간접적 의존 대상 목록입니다."
+
+#. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
+#: project/widgets/dependencieswidget.ui:71
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This list should contain targets that the application does not directly "
+"depend on, but for which an action needs to be taken before running the "
+"application."
+msgstr ""
+"이 목록에는 프로그램이 직접 의존하지는 않지만 프로그램을 실행하기 전에 실행해"
+"야 할 작업이 포함되어야 합니다."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
+#: project/widgets/dependencieswidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove the selected dependencies from the list"
+msgstr "선택한 의존성을 목록에서 삭제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
+#: project/widgets/dependencieswidget.ui:103
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected dependency up in the list"
+msgstr "선택한 의존성을 목록에서 위로 이동"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
+#: project/widgets/dependencieswidget.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected dependency down in the list"
+msgstr "선택한 의존성을 목록에서 아래로 이동"
+
+#: serialization/itemrepository.h:204 serialization/itemrepository.h:1809
+#, kde-format
+msgid "Failed writing to %1, probably the disk is full"
+msgstr "%1에 쓸 수 없음, 디스크 공간이 부족할 수 있음"
+
+#: serialization/itemrepositoryregistry.cpp:75
+#, kde-format
+msgid "The previous session crashed."
+msgid_plural "Session crashed %1 times in a row."
+msgstr[0] "세션이 연속으로 %1번 충돌했습니다."
+
+#: serialization/itemrepositoryregistry.cpp:77
+#, kde-format
+msgctxt "tty action"
+msgid "Clear cache"
+msgstr "캐시 지우기"
+
+#: serialization/itemrepositoryregistry.cpp:78
+#, kde-format
+msgctxt "@title"
+msgid "Session Crashed"
+msgstr "세션 충돌함"
+
+#: serialization/itemrepositoryregistry.cpp:79
+#, kde-format
+msgid ""
+"The crash may be caused by a corruption of cached data.\n"
+"\n"
+"Press Clear if you want KDevelop to clear the cache, otherwise press "
+"Continue if you are sure the crash has another origin."
+msgstr ""
+"캐시된 데이터가 손상되어 충돌했을 수 있습니다.\n"
+"\n"
+"캐시를 지우려면 지우기를 누르십시오. 충돌 원인이 다른 곳에 있다고 생각하면 계"
+"속을 누르십시오."
+
+#: serialization/itemrepositoryregistry.cpp:81
+#, kde-format
+msgctxt "@action:button"
+msgid "Clear Cache"
+msgstr "캐시 지우기"
+
+#: serialization/itemrepositoryregistry.cpp:82
+#, kde-format
+msgctxt "@action:button"
+msgid "Continue"
+msgstr "계속"
+
+#: shell/areadisplay.cpp:44
+#, kde-format
+msgid ""
+"Execute actions to change the area.<br />An area is a tool view "
+"configuration for a specific use case. From here you can also navigate back "
+"to the default code area."
+msgstr ""
+"작업을 실행하여 영역을 변경하십시오.<br />영역은 특정한 사용례에 대한 도구 보"
+"기 설정입니다. 여기에서 기본 코드 영역으로 되돌아갈 수도 있습니다."
+
+#: shell/areadisplay.cpp:70
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Back to Code"
+msgstr "코드로 돌아가기"
+
+#: shell/checkerstatus.cpp:37
+#, kde-format
+msgctxt "@info:progress"
+msgid "Running %1"
+msgstr "%1 실행 중"
+
+#: shell/colorschemechooser.cpp:44
+#, kde-format
+msgid "&Color Scheme"
+msgstr "색 배열(&C)"
+
+#: shell/configdialog.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure"
+msgstr "설정"
+
+#: shell/configdialog.cpp:82
+#, kde-format
+msgid ""
+"The settings of the current module have changed.\n"
+"Do you want to apply the changes or discard them?"
+msgstr ""
+"현재 모듈의 설정이 수정되었습니다.\n"
+"변경 사항을 적용하거나 무시하시겠습니까?"
+
+#: shell/configdialog.cpp:83
+#, kde-format
+msgctxt "@title:window"
+msgid "Apply Settings"
+msgstr "설정 적용"
+
+#: shell/core.cpp:114
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "플러그인을 찾을 수 없음"
+
+#: shell/core.cpp:115
+#, kde-format
+msgid ""
+"<p>Could not find any plugins during startup.<br/>Please make sure "
+"QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
+"org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
+"\">this article</a> for more information."
+msgstr ""
+"<p>시작하는 동안 플러그인을 찾을 수 없었습니다.<br/>QT_PLUGIN_PATH가 올바르"
+"게 설정되어 있는지 확인하십시오.</p> 자세한 내용은 <a href=\"https://"
+"community.kde.org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">이 글</a>을 참조하십시오."
+
+#: shell/debugcontroller.cpp:90
+#, kde-format
+msgid "Debugger"
+msgstr "디버거"
+
+#: shell/debugcontroller.cpp:108
+#, kde-format
+msgctxt "@title:window"
+msgid "Frame Stack"
+msgstr "프레임 스택"
+
+#: shell/debugcontroller.cpp:114
+#, kde-format
+msgctxt "@title:window"
+msgid "Breakpoints"
+msgstr "중단점"
+
+#: shell/debugcontroller.cpp:120
+#, kde-format
+msgctxt "@title:window"
+msgid "Variables"
+msgstr "변수"
+
+#: shell/debugcontroller.cpp:197
+#, kde-format
+msgid "&Restart"
+msgstr "다시 시작(&R)"
+
+#: shell/debugcontroller.cpp:198
+#, kde-format
+msgid "Restart program"
+msgstr "프로그램 다시 시작"
+
+#: shell/debugcontroller.cpp:199
+#, kde-format
+msgid "Restarts applications from the beginning."
+msgstr "프로그램을 처음부터 다시 시작합니다."
+
+#: shell/debugcontroller.cpp:205
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "인터럽트"
+
+#: shell/debugcontroller.cpp:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Interrupt application"
+msgstr "프로그램 인터럽트"
+
+#: shell/debugcontroller.cpp:207
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Interrupts the debugged process or current debugger command."
+msgstr "디버그하고 있는 프로세스나 현재 디버거 명령을 인터럽트합니다."
+
+#: shell/debugcontroller.cpp:211
+#, kde-format
+msgctxt "@action"
+msgid "Run to &Cursor"
+msgstr "커서까지 실행(&C)"
+
+#: shell/debugcontroller.cpp:212
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Run to cursor"
+msgstr "커서까지 실행"
+
+#: shell/debugcontroller.cpp:213
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
+
+#: shell/debugcontroller.cpp:218
+#, kde-format
+msgctxt "@action"
+msgid "Set E&xecution Position to Cursor"
+msgstr "커서로 실행 위치 설정(&X)"
+
+#: shell/debugcontroller.cpp:219
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to cursor"
+msgstr "커서 위치로 이동"
+
+#: shell/debugcontroller.cpp:220
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continue execution from the current cursor position."
+msgstr "커서 위치에 도착할 때까지 실행을 계속합니다."
+
+#: shell/debugcontroller.cpp:224
+#, kde-format
+msgctxt "@action"
+msgid "Step &Over"
+msgstr "한 단계 건너뜀(&O)"
+
+#: shell/debugcontroller.cpp:226
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step over the next line"
+msgstr "다음 줄로 한 단계 이동"
+
+#: shell/debugcontroller.cpp:227
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes one line of source in the current source file. If the source line "
+"is a call to a function the whole function is executed and the app will stop "
+"at the line following the function call."
+msgstr ""
+"현재 소스 파일에서 한 줄의 소스 코드를 실행합니다. 소스 코드 줄에서 함수를 호"
+"출한다면 해당 함수를 실행하고 함수 호출이 끝난 그 다음 줄에서 프로그램 실행"
+"을 정지합니다."
+
+#: shell/debugcontroller.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Step over Ins&truction"
+msgstr "다음 명령으로(&T)"
+
+#: shell/debugcontroller.cpp:236
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step over instruction"
+msgstr "다음 단계 명령으로 이동"
+
+#: shell/debugcontroller.cpp:237
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Steps over the next assembly instruction."
+msgstr "다음 어셈블리 명령으로 이동합니다."
+
+#: shell/debugcontroller.cpp:242
+#, kde-format
+msgctxt "@action"
+msgid "Step &Into"
+msgstr "다음 줄로 진입(&I)"
+
+#: shell/debugcontroller.cpp:244
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step into the next statement"
+msgstr "다음 구문으로 들어갑니다."
+
+#: shell/debugcontroller.cpp:245
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes exactly one line of source. If the source line is a call to a "
+"function then execution will stop after the function has been entered."
+msgstr ""
+"소스의 한 줄만 정확하게 실행합니다. 소스 줄이 함수 호출이라면 함수에 진입한 "
+"후 실행을 멈춥니다."
+
+#: shell/debugcontroller.cpp:252
+#, kde-format
+msgctxt "@action"
+msgid "Step into I&nstruction"
+msgstr "다음 명령으로 진입(&N)"
+
+#: shell/debugcontroller.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step into instruction"
+msgstr "다음 명령으로 진입"
+
+#: shell/debugcontroller.cpp:254
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Steps into the next assembly instruction."
+msgstr "다음 어셈블리 명령으로 진입합니다."
+
+#: shell/debugcontroller.cpp:258
+#, kde-format
+msgctxt "@action"
+msgid "Step O&ut"
+msgstr "한 단계 밖으로(&U)"
+
+#: shell/debugcontroller.cpp:260
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step out of the current function"
+msgstr "현재 함수 밖으로 진출"
+
+#: shell/debugcontroller.cpp:261
+#, kde-format
+msgctxt "@whatsthis"
+msgid ""
+"Executes the application until the currently executing function is "
+"completed. The debugger will then display the line after the original call "
+"to that function. If program execution is in the outermost frame (i.e. in "
+"main()) then this operation has no effect."
+msgstr ""
+"현재 실행 중인 함수를 완료할 때까지 프로그램을 실행합니다. 그 후 디버거에서 "
+"원래 함수 호출 바로 다음 줄을 표시합니다. 프로그램 실행이 가장 바깥쪽 프레임"
+"(예: main())에 있으면 이 작업은 효과가 없습니다."
+
+#: shell/debugcontroller.cpp:269
+#, kde-format
+msgctxt "@action"
+msgid "Toggle Breakpoint"
+msgstr "중단점 전환"
+
+#: shell/debugcontroller.cpp:270
+#, kde-format
+msgid "Ctrl+Alt+B"
+msgstr "Ctrl+Alt+B"
+
+#: shell/debugcontroller.cpp:271
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle breakpoint"
+msgstr "중단점 전환"
+
+#: shell/debugcontroller.cpp:272
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Toggles the breakpoint at the current line in editor."
+msgstr "편집기의 현재 줄에 중단점을 설정하거나 해제합니다."
+
+#: shell/debugcontroller.cpp:276
+#, kde-format
+msgctxt "@action"
+msgid "Show Current Line"
+msgstr "현재 줄 표시"
+
+#: shell/debugcontroller.cpp:277
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show the current execution position"
+msgstr "현재 실행 중인 위치 표시"
+
+#: shell/debugcontroller.cpp:278
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Jumps to the execution line in the editor."
+msgstr "편집기에서 실행하고 있는 줄로 이동합니다."
+
+#: shell/debugcontroller.cpp:390
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "디버그"
+
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:444
+#, kde-format
+msgctxt "@action"
+msgid "Debug Launch"
+msgstr "디버그 시작"
+
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:447
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Debug current launch"
+msgstr "현재 시작 디버그"
+
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:448
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes the target or the program specified in currently active launch "
+"configuration inside a Debugger."
+msgstr ""
+"현재 활성화된 시작 설정에 지정한 대상 또는 프로그램을 디버거에서 실행합니다."
+
+#: shell/debugcontroller.cpp:446
+#, kde-format
+msgctxt "@action"
+msgid "&Continue"
+msgstr "계속(&C)"
+
+#: shell/debugcontroller.cpp:448
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Continue application execution"
+msgstr "프로그램 계속 실행"
+
+#: shell/debugcontroller.cpp:449
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Continues the execution of your application in the debugger. This only takes "
+"effect when the application has been halted by the debugger (i.e. a "
+"breakpoint has been activated or the interrupt was pressed)."
+msgstr ""
+"디버거에서 프로그램을 계속 실행합니다. 디버거에서 프로그램 실행이 일시 정지되"
+"었을 때(예: 중단점이 활성화되었거나 인터럽트가 발생함)에만 효과가 있습니다."
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: shell/debugger/kdevdebuggershellui.rc:25
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "디버거 도구 모음"
+
+#: shell/documentationcontroller.cpp:114
+#, kde-format
+msgctxt "@action"
+msgid "Show Documentation"
+msgstr "문서 표시"
+
+#: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
+#, kde-format
+msgctxt "@title:window"
+msgid "Documentation"
+msgstr "문서"
+
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#, kde-format
+msgid "Untitled"
+msgstr "제목 없음"
+
+#: shell/documentcontroller.cpp:118
+#, kde-format
+msgctxt "@title:window"
+msgid "Open File"
+msgstr "파일 열기"
+
+#: shell/documentcontroller.cpp:119
+#, kde-format
+msgid "*|Text File\n"
+msgstr "*|텍스트 파일\n"
+
+#: shell/documentcontroller.cpp:317
+#, kde-format
+msgid ""
+"KDevelop could not find the editor for file '%1' of type %2.\n"
+"Do you want to open it as plain text?"
+msgstr ""
+"KDevelop에서 %2 형식의 '%1' 파일의 편집기를 찾을 수 없습니다.\n"
+"일반 텍스트로 여시겠습니까?"
+
+#: shell/documentcontroller.cpp:318
+#, kde-format
+msgctxt "@title:window"
+msgid "Could Not Find Editor"
+msgstr "편집기를 찾을 수 없음"
+
+#: shell/documentcontroller.cpp:319
+#, kde-format
+msgctxt "@action:button"
+msgid "Open as Plain Text"
+msgstr "일반 텍스트로 열기"
+
+#: shell/documentcontroller.cpp:320
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Open"
+msgstr "열지 않기"
+
+#: shell/documentcontroller.cpp:603
+#, kde-format
+msgctxt "@action"
+msgid "&Open..."
+msgstr "열기(&O)..."
+
+#: shell/documentcontroller.cpp:606
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open file"
+msgstr "파일 열기"
+
+#: shell/documentcontroller.cpp:607
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a file for editing."
+msgstr "파일을 편집하려고 엽니다."
+
+#: shell/documentcontroller.cpp:611
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This lists files which you have opened recently, and allows you to easily "
+"open them again."
+msgstr ""
+"이 목록은 최근에 열었던 파일 목록이며, 다시 쉽게 열 수 있도록 도와 줍니다."
+
+#: shell/documentcontroller.cpp:616
+#, kde-format
+msgctxt "@action"
+msgid "Save Al&l"
+msgstr "모두 저장(&L)"
+
+#: shell/documentcontroller.cpp:618
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all open documents"
+msgstr "열려 있는 모든 문서 저장"
+
+#: shell/documentcontroller.cpp:619
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Save all open documents, prompting for additional information when necessary."
+msgstr "모든 열린 문서를 저장합니다. 필요한 경우 추가 정보를 묻습니다."
+
+#: shell/documentcontroller.cpp:625
+#, kde-format
+msgctxt "@action"
+msgid "Reload All"
+msgstr "모두 새로 고침"
+
+#: shell/documentcontroller.cpp:627
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Revert all open documents"
+msgstr "열려 있는 모든 문서 되돌리기"
+
+#: shell/documentcontroller.cpp:628
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Revert all open documents, returning to the previously saved state."
+msgstr "열려 있는 모든 문서를 이전에 저장된 상태로 되돌립니다."
+
+#: shell/documentcontroller.cpp:634
+#, kde-format
+msgctxt "@action"
+msgid "&Close"
+msgstr "닫기(&C)"
+
+#: shell/documentcontroller.cpp:636
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close file"
+msgstr "파일 닫기"
+
+#: shell/documentcontroller.cpp:637
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Closes current file."
+msgstr "현재 파일을 닫습니다."
+
+#: shell/documentcontroller.cpp:642
+#, kde-format
+msgctxt "@action"
+msgid "Clos&e All"
+msgstr "모두 닫기(&E)"
+
+#: shell/documentcontroller.cpp:644
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all open documents"
+msgstr "모든 열린 문서 닫기"
+
+#: shell/documentcontroller.cpp:645
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Close all open documents, prompting for additional information when "
+"necessary."
+msgstr "모든 열린 문서를 닫습니다. 필요한 경우 추가 정보를 묻습니다."
+
+#: shell/documentcontroller.cpp:651
+#, kde-format
+msgctxt "@action"
+msgid "Close All Ot&hers"
+msgstr "나머지 모두 닫기(&H)"
+
+#: shell/documentcontroller.cpp:653
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other documents"
+msgstr "모든 다른 문서 닫기"
+
+#: shell/documentcontroller.cpp:654
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Close all open documents, with the exception of the currently active "
+"document."
+msgstr "현재 활성화된 문서를 제외한 모든 열린 문서를 닫습니다."
+
+#: shell/documentcontroller.cpp:659
+#, kde-format
+msgctxt "@action"
+msgid "Show Annotate on Current Document"
+msgstr "현재 문서의 작성자 보기"
+
+#: shell/documentcontroller.cpp:660
+#, kde-format
+msgctxt "@action"
+msgid "Annotate"
+msgstr "작성자 보기"
+
+#: shell/documentcontroller.cpp:1279
+#, kde-format
+msgid ""
+"Could not annotate the document because it is not part of a version-"
+"controlled project."
+msgstr ""
+"이 문서가 버전 관리되는 프로젝트에 속해 있지 않기 때문에 문서의 작성자를 표시"
+"할 수 없습니다."
+
+#: shell/editorconfigpage.cpp:86
+#, kde-format
+msgctxt "@title:tab"
+msgid "Editor"
+msgstr "편집기"
+
+#: shell/editorconfigpage.cpp:96
+#, kde-format
+msgid "Configure Text Editor"
+msgstr "텍스트 편집기 설정"
+
+#: shell/environmentconfigurebutton.cpp:74
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure environment variables"
+msgstr "환경 변수 설정"
+
+#: shell/launchconfigurationdialog.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Launch Configurations"
+msgstr "시작 설정"
+
+#: shell/launchconfigurationdialog.cpp:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add a new launch configuration."
+msgstr "새로운 시작 설정을 추가합니다."
+
+#: shell/launchconfigurationdialog.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete selected launch configuration."
+msgstr "선택한 시작 설정을 삭제합니다."
+
+#: shell/launchconfigurationdialog.cpp:173
+#, kde-format
+msgid ""
+"No launch configurations available. (Is any of the Execute plugins loaded?)"
+msgstr "사용 가능한 시작 설정이 없습니다.(실행 플러그인을 불러왔습니까?)"
+
+#: shell/launchconfigurationdialog.cpp:196
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rename Configuration"
+msgstr "설정 이름 바꾸기"
+
+#: shell/launchconfigurationdialog.cpp:197
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Delete Configuration"
+msgstr "설정 삭제"
+
+#: shell/launchconfigurationdialog.cpp:251
+#, kde-format
+msgid ""
+"Selected Launch Configuration has unsaved changes. Do you want to save it?"
+msgstr ""
+"선택한 시작 설정에 저장하지 않은 변경 사항이 있습니다. 저장하시겠습니까?"
+
+#: shell/launchconfigurationdialog.cpp:251
+#, kde-format
+msgctxt "@title:window"
+msgid "Unsaved Changes"
+msgstr "저장하지 않은 변경 사항"
+
+#: shell/launchconfigurationdialog.cpp:324
+#, kde-format
+msgctxt "%1 is a launcher name"
+msgid "No configuration is needed for '%1'"
+msgstr "'%1'에는 설정이 필요하지 않음"
+
+#: shell/launchconfigurationdialog.cpp:368
+#, kde-format
+msgid ""
+"<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
+"button to add a new one.</i>"
+msgstr ""
+"<i>왼쪽에서 편집할 설정을 선택하거나<br>\"추가\" 단추를 클릭하여 새로운 설정"
+"을 추가하십시오.</i>"
+
+#: shell/launchconfigurationdialog.cpp:436
+#, kde-format
+msgid "Editing %2: <b>%1</b>"
+msgstr "%2 편집: <b>%1</b>"
+
+#: shell/launchconfigurationdialog.cpp:709
+#, kde-format
+msgctxt "@title:column Name of the Launch Configurations"
+msgid "Name"
+msgstr "이름"
+
+#: shell/launchconfigurationdialog.cpp:712
+#, kde-format
+msgctxt ""
+"@title:column Type of the Launch Configurations (i.e. Python Application, C+"
+"+ Application)"
+msgid "Type"
+msgstr "형식"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: shell/launchconfigurationdialog.ui:29
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "추가"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
+#: shell/launchconfigurationdialog.ui:41
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "삭제"
+
+#. i18n: ectx: property (text), widget (QLabel, debugLabel)
+#: shell/launchconfigurationdialog.ui:88
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Debugger:"
+msgstr "디버거:"
+
+#: shell/loadedpluginsdialog.cpp:295
+#, kde-format
+msgctxt "@title:window"
+msgid "Loaded Plugins"
+msgstr "불러온 플러그인"
+
+#: shell/loadedpluginsdialog.cpp:305
+#, kde-format
+msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
+msgstr "<html><font size=\"4\"><b>%1</b>에 대해 불러온 플러그인</font></html>"
+
+#: shell/mainwindow.cpp:445
+#, kde-format
+msgid " (read only)"
+msgstr " (읽기 전용)"
+
+#: shell/mainwindow_p.cpp:221
+#, kde-format
+msgctxt "@info:tooltip %1 = application name"
+msgid "Configure %1"
+msgstr "%1 설정"
+
+#: shell/mainwindow_p.cpp:222
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Lets you customize %1."
+msgstr "%1을(를) 사용자 정의합니다."
+
+#: shell/mainwindow_p.cpp:225
+#, kde-format
+msgctxt "@action"
+msgid "Configure Notifications..."
+msgstr "알림 설정..."
+
+#: shell/mainwindow_p.cpp:226
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure notifications"
+msgstr "알림 설정"
+
+#: shell/mainwindow_p.cpp:227
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Shows a dialog that lets you configure notifications."
+msgstr "알림을 설정하는 대화 상자를 표시합니다."
+
+#: shell/mainwindow_p.cpp:231
+#, kde-format
+msgctxt "@action"
+msgid "Loaded Plugins"
+msgstr "불러온 플러그인"
+
+#: shell/mainwindow_p.cpp:232
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show a list of all loaded plugins"
+msgstr "모든 불러온 플러그인 목록 표시"
+
+#: shell/mainwindow_p.cpp:233
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Shows a dialog with information about all loaded plugins."
+msgstr "불러온 플러그인의 정보를 표시하는 대화 상자를 표시합니다."
+
+#: shell/mainwindow_p.cpp:236
+#, kde-format
+msgctxt "@action"
+msgid "&Next Window"
+msgstr "다음 창(&N)"
+
+#: shell/mainwindow_p.cpp:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next window"
+msgstr "다음 창"
+
+#: shell/mainwindow_p.cpp:240
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the next window."
+msgstr "다음 창으로 전환합니다."
+
+#: shell/mainwindow_p.cpp:244
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Window"
+msgstr "이전 창(&P)"
+
+#: shell/mainwindow_p.cpp:247
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous window"
+msgstr "이전 창"
+
+#: shell/mainwindow_p.cpp:248
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the previous window."
+msgstr "이전 창으로 전환합니다."
+
+#: shell/mainwindow_p.cpp:252
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Next Outputmark"
+msgstr "다음 출력 표시로 이동"
+
+#: shell/mainwindow_p.cpp:258
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Previous Outputmark"
+msgstr "이전 출력 표시로 이동"
+
+#: shell/mainwindow_p.cpp:265
+#, kde-format
+msgctxt "@action"
+msgid "Split View &Top/Bottom"
+msgstr "위/아래로 보기 나누기(&T)"
+
+#: shell/mainwindow_p.cpp:268
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Split horizontal"
+msgstr "가로로 나누기"
+
+#: shell/mainwindow_p.cpp:269
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Splits the current view horizontally."
+msgstr "현재 보기를 가로로 나눕니다."
+
+#: shell/mainwindow_p.cpp:273
+#, kde-format
+msgctxt "@action"
+msgid "Split View &Left/Right"
+msgstr "왼쪽/오른쪽으로 보기 나누기(&L)"
+
+#: shell/mainwindow_p.cpp:276
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Split vertical"
+msgstr "세로로 나누기"
+
+#: shell/mainwindow_p.cpp:277
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Splits the current view vertically."
+msgstr "현재 보기를 세로로 나눕니다."
+
+#: shell/mainwindow_p.cpp:280
+#, kde-format
+msgctxt "@action"
+msgid "&Next Split View"
+msgstr "다음 나뉜 보기로 이동(&N)"
+
+#: shell/mainwindow_p.cpp:283
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next split view"
+msgstr "다음 나뉜 보기로 이동"
+
+#: shell/mainwindow_p.cpp:284
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the next split view."
+msgstr "다음 나뉜 보기로 이동합니다."
+
+#: shell/mainwindow_p.cpp:288
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Split View"
+msgstr "이전 나뉜 보기로 이동(&P)"
+
+#: shell/mainwindow_p.cpp:291
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous split view"
+msgstr "이전 나뉜 보기로 이동"
+
+#: shell/mainwindow_p.cpp:292
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the previous split view."
+msgstr "이전 나뉜 보기로 이동합니다."
+
+#: shell/mainwindow_p.cpp:300
+#, kde-format
+msgctxt "@action new file"
+msgid "&New"
+msgstr "새로 만들기(&N)"
+
+#: shell/mainwindow_p.cpp:301
+#, kde-format
+msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
+msgid "New"
+msgstr "새로 만들기"
+
+#: shell/mainwindow_p.cpp:303
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "New file"
+msgstr "새 파일"
+
+#: shell/mainwindow_p.cpp:304
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Creates an empty file."
+msgstr "빈 파일을 만듭니다."
+
+#: shell/mainwindow_p.cpp:309
+#, kde-format
+msgctxt "@action"
+msgid "&Add Tool View..."
+msgstr "도구 보기 추가(&A)..."
+
+#: shell/mainwindow_p.cpp:311
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add tool view"
+msgstr "도구 보기 추가"
+
+#: shell/mainwindow_p.cpp:312
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Adds a new tool view to this window."
+msgstr "이 창에 새 도구 보기를 추가합니다."
+
+#: shell/mainwindow_p.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Top/Bottom"
+msgstr "위/아래로 보기 나누기"
+
+#: shell/mainwindow_p.cpp:351
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Left/Right"
+msgstr "왼쪽/오른쪽으로 보기 나누기"
+
+#: shell/mainwindow_p.cpp:355
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "New File"
+msgstr "새 파일"
+
+#: shell/mainwindow_p.cpp:361
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "새로 고침"
+
+#: shell/mainwindow_p.cpp:364
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload All"
+msgstr "모두 새로 고침"
+
+#: shell/mainwindow_p.cpp:404
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add Tool View"
+msgstr "도구 보기 추가"
+
+#: shell/mainwindow_p.cpp:427
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Lock the Panel from Hiding"
+msgstr "패널이 숨겨지지 않도록 잠금"
+
+#: shell/openprojectdialog.cpp:112
+#, kde-format
+msgid "%1|All Project Files (%1)"
+msgstr "%1|모든 프로젝트 파일 (%1)"
+
+#: shell/openprojectdialog.cpp:121
+#, kde-format
+msgctxt "@title:tab"
+msgid "Select Source"
+msgstr "소스 선택"
+
+#: shell/openprojectdialog.cpp:129
+#, kde-format
+msgid ""
+"Select a build system setup file, existing KDevelop project, or any folder "
+"to open as a project"
+msgstr ""
+"빌드 시스템 설정 파일, 기존 KDevelop 프로젝트 또는 프로젝트로 열 폴더 선택"
+
+#: shell/openprojectdialog.cpp:136 shell/openprojectdialog.cpp:156
+#, kde-format
+msgctxt "@title:window"
+msgid "Open Project"
+msgstr "프로젝트 열기"
+
+#: shell/openprojectdialog.cpp:144
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project Information"
+msgstr "프로젝트 정보"
+
+#: shell/openprojectdialog.cpp:205
+#, kde-format
+msgid "Open \"%1\" as project"
+msgstr "\"%1\"을(를) 프로젝트로 열기"
+
+#: shell/openprojectdialog.cpp:209
+#, kde-format
+msgid "Selected URL is invalid"
+msgstr "선택한 URL이 잘못됨"
+
+#: shell/openprojectdialog.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Open existing file \"%1\""
+msgstr "기존 파일 \"%1\" 열기"
+
+#: shell/partcontroller.cpp:252
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Use this command to show or hide the view's statusbar."
+msgstr "보기의 상태 표시줄을 숨기거나 표시합니다."
+
+#: shell/partdocument.cpp:103
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "문서 \"%1\"에 저장하지 않은 변경 사항이 있습니다. 저장하시겠습니까?"
+
+#: shell/partdocument.cpp:104 shell/partdocument.cpp:114
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "문서 닫기"
+
+#: shell/partdocument.cpp:112
+#, kde-format
+msgid ""
+"The document \"%1\" has unsaved changes and was modified by an external "
+"process.\n"
+"Do you want to overwrite the external changes?"
+msgstr ""
+"문서 \"%1\"에 저장하지 않은 변경 사항이 있으며 외부 프로세스에서 수정했습니"
+"다.\n"
+"외부 변경 사항을 덮어쓰시겠습니까?"
+
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:440
+#, kde-format
+msgctxt "@action:button"
+msgid "Overwrite External Changes"
+msgstr "외부 변경 사항 덮어쓰기"
+
+#: shell/problem.cpp:40
+#, kde-format
+msgid "Plugin"
+msgstr "플러그인"
+
+#: shell/problem.cpp:80
+#, kde-format
+msgid "DuchainBuilder"
+msgstr "DuchainBuilder"
+
+#: shell/problem.cpp:82
+#, kde-format
+msgid "Todo"
+msgstr "할 일"
+
+#: shell/problem.cpp:167
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Hint"
+msgstr "힌트"
+
+#: shell/problem.cpp:168
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Warning"
+msgstr "경고"
+
+#: shell/problem.cpp:169
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Error"
+msgstr "오류"
+
+#: shell/problemmodel.cpp:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-parse all watched documents"
+msgstr "주시하는 모든 문서를 다시 해석"
+
+#: shell/problemmodel.cpp:319
+#, kde-format
+msgctxt "@title:column source of problem"
+msgid "Source"
+msgstr "소스"
+
+#: shell/problemmodel.cpp:321
+#, kde-format
+msgctxt "@title:column problem description"
+msgid "Problem"
+msgstr "문제점"
+
+#: shell/problemmodel.cpp:323
+#, kde-format
+msgctxt "@title:column file where problem was found"
+msgid "File"
+msgstr "파일"
+
+#: shell/problemmodel.cpp:325
+#, kde-format
+msgctxt "@title:column line number with problem"
+msgid "Line"
+msgstr "줄"
+
+#: shell/problemmodel.cpp:327
+#, kde-format
+msgctxt "@title:column column number with problem"
+msgid "Column"
+msgstr "칸"
+
+#: shell/progresswidget/progressdialog.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Cancel this operation"
+msgstr "이 작업을 취소합니다"
+
+#: shell/progresswidget/progressmanager.cpp:87
+#, kde-format
+msgctxt "@info"
+msgid "Aborting..."
+msgstr "중단 중..."
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open detailed progress dialog"
+msgstr "자세한 진행 정보 대화 상자 열기"
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:337
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide detailed progress window"
+msgstr "자세한 진행 정보 창 닫기"
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:341
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show detailed progress window"
+msgstr "자세한 진행 정보 창 열기"
+
+#: shell/project.cpp:99
+#, kde-format
+msgid "Loading Project %1"
+msgstr "%1 프로젝트 불러오는 중"
+
+#: shell/project.cpp:107
+#, kde-format
+msgctxt "%1: Project name"
+msgid "Loading %1"
+msgstr "%1 불러오는 중"
+
+#: shell/project.cpp:226
+#, kde-format
+msgid ""
+"Unable to load the project file %1.<br>The project has been removed from the "
+"session."
+msgstr ""
+"프로젝트 파일 %1을(를) 불러올 수 없습니다.<br>프로젝트가 세션에서 삭제되었습"
+"니다."
+
+#: shell/project.cpp:252
+#, kde-format
+msgid "Unable to create hidden dir (%1) for developer file"
+msgstr "개발자 파일을 저장할 숨김 디렉터리(%1)를 만들 수 없음"
+
+#: shell/project.cpp:268
+#, kde-format
+msgid "Unable to get project file: %1"
+msgstr "프로젝트 파일을 얻을 수 없음: %1"
+
+#: shell/project.cpp:308
+#, kde-format
+msgid "Could not load %1, a project with the same name '%2' is already open."
+msgstr ""
+"%1을(를) 불러올 수 없습니다. 같은 이름 '%2'을(를) 사용하는 프로젝트가 이미 열"
+"려 있습니다."
+
+#: shell/project.cpp:339
+#, kde-format
+msgid ""
+"Could not load project management plugin <b>%1</b>.<br>Check that the "
+"required programs are installed, or see console output for more information."
+msgstr ""
+"프로젝트 관리 플러그인 <b>%1</b>을(를) 불러올 수 없습니다.<br>필요한 프로그램"
+"의 설치 상태를 확인하고, 자세한 정보는 콘솔 출력을 참조하십시오."
+
+#: shell/project.cpp:349
+#, kde-format
+msgid ""
+"The project importing plugin (%1) does not support the IProjectFileManager "
+"interface."
+msgstr ""
+"프로젝트 가져오기 플러그인(%1)에서 IProjectFileManager 인터페이스를 지원하지 "
+"않습니다."
+
+#: shell/project.cpp:402
+#, kde-format
+msgid "Could not open project."
+msgstr "프로젝트를 열 수 없습니다."
+
+#: shell/project.cpp:560
+#, kde-format
+msgid ""
+"Could not store developer specific project configuration.\n"
+"Attention: The project settings you changed will be lost."
+msgstr ""
+"개발자별 프로젝트 설정을 저장할 수 없습니다.\n"
+"주의: 변경한 프로젝트 설정이 손실됩니다."
+
+#: shell/projectcontroller.cpp:160
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure Project %1"
+msgstr "%1 프로젝트 설정"
+
+#: shell/projectcontroller.cpp:303
+#, kde-format
+msgid "Invalid Location: %1"
+msgstr "잘못된 위치: %1"
+
+#: shell/projectcontroller.cpp:313
+#, kde-format
+msgid "Already opening %1, not opening again"
+msgstr "%1이(가) 이미 열려 있음, 다시 열지 않음"
+
+#: shell/projectcontroller.cpp:474
+#, kde-format
+msgctxt "@action:button"
+msgid "Override"
+msgstr "재정의"
+
+#: shell/projectcontroller.cpp:475
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Continue to open the project and use the just provided project configuration"
+msgstr "프로젝트를 계속 열고 방금 지정한 프로젝트 구성 사용"
+
+#: shell/projectcontroller.cpp:476
+#, kde-format
+msgctxt "@action:button"
+msgid "Open Existing File"
+msgstr "기존 파일 열기"
+
+#: shell/projectcontroller.cpp:477
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Continue to open the project but use the existing project configuration"
+msgstr "프로젝트를 계속 열고 기존 프로젝트 구성 사용"
+
+#: shell/projectcontroller.cpp:479
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Cancel and do not open the project"
+msgstr "취소하고 프로젝트를 열지 않기"
+
+#: shell/projectcontroller.cpp:481
+#, kde-format
+msgid ""
+"There already exists a project configuration file at %1.\n"
+"Do you want to override it or open the existing file?"
+msgstr ""
+"%1에 프로젝트 설정 파일이 이미 있습니다.\n"
+"이 파일을 재정의하거나 기존 파일을 여시겠습니까?"
+
+#: shell/projectcontroller.cpp:483
+#, kde-format
+msgctxt "@title:window"
+msgid "Override Existing Project Configuration"
+msgstr "기존 프로젝트 설정 재정의"
+
+#: shell/projectcontroller.cpp:503
+#, kde-format
+msgid "Unable to create configuration file %1"
+msgstr "설정 파일 %1을(를) 만들 수 없음"
+
+#: shell/projectcontroller.cpp:517
+#, kde-format
+msgid "Reopen the current project?"
+msgstr "현재 프로젝트를 다시 여시겠습니까?"
+
+#: shell/projectcontroller.cpp:518
+#, kde-format
+msgctxt "@action:button"
+msgid "Reopen"
+msgstr "다시 열기"
+
+#: shell/projectcontroller.cpp:558
+#, kde-format
+msgctxt "@action"
+msgid "Open / Import Project..."
+msgstr "프로젝트 열기/가져오기..."
+
+#: shell/projectcontroller.cpp:559
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open or import project"
+msgstr "프로젝트를 열거나 가져오기"
+
+#: shell/projectcontroller.cpp:560
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Open an existing KDevelop project or import an existing Project into "
+"KDevelop. This entry allows one to select a KDevelop project file or an "
+"existing directory to open it in KDevelop. When opening an existing "
+"directory that does not yet have a KDevelop project file, the file will be "
+"created."
+msgstr ""
+"기존 KDevelop 프로젝트를 열거나 기존 프로젝트를 KDevelop으로 가져옵니다. "
+"KDevelop 프로젝트 파일을 선택하거나 KDevelop으로 열 기존 디렉터리를 선택할 "
+"수 있습니다. KDevelop 프로젝트 파일이 없는 기존 디렉터리를 열면 파일을 생성합"
+"니다."
+
+#: shell/projectcontroller.cpp:571
+#, kde-format
+msgctxt "@action"
+msgid "Fetch Project..."
+msgstr "원격 프로젝트 가져오기..."
+
+#: shell/projectcontroller.cpp:573
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fetch project"
+msgstr "원격 프로젝트 가져오기"
+
+#: shell/projectcontroller.cpp:574
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Guides the user through the project fetch and then imports it into KDevelop."
+msgstr "원격에서 프로젝트를 가져온 다음 KDevelop으로 가져옵니다."
+
+#: shell/projectcontroller.cpp:589
+#, kde-format
+msgctxt "@action"
+msgid "Close Project(s)"
+msgstr "프로젝트 닫기"
+
+#: shell/projectcontroller.cpp:591
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Closes all currently selected projects"
+msgstr "현재 선택한 모든 프로젝트 닫기"
+
+#: shell/projectcontroller.cpp:597
+#, kde-format
+msgctxt "@action"
+msgid "Open Configuration..."
+msgstr "설정 열기..."
+
+#: shell/projectcontroller.cpp:603
+#, kde-format
+msgctxt "@action"
+msgid "Commit Current Project..."
+msgstr "현재 프로젝트 커밋..."
+
+#: shell/projectcontroller.cpp:604
+#, kde-format
+msgctxt "@action"
+msgid "Commit..."
+msgstr "커밋..."
+
+#: shell/projectcontroller.cpp:615
+#, kde-format
+msgctxt "@action"
+msgid "Open Recent Project"
+msgstr "최근 프로젝트 열기"
+
+#: shell/projectcontroller.cpp:616
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens recently opened project."
+msgstr "최근에 열었던 프로젝트를 엽니다."
+
+#: shell/projectcontroller.cpp:621
+#, kde-format
+msgctxt "@action"
+msgid "Open Project for Current File"
+msgstr "현재 파일의 프로젝트 열기"
+
+#: shell/projectcontroller.cpp:772
+#, kde-format
+msgid "Project already open: %1"
+msgstr "프로젝트가 이미 열림: %1"
+
+#: shell/projectcontroller.cpp:776
+#, kde-format
+msgid "No active document"
+msgstr "활성 문서 없음"
+
+#: shell/projectcontroller.cpp:857
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Already Open"
+msgstr "프로젝트가 이미 열림"
+
+#: shell/projectcontroller.cpp:860
+#, kde-format
+msgid ""
+"The project you're trying to open is already open in at least one other "
+"session.<br>What do you want to do?"
+msgstr ""
+"열려고 하는 프로젝트가 다른 세션에서 이미 열려 있습니다.<br>무엇을 하시겠습니"
+"까?"
+
+#: shell/projectcontroller.cpp:864
+#, kde-format
+msgctxt "@option:radio"
+msgid "Add project to current session"
+msgstr "현재 세션에 프로젝트 추가"
+
+#: shell/projectcontroller.cpp:868
+#, kde-format
+msgctxt "@option:radio"
+msgid "Open session %1"
+msgstr "세션 %1 열기"
+
+#: shell/projectcontroller.cpp:929
+#, kde-format
+msgid "No enabled plugin supports this repository URL: %1"
+msgstr "이 저장소 URL을 지원하는 플러그인이 활성화되지 않았음: %1"
+
+#: shell/projectcontroller.cpp:1233
+#, kde-format
+msgctxt "@action"
+msgid "Reparse the Entire Project"
+msgstr "전체 프로젝트 다시 해석"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
+#: shell/projectinfopage.ui:29 shell/projectinfopage.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the Management Plugin to use for this project"
+msgstr "이 프로젝트에 사용할 관리 플러그인 선택"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/projectinfopage.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Project manager:"
+msgstr "프로젝트 관리자:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: shell/projectinfopage.ui:39 shell/projectinfopage.ui:49
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Provide a name for the project"
+msgstr "프로젝트 이름 지정"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "이름:"
+
+#: shell/projectsourcepage.cpp:45
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "From File System"
+msgstr "파일 시스템에서"
+
+#: shell/projectsourcepage.cpp:180
+#, kde-format
+msgid "Could not create the directory: %1"
+msgstr "디렉터리를 만들 수 없음: %1"
+
+#: shell/projectsourcepage.cpp:213
+#, kde-format
+msgctxt "Format of the progress bar text. progress and info"
+msgid "%1 : %p%"
+msgstr "%1: %p%"
+
+#: shell/projectsourcepage.cpp:254
+#, kde-format
+msgid ""
+"You need to specify a valid or nonexistent directory to check out a project"
+msgstr "프로젝트를 체크아웃하려면 올바르거나 없는 디렉터리를 지정해야 합니다"
+
+#: shell/projectsourcepage.cpp:256
+#, kde-format
+msgid "You need to specify the source for your remote project"
+msgstr "원격 프로젝트 원본을 지정해야 함"
+
+#: shell/projectsourcepage.cpp:258
+#, kde-format
+msgid "You need to specify an empty folder as your project destination"
+msgstr "프로젝트 대상으로 빈 폴더를 지정해야 함"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/projectsourcepage.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Source:"
+msgstr "원본:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/projectsourcepage.ui:49
+#, kde-format
+msgctxt "@title:group"
+msgid "Destination"
+msgstr "대상"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/projectsourcepage.ui:55
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Directory:"
+msgstr "디렉터리:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
+#: shell/projectsourcepage.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select the directory to use..."
+msgstr "사용할 디렉터리 선택..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
+#: shell/projectsourcepage.ui:78
+#, kde-format
+msgctxt "@title:group"
+msgid "Source"
+msgstr "원본"
+
+#. i18n: ectx: property (text), widget (QPushButton, get)
+#: shell/projectsourcepage.ui:105
+#, kde-format
+msgctxt "@action:button"
+msgid "Get"
+msgstr "가져오기"
+
+#: shell/runcontroller.cpp:89
+#, kde-format
+msgctxt "launch mode"
+msgid "Debug"
+msgstr "디버그"
+
+#: shell/runcontroller.cpp:98
+#, kde-format
+msgctxt "launch mode"
+msgid "Profile"
+msgstr "프로필"
+
+#: shell/runcontroller.cpp:107
+#, kde-format
+msgctxt "launch mode"
+msgid "Execute"
+msgstr "실행"
+
+#: shell/runcontroller.cpp:409
+#, kde-format
+msgid "The current launch configuration does not support the '%1' mode."
+msgstr "현재 시작 설정은 '%1' 모드를 지원하지 않습니다."
+
+#: shell/runcontroller.cpp:429
+#, kde-format
+msgctxt "@action"
+msgid "Configure Launches..."
+msgstr "시작 설정..."
+
+#: shell/runcontroller.cpp:432
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open Launch Configuration Dialog"
+msgstr "시작 설정 대화 상자 열기"
+
+#: shell/runcontroller.cpp:433
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens a dialog to setup new launch configurations, or to change the existing "
+"ones."
+msgstr ""
+"새로운 시작 설정을 정의하거나 기존 시작 설정을 변경하는 대화 상자를 엽니다."
+
+#: shell/runcontroller.cpp:436
+#, kde-format
+msgctxt "@action"
+msgid "Execute Launch"
+msgstr "실행 시작"
+
+#: shell/runcontroller.cpp:437
+#, kde-format
+msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
+msgid "Execute"
+msgstr "실행"
+
+#: shell/runcontroller.cpp:439
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Execute current launch"
+msgstr "현재 시작 실행"
+
+#: shell/runcontroller.cpp:440
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes the target or the program specified in currently active launch "
+"configuration."
+msgstr "현재 활성화된 시작 설정에 지정한 대상 또는 프로그램을 실행합니다."
+
+#: shell/runcontroller.cpp:446
+#, kde-format
+msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
+msgid "Debug"
+msgstr "디버그"
+
+#. i18n("Profile Launch"), this);
+#. profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
+#. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
+#. ac->addAction("run_profile", profileAction);
+#. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
+#: shell/runcontroller.cpp:460
+#, kde-format
+msgctxt "@action"
+msgid "Stop All Jobs"
+msgstr "모든 작업 정지"
+
+#: shell/runcontroller.cpp:461
+#, kde-format
+msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
+msgid "Stop All"
+msgstr "모두 정지"
+
+#: shell/runcontroller.cpp:464
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Stop all currently running jobs"
+msgstr "현재 실행 중인 모든 작업 정지"
+
+#: shell/runcontroller.cpp:465
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Requests that all running jobs are stopped."
+msgstr "실행 중인 모든 작업이 정지하도록 요청합니다."
+
+#: shell/runcontroller.cpp:471
+#, kde-format
+msgctxt "@action"
+msgid "Stop"
+msgstr "정지"
+
+#: shell/runcontroller.cpp:477
+#, kde-format
+msgctxt "@action Short text for 'Stop' used in the toolbar"
+msgid "Stop"
+msgstr "정지"
+
+#: shell/runcontroller.cpp:478
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Menu allowing to stop individual jobs"
+msgstr "개별 작업을 정지할 수 있는 메뉴"
+
+#: shell/runcontroller.cpp:479
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "List of jobs that can be stopped individually."
+msgstr "개별적으로 정지할 수 있는 작업 목록입니다."
+
+#: shell/runcontroller.cpp:483
+#, kde-format
+msgctxt "@title:menu"
+msgid "Current Launch Configuration"
+msgstr "현재 시작 설정"
+
+#: shell/runcontroller.cpp:484
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Current launch configuration"
+msgstr "현재 시작 설정"
+
+#: shell/runcontroller.cpp:485
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Select which launch configuration to run when run is invoked."
+msgstr "실행 명령을 내렸을 때 실행할 시작 설정을 선택하십시오."
+
+#: shell/runcontroller.cpp:602
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "<%1> Unnamed job"
+msgstr "<%1> 이름 없는 작업"
+
+#: shell/runcontroller.cpp:983
+#, kde-format
+msgid "New %1 Launcher"
+msgstr "새 %1 실행기"
+
+#: shell/runcontroller.cpp:1020
+#, kde-format
+msgctxt "@title:menu"
+msgid "%1 As..."
+msgstr "%1을(를) 다음으로..."
+
+#: shell/runtimecontroller.cpp:25
+#, kde-format
+msgid "Host System"
+msgstr "호스트 시스템"
+
+#: shell/runtimecontroller.cpp:80
+#, kde-format
+msgid "Allows to select a runtime"
+msgstr "런타임을 선택할 수 있음"
+
+#: shell/runtimecontroller.cpp:84
+#, kde-format
+msgid "Runtime: %1"
+msgstr "런타임: %1"
+
+#: shell/savedialog.cpp:44
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Modified Files?"
+msgstr "변경한 파일을 저장하시겠습니까?"
+
+#: shell/savedialog.cpp:47
+#, kde-format
+msgid "The following files have been modified. Save them?"
+msgstr "다음 파일이 변경되었습니다. 저장하시겠습니까?"
+
+#: shell/savedialog.cpp:65
+#, kde-format
+msgctxt "@action:button"
+msgid "Save &None"
+msgstr "저장하지 않음(&N)"
+
+#: shell/savedialog.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Discard all modifications"
+msgstr "모든 변경 사항 버리기"
+
+#: shell/session.cpp:178
+#, kde-format
+msgid "(no projects)"
+msgstr "(프로젝트 없음)"
+
+#: shell/sessionchooserdialog.cpp:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete session"
+msgstr "세션 삭제"
+
+#: shell/sessionchooserdialog.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Pick a Session"
+msgstr "세션 선택"
+
+#: shell/sessionchooserdialog.cpp:62
+#, kde-format
+msgctxt "@action:button"
+msgid "Run"
+msgstr "실행"
+
+#: shell/sessionchooserdialog.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Active session.\n"
+"pid %1, app %2, host %3"
+msgstr ""
+"활성 세션입니다.\n"
+"pid %1, 앱 %2, 호스트 %3"
+
+#: shell/sessionchooserdialog.cpp:96
+#, kde-format
+msgid "Running"
+msgstr "실행 중"
+
+#: shell/sessionchooserdialog.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Delete Session"
+msgstr "세션을 삭제할 수 없음"
+
+#: shell/sessionchooserdialog.cpp:192
+#, kde-format
+msgctxt "@info"
+msgid "<p>Cannot delete a locked session."
+msgstr "<p>잠긴 세션을 삭제할 수 없습니다."
+
+#: shell/sessionchooserdialog.cpp:195
+#, kde-format
+msgctxt "@info"
+msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
+msgstr "<p>%3의 %2(PID %4)이(가) 세션 <b>%1</b>을(를) 잠갔습니다."
+
+#: shell/sessionchooserdialog.cpp:203
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The session <b>%1</b> and all contained settings will be deleted. The "
+"projects will stay unaffected. Do you really want to continue?"
+msgstr ""
+"세션 <b>%1</b>와(과) 포함된 모든 설정을 삭제합니다. 프로젝트는 영향받지 않습"
+"니다. 계속 진행하시겠습니까?"
+
+#: shell/sessionchooserdialog.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Session"
+msgstr "세션 삭제"
+
+#: shell/sessioncontroller.cpp:129
+#, kde-format
+msgid ""
+"The current session and all contained settings will be deleted. The projects "
+"will stay unaffected. Do you really want to continue?"
+msgstr ""
+"현재 세션과 포함된 모든 설정을 삭제합니다. 프로젝트는 영향받지 않습니다. 계"
+"속 진행하시겠습니까?"
+
+#: shell/sessioncontroller.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename Session"
+msgstr "세션 이름 바꾸기"
+
+#: shell/sessioncontroller.cpp:142
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New session name:"
+msgstr "새 세션 이름:"
+
+#: shell/sessioncontroller.cpp:249
+#, kde-format
+msgid "Session Manager"
+msgstr "세션 관리자"
+
+#: shell/sessioncontroller.cpp:261
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Start New Session"
+msgstr "새 세션 시작"
+
+#: shell/sessioncontroller.cpp:262
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty session"
+msgstr "새 KDevelop 인스턴스를 빈 세션으로 시작"
+
+#: shell/sessioncontroller.cpp:268
+#, kde-format
+msgctxt "@action"
+msgid "Rename Current Session..."
+msgstr "현재 세션 이름 바꾸기..."
+
+#: shell/sessioncontroller.cpp:274
+#, kde-format
+msgctxt "@action"
+msgid "Delete Current Session..."
+msgstr "현재 세션 삭제..."
+
+#: shell/sessioncontroller.cpp:278
+#, kde-format
+msgctxt "@action"
+msgid "Quit"
+msgstr "끝내기"
+
+#: shell/sessioncontroller.cpp:498
+#, kde-format
+msgid "Copy of %1"
+msgstr "사본 - %1"
+
+#: shell/sessioncontroller.cpp:588
+#, kde-format
+msgctxt "@title:column"
+msgid "Identity"
+msgstr "프로필"
+
+#: shell/sessioncontroller.cpp:589
+#, kde-format
+msgctxt "@title:column"
+msgid "Contents"
+msgstr "내용"
+
+#: shell/sessioncontroller.cpp:590
+#, kde-format
+msgctxt "@title:column"
+msgid "State"
+msgstr "상태"
+
+#: shell/sessioncontroller.cpp:591
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "이름"
+
+#: shell/sessioncontroller.cpp:597
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Filter:"
+msgstr "필터:"
+
+#: shell/sessioncontroller.cpp:629
+#, kde-format
+msgid "Create New Session"
+msgstr "새 세션 만들기"
+
+#: shell/sessionlock.cpp:153
+#, kde-format
+msgctxt "@info:shell"
+msgid ""
+"Running %1 instance (PID: %2) detected, making this one visible instead of "
+"starting a new one"
+msgstr ""
+"실행 중인 %1 인스턴스(PID: %2)가 감지되어 새 인스턴스를 시작하는 대신 해당 인"
+"스턴스를 활성화함"
+
+#: shell/sessionlock.cpp:158
+#, kde-format
+msgctxt "@info:shell"
+msgid "Running %1 instance (PID: %2) is apparently hung"
+msgstr "실행 중인 %1 인스턴스(PID: %2)의 응답이 없음"
+
+#: shell/sessionlock.cpp:164
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The given application did not respond to a DBUS call, it may have crashed or "
+"is hanging."
+msgstr ""
+"지정한 프로그램이 D-Bus 호출에 응답하지 않았습니다. 프로그램이 충돌했거나 중"
+"단된 것 같습니다."
+
+#: shell/sessionlock.cpp:169
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
+msgstr ""
+"세션 <em>%1</em>을(를) 잠글 수 없습니다. %3의 %2(PID %4)이(가) 잠갔습니다."
+
+#: shell/sessionlock.cpp:173
+#, kde-format
+msgctxt "@info"
+msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
+msgstr "세션 <em>%1</em>을 잠글 수 없습니다(잠금 파일을 사용할 수 없음)."
+
+#: shell/sessionlock.cpp:177
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<p>Please, close the offending application instance or choose another "
+"session to launch.</p>"
+msgstr ""
+"<p>문제가 있는 프로그램 인스턴스를 닫거나 시작할 다른 세션을 선택하십시오.</"
+"p>"
+
+#: shell/sessionlock.cpp:183
+#, kde-format
+msgctxt "@action:button"
+msgid "Retry Startup"
+msgstr "시작 다시 시도"
+
+#: shell/sessionlock.cpp:186
+#, kde-format
+msgctxt "@action:button"
+msgid "Choose Another Session"
+msgstr "다른 세션 선택"
+
+#: shell/sessionlock.cpp:189
+#, kde-format
+msgctxt "@title:window"
+msgid "Failed to Lock Session %1"
+msgstr "세션 %1을(를) 잠글 수 없음"
+
+#: shell/sessionlock.cpp:196
+#, kde-format
+msgctxt "@info"
+msgid "The session %1 is already active in another running instance."
+msgstr "세션 %1이(가) 이미 다른 실행 중인 인스턴스에 활성화되어 있습니다."
+
+#: shell/settings/analyzerspreferences.cpp:25
+#, kde-format
+msgid "Analyzers"
+msgstr "분석기"
+
+#: shell/settings/analyzerspreferences.cpp:35
+#, kde-format
+msgid "Configure Analyzers"
+msgstr "분석기 설정"
+
+#: shell/settings/bgpreferences.cpp:73
+#, kde-format
+msgid "Configure Background Parser"
+msgstr "백그라운드 파서 설정"
+
+#. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
+#: shell/settings/bgpreferences.ui:20
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Enables or disables the background parser.<br>If unsure, leave it "
+"enabled. Disabling the background parser will disable large parts of "
+"KDevelop's functionality.</p>"
+msgstr ""
+"<p>백그라운드 파서를 활성화하거나 비활성화합니다.<br>확실하지 않으면 활성화하"
+"십시오. 백그라운드 파서를 비활성화하면 대부분 KDevelop 기능이 비활성화됩니다."
+"</p>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
+#: shell/settings/bgpreferences.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Enable Background Parser"
+msgstr "백그라운드 파서 활성화"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
+#: shell/settings/bgpreferences.ui:35 shell/settings/bgpreferences.ui:45
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The time to wait before the document is re-analyzed when you edit it."
+msgstr "문서를 편집하고 문서를 다시 구문 분석할 때까지 기다릴 시간입니다."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/bgpreferences.ui:38
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Delay:"
+msgstr "지연:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
+#: shell/settings/bgpreferences.ui:48
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " ms"
+msgstr "밀리초"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
+#: shell/settings/bgpreferences.ui:61 shell/settings/bgpreferences.ui:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The maximum number of parallel instances the background parser uses. If "
+"unsure, select 1 or 2."
+msgstr ""
+"최대 백그라운드 파서 병렬 인스턴스 개수입니다. 확실하지 않으면 1 또는 2를 지"
+"정하십시오."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/bgpreferences.ui:64
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "최대 스레드 개수:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
+#: shell/settings/bgpreferences.ui:74
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " threads"
+msgstr "개 스레드"
+
+#: shell/settings/documentationpreferences.cpp:35
+#, kde-format
+msgid "Configure Documentation"
+msgstr "문서 설정"
+
+#: shell/settings/editstyledialog.cpp:102
+#, kde-format
+msgid "No Source Formatter available"
+msgstr "사용 가능한 소스 코드 서식 적용 도구가 없음"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreview)
+#. i18n: ectx: property (text), widget (QLabel, previewLabel)
+#: shell/settings/editstyledialog.ui:40
+#: shell/sourceformatterselectionedit.ui:83
+#, kde-format
+msgctxt "@label"
+msgid "Preview:"
+msgstr "미리 보기:"
+
+#: shell/settings/environmentpreferences.cpp:79
+#, kde-format
+msgid "Environment"
+msgstr "환경"
+
+#: shell/settings/environmentpreferences.cpp:84
+#, kde-format
+msgid "Configure Environment Variables"
+msgstr "환경 변수 설정"
+
+#: shell/settings/environmentprofilelistmodel.cpp:48
+#, kde-format
+msgid "%1 (default profile)"
+msgstr "%1(기본 프로필)"
+
+#: shell/settings/environmentprofilemodel.cpp:91
+#, kde-format
+msgctxt "@title:column"
+msgid "Variable"
+msgstr "변수"
+
+#: shell/settings/environmentprofilemodel.cpp:93
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "값"
+
+#: shell/settings/environmentwidget.cpp:81
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter variable..."
+msgstr "변수 입력..."
+
+#: shell/settings/environmentwidget.cpp:169
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Environment Profile"
+msgstr "새 환경 변수 프로필 이름 입력"
+
+#: shell/settings/environmentwidget.cpp:233
+#, kde-format
+msgctxt "@title:window"
+msgid "Batch Edit Mode"
+msgstr "일괄 편집 모드"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/environmentwidget.ui:22
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Environment profile:"
+msgstr "환경 프로필:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
+#: shell/settings/environmentwidget.ui:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add profile..."
+msgstr "프로필 추가..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
+#: shell/settings/environmentwidget.ui:49
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone profile..."
+msgstr "프로필 복제..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
+#: shell/settings/environmentwidget.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove profile"
+msgstr "프로필 삭제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
+#: shell/settings/environmentwidget.ui:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "기본값으로 설정"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
+#: shell/settings/environmentwidget.ui:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove variable"
+msgstr "변수 삭제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
+#: shell/settings/environmentwidget.ui:130
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Batch edit mode"
+msgstr "일괄 편집 모드"
+
+#: shell/settings/languagepreferences.cpp:35
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " file"
+msgid_plural " files"
+msgstr[0] "파일"
+
+#: shell/settings/languagepreferences.cpp:77
+#, kde-format
+msgid "Language Support"
+msgstr "언어 지원"
+
+#: shell/settings/languagepreferences.cpp:82
+#, kde-format
+msgid "Configure Code-Completion and Semantic Highlighting"
+msgstr "코드 자동 완성 및 시맨틱 강조 구성"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/languagepreferences.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "코드 자동 완성"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_6)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
+#: shell/settings/languagepreferences.ui:35
+#: shell/settings/languagepreferences.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "If disabled, the code completion widget will never show automatically."
+msgstr "이 옵션을 사용하지 않으면 코드 완성 위젯을 자동으로 표시하지 않습니다."
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: shell/settings/languagepreferences.ui:38
+#, kde-format
+msgctxt "@label"
+msgid "Enable automatic invocation:"
+msgstr "자동 호출 사용:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_7)
+#: shell/settings/languagepreferences.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Choose whether to display additional information for the currently selected "
+"codecompletion item."
+msgstr ""
+"이 옵션을 사용하면 현재 선택한 코드 자동 완성 항목의 추가 정보를 표시합니다."
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: shell/settings/languagepreferences.ui:61
+#, kde-format
+msgctxt "@label"
+msgid "Additional information for current item:"
+msgstr "현재 항목의 추가 정보:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
+#: shell/settings/languagepreferences.ui:71
+#, kde-format
+msgctxt "info:tooltip"
+msgid ""
+"Choose whether to display additional information for the currently selected "
+"code completion item."
+msgstr ""
+"이 옵션을 사용하면 현재 선택한 코드 자동 완성 항목의 추가 정보를 표시합니다."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:81
+#: shell/settings/languagepreferences.ui:94
+#, kde-format
+msgid ""
+"<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
+"in what cases full code completion will be displayed.</p>"
+msgstr ""
+"<p>코드 자동 완성 UI에는 최소 모드와 상세 모드가 있습니다.<br>전체 코드 자동 "
+"완성을 표시할 경우를 선택하십시오.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/languagepreferences.ui:84
+#, kde-format
+msgctxt "@label"
+msgid "Detailed completion:"
+msgstr "자세한 자동 완성:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:101
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Never"
+msgstr "하지 않음"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "When Invoked Manually"
+msgstr "수동으로 호출할 때"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:111
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr "항상"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/languagepreferences.ui:122
+#, kde-format
+msgctxt "@title:group"
+msgid "Semantic Code Highlighting"
+msgstr "시맨틱 코드 구문 강조"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
+#. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
+#: shell/settings/languagepreferences.ui:131
+#: shell/settings/languagepreferences.ui:144
+#, kde-format
+msgid ""
+"<p>This setting decides about the intensity of colors for local variables, "
+"for example function arguments, variables and the like.</p>"
+msgstr ""
+"<p>이 옵션은 지역 변수, 함수 인자, 변수 등 로컬 변수의 색상 강도를 설정합니"
+"다.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
+#: shell/settings/languagepreferences.ui:134
+#, kde-format
+msgctxt "@label:slider"
+msgid "Local colorization intensity:"
+msgstr "로컬 색상 강도:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
+#. i18n: ectx: property (toolTip), widget (QLabel, label_9)
+#: shell/settings/languagepreferences.ui:166
+#: shell/settings/languagepreferences.ui:183
+#, kde-format
+msgid ""
+"<p>By default, the global colors for types, functions, namespaces and so "
+"forth are auto-generated and will adapt to the selected editor theme based "
+"on the global colorization intensity. If you want to have full control over "
+"the colors, you can instead use the editor theme as color source. You can "
+"then fine tune the colors in the settings under Editor &gt; Color Themes "
+"&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
+msgstr ""
+"<p>기본값으로 형식, 함수, 네임스페이스 등의 전역 색상은 자동 생성되며 선택한 "
+"편집기 테마와 전역 색상 강도 설정에 맞춥니다. 색상 전체를 사용자 정의하려면 "
+"편집기 테마를 색상 원본으로 사용할 수 있습니다. 편집기 &gt; 색상 테마 &gt; 강"
+"조 텍스트 스타일 &gt; KDevelop/시맨틱 색상에서 미세 조정할 수 있습니다.</p>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
+#: shell/settings/languagepreferences.ui:170
+#, kde-format
+msgid "Auto-Generated"
+msgstr "자동 생성됨"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
+#: shell/settings/languagepreferences.ui:175
+#, kde-format
+msgid "From Editor Theme"
+msgstr "편집기 테마에서"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: shell/settings/languagepreferences.ui:186
+#, kde-format
+msgid "Global colors:"
+msgstr "전역 색상:"
+
+#. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
+#. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
+#: shell/settings/languagepreferences.ui:196
+#: shell/settings/languagepreferences.ui:218
+#, kde-format
+msgid ""
+"<p>This settings lets you change the intensity of globally accessible types, "
+"for example classes, methods, functions etc.</p>"
+msgstr ""
+"<p>이 옵션은 클래스, 메서드, 함수 등 전역적으로 접근 가능한 형식의 색상 강도"
+"를 설정합니다.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
+#: shell/settings/languagepreferences.ui:221
+#, kde-format
+msgctxt "@label:slider"
+msgid "Global colorization intensity:"
+msgstr "전역 색상 강도:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_4)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
+#: shell/settings/languagepreferences.ui:231
+#: shell/settings/languagepreferences.ui:244
+#, kde-format
+msgid ""
+"<p>Highlight semantic problems, such as non-existent or inaccessible "
+"declarations.</p>"
+msgstr "<p>없거나 접근할 수 없는 선언과 같은 시맨틱 문제를 강조합니다.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/settings/languagepreferences.ui:234
+#, kde-format
+msgctxt "@label"
+msgid "Highlight semantic problems:"
+msgstr "시맨틱 문제 강조:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
+#: shell/settings/languagepreferences.ui:254
+#: shell/settings/languagepreferences.ui:267
+#, kde-format
+msgid ""
+"<p>When enabled, lines with errors will get additionally highlighted and "
+"their positions get marked in the scrollbar.</p>"
+msgstr ""
+"<p>이 옵션을 사용하면 오류가 있는 줄을 추가로 강조 표시하고 스크롤 바에 위치"
+"를 표시합니다.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: shell/settings/languagepreferences.ui:257
+#, kde-format
+msgctxt "@label"
+msgid "Highlight problematic lines:"
+msgstr "문제가 있는 줄 강조:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
+#: shell/settings/languagepreferences.ui:277
+#, kde-format
+msgid ""
+"<html><head/><body><p>Use bold font for declarations such as classes, "
+"functions, local variables, etc.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>클래스, 함수, 지역 변수 등의 선언에 굵은 글꼴을 사용합"
+"니다.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
+#: shell/settings/languagepreferences.ui:280
+#, kde-format
+msgctxt "@label"
+msgid "Bold font for declarations:"
+msgstr "선언에 굵은 글씨 사용:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: shell/settings/languagepreferences.ui:293
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Problems shown as inline notes:"
+msgstr "인라인 메모로 표시할 문제:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:304
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "None"
+msgstr "없음"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:309
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Errors"
+msgstr "오류"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:314
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Warnings and Errors"
+msgstr "경고 및 오류"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:319
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Hints, Warnings and Errors"
+msgstr "힌트, 경고, 오류"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#: shell/settings/languagepreferences.ui:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Space-separated list of words that make a comment represent a TODO item"
+msgstr "주석을 할 일(TODO) 항목으로 간주할 공백으로 구분한 단어 목록"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/languagepreferences.ui:330
+#, kde-format
+msgctxt "@label:textbox"
+msgid "TODO marker words:"
+msgstr "할 일(TODO) 마커 단어:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
+#: shell/settings/languagepreferences.ui:340
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Space-separated list of words that make a comment represent a TODO item."
+msgstr "주석을 할 일(TODO) 항목으로 간주할 공백으로 구분한 단어 목록입니다."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: shell/settings/languagepreferences.ui:369
+#, kde-format
+msgctxt "@title:group"
+msgid "Project Parsing"
+msgstr "프로젝트 구문 분석"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
+#: shell/settings/languagepreferences.ui:379
+#: shell/settings/languagepreferences.ui:399
+#, kde-format
+msgid ""
+"<p>When a project contains more files than this number, the project will be\n"
+"parsed in simplified mode, increasing the efficiency by gathering less "
+"information. Global code navigation and quickopen capabilities will be "
+"reduced.</p>"
+msgstr ""
+"<p>프로젝트에 다음 개수보다 많은 파일이 포함되어 있으면 프로젝트\n"
+"해석 모드를 더 적은 정보를 수집하여 효율성을 높이는 단순 모드로 전환합니다. "
+"전역 코드 탐색 및 빠른 열기 기능의 일부를 사용하지 못할 수도 있습니다.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/settings/languagepreferences.ui:382
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Minimum project size for simplified parsing:"
+msgstr "다음 크기 이상의 프로젝트에 단순화된 구문 분석 사용:"
+
+#: shell/settings/pluginpreferences.cpp:48
+#, kde-format
+msgctxt "@title:group"
+msgid "Core"
+msgstr "코어"
+
+#: shell/settings/pluginpreferences.cpp:49
+#, kde-format
+msgctxt "@title:group"
+msgid "Project Management"
+msgstr "프로젝트 관리"
+
+#: shell/settings/pluginpreferences.cpp:50
+#, kde-format
+msgctxt "@title:group"
+msgid "Version Control"
+msgstr "버전 관리"
+
+#: shell/settings/pluginpreferences.cpp:51
+#, kde-format
+msgctxt "@title:group"
+msgid "Utilities"
+msgstr "유틸리티"
+
+#: shell/settings/pluginpreferences.cpp:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Documentation"
+msgstr "문서"
+
+#: shell/settings/pluginpreferences.cpp:53
+#, kde-format
+msgctxt "@title:group"
+msgid "Language Support"
+msgstr "언어 지원"
+
+#: shell/settings/pluginpreferences.cpp:54
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugging"
+msgstr "디버깅"
+
+#: shell/settings/pluginpreferences.cpp:55
+#, kde-format
+msgctxt "@title:group"
+msgid "Testing"
+msgstr "시험"
+
+#: shell/settings/pluginpreferences.cpp:56
+#, kde-format
+msgctxt "@title:group"
+msgid "Analyzers"
+msgstr "분석기"
+
+#: shell/settings/pluginpreferences.cpp:57
+#, kde-format
+msgctxt "@title:group"
+msgid "Runtimes"
+msgstr "런타임"
+
+#: shell/settings/pluginpreferences.cpp:58
+#, kde-format
+msgctxt "@title:group"
+msgid "Other"
+msgstr "기타"
+
+#: shell/settings/pluginpreferences.h:32
+#, kde-format
+msgid "Plugins"
+msgstr "플러그인"
+
+#: shell/settings/pluginpreferences.h:33
+#, kde-format
+msgid "Configure Plugins"
+msgstr "플러그인 설정"
+
+#. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:11
+#, kde-format
+msgid ""
+"Schedule all project source code to be parsed by the language support in the "
+"background"
+msgstr "백그라운드에서 언어 지원이 모든 프로젝트 소스 코드를 해석하도록 예약"
+
+#. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:15
+#, kde-format
+msgid ""
+"If this option is set, KDevelop will schedule all source code\n"
+"        found by the current build system for parsing by the appropriate "
+"language\n"
+"        support part.  This will enable more complete language support, but "
+"may\n"
+"        be slower."
+msgstr ""
+"이 옵션을 선택하면 현재 빌드 시스템에서 찾은 모든 소스 코드를\n"
+"        적합한 언어 지원 부분을 사용하여 구문 분석하도록 예약합니다.\n"
+"        더 완전한 언어 지원을 사용할 수 있으나 속도가 더 느려질 수\n"
+"        있습니다."
+
+#. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:19
+#, kde-format
+msgid "Chooses the base directory where new projects are created."
+msgstr "새 프로젝트를 만들 기본 디렉터리를 선택하십시오."
+
+#. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:23
+#, kde-format
+msgid "Save all open documents before building anything"
+msgstr "빌드하기 전에 열려 있는 모든 문서 저장"
+
+#. i18n: ectx: whatsthis, entry (saveDocuments), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:24
+#, kde-format
+msgid ""
+"If this option is set all open documents will be automatically saved before "
+"any build is started."
+msgstr ""
+"이 옵션을 선택하면 빌드를 시작하기 전에 열려 있는 모든 문서를 자동으로 저장합"
+"니다."
+
+#: shell/settings/projectpreferences.cpp:44
+#, kde-format
+msgid "Projects"
+msgstr "프로젝트"
+
+#: shell/settings/projectpreferences.cpp:49
+#, kde-format
+msgid "Configure Projects"
+msgstr "프로젝트 설정"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
+#: shell/settings/projectpreferences.ui:22
+#: shell/settings/projectpreferences.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the base directory where new projects are to be created"
+msgstr "새 프로젝트를 만들 기본 디렉터리를 선택하십시오"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/projectpreferences.ui:25
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects base directory:"
+msgstr "프로젝트 기반 디렉터리:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
+#: shell/settings/projectpreferences.ui:47
+#, kde-format
+msgctxt "@info:tolltip"
+msgid "Parse all files in a project after the project has been opened"
+msgstr "프로젝트를 연 다음 프로젝트의 모든 파일을 해석"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
+#: shell/settings/projectpreferences.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Schedule all project files for parsing"
+msgstr "모든 프로젝트 파일 구문 분석 예약"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
+#: shell/settings/projectpreferences.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all modified documents when the \"build\" action is triggered"
+msgstr "\"빌드\" 동작을 실행할 때 수정한 모든 문서 저장"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
+#: shell/settings/projectpreferences.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Save all documents before building"
+msgstr "빌드하기 전에 열려 있는 모든 문서 저장"
+
+#: shell/settings/runtimespreferences.cpp:23
+#, kde-format
+msgid "Runtimes"
+msgstr "런타임"
+
+#: shell/settings/runtimespreferences.cpp:33
+#, kde-format
+msgid "Configure Runtimes"
+msgstr "런타임 설정"
+
+#: shell/settings/sourceformattersettings.cpp:75
+#: shell/sourceformattercontroller.cpp:139
+#, kde-format
+msgid "Source Formatter"
+msgstr "소스 코드 형식 적용 도구"
+
+#: shell/settings/sourceformattersettings.cpp:80
+#, kde-format
+msgid "Configure Source Formatter"
+msgstr "소스 코드 형식 적용 도구 설정"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/sourceformattersettings.ui:20
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr "일반"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
+#: shell/settings/sourceformattersettings.ui:26
+#, kde-format
+msgctxt "@info:tolltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without Kate modeline."
+msgstr ""
+"Kate 모드라인이 없는 문서를 서식 지정 스타일에 따라서 편집기 들여쓰기 모드를 "
+"변경합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
+#: shell/settings/sourceformattersettings.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "Override Kate Indentation Mode"
+msgstr "Kate 들여쓰기 모드 재정의"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
+#: shell/settings/sourceformattersettings.ui:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr "서식이 지정된 문서의 스타일에 따른 Kate 모드라인을 추가합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
+#: shell/settings/sourceformattersettings.ui:39
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate Modeline"
+msgstr "Kate 모드라인 추가"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/sourceformattersettings.ui:55
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr "서식 지정"
+
+#: shell/settings/templateconfig.cpp:39
+#, kde-format
+msgid "Templates"
+msgstr "템플릿"
+
+#: shell/settings/templateconfig.cpp:44
+#, kde-format
+msgid "Configure Templates"
+msgstr "템플릿 설정"
+
+#. i18n: ectx: property (text), widget (QPushButton, loadButton)
+#: shell/settings/templatepage.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template From File"
+msgstr "파일에서 템플릿 불러오기"
+
+#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
+#: shell/settings/templatepage.ui:38
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "새 템플릿 가져오기"
+
+#. i18n: ectx: property (text), widget (QPushButton, extractButton)
+#: shell/settings/templatepage.ui:50
+#, kde-format
+msgctxt "@action:button"
+msgid "Clone Template"
+msgstr "템플릿 복제"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
+#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
+#, kde-format
+msgid "User Interface"
+msgstr "사용자 인터페이스"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/uiconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Dock Window Behavior"
+msgstr "독 창 동작"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_4)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#: shell/settings/uiconfig.ui:29 shell/settings/uiconfig.ui:49
+#, kde-format
+msgid ""
+"<p>Controls whether the bottom left corner is occupied by the dock at the "
+"left, or by the dock at the bottom.</p>"
+msgstr ""
+"<p>왼쪽 아래 모서리를 왼쪽 독 또는 아래쪽 독에서 사용할지 여부를 설정합니다."
+"</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/settings/uiconfig.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Bottom left corner occupied by:"
+msgstr "왼쪽 아래 꼭짓점:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:39 shell/settings/uiconfig.ui:66
+#, kde-format
+msgid ""
+"<p>Controls whether the bottom right corner is occupied by the dock at the "
+"right, or by the dock at the bottom.</p>"
+msgstr ""
+"<p>오른쪽 아래 모서리를 오른쪽 독 또는 아래쪽 독에서 사용할지 여부를 설정합니"
+"다.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: shell/settings/uiconfig.ui:42
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Bottom right corner occupied by:"
+msgstr "오른쪽 아래 꼭짓점:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#: shell/settings/uiconfig.ui:53
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Left Dock"
+msgstr "왼쪽 독"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Bottom Dock"
+msgstr "아래쪽 독"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:70
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Right Dock"
+msgstr "오른쪽 독"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/uiconfig.ui:86
+#, kde-format
+msgctxt "@title:group"
+msgid "Tabbed Browsing"
+msgstr "탭 브라우징"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
+#: shell/settings/uiconfig.ui:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Controls whether to open new tabs next to the active one."
+msgstr "활성 탭 옆에 새 탭을 열지 여부를 설정합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
+#: shell/settings/uiconfig.ui:95
+#, kde-format
+msgctxt "@option:check"
+msgid "Open new tab after current"
+msgstr "현재 탭 다음에 새로운 탭 열기"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
+#: shell/settings/uiconfig.ui:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"When enabled, plugins can group related files side by side.\n"
+"For example, a header file will be opened next to the implementation file."
+msgstr ""
+"이 옵션을 사용하면 플러그인에서 관련된 파일을 나란히 표시할 수 있습니다.\n"
+"예를 들어 구현 파일 옆에 헤더 파일이 열립니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
+#: shell/settings/uiconfig.ui:109
+#, kde-format
+msgctxt "@option:check"
+msgid "Arrange related documents side by side"
+msgstr "관련 문서를 나란히 정렬"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
+#: shell/settings/uiconfig.ui:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enables or disables the display of the tab bar at the top of the editor "
+"window."
+msgstr "편집기 창 위쪽에 탭 표시줄을 표시할지 여부입니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
+#: shell/settings/uiconfig.ui:119
+#, kde-format
+msgctxt "@option:check"
+msgid "Show tabs"
+msgstr "탭 표시"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
+#: shell/settings/uiconfig.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enables or disables the display of a close button in each tab in the tab bar "
+"at the top of the editor window."
+msgstr ""
+"편집기 창 위쪽의 탭 표시줄의 각각 탭 옆에 닫기 단추를 표시할지 여부입니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
+#: shell/settings/uiconfig.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Show close buttons on tabs"
+msgstr "탭에 닫기 단추 표시"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: shell/settings/uiconfig.ui:145
+#, kde-format
+msgctxt "@title:group"
+msgid "Coloring"
+msgstr "채색"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ColorizeByProject)
+#: shell/settings/uiconfig.ui:151
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"When enabled, tabs and other widgets are colored based on the project "
+"affiliation"
+msgstr "이 옵션을 사용하면 탭과 기타 위젯을 프로젝트 소속에 따라 색을 입힙니다"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
+#: shell/settings/uiconfig.ui:154
+#, kde-format
+msgctxt "@option:check"
+msgid "Color widgets based on the project affiliation"
+msgstr "프로젝트 소속에 따라 위젯에 색 입히기"
+
+#: shell/settings/uipreferences.cpp:55
+#, kde-format
+msgid "Configure User Interface"
+msgstr "사용자 인터페이스 설정"
+
+#: shell/sourceformattercontroller.cpp:145
+#, kde-format
+msgctxt "@action"
+msgid "&Reformat Source"
+msgstr "소스 형식 재지정(&R)"
+
+#: shell/sourceformattercontroller.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Reformat Line"
+msgstr "줄 형식 재지정"
+
+#: shell/sourceformattercontroller.cpp:153
+#, kde-format
+msgctxt "@action"
+msgid "Reformat Files..."
+msgstr "파일 형식 재지정..."
+
+#: shell/sourceformattercontroller.cpp:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Format file(s) using the configured source formatter(s)"
+msgstr "지정한 형식 지정 도구로 파일 형식 재지정"
+
+#: shell/sourceformattercontroller.cpp:156
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Formatting functionality using the configured source formatter(s)."
+msgstr "설정한 형식 지정 도구를 사용하는 형식 재지정 기능입니다."
+
+#: shell/sourceformattercontroller.cpp:523
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
+msgstr "<i>%1</i>(<b>%2</b>)(으)로 선택 영역이나 파일 형식 재지정"
+
+#: shell/sourceformattercontroller.cpp:526
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Reformats selected text or the entire file if nothing is selected, using <i>"
+"%1</i> tool with <b>%2</b> style."
+msgstr ""
+"<i>%1</i> 도구의 <b>%2</b> 스타일을 사용하여 선택 영역이나 파일 전체(선택이 "
+"없을 때)의 형식을 재지정합니다."
+
+#: shell/sourceformattercontroller.cpp:528
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
+msgstr "<i>%1</i>(<b>%2</b>)을(를) 사용하여 현재 줄 형식 재지정"
+
+#: shell/sourceformattercontroller.cpp:531
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
+"style."
+msgstr ""
+"<i>%1</i> 도구의 <b>%2</b> 스타일을 사용하여 커서 아래 소스 코드 줄의 형식을 "
+"재지정합니다."
+
+#: shell/sourceformattercontroller.cpp:535
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat selection or file using the configured source formatter"
+msgstr "지정한 형식 지정 도구로 선택 영역이나 파일 형식 재지정"
+
+#: shell/sourceformattercontroller.cpp:537
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Reformats selected text or the entire file if nothing is selected, using the "
+"configured source formatter."
+msgstr ""
+"설정한 소스 형식 지정 도구를 사용하여 선택 영역이나 파일 전체(선택이 없을 때)"
+"의 형식을 재지정합니다."
+
+#: shell/sourceformattercontroller.cpp:539
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat current line using the configured source formatter"
+msgstr "지정한 형식 지정 도구로 현재 줄 형식 재지정"
+
+#: shell/sourceformattercontroller.cpp:541
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Source reformatting of line under cursor using the configured source "
+"formatter."
+msgstr "설정한 형식 지정 도구를 사용하는 커서 아래 줄 형식 재지정 기능입니다."
+
+#: shell/sourceformattercontroller.cpp:765
+#, kde-format
+msgctxt "@title:window"
+msgid "Reformat Files?"
+msgstr "파일 형식을 재지정하시겠습니까?"
+
+#: shell/sourceformattercontroller.cpp:766
+#, kde-format
+msgid "Reformat all files in the selected folder?"
+msgstr "선택한 폴더의 모든 파일의 형식을 재지정하시겠습니까?"
+
+#: shell/sourceformattercontroller.cpp:770
+#, kde-format
+msgctxt "@action:button"
+msgid "Reformat"
+msgstr "형식 재지정"
+
+#: shell/sourceformatterjob.cpp:38
+#, kde-format
+msgid "Reformatting"
+msgstr "형식 재지정"
+
+#: shell/sourceformatterjob.cpp:49
+#, kde-format
+msgid "Reformat Files"
+msgstr "파일 형식 재지정"
+
+#: shell/sourceformatterjob.cpp:60
+#, kde-format
+msgid "Reformatting one file"
+msgid_plural "Reformatting %1 files"
+msgstr[0] "파일 %1개 형식 재지정 중"
+
+#: shell/sourceformatterselectionedit.cpp:484
+#, kde-format
+msgid ""
+"The style %1 is also used for the following languages:\n"
+"%2.\n"
+"Are you sure you want to delete it?"
+msgstr ""
+"%1 스타일을 다음 언어에서 사용하고 있습니다:\n"
+"%2.\n"
+"삭제하시겠습니까?"
+
+#: shell/sourceformatterselectionedit.cpp:485
+#, kde-format
+msgctxt "@title:window"
+msgid "Deleting Style"
+msgstr "스타일 삭제"
+
+#: shell/sourceformatterselectionedit.cpp:540
+#, kde-format
+msgid "New %1"
+msgstr "새 %1"
+
+#: shell/sourceformatterselectionedit.cpp:543
+#, kde-format
+msgid "New Style"
+msgstr "새 스타일"
+
+#: shell/sourceformatterselectionedit.cpp:624
+#, kde-format
+msgid "No language selected"
+msgstr "언어를 선택하지 않았음"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/sourceformatterselectionedit.ui:29
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Language:"
+msgstr "언어:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/sourceformatterselectionedit.ui:102
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Formatter:"
+msgstr "형식 재지정 도구:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/sourceformatterselectionedit.ui:132
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Style:"
+msgstr "스타일:"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
+#: shell/sourceformatterselectionedit.ui:150
+#, kde-format
+msgctxt "@action:button"
+msgid "New"
+msgstr "새로 만들기"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
+#: shell/sourceformatterselectionedit.ui:157
+#, kde-format
+msgctxt "@action:button"
+msgid "Edit..."
+msgstr "편집..."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
+#. i18n: ectx: property (text), widget (QPushButton, deleteButton)
+#: shell/sourceformatterselectionedit.ui:164
+#: shell/workingsets/workingsettooltipwidget.cpp:93
+#: vcs/dvcs/ui/branchmanager.ui:44
+#, kde-format
+msgctxt "@action:button"
+msgid "Delete"
+msgstr "삭제"
+
+#: shell/textdocument.cpp:436
+#, kde-format
+msgid ""
+"The file \"%1\" is modified on disk.\n"
+"\n"
+"Are you sure you want to overwrite it? (External changes will be lost.)"
+msgstr ""
+"\"%1\" 파일이 디스크에서 변경되었습니다.\n"
+"\n"
+"덮어쓰시겠습니까?(외부 변경 사항은 손실됩니다.)"
+
+#: shell/textdocument.cpp:439
+#, kde-format
+msgctxt "@title:window"
+msgid "Document Externally Modified"
+msgstr "파일이 외부에서 변경됨"
+
+#: shell/textdocument.cpp:703
+#, kde-format
+msgid " Line: %1 Col: %2 "
+msgstr " 행: %1 열: %2 "
+
+#: shell/uicontroller.cpp:81
+#, kde-format
+msgctxt "area"
+msgid "Code"
+msgstr "코드"
+
+#: shell/uicontroller.cpp:92
+#, kde-format
+msgctxt "area"
+msgid "Debug"
+msgstr "디버그"
+
+#: shell/uicontroller.cpp:101
+#, kde-format
+msgctxt "area"
+msgid "Review"
+msgstr "리뷰"
+
+#: shell/uicontroller.cpp:460
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Tool View to Add"
+msgstr "추가할 도구 보기 선택"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:74
+#, kde-format
+msgid "<b>Active Working Set</b>"
+msgstr "<b>활성 작업 세트</b>"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:76
+#, kde-format
+msgid "<b>Working Set</b>"
+msgstr "<b>작업 세트</b>"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this working set. The contained documents are not affected."
+msgstr "이 작업 세트를 삭제합니다. 포함된 문서는 영향받지 않습니다."
+
+#: shell/workingsets/workingsettooltipwidget.cpp:120
+#, kde-format
+msgctxt "@label"
+msgid "Documents:"
+msgstr "문서:"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:128
+#, kde-format
+msgctxt "@action:button"
+msgid "Add All"
+msgstr "모두 추가"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add all documents that are part of this working set to the currently active "
+"working set"
+msgstr "이 작업 세트에 포함된 모든 문서를 현재 활성 작업 세트에 추가"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:136
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove All"
+msgstr "모두 삭제"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Remove all documents that are part of this working set from the currently "
+"active working set"
+msgstr "현재 활성 작업 세트에서 이 작업 세트에 포함된 문서 삭제"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:170
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to open and activate this document."
+msgstr "이 문서를 열고 활성화하려면 클릭하십시오."
+
+#: shell/workingsets/workingsettooltipwidget.cpp:281
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this file from the current working set"
+msgstr "현재 작업 세트에서 이 파일 삭제"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:286
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add this file to the current working set"
+msgstr "현재 작업 세트에 이 파일 추가"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:315
+#, kde-format
+msgctxt "@action:button"
+msgid "Stash"
+msgstr "임시 저장"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:321
+#, kde-format
+msgctxt "@action:button"
+msgid "Load"
+msgstr "불러오기"
+
+#: sublime/container.cpp:285
+#, kde-format
+msgid "Line: 00000 Col: 000"
+msgstr "행: 00000 열:  000"
+
+#: sublime/container.cpp:319
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show sorted list of opened documents"
+msgstr "연 문서의 정렬된 목록 보기"
+
+#: sublime/container.cpp:331
+#, kde-format
+msgctxt "@info"
+msgid "(Press Ctrl+Tab to switch)"
+msgstr "(Ctrl+Tab을 눌러 전환)"
+
+#: sublime/container.cpp:724
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Filename"
+msgstr "파일 이름 복사"
+
+#: sublime/container.cpp:727
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "닫기"
+
+#: sublime/container.cpp:729
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "다른 모두 닫기"
+
+#: sublime/container.cpp:731
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All"
+msgstr "모두 닫기"
+
+#: sublime/idealbuttonbarwidget.cpp:37
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle '%1' tool view"
+msgstr "'%1' 도구 보기 전환"
+
+#: sublime/idealbuttonbarwidget.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Right click to add new tool views."
+msgstr "오른쪽 단추를 클릭해서 새 도구 보기를 추가하십시오."
+
+#: sublime/idealcontroller.cpp:94
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Toolbar"
+msgstr "%1 도구 모음"
+
+#: sublime/idealdockwidget.cpp:108
+#, kde-format
+msgctxt "@title:menu"
+msgid "Tool View Position"
+msgstr "도구 보기 위치"
+
+#: sublime/idealdockwidget.cpp:112
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Left"
+msgstr "왼쪽"
+
+#: sublime/idealdockwidget.cpp:113
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Bottom"
+msgstr "아래쪽"
+
+#: sublime/idealdockwidget.cpp:114
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Right"
+msgstr "오른쪽"
+
+#: sublime/idealdockwidget.cpp:115
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Detached"
+msgstr "분리됨"
+
+#: sublime/idealdockwidget.cpp:133
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Assign Shortcut..."
+msgstr "단축키 할당..."
+
+#: sublime/idealdockwidget.cpp:134
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Use this shortcut to trigger visibility of the tool view."
+msgstr "이 단축키를 사용하여 도구 보기 표시 여부를 전환합니다."
+
+#: sublime/idealdockwidget.cpp:137
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove Tool View"
+msgstr "도구 보기 삭제"
+
+#: sublime/idealdockwidget.cpp:148
+#, kde-format
+msgctxt "@title:window"
+msgid "Assign Shortcut For '%1' Tool View"
+msgstr "'%1' 도구 보기에 단축키 할당"
+
+#: sublime/mainwindow_p.cpp:79
+#, kde-format
+msgctxt "@option:check"
+msgid "Concentration Mode"
+msgstr "집중 모드"
+
+#: sublime/mainwindow_p.cpp:81
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove most of the controls so you can focus on what matters"
+msgstr "코드 작성에 집중할 수 있도록 대부분의 컨트롤 숨기기"
+
+#: sublime/mainwindow_p.cpp:88
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Left Dock"
+msgstr "왼쪽 독 표시"
+
+#: sublime/mainwindow_p.cpp:95
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Right Dock"
+msgstr "오른쪽 독 표시"
+
+#: sublime/mainwindow_p.cpp:101
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Bottom Dock"
+msgstr "아래쪽 독 표시"
+
+#: sublime/mainwindow_p.cpp:107
+#, kde-format
+msgctxt "@action"
+msgid "Focus Editor"
+msgstr "편집기에 초점 맞추기"
+
+#: sublime/mainwindow_p.cpp:112
+#, kde-format
+msgctxt "@action"
+msgid "Hide/Restore Docks"
+msgstr "독 숨기기/복원"
+
+#: sublime/mainwindow_p.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Next Tool View"
+msgstr "다음 도구 보기"
+
+#: sublime/mainwindow_p.cpp:123
+#, kde-format
+msgctxt "@action"
+msgid "Previous Tool View"
+msgstr "이전 도구 보기"
+
+#: sublime/mainwindow_p.cpp:129
+#, kde-format
+msgctxt "@title:menu"
+msgid "Tool Views"
+msgstr "도구 보기"
+
+#: sublime/mainwindow_p.cpp:139
+#, kde-format
+msgid "Left Button Bar"
+msgstr "왼쪽 단추 표시줄"
+
+#: sublime/mainwindow_p.cpp:142
+#, kde-format
+msgid "Right Button Bar"
+msgstr "오른쪽 단추 표시줄"
+
+#: sublime/mainwindow_p.cpp:145
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "아래쪽 단추 표시줄"
+
+#: sublime/mainwindow_p.cpp:817
+#, kde-format
+msgctxt "@action"
+msgid "Close"
+msgstr "닫기"
+
+#: sublime/mainwindow_p.cpp:818
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close message"
+msgstr "메시지 닫기"
+
+#: util/duchainify/main.cpp:255
+#, kde-format
+msgid "duchainify"
+msgstr "duchainify"
+
+#: util/duchainify/main.cpp:256
+#, kde-format
+msgid "DUChain builder application"
+msgstr "DUChain 빌더 프로그램"
+
+#: util/duchainify/main.cpp:257
+#, kde-format
+msgid "(c) 2009 David Nolden"
+msgstr "(c) 2009 David Nolden"
+
+#: util/duchainify/main.cpp:263
+#, kde-format
+msgid "file or directory"
+msgstr "파일이나 디렉터리"
+
+#: util/duchainify/main.cpp:266
+#, kde-format
+msgid "Show warnings"
+msgstr "경고 표시"
+
+#: util/duchainify/main.cpp:268
+#, kde-format
+msgid "Show warnings and debug output"
+msgstr "경고와 디버그 출력 표시"
+
+#: util/duchainify/main.cpp:270
+#, kde-format
+msgid "Enforce an update of the top-contexts corresponding to the given files"
+msgstr "지정한 파일의 최상위 콘텍스트 강제 업데이트"
+
+#: util/duchainify/main.cpp:274
+#, kde-format
+msgid ""
+"Enforce an update of the top-contexts corresponding to the given files and "
+"all included files"
+msgstr "지정한 파일과 모든 포함된 파일의 최상위 콘텍스트 강제 업데이트"
+
+#: util/duchainify/main.cpp:276
+#, kde-format
+msgid "Number of threads to use"
+msgstr "사용할 스레드 개수"
+
+#: util/duchainify/main.cpp:279
+#, kde-format
+msgid ""
+"Features to build. Options: empty, simplified-visible-declarations, visible-"
+"declarations (default), all-declarations, all-declarations-and-uses, all-"
+"declarations-and-uses-and-AST"
+msgstr ""
+"빌드할 기능입니다. 옵션: empty, simplified-visible-declarations, visible-"
+"declarations(기본값), all-declarations, all-declarations-and-uses, all-"
+"declarations-and-uses-and-AST"
+
+#: util/duchainify/main.cpp:283
+#, kde-format
+msgid "Print complete Definition-Use Chain on successful parse"
+msgstr "해석이 성공했을 때 완전한 정의-사용 체인 출력"
+
+#: util/duchainify/main.cpp:285
+#, kde-format
+msgid "Print complete DUChain Definitions repository on successful parse"
+msgstr "해석이 성공했을 때 완전한 DUChain 정의 저장소 출력"
+
+#: util/duchainify/main.cpp:288
+#, kde-format
+msgid ""
+"Print complete DUChain PersistentSymbolTable repository on successful parse"
+msgstr "해석이 성공했을 때 완전한 DUChain PersistentSymbolTable 저장소 출력"
+
+#: util/duchainify/main.cpp:291
+#, kde-format
+msgid "Number defining the maximum depth where declaration details are printed"
+msgstr "선언의 자세한 정보를 출력할 때 최대 깊이 정의"
+
+#: util/duchainify/main.cpp:294
+#, kde-format
+msgid "Dump DUChain graph (in .dot format)"
+msgstr "DUChain 그래프 저장(.dot 형식으로)"
+
+#: util/duchainify/main.cpp:296
+#, kde-format
+msgid "Print problems encountered during parsing"
+msgstr "구문 분석 중 발생한 문제 출력"
+
+#: util/duchainify/main.cpp:298
+#, kde-format
+msgid "Recursively dump errors from imported contexts."
+msgstr "가져온 콘텍스트에서 오류를 재귀적으로 출력합니다."
+
+#: util/environmentselectionmodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Profile"
+msgstr "프로필"
+
+#: util/environmentselectionmodel.cpp:51
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default profile (currently: %1)"
+msgstr "기본 프로필 사용(현재: %1)"
+
+#: util/environmentselectionmodel.cpp:55
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (does not exist)"
+msgstr "%1(없음)"
+
+#: util/jobstatus.cpp:30
+#, kde-format
+msgid "Task aborted"
+msgstr "작업이 중단됨"
+
+#: util/projecttestjob.cpp:81
+#, kde-format
+msgid "Run all tests in %1"
+msgstr "%1에서 모든 테스트 실행"
+
+#: util/shellutils.cpp:80
+#, kde-format
+msgid ""
+"You don't have write permissions for the following files; add write "
+"permissions for owner before saving?"
+msgstr ""
+"다음 파일에 쓰기 권한이 없습니다. 저장하기 전에 소유자에게 쓰기 권한을 추가하"
+"시겠습니까?"
+
+#: util/shellutils.cpp:82
+#, kde-format
+msgctxt "@title:window"
+msgid "Some Files are Write-Protected"
+msgstr "일부 파일이 쓰기 방지됨"
+
+#: util/shellutils.cpp:83
+#, kde-format
+msgctxt "@action:button"
+msgid "Set Write Permissions"
+msgstr "쓰기 권한 설정"
+
+#: util/shellutils.cpp:84
+#, kde-format
+msgctxt "@action:button"
+msgid "Ignore"
+msgstr "무시"
+
+#: util/shellutils.cpp:97
+#, kde-format
+msgid "Failed adding write permissions for some files."
+msgstr "일부 파일에 쓰기 권한을 추가할 수 없습니다."
+
+#: util/shellutils.cpp:98
+#, kde-format
+msgctxt "@title:window"
+msgid "Failed Setting Permissions"
+msgstr "권한 설정 실패"
+
+#: vcs/dvcs/dvcsjob.cpp:173
+#, kde-format
+msgid "Working Directory does not exist: %1"
+msgstr "작업 디렉터리가 없음: %1"
+
+#: vcs/dvcs/dvcsjob.cpp:182
+#, kde-format
+msgid "Working Directory is not absolute: %1"
+msgstr "작업 디렉터리가 절대 경로가 아님: %1"
+
+#: vcs/dvcs/dvcsjob.cpp:232
+#, kde-format
+msgid ""
+"Process '%1' exited with status %2\n"
+"%3"
+msgstr ""
+"'%1' 프로세스가 상태 %2(으)로 종료됨\n"
+"%3"
+
+#: vcs/dvcs/dvcsjob.cpp:263
+#, kde-format
+msgid "Command finished with error %1."
+msgstr "명령이 종료되었고 오류 코드 %1을(를) 반환했습니다."
+
+#: vcs/dvcs/dvcsjob.cpp:277
+#, kde-format
+msgid "Command exited with value %1."
+msgstr "명령이 종료되었고 값 %1을(를) 반환했습니다."
+
+#: vcs/dvcs/dvcsplugin.cpp:95
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Branches..."
+msgstr "브랜치..."
+
+#: vcs/dvcs/ui/branchmanager.cpp:37
+#, kde-format
+msgctxt "@title:window"
+msgid "Branch Manager"
+msgstr "브랜치 관리자"
+
+#: vcs/dvcs/ui/branchmanager.cpp:107
+#, kde-format
+msgid ""
+"You must select a base branch from the list before creating a new branch."
+msgstr "새 브랜치를 만들기 전에 목록에서 기반 브랜치를 선택해야 합니다."
+
+#: vcs/dvcs/ui/branchmanager.cpp:112
+#, kde-format
+msgctxt "@title:window"
+msgid "New Branch"
+msgstr "새 브랜치"
+
+#: vcs/dvcs/ui/branchmanager.cpp:112
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name of the new branch:"
+msgstr "새 브랜치 이름:"
+
+#: vcs/dvcs/ui/branchmanager.cpp:119
+#, kde-format
+msgid ""
+"Branch \"%1\" already exists.\n"
+"Please, choose another name."
+msgstr ""
+"\"%1\" 브랜치가 이미 존재합니다.\n"
+"다른 이름을 지정하십시오."
+
+#: vcs/dvcs/ui/branchmanager.cpp:133
+#, kde-format
+msgid ""
+"Currently at the branch \"%1\".\n"
+"To delete it, please change to another branch."
+msgstr ""
+"현재 \"%1\" 브랜치에 있습니다.\n"
+"브랜치를 삭제하려면 다른 브랜치로 변경하십시오."
+
+#: vcs/dvcs/ui/branchmanager.cpp:140
+#, kde-format
+msgid "Are you sure you want to irreversibly delete the branch '%1'?"
+msgstr "\"%1\" 브랜치를 삭제하시겠습니까?"
+
+#: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
+#, kde-format
+msgid "Already on branch \"%1\"\n"
+msgstr "\"%1\" 브랜치에 이미 있음\n"
+
+#: vcs/dvcs/ui/branchmanager.cpp:182
+#, kde-format
+msgid ""
+"Branch \"%1\" doesn't exists.\n"
+"Please, choose another name."
+msgstr ""
+"브랜치 \"%1\"이(가) 없습니다.\n"
+"다른 이름을 지정하십시오."
+
+#: vcs/dvcs/ui/branchmanager.cpp:191
+#, kde-format
+msgid "You must select a branch to merge into current one from the list."
+msgstr "현재 브랜치로 병합할 브랜치를 목록에서 선택해야 합니다."
+
+#: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
+#, kde-format
+msgid "Could not create a patch for the current version."
+msgstr "현재 버전에 대한 패치를 생성할 수 없습니다."
+
+#: vcs/dvcs/ui/branchmanager.cpp:264
+#, kde-format
+msgctxt "@titlew:indow"
+msgid "Unable to Retrieve Diff"
+msgstr "차이점을 가져올 수 없음"
+
+#: vcs/dvcs/ui/branchmanager.cpp:271
+#, kde-format
+msgid "There are no committed differences."
+msgstr "커밋된 차이점이 없습니다."
+
+#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:296
+#, kde-format
+msgctxt "@title:window"
+msgid "VCS Support"
+msgstr "버전 관리 시스템 지원"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
+#: vcs/dvcs/ui/branchmanager.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Creates new branch based on the selected branch"
+msgstr "현재 선택한 브랜치에서 새 브랜치 만들기"
+
+#. i18n: ectx: property (text), widget (QPushButton, newButton)
+#: vcs/dvcs/ui/branchmanager.ui:34
+#, kde-format
+msgctxt "@action:button new branch"
+msgid "New"
+msgstr "새로 만들기"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
+#: vcs/dvcs/ui/branchmanager.ui:41
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The same as git branch -D"
+msgstr "git branch -D와 동일함"
+
+#. i18n: ectx: property (text), widget (QPushButton, renameButton)
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#, kde-format
+msgctxt "@action:button"
+msgid "Rename"
+msgstr "이름 바꾸기"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, diffButton)
+#: vcs/dvcs/ui/branchmanager.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Show changes between the current branch (or staging area, if not empty) "
+"and the last commit on the selected branch.</p>"
+msgstr ""
+"<p>현재 브랜치(비어 있지 않으면 작업 영역)와 선택한 브랜치의 마지막 커밋 사이"
+"의 변경 사항을 표시합니다.</p>"
+
+#. i18n: ectx: property (text), widget (QPushButton, diffButton)
+#: vcs/dvcs/ui/branchmanager.ui:80
+#, kde-format
+msgctxt "@action:button"
+msgid "Compare to Branch"
+msgstr "브랜치와 비교"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
+#: vcs/dvcs/ui/branchmanager.ui:103
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Checkout to the selected branch"
+msgstr "선택한 브랜치 체크아웃"
+
+#. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
+#: vcs/dvcs/ui/branchmanager.ui:106
+#, kde-format
+msgctxt "@action:button checkout a version"
+msgid "Checkout"
+msgstr "체크아웃"
+
+#. i18n: ectx: property (text), widget (QPushButton, mergeButton)
+#: vcs/dvcs/ui/branchmanager.ui:116
+#, kde-format
+msgctxt "@action:button merge a branch"
+msgid "Merge"
+msgstr "병합"
+
+#. i18n: ectx: property (text), widget (QLabel, labelUrl)
+#: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "원본 디렉터리:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
+#: vcs/widgets/vcsdiffpatchsources.cpp:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "커밋 메시지:"
+
+#: vcs/models/brancheslistmodel.cpp:63
+#, kde-format
+msgid "Branch \"%1\" already exists."
+msgstr "\"%1\" 브랜치가 이미 존재합니다."
+
+#: vcs/models/brancheslistmodel.cpp:68
+#, kde-format
+msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
+msgstr "\"%1\"의 이름을 \"%2\"(으)로 바꾸시겠습니까?"
+
+#: vcs/models/vcsannotationmodel.cpp:116
+#, kde-format
+msgid "Author:"
+msgstr "작성자:"
+
+#: vcs/models/vcsannotationmodel.cpp:117
+#, kde-format
+msgid "Date:"
+msgstr "날짜:"
+
+#: vcs/models/vcsannotationmodel.cpp:118
+#, kde-format
+msgid "Commit message:"
+msgstr "커밋 메시지:"
+
+#: vcs/models/vcseventmodel.cpp:88
+#, kde-format
+msgctxt "@title:column"
+msgid "Revision"
+msgstr "리비전"
+
+#: vcs/models/vcseventmodel.cpp:90
+#, kde-format
+msgctxt "@title:column"
+msgid "Message"
+msgstr "메시지"
+
+#: vcs/models/vcseventmodel.cpp:92
+#, kde-format
+msgctxt "@title:column"
+msgid "Author"
+msgstr "작성자"
+
+#: vcs/models/vcseventmodel.cpp:94
+#, kde-format
+msgctxt "@title:column"
+msgid "Date"
+msgstr "날짜"
+
+#: vcs/models/vcsfilechangesmodel.cpp:32
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem"
+msgid "Added"
+msgstr "추가됨"
+
+#: vcs/models/vcsfilechangesmodel.cpp:34
+#, kde-format
+msgctxt "@item file was deleted from versioncontrolsystem"
+msgid "Deleted"
+msgstr "삭제됨"
+
+#: vcs/models/vcsfilechangesmodel.cpp:36
+#, kde-format
+msgctxt "@item file is conflicting (versioncontrolsystem)"
+msgid "Has Conflicts"
+msgstr "충돌 있음"
+
+#: vcs/models/vcsfilechangesmodel.cpp:38
+#, kde-format
+msgctxt "@item version controlled file was modified"
+msgid "Modified"
+msgstr "수정됨"
+
+#: vcs/models/vcsfilechangesmodel.cpp:40
+#, kde-format
+msgctxt "@item file is up to date in versioncontrolsystem"
+msgid "Up To Date"
+msgstr "최신 상태"
+
+#: vcs/models/vcsfilechangesmodel.cpp:43
+#, kde-format
+msgctxt "@item file is not known to versioncontrolsystem"
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: vcs/models/vcsfilechangesmodel.cpp:45
+#, kde-format
+msgctxt "@item Unknown VCS file status, probably a backend error"
+msgid "?"
+msgstr "?"
+
+#: vcs/models/vcsfilechangesmodel.cpp:131
+#, kde-format
+msgctxt "@title:column"
+msgid "Filename"
+msgstr "파일 이름"
+
+#: vcs/models/vcsfilechangesmodel.cpp:132
+#, kde-format
+msgctxt "@title:column"
+msgid "Status"
+msgstr "상태"
+
+#: vcs/models/vcsitemeventmodel.cpp:46
+#, kde-format
+msgctxt "@item"
+msgid "Added"
+msgstr "추가됨"
+
+#: vcs/models/vcsitemeventmodel.cpp:48
+#, kde-format
+msgctxt "@item"
+msgid "Deleted"
+msgstr "삭제됨"
+
+#: vcs/models/vcsitemeventmodel.cpp:50
+#, kde-format
+msgctxt "@item"
+msgid "Modified"
+msgstr "수정됨"
+
+#: vcs/models/vcsitemeventmodel.cpp:52
+#, kde-format
+msgctxt "@item"
+msgid "Copied"
+msgstr "복사됨"
+
+#: vcs/models/vcsitemeventmodel.cpp:54
+#, kde-format
+msgctxt "@item"
+msgid "Replaced"
+msgstr "대체됨"
+
+#: vcs/models/vcsitemeventmodel.cpp:61
+#, kde-format
+msgctxt "separates an action list"
+msgid ", "
+msgstr ", "
+
+#: vcs/models/vcsitemeventmodel.cpp:85
+#, kde-format
+msgctxt "@title:column"
+msgid "Location"
+msgstr "위치"
+
+#: vcs/models/vcsitemeventmodel.cpp:86
+#, kde-format
+msgctxt "@title:column"
+msgid "Actions"
+msgstr "작업"
+
+#: vcs/models/vcsitemeventmodel.cpp:87
+#, kde-format
+msgctxt "@title:column"
+msgid "Source Location"
+msgstr "소스 위치"
+
+#: vcs/models/vcsitemeventmodel.cpp:88
+#, kde-format
+msgctxt "@title:column"
+msgid "Source Revision"
+msgstr "소스 리비전"
+
+#: vcs/vcspluginhelper.cpp:87
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Commit..."
+msgstr "커밋..."
+
+#: vcs/vcspluginhelper.cpp:88
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "업데이트"
+
+#: vcs/vcspluginhelper.cpp:89
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add"
+msgstr "추가"
+
+#: vcs/vcspluginhelper.cpp:90
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Differences..."
+msgstr "차이점 표시..."
+
+#: vcs/vcspluginhelper.cpp:91
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Revert"
+msgstr "되돌리기"
+
+#: vcs/vcspluginhelper.cpp:92 vcs/vcspluginhelper.cpp:487
+#, kde-format
+msgctxt "@action:inmenu revision history"
+msgid "History..."
+msgstr "과거 기록..."
+
+#: vcs/vcspluginhelper.cpp:93
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Annotation..."
+msgstr "작성자 보기..."
+
+#: vcs/vcspluginhelper.cpp:94
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Diff..."
+msgstr "차이점 표시..."
+
+#: vcs/vcspluginhelper.cpp:95
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Diff (All Files)..."
+msgstr "차이점 보기(모든 파일)..."
+
+#: vcs/vcspluginhelper.cpp:96
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Push"
+msgstr "푸시"
+
+#: vcs/vcspluginhelper.cpp:97
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Pull"
+msgstr "풀"
+
+#: vcs/vcspluginhelper.cpp:295
+#, kde-format
+msgid "There are no differences."
+msgstr "차이점이 없습니다."
+
+#: vcs/vcspluginhelper.cpp:302
+#, kde-format
+msgctxt "@title:window"
+msgid "Unable to Get Differences"
+msgstr "차이점을 가져올 수 없음"
+
+#: vcs/vcspluginhelper.cpp:370
+#, kde-format
+msgctxt "@title:window %1: path or URL, %2: name of a version control system"
+msgid "%2 History (%1)"
+msgstr "%2 과거 기록(%1)"
+
+#: vcs/vcspluginhelper.cpp:443
+#, kde-format
+msgid ""
+"Cannot display annotations, missing interface KTextEditor::"
+"AnnotationInterface for the editor."
+msgstr ""
+"작성자를 표시할 수 없습니다. 편집기에 KTextEditor::AnnotationInterface 인터페"
+"이스가 없습니다."
+
+#: vcs/vcspluginhelper.cpp:447
+#, kde-format
+msgid ""
+"Cannot execute annotate action because the document was not found, or was "
+"not a text document:\n"
+"%1"
+msgstr ""
+"문서를 찾을 수 없거나 텍스트 문서가 아니기 때문에 작성자 표시 작업을 실행할 "
+"수 없습니다:\n"
+"%1"
+
+#: vcs/vcspluginhelper.cpp:482 vcs/widgets/vcseventwidget.cpp:46
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Revision Id"
+msgstr "리비전 ID 복사"
+
+#: vcs/widgets/standardvcslocationwidget.cpp:23
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter the repository URL..."
+msgstr "저장소 URL 입력..."
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:60
+#, kde-format
+msgctxt "@item age"
+msgid "%1 year"
+msgid_plural "%1 years"
+msgstr[0] "%1년"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:70
+#, kde-format
+msgctxt "@item age"
+msgid "%1 month"
+msgid_plural "%1 months"
+msgstr[0] "%1개월"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:74
+#, kde-format
+msgctxt "@item age"
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "%1일"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:76
+#, kde-format
+msgctxt "@item age"
+msgid "Today"
+msgstr "오늘"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:290
+#, kde-format
+msgctxt "By: commit author"
+msgid "By: %1"
+msgstr "작성자: %1"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
+#: vcs/widgets/vcscommitdialog.ui:17
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Files to Commit"
+msgstr "커밋할 파일 선택"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: vcs/widgets/vcscommitdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Commit files:"
+msgstr "파일 커밋:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
+#: vcs/widgets/vcscommitdialog.ui:33
+#, kde-format
+msgctxt "@option:check"
+msgid "Recursive"
+msgstr "재귀적"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:53
+#, kde-format
+msgid "Old Messages"
+msgstr "이전 메시지"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:109
+#, kde-format
+msgid "For more detailed information please see the Version Control tool view."
+msgstr "자세한 정보는 버전 관리 도구 보기를 참조하십시오."
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:111
+#, kde-format
+msgid "Unable to commit"
+msgstr "커밋할 수 없음"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Commit Unsuccessful"
+msgstr "커밋 실패"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:224
+#, kde-format
+msgctxt "@action:button To make a commit"
+msgid "Commit"
+msgstr "커밋"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:257
+#, kde-format
+msgid ""
+"<qt>Files will be committed:\n"
+"<ul>%1</ul>\n"
+"With message:\n"
+" <pre>%2</pre></qt>"
+msgstr ""
+"<qt>다음 파일을 커밋합니다:\n"
+"<ul>%1</ul>\n"
+"커밋 메시지:\n"
+"<pre>%2</pre></qt>"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:259
+#, kde-format
+msgctxt "@title:window"
+msgid "About to Commit to Repository"
+msgstr "저장소에 커밋하려고 함"
+
+#: vcs/widgets/vcsdiffwidget.cpp:86
+#, kde-format
+msgctxt "@label"
+msgid "Difference between revision %1 and %2:"
+msgstr "리비전 %1와(과) %2의 차이점:"
+
+#. i18n: ectx: property (text), widget (QLabel, revLabel)
+#: vcs/widgets/vcsdiffwidget.ui:28
+#, kde-format
+msgctxt "@label"
+msgid "Difference between revisions:"
+msgstr "리비전간 차이점:"
+
+#: vcs/widgets/vcseventwidget.cpp:78
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Diff to Previous Revision"
+msgstr "이전 리비전과 차이점"
+
+#: vcs/widgets/vcseventwidget.cpp:81
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Diff between Revisions"
+msgstr "리비전간 차이점"
+
+#: vcs/widgets/vcseventwidget.cpp:138
+#, kde-format
+msgctxt "@title:window"
+msgid "Difference To Previous"
+msgstr "이전과 차이점"
+
+#: vcs/widgets/vcseventwidget.cpp:167
+#, kde-format
+msgctxt "@title:window"
+msgid "Difference between Revisions"
+msgstr "리비전간 차이점"
+
+#~ msgctxt "@action:button"
+#~ msgid "Share Templates"
+#~ msgstr "템플릿 공유"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Reformat source using AStyle"
+#~ msgstr "AStyle을 사용하여 소스 코드 형식 재지정"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid "Source reformatting functionality using <b>astyle</b> library."
+#~ msgstr ""
+#~ "<b>astyle</b> 라이브러리를 사용하는 소스 코드 형식 재지정 기능입니다."
+
+#~ msgctxt "@info:shell"
+#~ msgid "running %1 instance (PID: %2) is apparently hung"
+#~ msgstr "실행 중인 %1 인스턴스(PID: %2)의 응답이 없음"
+
+#~ msgid "Current launch Configuration"
+#~ msgstr "현재 시작 설정"
+
+#~ msgid "Open Launch Configuration Dialog"
+#~ msgstr "시작 설정 대화 상자 열기"
+
+#~ msgid "Execute current launch"
+#~ msgstr "현재 시작 실행"
+
+#~ msgid "Debug current launch"
+#~ msgstr "현재 시작 디버그"
+
+#~ msgid "Search..."
+#~ msgstr "찾기..."
+
+#~ msgid "Could not find any plugins"
+#~ msgstr "플러그인을 찾을 수 없음"
+
+#~ msgid ""
+#~ "Executes the target or the program specified in currently active launch "
+#~ "configuration inside a Debugger."
+#~ msgstr ""
+#~ "현재 활성화된 시작 설정에 지정한 대상 또는 프로그램을 디버거에서 실행합니"
+#~ "다."
+
+#~ msgctxt "Name of the Launch Configurations"
+#~ msgid "Name"
+#~ msgstr "이름"
+
+#~ msgctxt ""
+#~ "The type of the Launch Configurations (i.e. Python Application, C++ "
+#~ "Application)"
+#~ msgid "Type"
+#~ msgstr "형식"
+
+#~ msgctxt "Shorter Text for 'New File' shown in the toolbar"
+#~ msgid "New"
+#~ msgstr "새로 만들기"
+
+#~ msgid "Close Document"
+#~ msgstr "문서 닫기"
+
+#~ msgctxt "Short text for 'Execute launch' used in the toolbar"
+#~ msgid "Execute"
+#~ msgstr "실행"
+
+#~ msgctxt "Short text for 'Debug launch' used in the toolbar"
+#~ msgid "Debug"
+#~ msgstr "디버그"
+
+#~ msgctxt "Short text for 'Stop' used in the toolbar"
+#~ msgid "Stop"
+#~ msgstr "정지"
+
+#~ msgid "Search"
+#~ msgstr "찾기"
+
+#~ msgid "Reformat files?"
+#~ msgstr "파일 형식을 재지정하시겠습니까?"
+
+#~ msgid "Style being deleted"
+#~ msgstr "스타일 삭제"
+
+#~ msgctxt "file was added to versioncontrolsystem"
+#~ msgid "Added"
+#~ msgstr "추가됨"
+
+#~ msgctxt "file was deleted from versioncontrolsystem"
+#~ msgid "Deleted"
+#~ msgstr "삭제됨"
+
+#~ msgctxt "version controlled file was modified"
+#~ msgid "Modified"
+#~ msgstr "수정됨"
+
+#~ msgctxt "file is not known to versioncontrolsystem"
+#~ msgid "Unknown"
+#~ msgstr "알 수 없음"
+
+#~ msgid "Commit Message:"
+#~ msgstr "커밋 메시지:"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Hamish Rodda"
+#~ msgstr "Hamish Rodda"
+
+#~ msgid "SnippetPart, debugger and usability patches"
+#~ msgstr "인용문 부분, 디버거와 편리한 패치"
+
+#~ msgid "Milian Wolff"
+#~ msgstr "Milian Wolff"
+
+#~ msgid "Import"
+#~ msgstr "가져오기"
+
+#~ msgid "Find"
+#~ msgstr "찾기"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Next"
+#~ msgstr "다음"
+
+#~ msgid "Previous"
+#~ msgstr "이전"
+
+#~ msgid "Preview"
+#~ msgstr "미리 보기"
+
+#~ msgid "Project %1"
+#~ msgstr "프로젝트 %1"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "실행"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Session"
+#~ msgstr "세션"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "편집"
+
+#~ msgid "Version Control"
+#~ msgstr "버전 제어"
+
+#~ msgid "Add Group"
+#~ msgstr "그룹 추가"
+
+#, fuzzy
+#~| msgid "Clone"
+#~ msgid "Clone Group"
+#~ msgstr "복제"
+
+#~ msgid "Solve: %1"
+#~ msgstr "해결: %1"
+
+#~ msgid "Solve"
+#~ msgstr "해 계산"
+
+#~ msgid "Hide"
+#~ msgstr "숨기기"
+
+#, fuzzy
+#~| msgid "Project %1"
+#~ msgid "All Project Files (%1)"
+#~ msgstr "프로젝트 %1"
+
+#~ msgid "Configure Sessions..."
+#~ msgstr "세션 설정..."
+
+#~ msgid "Clone"
+#~ msgstr "복제"
+
+#~ msgid "Save &Selected"
+#~ msgstr "선택 저장(&S)"
+
+#~ msgid "(c) 2009"
+#~ msgstr "(c) 2009"
+
+#~ msgid "&Username:"
+#~ msgstr "사용자 이름(&U):"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid "Configure various aspects of this editor."
+#~ msgstr "이 편집기의 다양한 면을 설정합니다."
+
+#~ msgid ""
+#~ "A KDE text-editor component could not be found.\n"
+#~ "Please check your KDE installation."
+#~ msgstr ""
+#~ "KDE 텍스트 편집기를 찾을 수 없습니다.\n"
+#~ "설치 상태를 확인하십시오."
+
+#~ msgid "User Interface Settings"
+#~ msgstr "사용자 인터페이스 설정"

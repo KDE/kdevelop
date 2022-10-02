@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-24 19:32+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: vcschangesview.cpp:84
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Refresh"
+msgstr "განახლება"
+
+#: vcschangesviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Changes"
+msgstr "ცვლილებები პროექტში"
+
+#: vcschangesviewplugin.cpp:65
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "მინდინარე პროექტის დოკუმენტის პოვნა"
+
+#: vcschangesviewplugin.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locate the current document and select it"
+msgstr "მიმდინარე პროექტის დოკუმენტის პოვნა და მონიშვნა"
+
+#: vcschangesviewplugin.cpp:70
+#, kde-format
+msgctxt "@action"
+msgid "Reload View"
+msgstr "ხედის გადატვირთვა"
+
+#: vcschangesviewplugin.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Refresh the view for all projects, in case anything changed"
+msgstr ""
+"ყოველი შემთხვევისთვის, ცვლილებების გადასამოწმებლად, პროექტების ხედების "
+"განახლება"

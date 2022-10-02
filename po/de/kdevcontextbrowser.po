@@ -1,0 +1,178 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2013, 2017, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020.
+# Gerhard Stengel <gstengel@gmx.net>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2020-09-28 05:57+0200\n"
+"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: contextbrowser.cpp:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Zurück im Kontextverlauf"
+
+#: contextbrowser.cpp:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Vorwärts im Kontextverlauf"
+
+#: contextbrowser.cpp:192
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Funktions-Kurzinfo"
+
+#: contextbrowser.cpp:193
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Funktions-Kurzinfo"
+
+#: contextbrowser.cpp:194
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr ""
+"In den Funktions-Kurzinformationen des aktiven Dokuments navigieren, zum "
+"Browsen hineinklicken"
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Quelltext-&Browse-Modus"
+
+#: contextbrowser.cpp:241
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Zuvor betrachteter Kontext"
+
+#: contextbrowser.cpp:247
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Nächster betrachteter Kontext"
+
+#: contextbrowser.cpp:253
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Vorheriges Vorkommen"
+
+#: contextbrowser.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Nächstes Vorkommen"
+
+#: contextbrowser.cpp:265
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Kontext-Browser"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Quelltext-Browser"
+
+#: contextbrowser.cpp:312
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Vorkommen suchen"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(geändert)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Deklarationenmenü anzeigen"
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Deklarationenmenü"
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Aktuelle Ansicht sperren"
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Aktuelle Ansicht sperren"
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Aktuelle Ansicht entsperren"
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Aktuelle Ansicht entsperren"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Quelltext-Browser-Werkzeugleiste"
+
+#~ msgid "Outline..."
+#~ msgstr "Funktions-Kurzinfo ..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigation"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Quelltext-Browse-Modus aktivieren/deaktivieren"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Ist diese Einstellung markiert, können Sie durch die Quelltexte "
+#~ "navigieren, indem Sie in den Editor klicken."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Dieses Modul zeigt Informationen über den aktuellen Sprachkontext an und "
+#~ "hebt die wichtigen Deklarationen und Vorkommen hervor."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Zeigt Informationen über den aktuellen Kontext"

@@ -1,0 +1,57 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Phuwanat Sakornsakolpat <narachai@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2010-05-27 22:51+0700\n"
+"Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr ""
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr ""
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr ""
+
+#~ msgid "Konsole"
+#~ msgstr "คอนโซล-K"
+
+#, fuzzy
+#~| msgid "Konsole"
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "คอนโซล-K"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ภูวณัฏฐ์ สาครสกลพัฒน์"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "narachai@gmail.com"
+
+#~ msgid "Embedded Terminal support"
+#~ msgstr "สนับสนุนการฝังตัวเทอร์มินอล"
+
+#~ msgid "<b>Konsole</b><p>This window contains an embedded console.</p>"
+#~ msgstr "<b>Konsole</b><p>หน้าต่างนี้ฝังคอนโซลไว้</p>"

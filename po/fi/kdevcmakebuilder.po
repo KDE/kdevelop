@@ -1,0 +1,166 @@
+# Finnish messages for kdevcmakebuilder.
+# Copyright © 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevcmakebuilder package.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-01-01 13:56+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:20:28+0000\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: cmakebuilder.cpp:105
+#, fuzzy, kde-format
+#| msgid "Couldn't find the make builder. Check your installation"
+msgid "Could not find the make builder. Check your installation"
+msgstr "make-käännintä ei löytynyt. Tarkista asennuksesi"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, fuzzy, kde-format
+#| msgid "Couldn't find a builder for %1"
+msgid "Could not find a builder for %1"
+msgstr "Käännintä projektille %1 ei löytynyt"
+
+#: cmakebuilder.cpp:195
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot install"
+msgid "No build directory configured, cannot install"
+msgstr "Mitään käännöshakemistoa ei ole asetuksissa, ei voida asentaa"
+
+#: cmakebuilder.cpp:205
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot configure"
+msgid "No build directory configured, cannot configure"
+msgstr "Mitään käännöshakemistoa ei ole asetuksissa, ei voida tehdä asetuksia"
+
+#: cmakebuilderpreferences.cpp:40
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, fuzzy, kde-format
+#| msgid "Configure global CMake settings"
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Yleiset CMake-asetukset"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, fuzzy, kde-format
+#| msgid "Default CMake executable:"
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "CMake-oletusohjelmatiedosto:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, fuzzy, kde-format
+#| msgid "Default generator:"
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Oletusgeneraattori:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr ""
+
+#: cmakejob.cpp:63
+#, fuzzy, kde-format
+#| msgid "Couldn't configure the build directory."
+msgid "Failed to create build directory %1."
+msgstr "Käännöshakemistoa ei voitu asettaa."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot clear builddir"
+msgid "No build directory configured, cannot clear the build directory"
+msgstr ""
+"Mitään käännöshakemistoa ei ole asetuksissa, ei voida tyhjentää "
+"käännöshakemistoa builddir"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Käännöshakemistoa ei voida tyhjentää: se on väärä"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Tyhjentäminen onnistui **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Tyhjentäminen epäonnistui: %1 **"
+
+#~ msgid "Aborting"
+#~ msgstr "Keskeytetään"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Keskeytetään asetusten tekeminen"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "Mitään käännöshakemistoa ei ole asetuksissa, ei voida kääntää"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Mitään käännöshakemistoa ei ole asetuksissa, ei voida puhdistaa"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Keskeytetään puhdistaminen"
+
+#~ msgid "Aborting install"
+#~ msgstr "Keskeytetään asennus"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Jorma Karvonen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "karvonen.jorma@gmail.com"
+
+#~ msgid "CMake Builder"
+#~ msgstr "CMake-käännin"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Tuki CMake-projektien kääntämiselle"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "Käännöshakemiston tyhjentäminen ei ole mahdollista"
+
+#~ msgid "Job failed"
+#~ msgstr "Työ epäonnistui"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake-binääri:"

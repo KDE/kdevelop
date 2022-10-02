@@ -1,0 +1,626 @@
+# Translation of kdevsubversion.po to Brazilian Portuguese
+# Copyright (C) 2008-2014 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2017, 2020.
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsubversion\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-29 11:58-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: kdevsvnplugin.cpp:334
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "Copiar..."
+
+#: kdevsvnplugin.cpp:341
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "Mover..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Selecione por favor apenas um item para esta operação"
+
+#: kdevsvnplugin.cpp:370
+#, kde-format
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "Arquivo/pasta de destino"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "A cópia só funciona sobre os arquivos locais"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "Arquivo/pasta de destino"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "A mudança de posição só funciona sobre os arquivos/pastas locais"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Adição do Subversion"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "Não existem informações suficientes para adicionar um arquivo"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Anotação do Subversion"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "Não existem informações suficientes para acusar a localização"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Extração do Subversion"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "Não existem informações suficientes para receber o módulo"
+
+#: svncommitjob.cpp:109
+#, kde-format
+msgid "Subversion Commit"
+msgstr "Envio do Subversion"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "Enviando..."
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "Não existem informações suficientes para executar o envio de dados"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Cópia do Subversion"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "Não existem informações suficientes para copiar o arquivo"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Diferenças do Subversion"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "Não existem informações suficientes para executar as diferenças"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Importação do Subversion"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "Não existem informações suficientes para a importação"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Informação do Subversion"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr ""
+"Não existem informações suficientes para executar a tarefa de informações"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "Adicionado %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "Excluído %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "Excluído %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "Adicionado %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "Revisão %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "Atualizando os itens externos: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "Enviando %1"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "Adicionando o %1 com o tipo MIME %2."
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "Adicionando %1."
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "Excluindo %1."
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "Substituindo %1."
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "Transferindo os dados dos arquivos "
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "Terminou-se a anotação para a versão %1 no local %2"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "Reverteu-se a cópia de trabalho %1"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "Não foi possível reverter a cópia de trabalho %1"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "Copiado %1"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "O certificado ainda não é válido."
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "O certificado expirou."
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr ""
+"O CN (nome da máquina) do certificado não corresponde à máquina remota."
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "A autoridade de certificação é desconhecida."
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "Ocorreu um erro desconhecido."
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "Insira o Usuário para: %1"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "Concluído"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"Erro ao executar a tarefa:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Registro do Subversion"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr ""
+"Não existem informações suficientes para mostrar o registro da localização"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Movimentação do Subversion"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "Não existem informações suficientes para mover o arquivo"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Remoção do Subversion"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "Não existem informações suficientes para executar a tarefa de remoção"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Reversão do Subversion"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "Não existem informações suficientes para executar a reversão"
+
+#: svnssldialog.cpp:28
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "Certificado SSL do servidor"
+
+#: svnssldialog.cpp:30
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "Confiar permanentemente"
+
+#: svnssldialog.cpp:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "Confiar temporariamente"
+
+#: svnssldialog.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "Certificado SSL do servidor: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Estado do Subversion"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "Não existem informações suficientes para executar a tarefa de estado"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Atualização do Subversion"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "Não existem informações suficientes para executar uma atualização"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Pasta de origem:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "Repositório:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "Localização do repositório"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "Escolha o repositório para onde será importada a pasta de origem"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Mensagem de envio:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"Ocorreram erros ao validar o certificado do servidor.\n"
+"Você deseja confiar neste certificado?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "Razões para a falha da validação"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "Informações do certificado"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "Máquina:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "um-servidor"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "Emissor:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "um-emissor"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "Válido de:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "válido-de"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "Válido até:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "válido-até"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "Impressão digital:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "impressão digital"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "Certificado SSL do servidor"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "Localização do repositório para onde importar"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "Importar para o repositório de Subversion"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "Obter do repositório de Subversion"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "Leitura do Subversion"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "Não existem informações suficientes para executar o 'cat'"
+
+#~ msgid "Start Revision"
+#~ msgstr "Versão inicial"
+
+#~ msgid "End Revision"
+#~ msgstr "Versão final"
+
+#~ msgid "Checkout"
+#~ msgstr "Baixar"
+
+#~ msgid "Repository Url:"
+#~ msgstr "URL do repositório:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "Local de destino:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Recursivo:"
+
+#~ msgid "Requested local path:"
+#~ msgstr "Pasta local pedida:"
+
+#~ msgid "Source"
+#~ msgstr "Fonte"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "Indicar pela URL do repositório"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "Indicar pela cópia de trabalho local"
+
+#~ msgid "Source revision"
+#~ msgstr "Versão de origem"
+
+#~ msgid "Destination"
+#~ msgstr "Destino"
+
+#~ msgid "Specify either the full repository URL or local working path"
+#~ msgstr "Indique a URL completa do repositório ou a pasta de trabalho local"
+
+#~ msgid "Target Url"
+#~ msgstr "URL de destino"
+
+#~ msgid "Non Recursive"
+#~ msgstr "Não recursivo"
+
+#~ msgid "No diff deleted"
+#~ msgstr "Sem diferenças apagadas"
+
+#~ msgid "Ignore contents type"
+#~ msgstr "Ignorar o tipo de conteúdo"
+
+#~ msgid "Subversion Log View Options"
+#~ msgstr "Opções de visualização do registro do Subversion"
+
+#~ msgid "Maximum number of logs to be displayed"
+#~ msgstr "Número máximo de registros a apresentar"
+
+#~ msgid "Do not show logs before branching point"
+#~ msgstr "Não mostrar os registros antes do ponto de ramificação"
+
+#~ msgid "Forcefully delete locally modified and/or unversioned items"
+#~ msgstr "Obrigar a excluir os itens modificados localmente e/ou sem versão"
+
+#~ msgid "Select working copies to be reverted:"
+#~ msgstr "Selecione as cópias de trabalho a reverter:"
+
+#~ msgid "Select"
+#~ msgstr "Selecionar"
+
+#~ msgid "Text Status"
+#~ msgstr "Estado do texto"
+
+#~ msgid "Prop Status"
+#~ msgstr "Estado das propriedades"
+
+#~ msgid "Working Copy"
+#~ msgstr "Cópia de trabalho"
+
+#~ msgid "Recursive"
+#~ msgstr "Recursivo"
+
+#~ msgid "Specify as number:"
+#~ msgstr "Indicar como número:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "Indicar como palavra-chave:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "Indicar como data:"
+
+#~ msgid "Status Requested for:"
+#~ msgstr "Estado pedido para:"
+
+#~ msgid "Specify revision"
+#~ msgstr "Indicar a versão"
+
+#~ msgid "Non recursive"
+#~ msgstr "Não-recursivo"
+
+#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
+#~ msgstr ""
+#~ "Obter apenas os itens \"interessantes\" (como as modificações locais)"
+
+#~ msgid "Contact repository and augment with repository information"
+#~ msgstr "Contactar o repositório e ampliar com a informação do mesmo"
+
+#~ msgid "Do not ignore svn:ignore"
+#~ msgstr "Não ignorar o 'svn:ignore'"
+
+#~ msgid "Ignore external items"
+#~ msgstr "Ignorar os itens externos"
+
+#~ msgid "Update immediate children only (non-recursive)"
+#~ msgstr "Atualizar apenas os filhos imediatos (não-recursivo)"
+
+#~ msgid "Ignore external entries"
+#~ msgstr "Ignorar os itens externos"
+
+#~ msgid "Select Revision"
+#~ msgstr "Selecionar a versão"

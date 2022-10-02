@@ -1,0 +1,71 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2016.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 10:03+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: switchtobuddyplugin.cpp:114
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Preklopi na '%1'"
+
+#: switchtobuddyplugin.cpp:128
+#, kde-format
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr "Preklopi določilo/deklaracijo"
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr "Preklopi glavo/izvorno kodo"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#, fuzzy
+#~| msgid "Switch to '%1'"
+#~ msgid "Switch To"
+#~ msgstr "Preklopi na »%1«"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Krmarjenje"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Preklopi na sorodnega"
+
+#~ msgid ""
+#~ "Allows switching between buddy documents like implementation and header "
+#~ "file."
+#~ msgstr ""
+#~ "Omogoča preklapljanje med prijateljskimi dokumenti kot na primer izvedbo "
+#~ "in datoteko glave."
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Avtor"

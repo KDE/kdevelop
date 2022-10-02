@@ -1,0 +1,275 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"PO-Revision-Date: 2020-01-16 19:12+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr "(töötab)"
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#, kde-format
+msgid "LLDB"
+msgstr "LLDB"
+
+#: debuggerplugin.cpp:93
+#, fuzzy, kde-format
+#| msgid "LLDB Console"
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB konsool"
+
+#: debugsession.cpp:136
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr "Kasutaja käsu täitmise katse LLDB toetamata versiooniga"
+
+#: debugsession.cpp:335
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Siluri käivitamine nurjus:</b><br />"
+
+#: debugsession.cpp:346
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr "<b>Tõrge ühendumisel kaugsihtmärgiga:</b><br />"
+
+#: debugsession.cpp:359
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Mälupildifaili laadimine nurjus</b><p>Silur andis teada järgmisest "
+"tõrkest:<p><tt>%1"
+
+#: debugsession.cpp:390
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+"<b>Sinu lldb-mi versioon on toetamata, sest sel puudub väga tähtis paik.</"
+"b><br/>Vaata lähemat teavet aadressil https://llvm.org/bugs/show_bug.cgi?"
+"id=28026.<br/>Krahhi vältimiseks siluri konsool keelatakse.<br/>Kas jätkata?"
+
+#: debugsession.cpp:394
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr "LLDB toetamata versioon"
+
+#: debugsession.cpp:442
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr ""
+"<b>Vajalik on lldb-mi LLDB versioonist 3.8.1 või uuem.</b><br />Praegu on "
+"kasutusel %1"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Silumisriba"
+
+#: lldblauncher.cpp:49
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr "Omarakenduse silumine LLDB-s"
+
+#: lldblauncher.cpp:73
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
+"jätkata käivitamisega?"
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: widgets/lldbconfigpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "LLDB Configuration"
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr "LLDB seadistamine"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, fuzzy, kde-format
+#| msgid "Debugger"
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Silur"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, fuzzy, kde-format
+#| msgid "Debugger executable:"
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr "Siluri täitmisfail:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, fuzzy, kde-format
+#| msgid "Override path to lldb-mi executable"
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr "lldb-mi täitmisfaili asukoha tühistamine"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, fuzzy, kde-format
+#| msgid "Additional arguments:"
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr "Lisaargumendid:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Keskkond:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, fuzzy, kde-format
+#| msgid "Inherit system environment"
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr "Süsteemi keskkonna pärimine"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Valikud"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, fuzzy, kde-format
+#| msgid "Config script:"
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr "Seadistusskript:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, fuzzy, kde-format
+#| msgid "/path/to/lldb/config/script"
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr "/lldb/seadistusskripti/asukoht"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, fuzzy, kde-format
+#| msgid "Start debugger with:"
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr "Siluri käivitamine järgnevaga:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, fuzzy, kde-format
+#| msgid "Application Output"
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Rakenduse väljund"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, fuzzy, kde-format
+#| msgid "LLDB Console"
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr "LLDB konsool"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, fuzzy, kde-format
+#| msgid "Frame Stack"
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Kaadripinu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, fuzzy, kde-format
+#| msgid "Break on start:"
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr "Katkestus käivitamisel:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, fuzzy, kde-format
+#| msgid "Remo&te Debugging"
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr "Kau&gsilumine"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, fuzzy, kde-format
+#| msgid "Remote server:"
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr "Kaugserver:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, fuzzy, kde-format
+#| msgid "host:port"
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr "masin:port"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, fuzzy, kde-format
+#| msgid "Remote work path:"
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr "Kaugmasina töökataloog:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, fuzzy, kde-format
+#| msgid "/path/to/a/on-device/writable/directory"
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr "/seadme/kirjutatava/kataloogi/asukoht"
+
+#~ msgid "Startup error"
+#~ msgstr "Tõrge käivitamisel"
+
+#~ msgid "LLDB Error"
+#~ msgstr "LLDB tõrge"

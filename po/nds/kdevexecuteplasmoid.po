@@ -1,0 +1,178 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-03-17 20:10+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.4\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr ""
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "En Plasma-Lüttprogramm wiesen"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Oproper för Plasma-Lüttprogrammen"
+
+#: plasmoidexecutionconfig.cpp:183
+#, kde-format
+msgid "Could not resolve the dependency: %1"
+msgstr ""
+
+#: plasmoidexecutionconfig.cpp:297
+#, fuzzy, kde-format
+#| msgid "Plasmoids"
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plasma-Lüttprogrammen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Plasmoid"
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasma-Lüttprogramm"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Path or name:"
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Padd oder Naam:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Bedregen"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, fuzzy, kde-format
+#| msgid "Theme"
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Muster"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Afhangigkeiten"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "Telen:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr ""
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Afschaten **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Fehlslaan ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Afslaten ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr ""
+
+#~ msgid "planar"
+#~ msgstr "even"
+
+#~ msgid "horizontal"
+#~ msgstr "kimmrecht"
+
+#~ msgid "vertical"
+#~ msgstr "pielrecht"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m.j.wiese@web.de"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "En Afhangigkeit ingeven, de Du de List tofögen wullt"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Dat opliste Teel de List mit Afhangigkeiten tofögen"
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "List mit indirekte Telen"
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Disse List bargt Telen, vun de dat Programm nich direktemang afhangt, man "
+#~ "för de en Akschoon noot deit, ehr dat Programm utföhrt warrt."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "De utsöchte Afhangigkeit ut de List wegmaken"
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "En Afhangigkeit op de List na baven schuven"
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "De utsöchte Afhangigkeit binnen de List na nerrn schuven"
+
+#~ msgid "Allows running of plasmoids"
+#~ msgstr "Maakt dat Opropen vun Plasma-Lüttprogrammen mööglich."
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Author"
+#~ msgstr "Programmschriever"

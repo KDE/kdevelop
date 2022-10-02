@@ -1,0 +1,313 @@
+# Translation of kdevquickopen into esperanto.
+# Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevquickopen\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: pology\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr ""
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr ""
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr ""
+
+#: duchainitemquickopen.cpp:132
+#, fuzzy, kde-format
+#| msgid "Return:"
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Reveno:"
+
+#: duchainitemquickopen.cpp:136
+#, fuzzy, kde-format
+#| msgid "File:"
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Dosiero:"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgid "Quick Open Toolbar"
+msgstr "&Rapida malfermo"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "Projekto"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr ""
+
+#: projectfilequickopen.cpp:178
+#, fuzzy, kde-format
+#| msgid "none"
+msgctxt "@item no project"
+msgid "none"
+msgstr "nenio"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Klasoj"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Funkcioj"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Projekto"
+
+#: quickopenplugin.cpp:60
+#, fuzzy, kde-format
+#| msgid "Includes"
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Inkluditoj"
+
+#: quickopenplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Includers"
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Inkludantoj"
+
+#: quickopenplugin.cpp:62
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr ""
+
+#: quickopenplugin.cpp:64
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Dosieroj"
+
+#: quickopenplugin.cpp:67
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr ""
+
+#: quickopenplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Funkcioj"
+
+#: quickopenplugin.cpp:279
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:285
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:291
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:297
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr ""
+
+#: quickopenplugin.cpp:308
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:314
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:319
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr ""
+
+#: quickopenplugin.cpp:325
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr ""
+
+#: quickopenplugin.cpp:330
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:337
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Funkcioj"
+
+#: quickopenplugin.cpp:342
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Funkcioj"
+
+#: quickopenplugin.cpp:347
+#, fuzzy, kde-format
+#| msgid "Border Outline"
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Randlinio"
+
+#: quickopenplugin.cpp:498
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:832
+#, fuzzy, kde-format
+#| msgid "Border Outline"
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Randlinio"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "&Rapida malfermo"
+
+#: quickopenplugin.cpp:943
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Search:"
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Serĉi:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Malfermi"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, fuzzy, kde-format
+#| msgid "Cancel"
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Rezigni"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Project %1"
+#~ msgstr "Projekto"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Axel Rousseau"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "axel@esperanto-jeunes.org"
+
+#~ msgid "Navigate"
+#~ msgstr "Navigadi"

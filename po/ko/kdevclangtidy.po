@@ -1,0 +1,260 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Shinjo Park <kde@peremen.name>, 2020, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-05-30 19:03+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 20.12.3\n"
+
+#: analyzer.cpp:29
+#, kde-format
+msgid "Clang-Tidy"
+msgstr "Clang-Tidy"
+
+#: config/checklistfilterproxysearchline.cpp:23
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "찾기..."
+
+#: config/checklistmodel.cpp:65
+#, kde-format
+msgctxt "@item"
+msgid "All checks"
+msgstr "모든 검사"
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "새 검사 모음 이름 입력"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "이름:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "검사 모음:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "검사 모음 추가"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "검사 모음 복제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "검사 모음 삭제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "기본값으로 설정"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "검사 모음의 이름 입력"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "사용자 정의"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "기본값으로 사용(현재: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1(기본 선택)"
+
+#: config/clangtidypreferences.cpp:62 config/clangtidyprojectconfigpage.cpp:55
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clang-Tidy"
+msgstr "Clang-Tidy"
+
+#: config/clangtidypreferences.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clang-Tidy Settings"
+msgstr "Clang-Tidy 설정"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/clangtidypreferences.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "경로"
+
+#. i18n: ectx: property (text), widget (QLabel, clangtidyLabel)
+#: config/clangtidypreferences.ui:37
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Clang-&Tidy executable:"
+msgstr "Clang-Tidy 실행 파일(&T):"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
+#: config/clangtidypreferences.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The full path to the Clang-Tidy executable"
+msgstr "clang-tidy 실행 파일의 전체 경로"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/clangtidypreferences.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "분석 작업을 병렬로 실행"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/clangtidypreferences.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "모든 CPU 코어 사용"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/clangtidypreferences.ui:101
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "최대 스레드 개수:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useConfigFile)
+#: config/clangtidyprojectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use .clang-tidy file(s)"
+msgstr ".clang-tidy 파일 사용(&U)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/clangtidyprojectconfigpage.ui:43
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "검사"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: config/clangtidyprojectconfigpage.ui:73
+#, kde-format
+msgctxt "@title:tab"
+msgid "Includes"
+msgstr "인클루드"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: config/clangtidyprojectconfigpage.ui:79
+#, kde-format
+msgctxt "@option:check"
+msgid "&Check system headers:"
+msgstr "시스템 헤더 검사(&C):"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/clangtidyprojectconfigpage.ui:92
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header fi&lter:"
+msgstr "헤더 필터(&L):"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/clangtidyprojectconfigpage.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from. Diagnostics from the main file of each translation unit are always "
+"displayed. Can be used together with -line-filter."
+msgstr ""
+"진단 출력에서 헤더 파일의 이름과 일치할 정규 표현식입니다. 각각 번역 단위의 "
+"주 파일에서의 진단은 항상 표시됩니다. -line-filter 옵션과 같이 사용할 수 있습"
+"니다."
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: config/clangtidyprojectconfigpage.ui:119
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "추가 인자"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: config/clangtidyprojectconfigpage.ui:125
+#, kde-format
+msgctxt "@label.textbox"
+msgid "E&xtra parameters:"
+msgstr "추가 인자(&X):"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_additionalParameters)
+#: config/clangtidyprojectconfigpage.ui:135
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional command line options to pass to Clang-Tidy."
+msgstr "clang-tidy 명령에 전달할 추가 인자입니다."
+
+#: job.cpp:68
+#, kde-format
+msgid "Clang-Tidy Analysis"
+msgstr "Clang-Tidy 분석"
+
+#: job.cpp:142
+#, kde-format
+msgid "Failed to start Clang-Tidy process."
+msgstr "Clang-Tidy 프로세스를 시작할 수 없습니다."
+
+#: job.cpp:147
+#, kde-format
+msgid "Clang-Tidy crashed."
+msgstr "Clang-Tidy가 충돌했습니다."
+
+#: job.cpp:151
+#, kde-format
+msgid "Clang-Tidy process timed out."
+msgstr "Clang-Tidy 프로세스 시간이 초과되었습니다."
+
+#: job.cpp:155
+#, kde-format
+msgid "Write to Clang-Tidy process failed."
+msgstr "Clang-Tidy 프로세스에 쓸 수 없습니다."
+
+#: job.cpp:159
+#, kde-format
+msgid "Read from Clang-Tidy process failed."
+msgstr "Clang-Tidy 프로세스에서 읽을 수 없습니다."

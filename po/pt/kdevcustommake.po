@@ -1,0 +1,104 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-08-06 13:45+0100\n"
+"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
+"Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-POFile-SpellExtra: make Makefiles\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Tentou-se a resolução das pastas de inclusão enquanto estava outro processo "
+"de resolução em curso"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Falta a Makefile na pasta \"%1\""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Ocorreu um problema ao tentar resolver os locais de inclusão de %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Em 'cache': %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "O nome do ficheiro %1 parece ser inválido"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Não foi possível extrair a nova pasta de trabalho"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "O resultado foi: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "A chamada recursiva do 'make' foi mal-sucedida"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+"O texto do parâmetro \"%1\" não parece ser válido. O resultado foi: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "A pasta \"%1\" não existe. O resultado foi: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "A chamada recursiva do 'make' foi mal-sucedida"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Não foi possível extrair os locais de inclusão do resultado do 'make'"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Pasta: \"%1\"  Comando: \"%2\"  Resultado: \"%3\""
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Executar"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "José Nuno Pires"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "zepires@gmail.com"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Gestor de Makefiles Personalizadas"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Suporte para a gestão dos projectos de Makefiles personalizadas"

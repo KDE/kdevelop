@@ -1,0 +1,126 @@
+# translation of kdevscratchpad.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2019, 2022.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevscratchpad\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-17 20:47+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: scratchpad.cpp:104 scratchpadview.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Scratchpad"
+msgstr "Zápisník"
+
+#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "scratch:%1"
+
+#: scratchpad.cpp:168
+#, kde-format
+msgid "Failed to remove scratch: %1"
+msgstr "Nepodarilo sa odstrániť scratch: %1"
+
+#: scratchpad.cpp:175
+#, kde-format
+msgid "Failed to create scratch: Name already in use"
+msgstr "Nepodarilo sa vytvoriť scratch: Názov sa už používa"
+
+#: scratchpad.cpp:187
+#, kde-format
+msgid "Failed to create new scratch"
+msgstr "Nepodarilo sa vytvoriť nový scratch"
+
+#: scratchpad.cpp:196
+#, kde-format
+msgid "Failed to rename scratch: Names must not include path separator"
+msgstr "Nepodarilo sa spustiť scratch: Názvy nemôžu obsahovať medzery"
+
+#: scratchpad.cpp:226
+#, kde-format
+msgid "Failed renaming scratch."
+msgstr "Nepodarilo sa premenovať scratch."
+
+#: scratchpadjob.cpp:57
+#, kde-format
+msgid "Running %1..."
+msgstr "Beží %1..."
+
+#: scratchpadjob.cpp:73
+#, kde-format
+msgid "Process finished with exit code %1."
+msgstr "Proces bol ukončený výstupným kódom %1."
+
+#: scratchpadjob.cpp:80
+#, kde-format
+msgid "Failed to run scratch: %1"
+msgstr "Nepodarilo sa spustiť scratch: %1"
+
+#: scratchpadview.cpp:100
+#, kde-format
+msgid ""
+"Scratchpad lets you quickly run and experiment with code without a full "
+"project, and even store todos. Create a new scratch to start."
+msgstr ""
+"Scratchpad vám umožňuje rýchlo spustiť a experimentovať s kódom bez úplného "
+"projektu a dokonca ukladať úlohy. Ak chcete začať, vytvorte nový Scratch."
+
+#: scratchpadview.cpp:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Command to run this scratch. '$f' will expand to the scratch path."
+msgstr "Príkaz na spustenie tohto scratch. $f sa rozbalí na cestu scratch."
+
+#: scratchpadview.cpp:137
+#, kde-format
+msgctxt "@action"
+msgid "New Scratch"
+msgstr "Nový Scratch"
+
+#: scratchpadview.cpp:141
+#, kde-format
+msgctxt "@action"
+msgid "Remove Scratch"
+msgstr "Odstrániť Scratch"
+
+#: scratchpadview.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Rename Scratch"
+msgstr "Premenovať Scratch"
+
+#: scratchpadview.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Run Scratch"
+msgstr "Spustiť Scratch"
+
+#: scratchpadview.cpp:164
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtrovať..."
+
+#: scratchpadview.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Scratch"
+msgstr "Vytvoriť nový Scratch"
+
+#: scratchpadview.cpp:205
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for scratch file:"
+msgstr "Zadať názov pre súbor scratch:"

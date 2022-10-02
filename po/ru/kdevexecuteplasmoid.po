@@ -1,0 +1,182 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-03-10 10:43+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.1\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Настройка запуска плазмоида"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Показывает плазмоид"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Запуск плазмоида"
+
+#: plasmoidexecutionconfig.cpp:183
+#, kde-format
+msgid "Could not resolve the dependency: %1"
+msgstr "Не удалось разрешить зависимость: %1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, kde-format
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Плазмоиды"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Плазмоид"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Путь или имя:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Поведение"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Форм-фактор:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Тема оформления:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Зависимости"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "&Цели:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Просмотр плазмоида"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Уничтожен **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Завершено с ошибкой ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Завершено ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr "Не удалось выполнить плазмоид на %1"
+
+#~ msgid "planar"
+#~ msgstr "планарный"
+
+#~ msgid "horizontal"
+#~ msgstr "горизонтальный"
+
+#~ msgid "vertical"
+#~ msgstr "вертикальный"
+
+#~ msgid "mediacenter"
+#~ msgstr "медиацентр"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Александр Лахин"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "exclusion@gmail.com"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Введите зависимость для добавления в список"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Добавить указанную цель в список зависимостей."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Список косвенно зависимых целей."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Это список целей, от которых приложение не зависит напрямую, но для "
+#~ "которых требуются какие-либо действия перед запуском приложения."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Удалить выбранные зависимости из списка."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Переместить выделенную зависимость вверх по списку."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Переместить выделенную зависимость вниз по списку."
+
+#~ msgid "Ninja failed to compile %1"
+#~ msgstr "Ninja не может скомпилировать %1"
+
+#~ msgid "Execute plasmoid support"
+#~ msgstr "Поддержка запуска плазмоидов"
+
+#~ msgid "Allows running of plasmoids"
+#~ msgstr "Позволяет запускать плазмоиды"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Author"
+#~ msgstr "Автор"

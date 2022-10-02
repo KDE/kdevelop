@@ -1,0 +1,700 @@
+# translation of kdevcmake.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2019, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-07-10 16:30+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.03.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Ustawienia katalogu budowania - %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Ustawienia katalogu budowania dla %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Musisz określić katalog budowania."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Wykorzystywanie już utworzonego katalogu budowania."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Tworzenie nowego katalogu budowania."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Katalog budowania już został ustawiony."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Ten katalog budowania jest dla %1, ale katalogiem projektu jest %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Nie można wybrać względnego katalogu budowania."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Wybrany katalog budowania nie jest pusty."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Dostępne katalogi budowania:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Nowy katalog budowania"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "Katalog bu&dowania:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "Przedrostek wgran&ia:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Katalog, w którym zostanie wgrany projekt. Jeśli pusty, to CMake użyje "
+"domyślnego katalogu do wgrywania."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Domyślny katalog wgrywania CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "&Rodzaj budowania:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Dołącz argumenty:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "Plik wykonywalny CMak&e:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "NIEPRAWIDŁOWE"
+
+#: cmakecodecompletionmodel.cpp:197
+#, kde-format
+msgctxt "@item"
+msgid "Command"
+msgstr "Polecenie"
+
+#: cmakecodecompletionmodel.cpp:198
+#, kde-format
+msgctxt "@item"
+msgid "Variable"
+msgstr "Zmienna"
+
+#: cmakecodecompletionmodel.cpp:199
+#, kde-format
+msgctxt "@item"
+msgid "Macro"
+msgstr "Makro"
+
+#: cmakecodecompletionmodel.cpp:200
+#, kde-format
+msgctxt "@item"
+msgid "Path"
+msgstr "Ścieżka"
+
+#: cmakecodecompletionmodel.cpp:201
+#, kde-format
+msgctxt "@item"
+msgid "Target"
+msgstr "Cel"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "zły"
+
+#: cmakecommandscontents.cpp:29
+#, kde-format
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Polecenia"
+
+#: cmakecommandscontents.cpp:30
+#, kde-format
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Zmienne"
+
+#: cmakecommandscontents.cpp:31
+#, kde-format
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Moduły"
+
+#: cmakecommandscontents.cpp:32
+#, kde-format
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Właściwości"
+
+#: cmakecommandscontents.cpp:33
+#, kde-format
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Polityki"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr "<p>Dla lepszego wyświetlania dokumentacji CMake wgraj rst2html</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+"Nie można znaleźć pliku wykonywalnego CMake. Czy został on wgrany w systemie?"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Wartość do pamięci podręcznej:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Dokumentacja do pamięci podręcznej:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "Strona treści CMake"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Nie udało się nadać ustawień w projekcie '%1' (opis błędu: %2). W wyniku "
+"tego, KDevelop prawdopodobnie nie będzie rozumiał kodu.\n"
+"\n"
+"Aby temu zaradzić, upewnij się, że pliki projektu CMakeLists.txt są "
+"poprawne, a KDevelop używa poprawnych ustawień i wersji CMake. Następnie "
+"naciśnij prawym na projekcie w widoku projektów i wybierz 'Wczytaj ponownie'."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"KDevelop znalazł kilka możliwych katalogów głównych projektu, proszę wybrać "
+"poprawny."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Wartości w pamięci podręcznej"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, kde-format
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Uwagi:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Pokaż rozszerzone"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Rozszerzone"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "Przedrostek wgrania:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Rodzaj budowania:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Ustawienia środowiska:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Wybierz wykorzystywane środowisko"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, kde-format
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Pokaż rozszerzone wartości"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "Plik wykonywalny CMake:"
+
+#: settings/cmakecachemodel.cpp:36
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Nazwa"
+
+#: settings/cmakecachemodel.cpp:37
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Rodzaj"
+
+#: settings/cmakecachemodel.cpp:38
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Wartość"
+
+#: settings/cmakecachemodel.cpp:39
+#, kde-format
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Uwaga"
+
+#: settings/cmakecachemodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Rozszerzone"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Ciągi znaków"
+
+#: settings/cmakepreferences.cpp:343
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Katalog %1 zaraz zostanie usunięty z listy KDevelopa.\n"
+"Czy KDevelop ma go też usunąć z dysku?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr "Nie usuwaj"
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Nie można usunąć: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "Ustawienia CMake"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Przetwórz zestaw próbny %1"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+msgstr[2] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - obsługa CMake"
+
+#~ msgid "Add"
+#~ msgstr "Dodaj"
+
+#~ msgid "Remove"
+#~ msgstr "Usuń"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 jest przestarzałym poleceniem i nie powinno być używane"
+
+#~ msgid "Unfinished function."
+#~ msgstr "Niedokończona funkcja."
+
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Musisz wybrać plik wykonywalny CMake."
+
+#, fuzzy
+#~| msgid "CMake executable:"
+#~ msgid "&CMake executable:"
+#~ msgstr "Plik wykonywalny CMake:"
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Ustawienia katalogu budowania"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "Plik &wykonywalny CMake:"
+
+#, fuzzy
+#~| msgid "Build Type"
+#~ msgid "Build Type:"
+#~ msgstr "Rodzaj budowania"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary:"
+#~ msgstr "Plik &wykonywalny CMake:"
+
+#~ msgid "Installation Prefix"
+#~ msgstr "Przedrostek instalacji"
+
+#~ msgid "Extra Arguments"
+#~ msgstr "Dodatkowe argumenty"
+
+#~ msgid "CMake Binary"
+#~ msgstr "Plik wykonywalny CMake"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake jest niezainstalowany"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Nie można zapisać ustawień CMake do pliku '%1'.\n"
+#~ "Sprawdź czy masz do niego dostęp zapisu"
+
+#~ msgid "CMake Documentation"
+#~ msgstr "Dokumentacja CMake"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Obsługa dokumentacji CMake"
+
+#~ msgid "CMake Manager"
+#~ msgstr "Menedżer CMake"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Obsługa zarządzanie projektami CMake"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Przejdź do definicji obiektu"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Przenieś pliki i katalogi wewnątrz CMakeLists następująco:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Nieudane zmiany w CMakeLists, przerwać przenoszenie?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Usuń i katalogi wewnątrz CMakeLists następująco:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Nieudane zmiany w CMakeLists, przerwać usuwanie?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Modyfikuj cele projektu następująco:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Utwórz katalog '%1':"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Nie można zapisać zmiany."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Modyfikuj cel '%1' następująco:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "Nieudane zmiany w CMakeLists."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "Zmień nazwę '%1' na '%2':"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Nieudane zmiany w CMakeLists, przerwać zmienianie nazwy?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "Katalog CMake"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "Katalog budowania nie istnieje i nie można go utworzyć."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Błąd podczas tworzenia katalogu budowania"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "Dodaj plik \"%1\" do celu \"%2\"."
+
+#~ msgid "Cannot save the change."
+#~ msgstr "Nie można zapisać zmiany."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "Usuń plik \"%1\"."
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "Zmień nazwę folderu \"%1\"."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Usuń katalog \"%1\"."
+
+#~ msgid "Swi&tch Colors"
+#~ msgstr "&Przełącz kolory"
+
+#~ msgid "General"
+#~ msgstr "Ogólne"
+
+#~ msgid "This project is one day old"
+#~ msgid_plural "This project is %1 days old"
+#~ msgstr[0] "Ten projekt ma jeden dzień"
+#~ msgstr[1] "Ten projekt ma %1 dni"
+#~ msgstr[2] "Ten projekt ma %1 dni"
+
+#~ msgid "Settings changed"
+#~ msgstr "Ustawienia zmienione"
+
+#~ msgid "A KDE 4 Application"
+#~ msgstr "Program dla KDE4"
+
+#~ msgid "kde4app"
+#~ msgstr "kde4app"
+
+#~ msgid "(C) 2007 %{AUTHOR}"
+#~ msgstr "(C) 2007 %{AUTHOR}"
+
+#~ msgid "%{AUTHOR}"
+#~ msgstr "%{AUTHOR}"
+
+#~ msgid "Document to open"
+#~ msgstr "Dokument do otwarcia"
+
+#~ msgid "&Move"
+#~ msgstr "&Przesuń"
+
+#~ msgid "kapp4_base"
+#~ msgstr "kapp4_base"
+
+#~ msgid "hello, world"
+#~ msgstr "witaj świecie"
+
+#~ msgid "Background color:"
+#~ msgstr "Kolor tła:"
+
+#~ msgid "Choose a new background color"
+#~ msgstr "Wybranie nowego koloru tła"
+
+#~ msgid "Project age:"
+#~ msgstr "Wiek projektu:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Kolor pierwszego planu:"
+
+#~ msgid "Choose a new foreground color"
+#~ msgstr "Wybranie nowego koloru pierwszego planu"
+
+#~ msgid "Set the project age (in days)"
+#~ msgstr "Ustawienie wieku projektu (w dniach)"
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Nie można utworzyć pliku CMakeLists.txt w katalogu."
+
+#~ msgid "debug"
+#~ msgstr "debug"
+
+#~ msgid "release"
+#~ msgstr "release"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "RelWithDebInfo"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "MinSizeRel"
+
+#~ msgid "Status:"
+#~ msgstr "Stan:"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Action"
+#~ msgstr "Akcja"
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "&Bez zmiany"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Wstaw %1"
+
+#, fuzzy
+#~ msgid "Choose CMake Build Directory"
+#~ msgstr "Należy wybrać katalog."
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "TextLabel"
+#~ msgstr "Tekst"
+
+#, fuzzy
+#~| msgid "&Run"
+#~ msgid "Run"
+#~ msgstr "&Uruchom"
+
+#, fuzzy
+#~ msgid "Running"
+#~ msgstr "unia"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Anuluj"
+
+#~ msgid "&Run"
+#~ msgstr "&Uruchom"
+
+#, fuzzy
+#~ msgid "CMake process killed"
+#~ msgstr "proces make zakończony z błędem"
+
+#, fuzzy
+#~ msgid "Created successfully"
+#~ msgstr "Połączenie wykonane"
+
+#, fuzzy
+#~ msgid "An error occurred"
+#~ msgstr "Napotkano błąd:"

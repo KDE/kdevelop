@@ -1,0 +1,32 @@
+# translation of plasma_runner_kdevelopsessions.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2011.
+# Roman Paholík <wizzardsk@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma_runner_kdevelopsessions\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-11-10 20:52+0100\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "Nájde sedenia KDevelop zodpovedajúce :q:."
+
+#: kdevelopsessions.cpp:38 kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr "Zobrazí všetky sedenia editora KDevelop vo vašom účte."
+
+#: kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "Otvoriť sedenie KDevelop"

@@ -1,0 +1,242 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevlldb.pot\n"
+"X-Crowdin-File-ID: 4958\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr "(正在运行)"
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#, kde-format
+msgid "LLDB"
+msgstr "LLDB"
+
+#: debuggerplugin.cpp:93
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB 控制台"
+
+#: debugsession.cpp:136
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr "试图在不受支持的 LLDB 版本上执行用户命令"
+
+#: debugsession.cpp:335
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>无法启动调试器。</b><br />"
+
+#: debugsession.cpp:346
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr "<b>链接远程目标时出错：</b><br />"
+
+#: debugsession.cpp:359
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr "<b>调试器错误</b><p>调试器报告了以下错误：<p><tt>%1"
+
+#: debugsession.cpp:390
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+"<b>您的 lldb-mi 版本不被支持，因为它缺少关键补丁。</b><br/>请查看 https://"
+"llvm.org/bugs/show_bug.cgi?id=28026 了解更多信息。<br/>调试器控制台将被禁用以"
+"避免崩溃。<br/>您想要继续吗？"
+
+#: debugsession.cpp:394
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr "LLDB 版本不受支持"
+
+#: debugsession.cpp:442
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr "<b>您需要 LLDB 3.8.1 或更高版本的 lldb-mi。</b><br />您正在使用：%1"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "调试器工具栏"
+
+#: lldblauncher.cpp:49
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr "在 LLDB 中调试本地应用程序"
+
+#: lldblauncher.cpp:73
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr "一个程序正在被调试。你想终止正在运行的调试会话并继续启动吗？"
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: widgets/lldbconfigpage.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr "LLDB 配置"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "调试器"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr "调试器可执行文件："
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr "覆盖 lldb-mi 可执行程序的路径..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr "额外参数："
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "环境："
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr "继承系统环境"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "选项"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr "配置脚本："
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr "/path/to/lldb/config/script"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr "启动调试器，使用："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "应用程序输出"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr "LLDB 控制台"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "框架堆栈"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, kde-format
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr "启动后中断："
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, kde-format
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr "远程调试(&T)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr "远程服务器："
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr "主机:端口"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr "远程工作路径："
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr "/path/to/a/on-device/writable/directory"

@@ -1,0 +1,565 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-09-05 22:41+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.08.0\n"
+
+#: mesonbuilder.cpp:48
+#, kde-format
+msgid "    *** MESON ERROR ***\n"
+msgstr "    *** MESON HATASI ***\n"
+
+#: mesonbuilder.cpp:75
+#, kde-format
+msgid "Failed to set the internally used Ninja builder"
+msgstr "İçsel olarak kullanılan Ninja yapıcısı ayarlanamadı"
+
+#: mesonbuilder.cpp:78
+#, kde-format
+msgid "Failed to acquire the Ninja builder plugin"
+msgstr "Ninja yapıcısı eklentisi elde edilemedi"
+
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#, kde-format
+msgid "The current build directory for %1 is invalid"
+msgstr "%1 için olan geçerli yapı dizini geçersiz"
+
+#: mesonbuilder.cpp:164
+#, kde-format
+msgid ""
+"The directory '%1' is not empty and does not seem to be an already "
+"configured build directory"
+msgstr ""
+"'%1' dizini boş değil ve halihazırda yapılandırılmış bir yapı dizini gibi "
+"görünmüyor"
+
+#: mesonbuilder.cpp:169
+#, kde-format
+msgid "The directory '%1' cannot be used as a meson build directory"
+msgstr "'%1' dizini, bir Meson yapı dizini olarak kullanılamaz"
+
+#: mesonbuilder.cpp:172 mesonjobprune.cpp:55
+#, kde-format
+msgid ""
+"The current build configuration is broken, because the build directory is "
+"not specified"
+msgstr "Geçerli yapı yapılandırması bozuk; çünkü yapı dizini belirtilmemiş"
+
+#: mesonbuilder.cpp:176
+#, kde-format
+msgid ""
+"Congratulations: You have reached unreachable code!\n"
+"Please report a bug at https://bugs.kde.org/\n"
+"FILE: %1:%2"
+msgstr ""
+"Tebrikler: Erişilemez codef'e ulaştınız\n"
+"https://bugs.kde.org/ adresinde bir hata bildirin\n"
+"DOSYA: %1:%2"
+
+#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#, kde-format
+msgid "Internal error: The buildsystem manager is not the MesonManager"
+msgstr "İç hata: Yapı sistemi yöneticisi, MesonManager değil"
+
+#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#, kde-format
+msgid "Failed to create a new build directory"
+msgstr "Yeni bir yapı dizini oluşturulamadı"
+
+#: mesonjob.cpp:27 mesonjobprune.cpp:27
+#, kde-format
+msgid "Meson"
+msgstr "Meson"
+
+#: mesonjobprune.cpp:43
+#, kde-format
+msgid "The directory '%1' is already pruned"
+msgstr "'%1' dizini, halihazırda budanmış"
+
+#: mesonjobprune.cpp:49
+#, kde-format
+msgid "The directory '%1' does not appear to be a meson build directory"
+msgstr "'%1' dizini, halihazırda bir Meson yapı dizini gibi görünmüyor"
+
+#: mesonjobprune.cpp:50
+#, kde-format
+msgid "Aborting prune operation"
+msgstr "Budama işlemi iptal ediliyor"
+
+#: mesonjobprune.cpp:70
+#, kde-format
+msgid "Deleting contents of '%1'"
+msgstr "'%1' içeriği siliniyor"
+
+#: mesonjobprune.cpp:76
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Budama başarılı **"
+
+#: mesonjobprune.cpp:78
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Budama başarılı: %1 **"
+
+#: mesonmanager.cpp:64
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Import Failed"
+msgstr "Proje İçe Aktarma Başarısız"
+
+#: mesonmanager.cpp:111
+#, kde-format
+msgid "Meson builder error: %1"
+msgstr "Meson yapıcı hatası: %1"
+
+#: mesonmanager.cpp:251
+#, kde-format
+msgid "Importing %1 failed because no build directory could be created."
+msgstr "%1 içe aktarması başarısız; çünkü bir yapı dizini oluşturulamadı."
+
+#: mintro/mesonintrospectjob.cpp:115
+#, kde-format
+msgid "Introspection file '%1' does not exist"
+msgstr "İçgözlem dosyası '%1' yok"
+
+#: mintro/mesonintrospectjob.cpp:119
+#, kde-format
+msgid "Failed to open introspection file '%1'"
+msgstr "İçgözlem dosyası '%1' açılamadı"
+
+#: mintro/mesonintrospectjob.cpp:125
+#, kde-format
+msgid "In %1:%2: %3"
+msgstr "%1:%2: %3 içinde"
+
+#: mintro/mesonintrospectjob.cpp:133
+#, kde-format
+msgid "The introspection file '%1' contains neither an array nor an object"
+msgstr "İçgözlem dosyası '%1', ne bir dizilim ne de bir nesne içeriyor"
+
+#: mintro/mesonintrospectjob.cpp:154 rewriter/mesonrewriterjob.cpp:59
+#, kde-format
+msgid "%1 returned %2"
+msgstr "%1, %2 döndürdü"
+
+#: mintro/mesonintrospectjob.cpp:160 rewriter/mesonrewriterjob.cpp:70
+#, kde-format
+msgid "JSON parser error: %1"
+msgstr "JSON ayrıştırıcı hatası: %1"
+
+#: mintro/mesonintrospectjob.cpp:168
+#, kde-format
+msgid ""
+"The introspection output of '%1' contains neither an array nor an object"
+msgstr "İçgözlem dosyası '%1', ne bir dizilim ne de bir nesne içeriyor"
+
+#: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
+#, kde-format
+msgid "The current build directory is invalid"
+msgstr "Geçerli yapı dizini geçersiz"
+
+#: rewriter/mesonrewriterjob.cpp:42
+#, kde-format
+msgid "Failed to create a temporary file."
+msgstr "Geçici bir dosya oluşturulamadı."
+
+#: rewriter/mesonrewriterjob.cpp:74
+#, kde-format
+msgid "The rewriter output of '%1' is not an object"
+msgstr "'%1' yeniden yazıcı çıktısı bir nesne değil"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_showAdvanced)
+#: settings/mesonadvancedsettings.ui:29
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced Configuration"
+msgstr "Gelişmiş Yapılandırmayı Göster"
+
+#. i18n: ectx: property (title), widget (QGroupBox, container)
+#: settings/mesonadvancedsettings.ui:36
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced Configuration"
+msgstr "Gelişmiş Yapılandırma"
+
+#. i18n: ectx: property (text), widget (QLabel, l_mesonArgs)
+#: settings/mesonadvancedsettings.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra Meson arguments:"
+msgstr "Ek Meson argümanları:"
+
+#. i18n: ectx: property (text), widget (QLabel, l_backend)
+#: settings/mesonadvancedsettings.ui:57
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Meson backend:"
+msgstr "Meson arka ucu:"
+
+#. i18n: ectx: property (text), widget (QLabel, l_mesonExe)
+#: settings/mesonadvancedsettings.ui:70
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Meson executable:"
+msgstr "Meson yürütülebiliri:"
+
+#. i18n: ectx: property (toolTip), widget (KLineEdit, i_mesonArgs)
+#: settings/mesonadvancedsettings.ui:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Changing this will reset the build options."
+msgstr "Bunu değiştirmek, yapı seçeneklerini sıfırlayacaktır."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_mesonExe)
+#: settings/mesonadvancedsettings.ui:93
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/mesonexecutable"
+msgstr "meson/yürütülebiliri/yolu"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_hideAdvanced)
+#: settings/mesonadvancedsettings.ui:102
+#, kde-format
+msgctxt "@action:button"
+msgid "Hide Advanced Configuration"
+msgstr "Gelişmiş Yapılandırmayı Gizle"
+
+#: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:174
+#, kde-format
+msgid "Status: %1"
+msgstr "Durum: %1"
+
+#: settings/mesonconfigpage.cpp:182
+#, kde-format
+msgid "The current build directory does not exist"
+msgstr "Geçerli yapı dizini yok"
+
+#: settings/mesonconfigpage.cpp:185
+#, kde-format
+msgid "The current build directory is empty"
+msgstr "Geçerli yapı dizini boş"
+
+#: settings/mesonconfigpage.cpp:188
+#, kde-format
+msgid "Build directory configured"
+msgstr "Yapı dizini yapılandırıldı"
+
+#: settings/mesonconfigpage.cpp:191
+#, kde-format
+msgid "This meson build directory is not fully configured"
+msgstr "Meson yapı dizini tümüyle yapılandırılmamış"
+
+#: settings/mesonconfigpage.cpp:197
+#, kde-format
+msgid "This directory does not seem to be a meson build directory"
+msgstr "Dizin, bir Meson yapı dizini gibi görünmüyor"
+
+#: settings/mesonconfigpage.cpp:200
+#, kde-format
+msgid "Invalid build directory configuration (empty build directory string)"
+msgstr "Geçersiz yapı dizini yapılandırması (boş yapı dizini dizisi)"
+
+#: settings/mesonconfigpage.cpp:203
+#, kde-format
+msgid "Something went very wrong. This is a bug"
+msgstr "Bir şeyler çok ters gitti. Bu bir hata"
+
+#: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:208
+#, kde-format
+msgid "No changes"
+msgstr "Değişiklik yok"
+
+#: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:211
+#, kde-format
+msgid "%1 option changed"
+msgid_plural "%1 options changed"
+msgstr[0] "%1 seçenek değiştirildi"
+msgstr[1] "%1 seçenek değiştirildi"
+
+#: settings/mesonconfigpage.cpp:332
+#, kde-format
+msgctxt "@title:tab"
+msgid "Meson"
+msgstr "Meson"
+
+#: settings/mesonconfigpage.cpp:337
+#, kde-format
+msgctxt "@title:tab"
+msgid "Meson Project Configuration"
+msgstr "Meson Proje Yapılandırması"
+
+#. i18n: ectx: property (text), widget (QToolButton, b_addDir)
+#. i18n: ectx: property (text), widget (QToolButton, b_rmDir)
+#: settings/mesonconfigpage.ui:41 settings/mesonconfigpage.ui:51
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, l_status)
+#. i18n: ectx: property (text), widget (QLabel, l_statusMessage)
+#: settings/mesonconfigpage.ui:71 settings/mesonnewbuilddir.ui:49
+#: settings/mesonrewriterpage.ui:187
+#, kde-format
+msgid "Status message..."
+msgstr "Durum iletisi..."
+
+#. i18n: ectx: property (text), widget (QLabel, l_changed)
+#: settings/mesonconfigpage.ui:78 settings/mesonrewriterpage.ui:194
+#, kde-format
+msgid "Num changed"
+msgstr "Sayı değiştirildi"
+
+#: settings/mesonlisteditor.cpp:50
+#, kde-format
+msgid "<NEW>"
+msgstr "<YENİ>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, MesonListEditor)
+#: settings/mesonlisteditor.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "İletişim Kutusu"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_new)
+#: settings/mesonlisteditor.ui:38
+#, kde-format
+msgid "New"
+msgstr "Yeni"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_del)
+#: settings/mesonlisteditor.ui:48
+#, kde-format
+msgid "Delete"
+msgstr "Sil"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_first)
+#: settings/mesonlisteditor.ui:65
+#, kde-format
+msgid "First"
+msgstr "İlk"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_up)
+#: settings/mesonlisteditor.ui:75
+#, kde-format
+msgid "Up"
+msgstr "Yukarı"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_down)
+#: settings/mesonlisteditor.ui:85
+#, kde-format
+msgid "Down"
+msgstr "Aşağı"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_last)
+#: settings/mesonlisteditor.ui:95
+#, kde-format
+msgid "Last"
+msgstr "Son"
+
+#: settings/mesonnewbuilddir.cpp:39
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Bir Yapı Dizini Yapılandır - %1"
+
+#: settings/mesonnewbuilddir.cpp:137
+#, kde-format
+msgid "Specified meson executable does not exist"
+msgstr "Belirtilen Meson yürütülebiliri yok"
+
+#: settings/mesonnewbuilddir.cpp:145
+#, kde-format
+msgid "Creating new build directory"
+msgstr "Yeni yapı dizini oluştur"
+
+#: settings/mesonnewbuilddir.cpp:148
+#, kde-format
+msgid "Using an already configured build directory"
+msgstr "Halihazırda yapılandırılmış bir yapı dizini kullanılıyor"
+
+#: settings/mesonnewbuilddir.cpp:151
+#, kde-format
+msgid "Using a broken meson build directory (this should be fine)"
+msgstr "Bozuk bir Meson yapı dizini kullanılıyor (bunda sıkıntı yok)"
+
+#: settings/mesonnewbuilddir.cpp:154
+#, kde-format
+msgid "Cannot use specified directory"
+msgstr "Belirtilen dizin kullanılamıyor"
+
+#: settings/mesonnewbuilddir.cpp:157
+#, kde-format
+msgid "There are already files in the build directory"
+msgstr "Yapı dizininde, halihazırda dosyalar var"
+
+#: settings/mesonnewbuilddir.cpp:160
+#, kde-format
+msgid "The build directory field must not be empty"
+msgstr "Yapı dizini alanı boş olmamalı"
+
+#: settings/mesonnewbuilddir.cpp:163
+#, kde-format
+msgid "You have reached unreachable code. This is a bug"
+msgstr "Erişilemez koda eriştiniz. Bu bir hata"
+
+#. i18n: ectx: property (text), widget (QLabel, l_buildDir)
+#: settings/mesonnewbuilddir.ui:19
+#, kde-format
+msgid "Build directory:"
+msgstr "Yapı dizini:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_buildDir)
+#: settings/mesonnewbuilddir.ui:32
+#, kde-format
+msgid "Full Path to the new build directory"
+msgstr "Yeni yapı dizinine olan tam yol"
+
+#. i18n: ectx: property (text), widget (QLabel, l_name)
+#. i18n: ectx: property (text), widget (QLabel, l_dispProject)
+#: settings/mesonoptionbaseview.ui:41 settings/mesonrewriterinput.ui:41
+#: settings/mesonrewriterpage.ui:61
+#, kde-format
+msgid "Name:"
+msgstr "Ad:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, b_reset)
+#: settings/mesonoptionbaseview.ui:48
+#, kde-format
+msgid "Reset to default value"
+msgstr "Öntanımlı değere sıfırla"
+
+#. i18n: ectx: property (title), widget (QGroupBox, c_main)
+#: settings/mesonoptionsview.ui:32
+#, kde-format
+msgid "Meson Options"
+msgstr "Meson Seçenekleri"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_core)
+#: settings/mesonoptionsview.ui:45
+#, kde-format
+msgid "Core"
+msgstr "Çekirdek"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_backend)
+#: settings/mesonoptionsview.ui:102
+#, kde-format
+msgid "Backend"
+msgstr "Arka Uç"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_base)
+#: settings/mesonoptionsview.ui:159
+#, kde-format
+msgid "Base"
+msgstr "Taban"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_compiler)
+#: settings/mesonoptionsview.ui:216
+#, kde-format
+msgid "Compiler"
+msgstr "Derleyici"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_directory)
+#: settings/mesonoptionsview.ui:273
+#, kde-format
+msgid "Directories"
+msgstr "Dizinler"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_user)
+#. i18n: ectx: attribute (title), widget (QWidget, t_project)
+#: settings/mesonoptionsview.ui:330 settings/mesonrewriterpage.ui:36
+#, kde-format
+msgid "Project"
+msgstr "Proje"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_test)
+#: settings/mesonoptionsview.ui:387
+#, kde-format
+msgid "Testing"
+msgstr "Sınama"
+
+#: settings/mesonrewriterpage.cpp:179 settings/mesonrewriterpage.cpp:188
+#, kde-format
+msgid "Initializing GUI"
+msgstr "Kullanıcı Arayüzü İlklendirme"
+
+#: settings/mesonrewriterpage.cpp:182
+#, kde-format
+msgid "Loading project data..."
+msgstr "Proje verisi yükleniyor..."
+
+#: settings/mesonrewriterpage.cpp:185
+#, kde-format
+msgid "Writing project data..."
+msgstr "Proje verisi yazılıyor..."
+
+#: settings/mesonrewriterpage.cpp:191
+#, kde-format
+msgid "Loading meson rewriter data failed"
+msgstr "Meson yeniden yazıcısı verisi yükleme başarısız"
+
+#: settings/mesonrewriterpage.cpp:406
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Additional Meson Option"
+msgstr "Ek Meson Seçenekleri Seç"
+
+#: settings/mesonrewriterpage.cpp:407
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Meson option to add:"
+msgstr "Eklenecek meson seçeneği:"
+
+#: settings/mesonrewriterpage.cpp:438
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project"
+msgstr "Proje"
+
+#: settings/mesonrewriterpage.cpp:443
+#, kde-format
+msgctxt "@title:tab"
+msgid "Meson Project Settings"
+msgstr "Meson Proje Ayarları"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, MesonRewriterPage)
+#: settings/mesonrewriterpage.ui:14
+#, kde-format
+msgid "Meson project settings"
+msgstr "Meson proje ayarları"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, t_project)
+#: settings/mesonrewriterpage.ui:39
+#, kde-format
+msgid "Project settings"
+msgstr "Proje ayarları"
+
+#. i18n: ectx: property (text), widget (QLabel, l_project)
+#: settings/mesonrewriterpage.ui:74
+#, kde-format
+msgid "<html><head/><body><h3>projectName</h3></body></html>"
+msgstr "<html><head/><body><h3>projeAdı</h3></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, l_defOpts)
+#: settings/mesonrewriterpage.ui:112
+#, kde-format
+msgid "Project default options"
+msgstr "Öntanımlı proje seçenekleri"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_newOpt)
+#: settings/mesonrewriterpage.ui:152
+#, kde-format
+msgid "New Option"
+msgstr "Yeni Seçenek"

@@ -1,0 +1,57 @@
+# translation of kdevkonsole.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2009.
+# Roman Paholík <wizzardsk@gmail.com>, 2013, 2014, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevkonsole\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-17 20:46+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr "Terminál"
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr "Terminál"
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr "Zlyhalo načítanie pluginu 'konsolepart'"
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~| msgid "Konsole"
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid ""
+#~ "This plugin provides KDevelop with an embedded konsole for quick and easy "
+#~ "command line access."
+#~ msgstr ""
+#~ "Tento plugin poskytuje KDevelop so zabudovanou konzolou na rýchly a ľahký "
+#~ "prístup k príkazovému riadku."

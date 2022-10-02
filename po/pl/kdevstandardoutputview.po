@@ -1,0 +1,171 @@
+# translation of kdevstandardoutputview.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2012, 2014, 2015, 2016, 2017, 2019, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevstandardoutputview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-04-11 07:34+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: outputwidget.cpp:53
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Widok wyniku"
+
+#: outputwidget.cpp:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Zamknij bieżący widok wyniku"
+
+#: outputwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Zamknij wszystkie pozostałe widoki wyników"
+
+#: outputwidget.cpp:81
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Poprzedni wynik"
+
+#: outputwidget.cpp:84
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Następny wynik"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Zaznacz uaktywniony element"
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Uaktywnij po zaznaczeniu elementu"
+
+#: outputwidget.cpp:105
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Pierwszy element"
+
+#: outputwidget.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Poprzedni element"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Następny element"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Ostatni element"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Wyczyść"
+
+#: outputwidget.cpp:141
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Szukaj..."
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr ""
+"Wpisz wyrażenie regularne dowolną wielkością liter, aby odfiltrować widok "
+"wyniku"
+
+#: standardoutputview.cpp:101
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Budowanie"
+
+#: standardoutputview.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Uruchamianie"
+
+#: standardoutputview.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Diagnozowanie"
+
+#: standardoutputview.cpp:116
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Testowanie"
+
+#: standardoutputview.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Zarządzanie wersjami"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Nawigacja"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "Provides toolviews for presenting the output of running apps"
+#~ msgstr ""
+#~ "Udostępnia widoki narzędzi do prezentacji wyjścia działających programów"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "Podglądy"

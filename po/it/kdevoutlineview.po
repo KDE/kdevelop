@@ -1,0 +1,51 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2018, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-07-25 16:31+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: outlinenode.cpp:169
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anonima>"
+
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Schema di massima"
+
+#: outlinewidget.cpp:47
+#, kde-format
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "Ordina alfabeticamente"
+
+#: outlinewidget.cpp:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "Ordina gli elementi alfabeticamente"
+
+#: outlinewidget.cpp:60
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtro..."
+
+#~ msgid "Outline View"
+#~ msgstr "Vista schema di massima"

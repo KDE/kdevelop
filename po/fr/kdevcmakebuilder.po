@@ -1,0 +1,170 @@
+# translation of kdevcmakebuilder.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2008, 2009, 2010, 2011, 2012, 2013.
+# Sebastien Renard <renard@kde.org>, 2013.
+# xavier <xavier.besnard@neuf.fr>, 2013, 2020.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+# Johnny Jazeix <jazeix@gmail.com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-26 21:55+0200\n"
+"Last-Translator: Johnny Jazeix <jazeix@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr ""
+"Impossible de trouver le constructeur make. Veuillez vérifier votre "
+"installation"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "Impossible de trouver un constructeur pour « %1 »"
+
+#: cmakebuilder.cpp:195
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "Aucun dossier de compilation n'est configuré, installation impossible"
+
+#: cmakebuilder.cpp:205
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "Aucun dossier de compilation n'est configuré, configuration impossible"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Configurer les paramètres globaux de CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Programme CMake par défaut :"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Générateur par défaut :"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Erreur interne : aucun projet spécifié à configurer."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Impossible de créer le dossier de compilation %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake : %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr ""
+"Aucun dossier de compilation n'est configuré, effacement du dossier de "
+"compilation impossible"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr ""
+"Mauvaise configuration du dossier de compilation, effacement du dossier de "
+"compilation impossible"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** L'élagage a réussi **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** L'élagage a échoué : %1 **"
+
+#, fuzzy
+#~| msgid "Aborting build"
+#~ msgid "Aborting"
+#~ msgstr "Interruption de la compilation"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Interruption de la configuration"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr ""
+#~ "Aucun dossier de compilation n'est configuré, compilation impossible"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Aucun dossier de compilation n'est configuré, nettoyage impossible"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Interruption du nettoyage"
+
+#~ msgid "Aborting install"
+#~ msgstr "Interruption de l'installation"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Joëlle Cornavin"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jcornavi@club-internet.fr"
+
+#~ msgid "CMake Builder"
+#~ msgstr "Compilateur CMake"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Prise en charge de la compilation de projets avec CMake"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "Aucun effacement du dossier de compilation n'est possible"
+
+#~ msgid "Job failed"
+#~ msgstr "La tâche a échoué"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "Binaire CMake :"
+
+#~ msgid "'%1' + '%2'"
+#~ msgstr "« %1 » + « %2 »"

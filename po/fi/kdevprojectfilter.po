@@ -1,0 +1,232 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"PO-Revision-Date: 2015-01-11 20:38+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: filtermodel.cpp:74
+#, fuzzy, kde-format
+#| msgid "Pattern"
+msgctxt "@title:column"
+msgid "Pattern"
+msgstr "Kuvio"
+
+#: filtermodel.cpp:76
+#, fuzzy, kde-format
+#| msgid "Targets"
+msgctxt "@title:column"
+msgid "Targets"
+msgstr "Kohteet"
+
+#: filtermodel.cpp:78
+#, fuzzy, kde-format
+#| msgid "Action"
+msgctxt "@title:column"
+msgid "Action"
+msgstr "Toiminto"
+
+#: filtermodel.cpp:107
+#, kde-format
+msgid ""
+"The wildcard pattern defines whether a file or folder is included in a "
+"project or not.<br />The pattern is matched case-sensitively against the "
+"items relative path to the project root. The relative path starts with a "
+"forward slash, trailing slashes of folders are removed.<br />Patterns ending "
+"on <code>\"/\"</code> are implicitly considered to match against folders "
+"only.<br />Patterns which do not explicitly start with either <code>\"/\"</"
+"code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
+"thus match any item with a relative path ending on the given pattern."
+msgstr ""
+"Jokerimerkkejä mahdollisesti sisältävä kuvio valitsee, otetaanko tiedosto "
+"tai kansio mukaan projektiin vai ei.<br />Kuviota käytetään projektissa "
+"olevien kohteiden polkuihin, jotka ovat suhteellisia projektin juureen. "
+"Suur- ja pienaakkoset erotellaan. Suhteellinen polku alkaa vinoviivalla, ja "
+"polkujen lopussa olevat kansioiden vinoviivat poistetaan.<br />Vinoviivaan "
+"(<code>\"/\"</code>) päättyvät kuviot koskevat implisiittisesti vain "
+"kansioita.<br />Jos kuvio ei eksplisiittisesti ala vinoviivalla (<code>\"/"
+"\"</code>) eikä asteriskilla (<code>\"*\"</code>), kuvion alkuun lisätään "
+"implisiittisesti <code>\"*/\"</code>. Tällöin se vastaa jokaista kohdetta, "
+"jonka suhteellinen polku päättyy annettuun kuvioon."
+
+#: filtermodel.cpp:119
+#, kde-format
+msgid ""
+"The target defines what type of item the filter is matched against.<br /"
+">Filters either apply only to files, only to folders or to both."
+msgstr ""
+"Kohde määrittää, millaisia kohteita suodatin vastaa.<br />Suodattimia "
+"käytetään joko vain tiedostoihin, vain kansioihin tai molempiin."
+
+#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#, fuzzy, kde-format
+#| msgid "Files and Folders"
+msgctxt "@item"
+msgid "Files and Folders"
+msgstr "Tiedostot ja kansiot"
+
+#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Folders"
+msgctxt "@item"
+msgid "Folders"
+msgstr "Kansiot"
+
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item"
+msgid "Files"
+msgstr "Tiedostot"
+
+#: filtermodel.cpp:141
+#, kde-format
+msgid ""
+"Filters by default exclude items from the project. Inclusive patterns can be "
+"used to include items which where matched by previous exclusive patterns."
+"<br />E.g. to only include files ending on <code>\".cpp\"</code> in your "
+"project, you could exclude all files via <code>\"*\"</code> and then apply "
+"an inclusive <code>\"*.cpp\"</code> pattern."
+msgstr ""
+"Oletusarvoisesti suodattimet jättävät kohteita pois projektista. Mukaan "
+"ottavia kuvioita voi käyttää sisällyttämään kohteita, jotka edeltävät kuviot "
+"jättävät pois.<br />Esimerkiksi, jos haluat ottaa mukaan projektiisi vain "
+"<code>\".cpp\"</code>-päätteiset tiedostot, voit jättää kaikki tiedostot "
+"pois kuviolla <code>\"*\"</code> ja sitten käyttää mukaan ottavaa kuviota "
+"<code>\"*.cpp\"</code>."
+
+#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#, fuzzy, kde-format
+#| msgid "Include"
+msgctxt "@item"
+msgid "Include"
+msgstr "Ota mukaan"
+
+#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#, fuzzy, kde-format
+#| msgid "Exclude"
+msgctxt "@item"
+msgid "Exclude"
+msgstr "Jätä pois"
+
+#: projectfilterconfigpage.cpp:172
+#, kde-format
+msgid ""
+"A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
+"to make this explicit."
+msgstr ""
+"Tyhjän kuvion suodatin vastaa kaikkia kohteita. Kirjoittamalla <code>\"*\"</"
+"code> ilmaiset saman eksplisiittisesti."
+
+#: projectfilterconfigpage.cpp:175
+#, kde-format
+msgid "A filter ending on <code>\"/\"</code> can never match a file."
+msgstr ""
+"Vinoviivaan (<code>\"/\"</code>) päättyvä suodatin ei voi koskaan vastata "
+"tiedostoa."
+
+#: projectfilterconfigpage.cpp:198
+#, fuzzy, kde-format
+#| msgid "Configure Project Filter"
+msgctxt "@title:tab"
+msgid "Configure Project Filter"
+msgstr "Projektisuodattimen asetukset"
+
+#: projectfilterconfigpage.cpp:208
+#, fuzzy, kde-format
+#| msgid "Project Filter"
+msgctxt "@title:tab"
+msgid "Project Filter"
+msgstr "Projektisuodatin"
+
+#: projectfilterprovider.cpp:76
+#, fuzzy, kde-format
+#| msgid "Exclude Item From Project"
+#| msgid_plural "Exclude Items From Project"
+msgctxt "@action:inmenu"
+msgid "Exclude Item from Project"
+msgid_plural "Exclude Items from Project"
+msgstr[0] "Jätä kohde pois projektista"
+msgstr[1] "Jätä kohteet pois projektista"
+
+#: projectfilterprovider.cpp:115
+#, kde-format
+msgid ""
+"A filter for the item was added. To undo, use the project filter settings."
+msgid_plural ""
+"A filter for the items was added. To undo, use the project filter settings."
+msgstr[0] ""
+"Kohteelle lisättiin suodatin. Kumoa muuttamalla projektisuodattimen "
+"asetuksia."
+msgstr[1] ""
+"Kohteille lisättiin suodatin. Kumoa muuttamalla projektisuodattimen "
+"asetuksia."
+
+#: projectfilterprovider.cpp:117
+#, fuzzy, kde-format
+#| msgid "Project Filter Added"
+msgctxt "@title:window"
+msgid "Project Filter Added"
+msgstr "Lisättiin projektisuodatin"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectfiltersettings.ui:20
+#, kde-format
+msgid ""
+"Configure which files and folders inside the project folder should be "
+"included or excluded:"
+msgstr ""
+"Valitse, mitkä projektikansiossa olevat tiedostot ja kansiot pitäisi ottaa "
+"mukaan ja mitkä pitäisi jättää pois:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: projectfiltersettings.ui:34
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Lisää"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: projectfiltersettings.ui:49
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Poista"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveUp)
+#: projectfiltersettings.ui:61
+#, fuzzy, kde-format
+#| msgid "Move Up"
+msgctxt "@action:button"
+msgid "Move Up"
+msgstr "Siirrä ylemmäs"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveDown)
+#: projectfiltersettings.ui:73
+#, fuzzy, kde-format
+#| msgid "Move Down"
+msgctxt "@action:button"
+msgid "Move Down"
+msgstr "Siirrä alemmas"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com"

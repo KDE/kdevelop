@@ -1,0 +1,342 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Николай Ерёмин <doktorkster@gmail.com>, 2009.
+# Ерёмин Николай <doktorkster@gmail.com>, 2009.
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2011.
+# Alexander Wolf <alex.v.wolf@gmail.com>, 2011.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevproblemreporter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"PO-Revision-Date: 2022-03-15 10:28+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: problemreporterplugin.cpp:94
+#, kde-format
+msgid "Parser"
+msgstr "Синтаксический анализатор"
+
+#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemsview.cpp:324
+#, kde-format
+msgctxt "@title:window"
+msgid "Problems"
+msgstr "Проблемы"
+
+#: problemreporterplugin.cpp:229
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve Problem"
+msgstr "Решение проблемы"
+
+#: problemreporterplugin.cpp:231
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve: %1"
+msgstr "Решить: %1"
+
+#: problemsview.cpp:37
+#, kde-format
+msgctxt "@action"
+msgid "Force Full Update"
+msgstr "Пересканировать полностью"
+
+#: problemsview.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Which files to display the problems for"
+msgstr "Файлы, проблемы в которых нужно показывать"
+
+#: problemsview.cpp:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Document"
+msgstr "Текущий документ"
+
+#: problemsview.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current document"
+msgstr "Показывать проблемы в текущем документе"
+
+#: problemsview.cpp:62
+#, kde-format
+msgctxt "@option:check"
+msgid "Open Documents"
+msgstr "Открытые документы"
+
+#: problemsview.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all open documents"
+msgstr "Показывать проблемы во всех открытых документах"
+
+#: problemsview.cpp:66
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Project"
+msgstr "Текущий проект"
+
+#: problemsview.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current project"
+msgstr "Показывать проблемы в текущем проекте"
+
+#: problemsview.cpp:70
+#, kde-format
+msgctxt "@option:check"
+msgid "All Projects"
+msgstr "Все проекты"
+
+#: problemsview.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all projects"
+msgstr "Показывать проблемы во всех проектах"
+
+#: problemsview.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Path"
+msgstr "Документы в каталоге"
+
+#: problemsview.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in a specific path"
+msgstr "Показывать проблемы во всех файлах в указанном каталоге"
+
+#: problemsview.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Current Path"
+msgstr "Документы в текущем каталоге"
+
+#: problemsview.cpp:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in the path of the current document"
+msgstr "Показывать проблемы во всех файлах в каталоге текущего документа"
+
+#: problemsview.cpp:83
+#, kde-format
+msgctxt "@option:check"
+msgid "Show All"
+msgstr "Показать все"
+
+#: problemsview.cpp:84
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display all problems"
+msgstr "Показывать все проблемы"
+
+#: problemsview.cpp:105
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Path Filter..."
+msgstr "Фильтр по пути..."
+
+#: problemsview.cpp:137
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Imports"
+msgstr "Показывать включённые"
+
+#: problemsview.cpp:138
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in imported files"
+msgstr "Показывать проблемы во включённых файлах"
+
+#: problemsview.cpp:148
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display errors"
+msgstr "Показывать ошибки"
+
+#: problemsview.cpp:150
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Errors"
+msgstr "Показывать ошибки"
+
+#: problemsview.cpp:153
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display warnings"
+msgstr "Показывать предупреждения"
+
+#: problemsview.cpp:155
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Warnings"
+msgstr "Показывать предупреждения"
+
+#: problemsview.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display hints"
+msgstr "Показывать подсказки"
+
+#: problemsview.cpp:160
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Hints"
+msgstr "Показывать подсказки"
+
+#: problemsview.cpp:180
+#, kde-format
+msgctxt "@title:menu"
+msgid "Grouping"
+msgstr "Группировка"
+
+#: problemsview.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "None"
+msgstr "Нет"
+
+#: problemsview.cpp:190
+#, kde-format
+msgctxt "@option:check"
+msgid "Path"
+msgstr "Путь"
+
+#: problemsview.cpp:191
+#, kde-format
+msgctxt "@option:check"
+msgid "Severity"
+msgstr "Важность"
+
+#: problemsview.cpp:219
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Поиск…"
+
+#: problemsview.cpp:462
+#, kde-format
+msgctxt "@title:tab %1: tab name, %2: number of problems"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: problemsview.cpp:500
+#, kde-format
+msgctxt "@title:menu"
+msgid "Scope: %1"
+msgstr "Область: %1"
+
+#: problemtreeview.cpp:94
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Problems"
+msgstr "Проблемы"
+
+#: problemtreeview.cpp:205
+#, kde-format
+msgctxt "@title:menu"
+msgid "Problem"
+msgstr "Проблема"
+
+#: problemtreeview.cpp:207
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Description"
+msgstr "&Копировать описание"
+
+#: problemtreeview.cpp:226
+#, kde-format
+msgctxt "@title:menu"
+msgid "Solve: %1"
+msgstr "Решить: %1"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Re-parse all watched documents"
+#~ msgstr "Повторно проанализировать все документы"
+
+#, fuzzy
+#~ msgid "Solve"
+#~ msgstr "Решить: %1"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Display errors, warnings and hints"
+#~ msgstr "Показывать ошибки, предупреждения и советы"
+
+#~ msgid "Scope"
+#~ msgstr "Область"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select the lowest level of problem severity to be displayed"
+#~ msgstr "Выберите наименьшую степень важности выводимых проблем"
+
+#~ msgid "Hint"
+#~ msgstr "Советы"
+
+# BUGME: context string needed (otherwise confused with "Source code")
+# Источник ошибки (препроцессор, семантический анализ(атор), ...) --aspotashev
+#~ msgctxt "@title:column source of problem"
+#~ msgid "Source"
+#~ msgstr "Источник"
+
+#~ msgctxt "@title:column file where problem was found"
+#~ msgid "File"
+#~ msgstr "Файл"
+
+#~ msgctxt "@title:column line number with problem"
+#~ msgid "Line"
+#~ msgstr "Строка"
+
+# Позиция в строке. --aspotashev
+#~ msgctxt "@title:column column number with problem"
+#~ msgid "Column"
+#~ msgstr "Позиция"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ерёмин Николай,Александр Поташев,Александр Вольф"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "doktorkster@gmail.com,aspotashev@gmail.com,alex.v.wolf@gmail.com"
+
+#~ msgid "Problem Reporter"
+#~ msgstr "Диагностика проблем"
+
+#~ msgid "Shows errors in source code"
+#~ msgstr "Показывает ошибки в исходном коде"
+
+#~ msgid "In file included from:"
+#~ msgstr "В файле, включённом из:"
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Неизвестно"
+
+#~ msgid "Disk"
+#~ msgstr "Диск"
+
+#~ msgid "Preprocessor"
+#~ msgstr "Препроцессор"
+
+#~ msgid "Lexer"
+#~ msgstr "Лексический анализатор"
+
+#~ msgid "Semantic Analysis"
+#~ msgstr "Семантический анализ"

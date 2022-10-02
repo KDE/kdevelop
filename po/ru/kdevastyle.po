@@ -1,0 +1,721 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Dimitriy Ryazantcev <DJm00n@mail.ru>, 2009.
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2011, 2012.
+# Alexey Morozov <morozov@gmail.com>, 2011.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevformatters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-03-04 10:31+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: astyle_plugin.cpp:230
+#, kde-format
+msgid ""
+"<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
+"for the C, C++, C# and Java programming languages.<br />Home Page: <a href="
+"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+msgstr ""
+"<b>Artistic Style</b> — программа для форматирования, расстановки отступов и "
+"преображения исходного кода на языках C, C++, C# и Java.<br />Домашняя "
+"страница: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
+"sourceforge.net</a>"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
+#: astyle_preferences.ui:33
+#, kde-format
+msgctxt "@title:tab"
+msgid "Indentation"
+msgstr "Отступы"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:48
+#, kde-format
+msgctxt "@item:inlistbox Indentation type"
+msgid "Tabs"
+msgstr "Табуляции"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:53
+#, kde-format
+msgctxt "@item:inlistbox Indentation type"
+msgid "Force tabs"
+msgstr "Табуляции (принудительно)"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:58
+#, kde-format
+msgctxt "@item:inlistbox Indentation type"
+msgid "Spaces"
+msgstr "Пробелы"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpNuberSpaces)
+#: astyle_preferences.ui:86
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Number of spaces that will be converted to a tab.\n"
+"The number of spaces per tab is controlled by the editor."
+msgstr ""
+"Количество пробелов, преобразуемых в табуляцию.\n"
+"Ширина табуляции в пробелах определяется редактором."
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
+#: astyle_preferences.ui:104
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Convert tabs to spaces."
+msgstr "Заменять табуляции пробелами."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkConvertTabs)
+#: astyle_preferences.ui:107
+#, kde-format
+msgctxt "@option:check"
+msgid "Con&vert tabs into spaces"
+msgstr "&Заменять табуляции пробелами"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkFillEmptyLines)
+#: astyle_preferences.ui:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fill empty lines with the white space of their previous lines."
+msgstr "Заполнять пустые строки пробелами по длине предыдущих строк."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
+#: astyle_preferences.ui:117
+#, kde-format
+msgctxt "@option:check"
+msgid "Fill empt&y lines"
+msgstr "З&аполнять пустые строки"
+
+#. i18n: ectx: property (text), widget (QLabel, lblIndentObjects)
+#: astyle_preferences.ui:139
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Indent:"
+msgstr "Отступ:"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:153
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Blocks"
+msgstr "Блоки"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:158
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Brackets"
+msgstr "Скобки"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:163
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Cases"
+msgstr "Варианты выбора"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:168
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Class"
+msgstr "Класс"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:173
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Labels"
+msgstr "Метки"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:178
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Namespaces"
+msgstr "Пространства имён"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:183
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preprocessor directives"
+msgstr "Директивы препроцессора"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:188
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Switches"
+msgstr "Конструкции выбора"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpMaxStatement)
+#. i18n: ectx: property (toolTip), widget (QLabel, TextLabel2_2)
+#: astyle_preferences.ui:201 astyle_preferences.ui:243
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Indent a maximal # spaces in a continuous statement,\n"
+"relative to the previous line."
+msgstr ""
+"Максимальный отступ # пробелов в продолжении оператора,\n"
+"относительно предыдущей строки."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
+#: astyle_preferences.ui:212 astyle_preferences.ui:226
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Indent a minimal # spaces in a continuous conditional\n"
+"belonging to a conditional header."
+msgstr ""
+"Минимальный отступ # пробелов в продолжении условия\n"
+"относительно начала."
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: astyle_preferences.ui:215
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Minimum in conditional:"
+msgstr "Минимум в условии:"
+
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
+#: astyle_preferences.ui:229
+#, kde-format
+msgctxt "@item"
+msgid "Twice current"
+msgstr "Текущий x 2"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
+#: astyle_preferences.ui:246
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum in statement:"
+msgstr "Максимум в операторе:"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
+#: astyle_preferences.ui:256
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Number of indents"
+msgstr "Количество отступов"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAfterParens)
+#: astyle_preferences.ui:269
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Indent, instead of align, continuation lines following lines that contain an "
+"opening paren '(' or an assignment '='."
+msgstr ""
+"Добавлять отступы (а не выравнивать) строк продолжения, которые следуют за "
+"строками, содержащими открывающую скобку «(» или символ придания значения "
+"«=»."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
+#: astyle_preferences.ui:272
+#, kde-format
+msgctxt "@option:check"
+msgid "Continuation lines:"
+msgstr "Строки продолжения:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabOther)
+#: astyle_preferences.ui:295
+#, kde-format
+msgctxt "@title:tab"
+msgid "Other"
+msgstr "Другое"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpBrackets)
+#: astyle_preferences.ui:301
+#, kde-format
+msgctxt "@title:group"
+msgid "Brackets"
+msgstr "Скобки"
+
+#. i18n: ectx: property (text), widget (QLabel, lblBrackets)
+#: astyle_preferences.ui:315
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Type:"
+msgstr "Тип:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracketsCloseHeaders)
+#: astyle_preferences.ui:326
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
+"from their immediately preceding closing brackets."
+msgstr ""
+"Переносить закрывающее начало (else, catch, ...)\n"
+"непосредственно перед предыдущей закрывающей скобкой."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
+#: astyle_preferences.ui:329
+#, kde-format
+msgctxt "@option:check"
+msgid "Brea&k closing headers"
+msgstr "Пере&носить закрывающее начало"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:343
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "No change"
+msgstr "Не менять"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:348
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Attach"
+msgstr "Присоединение"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:353
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Break"
+msgstr "Перенос"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:358
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Linux"
+msgstr "Linux"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:363
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Run-In"
+msgstr "Подтягивание"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
+#: astyle_preferences.ui:376
+#, kde-format
+msgctxt "@title:group"
+msgid "Blocks"
+msgstr "Блоки"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
+#: astyle_preferences.ui:391
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Insert empty lines around unrelated blocks, labels, classes,...\n"
+"Known problems:\n"
+"\n"
+"1. If a statement is NOT part of a block, \n"
+"the following statements are all double spaced. \n"
+"Statements enclosed in a block are formatted \n"
+"correctly.\n"
+"\n"
+"2. Comments are broken from the block.\n"
+msgstr ""
+"Вставлять пустые строки вокруг несвязанных блоков, меток, классов,...\n"
+"Возможные проблемы:\n"
+"\n"
+"1. Если оператор НЕ является частью блока, \n"
+"следующие операторы будут идти с двойным пропуском.\n"
+"Операторы внутри блока форматируются \n"
+"корректно.\n"
+"\n"
+"2. Комментарии отделяются от блока.\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
+#: astyle_preferences.ui:394
+#, kde-format
+msgctxt "@option:check break unrelated blocks by a newline"
+msgid "&Break blocks"
+msgstr "Разделять &блоки"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
+#: astyle_preferences.ui:412
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Like --break-blocks, except also insert empty lines \n"
+"around closing headers (e.g. 'else', 'catch', ...).\n"
+"\n"
+"Known problems:\n"
+"\n"
+"1. If a statement is NOT part of a block, \n"
+"the following statements are all double spaced. \n"
+"Statements enclosed in a block are formatted \n"
+"correctly.\n"
+"\n"
+"2. Comments are broken from the block.\n"
+msgstr ""
+"Похоже на разделение блоков, но пустые строки\n"
+"окружают и закрывающее начало (else, catch, ...).\n"
+"\n"
+"Возможные проблемы:\n"
+"\n"
+"1. Если оператор НЕ является частью блока,\n"
+"следующие операторы будут идти с двойным пропуском.\n"
+"Операторы внутри блока форматируются корректно.\n"
+"\n"
+"\n"
+"2. Комментарии отделяются от блока.\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
+#: astyle_preferences.ui:415
+#, kde-format
+msgctxt "@option:check break all blocks with a newline"
+msgid "Break all bl&ocks"
+msgstr "Разделять все бл&оки"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
+#: astyle_preferences.ui:422
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Break 'else if()' statements into two different lines."
+msgstr "Разбивать операторы «else if()» на две строки."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
+#: astyle_preferences.ui:425
+#, kde-format
+msgctxt "@option:check break else if() into separate lines"
+msgid "Break i&f-else"
+msgstr "Разделять i&f-else"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
+#: astyle_preferences.ui:435
+#, kde-format
+msgctxt "@title:group"
+msgid "Padding"
+msgstr "Заполнение"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:450
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "No change"
+msgstr "Не менять"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:455
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Unpad"
+msgstr "Убрать"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:460
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Inside only"
+msgstr "Только внутри"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:465
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Outside only"
+msgstr "Только снаружи"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:470
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Inside and outside"
+msgstr "Снаружи и внутри"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
+#: astyle_preferences.ui:480
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Insert space padding around operators.\n"
+"Once padded, operators stay padded.\n"
+"There is no unpad operator option."
+msgstr ""
+"Вставить отступ пробелом вокруг операторов.\n"
+"После добавления операторы остаются с отступом.\n"
+"Операцию отменить нельзя."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
+#: astyle_preferences.ui:483
+#, kde-format
+msgctxt "@option:check"
+msgid "&Add spaces around operators"
+msgstr "&Добавить пробелы вокруг операторов"
+
+#. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
+#: astyle_preferences.ui:490
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Pad parenthesis:"
+msgstr "Отступы от скобок:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
+#: astyle_preferences.ui:497
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Insert space padding after parenthesis headers (e.g. 'if', 'for', "
+"'while', ...)"
+msgstr ""
+"Вставлять дополнительные пробелы после начала со скобками (if, for, "
+"while, ...)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
+#: astyle_preferences.ui:500
+#, kde-format
+msgctxt "@option:check"
+msgid "Add spaces after parenthesis &headers"
+msgstr "Добавлять пробелы после &начала со скобками"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
+#: astyle_preferences.ui:512
+#, kde-format
+msgctxt "@title:group"
+msgid "One Liners"
+msgstr "Однострочные конструкции"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
+#: astyle_preferences.ui:519
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not break lines containing multiple statements into\n"
+"multiple single-statement lines."
+msgstr ""
+"Не разбивать строки с несколькими операторами\n"
+"на отдельные строки для каждого."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
+#: astyle_preferences.ui:522
+#, kde-format
+msgctxt "@option:check"
+msgid "&Keep one-line statements"
+msgstr "&Сохранять однострочные операторы"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
+#: astyle_preferences.ui:529
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Do not break blocks residing completely on one line."
+msgstr "Не разбивать блоки, находящиеся полностью на одной строке."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
+#: astyle_preferences.ui:532
+#, kde-format
+msgctxt "@option:check"
+msgid "Keep o&ne-line blocks"
+msgstr "Со&хранять однострочные блоки"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpOther)
+#: astyle_preferences.ui:542
+#, kde-format
+msgctxt "@title:group"
+msgid "Other"
+msgstr "Другое"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
+#: astyle_preferences.ui:548
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Pointer Alignment:"
+msgstr "Позиция указателя:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:556
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "No change"
+msgstr "Не менять"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:561
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Name"
+msgstr "Имя"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:566
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Middle"
+msgstr "Середина"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:571
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Type"
+msgstr "Тип"
+
+#~ msgid "Stroustrup"
+#~ msgstr "Страуструп"
+
+#~ msgid ""
+#~ "<b>Indent and Format Source Code.</b><br />This plugin allows using "
+#~ "powerful external formatting tools that can be invoked through the "
+#~ "command-line.<br />For example, the <b>uncrustify</b>, <b>astyle</b> or "
+#~ "<b>indent</b> formatters can be used.<br />The advantage of command-line "
+#~ "formatters is that formatting configurations can be easily shared by all "
+#~ "team members, independent of their preferred IDE."
+#~ msgstr ""
+#~ "<b>Расстановка отступов и форматирование исходного кода.</b><br />Данное "
+#~ "расширение позволяет использовать внешние средства форматирования, "
+#~ "запускаемые из командной строки,<br /> например <b>uncrustify</b>, "
+#~ "<b>astyle</b> или <b>indent</b>. Плюс применения подобных средств "
+#~ "форматирования в том, что все члены группы разработчиков могут "
+#~ "использовать одну конфигурацию форматирования вне зависимости от "
+#~ "предпочитаемой среды разработки."
+
+#~ msgid "Gnu Indent: GNU"
+#~ msgstr "Gnu Indent: GNU"
+
+#~ msgid "Gnu Indent: Kernighan & Ritchie"
+#~ msgstr "Gnu Indent: Керниган и Ритчи"
+
+#~ msgid "Gnu Indent: Original Berkeley indent style"
+#~ msgstr "Gnu Indent: Канонический стиль Беркли"
+
+#~ msgid ""
+#~ "Description:<br /><b>kdev_format_source</b> is a script bundled with "
+#~ "KDevelop which allows using fine-grained formatting rules by placing meta-"
+#~ "files called <b>format_sources</b> into the file-system.<br /><br />Each "
+#~ "line of the <b>format_sources</b> files defines a list of wildcards "
+#~ "followed by a colon and the used formatting-command.<br /><br />The "
+#~ "formatting-command should use <b>$TMPFILE</b> to reference the temporary "
+#~ "file to reformat.<br /><br />Example:<br /><b>*.cpp *.h : myformatter "
+#~ "$TMPFILE</b><br />This will reformat all files ending with <b>.cpp</b> or "
+#~ "<b>.h</b> using the custom formatting script <b>myformatter</b>.<br /"
+#~ "><br />Example: <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c "
+#~ "uncrustify.config -o $TMPFILE</b> <br />This will reformat all files in "
+#~ "subdirectory <b>subdir</b> using the <b>uncrustify</b> tool with the "
+#~ "config-file <b>uncrustify.config</b>."
+#~ msgstr ""
+#~ "Описание:<br /><b>kdev_format_source</b> — сценарий, поставляемый с "
+#~ "KDevelop, который позволяет гибко настраивать правила форматирования, "
+#~ "размещая метафайлы <b>format_sources</b> в файловой системе.<br /><br />В "
+#~ "каждой строке файлов <b>format_sources</b> определяется список шаблонов, "
+#~ "за которым следует двоеточие и применяемая команда форматирования.<br /"
+#~ "><br />Команда форматирования должна обрабатывать временный файл <b>"
+#~ "$TMPFILE</b>.<br /><br />Пример 1:<br /><b>*.cpp *.h : myformatter "
+#~ "$TMPFILE</b><br />Эта строка запустит переформатирование всех файлов с "
+#~ "расширением <b>.cpp</b> и <b>.h</b> заданным сценарием форматирования "
+#~ "<b>myformatter</b>.<br /><br />Пример 2: <br /><b>subdir/* : uncrustify -"
+#~ "l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />Эта строка "
+#~ "запустит переформатирование всех файлов в подкаталоге <b>subdir</b> с "
+#~ "помощью утилиты <b>uncrustify</b> с конфигурацией <b>uncrustify.config</"
+#~ "b>."
+
+# BUGME: rm space --aspotashev
+#, fuzzy
+#~ msgid "Command:"
+#~ msgstr "Команда:"
+
+#~ msgid ""
+#~ "<i>You can enter an arbitrary shell command.</i><br />The unformatted "
+#~ "source-code is reached to the command <br />through the standard input, "
+#~ "and the <br />formatted result is read from the standard output.<br /"
+#~ "><br />If you add <b>$TMPFILE</b> into the command, then <br />a "
+#~ "temporary file is used for transferring the code."
+#~ msgstr ""
+#~ "<i>Вы можете ввести здесь произвольную команду оболочки.</i><br /> "
+#~ "Неформатированный исходный код передаётся этой команде<br /> через поток "
+#~ "стандартного ввода, а форматированный<br /> результат считывается из "
+#~ "потока стандартного вывода.<br /> <br />Если вы добавите в параметры "
+#~ "команды <b>$TMPFILE</b>,<br /> код будет передаваться через временный "
+#~ "файл."
+
+#~ msgid "More Variables"
+#~ msgstr "Подробнее о переменных"
+
+#~ msgid "Style: %1"
+#~ msgstr "Стиль: %1"
+
+#~ msgid ""
+#~ "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+#~ ">The code will be written into the file, the temporary <br />file will be "
+#~ "substituted into that position, and the result <br />will be read out of "
+#~ "that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+#~ "original file. <br />The contents of the file must not be modified, "
+#~ "changes are allowed <br />only in $TMPFILE.<br /><br /><b>${PROJECT_NAME}"
+#~ "</b> will be replaced by the path of <br />the currently open project "
+#~ "with the matching name."
+#~ msgstr ""
+#~ "<b>$TMPFILE</b> заменяется путём временного файла. <br />В этот файл "
+#~ "будет записан обрабатываемый код, <br /> путь к нему будет подставлен "
+#~ "вместо переменной,<br /> и из этого же файла будет прочитан результат."
+#~ "<br /><br /> <b>$FILE</b> заменяется путём исходного файла. <br /> "
+#~ "Содержимое этого файла должно остаться неизменным,<br /> изменения "
+#~ "допускаются только в $TMPFILE.<br /><br /> <b>${PROJECT_NAME}</b> "
+#~ "заменяется путём файла текущего<br /> проекта с соответствующим именем."
+
+#~ msgid "Variable Replacements"
+#~ msgstr "Переменные подстановки"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Александр Дымо,Руслан Попов,Николай Шафоростов,Стас Иванов,Андрей "
+#~ "Черепанов,Дмитрий Рязанцев,Алексей Морозов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "adymo@kdevelop.org,rpopov@jet.msk.su,shafff@ukr.net,f0ma@smtp.ru,"
+#~ "sibskull@mail.ru,djm00n@rambler.ru,morozov@gmail.com"
+
+#~ msgid "Astyle Formatter"
+#~ msgstr "Преобразователь Astyle"
+
+#~ msgid "A formatting tool using astyle"
+#~ msgstr "Форматирование кода с использованием astyle"
+
+#~ msgid "Custom Script Formatter"
+#~ msgstr "Настраиваемый сценарий форматирования"
+
+#~ msgid "A formatter using custom scripts"
+#~ msgstr "Форматирование с помощью сценариев"
+
+#~ msgid "Indent Formatter"
+#~ msgstr "Indent - оформление кода"
+
+#~ msgid ""
+#~ "<b>Indent and Format C Program Source.</b><br />The `indent' program can "
+#~ "be used to make code easier to read. It can also convert from one style "
+#~ "of writing C to another.<br /><b>indent</b> understands a substantial "
+#~ "amount about the syntax of C, but it also attempts to cope with "
+#~ "incomplete and misformed syntax.<br />Home Page: <a href=\"http://www.gnu."
+#~ "org/software/indent/\">http://www.gnu.org/software/indent/</a>"
+#~ msgstr ""
+#~ "<b>Отступы и форматирование программ на C.</b><br />Программа «indent» "
+#~ "может использоваться для приведения кода в более удобочитаемый вид. Она "
+#~ "также может преобразовывать код из одного стиля написания программ на C в "
+#~ "другой.<br /><b>indent</b> не только понимает основное подмножество C, но "
+#~ "и пытается разобрать неполный или неправильный синтаксис.<br />Домашняя "
+#~ "страница: <a href=\"http://www.gnu.org/software/indent/\">http://www.gnu."
+#~ "org/software/indent</a>"
+
+#~ msgid "Break bl&ocks all"
+#~ msgstr "Перено&сить все блоки"

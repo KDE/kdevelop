@@ -1,0 +1,257 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Vit Pelcak <vit@pelcak.org>, 2018, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-17 16:39+0200\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: analyzer.cpp:29
+#, kde-format
+msgid "Clang-Tidy"
+msgstr "Clang-Tidy"
+
+#: config/checklistfilterproxysearchline.cpp:23
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Hledat..."
+
+#: config/checklistmodel.cpp:65
+#, kde-format
+msgctxt "@item"
+msgid "All checks"
+msgstr "Všechny kontroly"
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "Zadejte název nové sady kontrol"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Název:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "Sada kontrol:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "Přidat sadu kontrol"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "Klonovat sadu kontrol"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "Odstranit sadu kontrol"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "Nastavit jako výchozí"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "Upravit název sady kontrol"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "Vlastní"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "Použít výchozí (aktuálně: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1 (výchozí výběr)"
+
+#: config/clangtidypreferences.cpp:62 config/clangtidyprojectconfigpage.cpp:55
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clang-Tidy"
+msgstr "Clang-Tidy"
+
+#: config/clangtidypreferences.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clang-Tidy Settings"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/clangtidypreferences.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Cesty"
+
+#. i18n: ectx: property (text), widget (QLabel, clangtidyLabel)
+#: config/clangtidypreferences.ui:37
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Clang-&Tidy executable:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
+#: config/clangtidypreferences.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The full path to the Clang-Tidy executable"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/clangtidypreferences.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "Spustit úlohy analýzy souběžně"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/clangtidypreferences.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "Použít všechna jádra CPU"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/clangtidypreferences.ui:101
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "Maximální počet vláken:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useConfigFile)
+#: config/clangtidyprojectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use .clang-tidy file(s)"
+msgstr "Po&užít soubor(y) .clang-tidy"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/clangtidyprojectconfigpage.ui:43
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Kontroly"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: config/clangtidyprojectconfigpage.ui:73
+#, kde-format
+msgctxt "@title:tab"
+msgid "Includes"
+msgstr "Vložené soubory"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: config/clangtidyprojectconfigpage.ui:79
+#, kde-format
+msgctxt "@option:check"
+msgid "&Check system headers:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/clangtidyprojectconfigpage.ui:92
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header fi&lter:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/clangtidyprojectconfigpage.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from. Diagnostics from the main file of each translation unit are always "
+"displayed. Can be used together with -line-filter."
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: config/clangtidyprojectconfigpage.ui:119
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Extra parametry"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: config/clangtidyprojectconfigpage.ui:125
+#, kde-format
+msgctxt "@label.textbox"
+msgid "E&xtra parameters:"
+msgstr "E&xtra parametry:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_additionalParameters)
+#: config/clangtidyprojectconfigpage.ui:135
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional command line options to pass to Clang-Tidy."
+msgstr ""
+
+#: job.cpp:68
+#, kde-format
+msgid "Clang-Tidy Analysis"
+msgstr ""
+
+#: job.cpp:142
+#, kde-format
+msgid "Failed to start Clang-Tidy process."
+msgstr "Spuštění procesu Clang-Tidy selhalo."
+
+#: job.cpp:147
+#, kde-format
+msgid "Clang-Tidy crashed."
+msgstr ""
+
+#: job.cpp:151
+#, kde-format
+msgid "Clang-Tidy process timed out."
+msgstr ""
+
+#: job.cpp:155
+#, kde-format
+msgid "Write to Clang-Tidy process failed."
+msgstr ""
+
+#: job.cpp:159
+#, kde-format
+msgid "Read from Clang-Tidy process failed."
+msgstr ""

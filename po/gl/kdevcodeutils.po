@@ -1,0 +1,95 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Xabier Villar <xabier.villar@gmail.com>, 2012.
+# Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2013.
+# Marce Villarino <mvillarino@kde-espana.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-11-08 23:20+0100\n"
+"Last-Translator: Marce Villarino <mvillarino@kde-espana.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, fuzzy, kde-format
+#| msgid "Document Declaration"
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr "Documentar a declaración"
+
+#: codeutilsplugin.cpp:50
+#, fuzzy, kde-format
+#| msgid "Alt+Shift+d"
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr "Alt+Maiús+D"
+
+#: codeutilsplugin.cpp:52
+#, fuzzy, kde-format
+#| msgid "Add Doxygen skeleton for declaration under cursor."
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr "Engadir un esqueleto Doxygen para declaración baixo o cursor."
+
+#: codeutilsplugin.cpp:55
+#, fuzzy, kde-format
+#| msgid ""
+#| "Adds a basic Doxygen comment skeleton in front of the declaration under "
+#| "the cursor, e.g. with all the parameter of a function."
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr ""
+"Engade un esqueleto básico de comentario de Doxygen diante da declaración "
+"baixo o cursor; por exemplo, con todos os parámetros dunha función."
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr "…"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Code"
+#~ msgstr "Código"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Xabier Villar"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "xabier.villar@gmail.com"
+
+#, fuzzy
+#~| msgid "Code Utilities"
+#~ msgid "Code Utils"
+#~ msgstr "Utilidades de código"
+
+#~ msgid ""
+#~ "Collection of various utilities that increase productivity while "
+#~ "programming."
+#~ msgstr ""
+#~ "Colección de varias utilidades que aumentan a produtividade durante a "
+#~ "programación."
+
+#~ msgid "Milian Wolff"
+#~ msgstr "Milian Wolff"
+
+#~ msgid "Author"
+#~ msgstr "Autor."
+
+#~ msgid "Various utilities that help you code faster."
+#~ msgstr "Varias utilidades que lle axudan a escribir código mais rápido."
+
+#~ msgid "Defaults to %1."
+#~ msgstr "Predeterminado a %1."

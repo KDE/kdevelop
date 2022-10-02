@@ -1,0 +1,303 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sergiu Bivol <sergiu@cip.md>, 2008, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2012-12-21 04:25+0200\n"
+"Last-Translator: Sergiu Bivol <sergiu.bivol@jurnaltv.md>\n"
+"Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: appwizarddialog.cpp:23
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Creează proiect nou"
+
+#: appwizarddialog.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "Page for general configuration options"
+#| msgid "General"
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "General"
+
+#: appwizarddialog.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Control versiune"
+
+#: appwizardplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "&New Project..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Proiect &nou..."
+
+#: appwizardplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid "Generate a new project from a template"
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Generează un proiect nou dintr-un șablon"
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+
+#: appwizardplugin.cpp:106
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgid "Could not create project from template."
+msgstr "Creează proiect nou"
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr ""
+
+#: appwizardplugin.cpp:136
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Control versiune"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr ""
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr ""
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr ""
+
+#: appwizardplugin.cpp:182
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgid "Could not import project into %1."
+msgstr "Creează proiect nou"
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr ""
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr ""
+
+#: appwizardplugin.cpp:332
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgid "Could not create new project"
+msgstr "Creează proiect nou"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr ""
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Șabloane de proiecte"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr ""
+
+#: projectselectionpage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Project Templates"
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Șabloane de proiecte"
+
+#: projectselectionpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Project Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Șabloane de proiecte"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr ""
+
+#: projectselectionpage.cpp:170
+#, fuzzy, kde-format
+#| msgid "Invalid Location"
+msgid "Invalid location"
+msgstr "Locație nevalidă"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Denumire de proiect goală"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Denumire de proiect nevalidă"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr ""
+
+#: projectselectionpage.cpp:232
+#, fuzzy, kde-format
+#| msgid "Invalid project name"
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Denumire de proiect nevalidă"
+
+#: projectselectionpage.cpp:245
+#, fuzzy, kde-format
+#| msgid "Directory already exists and is not empty!"
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Directorul există deja și nu este gol!"
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Proprietăți"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, fuzzy, kde-format
+#| msgid "Project Templates"
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Șabloane de proiecte"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Amplasare:"
+
+#: projectvcspage.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "No Version Control Support chosen"
+#| msgid "None"
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Niciunul"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Control versiune"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Failed to create project"
+#~ msgstr "Creează proiect nou"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Proiect"
+
+#, fuzzy
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Denumire aplicație:"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sergiu Bivol"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sergiu@ase.md"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Expert proiecte"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&Import proiect existent..."
+
+#~ msgid "Import existing project"
+#~ msgstr "Importă un proiect existent"
+
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Alegeți un dosar existent."
+
+#~ msgid "Please choose a project name."
+#~ msgstr "Alegeți o denumire de proiect."
+
+#~ msgid "Project import error"
+#~ msgstr "Eroare la importarea proiectului"
+
+#~ msgid "Import Existing Project"
+#~ msgstr "Importă un proiect existent"
+
+#~ msgid "&Directory:"
+#~ msgstr "&Director:"
+
+#~ msgid "Choose directory to import"
+#~ msgstr "Alegeți directorul de importat"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "&Preia din:"
+
+#~ msgid "CMake"
+#~ msgstr "CMake"
+
+#~ msgid "QMake"
+#~ msgstr "QMake"

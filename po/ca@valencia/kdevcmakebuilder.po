@@ -1,0 +1,120 @@
+# Translation of kdevcmakebuilder.po to Catalan (Valencian)
+# Copyright (C) 2009-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa <manutortosa@gmail.com>, 2009.
+# Josep M. Ferrer <txemaq@gmail.com>, 2013, 2014, 2015, 2020, 2021.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-10-30 20:48+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr ""
+"No s'ha pogut trobar el constructor de «make». Comproveu la instal·lació"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "No s'ha trobat un constructor per a %1"
+
+#: cmakebuilder.cpp:195
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "No s'ha configurat cap directori de construcció, no es pot instal·lar"
+
+#: cmakebuilder.cpp:205
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "No s'ha configurat cap directori de construcció, no es pot configurar"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Configura la configuració global de CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Executable predeterminat de CMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Generador predeterminat:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr ""
+"S'ha produït un error intern: no s'ha especificat el projecte a configurar."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "No s'ha pogut crear el directori de construcció %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr ""
+"No s'ha configurat un directori de construcció, no s'ha pogut netejar el "
+"directori de construcció"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr ""
+"Directori de construcció incorrecte, no s'ha pogut netejar el directori de "
+"construcció"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Eliminat amb èxit **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** L'eliminació ha fallat: %1 **"

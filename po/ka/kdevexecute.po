@@ -1,0 +1,352 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-24 19:26+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"ბრჭყალების შეცდომა %1-ის კონფიგურაციის გაშვებისას. გაშვება გაუქმებულია."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის არგუმენტებშია, "
+"მხარდაუჭერელია. გაშვება გაუქმებულია."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "%1-ის დამოკიდებულებების გადაწყვეტის შეცდომა"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "მითითებული გამშვები ფაილი არასწორია"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"ბრჭყალების შეცდომა ხელით მითითებული ინტერპრეტატორით %1-ის კონფიგურაციის "
+"გაშვებისას. გაშვება გაუქმებულია."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"გარსის მეტასიმბოლო, რომელიც %1-ის გასაშვები კონფიგურაციის სკრიპტშია, "
+"მხარდაუჭერელია. გაშვება გაუქმებულია."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr "კითხვა, გაშვებულია, თუ არა"
+
+#: nativeappconfig.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "ყველა ასლის მოკვლა"
+
+#: nativeappconfig.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "კიდევ ერთის გაშვება"
+
+#: nativeappconfig.cpp:156
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "ადგილობრივი აპლიკაციის მორგება"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "ადგილობრივი აპლიკაციის გაშვება"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "ადგილობრივი აპლიკაცია"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "დაკომპილებული მანქანური კოდი"
+
+#: nativeappconfig.cpp:322
+#, kde-format
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "პროექტის გამშვები ფაილები"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, kde-format
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "გამშვები ფაილები"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "პროექტის სამ&იზნე:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "&გამშვები ფაილი:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "გამშვები ფაილი ან /ბილიკი/გამშვებ/ფაილამდე"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr "შეიყვანეთ გამშვები ფაილი ან აბსოლუტური ბილიკი გამშვებ ფაილამდე"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "ქცევა"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "&არგუმენტები:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>შეიყვანეთ გამშვები ფაილისთვის გადასაცემი არგუმენტები. "
+"<br/>ჰარე მის ორმაგ ბრჭყალებში ჩასმითშეგიძლიათ გადასცეთ.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "სამუშაო საქაღალდე:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "აირჩიეთ გამშვები ფაილის სამუშაო საქაღალდე"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "&გარემო:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "აირჩიეთ გარემო"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>ნაგულისხმევად, აპლიკაციები გაშვებული იქნება ფონზე და მხოლოდ მათი "
+"გამომავალი იქნება ნაჩვენები ინსტრუმენტის ხედში. ეს შეუძლებელს ხდის "
+"აპლიკაციებთან ურთიერთობას, რომლებიც საჭიროებენ მომხმარებლის შეყვანას "
+"ტერმინალის ემულატორიდან. ასეთი აპლიკაციების გასაშვებად, თქვენ უნდა "
+"გამოიყენოთ გარე ტერმინალი.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, kde-format
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "გარე ტერმინალის გამოყენება:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>განსაზღვრავს ბრძანებას გარე ტერმინალის ემულატორის შესასრულებლად. "
+"გამოიყენეთ შემდეგი ჩანაცვლების ველები:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd> ზემოთ არჩეული შესრულებადი ფაილის გზა.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>ზემოთ არჩეული სამუშაო დირექტორიას გზა.</dd>\n"
+"</dl>\n"
+"<p>ზემოთ განსაზღვრული არგუმენტები დაემატება ამ ბრძანებას.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr "გადატვირთვა"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "დამოკიდებულებები"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "&ქმედებები:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "არაფერი"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "აგება"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "აგება და დაყენება"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "სამიზნეები:"
+
+#: nativeappjob.cpp:66
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"გარემოს პროფილი არჩეული არაა. როგორც ჩანს, რაღაც გაფუჭდა. შეამოწმეთ %1-ის "
+"კონფიგურაცია. გამოიყენება გარემოს ნაგულისხმები პროფილი."
+
+#: nativeappjob.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "დავალება უკვე გაშვებულია"
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "%1 უკვე გაშვებულია."
+
+#: nativeappjob.cpp:145
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "ყველა ასლის მოკვლა"
+
+#: nativeappjob.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "კიდევ ერთის გაშვება"
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr "არჩევანის დამახსოვრება"

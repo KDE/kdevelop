@@ -1,0 +1,296 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-04 20:03+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: configwidget.cpp:25
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "빌드"
+
+#: configwidget.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "설정"
+
+#: configwidget.cpp:27
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "설치"
+
+#: configwidget.cpp:28
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "정리"
+
+#: configwidget.cpp:29
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "가지치기"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "빌드 디렉터리:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"빌드 도구를 실행할 디렉터리를 선택하십시오.\n"
+"소스 디렉터리와 같으면 비워 두어도 됩니다."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "도구를 실행할 디렉터리"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "빌드 도구"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "동작:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "활성화:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "실행 파일:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr "프로젝트 메뉴에서 동작을 선택했을 때 실행할 실행 파일입니다"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "인자:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "도구를 실행할 때 사용할 인자입니다."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "환경:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "도구의 환경을 설정합니다"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "빌드 중: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "청소 중: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "설치 중: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "설치 중: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "설정 중: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "가지치기 중: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "정의되지 않은 빌드 종류"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr "\"%2\" 프로젝트의 사용자 정의 %1 도구의 명령이 없습니다."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "\"%2\" 프로젝트의 사용자 정의 %1 도구가 비활성화됨"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr "지정한 인자를 처리하려면 진짜 셸이 필요하나 현재 지원하지 않습니다."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "명령을 시작할 수 없습니다."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "명령이 충돌했습니다."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "명령에서 알 수 없는 오류가 발생했습니다."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** 실패 ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** 완료됨 ***"
+
+#: custombuildsystemconfig.cpp:14
+#, kde-format
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "빌드"
+
+#: custombuildsystemconfig.cpp:15
+#, kde-format
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "설정"
+
+#: custombuildsystemconfig.cpp:16
+#, kde-format
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "설치"
+
+#: custombuildsystemconfig.cpp:17
+#, kde-format
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "청소"
+
+#: custombuildsystemconfig.cpp:18
+#, kde-format
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "가지치기"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "알 수 없음"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "빌드 설정:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "추가"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "삭제"
+
+#: kcm_custombuildsystem.cpp:53
+#, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "사용자 정의 빌드 시스템"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"프로젝트 사용자 정의 빌드 도구를 설정하고 언어 지원을 포함하거나 정의합니다."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"

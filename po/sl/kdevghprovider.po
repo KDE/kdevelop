@@ -1,0 +1,197 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2015, 2016, 2018.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 09:30+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: ghdialog.cpp:25
+#, kde-format
+msgid ""
+"You have not authorized KDevelop to use your GitHub account. If you "
+"authorize KDevelop, you will be able to fetch your public/private "
+"repositories and the repositories from your organizations."
+msgstr ""
+"Niste pooblastili KDevelop, da lahko uporablja vaš račun GitHub. Če "
+"pooblastite KDevelop, boste lahko pridobili vaša javna/zasebna skladišča in "
+"skladišča vaših organizacij."
+
+#: ghdialog.cpp:34
+#, kde-format
+msgctxt "%1 is the URL with the GitHub token settings"
+msgid "You can check the authorization for this application and others at %1"
+msgstr "Pooblastitev za ta program in druge lahko preverite na %1"
+
+#: ghdialog.cpp:54
+#, kde-format
+msgid "You are logged in as <b>%1</b>.<br/>%2"
+msgstr "Prijavljeni ste kot <b>%1</b>.<br/>%2"
+
+#: ghdialog.cpp:58
+#, kde-format
+msgctxt "@action:button"
+msgid "Log Out"
+msgstr "Odjavi se"
+
+#: ghdialog.cpp:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Force Sync"
+msgstr "Vsili uskladitev"
+
+#: ghdialog.cpp:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Authorize"
+msgstr "Odobri"
+
+#: ghdialog.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account"
+msgstr "Račun GitHub"
+
+#: ghdialog.cpp:98
+#, kde-format
+msgid "Enter a login and a password"
+msgstr "Vnesite uporabniško ime in geslo"
+
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#, kde-format
+msgid "Waiting for response"
+msgstr "Čakanje na odgovor"
+
+#: ghdialog.cpp:126
+#, kde-format
+msgid ""
+"Authentication failed. Please try again.\n"
+"\n"
+"Could not create token: \"%1\"\n"
+"%2"
+msgstr ""
+"Overitev ni uspela. Poskusite znova.\n"
+"\n"
+"Ni bilo mogoče ustvariti žetona: »%1«\n"
+"%2"
+
+#: ghdialog.cpp:129
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Authorization Failed"
+msgstr "Pooblastitev za GitHub ni uspela"
+
+#: ghdialog.cpp:133
+#, kde-format
+msgid ""
+"Authentication succeeded.\n"
+"\n"
+"Created token: \"%1\"\n"
+"%2"
+msgstr ""
+"Overitev je uspela.\n"
+"\n"
+"Ustvarjen žeton: »%1«\n"
+"%2"
+
+#: ghdialog.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account Authorized"
+msgstr "Račun GitHub pooblaščen"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@title:window"
+msgid "Authentication Code"
+msgstr "Overitvena koda"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OTP Code:"
+msgstr "Koda OTP:"
+
+#: ghdialog.cpp:176
+#, kde-format
+msgid "Please, write your password here."
+msgstr "Vnesite svoje geslo."
+
+#: ghproviderplugin.cpp:35
+#, kde-format
+msgid "GitHub"
+msgstr "GitHub"
+
+#: ghproviderwidget.cpp:57
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Poišči..."
+
+#: ghproviderwidget.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "You can press the Return key if you do not want to wait."
+msgstr "Če ne želite čakati, lahko pritisnete Vračalko."
+
+#: ghproviderwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure your GitHub account"
+msgstr "Nastavite vaš račun GitHub"
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgid ""
+"The Git plugin could not be loaded which is required to import a GitHub "
+"project."
+msgstr ""
+"Vstavka Git ni bilo mogoče naložiti. Zahtevan je za uvoz projekta iz GitHuba."
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Provider Error"
+msgstr "Napaka ponudnika za GitHub"
+
+#: ghproviderwidget.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User"
+msgstr "Uporabnik"
+
+#: ghproviderwidget.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Organization"
+msgstr "Organizacija"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Github"
+#~ msgstr "Github"
+
+#~ msgid "Github Provider"
+#~ msgstr "Ponudnik za Github"
+
+#~ msgid "Import projects from Github"
+#~ msgstr "Uvozite projekte iz Githuba"

@@ -1,0 +1,63 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2013, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevkonsole\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-14 09:53+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr "Terminal"
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr "Terminal"
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr "Laden van plug-in 'konsolepart' is mislukt"
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid ""
+#~ "This plugin provides KDevelop with an embedded konsole for quick and easy "
+#~ "command line access."
+#~ msgstr ""
+#~ "Deze plugin biedt KDevelop een ingebed konsole voor snelle en "
+#~ "gemakkelijke toegang tot commandoregels."
+
+#~ msgid "Embedded Terminal support"
+#~ msgstr "Ondersteuning voor een ingebedde terminal"
+
+#~ msgid "<b>Konsole</b><p>This window contains an embedded console.</p>"
+#~ msgstr "<b>Konsole</b><p>Dit venster bevat een ingebed console.</p>"

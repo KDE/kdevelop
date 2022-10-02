@@ -1,0 +1,196 @@
+# translation of kdevcontextbrowser.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2020-01-14 21:24+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: contextbrowser.cpp:164
+#, fuzzy, kde-format
+#| msgid "Go back in context history"
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Kontekstiajaloos tagasi"
+
+#: contextbrowser.cpp:176
+#, fuzzy, kde-format
+#| msgid "Go forward in context history"
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Kontekstiajaloos edasi"
+
+#: contextbrowser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Struktuur"
+
+#: contextbrowser.cpp:193
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Struktuur"
+
+#: contextbrowser.cpp:194
+#, fuzzy, kde-format
+#| msgid "Navigate outline of active document, click to browse."
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Liigu aktiivse dokumendi struktuuris, klõpsa sirvimiseks."
+
+#: contextbrowser.cpp:235
+#, fuzzy, kde-format
+#| msgid "Source &Browse Mode"
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Lä&htekoodi sirvimisrežiim"
+
+#: contextbrowser.cpp:241
+#, fuzzy, kde-format
+#| msgid "&Previous Visited Context"
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Eelmine külastatud kontekst"
+
+#: contextbrowser.cpp:247
+#, fuzzy, kde-format
+#| msgid "&Next Visited Context"
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Järgmine külastatud kontekst"
+
+#: contextbrowser.cpp:253
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Eelmine kasutus"
+
+#: contextbrowser.cpp:259
+#, fuzzy, kde-format
+#| msgid "&Next Use"
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Järgmine kasutus"
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Kontekstibrauser"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Koodibrauser"
+
+#: contextbrowser.cpp:312
+#, fuzzy, kde-format
+#| msgid "Find Uses"
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Otsi kasutusi"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(muudetud)"
+
+#: contextbrowserview.cpp:178
+#, fuzzy, kde-format
+#| msgid "Show declaration menu"
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Deklaratsiooni menüü näitamine"
+
+#: contextbrowserview.cpp:181
+#, fuzzy, kde-format
+#| msgid "Declaration Menu"
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Deklaratsiooni menüü"
+
+#: contextbrowserview.cpp:185
+#, fuzzy, kde-format
+#| msgid "Lock Current View"
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Lukusta aktiivne vaade"
+
+#: contextbrowserview.cpp:186
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Lukusta aktiivne vaade"
+
+#: contextbrowserview.cpp:187
+#, fuzzy, kde-format
+#| msgid "Unlock Current View"
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Eemalda aktiivse vaate lukustus"
+
+#: contextbrowserview.cpp:189
+#, fuzzy, kde-format
+#| msgid "Unlock current view"
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Eemalda aktiivse vaate lukustus"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Koodibrauseri riba"
+
+#~ msgid "Outline..."
+#~ msgstr "Struktuur..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Liikumine"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Lähtekoodi sirvimisrežiimi lubamine/keelamine"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr "Kui see on lubatud, saab lähtekoodi sirvida redaktoris klõpsates."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "See plugin pakub külgvaates teavet aktiivse keele konteksti kohta ning "
+#~ "tõstab esile asjakohased deklaratsioonid ja kasutused."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Aktiivse konteksti teabe näitamine"

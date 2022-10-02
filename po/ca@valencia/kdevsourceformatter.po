@@ -1,0 +1,91 @@
+# Translation of kdevsourceformatter.po to Catalan (Valencian)
+# Copyright (C) 2009-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-11-11 19:11+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#: config/projectconfigpage.cpp:44
+#, kde-format
+msgctxt "@title:tab"
+msgid "Source Formatter"
+msgstr "Formatador del codi font"
+
+#: config/projectconfigpage.cpp:49
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Source Formatter"
+msgstr "Configura el formatador del codi font"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
+#: config/projectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use default"
+msgstr "Es&tablix com a predeterminat"
+
+#. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
+#: config/projectconfigpage.ui:36
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr "General"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without a Kate modeline."
+msgstr ""
+"Substituïx el mode de sagnat de l'editor segons l'estil de format pels "
+"documents sense un mode de línia de Kate."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:45
+#, kde-format
+msgctxt "@option:check"
+msgid "Override editor indentation mode"
+msgstr "Substituïx el mode de sagnat de l'editor"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr ""
+"Afig un mode de línia de Kate segons l'estil de format als documents amb "
+"format."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:55
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate modeline"
+msgstr "Afig el mode de línia de Kate"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
+#: config/projectconfigpage.ui:65
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr "Estils de donar format"

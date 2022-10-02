@@ -1,0 +1,144 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2016, 2017.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 10:11+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Andrej Mernik"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "andrejm@ubuntu.si"
+
+#: qmakebuilddirchooser.cpp:124
+#, kde-format
+msgid "Please specify path to QMake executable."
+msgstr "Navedite pot do izvedljive datoteke QMake."
+
+#: qmakebuilddirchooser.cpp:129
+#, kde-format
+msgid "QMake executable \"%1\" does not exist."
+msgstr "Izvedljiva datoteka QMake »%1« ne obstaja."
+
+#: qmakebuilddirchooser.cpp:132
+#, kde-format
+msgid "QMake executable is not a file."
+msgstr "Izvedljiva datoteka QMake ni datoteka."
+
+#: qmakebuilddirchooser.cpp:135
+#, kde-format
+msgid "QMake executable is not executable."
+msgstr "Datoteka QMake ni izvedljiva."
+
+#: qmakebuilddirchooser.cpp:140
+#, kde-format
+msgid "QMake executable cannot be queried for variables."
+msgstr "Izvedljive datoteke QMake ni mogoče povprašati za spremenljivkami."
+
+#: qmakebuilddirchooser.cpp:143
+#, kde-format
+msgid "No basic MkSpec file could be found for the given QMake executable."
+msgstr ""
+"Za dano izvedljivo datoteko QMake ni bilo mogoče najti osnovne datoteke "
+"MkSpec."
+
+#: qmakebuilddirchooser.cpp:150
+#, kde-format
+msgid "Please specify a build folder."
+msgstr "Navedite mapo za izgradnjo."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: qmakebuilddirchooser.ui:23
+#, kde-format
+msgctxt "@label:textbox"
+msgid "QMake &executable:"
+msgstr "Izv&edljiva datoteka QMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qmakebuilddirchooser.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Build directory:"
+msgstr "Mapa za iz&gradnjo:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qmakebuilddirchooser.ui:62
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Install to (target.path):"
+msgstr "Namest&i v (target.path):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qmakebuilddirchooser.ui:85
+#, kde-format
+msgctxt "@labal:listbox"
+msgid "Build &type:"
+msgstr "Vrs&ta izgradnje:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
+#: qmakebuilddirchooser.ui:115
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "(Use default from .pro file)"
+msgstr "(Uporabi privzeto iz datoteke .pro)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: qmakebuilddirchooser.ui:123
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra arguments:"
+msgstr "Dodatni argumenti:"
+
+#: qmakebuilddirchooserdialog.cpp:22
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory"
+msgstr "Nastavite mapo za izgradnjo"
+
+#: qmakejob.cpp:33
+#, kde-format
+msgid "Run QMake in %1"
+msgstr "Zaženi QMake v %1"
+
+#: qmakejob.cpp:137
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Končano z izhodno kodo: %1 ***"
+
+#: qmakejob.cpp:139
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Opravilo prekinjeno ***"
+
+#: qmakejob.cpp:141
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Sesuto z izhodno kodo: %1 ***"
+
+#: qmakemanager.cpp:75
+#, kde-format
+msgctxt "@action"
+msgid "Run QMake"
+msgstr "Zaženi QMake"
+
+#~ msgid "QMake &binary:"
+#~ msgstr "Iz&vedljiva datoteka QMake:"

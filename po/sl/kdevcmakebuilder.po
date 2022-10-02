@@ -1,0 +1,143 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2015, 2016, 2017.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-30 07:09+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "Ni bilo mogoče najti izgrajevalnika make. Preverite vašo namestitev"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "Ni bilo mogoče najti izgrajevalnika za %1"
+
+#: cmakebuilder.cpp:195
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "Ni nastavljene mape za izgradnjo, ni mogoče namestiti"
+
+#: cmakebuilder.cpp:205
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "Ni nastavljene mape za izgradnjo, zato ni mogoče nastaviti"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Nastavi splošne možnosti za CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Privzeta izvedljiva datoteka CMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Privzeti generator:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Interna napaka: ni določenega projekta za nastavitev."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Ni bilo mogoče ustvariti mape za izgradnjo %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr "Ni nastavljene mape za izgradnjo, zato je ni mogoče počistiti"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Napačna mapa za izgradnjo, ni je mogoče počistiti"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Čiščenje uspešno **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Čiščenje je spodletelo: %1 **"
+
+#~ msgid "Aborting"
+#~ msgstr "Prekinjanje"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Prekinjanje nastavitve"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "Ni nastavljene mape za izgradnjo, zato ta ni mogoča"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Ni nastavljene mape za izgradnjo, ni mogoče čistiti"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Prekinjanje čiščenja"
+
+#~ msgid "Aborting install"
+#~ msgstr "Prekinjanje namestitve"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "CMake Builder"
+#~ msgstr "Izgrajevalnik CMake"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Podpora za izgrajevanje projektov CMake"

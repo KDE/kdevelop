@@ -1,0 +1,449 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2011, 2012, 2013, 2014, 2015, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-24 13:53+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: configwidget.cpp:25
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Bygg"
+
+#: configwidget.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Anpassa"
+
+#: configwidget.cpp:27
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Installera"
+
+#: configwidget.cpp:28
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Rensa"
+
+#: configwidget.cpp:29
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Ta bort"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Byggkatalog:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Välj katalog där verktygen körs.\n"
+"Om det är samma som källkodskatalogen kan den lämnas tom."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "Katalogen där verktygen körs"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Byggverktyg"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Åtgärd:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Aktivera:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Körbart program:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Det här är det körbara programmet som ska användas när alternativet väljes i "
+"projektmenyn"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argument:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "Argumenten som verktyget behöver för att köras på ett riktigt sätt."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Miljö:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Välj en fördefinierad miljö för verktyget"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Bygger: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Rensar: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Installerar: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Installerar: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Konfigurerar: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Tar bort: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Odefinierad byggtyp"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr "Inget kommando angivet för eget verktyg %1 i projekt \"%2\"."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "Eget verktyg %1 i projekt \"%2\" är inaktiverat"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"De givna argumenten skulle behöva ett riktig skal, det stöds för närvarande "
+"inte."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Misslyckades starta kommando."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Kommandot kraschade."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Okänt fel när kommandot skulle köras."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Misslyckades ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Klar ***"
+
+#: custombuildsystemconfig.cpp:14
+#, kde-format
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "bygg"
+
+#: custombuildsystemconfig.cpp:15
+#, kde-format
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "konfigurera"
+
+#: custombuildsystemconfig.cpp:16
+#, kde-format
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "installera"
+
+#: custombuildsystemconfig.cpp:17
+#, kde-format
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "rensa"
+
+#: custombuildsystemconfig.cpp:18
+#, kde-format
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "ta bort"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "okänd"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Bygginställning:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Lägg till"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Ta bort"
+
+#: kcm_custombuildsystem.cpp:53
+#, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Eget byggsystem"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"Anpassa ett projekts egna byggsystem samt deklarationer och definitioner för "
+"språkstödet."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "No command given"
+#~ msgstr "Inget kommando angivet"
+
+#~ msgid "This command is disabled"
+#~ msgstr "Kommandot är inaktiverat"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr "Stöd för att bygga och hantera egna byggsystem"
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Sökvägspecifika språkparametrar"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr ""
+#~ "Dubbelklicka här för att infoga en ny definition att använda för sökvägen"
+
+#~ msgid "Define"
+#~ msgstr "Definiera"
+
+#~ msgid "Value"
+#~ msgstr "Värde"
+
+#~ msgid "Delete Define"
+#~ msgstr "Ta bort definitioner"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Ta bort inkluderingssökväg"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr ""
+#~ "Är du säker på att du vill ta bort markerad inkluderingssökväg '%1'?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Lägger till webbadressen som för närvarande visas i listan med "
+#~ "inkluderade filer, om den inte redan finns i listan."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr ""
+#~ "En ny inkluderingssökväg som används för att tolka filer under en given "
+#~ "katalog"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Skapa en ny post med inkluderingssökväg från den här webbadressen."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Ta bort inkluderingssökväg."
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr "Är du säker på att du vill ta bort inställningen för sökvägen '%1'?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Lägg till en ny sökvägspost för delprojekt."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Ersätter sökvägen som för närvarande är markerad med ett nytt värde och "
+#~ "behåller deklarationer och definitioner inställda för den markerade "
+#~ "sökvägen."
+
+#~ msgid "Replace"
+#~ msgstr "Ersätt"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Ta bort nuvarande sökvägspost för delprojekt."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "Inkluderingar och importer"
+
+#~ msgid "Defines"
+#~ msgstr "Definitioner"
+
+#, fuzzy
+#~| msgid "Custom BuildSystem"
+#~ msgid "CustomBuildSystem Config Ui Test App"
+#~ msgstr "Eget byggsystem"
+
+#, fuzzy
+#~| msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgid "(C) 2012 Andreas Pakulat"
+#~ msgstr "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Delete Project Path"
+#~ msgstr "Ta bort projektsökväg"
+
+#~ msgid "Includes/Imports and Defines for Project Directories/Files"
+#~ msgstr ""
+#~ "Inkluderingar, import och definitioner för projektkataloger och filer"
+
+#~ msgid "Directories/Files:"
+#~ msgstr "Kataloger och filer:"
+
+#~ msgid ""
+#~ "A list of paths specifying project directories or files, for which "
+#~ "includes and\n"
+#~ "defines should be set up. \"/\" denotes the top level project directory. "
+#~ "If the\n"
+#~ "path identifies a directory the includes/defines are active for that "
+#~ "directory\n"
+#~ "and all sub (and sub-sub)directories."
+#~ msgstr ""
+#~ "En lista med sökvägar som definierar projektkataloger eller filer,\n"
+#~ "som ska ha inkluderingar och definitioner. \"/\" anger projektkatalogens\n"
+#~ "toppnivå. Om sökvägen identifierar en katalog är inkluderingar och\n"
+#~ "definitioner aktiva för den katalogen och alla underkataloger."
+
+#~ msgid "Switch between configuring Includes/Imports and Defines"
+#~ msgstr "Byt mellan inställning av inkluderingar/importer och definitioner."
+
+#~ msgid "List of include paths for the selected project item"
+#~ msgstr "Lista med inkluderingssökvägar för det valda projektobjektet"
+
+#~ msgid ""
+#~ "A list of absolute include paths that the KDevelop parser should be "
+#~ "using\n"
+#~ "when parsing the project files in the given project path."
+#~ msgstr ""
+#~ "En lista med absoluta inkluderingssökvägar som Kdevelops tolk ska\n"
+#~ "använda när projektfilerna i den angivna projektsökvägen tolkas."
+
+#~ msgid ""
+#~ "Specify a list of pre-processor defines and their values that the "
+#~ "KDevelop parser should use when parsing the files in the given project "
+#~ "path."
+#~ msgstr ""
+#~ "Ange en lista med prepocessordefinitioner och deras värden som Kdevelops "
+#~ "tolk ska använda när projektfilerna i den angivna projektsökvägen tolkas."
+
+#~ msgid ""
+#~ "Double-Click here to insert a new include path to be used for the path"
+#~ msgstr ""
+#~ "Dubbelklicka här för att infoga en ny inkluderingssökväg att använda för "
+#~ "sökvägen"
+
+#~ msgid "Double-Click here to insert a new path to a directory or file."
+#~ msgstr ""
+#~ "Dubbelklicka här för att infoga en ny sökväg till en katalog eller fil."

@@ -1,0 +1,87 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-04-23 02:56+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Рұқсаттары"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "Көрініс"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Бетбелгілер"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "\"%1\" деген құжатта сақталмаған өзгерістер бар. Сақталсын ба?"
+
+#: oktetadocument.cpp:125
+#, fuzzy, kde-format
+#| msgid "Close Document"
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Құжатты жабу"
+
+#: oktetaplugin.cpp:97
+#, fuzzy, kde-format
+#| msgid "Hex Editor"
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "Оналтылық редакторы"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Байт жиымдарын қарау тәртіптерді басқару"
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Designer орналастыру құралдары"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "KDevelop-тың Okteta плагині"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "Оналтылық түрде өңдеу қарапайым редакторы"

@@ -1,0 +1,116 @@
+# Translation of kdevcompileanalyzercommon.po to Brazilian Portuguese
+# Copyright (C) 2020 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-01-13 14:31-0300\n"
+"Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 19.04.3\n"
+
+#: compileanalyzeproblemmodel.cpp:84
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "A análise foi concluída, sem problemas detectados."
+
+#: compileanalyzeproblemmodel.cpp:107
+#, kde-format
+msgid "Analysis started..."
+msgstr "A análise foi iniciada..."
+
+#: compileanalyzeproblemmodel.cpp:110
+#, kde-format
+msgctxt "@info:tooltip %2 is the path of the file"
+msgid "Re-run last %1 analysis (%2)"
+msgstr "Executar novamente a última análise do %1 (%2)"
+
+#: compileanalyzeproblemmodel.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last %1 analysis"
+msgstr "Executar novamente a última análise do %1"
+
+#: compileanalyzer.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with %1"
+msgstr "Analisar o arquivo atual com %1"
+
+#: compileanalyzer.cpp:79
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with %1"
+msgstr "Analisar o projeto atual com %1"
+
+#: compileanalyzer.cpp:161
+#, kde-format
+msgid "No suitable active file, unable to deduce project."
+msgstr ""
+"Não há nenhum arquivo ativo adequado, não sendo possível deduzir o projeto."
+
+#: compileanalyzer.cpp:173
+#, kde-format
+msgid "Active file isn't in a project."
+msgstr "O arquivo ativo não está em um projeto."
+
+#: compileanalyzer.cpp:186
+#, kde-format
+msgid ""
+"Unable to start check for '%1':\n"
+"\n"
+"%2"
+msgstr ""
+"Não é possível iniciar a verificação do '%1':\n"
+"\n"
+"%2"
+
+#: compileanalyzer.cpp:216
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Testar"
+
+#: compileanalyzeutils.cpp:45
+#, kde-format
+msgid "Compilation database file not found: '%1'"
+msgstr "O arquivo do banco de dados de compilações não foi encontrado: '%1'"
+
+#: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
+#, kde-format
+msgid ""
+"Nothing to check: compilation database file '%1' contains no matching items."
+msgstr ""
+"Nada a verificar: o arquivo do banco de dados de compilações '%1' não contém "
+"itens correspondentes."
+
+#: compileanalyzeutils.cpp:57
+#, kde-format
+msgid "Could not open compilation database file for reading: '%1'"
+msgstr ""
+"Não foi possível abrir o arquivo do banco de dados de compilações para "
+"leitura: '%1'"
+
+#: compileanalyzeutils.cpp:65
+#, kde-format
+msgid "JSON error during parsing compilation database file '%1': %2"
+msgstr ""
+"Erro de JSON ao processar o arquivo do banco de dados de compilações '%1': %2"
+
+#: compileanalyzeutils.cpp:70
+#, kde-format
+msgid ""
+"JSON error during parsing compilation database file '%1': document is not an "
+"array."
+msgstr ""
+"Erro de JSON ao processar o arquivo de banco de dados de compilações '%1': o "
+"documento não é uma lista."

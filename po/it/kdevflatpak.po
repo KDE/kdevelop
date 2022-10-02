@@ -1,0 +1,110 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevflatpak package.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2017, 2018, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"PO-Revision-Date: 2020-07-25 16:41+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: flatpakplugin.cpp:45
+#, kde-format
+msgctxt "@action"
+msgid "Rebuild Environment"
+msgstr "Rigenera l'ambiente"
+
+#: flatpakplugin.cpp:46
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Recompiles all dependencies for a fresh environment."
+msgstr "Ricompila tutta le dipendenze per avere un ambiente pulito."
+
+#: flatpakplugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Export Flatpak Bundle..."
+msgstr "Esporta pacco flatpak..."
+
+#: flatpakplugin.cpp:52
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Exports the current build into a 'bundle.flatpak' file."
+msgstr "Esporta i contenuti generati in un file «bundle.flatpak»."
+
+#: flatpakplugin.cpp:57
+#, kde-format
+msgctxt "@action"
+msgid "Send to Device..."
+msgstr "Invia al dispositivo..."
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "Export %1"
+msgstr "Esportazione di %1"
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgid "Flatpak Bundle (*.flatpak)"
+msgstr "Pacco Flatpak (*.flatpak)"
+
+#: flatpakplugin.cpp:176
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Build Flatpak %1 for %2"
+msgstr "Creazione del flatpak %1 per %2"
+
+#: flatpakplugin.cpp:198
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Scegli il nome del tag"
+
+#: flatpakplugin.cpp:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Device hostname:"
+msgstr "Nome host del dispositivo:"
+
+#: flatpakruntime.cpp:53
+#, kde-format
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: flatpakruntime.cpp:144
+#, kde-format
+msgid "Bundling"
+msgstr "Impacchettamento"
+
+#: flatpakruntime.cpp:166
+#, kde-format
+msgid "Run on Device"
+msgstr "Esegui sul dispositivo"
+
+#~ msgid "Export %1 to..."
+#~ msgstr "Esporta %1 su..."
+
+#~ msgid "Creating Flatpak %1"
+#~ msgstr "Creazione del Flatpak %1"
+
+#~ msgid "Transferring flatpak to %1"
+#~ msgstr "Trasferimento del flatpak su %1"
+
+#~ msgid "Transferring replicate.sh to %1"
+#~ msgstr "Trasferimento di replicate.sh su %1"
+
+#~ msgid "Installing %1 to %2"
+#~ msgstr "Installazione di %1 su %2"
+
+#~ msgid "Running %1 on %2"
+#~ msgstr "Esecuzione di %1 su %2"

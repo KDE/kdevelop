@@ -1,0 +1,531 @@
+# translation of kdevexecute.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2012, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecute\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-01-15 14:27+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Seadistuse \"%1\" käivitamise argumentides esines tsiteerimisviga. "
+"Käivitamisest loobutakse."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Seadistuse \"%1\" käivitamise argumentidesse oli kaasatud shelli metamärk, "
+"mis ei ole praegu toetatud. Käivitamisest loobutakse."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "Sõltuvuse lahendamine nurjus: %1"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Korrektset täitmisfaili pole määratud"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Seadistuse \"%1\" käivitamise täitmisfailis esines tsiteerimisviga. "
+"Käivitamisest loobutakse."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Seadistuse \"%1\" käivitamise täitmisfaili oli kaasatud shelli metamärk, mis "
+"ei ole praegu toetatud. Käivitamisest loobutakse."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr ""
+
+#: nativeappconfig.cpp:105
+#, fuzzy, kde-format
+#| msgid "Kill All Instances"
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "Tapa kõik isendid"
+
+#: nativeappconfig.cpp:106
+#, fuzzy, kde-format
+#| msgid "Start Another"
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "Käivita uus"
+
+#: nativeappconfig.cpp:156
+#, fuzzy, kde-format
+#| msgid "Configure Native Application"
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Omarakenduse seadistamine"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "Omarakenduse käivitamine"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "Omarakendus"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "Kompileeritud binaarfail"
+
+#: nativeappconfig.cpp:322
+#, fuzzy, kde-format
+#| msgid "Project Executables"
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Projekti täitmisfailid"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Executable"
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Täitmisfail"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, fuzzy, kde-format
+#| msgid "Project &target:"
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "Projek&ti sihtmärk:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, fuzzy, kde-format
+#| msgid "E&xecutable:"
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "Täitmis&fail:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "Sisesta täitmisfaili nimi või absoluutne asukoht"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr "Sisesta täitmisfaili nimi või absoluutne asukoht"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Käitumine"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, fuzzy, kde-format
+#| msgid "Ar&guments:"
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "Ar&gumendid:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Enter arguments to give to the executable.<br/>You "
+#| "can pass arguments containing space characters by putting them in double-"
+#| "quotes.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Sisesta täitmisfailile antavad argumendid.<br/"
+">Tühikuid sisaldavaid argumente saab määrata, kui ümbritseda nad "
+"topeltjutumärkidega.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, fuzzy, kde-format
+#| msgid "Working &directory:"
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "Tööka&taloog:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, fuzzy, kde-format
+#| msgid "Select a working directory for the executable"
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Vali täitmisfailile töökataloog"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, fuzzy, kde-format
+#| msgid "E&nvironment:"
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "K&eskkond:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Vali kasutatav keskkond"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>By default applications will be run in the background and only their "
+#| "output will be displayed in a tool view. This makes it impossible to "
+#| "interact with applications requiring user input from a terminal emulator. "
+#| "To run such applications, you should use an external terminal.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Vaikimisi käivitatakse rakendused taustal ja tööriistavaates näidatakse "
+"ainult nende väljundit. See ei luba suhelda rakendustega, mis nõuavad "
+"kasutaja tegutsemist terminaliemulaatoris. Niisuguste rakenduste "
+"käivitamiseks tuleks kasutada välist terminali.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, fuzzy, kde-format
+#| msgid "Use external terminal:"
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Välise terminali kasutamine:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "<p>Defines the command to execute the external terminal emulator. Use the "
+#| "following placeholders:</p>\n"
+#| "<dl>\n"
+#| "<dt><code>%exe</code></dt>\n"
+#| "<dd>The path to the executable selected above.</dd>\n"
+#| "<dt><code>%workdir</code></dt>\n"
+#| "<dd>The path to the working directory selected above.</dd>\n"
+#| "</dl>\n"
+#| "<p>The arguments defined above will get appended to this command.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Välises terminaliemulaatoris käivitatava käsu määramine. Kasutada saab "
+"järgmisi kohatäitjaid:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>Ülal valitud teostusfaili asukoht.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>Ülal valitud töökataloogi asukoht.</dd>\n"
+"</dl>\n"
+"<p>Ülal määratud argumendid lisatakse käsule.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Sõltuvused"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, fuzzy, kde-format
+#| msgid "Act&ion:"
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "To&iming:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, fuzzy, kde-format
+#| msgid ""
+#| "Specifies the action to take for the dependencies before starting the "
+#| "executable."
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr "Toimingu määramine sõltuvustele enne täitmisfaili käivitamist."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected action will be run before the executable is started.  This "
+#| "allows there to be parts of a project, upon which the executable does not "
+#| "directly depend, to be built and/or installed before running the "
+#| "application."
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"Valitud toiming käivitatakse enne täitmisfaili käivitamist. See võimaldab "
+"ehitada ja/või paigaldada veel enne rakenduse käivitamist projekti osasid, "
+"millest täitmisfail otseselt ei sõltu."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, fuzzy, kde-format
+#| msgid "Do Nothing"
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "Ei tehta midagi"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Ehitamine"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build and Install"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Ehitamine ja paigaldamine"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Sihtmärgid:"
+
+#: nativeappjob.cpp:66
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Keskkonnaprofiili pole määratud, tundub, et tegemist on katkise "
+"seadistusega. Palun käivita kontrolliks '%1' konfigureerimine. Kasutatakse "
+"vaikimisi keskkonnaprofiili."
+
+#: nativeappjob.cpp:142
+#, fuzzy, kde-format
+#| msgid "Job already running"
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "Töö juba käib"
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "\"%1\" on juba täitmisel."
+
+#: nativeappjob.cpp:145
+#, fuzzy, kde-format
+#| msgid "Kill All Instances"
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "Tapa kõik isendid"
+
+#: nativeappjob.cpp:146
+#, fuzzy, kde-format
+#| msgid "Start Another"
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "Käivita uus"
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr ""
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Sisesta täitmisfailile antavad argumendid"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Käivitatakse: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Rakendus tapeti ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Väljuti normaalselt ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Väljuti koodiga %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Protsess katkestas töö ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Krahh koodiga %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "*** Programmi '%1' käivitamine nurjus. Kontrolli, kas otsingutee (path) "
+#~ "on ikka korrektne ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Sisesta nimekirja lisatav sõltuvus"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Nimekirjas oleva sihtmärgi lisamine sõltuvuste nimekirja."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Kaudselt sõltuvate sihtmärkide nimekiri."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Selles nimekirjas peavad olema sihtmärgid, millest rakendust otseselt ei "
+#~ "sõltu, aga mille puhul tuleb toiming ette võtta enne rakenduse "
+#~ "käivitamist."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Valitud sõltuvuste eemaldamine nimekirjast."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Sõltuvuse liigutamine nimekirjas ülespoole."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Valitud sõltuvuse liigutamine nimekirjas allapoole."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "Execute support"
+#~ msgstr "Täitmise toetus"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "See plugin võimaldab panna programme aktiivses masinas tööle ilma "
+#~ "instrumentaatorita, s.t loomulikult."
+
+#~ msgid "Application"
+#~ msgstr "Rakendus"
+
+#~ msgid "Allows running of native apps"
+#~ msgstr "Võimaldab käivitada omarakendusi"
+
+#~ msgid "Could not start application"
+#~ msgstr "Rakenduse käivitamine nurjus"
+
+#~ msgid "configure environment variables"
+#~ msgstr "keskkonnamuutujate seadistamine"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Enter a project target as path in the tree"
+#~ msgstr "Sisesta projekti sihtmärk asukohana puusse"
+
+#~ msgid "Installing via sudo is not yet implemented"
+#~ msgstr "Paigaldamine sudo abil ei ole veel võimalik"
+
+#~ msgid "Not implemented"
+#~ msgstr "Pole veel teostatud"
+
+#~ msgid "Build and Install (as Superuser)"
+#~ msgstr "Ehitamine ja paigaldamine (administraatorina)"
+
+#, fuzzy
+#~ msgid "When enabled, runs the application in an external terminal."
+#~ msgstr "lubatud rakendus asukohas väline terminal."
+
+#, fuzzy
+#~ msgid "-"
+#~ msgstr "-"
+
+#, fuzzy
+#~ msgid "Up"
+#~ msgstr "Üles"
+
+#, fuzzy
+#~ msgid "Down"
+#~ msgstr "Alla"
+
+#, fuzzy
+#~ msgid "+"
+#~ msgstr "+"

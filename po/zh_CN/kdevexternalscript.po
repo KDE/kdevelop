@@ -1,0 +1,525 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevexternalscript.pot\n"
+"X-Crowdin-File-ID: 4974\n"
+
+#: editexternalscript.cpp:30
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command that should be executed when this script is run. "
+"Basic shell features of your platform should be available.</p>\n"
+"<p>There are a few placeholders you can use in the command:</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>Gets replaced by the URL of the active document.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>Gets replaced by the local filepath to the active document.</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document, including its "
+"extension.</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document without its extension."
+"</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>Gets replaced by the path to the directory of the active document.</"
+"dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>Gets replaced by the URL to the project of the active document.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>Gets replaced with the shell escaped contents of the selection in the "
+"active document.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>Gets replaced with the PID of the currently running KDevelop process.</"
+"dd>\n"
+"</dl>\n"
+"<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
+"commands that could lead to data loss.</p>\n"
+msgstr ""
+"<p>定义脚本执行时的命令。您平台上的基本 shell 特性应该可用。</p>\n"
+"<p>以下是一些您可以在命令中使用的占位符：</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>替换为活动文档的 URL。</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>替换为活动文档的本地文件路径。</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>替换为活动文档的文件名，包含后缀名。</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>替换为活动文档的文件名，不含后缀名。</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>替换为活动文档所在的目录的路径。</dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>替换为活动文档所在工程的 URL。</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>替换为已被 shell 转义的活动文档中的选中内容。</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>替换为当前运行的 KDevelop 进程的进程号。</dd>\n"
+"</dl>\n"
+"<p><b>注意：</b>您应自己负责不要运行可能导致的数据丢失的危险命令。</p>\n"
+
+#: editexternalscript.cpp:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what the external script should get as input (via <code>STDIN</"
+"code>).</p>"
+msgstr "<p>定义外部脚本该获得什么输入 (通过<code>STDIN</code>)。</p>"
+
+#: editexternalscript.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
+"the script.</p>"
+msgstr "<p>定义该对脚本的输出 (例如<code>STDOUT</code>) 做什么。</p>"
+
+#: editexternalscript.cpp:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of "
+"the script.</p><p>Note: if the action is the same as that chosen for the "
+"output, the channels will be merged and handled together.</p>"
+msgstr ""
+"<p>定义该对脚本的错误 (例如<code>STDERR</code>) 做什么。</p><p>注意：如果该操"
+"作与处理输出的操作一致，通道会合并并一起处理。</p>"
+
+#: editexternalscript.cpp:76
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
+msgstr "<p>定义脚本的名称。只是为了显示。</p>"
+
+#: editexternalscript.cpp:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the shortcut(s) you can use to execute this external script.</p>"
+msgstr "<p>定义您可以用来执行此外部脚本的快捷键。</p>"
+
+#: editexternalscript.cpp:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether documents should be saved before the script gets executed."
+"</p>"
+msgstr "<p>定义文档是否要在脚本执行前保存。</p>"
+
+#: editexternalscript.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether the output of the script should be shown in a tool view.</"
+"p>"
+msgstr "<p>定义脚本的输出是否要显示在工具视图中。</p>"
+
+#: editexternalscript.cpp:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what type of filtering should be applied to the output. E.g. to "
+"indicate errors by red text.</p>"
+msgstr "<p>定义要应用在输出上的过滤器类型。例如：用红色表明错误。</p>"
+
+#: editexternalscript.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New External Script"
+msgstr "创建新外部脚本"
+
+#: editexternalscript.cpp:108
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit External Script '%1'"
+msgstr "编辑外部脚本“%1”"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: editexternalscript.ui:19
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "名称(&N)："
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: editexternalscript.ui:30
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>The name will also be used as the identifier during code completion.</p>\n"
+"  <p><b>Note:</b> No spaces allowed.</p>"
+msgstr ""
+"<p>该名称也将会在代码补全中被用作标识符。</p>\n"
+"<p><b>注意：</b>不允许有空格</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, commandLabel)
+#: editexternalscript.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Command:"
+msgstr "命令(&C)："
+
+#. i18n: ectx: property (text), widget (QLabel, stdinLabel)
+#: editexternalscript.ui:51
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Input:"
+msgstr "输入(&I)："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:62
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Nothing"
+msgstr "无"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:67
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Nothing"
+msgstr "当前文件的选中部分或无"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:72
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Whole File"
+msgstr "当前文件的选中部分或整个文件"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:77
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Contents of Current File"
+msgstr "当前文件的内容"
+
+#. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
+#: editexternalscript.ui:85
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Output:"
+msgstr "输出(&O)："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:96
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Ignore"
+msgstr "忽略"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:101
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Insert at Cursor Position of Current File"
+msgstr "插入至当前文件的光标位置"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:106
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr "替换当前文件的选中部分或插入至光标位置"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:111
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "替换当前文件的选中部分或整个文件"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:116
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Contents of Current File"
+msgstr "替换当前文件的内容"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:121
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Create New File"
+msgstr "创建新文件"
+
+#. i18n: ectx: property (text), widget (QLabel, stderrLabel)
+#: editexternalscript.ui:129
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Errors:"
+msgstr "错误："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:140
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Ignore"
+msgstr "忽略"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:145
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Merge with Normal Output"
+msgstr "并入正常输出"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:150
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Insert at Cursor Position of Current File"
+msgstr "插入至当前文件的光标位置"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:155
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr "替换当前文件的选中部分或插入至光标位置"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:160
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "替换当前文件的选中部分或整个文件"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:165
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Contents of Current File"
+msgstr "替换当前文件的内容"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:170
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Create New File"
+msgstr "创建新文件"
+
+#. i18n: ectx: property (text), widget (QLabel, saveLabel)
+#: editexternalscript.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Save &mode:"
+msgstr "保存模式(&M)："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:189
+#, kde-format
+msgctxt "@item:inlistbox save mode"
+msgid "Save Nothing"
+msgstr "不保存"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:194
+#, kde-format
+msgctxt "@item:inlistbox save mode"
+msgid "Save Active Document"
+msgstr "保存活动的文档"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:199
+#, kde-format
+msgctxt "@item:inlistbox save mode"
+msgid "Save All Open Documents"
+msgstr "保存全部打开的文档"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: editexternalscript.ui:207
+#, kde-format
+msgctxt "@option:check"
+msgid "Show out&put:"
+msgstr "显示输出(&P)："
+
+#. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
+#: editexternalscript.ui:224
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "输出过滤器："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:235
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "无过滤器"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:240
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "编译过滤器"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:245
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "脚本错误过滤器"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:250
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "静态分析过滤器"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:258
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Defines shortcuts you can use to execute this script."
+msgstr "定义您可以用来执行此脚本的快捷键。"
+
+#. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:261
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Shortcut:"
+msgstr "快捷键："
+
+#: externalscriptjob.cpp:88
+#, kde-format
+msgid ""
+"Cannot run script '%1' since it tries to access the editor contents but no "
+"document is open."
+msgstr "无法运行脚本“%1”因为它试图访问编辑器内容而没有打开的文档。"
+
+#: externalscriptjob.cpp:224
+#, kde-format
+msgid "Running external script: %1"
+msgstr "运行外部脚本：%1"
+
+#: externalscriptjob.cpp:268
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** 应用程序已杀死 ***"
+
+#: externalscriptjob.cpp:348
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** 正常退出 ***"
+
+#: externalscriptjob.cpp:351
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** 退出，返回值：%1 ***"
+
+#: externalscriptjob.cpp:354
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** 进程已中止 ***"
+
+#: externalscriptjob.cpp:356
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** 崩溃，返回值：%1 ***"
+
+#: externalscriptjob.cpp:368
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr "*** 无法启动程序“%1”。请确保正确指定了路径 ***"
+
+#: externalscriptplugin.cpp:125
+#, kde-format
+msgid "External Scripts"
+msgstr "外部脚本"
+
+#: externalscriptplugin.cpp:136
+#, kde-format
+msgid "Quick Compile"
+msgstr "快速编译"
+
+#: externalscriptplugin.cpp:142
+#, kde-format
+msgid "Sort Selection"
+msgstr "排序选中项"
+
+#: externalscriptplugin.cpp:150
+#, kde-format
+msgid "Google Selection"
+msgstr "Google 所选文本"
+
+#: externalscriptplugin.cpp:156
+#, kde-format
+msgid "Paste to Hastebin"
+msgstr "粘贴到 Hastebin"
+
+#: externalscriptplugin.cpp:238
+#, kde-format
+msgctxt "@title:menu"
+msgid "External Scripts"
+msgstr "外部脚本"
+
+#: externalscriptview.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "External Scripts"
+msgstr "外部脚本"
+
+#: externalscriptview.cpp:48
+#, kde-format
+msgctxt "@action"
+msgid "Add External Script"
+msgstr "添加外部脚本"
+
+#: externalscriptview.cpp:53
+#, kde-format
+msgctxt "@action"
+msgid "Edit External Script"
+msgstr "编辑外部脚本"
+
+#: externalscriptview.cpp:58
+#, kde-format
+msgctxt "@action"
+msgid "Remove External Script"
+msgstr "删除外部脚本"
+
+#: externalscriptview.cpp:145
+#, kde-format
+msgid ""
+"<p>Do you really want to remove the external script configuration for <i>%1</"
+"i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
+msgstr ""
+"<p>您确实想要删除 <i>%1</i> 的外部脚本配置吗？</p><p><i>注意：</i>脚本本身不"
+"会被删除。</p>"
+
+#: externalscriptview.cpp:148
+#, kde-format
+msgctxt "@title:window"
+msgid "Confirm External Script Removal"
+msgstr "确认外部脚本删除"
+
+#: externalscriptview.cpp:149
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
+#: externalscriptview.ui:35
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "过滤..."

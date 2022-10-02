@@ -1,0 +1,274 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2016, 2017, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"PO-Revision-Date: 2022-08-03 09:57+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr "(kör)"
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#, kde-format
+msgid "LLDB"
+msgstr "LLDB"
+
+#: debuggerplugin.cpp:93
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB-terminal"
+
+#: debugsession.cpp:136
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr "Försök att utföra användarkommando med LLDB-version som inte stöds"
+
+#: debugsession.cpp:335
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Kunde inte starta avlusaren:</b><br />"
+
+#: debugsession.cpp:346
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr "<b>Fel vid anslutning till fjärrmål:</b><br />"
+
+#: debugsession.cpp:359
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Misslyckades läsa in core-fil</b><p>Avlusaren rapporterade följande fel: "
+"<p><tt>%1"
+
+#: debugsession.cpp:390
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+"<b>Versionen av lldb-mi stöds inte, eftersom den saknar en nödvändig "
+"programfix.</b><br/>Se https://llvm.org/bugs/show_bug.cgi?id=28026 för mer "
+"information.<br/>Avlusningsterminalen kommer att inaktiveras för att undvika "
+"en krasch.<br/>Vill du fortsätta?"
+
+#: debugsession.cpp:394
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr "LLDB-version stöds inte"
+
+#: debugsession.cpp:442
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr ""
+"<b>Du behöver lldb-mi från LLDB 3.8.1 eller senare.</b><br />Du använder: %1"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Avlusningsverktygsrad"
+
+#: lldblauncher.cpp:49
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr "Avlusa ett program för den här datorn i LLDB"
+
+#: lldblauncher.cpp:73
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Ett program håller redan på att avlusas. Vill du avbryta avlusningssessionen "
+"som pågår och fortsätta starten?"
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Avbryt aktuell session"
+
+#: widgets/lldbconfigpage.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr "LLDB-inställning"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Avlusare"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr "Körbart avlusningsprogram:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr "Överskrid sökväg till körbart lldb-mi-program..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr "Ytterligare argument:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Miljö:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr "Ärv systemmiljö"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Alternativ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr "Inställningsskript:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr "/sökväg/till/lldb/inställningsskript"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr "Starta avlusaren med:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Programutmatning"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr "LLDB-terminal"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Aktiveringspoststack"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, kde-format
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr "Brytpunkt vid start:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, kde-format
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr "&Fjärravlusning"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr "Fjärrserver:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr "värddator:port"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr "Fjärrsökväg:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr "/sökväg/till/en/skrivbar/katalog/på/enheten"
+
+#~ msgid "Startup error"
+#~ msgstr "Startfel"
+
+#~ msgid "LLDB Error"
+#~ msgstr "LLDB-fel"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Avlusningsinställning"
+
+#~ msgid ""
+#~ "No environment profile specified, looks like a broken configuration, "
+#~ "please check run configuration '%1'. Using default environment profile."
+#~ msgstr ""
+#~ "Ingen miljöprofil angiven. Detta verkar vara en felaktig inställning. "
+#~ "Kontrollera körinställningen '%1'. Använder standardmiljöprofilen."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Kör"
+
+#~ msgid "/path/to/lldb-mi/"
+#~ msgstr "/sökväg/till/lldb-mi/"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argument:"

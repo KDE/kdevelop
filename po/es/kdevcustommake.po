@@ -1,0 +1,110 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-08-08 16:18+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Se ha intentado resolver la ruta de inclusión mientras se ejecutaba otro "
+"proceso de resolución"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Falta el archivo Makefile en la carpeta «%1»"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr ""
+"Ha ocurrido un problema al intentar resolver las rutas de inclusión para %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "En caché: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Parece que el nombre de archivo %1 está mal formado"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "La extracción del nuevo directorio de trabajo ha fallado"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "La salida ha sido: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "La llamada recursiva a make ha fallado"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+"Parece que cadena del parámetro «%1» no es válida. La salida ha sido: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "El directorio «%1» no existe. La salida ha sido: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Llamada recursiva a make mal formada"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "No es posible extraer rutas de inclusión de la salida de make"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Carpeta: «%1»  Orden: «%2»  Salida: «%3»"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Ejecutar"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Eloy Cuadra"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ecuadra@eloihr.net"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Gestor de makefiles personalizados"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr ""
+#~ "Implementación de la gestión de proyectos con makefiles personalizados"

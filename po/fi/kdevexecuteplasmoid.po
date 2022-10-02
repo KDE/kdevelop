@@ -1,0 +1,191 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2015-10-31 15:19+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, fuzzy, kde-format
+#| msgid "Configure Plasmoid Execution"
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Plasmoidin suorituksen asetukset"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Näytä plasmoidi"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Plasmoidikäynnistin"
+
+#: plasmoidexecutionconfig.cpp:183
+#, fuzzy, kde-format
+#| msgid "Couldn't resolve the dependency: %1"
+msgid "Could not resolve the dependency: %1"
+msgstr "Riippuvuuden %1 selvittäminen epäonnistui"
+
+#: plasmoidexecutionconfig.cpp:297
+#, fuzzy, kde-format
+#| msgid "Plasmoids"
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plasmoidit"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Plasmoid"
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoidi"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Path or name:"
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Polku tai nimi:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Toiminta"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, fuzzy, kde-format
+#| msgid "Form Factor"
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Kokoluokka"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, fuzzy, kde-format
+#| msgid "Theme"
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Teema"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Riippuvuudet"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, fuzzy, kde-format
+#| msgid "&Targets:"
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "&Kohteet:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Plasmoidikatselin"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Tapettiin **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Epäonnistui ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Päättyi ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr "Plasmoidin suoritus epäonnistui kansiossa %1"
+
+#~ msgid "planar"
+#~ msgstr "taso"
+
+#~ msgid "horizontal"
+#~ msgstr "vaaka"
+
+#~ msgid "vertical"
+#~ msgstr "pysty"
+
+#~ msgid "mediacenter"
+#~ msgstr "mediakeskus"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Kirjoita luetteloon lisättävä riippuvuus"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Lisää luetellun kohteen riippuvuusluetteloon."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Epäsuorien riippuvuuskohteiden luettelo."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Tämä luettelo sisältää kohteet, joista sovellus ei ole suoraan "
+#~ "riippuvainen, mutta joille täytyy tehdä toimintoja ennen sovelluksen "
+#~ "suorittamista."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Poistaa valitut riippuvuudet luettelosta."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Siirtää riippuvuuden luettelossa ylemmäs."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Siirtää valitun riippuvuuden luettelossa alemmas."
+
+#~ msgid "Ninja failed to compile %1"
+#~ msgstr "Ninja ei onnistunut kääntämään kansiota %1"
+
+#~ msgid "Execute plasmoid support"
+#~ msgstr "Plasmoidien suoritustuki"
+
+#~ msgid "Allows running of plasmoids"
+#~ msgstr "Mahdollistaa plasmoidien suorittamisen"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Author"
+#~ msgstr "Tekijä"

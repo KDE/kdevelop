@@ -1,0 +1,478 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Alexander Potashev <aspotashev@gmail.com>, 2010, 2011.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2021.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-03-16 10:50+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.1\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "Собственный патч"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "Патч"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr "Базовый каталог:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr "/путь/к/базовому/каталогу/патча"
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, kde-format
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "Из файла"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr "/путь/к/патчу"
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "Результат команды"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr "Укажите команду, выведенные данные которой следует взять…"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "Патч уже применён к локальной версии"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, kde-format
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "Уже применён"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">Конфликт</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "<b>Применено.</b><br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "<b>Вставка</b><br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, kde-format
+msgid "Removal<br/>"
+msgstr "<b>Удаление</b><br/>"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "<b>Предыдущий:</b><br/>"
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "<b>Возвращено.</b><br/>"
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "<b>Альтернатива:</b><br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr ""
+"Не удалось применить изменение: вместо ожидавшегося текста «%1» обнаружено "
+"«%2»."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, kde-format
+msgctxt "@item"
+msgid "Insertion"
+msgstr "Вставка"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, kde-format
+msgctxt "@item"
+msgid "Removal"
+msgstr "Удаление"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, kde-format
+msgctxt "@item"
+msgid "Change"
+msgstr "Изменение"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, kde-format
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Обновление модели Kompare"
+
+#: patchreview.cpp:457
+#, kde-format
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "Обзор"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, kde-format
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "Рецензирование патчей"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr "Путь к базовому каталогу патча должен быть абсолютным."
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, kde-format
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "Завершить рецензирование"
+
+#: patchreview.cpp:603
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "Редактирование патча"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "Предыдущий файл"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "Предыдущее различие"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "Следующее различие"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "Следующий файл"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Обновить"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "Запустить тесты"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, kde-format
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Экспорт различий…"
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "Отменить рецензирование"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, kde-format
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "Завершить рецензирование"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, kde-format
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "Изменения"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (%1 часть)"
+msgstr[1] "%2 (%1 части)"
+msgstr[2] "%2 (%1 частей)"
+msgstr[3] "%2 (одна часть)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+"<qt>Созданный запрос находится по адресу:<br /><a href='%1'>%1</a> </qt>"
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+"Не удалось выполнить экспорт патча.\n"
+"%1"
+
+#: patchreviewtoolview.cpp:255
+#, kde-format
+msgctxt "@action"
+msgid "Select All"
+msgstr "Выбрать все"
+
+#: patchreviewtoolview.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "Отменить выбор"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "Выполнение тестов: %p%"
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "Пройдены все тесты (%1)"
+msgstr[1] "Пройдены все тесты (%1)"
+msgstr[2] "Пройдены все тесты (%1)"
+msgstr[3] "Тест пройден"
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "Результаты тестов: пройдено %1, не пройдено %2, с ошибками %3"
+
+#~ msgid "Base:"
+#~ msgstr "База:"
+
+#~ msgid "Patch base..."
+#~ msgstr "База патча..."
+
+#~ msgid "Patch location..."
+#~ msgstr "Расположение патча..."
+
+#~ msgid "Command's output..."
+#~ msgstr "Вывод команды..."
+
+#~ msgid "Edit Patch"
+#~ msgstr "Редактирование патча"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Save As..."
+#~ msgstr "Сохранить как..."
+
+#~ msgid "Send..."
+#~ msgstr "Отправить..."
+
+#~ msgid "Send to contact..."
+#~ msgstr "Отправить контакту..."
+
+#~ msgid "Side view (Kompare)..."
+#~ msgstr "Боковая панель (Kompare)..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Александр Поташев,Алексей Морозов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "aspotashev@gmail.com,morozov@gmail.com"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>Нет моделей или различий. Файл <b>%1</b> не является файлом формата "
+#~ "diff.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>Возникли проблемы при применении различий <b>%1</b> к файлу <b>%2</b>."
+#~ "</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>Возникли проблемы при применении различий <b>%1</b> к каталогу <b>%2</"
+#~ "b>.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "Не удалось открыть временный файл."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr ""
+#~ "<qt>Не удалось записать <b>%1</b> во временный файл, файл удаляется.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>Не удалось создать каталог назначения <b>%1</b>.\n"
+#~ "Файл не был сохранён.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>Не удалось загрузить временный файл в место назначения <b>%1</b>. "
+#~ "Временный файл всё ещё доступен под именем <b>%2</b>. Вы можете вручную "
+#~ "скопировать его в нужное место.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "Не удалось обработать результаты поиска различий."
+
+#~ msgid "The files are identical."
+#~ msgstr "Файлы идентичны."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Не удалось записать во временный файл."
+
+#~ msgid "Highlights code affected by a patch"
+#~ msgstr "Подсвечивает код, затронутый патчем"
+
+#~ msgid "Show"
+#~ msgstr "Показать"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">File:</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Файл:</"
+#~ "span></p></body></html>"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Command:</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Команда:</"
+#~ "span></p></body></html>"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Added"
+#~ msgstr "Добавлено"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Deleted"
+#~ msgstr "Удалено"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Has Conflicts"
+#~ msgstr "Конфликтует"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Modified"
+#~ msgstr "Изменено"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Up To Date"
+#~ msgstr "Не требует обновления"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Unknown"
+#~ msgstr "Неизвестно"
+
+#~ msgctxt "Unknown VCS file status, probably a backend error"
+#~ msgid "?"
+#~ msgstr "?"
+
+#~ msgctxt "%1: number of changed hunks, %2: file name, %3: vcs file state"
+#~ msgid "%2 (1 hunk, %3)"
+#~ msgid_plural "%2 (%1 hunks, %3)"
+#~ msgstr[0] "%2 (%1 часть, %3)"
+#~ msgstr[1] "%2 (%1 части, %3)"
+#~ msgstr[2] "%2 (%1 частей, %3)"
+#~ msgstr[3] "%2 (одна часть, %3)"

@@ -1,0 +1,83 @@
+# el translation of kdevvcsprojectintegration.po
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2011.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevvcsprojectintegration\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-03-20 21:58+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: vcschangesview.cpp:84
+#, fuzzy, kde-format
+#| msgid "Refresh"
+msgctxt "@action:inmenu"
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+#: vcschangesviewplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "VCS Changes"
+msgctxt "@title:window"
+msgid "Project Changes"
+msgstr "Αλλαγές VCS"
+
+#: vcschangesviewplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Locate Current Document"
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Βρίσκει το τρέχον έγγραφο"
+
+#: vcschangesviewplugin.cpp:67
+#, fuzzy, kde-format
+#| msgid "Locates the current document and selects it."
+msgctxt "@info:tooltip"
+msgid "Locate the current document and select it"
+msgstr "Βρίσκει το τρέχον έγγραφο και το επιλέγει."
+
+#: vcschangesviewplugin.cpp:70
+#, fuzzy, kde-format
+#| msgid "Reload View"
+msgctxt "@action"
+msgid "Reload View"
+msgstr "Επαναφόρτωση προβολής"
+
+#: vcschangesviewplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid "Refreshes the view for all projects, in case anything changed."
+msgctxt "@info:tooltip"
+msgid "Refresh the view for all projects, in case anything changed"
+msgstr "Ανανεώνει την προβολή όλων των έργων, αν κάτι αλλάξει."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "VCS Project Integration"
+#~ msgstr "VCS ενσωμάτωση έργου"
+
+#~ msgid ""
+#~ "This plugin provides integration between the projects and their VCS "
+#~ "infrastructure"
+#~ msgstr ""
+#~ "Το πρόσθετο αυτό παρέχει ολοκλήρωση ανάμεσα στα έργα και τη VCS υποδομή "
+#~ "τους"
+
+#~ msgid "Integrates VCS with Projects"
+#~ msgstr "Ενσωματώνει το VCS με έργα"

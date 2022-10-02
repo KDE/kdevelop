@@ -1,0 +1,4020 @@
+# translation of kdevelop.po to
+# Version: $Revision: 1612089 $
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010, 2013.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2020-04-05 07:34+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.07.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Marta Rybczyńska, Jerzy Skalski, Łukasz Wojniłowicz"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"kde-i18n@rybczynska.net, jurek@kde.com.pl, lukasz.wojnilowicz@gmail.com"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, kde-format
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "Sesja"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "&Projekt"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "U&ruchom"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "Przebadaj plik jądra"
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr "Dołącz do procesu"
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "&Poruszanie się"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, kde-format
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Plik"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&Edycja"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, kde-format
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Kod"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr "Przeanalizuj bieżący plik przy użyciu"
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr "Przeanalizuj bieżący projekt przy użyciu"
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&Okno"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, kde-format
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "Ustawienia"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "Pomoc"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Główny pasek narzędzi"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "Kod"
+
+#: kdevideextension.cpp:47
+#, kde-format
+msgid "KDevelop Project Files"
+msgstr "Pliki projektu KDevelopa"
+
+#: main.cpp:85
+#, kde-format
+msgid "Could not open %1"
+msgstr "Nie można otworzyć %1"
+
+#: main.cpp:219
+#, kde-format
+msgid "Could not open file '%1'."
+msgstr "Nie można otworzyć pliku '%1'."
+
+#: main.cpp:242
+#, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "Nie można otworzyć projektu '%1': %2"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr "Wybierz sesję, w której otworzyć dokument"
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+"Nie można otworzyć nieznanej sesji %1. Użyj przełącznika `--list-sessions` "
+"aby zobaczyć listę dostępnych sesji lub `-n` aby utworzyć nową sesję."
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr "KDevelop"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr "KDevelop: Zintegrowane środowisko programistyczne"
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr "Prawa autorskie 1999-%1, Programiści KDevelop"
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr "Kevin Funk"
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+"Współopiekun, C++/Clang, jakość, wsparcie na Windowsie, strona internetowa, "
+"wydajność"
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr "Sven Brauch"
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+"Współopiekun, AppImage, Obsługa Pythona, ulepszenia w interfejsie użytkownika"
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr "Aleix Pol Gonzalez"
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr "Obsługa CMake, Obsługa Run, Obsługa Kross"
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr "Milian Wolff"
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+"C++/Clang, Zwykłe zarządzanie, wtyczki do tworzenia stron internetowych, "
+"Wstawki, Wydajność"
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr "Olivier JG"
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr "C++/Clang, DUChain, usuwanie błędów"
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr "Andreas Pakulat"
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+"Architektura, Obsługa VCS, Obsługa zarządzania projektem, Zarządzanie "
+"projektem QMake"
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr "Alexander Dymo"
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr "Architektura, UI Sublime, obsługa języka Ruby"
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr "David Nolden"
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+"Łańcuch definicja-użycie, obsługa C++, poruszanie się po kodzie, "
+"uzupełnianie kodu, asystowanie przy programowaniu, refaktoryzacja"
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr "Vladimir Prus"
+
+#: main.cpp:397
+#, kde-format
+msgid "GDB integration"
+msgstr "Integracja GDB"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr "Hamish Rodda"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr "Integracja z edytorem tekstowym, ścieżka definicja-użycie"
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr "Amilcar do Carmo Lucas"
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+"Administrator WWW, dokumentacja API, Doxygen i łaty dotyczące autoprojektu"
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr "Niko Sams"
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr "Integracja GDB, wtyczki do tworzenia stron internetowych"
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr "Friedrich W. H. Kossebau"
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr "Matt Rogers"
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr "Cédric Pasteur"
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr "Obsługa astyle i indent"
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr "Evgeniy Ivanov"
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr "Rozproszone systemy zarządzania wersjami, Git, Mercurial"
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr "Robert Gruber"
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr "SnippetPart, program diagnostyczny i łaty dotyczące funkcjonalności"
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr "Dukju Ahn"
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+"Wtyczka Subversion, zarządzanie własnymi skryptami make, ogólne usprawnienia"
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr "Harald Fernengel"
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr "Portowanie do Qt3, poprawki, wsparcie dla diff, preforce, valgrind"
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr "Roberto Raggi"
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr "Parser C++"
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr "Autorzy KWrite"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "Komponent edytora Kate"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr "Nokia Corporation/Qt Software"
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr "Kod Designera"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr "Wkład do wcześniejszych wersji:"
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr "Bernd Gehrmann"
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr "Idea, podstawowa struktura, duża część początkowego kodu źródłowego"
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr "Caleb Tennis"
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr "KTabBar, poprawianie błędów"
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr "Richard Dale"
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr "Obsługa Javy i obiektowego C"
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr "John Birch"
+
+#: main.cpp:419
+#, kde-format
+msgid "Debugger frontend"
+msgstr "Nakładka programu diagnostycznego"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr "Sandy Meier"
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr "Obsługa PHP, menu kontekstowe"
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr "Kurt Granroth"
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr "Szablony programów KDE"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr "Ian Reinhart Geiser"
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "Dist, obsługa basha, szablony programów"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr "Matthias Hoelzer-Kluepfel"
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr "Kilka komponentów, indeksowanie htdig"
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr "Victor Roeder"
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr "Pomoc dotycząca zarządzania Automake i stałych zbiorów klas"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr "Simon Hausmann"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr "Pomoc przy infrastrukturze KParts"
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr "Oliver Kellogg"
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr "Obsługa Ady"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr "Jakob Simon-Gaarde"
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "Zarządzanie projektem QMake"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr "Falk Brettschneider"
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr "Tryby MDI, QEditor, poprawianie błędów"
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr "Mario Scalas"
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr "PartExplorer, przeprojektowanie CvsPart, łaty, poprawianie błędów"
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr "Jens Dagerbo"
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+"Wtyczki do zamiany, zakładek, listy plików i CTags2. Ogólne usprawnienia i "
+"łaty"
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr "Julian Rockey"
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr "Element Filecreate i inne rzeczy oraz łaty"
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr "Ajay Guleria"
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr "Obsługa ClearCase"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr "Marek Janukowicz"
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr "Obsługa: Ruby"
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr "Robert Moniot"
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "Dokumentacja Fortrana"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr "Ka-Ping Yee"
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr "Narzędzie do dokumentacji Pythona"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr "Dimitri van Heesch"
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "Pomocnik Doxygen"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr "Hugo Varotto"
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr "Komponent wyboru pliku"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr "Matt Newell"
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr "Daniel Engelschalt"
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr "Dopełnianie kodu w C++, stały zbiór klas"
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr "Stephane Ancelot"
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "Łaty"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr "Jens Zurheide"
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr "Luc Willems"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr "Pomoc w obsłudze Perla"
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr "Marcel Turino"
+
+#: main.cpp:443
+#, kde-format
+msgid "Documentation index view"
+msgstr "Widok indeksu dokumentacji"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr "Yann Hodique"
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr "Tobias Gläßer"
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+"Wyszukiwarka dokumentacji,  łaty do zarządzania projektem qmake, ulepszenia "
+"funkcjonalności, poprawki błędów ... "
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr "Andreas Koepfle"
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr "Łaty dotyczące zarządzania projektami QMake"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr "Sascha Cunz"
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr ""
+"Wyczyszczenie kodu i poprawki do qEditor, AutoMake i wiele innych rzeczy"
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr "Zoran Karavla"
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr "Grafika dla języka Ruby"
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr "Otwórz KDevelop z nową sesją używając danej nazwy."
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"Otwórz KDevelop z daną sesją.\n"
+"Możesz podać albo hasz albo nazwę sesji."
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"Usuń daną sesję.\n"
+"Możesz podać albo hasz albo nazwę tej sesji."
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+"Pokazuje wszystkie dostępne sesje i pozwala wybrać tobie jedną do otwarcia."
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+"Tworzy listę wszystkich dostępnych sesji w powłoce i pozwala wybrać tobie "
+"jedną do otwarcia."
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr "Sporządź listę dostępnych sesji i wyjdź."
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "Otwórz KDevelop i pobierz projekt z danego <adresu repozytorium>."
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+"Otwórz KDevelop i wczytaj dany projekt. <project> może być albo plikiem ."
+"kdev4 albo ścieżką ktalogu."
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+"Rozpocznij diagnozowanie programu w KDevelop z danym programem "
+"diagnostycznym.\n"
+"Plik wykonywalny mający być poddany diagnozowaniu musi być na końcu - "
+"włączając w to argumenty.\n"
+"Przykład: kdevelop --debug gdb mójprogram --foo bar"
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr "Pliki do wczytania lub katalogi do wczytania jako projekty"
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr "Dostępne sesje (użyj \"-s HASH\" lub \"-s NAME\" aby wybrać sesję):"
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr "Skrót"
+
+#: main.cpp:520
+#, kde-format
+msgid "Name: Opened Projects"
+msgstr "Nazwa: otwarte projekty"
+
+#: main.cpp:529
+#, kde-format
+msgid "[running]"
+msgstr "[działa]"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr "Wybierz sesję, której chciałbyś używać"
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr "Proszę podać plik wykonywalny do diagnozowania."
+
+#: main.cpp:648
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "Podany plik wykonywalny nie istnieje."
+
+#: main.cpp:654
+#, kde-format
+msgid "Debug %1"
+msgstr "Diagnozuj %1"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr "Sesja o nazwie %1 już istnieje. Użyj przełącznika -s aby ją otworzyć."
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr "Sesja o nazwie %1 nie istnieje."
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr "Nie można zablokować sesji %1 do usunięcia."
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr "Sesja o nazwie %1 została pomyślnie usunięta."
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr "Nie można znaleźć rodzaju skrótu do macierzystego programu"
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr "Nie można znaleźć skrótu %1"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr "Sesje KDevelop"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr "Dowolny ciąg znaków, który coś mówi "
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "Znajduje sesje KDevelop pasujące do :q:."
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr "Sporządza listę wszystkich sesji edytora KDevelop na twoim koncie."
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "Otwórz sesję KDevelop"
+
+#~ msgid "Files to load"
+#~ msgstr "Pliki do wczytania"
+
+#~ msgid "Analy&ze"
+#~ msgstr "Anali&za"
+
+#~ msgid "&File"
+#~ msgstr "&Plik"
+
+#~ msgid "&Edit"
+#~ msgstr "&Edycja"
+
+#~ msgid "&Advanced"
+#~ msgstr "Z&aawansowane"
+
+#~ msgid "&View"
+#~ msgstr "&Widok"
+
+#~ msgid "&Code Folding"
+#~ msgstr "Z&wijanie kodu"
+
+#~ msgid "&Tools"
+#~ msgstr "&Narzędzia"
+
+#~ msgid "Word Completion"
+#~ msgstr "Uzupełnianie słów"
+
+#~ msgid "&Settings"
+#~ msgstr "U&stawienia"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Edytor"
+
+#~ msgid "Deprecated options:"
+#~ msgstr "Przestarzałe opcje:"
+
+#~ msgid "Same as -l / --list-sessions"
+#~ msgstr "Tak samo jak -l / --list-sessions"
+
+#~ msgid "Same as -n / --new-session"
+#~ msgstr "Tak samo jak -n / --new-session"
+
+#~ msgid "The KHTML authors"
+#~ msgstr "Autorzy KHTML"
+
+#~ msgid "HTML documentation component"
+#~ msgstr "Komponent dokumentacji HTML"
+
+#~ msgid "Develop"
+#~ msgstr "Rozwijaj"
+
+#~ msgid "Getting Started"
+#~ msgstr "Wdrażanie się"
+
+#~ msgid "Back to code"
+#~ msgstr "Z powrotem do kodu"
+
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Ustawienia nowego programu uruchamiającego"
+
+#~ msgid "Debug your program"
+#~ msgstr "Debuguj swój program"
+
+#~ msgid "Debug Area"
+#~ msgstr "Debug obszar"
+
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options.<br/><br/>As you can see, here you can just execute "
+#~ "your application or debug it if you need further runtime information. You "
+#~ "can select what is going to be run by configuring the launches and "
+#~ "selecting the one you want to use in the <em>Current Launch "
+#~ "Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "W obszarze <em>Debugowania</em> będzie można przeanalizować działanie i "
+#~ "wykonanie swojego programu. W menu <em>Uruchamiania</em> znajdziesz "
+#~ "wszystkie możliwe opcje.<br/><br/>Jak zauważysz, tutaj możesz albo tylko "
+#~ "wykonać swoje programy albo dodatkowo dokonać ich debugowania, jeśli "
+#~ "potrzebujesz dalszych informacji o procedurach. Możesz wybrać co zostanie "
+#~ "uruchomione poprzez konfigurację uruchamiań i wybraniu wybranie ich z pod-"
+#~ "menu <em>Bieżące ustawienia uruchamiania</em>."
+
+#~ msgid "Review a Patch"
+#~ msgstr "Przejrzyj łatkę"
+
+#~ msgid "Review Area"
+#~ msgstr "Przejrzyj obszar"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch.<br/> Also it will help you send the changes to the "
+#~ "community you're contributing to, either by committing the changes, "
+#~ "sending them by e-mail or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "W obszarze <em>Przeglądu</em> znajdziesz narzędzie potrzebne do "
+#~ "przeglądnięcia zmian w twoich projektach, zarówno tych których ty "
+#~ "dokonałeś, jak i tych zewnętrznych.<br/> Będziesz mógł także wysłać "
+#~ "zmiany do społeczności, z którą współtworzysz projekty, albo poprzez "
+#~ "dokonywanie zmian, albo poprzez wysłanie ich przez pocztę lub "
+#~ "umieszczanie ich w usłudze TablicaPrzeglądu."
+
+#~ msgid "New Project"
+#~ msgstr "Nowy projekt"
+
+#~ msgid "Open project"
+#~ msgstr "Otwórz projekt"
+
+#~ msgid "Fetch project"
+#~ msgstr "Pobierz projekt"
+
+#~ msgid "Recent Projects"
+#~ msgstr "Ostatnie projekty"
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Sessions"
+#~ msgstr "Sesje"
+
+#~ msgid "Official Website"
+#~ msgstr "Oficjalna strona internetowa"
+
+#~ msgid "Userbase"
+#~ msgstr "Baza użytkownika"
+
+#~ msgid "Techbase"
+#~ msgstr "Baza techniczna"
+
+#~ msgid "Handbook"
+#~ msgstr "Podręcznik"
+
+#~ msgid "Go!"
+#~ msgstr "Idź!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Dokumentacja dla użytkowników KDevelop"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Bądź na bieżąco z rozwojem KDevelop"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Pomóż nam ulepszyć KDevelop"
+
+#~ msgctxt "name: content"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Starting"
+#~ msgstr "Uruchamianie"
+
+#~ msgid "Learn KDevelop!"
+#~ msgstr "Naucz się KDevelop!"
+
+#~ msgid "Execute your program"
+#~ msgstr "Wykonaj swój program"
+
+#~ msgid "made running kdevelop instance (PID: %1) visible"
+#~ msgstr "uczyń widoczną uruchomioną instancję kdevelop (PID: %1)"
+
+#~ msgid ""
+#~ "<p>Failed to lock the session <em>%1</em>, already locked by %2 (PID %4) "
+#~ "on %3.<br>The given application did not respond to a DBUS call, it may "
+#~ "have crashed or is hanging.</p><p>Do you want to remove the lock file and "
+#~ "force a new KDevelop instance?<br/><strong>Beware:</strong> Only do this "
+#~ "if you are sure there is no running KDevelop process using this session.</"
+#~ "p>"
+#~ msgstr ""
+#~ "<p>Nieudane zablokowanie sesji <em>%1</em>, już zablokowane przez %2 (PID "
+#~ "%4) na %3.<br>Dany program nie odpowiedziała na wywołanie DBUS, oznacza "
+#~ "to, że mógł ulec awarii lub zawiesić się.</p><p>Czy chcesz usunąć plik "
+#~ "blokowany i wymusić nową instancję KDevelop?<br/><strong>Miej na uwadze:</"
+#~ "strong> Zrób to tylko, gdy masz pewność, że nie ma uruchomionego procesu "
+#~ "KDevelop używającego tej sesji.</p>"
+
+#~ msgid "Remove lock file"
+#~ msgstr "Usuń plik blokowany"
+
+#~ msgid "Failed to Lock Session %1"
+#~ msgstr "Nieudane zablokowanie sesji %1"
+
+#~ msgid "Failed to remove lock file %1."
+#~ msgstr "Nieudane usuniecie pliku blokowanego %1."
+
+#~ msgid "Import project"
+#~ msgstr "Importuj projekt"
+
+#, fuzzy
+#~| msgid "Open KDevelop and load the given project."
+#~ msgid "Open KDevelop with the given session.\n"
+#~ msgstr "Otwórz KDevelop i wczytaj dany projekt."
+
+#, fuzzy
+#~| msgid "Failed to Lock Session %1"
+#~ msgid "<p>Failed to lock the session <em>%1</em>, "
+#~ msgstr "Nieudane zablokowanie sesji %1"
+
+#~ msgid "%1"
+#~ msgstr "%1"
+
+#~ msgid "Url to project to load"
+#~ msgstr "Adres projektu do wczytania"
+
+#~ msgid "Session %1 is already running."
+#~ msgstr "Sesja %1 już działa."
+
+#~ msgid ""
+#~ "Cannot start KDevelop, the kdevelop.bin executable is missing in %1. "
+#~ "Please fix your KDevelop installation."
+#~ msgstr ""
+#~ "Nie można uruchomić KDevelopa, brakuje pliku wykonywalnego kdevelop.exe w "
+#~ "%1. Proszę naprawić swoją instalację."
+
+#~ msgid "%1 (using KDevPlatform %2)"
+#~ msgstr "%1 (używa platformy KDevPlatform %2)"
+
+#~ msgctxt "@title:menu"
+#~ msgid "|"
+#~ msgstr "|"
+
+#, fuzzy
+#~| msgid "(c) 1999-2007, The KDevelop developers"
+#~ msgid "Copyright 1999-2009, The KDevelop developers"
+#~ msgstr "(c) 1999-2007, autorzy KDevelopa"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Session contents"
+#~ msgstr "&Ustawienia"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "Pliki do wczytania"
+
+#~ msgid "Profile to load"
+#~ msgstr "Profil do wczytania"
+
+#~ msgid "Version %1"
+#~ msgstr "Wersja %1"
+
+#~ msgid "Trolltech AS"
+#~ msgstr "Trolltech AS"
+
+#~ msgid "Run"
+#~ msgstr "Uruchom lub kontynuuj"
+
+#~ msgid ""
+#~ "QEditor component, code completion, Abbrev component, C++ support, Java "
+#~ "support"
+#~ msgstr ""
+#~ "Komponent QEditor, uzupełnianie kodu, komponent Abbrev, \n"
+#~ "obsługa C++, obsługa Javy"
+
+#~ msgid "Cancel"
+#~ msgstr "Anuluj"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Rename %1"
+#~ msgstr "Usuń"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create Class"
+#~ msgstr "Utwórz nowy projekt"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgid "New name:"
+#~ msgstr "&Nazwa:"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Rename"
+#~ msgstr "Usuń"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Uses"
+#~ msgstr "Klasa"
+
+#~ msgid ""
+#~ "tried include-path-resolution while another resolution-process was still "
+#~ "running"
+#~ msgstr ""
+#~ "nastąpiła próba znalezienia ścieżek do plików dołączanych, a podobny "
+#~ "proces już działa"
+
+#~ msgid "Makefile is missing in folder \"%1\""
+#~ msgstr "Brakuje Makefile w \"%1\""
+
+#~ msgid "problem while trying to resolve include-paths for %1"
+#~ msgstr "problem podczas znajdowania ścieżek do plików dołączanych dla %1"
+
+#~ msgid "Cached: "
+#~ msgstr "Zachowane:"
+
+#~ msgid "Filename %1 seems to be malformed"
+#~ msgstr "Nazwa pliku %1 wygląda na błędną"
+
+#~ msgid "make-process failed"
+#~ msgstr "proces make zakończył się z błędem"
+
+#~ msgid "output: %1"
+#~ msgstr "wynik: %1"
+
+#~ msgid "Recursive make-call failed"
+#~ msgstr "Rekursywne wywołanie make nie powiodło się"
+
+#~ msgid ""
+#~ "The parameter-string \"%1\" does not seem to be valid. Output was: %2"
+#~ msgstr "Parametr \"%1\" wygląda na niepoprawny. Wynik: %2"
+
+#~ msgid "The directory \"%1\" does not exist. Output was: %2"
+#~ msgstr "Katalog \"%1\" nie istnieje. Wynik: %2"
+
+#~ msgid "Recursive make-call malformed"
+#~ msgstr "Błędne rekursywne wywołanie make"
+
+#~ msgid "Output was: %1"
+#~ msgstr "Wynik: %1"
+
+#~ msgid "Could not extract include-paths from make-output"
+#~ msgstr ""
+#~ "Nie udało się znaleźć ścieżek do plików nagłówkowych w wyniku działania "
+#~ "make"
+
+#~ msgid "Folder: \"%1\"  Command: \"%2\"Output: \"%3\""
+#~ msgstr "Katalog: \"%1\"  Polecenie: \"%2\" Wynik:\"%3\""
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "Funkcja"
+
+#, fuzzy
+#~| msgid "Macro error"
+#~ msgid "Macro"
+#~ msgstr "Błąd makra"
+
+#, fuzzy
+#~| msgid "Valgrind process timed out."
+#~ msgid "Preprocessed body:"
+#~ msgstr "Błąd Valginda: przekroczony czas oczekiwania."
+
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "Dołączane"
+
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "Dołączane przez"
+
+#~ msgctxt "Count of macros defined in this header"
+#~ msgid "Defined macros"
+#~ msgstr "Zdefiniowane makra"
+
+#~ msgid "Declarations:"
+#~ msgstr "Deklaracje:"
+
+#~ msgid "not parsed yet"
+#~ msgstr "jeszcze nie analizowane"
+
+#~ msgid "Included file was not found: %1"
+#~ msgstr "Plik dołączony nie został znaleziony: %1"
+
+#~ msgid ""
+#~ "Searched include path:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Przeszukano ścieżkę do plików dołączanych:\n"
+#~ "%1"
+
+#~ msgid "This file imports the current open document<br/>"
+#~ msgstr "Ten plik importuje otwarty w tym samym czasie dokument<br/>"
+
+#, fuzzy
+#~| msgid "Found in %1th include-path"
+#~ msgid "In %1th include-path"
+#~ msgstr "Znaleziono w %1. ścieżce do plików dołączanych"
+
+#~ msgid "Included through"
+#~ msgstr "Dołączone przez"
+
+#~ msgid "Directory %1"
+#~ msgstr "Katalog %1"
+
+#~ msgid "Includes"
+#~ msgstr "Pliki dołączane"
+
+#~ msgid "Include Path"
+#~ msgstr "Ścieżka do plików dołączanych"
+
+#~ msgid "Includers"
+#~ msgstr "Dołączający"
+
+#, fuzzy
+#~| msgid "Ada support"
+#~ msgid "C++ Support"
+#~ msgstr "Obsługa Ady"
+
+#~ msgid "Files"
+#~ msgstr "Pliki"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create &New Class"
+#~ msgstr "Utwórz nowy projekt"
+
+#, fuzzy
+#~| msgid "Build-manager did not return an include-path"
+#~ msgid "Build manager for project %1 did not return a build directory"
+#~ msgstr "Menadżer budowania nie zwrócił ścieżki do plików nagłówkowych"
+
+#~ msgid "Build-manager did not return an include-path"
+#~ msgstr "Menadżer budowania nie zwrócił ścieżki do plików nagłówkowych"
+
+#~ msgid ""
+#~ "The build-manager did not return the include-path %1, which could be "
+#~ "resolved by the include-path resolver"
+#~ msgstr ""
+#~ "Menadżer budowania nie zwrócił ścieżki do plików nagłówkowych %1, która "
+#~ "została rozwiązana przez program do rozwiązywania ścieżek"
+
+#~ msgid "Include-path resolver:"
+#~ msgstr "Rozwiązywanie ścieżek do plików nagłówkowych:"
+
+#~ msgid ""
+#~ "Used build directory: \"%1\"\n"
+#~ "Include-path resolver: %2"
+#~ msgstr ""
+#~ "Katalog budowania: \"%1\"\n"
+#~ "Rozwiązywanie ścieżek: %2"
+
+#, fuzzy
+#~| msgid "&Build System"
+#~ msgid "Building uses"
+#~ msgstr "System &budowania"
+
+#, fuzzy
+#~| msgid "Reload"
+#~ msgid "Ready"
+#~ msgstr "Wczytaj ponownie"
+
+#~ msgid "Macro error"
+#~ msgstr "Błąd makra"
+
+#~ msgid "Call to macro %1 missing argument number %2"
+#~ msgstr "W wywołaniu makra %1 brakuje argumentu numer %2"
+
+#~ msgid "Formals: %1"
+#~ msgstr "Formals: %1"
+
+#~ msgid "Unterminated #if statement"
+#~ msgstr "Niezakończony #if"
+
+#~ msgid "character %1"
+#~ msgstr "znak %1"
+
+#~ msgid "Expected \"identifier\", found: %1"
+#~ msgstr "Spodziewany \"identyfikator\"', znaleziono %1"
+
+#~ msgid "<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>"
+#~ msgstr "<h5>Tekst tokena</h5><pre>%1</pre><h5>Wejście</h5><pre>%2</pre>"
+
+#~ msgid "Expected \")\", found %1"
+#~ msgstr "Spodziewany znak \")\", nastąpiło %1"
+
+#~ msgid "Division by zero"
+#~ msgstr "Dzielenie przez zero"
+
+#~ msgid "Input text: %1"
+#~ msgstr "Tekst wejściowy: %1"
+
+#~ msgid "expected ``:'' = %1"
+#~ msgstr "spodziewany znak ``:'' = %1"
+
+#~ msgid "#else without #if"
+#~ msgstr "#else bez #if"
+
+#~ msgid "#endif without #if at output line %1"
+#~ msgstr "#endif bez #if w wierszu %1"
+
+#~ msgid "KDE forwarding header generator"
+#~ msgstr "Generacja plików nagłówkowych KDE"
+
+#~ msgid ""
+#~ "An application which creates forwarding headers (like Qt headers) from "
+#~ "source code."
+#~ msgstr ""
+#~ "Program tworzący pliki nagłówkowe (takie jak pliki nagłówkowe Qt) z kodu "
+#~ "źródłowego."
+
+#~ msgid "(c) 2006, Hamish Rodda"
+#~ msgstr "(c) 2006, Hamish Rodda"
+
+#~ msgid ""
+#~ "KDE include directory - headers go into <placeholder>includes</"
+#~ "placeholder>/KDE"
+#~ msgstr ""
+#~ "Katalog plików dołączanych KDE - pliki nagłówkowe są umieszczane w "
+#~ "<placeholder>includes</placeholder>/KDE"
+
+#~ msgid "Build information from the cmake XML generator"
+#~ msgstr "Informacje dotyczące budowania z generatora XML-a cmake"
+
+#, fuzzy
+#~| msgid "Evaluate: %1"
+#~ msgid "invalid input: %1"
+#~ msgstr "Oblicz: %1"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "Generate Stub Class"
+#~ msgstr "Generator:"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "Generate Stub"
+#~ msgstr "Generator:"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgid "Implement"
+#~ msgstr "Komentarz"
+
+#~ msgid "Add"
+#~ msgstr "Dodaj"
+
+#, fuzzy
+#~| msgid "Failed to start Valgrind"
+#~ msgid "Failed to start test executable."
+#~ msgstr "Nie udało się uruchomić Valgrinda"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Test executable crashed."
+#~ msgstr "Plik wykonywalny Make:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Test root."
+#~ msgstr "Nazwa"
+
+#, fuzzy
+#~| msgid "Add Profile"
+#~ msgid "profile"
+#~ msgstr "Dodaj profil"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest verbose output"
+#~ msgstr "Nazwa"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Test executable timed out."
+#~ msgstr "Plik wykonywalny Make:"
+
+#, fuzzy
+#~| msgid "Failed to start Valgrind"
+#~ msgid "Failed to write to test executable."
+#~ msgstr "Nie udało się uruchomić Valgrinda"
+
+#, fuzzy
+#~| msgid "Failed to start Valgrind"
+#~ msgid "Failed to read from test executable."
+#~ msgstr "Nie udało się uruchomić Valgrinda"
+
+#, fuzzy
+#~| msgid "An error occurred"
+#~ msgid "Unknown error occurred."
+#~ msgstr "Napotkano błąd"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "xTest"
+#~ msgstr "TextLabel"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest test"
+#~ msgstr "Nazwa"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Class name:"
+#~ msgstr "Klasa"
+
+#~ msgid "Search"
+#~ msgstr "Znajdź"
+
+#~ msgid "Find In Files"
+#~ msgstr "Znajdź w plikach"
+
+#, fuzzy
+#~| msgid "Make: %1"
+#~ msgid "Grep: %1"
+#~ msgstr "Make: %1"
+
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr ""
+#~ "Nie można utworzyć pliku tymczasowego potrzebnego przy wyszukiwaniu."
+
+#, fuzzy
+#~| msgid "Find In Files"
+#~ msgid "Find in Files"
+#~ msgstr "Znajdź w plikach"
+
+#, fuzzy
+#~| msgid "Profile to load"
+#~ msgid "Process failed to start."
+#~ msgstr "Profil do wczytania"
+
+#, fuzzy
+#~| msgid "Process exited"
+#~ msgid "Process crashed."
+#~ msgstr "Proces zakończył się"
+
+#, fuzzy
+#~| msgid "Valgrind process timed out."
+#~ msgid "Process timed out."
+#~ msgstr "Błąd Valginda: przekroczony czas oczekiwania."
+
+#, fuzzy
+#~| msgid "Unknown Valgrind process error."
+#~ msgid "Unknown process error."
+#~ msgstr "Błąd Valgrinda: nieznany błąd procesu."
+
+#~ msgid "Find in Fi&les..."
+#~ msgstr "&Znajdź w plikach..."
+
+#~ msgid "Search for expressions over several files"
+#~ msgstr "Wyszukanie wyrażenia w wielu plikach"
+
+#~ msgid ""
+#~ "<b>Find in files</b><p>Opens the 'Find in files' dialog. There you can "
+#~ "enter a regular expression which is then searched for within all files in "
+#~ "the directories you specify. Matches will be displayed, you can switch to "
+#~ "a match directly.</p>"
+#~ msgstr ""
+#~ "<b>Znajdź w plikach</b> <p>Otwiera okno \"Znajdź w plikach\". Można tam "
+#~ "wpisać wyrażenie regularne, które jest potem wyszukiwane we wszystkich "
+#~ "plikach podanych katalogów. Znalezione wyrażenia będą pokazywane, można "
+#~ "się do nich bezpośrednio przełączyć.</p>"
+
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Brak"
+
+#~ msgid "Create New Project"
+#~ msgstr "Utwórz nowy projekt"
+
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "Ogólne"
+
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "Kontrola wersji"
+
+#, fuzzy
+#~| msgid "Project to load"
+#~ msgid "Project Wizard"
+#~ msgstr "Projekt do wczytania"
+
+#~ msgid "Generate a new project from a template"
+#~ msgstr "Utworzenie nowego projektu z szablonu"
+
+#~ msgid ""
+#~ "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
+#~ "you to generate a skeleton for your application from a set of templates.</"
+#~ "p>"
+#~ msgstr ""
+#~ "<b>Nowy projekt</b><p> W ten sposób uruchamia się asystenta z programu "
+#~ "KDevelop. Pomoże on utworzyć szkielet programu ze zbioru szablonów.</p>"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&Importuj istniejący projekt..."
+
+#, fuzzy
+#~| msgid "Couldn't import project"
+#~ msgid "Could not import project into"
+#~ msgstr "Nie można zaimportować projektu"
+
+#, fuzzy
+#~| msgid "Couldn't checkout imported project"
+#~ msgid "Could not checkout imported project"
+#~ msgstr "Nie można pobrać zaimportowanego projektu"
+
+#, fuzzy
+#~| msgid "Couldn't import project"
+#~ msgid "Could not import project"
+#~ msgstr "Nie można zaimportować projektu"
+
+#, fuzzy
+#~| msgid "Couldn't create new project"
+#~ msgid "Could not create new project"
+#~ msgstr "Nie można utworzyć nowego projektu"
+
+#~ msgid "The file %1 cannot be created."
+#~ msgstr "Plik %1 nie może być utworzony."
+
+#, fuzzy
+#~| msgid "Please chose an existing directory."
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Proszę wybrać istniejący katalog."
+
+#~ msgid "Please choose a project name."
+#~ msgstr "Należy wybrać nazwę projektu."
+
+#~ msgid ""
+#~ "Cannot create project file.<p><b>Suggestion</b>: check permissions on the "
+#~ "selected directory"
+#~ msgstr ""
+#~ "Nie można utworzyć pliku projektu.<p><b>Sugestia</b>: warto sprawdzić "
+#~ "prawa wybranego katalogu"
+
+#~ msgid "Project import error"
+#~ msgstr "Błąd podczas importowania projektu"
+
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "Nie można utworzyć pliku tymczasowego do wysłania."
+
+#~ msgid "Invalid Location"
+#~ msgstr "Błędna lokalizacja"
+
+#, fuzzy
+#~| msgid "Project &name:"
+#~ msgid "Empty project name"
+#~ msgstr "&Nazwa projektu:"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid project name"
+#~ msgstr "Szablony projektów"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid Project Template"
+#~ msgstr "Szablony projektów"
+
+#~ msgid "Project Templates"
+#~ msgstr "Szablony projektów"
+
+#~ msgid "Document View"
+#~ msgstr "Przeglądarka dokumentacji"
+
+#~ msgid "Documents"
+#~ msgstr "Dokumenty"
+
+#~ msgid "<%1 items>"
+#~ msgstr "<%1 elementów>"
+
+#~ msgid "Disabled"
+#~ msgstr "Wyłączone"
+
+#~ msgid "Pending (add)"
+#~ msgstr "W toku (dodaj)"
+
+#~ msgid "Pending (clear)"
+#~ msgstr "W toku (wyczyść)"
+
+#~ msgid "Pending (modify)"
+#~ msgstr "W toku (modyfikuj)"
+
+#~ msgid "Active"
+#~ msgstr "Aktywne"
+
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Kod"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>Polecenie gdb zostało wysłane, ale debugger nie działa</"
+#~ "b><br>Polecenie:<br> %1"
+
+#~ msgid "Internal error"
+#~ msgstr "Błąd wewnętrzny"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>Błędne polecenie debuggera</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Błędne polecenie debuggera"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Invalid gdb reply</b><p>The 'stopped' packet does not include the "
+#~| "'reason' field'."
+#~ msgid ""
+#~ "<b>Invalid gdb reply</b><p>The 'stopped' packet does not include the "
+#~ "'reason' field."
+#~ msgstr ""
+#~ "<b>Błędna odpowiedź gdb</b><p>Pakiet 'zatrzymane' (stopped) nie zawierał "
+#~ "pola 'powód' (reason)."
+
+#, fuzzy
+#~| msgid "The gdb reply is: bla-bla-bla"
+#~ msgid "The gdb reply is: invalid"
+#~ msgstr "Odpowiedź gdb to: bla-bla-bla"
+
+#~ msgid "Invalid gdb reply"
+#~ msgstr "Niepoprawna odpowiedź gdb"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "Wyjście z sygnałem %1"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Program otrzymał sygnał %1 (%2)"
+
+#~ msgid "Received signal"
+#~ msgstr "Otrzymano sygnał"
+
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "komunikat gdb:\n"
+#~ "%1"
+
+#~ msgid "Warning"
+#~ msgstr "Ostrzeżenie"
+
+#~ msgid "Running program"
+#~ msgstr "Uruchamianie programu"
+
+#~ msgid ""
+#~ "GDB cannot use the tty* or pty* devices.\n"
+#~ "Check the settings on /dev/tty* and /dev/pty*\n"
+#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
+#~ "the user to the tty group using \"usermod -G tty username\"."
+#~ msgstr ""
+#~ "GDB nie może użyć urządzeń tty* lub pty*.\n"
+#~ "Sprawdź ustawienia /dev/tty* i /dev/pty*.\n"
+#~ "Może być potrzebne uruchomienie poleceń (jako administrator)  \"chmod ug"
+#~ "+rw\" tty* lub pty*i/lub dodanie użytkownika do grupy tty za pomocą "
+#~ "\"usermod -G tty użytkownik\"."
+
+#~ msgid ""
+#~ "<b>Application does not exist</b><p>The application you're trying to "
+#~ "debug,<br>    %1\n"
+#~ "<br>does not exist. Check that you've specified the right application in "
+#~ "the debugger configuration."
+#~ msgstr ""
+#~ "<b>Program nie istnieje</b><p>Program, który próbujesz debugować,<br>    "
+#~ "%1\n"
+#~ "<br>nie istnieje. Sprawdź, czy w konfiguracji debuggera jest podany "
+#~ "właściwy program."
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Nie można uruchomić programu '%1'.</b><p>Plik z programem nie ma "
+#~ "ustawionegoprawa do uruchamiania. Spróbuj ponownie zbudować projekt lub "
+#~ "ręcznie zmienić uprawnienia."
+
+#~ msgid "Could not run application"
+#~ msgstr "Nie można uruchomić programu"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr "<b>Błąd debuggera</b><p>Debugger zgłosił następujący błąd:<p><tt>%1"
+
+#~ msgid ""
+#~ "%1 commands in queue\n"
+#~ "%2 commands being processed by gdb\n"
+#~ "Debugger state: %3\n"
+#~ msgstr ""
+#~ "%1 poleceń w kolejce\n"
+#~ "%2 poleceń przetworzonych przez gdb\n"
+#~ "Stan debuggera: %3\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "Klasa bieżącego polecenia: '%1'\n"
+#~ "Treść bieżącego polecenia: '%2'\n"
+#~ "Oryginalna treść bieżącego polecenia: '%3'\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "Stan debuggera"
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>Widok kodu maszynowego</b><p>Widok kodu maszynowego działającego "
+#~ "programu z podświetloną bieżącą instrukcję. Można wykonywać pojedyncze "
+#~ "instrukcje używając przycisków \"przejdź\" oraz \"wejdź w\"."
+
+#~ msgid "Disassemble View"
+#~ msgstr "Widok deasemblacji"
+
+#~ msgid "Address"
+#~ msgstr "Adres"
+
+#~ msgid "Function"
+#~ msgstr "Funkcja"
+
+#~ msgid "Offset"
+#~ msgstr "Przesunięcie"
+
+#~ msgid "Instruction"
+#~ msgstr "Instrukcja"
+
+#~ msgid ""
+#~ "<b>Frame stack</b><p>Often referred to as the \"call stack\", this is a "
+#~ "list showing what function is currently active and who called each "
+#~ "function to get to this point in your program. By clicking on an item you "
+#~ "can see the values in any of the previous calling functions."
+#~ msgstr ""
+#~ "<b>Ramka stosu</b><p>Nazywana także \"listą wywołań\", jest to lista "
+#~ "pokazująca aktywną funkcję oraz to, skąd została wywołana każda z "
+#~ "poprzednich funkcji na drodze do tej. Wartości poprzednich wywołań można "
+#~ "obejrzeć po kliknięciu elementu listy."
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Nie można znaleźć powłoki debuggera '%1'."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Nie znaleziono powłoki debuggera"
+
+#~ msgctxt "<b>Internal debugger error</b>"
+#~ msgid ""
+#~ "<p>The debugger component encountered internal error while processing "
+#~ "reply from gdb. Please submit a bug report."
+#~ msgstr ""
+#~ "<p>Wystąpił wewnętrzny błąd w module debuggera podczas przetwarzania "
+#~ "odpowiedzi od gdb. Proszę wysłać raport o błędzie."
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "Wyjątek: %1\n"
+#~ "Odpowiedź MI: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "Błąd wewnętrzny debuggera"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>Nie można uruchomić debuggera.</b><p>Nie można uruchomić '%1'. Proszę "
+#~ "się upewnić, że ścieżka została podana poprawnie."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Nie można uruchomić debuggera"
+
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Pułapki debuggera"
+
+#~ msgid ""
+#~ "<b>Breakpoint list</b><p>Displays a list of breakpoints with their "
+#~ "current status. Clicking on a breakpoint item allows you to change the "
+#~ "breakpoint and will take you to the source in the editor window."
+#~ msgstr ""
+#~ "<b>Lista pułapek</b><p>Pokazuje listę pułapek z ich bieżącym stanem."
+#~ "Kliknięcie pułapki pozwala na jej zmianę i przenosi we właściwe miejsce w "
+#~ "edytorze tekstu."
+
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Nowa"
+
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Zapis danych"
+
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Odczyt danych"
+
+#~ msgid "Show text"
+#~ msgstr "Pokaż tekst"
+
+#~ msgid "Disable"
+#~ msgstr "Wyłączone"
+
+#~ msgid "Delete"
+#~ msgstr "Usuń"
+
+#~ msgid "Disable all"
+#~ msgstr "Wyłącz wszystkie"
+
+#~ msgid "Enable all"
+#~ msgstr "Włącz wszystkie"
+
+#~ msgid "Delete all"
+#~ msgstr "Usuń wszystkie"
+
+#~ msgid ""
+#~ "<b>Data write breakpoint</b><br>Expression: %1<br>Address: 0x%2<br>Old "
+#~ "value: %3<br>New value: %4"
+#~ msgstr ""
+#~ "<b>Pułapka podczas zapisu danych</b><br>Wyrażenie: %1<br>Adres: 0x"
+#~ "%2<br>Stara wartość: %3<br>Nowa wartość: %4"
+
+#~ msgid "Enable"
+#~ msgstr "Włącz"
+
+#~ msgid "GDB Output"
+#~ msgstr "Wyjście GDB"
+
+#~ msgid ""
+#~ "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
+#~ "issue any other gdb command while debugging."
+#~ msgstr ""
+#~ "<b>Wyjście GDB</b><p>Pokazuje wszystkie wykonywane polecenia gdb. Podczas "
+#~ "debugowania można tam też wydawać własne."
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "Polecenie &GDB:"
+
+#~ msgid "Pause execution of the app to enter gdb commands"
+#~ msgstr "Zatrzymanie działania programu, żeby wpisać polecenie gdb"
+
+#~ msgid "Show Internal Commands"
+#~ msgstr "Pokaż wewnętrzne polecenia"
+
+#, fuzzy
+#~| msgid ""
+#~| "Controls if commands issued internally by KDevelop will be shown or not."
+#~| "<br>This option will affect only future commands, it won't add or remove "
+#~| "already issued commands from the view."
+#~ msgid ""
+#~ "Controls if commands issued internally by KDevelop will be shown or not."
+#~ "<br>This option will affect only future commands, it will not add or "
+#~ "remove already issued commands from the view."
+#~ msgstr ""
+#~ "Wskazuje, czy polecenia wydawane wewnętrznie przez KDevelopa mają być "
+#~ "pokazywane, czy też nie.<br>Ta opcja wpłynie tylko na przyszłe polecenia, "
+#~ "nie usunie już wydanych z widoku."
+
+#~ msgid "Copy All"
+#~ msgstr "Kopiuj wszystko"
+
+#, fuzzy
+#~| msgid "Ignore Count"
+#~ msgid "Ignore"
+#~ msgstr "Liczba ignorowanych"
+
+#~ msgid "Watches"
+#~ msgstr "Śledzone"
+
+#~ msgid "Recent"
+#~ msgstr "Ostatnie"
+
+#~ msgid "Debugger Variables"
+#~ msgstr "Zmienne debuggera"
+
+#~ msgid ""
+#~ "<b>Variable tree</b><p>The variable tree allows you to see the values of "
+#~ "local variables and arbitrary expressions.<p>Local variables are "
+#~ "displayed automatically and are updated as you step through your program. "
+#~ "For each expression you enter, you can either evaluate it once, or \"watch"
+#~ "\" it (make it auto-updated). Expressions that are not auto-updated can "
+#~ "be updated manually from the context menu. Expressions can be renamed to "
+#~ "more descriptive names by clicking on the name column.<p>To change the "
+#~ "value of a variable or an expression, click on the value."
+#~ msgstr ""
+#~ "<b>Drzewo zmiennych</b><p>Drzewo zmiennych pozwala przeglądać wartości "
+#~ "zmiennych lokalnych i wyrażeń.<p>Zmienne lokalne są automatycznie "
+#~ "pokazywane i uaktualniane po wykonaniu kolejnych fragmentów programu. "
+#~ "Jeśli chodzi o wyrażenia, można albo raz obliczyć jego wartość, albo je "
+#~ "\"śledzić\" (automatycznie uaktualniać). Wyrażenia, które nie są "
+#~ "uaktualniane automatycznie, mogą być uaktualnione za pomocą opcji z menu "
+#~ "kontekstowego. Można też zmieniać nazwy wyrażeń po kliknięciu na kolumnę "
+#~ "nazw. <p>Aby zmienić wartość zmiennej w wyrażeniu, kliknij tą wartość."
+
+#, fuzzy
+#~| msgid "<b>Expression entry</b><p>Type in expression to evaluate."
+#~ msgid "<b>Expression entry</b><p>Type in expression to watch."
+#~ msgstr "<b>Wyrażenie</b><p>Proszę wpisać wyrażenie do obliczenia."
+
+#~ msgid "Recent Expressions"
+#~ msgstr "Ostatnie wyrażenia"
+
+#~ msgid "Remove All"
+#~ msgstr "Usuń wszystkie"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "Ponownie oblicz wszystkie"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Natural"
+#~ msgstr "Naturalny"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "Szesnastkowy"
+
+#~ msgid "Decimal"
+#~ msgstr "Dziesiętnie"
+
+#~ msgid "Character"
+#~ msgstr "Znak"
+
+#~ msgid "Binary"
+#~ msgstr "Binarny"
+
+#~ msgid "Remember Value"
+#~ msgstr "Zapamiętaj wartość"
+
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Usuń obserwowaną zmienną"
+
+#~ msgid "Watch Variable"
+#~ msgstr "Obserwowana zmienna"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Ponownie wykonaj wyrażenie"
+
+#~ msgid "Remove Expression"
+#~ msgstr "Usuń wyrażenie"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "Pułapka przy zapisie danych"
+
+#~ msgid "Copy Value"
+#~ msgstr "Kopiuj wartość"
+
+#~ msgid "Invalid"
+#~ msgstr "Błędna"
+
+#~ msgid "Watchpoint"
+#~ msgstr "Punk obserwowany"
+
+#~ msgid "Read Watchpoint"
+#~ msgstr "Odczytaj punkt obserwowany"
+
+#~ msgid "Start"
+#~ msgstr "Uruchom"
+
+#~ msgid "Amount"
+#~ msgstr "Ilość"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Memory view"
+#~ msgstr "Widok pamięci"
+
+#~ msgid "Change memory range"
+#~ msgstr "Zmień zakres pamięci"
+
+#~ msgid "Reload"
+#~ msgstr "Wczytaj ponownie"
+
+#~ msgid "Close this view"
+#~ msgstr "Zamknij ten widok"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Specjalne widoki debuggera"
+
+#~ msgid "Breakpoint"
+#~ msgstr "Pułapka"
+
+#~ msgid " temporary"
+#~ msgstr " tymczasowy"
+
+#~ msgid " hw"
+#~ msgstr " hw"
+
+#~ msgid "Enabled"
+#~ msgstr "Włączone"
+
+#~ msgid "Type"
+#~ msgstr "Typ"
+
+#~ msgid "Status"
+#~ msgstr "Stan"
+
+#~ msgid "Location"
+#~ msgstr "Lokalizacja"
+
+#~ msgid "Condition"
+#~ msgstr "Warunek"
+
+#~ msgid "Ignore Count"
+#~ msgstr "Liczba ignorowanych"
+
+#~ msgid "Hits"
+#~ msgstr "Trafienia"
+
+#~ msgid "Tracing"
+#~ msgstr "Śledzenie"
+
+#~ msgid "Frame"
+#~ msgstr "Ramka"
+
+#, fuzzy
+#~| msgid "Debugger"
+#~ msgid "C++ Debugger"
+#~ msgstr "Debugger"
+
+#~ msgid "Breakpoints"
+#~ msgstr "Pułapki"
+
+#~ msgid "Variables"
+#~ msgstr "Zmienne"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Ramka stosu"
+
+#~ msgid "Disassemble"
+#~ msgstr "Deasembluj"
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#~ msgid "Debug views"
+#~ msgstr "Widoki debugowania"
+
+#~ msgid "&Start"
+#~ msgstr "&Uruchom"
+
+#~ msgid "Start in debugger"
+#~ msgstr "Uruchom w debuggerze"
+
+#~ msgid ""
+#~ "<b>Start in debugger</b><p>Starts the debugger with the project's main "
+#~ "executable. You may set some breakpoints before this, or you can "
+#~ "interrupt the program while it is running, in order to get information "
+#~ "about variables, frame stack, and so on."
+#~ msgstr ""
+#~ "<b>Uruchom w debuggerze</b><p>Uruchomienie głównego programu projektu w "
+#~ "debuggerze. Można wcześniej ustawić pułapki albo przerwać program w "
+#~ "trakcie jego działania, aby uzyskać informacje o zmiennych, ramce stosu i "
+#~ "tak dalej."
+
+#~ msgid "&Restart"
+#~ msgstr "&Uruchom ponownie"
+
+#~ msgid ""
+#~ "<b>Restarts application</b><p>Restarts applications from the beginning."
+#~ msgstr ""
+#~ "<b>Ponownie uruchom program</b><p>Rozpoczęcie działania programu od "
+#~ "początku."
+
+#~ msgid "Sto&p"
+#~ msgstr "&Zatrzymaj"
+
+#~ msgid "Stop debugger"
+#~ msgstr "Zatrzymaj debugger"
+
+#~ msgid "<b>Stop debugger</b><p>Kills the executable and exits the debugger."
+#~ msgstr ""
+#~ "<b>Zatrzymaj debugger</b><p>Zakończenie programu i wyjście z debuggera."
+
+#~ msgid "Interrupt"
+#~ msgstr "Przerwanie"
+
+#~ msgid "Interrupt application"
+#~ msgstr "Przerwij program"
+
+#~ msgid ""
+#~ "<b>Interrupt application</b><p>Interrupts the debugged process or current "
+#~ "GDB command."
+#~ msgstr ""
+#~ "<b>Przerwij program</b><p>Przerwanie debugowanego procesu lub bieżącego "
+#~ "polecenia GDB."
+
+#~ msgid "Run to &Cursor"
+#~ msgstr "Uruchom do &kursora"
+
+#~ msgid "Run to cursor"
+#~ msgstr "Wykonaj program do pozycji kursora"
+
+#~ msgid ""
+#~ "<b>Run to cursor</b><p>Continues execution until the cursor position is "
+#~ "reached."
+#~ msgstr ""
+#~ "<b>Wykonaj program do pozycji kursora</b><p>Wznowienie wykonania aż do "
+#~ "osiągnięcia pozycji kursora."
+
+#~ msgid "Set E&xecution Position to Cursor"
+#~ msgstr "Ustaw &pozycję wykonania na kursorze"
+
+#~ msgid "Jump to cursor"
+#~ msgstr "Skocz do kursora"
+
+#~ msgid ""
+#~ "<b>Set Execution Position </b><p>Set the execution pointer to the current "
+#~ "cursor position."
+#~ msgstr ""
+#~ "<b>Ustaw pozycję wykonywania</b><p>Ustawienie wskaźnika wykonania na "
+#~ "bieżącej pozycji kursora."
+
+#~ msgid "Step &Over"
+#~ msgstr "Przejdź &przez"
+
+#~ msgid "Step over the next line"
+#~ msgstr "Przejdź przez następny wiersz"
+
+#~ msgid ""
+#~ "<b>Step over</b><p>Executes one line of source in the current source "
+#~ "file. If the source line is a call to a function the whole function is "
+#~ "executed and the app will stop at the line following the function call."
+#~ msgstr ""
+#~ "<b>Przejdź przez</b><p>Wykonanie jednego wiersza z bieżącego pliku. Jeśli "
+#~ "znajduje się tam wywołanie funkcji, wykonywana jest cała funkcja, a "
+#~ "program zatrzymuje się w wierszu następnym po jej wywołaniu."
+
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Przejdź przez &instrukcję"
+
+#~ msgid "Step over instruction"
+#~ msgstr "Przejdź przez instrukcję"
+
+#~ msgid ""
+#~ "<b>Step over instruction</b><p>Steps over the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Przejdź przez instrukcję</b><p>Przejście przez następną instrukcję "
+#~ "asemblera."
+
+#~ msgid "Step &Into"
+#~ msgstr "Wejdź &w"
+
+#~ msgid "Step into the next statement"
+#~ msgstr "Wejdź w następne wyrażenie"
+
+#~ msgid ""
+#~ "<b>Step into</b><p>Executes exactly one line of source. If the source "
+#~ "line is a call to a function then execution will stop after the function "
+#~ "has been entered."
+#~ msgstr ""
+#~ "<b>Wejdź w</b><p>Wykonywany jest dokładnie jeden wiersz kodu. Jeśli "
+#~ "znajduje się tam wywołanie funkcji, to program zostanie zatrzymany zaraz "
+#~ "po wejściu do niej."
+
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Wejdź w i&nstrukcję"
+
+#~ msgid "Step into instruction"
+#~ msgstr "Wejdź w następną instrukcję"
+
+#~ msgid ""
+#~ "<b>Step into instruction</b><p>Steps into the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Wejdź w instrukcję</b><p>Wejście w następną instrukcję asemblera."
+
+#~ msgid "Step O&ut"
+#~ msgstr "Wyjdź &z"
+
+#~ msgid "Steps out of the current function"
+#~ msgstr "Wyjdź z bieżącej funkcji"
+
+#~ msgid ""
+#~ "<b>Step out</b><p>Executes the application until the currently executing "
+#~ "function is completed. The debugger will then display the line after the "
+#~ "original call to that function. If program execution is in the outermost "
+#~ "frame (i.e. in main()) then this operation has no effect."
+#~ msgstr ""
+#~ "<b>Wyjdź z</b><p>Program działa do zakończenia bieżącej funkcji. "
+#~ "Następnie debugger pokaże wiersz po jej wywołaniu. Jeśli program znajduje "
+#~ "się w najbardziej zewnętrznej ramce (tzn. w main()), to ta operacja nie "
+#~ "odnosi skutku. "
+
+#~ msgid "Viewers"
+#~ msgstr "Podglądy"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "Podglądy debuggera"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>Widoki debuggera</b><p>Różne informacje na temat uruchomionego "
+#~ "programu. Dostępne są 4 widoki:<br><b>Pamięć</b><br><b>Deasembluj</"
+#~ "b><br><b>Rejestry</b><br><b>Biblioteki</b>"
+
+#~ msgid "Examine core file"
+#~ msgstr "Analizuj plik core"
+
+#~ msgid ""
+#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
+#~ "created after the application has crashed, e.g. with a segmentation "
+#~ "fault. The core file contains an image of the program memory at the time "
+#~ "it crashed, allowing you to do a post-mortem analysis."
+#~ msgstr ""
+#~ "<b>Analizuj plik core</b><p>Następuje wczytanie pliku core, który jest "
+#~ "zazwyczaj tworzony po awarii programu, np. po błędzie segmentacji "
+#~ "(segmentation fault). Plik core zawiera obraz pamięci programu w momencie "
+#~ "awarii, co pozwala na analizę po fakcie."
+
+#~ msgid "Attach to process"
+#~ msgstr "Dołącz do procesu"
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process."
+#~ msgstr ""
+#~ "<b>Dołącz do procesu</b><p>Dołączenie debuggera do działającego procesu."
+
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Włącz/wyłącz pułapkę"
+
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Włącz/wyłącz pułapkę"
+
+#~ msgid ""
+#~ "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
+#~ "editor."
+#~ msgstr ""
+#~ "<b>Włącz/wyłącz pułapkę</b><p>Włączenie/wyłączenie pułapki w bieżącym "
+#~ "wierszu kodu w edytorze."
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "Oblicz: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor."
+#~ msgstr ""
+#~ "<b>Wykonaj wyrażenie</b><p>Pokazanie wartości wyrażenia pod kursorem."
+
+#~ msgid "Watch: %1"
+#~ msgstr "Śledź: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list."
+#~ msgstr ""
+#~ "<b>Śledź wyrażenie</b><p>Dodanie wyrażenia pod kursorem do listy "
+#~ "śledzonych."
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>GDB zakończył pracę z błędem</b><p>Jest to prawdopodobnie błąd w GDB. "
+#~ "Przejrzyj okno wyników gdb i zatrzymaj debugger"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "GDB zakończył pracę z błędem"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Wybierz plik core do analizy..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "Analiza pliku core %1"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "Wybierz proces do dołączenia..."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "Dołączanie do procesu %1"
+
+#~ msgid "Debugger"
+#~ msgstr "Debugger"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Debugger zatrzymany"
+
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Uruchomienie programu w debuggerze"
+
+#~ msgid ""
+#~ "Start in debugger\n"
+#~ "\n"
+#~ "Starts the debugger with the project's main executable. You may set some "
+#~ "breakpoints before this, or you can interrupt the program while it is "
+#~ "running, in order to get information about variables, frame stack, and so "
+#~ "on."
+#~ msgstr ""
+#~ "Uruchom w debuggerze\n"
+#~ "\n"
+#~ "Uruchomienie głównego programu wykonywalnego projektu w debuggerze. Można "
+#~ "wcześniej ustawić pułapki, można też przerywać działanie programu, żeby "
+#~ "uzyskać informacje o zmiennych, ramce stosu i tak dalej."
+
+#~ msgid "&Continue"
+#~ msgstr "&Dalej"
+
+#~ msgid "Continues the application execution"
+#~ msgstr "Wznowienie działania programu"
+
+#~ msgid ""
+#~ "Continue application execution\n"
+#~ "\n"
+#~ "Continues the execution of your application in the debugger. This only "
+#~ "takes effect when the application has been halted by the debugger (i.e. a "
+#~ "breakpoint has been activated or the interrupt was pressed)."
+#~ msgstr ""
+#~ "Wznów działanie programu\n"
+#~ "\n"
+#~ "Wznowienie działania programu w debuggerze. Odnosi skutek tylko wtedy, "
+#~ "kiedy program został wcześniej zatrzymany w debuggerze (np. została "
+#~ "uaktywniona pułapka albo nastąpiło przerwanie działania)."
+
+#~ msgid "Process exited"
+#~ msgstr "Proces zakończył się"
+
+#~ msgid "Variable"
+#~ msgstr "Zmienna"
+
+#~ msgid "Value"
+#~ msgstr "Wartość"
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: Konsola debugowania"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake Manager"
+#~ msgstr "Program CMake:"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Nie można zapisać do pliku projektu."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not save the change."
+#~ msgstr "Nie można zapisać do pliku projektu."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "Nie można odczytać pliku projektu: %1"
+
+#~ msgid "Name"
+#~ msgstr "Nazwa"
+
+#~ msgid "Comment"
+#~ msgstr "Komentarz"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Anuluj"
+
+#~ msgid "CMake process killed"
+#~ msgstr "Proces CMake zatrzymany"
+
+#~ msgid "Created successfully"
+#~ msgstr "Utworzono poprawnie"
+
+#~ msgid "An error occurred"
+#~ msgstr "Napotkano błąd"
+
+#~ msgid "You need to select a cmake binary"
+#~ msgstr "Należy podać plik uruchamialny cmake"
+
+#, fuzzy
+#~| msgid "Using an already created build directory"
+#~ msgid "You need to specify a build directory"
+#~ msgstr "Użycie istniejącego katalogu budowania"
+
+#, fuzzy
+#~| msgid "Using an already created build directory"
+#~ msgid "Already used build directory"
+#~ msgstr "Użycie istniejącego katalogu budowania"
+
+#~ msgid "Using an already created build directory"
+#~ msgstr "Użycie istniejącego katalogu budowania"
+
+#, fuzzy
+#~| msgid "The selected directory does not exist or is not empty"
+#~ msgid "The selected build directory is not empty"
+#~ msgstr "Wybrany katalog nie istnieje lub nie jest pusty"
+
+#, fuzzy
+#~| msgid "The selected directory does not exist or is not empty"
+#~ msgid "This build directory is for %1, but the project directory is %2"
+#~ msgstr "Wybrany katalog nie istnieje lub nie jest pusty"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "Text"
+#~ msgstr "TextLabel"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Action"
+#~ msgstr "Funkcja"
+
+#, fuzzy
+#~| msgid "Cancel"
+#~ msgid "Change"
+#~ msgstr "Anuluj"
+
+#, fuzzy
+#~| msgid "Interrupt"
+#~ msgid "Insert"
+#~ msgstr "Przerwanie"
+
+#~ msgid "Remove"
+#~ msgstr "Usuń"
+
+#, fuzzy
+#~| msgid "Custom Makefiles"
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Własne skrypty Makefile"
+
+#~ msgid "Build &Target"
+#~ msgstr "Buduj &cel"
+
+#~ msgid "Build target"
+#~ msgstr "Buduj cel"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Buduj cel</b> <p>Uruchomienie <b>make nazwacelu</b> z katalogu "
+#~ "projektu (nazwacelu to nazwa wybranego celu). </p><p>Zmienne środowiska i "
+#~ "argumenty programu make mogą być zmienione w oknie dialogowym ustawień "
+#~ "projektu, karta <b>Opcje budowania</b>.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "Buduj projekt"
+
+#~ msgid "Build this target"
+#~ msgstr "Buduj ten cel"
+
+#~ msgid "Build this directory"
+#~ msgstr "Buduj ten katalog"
+
+#~ msgid "qmake-parser"
+#~ msgstr "parser qmake"
+
+#~ msgid "Parse QMake project files"
+#~ msgstr "Analiza plików projektu QMake"
+
+#~ msgid "Enable output of the debug AST"
+#~ msgstr "Włączenie wyniku debugowania AST"
+
+#~ msgid "QMake project files"
+#~ msgstr "Pliki projektu QMake"
+
+#, fuzzy
+#~| msgid "QMake projectmanager"
+#~ msgid "QMake Manager"
+#~ msgstr "Menedżer projektu QMake"
+
+#~ msgid "freedesktop.org Desktop Entry Files"
+#~ msgstr "Pliki Desktop z freedesktop.org"
+
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "Definicje KDE XMLGUI"
+
+#~ msgid "Installed headers"
+#~ msgstr "Zainstalowane pliki nagłówkowe"
+
+#~ msgid "Uninstalled headers"
+#~ msgstr "Odinstalowane pliki nagłówkowe"
+
+#, fuzzy
+#~| msgid "Number of simultaneous jobs:"
+#~ msgid "Number of times visited."
+#~ msgstr "Liczba jednocześnie wykonywanych zadań:"
+
+#, fuzzy
+#~| msgid "Source"
+#~ msgid "source"
+#~ msgstr "Źródło"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "coverage"
+#~ msgstr "Obsługa ClearCase"
+
+#, fuzzy
+#~| msgid "Instruction"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "Instrukcja"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Report"
+#~ msgstr "Obsługa ClearCase"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Support"
+#~ msgstr "Obsługa ClearCase"
+
+#, fuzzy
+#~| msgid "&Restart"
+#~ msgid "Reset Data"
+#~ msgstr "&Uruchom ponownie"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake Builder"
+#~ msgstr "Program CMake:"
+
+#~ msgid "CMake: %1"
+#~ msgstr "CMake: %1"
+
+#, fuzzy
+#~| msgid "QMake Binary:"
+#~ msgid "QMake Builder"
+#~ msgstr "Program QMake:"
+
+#, fuzzy
+#~| msgid "QMake project files"
+#~ msgid "No project specified."
+#~ msgstr "Pliki projektu QMake"
+
+#~ msgid "QMake: %1"
+#~ msgstr "QMake: %1"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "Make Builder"
+#~ msgstr "Program CMake:"
+
+#~ msgid "compiling"
+#~ msgstr "kompilowanie"
+
+#~ msgid "generating"
+#~ msgstr "generowanie"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "łączenie"
+
+#~ msgid "built"
+#~ msgstr "zbudowane"
+
+#~ msgid "installing"
+#~ msgstr "instalowanie"
+
+#~ msgid "creating"
+#~ msgstr "tworzenie"
+
+#~ msgid "Make: %1"
+#~ msgstr "Make: %1"
+
+#, fuzzy
+#~| msgid "Using an already created build directory"
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Użycie istniejącego katalogu budowania"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "Nie można utworzyć wtyczki językowej dla %1."
+
+#~ msgid "Valgrind Output"
+#~ msgstr "Wynik Valgrinda"
+
+#~ msgid ""
+#~ "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/"
+#~ ">use of uninitialized memory<br/>reading/writing memory after it has been "
+#~ "free'd<br/>reading/writing off the end of malloc'd blocks<br/>reading/"
+#~ "writing inappropriate areas on the stack<br/>memory leaks -- where "
+#~ "pointers to malloc'd blocks are lost forever<br/>passing of uninitialised "
+#~ "and/or unaddressable memory to system calls<br/>mismatched use of malloc/"
+#~ "new/new [] vs free/delete/delete []<br/>some abuses of the POSIX pthread "
+#~ "API.</p>"
+#~ msgstr ""
+#~ "<b>Valgrind</b><p>Pokazanie wyniku działania programu valgrind. Wykrywa "
+#~ "on:<br/>użycia niezainicjowanej<br/>czytanie/pisanie do pamięci po jej "
+#~ "zwolnieniu<br/>czytanie/pisanie za końcem bloków przydzielonych przez "
+#~ "malloc<br/>czytanie/pisanie w niewłaściwych obszarach stosu<br/>wycieki "
+#~ "pamięci -- kiedy wskaźniki na bloki przydzielanie przez malloc są tracone "
+#~ "i nie można ich odzyskać<br/>przekazywanie niezainicjowanej i/lub "
+#~ "nieadresowalnej pamięci do wywołań systemowych<br/>mieszanie malloc/new/"
+#~ "new [] i free/delete/delete []<br/>niektóre naruszenia API wątków POSIX "
+#~ "(pthread).</p>"
+
+#~ msgid "Valgrind"
+#~ msgstr "Valgrind"
+
+#~ msgid "&Valgrind Memory Leak Check"
+#~ msgstr "Sprawdź wycieki pamięci (&Valgrind)"
+
+#~ msgid "Valgrind memory leak check and other tools"
+#~ msgstr "Valgrind: sprawdzenie wycieków pamięci i inne narzędzia"
+
+#~ msgid ""
+#~ "<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you "
+#~ "find memory-management problems in your programs, and other valgrind "
+#~ "tools.</p>"
+#~ msgstr ""
+#~ "<b>Sprawdź wycieki pamięci za pomocą programu Valgrind</b> "
+#~ "<p>Uruchomienie programu Valgrind - narzędzia pomagającego rozwiązać "
+#~ "problemy związane z zarządzaniem pamięcią.</p>"
+
+#~ msgid "Open Valgrind Output"
+#~ msgstr "Otwórz wynik programu Valgrind"
+
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "Nie można otworzyć wyniku działania programu Valgrind: %1"
+
+#, fuzzy
+#~| msgid "&Valgrind Memory Leak Check"
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "Sprawdź wycieki pamięci (&Valgrind)"
+
+#, fuzzy
+#~| msgid "Callgrind"
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Callgrind"
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Valgrind uległ awarii."
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Valgrind uległ awarii."
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Valgrind uległ awarii."
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Valgrind uległ awarii."
+
+#, fuzzy
+#~| msgid "Valid Location"
+#~ msgid "Valgrind communication error"
+#~ msgstr "Poprawna lokalizacja"
+
+#~ msgid "Failed to start valgrind from \"%1.\""
+#~ msgstr "Nie udało się uruchomić valgrinda z \"%1.\""
+
+#~ msgid "Failed to start Valgrind"
+#~ msgstr "Nie udało się uruchomić Valgrinda"
+
+#~ msgid "Valgrind crashed."
+#~ msgstr "Valgrind uległ awarii."
+
+#~ msgid "Valgrind Error"
+#~ msgstr "Błąd Valgrinda"
+
+#~ msgid "Valgrind process timed out."
+#~ msgstr "Błąd Valginda: przekroczony czas oczekiwania."
+
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "Błąd Valgrinda: nieudany zapis do procesu."
+
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "Błąd Valgrinda: nieudany odczyt z procesu."
+
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "Błąd Valgrinda: nieznany błąd procesu."
+
+#~ msgid "at: %1"
+#~ msgstr "w: %1"
+
+#~ msgid "by: %1"
+#~ msgstr "przez: %1"
+
+#~ msgid "Source"
+#~ msgstr "Źródło"
+
+#~ msgid "Object"
+#~ msgstr "Obiekt"
+
+#~ msgid "Valgrind XML Parsing: error at line %1, column %2: %3"
+#~ msgstr "Valgrind: Błąd analizy XML w wierszu %1, kolumna %2: %3"
+
+#, fuzzy
+#~| msgid "Designer code"
+#~ msgid "Qt Designer"
+#~ msgstr "Kod Designera"
+
+#~ msgid "Widget Box"
+#~ msgstr "Widget Box"
+
+#~ msgid "Property Editor"
+#~ msgstr "Edytor właściwości"
+
+#~ msgid "Action Editor"
+#~ msgstr "Edytor akcji"
+
+#~ msgid "Object Inspector"
+#~ msgstr "Inspektor obiektów"
+
+#, fuzzy
+#~| msgid "Documents"
+#~ msgid "Close Document"
+#~ msgstr "Dokumenty"
+
+#~ msgid "%{APPNAME}"
+#~ msgstr "%{APPNAME}"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Protected"
+#~ msgstr "Projekt"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "C++ Options"
+#~ msgstr "Opcje"
+
+#, fuzzy
+#~| msgid "Macro error"
+#~ msgid "&Macro:"
+#~ msgstr "Błąd makra"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr "Śledzenie konfiguracji"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Enable tracing</b>\n"
+#~| "<p>Tracing is a mechanism to automatically print values of the choosed "
+#~| "expressions and continue execution when breakpoint is hit. You can think "
+#~| "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgid ""
+#~ "<b>Enable tracing</b>\n"
+#~ "<p>Tracing is a mechanism to automatically print values of the chosen "
+#~ "expressions and continue execution when breakpoint is hit. You can think "
+#~ "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgstr ""
+#~ "<b>Włącz śledzenie</b>\n"
+#~ "<p>Śledzenie to mechanizm polegający na automatycznym wypisywaniu "
+#~ "wartości wybranych wyrażeń i kontynuowaniu wykonania po napotkaniu "
+#~ "pułapki. Można je traktować jako debugowanie za pomocą printf, które nie "
+#~ "wymaga modyfikacji źródeł.</p>"
+
+#~ msgid "Enable tracing"
+#~ msgstr "Włącz śledzenie"
+
+#~ msgid "Custom format string"
+#~ msgstr "Własny ciąg formatujący"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Custom format string</b>\n"
+#~| "<p>Specify a C-style format string that will be used when printing the "
+#~| "choosen expression. For example:\n"
+#~| "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~| "If custom format string is not enabled, names and values of all "
+#~| "expressions will be printed, using \"%d\" as format specifier for all "
+#~| "expressions."
+#~ msgid ""
+#~ "<b>Custom format string</b>\n"
+#~ "<p>Specify a C-style format string that will be used when printing the "
+#~ "chosen expression. For example:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "If custom format string is not enabled, names and values of all "
+#~ "expressions will be printed, using \"%d\" as format specifier for all "
+#~ "expressions."
+#~ msgstr ""
+#~ "<b>Własny ciąg formatujący</b>\n"
+#~ "<p>Podaj ciąg formatujący w stylu języka C, który ma być używany podczas "
+#~ "wypisywania wartości wyrażenia. Na przykład:\n"
+#~ "<p align=\"center\"> <tt>Punkt 1: g = %d</tt></p>\n"
+#~ "Jeśli własne ciągi formatujące nie są włączone, zostaną wyświetlone nazwy "
+#~ "i wartości wszystkich wyrażeń; dla wyrażeń wykorzystany będzie ciąg "
+#~ "formatujący \"%d\"."
+
+#~ msgid "Expressions to print:"
+#~ msgstr "Wyrażenie do wypisania:"
+
+#~ msgid "Pid"
+#~ msgstr "Pid"
+
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#~ msgid "Stat"
+#~ msgstr "Stat"
+
+#~ msgid "Time"
+#~ msgstr "Czas"
+
+#~ msgid "Command"
+#~ msgstr "Polecenie"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Uruchom lub kontynuuj"
+
+#~ msgid "Debugger Toolbar"
+#~ msgstr "Pasek debuggera"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Konfiguracja debuggera"
+
+#~ msgid ""
+#~ "Debug arguments can be set on the Run Options page\n"
+#~ " or directly in the project manager"
+#~ msgstr ""
+#~ "Argumenty debuggera mogą być ustawione na karcie Opcje uruchamiania\n"
+#~ "lub bezpośrednio w menadżerze projektu"
+
+#~ msgid "Debugger executable:"
+#~ msgstr "Plik wykonywalny debuggera:"
+
+#~ msgid "Gdb executable"
+#~ msgstr "Plik wykonywalny gdb:"
+
+#~ msgid ""
+#~ "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
+#~ "gdb, for example, for a different architecture, enter the executable name "
+#~ "here. You can either run gdb from $PATH, but with a different name (say, "
+#~ "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+#~ "executable."
+#~ msgstr ""
+#~ "Jeśli chcesz uruchomić program \"gdb\" z $PATH, zostaw to pole puste. "
+#~ "Należy je wypełnić, żeby uruchomić własną wersję gdb, na przykład na inną "
+#~ "architekturę. Można także uruchomić gdb z $PATH, ale o innej nazwie (jak "
+#~ "\"arm-gdb\"). Wszystko to po podaniu tutaj nazwy pliku lub podaniu pełnej "
+#~ "ścieżki."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr ""
+#~ "Uruchom gdb w specjalnej powłoce (głównie dla projektów korzystających z "
+#~ "automake)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Jeśli chcesz, żeby gdb było uruchomione ze specjalnej powłoki lub "
+#~ "narzędzia, wstaw je tutaj. Najpopularniejszy sposób wykorzystania tej "
+#~ "opcji jest związany z projektami korzystającymi z Automake, gdzie program "
+#~ "jest tylko skryptem, a do uruchomienia go w gdb potrzeba libtool."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "&Powłoka debuggera:"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Jeśli chcesz, żeby gdb było uruchomione ze specjalnej powłoki lub "
+#~ "narzędzia, wstaw je tutaj. Najpopularniejszy sposób wykorzystania tej "
+#~ "opcji jest związany z projektami korzystającymi z Automake, gdzie program "
+#~ "jest tylko skryptem, a do uruchomienia go w gdb potrzeba <b>libtool</b>."
+
+#~ msgid "Options"
+#~ msgstr "Opcje"
+
+#~ msgid ""
+#~ "Displaying static members makes GDB slower in\n"
+#~ "producing data within KDE and Qt.\n"
+#~ "It may change the \"signature\" of the data\n"
+#~ "which QString and friends rely on,\n"
+#~ "but if you need to debug into these values then\n"
+#~ "check this option."
+#~ msgstr ""
+#~ "Pokazywanie składowych statycznych sprawia,\n"
+#~ "że GDB działa wolniej z KDE i Qt.\n"
+#~ "Może też zmienić \"podpis\" danych,\n"
+#~ "na którym bazuje QString, ale jeśli\n"
+#~ "potrzebujesz debugować te wartości,\n"
+#~ "to zaznacz tą opcję."
+
+#~ msgid "Display static &members"
+#~ msgstr "Pokazuj statyczne &składowe"
+
+#~ msgid ""
+#~ "When displaying the disassembled code you\n"
+#~ "can select to see the methods' mangled names.\n"
+#~ "However, non-mangled names are easier to read."
+#~ msgstr ""
+#~ "Podczas pokazywania zdeasemblowanego kodu możesz\n"
+#~ "wybrać wyświetlanie pełnych nazw metod. Z drugiej strony,\n"
+#~ "nazwy oczyszczone są łatwiejsze do czytania."
+
+#~ msgid "Display &demangled names"
+#~ msgstr "Pokazuj &oczyszczone nazwy"
+
+#~ msgid ""
+#~ "If GDB has not seen a library that will be loaded via\n"
+#~ "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~ "We can get GDB to stop on a library load and hence\n"
+#~ "try to set the pending breakpoints. See the documentation\n"
+#~ "for more details relating to this behavior.\n"
+#~ "\n"
+#~ "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgstr ""
+#~ "Jeśli GDB nie widzi biblioteki, która będzie wczytana za pomocą\n"
+#~ "\"dlopen\", to nie ustawi pułapek w tym kodzie.\n"
+#~ "Można zatrzymać GDB po wczytaniu biblioteki i wtedy\n"
+#~ "spróbować ustawić pułapki. Więcej informacji na temat\n"
+#~ "tego zachowania można znaleźć w dokumentacji.\n"
+#~ "\n"
+#~ "Jeśli nie używasz \"dlopen\", możesz nie zaznaczać tej opcji."
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Próbuj ustawiać &pułapki podczas wczytywania biblioteki"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "Użyj pływający pasek narzędzi. Taki pasek zawsze pozostaje\n"
+#~ "na wierzchu wszystkich okien, jeśli więc jakiś program przesłoni\n"
+#~ "KDevelopa, to do części funkcji ciągle będzie dostęp przez ten\n"
+#~ "mały pasek. Może on być też zadokowany na panelu.\n"
+#~ "\n"
+#~ "Ten pasek jest dodatkiem do paska narzędzi KDevelopa."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Włą&cz pływający pasek"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "To pozwala na wpisywanie danych wejściowych na terminalu,\n"
+#~ "kiedy Twój program tego wymaga (np. wykorzystuje cin czy fgets).\n"
+#~ "Jeśli potrzebujesz wejścia terminalowego, zaznacz tę opcję.\n"
+#~ "W przeciwnym wypadku tego nie rób."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr "Włącz oddzielny terminal dla &IO programu"
+
+#~ msgid "Start Debugger With"
+#~ msgstr "Rozpocznij pracę debuggera z"
+
+#~ msgid "Framestack"
+#~ msgstr "Ramka stosu"
+
+#~ msgid ""
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgstr ""
+#~ "Ten skrypt ma służyć do wykonania poleceń potrzebnych do połączenia ze "
+#~ "zdalnie działającym programem.\n"
+#~ "\tshell sleep 5\toczekiwanie na uruchomienie zdalnego programu\n"
+#~ "\ttarget remote ...\tpodłączenie do zdalnego debuggera\n"
+#~ "\tcontinue\t[opcjonalne] uruchomienie programu (do pierwszej pułapki)"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "Zdalne debugowanie"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "Skrypt &konfiguracyjny gdb:"
+
+#~ msgid "Gdb configure script"
+#~ msgstr "Skrypt configuracyjny gdb"
+
+#~ msgid "This script is sourced by gdb when the debugging starts."
+#~ msgstr "Ten skrypt jest pobierany przez gdb po uruchomieniu debuggera."
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "&Uruchom skrypt powłoki:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Skrypt uruchamiający zdalny program"
+
+#~ msgid ""
+#~ "This shell script is run after the Config gdb script has been sourced by "
+#~ "gdb.\n"
+#~ "When debugging remotely this script is intended to actually start the "
+#~ "remote process.\n"
+#~ "[It is expected that the debug executable can be reached on the target, "
+#~ "maybe by downloading it as a final build step]\n"
+#~ "1) Find a way to execute a command remotely - rsh, ssh, telnet, ...\n"
+#~ "2a) Execute \"gdbserver ... application\" on target.\n"
+#~ "or if your executable contains the gdb stub\n"
+#~ "2b) Execute \"application\" on target."
+#~ msgstr ""
+#~ "Skrypt powłoki uruchamiany po tym, jak skrypt Config został pobrany przez "
+#~ "gdb.\n"
+#~ "Podczas zdalnego debugowania ten skrypt ma uruchomić zdalny proces.\n"
+#~ "[Oczekuje się, że debugowany plik uruchamialny jest dostępny, być może po "
+#~ "pobraniu go w ostatnim kroku budowania]\n"
+#~ "1) Znajdź sposób zdalnego wykonywania poleceń - rsh, ssh, telnet, ...\n"
+#~ "2a) Uruchom \"gdbserver ... program\" na komputerze docelowym.\n"
+#~ "lub jeśli Twój program jest związany z gdb\n"
+#~ "2b) Uruchom \"program\" na komputerze docelowym."
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Uruchom skrypt &gdb:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Skrypt służący do połączenia się ze zdalnym programem"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Ten skrypt jest pobierany przez gdb po tym, jak zostały uruchomione dwa "
+#~ "poprzednie skrypty.\n"
+#~ "Ten skrypt ma służyć do wykonania poleceń potrzebnych do połączenia ze "
+#~ "zdalnie działającym programem.\n"
+#~ "\tshell sleep 5\toczekiwanie na uruchomienie zdalnego programu\n"
+#~ "\ttarget remote ...\tpodłączenie do zdalnego debuggera\n"
+#~ "\tcontinue\t[opcjonalne] uruchomienie programu (do pierwszej pułapki)"
+
+#~ msgid "Profile Editor for The KDevelop Platform"
+#~ msgstr "Edytor profili dla platformy KDevelop"
+
+#~ msgid "Add Profile"
+#~ msgstr "Dodaj profil"
+
+#~ msgid "Description"
+#~ msgstr "Opis"
+
+#~ msgid "Properties"
+#~ msgstr "Właściwości"
+
+#~ msgid "Derived properties:"
+#~ msgstr "Dziedziczone właściwości:"
+
+#~ msgid "Own properties:"
+#~ msgstr "Własne właściwości:"
+
+#~ msgid "Lists of Explicitly Enabled && Disabled Plugins"
+#~ msgstr "Lista włączonych i wyłączonych wtyczek"
+
+#~ msgid "Enabled:"
+#~ msgstr "Włączone"
+
+#~ msgid "Plugin Name"
+#~ msgstr "Nazwa wtyczki"
+
+#~ msgid "Disabled:"
+#~ msgstr "Wyłączone"
+
+#~ msgid "<-"
+#~ msgstr "<-"
+
+#~ msgid "Available plugins:"
+#~ msgstr "Dostępne wtyczki:"
+
+#~ msgid "Generic Name"
+#~ msgstr "Nazwa ogólna"
+
+#~ msgid "->"
+#~ msgstr "->"
+
+#~ msgid "List of Plugins to Be Loaded"
+#~ msgstr "Lista wtyczek do wczytania"
+
+#~ msgid "&Name:"
+#~ msgstr "&Nazwa:"
+
+#~ msgid "&Generic name:"
+#~ msgstr "Nazwa &ogólna:"
+
+#~ msgid "&Description:"
+#~ msgstr "&Opis:"
+
+#~ msgid "Build Directory Creator"
+#~ msgstr "Tworzenie katalogów budowania"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "Program &CMake:"
+
+#~ msgid "&Build Directory:"
+#~ msgstr "Katalog &budowania:"
+
+#~ msgid "&Installation Prefix:"
+#~ msgstr "Ścieżka &instalacji:"
+
+#~ msgid "Build &type:"
+#~ msgstr "&Typ budowania:"
+
+#~ msgid "release"
+#~ msgstr "wydanie"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "RelWithDebInfo"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "MinSizeRel"
+
+#~ msgid "Generator:"
+#~ msgstr "Generator:"
+
+#~ msgid "TextLabel"
+#~ msgstr "TextLabel"
+
+#~ msgid "Cache Values"
+#~ msgstr "Cache"
+
+#~ msgid "Comment:"
+#~ msgstr "Komentarz:"
+
+#~ msgid "Show Advanced"
+#~ msgstr "Pokaż zaawansowane"
+
+#~ msgid "CMake Directory"
+#~ msgstr "Katalog CMake"
+
+#~ msgid "Show Advanced Values"
+#~ msgstr "Pokaż zaawansowane wartości"
+
+#~ msgid "Viewer"
+#~ msgstr "Podglądy"
+
+#~ msgid "Parse Tree"
+#~ msgstr "Drzewo parsowania"
+
+#~ msgid "Value 1"
+#~ msgstr "Wartość 1"
+
+#~ msgid "Value 2"
+#~ msgstr "Wartość 2"
+
+#~ msgid "Source to Be Written Back"
+#~ msgstr "Źródło do ponownego zapisania"
+
+#~ msgid "Add All From Directory"
+#~ msgstr "Dodaj wszystkie z katalogu"
+
+#~ msgid "Choose File to Add..."
+#~ msgstr "Wybierz plik do dodania..."
+
+#~ msgid "CMake Binary:"
+#~ msgstr "Program CMake:"
+
+#~ msgid "QMake Binary:"
+#~ msgstr "Program QMake:"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "View"
+#~ msgstr "&Widok"
+
+#~ msgid "Abort on first error:"
+#~ msgstr "Przerwij przy pierwszym błędzie:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Display commands but do not\n"
+#~| "execute them:"
+#~ msgid "Display commands but do not execute them:"
+#~ msgstr ""
+#~ "Pokaż polecenia,\n"
+#~ "nie wykonuj ich"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Uruchom więcej niż jedno zadanie naraz:"
+
+#~ msgid "Number of simultaneous jobs:"
+#~ msgstr "Liczba jednocześnie wykonywanych zadań:"
+
+#~ msgid "Make executable:"
+#~ msgstr "Plik wykonywalny Make:"
+
+#~ msgid "Default make target:"
+#~ msgstr "Domyślny cel:"
+
+#~ msgid "Additional make options:"
+#~ msgstr "Dodatkowe opcje make:"
+
+#, fuzzy
+#~| msgid "Active Environment Profile: "
+#~ msgid "Active Environment Profile:"
+#~ msgstr "Aktywny profil środowiska:"
+
+#~ msgid "Pattern:"
+#~ msgstr "Wzorzec:"
+
+#~ msgid ""
+#~ "Enter the regular expression you want to search for here.<p>Possible meta "
+#~ "characters are:<ul><li><b>.</b> - Matches any character</li><li><b>^</b> "
+#~ "- Matches the beginning of a line</li><li><b>$</b> - Matches the end of a "
+#~ "line</li><li><b>\\&lt;</b> - Matches the beginning of a word</li><li><b>"
+#~ "\\&gt;</b> - Matches the end of a word</li></ul>The following repetition "
+#~ "operators exist:<ul><li><b>?</b> - The preceding item is matched at most "
+#~ "once</li><li><b>*</b> - The preceding item is matched zero or more times</"
+#~ "li><li><b>+</b> - The preceding item is matched one or more times</"
+#~ "li><li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> "
+#~ "times</li><li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> "
+#~ "or more times</li><li><b>{,<i>n</i>}</b> - The preceding item is matched "
+#~ "at most <i>n</i> times</li><li><b>{<i>n</i>,<i>m</i>}</b> - The preceding "
+#~ "item is matched at least <i>n</i>, but at most <i>m</i> times.</li></"
+#~ "ul>Furthermore, backreferences to bracketed subexpressions are available "
+#~ "via the notation \\<i>n</i>.</p>"
+#~ msgstr ""
+#~ "Podaj wyrażenie regularne, które chcesz wyszukać. <p>Możliwe znaki "
+#~ "specjalne to: <ul><li><b>.</b> - Jakikolwiek znak</li><li><b>^</b> - "
+#~ "Początek wiersza</li><li><b>$</b> - Koniec wiersza</li><li><b>\\&lt;</b> "
+#~ "- Początek słowa</li><li><b>\\&gt;</b> - Koniec słowa</li></ul> Istnieją "
+#~ "następujące operatory powtórzeń: <ul><li><b>?</b> - poprzednie wyrażenie "
+#~ "występuje co najmniej raz</li><li><b>*</b> - poprzednie wyrażenie "
+#~ "występuje zero lub więcej razy</li><li><b>+</b> - poprzednie wyrażenie "
+#~ "występuje raz lub więcej razy</li><li><b>{<i>n</i>}</b> - poprzednie "
+#~ "wyrażenie występuje dokładnie <i>n</i> razy</li><li><b>{<i>n</i>,}</b> - "
+#~ "poprzednie wyrażenie występuje <i>n</i> lub więcej razy</li><li><b>{,"
+#~ "<i>n</i>}</b> - poprzednie wyrażenie występuje co najwyżej <i>n</i> razy</"
+#~ "li><li><b>{<i>n</i>,<i>m</i>}</b> - poprzednie wyrażenie występuje co "
+#~ "najmniej <i>n</i>, ale co najwyżej <i>m</i> razy. </li></ul>Co więcej, "
+#~ "odwołania wsteczne do podwyrażeń w nawiasach są dostępne przy użyciu "
+#~ "notacji \\<i>n</i>.</p>"
+
+#~ msgid "Template:"
+#~ msgstr "Szablon:"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Regular Expression:"
+#~ msgstr "Wyrażenie regularne:"
+
+#~ msgid "Case Sensitive:"
+#~ msgstr "Rozróżniaj wielkie/małe litery:"
+
+#~ msgid "Directory:"
+#~ msgstr "Katalog:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Rekursywnie:"
+
+#~ msgid "Limit to project files:"
+#~ msgstr "Tylko w plikach projektu:"
+
+#~ msgid "Files:"
+#~ msgstr "Pliki:"
+
+#~ msgid ""
+#~ "Enter the file name pattern of the files to search here. You may give "
+#~ "several patterns separated by commas"
+#~ msgstr ""
+#~ "Proszę podać wzorzec, jaki powinny spełniać wyszukane pliki. Można podać "
+#~ "kilka wzorów, należy je oddzielić oddzielonych przecinkami"
+
+#~ msgid "Exclude:"
+#~ msgstr "Wyłącz:"
+
+#~ msgid ""
+#~ "You can choose a template for the pattern from the combo box and edit it "
+#~ "here. The string %s in the template is replaced  by the pattern input "
+#~ "field, resulting in the regular expression to search for."
+#~ msgstr ""
+#~ "Z rozwijanej listy można wybrać szablon do wyszukiwania i tutaj go "
+#~ "modyfikować. W szablonie ciąg %s zostanie zamieniony na zawartość pola, a "
+#~ "tak powstałe wyrażenie regularne będzie użyte przy wyszukiwaniu."
+
+#~ msgid "Suppress find errors:"
+#~ msgstr "Nie pokazuj błędów wyszukiwania:"
+
+#~ msgid "Import Existing Project"
+#~ msgstr "Importuj istniejący projekt"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory:"
+#~ msgstr "Katalog:"
+
+#~ msgid "Choose directory to import"
+#~ msgstr "Proszę wybrać katalog do zaimportowania"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "Ś&ciągnij z:"
+
+#~ msgid "Fetch &Module"
+#~ msgstr "Ściągnij &moduł"
+
+#~ msgid "Project &name:"
+#~ msgstr "&Nazwa projektu:"
+
+#, fuzzy
+#~| msgid "&Build System"
+#~ msgid "&Build System:"
+#~ msgstr "System &budowania"
+
+#~ msgid "CMake"
+#~ msgstr "CMake"
+
+#~ msgid "QMake"
+#~ msgstr "QMake"
+
+#~ msgid "Custom Makefiles"
+#~ msgstr "Własne skrypty Makefile"
+
+#~ msgid "None"
+#~ msgstr "Brak"
+
+#~ msgid "Version Control System:"
+#~ msgstr "System kontroli wersji:"
+
+#~ msgid "Location:"
+#~ msgstr "Lokalizacja:"
+
+#~ msgid "Application Name:"
+#~ msgstr "Nazwa programu:"
+
+#~ msgid "(invalid)"
+#~ msgstr "(błędna)"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Pokazuj kategorie dokumentów (typy MIME)"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype. If this option is not set, the Document View "
+#~ "will not\n"
+#~ "        organize the open documents by type."
+#~ msgstr ""
+#~ "Jeśli ta opcja jest wybrana, Przeglądarka dokumentów będzie precentować "
+#~ "dokumentów\n"
+#~ "        na podstawie typu MIME. Jeśli ta opcja nie jest włączona, "
+#~ "dokumenty\n"
+#~ "        nie będą prezentowane z podziałem na typy."
+
+#~ msgid "Display document &categories"
+#~ msgstr "Pokaż &kategorie dokumentów"
+
+#, fuzzy
+#~| msgid "generating"
+#~ msgid "Indentation"
+#~ msgstr "generowanie"
+
+#, fuzzy
+#~| msgid "Watches"
+#~ msgid "Spaces"
+#~ msgstr "Śledzone"
+
+#, fuzzy
+#~| msgid "Breakpoints"
+#~ msgid "Brackets"
+#~ msgstr "Pułapki"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Cases"
+#~ msgstr "Klasa"
+
+#~ msgid "Class"
+#~ msgstr "Klasa"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "Labels"
+#~ msgstr "TextLabel"
+
+#, fuzzy
+#~| msgid "Namespace alias"
+#~ msgid "Namespaces"
+#~ msgstr "Alias przestrzeni nazw"
+
+#, fuzzy
+#~| msgid "Watches"
+#~ msgid "Switches"
+#~ msgstr "Śledzone"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgid "No change"
+#~ msgstr "Brak"
+
+#, fuzzy
+#~| msgid "Breakpoint"
+#~ msgid "Break"
+#~ msgstr "Pułapka"
+
+#, fuzzy
+#~| msgid "Step into the next statement"
+#~ msgid "&Keep one-line statements"
+#~ msgstr "Wejdź w następne wyrażenie"
+
+#~ msgid "&Executable:"
+#~ msgstr "Plik &wykonywalny:"
+
+#, fuzzy
+#~| msgid "Extra &Parameters"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "Dodatkowe parametry"
+
+#~ msgid "Display stack to &depth:"
+#~ msgstr "Pokazuj stos do &głębokości:"
+
+#, fuzzy
+#~| msgid "Maximum &frame stack size"
+#~ msgid "Maximum &frame stack size:"
+#~ msgstr "Maksymalny rozmiar &ramki stosu"
+
+#~ msgid " bytes"
+#~ msgstr " bajtów"
+
+#~ msgid "Limit &identical error display"
+#~ msgstr "Ogranicz wyświetlanie &identycznych błędów"
+
+#~ msgid "&Memcheck"
+#~ msgstr "&Memcheck"
+
+#~ msgid "Leak Summary:"
+#~ msgstr "Podsumowanie wycieków:"
+
+#~ msgid "Summary"
+#~ msgstr "Podsumowanie"
+
+#~ msgid "Full"
+#~ msgstr "Pełne"
+
+#~ msgid "Leak Resolution Matching:"
+#~ msgstr "Rozdzielczość dopasowania wycieków:"
+
+#~ msgid "Low"
+#~ msgstr "Niska"
+
+#~ msgid "Medium"
+#~ msgstr "Średnia"
+
+#~ msgid "High"
+#~ msgstr "Wysoka"
+
+#~ msgid "Show Reachable Blocks"
+#~ msgstr "Pokaż ciągle dostępne bloki"
+
+#, fuzzy
+#~| msgid "Free block list size"
+#~ msgid "Free block list size:"
+#~ msgstr "Rozmiar listy wolnych bloków"
+
+#~ msgid "&Cachegrind"
+#~ msgstr "&Cachegrind"
+
+#~ msgid "Ca&llgrind"
+#~ msgstr "Ca&llgrind"
+
+#~ msgid "Separate Thread Reporting"
+#~ msgstr "Oddzielne raporty dla wątków"
+
+#~ msgid "Full Cache Simulation"
+#~ msgstr "Pełna symulacja pamięci podręcznej"
+
+#~ msgid "Simulate Hardware Prefetcher"
+#~ msgstr "Symuluj sprzętowy prefetcher"
+
+#~ msgid "Massi&f"
+#~ msgstr "Massi&f"
+
+#, fuzzy
+#~| msgid "&Hellgrind"
+#~ msgid "&Helgrind"
+#~ msgstr "&Hellgrind"
+
+#, fuzzy
+#~| msgid "Extra Synchronization Events"
+#~ msgid "Extra Synchronization Events:"
+#~ msgstr "Dodatkowe zdarzenia synchronizacji"
+
+#~ msgid "None (Locks Only)"
+#~ msgstr "Brak (tylko blokady)"
+
+#~ msgid "Threads"
+#~ msgstr "Wątki"
+
+#~ msgid "All"
+#~ msgstr "Wszystkie"
+
+#~ msgid "&Parameters:"
+#~ msgstr "&Parametry:"
+
+#~ msgid "Callgrind"
+#~ msgstr "Callgrind"
+
+#~ msgid "&Trace children"
+#~ msgstr "Ś&ledź potomków"
+
+#~ msgid "E&xecutable:"
+#~ msgstr "Plik &wykonywalny:"
+
+#~ msgid "Additional p&arameters:"
+#~ msgstr "Dodatkowe p&arametry:"
+
+#~ msgid "KCacheGrind"
+#~ msgstr "KCacheGrind"
+
+#~ msgid "Executable:"
+#~ msgstr "Plik wykonywalny:"
+
+#~ msgid "Memcheck"
+#~ msgstr "Memcheck"
+
+#~ msgid "Memory &leak check"
+#~ msgstr "Sprawdzenie &wycieków pamięci"
+
+#~ msgid "&Show still reachable blocks"
+#~ msgstr "&Pokaż ciągle dostępne bloki"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "Formularz"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Pasek układu"
+
+#~ msgid "KDevelop Profile Editor"
+#~ msgstr "Edytor profili KDevelopa"
+
+#~ msgid "(c) 2004, The KDevelop Developers"
+#~ msgstr "(c) 2004, autorzy KDevelopa"
+
+#~ msgid "Core"
+#~ msgstr "Główne właściwości"
+
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "Globalne"
+
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#~ msgid "Core Plugins"
+#~ msgstr "Główne wtyczki"
+
+#~ msgid "Global Plugins"
+#~ msgstr "Wtyczki globalne"
+
+#~ msgid "Project Plugins"
+#~ msgstr "Wtyczki projektu"
+
+#~ msgid "Remove selected profile and all its subprofiles?"
+#~ msgstr "Czy usunąć wybrany profil oraz jego podprofile?"
+
+#~ msgid ""
+#~ "Cannot remove this profile because it is not a local (user-created) "
+#~ "profile."
+#~ msgstr ""
+#~ "Nie można usunąć profilu, bo nie jest lokalnym (utworzonym przez "
+#~ "użytkownika)."
+
+#~ msgid "This plugin is already contained in the list of disabled plugins."
+#~ msgstr "Ta wtyczka już znajduje się na liście wyłączonych wtyczek."
+
+#~ msgid "Enable Plugin"
+#~ msgstr "Włącz wtyczkę"
+
+#~ msgid "This plugin is already contained in the list of enabled plugins."
+#~ msgstr "Ta wtyczka już znajduje się na liście włączonych wtyczek."
+
+#~ msgid "Disable Plugin"
+#~ msgstr "Wyłącz wtyczkę"
+
+#~ msgid ""
+#~ "The file %1 does not contain valid XML.\n"
+#~ "The loading of the session failed."
+#~ msgstr ""
+#~ "Plik %1 zawiera niepoprawny XML.\n"
+#~ "Wczytywanie sesji zakończyło się błędem."
+
+#~ msgid ""
+#~ "The file %1 does not contain a valid KDevelop project session "
+#~ "('KDevPrjSession').\n"
+#~ msgstr "Plik %1 nie zawiera poprawnej sesji projektu ('KDevPrjSession').\n"
+
+#~ msgid "The document type seems to be: '%1'."
+#~ msgstr "Dokument wydaje się być typu: %1"
+
+#~ msgid "&Open Project..."
+#~ msgstr "&Otwórz projekt..."
+
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr ""
+#~ "<b>Otwórz projekt</b> <p>Otwarcie projektu KDevelopa3 lub KDevelopa2.</p>"
+
+#~ msgid "Open recent project"
+#~ msgstr "Otwarcie ostatniego projektu"
+
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr ""
+#~ "<b>Otwórz ostatni projekt</b> <p>Otwarcie ostatnio otwieranego projektu.</"
+#~ "p>"
+
+#~ msgid "C&lose Project"
+#~ msgstr "&Zamknij projekt"
+
+#~ msgid "Close project"
+#~ msgstr "Zamknij projekt"
+
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "<b>Zamknij projekt</b> <p>Zamknięcie bieżącego projektu.</p>"
+
+#~ msgid "Project &Options"
+#~ msgstr "&Opcje projektu"
+
+#~ msgid "<b>Project options</b><p>Lets you customize project options.</p>"
+#~ msgstr "<b>Opcje projektu</b> <p>Pozwala dostosować opcje projektu.</p>"
+
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr "*.kdevelop|Pliki projektu KDevelopa 3\n"
+
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "Czy na pewno ponownie wczytać bieżący projekt?"
+
+#~ msgid "Changing plugin profile..."
+#~ msgstr "Zmiana profilu wtyczki..."
+
+#~ msgid "Loading project plugins..."
+#~ msgstr "Wczytywanie wtyczek projektu..."
+
+#~ msgid "error during restoring of the KDevelop session"
+#~ msgstr "błąd podczas przywracania sesji KDevelopa"
+
+#~ msgid "Project loaded."
+#~ msgstr "Projekt wczytany."
+
+#~ msgid ""
+#~ "This is not a valid project file.\n"
+#~ "XML error in line %1, column %2:\n"
+#~ "%3"
+#~ msgstr ""
+#~ "To nie jest poprawny plik projektu.\n"
+#~ "Błąd XML w wierszu %1, kolumnie %2:\n"
+#~ "%3"
+
+#~ msgid "This is not a valid project file."
+#~ msgstr "To nie jest poprawny plik projektu."
+
+#~ msgid "Could not write the project file."
+#~ msgstr "Nie można zapisać do pliku projektu."
+
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "Nie znaleziono wtyczki %1 do zarządzanie projektami."
+
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "Nie można utworzyć wtyczki do zarządzania projektami %1."
+
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "Nie znaleziono wtyczki językowej dla %1."
+
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "Nie można utworzyć wtyczki językowej dla %1."
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Form"
+#~ msgstr "Formularz"
+
+#~ msgid "Valid Location"
+#~ msgstr "Poprawna lokalizacja"
+
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "Nieznane"
+
+#~ msgid "Namespace import"
+#~ msgstr "Import przestrzeni nazw"
+
+#~ msgid "Namespace alias"
+#~ msgstr "Alias przestrzeni nazw"
+
+#~ msgid "Forward Declaration"
+#~ msgstr "Deklaracja poprzedzająca"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "enumerator"
+#~ msgstr "Generator:"
+
+#~ msgid "resolved forward-declaration"
+#~ msgstr "rozwiązana deklaracja poprzedzająca"
+
+#, fuzzy
+#~| msgid "resolved forward-declaration"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "rozwiązana deklaracja poprzedzająca"
+
+#~ msgid "Container: "
+#~ msgstr "Kontener:"
+
+#~ msgid "Scope: "
+#~ msgstr "Zakres:"
+
+#~ msgid "Access: "
+#~ msgstr "Dostęp:"
+
+#~ msgid "Kind: "
+#~ msgstr "Rodzaj:"
+
+#~ msgid "Modifiers: "
+#~ msgstr "Modyfikatory:"
+
+#~ msgid "Def.: "
+#~ msgstr "Definicja:"
+
+#~ msgid "Decl.: "
+#~ msgstr "Deklaracja:"
+
+#, fuzzy
+#~| msgid "Def.: "
+#~ msgid " Def.: "
+#~ msgstr "Definicja:"
+
+#, fuzzy
+#~| msgid "Decl.: "
+#~ msgid " Decl.: "
+#~ msgstr "Deklaracja:"
+
+#, fuzzy
+#~| msgid "&Restart"
+#~ msgid "Result"
+#~ msgstr "&Uruchom ponownie"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "File Name"
+#~ msgstr "Nazwa"
+
+#~ msgid "Maintainer"
+#~ msgstr "Opiekun"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Format files"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "Delete style"
+#~ msgstr "Usuń wszystkie"
+
+#, fuzzy
+#~| msgid "Are you sure you want to reopen the current project?"
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "Czy na pewno ponownie wczytać bieżący projekt?"
+
+#, fuzzy
+#~| msgid "Custom Makefiles"
+#~ msgid "Custom Style"
+#~ msgstr "Własne skrypty Makefile"
+
+#, fuzzy
+#~| msgid "Sto&p"
+#~ msgid "S&top"
+#~ msgstr "&Zatrzymaj"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "Select &All"
+#~ msgstr "Usuń wszystkie"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "&Unselect All"
+#~ msgstr "Usuń wszystkie"
+
+#, fuzzy
+#~| msgid "Amount"
+#~ msgid "&About"
+#~ msgstr "Ilość"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "E&xit"
+#~ msgstr "Modyfikuj"
+
+#, fuzzy
+#~| msgid "Copy All"
+#~ msgid "&Collapse All"
+#~ msgstr "Kopiuj wszystko"
+
+#, fuzzy
+#~| msgid "&Restart"
+#~ msgid "&Results"
+#~ msgstr "&Uruchom ponownie"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings..."
+#~ msgstr "&Ustawienia"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Toolbars"
+#~ msgstr "&Narzędzia"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "Pasek debuggera"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "Uruchom lub kontynuuj"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Selected:"
+#~ msgstr "Usuń"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Run:"
+#~ msgstr "Uruchom lub kontynuuj"
+
+#, fuzzy
+#~| msgid "Access: "
+#~ msgid "Success"
+#~ msgstr "Dostęp:"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "Exceptions"
+#~ msgstr "Opcje"
+
+#, fuzzy
+#~| msgid "Natural"
+#~ msgid "Fatals"
+#~ msgstr "Naturalny"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgid "Warnings"
+#~ msgstr "Ostrzeżenie"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgid "Close"
+#~ msgstr "Kod"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Failed to comply."
+#~ msgstr "Pliki do wczytania"
+
+#~ msgid "&Directory"
+#~ msgstr "&Katalog"
+
+#~ msgid "Click run when you are ready"
+#~ msgstr "Kliknij aby kontynuować"
+
+#, fuzzy
+#~| msgid "Summary"
+#~ msgid "dummy"
+#~ msgstr "Podsumowanie"
+
+#, fuzzy
+#~| msgid "<Loading...>"
+#~ msgid "Stopping..."
+#~ msgstr "<Wczytywanie...>"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Usuń"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Usuń"
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "StatusWidget"
+#~ msgstr "Stan"

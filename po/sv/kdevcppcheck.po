@@ -1,0 +1,640 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2015, 2016, 2017, 2018, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-24 14:01+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.04.3\n"
+
+#: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
+#, kde-format
+msgctxt "@title:tab"
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: config/globalconfigpage.cpp:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Cppcheck Settings"
+msgstr "Anpassa Cppcheck-inställningar"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/globalconfigpage.ui:20
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Sökvägar"
+
+#. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
+#: config/globalconfigpage.ui:26
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Cppchec&k executable:"
+msgstr "Cppcheck &körbart program:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
+#: config/globalconfigpage.ui:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "Utmatning"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "Dölj utmatningsvisning under kontroll"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
+#: config/globalconfigpage.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Cppcheck XML output in the output view"
+msgstr "Visa Cppcheck XML-utdata i utmatningsvisningen"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Kontroller"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
+#: config/projectconfigpage.ui:47
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check for unused functions. It is recommend to only enable this when the "
+"whole program is scanned"
+msgstr ""
+"Kontrollera oanvända funktioner. Det rekommenderas att bara aktivera det när "
+"hela programmet söks igenom."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
+#: config/projectconfigpage.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Unused function"
+msgstr "Oanvända funktioner"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
+#: config/projectconfigpage.ui:60
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Allow that Cppcheck reports even though the analysis is inconclusive. There "
+"are false positives with this option. Each result must be carefully "
+"investigated before you know if it is good or bad."
+msgstr ""
+"Tillåt att Cppcheck ger en rapport även om analysen är ofullständig. Det "
+"finns falska positiva med alternativet. Alla resultat måste undersökas noga "
+"innan det går att avgöra om den är bra eller dålig."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
+#: config/projectconfigpage.ui:63
+#, kde-format
+msgctxt "@option:check"
+msgid "Inconclusive analysis"
+msgstr "Ofullständig analys"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
+#: config/projectconfigpage.ui:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable information messages"
+msgstr "Aktivera informationsmeddelanden"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
+#: config/projectconfigpage.ui:73
+#, kde-format
+msgctxt "@option:check"
+msgid "Information"
+msgstr "Information"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
+#: config/projectconfigpage.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Warn if there are missing includes. For detailed information use 'check-"
+"config'"
+msgstr ""
+"Varna om det finns saknade include-satser. Använd 'check-config' för "
+"detaljerad information."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
+#: config/projectconfigpage.ui:86
+#, kde-format
+msgctxt "@option:check"
+msgid "Missing include"
+msgstr "Saknade include"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
+#: config/projectconfigpage.ui:96
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable performance messages"
+msgstr "Aktivera prestandameddelanden"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
+#: config/projectconfigpage.ui:99
+#, kde-format
+msgctxt "@option:check"
+msgid "Performance"
+msgstr "Prestanda"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Force checking of files that have a lot of configurations. Error is "
+"printed if such a file is found so there is no reason to use this by "
+"default. If used together with '--max-configs=', the last option is the one "
+"that is effective.<br/><br/>Be careful with using this option - it can "
+"dramatically slow checking.</p>"
+msgstr ""
+"<p>Tvinga att filer som har många konfigurationer kontrolleras. Fel skrivs "
+"ut om en sådan fil hittas, så det finns ingen anledning att normalt använda "
+"det. Om det används med '--max-configs=' är det den sista väljaren som "
+"gäller.<br/><br/>Var försiktig när väljaren används: det kan göra kontrollen "
+"mycket långsammare.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Force checking"
+msgstr "Tvinga kontroll"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
+#: config/projectconfigpage.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable portability messages"
+msgstr "Aktivera flyttbarhetsmeddelanden"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
+#: config/projectconfigpage.ui:122
+#, kde-format
+msgctxt "@option:check"
+msgid "Portability"
+msgstr "Flyttbarhet"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enable all coding style checks. All messages with the severities 'style', "
+"'performance' and 'portability' are enabled."
+msgstr ""
+"Aktivera alla kontroller av kodningsstil. Alla meddelanden med "
+"svårighetsgraden 'stil', 'prestanda' och 'flyttbarhet' aktiveras."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
+#: config/projectconfigpage.ui:135
+#, kde-format
+msgctxt "@option:check"
+msgid "Style"
+msgstr "Stil"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
+#: config/projectconfigpage.ui:145
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check Cppcheck configuration. The normal code analysis is disabled by this "
+"flag."
+msgstr ""
+"Kontrollera inställningen av Cppcheck. Den normala kodanalysen inaktiveras "
+"av väljaren."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
+#: config/projectconfigpage.ui:148
+#, kde-format
+msgctxt "@option:check"
+msgid "Check config"
+msgstr "Kontrollera konfiguration"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
+#: config/projectconfigpage.ui:158
+#, kde-format
+msgctxt "@title:tab"
+msgid "Include Directories"
+msgstr "Kataloger för include"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
+#: config/projectconfigpage.ui:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add 'project' include directories to Cppcheck arguments. This option adds "
+"only paths related with project's root and build directories."
+msgstr ""
+"Lägg till 'projektkataloger' för include i väljare till Cppcheck. Väljaren "
+"lägger bara till sökvägar relaterade till projektets rotkatalog och "
+"byggkataloger."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
+#: config/projectconfigpage.ui:167
+#, kde-format
+msgctxt "@option:check"
+msgid "Use 'project' include dirs"
+msgstr "Använd 'projektkataloger' för include"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
+#: config/projectconfigpage.ui:180
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
+">Be careful with using this option - it can dramatically slow checking.</p>"
+msgstr ""
+"<p>Lägg till andra 'systemkataloger' för include i väljare till Cppcheck.<br/"
+"><br/>Var försiktig med att använda väljaren: den kan göra kontrollen mycket "
+"långsammare.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
+#: config/projectconfigpage.ui:183
+#, kde-format
+msgctxt "@option:check"
+msgid "Use 'system' include dirs"
+msgstr "Använd 'systemkataloger' för include"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/projectconfigpage.ui:198
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Ignored includes:"
+msgstr "&Ignorera include:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
+#: config/projectconfigpage.ui:218
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html>\n"
+"\n"
+"<p>Defines semicolon-separated list of ignored include directories.</p>\n"
+"\n"
+"<p>You can use the following placeholders:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
+"directory.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
+"directory.</p>\n"
+"\n"
+"</html>"
+msgstr ""
+"<html>\n"
+"\n"
+"<p>Definierar en lista av ignorerade include-kataloger åtskilda av semikolon."
+"</p>\n"
+"\n"
+"<p>Följande platsmarkörer kan användas:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Ersätts av webbadressen för projektets rotkatalog.</"
+"p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Ersätts av webbadressen för projektets byggkatalog.</"
+"p>\n"
+"\n"
+"</html>"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
+#: config/projectconfigpage.ui:241
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Extra väljare"
+
+#. i18n: ectx: property (text), widget (QLabel, extraLabel)
+#: config/projectconfigpage.ui:254
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ex&tra parameters:"
+msgstr "Ex&tra väljare:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
+#: config/projectconfigpage.ui:274
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html>\n"
+"\n"
+"<p>Defines additional parameters for cppcheck (see documentation).</p>\n"
+"\n"
+"<p>You can use the following placeholders:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
+"directory.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
+"directory.</p>\n"
+"\n"
+"</html>"
+msgstr ""
+"<html>\n"
+"\n"
+"<p>Definierar ytterligare parametrar för Cppcheck (se dokumentationen)</p>\n"
+"\n"
+"<p>Följande platsmarkörer kan användas:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Ersätts av webbadressen för projektets rotkatalog.</"
+"p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Ersätts av webbadressen för projektets byggkatalog.</"
+"p>\n"
+"\n"
+"</html>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: config/projectconfigpage.ui:308
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "Kommandorad"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
+#: config/projectconfigpage.ui:316
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Sök..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
+#: config/projectconfigpage.ui:326
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "Bryt rader"
+
+#: job.cpp:42
+#, kde-format
+msgid "Cppcheck Analysis (%1)"
+msgstr "Cppcheck-analys (%1)"
+
+#: job.cpp:111 parser.cpp:250 problemmodel.cpp:40 problemmodel.cpp:85
+#, kde-format
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: job.cpp:150
+#, kde-format
+msgid "Failed to start Cppcheck from \"%1\"."
+msgstr "Misslyckades starta Cppcheck från \"%1\"."
+
+#: job.cpp:155
+#, kde-format
+msgid "Cppcheck crashed."
+msgstr "Cppcheck kraschade."
+
+#: job.cpp:160
+#, kde-format
+msgid "Cppcheck process timed out."
+msgstr "Cppcheck-processens tidsgräns överskreds."
+
+#: job.cpp:164
+#, kde-format
+msgid "Write to Cppcheck process failed."
+msgstr "Skrivning till Cppcheck-processen misslyckades."
+
+#: job.cpp:168
+#, kde-format
+msgid "Read from Cppcheck process failed."
+msgstr "Läsning från Cppcheck-processen misslyckades."
+
+#: parameters.cpp:122
+#, kde-format
+msgid ""
+"It seems that this project uses Qt library. For correctly work of cppcheck "
+"the value for define Q_MOC_OUTPUT_REVISION must be set. Unfortunately, the "
+"plugin is unable to find this value automatically - you should set it "
+"manually by adding '-DQ_MOC_OUTPUT_REVISION=XX' to extra parameters. The "
+"'XX' value can be found in any project's moc-generated file or in the "
+"<QtCore/qobjectdefs.h> header file."
+msgstr ""
+"Det verkar som om projektet använder Qt-biblioteket. För att Cppcheck ska "
+"fungera riktigt måste värdet för definitionen Q_MOC_OUTPUT_REVISION finnas. "
+"Tyvärr kan inte insticksprogrammet hitta värdet automatiskt: det måste "
+"ställas in manuellt genom att lägga till '-DQ_MOC_OUTPUT_REVISION=XX' som "
+"extra parameter. Värdet 'XX' kan hittas i vilka projektfiler genererade av "
+"moc som helst eller i deklarationsfilen <QtCore/qobjectdefs.h>."
+
+#: parser.cpp:220
+#, kde-format
+msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
+msgstr "Cppcheck XML-tolkning: fel på rad %1, kolumn %2: %3"
+
+#: plugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with Cppcheck"
+msgstr "Analysera aktuell fil med Cppcheck"
+
+#: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: plugin.cpp:62
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with Cppcheck"
+msgstr "Analysera aktuellt projekt med Cppcheck"
+
+#: plugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Prova"
+
+#: problemmodel.cpp:116
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "Analys färdig, inga problem detekterade."
+
+#: problemmodel.cpp:137
+#, kde-format
+msgid "Analysis started..."
+msgstr "Analys startad..."
+
+#: problemmodel.cpp:138
+#, kde-format
+msgctxt "@info:tooltip %1 is the path of the file"
+msgid "Re-run last Cppcheck analysis (%1)"
+msgstr "Gör om senaste Cppcheck-analys (%1)"
+
+#: problemmodel.cpp:140
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last Cppcheck analysis"
+msgstr "Gör om senaste Cppcheck-analys"
+
+#~ msgid "Cppcheck Error"
+#~ msgstr "Fel i Cppcheck"
+
+#~ msgid "Cppcheck (Current File)"
+#~ msgstr "Cppcheck (nuvarande fil)"
+
+#~ msgid "Cppcheck (Current Project)"
+#~ msgstr "Cppcheck (nuvarande projekt)"
+
+#~| msgid "Cppcheck Analysis (%1)"
+#~ msgid "Cppcheck Analyzer"
+#~ msgstr "Cppcheck-analys"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Analyze"
+#~ msgstr "Analysera"
+
+#~ msgid "Cppcheck Settings"
+#~ msgstr "Inställningar av Cppcheck"
+
+#~ msgid "<html><head/><body><p>Enable information messages</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Aktivera informationsmeddelanden</p></body></html>"
+
+#~ msgid "<html><head/><body><p>Enable performance messages</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Aktivera prestandameddelanden</p></body></html>"
+
+#~ msgid "<html><head/><body><p>Enable portability messages</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Aktivera flyttbarhetsmeddelanden</p></body></html>"
+
+#~ msgid "Error starting Cppcheck"
+#~ msgstr "Misslyckades starta Cppcheck"
+
+#~ msgid "No active file, unable to deduce project."
+#~ msgstr "Ingen aktiv fil, kan inte härleda projekt."
+
+#~ msgid "Active file isn't in a project"
+#~ msgstr "Aktiv fil är inte i ett projekt"
+
+#~ msgid "Enable additional checks"
+#~ msgstr "Aktivera ytterligare kontroller"
+
+#~ msgid "Additional checks "
+#~ msgstr "Ytterligare kontroller "
+
+#~ msgid "Check for unused functions"
+#~ msgstr "Kontrollera oanvända funktioner"
+
+#~ msgid "Warn if there are missing includes"
+#~ msgstr "Varna om det finns saknade include-satser"
+
+#~ msgid "Cppcheck output"
+#~ msgstr "Cppcheck-utmatning"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Kör"
+
+#~ msgid "Can't load parameters. They must be set in the project settings."
+#~ msgstr ""
+#~ "Kan inte läsa in parametrar. De måste anges i projektinställningarna."
+
+#~ msgid "Launches Cppcheck for current file"
+#~ msgstr "Startar Cppcheck för nuvarande fil"
+
+#~ msgid "Launches Cppcheck for all files"
+#~ msgstr "Startar Cppcheck för alla filer"
+
+#~ msgid "Cppcheck (all Files)"
+#~ msgstr "Cppcheck (alla filer)"
+
+#~ msgid "Problems"
+#~ msgstr "Problem"
+
+#~ msgid "Failed to start Cppcheck"
+#~ msgstr "Misslyckades starta Cppcheck"
+
+#~ msgid "Unknown Cppcheck process error."
+#~ msgstr "Okänt fel i Cppcheck-processen."
+
+#~ msgid "Cppcheck finished (pid=%1,exit=%2)"
+#~ msgstr "Cppcheck klar (process-id=%1, avslutades med=%2)"
+
+#~ msgid "job failed"
+#~ msgstr "jobb misslyckades"
+
+#~ msgid "File"
+#~ msgstr "Arkiv"
+
+#~ msgid "Line"
+#~ msgstr "Rad"
+
+#~ msgid "Message"
+#~ msgstr "Meddelande"
+
+#~ msgid "Project path"
+#~ msgstr "Projektsökväg"
+
+#~ msgid "Message detailed"
+#~ msgstr "Detaljerat meddelande"
+
+#~ msgid "Flat list"
+#~ msgstr "Enkel lista"
+
+#~ msgid "Grouped by file"
+#~ msgstr "Grupperad enligt fil"
+
+#~ msgid "Grouped by severity"
+#~ msgstr "Grupperad enligt allvarlighetsgrad"
+
+#~ msgid "Output view mode"
+#~ msgstr "Utmatningsvisning"
+
+#~ msgid "job running (pid=%1)"
+#~ msgstr "Jobb kör (process-id=%1)"
+
+#~ msgid "unknown"
+#~ msgstr "okänd"
+
+#~ msgid "Global scope"
+#~ msgstr "Global omgivning"
+
+#~ msgid "File / Line"
+#~ msgstr "Fil och rad"
+
+#~ msgid "Severity / File"
+#~ msgstr "Allvarlighetsgrad och fil"
+
+#~ msgid "Cppcheck Output"
+#~ msgstr "Cppcheck-utmatning"
+
+#~ msgid "<b>Cppcheck</b><p>Shows the output of cppcheck.</p>"
+#~ msgstr "<b>Cppcheck</b><p>Visar utmatningen från Cppcheck.</p>"
+
+#~ msgid "Job scheduled"
+#~ msgstr "Schemalagd jobb"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Global Settings"
+#~ msgstr "Allmänna inställningar"
+
+#~ msgid "save"
+#~ msgstr "spara"

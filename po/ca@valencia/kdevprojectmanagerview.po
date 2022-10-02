@@ -1,0 +1,457 @@
+# Translation of kdevprojectmanagerview.po to Catalan (Valencian)
+# Copyright (C) 2009-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2021-11-11 05:17+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 21.08.1\n"
+
+#: cutcopypastehelpers.cpp:78
+#, kde-format
+msgid "Move %1 item into %2"
+msgid_plural "Move %1 items into %2"
+msgstr[0] "Mou %1 element a %2"
+msgstr[1] "Mou %1 elements a %2"
+
+#: cutcopypastehelpers.cpp:81
+#, kde-format
+msgid "Copy %1 item into %2"
+msgid_plural "Copy %1 items into %2"
+msgstr[0] "Copia %1 element a %2"
+msgstr[1] "Copia %1 elements a %2"
+
+#: cutcopypastehelpers.cpp:84
+#, kde-format
+msgid "Delete %1 item"
+msgid_plural "Delete %1 items"
+msgstr[0] "Suprimix %1 element"
+msgstr[1] "Suprimix %1 elements"
+
+#: cutcopypastehelpers.cpp:93
+#, kde-format
+msgid "Move item %1 into %2"
+msgstr "Mou l'element %1 a %2"
+
+#: cutcopypastehelpers.cpp:96
+#, kde-format
+msgid "Copy item %1 into %2"
+msgstr "Copia l'element %1 a %2"
+
+#: cutcopypastehelpers.cpp:99
+#, kde-format
+msgid "Delete item %1"
+msgstr "Suprimix l'element %1"
+
+#: cutcopypastehelpers.cpp:108
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation succeeded"
+msgstr "La suboperació ha reeixit"
+
+#: cutcopypastehelpers.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation failed"
+msgstr "La suboperació ha fallat"
+
+#: cutcopypastehelpers.cpp:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation skipped to prevent data loss"
+msgstr "La suboperació s'ha omés per a evitar la pèrdua de dades"
+
+#: cutcopypastehelpers.cpp:287
+#, kde-format
+msgctxt "@title:window"
+msgid "Paste Failed"
+msgstr "No s'ha pogut apegar"
+
+#: cutcopypastehelpers.cpp:323
+#, kde-format
+msgid ""
+"Failed to paste. Below is a list of suboperations that have been attempted."
+msgstr ""
+"No s'ha pogut apegar. A davall hi ha la llista de suboperacions que s'han "
+"intentat."
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevprojectmanagerview.rc:26
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Barra d'eines principal"
+
+#: projectbuildsetwidget.cpp:123
+#, kde-format
+msgctxt "@title:menu"
+msgid "Build Set"
+msgstr "Conjunt de construcció"
+
+#: projectbuildsetwidget.cpp:124
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from Build Set"
+msgstr "Elimina del conjunt de construcció"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
+#: projectbuildsetwidget.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the top"
+msgstr "Mou els elements seleccionats a dalt de tot"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
+#: projectbuildsetwidget.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items up"
+msgstr "Puja els elements seleccionats"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
+#: projectbuildsetwidget.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected item down"
+msgstr "Baixa l'element seleccionat"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
+#: projectbuildsetwidget.ui:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the bottom"
+msgstr "Mou els elements seleccionats a baix de tot"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#: projectbuildsetwidget.ui:177
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "These items will be built in the order they are listed."
+msgstr "Estos elements es construiran segons l'ordre que estan llistats."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectbuildsetwidget.ui:180
+#, kde-format
+msgctxt "@title"
+msgid "Build Sequence"
+msgstr "Seqüència de construcció"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
+#: projectbuildsetwidget.ui:200
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add currently selected items from project tree view to the build set."
+msgstr ""
+"Afig els elements actualment seleccionats en la vista en arbre del projecte "
+"al conjunt de construcció."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
+#: projectbuildsetwidget.ui:216
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove currently selected item from the build set."
+msgstr "Elimina l'element actualment seleccionat del conjunt de construcció."
+
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#, kde-format
+msgctxt "@title:window"
+msgid "Projects"
+msgstr "Projectes"
+
+#: projectmanagerview.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Ubica el document actual"
+
+#: projectmanagerview.cpp:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locates the current document in the project tree and selects it."
+msgstr "Ubica el document actual en l'arbre de projecte i selecciona'l."
+
+#: projectmanagerview.cpp:98
+#, kde-format
+msgctxt "@action"
+msgid "Auto-Select Current Document"
+msgstr "Selecciona automàticament el document actual"
+
+#: projectmanagerview.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically select the current document in the project tree."
+msgstr "Selecciona automàticament el document actual en l'arbre de projecte."
+
+#: projectmanagerview.cpp:118
+#, kde-format
+msgctxt "@action"
+msgid "Show Build Targets"
+msgstr "Mostra els objectius de construcció"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
+#: projectmanagerview.ui:33
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Project Overview"
+msgstr "Resum del projecte"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
+#: projectmanagerview.ui:53
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Build Items:"
+msgstr "Construïx elements:"
+
+#: projectmanagerviewplugin.cpp:142
+#, kde-format
+msgctxt "@action"
+msgid "Build All Projects"
+msgstr "Construïx tots els projectes"
+
+#: projectmanagerviewplugin.cpp:147
+#, kde-format
+msgctxt "@action"
+msgid "Build Selection"
+msgstr "Construïx la selecció"
+
+#: projectmanagerviewplugin.cpp:148
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Build"
+msgstr "Construïx"
+
+#: projectmanagerviewplugin.cpp:154
+#, kde-format
+msgctxt "@action"
+msgid "Install Selection"
+msgstr "Instal·la la selecció"
+
+#: projectmanagerviewplugin.cpp:155
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Install"
+msgstr "Instal·la"
+
+#: projectmanagerviewplugin.cpp:161
+#, kde-format
+msgctxt "@action"
+msgid "Clean Selection"
+msgstr "Neteja la selecció"
+
+#: projectmanagerviewplugin.cpp:162
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Clean"
+msgstr "Neteja"
+
+#: projectmanagerviewplugin.cpp:167
+#, kde-format
+msgctxt "@action"
+msgid "Configure Selection"
+msgstr "Configura la selecció"
+
+#: projectmanagerviewplugin.cpp:169
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Configure"
+msgstr "Configura"
+
+#: projectmanagerviewplugin.cpp:174
+#, kde-format
+msgctxt "@action"
+msgid "Prune Selection"
+msgstr "Elimina la selecció"
+
+#: projectmanagerviewplugin.cpp:175
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Prune"
+msgstr "Elimina"
+
+#: projectmanagerviewplugin.cpp:281
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create &File..."
+msgstr "Crea un &fitxer..."
+
+#: projectmanagerviewplugin.cpp:287
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create F&older..."
+msgstr "Crea una &carpeta..."
+
+#: projectmanagerviewplugin.cpp:294
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Build"
+msgstr "&Construïx"
+
+#: projectmanagerviewplugin.cpp:298
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Install"
+msgstr "&Instal·la"
+
+#: projectmanagerviewplugin.cpp:302
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Clean"
+msgstr "&Neteja"
+
+#: projectmanagerviewplugin.cpp:306
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Set"
+msgstr "&Afig al conjunt de construcció"
+
+#: projectmanagerviewplugin.cpp:313
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&lose Project"
+msgid_plural "Close Projects"
+msgstr[0] "&Tanca el projecte"
+msgstr[1] "Tanca els projectes"
+
+#: projectmanagerviewplugin.cpp:319
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Reload"
+msgstr "To&rna a carregar"
+
+#: projectmanagerviewplugin.cpp:350
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remo&ve"
+msgstr "&Elimina"
+
+#: projectmanagerviewplugin.cpp:354
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Re&name..."
+msgstr "Ca&nvia el nom..."
+
+#: projectmanagerviewplugin.cpp:360
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from &Target"
+msgstr "Elimina de l'objec&tiu"
+
+#: projectmanagerviewplugin.cpp:547
+#, kde-format
+msgctxt "@title:window"
+msgid "Create Folder in %1"
+msgstr "Crea una carpeta a %1"
+
+#: projectmanagerviewplugin.cpp:548
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Folder name:"
+msgstr "Nom de la carpeta:"
+
+#: projectmanagerviewplugin.cpp:600
+#, kde-format
+msgid "Do you really want to delete this item?"
+msgid_plural "Do you really want to delete these %1 items?"
+msgstr[0] "Segur que voleu suprimir este element?"
+msgstr[1] "Segur que voleu suprimir estos %1 elements?"
+
+#: projectmanagerviewplugin.cpp:603
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Files"
+msgstr "Suprimix els fitxers"
+
+#: projectmanagerviewplugin.cpp:656
+#, kde-format
+msgctxt "@window:title"
+msgid "Rename"
+msgstr "Canvia el nom"
+
+#: projectmanagerviewplugin.cpp:657
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New name for '%1':"
+msgstr "Nom nou per a «%1»:"
+
+#: projectmanagerviewplugin.cpp:669
+#, kde-format
+msgid "There is already a file named '%1'"
+msgstr "Ja existix un fitxer anomenat «%1»"
+
+#: projectmanagerviewplugin.cpp:672
+#, kde-format
+msgid "Could not rename '%1'"
+msgstr "No s'ha pogut canviar el nom del fitxer «%1»"
+
+#: projectmanagerviewplugin.cpp:675
+#, kde-format
+msgid "'%1' is not a valid file name"
+msgstr "«%1» no és un nom vàlid de fitxer"
+
+#: projectmanagerviewplugin.cpp:689
+#, kde-format
+msgctxt "@title:window"
+msgid "Create File in %1"
+msgstr "Crea fitxer en %1"
+
+#: projectmanagerviewplugin.cpp:689
+#, kde-format
+msgctxt "@label:textbox"
+msgid "File name:"
+msgstr "Nom de fitxer:"
+
+#: projecttreeview.cpp:151
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Move Here"
+msgstr "&Mou ací"
+
+#: projecttreeview.cpp:157
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Here"
+msgstr "&Copia ací"
+
+#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&ancel"
+msgstr "C&ancel·la"
+
+#: projecttreeview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Target"
+msgstr "&Afig a l'objectiu de construcció"
+
+#: projecttreeview.cpp:348
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze with"
+msgstr "Analitza amb"
+
+#: projecttreeview.cpp:364
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Open Configuration..."
+msgstr "Obri la configuració..."
+
+#: vcsoverlayproxymodel.cpp:105
+#, kde-format
+msgctxt "Version control: Currently not on a branch"
+msgid "(no branch)"
+msgstr "(sense branca)"

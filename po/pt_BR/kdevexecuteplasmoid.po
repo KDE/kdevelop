@@ -1,0 +1,134 @@
+# Translation of kdevexecuteplasmoid.po to Brazilian Portuguese
+# Copyright (C) 2013-2018 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2015, 2018.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecuteplasmoid\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-23 15:29-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Configurar a execução de plasmoides"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Mostrar um plasmoide"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Lançador de plasmoides"
+
+#: plasmoidexecutionconfig.cpp:183
+#, kde-format
+msgid "Could not resolve the dependency: %1"
+msgstr "Não foi possível resolver a dependência: %1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, kde-format
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plasmoides"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoide"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Localização ou nome:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Comportamento"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Fator de formato:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Tema:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Dependências"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "Des&tinos:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Visualizador de plasmoide"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Terminado **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Falhou ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Concluído ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr "O plasmoide não conseguiu executar o %1"
+
+# Opção do 'Fator de formato'. (Alvarenga)
+#~ msgid "planar"
+#~ msgstr "plano"
+
+#~ msgid "horizontal"
+#~ msgstr "horizontal"
+
+#~ msgid "vertical"
+#~ msgstr "vertical"
+
+#~ msgid "mediacenter"
+#~ msgstr "multimídia"

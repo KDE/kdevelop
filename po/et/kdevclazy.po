@@ -1,0 +1,652 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-01-23 10:43+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: analyzer.cpp:30
+#, kde-format
+msgid "Clazy"
+msgstr "Clazy"
+
+#: checksdb.cpp:28
+#, fuzzy, kde-format
+#| msgid "Level 0"
+msgctxt "@item level of checks"
+msgid "Level 0"
+msgstr "Tase 0"
+
+#: checksdb.cpp:29
+#, fuzzy, kde-format
+#| msgid "Level 1"
+msgctxt "@item level of checks"
+msgid "Level 1"
+msgstr "Tase 1"
+
+#: checksdb.cpp:30
+#, fuzzy, kde-format
+#| msgid "Level 2"
+msgctxt "@item level of checks"
+msgid "Level 2"
+msgstr "Tase 2"
+
+#: checksdb.cpp:31
+#, fuzzy, kde-format
+#| msgid "Level 3"
+msgctxt "@item level of checks"
+msgid "Level 3"
+msgstr "Tase 3"
+
+#: checksdb.cpp:32
+#, fuzzy, kde-format
+#| msgid "Manual Level"
+msgctxt "@item level of checks"
+msgid "Manual Level"
+msgstr "Tase käsitsi"
+
+#: checksdb.cpp:37
+#, kde-format
+msgid ""
+"Very stable checks, 99.99% safe, mostly no false-positives, very desirable."
+msgstr ""
+"Väga stabiilsed kontrollid, 99,99% turvaline, väärtuvastused peaaegu "
+"puuduvad, äärmiselt soovitatav."
+
+#: checksdb.cpp:40
+#, kde-format
+msgid ""
+"The default level. Very similar to level 0, slightly more false-positives "
+"but very few."
+msgstr ""
+"Vaikimisi tase. Väga sarnane tasemega 0, pisut rohkem väärtuvastusi, aga "
+"väga vähe."
+
+#: checksdb.cpp:43
+#, kde-format
+msgid ""
+"Also very few false-positives, but contains noisy checks which not everyone "
+"agree should be default."
+msgstr ""
+"Samuti väga vähe väärtuvastusi, aga toob kaasa mürarohkeid kontrolle, mida "
+"sugugi kõik ei soovi vaikimisi kasutada."
+
+#: checksdb.cpp:46
+#, kde-format
+msgid "Contains checks with high rate of false-positives."
+msgstr "Sisaldab kõrge väärtuvastuse tasemega kontrolle."
+
+#: checksdb.cpp:49
+#, kde-format
+msgid ""
+"Checks here need to be enabled explicitly, as they don't belong to any "
+"level. Checks here are very stable and have very few false-positives."
+msgstr ""
+"Kontrollid tuleb ükshaaval lubada, sest need ei sisaldu üheski tasemes, "
+"Siinsed kontrollid on väga stabiilsed ja toovad kaasa ainult üksikuid "
+"väärtuvastusi."
+
+#: checksdb.cpp:54
+#, kde-format
+msgid ""
+"Unable to load Clazy checks information from '%1'. Please check your "
+"settings."
+msgstr ""
+"Clazy kontrollide teabe laadimine asukohast \"%1\" nurjus. Palun kontrolli "
+"seadistusi."
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "Uue kontrollikomplekti nimi"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Nimi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, fuzzy, kde-format
+#| msgid "Check set:"
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "Kontrollikomplekt:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, fuzzy, kde-format
+#| msgid "Add check set..."
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "Kontrollikomplekti lisamine ..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, fuzzy, kde-format
+#| msgid "Clone check set..."
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "Kontrollikomplekti kloonimine ..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, fuzzy, kde-format
+#| msgid "Remove check set"
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "Kontrollikomplekti eemaldamine"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, fuzzy, kde-format
+#| msgid "Set as default"
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "Määra vaikeväärtuseks"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, fuzzy, kde-format
+#| msgid "Edit name of check set"
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "Kontrollikomplekti nime muutmine"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "Kohandatud"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "Vaikeväärtuse kasutamine (praegu: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1 (vaikimisi valik)"
+
+#: config/checkswidget.cpp:37
+#, fuzzy, kde-format
+#| msgid "Search checks..."
+msgctxt "@info:placeholder"
+msgid "Search checks..."
+msgstr "Kontrollide otsimine ..."
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: config/checkswidget.ui:31
+#, fuzzy, kde-format
+#| msgid "Reset checks"
+msgctxt "@action:button"
+msgid "Reset Checks"
+msgstr "Lähtesta kontrollid"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
+#: config/checkswidget.ui:74
+#, kde-format
+msgid ""
+"Since nothing is selected Clazy will use all checks from levels 0 and 1."
+msgstr "Et midagi pole valitud, kasutab Clazy kõiki tasemete 0 ja 1 kontrolle."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/commandlinewidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Command Line"
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "Käsurida"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
+#: config/commandlinewidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Search"
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Otsing"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
+#: config/commandlinewidget.ui:47
+#, fuzzy, kde-format
+#| msgid "Break lines"
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "Ridade murdmine"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgid "1 check detected"
+msgid_plural "%1 checks detected"
+msgstr[0] "Leiti 1 kontroll"
+msgstr[1] "Leiti %1 kontrolli"
+
+#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#, fuzzy, kde-format
+#| msgid "Clazy"
+msgctxt "@title:tab"
+msgid "Clazy"
+msgstr "Clazy"
+
+#: config/globalconfigpage.cpp:84
+#, fuzzy, kde-format
+#| msgid "Configure Clazy Settings"
+msgctxt "@title:tab"
+msgid "Configure Clazy Settings"
+msgstr "Clazy valikute seadistamine"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathBox)
+#: config/globalconfigpage.ui:29
+#, fuzzy, kde-format
+#| msgid "Paths"
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Asukohad"
+
+#. i18n: ectx: property (text), widget (QLabel, executableLabel)
+#: config/globalconfigpage.ui:35
+#, fuzzy, kde-format
+#| msgid "clazy-standalone:"
+msgctxt "@label:chooser"
+msgid "clazy-standalone:"
+msgstr "clazy-standalone:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
+#: config/globalconfigpage.ui:42
+#, fuzzy, kde-format
+#| msgid "Path to clazy-standalone executable."
+msgctxt "@info:tooltip"
+msgid "Path to clazy-standalone executable."
+msgstr "clazy-standalone täitmisfaili asukoht."
+
+#. i18n: ectx: property (text), widget (QLabel, docsLabel)
+#: config/globalconfigpage.ui:52
+#, fuzzy, kde-format
+#| msgid "Documentation:"
+msgctxt "@label:chooser"
+msgid "Documentation:"
+msgstr "Dokumentatsioon:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
+#: config/globalconfigpage.ui:59
+#, fuzzy, kde-format
+#| msgid "Path to clazy documentation directory."
+msgctxt "@info:tooltip"
+msgid "Path to clazy documentation directory."
+msgstr "Clazy dokumentatsioonikataloogi asukoht."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/globalconfigpage.ui:85
+#, fuzzy, kde-format
+#| msgid "Run analysis jobs in parallel"
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "Analüüside käitamine paralleelselt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/globalconfigpage.ui:94
+#, fuzzy, kde-format
+#| msgid "Use all CPU cores"
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "Kõigi CPU tuumade kasutamine"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/globalconfigpage.ui:114
+#, fuzzy, kde-format
+#| msgid "Maximum number of threads:"
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "Maks. lõimede arv:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/globalconfigpage.ui:133
+#, fuzzy, kde-format
+#| msgid "Output"
+msgctxt "@title:group"
+msgid "Output"
+msgstr "Väljund"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:139
+#, fuzzy, kde-format
+#| msgid "Hide output view during check"
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "Väljundivaate peitmine kontrolli ajal"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
+#: config/globalconfigpage.ui:146
+#, fuzzy, kde-format
+#| msgid "Verbose output"
+msgctxt "@option:check"
+msgid "Verbose output"
+msgstr "Jutukas väljund"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/projectconfigpage.ui:39
+#, fuzzy, kde-format
+#| msgid "Checks"
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Kontrollid"
+
+#. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
+#: config/projectconfigpage.ui:66
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "@title:tab"
+msgid "Options"
+msgstr "Valikud"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:78
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do not emit warnings for non-Qt files, or in other words, if -"
+#| "DQT_CORE_LIB is missing."
+msgctxt "@info:tooltip"
+msgid ""
+"Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
+"is missing."
+msgstr ""
+"Mitte-QT-failide puhul ehk teisisõnu siis, kui -DQT_CORE_LIB puudub, "
+"hoiatusi ei väljastata"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:81
+#, fuzzy, kde-format
+#| msgid "Only Qt"
+msgctxt "@option:check"
+msgid "Only Qt"
+msgstr "Ainult Qt"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:88
+#, fuzzy, kde-format
+#| msgid "Disable checks not compatible with Qt 4."
+msgctxt "@info:tooltip"
+msgid "Disable checks not compatible with Qt 4."
+msgstr "Qt4-ga mitteühilduvate kontrollide keelamine."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:91
+#, fuzzy, kde-format
+#| msgid "Qt4 compatible"
+msgctxt "@option:check"
+msgid "Qt4 compatible"
+msgstr "Qt4 ühilduvad"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:98
+#, fuzzy, kde-format
+#| msgid ""
+#| "For running clazy on Qt itself, optional, but honors specific guidelines."
+msgctxt "@info:tooltip"
+msgid ""
+"For running clazy on Qt itself, optional, but honors specific guidelines."
+msgstr ""
+"Clazy käitamine Qt enda peal, mis on lisavõimalus, aga järgib konkreetseid "
+"juhiseid."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:101
+#, fuzzy, kde-format
+#| msgid "Qt developer"
+msgctxt "@option:check"
+msgid "Qt developer"
+msgstr "Qt arendaja"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For visiting implicit code like compiler generated constructors.\n"
+"None of the built-in checks benefit from this, but can be useful for custom "
+"checks."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Visit implicit code"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:129
+#, fuzzy, kde-format
+#| msgid ""
+#| "Only emit warnings for the current file being compiled and ignore any "
+#| "includes.\n"
+#| "Useful for performance reasons."
+msgctxt "@info:tooltip"
+msgid ""
+"Only emit warnings for the current file being compiled and ignore any "
+"includes.\n"
+"Useful for performance reasons."
+msgstr ""
+"Ainult parajasti kompileeritava faili hoiatuste väljastamine, eirates kõiki "
+"kaasatud faile.\n"
+"Kasulik jõudluse huvides."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:132
+#, fuzzy, kde-format
+#| msgid "Ignore included files"
+msgctxt "@option:check"
+msgid "Ignore included files"
+msgstr "Kaasatud failide eiramine"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/projectconfigpage.ui:141
+#, fuzzy, kde-format
+#| msgid "Header filter:"
+msgctxt "@label:textbox"
+msgid "Header filter:"
+msgstr "Päisefilter:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/projectconfigpage.ui:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from.\n"
+"Diagnostics from the main file of each translation unit are always displayed."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
+#: config/projectconfigpage.ui:172
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable all fix-its"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fix-its will be applied to a separate file (for unit-test use only)."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:182
+#, kde-format
+msgctxt "@option:check"
+msgid "No-inplace fix-its"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
+#: config/projectconfigpage.ui:192
+#, kde-format
+msgid ""
+"Please backup your code before fix-its applying. For better results also "
+"disable \n"
+"parallel checking, which can lead to multiple fix-it applying for header "
+"files."
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, extraTab)
+#: config/projectconfigpage.ui:209
+#, fuzzy, kde-format
+#| msgid "Extra Parameters"
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Lisaparameetrid"
+
+#. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
+#: config/projectconfigpage.ui:215
+#, fuzzy, kde-format
+#| msgid "Compiler append:"
+msgctxt "@label:textbox"
+msgid "Compiler append:"
+msgstr "Kompilaatori järellisad:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
+#: config/projectconfigpage.ui:222
+#, fuzzy, kde-format
+#| msgid "Additional parameters to append to the compiler command line."
+msgctxt "@info:tooltip"
+msgid "Additional parameters to append to the compiler command line."
+msgstr "Kompilaatori käsurea lõppu lisatavad parameetrid."
+
+#. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
+#: config/projectconfigpage.ui:232
+#, fuzzy, kde-format
+#| msgid "Compiler prepend:"
+msgctxt "@label:textbox"
+msgid "Compiler prepend:"
+msgstr "Kompilaatori eellisad:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
+#: config/projectconfigpage.ui:239
+#, fuzzy, kde-format
+#| msgid "Additional parameters to prepend to the compiler command line."
+msgctxt "@info:tooltip"
+msgid "Additional parameters to prepend to the compiler command line."
+msgstr "Kompilaatori käsurea algusse lisatavad parameetrid."
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
+#: config/projectconfigpage.ui:249
+#, fuzzy, kde-format
+#| msgid "Additional parameters to clazy-standalone."
+msgctxt "@info:tooltip"
+msgid "Additional parameters to clazy-standalone."
+msgstr "clazy-standalone lisaparameetrid."
+
+#. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
+#: config/projectconfigpage.ui:259
+#, fuzzy, kde-format
+#| msgid "Extra parameters:"
+msgctxt "@label:textbox"
+msgid "Extra parameters:"
+msgstr "Lisaparameetrid:"
+
+#: job.cpp:105
+#, kde-format
+msgid "Clazy Analysis (%1)"
+msgstr "Clazy analüüs (%1)"
+
+#: job.cpp:135
+#, kde-format
+msgid "Unknown Level"
+msgstr "Teadmata tase"
+
+#: job.cpp:201
+#, kde-format
+msgid "Failed to start Clazy analysis process."
+msgstr "Clazy analüüsi käivitamine nurjus."
+
+#: job.cpp:206
+#, kde-format
+msgid "Clazy analysis process crashed."
+msgstr "Clazy analüüsi tabas krahh."
+
+#: job.cpp:211
+#, kde-format
+msgid "Clazy analysis process timed out."
+msgstr "Clazy analüüsi ajaületus."
+
+#: job.cpp:215
+#, kde-format
+msgid "Write to Clazy analysis process failed."
+msgstr "Kirjutamine Clazy analüüsiprotsessi nurjus."
+
+#: job.cpp:219
+#, kde-format
+msgid "Read from Clazy analysis process failed."
+msgstr "Lugemine Clazy analüüsiprotsessist nurjus."
+
+#: job.cpp:229
+#, fuzzy, kde-format
+#| msgid "Clazy Error"
+msgctxt "@title:window"
+msgid "Clazy Error"
+msgstr "Clazy tõrge"
+
+#: jobparameters.cpp:39
+#, kde-format
+msgid ""
+"clazy-standalone path cannot be detected. Set the path manually if Clazy is "
+"already installed."
+msgstr ""
+"clazy-standalone asukohta ei suudetud leida. Määra see käsitsi, kui Clazy on "
+"ikka paigaldatud."
+
+#: jobparameters.cpp:42
+#, kde-format
+msgid "clazy-standalone path is empty."
+msgstr "clazy-standalone asukoht on andmata."
+
+#: jobparameters.cpp:50
+#, kde-format
+msgid "clazy-standalone path '%1' does not exists."
+msgstr "clazy-standalone asukohta \"%1\" ei ole olemas."
+
+#: jobparameters.cpp:55
+#, kde-format
+msgid "clazy-standalone path '%1' is not an executable."
+msgstr "clazy-standalone asukoht \"%1\" ei ole täitmisfail."
+
+#: jobparameters.cpp:64
+#, kde-format
+msgid ""
+"Clazy documentation path cannot be detected. Set the path manually if Clazy "
+"is already installed."
+msgstr ""
+"Clazy dokumentatsiooni asukohta ei suudetud leida. Määra see käsitsi, kui "
+"Clazy on ikka paigaldatud."
+
+#: jobparameters.cpp:67
+#, kde-format
+msgid "Clazy documentation path is empty."
+msgstr "Clazy dokumentatsiooni asukoht on andmata."
+
+#: jobparameters.cpp:75
+#, kde-format
+msgid "Clazy documentation path '%1' does not exists."
+msgstr "Clazy dokumentatsiooni asukohta \"%1\" ei ole olemas."
+
+#: jobparameters.cpp:80
+#, kde-format
+msgid "Clazy documentation path '%1' is not a directory."
+msgstr "Clazy dokumentatsiooni asukoht \"%1\" ei ole kataloog."

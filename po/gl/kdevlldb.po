@@ -1,0 +1,279 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Adrian Chaves <adrian@chaves.io>, 2018, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"PO-Revision-Date: 2019-10-27 07:42+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.11.70\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr "(en execución)"
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#, kde-format
+msgid "LLDB"
+msgstr "LLDB"
+
+#: debuggerplugin.cpp:93
+#, fuzzy, kde-format
+#| msgid "LLDB Console"
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "Consola de LLDB"
+
+#: debugsession.cpp:136
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr ""
+"Intentando executar unha orde do usuario nunha versión incompatíbel de LLDB."
+
+#: debugsession.cpp:335
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Non se puido iniciar o depurador:</b><br />"
+
+#: debugsession.cpp:346
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr "<b>Erro ao conectar ao destino remoto:</b><br />"
+
+#: debugsession.cpp:359
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Non se puido cargar o ficheiro principal.</b><p>O depurador informou do "
+"seguinte erro:<p><tt>%1"
+
+#: debugsession.cpp:390
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+"<b>A súa versión de lldb-mi non é compatíbel, fáltalle un parche esencial.</"
+"b><br/>Consulte https://llvm.org/bugs/show_bug.cgi?id=28026 (en inglés) para "
+"máis información.<br/>A consola do depurador desactivarase para evitar unha "
+"quebra.<br/>Quere continuar?"
+
+#: debugsession.cpp:394
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr "Versión incompatíbel de LLDB"
+
+#: debugsession.cpp:442
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr ""
+"<b>Necesita lldb-mi de LLDB 3.8.1 ou superior.</b><br />Está a usar: %1"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Barra de ferramentas do depurador"
+
+#: lldblauncher.cpp:49
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr "Depurar unha aplicación nativa en LLDB"
+
+#: lldblauncher.cpp:73
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Xa se está a depurar un programa. Quere interromper a sesión de depuración "
+"actual e continuar co inicio?"
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: widgets/lldbconfigpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "LLDB Configuration"
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr "Configuración de LLDB"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, fuzzy, kde-format
+#| msgid "Debugger"
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Depurador"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, fuzzy, kde-format
+#| msgid "Debugger executable:"
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr "Executábel do depurador:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, fuzzy, kde-format
+#| msgid "Override path to lldb-mi executable"
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr "Sobrepor a ruta do executábel de lldb-mi"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, fuzzy, kde-format
+#| msgid "Additional arguments:"
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr "Argumentos adicionais:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Ambiente:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, fuzzy, kde-format
+#| msgid "Inherit system environment"
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr "Herdar o ambiente do sistema."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Opcións"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, fuzzy, kde-format
+#| msgid "Config script:"
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr "Script de configuración:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, fuzzy, kde-format
+#| msgid "/path/to/lldb/config/script"
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr "/ruta/ao/script/de/configuración/de/lldb"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, fuzzy, kde-format
+#| msgid "Start debugger with:"
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr "Iniciar o depurador con:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, fuzzy, kde-format
+#| msgid "Application Output"
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Saída da aplicación"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, fuzzy, kde-format
+#| msgid "LLDB Console"
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr "Consola de LLDB"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, fuzzy, kde-format
+#| msgid "Frame Stack"
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Pila de chamadas"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, fuzzy, kde-format
+#| msgid "Break on start:"
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr "Parar ao iniciar:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, fuzzy, kde-format
+#| msgid "Remo&te Debugging"
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr "Depuración remo&ta"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, fuzzy, kde-format
+#| msgid "Remote server:"
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr "Servidor remoto:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, fuzzy, kde-format
+#| msgid "host:port"
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr "servidor:porto"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, fuzzy, kde-format
+#| msgid "Remote work path:"
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr "Ruta de traballo remota:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, fuzzy, kde-format
+#| msgid "/path/to/a/on-device/writable/directory"
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr "/ruta/a/un/directorio/no/dispositivo/con/permisos/de/escritura"
+
+#~ msgid "Startup error"
+#~ msgstr "Erro de inicio"
+
+#~ msgid "LLDB Error"
+#~ msgstr "Erro de LLDB"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Configuración do depurador"

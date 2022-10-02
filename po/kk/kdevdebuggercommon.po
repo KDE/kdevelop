@@ -1,0 +1,1229 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2013-11-15 06:17+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.2\n"
+
+#: dialogs/processselection.cpp:28
+#, fuzzy, kde-format
+#| msgid "Attach to a process"
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr "Процеске ілегу"
+
+#: dialogs/processselection.cpp:48
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr ""
+
+#: dialogs/selectcoredialog.cpp:18
+#, fuzzy, kde-format
+#| msgid "Select Core File"
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr "Core файлды таңдау"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Орындалатын файл:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, fuzzy, kde-format
+#| msgid "Core File:"
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr "Core файлы:"
+
+#: mibreakpointcontroller.cpp:741
+#, kde-format
+msgid "<br>Old value: %1"
+msgstr "<br>Ескі мәні: %1"
+
+#: mibreakpointcontroller.cpp:744
+#, kde-format
+msgid "<br>New value: %1"
+msgstr "<br>Жаңа мәні: %1"
+
+#: midebugger.cpp:327
+#, fuzzy, kde-format
+#| msgctxt "<b>Internal debugger error</b>"
+#| msgid ""
+#| "<p>The debugger component encountered internal error while processing "
+#| "reply from gdb. Please submit a bug report."
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+"<p>gdb-ден келген жауапты талдау кезде жөндегіш компоненті бір ішкі қатеге "
+"тап болды. Қате туралы хабарлаңыз."
+
+#: midebugger.cpp:330
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"Ерекшелігі: %1\n"
+"MI жауабы: %2"
+
+#: midebugger.cpp:333
+#, fuzzy, kde-format
+#| msgid "Internal debugger error"
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr "Жөндегіштің ішкі қатесі"
+
+#: midebugger.cpp:345 midebugsession.cpp:415
+#, kde-format
+msgid "Process exited"
+msgstr "Процестен шықты"
+
+#: midebugger.cpp:354
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr ""
+"<b>Жөндеу басталмады.</b><p>'%1' жегілмеді. Жолы дұрыс келтірілгенін "
+"тексеріңіз."
+
+#: midebugger.cpp:362
+#, kde-format
+msgid "Process failed to start"
+msgstr ""
+
+#: midebugger.cpp:367
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
+#| "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>Gdb қирады.</b><p>Сондықтан жөндеу сеансы аяқталып қалды.<br>Жәй gdb "
+"көмегімен қайталап көріңіз де, қате туралы хабарлаңыз.<br>"
+
+#: midebugger.cpp:372
+#, fuzzy, kde-format
+#| msgid "Debugger stopped"
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr "Жөндегіш тоқтады"
+
+#: midebugger.cpp:375
+#, fuzzy, kde-format
+#| msgid "Process exited"
+msgid "Process crashed"
+msgstr "Процестен шықты"
+
+#: midebuggerplugin.cpp:109
+#, fuzzy, kde-format
+#| msgid "Examine Core File..."
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr "Core файлын зерттеу..."
+
+#: midebuggerplugin.cpp:111
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Examine core file</b><p>This loads a core file, which is typically "
+#| "created after the application has crashed, e.g. with a segmentation "
+#| "fault. The core file contains an image of the program memory at the time "
+#| "it crashed, allowing you to do a post-mortem analysis.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+"<b>Core файлын зерттеу</b><p>Әдетте, бағдарлама (мысалы, сегментация "
+"қатесінен) қираған соң құрылатын core файлын жүктеу. Ол файлда, қирағаннан "
+"кейін талдауға мүмкіндік беретін, қираған кездегі бағдарламаға қатысты "
+"жадының мазмұны сақталады.</p>"
+
+#: midebuggerplugin.cpp:123
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr "Процеске ілектіру"
+
+#: midebuggerplugin.cpp:125
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr "<b>Процеске ілектіру</b><p>Жөндегішті жегілген процеске ілектіру.</p>"
+
+#: midebuggerplugin.cpp:138
+#, fuzzy, kde-format
+#| msgid "KDevelop"
+msgid "KDevelop (%1) - %2"
+msgstr "KDevelop"
+
+#: midebuggerplugin.cpp:212
+#, fuzzy, kde-format
+#| msgid "Evaluate: %1"
+msgctxt "@action:inmenu"
+msgid "Evaluate: %1"
+msgstr "Есептеу: %1"
+
+#: midebuggerplugin.cpp:214
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#| "cursor.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Evaluate expression</b><p>Shows the value of the expression under the "
+"cursor.</p>"
+msgstr ""
+"<b>Өрнекті есептеу</b><p>Меңзердің астындағы өрнектің мәнін есептеп беру.</p>"
+
+#: midebuggerplugin.cpp:222
+#, fuzzy, kde-format
+#| msgid "Watch: %1"
+msgctxt "@action:inmenu"
+msgid "Watch: %1"
+msgstr "Бақылау: %1"
+
+#: midebuggerplugin.cpp:224
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#| "Variables/Watch list.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Watch expression</b><p>Adds the expression under the cursor to the "
+"Variables/Watch list.</p>"
+msgstr ""
+"<b>Өрнекті бақылау</b><p>Меңзердің астындағы өрнектіАйнымалы/Бақылау "
+"тізіміне қосу.</p>"
+
+#: midebuggerplugin.cpp:237
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "Зерттеуге core файлын таңдау..."
+
+#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+
+#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: midebuggerplugin.cpp:257
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "Қай процеске ілектіру..."
+
+#: midebuggerplugin.cpp:281
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr "%1 процесіне ілекпеді: жөндегіш өзі-өзіне ілекпейді."
+
+#: midebuggerplugin.cpp:301
+#, kde-format
+msgid "Debugger"
+msgstr "Жөндегіш"
+
+#: midebugjobs.cpp:49
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr ""
+
+#: midebugjobs.cpp:73
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr ""
+
+#: midebugjobs.cpp:147
+#, kde-format
+msgid "Debug core file"
+msgstr "Core файлы бойынша жөндеу"
+
+#: midebugjobs.cpp:185
+#, kde-format
+msgid "Debug process %1"
+msgstr "%1 процесін жөндеу"
+
+#: midebugsession.cpp:210
+#, kde-format
+msgid "Running program"
+msgstr "Бағдарлама орындалуда"
+
+#: midebugsession.cpp:287
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "%1 процесіне ілегу"
+
+#: midebugsession.cpp:318
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>Жөндегіш ілектірілмеді:</b><br />"
+
+#: midebugsession.cpp:328
+#, kde-format
+msgid "Examining core file %1"
+msgstr "%1 core файлын зерттеу"
+
+#: midebugsession.cpp:400
+#, kde-format
+msgid "Debugger stopped"
+msgstr "Жөндегіш тоқтады"
+
+#: midebugsession.cpp:420
+#, kde-format
+msgid "Application is running"
+msgstr "Бағдарлама орындалып жатыр"
+
+#: midebugsession.cpp:425
+#, kde-format
+msgid "Application is paused"
+msgstr "Бағдарлама аялдап тұр"
+
+#: midebugsession.cpp:735
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr ""
+"<b>Gdb командасы жөндегіш жегілмеген кезде жіберілген</b><br>Командасы:<br> "
+"%1"
+
+#: midebugsession.cpp:847
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>Жарамсыз жөндегіш командасы</b><br>%1"
+
+#: midebugsession.cpp:985
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "Шығу коды: %1"
+
+#: midebugsession.cpp:987
+#, kde-format
+msgid "Exited normally"
+msgstr "Дұрыс аяқталды"
+
+#: midebugsession.cpp:994
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "%1 сигналымен шықты"
+
+#: midebugsession.cpp:1029
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "Бығдарлама %1 (%2) сигналын қабылдады"
+
+#: midebugsession.cpp:1161
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] "%1 команда кезекте\n"
+
+#: midebugsession.cpp:1162
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] "%1 команда gdb-мен өңделмек\n"
+
+#: midebugsession.cpp:1163
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "Жөндегіштің күй-жайы: %1\n"
+
+#: midebugsession.cpp:1166
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"Назардағы команда класы: '%1'\n"
+"Назардағы команда мәтіні: '%2'\n"
+"Назардағы команданың бастапқы мәтіні: '%3'\n"
+
+#: midebugsession.cpp:1242
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr ""
+"<b>Жөндегіш қатесі</b><p>Жөндегіш келесі қате туралы хабарлады:<p><tt>%1"
+
+#: miframestackmodel.cpp:69
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgid "(running)"
+msgstr "Ескерту"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "Екілік"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "Сегіздік"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "Ондық"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "Оналтылық"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "Өңделмеген"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "Unsigned"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "Жалпы"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "Жалаушалар"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP бір-сөзді"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP қос-сөзді"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP төрт-сөзді"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "Сегмент"
+
+#: registers/registersview.cpp:51
+#, fuzzy, kde-format
+#| msgid "Format"
+msgctxt "@title:menu"
+msgid "Format"
+msgstr "Пішім"
+
+#: registers/registersview.cpp:60
+#, fuzzy, kde-format
+#| msgid "Mode"
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr "Режімі"
+
+#: registers/registersview.cpp:195
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "Жаңарту"
+
+#: stty.cpp:243
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"tty* мен pty* құрылғыларды қолдана алмады.\n"
+"/dev/tty* және /dev/pty* дегендерінің параметрлерін қараңыз.\n"
+"Мүмкін root атынан \"chmod ug+rw\" командасын tty* және pty* құрылғыларға "
+"беріп және/немесе \"usermod -aG tty пайдаланушы\" деп пайдаланушыны tty "
+"тобына қосу керек шығар."
+
+#: stty.cpp:295
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "%1 деген терминал атауы дұрыс емес"
+
+#: stty.cpp:301
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "Уақытша файл құрылмады"
+
+#: stty.cpp:348
+#, fuzzy, kde-format
+#| msgid ""
+#| "Can't get %1 tty/pty. Check that %1 is actually a terminal and that it "
+#| "accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+#| "sleep 3600;done\""
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+msgstr ""
+"%1 tty/pty қол жеткізбеді. %1 деген шын терминал екенін және ол мына "
+"аргументтерді қабылдайтынын тексеріңіз: -e sh -c \"tty> %2 ;exec<&-;exec>&-;"
+"while :;do sleep 3600;done\""
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#, fuzzy, kde-format
+#| msgid "Debugger Toolbar"
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr "Жөндегіш құрал панелі"
+
+#: widgets/debuggerconsoleview.cpp:49
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
+#| "issue any other gdb command while debugging.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+"<b>GDB шығысы.</b><p>Бүкіл орындалмақ gdb командаларды көрсету. Жөндеу "
+"кезінде басқа да gdb командаларын беруге болады.</p>"
+
+#: widgets/debuggerconsoleview.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#, fuzzy, kde-format
+#| msgid "Pause execution of the app to enter gdb commands"
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr "gdb командаларын енгізу үшін бағдарлама орындауын аялдату"
+
+#: widgets/debuggerconsoleview.cpp:72
+#, fuzzy, kde-format
+#| msgid "Show Internal Commands"
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr "Ішкі командалары көрсетілсін"
+
+#: widgets/debuggerconsoleview.cpp:76
+#, fuzzy, kde-format
+#| msgid ""
+#| "Controls if commands issued internally by KDevelop will be shown or not."
+#| "<br>This option will affect only future commands, it will not add or "
+#| "remove already issued commands from the view."
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"KDevelop берген ішкі командаларын көрсету-көрсетпеуін басқару.<br>Бұл "
+"параметр тек болашақ командаларға әсер етеді, өткен командаларға қатысуы жоқ."
+
+#: widgets/debuggerconsoleview.cpp:137
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr ""
+
+#: widgets/debuggerconsoleview.cpp:159
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, kde-format
+msgctxt "@action"
+msgid "Repeat"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, fuzzy, kde-format
+#| msgid "Address Selector"
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr "Адресін таңдау"
+
+#: widgets/disassemblewidget.cpp:88
+#, fuzzy, kde-format
+#| msgid "Change &address"
+msgctxt "@action"
+msgid "Change &Address"
+msgstr "&Аадресті өзгерту"
+
+#: widgets/disassemblewidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "&Jump to Cursor"
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr "Меңзерге &секіріп өту"
+
+#: widgets/disassemblewidget.cpp:93
+#, fuzzy, kde-format
+#| msgid "Sets the execution pointer to the current cursor position."
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr "Орындау орынның көрсеткішін меңзер көрсетіп тұрған жерге ауыстыру."
+
+#: widgets/disassemblewidget.cpp:96
+#, fuzzy, kde-format
+#| msgid "&Run to Cursor"
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr "&Меңзерге дейін орындау"
+
+#: widgets/disassemblewidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Continues execution until the cursor position is reached."
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "Бағдарламаны меңзер тұрған орынға дейін орындау."
+
+#: widgets/disassemblewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:105
+#, kde-format
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr ""
+
+#: widgets/disassemblewidget.cpp:143
+#, fuzzy, kde-format
+#| msgid "Disassemble"
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr "Дизассемблдеу"
+
+#: widgets/disassemblewidget.cpp:174
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Machine code display</b><p>A machine code view into your running "
+#| "executable with the current instruction highlighted. You can step "
+#| "instruction by instruction using the debuggers toolbar buttons of \"step "
+#| "over\" instruction and \"step into\" instruction."
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+"<b>машина кодын көрсету</b><p>Орындалып жатқан бағдарламаның машиналық кодын "
+"көрсететін терезе. Қазір орындалыып жатқан жері белгіленіп көрсетіледі. "
+"Нұсқаудан нұсқауға жөндегіш құралдарындағы \"қадам жасау\", \"аттап кіру\" "
+"батырмаларын басып ауысуға болады."
+
+#: widgets/disassemblewidget.cpp:190
+#, fuzzy, kde-format
+#| msgid "Address"
+msgctxt "@title:column"
+msgid "Address"
+msgstr "Адрес"
+
+#: widgets/disassemblewidget.cpp:191
+#, fuzzy, kde-format
+#| msgid "Function"
+msgctxt "@title:column"
+msgid "Function"
+msgstr "Функция"
+
+#: widgets/disassemblewidget.cpp:192
+#, fuzzy, kde-format
+#| msgid "Instruction"
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr "Нұсқау"
+
+#: widgets/disassemblewidget.cpp:212
+#, fuzzy, kde-format
+#| msgid "Disassemble/Registers View"
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr "Дизассемблдеу/Регистрлер көрінісі"
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, fuzzy, kde-format
+#| msgid "Select the address to disassemble around"
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr "Маңайын дизассемблдейтін адресті таңдау"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, fuzzy, kde-format
+#| msgid "Select address to disassemble around"
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr "Маңайын дизассемблдейтін адресті таңдау"
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Жөндеу басталмады"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgid "warning"
+#~ msgstr "Ескерту"
+
+#~ msgid "Startup error"
+#~ msgstr "Бастау қатесі"
+
+#~ msgid "Internal error"
+#~ msgstr "Ішкі қате"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Жарамсыз жөндегіш командасы"
+
+#~ msgid "Debugger status"
+#~ msgstr "Жөндегіш күй-жайы"
+
+#~ msgid "Debugger error"
+#~ msgstr "Жөндегіш қатесі"
+
+#~ msgid "Address selector"
+#~ msgstr "Адресін таңдау"
+
+#~ msgid "Examine core file"
+#~ msgstr "Core файлын зерттеу"
+
+#, fuzzy
+#~| msgid "Attach to process..."
+#~ msgid "Attach to Process... (%1)"
+#~ msgstr "Процеске ілектіру..."
+
+#, fuzzy
+#~| msgid "Attach to a process"
+#~ msgid "Attach to process"
+#~ msgstr "Процеске ілегу"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Жөндегіш қатесі</b><p>Жөндегіш келесі қате туралы хабарлады:<p><tt>%1"
+
+#~ msgid "Disassemble/Registers"
+#~ msgstr "Дизассемблдеу/Регистрлері"
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#, fuzzy
+#~| msgid "Memory view"
+#~ msgid "Memory"
+#~ msgstr "Жад кірінісі"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr "Қадамдауды баптау"
+
+#~ msgid ""
+#~ "<b>Enable tracing</b>\n"
+#~ "<p>Tracing is a mechanism to automatically print values of the chosen "
+#~ "expressions and continue execution when breakpoint is hit. You can think "
+#~ "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgstr ""
+#~ "<b>Қадамдау рұқсат етілсін</b>\n"
+#~ "<p>Қадамдау деген таңдалған өрнектің мәнін автоматты түрде қадағалап, "
+#~ "тоқтау нуктеден кейін орындауды жалғастыра беру тетігі. Ол printf "
+#~ "көмегімен, кодын өзгертпей, мәнді білудің бір түрі деп санауға болады.</p>"
+
+#~ msgid "Enable tracing"
+#~ msgstr "Қадамдау рұқсат етілсін"
+
+#~ msgid "Cancel"
+#~ msgstr "Қайту"
+
+#~ msgid "Custom format string"
+#~ msgstr "Өзіндік пішім жолы"
+
+#~ msgid "OK"
+#~ msgstr "ОК"
+
+#~ msgid ""
+#~ "<b>Custom format string</b>\n"
+#~ "<p>Specify a C-style format string that will be used when printing the "
+#~ "chosen expression. For example:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "If custom format string is not enabled, names and values of all "
+#~ "expressions will be printed, using \"%d\" as format specifier for all "
+#~ "expressions."
+#~ msgstr ""
+#~ "<b>Өзіндік пішім жолы</b>\n"
+#~ "<p>Таңдалған өрнекті басып шығарғанда қолданатын C-стильді пішім жолы. "
+#~ "Мысалы:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "Егер бұл рұқсат етілмесе бүкіл өрнектер үшін \"%d\" қолданылады."
+
+#~ msgid "Expressions to print:"
+#~ msgstr "Басып шығарылатын өрнек:"
+
+#~ msgid ""
+#~ "No environment group specified, looks like a broken configuration, please "
+#~ "check run configuration '%1'. Using default environment group."
+#~ msgstr ""
+#~ "Орталар тобы келтірілмеген, жегу баптауы жарамсыз секілді, '%1' жегу "
+#~ "баптауын тексеріңіз. Әдетті орталар тобы қолданбақ."
+
+#~ msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+#~ msgstr "<b>Сізге керегі gdb 7.0.0 не одан да жаңасы.</b><br />Сізде: %1"
+
+#~ msgid "gdb error"
+#~ msgstr "gdb қатесі"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Жөндеу басталмады:</b><br />"
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "'%1' жөндеу ортасы табылмады."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Жөндеу ортасы табылмады"
+
+#~ msgid "GDB Configuration"
+#~ msgstr "GDB баптауы"
+
+#~ msgid "Executes a Native application in GDB"
+#~ msgstr "\"Туған\" бағдарламаны GDB-де орындау"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Жөндегіш баптауы"
+
+#, fuzzy
+#~| msgid "Debugger executable:"
+#~ msgid "Debugger e&xecutable:"
+#~ msgstr "Жөндегіштің орындалатын файлы:"
+
+#~ msgid "Gdb executable"
+#~ msgstr "Gdb орындалатын файлы"
+
+#~ msgid ""
+#~ "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
+#~ "gdb, for example, for a different architecture, enter the executable name "
+#~ "here. You can either run gdb from $PATH, but with a different name (say, "
+#~ "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+#~ "executable."
+#~ msgstr ""
+#~ "$PATH жолдағы \"gdb\" бинарлы файлды жегу үшін бұл өрісті бос қалдырыңыз."
+#~ "Әдеттен тыс, мысалы, басқа платформаға арналған gdb-ні жегу үшін оның "
+#~ "бинарлы файл атауын осында келтіріңіз. Немесе $PATH жолындағы, басқаша "
+#~ "аталған (мысалы, \"arm-gdb\") файлды келтіруге немесе толық жолымен "
+#~ "бинарлы файлы атауын келтіруге болады."
+
+#, fuzzy
+#~| msgctxt "Shell script to be executed at run time"
+#~| msgid "R&un shell script:"
+#~ msgid "She&ll script:"
+#~ msgstr "Жегетің командалық орта скрипті:"
+
+#~ msgid "Options"
+#~ msgstr "Параметрлер"
+
+#~ msgid "Display static &members:"
+#~ msgstr "Көрсететін статикалық &мүшелері:"
+
+#~ msgid ""
+#~ "Displaying static members makes GDB slower in\n"
+#~ "producing data within KDE and Qt.\n"
+#~ "It may change the \"signature\" of the data\n"
+#~ "which QString and friends rely on,\n"
+#~ "but if you need to debug into these values then\n"
+#~ "check this option."
+#~ msgstr ""
+#~ "Статикалық мүшелерін көрсету KDE мен Qt ортасында.\n"
+#~ "деректерді өңдегенде GDB-ні тежейді.\n"
+#~ "Ол QString және дос кластары жүгінетін\n"
+#~ "деректің сигнатурасын өзгертуі ықтимал.\n"
+#~ "Бірақ мәндерді жөндегішке салам десеңіз\n"
+#~ "бұл параметрді қосу керек."
+
+#~ msgid "Display &demangled names:"
+#~ msgstr "&Бұрмаланған атауларын көрсету"
+
+#~ msgid ""
+#~ "When displaying the disassembled code you\n"
+#~ "can select to see the methods' mangled names.\n"
+#~ "However, non-mangled names are easier to read."
+#~ msgstr ""
+#~ "Дизассемблденген кодты қарағанда бұрмаланған\n"
+#~ "әдіс атауларын көрсетуді таңдауға болады\n"
+#~ "Бірақ бұрмаланбағанды оқу оңайырақ."
+
+#, fuzzy
+#~| msgid "Start Debugger with:"
+#~ msgid "S&tart Debugger with:"
+#~ msgstr "Мынамен жөндеуді бастау:"
+
+#~ msgid "Application Output"
+#~ msgstr "Бағдарлама шығысы"
+
+#~ msgid "GDB Console"
+#~ msgstr "GDB консолі"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Фрейм стегі"
+
+#~ msgid ""
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgstr ""
+#~ "Бұл скрипт керек командалар үшін қашықта жегілген бағдарламамен "
+#~ "байланысуға арналған.\n"
+#~ "\tshell sleep 5\tқашықтағы бағдарламаны жегуін кідіртуі\n"
+#~ "\ttarget remote ...\tқашық жөндегішпен байланысу\n"
+#~ "\tcontinue\t[міндетті емес] жөндегішті келесі тоқтау нүктесіне дейін айдау"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "Қашықтан жөндеу"
+
+#, fuzzy
+#~| msgid ""
+#~| "This shell script is run after the Config gdb script has been sourced by "
+#~| "gdb.\n"
+#~| "When debugging remotely this script is intended to actually start the "
+#~| "remote process.\n"
+#~| "[It is expected that the debug executable can be reached on the target, "
+#~| "maybe by downloading it as a final build step]\n"
+#~| "1) Find a way to execute a command remotely - rsh, ssh, telnet, ...\n"
+#~| "2a) Execute \"gdbserver ... application\" on target.\n"
+#~| "or if your executable contains the gdb stub\n"
+#~| "2b) Execute \"application\" on target."
+#~ msgid ""
+#~ "<html><head/><body><p>Script to start remote application</p><p></"
+#~ "p><p>This shell script is run after the Gdb Config script has been "
+#~ "sourced by gdb.</p><p>It's purpose is to actually start the remote "
+#~ "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
+#~ "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
+#~ "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
+#~ "\"application\" on target.</p></body></html>"
+#~ msgstr ""
+#~ "Бұл скрипт gdb-ге оны баптау скрипті тапсырылған соң жегіледі.\n"
+#~ "Бұл қашықтан жөндеу процесін бастауға арналған скрипт.\n"
+#~ "[Қашықтағы компьютерінде, кемінде құрастыру соңғы кезеңінде жүктеп "
+#~ "алынған, орындалатын бағдарлама файлы бар деп есептеледі]\n"
+#~ "1) Команданы қашықтан орындау жолын табыңыз - rsh, ssh, telnet, ...\n"
+#~ "2a) Қашықтағы компьютерінде \"gdbserver ... бағдарлама\" командасын "
+#~ "орындаңыз.\n"
+#~ "немесе егер орындалатын файлда gdb бітеуіші болса\n"
+#~ "2b) Қашықтағы компьютерінде \"бағдарлама\" командасын орындаңыз."
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "Жегетің командалық орта скрипті:"
+
+#, fuzzy
+#~| msgid "This script is sourced by gdb when the debugging starts."
+#~ msgid ""
+#~ "<html><head/><body><p>This script is sourced by gdb when the debugging "
+#~ "starts.</p></body></html>"
+#~ msgstr "Бұл жөндеу басталғанда gdb оқитын скрипт."
+
+#, fuzzy
+#~| msgid "Gdb configure script"
+#~ msgid "Gdb &config script:"
+#~ msgstr "Gdb баптау скрипті"
+
+#, fuzzy
+#~| msgid ""
+#~| "This script is intended for the actual commands needed to connect to a "
+#~| "remotely running executable.\n"
+#~| "\tshell sleep 5\twait for remote program to start\n"
+#~| "\ttarget remote ...\tconnect to the remote debugger\n"
+#~| "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgid ""
+#~ "<html><head/><body><p>Script to connect with remote application</p><p>For "
+#~ "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+#~ "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+#~ "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+#~ msgstr ""
+#~ "Бұл скрипт керек командалар үшін қашықта жегілген бағдарламамен "
+#~ "байланысуға арналған.\n"
+#~ "\tshell sleep 5\tқашықтағы бағдарламаны жегуін кідіртуі\n"
+#~ "\ttarget remote ...\tқашық жөндегішпен байланысу\n"
+#~ "\tcontinue\t[міндетті емес] жөндегішті келесі тоқтау нүктесіне дейін айдау"
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "&gdb скриптін жегу:"
+
+#~ msgid "GDB Output"
+#~ msgstr "GDB шығысы"
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "&GDB командасы:"
+
+#~ msgid "Copy All"
+#~ msgstr "Бүкілін көшіріп алу"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Жегу"
+
+#~ msgid "Start"
+#~ msgstr "Басы"
+
+#~ msgid "Amount"
+#~ msgstr "Мөлшері"
+
+#~ msgid "Memory view"
+#~ msgstr "Жад кірінісі"
+
+#~ msgid "%2 (1 byte)"
+#~ msgid_plural "%2 (%1 bytes)"
+#~ msgstr[0] "%2 (%1 байт)"
+
+#~ msgid "&Format"
+#~ msgstr "&Пішім"
+
+#~ msgid "&Binary"
+#~ msgstr "&Екілік"
+
+#~ msgid "&Octal"
+#~ msgstr "&Сегіздік"
+
+#~ msgid "&Decimal"
+#~ msgstr "О&ндық"
+
+#~ msgid "&Hexadecimal"
+#~ msgstr "Он&алтылық"
+
+#~ msgid "&Grouping"
+#~ msgstr "&Топтастыру"
+
+#~ msgid "&0"
+#~ msgstr "&0"
+
+#~ msgid "&1"
+#~ msgstr "&1"
+
+#~ msgid "&2"
+#~ msgstr "&2"
+
+#~ msgid "&4"
+#~ msgstr "&4"
+
+#~ msgid "&8"
+#~ msgstr "&8"
+
+#~ msgid "1&6"
+#~ msgstr "1&6"
+
+#~ msgid "Write changes"
+#~ msgstr "Өзгерістерін жазу"
+
+#~ msgid "Change memory range"
+#~ msgstr "Жад аумағын өзгерту"
+
+#~ msgid "Close this view"
+#~ msgstr "Бұл көрінісін жабу"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Open a new memory viewer."
+#~ msgstr "Жаңа жадын қөру құралын ашу."
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>GDB қатемен шықты</b><p>Бұл  GDB қатесі болу ықтимал. gdb-дің шығыс "
+#~ "терезесін қараңыз да, жөндегішті тоқтатыңыз"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "GDB қатемен доғарылды"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Gdb қирады"
+
+#~ msgid "Application interrupted"
+#~ msgstr "Бағдарлама үзілді"
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid "GDB Support"
+#~ msgstr "GDB қолдауы"
+
+#~ msgid ""
+#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
+#~ "+ and more."
+#~ msgstr ""
+#~ "Бұл плагин GDB, яғни C, C++ , т.б. бастапқы кодымен істейтін жөндегішке "
+#~ "интерфейсі."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr ""
+#~ "gdb-ні әрнаулы командалық ортасында жегу (көбінде automake жоба үшін)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "gdb-ні арнаулы командалық ортасында не құралында жегу үшін оны осында "
+#~ "енгізіңіз. Көбінде бұл Automake негізіндегі жобалаға арналған. Ондағы "
+#~ "қолданбасы шынында тек скрипт және gdb-нің ішінде жегу үшін <b>libtool</"
+#~ "b> керек."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "gdb-ні арнаулы командалық ортасында не құралында жегу үшін оны осында "
+#~ "енгізіңіз. Көбінде бұл Automake негізіндегі жобалаға арналған. Ондағы "
+#~ "қолданбасы шынында тек скрипт және gdb-нің ішінде жегу үшін ibtool керек."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "Жөндеу командалық ортасы:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Қашық бағдарламаны жегу скрипті"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "&Баптайтын gdb скрипті:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Қашық бағдарламамен байланысу скрипті"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Бұл скриптті gdb екі алдыңғы скрипттер орындалып болғасын оқиды.\n"
+#~ "Бұл скрипт керек командалар үшін қашықта жегілген бағдарламамен "
+#~ "байланысуға арналған.\n"
+#~ "\tshell sleep 5\tқашықтағы бағдарламаны жегуін кідіртуі\n"
+#~ "\ttarget remote ...\tқашық жөндегішпен байланысу\n"
+#~ "\tcontinue\t[міндетті емес] жөндегішті келесі тоқтау нүктесіне дейін "
+#~ "айдау."
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: Жөндегіш қолданба консолі"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Бағдарламаларды GDB ортасында жегуді қолдау"
+
+#~ msgid "Start address:"
+#~ msgstr "Бастау адресі:"
+
+#~ msgid "End Address:"
+#~ msgstr "Аяқтау адресі:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Көрсету"
+
+#~ msgid "Offset"
+#~ msgstr "Шегініс"

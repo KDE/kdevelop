@@ -1,0 +1,59 @@
+# Translation of kdevclassbrowser.po to Catalan
+# Copyright (C) 2009-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa <manutortosa@gmail.com>, 2009.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013.
+# Josep M. Ferrer <txemaq@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 13:04+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, kde-format
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Classes"
+
+#: classbrowserplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "&Cerca al navegador de classes"
+
+#: classwidget.cpp:72
+#, kde-format
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "C&erca:"
+
+#: classwidget.cpp:89
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Navegador de classes"
+
+#~ msgid "All projects classes"
+#~ msgstr "Totes les classes dels projectes"
+
+#~ msgid "Base classes"
+#~ msgstr "Classes bàsiques"
+
+#~ msgid "Derived classes"
+#~ msgstr "Classes derivades"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Classes en el projecte %1"

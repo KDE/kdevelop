@@ -1,0 +1,415 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Claus Christensen <claus_chr@webspeed.dk>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-01-06 16:04+0100\n"
+"Last-Translator: Claus Christensen <claus_chr@webspeed.dk>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: configwidget.cpp:25
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Byg"
+
+#: configwidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Konfigurér"
+
+#: configwidget.cpp:27
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Installér"
+
+#: configwidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Ryd"
+
+#: configwidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Beskær"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, fuzzy, kde-format
+#| msgid "Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Byggemappe:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the directory where the tools are being executed in.\n"
+#| "If this is the same as the source directory you can leave it empty."
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Vælg den mappe som værktøjerne skal køres i.\n"
+"Hvis det er den samme som kildemappen behøver du ikke vælge noget."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, fuzzy, kde-format
+#| msgid "The directory where the tools are executed"
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "Mappen hvor værktøjerne køres i"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, fuzzy, kde-format
+#| msgid "Build Tools"
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Byggeværktøjer"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, fuzzy, kde-format
+#| msgid "Action:"
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Handling:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, fuzzy, kde-format
+#| msgid "Enable:"
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Aktivér:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Kørbar:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is the executable that should be executed when selecting the action "
+#| "from the Project menu"
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Dette er den kørbare fil som skal køres når du vælger handlingen i menuen "
+"Projekt"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumenter:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, fuzzy, kde-format
+#| msgid "The arguments that the tool needs to execute properly."
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "Argumenterne som værktøjet skal have for at køre korrekt."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Miljø:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, fuzzy, kde-format
+#| msgid "Choose a pre-configured environment for your tool"
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Vælg et forudkonfigureret miljø til dit værktøj"
+
+#: custombuildjob.cpp:67
+#, fuzzy, kde-format
+#| msgid "Building:"
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Bygning:"
+
+#: custombuildjob.cpp:70
+#, fuzzy, kde-format
+#| msgid "Cleaning:"
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Rydning:"
+
+#: custombuildjob.cpp:73
+#, fuzzy, kde-format
+#| msgid "Installing:"
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Installation:"
+
+#: custombuildjob.cpp:74
+#, fuzzy, kde-format
+#| msgid "Installing:"
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Installation:"
+
+#: custombuildjob.cpp:77
+#, fuzzy, kde-format
+#| msgid "Configuring:"
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Konfiguration:"
+
+#: custombuildjob.cpp:80
+#, fuzzy, kde-format
+#| msgid "Pruning:"
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Beskæring:"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Udefineret byggetype"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr ""
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr ""
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"Det givne argument skal bruge en rigtig kommandoskal, det understøttes ikke "
+"i øjeblikket."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Kunne ikke starte kommando."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Kommando brød ned."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Ukendt fejl under kørsel af kommando."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Mislykkedes ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Afsluttet ***"
+
+#: custombuildsystemconfig.cpp:14
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "Byg"
+
+#: custombuildsystemconfig.cpp:15
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "Konfigurér"
+
+#: custombuildsystemconfig.cpp:16
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "Installér"
+
+#: custombuildsystemconfig.cpp:17
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "Ryd"
+
+#: custombuildsystemconfig.cpp:18
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "Beskær"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, fuzzy, kde-format
+#| msgid "Build Configuration:"
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Byggekonfiguration:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Tilføj"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Fjern"
+
+#: kcm_custombuildsystem.cpp:53
+#, fuzzy, kde-format
+#| msgid "Custom Build System"
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Tilpasset byggesystem"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Claus Christensen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "claus_chr@webspeed.dk"
+
+#~ msgid "No command given"
+#~ msgstr "Ingen kommando givet"
+
+#~ msgid "This command is disabled"
+#~ msgstr "Denne kommando er slået fra"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr ""
+#~ "Understøttelse af bygning med og håndtering af tilpassede byggesystemer"
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Ophavsret 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Stispecifikke sprogparametre"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr ""
+#~ "Dobbeltklik her for at indsætte en ny define-erklæring at bruge til stien"
+
+#~ msgid "Define"
+#~ msgstr "Define"
+
+#~ msgid "Value"
+#~ msgstr "Værdi"
+
+#~ msgid "Delete Define"
+#~ msgstr "Slet define"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Slet include-sti"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr "Vil du virkelig fjerne den markerede include-sti \"%1\"?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Tilføj den aktuelt viste URL til listen med includes hvis den ikke "
+#~ "allerede er i listen."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr ""
+#~ "En ny include-sti at bruge til fortolkning af filer under en given mappe"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Opret en ny include-sti fra denne URL."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Slet den aktuelle include-sti."
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr "Vil du virkelig fjerne konfigurationen for stien \"%1\"?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Tilføj en ny underprojekt-sti."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Erstat den aktuelt valgte sti med en ny værdi, men behold de includes og "
+#~ "defines der i øjeblikket er angivet for den markerede sti."
+
+#~ msgid "Replace"
+#~ msgstr "Erstat"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Slet den aktuelle underprojekt-sti."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "Includes/imports"
+
+#~ msgid "Defines"
+#~ msgstr "Defines"

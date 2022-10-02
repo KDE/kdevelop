@@ -1,0 +1,290 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcustombuildsystem.pot\n"
+"X-Crowdin-File-ID: 4965\n"
+
+#: configwidget.cpp:25
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "构建"
+
+#: configwidget.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "配置"
+
+#: configwidget.cpp:27
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "安装"
+
+#: configwidget.cpp:28
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "清理"
+
+#: configwidget.cpp:29
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "净化"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "构建目录："
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"选择工具运行的目录。\n"
+"如果与源代码目录相同，可以留空。"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "工具运行的目录"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "构建工具"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "操作："
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "启用："
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "可执行文件："
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr "从工程菜单中选择操作时要执行的可执行文件"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "参数："
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "工具正确执行所需的参数。"
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "环境："
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "为您的工具选择预配置环境"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "正在构建：%1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "正在清理：%1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "正在安装：%1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "正在安装：%1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "正在配置：%1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "正在修剪：%1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "未定义的构建类型"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr "没有在工程“%2”中指定自定义 %1 工具的命令。"
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "工程“%2”中的自定义 %1 工具被禁用"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr "给定的参数需要一个真实的 shell，现在尚未支持。"
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "启动命令失败。"
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "命令已崩溃。"
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "执行命令时发生未知错误。"
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** 已失败 ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** 已完成 ***"
+
+#: custombuildsystemconfig.cpp:14
+#, kde-format
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "构建"
+
+#: custombuildsystemconfig.cpp:15
+#, kde-format
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "配置"
+
+#: custombuildsystemconfig.cpp:16
+#, kde-format
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "安装"
+
+#: custombuildsystemconfig.cpp:17
+#, kde-format
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "清除"
+
+#: custombuildsystemconfig.cpp:18
+#, kde-format
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "删除"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "未知算法"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "构建配置："
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "添加"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "删除"
+
+#: kcm_custombuildsystem.cpp:53
+#, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "自定义构建系统"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr "配置工程的自定义构建工具以及语言支持的包含/定义"

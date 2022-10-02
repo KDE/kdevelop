@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-24 19:31+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: config/projectconfigpage.cpp:44
+#, kde-format
+msgctxt "@title:tab"
+msgid "Source Formatter"
+msgstr "წყაროს ფორმატირება"
+
+#: config/projectconfigpage.cpp:49
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Source Formatter"
+msgstr "წყაროს ფორმატირების მორგება"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
+#: config/projectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use default"
+msgstr "ნაგულისხმების გამოყენება"
+
+#. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
+#: config/projectconfigpage.ui:36
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr "ზოგადი"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without a Kate modeline."
+msgstr ""
+"რედაქტორის სწორების რეჟიმის უგულებელყოფა დოკუმენტების ფორმატირების სტილის "
+"მიხედვით Kate modeline-ის გარეშე."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:45
+#, kde-format
+msgctxt "@option:check"
+msgid "Override editor indentation mode"
+msgstr "რედაქტორის სწორების რეჟიმის უგულებელყოფა"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr ""
+"Kate modeline-ების დამატება ფორმატირებული დოკუმენტების ფორმატირების სტილის "
+"მიხედვით."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:55
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate modeline"
+msgstr "Kate modeline-ის დამატება"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
+#: config/projectconfigpage.ui:65
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr "ფორმატირების სტილები"

@@ -1,0 +1,475 @@
+# KDE Finnish translation sprint participants:
+# Author: Karvjorm
+# Author: Lliehu
+# Author: Niklas Laxström
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustombuildsystem\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2015-07-26 13:24+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-POT-Import-Date: 2012-12-01 22:20:29+0000\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: configwidget.cpp:25
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Käännä"
+
+#: configwidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Tee asetukset"
+
+#: configwidget.cpp:27
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Asenna"
+
+#: configwidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Puhdista"
+
+#: configwidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Tyhjennä"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, fuzzy, kde-format
+#| msgid "Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Käännöshakemisto:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the directory where the tools are being executed in.\n"
+#| "If this is the same as the source directory you can leave it empty."
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Valitse hakemisto, jossa työkaluja käytetään.\n"
+"Jos tämä on sama kuin lähdekoodihakemisto, voit jättää sen tyhjäksi."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, fuzzy, kde-format
+#| msgid "The directory where the tools are executed"
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "Hakemisto, jossa työkaluja käytetään"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, fuzzy, kde-format
+#| msgid "Build Tools"
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Käännöstyökalut"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, fuzzy, kde-format
+#| msgid "Action:"
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Toiminto:"
+
+# @option:check
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, fuzzy, kde-format
+#| msgid "Enable:"
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Käytössä:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Ohjelmatiedosto:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is the executable that should be executed when selecting the action "
+#| "from the Project menu"
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Tämä on ohjelmatiedostto, joka olisi suoritettava, kun valitaan toiminto "
+"Projekti-valikosta"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumentit:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, fuzzy, kde-format
+#| msgid "The arguments that the tool needs to execute properly."
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "Argumentit, jotka työkalun on suoritettava oikein."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Ympäristö:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, fuzzy, kde-format
+#| msgid "Choose a pre-configured environment for your tool"
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Valitse työkalullesi esiasetettu ympäristö"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Käännetään: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Puhdistetaan: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Asennetaan: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Asennetaan: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Tehdään asetuksia: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Tyhjennetään: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Määrittämätön käännöstyyppi"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr "Komentoa ei ole annettu mukautetulle %1-työkalulle projektissa ”%2”."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "Mukautetu %1-työkalu projektissa ”%2” ei ole käytössä"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"Annetut argumentit tarvitsisivat oikean komentotulkin. Tämä ei ole nykyisin "
+"tuettua."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Komennon aloittaminen epäonnistui."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Komento kaatui."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Tuntematon virhe komennon suorituksessa."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Epäonnistui ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Päättyi ***"
+
+#: custombuildsystemconfig.cpp:14
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "build"
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "käännä"
+
+#: custombuildsystemconfig.cpp:15
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "configure"
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "tee asetukset"
+
+#: custombuildsystemconfig.cpp:16
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "install"
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "asenna"
+
+#: custombuildsystemconfig.cpp:17
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "clean"
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "puhdista"
+
+#: custombuildsystemconfig.cpp:18
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "prune"
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "tyhjennä"
+
+#: custombuildsystemconfig.cpp:19
+#, fuzzy, kde-format
+#| msgid "unknown"
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "tuntematon"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, fuzzy, kde-format
+#| msgid "Build Configuration:"
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Käännösasetukset:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Lisää"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Poista"
+
+#: kcm_custombuildsystem.cpp:53
+#, fuzzy, kde-format
+#| msgid "Custom Build System"
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Oma käännösjärjestelmä"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"Projektin oman käännöstyökalun asetukset sekä kielituen include/define-"
+"hakupolut."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Jorma Karvonen, Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "karvonen.jorma@gmail.com, lasse.liehu@gmail.com"
+
+#~ msgid "No command given"
+#~ msgstr "Komentoa ei ole annettu"
+
+#~ msgid "This command is disabled"
+#~ msgstr "Tämä komento on poistettu käytöstä"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr "Tuki omien käännösjärjestelmien kääntämiselle ja hallinnoimiselle"
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Teijänoikeus 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Polkukohtaiset kieliparametrit"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr "Lisää uusi polussa käytettävä define kaksoisnapsauttamalla tästä."
+
+#~ msgid "Define"
+#~ msgstr "Define-määrittelyt"
+
+#~ msgid "Value"
+#~ msgstr "Arvo"
+
+#~ msgid "Delete Define"
+#~ msgstr "Poista Define"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Poista Include-polku"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr "Haluatko varmasti poistaa valitun include-polun ”%1”?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Lisää parhaillaan näytetty osoite include-polkujen luetteloon, jos se ei "
+#~ "vielä ole luettelossa."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr ""
+#~ "Uusi include-polku, jota käytetään annetun kansion alla olevien "
+#~ "tiedostojen jäsentämisessä"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Luo uusi include-polkumerkintä tästä osoitteesta."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Poista nykyinen include-polkumerkintä"
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr "Haluatko varmasti poistaa polun ”%1” asetukset?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Lisää uusi aliprojektin polkumerkintä."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Korvaa valittu polku uudella arvolla säilyttäen nykyisen polun includet "
+#~ "ja definet."
+
+#~ msgid "Replace"
+#~ msgstr "Korvaa"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Poista nykyinen aliprojektin polkumerkintä."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "Include-/import-määrittelyt"
+
+#~ msgid "Defines"
+#~ msgstr "Define-määrittelyt"
+
+#, fuzzy
+#~| msgid "Custom BuildSystem"
+#~ msgid "CustomBuildSystem Config Ui Test App"
+#~ msgstr "Oma käännösjärjestelmä"
+
+#, fuzzy
+#~| msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgid "(C) 2012 Andreas Pakulat"
+#~ msgstr "Teijänoikeus 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Delete Project Path"
+#~ msgstr "Poista projektipolku"
+
+#~ msgid "Includes/Imports and Defines for Project Directories/Files"
+#~ msgstr ""
+#~ "Includet/importit ja definet projektin hakemistoille ja tiedostoille"
+
+#~ msgid "Directories/Files:"
+#~ msgstr "Hakemistot/tiedostot:"
+
+#~ msgid "Switch between configuring Includes/Imports and Defines"
+#~ msgstr ""
+#~ "Vaihda Include-/import-määrittelyjen ja define-määrittelyiden asettamisen "
+#~ "välillä"
+
+#~ msgid "List of include paths for the selected project item"
+#~ msgstr "Include-polkujen luettelo valituille projektikohteille"
+
+#~ msgid ""
+#~ "A list of absolute include paths that the KDevelop parser should be "
+#~ "using\n"
+#~ "when parsing the project files in the given project path."
+#~ msgstr ""
+#~ "Absoluuttisten include-polkujen luettelo, jota KDevelop-jäsentäjän "
+#~ "pitäisi käyttää\n"
+#~ "kun jäsennetään hankkeen tiedostoja annetussa projektipolussa."
+
+#~ msgid ""
+#~ "Specify a list of pre-processor defines and their values that the "
+#~ "KDevelop parser should use when parsing the files in the given project "
+#~ "path."
+#~ msgstr ""
+#~ "Määritä esikääntäjä define-määrittelyjen luetteloa ja niitä arvoja,  "
+#~ "joita KDevelop-jäsentäjän pitäisi käyttää jäsennettäesä tiedostoja "
+#~ "annetussa projektipolussa."
+
+#~ msgid ""
+#~ "Double-Click here to insert a new include path to be used for the path"
+#~ msgstr ""
+#~ "Kaksoisnapsauta tähän lisätäksesi uuden include-polun tämän polun "
+#~ "käytettäväksi"
+
+#~ msgid "Double-Click here to insert a new path to a directory or file."
+#~ msgstr ""
+#~ "Kaksoisnapsauta tähän lisätäksesi uuden polun hakemistoon tai tiedostoon."

@@ -1,0 +1,157 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2013, 2014, 2015, 2017, 2021.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2016, 2020.
+# Gerhard Stengel <gstengel@gmx.net>, 2010, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevstandardoutputview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-05-31 16:08+0200\n"
+"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: outputwidget.cpp:53
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Ausgabeansicht"
+
+#: outputwidget.cpp:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Die aktuelle Ausgabeansicht schließen"
+
+#: outputwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Alle anderen Ausgabeansichten schließen"
+
+#: outputwidget.cpp:81
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Vorherige Ausgabe"
+
+#: outputwidget.cpp:84
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Nächste Ausgabe"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Aktiviertes Element auswählen"
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Aktivieren, wenn Element ausgewählt wird"
+
+#: outputwidget.cpp:105
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Erstes Element"
+
+#: outputwidget.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Vorheriges Element"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Nächstes Element"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Letztes Element"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Leeren"
+
+#: outputwidget.cpp:141
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Suchen ..."
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr ""
+"Geben Sie einen regulären Ausdruck ohne Berücksichtigung der Groß-/"
+"Kleinschreibung ein, um die Ausgabeansicht zu filtern"
+
+#: standardoutputview.cpp:101
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Erstellen"
+
+#: standardoutputview.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Ausführen"
+
+#: standardoutputview.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Debuggen"
+
+#: standardoutputview.cpp:116
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Test"
+
+#: standardoutputview.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Versionsverwaltung"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigation"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "Provides toolviews for presenting the output of running apps"
+#~ msgstr "Bietet Ansichten zum Durchsehen von Ausgaben laufender Programme"
+
+#~ msgid "Select &All"
+#~ msgstr "&Alles auswählen"
+
+#~ msgid "&Copy"
+#~ msgstr "&Kopieren"
+
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "Ansicht"

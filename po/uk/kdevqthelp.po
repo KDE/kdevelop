@@ -1,0 +1,267 @@
+# Translation of kdevqthelp.po to Ukrainian
+# Copyright (C) 2009-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqthelp\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-07-20 08:35+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.07.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: qthelpconfig.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr "Внесення змін до запису"
+
+#: qthelpconfig.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr "Додавання нового запису"
+
+#: qthelpconfig.cpp:67
+#, kde-format
+msgid "Name cannot be empty."
+msgstr "Назва не може бути порожньою."
+
+#: qthelpconfig.cpp:101
+#, kde-format
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "Отримати нову документацію"
+
+#: qthelpconfig.cpp:116
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr ""
+"Не вдалося отримати шлях до файла QtHelp (QCH) за допомогою команди «qmake -"
+"query»."
+
+#: qthelpconfig.cpp:204
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr "Документація, що надається за допомогою GHNS"
+
+#: qthelpconfig.cpp:230
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr "Некоректний файл стиснутої довідки до Qt."
+
+#: qthelpconfig.cpp:239
+#, kde-format
+msgid "Documentation already imported"
+msgstr "Документацію вже імпортовано"
+
+#: qthelpconfig.cpp:291
+#, kde-format
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "Довідка з Qt"
+
+#: qthelpconfig.cpp:296
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "Налаштувати параметри довідки з Qt"
+
+#: qthelpconfig.cpp:321
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr "Змінити"
+
+#: qthelpconfig.cpp:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr "Вилучити"
+
+#: qthelpconfig.cpp:333
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr "Будь ласка, вилучіть це за допомогою засобу отримання нових даних."
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr "Завантаження документації до Qt із загальносистемних каталогів"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "З&авантажити документацію з API Qt:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr "Завантажити файли довідки до Qt з цього каталогу:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, kde-format
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "Встановлення додаткових файлів документації"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Назва"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, kde-format
+msgctxt "@title:column"
+msgid "Path"
+msgstr "Шлях"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Додати"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr "Піктограма:"
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr "Вибрати піктограму"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Назва:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr "Введіть назву"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr "Виберіть назву…"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr "Шлях:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr "Виберіть файл довідки з Qt…"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:73
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr "Вибрати файл довідки з Qt…"
+
+#: qthelpdocumentation.cpp:181
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "Не вдалося знайти жодної документації щодо «%1»"
+
+#: qthelpdocumentation.cpp:276
+#, kde-format
+msgid "QtHelp Home Page"
+msgstr "Домашня сторінка QtHelp"
+
+#: qthelpqtdoc.cpp:142
+#, kde-format
+msgid "QtHelp"
+msgstr "QtHelp"
+
+#~ msgid "Dialog"
+#~ msgstr "Діалогове вікно"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "QtHelp Documentation"
+#~ msgstr "Документація QtHelp"
+
+#~ msgid "Identifier to search:"
+#~ msgstr "Ключ пошуку:"
+
+#~ msgid "Help page:"
+#~ msgstr "Довідкова сторінка:"
+
+#~ msgid "about:blank"
+#~ msgstr "about:blank"
+
+#~ msgid "Debug info:"
+#~ msgstr "Діагностичні відомості:"
+
+#~ msgid "Search QtHelp files in this directory..."
+#~ msgstr "Шукати файли QtHelp у цьому каталозі…"
+
+#~ msgid "Remove"
+#~ msgstr "Вилучити"
+
+#~ msgid "Move Up"
+#~ msgstr "Пересунути вгору"
+
+#~ msgid "Move Down"
+#~ msgstr "Пересунути вниз"
+
+#~ msgid "Choose dir"
+#~ msgstr "Вибрати каталог"
+
+#~ msgid "Manage QtHelp Documentation"
+#~ msgstr "Керування документацією QtHelp"
+
+#~ msgid "Ghns"
+#~ msgstr "GHNS"
+
+#~ msgid "Form"
+#~ msgstr "Форма"

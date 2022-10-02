@@ -1,0 +1,112 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Volkan Gezer <volkangezer@gmail.com>, 2021.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevninja\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-05 22:43+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.08.0\n"
+
+#: ninjabuilder.cpp:30
+#, kde-format
+msgid "Unable to find ninja executable. Is it installed on the system?"
+msgstr "Ninja yürütülebiliri bulunamadı. Sistemde kuruldu mu?"
+
+#: ninjabuilder.cpp:197
+#, kde-format
+msgid "Cannot specify prefix in %1, on ninja"
+msgstr "Ninja üzerinde, %1 içinde önek belirtilemiyor"
+
+#: ninjabuilderpreferences.cpp:35
+#, kde-format
+msgctxt "@title:tab"
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjabuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Ninja settings"
+msgstr "Ninja ayarlarını yapılandır"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: ninjaconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Komutları görüntüle; ancak yürütme:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: ninjaconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "Install as &root:"
+msgstr "&Kök olarak kur:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: ninjaconfig.ui:75
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Root installation &command:"
+msgstr "Kök olarak &kurma komutu:"
+
+#. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
+#: ninjaconfig.ui:110
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "&Eşzamanlı işlerin sayısı:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: ninjaconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Count of &errors to be tolerated:"
+msgstr "Tölere edilebilecek &hataların sayısı:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ninjaconfig.ui:153
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ninja &options:"
+msgstr "Ek &ninja seçenekleri:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ninjaconfig.ui:173
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Etkin çevre &profil:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ninjaconfig.ui:208
+#, kde-format
+msgctxt "@option:check"
+msgid "O&verride number of jobs:"
+msgstr "Geçersiz kılınacak &işler sayısı:"
+
+#: ninjajob.cpp:72
+#, kde-format
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjajob.cpp:94
+#, kde-format
+msgid "Ninja (%1): %2"
+msgstr "Ninja (%1): %2"
+
+#: ninjajob.cpp:96
+#, kde-format
+msgid "Ninja (%1)"
+msgstr "Ninja (%1)"

@@ -1,0 +1,443 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
+# Javier Viñal <fjvinal@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecute\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 19:11+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.07.80\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Existe un error de comillas en los argumentos para la configuración de "
+"lanzamiento «%1». Cancelando el inicio."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Se ha incluido un metacarácter de la shell en los argumentos para la "
+"configuración de lanzamiento «%1»; esto es algo que no está permitido en la "
+"actualidad. Cancelando el inicio."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "No se puede resolver la dependencia: %1"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "No se ha especificado un ejecutable válido"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Existe un error de comillas en el ejecutable para la configuración de "
+"lanzamiento «%1». Cancelando el inicio."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Se ha incluido un metacarácter de la shell en el ejecutable para la "
+"configuración de lanzamiento «%1»; esto es algo que no está permitido en la "
+"actualidad. Cancelando el inicio."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr "Preguntar si está en ejecución"
+
+#: nativeappconfig.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "Matar todas las instancias"
+
+#: nativeappconfig.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "Iniciar otra"
+
+#: nativeappconfig.cpp:156
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Configurar aplicación nativa"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "Ejecuta aplicaciones nativas"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "Aplicación nativa"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "Binario compilado"
+
+#: nativeappconfig.cpp:322
+#, kde-format
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Ejecutables del proyecto"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, kde-format
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Ejecutable"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "Obje&tivo del proyecto:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "E&jecutable:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "ejecutable o ruta/al/ejecutable"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr ""
+"Introduzca el nombre del ejecutable o la ruta absoluta al archivo ejecutable"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Comportamiento"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "Ar&gumentos:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Introduzca los argumentos a proporcionar al ejecutable."
+"<br/>Puede pasar argumentos que contengan espacios poniéndolos entre "
+"comillas dobles.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "&Directorio de trabajo:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Seleccione un directorio de trabajo para el ejecutable"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "E&ntorno:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Seleccione un entorno a usar"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Por omisión, las aplicaciones se ejecutarán en segundo plano y solo se "
+"mostrará su salida en una vista de herramientas. Esto hace imposible "
+"interactuar con las aplicaciones que necesiten entrada por parte del usuario "
+"en un emulador de terminal. Para ejecutar estas aplicaciones debería usar un "
+"terminal externo.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, kde-format
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Usar terminal externa:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Define la orden para ejecutar el emulador de terminal externo. Use los "
+"siguientes parámetros de sustitución:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>La ruta al ejecutable seleccionado más arriba.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>La ruta al directorio de trabajo seleccionado más arriba.</dd>\n"
+"</dl>\n"
+"<p>Los argumentos definidos más arriba se añadirán a esta orden.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr "Reiniciar"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Dependencias"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "Acc&ión:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr ""
+"Especifica la acción a realizar con las dependencias antes de iniciar el "
+"ejecutable."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"La acción seleccionada se lanzará antes de iniciar el ejecutable. Esto "
+"permite que existan partes de un proyecto, de las que el ejecutable no "
+"depende directamente, que puedan ser construidas o instaladas antes de "
+"ejecutar la aplicación."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "No hacer nada"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Construir"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Construir e instalar"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Objetivos:"
+
+#: nativeappjob.cpp:66
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"No se ha especificado ningún perfil de entorno; parece que se trata de una "
+"configuración dañada. Compruebe la configuración de ejecución «%1». Se usa "
+"el perfil de entorno por omisión."
+
+#: nativeappjob.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "El trabajo ya se está ejecutando"
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "«%1» ya está siendo ejecutado."
+
+#: nativeappjob.cpp:145
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "Matar todas las instancias"
+
+#: nativeappjob.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "Iniciar otra"
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr "Recordar la elección"
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Introduzca los argumentos a pasar al ejecutable"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Iniciando: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Aplicación matada ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Terminado normalmente ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Terminado con código de retorno: %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Proceso interrumpido ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Fallado con código de retorno: %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "*** No se pudo iniciar el programa «%1». Asegúrese de que ha especificado "
+#~ "la ruta correctamente ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Introduzca una dependencia para añadir a la lista"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Añade el objetivo listado a la lista de dependencias."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Lista de objetivos indirectamente dependientes."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Esta lista debe contener objetivos de los que la aplicación no depende "
+#~ "directamente, pero para los que se necesita realizar alguna acción antes "
+#~ "de ejecutar la aplicación."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Elimina las dependencias seleccionadas de la lista."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Mueve una dependencia arriba en la lista."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Mueve la dependencia seleccionada abajo en la lista."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Eloy Cuadra"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ecuadra@eloihr.net"
+
+#~ msgid "Execute support"
+#~ msgstr "Implementación de ejecución"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "Este complemento permite la ejecución de programas sin intrumentor (es "
+#~ "decir, de forma nativa) en la máquina actual."
+
+#~ msgid "Application"
+#~ msgstr "Aplicación"
+
+#~ msgid "Allows running of native apps"
+#~ msgstr "Permite ejecutar aplicaciones nativas"

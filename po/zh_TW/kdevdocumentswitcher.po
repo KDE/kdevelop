@@ -1,0 +1,54 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2009, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentswitcher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-01-30 13:03+0800\n"
+"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
+"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"dot tw>\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: documentswitcherplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Last Used Views"
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "上次使用檢視"
+
+#: documentswitcherplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr "開啟清單並瀏覽上次使用的檢視。"
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Walk through the list of last used views"
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "瀏覽上次使用檢視"
+
+#: documentswitcherplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Last Used Views (Reverse)"
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "上次使用的檢視（反向）"
+
+#: documentswitcherplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views in reverse."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr "開啟清單並反向瀏覽上次使用的檢視。"

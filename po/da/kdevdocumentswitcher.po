@@ -1,0 +1,75 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Martin Schlander <mschlander@opensuse.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-26 13:44+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: documentswitcherplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Last Used Views"
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Senest brugte visninger"
+
+#: documentswitcherplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr "Åbner en liste til gennemgang af senest brugte visninger."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Walk through the list of last used views"
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Gå gennem listen over de sidst brugte visninger"
+
+#: documentswitcherplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Last Used Views (Reverse)"
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "De sidst brugte visninger (baglæns)"
+
+#: documentswitcherplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views in reverse."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr "Åbner en liste til omvendt gennemgang af senest brugte visninger."
+
+#~ msgid "Document Switcher"
+#~ msgstr "Dokumentskifter"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk"
+
+#~ msgid "Switch between open documents using most-recently-used list"
+#~ msgstr "Skift mellem åbne dokumenter med for-nylig-brugt listen"
+
+#~ msgid ""
+#~ "<b>Walk through last used Views</b><br/>Opens a list to walk through the "
+#~ "list of last used views."
+#~ msgstr ""
+#~ "<b>Gå gennem de sidst brugte visninger</b><br/>Åbner en liste til at "
+#~ "gennemgå de sidst brugte visninger."

@@ -1,0 +1,214 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-21 12:02+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makebuilderpreferences.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr "Make-instellingen configureren"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "&Afbreken bij de eerste fout:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Opdrachten tonen maar ze niet uitvoeren:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "A&ls root installeren:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "Installatie-%commando om als root te installeren:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "Aa&ntal parallelle taken:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "Uitvoerbaar bestand &maken:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "Standaard make-&doel:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Aanvullende ma&ke-opties:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Actief omgevings&profiel:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr "Overschrijf het aantal &taken:"
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Item voor bouwen is niet langer beschikbaar"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Interne fout: een bestandsitem kan niet worden gebouwd"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "gksu"
+#~ msgstr "gksu"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Beeld"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "Make Builder"
+#~ msgstr "Make-bouwer"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Ondersteuning voor aanmaken van Make-projecten"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Ongeldige bouw-map '%1'"
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "'%1' is geen lokaal pad"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "'%1' is geen map"
+
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Kon bouw-commando voor doelen '%1' niet aanmaken"
+
+#~ msgid "Job failed"
+#~ msgstr "Taak mislukt"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Mislukt ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Voltooid ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Afgebroken. ***"
+
+#~ msgid "Build, then install as root"
+#~ msgstr "Bouwen en dan als root installeren"
+
+#~ msgid "compiling"
+#~ msgstr "compileren"
+
+#~ msgid "generating"
+#~ msgstr "genereren"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "linken"
+
+#~ msgid "built"
+#~ msgstr "bouwt"
+
+#~ msgid "installing"
+#~ msgstr "installeren"
+
+#~ msgid "creating"
+#~ msgstr "aanmaken"
+
+#~ msgid ""
+#~ "If checked and some include files cannot be resolved, make will be "
+#~ "invoked in dry mode to try and figure out include paths from the command "
+#~ "line."
+#~ msgstr ""
+#~ "Indien geactiveerd en sommige in te voegen bestanden kunnen niet worden "
+#~ "gevonden, dan zal make worden aangeroepen in dry-mode om te proberen en "
+#~ "uit te zoeken welke include-paden vanaf de opdrachtregel ingevoegd moeten "
+#~ "worden."
+
+#~ msgid "Use make to find unresolved &includes:"
+#~ msgstr "Om niet opgeloste &include-bestanden te vinden gebruik dan make:"

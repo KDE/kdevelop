@@ -1,0 +1,508 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2013, 2019.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecute\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2019-08-28 09:43+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Υπάρχει σφάλμα εισαγωγικών στα ορίσματα για τη διαμόρφωση εκκίνησης '%1'. "
+"Εγκατάλειψη έναρξης."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Ένας μεταχαρακτήρας φλοιού συμπεριελήφθη στα ορίσματα για τη διαμόρφωση "
+"εκκίνησης '%1', αυτό δεν υποστηρίζεται προς το παρόν. Εγκατάλειψη έναρξης."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "Αδυναμία επίλυσης της εξάρτησης: %1"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Δεν ορίστηκε έγκυρο εκτελέσιμο"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Υπάρχει σφάλμα εισαγωγικών στο εκτελέσιμο για τη διαμόρφωση εκκίνησης '%1'. "
+"Εγκατάλειψη έναρξης."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Ένας μεταχαρακτήρας φλοιού συμπεριελήφθη στο εκτελέσιμο για τη διαμόρφωση "
+"εκκίνησης '%1', αυτό δεν υποστηρίζεται προς το παρόν. Εγκατάλειψη έναρξης."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr ""
+
+#: nativeappconfig.cpp:105
+#, fuzzy, kde-format
+#| msgid "Kill All Instances"
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "Τερματισμός όλων των εκτελέσεων"
+
+#: nativeappconfig.cpp:106
+#, fuzzy, kde-format
+#| msgid "Start Another"
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "Εκκίνηση άλλης"
+
+#: nativeappconfig.cpp:156
+#, fuzzy, kde-format
+#| msgid "Configure Native Application"
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Διαμόρφωση εγγενούς εφαρμογής"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "Εκτελεί εγγενείς εφαρμογές"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "Εγγενής εφαρμογή"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "Μεταγλωττισμένο εκτελέσιμο"
+
+#: nativeappconfig.cpp:322
+#, fuzzy, kde-format
+#| msgid "Project Executables"
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Εκτελέσιμα έργου"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Executable"
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Εκτελέσιμο"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, fuzzy, kde-format
+#| msgid "Project &target:"
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "Προορισμός έρ&γου:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, fuzzy, kde-format
+#| msgid "E&xecutable:"
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "Ε&κτελέσιμο:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "Δώστε το εκτελέσιμο ή την απόλυτη διαδρομή σε ένα εκτελέσιμο αρχείο"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr "Δώστε το εκτελέσιμο ή την απόλυτη διαδρομή σε ένα εκτελέσιμο αρχείο"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Συμπεριφορά"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, fuzzy, kde-format
+#| msgid "Ar&guments:"
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "Ο&ρίσματα:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Enter arguments to give to the executable.<br/>You "
+#| "can pass arguments containing space characters by putting them in double-"
+#| "quotes.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Εισάγετε τα ορίσματα για το εκτελέσιμο.<br/>Μπορείτε "
+"να περάσετε ορίσματα που περιέχουν κενούς χαρακτήρες κλείνοντας τα ορίσματα "
+"με διπλά εισαγωγικά.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, fuzzy, kde-format
+#| msgid "Working &directory:"
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "Κατάλογος εργα&σίας:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, fuzzy, kde-format
+#| msgid "Select a working directory for the executable"
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Επιλογή καταλόγου εργασίας για το εκτελέσιμο"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, fuzzy, kde-format
+#| msgid "E&nvironment:"
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "Περι&βάλλον:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Επιλογή περιβάλλοντος εργασίας"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>By default applications will be run in the background and only their "
+#| "output will be displayed in a tool view. This makes it impossible to "
+#| "interact with applications requiring user input from a terminal emulator. "
+#| "To run such applications, you should use an external terminal.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Προεπιλεγμένα οι εφαρμογές θα εκτελούνται στο παρασκήνιο και μόνο η "
+"έξοδος θα εμφανίζεται στην προβολή εργαλείων. Αυτό καθιστά αδύνατη την "
+"αλληλεπίδραση με εφαρμογές που απαιτούν δεδομένα εισόδου του χρήστη από έναν "
+"εξομοιωτή τερματικού. Για την εκτέλεση παρόμοιων εφαρμογών, θα πρέπει να "
+"χρησιμοποιήσετε εξωτερικό τερματικό.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, fuzzy, kde-format
+#| msgid "Use external terminal:"
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Χρήση εξωτερικού τερματικού:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "<p>Defines the command to execute the external terminal emulator. Use the "
+#| "following placeholders:</p>\n"
+#| "<dl>\n"
+#| "<dt><code>%exe</code></dt>\n"
+#| "<dd>The path to the executable selected above.</dd>\n"
+#| "<dt><code>%workdir</code></dt>\n"
+#| "<dd>The path to the working directory selected above.</dd>\n"
+#| "</dl>\n"
+#| "<p>The arguments defined above will get appended to this command.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Καθορίζει την εντολή για την εκτέλεση του εξωτερικού εξομοιωτή "
+"τερματικού. Χρησιμοποιήστε τα ακόλουθα πλαίσια:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>Η διαδρομή στο εκτελέσιμο που επιλέχθηκε παραπάνω.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>Η διαδρομή στον κατάλογο εργασίας που επιλέχθηκε παραπάνω.</dd>\n"
+"</dl>\n"
+"<p>Τα παραπάνω ορίσματα θα προστεθούν σε αυτήν την εντολή.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Εξαρτήσεις"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, fuzzy, kde-format
+#| msgid "Act&ion:"
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "Ενέργε&ια:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, fuzzy, kde-format
+#| msgid ""
+#| "Specifies the action to take for the dependencies before starting the "
+#| "executable."
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr ""
+"Προσδιορίζει την ενέργεια που θα πραγματοποιηθεί για τις εξαρτήσεις πριν από "
+"την εκκίνηση του εκτελέσιμου."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected action will be run before the executable is started.  This "
+#| "allows there to be parts of a project, upon which the executable does not "
+#| "directly depend, to be built and/or installed before running the "
+#| "application."
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"Η επιλεγμένη ενέργεια θα εκτελεστεί πριν από την εκκίνηση του εκτελέσιμου. "
+"Αυτό επιτρέπει την ύπαρξη τμημάτων του έργου από τα οποία το εκτελέσιμο δεν "
+"εξαρτάται άμεσα και που μπορούν να κατασκευαστούν ή/και εγκατασταθούν πριν "
+"από την εκτέλεση της εφαρμογής."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, fuzzy, kde-format
+#| msgid "Do Nothing"
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "Μην κάνετε τίποτα"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Κατασκευή"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build and Install"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Κατασκευή και εγκατάσταση"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Προορισμοί:"
+
+#: nativeappjob.cpp:66
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Δεν έχει οριστεί προφίλ περιβάλλοντος, η διαμόρφωση φαίνεται προβληματική, "
+"παρακαλώ ελέγξτε τη διαμόρφωση εκτέλεσης '%1'. Χρησιμοποιήστε το "
+"προκαθορισμένο προφίλ περιβάλλοντος."
+
+#: nativeappjob.cpp:142
+#, fuzzy, kde-format
+#| msgid "Job already running"
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "Η εργασία εκτελείται ήδη"
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "Η '%1' εκτελείται ήδη."
+
+#: nativeappjob.cpp:145
+#, fuzzy, kde-format
+#| msgid "Kill All Instances"
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "Τερματισμός όλων των εκτελέσεων"
+
+#: nativeappjob.cpp:146
+#, fuzzy, kde-format
+#| msgid "Start Another"
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "Εκκίνηση άλλης"
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr ""
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Δώστε τα ορίσματα που θα περάσουν στο εκτελέσιμο"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Εκκίνηση: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Τερματισμός εφαρμογής ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Έξοδος κανονικά ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Έξοδος με κωδικό επιστροφής: %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Εγκατάλειψη διεργασίας ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Κατάρρευση με κωδικό επιστροφής: %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "***Αδυναμία εκκίνησης του προγράμματος '%1'. Βεβαιωθείτε ότι η διαδρομή "
+#~ "έχει οριστεί σωστά ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Δώστε μια εξάρτηση για να προστεθεί στη λίστα"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Προσθέτει τον προορισμό στη λίστα εξαρτήσεων."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Λίστα των έμμεσα εξαρτημένων προορισμών"
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Αυτή η λίστα θα πρέπει να περιέχει προορισμούς από τους οποίους η "
+#~ "εφαρμογή δεν εξαρτάται άμεσα, αλλά για τους οποίους κάποια ενέργεια "
+#~ "απαιτείται να ληφθεί πριν από την εκτέλεση της εφαρμογής."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Αφαιρεί τις επιλεγμένες εξαρτήσεις από τη λίστα."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Μετακινεί προς τα επάνω μια εξάρτηση στη λίστα."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Μετακινεί προς τα κάτω την επιλεγμένη εξάρτηση στη λίστα."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Execute support"
+#~ msgstr "Υποστήριξη εκτέλεσης"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "Αυτό το πρόσθετο επιτρέπει την εκτέλεση προγραμμάτων χωρίς οργανωτή, πχ. "
+#~ "εγγενώς από τον τρέχοντα υπολογιστή."
+
+#~ msgid "Application"
+#~ msgstr "Εφαρμογή"
+
+#~ msgid "Allows running of native apps"
+#~ msgstr "Επιτρέπει την εκτέλεση εγγενών εφαρμογών"
+
+#~ msgid "Could not start application"
+#~ msgstr "Αδυναμία εκκίνησης της εφαρμογής"
+
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid "Run in external konsole"
+#~ msgstr "Εκτέλεση σε εξωτερική konsole"
+
+#~ msgid "Unsupported instrumentor"
+#~ msgstr "Μη υποστηριζόμενος οργανωτής"

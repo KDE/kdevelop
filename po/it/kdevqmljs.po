@@ -1,0 +1,232 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevelop package.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-07-31 18:30+0100\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr "Scegli la posizione"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "Nome:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "Percorso:"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr "Nome della &classe:"
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr "Classe &base:"
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr "Informazioni di &tipo:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "Nessuna"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr "Eredita da QObject"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr "Eredita da QWidget"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr "Eredita da QDeclarativeItem - Qt Quick 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr "Eredita da QQuickItem - Qt Quick 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr "Basato su QSharedData"
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr "File di &intestazione:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr "File &sorgente:"
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr "&Genera modulo:"
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr "File del &modulo:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "&Percorso:"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr "Introduzione e posizione del progetto"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr "Crea in:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr "Usa come posizione predefinita del progetto"
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "Progetto:"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+"Possibile mancata corrispondenza di tipo tra il tipo dell'argomento (%1) ed "
+"il valore passato come argomento (%2)"
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr ""
+"Modulo non trovato, alcuni tipi o proprietà potrebbero non essere "
+"riconosciuti"
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr ""
+"Mancata corrispondenza tra il tipo del valore (%1) e il tipo della proprietà "
+"(%2)"
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Errore durante il caricamento del file QML: %1"
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr "Durata in millisecondi"
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr "Ma la volpe col suo balzo<br> ha raggiunto il quieto Fido."
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr "Famiglia dei caratteri"
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr "Dimensione dei caratteri"
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr "Altezza di un elemento in pixel"
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr "Opacità di un elemento"
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr "Spaziatura tra gli elementi"
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr "Larghezza di un elemento in pixel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Luigi Toscano"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "luigi.toscano@tiscali.it"
+
+#~ msgid "Descriptio&n"
+#~ msgstr "Descrizio&ne"
+
+#~ msgid "F&iles"
+#~ msgstr "F&ile"
+
+#~ msgid "Check a&ll"
+#~ msgstr "Contro&lla tutti"

@@ -1,0 +1,132 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2019, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 16:25+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: scratchpad.cpp:104 scratchpadview.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Scratchpad"
+msgstr "Scratchpad"
+
+#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "blocconote:%1"
+
+#: scratchpad.cpp:168
+#, kde-format
+msgid "Failed to remove scratch: %1"
+msgstr "Rimozione dell'appunto non riuscita: %1"
+
+#: scratchpad.cpp:175
+#, kde-format
+msgid "Failed to create scratch: Name already in use"
+msgstr "Creazione dell'appunto non riuscita: nome già in uso"
+
+#: scratchpad.cpp:187
+#, kde-format
+msgid "Failed to create new scratch"
+msgstr "Creazione di un nuovo appunto non riuscita"
+
+#: scratchpad.cpp:196
+#, kde-format
+msgid "Failed to rename scratch: Names must not include path separator"
+msgstr ""
+"Rinomina dell'appunto non riuscita: i nomi non possono includere il "
+"separatore di percorsi"
+
+#: scratchpad.cpp:226
+#, kde-format
+msgid "Failed renaming scratch."
+msgstr "Rinomina dell'appunto non riuscita"
+
+#: scratchpadjob.cpp:57
+#, kde-format
+msgid "Running %1..."
+msgstr "Esecuzione di %1..."
+
+#: scratchpadjob.cpp:73
+#, kde-format
+msgid "Process finished with exit code %1."
+msgstr "Processo concluso con codice di uscita %1."
+
+#: scratchpadjob.cpp:80
+#, kde-format
+msgid "Failed to run scratch: %1"
+msgstr "Esecuzione dell'appunto non riuscita: %1"
+
+#: scratchpadview.cpp:100
+#, kde-format
+msgid ""
+"Scratchpad lets you quickly run and experiment with code without a full "
+"project, and even store todos. Create a new scratch to start."
+msgstr ""
+"Il blocco appunti ti permette di sperimentare ed eseguire rapidamente il "
+"codice senza un progetto completo, ed anche memorizzare un elenco di cose da "
+"fare. Crea un nuovo appunto per iniziare."
+
+#: scratchpadview.cpp:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Command to run this scratch. '$f' will expand to the scratch path."
+msgstr ""
+"Commando per eseguire questo appunto. «$f» verrà espanso con il percorso "
+"dell'appunto."
+
+#: scratchpadview.cpp:137
+#, kde-format
+msgctxt "@action"
+msgid "New Scratch"
+msgstr "Nuovo appunto"
+
+#: scratchpadview.cpp:141
+#, kde-format
+msgctxt "@action"
+msgid "Remove Scratch"
+msgstr "Rimuovi appunto"
+
+#: scratchpadview.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Rename Scratch"
+msgstr "Rinomina appunto"
+
+#: scratchpadview.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Run Scratch"
+msgstr "Esegui appunto"
+
+#: scratchpadview.cpp:164
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtro..."
+
+#: scratchpadview.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Scratch"
+msgstr "Crea nuovo appunto"
+
+#: scratchpadview.cpp:205
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for scratch file:"
+msgstr "Inserisci il nome per il file di appunti:"

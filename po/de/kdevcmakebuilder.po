@@ -1,0 +1,155 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2012, 2013, 2014, 2015, 2016, 2017.
+# Thomas Reitelbach <tr@erdfunkstelle.de>, 2009.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2013, 2015, 2016, 2020.
+# Gerhard Stengel <gstengel@gmx.net>, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-08-23 13:43+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr ""
+"Ersteller für Make-Projekte wurde nicht gefunden. Prüfen Sie Ihre "
+"Installation"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "Ersteller für %1 kann nicht gefunden werden."
+
+#: cmakebuilder.cpp:195
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "Es ist kein Build-Ordner eingerichtet; Installieren nicht möglich"
+
+#: cmakebuilder.cpp:205
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "Es ist kein Build-Ordner eingerichtet; Konfigurieren nicht möglich"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Globale CMake-Einstellungen einrichten"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Standard-CMake-Programmdatei:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Standard-Generator:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Interner Fehler: Es ist kein Projekt zum Einrichten angegeben."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Der Build-Ordner kann nicht erstellt werden %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr ""
+"Es ist kein Build-Ordner eingerichtet; Leeren des Build-Ordners nicht möglich"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Falscher Build-Ordner, Leeren nicht möglich"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Aufräumen erfolgreich **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Aufräumen fehlgeschlagen: %1 **"
+
+#~ msgid "Aborting"
+#~ msgstr "Vorgang wird abgebrochen"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Konfigurieren wird abgebrochen"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "Es ist kein Build-Ordner eingerichtet, Erstellen nicht möglich"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Es ist kein Build-Ordner eingerichtet, Aufräumen nicht möglich"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Aufräumen wird abgebrochen"
+
+#~ msgid "Aborting install"
+#~ msgstr "Installieren wird abgebrochen"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "CMake Builder"
+#~ msgstr "CMake-Builder"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Unterstützung für die Erstellung von CMake-Projekten"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "Leeren des Build-Ordners ist nicht möglich"
+
+#~ msgid "Job failed"
+#~ msgstr "Auftrag fehlgeschlagen"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake-Programmdatei:"
+
+#~ msgid "'%1' + '%2'"
+#~ msgstr "'%1' + '%2'"

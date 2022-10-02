@@ -1,0 +1,221 @@
+# Translation of kdevappwizard to Norwegian Bokmål
+#
+# Bjørn Steensrud <bjornst@skogkatt.homelinux.org>, 2010, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: KDE 4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2013-04-01 13:55+0200\n"
+"Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
+"Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 1.4\n"
+
+#: appwizarddialog.cpp:23
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr ""
+
+#: appwizarddialog.cpp:37
+#, kde-format
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr ""
+
+#: appwizarddialog.cpp:39
+#, kde-format
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr ""
+
+#: appwizardplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr ""
+
+#: appwizardplugin.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr ""
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr ""
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr ""
+
+#: appwizardplugin.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr ""
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Klarte ikke klargjøre DVCS-lager"
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr ""
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Klarte ikke legge til filer til DVCS-lager"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Klarte ikke importere prosjekt til %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Klarte ikke importere prosjekt"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Klarte ikke sjekke ut importert prosjekt"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Klarte ikke å opprette nytt prosjekt"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Fila %1 kan ikke opprettes."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Prosjektmaler"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr ""
+
+#: projectselectionpage.cpp:57
+#, kde-format
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr ""
+
+#: projectselectionpage.cpp:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr ""
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr ""
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Ugyldig sted"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Tomt prosjektnavn"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Ugyldig prosjektnavn"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Klarer ikke opprette undermapper, mangler rettigheter på: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Ugyldig prosjektmal, velg et blad-element"
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr ""
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"Den oppgitte stien finnes fra før. Er du sikker på at du vil fortsette?"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Properties"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr ""
+
+#: projectvcspage.cpp:33
+#, kde-format
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr ""

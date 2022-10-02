@@ -1,0 +1,1223 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2012.
+# Alexey Morozov <morozov@gmail.com>, 2011.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"PO-Revision-Date: 2022-03-10 15:35+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#, kde-format
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Дизассемблер/Регистры"
+
+#: debuggerplugin.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Память"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
+#: debuggertracingdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Tracing Configuration"
+msgstr "Конфигурация трассировки"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
+#: debuggertracingdialog.ui:26
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Custom format string</b>\n"
+"<p>Specify a C-style format string that will be used when printing the "
+"chosen expression. For example:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"If custom format string is not enabled, names and values of all expressions "
+"will be printed, using \"%d\" as format specifier for all expressions."
+msgstr ""
+"<b>Изменить форматную строку</b>\n"
+"<p>Укажите спецификатор формата строки в стиле C, который будет использован "
+"при печати выбранного выражения. Например:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"Формат строки по умолчанию — «%d»."
+
+#. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
+#: debuggertracingdialog.ui:36
+#, kde-format
+msgctxt "@label"
+msgid "Expressions to print:"
+msgstr "Выводимые выражения:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:47
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"<b>Enable tracing</b>\n"
+"<p>Tracing is a mechanism to automatically print values of the chosen "
+"expressions and continue execution when breakpoint is hit. You can think of "
+"it as printf debugging that does not require modifying the source.</p>"
+msgstr ""
+"<b>Включить трассировку</b>\n"
+"<p>Трассировка заключается в автоматическом выводе значений указанных "
+"выражений. Другими словами, это аналог отладки посредством вставки команд "
+"printf, без необходимости изменять код.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable tracing"
+msgstr "Включить трассировку"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
+#: debuggertracingdialog.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Custom format string"
+msgstr "Пользовательская строка форматирования"
+
+#: debugsession.cpp:170
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Профиль среды не указан. Похоже, конфигурация неверна. Проверьте "
+"конфигурацию запуска «%1». Будет использоваться профиль среды по умолчанию."
+
+#: debugsession.cpp:281
+#, kde-format
+msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+msgstr ""
+"<b>Требуется GDB версии 7.0.0 или старше.</b><br/>В настоящее время "
+"используется: %1"
+
+#: debugsession.cpp:294
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Не удалось запустить отладчик:</b><br />"
+
+#: debugsession.cpp:308
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Не удалось загрузить файл дампа</b><p>Отладчик сообщил о следующей ошибке:"
+"<p><tt>%1"
+
+#: gdb.cpp:69
+#, kde-format
+msgid "Could not locate the debugging shell '%1'."
+msgstr "Не удалось найти отладочную оболочку «%1»."
+
+#: gdbconfigpage.cpp:92
+#, kde-format
+msgctxt "@title:tab"
+msgid "GDB Configuration"
+msgstr "Настройка GDB"
+
+#: gdbconfigpage.cpp:133
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Отладка программы уже выполняется. Прервать текущий сеанс отладки и "
+"продолжить запуск?"
+
+#: gdbconfigpage.cpp:135
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: gdbconfigpage.cpp:161
+#, kde-format
+msgid "Executes a native application in GDB"
+msgstr "Выполняет обычное приложение в GDB"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: gdbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Отладчик"
+
+#. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
+#: gdbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger e&xecutable:"
+msgstr "Испо&лняемый файл отладчика:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Gdb executable"
+msgstr "Исполняемый файл gdb"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:51
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
+"gdb, for example, for a different architecture, enter the executable name "
+"here. You can either run gdb from $PATH, but with a different name (say, "
+"\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+"executable."
+msgstr ""
+"Для использования исполняемого файла «gdb», находящегося по системному пути "
+"$PATH, оставьте это поле пустым. Чтобы запустить нестандартный gdb, "
+"например, для другой архитектуры, укажите здесь имя исполняемого файла. Вы "
+"можете указать здесь только другое имя (к примеру, «arm-gdb»), и тогда также "
+"будет использоваться $PATH, либо ввести полный путь к исполняемому файлу gdb."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:54
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to gdb executable..."
+msgstr "Переопределить путь к исполняемому файлу gdb…"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
+#: gdbconfigpage.ui:61 gdbconfigpage.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>If you want gdb to be executed by a special shell "
+"script, which for example properly sets the library path, insert it here e."
+"g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+"invoked like this: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+"span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Если gdb следует запускать с помощью специального "
+"сценария оболочки, который, например, правильно устанавливает путь к "
+"библиотекам, укажите его здесь. Пример: /путь/к/script.sh --"
+"АргументыСценария</p><p>Примечание: сценарий будет вызываться следующим "
+"образом: /путь/к/script.sh --АргументыСценария отладчик --"
+"АргументыОтладчика. Поэтому script.sh <span style=\" font-weight:600;"
+"\">должен</span> вызывать исполняемый файл &quot;отладчика&quot; вручную.</"
+"p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
+#: gdbconfigpage.ui:64
+#, kde-format
+msgctxt "@label:chooser"
+msgid "She&ll script:"
+msgstr "С&ценарий оболочки:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: gdbconfigpage.ui:87
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Параметры"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: gdbconfigpage.ui:96
+#, kde-format
+msgctxt "@option:check"
+msgid "Display static &members:"
+msgstr "Показывать &статические члены:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
+#: gdbconfigpage.ui:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displaying static members makes GDB slower in\n"
+"producing data with Qt-based code.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on,\n"
+"but if you need to debug into these values then\n"
+"check this option."
+msgstr ""
+"Отображение статических членов замедляет GDB\n"
+"при обработке кода на основе Qt.\n"
+"Это может изменить сигнатуру данных,\n"
+"на которую полагается QString и дружественные классы,\n"
+"но если необходима отладка их значений, установите\n"
+"этот флажок."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gdbconfigpage.ui:121
+#, kde-format
+msgctxt "@option:check"
+msgid "Display &demangled names:"
+msgstr "Показывать &читабельные имена:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
+#: gdbconfigpage.ui:133
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"When displaying the disassembled code you\n"
+"can select to see the methods' mangled names.\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"При отображении дизассемблированного кода\n"
+"вы можете видеть декорированные имена методов.\n"
+"Однако легче читаются недекорированные имена."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gdbconfigpage.ui:143
+#, kde-format
+msgctxt "@label:listbox"
+msgid "S&tart debugger with:"
+msgstr "При &запуске отладчика открывать:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:154
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Вывод приложения"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:159
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "GDB Console"
+msgstr "Консоль GDB"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:164
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Стек"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:178
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This script is intended for the actual commands needed to connect to a "
+"remotely running executable.\n"
+"\tshell sleep 5\twait for remote program to start\n"
+"\ttarget remote ...\tconnect to the remote debugger\n"
+"\tcontinue\t[optional] run debugging to the first breakpoint"
+msgstr ""
+"Этот сценарий предназначен для команд, необходимых для соединения с "
+"удалённым работающим приложением.\n"
+"\tshell sleep 5\tожидать запуска удалённой программы\n"
+"\ttarget remote ...\tподключиться к удалённому отладчику\n"
+"\tcontinue\t[не обязательно] начать отладку до первой точки останова"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:181
+#, kde-format
+msgctxt "@title:group"
+msgid "Remote Debugging"
+msgstr "Удалённая отладка"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
+#: gdbconfigpage.ui:187 gdbconfigpage.ui:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to start remote application</p><p></p><p>This "
+"shell script is run after the Gdb Config script has been sourced by gdb.</"
+"p><p>It's purpose is to actually start the remote process.</p><p>1) Find a "
+"way to execute a command remotely - rsh, ssh, telnet, ...</p><p>2a) Execute "
+"&quot;gdbserver ... application&quot; on target.</p><p>or if your executable "
+"contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
+"p></body></html>"
+msgstr ""
+"<html><head/><body><p>Сценарий для запуска удалённого приложения</p><p></"
+"p><p>Этот сценарий оболочки запускается после сценария настройки gdb, "
+"который поставляется с gdb.</p><p>Его целью является запуск удалённого "
+"процесса.</p><p>1) Определитесь со способом удалённого выполнения команды — "
+"rsh, ssh, telnet, ...</p><p>2a) Выполните команду &quot;gdbserver ... "
+"приложение&quot; на удалённом компьютере.</p><p>или, если ваша программа "
+"содержит заглушку gdb:</p><p>2b) Выполните команду &quot;приложение&quot; на "
+"удалённом компьютере.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
+#: gdbconfigpage.ui:190
+#, kde-format
+msgctxt "@label:chooser Shell script to be executed at run time"
+msgid "R&un shell script:"
+msgstr "З&апустить сценарий оболочки:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
+#: gdbconfigpage.ui:210 gdbconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This script is sourced by gdb when the debugging starts."
+msgstr "Этот сценарий передаётся gdb перед началом отладки."
+
+#. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
+#: gdbconfigpage.ui:213
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Gdb &config script:"
+msgstr "Сценарий &настройки gdb:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
+#. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:226 gdbconfigpage.ui:233
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to connect with remote application</p><p>For "
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Сценарий для установки соединения с удалённым "
+"приложением</p><p>Например:</p><p>\tshell sleep 5\t #ожидать запуска "
+"удалённой программы</p><p>\ttarget remote ...\t#подключиться к удалённому "
+"отладчику</p><p>\tcontinue\t#[необязательно] выполнить отладку до первой "
+"точки останова.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:236
+#, kde-format
+msgctxt "@label:chooser Gdb script to be executed at run time."
+msgid "Run &gdb script:"
+msgstr "Запустить сценарий &GDB:"
+
+#: gdboutputwidget.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB Output"
+msgstr "Вывод GDB"
+
+#: gdboutputwidget.cpp:48
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
+"issue any other GDB command while debugging.</p>"
+msgstr ""
+"<b>Вывод GDB</b><p>Показывает все выполняемые команды GDB. Вы также можете "
+"выполнить любую команду GDB вручную при отладке.</p>"
+
+#: gdboutputwidget.cpp:58
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&GDB command:"
+msgstr "К&оманда GDB:"
+
+#: gdboutputwidget.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter GDB commands"
+msgstr "Приостановить выполнение приложения для ввода команд GDB"
+
+#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Internal Commands"
+msgstr "Показывать внутренние команды"
+
+#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Определяет, будут ли выводиться команды, которые передаёт KDevelop."
+"<br>Изменение этого параметра повлияет только на последующий вывод. Уже "
+"выполненные команды в окне не добавятся и не удалятся."
+
+#: gdboutputwidget.cpp:381
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy All"
+msgstr "Копировать всё"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevgdbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Панель инструментов отладки"
+
+#: memviewdlg.cpp:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Start:"
+msgstr "Запуск:"
+
+#: memviewdlg.cpp:69
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Amount:"
+msgstr "Величина:"
+
+#: memviewdlg.cpp:96
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory View"
+msgstr "Просмотр памяти"
+
+#: memviewdlg.cpp:223
+#, kde-format
+msgid "%2 (1 byte)"
+msgid_plural "%2 (%1 bytes)"
+msgstr[0] "%2 (%1 байт)"
+msgstr[1] "%2 (%1 байта)"
+msgstr[2] "%2 (%1 байтов)"
+msgstr[3] "%2 (%1 байт)"
+
+#: memviewdlg.cpp:262
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "&Reload"
+msgstr "&Обновить"
+
+#: memviewdlg.cpp:271
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Format"
+msgstr "&Формат"
+
+#: memviewdlg.cpp:274
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Binary"
+msgstr "&Двоичный"
+
+#: memviewdlg.cpp:279
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Octal"
+msgstr "&Восьмеричный"
+
+#: memviewdlg.cpp:284
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Decimal"
+msgstr "Д&есятичный"
+
+#: memviewdlg.cpp:289
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Hexadecimal"
+msgstr "&Шестнадцатеричный"
+
+#: memviewdlg.cpp:303
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Grouping"
+msgstr "&Группировка"
+
+#: memviewdlg.cpp:306
+#, kde-format
+msgctxt "@item:inmenu no byte grouping"
+msgid "&0"
+msgstr "&0"
+
+#: memviewdlg.cpp:311
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&1"
+msgstr "&1"
+
+#: memviewdlg.cpp:316
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&2"
+msgstr "&2"
+
+#: memviewdlg.cpp:321
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&4"
+msgstr "&4"
+
+#: memviewdlg.cpp:326
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&8"
+msgstr "&8"
+
+#: memviewdlg.cpp:331
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "1&6"
+msgstr "1&6"
+
+#: memviewdlg.cpp:344
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Write Changes"
+msgstr "Записать изменения"
+
+#: memviewdlg.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Change Memory Range"
+msgstr "Изменить диапазон памяти"
+
+#: memviewdlg.cpp:352
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close View"
+msgstr "Закрыть панель"
+
+#: memviewdlg.cpp:419
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory Viewer"
+msgstr "Просмотр памяти"
+
+#: memviewdlg.cpp:423
+#, kde-format
+msgctxt "@action"
+msgid "New Memory Viewer"
+msgstr "Новое окно просмотра памяти"
+
+#: memviewdlg.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open a new memory viewer"
+msgstr "Открыть новое окно просмотра памяти"
+
+#~ msgid "gdb error"
+#~ msgstr "Ошибка GDB"
+
+#~ msgid "Startup error"
+#~ msgstr "Ошибка запуска"
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Отладочная оболочка не найдена"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Настройка отладчика"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Выполнение"
+
+#~ msgid "OK"
+#~ msgstr "ОК"
+
+#~ msgid "Cancel"
+#~ msgstr "Отмена"
+
+#~ msgid "Address Selector"
+#~ msgstr "Выбор адреса"
+
+#~ msgid "Change &address"
+#~ msgstr "Изменить &адрес"
+
+#~ msgid "&Jump to Cursor"
+#~ msgstr "&Перейти к курсору"
+
+#~ msgid "Sets the execution pointer to the current cursor position."
+#~ msgstr ""
+#~ "Устанавливает указатель выполняемой команды в текущее положение курсора."
+
+#~ msgid "&Run to Cursor"
+#~ msgstr "&Выполнить до курсора"
+
+#~ msgid "Continues execution until the cursor position is reached."
+#~ msgstr "Продолжает выполнение до достижения позиции курсора в коде."
+
+#, fuzzy
+#~ msgid "Disassembly flavor"
+#~ msgstr "Дизассемблер"
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>Окно машинного кода</b><p>Окно машинного кода в работающей программе с "
+#~ "подсветкой текущей инструкции. Вы можете переходить от инструкции к "
+#~ "инструкции, используя кнопки «Шаг с обходом» и «Шаг с заходом» на панели "
+#~ "инструментов отладчика."
+
+#~ msgid "Address"
+#~ msgstr "Адрес"
+
+#~ msgid "Function"
+#~ msgstr "Функция"
+
+#~ msgid "Instruction"
+#~ msgstr "Инструкция"
+
+#, fuzzy
+#~ msgid "Disassemble/Registers View"
+#~ msgstr "Ассемблерный код"
+
+#, fuzzy
+#~ msgid "Binary"
+#~ msgstr "&Двоичный"
+
+#, fuzzy
+#~ msgid "Octal"
+#~ msgstr "&Восьмеричный"
+
+#, fuzzy
+#~ msgid "Decimal"
+#~ msgstr "Д&есятичный"
+
+#, fuzzy
+#~ msgid "Hexadecimal"
+#~ msgstr "&Шестнадцатеричный"
+
+#, fuzzy
+#~ msgid "Format"
+#~ msgstr "&Формат"
+
+#~ msgid "Address selector"
+#~ msgstr "Выбор адреса"
+
+#~ msgid "Select the address to disassemble around"
+#~ msgstr "Укажите адрес, определяющий место дизассемблирования кода"
+
+#~ msgid "Select address to disassemble around"
+#~ msgstr "Укажите адрес кода для дизассемблирования"
+
+#~ msgid "Examine Core File..."
+#~ msgstr "Исследовать дамп памяти..."
+
+#~ msgid "Examine core file"
+#~ msgstr "Исследовать дамп памяти"
+
+#~ msgid ""
+#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
+#~ "created after the application has crashed, e.g. with a segmentation "
+#~ "fault. The core file contains an image of the program memory at the time "
+#~ "it crashed, allowing you to do a post-mortem analysis.</p>"
+#~ msgstr ""
+#~ "<b>Исследовать дамп памяти</b><p>Эта команда загружает файл дампа памяти, "
+#~ "который обычно создаётся при аварийном завершении приложения, например, "
+#~ "при ошибке сегментации. Файл дампа содержит образ памяти программы в "
+#~ "момент сбоя и позволяет провести анализ ошибки.</p>"
+
+#~ msgid "Attach to Process"
+#~ msgstr "Подключиться к процессу"
+
+#~ msgid "Attach to process..."
+#~ msgstr "Подключиться к процессу..."
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+#~ msgstr ""
+#~ "<b>Подключиться к процессу</b><p>Подключить отладчик к выполняющемуся "
+#~ "процессу.</p>"
+
+#~ msgid "KDevelop"
+#~ msgstr "KDevelop"
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "Вычислить: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Вычислить выражение</b><p>Показывает результат выражения под курсором."
+#~ "</p>"
+
+#~ msgid "Watch: %1"
+#~ msgstr "Наблюдать: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Наблюдать за выражением</b><p>Добавляет выражение под курсором в "
+#~ "список Переменные/Наблюдение.</p>"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Выберите файл дампа..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "Исследуется дамп памяти %1"
+
+#~ msgid "Debug core file"
+#~ msgstr "Отладка с файлом дампа"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "Выберите процесс для подключения к нему..."
+
+#~ msgid "Not attaching to process %1: cannot attach the debugger to itself."
+#~ msgstr ""
+#~ "Подключение к процессу %1 невозможно: отладчик не может подключиться сам "
+#~ "к себе."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "Подключение к процессу %1"
+
+#~ msgid "Debug process %1"
+#~ msgstr "Отладка процесса %1"
+
+#~ msgid "Attach to a process"
+#~ msgstr "Подключение к процессу"
+
+#~ msgid "Select Core File"
+#~ msgstr "Выбор файла дампа"
+
+#~ msgid "Executable:"
+#~ msgstr "Программа:"
+
+#~ msgid "Core File:"
+#~ msgstr "Файл дампа:"
+
+#~ msgid "<br>Old value: %1"
+#~ msgstr "<br>Старое значение: %1"
+
+#~ msgid "<br>New value: %1"
+#~ msgstr "<br>Новое значение: %1"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Отладчик завершил работу"
+
+#~ msgid "Process exited"
+#~ msgstr "Процесс завершён"
+
+#~ msgid "Application is running"
+#~ msgstr "Приложение выполняется"
+
+#~ msgid "Application is paused"
+#~ msgstr "Приложение приостановлено"
+
+#~ msgid "Debugger error"
+#~ msgstr "Ошибка отладчика"
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>Неожиданное завершение GDB</b><p>Причиной может быть ошибка в GDB. "
+#~ "Проверьте вывод gdb, после чего остановите отладку."
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "Нештатное завершение GDB"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>Команда gdb была передана отладчику, когда он не был запущен.</"
+#~ "b><br>Текст этой команды:<br> %1"
+
+#~ msgid "Internal error"
+#~ msgstr "Внутренняя ошибка"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>Неверная команда отладчика</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Неверная команда отладчика"
+
+#~ msgid "Exited with return code: %1"
+#~ msgstr "Завершение с кодом возврата %1"
+
+#~ msgid "Exited normally"
+#~ msgstr "Завершение без ошибок"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "Выход по сигналу %1"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Программа получила сигнал %1 (%2)"
+
+#~ msgid "Running program"
+#~ msgstr "Выполнение программы"
+
+#~ msgid "Warning"
+#~ msgstr "Предупреждение"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Ошибка отладчика</b><p>Отладчик сообщил о следующей ошибке:<p><tt>%1"
+
+#~ msgid "1 command in queue\n"
+#~ msgid_plural "%1 commands in queue\n"
+#~ msgstr[0] "%1 команда в очереди\n"
+#~ msgstr[1] "%1 команды в очереди\n"
+#~ msgstr[2] "%1 команд в очереди\n"
+#~ msgstr[3] "%1 команда в очереди\n"
+
+#~ msgctxt "Only the 0 and 1 cases need to be translated"
+#~ msgid "1 command being processed by gdb\n"
+#~ msgid_plural "%1 commands being processed by gdb\n"
+#~ msgstr[0] "%1 команда обрабатывается GDB\n"
+#~ msgstr[1] "%1 команды обрабатываются GDB\n"
+#~ msgstr[2] "%1 команд обрабатывается GDB\n"
+#~ msgstr[3] "%1 команда обрабатывается GDB\n"
+
+#~ msgid "Debugger state: %1\n"
+#~ msgstr "Состояние отладчика: %1\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "Категория выполняемой команды: «%1»\n"
+#~ "Текст выполняемой команды: «%2»\n"
+#~ "Исходный текст выполняемой команды: «%3»\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "Состояние отладчика"
+
+#~ msgid "<b>Could not attach debugger:</b><br />"
+#~ msgstr "<b>Не удалось подключить отладчик:</b><br />"
+
+#~ msgctxt "<b>Internal debugger error</b>"
+#~ msgid ""
+#~ "<p>The debugger component encountered internal error while processing "
+#~ "reply from gdb. Please submit a bug report."
+#~ msgstr ""
+#~ "<p>В компоненте управления отладчиком при обработке ответа от gdb "
+#~ "произошла ошибка. Пожалуйста, отправьте отчёт об ошибке."
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "Исключение: %1\n"
+#~ "Ответ, полученный от MI: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "Внутренняя ошибка отладчика"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>Невозможно запустить отладчик.</b><p>Не удалось запустить «%1». "
+#~ "Проверьте правильность заданного пути."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Не удалось запустить отладчик"
+
+#~ msgid ""
+#~ "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
+#~ "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
+#~ msgstr ""
+#~ "<b>Произошёл сбой gdb.</b><p>В результате сеанс отладки был прекращён."
+#~ "<br>Попробуйте воспроизвести сбой с обычным gdb и сообщите об ошибке.<br>"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Сбой gdb"
+
+#, fuzzy
+#~ msgid "(running)"
+#~ msgstr "Предупреждение"
+
+#, fuzzy
+#~ msgid ""
+#~ "Cannot use the tty* or pty* devices.\n"
+#~ "Check the settings on /dev/tty* and /dev/pty*\n"
+#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
+#~ "the user to the tty group using \"usermod -aG tty username\"."
+#~ msgstr ""
+#~ "GDB не может использовать устройства tty* или pty*.\n"
+#~ "Проверьте атрибуты /dev/tty* и /dev/pty*.\n"
+#~ "Возможно, вам нужно выполнить от имени root команду \"chmod ug+rw\" для "
+#~ "tty* и pty* и/или добавить текущего пользователя в группу tty командой "
+#~ "\"usermod -G tty имя_пользователя\"."
+
+#~ msgid "Application interrupted"
+#~ msgstr "Приложение прервано"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Александр Дымо,Руслан Попов,Николай Шафоростов,Стас Иванов,Андрей "
+#~ "Черепанов,Дмитрий Рязанцев,Александр Поташев,Алексей Морозов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "adymo@kdevelop.org,rpopov@jet.msk.su,shafff@ukr.net,f0ma@smtp.ru,"
+#~ "sibskull@mail.ru,djm00n@rambler.ru,aspotashev@gmail.com,morozov@gmail.com"
+
+#~ msgid "GDB Support"
+#~ msgstr "Поддержка GDB"
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr ""
+#~ "Запустить gdb в специальной оболочке (в основном для проектов с automake)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Если вы хотите, чтобы gdb запускался в специальной оболочке или утилите, "
+#~ "определите её здесь. В основном это полезно в проектах на базе automake, "
+#~ "где приложение представляет собой сценарий и для запуска его в gdb "
+#~ "необходим <b>libtool</b>."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Если вы хотите, чтобы gdb запускался в специальной оболочке или утилите, "
+#~ "определите её здесь. В основном это полезно в проектах на базе automake, "
+#~ "где приложение представляет собой сценарий и для запуска его в gdb "
+#~ "необходим libtool."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "&Оболочка для отладки:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Сценарий запуска удалённого приложения"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "&Сценарий настройки gdb:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Сценарий соединения с удалённым приложением"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Этот сценарий передаётся gdb после завершения выполнения двух "
+#~ "предыдущих.\n"
+#~ "Он предназначен для команд, необходимых для соединения с удалённым "
+#~ "работающим приложением.\n"
+#~ "\tshell sleep 5\tожидать запуска удалённой программы\n"
+#~ "\ttarget remote ...\tподсоединиться к удалённому отладчику\n"
+#~ "\tcontinue\t[не обязательно] начать отладку до первой точки останова."
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: Консоль отладки приложения"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Поддержка запуска приложений в отладчике GDB"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Формат"
+
+#~ msgid "Start address:"
+#~ msgstr "Начальный адрес:"
+
+#~ msgid "End Address:"
+#~ msgstr "Конечный адрес:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Показать"
+
+#~ msgid "Offset"
+#~ msgstr "Смещение"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Специальные окна отладчика"
+
+#~ msgid "Watches"
+#~ msgstr "Наблюдаемые переменные"
+
+#~ msgid "Recent"
+#~ msgstr "Последние"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "Это даёт возможность терминального ввода, когда программа \n"
+#~ "содержит код, обрабатывающий ввод из терминала (cin, fgets, и т.д.).\n"
+#~ "Если вы используете ввод из терминала, включите эту опцию.\n"
+#~ "Иначе — оставьте выключенной."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr "Включить отдельный &терминал для ввода/вывода приложения"
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Попытаться установить &точки останова при загрузке библиотек"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "Использование плавающей панели инструментов.\n"
+#~ "Эта панель всегда остаётся над всеми окнами.\n"
+#~ "Так же если те закрывают KDevelop,\n"
+#~ "возможно управлять программой при помощи небольшой панели.\n"
+#~ "Она так же может быть свёрнута в системный лоток.\n"
+#~ "\n"
+#~ "Эта панель — дополнение к основной панели инструментов KDevelop."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "В&ключить плавающую панель"
+
+#~ msgid "Debug views"
+#~ msgstr "Окна отладки"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>Окна отладчика</b><p>Различная информация о выполняемой программе. "
+#~ "Доступно 4 окна:<br><b>Память</b> <br><b>Дизассемблирование</b> "
+#~ "<br><b>Регистры</b> <br><b>Библиотеки</b>"
+
+#~ msgid "Application does not exist"
+#~ msgstr "Приложение не существует"
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Не удалось запустить «%1».</b><p>В атрибутах файла не установлен флаг "
+#~ "«Исполнимый файл». Запустите сборку проекта или измените права доступа "
+#~ "вручную."
+
+#~ msgid "Could not run application"
+#~ msgstr "Не удалось запустить приложение"
+
+#~ msgid "Received signal"
+#~ msgstr "Получен сигнал"
+
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "сообщение от gdb:\n"
+#~ "%1"
+
+#~ msgid "<%1 items>"
+#~ msgstr "<%1 элементов>"
+
+#~ msgid "Debugger Variables"
+#~ msgstr "Переменные отладчика"
+
+#~ msgid "Recent Expressions"
+#~ msgstr "Последние выражения"
+
+#~ msgid "Remove All"
+#~ msgstr "Удалить все"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "Вычислить все заново"
+
+#~ msgid "Natural"
+#~ msgstr "Натуральное"
+
+#~ msgid "Character"
+#~ msgstr "Символьный"
+
+#~ msgid "Remember Value"
+#~ msgstr "Запомнить значение"
+
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Прекратить наблюдение за переменной"
+
+#~ msgid "Watch Variable"
+#~ msgstr "Наблюдать за переменной"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Вычислить выражение"
+
+#~ msgid "Remove Expression"
+#~ msgstr "Удалить выражение"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "Точка останова записи данных"
+
+#~ msgid "Copy Value"
+#~ msgstr "Копировать значение"
+
+#~ msgid "Variables"
+#~ msgstr "Переменные"
+
+#~ msgid "Variable"
+#~ msgstr "Переменная"
+
+#~ msgid "Value"
+#~ msgstr "Значение"
+
+#~ msgid "Type"
+#~ msgstr "Тип"
+
+#~ msgid "Not implemented"
+#~ msgstr "Не реализовано"
+
+#~ msgid "Pid"
+#~ msgstr "Pid"
+
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#~ msgid "Stat"
+#~ msgstr "Stat"
+
+#~ msgid "Time"
+#~ msgstr "Время"
+
+#~ msgid "Command"
+#~ msgstr "Команда:"
+
+#~ msgid ""
+#~ "<b>Invalid gdb reply</b><p>The 'stopped' packet does not include the "
+#~ "'reason' field."
+#~ msgstr ""
+#~ "<b>Недопустимый ответ gdb</b><p>Пакет «stopped» (остановлено) не содержит "
+#~ "поля «reason» (причина)."
+
+#~ msgid "The gdb reply is: invalid"
+#~ msgstr "Вывод gdb неверен"
+
+#~ msgid "Invalid gdb reply"
+#~ msgstr "Неверный вывод gdb"

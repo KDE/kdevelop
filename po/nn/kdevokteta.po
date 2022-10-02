@@ -1,0 +1,68 @@
+# Translation of kdevokteta to Norwegian Nynorsk
+#
+# Karl Ove Hufthammer <karl@huftis.org>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-12-11 13:59+0100\n"
+"Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
+"Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
+"Language: nn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Løyve"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "Vis"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Bokmerke"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "Endringane i «%1» er ikkje lagra. Vil du lagra dei?"
+
+#: oktetadocument.cpp:125
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr ""
+
+#: oktetaplugin.cpp:97
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr ""
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Set opp bytematrisevisingsprofilar …"

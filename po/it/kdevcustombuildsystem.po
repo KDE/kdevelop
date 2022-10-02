@@ -1,0 +1,464 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevcustombuildsystem package.
+# Simone Solinas <ksolsim@gmail.com>, 2011, 2012, 2013, 2014, 2015.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2019, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustombuildsystem\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 16:50+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: configwidget.cpp:25
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Compila"
+
+#: configwidget.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Configura"
+
+#: configwidget.cpp:27
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Installa"
+
+#: configwidget.cpp:28
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Pulisci"
+
+#: configwidget.cpp:29
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Ripulisci"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Cartella di compilazione:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Seleziona la cartella dove vengono eseguiti gli strumenti.\n"
+"Se questa è la stessa cartella dei sorgenti è possibile lasciarla vuota."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "La cartella dove sono eseguiti gli strumenti"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Strumenti di compilazione"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Azione:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Abilita:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Eseguibile:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Questo è l'eseguibile che dovrebbe essere eseguito quando si seleziona "
+"l'azione dal menu Progetto"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argomenti:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr ""
+"Gli argomenti di cui lo strumento ha bisogno per essere eseguito "
+"correttamente."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Ambiente:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Scegli un ambiente pre-configurato per il tuo strumento"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Compilazione di: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Pulizia di: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Installazione di: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Installazione: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Configurazione di: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Eliminazione di: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Tipo di compilazione non definita"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr ""
+"Non è stato dato alcun comando per lo strumento personalizzato %1 nel "
+"progetto «%2»."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "Lo strumento personalizzato %1 nel progetto %2 è disabilitato"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"Gli argomenti dati avrebbero bisogno di una shell reale, questo al momento "
+"non è supportato."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Impossibile avviare il comando."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Crash del comando."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Errore sconosciuto nell'esecuzione del comando."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Non riuscito ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Finito ***"
+
+#: custombuildsystemconfig.cpp:14
+#, kde-format
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "compila"
+
+#: custombuildsystemconfig.cpp:15
+#, kde-format
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "configura"
+
+#: custombuildsystemconfig.cpp:16
+#, kde-format
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "installa"
+
+#: custombuildsystemconfig.cpp:17
+#, kde-format
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "pulisci"
+
+#: custombuildsystemconfig.cpp:18
+#, kde-format
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "ripulisci"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "sconosciuto"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Configurazione di compilazione:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Aggiungi"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Rimuovi"
+
+#: kcm_custombuildsystem.cpp:53
+#, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Sistema di compilazione personalizzato"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"Configura uno strumento di compilazione personalizzato per i progetti e le "
+"direttive include/define per il supporto del linguaggio."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid "No command given"
+#~ msgstr "Non è stato dato alcun comando"
+
+#~ msgid "This command is disabled"
+#~ msgstr "Questo comando è disabilitato"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr ""
+#~ "Supporto per la compilazione e gestione di sistemi di compilazione "
+#~ "personalizzati"
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Parametri del linguaggio relativi al percorso"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr ""
+#~ "Fai clic qui due volte per inserire una nuova definizione da usare come "
+#~ "percorso"
+
+#~ msgid "Define"
+#~ msgstr "Definisci"
+
+#~ msgid "Value"
+#~ msgstr "Valore"
+
+#~ msgid "Delete Define"
+#~ msgstr "Elimina definione"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Elimina il percorso di inclusione"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr "Sei sicuro di voler rimuovere il percorso «%1» selezionato?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Aggiunge l'URL attualmente visualizzato all'elenco di quelli inclusi se "
+#~ "non è già nell'elenco."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr ""
+#~ "Un nuovo percorso di inclusione da usare per analizzare i file sotto una "
+#~ "data cartella"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Crea una nuova voce del percorso di inclusione da questo URL."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Elimina la voce selezionata del percorso di inclusione."
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr ""
+#~ "Sei sicuro di voler rimuovere la configurazione per il percorso «%1»?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Aggiunge una nuova voce del percorso del sottoprogetto."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Sostituisce il percorso attualmente selezionato con un nuovo valore "
+#~ "mantenendo gli include e le definizioni attualmente impostate per il "
+#~ "percorso selezionato."
+
+#~ msgid "Replace"
+#~ msgstr "Sostituisci"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Elimina la voce del percorso del sottoprogetto selezionata."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "Include/Import"
+
+#~ msgid "Defines"
+#~ msgstr "Define"
+
+#, fuzzy
+#~| msgid "Custom BuildSystem"
+#~ msgid "CustomBuildSystem Config Ui Test App"
+#~ msgstr "BuildSystem personalizzato"
+
+#, fuzzy
+#~| msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgid "(C) 2012 Andreas Pakulat"
+#~ msgstr "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Delete Project Path"
+#~ msgstr "Elimina il percorso del progetto"
+
+#~ msgid "Includes/Imports and Defines for Project Directories/Files"
+#~ msgstr "Include/Importa e definisce per file/cartelle del progetto"
+
+#~ msgid "Directories/Files:"
+#~ msgstr "Cartelle/File"
+
+#~ msgid ""
+#~ "A list of paths specifying project directories or files, for which "
+#~ "includes and\n"
+#~ "defines should be set up. \"/\" denotes the top level project directory. "
+#~ "If the\n"
+#~ "path identifies a directory the includes/defines are active for that "
+#~ "directory\n"
+#~ "and all sub (and sub-sub)directories."
+#~ msgstr ""
+#~ "Un elenco di percorsi che specificano le cartelle o i file del progetto, "
+#~ "per i quali\n"
+#~ "dovrebbero essere specificate le inclusioni e le definizioni. «/» indica "
+#~ "la cartella\n"
+#~ "del progetto di livello superiore. Se il percorso identifica una cartella "
+#~ "le inclusioni/definizioni sono attive per quella cartella\n"
+#~ "e tutte le sottocartelle."
+
+#~ msgid "Switch between configuring Includes/Imports and Defines"
+#~ msgstr ""
+#~ "Passa dalla configurazione delle Inclusioni/Importazioni alle Definizioni"
+
+#~ msgid "List of include paths for the selected project item"
+#~ msgstr ""
+#~ "Lista dei percorsi di inclusione per l'elemento selezionato del progetto"
+
+#~ msgid ""
+#~ "A list of absolute include paths that the KDevelop parser should be "
+#~ "using\n"
+#~ "when parsing the project files in the given project path."
+#~ msgstr ""
+#~ "Un elenco di percorsi assoluti di inclusione che l'analizzatore di "
+#~ "KDevelop dovrebbe\n"
+#~ "usare quando analizza i file del progetto nel percorso dato del progetto."
+
+#~ msgid ""
+#~ "Specify a list of pre-processor defines and their values that the "
+#~ "KDevelop parser should use when parsing the files in the given project "
+#~ "path."
+#~ msgstr ""
+#~ "Specifica un elenco di definizioni del pre-processore e il loro valori "
+#~ "che l'analizzatore di KDevelop dovrebbe usare quando analizza i file nel "
+#~ "percorso dato del progetto"
+
+#~ msgid ""
+#~ "Double-Click here to insert a new include path to be used for the path"
+#~ msgstr ""
+#~ "Fai clic qui due volte per inserire un nuovo percorso di inclusione da "
+#~ "usare come percorso"
+
+#~ msgid "Double-Click here to insert a new path to a directory or file."
+#~ msgstr ""
+#~ "Fai clic qui due volte per inserire un nuovo percorso per una cartella o "
+#~ "file."

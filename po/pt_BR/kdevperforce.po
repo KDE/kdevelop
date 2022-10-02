@@ -1,0 +1,182 @@
+# Translation of kdevperforce.po to Brazilian Portuguese
+# Copyright (C) 2013-2020 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2018, 2020.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-09-09 11:41-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: perforceplugin.cpp:108
+#, kde-format
+msgid "The variable P4CONFIG is not set. Is perforce installed on the system?"
+msgstr ""
+"A variável P4CONFIG não foi definida. O 'perforce' está instalado no sistema?"
+
+#: perforceplugin.cpp:122
+#, kde-format
+msgid "Perforce"
+msgstr "Perforce"
+
+#: perforceplugin.cpp:232 perforceplugin.cpp:249
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Selecione apenas um item para esta operação"
+
+#: perforceplugin.cpp:282
+#, kde-format
+msgid "No files or message specified"
+msgstr "Não foram indicados arquivos ou mensagem"
+
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#, kde-format
+msgid "Please select a file for this operation"
+msgstr "Selecione um arquivo para esta operação"
+
+#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#, kde-format
+msgid "Directory not supported for this operation"
+msgstr "A pasta não é suportada para esta operação"
+
+#: perforceplugin.cpp:462
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "Edit"
+msgstr "Editar"
+
+#: perforceplugin.cpp:671
+#, kde-format
+msgid "error: %1"
+msgstr "erro: %1"
+
+#: ui/perforceimportmetadatawidget.cpp:124
+#, kde-format
+msgid ""
+"Unable to find perforce executable. Is it installed on the system? Is it in "
+"your PATH?"
+msgstr ""
+
+#: ui/perforceimportmetadatawidget.cpp:152
+#, kde-format
+msgid "P4 Client failed with exit code: %1"
+msgstr ""
+
+#: ui/perforceimportmetadatawidget.cpp:196
+#, kde-format
+msgid "P4 Client failed with error code: %1"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelUrl)
+#: ui/perforceimportmetadatawidget.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Pasta fonte:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelExec)
+#: ui/perforceimportmetadatawidget.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "P4 executable:"
+msgstr "Executável P4:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4port)
+#: ui/perforceimportmetadatawidget.ui:49
+#, kde-format
+msgid "P4 Port"
+msgstr "Porte do P4"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, p4portEdit)
+#: ui/perforceimportmetadatawidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The format of P4PORT for Perforce applications is protocol:host:port, or "
+"port by itself if both the Perforce application and versioning service are "
+"running on the same host. Port numbers must be in the range 1024 through "
+"32767"
+msgstr ""
+"O formato do P4PORT para os aplicativos do Perforce é protocolo:máquina:"
+"porta, ou então a porta em si, se tanto o aplicativo quanto o serviço de "
+"controle de versões do Perforce estiverem na mesma máquina. Os números das "
+"portas devem estar no intervalo entre 1024 e 32767"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4user)
+#: ui/perforceimportmetadatawidget.ui:90
+#, kde-format
+msgid "P4 User"
+msgstr "Usuário do P4"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, p4userEdit)
+#: ui/perforceimportmetadatawidget.ui:97
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Current Perforce user name. By default, the Perforce username is the same as "
+"the OS username"
+msgstr ""
+"O nome do usuário atual do Perforce. Por padrão, o nome do usuário do "
+"Perforce é igual ao do usuário do sistema operacional"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4client)
+#: ui/perforceimportmetadatawidget.ui:104
+#, kde-format
+msgid "P4 Client"
+msgstr "Cliente do P4"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, p4clientEdit)
+#: ui/perforceimportmetadatawidget.ui:111
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Name of current client workspace on the Perforce server"
+msgstr "Nome do espaço de trabalho do cliente atual no servidor Perforce"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4config)
+#: ui/perforceimportmetadatawidget.ui:118
+#, kde-format
+msgid "P4 Config"
+msgstr "Configuração do P4"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, p4configEdit)
+#: ui/perforceimportmetadatawidget.ui:128
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Contains a file name without a path. The specified file is used to store "
+"other Perforce environment variables "
+msgstr ""
+"Contém um nome de arquivo sem o seu caminho. O arquivo indicado é usado para "
+"armazenar as outras variáveis de ambiente do Perforce "
+
+#. i18n: ectx: property (text), widget (QPushButton, testP4setupButton)
+#: ui/perforceimportmetadatawidget.ui:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Test"
+msgstr "Testar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButtonConfig)
+#: ui/perforceimportmetadatawidget.ui:197
+#, kde-format
+msgctxt "@option:radio"
+msgid "Config File"
+msgstr "Arquivo de configuração"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButtonVariables)
+#: ui/perforceimportmetadatawidget.ui:213
+#, kde-format
+msgctxt "@option:radio"
+msgid "User/Port Config"
+msgstr "Configuração do usuário/porta"

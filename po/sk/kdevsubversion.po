@@ -1,0 +1,630 @@
+# translation of kdevsubversion.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2009.
+# Roman Paholik <wizzardsk@gmail.com>, 2014, 2017, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsubversion\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-17 20:49+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: kdevsvnplugin.cpp:334
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "Kopírovať..."
+
+#: kdevsvnplugin.cpp:341
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "Presunúť..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Prosím vyberte iba jednu položku pre túto operáciu"
+
+#: kdevsvnplugin.cpp:370
+#, kde-format
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "Cieľový súbor/adresár..."
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "Kopírovanie pracuje len s miestnymi súbormi"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "Cieľový súbor/adresár..."
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "Presun pracuje len s miestnymi súbormi/adresármi"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Subversion Pridať"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "Nedostatočné informácie na pridanie súboru"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Subversion Anotovať"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "Nedostatočné informácie na vinu umiestnenia"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Subversion Checkout"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "Nedostatočné informácie na checkout"
+
+#: svncommitjob.cpp:109
+#, kde-format
+msgid "Subversion Commit"
+msgstr "Subversion Commit"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "Odosielanie..."
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "Nedostatočné informácie na vykonanie odoslania"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Subversion Kopírovať"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "Nedostatočné informácie na kopírovanie súboru"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Subversion Diff"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "Nedostatočné informácie na vykonanie diff"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Subversion Import"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "Nedostatočné informácie na import"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Subversion Info"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "Nedostatočné informácie na vykonanie info úlohy"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "Pridané %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "Vymazané %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "Vymazané %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "Pridané %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "Revízia %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "Aktualizujem externals: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "Posielam %1"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "Pridávam %1 pomocou mimetype %2."
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "Pridávam %1"
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "Mažem %1"
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "Nahrádzam %1"
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "Prenášam dáta súboru"
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "Vina ukončená pre revíziu %1, cesta %2"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "Vrátená pracovná kópia %1"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "Zlyhalo vrátenie na pracovnej kópii %1"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "Skopírované %1"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "Certifikát zatiaľ nie je platný."
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "Certifikát vypršal."
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr ""
+"CN (názov hostiteľa) certifikátu nezodpovedá vzdialenému názvu hostiteľa."
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "Certifikačná autorita je neznáma."
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "Iná neznáma chyba."
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "Zadajte login pre: %1"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "Dokončené"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"Chyba vykonávania úlohy:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Subversion Záznam"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "Nedostatočné informácie na záznam umiestnenia"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Subversion Presun"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "Nedostatočné informácie na presun súboru"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Subversion Vymazať"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "Nedostatočné informácie na vykonanie úlohy odstránenia"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Subversion Vrátiť"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "Nedostatočné informácie na vykonanie vrátenia"
+
+#: svnssldialog.cpp:28
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "Certifikát SSL servera"
+
+#: svnssldialog.cpp:30
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "Dôverovať natrvalo"
+
+#: svnssldialog.cpp:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "Dôverovať dočasne"
+
+#: svnssldialog.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "Certifikát SSL servera: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Subversion Stav"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "Nedostatočné informácie na vykonanie úlohy stavu"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Subversion Aktualizácia"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "Nedostatočné informácie na vykonanie aktualizácie"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Zdrojový adresár:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "Repozitár:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "Umiestnenie repozitára"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "Zvoľte repozitár, do ktorého sa importuje zdrojový adresár"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Správa odoslania:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"Boli chyby pri kontrole certifikátu servera.\n"
+"Chcete dôverovať tomuto certifikátu?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "Dôvody, prečo kontrola zlyhala"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "Informácia o certifikáte"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "Meno hosťa:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "someserver"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "Vydavateľ:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "someissuer"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "Platné od:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "validfrom"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "Platný do:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "validuntil"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "Odtlačok:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "odtlačok"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "Certifikát SSL servera"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "Umiestnenie repozitára na importovanie"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "Importovať do repozitára Subversion"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "Checkout z repozitára Subversion"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "Subversion Cat"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "Nedostatočné informácie na vykonanie cat"
+
+#~ msgid "Start Revision"
+#~ msgstr "Začať revíziu"
+
+#~ msgid "End Revision"
+#~ msgstr "Ukončiť revíziu"
+
+#~ msgid "Checkout"
+#~ msgstr "Checkout"
+
+#~ msgid "Repository Url:"
+#~ msgstr "URL repozitára:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "Cieľová cesta:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Rekurzívne:"
+
+#~ msgid "Requested local path:"
+#~ msgstr "Vyžadovaná miestna cesta:"
+
+#~ msgid "Source"
+#~ msgstr "Zdroj"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "Určiť podľa URL repozitára"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "Určiť podľa miestnej pracovnej kópie"
+
+#~ msgid "Source revision"
+#~ msgstr "Zdrojová revízia"
+
+#~ msgid "Destination"
+#~ msgstr "Cieľ"
+
+#~ msgid "Specify either the full repository URL or local working path"
+#~ msgstr "Určite buď plné URL repozitára alebo miestnu pracovnú cestu"
+
+#~ msgid "Target Url"
+#~ msgstr "Cieľové URL"
+
+#~ msgid "Non Recursive"
+#~ msgstr "Nerekurzívne"
+
+#~ msgid "No diff deleted"
+#~ msgstr "Nevymazaný žiadny rozdiel"
+
+#~ msgid "Ignore contents type"
+#~ msgstr "Ignorovať typ obsahu"
+
+#~ msgid "Subversion Log View Options"
+#~ msgstr "Možnosti zobrazenia záznamu Subversion"
+
+#~ msgid "Maximum number of logs to be displayed"
+#~ msgstr "Maximálny počet zobrazovaných záznamov"
+
+#~ msgid "Do not show logs before branching point"
+#~ msgstr "Nezobrazovať záznamy pred vetviacim bodom"
+
+#~ msgid "Forcefully delete locally modified and/or unversioned items"
+#~ msgstr "Vynútene vymazať miestne zmenené a/alebo neverzionované položky"
+
+#~ msgid "Select working copies to be reverted:"
+#~ msgstr "Vyberte pracovné kópie na vrátenie:"
+
+#~ msgid "Select"
+#~ msgstr "Vybrať"
+
+#~ msgid "Text Status"
+#~ msgstr "Stav textu"
+
+#~ msgid "Prop Status"
+#~ msgstr "Stav vlastnosti"
+
+#~ msgid "Working Copy"
+#~ msgstr "Pracovná kópia"
+
+#~ msgid "Recursive"
+#~ msgstr "Rekurzívne"
+
+#~ msgid "Specify as number:"
+#~ msgstr "Určiť ako číslo:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "Určiť ako kľúčové slovo:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "Určit ako dátum:"
+
+#~ msgid "Status Requested for:"
+#~ msgstr "Stav vyžadovaný pre:"
+
+#~ msgid "Specify revision"
+#~ msgstr "Určiť revíziu"
+
+#~ msgid "Non recursive"
+#~ msgstr "Nerekurzívne"
+
+#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
+#~ msgstr "Obnoviť iba \"zaujímavé\" položky (ako miestne zmeny)"
+
+#~ msgid "Contact repository and augment with repository information"
+#~ msgstr "Kontaktovať repozitár a rozšíriť s informáciami repozitára"
+
+#~ msgid "Do not ignore svn:ignore"
+#~ msgstr "Neignorovať svn:ignore"
+
+#~ msgid "Ignore external items"
+#~ msgstr "Ignorovať externé položky"
+
+#~ msgid "Update immediate children only (non-recursive)"
+#~ msgstr "Aktualizovať len priamych potomkov (nerekurzívne)"
+
+#~ msgid "Ignore external entries"
+#~ msgstr "Ignorovať externé záznamy"
+
+#~ msgid "Select Revision"
+#~ msgstr "Vybrať revíziu"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid "Support for Subversion version control systems"
+#~ msgstr "Podpora pre verzionovacie systémy Subversion"

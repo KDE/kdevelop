@@ -1,0 +1,152 @@
+# Translation of kdevcontextbrowser into Japanese.
+# Yukiko Bando <ybando@k6.dion.ne.jp>, 2008.
+# Daniel E. Moctezuma <democtezuma@gmail.com>, 2010.
+# Fumiaki Okushi <okushi@kde.gr.jp>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2010-11-02 00:45-0700\n"
+"Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 1.1\n"
+
+#: contextbrowser.cpp:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr ""
+
+#: contextbrowser.cpp:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr ""
+
+#: contextbrowser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "アウトライン"
+
+#: contextbrowser.cpp:193
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "アウトライン"
+
+#: contextbrowser.cpp:194
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr ""
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr ""
+
+#: contextbrowser.cpp:241
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "前の使用例(&P)"
+
+#: contextbrowser.cpp:247
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr ""
+
+#: contextbrowser.cpp:253
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "前の使用例(&P)"
+
+#: contextbrowser.cpp:259
+#, fuzzy, kde-format
+#| msgid "&Next Use"
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "次の使用例(&N)"
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "コンテキストブラウザ"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "コードブラウザ"
+
+#: contextbrowser.cpp:312
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr ""
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(変更されました)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr ""
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr ""
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr ""
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr ""
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr ""
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr ""
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "コードブラウザツールバー"

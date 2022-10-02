@@ -1,0 +1,86 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Xosé <xosecalvo@gmail.com>, 2012, 2013.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-02-16 09:30+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.3\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Permisos"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "Vista"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Marcadores"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Barra de ferramentas principal"
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "O documento «%1» ten cambios sen gardar. Desexa gardalos?"
+
+#: oktetadocument.cpp:125
+#, fuzzy, kde-format
+#| msgid "Close Document"
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Pechar o documento"
+
+#: oktetaplugin.cpp:97
+#, fuzzy, kde-format
+#| msgid "Hex Editor"
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "Editor Hexadecimal"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Xestionar perfís de vista de matriz de bytes…"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Xosé Calvo"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "xosecalvo@gmail.com"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Barra de ferramentas Deseñador da disposición"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "Engadido Okteta para o KDevelop"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "Fornece edición hexadecimal simple"

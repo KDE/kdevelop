@@ -1,0 +1,131 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2015, 2016.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 09:48+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: ninjabuilder.cpp:30
+#, kde-format
+msgid "Unable to find ninja executable. Is it installed on the system?"
+msgstr ""
+"Ni bilo mogoče najti izvedljive datoteke ninja. Ali je nameščena na sistemu?"
+
+#: ninjabuilder.cpp:197
+#, kde-format
+msgid "Cannot specify prefix in %1, on ninja"
+msgstr "Ni mogoče navesti predpone v %1 (na Ninja)"
+
+#: ninjabuilderpreferences.cpp:35
+#, kde-format
+msgctxt "@title:tab"
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjabuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Ninja settings"
+msgstr "Nastavi možnosti za Ninja"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: ninjaconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "Prikaži ukaze, ampak jih ne izvedi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: ninjaconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "Install as &root:"
+msgstr "Namesti kot sk&rbnik:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: ninjaconfig.ui:75
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Root installation &command:"
+msgstr "Ukaz za namestitev kot skrbnik:"
+
+#. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
+#: ninjaconfig.ui:110
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "Število sočasnih poslov:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: ninjaconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Count of &errors to be tolerated:"
+msgstr "Število napak, ki bodo prezrte:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ninjaconfig.ui:153
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ninja &options:"
+msgstr "Dodatne m&ožnosti za ninja:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ninjaconfig.ui:173
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Dejaven &profil okolja:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ninjaconfig.ui:208
+#, kde-format
+msgctxt "@option:check"
+msgid "O&verride number of jobs:"
+msgstr "Prepiši število poslov:"
+
+#: ninjajob.cpp:72
+#, kde-format
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjajob.cpp:94
+#, kde-format
+msgid "Ninja (%1): %2"
+msgstr "Ninja (%1): %2"
+
+#: ninjajob.cpp:96
+#, kde-format
+msgid "Ninja (%1)"
+msgstr "Ninja (%1)"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Build finished"
+#~ msgstr "Izgrajevanje zaključeno"
+
+#~ msgid "Ninja Builder"
+#~ msgstr "Izgrajevalnik Ninja"
+
+#~ msgid "Support for building Ninja projects"
+#~ msgstr "Podpora za izgradnjo projektov Ninja"

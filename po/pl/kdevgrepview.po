@@ -1,0 +1,722 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2019, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-07-29 16:33+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 22.03.70\n"
+
+#: grepdialog.cpp:52
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Open Files"
+msgstr "Wszystkie otwarte pliki"
+
+#: grepdialog.cpp:53
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Open Projects"
+msgstr "Wszystkie otwarte projekty"
+
+#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#, kde-format
+msgctxt "@title:window"
+msgid "Find/Replace in Files"
+msgstr "Znajdź/zastąp w plikach"
+
+#: grepdialog.cpp:189
+#, kde-format
+msgctxt "@action:button"
+msgid "Search..."
+msgstr "Znajdź..."
+
+#: grepdialog.cpp:256
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Directory to Search in"
+msgstr "Wybierz katalog do przeszukania"
+
+#: grepdialog.cpp:512
+#, kde-format
+msgid "%2, and %1 more item"
+msgid_plural "%2, and %1 more items"
+msgstr[0] "%2, i %1 element więcej"
+msgstr[1] "%1, i %2 więcej elementów"
+msgstr[2] "%1, i %2 więcej elementów"
+
+#: grepdialog.cpp:525
+#, kde-format
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2"
+msgstr "Szukaj \"%1\" w %2"
+
+#: grepdialog.cpp:530
+#, kde-format
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2 (at time %3)"
+msgstr "Szukanie \"%1\" w %2 (w czasie %3)"
+
+#: grepjob.cpp:97
+#, kde-format
+msgid "Find in Files"
+msgstr "Znajdź w plikach"
+
+#: grepjob.cpp:113 grepjob.cpp:216
+#, kde-format
+msgid "Search aborted"
+msgstr "Przerwano znajdywanie"
+
+#: grepjob.cpp:122
+#, kde-format
+msgid "No files found matching the wildcard patterns"
+msgstr "Nie znaleziono plików pasujących do wzorców znaków wieloznacznych"
+
+#: grepjob.cpp:140
+#, kde-format
+msgctxt ""
+"Capture is the text which is \"captured\" with () in regular expressions see "
+"https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
+msgid "Captures are not allowed in pattern string"
+msgstr "Przechwytywania nie są dozwolone we wzorcu ciągu znaków"
+
+#: grepjob.cpp:161
+#, kde-format
+msgid "Searching for <b>%2</b> in one file"
+msgid_plural "Searching for <b>%2</b> in %1 files"
+msgstr[0] "Wyszukiwanie <b>%2</b> w jednym pliku"
+msgstr[1] "Wyszukiwanie <b>%2</b> w %1 plikach"
+msgstr[2] "Wyszukiwanie <b>%2</b> w %1 plikach"
+
+#: grepjob.cpp:182
+#, kde-format
+msgid "Collecting files..."
+msgstr "Zbieranie plików..."
+
+#: grepjob.cpp:260
+#, kde-format
+msgid "Failed: %1"
+msgstr "Niepowodzenie: %1"
+
+#: grepjob.cpp:263
+#, kde-format
+msgid "No results found"
+msgstr "Nie znaleziono wyników"
+
+#: grepjob.cpp:282
+#, kde-format
+msgid "Grep: %1"
+msgstr "Grep: %1"
+
+#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#, kde-format
+msgid "Line %1: "
+msgstr "Wiersz %1: "
+
+#: grepoutputmodel.cpp:377
+#, kde-format
+msgid "<b>1</b> match"
+msgid_plural "<b>%1</b> matches"
+msgstr[0] "<b>1</b> dopasowanie"
+msgstr[1] "<b>%1</b> dopasowania"
+msgstr[2] "<b>%1</b> dopasowań"
+
+#: grepoutputmodel.cpp:378
+#, kde-format
+msgid "<b>1</b> file"
+msgid_plural "<b>%1</b> files"
+msgstr[0] "<b>1</b> plik"
+msgstr[1] "<b>%1</b> pliki"
+msgstr[2] "<b>%1</b> plików"
+
+#: grepoutputmodel.cpp:380
+#, kde-format
+msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
+msgid "<b>%1 in %2</b>"
+msgstr "<b>%1 w %2</b>"
+
+#: grepoutputmodel.cpp:382
+#, kde-format
+msgid "%2: 1 match"
+msgid_plural "%2: %1 matches"
+msgstr[0] "%2: 1 pasujące"
+msgstr[1] "%2: %1 pasujące"
+msgstr[2] "%2: %1 pasujących"
+
+#: grepoutputmodel.cpp:452
+#, kde-format
+msgctxt ""
+"%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
+"its row and column"
+msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
+msgstr "Nieudane zastąpienie <b>%1</b> przez <b>%2</b> w %3:%4:%5"
+
+#: grepoutputview.cpp:71
+#, kde-format
+msgctxt "@title:window"
+msgid "Find/Replace Output View"
+msgstr "Widok wyjścia znajdź/zastąp"
+
+#: grepoutputview.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Item"
+msgstr "&Poprzedni element"
+
+#: grepoutputview.cpp:75
+#, kde-format
+msgctxt "@action"
+msgid "&Next Item"
+msgstr "&Następny element"
+
+#: grepoutputview.cpp:80
+#, kde-format
+msgctxt "@action"
+msgid "C&ollapse All"
+msgstr "Zwiń wszystk&o"
+
+#: grepoutputview.cpp:82
+#, kde-format
+msgctxt "@action"
+msgid "&Expand All"
+msgstr "&Rozwiń wszystko"
+
+#: grepoutputview.cpp:86
+#, kde-format
+msgctxt "@action"
+msgid "New &Search"
+msgstr "Nowe &szukanie"
+
+#: grepoutputview.cpp:87
+#, kde-format
+msgctxt "@action"
+msgid "Refresh"
+msgstr "Odśwież"
+
+#: grepoutputview.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Clear Search History"
+msgstr "Wyczyść historię wyszukiwania"
+
+#: grepoutputview.cpp:323
+#, kde-format
+msgid "Do you want to replace with an empty string?"
+msgstr "Czy chcesz zastąpić pustym ciągiem znaków? "
+
+#: grepoutputview.cpp:324
+#, kde-format
+msgctxt "@title:window"
+msgid "Start Replacement"
+msgstr "Rozpocznij zastępowanie"
+
+#: grepoutputview.cpp:325
+#, kde-format
+msgctxt "@action:button"
+msgid "Replace"
+msgstr "Zastąp"
+
+#. i18n: ectx: property (text), widget (QLabel, replacementLabel)
+#: grepoutputview.ui:41
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Replacement &text:"
+msgstr "&Tekst zastępujący:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
+#: grepoutputview.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the replacement pattern"
+msgstr "Wpisz wzorzec zastępowania"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
+#: grepoutputview.ui:76
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply replacement on selected items"
+msgstr "Zastosuj zastąpienie na zaznaczonych elementach."
+
+#. i18n: ectx: property (text), widget (QPushButton, applyButton)
+#: grepoutputview.ui:79
+#, kde-format
+msgctxt "@action:button"
+msgid "&Replace"
+msgstr "&Zastąp"
+
+#: grepviewplugin.cpp:76
+#, kde-format
+msgctxt "@action"
+msgid "Find/Replace in Fi&les..."
+msgstr "Znajdź/zastąp w p&likach"
+
+#: grepviewplugin.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Search for expressions over several files"
+msgstr "Wyszukuj wyrażeń w kilku plikach"
+
+#: grepviewplugin.cpp:81
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens the 'Find/Replace in Files' dialog. There you can enter a regular "
+"expression which is then searched for within all files in the directories "
+"you specify. Matches will be displayed, you can switch to a match directly. "
+"You can also do replacement."
+msgstr ""
+"Otwiera okno dialogowe 'Znajdź/zastąp w plikach'.  Tam możesz podać "
+"wyrażenie regularne, które jest później wyszukiwane we wszystkich plikach w "
+"katalogach, które określisz. Dopasowania będą wyświetlone, możesz "
+"przełączyć, aby dopasować bezpośrednio. Możesz także dokonać zamiany."
+
+#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Find/Replace in This Folder..."
+msgstr "Znajdź/Zastąp w tym katalogu..."
+
+#: grepviewplugin.cpp:140
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Find/Replace in Files..."
+msgstr "&Znajdź/zastąp w plikach"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
+#: grepwidget.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the regular expression you want to search for"
+msgstr "Wpisz wyrażenie regularne, które chcesz znaleźć"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
+#: grepwidget.ui:59
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
+"expression you want to search for here.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
+"\"Regular Expression\" below, this is considered a raw string. That means, "
+"all meta characters are escaped.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta characters "
+"are:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
+"character</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - Matches the beginning of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Matches the end of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Matches a word boundary</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">The following repetition "
+"operators exist:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
+"item is matched at most once</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - The preceding item is matched zero or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - The preceding item is matched one or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched exactly <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding item "
+"is matched <span style=\" font-style:italic;\">n</span> or more times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched at most <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - The preceding item is matched at least <span style=\" font-style:"
+"italic;\">n</span>, but at most <span style=\" font-style:italic;\">m</span> "
+"times.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
+"backreferences to bracketed subexpressions are available via the notation "
+"\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
+"look at <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
+"style:italic;\">man pcresyntax.</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Tutaj podaj wyrażenie "
+"regularne, które chcesz znaleźć.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Jeżeli poniżej nie "
+"odhaczysz \"Wyrażenie regularne\", to zostanie to potraktowane jako surowy "
+"ciąg znaków. Oznacza to, że wszystkie meta znaki zostaną pominięte.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Możliwe meta znaki to:</"
+"p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Pasuje do "
+"jakiegokolwiek znaku</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - Pasuje do początku wiersza</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Pasuje do końca wiersza</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Pasuje do granicy słowa</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Pasuje do jakiegokolwiek znaku białej spacji</"
+"li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Istnieją następujące "
+"operatory powtórzeń:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - Poprzedzający "
+"element jest dopasowany co najwyżej raz</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - Poprzedzający element jest dopasowany zero lub "
+"więcej razy</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - Poprzedzający element jest dopasowany jeden lub "
+"więcej razy</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - Poprzedzający "
+"element jest dopasowany dokładnie <span style=\" font-style:italic;\">n</"
+"span> razy</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - Poprzedzający "
+"element jest dopasowany <span style=\" font-style:italic;\">n</span> lub "
+"więcej razy</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - Poprzedzający "
+"element jest dopasowany co najwyżej <span style=\" font-style:italic;\">n</"
+"span> razy</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - Poprzedzający element jest dopasowany co najmniej <span style=\" "
+"font-style:italic;\">n</span>, ale co najwyżej <span style=\" font-style:"
+"italic;\">m</span> razy.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Dalsze odwołania wsteczne "
+"do pod-wyrażeń w nawiasach są dostępne dzięki notacji  \\<span style=\" font-"
+"style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Po dalsze informacje, "
+"zobacz <a href=\"https://www.pcre.org\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
+"style:italic;\">man pcresyntax.</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: grepwidget.ui:69
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Template:"
+msgstr "Szablon:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
+#: grepwidget.ui:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This is the regular expression template."
+msgstr "Jest to szablon regularnego wyrażenia."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
+#: grepwidget.ui:85
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This is the regular expression template. <i>%s</i> will be replaced by the "
+"pattern, while <i>%%</i> will be replaced by <i>%</i>."
+msgstr ""
+"Jest to szablon regularnego wyrażenia. <i>%s</i> zostanie zastąpione przez "
+"wzorzec, podczas gdy <i>%%</i> zostanie zastąpione przez <i>%</i>."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
+#: grepwidget.ui:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Quickly select location from a set of directories"
+msgstr "Szybko wybierz położenie z zestawu katalogów"
+
+#. i18n: ectx: property (text), widget (QPushButton, syncButton)
+#: grepwidget.ui:95
+#, kde-format
+msgctxt "@action:button"
+msgid "Quick Select"
+msgstr "Szybkie wybieranie"
+
+#. i18n: ectx: property (text), widget (QLabel, depthLabel)
+#: grepwidget.ui:102
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Depth:"
+msgstr "Głębokość:"
+
+#. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, kde-format
+msgctxt "@item full recursion"
+msgid "Full"
+msgstr "Pełna"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: grepwidget.ui:131
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Pattern:"
+msgstr "Wzorzec:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: grepwidget.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Files:"
+msgstr "Pliki:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: grepwidget.ui:157
+#, kde-format
+msgctxt "@option:check"
+msgid "Case sensitive:"
+msgstr "Rozróżniaj wielkość liter:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
+#: grepwidget.ui:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Case-sensitive searching."
+msgstr "Szukanie rozróżnia wielkość liter."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: grepwidget.ui:189
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Location(s):"
+msgstr "Położenie(a):"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
+#: grepwidget.ui:202
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Files filter"
+msgstr "Filtr plików"
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
+#: grepwidget.ui:205
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to search here. You may give "
+"several patterns separated by commas or spaces."
+msgstr ""
+"Tutaj podaj wzorzec nazwy pliku lub plik do znalezienia. Możesz podać kilka "
+"wzorców oddzielonych przecinkami lub znakami odstępu."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: grepwidget.ui:218
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Exclude:"
+msgstr "Wyklucz:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:231
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Files pattern to exclude"
+msgstr "Wzorzec wykluczający pliki"
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:234
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to exclude from the search here. "
+"You may give several patterns separated by commas or spaces.<p>Every pattern "
+"is internally surrounded by asterisks, so that each pattern can match parts "
+"of the file paths.</p>"
+msgstr ""
+"Tutaj podaj wzorzec nazwy plików do wykluczenia z wyszukiwania. Możesz podać "
+"kilka wzorców oddzielonych przecinkami lub spacjami.<p>Każdy wzorzec jest "
+"wewnętrznie otoczony gwiazdkami, tak żeby każdy mógł się dopasować do części "
+"ścieżek plików.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: grepwidget.ui:314
+#, kde-format
+msgctxt "@option:check"
+msgid "Regular expression:"
+msgstr "Wyrażenie regularne:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
+#: grepwidget.ui:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable or disable regular expression."
+msgstr "Włącz lub wyłącz wyrażenie regularne."
+
+#. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
+#: grepwidget.ui:340
+#, kde-format
+msgctxt "@option:check"
+msgid "Limit to project files:"
+msgstr "Ogranicz do plików projektu:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
+#: grepwidget.ui:369
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the replacement template"
+msgstr "Wpisz szablon zastępujący"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: grepwidget.ui:376
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Replacement template:"
+msgstr "Szablon zastępowania:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
+#: grepwidget.ui:389
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the location where you want to search. It can be a directory, a file, "
+"or a semicolon separated (without spaces) list of directories/files."
+msgstr ""
+"Wybierz położenie, gdzie chcesz wyszukiwać. Może to być katalog, plik, lub "
+"lista katalogów/plików oddzielona dwukropkami (bez odstępów)."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
+#: grepwidget.ui:414
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a directory to search in"
+msgstr "Wybierz katalog do przeszukania"
+
+#~ msgid "Find-Replace In Files"
+#~ msgstr "Znajdź-zastąp w plikach"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Edytuj"
+
+#~ msgid "<big>%2 <i>(one match)</i></big>"
+#~ msgid_plural "<big>%2 <i>(%1 matches)</i></big>"
+#~ msgstr[0] "<big>%2 <i>(jedno dopasowanie)</i></big>"
+#~ msgstr[1] "<big>%2 <i>(%1 dopasowania)</i></big>"
+#~ msgstr[2] "<big>%2 <i>(%1 dopasowań)</i></big>"
+
+#, fuzzy
+#~| msgid "Find/Replace in Files"
+#~ msgid "Find/Replace"
+#~ msgstr "Znajdź/zastąp w plikach"
+
+#~ msgid "&Find/Replace in Files"
+#~ msgstr "&Znajdź/zastąp w plikach"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lukasz.wojnilowicz@gmail.com"
+
+#~ msgid ""
+#~ "Allows fast searching of multiple files using patterns or regular "
+#~ "expressions. And allow to replace it too."
+#~ msgstr ""
+#~ "Pozwala na szybkie znajdowanie wielu plików wykorzystując wzorce lub "
+#~ "regularne wyrażenia. Pozwala także na ich zastępowanie."
+
+#~ msgid "Ctrl+Alt+f"
+#~ msgstr "Ctrl+Alt+f"
+
+#~ msgid "Synchronize with current document directory."
+#~ msgstr "Synchronizuj z bieżącym katalogiem dokumentu."
+
+#~ msgid "&Change Search Settings"
+#~ msgstr "&Zmień ustawienia znajdywania"
+
+#~ msgid "Support for running grep over a list of files"
+#~ msgstr "Obsługa uruchamiania grep na liście plików"
+
+#~ msgid "Recursive:"
+#~ msgstr "Rekursywnie:"
+
+#~ msgid "Find/Replace In Files"
+#~ msgstr "Znajdź/zastąp w plikach"
+
+#~ msgid "&Change criteria"
+#~ msgstr "&Zmień kryteria"

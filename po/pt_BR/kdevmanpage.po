@@ -1,0 +1,44 @@
+# Translation of kdevmanpage.po to Brazilian Portuguese
+# Copyright (C) 2011-2018 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marcus Gama <marcus.gama@gmail.com>, 2011.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmanpage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2018-07-14 15:31-0300\n"
+"Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Página de conteúdo do manual"
+
+#: manpagedocumentationwidget.cpp:32
+#, kde-format
+msgid "Loading man pages..."
+msgstr "Carregando páginas do manual..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+"Erro durante o carregamento das man pages:\n"
+"%1"
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Página do manual"

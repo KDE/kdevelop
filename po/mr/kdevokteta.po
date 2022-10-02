@@ -1,0 +1,85 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Chetan Khona <chetan@kompkin.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-03-23 13:56+0530\n"
+"Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
+"Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "परवानगी"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "दृश्य"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "ओळखचिन्ह"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "दस्तऐवज \"%1\" मध्ये बदल केलेले आहेत. तुम्हाला तो साठवायचा आहे का?"
+
+#: oktetadocument.cpp:125
+#, fuzzy, kde-format
+#| msgid "Close Document"
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "दस्तऐवज बंद करा"
+
+#: oktetaplugin.cpp:97
+#, fuzzy, kde-format
+#| msgid "Hex Editor"
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "हेक्स संपादक"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "बाइट एरे दृश्य रूपरेषा व्यवस्थापीत करा..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "चेतन खोना"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "chetan@kompkin.com"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "डिजाइनर रचना साधनपट्टी"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "के-डेव्हलप करिता ओक्टेटा प्लगइन"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "सोपे हेक्स संपादन पुरवितो"

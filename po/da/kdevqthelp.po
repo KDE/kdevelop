@@ -1,0 +1,281 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Martin Schlander <mschlander@opensuse.org>, 2010, 2011, 2012, 2014.
+# Keld Simonsen <keld@keldix.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-04-26 15:37+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: qthelpconfig.cpp:47
+#, fuzzy, kde-format
+#| msgid "Modify Entry"
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr "Ændr indgang"
+
+#: qthelpconfig.cpp:49
+#, fuzzy, kde-format
+#| msgid "Add New Entry"
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr "Tilføj ny indgang"
+
+#: qthelpconfig.cpp:67
+#, kde-format
+msgid "Name cannot be empty."
+msgstr "Navnet må ikke være tomt."
+
+#: qthelpconfig.cpp:101
+#, fuzzy, kde-format
+#| msgctxt "Allow user to get some API documentation with GHNS"
+#| msgid "Get New Documentation"
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "Hent ny dokumentation"
+
+#: qthelpconfig.cpp:116
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr ""
+
+#: qthelpconfig.cpp:204
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr "Dokumentation leveret af GHNS"
+
+#: qthelpconfig.cpp:230
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr "Qt Compressed Help-fil er ikke gyldig."
+
+#: qthelpconfig.cpp:239
+#, kde-format
+msgid "Documentation already imported"
+msgstr "Dokumentation er allerede importeret"
+
+#: qthelpconfig.cpp:291
+#, fuzzy, kde-format
+#| msgid "QtHelp"
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "QtHelp"
+
+#: qthelpconfig.cpp:296
+#, fuzzy, kde-format
+#| msgid "Check Qt Help documentation"
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "Tjek Qt Help-dokumentationen"
+
+#: qthelpconfig.cpp:321
+#, fuzzy, kde-format
+#| msgid "Modify"
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr "Ændr"
+
+#: qthelpconfig.cpp:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr ""
+
+#: qthelpconfig.cpp:333
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Load Qt documentation"
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "Indlæs Qt-dokumentation"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, fuzzy, kde-format
+#| msgid "Search qch files in directory..."
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr "Gennemsøg qch-filer i mappen..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, fuzzy, kde-format
+#| msgid "Manage QtHelp Documentation"
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "Håndtér QtHelp-dokumentation"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Navn"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@title:column"
+msgid "Path"
+msgstr "Sti"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Tilføj"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, fuzzy, kde-format
+#| msgid "Icon:"
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr "Ikon:"
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, fuzzy, kde-format
+#| msgid "Select an icon"
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr "Vælg et ikon"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:37
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Navn:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, fuzzy, kde-format
+#| msgid "Select a name"
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr "Vælg et navn"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:47
+#, fuzzy, kde-format
+#| msgid "Select a name"
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr "Vælg et navn"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:54
+#, fuzzy, kde-format
+#| msgid "Path:"
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr "Sti:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, fuzzy, kde-format
+#| msgid "Select a QtHelp file..."
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr "Vælg en QtHelp-fil..."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:73
+#, fuzzy, kde-format
+#| msgid "Select a QtHelp file..."
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr "Vælg en QtHelp-fil..."
+
+#: qthelpdocumentation.cpp:181
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "Kunne ikke finde nogen dokumentation til \"%1\""
+
+#: qthelpdocumentation.cpp:276
+#, kde-format
+msgid "QtHelp Home Page"
+msgstr "QtHelps hjemmeside"
+
+#: qthelpqtdoc.cpp:142
+#, kde-format
+msgid "QtHelp"
+msgstr "QtHelp"
+
+#~ msgid "Dialog"
+#~ msgstr "Dialog"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk"
+
+#, fuzzy
+#~| msgid "Manage QtHelp Documentation"
+#~ msgid "QtHelp Documentation"
+#~ msgstr "Håndtér QtHelp-dokumentation"
+
+#~ msgid "Identifier to search:"
+#~ msgstr "Identifikator at søge efter:"
+
+#~ msgid "Help page:"
+#~ msgstr "Hjælpeside:"
+
+#~ msgid "about:blank"
+#~ msgstr "about:blank"
+
+#~ msgid "Debug info:"
+#~ msgstr "Fejlsøgningsinfo:"
+
+#~ msgid "Remove"
+#~ msgstr "Fjern"
+
+#~ msgid "Move Up"
+#~ msgstr "Flyt op"
+
+#~ msgid "Move Down"
+#~ msgstr "Flyt ned"
+
+#~ msgid "Choose dir"
+#~ msgstr "Vælg mappe"
+
+#~ msgid "Manage QtHelp Documentation"
+#~ msgstr "Håndtér QtHelp-dokumentation"
+
+#~ msgid "Ghns"
+#~ msgstr "Ghns"

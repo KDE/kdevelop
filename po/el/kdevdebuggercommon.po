@@ -1,0 +1,2006 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008, 2009.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2017, 2019.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcppdebugger\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2019-08-27 13:18+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: dialogs/processselection.cpp:28
+#, fuzzy, kde-format
+#| msgid "Attach to a Process"
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr "Πρόσδεση σε μια διεργασία"
+
+#: dialogs/processselection.cpp:48
+#, fuzzy, kde-format
+#| msgid "Attach"
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "Πρόσδεση"
+
+#: dialogs/selectcoredialog.cpp:18
+#, fuzzy, kde-format
+#| msgid "Select Core File"
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr "Επιλογή αρχείου πυρήνα"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Εκτελέσιμο:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, fuzzy, kde-format
+#| msgid "Core file:"
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr "Αρχείο πυρήνα:"
+
+#: mibreakpointcontroller.cpp:741
+#, kde-format
+msgid "<br>Old value: %1"
+msgstr "<br>Παλιά τιμή: %1"
+
+#: mibreakpointcontroller.cpp:744
+#, kde-format
+msgid "<br>New value: %1"
+msgstr "<br>Νέα τιμή: %1"
+
+#: midebugger.cpp:327
+#, kde-format
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+"<p>Το συστατικό debugger εμφάνισε εσωτερικό σφάλμα κατά την επεξεργασία της "
+"απάντησης από τον διορθωτή σφαλμάτων. Υποβάλετε μια αναφορά σφάλματος. Η "
+"συνεδρία αποσφαλμάτωσης θα τερματιστεί τώρα για την αποφυγή πιθανής "
+"κατάρρευσης"
+
+#: midebugger.cpp:330
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"Η εξαίρεση είναι: %1\n"
+"Η απάντηση MI είναι: %2"
+
+#: midebugger.cpp:333
+#, fuzzy, kde-format
+#| msgid "Internal debugger error"
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr "Εσωτερικό σφάλμα debugger"
+
+#: midebugger.cpp:345 midebugsession.cpp:415
+#, kde-format
+msgid "Process exited"
+msgstr "Η διεργασία τερμάτισε"
+
+#: midebugger.cpp:354
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr ""
+"<b>Αδυναμία εκκίνησης του debugger.</b><p>Αδυναμία εκτέλεσης του '%1'. "
+"Σιγουρευτείτε ότι δώσατε τη διαδρομή και το όνομα σωστά."
+
+#: midebugger.cpp:362
+#, kde-format
+msgid "Process failed to start"
+msgstr "Αποτυχία έναρξης διεργασίας"
+
+#: midebugger.cpp:367
+#, kde-format
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>Ο debugger κατέρρευσε.</b><p>Η διεργασία αποσφαλμάτωσης '%1' κατέρρευσε."
+"<br>Εξαιτίας αυτού η συνεδρία εντοπισμού σφαλμάτων πρέπει να τερματιστεί."
+"<br>Προσπαθήστε να αναπαραγάγετε την κατάρρευση χωρίς το KDevelop και "
+"στείλτε αναφορά σφάλματος.<br>"
+
+#: midebugger.cpp:372
+#, fuzzy, kde-format
+#| msgid "Debugger crashed"
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr "Ο debugger κατέρρευσε"
+
+#: midebugger.cpp:375
+#, kde-format
+msgid "Process crashed"
+msgstr "Η διεργασία κατέρρευσε"
+
+#: midebuggerplugin.cpp:109
+#, fuzzy, kde-format
+#| msgid "Examine Core File with %1"
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr "Εξέταση αρχείου πυρήνα με %1"
+
+#: midebuggerplugin.cpp:111
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Examine core file</b><p>This loads a core file, which is typically "
+#| "created after the application has crashed, e.g. with a segmentation "
+#| "fault. The core file contains an image of the program memory at the time "
+#| "it crashed, allowing you to do a post-mortem analysis.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+"<b>Εξέταση αρχείου πυρήνα</b><p>Αυτό φορτώνει το αρχείο πυρήνα, το οποίο "
+"συνήθως είναι το αρχείο που δημιουργείται μετά από την κατάρρευση της "
+"εφαρμογής, π.χ. με ένα σφάλμα αποκοπής. Το αρχείο πυρήνα περιέχει την εικόνα "
+"της μνήμης του προγράμματος τη στιγμή της κατάρρευσης, δίνοντας τη "
+"δυνατότητα για περαιτέρω ανάλυση.</p>"
+
+#: midebuggerplugin.cpp:123
+#, fuzzy, kde-format
+#| msgid "Attach to Process with %1"
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr "Πρόσδεση σε διεργασία με %1"
+
+#: midebuggerplugin.cpp:125
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr ""
+"<b>Πρόσδεση σε διεργασία</b><p>Πρόσδεση του debugger σε μια εκτελούμενη "
+"διεργασία.</p>"
+
+#: midebuggerplugin.cpp:138
+#, kde-format
+msgid "KDevelop (%1) - %2"
+msgstr "KDevelop (%1) - (%2)"
+
+#: midebuggerplugin.cpp:212
+#, fuzzy, kde-format
+#| msgid "Evaluate: %1"
+msgctxt "@action:inmenu"
+msgid "Evaluate: %1"
+msgstr "Υπολογισμός: %1"
+
+#: midebuggerplugin.cpp:214
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#| "cursor.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Evaluate expression</b><p>Shows the value of the expression under the "
+"cursor.</p>"
+msgstr ""
+"<b>Υπολογισμός έκφρασης</b><p>Εμφανίζει την τιμή της έκφρασης κάτω από το "
+"δρομέα.</p>"
+
+#: midebuggerplugin.cpp:222
+#, fuzzy, kde-format
+#| msgid "Watch: %1"
+msgctxt "@action:inmenu"
+msgid "Watch: %1"
+msgstr "Παρακολούθηση: %1"
+
+#: midebuggerplugin.cpp:224
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#| "Variables/Watch list.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Watch expression</b><p>Adds the expression under the cursor to the "
+"Variables/Watch list.</p>"
+msgstr ""
+"<b>Παρακολούθηση έκφρασης</b><p>Προσθέτει την έκφραση κάτω από το δρομέα στη "
+"λίστα παρακολουθήσεων μεταβλητών.</p>"
+
+#: midebuggerplugin.cpp:237
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "Επιλογή αρχείου πυρήνα για εξέταση..."
+
+#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Ένα πρόγραμμα ήδη βρίσκεται σε διαδικασία αποσφαλμάτωσης. Θέλετε να "
+"εγκαταλείψετε την τρέχουσα συνεδρία αποσφαλμάτωσης και να συνεχίσετε;"
+
+#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: midebuggerplugin.cpp:257
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "Επιλογή μιας διεργασίας για πρόσδεση..."
+
+#: midebuggerplugin.cpp:281
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr ""
+"Δεν έγινε πρόσδεση στη διεργασία %1: αδυναμία πρόσδεσης του debugger στον "
+"εαυτό του."
+
+#: midebuggerplugin.cpp:301
+#, kde-format
+msgid "Debugger"
+msgstr "Debugger"
+
+#: midebugjobs.cpp:49
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: midebugjobs.cpp:73
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr "Το '%1' δεν είναι εκτελέσιμο"
+
+#: midebugjobs.cpp:147
+#, kde-format
+msgid "Debug core file"
+msgstr "Διόρθωση αρχείου πυρήνα"
+
+#: midebugjobs.cpp:185
+#, kde-format
+msgid "Debug process %1"
+msgstr "Διόρθωση διεργασίας %1"
+
+#: midebugsession.cpp:210
+#, kde-format
+msgid "Running program"
+msgstr "Εκτέλεση προγράμματος"
+
+#: midebugsession.cpp:287
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "Πρόσδεση με διεργασία %1"
+
+#: midebugsession.cpp:318
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>Αδυναμία εκκίνησης του debugger</b><br />"
+
+#: midebugsession.cpp:328
+#, kde-format
+msgid "Examining core file %1"
+msgstr "Εξέταση αρχείου πυρήνα %1"
+
+#: midebugsession.cpp:400
+#, kde-format
+msgid "Debugger stopped"
+msgstr "Ο debugger σταμάτησε"
+
+#: midebugsession.cpp:420
+#, kde-format
+msgid "Application is running"
+msgstr "Η εφαρμογή εκτελείται"
+
+#: midebugsession.cpp:425
+#, kde-format
+msgid "Application is paused"
+msgstr "Η εφαρμογή είναι σε παύση"
+
+#: midebugsession.cpp:735
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr ""
+"<b>Στάλθηκε εντολή Gdb χωρίς να εκτελείται ο debugger</b><br>Η εντολή ήταν η:"
+"<br> %1"
+
+#: midebugsession.cpp:847
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>Μη έγκυρη εντολή debugger</b><br>%1"
+
+#: midebugsession.cpp:985
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "Έξοδος με επιστροφή κωδικού: %1"
+
+#: midebugsession.cpp:987
+#, kde-format
+msgid "Exited normally"
+msgstr "Τερμάτισε κανονικά"
+
+#: midebugsession.cpp:994
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "Έξοδος με σήμα %1"
+
+#: midebugsession.cpp:1029
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "Το πρόγραμμα έλαβε το σήμα %1 (%2)"
+
+#: midebugsession.cpp:1161
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] "1 εντολή σε αναμονή\n"
+msgstr[1] "%1 εντολές σε αναμονή\n"
+
+#: midebugsession.cpp:1162
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] "1 εντολή επεξεργάζεται από το gdb\n"
+msgstr[1] "%1 εντολές επεξεργάζονται από το gdb\n"
+
+#: midebugsession.cpp:1163
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "Κατάσταση debugger: %1\n"
+
+#: midebugsession.cpp:1166
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"Τρέχουσα κλάση εντολής: '%1'\n"
+"Τρέχον κείμενο εντολής: '%2'\n"
+"Αρχικό κείμενο τρέχουσας εντολής: '%3'\n"
+
+#: midebugsession.cpp:1242
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr ""
+"<b>Σφάλμα debugger</b><p>Ο debugger ανέφερε το παρακάτω σφάλμα:<p><tt>%1"
+
+#: miframestackmodel.cpp:69
+#, kde-format
+msgid "(running)"
+msgstr "(εκτελείται)"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "Δυαδικό"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "Οκταδικό"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "Δεκαδικό"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "Δεκαεξαδικό"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "Αδιαμόρφωτο"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "Χωρίς πρόσημο"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "Γενικά"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "Flags"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP single-word"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP double-word"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP quad-word"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "Τμήμα"
+
+#: registers/registersview.cpp:51
+#, fuzzy, kde-format
+#| msgid "Format"
+msgctxt "@title:menu"
+msgid "Format"
+msgstr "Μορφή"
+
+#: registers/registersview.cpp:60
+#, fuzzy, kde-format
+#| msgid "Mode"
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr "Λειτουργία"
+
+#: registers/registersview.cpp:195
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "Ενημέρωση"
+
+#: stty.cpp:243
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"Αδυναμία χρήσης των συσκευών tty* ή pty*.\n"
+"Ελέγξτε τις ρυθμίσεις στις /dev/tty* και /dev/pty*\n"
+"Ως υπερχρήστης (root) ίσως χρειαστεί να εκτελέσετε την \"chmod ug+rw\" στις "
+"συσκευές tty* και pty* και/ή να προσθέσετε το χρήστη στην ομάδα tty "
+"χρησιμοποιώντας την \"usermod -G tty όνομα_χρήστη\"."
+
+#: stty.cpp:295
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "Το %1 είναι λανθασμένο όνομα τερματικού"
+
+#: stty.cpp:301
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "Αδυναμία δημιουργίας προσωρινού αρχείου"
+
+#: stty.cpp:348
+#, kde-format
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+msgstr ""
+"Αδυναμία λήψης %1 tty/pty. Ελέγξτε ότι υο %1 είναι πράγματι ένα τερματικό "
+"και ότι δέχεται τα ορίσματα: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#, fuzzy, kde-format
+#| msgid "Debugger Console"
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr "Κονσόλα Debugger"
+
+#: widgets/debuggerconsoleview.cpp:49
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+#| "can also issue any other debugger command while debugging.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+"<b>Κονσόλα Debugger</b><p>Εμφανίζει όλες τις εντολές αποσφαλμάτωσης ενώ "
+"εκτελούνται. Μπορείτε επίσης να καλέσετε οποιαδήποτε άλλη εντολή του "
+"debugger κατά την αποσφαλμάτωση.</p>"
+
+#: widgets/debuggerconsoleview.cpp:58
+#, fuzzy, kde-format
+#| msgid "Repeat last command when hit Return"
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr "Να επαναληγθεί η τελευταία εντολή με το πάτημα του πλήκτρου Return"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#, fuzzy, kde-format
+#| msgid "Pause execution of the app to enter gdb commands"
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr "Παύση εκτέλεσης της εφαρμογής για εισαγωγή gdb εντολών"
+
+#: widgets/debuggerconsoleview.cpp:72
+#, fuzzy, kde-format
+#| msgid "Show Internal Commands"
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr "Εμφάνιση εσωτερικών εντολών"
+
+#: widgets/debuggerconsoleview.cpp:76
+#, fuzzy, kde-format
+#| msgid ""
+#| "Controls if commands issued internally by KDevelop will be shown or not."
+#| "<br>This option will affect only future commands, it will not add or "
+#| "remove already issued commands from the view."
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Ελέγχει αν οι εντολές που εκτελούνται εσωτερικά από το KDevelop θα "
+"εμφανίζονται ή όχι.<br>Αυτή η εντολή έχει αποτέλεσμα μόνο στις μελλοντικές "
+"εντολές, δε θα προσθέσει ή αφαιρέσει εκτελεσμένες εντολές από την προβολή."
+
+#: widgets/debuggerconsoleview.cpp:137
+#, fuzzy, kde-format
+#| msgid "&Command:"
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr "&Εντολή:"
+
+#: widgets/debuggerconsoleview.cpp:159
+#, fuzzy, kde-format
+#| msgid "%1 Command Bar"
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr "%1 γραμμή εντολής"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, fuzzy, kde-format
+#| msgid "Interrupt"
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "Διακοπή"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, fuzzy, kde-format
+#| msgid "Repeat"
+msgctxt "@action"
+msgid "Repeat"
+msgstr "Επανάληψη"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, fuzzy, kde-format
+#| msgid "Repeat last sent command when hit <Return>"
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr "Επανάληψη της εντολής που εστάλη τελευταία με το πάτημα του <Return>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, fuzzy, kde-format
+#| msgid "Address Selector"
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr "Διεύθυνση επιλογέα"
+
+#: widgets/disassemblewidget.cpp:88
+#, fuzzy, kde-format
+#| msgid "Change &address"
+msgctxt "@action"
+msgid "Change &Address"
+msgstr "Αλλαγή &διεύθυνσης"
+
+#: widgets/disassemblewidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "&Jump to Cursor"
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr "&Μετάβαση στο δρομέα"
+
+#: widgets/disassemblewidget.cpp:93
+#, fuzzy, kde-format
+#| msgid "Sets the execution pointer to the current cursor position."
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr "Τοποθετεί το δείκτη εκτέλεσης στην τρέχουσα θέση του δρομέα."
+
+#: widgets/disassemblewidget.cpp:96
+#, fuzzy, kde-format
+#| msgid "&Run to Cursor"
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr "Εκτέλεση μέχρι το δ&ρομέα"
+
+#: widgets/disassemblewidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Continues execution until the cursor position is reached."
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "Συνεχίζει την εκτέλεση μέχρι τη θέση του δρομέα."
+
+#: widgets/disassemblewidget.cpp:100
+#, fuzzy, kde-format
+#| msgid "&AT&&T"
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr "&AT&&T"
+
+#: widgets/disassemblewidget.cpp:101
+#, fuzzy, kde-format
+#| msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr ""
+"Το GDB θα χρησιμοποιήσει το μετατροπέα σε τελεστές μηχανής της AT&T (e.g. "
+"mov 0xc(%ebp),%eax)."
+
+#: widgets/disassemblewidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "&Intel"
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr "&Intel"
+
+#: widgets/disassemblewidget.cpp:106
+#, fuzzy, kde-format
+#| msgid ""
+#| "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+#| "+0xc])."
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr ""
+"Το GDB θα χρησιμοποιήσει το μετατροπέα σε τελεστές μηχανής της Intel (e.g. "
+"mov eax, DWORD PTR [ebp+0xc])."
+
+#: widgets/disassemblewidget.cpp:143
+#, fuzzy, kde-format
+#| msgid "Disassembly flavor"
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr "Έκδοση μετατροπέα σε τελεστές μηχανής"
+
+#: widgets/disassemblewidget.cpp:174
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Machine code display</b><p>A machine code view into your running "
+#| "executable with the current instruction highlighted. You can step "
+#| "instruction by instruction using the debuggers toolbar buttons of \"step "
+#| "over\" instruction and \"step into\" instruction."
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+"<b>Εμφάνιση του κώδικα μηχανής</b><p>Μια προβολή του κώδικα μηχανής του "
+"τρέχοντος εκτελούμενου αρχείου με την τρέχουσα εντολή τονισμένη. Μπορείτε να "
+"κάνετε βήματα ανά εντολή χρησιμοποιώντας τα κουμπιά της γραμμής εργαλείων "
+"του debugger \"βήμα πάνω\" από εντολή και \"βήμα μέσα\" στην εντολή."
+
+#: widgets/disassemblewidget.cpp:190
+#, fuzzy, kde-format
+#| msgid "Address"
+msgctxt "@title:column"
+msgid "Address"
+msgstr "Διεύθυνση"
+
+#: widgets/disassemblewidget.cpp:191
+#, fuzzy, kde-format
+#| msgid "Function"
+msgctxt "@title:column"
+msgid "Function"
+msgstr "Συνάρτηση"
+
+#: widgets/disassemblewidget.cpp:192
+#, fuzzy, kde-format
+#| msgid "Instruction"
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr "Τελεστής"
+
+#: widgets/disassemblewidget.cpp:212
+#, fuzzy, kde-format
+#| msgid "Disassemble/Registers View"
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr "Προβολή τελεστών/καταχωρητών"
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, fuzzy, kde-format
+#| msgid "Select the address to disassemble around"
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr "Επιλογή της διεύθυνσης για αποσυναρμολόγηση"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, fuzzy, kde-format
+#| msgid "Select address to disassemble around"
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr "Επιλογή της διεύθυνσης για αποσυναρμολόγηση"
+
+#~ msgid "toolBar"
+#~ msgstr "toolBar"
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Αδυναμία εκκίνησης του debugger"
+
+#~ msgid "warning"
+#~ msgstr "προειδοποίηση"
+
+#~ msgid "Startup error"
+#~ msgstr "Σφάλμα εκκίνησης"
+
+#~ msgid "Internal error"
+#~ msgstr "Εσωτερικό σφάλμα"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Μη έγκυρη εντολή debugger"
+
+#~ msgid "Debugger status"
+#~ msgstr "Κατάσταση debugger"
+
+#~ msgid "Debugger error"
+#~ msgstr "Σφάλμα debugger"
+
+#~ msgid "Address selector"
+#~ msgstr "Διεύθυνση επιλογέα"
+
+#~ msgid "Examine core file"
+#~ msgstr "Εξέταση αρχείου πυρήνα"
+
+#, fuzzy
+#~| msgid "Attach to process..."
+#~ msgid "Attach to Process... (%1)"
+#~ msgstr "Πρόσδεση σε διεργασία..."
+
+#, fuzzy
+#~| msgid "Attach to a process"
+#~ msgid "Attach to process"
+#~ msgstr "Πρόσδεση σε μια διεργασία"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Σφάλμα debugger</b><p>Ο debugger ανέφερε το παρακάτω σφάλμα:<p><tt>%1"
+
+#, fuzzy
+#~| msgid "Disassemble View"
+#~ msgid "Disassemble/Registers"
+#~ msgstr "Προβολή τελεστών μηχανής"
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#~ msgid "Memory"
+#~ msgstr "Μνήμη"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr "Διαμόρφωση ανίχνευσης"
+
+#~ msgid ""
+#~ "<b>Enable tracing</b>\n"
+#~ "<p>Tracing is a mechanism to automatically print values of the chosen "
+#~ "expressions and continue execution when breakpoint is hit. You can think "
+#~ "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgstr ""
+#~ "<b>Ενεργοποίηση ανίχνευσης</b>\n"
+#~ "<p>Η ανίχνευση είναι ένας μηχανισμός που αυτόματα εμφανίζει τιμές των "
+#~ "επιλεγμένων εκφράσεων και της συνέχισης της εκτέλεσης μετά από σημείο "
+#~ "διακοπής. Μπορείτε να το φανταστείτε ως μία εντολή printf κατά την "
+#~ "αποσφαλμάτωση η οποία δεν απαιτεί τροποποίηση του κώδικα.</p>"
+
+#~ msgid "Enable tracing"
+#~ msgstr "Ενεργοποίηση ανίχνευσης"
+
+#~ msgid "Cancel"
+#~ msgstr "Ακύρωση"
+
+#~ msgid "Custom format string"
+#~ msgstr "Συμβολοσειρά προσαρμοσμένης μορφής"
+
+#~ msgid "OK"
+#~ msgstr "Εντάξει"
+
+#~ msgid ""
+#~ "<b>Custom format string</b>\n"
+#~ "<p>Specify a C-style format string that will be used when printing the "
+#~ "chosen expression. For example:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "If custom format string is not enabled, names and values of all "
+#~ "expressions will be printed, using \"%d\" as format specifier for all "
+#~ "expressions."
+#~ msgstr ""
+#~ "<b>Συμβολοσειρά προσαρμοσμένης μορφής</b>\n"
+#~ "<p>Ορίστε μία συμβολοσειρά C-μορφής το οποίο θα χρησιμοποιείται για την "
+#~ "εμφάνιση της επιλεγμένης έκφρασης. Για παράδειγμα:\n"
+#~ "<p align=\"center\"> <tt>Σημείο ανίχνευσης 1: g = %d</tt></p>\n"
+#~ "Αν δεν είναι ενεργοποιημένο, τα ονόματα και οι τιμές όλων των εκφράσεων "
+#~ "θα εμφανίζονται, χρησιμοποιώντας το \"%d\" για τον ορισμό μορφής τους."
+
+#~ msgid "Expressions to print:"
+#~ msgstr "Εκφράσεις για εμφάνιση:"
+
+#~ msgid ""
+#~ "No environment group specified, looks like a broken configuration, please "
+#~ "check run configuration '%1'. Using default environment group."
+#~ msgstr ""
+#~ "Δεν έχει οριστεί ομάδα από περιβάλλοντα, η διαμόρφωση φαίνεται "
+#~ "προβληματική, παρακαλώ ελέγξτε τη διαμόρφωση εκτέλεσης '%1'. "
+#~ "Χρησιμοποιήστε την προεπιλεγμένη ομάδα από περιβάλλοντα."
+
+#~ msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>Απαιτείται gdb 7.0.0 ή μεταγενέστερο.</b><br />Χρησιμοποιείτε: %1"
+
+#~ msgid "gdb error"
+#~ msgstr "Σφάλμα gdb"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Αδυναμία εκκίνησης του debugger:</b><br />"
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Αδυναμία εντοπισμού του φλοιού διόρθωσης '%1'."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Το κέλυφος αποσφαλμάτωσης δε βρέθηκε"
+
+#~ msgid "GDB Configuration"
+#~ msgstr "Διαμόρφωση GDB"
+
+#~ msgid "Executes a Native application in GDB"
+#~ msgstr "Εκτελεί μια εγγενή εφαρμογή στο GDB"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Ρυθμίσεις debugger"
+
+#, fuzzy
+#~| msgid "Debugger executable:"
+#~ msgid "Debugger e&xecutable:"
+#~ msgstr "Εκτελέσιμο debugger:"
+
+#~ msgid "Gdb executable"
+#~ msgstr "Εκτελέσιμο gdb"
+
+#~ msgid ""
+#~ "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
+#~ "gdb, for example, for a different architecture, enter the executable name "
+#~ "here. You can either run gdb from $PATH, but with a different name (say, "
+#~ "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+#~ "executable."
+#~ msgstr ""
+#~ "Για την εκτέλεση του \"gdb\" από τη $PATH, αφήστε το πεδίο αυτό κενό. Για "
+#~ "την εκτέλεση ενός προσαρμοσμένου gdb, π.χ. για διαφορετική εφαρμογή, "
+#~ "εισάγετε εδώ το όνομά του. Μπορείτε επίσης να εκτελέσετε το gdb από τη "
+#~ "$PATH, αλλά με κάποιο άλλο όνομα (π.χ. \"arm-gdb\"),  πληκτρολογώντας εδώ "
+#~ "το όνομα, ή καθορίζοντας την πλήρη διαδρομή του εκτελέσιμου."
+
+#, fuzzy
+#~| msgctxt "Shell script to be executed at run time"
+#~| msgid "R&un shell script:"
+#~ msgid "She&ll script:"
+#~ msgstr "&Εκτέλεση σεναρίου κελύφους:"
+
+#~ msgid "Options"
+#~ msgstr "Επιλογές"
+
+#~ msgid "Display static &members:"
+#~ msgstr "Εμφάνιση στατικών &μελών:"
+
+#~ msgid ""
+#~ "Displaying static members makes GDB slower in\n"
+#~ "producing data within KDE and Qt.\n"
+#~ "It may change the \"signature\" of the data\n"
+#~ "which QString and friends rely on,\n"
+#~ "but if you need to debug into these values then\n"
+#~ "check this option."
+#~ msgstr ""
+#~ "Η εμφάνιση στατικών μελών κάνει το GDB αργότερο στην\n"
+#~ "παραγωγή δεδομένων εντός του KDE και του Qt.\n"
+#~ "Μπορεί να αλλάξει την \"υπογραφή\" των δεδομένων στα\n"
+#~ "οποία το GString και οι φίλες τάξεις βασίζονται,\n"
+#~ "αλλά αν χρειάζεστε να αποσφαλματώσετε σε αυτές τις τιμές\n"
+#~ "τότε ενεργοποιήστε αυτή την επιλογή."
+
+#~ msgid "Display &demangled names:"
+#~ msgstr "Εμφάνιση &αποκωδικοποιημένων ονομάτων:"
+
+#~ msgid ""
+#~ "When displaying the disassembled code you\n"
+#~ "can select to see the methods' mangled names.\n"
+#~ "However, non-mangled names are easier to read."
+#~ msgstr ""
+#~ "Όταν εμφανίζεται ο τελεστικός κώδικας μηχανής μπορείτε να επιλέξετε\n"
+#~ "να δείτε τις μεθόδους με τα κωδικά τους ονόματα.\n"
+#~ "Όμως, τα αποκωδικοποιημένα ονόματα είναι πιο ευανάγνωστα."
+
+#, fuzzy
+#~| msgid "Start Debugger with:"
+#~ msgid "S&tart Debugger with:"
+#~ msgstr "Εκκίνηση του αποσφαλματωτή με:"
+
+#~ msgid "Application Output"
+#~ msgstr "Έξοδος εφαρμογής"
+
+#~ msgid "GDB Console"
+#~ msgstr "GDB τερματικό"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Πλαίσιο στοίβας"
+
+#~ msgid ""
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgstr ""
+#~ "Το σενάριο αυτό προορίζεται για τις απαιτούμενες εντολές σύνδεσης σε ένα "
+#~ "απομακρυσμένο εκτελέσιμο.\n"
+#~ "\tshell sleep 5\tαναμονή για εκκίνηση του απομακρυσμένου προγράμματος\n"
+#~ "\ttarget remote ...\tσύνδεση στον απομακρυσμένο debugger\n"
+#~ "\tcontinue\t[προαιρετικό] εκτέλεση αποσφαλμάτωσης έως το πρώτο σημείο "
+#~ "διακοπής"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "Απομακρυσμένη αποσφαλμάτωση"
+
+#, fuzzy
+#~| msgid ""
+#~| "This shell script is run after the Config gdb script has been sourced by "
+#~| "gdb.\n"
+#~| "When debugging remotely this script is intended to actually start the "
+#~| "remote process.\n"
+#~| "[It is expected that the debug executable can be reached on the target, "
+#~| "maybe by downloading it as a final build step]\n"
+#~| "1) Find a way to execute a command remotely - rsh, ssh, telnet, ...\n"
+#~| "2a) Execute \"gdbserver ... application\" on target.\n"
+#~| "or if your executable contains the gdb stub\n"
+#~| "2b) Execute \"application\" on target."
+#~ msgid ""
+#~ "<html><head/><body><p>Script to start remote application</p><p></"
+#~ "p><p>This shell script is run after the Gdb Config script has been "
+#~ "sourced by gdb.</p><p>It's purpose is to actually start the remote "
+#~ "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
+#~ "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
+#~ "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
+#~ "\"application\" on target.</p></body></html>"
+#~ msgstr ""
+#~ "Αυτό το σενάριο εκτελείται αφού το σενάριο Config gdb έχει εκτελεστεί από "
+#~ "το gdb.\n"
+#~ "Κατά την απομακρυσμένη αποσφαλμάτωση αυτό το σενάριο προορίζεται για να "
+#~ "εκκινηθεί η απομακρυσμένη διεργασία.\n"
+#~ "[Αναμένεται ότι το προς αποσφαλμάτωση εκτελέσιμο μπορεί να προσεγγιστεί, "
+#~ "ίσως λαμβάνοντάς το ως τελικό βήμα στην κατασκευή]\n"
+#~ "1) Αναζήτηση ενός τρόπου απομακρυσμένης εκτέλεσης εντολών - rsh, ssh, "
+#~ "telnet, ...\n"
+#~ "2)α) Εκτέλεση \"gdbserver ... εφαρμογή\" απομακρυσμένα.\n"
+#~ "ή αν το εκτελέσιμο περιέχει το \"ίχνος\" του gdb\n"
+#~ "2β) Εκτέλεση της \"εφαρμογής\" στον προορισμό."
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "&Εκτέλεση σεναρίου κελύφους:"
+
+#, fuzzy
+#~| msgid "This script is sourced by gdb when the debugging starts."
+#~ msgid ""
+#~ "<html><head/><body><p>This script is sourced by gdb when the debugging "
+#~ "starts.</p></body></html>"
+#~ msgstr ""
+#~ "Αυτό το σενάριο εκτελείται από το gdb κατά την εκκίνηση της "
+#~ "αποσφαλμάτωσης."
+
+#, fuzzy
+#~| msgid "Gdb configure script"
+#~ msgid "Gdb &config script:"
+#~ msgstr "Σενάριο ρύθμισης gdb"
+
+#, fuzzy
+#~| msgid ""
+#~| "This script is intended for the actual commands needed to connect to a "
+#~| "remotely running executable.\n"
+#~| "\tshell sleep 5\twait for remote program to start\n"
+#~| "\ttarget remote ...\tconnect to the remote debugger\n"
+#~| "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgid ""
+#~ "<html><head/><body><p>Script to connect with remote application</p><p>For "
+#~ "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+#~ "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+#~ "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+#~ msgstr ""
+#~ "Το σενάριο αυτό προορίζεται για τις απαιτούμενες εντολές σύνδεσης σε ένα "
+#~ "απομακρυσμένο εκτελέσιμο.\n"
+#~ "\tshell sleep 5\tαναμονή για εκκίνηση του απομακρυσμένου προγράμματος\n"
+#~ "\ttarget remote ...\tσύνδεση στον απομακρυσμένο debugger\n"
+#~ "\tcontinue\t[προαιρετικό] εκτέλεση αποσφαλμάτωσης έως το πρώτο σημείο "
+#~ "διακοπής"
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Εκτέλεση σε&ναρίου gdb:"
+
+#~ msgid "GDB Output"
+#~ msgstr "Έξοδος GDB"
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "ε&ντολή GDB:"
+
+#~ msgid "Copy All"
+#~ msgstr "Αντιγραφή όλων"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid "Start"
+#~ msgstr "Αρχή"
+
+#~ msgid "Amount"
+#~ msgstr "Ποσότητα"
+
+#~ msgid "Memory view"
+#~ msgstr "Προβολή μνήμης"
+
+#~ msgid "%2 (1 byte)"
+#~ msgid_plural "%2 (%1 bytes)"
+#~ msgstr[0] "%2 (1 byte)"
+#~ msgstr[1] "%2 (%1 bytes)"
+
+#~ msgid "&Reload"
+#~ msgstr "Επαναφό&ρτωση"
+
+#~ msgid "&Format"
+#~ msgstr "Μορ&φή"
+
+#~ msgid "&Binary"
+#~ msgstr "&Δυαδικό"
+
+#~ msgid "&Octal"
+#~ msgstr "&Οκταδικό"
+
+#~ msgid "&Decimal"
+#~ msgstr "Δε&καδικό"
+
+#~ msgid "&Hexadecimal"
+#~ msgstr "Δεκαε&ξαδικό"
+
+#~ msgid "&Grouping"
+#~ msgstr "Ο&μαδοποίηση"
+
+#~ msgid "&0"
+#~ msgstr "&0"
+
+#~ msgid "&1"
+#~ msgstr "&1"
+
+#~ msgid "&2"
+#~ msgstr "&2"
+
+#~ msgid "&4"
+#~ msgstr "&4"
+
+#~ msgid "&8"
+#~ msgstr "&8"
+
+#~ msgid "1&6"
+#~ msgstr "1&6"
+
+#~ msgid "Write changes"
+#~ msgstr "Εγγραφή αλλαγών"
+
+#~ msgid "Change memory range"
+#~ msgstr "Τροποποίηση εύρους μνήμης"
+
+#~ msgid "Close this view"
+#~ msgstr "Κλείσιμο αυτής της προβολής"
+
+#~ msgid "Memory viewer"
+#~ msgstr "Προβολέας μνήμης"
+
+#~ msgid "New memory viewer"
+#~ msgstr "Νέος προβολέας μνήμης"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Open a new memory viewer."
+#~ msgstr "Άνοιγμα νέου προβολέα μνήμης."
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>Ο GDB τερμάτισε αντικανονικά</b><p>Αυτό πιθανόν να είναι ένα σφάλμα "
+#~ "στο GDB. Ελέγξτε το παράθυρο εξόδου του gdb και έπειτα σταματήστε τον "
+#~ "debugger"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "Ο GDB τερμάτισε αντικανονικά"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Το gdb κατέρρευσε"
+
+#~ msgid "Application interrupted"
+#~ msgstr "Η εφαρμογή διακόπηκε"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "GDB Support"
+#~ msgstr "Υποστήριξη GDB"
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr "Εκτέλεση gdb σε ειδικό κέλυφος (κυρίως για έργα automake)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Αν επιθυμείτε την εκτέλεση του gdb μέσω ειδικού φλοιού ή εργαλείου "
+#~ "πληκτρολογήστε το εδώ. Η κύρια χρήση αυτού είναι για έργα βασισμένα στο "
+#~ "Automake για τα οποία η εφαρμογή είναι στην πράξη ένα σενάριο οπότε "
+#~ "απαιτείται το <b>libtool</b> για την εκτέλεσή του μέσα στο gdb."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Αν επιθυμείτε την εκτέλεση του gdb μέσω ειδικού φλοιού ή εργαλείου "
+#~ "πληκτρολογήστε το εδώ. Η κύρια χρήση αυτού είναι για έργα βασισμένα στο "
+#~ "Automake για τα οποία η εφαρμογή είναι στην πράξη ένα σενάριο οπότε "
+#~ "απαιτείται το libtool για την εκτέλεσή του μέσα στο gdb."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "&Φλοιός αποσφαλμάτωσης:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Σενάριο εκκίνησης απομακρυσμένης εφαρμογής"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "&Σενάριο ρύθμισης gdb:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Σενάριο για τη σύνδεση με την απομακρυσμένη εφαρμογή"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Αυτό το σενάριο δημιουργείται από το gdb μετά την εκτέλεση των δύο "
+#~ "προηγούμενων.\n"
+#~ "Το σενάριο προορίζεται για τις ακριβείς εντολές που χρειάζεται για να "
+#~ "συνδεθείτε με μια απομακρυσμένη τρέχουσα διεργασία.\n"
+#~ "\tshell sleep 5\tαναμονή για την εκκίνηση του απομακρυσμένου "
+#~ "προγράμματος\n"
+#~ "\ttarget remote ...\tσύνδεση με τον απομακρυσμένο debugger\n"
+#~ "\tcontinue\t[προαιρετικό] εκτέλεση αποσφαλμάτωσης μέχρι το πρώτο σημείο "
+#~ "διακοπής."
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: κονσόλα αποσφαλμάτωσης εφαρμογής"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Υποστήριξη εκτέλεσης εφαρμογών στο GDB"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Μορφή"
+
+#~ msgid "Start address:"
+#~ msgstr "Διεύθυνση εκκίνησης:"
+
+#~ msgid "End Address:"
+#~ msgstr "Διεύθυνση τερματισμού:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid "Offset"
+#~ msgstr "Μετατόπιση"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Ειδικές προβολές αποσφαλμάτωσης"
+
+#~ msgid "Watches"
+#~ msgstr "Παρακολουθήσεις"
+
+#~ msgid "Recent"
+#~ msgstr "Πρόσφατο"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "Αυτή η επιλογή σας επιτρέπει να εισάγετε τερματική είσοδο όταν η\n"
+#~ "εφαρμογή σας περιέχει κώδικα εισόδου τερματικού (π.χ. cin, fgets, κτλ.).\n"
+#~ "Αν χρησιμοποιείτε είσοδο τερματικού στην εφαρμογή σας τότε ενεργοποιήστε "
+#~ "αυτή την επιλογή.\n"
+#~ "Σε άλλη περίπτωση μην την ενεργοποιήσετε."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr ""
+#~ "Ενεργοποίηση χωριστού &τερματικού για την είσοδο/έξοδο της εφαρμογής"
+
+#, fuzzy
+#~| msgid ""
+#~| "If GDB has not seen a library that will be loaded via\n"
+#~| "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~| "We can get GDB to stop on a library load and hence\n"
+#~| "try to set the pending breakpoints. See the documentation\n"
+#~| "for more details relating to this behavior.\n"
+#~| "\n"
+#~| "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgid ""
+#~ "If GDB has not seen a library that will be loaded via\n"
+#~ "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~ "With this option, GDB will stop on a library load and hence\n"
+#~ "try to set the pending breakpoints. See the documentation\n"
+#~ "for more details relating to this behavior.\n"
+#~ "\n"
+#~ "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgstr ""
+#~ "Αν το GDB δεν έχει δει μια βιβλιοθήκη η οποία θα φορτωθεί μέσω\n"
+#~ "\"dlopen\" τότε θα αρνηθεί να θέσει σημείο διακοπής σε αυτόν τον κώδικα.\n"
+#~ "Μπορούμε να βάλουμε το GDB να σταματά κατά τη φόρτωση μιας βιβλιοθήκης\n"
+#~ "και να προσπαθήσουμε να θέσουμε τα εκκρεμή σημεία διακοπής. Ανατρέξτε "
+#~ "στην\n"
+#~ "τεκμηρίωση για περισσότερες λεπτομέρειες σχετικά με αυτή τη συμπεριφορά.\n"
+#~ "\n"
+#~ "Αν δε φορτώνετε βιβλιοθήκες με το \"dlopen\" τότε μην ενεργοποιήσετε αυτή "
+#~ "την επιλογή."
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Προσπάθεια εισαγωγής σημείων &διακοπής κατά τη φόρτωση βιβλιοθηκών"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "Χρησιμοποιήστε την κινητή γραμμή εργαλείων. Αυτή η\n"
+#~ "γραμμή εργαλείων παραμένει πάνω από όλα τα παράθυρα ώστε αν\n"
+#~ "η εφαρμογή καλύψει το KDevelop έχετε τον έλεγχό της μέσω της μικρής\n"
+#~ "γραμμής εργασιών. Μπορεί επίσης να προσαρτηθεί στον πίνακα.\n"
+#~ "\n"
+#~ "Αυτή η γραμμή εργασιών είναι πρόσθετη τη γραμμής εργαλείων του KDevelop."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Ενεργοποίηση &κινητής γραμμής εργαλείων"
+
+#~ msgid "Debug views"
+#~ msgstr "Προβολές αποσφαλμάτωσης"
+
+#~ msgid "Viewers"
+#~ msgstr "Προβολείς"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "Προβολείς αποσφαλμάτωσης"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>Προβολείς αποσφαλμάτωσης</b><p>Διάφορες πληροφορίες σχετικά με την "
+#~ "εφαρμογή που εκτελείται. Υπάρχουν 4 διαθέσιμες προβολές:<br><b>Μνήμη</"
+#~ "b><br><b>Τελεστές κώδικα μηχανής</b><br><b>Καταχωρητές</"
+#~ "b><br><b>Βιβλιοθήκες</b>"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Application does not exist</b><p>The application you're trying to "
+#~| "debug,<br>    %1\n"
+#~| "<br>does not exist. Check that you've specified the right application in "
+#~| "the debugger configuration."
+#~ msgid ""
+#~ "<b>Application does not exist</b><p>The application you are trying to "
+#~ "debug,<br>    %1\n"
+#~ "<br>does not exist. Check that you have specified the right application "
+#~ "in the debugger configuration."
+#~ msgstr ""
+#~ "<b>Η εφαρμογή δεν υπάρχει</b><p>Η εφαρμογή που προσπαθείτε να "
+#~ "αποσφαλματώσετε, <br>    %1\n"
+#~ "<br>δεν υπάρχει. Ελέγξτε ότι έχετε καθορίσει τη σωστή εφαρμογή στις "
+#~ "ρυθμίσεις του αποσφαλματωτή."
+
+#~ msgid "Application does not exist"
+#~ msgstr "Η εφαρμογή δεν υπάρχει"
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Αδυναμία εκτέλεσης της εφαρμογής '%1'.</b><p>Η εφαρμογή δεν έχει την "
+#~ "εκτελέσιμη ιδιότητα ορισμένη. Δοκιμάστε να ανακατασκευάσετε το έργο, ή να "
+#~ "αλλάξετε τα δικαιώματα χειροκίνητα."
+
+#~ msgid "Could not run application"
+#~ msgstr "Αδυναμία εκτέλεσης της εφαρμογής"
+
+#~ msgid "Received signal"
+#~ msgstr "Λήφθηκε σήμα"
+
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "μήνυμα gdb:\n"
+#~ "%1"
+
+#~ msgid "<%1 items>"
+#~ msgstr "<%1 αντικείμενα>"
+
+#~ msgid "<a href=add_watch>Watch this</a>"
+#~ msgstr "<a href=add_watch>Παρακολούθηση</a>"
+
+#~ msgid "<a href=watchpoint>Stop on change</a>"
+#~ msgstr "<a href=watchpoint>Σταμάτημα σε τροποποίηση</a>"
+
+#~ msgid "Debugger Variables"
+#~ msgstr "Μεταβλητές αποσφαλματωτή"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Variable tree</b><p>The variable tree allows you to see the values of "
+#~| "local variables and arbitrary expressions.<p>Local variables are "
+#~| "displayed automatically and are updated as you step through your "
+#~| "program. For each expression you enter, you can either evaluate it once, "
+#~| "or \"watch\" it (make it auto-updated). Expressions that are not auto-"
+#~| "updated can be updated manually from the context menu. Expressions can "
+#~| "be renamed to more descriptive names by clicking on the name column."
+#~| "<p>To change the value of a variable or an expression, click on the "
+#~| "value."
+#~ msgid ""
+#~ "<b>Variable tree</b><p>The variable tree allows you to see the values of "
+#~ "local variables and arbitrary expressions.</p><p>Local variables are "
+#~ "displayed automatically and are updated as you step through your program. "
+#~ "For each expression you enter, you can either evaluate it once, or \"watch"
+#~ "\" it (make it auto-updated). Expressions that are not auto-updated can "
+#~ "be updated manually from the context menu. Expressions can be renamed to "
+#~ "more descriptive names by clicking on the name column.</p><p>To change "
+#~ "the value of a variable or an expression, click on the value.</p>"
+#~ msgstr ""
+#~ "<b>Δέντρο μεταβλητών</b><p>Το δέντρο μεταβλητών σας επιτρέπει να δείτε "
+#~ "τις τιμές των τοπικών μεταβλητών και άλλων εκφράσεων.<p>Οι τοπικές "
+#~ "μεταβλητές εμφανίζονται αυτόματα και ενημερώνονται καθώς βηματίζετε μέσα "
+#~ "στο πρόγραμμά σας. Για κάθε έκφραση που εισάγετε, μπορείτε είτε να την "
+#~ "υπολογίσετε είτε να την \"παρακολουθήσετε\" (με αυτόματη ενημέρωση). Οι "
+#~ "εκφράσεις που δεν ενημερώνονται αυτόματα μπορούν χειροκίνητα μέσω του "
+#~ "σχετικού μενού. Οι εκφράσεις μπορούν να μετονομαστούν σε πιο περιγραφικά "
+#~ "ονόματα κάνοντας κλικ στη στήλη όνομα.<p>Για την αλλαγή της τιμής μιας "
+#~ "μεταβλητής ή μιας έκφρασης κάντε κλικ στην τιμή."
+
+#, fuzzy
+#~| msgid "<b>Expression entry</b><p>Type in expression to watch."
+#~ msgid "<b>Expression entry</b><p>Type in expression to watch.</p>"
+#~ msgstr ""
+#~ "<b>Καταχώρηση έκφρασης</b><p>Εισάγετε μια έκφραση για παρακολούθηση."
+
+#~ msgid "Recent Expressions"
+#~ msgstr "Πρόσφατες εκφράσεις"
+
+#~ msgid "Remove All"
+#~ msgstr "Αφαίρεση όλων"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "Επαναϋπολογισμός όλων"
+
+#~ msgid "Natural"
+#~ msgstr "Φυσική"
+
+#~ msgid "Character"
+#~ msgstr "Χαρακτήρας"
+
+#~ msgid "Remember Value"
+#~ msgstr "Απομνημόνευση τιμής"
+
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Αφαίρεση μεταβλητής παρακολούθησης"
+
+#~ msgid "Watch Variable"
+#~ msgstr "Μεταβλητή παρακολούθησης"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Επαναϋπολογισμός έκφρασης"
+
+#~ msgid "Remove Expression"
+#~ msgstr "Αφαίρεση έκφρασης"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "Σημείο διακοπής εγγραφής δεδομένων"
+
+#~ msgid "Copy Value"
+#~ msgstr "Αντιγραφή τιμής"
+
+#~ msgid "Variables"
+#~ msgstr "Μεταβλητές"
+
+#~ msgid "Variable"
+#~ msgstr "Μεταβλητή"
+
+#~ msgid "Value"
+#~ msgstr "Τιμή"
+
+#~ msgid "Type"
+#~ msgstr "Τύπος"
+
+#~ msgid "Framestack"
+#~ msgstr "Πλαίσιο στοίβας"
+
+#~ msgid "Pid"
+#~ msgstr "Pid"
+
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#~ msgid "Stat"
+#~ msgstr "Κατάστ"
+
+#~ msgid "Time"
+#~ msgstr "Χρόνος"
+
+#~ msgid ""
+#~ "Debug arguments can be set on the Run Options page\n"
+#~ " or directly in the project manager"
+#~ msgstr ""
+#~ "Οι παράμετροι αποσφαλμάτωσης μπορούν να οριστούν στη σελίδα επιλογών "
+#~ "εκτέλεσης\n"
+#~ " ή απευθείας στον διαχειριστή έργου"
+
+#~ msgid ""
+#~ "<b>Invalid gdb reply</b><p>The 'stopped' packet does not include the "
+#~ "'reason' field."
+#~ msgstr ""
+#~ "<b>Μη έγκυρη απάντηση της gdb</b><p>Το πακέτο 'παύσης' δεν περιλαμβάνει "
+#~ "το πεδίο 'αιτίας'."
+
+#~ msgid "The gdb reply is: invalid"
+#~ msgstr "Η απάντηση του gdb δεν είναι έγκυρη"
+
+#~ msgid "Invalid gdb reply"
+#~ msgstr "Μη έγκυρη απάντηση του gdb"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgctxt "Process Niceness"
+#~ msgid "Normal"
+#~ msgstr "Μορφή"
+
+#, fuzzy
+#~| msgid "Time"
+#~ msgctxt "Priority Class"
+#~ msgid "Real Time"
+#~ msgstr "Χρόνος"
+
+#, fuzzy
+#~| msgid "Debugger stopped"
+#~ msgctxt "process status"
+#~ msgid "stopped"
+#~ msgstr "Ο αποσφαλματωτής σταμάτησε"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "process status"
+#~ msgid "paging"
+#~ msgstr "Προειδοποίηση"
+
+#, fuzzy
+#~| msgid "Watches"
+#~ msgctxt "Scheduler"
+#~ msgid "Batch"
+#~ msgstr "Παρακολουθήσεις"
+
+#, fuzzy
+#~| msgid "Application does not exist"
+#~ msgid "Show Application Window"
+#~ msgstr "Η εφαρμογή δεν υπάρχει"
+
+#, fuzzy
+#~| msgid "&Continue"
+#~ msgid "Continue (CONT)"
+#~ msgstr "&Συνέχεια"
+
+#, fuzzy
+#~| msgid "Received signal"
+#~ msgid "Send Signal"
+#~ msgstr "Λήφθηκε σήμα"
+
+#, fuzzy
+#~| msgid "Recent"
+#~ msgid "Percentage"
+#~ msgstr "Πρόσφατο"
+
+#, fuzzy
+#~| msgid "Display &demangled names"
+#~ msgid "Display command line options"
+#~ msgstr "Εμφάνιση &αποκωδικοποιημένων ονομάτων"
+
+#, fuzzy
+#~| msgid "Command"
+#~ msgid "<br/>Command: %1"
+#~ msgstr "Εντολή"
+
+#, fuzzy
+#~| msgid "Frame"
+#~ msgctxt "process heading"
+#~ msgid "Name"
+#~ msgstr "Πλαίσιο"
+
+#, fuzzy
+#~| msgid "TTY"
+#~ msgctxt "process heading"
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#, fuzzy
+#~| msgid "Command"
+#~ msgctxt "process heading"
+#~ msgid "Command"
+#~ msgstr "Εντολή"
+
+#, fuzzy
+#~| msgid "Attach to Process"
+#~ msgid "All Processes"
+#~ msgstr "Πρόσδεση σε διεργασία"
+
+#, fuzzy
+#~| msgid "Process exited"
+#~ msgid "All Processes, Tree"
+#~ msgstr "Η διεργασία τερμάτισε"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Normal"
+#~ msgstr "Μορφή"
+
+#, fuzzy
+#~| msgid "Watches"
+#~ msgid "Batch"
+#~ msgstr "Παρακολουθήσεις"
+
+#, fuzzy
+#~| msgid "Attaching to process %1"
+#~ msgid "Stop monitoring the process"
+#~ msgstr "Πρόσδεση με διεργασία %1"
+
+#~ msgid "Start in debugger"
+#~ msgstr "Εκκίνηση στον αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Start in debugger</b><p>Starts the debugger with the project's main "
+#~ "executable. You may set some breakpoints before this, or you can "
+#~ "interrupt the program while it is running, in order to get information "
+#~ "about variables, frame stack, and so on."
+#~ msgstr ""
+#~ "<b>Εκκίνηση στον αποσφαλματωτή</b><p>Εκκινεί τον αποσφαλματωτή με το "
+#~ "κύριο εκτελέσιμο του έργου. Μπορείτε να ορίσετε κάποια σημεία διακοπής "
+#~ "πριν από αυτό, ή μπορείτε να διακόψετε το πρόγραμμα που εκτελείται, για "
+#~ "να ανακτήσετε πληροφορίες σχετικά με μεταβλητές, το πλαίσιο στοίβας και "
+#~ "άλλα."
+
+#~ msgid "Breakpoints"
+#~ msgstr "Σημεία διακοπής"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Frame stack</b><p>Often referred to as the \"call stack\", this is a "
+#~| "list showing what function is currently active and who called each "
+#~| "function to get to this point in your program. By clicking on an item "
+#~| "you can see the values in any of the previous calling functions."
+#~ msgid ""
+#~ "<b>Frame stack</b><p>Often referred to as the \"call stack\", this is a "
+#~ "list showing which function is currently active, and what called each "
+#~ "function to get to this point in your program. By clicking on an item you "
+#~ "can see the values in any of the previous calling functions."
+#~ msgstr ""
+#~ "<b>Πλαίσιο στοίβας</b><p>Συχνά αποκαλείται \"στοίβα κλήσης\", αυτή είναι "
+#~ "η λίστα που εμφανίζει την τρέχουσα ενεργή συνάρτηση καθώς και ποιος "
+#~ "κάλεσε κάθε συνάρτηση μέχρι να βρεθεί η εκτέλεση σε αυτό το σημείο του "
+#~ "προγράμματος. Κάνοντας κλικ σε ένα αντικείμενο μπορείτε να δείτε τις "
+#~ "τιμές σε οποιαδήποτε από τις προηγούμενες συναρτήσεις."
+
+#~ msgid "Double-click to create new code breakpoint"
+#~ msgstr "Διπλό κλικ για τη δημιουργία νέας διακοπής κώδικα"
+
+#~ msgid "Breakpoint is active"
+#~ msgstr "Σημείο διακοπής ενεργό"
+
+#~ msgid "Not hit yet"
+#~ msgstr "Μη εμφάνιση ακόμη"
+
+#~ msgid "Ignore"
+#~ msgstr "Αγνόηση"
+
+#~ msgid "next hits"
+#~ msgstr "επόμενες εμφανίσεις"
+
+#~ msgid "Breakpoint is %1"
+#~ msgstr "Σημείο διακοπής %1"
+
+#~ msgid "Hit %1 time"
+#~ msgid_plural "Hit %1 times"
+#~ msgstr[0] "%1 εμφάνιση"
+#~ msgstr[1] "%1 εμφανίσεις"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Breakpoint is pending</b><p>Pending breakpoints are those that are "
+#~| "communucated to GDB, but which are not yet installed in the target, "
+#~| "because GDB cannot find the function or the file the breakpoint refers "
+#~| "too. Most common case is a breakpoint in a shared library.  GDB will "
+#~| "insert this breakpoint only when the library is loaded."
+#~ msgid ""
+#~ "<b>Breakpoint is pending</b><p>Pending breakpoints are those that are "
+#~ "communucated to GDB, but which are not yet installed in the target, "
+#~ "because GDB cannot find the function or the file the breakpoint refers "
+#~ "to. The most common case is a breakpoint in a shared library: GDB will "
+#~ "insert this breakpoint only when the library is loaded."
+#~ msgstr ""
+#~ "<b>Σημείο διακοπής σε εξέλιξη</b><p>Τα σημεία διακοπής σε εξέλιξη είναι "
+#~ "αυτά που έχουν αποσταλεί στο GDB, αλλά δεν έχουν εγκατασταθεί ακόμη στον "
+#~ "προορισμό, επειδή το GDB δεν μπορεί να βρει τη συνάρτηση ή το αρχείο στο "
+#~ "οποίο αναφέρεται το σημείο διακοπής. Το πιο συνηθισμένο είναι όταν το "
+#~ "σημείο διακοπής βρίσκεται σε μια κοινόχρηστη βιβλιοθήκη. Το GDB θα "
+#~ "εισάγει το σημείο διακοπής μόνο όταν η βιβλιοθήκη φορτωθεί."
+
+#~ msgid ""
+#~ "<b>Breakpoint is dirty</b><p>The breakpoint is not yet communicated to "
+#~ "GDB."
+#~ msgstr ""
+#~ "<b>Μη καθαρό σημείο διακοπής</b><p>Το σημείο διακοπής δεν έχει ακόμη "
+#~ "αποσταλεί στο GDB."
+
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Σημεία διακοπής αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Breakpoint list</b><p>Displays a list of breakpoints with their "
+#~ "current status. Clicking on a breakpoint item allows you to change the "
+#~ "breakpoint and will take you to the source in the editor window."
+#~ msgstr ""
+#~ "<b>Λίστα σημείων διακοπής</b><p>Εμφανίζει μια λίστα των σημείων διακοπής "
+#~ "καθώς και την τρέχουσα κατάστασή τους. Κάνοντας κλικ σε ένα σημείο "
+#~ "διακοπής σας επιτρέπει την τροποποίηση του σημείου διακοπής και σας "
+#~ "μεταφέρει στον κώδικα στο παράθυρο του επεξεργαστή."
+
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Νέο"
+
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Κώδικας"
+
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Εγγραφή δεδομένων"
+
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Ανάγνωση δεδομένων"
+
+#~ msgid "Show text"
+#~ msgstr "Εμφάνιση κειμένου"
+
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
+
+#~ msgid "Disable"
+#~ msgstr "Απενεργοποίηση"
+
+#~ msgid "Delete"
+#~ msgstr "Διαγραφή"
+
+#~ msgid "Disable all"
+#~ msgstr "Απενεργοποίηση όλων"
+
+#~ msgid "Enable all"
+#~ msgstr "Ενεργοποίηση όλων"
+
+#~ msgid "Delete all"
+#~ msgstr "Διαγραφή όλων"
+
+#~ msgid "Enable"
+#~ msgstr "Ενεργοποίηση"
+
+#~ msgid "&Start"
+#~ msgstr "&Εκκίνηση"
+
+#~ msgid "&Restart"
+#~ msgstr "&Επανεκκίνηση"
+
+#~ msgid "Restart program"
+#~ msgstr "Επανεκκίνηση προγράμματος"
+
+#~ msgid ""
+#~ "<b>Restarts application</b><p>Restarts applications from the beginning."
+#~ msgstr ""
+#~ "<b>Επανεκκίνηση της εφαρμογής</b><p>Επανεκκινεί τις εφαρμογές από την "
+#~ "αρχή."
+
+#~ msgid "Sto&p"
+#~ msgstr "&Σταμάτημα"
+
+#~ msgid "Stop debugger"
+#~ msgstr "Σταμάτημα αποσφαλματωτή"
+
+#~ msgid "<b>Stop debugger</b><p>Kills the executable and exits the debugger."
+#~ msgstr ""
+#~ "<b>Σταμάτημα αποσφαλματωτή</b><p>Τερματίζει το εκτελέσιμο και βγαίνει από "
+#~ "τον αποσφαλματωτή."
+
+#~ msgid "Interrupt application"
+#~ msgstr "Διακοπή εφαρμογής"
+
+#~ msgid ""
+#~ "<b>Interrupt application</b><p>Interrupts the debugged process or current "
+#~ "GDB command."
+#~ msgstr ""
+#~ "<b>Διακοπή εφαρμογής</b><p>Διακόπτει τη διαδικασία που αποσφαλματώνεται ή "
+#~ "την τρέχουσα εντολή του GDB."
+
+#~ msgid "Run to cursor"
+#~ msgstr "Εκτέλεση μέχρι το δρομέα"
+
+#~ msgid "Set E&xecution Position to Cursor"
+#~ msgstr "Ορισμός θέσης ε&κτέλεσης στο δρομέα"
+
+#~ msgid "Step &Over"
+#~ msgstr "Βήμα από &πάνω"
+
+#~ msgid "Step over the next line"
+#~ msgstr "Βήμα πάνω από την επόμενη γραμμή"
+
+#~ msgid ""
+#~ "<b>Step over</b><p>Executes one line of source in the current source "
+#~ "file. If the source line is a call to a function the whole function is "
+#~ "executed and the app will stop at the line following the function call."
+#~ msgstr ""
+#~ "<b>Βήμα από πάνω</b><p>Εκτελεί μια γραμμή του κώδικα στο τρέχον αρχείο "
+#~ "κώδικα. Αν η γραμμή είναι κλήση σε μια συνάρτηση τότε εκτελείται όλη η "
+#~ "συνάρτηση και η εφαρμογή θα σταματήσει στην επόμενη γραμμή μετά την κλήση "
+#~ "της συνάρτησης."
+
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Βήμα πάνω από &τελεστή"
+
+#~ msgid "Step over instruction"
+#~ msgstr "Βήμα πάνω από τελεστή"
+
+#~ msgid ""
+#~ "<b>Step over instruction</b><p>Steps over the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Βήμα πάνω από τελεστή</b><p>Βήμα πάνω από τον επόμενο τελεστή κώδικα "
+#~ "μηχανής."
+
+#~ msgid "Step &Into"
+#~ msgstr "Βήμα &μέσα"
+
+#~ msgid "Step into the next statement"
+#~ msgstr "Βήμα μέσα στην επόμενη εντολή"
+
+#~ msgid ""
+#~ "<b>Step into</b><p>Executes exactly one line of source. If the source "
+#~ "line is a call to a function then execution will stop after the function "
+#~ "has been entered."
+#~ msgstr ""
+#~ "<b>Βήμα μέσα</b><p>Εκτελεί ακριβώς μια γραμμή κώδικα. Αν η γραμμή κώδικα "
+#~ "είναι μια κλήση συνάρτησης τότε η εκτέλεση θα σταματήσει στην είσοδο της "
+#~ "συνάρτησης."
+
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Βήμα μέσα σε έναν τε&λεστή"
+
+#~ msgid "Step into instruction"
+#~ msgstr "Βήμα μέσα σε έναν τελεστή"
+
+#~ msgid ""
+#~ "<b>Step into instruction</b><p>Steps into the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Βήμα μέσα σε έναν τελεστή</b><p>Βήμα μέσα στον επόμενο τελεστή κώδικα "
+#~ "μηχανής."
+
+#~ msgid "Step O&ut"
+#~ msgstr "Βήμα έ&ξω"
+
+#~ msgid "Steps out of the current function"
+#~ msgstr "Βήμα έξω από την τρέχουσα συνάρτηση"
+
+#~ msgid ""
+#~ "<b>Step out</b><p>Executes the application until the currently executing "
+#~ "function is completed. The debugger will then display the line after the "
+#~ "original call to that function. If program execution is in the outermost "
+#~ "frame (i.e. in main()) then this operation has no effect."
+#~ msgstr ""
+#~ "<b>Βήμα έξω</b><p>Εκτελεί την εφαρμογή μέχρι την ολοκλήρωση της τρέχουσας "
+#~ "συνάρτησης. Ο αποσφαλματωτής θα εμφανίσει τη γραμμή μετά την αρχική κλήση "
+#~ "της συνάρτησης. Αν η εκτέλεση βρίσκεται στο πιο έξω πλαίσιο (π.χ. στην "
+#~ "main()) τότε αυτή η λειτουργία δεν έχει κανένα αποτέλεσμα."
+
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Εναλλαγή σημείου διακοπής"
+
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Εναλλαγή σημείου διακοπής"
+
+#~ msgid ""
+#~ "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
+#~ "editor."
+#~ msgstr ""
+#~ "<b>Εναλλαγή σημείου διακοπής</b><p>Εναλλάσσει την κατάσταση του σημείου "
+#~ "διακοπής στην τρέχουσα γραμμή του επεξεργαστή."
+
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Εκτέλεση του προγράμματος στον αποσφαλματωτή"
+
+#~ msgid ""
+#~ "Start in debugger\n"
+#~ "\n"
+#~ "Starts the debugger with the project's main executable. You may set some "
+#~ "breakpoints before this, or you can interrupt the program while it is "
+#~ "running, in order to get information about variables, frame stack, and so "
+#~ "on."
+#~ msgstr ""
+#~ "Εκκίνηση μέσα στον αποσφαλματωτή\n"
+#~ "\n"
+#~ "Εκκινεί τον αποσφαλματωτή με το κύριο εκτελέσιμο του έργου. Μπορείτε να "
+#~ "ορίσετε κάποια σημεία διακοπής πριν από αυτό, ή μπορείτε να διακόψετε το "
+#~ "πρόγραμμα που εκτελείται, για να ανακτήσετε πληροφορίες σχετικά με "
+#~ "μεταβλητές, τη στοίβα κλήσης και άλλα."
+
+#~ msgid "Continues the application execution"
+#~ msgstr "Συνέχεια της εκτέλεσης της εφαρμογής"
+
+#~ msgid ""
+#~ "Continue application execution\n"
+#~ "\n"
+#~ "Continues the execution of your application in the debugger. This only "
+#~ "takes effect when the application has been halted by the debugger (i.e. a "
+#~ "breakpoint has been activated or the interrupt was pressed)."
+#~ msgstr ""
+#~ "Συνέχεια της εκτέλεσης της εφαρμογής\n"
+#~ "\n"
+#~ "Συνεχίζει την εκτέλεση της εφαρμογής στον αποσφαλματωτή. Αυτό έχει "
+#~ "αποτέλεσμα μόνο όταν η εφαρμογή έχει σταματήσει από τον αποσφαλματωτή (π."
+#~ "χ. με ένα σημείο διακοπής ή με χειροκίνητη διακοπή)."
+
+#~ msgid "Breakpoint"
+#~ msgstr "Σημείο διακοπής"
+
+#~ msgid " temporary"
+#~ msgstr " προσωρινό"
+
+#~ msgid " hw"
+#~ msgstr " υλικό"
+
+#~ msgid "Enabled"
+#~ msgstr "Ενεργό"
+
+#~ msgid "Disabled"
+#~ msgstr "Ανενεργό"
+
+#~ msgid "Status"
+#~ msgstr "Κατάσταση"
+
+#~ msgid "Location"
+#~ msgstr "Τοποθεσία"
+
+#~ msgid "Condition"
+#~ msgstr "Συνθήκη"
+
+#~ msgid "Ignore Count"
+#~ msgstr "Μετρητής παράβλεψης"
+
+#~ msgid "Hits"
+#~ msgstr "Εμφανίσεις"
+
+#~ msgid "Tracing"
+#~ msgstr "Ανίχνευση"
+
+#~ msgid "Pending (add)"
+#~ msgstr "Σε αναμονή (προσθήκη)"
+
+#~ msgid "Pending (clear)"
+#~ msgstr "Σε αναμονή (καθαρισμός)"
+
+#~ msgid "Pending (modify)"
+#~ msgstr "Σε αναμονή (τροποποίηση)"
+
+#~ msgid "Active"
+#~ msgstr "Ενεργό"
+
+#~ msgid ""
+#~ "<b>Data write breakpoint</b><br>Expression: %1<br>Address: 0x%2<br>Old "
+#~ "value: %3<br>New value: %4"
+#~ msgstr ""
+#~ "<b>Σημείο διακοπής εγγραφής δεδομένων</b><br>Έκφραση: %1<br>Διεύθυνση: 0x"
+#~ "%2<br>Παλιά τιμή: %3<br>Νέα τιμή: %4"
+
+#~ msgid "Invalid"
+#~ msgstr "Μη έγκυρο"
+
+#~ msgid "Watchpoint"
+#~ msgstr "Σημείο παρακολούθησης"
+
+#~ msgid "Read Watchpoint"
+#~ msgstr "Ανάγνωση σημείου παρακολούθησης"
+
+#~ msgid "C++ Debugger"
+#~ msgstr "Αποσφαλματωτής C++"

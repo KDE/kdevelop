@@ -1,0 +1,151 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2009.
+# Steve Allewell <steve.allewell@gmail.com>, 2014, 2015, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-19 18:09+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "Could not find the make builder. Check your installation"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "Could not find a builder for %1"
+
+#: cmakebuilder.cpp:195
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "No build directory configured, cannot install"
+
+#: cmakebuilder.cpp:205
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "No build directory configured, cannot configure"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Configure Global CMake Settings"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Default CMake executable:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Default generator:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Internal error: no project specified to configure."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Failed to create build directory %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr "No build directory configured, cannot clear the build directory"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Wrong build directory, cannot clear the build directory"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Prune successful **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Prune failed: %1 **"
+
+#~ msgid "Aborting"
+#~ msgstr "Aborting"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Aborting configure"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "No Build Directory configured, cannot build"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "No Build Directory configured, cannot clean"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Aborting clean"
+
+#~ msgid "Aborting install"
+#~ msgstr "Aborting install"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrew Coles, Steve Allewell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrew_coles@yahoo.co.uk, steve.allewell@gmail.com"
+
+#~ msgid "CMake Builder"
+#~ msgstr "CMake Builder"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Support for building CMake projects"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "No clearing of builddir possible"
+
+#~ msgid "Job failed"
+#~ msgstr "Job failed"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake Binary:"

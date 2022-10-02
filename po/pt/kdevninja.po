@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevninja\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 11:49+0100\n"
+"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
+"Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-POFile-SpellExtra: ninja kdesudo kdesu\n"
+
+#: ninjabuilder.cpp:30
+#, kde-format
+msgid "Unable to find ninja executable. Is it installed on the system?"
+msgstr ""
+"Não foi possível encontrar o executável 'ninja'. Será que está instalado no "
+"sistema?"
+
+#: ninjabuilder.cpp:197
+#, kde-format
+msgid "Cannot specify prefix in %1, on ninja"
+msgstr "Não é possível definir o prefixo como %1 no Ninja"
+
+#: ninjabuilderpreferences.cpp:35
+#, kde-format
+msgctxt "@title:tab"
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjabuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Ninja settings"
+msgstr "Configurar as definições do Ninja"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: ninjaconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "Mostrar os coman&dos mas não os executar:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: ninjaconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "Install as &root:"
+msgstr "Instalar como '&root':"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: ninjaconfig.ui:75
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Root installation &command:"
+msgstr "&Comando de instalação como 'root':"
+
+#. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
+#: ninjaconfig.ui:110
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "&Número de tarefas em simultâneo:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: ninjaconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Count of &errors to be tolerated:"
+msgstr "Número de &erros tolerados:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ninjaconfig.ui:153
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ninja &options:"
+msgstr "&Opções adicionais do 'ninja':"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ninjaconfig.ui:173
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "&Perfil activo do ambiente:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ninjaconfig.ui:208
+#, kde-format
+msgctxt "@option:check"
+msgid "O&verride number of jobs:"
+msgstr "S&ubstituir o número de tarefas:"
+
+#: ninjajob.cpp:72
+#, kde-format
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjajob.cpp:94
+#, kde-format
+msgid "Ninja (%1): %2"
+msgstr "Ninja (%1): %2"
+
+#: ninjajob.cpp:96
+#, kde-format
+msgid "Ninja (%1)"
+msgstr "Ninja (%1)"

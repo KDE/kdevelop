@@ -1,0 +1,63 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2016-11-23 18:58+0100\n"
+"Last-Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Stran vsebine man"
+
+#: manpagedocumentationwidget.cpp:32
+#, kde-format
+msgid "Loading man pages..."
+msgstr "Nalaganje strani man ..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+"Napaka med nalaganjem strani man:\n"
+"%1"
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Stran man"
+
+#~ msgid "Man pages loading error"
+#~ msgstr "Napaka med nalaganjem strani man"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Could not find any documentation for '%1'"
+#~ msgstr "Ni bilo mogoče najti dokumentacije za '%1'"
+
+#~ msgid "ManPage"
+#~ msgstr "ManPage"
+
+#~ msgid "Check Man Page documentation"
+#~ msgstr "Preveri dokumentacijo strani Man"

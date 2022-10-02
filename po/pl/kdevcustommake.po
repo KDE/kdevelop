@@ -1,0 +1,156 @@
+# translation of kdevcustommake.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-08-08 14:53+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Próbowano znaleźć ścieżkę plików dołączanych podczas, gdy inny proces "
+"znajdywania był nadal uruchomiony"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Brakuje Makefile w katalogu \"%1\""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Problem podczas rozwiązywania ścieżek do plików dołączanych w %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "W pamięci podręcznej: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Plik %1 wydaje się być zdeformowanym"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Nieudane wypakowanie nowego katalogu roboczego"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "Wynikiem było: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Nieudane rekursywne wywołanie make"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+"Ciąg znaków parametru \"%1\" nie wydaje się być prawidłowym. Wynikiem było: "
+"%2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "Katalog \"%1\" nie istnieje. Wynikiem było: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Zdeformowane rekursywne wywołanie make"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Nie można wypakować ścieżek plików dołączanych z wyjścia make"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Katalog: \"%1\"  Polecenie: \"%2\" Wynik: \"%3\""
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Uruchom"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Zarządzanie własnymi plikami Makefile"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr ""
+#~ "Obsługa zarządzania projektami korzystającymi z własnych plików makefile"
+
+#~ msgid "Build &Target"
+#~ msgstr "Buduj &cel"
+
+#~ msgid "Build target"
+#~ msgstr "Buduj cel"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Buduj cel</b> <p>Uruchomienie <b>make nazwacelu</b> z katalogu "
+#~ "projektu (nazwacelu to nazwa wybranego celu). <br> Zmienne środowiska i "
+#~ "argumenty programu make mogą być zmienione w oknie dialogowym ustawień "
+#~ "projektu, karta <b>Opcje budowania</b>."
+
+#, fuzzy
+#~ msgid "Build this project"
+#~ msgstr "Buduj projekt"
+
+#, fuzzy
+#~ msgid "Build this target"
+#~ msgstr "Budowanie aktywnego celu"
+
+#, fuzzy
+#~ msgid "Build this directory"
+#~ msgstr "Budowanie aktywnego celu"

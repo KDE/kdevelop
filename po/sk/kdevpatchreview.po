@@ -1,0 +1,400 @@
+# translation of kdevpatchreview.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2009.
+# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015, 2016, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevpatchreview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-04-17 20:50+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "Vlastná záplata"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "Záplata"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr "Základný adresár:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr "/cesta/ku/základu/patchu"
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, kde-format
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "Zo súboru"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr "/cesta/ku/patchu"
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "Z príkazu"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr "Zadajte príkaz na získanie výstupu:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "Záplata je už použitá na miestnej verzii"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, kde-format
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "Už použité"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">Konflikt</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "Použité.<br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "Vloženie<br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, kde-format
+msgid "Removal<br/>"
+msgstr "Odstránenie<br/>"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "Predošlé:<br/>"
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "Vrátené.<br/>"
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "Alternatívne:<br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr "Nemôžem použiť zmenu: Text by mal byť \"%1\", ale je \"%2\"."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, kde-format
+msgctxt "@item"
+msgid "Insertion"
+msgstr "Vloženie"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, kde-format
+msgctxt "@item"
+msgid "Removal"
+msgstr "Odstránenie"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, kde-format
+msgctxt "@item"
+msgid "Change"
+msgstr "Zmeniť"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, kde-format
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Aktualizácia modelu Kompare"
+
+#: patchreview.cpp:457
+#, kde-format
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "Prehľad"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, kde-format
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "Zhodnotenie záplaty"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr "Základný adresár záplaty musí byť absolútny adresár."
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, kde-format
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "Ukončiť revíziu"
+
+#: patchreview.cpp:603
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "Skontrolovať záplatu"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "Predošlý súbor"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "Predchádzajúci rozdiel"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "Nasledujúci rozdiel"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "Ďalší súbor"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Aktualizovať"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "Spustiť testy"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, kde-format
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Exportovať Diff..."
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "Zrušiť revíziu"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, kde-format
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "Ukončiť revíziu"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, kde-format
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "Zmeny"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (1 väzba)"
+msgstr[1] "%2 (%1 väzby)"
+msgstr[2] "%2 (%1 väzieb)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr "<qt>Môžete nájsť novú požiadavku na:<br /><a href='%1'>%1</a> </qt>"
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+"Nemôžem exportovať záplatu.\n"
+"%1"
+
+#: patchreviewtoolview.cpp:255
+#, kde-format
+msgctxt "@action"
+msgid "Select All"
+msgstr "Vybrať všetko"
+
+#: patchreviewtoolview.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "Zrušiť výber"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "Spúšťam testy: %p%"
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "Test prešiel"
+msgstr[1] "Všetky %1 testy prešli"
+msgstr[2] "Všetkých %1 testov prešlo"
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "Výsledky testu: %1 prešlo, %2 zlyhalo, %3 chýb"
+
+#~ msgid "Base:"
+#~ msgstr "Základ:"
+
+#~ msgid "Patch base..."
+#~ msgstr "Základ záklaty..."
+
+#~ msgid "Patch location..."
+#~ msgstr "Umiestnenie záplaty..."
+
+#~ msgid "Command's output..."
+#~ msgstr "Výstup príkazu..."
+
+#~ msgid "Error exporting"
+#~ msgstr "Chyba exportu"
+
+#~ msgid "Edit Patch"
+#~ msgstr "Upraviť záplatu"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Save As..."
+#~ msgstr "Uložiť ako..."
+
+#~ msgid "Send..."
+#~ msgstr "Poslať..."
+
+#~ msgid "Send to contact..."
+#~ msgstr "Poslať do kontaktu:"
+
+#~ msgid "Side view (Kompare)..."
+#~ msgstr "Bočné zobrazenie (Kompare)..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>Žiadne modely ani rozdiely v súbore: <b>%1</b>. Nie je to platný "
+#~ "súbor diff.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>Nastali problémy pri použití rozdielu <b>%1</b> na súbor <b>%2</b>.</"
+#~ "qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>Nastali problémy pri použití rozdielu <b>%1</b> na priečinok <b>%2</"
+#~ "b>.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "Nepodarilo sa otvoriť dočasný súbor."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr ""
+#~ "<qt>Nepodaril sa zápis do dočasného súboru <b>%1</b>, súbor bol zmazaný.</"
+#~ "qt>"
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>Nepodarilo sa vytvoriť cieľový adresár <b>%1</b>.\n"
+#~ "Súbor nebol uložený.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>Nepodarilo sa poslať dočasný súbor na cieľové umiestnenie <b>%1</b>. "
+#~ "Dočasný súbor je k dispozícii pod: <b>%2</b>. Môžete ho na správne miesto "
+#~ "skopírovať ručne.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "Nepodarilo sa spracovať výstup diff."
+
+#~ msgid "The files are identical."
+#~ msgstr "Súbory sú rovnaké."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Nepodaril sa zápis do dočasného súboru."
+
+#~ msgid "Highlights code affected by a patch"
+#~ msgstr "Zvýrazniť kód zmenený záplatou"

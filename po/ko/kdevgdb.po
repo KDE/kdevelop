@@ -1,0 +1,750 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"PO-Revision-Date: 2022-07-13 13:06+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#, kde-format
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "디스어셈블/레지스터"
+
+#: debuggerplugin.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "메모리"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
+#: debuggertracingdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Tracing Configuration"
+msgstr "추적 설정"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
+#: debuggertracingdialog.ui:26
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Custom format string</b>\n"
+"<p>Specify a C-style format string that will be used when printing the "
+"chosen expression. For example:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"If custom format string is not enabled, names and values of all expressions "
+"will be printed, using \"%d\" as format specifier for all expressions."
+msgstr ""
+"<b>사용자 정의 형식 문자열</b>\n"
+"<p>선택한 표현식을 출력할 때 지정한 C 스타일 형식 문자열을 사용합니다. 예:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"사용자 정의 형식 문자열이 비활성화되어 있으면 모든 표현식에 \"%d\" 형식 문자"
+"열을 사용하여 각각 이름과 값을 출력합니다."
+
+#. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
+#: debuggertracingdialog.ui:36
+#, kde-format
+msgctxt "@label"
+msgid "Expressions to print:"
+msgstr "출력할 표현식:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:47
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"<b>Enable tracing</b>\n"
+"<p>Tracing is a mechanism to automatically print values of the chosen "
+"expressions and continue execution when breakpoint is hit. You can think of "
+"it as printf debugging that does not require modifying the source.</p>"
+msgstr ""
+"<b>추적 사용</b>\n"
+"<p>추적을 사용하면 중단점에 도달했을 때 지정한 표현식의 값을 자동으로 출력하"
+"고 실행을 계속합니다. 소스 코드 수정 없이 사용할 수 있는 printf 디버깅과 비슷"
+"합니다.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable tracing"
+msgstr "추적 사용"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
+#: debuggertracingdialog.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Custom format string"
+msgstr "사용자 정의 형식 문자열"
+
+#: debugsession.cpp:170
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"환경 프로필을 지정하지 않았습니다. 설정이 잘못된 것 같습니다. '%1' 실행 설정"
+"을 확인하십시오. 기본 환경 프로필을 사용합니다."
+
+#: debugsession.cpp:281
+#, kde-format
+msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+msgstr "<b>gdb 7.0.0 이상이 필요합니다.</b><br />사용 중인 버전: %1"
+
+#: debugsession.cpp:294
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>디버거를 시작할 수 없음:</b><br />"
+
+#: debugsession.cpp:308
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>코어 파일을 불러올 수 없음</b><p>디버거에서 다음 오류를 반환했습니다:"
+"<p><tt>%1"
+
+#: gdb.cpp:69
+#, kde-format
+msgid "Could not locate the debugging shell '%1'."
+msgstr "'%1' 디버깅 셸을 찾을 수 없습니다."
+
+#: gdbconfigpage.cpp:92
+#, kde-format
+msgctxt "@title:tab"
+msgid "GDB Configuration"
+msgstr "GDB 설정"
+
+#: gdbconfigpage.cpp:133
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
+"실행하시겠습니까?"
+
+#: gdbconfigpage.cpp:135
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "현재 세션 중단"
+
+#: gdbconfigpage.cpp:161
+#, kde-format
+msgid "Executes a native application in GDB"
+msgstr "GDB에서 네이티브 프로그램 실행"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: gdbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "디버거"
+
+#. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
+#: gdbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger e&xecutable:"
+msgstr "디버거 실행 파일(&X):"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Gdb executable"
+msgstr "GDB 실행 파일"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:51
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
+"gdb, for example, for a different architecture, enter the executable name "
+"here. You can either run gdb from $PATH, but with a different name (say, "
+"\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+"executable."
+msgstr ""
+"$PATH에 등록된 \"gdb\" 실행 파일을 실행하려면 비워 두십시오. 다른 아키텍처용 "
+"등 사용자 정의 gdb를 실행하려면 실행 파일 이름을 입력하십시오. $PATH에 등록되"
+"었으나 다른 이름으로 된 gdb(예: \"arm-gdb\")를 사용하려면 여기에 이름만 입력"
+"하거나 gdb 실행 파일의 전체 경로를 입력하십시오."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:54
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to gdb executable..."
+msgstr "GDB 실행 파일 경로 재정의"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
+#: gdbconfigpage.ui:61 gdbconfigpage.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>If you want gdb to be executed by a special shell "
+"script, which for example properly sets the library path, insert it here e."
+"g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+"invoked like this: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+"span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>라이브러리 경로를 설정해야 하는 등 이유로 GDB를 특수한 "
+"셸 스크립트를 통해서 실행해야 한다면 여기에 입력하십시오. 예: /path/to/"
+"script.sh --scriptArguments</p><p>메모: 이 때 스크립트는 다음과 같이 호출됩니"
+"다: /path/to/script.sh --scriptArguments debugger --debuggerArguments. 따라"
+"서 script.sh 파일에서는 &quot;debugger&quot; 실행 파일을 <span style=\" font-"
+"weight:600;\">항상</span> 수동으로 호출해야 합니다.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
+#: gdbconfigpage.ui:64
+#, kde-format
+msgctxt "@label:chooser"
+msgid "She&ll script:"
+msgstr "셸 스크립트(&L):"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: gdbconfigpage.ui:87
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "옵션"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: gdbconfigpage.ui:96
+#, kde-format
+msgctxt "@option:check"
+msgid "Display static &members:"
+msgstr "정적 멤버 표시(&M):"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
+#: gdbconfigpage.ui:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displaying static members makes GDB slower in\n"
+"producing data with Qt-based code.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on,\n"
+"but if you need to debug into these values then\n"
+"check this option."
+msgstr ""
+"정적 멤버를 표시하면 Qt 기반 코드의 내부 데이터를\n"
+"표시할 때 GDB가 느려집니다.\n"
+"QString 및 그 계열 클래스에서 사용하는 데이터의\n"
+"\"증명\"(signature)이 변경될 수 있으나,\n"
+"해당 값을 디버깅해야 한다면 이 옵션을\n"
+"활성화하십시오."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gdbconfigpage.ui:121
+#, kde-format
+msgctxt "@option:check"
+msgid "Display &demangled names:"
+msgstr "맹글링 해제된 이름 표시(&D):"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
+#: gdbconfigpage.ui:133
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"When displaying the disassembled code you\n"
+"can select to see the methods' mangled names.\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"디스어셈블된 코드를 표시할 때 메서드의 이름을\n"
+"맹글링된 형태로 표시할 수도 있습니다.\n"
+"맹글링되지 않은 이름이 더 읽기 쉽습니다."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gdbconfigpage.ui:143
+#, kde-format
+msgctxt "@label:listbox"
+msgid "S&tart debugger with:"
+msgstr "다음으로 디버거 시작(&T):"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:154
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "프로그램 출력"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:159
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "GDB Console"
+msgstr "GDB 콘솔"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:164
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "프레임 스택"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:178
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This script is intended for the actual commands needed to connect to a "
+"remotely running executable.\n"
+"\tshell sleep 5\twait for remote program to start\n"
+"\ttarget remote ...\tconnect to the remote debugger\n"
+"\tcontinue\t[optional] run debugging to the first breakpoint"
+msgstr ""
+"이 스크립트는 원격에서 실행 중인 프로그램에 연결할 때 실행해야 할 실제 명령 "
+"호출입니다.\n"
+"\tshell sleep 5\t원격 프로그램의 시작 기다리기\n"
+"\ttarget remote ...\t원격 디버거에 연결\n"
+"\tcontinue\t[선택 사항] 첫 중단점까지 디버깅 실행"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:181
+#, kde-format
+msgctxt "@title:group"
+msgid "Remote Debugging"
+msgstr "원격 디버깅"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
+#: gdbconfigpage.ui:187 gdbconfigpage.ui:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to start remote application</p><p></p><p>This "
+"shell script is run after the Gdb Config script has been sourced by gdb.</"
+"p><p>It's purpose is to actually start the remote process.</p><p>1) Find a "
+"way to execute a command remotely - rsh, ssh, telnet, ...</p><p>2a) Execute "
+"&quot;gdbserver ... application&quot; on target.</p><p>or if your executable "
+"contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
+"p></body></html>"
+msgstr ""
+"<html><head/><body><p>원격 프로그램을 시작하는 스크립트</p><p></p><p>이 셸 스"
+"크립트는 gdb에서 GDB 설정 스크립트를 불러온 후 실행됩니다.</p><p>이 스크립트"
+"의 목적은 원격 프로세스 시작입니다.</p><p>1) 원격으로 명령을 실행할 방법 찾"
+"기: rsh, ssh, telnet, ...</p><p>2a) 대상에서 &quot;gdbserver ... "
+"application&quot;을 실행합니다.</p><p>또는 실행 파일에 gdb stub이 들어 있다"
+"면:</p><p>2b) 대상에서 &quot;application&quot;을 실행합니다.</p></body></"
+"html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
+#: gdbconfigpage.ui:190
+#, kde-format
+msgctxt "@label:chooser Shell script to be executed at run time"
+msgid "R&un shell script:"
+msgstr "셸 스크립트 실행(&U):"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
+#: gdbconfigpage.ui:210 gdbconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This script is sourced by gdb when the debugging starts."
+msgstr "디버깅을 시작할 때 이 스크립트를 GDB에서 불러옵니다."
+
+#. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
+#: gdbconfigpage.ui:213
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Gdb &config script:"
+msgstr "GDB 설정 스크립트(&C):"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
+#. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:226 gdbconfigpage.ui:233
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to connect with remote application</p><p>For "
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>원격 프로그램과 연결하는 스크립트</p><p>예제:</p><p>"
+"\tshell sleep 5\t # 원격 프로그램의 시작 기다리기</p><p>\ttarget remote ..."
+"\t# 원격 디버거에 연결</p><p>\tcontinue\t#[선택 사항] 첫 중단점까지 디버깅을 "
+"실행합니다.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:236
+#, kde-format
+msgctxt "@label:chooser Gdb script to be executed at run time."
+msgid "Run &gdb script:"
+msgstr "GDB 스크립트 실행(&G):"
+
+#: gdboutputwidget.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB Output"
+msgstr "GDB 출력"
+
+#: gdboutputwidget.cpp:48
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
+"issue any other GDB command while debugging.</p>"
+msgstr ""
+"<b>GDB 출력</b><p>실행 중인 모든 GDB 명령어를 표시합니다. 또한 디버깅 중에 다"
+"른 GDB 명령어를 내릴 수 있습니다.</p>"
+
+#: gdboutputwidget.cpp:58
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&GDB command:"
+msgstr "GDB 명령(&G):"
+
+#: gdboutputwidget.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter GDB commands"
+msgstr "프로그램의 실행을 일시 정지하여 GDB 명령 입력"
+
+#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Internal Commands"
+msgstr "내부 명령 표시"
+
+#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"KDevelop에서 내부적으로 내린 명령을 표시할지 여부입니다.<br>이 옵션을 변경한 "
+"후의 명령에만 적용되며, 보기에 이미 있는 명령을 추가하거나 삭제하지는 않습니"
+"다."
+
+#: gdboutputwidget.cpp:381
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy All"
+msgstr "모두 복사"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevgdbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "디버거 도구 모음"
+
+#: memviewdlg.cpp:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Start:"
+msgstr "시작:"
+
+#: memviewdlg.cpp:69
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Amount:"
+msgstr "합계:"
+
+#: memviewdlg.cpp:96
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory View"
+msgstr "메모리 보기"
+
+#: memviewdlg.cpp:223
+#, kde-format
+msgid "%2 (1 byte)"
+msgid_plural "%2 (%1 bytes)"
+msgstr[0] "%2(%1바이트)"
+
+#: memviewdlg.cpp:262
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "&Reload"
+msgstr "새로 고침(&R)"
+
+#: memviewdlg.cpp:271
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Format"
+msgstr "형식(&F)"
+
+#: memviewdlg.cpp:274
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Binary"
+msgstr "2진수(&B)"
+
+#: memviewdlg.cpp:279
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Octal"
+msgstr "8진수(&O)"
+
+#: memviewdlg.cpp:284
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Decimal"
+msgstr "10진수(&D)"
+
+#: memviewdlg.cpp:289
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Hexadecimal"
+msgstr "16진수(&H)"
+
+#: memviewdlg.cpp:303
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Grouping"
+msgstr "그룹화(&G)"
+
+#: memviewdlg.cpp:306
+#, kde-format
+msgctxt "@item:inmenu no byte grouping"
+msgid "&0"
+msgstr "0(&0)"
+
+#: memviewdlg.cpp:311
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&1"
+msgstr "1(&1)"
+
+#: memviewdlg.cpp:316
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&2"
+msgstr "2(&2)"
+
+#: memviewdlg.cpp:321
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&4"
+msgstr "4(&4)"
+
+#: memviewdlg.cpp:326
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&8"
+msgstr "8(&8)"
+
+#: memviewdlg.cpp:331
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "1&6"
+msgstr "16(&6)"
+
+#: memviewdlg.cpp:344
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Write Changes"
+msgstr "변경 사항 기록"
+
+#: memviewdlg.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Change Memory Range"
+msgstr "메모리 범위 변경"
+
+#: memviewdlg.cpp:352
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close View"
+msgstr "보기 닫기"
+
+#: memviewdlg.cpp:419
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory Viewer"
+msgstr "메모리 뷰어"
+
+#: memviewdlg.cpp:423
+#, kde-format
+msgctxt "@action"
+msgid "New Memory Viewer"
+msgstr "새 메모리 뷰어"
+
+#: memviewdlg.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open a new memory viewer"
+msgstr "새 메모리 뷰어 열기"
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "디버깅 셸을 찾을 수 없습니다."
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "디버거 설정"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "실행"
+
+#~ msgid "OK"
+#~ msgstr "확인"
+
+#~ msgid "Cancel"
+#~ msgstr "취소"
+
+#~ msgid "Continues execution until the cursor position is reached."
+#~ msgstr "커서 위치에 도착할 때까지 실행을 계속"
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>머신 코드 표시</b> <p>머신 코드는 실행 중인 프로그램에서 강조하는 현재 "
+#~ "인스트럭션을 보여줍니다. \"다음 단계\" 인스트럭션 과 \"한 단계\" 인스트럭"
+#~ "션 디버거 도구 막대 버튼을 사용하여 인스트럭션을 하나씩 진행할 수 있습니"
+#~ "다."
+
+#~ msgid "Address"
+#~ msgstr "주소"
+
+#~ msgid "Function"
+#~ msgstr "함수"
+
+#~ msgid "Instruction"
+#~ msgstr "명령어"
+
+#~ msgid "Octal"
+#~ msgstr "8진법"
+
+#~ msgid "Decimal"
+#~ msgstr "10진법"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "16진법"
+
+#~ msgid "Raw"
+#~ msgstr "원본"
+
+#~ msgid "General"
+#~ msgstr "일반"
+
+#~ msgid "Flags"
+#~ msgstr "플래그"
+
+#~ msgid "Mode"
+#~ msgstr "모드"
+
+#~ msgid "Update"
+#~ msgstr "업데이트"
+
+#~ msgid "Examine Core File..."
+#~ msgstr "코어 파일 시험..."
+
+#~ msgid "Examine core file"
+#~ msgstr "코어 파일 시험"
+
+#~ msgid "Attach to Process"
+#~ msgstr "프로세스에 접근"
+
+#~ msgid "KDevelop"
+#~ msgstr "KDE 개발"
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "점검: %1"
+
+#~ msgid "Watch: %1"
+#~ msgstr "관찰: %1"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "시험할 코어 파일 선택..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "%1 코어파일 시험중"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "접근 위한 프로세스 선택..."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "%1 프로세스에 접근"
+
+#~ msgid "Executable:"
+#~ msgstr "실행가능:"
+
+#~ msgid "<br>Old value: %1"
+#~ msgstr "<br>이전 값: %1"
+
+#~ msgid "<br>New value: %1"
+#~ msgstr "<br>새 값: %1"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "디버거 중지"
+
+#~ msgid "Process exited"
+#~ msgstr "프로세스 종료"
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>비정상적인 GDB 종료</b> <p>GDB의 버그입니다. GDB 출력창을 검사하고 디버"
+#~ "거를 정지하십시오."
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "비정상적으로 GDB 종료"
+
+#~ msgid "Internal error"
+#~ msgstr "내부 오류"
+
+#~ msgid "Running program"
+#~ msgstr "프로그램 실행"
+
+#~ msgid "Warning"
+#~ msgstr "경고"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>디버거 시작 실패</b><p>'%1' 시작 실패. 지정한 경로의 이름을 확인하십시"
+#~ "오."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "디버거 시작 실패"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgid "(running)"
+#~ msgstr "경고"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"

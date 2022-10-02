@@ -1,0 +1,253 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Shinjo Park <kde@peremen.name>, 2019, 2020, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"PO-Revision-Date: 2022-07-13 13:06+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr "(실행 중)"
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#, kde-format
+msgid "LLDB"
+msgstr "LLDB"
+
+#: debuggerplugin.cpp:93
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "LLDB 콘솔"
+
+#: debugsession.cpp:136
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr "지원하지 않는 LLDP 버전에서 사용자 명령 실행 시도 중"
+
+#: debugsession.cpp:335
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>디버거를 시작할 수 없음:</b><br />"
+
+#: debugsession.cpp:346
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr "<b>원격 대상에 연결할 수 없음:</b><br />"
+
+#: debugsession.cpp:359
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>코어 파일을 불러올 수 없음</b><p>디버거에서 다음 오류를 반환했습니다:"
+"<p><tt>%1"
+
+#: debugsession.cpp:390
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+"<b>필수적인 패치가 누락되어 있어서 사용 중인 lldb-mi 버전을 지원하지 않습니"
+"다.</b><br/>더 많은 정보를 보려면 https://llvm.org/bugs/show_bug.cgi?"
+"id=28026 페이지를 참조하십시오.<br/>충돌을 방지할 수 있도록 디버거 콘솔을 비"
+"활성화합니다.<br/>계속 진행하시겠습니까?"
+
+#: debugsession.cpp:394
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr "지원하지 않는 LLDB 버전"
+
+#: debugsession.cpp:442
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr "<b>LLDB 3.8.1 이상의 llbi-mi가 필요합니다.</b><br />사용 중인 버전: %1"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "디버거 도구 모음"
+
+#: lldblauncher.cpp:49
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr "LLDB로 네이티브 프로그램 디버그"
+
+#: lldblauncher.cpp:73
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"프로그램이 이미 디버그 중입니다. 현재 실행 중인 디버그 세션을 종료하고 계속 "
+"실행하시겠습니까?"
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "현재 세션 중단"
+
+#: widgets/lldbconfigpage.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr "LLDB 설정"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "디버거"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr "디버거 실행 파일:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr "lldb-mi 실행 파일 경로 재정의..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr "추가 인자:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "환경:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr "시스템 환경 상속"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "옵션"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr "설정 스크립트:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr "/path/to/lldb/config/script"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr "디버거 시작:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "프로그램 출력"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr "LLDB 콘솔"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "프레임 스택"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, kde-format
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr "시작 시 중단점 설정:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, kde-format
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr "원격 디버깅(&T)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr "원격 서버:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr "host:port"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr "원격 작업 경로:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr "/path/to/a/on-device/writable/directory"
+
+#~ msgid "Startup error"
+#~ msgstr "시작 오류"
+
+#~ msgid "LLDB Error"
+#~ msgstr "LLDB 오류"

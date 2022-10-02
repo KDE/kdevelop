@@ -1,0 +1,36 @@
+# Lithuanian translations for l package.
+# Copyright (C) 2011 This_file_is_part_of_KDE
+# This file is distributed under the same license as the l package.
+#
+# Automatically generated, 2011.
+# Donatas G. <dgvirtual@akl.lt>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma_runner_kdevelopsessions\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-11-22 19:13+0100\n"
+"Last-Translator: Andrius Štikonas <andrius@stikonas.eu>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "Randa KDevelop sesijas, atitinkančias :q:."
+
+#: kdevelopsessions.cpp:38 kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr "Išvardija visas KDevelop rengyklės sesijas jūsų paskyroje."
+
+#: kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "Atverti KDevelop sesiją"

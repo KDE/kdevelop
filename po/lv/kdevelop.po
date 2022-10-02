@@ -1,0 +1,11248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2002-03-23 20:46EEST\n"
+"Last-Translator: Andris Maziks <andzha@latnet.lv>\n"
+"Language-Team: Latvian\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.9.5\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Andris Maziks"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "andzha@latnet.lv"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "Versija:"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, fuzzy, kde-format
+#| msgid "&Project"
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "&Projekts"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "Funkcija"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "Avoti"
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr ""
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "Deklarācijas:"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Faili:"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "Iziet..."
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Aizvērt"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, fuzzy, kde-format
+#| msgid "&Window"
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&Logs"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "Kompilatora Uzstādījumi"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr ""
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, fuzzy, kde-format
+msgid "Main Toolbar"
+msgstr "Rīkjosla"
+
+#: kdevideextension.cpp:36
+#, fuzzy, kde-format
+msgid "Code"
+msgstr "Aizvērt"
+
+#: kdevideextension.cpp:47
+#, fuzzy, kde-format
+msgid "KDevelop Project Files"
+msgstr "Projekta Opcijas"
+
+#: main.cpp:85
+#, fuzzy, kde-format
+msgid "Could not open %1"
+msgstr "&Konfigurācija:"
+
+#: main.cpp:219
+#, fuzzy, kde-format
+msgid "Could not open file '%1'."
+msgstr "&Konfigurācija:"
+
+#: main.cpp:242
+#, fuzzy, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "&Konfigurācija:"
+
+#: main.cpp:273
+#, fuzzy, kde-format
+msgid "Select the session to open the document in"
+msgstr "Dokumentācija"
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+
+#: main.cpp:383
+#, fuzzy, kde-format
+msgid "KDevelop"
+msgstr "&Līmenis:"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr ""
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr ""
+
+#: main.cpp:397
+#, fuzzy, kde-format
+msgid "GDB integration"
+msgstr "Klusās darbības"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr ""
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr ""
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr ""
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr ""
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr ""
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr ""
+
+#: main.cpp:412
+#, fuzzy, kde-format
+msgid "The KWrite authors"
+msgstr "Autors:"
+
+#: main.cpp:412
+#, fuzzy, kde-format
+msgid "Kate editor component"
+msgstr "Konfig Select"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr ""
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr ""
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr ""
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr ""
+
+#: main.cpp:419
+#, fuzzy, kde-format
+msgid "Debugger frontend"
+msgstr "Atkļūdotājs apturēts"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr ""
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr ""
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr ""
+
+#: main.cpp:421
+#, fuzzy, kde-format
+msgid "KDE application templates"
+msgstr "Aplikācijas"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr ""
+
+#: main.cpp:422
+#, fuzzy, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "Aplikācijas"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr ""
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr ""
+
+#: main.cpp:424
+#, fuzzy, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr "Klases"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr ""
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr ""
+
+#: main.cpp:426
+#, fuzzy, kde-format
+msgid "Ada support"
+msgstr "Projekts"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr ""
+
+#: main.cpp:427
+#, fuzzy, kde-format
+msgid "QMake projectmanager"
+msgstr "Projekts"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr ""
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr ""
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr ""
+
+#: main.cpp:432
+#, fuzzy, kde-format
+msgid "ClearCase support"
+msgstr "Aizvākt Ierakstu"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr ""
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr ""
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr ""
+
+#: main.cpp:434
+#, fuzzy, kde-format
+msgid "Fortran documentation"
+msgstr "Dokumentācija"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr ""
+
+#: main.cpp:435
+#, fuzzy, kde-format
+msgid "Python documentation utility"
+msgstr "Dokumentācija"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr ""
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr ""
+
+#: main.cpp:437 main.cpp:438
+#, fuzzy, kde-format
+msgid "Fileselector component"
+msgstr "Konfig Select"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr ""
+
+#: main.cpp:439
+#, fuzzy, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr "Klases"
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr ""
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, fuzzy, kde-format
+msgid "Patches"
+msgstr "Ceļš"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr ""
+
+#: main.cpp:442
+#, fuzzy, kde-format
+msgid "Luc Willems"
+msgstr "Avoti"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr ""
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr ""
+
+#: main.cpp:443
+#, fuzzy, kde-format
+msgid "Documentation index view"
+msgstr "Dokumentācija"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr ""
+
+#: main.cpp:446
+#, fuzzy, kde-format
+msgid "QMake project manager patches"
+msgstr "Projekts"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr ""
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr ""
+
+#: main.cpp:471
+#, fuzzy, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr "Veidoju jaunu failu..."
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr ""
+
+#: main.cpp:488
+#, fuzzy, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "&Līmenis:"
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr ""
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr ""
+
+#: main.cpp:520
+#, fuzzy, kde-format
+msgid "Name: Opened Projects"
+msgstr "Atve&r neseno projektu..."
+
+#: main.cpp:529
+#, fuzzy, kde-format
+msgid "[running]"
+msgstr "Funkcija"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr ""
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr ""
+
+#: main.cpp:648
+#, fuzzy, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "Nav tāda faila vai direktorija."
+
+#: main.cpp:654
+#, fuzzy, kde-format
+msgid "Debug %1"
+msgstr "Atkļūdot"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+
+#: main.cpp:678
+#, fuzzy, kde-format
+msgid "No session with the name %1 exists."
+msgstr ""
+"Dokuments ar šo Vārdu jau eksistē.\n"
+"Vai vēlaties to pārrakstīt?"
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr ""
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr ""
+
+#: main.cpp:794
+#, fuzzy, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr "&Konfigurācija:"
+
+#: main.cpp:814
+#, fuzzy, kde-format
+msgid "Cannot find launcher %1"
+msgstr "&Konfigurācija:"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+#, fuzzy
+msgid "KDevelop Sessions"
+msgstr "&Līmenis:"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, fuzzy, kde-format
+msgid "Open KDevelop Session"
+msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Files to load"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "&Edit"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "&Advanced"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "&View"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "&Code Folding"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Tools"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Word Completion"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "Deprecated options:"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "The KHTML authors"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "HTML documentation component"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Develop"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Getting Started"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Configure a new Launcher"
+#~ msgstr "K&onfigurē..."
+
+#, fuzzy
+#~ msgid "Debug your program"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Debug Area"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "Review a Patch"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Review Area"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "New Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Open project"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Fetch project"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Recent Projects"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Sessions"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Userbase"
+#~ msgstr "Nenosaukts"
+
+#, fuzzy
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Some of the requested files could not be opened."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Starting"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Learn KDevelop!"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Execute your program"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Remove lock file"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Failed to remove lock file %1."
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Import project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Url to project to load"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Session contents"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Session to load"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Profile to load"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Version %1"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Definition-Use Chain, C++ Support"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Window"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Rename %1"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Create Class"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "New name:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Rename"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Uses"
+#~ msgstr "Nenosaukts"
+
+#, fuzzy
+#~ msgid "Header generation error"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Implementation generation error"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Cached: "
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "make-process failed"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "output: %1"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Recursive make-call failed"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive make-call malformed"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Output was: %1"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Connect to"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Preprocessed body:"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Body:"
+#~ msgstr "Treknraksts"
+
+#, fuzzy
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgctxt "Count of macros defined in this header"
+#~ msgid "Defined macros"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Declarations:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "File could not be read from."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid ""
+#~ "Searched include path:\n"
+#~ "%1"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "This file imports the current open document<br/>"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "In %1th include-path"
+#~ msgstr "Meklēt Failos..."
+
+#, fuzzy
+#~ msgid "Included through"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Directory %1"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Includes"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Include Path"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Includers"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Files"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "Create &New Class"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Parsing included files"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Parsing actual file"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Building uses"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Ready"
+#~ msgstr "&Izvēles teksts"
+
+#, fuzzy
+#~ msgid "Formals: %1"
+#~ msgstr "Fails:"
+
+#, fuzzy
+#~ msgid "Unterminated #if statement"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "character %1"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Division by zero"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Input text: %1"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "expected ``:'' = %1"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "invalid input: %1"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Generate Stub Class"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate Stub"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Save to "
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Generate Unit Under Test"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "&Switch Test/Unit Under Test"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Override"
+#~ msgstr "&Pārrakstīt"
+
+#, fuzzy
+#~ msgid "Implement"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Add"
+#~ msgstr "&Pievienot"
+
+#, fuzzy
+#~ msgid "Failed to start test executable."
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Test executable crashed."
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Test root."
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "profile"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "QTest verbose output"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Test executable timed out."
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Failed to write to test executable."
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Failed to read from test executable."
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "xTest"
+#~ msgstr "&Jā"
+
+#, fuzzy
+#~ msgid "QTest test"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "New QTest"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Class name:"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Search"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Find In Files"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Grep: %1"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Find in Files"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Process failed to start."
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Process crashed."
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Process timed out."
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Find in Fi&les..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Create New Project"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Project Wizard"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&New Project..."
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Generate a new project from a template"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Import Existing Project..."
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Could not initialize DVCS repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Could not add files to the DVCS repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Could not import project into"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Could not checkout imported project"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Could not import project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Could not create new project"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Please choose a project name."
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Project import error"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Invalid Location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Empty project name"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Invalid project name"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Invalid Project Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Project Templates"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Document View"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Documents"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "<%1 items>"
+#~ msgstr "Atribūti"
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Pending (add)"
+#~ msgstr "Ielādēju..."
+
+#, fuzzy
+#~ msgid "Pending (clear)"
+#~ msgstr "Ielādēju..."
+
+#, fuzzy
+#~ msgid "Pending (modify)"
+#~ msgstr "Ielādēju..."
+
+#, fuzzy
+#~ msgid "Active"
+#~ msgstr "Aktivizēt"
+
+#, fuzzy
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Aizvērt"
+
+#, fuzzy
+#~ msgid "Internal error"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~| msgid "Enter log message:"
+#~ msgid "Invalid debugger command"
+#~ msgstr "Ievadiet žurnāla ziņojumu:"
+
+#, fuzzy
+#~ msgid "Exited on signal %1"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Received signal"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr "gdb ziņojums:\n"
+
+#, fuzzy
+#~ msgid "Warning"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Running program"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Could not run application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Debugger error"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~| msgid "Debugger stopped"
+#~ msgid "Debugger status"
+#~ msgstr "Atkļūdotājs apturēts"
+
+#, fuzzy
+#~ msgid "Disassemble View"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Address"
+#~ msgstr "Klase"
+
+#~ msgid "Function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Instruction"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~| msgid "Enter log message:"
+#~ msgid "Internal debugger error"
+#~ msgstr "Ievadiet žurnāla ziņojumu:"
+
+#, fuzzy
+#~ msgid "Could not start debugger"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Jauns"
+
+#, fuzzy
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgid "Show text"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Disable"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Delete"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Disable all"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Enable all"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Delete all"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Enable"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "GDB Output"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Copy All"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Not hit yet"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Ignore"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "next hits"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Watches"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Recent"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Debugger Variables"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Recent Expressions"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Remove All"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Re-evaluate All"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Format"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Natural"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Hexadecimal"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Decimal"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Character"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Binary"
+#~ msgstr "Binārais"
+
+#, fuzzy
+#~ msgid "Remember Value"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Watch Variable"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Remove Expression"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Data write breakpoint"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy Value"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Invalid"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Watchpoint"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Read Watchpoint"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Start"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Amount"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "Memory view"
+#~ msgstr "Atmiņa"
+
+#, fuzzy
+#~ msgid "Change memory range"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Reload"
+#~ msgstr "&Izvēles teksts"
+
+#, fuzzy
+#~ msgid "Close this view"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Special debugger views"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Breakpoint"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid " temporary"
+#~ msgstr "Atmiņa"
+
+#, fuzzy
+#~ msgid "Enabled"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Tips:"
+
+#, fuzzy
+#~ msgid "Status"
+#~ msgstr "Startēšana"
+
+#, fuzzy
+#~ msgid "Location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Condition"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Ignore Count"
+#~ msgstr "Avoti"
+
+#~ msgid "Hits"
+#~ msgstr "Hīti"
+
+#, fuzzy
+#~ msgid "Tracing"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "Frame"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "C++ Debugger"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "Breakpoints"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Variables"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Frame Stack"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Disassemble"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Debug views"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "&Start"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Start in debugger"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "&Restart"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Restart program"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Sto&p"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Stop debugger"
+#~ msgstr "Termināls"
+
+#~ msgid "Interrupt"
+#~ msgstr "Pārtraukums"
+
+#, fuzzy
+#~ msgid "Interrupt application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Run to &Cursor"
+#~ msgstr "&No Kursora"
+
+#, fuzzy
+#~ msgid "Run to cursor"
+#~ msgstr "&No Kursora"
+
+#, fuzzy
+#~ msgid "Jump to cursor"
+#~ msgstr "&No Kursora"
+
+#, fuzzy
+#~ msgid "Step over the next line"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Step over instruction"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Step into the next statement"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Step into instruction"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Steps out of the current function"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Viewers"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Debugger viewers"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Examine core file"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Debug in &KDevelop"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Evaluate: %1"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Watch: %1"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Examining core file %1"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Debugger"
+#~ msgstr "Atkļūdot"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Atkļūdotājs apturēts"
+
+#, fuzzy
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Termināls"
+
+#~ msgid "&Continue"
+#~ msgstr "&Turpināt"
+
+#, fuzzy
+#~ msgid "Process exited"
+#~ msgstr "Noklusētais Fonts"
+
+#~ msgid "Variable"
+#~ msgstr "Mainīgais"
+
+#~ msgid "Value"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "CMake Manager"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Jump to target definition"
+#~ msgstr "&No Kursora"
+
+#, fuzzy
+#~ msgid "Create a folder called '%1'."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Could not save the change."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Comment"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "CMake process killed"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Created successfully"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "You need to select a cmake binary"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "You need to specify a build directory"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Already used build directory"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Using an already created build directory"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "The selected build directory is not empty"
+#~ msgstr "Norādītais Fails neeksistē"
+
+#, fuzzy
+#~ msgid "This build directory is for %1, but the project directory is %2"
+#~ msgstr "Norādītais Fails neeksistē"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Action"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Atcelts"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Build &Target"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Build target"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Build this project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Build this target"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Build this directory"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Parse QMake project files"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "QMake project files"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "QMake Manager"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Installed headers"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Uninstalled headers"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Line not reachable."
+#~ msgstr "Nav tāda faila vai direktorija."
+
+#, fuzzy
+#~ msgid "source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "coverage"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Cov verbose output"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Line Coverage:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Total SLOC:"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Instrumented Lines:"
+#~ msgstr "&Turpināt"
+
+#, fuzzy
+#~ msgid "Coverage Report"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Reset Data"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Insert Build Flags"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "Astyle Formatter"
+#~ msgstr "Indenta Garums:"
+
+#, fuzzy
+#~ msgid "Indent Formatter"
+#~ msgstr "Indenta Garums:"
+
+#, fuzzy
+#~ msgid "CMake Builder"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "CMake: %1"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "QMake Builder"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "No project specified."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "QMake: %1"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Configure error"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Make Builder"
+#~ msgstr "Make"
+
+#, fuzzy
+#~ msgid "compiling"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "generating"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "built"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "installing"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "creating"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "Make: %1"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Valgrind Output"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Valgrind"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Open Valgrind Output"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Valgrind communication error"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Failed to start Valgrind"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Valgrind crashed."
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Valgrind Error"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Valgrind process timed out."
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "at: %1"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "by: %1"
+#~ msgstr "Fails:"
+
+#, fuzzy
+#~ msgid "Source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Object"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Widget Box"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Property Editor"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Action Editor"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Object Inspector"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Close Document"
+#~ msgstr "Dokumentācija"
+
+#~ msgid "Public"
+#~ msgstr "Publisks"
+
+#, fuzzy
+#~ msgid "Protected"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Private"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "Slot"
+#~ msgstr "Sloti"
+
+#, fuzzy
+#~ msgid "Signal"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "C++ Options"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "&Export:"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Tracing Configuration"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "Enable tracing"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Custom format string"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Expressions to print:"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Stat"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "Command"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Debugger Toolbar"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "Debugger Configuration"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "Debugger executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Gdb executable"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Debugging &shell:"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Options"
+#~ msgstr "Opcijas..."
+
+#, fuzzy
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Start Debugger With"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Remote Debugging"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "&Config gdb script:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Gdb configure script"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Script to start remote application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Add Profile"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Description"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Remove Profile"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Derived properties:"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Own properties:"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Enabled:"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Plugin Name"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Disabled:"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Available plugins:"
+#~ msgstr "Pieejams:"
+
+#, fuzzy
+#~ msgid "Generic Name"
+#~ msgstr "Nenosaukts"
+
+#, fuzzy
+#~ msgid "&Name:"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "&Generic name:"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "&Description:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Build Directory Creator"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "CMake &Binary:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Build Directory:"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "&Installation Prefix:"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Build &type:"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~| msgid "Debug"
+#~ msgid "debug"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "release"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "MinSizeRel"
+#~ msgstr "&Minimizēt"
+
+#, fuzzy
+#~ msgid "Generator:"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "TextLabel"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Cache Values"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Comment:"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "CMake Directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Viewer"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Parse Tree"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Value 1"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Value 2"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Add All From Directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Choose File to Add..."
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "CMake Binary:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "QMake Binary:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Make executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Default make target:"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Additional make options:"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Active Environment Profile:"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~| msgid "&Pattern:"
+#~ msgid "Pattern:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~| msgid "&Template:"
+#~ msgid "Template:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Regular Expression:"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Recursive:"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Limit to project files:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Files:"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter the file name pattern of the files to search here. You may give "
+#~ "several patterns separated by commas"
+#~ msgstr ""
+#~ "Ievadiet faila vārda varda šablonu šeit meklējamajiem failiem.\n"
+#~ "Jūs varat norādīt vairākus šablonus atdalot ar komatu"
+
+#, fuzzy
+#~ msgid "Exclude:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can choose a template for the pattern from the combo box and edit it "
+#~ "here. The string %s in the template is replaced  by the pattern input "
+#~ "field, resulting in the regular expression to search for."
+#~ msgstr ""
+#~ "Jūs varat izvēlēties meistaru šablonam no kombo bokša\n"
+#~ "un labot to šeit. Rinda %s meistarā tiek aizvietota\n"
+#~ "ar šablona ievades lauku, rezultātā iegūstot regulāru izteiksmi\n"
+#~ "kuru meklēt."
+
+#, fuzzy
+#~ msgid "Import Existing Project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "&Directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Choose directory to import"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "&Fetch from:"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Fetch &Module"
+#~ msgstr "Aizvērt"
+
+#, fuzzy
+#~ msgid "Project &name:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Build System:"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~| msgid "&Make"
+#~ msgid "CMake"
+#~ msgstr "&Pārvietot"
+
+#, fuzzy
+#~| msgid "&Make"
+#~ msgid "QMake"
+#~ msgstr "&Pārvietot"
+
+#, fuzzy
+#~ msgid "Custom Makefiles"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "None"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Version Control System:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Application Name:"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Indentation"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Tabs"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Force tabs"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Spaces"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Fill empt&y lines"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Indent"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Blocks"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "Brackets"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~| msgid "Classes"
+#~ msgid "Cases"
+#~ msgstr "Klases"
+
+#~ msgid "Class"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Labels"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "Namespaces"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Preprocessor directives"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "Switches"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Minimum in conditional:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Other"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "No change"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Attach"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Break"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "Linux"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "&Break blocks"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "Padding"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Unpad"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "One liners"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "&Keep one-line statements"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "&Executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Extra &Parameters:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Low"
+#~ msgstr "Aizvērt"
+
+#, fuzzy
+#~ msgid "Medium"
+#~ msgstr "Minimizēt"
+
+#, fuzzy
+#~ msgid "High"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "&Cachegrind"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Full Cache Simulation"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "&Helgrind"
+#~ msgstr "Nav atrasts"
+
+#~ msgid "All"
+#~ msgstr "Visi"
+
+#, fuzzy
+#~ msgid "&Parameters:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "E&xecutable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Additional p&arameters:"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "KCacheGrind"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "KDevelop Profile Editor"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Core"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "lokāls"
+
+#~ msgid "Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Core Plugins"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Global Plugins"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "Project Plugins"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Enable Plugin"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Disable Plugin"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "&Open Project..."
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Open recent project"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "C&lose Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Close project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Project &Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Loading project plugins..."
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Project loaded."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Check Test"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Import options:"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Valid Location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Namespace import"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Namespace alias"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Forward Declaration"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "enumerator"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "enumeration"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "resolved forward-declaration"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Container: "
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Scope: "
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Access: "
+#~ msgstr "Pieeja:"
+
+#, fuzzy
+#~ msgid "Kind: "
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Modifiers: "
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Decl.: "
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid " Def.: "
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid " Decl.: "
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Result"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Message"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "File Name"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Maintainer"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Style"
+#~ msgstr "Elementa Stils"
+
+#, fuzzy
+#~ msgid "Save current theme"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Preview"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "&Reformat Source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Format files"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Unable to read %1"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Unable to write to %1"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Custom"
+#~ msgstr "&No Kursora"
+
+#, fuzzy
+#~ msgid "Delete style"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "New style"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Please enter a name for the new style"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Custom Style"
+#~ msgstr "&No Kursora"
+
+#, fuzzy
+#~ msgid "S&top"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Select &All"
+#~ msgstr "Deselektēt Visu"
+
+#, fuzzy
+#~ msgid "&Unselect All"
+#~ msgstr "Deselektēt Visu"
+
+#, fuzzy
+#~ msgid "&About"
+#~ msgstr "&Par %1"
+
+#, fuzzy
+#~ msgid "E&xit"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "&Collapse All"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "&Expand All"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "C&olumns..."
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "&Results"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "&Settings..."
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "&Toolbars"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "Ran"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Selected:"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Run:"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~| msgid "Sources"
+#~ msgid "Success"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Exceptions"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Errors"
+#~ msgstr "Rediģēšanas Opcijas"
+
+#, fuzzy
+#~ msgid "Warnings"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Infos"
+#~ msgstr "Unko&mentēt"
+
+#, fuzzy
+#~ msgid "Save"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~| msgid "C&lose"
+#~ msgid "Close"
+#~ msgstr "Ai&zvērt"
+
+#, fuzzy
+#~ msgid "Failed to comply."
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Select a project in the qtest view."
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~| msgid "&Directory:"
+#~ msgid "&Directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Results"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Stopping..."
+#~ msgstr "Ielādēju..."
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "StatusWidget"
+#~ msgstr "Startēšana"
+
+#, fuzzy
+#~ msgid "Build"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Evaluate"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Watch"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Evaluate the expression."
+#~ msgstr "Dzēst atribūtu"
+
+#~ msgid "&Build"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "F&orm"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Build Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Browser Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Extra Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~| msgid "No such file or directory."
+#~ msgid "No such file or directory."
+#~ msgstr "Nav tāda faila vai direktorija."
+
+#, fuzzy
+#~ msgid "Calltree Not Found"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "KCachegrind Not Found"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "P&rofile with KCachegrind"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Profile with KCachegrind"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~| msgid "local"
+#~ msgid "Locals"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "Watch"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Project file already exists."
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "Imports"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "Importers"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgctxt "To start something"
+#~ msgid "Start"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Restart the program in the debugger"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Global Output Radix"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "Oct&al"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "He&xadecimal"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Rebuild the project?"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Continuing program"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Code View"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "No active language part loaded!"
+#~ msgstr "Atbilstības nav atrastas"
+
+#, fuzzy
+#~ msgid "Mode"
+#~ msgstr "&Pārvietot"
+
+#, fuzzy
+#~ msgctxt "Current View"
+#~ msgid "&Current"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgctxt "Normalize View"
+#~ msgid "&Normalize"
+#~ msgstr "Normāls"
+
+#, fuzzy
+#~ msgctxt "Aggregate View"
+#~ msgid "&Aggregate"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Filter"
+#~ msgstr "Mape"
+
+#, fuzzy
+#~ msgid "CMake binary:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "debugfull"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Scope: %1<br />"
+#~ msgstr "Pieeja:"
+
+#, fuzzy
+#~ msgid "Access: %1<br />"
+#~ msgstr "Pieeja:"
+
+#, fuzzy
+#~ msgid "Kind: %1<br />"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Modifiers: %1<br />"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Form2"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Please enter a search pattern"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Search Results"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "New view"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "Vertical Tabs:"
+#~ msgstr "Vertikālā Selekcija Ieslēgta"
+
+#, fuzzy
+#~ msgid "LeftDock"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "TopDock"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "RightDock"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "Choose Revisions to Diff"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Build Difference Between"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Revision A:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Revision B:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "&Repository:"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Mo&dule:"
+#~ msgstr "Aizvērt"
+
+#, fuzzy
+#~ msgid "&Vendor tag:"
+#~ msgstr "Lasīt"
+
+#, fuzzy
+#~ msgid "vendor"
+#~ msgstr "Lasīt"
+
+#, fuzzy
+#~ msgid "Re&lease tag:"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "&Local destination directory:"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "&Module:"
+#~ msgstr "Aizvērt"
+
+#, fuzzy
+#~ msgid "Tag/Branch:"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Commit to Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Editors"
+#~ msgstr "Rediģēšanas Opcijas"
+
+#, fuzzy
+#~ msgid "Log"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgid "GroupBox"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "&Subversion"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Target repository Url. "
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Non recursive"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Subversion Login"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Password"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Save Password"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Select Files to commit"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Files to commit"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "C&ancel"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Ignore external entries"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Select Revision"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Specify By number"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "SSL Server Certificate"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "Item"
+#~ msgstr "Elements:"
+
+#, fuzzy
+#~ msgid "Accept"
+#~ msgstr "Pieeja"
+
+#, fuzzy
+#~ msgid "Reject"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Annotate Type"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Repository Annotation"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "End Revision"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Start Revision"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Log Type"
+#~ msgstr "Tips"
+
+#, fuzzy
+#~ msgid "Repository History"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Local server"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Connected clients:"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Servers"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Available:"
+#~ msgstr "Pieejams:"
+
+#, fuzzy
+#~ msgid "Messaging"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "Source-discussion"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Reference:"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~| msgid "gdb message:\n"
+#~ msgid "&Send message"
+#~ msgstr "gdb ziņojums:\n"
+
+#, fuzzy
+#~ msgid "Local state"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "Manage local patches"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Messages"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "All Users"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "History"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Enable Collaboration"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Dialog"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Finish"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Tail"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "replacement-text"
+#~ msgstr "&Izvēles teksts"
+
+#, fuzzy
+#~ msgid "Edit Patch"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "To File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Previous Hunk"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Next Hunk"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Author:"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "Determine"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "State:"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~| msgid "C&lose"
+#~ msgid "Choose"
+#~ msgstr "Ai&zvērt"
+
+#, fuzzy
+#~ msgid "Description:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Show"
+#~ msgstr "hw %1"
+
+#, fuzzy
+#~ msgid "Manage Patches"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Available patches:"
+#~ msgstr "Pieejams:"
+
+#, fuzzy
+#~ msgid "position"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "referenceType"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "From:"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "Until:"
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgid "Context:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "actions"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Menu"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "E-Mail"
+#~ msgstr "Epasts:"
+
+#, fuzzy
+#~ msgid "State"
+#~ msgstr "Startēšana"
+
+#, fuzzy
+#~ msgid "Rights"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "Direction"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Add an existing Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "..."
+#~ msgstr "Jauns..."
+
+#~ msgid "Name:"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Edit Snippet"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Snippet"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "New Location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Variable Substitution"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Apply filter"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "Select Tool View to Add"
+#~ msgstr "Atkļūdotājs apturēts"
+
+#, fuzzy
+#~ msgid "Configure %1"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Lets you customize %1."
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Configure &Editor..."
+#~ msgstr "K&onfigurēt..."
+
+#, fuzzy
+#~ msgid "Configure editor settings"
+#~ msgstr "Konfigurēt-Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Show &Statusbar"
+#~ msgstr "&Statusjosla"
+
+#, fuzzy
+#~ msgid "Show statusbar"
+#~ msgstr "&Statusjosla"
+
+#, fuzzy
+#~ msgid "&Next Window"
+#~ msgstr "Jauns &Logs"
+
+#, fuzzy
+#~ msgid "Next window"
+#~ msgstr "Jauns &Logs"
+
+#, fuzzy
+#~ msgid "&Previous Window"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Previous window"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "&New Window"
+#~ msgstr "Jauns &Logs"
+
+#, fuzzy
+#~ msgid "New Window"
+#~ msgstr "Jauns &Logs"
+
+#, fuzzy
+#~ msgid "Split Horizontal"
+#~ msgstr "Vertikālā Selekcija Ieslēgta"
+
+#, fuzzy
+#~ msgid "Split Vertical"
+#~ msgstr "Vertikālā Selekcija Ieslēgta"
+
+#, fuzzy
+#~ msgid "&New File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "New File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "<b>New File</b><p>Creates an empty file."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "&Close File"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Close File"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "<b>Close File</b><p>Closes current file."
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "&Add Tool View..."
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Add Tool View"
+#~ msgstr "Mape"
+
+#, fuzzy
+#~ msgid "<b>Add Tool View</b><p>Adds a new tool view to this window."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Could not load project management plugin %1."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Reopen the current project?"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Could not load project management view plugin %1."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~| msgid "hw %1"
+#~ msgid " (%1)"
+#~ msgstr "hw %1"
+
+#, fuzzy
+#~ msgid "Document is Modified"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Document Externally Modified"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Date"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Machine"
+#~ msgstr "Meklēt Failos..."
+
+#, fuzzy
+#~ msgid "Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Show log"
+#~ msgstr "hw %1"
+
+#, fuzzy
+#~ msgid "Show differences..."
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Edit..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Unedit..."
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Show Editors..."
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Add Files..."
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Remove Files..."
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Commit Files..."
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "Update Files..."
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Import Directory..."
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Annotate..."
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "Checkout..."
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Status..."
+#~ msgstr "Startēšana"
+
+#, fuzzy
+#~ msgid "Annotate"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Unedit Files"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Checkout Error"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "No log information found"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Revision"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Added %1"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Deleted %1"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Updated %1"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Revision %1"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Updating externals: %1"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Adding mimetype %1. %2"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Adding %1."
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Deleting %1."
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Replacing %1."
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Copied %1"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Committed"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Checkout from repository..."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Add to version control..."
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Remove from repository..."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Commit to repository..."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Update to..."
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Show Subversion Log..."
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Log View"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Blame (Annotate)"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Update"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Commit..."
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Add to version control"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Remove from version control"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "No active docuement to add"
+#~ msgstr "Atbilstības nav atrastas"
+
+#, fuzzy
+#~ msgid "No active docuement to update"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Enter Subversion Commit Log Message"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Other unknown failures"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "Subversion Import"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Subversion"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "subversion"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Subversion Notification"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Log History"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Blame"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid " Abort"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Destination:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Progress:"
+#~ msgstr "Īpašības..."
+
+#~ msgid "Line"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Rev"
+#~ msgstr "Gatavs."
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "Contents"
+#~ msgstr "&Turpināt"
+
+#, fuzzy
+#~ msgid "An error occurred during subversion operation"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Project Overview"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Project Details"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Project Manager"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Build Selected Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Build Selected Project</b><p>Builds the currently selected project."
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "File: %1"
+#~ msgstr "Fails:"
+
+#, fuzzy
+#~ msgid "Could not parse diff output."
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "New Folder"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "New Folder..."
+#~ msgstr "Atvērt Failu"
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~ msgid "Snippets"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Add Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Add Snippet"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Create Subrepository"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Hide"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "New Snippet"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Create a new subrepository"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Directoryname"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Empty name"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Please enter a name and a location"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Please enter a name"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "DUChain Viewer"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Top level context"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "Definition: %1"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "[No definition found]"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "KDevelop GUI Builder"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "op&timizācija"
+
+#, fuzzy
+#~ msgid "Subversion Commit"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Subversion Update"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Subversion Logview"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Subversion Blame"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Subversion Status"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Subversion Difference"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Standard"
+#~ msgstr "Standarta Fonts"
+
+#, fuzzy
+#~ msgid "Local Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Global Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Could Not Open File"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Enable Background Parser"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Lo&ad last project on startup"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Open the last project that was loaded on startup"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Docked Window"
+#~ msgstr "Jauns &Logs"
+
+#, fuzzy
+#~ msgid "General Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#~ msgid "Version:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Absolute Path"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Relative to Project File"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Value:"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Duplicate Tab"
+#~ msgstr "Koda &Logs"
+
+#, fuzzy
+#~ msgid "Back"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "Forward"
+#~ msgstr "&Uzpriekšu"
+
+#, fuzzy
+#~ msgid "Open in New Tab"
+#~ msgstr "Jauns &Logs"
+
+#, fuzzy
+#~ msgid "Save &Selected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Saves all selected files"
+#~ msgstr "Saglabāt Failu"
+
+#, fuzzy
+#~ msgid "Save &None"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Save &All"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Loading Settings"
+#~ msgstr "\"konfigurēt\" Uzstādījumi"
+
+#, fuzzy
+#~ msgid "'%1' is not an absolute path."
+#~ msgstr "Nav tāda faila vai direktorija."
+
+#, fuzzy
+#~ msgid "'%1' is not a relative path."
+#~ msgstr "Nav tāda faila vai direktorija."
+
+#, fuzzy
+#~ msgid "'%1' is not a directory."
+#~ msgstr "Nav tāda faila vai direktorija."
+
+#, fuzzy
+#~ msgid "'%1' is a valid project directory."
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Additional Language Support"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Set as Default"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Choose Editor..."
+#~ msgstr "K&onfigurēt..."
+
+#, fuzzy
+#~ msgid "Close the current document view"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Sho&w Path"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Open File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid " Line: %1 Col: %2 "
+#~ msgstr "Rinda: %1 Kol: %2"
+
+#, fuzzy
+#~ msgid "Document to open"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "KWrite"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "Core Developer"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Testing, ..."
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "Former Core Developer"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Patches and more"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Highlighting for VHDL"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "Highlighting for SQL"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "Highlighting for Ferite"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "Highlighting for LaTeX"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "Highlighting for Python"
+#~ msgstr "Izcelt:"
+
+#~ msgid "&Move"
+#~ msgstr "&Pārvietot"
+
+#, fuzzy
+#~ msgid "Tools Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Background color:"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Foreground color:"
+#~ msgstr "Atrasts:"
+
+#, fuzzy
+#~ msgid "%{APPNAMELC}_base"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "hello, world"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Set some setting"
+#~ msgstr "Ko&mpilatora uzstādījumi"
+
+#, fuzzy
+#~ msgid "%{APPNAME}_base"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "<qt><h3>Project Settings</h3></qt>"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Line &wrapping"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Window &font:"
+#~ msgstr "Logs"
+
+#, fuzzy
+#~ msgid "&Compiler output:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Very Short"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Short"
+#~ msgstr "Sloti"
+
+#, fuzzy
+#~ msgid "&Other:"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "Use &KDE setting"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "<qt><h3>Output View Settings</h3></qt>"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Default pro&jects directory:"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "KDE service &type:"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "&Additional constraints:"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "All s&ubstrings"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "&Whole words only"
+#~ msgstr "&Pilnus Vārdus Tikai"
+
+#, fuzzy
+#~ msgid "Enter the regexp here"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Target Files in Project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "A&ll files"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "All files in the project will be considered."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Open files only"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Files under &path:"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Strings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "&Text to find:"
+#~ msgstr "Meklējamais &Teksts:"
+
+#, fuzzy
+#~ msgid "Target string"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "C&apture output"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "&Add..."
+#~ msgstr "&Pievienot"
+
+#, fuzzy
+#~ msgid "&File Context Menu"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Output Filter Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Filter Options"
+#~ msgstr "Būves Opcijas"
+
+#, fuzzy
+#~ msgid "Filter for string"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Filter with regular expression"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Show code &tooltip"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "&Never"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "&Only lines beginning with the following string:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Always"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "A KDE Application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Page One Options"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "Page Two Options"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "Add something here"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Open Location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "A KDE KPart Application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Insert Hello World"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Do Something..."
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Do something"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "%{APPNAME} Plugin"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
+
+#, fuzzy
+#~ msgid "&Plugin Action"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "%{APPNAME} Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Items"
+#~ msgstr "Elements:"
+
+#, fuzzy
+#~ msgid "Size"
+#~ msgstr "Izmērs:"
+
+#, fuzzy
+#~ msgid "Terminal"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "%{APPNAMELC}Part"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "%{APPNAME} Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Playlist"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "No File Loaded"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Save Modified Files?"
+#~ msgstr "Saglabāt Failu"
+
+#, fuzzy
+#~ msgid "Configure KDevelop"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Could Not Find Plugins"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Raise &Editor"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "Raise editor"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "<b>Raise editor</b><p>Focuses the editor."
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Close All Others"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Duplicate"
+#~ msgstr "Koda &Logs"
+
+#, fuzzy
+#~ msgid "Show Context Menu"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "unnamed"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Open file"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Opens recently opened file."
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Save Al&l"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Save all modified files"
+#~ msgstr "Saglabāt Failu"
+
+#, fuzzy
+#~ msgid "<b>Save all</b><p>Saves all modified files."
+#~ msgstr "Saglabāt Failu"
+
+#, fuzzy
+#~ msgid "Rever&t All"
+#~ msgstr "Izvēlēties Visus"
+
+#, fuzzy
+#~ msgid "Revert all changes"
+#~ msgstr "Izvēlēties Visus"
+
+#, fuzzy
+#~ msgid "Closes current file."
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Close all files"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Close other files"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Conflict"
+#~ msgstr "Konfig Select"
+
+#, fuzzy
+#~ msgid "Document Deleted"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Document Changed"
+#~ msgstr "Dokumentācija"
+
+#~ msgid "Project Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Delete item(s)"
+#~ msgstr "Attribūts"
+
+#~ msgid "Make Options"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "&Save As..."
+#~ msgstr "Saglabāt &Kā..."
+
+#, fuzzy
+#~ msgid "Diff Frontend"
+#~ msgstr "Būves Opcijas"
+
+#, fuzzy
+#~ msgid "Diff Output"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Difference viewer"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Difference to Disk File"
+#~ msgstr "Atbilstības nav atrastas"
+
+#, fuzzy
+#~ msgid "DiffPart: No differences found."
+#~ msgstr "Atbilstības nav atrastas"
+
+#, fuzzy
+#~ msgid "Please Select Patch File"
+#~ msgstr "Meklēt Failos..."
+
+#, fuzzy
+#~ msgid "Property"
+#~ msgstr "Īpašības..."
+
+#~ msgid "&Search"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Find-Select-Replace..."
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "&Applications:"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Known Applications"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Quick Open..."
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Quick open locations in project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Part not available"
+#~ msgstr "Pieejams:"
+
+#, fuzzy
+#~ msgid "Choose projects directory"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Set"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Do Not Set"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid " (dir/file already exist)"
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "Application Output"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Messages Output"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "Do Not Filter Output"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Filter Output"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Compiler output messages"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Short Compiler Output"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Full Compiler Output"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Open With"
+#~ msgstr "&Aizvietot Ar:"
+
+#, fuzzy
+#~ msgid "File Selector"
+#~ msgstr "Konfig Select"
+
+#, fuzzy
+#~ msgid "File selector"
+#~ msgstr "Konfig Select"
+
+#, fuzzy
+#~ msgid "Current Document Directory"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Clear filter"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "S&elected actions:"
+#~ msgstr "Iezīmēti + Atrasti:"
+
+#, fuzzy
+#~ msgid "When a document is o&pened"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Remember &locations:"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Remember &filters:"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Restore loca&tion"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "No."
+#~ msgstr "&Nē"
+
+#, fuzzy
+#~ msgid "Expand All Items"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Remove This Bookmark"
+#~ msgstr "Nodzēst Grāmatzīmes"
+
+#, fuzzy
+#~ msgid ", All"
+#~ msgstr "Visi"
+
+#, fuzzy
+#~ msgid "Remove These Bookmarks"
+#~ msgstr "Nodzēst Grāmatzīmes"
+
+#, fuzzy
+#~ msgid "Source bookmarks"
+#~ msgstr "Nodzēst Grāmatzīmes"
+
+#, fuzzy
+#~ msgid "Could not find file"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "&Java Debug"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "&CVS Service"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "&Perforce"
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "Project Views"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Projectviews Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "File Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Add Class"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "&Class"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "&Interface"
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "&Public"
+#~ msgstr "Publisks"
+
+#, fuzzy
+#~ msgid "P&rotected"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Final"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "&Source path:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "&Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&License:"
+#~ msgstr "&Līmenis:"
+
+#~ msgid "&Add"
+#~ msgstr "&Pievienot"
+
+#, fuzzy
+#~ msgid "Class &Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Docu&mentation:"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&Header:"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Im&plementation:"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Inheritance"
+#~ msgstr "Mime Tipi:"
+
+#~ msgid "Move &Up"
+#~ msgstr "Pārvietot &Uz augšu"
+
+#~ msgid "Move &Down"
+#~ msgstr "Pārvietot &Uz leju"
+
+#, fuzzy
+#~ msgid "Baseclass Name"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Inheritance Type"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Use file t&emplates"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Generate QOb&ject child class"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate Q&Widget child class"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Ad&vanced Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Constr&uctors"
+#~ msgstr "Konst"
+
+#, fuzzy
+#~ msgid "Base Class Constructors"
+#~ msgstr "Konst"
+
+#, fuzzy
+#~ msgid "C&reate Constructor >>"
+#~ msgstr "Konst"
+
+#, fuzzy
+#~ msgid "C&lear Selection"
+#~ msgstr "&Vertikāla Selekcija"
+
+#, fuzzy
+#~ msgid "&Header"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "&Source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Methods Ov&erriding"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "&Access Control"
+#~ msgstr "Pieeja"
+
+#, fuzzy
+#~ msgid "Methods & Attributes"
+#~ msgstr "Atribūti"
+
+#, fuzzy
+#~ msgid "Implied Modifier"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "New Modifier"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "&Generation Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&inline"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "&get method"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "create get method"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "&set method"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "create set method"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "name of the get method"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "The name of the created get method"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "name of the set method"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "The name of the created set method"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "i&nline"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Choose Library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Library Settings"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Special &Headers"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "&General"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Class Wizard Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Interface suffix:"
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "I&mplementation suffix:"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Show Go To Declaration/Definition submenus"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Use Qt in this project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Version"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Code Completion Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Automatic c&ode completion:"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Automatic &arguments hint:"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Include enums"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Include global functions"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "Include typedefs"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Code Completion Databases"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Column 1"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Click to start the Code Completion database creation wizard."
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Accessors"
+#~ msgstr "Pieeja:"
+
+#, fuzzy
+#~ msgid "Variable name:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Get method:"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Set method:"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Add Method"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "&Add Method"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "&Delete Method"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Method Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Return t&ype:"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "S&torage:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "&Inline"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Add Attribute"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "&Add Attribute"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "&Delete Attribute"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "Attribute Properties"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "T&ype:"
+#~ msgstr "Tips:"
+
+#, fuzzy
+#~ msgid "Subclass Properties"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "C&lass name:"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "F&ile name:"
+#~ msgstr "Failavārds:"
+
+#~ msgid "Method"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Class &Templates"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Cpp Header"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Cpp Source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "GTK C Header"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "GTK C Source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Names"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "&File names:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Lowercase"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Same as Class Names"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Same as File Names"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "&Superclass file names:"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Class Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Include &author name in class documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Generate &empty documentation strings"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Program &arguments:"
+#~ msgstr "Argumenti: "
+
+#, fuzzy
+#~ msgid "Configuration:"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "KDE Libs Headers"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Parse:"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Database name:"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Create or Select Implementation Class"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Class Name"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Use &existing class"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&File name:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Class &name:"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Class &template:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "PHP Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "PHP Options"
+#~ msgstr "Opcijas..."
+
+#, fuzzy
+#~ msgid "Genera&l"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Use &this file as default:"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "&Enable code completion"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Enable code &hinting"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "In&vocation"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "&Webserver"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "&Shell"
+#~ msgstr "Mazs"
+
+#, fuzzy
+#~ msgid "Load &Zend extension:"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Plugin"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Database Name"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Host"
+#~ msgstr "Konst"
+
+#, fuzzy
+#~ msgid "&Parsing"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "&Special Headers"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Run applications in &terminal"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Enable debugger &floating toolbar"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Trace &into Ruby libraries"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "Main pr&ogram"
+#~ msgstr "Programma"
+
+#, fuzzy
+#~ msgid "&Selected window"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "&Main program:"
+#~ msgstr "Programma"
+
+#, fuzzy
+#~ msgid "This is the name of the main program source file"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "%{APPNAMESC}_base"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Ftnchek Options"
+#~ msgstr "Indeksa Opcijas"
+
+#, fuzzy
+#~ msgid "&Identifiers without explicit type"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Ar&guments:"
+#~ msgstr "Argumenti: "
+
+#, fuzzy
+#~ msgid "&Use of variables:"
+#~ msgstr "Mainīgie"
+
+#, fuzzy
+#~ msgid "Fortran 77 language &extensions:"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Python"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Company"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Implement Slots"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Set the directory where you want your projects in."
+#~ msgstr "Ievadiet direktoriju kurš satur failus kuros vēlaties meklēt."
+
+#, fuzzy
+#~ msgid "Create &Standard Directories (tags/trunk/branches/)?"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "Subversion Module Checkout"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Server Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "&Revision:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "This Project has Standard &Trunk/Branches/Tags/Directories"
+#~ msgstr "Iezīmējiet šo boksu, lai meklētu visos apakšdirektorijos."
+
+#, fuzzy
+#~ msgid "&Name of the newly created directory:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Recursive commits"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive updates"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive switch"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive diff"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive add"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive remove"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive revert"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive resolve"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive propset"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive propget"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Recursive proplist"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "Do not do anything"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Release &tag:"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "Enter the name of the repository"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "&Message:"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "&Server path:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "CVS_&RSH:"
+#~ msgstr "CVS"
+
+#, fuzzy
+#~ msgid "&Message"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "&Add to changelog:"
+#~ msgstr "Atcelts"
+
+#, fuzzy
+#~ msgid "Change log filename path (relative to project directory)"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Additional Options"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Select Module"
+#~ msgstr "Izvēlēties &Visu"
+
+#, fuzzy
+#~ msgid "&Fetch Modules List"
+#~ msgstr "Aizvērt"
+
+#, fuzzy
+#~ msgid "Tag Files on CVS Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "CVS Options"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Common Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "CVS server &location:"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "When Updating"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Create &new directories (if any)"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "&Prune empty directories"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "&Update subdirectories too"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "Use these e&xtra options:"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Init Local Repository..."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Login to &Repository..."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Fetch &List"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "Log Message"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "Function arguments list:"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "<H2>Project Packaging & Publishing</H2>"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Use custom options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Source Options"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "R&eset"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "File &list:"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "&Package Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "&Application name:"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "R&elease:"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "&Version:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "&Group:"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Pac&kager:"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Advanced Package Op&tions"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid ""
+#~ "Build Source \n"
+#~ "Package"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Build Binary \n"
+#~ "Package"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Export \n"
+#~ "Build Files"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "P&roject Publishing"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Local Options"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "&User information generated by RPM"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Re&mote Options"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "File su&bmission list:"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "&Project type:"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "&Email:"
+#~ msgstr "Epasts:"
+
+#, fuzzy
+#~ msgid "Vcs Form"
+#~ msgstr "Forma1"
+
+#, fuzzy
+#~ msgid "&Version control system:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "&Show all project templates"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Favorites"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Location:"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "General Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "License:"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Custom Options"
+#~ msgstr "Būves Opcijas"
+
+#, fuzzy
+#~ msgid "Header file:"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Classes:"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "New File Wizard Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Project Types"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Re&move Type"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Edit Type..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "&New Type..."
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgid "Type Extension"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Icon"
+#~ msgstr "Unko&mentēt"
+
+#, fuzzy
+#~ msgid "Use s&ide tab"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Edit Temp&late"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Copy to Pro&ject Types"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Template Name"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "C&hange Content..."
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "&New Template..."
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Re&move Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Edit Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "File Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Template &name:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "File Type"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Type &extension:"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Type &name:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Type &description:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Group:"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Snippet Settings"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Tooltips"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Show snippet's text in &tooltip"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Input Method for Variables"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Automatically Open Groups"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "File List"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "Projectviews"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Co&nflict:"
+#~ msgstr "Konfig Select"
+
+#, fuzzy
+#~ msgid "&Added:"
+#~ msgstr "&Pievienot"
+
+#, fuzzy
+#~ msgid "&Needs checkout:"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "&Needs patch:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "&Default:"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Pattern"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Add Group..."
+#~ msgstr "&Grupas"
+
+#, fuzzy
+#~ msgid "&Edit Group..."
+#~ msgstr "&Grupas"
+
+#, fuzzy
+#~ msgid "De&lete Group"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Code Templates"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Enable automatic word completion"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Templates:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Add Code Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Suffixes:"
+#~ msgstr "Izmērs:"
+
+#, fuzzy
+#~ msgid "Version control system to use for this project:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Artistic Style Configuration"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "&Linux"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Example"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Indented &Entities"
+#~ msgstr "Indeksa Opcijas"
+
+#, fuzzy
+#~ msgid "Indent &switches"
+#~ msgstr "Indenta Garums:"
+
+#, fuzzy
+#~ msgid "Indent &cases"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Indent cl&asses"
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "Indent &labels"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Use s&paces:"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "Contin&uation"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "&Insert Quoted"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "Regular Expression T&ype"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Copy To"
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "Copy Mode"
+#~ msgstr "Normāls"
+
+#, fuzzy
+#~ msgid "Traditional"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "Relative"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "Editor Context Menu"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Show \"Go To Declaration\""
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Show \"Go To Definition\""
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Show \"CTags Lookup\""
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Paths"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Tag"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Hits:"
+#~ msgstr "Hīti"
+
+#, fuzzy
+#~ msgid "Date:"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Regenerate"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Project API Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Ca&talog location:"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "C&ollection type:"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Project User Manual"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Choose Topic"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Choose a topic for <b>%1</b>:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Documentation Catalog Properties"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&Title:"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "&Documentation Collections"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "htse&arch executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Database di&rectory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "O&ther"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "Editor Context Menu Items"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "&Find in documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&Look in documentation index"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "S&earch in documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Goto &infopage"
+#~ msgstr "Iet uz Rindu"
+
+#, fuzzy
+#~ msgid "Goto &manpage"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Use KDevelop &Assistant to browse documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Fonts && Sizes"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Fi&xed font:"
+#~ msgstr "Logs"
+
+#, fuzzy
+#~ msgid "Find Documentation Options"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Find Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Search term:"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "Major &User-Interface Mode"
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "&Simplified IDEAl window mode"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "I&DEAl window mode"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "C&hildframe window mode"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "To&plevel window mode"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "Always"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Text and icons"
+#~ msgstr "Tikai teksts"
+
+#, fuzzy
+#~ msgid "Scripting"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "On External Changes"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Do nothing"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Additional parameters:"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Full screen"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Ada Compiler"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Ada &compiler:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Compiler co&mmand:"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#, fuzzy
+#~ msgid "Main &source file:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Load Default Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Build file:"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "&Verbosity:"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Class&path"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Value 3"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Related Subclasses"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "&Add Relation"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "&Remove Relation"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Related subclass &location:"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Run Options"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Run from the &BUILD directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "C&ustom directory:"
+#~ msgstr "&Direktorijs:"
+
+#~ msgid "Program"
+#~ msgstr "Programma"
+
+#, fuzzy
+#~ msgid "Start in external &terminal"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Automatically com&pile before execution"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "&Name of make executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Make priority:"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Widget Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Subclassing"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Caption:"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Subclass name:"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "New Item"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "QMake Subproject Configuration"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "&Basics"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "&Application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Create an application"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Librar&y"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "S&ubdirectories"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "This project holds subdirectories"
+#~ msgstr "Iezīmējiet šo boksu, lai meklētu visos apakšdirektorijos."
+
+#, fuzzy
+#~ msgid "Target"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Output &file:"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "&Browse..."
+#~ msgstr "&Jauns..."
+
+#, fuzzy
+#~ msgid "Target Installation"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "&Installation path:"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Build Mode"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "&Release"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "Enable &warnings"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Show compiler warnings"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Console"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~ msgid "Library Options"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "St&atic library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "S&hared library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Pl&ugin"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Create pkgconf file"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "&Build as DLL"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "Librar&y version:"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Directories Outside Project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Directories Inside Project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Move U&p"
+#~ msgstr "Pārvietot &Uz augšu"
+
+#, fuzzy
+#~ msgid "Move Dow&n"
+#~ msgstr "Pārvietot &Uz leju"
+
+#, fuzzy
+#~ msgid "Libr&aries"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "External Libraries"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Link Convenience Libraries Inside Project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Targets in Project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Miscellaneous Targets"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Bu&ild Options"
+#~ msgstr "Būves Opcijas"
+
+#, fuzzy
+#~ msgid "Compiler Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Debug flags:"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "&Release flags:"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "Defines:"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Intermediate File Directories"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&MOC files:"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "&UI files:"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Ob&ject files:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Corba"
+#~ msgstr "Krāsas"
+
+#, fuzzy
+#~ msgid "Compiler o&ptions:"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&IDL compiler:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "&New"
+#~ msgstr "Jauns"
+
+#, fuzzy
+#~ msgid "Select Subproject"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Subprojects"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Project Scopes"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Options:"
+#~ msgstr "Opcijas..."
+
+#, fuzzy
+#~ msgid "Co&mmand:"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Pascal Compiler"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Con&figuration:"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Compiler op&tions:"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Pascal compiler:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Load &Default Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Custom Build Options"
+#~ msgstr "Būves Opcijas"
+
+#, fuzzy
+#~ msgid "Build Tool"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "Name of make e&xecutable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Make &priority:"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "E&nvironment:"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Confi&guration"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Script Project Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Include files into the project with the following patterns:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "A&dd All"
+#~ msgstr "Visi"
+
+#, fuzzy
+#~ msgid "&Add Selected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "R&emove All"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "&Remove Selected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Add &Following"
+#~ msgstr "Mape"
+
+#, fuzzy
+#~ msgid "&Application File"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Start in t&erminal"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Games"
+#~ msgstr "Vārds:"
+
+#, fuzzy
+#~ msgid "WordProcessing"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "&Section:"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Mime &Types"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Add new files to m&y active target"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Choose &another target"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Choose &Target"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "&Service File"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "&Library:"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Service &Types"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Target Options"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "&Flags"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "O&ther:"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "&Libraries"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Ar&guments"
+#~ msgstr "Argumenti: "
+
+#, fuzzy
+#~ msgid "Configure Options"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "&Top source directory:"
+#~ msgstr "&Direktorijs:"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#, fuzzy
+#~ msgid "C com&piler:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Compiler f&lags (CFLAGS):"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#, fuzzy
+#~ msgid "Compiler co&mmand (CC):"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#, fuzzy
+#~ msgid "C++ com&piler:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Compiler co&mmand (CXX):"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#, fuzzy
+#~ msgid "Compiler f&lags (CXXFLAGS):"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#, fuzzy
+#~ msgid "Fortran com&piler:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Compiler co&mmand (F77):"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#, fuzzy
+#~ msgid "Compiler f&lags (FFLAGS):"
+#~ msgstr "&C Kompilatora Komanda:"
+
+#, fuzzy
+#~ msgid "Add New Subproject"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Subproject"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Subproject &name:"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Menu Text"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Command Type"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "&Type:"
+#~ msgstr "Tips:"
+
+#, fuzzy
+#~ msgid "&Size:"
+#~ msgstr "Izmērs:"
+
+#, fuzzy
+#~ msgid "Remove Target From [SUBPROJECT]"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Target Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Subproject Options"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Co&mpiler"
+#~ msgstr "Kompilators"
+
+#~ msgid "Path"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "C&ustom prefixes:"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "&Build Order"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "&Target"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "File &name:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Ot&her:"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "File Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "&Use file template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&File Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Apply all changes."
+#~ msgstr "Izvēlēties Visus"
+
+#, fuzzy
+#~ msgid "Preview Window"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "ButtonGroup"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "RadioButton1"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "RadioButton2"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "RadioButton3"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "ButtonGroup2"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "LineEdit"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "PushButton"
+#~ msgstr "NospiežamaPoga9"
+
+#, fuzzy
+#~ msgid "&Insert into:"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "View & Edit Connections"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Edit Slots..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Select &palette:"
+#~ msgstr "Izvēlēties &Visu"
+
+#, fuzzy
+#~ msgid "Active Palette"
+#~ msgstr "Aktivizēt"
+
+#, fuzzy
+#~ msgid "Disabled Palette"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Background"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Foreground"
+#~ msgstr "Atrasts:"
+
+#~ msgid "Button"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "Base"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "ButtonText"
+#~ msgstr "Poga"
+
+#, fuzzy
+#~ msgid "Link"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Choose pi&xmap:"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "&Select color:"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Choose a color"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Generate shadings"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Select co&lor:"
+#~ msgstr "Izvēlēties &Visu"
+
+#, fuzzy
+#~ msgid "Replace Text"
+#~ msgstr "&Izvēles teksts"
+
+#, fuzzy
+#~ msgid "R&eplace:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Replace"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Replace &All"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Forwar&d"
+#~ msgstr "&Uzpriekšu"
+
+#, fuzzy
+#~ msgid "Bac&kward"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Edit Actions"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Create new Action"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Connect current Action"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Connection Details"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "All items in the iconview."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&New Item"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Add an item"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "&Delete Item"
+#~ msgstr "&Izvēles teksts"
+
+#, fuzzy
+#~ msgid "Delete the selected item."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "&Item Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "&Text:"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Change text"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Change the text for the selected item."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Delete Pixmap"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Delete the selected item's pixmap."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Create Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Name of the new template"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Enter the name of the new template"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Class of the new template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Creates the new template"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Closes the Dialog"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "&Baseclass for template:"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "File Saving"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Plu&gin Paths"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Ge&neral"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Restore last &workspace on startup"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Restore last workspace"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Show start &dialog"
+#~ msgstr "&Statusjosla"
+
+#, fuzzy
+#~ msgid "G&rid"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Grid resolution"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "Backgro&und"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Co&lor"
+#~ msgstr "Krāsas"
+
+#, fuzzy
+#~ msgid "Use a background color"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Use a background color."
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Use a background pixmap"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Use a background pixmap."
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Choose a pixmap file."
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "&Items"
+#~ msgstr "Elements:"
+
+#, fuzzy
+#~ msgid "Item Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Change column"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Colu&mn:"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "New &Subitem"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Move up"
+#~ msgstr "Pārvietot &Uz augšu"
+
+#, fuzzy
+#~ msgid "Move down"
+#~ msgstr "Pārvietot &Uz leju"
+
+#, fuzzy
+#~ msgid "Move left"
+#~ msgstr "Pārvietot &Uz augšu"
+
+#, fuzzy
+#~ msgid "Move right"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Column Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Enter column text"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Re&sizable"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "&Delete Column"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Delete column"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Deletes the selected Column."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "&New Column"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Add a Column"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Build Palette"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Back&ground:"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "&New Widget"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Add new custom widget."
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "&Delete Widget"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Delete custom widget"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Closes the Dialog."
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "&Load Descriptions..."
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "&Save Descriptions..."
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Enter filename"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Choose headerfile"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Select access"
+#~ msgstr "Iezīmēti + Atrasti:"
+
+#, fuzzy
+#~ msgid "Change classname"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Heade&rfile:"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Cl&ass:"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Size p&olicy:"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Fixed"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Maximum"
+#~ msgstr "M&aksimizēt"
+
+#, fuzzy
+#~ msgid "MinimumExpanding"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Expanding"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Vertical Sizepolicy"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Con&tainer widget"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "N&ew Signal"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Dele&te Signal"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "S&ignal:"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "S&lots"
+#~ msgstr "Sloti"
+
+#, fuzzy
+#~ msgid "Sl&ot:"
+#~ msgstr "Sloti"
+
+#, fuzzy
+#~ msgid "public"
+#~ msgstr "Publisks"
+
+#, fuzzy
+#~ msgid "protected"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "N&ew Slot"
+#~ msgstr "Sloti"
+
+#, fuzzy
+#~ msgid "Add new slot"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Dele&te Slot"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "N&ew Property"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Add new property"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Dele&te Property"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Delete property"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Deletes the selected property."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "String"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "CString"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "StringList"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Bool"
+#~ msgstr "Treknraksts"
+
+#, fuzzy
+#~ msgid "Int"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "UInt"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Color"
+#~ msgstr "Krāsas"
+
+#, fuzzy
+#~ msgid "Point"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Palette"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Select property type"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "P&roperty name:"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Find Text"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "F&ind:"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "&Find"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Version 3.2"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "&Project file:"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "&Language:"
+#~ msgstr "Valoda:"
+
+#, fuzzy
+#~ msgid "&Database file:"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Form Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Save in&line"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Project &image file"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Use &function:"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Change class name"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "A&uthor:"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "Enter your name."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "D&efault spacing:"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Use func&tions:"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Default mar&gin:"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Edit Database Connection"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "&Database name:"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "&Username:"
+#~ msgstr "Nenosaukts"
+
+#, fuzzy
+#~ msgid "D&river:"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "&Hostname:"
+#~ msgstr "Nenosaukts"
+
+#, fuzzy
+#~ msgid "Choose a pixmap file for the selected item."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Change the selected item's text."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Delete the selected item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Moves the selected item up."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Move the selected item down."
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Edit Text"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Choose Pixmap"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Edit Table"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Label:"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "&Field:"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "<no table>"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "&New Row"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "&Delete Row"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Configure Toolbox"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Available Tools"
+#~ msgstr "Pieejams:"
+
+#, fuzzy
+#~ msgid "&New File/Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "&Open File/Project"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "&Recently Opened"
+#~ msgstr "Atve&r neseno projektu..."
+
+#~ msgid "Goto Line"
+#~ msgstr "Iet uz Rindu"
+
+#, fuzzy
+#~ msgid "&Line:"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "&Goto"
+#~ msgstr "&Nē"
+
+#, fuzzy
+#~ msgid "Font Properties"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "&Font:"
+#~ msgstr "Atrasts:"
+
+#, fuzzy
+#~ msgid "Rel. &size:"
+#~ msgstr "Izmērs:"
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "Krāsas"
+
+#, fuzzy
+#~ msgid "&New Connection"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Delete Connection"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Edit Functions"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Change displaying mode for functions"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "&New Function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Add new function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "&Delete Function"
+#~ msgstr "Iezīmēti + Atrasti:"
+
+#, fuzzy
+#~ msgid "Delete function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Function Properties"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "F&unction:"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Change function name"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "&Return type:"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "S&pecifier:"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Change function access"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "Variable Properties"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Acc&ess:"
+#~ msgstr "Pieeja:"
+
+#, fuzzy
+#~ msgid "&Variable:"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "private"
+#~ msgstr "Privāts"
+
+#~ msgid "Done"
+#~ msgstr "Pabeigts"
+
+#, fuzzy
+#~ msgid "Level"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Remove Database"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Cannot write to implementation file"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Cannot write to header file"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Create Subclass of "
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Use as Private"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "Use as Protected"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Use as Public"
+#~ msgstr "Publisks"
+
+#, fuzzy
+#~ msgid "Unset"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Attributes"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "replace"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "extend"
+#~ msgstr "Izvēlēts:"
+
+#~ msgid "Complete Text"
+#~ msgstr "Pabeigt Tekstu"
+
+#, fuzzy
+#~ msgid "Create Accessor Methods"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "C++ Specific"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "C++ Class Generator"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Extract Interface..."
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "Create or Select Implementation..."
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Please select a class."
+#~ msgstr "Meklēt Failos..."
+
+#, fuzzy
+#~ msgid "Fixme"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Filtered: %1"
+#~ msgstr "Mape"
+
+#, fuzzy
+#~ msgid "Column"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Do not delete intermediate output like assembler files"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Enable exception handling"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Optimization Level"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Level 1"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Level 2"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Generate run-time checks for array subscripts"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Inhibit all warnings"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Optimization"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "GNU C Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "GNU C++ Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "GNU Fortran 77 Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Breakpoint List"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Debugger function call stack"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "Debugger disassemble view"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Debug Toolbar"
+#~ msgstr "Atkļūdot"
+
+#~ msgid "Activate"
+#~ msgstr "Aktivizēt"
+
+#, fuzzy
+#~ msgid "Run to Cursor"
+#~ msgstr "&No Kursora"
+
+#~ msgid "No source: %1"
+#~ msgstr "Nav avota: %1"
+
+#, fuzzy
+#~ msgid "Add empty breakpoint"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Edit selected breakpoint"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Remove all breakpoints"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "File:line"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Method()"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Variable Tree"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "&Memory"
+#~ msgstr "Atmiņa"
+
+#, fuzzy
+#~ msgid "&Registers"
+#~ msgstr "Reģistri"
+
+#, fuzzy
+#~ msgid "Directories to Parse"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Namespaces &amp;&amp; Classes"
+#~ msgstr "Klase:"
+
+#, fuzzy
+#~ msgid "Cannot find implementation class for form: %1"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Undefined function"
+#~ msgstr "Funkcija"
+
+#~ msgid "&New Class..."
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "New class"
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "PHP Specific"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "PHP Settings"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "No such connection: %1"
+#~ msgstr "Nav avota: %1"
+
+#, fuzzy
+#~ msgid "Driver"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "Database"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "<b>Run</b><p>Starts an application."
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Remove item(s)"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Remove Breakpoint"
+#~ msgstr "Aizvākt Ierakstu"
+
+#~ msgid "%1>\t%2"
+#~ msgstr "%1>\t%2"
+
+#, fuzzy
+#~ msgid "debugger variable-view"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "debugger breakpoints"
+#~ msgstr "Aizvākt Ierakstu"
+
+#~ msgid "Memory"
+#~ msgstr "Atmiņa"
+
+#~ msgid "Registers"
+#~ msgstr "Reģistri"
+
+#~ msgid "Libraries"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Filename: %1 at line: %2"
+#~ msgstr "Rinda: %1 Kol: %2"
+
+#~ msgid "&Enable"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Execute Main Program"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Runs the Perl program"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Execute String..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Find Perl Function Documentation..."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "String to Execute"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "String to execute:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Show Perl Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Cannot write to file"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Debugger method call stack"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "RDB Output"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "RDB output"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Catchpoint"
+#~ msgstr "Ceļš"
+
+#, fuzzy
+#~ msgid "Remove Watch Expression"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "PGHPF Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "PGF77 Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Glasgow Haskell Compiler"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Free Pascal Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Language"
+#~ msgstr "Valoda:"
+
+#, fuzzy
+#~ msgid "Locations I"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Locations II"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Debug && Optimization"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Linker"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Write no messages"
+#~ msgstr "Ievadiet žurnāla ziņojumu:"
+
+#, fuzzy
+#~ msgid "Show some general information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Issue warnings"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Issue notes"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Other Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Print the names of loaded files"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Executable name:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Dynamic linker executable:"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "GNU Pascal compatibility mode"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Do not delete assembler files"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Use default reader"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Assembler Output"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "Use default output"
+#~ msgstr "Noklusētais Fonts"
+
+#, fuzzy
+#~ msgid "Debugging"
+#~ msgstr "Atkļūdot"
+
+#, fuzzy
+#~ msgid "Generate checks for pointers"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Profiling"
+#~ msgstr "Drukāju..."
+
+#, fuzzy
+#~ msgid "Generate profiler code for gprof"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "General Optimization"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Generate smaller code"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate faster code"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Optimization Levels"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Level 3"
+#~ msgstr "&Līmenis:"
+
+#, fuzzy
+#~ msgid "Another Optimization"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Use register variables"
+#~ msgstr "Mainīgie"
+
+#, fuzzy
+#~ msgid "Uncertain optimizations"
+#~ msgstr "op&timizācija"
+
+#, fuzzy
+#~ msgid "Range checking"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Stack checking"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Stack size:"
+#~ msgstr "Mazs"
+
+#, fuzzy
+#~ msgid "Heap size:"
+#~ msgstr "Mazs"
+
+#, fuzzy
+#~ msgid "Create dynamic library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Generate release units"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Executable Generation"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Do not read default configuration file"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Compiler configuration file:"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Browser Info"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Global browser info"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Target OS"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Delphi Compiler Options"
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Map File"
+#~ msgstr "Make"
+
+#, fuzzy
+#~ msgid "Segments"
+#~ msgstr "Nav iestrādāts"
+
+#, fuzzy
+#~ msgid "Publics"
+#~ msgstr "Publisks"
+
+#, fuzzy
+#~ msgid "Default dynamic loader:"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Executable output directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Unit output directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Package directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Package source code directory:"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Make modified units"
+#~ msgstr "Saglabāt Failu"
+
+#, fuzzy
+#~ msgid "Quiet compile"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Output hint messages"
+#~ msgstr "Ievadiet žurnāla ziņojumu:"
+
+#, fuzzy
+#~ msgid "Output warning messages"
+#~ msgstr "Ievadiet žurnāla ziņojumu:"
+
+#, fuzzy
+#~ msgid "Packages"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Default (-$A8)"
+#~ msgstr "(Noklusētais)"
+
+#, fuzzy
+#~ msgid "Generate stack frames"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Enumeration Size"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "Default (-$Z1)"
+#~ msgstr "(Noklusētais)"
+
+#, fuzzy
+#~ msgid "Assertions"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Complete boolean evaluation"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Long strings"
+#~ msgstr "\"konfigurēt\" Uzstādījumi"
+
+#, fuzzy
+#~ msgid "Open string parameters"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Type-checked pointers"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Var-string checking"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Runtime type information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Overflow checking"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Local symbol information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Symbol Reference Information"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Default (-$YD)"
+#~ msgstr "(Noklusētais)"
+
+#, fuzzy
+#~ msgid "Execute Program"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "<b>Execute program</b><p>Runs the Python program."
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Execute string"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Python Documentation..."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Python documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "<b>Python documentation</b><p>Shows a Python documentation page."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Show Python Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "KJS Console"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~ msgid "expression expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Declaration syntax error"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "namespace expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "{ expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "')' expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "} missing"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Identifier expected"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Class name expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "condition expected"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "statement expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "catch expected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Flags"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Close &Others"
+#~ msgstr "Aizvērt Visu"
+
+#~ msgid "Ok"
+#~ msgstr "Ok"
+
+#, fuzzy
+#~ msgid "hSizeType"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "vSizeType"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Vertical Size Type"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Vertical Stretch"
+#~ msgstr "Vertikālā Selekcija Ieslēgta"
+
+#, fuzzy
+#~ msgid "Cross"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Waiting"
+#~ msgstr "Operācijas"
+
+#, fuzzy
+#~ msgid "iBeam"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Size All"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Blank"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "What's This?"
+#~ msgstr "Kas &Tas ir"
+
+#, fuzzy
+#~ msgid "true"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "false"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid " Bold"
+#~ msgstr "Treknraksts"
+
+#, fuzzy
+#~ msgid "Tool &Views"
+#~ msgstr "Atkļūdotājs apturēts"
+
+#, fuzzy
+#~ msgid "C&hildframe Mode"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "I&DEAl Mode"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "Previous Tool View"
+#~ msgstr "Atkļūdotājs apturēts"
+
+#, fuzzy
+#~ msgid "Show %1"
+#~ msgstr "hw %1"
+
+#, fuzzy
+#~ msgid "Maximize"
+#~ msgstr "M&inimizēt"
+
+#, fuzzy
+#~ msgid "Operations"
+#~ msgstr "Operācijas"
+
+#~ msgid "Close &All"
+#~ msgstr "&Aizvērt Visu"
+
+#~ msgid "&Minimize All"
+#~ msgstr "&Minimizēt Visu"
+
+#, fuzzy
+#~ msgid "&MDI Mode"
+#~ msgstr "&Pārslēgt Veco"
+
+#, fuzzy
+#~ msgid "&Tile"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "Ca&scade Windows"
+#~ msgstr "Koda &Logs"
+
+#, fuzzy
+#~ msgid "Cascade &Maximized"
+#~ msgstr "Maksimizēt"
+
+#~ msgid "&Restore"
+#~ msgstr "&Atjaunot"
+
+#, fuzzy
+#~ msgid "R&esize"
+#~ msgstr "&Noraidīt"
+
+#~ msgid "M&inimize"
+#~ msgstr "M&inimizēt"
+
+#, fuzzy
+#~ msgid "M&aximize"
+#~ msgstr "M&inimizēt"
+
+#, fuzzy
+#~ msgid "&Maximize"
+#~ msgstr "&Minimizēt"
+
+#~ msgid "&Minimize"
+#~ msgstr "&Minimizēt"
+
+#~ msgid "M&ove"
+#~ msgstr "Pārviet&ot"
+
+#, fuzzy
+#~ msgid "&Resize"
+#~ msgstr "&Rekursīvi"
+
+#, fuzzy
+#~ msgid "File Deleted"
+#~ msgstr "Konfig Select"
+
+#~ msgid "&Tile..."
+#~ msgstr "&Pārklāt..."
+
+#, fuzzy
+#~ msgid "Reopen"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Do Not Reopen"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Create Element"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Remove Element"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Clearcase"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "There is no difference to the repository."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "No Difference Found"
+#~ msgstr "Atbilstības nav atrastas"
+
+#, fuzzy
+#~ msgid "Reserve"
+#~ msgstr "Privāts"
+
+#, fuzzy
+#~ msgid "<b>Subversion</b><p>Subversion operations window."
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "<b>Add file to repository</b><p>Adds file to repository."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "&Remove From Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "<b>Update</b><p>Updates file(s) from repository."
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "&Revert"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Revert"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "<b>Revert</b><p>Undo local changes."
+#~ msgstr "Izvēlēties Visus"
+
+#, fuzzy
+#~ msgid "&Ignore in Subversion Operations"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "<b>Ignore in Subversion operations</b><p>Ignores file(s)."
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Do &Not Ignore in Subversion Operations"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Do not ignore in Subversion operations"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s)."
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Re&solve Conflicting State"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "CVS: Operation Already Pending "
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "CVS - Unedit Files"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "CVS - Files Removed From Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Show in %1"
+#~ msgstr "hw %1"
+
+#, fuzzy
+#~ msgid "CVS Annotate Dialog"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "CvsService Output"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "CvsService"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "&Difference Between Revisions"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Build difference"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "<b>Build difference</b><p>Builds difference between releases."
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Generate &Log"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate log"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate annotations"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "&Edit Files"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Remove editing mark from files"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Show editors"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Add to Repository as &Binary"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Add file to repository as binary"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Update/revert"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "R&emove Sticky Flag"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Remove sticky flag"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Make &Tag/Branch"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Make tag/branch"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "&Delete Tag/Branch"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Delete tag/branch"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "&Ignore in CVS Operations"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Ignore in CVS operations"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Ignore in CVS operations</b><p>Ignore file(s) by adding it to ."
+#~ "cvsignore file."
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Do &Not Ignore in CVS Operations"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Annotate Failed"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "CVS Commit Warning"
+#~ msgstr "Kompilatora brīdinājumi"
+
+#, fuzzy
+#~ msgid "Started job: %1"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Init CVS Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Diff against repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Remove From Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Do Not Revert"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "No Differences Found"
+#~ msgstr "Atbilstības nav atrastas"
+
+#, fuzzy
+#~ msgid "&Enter description:"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "C&lient:"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "&User:"
+#~ msgstr "Nenosaukts"
+
+#, fuzzy
+#~ msgid "Class &list:"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Quick open file in project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Quick Open Class..."
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "Find class in project"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Quick Open Method..."
+#~ msgstr "Atver failu..."
+
+#, fuzzy
+#~ msgid "Function &name:"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Function &list:"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Delete selected item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Build API Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Build API documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Clean API Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Clean API documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Document Current Function"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Create a documentation template above a function"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Project version"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Include brief member descriptions"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Strip from include path"
+#~ msgstr "Meklēt Failos..."
+
+#, fuzzy
+#~ msgid "Generate short file names"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Inherit documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Tab size"
+#~ msgstr "Mazs"
+
+#, fuzzy
+#~ msgid "Aliases"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Make inline functions"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "Sort member documentation alphabetically"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Sort brief documentation alphabetically"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Enable conditional sections"
+#~ msgstr "&Optimizācija"
+
+#, fuzzy
+#~ msgid "Generate Deprecated-list"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Suppress output"
+#~ msgstr "Ziņoju&mi"
+
+#, fuzzy
+#~ msgid "Show warnings"
+#~ msgstr "&Rādīt tabus"
+
+#, fuzzy
+#~ msgid "Warn about undocumented entities"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Input files and directories"
+#~ msgstr "Nav tāda faila vai direktorija."
+
+#, fuzzy
+#~ msgid "Recurse into subdirectories"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "Source Browser"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Referenced by relation"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "References relation"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Generate HTML"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "HTML file extension"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Header file"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "CHM file"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "HHC location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Expand TOC"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "LaTeX"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "LaTeX Header file"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Use pdflatex"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Generate RTF"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Extensions file"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Man extension"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Generate links"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate XML"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "XML output directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "DEF"
+#~ msgstr "KDE"
+
+#, fuzzy
+#~ msgid "Generate Autogen DEF"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Generate Perl module"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Search for includes"
+#~ msgstr "Meklēt Failos..."
+
+#, fuzzy
+#~ msgid "External"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Tagfiles"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "Generate tagfile"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "External groups"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "Hide undocumented relations"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Generate legend"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Documentation URL"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Absolute path to documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Paths to external documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Distribution && Publishing"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Make source and binary distribution"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Distribution & Publishing"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Add to Favorites"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Remove Favorite"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Set default project location to: %1?"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Cannot open project template."
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Do Not Generate"
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "Global Types"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "Project templates in "
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "File Create"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Create a new file"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "File creation"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Template Location"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Type extension:"
+#~ msgstr "Faila Paplašinājumi:"
+
+#, fuzzy
+#~ msgid "Type name:"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "Template location:"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Icon:"
+#~ msgstr "Unko&mentēt"
+
+#, fuzzy
+#~ msgid "<b>New File Creation</b>"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "A file with this name already exists"
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "File Exists"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "Insert a code snippet"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "SnippetPart for KDevelop"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Add Group"
+#~ msgstr "&Grupas"
+
+#~ msgid "Language:"
+#~ msgstr "Valoda:"
+
+#, fuzzy
+#~ msgid "Edit Group"
+#~ msgstr "&Grupas"
+
+#, fuzzy
+#~ msgid "Add Item..."
+#~ msgstr "&Pievienot"
+
+#, fuzzy
+#~ msgid "Add Group..."
+#~ msgstr "&Grupas"
+
+#, fuzzy
+#~ msgid "Please enter the value for <b>%1</b>:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Enter Values for Variables"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Enter the replacement values for these variables:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Enter the replacement values for %1:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Open files"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Open Project View..."
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Open project view"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Save Project View"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "New Project View..."
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Delete Project View"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Delete project view"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Save Project View As"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Enter the name of the view:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid ""
+#~ "<qt>A project view named <b>%1</b> already exists.<br>Do you want to "
+#~ "overwrite it?</qt>"
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "Close Selected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Save Selected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Reload Selected"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "File Tree"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Show Non Project Files"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Hide Non Project Files"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Sync with Repository"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "File tree view in the project directory"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "File Groups"
+#~ msgstr "Grupas"
+
+#, fuzzy
+#~ msgid "File groups in the project directory"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "Add File Group"
+#~ msgstr "Grupas"
+
+#, fuzzy
+#~ msgid "Edit File Group"
+#~ msgstr "Grupas"
+
+#~ msgid "Translations"
+#~ msgstr "Tulkojumi"
+
+#~ msgid "Others"
+#~ msgstr "Citi"
+
+#, fuzzy
+#~ msgid "Display Location Column"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Expand abbreviation"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Abbreviations"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgctxt "No Version Control System"
+#~ msgid "None"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Formatting"
+#~ msgstr "Kompilatora Uzstādījumi"
+
+#, fuzzy
+#~ msgid "No match"
+#~ msgstr " atbilstības"
+
+#, fuzzy
+#~ msgid "Debug regular expression"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Copy To..."
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "CTags Lookup"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "CTags"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "CTags lookup results"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Lookup Current Text"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Lookup Current Text as Declaration"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Lookup Current Text as Definition"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "CTags - Go to Declaration: %1"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "CTags - Go to Definition: %1"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "CTags - Lookup: %1"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Hits: %1"
+#~ msgstr "Hīti"
+
+#, fuzzy
+#~ msgid "No CTags database found"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "define"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "label"
+#~ msgstr "lokāls"
+
+#, fuzzy
+#~ msgid "function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "any pattern"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "slot"
+#~ msgstr "Sloti"
+
+#, fuzzy
+#~ msgid "pattern"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "class"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "variable"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "external variable"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "feature"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "common"
+#~ msgstr "Unko&mentēt"
+
+#, fuzzy
+#~ msgid "interface"
+#~ msgstr "Lietotāja Starpseja"
+
+#, fuzzy
+#~ msgid "program"
+#~ msgstr "Programma"
+
+#, fuzzy
+#~ msgid "type"
+#~ msgstr "Tips"
+
+#, fuzzy
+#~ msgid "method"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Project Documentation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Documentation Settings"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&Search in Documentation..."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&Look in Documentation Index..."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Look in the documentation index"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Show an infopage"
+#~ msgstr "&Rādīt tabus"
+
+#, fuzzy
+#~ msgid "Show Manual Page"
+#~ msgstr "&Rādīt tabus"
+
+#, fuzzy
+#~ msgid "Show Info Page"
+#~ msgstr "&Rādīt tabus"
+
+#, fuzzy
+#~ msgid "Show infopage on:"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Find Documentation: %1"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Look in Documentation Index: %1"
+#~ msgstr "Dokumentācija"
+
+#~ msgid "Title"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "Edit Bookmark"
+#~ msgstr "Nodzēst Grāmatzīmes"
+
+#, fuzzy
+#~ msgid "Add Bookmark"
+#~ msgstr "Nodzēst Grāmatzīmes"
+
+#, fuzzy
+#~ msgid "Google"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~ msgid "Finder"
+#~ msgstr "Meklēt"
+
+#, fuzzy
+#~ msgid "Se&arch"
+#~ msgstr "&Meklēt"
+
+#, fuzzy
+#~ msgid "&Method:"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "S&ort by:"
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Search &results:"
+#~ msgstr "Meklēšana..."
+
+#, fuzzy
+#~ msgid "Update Config"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Update Index"
+#~ msgstr "Atjaunināt"
+
+#, fuzzy
+#~ msgid "Relevance"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "Cannot find the htsearch executable."
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Scanning for files"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Generating index..."
+#~ msgstr "Atver failu..."
+
+#, fuzzy
+#~ msgid "Running htmerge failed"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Update user's htdig configuration file only"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "-c and generate index"
+#~ msgstr "Atver failu..."
+
+#, fuzzy
+#~ msgid "KDE Index generator for documentation files."
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Configuration file updated."
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Configuration file update failed."
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Qt Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "CHM Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "PalmDoc documentation plugin"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "PalmDoc Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "PDF documentation plugin"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "PDF Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Djvu documentation plugin"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Djvu Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "KDevelopTOC Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Devhelp Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Doxygen Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Custom Documentation Collection"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Execute shell command"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Execute Command"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Security Widget"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Suggestion"
+#~ msgstr "Versija:"
+
+#, fuzzy
+#~ msgid "Assertion failed: %1"
+#~ msgstr "Saglabāju..."
+
+#, fuzzy
+#~ msgid "Entering directory %1"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Leaving directory %1"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Text structure"
+#~ msgstr "Konfig Select"
+
+#, fuzzy
+#~ msgid "Open With..."
+#~ msgstr "Atver failu..."
+
+#, fuzzy
+#~ msgid "%1 Methods"
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Class Browser"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Class browser"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Functions in file"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Class Inheritance Diagram"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Class inheritance diagram"
+#~ msgstr "Mime Tipi:"
+
+#, fuzzy
+#~ msgid "Group by Directories"
+#~ msgstr "Direktoriji"
+
+#, fuzzy
+#~ msgid "Plain List"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Java Like Mode"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "View Mode"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Create get/set Methods"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Add Method..."
+#~ msgstr "Metode"
+
+#, fuzzy
+#~ msgid "Add Attribute..."
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "Open Declaration"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Open Implementation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Class Tool"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Parent Classes..."
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "Child Classes..."
+#~ msgstr "Jau&na Klase..."
+
+#, fuzzy
+#~ msgid "Class Tool..."
+#~ msgstr "Jau&na Klase..."
+
+#~ msgid "Attribute"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "(Global Namespace)"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "Add Annotation"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "Add Annotations"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "Annotation Plugin"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "annotationPart"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "AnnotationPart for KDevelop"
+#~ msgstr "At&kļūdošana"
+
+#, fuzzy
+#~ msgid "Annotations"
+#~ msgstr "Indents"
+
+#, fuzzy
+#~ msgid "Ant Options"
+#~ msgstr "Rediģēšanas Opcijas"
+
+#, fuzzy
+#~ msgid "Classpath"
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Remove %1 From Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Add %1 to Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Copy File(s)"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "Add Relative Path(s)"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "&Value:"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Select Directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Select Main Program Executable"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Compile file"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "&Rebuild Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "&Clean Project"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Clean project"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Execute main program"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "&Build Subproject"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Build subproject"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "&Rebuild Subproject"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Rebuild subproject"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "&Clean Subproject"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Clean subproject"
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Execute Subproject"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Execute subproject"
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Open browser"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Down"
+#~ msgstr "Pabeigts"
+
+#, fuzzy
+#~ msgid "Edit value"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Remove value"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Add Library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Add library to link:"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Add library directory:"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Change include directory:"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Change Library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Add target:"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Change target:"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Lexsources"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Yaccsources"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Distfiles"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Install object"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Create scope"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Subproject settings"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Add existing files"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Create Scope"
+#~ msgstr "Veidot"
+
+#, fuzzy
+#~ msgid "Please enter a name for the new scope:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Please enter a name for the subdirectory: "
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Subproject %1"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Add Subproject..."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Remove Subproject..."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Create Scope..."
+#~ msgstr "Veidot..."
+
+#, fuzzy
+#~ msgid "Subproject Settings"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Remove Scope"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "an application: "
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "a library: "
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "a subdirs project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Insert Existing Files"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Insert New Filepattern"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Insert New Install Object"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Insert New File"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Add Install Object..."
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Install Path..."
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Create New File..."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Add Existing Files..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Update Translation Files"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "Release Binary Translations"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Choose Install Path"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Create New File"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Enter a name for the new file:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Add Install Object"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Enter a name for the new object:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Edit ui-Subclass..."
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Subclassing Wizard..."
+#~ msgstr "Klase"
+
+#, fuzzy
+#~ msgid "Open ui.h File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "List of Subclasses..."
+#~ msgstr "Klase"
+
+#~ msgid "Properties..."
+#~ msgstr "Īpašības..."
+
+#, fuzzy
+#~ msgid "Edit Pattern"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Remove Pattern"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you wish to remove <strong>%1</strong> from this project?"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "No Executable Name Given"
+#~ msgstr "&Izpildīt"
+
+#, fuzzy
+#~ msgid "Do Not Run"
+#~ msgstr "Nav atrasts"
+
+#, fuzzy
+#~ msgid "Haskell Options"
+#~ msgstr "Make Opcijas"
+
+#, fuzzy
+#~ msgid "Make environment"
+#~ msgstr "Indents"
+
+#~ msgid "Build Options"
+#~ msgstr "Būves Opcijas"
+
+#, fuzzy
+#~ msgid "Ma&ke"
+#~ msgstr "Make"
+
+#, fuzzy
+#~ msgid "Remove Selected Files From Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Populate"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Object Files"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Build All"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "Add File"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Add Target"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Add Folder"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Documentation data"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "%1 in %2"
+#~ msgstr "%1 %2"
+
+#, fuzzy
+#~ msgid "Library"
+#~ msgstr "Bibliotēkas"
+
+#~ msgid "Header"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Subproject Options for '%1'"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Add Include Directory"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Edit Include Directory"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Edit include directory:"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Substitution:"
+#~ msgstr "Distribūcija"
+
+#, fuzzy
+#~ msgid "Edit External Library"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Edit external library:"
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "You have to give the subproject a name."
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "A subproject with this name already exists."
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "A file named %1 already exists."
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "Could not access the subdirectory %1."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Could not create Makefile.am in subdirectory %1."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Automake manager"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Add Translation..."
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "Add translation"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "Build &Active Target"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Run Configure"
+#~ msgstr "K&onfigurē..."
+
+#, fuzzy
+#~ msgid "Run configure"
+#~ msgstr "K&onfigurē..."
+
+#, fuzzy
+#~ msgid "Install as root user"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Distclean"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Build Configuration"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "Build configuration menu"
+#~ msgstr "Kompilēšanas Konfigurācija"
+
+#, fuzzy
+#~ msgid "Application Already Running"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "&Restart Application"
+#~ msgstr "Aplikācijas"
+
+#~ msgid "Options..."
+#~ msgstr "Opcijas..."
+
+#, fuzzy
+#~ msgid "Add Existing Subprojects..."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Add Application..."
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Expand Subtree"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Collapse Subtree"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Add New Subproject to '%1'"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Add Existing Subproject to '%1'"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Add New Application to '%1'"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Remove Subproject %1"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Execute Target..."
+#~ msgstr "Iziet no programmas"
+
+#, fuzzy
+#~ msgid "Add New File to '%1'"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Add Existing Files to '%1'"
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Remove Target From '%1'"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Add Translation"
+#~ msgstr "Tulkojumi"
+
+#, fuzzy
+#~ msgid "MIME Type"
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgid "Home directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Previous directory"
+#~ msgstr "Būves Dir&ektorijs:"
+
+#, fuzzy
+#~ msgid "Next directory"
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Enter Value"
+#~ msgstr "Termināls"
+
+#, fuzzy
+#~ msgid "You have to give the target a name"
+#~ msgstr "Jūs esat norādijis katalogu"
+
+#, fuzzy
+#~ msgid "A target with this name already exists."
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "*.ui|Qt User-Interface Files"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "*|All Files"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Save Form '%1' As"
+#~ msgstr "Saglabāt &Kā..."
+
+#, fuzzy
+#~ msgid "File Already Exists"
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "The file already exists. Do you wish to overwrite it?"
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "Edit %1"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Save changes to form '%1'?"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Yes"
+#~ msgstr "&Jā"
+
+#, fuzzy
+#~ msgid "&No"
+#~ msgstr "&Nē"
+
+#, fuzzy
+#~ msgid "Using ui.h File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid ""
+#~ "An \"ui.h\" file for this form already exists.\n"
+#~ "Do you want to use it or create a new one?"
+#~ msgstr ""
+#~ "Dokuments ar šo Vārdu jau eksistē.\n"
+#~ "Vai vēlaties to pārrakstīt?"
+
+#, fuzzy
+#~ msgid "Use Existing"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Create New"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Creating ui.h file"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Do you want to create an new \"ui.h\" file?"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Invalid Filename"
+#~ msgstr "Failavārds:"
+
+#, fuzzy
+#~ msgid "True"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "width"
+#~ msgstr "Tab Platums:"
+
+#, fuzzy
+#~ msgid "Green"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Blue"
+#~ msgstr "Vērtība"
+
+#, fuzzy
+#~ msgid "Family"
+#~ msgstr "Saime:"
+
+#, fuzzy
+#~ msgid "Point Size"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Underline"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Strikeout"
+#~ msgstr "Sākums:"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "&Atļaut"
+
+#, fuzzy
+#~ msgid "Field"
+#~ msgstr "&Faili:"
+
+#, fuzzy
+#~ msgid "horizontalStretch"
+#~ msgstr "Vertikālā Selekcija Ieslēgta"
+
+#, fuzzy
+#~ msgid "verticalStretch"
+#~ msgstr "Vertikālā Selekcija Ieslēgta"
+
+#, fuzzy
+#~ msgid "%1/%2/%3/%4"
+#~ msgstr "%1 %2"
+
+#, fuzzy
+#~ msgid "Sort &Alphabetically"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "New Signal Handler"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Delete Signal Handler"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Remove Connection"
+#~ msgstr "Aizvākt Ierakstu"
+
+#, fuzzy
+#~ msgid "Add Connection"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Add Function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Signa&l Handlers"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Signal Handlers"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "New &Action"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "New Action &Group"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "Qt User-Interface Files (*.ui)"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "All Files (*)"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Loading File"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Move Tab Page"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Tab 1"
+#~ msgstr "Mazs"
+
+#, fuzzy
+#~ msgid "Tab 2"
+#~ msgstr "Mazs"
+
+#, fuzzy
+#~ msgid "Page 1"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "Page 2"
+#~ msgstr "Fons:"
+
+#, fuzzy
+#~ msgid "&Redo: Not Available"
+#~ msgstr "Pieejams:"
+
+#, fuzzy
+#~ msgid "Redoes the last undone operation"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "Copies the selected widgets to the clipboard"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Deletes the selected widgets"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Selects all widgets"
+#~ msgstr "Izvēlēties &Visu"
+
+#, fuzzy
+#~ msgid "Raises the selected widgets"
+#~ msgstr "Saglabāt Failu"
+
+#, fuzzy
+#~ msgid "Lowers the selected widgets"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "S&lots..."
+#~ msgstr "O&pcijas..."
+
+#, fuzzy
+#~ msgid "Connections"
+#~ msgstr "&Konfigurācija:"
+
+#, fuzzy
+#~ msgid "Co&nnections..."
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "&Source..."
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Preferences..."
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "Find Incremental"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Find &Incremental"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "&Goto Line..."
+#~ msgstr "Iet uz Rindu"
+
+#, fuzzy
+#~ msgid "Adjusts the size of the selected widget"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Break Layout"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "&Break Layout"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "Breaks the selected layout"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Layout"
+#~ msgstr "&Atpakaļ"
+
+#, fuzzy
+#~ msgid "Insert a %1"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "<b>The Layout toolbar</b>%1"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Pointer"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "&Pointer"
+#~ msgstr "Līnija"
+
+#, fuzzy
+#~ msgid "Connect Signal/Slots"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Selects the connection tool"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Tab Order"
+#~ msgstr "&Veidot"
+
+#, fuzzy
+#~ msgid "<b>The Tools toolbar</b>%1"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Custom Widgets"
+#~ msgstr "Kompilators"
+
+#, fuzzy
+#~ msgid "Edit &Custom Widgets..."
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Configure Toolbox..."
+#~ msgstr "K&onfigurēt..."
+
+#, fuzzy
+#~ msgid "<b>The File toolbar</b>%1"
+#~ msgstr "Klusās darbības"
+
+#, fuzzy
+#~ msgid "New dialog or file"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "&New..."
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgid "Creates a new project, form or source file."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Creates a new dialog or file"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "New Dialog"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "&Dialog..."
+#~ msgstr "&Pārklāt..."
+
+#, fuzzy
+#~ msgid "Creates a new dialog."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "&File..."
+#~ msgstr "&Pārklāt..."
+
+#, fuzzy
+#~ msgid "Creates a new file."
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Opens an existing project, form or source file "
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Save &As..."
+#~ msgstr "Saglabāt &Kā..."
+
+#, fuzzy
+#~ msgid "Sa&ve All"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "Create &Template..."
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Creates a new template"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Recently Opened Files "
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "Pr&oject"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Active Project"
+#~ msgstr "&Projekts"
+
+#, fuzzy
+#~ msgid "Image Collection..."
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "&Image Collection..."
+#~ msgstr "Kompilatora Opcijas"
+
+#, fuzzy
+#~ msgid "Database Connections..."
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "&Database Connections..."
+#~ msgstr "&Direktorijs:"
+
+#, fuzzy
+#~ msgid "Project Settings..."
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Project Settings..."
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "&Preview"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Preview Form"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Cascade"
+#~ msgstr "Klases"
+
+#, fuzzy
+#~ msgid "Cl&ose"
+#~ msgstr "Ai&zvērt"
+
+#, fuzzy
+#~ msgid "Closes the active window"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Close Al&l"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Closes all form windows"
+#~ msgstr "Aizvērt Visu"
+
+#, fuzzy
+#~ msgid "Ne&xt"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Pre&vious"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Activates the previous window"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "&Manual"
+#~ msgstr "Valoda:"
+
+#, fuzzy
+#~ msgid "About &Qt"
+#~ msgstr "Par &KDE"
+
+#, fuzzy
+#~ msgid "Register Qt"
+#~ msgstr "Reģistri"
+
+#, fuzzy
+#~ msgid "&Register Qt..."
+#~ msgstr "Reģistri"
+
+#, fuzzy
+#~ msgid "Create a new project, form or source file..."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Name of File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Enter the name of the new source file:"
+#~ msgstr "Veidoju jaunu failu..."
+
+#, fuzzy
+#~ msgid "Save Project Settings"
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Selected project '%1'"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Open a file..."
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Loaded file '%1'"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Load File"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Project '%1' saved."
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Enter a filename..."
+#~ msgstr "Vispārējs"
+
+#, fuzzy
+#~ msgid "NewTemplate"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Paste Error"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "Edit Source"
+#~ msgstr "Iziet"
+
+#, fuzzy
+#~ msgid "Edit custom widgets..."
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Set 'name' Property"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Load Template"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "%1 Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "Main Window"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "&Styles"
+#~ msgstr "Elementa Stils"
+
+#, fuzzy
+#~ msgid "Typewriter"
+#~ msgstr "&Pārrakstīt"
+
+#, fuzzy
+#~ msgid "Paragraph"
+#~ msgstr "Programma"
+
+#, fuzzy
+#~ msgid "Align right"
+#~ msgstr "Izcelt:"
+
+#, fuzzy
+#~ msgid "&Font"
+#~ msgstr "Atrasts:"
+
+#, fuzzy
+#~ msgid "Headline 1"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Headline 2"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Headline 3"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Set the Text of '%1'"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "&Designer Project Settings..."
+#~ msgstr "Projekta Opcijas"
+
+#, fuzzy
+#~ msgid "Add Spacer"
+#~ msgstr "&Pārvietot"
+
+#, fuzzy
+#~ msgid "Pre&vious Form"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Configure &KDevDesigner..."
+#~ msgstr "K&onfigurēt..."
+
+#, fuzzy
+#~ msgid "Edit Wizard Pages"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Add Page to %1"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Add/Remove functions of '%1'"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Remove Function"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Change Function Attributes"
+#~ msgstr "Virtuālas funkcijas"
+
+#, fuzzy
+#~ msgid "%1/%2"
+#~ msgstr "%1 %2"
+
+#, fuzzy
+#~ msgid "Resize"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "&Connect Action..."
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Delete Action"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "&Open Source File"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "&Remove Source File From Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Open Form"
+#~ msgstr "Atve&r neseno projektu..."
+
+#, fuzzy
+#~ msgid "&Remove Form From Project"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Remove Source File From Form"
+#~ msgstr "Projekts"
+
+#, fuzzy
+#~ msgid "&Open Source"
+#~ msgstr "Avoti"
+
+#, fuzzy
+#~ msgid "Sender"
+#~ msgstr "Heders"
+
+#, fuzzy
+#~ msgid "Receiver"
+#~ msgstr "&Noraidīt"
+
+#, fuzzy
+#~ msgid "Delete Toolbar"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Delete Toolbar '%1'"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Delete Separator"
+#~ msgstr "&Dzēst"
+
+#, fuzzy
+#~ msgid "Insert Separator"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Delete Action '%1' From Toolbar '%2'"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "Add Separator to Toolbar '%1'"
+#~ msgstr "Aplikācijas"
+
+#, fuzzy
+#~ msgid "Insert/Move Action"
+#~ msgstr "&Vertikāla Selekcija"
+
+#, fuzzy
+#~ msgid "Class Variables"
+#~ msgstr "Globāls Mainīgais"
+
+#, fuzzy
+#~ msgid "Functions"
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "New..."
+#~ msgstr "Nav tipa"
+
+#, fuzzy
+#~ msgid "Goto Implementation"
+#~ msgstr "Dokumentācija"
+
+#, fuzzy
+#~ msgid "Remove Variable"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Add Variable"
+#~ msgstr "Mainīgais"
+
+#, fuzzy
+#~ msgid "Members"
+#~ msgstr "Atmiņa"
+
+#, fuzzy
+#~ msgid "Class Declarations"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Adding Custom Widget"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Removing Custom Widget"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Renaming Custom Widget"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "new separator"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "separator"
+#~ msgstr "Deklarācijas:"
+
+#, fuzzy
+#~ msgid "Delete Menu"
+#~ msgstr "Attribūts"
+
+#, fuzzy
+#~ msgid "Move Menu Left"
+#~ msgstr "Pārvietot &Uz augšu"
+
+#, fuzzy
+#~ msgid "Move Menu Right"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Rename Menu"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "New Column"
+#~ msgstr "Komentārs"
+
+#, fuzzy
+#~ msgid "Subitem"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Save Code"
+#~ msgstr "Saglabāt V&isu"
+
+#, fuzzy
+#~ msgid "new item"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Cut Item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Paste Item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Set Icon"
+#~ msgstr "Atrašanās Vieta:"
+
+#, fuzzy
+#~ msgid "Add Item"
+#~ msgstr "&Pievienot"
+
+#, fuzzy
+#~ msgid "Remove Item"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Rename Item"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Drop Item"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Remove Icon"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Move Item Up"
+#~ msgstr "Pārvietot &Uz augšu"
+
+#, fuzzy
+#~ msgid "Move Item Down"
+#~ msgstr "Pārvietot &Uz leju"
+
+#, fuzzy
+#~ msgid "Output Window"
+#~ msgstr "Ievietot Failu"
+
+#, fuzzy
+#~ msgid "Toolbox"
+#~ msgstr "Rīkjosla"
+
+#, fuzzy
+#~ msgid "&Redo: %1"
+#~ msgstr "Lasīt"
+
+#, fuzzy
+#~ msgid "Choose Pixmap..."
+#~ msgstr "Bibliotēkas"
+
+#, fuzzy
+#~ msgid "Edit Text..."
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Edit Title..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Edit Page Title..."
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "Delete Page"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Add Page"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Previous Page"
+#~ msgstr "&Logs"
+
+#, fuzzy
+#~ msgid "Next Page"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Rename Current Page..."
+#~ msgstr "Tekošais Projekts"
+
+#, fuzzy
+#~ msgid "Edit Pages..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Add Menu Item"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Add Toolbar"
+#~ msgstr "Mape"
+
+#, fuzzy
+#~ msgid "Page Title"
+#~ msgstr "Titls"
+
+#, fuzzy
+#~ msgid "New page title"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Add Toolbar to '%1'"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Add Menu to '%1'"
+#~ msgstr "Atvērt Failu"
+
+#, fuzzy
+#~ msgid "Edit %1..."
+#~ msgstr "Iziet..."
+
+#, fuzzy
+#~ msgid "Insert a %1 (custom widget)"
+#~ msgstr "Dzēst atribūtu"
+
+#, fuzzy
+#~ msgid "Restoring Last Session"
+#~ msgstr "RFV Opcijas"
+
+#, fuzzy
+#~ msgid "A %1 (custom widget)"
+#~ msgstr "Papil&dus Opcijas:"
+
+#, fuzzy
+#~ msgid "Reparent Widgets"
+#~ msgstr "Dzēst mapi"
+
+#, fuzzy
+#~ msgid "Connect '%1' with..."
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Change Tab Order"
+#~ msgstr "Liels"
+
+#, fuzzy
+#~ msgid "Inserting Widget"
+#~ msgstr "&Iespraust Failu..."
+
+#, fuzzy
+#~ msgid "Use Size Hint"
+#~ msgstr "Ša&blons:"
+
+#, fuzzy
+#~ msgid "&Select"
+#~ msgstr "Izvēlēts:"
+
+#, fuzzy
+#~ msgid "Raise"
+#~ msgstr "&Aizvērt"
+
+#, fuzzy
+#~ msgid "Edit connections..."
+#~ msgstr "Funkcija"

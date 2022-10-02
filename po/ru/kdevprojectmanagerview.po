@@ -1,0 +1,595 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Николай Ерёмин <doktorkster@gmail.com>, 2009.
+# Ерёмин Николай <doktorkster@gmail.com>, 2009.
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2010, 2011.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevprojectmanagerview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2022-03-15 11:15+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: cutcopypastehelpers.cpp:78
+#, kde-format
+msgid "Move %1 item into %2"
+msgid_plural "Move %1 items into %2"
+msgstr[0] "Переместить %1 объект в %2"
+msgstr[1] "Переместить %1 объекта в %2"
+msgstr[2] "Переместить %1 объектов в %2"
+msgstr[3] "Переместить %1 объект в %2"
+
+#: cutcopypastehelpers.cpp:81
+#, kde-format
+msgid "Copy %1 item into %2"
+msgid_plural "Copy %1 items into %2"
+msgstr[0] "Скопировать %1 объект в %2"
+msgstr[1] "Скопировать %1 объекта в %2"
+msgstr[2] "Скопировать %1 объектов в %2"
+msgstr[3] "Скопировать %1 объект в %2"
+
+#: cutcopypastehelpers.cpp:84
+#, kde-format
+msgid "Delete %1 item"
+msgid_plural "Delete %1 items"
+msgstr[0] "Удалить %1 объект"
+msgstr[1] "Удалить %1 объекта"
+msgstr[2] "Удалить %1 объектов"
+msgstr[3] "Удалить %1 объект"
+
+#: cutcopypastehelpers.cpp:93
+#, kde-format
+msgid "Move item %1 into %2"
+msgstr "Переместить объект %1 в %2"
+
+#: cutcopypastehelpers.cpp:96
+#, kde-format
+msgid "Copy item %1 into %2"
+msgstr "Скопировать объект %1 в %2"
+
+#: cutcopypastehelpers.cpp:99
+#, kde-format
+msgid "Delete item %1"
+msgstr "Удалить объект %1"
+
+#: cutcopypastehelpers.cpp:108
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation succeeded"
+msgstr "Субоперация выполнена успешно"
+
+#: cutcopypastehelpers.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation failed"
+msgstr "Не удалось выполнить субоперацию"
+
+#: cutcopypastehelpers.cpp:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation skipped to prevent data loss"
+msgstr "Субоперация пропущена в целях предотвращения потери данных"
+
+#: cutcopypastehelpers.cpp:287
+#, kde-format
+msgctxt "@title:window"
+msgid "Paste Failed"
+msgstr "Ошибка вставки"
+
+#: cutcopypastehelpers.cpp:323
+#, kde-format
+msgid ""
+"Failed to paste. Below is a list of suboperations that have been attempted."
+msgstr ""
+"Не удалось выполнить вставку. Далее приведён перечень субопераций, которые "
+"пыталась выполнить программа."
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevprojectmanagerview.rc:26
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Основная панель инструментов"
+
+#: projectbuildsetwidget.cpp:123
+#, kde-format
+msgctxt "@title:menu"
+msgid "Build Set"
+msgstr "Комплект сборки"
+
+#: projectbuildsetwidget.cpp:124
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from Build Set"
+msgstr "Удалить из комплекта сборки"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
+#: projectbuildsetwidget.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the top"
+msgstr "Поднять выбранные объекты вверх"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
+#: projectbuildsetwidget.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items up"
+msgstr "Переместить выбранные объекты выше"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
+#: projectbuildsetwidget.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected item down"
+msgstr "Переместить выбранные объекты ниже"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
+#: projectbuildsetwidget.ui:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the bottom"
+msgstr "Опустить выбранные объекты вниз"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#: projectbuildsetwidget.ui:177
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "These items will be built in the order they are listed."
+msgstr "Эти объекты будут собраны в показанном порядке."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectbuildsetwidget.ui:180
+#, kde-format
+msgctxt "@title"
+msgid "Build Sequence"
+msgstr "Последовательность сборки"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
+#: projectbuildsetwidget.ui:200
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add currently selected items from project tree view to the build set."
+msgstr ""
+"Добавить текущие выбранные объекты из дерева проектов в комплект сборки."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
+#: projectbuildsetwidget.ui:216
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove currently selected item from the build set."
+msgstr "Удалить текущий выбранный объект из комплекта сборки."
+
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#, kde-format
+msgctxt "@title:window"
+msgid "Projects"
+msgstr "Проекты"
+
+#: projectmanagerview.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Найти текущий документ"
+
+#: projectmanagerview.cpp:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locates the current document in the project tree and selects it."
+msgstr "Найти текущий документ в дереве проекта и выделить его."
+
+#: projectmanagerview.cpp:98
+#, kde-format
+msgctxt "@action"
+msgid "Auto-Select Current Document"
+msgstr "Автоматически выделить текущий документ"
+
+#: projectmanagerview.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically select the current document in the project tree."
+msgstr "Автоматически выделить текущий документ в дереве проекта."
+
+#: projectmanagerview.cpp:118
+#, kde-format
+msgctxt "@action"
+msgid "Show Build Targets"
+msgstr "Показать цели сборки"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
+#: projectmanagerview.ui:33
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Project Overview"
+msgstr "Обзор проекта"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
+#: projectmanagerview.ui:53
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Build Items:"
+msgstr "Элементы сборки:"
+
+#: projectmanagerviewplugin.cpp:142
+#, kde-format
+msgctxt "@action"
+msgid "Build All Projects"
+msgstr "Собрать все проекты"
+
+#: projectmanagerviewplugin.cpp:147
+#, kde-format
+msgctxt "@action"
+msgid "Build Selection"
+msgstr "Собрать выделенное"
+
+#: projectmanagerviewplugin.cpp:148
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Build"
+msgstr "Собрать"
+
+#: projectmanagerviewplugin.cpp:154
+#, kde-format
+msgctxt "@action"
+msgid "Install Selection"
+msgstr "Установить выделенное"
+
+#: projectmanagerviewplugin.cpp:155
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Install"
+msgstr "Установить"
+
+#: projectmanagerviewplugin.cpp:161
+#, kde-format
+msgctxt "@action"
+msgid "Clean Selection"
+msgstr "Очистить выделенное"
+
+#: projectmanagerviewplugin.cpp:162
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Clean"
+msgstr "Очистить"
+
+#: projectmanagerviewplugin.cpp:167
+#, kde-format
+msgctxt "@action"
+msgid "Configure Selection"
+msgstr "Сконфигурировать выделенное"
+
+#: projectmanagerviewplugin.cpp:169
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Configure"
+msgstr "Сконфигурировать"
+
+#: projectmanagerviewplugin.cpp:174
+#, kde-format
+msgctxt "@action"
+msgid "Prune Selection"
+msgstr "Прибрать выделенное"
+
+#: projectmanagerviewplugin.cpp:175
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Prune"
+msgstr "Прибрать"
+
+#: projectmanagerviewplugin.cpp:281
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create &File..."
+msgstr "Создать &файл..."
+
+#: projectmanagerviewplugin.cpp:287
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create F&older..."
+msgstr "Создать &каталог..."
+
+#: projectmanagerviewplugin.cpp:294
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Build"
+msgstr "Со&брать"
+
+#: projectmanagerviewplugin.cpp:298
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Install"
+msgstr "&Установить"
+
+#: projectmanagerviewplugin.cpp:302
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Clean"
+msgstr "&Очистить"
+
+#: projectmanagerviewplugin.cpp:306
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Set"
+msgstr "&Добавить в комплект сборки"
+
+#: projectmanagerviewplugin.cpp:313
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&lose Project"
+msgid_plural "Close Projects"
+msgstr[0] "Закрыть проекты"
+msgstr[1] "Закрыть проекты"
+msgstr[2] "Закрыть проекты"
+msgstr[3] "&Закрыть проект"
+
+#: projectmanagerviewplugin.cpp:319
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Reload"
+msgstr "&Перезагрузить"
+
+#: projectmanagerviewplugin.cpp:350
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remo&ve"
+msgstr "&Удалить"
+
+#: projectmanagerviewplugin.cpp:354
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Re&name..."
+msgstr "&Переименовать..."
+
+#: projectmanagerviewplugin.cpp:360
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from &Target"
+msgstr "Удалить из &цели"
+
+#: projectmanagerviewplugin.cpp:547
+#, kde-format
+msgctxt "@title:window"
+msgid "Create Folder in %1"
+msgstr "Создание каталога в %1"
+
+#: projectmanagerviewplugin.cpp:548
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Folder name:"
+msgstr "Имя каталога:"
+
+#: projectmanagerviewplugin.cpp:600
+#, kde-format
+msgid "Do you really want to delete this item?"
+msgid_plural "Do you really want to delete these %1 items?"
+msgstr[0] "Удалить следующий %1 объект?"
+msgstr[1] "Удалить следующие %1 объекта?"
+msgstr[2] "Удалить следующие %1 объектов?"
+msgstr[3] "Удалить этот объект?"
+
+#: projectmanagerviewplugin.cpp:603
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Files"
+msgstr "Удаление файлов"
+
+#: projectmanagerviewplugin.cpp:656
+#, kde-format
+msgctxt "@window:title"
+msgid "Rename"
+msgstr "Переименование"
+
+#: projectmanagerviewplugin.cpp:657
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New name for '%1':"
+msgstr "Новое имя для «%1»:"
+
+#: projectmanagerviewplugin.cpp:669
+#, kde-format
+msgid "There is already a file named '%1'"
+msgstr "Файл с именем «%1» уже существует."
+
+#: projectmanagerviewplugin.cpp:672
+#, kde-format
+msgid "Could not rename '%1'"
+msgstr "Не удалось переименовать «%1»."
+
+#: projectmanagerviewplugin.cpp:675
+#, kde-format
+msgid "'%1' is not a valid file name"
+msgstr "«%1» не является допустимым именем файла."
+
+#: projectmanagerviewplugin.cpp:689
+#, kde-format
+msgctxt "@title:window"
+msgid "Create File in %1"
+msgstr "Создание файла в %1"
+
+#: projectmanagerviewplugin.cpp:689
+#, kde-format
+msgctxt "@label:textbox"
+msgid "File name:"
+msgstr "Имя файла:"
+
+#: projecttreeview.cpp:151
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Move Here"
+msgstr "Переместить &сюда"
+
+#: projecttreeview.cpp:157
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Here"
+msgstr "Копировать с&юда"
+
+#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&ancel"
+msgstr "О&тменить"
+
+#: projecttreeview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Target"
+msgstr "&Добавить в цель сборки"
+
+#: projecttreeview.cpp:348
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze with"
+msgstr "Анализ с помощью"
+
+#: projecttreeview.cpp:364
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Open Configuration..."
+msgstr "Настроить проект..."
+
+#: vcsoverlayproxymodel.cpp:105
+#, kde-format
+msgctxt "Version control: Currently not on a branch"
+msgid "(no branch)"
+msgstr "(нет ветви)"
+
+#~ msgid "Rename..."
+#~ msgstr "Переименование"
+
+#~ msgid "&Add to Target"
+#~ msgstr "&Добавить в цель"
+
+#~ msgid "Project Manager"
+#~ msgstr "Управление проектами"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "@action"
+#~ msgid "Build"
+#~ msgstr "Собрать"
+
+#~ msgctxt "@action"
+#~ msgid "Install"
+#~ msgstr "Установить"
+
+#~ msgctxt "@action"
+#~ msgid "Clean"
+#~ msgstr "Очистить"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Запустить"
+
+#, fuzzy
+#~ msgid "Projects View"
+#~ msgstr "Проекты"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ерёмин Николай,Александр Поташев,Алексей Морозов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "doktorkster@gmail.com,aspotashev@gmail.com,morozov@gmail.com"
+
+#~ msgid "Project Management View"
+#~ msgstr "Панель Проекты"
+
+#~ msgid "Toolview to do all the project management stuff"
+#~ msgstr "Панель для выполнения всех задач, связанных с управлением проектом"
+
+#~ msgid "Filter..."
+#~ msgstr "Фильтр..."
+
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the project view for files and targets "
+#~ "for matching items.\n"
+#~ "Prepend patterns with an exclamation mark to negate them.\n"
+#~ "Separate different patterns with semicolons or spaces."
+#~ msgstr ""
+#~ "Введите сюда шаблоны поиска с подстановочными знаками, чтобы "
+#~ "отфильтровать в дереве проекта соответствующие файлы и цели.\n"
+#~ "Чтобы задать шаблон отрицания, поставьте перед ним восклицательный знак.\n"
+#~ "Указывая нескольких шаблонов, разделяйте их точкой с запятой или "
+#~ "пробелами."
+
+#, fuzzy
+#~ msgid "Project Selection"
+#~ msgstr "Проекты для сборки"
+
+#~ msgid "List of items to be built"
+#~ msgstr "Список объектов, которые будут собраны"
+
+#, fuzzy
+#~ msgid "Project name: %1"
+#~ msgstr "Управление проектом"
+
+#, fuzzy
+#~ msgid "Do you really to remove the file <i>%1</i>?"
+#~ msgstr "Удалить файл также и с файловой системы?"
+
+#~ msgid "Version Control "
+#~ msgstr "Контроль версий "
+
+#~ msgid "Cannot create folder."
+#~ msgstr "Невозможно создать каталог."
+
+#~ msgid "Cannot remove folder."
+#~ msgstr "Невозможно удалить каталог."
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "Невозможно удалить файл."
+
+#~ msgid "This file exists already."
+#~ msgstr "Этот файл уже существует."
+
+#, fuzzy
+#~ msgid "Cannot create temporary file."
+#~ msgstr "Невозможно создать файл."
+
+#~ msgid "Cannot create file."
+#~ msgstr "Невозможно создать файл."
+
+#~ msgid "Remove Folder"
+#~ msgstr "Удалить каталог"
+
+#, fuzzy
+#~ msgid "Rename File"
+#~ msgstr "Удалить файл"
+
+#, fuzzy
+#~ msgid "Rename Folder"
+#~ msgstr "Удалить каталог"
+
+#, fuzzy
+#~ msgid "Cannot rename '%1' to '%2'."
+#~ msgstr "Невозможно создать файл."
+
+#~ msgid "Name"
+#~ msgstr "Название"
+
+#~ msgid "Project"
+#~ msgstr "Проект"
+
+#~ msgid "Folder"
+#~ msgstr "Каталог"
+
+#~ msgid "Run"
+#~ msgstr "Запустить"

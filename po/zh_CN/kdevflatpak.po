@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevflatpak.pot\n"
+"X-Crowdin-File-ID: 6185\n"
+
+#: flatpakplugin.cpp:45
+#, kde-format
+msgctxt "@action"
+msgid "Rebuild Environment"
+msgstr "重建环境"
+
+#: flatpakplugin.cpp:46
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Recompiles all dependencies for a fresh environment."
+msgstr "为一个新环境重新编译所有依赖。"
+
+#: flatpakplugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Export Flatpak Bundle..."
+msgstr "导出 Flatpak 包..."
+
+#: flatpakplugin.cpp:52
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Exports the current build into a 'bundle.flatpak' file."
+msgstr "将当前构造导出为一个“bundle.flatpak”文件"
+
+#: flatpakplugin.cpp:57
+#, kde-format
+msgctxt "@action"
+msgid "Send to Device..."
+msgstr "发送到设备..."
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "Export %1"
+msgstr "导出 %1"
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgid "Flatpak Bundle (*.flatpak)"
+msgstr "Flatpak 包 (*.flatpak)"
+
+#: flatpakplugin.cpp:176
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Build Flatpak %1 for %2"
+msgstr "为 %2 构建 flatpak %1"
+
+#: flatpakplugin.cpp:198
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "选择标签名称"
+
+#: flatpakplugin.cpp:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Device hostname:"
+msgstr "设备主机名："
+
+#: flatpakruntime.cpp:53
+#, kde-format
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: flatpakruntime.cpp:144
+#, kde-format
+msgid "Bundling"
+msgstr "打包"
+
+#: flatpakruntime.cpp:166
+#, kde-format
+msgid "Run on Device"
+msgstr "在设备上运行"

@@ -1,0 +1,103 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2015-01-10 12:48+0100\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: qmakebuilderpreferences.cpp:80
+#, fuzzy, kde-format
+#| msgid "QMake"
+msgctxt "@title:tab"
+msgid "QMake"
+msgstr "QMake"
+
+#: qmakebuilderpreferences.cpp:138
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"A(z) %1 könyvtár hamarosan el lesz távolítva a KDevelop listájából.\n"
+"Szeretné, hogy a KDevelop eltávolítsa azt a fájlrendszerből is?"
+
+#: qmakebuilderpreferences.cpp:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: qmakebuilderpreferences.cpp:146
+#, kde-format
+msgid "Could not remove: %1."
+msgstr "Nem sikerült eltávolítani: %1."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: qmakeconfig.ui:77
+#, fuzzy, kde-format
+#| msgid "Build Settings"
+msgctxt "@title:group"
+msgid "Build Settings"
+msgstr "Fordítási beállítások"
+
+#: qmakejob.cpp:32
+#, fuzzy, kde-format
+#| msgid "QMake"
+msgctxt "@title:window"
+msgid "QMake"
+msgstr "QMake"
+
+#: qmakejob.cpp:43
+#, kde-format
+msgid "No project specified."
+msgstr "Nincs projekt meghatározva."
+
+#: qmakejob.cpp:82
+#, kde-format
+msgid "QMake: %1"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:92
+#, kde-format
+msgid "Configure error"
+msgstr "Beállítási hiba"
+
+#~ msgid "Add"
+#~ msgstr "Hozzáadás"
+
+#~ msgid "Remove"
+#~ msgstr "Eltávolítás"
+
+#~ msgid "Current changes will be lost. Would you want to save them?"
+#~ msgstr ""
+#~ "A jelenlegi változtatások el fognak veszni. Szeretné menteni azokat?"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid "QMake Builder"
+#~ msgstr "QMake fordító"
+
+#~ msgid "Support for building QMake projects"
+#~ msgstr "QMake projektek fordításának támogatása"

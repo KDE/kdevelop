@@ -1,0 +1,225 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2012.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-03-20 22:26+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: makebuilderpreferences.cpp:70
+#, fuzzy, kde-format
+#| msgid "Make"
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, fuzzy, kde-format
+#| msgid "&Abort on first error:"
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "Εγκ&ατάλειψη στο πρώτο σφάλμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, fuzzy, kde-format
+#| msgid "&Display commands but do not execute them:"
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Εμφάνιση εντολών χωρίς την εκτέλεσή τους:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, fuzzy, kde-format
+#| msgid "Install as &root:"
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "Εγκατάσταση ως χ&ρήστης root:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, fuzzy, kde-format
+#| msgid "Root installation &command:"
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "Ε&ντολή εγκατάστασης με δικαιώματα root:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, fuzzy, kde-format
+#| msgid "&Number of simultaneous jobs:"
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "Αρι&θμός ταυτόχρονων εργασιών:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, fuzzy, kde-format
+#| msgid "&Make executable:"
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "Εκτελέσι&μο του make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Default make &target:"
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "Προκαθορισμένος &προορισμός make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, fuzzy, kde-format
+#| msgid "Additional make &options:"
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Επιπλέον παράμετρ&οι του make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, fuzzy, kde-format
+#| msgid "Active environment &profile:"
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Προ&φίλ ενεργού περιβάλλοντος:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr ""
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make: (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Το αντικείμενο για την κατασκευή δεν είναι πλέον διαθέσιμο"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Εσωτερικό σφάλμα: αδυναμία κατασκευής αντικειμένου αρχείου"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Προβολή"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Make Builder"
+#~ msgstr "Κατασκευαστής Make"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Υποστήριξη κατασκευής έργων Make"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Μη έγκυρος κατάλογος κατασκευής '%1'"
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "Το '%1' δεν είναι τοπική διαδρομή"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "Το '%1' δεν είναι κατάλογος"
+
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Αδυναμία δημιουργίας εντολής κατασκευής για τους προορισμούς '%1'"
+
+#~ msgid "Job failed"
+#~ msgstr "Αποτυχία εργασίας"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Απέτυχε ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Ολοκλήρωση ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Εγκατάλειψη ***"
+
+#~ msgid "Build, then install as root"
+#~ msgstr "Κατασκευή, έπειτα εγκατάσταση ως χρήστης root"
+
+#~ msgid "compiling"
+#~ msgstr "μεταγλώττιση"
+
+#~ msgid "generating"
+#~ msgstr "δημιουργία"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "σύνδεση"
+
+#~ msgid "built"
+#~ msgstr "κατασκευή"
+
+#~ msgid "installing"
+#~ msgstr "εγκατάσταση"
+
+#~ msgid "creating"
+#~ msgstr "δημιουργία"
+
+#~ msgid ""
+#~ "If checked and some include files cannot be resolved, make will be "
+#~ "invoked in dry mode to try and figure out include paths from the command "
+#~ "line."
+#~ msgstr ""
+#~ "Αν έχει επιλεγεί και κάποια αρχεία include δεν επιλύονται, θα εκτελεστεί "
+#~ "το make σε λειτουργία dry (με απλή εμφάνιση των εντολών) για να μπορέσετε "
+#~ "να δείτε τις include διαδρομές από τη γραμμή εντολών."
+
+#~ msgid "Use make to find unresolved &includes:"
+#~ msgstr "Χρησιμοποιήστε το make για να βρείτε ανεπίλυτα &includes:"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Εκτέλεση πάνω από μίας εργασιών ταυτόχρονα:"

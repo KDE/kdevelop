@@ -1,0 +1,58 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2011-06-27 09:17+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Side med man-indhold"
+
+#: manpagedocumentationwidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "Loading man pages ..."
+msgid "Loading man pages..."
+msgstr "Indlæser man-sider..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Man-side"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Martin Schlander"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mschlander@opensuse.org"
+
+#~ msgid "Could not find any documentation for '%1'"
+#~ msgstr "Kunne ikke finde nogen dokumentation til \"%1\""
+
+#~ msgid "ManPage"
+#~ msgstr "Man-side"
+
+#~ msgid "Check Man Page documentation"
+#~ msgstr "Se man-sidedokumentation"

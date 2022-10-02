@@ -1,0 +1,66 @@
+# Danish translation of kdevkonsole
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Martin Schlander <mschlander@opensuse.org>, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-08-24 21:48+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr ""
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr ""
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr "Kunne ikke indlæse \"konsolepart\"-pluginet"
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~| msgid "Konsole"
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk"
+
+#~ msgid ""
+#~ "This plugin provides KDevelop with an embedded konsole for quick and easy "
+#~ "command line access."
+#~ msgstr ""
+#~ "Dette plugin giver KDevelop en indlejret konsol for hurtig og nem "
+#~ "kommandolinje adgang."
+
+#~ msgid "Embedded Terminal support"
+#~ msgstr "Understøttelse af indlejret terminal"
+
+#~ msgid "<b>Konsole</b><p>This window contains an embedded console.</p>"
+#~ msgstr "<b>Konsole</b><p>Dette vindue indeholder en indlejret konsol.</p>"

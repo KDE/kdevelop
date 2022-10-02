@@ -1,0 +1,580 @@
+# Translation of kdevexternalscript.po to Brazilian Portuguese
+# Copyright (C) 2010-2013 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2012, 2013.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexternalscript\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2022-07-14 09:46-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: editexternalscript.cpp:30
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command that should be executed when this script is run. "
+"Basic shell features of your platform should be available.</p>\n"
+"<p>There are a few placeholders you can use in the command:</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>Gets replaced by the URL of the active document.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>Gets replaced by the local filepath to the active document.</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document, including its "
+"extension.</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document without its extension."
+"</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>Gets replaced by the path to the directory of the active document.</"
+"dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>Gets replaced by the URL to the project of the active document.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>Gets replaced with the shell escaped contents of the selection in the "
+"active document.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>Gets replaced with the PID of the currently running KDevelop process.</"
+"dd>\n"
+"</dl>\n"
+"<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
+"commands that could lead to data loss.</p>\n"
+msgstr ""
+"<p>Define o comando que deverá ser executado quando for rodado este "
+"programa. Deverão estar disponíveis as funcionalidades básicas do console "
+"para a sua plataforma.</p>\n"
+"<p>Existem alguns itens de substituição para usar no comando:</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>É substituído pela URL do documento ativo.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>É substituído pela localização do arquivo local para o documento ativo."
+"</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>É substituído pelo nome do documento ativo, incluindo a sua extensão.</"
+"dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>É substituído pelo nome do documento ativo sem a sua extensão.</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>É substituído pela localização da pasta do documento ativo.</dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>É substituído pela URL do projeto do documento ativo.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>É substituído pelo conteúdo formatado pela linha de comando da seleção "
+"no documento ativo.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>É substituído pelo PID do processo KDevelop atualmente em execução.</"
+"dd>\n"
+"</dl>\n"
+"<p><b>NOTA:</b>  É da sua responsabilidade evitar a execução de comandos "
+"perigosos que levem à perda de dados.</p>\n"
+
+#: editexternalscript.cpp:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what the external script should get as input (via <code>STDIN</"
+"code>).</p>"
+msgstr ""
+"<p>Define se o programa externo deverá receber dados à entrada (<code>STDIN</"
+"code>) ou não.</p>"
+
+#: editexternalscript.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
+"the script.</p>"
+msgstr ""
+"<p>Define o que deverá ser feito com a saída (<code>STDOUT</code>) do "
+"programa.</p>"
+
+#: editexternalscript.cpp:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of "
+"the script.</p><p>Note: if the action is the same as that chosen for the "
+"output, the channels will be merged and handled together.</p>"
+msgstr ""
+"<p>Define o que se deverá fazer com os erros (i.e. <code>STDERR</code>) do "
+"programa.</p><p>Nota: se a ação é a mesma escolhida para a saída, os canais "
+"serão reunidos e tratados em conjunto.</p>"
+
+#: editexternalscript.cpp:76
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
+msgstr "<p>Define o nome do programa. Apenas para fins de apresentação.</p>"
+
+#: editexternalscript.cpp:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the shortcut(s) you can use to execute this external script.</p>"
+msgstr ""
+"<p>Define os atalhos que você poderá usar para executar este programa "
+"externo.</p>"
+
+#: editexternalscript.cpp:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether documents should be saved before the script gets executed."
+"</p>"
+msgstr ""
+"<p>Define se os documentos deverão ser salvos antes de executar o programa.</"
+"p>"
+
+#: editexternalscript.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether the output of the script should be shown in a tool view.</"
+"p>"
+msgstr ""
+"<p>Define se o resultado do programa deverá ser apresentado numa área de "
+"ferramentas.</p>"
+
+#: editexternalscript.cpp:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what type of filtering should be applied to the output. E.g. to "
+"indicate errors by red text.</p>"
+msgstr ""
+"<p>Define o tipo de filtragem que deve ser aplicado à saída. Por exemplo, "
+"para indicar erros com texto em vermelho.</p>"
+
+#: editexternalscript.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New External Script"
+msgstr "Criar um novo script externo"
+
+#: editexternalscript.cpp:108
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit External Script '%1'"
+msgstr "Editar o script externo '%1'"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: editexternalscript.ui:19
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "&Nome:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: editexternalscript.ui:30
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>The name will also be used as the identifier during code completion.</p>\n"
+"  <p><b>Note:</b> No spaces allowed.</p>"
+msgstr ""
+"<p>O nome será também usado como identificador durante o completamento do "
+"código.</p>\n"
+"<p><b>Nota:</b> Espaços não são permitidos.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, commandLabel)
+#: editexternalscript.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Command:"
+msgstr "&Comando:"
+
+#. i18n: ectx: property (text), widget (QLabel, stdinLabel)
+#: editexternalscript.ui:51
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Input:"
+msgstr "&Entrada:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:62
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Nothing"
+msgstr "Nada"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:67
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Nothing"
+msgstr "Seleção no arquivo atual ou nada"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:72
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Whole File"
+msgstr "Seleção no arquivo atual ou todo o arquivo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:77
+#, kde-format
+msgctxt "@item:inlistbox input source"
+msgid "Contents of Current File"
+msgstr "Conteúdo do arquivo atual"
+
+#. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
+#: editexternalscript.ui:85
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Output:"
+msgstr "&Saída:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:96
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Ignore"
+msgstr "Ignorar"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:101
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Insert at Cursor Position of Current File"
+msgstr "Inserir na posição do cursor do arquivo atual"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:106
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr "Substituir a seleção no arquivo atual ou inserir na posição do cursor"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:111
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "Substituir a seleção no arquivo atual ou todo o arquivo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:116
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Contents of Current File"
+msgstr "Substituir o conteúdo do arquivo atual"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:121
+#, kde-format
+msgctxt "@item:inlistbox handle output"
+msgid "Create New File"
+msgstr "Criar um arquivo novo"
+
+#. i18n: ectx: property (text), widget (QLabel, stderrLabel)
+#: editexternalscript.ui:129
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Errors:"
+msgstr "Erros:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:140
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Ignore"
+msgstr "Ignorar"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:145
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Merge with Normal Output"
+msgstr "Reunir com a saída normal"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:150
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Insert at Cursor Position of Current File"
+msgstr "Inserir na posição do cursor do arquivo atual"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:155
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr "Substituir a seleção no arquivo atual ou inserir na posição do cursor"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:160
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "Substituir a seleção no arquivo atual ou todo o arquivo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:165
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Contents of Current File"
+msgstr "Substituir o conteúdo do arquivo atual"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:170
+#, kde-format
+msgctxt "@item:inlistbox handle errors"
+msgid "Create New File"
+msgstr "Criar um arquivo novo"
+
+#. i18n: ectx: property (text), widget (QLabel, saveLabel)
+#: editexternalscript.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Save &mode:"
+msgstr "&Modo de salvamento:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:189
+#, kde-format
+msgctxt "@item:inlistbox save mode"
+msgid "Save Nothing"
+msgstr "Não salvar nada"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:194
+#, kde-format
+msgctxt "@item:inlistbox save mode"
+msgid "Save Active Document"
+msgstr "Salvar o documento ativo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:199
+#, kde-format
+msgctxt "@item:inlistbox save mode"
+msgid "Save All Open Documents"
+msgstr "Salvar todos os documentos ativos"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: editexternalscript.ui:207
+#, kde-format
+msgctxt "@option:check"
+msgid "Show out&put:"
+msgstr "Mo&strar resultado:"
+
+#. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
+#: editexternalscript.ui:224
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "Filtro de saída::"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:235
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "Sem filtro"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:240
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "Filtro do compilador"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:245
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "Filtro de erros do script"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:250
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "Filtro de análise estática"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:258
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Defines shortcuts you can use to execute this script."
+msgstr "Define os atalhos que você poderá usar para executar este programa."
+
+#. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:261
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Shortcut:"
+msgstr "Atalho:"
+
+#: externalscriptjob.cpp:88
+#, kde-format
+msgid ""
+"Cannot run script '%1' since it tries to access the editor contents but no "
+"document is open."
+msgstr ""
+"Não é possível executar o programa '%1', uma vez que ele tenta acessar o "
+"conteúdo de um editor, mas não existe nenhum documento aberto."
+
+#: externalscriptjob.cpp:224
+#, kde-format
+msgid "Running external script: %1"
+msgstr "Rodando o programa externo: %1"
+
+#: externalscriptjob.cpp:268
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** Matou-se o aplicativo ***"
+
+#: externalscriptjob.cpp:348
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** Saiu normalmente ***"
+
+#: externalscriptjob.cpp:351
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Saiu com o código de saída: %1 ***"
+
+#: externalscriptjob.cpp:354
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Processo cancelado ***"
+
+#: externalscriptjob.cpp:356
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Estourou com o código de saída: %1 ***"
+
+#: externalscriptjob.cpp:368
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr ""
+"*** Não foi possível iniciar o programa '%1'. Certifique-se de que o caminho "
+"está indicado corretamente ***"
+
+#: externalscriptplugin.cpp:125
+#, kde-format
+msgid "External Scripts"
+msgstr "Programas externos"
+
+#: externalscriptplugin.cpp:136
+#, kde-format
+msgid "Quick Compile"
+msgstr "Compilação rápida"
+
+#: externalscriptplugin.cpp:142
+#, kde-format
+msgid "Sort Selection"
+msgstr "Ordenar a seleção"
+
+#: externalscriptplugin.cpp:150
+#, kde-format
+msgid "Google Selection"
+msgstr "Seleção do Google"
+
+#: externalscriptplugin.cpp:156
+#, kde-format
+msgid "Paste to Hastebin"
+msgstr "Colar no Hastebin"
+
+#: externalscriptplugin.cpp:238
+#, kde-format
+msgctxt "@title:menu"
+msgid "External Scripts"
+msgstr "Programas externos"
+
+#: externalscriptview.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "External Scripts"
+msgstr "Programas externos"
+
+#: externalscriptview.cpp:48
+#, kde-format
+msgctxt "@action"
+msgid "Add External Script"
+msgstr "Adicionar um programa externo"
+
+#: externalscriptview.cpp:53
+#, kde-format
+msgctxt "@action"
+msgid "Edit External Script"
+msgstr "Editar o programa externo"
+
+#: externalscriptview.cpp:58
+#, kde-format
+msgctxt "@action"
+msgid "Remove External Script"
+msgstr "Remover o programa externo"
+
+#: externalscriptview.cpp:145
+#, kde-format
+msgid ""
+"<p>Do you really want to remove the external script configuration for <i>%1</"
+"i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
+msgstr ""
+"<p>Você deseja realmente remover a configuração do programa externo <i>%1</"
+"i>?</p><p><i>Nota:</i> O programa em si não será removido.</p>"
+
+#: externalscriptview.cpp:148
+#, kde-format
+msgctxt "@title:window"
+msgid "Confirm External Script Removal"
+msgstr "Confirmar a remoção do programa externo"
+
+#: externalscriptview.cpp:149
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Remover"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
+#: externalscriptview.ui:35
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtro..."
+
+#~ msgid "please insert a name"
+#~ msgstr "por favor, insira um nome"
+
+#~ msgid "please insert a command to execute"
+#~ msgstr "por favor, insira um comando a executar"
+
+#~ msgid "Define filter here"
+#~ msgstr "Defina aqui o filtro"
+
+#~ msgid "No Document Open"
+#~ msgstr "Nenhum documento aberto"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marcus Gama, André Marcelo Alvarenga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "marcus.gama@gmail.com, alvarenga@kde.org"
+
+#~ msgid ""
+#~ "Run external scripts or applications to manipulate the editor contents or "
+#~ "do other arbitrary actions."
+#~ msgstr ""
+#~ "Execute scripts externos ou aplicativos para manipular os conteúdos do "
+#~ "editor ou para fazer outras ações ordinárias."

@@ -1,0 +1,91 @@
+# translation of kdevqmakebuilder.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Manfred Wiese <m.j.wiese@web.de>, 2008, 2009.
+# Sönke Dibbern <s_dibbern@web.de>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2009-02-22 07:29+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: qmakebuilderpreferences.cpp:80
+#, fuzzy, kde-format
+#| msgid "QMake: %1"
+msgctxt "@title:tab"
+msgid "QMake"
+msgstr "QMake: %1"
+
+#: qmakebuilderpreferences.cpp:138
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+
+#: qmakebuilderpreferences.cpp:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: qmakebuilderpreferences.cpp:146
+#, kde-format
+msgid "Could not remove: %1."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: qmakeconfig.ui:77
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Settings"
+msgstr ""
+
+#: qmakejob.cpp:32
+#, fuzzy, kde-format
+#| msgid "QMake: %1"
+msgctxt "@title:window"
+msgid "QMake"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:43
+#, kde-format
+msgid "No project specified."
+msgstr "Keen Projekt angeven"
+
+#: qmakejob.cpp:82
+#, kde-format
+msgid "QMake: %1"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:92
+#, kde-format
+msgid "Configure error"
+msgstr "Fehler binnen \"configure\""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sönke Dibbern, Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "s_dibbern@web.de, m.j.wiese@web.de"
+
+#~ msgid "QMake Builder"
+#~ msgstr "QMake-Buumoduul"
+
+#~ msgid "Support for building QMake projects"
+#~ msgstr "Ünnerstütten för't Buen vun QMake-Projekten"
+
+#~ msgid "QMake Binary:"
+#~ msgstr "QMake-Programm:"

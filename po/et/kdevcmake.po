@@ -1,0 +1,741 @@
+# translation of kdevcmake.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2011, 2012, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2020-01-21 19:51+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, fuzzy, kde-format
+#| msgid "Configure a build directory - %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Ehituskataloogi seadistamine - %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "%1 ehituskataloogi seadistamine"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Määrata tuleb ehituskataloog."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Juba loodud ehituskataloogi kasutamine."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Uue ehituskataloogi loomine."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Ehituskataloog on juba seadistatud."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "See ehituskataloog on %1 jaoks, kuid projekti kataloog on %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Suhtelist ehituskataloogi ei saa valida."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Valitud ehituskataloog pole tühi."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, fuzzy, kde-format
+#| msgid "Available build directories:"
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Saadaolevad ehituskataloogid"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, fuzzy, kde-format
+#| msgid "New build directory"
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Uus ehituskataloog"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, fuzzy, kde-format
+#| msgid "Build &directory:"
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "&Ehituskataloog:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, fuzzy, kde-format
+#| msgid "&Installation prefix:"
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "Pa&igaldamise prefiks:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, fuzzy, kde-format
+#| msgid ""
+#| "The prefix under which the project will be installed. Leaving this empty "
+#| "will let CMake use its default install prefix."
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Prefiks, millega projekt paigaldatakse. Kui see andmata jätta, kasutatakse "
+"CMake'i vaikimisi paigaldusprefiksit."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, fuzzy, kde-format
+#| msgid "CMake's default install prefix"
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Cmake'i vaikimisi paigaldamisprefiks"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "Ehi&tamise tüüp:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, fuzzy, kde-format
+#| msgid "Extra arguments:"
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Lisaargumendid:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, fuzzy, kde-format
+#| msgid "CMake &executable:"
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "CMak&e'i täitmisfail:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "VIGANE"
+
+#: cmakecodecompletionmodel.cpp:197
+#, fuzzy, kde-format
+#| msgid "Command"
+msgctxt "@item"
+msgid "Command"
+msgstr "Käsk"
+
+#: cmakecodecompletionmodel.cpp:198
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgctxt "@item"
+msgid "Variable"
+msgstr "Muutuja"
+
+#: cmakecodecompletionmodel.cpp:199
+#, fuzzy, kde-format
+#| msgid "Macro"
+msgctxt "@item"
+msgid "Macro"
+msgstr "Makro"
+
+#: cmakecodecompletionmodel.cpp:200
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@item"
+msgid "Path"
+msgstr "Asukoht"
+
+#: cmakecodecompletionmodel.cpp:201
+#, fuzzy, kde-format
+#| msgid "Target"
+msgctxt "@item"
+msgid "Target"
+msgstr "Sihtmärk"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "vale"
+
+#: cmakecommandscontents.cpp:29
+#, fuzzy, kde-format
+#| msgid "Commands"
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Käsud"
+
+#: cmakecommandscontents.cpp:30
+#, fuzzy, kde-format
+#| msgid "Variables"
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Muutujad"
+
+#: cmakecommandscontents.cpp:31
+#, fuzzy, kde-format
+#| msgid "Modules"
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Moodulid"
+
+#: cmakecommandscontents.cpp:32
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Omadused"
+
+#: cmakecommandscontents.cpp:33
+#, fuzzy, kde-format
+#| msgid "Policies"
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Reeglid"
+
+#: cmakecommandscontents.cpp:102
+#, fuzzy, kde-format
+#| msgid "<p>For better cmake documentation rendering, install rst2html</p>"
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+"<p>CMake'i dokumentatsiooni parema renderdamise huvides paigalda rst2html</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr "CMake'i täitmisfaili ei leitud. On see ikka süsteemi paigaldatud?"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Puhverväärtus:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Puhverdokumentatsioon:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "CMake'i sisulehekülg"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Projekti \"%1\" seadistamine nurjus (veateade: %2). Selle tõttu ei suuda KDE "
+"ilmselt koodi korralikult mõista.\n"
+"\n"
+"Probleemi lahendamiseks palun kontrolli, kas projekti failid CMakeLists.txt "
+"on ikka korrektsed ning KDevelop on seadistatud kasutama õiget CMake'i "
+"versiooni ja seadistusi. Seejärel tee projektivaates paremklõps "
+"projektikirjel ja vali \"Laadi uuesti\"."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"KDevelop leidis sinu projektile mitu võimalikku juurkataloogi. palun vali "
+"neist õige."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, fuzzy, kde-format
+#| msgid "Cache Values"
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Puhverväärtused"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, fuzzy, kde-format
+#| msgid "Comment:"
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Kommentaar:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, fuzzy, kde-format
+#| msgid "Show Advanced"
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Näita muid"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Muu"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, fuzzy, kde-format
+#| msgid "Installation prefix:"
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "Paigaldamise prefiks:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, fuzzy, kde-format
+#| msgid "Build type:"
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Ehitamise tüüp:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, fuzzy, kde-format
+#| msgid "Configure environment:"
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Keskkonna seadistamine:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Vali kasutatav keskkond"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, fuzzy, kde-format
+#| msgid "Show advanced values"
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Muude väärtuste näitamine"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, fuzzy, kde-format
+#| msgid "CMake executable:"
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "CMake'i täitmisfail:"
+
+#: settings/cmakecachemodel.cpp:36
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Nimi"
+
+#: settings/cmakecachemodel.cpp:37
+#, fuzzy, kde-format
+#| msgid "Type"
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Tüüp"
+
+#: settings/cmakecachemodel.cpp:38
+#, fuzzy, kde-format
+#| msgid "Value"
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Väärtus"
+
+#: settings/cmakecachemodel.cpp:39
+#, fuzzy, kde-format
+#| msgid "Comment"
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Kommentaar"
+
+#: settings/cmakecachemodel.cpp:40
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Muu"
+
+#: settings/cmakecachemodel.cpp:41
+#, fuzzy, kde-format
+#| msgid "Strings"
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Stringid"
+
+#: settings/cmakepreferences.cpp:343
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"%1 kataloog eemaldatakse KDevelopi nimekirjast.\n"
+"Kas KDevelop peaks selle eemaldama ka failisüsteemist?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Eemaldamine nurjus: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, fuzzy, kde-format
+#| msgid "Configure CMake settings"
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "CMake'i valikute seadistamine"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Testkomplekti %1 parsimine"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - CMake'i toetus"
+
+#~ msgid "Add"
+#~ msgstr "Lisa"
+
+#~ msgid "Remove"
+#~ msgstr "Eemalda"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 on iganenud käsk ja seda ei peaks kasutama"
+
+#, fuzzy
+#~| msgid "Unfinished function. "
+#~ msgid "Unfinished function."
+#~ msgstr "Lõpetamata funktsioon. "
+
+#, fuzzy
+#~| msgid "You need to select a cmake binary."
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Valida tuleb cmake'i binaarfail."
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Ehituskataloogi seadistamine"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "qiilaq69@gmail.com"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake'i &binaar:"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Build Type:"
+#~ msgstr "Ehi&tamise tüüp:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake'i &binaar:"
+
+#, fuzzy
+#~| msgid "&Installation Prefix:"
+#~ msgid "Installation Prefix"
+#~ msgstr "Pa&igaldamise prefiks:"
+
+#, fuzzy
+#~| msgid "Extra Arguments:"
+#~ msgid "Extra Arguments"
+#~ msgstr "Lisaargumendid:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary"
+#~ msgstr "CMake'i &binaar:"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake ei ole paigaldatud"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "CMake'i seadistuste kirjutamine faili \"%1\" nurjus.\n"
+#~ "Kontrolli, kas sul on selle faili kirjutamisõigus."
+
+#~ msgid "CMake Documentation"
+#~ msgstr "CMake'i dokumentatsioon"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "CMake'i dokumentatsiooni toetus"
+
+#~ msgid "CMake Manager"
+#~ msgstr "CMake'i haldur"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "CMake'i projektide haldamise toetus"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Hüppa sihtdefinitsioonile"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Failide ja kataloogide liigutamine CMakeListsis järgmiselt:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr ""
+#~ "Muudatuste tegemine CMakeListsi nurjus, kas loobuda faili liigutamisest?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Failide ja kataloogide eemaldamine CMakeListsist:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Muudatuste tegemine CMakeListsi nurjus, kas loobuda kustutamisest?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Projekti sihtmärkide muutmine:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Kataloogi \"%1\" loomine:"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Muudatuse salvestamine nurjus."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Sihtmärgi \"%1\" muutmine järgnevalt:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "CMakeListsi muutmine nurjus."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "\"%1\" saab nimeks \"%2\":"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr ""
+#~ "Muudatuste tegemine CMakeListsi nurjus, kas loobuda nime muutmisest?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "CMake'i kataloog"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "Ehituskataloogi pole olemas ja seda ei saa luua."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Viga ehituskataloogi loomisel"
+
+#~ msgid "Error"
+#~ msgstr "Viga"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "Faili \"%1\" lisamine sihtmärgile \"%2\"."
+
+#~ msgid "Cannot save the change."
+#~ msgstr "Muudatuse salvestamine nurjus."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "Faili \"%1\" eemaldamine."
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "Kataloogi \"%1\" nime muutmine."
+
+#~ msgid "Swi&tch Colors"
+#~ msgstr "Lüli&ta värve"
+
+#~ msgid "General"
+#~ msgstr "Üldine"
+
+#~ msgid "This project is one day old"
+#~ msgid_plural "This project is %1 days old"
+#~ msgstr[0] "See projekt on üks päev vana"
+#~ msgstr[1] "See projekt on %1 päeva vana"
+
+#~ msgid "Settings changed"
+#~ msgstr "Seadistused on muudetud"
+
+#~ msgid "A KDE 4 Application"
+#~ msgstr "KDE 4 rakendus"
+
+#~ msgid "kde4app"
+#~ msgstr "kde4app"
+
+#~ msgid "(C) 2007 %{AUTHOR}"
+#~ msgstr "(C) 2007 %{AUTHOR}"
+
+#~ msgid "%{AUTHOR}"
+#~ msgstr "%{AUTHOR}"
+
+#~ msgid "Document to open"
+#~ msgstr "Avatav dokument"
+
+#~ msgid "&Move"
+#~ msgstr "&Liikumine"
+
+#~ msgid "kapp4_base"
+#~ msgstr "kapp4_base"
+
+#~ msgid "hello, world"
+#~ msgstr "tere, maailm"
+
+#~ msgid "Background color:"
+#~ msgstr "Taustavärv:"
+
+#~ msgid "Choose a new background color"
+#~ msgstr "Vali uus taustavärv"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">background</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Muuda <span style=\" "
+#~ "font-weight:600;\">taustavärvi</span>, klõpsates siia ja valides uue "
+#~ "<span style=\" color:#ff0000;\">värvi</span> <span style=\" font-style:"
+#~ "italic;\">värvidialoogis</span>.</p></body></html>"
+
+#~ msgid "Project age:"
+#~ msgstr "Projekti vanus:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Esiplaani värv:"
+
+#~ msgid "Choose a new foreground color"
+#~ msgstr "Vali uus esiplaani värv"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">foreground</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Muuda <span style=\" "
+#~ "font-weight:600;\">esiplaani</span> värvi, klõpsates siia ja valides uue "
+#~ "<span style=\" color:#ff0000;\">värvi</span> <span style=\" font-style:"
+#~ "italic;\">värvidialoogis</span>.</p></body></html>"
+
+#~ msgid "Set the project age (in days)"
+#~ msgstr "Projekti vanuse määramine (päevades)"
+
+#~ msgid "Change the project age (in days) by choosing a new number of days."
+#~ msgstr "Projekti vanuse muutmine (päevades), valides uue päevade arvu."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Kataloogi \"%1\" eemaldamine."
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Kataloogi CMakeLists.txt faili loomine nurjus."
+
+#~ msgid "debug"
+#~ msgstr "silumine"
+
+#~ msgid "release"
+#~ msgstr "väljalase"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "RelWithDebInfo"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "MinSizeRel"
+
+#~ msgid "Status:"
+#~ msgstr "Olek:"
+
+#, fuzzy
+#~ msgid "Cannot remove the file."
+#~ msgstr "eemalda fail."

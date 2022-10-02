@@ -1,0 +1,3284 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY kdevelop "<application
+>KDevelop</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Italian "INCLUDE">
+]>
+<book id="kdevelop" lang="&language;">
+<bookinfo>
+<title
+>Manuale di &kdevelop;</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Questa documentazione è stata convertita dalla pagina <ulink url=" https://userbase.kde.org/KDevelop4/Manual"
+>KDevelop4/Manual</ulink
+> di KDE UserBase .</firstname
+> <surname
+></surname
+>  </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>Simone</firstname
+><surname
+>Solinas</surname
+><affiliation
+><address
+><email
+>ksolsim@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione.</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-08-19</date>
+    <releaseinfo
+>&kdevelop; 4.4 (&kde; 4.9)</releaseinfo>
+<abstract>
+<para
+>&kdevelop; è un ambiente di sviluppo integrato da utilizzare per una grande varietà di attività di programmazione.</para>
+    </abstract>
+  <keywordset>
+    <keyword
+>KDE</keyword>
+    <keyword
+>KDevelop</keyword>
+    <keyword
+>IDE</keyword>
+    <keyword
+>sviluppo</keyword>
+    <keyword
+>programmazione</keyword>
+  </keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2012-08-19T12:36:08Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="what-is-kdevelop"
+><title
+>Cosa è &kdevelop;?</title>
+<para
+><ulink url="https://www.kdevelop.org"
+>&kdevelop;</ulink
+> è un ambiente di sviluppo integrato (IDE) moderno per il C++ (e altri linguaggi), questo è una delle tante <ulink url="https://kde.org/applications/"
+>applicazioni di KDE</ulink
+>. Come tale esso viene eseguito su &Linux; (anche se si esegue uno degli altri desktop, come GNOME), ma è disponibile per la maggior parte delle altre varianti di &UNIX; e anche per Windows.</para>
+<para
+>&kdevelop; offre tutte le comodità dei moderni IDE. Per progetti e applicazioni di grandi dimensioni, la caratteristica più importante è che &kdevelop; <emphasis
+>interpreta il C++</emphasis
+>: analizza l'intero codice sorgente e ricorda le funzioni membro delle classi, dove sono definite le variabili, quali sono i loro tipi, e molte altre cose sul codice. Per esempio, mettiamo il caso che in uno dei file di intestazione del tuo progetto sia dichiarata la seguente classe</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>poi nel tuo programma hai</para>
+<para
+><programlisting
+>Car my_ride;
+// ...do something with this variable...
+std::string color = my_ride.ge
+</programlisting>
+</para>
+<para
+>questo ti avrà ricordato che <varname
+>my_ride</varname
+> nell'ultima riga è una variabile di tipo <varname
+>Car</varname
+> e ti offre di completare <varname
+>ge</varname
+> come <varname
+>get_color()</varname
+> poiché questa è l'unica funzione membro della classe <varname
+>Car</varname
+> che inizia in questo modo. Invece di continuare a digitare basta premere &Enter; per ottenere la parola completa, questo permette di scrivere di meno, evitare errori di battitura, e non richiede di ricordare i nomi esatti delle centinaia o migliaia di funzioni e classi che compongono i progetti di grandi dimensioni.</para>
+<para
+>Come secondo esempio, supponi di avere un codice come questo:</para>
+<para
+><programlisting
+>double foo ()
+{
+  double var = my_func();
+ return var * var;
+}
+double bar ()
+{
+  double var = my_func();
+  return var * var * var;
+}
+</programlisting
+></para>
+<para
+>Se passi il mouse sul simbolo <varname
+>var</varname
+> nella funzione <varname
+>bar</varname
+> hai la possibilità di vedere tutti i modi di utilizzare questo simbolo. Facendo clic su di esso ti verranno mostrati solo i modi di utilizzare questa variabile nella funzione <varname
+>bar</varname
+> perché &kdevelop; sa che la variabile <varname
+>var</varname
+> nella funzione <varname
+>foo</varname
+> è una variabile diversa. Allo stesso modo, fare clic con il tasto destro sul nome della varibile consente di rinominare la variabile; in questo modo verrà toccata solo la variabile <varname
+>bar</varname
+> ma non quella con lo stesso nome presente in <varname
+>foo</varname
+>.</para>
+<para
+>Ma &kdevelop; non è solo un editor intelligente di codice; ci sono altre cose che &kdevelop; fa' bene. Ovviamente sottolinea il codice sorgente con colori differenti; ha un identatore personalizzabile; ha un interfaccia integrata per il debugger GNU <application
+>gdb</application
+>; può mostrare la documentazione per una funzione, se si passa il mouse sopra; può avere a che fare con tipi differenti di ambienti di compilazione e compilatori (ad esempio con <guilabel
+>make</guilabel
+> e progetti basati su <guilabel
+>cmake</guilabel
+>), e molte altre cose che saranno discusse in questo manuale.</para>
+</chapter>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"
+><title
+>Sessioni e progetti: le basi di &kdevelop;</title>
+<para
+>In questa sezione, andremo oltre la terminologia di come &kdevelop; vede il mondo e di come struttura il lavoro. In particolare, introdurremo il concetto di <emphasis
+>sessioni</emphasis
+> e <emphasis
+>progetti</emphasis
+> e spiegheremo come è possibile impostare i progetti su cui si desidera lavorare in &kdevelop;.</para>
+<sect1 id="terminology"
+><title
+>Terminologia</title>
+<para
+>&kdevelop; ha l'approccio di <emphasis
+>sessioni</emphasis
+> e <emphasis
+>progetti</emphasis
+>. Una sessione contiene tutti i progetti che hanno qualcosa a che fare l'uno con l'altro. Per gli esempi che seguono, presupponiamo che tu sia lo sviluppatore sia di una libreria che di un'applicazione che la utilizza. Puoi pensare alle librerie base di KDE come se fossero la prima e a &kdevelop; come se fosse l'ultima. Un altro esempio: diciamo che sei un hacker del kernel &Linux; ma che stai anche lavorando su un driver per un dispositivo per &Linux; che non è stato ancora aggiunto all'albero dei sorgenti del kernel.</para>
+<para
+>Quindi, prendendo quest'ultimo come esempio, avresti una sessione in &kdevelop; che ha due progetti: il kernel &Linux; e il driver del dispositivo. Vorrai raggrupparli in una singola sessione (piuttosto che avere due sessioni con un singolo progetto ciascuno) perché sarà utile vedere le funzioni del kernel e le strutture dati in &kdevelop; ogni volta che scrivi il codice sorgente per il driver &mdash; per esempio in modo da ottenere le funzioni del kernel e i nomi delle variabili auto-espanse, o in modo da vedere la documentazione delle funzioni del kernel mentre si agisce sul driver del dispositivo.</para>
+<para
+>Ora immagina anche di essere un sviluppatore di KDE. Quindi avresti una seconda sessione che contiene KDE come progetto. Potresti, in linea di principio avere una sola sessione per tutto questo, ma non c'è una vera ragione per questo: nel tuo lavoro per KDE, non hai bisogno di accedere alle funzioni del kernel o ai driver del dispositivo; e non vuoi che i nomi delle classi di KDE siano espansi automaticamente mentre lavori sul kernel &Linux;. Infine, la compilazione di alcune librerie di KDE è indipendente dal ricompilare il kernel &Linux; (invece ogni volta che compili il driver del dispositivo sarebbe anche bene ricompilare il kernel &Linux; se alcuni dei file di intestazione del kernel sono cambiati).</para>
+<para
+>Infine, un altro uso per le sessioni è se lavori sia sulla versione di sviluppo di un progetto, che su un altro ramo: in questo caso,non vuoi che &kdevelop; confonda le classi che appartengono alla linea principale e al ramo, quindi avresti due sessioni, con lo stesso insieme di progetti, ma da diverse cartelle (che corrispondono a diversi rami di sviluppo).</para>
+</sect1>
+<sect1 id="setting-up-a-session-and-importing-an-existing-project"
+><title
+>Impostare una sessione e importare un progetto esistente</title>
+<para
+>Rimanendo all'esempio del kernel &Linux; e dei driver &mdash; potresti voler sostituire i tuoi progetti o librerie di questi due esempi. Per creare una nuova sessione che contenga questi due progetti vai nel menu in alto a sinistra <menuchoice
+><guimenu
+>Sessione</guimenu
+><guimenuitem
+>Avvia una nuova sessione</guimenuitem
+></menuchoice
+> (o se è la prima volta che usi &kdevelop;: è sufficiente usare la sessione predefinita, quella del primo utilizzo, che è vuota).</para>
+<para
+>Poi vogliamo popolare questa sessione con dei progetti che per il momento assumiamo già esistenti da qualche parte (il caso della creazione da zero di progetti è discusso altrove in questo manuale). Per fare questo, esistono essenzialmente due metodi, a seconda che il progetto sia già da qualche parte sul tuo disco fisso o se deve essere scaricato da un server.</para>
+<sect2 id="option-1--importing-a-project-from-a-version-control-system-server"
+><title
+>Opzione 1: importare un progetto da un server vcs</title>
+<para
+>Assumendo che il progetto che vogliamo creare &mdash; il kernel &Linux; &mdash; si trovi in qualche sistema di versione controllo su un server, che non hai ancora scaricato sul tuo disco fisso. In questo caso, vai nel menu <guilabel
+>Progetto</guilabel
+> per creare il kernel &Linux; come progetto nella sessione corrente e poi segui questi passi:</para>
+<itemizedlist>
+<listitem
+><para
+>Vai in <menuchoice
+><guimenu
+>Progetto</guimenu
+><guimenuitem
+>Preleva progetto</guimenuitem
+></menuchoice
+> per importare un progetto </para
+></listitem>
+<listitem
+><para
+>Quindi hai diverse opzioni per avviare un nuovo progetto nella sessione corrente, a seconda della provenienza dei file sorgente: puoi far puntare &kdevelop; solo ad una cartella che esiste (vedi l'opzione 2 sotto), oppure puoi chiedere a &kdevelop; di ottenere i sorgenti da un deposito. </para
+></listitem>
+<listitem
+><para
+>Assumendo che tu non ne abbia già prelevata una versione: <itemizedlist>
+<listitem
+><para
+>Nella finestra di dialogo, sotto <guilabel
+>Seleziona il sorgente</guilabel
+>, scegliere di usare <guilabel
+>Dal file system</guilabel
+>, <guilabel
+>Subversion</guilabel
+>, <guilabel
+>Git</guilabel
+>, <guilabel
+>GitHub</guilabel
+> o <guilabel
+>KDE</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>Scegli una cartella di lavoro come destinazione nella quale dovrebbero essere posti i sorgenti prelevati </para
+></listitem>
+<listitem
+><para
+>Scegli un URL per la posizione del deposito da cui i file sorgente possono essere ottenuti </para
+></listitem>
+<listitem
+><para
+>Premi <guilabel
+>Ottieni</guilabel
+>. Questa operazione può richiedere parecchio tempo; a seconda della velocità della tua connessione e dalla dimensione del progetto. Purtroppo, in &kdevelop; 4.2.x la barra di avanzamento in realtà non mostra nulla, ma si può tenere traccia dei progressi guardando periodicamente l'output della riga di comando<screen
+>du-sk<replaceable
+>/path/to/&kdevelop;/progetto</replaceable
+></screen
+> per vedere quanti dati sono stati già scaricati. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Il problema con la barra di avanzamento è stato segnalato nel <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832"
+>bug di &kdevelop; 256832</ulink
+></para
+></note
+></para>
+<para
+><note
+><para
+>In questo processo, ho anche ottenuto il messaggio d'errore <emphasis
+> È necessario specificare un percorso valido per il progetto</emphasis
+> che può essere tranquillamente ignorato.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>Ti chiede di selezionare in questa cartella un file di progetto di &kdevelop;. Dal momento che probabilmente non ne hai ancora uno, basta premere <guilabel
+>Successivo</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>Premi ancora <guilabel
+>Successivo</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>poi &kdevelop; ti chiederà di scegliere un gestore per il progetto. Se questo progetto usa dei make file standard di &UNIX; scegli gestore progetto Makefile personalizzato </para
+></listitem>
+<listitem
+><para
+>&kdevelop; quindi inizierà ad analizzare l'intero progetto. Anche in questo caso, ci vorrà un bel po' per completare tutti i file e le classi &etc;. In basso a destra della finestra principale, c'è una barra di avanzamento che mostra quanto tempo dura questo processo. (Se disponi di un processore multicore, questo processo può essere accelerato andando alla voce del menu <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura &kdevelop;</guimenuitem
+></menuchoice
+> , poi selezionando <guilabel
+>Analizzatore in background</guilabel
+> sulla sinistra, e aumentando il numero di thread per l'analisi in background sulla destra). </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"
+><title
+>Opzione 2: importare un progetto che è già sul tuo disco fisso</title>
+<para
+>In alternativa, se il progetto sul quale vuoi lavorare esiste già sul tuo disco fisso (per esempio, perché lo hai scaricato come un file tar da un server FTP, perché hai già prelevato una versione del progetto da un sistema di controllo versione, o perché è il tuo progetto ed esiste <emphasis
+>solo</emphasis
+> sul tuo disco fisso ), allora usa <menuchoice
+><guimenu
+>Progetto</guimenu
+><guimenuitem
+>Apri/Importa progetto</guimenuitem
+></menuchoice
+> e nella finestra di dialogo scegli la cartella in cui risiede il progetto.</para>
+</sect2>
+</sect1>
+<sect1 id="setting-up-an-application-as-a-second-project"
+><title
+>Impostare un'applicazione come secondo progetto</title>
+<para
+>La prossima cosa che vuoi fare è impostare altri progetti nella stessa sessione. Nell'esempio precedente, volevi aggiungere come secondo progetto il driver del dispositivo, che puoi fare eseguendo gli stessi passi.</para>
+<para
+>Se hai applicazioni o librerie multiple, ripeti semplicemente i passi per aggiungere sempre più progetti alla tua sessione.</para>
+</sect1>
+<sect1 id="creating-projects-from-scratch"
+><title
+>Creare progetti da zero</title>
+<para
+>C'è, naturalmente, anche la possibilità che tu voglia iniziare un nuovo progetto da zero. Questo può essere fatto usando la voce del menu <menuchoice
+><guimenu
+>Progetto</guimenu
+><guimenuitem
+>Nuovo da modello...</guimenuitem
+></menuchoice
+> che ti si presenta con una finestra per la scelta del modello. Alcuni modelli di progetto sono forniti da &kdevelop;, ma ce ne sono molti altri se si installa l'applicazione <application
+>KAppTemplate</application
+>. Scegli il tipo di progetto e il linguaggio di programmazione dalla finestra di dialogo, immetti un nome e una posizione per il tuo progetto e fai clic su <guilabel
+>Successivo</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-project-dialog.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>La seconda pagina della finestra di dialogo ti permette di impostare un sistema di controllo versione. Scegli il sistema che vuoi usare, e completa se necessario la configurazione specifica del sistema. Se non vuoi usare un sistema di controllo versione, o vuoi impostarlo manualmente in seguito, scegli <guilabel
+>Nessuno</guilabel
+>. Quando sei contento delle tue scelte, premi <guilabel
+>Completa</guilabel
+>. </para>
+<para
+>Ora il tuo progetto è stato creato, per cui puoi provare a compilarlo o a installarlo. Alcuni modelli conterranno dei commenti nel codice, o pure un file README separato, e si raccomanda di leggerlo prima. Poi puoi iniziare a lavorare sul tuo progetto, aggiungendo qualsiasi funzionalità desideri. </para>
+</sect1>
+</chapter>
+<chapter id="working-with-source-code"
+><title
+>Lavorare con il codice sorgente</title>
+<para
+>Oltre a fare il debug, quello su cui passerai la maggior parte del tempo quando svilupperai software sarà leggere e scrivere codice sorgente. A tal fine, &kdevelop; ti offre molti modi diversi per analizzare il codice sorgente e per rendere più produttiva la scrittura. Come discusso più in dettaglio nelle sezioni seguenti, &kdevelop; non è solo un editor di sorgenti &mdash; piuttosto, si tratta di un sistema di gestione dei sorgenti che ti da diversi modi di vedere le informazioni estratte dai file che insieme compongono il codice sorgente della sessione.</para>
+<sect1 id="tools-and-views"
+><title
+>Strumenti e viste</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-7.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Al fine di lavorare con i progetti, &kdevelop; possiede il concetto degli <emphasis
+>strumenti</emphasis
+>. Uno strumento fornisce una visione particolare del sorgente, o di un'azione che può essere fatta con esso. Gli strumenti sono rappresentati da pulsanti nella finestra (nel testo verticale lungo i margini destro e sinistro, o in orizzontale lungo il margine inferiore). Se fai clic su di essi, si espandono in una sotto finestra &mdash; una <emphasis
+>vista</emphasis
+> &mdash; all'interno della finestra principale; se fai ancora clic sul pulsante dello strumento, la sottofinestra scompare di nuovo.</para>
+<para
+>Per far chiudere una sottofinestra, puoi fare clic sulla <guilabel
+>x</guilabel
+> in alto a destra della sottofinestra.</para>
+<!--FIXME How to add a tool-->
+<para
+>L'immagine sopra mostra una particolare selezione di strumenti, allineata a sinistra e al margine destro, nella foto, lo strumento <guilabel
+>Classi</guilabel
+> è aperto sulla sinistra e lo strumento <guilabel
+>Frammenti</guilabel
+> lo è sulla destra, insieme all'editor del file sorgente nel mezzo. In pratica, per la maggior parte del tempo avrai solo l'editor e forse lo strumento <guilabel
+>Classi</guilabel
+> o quello <guilabel
+>Browser del codice</guilabel
+> aperti sulla sinistra. Gli altri strumenti si apriranno solo temporaneamente durante l'uso, lasciando per la maggior parte del tempo più spazio all'editor.</para>
+<para
+>Quando esegui &kdevelop; la prima volta, dovresti avere già il pulsante dello strumento <guilabel
+>Progetti</guilabel
+>. Fai clic su di esso: si aprirà una sottofinestra che mostra, in basso, i progetti che hai aggiunto alla sessione, e una vista, in alto, del file system delle cartelle dei tuoi progetti.</para>
+<para
+>Ci sono molti altri strumenti che puoi usare con &kdevelop; non tutti sono presenti all'inizio come pulsanti sulla finistra. Per aggiungerne altri, vai alla voce del menu <menuchoice
+><guimenu
+>Finestra</guimenu
+><guimenuitem
+>Aggiungi vista strumento</guimenuitem
+></menuchoice
+>. Qui ci sono alcune viste che probabilmente troverai utili:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Classi</guilabel
+>: un elenco completo di tutte le classi che sono definite in uno dei progetti o la tua sessione con tutte le sue funzioni membro e variabili. Facendo clic su uno qualsiasi dei membri si apre una finestra dell'editor del sorgente relativa all'elemento sul quale hai fatto clic. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Documenti</guilabel
+>: elenca alcuni dei file visitati più di recente, per tipo (ad esempio sorgenti, patch, documenti di testo). </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Browser del codice</guilabel
+>: a seconda della posizione del cursore in un file, questo strumento mostra le cose che sono in relazione. Per esempio, se sei su una riga <varname
+>#include</varname
+>, vengono mostrate informazioni sul file che stai includendo ad esempio quali classi sono dichiarate in questo file, se sei su una riga vuota nell'ambito del file, vengono mostrate le classi e le funzioni dichiarate e definite nel file (tutte come collegamenti: se fai clic su una di esse questo ti porterà al punto del file in cui è in realtà la dichiarazione o la definizione); se sei nella definizione di una funzione, questo ti mostrerà dov'è la dichiarazione e ti offrirà un elenco di posti in cui viene usata la funzione. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Filesystem</guilabel
+>: ti mostra una vista ad albero del file system. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Documentazione</guilabel
+>: ti permette di cercare pagine man e altra documentazione d'aiuto. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Frammenti</guilabel
+>: fornisce le sequenze di testo che si usano di più e che non si vuole scrivere ogni volta. Ad esempio, nel progetto dalla quale l'immagine qui sopra è stata creata, vi è una frequente necessità di scrivere del codice del tipo </para
+></listitem>
+</itemizedlist>
+<para
+><programlisting
+>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell
+      = triangulation.begin_active();
+   cell != triangulation.end();
+   ++cell)</programlisting
+>Questa è un'espressione complicata ma sembrerà sempre la stessa ogni volta che avrai bisogno di un ciclo simile &mdash; cosa che la rende una buona candidata per un frammento.</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Konsole</guilabel
+>: apre una finestra della riga di comando nella finestra principale di &kdevelop;, per il comando occasionale che potresti inserire (&eg; per eseguire <varname
+>./configure</varname
+>). </para
+></listitem>
+</itemizedlist>
+<para
+><ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
+>Qui</ulink
+> puoi trovare un elenco completo di strumenti e viste.</para>
+<para
+>Per molti programmatori, lo spazio verticale dello schermo è il più importante. A questo proposito, è possibile organizzare le tue viste strumento sul margine sinistro e destro della finestra: per spostare uno strumento, fare clic sul simbolo con il tasto destro del mouse e selezionare una nuova posizione.</para>
+</sect1>
+<sect1 id="exploring-source-code"
+><title
+>Esplorare il codice sorgente</title>
+<sect2 id="local-information"
+><title
+>Informazioni locale</title>
+<para
+>&kdevelop; <emphasis
+>interpreta</emphasis
+> il codice sorgente, e di conseguenza è veramente valido nel fornire informazioni sulle variabili o funzioni che possono apparire nel tuo programma. Per esempio, ecco un'istantanea del lavoro su un pezzo di codice e sul passaggio del mouse sopra il simbolo <varname
+>cell</varname
+> nella riga 1316 (se stai lavorando usando solo la tastiera, è possibile ottenere lo stesso effetto tenendo premuto per un po' il tasto &Alt;):</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; mi mostra un suggerimento che include il tipo della variabile (qui: <varname
+>DoFHandler&lt;dim&gt;active_cell_iterator</varname
+> ), dove è dichiarata questa variabile (il <emphasis
+>contenitore</emphasis
+>, che qui è la funzione circondata <varname
+>get_maximal_velocity</varname
+> dal momento che è una variabile locale), cosa è (una variabile, non una funzione, classe o namespace) e dove è dichiarata (nella riga 1314, solo poche righe sopra).</para>
+<para
+>Nel contesto attuale, il simbolo sul quale viene passato il mouse non ha alcuna documentazione associata. In questo esempio, il mouse viene fatto passare sopra il simbolo <varname
+>get_this_mpi_process</varname
+> nella riga 1318, il risultato è questo:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Qui, &kdevelop; ha fatto un riferimento incrociato della dichiarazione da un file completamente diverso (<filename
+>utilities.h</filename
+>, che in realtà sta anche in un diverso progetto della stessa sessione) con il commento in stile doxygen che accompagna la dichiarazione.</para>
+<para
+>Ciò che rende questi suggerimenti ancora più utili è il fatto che sono dinamici: posso fare clic sul contenitore per ottenere informazioni sul contesto nel quale la variabile è dichiarata (&ie; sul namespace di <varname
+>System</varname
+>, come per esempio dove è dichiarato, definito, usato, o com'è la sua documentazione) e posso fare clic sui collegamenti di color blu che consentono di resettare la posizione del cursore alla posizione della dichiarazione del simbolo (&eg; in <varname
+>utilities.h</varname
+>, riga 289) o darmi un elenco di posti in cui questo simbolo viene utilizzato nel file corrente o in tutti i progetti della sessione corrente. Quest'ultimo punto è spesso utile se vuoi analizzare come, per esempio, è utilizzata una funzione particolare in codici di grandi dimensioni.</para>
+<note
+><para
+>Le informazioni contenute in un suggerimento sono rapide - dipende da te tenendo premuto il tasto &Alt; o passando il mouse. Se vuoi un posto permanente per queste, apri lo strumento <guilabel
+>Browser del codice</guilabel
+> in una delle sotto finestre. Per esempio, qui il cursore si trova sulla stessa funzione dell'esempio precedente, e la vista strumento a sinistra presenta lo stesso tipo di informazione del suggerimento di prima:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-15.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Spostando il cursore a destra cambiano le informazioni presentate sulla sinistra. Inoltre, facendo clic sul pulsante <guilabel
+>Blocca la vista corrente</guilabel
+> in alto a destra questo permette di bloccare queste informazioni, rendendole indipendenti dal movimento del cursore mentre analizzi l'informazione fornita.</para
+></note>
+<para
+><note
+><para
+>Questo tipo di informazioni di contesto è disponibile in molti altri posti in&kdevelop;, non solo nell'editor di sorgente. Ad esempio, tenendo premuto &Alt; in un elenco di completamento (&eg; quando si esegue un'apertura rapida) fornisce anche informazioni di contesto relative al simbolo corrente.</para
+></note
+></para>
+</sect2>
+<sect2 id="file-scope-information"
+><title
+>Informazioni sul ambito del file</title>
+<para
+>Il passo successivo è quello di ottenere informazioni su tutto il file sorgente a cui stai lavorando in questo momento. A tal fine, posiziona il cursore nell'ambito del file nel file corrente e guarda come viene mostrato lo strumento <guilabel
+>Browser del codice</guilabel
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Qui sono mostrati un elenco di namespace, classi e funzioni dichiarate o definite nel file, offrendoti una panoramica di quello che sta succedendo in questo file e un mezzo per passare direttamente ad una qualsiasi di queste dichiarazioni o definizioni senza andare da un punto all'altro del file o alla ricerca di un simbolo particolare.</para>
+<para
+><note
+><para
+>Le informazioni visualizzate dell'ambito del file sono le stesse di quelle presentate nella modalità <quote
+>Schema riassuntivo</quote
+> discusse di seguito per la navigazione del codice sorgente, la differenza è che la modalità schema riassuntivo rappresenta solo un suggerimento temporaneo.</para
+></note
+></para>
+</sect2>
+<sect2 id="project-and-session-scope-information"
+><title
+>Informazioni sull'ambito del progetto e della sessione</title>
+<para
+>Ci sono molti modi per ottenere informazioni sull'intero progetto (o, di fatto, su tutti i progetti in una sessione). Questo tipo di informazione è tipicamente fornita attraverso vari strumenti vista. Ad esempio, lo strumento <guilabel
+>Classi</guilabel
+> fornisce una struttura ad albero di tutte le classi e circonda i namespace di tutti i progetti in una sessione, insieme con le funzioni membro e le variabili membro di ciascuna di queste classi:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Passando il mouse sopra una voce vengono fornite ulteriori informazioni sul simbolo, la posizione della sua dichiarazione e definizione, e i suoi usi. Facendo doppio clic su una voce in questa vista ad albero si apre una finestra nella posizione in cui il simbolo è dichiarato o definito.</para>
+<para
+>Ma ci sono altri modi di vedere le informazioni globali. Ad esempio, lo strumento <guilabel
+>Documenti</guilabel
+> fornisce una vista di un progetto in termini di tipi di file o altri documenti di cui è composto questo progetto:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-18.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="rainbow-color-highlighting-explained"
+><title
+>Spiegazione dei colori di evidenziazione</title
+> 
+<para
+><application
+>KDevelop</application
+> usa una varietà di colori per evidenziare diversi oggetti nel codice sorgente. Se sai cosa significano i diversi colori, è possibile estrarre rapidamente molte informazioni dal codice sorgente solo guardando i colori, senza leggere un singolo carattere. Le regole di evidenziazione sono le seguenti: </para>
+<itemizedlist>
+<listitem
+><para
+>Gli oggetti di tipo Class / Struct, Enum (i valori e il tipo), funzioni (globali), e i membri della classe hanno ciascuno un proprio colore assegnato (le classi sono verdi, le enumerazioni sono di colore rosso scuro, ed i membri sono di colore giallo scuro o viola, le funzioni (globali) sono sempre viola).</para
+></listitem>
+<listitem
+><para
+>Tutte le variabili globali sono colorate di verde scuro.</para
+></listitem>
+<listitem
+><para
+>Gli identificatori che sono dei typedef di altri tipi sono colorati di color foglia di tè.</para
+></listitem>
+<listitem
+><para
+>Tutte le dichiarazioni e definizioni degli oggetti sono in neretto.</para
+></listitem>
+<listitem
+><para
+>Se si accede ad un membro dall'interno del contesto dove è definito (classe di base o derivata) appare in giallo, altrimenti appare in viola.</para
+></listitem>
+<listitem
+><para
+>Se un membro è privato o protetto, si colora di un colore leggermente più scuro quando viene usato.</para
+></listitem>
+<listitem
+><para
+>Per le variabili locali nell'ambito del corpo della funzione, i colori sono scelti in base al hash della identificatore. Questo include i parametri della funzione. Un identificatore avrà sempre lo stesso colore nel suo ambito (ma lo stesso identificatore otterrà un colore diverso se rappresenta un oggetto diverso, &ie; se viene ridefinito in un ambito nidificato), e di solito otterrai lo stesso colore per lo stesso nome dell'identificatore in ambiti diversi. Quindi, se disponi di molteplici funzioni che assumono gli stessi nomi per gli identificatori, tutti gli argomenti avranno lo stesso aspetto in termini di colore. Questi colori possono essere disattivati separatamente dalla colorazione globale nella finestra delle impostazioni.</para
+></listitem>
+<listitem
+><para
+>Gli indentificatori per i quali &kdevelop; non può determinare la dichiarazione sono colorati in bianco. Questo talvolta può essere causato dalla perdita delle direttive <varname
+>#include</varname
+>.</para
+></listitem>
+<listitem
+><para
+>In aggiunta a questa colorazione, sarà applicata la normale sintassi di evidenziazione dell'editor, come noto da &kate;. La semantica di evidenziazione di &kdevelop; sovrascriverà sempre l'evidenziazione dell'editor in presenza di un conflitto.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="navigating-in-source-code"
+><title
+>Navigare nel codice sorgente</title>
+<para
+>Nella sezione precedente, abbiamo discusso dell'esplorazione del codice sorgente, &ie; ottenere informazioni sui simboli, sui file e progetti. Il passo successivo consisterà nel saltare da un punto all'altro del codice, &ie; navigarlo. Ci sono ancora diversi livelli ai quali questo può essere fatto: locale, dentro un file, e all'interno di un progetto.</para>
+<para
+><note
+><para
+>Molti dei modi di attraversare il codice sono accessibili dal menu <guilabel
+>Navigazione</guilabel
+> nella finestra principale di &kdevelop;.</para
+></note
+></para>
+<sect2 id="local-navigation"
+><title
+>Navigazione locale</title>
+<para
+>&kdevelop; è molto di più di un editor, ma è <emphasis
+>anche</emphasis
+> un editor di sorgenti. Come tale, ovviamente puoi spostare il cursore verso l'alto, il basso, a sinistra o a destra in un file sorgente. Puoi anche usare i tasti <keycap
+>Pag↑</keycap
+> e <keycap
+>Pag↓</keycap
+>, e tutti gli altri comandi che usi da qualsiasi editor utile.</para>
+</sect2>
+<sect2 id="file-scope-navigation-and-outline-mode"
+><title
+>Navigazione dell'ambito del file e modalità schema riassuntivo</title>
+<para
+>All'ambito del file, &kdevelop; offre molti modi diversi di attraversare il codice sorgente. Per esempio:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Schema riassuntivo</guilabel
+>: puoi ottenere uno schema riassuntivo di quello che c'è nel file corrente in almeno tre modi diversi: <itemizedlist>
+<listitem
+><para
+>Facendo clic nella casella di testo <guilabel
+>Schema riassuntivo</guilabel
+> in alto a destra della finestra principale, o premendo <keycombo
+>&Alt;&Ctrl;<keycap
+>N</keycap
+></keycombo
+> si apre un menu a discesa che elenca le dichiarazioni di tutte le funzioni e classi: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-19.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Poi potrai selezionare quale scegliere, o &mdash; se ce ne sono molte &mdash; iniziare a digitare del testo che potrebbe apparire nei nomi mostrati; in questo caso, mentre continui a digitare, l'elenco diventa sempre più piccolo mentre i nomi che non corrispondono a quello che hai già digitato vengono rimossi finché non sei pronto a selezionarne uno. </para
+></listitem>
+<listitem
+><para
+>Selezionando il cursore nell'ambito del file (&ie; fuori da qualsiasi dichiarazione o definizione di funzione o classe) e avendo aperto lo strumento <guilabel
+>Browser del codice</guilabel
+>: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-16.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Questo fornisce anche uno schema riassuntivo di quello che sta accadendo nel file corrente, e ti permette di selezionare il punto in cui vuoi andare. </para
+></listitem>
+<listitem
+><para
+>Passando il mouse sopra la scheda su uno dei file aperti viene prodotto anche uno schema riassuntivo del file nella scheda. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+>I file sorgente sono organizzati come un'elenco di dichiarazioni e definizioni. Premendo <keycombo
+>&Alt;&Ctrl;<keycap
+>PgUp</keycap
+></keycombo
+> e <keycombo
+>&Alt;&Ctrl;<keycap
+>PgDown</keycap
+></keycombo
+> si salta alla definizione di funzione precedente o successiva in questo file. </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-and-session-scope-navigation--semantic-navigation"
+><title
+>Navigazione dell'ambito della sessione e del progetto: navigazione semantica</title>
+<para
+>Come detto da altre parti, &kdevelop; di solito non considera file sorgente individuali ma piuttosto guarda nel suo insieme ai progetti (o, piuttosto, a tutti i progetti che sono parte della sessione corrente). Di conseguenza, offre molti modi di attraversare interi progetti. Alcuni di questi sono derivati da quello che abbiamo già discusso nella sezione <link linkend="exploring-source-code"
+>Esplorare il codice sorgente</link
+> mentre altri sono molto diversi. Il tema comune è che queste caratteristiche di navigazione sono basate sulla <emphasis
+>comprensione semantica</emphasis
+> del codice, &ie; ti offrono qualcosa che richiede l'analisi di progetti interi e dei dati collegati.</para>
+<itemizedlist>
+<listitem
+><para
+>Come hai visto nella sezione <link linkend="exploring-source-code"
+>Esplorare il codice sorgente</link
+>, puoi ottenere un suggerimento che spiega namespace, classi, funzioni o nomi di variabili passando sopra il tuo mouse o tenendo premuto per un po' il tasto &Alt;. Ecco un esempio: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-14.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> </mediaobject
+> </screenshot
+> Facendo clic sui collegamenti delle dichiarazioni di un simbolo o espandendo l'elenco degli usi questo consente di saltare in queste posizioni. Un effetto simile può essere ottenuto utilizzando lo strumento <guilabel
+>Browser del codice</guilabel
+> discusso anche in precedenza. </para
+></listitem>
+<listitem
+><para
+>Un modo più veloce per passare alla dichiarazione di un simbolo senza dover fare clic sui collegamenti nel suggerimento consiste nell'abilitare temporaneamente la <guilabel
+>Modalità navigazione dei sorgenti</guilabel
+> tendendo premuti i tasti &Alt; e &Ctrl;. In questo modo sarà possibile fare clic direttamente su qualsiasi simbolo nell'editor per passare alla sua dichiarazione. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Apertura veloce</guilabel
+>: un modo molto potente di saltare ad altri file o posizioni è usare i vari metodi di <emphasis
+>apertura rapida</emphasis
+> in &kdevelop;. Ci sono quattro versioni di questi: <itemizedlist>
+<listitem
+><para
+><guilabel
+>Apertura veloce classe</guilabel
+> (<menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Apertura veloce classe</guimenuitem
+></menuchoice
+> o <keycombo
+>&Alt;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>): otterrai un elenco di tutte le classi in questa sessione. Inizia a digitare il nome (una parte) di una classe e l'elenco continuerà a ridursi a soltanto quelle classe che corrispondono a quello che hai scritto finora. Se l'elenco è abbastanza corto, seleziona un elemento usando i tasti su e giu e &kdevelop; ti porterà dov'è dichiarata la classe. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Apertura veloce funzione</guilabel
+> (<menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Apertura veloce funzione</guimenuitem
+></menuchoice
+> o <keycombo
+>&Alt;&Ctrl;<keycap
+>M</keycap
+></keycombo
+>): otterrai un elenco di tutte le funzioni (membro) che fanno parte del progetto in questa sessione, che puoi selezionare nello stesso modo visto sopra. Nota che questo elenco potrebbe includere sia la definizione della funzione che la dichiarazione della stessa. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Apertura veloce file</guilabel
+> (<menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Apertura veloce file</guimenuitem
+></menuchoice
+> o <keycombo
+>&Alt;&Ctrl;<keycap
+>O</keycap
+></keycombo
+>): otterrai un elenco di tutti i file che sono parte dei progetti di questa sessione, che puoi selezionare nello stesso modo visto qui sopra. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Apertura veloce universale</guilabel
+> (<menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Apertura veloce</guimenuitem
+></menuchoice
+> o <keycombo
+>&Alt;&Ctrl;<keycap
+>Q</keycap
+></keycombo
+>): se ti dimentichi quale combinazione di tasti è associata ai comandi visti sopra, questo è il coltellino svizzero &mdash; che semplicemente ti presenta un elenco combinato di tutti i file, funzioni, classi e altre cose che hai selezionato. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Salta alla dichiarazione/definizione</guilabel
+>: quando si implementa una funzione (membro), c'è spesso bisogno di ritornare al punto in cui è dichiarata la funzione, per esempio per tenere sincronizzato l'elenco degli argomenti delle funzioni tra dichiarazioni e definizioni, o per aggiornare la documentazione. Per farlo, metti il cursore sul nome della funzione e seleziona <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Salta alla dichiarazione</guimenuitem
+></menuchoice
+> (o premi <keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+>) per raggiungere il posto in cui è dichiarata la funzione. Ci sono diversi modi per tornare dove si era prima: <itemizedlist>
+<listitem
+><para
+>Selezionando <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Salta alla definizione</guimenuitem
+></menuchoice
+> (o premendo <keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+>). </para
+></listitem>
+<listitem
+><para
+>Selezionando <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Contesto visitato precedente</guimenuitem
+></menuchoice
+> (o premendo <keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Sinistra</keycap
+></keycombo
+>), come è stato descritto sopra. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Saltare alla dichiarazione di un simbolo è qualcosa che non funziona solo quando si mette il cursore sul nome delle funzione che stai implementando al momento. In effetti, funziona anche per altri simboli: mettendo il cursore su una variabile (locale, globale o membro) e saltando alla sua dichiarazione si viene portati alla posizione della dichiarazione. Allo stesso modo puoi mettere il cursore sul nome della classe, per esempio su una variabile di una dichiarazione di funzione, e saltare nella posizione della sua dichiarazione.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Commuta tra definizione/dichiarazione</guilabel
+>: nell'esempio precedente, per saltare al punto in cui è definita la funzione corrente, dovevi mettere prima il cursore sul nome della funzione. Per evitare questo passo, puoi selezionare <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Commuta definizione/dichiarazione</guimenuitem
+></menuchoice
+> (o premere <keycombo
+>&Shift;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>) per saltare alla dichiarazione della funzione sul quale è presente il cursore. La selezione della stessa voce del menu una seconda volta ti riporterà nel posto in cui è definita la funzione. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Uso di precedente/successivo</guilabel
+>: mettendo il cursore sul nome di una variabile locale e selezionando <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Uso successivo</guimenuitem
+></menuchoice
+> (o premendo <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Destra</keycap
+></keycombo
+>) si viene portati all'uso successivo di questa variabile nel codice. (Nota che questo non solo cerca l'occorrenza successiva del nome della variabile ma tiene conto del fatto che le variabili con lo stesso nome ma in differenti ambiti sono diverse). La stessa cosa vale per l'uso dei nomi delle funzioni. Selezionando <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Uso precedente</guimenuitem
+></menuchoice
+> (o premendo <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Sinistra</keycap
+></keycombo
+>) si viene portati all'uso precedente di un simbolo. </para
+></listitem>
+</itemizedlist>
+<para
+><note
+><para
+>Per visualizzare un elenco di tutti gli usi di un nome, posiziona il cursore su di esso e apri lo strumento <guilabel
+>Browser del codice</guilabel
+> o premi e tieni premuto il pulsante &Alt;. Questo è spiegato in dettaglio nella sezione <link linkend="file-scope-information"
+>Esplorare il codice</link
+>. </para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>L'<guilabel
+>elenco dei contesti</guilabel
+>: i browser web hanno questa caratteristica con la quale si può andare indietro o avanti nell'elenco delle pagine visitate più di recente. &kdevelop; ha lo stesso tipo di caratteristica, a parte il fatto che invece di pagine web si visitano <emphasis
+>contesti</emphasis
+>. Un contesto è la posizione corrente del cursore, e puoi cambiarla allontanandoti da questa usando qualsiasi cosa eccetto i cursori &mdash; per esempio, facendo clic su una posizione fornita da un suggerimento nella vista strumento <guilabel
+>Browser del codice</guilabel
+>, una delle opzioni date nel menu <guilabel
+>Navigazione</guilabel
+>, o qualsiasi altro comando. Usando <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Contesto visitato precedente</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Sinistra</keycap
+></keycombo
+>) e <menuchoice
+><guimenu
+>Navigazione</guimenu
+><guimenuitem
+>Contesto visitato successivo</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Destra</keycap
+></keycombo
+>) si viene portati all'elenco dei contesti visitati proprio come i pulsanti <guilabel
+>indietro</guilabel
+> e <guilabel
+>avanti</guilabel
+> di un browser ti portano alla pagina precedente o prossima tra quelle che hai visitato. </para
+></listitem>
+<listitem
+><para
+>Infine, ci sono viste strumenti che ti permettono di navigare in posti diversi del tuo codice. Per esempio, lo strumento <guilabel
+>Classi</guilabel
+> ti fornisce un elenco di tutti i namespace e classi di tutti i progetti della sessione corrente, e ti permette di espanderli per vedere le funzioni e variabili membro di ognuna di queste classi: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-17.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Il doppio clic su un elemento (o scorrendo il menu contestuale usando il tasto destro del mouse) ti permette di saltare alla posizione della dichiarazione dell'elemento. Gli altri strumenti ti permettono di fare cose simili; per esempio, la vista strumento <guilabel
+>Progetti</guilabel
+> fornisce un elenco di file che sono parte di una sessione: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-13.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Un ulteriore doppio clic su un file lo apre. </para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="writing-source-code"
+><title
+>Scrivere codice sorgente</title>
+<para
+>Poiché &kdevelop; interpreta il codice sorgente dei tuoi progetti, può essere d'aiuto nello scrivere più codice. Nel seguito vengono presentati alcuni dei modi nel quale questo può essere fatto.</para>
+<sect2 id="auto-completion"
+><title
+>Auto-completamento</title>
+<para
+>Probabilmente la caratteristica più utile di tutte nello scrivere nuovo codice è l'auto-completamento. Considera, per esempio, il seguente pezzo di codice:</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+void foo()
+{
+  Car my_ride;
+  // ...do something with this variable...
+  std::string color = my_ride.ge
+</programlisting
+></para>
+<para
+>Nell'ultima riga, &kdevelop; ricorderà che la variabile <varname
+>my_ride</varname
+> è di tipo <varname
+>Car</varname
+>, e automaticamente proporrà di completare il nome della funzione membro <varname
+>ge</varname
+> come <varname
+>get_color</varname
+>. In realtà, tutto quello che devi fare è continuare a scrivere finché la funzione di auto-completamento ha ridotto le corrispondenze ad una, e poi premere il tasto &Enter;:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Nota che puoi fare clic sul suggerimento per avere più informazioni sulla funzione a parte il suo tipo di ritorno e se è pubblica:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-43.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>L'auto-completamento può salvarti dal digitare molti caratteri se il tuo progetto usa nomi lunghi per variabili e funzioni; inoltre, evita errori di ortografia (e i risultanti errori di compilazione) e rende più semplici da ricordare i nomi esatti delle funzioni; per esempio, se tutti i vostri getter iniziano con <varname
+>get_</varname
+>, allora la funzione di auto-completamento sarà capace solo di presentarti un elenco di getter possibili quando hai digitato le prime quattro lettere, probabilmente ricordandoti nel processo quale delle funzioni è quella giusta. Nota che affinché l'auto-completamento funzioni, né la dichiarazione della classe <varname
+>Car</varname
+> né quella della variabile <varname
+>my_ride</varname
+> devono essere nello stesso file in cui si stà scrivendo il codice. &kdevelop; deve semplicemente sapere che queste classi e variabili sono connesse, &ie; i file nei quali queste connessioni sono fatte devono essere parte del progetto sul quale stai attualmente lavorando.</para>
+<para
+><note
+><para
+>&kdevelop; non sa sempre quando esserti d'aiuto nel completare il codice. Se il suggerimento dell'auto-completamento non si apre automaticamente, premi <keycombo
+>&Ctrl;<keycap
+>Spazio</keycap
+></keycombo
+> per aprire un elenco da cui sceglierne uno. In generale, affinché l'auto-completamento funzioni, &kdevelop; deve analizzare i tuoi file sorgente. Questo viene fatto in background per tutti i file che fanno parte dei progetti della sessione corrente dopo che hai avviato &kdevelop;, subito dopo aver smesso di scrivere (il ritardo può essere configurato).</para
+></note
+></para>
+<para
+><note
+><para
+>&kdevelop; analizza soltanto i file che considera codice sorgente, determinandolo dal tipo MIME del file. Questo tipo è stabilito la prima volta che il file viene salvato; di conseguenza, creare un nuovo file e iniziare a scriverci codice non avvierà l'analisi dell'auto-completamento fino a quando non lo si salva per la prima volta.</para
+></note
+></para>
+<para
+><note
+><para
+>Come nella nota precedente, affinché l'auto-completamento funzioni, &kdevelop; deve essere in grado di trovare le dichiarazioni nei file di intestazione. Per questo cerca in un numero di percorsi predefiniti. Se non trova automaticamente un file di intestazione, sottolinea il nome del file di intestazione in rosso; in questo caso, fai clic col tasto destro sul nome sottolineato per dire esplicitamente a &kdevelop; dove trovare questi file e le informazioni che questi forniscono.</para
+></note
+></para>
+<para
+><note
+><para
+>La configurazione dell'auto-completamento è discussa in <link linkend="customizing-code-auto-completion"
+>questa sezione del manuale</link
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="adding-new-classes-and-implementing-member-functions"
+><title
+>Aggiungere nuove classi e implementare le funzioni membro</title>
+<para
+>&kdevelop; ha un assistente per aggiungere nuove classi. La procedura è descritta in <link linkend="creating-a-new-class"
+>Creare una nuova classe</link
+>. Si può creare una semplice classe in C++ scegliendo il modello Base C++ dalla categoria <filename
+>Classe</filename
+>. Nell'assistente, si possono scegliere alcune funzioni membro predefinite, per esempio un costruttore vuoto, un costruttore di copie e un distruttore. </para>
+<para
+>Dopo che l'assistente ha completato, i nuovi file vengono creati e aperti nell'editor. Il file di intestazione include già le include guard e le nuove classi hanno tutte le funzioni membro scelte. I successivi due passi sarebbero per documentare la classe e le sue funzioni membro e per la loro implementazione. Si discuterà degli aiuti per la documentazione delle classi e delle funzioni qui sotto. Per implementare le funzioni speciali già aggiunte, andare semplicemente nella scheda <guilabel
+>bus.cpp</guilabel
+> dove sono già forniti gli scheletri delle funzioni:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-30.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Per aggiungere nuove funzioni membro, ritornare nella scheda <guilabel
+>bus.h</guilabel
+> e aggiungere il nome di una funzione. Per esempio, aggiungiamo questa:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-31.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Nota come ho iniziato l'implementazione. Comunque, in molti stili di codifica, la funzione non dovrebbe essere implementata nel file di intestazione ma piuttosto nel corrispondente file .cpp. A tal fine, posizionare il cursore sul nome della funzione e selezionare <menuchoice
+><guimenu
+>Codice</guimenu
+><guimenuitem
+>Sposta il sorgente</guimenuitem
+></menuchoice
+> o premere <keycombo
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+>. Questo rimuoverà il codice tra le parentesi graffe dal file di instestazione (e lo sostituirà con un punto e virgola allo scopo di terminare la dichiarazione della funzione) e lo sposterà nel codice sorgente:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-32.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Nota che quello che volevo sottointendere è che la variabile <varname
+>students</varname
+> dovrebbe essere probabilmente una variabile membro della classe <varname
+>Bus</varname
+> ma che non ho ancora aggiunto. Nota pure come &kdevelop; la sottolinea per rendere chiaro che non sa niente della variabile. Ma questo problema può essere risolto: facendo clic sul nome della variabile si ottiene il seguente suggerimento:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-33.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>(Lo stesso risultato può essere raggiunto facendo clic con il tasto destro su di esso e selezionando <guilabel
+>Risolvere: Dichiara come</guilabel
+>.) Ora consideriamo <quote
+>3 - private unsigned int</quote
+> (o con il mouse, o premendo <keycombo
+>&Alt;<keycap
+>3</keycap
+></keycombo
+>) e vediamo come viene fuori nel file di intestazione:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-34.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Vale la pena notare che &kdevelop; estrae il tipo della variabile che deve essere dichiarata dall'espressione usata per inizializzarla. Per esempio, se avessimo scritto la somma seguente in un modo piuttosto dubbio, avrebbe suggerito di dichiarare la variabile di tipo <varname
+>double</varname
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-35.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Per concludere: il metodo che consiste nell'usare <menuchoice
+><guimenu
+>Codice</guimenu
+><guimenuitem
+>Sposta il sorgente</guimenuitem
+></menuchoice
+> non sempre inserisce la nuova funzione membro dove potresti volere. Per esempio, potresti volerla marcare come <varname
+>inline</varname
+> e metterla in fondo al file di intestazione. In un caso come questo, scrivi la dichiarazione e inizia a scrivere la definizione della funzione in questo modo:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-36.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; automaticamente offre tutti i possibili completamenti del caso. La selezione di una delle due voci <varname
+>add_students</varname
+> produce il codice seguente che riempie già l'elenco completo degli argomenti:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-37.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Nell'esempio, accettando una delle scelte che lo strumento di auto-completamento offre viene prodotta la firma completa ma sfortunatamente cancella l'indicazione <varname
+>inline</varname
+> scritta in precedenza. Questo comportamento è stato riportato nel <ulink url="https://bugs.kde.org/show_bug.cgi?id=274244"
+>bug 274245 di &kdevelop;</ulink
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="documenting-declarations"
+><title
+>Documentare le dichiarazioni</title>
+<para
+>Il buon codice è ben documentato, sia a livello dell'implementazione degli algoritmi delle funzioni che a livello dell'interfaccia &mdash; &ie;, le classi, le funzioni (membro e locali) e le variabili devono essere documentate per spiegare a cosa servono, i possibili valori degli argomenti, pre e post condizioni, &etc;. Per quanto riguarda l'interfaccia della documentazione, <ulink url="http://www.doxygen.org"
+>doxygen</ulink
+> è diventato lo standard de facto per la formattazione dei commenti che poi possono essere estratti e visualizzati da pagine web ricercabili.</para>
+<para
+>&kdevelop; supporta questo stile di commenti fornendo una scorciatoia per generare l'infrastruttura dei commenti che documenta una classe o una funzione membro. Per esempio, immagina di aver già scritto questo codice:</para>
+<para
+><programlisting
+>class Car {
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>Ora vuoi aggiungere la documentazione sia alla classe che alla funzione membro. A tal fine, sposta il cursore sulla prima riga e seleziona <menuchoice
+><guimenu
+>Codice</guimenu
+><guimenuitem
+>Documenta dichiarazione</guimenuitem
+></menuchoice
+> o premi <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>. &kdevelop; risponderà in questo modo: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-23.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Il cursore si trova già nell'area in grigio in modo che tu possa scrivere una breve descrizione (dopo la parola chiave di doxygen <varname
+>@brief</varname
+>) di questa classe. Poi puoi continuare ad aggiungere documentazione a questo commento in modo da avere una panoramica più dettagliata di quello che fa la classe:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-24.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Mentre l'editor si trova all'interno del commento, il testo del commento è evidenziato in verde (l'evidenziazione scompare quando sposti il cursore al di fuori del commento). Quando raggiungi la fine di una riga, premi &Enter; e &kdevelop; inizierà automaticamente una nuova riga che inizia con un asterisco e posizionerà il cursore di un carattere rientrato.</para>
+<para
+>Ora documentiamo la funzione membro, metti di nuovo il cursore sulla riga della dichiarazione e seleziona <menuchoice
+><guimenu
+>Codice</guimenu
+><guimenuitem
+>Documenta dichiarazione</guimenuitem
+></menuchoice
+> o premi <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-25.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Di nuovo, &kdevelop; genererà automaticamente lo scheletro di un commento, insieme alla documentazione della stessa funzione, in aggiunta al suo tipo di ritorno. In questo caso, il nome della funzione si spiega da sola, ma spesso gli argomenti della funzione potrebbero non essere documentati individualmente anche se dovrebbero. Per illustrare quanto appena detto, consideriamo una funzione un po' più interessante e il commento che &kdevelop; genera automaticamente:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-26.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Qui, il commento proposto contiene già tutti i campi per i parametri individuali di Doxygen, per esempio.</para>
+</sect2>
+<sect2 id="renaming-variables-functions-and-classes"
+><title
+>Rinominare le variabili, le funzioni e le classi</title>
+<para
+>A volte, si vuole rinominare una funzione, una classe o una variabile. Per esempio, diciamo di avere già questo:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-38.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Poi ci rendiamo conto di non essere contenti del nome <varname
+>remove_students</varname
+> e preferiremo chiamarlo, ad esempio, <varname
+>throw_out_students</varname
+>. Potremmo fare cerca e sostituisci il nome, ma questo ha due inconvenienti:</para>
+<itemizedlist>
+<listitem
+><para
+>La funzione potrebbe essere usata in più di un file. </para
+></listitem>
+<listitem
+><para
+>In realtà vogliamo solo rinominare questa funzione e non toccare le funzioni che potrebbero avere lo stesso nome ma che sono dichiarate in altre classi o namespace. </para
+></listitem>
+</itemizedlist>
+<para
+>Antrambi questi problemi possono essere risolti spostando il cursore su una delle occorrenze del nome della funzione e selezionando <menuchoice
+><guimenu
+>Codice</guimenu
+><guimenuitem
+>Rinomina dichiarazione</guimenuitem
+></menuchoice
+> (o facendo clic con il tasto destro sul nome e selezionando <guilabel
+>Rinomina Bus::remove_students</guilabel
+>). Questo fa apparire una finestra di dialogo in cui è possibile inserire il nuovo nome della funzione e dove si possono anche vedere tutti i posti in cui la funzione è effettivamente usata:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-39.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="code-snippets"
+><title
+>Frammenti di codice</title>
+<para
+>La maggior parte dei progetti hanno parti di codice che frequentemente devono essere scritte nel codice sorgente. Esempi sono: chi scrive compilatori, un ciclo su tutte le istruzioni; chi realizza interfacce utente, controllare che l'input dell'utente sia valido e se non aprire una finestra di errore; nel progetto dell'autore di queste righe, sarebbe codice del tipo</para>
+<para
+><programlisting
+>for (typename Triangulation::active_cell_iterator
+       cell = triangulation.begin_active();
+     cell != triangulation.end(); ++cell)
+  ... do something with the cell ...
+</programlisting>
+</para>
+<para
+>Piuttosto che scrivere continuamente del testo simile (con tutti gli errori di battitura connessi che si introducono), qui può essere d'aiuto lo strumento <guilabel
+>Frammenti</guilabel
+> di &kdevelop;. A tale fine, aprire la vista strumento (vedi <link linkend="tools-and-views"
+>Strumenti e viste</link
+> se il tasto corrispondente non è già nella finestra). Poi fare clic sul tasto <quote
+>Aggiungi un deposito</quote
+> (un nome improprio &mdash; ti consente di creare una raccolta di frammenti di codice sorgente di un tipo particolare con un nome, &eg; Sorgenti C++) e creare un deposito vuoto. Poi fare clic su <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> per aggiungere un frammento, ottenendo una finestra di dialogo come la seguente:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-40.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Il nome del frammento potrebbe non vere spazi o altri caratteri speciali perché deve sembrare un normale nome di funzione o variabile (per ragioni che saranno chiare nel paragrafo successivo).</para
+></note
+></para>
+<para
+>Per usare un frammento definito in questo modo, quando stai editando il codice, è sufficente scrivere il nome del frammento nello stesso modo in cui avresti scritto il nome di qualsiasi altra funzione o variabile. Questo nome diventerà disponibile all'auto-completamento &mdash; ciò significa che non c'è niente di male nell'uso di nomi lunghi e descrittivi per i frammenti come quello qui sopra &mdash; e quando accetti il suggerimento dell'auto-completamento (per esempio premento &Enter;), la parte del nome del frammento già inserito sarà rimpiazzata dal nome completo del frammento e sarà adeguatamente identata:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-41.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Nota che affinché questo funzioni, deve essere aperta e visibile la vista strumento <guilabel
+>Frammenti</guilabel
+>: hai bisogno unicamente e solamente della vista strumento per definire dei nuovi frammenti. Un modo alternativo, anche se meno conveniente, di espandere un frammento consiste nel fare semplicemente clic sullo stesso nella relativa vista strumento.</para>
+<para
+><note
+><para
+>I frammenti sono molto più potenti di quanto appena spiegato. Per una completa descrizione di cosa puoi farci, vedi la <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
+>documentazione dettagliata dello strumento frammenti</ulink
+>.</para
+></note
+></para>
+</sect2>
+</sect1>
+<sect1 id="modes-and-working-sets"
+><title
+>Modalità e working set</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_noworkingset.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Se sei arrivato fino a questo punto, dai un'occhiata in alto a destra della finestra principale di &kdevelop;: come mostrato in figura, vedrai che vi sono tre <guilabel
+>modalità</guilabel
+> in cui si può trovare &kdevelop;: <guilabel
+>Codice</guilabel
+> (la modalità di cui abbiamo discusso in questo capitolo), <guilabel
+>Debug</guilabel
+> (vedi <link linkend="debugging-programs-in-kdevelop"
+>Fare il debug dei programmi</link
+>) e <guilabel
+>Revisione</guilabel
+> (vedi <link linkend="working-with-version-control-systems"
+>Lavorare con i sistemi di controllo versione</link
+>).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_sessionsprojectsworkingsets.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Ogni modalità ha il proprio insieme di strumenti disposti sulla finestra della stessa, e ogni modalità ha anche un <emphasis
+>working set</emphasis
+> di documenti e file attualmente aperti. Inoltre, ogni working set è associato alla sessione corrente, &ie; abbiamo la relazione mostrata sopra. Nota che i file nel working set provengono dalla stessa sessione, ma potrebbero venire da progetti diversi che fanno parte della stessa sessione.</para>
+<para
+>Se apri per la prima volta &kdevelop;, il working set è vuoto &mdash; non ci sono file aperti. Ma quando apri i file per la modifica (o per il debug, o per la revisione nelle altre modalità) il tuo working set diventa più grande. Il fatto che il tuo working set non è vuoto è indicato da un simbolo nella scheda, come mostrato qui sotto. Noterai che ogni volta che chiudi &kdevelop; e poi lo riavvii, il working set viene salvato e ripristinato, &ie; ottieni lo stesso insieme di file aperti.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-10.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Se passi il mouse sul simbolo del working set, ottieni un suggerimento che ti mostra quali file sono aperti in questo working set (qui: i file <varname
+>step-32.cc</varname
+> and <varname
+>step-1.cc</varname
+>). Facendo clic sul segno meno di color rosso si chiude la scheda del file corrispondente. Forse ancora più importante, facendo clic sul pulsante con il nome corrispondente ti permette di <guilabel
+>chiudere</guilabel
+> tutto il working set in una volta (&ie; chiudere tutti i file aperti). Il punto sulla chiusura di un working set, comunque, è che non chiude soltanto tutti i file, in realtà salva il working set e ne apre uno nuovo, ancora vuoto. Lo puoi vedere qui:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-11.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Nota i due simboli a sinistra delle tre schede delle modalità (il cuore e il simbolo non identificabile alla sua sinistra). Ognuno di questi due simboli rappresenta un working set salvato, in aggiunta al working set aperto. Se passi il mouse sopra al cuore, avrai qualcosa del genere:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-12.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Ti mostra che il working set corrispondente contiene due file con i rispettivi nomi: <varname
+>Makefile</varname
+> e <varname
+>changes.h</varname
+>. Facendo clic su <guilabel
+>Carica</guilabel
+> il working set corrente verrà chiuso e salvato (che come mostrato qui ha i seguenti file aperti <varname
+>tria.h</varname
+> e <varname
+>tria.cc</varname
+>) al posto di aprire il working set selezionato. Puoi anche cancellare per sempre un working set, questo lo rimuove dall'insieme dei working set salvati.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts"
+><title
+>Alcune utili scorciatoie da tastiera</title>
+<para
+>L'editor di &kdevelop; segue lo standard delle scorciatoie da tastiera per le operazioni di modifica usuali. Comunque, supporta anche un numero maggiore di operazioni avanzate quando si modifica il codice sorgente, alcune delle quali sono legate a particolari combinazioni di tasti. Le seguenti sono particolarmente utili:</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Saltare da un posto a un altro nel codice</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>O</keycap
+></keycombo
+></entry>
+    <entry
+>Apertura veloce file: inserire parte del nome di un file e selezionare tra tutti i file nell'albero delle cartelle di progetto della sessione corrente che corrisponde con la stringa; il file poi verrà aperto</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>C</keycap
+></keycombo
+></entry>
+    <entry
+>Apertura veloce classe: inserire parte del nome di una classe e selezionare tra tutti i nomi quello corrispondente; il cursore poi salterà alla dichiarazione della classe</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>M</keycap
+></keycombo
+></entry>
+    <entry
+>Apertura veloce funzione: inserire parte del nome di una funzione (membro) e selezionare tra tutti i nomi quello corrispondente; nota che l'elenco mostra sia le dichiarazioni che le definizioni e il cursore salterà alla voce selezionata</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Q</keycap
+></keycombo
+></entry>
+    <entry
+>Apertura veloce universale: digita qualsiasi cosa (nome di un file, nome di una classe, nome di una funzione) e otterai un'elenco di tutto quello che corrisponde</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>N</keycap
+></keycombo
+></entry>
+    <entry
+>Schema riassuntivo: fornisce un elenco di tutte le cose avvenute a questo file, &eg; dichiarazioni di classi e definizioni di funzioni</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+></entry>
+    <entry
+>Salta alla definizione di una funzione se il cursore è sulla dichiarazione di una funzione</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+></entry>
+    <entry
+>Salta alla dichiarazione di una funzione o variabile se il cursore è nella definizione di una funzione</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Pag↓</keycap
+></keycombo
+></entry>
+    <entry
+>Funzione successiva</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Pag↑</keycap
+></keycombo
+></entry>
+    <entry
+>Funzione precedente</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>G</keycap
+></keycombo
+></entry>
+    <entry
+>Vai alla riga</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Cercare e sostituire</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Trova</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F3</keycap
+></entry>
+    <entry
+>Trova successivo</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+></entry>
+    <entry
+>Sostituisci</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Cerca-Sostituisci in file multipli</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Altre cose</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>_</keycap
+></keycombo
+></entry>
+    <entry
+>Riduce un livello: rimuovi questo blocco dalla vista, per esempio se vuoi concentrarti sulla figura più grande all'interno di una funzione</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>+</keycap
+></keycombo
+></entry>
+    <entry
+>Espande un livello: annulla la riduzione</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Commenta il testo selezionato o la riga corrente</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Decommenta il testo selezionato o la riga corrente</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Documenta la funzione corrente. Se il cursore è sulla dichiarazione di una classe o funzione allora premere questa combinazione di tasti creerà un commento in stile doxygen pre-popolato con una lista di tutti i parametri, valori di ritorno, &etc;</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+></entry>
+    <entry
+>Inverte il carattere corrente e quello precedente</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>K</keycap
+></keycombo
+></entry>
+    <entry
+>Cancella la riga corrente (nota: non è soltanti il <quote
+>cancella da qui alla fine della riga</quote
+> di emacs)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="code-generation-with-templates"
+><title
+>Generare codice con i modelli</title>
+<para
+>&kdevelop; usa i modelli per generare file di codice sorgente e per evitare di scrivere codice ripetibile. </para>
+<sect1 id="creating-a-new-class"
+><title
+>Creare una nuova classe</title>
+<para
+>Il modo più banale di generare codice probabilmente è scrivere nuove classi. Per creare una nuova classe in un progetto esistente, fare clic con il tasto destro sulla cartella di un progetto e scegliere <guilabel
+>Crea da modello...</guilabel
+>. Si può fare la stessa cosa dal menu facendo clic su <menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+>Nuovo da modello...</guimenuitem
+></menuchoice
+>, ma usare la cartella del progetto ha il vantaggio di impostare un collegamento base per i file di output. Scegli <filename
+>Classe</filename
+> nella vista di selezione della categoria, ed il linguaggio e il modello desiderati nelle altre due viste. Dopo aver selezionato il modello della classe, dovrai specificare i dettagli della nuova classe. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-selection.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Come primo passo devi specificare un identificatore per la nuova classe. Questo può essere un nome semplice (come <varname
+>Bus</varname
+>) o un identificatore con un namespace (come <varname
+>Transportation::Bus</varname
+>). Nell'ultimo caso, &kdevelop; analizzerà l'identificatore e separerà correttamente il namespace dal nome effettivo. Nella stessa pagina, puoi aggiungere classi di base alla nuova classe. Puoi notare che alcuni modelli scelgono una classe base da soli, sei libero di rimuoverla e/o aggiungerne altre. Qui dovresti scrivere il tipo di ereditarietà, indipendentemente dal linguaggio, come ad esempio <varname
+>public QObject</varname
+> per il C++, <varname
+>extends SomeClass</varname
+> per il PHP o semplicemente il nome della classe per il Python. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-inheritance.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Nella pagina seguente, ti verrà offerta una selezione di metodi virtuali dalle classi ereditate, così come alcuni costruttori, distruttori e operatori predefiniti. La selezione della casella di controllo accanto alla firma del metodo implementerà questo metodo nella nuova classe. </para>
+<para
+>Facendo clic su <guilabel
+>Successivo</guilabel
+> si va ad una pagina dove puoi aggiungere membri ad una classe. A seconda del modello selezionato, questi possono apparire nella nuova classe come variabili membro, o il modello potrebbe creare per loro proprietà con setter e getter. In un linguaggio dove devono essere dichiarati i tipi di variabile, come il C++ ad esempio, devi specificare sia il tipo che il nome del membro, come <varname
+>int number</varname
+> o <varname
+>QString name</varname
+>. In altri linguaggi puoi non specificare il tipo, ma è buona norma specificarlo comunque, perché il modello scelto potrebbe ancora farne un certo uso. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-members.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Nelle pagine seguenti puoi scegliere una licenza per la tua nuova classe, impostare qualsiasi opzione personalizzata richiesta dal modello selezionato, e configurare dove salvare i file generati. Facendo clic su <guilabel
+>Completa</guilabel
+>, completi l'assistente e crei la nuova classe. I file generati saranno aperti nell'editor, in modo che tu possa iniziare ad aggiungere codice subito. </para>
+<para
+>Dopo aver creato una nuova classe C++ ti sarà data la possibilità di aggiungere la classe al progetto scelto. Scegline uno dalle pagine della finestra, o chiudi la pagina e aggiungi manualmente i file ad un progetto. </para>
+<para
+>Se hai scelto il modello <filename
+>Qt Object</filename
+>, controllato alcuni dei metodi predefiniti, e aggiunto due variabili membro, l'output dovrebbe essere simile alla seguente immagine. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-result.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Puoi vedere che i dati membro sono convertiti in proprietà Qt, con funzioni d'accesso e le macro Q_PROPERTY. Gli argomenti delle funzioni setter sono anche passati come const-reference, se del caso. Inoltre, è dichiarata una classe privata e un puntatore privato creato con Q_DECLARE_PRIVATE. Tutto questo è fatto dal modello, la scelta di un altro nel primo passo potrebbe cambiare completamente l'output. </para>
+</sect1>
+<sect1 id="creating-a-new-unit-test"
+><title
+>Creare un nuovo unit test</title>
+<para
+>Anche se la maggior parte delle infrastrutture per i test richiedono che ogni test sia anche una classe, &kdevelop; include un modo per semplificare la creazione di unit test. Per creare un nuovo test, fare clic col tasto destro sulla cartella di un progetto e scegliere <guilabel
+>Crea da modello...</guilabel
+>. Nella pagina di selezione dei modelli scegliere <filename
+>Test</filename
+> come categoria, poi scegliere il linguaggio di programmazione e il modello e fare clic su <guilabel
+>Successivo</guilabel
+>. </para>
+<para
+>Ti saranno chiesti il nome del test e un'elenco dei casi di test. Per i casi di test, devi solo specificare un elenco di nomi. Alcune infrastrutture per unit test come PyUnit e PHPUnit, richiedono che i casi di test inizino con un prefisso speciale. In &kdevelop;, il modello è responsabile dell'aggiunta del prefisso, così non devi farlo tu. Dopo aver fatto clic su <guilabel
+>Successivo</guilabel
+>, indica la licenza e dove vengono generati i file, e il test verrà creato. </para>
+<para
+>GlI unit test così creati non saranno aggiunti ad alcun obiettivo. Se stai usando CTest o qualche altra infrastruttura di test, accertati di aggiungere i nuovi file all'obiettivo. </para>
+</sect1>
+<sect1 id="other-files"
+><title
+>Altri file</title>
+<para
+>Mentre le classi e gli unit test ricevono attenzioni speciali durante la generazione di codice dai modelli, lo stesso metodo può essere usato da qualsiasi tipo di file di codice sorgente. Per esempio, si potrebbe usare un modello per un modulo Find di CMake o per un file. desktop. Questo può essere fatto scegliendo <guilabel
+>Crea da modello...</guilabel
+>, e selezionando la categoria e il modello che si vuole. Se la categoria selezionata non è né <filename
+>Classe</filename
+> né <filename
+>Test</filename
+>, avrai solo la possibilità di scegliere la licenza, le opzioni personalizzate specificate dal modello e dove salvare i file. Come per le classi e per i test, concluso l'assistente verranno generati i file che saranno aperti nell'editor. </para>
+</sect1>
+<sect1 id="managing-templates"
+><title
+>Gestire i modelli</title>
+<para
+>Dall'assistente <menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+>Nuovo da modello...</guimenuitem
+></menuchoice
+>, puoi anche scaricare modelli aggiuntivi facendo clic sul pulsante <guilabel
+>Ottieni altri modelli...</guilabel
+>. Questo apre una finestra Scarica le Novità, da dove puoi installare modelli aggiuntivi, così come aggiornarli o rimuoverli. C'è anche un modulo di configurazione per i modelli, che può essere raggiunto facendo clic su <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guisubmenu
+>Configura &kdevelop;</guisubmenu
+><guimenuitem
+>Modelli</guimenuitem
+></menuchoice
+>. Da lì, puoi gestire sia i modelli dei file (spiegato qui sopra) che i modelli di progetto (utilizzati per la creare nuovi progetti). </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-manager.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Naturalmente, se nessuno dei modelli disponibili è adatto al tuo progetto, puoi sempre crearne di nuovi. Il modo più semplice probabilmente consiste nel copiare e modificare un modello esistente, un breve <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
+>tutorial</ulink
+> e un più lungo <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
+>documento dettagliato</ulink
+> ti saranno d'aiuto. Per copiare un modello installato, aprire il gestore di modelli facendo clic sul pulsante <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guisubmenu
+>Configura KDevelop...</guisubmenu
+><guimenuitem
+>Modelli</guimenuitem
+></menuchoice
+>, seleziona il modello che vuoi copiare, poi fai clic sul pulsante <guilabel
+>Estrai modello</guilabel
+>. Seleziona la cartella di destinazione, poi fai clic su <guilabel
+>OK</guilabel
+>, e il contenuto del modello verrà estratto nella cartella scelta. Ora puoi modificare il modello aprendo e modificando i file estratti. Dopo che hai finito, puoi importare il tuo nuovo modello in &kdevelop; aprendo il gestore modelli, attivando la scheda appropriata (ne <guilabel
+>Modelli di progetto</guilabel
+> ne <guilabel
+>Modelli di file</guilabel
+>) e facendo clic su <guilabel
+>Carica modello</guilabel
+>. Aprire il file di descrizione del modello, che non è né <varname
+>.kdevtemplate</varname
+> né <varname
+>.desktop</varname
+>. &kdevelop; comprimerà i file in un archivio per i modelli e importerà il modello. </para>
+<para
+><note
+><para
+>Quando stai copiando un modello esistente, assicurati di rinominarlo prima di importarlo ancora. Altrimenti sovrascriverai il vecchio modello, o finirai con due modelli con lo stesso nome. Per rinominare un modello, rinomina il file di descrizione in qualcosa di unico (ma tieni il suffisso), e cambia la voce <filename
+>Nome</filename
+> nel file di descrizione. </para
+></note>
+</para>
+<para
+>Se vuoi scrivere un modello da zero, puoi iniziare con un campione di un modello di una classe C++ da <link linkend="creating-projects-from-scratch"
+>creare un nuovo progetto</link
+> e selezionare il <filename
+>Modello di classe C++</filename
+> per i progetti nella categoria <filename
+>KDevelop</filename
+>. </para>
+</sect1>
+</chapter>
+<chapter id="building-compiling-projects-with-custom-makefiles"
+><title
+>Compilare progetti con Makefile personalizzati</title>
+<para
+>Molti progetti descrivono il modo in cui i file devono essere compilati (e quali file devono essere ricompilati una volta che viene modificato il file sorgente o d'intestazione) usando Makefile che sono interpretati da <guilabel
+>make</guilabel
+> (vedi, per esempio, <ulink url="https://www.gnu.org/software/make/"
+>GNU make</ulink
+>). Per progetti semplici, è spesso molto facile impostare questo file a mano. Progetti più grandi integrano spesso i loro Makefile con <guilabel
+>GNU autotools</guilabel
+> (autoconf, autoheader, automake). In questa sezione, assumiamo semplicemente di avere un Makefile per il tuo progetto e che tu vuoi istruire &kdevelop; a interagire con questo.</para>
+<para
+><note
+><para
+>&kdevelop; 4.x non sa molte cose su <guilabel
+>GNU autotools</guilabel
+> nel periodo in cui questa sezione è stata scritta. Se il tuo progetto li usa, dovrai eseguire a mano su una riga di comando <varname
+>./configure</varname
+> o uno qualsiasi degli altri comandi correlati. Se vuoi fare in questo modo usando &kdevelop;, apri lo strumento <guilabel
+>Konsole</guilabel
+> (se necessario aggiungilo alla finestra usando il menu <menuchoice
+><guimenu
+>Finestra</guimenu
+><guimenuitem
+>Aggiungi vista strumento</guimenuitem
+></menuchoice
+>) che ti fornisce un terminale ed esegui <varname
+>./configure</varname
+> dalla linea di comando ottenuta.</para
+></note
+></para>
+<para
+>Il primo passo consiste nell'istruire &kdevelop; sugli obiettivi del tuo Makefile. Ci sono due modi di farlo: selezionando obiettivi Makefile individuali, e scegliendo un insieme di obiettivi che potresti compilare di frequente. Per entrambi gli approcci, apri lo strumento <guilabel
+>Progetti</guilabel
+> facendo clic sul pulsante <guilabel
+>Progetti</guilabel
+> nella finestra principale di &kdevelop; (se non hai questo pulsante vedi sopra su come aggiungerlo). La finestra strumento <guilabel
+>Progetti</guilabel
+> ha due parti: la metà superiore &mdash; chiamata <guilabel
+>Progetti</guilabel
+> &mdash; elenca tutto dei tuoi progetti e ti consente di espandere la struttura ad albero sottostante. La metà inferiore &mdash; chiamata <guilabel
+>Selezione progetto</guilabel
+> &mdash; elenca un sottoinsieme di quei progetti che saranno compilati se scegli dal menu <menuchoice
+><guimenu
+>Progetto</guimenu
+><guimenuitem
+>Compila selezione</guimenuitem
+></menuchoice
+> o premi <keycap
+>F8</keycap
+>; torneremo a questa punto sotto.</para>
+<sect1 id="building-individual-makefile-targets"
+><title
+>Compilare obiettivi Makefile individuali</title>
+<para
+>Nella parte superiore della vista progetto, espandi il sotto-albero di un progetto, diciamo quello di cui vuoi eseguire un particolare Makefile. Questo ti darà (i) delle cartelle sotto questo progetto, (ii) dei file nella cartella di livello superiore di questo progetto, (iii) dei Makefile che &kdevelop; può identificare. Queste categorie sono mostrare nella figura a destra. Nota che &kdevelop; <emphasis
+>interpreta</emphasis
+> fino ad un certo punto la sintassi di Makefile e perciò ti può offire obiettivi definiti in questo Makefile (anche se questa interpretazione ha i suoi limiti se gli obiettivi sono composti o impliciti).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-1a.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Per compilare uno dei obiettivi elencati, fai clic con il tasto destro del mouse su di esso e seleziona <guilabel
+>Compila</guilabel
+>. Per esempio, facendolo con <quote
+>make</quote
+> l'obiettivo semplicemente eseguirà <quote
+>make clean</quote
+>. Puoi vederlo accadere nella sottofinestra che si apre chiamata <guilabel
+>Compila</guilabel
+>, che mostra il comando e l'output.(Questa finistra corrisponde allo strumento <guilabel
+>Compila</guilabel
+>, così che tu possa chiudere e riaprire la finestra usando il pulsante dello strumento <guilabel
+>Compila</guilabel
+>) nella finestra principale. Questo è mostrato in basso a destra nella figura).</para>
+</sect1>
+<sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"
+><title
+>Selezionare una collezione di obiettivi Makefile per compilazioni ripetute</title>
+<para
+>Fare clic destro sul singolo Makefile scelto ogni volta che si desidera compilare qualcosa, è una perdita di tempo. Invece, sarebbe bello avere obiettivi individuali per uno o più progetti della sessione che possiamo compilare più volte senza fare molto lavoro con il mouse. Da ciò viene il concetto di <quote
+>Compila selezioni obiettivi</quote
+>: si tratta di una collezione di obiettivi Makefile che sono compilati uno dopo l'altro ogni volta che premi il pulsante <guilabel
+>Compila selezione</guilabel
+> nell'elenco pulsanti in alto, seleziona la voce del menu <menuchoice
+><guimenu
+>Progetto</guimenu
+><guimenuitem
+>Compila selezione</guimenuitem
+></menuchoice
+>, oppure premi il tasto funzione <keycap
+>F8</keycap
+>.</para>
+<para
+>L'elenco degli obiettivi Makefile selezionati è mostrato nella metà inferiore della vista strumento <guilabel
+>Progetti</guilabel
+>.</para>
+<para
+>Per impostazione predefinita, la selezione contiene tutti i progetti, ma puoi cambiarla. Per esempio, se i tuoi progetti contengono tre progetti (una libreria base L e due applicazioni A e B), ma stai ancora lavorando al progetto A, allora potresti voler rimuovere il progetto B dalla selezione evidenziandolo nella selezione e premendo il pulsante <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>. Inoltre, probabilmente vorrai assicurarti che la libreria L sia compilata prima del progetto A spostando le voci nella selezione in alto o in basso usando i pulsanti a destra dell'elenco. Puoi anche usare un Makefile obiettivo particolare nella selezione facendo clic con il tasto destro su di esso e selezionando <guilabel
+>Aggiungi al buildset</guilabel
+>, o evidenziandolo e premendo il pulsante <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> appena sopra agli obiettivi selezionati.</para>
+<para
+>&kdevelop; ti permette d configurare cosa fare ogni volta che compili la selezione. A tale fine usa la voce del menu <menuchoice
+><guimenu
+>Progetto</guimenu
+><guimenuitem
+>Apri configurazione</guimenuitem
+></menuchoice
+>. Lì, puoi selezionare, per esempio, il numero di job che dovrebbe eseguire <quote
+>make</quote
+> &mdash; se il tuo computer ha, diciamo, un processore a 8 core, allora mettere 8 in questo campo sarebbe una scelta utile. In questa finestra di dialogo, l'<guilabel
+>obiettivo make predefinito</guilabel
+> è un obiettivo Makefile usato per <emphasis
+>tutti</emphasis
+> gli obiettivi in questa selezione.</para>
+</sect1>
+<sect1 id="what-to-do-with-error-messages"
+><title
+>Cosa fare con i messaggi di errore</title>
+<para
+>Se il compilatore incontra un messaggio d'errore, fai clic sulla riga con il messaggio di errore e l'editor salterà in quella riga (e se disponibile la colonna) dove è stato segnalato l'errore. A seconda del messaggio di errore, &kdevelop; potrebbe offrirti diverse possibili azioni per correggere l'errore, per esempio dichiarare una variabile non dichiarata in precedenza se è stato trovato un simbolo sconosciuto.</para>
+</sect1>
+</chapter>
+<chapter id="running-programs-in-kdevelop"
+><title
+>Eseguire programmi in &kdevelop;</title>
+<para
+>Una volta che hai compilato un programma, lo vorrai eseguire. A tale scopo devi configurare per i tuoi progetti i <emphasis
+>Lanci</emphasis
+>. Un <emphasis
+>Lancio</emphasis
+> è formato dal nome di un eseguibile, un insieme di parametri della riga di comando, e un ambiente di esecuzione (ad esempio <quote
+>esegui questo programma in una shell</quote
+>, o <quote
+>esegui questo programma in un debugger</quote
+>).</para>
+<sect1 id="setting-up-launches-in-kdevelop"
+><title
+>Impostare i lanci in &kdevelop;</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-2.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Per impostarli vai alla voce del menu <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Configura i lanci</guimenuitem
+></menuchoice
+>, e seleziona il progetto a cui vuoi aggiungere un lancio, e fai clic sul pulsante <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>. Poi inserisci il nome dell'eseguibile, e il percorso dove vuoi eseguire il programma. Se l'esecuzione dell'eseguibile dipende dalla compilazione dell'eseguibile e/o da altre librerie, allora potresti volerle aggiungere all'elenco in basso: seleziona <guilabel
+>Compila</guilabel
+> dal menu a discesa, poi premi il simbolo <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-folder.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> a destra della casella di testo e seleziona qualunque obiettivo vuoi compilare. Nell'esempio qui sopra ho selezionato l'obiettivo <guilabel
+>tutto</guilabel
+> dal progetto <replaceable
+>1.deal.II</replaceable
+> e <replaceable
+>step-32</replaceable
+> dal progetto <replaceable
+>1.step-32</replaceable
+> per assicurarmi che sia la libreria base che il programma siano compilati e aggiornati prima che il programma sia effettivamente eseguito. Già che ci sei, potresti anche configurare il lancio del debug facendo clic sul simbolo <guilabel
+>Debug</guilabel
+> e aggiungere il nome del debugger; se è il debugger di sistema (&eg; <application
+>gdb</application
+> on &Linux;), non hai bisogno di fare questo passo.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-3.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Ora puoi cercare di eseguire il programma: seleziona dal menu della finestra principale di &kdevelop; <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Esegui lancio</guimenuitem
+></menuchoice
+> (o premi <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+>) e il tuo programma dovrebbe essere eseguito in una sottofinestra separata di &kdevelop;. La figura qui sopra mostra il risultato: la nuova sottofinestra in basso relativa allo strumento <guilabel
+>Esegui</guilabel
+> mostra l'output del programma in esecuzione, in questo caso il programma <replaceable
+>step-32</replaceable
+>.</para>
+<para
+><note
+><para
+>Se hai configurato dei lanci multipli, puoi scegliere quale eseguire quando premi <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+> andando in <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Configurazione di lancio attuale</guimenuitem
+></menuchoice
+>. Esiste un modo non ovvio per modificare il nome di una configurazione: nella finestra di dialogo che si ottiene quando selezioni <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Configurazione di lancio attuale</guimenuitem
+></menuchoice
+>, il doppio clic sul nome della configurazione nella vista ad albero a sinistra, ti permetterà di modificare il nome della configurazione.</para
+></note
+></para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts0"
+><title
+>Alcune utili scorciatoie da tastiera</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Eseguire un programma</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F8</keycap
+></entry>
+    <entry
+>Compila (chiama make)</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Esegui</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Esegui il programma nel debugger; potresti voler impostare i breakpoint in anticipo, per esempio facenco clic con il tasto destro del mouse su una riga particolare nel codice sorgente</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="debugging-programs-in-kdevelop"
+><title
+>Fare il debug dei programmi in &kdevelop;</title>
+<sect1 id="running-a-program-in-the-debugger"
+><title
+>Eseguire un programma nel debugger</title>
+<para
+>Una volta che hai un lancio configurato (vedi <link linkend="running-programs-in-kdevelop"
+>Eseguire programmi</link
+>), puoi anche eseguirlo in un debugger: seleziona la voce del menu <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Debug del lancio</guimenuitem
+></menuchoice
+>, o premi <keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+>. Se hai familiarità con <application
+>gdb</application
+>, l'effetto è lo stesso di avviare <application
+>gdb</application
+> con l'eseguibile specificato nella configurazione di lancio e poi lanciare l'esecuzione con <varname
+>Esegui</varname
+>. Questo significa che se il programma chiama da qualche parte la funzione <varname
+>abort()</varname
+> (&eg; quando incappi in un'asserzione) o se c'è un segmentation fault, allora il debugger si fermerà. D'altra parte, se il programma viene eseguito fino alla fine (con o senza fare la cosa giusta) allora il debugger non si fermerà da solo prima che il programma sia finito. In quest'ultimo caso, vorrai impostare un breakpoint su tutte quelle righe del tuo codice nelle quali vuoi che il debugger si fermi prima di eseguire il debug del lancio. Questo puoi farlo spostando il cursore del mouse su una riga di quel tipo e selezionando la voce del menu <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Attiva/Disattiva breakpoint</guimenuitem
+></menuchoice
+>, o facendo clic con il tasto destro su una riga e selezionando dal menu contestuale <guilabel
+>Attiva/Disattiva breakpoint</guilabel
+>.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-4.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Eseguire un programma nel debugger porrà &kdevelop; in una diversa modalità: rimpiazzerà tutti i pulsanti <quote
+>Strumento</quote
+> della finestra principale con quelli più appropriati per il debug, piuttosto che per la modifica. Puoi vedere in quale modalità sei guardando in alto a destra nella finestra: ci sono tabelle chiamate <guilabel
+>Revisione</guilabel
+>, <guilabel
+>Debug</guilabel
+>, e <guilabel
+>Codice</guilabel
+>; fare clic su queste ti permette di scegliere una delle tre modalità: ogni modalità ha un proprio insieme di viste strumento, che puoi configurare allo stesso modo in cui hai configurato lo strumento <guilabel
+>Codice</guilabel
+> nella sezione <link linkend="tools-and-views"
+>Strumenti e viste</link
+>.</para>
+<para
+>Una volta che il debugger si ferma (ad un breakpoint, o in un punto dove viene chiamata la funzione <varname
+>abort()</varname
+>) puoi controllare una serie di informazioni riguardo il tuo programma. Per esempio, nella figura qui sopra, abbiamo selezionato lo strumento in basso <guilabel
+>Frame Stack</guilabel
+> (più o meno equivalente ai comandi <quote
+>backtrace</quote
+> e <quote
+>info threads</quote
+> di <application
+>gdb</application
+>) che mostra, sulla sinistra, i vari thread che sono attualmente in esecuzione nel tuo programma (qui in totale 8) e come, sulla destra, l'esecuzione ha raggiunto il punto di arresto (qui: <varname
+>main()</varname
+> called <varname
+>run()</varname
+>; l'elenco sarebbe più lungo se ci fossimo fermati su una funzione chiamata dalla stessa funzione <varname
+>run()</varname
+>). Sulla sinistra, possiamo controllare le variabili locali e l'oggetto corrente (l'oggetto puntato dalla variabile <varname
+>this</varname
+>).</para>
+<para
+>Da qui ci sono diverse cose che puoi fare: puoi eseguire la riga corrente (<keycap
+>F10</keycap
+>, il comando <quote
+>successivo</quote
+> di <application
+>gdb</application
+>), passare dentro le funzioni (<keycap
+>F11</keycap
+>, il comando <quote
+>passo</quote
+> di <application
+>gdb</application
+>), o eseguire la funzione fino alla fine (<keycap
+>F12</keycap
+>, il comando <quote
+>ferma</quote
+> di <application
+>gdb</application
+>). In ogni fase, &kdevelop; aggiorna le variabili mostrate sulla sinistra con i valori attuali. Puoi anche passare il mouse sopra un simbolo del tuo codice, &eg; una variabile; &kdevelop; mostrerà quindi il valore attuale di quel simbolo e chiederà di fermare il programma durante l'esecuzione la prossima volta che il valore di questa variabile cambierà. Se conosci <application
+>gdb</application
+>, puoi anche fare clic sul pulsante strumento <guilabel
+>GDB</guilabel
+> in basso e avere la possibilità di inserire comandi <application
+>gdb</application
+>, per esempio al fine di cambiare il valore di una variabile (per la quale attualmente non sembra esserci altro modo).</para>
+</sect1>
+<sect1 id="attaching-the-debugger-to-a-running-process"
+><title
+>Collegare il debugger ad un processo in esecuzione</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-9.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>A volte si vuole fare il debug di un programma che è già in esecuzione. Uno scenario di questo è il debug di programmi paralleli usando <ulink url="https://computing.llnl.gov/tutorials/mpi/"
+>MPI</ulink
+>, o per fare il debug di un processo in esecuzione da molto tempo in background. Per farlo, andare alla voce del menu <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Collega al debugger</guimenuitem
+></menuchoice
+>, questo aprirà una finestra come quella qui sopra. Vorrai selezionare il programma che corrisponde al progetto che hai aperto in questo momento in &kdevelop; - nel mio caso questo sarebbe il programma step-32.</para>
+<para
+>L'elenco dei programmi può confondere perché è spesso lungo come nel caso mostrato qui. Puoi rendere la tua vita un po' più semplice andando nella casella a tendina in alto a destra della finestra. Il valore predefinito è <guilabel
+>Processi utente</guilabel
+>, &ie; tutti i programmi in esecuzione degli utenti connessi al momento al computer (se questo è il tuo desktop o laptop, probabilmente sei l'unico utente, oltre gli account root e degli altri servizi); l'elenco, comunque, non include i processi eseguiti dall'utente root. Puoi limitare l'elenco per entrambi scegliendo <guilabel
+>Processi propri</guilabel
+>, rimuovendo tutti i programmi eseguiti dagli altri utenti. O meglio ancora: seleziona <guilabel
+>Solo programmi</guilabel
+>, questo rimuove molti processi che sono formalmente in esecuzione sotto il tuo nome ma con i quali non interagisci di solito, come il gestore delle finestre, le attività in background e così via, che sono candidati improbabili per il debug.</para>
+<para
+>Una volta che hai selezionato un processo, collegandolo ti porterà nella modalità di debug di &kdevelop;, aprendo tutte le solite viste strumento del debugger e fermando il programma nella posizione in cui sembrava essere quando lo hai collegato. Poi potresti voler impostare i breakpoint, i punti di vista, o qualsiasi altra cosa è necessaria e continuare l'esecuzione del programma andando alla voce del menu <menuchoice
+><guimenu
+>Esegui</guimenu
+><guimenuitem
+>Continua</guimenuitem
+></menuchoice
+>.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts1"
+><title
+>Alcune utili scorciatoie da tastiera</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Debugging</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F10</keycap
+></entry>
+    <entry
+>Passa oltre (<quote
+>successivo</quote
+> di gdb)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F11</keycap
+></entry>
+    <entry
+>Passa dentro (<quote
+>passo</quote
+> di gdb)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F12</keycap
+></entry>
+    <entry
+>Esci da (<quote
+>finisci</quote
+> di gdb)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="working-with-version-control-systems"
+><title
+>Lavorare con i sistemi di controllo versione</title>
+<para
+>Se stai lavorando su progetti di grandi dimensioni, è probabile che il codice sorgente sia gestito da un sistema di controllo versione come <ulink url="https://subversion.apache.org/"
+>subversion</ulink
+> o <ulink url="https://git-scm.com/"
+>git</ulink
+>. La descrizione seguente è scritta prendendo in considerazione <guilabel
+>subversion</guilabel
+> ma sarà altrettando vera se si usa <guilabel
+>git</guilabel
+> o qualsiasi altro sistema di controllo versione.</para>
+<para
+>Per prima cosa, non è che se la cartella in cui si trova un progetto è sotto controllo versione, automaticamente &kdevelop; lo rileva. In altre parole: non è necessario dire a &kdevelop; di andare a prelevare un copia durante l'impostazione del progetto; ma è una buona scelta far puntare &kdevelop; a una cartella nella quale si è in precedenza scaricato un progetto dopo averlo prelevato dal deposito. Se si ha sotto controllo versione una cartella di questo tipo, aprire la vista strumento <guilabel
+>Progetti</guilabel
+>. Ci sono poi una serie di cose che si possono fare:</para>
+<itemizedlist>
+<listitem
+><para
+>Se la cartella è diventata obsoleta, la puoi aggiornare dal deposito: fai clic col tasto destro del mouse sul nome del progetto, vai al menu <guilabel
+>Subversion</guilabel
+> e seleziona <guilabel
+>Aggiorna</guilabel
+>. Questo aggiornerà tutti i file che appartengono a questo progetto a quelli presenti nel deposito. </para
+></listitem>
+<listitem
+><para
+>Se vuoi limitare questa azione alle singole sottocartelle o file, allora espandi la vista ad albero del progetto al livello che vuoi e fai clic destro sul nome della sotto cartella o file, quindi fai lo stesso di sopra. </para
+></listitem>
+</itemizedlist>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-8.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<itemizedlist>
+<listitem
+><para
+>Se hai modificato uno o più file, espandi la vista di questo progetto alla cartella in cui questi file sono presenti e fai clic destro sulla cartella. Questo ti darà una voce del menu <guilabel
+>Subversion</guilabel
+> che ti proporrà diverse scelte. Scegli <guilabel
+>Mostra differenze</guilabel
+> per vedere le differenze tra la versione che hai modificato e la versione nel deposito che hai prelevato in precedenza (la revisione <quote
+>base</quote
+>). La vista risultante mostrerà le <quote
+>differenze</quote
+> per tutti i file della cartella. </para
+></listitem>
+<listitem
+><para
+>Se hai modificato solo un file, puoi anche ottenere il menu <guilabel
+>Subversion</guilabel
+> per questo file facendo semplicemente clic sul nome corrispondente nella vista progetto. In modo più semplice, basta fare clic destro nella vista <guilabel
+>Editor</guilabel
+> nella quale hai aperto questo file ottenendo anche questa opzione del menu. </para
+></listitem>
+<listitem
+><para
+>Se vuoi inviare uno o più file modificati, fai clic destro o su un singolo file, sottocartella o su tutto il progetto e seleziona <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>Deposita</guimenuitem
+></menuchoice
+>. Questo ti porterà nella modalità <guilabel
+>Revisione</guilabel
+>, la terza modalità oltre a <guilabel
+>Codice</guilabel
+> e <guilabel
+>Debug</guilabel
+> nell'angolo in alto a destra della finestra principale di &kdevelop;. La figura sulla destra mostra com'è. Nella modalità <guilabel
+>Revisione</guilabel
+>, la parte superiore mostra le differenze per l'intera/o sottocartella/progetto e ciascuno dei singoli file modificati con le modifiche evidenziate (vedi le varie tabelle di questa parte della finestra). Per impostazione predefinita, tutti i file modificati sono nel changeset che stai per depositare, ma puoi deselezionarne alcuni se le loro modifiche non sono legate a cosa vuoi depositare. Per esempio, nell'esempio sulla destra ho deselezionato <varname
+>step-32.cc</varname
+> e <varname
+>step-32.prm</varname
+> perché le modifiche in questi file non hanno niente a che fare con le altre che ho fatto nel progetto e che non voglio ancora depositare (potrei volerlo fare in un secondo momento). Dopo aver revisionato le modifiche puoi inserire un messaggio di deposito nella casella di testo e premere <guilabel
+>Deposita</guilabel
+> sulla destra per inviare quello che vuoi. </para
+></listitem>
+<listitem
+><para
+>Proprio come nella visualizzazione delle differenze, se vuoi inviare un unico file è sufficiente fare clic destro nella finestra dell'editor per avere la voce del menu <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>Deposita</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="customizing-kdevelop"
+><title
+>Personalizzare &kdevelop;</title>
+<para
+>Quando vuoi cambiare l'aspetto o il comportamento predefinito di &kdevelop;, per esempio perché sei abituato a differenti scorciatoie da tastiera o perché il tuo progetto richiede uno stile di identazione del codice sorgente diverso. Nelle sezioni seguenti, discuteremo brevemente i diversi modi in cui è possibile personalizzare &kdevelop; per questi scopi.</para>
+<sect1 id="customizing-the-editor"
+><title
+>Personalizzare l'editor</title>
+<para
+>Ci sono molte cose utili che si possono configurare nell'editor di &kdevelop;. L'uso più comune consiste nell'abilitare la numerazione delle righe usando la voce del menu <menuchoice
+><guimenu
+>Editor</guimenu
+><guisubmenu
+>Vista</guisubmenu
+><guimenuitem
+>Mostra i numeri di riga</guimenuitem
+></menuchoice
+>, il che rende più facile abbinare i messaggi di errore del compilatore o i messaggi di debug con le posizioni nel codice. Nello stesso sottomenu potresti voler anche abilitare il <emphasis
+>bordo delle icone</emphasis
+> - una colonna alla sinistra del codice nella quale &kdevelop; mostrerà le icone come ad esempio quella di un breakpoint su una riga.</para>
+</sect1>
+<sect1 id="customizing-code-indentation"
+><title
+>Personalizzare l'identazione del codice</title>
+<para
+>A molti di noi piace il testo formattato in un modo particolare. Molti progetti obbligano ad usare un particolare stile di identazione. Alcuni di questi potrebbero non corrispondere agli stili predefiniti di &kdevelop;. Tuttavia, questo può essere personalizzato: andare alla voce del menu <menuchoice
+> <guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configurare &kdevelop;</guimenuitem
+></menuchoice
+>, poi fare clic su <guilabel
+>Formattatore sorgenti</guilabel
+> sulla sinistra. È possibile scegliere uno degli stili predefiniti di identazione, che sono quelli tra i più usati, o definirne uno proprio aggiungendo un nuovo stile e poi modificandolo. Potrebbe non esserci un modo di ricreare esattamente lo stile di identazione usato nei sorgenti di un progetto passato, ma ti ci puoi avvicinare usando le impostazioni di un nuovo stile; un esempio è mostrato nelle due figure qui sotto.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-5.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-6.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Con <guilabel
+>&kdevelop; 4.2.2</guilabel
+>, puoi creare un nuovo stile per un particolare tipo MIME (&eg; per i file di intestazione C++) ma questo stile potrebbe non apparire nella lista dei possibili stili per altri tipi MIME (&eg; per i file sorgente C++) anche se potrebbe essere utile usare lo stesso stile per entrambi i tipi di file. Perciò dovrai definire lo stile due volte, una volta per il file di intestazione e l'altra per i file sorgente. Questo comportamento è stato riportato come <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
+>bug 272335 di &kdevelop;</ulink
+>.</para
+></note
+></para>
+</sect1>
+<sect1 id="customizing-keyboard-shortcuts"
+><title
+>Personalizzare le scorciatoie da tastiera</title>
+<para
+>&kdevelop; ha una lista quasi infinita di scorciatoie da tastiera (alcune di esse sono elencate nelle <quote
+>Sezioni scorciatoie da tastiera utili</quote
+> di diversi capitoli di questo manuale) che possono essere modificate a piacere attraverso il menu <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura le scorciatoie</guimenuitem
+></menuchoice
+>. Nella parte superiore della finestra di dialogo è possibile inserire una parola, una volta inserita saranno mostrate solo le scorciatoie corrispondenti alla parola, quindi è possibile modificare la combinazione dei tasti da associare alla scorciatoia.</para>
+<para
+>Due che sono state considerate utili da cambiare riguardano l'impostazione di <guilabel
+>Align</guilabel
+> per il &Tab; (molte persone non inseriscono i tab a mano e preferiscono piuttosto che l'editor scelga il layout del codice; con la scorciatoia modificata, la pressione di &Tab; fa sì che &kdevelop; identi/deidenti/allinei il codice). La seconda è mettere <guilabel
+>Attiva/disattiva breakpoint</guilabel
+> su <keycombo
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+> perché è una operazione abbastanza comune.</para>
+</sect1>
+<sect1 id="customizing-code-auto-completion"
+><title
+>Personalizzare l'auto-completamento del codice</title>
+<para
+>Il completamento del codice è discusso nella <link linkend="auto-completion"
+>sezione che riguarda la scrittura del codice sorgente di questo manuale</link
+>. In &kdevelop;, viene da due fonti: l'editor, e il motore di analisi. L'editor (&kate;) è una componente dell'ambiente KDE e offre l'auto-completamento basato sulle parole già viste in altre parti dello stesso documento. L'auto-completamento può essere identificato nel suggerimento dall'icona che lo precede:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-20.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Il completamento del codice dell'editor può essere personalizzato con <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guisubmenu
+>Configura editor</guisubmenu
+><guimenuitem
+>Modifica</guimenuitem
+><guimenuitem
+>Completamento delle parole</guimenuitem
+></menuchoice
+>. In particolare, puoi selezionare quanti caratteri di una parola è necessario scrivere prima che questa venga completata.</para>
+<para
+>Però l'auto-completamento di &kdevelop; è molto più potente in quanto tiene conto delle informazioni semantiche del contesto. Per esempio, sa quali funzioni membro proporre quando digiti <varname
+>object.</varname
+>, &etc;, come mostrato qui:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Queste informazioni sul contesto provengono dalle varie estensioni di supporto linguaggio, che possono essere usate dopo che è stato salvato un dato file (in modo da poter poi controllare il tipo di file e utilizzare il supporto linguaggio corretto)</para>
+<para
+>Il completamento di &kdevelop; è impostato per comparire durante la digitazione, subito, praticamente ovunque ci sia bisogno di completare qualcosa. Questo è configurabile in <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guisubmenu
+>Configura &kdevelop;</guisubmenu
+><guimenuitem
+>Supporto linguaggio</guimenuitem
+></menuchoice
+>. Se non è già impostato (come dovrebbe, per impostazione predefinita), assicurarsi che sia impostato <guilabel
+>Abilita l'invocazione automatica</guilabel
+>.</para>
+<para
+>&kdevelop; ha due modi per visualizzare un completamento: il <guilabel
+>Completamento automatico minimo</guilabel
+> che mostra solo le informazioni base in suggerimenti di completamento (&ie; i namespace, le classi, le funzioni, o nomi delle variabili). Questo sarà simile al completamento di &kate; (eccetto le icone).</para>
+<para
+>Però, il <guilabel
+>Completamento totale</guilabel
+> in aggiunta mostrerà il tipo di ogni voce, e in caso di funzioni, anche gli argomenti che prende. Inoltre se stai attualmente inserendo gli argomenti di una funzione, il completamento totale avrà un riquadro di informazioni aggiuntivo sopra il cursore che ti mostrerà l'argomento su cui stai lavorando adesso.</para>
+<para
+>Il completamento del codice di &kdevelop; dovrebbe evidenziare in verde tutti gli elementi di completamento che corrispondono al tipo attualmente previsto sia nel completamento minimo che totale, noto come <quote
+>best-matches</quote
+>.</para>
+<para
+>Le tre possibili scelte per il livello di completamento nella finestra di dialogo della configurazione sono:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Sempre completamento minimo</guilabel
+>: non mostra mai il <quote
+>Completamento totale</quote
+> </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Completamento automatico minimo</guilabel
+>: mostra solo il <quote
+>Completamento totale</quote
+> quando l'auto-completamento è stato avviato automaticamente (&ie;, ogni volta che premi <keycombo
+>&Ctrl;<keycap
+>Spazio</keycap
+></keycombo
+>) </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Sempre completamento totale</guilabel
+>: mostra sempre il <quote
+>Completamento totale</quote
+> </para
+></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<!--userbase-content-->
+<chapter id="credits">
+<title
+>Riconoscimenti e licenza</title>
+    <para
+>Copyright documentazione vedere <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
+>KDevelop4/Manual: cronologia delle modifiche</ulink
+></para>
+    <para
+>Simone Solinas <email
+>ksolsim@gmail.com</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

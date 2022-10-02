@@ -1,0 +1,1087 @@
+# translation of kdevelop.po to Spanish
+# Spanish .po file for KDevelop
+# Copyright (C) 1999,2002,2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+# David Martínez Moreno <ender@debian.org> 2005.
+# David Martínez Moreno <ender@debian.org> 2005.
+#
+# Salvador Gimeno <salgiza@jazzfree.com>, 2001.
+# Juan Manuel García Molina <salgiza@jazzfree.com>, 2001-2002.
+# Miguel Revilla Rodríguez <yo@miguelrevilla.com>, 2002, 2003, 2004.
+# Pedro Jurado Maqueda <pjmelenas@biwemail.com>, 2003.
+# Juan Manuel Garcia Molina <juanma@superiodico.net>, 2005.
+# Isaac Clerencia <isaac@warp.es>, 2005.
+# Jaime Robles <jaime@kde.org>, 2005, 2008.
+# Pablo de Vicente <p.devicente@wanadoo.es>, 2005.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Rocio Gallego <traducciones@rociogallego.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2020-01-10 13:00+0100\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"First-Translator: Jaime Robles <jaime@kde.org>\n"
+"X-Generator: Lokalize 19.12.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Eloy Cuadra"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ecuadra@eloihr.net"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, kde-format
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "Sesión"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "&Proyecto"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "&Ejecutar"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "Examinar archivo de volcado de memoria"
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr "Adjuntar al proceso"
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "&Navegación"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, kde-format
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Archivo"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&Editar"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, kde-format
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Código"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr "Analizar el archivo actual con"
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr "Analizar el proyecto actual con"
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&Ventana"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, kde-format
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "Preferencias"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "Ayuda"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Barra de herramientas principal"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "Código"
+
+#: kdevideextension.cpp:47
+#, kde-format
+msgid "KDevelop Project Files"
+msgstr "Archivos de proyecto de KDevelop"
+
+#: main.cpp:85
+#, kde-format
+msgid "Could not open %1"
+msgstr "No se ha podido abrir %1"
+
+#: main.cpp:219
+#, kde-format
+msgid "Could not open file '%1'."
+msgstr "No se ha podido abrir el archivo «%1»."
+
+#: main.cpp:242
+#, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "No se ha podido abrir el proyecto «%1»: %2"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr "Seleccione la sesión en la que abrir el documento"
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+"No se puede abrir la sesión desconocida %1. Use «--list-sessions» para "
+"consultar las sesiones disponibles o «-n» para crear una nueva."
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr "KDevelop"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr "El entorno integrado de desarrollo KDevelop"
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr "Copyright 1999-%1, los desarrolladores de KDevelop"
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr "Kevin Funk"
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+"Encargado adjunto, C++/Clang, QA, uso en Windows, rendimiento, sitio web"
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr "Sven Brauch"
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+"Encargado adjunto, AppImage, uso de Python, mejoras de la interfaz de usuario"
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr "Aleix Pol Gonzalez"
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr "Uso de CMake, implementación de ejecución, uso de Kross"
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr "Milian Wolff"
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+"C++/Clang, administrador general, complementos para el desarrollo Web, "
+"fragmentos de código, rendimiento"
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr "Olivier JG"
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr "C++/Clang, DUChain, corrección de errores"
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr "Andreas Pakulat"
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+"Arquitectura, implementación de VCS, implementación de gestión de proyectos, "
+"gestor de proyectos de QMake"
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr "Alexander Dymo"
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr "Arquitectura, interfaz Sublime, implementación de Ruby"
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr "David Nolden"
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+"Cadena definición-usos, implementación de C++, navegación de código, "
+"terminación de código, asistencia en programación, refactorización"
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr "Vladimir Prus"
+
+#: main.cpp:397
+#, kde-format
+msgid "GDB integration"
+msgstr "Integración de GDB"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr "Hamish Rodda"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr "Integración del editor de texto, cadena de definición-usos"
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr "Amilcar do Carmo Lucas"
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+"Administrador del sitio web, documentación de la API, Doxygen y parches para "
+"autoproyectos"
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr "Niko Sams"
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr "Integración de GDB, complementos para el desarrollo Web"
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr "Friedrich W. H. Kossebau"
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr "Matt Rogers"
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr "Cédric Pasteur"
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr "Implementación de «astyle» e «indent»"
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr "Evgeniy Ivanov"
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr "VCS distribuido, Git, Mercurial"
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr "Robert Gruber"
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr "SnippetPart, parches del depurador y de usabilidad"
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr "Dukju Ahn"
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+"Complemento para Subversion, gestor de Make personalizado, mejoras globales"
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr "Harald Fernengel"
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr "Versión en Qt 3, parches, implementación de valgrind, diff y perforce"
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr "Roberto Raggi"
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr "Analizador C++"
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr "Los autores de KWrite"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "Componente del editor Kate"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr "Nokia Corporation/Qt Software"
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr "Código del diseñador"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr "Colaboradores de versiones anteriores:"
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr "Bernd Gehrmann"
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr ""
+"Idea inicial, arquitectura básica, gran parte del código fuente inicial"
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr "Caleb Tennis"
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr "KTabBar, correcciones de errores"
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr "Richard Dale"
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr "Implementación de Java y Objective C"
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr "John Birch"
+
+#: main.cpp:419
+#, kde-format
+msgid "Debugger frontend"
+msgstr "Interfaz del depurador"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr "Sandy Meier"
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr "Implementación de PHP, menús contextuales"
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr "Kurt Granroth"
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr "Plantillas de aplicaciones KDE"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr "Ian Reinhart Geiser"
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "Parte dist, implementación bash, plantillas de aplicaciones"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr "Matthias Hoelzer-Kluepfel"
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr "Varios componentes, indexación con htdig"
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr "Victor Roeder"
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr "Ayuda con el gestor de automake y el almacén de clases persistentes"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr "Simon Hausmann"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr "Ayuda con la infraestructura de KParts"
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr "Oliver Kellogg"
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr "Implementación de Ada"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr "Jakob Simon-Gaarde"
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "Gestor de proyectos QMake"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr "Falk Brettschneider"
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr "Modos MDI, QEditor, corrección de fallos"
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr "Mario Scalas"
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr "PartExplorer, rediseño de CvsPart, parches, corrección de fallos"
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr "Jens Dagerbo"
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+"Complementos para reemplazar, marcadores, lista de archivos y CTags2; "
+"mejoras y parches diversos"
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr "Julian Rockey"
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr "Part de Filecreate y otros arreglos y parches"
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr "Ajay Guleria"
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr "Implementación de ClearCase"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr "Marek Janukowicz"
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr "Implementación de Ruby"
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr "Robert Moniot"
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "Documentación de Fortran"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr "Ka-Ping Yee"
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr "Utilidad de documentación de Python"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr "Dimitri van Heesch"
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "Asistente de Doxygen"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr "Hugo Varotto"
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr "Componente Fileselector"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr "Matt Newell"
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr "Daniel Engelschalt"
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr "Terminación de código C++, almacén de clases persistentes"
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr "Stephane Ancelot"
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "Parches"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr "Jens Zurheide"
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr "Luc Willems"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr "Ayuda con la implementación de Perl"
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr "Marcel Turino"
+
+#: main.cpp:443
+#, kde-format
+msgid "Documentation index view"
+msgstr "Visor del índice de la documentación"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr "Yann Hodique"
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr "Tobias Gläßer"
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+"Buscador de documentación, parches para el gestor de proyectos QMake, "
+"mejoras en la usabilidad, corrección de fallos... "
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr "Andreas Koepfle"
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr "Parches para el gestor de proyectos QMake"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr "Sascha Cunz"
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr ""
+"Limpieza y corrección de fallos para qEditor, AutoMake y muchas cosas más"
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr "Zoran Karavla"
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr "Material gráfico para el lenguaje Ruby"
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr "Abrir KDevelop con una nueva sesión con el nombre indicado."
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"Abrir KDevelop con la sesión indicada.\n"
+"Puede pasar el «hash» o el nombre de la sesión."
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"Borrar la sesión indicada.\n"
+"Puede pasar el «hash» o el nombre de la sesión."
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+"Muestra todas las sesiones disponibles y le permite seleccionar una para "
+"abrir."
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+"Lista todas las sesiones disponibles en la consola y le permite seleccionar "
+"una para abrir."
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr "Listar las sesiones disponibles y salir."
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "Abrir KDevelop y obtener el proyecto de la <url del repo> indicada."
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+"Abre KDevelop y carga el proyecto indicado. <proyecto> puede ser un archivo ."
+"kdev4 o la ruta de un directorio."
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+"Iniciar la depuración de una aplicación en KDevelop con el depurador "
+"indicado.\n"
+"El ejecutable que se debe depurar debe ir a continuación (incluidos sus "
+"argumentos).\n"
+"Ejemplo: kdevelop --debug gdb miaplicación --parámetro valor"
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr "Archivos a cargar, o directorios a cargar como proyectos"
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+"Sesiones disponibles (use «-s HASH» o «-s NOMBRE» para abrir una de ellas):"
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr "Hash"
+
+#: main.cpp:520
+#, kde-format
+msgid "Name: Opened Projects"
+msgstr "Nombre: Proyectos abiertos"
+
+#: main.cpp:529
+#, kde-format
+msgid "[running]"
+msgstr "[ejecutando]"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr "Seleccione la sesión que desea usar"
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr "Especifique el ejecutable que quiere depurar."
+
+#: main.cpp:648
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "El ejecutable indicado no existe."
+
+#: main.cpp:654
+#, kde-format
+msgid "Debug %1"
+msgstr "Depurar %1"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+"Ya existe una sesión con el nombre %1. Utilice el modificador «-s» para "
+"abrirla."
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr "No existe ninguna sesión con el nombre %1."
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr "No se puede bloquear la sesión %1 para borrarla."
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr "La sesión con el nombre %1 se ha eliminado con éxito."
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr "No se puede encontrar el tipo de configuración del lanzador nativo"
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr "No se puede encontrar el lanzador %1"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr "Sesiones de KDevelop"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr "Cadena aleatoria que dice algo"
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "Encontrar sesiones de KDevelop que coincidan con :q:."
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr "Lista todas las sesiones del editor de KDevelop de su cuenta."
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "Abrir sesión de KDevelop"
+
+#~ msgid "Files to load"
+#~ msgstr "Archivos a cargar"
+
+#~ msgid "Analy&ze"
+#~ msgstr "Anali&zar"
+
+#~ msgid "&File"
+#~ msgstr "&Archivo"
+
+#~ msgid "&Edit"
+#~ msgstr "&Editar"
+
+#~ msgid "&Advanced"
+#~ msgstr "Avan&zado"
+
+#~ msgid "&View"
+#~ msgstr "&Ver"
+
+#~ msgid "&Code Folding"
+#~ msgstr "&Plegado de código"
+
+#~ msgid "&Tools"
+#~ msgstr "&Herramientas"
+
+#~ msgid "Word Completion"
+#~ msgstr "Terminación de palabras"
+
+#~ msgid "&Settings"
+#~ msgstr "&Preferencias"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "Deprecated options:"
+#~ msgstr "Opciones desaconsejadas:"
+
+#~ msgid "Same as -l / --list-sessions"
+#~ msgstr "Igual que -l / --list-sessions"
+
+#~ msgid "Same as -n / --new-session"
+#~ msgstr "Igual que -n / --new-session"
+
+#~ msgid "The KHTML authors"
+#~ msgstr "Los autores de KHTML"
+
+#~ msgid "HTML documentation component"
+#~ msgstr "Componente de documentación HTML"
+
+#~ msgid "Develop"
+#~ msgstr "Desarrollo"
+
+#~ msgid "Getting Started"
+#~ msgstr "Cómo comenzar"
+
+#~ msgid "Back to code"
+#~ msgstr "De vuelta al código"
+
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Configurar un nuevo lanzador"
+
+#~ msgid "Debug your program"
+#~ msgstr "Depurar sus programas"
+
+#~ msgid "Debug Area"
+#~ msgstr "Área de depuración"
+
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options.<br/><br/>As you can see, here you can just execute "
+#~ "your application or debug it if you need further runtime information. You "
+#~ "can select what is going to be run by configuring the launches and "
+#~ "selecting the one you want to use in the <em>Current Launch "
+#~ "Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "En el área <em>Depuración</em> podrá ver y analizar cómo funciona su "
+#~ "programa cuando se ejecuta. En el menú <em>Ejecutar</em> encontrará todas "
+#~ "las opciones posibles.<br/><br/>Como puede ver, aquí solo puede ejecutar "
+#~ "su aplicación o depurarla si necesita más información en tiempo de "
+#~ "ejecución. Puede seleccionar lo que se va a ejecutar configurando los "
+#~ "lanzadores y eligiendo el que quiera usar en el submenú <em>Configuración "
+#~ "del lanzador actual</em>."
+
+#~ msgid "Review a Patch"
+#~ msgstr "Revisar un parche"
+
+#~ msgid "Review Area"
+#~ msgstr "Área de revisión"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch.<br/> Also it will help you send the changes to the "
+#~ "community you're contributing to, either by committing the changes, "
+#~ "sending them by e-mail or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "En el área <em>Revisar</em> podrá encontrar las herramientas que necesita "
+#~ "para revisar cambios en sus proyectos, tanto los que ha hecho usted como "
+#~ "parches externos.<br/>También le ayudará a enviar los cambios a la "
+#~ "comunidad con la que está colaborando, ya sea enviando los cambios a un "
+#~ "repositorio, enviándolos por correo electrónico o colocándolos en un "
+#~ "servicio ReviewBoard."
+
+#~ msgid "New Project"
+#~ msgstr "Nuevo proyecto"
+
+#~ msgid "Open project"
+#~ msgstr "Abrir proyecto"
+
+#~ msgid "Fetch project"
+#~ msgstr "Extraer proyecto"
+
+#~ msgid "Recent Projects"
+#~ msgstr "Proyectos recientes"
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Sessions"
+#~ msgstr "Sesiones"
+
+#~ msgid "Official Website"
+#~ msgstr "Página web oficial"
+
+#~ msgid "Userbase"
+#~ msgstr "Userbase"
+
+#~ msgid "Techbase"
+#~ msgstr "Techbase"
+
+#~ msgid "Handbook"
+#~ msgstr "Manual"
+
+#~ msgid "Go!"
+#~ msgstr "Ir"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Documentación para los usuarios de KDevelop"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Manténgase al día del desarrollo de KDevelop"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Ayúdenos a mejorar KDevelop"
+
+#~ msgctxt "name: content"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Some of the requested files could not be opened."
+#~ msgstr "Algunos de los archivos solicitados no se pueden abrir."
+
+#~ msgid "Starting"
+#~ msgstr "Iniciación"
+
+#~ msgid "Learn KDevelop!"
+#~ msgstr "¡Aprenda a usar KDevelop!"

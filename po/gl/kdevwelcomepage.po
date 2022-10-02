@@ -1,0 +1,207 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Adrian Chaves <adrian@chaves.io>, 2018, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-20 00:43+0000\n"
+"PO-Revision-Date: 2019-10-27 07:39+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.11.70\n"
+
+#: qml/area_code.qml:76
+msgid "Need Help?"
+msgstr "Necesita axuda?"
+
+#: qml/area_code.qml:84
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#: qml/area_code.qml:91
+msgid "Learn about KDevelop"
+msgstr "Aprenda sobre KDevelop"
+
+#: qml/area_code.qml:96
+msgid "Join KDevelop's team!"
+msgstr "Únase ao equipo de KDevelop!"
+
+#: qml/area_code.qml:101
+msgid "Handbook"
+msgstr "Manual"
+
+#: qml/area_debug.qml:18 qml/area_review.qml:16
+msgid "Back to code"
+msgstr "Volver ao código"
+
+#: qml/area_debug.qml:37
+msgid "Configure a new Launcher"
+msgstr "Configurar un novo iniciador"
+
+#: qml/area_debug.qml:38
+msgid "Attach to Process"
+msgstr "Anexar ao proceso"
+
+#: qml/area_debug.qml:39
+msgid "Debug your program"
+msgstr "Depurar o programa"
+
+#: qml/area_debug.qml:41
+msgid "Debug Area"
+msgstr "Zona de depuración"
+
+#: qml/area_debug.qml:44
+msgid ""
+"On the <em>Debug</em> area you will be able to see and analyze how your "
+"program works on execution. On the <em>Run</em> menu you will find all the "
+"possible options."
+msgstr ""
+"Na zona de <em>depuración</em> poderá ver e analizar o funcionamento do seu "
+"programa durante a execución. No menú <em>Executar</em> atopará todas as "
+"opcións posíbeis."
+
+#: qml/area_debug.qml:50
+msgid ""
+"As you can see, here you can just execute your application or debug it if "
+"you need further runtime information. You can select what is going to be run "
+"by configuring the launches and selecting the one you want to use in the "
+"<em>Current Launch Configuration</em> sub-menu."
+msgstr ""
+"Como pode ver, aquí pode executar a aplicación ou depurala se necesita "
+"información adicional de tempo de execución. Pode seleccionar o que se vai "
+"executar configurando os inicios e seleccionando un que queira usar no menú "
+"subordinado <em>Configuración actual de inicio</em>."
+
+#: qml/area_review.qml:38
+msgid "Review a Patch"
+msgstr "Revisar un parche"
+
+#: qml/area_review.qml:46
+msgid "Review Area"
+msgstr "Zona de revisión"
+
+#: qml/area_review.qml:50
+msgid ""
+"On the <em>Review</em> area you will be able to find the tools you need to "
+"review changes in your projects, either the ones you made or some external "
+"patch."
+msgstr ""
+"Na zona de <em>revisión</em> atopará as ferramentas que necesita para "
+"revisar cambios nos seus proxectos, ou os que fixese vostede ou parches "
+"externos."
+
+#: qml/area_review.qml:56
+msgid ""
+"Also it will help you send the changes to the community you're contributing "
+"to, either by committing the changes, sending them by e-mail or putting them "
+"on a ReviewBoard service."
+msgstr ""
+"Ademais axudaralle a enviar os cambios á comunidade coa que está a "
+"colaborar, xa sexa remitindo os cambios, enviándoos por correo electrónico "
+"ou enviándoos a un servido de revisión."
+
+#: qml/Develop.qml:32
+msgid "New Project"
+msgstr "Novo proxecto"
+
+#: qml/Develop.qml:37
+msgid "Open Project"
+msgstr "Abrir un proxecto"
+
+#: qml/Develop.qml:43
+msgid "Fetch Project"
+msgstr "Obter un proxecto"
+
+#: qml/Develop.qml:50
+msgid "Recent Projects"
+msgstr "Proxectos recentes"
+
+#: qml/Develop.qml:65
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Benvido a KDevelop!</h3>\n"
+"<p>Pode comezar a traballar nun proxecto abrindo un existente ou creando un "
+"novo cos botóns de enriba.</p>\n"
+"<p>Se necesita axuda, consulte o <a href=\"https://userbase.kde.org/KDevelop"
+"\">manual de usuario</a>.</p>"
+
+#: qml/Develop.qml:70
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Nota para usuarios de Windows</h3>\n"
+"<p>KDevelop NON inclúe un compilador de C e C++ en Windows!</p>\n"
+"<p>Ten que instalar GCC mediante MinGW ou instalar unha versión recente do "
+"IDE Visual Studio de Microsoft e asegurarse de que o ambiente está "
+"configurado correctamente <i>antes</i> de iniciar KDevelop.</p>\n"
+"<p>Se necesita máis axuda, consulte as <a href=\"https://userbase.kde.org/"
+"KDevelop4/Manual/WindowsSetup\">instrucións de KDevelop en Windows</a>.</p>"
+
+#: qml/Develop.qml:107
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: qml/Develop.qml:126
+msgid "Sessions"
+msgstr "Sesións"
+
+#: qml/GettingStarted.qml:49
+msgid "Go!"
+msgstr "Ir!"
+
+#: qml/GettingStarted.qml:57
+msgid "Documentation for KDevelop users"
+msgstr "Documentación para usuarios de KDevelop"
+
+#: qml/GettingStarted.qml:62
+msgid "Keep up with KDevelop's development"
+msgstr "Manterse ao día do desenvolvemento de KDevelop"
+
+#: qml/GettingStarted.qml:67
+msgid "Help us improve KDevelop"
+msgstr "Axudarnos a mellorar KDevelop"
+
+#: qml/NewsFeed.qml:136
+msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+msgid "%1 (new)"
+msgstr "%1 (nova)"
+
+#: qml/NewsFeed.qml:147
+msgid "Fetching feeds..."
+msgstr "Obtendo as fontes…"
+
+#: qml/NewsFeed.qml:148
+msgid "No recent news"
+msgstr "Non hai novas recentes."
+
+#: qml/plugins/Branches.qml:16
+msgid "Branches"
+msgstr "Ramas"
+
+#: qml/plugins/Projects.qml:15
+msgid "Projects"
+msgstr "Proxectos"
+
+#~ msgid "News"
+#~ msgstr "Novas"

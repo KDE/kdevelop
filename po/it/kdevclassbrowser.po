@@ -1,0 +1,98 @@
+# translation of kdevclassbrowser.po to Italian
+#
+# Matteo Merli <merlim@libero.it>, 2001.
+# Daniele Medri <madrid@linuxmeeting.net>, 2003.
+# Giovanni Venturi <jumpyj@libero.it>, 2003, 2004.
+# Luciano Montanaro <mikelima@cirulla.net>, 2003.
+# Giovanni Venturi <jumpyj@tiscali.it>, 2003, 2004, 2005, 2006, 2007, 2008.
+# Nicola Ruggero <nicola@nxnt.org>, 2007.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2007, 2020.
+# Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2011, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclassbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 16:07+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, kde-format
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Classi"
+
+#: classbrowserplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Trova nel browser delle &classi"
+
+#: classwidget.cpp:72
+#, kde-format
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "C&erca:"
+
+#: classwidget.cpp:89
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Browser classi"
+
+#~ msgid "All projects classes"
+#~ msgstr "Tutte le classi del progetto"
+
+#~ msgid "Base classes"
+#~ msgstr "Classi di base"
+
+#~ msgid "Derived classes"
+#~ msgstr "Classi derivate"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Classi nel progetto %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid ""
+#~ "This plugin provides a browsable model of the currently parsed classes "
+#~ "and other items."
+#~ msgstr ""
+#~ "Questa estensione fornisce un modello sfogliabile delle classi "
+#~ "attualmente analizzate e altri elementi."
+
+#~ msgid "Browser for all known classes"
+#~ msgstr "Browser per tutte le classi conosciute"
+
+#~ msgid "Show &Declaration"
+#~ msgstr "Mostra &dichiarazione"
+
+#~ msgid "Show De&finition"
+#~ msgstr "Mostra de&finizione"
+
+#~ msgid "Global Functions"
+#~ msgstr "Funzioni globali"
+
+#~ msgid "Global Variables"
+#~ msgstr "Variabili globali"
+
+#, fuzzy
+#~| msgid "Unknown object!"
+#~ msgid "Unknown object."
+#~ msgstr "Oggetto sconosciuto!"
+
+#~ msgid "Code View"
+#~ msgstr "Vista codice"

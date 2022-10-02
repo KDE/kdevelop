@@ -1,0 +1,259 @@
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2012, 2016, 2017, 2020.
+# Gerhard Stengel <gstengel@gmx.net>, 2010, 2011.
+# Jonathan Kolberg <bulldog98@kubuntu-de.org>, 2010.
+# Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqthelp\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-11-26 06:58+0100\n"
+"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: qthelpconfig.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr "Eintrag ändern"
+
+#: qthelpconfig.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr "Neuen Eintrag hinzufügen"
+
+#: qthelpconfig.cpp:67
+#, kde-format
+msgid "Name cannot be empty."
+msgstr "Der Name darf nicht leer sein."
+
+#: qthelpconfig.cpp:101
+#, kde-format
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "Neue Dokumentation holen"
+
+#: qthelpconfig.cpp:116
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr ""
+"Der Befehl „qmake -query“ bietet keinen Pfad zu einer QtHilfe-Datei (QCH)."
+
+#: qthelpconfig.cpp:204
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr "Durch GHNS bereitgestellte Dokumentation"
+
+#: qthelpconfig.cpp:230
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr "Komprimierte Qt-Hilfedatei ist ungültig."
+
+#: qthelpconfig.cpp:239
+#, kde-format
+msgid "Documentation already imported"
+msgstr "Dokumentation ist bereits importiert"
+
+#: qthelpconfig.cpp:291
+#, kde-format
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "Qt-Hilfe"
+
+#: qthelpconfig.cpp:296
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "Qt-Hilfe einrichten"
+
+#: qthelpconfig.cpp:321
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr "Ändern"
+
+#: qthelpconfig.cpp:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr "Löschen"
+
+#: qthelpconfig.cpp:333
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr "Deinstallieren Sie dies bitte mit GHNS."
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr "Qt-Hilfe-Dokumentationsdateien aus System-Pfaden laden"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "Qt-API-Dokumentation &laden:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr "Qt-Hilfe-Dateien aus Ordner laden:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, kde-format
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "Weitere Dokumentationsdateien installieren"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Name"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, kde-format
+msgctxt "@title:column"
+msgid "Path"
+msgstr "Pfad"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Hinzufügen"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr "Symbol:"
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr "Symbol auswählen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Name:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr "Geben Sie einen Namen ein"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr "Namen auswählen ..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr "Pfad:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr "Qt-Hilfedatei auswählen ..."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:73
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr "Qt-Hilfedatei auswählen ..."
+
+#: qthelpdocumentation.cpp:181
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "Für „%1“ kann keine Dokumentation gefunden werden"
+
+#: qthelpdocumentation.cpp:276
+#, kde-format
+msgid "QtHelp Home Page"
+msgstr "Homepage der Qt-Hilfe"
+
+#: qthelpqtdoc.cpp:142
+#, kde-format
+msgid "QtHelp"
+msgstr "Qt-Hilfe"
+
+#~ msgid "Dialog"
+#~ msgstr "Dialog"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "QtHelp Documentation"
+#~ msgstr "Qt-Hilfe-Dokumentation"
+
+#~ msgid "Identifier to search:"
+#~ msgstr "Zu suchendes Schlüsselwort:"
+
+#~ msgid "Help page:"
+#~ msgstr "Hilfeseite:"
+
+#~ msgid "about:blank"
+#~ msgstr "about:blank"
+
+#~ msgid "Debug info:"
+#~ msgstr "Debug-Info:"
+
+#~ msgid "Search QtHelp files in this directory..."
+#~ msgstr "In diesem Ornder nach QtHilfe-Dateien suchen ..."
+
+#~ msgid "Remove"
+#~ msgstr "Entfernen"
+
+#~ msgid "Move Up"
+#~ msgstr "Nach oben"
+
+#~ msgid "Move Down"
+#~ msgstr "Nach unten"
+
+#~ msgid "Choose dir"
+#~ msgstr "Ordner auswählen"
+
+#~ msgid "Manage QtHelp Documentation"
+#~ msgstr "Qt-Hilfe-Dokumentation verwalten"
+
+#~ msgid "Ghns"
+#~ msgstr "Ghns"

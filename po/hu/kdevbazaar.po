@@ -1,0 +1,55 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2012-06-29 22:18+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.4\n"
+
+#: bazaarplugin.cpp:36
+#, kde-format
+msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid "Bazaar Plugin"
+#~ msgstr "Bazaar bővítmény"
+
+#~ msgid "Bazaar version control system support"
+#~ msgstr "Bazaar verziókezelő rendszer támogatás"
+
+#~ msgid "Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>"
+#~ msgstr "Copyright Evgeniy Ivanov <powerfox@kde.ru>, 2008."
+
+#~ msgid "Bazaar"
+#~ msgstr "Bazaar"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Bazaar"
+#~ msgstr "Bazaar"
+
+#~ msgid ""
+#~ "It is easier to change the specification to fit the program than vice "
+#~ "versa. It means it easier to use git than make a good DVCS from Bzr ;)"
+#~ msgstr ""
+#~ "Könnyebb megváltoztatni a specifikációt, hogy illeszkedjen a programhoz "
+#~ "mint fordítva. Ez azt jelenti, hogy könnyebb gitet használni, mint egy jó "
+#~ "DVCS-t készíteni Bzr-ből ;)"

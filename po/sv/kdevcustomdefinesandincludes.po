@@ -1,0 +1,537 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-08-03 09:56+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: compilerprovider/compilerprovider.cpp:32
+#, kde-format
+msgctxt "@item no compiler"
+msgid "None"
+msgstr "Ingen"
+
+#: compilerprovider/widget/compilersmodel.cpp:117
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Namn"
+
+#: compilerprovider/widget/compilersmodel.cpp:117
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Typ"
+
+#: compilerprovider/widget/compilersmodel.cpp:119
+#, kde-format
+msgctxt "@item"
+msgid "Auto-detected"
+msgstr "Automatiskt detekterad"
+
+#: compilerprovider/widget/compilersmodel.cpp:120
+#, kde-format
+msgctxt "@item"
+msgid "Manual"
+msgstr "Manuell"
+
+#: compilerprovider/widget/compilerswidget.cpp:50
+#, kde-format
+msgctxt "@action"
+msgid "Delete Compiler"
+msgstr "Ta bort kompilator"
+
+#: compilerprovider/widget/compilerswidget.cpp:215
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Compilers"
+msgstr "C/C++ kompilatorer"
+
+#: compilerprovider/widget/compilerswidget.cpp:220
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure C/C++ Compilers"
+msgstr "Anpassa C/C++ kompilatorer"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: compilerprovider/widget/compilerswidget.ui:25
+#, kde-format
+msgctxt "@action:button"
+msgid "&Add"
+msgstr "&Lägg till"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#: compilerprovider/widget/compilerswidget.ui:35
+#, kde-format
+msgctxt "@action:button"
+msgid "&Remove"
+msgstr "&Ta bort"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: compilerprovider/widget/compilerswidget.ui:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Namn:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: compilerprovider/widget/compilerswidget.ui:76
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Compiler executable:"
+msgstr "Körbar kompilator:"
+
+#: kcm_widget/definesandincludesconfigpage.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Language Support"
+msgstr "Språkstöd"
+
+#: kcm_widget/definesandincludesconfigpage.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Language Support"
+msgstr "Anpassa språkstöd"
+
+#: kcm_widget/definesmodel.cpp:31
+#, kde-format
+msgid "Double-click here to insert a new define to be used for the path"
+msgstr ""
+"Dubbelklicka här för att infoga en ny definition att använda för sökvägen"
+
+#: kcm_widget/definesmodel.cpp:67
+#, kde-format
+msgctxt "@title:column"
+msgid "Define"
+msgstr "Definition"
+
+#: kcm_widget/definesmodel.cpp:69
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Värde"
+
+#: kcm_widget/defineswidget.cpp:29
+#, kde-format
+msgctxt "@action"
+msgid "Delete Define"
+msgstr "Ta bort definition"
+
+#: kcm_widget/includeswidget.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Delete Include Path"
+msgstr "Ta bort inkluderad sökväg"
+
+#: kcm_widget/includeswidget.cpp:138
+#, kde-format
+msgctxt "%1 is an include path"
+msgid "%1 does not exist"
+msgstr "%1 finns inte"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, includePathRequester)
+#: kcm_widget/includeswidget.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add the currently displayed URL to the list of includes if it is not in the "
+"list yet."
+msgstr ""
+"Lägger till webbadressen som för närvarande visas i listan med inkluderade "
+"filer, om den inte redan finns i listan."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
+#: kcm_widget/includeswidget.ui:34
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "A new include path/file to use for parsing files under given directory"
+msgstr ""
+"En ny inkluderingssökväg eller fil som används för att tolka filer under en "
+"given katalog"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addIncludePath)
+#: kcm_widget/includeswidget.ui:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create a new include path entry from this URL"
+msgstr "Skapa en ny post med inkluderingssökväg från den här webbadressen"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
+#: kcm_widget/includeswidget.ui:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete current include path entry"
+msgstr "Ta bort aktuell inkluderingssökväg"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
+#: kcm_widget/parserwidget.ui:20
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Check this if you want <code>*.h</code> headers to be "
+"parsed in plain C mode. By default they are parsed as C++ headers.</p></"
+"body></html>"
+msgstr ""
+"<html><head/><body><p>Markera det här om du vill att <code>*.h</code> "
+"deklarationsfiler ska tolkas som som vanlig C-kod. Normalt tolkas de som C++ "
+"deklarationsfiler.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, parseHeadersInPlainC)
+#: kcm_widget/parserwidget.ui:23
+#, kde-format
+msgctxt "@option:check"
+msgid "Parse *.h headers in plain C"
+msgstr "Tolka *.h deklarationsfiler som vanlig C-kod"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: kcm_widget/parserwidget.ui:36
+#, kde-format
+msgctxt "@label:listbox"
+msgid "C++ profi&le:"
+msgstr "C++ profi&l:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsOpenCl)
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCuda)
+#: kcm_widget/parserwidget.ui:52 kcm_widget/parserwidget.ui:136
+#: kcm_widget/parserwidget.ui:220 kcm_widget/parserwidget.ui:289
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Choose language profile. </p><p>Use &quot;Custom&quot; "
+"profile to modify parser command-line arguments</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Välj språkprofil.</p><p>Använd &quot;Egen&quot; profil "
+"för att ändra tolkens kommandoradsväljare</p></body></html>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCpp)
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsOpenCl)
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCuda)
+#: kcm_widget/parserwidget.ui:56 kcm_widget/parserwidget.ui:140
+#: kcm_widget/parserwidget.ui:224 kcm_widget/parserwidget.ui:293
+#, kde-format
+msgctxt "@item:inlistbox language standard"
+msgid "Custom"
+msgstr "Egen"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel)
+#: kcm_widget/parserwidget.ui:94
+#, kde-format
+msgctxt "@label:textbox"
+msgid "C++ co&mmand-line arguments:"
+msgstr "C++ ko&mmandoradsväljare:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: kcm_widget/parserwidget.ui:120
+#, kde-format
+msgctxt "@label:listbox"
+msgid "C profi&le:"
+msgstr "C-profi&l:"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
+#: kcm_widget/parserwidget.ui:178
+#, kde-format
+msgctxt "@label:textbox"
+msgid "C co&mmand-line arguments:"
+msgstr "C ko&mmandoradsväljare:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: kcm_widget/parserwidget.ui:204
+#, kde-format
+msgctxt "@label:listbox"
+msgid "OpenCL C &profile:"
+msgstr "OpenCL C-&profil:"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel_3)
+#: kcm_widget/parserwidget.ui:247
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OpenCL C comma&nd-line arguments:"
+msgstr "OpenCL C-komma&ndoradsväljare:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: kcm_widget/parserwidget.ui:273
+#, kde-format
+msgctxt "@label:listbox"
+msgid "CUDA C P&rofile:"
+msgstr "CUDA C-p&rofil:"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel_4)
+#: kcm_widget/parserwidget.ui:321
+#, kde-format
+msgctxt "@label:textbox"
+msgid "CUDA C comman&d-line arguments:"
+msgstr "CUDA C komman&doradsväljare:"
+
+#: kcm_widget/projectpathswidget.cpp:168
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Project Path"
+msgstr "Välj projektsökväg"
+
+#: kcm_widget/projectpathswidget.cpp:182
+#, kde-format
+msgid "Are you sure you want to delete the configuration for the path '%1'?"
+msgstr "Är du säker på att du vill ta bort inställningen för sökvägen '%1'?"
+
+#: kcm_widget/projectpathswidget.cpp:183
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Path Configuration"
+msgstr "Ta bort sökvägsinställning"
+
+#: kcm_widget/projectpathswidget.cpp:221
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit Include Directories/Files"
+msgstr "Redigera inkluderade kataloger och filer"
+
+#: kcm_widget/projectpathswidget.cpp:229
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit Defined Macros"
+msgstr "Redigera definierade makron"
+
+#: kcm_widget/projectpathswidget.cpp:285
+#, kde-format
+msgid "Configure C/C++ parser"
+msgstr "Anpassa C/C++ tolk"
+
+#. i18n: ectx: property (text), widget (QLabel, configureLabel)
+#: kcm_widget/projectpathswidget.cpp:289 kcm_widget/projectpathswidget.ui:20
+#, kde-format
+msgid ""
+"Configure which macros and include directories/files will be added to the "
+"parser during project parsing:"
+msgstr ""
+"Anpassa vilka makron och filer eller kataloger att inkludera som läggs till "
+"i tolken under projekttolkning:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
+#: kcm_widget/projectpathswidget.ui:29
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Check this if you want the project to be reparsed to apply the changes."
+msgstr ""
+"Markera om du vill att projektet ska tolkas om för att verkställa "
+"ändringarna."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
+#: kcm_widget/projectpathswidget.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "Reparse the project"
+msgstr "Tolka om projektet"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QComboBox, compiler)
+#: kcm_widget/projectpathswidget.ui:70 kcm_widget/projectpathswidget.ui:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Select compiler that will be used to retrieve standard "
+"include directories and defined macros.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Välj kompilator som ska användas för att hämta "
+"standarddeklarationskatalogerna och definierade makron.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: kcm_widget/projectpathswidget.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Compiler for path:"
+msgstr "Kompilator för sökväg:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, batchEdit)
+#: kcm_widget/projectpathswidget.ui:90
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit multiple includes/defines at the same time."
+msgstr "Redigera flera inkluderingar och definitioner samtidigt."
+
+#. i18n: ectx: property (text), widget (QPushButton, batchEdit)
+#: kcm_widget/projectpathswidget.ui:93
+#, kde-format
+msgctxt "@action:button"
+msgid "&Batch Edit..."
+msgstr "&Bakgrundsredigering..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
+#: kcm_widget/projectpathswidget.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add a new sub-project path entry."
+msgstr "Lägg till en ny sökvägspost för delprojekt."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removePath)
+#: kcm_widget/projectpathswidget.ui:135
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete current sub-project path entry."
+msgstr "Ta bort nuvarande sökvägspost för delprojekt."
+
+#. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
+#: kcm_widget/projectpathswidget.ui:165
+#, kde-format
+msgctxt "@title:tab"
+msgid "Includes/Imports"
+msgstr "Inkluderingar och importer"
+
+#. i18n: ectx: attribute (title), widget (QWidget, definesPage)
+#: kcm_widget/projectpathswidget.ui:182
+#, kde-format
+msgctxt "@title:tab"
+msgid "Defines"
+msgstr "Definitioner"
+
+#. i18n: ectx: attribute (title), widget (QWidget, parserPage)
+#: kcm_widget/projectpathswidget.ui:199
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Parser"
+msgstr "C/C++ tolk"
+
+#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:24
+#, kde-format
+msgctxt "@title:window"
+msgid "Setup Custom Include Paths"
+msgstr "Ställ in egna deklarationssökvägar"
+
+#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:57
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Directory to Include"
+msgstr "Välj katalog att inkludera"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
+#, kde-format
+msgctxt "@title:group"
+msgid "Storage Directory:"
+msgstr "Lagringskatalog:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, storageDirectory)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:25
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The custom include-path will be stored in a special file called \"."
+"kdev_include_paths\" stored within a source directory."
+msgstr ""
+"Den egna deklarationssökvägen kommer att lagras i en speciell fil som heter "
+"\".kdev_include_paths\", lagrad i källkodskatalogen."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:37
+#, kde-format
+msgctxt "@title:group"
+msgid "Custom include paths or #define's"
+msgstr "Egna deklarationssökvägar eller #define"
+
+#. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The plain list of include paths. You may also define custom macros here by "
+"adding \"#define NAME VALUE\" lines."
+msgstr ""
+"Den enkla listan över inkluderingssökvägar. Du kan också definiera egna "
+"makron här genom att lägga till rader som \"#define NAMN VÄRDE\"."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a directory to include."
+msgstr "Välj en katalog att inkludera."
+
+#. i18n: ectx: property (text), widget (QPushButton, directorySelector)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69
+#, kde-format
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
+
+#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:86
+#, kde-format
+msgid "Bad #define directive in %1: %2"
+msgstr "Felaktigt #define-direktiv i %1: %2"
+
+#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:139
+#, kde-format
+msgid "Failed to save custom include paths in directory: %1"
+msgstr "Misslyckades spara egna deklarationssökvägar i katalogen: %1"
+
+#~ msgid "c++98"
+#~ msgstr "C++98"
+
+#~ msgid "c++03"
+#~ msgstr "C++ 03"
+
+#~ msgid "c++11"
+#~ msgstr "C++ 11"
+
+#~ msgid "c++14"
+#~ msgstr "C++ 14"
+
+#~ msgid "c++17"
+#~ msgstr "C++17"
+
+#~ msgid "c++2a"
+#~ msgstr "C++2a"
+
+#~ msgid "c89"
+#~ msgstr "C89"
+
+#~ msgid "gnu89"
+#~ msgstr "GNU89"
+
+#~ msgid "c99"
+#~ msgstr "C99"
+
+#~ msgid "gnu99"
+#~ msgstr "GNU99"
+
+#~ msgid "c11"
+#~ msgstr "C11"
+
+#~ msgid "gnu11"
+#~ msgstr "GNU11"
+
+#~ msgid "CL1.1"
+#~ msgstr "CL 1.1"
+
+#~ msgid "CL1.2"
+#~ msgstr "CL 1.2"
+
+#~ msgid "CL2.0"
+#~ msgstr "CL 2.0"
+
+#~ msgid "c++1z"
+#~ msgstr "C++1z"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Form"
+#~ msgstr "Formulär"

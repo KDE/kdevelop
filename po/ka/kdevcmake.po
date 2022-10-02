@@ -1,0 +1,413 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-09-12 09:38+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "აგების საქაღალდის მორგება - %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "აგების საქაღალდის მორგება %1-თვის"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "საჭიროა აგების საქაღალდის მითითება."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "აგების უკვე შექმნილი საქაღალდის გამოყენება."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "აგების ახალი საქაღალდის გამოყენება."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "აგების საქაღალდე უკვე მითითებულია."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "აგების ეს საქაღალდე %1-ს ეკუთვნის, მაგრამ პროექტის საქაღალდე %2-საა."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "აგების დამოკიდებული საქაღალდის არჩევა არ შეგიძლიათ."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "აგების თქვენი არჩეული საქაღალდე ცარიელი არაა."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "აგების ხელმისაწვდომი საქაღალდეები:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "აგების ახალი საქაღალდე"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "აგების &საქაღალდე:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "დაყენების პრეფიქსი:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"პრეფიქსი, რომლის ქვეშაც დადგება პროექტი. თუ ცარიელს დატოვებთ, CMake "
+"ნაგულისხმევ პრეფიქსს გამოიყენებს."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "CMake-ის ნაგულისხმები დაყენების პრეფიქსი"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "აგების &ტიპი:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "დამატებითი არგუმენტები:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "CMake-ის გამშვები ფაილი:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "არასწორია"
+
+#: cmakecodecompletionmodel.cpp:197
+#, kde-format
+msgctxt "@item"
+msgid "Command"
+msgstr "ბრძანება"
+
+#: cmakecodecompletionmodel.cpp:198
+#, kde-format
+msgctxt "@item"
+msgid "Variable"
+msgstr "ცვლადი"
+
+#: cmakecodecompletionmodel.cpp:199
+#, kde-format
+msgctxt "@item"
+msgid "Macro"
+msgstr "მაკრო"
+
+#: cmakecodecompletionmodel.cpp:200
+#, kde-format
+msgctxt "@item"
+msgid "Path"
+msgstr "ბილიკი"
+
+#: cmakecodecompletionmodel.cpp:201
+#, kde-format
+msgctxt "@item"
+msgid "Target"
+msgstr "სამიზნე"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "არასწორი"
+
+#: cmakecommandscontents.cpp:29
+#, kde-format
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "ბრძანებები"
+
+#: cmakecommandscontents.cpp:30
+#, kde-format
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "ცვლადები"
+
+#: cmakecommandscontents.cpp:31
+#, kde-format
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "მოდულები"
+
+#: cmakecommandscontents.cpp:32
+#, kde-format
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "თვისებები"
+
+#: cmakecommandscontents.cpp:33
+#, kde-format
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "წესები"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr "<p>CMake დოკუმენტაციის უკეთესი რენდერისთვის rst2html დააყენეთ.</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr "CMake-ის გამშვები ფაილის პოვნა შეუძლებელია. გიყენიათ?"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>ქეშის მნიშვნელობა:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>ქეშის დოკუმენტაცია:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "CMake-is სარჩევის გვერდი"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"KDevelop-მა თქვენი პროექტის რამდენიმე შესაძლო ძირითადი საქაღალდე იპოვა. "
+"აირჩიეთ სწორი."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "მნიშვნელობების დაქეშვა"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, kde-format
+msgctxt "@label"
+msgid "Comment:"
+msgstr "კომენტარი:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "დამატებითი ფუნქციები"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "დამატებით"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "დაყენების პრეფიქსი:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "აგების ტიპი:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "გარემოს მორგება:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "აირჩიეთ გამოსაყენებელი გარემო"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, kde-format
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "დამატებითი მნიშვნელობების ჩვენება"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "CMake-ის გამშვები ფაილი:"
+
+#: settings/cmakecachemodel.cpp:36
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "სახელი"
+
+#: settings/cmakecachemodel.cpp:37
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "ტიპი"
+
+#: settings/cmakecachemodel.cpp:38
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "მნიშვნელობა"
+
+#: settings/cmakecachemodel.cpp:39
+#, kde-format
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "შენიშვნა"
+
+#: settings/cmakecachemodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "დამატებით"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "სტრიქონები"
+
+#: settings/cmakepreferences.cpp:343
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"საქაღალდე %1 წაიშლება KDevelop-ის სიიდან.\n"
+"გნებავთ KDevelop-მა ის ფაილური სისტემიდანაც წაშალოს?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr "არ წაშალო"
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "%1-ის წაშლის შეცდომა"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "CMake-ის პარამეტრების მორგება"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "სატესტო კომპლექსის დამუშავება: %1"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"

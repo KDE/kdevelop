@@ -1,0 +1,680 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsubversion\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2011-11-21 19:43+0100\n"
+"Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.2\n"
+
+#: kdevsvnplugin.cpp:334
+#, fuzzy, kde-format
+#| msgid "Copy..."
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "Αντιγραφή..."
+
+#: kdevsvnplugin.cpp:341
+#, fuzzy, kde-format
+#| msgid "Move..."
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "Μετακίνηση..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Παρακαλώ επιλέξτε μόνο ένα αντικείμενο για τη λειτουργία αυτή"
+
+#: kdevsvnplugin.cpp:370
+#, fuzzy, kde-format
+#| msgid "Destination file/directory"
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "Αρχείο/κατάλογος προορισμού"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "Η αντιγραφή λειτουργεί μόνο σε τοπικά αρχεία"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "Αρχείο/κατάλογος προορισμού"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "Η μετακίνηση λειτουργεί μόνο σε τοπικά αρχεία/καταλόγους"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Προσθήκη Subversion"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "Μη επαρκείς πληροφορίες για την προσθήκη αρχείου"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Σημείωση subversion"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "Μη επαρκείς πληροφορίες για τη θέση υπαιτιότητας"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Subversion Checkout"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "Ανεπαρκείς πληροφορίες για το checkout"
+
+#: svncommitjob.cpp:109
+#, fuzzy, kde-format
+#| msgid "Subversion Cat"
+msgid "Subversion Commit"
+msgstr "Κατάλογος subversion"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "Υποβολή..."
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση υποβολής"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Αντίγραφο Subversion"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "Μη επαρκείς πληροφορίες για την αντιγραφή αρχείου"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Διαφορές subversion"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση διαφορών diff"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Εισαγωγή subversion"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "Μη επαρκείς πληροφορίες για εισαγωγή"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Πληροφορίες Subversion"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση εργασίας πληροφοριών"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "Προσθήκη %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "Διαγραφή %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "Διαγραφή %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "Προσθήκη %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "Αναθεώρηση %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "Ενημέρωση εξωτερικών: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "Αποστολή %1"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "Προσθήκη %1 με χρήση τύπου mime %2."
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "Προσθήκη %1."
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "Διαγραφή %1."
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "Αντικατάσταση %1."
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "Μετάδοση δεδομένων αρχείου"
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "Η υπαιτιότητα ολοκληρώθηκε για την αναθεώρηση %1, διαδρομή %2"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "Επαναφορά αντιγράφου εργασίας %1"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "Αποτυχία επαναφοράς στο αντίγραφο εργασίας %1"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "Αντιγραφή %1 "
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "Το πιστοποιητικό δεν είναι ακόμη έγκυρο."
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "Το πιστοποιητικό έχει λήξει."
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr ""
+"Το CN του πιστοποιητικού (όνομα υπολογιστή) δεν αντιστοιχεί με το όνομα του "
+"απομακρυσμένου υπολογιστή."
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "Η αρχή υπογραφής του πιστοποιητικού είναι άγνωστη."
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "Άγνωστο σφάλμα."
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "Εισάγετε όνομα σύνδεσης για: %1"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "Ολοκληρώθηκε"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"Σφάλμα εκτέλεσης εργασίας:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Καταγραφή subversion"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "Μη επαρκείς πληροφορίες για την τοποθεσία καταγραφής"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Μετακίνηση subversion"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "Μη επαρκείς πληροφορίες για τη μετακίνηση αρχείου"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Αφαίρεση subversion"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση της εργασίας αφαίρεσης"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Επαναφορά subversion"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση επαναφοράς"
+
+#: svnssldialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "SSL Server Certificate"
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "Πριστοποιητικό εξυπηρετητή SSL"
+
+#: svnssldialog.cpp:30
+#, fuzzy, kde-format
+#| msgid "Trust Permanently"
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "Έμπιστο μόνιμα"
+
+#: svnssldialog.cpp:31
+#, fuzzy, kde-format
+#| msgid "Trust Temporarily"
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "Έμπιστο προσωρινά"
+
+#: svnssldialog.cpp:62
+#, fuzzy, kde-format
+#| msgid "Ssl Server Certificate: %1"
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "Πιστοποιητικό εξυπηρετητή ssl: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Κατάσταση subversion"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση εργασίας κατάστασης"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Ενημέρωση subversion"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση ενημέρωσης"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, fuzzy, kde-format
+#| msgid "Source directory:"
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Κατάλογος πηγής:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, fuzzy, kde-format
+#| msgid "Repository:"
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "Αποθετήριο:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Repository Location"
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "Τοποθεσία αποθετηρίου"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Choose the repository into which the source directory is imported"
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "Επιλέξτε το αποθετήριο στο οποίο έχει εισαχθεί ο πηγαίος κατάλογος"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, fuzzy, kde-format
+#| msgid "Commit Message:"
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Μήνυμα υποβολής:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"Υπήρξαν σφάλματα κατά την επαλήθευση των πιστοποιητικού του εξυπηρετητή.\n"
+"Επιθυμείτε να εμπιστευθείτε αυτό το πιστοποιητικό;"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "Αιτίες αποτυχίας της επαλήθευσης"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, fuzzy, kde-format
+#| msgid "Certificate Information"
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "Πληροφορίες πιστοποιητικού"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, fuzzy, kde-format
+#| msgid "Hostname:"
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "Όνομα υπολογιστή:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "κάποιος εξυπηρετητής"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, fuzzy, kde-format
+#| msgid "Issuer:"
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "Εκδότης:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "κάποιος εκδότης"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, fuzzy, kde-format
+#| msgid "Valid From:"
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "Έγκυρο από:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "έγκυρο από"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, fuzzy, kde-format
+#| msgid "Valid Until:"
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "Έγκυρο έως:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "έγκυρο έως"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, fuzzy, kde-format
+#| msgid "Fingerprint:"
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "Αποτύπωμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "αποτύπωμα"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "Πριστοποιητικό εξυπηρετητή ssl"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "Τοποθεσία αποθετηρίου για την εισαγωγή"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "Εισαγωγή στο αποθετήριο Subversion"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "Checkout από το αποθετήριο Subversion"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "Κατάλογος subversion"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "Μη επαρκείς πληροφορίες για την εκτέλεση cat"
+
+#~ msgid "Start Revision"
+#~ msgstr "Έναρξη αναθεώρησης"
+
+#~ msgid "End Revision"
+#~ msgstr "Τέλος αναθεώρησης"
+
+#~ msgid "Checkout"
+#~ msgstr "Checkout"
+
+#~ msgid "Repository Url:"
+#~ msgstr "Url αποθετηρίου:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "Διαδρομή προορισμού:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Αναδρομικά:"
+
+#~ msgid "Requested local path:"
+#~ msgstr "Αιτήθηκε τοπική διαδρομή:"
+
+#~ msgid "Source"
+#~ msgstr "Πηγή"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "Ορισμός με το URL του αποθετηρίου"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "Ορισμός με το τοπικό αντίγραφο εργασίας"
+
+#~ msgid "Source revision"
+#~ msgstr "Αναθεώρηση πηγής"
+
+#~ msgid "Destination"
+#~ msgstr "Προορισμός"
+
+#~ msgid "Specify either the full repository URL or local working path"
+#~ msgstr ""
+#~ "Ορίστε είτε το πλήρες URL του αποθετηρίου ή την τοπική διαδρομή εργασίας"
+
+#~ msgid "Target Url"
+#~ msgstr "Url προορισμού"
+
+#~ msgid "Non Recursive"
+#~ msgstr "Μη αναδρομικά"
+
+#~ msgid "No diff deleted"
+#~ msgstr "Δε διαγράφηκε διαφορά"
+
+#~ msgid "Ignore contents type"
+#~ msgstr "Αγνόηση τύπου περιεχομένων"
+
+#~ msgid "Subversion Log View Options"
+#~ msgstr "Επιλογές προβολής καταγραφών του subversion"
+
+#~ msgid "Maximum number of logs to be displayed"
+#~ msgstr "Μέγιστος αριθμός εμφάνισης καταγραφών"
+
+#~ msgid "Do not show logs before branching point"
+#~ msgstr "Μη εμφάνιση καταγραφών πριν το σημείο διακλάδωσης"
+
+#~ msgid "Forcefully delete locally modified and/or unversioned items"
+#~ msgstr ""
+#~ "Εξαναγκασμός διαγραφής  των τοπικών τροποποιημένων και/ή αντικειμένων "
+#~ "χωρίς έκδοση"
+
+#~ msgid "Select working copies to be reverted:"
+#~ msgstr "Επιλογή αντιγράφων εργασίας για επαναφορά:"
+
+#~ msgid "Select"
+#~ msgstr "Επιλογή"
+
+#~ msgid "Text Status"
+#~ msgstr "Κατάσταση κειμένου"
+
+#~ msgid "Prop Status"
+#~ msgstr "Κατάσταση ιδιότητας"
+
+#~ msgid "Working Copy"
+#~ msgstr "Αντίγραφο εργασίας"
+
+#~ msgid "Recursive"
+#~ msgstr "Αναδρομικά"
+
+#~ msgid "Specify as number:"
+#~ msgstr "Ορισμός ως αριθμό:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "Ορισμός ως λέξη κλειδί:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "Ορισμός ως ημερομηνία:"
+
+#~ msgid "Status Requested for:"
+#~ msgstr "Αίτηση κατάστασης για:"
+
+#~ msgid "Specify revision"
+#~ msgstr "Καθορισμός αναθεώρησης"
+
+#~ msgid "Non recursive"
+#~ msgstr "Μη αναδρομικά"
+
+#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
+#~ msgstr ""
+#~ "Ανάκτηση μόνο \"ενδιαφέροντων\" καταχωρήσεων (όπως τοπικές τροποποιήσεις)"
+
+#~ msgid "Contact repository and augment with repository information"
+#~ msgstr "Σύνδεση με αποθετηρίου και προσθήκη των πληροφοριών του"
+
+#~ msgid "Do not ignore svn:ignore"
+#~ msgstr "Να μην γίνει αγνόηση svn:ignore"
+
+#~ msgid "Ignore external items"
+#~ msgstr "Αγνόηση εξωτερικών αντικειμένων"
+
+#~ msgid "Update immediate children only (non-recursive)"
+#~ msgstr "Ενημέρωση μόνο άμεσων απογόνων (μη αναδρομικό)"
+
+#~ msgid "Ignore external entries"
+#~ msgstr "Αγνόηση εξωτερικών καταχωρήσεων"
+
+#~ msgid "Select Revision"
+#~ msgstr "Επιλογή αναθεώρησης"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Δημήτριος Γλενταδάκης"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "dglent@gmail.com"
+
+#~ msgid "Support for Subversion version control systems"
+#~ msgstr "Υποστήριξη συστημάτων ελέγχου εκδόσεων Subversion"
+
+#~ msgid "Subversion Log (%1)"
+#~ msgstr "Καταγραφή subversion (%1)"
+
+#~ msgid "SvnLogViewOptionDlgBase"
+#~ msgstr "SvnLogViewOptionDlgBase"
+
+#~ msgid "Annotate is only supported on local files"
+#~ msgstr "Η επισήμανση υποστηρίζεται μόνο σε τοπικά αρχεία"
+
+#~ msgid "Annotation (%1)"
+#~ msgstr "Επισήμανση (%1)"
+
+#~ msgid ""
+#~ "Cannot execute annotate action because the document wasn't found or was "
+#~ "not a text document:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Αδυναμία εκτέλεσης επισήμανσης επειδή το έγγραφο δε βρέθηκε ή δεν "
+#~ "πρόκειται για ένα έγγραφο κειμένου:\n"
+#~ "%1"
+
+#~ msgid "TextLabel"
+#~ msgstr "Ετικέτα κειμένου"

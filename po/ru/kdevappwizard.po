@@ -1,0 +1,257 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Николай Ерёмин <doktorkster@gmail.com>, 2009.
+# Ерёмин Николай <doktorkster@gmail.com>, 2009.
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2010.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-03-04 10:01+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: appwizarddialog.cpp:23
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Создание нового проекта"
+
+#: appwizarddialog.cpp:37
+#, kde-format
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Основное"
+
+#: appwizarddialog.cpp:39
+#, kde-format
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Управление версиями"
+
+#: appwizardplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Создать из шаблона..."
+
+#: appwizardplugin.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Создать новый проект из шаблона"
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Это мастер создания приложений. Он поможет вам создать основу приложения из "
+"шаблона."
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr "Не удалось создать проект из шаблона."
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Перейдите к средству управления версиями."
+
+#: appwizardplugin.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Ошибка системы управления версиями"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Не удалось инициализировать репозиторий DVCS"
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr "Не удалось проверить состояние репозитория DVCS"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Не удалось добавить файлы в репозиторий DVCS"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Не удалось импортировать проект в %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Не удалось импортировать проект"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Не удалось получить импортированный проект из репозитория"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Не удалось создать новый проект"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Файл %1 не может быть создан."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Шаблоны проектов"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Категория"
+
+#: projectselectionpage.cpp:57
+#, kde-format
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Тип проекта"
+
+#: projectselectionpage.cpp:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Получить другие шаблоны"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Загрузить шаблон из файла"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Недопустимое расположение"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Пустое имя проекта"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Недопустимое имя проекта"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Создать подкаталоги не удалось, нет доступа к %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Не выбран шаблон проекта. Возможно, выбрана категория."
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Каталог уже существует и содержит файлы. Откройте его как проект."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr "Заданный каталог уже существует и содержит файлы. Продолжить?"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Загрузить шаблон из файла"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Свойства"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Имя проекта:"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Расположение:"
+
+#: projectvcspage.cpp:33
+#, kde-format
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Нет"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Система управления версиями:"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Ошибка создания проекта"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Проект"
+
+#, fuzzy
+#~ msgid "Application Wizard"
+#~ msgstr "Название приложения:"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ерёмин Николай"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "doktorkster@gmail.com"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Мастер проектов"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Поддержка создания и импорта проектов"

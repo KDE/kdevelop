@@ -1,0 +1,265 @@
+# translation of kdevappwizard.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2008, 2009.
+# Joëlle Cornavin <jcorn@free.fr>, 2010, 2013.
+# xavier <xavier.besnard@neuf.fr>, 2013, 2020.
+# Vincent PINON <vpinon@april.org>, 2014.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+# Johnny Jazeix <jazeix@gmail.com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-10-19 13:58+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.08.2\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: appwizarddialog.cpp:23
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Créer un nouveau projet"
+
+#: appwizarddialog.cpp:37
+#, kde-format
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Général"
+
+#: appwizarddialog.cpp:39
+#, kde-format
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Contrôle de versions"
+
+#: appwizardplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Créer à partir d'un modèle…"
+
+#: appwizardplugin.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Génère un nouveau projet à partir d'un modèle"
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Cette commande démarre l'assistant d'applications de KDevelop. Il vous "
+"aidera dans la génération d'un squelette pour votre application à partir "
+"d'un ensemble de modèles."
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr "Impossible de créer le projet à partir du modèle."
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Veuillez consulter la vue de l'outil de contrôle de versions."
+
+#: appwizardplugin.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Erreur du système de contrôle de versions"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Impossible d'initialiser le dépôt « DVCS »"
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr "Impossible de vérifier l'état du dépôt « DVCS »"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Impossible d'ajouter des fichiers au dépôt « DVCS »"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Impossible d'importer le projet dans %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Impossible d'importer un projet"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Impossible d'extraire un projet importé"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Impossible de créer un nouveau projet"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Impossible de créer le fichier %1."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Modèles de projets"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Catégorie"
+
+#: projectselectionpage.cpp:57
+#, kde-format
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Type de projet"
+
+#: projectselectionpage.cpp:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Obtenir plus de modèles"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Charger un modèle depuis un fichier"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Emplacement non valable"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Nom de projet vide"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Nom de projet non valable"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr ""
+"Impossible de créer des sous-dossiers, les droits d'accès sont manquants "
+"sur : %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Modèle de projet non valable. Veuillez choisir un élément final."
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr ""
+"L'emplacement existe déjà et contient des fichiers. Ouvrez-le en tant que "
+"projet."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"L'emplacement spécifié existe déjà et contient des fichiers. Voulez-vous "
+"vraiment continuer ?"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Charger un modèle depuis un fichier"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Propriétés"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Nom du projet :"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Emplacement :"
+
+#: projectvcspage.cpp:33
+#, kde-format
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Aucun"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Système de contrôle de versions :"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Impossible de créer le projet"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Projet"
+
+#, fuzzy
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Nom de l'application :"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "Étiquette de texte KSqueezed"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Joëlle Cornavin"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jcorn@free.fr"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Assistant de projet"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Prise en charge de la création et de l'importation de projets"

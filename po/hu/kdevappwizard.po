@@ -1,0 +1,278 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-03-19 21:23+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: appwizarddialog.cpp:23
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Új projekt létrehozása"
+
+#: appwizarddialog.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "Page for general configuration options"
+#| msgid "General"
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Általános"
+
+#: appwizarddialog.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Verziókezelés"
+
+#: appwizardplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "New From Template..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Új sablon alapján…"
+
+#: appwizardplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid "Generate a new project from a template"
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Új projekt előállítása sablon alapján"
+
+#: appwizardplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid ""
+#| "This starts KDevelop's application wizard. It helps you to generate a "
+#| "skeleton for your application from a set of templates."
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Ez indítja el a KDevelop alkalmazásvarázslót, amely segít önnek az "
+"alkalmazás vázának előállításában sablonokból."
+
+#: appwizardplugin.cpp:106
+#, fuzzy, kde-format
+#| msgid "Could not create project from template\n"
+msgid "Could not create project from template."
+msgstr "Nem hozható létre projekt a sablonból\n"
+
+#: appwizardplugin.cpp:134
+#, fuzzy, kde-format
+#| msgid "Please see the Version Control toolview"
+msgid "Please see the Version Control tool view."
+msgstr "Kérjük tekintse meg a verziókezelő eszköznézetet"
+
+#: appwizardplugin.cpp:136
+#, fuzzy, kde-format
+#| msgid "Version Control System Error"
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Verziókezelő rendszer hiba"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Nem sikerült inicializálni a DVCS-tárolót"
+
+#: appwizardplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Could not add files to the DVCS repository"
+msgid "Could not check status of the DVCS repository"
+msgstr "Nem sikerült fájlokat hozzáadni a DVCS-tárolóhoz"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Nem sikerült fájlokat hozzáadni a DVCS-tárolóhoz"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Nem sikerült importálni a projektet ebbe: %1"
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Nem sikerült importálni a projektet"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Nem sikerült ellenőrizni az importált projektet"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Nem sikerült az új projekt létrehozása"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "A(z) %1 fájl nem hozható létre."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Projektsablonok"
+
+#: projectselectionpage.cpp:56
+#, fuzzy, kde-format
+#| msgid "Category"
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Kategória"
+
+#: projectselectionpage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Project Type"
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Projekt típus"
+
+#: projectselectionpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "További sablonok beszerzése"
+
+#: projectselectionpage.cpp:74
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Sablon betöltése fájlból"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Érvénytelen hely"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Üres projektnév"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Érvénytelen projektnév"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr ""
+"Nem lehet alkönyvtárakat létrehozni, hiányoznak a jogosultságok ezen: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Érvénytelen projektsablon, kérem válasszon egy levélelemet"
+
+#: projectselectionpage.cpp:245
+#, fuzzy, kde-format
+#| msgid "Path already exists and contains files"
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Az elérési út már létezik és fájlokat tartalmaz"
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"A megadott elérési út már létezik és fájlokat tartalmaz. Biztosan folytatni "
+"szeretné?"
+
+#: projectselectionpage.cpp:308
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Sablon betöltése fájlból"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Tulajdonságok"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, fuzzy, kde-format
+#| msgid "Project Type"
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Projekt típus"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Hely:"
+
+#: projectvcspage.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "No Version Control Support chosen"
+#| msgid "None"
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Nincs"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, fuzzy, kde-format
+#| msgid "Version Control System:"
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Verziókezelő rendszer:"
+
+#~ msgid "Failed to create project"
+#~ msgstr "A projekt létrehozása nem sikerült"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#, fuzzy
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Alkalmazásnév:"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Projekt varázsló"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Projektek létrehozásának és importálásának támogatása"

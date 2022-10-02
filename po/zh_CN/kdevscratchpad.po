@@ -1,0 +1,127 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevscratchpad.pot\n"
+"X-Crowdin-File-ID: 10814\n"
+
+#: scratchpad.cpp:104 scratchpadview.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Scratchpad"
+msgstr "临时文件板"
+
+#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "临时文件：%1"
+
+#: scratchpad.cpp:168
+#, kde-format
+msgid "Failed to remove scratch: %1"
+msgstr "移除临时文件失败：%1"
+
+#: scratchpad.cpp:175
+#, kde-format
+msgid "Failed to create scratch: Name already in use"
+msgstr "创建临时文件失败：文件名已占用"
+
+#: scratchpad.cpp:187
+#, kde-format
+msgid "Failed to create new scratch"
+msgstr "创建临时文件失败"
+
+#: scratchpad.cpp:196
+#, kde-format
+msgid "Failed to rename scratch: Names must not include path separator"
+msgstr "重命名临时文件失败：名称不能包含路径分隔符"
+
+#: scratchpad.cpp:226
+#, kde-format
+msgid "Failed renaming scratch."
+msgstr "重命名临时文件失败。"
+
+#: scratchpadjob.cpp:57
+#, kde-format
+msgid "Running %1..."
+msgstr "正在运行 %1..."
+
+#: scratchpadjob.cpp:73
+#, kde-format
+msgid "Process finished with exit code %1."
+msgstr "进程完成，退出代码 %1。"
+
+#: scratchpadjob.cpp:80
+#, kde-format
+msgid "Failed to run scratch: %1"
+msgstr "运行临时文件失败：%1"
+
+#: scratchpadview.cpp:100
+#, kde-format
+msgid ""
+"Scratchpad lets you quickly run and experiment with code without a full "
+"project, and even store todos. Create a new scratch to start."
+msgstr ""
+"临时文件版让您可以快速运行和测试代码，而无需配置完整项目，甚至还可以存储待办"
+"事项。创建新的临时文件开始。"
+
+#: scratchpadview.cpp:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Command to run this scratch. '$f' will expand to the scratch path."
+msgstr "运行此临时文件的命令。'$f' 将展开为临时文件路径。"
+
+#: scratchpadview.cpp:137
+#, kde-format
+msgctxt "@action"
+msgid "New Scratch"
+msgstr "新建临时文件"
+
+#: scratchpadview.cpp:141
+#, kde-format
+msgctxt "@action"
+msgid "Remove Scratch"
+msgstr "移除临时文件"
+
+#: scratchpadview.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Rename Scratch"
+msgstr "重命名临时文件"
+
+#: scratchpadview.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Run Scratch"
+msgstr "运行临时文件"
+
+#: scratchpadview.cpp:164
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "过滤..."
+
+#: scratchpadview.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Scratch"
+msgstr "创建新临时文件"
+
+#: scratchpadview.cpp:205
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for scratch file:"
+msgstr "临时文件的名称："

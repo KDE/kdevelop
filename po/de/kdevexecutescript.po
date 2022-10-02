@@ -1,0 +1,407 @@
+# Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
+# Burkhard Lück <lueck@hube-lueck.de>, 2011, 2012, 2013, 2017.
+# Gerhard Stengel <gstengel@gmx.net>, 2011.
+# Rolf Eike Beer <kde@opensource.sf-tec.de>, 2012.
+# Frederik Schwarzer <schwarzer@kde.org>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecutescript\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-08-22 09:39+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: executescriptplugin.cpp:61
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Keine gültige Programmdatei angegeben"
+
+#: executescriptplugin.cpp:71
+#, kde-format
+msgid ""
+"There is a quoting error in the script for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Die Startkonfiguration „%1“ enthält fehlerhaft maskierte Sonderzeichen im "
+"Skript. Ausführung wird abgebrochen."
+
+#: executescriptplugin.cpp:76
+#, kde-format
+msgid ""
+"A shell meta character was included in the script for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Ein Sonderzeichen der Shell befindet sich im Skript der Startkonfiguration "
+"„%1“. Das wird im Moment nicht unterstützt. Die Ausführung wird abgebrochen."
+
+#: executescriptplugin.cpp:93
+#, kde-format
+msgid "No remote host set for launch configuration '%1'. Aborting start."
+msgstr ""
+"Kein entfernter Rechner für die Startkonfiguration „%1“ gesetzt. Start wird "
+"abgebrochen."
+
+#: executescriptplugin.cpp:116
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Die Startkonfiguration „%1“ enthält fehlerhaft maskierte Sonderzeichen in "
+"den Argumenten. Ausführung wird abgebrochen."
+
+#: executescriptplugin.cpp:120
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Ein Sonderzeichen der Shell befindet sich in den Argumenten der "
+"Startkonfiguration „%1“. Das wird im Moment nicht unterstützt. Die "
+"Ausführung wird abgebrochen."
+
+#: executescriptplugin.cpp:173
+#, kde-format
+msgid "No valid interpreter specified"
+msgstr "Kein gültiger Interpreter angegeben"
+
+#: executescriptplugin.cpp:183
+#, kde-format
+msgid ""
+"There is a quoting error in the interpreter for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Die Startkonfiguration „%1“ enthält fehlerhaft maskierte Sonderzeichen im "
+"Interpreter. Ausführung wird abgebrochen."
+
+#: executescriptplugin.cpp:188
+#, kde-format
+msgid ""
+"A shell meta character was included in the interpreter for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Ein Sonderzeichen der Shell befindet sich im Interpreter der "
+"Startkonfiguration „%1“. Das wird im Moment nicht unterstützt. Die "
+"Ausführung wird abgebrochen."
+
+#: scriptappconfig.cpp:83
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Type or select an interpreter..."
+msgstr "Wählen Sie einen Interpreter oder geben Sie seinen Namen ein ..."
+
+#: scriptappconfig.cpp:116
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Script Application"
+msgstr "Skript-Anwendung einrichten"
+
+#: scriptappconfig.cpp:126
+#, kde-format
+msgid "Executes Script Applications"
+msgstr "Ausführen von Skript-Anwendungen"
+
+#: scriptappconfig.cpp:136 scriptappconfig.cpp:186
+#, kde-format
+msgid "Script Application"
+msgstr "Skript-Anwendung"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: scriptappconfig.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Interpreter"
+msgstr "Interpreter"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: scriptappconfig.ui:44
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Script interpreter:"
+msgstr "Skript-Interpreter:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: scriptappconfig.ui:95
+#, kde-format
+msgctxt "@title:group"
+msgid "Script file"
+msgstr "Skriptdatei"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
+#: scriptappconfig.ui:101
+#, kde-format
+msgctxt "@option:radio"
+msgid "Run the file currently open in the editor"
+msgstr "Die aktuell im Editor geöffnete Datei ausführen"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
+#: scriptappconfig.ui:111
+#, kde-format
+msgctxt "@option:radio"
+msgid "Always run the same file"
+msgstr "Immer dieselbe Datei ausführen"
+
+#. i18n: ectx: property (text), widget (QLabel, scriptLabel)
+#: scriptappconfig.ui:123
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Script file:"
+msgstr "Skriptdatei:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: scriptappconfig.ui:133
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the absolute path to the script to run"
+msgstr "Geben Sie den absoluten Pfad zu einem auszuführenden Skript an"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: scriptappconfig.ui:136
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/script"
+msgstr "/pfad/zum/skript"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: scriptappconfig.ui:148
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Verhalten"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scriptappconfig.ui:160
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumente:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: scriptappconfig.ui:170
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter arguments to give to the executable"
+msgstr "Geben Sie Argumente ein, die der Programmdatei übergeben werden"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scriptappconfig.ui:177
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Working directory:"
+msgstr "Arbeitsordner:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: scriptappconfig.ui:187
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Wählen Sie einen Arbeitsordner für die Programmdatei"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: scriptappconfig.ui:194
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Umgebung:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: scriptappconfig.ui:212
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Wählen Sie die zu verwendende Umgebung"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: scriptappconfig.ui:224
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "Ausgabefilter:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:231
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the filter to applied to the output. E.g. to mark errors with red text"
+msgstr ""
+"Wählen Sie den Filter, der auf die Ausgabe angewendet wird, z. B. um Fehler "
+"in roter Schriftfarbe anzuzeigen"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:235
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "Kein Filter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:240
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "Compiler-Filter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:245
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "Skriptfehler-Filter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:250
+#, kde-format
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "Statische-Analyse-Filter"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: scriptappconfig.ui:267
+#, kde-format
+msgctxt "@title:group"
+msgid "Execute on Host"
+msgstr "Ausführen auf Rechner"
+
+#. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
+#: scriptappconfig.ui:273
+#, kde-format
+msgctxt "@option:check"
+msgid "Execute on remote host"
+msgstr "Ausführen auf entferntem Rechner"
+
+#. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
+#: scriptappconfig.ui:285
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote host (ssh):"
+msgstr "Entfernter Rechner (ssh):"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, remoteHost)
+#: scriptappconfig.ui:298
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "user@host"
+msgstr "benutzer@rechner"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, remoteHost)
+#: scriptappconfig.ui:301
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a remote host (user@host)"
+msgstr "Geben Sie einen entfernten Rechner an (benutzer@rechner)"
+
+#: scriptappjob.cpp:76
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "Es gibt kein aktives Dokument, das gestartet werden kann."
+
+#: scriptappjob.cpp:98
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Es ist keine Profil mit Umgebungsvariablen angegeben. Bitte überprüfen Sie "
+"die Startkonfiguration „%1“, weil sie anscheinend defekt ist. Das "
+"Standardprofil von Umgebungsvariablen wird verwendet."
+
+#: scriptappjob.cpp:170
+#, kde-format
+msgid "Starting: %1"
+msgstr "Wird gestartet: %1"
+
+#: scriptappjob.cpp:184
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** Anwendung abgeschossen ***"
+
+#: scriptappjob.cpp:195
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** Normal beendet ***"
+
+#: scriptappjob.cpp:197
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Beendet mit Rückgabewert: %1 ***"
+
+#: scriptappjob.cpp:200
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Prozess abgebrochen ***"
+
+#: scriptappjob.cpp:203
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Abgestürzt mit Rückgabewert: %1 ***"
+
+#: scriptappjob.cpp:218
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr ""
+"*** Programm „%1“ kann nicht ausgeführt werden. Stellen Sie sicher, dass der "
+"Pfad richtig angegeben ist ***"
+
+#~ msgid "python"
+#~ msgstr "Python"
+
+#~ msgid "ruby"
+#~ msgstr "Ruby"
+
+#~ msgid "bash"
+#~ msgstr "Bash"
+
+#~ msgid "php"
+#~ msgstr "PHP"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Panagiotis Papadopoulos,Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "pano_90@gmx.net,schwarzer@kde.org"
+
+#~ msgid "Execute script support"
+#~ msgstr "Unterstützung zum Ausführen von Skripten"
+
+#~ msgid "Allows running of scripts"
+#~ msgstr "Erlaubt das Ausführen von Skripten"
+
+#~ msgid "Niko Sams"
+#~ msgstr "Niko Sams"
+
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgid "Script"
+#~ msgstr "Skript"
+
+#~ msgid "Could not start application"
+#~ msgstr "Die Anwendung kann nicht gestartet werden"
+
+#~ msgid "Enter a project target as path in the tree"
+#~ msgstr "Projektziel als Pfad in einem Baum eingeben"
+
+#~ msgid "Project Target:"
+#~ msgstr "Projektziel:"
+
+#~ msgid "Local Host"
+#~ msgstr "Lokaler Rechner"
+
+#~ msgid "External Terminal:"
+#~ msgstr "Externes Terminal:"
+
+#~ msgid "When enabled, runs the application in an external terminal."
+#~ msgstr ""
+#~ "Falls eingeschaltet, wird die Anwendung in einem externen Terminal "
+#~ "ausgeführt."

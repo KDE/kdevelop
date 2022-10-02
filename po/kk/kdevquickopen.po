@@ -1,0 +1,331 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2013-11-14 03:01+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "Құжаттама %1 дегенде"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "Енді қол жеткізбеуде: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "Енді қол жеткізбеуде"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Қайтаруы: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Файлы: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "Шұғыл ашу құралдары"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "%1 жобасы"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "Әлі талданбаған"
+
+#: projectfilequickopen.cpp:178
+#, fuzzy, kde-format
+#| msgid "none"
+msgctxt "@item no project"
+msgid "none"
+msgstr "жоқ"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Кластар"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Функциялар"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Жоба"
+
+#: quickopenplugin.cpp:60
+#, fuzzy, kde-format
+#| msgid "Includes"
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Кірмелер"
+
+#: quickopenplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Includers"
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Қайда кіргізілген"
+
+#: quickopenplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "Currently Open"
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "Ашылып тұрғаны"
+
+#: quickopenplugin.cpp:64
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Файлдар"
+
+#: quickopenplugin.cpp:67
+#, fuzzy, kde-format
+#| msgid "Documentation"
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "Құжаттама"
+
+#: quickopenplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Функциялар"
+
+#: quickopenplugin.cpp:279
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "&Шұғыл ашу"
+
+#: quickopenplugin.cpp:285
+#, fuzzy, kde-format
+#| msgid "Quick Open &File"
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "&Файлды шұғыл ашу"
+
+#: quickopenplugin.cpp:291
+#, fuzzy, kde-format
+#| msgid "Quick Open &Class"
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "&Класты шұғыл ашу"
+
+#: quickopenplugin.cpp:297
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "Ф&ункцияны шұғыл ашу"
+
+#: quickopenplugin.cpp:303
+#, fuzzy, kde-format
+#| msgid "Quick Open &File"
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "&Файлды шұғыл ашу"
+
+#: quickopenplugin.cpp:308
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "Ф&ункцияны шұғыл ашу"
+
+#: quickopenplugin.cpp:314
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "Ф&ункцияны шұғыл ашу"
+
+#: quickopenplugin.cpp:319
+#, fuzzy, kde-format
+#| msgid "Jump to Declaration"
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "Мәлімдемесіне ауысу"
+
+#: quickopenplugin.cpp:325
+#, fuzzy, kde-format
+#| msgid "Jump to Definition"
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "Анықтамасына ауысу"
+
+#: quickopenplugin.cpp:330
+#, fuzzy, kde-format
+#| msgid "Embedded Quick Open"
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "Құрамындағы шұғыл ашу"
+
+#: quickopenplugin.cpp:337
+#, fuzzy, kde-format
+#| msgid "Next Function"
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Келесі функция"
+
+#: quickopenplugin.cpp:342
+#, fuzzy, kde-format
+#| msgid "Previous Function"
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Алдыңғы функция"
+
+#: quickopenplugin.cpp:347
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Сұлба"
+
+#: quickopenplugin.cpp:498
+#, fuzzy, kde-format
+#| msgid "Quick Open"
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "Шұғыл ашу"
+
+#: quickopenplugin.cpp:832
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Сұлба"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, fuzzy, kde-format
+#| msgid "Quick Open..."
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "Шұғыл ашу..."
+
+#: quickopenplugin.cpp:943
+#, fuzzy, kde-format
+#| msgid ""
+#| "Search for files, classes, functions and more, allowing you to quickly "
+#| "navigate in your source code."
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+"Бастапқы кодыңызды тез ақтарып, файл, клас, функция, т.б. іздеу мүмкіндігі."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Search:"
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Іздейтіні:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Ашу"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, fuzzy, kde-format
+#| msgid "Cancel"
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Қайту"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, fuzzy, kde-format
+#| msgid "&Scopes:"
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "&Аумағы:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, fuzzy, kde-format
+#| msgid "&Items:"
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "&Аталымдары:"
+
+#~ msgid "Project %1"
+#~ msgstr "%1 жобасы"
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "Жоба файлдарына және класс/функция секілді нысандарға тез қатынау "
+#~ "мүмкіндік беретін плагині."
+
+#~ msgid "Navigate"
+#~ msgstr "Ақтару"
+
+#~ msgid "Quickly open resources such as files, classes and methods."
+#~ msgstr "Файл, клас, әдістер сияқты нәрселерді шұғыл ашу"

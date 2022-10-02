@@ -1,0 +1,137 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Vit Pelcak <vit@pelcak.org>, 2013, 2014, 2015, 2017, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-17 16:29+0200\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Vít Pelčák"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "vit@pelcak.org"
+
+#: qmakebuilddirchooser.cpp:124
+#, kde-format
+msgid "Please specify path to QMake executable."
+msgstr "Prosím, zadejte cestu ke spustitelnému souboru QMake."
+
+#: qmakebuilddirchooser.cpp:129
+#, kde-format
+msgid "QMake executable \"%1\" does not exist."
+msgstr "Spustitelný soubor QMake \"%1\" neexistuje."
+
+#: qmakebuilddirchooser.cpp:132
+#, kde-format
+msgid "QMake executable is not a file."
+msgstr "Spustitelný soubor QMake není soubor."
+
+#: qmakebuilddirchooser.cpp:135
+#, kde-format
+msgid "QMake executable is not executable."
+msgstr "Spustitelný soubor QMake není spustitelný."
+
+#: qmakebuilddirchooser.cpp:140
+#, kde-format
+msgid "QMake executable cannot be queried for variables."
+msgstr "Spustitelný soubor QMake nelze požádat o proměnné."
+
+#: qmakebuilddirchooser.cpp:143
+#, kde-format
+msgid "No basic MkSpec file could be found for the given QMake executable."
+msgstr ""
+
+#: qmakebuilddirchooser.cpp:150
+#, kde-format
+msgid "Please specify a build folder."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: qmakebuilddirchooser.ui:23
+#, kde-format
+msgctxt "@label:textbox"
+msgid "QMake &executable:"
+msgstr "Spustitelný soubor QMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qmakebuilddirchooser.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Build directory:"
+msgstr "&Adresář pro sestavení:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qmakebuilddirchooser.ui:62
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Install to (target.path):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qmakebuilddirchooser.ui:85
+#, kde-format
+msgctxt "@labal:listbox"
+msgid "Build &type:"
+msgstr "&Typ sestavení:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
+#: qmakebuilddirchooser.ui:115
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "(Use default from .pro file)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: qmakebuilddirchooser.ui:123
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra arguments:"
+msgstr "Dodatečné argumenty:"
+
+#: qmakebuilddirchooserdialog.cpp:22
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory"
+msgstr "Nastavit adresář pro překlad "
+
+#: qmakejob.cpp:33
+#, kde-format
+msgid "Run QMake in %1"
+msgstr "Spustit QMake v %1"
+
+#: qmakejob.cpp:137
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr ""
+
+#: qmakejob.cpp:139
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Proces byl přerušen ***"
+
+#: qmakejob.cpp:141
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr ""
+
+#: qmakemanager.cpp:75
+#, kde-format
+msgctxt "@action"
+msgid "Run QMake"
+msgstr "Spustit QMake"

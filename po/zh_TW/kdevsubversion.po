@@ -1,0 +1,506 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# pan93412 <pan93412@gmail.com>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsubversion\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2018-12-02 21:13+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: kdevsvnplugin.cpp:334
+#, fuzzy, kde-format
+#| msgid "Copy..."
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "複製..."
+
+#: kdevsvnplugin.cpp:341
+#, fuzzy, kde-format
+#| msgid "Move..."
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "移動..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "此操作只能選擇一個項目"
+
+#: kdevsvnplugin.cpp:370
+#, fuzzy, kde-format
+#| msgid "Destination file/directory"
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "目標檔案/目錄"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "只複製本地端檔案的工作"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "目標檔案/目錄"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "只移動本地端檔案或目錄的工作"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Subversion Add"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "沒有足夠的資訊新增檔案"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Subversion Annotate"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "沒有足夠的資訊執行最後狀態註記"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Subversion Checkout"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "沒有足夠的資訊執行取出"
+
+#: svncommitjob.cpp:109
+#, kde-format
+msgid "Subversion Commit"
+msgstr "Subversion 提交"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "提交中..."
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "沒有足夠的資訊執行 commit"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Subversion Copy"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "沒有足夠的資訊複製檔案"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Subversion Diff"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "沒有足夠的資訊執行差異比較"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Subversion Import"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "沒有足夠的資訊執行匯入"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Subversion Info"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "沒有足夠的資訊執行 info 工作"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "已新增 %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "已刪除 %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "已刪除 %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "已新增 %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "版本 %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "外部更新：%1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "傳送 %1 中"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "使用 mimetype %2 新增 %1 中"
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "新增 %1 中。"
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "刪除 %1 中。"
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "取代 %1 中。"
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "傳送檔案資料中"
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "已完成版本 %1，路徑 %2 的最後狀態註記"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "已回復工作複本 %1"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "工作複本 %1 回復失敗。"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "已複製 %1"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "憑證尚未合法。"
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "憑證已過期。"
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr "憑證的 CN 與遠端主機名稱不符。"
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "未知的憑證認證。"
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "其它未知的錯誤。"
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "輸入 %1 的使用者名稱："
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "已完成"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"執行工作錯誤：\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Subversion Log"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "沒有足夠的資訊執行 log。"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Subversion Move"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "沒有足夠的資訊執行移動檔案"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Subversion Remove"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "沒有足夠的資訊執行移動工作"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Subversion Revert"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "沒有足夠的資訊執行 revert。"
+
+#: svnssldialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "SSL Server Certificate"
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "SSL 伺服器憑證"
+
+#: svnssldialog.cpp:30
+#, fuzzy, kde-format
+#| msgid "Trust Permanently"
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "永久信任"
+
+#: svnssldialog.cpp:31
+#, fuzzy, kde-format
+#| msgid "Trust Temporarily"
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "暫時信任"
+
+#: svnssldialog.cpp:62
+#, fuzzy, kde-format
+#| msgid "Ssl Server Certificate: %1"
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "SSL 伺服器憑證：%1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Subversion Status"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "沒有足夠的資訊執行 status。"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Subversion Update"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "沒有足夠的資訊執行更新"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, fuzzy, kde-format
+#| msgid "Source directory:"
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "程式源碼目錄："
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, fuzzy, kde-format
+#| msgid "Repository:"
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "主目錄："
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Repository Location"
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "主目錄位置"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Choose the repository into which the source directory is imported"
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "選擇要匯入程式源碼的主目錄"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, fuzzy, kde-format
+#| msgid "Commit message:"
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "提交訊息："
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"確認伺服器憑證時發生錯誤。\n"
+"您要信任此憑證嗎？"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "為何確認失敗"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, fuzzy, kde-format
+#| msgid "Certificate Information"
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "憑證資訊"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, fuzzy, kde-format
+#| msgid "Hostname:"
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "主機名稱："
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "someserver"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, fuzzy, kde-format
+#| msgid "Issuer:"
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "發起者："
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "someissuer"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, fuzzy, kde-format
+#| msgid "Valid From:"
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "合法起始日："
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "validfrom"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, fuzzy, kde-format
+#| msgid "Valid Until:"
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "合法到期日："
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "validuntil"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, fuzzy, kde-format
+#| msgid "Fingerprint:"
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "指紋:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "指紋"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "SSL 伺服器憑證"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "要匯入的主目錄位置"

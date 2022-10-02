@@ -1,0 +1,74 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Stelios <sstavra@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-07-20 02:08+0200\n"
+"PO-Revision-Date: 2019-08-19 11:00+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, label)
+#: androidpreferences.ui:29
+#, fuzzy, kde-format
+#| msgid "Android KDE extra-cmake-modules toolchain file"
+msgctxt "@info:whatsthis"
+msgid "Android KDE extra-cmake-modules toolchain file"
+msgstr "Αρχείο εργαλειοσυνόλου KDE extra-cmake-modules για το Android"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: androidpreferences.ui:32
+#, fuzzy, kde-format
+#| msgid "Android toolchain:"
+msgctxt "@label:textbox"
+msgid "Android toolchain:"
+msgstr "Εργαλειοσύνολο Android:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: androidpreferences.ui:46
+#, fuzzy, kde-format
+#| msgid "Android NDK:"
+msgctxt "@label:textbox"
+msgid "Android NDK:"
+msgstr "Android NDK:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: androidpreferences.ui:60
+#, fuzzy, kde-format
+#| msgid "Android SDK:"
+msgctxt "@label:textbox"
+msgid "Android SDK:"
+msgstr "Android SDK:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: androidpreferences.ui:74
+#, fuzzy, kde-format
+#| msgid "Architecture:"
+msgctxt "@label:textbox"
+msgid "Architecture:"
+msgstr "Αρχιτεκτονική:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: androidpreferences.ui:84
+#, fuzzy, kde-format
+#| msgid "Toolchain:"
+msgctxt "@label:textbox"
+msgid "Toolchain:"
+msgstr "Εργαλειοσύνολο:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: androidpreferences.ui:94
+#, fuzzy, kde-format
+#| msgid "ABI:"
+msgctxt "@label:textbox"
+msgid "ABI:"
+msgstr "ABI:"

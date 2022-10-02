@@ -1,0 +1,81 @@
+# translation of kdevdocumentswitcher.po to galician
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marce Villarino <mvillarino@users.sourceforge.net>, 2009.
+# Xosé <xosecalvo@gmail.com>, 2009.
+# Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentswitcher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-01-27 12:55+0100\n"
+"Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: documentswitcherplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Last Used Views"
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Vistas empregadas ultimamente"
+
+#: documentswitcherplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr ""
+"Abre unha lista para examinar a lista das vistas empregadas ultimamente."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Walk through the list of last used views"
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Examinar a lista de vistas empregadas recentemente"
+
+#: documentswitcherplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Last Used Views (Reverse)"
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "Vistas empregadas ultimamente (Reverso)"
+
+#: documentswitcherplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views in reverse."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr ""
+"Abre unha lista para examinar a lista das vistas empregadas ultimamente ao "
+"revés."
+
+#~ msgid "Document Switcher"
+#~ msgstr "Alternador entre documentos"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Xosé"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "proxecto@trasno.net"
+
+#~ msgid "Switch between open documents using most-recently-used list"
+#~ msgstr ""
+#~ "Alternar entre os documentos abertos empregando unha lista dos empregados "
+#~ "máis recentemente"
+
+#~ msgid ""
+#~ "<b>Walk through last used Views</b><br/>Opens a list to walk through the "
+#~ "list of last used views."
+#~ msgstr ""
+#~ "<b>Ollar as últimas vistas empregadas</b><br/>Abre unha lista para "
+#~ "examinar a lista das vistas empregadas ultimamente."

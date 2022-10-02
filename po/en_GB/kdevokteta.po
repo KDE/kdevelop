@@ -1,0 +1,87 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2010.
+# Steve Allewell <steve.allewell@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-27 13:37+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Permissions"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "View"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Bookmarks"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Main Toolbar"
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "The document \"%1\" has unsaved changes. Would you like to save them?"
+
+#: oktetadocument.cpp:125
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Close Document"
+
+#: oktetaplugin.cpp:97
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "Hex Editor"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Manage Byte Array View Profiles..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrew Coles, Steve Allewell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrew_coles@yahoo.co.uk, steve.allewell@gmail.com"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Designer Layout Toolbar"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "Okteta Plugin for KDevelop"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "Provides simple Hex Editing"
+
+#~ msgid "Open As Byte Array"
+#~ msgstr "Open As Byte Array"

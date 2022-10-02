@@ -1,0 +1,181 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevcontextbrowser package.
+# Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2011, 2013.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2020-07-25 16:43+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: contextbrowser.cpp:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Torna indietro nella cronologia del contesto"
+
+#: contextbrowser.cpp:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Vai avanti nella cronologia del contesto"
+
+#: contextbrowser.cpp:192
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Schema di massima"
+
+#: contextbrowser.cpp:193
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Schema di massima"
+
+#: contextbrowser.cpp:194
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr ""
+"Spostati nello schema di massima del documento attivo, fai clic per navigare."
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Modalità &navigazione dei sorgenti"
+
+#: contextbrowser.cpp:241
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "Contesto visitato &precedente"
+
+#: contextbrowser.cpp:247
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "Contesto visitato s&uccessivo"
+
+#: contextbrowser.cpp:253
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "Uso &precedente"
+
+#: contextbrowser.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "Uso &successivo"
+
+#: contextbrowser.cpp:265
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Browser del contesto"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Browser del codice"
+
+#: contextbrowser.cpp:312
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Trova usi"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(cambiato)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Mostra il menu della dichiarazione"
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Menu dichiarazione"
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Blocca la vista corrente"
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Blocca la vista corrente"
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Sblocca la vista corrente"
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Sblocca la vista corrente"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Barra degli strumenti del browser del codice"
+
+#~ msgid "Outline..."
+#~ msgstr "Schema di massima..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigazione"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Abilita/disabilita la modalità navigazione nel codice"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Quando è abilitato, puoi sfogliare il codice sorgente facendo clic "
+#~ "nell'editor."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Questa estensione mostra le informazioni sul contesto del linguaggio "
+#~ "corrente in una vista laterale, mettendo in evidenza le dichiarazioni e "
+#~ "gli usi."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Mostra le informazioni del contesto corrente"

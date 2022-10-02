@@ -1,0 +1,53 @@
+# Translation of kdevoutlineview.po to Catalan
+# Copyright (C) 2018 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2018-08-11 15:38+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: outlinenode.cpp:169
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anònim>"
+
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Contorn"
+
+#: outlinewidget.cpp:47
+#, kde-format
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "Ordena alfabèticament"
+
+#: outlinewidget.cpp:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "Ordena alfabèticament els elements"
+
+#: outlinewidget.cpp:60
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtre..."
+
+#~ msgid "Outline View"
+#~ msgstr "Vista del contorn"

@@ -1,0 +1,110 @@
+# translation of kdevclassbrowser.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014, 2019, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclassbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-07-10 17:05+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.03.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, kde-format
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Klasy"
+
+#: classbrowserplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Poszukaj w przeglądar&ce klas"
+
+#: classwidget.cpp:72
+#, kde-format
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "Po&szukaj:"
+
+#: classwidget.cpp:89
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Przeglądarka klas"
+
+#~ msgid "All projects classes"
+#~ msgstr "Wszystkie klasy projektu"
+
+#~ msgid "Base classes"
+#~ msgstr "Klasy bazowe"
+
+#~ msgid "Derived classes"
+#~ msgstr "Klasy pochodne"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Klasy w projekcie %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net"
+
+#~ msgid ""
+#~ "This plugin provides a browsable model of the currently parsed classes "
+#~ "and other items."
+#~ msgstr ""
+#~ "Ta wtyczka udostępnia możliwy do przeglądania model przeanalizowanych "
+#~ "klas i innych elementów."
+
+#~ msgid "Browser for all known classes"
+#~ msgstr "Przeglądarka wszystkich znanych klas"
+
+#~ msgid "Show &Declaration"
+#~ msgstr "Pokaż &deklarację"
+
+#~ msgid "Show De&finition"
+#~ msgstr "Pokaż d&efinicję"
+
+#, fuzzy
+#~ msgid "Global Functions"
+#~ msgstr "Wtyczki globalne"
+
+#, fuzzy
+#~ msgid "Global Variables"
+#~ msgstr "zmienna lokalna"
+
+#, fuzzy
+#~ msgid "Unknown object."
+#~ msgstr "Nieznany błąd"
+
+#, fuzzy
+#~ msgid "Code View"
+#~ msgstr "Pomoc"

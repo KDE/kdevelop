@@ -1,0 +1,25 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Simone Solinas <ksolsim@gmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelopsessions\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2012-07-26 10:47+0200\n"
+"Last-Translator: Simone Solinas <ksolsim@gmail.com>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr "Sessioni KDevelop"
+
+#: package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr "Stringa arbitraria che dice qualcosa"

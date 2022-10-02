@@ -1,0 +1,99 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-06-07 16:24+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: testview.cpp:56 testviewplugin.cpp:70
+#, fuzzy, kde-format
+#| msgid "Unit Tests"
+msgctxt "@title:window"
+msgid "Unit Tests"
+msgstr "Enhedstester"
+
+#: testview.cpp:78
+#, fuzzy, kde-format
+#| msgid "Show Source"
+msgctxt "@action:inmenu"
+msgid "Show Source"
+msgstr "Vis kildekode"
+
+#: testview.cpp:85
+#, fuzzy, kde-format
+#| msgid "Run Selected Tests"
+msgctxt "@action"
+msgid "Run Selected Tests"
+msgstr "Kør valgte tester"
+
+#: testview.cpp:90
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filter..."
+
+#: testview.cpp:292
+#, kde-format
+msgid "Run 1 test"
+msgid_plural "Run %1 tests"
+msgstr[0] "Kør 1 test"
+msgstr[1] "Kør %1 tester"
+
+#: testviewplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Run All Tests"
+msgctxt "@action"
+msgid "Run All Tests"
+msgstr "Kør alle tester"
+
+#: testviewplugin.cpp:63
+#, fuzzy, kde-format
+#| msgid "Stop Running Tests"
+msgctxt "@action"
+msgid "Stop Running Tests"
+msgstr "Stop kørende tester"
+
+#: testviewplugin.cpp:104
+#, kde-format
+msgid "Run 1 test in %2"
+msgid_plural "Run %1 tests in %2"
+msgstr[0] "Kør 1 test i %2"
+msgstr[1] "Kør %1 tester i %2"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Kør"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Martin Schlander"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mschlander@opensuse.org"
+
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the test view for matching test suites "
+#~ "and cases."
+#~ msgstr ""
+#~ "Indsæt jokertegn-mønstre for at filtrere testvisningen for matchende "
+#~ "testsuiter og cases."
+
+#~ msgid "Unit Test View"
+#~ msgstr "Enhedstest-visning"
+
+#~ msgid "Lets you see and run unit tests"
+#~ msgstr "Lader dig se og køre enhedstester"

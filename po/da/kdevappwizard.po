@@ -1,0 +1,277 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Martin Schlander <mschlander@opensuse.org>, 2010, 2013, 2014.
+# Claus Christensen <claus_chr@webspeed.dk>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-03-09 15:34+0100\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: appwizarddialog.cpp:23
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Opret nyt projekt"
+
+#: appwizarddialog.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "Page for general configuration options"
+#| msgid "General"
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Generelt"
+
+#: appwizarddialog.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Versionsstyring"
+
+#: appwizardplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "New From Template..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Ny fra skabelon..."
+
+#: appwizardplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid "Generate a new project from a template"
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Generér et nyt projekt fra en skabelon"
+
+#: appwizardplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid ""
+#| "This starts KDevelop's application wizard. It helps you to generate a "
+#| "skeleton for your application from a set of templates."
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Dette starter KDevelops applikationsguide. Den hjælper dig med at generere "
+"en grundstruktur til din applikation fra et sæt af skabeloner."
+
+#: appwizardplugin.cpp:106
+#, fuzzy, kde-format
+#| msgid "Could not create project from template\n"
+msgid "Could not create project from template."
+msgstr "Kunne ikke oprette projektet fra skabelon\n"
+
+#: appwizardplugin.cpp:134
+#, fuzzy, kde-format
+#| msgid "Please see the Version Control toolview"
+msgid "Please see the Version Control tool view."
+msgstr "Se værktøjsvisningen til versionsstyring"
+
+#: appwizardplugin.cpp:136
+#, fuzzy, kde-format
+#| msgid "Version Control System Error"
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Fejl i versionstyringssystem"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Kunne ikke initialisere filer til DVCS-depot"
+
+#: appwizardplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Could not add files to the DVCS repository"
+msgid "Could not check status of the DVCS repository"
+msgstr "Kunne ikke tilføje filer til DVCS-depot"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Kunne ikke tilføje filer til DVCS-depot"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Kunne ikke importere projekt til %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Kunne ikke importere projekt"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Kunne ikke checke det importerede projekt ud"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Kunne ikke oprette et nyt projekt"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Filen %1 kan ikke oprettes."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Projektskabeloner"
+
+#: projectselectionpage.cpp:56
+#, fuzzy, kde-format
+#| msgid "Category"
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Kategori"
+
+#: projectselectionpage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Project Type"
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Projekttype"
+
+#: projectselectionpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Hent flere skabeloner"
+
+#: projectselectionpage.cpp:74
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Indlæs skabelon fra fil"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Ugyldig placering"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Tomt projektnavn"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Ugyldigt projektnavn"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Kan ikke oprette undermapper, der mangler rettigheder på: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Ugyldig projektskabelon, vælg venligst et leaf-element"
+
+#: projectselectionpage.cpp:245
+#, fuzzy, kde-format
+#| msgid "Path already exists and contains files"
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Stien findes allerede og indeholder filer"
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr "Den angivne sti findes allerede og indeholder filer. Vil du forsætte?"
+
+#: projectselectionpage.cpp:308
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Indlæs skabelon fra fil"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Egenskaber"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, fuzzy, kde-format
+#| msgid "Project Type"
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Projekttype"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Placering:"
+
+#: projectvcspage.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "No Version Control Support chosen"
+#| msgid "None"
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Ingen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, fuzzy, kde-format
+#| msgid "Version Control System:"
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Versionsstyringssystem:"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Kunne ikke oprette projekt"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#, fuzzy
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Applikationsnavn:"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren,Claus Christensen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk,claus_chr@webspeed.dk"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Guide til projekt"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Understøttelse af oprettelse og import af projekter"

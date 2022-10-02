@@ -1,0 +1,59 @@
+# el translation of kdevmanpage.po
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+#
+# Stelios <sstavra@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmanpage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2011-06-12 03:05+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Σελίδα εγχειριδίου"
+
+#: manpagedocumentationwidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "Loading man pages ..."
+msgid "Loading man pages..."
+msgstr "Φόρτωση σελίδων εγχειριδίου ..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Σελίδα εγχειριδίου"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Could not find any documentation for '%1'"
+#~ msgstr "Αδυναμία εύρεσης τεκμηρίωσης για το '%1'"
+
+#~ msgid "ManPage"
+#~ msgstr "ManPage"
+
+#~ msgid "Check Man Page documentation"
+#~ msgstr "Επιλογή τεκμηρίωσης σελίδων εγχειριδίου"

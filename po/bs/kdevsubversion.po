@@ -1,0 +1,652 @@
+# Bosnian translation for kdevplatform
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevplatform package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevplatform\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-18 20:27+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:07+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: kdevsvnplugin.cpp:334
+#, fuzzy, kde-format
+#| msgid "Copy..."
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "Kopiraj..."
+
+#: kdevsvnplugin.cpp:341
+#, fuzzy, kde-format
+#| msgid "Move..."
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "Pomjeri..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Molim odaberite samo jednu stavku za ovu operaciju"
+
+#: kdevsvnplugin.cpp:370
+#, fuzzy, kde-format
+#| msgid "Destination file/directory"
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "Odredišna datoteka/direktorij"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "Kopiranje radi samo s lokalnim datotekama"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "Odredišna datoteka/direktorij"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "Premještanje radi samo s lokalnim datotekama i direktorijima"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Subversion dodavanje"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "Nedovoljno informacija da se doda datoteka"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Subversion anotavija"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "Nedovoljno informacija da se okrivi lokacija"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Subversion izdvajanje datoteke"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "Nedovoljno informacija da se izvrši izdvajanje datoteke"
+
+#: svncommitjob.cpp:109
+#, fuzzy, kde-format
+msgid "Subversion Commit"
+msgstr "Subversion spajanje"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "Upisujem..."
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "Nedovoljno informacija da se izvrši upisivanje"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Subversion kopija"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "Nedovoljno informacija da se izvrši kopiranje datoteke"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Subversion Diff"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "Nedovoljno informacija da se izvrši diff"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Subversion uvoz"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "Nedovoljno informacija da se izvrši uvoz"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Subversion Info"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "Nedovoljno informacija da se izvrši info posao"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "Dodano %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "Obrisano %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "Obrisano %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "Dodano %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "Revizija %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "Ažuriram spoljnje: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "Šaljem %1"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "Dodavanje %1 koristeći mime tip %2."
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "Dodajem %1."
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "Brišem %1."
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "Zamjenjujem %1."
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "Prenosim podatke datoteka "
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "Okrivljivanje završeno za revizuju %1, staza %2"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "Vraćena radna kopija %1"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "Vraćanje neuspjelo na radnoj kopiji %1"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "Kopiran %1"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "Certifikate još nije važeći."
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "Certifikat je istekao."
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr "Certifikatsko CN (ime hosta) se ne slaže s udaljenim imenom."
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "Certifikatski autoritet je nepoznat."
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "Ostale nepoznate greške."
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "Unesite prijavu za: %1"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "Završeno"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"Greška u izvršavanju posla:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Subversion dnevnik"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "Nema dovoljno informacija za lokaciju dnevnika"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Subversion premještanje"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "Nedovoljno informacija da se premjesti datoteka"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Subversion brisanje"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "Nedovoljno informacija da se izvrši brisanje posla"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Subversion vraćanje"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "Nedovoljno informacija da se izvrši vraćanje"
+
+#: svnssldialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "SSL Server Certificate"
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "SSL certifikat servera"
+
+#: svnssldialog.cpp:30
+#, fuzzy, kde-format
+#| msgid "Trust Permanently"
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "Trajno povjerenje"
+
+#: svnssldialog.cpp:31
+#, fuzzy, kde-format
+#| msgid "Trust Temporarily"
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "Privremeno povjerenje"
+
+#: svnssldialog.cpp:62
+#, fuzzy, kde-format
+#| msgid "Ssl Server Certificate: %1"
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "Ssl Server certifikat: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Subversion status"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "Nedovoljno informacija za izvršennje statusnog posla"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Subversion ažuriranje"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "Nedovoljno informacija da se izvrši ažuriranje"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, fuzzy, kde-format
+#| msgid "Source directory:"
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Izvorni direktorij:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, fuzzy, kde-format
+#| msgid "Repository:"
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "Repozitorij:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Repository Location"
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "Lokacija repozitorija"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Choose the repository into which the source directory is imported"
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "Izabeiri repozitorij u koji se uvozi izvorni direktorij"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, fuzzy, kde-format
+#| msgid "Commit Message:"
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Poruka potvrde:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"Bilo je grešaka potvrđivanja certifikata servera.\n"
+"Da li želite da vjerujete ovom certifikatu?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "Razlozi zašto je validacija neuspjela"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, fuzzy, kde-format
+#| msgid "Certificate Information"
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "Informacije o certifikatu"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, fuzzy, kde-format
+#| msgid "Hostname:"
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "Naziv domaćina:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "nekiserver"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, fuzzy, kde-format
+#| msgid "Issuer:"
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "Izdavač:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "nekiizdavač"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, fuzzy, kde-format
+#| msgid "Valid From:"
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "Važi od:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "važiod"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, fuzzy, kde-format
+#| msgid "Valid Until:"
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "Vrijedi do:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "važido"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, fuzzy, kde-format
+#| msgid "Fingerprint:"
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "Otisak prsta:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "otisak"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "Ssl Server certifikat"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "Lokacija repozitorija za uvoz u"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "Uvoz u Subversion repozitorij"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "Izdvajanje iz Subversion repozitorija"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "Subversion spajanje"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "Nedovoljno informacija da se izvrši spajanje"
+
+#~ msgid "Start Revision"
+#~ msgstr "Početna revizija"
+
+#~ msgid "End Revision"
+#~ msgstr "Krajnja revizija"
+
+#~ msgid "Checkout"
+#~ msgstr "Izdvajanje"
+
+#~ msgid "Repository Url:"
+#~ msgstr "Repozitorijski Url:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "Odredišna staza:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Rekurzivno:"
+
+#~ msgid "Requested local path:"
+#~ msgstr "Zahtijevana lokalna staza:"
+
+#~ msgid "Source"
+#~ msgstr "Izvor"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "Odredi po repozitorijskom URL"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "Odredi po lokalnoj radnoj kopiji"
+
+#~ msgid "Source revision"
+#~ msgstr "Revizija izvornog koda"
+
+#~ msgid "Destination"
+#~ msgstr "Odredište"
+
+#~ msgid "Specify either the full repository URL or local working path"
+#~ msgstr "Navedite ili puni URL repozitorija ili lokalnu stazu"
+
+#~ msgid "Target Url"
+#~ msgstr "Odredišni Url"
+
+#~ msgid "Non Recursive"
+#~ msgstr "Nerekurzivno"
+
+#~ msgid "No diff deleted"
+#~ msgstr "Diff nije obrisan"
+
+#~ msgid "Ignore contents type"
+#~ msgstr "Ignoriši vrstu sadržaja"
+
+#~ msgid "Subversion Log View Options"
+#~ msgstr "Subversion Log opcije pogleda"
+
+#~ msgid "Maximum number of logs to be displayed"
+#~ msgstr "Maksimalni broj dnevnika za prikaz"
+
+#~ msgid "Do not show logs before branching point"
+#~ msgstr "Ne prikazuj dnevnike prije tačke grananja"
+
+#~ msgid "Forcefully delete locally modified and/or unversioned items"
+#~ msgstr "Namjerno obriši lokalno izmijenjene i/ili neverzirane stavke"
+
+#~ msgid "Select working copies to be reverted:"
+#~ msgstr "Izaberite radne kopije koje će biti vrćene:"
+
+#~ msgid "Select"
+#~ msgstr "Izaberi"
+
+#~ msgid "Text Status"
+#~ msgstr "Status teksta"
+
+#~ msgid "Prop Status"
+#~ msgstr "Status osobine"
+
+#~ msgid "Working Copy"
+#~ msgstr "Radbna kopija"
+
+#~ msgid "Recursive"
+#~ msgstr "Rekurzivno"
+
+#~ msgid "Specify as number:"
+#~ msgstr "Navedi kao broj:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "Navedi kao ključnu riječ:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "Navedi kao datum:"
+
+#~ msgid "Status Requested for:"
+#~ msgstr "Status zahtijevan za:"
+
+#~ msgid "Specify revision"
+#~ msgstr "Navedi reviziju"
+
+#~ msgid "Non recursive"
+#~ msgstr "Nerekurzivno"
+
+#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
+#~ msgstr ""
+#~ "Preuzmi samo \"interesantne\" elemente (poput lokalnih modifikacija)"
+
+#~ msgid "Contact repository and augment with repository information"
+#~ msgstr "Kontaktiraj repozitorij i proširi s repozitorijskom informacijama"
+
+#~ msgid "Do not ignore svn:ignore"
+#~ msgstr "Ne ignotišisvn:ignore"
+
+#~ msgid "Ignore external items"
+#~ msgstr "Ignoriši spoljnje url"
+
+#~ msgid "Update immediate children only (non-recursive)"
+#~ msgstr "Ažuriraj samo neposredne potomke (nerekurzivno)"
+
+#~ msgid "Ignore external entries"
+#~ msgstr "Ignoriši spoljnje ulaze"
+
+#~ msgid "Select Revision"
+#~ msgstr "Izbor revizije"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kenan Dervišević,Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "Kd@etf.unsa.ba,samir.ribic@etf.unsa.ba"
+
+#~ msgid "Support for Subversion version control systems"
+#~ msgstr "Podrška za Subversion sistem kontrole verzija"

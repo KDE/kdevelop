@@ -1,0 +1,100 @@
+# Translation of kdevcustommake.po to Catalan
+# Copyright (C) 2009-2015 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa <manutortosa@gmail.com>, 2009.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2015.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2015-05-12 13:47+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Intenta la resolució del camí als «include» mentre s'està executant un altre "
+"procés de resolució"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Falta el Makefile a la carpeta «%1»"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr ""
+"Hi ha un problema en intentar identificar els camins dels «include» per a %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "A la memòria cau: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "El nom de fitxer %1 sembla estar amb format incorrecte"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Ha fallat en extreure el nou directori de treball"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "El resultat és: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Ha fallat la crida recursiva al «make»"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "La cadena del paràmetre «%1» no sembla vàlida. El resultat és: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "El directori «%1» no existeix. El resultat és %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "La crida recursiva al «make» està amb format incorrecte"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr ""
+"No s'han pogut extreure els camins als «include» des de la sortida de «make»"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Carpeta: «%1» Ordre: «%2» Resultat: «%3»"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Executa"

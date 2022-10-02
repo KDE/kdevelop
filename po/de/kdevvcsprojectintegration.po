@@ -1,0 +1,73 @@
+# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2015, 2020.
+# Burkhard Lück <lueck@hube-lueck.de>, 2011, 2013.
+# Gerhard Stengel <gstengel@gmx.net>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevvcsprojectintegration\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-08-19 18:31+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: vcschangesview.cpp:84
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+#: vcschangesviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Changes"
+msgstr "Projekt-Änderungen"
+
+#: vcschangesviewplugin.cpp:65
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Aktuelles Dokument suchen"
+
+#: vcschangesviewplugin.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locate the current document and select it"
+msgstr "Das aktuelle Dokument suchen und auswählen"
+
+#: vcschangesviewplugin.cpp:70
+#, kde-format
+msgctxt "@action"
+msgid "Reload View"
+msgstr "Ansicht neu laden"
+
+#: vcschangesviewplugin.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Refresh the view for all projects, in case anything changed"
+msgstr "Die Ansicht aller Projekte bei Änderungen aktualisieren"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Gerhard Stengel"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "gstengel@gmx.net"
+
+#~ msgid "VCS Project Integration"
+#~ msgstr "Integration von VCS mit Projekten"
+
+#~ msgid ""
+#~ "This plugin provides integration between the projects and their VCS "
+#~ "infrastructure"
+#~ msgstr ""
+#~ "Dieses Modul stellt eine Integration zwischen Projekten und ihrer VCS-"
+#~ "Infrastruktur her."
+
+#~ msgid "Integrates VCS with Projects"
+#~ msgstr "Integriert VCS mit Projekten"

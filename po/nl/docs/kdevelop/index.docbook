@@ -1,0 +1,3270 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY kdevelop "<application
+>KDevelop</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Dutch "INCLUDE">
+]>
+<book id="kdevelop" lang="&language;">
+<bookinfo>
+<title
+>Handboek van &kdevelop;</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Deze documentatie is geconverteerd vanuit de KDE UserBase <ulink url=" https://userbase.kde.org/KDevelop4/Manual"
+>KDevelop4/Manual</ulink
+> pagina.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+&Freek.de.Kruijf;&Ronald.Stroethoff; 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-08-19</date>
+    <releaseinfo
+>&kdevelop; 4.4 (&kde; 4.9)</releaseinfo>
+<abstract>
+<para
+>&kdevelop; is een geïntegreerde ontwikkelomgeving om te worden gebruikt voor een brede variëteit van programmeertaken.</para>
+    </abstract>
+  <keywordset>
+    <keyword
+>KDE</keyword>
+    <keyword
+>KDevelop</keyword>
+    <keyword
+>IDE</keyword>
+    <keyword
+>ontwikkeling</keyword>
+    <keyword
+>programmeren</keyword>
+  </keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2012-08-19T12:36:08Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="what-is-kdevelop"
+><title
+>Wat is &kdevelop;?</title>
+<para
+><ulink url="https://www.kdevelop.org/"
+>&kdevelop;</ulink
+> is een moderne geïntegreerde ontwikkelomgeving (IDE) voor C++ (en andere programmeertalen) en is een van de vele <ulink url="https://kde.org/applications/"
+>KDE programma's</ulink
+>. Het draait op &Linux; (zelfs als u een andere desktop, zoals GNOME, gebruikt) maar is ook beschikbaar voor de meeste andere varianten van &UNIX; en zelfs voor Windows.</para>
+<para
+>&kdevelop; heeft alle voorzieningen van een moderne IDE. Voor grote projecten en programma's is het belangrijk dat &kdevelop; <emphasis
+> C++ begrijpt</emphasis
+>: het verwerkt de gehele broncode en onthoudt welke member-functies van welke klassen zijn, waar variabelen gedefinieerd zijn, welke types het zijn en vele andere dingen over uw code. Als bijvoorbeeld: in een van de headers in uw project wordt een klasse gedeclareerd</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>en later in uw programma hebt u</para>
+<para
+><programlisting
+>Car my_ride;
+// ...doe iets met deze variabele...
+std::string color = my_ride.ge
+</programlisting>
+</para>
+<para
+>heeft het bijgehouden dat <varname
+>my_ride</varname
+> in de laatste regel een variabele van het type <varname
+>Car</varname
+> is en biedt aan om automatisch <varname
+>ge</varname
+> aan te vullen tot <varname
+>get_color()</varname
+> omdat deze de enige member-functie van de klasse <varname
+>Car</varname
+> is die op deze manier start. In plaats doorgaan met het volledig invoeren drukt u gewoon op &Enter; om het complete woord te krijgen; dit bespaart typen, vermijdt typefouten, en u hoeft ook niet meer de exacte namen van honderden functies en klassen uit een project te onthouden.</para>
+<para
+>Als een tweede voorbeeld, neemt u aan dat u een code als deze hebt:</para>
+<para
+><programlisting
+>double foo ()
+{
+  double var = my_func();
+ return var * var;
+}
+double bar ()
+{
+  double var = my_func();
+  return var * var * var;
+}
+</programlisting
+></para>
+<para
+>Als u met uw muis boven het symbool <varname
+>var</varname
+> in de functie <varname
+>bar</varname
+> zweeft dan heeft u de mogelijkheid om alle locaties te zien waar dit symbool gebruikt is. Als u erop klikt, ziet u alleen het gebruik van deze variabele in de functie <varname
+>bar</varname
+> omdat &kdevelop; begrijpt dat de variabele <varname
+>var</varname
+> in de functie <varname
+>foo</varname
+> daarmee niets van doen heeft. Vergelijkbaar, kunt na het klikken met de &RMB; de naam van de variabele wijzigen; maar dit gebeurt dan alleen met de variabele in <varname
+>bar</varname
+> maar niet die met dezelfde naam in <varname
+>foo</varname
+>.</para>
+<para
+>Maar &kdevelop; is niet alleen een intelligente bewerker van broncode; &kdevelop; kan ook andere taken goed uitvoeren. het markeert de broncode in verschillende kleuren; De inspringingen die het maakt zijn instelbaar; het heeft een geïntegreerde interface voor de GNU debugger <application
+>gdb</application
+>; het kan u de documentatie van een functie tonen als u met de muis boven een locatie zweeft waar deze functie in gebruik is; het kan overweg met verschillende soorten build environments en compilers (&eg; met op <guilabel
+>make</guilabel
+> en <guilabel
+>cmake</guilabel
+>-gebaseerde projecten), en vele andere handige dingen die in deze handleiding beschreven worden.</para>
+</chapter>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"
+><title
+>Sessies en projecten: De basis elementen van &kdevelop;</title>
+<para
+>In deze sectie behandelen we sommige begrippen van hoe &kdevelop; de wereld ziet en hoe het werk structureert. We zullen met name de begrippen <emphasis
+>sessies</emphasis
+> en <emphasis
+>projecten</emphasis
+> uitleggen en hoe u de projecten opzet die u wilt bewerken in &kdevelop;.</para>
+<sect1 id="terminology"
+><title
+>Terminologie</title>
+<para
+>&kdevelop; heeft de begrippen <emphasis
+>sessies</emphasis
+> en <emphasis
+>projecten</emphasis
+>. Een sessie bevat alle projecten die iets met elkaar gemeen hebben. Voor de voorbeelden die hierna komen nemen we aan dat u de ontwikkelaar bent van zowel een bibliotheek als het programma dat daarvan gebruik maakt. U kunt daarbij voor de eerste denken aan de core KDE bibliotheken en voor het laatste aan &kdevelop;. Ander voorbeeld: laten we aannemen dat u een &Linux; kernel hacker bent en u werkt ook aan een device driver voor &Linux; die nog niet is opgenomen in de kernel-tree.</para>
+<para
+>Laten we de laatste als voorbeeld nemen, u heeft een sessie in &kdevelop; met daarin twee projecten: de &Linux; kernel en de device driver. U zal deze in een enkele sessie willen hebben (en niet twee sessies met elk een enkel project) omdat het handig is om de kernel functies en data structures in &kdevelop; te zien wanneer u broncode voor de driver aan het schrijven bent &mdash; bijvoorbeeld omdat dan kernel functies en variabele-namen automatisch aangevuld krijgt, maar ook omdat u dan de documentatie  van de kernelfunctie te zien krijgt tijdens het hacken aan de device driver.</para>
+<para
+>Stelt u zich voor dat u ook een KDE ontwikkelaar bent. Dan is het verstandig om een tweede sessie te hebben die KDE als project heeft. U zou in principe maar één sessie hoeven te hebben voor dit alles , maar daar is niet echt een reden voor: in uw KDE werk, hoeft u geen toegang te hebben tot kernel of device driver functies; en u wilt geen KDE class-namen automatisch aangevuld hebben tijdens het werk aan de &Linux;-kernel. Tenslotte, het compileren van een van de KDE libraries is onafhankelijk van het hercompileren van de &Linux; kernel (maar het is wel verstandig om de &Linux; kernel te hercompileren als u de device driver compileert omdat een of meer van de header-bestanden gewijzigd kunnen zijn).</para>
+<para
+>Tenslotte, een ander gebruik van sessies is als u zowel aan de huidige ontwikkelversie van een project als aan een branch werkt: u wilt in dat geval niet dat &kdevelop; in de war komt met de klassen die bij de hoofdtak horen en die bij de branch horen, Het is daarom verstandig om twee sessies te hebben, met dezelfde verzameling projecten maar uit andere mappen (overeenkomend met verschillende ontwikkel-branches).</para>
+</sect1>
+<sect1 id="setting-up-a-session-and-importing-an-existing-project"
+><title
+>Opzetten van een sessie en importeren van een bestaand project</title>
+<para
+>Laten we het bij het voorbeeld van de &Linux; kernel en de device driver houden &mdash; u wilt misschien deze twee voorbeelden vervangen door uw eigen set bibliotheken of projecten. Om een nieuwe sessie voor deze twee projecten aan te maken, gaat u in het menu naar <menuchoice
+><guimenu
+>Sessie</guimenu
+><guimenuitem
+>Nieuwe sessie starten</guimenuitem
+></menuchoice
+> linksboven (of, als dit de eerste keer is dat u &kdevelop; gebruikt: gebruik gewoon de standaard sessie die u krijgt bij het eerste gebruik, deze is leeg).</para>
+<para
+>We willen vervolgens deze sessie vullen met projecten waarvan we even aannemen dat ze al ergens aanwezig zijn (het aanmaken van nieuwe lege projecten wordt elders in deze handleiding beschreven). Hiervoor zijn er eigenlijk twee methoden, de keuze is afhankelijk van of het project al ergens op uw harde schijf aanwezig is of dat nog moet worden gedownload van een server.</para>
+<sect2 id="option-1--importing-a-project-from-a-version-control-system-server"
+><title
+>Optie 1: Een project importeren Uit een versiecontrolsysteemserver</title>
+<para
+>We gaan ervan uit dat het project dat we willen gaan opzetten &mdash; de &Linux;-kernel &mdash; nog in een versiebeheersysteem op een server aanwezig is en dat u het nog niet heeft uitgecheckt naar uw lokale harde schijf. Ga in dat geval naar het menu <guilabel
+>Project</guilabel
+> om de &Linux; kernel als project in de huidige sessie aan te maken, volg daarna de volgende stappen:</para>
+<itemizedlist>
+<listitem
+><para
+>Ga naar <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Project ophalen</guimenuitem
+></menuchoice
+> om een project te importeren </para
+></listitem>
+<listitem
+><para
+>Er zijn meerdere manieren om in de huidige sessie een nieuw project te beginnen , afhankelijk van waar de bronbestanden vandaan komen: u kunt eenvoudig in &kdevelop; een bestaande map aanwijzen (zie optie 2 hieronder), maar u kunt ook aan &kdevelop; vragen om de bronbestanden vanuit een repository te downloaden. </para
+></listitem>
+<listitem
+><para
+>Aannemend dat u nog geen versie hebt opgehaald (checked out): <itemizedlist>
+<listitem
+><para
+>In het dialoogvenster <guilabel
+>Bron selecteren</guilabel
+> maak een keuze uit <guilabel
+>Uit bestandssysteem</guilabel
+>, <guilabel
+>Subversion</guilabel
+>, <guilabel
+>Git</guilabel
+>, <guilabel
+>GitHub</guilabel
+> of <guilabel
+>KDE</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>Kies een werkmap als doel waar de broncode naar toe uitgecheckt moet worden. </para
+></listitem>
+<listitem
+><para
+>Geef een &URL; op voor de locatie van de repository waar u broncode kan verkrijgen.  </para
+></listitem>
+<listitem
+><para
+>Klik op <guilabel
+>Gaan</guilabel
+>. Het kan zijn dat u daarna afhankelijk van de snelheid van uw verbinding en de grootte van het project vrij lang moet wachten. Helaas geeft de voortgangsbalk van &kdevelop; 4.2.x niet de werkelijke voortgang weer, maar u kunt wel door regelmatig via het commando <screen
+>du -sk <replaceable
+>/path/to/&kdevelop;/project</replaceable
+></screen
+> op de commandoregel zien hoeveel al is gedownloaded. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Het probleem van de voortgangsbalk is gemeld als <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832"
+>&kdevelop; bug 256832</ulink
+>.</para
+></note
+></para>
+<para
+><note
+><para
+>Tijdens dit proces krijg ik ook de foutmelding <emphasis
+>You need to specify a valid location for the project</emphasis
+>, welke u gerust kan negeren.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>Het vraagt u in deze map een &kdevelop; project-bestand te selecteren. Maar omdat u waarschijnlijk er nog geen heeft, kunt u gewoon op <guilabel
+>Verder</guilabel
+> klikken. </para
+></listitem>
+<listitem
+><para
+>Klik opnieuw op <guilabel
+>Verder</guilabel
+> </para
+></listitem>
+<listitem
+><para
+>&kdevelop; zal u vervolgens vragen om een project manager te kiezen. Als in dit project standaard &UNIX; make bestanden aanwezig zijn dan kiest u de makefile projectmanager. </para
+></listitem>
+<listitem
+><para
+>&kdevelop; zal starten met opnemen van het gehele project. Dit kan opnieuw nogal wat tijd in beslag nemen om alle bestanden te doorlopen en indexen van klassen &etc; te maken. Onderaan het hoofdvenster is een voortgangsbalk die de voortgang aangeeft. (Als u meerdere processor cores heeft dan kan u dit proces versnellen door naar <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>&kdevelop; instellen</guimenuitem
+></menuchoice
+> te gaan en vervolgens naar <guilabel
+>Achtergrond ontleder</guilabel
+> links te gaan en het aantal threads voor achtergrond ontleden te verhogen.) </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"
+><title
+>Optie 2: een project importeren die al aanwezig is op uw harde schijf</title>
+<para
+>Als alternatief, als het project waaraan u wilt gaan werken al aanwezig is op uw harde schijf (Omdat bijvoorbeeld u het als tar-bestand heeft gedownload van een FTP server, omdat u het al heeft uitgecheckt van een versiebeheersysteem, of omdat het uw eigen project is dat <emphasis
+>alleen</emphasis
+> op uw eigen harde schijf bestaat ), gebruik dan <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Projecten openen / importeren</guimenuitem
+></menuchoice
+> en kies in het dialoogvenster de map waarin uw project aanwezig is.</para>
+</sect2>
+</sect1>
+<sect1 id="setting-up-an-application-as-a-second-project"
+><title
+>Opzetten van programma als een tweede project</title>
+<para
+>Het volgende wat u wilt doen is het opzetten van andere projecten in dezelfde sessie. In het voorbeeld van hierboven wilt u de device driver als tweede project toevoegen, dit kunt u doen door exact dezelfde stappen uit te voeren.</para>
+<para
+>Als u meerdere programma's of bibliotheken heeft kunt u eenvoudig de stappen herhalen om meer en meer projecten aan uw sessie toe te voegen.</para>
+</sect1>
+<sect1 id="creating-projects-from-scratch"
+><title
+>Projecten vanaf nul aanmaken</title>
+<para
+>Er is natuurlijk ook de mogelijkheid dat u een nieuw project vanaf nul wilt aanmaken. dit kunt u doen door gebruik van het <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Nieuw van sjabloon...</guimenuitem
+></menuchoice
+> menu item, waar u een compleet keuzemenu vindt. Sommige project sjablonen zijn meegeleverd met &kdevelop;, maar er zijn meer beschikbaar door toepassing <application
+>KAppTemplate</application
+> te installeren. Kies in het dialoog het project type en de programmeertaal, geef een naam en locatie voor uw project op en klik op <guilabel
+>Verder</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-project-dialog.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Op de tweede pagina kunt u een versiebeheersysteem instellen. Kies het systeem dat u wilt gebruiken en vul de benodigde gegevens in. Als u geen versiebeheersysteem wilt gebruiken of u wilt het later handmatig instellen, kies dan <guilabel
+>Geen</guilabel
+>. Als u tevreden bent over de keuzes dan kunt u op <guilabel
+>Voltooien</guilabel
+> klikken. </para>
+<para
+>Uw project is nu klaar, u kunt daarom proberen uw project te compileren of te installeren. Sommige sjablonen zijn met commentaar in de code of zelfs een apart README bestand, en het is verstandig dat u deze eerst leest. Daarna kunt u beginnen met uw project te bewerken door welke gewenste functionaliteit dan ook toe te voegen. </para>
+</sect1>
+</chapter>
+<chapter id="working-with-source-code"
+><title
+>Broncode bewerken</title>
+<para
+>Naast fout opsporing zal u de meeste tijd spenderen aan het lezen door de broncode en het schrijven daaraan tijdens het ontwikkelen van software. Om u hierin bij te staan, heeft &kdevelop; veel verschillende manieren om de broncode te doorzoeken en het schrijven van ervan productiever te maken. Zoals in de volgende hoofdstukken meer in detail zal worden beschreven, &kdevelop; is niet alleen een source editor &mdash; maar het is een source beheerssysteem waarmee u op verschillende manieren kunt kijken naar de gefilterde informatie over de bestanden die samen de broncode in uw sessie vormen.</para>
+<sect1 id="tools-and-views"
+><title
+>Gereedschappen en vensters</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-7.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Om met projecten te werken heeft &kdevelop; het concept van <emphasis
+>hulpmiddelen</emphasis
+>. Een hulpmiddel biedt een specifiek zicht op de hulpbron of een actie die er mee kan worden gedaan. Hulpmiddelen worden gerepresenteerd door knoppen aan de randen van uw venster (in verticale tekst langs de linker- en rechterkant of horizontaal langs de onderkant). Als u op ze klikt, expanderen ze tot een subvenster &mdash; een <emphasis
+>beeld</emphasis
+> &mdash; binnen het hoofdvenster; als u nog eens klikt op de knop van het hulpmiddel, zal het subvenster weer verdwijnen.</para>
+<para
+>Om een subvenster te laten verdwijnen kunt u ook klikken op de <guilabel
+>x</guilabel
+> rechtsboven op het subvenster</para>
+<!--FIXME How to add a tool-->
+<para
+>De afbeelding hierboven toont een selectie hulpmiddelen, aan de linkerkant en de rechterkant van het venster; in de afbeelding is links het <guilabel
+>Klassen</guilabel
+>-venster en rechts het <guilabel
+>Fragmenten</guilabel
+>-venster geopend met in het midden een editor met een bronbestand geopend. In de praktijk heeft u waarschijnlijk meestal alleen de editor en misschien links het <guilabel
+>Klassen</guilabel
+> of <guilabel
+>Broncode Browser</guilabel
+> venster open. Andere vensters zult u waarschijnlijk alleen tijdelijk openen als u het betreffende gereedschap gebruikt zodat er de meeste tijd meer ruimte overblijft voor de editor.</para>
+<para
+>De knop <guilabel
+>Project</guilabel
+> zou al aanwezig moeten zijn als u &kdevelop; voor de eerste keer gebruikt. Klik erop: een subvenster opent waarin onderaan de projecten te zien zijn die u aan de sessie toegevoegd heeft en een lijst met mappen in de projecten bovenaan.</para>
+<para
+>Er zijn vele andere hulpmiddelen die u in &kdevelop; kunt gebruiken, aanvankelijk zijn ze allemaal als knop aanwezig langs de rand van het hoofdvenster. Voor het toevoegen van meer knoppen gaat u naar het menu item<menuchoice
+><guimenu
+>Venster</guimenu
+><guimenuitem
+>weergave van hulpmiddelen</guimenuitem
+></menuchoice
+>. Hieronder zijn er enkele die u wellicht handig vindt:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Klassen</guilabel
+>: een complete lijst met alle klassen die in een van de projecten uit de sessie zijn gedefinieerd met alle daarbij horende functies en variabelen. Door op een ervan te klikken opent een venster met informatie daarover.  </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Documenten</guilabel
+>: Een lijst met de laatst gebruikte bestanden, op soort onderverdeeld (&eg; bronbestanden, patch bestanden, platte tekst documenten). </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Broncode Browser</guilabel
+>: Afhankelijk van de positie van uw cursor in het bestand toont dit hulpmiddel gerelateerde zaken. Bijvoorbeeld, als u op een <varname
+>#include</varname
+> regel staat, dan toont het informatie over het bestand die u wilt includen zoals de klassen die in dat bestand worden gedeclareerd; als u op een lege regel staat, dan toont het de in dit bestand gedeclareerde klassen en functies (alle als links: door erop te klikken gaat u naar de eigenlijke locatie in het bestand van de declaratie of definitie); als u in een functiedefinitie bent dan toont het de locatie van de declaratie met een lijst waar het gebruikt is. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Bestandssysteem</guilabel
+>: Toont in een boomstructuur het bestandssysteem. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Documentatie</guilabel
+>: Hier kunt u zoeken naar man pages en andere helppagina's. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Fragmenten</guilabel
+>: Hier zijn stukken tekst beschikbaar die u keer op keer gebruikt en niet iedere keer opnieuw wilt invoeren. Bijvoorbeeld, in het project waarmee de afbeelding hierboven is gecreëerd, is het vaak nodig om de volgende code te creëren: </para
+></listitem>
+</itemizedlist>
+<para
+><programlisting
+>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell
+      = triangulation.begin_active();
+   cell != triangulation.end();
+   ++cell)</programlisting
+>Dit is een verschrikkelijk stuk tekst dat bijna iedere keer dat u een dergelijke loop nodig heeft er precies zo uitziet &mdash; daarom is het een goede kandidaat voor een fragment.</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Konsole</guilabel
+>: Opent in het hoofdvenster een venster met de commandoregel voor de zeldzame keer dat u een commando (&eg; to run <varname
+>./configure</varname
+>) wilt starten. </para
+></listitem>
+</itemizedlist>
+<para
+>Een complete lijst van de hulpmiddelen en vensters vindt u <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
+>hier</ulink
+>.</para>
+<para
+>Voor veel programmeurs is verticale monitor ruimte erg belangrijk. Om hieraan tegemoet te komen, kunt u de hulpvensters aan de linkerkant en de rechterkant van het venster arrangeren: voor het verplaatsen van een hulpmiddel klikt u erop met de &RMB; en versleept het vervolgens naar de nieuwe locatie.</para>
+</sect1>
+<sect1 id="exploring-source-code"
+><title
+>Broncode verkennen</title>
+<sect2 id="local-information"
+><title
+>Lokale informatie</title>
+<para
+>&kdevelop; <emphasis
+>begrijpt</emphasis
+> broncode, en als consequentie daarvan is het erg goed in het geven van informatie over variabelen en functies die in uw programma beschikbaar zijn. Hier is bijvoorbeeld een schermafdruk van het bewerken van een stuk code waarbij de muis zweeft boven het symbool <varname
+>cell</varname
+> in regel 1316 (als u gewent bent om met een toetsenbord te werken, u kunt hetzelfde effect bereiken door de &Alt;-toets een tijdje ingedrukt te houden):</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; toont aan mij een tooltip met daarin het type variabele (hier: <varname
+>DoFHandler&lt;dim&gt;active_cell_iterator</varname
+>), waar deze variabele is gedeclareerd (de <emphasis
+>container</emphasis
+>, omdat die hier de surrounding functie <varname
+>get_maximal_velocity</varname
+> is, daar het een lokale variabele is), wat het is (een variabele, niet een functie, klasse of namespace) en waar het is gedeclareerd (in regel 1314, een paar regels hoger in de code).</para>
+<para
+>In dit voorbeeld is het symbool waarboven de muis zweeft niet gedocumenteerd. Als de muis boven het symbool <varname
+>get_this_mpi_process</varname
+> in regel 1318 had gezweefd dan was de uitkomst dit geweest:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Hier heeft &kdevelop; een kruisverwijzing naar een declaratie uit een compleet ander bestand (<filename
+>utilities.h</filename
+>, die zelfs uit een compleet ander project van dezelfde sessie komt) samen met de doxygen-style commentaar die hier de declaratie begeleid.</para>
+<para
+>Wat deze tooltips nog meer nuttig maakt is dat ze dynamisch zijn: ik kan erop klikken zodat ik informatie krijg over de context waarin de variabele is gedeclareerd (&ie; over de namespace <varname
+>System</varname
+>, waar het is gedeclareerd, gedefinieerd, gebruikt, of over de documentatie daarvan) en ik kan op de blauwe links klikken zodat de cursor naar de locatie van de declaratie van het symbool springt (&eg; in <varname
+>utilities.h</varname
+>, regel 289) of het geeft mij een lijst van de locaties waar dit symbool is gebruikt in het huidige bestand (of in alle projecten van deze sessie. Dit laatste is vaak nuttig als u wilt bestuderen hoe, bijvoorbeeld, een bepaalde functie in een groot stuk code is gebruikt.</para>
+<note
+><para
+>De informatie in een tooltip is veranderlijk &mdash; het is afhankelijk van of u de &Alt;-toets indrukt of waar u uw muis boven zweeft. Als u het op een meer permanente plaats wilt lezen, dan kunt u het subvenster <guilabel
+>Broncode Browser</guilabel
+> openen. Hier is bijvoorbeeld de cursor bij dezelfde functie als in voorbeeld hierboven en het venster links toont dezelfde soort informatie als in de eerdere tooltip:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-15.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Als u de cursor rechts beweegt dan wijzigt de informatie aan de linkerkant. Maar als u klikt op de knop <guilabel
+>Huidige weergave vergrendelen</guilabel
+> rechtsboven dan vergrendelt u deze informatie, zodat het onafhankelijk is van de muis-bewegingen en u deze informatie rustig kunt bestuderen.</para
+></note>
+<para
+><note
+><para
+>Dit soort van contextinformatie is beschikbaar op veel andere plaatsen in &kdevelop;, niet alleen in de broncodebewerker. Bijvoorbeeld, het ingedrukt houden van de toets &Alt; in een lijst voor aanvullen(&eg; bij een snel-openen) geeft ook de contextinformatie over het huidige symbool.</para
+></note
+></para>
+</sect2>
+<sect2 id="file-scope-information"
+><title
+>Informatie op bestand-niveau</title>
+<para
+>Een niveau hoger is het verkrijgen van informatie over het bronbestand waar u op dit moment aan werkt. Om deze informatie te verkrijgen plaatst u de cursor op het huidige bestand waarna u kunt de informatie kunt bekijken in de <guilabel
+>Code Browser</guilabel
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Hier toont het een lijst met namespaces, klasses en functies die gedeclareerd of gedefinieerd zijn in het geselecteerde bestand, zodat u een indruk krijgt van wat er in het bestand gebeurt en u naar elk van deze declaraties of definities kunt springen zonder in het bestand omhoog of omlaag te scrollen of te moeten zoeken naar een bepaald symbool.</para>
+<para
+><note
+><para
+>De informatie over het bestand is dezelfde als in de <quote
+>Overzicht</quote
+> modus getoond zoals hieronder in de Navigeren door broncode beschreven; het verschil is dat de overzicht modus alleen een tijdelijke tooltip is.</para
+></note
+></para>
+</sect2>
+<sect2 id="project-and-session-scope-information"
+><title
+>Informatie op project- en sessie-niveau</title>
+<para
+>Er zijn zoveel manieren waarop u informatie kan verkrijgen over een heel project (of, in feite over alle projecten in een sessie). Deze soort informatie krijgt u via verschillende vensters. Bijvoorbeeld het venster <guilabel
+>Klassen</guilabel
+> laat voor alle projecten in de sessie een boomstructuur zien met alle klassen en bijbehorende namespaces, samen met de leden van de functies en de variabelen van elk van deze klassen:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Met de muis zwevend boven een entry krijgt u informatie over het symbool, waar het is gedeclareerd en gedefinieerd en waar het is gebruikt. Als u dubbelklikt op een entry in de boomstructuur dan opent op de locatie waar het symbool is gedeclareerd of gedefinieerd een bewerking-venster.</para>
+<para
+>Maar er zijn ook andere manieren om algemene informatie te bestuderen. Bijvoorbeeld, het venster <guilabel
+>Documenten</guilabel
+> geeft een overzicht over een project in de vorm van de soorten bestanden of andere documenten waaruit het project is opgebouwd:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-18.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="rainbow-color-highlighting-explained"
+><title
+>Veelkleurig oplichten uitgelegd</title
+> 
+<para
+><application
+>KDevelop</application
+> gebruikt veel verschillende kleuren om verschillende objecten op te laten lichten in de broncode. Als u de betekenis van de verschillende kleuren weet dan kunt snel veel informatie uit de broncode halen door alleen maar naar de kleuren te kijken,zonder een enkele karakter te lezen. Het oplichten volgt de volgende regels: </para>
+<itemizedlist>
+<listitem
+><para
+>Objects van het type Class / Struct, Enum (de waarde en het type), (global) functies, en leden van klasses hebben elk een eigen kleur toegewezen (klasses zijn groen, enums zijn donkerrood, en members zijn donkergeel of paars, (algemeen) functies zijn altijd paars).</para
+></listitem>
+<listitem
+><para
+>Alle algemene variabelen hebben de kleur donkergroen.</para
+></listitem>
+<listitem
+><para
+>Identifiers die typedefs zijn voor een ander type hebben de kleur cyaan.</para
+></listitem>
+<listitem
+><para
+>Alle object-declaraties en definities zijn vetgedrukt.</para
+></listitem>
+<listitem
+><para
+>Als u een member aanroept vanuit de context waar het is gedefinieerd (base of afgeleide klasse) dan verschijnt het in geel, in de andere gevallen verschijnt het in paars.</para
+></listitem>
+<listitem
+><para
+>Als een member private of protected is dan krijgt het bij gebruik een donkerder kleur.</para
+></listitem>
+<listitem
+><para
+>Voor lokale variabelen die bij een functie horen worden alle kleuren uit de regenboog gebruikt, waarbij de kleurkeuze gebaseerd is op de hash van de identifier. Hier horen ook de parameters van de functie bij. Een identifier zal als het niet van scope verandert altijd dezelfde kleur gebruiken (maar dezelfde identifier zal een andere kleur krijgen als het een ander object vertegenwoordigt, &ie; als het wordt geherdefinieerd in een meer geneste scope), en u krijgt meestal dezelfde kleur voor dezelfde identifier in een andere scope. Als u dus meerdere functies heeft waarbij de parameters dezelfde namen hebben dan lijken de parameters qua kleur op elkaar. U kunt deze markering-kleuren apart uitschakelen in het instellingendialoog.</para
+></listitem>
+<listitem
+><para
+>Identifiers waar &kdevelop; niet de overeenkomstige declaratie van kon bepalen worden wit gekleurd. Dit kan soms veroorzaakt worden door het ontbreken van een <varname
+>#include</varname
+> directive.</para
+></listitem>
+<listitem
+><para
+>Naast deze kleur-markering is ook de normale syntax-markering van toepassing zoals we dat kennen van &kate;. Bij een conflict heeft &kdevelop;'s semantische markering altijd de voorrang boven de markering van de editor.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="navigating-in-source-code"
+><title
+>Navigeren door broncode</title>
+<para
+>In het vorige hoofdstuk hebben we het doorzoeken van broncode beschreven, &ie; het verkrijgen van informatie over symbols, bestanden en projecten. De volgende stap is het in uw broncode rondspringen, &ie; er in navigeren. Opnieuw is dit op verschillende niveaus mogelijk: lokaal, in een bestand en in een project.</para>
+<para
+><note
+><para
+>Vanuit het menu <guilabel
+>Navigatie</guilabel
+> in het hoofdvenster van &kdevelop; zijn veel verschillende manieren beschikbaar om door de broncode te navigeren.</para
+></note
+></para>
+<sect2 id="local-navigation"
+><title
+>Lokale navigatie</title>
+<para
+>&kdevelop; is veel meer dan een editor, maar het is <emphasis
+>ook</emphasis
+> een editor voor broncode. Bij gebruik als zodanig kunt u natuurlijk in een bronbestand de cursor omhoog, omlaag, naar links of naar rechts verplaatsen. U kunt ook de <keycap
+>vorig scherm</keycap
+> en <keycap
+>volgende scherm</keycap
+> toetsen gebruiken, en alle andere commando's die u kent uit andere editors.</para>
+</sect2>
+<sect2 id="file-scope-navigation-and-outline-mode"
+><title
+>Overzicht en navigatie op bestandsniveau</title>
+<para
+>&kdevelop; heeft op bestandsniveau veel verschillende manieren om door de broncode te navigeren. Als voorbeeld:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Uitlijning</guilabel
+>: U kunt op minstens drie verschillende manieren een overzicht van het huidige bestand verkrijgen: <itemizedlist>
+<listitem
+><para
+>Klik in het tekstvak van <guilabel
+>Uitlijning</guilabel
+> rechtsboven van het hoofdvenster of toets in <keycombo
+>&Alt;&Ctrl;<keycap
+>N</keycap
+></keycombo
+> om een keuzelijst met alle functies en klasse-declaraties te openen: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-19.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> U kunt vervolgens een keuze maken welke u wilt selecteren, of &mdash; als de keuze groot is &mdash; voer een tekst in wat vervolgens zal verschijnen in het tekstvak; als u doorgaat met het invoeren van tekst zal de lijst korter en korter worden omdat namen afvallen die niet overeenkomen met de al ingevoerde tekst totdat u tenslotte een keuze maakt. </para
+></listitem>
+<listitem
+><para
+>Plaats uw cursor op het bestand-niveau (&ie; buiten elke functie of klassedeclaratie of definities) en houdt het <guilabel
+>Broncode Browser</guilabel
+>-venster geopend: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-16.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Dit geeft u ook een overzicht van wat er in het geselecteerde bestand gebeurt, en hierdoor kunt u ook makkelijk selecteren waarnaar u naar toe wilt springen. </para
+></listitem>
+<listitem
+><para
+>Als uw muis boven de tab van een geopend bestand zweeft dan krijgt u ook een overzicht van het bestand in die tab. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+>Bronbestanden zijn georganiseerd als een lijst met functiedeclaraties of definities. Toets in <keycombo
+>&Alt;&Ctrl;<keycap
+>PgUp</keycap
+></keycombo
+> en <keycombo
+>&Alt;&Ctrl;<keycap
+>PgDown</keycap
+></keycombo
+> om naar de vorige of volgende definitie in het bestand te gaan. </para
+></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-and-session-scope-navigation--semantic-navigation"
+><title
+>Navigeren in projecten en sessies: Semantische navigatie</title>
+<para
+>Zoals ook op andere plaatsen gemeld, &kdevelop; kijkt niet zozeer naar aparte bronbestanden maar meer naar projecten als een geheel (of eigenlijk naar alle projecten die deel uitmaken van de huidige sessie). Als consequentie daarvan heeft het veel mogelijkheden om door complete projecten te navigeren. Sommige zijn al eerder beschreven in het hoofdstuk <link linkend="exploring-source-code"
+>Broncode verkennen</link
+> terwijl andere compleet anders zijn. De overeenkomst is dat deze navigatie mogelijkheden gebaseerd zijn op een <emphasis
+>begrip van de betekenis</emphasis
+> van de code, &ie; zij bieden iets waarbij het nodig is dat het complete project ontleedt wordt en de data met elkaar verbonden wordt. De volgende lijst toont enkele manieren hoe u door broncode kan navigeren die verspreidt is door een mogelijk groot aantal bestanden:</para>
+<itemizedlist>
+<listitem
+><para
+>Zoals te lezen in het hoofdstuk over <link linkend="exploring-source-code"
+>Broncode verkennen</link
+>, u krijgt een tooltip waarin u de individuele namespace, klasse, functie of de naam van de variabele te zien krijgt als u met de muis erboven zweeft of door de &Alt;-toets enige tijd indrukt. Hier ziet u een voorbeeld: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-14.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> </mediaobject
+> </screenshot
+> Als u klikt op de een declaratie van een symbool of de lijst met locaties uitklapt kunt u naar een van deze locaties springen waarbij indien noodzakelijk het bestand wordt geopend waarna de cursor op de locatie wordt geplaatst. Een vergelijkbaar resultaat krijgt u als u zoals eerder beschreven de <guilabel
+>Broncode Browser</guilabel
+> gebruikt. </para
+></listitem>
+<listitem
+><para
+>Een snellere manier om naar de declaratie van een symbool te springen zonder te hoeven klikken op de koppelingen in de tekstballon is om tijdelijk <guilabel
+>Modus broncode browsen</guilabel
+> in te schakelen door de toets &Alt; of &Ctrl; ingedrukt te houden. In deze modus is het mogelijk om direct op een symbool in de editor te klikken om naar zijn declaratie te springen. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Snel openen</guilabel
+>: een zeer handige manier om snel naar andere bestanden of locaties te gaan is door het gebruik van de verschillende <emphasis
+>snel open</emphasis
+> methoden in &kdevelop;. Er zijn vier versies hiervan: <itemizedlist>
+<listitem
+><para
+><guilabel
+>Snel openen van klasse</guilabel
+> (<menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Snel openen van klasse</guimenuitem
+></menuchoice
+> of <keycombo
+>&Alt;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>): U krijgt vervolgens een lijst met alle klassen in de projecten van deze sessie. Start met het typen van (een gedeelte van) de naam van een klas en lijst zal inkrimpen tot alleen die overblijven die overeenkomen met wat u tot dusver heeft ingevoerd. Als de lijst kort genoeg is dan kan u een element selecteren door gebruik van de up en down toetsen en &kdevelop; brengt u naar de plaats waar de klasse is gedeclareerd. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Functie snel openen</guilabel
+> (<menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Functie snel openen</guimenuitem
+></menuchoice
+> of <keycombo
+>&Alt;&Ctrl;<keycap
+>M</keycap
+></keycombo
+>): U krijgt vervolgens een lijst met alle (lid)functies in de projecten van deze sessie en u kunt ze op dezelfde manier selecteren als hierboven beschreven. Merk op dat deze lijst zowel functiedeclaraties als functiedefinities aanwezig kunnen zijn. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Snel openen van bestand</guilabel
+> (<menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Snel openen van bestand</guimenuitem
+></menuchoice
+> of <keycombo
+>&Alt;&Ctrl;<keycap
+>O</keycap
+></keycombo
+>): U krijgt vervolgens een lijst met alle bestanden in de projecten van deze sessie en u kunt ze op dezelfde manier selecteren als hierboven beschreven. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Universeel snel openen</guilabel
+> (<menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Snel openen</guimenuitem
+></menuchoice
+> of <keycombo
+>&Alt;&Ctrl;<keycap
+>Q</keycap
+></keycombo
+>): Als u vergeten bent welke toetscombinatie bij welke van bovengenoemde commando's hoort, deze is het universele Zwitserse zakmes &mdash; het toont u een gecombineerde lijst met alle bestanden, functies, klasses en andere zaken waaruit u kunt selecteren. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Ga naar declaratie/definitie</guilabel
+>: Wanneer men een (member) functie implementeert dan moet men vaak terug gaan naar de locatie waar de functie is declareert om bijvoorbeeld de lijst met functie argumenten bij de declaratie en de definitie synchroon te houden of om de documentatie bij te werken. Om dit te doen moet u de cursor op de naam van de functie plaatsen en vervolgens <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Ga naar declaratie</guimenuitem
+></menuchoice
+> (of toets in <keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+>) selecteren om naar de plaats te gaan waar de functie is gedeclareerd. Er zijn meerdere manieren om terug te gaan naar het startpunt: <itemizedlist>
+<listitem
+><para
+>Selecteer <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Ga naar definitie</guimenuitem
+></menuchoice
+> (or toets in <keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+>). </para
+></listitem>
+<listitem
+><para
+>Selecteer <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Vorige bezochte context</guimenuitem
+></menuchoice
+> (of toets in <keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Links</keycap
+></keycombo
+>), zoals hieronder beschreven. </para
+></listitem>
+</itemizedlist>
+</para
+></listitem>
+</itemizedlist
+><para
+><note
+><para
+>Het springen naar de declaratie van een symbool is iets dat niet alleen werkt wanneer de cursor is geplaatst op de functienaam waaraan u werkt. Maar dit werkt ook bij andere symbolen: plaats de cursor op een (locale, globale, of member) variabele en springen naar zijn declaratie verplaatst u ook naar de locatie van zijn declaratie. Vergelijkbaar kan u ook de cursor op de naam van een klasse plaatsen, bijvoorbeeld in een variabele of een functiedeclaratie en vervolgens naar de locatie van de declaratie daarvan springen.</para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Schakel definitie/declaratie om</guilabel
+>: In het voorbeeld hierboven , om naar de locatie van de declaratie van de huidige functie te springen moet u eerst de cursor op de functienaam plaatsen. U kunt ook <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Schakel definitie/declaratie om</guimenuitem
+></menuchoice
+> gebruiken (of toets <keycombo
+>&Shift;&Ctrl;<keycap
+>C</keycap
+></keycombo
+>) om naar de declaratie te springen van de functie waar de cursor op dit moment is. Door het dezelfde menu-item opnieuw te selecteren springt u terug naar de plaats waar de functie is gedefinieerd. </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Vorig/Volgend gebruik</guilabel
+>: plaats de cursor op de naam van een lokale variabele en selecteer <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Volgend gebruik</guimenuitem
+></menuchoice
+> (of toets <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Rechts</keycap
+></keycombo
+>) en u springt naar de volgende plaats waar deze variabele in de code is gebruikt. (Merk op dat er niet alleen gezocht wordt naar de volgende plek waar de variabele voorkomt maar neemt ook in overweging dat variabele met dezelfde naam in andere scopes verschillend zijn.) Dit werkt op dezelfde manier bij het gebruik van functienamen. Selecteer <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Vorig gebruik</guimenuitem
+></menuchoice
+> (of toets <keycombo
+><keycap
+>Meta</keycap
+>&Shift;<keycap
+>Links</keycap
+></keycombo
+>) en u springt naar de vorige plaats waar deze variabele in de code is gebruikt. </para
+></listitem>
+</itemizedlist>
+<para
+><note
+><para
+>Voor het bekijken van een lijst met alle locaties waar deze commando's doorheen springen, plaatst u de cursor er boven op en opent het <guilabel
+>Broncode Browser</guilabel
+> venster of houdt de &Alt; toets ingedrukt. Dit wordt meer gedetailleerd uitgelegd in het hoofdstuk <link linkend="file-scope-information"
+>Broncode verkennen</link
+>. </para
+></note
+></para>
+<itemizedlist>
+<listitem
+><para
+>De <guilabel
+>context lijst</guilabel
+>: Web browsers hebben deze mogelijkheid waarmee u de mogelijkheid heeft om vooruit en achteruit te gaan in de lijst met recent bezochte webpagina's. &kdevelop; heeft dezelfde mogelijkheid, behalve dat u in plaats van webpagina's <emphasis
+>contexts</emphasis
+> bezoekt. Een context is de huidige locatie van de cursor, en u wijzigt deze door naar een andere locatie te navigeren met behulp van cursor opdrachten &mdash; bijvoorbeeld, door te klikken op een locatie die u via een tooltip is aangereikt, via het <guilabel
+>Broncode Browser</guilabel
+>-venster, een item te kiezen in het <guilabel
+>Navigatie</guilabel
+> menu, of een ander navigatie-commando. Door het gebruik van de <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Vorige bezochte Context</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Links</keycap
+></keycombo
+>) en <menuchoice
+><guimenu
+>Navigatie</guimenu
+><guimenuitem
+>Volgende bezochte Context</guimenuitem
+></menuchoice
+> (<keycombo
+><keycap
+>Meta</keycap
+><keycap
+>Rechts</keycap
+></keycombo
+>) gaat u door de lijst met bezochte context op dezelfde manier als u met de knoppen <guilabel
+>vorige</guilabel
+> en <guilabel
+>volgende</guilabel
+> van een browser naar de vorige of volgende webpagina in de lijst met bezochte pagina's gaat. </para
+></listitem>
+<listitem
+><para
+>Tenslotte zijn er hulpmiddelen waarmee u naar andere locaties in uw broncode kunt navigeren. Bijvoorbeeld, het hulpmiddel <guilabel
+>Klasses</guilabel
+> toont een lijst met alle namespaces en klasses in alle projecten van de huidige sessie, deze lijst kunt u uitklappen zodat u van elke klasse de member functies en variabelen kunt zien: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-17.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Door dubbelklikken op een item (of via het contextmenu door te klikken met de &RMB;) springt u naar de locatie van de declaratie van het item. Andere hulpmiddelen werken vergelijkbaar; bijvoorbeeld, het venster <guilabel
+>Projecten</guilabel
+> toont een lijst met bestanden die deel uitmaken van een sessie: <screenshot
+> <screeninfo
+></screeninfo
+> <mediaobject
+> <imageobject
+> <imagedata fileref="kdevelop-13.png" format="PNG"/> </imageobject
+> <textobject
+> <phrase
+></phrase
+> </textobject
+> <caption
+> <para
+></para
+> </caption
+> </mediaobject
+> </screenshot
+> Ook hier, dubbelklikken opent het bestand. </para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="writing-source-code"
+><title
+>Broncode schrijven</title>
+<para
+>Omdat &kdevelop; de broncode in uw project begrijpt, kan het assisteren bij het schrijven van meer code. Hieronder zijn enige manieren beschreven waarop het dat doet.</para>
+<sect2 id="auto-completion"
+><title
+>Automatische aanvulling</title>
+<para
+>Waarschijnlijk het meest gebruikte functionaliteit bij het schrijven van nieuwe code is automatisch aanvullen. Denk bijvoorbeeld aan het volgende stuk code:</para>
+<para
+><programlisting
+>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+void foo()
+{
+  Car my_ride;
+  // ...doe iets met deze variabele...
+  std::string color = my_ride.ge
+</programlisting
+></para>
+<para
+>In de laatste regel zal &kdevelop; weten dat de variabele <varname
+>my_ride</varname
+> van het type <varname
+>Car</varname
+> is en zal automatisch aanbieden om de naam van de member function <varname
+>ge</varname
+> aan te vullen tot <varname
+>get_color</varname
+>. U hoeft slechts door te gaan met typen tot dat de functie automatisch aanvullen het aantal matches heeft beperkt tot één waarna u de &Enter;-toets kan indrukken:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Merk op dat u op de tooltip kunt klikken om meer informatie te krijgen over de functie zoals het return type en of het public is:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-43.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Automatische aanvulling kan u veel tijd besparen als u lange namen voor variabelen en functies gebruikt; bovendien vermijdt u op deze manier spellingsfouten (en de daaruit resulterende compile errors) en het is veel eenvoudiger om de precieze namen van functies te onthouden; bijvoorbeeld, als al uw getters starten met <varname
+>get_</varname
+>, dan zal de automatische aanvulling u alleen een lijst met mogelijke getters tonen nadat u de eerste vier letters heeft ingevoerd, u eraan herinnerend welke van de functies de correcte is. Merk op dat om automatische aanvulling te laten werken het niet nodig is dat de declaratie van de klasse <varname
+>Car</varname
+> of de variabele <varname
+>my_ride</varname
+> in hetzelfde bestand is als waar u op dit moment code bewerkt. &kdevelop; hoeft alleen te weten dat deze klassen en variabelen ermee verbonden zijn , &ie; de bestanden waarin de verbindingen zijn gemaakt moeten onderdeel maken van het project waaraan u op dit moment werkt.</para>
+<para
+><note
+><para
+>Soms start &kdevelop; niet automatisch met het u assisteren van het bewerken van de code. Als de automatische aanvulling tooltip niet automatisch opent, toets dan <keycombo
+>&Ctrl;<keycap
+>Spatie</keycap
+></keycombo
+> om de lijst met automatische aanvulling handmatig te openen. Automatische aanvulling kan pas werken nadat &kdevelop; uw bronbestanden heeft doorzocht. Dit gebeurt voor alle bestanden van de projecten in deze sessie in de achtergrond nadat u &kdevelop; heeft gestart, maar ook als u een fractie van een seconde heeft gestopt met typen (de vertraging kunt u instellen).</para
+></note
+></para>
+<para
+><note
+><para
+>&kdevelop; doorzoekt alleen bestanden die het als broncode beschouwt, dit gebeurt aan de hand van het MIME-type van het bestand. Dit type wordt pas ingesteld bij het voor de eerste keer opslaan van het bestand; als consequentie daarvan werkt de automatisch aanvulling niet als u een bestand heeft gestart en hierin code schrijft totdat het voor de eerste keer is opgeslagen.</para
+></note
+></para>
+<para
+><note
+><para
+>Zoals eerder opgemerkt, om automatische aanvulling te kunnen laten werken moet het voor &kdevelop; mogelijk zijn om de declaraties te kunnen vinden in de header-bestanden. Hiervoor doorzoekt het een aantal standaard locaties. Als het geen header-bestand kan vinden dan onderstreept het met rood de naam van een header-bestand; klik daarop in dat geval om &kdevelop; duidelijk te maken waar het deze bestanden kan vinden en welke informatie deze geven.</para
+></note
+></para>
+<para
+><note
+><para
+>De beschrijving van het instellen van de automatische aanvulling vindt u in <link linkend="customizing-code-auto-completion"
+>dit hoofdstuk van deze handleiding</link
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="adding-new-classes-and-implementing-member-functions"
+><title
+>Nieuwe klassen toevoegen en implementeren van member-functies</title>
+<para
+>&kdevelop; heeft een hulpmiddel voor het toevoegen van nieuwe klasses. De beschrijving van de procedure vindt u in <link linkend="creating-a-new-class"
+>Een nieuwe klasse aanmaken</link
+>. U kunt een eenvoudige C++ klasse aanmaken door gebruik van de Basic C++ template uit de <filename
+>Class</filename
+> category. In het hulpmiddel kunnen we voorgedefinieerde member functies uitkiezen zoals bijvoorbeeld een lege constructor, een copy constructor of een destructor. </para>
+<para
+>Na het gebruik van het hulpmiddel zijn de nieuwe bestanden aangemaakt en de editor geopend. Het header-bestand is inclusief guards en de nieuwe klasse heeft alle geselecteerde functies. De volgende twee stappen zijn het documenteren van de klasse en zijn memberfuncties en het implementeren daarvan. Wij zullen de hulpmiddelen voor het documenteren van de klassen en functies hieronder beschrijven. Voor het implementeren van de al aangemaakte speciale functies gaat u naar de tab <guilabel
+>bus.cpp</guilabel
+> waar het skelet van de functies al wacht:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-30.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Als u nieuwe member functies wilt toevoegen dan gaat u opnieuw naar de tab <guilabel
+>bus.h</guilabel
+> en voegt vervolgens de naam van een functie toe. Wij willen bijvoorbeeld het volgende toevoegen:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-31.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>U merkt dat ik al gestart ben met met de implementatie. Maar in veel codeerstylen is het niet toegestaan dat u de functie implementeert in het headerbestand, in plaats daarvan moet dat gebeuren in het bijbehorende .cpp-bestand. Plaats de cursor op de naam van de functie en selecteer <menuchoice
+><guimenu
+>Code</guimenu
+><guimenuitem
+>Verplaatsen naar bron</guimenuitem
+></menuchoice
+> of toets <keycombo
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+>. Dit verplaatst de code tussen de accolades uit het headerbestand (en vervangt dit door een puntkomma om de functiedefinities af te sluiten) naar het bronbestand:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-32.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>U merkt op dat ik gewoon gestart ben met typen en dat het mijn bedoeling is dat de variabele <varname
+>students</varname
+> waarschijnlijk een member variabele van de klasse <varname
+>Bus</varname
+> wordt maar dat ik het nu nog niet heb toegevoegd. Merk ook op dat &kdevelop; het onderstreept omdat er verder nog geen informatie over aanwezig is. Maar dat probleem kunt u oplossen: als u klikt op de naam van de variabele krijgt u de volgende tooltip:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-33.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>(Hetzelfde kan bereikt worden door er rechts op te klikken en <guilabel
+>Oplossing: Declareren als</guilabel
+> te selecteren.) Laat me <quote
+>3 - private unsigned int</quote
+> selecteren (ofwel met de muis of door <keycombo
+>&Alt;<keycap
+>3</keycap
+></keycombo
+>) in te drukken en kijk dan hoe het uit het header-bestand komt:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-34.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Het is het waard op te merken dat &kdevelop; het type van de variabele voor de declaratie haalt uit de expressie gebruikt om deze te initialiseren. Als we bijvoorbeeld de optelling hadden geschreven op de volgende tamelijk dubieuze manier, dan zou het hebben gesuggereerd om de variabele als type <varname
+>double</varname
+> te declareren:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-35.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Een laatste opmerking: De gebruikte methode <menuchoice
+><guimenu
+>Code</guimenu
+><guimenuitem
+>Verplaatsen naar bron</guimenuitem
+></menuchoice
+> voegt de nieuwe member functie niet altijd op de gewenste locatie in. U wilt het bijvoorbeeld markeren als <varname
+>inline</varname
+> en het onderaan het headerbestand plaatsen. In dit soort gevallen schrijft u de declaratie en start het schrijven van de functie op deze manier:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-36.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>&kdevelop; geeft automatisch alle mogelijke aanvullingen voor wat hier zou kunnen komen. Door het selecteren van een van de twee <varname
+>add_students</varname
+> entries krijgt u de volgende code met al de complete lijst met argumenten ingevuld:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-37.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Het accepteren van een van de keuzes in het voorbeeld geeft na het automatisch aanvullen de correcte ondertekening maar verwijdert helaas de al eerder geschreven <varname
+>inline</varname
+>-bladwijzer. Dit is gemeld als <ulink url="https://bugs.kde.org/show_bug.cgi?id=274245"
+>&kdevelop; Bug 274245</ulink
+>.</para
+></note
+></para>
+</sect2>
+<sect2 id="documenting-declarations"
+><title
+>Documenteren van declaraties</title>
+<para
+>Goede code is goed gedocumenteerd, zowel op het niveau van het implementeren van de algoritmes in de functies als op het niveau van de interface &mdash; &ie;, klasses, (member en globaal) functies, en (member of globaal) variabelen moeten gedocumenteerd zijn wat betreft hun doel, mogelijke waarden voor de argumenten, pre- en postconditions, &etc; Wat betreft de documentatie van de interface, <ulink url="http://www.doxygen.org"
+>doxygen</ulink
+> is de facto standaard geworden voor de opmaak van commentaar zodat het geëxtraheerd en daarna op doorzoekbare webpagina's getoond kan worden.</para>
+<para
+>&kdevelop; ondersteund deze stijl van commentaar door het geven van een sneltoets voor het aanmaken van een framework met commentaar voor het documenteren van een klasse of member function. Stel, u heeft al deze code geschreven:</para>
+<para
+><programlisting
+>class Car {
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para
+>U wilt nu documentatie toevoegen aan zowel de klasse en de memberfunctie. Plaats de cursor op de eerste regel en selecteer <menuchoice
+><guimenu
+>Code</guimenu
+><guimenuitem
+>Document declaratie</guimenuitem
+></menuchoice
+> of toets <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>. &kdevelop; zal als volgt reageren:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-23.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>De cursor staat al in het lichtgrijze gebied waar u een korte beschrijving kunt geven (na het doxygen trefwoord <varname
+>@brief</varname
+>) van deze klasse. U kunt vervolgens uitgebreider documentatie toevoegen aan dit commentaar die meer gedetailleerde informatie geeft over de klasse:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-24.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Als het commentaar is geselecteerd in de editor, dan zal de text daarvan groen oplichten (de tekst zal niet meer oplichten als de cursor van het commentaar weg is). Als u aan het eind van de regel de &Enter;-toets indrukt dan start &kdevelop; automatisch een nieuwe regel met een sterretje en de cursor een karakter ingesprongen.</para>
+<para
+>Nu gaan we de memberfunctie documenteren, we plaatsen opnieuw de cursor op de regel met de declaratie en selecteren <menuchoice
+><guimenu
+>Code</guimenu
+><guimenuitem
+>Document declaratie</guimenuitem
+></menuchoice
+> of toetsen <keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+>:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-25.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Opnieuw genereert &kdevelop; automatisch het skelet voor een commentaar inclusief de documentatie voor de functie zelf en het return type. In dit geval geeft de naam van de functie vrij duidelijk het doel weer, maar vaak genoeg is dat niet het geval bij de argumenten van een functie en moeten elk apart gedocumenteerd worden. Om dit duidelijker te maken bekijken we een iets interessantere functie en de documentatie die &kdevelop; automatisch genereert:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-26.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>De voorgestelde documentatie heeft bijvoorbeeld al alle nodige Doxygen-velden voor de individuele parameters.</para>
+</sect2>
+<sect2 id="renaming-variables-functions-and-classes"
+><title
+>Hernoemen van variabelen, functies en klassen</title>
+<para
+>Soms wilt u een functie, klasse of een variabele hernoemen. Stel bijvoorbeeld dat we het volgende al hebben:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-38.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>We realiseren vervolgens dat we ongelukkig zijn met de naam <varname
+>remove_students</varname
+> en dat de naam (bijvoorbeeld) <varname
+>throw_out_students</varname
+> beter is. We zouden een zoek-en-vervang actie voor de naam kunnen uitvoeren, maar dit heeft twee nadelen:</para>
+<itemizedlist>
+<listitem
+><para
+>De functie kan voor meer dan één bestand worden gebruikt. </para
+></listitem>
+<listitem
+><para
+>We willen alleen deze functie hernoemen en niet de functies die de dezelfde naam hebben in andere klasses of namespaces. </para
+></listitem>
+</itemizedlist>
+<para
+>Beide problemen kunt u oplossen door de cursor op een locatie te plaatsen waar deze voorkomt en vervolgens <menuchoice
+><guimenu
+>Code</guimenu
+><guimenuitem
+>Declaraties hernoemen</guimenuitem
+></menuchoice
+> te selecteren (of met de &RMB; te klikken op de naam en <guilabel
+>Bus::remove_students hernoemen</guilabel
+> selecteren). Er opent een dialoogvenster waarin u de nieuwe naam van de functie kunt invoeren en waar u ook alle plaatsen ziet waar deze daadwerkelijk is gebruikt:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-39.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+</sect2>
+<sect2 id="code-snippets"
+><title
+>Codefragmenten</title>
+<para
+>In de meeste projecten zijn er stukken code die vaak voorkomen in de broncode. Voorbeelden zijn: voor schrijvers van compilers, een loop met alle instructies; voor schrijvers van user interfaces, controle van de gebruikersinvoer op geldigheid en indien niet geldig het vervolgens geven van een foutmelding; in het project van de auteur van deze tekst, zou het de volgende code kunnen zijn:</para>
+<para
+><programlisting
+>for (typename Triangulation::active_cell_iterator
+       cell = triangulation.begin_active();
+     cell != triangulation.end(); ++cell)
+  ... doe iets met de cel ...
+</programlisting>
+</para>
+<para
+>In plaats van dat u dit soort teksten iedere keer opnieuw intypt (met het risico van tikfouten), kan het hulpmiddel <guilabel
+>Fragmenten</guilabel
+> van &kdevelop; u daarbij helpen. Open het venster (lees <link linkend="tools-and-views"
+>Weergave van hulpmiddelen</link
+> als u het desbetreffende knop nog niet aantreft rondom het hoofdvenster). Klik vervolgens op de knop <quote
+>Repository toevoegen</quote
+> (een beetje verkeerde naam &mdash; hiermee kan u de naam bepalen voor een verzameling van fragmenten mee aanmaken voor bepaalde soorten broncodes, &eg; C++ sources) en vervolgens een lege repository aanmaken. Klik vervolgens op <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> om een fragment toe te voegen, zodat u het volgende dialoogvenster te zien krijgt:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-40.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>De naam van het fragment mag geen spaties of andere speciale karakters hebben omdat het op de naam van een normale functie of variabele moet lijken (vanwege redenen die duidelijker worden in de volgende paragraaf).</para
+></note
+></para>
+<para
+>Om een gedefinieerde fragment te gebruiken tijdens het bewerken hoeft u alleen maar de naam van het fragment te typen zoals u dat met een andere functie of variabele zou doen. Deze naam komt beschikbaar voor automatische aanvulling &mdash; wat inhoud dat het geen probleem is als u een lange omschrijvende naam voor een fragment gebruikt zoals hierboven &mdash; en als u door de automatische aanvulling voorgestelde suggestie accepteert (bijvoorbeeld door op &Enter; te drukken), dan zal de al ingevoerde gedeelte van de naam van het fragment worden vervangen door de volledige tekst van het fragment met de juiste inspringingen:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-41.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Merk op dat voor de juiste werking hiervan is het niet nodig dat het <guilabel
+>Fragmenten</guilabel
+>-dialoogvenster geopend of zichtbaar is: u heeft het dialoogvenster alleen nodig om nieuwe fragmenten te definiëren. Als alternatieve, maar minder handige, manier om de volledige tekst van een fragment te krijgen is door te klikken in het desbetreffende dialoogvenster.</para>
+<para
+><note
+><para
+>Met fragmenten is veel meer mogelijk dan hier uitgelegd. Lees <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
+>gedetailleerde documentatie van het hulpmiddel voor fragmenten</ulink
+> voor een complete uitleg van de mogelijkheden.</para
+></note
+></para>
+</sect2>
+</sect1>
+<sect1 id="modes-and-working-sets"
+><title
+>Modes en werksets</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_noworkingset.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Als u tot hier bent gekomen dan is het nu tijd om in de rechterbovenkant van het hoofdvenster van &kdevelop; te kijken: Zoals u in de afbeelding ziet, zijn er drie <guilabel
+>modes</guilabel
+> &kdevelop; kan in de volgende modus zijn: <guilabel
+>Code</guilabel
+> (deze modus beschrijven we in dit hoofdstuk over het bewerken van broncode), <guilabel
+>Opstarten van debuggen</guilabel
+> (lees <link linkend="debugging-programs-in-kdevelop"
+>Programma's debuggen</link
+>) en <guilabel
+>Huidig project vastleggen</guilabel
+> (lees <link linkend="working-with-version-control-systems"
+>Werken met versiebeheersystemen</link
+>).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_sessionsprojectsworkingsets.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>elke modus heeft zijn eigen set hulpmiddelen die u rondom het hoofdvenstervenster kunt vinden, en elke modus heeft ook een <emphasis
+>werkset</emphasis
+> met de huidige geopende bestanden en documenten. Alle werksets horen bij de huidige sessie, &ie; we hebben de bovengenoemde relaties. Merk op dat de bestanden in de werkset weliswaar uit dezelfde sessie komen, maar dat ze uit verschillende projecten van deze sessie kunnen komen.</para>
+<para
+>Als u &kdevelop; voor de eerste keer opent dan is de werkset nog leeg &mdash; er zijn nog geen bestanden geopend. Maar als u begint met het openen van bestanden on deze te bewerken (of debuggen, of nakijken en vastleggen in de andere modes) dan groeit u werkset. Het feit dat uw werkset niet leeg is ziet u aan een symbool in de tab, zoals hieronder te zien . Merk op dat iedere keer als u &kdevelop; afsluit en later weer opstart, de werkset wordt opgeslagen en weer geopend, &ie; u krijgt dezelfde verzameling geopende bestanden.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-10.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Als uw muis boven het symbool van de werkset zweeft dan krijgt u een tooltip met de in deze werkset geopende bestanden (hier: de bestanden <varname
+>step-32.cc</varname
+> en <varname
+>step-1.cc</varname
+>). Door te klikken op het rode minus-tekentje sluit u de tab voor het desbetreffende bestand. Belangrijker is dat u door te klikken op knop genaamd <guilabel
+>sluiten</guilabel
+> de hele werkset sluit(&ie; u sluit alle op dit moment geopende bestanden). Het idee van het sluiten van een werkset is dat niet gewoon alle bestanden sluit, maar dat de werkset wordt opgeslagen en een nieuwe (nog lege) geopend. U ziet dat hier:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-11.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Let op de twee symbolen links van de drie mode tabs (het hart en het onherkenbare symbool links daarvan). Alle twee symbolen stellen een opgeslagen werkset voor, naast de op dit moment geopende werkset. Als u met uw muis boven het hart-symbool zweeft dan ziet u zoiets:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-12.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Hier ziet u dat de desbetreffende werkset twee bestanden bevat met de namen: <varname
+>Makefile</varname
+> en <varname
+>changes.h</varname
+>. Als u klikt op <guilabel
+>Laden</guilabel
+> dan sluit u de huidige werkset en slaat deze op (waarin zoals u hier ziet de bestanden <varname
+>tria.h</varname
+> en <varname
+>tria.cc</varname
+> geopend zijn) en opent in plaatst daarvan de geselecteerde werkset. U kunt ook een werkset permanent verwijderen,waardoor het ook verdwijnt uit de set met opgeslagen werksets.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts"
+><title
+>Enige nuttige sneltoetsen</title>
+<para
+>De editor van &kdevelop; heeft de standaard sneltoetsen voor alle gebruikelijke bewerkingen. Daarnaast heeft het een aantal voor meer ingewikkelder bewerkingen van broncode, sommige daarvan hebben hun eigen sneltoetsen. Hieronder volgt de uitleg van enkele veel gebruikte:</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Rond code springen</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>O</keycap
+></keycombo
+></entry>
+    <entry
+>Snel openen van bestand: voer een gedeelte van een bestandnaam in en selecteer het gewenste bestand tussen alle bestanden in de projectmappen van de huidige sessie die overeenkomen met de ingevoerde tekenreeks; dit bestand zal vervolgens worden geopend.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>C</keycap
+></keycombo
+></entry>
+    <entry
+>Snel openen van klasse: voer een gedeelte van een klassenaam in en selecteer de gewenste klasse tussen alle klassen die overeenkomen met de ingevoerde tekenreeks; de cursor zal vervolgens naar de klassedeclaratie springen.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>M</keycap
+></keycombo
+></entry>
+    <entry
+>Snel openen van functie: voer een gedeelte van een functienaam in en selecteer de gewenste functie tussen alle functies die overeenkomen met de ingevoerde tekenreeks; de cursor zal vervolgens naar het geselecteerde item springen. Merk op dat in de lijst zowel de declaraties als de definities te zien zijn.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>Q</keycap
+></keycombo
+></entry>
+    <entry
+>Snel openen: type iets (bestandsnaam, klassenaam, functienaam) en krijg een lijst met dingen die daarmee overeenkomen.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>N</keycap
+></keycombo
+></entry>
+    <entry
+>Uitlijning: geeft een lijst met alle zaken die in dit bestand voorkomen, &eg; klassedeclaraties en functiedefinities</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>,</keycap
+></keycombo
+></entry>
+    <entry
+>Ga naar de definitie van een functie als de cursor op dit moment op een functiedeclaratie staat.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>.</keycap
+></keycombo
+></entry>
+    <entry
+>Ga naar de declaratie van een functie als de cursor op dit moment op een functiedefinitie staat.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>PageDown</keycap
+></keycombo
+></entry>
+    <entry
+>Naar volgende functie springen</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>PageUp</keycap
+></keycombo
+></entry>
+    <entry
+>Naar vorige functie springen</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>G</keycap
+></keycombo
+></entry>
+    <entry
+>Ga naar regel</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Zoeken en vervangen</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Zoeken</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F3</keycap
+></entry>
+    <entry
+>Volgende zoeken</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+></entry>
+    <entry
+>Vervangen</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+></entry>
+    <entry
+>Zoek en vervang in meerdere bestanden</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Andere zaken</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>_</keycap
+></keycombo
+></entry>
+    <entry
+>Een niveau inklappen: verwijder dit blok uit het zicht, bijvoorbeeld als u zich wilt concentreren op het grotere geheel wilt van een functie wilt concentreren.</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>+</keycap
+></keycombo
+></entry>
+    <entry
+>Een niveau uitklappen: het inklappen ongedaan maken</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Commentaar maken van geselecteerde tekst of regel</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Geselecteerde tekst of regel als commentaar verwijderen</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;&Shift;<keycap
+>D</keycap
+></keycombo
+></entry>
+    <entry
+>Documenteer de geselecteerde functie. Als de cursor op een functie- of klassedeclaratie staat dan wordt een commentaar in doxygen-style aangemaakt gevuld met een lijst van alle parameters return values, &etc;</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+></entry>
+    <entry
+>Het huidige en de vorige teken omwisselen</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Ctrl;<keycap
+>K</keycap
+></keycombo
+></entry>
+    <entry
+>Verwijdert de geselecteerde regel (letop: dit is niet de <quote
+>delete from here to the end of the line</quote
+> van emacs)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="code-generation-with-templates"
+><title
+>Code aanmaken met templates</title>
+<para
+>&kdevelop; gebruikt templates voor de aanmaak van bronbestanden en om het herhalende schrijven van code te vermijden. </para>
+<sect1 id="creating-a-new-class"
+><title
+>Een nieuwe klasse aanmaken</title>
+<para
+>Het genereren van code wordt het meest gebruikt bij het schrijven van nieuwe klassen. Voor de creatie van een nieuwe klasse in een bestaand project klikt u met de &RMB; op de projectmap en selecteert <guilabel
+>Vanuit een sjabloon maken...</guilabel
+>. Dit dialoogvenster kunt u ook openen via het menu door <menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Nieuw van sjabloon</guimenuitem
+></menuchoice
+> te selecteren, maar het gebruik van een projectmap heeft het voordeel dat het een locatie instelt voor de uitvoerbestanden. Selecteer <filename
+>Klasse</filename
+> in het keuzemenu, en de gewenste programmeertaal en sjabloon in het volgende dialoogvenster. Na de selectie van een sjabloon voor een klasse, vult u de details van de nieuwe klasse in. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-selection.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Eerst moet u een identificatie opgeven voor de nieuwe klasse. Dit kan een simpele naam zijn (zoals <varname
+>Bus</varname
+>) of een complete identificatie met namespaces (zoals <varname
+>Transportation::Bus</varname
+>). In het laatste geval zal &kdevelop; de identifier analyseren en de namespaces van de eigenlijke naam separeren. Op dezelfde pagina kunt u basisklasses voor de nieuwe klasse toevoegen. U zal merken dat met sommige sjablonen gelijk een basisklasse wordt toegevoegd, niets houd u tegen om deze weer te verwijderen en/of andere klassen toe te voegen. U moet de volledige overervings-statement hier uitschrijven, deze is programmeertaal afhankelijk, zoals als <varname
+>public QObject</varname
+> for C++, <varname
+>extends SomeClass</varname
+> voor PHP of eenvoudig de klassenaam voor Python. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-inheritance.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>In het volgende venster kunt u kiezen uit een lijst met virtuele methoden van all overgeërfde klassen, met enkele standaard constructors, destructors en operators. Het selecteren van een keuzevakje naast de omschrijving zal deze methode in de nieuwe klasse implementeren. </para>
+<para
+>Als u klikt op <guilabel
+>Volgende</guilabel
+> dan opent een dialoogvenster waar u members aan de klas kunt toevoegen. Afhankelijk van het geselecteerde sjabloon kunnen deze in de nieuwe klasse verschijnen als nieuwe member variabelen of als eigenschappen met setters en getters daarvoor. In een programmeertaal waar variabelen gedeclareerd moeten worden zoals C++, moet u zowel de naam en het type van de member specificeren, zoals <varname
+>int number</varname
+> of <varname
+>QString name</varname
+>. In andere programmeertalen kunt u het type weglaten, maar is het gebruikelijk om dit toch wel te doen omdat het gekozen sjabloon er gebruik van kan maken. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-members.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>In het volgende dialoogvenster kunt u een licentie voor uw nieuwe klasse invoeren, door de gekozen sjabloon vereiste speciale opties en de uitvoerlocaties voor de aangemaakte bestanden instellen. Door te klikken op <guilabel
+>Voltooien</guilabel
+>, sluit u de assistent en creëert u de nieuw klasse. De gecreëerde bestanden worden geopend in de editor en u kunt onmiddellijk beginnen met het toevoegen van code. </para>
+<para
+>Na het creëren van de nieuwe C++ klasse heeft u de keuzemogelijkheid om het toe te voegen aan een project. Kies een project uit in het dialoogvenster of sluit het venster en voeg een doel later handmatig toe. </para>
+<para
+>Als u heeft gekozen voor het <filename
+>Qt Object</filename
+>-sjabloon en enkele van de standaard methoden heeft gekozen en twee member variabelen heeft toegevoegd dan moet het resultaat eruit zien als in de volgende afbeelding. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-result.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>U kunt zien dat de data members zijn omgezet naar Qt properties met accessor functies en de Q_PROPERTY macros. Argumenten naar setter functies worden zelf waar mogelijk doorgegeven met const-reference. Bovendien is een private klasse gedeclareerd, een private pointer gecreëerd met Q_DECLARE_PRIVATE. Dit is allemaal uitgevoerd door het sjabloon, in de eerste stap een andere sjabloon uitkiezen zou het resultaat compleet anders zijn. </para>
+</sect1>
+<sect1 id="creating-a-new-unit-test"
+><title
+>Een nieuwe unit test creëren</title>
+<para
+>Ofschoon de meeste test frameworks vereisen dat elke test ook een klasse is, heeft &kdevelop; een methode die het makkelijker maakt om unit tests te creëren. Om een nieuwe te creëren klikt u met de &RMB; op een projectmap en selecteert <guilabel
+>Vanuit een sjabloon maken...</guilabel
+>. In het sjabloon-selectiepagina selecteert u de categorie <filename
+>Test</filename
+>, vervolgens kiest u de programmeertaal en sjabloon en klik op <guilabel
+>Verder</guilabel
+>. </para>
+<para
+>U wordt gevraagd om een naam voor de test en een lijst met test cases. Voor de test cases hoeft u alleen maar een lijst met namen op te geven. Sommige unit testing frameworks zoals PyUnit en PHPUnit, vereisen dat test cases starten met een speciale voorvoegsel. In &kdevelop;, is het sjabloon verantwoordelijk voor te toevoegen van het voorvoegsel, daarom hoeft u zelf het voorvoegsel toe te voegen. Na het klikken op <guilabel
+>Volgende</guilabel
+>, kunt een licentie en de uitvoerlocaties voor de aangemaakte bestanden invoeren waarna &kdevelop; de test aanmaakt. </para>
+<para
+>Op deze manier aangemaakte unit tests worden niet automatisch toegevoegd aan een target. Als u CTest of een andere testing framework gebruikt dan moet u zelf de nieuwe bestanden aan de target toevoegen. </para>
+</sect1>
+<sect1 id="other-files"
+><title
+>Andere bestanden</title>
+<para
+>Terwijl klassen en unit tests extra aandacht krijgen bij het genereren van code via sjablonen, kan u deze methode ook gebruiken bij andere vormen van bronbestanden. U kunt bijvoorbeeld ook een sjabloon gebruiken voor een CMake Find module of een .desktop-bestand. Dit kunt u doen door bij <guilabel
+>Vanuit een sjabloon maken...</guilabel
+> de gewenste categorie en sjabloon te selecteren. Als de geselecteerde categorie niet <filename
+>Klasse</filename
+> en niet <filename
+>Test</filename
+>is dan hoeft u alleen de licentie, de bij het sjabloon horende speciale opties en de locaties voor de uitvoerbestanden in te voeren. Net zoals bij de klasses en tests zullen na het sluiten van de assistent de nieuwe bestanden worden gecreëerd en vervolgens geopend in de editor. </para>
+</sect1>
+<sect1 id="managing-templates"
+><title
+>Sjablonen beheren</title>
+<para
+>In het <menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Nieuw van sjabloon...</guimenuitem
+></menuchoice
+> assistent kunt u ook extra sjabloonbestanden downloaden door te klikken op de knop <guilabel
+>Meer sjablonen ophalen...</guilabel
+>. Er opent een Get Hot New Stuff dialoogvenster waarmee u extra sjablonen kunt installeren, bijwerken of verwijderen. Er is voor sjablonen ook een configuratiemodule, u kunt deze bereiken via <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guisubmenu
+>&kdevelop; instellen</guisubmenu
+><guimenuitem
+>Sjablonen</guimenuitem
+></menuchoice
+>. van hieruit kunt u zowel bestandsjablonen (hierboven uitgelegd) als projectsjablonen (gebruikt voor het creëren van nieuw projecten) beheren. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-manager.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Als geen van de beschikbare sjablonen geschikt is voor uw project dan kunt u natuurlijk zelf nieuwe sjablonen creëren. De makkelijkste manier is waarschijnlijk een bestaande sjabloon kopiëren en deze aanpassen, er is een korte <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
+>instructie</ulink
+> en een langer <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
+>document met specificaties</ulink
+> om u daarbij te helpen. Om een geïnstalleerde sjabloon te kopiëren, opent u de sjabloon-beheerder door op <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guisubmenu
+>KDevelop instellen...</guisubmenu
+><guimenuitem
+>Sjablonen</guimenuitem
+></menuchoice
+> te klikken, selecteer het sjabloon dat u wilt kopiëren, klik vervolgens op de knop <guilabel
+>Sjabloon klonen</guilabel
+>. Selecteer een map als bestemming en klik op <guilabel
+>OK</guilabel
+>, en het sjabloon zal naar de gekozen map worden gekopieerd. Nadat u het heeft geopend kunt u het nieuwe sjabloon gaan bewerken. Als u klaar bent met uw wijzigingen, kunt u uw nieuwe sjabloon weer in &kdevelop; importeren door sjabloonbeheer te openen en de van toepassing zijnde tab te openen (naar keuze <guilabel
+>Projectsjablonen</guilabel
+> of <guilabel
+>Bestandsjablonen</guilabel
+>) en klik op <guilabel
+>Sjabloon uit bestand laden</guilabel
+>. Open het sjabloonbeschrijvingsbestand, die een van de volgende twee bestandsextensies heeft: <varname
+>.kdevtemplate</varname
+> of <varname
+>.desktop</varname
+>. &kdevelop; zal de bestanden comprimeren in een sjabloon-archief en vervolgens het sjabloon importeren. </para>
+<para
+><note
+><para
+>Als u een bestaand sjabloon kopieert dan moet u er voor zorgen dat u het hernoemt voordat u het weer terug importeert omdat u anders het bestaande sjabloon overschrijft of eindigt met twee gelijk genaamde sjablonen. Om een sjabloon te hernoemen moet u het beschrijvingsbestand een unieke naam geven (maar blijf wel de extensie gebruiken), en het item <filename
+>Naam</filename
+> in het beschrijvingsbestand wijzigen. </para
+></note>
+</para>
+<para
+>Als u een sjabloon vanaf nul wilt schrijven dan kunt u starten met een voorbeeld C++ class sjabloon door <link linkend="creating-projects-from-scratch"
+>een nieuw project creëren</link
+> en het project <filename
+>C++ Class Template</filename
+> in de categorie <filename
+>KDevelop</filename
+> te selecteren. </para>
+</sect1>
+</chapter>
+<chapter id="building-compiling-projects-with-custom-makefiles"
+><title
+>Projecten bouwen (compileren) met aangepaste Makefiles</title>
+<para
+>Veel projecten beschrijven hoe bronbestanden gecompileerd moeten worden (en welke bestanden opnieuw gecompileerd moeten worden nadat een bronbestand of een headerbestand is gewijzigd) door gebruik van Makefiles die worden interpreteert door het programma <guilabel
+>make</guilabel
+> (lees bijvoorbeeld <ulink url="https://www.gnu.org/software/make/"
+>GNU make</ulink
+>). Voor simpele projecten is het meestal erg makkelijk om een dergelijk bestand handmatig op te zetten. Grotere projecten hebben vaak hun Makefiles geïntegreerd met de <guilabel
+>GNU autotools</guilabel
+> (autoconf, autoheader, automake). In deze sectie nemen we aan dat u een Makefile voor uw project heeft en u wilt &kdevelop; instrueren hoe ermee om te gaan.</para>
+<para
+><note
+><para
+>&kdevelop; 4.x heeft geen kennis over <guilabel
+>GNU autotools</guilabel
+> op het moment dat deze sectie is geschreven. Als uw project deze gebruikt dan moet u op de commandoregel de volgende opdracht gebruiken <varname
+>./configure</varname
+> of een van de andere van toepassing zijnde opdrachten. Als u dit vanuit &kdevelop; wilt doen dan moet u het <guilabel
+>Konsole</guilabel
+> openen (voeg het indien nodig toe aan de vensterrand via het menu <menuchoice
+><guimenu
+>Venster</guimenu
+><guimenuitem
+>Weergave van hulpmiddelen</guimenuitem
+></menuchoice
+>) van waaruit u de opdracht <varname
+>./configure</varname
+> op de commandoregel kunt geven.</para
+></note
+></para>
+<para
+>De eerste stap is het instellen van &kdevelop; voor de targets in uw Makefiles. Er zijn twee manieren om dat te doen: individuele Makefile targets selecteren, of een set targets selecteren die u vaak wilt compileren. bij beide benaderingen opent u het venster <guilabel
+>Projecten</guilabel
+> door te klikken op de knop <guilabel
+>Projecten</guilabel
+> langs de rand van het hoofdvenster van &kdevelop; (als de knop niet aanwezig is, lees dan hierboven hoe u de knop kunt toevoegen). Het venster <guilabel
+>Projecten</guilabel
+> heeft twee gedeelten: de bovenste helft &mdash; getiteld <guilabel
+>Projecten</guilabel
+> &mdash; geeft een lijst met al uw projecten waarvan u de onderliggende mappen kunt uitvouwen. De onderste helft &mdash; getiteld <guilabel
+>Sequentie bouwen</guilabel
+> &mdash; geeft een lijst met gedeeltes van projecten die gebouwd worden als u het menu item <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Selectie bouwen</guimenuitem
+></menuchoice
+> selecteert of <keycap
+>F8</keycap
+>; toetst; we zullen hierop later terug komen.</para>
+<sect1 id="building-individual-makefile-targets"
+><title
+>Individuele Makefile targets bouwen</title>
+<para
+>Klap in de bovenste helft van het projectvenster bij een project de mapstructuur uit, bijvoorbeeld van een project waarvan u een Makefile target wilt bouwen. Hierdoor krijgt u pictogrammen te zien voor (i) mappen in het project, (ii) bestanden op het hoogste niveau van dit project, (iii) Makefile targets die&kdevelop; kan vinden. Deze categorieën ziet u rechts in het venster. Merk op dat &kdevelop; in bepaalde mate de Makefile syntax <emphasis
+>begrijpt</emphasis
+> en kan daarom targets laten zien die in deze Makefile zijn gedefinieerd(maar dit begrip schiet tekort als de targets samengesteld of indirect zijn).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-1a.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Om een van de hier opgenoemde targets te bouwen, selecteert u het eerst met de &RMB; om vervolgens <guilabel
+>Bouwen</guilabel
+> te selecteren. Als u dit bijvoorbeeld doet met het target <quote
+>clean</quote
+> dan wordt gewoon <quote
+>make clean</quote
+> uitgevoerd. U kunt dit volgen in het subvenster <guilabel
+>Bouwen</guilabel
+> dat zich opent, u kunt dan de commando's en de resultaten daarvan zien. (dit venster hoort bij het hulpmiddel <guilabel
+>Bouwen</guilabel
+>, u kunt daarom dit venster sluiten en later weer heropenen met de knop <guilabel
+>bouwen</guilabel
+> linksonder het hoofdvenster. U kunt het aan de onderkant van de afbeelding zien).</para>
+</sect1>
+<sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"
+><title
+>Een verzameling van Makefile targets maken voor herhaald bouwen</title>
+<para
+>Met de &RMB; op individuele Makefile targets klikken iedere keer dat u iets snel wil bouwen zal snel vervelen. In plaats daarvan willen we individuele targets hebben voor een of meerdere projecten in de sessie dat we herhaaldelijk kunnen bouwen zonder veel muiswerk. Hier komt het begrip <quote
+>Bouw target set</quote
+> om de hoek: dit is een verzameling van Makefile targets die iedere keer dat u de knop <guilabel
+>Selectie bouwen</guilabel
+> in het menu indrukt na elkaar worden gebouwd, selecteer het menu-item <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Selectie bouwen</guimenuitem
+></menuchoice
+>, of druk op de sneltoets <keycap
+>F8</keycap
+>.</para>
+<para
+>De lijst met geselecteerde Makefile targets kunt u vinden in de onderste helft van het venster <guilabel
+>Projecten</guilabel
+>.</para>
+<para
+>Standaard zijn alle projecten in de selectie aanwezig maar u kunt dat naar wens aanpassen. Als voorbeeld in uw projectenlijst drie projecten aanwezig zijn (een basis bibliotheek L en de twee toepassingen A en B), maar u werkt op dit moment alleen aan project A, dan wilt u misschien project B uit de selectie verwijderen door het te markeren en de knop <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> in te drukken. Bovendien wilt u waarschijnlijk ook dat eerst bibliotheek L en vervolgens project A wordt gebouwd door de volgorde van de items in de selectie omhoog en omlaag te verplaatsen met behulp van de knoppen aan de rechterkant van de lijst. U wilt wellicht ook een bepaalde particular Makefile target aan de de selectie toevoegen, dit kunt u doen door er met de &RMB; te selecteren en vervolgens <guilabel
+>Aan bouwset toevoegen</guilabel
+> te selecteren, of markeer het en druk op de knop <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> net boven de lijst met geselecteerde targets.</para>
+<para
+>In &kdevelop; kunt u voor <quote
+>make</quote
+> de gebeurtenissen instellen. Open het menu item <menuchoice
+><guimenu
+>Project</guimenu
+><guimenuitem
+>Configuratie openen</guimenuitem
+></menuchoice
+>. Hier kunt u bijvoorbeeld het aantal parallelle taken dat <quote
+>make</quote
+> moet uitvoeren instellen &mdash; als uw computer bijvoorbeeld 8 processors heeft dan is het invoeren van 8 in dit veld een goede keus. In dit dialoog is het <guilabel
+>Standaard make doel</guilabel
+> een Makefile target in gebruik bij <emphasis
+>alle</emphasis
+> targets in de selectie.</para>
+</sect1>
+<sect1 id="what-to-do-with-error-messages"
+><title
+>Wat te doen met foutmeldingen</title>
+<para
+>Als de compiler een foutmelding geeft, klik dan op de regel met de foutmelding en de editor zal naar de regel (en zo mogelijk naar de kolom) gaan waar de fout is ontstaan. Afhankelijk van de foutmelding zal &kdevelop; proberen een voorstel te geven voor reparatie van de fout, bijvoorbeeld het declareren van een nog niet gedeclareerde variabele als een onbekend symbool is gevonden.</para>
+</sect1>
+</chapter>
+<chapter id="running-programs-in-kdevelop"
+><title
+>programma's uitvoeren in &kdevelop;</title>
+<para
+>Als u een programma heeft gebouwd dan wilt u het natuurlijk opstarten. Om dit te kunnen doen, moet u eerst <emphasis
+>Programmastarters</emphasis
+> voor uw projecten instellen. Een <emphasis
+>Starter</emphasis
+> bestaat uit de naam van een uitvoerbaar bestand, een set command line parameters en een execution environment (zoals <quote
+>voer dit programma in een shell uit</quote
+>, of <quote
+>voer dit programma in de debugger uit</quote
+>).</para>
+<sect1 id="setting-up-launches-in-kdevelop"
+><title
+>Een programmastarter instellen in &kdevelop; </title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-2.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Om dit in te stellen gaat u naar <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Starters instellen</guimenuitem
+></menuchoice
+>, markeer het project waar u een starter voor wilt toevoegen en klikt op de knop <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+>. Nu kunt u de naam van het programma opgeven en het pad van waar u het programma wilt uitvoeren. als eerst het programma en/of andere bibliotheken gecompileerd moeten worden voor het starten van het programma dan kunt u dit in een lijst onderaan opgeven: selecteer in het keuzemenu <guilabel
+>Bouwen</guilabel
+>, en druk op het symbool <inlinemediaobject
+> <imageobject
+> <imagedata fileref="Icon-folder.png" format="PNG"/> </imageobject
+> </inlinemediaobject
+> rechts van het tekstvak en selecteer het doel dat u gebouwd wilt hebben. In voorbeeld hierboven heb ik het target <guilabel
+>all</guilabel
+> uit hetproject <replaceable
+>1.deal.II</replaceable
+> en <replaceable
+>step-32</replaceable
+> uit het project <replaceable
+>1.step-32</replaceable
+> geselecteerd om zeker te zijn dat de laatste versie van zowel de basis-bibliotheek en het programma zelf gecompileerd zijn voor het opstarten van het programma. Hier kunt u ook opgeven dat u het programma in de debug-mode wilt opstarten door op het <guilabel
+>Debug</guilabel
+> symbool te klikken en vervolgens het debug-programma op te geven; deze stap is niet nodig als dit het standaard debug-programma is dat bij het systeem hoort (&eg; <application
+>gdb</application
+> bij &Linux;).</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-3.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>U kunt nu proberen of u het programma kunt uitvoeren: Selecteer <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Starter uitvoeren</guimenuitem
+></menuchoice
+> uit het hoofdmenu van &kdevelop; (of toets <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+>) en uw programma zou in een apart subvenster van &kdevelop; moeten starten . De afbeelding hierboven toont het resultaat: het nieuwe venster <guilabel
+>Uitvoeren</guilabel
+> onderaan toont de uitvoer van het programma dat nu is gestart, in dit geval het programma <replaceable
+>step-32</replaceable
+>.</para>
+<para
+><note
+><para
+>Als u meerdere startopdrachten hebt ingesteld kunt u kiezen welke uitgevoerd zou moeten worden wanneer u op <keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+> drukt door te gaan naar <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Huidige instellingen voor starten</guimenuitem
+></menuchoice
+>. Er is geen gemakkelijke manier om de naam van een instelling te bewerken, echter: in het dialoogvenster dat u krijgt wanneer u <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Huidige instellingen voor starten</guimenuitem
+></menuchoice
+> kiest, dubbelklik op de naam van de configuratie in de boomstructuur links, die u in staat zal stellen om de naam van de configuratie te bewerken.</para
+></note
+></para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts0"
+><title
+>Enige nuttige sneltoetsen</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Een programma uitvoeren</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F8</keycap
+></entry>
+    <entry
+>Compileren (roept make aan)</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Shift;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Uitvoeren</entry>
+  </row>
+  <row>
+    <entry
+><keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+></entry>
+    <entry
+>Voert het programma uit in de debugger: u wilt misschien eerst breakpoints instellen, bijvoorbeeld door met de &RMB; op een bepaalde regel in de broncode te klikken.</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="debugging-programs-in-kdevelop"
+><title
+>Programma's debuggen in &kdevelop;</title>
+<sect1 id="running-a-program-in-the-debugger"
+><title
+>Een programma uitvoeren in de debugger</title>
+<para
+>Nadat u een starter heeft ingesteld (lees <link linkend="running-programs-in-kdevelop"
+>programma's uitvoeren</link
+>), kunt u het ook uitvoeren in een debugger: Selecteer het menu item <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Opstarten debuggen </guimenuitem
+></menuchoice
+>, of toets <keycombo
+>&Alt;<keycap
+>F9</keycap
+></keycombo
+>. als u bekend bent met <application
+>gdb</application
+>, het effect is hetzelfde als het starten van <application
+>gdb</application
+> met het programma opgegeven in de opstartconfiguratie en vervolgens de opdracht <varname
+>Run</varname
+> geven. Dit houdt in dat als het programma ergens <varname
+>abort()</varname
+> aanroept (&eg; wanneer u een ongeldige statement tegenkomt) of als er een segmentation fault is, dan zal de debugger stoppen. Maar als het programma gewoon tot aan zijn eind doorloopt (met of zonder het gewenste resultaat) dan zal de debugger niet uit zichzelf stoppen voordat het programma zelfstandig is geëindigd. In dit laatste geval wilt u waarschijnlijk voordat u de debugger start breakpoints zetten op alle programma-regels waarvan u wilt dat de debugger er stopt. U kunt dit doen door met de cursor naar de betreffende regel te gaan en vervolgens het menu item <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Breekpunt aan/uit</guimenuitem
+></menuchoice
+> te selecteren, of met de &RMB; op een regel te klikken en vervolgens <guilabel
+>Breekpunt aan/uit</guilabel
+> uit het contextmenu te selecteren.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-4.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Een programma uitvoeren in de debugger zet &kdevelop; in een andere modus: het zal alle knoppen voor <quote
+>Hulpmiddelen</quote
+> aan de randen van het hoofdvenster vervangen door diegenen die van belang zijn voor debuggen, in plaats van voor bewerken. U kunt zien in welke modus u bezig bent door naar rechtsboven van het venster te kijken: er zijn tabbladen genaamd <guilabel
+>Nakijken</guilabel
+>, <guilabel
+>Debug</guilabel
+> en <guilabel
+>Code</guilabel
+>; er op klikken stelt u in staat tussen de drie modi te schakelen; elke modus heeft een eigen set hulpmiddelen, die u op dezelfde manier kunt instellen zoals we de hulpmiddelen voor <guilabel
+>Code</guilabel
+> in de sectie <link linkend="tools-and-views"
+>Gereedschappen en vensters</link
+>.</para>
+<para
+>Nadat de debugger stopt (op een breekpunt of een punt waar <varname
+>abort()</varname
+> wordt aangeroepen) kunt u een variëteit van informatie inspecteren over uw programma. In de bovenstaande afbeelding, bijvoorbeeld, hebben we onderaan het hulpmiddel <guilabel
+>Framestack</guilabel
+> geselecteerd (ruwweg gelijk aan <quote
+>backtrace</quote
+> van <application
+>gdb</application
+> en commando's <quote
+>info threads</quote
+>) die de verschillende threads die nu actief zijn in uw programma aan de linkerkant (hier een totaal van 8) en hoe uitvoeren leidde naar het huidige stoppunt rechts (hier: <varname
+>main()</varname
+> genaamd <varname
+>run()</varname
+>; de lijst zou langer zijn als we gestopt waren in een functie genaamd door <varname
+>run()</varname
+> zelf). Links kunnen we lokale variabelen inspecteren inclusief het huidige object (het object aangewezen door de variabele <varname
+>this</varname
+>).</para>
+<para
+>Vanaf hier zijn er verschillende mogelijkheden waaruit u kunt kiezen: U kunt de geselecteerde regel uitvoeren (<keycap
+>F10</keycap
+>, <application
+>gdb</application
+>'s <quote
+>next</quote
+> commando), de functie inspecteren (<keycap
+>F11</keycap
+>, <application
+>gdb</application
+>'s <quote
+>step</quote
+> commando), of ga naar het einde van de functie (<keycap
+>F12</keycap
+>, <application
+>gdb</application
+>'s <quote
+>finish</quote
+> commando). &kdevelop; update voortdurend de variabelen aan de linkerkant bij met de actuele waarden. Als u met uw muis boven een symbool (&eg; een variabele;) in uw code zweeft , dan toont &kdevelop; u de actuele waarde daarvan en krijgt u de mogelijkheid aangeboden om het programma te stoppen als de waarde daarvan wijzigt. Als u bekent met <application
+>gdb</application
+> dan kunt ook op de knop <guilabel
+>GDB</guilabel
+> klikken zodat u daarna een opdracht voor <application
+>gdb</application
+> kunt invoeren, bijvoorbeeld om de waarde van een variabele te wijzigen (hiervoor lijkt geen andere methode te bestaan).</para>
+</sect1>
+<sect1 id="attaching-the-debugger-to-a-running-process"
+><title
+>De debugger aan een lopend programma vastkoppelen</title>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-9.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Soms wilt u een programma dat al is opgestart debuggen. Een toepassing hiervan is het debuggen van parallelle programma's door middel van <ulink url="https://computing.llnl.gov/tutorials/mpi/"
+>MPI</ulink
+>, of het het debuggen van een lang lopend achtergrond proces. Hiervoor gaat u naar het menu-item <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Aan proces hechten</guimenuitem
+></menuchoice
+>, waarna zoals hierboven te zien een venster opent. U kunt hier het programma selecteren dat overeenkomt met het project dat nu in &kdevelop; geopend is - in mijn geval zou dat het programma step-32 zijn.</para>
+<para
+>Deze lijst met programma's kan u in verwarring brengen omdat het vaak net zoals in bovenstaand voorbeeld erg lang is. U kunt uzelf het een beetje makkelijker maken door naar het keuzemenu rechtsboven van het venster te gaan. De standaard waarde is <guilabel
+>Gebruikersprocessen</guilabel
+>, &ie; alle programma's die door een van de ingelogde gebruikers wordt gebruikt (als dit uw desktop of laptop is dan bent u waarschijnlijk de enige gebruiker, afgezien van root en verschillende service accounts); de lijst toont de processen van root niet, maar u kunt de lijst inkorten door de keuze <guilabel
+>Eigen processen</guilabel
+>, hierdoor zijn alle programma's van andere gebruikers niet meer zichtbaar. Of nog beter: selecteer <guilabel
+>Alleen programma's</guilabel
+>, hierdoor zijn een heleboel processen die formeel onder uw naam draaien maar waar u meestal geen contact mee heeft niet meer zichtbaar, zoals de window manager, taken op de achtergrond en andere die onwaarschijnlijke kandidaten voor debugging zijn.</para>
+<para
+>Als u een proces heeft geselecteerd en daaraan vastgehecht dan zal &kdevelop;'s overschakelen naar de debug-modus, alle gebruikelijke debugger-vensters openen en het programma onderbreken op het moment dat u eraan vast koppelde. Hierna wilt u waarschijnlijk breakpoints, viewpoints, of wat er verder noodzakelijk is instellen om daarna via <menuchoice
+><guimenu
+>Uitvoeren</guimenu
+><guimenuitem
+>Doorgaan</guimenuitem
+></menuchoice
+> het programma verder te laten gaan.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts1"
+><title
+>Enige nuttige sneltoetsen</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2"
+>Debugging</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry
+><keycap
+>F10</keycap
+></entry>
+    <entry
+>Overslaan van (gdb's <quote
+>next</quote
+>)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F11</keycap
+></entry>
+    <entry
+>Ga naar (gdb's <quote
+>step</quote
+>)</entry>
+  </row>
+  <row>
+    <entry
+><keycap
+>F12</keycap
+></entry>
+    <entry
+>Beëindig (gdb's <quote
+>finish</quote
+>)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="working-with-version-control-systems"
+><title
+>Werken met versiebeheersystemen</title>
+<para
+>als u met grotere projecten werkt dan is de kans groot dat de broncode beheert wordt via een versiebeheersysteem zoals <ulink url="https://subversion.apache.org"
+>subversion</ulink
+> of <ulink url="https://git-scm.com/"
+>git</ulink
+>. De volgende beschrijving is geschreven met <guilabel
+>subversion</guilabel
+> in gedachte maar is ook van toepassing als u <guilabel
+>git</guilabel
+> of een ander ondersteund versiebeheersysteem gebruikt.</para>
+<para
+>Vergeet niet dat als de map waarin een project is opgeslagen onder beheer is via een versiebeheersysteem dat &kdevelop; dit automatisch detecteert. Met andere woorden: het is dus niet nodig om opdracht te geven aan &kdevelop; om een kopie uit te checken wanneer u een project opzet; u hoeft &kdevelop; alleen maar naar de map te laten kijken waarnaar u eerder een kopie uitgecheckt. Als u een dergelijke map onder controle van versiebeheersysteem heeft, open de werkbalk <guilabel
+>Projecten</guilabel
+> links. U kunt hier een aantal dingen die u kunt doen:</para>
+<itemizedlist>
+<listitem
+><para
+>Als uw map verouderd is dan kunt het bijwerken vanuit de repository: klik op de naam van het project met de &RMB;, ga naar het menu-item <guilabel
+>Subversion</guilabel
+> en selecteer <guilabel
+>Bijwerken</guilabel
+>. Hierdoor worden alle bestanden die bij dit project horen up to date met de repository. </para
+></listitem>
+<listitem
+><para
+>Als u deze actie wilt beperken tot individuele mappen of bestanden, klap dan de boomstructuur van dit project uit tot het gewenste niveau en klik met de &RMB; op een map of bestandsnaam, ga verder zoals hierboven. </para
+></listitem>
+</itemizedlist>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-8.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<itemizedlist>
+<listitem
+><para
+>Als u een of meer bestanden heeft bewerkt, klap dan de boomstructuur van dit project uit tot het niveau waar deze bestanden zich bevinden en klik op de map met de &RMB;. U krijgt nu het menu item <guilabel
+>Subversion</guilabel
+> waarin u verschillende keuzes heeft. Kies <guilabel
+>Compare to base</guilabel
+> om de verschillen tussen de versie die u heeft bewerkt en de versie in de repository die u eerder heeft uitgecheckt (De versie <quote
+>base</quote
+>). Het resultaat toont de <quote
+>diffs</quote
+> voor alle bestanden in de map. </para
+></listitem>
+<listitem
+><para
+>Als u maar een enkel bestand heeft bewerkt dan kan u ook het <guilabel
+>Subversion</guilabel
+> menu voor dit bestand openen door met de &RMB; op de bestandsnaam in het projectvenster te klikken. Nog makkelijker, u kunt deze menuoptie ook openen door te klikken met de &RMB; in het <guilabel
+>Editor</guilabel
+> venster waarin u dit bestand heeft geopend. </para
+></listitem>
+<listitem
+><para
+>Als u een of meerdere bestanden die u heeft bewerkt in wilt checken, klik dan met de &RMB; op een individueel bestand, map of heel project en selecteer <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>Vastleggen</guimenuitem
+></menuchoice
+>. Hierdoor schakelt &kdevelop; om naar de <guilabel
+>Commit</guilabel
+> modus, de derde modus naast <guilabel
+>Code</guilabel
+> en <guilabel
+>Debuggen</guilabel
+> zoals u kunt zien in de rechterbovenhoek van het hoofdvenster van &kdevelop;. De afbeelding rechts toont hoe dit eruit ziet. In de <guilabel
+>Vastleg</guilabel
+> modus, in het bovenste gedeelte zijn de diffs voor de gehele map/project en elk individueel gewijzigd bestand te zien met de wijzigingen gemarkeerd (bekijk de verschillende tabs in dit gedeelte van het venster). Standaard zijn alle gewijzigde bestanden opgenomen in de changeset die u gaat committen, maar u kunt bestanden deselecteren omdat hun wijzigingen geen relatie hebben met waarvoor u een commit wilt uitvoeren. in het voorbeeld rechts heb ik <varname
+>step-32.cc</varname
+> en <varname
+>step-32.prm</varname
+> gedeselecteerd om de wijzigingen in deze bestanden niets van doen hebben met de andere wijzigingen die ik in dit project heb gemaakt en ik ze nog niet wil inchecken (misschien dat ik dat later alsnog wil doen in een aparte commit). Na een inspectie van de wijzigingen kunt u een commit-bericht in het tekstvak invoeren en op <guilabel
+>Vastleggen</guilabel
+> rechts drukken om het te versturen. </para
+></listitem>
+<listitem
+><para
+>Op dezelfde manier als bij het verschil zien, als u een enkel bestand wilt inchecken dan kunt u ook hier weer met &RMB; in het <guilabel
+>Editor</guilabel
+> venster klikken om het menu item <menuchoice
+><guimenu
+>Subversion</guimenu
+><guimenuitem
+>Vastleggen</guimenuitem
+></menuchoice
+> te openen. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="customizing-kdevelop"
+><title
+>&kdevelop; aanpassen</title>
+<para
+>Er zijn momenten dat u het standaard uiterlijk of gedrag van &kdevelop; wilt aanpassen, bijvoorbeeld omdat u gewend bent aan andere sneltoetsen of omdat uw project voor de broncode een andere inspring-style vereist. In de volgende secties beschrijven we de verschillende manieren hoe u &kdevelop; aan u behoeften kan aanpassen.</para>
+<sect1 id="customizing-the-editor"
+><title
+>De editor aanpassen</title>
+<para
+>Er zijn een aantal handige dingen die u kunt instellen rondom de ingebouwde editor van &kdevelop;. Voor meer algemeen gebruik is het inschakelen van regelnummering via het menu-item <menuchoice
+><guimenu
+>Bewerker</guimenu
+><guisubmenu
+>Beeld</guisubmenu
+><guimenuitem
+>Regelnummering tonen</guimenuitem
+></menuchoice
+>, zodat het makkelijker is om foutmeldingen van de compiler of debug-berichten in de broncode te lokaliseren. U kunt in hetzelfde menu ook de <emphasis
+>Pictogramrand tonen</emphasis
+> inschakelen - een kolom links van uw code waar &kdevelop; door middel van pictogrammen laat zien of er bijvoorbeeld een breakpoint op de geselecteerde regel is.</para>
+</sect1>
+<sect1 id="customizing-code-indentation"
+><title
+>Code inspringingen aanpassen</title>
+<para
+>Veel mensen hebben een voorkeur voor een bepaalde stijl waarop de code is opgemaakt. Ook veel projecten hebben een verplichtte stijl voor het inspringen. Die hoeven niet overeen te komen met manier waarop &kdevelop; inspringt. Maar dit kunt u aanpassen: ga naar het menu-item <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>&kdevelop; instellen</guimenuitem
+></menuchoice
+>, klik op <guilabel
+>Broncode formatteerprogramma</guilabel
+> aan de linkerkant. U kunt een van de veelgebruikte voorgedefinieerde stijlen kiezen, of uw eigen stijl definiëren door een nieuwe stijl aan te maken en deze verder te bewerken. Hiermee creëert u misschien niet exact de stijl voor het inspringen waarin in het verleden de broncode uit uw project is aangemaakt maar u komt er wel dichtbij; u ziet een voorbeeld in de twee afbeeldingen hieronder.</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-5.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-6.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+><note
+><para
+>Met <guilabel
+>&kdevelop; 4.2.2</guilabel
+>, kunt u een nieuwe stijl voor een bepaalde mimetype (&eg; voor C++ headerbestanden) aanmaken maar deze stijl komt niet zichtbaar in de lijst met beschikbare stijlen voor andere mimetypes (&eg; voor C++ bronbestanden) ofschoon het natuurlijk handig zou zijn om dezelfde stijl voor beide soorten bestanden te gebruiken. U moet daarom de stijl twee keer aanmaken, Een voor header en een voor bronbestanden. Dit is gemeld als <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335"
+>&kdevelop; bug 272335</ulink
+>.</para
+></note
+></para>
+</sect1>
+<sect1 id="customizing-keyboard-shortcuts"
+><title
+>Sneltoetsen aanpassen</title>
+<para
+>&kdevelop; heeft een bijna eindeloze lijst van sneltoetsen (enkele zijn genoemd in de <quote
+>Secties met handige sneltoetsen</quote
+> in verschillende hoofdstukken van deze handleiding) die u naar uw smaak kunt aanpassen in het menu-item <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Sneltoetsen instellen</guimenuitem
+></menuchoice
+>. Boven in het dialoogvenster kunt u zoeken naar een woord waarna alleen de overeenkomsten zichtbaar zijn; u kunt vervolgens de sneltoetscombinatie aanpassen die met dit commando is verbonden.</para>
+<para
+>Het is gebleken dat het verstandig is om deze twee aan te passen: <guilabel
+>Uitlijnen</guilabel
+> met de &Tab;-toets (veel mensen voeren meestal niet met de hand tabs in maar geven de voorkeur aan dat de editor de indeling van de broncode verzorgt door de aangepaste sneltoets, hitting &Tab; makes &kdevelop; inspringt/terugspringt/ de code naar links uitlijnt). De tweede is het in en uitschakelen van <guilabel
+>Breekpunt aan/uit</guilabel
+> via <keycombo
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+> omdat dit een veel voorkomende handeling is.</para>
+</sect1>
+<sect1 id="customizing-code-auto-completion"
+><title
+>Automatische aanvulling aanpassen</title>
+<para
+>De beschrijving van automatisch code aanvullen vindt u in <link linkend="auto-completion"
+>deze handleiding voor het schrijven van broncode</link
+>. In &kdevelop;, is het afkomstig van twee bronnen: de editor, en het verwerking- en ontleed-onderdeel. De editor (&kate;) maakt deel uit van het grote KDE omgeving en biedt automatisch aanvullen aan gebaseerd op in het document voorkomende woorden. Zulke automatische aanvullingen kunt u herkennen aan het voorafgaande icoontje in de tooltip:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-20.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>Het automatisch aanvullen in de editor kunt u aanpassen via <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guisubmenu
+>Editor instellen</guisubmenu
+><guimenuitem
+>Bewerking</guimenuitem
+><guimenuitem
+>Automatische Aanvulling</guimenuitem
+></menuchoice
+>. U kunt met name instellen hoeveel karakters u moet invoeren voordat automatisch aanvullen een voorstel geeft.</para>
+<para
+>Maar het automatische aanvulling van &kdevelop; zelf is veel krachtiger omdat het de context in overweging neemt. Het weet bijvoorbeeld welke member functions het moet aanbieden als u <varname
+>object.</varname
+> invoert, &etc;, zoals u hier kunt zien:</para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+    <caption>
+      <para
+></para>
+    </caption>
+  </mediaobject>
+</screenshot
+></para>
+<para
+>De informatie over de context komt van de verschillende plugins die de verschillende talen ondersteunen, deze kunt u pas gebruiken nadat u het bestand voor de eerste keer heeft opgeslagen (omdat dan pas het bestandsselectie gecontroleerd kan worden en de juiste taal ondersteunen).</para>
+<para
+>De automatische aanvulling van &kdevelop; is zodanig ingesteld dat de aanvullingen zichtbaar worden vanaf het moment dat u begint met typen op vrijwel alle plekken dat een aanvulling toepasselijk zou zijn, Dit kunt u aanpassen in <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guisubmenu
+>&kdevelop; instellen</guisubmenu
+><guimenuitem
+>Taalondersteuning</guimenuitem
+></menuchoice
+>. als dit nog niet is ingeschakeld (dit zou standaard wel moeten zijn), zorg er dan voor dat <guilabel
+>Automatisch opstarten inschakelen</guilabel
+> is ingeschakeld.</para>
+<para
+>&kdevelop; heeft twee manieren voor het tonen van een aanvulling: <guilabel
+>Eenvoudig automatische aanvulling</guilabel
+> toont alleen de standaard informatie in de aanvulling-tooltip (&ie; de namespace, klasse, functie, of variabele-naam). Dit zal op de aanvulling van &kate; lijken (behalve de pictogrammen).</para>
+<para
+>Maar <guilabel
+>Extra informatie</guilabel
+> zal ook het type voor elke entry, en in het geval van functies, ook de bijbehorende parameters tonen. Bovendien, als u een parameter aan een functie toevoegt dan zal Automatisch aanvullen een extra info-box boven de cursor tonen over de geselecteerde parameter waaraan u op dat moment werkt.</para>
+<para
+>Automatisch aanvullen van &kdevelop; zal bovendien zowel in eenvoudige als complete aanvulling bovenaan en groen gemarkeerd de items tonen die overeenkomen met het verwachte type, beter bekend als <quote
+>best overeenkomend</quote
+>.</para>
+<para
+>De drie keuzemogelijkheden in het instellingendialoog voor het niveau van automatisch aanvullen zijn:</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Nooit</guilabel
+>: geeft nooit <quote
+>Volledige aanvulling</quote
+> </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Indien handmatig opgestart</guilabel
+>: Toont alleen <quote
+>Extra informatie</quote
+> als automatisch aanvullen handmatig is opgestart (&ie;, wanneer u <keycombo
+>&Ctrl;<keycap
+>Spatie</keycap
+></keycombo
+> heeft ingetoetst) </para
+></listitem>
+<listitem
+><para
+><guilabel
+>Altijd</guilabel
+>: geeft altijd <quote
+>Volledige aanvulling</quote
+> </para
+></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<!--userbase-content-->
+<chapter id="credits">
+<title
+>Dankbetuigingen en licentie</title>
+    <para
+>Documentatie Copyright zie de UserBase <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
+>KDevelop4/Manual page history</ulink
+></para>
+    &meld.fouten;&vertaling.freek;&vertaling.ronald; &underFDL; </chapter>
+&documentation.index;
+</book>

@@ -1,0 +1,69 @@
+# Bosnian translations for kde package.
+# Copyright (C) 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kde package.
+# Samir Ribic <megaribi@epn.ba>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kde 49i410\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-01-14 00:50+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:10+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: switchtobuddyplugin.cpp:114
+#, fuzzy, kde-format
+#| msgid "Switch to '%1'"
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Prebaci na '%1'"
+
+#: switchtobuddyplugin.cpp:128
+#, kde-format
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr ""
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#, fuzzy
+#~| msgid "Switch to '%1'"
+#~ msgid "Switch To"
+#~ msgstr "Prebaci na '%1'"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Pređi na prijatelja"
+
+#~ msgid ""
+#~ "Allows switching between buddy documents like implementation and header "
+#~ "file."
+#~ msgstr ""
+#~ "Dopušta prebacivanje između prijatelj-dokumenata, poput datoteke "
+#~ "zaglavlja i implementacije."
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Autor"

@@ -1,0 +1,637 @@
+# translation of kdevprojectmanagerview.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2011, 2012, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevprojectmanagerview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2020-02-12 23:00+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cutcopypastehelpers.cpp:78
+#, kde-format
+msgid "Move %1 item into %2"
+msgid_plural "Move %1 items into %2"
+msgstr[0] "Liiguta %1 element asukohta %2"
+msgstr[1] "Liiguta %1 elementi asukohta %2"
+
+#: cutcopypastehelpers.cpp:81
+#, kde-format
+msgid "Copy %1 item into %2"
+msgid_plural "Copy %1 items into %2"
+msgstr[0] "Kopeeri %1 element asukohta %2"
+msgstr[1] "Kopeeri %1 elementi asukohta %2"
+
+#: cutcopypastehelpers.cpp:84
+#, kde-format
+msgid "Delete %1 item"
+msgid_plural "Delete %1 items"
+msgstr[0] "Kustuta %1 element"
+msgstr[1] "Kustuta %1 elementi"
+
+#: cutcopypastehelpers.cpp:93
+#, kde-format
+msgid "Move item %1 into %2"
+msgstr "Liiguta element %1 asukohta %2"
+
+#: cutcopypastehelpers.cpp:96
+#, kde-format
+msgid "Copy item %1 into %2"
+msgstr "Kopeeri element %1 asukohta %2"
+
+#: cutcopypastehelpers.cpp:99
+#, kde-format
+msgid "Delete item %1"
+msgstr "Kustuta element %1"
+
+#: cutcopypastehelpers.cpp:108
+#, fuzzy, kde-format
+#| msgid "Suboperation succeeded"
+msgctxt "@info:tooltip"
+msgid "Suboperation succeeded"
+msgstr "Alltoiming oli edukas"
+
+#: cutcopypastehelpers.cpp:112
+#, fuzzy, kde-format
+#| msgid "Suboperation failed"
+msgctxt "@info:tooltip"
+msgid "Suboperation failed"
+msgstr "Alltoiming nurjus"
+
+#: cutcopypastehelpers.cpp:116
+#, fuzzy, kde-format
+#| msgid "Suboperation skipped to prevent data loss"
+msgctxt "@info:tooltip"
+msgid "Suboperation skipped to prevent data loss"
+msgstr "Alltoiming jäeti andmekao vältimiseks vahele"
+
+#: cutcopypastehelpers.cpp:287
+#, kde-format
+msgctxt "@title:window"
+msgid "Paste Failed"
+msgstr "Asetamine nurjus"
+
+#: cutcopypastehelpers.cpp:323
+#, kde-format
+msgid ""
+"Failed to paste. Below is a list of suboperations that have been attempted."
+msgstr ""
+"Asetamine nurjus. Allpool on loetletud alltoimingud, mida läbi prooviti."
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevprojectmanagerview.rc:26
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Peamine tööriistariba"
+
+#: projectbuildsetwidget.cpp:123
+#, fuzzy, kde-format
+#| msgid "Build Set"
+msgctxt "@title:menu"
+msgid "Build Set"
+msgstr "Ehituskomplekt"
+
+#: projectbuildsetwidget.cpp:124
+#, fuzzy, kde-format
+#| msgid "Remove From Build Set"
+msgctxt "@action:inmenu"
+msgid "Remove from Build Set"
+msgstr "Eemalda ehituskomplektist"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
+#: projectbuildsetwidget.ui:35
+#, fuzzy, kde-format
+#| msgid "Move the selected items to the top"
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the top"
+msgstr "Valitud elemendi liigutamine esimeseks"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
+#: projectbuildsetwidget.ui:67
+#, fuzzy, kde-format
+#| msgid "Move the selected items up"
+msgctxt "@info:tooltip"
+msgid "Move the selected items up"
+msgstr "Valitud elemendi liigutamine ülespoole"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
+#: projectbuildsetwidget.ui:83
+#, fuzzy, kde-format
+#| msgid "Move the selected item down"
+msgctxt "@info:tooltip"
+msgid "Move the selected item down"
+msgstr "Valitud elemendi liigutamine allapoole"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
+#: projectbuildsetwidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Move the selected items to the bottom"
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the bottom"
+msgstr "Valitud elemendi liigutamine viimaseks"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#: projectbuildsetwidget.ui:177
+#, fuzzy, kde-format
+#| msgid "These items will be built in the order they are listed."
+msgctxt "@info:tooltip"
+msgid "These items will be built in the order they are listed."
+msgstr "Need elemendid ehitatakse loetlemise järjekorras."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectbuildsetwidget.ui:180
+#, fuzzy, kde-format
+#| msgid "Build Sequence"
+msgctxt "@title"
+msgid "Build Sequence"
+msgstr "Ehitusjärjestus"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
+#: projectbuildsetwidget.ui:200
+#, fuzzy, kde-format
+#| msgid "Add currently selected items from project tree view to buildset."
+msgctxt "@info:tooltip"
+msgid "Add currently selected items from project tree view to the build set."
+msgstr "Projektipuus valitud elementide lisamine ehituskomplekti."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
+#: projectbuildsetwidget.ui:216
+#, fuzzy, kde-format
+#| msgid "Remove currently selected item from buildset."
+msgctxt "@info:tooltip"
+msgid "Remove currently selected item from the build set."
+msgstr "Parajasti valitud elemendi eemaldamine ehituskomplektist."
+
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#, fuzzy, kde-format
+#| msgid "Projects"
+msgctxt "@title:window"
+msgid "Projects"
+msgstr "Projektid"
+
+#: projectmanagerview.cpp:91
+#, fuzzy, kde-format
+#| msgid "Locate Current Document"
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Tuvasta aktiivse dokumendi asukoht"
+
+#: projectmanagerview.cpp:92
+#, fuzzy, kde-format
+#| msgid "Locates the current document in the project tree and selects it."
+msgctxt "@info:tooltip"
+msgid "Locates the current document in the project tree and selects it."
+msgstr "Aktiivse dokumendi asukoha tuvastamine projektipuus ja selle valimine."
+
+#: projectmanagerview.cpp:98
+#, fuzzy, kde-format
+#| msgid "Locate Current Document"
+msgctxt "@action"
+msgid "Auto-Select Current Document"
+msgstr "Tuvasta aktiivse dokumendi asukoht"
+
+#: projectmanagerview.cpp:99
+#, fuzzy, kde-format
+#| msgid "Locates the current document in the project tree and selects it."
+msgctxt "@info:tooltip"
+msgid "Automatically select the current document in the project tree."
+msgstr "Aktiivse dokumendi asukoha tuvastamine projektipuus ja selle valimine."
+
+#: projectmanagerview.cpp:118
+#, fuzzy, kde-format
+#| msgid "Show Targets"
+msgctxt "@action"
+msgid "Show Build Targets"
+msgstr "Näita sihtmärke"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
+#: projectmanagerview.ui:33
+#, fuzzy, kde-format
+#| msgid "Project Overview"
+msgctxt "@info:whatsthis"
+msgid "Project Overview"
+msgstr "Projekti ülevaade"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
+#: projectmanagerview.ui:53
+#, fuzzy, kde-format
+#| msgid "Build Items:"
+msgctxt "@info:whatsthis"
+msgid "Build Items:"
+msgstr "Ehituselemendid:"
+
+#: projectmanagerviewplugin.cpp:142
+#, fuzzy, kde-format
+#| msgid "Build all Projects"
+msgctxt "@action"
+msgid "Build All Projects"
+msgstr "Ehita kõik projektid"
+
+#: projectmanagerviewplugin.cpp:147
+#, fuzzy, kde-format
+#| msgid "Build Selection"
+msgctxt "@action"
+msgid "Build Selection"
+msgstr "Ehita valik"
+
+#: projectmanagerviewplugin.cpp:148
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@action:intoolbar"
+msgid "Build"
+msgstr "Ehita"
+
+#: projectmanagerviewplugin.cpp:154
+#, fuzzy, kde-format
+#| msgid "Install Selection"
+msgctxt "@action"
+msgid "Install Selection"
+msgstr "Paigalda valik"
+
+#: projectmanagerviewplugin.cpp:155
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@action:intoolbar"
+msgid "Install"
+msgstr "Paigalda"
+
+#: projectmanagerviewplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Clean Selection"
+msgctxt "@action"
+msgid "Clean Selection"
+msgstr "Puhasta valik"
+
+#: projectmanagerviewplugin.cpp:162
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@action:intoolbar"
+msgid "Clean"
+msgstr "Puhasta"
+
+#: projectmanagerviewplugin.cpp:167
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Configure Selection"
+msgstr "Konfigureeri valik"
+
+#: projectmanagerviewplugin.cpp:169
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@action:intoolbar"
+msgid "Configure"
+msgstr "Konfigureeri"
+
+#: projectmanagerviewplugin.cpp:174
+#, fuzzy, kde-format
+#| msgid "Prune Selection"
+msgctxt "@action"
+msgid "Prune Selection"
+msgstr "Eemalda valik"
+
+#: projectmanagerviewplugin.cpp:175
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@action:intoolbar"
+msgid "Prune"
+msgstr "Eemalda"
+
+#: projectmanagerviewplugin.cpp:281
+#, fuzzy, kde-format
+#| msgid "Create &File..."
+msgctxt "@action:inmenu"
+msgid "Create &File..."
+msgstr "Loo &fail ..."
+
+#: projectmanagerviewplugin.cpp:287
+#, fuzzy, kde-format
+#| msgid "Create F&older..."
+msgctxt "@action:inmenu"
+msgid "Create F&older..."
+msgstr "Loo katal&oog ..."
+
+#: projectmanagerviewplugin.cpp:294
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "&Build"
+msgctxt "@action:inmenu"
+msgid "&Build"
+msgstr "&Ehita"
+
+#: projectmanagerviewplugin.cpp:298
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "&Install"
+msgctxt "@action:inmenu"
+msgid "&Install"
+msgstr "&Paigalda"
+
+#: projectmanagerviewplugin.cpp:302
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "&Clean"
+msgctxt "@action:inmenu"
+msgid "&Clean"
+msgstr "P&uhasta"
+
+#: projectmanagerviewplugin.cpp:306
+#, fuzzy, kde-format
+#| msgid "&Add to Build Set"
+msgctxt "@action:inmenu"
+msgid "&Add to Build Set"
+msgstr "Lis&a ehituskomplekti"
+
+#: projectmanagerviewplugin.cpp:313
+#, fuzzy, kde-format
+#| msgid "C&lose Project"
+#| msgid_plural "Close Projects"
+msgctxt "@action:inmenu"
+msgid "C&lose Project"
+msgid_plural "Close Projects"
+msgstr[0] "Su&lge projekt"
+msgstr[1] "Sulge projektid"
+
+#: projectmanagerviewplugin.cpp:319
+#, fuzzy, kde-format
+#| msgid "&Reload"
+msgctxt "@action:inmenu"
+msgid "&Reload"
+msgstr "Laa&di uuesti"
+
+#: projectmanagerviewplugin.cpp:350
+#, fuzzy, kde-format
+#| msgid "Remo&ve"
+msgctxt "@action:inmenu"
+msgid "Remo&ve"
+msgstr "&Eemalda"
+
+#: projectmanagerviewplugin.cpp:354
+#, fuzzy, kde-format
+#| msgid "Re&name..."
+msgctxt "@action:inmenu"
+msgid "Re&name..."
+msgstr "Muuda &nime ..."
+
+#: projectmanagerviewplugin.cpp:360
+#, fuzzy, kde-format
+#| msgid "Remove From &Target"
+msgctxt "@action:inmenu"
+msgid "Remove from &Target"
+msgstr "Eemalda si&htmärgist"
+
+#: projectmanagerviewplugin.cpp:547
+#, fuzzy, kde-format
+#| msgid "Create Folder in %1"
+msgctxt "@title:window"
+msgid "Create Folder in %1"
+msgstr "Kataloogi loomine asukohas %1"
+
+#: projectmanagerviewplugin.cpp:548
+#, fuzzy, kde-format
+#| msgid "Folder name:"
+msgctxt "@label:textbox"
+msgid "Folder name:"
+msgstr "Kataloogi nimi:"
+
+#: projectmanagerviewplugin.cpp:600
+#, kde-format
+msgid "Do you really want to delete this item?"
+msgid_plural "Do you really want to delete these %1 items?"
+msgstr[0] "Kas tõesti kustutada see element?"
+msgstr[1] "Kas tõesti kustutada need %1 elementi?"
+
+#: projectmanagerviewplugin.cpp:603
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgctxt "@title:window"
+msgid "Delete Files"
+msgstr "Kustuta failid"
+
+#: projectmanagerviewplugin.cpp:656
+#, fuzzy, kde-format
+#| msgid "Rename"
+msgctxt "@window:title"
+msgid "Rename"
+msgstr "Muuda nime"
+
+#: projectmanagerviewplugin.cpp:657
+#, fuzzy, kde-format
+#| msgid "New name for '%1':"
+msgctxt "@label:textbox"
+msgid "New name for '%1':"
+msgstr "\"%1\" uus nimi:"
+
+#: projectmanagerviewplugin.cpp:669
+#, kde-format
+msgid "There is already a file named '%1'"
+msgstr "Fail nimega \"%1\" on juba olemas"
+
+#: projectmanagerviewplugin.cpp:672
+#, kde-format
+msgid "Could not rename '%1'"
+msgstr "\"%1\" nime muutmine nurjus"
+
+#: projectmanagerviewplugin.cpp:675
+#, kde-format
+msgid "'%1' is not a valid file name"
+msgstr "\"%1\" ei ole korrektne failinimi"
+
+#: projectmanagerviewplugin.cpp:689
+#, fuzzy, kde-format
+#| msgid "Create File in %1"
+msgctxt "@title:window"
+msgid "Create File in %1"
+msgstr "Faili loomine asukohas %1"
+
+#: projectmanagerviewplugin.cpp:689
+#, fuzzy, kde-format
+#| msgid "File name:"
+msgctxt "@label:textbox"
+msgid "File name:"
+msgstr "Failinimi:"
+
+#: projecttreeview.cpp:151
+#, fuzzy, kde-format
+#| msgid "&Move Here"
+msgctxt "@action:inmenu"
+msgid "&Move Here"
+msgstr "&Liiguta siia"
+
+#: projecttreeview.cpp:157
+#, fuzzy, kde-format
+#| msgid "&Copy Here"
+msgctxt "@action:inmenu"
+msgid "&Copy Here"
+msgstr "&Kopeeri siia"
+
+#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#, fuzzy, kde-format
+#| msgid "C&ancel"
+msgctxt "@action:inmenu"
+msgid "C&ancel"
+msgstr "&Loobu"
+
+#: projecttreeview.cpp:218
+#, fuzzy, kde-format
+#| msgid "&Add to Build Set"
+msgctxt "@action:inmenu"
+msgid "&Add to Build Target"
+msgstr "Lis&a ehituskomplekti"
+
+#: projecttreeview.cpp:348
+#, fuzzy, kde-format
+#| msgid "Analyze With"
+msgctxt "@title:menu"
+msgid "Analyze with"
+msgstr "Analüüsi"
+
+#: projecttreeview.cpp:364
+#, fuzzy, kde-format
+#| msgid "Open Configuration..."
+msgctxt "@action:inmenu"
+msgid "Open Configuration..."
+msgstr "Ava seadistused..."
+
+#: vcsoverlayproxymodel.cpp:105
+#, kde-format
+msgctxt "Version control: Currently not on a branch"
+msgid "(no branch)"
+msgstr "(haru puudub)"
+
+#~ msgid "Rename..."
+#~ msgstr "Muuda nime..."
+
+#~ msgid "&Add to Target"
+#~ msgstr "Lis&a sihtmärgile"
+
+#~ msgid "Project Manager"
+#~ msgstr "Projektihaldur"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "@action"
+#~ msgid "Build"
+#~ msgstr "Ehita"
+
+#~ msgctxt "@action"
+#~ msgid "Install"
+#~ msgstr "Paigalda"
+
+#~ msgctxt "@action"
+#~ msgid "Clean"
+#~ msgstr "Puhasta"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Käivitamine"
+
+#, fuzzy
+#~| msgid "Projects"
+#~ msgid "Projects View"
+#~ msgstr "Projektid"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "Project Management View"
+#~ msgstr "Projektihalduse vaade"
+
+#~ msgid "Toolview to do all the project management stuff"
+#~ msgstr "Tööriistavaade kõigeks, mis seondub projekti haldamisega"
+
+#~ msgid "Filter..."
+#~ msgstr "Filtreeri..."
+
+#, fuzzy
+#~| msgid ""
+#~| "Insert wildcard patterns to filter the project view for files and "
+#~| "targets for matching items."
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the project view for files and targets "
+#~ "for matching items.\n"
+#~ "Prepend patterns with an exclamation mark to negate them.\n"
+#~ "Separate different patterns with semicolons or spaces."
+#~ msgstr ""
+#~ "Metamärkidega mustrite lisamine projektivaate filtreerimiseks ning "
+#~ "sobivate failide ja sihtmärkide leidmiseks."
+
+#~ msgid "Project Selection"
+#~ msgstr "Projekti valik"
+
+#~ msgid "List of items to be built"
+#~ msgstr "Ehitatavate elementide nimekiri"
+
+#~ msgid "Project name: %1"
+#~ msgstr "Projekti nimi: %1"
+
+#~ msgid "Project backend: %1"
+#~ msgstr "Projekti taustaprogramm: %1"
+
+#~ msgid "Do you really to remove the file <i>%1</i>?"
+#~ msgstr "Kas tõesti eemaldada fail <i>%1</i>?"
+
+#~ msgid "Version Control "
+#~ msgstr "Versioonihaldus "
+
+#~ msgid "Cannot create folder."
+#~ msgstr "Kataloogi loomine nurjus."
+
+#~ msgid "Cannot remove folder."
+#~ msgstr "Kataloogi eemaldamine nurjus."
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "Faili eemaldamine nurjus."
+
+#~ msgid "This file exists already."
+#~ msgstr "See fail on juba olemas."
+
+#~ msgid "Cannot create temporary file."
+#~ msgstr "Ajutise faili loomine nurjus."
+
+#~ msgid "Cannot create file."
+#~ msgstr "Faili loomine nurjus."
+
+#, fuzzy
+#~ msgid "Remove Folder"
+#~ msgstr "Eemalda kataloog"
+
+#, fuzzy
+#~ msgid "Rename File"
+#~ msgstr "Eemalda Fail"
+
+#, fuzzy
+#~ msgid "Rename Folder"
+#~ msgstr "Eemalda kataloog"
+
+#, fuzzy
+#~ msgid "Cannot rename '%1' to '%2'."
+#~ msgstr "fail."
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Nimi"
+
+#, fuzzy
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#, fuzzy
+#~ msgid "Folder"
+#~ msgstr "Kataloog"

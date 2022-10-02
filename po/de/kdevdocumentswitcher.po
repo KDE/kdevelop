@@ -1,0 +1,74 @@
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2020.
+# Gerhard Stengel <gstengel@gmx.net>, 2010.
+# Burkhard Lück <lueck@hube-lueck.de>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentswitcher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-08-19 17:42+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: documentswitcherplugin.cpp:65
+#, kde-format
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Zuletzt verwendete Ansichten"
+
+#: documentswitcherplugin.cpp:68
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr ""
+"Öffnet eine Liste, in der Sie durch die zuletzt verwendeten Ansichten "
+"blättern können."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Durch die Liste zuletzt verwendeter Ansichten blättern"
+
+#: documentswitcherplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "Zuletzt verwendete Ansichten (rückwärts)"
+
+#: documentswitcherplugin.cpp:76
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr ""
+"Öffnet eine Liste, in der Sie rückwärts durch die zuletzt verwendeten "
+"Ansichten blättern können."
+
+#~ msgid "Document Switcher"
+#~ msgstr "Dokumentumschalter"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "Switch between open documents using most-recently-used list"
+#~ msgstr ""
+#~ "Zwischen geöffneten Dokumenten umschalten (Reihenfolge der letzten "
+#~ "Aktivierung)"
+
+#~ msgid ""
+#~ "<b>Walk through last used Views</b><br/>Opens a list to walk through the "
+#~ "list of last used views."
+#~ msgstr ""
+#~ "<b>Durch die Liste zuletzt verwendeter Ansichten blättern</b><br/>Öffnet "
+#~ "eine Liste, in der Sie durch die zuletzt verwendeten Ansichten blättern "
+#~ "können."

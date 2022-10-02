@@ -1,0 +1,54 @@
+# Translation of kdevdocker.po to Catalan
+# Copyright (C) 2017-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2017.
+# Josep M. Ferrer <txemaq@gmail.com>, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-09-13 15:40+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+# skip-rule: kct-docker
+#: dockerplugin.cpp:117
+#, kde-format
+msgid "docker build '%1'"
+msgstr "Construcció del docker «%1»"
+
+#: dockerplugin.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Escolliu el nom de l'etiqueta"
+
+#: dockerplugin.cpp:122
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Tag name for '%1':"
+msgstr "Nom de l'etiqueta per a «%1»:"
+
+# skip-rule: kct-docker
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dockerpreferences.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "'docker run' arguments:"
+msgstr "Arguments de «docker run»:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dockerpreferences.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects volume:"
+msgstr "Volum dels projectes:"

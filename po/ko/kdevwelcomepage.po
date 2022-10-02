@@ -1,0 +1,205 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+# Shinjo Park <kde@peremen.name>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-20 00:43+0000\n"
+"PO-Revision-Date: 2020-02-15 23:50+0100\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: qml/area_code.qml:76
+msgid "Need Help?"
+msgstr "도움이 필요하십니까?"
+
+#: qml/area_code.qml:84
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#: qml/area_code.qml:91
+msgid "Learn about KDevelop"
+msgstr "KDevelop에 대해 알아보기"
+
+#: qml/area_code.qml:96
+msgid "Join KDevelop's team!"
+msgstr "KDevelop 팀에 참여하세요!"
+
+#: qml/area_code.qml:101
+msgid "Handbook"
+msgstr "도움말"
+
+#: qml/area_debug.qml:18 qml/area_review.qml:16
+msgid "Back to code"
+msgstr "코드로 돌아가기"
+
+#: qml/area_debug.qml:37
+msgid "Configure a new Launcher"
+msgstr "새 실행 구성"
+
+#: qml/area_debug.qml:38
+msgid "Attach to Process"
+msgstr "프로세스에 부착"
+
+#: qml/area_debug.qml:39
+msgid "Debug your program"
+msgstr "프로그램 디버그"
+
+#: qml/area_debug.qml:41
+msgid "Debug Area"
+msgstr "디버그 영역"
+
+#: qml/area_debug.qml:44
+msgid ""
+"On the <em>Debug</em> area you will be able to see and analyze how your "
+"program works on execution. On the <em>Run</em> menu you will find all the "
+"possible options."
+msgstr ""
+"<em>디버그</em> 영역에서 실행 중인 프로그램의 작동 방식을 보고 분석할 수 있습"
+"니다. <em>실행</em> 메뉴에서 가능한 모든 옵션을 찾을 수 있습니다."
+
+#: qml/area_debug.qml:50
+msgid ""
+"As you can see, here you can just execute your application or debug it if "
+"you need further runtime information. You can select what is going to be run "
+"by configuring the launches and selecting the one you want to use in the "
+"<em>Current Launch Configuration</em> sub-menu."
+msgstr ""
+"여기에서 보는 것처럼 프로그램을 실행하거나 추가 런타임 정보가 필요한 경우 디"
+"버그할 수 있습니다. 실행할 프로그램을 선택하려면 실행 종류를 구성하고 <em>현"
+"재 실행 설정</em> 하위 메뉴에서 실행할 것을 선택하십시오."
+
+#: qml/area_review.qml:38
+msgid "Review a Patch"
+msgstr "패치 검토"
+
+#: qml/area_review.qml:46
+msgid "Review Area"
+msgstr "검토 영역"
+
+#: qml/area_review.qml:50
+msgid ""
+"On the <em>Review</em> area you will be able to find the tools you need to "
+"review changes in your projects, either the ones you made or some external "
+"patch."
+msgstr ""
+"<em>검토</em> 영역에는 내부 변경 사항 및 외부 패치 형태로 된 프로젝트의 변경 "
+"사항을 검토할 수 있는 도구가 있습니다."
+
+#: qml/area_review.qml:56
+msgid ""
+"Also it will help you send the changes to the community you're contributing "
+"to, either by committing the changes, sending them by e-mail or putting them "
+"on a ReviewBoard service."
+msgstr ""
+"변경 사항을 커밋하거나, 이메일로 보내거나, ReviewBoard 서비스에 게시하여 기여"
+"하는 커뮤니티에 변경 사항을 보내는 것을 도와 줍니다."
+
+#: qml/Develop.qml:32
+msgid "New Project"
+msgstr "새 프로젝트"
+
+#: qml/Develop.qml:37
+msgid "Open Project"
+msgstr "프로젝트 열기"
+
+#: qml/Develop.qml:43
+msgid "Fetch Project"
+msgstr "프로젝트 가져오기"
+
+#: qml/Develop.qml:50
+msgid "Recent Projects"
+msgstr "최근 프로젝트"
+
+#: qml/Develop.qml:65
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>KDevelop에 오신 것을 환영합니다!</h3>\n"
+"<p>기존 프로젝트를 열거나 위에 있는 단추를 새 프로젝트를 생성하여 프로젝트를 "
+"시작할 수 있습니다.</p>\n"
+"<p>도움이 필요하면 <a href=\"https://userbase.kde.org/KDevelop\">사용자 설명"
+"서</a>를 참조하십시오.</p>"
+
+#: qml/Develop.qml:70
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Windows 사용자용 참고 사항</h3>\n"
+"<p>KDevelop은 Windows에서 C/C++ 컴파일러를 제공하지 않습니다!</p>\n"
+"<p>MinGW를 통해 GCC를 설치하거나 최신 버전의 Microsoft Visual Studio IDE를 설"
+"치하고 KDevelop을 <i>시작하기 전에</i> 환경이 올바르게 설정되었는지 확인해야 "
+"합니다.</p>\n"
+"<p>자세한 도움이 필요하면 <a href=\"https://userbase.kde.org/KDevelop4/"
+"Manual/WindowsSetup\">Windows 환경에서의 KDevelop</a> 문서를 참조하십시오.</"
+"p>"
+
+#: qml/Develop.qml:107
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: qml/Develop.qml:126
+msgid "Sessions"
+msgstr "세션"
+
+#: qml/GettingStarted.qml:49
+msgid "Go!"
+msgstr "시작!"
+
+#: qml/GettingStarted.qml:57
+msgid "Documentation for KDevelop users"
+msgstr "KDevelop 사용자 문서"
+
+#: qml/GettingStarted.qml:62
+msgid "Keep up with KDevelop's development"
+msgstr "KDevelop의 개발 따라가기"
+
+#: qml/GettingStarted.qml:67
+msgid "Help us improve KDevelop"
+msgstr "KDevelop 개선 돕기"
+
+#: qml/NewsFeed.qml:136
+msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+msgid "%1 (new)"
+msgstr "%1(새로운 항목)"
+
+#: qml/NewsFeed.qml:147
+msgid "Fetching feeds..."
+msgstr "피드 가져오는 중..."
+
+#: qml/NewsFeed.qml:148
+msgid "No recent news"
+msgstr "최근 뉴스 없음"
+
+#: qml/plugins/Branches.qml:16
+msgid "Branches"
+msgstr "브랜치"
+
+#: qml/plugins/Projects.qml:15
+msgid "Projects"
+msgstr "프로젝트"
+
+#~ msgid "News"
+#~ msgstr "뉴스"

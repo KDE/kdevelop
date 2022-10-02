@@ -1,0 +1,254 @@
+# Translation of kdevlldb.po to Catalan (Valencian)
+# Copyright (C) 2016-2022 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2016, 2017, 2020, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"PO-Revision-Date: 2022-07-09 16:17+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr "(en execució)"
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#, kde-format
+msgid "LLDB"
+msgstr "LLDB"
+
+#: debuggerplugin.cpp:93
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr "Consola de LLDB"
+
+#: debugsession.cpp:136
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr ""
+"S'està intentant executar una ordre d'usuari en una versió no admesa de LLDB"
+
+#: debugsession.cpp:335
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>No s'ha pogut iniciar el depurador:</b><br />"
+
+#: debugsession.cpp:346
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr "<b>S'ha produït un error en connectar amb l'objectiu remot:</b><br />"
+
+#: debugsession.cpp:359
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>No s'ha pogut carregar el fitxer de nucli</b><p>El depurador ha informat "
+"de l'error següent:<p><tt>%1"
+
+#: debugsession.cpp:390
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+"<b>Esta versió de «lldb-mi» no està admesa, ja que li falta un pedaç "
+"important.</b><br/>Vegeu https://llvm.org/bugs/show_bug.cgi?id=28026 per a "
+"més informació.<br/>La consola del depurador es desactivarà per a evitar una "
+"fallada.<br/>Voleu continuar?"
+
+#: debugsession.cpp:394
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr "Versió no admesa de la LLDB"
+
+#: debugsession.cpp:442
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr ""
+"<b>Necessiteu «lldb-mi» des de LLDB 3.8.1 o superior.</b><br />Esteu "
+"utilitzant: %1"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Barra d'eines del depurador"
+
+#: lldblauncher.cpp:49
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr "Depura una aplicació nativa en LLDB"
+
+#: lldblauncher.cpp:73
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Ja s'està depurant un programa. Voleu interrompre la sessió de depuració "
+"actualment en execució i continuar amb el llançament?"
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Interromp la sessió actual"
+
+#: widgets/lldbconfigpage.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr "Configuració de LLDB"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Depurador"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr "Executable del depurador:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr "Substituïx el camí cap a l'executable de «lldb-mi»..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr "Arguments addicionals:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Entorn:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr "Entorn del sistema heretat"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Opcions"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr "Script de configuració:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr "/camí/a/lldb/config/script"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr "Inicia el depurador amb:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Eixida de l'aplicació"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr "Consola de LLDB"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Pila d'execució"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, kde-format
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr "Para en iniciar:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, kde-format
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr "Depuració remo&ta"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr "Servidor remot:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr "host:port"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr "Camí de treball remot:"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr "/camí/a/un/dispositiu/gravable/directori"

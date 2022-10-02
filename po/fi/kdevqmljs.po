@@ -1,0 +1,227 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-02-02 20:43+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr "Valitse sijainti"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "Nimi:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "Sijainti:"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr "&Luokan nimi:"
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr "&Perusluokka:"
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr "&Tyyppitiedot:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "Ei mitään"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr "Perii QObjectin"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr "Perii QWidgetin"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr "Perii QDeclarativeItemin – Qt Quick 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr "Perii QQuickItemin – Qt Quick 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr "Perustuu QSharedDataan"
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr "&Otsaketiedosto:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr "&Lähdetiedosto:"
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr "&Luo lomake:"
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr "&Lomaketiedosto:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "&Sijainti:"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr "Johdanto ja projektin sijainti"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr "Luo sijaintiin:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr "Käytä projektien oletussijaintina"
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "Projekti:"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr ""
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr "Arvon tyyppi (%1) ja ominaisuuden tyyppi (%2) eivät täsmää"
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "QML-tiedoston avaaminen epäonnistui: %1"
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr "Kesto millisekunteina"
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr ""
+"On sangen hauskaa, että<br>polkupyörä on maanteiden<br>jokapäiväinen ilmiö."
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr "Fonttiperhe"
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr "Fonttikoko"
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr ""
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr ""
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr ""
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com"
+
+#~ msgid "Descriptio&n"
+#~ msgstr "K&uvaus"
+
+#~ msgid "F&iles"
+#~ msgstr "&Tiedostot"
+
+#~ msgid "Check a&ll"
+#~ msgstr "Valitse k&aikki"

@@ -1,0 +1,333 @@
+# Bosnian translation for kdevplatform
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevplatform package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevplatform\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-02-10 00:20+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 16810)\n"
+"X-Launchpad-Export-Date: 2013-10-26 06:18+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "Dokumentacija u %1"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "Nije više dostupno: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "Nije više dostupno"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Vrati: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Datoteka: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "Alatna traka za brzo otvaranje"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "Projekt %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "Nije još analizirano"
+
+#: projectfilequickopen.cpp:178
+#, fuzzy, kde-format
+#| msgid "none"
+msgctxt "@item no project"
+msgid "none"
+msgstr "ništa"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Klase"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Funkcije"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Projekt"
+
+#: quickopenplugin.cpp:60
+#, fuzzy, kde-format
+#| msgid "Includes"
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Uključuje"
+
+#: quickopenplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Includers"
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Uključivači"
+
+#: quickopenplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "Currently Open"
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "Trenutno otvoreno"
+
+#: quickopenplugin.cpp:64
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Datoteke"
+
+#: quickopenplugin.cpp:67
+#, fuzzy, kde-format
+#| msgid "Documentation"
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: quickopenplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Funkcije"
+
+#: quickopenplugin.cpp:279
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "&Brzo otvaranje"
+
+#: quickopenplugin.cpp:285
+#, fuzzy, kde-format
+#| msgid "Quick Open &File"
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "Brzo otvaranje &datoteke"
+
+#: quickopenplugin.cpp:291
+#, fuzzy, kde-format
+#| msgid "Quick Open &Class"
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "Brzo otvaranje &klase"
+
+#: quickopenplugin.cpp:297
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "Brzo otvaranje &funkcije"
+
+#: quickopenplugin.cpp:303
+#, fuzzy, kde-format
+#| msgid "Quick Open &Already Open File"
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "Brzo otvaranje već otvorene &datoteke"
+
+#: quickopenplugin.cpp:308
+#, fuzzy, kde-format
+#| msgid "Quick Open &Documentation"
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "Brzo otvaranje &dokumentacije"
+
+#: quickopenplugin.cpp:314
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "Brzo otvaranje &funkcije"
+
+#: quickopenplugin.cpp:319
+#, fuzzy, kde-format
+#| msgid "Jump to Declaration"
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "Skoči na deklaraciju"
+
+#: quickopenplugin.cpp:325
+#, fuzzy, kde-format
+#| msgid "Jump to Definition"
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "Skoči na definiciju"
+
+#: quickopenplugin.cpp:330
+#, fuzzy, kde-format
+#| msgid "Embedded Quick Open"
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "Ugrađeno brzo otvaranje"
+
+#: quickopenplugin.cpp:337
+#, fuzzy, kde-format
+#| msgid "Next Function"
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Naredna funkcija"
+
+#: quickopenplugin.cpp:342
+#, fuzzy, kde-format
+#| msgid "Previous Function"
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Prethodna funkcija"
+
+#: quickopenplugin.cpp:347
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Kontura"
+
+#: quickopenplugin.cpp:498
+#, fuzzy, kde-format
+#| msgid "Quick Open"
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "Brzo otvori"
+
+#: quickopenplugin.cpp:832
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Kontura"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, fuzzy, kde-format
+#| msgid "Quick Open..."
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "Brzo otvori"
+
+#: quickopenplugin.cpp:943
+#, fuzzy, kde-format
+#| msgid ""
+#| "Search for files, classes, functions and more, allowing you to quickly "
+#| "navigate in your source code."
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+"Pretraga za datotekama, klasama, funkcijama i još mnogo toga, što vam "
+"omogućava brzo da se krećete u izvornom kodu."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Search:"
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Traži:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Otvori"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, fuzzy, kde-format
+#| msgid "Cancel"
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Odustani"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, fuzzy, kde-format
+#| msgid "&Scopes:"
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "Op&sezi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, fuzzy, kde-format
+#| msgid "&Items:"
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "Predmet&i:"
+
+#~ msgid "Project %1"
+#~ msgstr "Projekt %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "Ovaj dodatak omogućava brzi pristup datotekama projekta i jezičkim "
+#~ "elementima poput klasa i funkcija"
+
+#~ msgid "Navigate"
+#~ msgstr "Navigacija"
+
+#~ msgid "Quickly open resources such as files, classes and methods."
+#~ msgstr "Brzo otvori resurse poput datoteka, klasa i metoda"

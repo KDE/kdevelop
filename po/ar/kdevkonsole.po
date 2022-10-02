@@ -1,0 +1,60 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2014.
+# Safa Alfulaij <safa1996alfulaij@gmail.com>, 2015.
+# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-01-20 18:52+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 21.07.70\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr "الطّرفيّة"
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr "الطّرفيّة"
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr "فشل تحميل ملحقة 'konsolepart'"
+
+#~ msgid "Konsole"
+#~ msgstr "كونسول"
+
+#, fuzzy
+#~| msgid "Konsole"
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "كونسول"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "عبدالرحيم الفاخوري"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "abdilra7eem@yahoo.com"
+
+#~ msgid ""
+#~ "This plugin provides KDevelop with an embedded konsole for quick and easy "
+#~ "command line access."
+#~ msgstr ""
+#~ "تتيح هذه الوِحدة كونسول مضمّن لـKDevelop للوصول السريع والسهل لسطر الأوامر."

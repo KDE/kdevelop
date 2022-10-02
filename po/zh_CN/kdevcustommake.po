@@ -1,0 +1,87 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcustommake.pot\n"
+"X-Crowdin-File-ID: 4967\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr "在另一个处理仍然运行时尝试包含路径解析"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "目录“%1”中缺少 Makefile"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "试图解析 %1 包含路径时发生问题"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "已缓存：%1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "文件名 %1 似乎格式无效"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "展开新工作目录失败"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "输出为：%1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "递归 Make 调用失败"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "参数字符串“%1”似乎无效。输出为：%2。"
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "目录“%1”不存在。输出为：%2。"
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "无效的递归 Make 调用"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "无法从 make 的输出中展开包含路径"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "文件夹：“%1” 命令：“%2” 输出：“%3”"

@@ -1,0 +1,214 @@
+# Danish translation of kdevmakebuilder
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Martin Schlander <mschlander@opensuse.org>, 2010, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-26 13:53+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makebuilderpreferences.cpp:70
+#, fuzzy, kde-format
+#| msgid "Make"
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, fuzzy, kde-format
+#| msgid "&Abort on first error:"
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "&Afbryd ved første fejl:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, fuzzy, kde-format
+#| msgid "&Display commands but do not execute them:"
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Vis kommandoer men kør dem ikke:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, fuzzy, kde-format
+#| msgid "Install as &root:"
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "Installér som &root:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, fuzzy, kde-format
+#| msgid "Root installation &command:"
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "&Kommando til root-installation:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, fuzzy, kde-format
+#| msgid "&Number of simultaneous jobs:"
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "A&ntal samtidige jobs:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, fuzzy, kde-format
+#| msgid "&Make executable:"
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "Programmet &Make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Default make &target:"
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "Standard make-må&l:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, fuzzy, kde-format
+#| msgid "Additional make &options:"
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Yderligere make-&tilvalg:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, fuzzy, kde-format
+#| msgid "Active environment &profile:"
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "&Profil for aktivt miljø:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr ""
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Bygge-elementet er ikke længere tilgængeligt"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Intern fejl: Kan ikke bygge et fil-element"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Vis"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk"
+
+#~ msgid "Make Builder"
+#~ msgstr "Make-bygger"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Understøttelse for at bygge Make-projekter"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Ugyldig bygningsmappe \"%1\""
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "\"%1\" er ikke en lokal sti"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "\"%1\" er ikke en mappe"
+
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Kunne ikke oprette byggekommando for målene \"%1\""
+
+#~ msgid "Job failed"
+#~ msgstr "Jobbet mislykkedes"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Mislykkedes ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Gennemført ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Afbrudt ***"
+
+#, fuzzy
+#~| msgid "Install as &root:"
+#~ msgid "Build, then install as root"
+#~ msgstr "Installér som &root:"
+
+#~ msgid "compiling"
+#~ msgstr "oversætter"
+
+#~ msgid "generating"
+#~ msgstr "genererer"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "linker"
+
+#~ msgid "built"
+#~ msgstr "bygget"
+
+#~ msgid "installing"
+#~ msgstr "installerer"
+
+#~ msgid "creating"
+#~ msgstr "opretter"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Kør mere end et job adgangen:"

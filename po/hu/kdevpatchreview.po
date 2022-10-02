@@ -1,0 +1,423 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-01-25 23:13+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "Egyéni javítócsomag"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Patch"
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "Javítócsomag"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, fuzzy, kde-format
+#| msgid "From File"
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "Fájlból"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, fuzzy, kde-format
+#| msgid "From Command"
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "Parancsból"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, fuzzy, kde-format
+#| msgid "Patch is already applied on local version"
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "A javítócsomag már alkalmazva lett a helyi verzión"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, fuzzy, kde-format
+#| msgid "Already applied"
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "Már alkalmazva lett"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">Ütközés</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "Alkalmazva.<br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "Beszúrás<br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, kde-format
+msgid "Removal<br/>"
+msgstr "Eltávolítás<br/>"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "Előző:<br/>"
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "Visszaállítva.<br/>"
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "Alternatív:<br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr ""
+"Nem sikerült alkalmazni a változtatást: a szövegnek ennek kellene lennie: "
+"„%1”, de helyette „%2”."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, fuzzy, kde-format
+#| msgid "Insertion"
+msgctxt "@item"
+msgid "Insertion"
+msgstr "Beszúrás"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, fuzzy, kde-format
+#| msgid "Removal"
+msgctxt "@item"
+msgid "Removal"
+msgstr "Eltávolítás"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, fuzzy, kde-format
+#| msgid "Change"
+msgctxt "@item"
+msgid "Change"
+msgstr "Módosítás"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, fuzzy, kde-format
+#| msgid "Kompare Model Update"
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Kompare modell frissítés"
+
+#: patchreview.cpp:457
+#, fuzzy, kde-format
+#| msgid "Overview"
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "Áttekintés"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "Javítócsomag átnézés"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr ""
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "Átnézés befejezése"
+
+#: patchreview.cpp:603
+#, fuzzy, kde-format
+#| msgid "Edit Patch"
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "Javítócsomag szerkesztése"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, fuzzy, kde-format
+#| msgid "Previous file"
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "Előző fájl"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, fuzzy, kde-format
+#| msgid "Previous difference"
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "Előző eltérés"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, fuzzy, kde-format
+#| msgid "Next difference"
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "Következő eltérés"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, fuzzy, kde-format
+#| msgid "Next file"
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "Következő fájl"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Frissítés"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, fuzzy, kde-format
+#| msgid "Run Tests"
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "Tesztek futtatása"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, fuzzy, kde-format
+#| msgid "Export Diff..."
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Diff exportálása…"
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, fuzzy, kde-format
+#| msgid "Cancel Review"
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "Átnézés megszakítása"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "Átnézés befejezése"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, fuzzy, kde-format
+#| msgid "Changes"
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "Változások"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (1 darab)"
+msgstr[1] "%2 (%1 darab)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+
+#: patchreviewtoolview.cpp:255
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgctxt "@action"
+msgid "Select All"
+msgstr "Összes kijelölése"
+
+#: patchreviewtoolview.cpp:257
+#, fuzzy, kde-format
+#| msgid "Deselect All"
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "A kijelölés megszüntetése"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "Futó tesztek: %p%"
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "Teszt megfelelt"
+msgstr[1] "Mind a(z) %1 teszt megfelelt"
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "Teszt eredmény: %1 megfelelt, %2 meghiúsult, %3 hibás"
+
+#~ msgid "Base:"
+#~ msgstr "Alap:"
+
+#~ msgid "Patch base..."
+#~ msgstr "Javítócsomag alapja…"
+
+#~ msgid "Patch location..."
+#~ msgstr "Javítócsomag helye…"
+
+#~ msgid "Command's output..."
+#~ msgstr "Parancs kimenete…"
+
+#~ msgid "Edit Patch"
+#~ msgstr "Javítócsomag szerkesztése"
+
+#~ msgid "..."
+#~ msgstr "…"
+
+#~ msgid "Save As..."
+#~ msgstr "Mentés másként…"
+
+#~ msgid "Send..."
+#~ msgstr "Küldés…"
+
+#~ msgid "Send to contact..."
+#~ msgstr "Küldés partnernek…"
+
+#~ msgid "Side view (Kompare)..."
+#~ msgstr "Oldalnézet (Kompare)…"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>Nincs modell vagy különbség, a(z) <b>%1</b> fájl nem diff-fájl.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>Nem sikerült alkalmazni a(z) <b>%1</b> diff-fájlt a(z) <b>%2</b> "
+#~ "fájlra.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>Nem sikerült alkalmazni a(z) <b>%1</b> diff-kimenetet a(z) <b>%2</b> "
+#~ "mappára.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "Az egyik ideiglenes fájlt nem sikerült megnyitni."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr ""
+#~ "<qt>Nem sikerült írni a(z) <b>%1</b> ideiglenes fájlba, ezért le lesz "
+#~ "törölve.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>Nem sikerült létrehozni a célmappát: <b>%1</b>.\n"
+#~ "A fájl nem lett elmentve.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>Nem sikerült feltölteni egy ideiglenes fájlt a távoli <b>%1</b> "
+#~ "címre. Az ideiglenes fájl még található itt: <b>%2</b>. Próbálja meg "
+#~ "átmásolni a fájlt a megfelelő helyre.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "A diff kimenet feldolgozása nem sikerült."
+
+#~ msgid "The files are identical."
+#~ msgstr "A fájlok teljesen egyformák."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Nem sikerült írni egy ideiglenes fájlba."
+
+#~ msgid "Highlights code affected by a patch"
+#~ msgstr "Kód kiemelése, amelyre hatással van a javítócsomag"
+
+#~ msgid "Show"
+#~ msgstr "Megjelenítés"

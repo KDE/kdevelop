@@ -1,0 +1,955 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2012.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgrepview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-03-20 22:34+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: grepdialog.cpp:52
+#, fuzzy, kde-format
+#| msgid "All Open Files"
+msgctxt "@item:inlistbox"
+msgid "All Open Files"
+msgstr "Όλα τα ανοικτά αρχεία"
+
+#: grepdialog.cpp:53
+#, fuzzy, kde-format
+#| msgid "All Open Projects"
+msgctxt "@item:inlistbox"
+msgid "All Open Projects"
+msgstr "Όλα τα ανοικτά έργα"
+
+#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#, fuzzy, kde-format
+#| msgid "Find/Replace in Files"
+msgctxt "@title:window"
+msgid "Find/Replace in Files"
+msgstr "Αναζήτηση/Αντικατάσταση σε αρχεία"
+
+#: grepdialog.cpp:189
+#, kde-format
+msgctxt "@action:button"
+msgid "Search..."
+msgstr "Αναζήτηση..."
+
+#: grepdialog.cpp:256
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select directory to search in"
+msgctxt "@title:window"
+msgid "Select Directory to Search in"
+msgstr "Επιλέξτε κατάλογο για αναζήτηση."
+
+#: grepdialog.cpp:512
+#, kde-format
+msgid "%2, and %1 more item"
+msgid_plural "%2, and %1 more items"
+msgstr[0] "%2, και %1 ππαραπάνω αντικείμενο"
+msgstr[1] "%2, και %1 παραπάνω αντικείμενα"
+
+#: grepdialog.cpp:525
+#, fuzzy, kde-format
+#| msgid "Search \"%1\" in %2"
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2"
+msgstr "Αναζήτηση «%1» στο %2"
+
+#: grepdialog.cpp:530
+#, fuzzy, kde-format
+#| msgid "Search \"%1\" in %2 (at time %3)"
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2 (at time %3)"
+msgstr "Αναζήτηση «%1» στο %2 (σε χρόνο %3)"
+
+#: grepjob.cpp:97
+#, kde-format
+msgid "Find in Files"
+msgstr "Αναζήτηση σε αρχεία"
+
+#: grepjob.cpp:113 grepjob.cpp:216
+#, kde-format
+msgid "Search aborted"
+msgstr "Εγκατάλειψη αναζήτησης"
+
+#: grepjob.cpp:122
+#, kde-format
+msgid "No files found matching the wildcard patterns"
+msgstr ""
+"Δεν βρέθηκαν αρχεία που να ταιριάζουν με τους χαρακτήρες αντικατάστασης"
+
+#: grepjob.cpp:140
+#, kde-format
+msgctxt ""
+"Capture is the text which is \"captured\" with () in regular expressions see "
+"https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
+msgid "Captures are not allowed in pattern string"
+msgstr "Αποτελέσματα σύγκρισης δεν επιτρέπονται στο σχήμα"
+
+#: grepjob.cpp:161
+#, kde-format
+msgid "Searching for <b>%2</b> in one file"
+msgid_plural "Searching for <b>%2</b> in %1 files"
+msgstr[0] "Αναζήτηση για <b>%2</b> σε ένα αρχείο"
+msgstr[1] "Αναζήτηση για <b>%2</b> σε %1 αρχεία"
+
+#: grepjob.cpp:182
+#, kde-format
+msgid "Collecting files..."
+msgstr "Συλλογή αρχείων..."
+
+#: grepjob.cpp:260
+#, kde-format
+msgid "Failed: %1"
+msgstr "Αποτυχία: %1"
+
+#: grepjob.cpp:263
+#, kde-format
+msgid "No results found"
+msgstr "Δεν βρέθηκαν αποτελέσματα"
+
+#: grepjob.cpp:282
+#, kde-format
+msgid "Grep: %1"
+msgstr "Grep: %1"
+
+#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#, kde-format
+msgid "Line %1: "
+msgstr "Γραμμή %1: "
+
+#: grepoutputmodel.cpp:377
+#, kde-format
+msgid "<b>1</b> match"
+msgid_plural "<b>%1</b> matches"
+msgstr[0] "<b>1</b> αποτέλεσμα σύγκρισης"
+msgstr[1] "<b>%1</b> αποτελέσματα σύγκρισης"
+
+#: grepoutputmodel.cpp:378
+#, kde-format
+msgid "<b>1</b> file"
+msgid_plural "<b>%1</b> files"
+msgstr[0] "<b>1</b> αρχείο"
+msgstr[1] "<b>%1</b> αρχεία"
+
+#: grepoutputmodel.cpp:380
+#, kde-format
+msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
+msgid "<b>%1 in %2</b>"
+msgstr "<b>%1 σε %2</b>"
+
+#: grepoutputmodel.cpp:382
+#, kde-format
+msgid "%2: 1 match"
+msgid_plural "%2: %1 matches"
+msgstr[0] "%2: 1 ταίριασμα"
+msgstr[1] "%2: %1 ταιριάσματα"
+
+#: grepoutputmodel.cpp:452
+#, kde-format
+msgctxt ""
+"%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
+"its row and column"
+msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
+msgstr "Αποτυχία αντικατάστασης <b>%1</b> με <b>%2</b> σε %3:%4:%5"
+
+#: grepoutputview.cpp:71
+#, kde-format
+msgctxt "@title:window"
+msgid "Find/Replace Output View"
+msgstr "Εύρεση/Αντικατάσταση προβολής εξόδου"
+
+#: grepoutputview.cpp:74
+#, fuzzy, kde-format
+#| msgid "&Previous Item"
+msgctxt "@action"
+msgid "&Previous Item"
+msgstr "&Προηγούμενο αντικείμενο"
+
+#: grepoutputview.cpp:75
+#, fuzzy, kde-format
+#| msgid "&Next Item"
+msgctxt "@action"
+msgid "&Next Item"
+msgstr "Επόμε&νο αντικείμενο"
+
+#: grepoutputview.cpp:80
+#, fuzzy, kde-format
+#| msgid "C&ollapse All"
+msgctxt "@action"
+msgid "C&ollapse All"
+msgstr "Σ&υρρίκνωση όλων"
+
+#: grepoutputview.cpp:82
+#, fuzzy, kde-format
+#| msgid "&Expand All"
+msgctxt "@action"
+msgid "&Expand All"
+msgstr "&Ανάπτυξη όλων"
+
+#: grepoutputview.cpp:86
+#, fuzzy, kde-format
+#| msgid "New &Search"
+msgctxt "@action"
+msgid "New &Search"
+msgstr "Νέα ανα&ζήτηση"
+
+#: grepoutputview.cpp:87
+#, fuzzy, kde-format
+#| msgid "Refresh"
+msgctxt "@action"
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+#: grepoutputview.cpp:89
+#, fuzzy, kde-format
+#| msgid "Clear Search History"
+msgctxt "@action"
+msgid "Clear Search History"
+msgstr "Καθαρισμός ιστορικού αναζητήσεων"
+
+#: grepoutputview.cpp:323
+#, kde-format
+msgid "Do you want to replace with an empty string?"
+msgstr "Θέλετε να αντικαταστήσετε με κενή συμβολοσειρά;"
+
+#: grepoutputview.cpp:324
+#, fuzzy, kde-format
+#| msgid "Start replacement"
+msgctxt "@title:window"
+msgid "Start Replacement"
+msgstr "Έναρξη αντικατάστασης"
+
+#: grepoutputview.cpp:325
+#, fuzzy, kde-format
+#| msgid "&Replace"
+msgctxt "@action:button"
+msgid "Replace"
+msgstr "Α&ντικατάσταση"
+
+#. i18n: ectx: property (text), widget (QLabel, replacementLabel)
+#: grepoutputview.ui:41
+#, fuzzy, kde-format
+#| msgid "Replacement &text:"
+msgctxt "@label:listbox"
+msgid "Replacement &text:"
+msgstr "Κείμενο αν&τικατάστασης:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
+#: grepoutputview.ui:57
+#, fuzzy, kde-format
+#| msgid "Enter the replacement pattern."
+msgctxt "@info:tooltip"
+msgid "Enter the replacement pattern"
+msgstr "Εισαγωγή σχήματος αντικατάστασης."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
+#: grepoutputview.ui:76
+#, fuzzy, kde-format
+#| msgid "Apply replacement on selected items."
+msgctxt "@info:tooltip"
+msgid "Apply replacement on selected items"
+msgstr "Εφαρμογή αντικατάστασης σε επιλεγμένα αντικείμενα."
+
+#. i18n: ectx: property (text), widget (QPushButton, applyButton)
+#: grepoutputview.ui:79
+#, fuzzy, kde-format
+#| msgid "&Replace"
+msgctxt "@action:button"
+msgid "&Replace"
+msgstr "Α&ντικατάσταση"
+
+#: grepviewplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Find/Replace in Fi&les..."
+msgctxt "@action"
+msgid "Find/Replace in Fi&les..."
+msgstr "Αναζήτηση/Αντικατάσταση σε &αρχεία..."
+
+#: grepviewplugin.cpp:79
+#, fuzzy, kde-format
+#| msgid "Search for expressions over several files"
+msgctxt "@info:tooltip"
+msgid "Search for expressions over several files"
+msgstr "Αναζήτηση εκφράσεων σε πολλαπλά αρχεία"
+
+#: grepviewplugin.cpp:81
+#, fuzzy, kde-format
+#| msgid ""
+#| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
+#| "expression which is then searched for within all files in the directories "
+#| "you specify. Matches will be displayed, you can switch to a match "
+#| "directly. You can also do replacement."
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens the 'Find/Replace in Files' dialog. There you can enter a regular "
+"expression which is then searched for within all files in the directories "
+"you specify. Matches will be displayed, you can switch to a match directly. "
+"You can also do replacement."
+msgstr ""
+"Ανοίγει το παράθυρο διαλόγου 'Αναζήτηση/Αντικατάσταση σε αρχεία'. Εκεί "
+"μπορείτε να εισαγάγετε μια κανονική έκφραση για αναζήτηση σε όλα τα αρχεία "
+"και καταλόγους που ορίζετε. Τα αποτελέσματα της σύγκρισης θα εμφανιστούν, "
+"μπορείτε να μεταβείτε άμεσα σε ένα αποτέλεσμα. Μπορείτε επίσης να κάνετε "
+"αντικατάσταση."
+
+#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#, fuzzy, kde-format
+#| msgid "Find/Replace in This Folder..."
+msgctxt "@action:inmenu"
+msgid "Find/Replace in This Folder..."
+msgstr "Εύρεση/αντικατάσταση σε αυτόν το φάκελο..."
+
+#: grepviewplugin.cpp:140
+#, fuzzy, kde-format
+#| msgid "&Find/Replace in Files..."
+msgctxt "@action:inmenu"
+msgid "&Find/Replace in Files..."
+msgstr "&Αναζήτηση/Αντικατάσταση σε αρχεία..."
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
+#: grepwidget.ui:35
+#, fuzzy, kde-format
+#| msgid "Enter the regular expression you want to search for here."
+msgctxt "@info:tooltip"
+msgid "Enter the regular expression you want to search for"
+msgstr "Εισαγωγή κανονικής έκφρασης για αναζήτηση"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
+#: grepwidget.ui:59
+#, fuzzy, kde-format
+#| msgid ""
+#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#| "REC-html40/strict.dtd\">\n"
+#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#| "css\">\n"
+#| "p, li { white-space: pre-wrap; }\n"
+#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; "
+#| "font-weight:400; font-style:normal;\">\n"
+#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
+#| "expression you want to search for here.</p>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
+#| "\"Regular Expression\" below, this is considered a raw string. That "
+#| "means, all meta characters are escaped.</p>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta "
+#| "characters are:</p>\n"
+#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+#| "indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
+#| "character</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">^</span> - Matches the beginning of a line</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">$</span> - Matches the end of a line</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">\\b</span> - Matches a word boundary</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
+#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">The following "
+#| "repetition operators exist:</p>\n"
+#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+#| "indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
+#| "item is matched at most once</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">*</span> - The preceding item is matched zero or more "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">+</span> - The preceding item is matched one or more times</"
+#| "li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
+#| "item is matched exactly <span style=\" font-style:italic;\">n</span> "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding "
+#| "item is matched <span style=\" font-style:italic;\">n</span> or more "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
+#| "item is matched at most <span style=\" font-style:italic;\">n</span> "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+#| "weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;"
+#| "\">}</span> - The preceding item is matched at least <span style=\" font-"
+#| "style:italic;\">n</span>, but at most <span style=\" font-style:italic;"
+#| "\">m</span> times.</li></ul>\n"
+#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
+#| "backreferences to bracketed subexpressions are available via the notation "
+#| "\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
+#| "look at <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
+#| "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" "
+#| "font-style:italic;\">man pcresyntax.</span></p></body></html>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
+"expression you want to search for here.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
+"\"Regular Expression\" below, this is considered a raw string. That means, "
+"all meta characters are escaped.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta characters "
+"are:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
+"character</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - Matches the beginning of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Matches the end of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Matches a word boundary</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">The following repetition "
+"operators exist:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
+"item is matched at most once</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - The preceding item is matched zero or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - The preceding item is matched one or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched exactly <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding item "
+"is matched <span style=\" font-style:italic;\">n</span> or more times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched at most <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - The preceding item is matched at least <span style=\" font-style:"
+"italic;\">n</span>, but at most <span style=\" font-style:italic;\">m</span> "
+"times.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
+"backreferences to bracketed subexpressions are available via the notation "
+"\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
+"look at <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
+"style:italic;\">man pcresyntax.</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Δώστε εδώ την κανονική "
+"έκφραση την οποία θέλετε να αναζητήσετε.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Αν δεν επιλέξετε «Κανονική "
+"έκφραση» παρακάτω, θα θεωρηθεί απλή συμβολοσειρά. Αυτό σημαίνει ότι όλοι οι "
+"μεταχαρακτήρες δεν θα ληφθούν υπόψη.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Πιθανοί μεταχαρακτήρες "
+"είναι:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - ταιριάζει με κάθε "
+"χαρακτήρα</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - ταιριάζει με την αρχή γραμμής</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - ταιριάζει με το τέλος γραμμής</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - ταιριάζει με το όριο λέξης</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - ταιριάζει με κάθε κενό χαρακτήρα</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Υπάρχουν οι ακόλουθοι "
+"επαναληπτικοί τελεστές:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - το αντικείμενο "
+"που προηγείται συγκρίνεται το πολύ μια φορά</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - το αντικείμενο που προηγείται συγκρίνεται μηδέν ή "
+"περισσότερες φορές</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - το αντικείμενο που προηγείται συγκρίνεται μία ή "
+"περισσότερες φορές</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - το αντικείμενο που "
+"προηγείται συγκρίνεται ακριβώς <span style=\" font-style:italic;\">n</span> "
+"φορές</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - το αντικείμενο που "
+"προηγείται συγκρίνεται <span style=\" font-style:italic;\">n</span> ή "
+"περισσότερες φορές</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - το αντικείμενο που "
+"προηγείται συγκρίνεται το πολύ <span style=\" font-style:italic;\">n</span> "
+"φορές</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - το αντικείμενο που προηγείται συγκρίνεται τουλάχιστον <span style="
+"\" font-style:italic;\">n</span>, αλλά το πολύ <span style=\" font-style:"
+"italic;\">m</span> φορές.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Επιπλέον, παραπομπές σε "
+"υποεκφράσεις μέσα σε αγκύλες είναι διαθέσιμες από το συμβολισμό \\<span "
+"style=\" font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Για περαιτέρω παραπομπές, "
+"δείτε στο <a href=\"http://www.pcre.org\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> ή στο <span style=\" "
+"font-style:italic;\">man pcresyntax.</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: grepwidget.ui:69
+#, fuzzy, kde-format
+#| msgid "Template:"
+msgctxt "@label:listbox"
+msgid "Template:"
+msgstr "Πρότυπο:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
+#: grepwidget.ui:82
+#, fuzzy, kde-format
+#| msgid "This is the regular expression template."
+msgctxt "@info:tooltip"
+msgid "This is the regular expression template."
+msgstr "Αυτό είναι το πρότυπο κανονικής έκφρασης."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
+#: grepwidget.ui:85
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "This is the regular expression template. <i>%s</i> will be replaced by "
+#| "the pattern, while <i>%%</i> will be replaced by <i>%</i>."
+msgctxt "@info:whatsthis"
+msgid ""
+"This is the regular expression template. <i>%s</i> will be replaced by the "
+"pattern, while <i>%%</i> will be replaced by <i>%</i>."
+msgstr ""
+"Αυτό είναι το πρότυπο κανονικής έκφρασης. Το <i>%s</i> θα αντικατασταθεί με "
+"το πρότυπο, ενώ το <i>%%</i> θα αντικατασταθεί με το <i>%</i>."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
+#: grepwidget.ui:92
+#, fuzzy, kde-format
+#| msgid "Quickly select location from a set of directories"
+msgctxt "@info:tooltip"
+msgid "Quickly select location from a set of directories"
+msgstr "Γρήγορη επιλογή τοποθεσίας από ένα σύνολο καταλόγων"
+
+#. i18n: ectx: property (text), widget (QPushButton, syncButton)
+#: grepwidget.ui:95
+#, fuzzy, kde-format
+#| msgid "Quick Select"
+msgctxt "@action:button"
+msgid "Quick Select"
+msgstr "Γρήγορη επιλογή"
+
+#. i18n: ectx: property (text), widget (QLabel, depthLabel)
+#: grepwidget.ui:102
+#, fuzzy, kde-format
+#| msgid "Depth:"
+msgctxt "@label:spinbox"
+msgid "Depth:"
+msgstr "Βάθος:"
+
+#. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, fuzzy, kde-format
+#| msgid "Full"
+msgctxt "@item full recursion"
+msgid "Full"
+msgstr "Πλήρης"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: grepwidget.ui:131
+#, fuzzy, kde-format
+#| msgid "Pattern:"
+msgctxt "@label:listbox"
+msgid "Pattern:"
+msgstr "Σχήμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: grepwidget.ui:144
+#, fuzzy, kde-format
+#| msgid "Files:"
+msgctxt "@label:listbox"
+msgid "Files:"
+msgstr "Αρχεία:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: grepwidget.ui:157
+#, fuzzy, kde-format
+#| msgid "Case sensitive:"
+msgctxt "@option:check"
+msgid "Case sensitive:"
+msgstr "Διάκριση πεζών/κεφαλαίων:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
+#: grepwidget.ui:176
+#, fuzzy, kde-format
+#| msgid "Case-sensitive searching."
+msgctxt "@info:tooltip"
+msgid "Case-sensitive searching."
+msgstr "Αναζήτηση με διάκριση πεζών/κεφαλαίων."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: grepwidget.ui:189
+#, fuzzy, kde-format
+#| msgid "Location(s):"
+msgctxt "@label:listbox"
+msgid "Location(s):"
+msgstr "Θέση(Θέσεις):"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
+#: grepwidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Files filter."
+msgctxt "@info:tooltip"
+msgid "Files filter"
+msgstr "Φίλτρο αρχείων."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
+#: grepwidget.ui:205
+#, fuzzy, kde-format
+#| msgid ""
+#| "Enter the file name pattern of the files to search here. You may give "
+#| "several patterns separated by commas or spaces."
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to search here. You may give "
+"several patterns separated by commas or spaces."
+msgstr ""
+"Πληκτρολογήστε εδώ το σχήμα ονόματος των αρχείων προς αναζήτηση. Μπορείτε να "
+"δώσετε πολλά σχήματα σύγκρισης διαχωρισμένα με κόμματα ή κενά."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: grepwidget.ui:218
+#, fuzzy, kde-format
+#| msgid "Exclude:"
+msgctxt "@label:listbox"
+msgid "Exclude:"
+msgstr "Εξαίρεση:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:231
+#, fuzzy, kde-format
+#| msgid "Files pattern to exclude"
+msgctxt "@info:tooltip"
+msgid "Files pattern to exclude"
+msgstr "Σχήμα σύγκρισης αρχείων που αποκλείονται"
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:234
+#, fuzzy, kde-format
+#| msgid ""
+#| "Enter the file name pattern of the files to exclude from the search here. "
+#| "You may give several patterns separated by commas or spaces.<p>Every "
+#| "pattern is internally surrounded by asterisks, so that each pattern can "
+#| "match parts of the file paths.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to exclude from the search here. "
+"You may give several patterns separated by commas or spaces.<p>Every pattern "
+"is internally surrounded by asterisks, so that each pattern can match parts "
+"of the file paths.</p>"
+msgstr ""
+"Πληκτρολογήστε εδώ το σχήμα ονόματος των αρχείων που αποκλείονται από την "
+"αναζήτηση. Μπορείτε να δώσετε πολλά σχήματα σύγκρισης διαχωρισμένα με "
+"κόμματα ή κενά.<p>Κάθε σχήμα περικλείεται εσωτερικά από αστερίσκους, έτσι "
+"ώστε κάθε σχήμα να συγκρίνεται με τμήματα διαδρομών των αρχείων.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: grepwidget.ui:314
+#, fuzzy, kde-format
+#| msgid "Regular expression:"
+msgctxt "@option:check"
+msgid "Regular expression:"
+msgstr "Κανονική έκφραση:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
+#: grepwidget.ui:327
+#, fuzzy, kde-format
+#| msgid "Enable or disable regular expression."
+msgctxt "@info:tooltip"
+msgid "Enable or disable regular expression."
+msgstr "(Απ)ενεργοποίηση κανονικής έκφρασης."
+
+#. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
+#: grepwidget.ui:340
+#, fuzzy, kde-format
+#| msgid "Limit to project files:"
+msgctxt "@option:check"
+msgid "Limit to project files:"
+msgstr "Περιορισμός στα αρχεία έργου:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
+#: grepwidget.ui:369
+#, fuzzy, kde-format
+#| msgid "Enter the replacement template."
+msgctxt "@info:tooltip"
+msgid "Enter the replacement template"
+msgstr "Δώστε το πρότυπο αντικατάστασης."
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: grepwidget.ui:376
+#, fuzzy, kde-format
+#| msgid "Replacement template:"
+msgctxt "@label:textbox"
+msgid "Replacement template:"
+msgstr "Πρότυπο αντικατάστασης:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
+#: grepwidget.ui:389
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the location where you want to search. It can be a directory, a "
+#| "file, or a semicolon separated (without spaces) list of directories/files."
+msgctxt "@info:tooltip"
+msgid ""
+"Select the location where you want to search. It can be a directory, a file, "
+"or a semicolon separated (without spaces) list of directories/files."
+msgstr ""
+"Επιλέξτε την τοποθεσία που θέλετε να πραγματοποιήσετε την αναζήτηση. Μπορεί "
+"να είναι κατάλογος, αρχείο ή μια λίστα καταλόγων/αρχείων διαχωρισμένη με "
+"ερωτηματικά (χωρίς κενά)."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
+#: grepwidget.ui:414
+#, fuzzy, kde-format
+#| msgid "Select a directory to search in."
+msgctxt "@info:tooltip"
+msgid "Select a directory to search in"
+msgstr "Επιλέξτε κατάλογο για αναζήτηση μέσα σε αυτόν."
+
+#~ msgid "Find-Replace In Files"
+#~ msgstr "Αναζήτηση-Αντικατάσταση σε αρχεία"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
+
+#~ msgid "<big>%2 <i>(one match)</i></big>"
+#~ msgid_plural "<big>%2 <i>(%1 matches)</i></big>"
+#~ msgstr[0] "<big>%2 <i>(ένα αποτέλεσμα σύγκρισης)</i></big>"
+#~ msgstr[1] "<big>%2 <i>(%1 αποτελέσματα σύγκρισης)</i></big>"
+
+#, fuzzy
+#~| msgid "Find/Replace in Files"
+#~ msgid "Find/Replace"
+#~ msgstr "Αναζήτηση/Αντικατάσταση σε αρχεία"
+
+#~ msgid "&Find/Replace in Files"
+#~ msgstr "Ανα&ζήτηση/Αντικατάσταση σε αρχεία"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid ""
+#~ "Allows fast searching of multiple files using patterns or regular "
+#~ "expressions. And allow to replace it too."
+#~ msgstr ""
+#~ "Επιτρέπει γρήγορη αναζήτηση πολλών αρχείων με χρήση προτύπων ή κανονικών "
+#~ "εκφράσεων. Επιτρέπει και την αντικατάστασή τους επίσης."
+
+#~ msgid "Ctrl+Alt+f"
+#~ msgstr "Ctrl+Alt+Α"
+
+#~ msgid "Synchronize with current document directory."
+#~ msgstr "Συγχρονισμός με τον τρέχοντα κατάλογο εγγράφων."
+
+#~ msgid "&Change Search Settings"
+#~ msgstr "&Αλλαγή ρυθμίσεων αναζήτησης"
+
+#~ msgid "Support for running grep over a list of files"
+#~ msgstr "Υποστήριξη εκτέλεσης grep σε μια λίστα αρχείων"
+
+#~ msgid "Recursive:"
+#~ msgstr "Αναδρομικά:"
+
+#~ msgid "Find/Replace In Files"
+#~ msgstr "Αναζήτηση/Αντικατάσταση σε αρχεία"
+
+#~ msgid "&Change criteria"
+#~ msgstr "Αλλαγή &κριτηρίων"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Directory:"
+#~ msgstr "Κατάλογος:"
+
+#, fuzzy
+#~| msgid "Find in Files"
+#~ msgid "Find in Files aborted"
+#~ msgstr "Αναζήτηση σε αρχεία"
+
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "Αδυναμία δημιουργίας προσωρινού αρχείου για αναζήτηση."
+
+#~ msgid "Process failed to start."
+#~ msgstr "Η διεργασία απέτυχε να εκκινήσει."
+
+#~ msgid "Process crashed."
+#~ msgstr "Η διεργασία κατέρρευσε."
+
+#~ msgid "Process timed out."
+#~ msgstr "Λήξη χρονικού ορίου διεργασίας."
+
+#~ msgid "Error while writing to process."
+#~ msgstr "Σφάλμα κατά την εγγραφή στη διεργασία."
+
+#~ msgid "Error while reading from process."
+#~ msgstr "Σφάλμα κατά την ανάγνωση από τη διεργασία."
+
+#~ msgid "Unknown process error."
+#~ msgstr "Άγνωστο σφάλμα διεργασίας."
+
+#~ msgid ""
+#~ "Enter the regular expression you want to search for here.<p>Possible meta "
+#~ "characters are:<ul><li><b>.</b> - Matches any character</li><li><b>^</b> "
+#~ "- Matches the beginning of a line</li><li><b>$</b> - Matches the end of a "
+#~ "line</li><li><b>\\&lt;</b> - Matches the beginning of a word</li><li><b>"
+#~ "\\&gt;</b> - Matches the end of a word</li></ul>The following repetition "
+#~ "operators exist:<ul><li><b>?</b> - The preceding item is matched at most "
+#~ "once</li><li><b>*</b> - The preceding item is matched zero or more times</"
+#~ "li><li><b>+</b> - The preceding item is matched one or more times</"
+#~ "li><li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> "
+#~ "times</li><li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> "
+#~ "or more times</li><li><b>{,<i>n</i>}</b> - The preceding item is matched "
+#~ "at most <i>n</i> times</li><li><b>{<i>n</i>,<i>m</i>}</b> - The preceding "
+#~ "item is matched at least <i>n</i>, but at most <i>m</i> times.</li></"
+#~ "ul>Furthermore, backreferences to bracketed subexpressions are available "
+#~ "via the notation \\<i>n</i>.</p>"
+#~ msgstr ""
+#~ "Εισάγετε εδώ την κανονική έκφραση που επιθυμείτε να αναζητήσετε."
+#~ "<p>Δυνατοί μεταχαρακτήρες είναι:<ul><li><b>.</b> - Ταιριάζει σε "
+#~ "οποιονδήποτε χαρακτήρα</li><li><b>^</b> - Ταιριάζει στην αρχή μιας "
+#~ "γραμμής</li><li><b>$</b> - Ταιριάζει στο τέλος μιας γραμμής</li><li><b>"
+#~ "\\&lt;</b> - Ταιριάζει με την αρχή μιας λέξης</li><li><b>\\&gt;</b> - "
+#~ "Ταιριάζει με το τέλος μιας λέξης</li></ul>Υπάρχουν οι παρακάτω τελεστές "
+#~ "επανάληψης:<ul><li><b>?</b> -Το προπορευόμενο αντικείμενο ταιριάζει το "
+#~ "πολύ μια  φορά</li><li><b>*</b> - Το προπορευόμενο αντικείμενο ταιριάζει "
+#~ "μηδέν ή περισσότερες φορές</li><li><b>+</b> - Το προπορευόμενο "
+#~ "αντικείμενο ταιριάζει μία ή περισσότερες φορές</li><li><b>{<i>n</i>}</b> "
+#~ "- Το προπορευόμενο αντικείμενο ταιριάζει ακριβώς <i>n</i> φορές</"
+#~ "li><li><b>{<i>n</i>,}</b> - Το προπορευόμενο αντικείμενο ταιριάζει <i>n</"
+#~ "i> ή περισσότερες φορές</li><li><b>{,<i>n</i>}</b> - Το προπορευόμενο "
+#~ "αντικείμενο ταιριάζει το πολύ <i>n</i> φορές</li><li><b>{<i>n</i>,<i>m</"
+#~ "i>}</b> - Το προπορευόμενο αντικείμενο ταιριάζει τουλάχιστον <i>n</i>, "
+#~ "αλλά το πολύ <i>m</i> φορές.</li></ul>Επιπλέον, είναι δυνατές οι προς τα "
+#~ "πίσω αναφορές σε υποεκφράσεις με αγκύλες μέσω της σύνταξης \\<i>n</i>.</p>"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can choose a template for the pattern from the combo box and edit it "
+#~| "here. The string %s in the template is replaced  by the pattern input "
+#~| "field, resulting in the regular expression to search for."
+#~ msgid ""
+#~ "You can choose a template for the pattern from the combo box and edit it "
+#~ "here. The string %s in the template is replaced by the pattern input "
+#~ "field, resulting in the regular expression to search for."
+#~ msgstr ""
+#~ "Μπορείτε να επιλέξετε ένα πρότυπο για το μοτίβο από το πλαίσιο συνδυασμών "
+#~ "και έπειτα να το επεξεργαστείτε. Η συμβολοσειρά %s στο πρότυπο γίνεται "
+#~ "αντικατάσταση με το πεδίο εισαγωγής μοτίβου, δημιουργώντας την κανονική "
+#~ "έκφραση προς αναζήτηση."
+
+#~ msgid "Suppress find errors:"
+#~ msgstr "Καταστολή σφαλμάτων αναζήτησης:"

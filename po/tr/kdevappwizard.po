@@ -1,0 +1,226 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
+# Volkan Gezer <volkangezer@gmail.com>, 2014, 2015, 2021.
+# Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: extragear-kdevelop-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-08-29 20:35+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.08.0\n"
+
+#: appwizarddialog.cpp:23
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Yeni Proje Oluştur"
+
+#: appwizarddialog.cpp:37
+#, kde-format
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Genel"
+
+#: appwizarddialog.cpp:39
+#, kde-format
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Sürüm Denetim"
+
+#: appwizardplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Şablondan Yeni..."
+
+#: appwizardplugin.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Bir şablondan yeni proje oluştur"
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Bu KDevelop 'un uygulama sihirbazını başlatır. Bir şablonlar kümesi içinden "
+"uygulamanız için bir iskelet oluşturmanıza yardımcı olur."
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr "Şablondan yeni proje oluşturulamadı."
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Lütfen Sürüm Denetim aracı görünümüne göz atın."
+
+#: appwizardplugin.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Sürüm Denetim Sistemi Hatası"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "DVCS deposu ilklendirilemedi"
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr "DVCS deposunun durumu denetlenemedi"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Dosyalar, DVCS deposuna eklenemedi"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Proje, %1 konumunua içe aktarılamadı."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Proje içe aktarılamadı"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "İçe aktarılan proje çıkış yapılamadı"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Yeni proje oluşturulamadı"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "%1 dosyası oluşturulamadı."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Proje Şablonları"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Kategori"
+
+#: projectselectionpage.cpp:57
+#, kde-format
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Proje Türü"
+
+#: projectselectionpage.cpp:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Daha Fazla Şablon Al"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Dosyadan Şablon Yükle"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Geçersiz konum"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Boş proje adı"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Geçersiz proje adı"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Alt dizinler oluşturulamadı, izniniz olmayan dizin: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Geçersiz proje şablonu, lütfen bir sayfa ögesi seçin"
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Yol halihazırda var ve dosyalar içeriyor. Bir proje aç."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"Belirtilen dizin zaten var ve dosyalar içeriyor. Sürdürmek istediğinize emin "
+"misiniz?"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Dosyadan Şablon Yükle"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Özellikler"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Proje adı:"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Konum:"
+
+#: projectvcspage.cpp:33
+#, kde-format
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Hiçbiri"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Sürüm denetim sistemi:"

@@ -1,0 +1,136 @@
+# Translation of kdevscratchpad.po to Catalan
+# Copyright (C) 2019-2022 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2019, 2020, 2021, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-05-08 17:59+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#: scratchpad.cpp:104 scratchpadview.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Scratchpad"
+msgstr "Scratchpad"
+
+#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "bloc:%1"
+
+#: scratchpad.cpp:168
+#, kde-format
+msgid "Failed to remove scratch: %1"
+msgstr "Ha fallat en eliminar el bloc de proves: %1"
+
+#: scratchpad.cpp:175
+#, kde-format
+msgid "Failed to create scratch: Name already in use"
+msgstr "Ha fallat en crear el bloc de proves: El nom ja està en ús"
+
+#: scratchpad.cpp:187
+#, kde-format
+msgid "Failed to create new scratch"
+msgstr "Ha fallat en crear un bloc de proves nou"
+
+#: scratchpad.cpp:196
+#, kde-format
+msgid "Failed to rename scratch: Names must not include path separator"
+msgstr ""
+"Ha fallat en reanomenar el bloc de proves: Els noms no han d'incloure cap "
+"separador de camí"
+
+#: scratchpad.cpp:226
+#, kde-format
+msgid "Failed renaming scratch."
+msgstr "Ha fallat en reanomenar el bloc de proves."
+
+#: scratchpadjob.cpp:57
+#, kde-format
+msgid "Running %1..."
+msgstr "%1 en execució..."
+
+#: scratchpadjob.cpp:73
+#, kde-format
+msgid "Process finished with exit code %1."
+msgstr "El procés ha finalitzat amb codi de sortida %1."
+
+#: scratchpadjob.cpp:80
+#, kde-format
+msgid "Failed to run scratch: %1"
+msgstr "Ha fallat en executar el bloc de proves: %1"
+
+#: scratchpadview.cpp:100
+#, kde-format
+msgid ""
+"Scratchpad lets you quickly run and experiment with code without a full "
+"project, and even store todos. Create a new scratch to start."
+msgstr ""
+"L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un "
+"projecte complet, i inclús emmagatzemar tasques pendents. Creeu un bloc de "
+"proves nou per a començar."
+
+#: scratchpadview.cpp:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Command to run this scratch. '$f' will expand to the scratch path."
+msgstr ""
+"Ordre per a executar aquest bloc de proves. «$f» s'expandirà al camí del "
+"bloc de proves."
+
+#: scratchpadview.cpp:137
+#, kde-format
+msgctxt "@action"
+msgid "New Scratch"
+msgstr "Bloc de proves nou"
+
+#: scratchpadview.cpp:141
+#, kde-format
+msgctxt "@action"
+msgid "Remove Scratch"
+msgstr "Eliminació de bloc de proves"
+
+#: scratchpadview.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Rename Scratch"
+msgstr "Canvi de nom de bloc de proves"
+
+#: scratchpadview.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Run Scratch"
+msgstr "Execució de bloc de proves"
+
+#: scratchpadview.cpp:164
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtre..."
+
+#: scratchpadview.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Scratch"
+msgstr "Creació de bloc de proves nou"
+
+#: scratchpadview.cpp:205
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for scratch file:"
+msgstr "Nom per al fitxer de bloc de proves:"

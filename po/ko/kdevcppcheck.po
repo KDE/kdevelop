@@ -1,0 +1,478 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Shinjo Park <kde@peremen.name>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-04 20:00+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 19.12.3\n"
+
+#: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
+#, kde-format
+msgctxt "@title:tab"
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: config/globalconfigpage.cpp:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Cppcheck Settings"
+msgstr "CppCheck 설정"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/globalconfigpage.ui:20
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "경로"
+
+#. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
+#: config/globalconfigpage.ui:26
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Cppchec&k executable:"
+msgstr "CppCheck 실행 파일(&K):"
+
+#. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
+#: config/globalconfigpage.ui:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "출력"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "검사 중 출력 숨기기"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
+#: config/globalconfigpage.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Cppcheck XML output in the output view"
+msgstr "출력 보기에 Cppcheck XML 출력 표시"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "검사"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
+#: config/projectconfigpage.ui:47
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check for unused functions. It is recommend to only enable this when the "
+"whole program is scanned"
+msgstr ""
+"사용하지 않는 함수를 검사합니다. 전체 프로그램을 검사할 때에만 이 검사를 활성"
+"화하십시오"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
+#: config/projectconfigpage.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Unused function"
+msgstr "사용하지 않는 함수"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
+#: config/projectconfigpage.ui:60
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Allow that Cppcheck reports even though the analysis is inconclusive. There "
+"are false positives with this option. Each result must be carefully "
+"investigated before you know if it is good or bad."
+msgstr ""
+"CppCheck 검사가 애매하더라도 보고합니다. 이 옵션을 사용하면 거짓 양성 결과가 "
+"발생할 수도 있습니다. 각각 결과를 평가하기 전에 직접 확인해야 합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
+#: config/projectconfigpage.ui:63
+#, kde-format
+msgctxt "@option:check"
+msgid "Inconclusive analysis"
+msgstr "애매한 분석"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
+#: config/projectconfigpage.ui:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable information messages"
+msgstr "정보 메시지 활성화"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
+#: config/projectconfigpage.ui:73
+#, kde-format
+msgctxt "@option:check"
+msgid "Information"
+msgstr "정보"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
+#: config/projectconfigpage.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Warn if there are missing includes. For detailed information use 'check-"
+"config'"
+msgstr ""
+"인클루드가 빠졌을 때 경고합니다. 자세한 정보를 보려면 'check-config'를 사용하"
+"십시오"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
+#: config/projectconfigpage.ui:86
+#, kde-format
+msgctxt "@option:check"
+msgid "Missing include"
+msgstr "인클루드 빠짐"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
+#: config/projectconfigpage.ui:96
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable performance messages"
+msgstr "성능 메시지 활성화"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
+#: config/projectconfigpage.ui:99
+#, kde-format
+msgctxt "@option:check"
+msgid "Performance"
+msgstr "성능"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Force checking of files that have a lot of configurations. Error is "
+"printed if such a file is found so there is no reason to use this by "
+"default. If used together with '--max-configs=', the last option is the one "
+"that is effective.<br/><br/>Be careful with using this option - it can "
+"dramatically slow checking.</p>"
+msgstr ""
+"<p>설정이 많은 파일을 강제로 검사합니다. 그러한 파일을 찾았을 때에는 오류가 "
+"표시되므로 이 옵션을 사용할 이유는 없습니다. \"--max-configs=\" 옵션과 같이 "
+"사용하면 해당 옵션에 지정한 값을 사용합니다.<br/><br/>이 옵션을 사용하면 검사"
+"가 느려질 수 있으므로 주의하십시오.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Force checking"
+msgstr "강제로 검사"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
+#: config/projectconfigpage.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable portability messages"
+msgstr "이식성 메시지 활성화"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
+#: config/projectconfigpage.ui:122
+#, kde-format
+msgctxt "@option:check"
+msgid "Portability"
+msgstr "이식성"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enable all coding style checks. All messages with the severities 'style', "
+"'performance' and 'portability' are enabled."
+msgstr ""
+"모든 코딩 스타일 검사를 활성화합니다. 모든 'style', 'performance', "
+"'portability' 심각도 메시지를 활성화합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
+#: config/projectconfigpage.ui:135
+#, kde-format
+msgctxt "@option:check"
+msgid "Style"
+msgstr "스타일"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
+#: config/projectconfigpage.ui:145
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check Cppcheck configuration. The normal code analysis is disabled by this "
+"flag."
+msgstr ""
+"Cppcheck 설정을 검사합니다. 이 플래그를 지정하면 일반 코드 분석을 비활성화합"
+"니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
+#: config/projectconfigpage.ui:148
+#, kde-format
+msgctxt "@option:check"
+msgid "Check config"
+msgstr "설정 검사"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
+#: config/projectconfigpage.ui:158
+#, kde-format
+msgctxt "@title:tab"
+msgid "Include Directories"
+msgstr "인클루드 디렉터리"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
+#: config/projectconfigpage.ui:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add 'project' include directories to Cppcheck arguments. This option adds "
+"only paths related with project's root and build directories."
+msgstr ""
+"'project' 인클루드 디렉터리를 Cppcheck 인자에 추가합니다. 이 옵션은 프로젝트 "
+"루트와 빌드 디렉터리에 상대적인 경로만 추가합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
+#: config/projectconfigpage.ui:167
+#, kde-format
+msgctxt "@option:check"
+msgid "Use 'project' include dirs"
+msgstr "'project' 인클루드 디렉터리 사용"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
+#: config/projectconfigpage.ui:180
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
+">Be careful with using this option - it can dramatically slow checking.</p>"
+msgstr ""
+"<p>Cppcheck 인자에 'system' 인클루드 디렉터리를 추가합니다.<br/><br/>이 옵션"
+"을 사용하면 검사가 느려질 수 있으므로 주의하십시오.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
+#: config/projectconfigpage.ui:183
+#, kde-format
+msgctxt "@option:check"
+msgid "Use 'system' include dirs"
+msgstr "'system' 인클루드 디렉터리 사용"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/projectconfigpage.ui:198
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Ignored includes:"
+msgstr "무시할 디렉터리(&I):"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
+#: config/projectconfigpage.ui:218
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html>\n"
+"\n"
+"<p>Defines semicolon-separated list of ignored include directories.</p>\n"
+"\n"
+"<p>You can use the following placeholders:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
+"directory.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
+"directory.</p>\n"
+"\n"
+"</html>"
+msgstr ""
+"<html>\n"
+"\n"
+"<p>무시할 인클루드 디렉터리를 쌍반점(;)으로 구분해서 입력하십시오.</p>\n"
+"\n"
+"<p>다음 자리 비움자를 사용할 수 있습니다:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - 프로젝트 루트 디렉터리 URL로 대체됩니다.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - 프로젝트 빌드 디렉터리 URL로 대체됩니다.</p>\n"
+"\n"
+"</html>"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
+#: config/projectconfigpage.ui:241
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "추가 인자"
+
+#. i18n: ectx: property (text), widget (QLabel, extraLabel)
+#: config/projectconfigpage.ui:254
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ex&tra parameters:"
+msgstr "추가 인자(&T):"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
+#: config/projectconfigpage.ui:274
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html>\n"
+"\n"
+"<p>Defines additional parameters for cppcheck (see documentation).</p>\n"
+"\n"
+"<p>You can use the following placeholders:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
+"directory.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
+"directory.</p>\n"
+"\n"
+"</html>"
+msgstr ""
+"<html>\n"
+"\n"
+"<p>cppcheck 추가 인자를 지정할 수 있습니다(문서 참조).</p>\n"
+"\n"
+"<p>다음 자리 비움자를 사용할 수 있습니다:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - 프로젝트 루트 디렉터리 URL로 대체됩니다.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - 프로젝트 빌드 디렉터리 URL로 대체됩니다.</p>\n"
+"\n"
+"</html>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: config/projectconfigpage.ui:308
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "명령행"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
+#: config/projectconfigpage.ui:316
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "찾기..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
+#: config/projectconfigpage.ui:326
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "줄 바꿈"
+
+#: job.cpp:42
+#, kde-format
+msgid "Cppcheck Analysis (%1)"
+msgstr "Cppcheck 분석(%1)"
+
+#: job.cpp:111 parser.cpp:250 problemmodel.cpp:40 problemmodel.cpp:85
+#, kde-format
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: job.cpp:150
+#, kde-format
+msgid "Failed to start Cppcheck from \"%1\"."
+msgstr "\"%1\"에서 Cppcheck를 실행할 수 없습니다."
+
+#: job.cpp:155
+#, kde-format
+msgid "Cppcheck crashed."
+msgstr "CppCheck가 충돌했습니다."
+
+#: job.cpp:160
+#, kde-format
+msgid "Cppcheck process timed out."
+msgstr "Cppcheck 프로세스 시간이 초과되었습니다."
+
+#: job.cpp:164
+#, kde-format
+msgid "Write to Cppcheck process failed."
+msgstr "Cppcheck 프로세스에 쓸 수 없습니다."
+
+#: job.cpp:168
+#, kde-format
+msgid "Read from Cppcheck process failed."
+msgstr "Cppcheck 프로세스에서 읽을 수 없습니다."
+
+#: parameters.cpp:122
+#, kde-format
+msgid ""
+"It seems that this project uses Qt library. For correctly work of cppcheck "
+"the value for define Q_MOC_OUTPUT_REVISION must be set. Unfortunately, the "
+"plugin is unable to find this value automatically - you should set it "
+"manually by adding '-DQ_MOC_OUTPUT_REVISION=XX' to extra parameters. The "
+"'XX' value can be found in any project's moc-generated file or in the "
+"<QtCore/qobjectdefs.h> header file."
+msgstr ""
+"이 프로젝트에서 Qt 라이브러리를 사용하는 것 같습니다. cppchekc가 올바르게 작"
+"동하려면 define Q_MOC_OUTPUT_REVISION의 값을 설정해야 하지만, 플러그인에서 "
+"이 값을 자동으로 찾을 수 없었습니다. 추가 인자에 '-"
+"DQ_MOC_OUTPUT_REVISION=XX'를 추가하여 수동으로 지정하십시오. 'XX' 값은 "
+"<QtCore/qobjectdefs.h> 헤더 파일이나 moc에서 생성한 값에서 확인할 수 있습니"
+"다."
+
+#: parser.cpp:220
+#, kde-format
+msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
+msgstr "CppCheck XML 처리 오류: 줄 %1, 칸 %2: %3"
+
+#: plugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with Cppcheck"
+msgstr "현재 파일을 Cppcheck로 분석"
+
+#: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: plugin.cpp:62
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with Cppcheck"
+msgstr "현재 프로젝트를 Cppcheck로 분석"
+
+#: plugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "테스트"
+
+#: problemmodel.cpp:116
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "분석이 완료되었습니다. 발견한 문제가 없습니다."
+
+#: problemmodel.cpp:137
+#, kde-format
+msgid "Analysis started..."
+msgstr "분석이 시작되었습니다..."
+
+#: problemmodel.cpp:138
+#, kde-format
+msgctxt "@info:tooltip %1 is the path of the file"
+msgid "Re-run last Cppcheck analysis (%1)"
+msgstr "마지막 Cppcheck 분석 다시 실행 (%1)"
+
+#: problemmodel.cpp:140
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last Cppcheck analysis"
+msgstr "마지막 Cppcheck 분석 다시 실행"

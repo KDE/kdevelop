@@ -1,0 +1,67 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009, 2013.
+# pan93412 <pan93412@gmail.com>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-30 00:43+0000\n"
+"PO-Revision-Date: 2018-12-02 21:12+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"dot tw>\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: kdevdocumentview.cpp:64
+#, kde-format
+msgid "Documents"
+msgstr "文件"
+
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Documents"
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "文件"
+
+#: kdevdocumentview.cpp:211
+#, fuzzy, kde-format
+#| msgid "Reload"
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "重新載入"
+
+#: kdevdocumentview.cpp:217
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "關閉"
+
+#: kdevdocumentview.cpp:218
+#, fuzzy, kde-format
+#| msgid "Close All Other"
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "關閉其他"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "在檢視中顯示文件分類（MIME 型態）"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype."
+#~ msgstr "若開啟此選項，文件檢視會將文件依 MIME 型態組織起來。"
+
+#, fuzzy
+#~| msgid "Display document &categories"
+#~ msgctxt "@option:check"
+#~ msgid "Display document &categories"
+#~ msgstr "顯示文件分類(&C)"

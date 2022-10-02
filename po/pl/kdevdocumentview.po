@@ -1,0 +1,101 @@
+# translation of kdevdocumentview.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2014, 2017, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-30 00:43+0000\n"
+"PO-Revision-Date: 2021-01-06 01:53+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: kdevdocumentview.cpp:64
+#, kde-format
+msgid "Documents"
+msgstr "Dokumenty"
+
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
+#, kde-format
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "Dokumenty"
+
+#: kdevdocumentview.cpp:211
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "Wczytaj ponownie"
+
+#: kdevdocumentview.cpp:217
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "Zamknij"
+
+#: kdevdocumentview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "Zamknij wszystkie pozostałe"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Pokazuje kategorie dokumentów (typy MIME) w widoku"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype."
+#~ msgstr ""
+#~ "Po zaznaczeniu tego pola, widok dokumentu będzie organizować dokumenty\n"
+#~ "        na podstawie ich typów MIME."
+
+#~ msgctxt "@option:check"
+#~ msgid "Display document &categories"
+#~ msgstr "Pokaż &kategorie dokumentów"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "Document View"
+#~ msgstr "Widok dokumentu"
+
+#~ msgid ""
+#~ "This plugin displays a graphical view of all documents currently loaded "
+#~ "and separates them by mimetype."
+#~ msgstr ""
+#~ "Ta wtyczka udostępnia graficzny widok wszystkich obecnie wczytanych "
+#~ "dokumentów i dzieli je według typu MIME."
+
+#~ msgid "A list of opened documents"
+#~ msgstr "Lista otwartych dokumentów"
+
+#~ msgid "Version Control "
+#~ msgstr "Kontrola wersji "

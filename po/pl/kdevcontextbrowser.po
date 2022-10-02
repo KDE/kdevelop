@@ -1,0 +1,194 @@
+# translation of kdevcontextbrowser.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014, 2016, 2017, 2019, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2021-01-03 10:01+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: contextbrowser.cpp:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Idź wstecz w historii kontekstu"
+
+#: contextbrowser.cpp:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Idź naprzód w historii kontekstu"
+
+#: contextbrowser.cpp:192
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Zarys"
+
+#: contextbrowser.cpp:193
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Zarys"
+
+#: contextbrowser.cpp:194
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Poruszaj się po zarysie bieżącego dokumentu, kliknij, aby przeglądać"
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Try&b przeglądania źródła"
+
+#: contextbrowser.cpp:241
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Poprzednio odwiedzony kontekst"
+
+#: contextbrowser.cpp:247
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Następny odwiedzony kontekst"
+
+#: contextbrowser.cpp:253
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Poprzednie użycie"
+
+#: contextbrowser.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Następne użycie"
+
+#: contextbrowser.cpp:265
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Przeglądarka kontekstu"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Przeglądarka kodu"
+
+#: contextbrowser.cpp:312
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Znajdź użycia"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(zmienione)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Pokaż menu deklaracji"
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Menu deklaracji"
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Unieruchom bieżący widok"
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Unieruchom bieżący widok"
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Odblokuj bieżący widok"
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Odblokuj bieżący widok"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Pasek przeglądarki kodu"
+
+#~ msgid "Outline..."
+#~ msgstr "Zarys..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Nawigacja"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Włącz/wyłącz tryb przeglądarki źródeł"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Kiedy jest to włączone, można przeglądać kod źródłowy po kliknięciu w "
+#~ "edytorze."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Ta wtyczka pokazuje informacje dotyczące kontekstu bieżącego języka w "
+#~ "widoku bocznym, podświetla deklaracja i ich użycia."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Pokazuje informacje o bieżącym kontekście"

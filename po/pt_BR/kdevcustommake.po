@@ -1,0 +1,110 @@
+# Translation of kdevcustommake.po para Brazilian Portuguese
+# Copyright (C) 2008-2014 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2009, 2020.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2009, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-09 11:45-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Tentou-se uma resolução de pastas de inclusão enquanto outro processo de "
+"resolução está rodando"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Falta um Makefile na pasta \"%1\""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Ocorreram problemas ao tentar resolver as pastas de inclusão do %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Em cache: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "O nome do arquivo %1 parece ser inválido"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Não foi possível extrair a nova pasta de trabalho"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "A saída foi: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "A chamada recursiva do 'make' falhou"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+"O texto do parâmetro \"%1\" não parece ser válido. O resultado foi: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "A pasta \"%1\" não existe. O resultado foi: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "A chamada recursiva do 'make' falhou"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Não é possível extrair os locais de inclusão do resultado do 'make'"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Pasta: \"%1\"  Comando: \"%2\"  Saída: \"%3\""
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Executar"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Luiz Fernando Ranghetti, André Marcelo Alvarenga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "elchevive@opensuse.org, alvarenga@kde.org"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Gerenciador de Makefile personalizado"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Suporte a gerenciamento de projetos makefile personalizados"

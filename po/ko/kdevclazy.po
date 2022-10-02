@@ -1,0 +1,597 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Shinjo Park <kde@peremen.name>, 2020, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-05-30 19:03+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 20.12.3\n"
+
+#: analyzer.cpp:30
+#, kde-format
+msgid "Clazy"
+msgstr "Clazy"
+
+#: checksdb.cpp:28
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 0"
+msgstr "0단계"
+
+#: checksdb.cpp:29
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 1"
+msgstr "1단계"
+
+#: checksdb.cpp:30
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 2"
+msgstr "2단계"
+
+#: checksdb.cpp:31
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 3"
+msgstr "3단계"
+
+#: checksdb.cpp:32
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Manual Level"
+msgstr "수동 단계"
+
+#: checksdb.cpp:37
+#, kde-format
+msgid ""
+"Very stable checks, 99.99% safe, mostly no false-positives, very desirable."
+msgstr "99.99% 안전한 매우 안정적인 검사입니다. 거짓 양성이 거의 없습니다."
+
+#: checksdb.cpp:40
+#, kde-format
+msgid ""
+"The default level. Very similar to level 0, slightly more false-positives "
+"but very few."
+msgstr ""
+"기본 단계입니다. 0단계와 거의 비슷하지만 아주 약간의 거짓 양성이 있습니다."
+
+#: checksdb.cpp:43
+#, kde-format
+msgid ""
+"Also very few false-positives, but contains noisy checks which not everyone "
+"agree should be default."
+msgstr ""
+"거짓 양성이 좀 더 있지만 일부 사람이 동의하지 않을 수도 있는 검사가 있습니다."
+
+#: checksdb.cpp:46
+#, kde-format
+msgid "Contains checks with high rate of false-positives."
+msgstr "거짓 양성으로 나올 확률이 높은 검사가 있습니다."
+
+#: checksdb.cpp:49
+#, kde-format
+msgid ""
+"Checks here need to be enabled explicitly, as they don't belong to any "
+"level. Checks here are very stable and have very few false-positives."
+msgstr ""
+"이 목록의 검사는 어느 단계에도 속하지 않으므로 필요한 검사를 수동으로 활성화"
+"해야 합니다. 이 검사는 매우 안정적이며 거짓 양성이 적습니다."
+
+#: checksdb.cpp:54
+#, kde-format
+msgid ""
+"Unable to load Clazy checks information from '%1'. Please check your "
+"settings."
+msgstr "'%1'에서 Clazy 검사를 불러올 수 없습니다. 설정을 확인하십시오."
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "새 검사 모음 이름 입력"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "이름:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "검사 모음:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "검사 모음 추가"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "검사 모음 복제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "검사 모음 삭제"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "기본값으로 설정"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "검사 모음의 이름 입력"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "사용자 정의"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "기본값으로 사용(현재: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1(기본 선택)"
+
+#: config/checkswidget.cpp:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search checks..."
+msgstr "검사 검색..."
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: config/checkswidget.ui:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Reset Checks"
+msgstr "검사 초기화"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
+#: config/checkswidget.ui:74
+#, kde-format
+msgid ""
+"Since nothing is selected Clazy will use all checks from levels 0 and 1."
+msgstr ""
+"아무것도 선택하지 않았으므로 Clazy에서 0단계와 1단계의 모든 검사를 사용합니"
+"다."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/commandlinewidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "명령행"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
+#: config/commandlinewidget.ui:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "찾기..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
+#: config/commandlinewidget.ui:47
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "줄 바꿈"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgid "1 check detected"
+msgid_plural "%1 checks detected"
+msgstr[0] "검사 %1개 감지됨"
+
+#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clazy"
+msgstr "Clazy"
+
+#: config/globalconfigpage.cpp:84
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clazy Settings"
+msgstr "Clazy 설정"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "경로"
+
+#. i18n: ectx: property (text), widget (QLabel, executableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "clazy-standalone:"
+msgstr "clazy-standalone:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
+#: config/globalconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy-standalone executable."
+msgstr "clazy-standalone 실행 파일의 경로입니다."
+
+#. i18n: ectx: property (text), widget (QLabel, docsLabel)
+#: config/globalconfigpage.ui:52
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Documentation:"
+msgstr "문서:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
+#: config/globalconfigpage.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy documentation directory."
+msgstr "clazy 문서 디렉터리 경로입니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/globalconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "분석 작업을 병렬로 실행"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/globalconfigpage.ui:94
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "모든 CPU 코어 사용"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/globalconfigpage.ui:114
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "최대 스레드 개수:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/globalconfigpage.ui:133
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "출력"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:139
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "검사 중 출력 숨기기"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
+#: config/globalconfigpage.ui:146
+#, kde-format
+msgctxt "@option:check"
+msgid "Verbose output"
+msgstr "자세한 출력"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "검사"
+
+#. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
+#: config/projectconfigpage.ui:66
+#, kde-format
+msgctxt "@title:tab"
+msgid "Options"
+msgstr "옵션"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
+"is missing."
+msgstr ""
+"-DQT_CORE_LIB 옵션을 지정하지 않았거나 Qt 파일이 아니면 경고를 출력하지 않습"
+"니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Only Qt"
+msgstr "Qt만"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Disable checks not compatible with Qt 4."
+msgstr "Qt 4와 호환되지 않는 검사를 비활성화합니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:91
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt4 compatible"
+msgstr "Qt4 호환"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For running clazy on Qt itself, optional, but honors specific guidelines."
+msgstr ""
+"Qt 그 자체에 clazy를 실행할 때의 옵션입니다. 선택 사항이며 특정 기준을 준수합"
+"니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:101
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt developer"
+msgstr "Qt 개발자"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For visiting implicit code like compiler generated constructors.\n"
+"None of the built-in checks benefit from this, but can be useful for custom "
+"checks."
+msgstr ""
+"컴파일러가 생성한 생성자와 같은 암시적 코드를 분석할 때 필요합니다.\n"
+"내장 검사에는 해당하지 않지만 일부 사용자 검사에서 도움이 될 수 있습니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Visit implicit code"
+msgstr "암시적 코드 검사"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Only emit warnings for the current file being compiled and ignore any "
+"includes.\n"
+"Useful for performance reasons."
+msgstr ""
+"컴파일하는 현재 파일에 대한 경고만 출력하고 포함된 파일은 무시합니다.\n"
+"성능에 도움이 될 수도 있습니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Ignore included files"
+msgstr "포함된 파일 무시"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/projectconfigpage.ui:141
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header filter:"
+msgstr "헤더 필터:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/projectconfigpage.ui:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from.\n"
+"Diagnostics from the main file of each translation unit are always displayed."
+msgstr ""
+"진단 출력에서 헤더 파일의 이름과 일치할 정규 표현식입니다. 각각 번역 단위의 "
+"주 파일에서의 진단은 항상 표시됩니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
+#: config/projectconfigpage.ui:172
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable all fix-its"
+msgstr "모든 fix-it 활성화"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fix-its will be applied to a separate file (for unit-test use only)."
+msgstr "별도 파일에 적용할 Fix-it입니다(단위 테스트에서만 사용)."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:182
+#, kde-format
+msgctxt "@option:check"
+msgid "No-inplace fix-its"
+msgstr "Fix-it을 바로 적용하지 않음"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
+#: config/projectconfigpage.ui:192
+#, kde-format
+msgid ""
+"Please backup your code before fix-its applying. For better results also "
+"disable \n"
+"parallel checking, which can lead to multiple fix-it applying for header "
+"files."
+msgstr ""
+"Fix-it을 적용하기 전에 코드를 백업하십시오. 더 나은 결과를 얻으려면\n"
+"헤더 파일에 여러 번의 Fix-it을 적용하지 않도록 병렬 검사를 비활성화하십시오."
+
+#. i18n: ectx: attribute (title), widget (QWidget, extraTab)
+#: config/projectconfigpage.ui:209
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "추가 인자"
+
+#. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
+#: config/projectconfigpage.ui:215
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler append:"
+msgstr "컴파일러 접미사:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
+#: config/projectconfigpage.ui:222
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to append to the compiler command line."
+msgstr "컴파일러 명령행 뒤에 지정할 추가 인자입니다."
+
+#. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
+#: config/projectconfigpage.ui:232
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler prepend:"
+msgstr "컴파일러 접두사:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
+#: config/projectconfigpage.ui:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to prepend to the compiler command line."
+msgstr "컴파일러 명령행 앞에 지정할 추가 인자입니다."
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
+#: config/projectconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to clazy-standalone."
+msgstr "clazy-standalone 실행 파일의 추가 인자입니다."
+
+#. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
+#: config/projectconfigpage.ui:259
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra parameters:"
+msgstr "추가 인자:"
+
+#: job.cpp:105
+#, kde-format
+msgid "Clazy Analysis (%1)"
+msgstr "Clazy 분석(%1)"
+
+#: job.cpp:135
+#, kde-format
+msgid "Unknown Level"
+msgstr "알 수 없는 단계"
+
+#: job.cpp:201
+#, kde-format
+msgid "Failed to start Clazy analysis process."
+msgstr "Clazy 분석 프로세스를 시작할 수 없습니다."
+
+#: job.cpp:206
+#, kde-format
+msgid "Clazy analysis process crashed."
+msgstr "Clazy 분석 프로세스가 충돌했습니다."
+
+#: job.cpp:211
+#, kde-format
+msgid "Clazy analysis process timed out."
+msgstr "Clazy 분석 프로세스 시간이 초과되었습니다."
+
+#: job.cpp:215
+#, kde-format
+msgid "Write to Clazy analysis process failed."
+msgstr "Clazy 분석 프로세스에 쓸 수 없습니다."
+
+#: job.cpp:219
+#, kde-format
+msgid "Read from Clazy analysis process failed."
+msgstr "Clazy 분석 프로세스에서 읽을 수 없습니다."
+
+#: job.cpp:229
+#, kde-format
+msgctxt "@title:window"
+msgid "Clazy Error"
+msgstr "Clazy 오류"
+
+#: jobparameters.cpp:39
+#, kde-format
+msgid ""
+"clazy-standalone path cannot be detected. Set the path manually if Clazy is "
+"already installed."
+msgstr ""
+"clazy-standalone 실행 파일 경로를 감지할 수 없습니다. Clazy가 설치되어 있다"
+"면 경로를 직접 지정하십시오."
+
+#: jobparameters.cpp:42
+#, kde-format
+msgid "clazy-standalone path is empty."
+msgstr "clazy-standalone 실행 파일 경로가 비어 있습니다."
+
+#: jobparameters.cpp:50
+#, kde-format
+msgid "clazy-standalone path '%1' does not exists."
+msgstr "clazy-standalone 실행 파일 경로 '%1'이(가) 없습니다."
+
+#: jobparameters.cpp:55
+#, kde-format
+msgid "clazy-standalone path '%1' is not an executable."
+msgstr "clazy-standalone 실행 파일 경로 '%1'을(를) 실행할 수 없습니다."
+
+#: jobparameters.cpp:64
+#, kde-format
+msgid ""
+"Clazy documentation path cannot be detected. Set the path manually if Clazy "
+"is already installed."
+msgstr ""
+"Clayz 문서 경로를 감지할 수 없습니다. Clazy가 설치되어 있다면 경로를 직접 지"
+"정하십시오."
+
+#: jobparameters.cpp:67
+#, kde-format
+msgid "Clazy documentation path is empty."
+msgstr "Clazy 문서 경로가 비어 있습니다."
+
+#: jobparameters.cpp:75
+#, kde-format
+msgid "Clazy documentation path '%1' does not exists."
+msgstr "Clazy 문서 경로 '%1'이(가) 없습니다."
+
+#: jobparameters.cpp:80
+#, kde-format
+msgid "Clazy documentation path '%1' is not a directory."
+msgstr "Clazy 문서 경로 '%1'이(가) 디렉터리가 아닙니다."

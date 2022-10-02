@@ -1,0 +1,90 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Simone Solinas <ksolsim@gmail.com>, 2011, 2013.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2017, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcodeutils\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 16:22+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr "Documenta dichiarazione"
+
+#: codeutilsplugin.cpp:50
+#, kde-format
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr "Alt+Shift+d"
+
+#: codeutilsplugin.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr "Aggiungi lo scheletro doxygen per la dichiarazione sotto il cursore."
+
+#: codeutilsplugin.cpp:55
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr ""
+"Aggiunge uno scheletro di base per il commento Doxygen di fronte alla "
+"dichiarazione sotto il cursore, ad esempio con tutti i parametri di una "
+"funzione."
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Code"
+#~ msgstr "Codice"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#, fuzzy
+#~| msgid "Code Utilities"
+#~ msgid "Code Utils"
+#~ msgstr "Utilità per il codice"
+
+#~ msgid ""
+#~ "Collection of various utilities that increase productivity while "
+#~ "programming."
+#~ msgstr ""
+#~ "Raccolta di varie utilità che aumentano la produttività durante la "
+#~ "programmazione."
+
+#~ msgid "Milian Wolff"
+#~ msgstr "Milian Wolff"
+
+#~ msgid "Author"
+#~ msgstr "Autore"
+
+#~ msgid "Various utilities that help you code faster."
+#~ msgstr "Varie utilità che ti aiutano a scrivere codice più velocemente."
+
+#~ msgid "Defaults to %1."
+#~ msgstr "Predefinito a %1."

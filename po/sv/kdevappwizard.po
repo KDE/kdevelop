@@ -1,0 +1,251 @@
+# translation of kdevappwizard.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2010, 2012, 2013, 2014, 2015, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-10-18 08:09+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: appwizarddialog.cpp:23
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Skapa nytt projekt"
+
+#: appwizarddialog.cpp:37
+#, kde-format
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Allmänt"
+
+#: appwizarddialog.cpp:39
+#, kde-format
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Versionskontroll"
+
+#: appwizardplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Nytt från mall..."
+
+#: appwizardplugin.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Skapa ett nytt projekt från en mall"
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Det här startar KDevelops programguide. Den hjälper dig att skapa ett "
+"programskelett från en uppsättning mallar."
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr "Kunde inte skapa projekt från mall."
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Se versionskontrollens verktygsvy."
+
+#: appwizardplugin.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Fel i versionskontrollsystemet"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Kunde inte initiera DVCS-arkivet"
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr "Kunde inte kontrollera DVCS-arkivets status"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Kunde inte lägga till filer i DVCS-arkivet"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Kunde inte importera projekt till %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Kunde inte importera projekt"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Kunde inte checka ut importerat projekt"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Kunde inte skapa nytt projekt"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Filen %1 kan inte skapas."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Projektmallar"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Kategori"
+
+#: projectselectionpage.cpp:57
+#, kde-format
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Projekttyp"
+
+#: projectselectionpage.cpp:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Hämta fler mallar"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Läs in mall från fil"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Ogiltig plats"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Tomt projektnamn"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Felaktigt projektnamn"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Kunde inte skapa underkataloger. Saknar rättigheter för: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Felaktig projektmall, välj ett lövobjekt"
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Sökvägen finns redan och innehåller filer. Öppna den som ett projekt."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"Den angivna sökvägen finns redan och innehåller filer. Är du säker på att du "
+"vill fortsätta?"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Läs in mall från fil"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Egenskaper"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Projektnamn:"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Plats:"
+
+#: projectvcspage.cpp:33
+#, kde-format
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Inget"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Versionskontrollsystem:"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Misslyckades skapa projekt"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Programguide"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Projektguide"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Stöd för att skapa och importera projekt"

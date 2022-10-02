@@ -1,0 +1,55 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# pan93412 <pan93412@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2019-09-30 19:00+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: outlinenode.cpp:169
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<匿名>"
+
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "大綱"
+
+#: outlinewidget.cpp:47
+#, fuzzy, kde-format
+#| msgid "Sort Alphabetically"
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "依字母排序"
+
+#: outlinewidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "Sort items alphabetically"
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "依字母排序項目"
+
+#: outlinewidget.cpp:60
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "過濾…"
+
+#~ msgid "Outline View"
+#~ msgstr "大綱檢視"

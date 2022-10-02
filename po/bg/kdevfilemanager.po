@@ -1,0 +1,53 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevfilemanager\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2010-07-03 22:50+0300\n"
+"Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
+"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "File System"
+msgstr "Файлова система"
+
+#: filemanager.cpp:127
+#, kde-format
+msgctxt "@title:menu"
+msgid "Bookmarks"
+msgstr ""
+
+#: filemanager.cpp:138
+#, fuzzy, kde-format
+msgctxt "@action switch to directory of current document"
+msgid "Current Document Directory"
+msgstr "Директория на текущия документ"
+
+#: filemanager.cpp:155
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "New File..."
+msgstr "Нов файл..."
+
+#: filemanager.cpp:162
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Create New File"
+msgstr "Създаване на нов файл"
+
+#: filemanager.cpp:178
+#, kde-format
+msgid "Unable to create file '%1'"
+msgstr "Грешка при създаване на файла \"%1\""

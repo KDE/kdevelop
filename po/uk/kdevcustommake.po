@@ -1,0 +1,136 @@
+# Translation of kdevcustommake.po to Ukrainian
+# Copyright (C) 2008-2014 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-08-06 08:48+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Спроба виявлення шляхів include у той час, коли ще виконувався інший процес "
+"виявлення"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "У теці «%1» відсутній Makefile"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Проблема під час спроби визначити шляхи include для %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Кешовано: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Назву файла %1, здається, неправильно сформовано"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Не вдалося видобути новий робочий каталог"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "Результат: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Помилка рекурсивного виклику make"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "Рядок параметрів «%1», здається, не є коректним. Результат: %2"
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "Каталогу «%1» не існує. Результат: %2"
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Неправильно сформований рекурсивний виклик make"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Не вдалося визначити шляхи include з виводу make"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Тека: «%1»  Команда: «%2» Результат: «%3»"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Запустити"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Інструмент керування нетиповим Makefile"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Підтримка керування проєктами з нетиповими файлами makefile"
+
+#~ msgid "Build &Target"
+#~ msgstr "Зібрати &ціль"
+
+#~ msgid "Build target"
+#~ msgstr "Зібрати ціль"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Зібрати ціль</b><p>Виконує команду <b>make назва_цілі</b> з теки "
+#~ "проєкту (назва_цілі — назва вибраної цілі).</p><p>Зміні середовища та "
+#~ "параметри команди make можна задати у діалозі «Параметри проєкту» на "
+#~ "сторінці <b>Параметри збирання</b>.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "Зібрати цей проєкт"
+
+#~ msgid "Build this target"
+#~ msgstr "Зібрати цю ціль"
+
+#~ msgid "Build this directory"
+#~ msgstr "Зібрати у цій теці"

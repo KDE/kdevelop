@@ -1,0 +1,1216 @@
+# translation of kdevgdb.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2008, 2009, 2010, 2011, 2012, 2013.
+# Anne-Marie Mahfouf <annma@kde.org>, 2012.
+# Vincent PINON <vpinon@kde.org>, 2013, 2014, 2015.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+# Johnny Jazeix <jazeix@gmail.com>, 2020.
+# Xavier Besnard <xavier.besnard@neuf.fr>, 2021, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgdb\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-07-10 12:32+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.04.3\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: dialogs/processselection.cpp:28
+#, kde-format
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr "Attacher à un processus"
+
+#: dialogs/processselection.cpp:48
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "Attacher"
+
+#: dialogs/selectcoredialog.cpp:18
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr "Sélectionner un fichier « Core »"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Exécutable :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr "Fichier « Core » :"
+
+#: mibreakpointcontroller.cpp:741
+#, kde-format
+msgid "<br>Old value: %1"
+msgstr "<br>Ancienne valeur : %1"
+
+#: mibreakpointcontroller.cpp:744
+#, kde-format
+msgid "<br>New value: %1"
+msgstr "<br>Nouvelle valeur : %1"
+
+#: midebugger.cpp:327
+#, kde-format
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+"<p>Le composant de débogage a rencontré un problème interne en traitant la "
+"réponse du débogueur. Veuillez envoyer un rapport de bogue. La session de "
+"débogage va maintenant prendre fin pour éviter un plantage éventuel."
+
+#: midebugger.cpp:330
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"L'exception est : %1\n"
+"La réponse de MI est : %2"
+
+#: midebugger.cpp:333
+#, kde-format
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr "Erreur interne du débogueur"
+
+#: midebugger.cpp:345 midebugsession.cpp:415
+#, kde-format
+msgid "Process exited"
+msgstr "Le processus s'est terminé"
+
+#: midebugger.cpp:354
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr ""
+"<b>Il est impossible de démarrer le débogueur.</b><p>Il est impossible "
+"d'exécuter « %1 ». Vérifiez que le nom de l'emplacement est spécifié "
+"correctement."
+
+#: midebugger.cpp:362
+#, kde-format
+msgid "Process failed to start"
+msgstr "Impossible de démarrer le processus"
+
+#: midebugger.cpp:367
+#, kde-format
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>Le débogueur a planté.</b> <p>Le processus du débogueur « %1 » a planté."
+"<br>Pour cette raison, il a fallu mettre fin à la session de "
+"débogage<br>Essayez de reproduire ce plantage sans KDevelop et envoyez un "
+"rapport de bogue.<br>"
+
+#: midebugger.cpp:372
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr "Le débogueur a planté"
+
+#: midebugger.cpp:375
+#, kde-format
+msgid "Process crashed"
+msgstr "Le processus a planté"
+
+#: midebuggerplugin.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr "Examiner un fichier « Core » avec %1"
+
+#: midebuggerplugin.cpp:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+"<b>Examiner un fichier « core »</b><p>Cette fonction charge un fichier "
+"« core », généralement créé après que l'application s'est arrêtée de façon "
+"anormale, par exemple avec une erreur de segmentation. Le fichier « core » "
+"contient une image de la mémoire du programme au moment où il s'est arrêté "
+"brutalement, ce qui permet d'effectuer une analyse post mortem de "
+"l'application.</p>"
+
+#: midebuggerplugin.cpp:123
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr "Attacher au processus avec %1"
+
+#: midebuggerplugin.cpp:125
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr ""
+"<b>Attacher au processus</b><p>Attache le débogueur à un processus en cours "
+"d'exécution.</p>"
+
+#: midebuggerplugin.cpp:138
+#, kde-format
+msgid "KDevelop (%1) - %2"
+msgstr "KDevelop (%1) - %2"
+
+#: midebuggerplugin.cpp:212
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Evaluate: %1"
+msgstr "Évaluer : %1"
+
+#: midebuggerplugin.cpp:214
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Evaluate expression</b><p>Shows the value of the expression under the "
+"cursor.</p>"
+msgstr ""
+"<b>Évaluer l'expression</b><p>Affiche la valeur de l'expression située sous "
+"le curseur.</p>"
+
+#: midebuggerplugin.cpp:222
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Watch: %1"
+msgstr "Surveiller : %1"
+
+#: midebuggerplugin.cpp:224
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Watch expression</b><p>Adds the expression under the cursor to the "
+"Variables/Watch list.</p>"
+msgstr ""
+"<b>Surveiller l'expression</b><p>Ajoute l'expression sous le curseur à la "
+"liste de surveillance des variables.</p>"
+
+#: midebuggerplugin.cpp:237
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "Choisir un fichier « core » à examiner..."
+
+#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Il y a déjà un programme en cours de débogage. Voulez-vous arrêter la "
+"session de débogage en cours et continuer ?"
+
+#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Annuler la session courante"
+
+#: midebuggerplugin.cpp:257
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "Choisir un processus à attacher à..."
+
+#: midebuggerplugin.cpp:281
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr ""
+"Pas d'attachement au processus %1 : impossible d'attacher le débogueur à lui-"
+"même."
+
+#: midebuggerplugin.cpp:301
+#, kde-format
+msgid "Debugger"
+msgstr "Débogueur"
+
+#: midebugjobs.cpp:49
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr "%1 : %2"
+
+#: midebugjobs.cpp:73
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr "« %1 » n'est pas un programme exécutable"
+
+#: midebugjobs.cpp:147
+#, kde-format
+msgid "Debug core file"
+msgstr "Déboguer un fichier « core »"
+
+#: midebugjobs.cpp:185
+#, kde-format
+msgid "Debug process %1"
+msgstr "Déboguer un processus %1"
+
+#: midebugsession.cpp:210
+#, kde-format
+msgid "Running program"
+msgstr "Exécution du programme"
+
+#: midebugsession.cpp:287
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "Attachement au processus %1"
+
+#: midebugsession.cpp:318
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>Il est impossible d'attacher le débogueur :</b><br />"
+
+#: midebugsession.cpp:328
+#, kde-format
+msgid "Examining core file %1"
+msgstr "Examen du fichier « core » %1"
+
+#: midebugsession.cpp:400
+#, kde-format
+msgid "Debugger stopped"
+msgstr "Le débogueur est arrêté"
+
+#: midebugsession.cpp:420
+#, kde-format
+msgid "Application is running"
+msgstr "L'application est en cours d'exécution"
+
+#: midebugsession.cpp:425
+#, kde-format
+msgid "Application is paused"
+msgstr "L'application est en pause"
+
+#: midebugsession.cpp:735
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr ""
+"<b>Commande « gdb » envoyée quand le débogueur n'est pas en cours "
+"d'exécution</b><br>La commande était :<br> %1"
+
+#: midebugsession.cpp:847
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>Commande de débogueur non valable</b><br>%1"
+
+#: midebugsession.cpp:985
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "S'est terminé avec le code de retour : %1"
+
+#: midebugsession.cpp:987
+#, kde-format
+msgid "Exited normally"
+msgstr "Arrêté anormalement"
+
+#: midebugsession.cpp:994
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "S'est arrêté avec le signal %1"
+
+#: midebugsession.cpp:1029
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "Le programme a reçu le signal %1 (%2)"
+
+#: midebugsession.cpp:1161
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] "1 commande dans la file d'attente\n"
+msgstr[1] "%1 commandes dans la file d'attente\n"
+
+#: midebugsession.cpp:1162
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] "%1 commande est en cours de traitement par GDB\n"
+msgstr[1] "%1 commandes sont en cours de traitement par GDB\n"
+
+#: midebugsession.cpp:1163
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "État du débogueur : %1\n"
+
+#: midebugsession.cpp:1166
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"Classe de commandes actuelle : « %1 »\n"
+"Texte de la commande actuelle : « %2 »\n"
+"Texte original de la commande actuelle : « %3 »\n"
+
+#: midebugsession.cpp:1242
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr ""
+"<b>Erreur du débogueur</b><p>Le débogueur a signalé l'erreur suivante :"
+"<p><tt>%1"
+
+#: miframestackmodel.cpp:69
+#, kde-format
+msgid "(running)"
+msgstr "(exécution en cours)"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "Binaire"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "Octal"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "Décimal"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "Hexadécimal"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "Brut"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "Non signé"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "Général"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "Drapeaux"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP d'un seul mot"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP de deux mots"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP de quatre mots"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "Segment"
+
+#: registers/registersview.cpp:51
+#, kde-format
+msgctxt "@title:menu"
+msgid "Format"
+msgstr "Format"
+
+#: registers/registersview.cpp:60
+#, kde-format
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr "Mode"
+
+#: registers/registersview.cpp:195
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "Mise à jour"
+
+#: stty.cpp:243
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"Impossible d'utiliser les périphériques « tty* » ou « pty* ».\n"
+"Vérifiez les paramètres de « /dev/tty* » et « /dev/pty* »\n"
+"En tant que superutilisateur, vous pouvez être amené à exécuter « chmod ug"
+"+rw » pour les périphériques « tty* » et « pty* » et/ou ajouter "
+"l'utilisateur au groupe « tty » en saisissant la commande « usermod -aG tty "
+"nom_utilisateur »."
+
+#: stty.cpp:295
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "%1 est un nom de terminal incorrect"
+
+#: stty.cpp:301
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "Impossible de créer un fichier temporaire"
+
+#: stty.cpp:348
+#, kde-format
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+msgstr ""
+"Impossible d'obtenir le tty/pty %1. Vérifiez que %1 est bien un terminal et "
+"qu'il accepte ces arguments : -e sh -c \"tty> %2 ; exec <&- ; exec >&- ; "
+"while :  ; do sleep 3600 ; done\""
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr "Console du débogueur"
+
+#: widgets/debuggerconsoleview.cpp:49
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+"<b>Console du débogueur</b><p>Affiche toutes les commandes du débogueur en "
+"cours d'exécution. Vous pouvez également émettre n'importe quelle autre "
+"commande du débogueur pendant le débogage.</p>"
+
+#: widgets/debuggerconsoleview.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr "Répéter la dernière commande lors d'un appui sur la touche « Entrée »"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr ""
+"Faire une pause dans l'exécution de l'application pour saisir des commandes "
+"du débogueur"
+
+#: widgets/debuggerconsoleview.cpp:72
+#, kde-format
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr "Afficher les commandes internes"
+
+#: widgets/debuggerconsoleview.cpp:76
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Vérifie si les commandes émises en interne par KDevelop seront affichées ou "
+"non.<br>Cette option affectera uniquement les commandes futures, elle "
+"n'ajoutera ou ne supprimera pas de la vue les commandes déjà émises."
+
+#: widgets/debuggerconsoleview.cpp:137
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr "&Commande :"
+
+#: widgets/debuggerconsoleview.cpp:159
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr "Barre de commande %1"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "Interrompre"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, kde-format
+msgctxt "@action"
+msgid "Repeat"
+msgstr "Répétition"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr "Répéter la dernière commande lors d'un appui sur la touche <Entrée>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr "Sélecteur d'adresses"
+
+#: widgets/disassemblewidget.cpp:88
+#, kde-format
+msgctxt "@action"
+msgid "Change &Address"
+msgstr "Modifier l'&adresse"
+
+#: widgets/disassemblewidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr "&Aller directement au curseur"
+
+#: widgets/disassemblewidget.cpp:93
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr "Fixe le pointeur d'exécution à la position actuelle du curseur."
+
+#: widgets/disassemblewidget.cpp:96
+#, kde-format
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr "&Exécuter jusqu'au curseur"
+
+#: widgets/disassemblewidget.cpp:97
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr ""
+"Continue l'exécution jusqu'à ce que la position du curseur soit atteinte."
+
+#: widgets/disassemblewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr "&AT&&T"
+
+#: widgets/disassemblewidget.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr ""
+"GDB utilisera la syntaxe désassembleur AT&T (par ex. mov 0xc(%ebp),%eax)."
+
+#: widgets/disassemblewidget.cpp:105
+#, kde-format
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr "&Intel"
+
+#: widgets/disassemblewidget.cpp:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr ""
+"GDB utilisera la syntaxe désassembleur Intel (par ex. mov eax, DWORD PTR [ebp"
+"+0xc])."
+
+#: widgets/disassemblewidget.cpp:143
+#, kde-format
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr "Syntaxe désassembleur"
+
+#: widgets/disassemblewidget.cpp:174
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+"<b>Affichage du code machine</b><p>Une vue du code machine dans votre "
+"exécutable en cours, avec l'instruction actuelle en surbrillance. Vous "
+"pouvez exécuter les instructions pas à pas à l'aide des boutons de la barre "
+"d'outils du débogueur de l'instruction « Avancer d'une ligne » (step over) "
+"et de l'instruction « Pas à pas en rentrant » (step into)."
+
+#: widgets/disassemblewidget.cpp:190
+#, kde-format
+msgctxt "@title:column"
+msgid "Address"
+msgstr "Adresse"
+
+#: widgets/disassemblewidget.cpp:191
+#, kde-format
+msgctxt "@title:column"
+msgid "Function"
+msgstr "Fonction"
+
+#: widgets/disassemblewidget.cpp:192
+#, kde-format
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr "Instruction"
+
+#: widgets/disassemblewidget.cpp:212
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr "Vue du désassemblage/registres"
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr "Sélectionner l'adresse à désassembler"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr "Adresse à désassembler :"
+
+#~ msgid "toolBar"
+#~ msgstr "Barre d'outils"
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Il est impossible de démarrer le débogueur"
+
+#~ msgid "warning"
+#~ msgstr "avertissement"
+
+#~ msgid "Startup error"
+#~ msgstr "Erreur au démarrage"
+
+#~ msgid "Internal error"
+#~ msgstr "Erreur interne"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Commande de débogueur non valable"
+
+#~ msgid "Debugger status"
+#~ msgstr "État du débogueur"
+
+#~ msgid "Debugger error"
+#~ msgstr "Erreur du débogueur"
+
+#~ msgid "Address selector"
+#~ msgstr "Sélecteur d'adresses"
+
+#~ msgid "Examine core file"
+#~ msgstr "Examiner un fichier « core »"
+
+#, fuzzy
+#~| msgid "Attach to process..."
+#~ msgid "Attach to Process... (%1)"
+#~ msgstr "Attacher au processus..."
+
+#, fuzzy
+#~| msgid "Attach to a process"
+#~ msgid "Attach to process"
+#~ msgstr "Attacher à un processus"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Impossible de créer le fichier core</b><p>Le débogueur a signalé "
+#~ "l'erreur suivante :<p><tt>%1"
+
+#~ msgid "Disassemble/Registers"
+#~ msgstr "Désassemblage/Registres"
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#~ msgid "Memory"
+#~ msgstr "Mémoire"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr "Configuration du traçage"
+
+#~ msgid ""
+#~ "<b>Enable tracing</b>\n"
+#~ "<p>Tracing is a mechanism to automatically print values of the chosen "
+#~ "expressions and continue execution when breakpoint is hit. You can think "
+#~ "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgstr ""
+#~ "<b>Activer le traçage</b>\n"
+#~ "<p>Le traçage est un mécanisme permettant d'afficher automatiquement la "
+#~ "valeur des expressions choisies et de continuer l'exécution lorsqu'un "
+#~ "point d'arrêt est rencontré. Vous pouvez le voir comme un débogage printf "
+#~ "qui ne nécessite pas de modifier le code source.</p>"
+
+#~ msgid "Enable tracing"
+#~ msgstr "Activer le traçage"
+
+#~ msgid "Cancel"
+#~ msgstr "Annuler"
+
+#~ msgid "Custom format string"
+#~ msgstr "Format de chaîne personnalisé"
+
+#~ msgid "OK"
+#~ msgstr "Ok"
+
+#~ msgid ""
+#~ "<b>Custom format string</b>\n"
+#~ "<p>Specify a C-style format string that will be used when printing the "
+#~ "chosen expression. For example:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "If custom format string is not enabled, names and values of all "
+#~ "expressions will be printed, using \"%d\" as format specifier for all "
+#~ "expressions."
+#~ msgstr ""
+#~ "<b>Format de chaîne personnalisé</b>\n"
+#~ "<p>Spécifiez un format de chaîne dans le style du C qui sera utilisé lors "
+#~ "de l'affichage de l'expression choisie. Par exemple :\n"
+#~ "<p align=\"center\"> <tt>Point de traçage 1 : g = %d</tt></p>\n"
+#~ "Si un format de chaîne personnalisé n'est pas activé, les noms et valeurs "
+#~ "de toutes les expressions seront affichés, à l'aide du format « %d » "
+#~ "comme spécificateur de format pour toutes les expressions."
+
+#~ msgid "Expressions to print:"
+#~ msgstr "Expressions à afficher :"
+
+#~ msgid ""
+#~ "No environment group specified, looks like a broken configuration, please "
+#~ "check run configuration '%1'. Using default environment group."
+#~ msgstr ""
+#~ "Aucun groupe d'environnement n'est spécifié, il semble qu'il s'agisse "
+#~ "d'une configuration défectueuse. Veuillez vérifier la configuration "
+#~ "d'exécution « %1 ». Utilisation du groupe d'environnement par défaut."
+
+#~ msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+#~ msgstr ""
+#~ "<b>Il vous faut GDB 7.0.0 ou postérieur.</b><br />Vous utilisez "
+#~ "actuellement : %1"
+
+#~ msgid "gdb error"
+#~ msgstr "Erreur de GDB"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Il est impossible de démarrer le débogueur :</b><br />"
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Il est impossible de trouver le shell de débogage « %1 »."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Il est impossible de trouver le shell de débogage"
+
+#~ msgid "GDB Configuration"
+#~ msgstr "Configuration de GDB"
+
+#~ msgid "Executes a Native application in GDB"
+#~ msgstr "Exécute une application native dans GDB"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Configuration du débogueur"
+
+#~ msgid "Debugger e&xecutable:"
+#~ msgstr "E&xécutable de débogage :"
+
+#~ msgid "Gdb executable"
+#~ msgstr "Exécutable gdb"
+
+#~ msgid ""
+#~ "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
+#~ "gdb, for example, for a different architecture, enter the executable name "
+#~ "here. You can either run gdb from $PATH, but with a different name (say, "
+#~ "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+#~ "executable."
+#~ msgstr ""
+#~ "Pour lancer le binaire « gdb » à partir de $PATH, laissez ce champ vide. "
+#~ "Pour lancer un « gdb » particulier, par exemple pour une architecture "
+#~ "différente, saisissez ici le nom de l'exécutable. Vous pouvez soit "
+#~ "exécuter « gdb » depuis $PATH mais avec un nom différent (par exemple "
+#~ "« arm-gdb » en saisissant son nom ici, soit spécifier l'emplacement "
+#~ "complet de l'exécutable « gdb »."
+
+#~ msgid ""
+#~ "<html><head/><body><p>If you want gdb to be executed by a special shell "
+#~ "script, which for example properly sets the library path, insert it here "
+#~ "e.g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+#~ "invoked like this: /path/to/script.sh --scriptArguments debugger --"
+#~ "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+#~ "span> invoke \"debugger\" executable manually.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Si vous voulez que « gdb » soit exécuté par un "
+#~ "script shell, par exemple pour définir un emplacement de librairie, "
+#~ "indiquez-le ici (sous la forme /emplacement/du/script.sh --"
+#~ "argumentsDuScript)</p><p>Remarque : votre script sera appelé de la "
+#~ "sorte : /emplacement/du/script.sh --argumentsDuScript débogueur --"
+#~ "argumentsDuDébogueur. Ainsi script.sh <span style=\" font-weight:600;"
+#~ "\">doit</span> appeler l'exécutable « débogueur » manuellement.</p></"
+#~ "body></html>"
+
+#~ msgid "She&ll script:"
+#~ msgstr "Script she&ll :"
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "Options"
+#~ msgstr "Options"
+
+#~ msgid "Display static &members:"
+#~ msgstr "Afficher les &membres statiques :"
+
+#~ msgid ""
+#~ "Displaying static members makes GDB slower in\n"
+#~ "producing data within KDE and Qt.\n"
+#~ "It may change the \"signature\" of the data\n"
+#~ "which QString and friends rely on,\n"
+#~ "but if you need to debug into these values then\n"
+#~ "check this option."
+#~ msgstr ""
+#~ "L'affichage des membres statiques ralentit le débogueur GDB\n"
+#~ "lorsqu'il doit produire des données dans KDE et Qt.\n"
+#~ "Cette option peut changer la « signature » des données sur lesquelles "
+#~ "repose « QString »\n"
+#~ "et les classes afférentes. Si devez déboguer ces valeurs,\n"
+#~ "cochez cette option."
+
+#~ msgid "Display &demangled names:"
+#~ msgstr "Afficher les noms &désassemblés :"
+
+#~ msgid ""
+#~ "When displaying the disassembled code you\n"
+#~ "can select to see the methods' mangled names.\n"
+#~ "However, non-mangled names are easier to read."
+#~ msgstr ""
+#~ "Lorsque vous affichez les noms désassemblés\n"
+#~ "vous pouvez choisir d'afficher les noms correspondant aux méthodes.\n"
+#~ "Cependant, ils seront plus difficiles à lire."
+
+#~ msgid "S&tart Debugger with:"
+#~ msgstr "&Lancer le débogueur avec :"
+
+#~ msgid "Application Output"
+#~ msgstr "Sortie de l'application"
+
+#~ msgid "GDB Console"
+#~ msgstr "Console GDB"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Pile principale"
+
+#~ msgid ""
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgstr ""
+#~ "Ce script est prévu pour les commandes qui sont nécessaires pour la "
+#~ "connexion avec l'exécutable distant.\n"
+#~ "\tAttendre 5 secondes\tattendre le lancement du programme distant\n"
+#~ "\tCible distante...\tconnecter au débogueur distant\n"
+#~ "\tContinuer\t[optionnel] lance le débogage jusqu'au premier point d'arrêt"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "Débogage à distance"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Script to start remote application</p><p></"
+#~ "p><p>This shell script is run after the Gdb Config script has been "
+#~ "sourced by gdb.</p><p>It's purpose is to actually start the remote "
+#~ "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
+#~ "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
+#~ "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
+#~ "\"application\" on target.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Script pour démarrer une application distante</"
+#~ "p><p></p><p>Ce script shell est exécuté après que le script de "
+#~ "configuration de gdb a été lu par celui-ci.</p><p>Il a pour rôle de "
+#~ "démarrer le processus distant.</p><p>1) Trouver un moyen pour exécuter "
+#~ "une commande à distance - rsh, ssh, telnet...</p><p>2a) Exécuter "
+#~ "« gdbserver... application » sur la cible.</p><p>ou si votre exécutable "
+#~ "contient la partie de code nécessaire à gdb :</p><p>2b) Exécuter "
+#~ "« application » sur la cible.</p></body></html>"
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "L&ancer le script shell :"
+
+#~ msgid ""
+#~ "<html><head/><body><p>This script is sourced by gdb when the debugging "
+#~ "starts.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Ce script est lu par gdb lorsque le débogage "
+#~ "démarre.</p></body></html>"
+
+#~ msgid "Gdb &config script:"
+#~ msgstr "Script de configuration de gdb :"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Script to connect with remote application</p><p>For "
+#~ "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+#~ "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+#~ "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Script pour la connexion à l'application distante.</"
+#~ "p><p>Par exemple :</p><p>\tshell sleep 5\t# attendre le lancement du "
+#~ "programme distant</p><p>\ttarget remote...\t# connecter au débogueur "
+#~ "distant</p><p>\tcontinue\t# [optionnel] lance le débogage jusqu'au "
+#~ "premier point d'arrêt</p></body></html>"
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Lancer le script pour &gdb :"
+
+#~ msgid "GDB Output"
+#~ msgstr "Sortie de GDB"
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "Commande pour &GDB :"
+
+#~ msgid "Copy All"
+#~ msgstr "Tout copier"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Exécuter"
+
+#~ msgid "Start"
+#~ msgstr "Démarrer"
+
+#~ msgid "Amount"
+#~ msgstr "Quantité"
+
+#~ msgid "Memory view"
+#~ msgstr "Vue de la mémoire"
+
+#~ msgid "%2 (1 byte)"
+#~ msgid_plural "%2 (%1 bytes)"
+#~ msgstr[0] "%2 (1 octet)"
+#~ msgstr[1] "%2 (%1 octets)"
+
+#~ msgid "&Reload"
+#~ msgstr "&Recharger"
+
+#~ msgid "&Format"
+#~ msgstr "&Format"
+
+#~ msgid "&Binary"
+#~ msgstr "&Binaire"
+
+#~ msgid "&Octal"
+#~ msgstr "&Octal"
+
+#~ msgid "&Decimal"
+#~ msgstr "&Décimal"
+
+#~ msgid "&Hexadecimal"
+#~ msgstr "&Hexadécimal"
+
+#~ msgid "&Grouping"
+#~ msgstr "&Groupement"
+
+#~ msgid "&0"
+#~ msgstr "&0"
+
+#~ msgid "&1"
+#~ msgstr "&1"
+
+#~ msgid "&2"
+#~ msgstr "&2"
+
+#~ msgid "&4"
+#~ msgstr "&4"
+
+#~ msgid "&8"
+#~ msgstr "&8"
+
+#~ msgid "1&6"
+#~ msgstr "1&6"
+
+#~ msgid "Write changes"
+#~ msgstr "Écrire les changements"
+
+#~ msgid "Change memory range"
+#~ msgstr "Modifier la plage mémoire"
+
+#~ msgid "Close this view"
+#~ msgstr "Fermer cette vue"
+
+#~ msgid "Memory viewer"
+#~ msgstr "Afficheur de mémoire"
+
+#~ msgid "New memory viewer"
+#~ msgstr "Nouvel afficheur de mémoire"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Open a new memory viewer."
+#~ msgstr "Ouvre un nouvel afficheur de mémoire."
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>GDB s'est arrêté anormalement</b><p>Il s'agit probablement d'un bogue "
+#~ "dans GDB. Examinez la fenêtre de sortie de GDB puis arrêtez le débogueur"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "GDB s'est arrêté anormalement"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Gdb s'est arrêté de façon anormale"
+
+#~ msgid "Application interrupted"
+#~ msgstr "L'application s'est interrompue"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Joëlle Cornavin, Vincent Pinon"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jcorn@free.fr, vincent.pinon@laposte.net"
+
+#~ msgid "GDB Support"
+#~ msgstr "Prise en charge de GDB"
+
+#~ msgid ""
+#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
+#~ "+ and more."
+#~ msgstr ""
+#~ "Ce module complémentaire fournit une interface pour GDB, un débogueur "
+#~ "niveau source pour C, C++ et autres."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr ""
+#~ "Lancer « gdb » dans un shell spécial (principalement pour les projets "
+#~ "« Automake »)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Si vous voulez que « gdb » soit exécuté par un shell ou un outil spécial, "
+#~ "indiquez-le ici. Le principal cas d'utilisation concerne les projets "
+#~ "reposant sur « Automake », où l'application n'est en fait qu'un script, "
+#~ "et « libtool » est nécessaire pour le faire s'exécuter dans « gdb »."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Si vous voulez que « gdb » soit exécuté par un interpréteur ou un outil "
+#~ "spécial, indiquez-le ici. Le principal cas d'utilisation concerne les "
+#~ "projets reposant sur « Automake », où l'application n'est en fait qu'un "
+#~ "script, et « libtool » est nécessaire pour le faire s'exécuter dans "
+#~ "« gdb »."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "&Shell de débogage :"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Script de démarrage de l'application distante"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "Script gdb de &configuration :"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Script pour se connecter avec l'application distante"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Ce script est lu par GDB après que les deux scripts précédents ont été "
+#~ "exécutés.\n"
+#~ "Ce script est prévu pour les commandes qui sont nécessaires pour la "
+#~ "connexion avec l'exécutable distant.\n"
+#~ "\tshell sleep 5\tattendre le lancement du programme distant\n"
+#~ "\tcible distante...\tconnecter au débogueur distant\n"
+#~ "\tcontinue\t[optionnel] lance le débogage jusqu'au premier point d'arrêt."
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "KDevelop : console de débogage de l'application"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Prise en charge de l'exécution d'applications dans GDB"
+
+#, fuzzy
+#~| msgid "&Format"
+#~ msgid "Form"
+#~ msgstr "&Format"
+
+#~ msgid "Start address:"
+#~ msgstr "Adresse de démarrage :"
+
+#~ msgid "End Address:"
+#~ msgstr "Adresse de fin :"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Affichage"
+
+#~ msgid "Offset"
+#~ msgstr "Décalage"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Vues de débogage particulières"
+
+#~ msgid "Watches"
+#~ msgstr "Sentinelles"
+
+#~ msgid "Recent"
+#~ msgstr "Récent"

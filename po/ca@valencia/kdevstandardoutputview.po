@@ -1,0 +1,139 @@
+# Translation of kdevstandardoutputview.po to Catalan (Valencian)
+# Copyright (C) 2009-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa <manutortosa@gmail.com>, 2009, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2012, 2015, 2020.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-16 12:54+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: outputwidget.cpp:53
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Vista de l'eixida"
+
+#: outputwidget.cpp:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Tanca la vista d'eixida actualment activa"
+
+#: outputwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Tanca totes les altres vistes d'eixida"
+
+#: outputwidget.cpp:81
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Eixida anterior"
+
+#: outputwidget.cpp:84
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Eixida següent"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Selecciona l'element activat"
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Focus en seleccionar un element"
+
+#: outputwidget.cpp:105
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Primer element"
+
+#: outputwidget.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Element anterior"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Element següent"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Últim element"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Neteja"
+
+#: outputwidget.cpp:141
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Busca..."
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr ""
+"Introduïu una expressió regular sense distinció entre majúscules i "
+"minúscules per a filtrar la visualització de l'eixida"
+
+#: standardoutputview.cpp:101
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Construcció"
+
+#: standardoutputview.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Execució"
+
+#: standardoutputview.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Depuració"
+
+#: standardoutputview.cpp:116
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Prova"
+
+#: standardoutputview.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Control de versions"

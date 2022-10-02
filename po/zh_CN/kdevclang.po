@@ -1,0 +1,366 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-16 00:46+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevclang.pot\n"
+"X-Crowdin-File-ID: 4863\n"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Helpers"
+msgstr "C/C++ 助手"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure C/C++ Helpers"
+msgstr "配置 C/C++ 助手"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: clangsettings/sessionsettings/sessionsettings.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "代码补全"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"If disabled, macros will not be included in the code completion results. "
+"This can improve the responsiveness of code completion in some cases."
+msgstr ""
+"如果禁用，宏将不会包括于代码补全结果当中。这可能可以改进某些情况下的代码补全"
+"的响应速度。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:38
+#, kde-format
+msgctxt "@option:check"
+msgid "Add macros to code completion"
+msgstr "将宏添加到代码补全"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
+#: clangsettings/sessionsettings/sessionsettings.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable Look-ahead code completion"
+msgstr "启用前向代码补全"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: clangsettings/sessionsettings/sessionsettings.ui:64
+#, kde-format
+msgctxt "@title:group"
+msgid "Assistants"
+msgstr "助手"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
+#: clangsettings/sessionsettings/sessionsettings.ui:70
+#, kde-format
+msgctxt "@option:check"
+msgid "Forward declare assistant"
+msgstr "前置声明助手"
+
+#: clangsupport.cpp:171
+#, kde-format
+msgid ""
+"The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
+"Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix "
+"this.\n"
+"See also: https://bugs.kde.org/show_bug.cgi?id=393779"
+msgstr ""
+"clang 内置的包括路径 %1 无效 (缺少 cpuid.h 头)。\n"
+"请尝试手动设置 KDEV_CLANG_BUILTIN_DIR 环境变量以修复。\n"
+"参照：https://bugs.kde.org/show_bug.cgi?id=393779"
+
+#: clangsupport.cpp:278
+#, kde-format
+msgctxt "@action"
+msgid "Rename Declaration"
+msgstr "重命名声明"
+
+#: clangsupport.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Move into Source"
+msgstr "移入源文件"
+
+#: codecompletion/context.cpp:145
+#, kde-format
+msgid "Override %1"
+msgstr "覆盖 %1"
+
+#: codecompletion/context.cpp:342
+#, kde-format
+msgid "Implement %1"
+msgstr "实现 %1"
+
+#: codecompletion/context.cpp:1305
+#, kde-format
+msgid "Special"
+msgstr "特殊"
+
+#: codecompletion/context.cpp:1306
+#, kde-format
+msgid "Look-ahead Matches"
+msgstr "前向匹配"
+
+#: codecompletion/context.cpp:1307
+#, kde-format
+msgid "Builtin"
+msgstr "内建"
+
+#: codecompletion/context.cpp:1308
+#, kde-format
+msgid "Macros"
+msgstr "宏"
+
+#: codecompletion/context.cpp:1351
+#, kde-format
+msgid "Abstract Override"
+msgstr "抽象覆盖"
+
+#: codecompletion/context.cpp:1352
+#, kde-format
+msgid "Virtual Override"
+msgstr "虚覆盖"
+
+#: codecompletion/context.cpp:1367
+#, kde-format
+msgid "Implement Function"
+msgstr "实现函数"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update declaration signature"
+msgstr "更新声明签名"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update definition signature"
+msgstr "更新定义签名"
+
+#: codegen/adaptsignatureaction.cpp:62
+#, kde-format
+msgid ""
+"Update declaration signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"更新声明签名\n"
+"从：%1\n"
+"到：%2"
+
+#: codegen/adaptsignatureaction.cpp:63
+#, kde-format
+msgid ""
+"Update definition signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"更新定义签名\n"
+"从：%1\n"
+"到：%2"
+
+#: codegen/adaptsignatureaction.cpp:113
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "应用修改失败：%1"
+
+#: codegen/adaptsignatureassistant.cpp:76
+#, kde-format
+msgid "Adapt Signature"
+msgstr "更改签名"
+
+#: codegen/clangrefactoring.cpp:82
+#, kde-format
+msgctxt "@action"
+msgid "Rename %1"
+msgstr "重命名 %1"
+
+#: codegen/clangrefactoring.cpp:94
+#, kde-format
+msgid "Create separate definition for %1"
+msgstr "创建 %1 的分离定义"
+
+#: codegen/clangrefactoring.cpp:137
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "光标位置没有声明"
+
+#: codegen/clangrefactoring.cpp:145
+#, kde-format
+msgid "No source file available for %1."
+msgstr "%1 没有可用的源文件。"
+
+#: codegen/clangrefactoring.cpp:157
+#, kde-format
+msgid "Failed to update DUChain for %1."
+msgstr "更新 %1 的定义使用链失败。"
+
+#: codegen/clangrefactoring.cpp:161
+#, kde-format
+msgid "Declaration lost while updating."
+msgstr "更新时丢失了声明。"
+
+#: codegen/clangrefactoring.cpp:167
+#, kde-format
+msgid "Cannot create definition for this declaration."
+msgstr "无法创建此声明的定义。"
+
+#: codegen/clangrefactoring.cpp:174
+#, kde-format
+msgid "No document for %1"
+msgstr "没有 %1 的文档"
+
+#: codegen/clangrefactoring.cpp:205
+#, kde-format
+msgid "Insertion failed"
+msgstr "插入失败"
+
+#: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
+#, kde-format
+msgid "Applying changes failed: %1"
+msgstr "应用修改失败：%1"
+
+#: duchain/clangproblem.cpp:204
+#, kde-format
+msgid "Fix-it Hints"
+msgstr "Fix-it 提示"
+
+#: duchain/clangproblem.cpp:246
+#, kde-format
+msgid "Insert \"%1\" at line: %2, column: %3"
+msgstr "在行：%2，列：%3 插入“%1“"
+
+#: duchain/clangproblem.cpp:250
+#, kde-format
+msgid "Replace text at line: %1, column: %2 with: \"%3\""
+msgstr "在行：”%1“，列：”%2“替换文本为：”%3“"
+
+#: duchain/clangproblem.cpp:253
+#, kde-format
+msgid "Replace \"%1\" with: \"%2\""
+msgstr "替换”%1“为：”%2“"
+
+#: duchain/clangproblem.cpp:256
+#, kde-format
+msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
+msgstr "从行：“%1“，列：”%2“起替换多行为：“%3“"
+
+#: duchain/headerguardassistant.cpp:45
+#, kde-format
+msgid "Add #pragma once"
+msgstr "添加 #pragma 一次"
+
+#: duchain/headerguardassistant.cpp:46
+#, kde-format
+msgid "Add macro-based #ifndef/#define/#endif header guard"
+msgstr "添加基于宏的 #ifndef/#define/#endif 的头保护"
+
+#: duchain/macrodefinition.cpp:112
+#, kde-format
+msgid "Macro %1"
+msgstr "宏 %1"
+
+#: duchain/macronavigationcontext.cpp:55
+#, kde-format
+msgctxt ""
+"%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
+"arguments"
+msgid "%1: %2"
+msgstr "%1：(%2)"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Function macro"
+msgstr "函数宏"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Macro"
+msgstr "远距离"
+
+#: duchain/macronavigationcontext.cpp:59
+#, kde-format
+msgctxt "%1: the link to the definition"
+msgid "Defined in: %1"
+msgstr "定义于：%1"
+
+#: duchain/macronavigationcontext.cpp:63
+#, kde-format
+msgid "Show uses"
+msgstr "显示使用"
+
+#: duchain/macronavigationcontext.cpp:66
+#, kde-format
+msgid "Body: "
+msgstr "体："
+
+#: duchain/missingincludepathproblem.cpp:35
+#, kde-format
+msgid "Add Custom Include Path"
+msgstr "添加自定义包含路径"
+
+#: duchain/missingincludepathproblem.cpp:58
+#, kde-format
+msgid "Open Project"
+msgstr "打开工程"
+
+#: duchain/parsesession.cpp:530
+#, kde-format
+msgid "Requested here: %1"
+msgstr "请求于此：%1"
+
+#: duchain/parsesession.cpp:571
+#, kde-format
+msgid "In included file: %1"
+msgstr "在包含的文件：%1"
+
+#: duchain/parsesession.cpp:594
+#, kde-format
+msgid "Header is not guarded against multiple inclusions"
+msgstr "头文件没有针对多次包含进行保护"
+
+#: duchain/parsesession.cpp:595
+#, kde-format
+msgid ""
+"The given header is not guarded against multiple inclusions, either with the "
+"conventional #ifndef/#define/#endif macro guards or with #pragma once."
+msgstr ""
+"头文件没有针对多次包含进行保护，用常规的 #ifndef/#define/#endif 宏防止或者用 "
+"#pragma once。"
+
+#: duchain/unknowndeclarationproblem.cpp:373
+#, kde-format
+msgid "Insert '%1'"
+msgstr "插入“%1“"
+
+#: duchain/unknowndeclarationproblem.cpp:433
+#, kde-format
+msgid "Forward declare as 'class'"
+msgstr "前置声明为“class”"
+
+#: duchain/unknowndeclarationproblem.cpp:440
+#, kde-format
+msgid "Forward declare as 'struct'"
+msgstr "前置声明为“struct”"
+
+#: util/clangutils.cpp:189
+#, kde-format
+msgid "<parse error>"
+msgstr "<解析出错>"

@@ -1,0 +1,65 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Solinas Simone <ksolsim@gmail.com>, 2009, 2013, 2014.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2020.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevkonsole\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-24 00:03+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr "Terminale"
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr "Terminale"
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr "Impossibile caricare l'estensione «konsolepart»"
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Solinas Simone"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid ""
+#~ "This plugin provides KDevelop with an embedded konsole for quick and easy "
+#~ "command line access."
+#~ msgstr ""
+#~ "Questa estensione dota KDevelop di una console integrata per una rapido e "
+#~ "facile accesso alla riga di comando."
+
+#~ msgid "Embedded Terminal support"
+#~ msgstr "Supporto terminale integrato"
+
+#~ msgid "<b>Konsole</b><p>This window contains an embedded console.</p>"
+#~ msgstr ""
+#~ "<b>Konsole</b><p>Questa finestra contiene una console integrata.</p>"

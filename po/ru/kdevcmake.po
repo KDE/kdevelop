@@ -1,0 +1,549 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2012, 2019.
+# Alexey Morozov <morozov@gmail.com>, 2011.
+# Yury G. Kudryashov <urkud.urkud@gmail.com>, 2012.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-03-04 16:57+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Настройка каталога сборки — %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Настройка каталога сборки для %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Необходимо указать каталог сборки."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Используется уже имеющийся каталог сборки."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Создание нового каталога сборки."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Каталог сборки уже настроен."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Это каталог сборки для %1, но каталог проекта — %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Для каталога сборки нужно указать абсолютный путь."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Выбранный каталог сборки не пуст."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Доступные каталоги сборки:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Новый каталог сборки"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "&Каталог сборки:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Префикс установки:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Префикс, под которым будет установлен проект. Если оставить пустым, CMake "
+"будет использовать свой стандартный префикс установки."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Стандартный префикс установки CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "&Тип сборки:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Дополнительные аргументы:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "&Исполняемый файл CMake:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "НЕДОПУСТИМО"
+
+#: cmakecodecompletionmodel.cpp:197
+#, kde-format
+msgctxt "@item"
+msgid "Command"
+msgstr "Команда"
+
+#: cmakecodecompletionmodel.cpp:198
+#, kde-format
+msgctxt "@item"
+msgid "Variable"
+msgstr "Переменная"
+
+#: cmakecodecompletionmodel.cpp:199
+#, kde-format
+msgctxt "@item"
+msgid "Macro"
+msgstr "Макрос"
+
+#: cmakecodecompletionmodel.cpp:200
+#, kde-format
+msgctxt "@item"
+msgid "Path"
+msgstr "Путь"
+
+#: cmakecodecompletionmodel.cpp:201
+#, kde-format
+msgctxt "@item"
+msgid "Target"
+msgstr "Цель"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "ошибка"
+
+#: cmakecommandscontents.cpp:29
+#, kde-format
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Команды"
+
+#: cmakecommandscontents.cpp:30
+#, kde-format
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Переменные"
+
+#: cmakecommandscontents.cpp:31
+#, kde-format
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Модули"
+
+#: cmakecommandscontents.cpp:32
+#, kde-format
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Свойства"
+
+#: cmakecommandscontents.cpp:33
+#, kde-format
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Правила"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+"<p>Для просмотра документации CMake с лучшим форматированием установите "
+"rst2html.</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr "Исполняемый файл CMake не найден. Проверьте, установлен ли он."
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Кэшированное значение:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Кэшированная документация:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "Страница содержимого CMake"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Не удалось настроить проект «%1» (сообщение об ошибке: %2). В результате "
+"возможность разобраться с кодом в KDevelop, вероятно, будет неполной.\n"
+"\n"
+"Чтобы устранить эту проблему, убедитесь, что в файлах CMakeLists.txt проекта "
+"нет ошибок, программа KDevelop настроена на использование надлежащей версии "
+"CMake и указаны правильные параметры работы. Затем щёлкните правой кнопкой "
+"мыши по пункту проекта на панели инструмента просмотра проектов и выберите "
+"пункт «Перезагрузить»."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"Программа KDevelop обнаружила несколько возможных корневых каталогов для "
+"проекта, выберите правильный."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Кэшируемые значения"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, kde-format
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Комментарий:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Показать дополнительные"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "Префикс установки:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Тип сборки:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Настройка окружения:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Выберите, какое окружение использовать"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, kde-format
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Показывать дополнительные значения"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "Исполняемый файл CMake:"
+
+#: settings/cmakecachemodel.cpp:36
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Имя"
+
+#: settings/cmakecachemodel.cpp:37
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Тип"
+
+#: settings/cmakecachemodel.cpp:38
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Значение"
+
+#: settings/cmakecachemodel.cpp:39
+#, kde-format
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Комментарий"
+
+#: settings/cmakecachemodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Строки"
+
+#: settings/cmakepreferences.cpp:343
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Каталог %1 будет удалён из списка KDevelop.\n"
+"Удалить его также из файловой системы?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Не удалось удалить: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "Настройка параметров CMake"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Комплект тестов %1"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+msgstr[2] "CTest %2 (%1)"
+msgstr[3] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop — Поддержка CMake"
+
+#~ msgid "Add"
+#~ msgstr "Добавить"
+
+#~ msgid "Remove"
+#~ msgstr "Удалить"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "команда %1 устарела и не должна использоваться"
+
+#, fuzzy
+#~ msgid "Unfinished function."
+#~ msgstr "Незавершённая функция. "
+
+#, fuzzy
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Необходимо указать исполняемый файл CMake."
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Настройка каталога сборки"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Дмитрий Рязанцев,Александр Поташев,Алексей Морозов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "djm00n@rambler.ru,aspotashev@gmail.com,morozov@gmail.com"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "&Исполняемый файл CMake:"
+
+#, fuzzy
+#~ msgid "Build Type:"
+#~ msgstr "&Тип сборки:"
+
+#, fuzzy
+#~ msgid "CMake Binary:"
+#~ msgstr "&Исполняемый файл CMake:"
+
+#, fuzzy
+#~ msgid "Installation Prefix"
+#~ msgstr "&Каталог установки:"
+
+#, fuzzy
+#~ msgid "Extra Arguments"
+#~ msgstr "Дополнительные аргументы:"
+
+#, fuzzy
+#~ msgid "CMake Binary"
+#~ msgstr "&Исполняемый файл CMake:"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake не установлен"
+
+# BUGME: full stop after last sentence. --aspotashev
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Невозможно записать параметры CMake в файл «%1».\n"
+#~ "Убедитесь, что вам разрешено его изменять."
+
+#~ msgid "CMake Documentation"
+#~ msgstr "Документация CMake"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Поддержка документации CMake"
+
+#~ msgid "CMake Manager"
+#~ msgstr "Диспетчер проектов CMake"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Поддержка управления проектами CMake"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Перейти к определению цели"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Переместить файлы и папки в CMakeLists следующим образом:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Не удалось изменить CMakeLists, прекратить перемещение?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Удалить следующие файлы и каталоги из CMakeLists:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Не удалось изменить CMakeLists, прекратить удаление?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Изменить следующие цели в проекте:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Создать папку «%1»:"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Не удалось сохранить изменения."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Изменить цель «%1» следующим образом:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "Изменить CMakeLists не удалось."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "Переименовать «%1» в «%2»:"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Не удалось изменить CMakeLists, прекратить переименование?"

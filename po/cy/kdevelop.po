@@ -1,0 +1,6226 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: all.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2004-09-20 15:44+0200\n"
+"Last-Translator: Thierry Vignaud <tvignaud@mandrakesoft.com>\n"
+"Language-Team: cy <LL@li.org>\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "KD wrth KGyfieithu"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kyfieithu@dotmon.com"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, fuzzy, kde-format
+#| msgid "Session"
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "Sesiwn"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, fuzzy, kde-format
+#| msgid "&Project"
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "&Cywaith"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, fuzzy, kde-format
+#| msgid "&Run"
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "R&hedeg"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, fuzzy, kde-format
+#| msgid "Remove File"
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "Gwaredu Ffeil"
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr ""
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, fuzzy, kde-format
+#| msgid "Con&figuration:"
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "Ffu&rfwedd :"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Ffeiliau:"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&Golygu..."
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Modiwl"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, fuzzy, kde-format
+#| msgid "&Window"
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&Ffenestr"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "Gosodiadau"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "Helo"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, fuzzy, kde-format
+msgid "Main Toolbar"
+msgstr "Bar offer"
+
+#: kdevideextension.cpp:36
+#, fuzzy, kde-format
+msgid "Code"
+msgstr "Modiwl"
+
+#: kdevideextension.cpp:47
+#, fuzzy, kde-format
+msgid "KDevelop Project Files"
+msgstr "Gosodiadau Cywaith"
+
+#: main.cpp:85
+#, fuzzy, kde-format
+msgid "Could not open %1"
+msgstr "Methu llwytho ffeil. '%1'"
+
+#: main.cpp:219
+#, fuzzy, kde-format
+msgid "Could not open file '%1'."
+msgstr "Methu llwytho ffeil. '%1'"
+
+#: main.cpp:242
+#, fuzzy, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "Methu llwytho ffeil. '%1'"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr ""
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+
+#: main.cpp:383
+#, fuzzy, kde-format
+#| msgid "Developer"
+msgid "KDevelop"
+msgstr "Datblygwr"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr ""
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr ""
+
+#: main.cpp:397
+#, fuzzy, kde-format
+#| msgid "General Settings"
+msgid "GDB integration"
+msgstr "Gosodiadau Cyffredinol"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr ""
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr ""
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr ""
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr ""
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr ""
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr ""
+
+#: main.cpp:412
+#, fuzzy, kde-format
+msgid "The KWrite authors"
+msgstr "Awdur"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr ""
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr ""
+
+#: main.cpp:413
+#, fuzzy, kde-format
+#| msgid "Qt Designer"
+msgid "Designer code"
+msgstr "Dylunydd Qt"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr ""
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr ""
+
+#: main.cpp:419
+#, fuzzy, kde-format
+msgid "Debugger frontend"
+msgstr "Bar offer"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr ""
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr ""
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr ""
+
+#: main.cpp:421
+#, fuzzy, kde-format
+#| msgid "A KDE Application"
+msgid "KDE application templates"
+msgstr "Cymhwysiad KDE"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr ""
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr ""
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr ""
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr ""
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr ""
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr ""
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr ""
+
+#: main.cpp:427
+#, fuzzy, kde-format
+msgid "QMake projectmanager"
+msgstr "Ffeil wedi Newid"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr ""
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr ""
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr ""
+
+#: main.cpp:432
+#, fuzzy, kde-format
+msgid "ClearCase support"
+msgstr "&Adfer"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr ""
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr ""
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr ""
+
+#: main.cpp:434
+#, fuzzy, kde-format
+#| msgid "&Documentation"
+msgid "Fortran documentation"
+msgstr "&Dogfenniaeth"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr ""
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr ""
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr ""
+
+#: main.cpp:437 main.cpp:438
+#, fuzzy, kde-format
+#| msgid "File selector"
+msgid "Fileselector component"
+msgstr "Dewisydd Ffeiliau"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr ""
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr ""
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "Ysbeidiau"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr ""
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr ""
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr ""
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr ""
+
+#: main.cpp:443
+#, fuzzy, kde-format
+#| msgid "&Documentation"
+msgid "Documentation index view"
+msgstr "&Dogfenniaeth"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr ""
+
+#: main.cpp:446
+#, fuzzy, kde-format
+msgid "QMake project manager patches"
+msgstr "Gosodiadau Cywaith"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr ""
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr ""
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr ""
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr ""
+
+#: main.cpp:488
+#, fuzzy, kde-format
+#| msgid "KDevelop Assistant"
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "Cymhorthwr KDevelop"
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr ""
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr ""
+
+#: main.cpp:520
+#, fuzzy, kde-format
+msgid "Name: Opened Projects"
+msgstr "Agor Cywaith"
+
+#: main.cpp:529
+#, fuzzy, kde-format
+msgid "[running]"
+msgstr "Rhaglen"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr ""
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr ""
+
+#: main.cpp:648
+#, fuzzy, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "Cymhwysiad"
+
+#: main.cpp:654
+#, fuzzy, kde-format
+#| msgid "Debugger"
+msgid "Debug %1"
+msgstr "Dadnamydd"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+
+#: main.cpp:678
+#, fuzzy, kde-format
+msgid "No session with the name %1 exists."
+msgstr "Mae ffeil o'r enw %1 mewn bod yn barod."
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr ""
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr ""
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr ""
+
+#: main.cpp:814
+#, fuzzy, kde-format
+msgid "Cannot find launcher %1"
+msgstr "Ffeiliau i'w llwytho"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+#, fuzzy
+#| msgid "KDevelop Assistant"
+msgid "KDevelop Sessions"
+msgstr "Cymhorthwr KDevelop"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, fuzzy, kde-format
+#| msgid "KDevelop Assistant"
+msgid "Open KDevelop Session"
+msgstr "Cymhorthwr KDevelop"
+
+#~ msgid "Files to load"
+#~ msgstr "Ffeiliau i'w llwytho"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Ffeiliau:"
+
+#, fuzzy
+#~ msgid "&Edit"
+#~ msgstr "&Golygu..."
+
+#, fuzzy
+#~ msgid "&Advanced"
+#~ msgstr "&Rhaeadr"
+
+#, fuzzy
+#~ msgid "&View"
+#~ msgstr "Gol&ygon"
+
+#, fuzzy
+#~ msgid "&Tools"
+#~ msgstr "Offer"
+
+#, fuzzy
+#~ msgid "Word Completion"
+#~ msgstr "Crynhoydd"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "Gosodiadau"
+
+#, fuzzy
+#~| msgid "Editor"
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Golygydd"
+
+#, fuzzy
+#~| msgid "KScript Error"
+#~ msgid "Deprecated options:"
+#~ msgstr "Gwall KScript"
+
+#, fuzzy
+#~ msgid "The KHTML authors"
+#~ msgstr "Awdur"
+
+#, fuzzy
+#~| msgid "Document to open"
+#~ msgid "HTML documentation component"
+#~ msgstr "Dogfen i'w hagor"
+
+#, fuzzy
+#~| msgid "Developer"
+#~ msgid "Develop"
+#~ msgstr "Datblygwr"
+
+#, fuzzy
+#~| msgid "C&lose Project"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "C&au Cywaith"
+
+#, fuzzy
+#~ msgid "Debug your program"
+#~ msgstr "Rhaglen"
+
+#, fuzzy
+#~| msgid "Debugger"
+#~ msgid "Debug Area"
+#~ msgstr "Dadnamydd"
+
+#, fuzzy
+#~| msgid "Preview Form"
+#~ msgid "Review Area"
+#~ msgstr "Rhagolygu Ffurflen"
+
+#, fuzzy
+#~| msgid "&New Project..."
+#~ msgid "New Project"
+#~ msgstr "Cywaith &Newydd..."
+
+#~ msgid "Open project"
+#~ msgstr "Agor Cywaith"
+
+#, fuzzy
+#~| msgid "new project"
+#~ msgid "Fetch project"
+#~ msgstr "cywaith Newydd"
+
+#, fuzzy
+#~| msgid "Open &Recent Project"
+#~ msgid "Recent Projects"
+#~ msgstr "Agor &Cywaith Diweddar"
+
+#, fuzzy
+#~| msgid "Session"
+#~ msgid "Sessions"
+#~ msgstr "Sesiwn"
+
+#, fuzzy
+#~| msgid "Username"
+#~ msgid "Userbase"
+#~ msgstr "Enw defnyddiwr"
+
+#, fuzzy
+#~| msgid "&Documentation"
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "&Dogfenniaeth"
+
+#, fuzzy
+#~| msgid "String"
+#~ msgid "Starting"
+#~ msgstr "Llinell"
+
+#, fuzzy
+#~| msgid "Developer"
+#~ msgid "Learn KDevelop!"
+#~ msgstr "Datblygwr"
+
+#, fuzzy
+#~ msgid "Execute your program"
+#~ msgstr "Rhaglen"
+
+#, fuzzy
+#~| msgid "Remove file"
+#~ msgid "Remove lock file"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Failed to remove lock file %1."
+#~ msgstr "Ffeiliau i'w llwytho"
+
+#, fuzzy
+#~| msgid "Open project"
+#~ msgid "Import project"
+#~ msgstr "Agor Cywaith"
+
+#, fuzzy
+#~ msgid "Url to project to load"
+#~ msgstr "Enw'r cywaith"
+
+#, fuzzy
+#~| msgid "Session"
+#~ msgid "Session contents"
+#~ msgstr "Sesiwn"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "Ffeiliau i'w llwytho"
+
+#, fuzzy
+#~ msgid "Profile to load"
+#~ msgstr "Enw'r cywaith"
+
+#~ msgid "Version %1"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "&Ffeiliau:"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "&Golygu..."
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "Gol&ygon"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Cywaith"
+
+#~ msgid "Run"
+#~ msgstr "Rhedeg"
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "&Rhaeadr"
+
+#, fuzzy
+#~| msgid "Re&name"
+#~ msgid "Rename %1"
+#~ msgstr "Ai&l-enwi"
+
+#, fuzzy
+#~| msgid "Create New"
+#~ msgid "Create Class"
+#~ msgstr "Creu Newydd"
+
+#, fuzzy
+#~| msgid "Type name:"
+#~ msgid "New name:"
+#~ msgstr "Enw'r math:"
+
+#, fuzzy
+#~| msgid "Re&name"
+#~ msgid "Rename"
+#~ msgstr "Ai&l-enwi"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Uses"
+#~ msgstr "Defnyddiwr"
+
+#, fuzzy
+#~ msgid "Cached: "
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "make-process failed"
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~ msgid "output: %1"
+#~ msgstr " Dileu eitem"
+
+#, fuzzy
+#~| msgid "Output"
+#~ msgid "Output was: %1"
+#~ msgstr "Allbwn"
+
+#, fuzzy
+#~| msgid "Connec&t"
+#~ msgid "Connect to"
+#~ msgstr "Cysyll&tu"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "Ffwythiant"
+
+#, fuzzy
+#~ msgid "Macro"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~ msgid "Preprocessed body:"
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgid "Body:"
+#~ msgstr "Trwm"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "Declarations:"
+#~ msgstr "&Disgrifiad:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "In %1th include-path"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Included through"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~ msgid "Directory %1"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Includes"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Include Path"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Includers"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~ msgid "Files"
+#~ msgstr "&Ffeiliau:"
+
+#, fuzzy
+#~| msgid "Create New"
+#~ msgid "Create &New Class"
+#~ msgstr "Creu Newydd"
+
+#, fuzzy
+#~| msgid "File System"
+#~ msgid "Building uses"
+#~ msgstr "Cysawd Ffeiliau"
+
+#, fuzzy
+#~ msgid "Ready"
+#~ msgstr "Coch"
+
+#, fuzzy
+#~ msgid "Macro error"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~| msgid "Folder: %1"
+#~ msgid "Formals: %1"
+#~ msgstr "Plygell: %1"
+
+#, fuzzy
+#~| msgid "Insert %1"
+#~ msgid "Input text: %1"
+#~ msgstr "Mewnosod %1"
+
+#, fuzzy
+#~ msgid "invalid input: %1"
+#~ msgstr "&Galluogi"
+
+#, fuzzy
+#~ msgid "Generate Stub Class"
+#~ msgstr "Dewisiadau Cyffredinol"
+
+#, fuzzy
+#~| msgid "Generate"
+#~ msgid "Generate Stub"
+#~ msgstr "Creu"
+
+#, fuzzy
+#~ msgid "Save to "
+#~ msgstr "Rhagolyg&u Ffurflen"
+
+#, fuzzy
+#~| msgid "Overwrite"
+#~ msgid "Override"
+#~ msgstr "Trosysgrifo"
+
+#, fuzzy
+#~ msgid "Implement"
+#~ msgstr "Heb ei weithredoli."
+
+#, fuzzy
+#~ msgid "Add"
+#~ msgstr "&Ychwcanegu"
+
+#, fuzzy
+#~| msgid "or"
+#~ msgid "for"
+#~ msgstr "neu"
+
+#, fuzzy
+#~| msgid "Executable:"
+#~ msgid "Test executable crashed."
+#~ msgstr "Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "Template Name"
+#~ msgid "Test root."
+#~ msgstr "Enw Patrymlun"
+
+#, fuzzy
+#~ msgid "profile"
+#~ msgstr "&Ychwanegu Ffeil..."
+
+#, fuzzy
+#~ msgid "QTest verbose output"
+#~ msgstr "Crynhoydd"
+
+#, fuzzy
+#~| msgid "Executable:"
+#~ msgid "Test executable timed out."
+#~ msgstr "Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "Unknown error occurred."
+#~ msgstr "Digwyddodd gwall :"
+
+#, fuzzy
+#~| msgid "&Test"
+#~ msgid "xTest"
+#~ msgstr "&Profi"
+
+#, fuzzy
+#~| msgid "Template Name"
+#~ msgid "QTest test"
+#~ msgstr "Enw Patrymlun"
+
+#, fuzzy
+#~ msgid "New QTest"
+#~ msgstr "Testun Newydd"
+
+#, fuzzy
+#~| msgid "Classes:"
+#~ msgid "Class name:"
+#~ msgstr "Dosbarthiadau :"
+
+#, fuzzy
+#~| msgid "Search"
+#~ msgid "Search"
+#~ msgstr "Chwilio"
+
+#, fuzzy
+#~| msgid "Find in Files"
+#~ msgid "Find In Files"
+#~ msgstr "Canfod mewn Ffeiliau"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "Grep: %1"
+#~ msgstr "Targed: %1"
+
+#, fuzzy
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "Methu llwytho ffeil. '%1'"
+
+#, fuzzy
+#~| msgid "Find in Files"
+#~ msgid "Find in Files"
+#~ msgstr "Canfod mewn Ffeiliau"
+
+#, fuzzy
+#~ msgid "Process failed to start."
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~ msgid "Process crashed."
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#, fuzzy
+#~ msgid "Process timed out."
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#, fuzzy
+#~| msgid "Unknown error."
+#~ msgid "Unknown process error."
+#~ msgstr "Gwall anhysbys."
+
+#~ msgid "Find in Fi&les..."
+#~ msgstr "Canfod mew&n Ffeiliau ..."
+
+#, fuzzy
+#~| msgctxt "no version control system"
+#~| msgid "None"
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Dim"
+
+#, fuzzy
+#~ msgid "Create New Project"
+#~ msgstr "Cywaith Newydd"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "Cyffredinol"
+
+#, fuzzy
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "Project Wizard"
+#~ msgstr "Enw'r cywaith"
+
+#, fuzzy
+#~ msgid "Generate a new project from a template"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Import Existing Project..."
+#~ msgstr "Cyfeiriadur:"
+
+#, fuzzy
+#~ msgid "Could not initialize DVCS repository"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~ msgid "Could not add files to the DVCS repository"
+#~ msgstr "Methu Cyfieithu'r Testun Tarddiad"
+
+#, fuzzy
+#~ msgid "Could not import project into"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Could not checkout imported project"
+#~ msgstr "Methu llwytho ffeil. '%1'"
+
+#, fuzzy
+#~ msgid "Could not import project"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Could not create new project"
+#~ msgstr "Cywaith Newydd"
+
+#, fuzzy
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Agor Cywaith Diweddar"
+
+#, fuzzy
+#~ msgid "Please choose a project name."
+#~ msgstr "Agor Cywaith Diweddar"
+
+#, fuzzy
+#~ msgid "Project import error"
+#~ msgstr "Creu Patrymlun"
+
+#, fuzzy
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "Methu llwytho ffeil. '%1'"
+
+#, fuzzy
+#~ msgid "Invalid Location"
+#~ msgstr "Lleolia&d:"
+
+#, fuzzy
+#~ msgid "Empty project name"
+#~ msgstr "Rhowch eich Enw"
+
+#, fuzzy
+#~ msgid "Invalid project name"
+#~ msgstr "Creu Patrymlun"
+
+#, fuzzy
+#~ msgid "Invalid Project Template"
+#~ msgstr "Creu Patrymlun"
+
+#, fuzzy
+#~ msgid "Project Templates"
+#~ msgstr "Creu Patrymlun"
+
+#, fuzzy
+#~ msgid "Document View"
+#~ msgstr "Dogfenniaeth"
+
+#, fuzzy
+#~ msgid "Documents"
+#~ msgstr "Dogfenniaeth"
+
+#~ msgid "Disabled"
+#~ msgstr "Analluogir"
+
+#, fuzzy
+#~| msgid "Pointing Hand"
+#~ msgid "Pending (add)"
+#~ msgstr "Llaw sy'n Pwyntio"
+
+#, fuzzy
+#~| msgid "Pointing Hand"
+#~ msgid "Pending (clear)"
+#~ msgstr "Llaw sy'n Pwyntio"
+
+#, fuzzy
+#~| msgid "Pointing Hand"
+#~ msgid "Pending (modify)"
+#~ msgstr "Llaw sy'n Pwyntio"
+
+#~ msgid "Active"
+#~ msgstr "Gweithredol"
+
+#, fuzzy
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Modiwl"
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Internal error"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Invalid debugger command"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~| msgid "Receiver"
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Derbynnydd"
+
+#, fuzzy
+#~| msgid "Receiver"
+#~ msgid "Received signal"
+#~ msgstr "Derbynnydd"
+
+#, fuzzy
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr "&Neges:"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Warning"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~ msgid "Running program"
+#~ msgstr "Rhaglen"
+
+#, fuzzy
+#~ msgid "Could not run application"
+#~ msgstr "Cymhwysiannau Hysbys"
+
+#, fuzzy
+#~ msgid "Debugger error"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~ msgid "Debugger status"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~| msgid "Disable"
+#~ msgid "Disassemble View"
+#~ msgstr "Analluogi"
+
+#, fuzzy
+#~| msgid "Address"
+#~ msgid "Address"
+#~ msgstr "Cyfeiriad"
+
+#~ msgid "Function"
+#~ msgstr "Ffwythiant"
+
+#, fuzzy
+#~| msgid "set"
+#~ msgid "Offset"
+#~ msgstr "set"
+
+#, fuzzy
+#~ msgid "Instruction"
+#~ msgstr "&Lleoliad:"
+
+#, fuzzy
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Internal debugger error"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~ msgid "Could not start debugger"
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~| msgid "Break Layout"
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Torri'r Haenlun"
+
+#, fuzzy
+#~| msgid "New"
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Newydd"
+
+#, fuzzy
+#~| msgid "Do Not Overwrite"
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Peidio â Throsysgrifo"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Dyddiad"
+
+#, fuzzy
+#~ msgid "Show text"
+#~ msgstr "&Llwybr:"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "&Golygu..."
+
+#~ msgid "Disable"
+#~ msgstr "Analluogi"
+
+#, fuzzy
+#~ msgid "Delete"
+#~ msgstr "Dileu Tudalen"
+
+#, fuzzy
+#~| msgid "Disable"
+#~ msgid "Disable all"
+#~ msgstr "Analluogi"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Enable all"
+#~ msgstr "Galluogi"
+
+#, fuzzy
+#~ msgid "Delete all"
+#~ msgstr "Dileu Tudalen"
+
+#~ msgid "Enable"
+#~ msgstr "Galluogi"
+
+#, fuzzy
+#~ msgid "GDB Output"
+#~ msgstr "Allbwn"
+
+#, fuzzy
+#~| msgid "Copy To"
+#~ msgid "Copy All"
+#~ msgstr "Copïo I"
+
+#, fuzzy
+#~| msgid "Ignored"
+#~ msgid "Ignore"
+#~ msgstr "Anwybyddwyd"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Watches"
+#~ msgstr "Ysbeidiau"
+
+#, fuzzy
+#~ msgid "Recent"
+#~ msgstr "Ailosod"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgid "Debugger Variables"
+#~ msgstr "Newidyn"
+
+#, fuzzy
+#~ msgid "Recent Expressions"
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#~ msgid "Remove All"
+#~ msgstr "Gwaredu Popeth"
+
+#, fuzzy
+#~ msgid "Re-evaluate All"
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#, fuzzy
+#~ msgid "Format"
+#~ msgstr "Ffurflenni"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Natural"
+#~ msgstr "Â llaw"
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgid "Hexadecimal"
+#~ msgstr "Ymgom"
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgid "Decimal"
+#~ msgstr "Ymgom"
+
+#, fuzzy
+#~ msgid "Remember Value"
+#~ msgstr "Cofio &hidlenni:"
+
+#, fuzzy
+#~ msgid "Remove Watch Variable"
+#~ msgstr "newidyn"
+
+#, fuzzy
+#~ msgid "Watch Variable"
+#~ msgstr "newidyn"
+
+#, fuzzy
+#~ msgid "Reevaluate Expression"
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#, fuzzy
+#~ msgid "Remove Expression"
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#, fuzzy
+#~| msgid "Do Not Overwrite"
+#~ msgid "Data write breakpoint"
+#~ msgstr "Peidio â Throsysgrifo"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy Value"
+#~ msgstr "Gwerth"
+
+#, fuzzy
+#~| msgid "Invalid URL."
+#~ msgid "Invalid"
+#~ msgstr "URL annilys."
+
+#, fuzzy
+#~| msgid "Watch"
+#~ msgid "Watchpoint"
+#~ msgstr "Gwylio"
+
+#, fuzzy
+#~| msgid "Watch"
+#~ msgid "Read Watchpoint"
+#~ msgstr "Gwylio"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgid "Start"
+#~ msgstr "&Dechrau:"
+
+#, fuzzy
+#~| msgid "&Ant"
+#~ msgid "Amount"
+#~ msgstr "&Morgrugyn"
+
+#, fuzzy
+#~| msgid "Memory"
+#~ msgid "Memory view"
+#~ msgstr "Cof"
+
+#, fuzzy
+#~ msgid "Reload"
+#~ msgstr "Coch"
+
+#, fuzzy
+#~| msgid "Close project"
+#~ msgid "Close this view"
+#~ msgstr "Cau Cywaith"
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Special debugger views"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~| msgid "Break Layout"
+#~ msgid "Breakpoint"
+#~ msgstr "Torri'r Haenlun"
+
+#, fuzzy
+#~| msgid "Memory"
+#~ msgid " temporary"
+#~ msgstr "Cof"
+
+#, fuzzy
+#~| msgid "Enabled:"
+#~ msgid "Enabled"
+#~ msgstr "Alluogir :"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgid "Type"
+#~ msgstr "Math:"
+
+#~ msgid "Status"
+#~ msgstr "Cyflwr"
+
+#, fuzzy
+#~ msgid "Location"
+#~ msgstr "Lleolia&d:"
+
+#, fuzzy
+#~| msgid "Connection"
+#~ msgid "Condition"
+#~ msgstr "Cysylltiad"
+
+#, fuzzy
+#~| msgid "Ignored"
+#~ msgid "Ignore Count"
+#~ msgstr "Anwybyddwyd"
+
+#~ msgid "Hits"
+#~ msgstr "Trawiadau"
+
+#, fuzzy
+#~ msgid "Tracing"
+#~ msgstr "creu"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame"
+#~ msgstr "Enw"
+
+#, fuzzy
+#~ msgid "C++ Debugger"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~| msgid "Break Layout"
+#~ msgid "Breakpoints"
+#~ msgstr "Torri'r Haenlun"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgid "Variables"
+#~ msgstr "Newidyn"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame Stack"
+#~ msgstr "Enw"
+
+#, fuzzy
+#~| msgid "Disable"
+#~ msgid "Disassemble"
+#~ msgstr "Analluogi"
+
+#, fuzzy
+#~ msgid "Debug views"
+#~ msgstr "Eitem Newydd"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgid "&Start"
+#~ msgstr "&Dechrau:"
+
+#, fuzzy
+#~ msgid "Start in debugger"
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#~ msgid "&Restart"
+#~ msgstr "&Ail-gychwyn"
+
+#, fuzzy
+#~ msgid "Sto&p"
+#~ msgstr "&Aros"
+
+#, fuzzy
+#~ msgid "Stop debugger"
+#~ msgstr "Bar offer"
+
+#~ msgid "Interrupt"
+#~ msgstr "Ymyriad"
+
+#, fuzzy
+#~ msgid "Interrupt application"
+#~ msgstr "Cymhwysiannau Hysbys"
+
+#, fuzzy
+#~| msgid "Cursor"
+#~ msgid "Run to &Cursor"
+#~ msgstr "Cyrchydd"
+
+#, fuzzy
+#~| msgid "Cursor"
+#~ msgid "Run to cursor"
+#~ msgstr "Cyrchydd"
+
+#, fuzzy
+#~| msgid "Cursor"
+#~ msgid "Jump to cursor"
+#~ msgstr "Cyrchydd"
+
+#, fuzzy
+#~ msgid "Step over the next line"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Step over instruction"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Step into instruction"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~| msgid "Viewer"
+#~ msgid "Viewers"
+#~ msgstr "Gwelydd"
+
+#, fuzzy
+#~ msgid "Debugger viewers"
+#~ msgstr "Eitem Newydd"
+
+#, fuzzy
+#~| msgid "Scanning for files"
+#~ msgid "Examine core file"
+#~ msgstr "Syllu am Ffeiliau"
+
+#, fuzzy
+#~| msgid "Break Layout"
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Torri'r Haenlun"
+
+#, fuzzy
+#~| msgid "Break Layout"
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Torri'r Haenlun"
+
+#, fuzzy
+#~ msgid "Evaluate: %1"
+#~ msgstr "&Galluogi"
+
+#~ msgid "Watch: %1"
+#~ msgstr "Gwylio : %1"
+
+#, fuzzy
+#~| msgid "Scanning for files"
+#~ msgid "Examining core file %1"
+#~ msgstr "Syllu am Ffeiliau"
+
+#, fuzzy
+#~ msgid "Debugger"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Rhaglen"
+
+#, fuzzy
+#~| msgid "&Continue"
+#~ msgid "&Continue"
+#~ msgstr "&Parhau"
+
+#, fuzzy
+#~ msgid "Process exited"
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#~ msgid "Variable"
+#~ msgstr "Newidyn"
+
+#~ msgid "Value"
+#~ msgstr "Gwerth"
+
+#, fuzzy
+#~ msgid "CMake Manager"
+#~ msgstr "Ffeil wedi Newid"
+
+#, fuzzy
+#~ msgid "Create a folder called '%1'."
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~ msgid "Could not save the change."
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "Methu llwytho ffeil. '%1'"
+
+#~ msgid "Name"
+#~ msgstr "Enw"
+
+#, fuzzy
+#~ msgid "Comment"
+#~ msgstr "S&ylwad:"
+
+#, fuzzy
+#~ msgid "CMake process killed"
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "An error occurred"
+#~ msgstr "Digwyddodd gwall :"
+
+#~ msgid "Text"
+#~ msgstr "Testun"
+
+#~ msgid "Action"
+#~ msgstr "Gweithred"
+
+#, fuzzy
+#~| msgid "Change text"
+#~ msgid "Change"
+#~ msgstr "Newid y Testun"
+
+#, fuzzy
+#~| msgid "Unset"
+#~ msgid "Insert"
+#~ msgstr "Datosod"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "G&waredu"
+
+#, fuzzy
+#~| msgid "Custom &Variables"
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Newidynnau &Addasiedig..."
+
+#, fuzzy
+#~| msgid "&Target"
+#~ msgid "Build &Target"
+#~ msgstr "&Targed"
+
+#, fuzzy
+#~ msgid "Build target"
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~ msgid "Build this project"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Build this target"
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~ msgid "Build this directory"
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~ msgid "Parse QMake project files"
+#~ msgstr "Methu Cyfieithu'r Testun Tarddiad"
+
+#, fuzzy
+#~| msgid "Source"
+#~ msgid "source"
+#~ msgstr "Tarddiad"
+
+#, fuzzy
+#~| msgid "Storage"
+#~ msgid "coverage"
+#~ msgstr "Storfa"
+
+#, fuzzy
+#~ msgid "Cov verbose output"
+#~ msgstr "Crynhoydd"
+
+#, fuzzy
+#~| msgid "Storage"
+#~ msgid "Line Coverage:"
+#~ msgstr "Storfa"
+
+#, fuzzy
+#~| msgid "Table:"
+#~ msgid "Total SLOC:"
+#~ msgstr "Tabl:"
+
+#, fuzzy
+#~| msgid "&Connections:"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "C&ysylltiadau :"
+
+#, fuzzy
+#~ msgid "Coverage Report"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~| msgid "Restart"
+#~ msgid "Reset Data"
+#~ msgstr "Ail-gychwyn"
+
+#, fuzzy
+#~ msgid "CMake Builder"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "CMake: %1"
+#~ msgstr "Targed: %1"
+
+#, fuzzy
+#~ msgid "QMake Builder"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~ msgid "No project specified."
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "QMake: %1"
+#~ msgstr "Targed: %1"
+
+#, fuzzy
+#~ msgid "Make Builder"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~| msgid "Scaling"
+#~ msgid "compiling"
+#~ msgstr "Graddio"
+
+#, fuzzy
+#~| msgid "General Settings"
+#~ msgid "generating"
+#~ msgstr "Gosodiadau Cyffredinol"
+
+#, fuzzy
+#~| msgid "field"
+#~ msgid "built"
+#~ msgstr "maes"
+
+#~ msgid "installing"
+#~ msgstr "gosod"
+
+#~ msgid "creating"
+#~ msgstr "creu"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "Make: %1"
+#~ msgstr "Targed: %1"
+
+#, fuzzy
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind Output"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~ msgid "Valgrind"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "Open Valgrind Output"
+#~ msgstr "Methu canfod ein rhan."
+
+#, fuzzy
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "Methu canfod ein rhan."
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~ msgid "Valgrind communication error"
+#~ msgstr "Lleolia&d:"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Valgrind crashed."
+#~ msgstr "Aros"
+
+#, fuzzy
+#~ msgid "Valgrind Error"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "Valgrind process timed out."
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#, fuzzy
+#~| msgid "Operation aborted (process killed)."
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "Terfynnwyd y gwithrediad (lladdwyd y proses). "
+
+#, fuzzy
+#~| msgid "Operation aborted (process killed)."
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "Terfynnwyd y gwithrediad (lladdwyd y proses). "
+
+#, fuzzy
+#~| msgid "Unknown error."
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "Gwall anhysbys."
+
+#, fuzzy
+#~| msgid "Watch: %1"
+#~ msgid "at: %1"
+#~ msgstr "Gwylio : %1"
+
+#, fuzzy
+#~ msgid "by: %1"
+#~ msgstr "Ffeil: %1"
+
+#, fuzzy
+#~| msgid "Source"
+#~ msgid "Source"
+#~ msgstr "Tarddiad"
+
+#, fuzzy
+#~| msgid "Objects"
+#~ msgid "Object"
+#~ msgstr "Gwrthrychau"
+
+#, fuzzy
+#~ msgid "Property Editor"
+#~ msgstr "Priodwedd"
+
+#, fuzzy
+#~ msgid "Action Editor"
+#~ msgstr "Gweithred"
+
+#, fuzzy
+#~ msgid "Object Inspector"
+#~ msgstr "Agor Ffeil"
+
+#, fuzzy
+#~ msgid "Close Document"
+#~ msgstr "Dogfenniaeth"
+
+#~ msgid "Public"
+#~ msgstr "Cyhoeddus"
+
+#~ msgid "Protected"
+#~ msgstr "Gwarchodir"
+
+#, fuzzy
+#~| msgctxt "member access"
+#~| msgid "Private"
+#~ msgid "Private"
+#~ msgstr "Preivat"
+
+#~ msgid "Slot"
+#~ msgstr "Agen"
+
+#~ msgid "Signal"
+#~ msgstr "Arwydd"
+
+#, fuzzy
+#~| msgid "O&ptions"
+#~ msgid "C++ Options"
+#~ msgstr "De&wisiadau"
+
+#, fuzzy
+#~| msgid "P&ort:"
+#~ msgid "&Export:"
+#~ msgstr "&Porth:"
+
+#, fuzzy
+#~ msgid "&Macro:"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~ msgid "Tracing Configuration"
+#~ msgstr "Ffurfwedd :"
+
+#, fuzzy
+#~ msgid "Enable tracing"
+#~ msgstr "Galluogi"
+
+#, fuzzy
+#~ msgid "Expressions to print:"
+#~ msgstr "M&ynegiad:"
+
+#, fuzzy
+#~| msgid "Mid"
+#~ msgid "Pid"
+#~ msgstr "Canol"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgid "Stat"
+#~ msgstr "&Dechrau:"
+
+#, fuzzy
+#~| msgid "Tile"
+#~ msgid "Time"
+#~ msgstr "Teilio"
+
+#~ msgid "Command"
+#~ msgstr "Gorchymyn"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Rhedeg"
+
+#, fuzzy
+#~| msgid "Configuration:"
+#~ msgid "Debugger Configuration"
+#~ msgstr "Ffurfwedd :"
+
+#, fuzzy
+#~| msgid "Executable:"
+#~ msgid "Debugger executable:"
+#~ msgstr "Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "Executable:"
+#~ msgid "Gdb executable"
+#~ msgstr "Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "O&ptions"
+#~ msgid "Options"
+#~ msgstr "De&wisiadau"
+
+#, fuzzy
+#~ msgid "Add Profile"
+#~ msgstr "&Ychwanegu Ffeil..."
+
+#~ msgid "Description"
+#~ msgstr "Disgrifiad"
+
+#, fuzzy
+#~ msgid "Remove Profile"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "P&riodweddau"
+
+#, fuzzy
+#~ msgid "Derived properties:"
+#~ msgstr "&Priodweddau :"
+
+#, fuzzy
+#~ msgid "Own properties:"
+#~ msgstr "&Priodweddau :"
+
+#~ msgid "Enabled:"
+#~ msgstr "Alluogir :"
+
+#, fuzzy
+#~ msgid "Plugin Name"
+#~ msgstr "Ategyn"
+
+#~ msgid "Disabled:"
+#~ msgstr "Analluogir :"
+
+#, fuzzy
+#~ msgid "Available plugins:"
+#~ msgstr "&Gweithredoedd ar gael:"
+
+#, fuzzy
+#~ msgid "Generic Name"
+#~ msgstr "&Creu"
+
+#~ msgid "&Name:"
+#~ msgstr "&Enw:"
+
+#, fuzzy
+#~ msgid "&Generic name:"
+#~ msgstr "&Creu"
+
+#~ msgid "&Description:"
+#~ msgstr "&Disgrifiad:"
+
+#, fuzzy
+#~ msgid "Build Directory Creator"
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~ msgid "&Build Directory:"
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~ msgid "&Installation Prefix:"
+#~ msgstr "Arsefydlu"
+
+#, fuzzy
+#~ msgid "Build &type:"
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "release"
+#~ msgstr "Rhyddhad"
+
+#, fuzzy
+#~| msgid "Minimize"
+#~ msgid "MinSizeRel"
+#~ msgstr "Lleihau"
+
+#, fuzzy
+#~ msgid "Generator:"
+#~ msgstr "&Creu"
+
+#, fuzzy
+#~| msgid "&Label:"
+#~ msgid "TextLabel"
+#~ msgstr "&Label:"
+
+#, fuzzy
+#~ msgid "Cache Values"
+#~ msgstr "Gwerth"
+
+#, fuzzy
+#~ msgid "Comment:"
+#~ msgstr "S&ylwad:"
+
+#, fuzzy
+#~ msgid "CMake Directory"
+#~ msgstr "Cyfeiriadur"
+
+#~ msgid "Viewer"
+#~ msgstr "Gwelydd"
+
+#, fuzzy
+#~ msgid "Parse Tree"
+#~ msgstr "Dosrannu :"
+
+#, fuzzy
+#~ msgid "Value 1"
+#~ msgstr "Gwerth"
+
+#, fuzzy
+#~ msgid "Value 2"
+#~ msgstr "Gwerth"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Gol&ygon"
+
+#, fuzzy
+#~| msgid "Executable:"
+#~ msgid "Make executable:"
+#~ msgstr "Gweithredadwyn:"
+
+#, fuzzy
+#~ msgid "Active Environment Profile:"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~| msgid "&Pattern:"
+#~ msgid "Pattern:"
+#~ msgstr "&Patrwm:"
+
+#, fuzzy
+#~| msgid "&Template:"
+#~ msgid "Template:"
+#~ msgstr "&Patrymlun:"
+
+#, fuzzy
+#~| msgid "&Regular expression:"
+#~ msgid "Regular Expression:"
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#, fuzzy
+#~| msgid "C&ase sensitive"
+#~ msgid "Case Sensitive:"
+#~ msgstr "Mae llythrennau bach/mawr o &bwys"
+
+#, fuzzy
+#~ msgid "Directory:"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~ msgid "Recursive:"
+#~ msgstr "&Ymgylchol"
+
+#, fuzzy
+#~ msgid "Limit to project files:"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Files:"
+#~ msgstr "&Ffeiliau:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Exclude:"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~ msgid "&Directory:"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~ msgid "Choose directory to import"
+#~ msgstr "Adfer lleolia&dau:"
+
+#, fuzzy
+#~| msgid "&Method:"
+#~ msgid "&Fetch from:"
+#~ msgstr "&Dull:"
+
+#, fuzzy
+#~ msgid "Fetch &Module"
+#~ msgstr "Modiwl"
+
+#~ msgid "Project &name:"
+#~ msgstr "Enw'r cy&waith:"
+
+#, fuzzy
+#~| msgid "File System"
+#~ msgid "&Build System:"
+#~ msgstr "Cysawd Ffeiliau"
+
+#, fuzzy
+#~| msgid "&Make"
+#~ msgid "CMake"
+#~ msgstr "&Make"
+
+#, fuzzy
+#~| msgid "&Make"
+#~ msgid "QMake"
+#~ msgstr "&Make"
+
+#, fuzzy
+#~| msgid "Custom &Variables"
+#~ msgid "Custom Makefiles"
+#~ msgstr "Newidynnau &Addasiedig..."
+
+#, fuzzy
+#~| msgctxt "no version control system"
+#~| msgid "None"
+#~ msgid "None"
+#~ msgstr "Dim"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "Lleolia&d:"
+
+#, fuzzy
+#~ msgid "Application Name:"
+#~ msgstr "Cymhwysiad"
+
+#, fuzzy
+#~ msgid "Indentation"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~| msgid "Tab size"
+#~ msgid "Tabs"
+#~ msgstr "Maint tab"
+
+#, fuzzy
+#~| msgid "&Force"
+#~ msgid "Force tabs"
+#~ msgstr "&Gorfodi"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Spaces"
+#~ msgstr "Ysbeidiau"
+
+#, fuzzy
+#~| msgid "Index"
+#~ msgid "Indent"
+#~ msgstr "Mynegai"
+
+#, fuzzy
+#~ msgid "Blocks"
+#~ msgstr "&Yn ôl"
+
+#, fuzzy
+#~ msgid "Brackets"
+#~ msgstr "&Yn ôl"
+
+#, fuzzy
+#~| msgid "Classes"
+#~ msgid "Cases"
+#~ msgstr "Dosbarthiadau"
+
+#~ msgid "Class"
+#~ msgstr "Dosbarth"
+
+#, fuzzy
+#~| msgid "label"
+#~ msgid "Labels"
+#~ msgstr "label"
+
+#, fuzzy
+#~| msgid "Names"
+#~ msgid "Namespaces"
+#~ msgstr "Sylwadau"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Switches"
+#~ msgstr "Ysbeidiau"
+
+#, fuzzy
+#~| msgid "&Other"
+#~ msgid "Other"
+#~ msgstr "&Arall"
+
+#, fuzzy
+#~| msgctxt "no version control system"
+#~| msgid "None"
+#~ msgid "No change"
+#~ msgstr "Dim"
+
+#, fuzzy
+#~| msgid "&Attach"
+#~ msgid "Attach"
+#~ msgstr "&Atodi"
+
+#, fuzzy
+#~| msgid "Break Layout"
+#~ msgid "Break"
+#~ msgstr "Torri'r Haenlun"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#, fuzzy
+#~| msgid "&Break Layout"
+#~ msgid "&Break blocks"
+#~ msgstr "&Torri'r Haenlun"
+
+#~ msgid "Padding"
+#~ msgstr "Padio"
+
+#, fuzzy
+#~| msgid "Unnamed"
+#~ msgid "Unpad"
+#~ msgstr "Di-enw"
+
+#, fuzzy
+#~| msgid "Underline"
+#~ msgid "One liners"
+#~ msgstr "Tanlinellu"
+
+#~ msgid "&Executable:"
+#~ msgstr "&Gweithredadwyn:"
+
+#, fuzzy
+#~| msgid "&Parameters:"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "&Paramedrau:"
+
+#, fuzzy
+#~| msgid "S&ummary:"
+#~ msgid "Leak Summary:"
+#~ msgstr "C&rynodeb:"
+
+#, fuzzy
+#~| msgid "S&ummary:"
+#~ msgid "Summary"
+#~ msgstr "C&rynodeb:"
+
+#, fuzzy
+#~| msgid "Lower"
+#~ msgid "Low"
+#~ msgstr "Gostwng"
+
+#, fuzzy
+#~| msgid "Minimum"
+#~ msgid "Medium"
+#~ msgstr "Lleiafswm"
+
+#, fuzzy
+#~| msgid "height"
+#~ msgid "High"
+#~ msgstr "taldra"
+
+#, fuzzy
+#~ msgid "&Cachegrind"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "Ca&llgrind"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "&Helgrind"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~| msgid "Auto Synchronization"
+#~ msgid "Extra Synchronization Events:"
+#~ msgstr "Cydweddu Ymysgogol"
+
+#~ msgid "All"
+#~ msgstr "Popeth"
+
+#~ msgid "&Parameters:"
+#~ msgstr "&Paramedrau:"
+
+#~ msgid "E&xecutable:"
+#~ msgstr "G&weithredadwyn:"
+
+#, fuzzy
+#~ msgid "KCacheGrind"
+#~ msgstr "KCachegrind"
+
+#~ msgid "Executable:"
+#~ msgstr "Gweithredadwyn:"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "Ffurflenni"
+
+#, fuzzy
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~ msgid "Core"
+#~ msgstr "Sgôr"
+
+#, fuzzy
+#~| msgid "Global"
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "Eang"
+
+#~ msgid "Project"
+#~ msgstr "Cywaith"
+
+#, fuzzy
+#~ msgid "Core Plugins"
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~ msgid "Global Plugins"
+#~ msgstr "Ategion"
+
+#, fuzzy
+#~ msgid "Project Plugins"
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~ msgid "Enable Plugin"
+#~ msgstr "Galluogi"
+
+#, fuzzy
+#~ msgid "Disable Plugin"
+#~ msgstr "Analluogi"
+
+#~ msgid "&Open Project..."
+#~ msgstr "&Agor Cywaith..."
+
+#~ msgid "Open recent project"
+#~ msgstr "Agor Cywaith Diweddar"
+
+#~ msgid "C&lose Project"
+#~ msgstr "C&au Cywaith"
+
+#~ msgid "Close project"
+#~ msgstr "Cau Cywaith"
+
+#, fuzzy
+#~ msgid "Project &Options"
+#~ msgstr "Gosodiadau Cywaith"
+
+#~ msgid "Open Project"
+#~ msgstr "Agor Cywaith"
+
+#, fuzzy
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~ msgid "Check Test"
+#~ msgstr "Testun Newydd"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Ffurflenni"
+
+#, fuzzy
+#~ msgid "Valid Location"
+#~ msgstr "Lleolia&d:"
+
+#, fuzzy
+#~| msgid "unknown"
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "anhysbys"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "Forward Declaration"
+#~ msgstr "&Disgrifiad:"
+
+#, fuzzy
+#~ msgid "enumerator"
+#~ msgstr "&Creu"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "&Disgrifiad:"
+
+#, fuzzy
+#~| msgid "&Continue"
+#~ msgid "Container: "
+#~ msgstr "&Parhau"
+
+#, fuzzy
+#~| msgid "Score"
+#~ msgid "Scope: "
+#~ msgstr "Sgôr"
+
+#, fuzzy
+#~| msgid "&Access:"
+#~ msgid "Access: "
+#~ msgstr "&Cyrchiad:"
+
+#, fuzzy
+#~| msgid "&Find:"
+#~ msgid "Kind: "
+#~ msgstr "&Canfod:"
+
+#, fuzzy
+#~| msgid "&Modified:"
+#~ msgid "Modifiers: "
+#~ msgstr "&Newidwyd:"
+
+#, fuzzy
+#~ msgid "Decl.: "
+#~ msgstr "Disgrifiad:"
+
+#, fuzzy
+#~ msgid " Def.: "
+#~ msgstr "Disgrifiad:"
+
+#, fuzzy
+#~ msgid " Decl.: "
+#~ msgstr "Disgrifiad:"
+
+#, fuzzy
+#~| msgid "&Results"
+#~ msgid "Result"
+#~ msgstr "&Canlyniadau"
+
+#~ msgid "Message"
+#~ msgstr "Neges"
+
+#, fuzzy
+#~| msgid "File name:"
+#~ msgid "File Name"
+#~ msgstr "Enw'r ffeil:"
+
+#, fuzzy
+#~ msgid "Maintainer"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~| msgid "&Style"
+#~ msgid "Style"
+#~ msgstr "A&rddull"
+
+#~ msgid "Preview"
+#~ msgstr "Rhagolwg"
+
+#, fuzzy
+#~ msgid "&Reformat Source"
+#~ msgstr "&Tarddiad"
+
+#, fuzzy
+#~ msgid "Format files"
+#~ msgstr "Ffurflenni"
+
+#, fuzzy
+#~ msgid "Unable to read %1"
+#~ msgstr "Ffeiliau i'w llwytho"
+
+#, fuzzy
+#~ msgid "Unable to write to %1"
+#~ msgstr "Ffeiliau i'w llwytho"
+
+#~ msgid "Custom"
+#~ msgstr "Addasiedig"
+
+#, fuzzy
+#~| msgid "&Delete Item"
+#~ msgid "Delete style"
+#~ msgstr "&Dileu Eitem"
+
+#, fuzzy
+#~| msgid "New title"
+#~ msgid "New style"
+#~ msgstr "Teitl newydd"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgid "Custom Style"
+#~ msgstr "Addasiedig"
+
+#, fuzzy
+#~| msgid "&Run"
+#~ msgid "QxRunner"
+#~ msgstr "R&hedeg"
+
+#, fuzzy
+#~ msgid "S&top"
+#~ msgstr "&Aros"
+
+#~ msgid "Select &All"
+#~ msgstr "Dewis Pope&th"
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgid "&Unselect All"
+#~ msgstr "Dewis Pope&th"
+
+#, fuzzy
+#~| msgid "&Ant"
+#~ msgid "&About"
+#~ msgstr "&Morgrugyn"
+
+#, fuzzy
+#~| msgid "Exit"
+#~ msgid "E&xit"
+#~ msgstr "Terfynu"
+
+#, fuzzy
+#~| msgid "Close &All"
+#~ msgid "&Collapse All"
+#~ msgstr "Cau'r &Cwbl"
+
+#, fuzzy
+#~| msgid "Expand &Vertically"
+#~ msgid "&Expand All"
+#~ msgstr "Ehangu'n &Fertigol"
+
+#, fuzzy
+#~| msgid "Co&lumns"
+#~ msgid "C&olumns..."
+#~ msgstr "Co&lofnau"
+
+#~ msgid "&Results"
+#~ msgstr "&Canlyniadau"
+
+#, fuzzy
+#~ msgid "&Settings..."
+#~ msgstr "Gosodiadau"
+
+#, fuzzy
+#~| msgid "Tool&bars"
+#~ msgid "&Toolbars"
+#~ msgstr "Barr&au Offer:"
+
+#, fuzzy
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "Rhedeg"
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#, fuzzy
+#~| msgid "Icons"
+#~ msgid "seconds"
+#~ msgstr "Eiconau"
+
+#, fuzzy
+#~| msgid "&Selected:"
+#~ msgid "Selected:"
+#~ msgstr "&Wedi'u dewis:"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Run:"
+#~ msgstr "Rhedeg"
+
+#, fuzzy
+#~| msgid "&Access:"
+#~ msgid "Success"
+#~ msgstr "&Cyrchiad:"
+
+#, fuzzy
+#~| msgid "E&xceptions "
+#~ msgid "Exceptions"
+#~ msgstr "Eit&hriadau "
+
+#, fuzzy
+#~| msgid "False"
+#~ msgid "Fatals"
+#~ msgstr "Ffug"
+
+#~ msgid "Errors"
+#~ msgstr "Gwallau"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Warnings"
+#~ msgstr "Aros"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "Infos"
+#~ msgstr "Gwybo"
+
+#, fuzzy
+#~| msgid "Save All"
+#~ msgid "Save"
+#~ msgstr "Cadw Popeth"
+
+#, fuzzy
+#~| msgid "C&lose"
+#~ msgid "Close"
+#~ msgstr "C&au"
+
+#, fuzzy
+#~| msgid "File to open"
+#~ msgid "Failed to comply."
+#~ msgstr "Ffeil i agor"
+
+#, fuzzy
+#~ msgid "Select a project in the qtest view."
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "&Directory"
+#~ msgstr "Cyfeiriadur"
+
+#, fuzzy
+#~| msgid "&Results"
+#~ msgid "Results"
+#~ msgstr "&Canlyniadau"
+
+#, fuzzy
+#~| msgid "S&ummary:"
+#~ msgid "dummy"
+#~ msgstr "C&rynodeb:"
+
+#, fuzzy
+#~ msgid "Stopping..."
+#~ msgstr "Creu ..."
+
+#, fuzzy
+#~| msgid "Delete Item"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Dileu Eitem"
+
+#, fuzzy
+#~| msgid "Delete Item"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Dileu Eitem"
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "StatusWidget"
+#~ msgstr "Cyflwr"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "Cywaith"
+
+#, fuzzy
+#~ msgid "&Evaluate"
+#~ msgstr "&Galluogi"
+
+#~ msgid "&Watch"
+#~ msgstr "&Gwylio"
+
+#, fuzzy
+#~ msgid "Evaluate the expression."
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#, fuzzy
+#~ msgid "F&orm"
+#~ msgstr "Ffurflenni"
+
+#~ msgid "Extra Toolbar"
+#~ msgstr "Bar Offer Ychwanegol"
+
+#, fuzzy
+#~ msgid "No such file or directory."
+#~ msgstr "&Cyfeiriadur:"
+
+#, fuzzy
+#~| msgid "local"
+#~ msgid "Locals"
+#~ msgstr "lleol"
+
+#~ msgid "Watch"
+#~ msgstr "Gwylio"
+
+#, fuzzy
+#~ msgid "Alt+M"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Alt+N"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Alt+I"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~| msgid "File %1 already exists"
+#~ msgid "Project file already exists."
+#~ msgstr "Ffeil yn Bodoli'n Barod %1"
+
+#, fuzzy
+#~| msgid "KScript Error"
+#~ msgid "Imports"
+#~ msgstr "Gwall KScript"
+
+#, fuzzy
+#~| msgid "KScript Error"
+#~ msgid "Importers"
+#~ msgstr "Gwall KScript"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgctxt "To start something"
+#~ msgid "Start"
+#~ msgstr "&Dechrau:"
+
+#, fuzzy
+#~ msgid "Rebuild the project?"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Continuing program"
+#~ msgstr "Rhaglen"
+
+#, fuzzy
+#~ msgid "Code View"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Mode"
+#~ msgstr "Modiwl"
+
+#, fuzzy
+#~ msgctxt "Current View"
+#~ msgid "&Current"
+#~ msgstr "Cyfredol"
+
+#, fuzzy
+#~ msgctxt "Normalize View"
+#~ msgid "&Normalize"
+#~ msgstr "Modd Arferol"
+
+#, fuzzy
+#~ msgctxt "Aggregate View"
+#~ msgid "&Aggregate"
+#~ msgstr "C&reu"
+
+#, fuzzy
+#~ msgid "Filter"
+#~ msgstr "Ffeil: %1"
+
+#, fuzzy
+#~| msgid "default"
+#~ msgid "debugfull"
+#~ msgstr "rhagosodiad"
+
+#, fuzzy
+#~| msgid "Acce&ss:"
+#~ msgid "Scope: %1<br />"
+#~ msgstr "Cyr&chiad:"
+
+#, fuzzy
+#~| msgid "Acce&ss:"
+#~ msgid "Access: %1<br />"
+#~ msgstr "Cyr&chiad:"
+
+#, fuzzy
+#~| msgid "Acce&ss:"
+#~ msgid "Kind: %1<br />"
+#~ msgstr "Cyr&chiad:"
+
+#, fuzzy
+#~| msgid "Acce&ss:"
+#~ msgid "Modifiers: %1<br />"
+#~ msgstr "Cyr&chiad:"
+
+#, fuzzy
+#~| msgid "Internet"
+#~ msgid "isInternal"
+#~ msgstr "Rhyngrwyd"
+
+#, fuzzy
+#~ msgid "Form2"
+#~ msgstr "Ffurf1"
+
+#~ msgid "Search Results"
+#~ msgstr "Canlyniadau Chwilio"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "&Rhyngwyneb"
+
+#, fuzzy
+#~| msgid "&Vertical"
+#~ msgid "Vertical Tabs:"
+#~ msgstr "&Fertigol"
+
+#, fuzzy
+#~| msgid "Switch Left Dock"
+#~ msgid "LeftDock"
+#~ msgstr "Newid y Doc ar y Chwith"
+
+#, fuzzy
+#~| msgid "Dock"
+#~ msgid "TopDock"
+#~ msgstr "Doc"
+
+#, fuzzy
+#~| msgid "Switch Right Dock"
+#~ msgid "RightDock"
+#~ msgstr "Newid y Doc ar y Dde"
+
+#, fuzzy
+#~| msgid "Switch Bottom Dock"
+#~ msgid "BottomDock"
+#~ msgstr "Newid y Doc wrth y Gwaelod"
+
+#, fuzzy
+#~ msgid "Revision A:"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "Revision B:"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "&Repository:"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~ msgid "Mo&dule:"
+#~ msgstr "Modiwl"
+
+#, fuzzy
+#~| msgid "Ve&ndor:"
+#~ msgid "&Vendor tag:"
+#~ msgstr "Gw&erthwr :"
+
+#~ msgid "vendor"
+#~ msgstr "gwerthwr"
+
+#, fuzzy
+#~ msgid "Re&lease tag:"
+#~ msgstr "R&hyddhâd:"
+
+#~ msgid "start"
+#~ msgstr "dechrau"
+
+#, fuzzy
+#~ msgid "Commit to Repository"
+#~ msgstr "&Adfer"
+
+#~ msgid "Editors"
+#~ msgstr "Golygyddion"
+
+#, fuzzy
+#~| msgid "Long"
+#~ msgid "Log"
+#~ msgstr "Hir"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgid "GroupBox"
+#~ msgstr "Gr?p"
+
+#, fuzzy
+#~ msgid "&Subversion"
+#~ msgstr "Fe&rsiwn:"
+
+#, fuzzy
+#~ msgid "Non recursive"
+#~ msgstr "&Ymgylchol"
+
+#, fuzzy
+#~ msgid "Login for"
+#~ msgstr "&Edrych am:"
+
+#~ msgid "Password"
+#~ msgstr "Cyfrinair"
+
+#, fuzzy
+#~ msgid "Save Password"
+#~ msgstr "Cyfrinair"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Files to commit"
+#~ msgstr "Ffeiliau i'w llwytho"
+
+#, fuzzy
+#~ msgid "Alt+K"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "C&ancel"
+#~ msgstr "&Rhaeadr"
+
+#, fuzzy
+#~ msgid "Ignore external entries"
+#~ msgstr "Gwall Mewnol"
+
+#, fuzzy
+#~ msgid "Select Revision"
+#~ msgstr "Gweithredoedd d&ewisiedig:"
+
+#~ msgid "Item"
+#~ msgstr "Eitem"
+
+#, fuzzy
+#~ msgid "Accept"
+#~ msgstr "Cyrchiad"
+
+#, fuzzy
+#~ msgid "Annotate Type"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~ msgid "Repository Annotation"
+#~ msgstr "Adfer lleolia&dau:"
+
+#, fuzzy
+#~ msgid "Log Type"
+#~ msgstr "Math"
+
+#, fuzzy
+#~ msgid "Repository History"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~ msgid "Local server"
+#~ msgstr "Cywaith Newydd"
+
+#, fuzzy
+#~| msgid "&Connections:"
+#~ msgid "Connected clients:"
+#~ msgstr "C&ysylltiadau :"
+
+#, fuzzy
+#~| msgid "Never"
+#~ msgid "Servers"
+#~ msgstr "Byth"
+
+#, fuzzy
+#~| msgid "&Available:"
+#~ msgid "Available:"
+#~ msgstr "&Ar gael:"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgid "Messaging"
+#~ msgstr "Neges"
+
+#, fuzzy
+#~| msgid "Preferences"
+#~ msgid "Reference:"
+#~ msgstr "Hoffterau"
+
+#, fuzzy
+#~| msgid "Clean"
+#~ msgid "Clear"
+#~ msgstr "Glan"
+
+#, fuzzy
+#~| msgid "Local"
+#~ msgid "Local state"
+#~ msgstr "Lleol"
+
+#~ msgid "Messages"
+#~ msgstr "Negeseuon"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgid "All Users"
+#~ msgstr "Pob Ffeil"
+
+#, fuzzy
+#~ msgid "History"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~ msgid "Enable Collaboration"
+#~ msgstr "Galluogi"
+
+#, fuzzy
+#~| msgid "Find"
+#~ msgid "Finish"
+#~ msgstr "Canfod:"
+
+#, fuzzy
+#~| msgid "Tile"
+#~ msgid "Tail"
+#~ msgstr "Teilio"
+
+#, fuzzy
+#~| msgid "&Replacement text:"
+#~ msgid "replacement-text"
+#~ msgstr "&Testun amnewid:"
+
+#, fuzzy
+#~ msgid "Edit Patch"
+#~ msgstr "Golygu..."
+
+#, fuzzy
+#~ msgid "To File"
+#~ msgstr "Gwaredu Ffeil"
+
+#, fuzzy
+#~| msgid "Previous"
+#~ msgid "Previous Hunk"
+#~ msgstr "Cynt"
+
+#, fuzzy
+#~| msgid "Next"
+#~ msgid "Next Hunk"
+#~ msgstr "Nesaf"
+
+#, fuzzy
+#~| msgid "&Author:"
+#~ msgid "Author:"
+#~ msgstr "Aw&dur:"
+
+#, fuzzy
+#~| msgid "Delete item"
+#~ msgid "Determine"
+#~ msgstr " Dileu eitem"
+
+#, fuzzy
+#~| msgctxt "the beginning"
+#~| msgid "Start:"
+#~ msgid "State:"
+#~ msgstr "Cychwyn:"
+
+#, fuzzy
+#~| msgid "&Dependencies"
+#~ msgid "Dependencies:"
+#~ msgstr "&Dibyniaethau"
+
+#, fuzzy
+#~| msgid "C&lose"
+#~ msgid "Choose"
+#~ msgstr "C&au"
+
+#, fuzzy
+#~| msgid "Shadow"
+#~ msgid "Show"
+#~ msgstr "Cysgod"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Manage Patches"
+#~ msgstr "Ysbeidiau"
+
+#, fuzzy
+#~| msgid "A&vailable actions:"
+#~ msgid "Available patches:"
+#~ msgstr "&Gweithredoedd ar gael:"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "position"
+#~ msgstr "Cyflwr"
+
+#, fuzzy
+#~| msgid "Preferences"
+#~ msgid "referenceType"
+#~ msgstr "Hoffterau"
+
+#, fuzzy
+#~ msgid "From:"
+#~ msgstr "Ffurflenni"
+
+#, fuzzy
+#~ msgid "Until:"
+#~ msgstr "Teitl"
+
+#, fuzzy
+#~ msgid "Context:"
+#~ msgstr " Dileu eitem"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgid "Internal Message"
+#~ msgstr "Neges"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgid "actions"
+#~ msgstr "Gweithredoedd"
+
+#, fuzzy
+#~ msgid "Menu"
+#~ msgstr "Canfod Testun"
+
+#, fuzzy
+#~| msgid "Email:"
+#~ msgid "E-Mail"
+#~ msgstr "Ebost:"
+
+#, fuzzy
+#~| msgctxt "To start something"
+#~| msgid "Start"
+#~ msgid "State"
+#~ msgstr "Dechrau"
+
+#, fuzzy
+#~| msgid "Light"
+#~ msgid "Rights"
+#~ msgstr "Golau"
+
+#~ msgid "Direction"
+#~ msgstr "Cyfeiriad:"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Name:"
+#~ msgstr "Enw:"
+
+#, fuzzy
+#~ msgid "Edit Snippet"
+#~ msgstr "Golygydd"
+
+#, fuzzy
+#~ msgid "Snippet"
+#~ msgstr "Sgript"
+
+#, fuzzy
+#~ msgid "New Location"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~ msgid "Variable Substitution"
+#~ msgstr "Newidynnau"
+
+#, fuzzy
+#~ msgid "Apply filter"
+#~ msgstr "Gweithredu'r hidlen ddiwethaf (\"%1\")"
+
+#, fuzzy
+#~ msgid "Select Tool View to Add"
+#~ msgstr "Golwg Offer Nesaf"
+
+#, fuzzy
+#~ msgid "Configure %1"
+#~ msgstr "Ffurf&wedd"
+
+#, fuzzy
+#~ msgid "Lets you customize %1."
+#~ msgstr "Gadael i chi ffurfweddu bariau offer."
+
+#, fuzzy
+#~ msgid "Show &Statusbar"
+#~ msgstr "Dangos bar cyflwr"
+
+#~ msgid "Show statusbar"
+#~ msgstr "Dangos bar cyflwr"
+
+#~ msgid "Lets you configure shortcut keys."
+#~ msgstr "Gadael i chi ffurfweddu bysellau byrlwybr."
+
+#~ msgid "Lets you configure toolbars."
+#~ msgstr "Gadael i chi ffurfweddu bariau offer."
+
+#, fuzzy
+#~ msgid "&New Window"
+#~ msgstr "&Ffenestr"
+
+#, fuzzy
+#~ msgid "New Window"
+#~ msgstr "Ffenestr"
+
+#~ msgid "Split Horizontal"
+#~ msgstr "Hollti'n Lorweddol"
+
+#~ msgid "Split Vertical"
+#~ msgstr "Hollti'n Fertigol"
+
+#, fuzzy
+#~ msgid "&New File"
+#~ msgstr "Ffeil newydd"
+
+#~ msgid "New File"
+#~ msgstr "Ffeil newydd"
+
+#, fuzzy
+#~ msgid "&Close File"
+#~ msgstr "Cau Popeth"
+
+#, fuzzy
+#~ msgid "Close File"
+#~ msgstr "Cau Popeth"
+
+#, fuzzy
+#~ msgid "&Add Tool View..."
+#~ msgstr "&Ychwanegu Ffeil..."
+
+#, fuzzy
+#~ msgid "Add Tool View"
+#~ msgstr "Golygfeydd &Offer"
+
+#, fuzzy
+#~ msgid "Reopen the current project?"
+#~ msgstr "Agor Cywaith Diweddar"
+
+#, fuzzy
+#~ msgid "Document is Modified"
+#~ msgstr "Dogfen i'w hagor"
+
+#, fuzzy
+#~ msgid "Document Externally Modified"
+#~ msgstr "Dogfen i'w hagor"
+
+#, fuzzy
+#~| msgid "Search engine"
+#~ msgid "Machine"
+#~ msgstr "Peiriant Chwilio"
+
+#, fuzzy
+#~ msgid "Repository"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~| msgid "Show"
+#~ msgid "Show log"
+#~ msgstr "Dangos"
+
+#, fuzzy
+#~ msgid "Show differences..."
+#~ msgstr "Hoffterau"
+
+#~ msgid "Edit..."
+#~ msgstr "Golygu..."
+
+#, fuzzy
+#~ msgid "Unedit..."
+#~ msgstr "Datosod"
+
+#, fuzzy
+#~ msgid "Show Editors..."
+#~ msgstr "Golygydd"
+
+#, fuzzy
+#~ msgid "Add Files..."
+#~ msgstr "Ychwanegu Ffeil"
+
+#, fuzzy
+#~| msgid "Customize..."
+#~ msgid "Commit Files..."
+#~ msgstr "Addasu..."
+
+#, fuzzy
+#~ msgid "Update Files..."
+#~ msgstr "Diweddaru"
+
+#, fuzzy
+#~ msgid "Annotate..."
+#~ msgstr "Cysylltiad"
+
+#, fuzzy
+#~| msgid "Customize..."
+#~ msgid "Checkout..."
+#~ msgstr "Addasu..."
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "Status..."
+#~ msgstr "Cyflwr"
+
+#, fuzzy
+#~ msgid "Annotate"
+#~ msgstr "Lleoliad"
+
+#~ msgid "Diff"
+#~ msgstr "Diff"
+
+#, fuzzy
+#~ msgid "Unedit Files"
+#~ msgstr "Canfod mewn Ffeiliau"
+
+#, fuzzy
+#~| msgid "&Next Error"
+#~ msgid "Checkout Error"
+#~ msgstr "&Gwall Nesaf"
+
+#, fuzzy
+#~ msgid "Revision"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "Added %1"
+#~ msgstr "Ychwanegu %1"
+
+#, fuzzy
+#~ msgid "Deleted %1"
+#~ msgstr "Dileu Tudalen"
+
+#, fuzzy
+#~ msgid "Updated %1"
+#~ msgstr "Diweddaru"
+
+#, fuzzy
+#~ msgid "Revision %1"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "Updating externals: %1"
+#~ msgstr "Patrwm: %1"
+
+#, fuzzy
+#~| msgid "Loading: %1"
+#~ msgid "Sending %1"
+#~ msgstr "llwytho : %1"
+
+#, fuzzy
+#~ msgid "Adding mimetype %1. %2"
+#~ msgstr "&Ychwanegu Ffeil..."
+
+#, fuzzy
+#~ msgid "Adding %1."
+#~ msgstr "&Ychwanegu Ffeil..."
+
+#, fuzzy
+#~ msgid "Deleting %1."
+#~ msgstr "Disgrifiad:"
+
+#, fuzzy
+#~ msgid "Copied %1"
+#~ msgstr "Ffurf&wedd"
+
+#, fuzzy
+#~| msgid "Customize..."
+#~ msgid "Committed"
+#~ msgstr "Addasu..."
+
+#, fuzzy
+#~ msgid "Add to version control..."
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "Remove from repository..."
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~ msgid "Update to..."
+#~ msgstr "Diweddaru"
+
+#, fuzzy
+#~ msgid "Log View"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Blame (Annotate)"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~ msgid "Update"
+#~ msgstr "Diweddaru"
+
+#, fuzzy
+#~| msgid "Customize..."
+#~ msgid "Commit..."
+#~ msgstr "Addasu..."
+
+#, fuzzy
+#~ msgid "Remove from version control"
+#~ msgstr "Fersiwn %1"
+
+#, fuzzy
+#~ msgid "Other unknown failures"
+#~ msgstr "Eraill"
+
+#, fuzzy
+#~ msgid "Subversion Import"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Subversion"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "subversion"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Subversion Notification"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Log History"
+#~ msgstr "&Adfer"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Blame"
+#~ msgstr "Enw"
+
+#, fuzzy
+#~| msgid "Port"
+#~ msgid " Abort"
+#~ msgstr "Porth"
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid "Destination:"
+#~ msgstr "Disgrifiad:"
+
+#, fuzzy
+#~| msgid "&Properties:"
+#~ msgid "Progress:"
+#~ msgstr "&Priodweddau :"
+
+#~ msgid "Line"
+#~ msgstr "Llinell"
+
+#, fuzzy
+#~ msgid "Rev"
+#~ msgstr "Dychwelyd"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Awdur:"
+
+#, fuzzy
+#~ msgid "Contents"
+#~ msgstr "Cysylltu"
+
+#, fuzzy
+#~ msgid "Project Overview"
+#~ msgstr "&Ffeil y cywaith:"
+
+#, fuzzy
+#~ msgid "Project Details"
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~ msgid "Project Manager"
+#~ msgstr "Rheolydd Prosiect"
+
+#, fuzzy
+#~ msgid "Build Selected Project"
+#~ msgstr "&Ffeil y cywaith:"
+
+#~ msgid "File: %1"
+#~ msgstr "Ffeil: %1"
+
+#, fuzzy
+#~ msgid "Could not parse diff output."
+#~ msgstr "Methu canfod ein rhan."
+
+#, fuzzy
+#~ msgid "New Folder"
+#~ msgstr "Ffeil newydd"
+
+#, fuzzy
+#~ msgid "New Folder..."
+#~ msgstr "Ffeil newydd ..."
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~ msgid "Snippets"
+#~ msgstr "S&griptiau"
+
+#, fuzzy
+#~ msgid "Add Repository"
+#~ msgstr "&Adfer"
+
+#~ msgid "Sync"
+#~ msgstr "Cydweddu"
+
+#, fuzzy
+#~ msgid "Add Snippet"
+#~ msgstr "Ychwanegu eitem"
+
+#, fuzzy
+#~ msgid "Hide"
+#~ msgstr "Cuddio %1"
+
+#, fuzzy
+#~ msgid "Create a new subrepository"
+#~ msgstr "Creu Patrymlun"
+
+#, fuzzy
+#~ msgid "DUChain Viewer"
+#~ msgstr "Gwelydd"
+
+#, fuzzy
+#~ msgid "Top level context"
+#~ msgstr "&Modd Gwastad Uchaf"
+
+#, fuzzy
+#~ msgid "Definition: %1"
+#~ msgstr "Cyrchfan:"
+
+#, fuzzy
+#~ msgid "Unknown object!"
+#~ msgstr "Gwall anhysbys"
+
+#~ msgid "&Stop"
+#~ msgstr "&Aros"
+
+#, fuzzy
+#~ msgid "KDevelop GUI Builder"
+#~ msgstr "Datblygwr"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "Lleolia&d:"
+
+#, fuzzy
+#~ msgid "Subversion Update"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Subversion Logview"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Subversion Blame"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Subversion Status"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Subversion Difference"
+#~ msgstr "Fersiwn"
+
+#, fuzzy
+#~ msgid "Standard"
+#~ msgstr "Wyn&ebfath safonol: "
+
+#, fuzzy
+#~ msgid "Global Project"
+#~ msgstr "C&au Cywaith"
+
+#~ msgid "Could Not Open File"
+#~ msgstr "Methwyd agor y ffeil"
+
+#~ msgid "What Do You Want to Do?"
+#~ msgstr "Beth hoffech chi ei wneud?"
+
+#, fuzzy
+#~ msgid "Docked Window"
+#~ msgstr "Ffenestr"
+
+#~ msgid "Version:"
+#~ msgstr "Fersiwn :"
+
+#~ msgid "Value:"
+#~ msgstr "Gwerth:"
+
+#~ msgid "Duplicate Tab"
+#~ msgstr "Dyblygu Tab"
+
+#~ msgid "Forward"
+#~ msgstr "Ymlaen"
+
+#~ msgid "Open in New Tab"
+#~ msgstr "Agor mewn Tab Newydd"
+
+#~ msgid "Save &All"
+#~ msgstr "Cadw &Popeth"
+
+#, fuzzy
+#~ msgid "'%1' is not an absolute path."
+#~ msgstr "Nid yw'r ffeil '%1' yn ddarllenadwy"
+
+#, fuzzy
+#~ msgid "'%1' is not a relative path."
+#~ msgstr "Nid yw'r ffeil '%1' yn ddarllenadwy"
+
+#, fuzzy
+#~ msgid "'%1' is not a directory."
+#~ msgstr "Nid yw'r ffeil '%1' yn ddarllenadwy"
+
+#~ msgid "Set as Default"
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#~ msgid "Open File"
+#~ msgstr "Agor Ffeil"
+
+#~ msgid " Line: %1 Col: %2 "
+#~ msgstr "Llinell: %1 Col: %2"
+
+#, fuzzy
+#~ msgid "KWrite"
+#~ msgstr "Preivat"
+
+#, fuzzy
+#~ msgid "Core Developer"
+#~ msgstr "Datblygwr"
+
+#, fuzzy
+#~ msgid "Former Core Developer"
+#~ msgstr "Datblygwr"
+
+#, fuzzy
+#~ msgid "Patches and more"
+#~ msgstr "Ysbeidiau"
+
+#, fuzzy
+#~ msgid "Highlighting for VHDL"
+#~ msgstr "Amlygu"
+
+#, fuzzy
+#~ msgid "Highlighting for SQL"
+#~ msgstr "Amlygu"
+
+#~ msgid "&Move"
+#~ msgstr "Sy&mud"
+
+#~ msgid "C&ustom"
+#~ msgstr "&Addasiedig"
+
+#~ msgid "Background color:"
+#~ msgstr "Lliw'r cefndir:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Lliw blaendir:"
+
+#, fuzzy
+#~ msgid "<qt><h3>Project Settings</h3></qt>"
+#~ msgstr "Gosodiadau Cywaith"
+
+#, fuzzy
+#~ msgid "Alt+W"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Very Short"
+#~ msgstr "&Byr"
+
+#~ msgid "Short"
+#~ msgstr "Byr"
+
+#, fuzzy
+#~ msgid "Alt+V"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Alt+D"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Alt+G"
+#~ msgstr "Alt+1"
+
+#~ msgid "&Other:"
+#~ msgstr "&Arall :"
+
+#, fuzzy
+#~ msgid "Alt+O"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Use &KDE setting"
+#~ msgstr "Ffeil yn Bodoli"
+
+#~ msgid "&Whole words only"
+#~ msgstr "D&im ond geiriau cyfan"
+
+#~ msgid "Regular e&xpression:"
+#~ msgstr "Mynegiad &rheolaidd :"
+
+#~ msgid "A&ll files"
+#~ msgstr "P&ob Ffeil"
+
+#~ msgid "&Text to find:"
+#~ msgstr "&Testun i ganfod:"
+
+#~ msgid "External Tools"
+#~ msgstr "Offer Allanol"
+
+#~ msgid "&Add..."
+#~ msgstr "Ychw&anegu..."
+
+#~ msgid "&Never"
+#~ msgstr "&Byth"
+
+#~ msgid "&Always"
+#~ msgstr "&Bob tro"
+
+#~ msgid "First Page"
+#~ msgstr "Tudalen Gyntaf"
+
+#~ msgid "Page One Options"
+#~ msgstr "Dewisiadau'r Dudalen Gyntaf"
+
+#~ msgid "Second Page"
+#~ msgstr "Ail Dudalen"
+
+#~ msgid "Page Two Options"
+#~ msgstr "Dewisiadau'r Ail Dudalen"
+
+#~ msgid "Add something here"
+#~ msgstr "Ychwanegwch rywbeth yma"
+
+#~ msgid "Open Location"
+#~ msgstr "Agor Lleoliad"
+
+#~ msgid "A KDE KPart Application"
+#~ msgstr "Cymhwysiad KPart KDE"
+
+#~ msgid "Insert Hello World"
+#~ msgstr "Mewnosod Bore Da, Byd!"
+
+#, fuzzy
+#~ msgid "Do something"
+#~ msgstr "Ychwanegwch rywbeth yma"
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
+
+#~ msgid "Cannot Translate Source"
+#~ msgstr "Methu Cyfieithu'r Testun Tarddiad"
+
+#~ msgid "The URL you entered is not valid, please correct it and try again"
+#~ msgstr "Nid yw'r URL a fewnosodwyd yn ddilys; cywirwch fo a ceisiwch eto"
+
+#~ msgid "Items"
+#~ msgstr "Eitemau"
+
+#~ msgid "Size"
+#~ msgstr "Maint"
+
+#~ msgid "This shows useful tips on the use of this application."
+#~ msgstr "Dengys hwn gynghorion defnyddiol ar ddefnydd y cymhwysiad yma."
+
+#~ msgid "Terminal"
+#~ msgstr "Terfynell"
+
+#~ msgid "Play"
+#~ msgstr "Chwarae"
+
+#~ msgid "Playlist"
+#~ msgstr "Rhestr chwarae:"
+
+#~ msgid "No File Loaded"
+#~ msgstr "Heb Lwytho Ffeil"
+
+#~ msgid "Split &Horizontal"
+#~ msgstr "Rhannu'n &Llorweddol"
+
+#~ msgid "Split &Vertical"
+#~ msgstr "Rhannu'n &Fertigol"
+
+#~ msgid "Duplicate"
+#~ msgstr "Dyblyg"
+
+#~ msgid "unnamed"
+#~ msgstr "di-enw"
+
+#~ msgid "Open file"
+#~ msgstr "Agor ffeil"
+
+#~ msgid "Save Al&l"
+#~ msgstr "Cadw Po&peth"
+
+#, fuzzy
+#~ msgid "Document Deleted"
+#~ msgstr "Dogfen i'w hagor"
+
+#, fuzzy
+#~ msgid "Document Changed"
+#~ msgstr "Dogfenniaeth"
+
+#~ msgid "Plugins"
+#~ msgstr "Ategion"
+
+#~ msgid "Delete item(s)"
+#~ msgstr " Dileu eitem(au)"
+
+#~ msgid "&Save As..."
+#~ msgstr "&Cadw Fel..."
+
+#~ msgid "Property"
+#~ msgstr "Priodwedd"
+
+#~ msgid "&Search"
+#~ msgstr " &Chwilio"
+
+#~ msgid "&Applications:"
+#~ msgstr "&Cymhwysiadau:"
+
+#~ msgid "Known Applications"
+#~ msgstr "Cymhwysiannau Hysbys"
+
+#, fuzzy
+#~ msgid "Part not available"
+#~ msgstr "&Ar gael:"
+
+#~ msgid "Set"
+#~ msgstr "Set"
+
+#~ msgid "&Previous Error"
+#~ msgstr "&Gwall Blaenorol"
+
+#~ msgid "Open With"
+#~ msgstr "Agor Efo"
+
+#~ msgid "File Selector"
+#~ msgstr "Dewisydd Ffeiliau"
+
+#~ msgid ""
+#~ "<p>Here you can enter a name filter to limit which files are displayed."
+#~ "<p>To clear the filter, toggle off the filter button to the left.<p>To "
+#~ "reapply the last filter used, toggle on the filter button."
+#~ msgstr ""
+#~ "<p>Yma gallwch roi hidlen enwau i gyfyngu pa ffeiliau a ddengys.<p>I "
+#~ "wagio'r hidlen, diffoddwch y botwm hidlen ar y chwith.<p>I ailweithredu'r "
+#~ "hidlen ddefnyddiwyd ddiwethaf, cynnwch y botwm hidlen."
+
+#~ msgid ""
+#~ "<p>This button clears the name filter when toggled off, or reapplies the "
+#~ "last filter used when toggled on."
+#~ msgstr ""
+#~ "<p>Gwagia'r botwm yma'r hidlen enwau pan yn ddiffodd, neu ailweithreda'r "
+#~ "hidlen ddefnyddiwyd ddiwethaf pan ynghyn."
+
+#~ msgid "Clear filter"
+#~ msgstr "Gwagio hidlen"
+
+#~ msgid "When a docu&ment becomes active"
+#~ msgstr "Pan ddaw dog&fen yn weithredol"
+
+#~ msgid "When the file selector becomes visible"
+#~ msgstr "Pan ymddengys y dewisydd ffeiliau"
+
+#~ msgid "Remember &locations:"
+#~ msgstr "Cofio &lleoliadau:"
+
+#~ msgid "Remember &filters:"
+#~ msgstr "Cofio &hidlenni:"
+
+#~ msgid "Restore loca&tion"
+#~ msgstr "Adfer lleolia&dau:"
+
+#~ msgid "Restore last f&ilter"
+#~ msgstr "Adfer h&idlen ddiwethaf:"
+
+#~ msgid ""
+#~ "<p>Decides how many locations to keep in the history of the location "
+#~ "combo box"
+#~ msgstr ""
+#~ "p>Penderfynna sawl lleoliad i gadw yn hanes y blwch cyfuno lleoliadau."
+
+#~ msgid ""
+#~ "<p>Decides how many filters to keep in the history of the filter combo box"
+#~ msgstr "p>Penderfynna sawl hidlen i gadw yn hanes y blwch cyfuno hidlenni."
+
+#~ msgid "No."
+#~ msgstr "Rhif"
+
+#, fuzzy
+#~ msgid "Projectviews Toolbar"
+#~ msgstr "Bar Lleoliad"
+
+#~ msgid "&Layout"
+#~ msgstr "&Cynllun"
+
+#~ msgid "&Class"
+#~ msgstr "&Dosbarth"
+
+#~ msgid "&Abstract"
+#~ msgstr "&Crynodeb"
+
+#~ msgid "&Public"
+#~ msgstr "&Cyhoeddus"
+
+#~ msgid "P&rotected"
+#~ msgstr "G&warchodir"
+
+#~ msgid "Pri&vate"
+#~ msgstr "Pre&ivat"
+
+#~ msgid "&Final"
+#~ msgstr "&Terfynol"
+
+#~ msgid "&License:"
+#~ msgstr "&Trwydded:"
+
+#~ msgid "LGPL"
+#~ msgstr "LGPL"
+
+#~ msgid "GPL"
+#~ msgstr "GPL"
+
+#~ msgid "&Add"
+#~ msgstr "&Ychwanegu"
+
+#~ msgid "Docu&mentation:"
+#~ msgstr "Dogf&enniaeth :"
+
+#~ msgid "&Header:"
+#~ msgstr "P&ennawd :"
+
+#~ msgid "Move &Up"
+#~ msgstr "Symud i &Fyny"
+
+#~ msgid "Move &Down"
+#~ msgstr "Symud i &Lawr"
+
+#~ msgid "C&lear Selection"
+#~ msgstr "G&wagu Dewisiad"
+
+#~ msgid "&Header"
+#~ msgstr "P&ennawd"
+
+#~ msgid "&Source"
+#~ msgstr "&Tarddiad"
+
+#~ msgid "&inline"
+#~ msgstr "&mewnlin"
+
+#, fuzzy
+#~ msgid "&get method"
+#~ msgstr "&Dull:"
+
+#, fuzzy
+#~ msgid "&set method"
+#~ msgstr "&Dull:"
+
+#~ msgid "i&nline"
+#~ msgstr "m&ewnlin"
+
+#~ msgid "msec"
+#~ msgstr "msec"
+
+#~ msgid "&General"
+#~ msgstr "&Cyffredinol"
+
+#, fuzzy
+#~ msgid "&Accessors"
+#~ msgstr "Cyrchiad"
+
+#, fuzzy
+#~ msgid "Variable name:"
+#~ msgstr "Enw'r ffeil:"
+
+#, fuzzy
+#~ msgid "Get method:"
+#~ msgstr "&Dull:"
+
+#, fuzzy
+#~ msgid "Set method:"
+#~ msgstr "&Dull:"
+
+#~ msgid "Inline"
+#~ msgstr "Mewnlin"
+
+#~ msgid "&Inline"
+#~ msgstr "&Mewnlin"
+
+#~ msgid "T&ype:"
+#~ msgstr "M&ath:"
+
+#~ msgid "F&ile name:"
+#~ msgstr "E&nw'r ffeil:"
+
+#~ msgid "Method"
+#~ msgstr "Dull"
+
+#~ msgid "Lowercase"
+#~ msgstr "Llythrennau Bach"
+
+#~ msgid "Uppercase"
+#~ msgstr "Priflythrennau"
+
+#~ msgid "Parse:"
+#~ msgstr "Dosrannu :"
+
+#~ msgid "Database name:"
+#~ msgstr "Enw'r gronfa ddata: :"
+
+#~ msgid "&File name:"
+#~ msgstr "&Enw'r ffeil:"
+
+#, fuzzy
+#~ msgid "PHP Options"
+#~ msgstr "De&wisiadau"
+
+#~ msgid "Genera&l"
+#~ msgstr "Cyffre&dinol"
+
+#~ msgid "&Startup"
+#~ msgstr "&Ymgychwyn"
+
+#, fuzzy
+#~ msgid "Use &this file as default:"
+#~ msgstr "Gosod fel Rhagosodiad"
+
+#~ msgid "&Shell"
+#~ msgstr "&Plisgyn"
+
+#~ msgid "Plugin"
+#~ msgstr "Ategyn"
+
+#~ msgid "Database Name"
+#~ msgstr "Enw'r gronfa ddata:"
+
+#~ msgid "Host"
+#~ msgstr "Gwesteiwr"
+
+#, fuzzy
+#~ msgid "&Selected window"
+#~ msgstr "Gweithredoedd d&ewisiedig:"
+
+#~ msgid "UTF-&8"
+#~ msgstr "UTF-&8"
+
+#~ msgid "&1"
+#~ msgstr "&1"
+
+#~ msgid "Ar&guments:"
+#~ msgstr "Ym&resymiadau:"
+
+#~ msgid "&2"
+#~ msgstr "&2"
+
+#~ msgid "&3"
+#~ msgstr "&3"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Company"
+#~ msgstr "Cwmni"
+
+#~ msgid "Server Settings"
+#~ msgstr "Gosodiadau Gweinydd"
+
+#, fuzzy
+#~ msgid "Do not do anything"
+#~ msgstr "Ychwanegwch rywbeth yma"
+
+#~ msgid "&Message:"
+#~ msgstr "&Neges:"
+
+#~ msgid "ssh"
+#~ msgstr "ssh"
+
+#~ msgid "&Message"
+#~ msgstr "&Neges"
+
+#, fuzzy
+#~ msgid "Fetch &List"
+#~ msgstr "Rhestr Ffeiliau"
+
+#, fuzzy
+#~ msgid "Log Message"
+#~ msgstr "Neges"
+
+#~ msgid "R&eset"
+#~ msgstr "A&ilosod"
+
+#~ msgid "R&elease:"
+#~ msgstr "R&hyddhâd:"
+
+#~ msgid "&Group:"
+#~ msgstr "&Grŵp:"
+
+#~ msgid "+"
+#~ msgstr "+"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "Submit"
+#~ msgstr "Cyflwyno"
+
+#~ msgid "&Project type:"
+#~ msgstr "&Math y cywaith:"
+
+#~ msgid "&Email:"
+#~ msgstr "E&bost:"
+
+#~ msgid "&Location:"
+#~ msgstr "&Lleoliad:"
+
+#~ msgid "General Options"
+#~ msgstr "Dewisiadau Cyffredinol"
+
+#~ msgid "0.1"
+#~ msgstr "0.1"
+
+#~ msgid "License:"
+#~ msgstr "Trwydded:"
+
+#~ msgid "Custom Options"
+#~ msgstr "Dewisiadau Addasu"
+
+#~ msgid "Customize"
+#~ msgstr "Addasu"
+
+#~ msgid "Icon"
+#~ msgstr "Eicon"
+
+#~ msgid "Re&move Template"
+#~ msgstr "Gw&aredu Patrymlun"
+
+#~ msgid "File Type"
+#~ msgstr "Math Ffeil"
+
+#~ msgid "Type &name:"
+#~ msgstr "Enw'r& math:"
+
+#~ msgid "Group:"
+#~ msgstr "Gr?p:"
+
+#~ msgid "Delimiter:"
+#~ msgstr "Amffinydd :"
+
+#~ msgid "File List"
+#~ msgstr "Rhestr Ffeiliau"
+
+#, fuzzy
+#~ msgid "Projectviews"
+#~ msgstr "&Ffeil y cywaith:"
+
+#~ msgid "&Sticky:"
+#~ msgstr "&Gludiog :"
+
+#~ msgid "&Default:"
+#~ msgstr "&Rhagosod :"
+
+#~ msgid "Pattern"
+#~ msgstr "Patrwm"
+
+#~ msgid "&Add Group..."
+#~ msgstr "&Ychwanegu Grŵp"
+
+#~ msgid "&Templates:"
+#~ msgstr "&Patrymluniau :"
+
+#~ msgid "Template"
+#~ msgstr "Patrymlun"
+
+#~ msgid "Suffixes"
+#~ msgstr "Ôl-ddodiadau"
+
+#~ msgid "&Linux"
+#~ msgstr "&Linux"
+
+#~ msgid "&JAVA"
+#~ msgstr "&JAVA"
+
+#~ msgid "Example"
+#~ msgstr "Enghraifft"
+
+#~ msgid "&Filling"
+#~ msgstr "Ll&enwad"
+
+#~ msgid "Relative"
+#~ msgstr " Cymharol"
+
+#~ msgid "Paths"
+#~ msgstr "Llwybrau"
+
+#~ msgid "Hits:"
+#~ msgstr "Trawiadau :"
+
+#~ msgid "Date:"
+#~ msgstr "Dyddiad:"
+
+#~ msgid "&Title:"
+#~ msgstr "&Teitl:"
+
+#~ msgid "O&ther"
+#~ msgstr "A&rall"
+
+#~ msgid "Fi&xed font:"
+#~ msgstr "Wy&nebfath gosodedig:"
+
+#, fuzzy
+#~ msgid "&Zoom factor:"
+#~ msgstr "&Edrych am:"
+
+#~ msgid "20"
+#~ msgstr "20"
+
+#, fuzzy
+#~ msgid "40"
+#~ msgstr "4"
+
+#, fuzzy
+#~ msgid "60"
+#~ msgstr "0"
+
+#, fuzzy
+#~ msgid "80"
+#~ msgstr "0"
+
+#, fuzzy
+#~ msgid "90"
+#~ msgstr "0"
+
+#, fuzzy
+#~ msgid "95"
+#~ msgstr "5"
+
+#~ msgid "100"
+#~ msgstr "100"
+
+#~ msgid "Always"
+#~ msgstr "Bob tro"
+
+#~ msgid "Tabbed Browsing"
+#~ msgstr "Pori â Thabiau"
+
+#~ msgid "Open &new tab after current tab"
+#~ msgstr "Agor tab ne&wydd ar ôl y tab cyfredol"
+
+#, fuzzy
+#~ msgid "Scripting"
+#~ msgstr "Disgrifiad"
+
+#~ msgid "Full screen"
+#~ msgstr "Sgrîn Lawn"
+
+#~ msgid "Verbose"
+#~ msgstr "Amleiriog"
+
+#, fuzzy
+#~ msgid "Value 3"
+#~ msgstr "Gwerth"
+
+#~ msgid "Program"
+#~ msgstr "Rhaglen"
+
+#~ msgid "&Information"
+#~ msgstr "G&wybodaeth"
+
+#~ msgid "Caption:"
+#~ msgstr "Pennawd:"
+
+#~ msgid "New Item"
+#~ msgstr "Eitem Newydd"
+
+#, fuzzy
+#~ msgid "&Basics"
+#~ msgstr "&Dosbarth"
+
+#~ msgid "&Application"
+#~ msgstr "&Cymhwysiad"
+
+#, fuzzy
+#~ msgid "S&ubdirectories"
+#~ msgstr "&Cyfeiriadur:"
+
+#~ msgid "Target"
+#~ msgstr "Targed"
+
+#~ msgid "Output &file:"
+#~ msgstr "Ffeil a&llbwn :"
+
+#~ msgid "&Browse..."
+#~ msgstr "&Pori..."
+
+#~ msgid "Browse"
+#~ msgstr "Pori"
+
+#~ msgid "I&nstall"
+#~ msgstr "G&osod"
+
+#~ msgid "&Release"
+#~ msgstr "&Rhyddhad"
+
+#~ msgid "Requirements"
+#~ msgstr "Anghenion"
+
+#~ msgid "Open&GL"
+#~ msgstr "Open&GL"
+
+#~ msgid "RTT&I"
+#~ msgstr "RTT&I"
+
+#~ msgid "Console"
+#~ msgstr "Terfynell"
+
+#~ msgid "Pl&ugin"
+#~ msgstr "At&egyn"
+
+#, fuzzy
+#~ msgid "Librar&y version:"
+#~ msgstr "Fe&rsiwn:"
+
+#~ msgid "Move U&p"
+#~ msgstr "Symud &i Fyny"
+
+#~ msgid "Move Dow&n"
+#~ msgstr "Symud i &Lawr"
+
+#, fuzzy
+#~ msgid "External Libraries"
+#~ msgstr "Offer Allanol"
+
+#, fuzzy
+#~ msgid "Bu&ild Options"
+#~ msgstr "&Dewisiadau :"
+
+#~ msgid "&New"
+#~ msgstr "&Newydd"
+
+#~ msgid "&Options:"
+#~ msgstr "&Dewisiadau :"
+
+#~ msgid "Co&mmand:"
+#~ msgstr "Gorchy&myn:"
+
+#~ msgid "Co&py"
+#~ msgstr "Co&pïo"
+
+#~ msgid "Target:"
+#~ msgstr "Targed:"
+
+#~ msgid "&Add Selected"
+#~ msgstr "&Ychwanegu'r Dewisiedig"
+
+#~ msgid "R&emove All"
+#~ msgstr "G&waredu Popeth"
+
+#~ msgid "&Remove Selected"
+#~ msgstr "&Tynnu'r Dewis"
+
+#~ msgid "Games"
+#~ msgstr "Gemau"
+
+#~ msgid "Development"
+#~ msgstr "Datblygiad"
+
+#~ msgid "Graphics"
+#~ msgstr "Graffeg"
+
+#~ msgid "Multimedia"
+#~ msgstr "Amlgyfrwng"
+
+#~ msgid "Office"
+#~ msgstr "Swyddfa"
+
+#~ msgid "System"
+#~ msgstr "Cysawd"
+
+#~ msgid "Toys"
+#~ msgstr "Teganau"
+
+#~ msgid "Utilities"
+#~ msgstr "Gwasanaethau"
+
+#~ msgid "&Icon:"
+#~ msgstr "&Eicon:"
+
+#~ msgid "&Section:"
+#~ msgstr "R&han:"
+
+#~ msgid "&Flags"
+#~ msgstr "&Baneri"
+
+#~ msgid "O&ther:"
+#~ msgstr "A&rall:"
+
+#~ msgid "Ar&guments"
+#~ msgstr "Ym&resymiadau"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#, fuzzy
+#~ msgid "Command Type"
+#~ msgstr "Gorchy&myn:"
+
+#~ msgid "&Type:"
+#~ msgstr "&Math:"
+
+#~ msgid "&Size:"
+#~ msgstr "&Maint:"
+
+#~ msgid "Co&mpiler"
+#~ msgstr "Cr&ynhoydd"
+
+#~ msgid "&Prefixes"
+#~ msgstr "&Rhagddodiadau"
+
+#~ msgid "Path"
+#~ msgstr "Llwybr"
+
+#~ msgid "&Primary:"
+#~ msgstr "&Cynradd :"
+
+#~ msgid "Pre&fix:"
+#~ msgstr "Rha&gddodiad:"
+
+#~ msgid "File &name:"
+#~ msgstr "Enw'r& ffeil:"
+
+#~ msgid "Ot&her:"
+#~ msgstr "Ar&all:"
+
+#~ msgid "ComboBox"
+#~ msgstr "Blwch Cyfuno"
+
+#~ msgid "Auto"
+#~ msgstr "Ymysgogol"
+
+#~ msgid "Background"
+#~ msgstr "Cefndir"
+
+#~ msgid "Foreground"
+#~ msgstr "Blaendir"
+
+#~ msgid "Button"
+#~ msgstr "Botwm"
+
+#~ msgid "Base"
+#~ msgstr "Bôn"
+
+#~ msgid "Link"
+#~ msgstr "Cyswllt"
+
+#~ msgid "Dark"
+#~ msgstr "Tywyll"
+
+#~ msgid "Replace Text"
+#~ msgstr "Amnewid Testun"
+
+#~ msgid "R&eplace:"
+#~ msgstr "A&mnewid:"
+
+#~ msgid "&Replace"
+#~ msgstr "A&mnewid"
+
+#~ msgid "Replace &All"
+#~ msgstr "Amnewid y &Cwbl"
+
+#~ msgid "Case &sensitive"
+#~ msgstr "Mae llythrennau bras o &bwys"
+
+#~ msgid "Forwar&d"
+#~ msgstr "Ymlaen"
+
+#~ msgid "&New Item"
+#~ msgstr "&Eitem Newydd"
+
+#~ msgid "&Text:"
+#~ msgstr "&Testun:"
+
+#~ msgid "&Pixmap:"
+#~ msgstr "&Picsfap :"
+
+#~ msgid "Ge&neral"
+#~ msgstr "Cy&ffredinol"
+
+#~ msgid "G&rid"
+#~ msgstr "G&rid"
+
+#~ msgid "Sn&ap to grid"
+#~ msgstr "Sn&apio i'r grid"
+
+#~ msgid "Backgro&und"
+#~ msgstr "Cefndir"
+
+#~ msgid "Co&lor"
+#~ msgstr "Ll&iw"
+
+#~ msgid "&Pixmap"
+#~ msgstr "&Picsfap"
+
+#~ msgid "&Items"
+#~ msgstr "&Eitemau"
+
+#~ msgid "Pi&xmap:"
+#~ msgstr "Pi&csfap :"
+
+#~ msgid "Colu&mn:"
+#~ msgstr "Colo&fn:"
+
+#~ msgid "New &Subitem"
+#~ msgstr "&Is-eitem Newydd"
+
+#~ msgid "Move up"
+#~ msgstr "Symud i fyny"
+
+#~ msgid "Move down"
+#~ msgstr "Symud i lawr"
+
+#~ msgid "Move left"
+#~ msgstr "Symud i'r Chwith"
+
+#~ msgid "Move right"
+#~ msgstr "Symud i'r Dde"
+
+#~ msgid "Clicka&ble"
+#~ msgstr "Clicad&wy"
+
+#~ msgid "Re&sizable"
+#~ msgstr "Ge&llir newid ei faint"
+
+#~ msgid "&Delete Column"
+#~ msgstr "&Dileu Colofn"
+
+#~ msgid "Delete column"
+#~ msgstr "Dileu Colofn"
+
+#~ msgid "&New Column"
+#~ msgstr "&Colofn Newydd"
+
+#~ msgid "Back&ground:"
+#~ msgstr "Cefn&dir:"
+
+#~ msgid "&Delete Widget"
+#~ msgstr "&Dileu celfigyn"
+
+#~ msgid "Cl&ass:"
+#~ msgstr "Do&sbarth:"
+
+#~ msgid "Pixmap:"
+#~ msgstr "Picsfap :"
+
+#~ msgid "Fixed"
+#~ msgstr "Sefydlog"
+
+#~ msgid "Maximum"
+#~ msgstr "Uchafswm"
+
+#~ msgid "S&ignal:"
+#~ msgstr "A&rwydd:"
+
+#~ msgid "Sl&ot:"
+#~ msgstr "Ag&en :"
+
+#~ msgid "public"
+#~ msgstr "cyhoeddus"
+
+#~ msgid "protected"
+#~ msgstr "gwarchodir"
+
+#~ msgid "&Properties"
+#~ msgstr "&Priodweddau"
+
+#~ msgid "Int"
+#~ msgstr "Int"
+
+#~ msgid "Color"
+#~ msgstr "Lliw"
+
+#~ msgid "Pixmap"
+#~ msgstr "Picsfap"
+
+#~ msgid "Find Text"
+#~ msgstr "Canfod Testun"
+
+#~ msgid "F&ind:"
+#~ msgstr "C&anfod:"
+
+#~ msgid "&Find"
+#~ msgstr "&Canfod"
+
+#~ msgid "&Project file:"
+#~ msgstr "&Ffeil y cywaith:"
+
+#~ msgid "&Language:"
+#~ msgstr "&Iaith:"
+
+#~ msgid "Pixmaps"
+#~ msgstr "Picsfapiau"
+
+#, fuzzy
+#~ msgid "Save in&line"
+#~ msgstr "&Parhau"
+
+#~ msgid "Use &function:"
+#~ msgstr "Defn&yddio ffwythiant:"
+
+#~ msgid "A&uthor:"
+#~ msgstr "A&wdur:"
+
+#~ msgid "Enter your name."
+#~ msgstr "Rhowch eich Enw."
+
+#~ msgid "S&pacing:"
+#~ msgstr "By&lchiad :"
+
+#~ msgid "Ma&rgin:"
+#~ msgstr "Y&myl:"
+
+#~ msgid "&Database name:"
+#~ msgstr "&Enw'r gronfa ddata: :"
+
+#~ msgid "&Username:"
+#~ msgstr "&Enw Defnyddiwr:"
+
+#~ msgid "&Password:"
+#~ msgstr "&Cyfrinair:"
+
+#~ msgid "D&river:"
+#~ msgstr "G&yrrydd:"
+
+#~ msgid "&Hostname:"
+#~ msgstr "&Enw Gwesteiwr:"
+
+#~ msgid ")"
+#~ msgstr ")"
+
+#~ msgid "&Field:"
+#~ msgstr "&Maes :"
+
+#~ msgid "&Rows"
+#~ msgstr "&Rhesi"
+
+#~ msgid "&Delete Row"
+#~ msgstr "&Dileu Rhes"
+
+#~ msgid "&Line:"
+#~ msgstr "&Llinell :"
+
+#~ msgid "&Font:"
+#~ msgstr "&Wynebfath:"
+
+#~ msgid "C&olor:"
+#~ msgstr "L&liw:"
+
+#~ msgid "In Use"
+#~ msgstr "Ar waith"
+
+#~ msgid "F&unction:"
+#~ msgstr "F&fwythiant:"
+
+#~ msgid "Acc&ess:"
+#~ msgstr "Cyrc&hiad:"
+
+#~ msgid "&Variable:"
+#~ msgstr "&Newidyn:"
+
+#~ msgid "private"
+#~ msgstr "preivat"
+
+#~ msgid "Done"
+#~ msgstr "Wedi gorffen"
+
+#~ msgid "Level"
+#~ msgstr "Lefel"
+
+#, fuzzy
+#~ msgid "Remove Database"
+#~ msgstr "Gwaredu ffeil"
+
+#~ msgid "Attributes"
+#~ msgstr "Priodweddion"
+
+#~ msgid "replace"
+#~ msgstr "amnewid"
+
+#~ msgid "Column"
+#~ msgstr "Colofn"
+
+#~ msgid "Level 1"
+#~ msgstr "Lefel 1"
+
+#~ msgid "Level 2"
+#~ msgstr "Lefel 2"
+
+#~ msgid "Activate"
+#~ msgstr "Gweithredoli"
+
+#~ msgid "Method()"
+#~ msgstr "Dull()"
+
+#~ msgid "Copy to Clipboard"
+#~ msgstr "Copïo i'r Gludfwrdd"
+
+#~ msgid "&Memory"
+#~ msgstr "&Cof"
+
+#, fuzzy
+#~ msgid "Undefined function"
+#~ msgstr "Defn&yddio ffwythiant:"
+
+#~ msgid "PHP"
+#~ msgstr "PHP"
+
+#~ msgid "SQL"
+#~ msgstr "SQL"
+
+#~ msgid "Driver"
+#~ msgstr "Gyrrydd"
+
+#~ msgid "Database"
+#~ msgstr "Cronfa ddata"
+
+#, fuzzy
+#~ msgid "Remove item(s)"
+#~ msgstr "Gwaredu Eitem"
+
+#~ msgid "Watch:"
+#~ msgstr "Gwylio :"
+
+#~ msgid "&Enable"
+#~ msgstr "&Galluogi"
+
+#, fuzzy
+#~ msgid "RDB output"
+#~ msgstr "Allbwn"
+
+#, fuzzy
+#~ msgid "Remove Watch Expression"
+#~ msgstr "&Mynegiad rheolaidd :"
+
+#~ msgid "Language"
+#~ msgstr "Iaith"
+
+#~ msgid "Architecture"
+#~ msgstr "Pensaernïaeth"
+
+#~ msgid "BeOS"
+#~ msgstr "BeOS"
+
+#~ msgid "Segments"
+#~ msgstr "Cylchrannau"
+
+#~ msgid "Packages"
+#~ msgstr "Pecynnau"
+
+#~ msgid "Unable to get KScript Runner for type \"%1\"."
+#~ msgstr "Methu cael Rhedydd KScript am fath \"%1\"."
+
+#~ msgid "Flags"
+#~ msgstr "Baneri"
+
+#~ msgid "Ok"
+#~ msgstr "Iawn"
+
+#~ msgid "x"
+#~ msgstr "x"
+
+#~ msgid "y"
+#~ msgstr "y"
+
+#~ msgid "hStretch"
+#~ msgstr "hStretch"
+
+#~ msgid "vStretch"
+#~ msgstr "vStretch"
+
+#~ msgid "Arrow"
+#~ msgstr "Saeth"
+
+#~ msgid "Up Arrow"
+#~ msgstr "Saeth i Fyny"
+
+#~ msgid "Cross"
+#~ msgstr "Croes"
+
+#~ msgid "iBeam"
+#~ msgstr "iTrawst"
+
+#~ msgid "Size Vertical"
+#~ msgstr "Maint Fertigol"
+
+#~ msgid "Size Horizontal"
+#~ msgstr "Maint Llorweddol"
+
+#~ msgid "Size Slash"
+#~ msgstr "Maint Slaes"
+
+#~ msgid "Size Backslash"
+#~ msgstr "Maint Slaes Ôl"
+
+#~ msgid "Size All"
+#~ msgstr "Maint Popeth"
+
+#~ msgid "Blank"
+#~ msgstr "Gwag"
+
+#~ msgid "Forbidden"
+#~ msgstr "Gwaharddir"
+
+#~ msgid "What's This?"
+#~ msgstr "Beth Yw Hyn?"
+
+#~ msgid "true"
+#~ msgstr "gwir"
+
+#~ msgid "false"
+#~ msgstr "ffug"
+
+#~ msgid "MDI Mode"
+#~ msgstr "Modd MDI"
+
+#~ msgid "C&hildframe Mode"
+#~ msgstr "Modd Ffrâm &Plentyn"
+
+#~ msgid "Ta&b Page Mode"
+#~ msgstr "Modd Tudalen Ta&b"
+
+#~ msgid "I&DEAl Mode"
+#~ msgstr "Modd I&DEAI"
+
+#~ msgid "Tool &Docks"
+#~ msgstr "Dociau &Offer"
+
+#~ msgid "Switch Top Dock"
+#~ msgstr "Newid y Doc wrth y Pen"
+
+#~ msgid "Previous Tool View"
+#~ msgstr "Golwg Offer Cynt"
+
+#~ msgid "Show %1"
+#~ msgstr "Dangos %1"
+
+#~ msgid "Undock"
+#~ msgstr "Dad-ddocio"
+
+#~ msgid "Maximize"
+#~ msgstr "Ehangu"
+
+#~ msgid "Operations"
+#~ msgstr "Gweithrediadau"
+
+#~ msgid "&Minimize All"
+#~ msgstr "Llei&hau'r Cwbl"
+
+#~ msgid "&MDI Mode"
+#~ msgstr "&Modd MDI"
+
+#~ msgid "&Tile"
+#~ msgstr "&Teilio"
+
+#~ msgid "Ca&scade Windows"
+#~ msgstr "Rhae&adru Ffenestri"
+
+#~ msgid "Cascade &Maximized"
+#~ msgstr "Rhaeadru wedi'u &Ehangu"
+
+#~ msgid "Expand &Horizontally"
+#~ msgstr "Ehangu'n &Llorweddol"
+
+#~ msgid "Tile &Non-overlapped"
+#~ msgstr "Teilio wedi'u &Di-orgyffwrd"
+
+#~ msgid "Tile Overla&pped"
+#~ msgstr "Teilio wedi'u &Gorgyffwrdd"
+
+#~ msgid "Tile V&ertically"
+#~ msgstr "Teilio'n Fe&rtigol"
+
+#~ msgid "&Dock/Undock"
+#~ msgstr "&Docio/Dad-ddocio"
+
+#~ msgid "&Restore"
+#~ msgstr "&Adfer"
+
+#~ msgid "R&esize"
+#~ msgstr "Ne&wid Maint"
+
+#~ msgid "M&inimize"
+#~ msgstr "Lle&ihau"
+
+#~ msgid "M&aximize"
+#~ msgstr "Ch&wyddo"
+
+#~ msgid "&Maximize"
+#~ msgstr "&Chwyddo"
+
+#~ msgid "&Minimize"
+#~ msgstr "Llei&hau"
+
+#~ msgid "M&ove"
+#~ msgstr "&Symud"
+
+#~ msgid "&Resize"
+#~ msgstr "Newid &Maint"
+
+#~ msgid "&Undock"
+#~ msgstr "&Dad-ddocio"
+
+#~ msgctxt "Freeze the window geometry"
+#~ msgid "Freeze"
+#~ msgstr "Rhewi"
+
+#~ msgctxt "Dock this window"
+#~ msgid "Dock"
+#~ msgstr "Clymu"
+
+#~ msgid "Detach"
+#~ msgstr "Dat-glymu"
+
+#~ msgctxt "Switch between overlap and side by side mode"
+#~ msgid "Overlap"
+#~ msgstr "Gorgyffwrdd"
+
+#, fuzzy
+#~ msgid "File Deleted"
+#~ msgstr "Dewisydd Ffeiliau"
+
+#~ msgid "&Tile..."
+#~ msgstr "&Teilio..."
+
+#, fuzzy
+#~ msgid "Reopen"
+#~ msgstr "G&waredu"
+
+#, fuzzy
+#~ msgid "Do Not Reopen"
+#~ msgstr "Dogfen i'w hagor"
+
+#, fuzzy
+#~ msgid "Reserve"
+#~ msgstr "&Adfer"
+
+#~ msgid "&Revert"
+#~ msgstr "&Dychwelyd"
+
+#, fuzzy
+#~ msgid "Re&solve Conflicting State"
+#~ msgstr "Gwaredu Cysylltiad"
+
+#, fuzzy
+#~ msgid "CVS - Unedit Files"
+#~ msgstr "Canfod mewn Ffeiliau"
+
+#~ msgid "Do Not Add"
+#~ msgstr "Na Ychwaneger"
+
+#, fuzzy
+#~ msgid "CVS Annotate Dialog"
+#~ msgstr "Cysylltiad"
+
+#~ msgid "CvsService"
+#~ msgstr "GwasanaethCVS"
+
+#, fuzzy
+#~ msgid "&Edit Files"
+#~ msgstr "newidyn"
+
+#, fuzzy
+#~ msgid "Annotate Failed"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~ msgid "Do Not Revert"
+#~ msgstr "Dychwelyd"
+
+#~ msgid "C&lient:"
+#~ msgstr "D&ibynnydd:"
+
+#~ msgid "&User:"
+#~ msgstr "&Defnyddiwr:"
+
+#~ msgid "Add item"
+#~ msgstr "Ychwanegu Eitem"
+
+#~ msgid "Aliases"
+#~ msgstr "Arallenwau"
+
+#~ msgid "Input"
+#~ msgstr "Mewnbwn"
+
+#~ msgid "HTML"
+#~ msgstr "HTML"
+
+#~ msgid "Paper type"
+#~ msgstr "Math papur"
+
+#~ msgid "XML"
+#~ msgstr "XML"
+
+#~ msgid "External"
+#~ msgstr "Allanol"
+
+#, fuzzy
+#~ msgid "Do Not Generate"
+#~ msgstr "&Creu"
+
+#~ msgid "File creation"
+#~ msgstr "Creu Ffeil"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "Icon:"
+#~ msgstr "Eicon:"
+
+#~ msgctxt "New file dialog (title)"
+#~ msgid "New File"
+#~ msgstr "Ffeil newydd"
+
+#~ msgid "File Exists"
+#~ msgstr "Ffeil yn Bodoli"
+
+#~ msgid "Add Group"
+#~ msgstr "Ychwanegu Gr?p"
+
+#~ msgid "Language:"
+#~ msgstr "Iaith:"
+
+#, fuzzy
+#~ msgid "Edit Group"
+#~ msgstr "Gr?p"
+
+#~ msgid "Add Item..."
+#~ msgstr "Ychwanegu Eitem ..."
+
+#~ msgid "Add Group..."
+#~ msgstr "Ychwanegu Grŵp"
+
+#~ msgid "Open files"
+#~ msgstr "Agor Ffeiliau"
+
+#, fuzzy
+#~ msgid "Open Project View..."
+#~ msgstr "&Agor Cywaith..."
+
+#, fuzzy
+#~ msgid "Open project view"
+#~ msgstr "Agor Cywaith"
+
+#, fuzzy
+#~ msgid "New Project View..."
+#~ msgstr "Cywaith &Newydd..."
+
+#~ msgid "Others"
+#~ msgstr "Eraill"
+
+#~ msgctxt "No Version Control System"
+#~ msgid "None"
+#~ msgstr "Dim"
+
+#~ msgid "Copy To..."
+#~ msgstr "Copïo I ..."
+
+#, fuzzy
+#~ msgid "CTags"
+#~ msgstr "Baneri"
+
+#~ msgid "Hits: %1"
+#~ msgstr "Trawiadau : %1"
+
+#~ msgid "function"
+#~ msgstr "ffwythiant"
+
+#~ msgid "slot"
+#~ msgstr "agen"
+
+#~ msgid "pattern"
+#~ msgstr "patrwm"
+
+#~ msgid "class"
+#~ msgstr "dosbarth"
+
+#~ msgid "variable"
+#~ msgstr "newidyn"
+
+#~ msgid "paragraph"
+#~ msgstr "paragraff"
+
+#~ msgid "feature"
+#~ msgstr "nodwedd"
+
+#~ msgid "common"
+#~ msgstr "cyffredin"
+
+#~ msgid "entry"
+#~ msgstr "cofnod"
+
+#~ msgid "interface"
+#~ msgstr "rhyngwyneb"
+
+#~ msgid "module"
+#~ msgstr "modiwl"
+
+#~ msgid "program"
+#~ msgstr "rhaglen"
+
+#~ msgid "type"
+#~ msgstr "math"
+
+#~ msgid "method"
+#~ msgstr "dull"
+
+#~ msgid "package"
+#~ msgstr "pecyn"
+
+#~ msgid "Bookmark This Location"
+#~ msgstr "Tudnodi'r Lleoliad Yma"
+
+#~ msgid "Custom..."
+#~ msgstr "Addasu ..."
+
+#~ msgid "Add Bookmark"
+#~ msgstr "Ychwanegu Tudnod"
+
+#~ msgid "Google"
+#~ msgstr "Google"
+
+#~ msgid "Se&arch"
+#~ msgstr "Ch&wilio"
+
+#~ msgid "and"
+#~ msgstr "a"
+
+#~ msgid "Extracting search terms"
+#~ msgstr "All-dynnu termau'r chwiliad"
+
+#~ msgid "Generating index..."
+#~ msgstr "Creu mynegai..."
+
+#~ msgid "Files processed: %1"
+#~ msgstr "Ffeiliau a gafodd eu prosesu: %1"
+
+#, fuzzy
+#~ msgid "Configuration file updated."
+#~ msgstr "Ffurfwedd :"
+
+#~ msgid "Execute shell command"
+#~ msgstr "Gweithredu Gorchymyn Plisgyn"
+
+#, fuzzy
+#~ msgid "Security Widget"
+#~ msgstr "Creu mynegai..."
+
+#, fuzzy
+#~ msgid "Suggestion"
+#~ msgstr "Sesiwn"
+
+#~ msgid "Open With..."
+#~ msgstr "Agor Gyda..."
+
+#~ msgid "Show attributes"
+#~ msgstr "Dangos nodweddion"
+
+#~ msgctxt "member access"
+#~ msgid "All"
+#~ msgstr "Popeth"
+
+#~ msgctxt "member access"
+#~ msgid "Public"
+#~ msgstr "Cyhoeddus"
+
+#~ msgctxt "member access"
+#~ msgid "Protected"
+#~ msgstr "Gwarchodir"
+
+#~ msgctxt "member access"
+#~ msgid "Package"
+#~ msgstr "Pecyn"
+
+#~ msgid "View Mode"
+#~ msgstr "Modd Golwg"
+
+#~ msgid "Attribute"
+#~ msgstr "Priodoleddau"
+
+#, fuzzy
+#~ msgid "Add Annotation"
+#~ msgstr "Cysylltiad"
+
+#, fuzzy
+#~ msgid "Add Annotations"
+#~ msgstr "Cysylltiad"
+
+#, fuzzy
+#~ msgid "Annotation Plugin"
+#~ msgstr "Galluogi"
+
+#, fuzzy
+#~ msgid "annotationPart"
+#~ msgstr "Lleoliad"
+
+#, fuzzy
+#~ msgid "(c) 2005"
+#~ msgstr "(h) 2002"
+
+#~ msgid "&Value:"
+#~ msgstr "&Gwerth:"
+
+#~ msgid "Up"
+#~ msgstr "I fyny"
+
+#~ msgid "Down"
+#~ msgstr "I Lawr"
+
+#~ msgid "Headers"
+#~ msgstr "Penawdau"
+
+#~ msgid "Images"
+#~ msgstr "Delweddau"
+
+#~ msgid "Properties..."
+#~ msgstr "Priodweddau"
+
+#~ msgid ""
+#~ "There was an error loading the module %1.\n"
+#~ "The diagnostics is:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Bu gwall wrth lwytho'r modiwl %1.\n"
+#~ "Dyma'r ddiagnosteg:\n"
+#~ " %2"
+
+#~ msgid "Ma&ke"
+#~ msgstr "Ma&ke"
+
+#, fuzzy
+#~ msgid "Populate"
+#~ msgstr "Patrymlun"
+
+#, fuzzy
+#~ msgid "Object Files"
+#~ msgstr "Agor Ffeil"
+
+#~ msgid "Add File"
+#~ msgstr "Ychwanegu Ffeil"
+
+#~ msgid "Header"
+#~ msgstr "Pennawd"
+
+#~ msgid "Data"
+#~ msgstr "Data"
+
+#~ msgid "Java"
+#~ msgstr "Java"
+
+#~ msgid "Do you really want to remove <b>%1</b>?"
+#~ msgstr "<b>Ydych wir eisiau gwaredu %1?</b>"
+
+#~ msgctxt "no dependency"
+#~ msgid "<none>"
+#~ msgstr "<dim>"
+
+#, fuzzy
+#~ msgid "Rerun"
+#~ msgstr "Rhedeg"
+
+#~ msgid "A file named %1 already exists."
+#~ msgstr "Mae ffeil o'r enw %1 mewn bod yn barod."
+
+#~ msgid "Install"
+#~ msgstr "Gosod"
+
+#, fuzzy
+#~ msgid "&Restart Application"
+#~ msgstr "&Cymhwysiad"
+
+#~ msgid "Options..."
+#~ msgstr "Dewisiadau ..."
+
+#~ msgid "Add Service..."
+#~ msgstr "Ychwanegu Gwasanaeth ..."
+
+#~ msgid "Add Application..."
+#~ msgstr "Ychwanegu Cymhwysiad ..."
+
+#~ msgid "Device"
+#~ msgstr "Dyfais"
+
+#~ msgid "MIME Type"
+#~ msgstr "Math MIME"
+
+#~ msgid "Short View"
+#~ msgstr "Golwg Byr"
+
+#~ msgid "Up one level"
+#~ msgstr "I fyny un lefel"
+
+#~ msgid "*|All Files"
+#~ msgstr "*|Pob Ffeil"
+
+#, fuzzy
+#~ msgid "Save Form '%1' As"
+#~ msgstr "&Cadw Fel..."
+
+#~ msgid "File Already Exists"
+#~ msgstr "Ffeil yn Bodoli'n Barod"
+
+#~ msgid "Edit %1"
+#~ msgstr "Golygu %1"
+
+#~ msgid "&Yes"
+#~ msgstr "&Ie"
+
+#~ msgid "&No"
+#~ msgstr "&Nage"
+
+#, fuzzy
+#~ msgid "Using ui.h File"
+#~ msgstr "Creu ..."
+
+#, fuzzy
+#~ msgid "Use Existing"
+#~ msgstr "Ffeil yn Bodoli"
+
+#, fuzzy
+#~ msgid "Creating ui.h file"
+#~ msgstr "Creu ..."
+
+#, fuzzy
+#~ msgid "Do you want to create an new \"ui.h\" file?"
+#~ msgstr "Methu creu'r ffeil newydd."
+
+#, fuzzy
+#~ msgid "Invalid Filename"
+#~ msgstr "Enw Ffeil"
+
+#~ msgid "True"
+#~ msgstr "Gwir"
+
+#~ msgid "width"
+#~ msgstr "lled"
+
+#~ msgid "Green"
+#~ msgstr "Gwyrdd"
+
+#~ msgid "Blue"
+#~ msgstr "Glas"
+
+#~ msgid "Family"
+#~ msgstr "Teulu"
+
+#~ msgid "Strikeout"
+#~ msgstr "Trwylinellu"
+
+#~ msgid "Table"
+#~ msgstr "Tabl"
+
+#~ msgid "Field"
+#~ msgstr "Maes"
+
+#, fuzzy
+#~ msgid "horizontalStretch"
+#~ msgstr "hStretch"
+
+#, fuzzy
+#~ msgid "verticalStretch"
+#~ msgstr "vStretch"
+
+#, fuzzy
+#~ msgid "Up-Arrow"
+#~ msgstr "Saeth i Fyny"
+
+#~ msgid "Sort &Alphabetically"
+#~ msgstr "Trefn&u yn ôl yr wyddor"
+
+#~ msgid "Remove Connection"
+#~ msgstr "Gwaredu Cysylltiad"
+
+#, fuzzy
+#~ msgid "Add Connection"
+#~ msgstr "Cysylltiad"
+
+#, fuzzy
+#~ msgid "Add Function"
+#~ msgstr "Ffwythiant"
+
+#~ msgid "New &Action"
+#~ msgstr "Gwei&thred Newydd"
+
+#~ msgid "New Action &Group"
+#~ msgstr "Grŵp Newydd o Weithredoedd"
+
+#, fuzzy
+#~ msgid "All Files (*)"
+#~ msgstr "Pob Ffeil"
+
+#~ msgid "Loading File"
+#~ msgstr "Llwytho ffeil..."
+
+#~ msgid "Tab 1"
+#~ msgstr "Tab 1"
+
+#~ msgid "Tab 2"
+#~ msgstr "Tab 2"
+
+#, fuzzy
+#~ msgid "Page 1"
+#~ msgstr "Targed: %1"
+
+#, fuzzy
+#~ msgid "Page 2"
+#~ msgstr "Pecyn"
+
+#, fuzzy
+#~ msgid "&Redo: Not Available"
+#~ msgstr "&Ar gael:"
+
+#~ msgid "Cu&t"
+#~ msgstr "To&rri"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Anfon i'r Blaen"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Anfon i'r &Blaen"
+
+#~ msgid "Send to Back"
+#~ msgstr "Anfon i'r Cefn"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Anfon i'r &Cefn"
+
+#~ msgid "Check Accelerators"
+#~ msgstr "Gwirio Cyflymyddion"
+
+#~ msgid "Chec&k Accelerators"
+#~ msgstr "G&wirio Cyflymyddion"
+
+#, fuzzy
+#~ msgid "Slots"
+#~ msgstr "Agen"
+
+#~ msgid "Connections"
+#~ msgstr "Cysylltiadau"
+
+#~ msgid "&Source..."
+#~ msgstr "&Tarddiad ..."
+
+#~ msgid "Preferences..."
+#~ msgstr "Hoffterau..."
+
+#, fuzzy
+#~ msgid "Adjust Size"
+#~ msgstr "Addasu"
+
+#, fuzzy
+#~ msgid "Lay Out Horizontally"
+#~ msgstr "Ehangu'n &Llorweddol"
+
+#, fuzzy
+#~ msgid "Lay Out Vertically"
+#~ msgstr "Ehangu'n &Fertigol"
+
+#~ msgid "Layout"
+#~ msgstr "Cynllun"
+
+#, fuzzy
+#~ msgid "Pointer"
+#~ msgstr "Hidlo"
+
+#, fuzzy
+#~ msgid "Connect Signal/Slots"
+#~ msgstr "C&ysylltiadau :"
+
+#, fuzzy
+#~ msgid "Custom Widgets"
+#~ msgstr "Addasu"
+
+#, fuzzy
+#~ msgid "Edit &Custom Widgets..."
+#~ msgstr "Addasu..."
+
+#~ msgid "<b>A %1</b>"
+#~ msgstr "<b>A %1</b>"
+
+#~ msgid "&New..."
+#~ msgstr "&Newydd..."
+
+#~ msgid "New Dialog"
+#~ msgstr "Ymgom Newydd"
+
+#, fuzzy
+#~ msgid "&Dialog..."
+#~ msgstr "&Teilio..."
+
+#~ msgid "&File..."
+#~ msgstr "&Ffeil..."
+
+#~ msgid "Save &As..."
+#~ msgstr "Cadw &Fel..."
+
+#~ msgid "Sa&ve All"
+#~ msgstr "Ca&dw Popeth"
+
+#~ msgid "Pr&oject"
+#~ msgstr "Cy&waith"
+
+#, fuzzy
+#~ msgid "Active Project"
+#~ msgstr "Cywaith Newydd"
+
+#, fuzzy
+#~ msgid "Database Connections..."
+#~ msgstr "C&ysylltiadau :"
+
+#~ msgid "Project Settings..."
+#~ msgstr "Gosodiadau Cywaith ..."
+
+#~ msgid "&Project Settings..."
+#~ msgstr "&Gosodiadau Cywaith ..."
+
+#~ msgid "&Preview"
+#~ msgstr "&Rhagolwg"
+
+#~ msgid "Preview &Form"
+#~ msgstr "Rhagolyg&u Ffurflen"
+
+#, fuzzy
+#~ msgid "Preview Form in %1 Style"
+#~ msgstr "Rhagolyg&u Ffurflen"
+
+#~ msgid "Cascade"
+#~ msgstr "Rhaeadr"
+
+#~ msgid "Cl&ose"
+#~ msgstr "Ca&u"
+
+#, fuzzy
+#~ msgid "Closes the active window"
+#~ msgstr "Gweithredoedd d&ewisiedig:"
+
+#~ msgid "Close Al&l"
+#~ msgstr "Cau Pope&th"
+
+#~ msgid "Ne&xt"
+#~ msgstr "Ne&saf"
+
+#~ msgid "Pre&vious"
+#~ msgstr "Cyn&t"
+
+#~ msgid "&Manual"
+#~ msgstr "&Â Llaw"
+
+#, fuzzy
+#~ msgid "Register Qt"
+#~ msgstr "Ail-gychwyn"
+
+#, fuzzy
+#~ msgid "Name of File"
+#~ msgstr "Gwaredu ffeil"
+
+#, fuzzy
+#~ msgid "Save Project Settings"
+#~ msgstr "Gosodiadau Cywaith"
+
+#~ msgid "Open a file..."
+#~ msgstr "Agor Ffeil ..."
+
+#, fuzzy
+#~ msgid "Project '%1' saved."
+#~ msgstr "Enw'r cywaith"
+
+#~ msgid "Enter a filename..."
+#~ msgstr "Mewnosod enw ffeil ..."
+
+#, fuzzy
+#~ msgid "NewTemplate"
+#~ msgstr "Patrymlun"
+
+#, fuzzy
+#~ msgid "Paste Error"
+#~ msgstr "Gwall Mewnol"
+
+#~ msgid "Load Template"
+#~ msgstr "Llwytho Patrymlun"
+
+#, fuzzy
+#~ msgid "%1 Project"
+#~ msgstr "Cywaith"
+
+#~ msgid "Wizard"
+#~ msgstr "Dewin"
+
+#~ msgid "Main Window"
+#~ msgstr "Prif Ffenestr"
+
+#~ msgid "&Styles"
+#~ msgstr "&Arddulliau"
+
+#~ msgid "Paragraph"
+#~ msgstr "Paragraff"
+
+#~ msgid "Align left"
+#~ msgstr "Alinio Chwith"
+
+#~ msgid "Align center"
+#~ msgstr "Alinio i'r Canol"
+
+#~ msgid "Align right"
+#~ msgstr "Alinio Dde"
+
+#~ msgid "&Font"
+#~ msgstr "&Wynebfath"
+
+#, fuzzy
+#~ msgid "Headline 1"
+#~ msgstr "Pennawd"
+
+#, fuzzy
+#~ msgid "Headline 2"
+#~ msgstr "Pennawd"
+
+#, fuzzy
+#~ msgid "Headline 3"
+#~ msgstr "Pennawd"
+
+#~ msgid "Resize"
+#~ msgstr "Newid maint"
+
+#, fuzzy
+#~ msgid "&Connect Action..."
+#~ msgstr "Cysylltiad"
+
+#~ msgid "Delete Action"
+#~ msgstr "Dileu Gweithred"
+
+#, fuzzy
+#~ msgid "&Open Source File"
+#~ msgstr "Agor ffeil"
+
+#, fuzzy
+#~ msgid "&Open Form"
+#~ msgstr "Agor ffeil"
+
+#, fuzzy
+#~ msgid "&Open Source"
+#~ msgstr "&Tarddiad"
+
+#~ msgid "Sender"
+#~ msgstr "Anfonwr"
+
+#~ msgid "Insert Separator"
+#~ msgstr "Mewnosod Gwahanydd"
+
+#, fuzzy
+#~ msgid "Class Variables"
+#~ msgstr "Newidynnau"
+
+#~ msgid "Functions"
+#~ msgstr "Ffwythiannau"
+
+#~ msgid "New..."
+#~ msgstr "Newydd ..."
+
+#~ msgid "Add Variable"
+#~ msgstr "Ychwanegu Newidyn"
+
+#~ msgid "Members"
+#~ msgstr "Aelodau"
+
+#, fuzzy
+#~ msgid "Adding Custom Widget"
+#~ msgstr "Addasu"
+
+#, fuzzy
+#~ msgid "Renaming Custom Widget"
+#~ msgstr "Addasu"
+
+#~ msgid "separator"
+#~ msgstr "gwahanydd"
+
+#, fuzzy
+#~ msgid "Delete Menu"
+#~ msgstr " Dileu eitem"
+
+#, fuzzy
+#~ msgid "Rename Menu"
+#~ msgstr "Ai&l-enwi"
+
+#~ msgid "New Column"
+#~ msgstr "Colofn Newydd"
+
+#, fuzzy
+#~ msgid "Subitem"
+#~ msgstr "Cyflwyno"
+
+#~ msgid "new item"
+#~ msgstr "eitem Newydd"
+
+#~ msgid "Cut Item"
+#~ msgstr "Torri'r Eitem"
+
+#, fuzzy
+#~ msgid "Paste Item"
+#~ msgstr "Dileu Eitem"
+
+#~ msgid "Set Icon"
+#~ msgstr "Gosod Eicon"
+
+#~ msgid "Add Item"
+#~ msgstr "Ychwanegu Eitem"
+
+#~ msgid "Remove Item"
+#~ msgstr "Gwaredu Eitem"
+
+#~ msgid "Rename Item"
+#~ msgstr "Ailenwi Eitem"
+
+#, fuzzy
+#~ msgid "Drop Item"
+#~ msgstr "Dileu Eitem"
+
+#, fuzzy
+#~ msgid "Remove Icon"
+#~ msgstr "Gwaredu ffeil"
+
+#~ msgid "Move Item Up"
+#~ msgstr "Symud Eitem i Fyny"
+
+#~ msgid "Move Item Down"
+#~ msgstr "Symud Eitem i Lawr"
+
+#, fuzzy
+#~ msgid "Output Window"
+#~ msgstr "Ffenestr"
+
+#~ msgid "Toolbox"
+#~ msgstr "Blwch offer"
+
+#~ msgid "&Undo: %1"
+#~ msgstr "&Dadwneud: %1"
+
+#~ msgid "&Redo: %1"
+#~ msgstr "&Ail-wneud: %1"
+
+#, fuzzy
+#~ msgid "Edit Text..."
+#~ msgstr "Golygu..."
+
+#, fuzzy
+#~ msgid "Edit Title..."
+#~ msgstr "Golygu..."
+
+#, fuzzy
+#~ msgid "Add Page"
+#~ msgstr "Ail Dudalen"
+
+#~ msgid "Previous Page"
+#~ msgstr "Tudalen Flaenorol"
+
+#~ msgid "Next Page"
+#~ msgstr "Tudalen Nesaf"
+
+#, fuzzy
+#~ msgid "Add Menu Item"
+#~ msgstr "Ychwanegu Eitem ..."
+
+#, fuzzy
+#~ msgid "Add Toolbar"
+#~ msgstr "Bar offer"
+
+#, fuzzy
+#~ msgid "Page Title"
+#~ msgstr "Teitl"
+
+#~ msgid "Edit %1..."
+#~ msgstr "Golygu %1 ..."
+
+#, fuzzy
+#~ msgid "Restoring Last Session"
+#~ msgstr "Adfer lleolia&dau:"
+
+#~ msgid "&Horizontal"
+#~ msgstr "&Llorweddol"
+
+#, fuzzy
+#~ msgid "Inserting Widget"
+#~ msgstr "Creu mynegai..."
+
+#, fuzzy
+#~ msgid "Use Size Hint"
+#~ msgstr "Maint Llorweddol"
+
+#~ msgid "&Select"
+#~ msgstr "&Detholi"
+
+#~ msgid "Raise"
+#~ msgstr "Codi"
+
+#, fuzzy
+#~ msgid "Lay Out Horizontally (in splitter)"
+#~ msgstr "Ehangu'n &Llorweddol"
+
+#, fuzzy
+#~ msgid "Lay Out Vertically (in splitter)"
+#~ msgstr "Ehangu'n &Fertigol"
+
+#, fuzzy
+#~ msgid "Lay Out Children Horizontally"
+#~ msgstr "Ehangu'n &Llorweddol"
+
+#, fuzzy
+#~ msgid "Lay Out Children Vertically"
+#~ msgstr "Teilio'n Fe&rtigol"
+
+#, fuzzy
+#~ msgid "Lay Out Children in a Grid"
+#~ msgstr "Teilio'n Fe&rtigol"
+
+#, fuzzy
+#~ msgid "Edit connections..."
+#~ msgstr "C&ysylltiadau :"

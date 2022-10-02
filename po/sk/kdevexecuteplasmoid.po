@@ -1,0 +1,179 @@
+# translation of kdevexecuteplasmoid.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2013, 2015, 2016, 2017, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecuteplasmoid\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-17 20:47+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Nastaviť spúšťanie plazmoidov"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Zobraziť plazmoid"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Spúšťač plazmoidov"
+
+#: plasmoidexecutionconfig.cpp:183
+#, kde-format
+msgid "Could not resolve the dependency: %1"
+msgstr "Nemôžem vyriešiť závislosť: %1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, kde-format
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plazmoidy"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoid"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Cesta alebo názov:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Správanie"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Formát:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Téma:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Závislosti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "Ciele_"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Prehliadač plazmoidov"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Zabité **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Zlyhalo ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Dokončené ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr "Plazmoid nebolo možné spustiť na %1"
+
+#~ msgid "planar"
+#~ msgstr "rovinné"
+
+#~ msgid "horizontal"
+#~ msgstr "vodorovne"
+
+#~ msgid "vertical"
+#~ msgstr "zvislo"
+
+#~ msgid "mediacenter"
+#~ msgstr "centrum médií"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Zadajte závislosť na pridanie do zoznamu"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Pridá vypísaný cieľ do zoznamu závislostí."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Zoznam nepriamych závislých cieľov."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Tento zoznam by mal obsahovať ciele, na ktorých aplikácia priamo "
+#~ "nezávisí, ale pre ktoré sú potrebné vykonané akcie pred spustením "
+#~ "aplikácie."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Odstrániť vybrané závislosti zo zoznamu."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Presunúť závislosť hore vyššie v zozname."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Presunie vybranú závislosť dolu v zozname."
+
+#~ msgid "Ninja failed to compile %1"
+#~ msgstr "Zlyhala kompilácia Ninja %1"
+
+#~ msgid "Execute plasmoid support"
+#~ msgstr "Podpora spúšťania plazmoidov"
+
+#~ msgid "Allows running of plasmoids"
+#~ msgstr "Umožní spúšťanie plazmoidov"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Author"
+#~ msgstr "Autor"

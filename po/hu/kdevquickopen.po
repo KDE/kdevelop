@@ -1,0 +1,331 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-01-20 20:25+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "Dokumentáció ebben: %1"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "Többet nem érhető el: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "Többet nem érhető el"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Visszatérés: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Fájl: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "Gyors megnyitás eszköztár"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "Projekt %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "Nincs még feldolgozva"
+
+#: projectfilequickopen.cpp:178
+#, fuzzy, kde-format
+#| msgid "none"
+msgctxt "@item no project"
+msgid "none"
+msgstr "nincs"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Osztályok"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Függvények"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Projekt"
+
+#: quickopenplugin.cpp:60
+#, fuzzy, kde-format
+#| msgid "Includes"
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Beágyazások"
+
+#: quickopenplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Includers"
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Beágyazók"
+
+#: quickopenplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "Currently Open"
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "Jelenleg megnyitott"
+
+#: quickopenplugin.cpp:64
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Fájlok"
+
+#: quickopenplugin.cpp:67
+#, fuzzy, kde-format
+#| msgid "Documentation"
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "Dokumentáció"
+
+#: quickopenplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Függvények"
+
+#: quickopenplugin.cpp:279
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "&Gyors megnyitás"
+
+#: quickopenplugin.cpp:285
+#, fuzzy, kde-format
+#| msgid "Quick Open &File"
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "&Fájl gyors megnyitása"
+
+#: quickopenplugin.cpp:291
+#, fuzzy, kde-format
+#| msgid "Quick Open &Class"
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "&Osztály gyors megnyitása"
+
+#: quickopenplugin.cpp:297
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "Függ&vény gyors megnyitása"
+
+#: quickopenplugin.cpp:303
+#, fuzzy, kde-format
+#| msgid "Quick Open &Already Open File"
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "&Már megnyitott fájl gyors megnyitása"
+
+#: quickopenplugin.cpp:308
+#, fuzzy, kde-format
+#| msgid "Quick Open &Documentation"
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "&Dokumentáció gyors megnyitása"
+
+#: quickopenplugin.cpp:314
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "Függ&vény gyors megnyitása"
+
+#: quickopenplugin.cpp:319
+#, fuzzy, kde-format
+#| msgid "Jump to Declaration"
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "Ugrás a deklarációra"
+
+#: quickopenplugin.cpp:325
+#, fuzzy, kde-format
+#| msgid "Jump to Definition"
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "Ugrás a definícióra"
+
+#: quickopenplugin.cpp:330
+#, fuzzy, kde-format
+#| msgid "Embedded Quick Open"
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "Beágyazott gyors megnyitás"
+
+#: quickopenplugin.cpp:337
+#, fuzzy, kde-format
+#| msgid "Next Function"
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Következő függvény"
+
+#: quickopenplugin.cpp:342
+#, fuzzy, kde-format
+#| msgid "Previous Function"
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Előző függvény"
+
+#: quickopenplugin.cpp:347
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Körvonal"
+
+#: quickopenplugin.cpp:498
+#, fuzzy, kde-format
+#| msgid "Quick Open"
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "Gyors megnyitás"
+
+#: quickopenplugin.cpp:832
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Körvonal"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, fuzzy, kde-format
+#| msgid "Quick Open..."
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "Gyors megnyitás…"
+
+#: quickopenplugin.cpp:943
+#, fuzzy, kde-format
+#| msgid ""
+#| "Search for files, classes, functions and more, allowing you to quickly "
+#| "navigate in your source code."
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+"Fájlok, osztályok, függvények és továbbiak keresése, lehetővé téve a gyors "
+"navigációt a forráskódban."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Search:"
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Keresés:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Megnyitás"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, fuzzy, kde-format
+#| msgid "Cancel"
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Mégse"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, fuzzy, kde-format
+#| msgid "&Scopes:"
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "&Hatáskörök:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, fuzzy, kde-format
+#| msgid "&Items:"
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "&Elemek:"
+
+#~ msgid "Project %1"
+#~ msgstr "Projekt %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "Ez a bővítmény lehetővé teszi a gyors hozzáférést a projektfájlokhoz és a "
+#~ "nyelvi elemekhez mint osztályokhoz/függvényekhez."
+
+#~ msgid "Navigate"
+#~ msgstr "Navigálás"
+
+#~ msgid "Quickly open resources such as files, classes and methods."
+#~ msgstr ""
+#~ "Erőforrások gyors megnyitása mint például fájlok, osztályok és metódusok."

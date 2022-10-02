@@ -1,0 +1,210 @@
+# translation of kdevwelcomepage.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2016, 2017, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevwelcomepage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-20 00:43+0000\n"
+"PO-Revision-Date: 2019-09-13 20:04+0200\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 18.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: qml/area_code.qml:76
+msgid "Need Help?"
+msgstr "Potrebujete pomoc?"
+
+#: qml/area_code.qml:84
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#: qml/area_code.qml:91
+msgid "Learn about KDevelop"
+msgstr "O programe KDevelop"
+
+#: qml/area_code.qml:96
+msgid "Join KDevelop's team!"
+msgstr "Pridajte sa k tímu KDevelop!"
+
+#: qml/area_code.qml:101
+msgid "Handbook"
+msgstr "Príručka"
+
+#: qml/area_debug.qml:18 qml/area_review.qml:16
+msgid "Back to code"
+msgstr "Späť na kód"
+
+#: qml/area_debug.qml:37
+msgid "Configure a new Launcher"
+msgstr "Nastaviť nový spúšťač"
+
+#: qml/area_debug.qml:38
+msgid "Attach to Process"
+msgstr "Pripojiť k procesu"
+
+#: qml/area_debug.qml:39
+msgid "Debug your program"
+msgstr "Debugovať váš program"
+
+#: qml/area_debug.qml:41
+msgid "Debug Area"
+msgstr "Oblasť ladenia"
+
+#: qml/area_debug.qml:44
+msgid ""
+"On the <em>Debug</em> area you will be able to see and analyze how your "
+"program works on execution. On the <em>Run</em> menu you will find all the "
+"possible options."
+msgstr ""
+"V oblasti <em>Ladenie</em> budete môcť vidieť a analyzovať, ako váš program "
+"funguje. V ponuke <em>Spustiť</em> nájdete všetky možné voľby."
+
+#: qml/area_debug.qml:50
+msgid ""
+"As you can see, here you can just execute your application or debug it if "
+"you need further runtime information. You can select what is going to be run "
+"by configuring the launches and selecting the one you want to use in the "
+"<em>Current Launch Configuration</em> sub-menu."
+msgstr ""
+"Ako vidíte, tu môžete spustiť vašu aplikáciu alebo ladiť ju, ak potrebujete "
+"informácie o behu. Môžete vybrať, čo sa má spustiť, nastavením behu a "
+"vybraním jedného, ktorý chcete použiť v podponuke <em>Nastavenie aktuálneho "
+"behu</em>."
+
+#: qml/area_review.qml:38
+msgid "Review a Patch"
+msgstr "Posúdiť záplatu"
+
+#: qml/area_review.qml:46
+msgid "Review Area"
+msgstr "Oblasť revízie"
+
+#: qml/area_review.qml:50
+msgid ""
+"On the <em>Review</em> area you will be able to find the tools you need to "
+"review changes in your projects, either the ones you made or some external "
+"patch."
+msgstr ""
+"V oblasti <em>Revízia</em> budete mať možnosť nájsť nástroje, ktoré "
+"potrebujete na revíziu zmien vo vašich projektoch, buď vaše alebo externé "
+"záplaty."
+
+#: qml/area_review.qml:56
+msgid ""
+"Also it will help you send the changes to the community you're contributing "
+"to, either by committing the changes, sending them by e-mail or putting them "
+"on a ReviewBoard service."
+msgstr ""
+"Tiež vám pomôže poslať zmeny komunite, ktorej prispievate, buď odoslaním "
+"zniem, poslaním ich e-mailom alebo vložením ich na službu ReviewBoard."
+
+#: qml/Develop.qml:32
+msgid "New Project"
+msgstr "Nový projekt"
+
+#: qml/Develop.qml:37
+msgid "Open Project"
+msgstr "Otvoriť projekt"
+
+#: qml/Develop.qml:43
+msgid "Fetch Project"
+msgstr "Natiahnuť projekt"
+
+#: qml/Develop.qml:50
+msgid "Recent Projects"
+msgstr "Nedávne projekty"
+
+#: qml/Develop.qml:65
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Vitajte v KDevelop!</h3>\n"
+"<p>Môžete začať pracovať na projekte otvorením existujúceho alebo vytvorením "
+"nového pomocou týchto tlačidiel.</p>\n"
+"<p>Ak potrebujete pomoc, prosím skontrolujte <a href=\"https://userbase.kde."
+"org/KDevelop\">používateľskú príručku.</a></p>"
+
+#: qml/Develop.qml:70
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Poznámka pre používateľov Windows</h3>\n"
+"<p>Pamätajte, že KDevelop sa NEDODÁVA s prekladačom C/C++ pre Windows!</p>\n"
+"<p>Musíte si nainštalovať buď GCC cez MinGW alebo nainštalovať poslednú "
+"verziu Microsoft Visual Studio IDE a uistiť sa, že prostredie je nastavené "
+"správne <i>pred</i> spustením KDevelop.</p>\n"
+"<p>Ak potrebujete pomoc, prosím skontrolujte <a href=\"https://userbase.kde."
+"org/KDevelop4/Manual/WindowsSetup\">inštrukcie pre KDevelop pod Windows "
+"instructions.</a></p>"
+
+#: qml/Develop.qml:107
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: qml/Develop.qml:126
+msgid "Sessions"
+msgstr "Sedenia"
+
+#: qml/GettingStarted.qml:49
+msgid "Go!"
+msgstr "Prejsť!"
+
+#: qml/GettingStarted.qml:57
+msgid "Documentation for KDevelop users"
+msgstr "Dokumentácia pre používateľov KDevelop"
+
+#: qml/GettingStarted.qml:62
+msgid "Keep up with KDevelop's development"
+msgstr "Držte krok s vývojom KDevelop"
+
+#: qml/GettingStarted.qml:67
+msgid "Help us improve KDevelop"
+msgstr "Pomôžte nám zlepšiť KDevelop"
+
+#: qml/NewsFeed.qml:136
+msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+msgid "%1 (new)"
+msgstr "%1 (nové)"
+
+#: qml/NewsFeed.qml:147
+msgid "Fetching feeds..."
+msgstr "Sťahujú sa kanály..."
+
+#: qml/NewsFeed.qml:148
+msgid "No recent news"
+msgstr "Žiadne nedávne novinky"
+
+#: qml/plugins/Branches.qml:16
+msgid "Branches"
+msgstr "Vetvy"
+
+#: qml/plugins/Projects.qml:15
+msgid "Projects"
+msgstr "Projekty"
+
+#~ msgid "News"
+#~ msgstr "Novinky"
+
+#~ msgid "<h3>Welcome to KDevelop!</h3>"
+#~ msgstr "<h3>Vitajte v KDevelop!</h3>"
+
+#~ msgid "<br/>"
+#~ msgstr "<br/>"

@@ -1,0 +1,270 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevquickopen.pot\n"
+"X-Crowdin-File-ID: 4917\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "在 %1 的文档"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "不再可用：%1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "不再可用"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "返回：%1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "文件：%1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "快速打开工具栏"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "工程 %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "尚未解析"
+
+#: projectfilequickopen.cpp:178
+#, kde-format
+msgctxt "@item no project"
+msgid "none"
+msgstr "无"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "类"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "函数"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "工程"
+
+#: quickopenplugin.cpp:60
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "包含"
+
+#: quickopenplugin.cpp:61
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "包含者"
+
+#: quickopenplugin.cpp:62
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "当前打开"
+
+#: quickopenplugin.cpp:64
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "文件"
+
+#: quickopenplugin.cpp:67
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "文档"
+
+#: quickopenplugin.cpp:68
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "操作"
+
+#: quickopenplugin.cpp:279
+#, kde-format
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "快速打开(&Q)"
+
+#: quickopenplugin.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "快速打开文件(&F)"
+
+#: quickopenplugin.cpp:291
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "快速打开类(&C)"
+
+#: quickopenplugin.cpp:297
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "快速打开函数(&F)"
+
+#: quickopenplugin.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "快速打开已经打开的文件(&A)"
+
+#: quickopenplugin.cpp:308
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "快速打开文档(&D)"
+
+#: quickopenplugin.cpp:314
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "快速打开操作(&A)"
+
+#: quickopenplugin.cpp:319
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "跳转到声明"
+
+#: quickopenplugin.cpp:325
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "跳转到定义"
+
+#: quickopenplugin.cpp:330
+#, kde-format
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "嵌入式快速打开"
+
+#: quickopenplugin.cpp:337
+#, kde-format
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "下个函数"
+
+#: quickopenplugin.cpp:342
+#, kde-format
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "上个函数"
+
+#: quickopenplugin.cpp:347
+#, kde-format
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "概要"
+
+#: quickopenplugin.cpp:498
+#, kde-format
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "快速打开"
+
+#: quickopenplugin.cpp:832
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "概要"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "快速打开..."
+
+#: quickopenplugin.cpp:943
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr "搜索文件、类、函数和更多，让您快速导航您的源代码。"
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "搜索："
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Open"
+msgstr "打开"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "取消"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "作用域(&S)："
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "项目(&I)："

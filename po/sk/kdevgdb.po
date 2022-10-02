@@ -1,0 +1,1011 @@
+# translation of kdevgdb.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2009.
+# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015, 2016, 2017, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgdb\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"PO-Revision-Date: 2022-04-17 20:54+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#, kde-format
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Disassemblovanie/Registre"
+
+#: debuggerplugin.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Pamäť"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
+#: debuggertracingdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Tracing Configuration"
+msgstr "Nastavenie trasovania"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
+#: debuggertracingdialog.ui:26
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Custom format string</b>\n"
+"<p>Specify a C-style format string that will be used when printing the "
+"chosen expression. For example:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"If custom format string is not enabled, names and values of all expressions "
+"will be printed, using \"%d\" as format specifier for all expressions."
+msgstr ""
+"<b>Vlastný formát reťazca</b>\n"
+"<p>Určite C-style formát reťazca, ktorý sa použite, keď sa bude tlačiť "
+"zvolený výraz. Napríklad:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"Ak vlastný formát reťazca nie je povolený, názvy a hodnoty všetkých výrazov "
+"budú tlačené použitím \"%d\" ako špecifikátora formátu pre všetky výrazy."
+
+#. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
+#: debuggertracingdialog.ui:36
+#, kde-format
+msgctxt "@label"
+msgid "Expressions to print:"
+msgstr "Výrazy na vytlačenie:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:47
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"<b>Enable tracing</b>\n"
+"<p>Tracing is a mechanism to automatically print values of the chosen "
+"expressions and continue execution when breakpoint is hit. You can think of "
+"it as printf debugging that does not require modifying the source.</p>"
+msgstr ""
+"<b>Povoliť trasovanie</b>\n"
+"<p>Trasovanie je mechanizmus, ktorý automaticky tlačí hodnoty vybraných "
+"výrazov a pokračuje vo vykonávaní, keď sa dosiahne bod zastavenia. Môžete si "
+"to predstaviť ako ladiace printf, ktoré nevyžaduje modifikáciu zdroja.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable tracing"
+msgstr "Povoliť trasovanie"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
+#: debuggertracingdialog.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Custom format string"
+msgstr "Vlastný formát reťazca"
+
+#: debugsession.cpp:170
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Nie je uvedená skupina prostredia, vyzerá to ako poškodená konfigurácia, "
+"prosím skontrolujte beh konfigurácie '%1'. Použitie predvolenej skupiny "
+"prostredia."
+
+#: debugsession.cpp:281
+#, kde-format
+msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+msgstr "<b>Potrebujete gdb 7.0.0 alebo vyšší.</b><br />Používate: %1"
+
+#: debugsession.cpp:294
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Nepodarilo sa spustiť ladiaci program:</b><br />"
+
+#: debugsession.cpp:308
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Zlyhalo načítanie súboru jadra</b><p>Ladič oznámil nasledovné chyby:"
+"<p><tt>%1"
+
+#: gdb.cpp:69
+#, kde-format
+msgid "Could not locate the debugging shell '%1'."
+msgstr "Nemožno nájsť ladiaci shell '%1'."
+
+#: gdbconfigpage.cpp:92
+#, kde-format
+msgctxt "@title:tab"
+msgid "GDB Configuration"
+msgstr "Nastavenie GDB"
+
+#: gdbconfigpage.cpp:133
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
+"pokračovať so spustením?"
+
+#: gdbconfigpage.cpp:135
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: gdbconfigpage.cpp:161
+#, kde-format
+msgid "Executes a native application in GDB"
+msgstr "Spustí natívnu aplikáciu v GDB"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: gdbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Debugger"
+
+#. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
+#: gdbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger e&xecutable:"
+msgstr "Program ladenia:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Gdb executable"
+msgstr "Program gdb"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:51
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
+"gdb, for example, for a different architecture, enter the executable name "
+"here. You can either run gdb from $PATH, but with a different name (say, "
+"\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+"executable."
+msgstr ""
+"Ak chcete spustiť program \"gdb\" z $ PATH, ponechajte toto pole prázdne. Ak "
+"chcete spustiť vlastný gdb, napríklad pre inú architektúru, zadajte sem "
+"názov spustiteľného súboru. Môžete spustiť gdb buď z $ PATH, ale s iným "
+"názvom (povedzme, \"arm-gdb\"), buď zadaním názvu, alebo špecifikujte úplnú "
+"cestu spustiteľného súboru gdb."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:54
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to gdb executable..."
+msgstr "Prepísať cestu k programu gdb..."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
+#: gdbconfigpage.ui:61 gdbconfigpage.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>If you want gdb to be executed by a special shell "
+"script, which for example properly sets the library path, insert it here e."
+"g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+"invoked like this: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+"span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Ak chcete, aby sa gdb spúšťal zvláštnym shellovým "
+"skriptom, ktorý napríklad správne nastaví cestu knižnice, vložte ho sem, "
+"napr.: /cesta/ku/skriptu.sh --parametreSkriptu</p> <p>Poznámka: váš skript "
+"sa vyvolá takto: /cesta/ku/skriptu.sh --parametreSkriptu debbuger --"
+"parametreDebuggera. Teda skript.sh <span style=\" font-weight:600;\">musí</"
+"span> vyvolať program \"debugger\" ručne.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
+#: gdbconfigpage.ui:64
+#, kde-format
+msgctxt "@label:chooser"
+msgid "She&ll script:"
+msgstr "Shellový skript:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: gdbconfigpage.ui:87
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Voľby"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: gdbconfigpage.ui:96
+#, kde-format
+msgctxt "@option:check"
+msgid "Display static &members:"
+msgstr "&Zobraziť statických členov:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
+#: gdbconfigpage.ui:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displaying static members makes GDB slower in\n"
+"producing data with Qt-based code.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on,\n"
+"but if you need to debug into these values then\n"
+"check this option."
+msgstr ""
+"Zobrazenie statických členov robí GDB\n"
+"pomalším v tvorbe dát v KDE a Qt.\n"
+"To môže zmeniť \"označenie\" dát,\n"
+"na ktoré sa QString a priatelia spoliehajú,\n"
+"ale ak potrebujete ladiť do týchto hodnôt \n"
+"potom zaškrtnite túto voľbu."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gdbconfigpage.ui:121
+#, kde-format
+msgctxt "@option:check"
+msgid "Display &demangled names:"
+msgstr "Zobraziť poža&dované názvy:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
+#: gdbconfigpage.ui:133
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"When displaying the disassembled code you\n"
+"can select to see the methods' mangled names.\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"Pri zobrazení disassemblovaného kódu si\n"
+"môžete vybrať zobrazenie pozmenených názvov metód.\n"
+"Avšak, nepozmenené názvy sú ľahšie na čítanie."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gdbconfigpage.ui:143
+#, kde-format
+msgctxt "@label:listbox"
+msgid "S&tart debugger with:"
+msgstr "Spustiť ladiaci program s:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:154
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Výstup aplikácie"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:159
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "GDB Console"
+msgstr "GDB konzola"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:164
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Rámcový zásobník"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:178
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This script is intended for the actual commands needed to connect to a "
+"remotely running executable.\n"
+"\tshell sleep 5\twait for remote program to start\n"
+"\ttarget remote ...\tconnect to the remote debugger\n"
+"\tcontinue\t[optional] run debugging to the first breakpoint"
+msgstr ""
+"Tento skript je určený pre aktuálne príkazy, ktoré sa potrebujú pripojiť k "
+"vzdialenému bežiacemu spustiteľnému programu.\n"
+"\tshell spí 5\tpočkať na spustenie vzdialeného programu\n"
+"\tcieľ vzdialený ...\tpripojiť vzdialený debugger\n"
+"\tpokračuje\t[voliteľné] spustiť ladenie na prvom bode zastavenia."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:181
+#, kde-format
+msgctxt "@title:group"
+msgid "Remote Debugging"
+msgstr "Vzdialené ladenie"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
+#: gdbconfigpage.ui:187 gdbconfigpage.ui:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to start remote application</p><p></p><p>This "
+"shell script is run after the Gdb Config script has been sourced by gdb.</"
+"p><p>It's purpose is to actually start the remote process.</p><p>1) Find a "
+"way to execute a command remotely - rsh, ssh, telnet, ...</p><p>2a) Execute "
+"&quot;gdbserver ... application&quot; on target.</p><p>or if your executable "
+"contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
+"p></body></html>"
+msgstr ""
+"<html><head/><body><p>Skript na spustenie vzdialenej aplikácie</p><p></p> "
+"<p>Tento shellový skript beží po zdrojovaní konfiguračného skriptu Gdb v Gdb."
+"</p> <p>Jeho cieľom je aktuálne spustenie vzdialeného procesu.</p> <p>1) "
+"Nájdite spôsob, ako vzdialene spustiť príkaz - rsh, ssh, telnet, ...</p> "
+"<p>2a) Spustite \"gdbserver ... aplikácia\" na cieli.</p> <p>alebo ak váš "
+"program obsahuje gdb stub:</p> <p>2b) Spustite \"aplikáciu\" na cieli.</p></"
+"body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
+#: gdbconfigpage.ui:190
+#, kde-format
+msgctxt "@label:chooser Shell script to be executed at run time"
+msgid "R&un shell script:"
+msgstr "Spustiť shellový skript:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
+#: gdbconfigpage.ui:210 gdbconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This script is sourced by gdb when the debugging starts."
+msgstr "Tento skript je vyhotovený gdb pri spustení ladenia."
+
+#. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
+#: gdbconfigpage.ui:213
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Gdb &config script:"
+msgstr "Konfiguračný skript Gdb:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
+#. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:226 gdbconfigpage.ui:233
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to connect with remote application</p><p>For "
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Skript na prepojenie so vzdialenou aplikáciou</p> "
+"<p>Napríklad:</p><p>\tshell sleep 5\t #čakať na spustenie vzdialeného "
+"programu</p><p>\ttarget remote ...\t#pripojiť sa na vzdialený debugger</p><p>"
+"\tcontinue\t#[voliteľné] spustiť ladenie k prvému breakpointu.</p></body></"
+"html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:236
+#, kde-format
+msgctxt "@label:chooser Gdb script to be executed at run time."
+msgid "Run &gdb script:"
+msgstr "Spustiť skript &gdb:"
+
+#: gdboutputwidget.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB Output"
+msgstr "GDB výstup"
+
+#: gdboutputwidget.cpp:48
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
+"issue any other GDB command while debugging.</p>"
+msgstr ""
+"<b>Výstup GDB</b><p>Ukazuje všetky vykonávané príkazy gdb. Môžete tiež vydať "
+"akýkoľvek iný príkaz gdb počas ladenia.</p>"
+
+#: gdboutputwidget.cpp:58
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&GDB command:"
+msgstr "GDB príkaz:"
+
+#: gdboutputwidget.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter GDB commands"
+msgstr "Pozastaviť vykonávanie aplikácie, aby sa zadali príkazy GDB"
+
+#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Internal Commands"
+msgstr "Ukázať interné príkazy"
+
+#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Určuje, či príkazy vydané interne KDevelop sa ukážu alebo nie.<br>Táto voľba "
+"ovplyvní iba budúce príkazy, nepridá alebo odstráni už vydané príkazy z "
+"pohľadu."
+
+#: gdboutputwidget.cpp:381
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy All"
+msgstr "Kopírovať všetko"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevgdbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Panel nástrojov ladenia"
+
+#: memviewdlg.cpp:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Start:"
+msgstr "Začiatok:"
+
+#: memviewdlg.cpp:69
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Amount:"
+msgstr "Množstvo:"
+
+#: memviewdlg.cpp:96
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory View"
+msgstr "Pohľad pamäte"
+
+#: memviewdlg.cpp:223
+#, kde-format
+msgid "%2 (1 byte)"
+msgid_plural "%2 (%1 bytes)"
+msgstr[0] "%2 (1 bajt)"
+msgstr[1] "%2 (%1 bajty)"
+msgstr[2] "%2 (%1 bajtov)"
+
+#: memviewdlg.cpp:262
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "&Reload"
+msgstr "&Obnoviť"
+
+#: memviewdlg.cpp:271
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Format"
+msgstr "&Formát"
+
+#: memviewdlg.cpp:274
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Binary"
+msgstr "&Binárny"
+
+#: memviewdlg.cpp:279
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Octal"
+msgstr "&Osmičkový"
+
+#: memviewdlg.cpp:284
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Decimal"
+msgstr "&Decimálny"
+
+#: memviewdlg.cpp:289
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Hexadecimal"
+msgstr "&Hexadecimálny"
+
+#: memviewdlg.cpp:303
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Grouping"
+msgstr "Zoskupovanie"
+
+#: memviewdlg.cpp:306
+#, kde-format
+msgctxt "@item:inmenu no byte grouping"
+msgid "&0"
+msgstr "&0"
+
+#: memviewdlg.cpp:311
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&1"
+msgstr "&1"
+
+#: memviewdlg.cpp:316
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&2"
+msgstr "&2"
+
+#: memviewdlg.cpp:321
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&4"
+msgstr "&4"
+
+#: memviewdlg.cpp:326
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&8"
+msgstr "&8"
+
+#: memviewdlg.cpp:331
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "1&6"
+msgstr "1&6"
+
+#: memviewdlg.cpp:344
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Write Changes"
+msgstr "Zapísať zmeny"
+
+#: memviewdlg.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Change Memory Range"
+msgstr "Zmeniť rozsah pamäte"
+
+#: memviewdlg.cpp:352
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close View"
+msgstr "Zavrieť pohľad"
+
+#: memviewdlg.cpp:419
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory Viewer"
+msgstr "Prehliadač pamäte"
+
+#: memviewdlg.cpp:423
+#, kde-format
+msgctxt "@action"
+msgid "New Memory Viewer"
+msgstr "Nový prehliadač pamäte"
+
+#: memviewdlg.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open a new memory viewer"
+msgstr "Otvoriť nový prehliadač pamäti"
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "gdb error"
+#~ msgstr "chyba gdb"
+
+#~ msgid "Startup error"
+#~ msgstr "Chyba spustenia"
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Shell ladenia sa nenašiel"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Nastavenie ladenia"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Spustiť"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Cancel"
+#~ msgstr "Zrušiť"
+
+#~ msgid "Address Selector"
+#~ msgstr "Výber adresy"
+
+#~ msgid "Change &address"
+#~ msgstr "Zmeniť adresu"
+
+#~ msgid "&Jump to Cursor"
+#~ msgstr "&Skočiť na kurzor"
+
+#~ msgid "Sets the execution pointer to the current cursor position."
+#~ msgstr "Nastaví ukazovateľ vykonávania na aktuálnu pozíciu kurzora."
+
+#~ msgid "&Run to Cursor"
+#~ msgstr "Bežať na kurzor"
+
+#~ msgid "Continues execution until the cursor position is reached."
+#~ msgstr "Pokračuje vo vykonávaní pokiaľ nie je dosiahnutá pozícia kurzora."
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>Zobrazenie strojového kódu</b><p>Strojový kód, ktorý je vidieť vo "
+#~ "vašom bežiacom spustiteľnom súbore so zvýraznenou aktuálnou inštrukciou. "
+#~ "Môžete krokovať inštrukciu za inštrukciou pomocou tlačidiel na paneli "
+#~ "nástrojov ladiaceho programu \"krok cez\" inštrukciu a \"krok do\" "
+#~ "inštrukcie."
+
+#~ msgid "Address"
+#~ msgstr "Adresa"
+
+#~ msgid "Function"
+#~ msgstr "Funkcia"
+
+#~ msgid "Instruction"
+#~ msgstr "Inštrukcia"
+
+#~ msgid "Disassemble/Registers View"
+#~ msgstr "Pohľad disassemblovania/registrov"
+
+#~ msgid "Binary"
+#~ msgstr "Binárny"
+
+#~ msgid "Octal"
+#~ msgstr "Osmičkový"
+
+#~ msgid "Decimal"
+#~ msgstr "Dekadický"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "Hexadecimálny"
+
+#~ msgid "Raw"
+#~ msgstr "Raw"
+
+#~ msgid "Unsigned"
+#~ msgstr "Nepodpísané"
+
+#~ msgid "General"
+#~ msgstr "Všeobecné"
+
+#~ msgid "Flags"
+#~ msgstr "Príznaky"
+
+#~ msgid "VFP single-word"
+#~ msgstr "Jednoduché slovo VFP"
+
+#~ msgid "VFP double-word"
+#~ msgstr "Dvojité slovo VFP"
+
+#~ msgid "VFP quad-word"
+#~ msgstr "Štvorité slovo VFP"
+
+#~ msgid "FPU"
+#~ msgstr "FPU"
+
+#~ msgid "XMM"
+#~ msgstr "XMM"
+
+#~ msgid "Segment"
+#~ msgstr "Úsečka"
+
+#~ msgid "Format"
+#~ msgstr "Formát"
+
+#~ msgid "Mode"
+#~ msgstr "Režim"
+
+#~ msgid "Update"
+#~ msgstr "Aktualizovať"
+
+#~ msgid "Address selector"
+#~ msgstr "Výber adresy"
+
+#~ msgid "Select the address to disassemble around"
+#~ msgstr "Vybrať adresu, ktorej okolie sa disassembluje"
+
+#~ msgid "Select address to disassemble around"
+#~ msgstr "Vybrať adresu, ktorej okolie sa disassembluje"
+
+#~ msgid "Examine Core File..."
+#~ msgstr "Preskúmať súbor core..."
+
+#~ msgid "Examine core file"
+#~ msgstr "Preskúmať súbor core"
+
+#~ msgid ""
+#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
+#~ "created after the application has crashed, e.g. with a segmentation "
+#~ "fault. The core file contains an image of the program memory at the time "
+#~ "it crashed, allowing you to do a post-mortem analysis.</p>"
+#~ msgstr ""
+#~ "<b>Preskúmať súbor core</b><p>Toto načíta core súbor, ktorý je zvyčajne "
+#~ "vytvorený po páde aplikácie, napr. so segmentation fault. Súbor core "
+#~ "obsahuje obraz pamäte programu v čase, keď havaroval, čo vám umožňuje "
+#~ "vykonať následnú analýzu.</p>"
+
+#~ msgid "Attach to Process"
+#~ msgstr "Pripojiť k procesu"
+
+#~ msgid "Attach to process..."
+#~ msgstr "Pripojiť k procesu..."
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+#~ msgstr ""
+#~ "<b>Pripojiť k procesu</b><p>Pripojí ladiaci program k bežiacemu procesu.</"
+#~ "p>"
+
+#~ msgid "KDevelop"
+#~ msgstr "KDevelop"
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "Vyhodnotiť: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr "<b>Vyhodnotiť výraz</b><p>Ukazuje hodnotu výrazu pod kurzorom.</p>"
+
+#~ msgid "Watch: %1"
+#~ msgstr "Pozorovať: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Sledovať výraz</b><p>Pridá výraz pod kurzorom do zoznamu Premenných/"
+#~ "Sledovaných.</p>"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Zvoliť súbor core, ktorý sa preskúma..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "Skúmanie súboru core %1"
+
+#~ msgid "Debug core file"
+#~ msgstr "Ladiť súbor core"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "Vybrať proces na pripojenie sa...."
+
+#~ msgid "Not attaching to process %1: cannot attach the debugger to itself."
+#~ msgstr ""
+#~ "Žiadne pripojenie k procesu %1: nemožno pripojiť ladiaci program k sebe "
+#~ "samému."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "Pripojenie k procesu %1"
+
+#~ msgid "Debug process %1"
+#~ msgstr "Proces ladenia %1"
+
+#~ msgctxt "ProjectName: run configuration name"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Attach to a process"
+#~ msgstr "Pripojiť k procesu"
+
+#~ msgid "Select Core File"
+#~ msgstr "Vybrať súbor jadra"
+
+#~ msgid "Executable:"
+#~ msgstr "&Spustiteľný súbor:"
+
+#~ msgid "Core File:"
+#~ msgstr "Súbor jadra:"
+
+#~ msgid "<br>Old value: %1"
+#~ msgstr "<br>Stará hodnota: %1"
+
+#~ msgid "<br>New value: %1"
+#~ msgstr "<br>Nová hodnota: %1"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Ladenie zastavené"
+
+#~ msgid "Process exited"
+#~ msgstr "Proces ukončený"
+
+#~ msgid "Application is running"
+#~ msgstr "Aplikácia beží"
+
+#~ msgid "Application is paused"
+#~ msgstr "Aplikácia je pozastavená"
+
+#~ msgid "Debugger error"
+#~ msgstr "Chyba ladenia"
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>GDB skončil abnormálne</b><p>To je pravdepodobne chyba v GDB. "
+#~ "Skontrolovať okno výstupu gdb a potom zastaviť ladiaci program"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "GDB skončil abnormálne"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>Príkaz gdb odoslaný, keď ladiaci program nebeží</b><br>Príkaz bol:<br> "
+#~ "%1"
+
+#~ msgid "Internal error"
+#~ msgstr "Interná chyba"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>Neplatný príkaz ladenia</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Neplatný príkaz ladenia"
+
+#~ msgid "Exited with return code: %1"
+#~ msgstr "Ukončené s návratovým kódom: %1"
+
+#~ msgid "Exited normally"
+#~ msgstr "Ukončené normálne"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "Ukončené na signáli %1"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Program obdržal signál %1 (%2)"
+
+#~ msgid "Running program"
+#~ msgstr "Spúšťam program"
+
+#~ msgid "Warning"
+#~ msgstr "Upozornenie"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Chyba ladiaceho programu</b><p>Debugger oznámil nasledovnú chybu:"
+#~ "<p><tt>%1"
+
+#~ msgid "1 command in queue\n"
+#~ msgid_plural "%1 commands in queue\n"
+#~ msgstr[0] "1 príkaz vo fronte\n"
+#~ msgstr[1] "%1 príkazy vo fronte\n"
+#~ msgstr[2] "%1 príkazov vo fronte\n"
+
+#~ msgctxt "Only the 0 and 1 cases need to be translated"
+#~ msgid "1 command being processed by gdb\n"
+#~ msgid_plural "%1 commands being processed by gdb\n"
+#~ msgstr[0] "1 príkaz jel spracovaný s gdb\n"
+#~ msgstr[1] "%1 príkazy sú spracovávané s gdb\n"
+#~ msgstr[2] "%1 príkazov je spracovávaných s gdb\n"
+
+#~ msgid "Debugger state: %1\n"
+#~ msgstr "Stav ladiaceho programu: %1\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "Trieda aktuálneho príkazu: '%1'\n"
+#~ "Text aktuálneho príkazu: '%2'\n"
+#~ "Pôvodný text aktuálneho príkazu: '%3'\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "Stav ladenia"
+
+#~ msgid "<b>Could not attach debugger:</b><br />"
+#~ msgstr "<b>Nepodarilo sa pripojiť ladiaci program:</b><br />"
+
+#~ msgctxt "<b>Internal debugger error</b>"
+#~ msgid ""
+#~ "<p>The debugger component encountered internal error while processing "
+#~ "reply from gdb. Please submit a bug report."
+#~ msgstr ""
+#~ "<p>Došlo k internej chybe komponentu ladiaceho programu pri spracovaní "
+#~ "odpovede z gdb. Prosím o zaslanie správy o chybe."
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "Výnimka je: %1\n"
+#~ "Odpoveď MI je: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "Vnútorná chyba ladenia"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>Nepodarilo sa spustiť ladiaci program.</b><p>Nepodarilo sa spustiť "
+#~ "'%1'. Uistite sa, že názov cesty je zadaný správne."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Nepodarilo sa spustiť ladiaci proces"
+
+#~ msgid ""
+#~ "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
+#~ "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
+#~ msgstr ""
+#~ "<b>Gdb spadol.</b><p>Z tohto dôvodu musí byť ladiace sedenie ukončené."
+#~ "<br>Pokúste sa reprodukovať pád s čistým gdb a nahlásiť chybu.<br>"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Gdb spadol"
+
+#~ msgid "(running)"
+#~ msgstr "(beží)"
+
+#~ msgid ""
+#~ "Cannot use the tty* or pty* devices.\n"
+#~ "Check the settings on /dev/tty* and /dev/pty*\n"
+#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
+#~ "the user to the tty group using \"usermod -aG tty username\"."
+#~ msgstr ""
+#~ "Nemožno použiť zariadenia tty* alebo pty*.\n"
+#~ "Skontrolujte nastavenia na /dev/tty* a /dev/pty*\n"
+#~ "Ako root môže byť potrebné pre zariadenia tty* and pty* \"chmod ug+rw\" a/"
+#~ "alebo pridať používateľa do skupiny tty pomocou \"usermod -aG tty username"
+#~ "\"."
+
+#~ msgid "%1 is incorrect terminal name"
+#~ msgstr "%1 je nesprávny názov terminálu"
+
+#~ msgid "Can't create a temporary file"
+#~ msgstr "Nemožno vytvoriť dočasný súbor"
+
+#~ msgid ""
+#~ "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
+#~ "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
+#~ "do sleep 3600;done\""
+#~ msgstr ""
+#~ "Nemožno dostať %1 tty/pty. Skontrolujte, že %1 je skutočne terminál a že "
+#~ "prijíma tieto argumenty: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+#~ "sleep 3600;done\""
+
+#~ msgid "Application interrupted"
+#~ msgstr "Aplikácia prerušená"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid "GDB Support"
+#~ msgstr "Podpora GDB"
+
+#~ msgid ""
+#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
+#~ "+ and more."
+#~ msgstr ""
+#~ "Tento modul poskytuje rozhranie pre GDB, debuger pre C, C++ a ďalšie."

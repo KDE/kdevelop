@@ -1,0 +1,354 @@
+# translation of kdevproblemreporter.po to Galician
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# mvillarino <mvillarino@users.sourceforge.net>, 2008.
+# Marce Villarino <mvillarino@users.sourceforge.net>, 2008.
+# Xosé <xosecalvo@gmail.com>, 2009, 2012, 2013.
+# Marce Villarino <mvillarino@gmail.com>, 2009, 2013.
+# Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevproblemreporter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"PO-Revision-Date: 2018-02-01 07:01+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: problemreporterplugin.cpp:94
+#, kde-format
+msgid "Parser"
+msgstr "Analizador"
+
+#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemsview.cpp:324
+#, fuzzy, kde-format
+#| msgid "Problems"
+msgctxt "@title:window"
+msgid "Problems"
+msgstr "Problemas"
+
+#: problemreporterplugin.cpp:229
+#, fuzzy, kde-format
+#| msgid "Solve Problem"
+msgctxt "@action:inmenu"
+msgid "Solve Problem"
+msgstr "Resolver o problema"
+
+#: problemreporterplugin.cpp:231
+#, fuzzy, kde-format
+#| msgid "Solve: %1"
+msgctxt "@action:inmenu"
+msgid "Solve: %1"
+msgstr "Resolver: %1"
+
+#: problemsview.cpp:37
+#, fuzzy, kde-format
+#| msgid "Force Full Update"
+msgctxt "@action"
+msgid "Force Full Update"
+msgstr "Forzar a actualización completa"
+
+#: problemsview.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Which files to display the problems for"
+msgstr "Os ficheiros dos que mostrar os problemas"
+
+#: problemsview.cpp:58
+#, fuzzy, kde-format
+#| msgid "Current Document"
+msgctxt "@option:check"
+msgid "Current Document"
+msgstr "Documento actual"
+
+#: problemsview.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current document"
+msgstr "Mostrar os problemas do documento actual"
+
+#: problemsview.cpp:62
+#, fuzzy, kde-format
+#| msgid "Open Documents"
+msgctxt "@option:check"
+msgid "Open Documents"
+msgstr "Abrir documentos"
+
+#: problemsview.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all open documents"
+msgstr "Mostrar os problemas de todos os documentos abertos"
+
+#: problemsview.cpp:66
+#, fuzzy, kde-format
+#| msgid "Current Project"
+msgctxt "@option:check"
+msgid "Current Project"
+msgstr "Proxecto actual"
+
+#: problemsview.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current project"
+msgstr "Mostrar os problemas do proxecto actual"
+
+#: problemsview.cpp:70
+#, fuzzy, kde-format
+#| msgid "All Projects"
+msgctxt "@option:check"
+msgid "All Projects"
+msgstr "Todos os proxectos"
+
+#: problemsview.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all projects"
+msgstr "Mostrar os problemas de todos os proxectos"
+
+#: problemsview.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Path"
+msgstr ""
+
+#: problemsview.cpp:75
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Display problems in all projects"
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in a specific path"
+msgstr "Mostrar os problemas de todos os proxectos"
+
+#: problemsview.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Current Path"
+msgstr ""
+
+#: problemsview.cpp:80
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Display problems in current document"
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in the path of the current document"
+msgstr "Mostrar os problemas do documento actual"
+
+#: problemsview.cpp:83
+#, fuzzy, kde-format
+#| msgid "Show All"
+msgctxt "@option:check"
+msgid "Show All"
+msgstr "Mostralo todo"
+
+#: problemsview.cpp:84
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Display ALL problems"
+msgctxt "@info:tooltip"
+msgid "Display all problems"
+msgstr "Mostrar todos os problemas"
+
+#: problemsview.cpp:105
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Path Filter..."
+msgstr ""
+
+#: problemsview.cpp:137
+#, fuzzy, kde-format
+#| msgid "Show Imports"
+msgctxt "@option:check"
+msgid "Show Imports"
+msgstr "Mostrar as importacións"
+
+#: problemsview.cpp:138
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in imported files"
+msgstr "Mostrar os problemas dos ficheiros importados"
+
+#: problemsview.cpp:148
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display errors"
+msgstr "Mostrar os erros"
+
+#: problemsview.cpp:150
+#, fuzzy, kde-format
+#| msgid "Show Errors"
+msgctxt "@option:check"
+msgid "Show Errors"
+msgstr "Mostrar os erros"
+
+#: problemsview.cpp:153
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display warnings"
+msgstr "Mostrar os avisos"
+
+#: problemsview.cpp:155
+#, fuzzy, kde-format
+#| msgid "Show Warnings"
+msgctxt "@option:check"
+msgid "Show Warnings"
+msgstr "Mostrar os avisos"
+
+#: problemsview.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display hints"
+msgstr "Mostrar os consellos"
+
+#: problemsview.cpp:160
+#, fuzzy, kde-format
+#| msgid "Show Hints"
+msgctxt "@option:check"
+msgid "Show Hints"
+msgstr "Mostrar os consellos"
+
+#: problemsview.cpp:180
+#, fuzzy, kde-format
+#| msgid "Grouping"
+msgctxt "@title:menu"
+msgid "Grouping"
+msgstr "Agrupamento"
+
+#: problemsview.cpp:189
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "@option:check"
+msgid "None"
+msgstr "Ningún"
+
+#: problemsview.cpp:190
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@option:check"
+msgid "Path"
+msgstr "Ruta"
+
+#: problemsview.cpp:191
+#, fuzzy, kde-format
+#| msgid "Severity"
+msgctxt "@option:check"
+msgid "Severity"
+msgstr "Severidade"
+
+#: problemsview.cpp:219
+#, fuzzy, kde-format
+#| msgid "Search..."
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Buscar…"
+
+#: problemsview.cpp:462
+#, fuzzy, kde-format
+#| msgctxt "%1: tab name, %2: number of problems"
+#| msgid "%1 (%2)"
+msgctxt "@title:tab %1: tab name, %2: number of problems"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: problemsview.cpp:500
+#, fuzzy, kde-format
+#| msgid "Scope: %1"
+msgctxt "@title:menu"
+msgid "Scope: %1"
+msgstr "Ámbito: %1"
+
+#: problemtreeview.cpp:94
+#, fuzzy, kde-format
+#| msgid "Problems"
+msgctxt "@info:whatsthis"
+msgid "Problems"
+msgstr "Problemas"
+
+#: problemtreeview.cpp:205
+#, fuzzy, kde-format
+#| msgid "Problem"
+msgctxt "@title:menu"
+msgid "Problem"
+msgstr "Problema"
+
+#: problemtreeview.cpp:207
+#, fuzzy, kde-format
+#| msgid "&Copy Description"
+msgctxt "@action:inmenu"
+msgid "&Copy Description"
+msgstr "&Copiar a descrición"
+
+#: problemtreeview.cpp:226
+#, fuzzy, kde-format
+#| msgid "Solve: %1"
+msgctxt "@title:menu"
+msgid "Solve: %1"
+msgstr "Resolver: %1"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Re-parse all watched documents"
+#~ msgstr "Procesar de novo todos os documentos vixiados"
+
+#~ msgid "Solve"
+#~ msgstr "Resolver"
+
+#~ msgid "Problem in <b>%1</b>:<br/>"
+#~ msgstr "Problema en <b>%1</b>:<br/>"
+
+#~ msgid " in "
+#~ msgstr " en "
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Display errors, warnings and hints"
+#~ msgstr "Mostrar os erros, os avisos e as suxestións"
+
+#~ msgid "Scope"
+#~ msgstr "Alcance"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select the lowest level of problem severity to be displayed"
+#~ msgstr "Escoller o menor nivel de severidade de problema que mostrar"
+
+#~ msgid "Hint"
+#~ msgstr "Suxestión"
+
+#~ msgctxt "@title:column source of problem"
+#~ msgid "Source"
+#~ msgstr "Orixe"
+
+#~ msgctxt "@title:column file where problem was found"
+#~ msgid "File"
+#~ msgstr "Ficheiro"
+
+#~ msgctxt "@title:column line number with problem"
+#~ msgid "Line"
+#~ msgstr " Liña"
+
+#~ msgctxt "@title:column column number with problem"
+#~ msgid "Column"
+#~ msgstr " Columna"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Xosé"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "xosecalvo@gmail.com"
+
+#~ msgid "Problem Reporter"
+#~ msgstr "Informador de problemas"
+
+#~ msgid "Shows errors in source code"
+#~ msgstr "Mostra erros no código fonte"
+
+#~ msgid "In file included from:"
+#~ msgstr "No ficheiro incluído desde:"

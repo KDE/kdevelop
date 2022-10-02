@@ -1,0 +1,231 @@
+# translation of kdevqmljssupport.po to Slovak
+# Roman Paholik <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmljssupport\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2015-10-16 18:08+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr "Vybrať umiestnenie"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "Názov:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "Cesta:"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr "Názov triedy:"
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr "Základná trieda:"
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr "Informácie o type:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "Žiadne"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr "Dedí po QObject"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr "Dedí po QWidget"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr "Dedí po QDeclarativeItem - Qt Quick 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr "Dedí po QQuickItem - Qt Quick 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr "Založené na QSharedData"
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr "Hlavičkový súbor:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr "Zdrojový súbor:"
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr "Vygenerovať formulár:"
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr "Súbor formulára:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "&Cesta:"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr "Úvod a umiestnenie projektu"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr "Vytvoriť v:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr "Použiť ako predvolené umiestnenie projektu"
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "Projekt:"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+"Možná nezhoda typov medzi typom argumentu (%1) a hodnotou predanou ako "
+"argument (%2)"
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr "Modul nenájdený, niektoré typy vlastností nemusia byť rozpoznané"
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr "Nezhoda medzi typom položky (%1) a typom vlastnosti (%2)"
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Chyba čítania súboru QML: %1"
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr "Trvanie v milisekundách"
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr ""
+"Kŕdeľ šťastných ďatľov učí pri ústí Váhu mĺkveho<br>koňa obhrýzať trávu a "
+"žrať čerstvé mäso."
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr "Rodina písma"
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr "Veľkosť písma"
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr "Výška položky v bodoch"
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr "Nepriehľadnosť položky"
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr "Rozostupy medzi položkami"
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr "Šírka položky v bodoch"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid "Subversion Submit"
+#~ msgstr "Subversion Submit"
+
+#~ msgid "Descriptio&n"
+#~ msgstr "Popis"
+
+#~ msgid "F&iles"
+#~ msgstr "Súbory"
+
+#~ msgid "Check a&ll"
+#~ msgstr "Začiarknuť všetko"

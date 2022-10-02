@@ -1,0 +1,596 @@
+# translation of kdevsubversion.po to Punjabi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# A S Alam <aalam@users.sf.net>, 2008, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsubversion\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2009-01-15 08:52+0530\n"
+"Last-Translator: A S Alam <aalam@users.sf.net>\n"
+"Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
+"Language: pa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: kdevsvnplugin.cpp:334
+#, fuzzy, kde-format
+#| msgid "Copy..."
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "ਕਾਪੀ ਕਰੋ..."
+
+#: kdevsvnplugin.cpp:341
+#, fuzzy, kde-format
+#| msgid "Move..."
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "ਭੇਜੋ..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "ਇਹ ਓਪਰੇਸ਼ਨ ਲਈ ਇੱਕ ਆਈਟਮ ਦੀ ਚੋਣ ਕਰੋ"
+
+#: kdevsvnplugin.cpp:370
+#, fuzzy, kde-format
+#| msgid "Destination file/directory"
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "ਟਿਕਾਣਾ ਫਾਇਲ/ਡਾਇਰੈਕਟਰੀ"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "ਕੇਵਲ ਲੋਕਲ ਫਾਇਲਾਂ ਉੱਤੇ ਕੀਤੇ ਕੰਮ ਦੀ ਕਾਪੀ ਕਰੋ"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "ਟਿਕਾਣਾ ਫਾਇਲ/ਡਾਇਰੈਕਟਰੀ"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "ਕੇਵਲ ਲੋਕਲ ਫਾਇਲਾਂ/ਡਾਇਰੈਕਟਰੀਆਂ ਉੱਤੇ ਹੀ ਭੇਜੋ"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "ਸਬ-ਵਰਜਨ"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "ਸਬ-ਵਰਜਨ ਸ਼ਾਮਲ"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "ਫਾਇਲ ਸ਼ਾਮਲ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr ""
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr ""
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "ਸਬ-ਵਰਜਨ ਚੈਕਆਉਟ"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "ਚੈਕਆਉਟ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svncommitjob.cpp:109
+#, fuzzy, kde-format
+#| msgid "Subversion Cat"
+msgid "Subversion Commit"
+msgstr "ਸਬ-ਵਰਜਨ ਕੈਟ"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr ""
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "ਕਮਿਟ ਕਮਾਂਡ ਚਲਾਉਣ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "ਸਬ-ਵਰਜਨ ਕਾਪੀ"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "ਫਾਇਲ ਕਾਪੀ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "ਸਬ-ਵਰਜਨ ਅੰਤਰ"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "diff ਚਲਾਉਣ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ ਹੈ"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "ਸਬ-ਵਰਜਨ ਇੰਪੋਰਟ"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "ਸਬ-ਵਰਜਨ ਜਾਣਕਾਰੀ (info)"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "ਜਾਣਕਾਰੀ (info) ਜਾਬ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ ਹੈ"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "%1 ਸ਼ਾਮਲ ਕੀਤੀ"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "%1 ਹਟਾਈ"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "%1 ਹਟਾਈ ਗਈ"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "%1 ਸ਼ਾਮਲ ਕੀਤੀ"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "%1 ਰੀਵਿਜ਼ਨ"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "ਬਾਹਰੀ ਅੱਪਡੇਟ: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "%1 ਭੇਜਿਆ ਜਾ ਰਿਹਾ ਹੈ"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr ""
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "%1 ਜੋੜਿਆ ਜਾਦਾ ਹੈ।"
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "%1 ਨੂੰ ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ।"
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "%1 ਨੂੰ ਤਬਦੀਲ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "ਫਾਇਲ ਡਾਟਾ ਭੇਜਿਆ ਜਾ ਰਿਹਾ ਹੈ "
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr ""
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "ਵਰਕਿੰਗ ਕਾਪੀ %1 ਲਈ ਰੀਵਰਟ ਕੀਤਾ"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "ਵਰਕਿੰਗ ਕਾਪੀ %1 ਲਈ ਰੀਵਰਟ ਕਰਨ ਲਈ ਫੇਲ੍ਹ"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "%1 ਕਾਪੀ ਕੀਤਾ"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "ਸਰਟੀਫਿਕੇਟ ਹਾਲੇ ਵੈਧ ਨਹੀਂ ਹੈ।"
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "ਸਰਟੀਫਿਕੇਟ ਦੀ ਮਿਆਦ ਪੁੱਗੀ।"
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr ""
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "ਸਰਟੀਫਿਕੇਟ ਅਥਾਰੀਟ ਅਣਜਾਣੀ ਹੈ।"
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "ਹੋਰ ਅਣਜਾਣੀ ਗਲਤੀ ਹੈ।"
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "%1: ਲਈ ਲਾਗਇਨ ਦਿਓ"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr ""
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"ਜਾਬ ਚਲਾਉਣ ਦੌਰਾਨ ਗਲਤੀ:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "ਸਬ-ਵਰਜਨ ਲਾਗ"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "ਲਾਗ ਟਿਕਾਣੇ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "ਸਬ-ਵਰਜਨ ਮੂਵ"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "ਫਾਇਲ ਭੇਜਣ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "ਸਬ-ਵਰਜਨ ਹਟਾਓ"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "ਹਟਾਉਣ ਕਾਰਵਾਈ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ ਹੈ"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "ਸਬ-ਵਰਜਨ ਰੀਵਰਟ"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr ""
+
+#: svnssldialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "SSL Server Certificate"
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "SSL ਸਰਵਰ ਸਰਟੀਫਿਕੇਟ"
+
+#: svnssldialog.cpp:30
+#, fuzzy, kde-format
+#| msgid "Trust Permanently"
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "ਪੱਕੇ ਤੌਰ ਉੱਤੇ ਟਰੱਸਟ"
+
+#: svnssldialog.cpp:31
+#, fuzzy, kde-format
+#| msgid "Trust Temporarily"
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "ਆਰਜ਼ੀ ਟਰੱਸਟ"
+
+#: svnssldialog.cpp:62
+#, fuzzy, kde-format
+#| msgid "Ssl Server Certificate: %1"
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "Ssl ਸਰਵਰ ਸਰਟੀਫਿਕੇਟ: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "ਸਬ-ਵਰਜਨ ਹਾਲਤ"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "ਹਾਲਤ ਕਾਰਵਾਈ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "ਸਬ-ਵਰਜਨ ਅੱਪਡੇਟ"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "ਅੱਪਡੇਟ ਚਲਾਉਣ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, fuzzy, kde-format
+#| msgid "Source directory:"
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "ਸਰੋਤ ਡਾਇਰੈਕਟਰੀ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, fuzzy, kde-format
+#| msgid "Repository:"
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "ਰਿਪੋਜ਼ਟਰੀ:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Repository Location"
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "ਰਿਪੋਜ਼ਟਰੀ ਟਿਕਾਣਾ"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, fuzzy, kde-format
+#| msgid "Commit Message:"
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "ਕਮਿਟ ਸੁਨੇਹਾ:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, fuzzy, kde-format
+#| msgid "Certificate Information"
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "ਸਰਟੀਫਿਕੇਟ ਜਾਣਕਾਰੀ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, fuzzy, kde-format
+#| msgid "Hostname:"
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "ਹੋਸਟ-ਨਾਂ:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "ਕੁਝ-ਸਰਵਰ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, fuzzy, kde-format
+#| msgid "Issuer:"
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "ਜਾਰੀ-ਕਰਤਾ:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, fuzzy, kde-format
+#| msgid "someserver"
+msgid "someissuer"
+msgstr "ਕੁਝ-ਸਰਵਰ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, fuzzy, kde-format
+#| msgid "Valid From:"
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "ਤੋਂ ਵੈਧ:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "ਤੱਕ-ਵੈਧ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, fuzzy, kde-format
+#| msgid "Valid Until:"
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "ਤੱਕ ਵੈਧ:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, fuzzy, kde-format
+#| msgid "Valid Until:"
+msgid "validuntil"
+msgstr "ਤੱਕ ਵੈਧ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, fuzzy, kde-format
+#| msgid "Fingerprint:"
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "ਫਿੰਗਰ-ਪਰਿੰਟ:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "ਫਿੰਗਰਪਰਿੰਟ"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "Ssl ਸਰਵਰ ਸਰਟੀਫਿਕੇਟ"
+
+#, fuzzy
+#~| msgid "Repository Location"
+#~ msgid "Repository Location to import into"
+#~ msgstr "ਰਿਪੋਜ਼ਟਰੀ ਟਿਕਾਣਾ"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਵਰਜਨ ਵਿੱਚ ਇੰਪੋਰਟ ਕਰੋ"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਰਿਪੋਜ਼ਟਰੀਆਂ ਤੋਂ ਚੈੱਕ-ਆਉਟ ਕਰੋ"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਕੈਟ"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "ਕੈਟ ਚਲਾਉਣ ਲਈ ਲੋੜੀਦੀ ਜਾਣਕਾਰੀ ਨਹੀਂ"
+
+#~ msgid "Start Revision"
+#~ msgstr "ਰੀਵਿਜ਼ਨ ਸ਼ੁਰੂ"
+
+#~ msgid "End Revision"
+#~ msgstr "ਰੀਵਿਜ਼ਨ ਅੰਤ"
+
+#~ msgid "Checkout"
+#~ msgstr "ਚੈਕਆਉਟ"
+
+#~ msgid "Repository Url:"
+#~ msgstr "ਰਿਪੋਜ਼ਟਰੀ Url:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "ਟਿਕਾਣਾ ਮਾਰਗ:"
+
+#~ msgid "Source"
+#~ msgstr "ਸਰੋਤ"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "ਰਿਪੋਜ਼ਟਰੀ URL ਰਾਹੀਂ ਦਿਓ"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "ਲੋਕਲ ਵਰਕਿੰਗ ਕਾਪੀ ਰਾਹੀਂ ਦਿਓ"
+
+#~ msgid "Source revision"
+#~ msgstr "ਸਰੋਤ ਰੀਵਿਜ਼ਨ"
+
+#~ msgid "Destination"
+#~ msgstr "ਟਿਕਾਣਾ"
+
+#~ msgid "Target Url"
+#~ msgstr "ਟਾਰਗੇਟ Url"
+
+#, fuzzy
+#~| msgid "Subversion Log"
+#~ msgid "Subversion Log View Options"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਲਾਗ"
+
+#~ msgid "Select"
+#~ msgstr "ਚੁਣੋ"
+
+#~ msgid "Text Status"
+#~ msgstr "ਟੈਕਸਟ ਹਾਲਤ"
+
+#, fuzzy
+#~| msgid "Subversion Status"
+#~ msgid "Prop Status"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਹਾਲਤ"
+
+#~ msgid "Working Copy"
+#~ msgstr "ਵਰਕਿੰਗ ਕਾਪੀ"
+
+#~ msgid "Specify as number:"
+#~ msgstr "ਨੰਬਰ ਵਾਂਗ ਦਿਓ:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "ਸ਼ਬਦ ਵਾਂਗ ਦਿਓ:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "ਮਿਤੀ ਵਾਂਗ ਦਿਓ:"
+
+#~ msgid "Specify revision"
+#~ msgstr "ਰੀਵਿਜ਼ਨ ਦਿਓ"
+
+#~ msgid "Select Revision"
+#~ msgstr "ਰੀਵਿਜ਼ਨ ਚੁਣੋ"
+
+#~ msgid "Support for Subversion version control systems"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਵਰਜਨ ਕੰਟਰੋਲ ਸਿਸਟਮ ਲਈ ਸਹਿਯੋਗ"
+
+#~ msgid "Subversion Log (%1)"
+#~ msgstr "ਸਬ-ਵਰਜਨ ਲਾਗ (%1)"
+
+#~ msgid "SvnLogViewOptionDlgBase"
+#~ msgstr "SvnLogViewOptionDlgBase"

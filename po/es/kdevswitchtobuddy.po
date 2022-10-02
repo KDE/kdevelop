@@ -1,0 +1,72 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Eloy Cuadra <ecuadra@eloihr.net>, 2012, 2013, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 19:40+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.07.80\n"
+
+#: switchtobuddyplugin.cpp:114
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Cambiar a «%1»"
+
+#: switchtobuddyplugin.cpp:128
+#, kde-format
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr "Ca&mbiar a definición/declaración"
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr "Cambiar cabecera/código fuente"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Eloy Cuadra"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ecuadra@eloihr.net"
+
+#, fuzzy
+#~| msgid "Switch to '%1'"
+#~ msgid "Switch To"
+#~ msgstr "Cambiar a «%1»"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navegación"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Cambiar a relacionado"
+
+#~ msgid ""
+#~ "Allows switching between buddy documents like implementation and header "
+#~ "file."
+#~ msgstr ""
+#~ "Permite cambiar entre documentos complementarios, como los archivos de "
+#~ "cabecera y de implementación."
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgid "Switch to buddy document in code editor."
+#~ msgstr "Cambiar a documento relacionado en el editor de código."

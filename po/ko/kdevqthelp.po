@@ -1,0 +1,256 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2021-07-18 12:53+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: qthelpconfig.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr "항목 수정"
+
+#: qthelpconfig.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr "새 항목 추가"
+
+#: qthelpconfig.cpp:67
+#, kde-format
+msgid "Name cannot be empty."
+msgstr "이름을 비워둘 수 없습니다."
+
+#: qthelpconfig.cpp:101
+#, kde-format
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "새 문서 가져오기"
+
+#: qthelpconfig.cpp:116
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr ""
+"\"qmake -query\" 명령에서 QtHelp 파일(QCH)의 경로를 제공하지 않았습니다."
+
+#: qthelpconfig.cpp:204
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr "GHNS에서 제공한 문서"
+
+#: qthelpconfig.cpp:230
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr "Qt 압축된 도움말 파일이 잘못되었습니다."
+
+#: qthelpconfig.cpp:239
+#, kde-format
+msgid "Documentation already imported"
+msgstr "문서를 이미 가져옴"
+
+#: qthelpconfig.cpp:291
+#, kde-format
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "Qt 도움말"
+
+#: qthelpconfig.cpp:296
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "Qt 도움말 설정"
+
+#: qthelpconfig.cpp:321
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr "수정"
+
+#: qthelpconfig.cpp:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr "삭제"
+
+#: qthelpconfig.cpp:333
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr "GHNS로 삭제하십시오."
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr "시스템 위치에서 Qt 도움말 문서 불러오기"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "Qt API 문서 불러오기(&L):"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr "다음 디렉터리에서 Qt 도움말 파일 불러오기:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, kde-format
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "추가 문서 파일 설치"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "이름"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, kde-format
+msgctxt "@title:column"
+msgid "Path"
+msgstr "경로"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "추가"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr "아이콘:"
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr "아이콘 선택"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "이름:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr "이름 입력"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr "이름 선택..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr "경로:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr "Qt 도움말 파일 선택..."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:73
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr "Qt 도움말 파일 선택..."
+
+#: qthelpdocumentation.cpp:181
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "'%1'의 문서를 찾을 수 없습니다."
+
+#: qthelpdocumentation.cpp:276
+#, kde-format
+msgid "QtHelp Home Page"
+msgstr "Qt 도움말 홈페이지"
+
+#: qthelpqtdoc.cpp:142
+#, kde-format
+msgid "QtHelp"
+msgstr "Qt 도움말"
+
+#~ msgid "Dialog"
+#~ msgstr "대화상자"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgid "QtHelp Documentation"
+#~ msgstr "QtHelp 문서"
+
+#~ msgid "Identifier to search:"
+#~ msgstr "검색 키워드:"
+
+#~ msgid "Help page:"
+#~ msgstr "도움말 페이지:"
+
+#~ msgid "about:blank"
+#~ msgstr "about:blank"
+
+#~ msgid "Debug info:"
+#~ msgstr "디버그 정보:"
+
+#, fuzzy
+#~| msgid "Search qch files in directory..."
+#~ msgid "Search QtHelp files in this directory..."
+#~ msgstr "다음 디렉터리에서 qch 파일 찾기..."
+
+#~ msgid "Remove"
+#~ msgstr "삭제"
+
+#~ msgid "Move Up"
+#~ msgstr "위로 이동"
+
+#~ msgid "Move Down"
+#~ msgstr "아래로 이동"
+
+#~ msgid "Choose dir"
+#~ msgstr "디렉터리 선택"
+
+#~ msgid "Manage QtHelp Documentation"
+#~ msgstr "QtHelp 문서 관리"

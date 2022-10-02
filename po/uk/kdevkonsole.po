@@ -1,0 +1,65 @@
+# Translation of kdevkonsole.po to Ukrainian
+# Copyright (C) 2008-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2013, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevkonsole\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-14 08:24+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.11.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: kdevkonsoleview.cpp:107
+#, kde-format
+msgid "Terminal"
+msgstr "Термінал"
+
+#: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Terminal"
+msgstr "Термінал"
+
+#: kdevkonsoleviewplugin.cpp:60
+#, kde-format
+msgid "Failed to load 'konsolepart' plugin"
+msgstr "Не вдалося завантажити додаток «konsolepart»"
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "@title:window"
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid ""
+#~ "This plugin provides KDevelop with an embedded konsole for quick and easy "
+#~ "command line access."
+#~ msgstr ""
+#~ "За допомогою цього додатка у KDevelop можна буде скористатися вбудованою "
+#~ "konsole, яка пришвидшить і полегшить доступ до командного рядка."
+
+#~ msgid "Embedded Terminal support"
+#~ msgstr "Підтримка вбудованого термінала"
+
+#~ msgid "<b>Konsole</b><p>This window contains an embedded console.</p>"
+#~ msgstr "<b>Konsole</b><p>У цьому вікні міститься вбудований термінал.</p>"

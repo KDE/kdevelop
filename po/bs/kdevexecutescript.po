@@ -1,0 +1,430 @@
+# Bosnian translation for bosnianuniversetranslation
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the bosnianuniversetranslation package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bosnianuniversetranslation\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-02-10 00:13+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 16869)\n"
+"X-Launchpad-Export-Date: 2013-12-16 05:33+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: executescriptplugin.cpp:61
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Ispravan izvršni program nije naveden"
+
+#: executescriptplugin.cpp:71
+#, kde-format
+msgid ""
+"There is a quoting error in the script for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Postoji citirajuća pogreška u skripti za pokretačku konfiguraciju '%1'. "
+"Prekinut start."
+
+#: executescriptplugin.cpp:76
+#, kde-format
+msgid ""
+"A shell meta character was included in the script for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Metaznak školjke bio je uključen u skripti za pokretačku konfiguraciju '%1', "
+"to trenutno nije podržano. Prekinut start."
+
+#: executescriptplugin.cpp:93
+#, kde-format
+msgid "No remote host set for launch configuration '%1'. Aborting start."
+msgstr ""
+"Nema postavljenog udaljenog hosta za pokretačku konfiguraciju i '%1'. "
+"Prekinut start."
+
+#: executescriptplugin.cpp:116
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Ima greška s navodniima u argumentima za pokretačku konfiguraciju '%1'. "
+"Prekidam start."
+
+#: executescriptplugin.cpp:120
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Meta-znak školjke je bio uključen u argumentima za pokretačku konfiguraciju "
+"'%1', Ovo nije podržano trenutno. Prekidam start."
+
+#: executescriptplugin.cpp:173
+#, kde-format
+msgid "No valid interpreter specified"
+msgstr "Nema važećeg navedenog interpretera"
+
+#: executescriptplugin.cpp:183
+#, kde-format
+msgid ""
+"There is a quoting error in the interpreter for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Postoji citirajuća pogreška u interpreteru  za pokretačku konfiguraciju "
+"'%1'. Prekinut start."
+
+#: executescriptplugin.cpp:188
+#, kde-format
+msgid ""
+"A shell meta character was included in the interpreter for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Metaznak školjke bio je uključen u interpreteru za pokretačku konfiguraciju "
+"'%1', to trenutno nije podržano. Prekinut start."
+
+#: scriptappconfig.cpp:83
+#, fuzzy, kde-format
+#| msgid "Type or select an interpreter"
+msgctxt "@info:placeholder"
+msgid "Type or select an interpreter..."
+msgstr "Unesi ili odaberi interpreter"
+
+#: scriptappconfig.cpp:116
+#, fuzzy, kde-format
+#| msgid "Configure Script Application"
+msgctxt "@title:tab"
+msgid "Configure Script Application"
+msgstr "Konfiguriši skriptni program"
+
+#: scriptappconfig.cpp:126
+#, kde-format
+msgid "Executes Script Applications"
+msgstr "Izvršava skriptnu aplikaciju"
+
+#: scriptappconfig.cpp:136 scriptappconfig.cpp:186
+#, kde-format
+msgid "Script Application"
+msgstr "Skriptna aplikacija"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: scriptappconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Interpreter"
+msgctxt "@title:group"
+msgid "Interpreter"
+msgstr "Interpreter"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: scriptappconfig.ui:44
+#, fuzzy, kde-format
+#| msgid "Script interpreter:"
+msgctxt "@label:listbox"
+msgid "Script interpreter:"
+msgstr "Skriptni interpreter:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: scriptappconfig.ui:95
+#, fuzzy, kde-format
+#| msgid "Script file"
+msgctxt "@title:group"
+msgid "Script file"
+msgstr "Skriptna datoteka"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
+#: scriptappconfig.ui:101
+#, fuzzy, kde-format
+#| msgid "Run the file currently open in the editor"
+msgctxt "@option:radio"
+msgid "Run the file currently open in the editor"
+msgstr "Pokreni datoteku trenutno otvorenu u uređivaču"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
+#: scriptappconfig.ui:111
+#, fuzzy, kde-format
+#| msgid "Always run the same file"
+msgctxt "@option:radio"
+msgid "Always run the same file"
+msgstr "Uvijek pokreni istu datoteku"
+
+#. i18n: ectx: property (text), widget (QLabel, scriptLabel)
+#: scriptappconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Script file:"
+msgctxt "@label:chooser"
+msgid "Script file:"
+msgstr "Skriptna datoteka:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: scriptappconfig.ui:133
+#, fuzzy, kde-format
+#| msgid "Enter the absolute path to the script to run"
+msgctxt "@info:tooltip"
+msgid "Enter the absolute path to the script to run"
+msgstr "Unesite apsolutnu stazu skripte koja se pokreće"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: scriptappconfig.ui:136
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/script"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: scriptappconfig.ui:148
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Ponašanje"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scriptappconfig.ui:160
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumenti:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: scriptappconfig.ui:170
+#, fuzzy, kde-format
+#| msgid "Enter arguments to give to the executable"
+msgctxt "@info:tooltip"
+msgid "Enter arguments to give to the executable"
+msgstr "Unesi argumente koji se prosljeđuju izvršnom programu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scriptappconfig.ui:177
+#, fuzzy, kde-format
+#| msgid "Working Directory:"
+msgctxt "@label:chooser"
+msgid "Working directory:"
+msgstr "Radni direktorij:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: scriptappconfig.ui:187
+#, fuzzy, kde-format
+#| msgid "Select a working directory for the executable"
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Odaberi radni direktorij za izvršni program"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: scriptappconfig.ui:194
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Okruženje:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: scriptappconfig.ui:212
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Odaberite okruženje koje će se koristiti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: scriptappconfig.ui:224
+#, fuzzy, kde-format
+#| msgid "Output Filter:"
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "Izlazni filter:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:231
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the filter to applied to the output. E.g. to mark errors with red "
+#| "text"
+msgctxt "@info:tooltip"
+msgid ""
+"Select the filter to applied to the output. E.g. to mark errors with red text"
+msgstr ""
+"Odaberite filter koji treba primijeniti na izlaz. Na primjer označiti "
+"pogreške s crvenim tekstom"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:235
+#, fuzzy, kde-format
+#| msgid "No Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "Bez filtera"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:240
+#, fuzzy, kde-format
+#| msgid "Compiler Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "Kompajlerski filter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:245
+#, fuzzy, kde-format
+#| msgid "Script Error Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "Filter grešaka ispisa"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:250
+#, fuzzy, kde-format
+#| msgid "Static Analysis Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "Filter statičke analize"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: scriptappconfig.ui:267
+#, fuzzy, kde-format
+#| msgid "Execute on Host"
+msgctxt "@title:group"
+msgid "Execute on Host"
+msgstr "Izvrši na računaru"
+
+#. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
+#: scriptappconfig.ui:273
+#, fuzzy, kde-format
+#| msgid "Execute on remote host"
+msgctxt "@option:check"
+msgid "Execute on remote host"
+msgstr "Izvrši na udaljenom računaru"
+
+#. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
+#: scriptappconfig.ui:285
+#, fuzzy, kde-format
+#| msgid "Remote host (ssh):"
+msgctxt "@label:textbox"
+msgid "Remote host (ssh):"
+msgstr "Udaljeni računar (ssh):"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, remoteHost)
+#: scriptappconfig.ui:298
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "user@host"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, remoteHost)
+#: scriptappconfig.ui:301
+#, fuzzy, kde-format
+#| msgid "Enter a remote host (user@example.com)"
+msgctxt "@info:tooltip"
+msgid "Enter a remote host (user@host)"
+msgstr "Unesi udaljeni računar (user@example.com)"
+
+#: scriptappjob.cpp:76
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "Nema aktivnog dokumenta za pokretanje"
+
+#: scriptappjob.cpp:98
+#, fuzzy, kde-format
+#| msgid ""
+#| "No environment group specified, looks like a broken configuration, please "
+#| "check run configuration '%1'. Using default environment group."
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Nema grupe okruženja, izgleda kao slomljena konfiguracija, molimo provjerite "
+"aktivnu konfiguraciju \"%1\". Koristi se podrazumijevana grupa okruženja."
+
+#: scriptappjob.cpp:170
+#, kde-format
+msgid "Starting: %1"
+msgstr "Pokrećem: %1"
+
+#: scriptappjob.cpp:184
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** Ubijen program ***"
+
+#: scriptappjob.cpp:195
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** Normalan izlaz ***"
+
+#: scriptappjob.cpp:197
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Izlaz s povratnim kodom: %1 ***"
+
+#: scriptappjob.cpp:200
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Proces prekinut ***"
+
+#: scriptappjob.cpp:203
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Krah s izlaznim kodom: %1 ***"
+
+#: scriptappjob.cpp:218
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr ""
+"*** Ne mogu pokrenuti program '%1'. Osigurajte se da je put pravilno naveden "
+"***"
+
+#~ msgid "python"
+#~ msgstr "python"
+
+#~ msgid "ruby"
+#~ msgstr "ruby"
+
+#~ msgid "bash"
+#~ msgstr "bash"
+
+#~ msgid "php"
+#~ msgstr "php"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić,Nermina Ahmić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba,nahmic1@etf.unsa.ba"
+
+#~ msgid "Execute script support"
+#~ msgstr "Izvrši skriptnu podršku"
+
+#~ msgid "Allows running of scripts"
+#~ msgstr "Dopušta izvođenje skripti"
+
+#~ msgid "Niko Sams"
+#~ msgstr "Niko Sams"
+
+#~ msgid "Author"
+#~ msgstr "autor"
+
+#~ msgid "Script"
+#~ msgstr "Pismo"
+
+#~ msgid "Interpreter Command:"
+#~ msgstr "Interpreterska komanda:"
+
+#~ msgid "Script File:"
+#~ msgstr "Datoteka skripte:"
+
+#~ msgid "Remote Host (ssh):"
+#~ msgstr "Udaljeni računar (ssh):"
+
+#~ msgid "Could not start application"
+#~ msgstr "Ne mogu pokrenuti program"

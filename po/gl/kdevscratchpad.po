@@ -1,0 +1,140 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2019-07-28 11:46+0200\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.04.1\n"
+
+#: scratchpad.cpp:104 scratchpadview.cpp:87
+#, fuzzy, kde-format
+#| msgid "Scratchpad"
+msgctxt "@title:window"
+msgid "Scratchpad"
+msgstr "Caderno de bosquexos"
+
+#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "bosquexo:%1"
+
+#: scratchpad.cpp:168
+#, kde-format
+msgid "Failed to remove scratch: %1"
+msgstr "Non se puido retirar o bosquexo: %1"
+
+#: scratchpad.cpp:175
+#, kde-format
+msgid "Failed to create scratch: Name already in use"
+msgstr "Non se puido crear o bosquexo: o nome xa está en uso"
+
+#: scratchpad.cpp:187
+#, kde-format
+msgid "Failed to create new scratch"
+msgstr "Non se puido crear un novo bosquexo"
+
+#: scratchpad.cpp:196
+#, kde-format
+msgid "Failed to rename scratch: Names must not include path separator"
+msgstr ""
+"Non se puido cambiar o nome do bosquexo: os nomes non poden incluír un "
+"separador de rutas"
+
+#: scratchpad.cpp:226
+#, kde-format
+msgid "Failed renaming scratch."
+msgstr "Non se puido cambiar o nome do bosquexo."
+
+#: scratchpadjob.cpp:57
+#, kde-format
+msgid "Running %1..."
+msgstr "Executando %1…"
+
+#: scratchpadjob.cpp:73
+#, kde-format
+msgid "Process finished with exit code %1."
+msgstr "O proceso rematou co código de saída %1."
+
+#: scratchpadjob.cpp:80
+#, kde-format
+msgid "Failed to run scratch: %1"
+msgstr "Non se puido executar o bosquexo: %1"
+
+#: scratchpadview.cpp:100
+#, kde-format
+msgid ""
+"Scratchpad lets you quickly run and experiment with code without a full "
+"project, and even store todos. Create a new scratch to start."
+msgstr ""
+"O caderno de bosquexos permítelle executar e experimentar rapidamente con "
+"código sen un proxecto completo, e incluso almacenar tarefas. Cree un novo "
+"bosquexo para empezar."
+
+#: scratchpadview.cpp:114
+#, fuzzy, kde-format
+#| msgid "Command to run this scratch. $f will expand to the scratch path"
+msgctxt "@info:tooltip"
+msgid "Command to run this scratch. '$f' will expand to the scratch path."
+msgstr ""
+"Orde para executar este bosquexo. $f substituirase pola ruta do bosquexo"
+
+#: scratchpadview.cpp:137
+#, fuzzy, kde-format
+#| msgid "New Scratch"
+msgctxt "@action"
+msgid "New Scratch"
+msgstr "Novo bosquexo"
+
+#: scratchpadview.cpp:141
+#, fuzzy, kde-format
+#| msgid "Remove Scratch"
+msgctxt "@action"
+msgid "Remove Scratch"
+msgstr "Retirar o bosquexo"
+
+#: scratchpadview.cpp:149
+#, fuzzy, kde-format
+#| msgid "Rename Scratch"
+msgctxt "@action"
+msgid "Rename Scratch"
+msgstr "Cambiar o nome do bosquexo"
+
+#: scratchpadview.cpp:158
+#, fuzzy, kde-format
+#| msgid "Run Scratch"
+msgctxt "@action"
+msgid "Run Scratch"
+msgstr "Executar o bosquexo"
+
+#: scratchpadview.cpp:164
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtro…"
+
+#: scratchpadview.cpp:204
+#, fuzzy, kde-format
+#| msgid "Create New Scratch"
+msgctxt "@title:window"
+msgid "Create New Scratch"
+msgstr "Crear un novo bosquexo"
+
+#: scratchpadview.cpp:205
+#, fuzzy, kde-format
+#| msgid "Enter name for scratch file:"
+msgctxt "@label:textbox"
+msgid "Name for scratch file:"
+msgstr "Escriba o nome do ficheiro de bosquexo:"

@@ -1,0 +1,587 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevclazy.pot\n"
+"X-Crowdin-File-ID: 7968\n"
+
+#: analyzer.cpp:30
+#, kde-format
+msgid "Clazy"
+msgstr "Clazy"
+
+#: checksdb.cpp:28
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 0"
+msgstr "等级 0"
+
+#: checksdb.cpp:29
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 1"
+msgstr "等级 1"
+
+#: checksdb.cpp:30
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 2"
+msgstr "等级 2"
+
+#: checksdb.cpp:31
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 3"
+msgstr "等级 3"
+
+#: checksdb.cpp:32
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Manual Level"
+msgstr "手动级别"
+
+#: checksdb.cpp:37
+#, kde-format
+msgid ""
+"Very stable checks, 99.99% safe, mostly no false-positives, very desirable."
+msgstr "非常稳定的检查，99.99% 的安全，基本上没有误报，非常可取。"
+
+#: checksdb.cpp:40
+#, kde-format
+msgid ""
+"The default level. Very similar to level 0, slightly more false-positives "
+"but very few."
+msgstr "默认级别。和级别 0 相似，稍有误报但非常少。"
+
+#: checksdb.cpp:43
+#, kde-format
+msgid ""
+"Also very few false-positives, but contains noisy checks which not everyone "
+"agree should be default."
+msgstr "虽然误报很少，但是包含一些不是所以人都认同可以作为默认的检查。"
+
+#: checksdb.cpp:46
+#, kde-format
+msgid "Contains checks with high rate of false-positives."
+msgstr "包含误报率较高的检查。"
+
+#: checksdb.cpp:49
+#, kde-format
+msgid ""
+"Checks here need to be enabled explicitly, as they don't belong to any "
+"level. Checks here are very stable and have very few false-positives."
+msgstr ""
+"此处的检查需要显式启用，因为它们不属于任何级别。这里的检查非常稳定，很少有误"
+"报。"
+
+#: checksdb.cpp:54
+#, kde-format
+msgid ""
+"Unable to load Clazy checks information from '%1'. Please check your "
+"settings."
+msgstr "无法从 %1 加载 Clazy 检查信息。请检查您的设置。"
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "输入新检查集的名称"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "名称："
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "检查集："
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "添加检查集"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "复制检查集"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "移除检查集"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "设为默认"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "编辑检查集的名称"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "定制"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "使用默认值 (当前： %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1 (默认选择)"
+
+#: config/checkswidget.cpp:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search checks..."
+msgstr "搜索检查..."
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: config/checkswidget.ui:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Reset Checks"
+msgstr "重置检查"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
+#: config/checkswidget.ui:74
+#, kde-format
+msgid ""
+"Since nothing is selected Clazy will use all checks from levels 0 and 1."
+msgstr "由于未选择任何内容，Clazy 将使用级别 0 和 1 中的所有检查。"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/commandlinewidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "命令行"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
+#: config/commandlinewidget.ui:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "搜索..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
+#: config/commandlinewidget.ui:47
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "断行"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgid "1 check detected"
+msgid_plural "%1 checks detected"
+msgstr[0] "检测到了 %1 个检查"
+
+#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clazy"
+msgstr "Clazy"
+
+#: config/globalconfigpage.cpp:84
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clazy Settings"
+msgstr "配置 Clazy 设置"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "路径"
+
+#. i18n: ectx: property (text), widget (QLabel, executableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "clazy-standalone:"
+msgstr "clazy-standalone："
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
+#: config/globalconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy-standalone executable."
+msgstr "clazy-standalone 可执行文件的路径。"
+
+#. i18n: ectx: property (text), widget (QLabel, docsLabel)
+#: config/globalconfigpage.ui:52
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Documentation:"
+msgstr "文档撰写:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
+#: config/globalconfigpage.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy documentation directory."
+msgstr "Clazy 文档目录的路径。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/globalconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "并行运行分析作业"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/globalconfigpage.ui:94
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "使用所有 CPU 核心"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/globalconfigpage.ui:114
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "最大线程数："
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/globalconfigpage.ui:133
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "输出"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:139
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "在检查时隐藏输出视图"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
+#: config/globalconfigpage.ui:146
+#, kde-format
+msgctxt "@option:check"
+msgid "Verbose output"
+msgstr "详细输出"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "检查"
+
+#. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
+#: config/projectconfigpage.ui:66
+#, kde-format
+msgctxt "@title:tab"
+msgid "Options"
+msgstr "选项"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
+"is missing."
+msgstr "不要为非 Qt 文件发出警告，也就是缺少 -DQT_CORE_LIB 的话。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Only Qt"
+msgstr "仅限 Qt"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Disable checks not compatible with Qt 4."
+msgstr "禁用不兼容 Qt 4 的检查。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:91
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt4 compatible"
+msgstr "Qt4 兼容"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For running clazy on Qt itself, optional, but honors specific guidelines."
+msgstr "在 Qt 自身之上运行 Clazy，可选，但是尊重特定的指导方针。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:101
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt developer"
+msgstr "Qt 开发者"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For visiting implicit code like compiler generated constructors.\n"
+"None of the built-in checks benefit from this, but can be useful for custom "
+"checks."
+msgstr ""
+"用于访问隐式代码，比如编译器生成的构造器。\n"
+"没有内置检查会受益于此，但是可能对自定义检查有用。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Visit implicit code"
+msgstr "访问隐式代码"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Only emit warnings for the current file being compiled and ignore any "
+"includes.\n"
+"Useful for performance reasons."
+msgstr ""
+"仅对当前编译文件发出警告，而忽略任何包含引用。\n"
+"这对性能非常有帮助。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Ignore included files"
+msgstr "忽略包含的文件"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/projectconfigpage.ui:141
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header filter:"
+msgstr "头文件过滤器："
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/projectconfigpage.ui:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from.\n"
+"Diagnostics from the main file of each translation unit are always displayed."
+msgstr ""
+"与输出诊断的头文件名匹配的正则表达式。\n"
+"始终显示每个翻译单元的注文件的诊断信息。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
+#: config/projectconfigpage.ui:172
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable all fix-its"
+msgstr "启用所有修复程序"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fix-its will be applied to a separate file (for unit-test use only)."
+msgstr "修复程序将应用于单独的文件 (仅用于单元测试)。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:182
+#, kde-format
+msgctxt "@option:check"
+msgid "No-inplace fix-its"
+msgstr "不要就地修复"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
+#: config/projectconfigpage.ui:192
+#, kde-format
+msgid ""
+"Please backup your code before fix-its applying. For better results also "
+"disable \n"
+"parallel checking, which can lead to multiple fix-it applying for header "
+"files."
+msgstr ""
+"请在修复程序应用之前备份您的代码。为了获得更好的结果，您还可以禁用并行检"
+"查，\n"
+"避免给头文件同时应用多个修复程序。"
+
+#. i18n: ectx: attribute (title), widget (QWidget, extraTab)
+#: config/projectconfigpage.ui:209
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "额外参数"
+
+#. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
+#: config/projectconfigpage.ui:215
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler append:"
+msgstr "编译器追加："
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
+#: config/projectconfigpage.ui:222
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to append to the compiler command line."
+msgstr "要追加到编译器命令行的其他参数。"
+
+#. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
+#: config/projectconfigpage.ui:232
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler prepend:"
+msgstr "编译器预置："
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
+#: config/projectconfigpage.ui:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to prepend to the compiler command line."
+msgstr "要预置到编译器命令行的其他参数。"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
+#: config/projectconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to clazy-standalone."
+msgstr "用于 clazy-standalone 命令的其他参数。"
+
+#. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
+#: config/projectconfigpage.ui:259
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra parameters:"
+msgstr "额外参数:"
+
+#: job.cpp:105
+#, kde-format
+msgid "Clazy Analysis (%1)"
+msgstr "Clazy 分析 (%1)"
+
+#: job.cpp:135
+#, kde-format
+msgid "Unknown Level"
+msgstr "未知级别"
+
+#: job.cpp:201
+#, kde-format
+msgid "Failed to start Clazy analysis process."
+msgstr "启动 Clazy 分析进程失败。"
+
+#: job.cpp:206
+#, kde-format
+msgid "Clazy analysis process crashed."
+msgstr "Clazy 分析进程已崩溃。"
+
+#: job.cpp:211
+#, kde-format
+msgid "Clazy analysis process timed out."
+msgstr "Clazy 分析进程已超时。"
+
+#: job.cpp:215
+#, kde-format
+msgid "Write to Clazy analysis process failed."
+msgstr "写入 Clazy 分析进程失败。"
+
+#: job.cpp:219
+#, kde-format
+msgid "Read from Clazy analysis process failed."
+msgstr "从 Clazy 分析进程读取失败。"
+
+#: job.cpp:229
+#, kde-format
+msgctxt "@title:window"
+msgid "Clazy Error"
+msgstr "Clazy 错误"
+
+#: jobparameters.cpp:39
+#, kde-format
+msgid ""
+"clazy-standalone path cannot be detected. Set the path manually if Clazy is "
+"already installed."
+msgstr ""
+"clazy-standalone 路径无法被检测。如果已经安装了 Clazy，请手动设置路径。"
+
+#: jobparameters.cpp:42
+#, kde-format
+msgid "clazy-standalone path is empty."
+msgstr "clazy-standalone 路径为空。"
+
+#: jobparameters.cpp:50
+#, kde-format
+msgid "clazy-standalone path '%1' does not exists."
+msgstr "clazy-standalone 路径 %1 不存在。"
+
+#: jobparameters.cpp:55
+#, kde-format
+msgid "clazy-standalone path '%1' is not an executable."
+msgstr "clazy-standalone 路径 %1 不是可执行文件。"
+
+#: jobparameters.cpp:64
+#, kde-format
+msgid ""
+"Clazy documentation path cannot be detected. Set the path manually if Clazy "
+"is already installed."
+msgstr "Clazy 文档路径无法被检测。如果已经安装了 Clazy，请手动设置路径。"
+
+#: jobparameters.cpp:67
+#, kde-format
+msgid "Clazy documentation path is empty."
+msgstr "Clazy 文档路径为空。"
+
+#: jobparameters.cpp:75
+#, kde-format
+msgid "Clazy documentation path '%1' does not exists."
+msgstr "Clazy 文档路径 %1 不存在。"
+
+#: jobparameters.cpp:80
+#, kde-format
+msgid "Clazy documentation path '%1' is not a directory."
+msgstr "Clazy 文档路径 %1 不是目录。"

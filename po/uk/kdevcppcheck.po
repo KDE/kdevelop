@@ -1,0 +1,676 @@
+# Translation of kdevcppcheck.po to Ukrainian
+# Copyright (C) 2013-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2013, 2015, 2016, 2017, 2018, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcppcheck\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 08:33+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.07.70\n"
+
+#: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
+#, kde-format
+msgctxt "@title:tab"
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: config/globalconfigpage.cpp:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Cppcheck Settings"
+msgstr "Налаштовування параметрів Cppcheck"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/globalconfigpage.ui:20
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Шляхи"
+
+#. i18n: ectx: property (text), widget (QLabel, cppcheckLabel)
+#: config/globalconfigpage.ui:26
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Cppchec&k executable:"
+msgstr "Ви&конуваний файл Cppcheck:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, outputGroupBox)
+#: config/globalconfigpage.ui:45
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "Виведення"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "Приховати панель виведення під час перевірки"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_showXmlOutput)
+#: config/globalconfigpage.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Cppcheck XML output in the output view"
+msgstr "Показати виведене cppcheck XML на панелі виведення"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabChecks)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Перевірки"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkUnusedFunction)
+#: config/projectconfigpage.ui:47
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check for unused functions. It is recommend to only enable this when the "
+"whole program is scanned"
+msgstr ""
+"Шукати невикористані функції. Рекомендуємо вмикати цю перевірку, лише якщо "
+"виконується сканування усього коду програми."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkUnusedFunction)
+#: config/projectconfigpage.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Unused function"
+msgstr "Невикористані функції"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_inconclusiveAnalysis)
+#: config/projectconfigpage.ui:60
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Allow that Cppcheck reports even though the analysis is inconclusive. There "
+"are false positives with this option. Each result must be carefully "
+"investigated before you know if it is good or bad."
+msgstr ""
+"Дозволити Cppcheck повідомляти про недоліки, щодо яких є сумніви. Якщо "
+"скористатися цим варіантом, можливі хибнопозитивні повідомлення. Вам "
+"доведеться ретельно перевіряти кожне з повідомлень щодо його справджуваності."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
+#: config/projectconfigpage.ui:63
+#, kde-format
+msgctxt "@option:check"
+msgid "Inconclusive analysis"
+msgstr "Неточний аналіз"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkInformation)
+#: config/projectconfigpage.ui:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable information messages"
+msgstr "Увімкнути інформаційні повідомлення"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkInformation)
+#: config/projectconfigpage.ui:73
+#, kde-format
+msgctxt "@option:check"
+msgid "Information"
+msgstr "Інформація"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkMissingInclude)
+#: config/projectconfigpage.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Warn if there are missing includes. For detailed information use 'check-"
+"config'"
+msgstr ""
+"Попереджати, якщо пропущено включення. Щоб дізнатися більше, скористайтеся "
+"параметром «check-config»."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkMissingInclude)
+#: config/projectconfigpage.ui:86
+#, kde-format
+msgctxt "@option:check"
+msgid "Missing include"
+msgstr "Пропущені включення"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPerformance)
+#: config/projectconfigpage.ui:96
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable performance messages"
+msgstr "Увімкнути повідомлення щодо швидкодії"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPerformance)
+#: config/projectconfigpage.ui:99
+#, kde-format
+msgctxt "@option:check"
+msgid "Performance"
+msgstr "Швидкодія"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_forceCheck)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Force checking of files that have a lot of configurations. Error is "
+"printed if such a file is found so there is no reason to use this by "
+"default. If used together with '--max-configs=', the last option is the one "
+"that is effective.<br/><br/>Be careful with using this option - it can "
+"dramatically slow checking.</p>"
+msgstr ""
+"<p>Примусова перевірка файлів, у яких багато налаштувань. Якщо такий файл "
+"буде виявлено, засіб перевірки повідомить про помилку. Отже, немає сенсу "
+"типово використовувати таку перевірку. Якщо використовується разом із «--max-"
+"configs=», братиметься до уваги лише той з параметрів, який вказано останнім."
+"<br/><br/>Будьте обережні з використанням цього параметра — він може значно "
+"уповільнити процес перевірки.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Force checking"
+msgstr "Примусова перевірка"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkPortability)
+#: config/projectconfigpage.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable portability messages"
+msgstr "Увімкнути повідомлення щодо придатності до портування"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkPortability)
+#: config/projectconfigpage.ui:122
+#, kde-format
+msgctxt "@option:check"
+msgid "Portability"
+msgstr "Придатність до портування"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkStyle)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enable all coding style checks. All messages with the severities 'style', "
+"'performance' and 'portability' are enabled."
+msgstr ""
+"Увімкнути усі перевірки стилю запису коду. Буде увімкнено усі повідомлення "
+"із рівнями критичності «style» (стиль), «performance» (швидкодія) та "
+"«portability» (придатність до портування)."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
+#: config/projectconfigpage.ui:135
+#, kde-format
+msgctxt "@option:check"
+msgid "Style"
+msgstr "Стиль"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_checkConfig)
+#: config/projectconfigpage.ui:145
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check Cppcheck configuration. The normal code analysis is disabled by this "
+"flag."
+msgstr ""
+"Перевірити налаштування Cppcheck. Звичайний аналіз коду при цьому буде "
+"вимкнено."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
+#: config/projectconfigpage.ui:148
+#, kde-format
+msgctxt "@option:check"
+msgid "Check config"
+msgstr "Перевірити налаштування"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabIncludes)
+#: config/projectconfigpage.ui:158
+#, kde-format
+msgctxt "@title:tab"
+msgid "Include Directories"
+msgstr "Каталоги включень"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useProjectIncludes)
+#: config/projectconfigpage.ui:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add 'project' include directories to Cppcheck arguments. This option adds "
+"only paths related with project's root and build directories."
+msgstr ""
+"Додати каталоги включення «project» до аргументів cppcheck. За допомогою "
+"цього параметра можна додати лише адреси каталогів відносно кореневого "
+"каталогу проєкту та каталоги збирання."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
+#: config/projectconfigpage.ui:167
+#, kde-format
+msgctxt "@option:check"
+msgid "Use 'project' include dirs"
+msgstr "Використовувати каталоги включення проєкту"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_useSystemIncludes)
+#: config/projectconfigpage.ui:180
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
+">Be careful with using this option - it can dramatically slow checking.</p>"
+msgstr ""
+"<p>Додати інші каталоги включення, «system», до аргументів cppcheck.<br/><br/"
+">Будьте обережні з використанням цього параметра — він страшенно уповільнює "
+"процес перевірки.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
+#: config/projectconfigpage.ui:183
+#, kde-format
+msgctxt "@option:check"
+msgid "Use 'system' include dirs"
+msgstr "Використовувати системні каталоги включення"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/projectconfigpage.ui:198
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Ignored includes:"
+msgstr "&Ігноровані включення:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_ignoredIncludes)
+#: config/projectconfigpage.ui:218
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html>\n"
+"\n"
+"<p>Defines semicolon-separated list of ignored include directories.</p>\n"
+"\n"
+"<p>You can use the following placeholders:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
+"directory.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
+"directory.</p>\n"
+"\n"
+"</html>"
+msgstr ""
+"<html>\n"
+"\n"
+"<p>Визначає список ігнорованих каталогів, відокремлених крапками з комами.</"
+"p>\n"
+"\n"
+"<p>Можна використовувати такі замінники:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> — буде замінено адресою кореневого каталогу проєкту.</"
+"p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> — буде замінено адресою каталогу збирання проєкту.</"
+"p>\n"
+"\n"
+"</html>"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
+#: config/projectconfigpage.ui:241
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Додаткові параметри"
+
+#. i18n: ectx: property (text), widget (QLabel, extraLabel)
+#: config/projectconfigpage.ui:254
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ex&tra parameters:"
+msgstr "&Додаткові параметри:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
+#: config/projectconfigpage.ui:274
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html>\n"
+"\n"
+"<p>Defines additional parameters for cppcheck (see documentation).</p>\n"
+"\n"
+"<p>You can use the following placeholders:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Gets replaced by the URL of the project's root "
+"directory.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Gets replaced by the URL of the project's build "
+"directory.</p>\n"
+"\n"
+"</html>"
+msgstr ""
+"<html>\n"
+"\n"
+"<p>Визначає список додаткових параметрів cppcheck (див. документацію).</p>\n"
+"\n"
+"<p>Можна використовувати такі замінники:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> — буде замінено адресою кореневого каталогу проєкту.</"
+"p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> — буде замінено адресою каталогу збирання проєкту.</"
+"p>\n"
+"\n"
+"</html>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: config/projectconfigpage.ui:308
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "Командний рядок"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, commandLineFilter)
+#: config/projectconfigpage.ui:316
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Шукати…"
+
+#. i18n: ectx: property (text), widget (QCheckBox, commandLineBreaks)
+#: config/projectconfigpage.ui:326
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "Розбиття рядків"
+
+#: job.cpp:42
+#, kde-format
+msgid "Cppcheck Analysis (%1)"
+msgstr "Аналіз cppcheck (%1)"
+
+#: job.cpp:111 parser.cpp:250 problemmodel.cpp:40 problemmodel.cpp:85
+#, kde-format
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: job.cpp:150
+#, kde-format
+msgid "Failed to start Cppcheck from \"%1\"."
+msgstr "Не вдалося запустити cppcheck з «%1»."
+
+#: job.cpp:155
+#, kde-format
+msgid "Cppcheck crashed."
+msgstr "Аварійне завершення роботи cppcheck."
+
+#: job.cpp:160
+#, kde-format
+msgid "Cppcheck process timed out."
+msgstr "Вичерпано час очікування на завершення процесу cppcheck."
+
+#: job.cpp:164
+#, kde-format
+msgid "Write to Cppcheck process failed."
+msgstr "Спроба записати дані до процесу cppcheck зазнала невдачі."
+
+#: job.cpp:168
+#, kde-format
+msgid "Read from Cppcheck process failed."
+msgstr "Спроба прочитати дані процесу cppcheck зазнала невдачі."
+
+#: parameters.cpp:122
+#, kde-format
+msgid ""
+"It seems that this project uses Qt library. For correctly work of cppcheck "
+"the value for define Q_MOC_OUTPUT_REVISION must be set. Unfortunately, the "
+"plugin is unable to find this value automatically - you should set it "
+"manually by adding '-DQ_MOC_OUTPUT_REVISION=XX' to extra parameters. The "
+"'XX' value can be found in any project's moc-generated file or in the "
+"<QtCore/qobjectdefs.h> header file."
+msgstr ""
+"Здається, у цьому проєкті використовується бібліотека Qt. Щоб cppcheck "
+"працював як слід, слід встановити значення параметра Q_MOC_OUTPUT_REVISION. "
+"На жаль, цей додаток не здатен визначити це значення автоматично. Вам слід "
+"встановити його вручну за допомогою додавання параметра «-"
+"DQ_MOC_OUTPUT_REVISION=XX». Значення «XX» можна визначити за будь-яким "
+"створеним moc файлом проєкту або за файлом заголовків <QtCore/qobjectdefs.h>."
+
+#: parser.cpp:220
+#, kde-format
+msgid "Cppcheck XML Parsing: error at line %1, column %2: %3"
+msgstr "Обробка XML сppcheck: помилка у рядку %1, стовпчик %2: %3"
+
+#: plugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with Cppcheck"
+msgstr "Виконати аналіз поточного файла за допомогою cppcheck"
+
+#: plugin.cpp:57 plugin.cpp:68 plugin.cpp:73
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Cppcheck"
+msgstr "Cppcheck"
+
+#: plugin.cpp:62
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with Cppcheck"
+msgstr "Виконати аналіз поточного проєкту за допомогою cppcheck"
+
+#: plugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Перевірка"
+
+#: problemmodel.cpp:116
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "Аналіз завершено. Проблем не виявлено."
+
+#: problemmodel.cpp:137
+#, kde-format
+msgid "Analysis started..."
+msgstr "Розпочато аналіз…"
+
+#: problemmodel.cpp:138
+#, kde-format
+msgctxt "@info:tooltip %1 is the path of the file"
+msgid "Re-run last Cppcheck analysis (%1)"
+msgstr "Повторно виконати останній аналіз cppcheck (%1)"
+
+#: problemmodel.cpp:140
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last Cppcheck analysis"
+msgstr "Повторно виконати останній аналіз cppcheck"
+
+#~ msgid "Cppcheck Error"
+#~ msgstr "Помилка cppcheck"
+
+#~ msgid "Cppcheck (Current File)"
+#~ msgstr "Cppcheck (поточний файл)"
+
+#~ msgid "Cppcheck (Current Project)"
+#~ msgstr "Cppcheck (поточний проєкт)"
+
+#~| msgid "Cppcheck Analysis (%1)"
+#~ msgid "Cppcheck Analyzer"
+#~ msgstr "Аналізатор cppcheck"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Analyze"
+#~ msgstr "Аналіз"
+
+#~ msgid "Cppcheck Settings"
+#~ msgstr "Параметри Cppcheck"
+
+#~ msgid "<html><head/><body><p>Enable information messages</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Увімкнути інформаційні повідомлення</p></body></"
+#~ "html>"
+
+#~ msgid "<html><head/><body><p>Enable performance messages</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Увімкнути повідомлення щодо швидкодії</p></body></"
+#~ "html>"
+
+#~ msgid "<html><head/><body><p>Enable portability messages</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Увімкнути повідомлення щодо придатності до "
+#~ "портування</p></body></html>"
+
+#~ msgid "Error starting Cppcheck"
+#~ msgstr "Помилка під час спроби запустити Cppcheck"
+
+#~ msgid "No active file, unable to deduce project."
+#~ msgstr "Немає активного файла, неможливо визначити проєкт."
+
+#~ msgid "Active file isn't in a project"
+#~ msgstr "Активний файл не є частиною проєкту"
+
+#~ msgid "Enable additional checks"
+#~ msgstr "Увімкнути додаткові перевірки"
+
+#~ msgid "Additional checks "
+#~ msgstr "Додаткові перевірки "
+
+#~ msgid "Check for unused functions"
+#~ msgstr "Шукати невикористані функції"
+
+#~ msgid "Warn if there are missing includes"
+#~ msgstr "Попереджати щодо пропущених директив включення"
+
+#~ msgid "Cppcheck output"
+#~ msgstr "Виведені cppcheck дані"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Виконання"
+
+#~ msgid "Can't load parameters. They must be set in the project settings."
+#~ msgstr ""
+#~ "Не вдалося завантажити параметри. Параметри слід встановити у вікні "
+#~ "параметрів проєкту."
+
+#~ msgid "Launches Cppcheck for current file"
+#~ msgstr "Запускає перевірку cppcheck для поточного файла"
+
+#~ msgid "Launches Cppcheck for all files"
+#~ msgstr "Запускає перевірку cppcheck для усіх файлів"
+
+#~ msgid "Cppcheck (all Files)"
+#~ msgstr "Cppcheck (усі файли)"
+
+#~ msgid "Problems"
+#~ msgstr "Проблеми"
+
+#~ msgid "Failed to start Cppcheck"
+#~ msgstr "Не вдалося запустити cppcheck"
+
+#~ msgid "Unknown Cppcheck process error."
+#~ msgstr "Невідома помилка під час обробки cppcheck."
+
+#~ msgid "Cppcheck finished (pid=%1,exit=%2)"
+#~ msgstr "перевірку cppcheck завершено (pid=%1, код виходу=%2)"
+
+#~ msgid "job failed"
+#~ msgstr "спроба виконати завдання зазнала невдачі"
+
+#~ msgid "File"
+#~ msgstr "Файл"
+
+#~ msgid "Line"
+#~ msgstr "Рядок"
+
+#~ msgid "Message"
+#~ msgstr "Повідомлення"
+
+#~ msgid "Project path"
+#~ msgstr "Шлях до проєкту"
+
+#~ msgid "Message detailed"
+#~ msgstr "Докладне повідомлення"
+
+#~ msgid "Flat list"
+#~ msgstr "Плоский список"
+
+#~ msgid "Grouped by file"
+#~ msgstr "Групування за файлом"
+
+#~ msgid "Grouped by severity"
+#~ msgstr "Групування за критичністю"
+
+#~ msgid "Output view mode"
+#~ msgstr "Режим перегляду виведених даних"
+
+#~ msgid "job running (pid=%1)"
+#~ msgstr "виконання завдання (pid=%1)"
+
+#~ msgid "unknown"
+#~ msgstr "невідомо"
+
+#~ msgid "Global scope"
+#~ msgstr "Загальна область"
+
+#~ msgid "File / Line"
+#~ msgstr "Файл/Рядок"
+
+#~ msgid "Severity / File"
+#~ msgstr "Строгість/Файл"
+
+#~ msgid "Cppcheck Output"
+#~ msgstr "Дані, виведені cppcheck"
+
+#~ msgid "<b>Cppcheck</b><p>Shows the output of cppcheck.</p>"
+#~ msgstr "<b>Cppcheck</b><p>Показує дані, виведені cppcheck.</p>"
+
+#~ msgid "Job scheduled"
+#~ msgstr "Заплановані завдання"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Global Settings"
+#~ msgstr "Загальні параметри"
+
+#~ msgid "save"
+#~ msgstr "зберегти"
+
+#~ msgid "Support for running Cppcheck"
+#~ msgstr "Підтримка запуску cppcheck"
+
+#~ msgid "&Save"
+#~ msgstr "З&берегти"
+
+#~ msgid ""
+#~ "<b>Cppcheck</b><p>Shows the output of cppcheck. Cppcheck detects:<br/>use "
+#~ "of uninitialized memory;<br/>reading/writing memory after it has been "
+#~ "free'd;<br/>reading/writing off the end of malloc'd blocks;<br/>reading/"
+#~ "writing inappropriate areas on the stack;<br/>memory leaks &mdash; where "
+#~ "pointers to malloc'd blocks are lost forever;<br/>passing of "
+#~ "uninitialised and/or unaddressable memory to system calls;<br/>mismatched "
+#~ "use of malloc/new/new [] vs free/delete/delete [];<br/>some abuses of the "
+#~ "POSIX pthread API.</p>"
+#~ msgstr ""
+#~ "<b>Cppcheck</b><p>Показує дані, виведені Cppcheck. Cppcheck виявляє:<br/"
+#~ ">використання не ініціалізованої пам’яті<br/>операції читання/запису з "
+#~ "вивільненої командою free пам’яті<br/>операції читання/запису за межами "
+#~ "виділених командою malloc блоків пам’яті<br/>операції читання/запису у не "
+#~ "призначені для цього області стеку<br/>витоки пам’яті — ситуації, коли "
+#~ "втрачено вказівники на виділені командою malloc блоки пам’яті<br/"
+#~ ">передачу не ініціалізованої та/або не адресовної пам’яті системним "
+#~ "викликам<br/>плутанину з використанням викликів malloc/new/new [x] та "
+#~ "free/delete/delete [x]<br/>порушення правил використання API pthread, "
+#~ "обумовленого POSIX.</p>"

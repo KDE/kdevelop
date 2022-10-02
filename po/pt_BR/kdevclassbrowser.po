@@ -1,0 +1,71 @@
+# Translation of kdevclassbrowser.po to Brazilian Portuguese
+# Copyright (C) 2008-2013 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008, 2009, 2020.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2011, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclassbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-23 15:18-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.3\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, kde-format
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Classes"
+
+#: classbrowserplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Localizar no &navegador de classe"
+
+#: classwidget.cpp:72
+#, kde-format
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "P&esquisar:"
+
+#: classwidget.cpp:89
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Navegador de classes"
+
+#~ msgid "All projects classes"
+#~ msgstr "Classes de todos os projetos"
+
+#~ msgid "Base classes"
+#~ msgstr "Classes de base"
+
+#~ msgid "Derived classes"
+#~ msgstr "Classes derivadas"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Classes do projeto %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Luiz Fernando Ranghetti, André Marcelo Alvarenga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "elchevive@opensuse.org, alvarenga@kde.org"
+
+#~ msgid ""
+#~ "This plugin provides a browsable model of the currently parsed classes "
+#~ "and other items."
+#~ msgstr ""
+#~ "Este plugin fornece um modelo navegável das classes atualmente analisadas "
+#~ "e outros itens."

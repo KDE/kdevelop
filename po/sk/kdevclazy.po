@@ -1,0 +1,660 @@
+# translation of kdevclazy.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2018, 2019, 2022.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclazy\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-17 20:53+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: analyzer.cpp:30
+#, kde-format
+msgid "Clazy"
+msgstr "Clazy"
+
+#: checksdb.cpp:28
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 0"
+msgstr "Úroveň 0"
+
+#: checksdb.cpp:29
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 1"
+msgstr "Úroveň 1"
+
+#: checksdb.cpp:30
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 2"
+msgstr "Úroveň 2"
+
+#: checksdb.cpp:31
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 3"
+msgstr "Úroveň 3"
+
+#: checksdb.cpp:32
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Manual Level"
+msgstr "Ručná úroveň"
+
+#: checksdb.cpp:37
+#, kde-format
+msgid ""
+"Very stable checks, 99.99% safe, mostly no false-positives, very desirable."
+msgstr ""
+"Veľmi stabilné kontroly, na 99,99% bezpečné, väčšinou bez falošne "
+"pozitívnych výsledkov."
+
+#: checksdb.cpp:40
+#, kde-format
+msgid ""
+"The default level. Very similar to level 0, slightly more false-positives "
+"but very few."
+msgstr ""
+"Predvolená úroveň. Veľmi podobné úrovni 0, o niečo viac falošne pozitívnych, "
+"ale veľmi málo."
+
+#: checksdb.cpp:43
+#, kde-format
+msgid ""
+"Also very few false-positives, but contains noisy checks which not everyone "
+"agree should be default."
+msgstr ""
+"Tiež veľmi málo falošne pozitívnych, ale obsahuje hlučné kontroly, ktoré nie "
+"všetci súhlasia, by mali byť predvolené."
+
+#: checksdb.cpp:46
+#, kde-format
+msgid "Contains checks with high rate of false-positives."
+msgstr "Obsahuje kontroly s vysokou mierou falošne pozitívnych výsledkov."
+
+#: checksdb.cpp:49
+#, kde-format
+msgid ""
+"Checks here need to be enabled explicitly, as they don't belong to any "
+"level. Checks here are very stable and have very few false-positives."
+msgstr ""
+"Kontroly je treba výslovne povoliť, pretože nepatria do žiadnej úrovne. "
+"Kontroly sú veľmi stabilné a majú veľmi málo falošne pozitívnych výsledkov."
+
+#: checksdb.cpp:54
+#, kde-format
+msgid ""
+"Unable to load Clazy checks information from '%1'. Please check your "
+"settings."
+msgstr ""
+"Nie je možné načítať informácie o kontrole od Clazy z „%1“. Skontrolujte "
+"svojenastavenia."
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "Zadajte názov novej kontrolnej sady"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Názov:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "Kontrolná sada:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "Všetky kontrolné sady:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "Klonovať kontrolnú sadu"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "Odstrániť kontrolnú sadu"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "Nastaviť ako predvolené"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "Upraviť názov kontrolnej sady"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "Vlastné"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "Použiť predvolené (aktuálne: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1 (predvolený výber)"
+
+#: config/checkswidget.cpp:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search checks..."
+msgstr "Hľadať kontroly..."
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: config/checkswidget.ui:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Reset Checks"
+msgstr "Obnoviť kontroly"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
+#: config/checkswidget.ui:74
+#, kde-format
+msgid ""
+"Since nothing is selected Clazy will use all checks from levels 0 and 1."
+msgstr ""
+"Pretože nič nie je vybrané, Clazy použije všetky kontroly z úrovní 0 a 1."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/commandlinewidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "Príkazový riadok"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
+#: config/commandlinewidget.ui:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Hľadať..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
+#: config/commandlinewidget.ui:47
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "Zalomiť riadky"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgid "1 check detected"
+msgid_plural "%1 checks detected"
+msgstr[0] "1 kontrola detekovaná"
+msgstr[1] "%1 kontroly detekované"
+msgstr[2] "%1 kontrol detekovaných"
+
+#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clazy"
+msgstr "Clazy"
+
+#: config/globalconfigpage.cpp:84
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clazy Settings"
+msgstr "Konfigurovať nastavenia Clazy"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Cesty"
+
+#. i18n: ectx: property (text), widget (QLabel, executableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "clazy-standalone:"
+msgstr "clazy-samostatný:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
+#: config/globalconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy-standalone executable."
+msgstr "Cesta k samostatnému spustiteľnému programu clazy."
+
+#. i18n: ectx: property (text), widget (QLabel, docsLabel)
+#: config/globalconfigpage.ui:52
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Documentation:"
+msgstr "Dokumentácia:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
+#: config/globalconfigpage.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy documentation directory."
+msgstr "Cesta do adresára dokumentácie clazy."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/globalconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "Spúšťať úlohy analýzy paralelne"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/globalconfigpage.ui:94
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "Používať všetky CPU jadrá"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/globalconfigpage.ui:114
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "Maximálny počet vlákien:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/globalconfigpage.ui:133
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "Výstup"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:139
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "Skryť pohľad výstupu počas kontroly"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
+#: config/globalconfigpage.ui:146
+#, kde-format
+msgctxt "@option:check"
+msgid "Verbose output"
+msgstr "Podrobný výstup"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Kontroly"
+
+#. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
+#: config/projectconfigpage.ui:66
+#, kde-format
+msgctxt "@title:tab"
+msgid "Options"
+msgstr "Voľby"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
+"is missing."
+msgstr ""
+"Nevysielať upozornenia pre nie-Qt súbory, inými slovami, ak chýba -"
+"DQT_CORE_LIB."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Only Qt"
+msgstr "Iba Qt"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Disable checks not compatible with Qt 4."
+msgstr "Zakázať kontroly, ktoré nie sú kompatibilné s Qt 4."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:91
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt4 compatible"
+msgstr "Qt4 kompatibilné"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For running clazy on Qt itself, optional, but honors specific guidelines."
+msgstr "Na spustenie clazy na samotnom Qt, voliteľne, ale sledovať príručky."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:101
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt developer"
+msgstr "Qt vývojár"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For visiting implicit code like compiler generated constructors.\n"
+"None of the built-in checks benefit from this, but can be useful for custom "
+"checks."
+msgstr ""
+"Pre navštívenie implicitného kódu ako počítačom generovaných konštruktorov.\n"
+"Nič zo vstupných kontrol ako táto, ale môže byť užitočné pre vlastné "
+"kontroly."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Visit implicit code"
+msgstr "Navštívte implicitný kód"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Only emit warnings for the current file being compiled and ignore any "
+"includes.\n"
+"Useful for performance reasons."
+msgstr ""
+"Vysielať iba upozornenia z aktuálneho súboru skompilovaného a ignorovať "
+"všetky includy.\n"
+"Užitočné z výkonnostných dôvodov."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Ignore included files"
+msgstr "Ignorovať zahrnuté súbory"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/projectconfigpage.ui:141
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header filter:"
+msgstr "Filter hlavičky:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/projectconfigpage.ui:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from.\n"
+"Diagnostics from the main file of each translation unit are always displayed."
+msgstr ""
+"Regulárny výraz vyhovujúci názvom hlavičiek a výstup diagnostiky.\n"
+"Diagnostika z hlavného súboru z každej jednotky prekladu sa vždy zobrazí."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
+#: config/projectconfigpage.ui:172
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable all fix-its"
+msgstr "Povoliť všetky fixity"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fix-its will be applied to a separate file (for unit-test use only)."
+msgstr "Fixity sa použijú na samostatný súbor (iba pre unit testovanie)."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:182
+#, kde-format
+msgctxt "@option:check"
+msgid "No-inplace fix-its"
+msgstr "Žiadne vnútorné fixity"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
+#: config/projectconfigpage.ui:192
+#, kde-format
+msgid ""
+"Please backup your code before fix-its applying. For better results also "
+"disable \n"
+"parallel checking, which can lead to multiple fix-it applying for header "
+"files."
+msgstr ""
+"Prosím, zálohujte váš kód pred použitím fixitov. Pre lepšie výsledky zakážte "
+"aj\n"
+"paralelné kontroly, ktoré môžu viesť k viacnásobnému použitiu fixitu pre "
+"hlavičkové súbory."
+
+#. i18n: ectx: attribute (title), widget (QWidget, extraTab)
+#: config/projectconfigpage.ui:209
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Dodatočné parametre"
+
+#. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
+#: config/projectconfigpage.ui:215
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler append:"
+msgstr "Predpona prekladača:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
+#: config/projectconfigpage.ui:222
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to append to the compiler command line."
+msgstr "Dodatočné parametre na predanie po príkazovom riadku prekladača."
+
+#. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
+#: config/projectconfigpage.ui:232
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler prepend:"
+msgstr "Prípona prekladača:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
+#: config/projectconfigpage.ui:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to prepend to the compiler command line."
+msgstr "Dodatočné parametre na predanie pred príkazový riadok prekladača."
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
+#: config/projectconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to clazy-standalone."
+msgstr "Dodatočný parameter pre clazy-standalone."
+
+#. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
+#: config/projectconfigpage.ui:259
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra parameters:"
+msgstr "Dodatočné parametre:"
+
+#: job.cpp:105
+#, kde-format
+msgid "Clazy Analysis (%1)"
+msgstr "Clazy Analýza (%1)"
+
+#: job.cpp:135
+#, kde-format
+msgid "Unknown Level"
+msgstr "Neznáma úroveň"
+
+#: job.cpp:201
+#, kde-format
+msgid "Failed to start Clazy analysis process."
+msgstr "Nepodarilo sa spustiť proces analýzy Clazy."
+
+#: job.cpp:206
+#, kde-format
+msgid "Clazy analysis process crashed."
+msgstr "Proces analýzy clazy zlyhal."
+
+#: job.cpp:211
+#, kde-format
+msgid "Clazy analysis process timed out."
+msgstr "Časový limit procesu analýzy clazy vypršal."
+
+#: job.cpp:215
+#, kde-format
+msgid "Write to Clazy analysis process failed."
+msgstr "Zápis do procesu clazy analýzy zlyhal."
+
+#: job.cpp:219
+#, kde-format
+msgid "Read from Clazy analysis process failed."
+msgstr "Čítanie x procesu clazy analýzy zlyhalo."
+
+#: job.cpp:229
+#, kde-format
+msgctxt "@title:window"
+msgid "Clazy Error"
+msgstr "Chyba Clazy"
+
+#: jobparameters.cpp:39
+#, kde-format
+msgid ""
+"clazy-standalone path cannot be detected. Set the path manually if Clazy is "
+"already installed."
+msgstr ""
+"Nezistila sa cesta clazy-standalone. Nastavte cestu ručne, ak je už "
+"nainštalované Clazy."
+
+#: jobparameters.cpp:42
+#, kde-format
+msgid "clazy-standalone path is empty."
+msgstr "Cesta clazy-standalone je prázdna."
+
+#: jobparameters.cpp:50
+#, kde-format
+msgid "clazy-standalone path '%1' does not exists."
+msgstr "Cesta clazy-standalone '%1' neexistuje."
+
+#: jobparameters.cpp:55
+#, kde-format
+msgid "clazy-standalone path '%1' is not an executable."
+msgstr "Cesta clazy-standalone '%1' nie je spustiteľná."
+
+#: jobparameters.cpp:64
+#, kde-format
+msgid ""
+"Clazy documentation path cannot be detected. Set the path manually if Clazy "
+"is already installed."
+msgstr ""
+"Cesta dokumentácie Clazy nebola nájdená. Nastavte cestu manuálne, ak je "
+"Clazy už nainštalované."
+
+#: jobparameters.cpp:67
+#, kde-format
+msgid "Clazy documentation path is empty."
+msgstr "Cesta dokumentácie Clazy je prázdna."
+
+#: jobparameters.cpp:75
+#, kde-format
+msgid "Clazy documentation path '%1' does not exists."
+msgstr "Clazy documentation path '%1' does not exists."
+
+#: jobparameters.cpp:80
+#, kde-format
+msgid "Clazy documentation path '%1' is not a directory."
+msgstr "Cesta dokumentácie Clazy '%1' nie je adresár."
+
+#~ msgid "Compile commands file '%1' does not exist."
+#~ msgstr "Súbor príkazov prekladača '%1' neexistuje."
+
+#~ msgid ""
+#~ "Nothing to check: compile commands file '%1' contains no matching items."
+#~ msgstr ""
+#~ "Nič na kontrolu: súbor príkazov prekladača '%1' neobsahuje žiadne zhodné "
+#~ "položky."
+
+#~ msgid "Analyze Current File with Clazy"
+#~ msgstr "Analyzovať aktuálny súbor s Clazy"
+
+#~ msgid "Analyze Current Project with Clazy"
+#~ msgstr "Analyzovať aktuálny projekt s Clazy"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Test"
+
+#~ msgid ""
+#~ "Unable to start Clazy check for '%1':\n"
+#~ "\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Nemôžem spustiť kontrolu Clazy pre '%1':\n"
+#~ "\n"
+#~ "%2"
+
+#~ msgid "Analysis completed, no problems detected."
+#~ msgstr "Analýza dokončená, neboli zistené žiadne problémy."
+
+#~ msgid "Analysis started..."
+#~ msgstr "Analýza sa začala ..."
+
+#~ msgctxt "@info:tooltip %1 is the path of the file"
+#~ msgid "Re-run last Clazy analysis (%1)"
+#~ msgstr "Znovu spustiť poslednú analýzu Clazy (%1)"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Re-run last Clazy analysis"
+#~ msgstr "Znovu spustiť poslednú analýzu Clazy"
+
+#~ msgid "Unable to open compile commands file '%1' for reading"
+#~ msgstr "Nemôžem otvoriť súbor príkazov prekladača '%1' na čítanie"
+
+#~ msgid "JSON error during parsing compile commands file '%1': %2"
+#~ msgstr "Chyba JSON počas spracovania súboru príkazov prekladu '%1': %2"
+
+#~ msgid ""
+#~ "JSON error during parsing compile commands file '%1': document is not an "
+#~ "array"
+#~ msgstr ""
+#~ "Chyba JSON počas spracovania súboru príkazov prekladu '%1': dokument nie "
+#~ "je pole"

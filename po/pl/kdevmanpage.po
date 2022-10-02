@@ -1,0 +1,63 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2016-12-24 09:54+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Strona spisu treści instrukcji"
+
+#: manpagedocumentationwidget.cpp:32
+#, kde-format
+msgid "Loading man pages..."
+msgstr "Wczytywanie stron instrukcji..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+"Błąd wczytywania stron instrukcji:\n"
+"%1"
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Strona instrukcji"
+
+#~ msgid "Man pages loading error"
+#~ msgstr "Błąd wczytywania stron instrukcji"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "Could not find any documentation for '%1'"
+#~ msgstr "Nie można znaleźć żadnej dokumentacji dla '%1'"
+
+#~ msgid "ManPage"
+#~ msgstr "StronaInstrukcji"
+
+#~ msgid "Check Man Page documentation"
+#~ msgstr "Sprawdź stronę instrukcji dokumentacji"

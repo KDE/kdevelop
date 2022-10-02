@@ -1,0 +1,776 @@
+# Translation of kdevcmake.po to Ukrainian
+# Copyright (C) 2008-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-07-09 08:25+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Налаштовування каталогу збирання — %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Налаштувати параметри каталогу збирання для %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Вам слід вказати каталог збирання."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Використання вже створеного каталогу збирання."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Створення нового каталогу збирання."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Каталог збирання вже налаштовано."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Цей каталог збирання належить %1, але каталог проєкту — це %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Не можна вказувати відносну адресу каталогу збирання."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Вибраний каталог збирання не є порожнім."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Доступні каталоги збирання:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Новий каталог збирання"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "Каталог &збирання:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "Пре&фікс теки встановлення:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Префікс, до якого буде встановлено проєкти. Якщо не вказувати, надасть змогу "
+"CMake використати типовий префікс."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Типовий префікс встановлення CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "&Тип збирання:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Додаткові параметри:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "Ви&конуваний файл CMake:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "НЕКОРЕКТНО"
+
+#: cmakecodecompletionmodel.cpp:197
+#, kde-format
+msgctxt "@item"
+msgid "Command"
+msgstr "Команда"
+
+#: cmakecodecompletionmodel.cpp:198
+#, kde-format
+msgctxt "@item"
+msgid "Variable"
+msgstr "Змінна"
+
+#: cmakecodecompletionmodel.cpp:199
+#, kde-format
+msgctxt "@item"
+msgid "Macro"
+msgstr "Макрос"
+
+#: cmakecodecompletionmodel.cpp:200
+#, kde-format
+msgctxt "@item"
+msgid "Path"
+msgstr "Шлях"
+
+#: cmakecodecompletionmodel.cpp:201
+#, kde-format
+msgctxt "@item"
+msgid "Target"
+msgstr "Призначення"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "помилкове"
+
+#: cmakecommandscontents.cpp:29
+#, kde-format
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Команди"
+
+#: cmakecommandscontents.cpp:30
+#, kde-format
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Змінні"
+
+#: cmakecommandscontents.cpp:31
+#, kde-format
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Модулі"
+
+#: cmakecommandscontents.cpp:32
+#, kde-format
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Властивості"
+
+#: cmakecommandscontents.cpp:33
+#, kde-format
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Правила"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+"<p>Для перегляду документації з CMake із кращим форматуванням встановіть "
+"rst2html</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+"Не вдалося виявити виконуваний файл CMake. Чи встановлено його у системі?"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Розмір кешу:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Кеш документації:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "Сторінка вмісту CMake"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Не вдалося налаштувати проєкт «%1» (повідомлення про помилку: %2). У "
+"результаті можливість розібратися з кодом у KDevelop, ймовірно, буде "
+"неповною.\n"
+"\n"
+"Щоб виправити цю проблему, переконайтеся, що у файлах CMakeLists.txt немає "
+"помилок, і що KDevelop налаштовано на використання належної версії CMake і "
+"вказано правильні параметри роботи. Далі, наведіть вказівник миші на пункт "
+"проєкту на панелі інструмента перегляду проєктів, клацніть правою кнопкою і "
+"виберіть у меню пункт «Перезавантажити»."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"Програма KDevelop виявила декілька можливих кореневих каталогів вашого "
+"проєкту, будь ласка, оберіть з них правильний."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Значення кешу"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, kde-format
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Коментар:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Показувати додаткові"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Додатково"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "Префікс теки встановлення:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Тип випуску:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Налаштування середовища:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Виберіть середовище, яке буде використано"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, kde-format
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Показувати додаткові значення"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "Виконуваний файл CMake:"
+
+#: settings/cmakecachemodel.cpp:36
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Назва"
+
+#: settings/cmakecachemodel.cpp:37
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Тип"
+
+#: settings/cmakecachemodel.cpp:38
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Значення"
+
+#: settings/cmakecachemodel.cpp:39
+#, kde-format
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Коментар"
+
+#: settings/cmakecachemodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Додатково"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Рядки"
+
+#: settings/cmakepreferences.cpp:343
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Зараз зі списку KDevelop буде вилучено каталог %1.\n"
+"Чи бажаєте ви, щоб KDevelop вилучив цей каталог і з файлової системи?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr "Не вилучати"
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Не вдалося вилучити: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "Налаштовування параметрів CMake"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Обробка комплексу для перевірки %1"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+msgstr[2] "CTest %2 (%1)"
+msgstr[3] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop — Підтримка CMake"
+
+#~ msgid "Add"
+#~ msgstr "Додати"
+
+#~ msgid "Remove"
+#~ msgstr "Вилучити"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 є застарілою командою, вам не слід нею користуватися"
+
+#~ msgid "Unfinished function."
+#~ msgstr "Незавершена функція."
+
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Вам слід вказати виконуваний файл CMake."
+
+#~ msgid "&CMake executable:"
+#~ msgstr "Ви&конуваний файл CMake:"
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Налаштувати параметри каталогу збирання"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "Ви&конуваний файл CMake:"
+
+#~ msgid "Build Type:"
+#~ msgstr "Тип збирання:"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "Виконуваний файл CMake:"
+
+#~ msgid "Installation Prefix"
+#~ msgstr "Префікс встановлення"
+
+#~ msgid "Extra Arguments"
+#~ msgstr "Додаткові параметри"
+
+#~ msgid "CMake Binary"
+#~ msgstr "Виконуваний файл CMake"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake не встановлено"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Не вдалося записати значення параметрів CMake до файла «%1».\n"
+#~ "Перевірте, чи є у вас доступ на запис до цього файла."
+
+#~ msgid "CMake Documentation"
+#~ msgstr "Документація CMake"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Підтримка документації CMake"
+
+#~ msgid "CMake Manager"
+#~ msgstr "Інструмент керування CMake"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Підтримка керування проєктами CMake"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Перейти до визначення цілі"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Пересування файлів і тек у CMakeLists таким чином:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Не вдалося внести зміни до CMakeLists, перервати пересування?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Вилучити записи файлів і тек з CMakeList таким чином:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Не вдалося внести зміни до CMakeLists, перервати вилучення?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Зміна цілі збирання проєкту таким чином:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Створення теки з назвою «%1»:"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Не вдалося виконати запис файла проєкту."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Змінити ціль «%1» таким чином:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "Спроба внесення змін до CMakeLists зазнала невдачі."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "Перейменування «%1» на «%2»:"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Не вдалося внести зміни до CMakeLists, перервати перейменування?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "Каталог CMake"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "Каталогу збирання не існує, його неможливо створити."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Помилка під час створення каталогу збирання"
+
+#~ msgid "Error"
+#~ msgstr "Помилка"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "Додати файл з назвою «%1» до призначення «%2»."
+
+#~ msgid "Cannot save the change."
+#~ msgstr "Не вдалося зберегти зміни."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "Вилучити файл з назвою «%1»."
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "Перейменувати теку з назвою «%1»."
+
+#~ msgid "Swi&tch Colors"
+#~ msgstr "Пер&емкнути кольори"
+
+#~ msgid "General"
+#~ msgstr "Загальне"
+
+#~ msgid "This project is one day old"
+#~ msgid_plural "This project is %1 days old"
+#~ msgstr[0] "Цей проєкт створено %1 день тому."
+#~ msgstr[1] "Цей проєкт створено %1 дні тому"
+#~ msgstr[2] "Цей проєкт створено %1 днів тому"
+#~ msgstr[3] "Цей проєкт створено %1 день тому."
+
+#~ msgid "Settings changed"
+#~ msgstr "Параметри змінено"
+
+#~ msgid "A KDE 4 Application"
+#~ msgstr "Програма KDE 4"
+
+#~ msgid "kde4app"
+#~ msgstr "kde4app"
+
+#~ msgid "(C) 2007 %{AUTHOR}"
+#~ msgstr "© %{AUTHOR}, 2007"
+
+#~ msgid "%{AUTHOR}"
+#~ msgstr "%{AUTHOR}"
+
+#~ msgid "Document to open"
+#~ msgstr "Документ, який слід відкрити"
+
+#~ msgid "&Move"
+#~ msgstr "Пере&хід"
+
+#~ msgid "kapp4_base"
+#~ msgstr "kapp4_base"
+
+#~ msgid "hello, world"
+#~ msgstr "привіт, світе"
+
+#~ msgid "Background color:"
+#~ msgstr "Колір тла:"
+
+#~ msgid "Choose a new background color"
+#~ msgstr "Оберіть новий колір тла"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">background</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Змініть колір <span "
+#~ "style=\" font-weight:600;\">тла</span> натисканням цієї кнопки і вибором "
+#~ "нового <span style=\" color:#ff0000;\">кольору</span> у <span style=\" "
+#~ "font-style:italic;\">діалоговому вікні вибору кольору</span>.</p></body></"
+#~ "html>"
+
+#~ msgid "Project age:"
+#~ msgstr "Вік проєкту:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Колір тексту:"
+
+#~ msgid "Choose a new foreground color"
+#~ msgstr "Оберіть новий колір тексту"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">foreground</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Змініть колір <span "
+#~ "style=\" font-weight:600;\">тексту</span> натисканням цієї кнопки з "
+#~ "наступним вибором нового <span style=\" color:#ff0000;\">кольору</span> "
+#~ "за допомогою <span style=\" font-style:italic;\">діалогового вікна вибору "
+#~ "кольорів</span>.</p></body></html>"
+
+#~ msgid "Set the project age (in days)"
+#~ msgstr "Встановіть вік проєкту (у днях)"
+
+#~ msgid "Change the project age (in days) by choosing a new number of days."
+#~ msgstr "Змініть вік проєкту (у днях) вибором нової кількості днів."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Вилучити теку з назвою «%1»."
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Не вдалося створити файл CMakeLists.txt для каталогу."
+
+#~ msgid "debug"
+#~ msgstr "налагоджування"
+
+#~ msgid "release"
+#~ msgstr "випуск"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "ВипускЗіНалагоджуванням"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "МінРозмВипуск"
+
+#~ msgid "Status:"
+#~ msgstr "Стан:"
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "Не вдалося вилучити файл."
+
+#~ msgid ""
+#~ "<html><b>Contents:</b> Use the index to select what you are looking for."
+#~ "<p />"
+#~ msgstr ""
+#~ "<html><b>Зміст:</b> скористайтеся покажчиком для вибору потрібного вам "
+#~ "пункту.<p />"
+
+#~ msgid "<b>Commands:</b> <p %1>%2</p>"
+#~ msgstr "<b>Команди:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Variables:</b> <p %1>%2</p>"
+#~ msgstr "<b>Змінні:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Modules:</b> <p %1>%2</p>"
+#~ msgstr "<b>Модулі:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Properties:</b> <p %1>%2</p>"
+#~ msgstr "<b>Властивості:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Policies:</b> <p %1>%2</p>"
+#~ msgstr "<b>Правила:</b> <p %1>%2</p>"
+
+#~ msgid "</html>"
+#~ msgstr "</html>"
+
+#~ msgid "Text"
+#~ msgstr "Текст"
+
+#~ msgid "Action"
+#~ msgstr "Дія"
+
+#~ msgid "Change"
+#~ msgstr "Змінити"
+
+#~ msgid "Insert"
+#~ msgstr "Вставити"
+
+#~ msgid "Choose CMake Build Directory"
+#~ msgstr "Оберіть теку для збирання CMake"
+
+#~ msgid "TextLabel"
+#~ msgstr "TextLabel"
+
+#~ msgid "Generator:"
+#~ msgstr "Інструмент створення:"
+
+#~ msgid "Run"
+#~ msgstr "Запустити"
+
+#~ msgid ""
+#~ "The %1 build directory is not valid. It will be removed from the list"
+#~ msgstr ""
+#~ "Вказаний каталог збирання, %1, не є коректним. Його буде вилучено зі "
+#~ "списку"
+
+#~ msgid ""
+#~ "The %1 directory does not exist, but is needed before the build directory "
+#~ "is created.\n"
+#~ "Do you want KDevelop to create it for you?"
+#~ msgstr ""
+#~ "Каталогу %1 не існує, але його існування потрібне для створення каталогу "
+#~ "збирання.\n"
+#~ "Чи бажаєте ви, щоб KDevelop створив цей каталог для вас?"
+
+#~ msgid "Running"
+#~ msgstr "Виконання"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Скасувати"
+
+#~ msgid "&Run"
+#~ msgstr "&Виконати"
+
+#~ msgid "CMake process killed"
+#~ msgstr "Процес аварійно завершено CMake"
+
+#~ msgid "Created successfully"
+#~ msgstr "Успішно створено"
+
+#~ msgid "An error occurred"
+#~ msgstr "Сталася помилка"

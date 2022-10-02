@@ -1,0 +1,134 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2009.
+# Steve Allewell <steve.allewell@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-08-06 17:04+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Tried include path resolution while another resolution process was still "
+"running"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Makefile is missing in folder \"%1\""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Problem while trying to resolve include paths for %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Cached: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Filename %1 seems to be malformed"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Failed to extract new working directory"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "Output was: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Recursive make call failed"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "The directory \"%1\" does not exist. Output was: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Malformed recursive make call"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Could not extract include paths from make output"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Run"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrew Coles"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrew_coles@yahoo.co.uk"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Custom Makefile Manager"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Support for managing custom makefile projects"
+
+#~ msgid "Build &Target"
+#~ msgstr "Build &Target"
+
+#~ msgid "Build target"
+#~ msgstr "Build target"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialogue, <b>Build Options</b> tab.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "Build this project"
+
+#~ msgid "Build this target"
+#~ msgstr "Build this target"
+
+#~ msgid "Build this directory"
+#~ msgstr "Build this directory"

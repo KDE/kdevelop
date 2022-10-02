@@ -1,0 +1,50 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcodeutils.pot\n"
+"X-Crowdin-File-ID: 4964\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr "文档声明"
+
+#: codeutilsplugin.cpp:50
+#, kde-format
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr "Alt+Shift+d"
+
+#: codeutilsplugin.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr "为光标下的声明添加 Doxygen 结构。"
+
+#: codeutilsplugin.cpp:55
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr "在光标下的声明前面添加基本的 Doxygen 注释结构，例如函数的所有参数。"
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr "..."

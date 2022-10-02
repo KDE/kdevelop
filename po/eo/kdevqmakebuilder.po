@@ -1,0 +1,89 @@
+# Translation of kdevqmakebuilder into esperanto.
+# Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: pology\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: qmakebuilderpreferences.cpp:80
+#, fuzzy, kde-format
+#| msgid "QMake: %1"
+msgctxt "@title:tab"
+msgid "QMake"
+msgstr "QMake: %1"
+
+#: qmakebuilderpreferences.cpp:138
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+
+#: qmakebuilderpreferences.cpp:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: qmakebuilderpreferences.cpp:146
+#, kde-format
+msgid "Could not remove: %1."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: qmakeconfig.ui:77
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Settings"
+msgstr ""
+
+#: qmakejob.cpp:32
+#, fuzzy, kde-format
+#| msgid "QMake: %1"
+msgctxt "@title:window"
+msgid "QMake"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:43
+#, fuzzy, kde-format
+#| msgid "QMake project files"
+msgid "No project specified."
+msgstr "QMake-projektdosieroj"
+
+#: qmakejob.cpp:82
+#, kde-format
+msgid "QMake: %1"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:92
+#, fuzzy, kde-format
+#| msgid "Abort on first error:"
+msgid "Configure error"
+msgstr "Ĉesigi je unua eraro:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Axel Rousseau"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "axel@esperanto-jeunes.org"
+
+#, fuzzy
+#~| msgid "QMake Binary:"
+#~ msgid "QMake Builder"
+#~ msgstr "QMake programo:"
+
+#~ msgid "QMake Binary:"
+#~ msgstr "QMake programo:"

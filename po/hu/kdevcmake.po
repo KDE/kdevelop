@@ -1,0 +1,575 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2015-09-08 10:41+0200\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Fordítási könyvtár beállítása ehhez: %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Fordítási könyvtár beállítása ehhez: %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Meg kell adnia egy fordítási könyvtárat."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Egy korábban létrehozott fordítási könyvtár használata."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Új fordítási könyvtár létrehozása."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "A fordítási könyvtár már be van állítva."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Ez a fordítási könyvtár ehhez van: %1. De a projekt könyvtár ez: %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Nem választhat relatív fordítási könyvtárat."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "A választott fordítási könyvtár nem üres."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, fuzzy, kde-format
+#| msgid "Creating a new build directory."
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Új fordítási könyvtár létrehozása."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, fuzzy, kde-format
+#| msgid "&Build Directory:"
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "&Fordítás könyvtár:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, fuzzy, kde-format
+#| msgid "&Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "&Fordítás könyvtár:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, fuzzy, kde-format
+#| msgid "&Installation Prefix:"
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Telepítési előtag:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "Fordítás &típus:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, fuzzy, kde-format
+#| msgid "Extra Arguments:"
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Extra paraméterek:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr ""
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "ÉRVÉNYTELEN"
+
+#: cmakecodecompletionmodel.cpp:197
+#, fuzzy, kde-format
+#| msgid "Command"
+msgctxt "@item"
+msgid "Command"
+msgstr "Parancs"
+
+#: cmakecodecompletionmodel.cpp:198
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgctxt "@item"
+msgid "Variable"
+msgstr "Változó"
+
+#: cmakecodecompletionmodel.cpp:199
+#, fuzzy, kde-format
+#| msgid "Macro"
+msgctxt "@item"
+msgid "Macro"
+msgstr "Makró"
+
+#: cmakecodecompletionmodel.cpp:200
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@item"
+msgid "Path"
+msgstr "Elérési út"
+
+#: cmakecodecompletionmodel.cpp:201
+#, fuzzy, kde-format
+#| msgid "Target"
+msgctxt "@item"
+msgid "Target"
+msgstr "Cél"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "hibás"
+
+#: cmakecommandscontents.cpp:29
+#, fuzzy, kde-format
+#| msgid "Commands"
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Parancsok"
+
+#: cmakecommandscontents.cpp:30
+#, fuzzy, kde-format
+#| msgid "Variables"
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Változók"
+
+#: cmakecommandscontents.cpp:31
+#, fuzzy, kde-format
+#| msgid "Modules"
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Modulok"
+
+#: cmakecommandscontents.cpp:32
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Tulajdonságok"
+
+#: cmakecommandscontents.cpp:33
+#, fuzzy, kde-format
+#| msgid "Policies"
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Házirendek"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Gyorsítótár érték:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Gyorsítótár dokumentáció:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "CMake tartalom oldal"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"A KDevelop több lehetséges gyökérkönyvtárat talált a projektjéhez, kérjük "
+"válassza ki a helyeset."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, fuzzy, kde-format
+#| msgid "Cache Values"
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Gyorsítótár értékek"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, fuzzy, kde-format
+#| msgid "Comment:"
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Megjegyzés:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, fuzzy, kde-format
+#| msgid "Show Advanced"
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Specialitások megjelenítése"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Speciális"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, fuzzy, kde-format
+#| msgid "&Installation Prefix:"
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "&Telepítési előtag:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Fordítás &típus:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, fuzzy, kde-format
+#| msgid "Configure Environment"
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Környezet beállítása"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "A használni kívánt környezetet kiválasztása"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, fuzzy, kde-format
+#| msgid "Show Advanced Values"
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Speciális értékek megjelenítése"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr ""
+
+#: settings/cmakecachemodel.cpp:36
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Név"
+
+#: settings/cmakecachemodel.cpp:37
+#, fuzzy, kde-format
+#| msgid "Type"
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Típus"
+
+#: settings/cmakecachemodel.cpp:38
+#, fuzzy, kde-format
+#| msgid "Value"
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Érték"
+
+#: settings/cmakecachemodel.cpp:39
+#, fuzzy, kde-format
+#| msgid "Comment"
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Megjegyzés"
+
+#: settings/cmakecachemodel.cpp:40
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Speciális"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:343
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"A(z) %1 könyvtár hamarosan el lesz távolítva a KDevelop listájából.\n"
+"Szeretné, hogy a KDevelop eltávolítsa azt a fájlrendszerből is?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:352
+#, fuzzy, kde-format
+#| msgid "Could not remove: %1\n"
+msgid "Could not remove: %1"
+msgstr "Nem sikerült eltávolítani: %1\n"
+
+#: settings/cmakepreferences.cpp:398
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, fuzzy, kde-format
+#| msgid "Configure CMake settings"
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "A CMake beállításainak módosítása"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Teszt alkalmazáscsomag (%1) feldolgozása"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - CMake támogatás"
+
+#~ msgid "Add"
+#~ msgstr "Hozzáadás"
+
+#~ msgid "Remove"
+#~ msgstr "Eltávolítás"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "A(z) %1 elavult parancs és nem kellene használni"
+
+#, fuzzy
+#~| msgid "Unfinished function. "
+#~ msgid "Unfinished function."
+#~ msgstr "Befejezetlen függvény. "
+
+#, fuzzy
+#~| msgid "You need to select a cmake binary."
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Ki kell választania egy cmake binárist."
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Fordítási könyvtár beállítása"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf,Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake &bináris:"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Build Type:"
+#~ msgstr "Fordítás &típus:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake &bináris:"
+
+#, fuzzy
+#~| msgid "&Installation Prefix:"
+#~ msgid "Installation Prefix"
+#~ msgstr "&Telepítési előtag:"
+
+#, fuzzy
+#~| msgid "Extra Arguments:"
+#~ msgid "Extra Arguments"
+#~ msgstr "Extra paraméterek:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary"
+#~ msgstr "CMake &bináris:"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "A cmake nincs telepítve"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Nem sikerült a CMake beállításainak írása ebbe a fájlba: „%1”.\n"
+#~ "Ellenőrizze, hogy rendelkezik-e írási joggal."
+
+#~ msgid "CMake Documentation"
+#~ msgstr "CMake dokumentáció"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Támogatás a CMake dokumentációhoz"
+
+#~ msgid "CMake Manager"
+#~ msgstr "CMake kezelő"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Támogatás CMake projektek kezeléséhez"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Ugrás a cél definícióra"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr ""
+#~ "Fájlok és mappák mozgatása a CMakeLists-en belül az alábbiak szerint:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "A CMakeLists módosításai nem sikerültek, megszakítja a mozgatást?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Fájlok és mappák eltávolítása a CMakeLists-ből az alábbiak szerint:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "A CMakeLists módosításai nem sikerültek, megszakítja a törlést?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Projektcélok módosítása az alábbiak szerint:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "„%1” mappa létrehozása:"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Nem sikerült elmenteni a változást."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "A(z) „%1” cél módosítása az alábbiak szerint:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "A CMakeLists módosításai nem sikerültek."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "„%1” átnevezése erre: „%2”:"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "A CMakeLists módosításai nem sikerültek, megszakítja az átnevezést?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "CMake könyvtár"
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Hiba a fordítási könyvtár létrehozásakor"

@@ -1,0 +1,674 @@
+# Bosnian translation for kdevplatform
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevplatform package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevplatform\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2014-01-13 20:54+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:08+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: editexternalscript.cpp:30
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines the command that should be executed when this script is run. "
+#| "Basic shell features of your platform should be available.</p>\n"
+#| "<p>There are a few placeholders you can use in the command:</p>\n"
+#| "<dl>\n"
+#| "  <dt><code>%u</code></dt>\n"
+#| "  <dd>Gets replaced by the URL of the active document.</dd>\n"
+#| "  <dt><code>%f</code></dt>\n"
+#| "  <dd>Gets replaced by the local filepath to the active document.</dd>\n"
+#| "  <dt><code>%n</code></dt>\n"
+#| "  <dd>Gets replaced by the name of the active document, including its "
+#| "extension.</dd>\n"
+#| "  <dt><code>%b</code></dt>\n"
+#| "  <dd>Gets replaced by the name of the active document without its "
+#| "extension.</dd>\n"
+#| "  <dt><code>%d</code></dt>\n"
+#| "  <dd>Gets replaced by the path to the directory of the active document.</"
+#| "dd>\n"
+#| "  <dt><code>%p</code></dt>\n"
+#| "  <dd>Gets replaced by the URL to the project of the active document.</"
+#| "dd>\n"
+#| "  <dt><code>%s</code></dt>\n"
+#| "  <dd>Gets replaced with the shell escaped contents of the selection in "
+#| "the active document.</dd>\n"
+#| "  <dt><code>%i</code></dt>\n"
+#| "  <dd>Gets replaced with the PID of the currently running KDevelop "
+#| "process.</dd>\n"
+#| "</dl>\n"
+#| "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
+#| "commands that could lead to data loss.</p>\n"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command that should be executed when this script is run. "
+"Basic shell features of your platform should be available.</p>\n"
+"<p>There are a few placeholders you can use in the command:</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>Gets replaced by the URL of the active document.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>Gets replaced by the local filepath to the active document.</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document, including its "
+"extension.</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document without its extension."
+"</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>Gets replaced by the path to the directory of the active document.</"
+"dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>Gets replaced by the URL to the project of the active document.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>Gets replaced with the shell escaped contents of the selection in the "
+"active document.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>Gets replaced with the PID of the currently running KDevelop process.</"
+"dd>\n"
+"</dl>\n"
+"<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
+"commands that could lead to data loss.</p>\n"
+msgstr ""
+"<p>Definiše komande koje se trebaju izvršiti pri pokretanju skripte. Osnovne "
+"mogućnosti školjke z avašu platformu bi trebale biti dostupne.</p>\n"
+"<p>Ima nekoliko mjesta koje možete koristiti u komandi:</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>Postaje zamijenjen s URL aktivnog dokumenta.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>Postaje zamijenjen s lokalnom stazom na aktivni dokument.</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>Postaje zamijenjen s imenom aktivnog dokumenta, uključujući ekstenziju."
+"</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>Postaje zamijenjen s imenom aktivnog dokumenta bez ekstenzije.</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>Postaje zamijenjen s stazom na direktorij aktivnog dokumenta.</dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>Postaje zamijenjen s URL na projekt aktivnog dokumenta.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>Postaje zamijenjen s sadržajem izbora proslijeđenim školjci unutar "
+"aktivnog dokumenta.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>Postaje zamijenjen s PID trenutno aktivnog KDevelop procesa.</dd>\n"
+"</dl>\n"
+"<p><b>NOTE:</b>  Vaša je odgovornost da izbjegnete izvršavanje slučajnih "
+"komandi koje mogu oštetiti vaše podatke.</p>\n"
+
+#: editexternalscript.cpp:56
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines what the external script should get as input (via <code>STDIN</"
+#| "code>).</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what the external script should get as input (via <code>STDIN</"
+"code>).</p>"
+msgstr ""
+"<p>Definiše šta bi eksterna skripta trebala dobiti kao ulaz (preko "
+"<code>STDIN</code>).</p>"
+
+#: editexternalscript.cpp:62
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) "
+#| "of the script.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
+"the script.</p>"
+msgstr ""
+"<p>Definiše šta bi se trebalu uraditi kao izlaz (tj.. <code>STDOUT</code>) "
+"skripte.</p>"
+
+#: editexternalscript.cpp:68
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) "
+#| "of the script.</p><p>Note: if the action is the same as that chosen for "
+#| "the output, the channels will be merged and handled together.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of "
+"the script.</p><p>Note: if the action is the same as that chosen for the "
+"output, the channels will be merged and handled together.</p>"
+msgstr ""
+"<p>Definiše šta uraditi s greškama (tj. <code>STDERR</code>) skripte.</"
+"p><p>Napomena: ako akcija je ista kao i da je izabrana za izlaz, kanali će "
+"biti objedinjeni i obrađeni zajedno.</p>"
+
+#: editexternalscript.cpp:76
+#, fuzzy, kde-format
+#| msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
+msgctxt "@info:tooltip"
+msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
+msgstr "<p>Definiše ime skripte. Samo za svrhu prikaza..</p>"
+
+#: editexternalscript.cpp:82
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines the shortcut(s) you can use to execute this external script.</"
+#| "p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the shortcut(s) you can use to execute this external script.</p>"
+msgstr ""
+"<p>Definiše kratice koje možete koristiti da izvršite eksternu skriptu.</p>"
+
+#: editexternalscript.cpp:88
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines whether documents should be saved before the script gets "
+#| "executed.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether documents should be saved before the script gets executed."
+"</p>"
+msgstr ""
+"<p>Definiše da li se dokumenti trebaju snimiti prije nego se skripta uzvrši."
+"</p>"
+
+#: editexternalscript.cpp:94
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines whether the output of the script should be shown in a toolview."
+#| "</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether the output of the script should be shown in a tool view.</"
+"p>"
+msgstr ""
+"<p>Definiše da li izlaz skripte treba biti prikazan u alatnom pogledui</p>"
+
+#: editexternalscript.cpp:98
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>Defines what type of filtering should be applied to the output. E.g. "
+#| "to indicate errors by red text.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what type of filtering should be applied to the output. E.g. to "
+"indicate errors by red text.</p>"
+msgstr ""
+"<p>Definira koji tip filtriranja treba primijeniti na izlazu. Na primjer "
+"naznačiti greške prema crvenom tekstu.</p>"
+
+#: editexternalscript.cpp:106
+#, fuzzy, kde-format
+#| msgid "Create new external script"
+msgctxt "@title:window"
+msgid "Create New External Script"
+msgstr "Kreiraj novu eksternu skriptu"
+
+#: editexternalscript.cpp:108
+#, fuzzy, kde-format
+#| msgid "Edit external script '%1'"
+msgctxt "@title:window"
+msgid "Edit External Script '%1'"
+msgstr "Izmijeni spoljnju skriptu '%1'"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: editexternalscript.ui:19
+#, fuzzy, kde-format
+#| msgid "&Name:"
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "&Naziv:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: editexternalscript.ui:30
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>The name will also be used as the identifier during code completion.</"
+#| "p>\n"
+#| "<p><b>Note:</b> No spaces allowed.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>The name will also be used as the identifier during code completion.</p>\n"
+"  <p><b>Note:</b> No spaces allowed.</p>"
+msgstr ""
+"<p>Ime će se koristiti kao identifikator tokom kompletiranja koda</p>\n"
+"<p><b>Napomena:</b> Razmaci nisu dopušteni.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, commandLabel)
+#: editexternalscript.ui:37
+#, fuzzy, kde-format
+#| msgid "&Command:"
+msgctxt "@label:textbox"
+msgid "&Command:"
+msgstr "&Naredba:"
+
+#. i18n: ectx: property (text), widget (QLabel, stdinLabel)
+#: editexternalscript.ui:51
+#, fuzzy, kde-format
+#| msgid "&Input:"
+msgctxt "@label:listbox"
+msgid "&Input:"
+msgstr "&Ulaz:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:62
+#, fuzzy, kde-format
+#| msgid "nothing"
+msgctxt "@item:inlistbox input source"
+msgid "Nothing"
+msgstr "ništa"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:67
+#, fuzzy, kde-format
+#| msgid "selection in current file or nothing"
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Nothing"
+msgstr "izbor u trenutnoj datoteci ili ništa"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:72
+#, fuzzy, kde-format
+#| msgid "selection in current file or whole file"
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Whole File"
+msgstr "izbor unutar trenutne datoteke ili cijele datoteke"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:77
+#, fuzzy, kde-format
+#| msgid "contents of current file"
+msgctxt "@item:inlistbox input source"
+msgid "Contents of Current File"
+msgstr "sadržaj trenutne datoteke"
+
+#. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
+#: editexternalscript.ui:85
+#, fuzzy, kde-format
+#| msgid "&Output:"
+msgctxt "@label:listbox"
+msgid "&Output:"
+msgstr "&Izlaz:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:96
+#, fuzzy, kde-format
+#| msgid "ignore"
+msgctxt "@item:inlistbox handle output"
+msgid "Ignore"
+msgstr "ignorisati"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:101
+#, fuzzy, kde-format
+#| msgid "insert at cursor position of current file"
+msgctxt "@item:inlistbox handle output"
+msgid "Insert at Cursor Position of Current File"
+msgstr "ubaci na poziciju kursora trenutne datoteke"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:106
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or insert at cursor position"
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr "zamijeni izbor trenutne datoteke ili ubaci na poziciju kursora"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:111
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or whole file"
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "zamijeni izbor trenutne datoteke ili cijelu datoteku"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:116
+#, fuzzy, kde-format
+#| msgid "replace contents of current file"
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Contents of Current File"
+msgstr "zamijeni sadržaj trenutne datoteke"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:121
+#, fuzzy, kde-format
+#| msgid "create new file"
+msgctxt "@item:inlistbox handle output"
+msgid "Create New File"
+msgstr "kreiraj novu datoteku"
+
+#. i18n: ectx: property (text), widget (QLabel, stderrLabel)
+#: editexternalscript.ui:129
+#, fuzzy, kde-format
+#| msgid "Errors:"
+msgctxt "@label:listbox"
+msgid "Errors:"
+msgstr "Greške:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:140
+#, fuzzy, kde-format
+#| msgid "ignore"
+msgctxt "@item:inlistbox handle errors"
+msgid "Ignore"
+msgstr "ignorisati"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:145
+#, fuzzy, kde-format
+#| msgid "merge with normal output"
+msgctxt "@item:inlistbox handle errors"
+msgid "Merge with Normal Output"
+msgstr "spoji s normalnim izlazom"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:150
+#, fuzzy, kde-format
+#| msgid "insert at cursor position of current file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Insert at Cursor Position of Current File"
+msgstr "ubaci na poziciju kursora trenutne datoteke"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:155
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or insert at cursor position"
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr "zamijeni izbor trenutne datoteke ili ubaci na poziciju kursora"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:160
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or whole file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "zamijeni izbor trenutne datoteke ili cijelu datoteku"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:165
+#, fuzzy, kde-format
+#| msgid "replace contents of current file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Contents of Current File"
+msgstr "zamijeni sadržaj trenutne datoteke"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:170
+#, fuzzy, kde-format
+#| msgid "create new file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Create New File"
+msgstr "kreiraj novu datoteku"
+
+#. i18n: ectx: property (text), widget (QLabel, saveLabel)
+#: editexternalscript.ui:178
+#, fuzzy, kde-format
+#| msgid "Save &Mode:"
+msgctxt "@label:listbox"
+msgid "Save &mode:"
+msgstr "Reži&m snimanja:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:189
+#, fuzzy, kde-format
+#| msgid "save nothing"
+msgctxt "@item:inlistbox save mode"
+msgid "Save Nothing"
+msgstr "ne snimaj ništa"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:194
+#, fuzzy, kde-format
+#| msgid "save active document"
+msgctxt "@item:inlistbox save mode"
+msgid "Save Active Document"
+msgstr "snimi aktivni dokument"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:199
+#, fuzzy, kde-format
+#| msgid "save all open documents"
+msgctxt "@item:inlistbox save mode"
+msgid "Save All Open Documents"
+msgstr "snimi sve otvorene dokumente"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: editexternalscript.ui:207
+#, fuzzy, kde-format
+#| msgid "Show Out&put"
+msgctxt "@option:check"
+msgid "Show out&put:"
+msgstr "Prikaži Izlaz"
+
+#. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
+#: editexternalscript.ui:224
+#, fuzzy, kde-format
+#| msgid "Output Filter:"
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "Izlazni filter:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:235
+#, fuzzy, kde-format
+#| msgid "no filter"
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "bez filtera"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:240
+#, fuzzy, kde-format
+#| msgid "compiler filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "kompajlerski filter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:245
+#, fuzzy, kde-format
+#| msgid "script error filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "filter skriptnih grešaka"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:250
+#, fuzzy, kde-format
+#| msgid "static analysis error filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "filter grešaka statičke analize"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:258
+#, fuzzy, kde-format
+#| msgid "<p>Defines shortcuts you can use to execute this script.</p>"
+msgctxt "@info:tooltip"
+msgid "Defines shortcuts you can use to execute this script."
+msgstr "<p>Definiše kratice koje možete koristiti da izvršite ovu skriptu.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:261
+#, fuzzy, kde-format
+#| msgid "Shortcut:"
+msgctxt "@label:chooser"
+msgid "Shortcut:"
+msgstr "Prečica:"
+
+#: externalscriptjob.cpp:88
+#, kde-format
+msgid ""
+"Cannot run script '%1' since it tries to access the editor contents but no "
+"document is open."
+msgstr ""
+"Ne mogu pokrenuti skriptu '%1' pošto ona pokušava pristupiti sadržaju "
+"editora ali nijedan dokument nije otvoren."
+
+#: externalscriptjob.cpp:224
+#, kde-format
+msgid "Running external script: %1"
+msgstr "Izvršavam spoljnju skriptu: %1"
+
+#: externalscriptjob.cpp:268
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** Ubijen program ***"
+
+#: externalscriptjob.cpp:348
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** Normalan izlaz ***"
+
+#: externalscriptjob.cpp:351
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Izlaz s povratnim kodom: %1 ***"
+
+#: externalscriptjob.cpp:354
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Proces prekinut ***"
+
+#: externalscriptjob.cpp:356
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Krah s izlaznim kodom: %1 ***"
+
+#: externalscriptjob.cpp:368
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr ""
+"*** Ne mogu pokrenuti program '%1'. Osigurajte se da je put pravilno naveden "
+"***"
+
+#: externalscriptplugin.cpp:125
+#, kde-format
+msgid "External Scripts"
+msgstr "Spoljnje skripte"
+
+#: externalscriptplugin.cpp:136
+#, kde-format
+msgid "Quick Compile"
+msgstr "Brzo prevedi"
+
+#: externalscriptplugin.cpp:142
+#, kde-format
+msgid "Sort Selection"
+msgstr "Izbor sortiranja"
+
+#: externalscriptplugin.cpp:150
+#, kde-format
+msgid "Google Selection"
+msgstr "Google izbor"
+
+#: externalscriptplugin.cpp:156
+#, kde-format
+msgid "Paste to Hastebin"
+msgstr ""
+
+#: externalscriptplugin.cpp:238
+#, fuzzy, kde-format
+#| msgid "External Scripts"
+msgctxt "@title:menu"
+msgid "External Scripts"
+msgstr "Spoljnje skripte"
+
+#: externalscriptview.cpp:30
+#, fuzzy, kde-format
+#| msgid "External Scripts"
+msgctxt "@title:window"
+msgid "External Scripts"
+msgstr "Spoljnje skripte"
+
+#: externalscriptview.cpp:48
+#, fuzzy, kde-format
+#| msgid "Add External Script"
+msgctxt "@action"
+msgid "Add External Script"
+msgstr "Dodaj spoljnju skriptu"
+
+#: externalscriptview.cpp:53
+#, fuzzy, kde-format
+#| msgid "Edit External Script"
+msgctxt "@action"
+msgid "Edit External Script"
+msgstr "Izmijeni spoljnju skriptu"
+
+#: externalscriptview.cpp:58
+#, fuzzy, kde-format
+#| msgid "Remove External Script"
+msgctxt "@action"
+msgid "Remove External Script"
+msgstr "Ukloni spoljnju skriptu"
+
+#: externalscriptview.cpp:145
+#, kde-format
+msgid ""
+"<p>Do you really want to remove the external script configuration for <i>%1</"
+"i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
+msgstr ""
+"<p>Da li zaista želite ukloniti konfiguraciju eksterne skripte za <i>%1</i>?"
+"</p><p><i>Napomena:</i> Sama skripta neće biti uklonjena.</p>"
+
+#: externalscriptview.cpp:148
+#, fuzzy, kde-format
+#| msgid "Confirm External Script Removal"
+msgctxt "@title:window"
+msgid "Confirm External Script Removal"
+msgstr "Potvrdi uklanjanje spoljne skripte."
+
+#: externalscriptview.cpp:149
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
+#: externalscriptview.ui:35
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filter..."
+
+#~ msgid "please insert a name"
+#~ msgstr "molim unesite ime"
+
+#~ msgid "please insert a command to execute"
+#~ msgstr "molim unesite komandu za izvršavanje"
+
+#~ msgid "Define filter here"
+#~ msgstr "Definiši filter ovdje"
+
+#~ msgid "No Document Open"
+#~ msgstr "Nema otvorenog dokumenta"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid ""
+#~ "Run external scripts or applications to manipulate the editor contents or "
+#~ "do other arbitrary actions."
+#~ msgstr ""
+#~ "Pokreni spoljne skripte ili aplikacija za manipulaciju sadržaja uređivača "
+#~ "ili  druge proizvoljne radnje."

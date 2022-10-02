@@ -1,0 +1,160 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sergiu Bivol <sergiu@cip.md>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2008-12-20 21:08+0200\n"
+"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: contextbrowser.cpp:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr ""
+
+#: contextbrowser.cpp:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr ""
+
+#: contextbrowser.cpp:192
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr ""
+
+#: contextbrowser.cpp:193
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr ""
+
+#: contextbrowser.cpp:194
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr ""
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr ""
+
+#: contextbrowser.cpp:241
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr ""
+
+#: contextbrowser.cpp:247
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr ""
+
+#: contextbrowser.cpp:253
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr ""
+
+#: contextbrowser.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr ""
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Navigator de context"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Navigator de cod"
+
+#: contextbrowser.cpp:312
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr ""
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(modificat)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr ""
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr ""
+
+#: contextbrowserview.cpp:185
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Blochează vizualizarea curentă"
+
+#: contextbrowserview.cpp:186
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Blochează vizualizarea curentă"
+
+#: contextbrowserview.cpp:187
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Blochează vizualizarea curentă"
+
+#: contextbrowserview.cpp:189
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Blochează vizualizarea curentă"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgid "Code Browser Toolbar"
+msgstr "Navigator de cod"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigare"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Activează/dezactivează regimul de răsfoire a surselor"
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Arată informații pentru contextul curent"

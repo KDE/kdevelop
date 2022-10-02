@@ -1,0 +1,95 @@
+# translation of kdevfilemanager.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010, 2013.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2019, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevfilemanager\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-01-06 01:51+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
+#, kde-format
+msgctxt "@title:window"
+msgid "File System"
+msgstr "System plików"
+
+#: filemanager.cpp:127
+#, kde-format
+msgctxt "@title:menu"
+msgid "Bookmarks"
+msgstr "Zakładki"
+
+#: filemanager.cpp:138
+#, kde-format
+msgctxt "@action switch to directory of current document"
+msgid "Current Document Directory"
+msgstr "Katalog bieżącego dokumentu"
+
+#: filemanager.cpp:155
+#, kde-format
+msgctxt "@action"
+msgid "New File..."
+msgstr "Nowy plik..."
+
+#: filemanager.cpp:162
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New File"
+msgstr "Utwórz nowy plik"
+
+#: filemanager.cpp:178
+#, kde-format
+msgid "Unable to create file '%1'"
+msgstr "Nie można utworzyć pliku '%1'"
+
+#~ msgid "Filesystem"
+#~ msgstr "Przeglądarka plików"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "Filename:"
+#~ msgstr "Nazwa pliku:"
+
+#~ msgid "File Manager"
+#~ msgstr "Zarządzanie plikami"
+
+#~ msgid "This plugin brings a filemanager to KDevelop."
+#~ msgstr "Ta wtyczka wnosi zarządzanie plikami w KDevelopie."
+
+#~ msgid "Browse the filesystem"
+#~ msgstr "Przeglądaj system plików"
+
+#~ msgid "Filesystem Browser"
+#~ msgstr "Przeglądarka systemu plików"

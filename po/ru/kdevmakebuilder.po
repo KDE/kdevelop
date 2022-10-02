@@ -1,0 +1,205 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Dimitriy Ryazantcev <DJm00n@mail.ru>, 2009.
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2012.
+# Alexey Morozov <morozov@gmail.com>, 2011.
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-03-11 11:15+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: makebuilderpreferences.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr "Настройка параметров Make"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "&Остановиться при первой ошибке:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Показывать команды, но не выполнять их:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "Установка от имени &root:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "&Команда для получения root:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "Коли&чество одновременных заданий:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "&Исполняемый файл make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "&Цель сборки по умолчанию:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "&Дополнительные параметры make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Активный п&рофиль переменных среды:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr "&Задать количество одновременных заданий:"
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Элемент сборки более не доступен"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Внутренняя ошибка: сборка файла невозможна"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Вид"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Дмитрий Рязанцев,Александр Поташев,Алексей Морозов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "djm00n@rambler.ru,aspotashev@gmail.com,morozov@gmail.com"
+
+#~ msgid "Make Builder"
+#~ msgstr "Сборщик Make"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Поддержка сборки проектов Make"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Недопустимый каталог сборки «%1»"
+
+#, fuzzy
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Не удалось создать команду сборки для цели «%1»"
+
+#~ msgid "Job failed"
+#~ msgstr "Задание не удалось"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Ошибка ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Выполнено ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Прервано ***"
+
+#, fuzzy
+#~ msgid "Build, then install as root"
+#~ msgstr "&Устанавливать с правами администратора (root):"
+
+#~ msgid "compiling"
+#~ msgstr "компиляция"
+
+#~ msgid "generating"
+#~ msgstr "генерация"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "компоновка"
+
+#~ msgid "built"
+#~ msgstr "собрано"
+
+#~ msgid "installing"
+#~ msgstr "установка"
+
+#~ msgid "creating"
+#~ msgstr "создание"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Выполнять несколько заданий параллельно:"

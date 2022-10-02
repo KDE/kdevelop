@@ -1,0 +1,72 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Solinas Simone <ksolsim@gmail.com>, 2009, 2013.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentswitcher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 16:22+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: documentswitcherplugin.cpp:65
+#, kde-format
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Ultime viste usate"
+
+#: documentswitcherplugin.cpp:68
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr "Apre una lista per scorrere la lista delle ultime viste usate."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Scorri la lista delle ultime viste usate"
+
+#: documentswitcherplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "Ultime viste usate (Opposto)"
+
+#: documentswitcherplugin.cpp:76
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr ""
+"Apre una lista per scorrere la lista delle ultime viste usate in verso "
+"opposto."
+
+#~ msgid "Document Switcher"
+#~ msgstr "Scambia documento"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid "Switch between open documents using most-recently-used list"
+#~ msgstr "Passa a documenti aperti usando la lista dei più usati recentemente"
+
+#~ msgid ""
+#~ "<b>Walk through last used Views</b><br/>Opens a list to walk through the "
+#~ "list of last used views."
+#~ msgstr ""
+#~ "<b>Scorri ultime viste usate</b><br/>Apre una lista per scorrere la lista "
+#~ "delle ultime viste usate."

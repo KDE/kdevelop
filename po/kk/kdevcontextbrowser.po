@@ -1,0 +1,198 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2013-11-11 04:32+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: contextbrowser.cpp:164
+#, fuzzy, kde-format
+#| msgid "Go back in context history"
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Контекст тарихында шегіну"
+
+#: contextbrowser.cpp:176
+#, fuzzy, kde-format
+#| msgid "Go forward in context history"
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Контекст тарихында ілгерілеу"
+
+#: contextbrowser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Сұлба"
+
+#: contextbrowser.cpp:193
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Сұлба"
+
+#: contextbrowser.cpp:194
+#, fuzzy, kde-format
+#| msgid "Navigate outline of active document, click to browse."
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Белсенді құжаттың сұлбасын ақтару үшін түртіңіз. "
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr ""
+
+#: contextbrowser.cpp:241
+#, fuzzy, kde-format
+#| msgid "&Previous Visited Context"
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Алдында жолыққан контекст  "
+
+#: contextbrowser.cpp:247
+#, fuzzy, kde-format
+#| msgid "&Next Visited Context"
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Келесі жолыққан контекст  "
+
+#: contextbrowser.cpp:253
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Алдыңғы пайдалануы"
+
+#: contextbrowser.cpp:259
+#, fuzzy, kde-format
+#| msgid "&Next Use"
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Келесі пайдалануы"
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Контекст шшолғышы"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Код шолғышы"
+
+#: contextbrowser.cpp:312
+#, fuzzy, kde-format
+#| msgid "Find Uses"
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Пайдалануларын табу"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(өзгертілген)"
+
+#: contextbrowserview.cpp:178
+#, fuzzy, kde-format
+#| msgid "Declaration menu"
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Мәлімдеме мәзірі"
+
+#: contextbrowserview.cpp:181
+#, fuzzy, kde-format
+#| msgid "Declaration menu"
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Мәлімдеме мәзірі"
+
+#: contextbrowserview.cpp:185
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Назардағы көріністі бұғаттау"
+
+#: contextbrowserview.cpp:186
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Назардағы көріністі бұғаттау"
+
+#: contextbrowserview.cpp:187
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Назардағы көріністі бұғаттау"
+
+#: contextbrowserview.cpp:189
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Назардағы көріністі бұғаттау"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Код шолғыш құралдары"
+
+#~ msgid "Outline..."
+#~ msgstr "Сұлба..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Шарлау"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Бастапқы кодын ақтару режімін рұқсат ету/етпеу"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Рұқсат етілгенде, редакторында түртіп бастапқы кодын ақтаруға болады."
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Бұл плагині, бүйірдегі көріністе, қолданыстағы тілінің контексті туралы "
+#~ "мәліметті келтіреді және тиісті мәлімдемелер мен қолдануларын бояп "
+#~ "белгілейді."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Назардағы контекст туралы мәліметті беру"

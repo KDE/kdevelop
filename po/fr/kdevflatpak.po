@@ -1,0 +1,113 @@
+# Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
+# Xavier Besnard <xavier.besnard@neuf.fr>, 2020, 2021.
+# Johnny Jazeix <jazeix@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevflatpak\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"PO-Revision-Date: 2021-01-11 18:59+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.12.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: flatpakplugin.cpp:45
+#, kde-format
+msgctxt "@action"
+msgid "Rebuild Environment"
+msgstr "Recompiler l'environnement"
+
+#: flatpakplugin.cpp:46
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Recompiles all dependencies for a fresh environment."
+msgstr "Recompile toutes les dépendances pour un environnement rafraîchi."
+
+#: flatpakplugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Export Flatpak Bundle..."
+msgstr "Exporter un paquet « Flatpak »…"
+
+#: flatpakplugin.cpp:52
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Exports the current build into a 'bundle.flatpak' file."
+msgstr ""
+"Exporte la version compilée actuelle dans un fichier « paquet.flatpak »."
+
+#: flatpakplugin.cpp:57
+#, kde-format
+msgctxt "@action"
+msgid "Send to Device..."
+msgstr "Envoyer vers un périphérique…"
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "Export %1"
+msgstr "Exporter %1"
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgid "Flatpak Bundle (*.flatpak)"
+msgstr "Paquet Flatpak (*.flatpak)"
+
+#: flatpakplugin.cpp:176
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Build Flatpak %1 for %2"
+msgstr "Compiler le Flatpak %1 pour %2"
+
+#: flatpakplugin.cpp:198
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Choisir un nom d'étiquette"
+
+#: flatpakplugin.cpp:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Device hostname:"
+msgstr "Nom d'hôte du périphérique :"
+
+#: flatpakruntime.cpp:53
+#, kde-format
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: flatpakruntime.cpp:144
+#, kde-format
+msgid "Bundling"
+msgstr "Groupage"
+
+#: flatpakruntime.cpp:166
+#, kde-format
+msgid "Run on Device"
+msgstr "Lancer sur le périphérique"
+
+#~ msgid "Export %1 to..."
+#~ msgstr "Exporter %1 vers..."
+
+#~ msgid "Creating Flatpak %1"
+#~ msgstr "Création du Flatpak %1"
+
+#~ msgid "Transferring flatpak to %1"
+#~ msgstr "Transfert du flatpak vers %1"
+
+#~ msgid "Transferring replicate.sh to %1"
+#~ msgstr "Transfert de replicate.sh vers %1"
+
+#~ msgid "Installing %1 to %2"
+#~ msgstr "Installation de %1 sur %2"
+
+#~ msgid "Running %1 on %2"
+#~ msgstr "Exécution de %1 sur %2"

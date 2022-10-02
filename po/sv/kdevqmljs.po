@@ -1,0 +1,1050 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-09-20 07:12+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr "Välj platsen"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "Namn:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "Sökväg:"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr "&Klassnamn:"
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr "&Basklass:"
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr "&Typinformation:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "Ingen"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr "Ärver QObject"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr "Ärver QWidget"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr "Ärver QDeclarativeItem - Qt Quick 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr "Ärver QQuickItem - Qt Quick 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr "Baserad på QSharedData"
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr "&Deklarationsfil:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr "&Källkodsfil:"
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr "&Skapa formulär:"
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr "&Formulärfil:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "&Sökväg:"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr "Inledning och projektplats"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr "Skapa i:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr "Använd som standardplats för projekt"
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "Projekt:"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+"Möjligt typmatchningsfel mellan argumenttypen (%1) och värdet som skickas "
+"som argument (%2)"
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr ""
+"Modulen hittades inte, vissa typer eller egenskaper kanske inte känns igen"
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr "Matchningsfel mellan värdetypen (%1) och egenskapstypen (%2)"
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Fel vid inläsning av QML-fil: %1"
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr "Längd i millisekunder"
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr "Östen äter<br> müsli på ett café."
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr "Teckensnittsfamilj"
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr "Teckenstorlek"
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr "Ett objekts höjd i bildpunkter"
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr "Ett objekts ogenomskinlighet"
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr "Mellanrum mellan objekt"
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr "Ett objekts bredd i bildpunkter"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Subversion Submit"
+#~ msgstr "Arkivera med Subversion"
+
+#~ msgid "Descriptio&n"
+#~ msgstr "Beskriv&ning"
+
+#~ msgid "F&iles"
+#~ msgstr "F&iler"
+
+#~ msgid "Check a&ll"
+#~ msgstr "Markera a&lla"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal syntax for exponential number"
+#~ msgstr "Ogiltig syntax för exponentialtal"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Stray newline in string literal"
+#~ msgstr "Extra nyrad i strängliteral"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal unicode escape sequence"
+#~ msgstr "Ogiltig Unicode escape-sekvens"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal hexadecimal escape sequence"
+#~ msgstr "Ogiltig hexadecimal escape-sekvens"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Octal escape sequences are not allowed"
+#~ msgstr "Oktala escape-sekvenser är inte tillåtna"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unclosed string at end of line"
+#~ msgstr "Oavslutad sträng vid radslut"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Decimal numbers can't start with '0'"
+#~ msgstr "Decimala siffror får inte börja med '0'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "At least one hexadecimal digit is required after '0%1'"
+#~ msgstr "Åtminstone en hexadecimal siffra krävs efter '0%1'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Invalid regular expression flag '%0'"
+#~ msgstr "Ogiltig reguljärt uttrycksflagga '%0'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression backslash sequence"
+#~ msgstr "Oavslutad bakstreck-sekvens i reguljärt uttryck"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression class"
+#~ msgstr "Oavslutad reguljär uttrycksklass"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression literal"
+#~ msgstr "Oavslutad literal i reguljärt uttryck"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Syntax error"
+#~ msgstr "Syntaxfel"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unexpected token `%1'"
+#~ msgstr "Oväntad symbol `%1'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Expected token `%1'"
+#~ msgstr "Förväntad symbol `%1'"
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Refusing to remove root directory."
+#~ msgstr "Vägrar ta bort rotkatalog."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Refusing to remove your home directory."
+#~ msgstr "Vägrar ta bort din hemkatalog."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to remove directory \"%1\"."
+#~ msgstr "Misslyckades ta bort katalogen \"%1\"."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to remove file \"%1\"."
+#~ msgstr "Misslyckades ta bort filen \"%1\"."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to create directory \"%1\"."
+#~ msgstr "Misslyckades skapa katalog \"%1\"."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Could not copy file \"%1\" to \"%2\"."
+#~ msgstr "Kunde inte kopiera filen \"%1\" till \"%2\"."
+
+#~ msgid "Cannot open %1 for reading: %2"
+#~ msgstr "Kan inte öppna %1 för läsning: %2"
+
+#~ msgid "Cannot read %1: %2"
+#~ msgstr "Kan inte läsa %1: %2"
+
+#~ msgid "File Error"
+#~ msgstr "Filfel"
+
+#~ msgid "Cannot write file %1. Disk full?"
+#~ msgstr "Kan inte skriva i filen %1. Är disken full?"
+
+#~ msgid "Cannot overwrite file %1: %2"
+#~ msgstr "Kan inte skriva över filen %1: %2"
+
+#~ msgid "Cannot create file %1: %2"
+#~ msgstr "Kan inte skapa filen %1: %2"
+
+#~ msgid "Cannot create temporary file in %1: %2"
+#~ msgstr "Kan inte skapa tillfällig fil i %1: %2"
+
+#~ msgid "QML/JS Support"
+#~ msgstr "QML/JS-stöd"
+
+#~ msgid "Support for QML and JS Languages"
+#~ msgstr "Stöd för språken QML och JS"
+
+#~ msgid "expected two numbers separated by a dot"
+#~ msgstr "förväntade två tal åtskilda med en punkt"
+
+#~ msgid "package import requires a version number"
+#~ msgstr "import av paket kräver ett versionsnummer"
+
+#~ msgid "'int' or 'real'"
+#~ msgstr "'int' eller 'real'"
+
+#~ msgid ""
+#~ "Errors while loading qmltypes from %1:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Fel vid inläsning av qmltypes från %1:\n"
+#~ "%2"
+
+#~ msgid ""
+#~ "Warnings while loading qmltypes from %1:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Varningar vid inläsning av qmltypes från %1:\n"
+#~ "%2"
+
+#~ msgid "file or directory not found"
+#~ msgstr "fil eller katalog hittades inte"
+
+#~ msgid ""
+#~ "QML module not found\n"
+#~ "\n"
+#~ "Import paths:\n"
+#~ "%1\n"
+#~ "\n"
+#~ "For qmake projects, use the QML_IMPORT_PATH variable to add import "
+#~ "paths.\n"
+#~ "For qmlproject projects, use the importPaths property to add import paths."
+#~ msgstr ""
+#~ "QML-modul hittades inte\n"
+#~ "\n"
+#~ "Importsökvägar:\n"
+#~ "%1\n"
+#~ "\n"
+#~ "Använd variabeln QML_IMPORT_PATH för att lägga till importsökvägar för "
+#~ "qmake projekt.\n"
+#~ "Använd egenskapen importPaths för att lägga till importsökvägar för "
+#~ "qmlproject projekt."
+
+#~ msgid ""
+#~ "QML module contains C++ plugins, currently reading type information..."
+#~ msgstr ""
+#~ "QML-modul innehåller C++ insticksprogram, läsning av typinformation "
+#~ "pågår..."
+
+#~ msgid "do not use '%1' as a constructor"
+#~ msgstr "använd inte '%1' som konstruktor"
+
+#~ msgid "invalid value for enum"
+#~ msgstr "ogiltigt värde för uppräkningstyp"
+
+#~ msgid "enum value must be a string or a number"
+#~ msgstr "uppräkningsvärde måste vara en sträng eller ett tal"
+
+#~ msgid "number value expected"
+#~ msgstr "numeriskt värde förväntades"
+
+#~ msgid "boolean value expected"
+#~ msgstr "Booleskt värde förväntades"
+
+#~ msgid "string value expected"
+#~ msgstr "strängvärde förväntades"
+
+#~ msgid "invalid URL"
+#~ msgstr "ogiltig webbadress"
+
+#~ msgid "file or directory does not exist"
+#~ msgstr "fil eller katalog finns inte"
+
+#~ msgid "invalid color"
+#~ msgstr "ogiltig färg"
+
+#~ msgid "anchor line expected"
+#~ msgstr "ankringsrad förväntades"
+
+#~ msgid "duplicate property binding"
+#~ msgstr "duplicerad egenskapsbindning"
+
+#~ msgid "id expected"
+#~ msgstr "id förväntades"
+
+#~ msgid "invalid id"
+#~ msgstr "ogiltig id"
+
+#~ msgid "duplicate id"
+#~ msgstr "duplicerad id"
+
+#~ msgid "invalid property name '%1'"
+#~ msgstr "ogiltigt egenskapsnamn '%1'"
+
+#~ msgid "'%1' does not have members"
+#~ msgstr "'%1' har inte medlemmar"
+
+#~ msgid "'%1' is not a member of '%2'"
+#~ msgstr "'%1' är inte en medlem av '%2'"
+
+#~ msgid "assignment in condition"
+#~ msgstr "tilldelning i villkor"
+
+#~ msgid "unterminated non-empty case block"
+#~ msgstr "icke-tomt case-block utan avslutning"
+
+#~ msgid "do not use 'eval'"
+#~ msgstr "använd inte 'eval'"
+
+#~ msgid "unreachable"
+#~ msgstr "kan inte nås"
+
+#~ msgid "do not use 'with'"
+#~ msgstr "använd inte 'with'"
+
+#~ msgid "do not use comma expressions"
+#~ msgstr "använd inte uttryck med kommatecken"
+
+#~ msgid "'%1' is already a formal parameter"
+#~ msgstr "'%1' är redan en formell parameter"
+
+#~ msgid "unnecessary message suppression"
+#~ msgstr "onödigt undertryckande av meddelande"
+
+#~ msgid "'%1' is already a function"
+#~ msgstr "'%1' är redan en funktion"
+
+#~ msgid "var '%1' is used before its declaration"
+#~ msgstr "var '%1' används innan sin deklaration"
+
+#~ msgid "'%1' is already a var"
+#~ msgstr "'%1' är redan en var"
+
+#~ msgid "'%1' is declared more than once"
+#~ msgstr "'%1' deklareras mer än en gång"
+
+#~ msgid "function '%1' is used before its declaration"
+#~ msgstr "funktionen '%1' används innan sin deklaration"
+
+#~ msgid ""
+#~ "the 'function' keyword and the opening parenthesis should be separated by "
+#~ "a single space"
+#~ msgstr ""
+#~ "nyckelordet 'function' och inledande parentes måste åtskiljas av ett enda "
+#~ "mellanslag"
+
+#~ msgid "do not use stand-alone blocks"
+#~ msgstr "använd inte fristående block"
+
+#~ msgid "do not use void expressions"
+#~ msgstr "använd inte uttryck med void"
+
+#~ msgid "confusing pluses"
+#~ msgstr "förvillande plustecken"
+
+#~ msgid "confusing minuses"
+#~ msgstr "förvillande minustecken"
+
+#~ msgid "declare all function vars on a single line"
+#~ msgstr "deklarera alla funktionsvariabler på en enda rad"
+
+#~ msgid "unnecessary parentheses"
+#~ msgstr "onödiga parenteser"
+
+#~ msgid "== and != may perform type coercion, use === or !== to avoid"
+#~ msgstr ""
+#~ "== och != kan utföra typomvandling, använd === eller !== istället för att "
+#~ "undvika det"
+
+#~ msgid ""
+#~ "expression statements should be assignments, calls or delete expressions "
+#~ "only"
+#~ msgstr ""
+#~ "uttryckssatser ska bara vara tilldelningar, anrop eller uttryck med delete"
+
+#~ msgid "var declarations should be at the start of a function"
+#~ msgstr "deklarationer med var ska vara i början av en funktion"
+
+#~ msgid "only use one statement per line"
+#~ msgstr "använd bara en sats per rad"
+
+#~ msgid "unknown component"
+#~ msgstr "okänd komponent"
+
+#~ msgid "could not resolve the prototype '%1' of '%2'"
+#~ msgstr "kunde inte lösa upp prototypen '%1' av '%2'"
+
+#~ msgid "could not resolve the prototype '%1'"
+#~ msgstr "kunde inte lösa upp prototypen '%1'"
+
+#~ msgid "prototype cycle, the last non-repeated component is '%1'"
+#~ msgstr "prototypcykel, den senaste ej upprepade komponenten är '%1'"
+
+#~ msgid "invalid property type '%1'"
+#~ msgstr "ogiltig egenskapstyp '%1'"
+
+#~ msgid "== and != perform type coercion, use === or !== to avoid"
+#~ msgstr ""
+#~ "== och != utföra typomvandling, använd === eller !== för att undvika det"
+
+#~ msgid ""
+#~ "calls of functions that start with an uppercase letter should use 'new'"
+#~ msgstr "anrop av funktioner som börjar med stor bokstav ska använda 'new'"
+
+#~ msgid ""
+#~ "'new' should only be used with functions that start with an uppercase "
+#~ "letter"
+#~ msgstr ""
+#~ "'new' ska bara användas med funktioner som börjar med en stor bokstav"
+
+#~ msgid "use spaces around binary operators"
+#~ msgstr "använd mellanslag omkring binära operatorer"
+
+#~ msgid "unintentional empty block, use ({}) for empty object literal"
+#~ msgstr "oavsiktligt tomt block, använd ({}) för tom objektliteral"
+
+#~ msgid "use %1 instead of 'var' or 'variant' to improve performance"
+#~ msgstr ""
+#~ "använd '%1' istället för 'var' eller 'variant' för att förbättra prestanda"
+
+#~ msgid "missing property '%1'"
+#~ msgstr "saknar egenskap '%1'"
+
+#~ msgid "object value expected"
+#~ msgstr "objektvärde förväntades"
+
+#~ msgid "array value expected"
+#~ msgstr "fältvärde förväntades"
+
+#~ msgid "%1 value expected"
+#~ msgstr "värdet %1 förväntades"
+
+#~ msgid "maximum number value is %1"
+#~ msgstr "maximalt nummervärde är %1"
+
+#~ msgid "minimum number value is %1"
+#~ msgstr "minimalt nummervärde är %1"
+
+#~ msgid "maximum number value is exclusive"
+#~ msgstr "maximalt nummervärde är exklusive"
+
+#~ msgid "minimum number value is exclusive"
+#~ msgstr "minimalt nummervärde är exklusive"
+
+#~ msgid "string value does not match required pattern"
+#~ msgstr "strängvärde motsvarar inte nödvändigt mönster"
+
+#~ msgid "minimum string value length is %1"
+#~ msgstr "strängvärdets minimala längd är %1"
+
+#~ msgid "maximum string value length is %1"
+#~ msgstr "strängvärdets maximala längd är %1"
+
+#~ msgid "%1 elements expected in array value"
+#~ msgstr "%1 element förväntades i fältvärde"
+
+#~ msgid "Imperative code is not supported in the Qt Quick Designer"
+#~ msgstr "Imperativ kod stöds inte i Qt Quick Designer"
+
+#~ msgid "This type is not supported in the Qt Quick Designer"
+#~ msgstr "Typen stöds inte i Qt Quick Designer"
+
+#~ msgid ""
+#~ "Reference to parent item cannot be resolved correctly by the Qt Quick "
+#~ "Designer"
+#~ msgstr ""
+#~ "Referens till överliggande objekt kan inte lösas upp korrekt av Qt Quick "
+#~ "Designer"
+
+#~ msgid ""
+#~ "This visual property binding cannot be evaluated in the local context and "
+#~ "might not show up in Qt Quick Designer as expected"
+#~ msgstr ""
+#~ "Denna visuella egenskapsbindning kan inte utvärderas i det lokala "
+#~ "sammanhanget och kanske inte visas som förväntat i Qt Quick Designer"
+
+#~ msgid "Qt Quick Designer only supports states in the root item "
+#~ msgstr "Qt Quick Designer stöder bara tillstånd i rotobjektet "
+
+#~ msgid "Adjust Column Widths to Contents"
+#~ msgstr "Justera kolumnbredd till innehåll"
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "The target directory %1 could not be created."
+#~ msgstr "Målkatalogen %1 kunde inte skapas."
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "The existing file %1 could not be removed."
+#~ msgstr "Den befintliga filen %1 kunde inte tas bort."
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "The file %1 could not be copied to %2."
+#~ msgstr "Filen %1 kunde inte kopieras till %2."
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Cannot start process: %1"
+#~ msgstr "Kan inte starta process: %1"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Timeout after %1s."
+#~ msgstr "Tidsgräns överskriden efter %1 s."
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "The process crashed."
+#~ msgstr "Processen kraschade."
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid ""
+#~ "The process returned exit code %1:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Processen returnerade slutkod %1:\n"
+#~ "%2"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Error running '%1' in %2: %3"
+#~ msgstr "Fel vid körning av '%1' i %2: %3"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Building helper '%1' in %2\n"
+#~ msgstr "Bygger hjälpprogram '%1' i %2\n"
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "%1 not found in PATH\n"
+#~ msgstr "%1 hittades inte i PATH\n"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Running %1 %2...\n"
+#~ msgstr "Kör %1 %2...\n"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Running %1 %2 ...\n"
+#~ msgstr "Kör %1 %2...\n"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "%1 not found in PATH\n"
+#~ msgstr "%1 hittades inte i PATH\n"
+
+#~ msgid "Do not ask again"
+#~ msgstr "Fråga inte igen"
+
+#~ msgid "The class name must not contain namespace delimiters."
+#~ msgstr "Klassnamnet får inte innehålla namnrymdsavskiljare."
+
+#~ msgid "Please enter a class name."
+#~ msgstr "Ange ett klassnamn."
+
+#~ msgid "The class name contains invalid characters."
+#~ msgstr "Klassnamnet innehåller ogiltiga tecken."
+
+#~ msgid "Cannot set up communication channel: %1"
+#~ msgstr "Kan inte skapa kommunikationskanal: %1"
+
+#~ msgid "Press <RETURN> to close this window..."
+#~ msgstr "Tryck på returtangenten för att stänga fönstret..."
+
+#~ msgid "Cannot create temporary file: %1"
+#~ msgstr "Kan inte skapa tillfällig fil: %1"
+
+#~ msgid "Cannot write temporary file. Disk full?"
+#~ msgstr "Kan inte skriva i tillfällig fil. Är disken full?"
+
+#~ msgid "Cannot create temporary directory '%1': %2"
+#~ msgstr "Kan inte skapa tillfällig katalog '%1': %2"
+
+#~ msgid "Unexpected output from helper program (%1)."
+#~ msgstr "Oväntad utmatning från hjälpprogram (%1)."
+
+#~ msgid "Cannot change to working directory '%1': %2"
+#~ msgstr "Kan inte byta till arbetskatalog '%1': %2"
+
+#~ msgid "Cannot execute '%1': %2"
+#~ msgstr "kan inte köra '%1': %2"
+
+#~ msgid "Quoting error in command."
+#~ msgstr "Citeringsfel i kommando."
+
+#~ msgid ""
+#~ "Debugging complex shell commands in a terminal is currently not supported."
+#~ msgstr ""
+#~ "Avlusning av komplexa skalkommandon i en terminal stöds för närvarande "
+#~ "inte."
+
+#~ msgid "Quoting error in terminal command."
+#~ msgstr "Citeringsfel i terminalkommando."
+
+#~ msgid "Terminal command may not be a shell command."
+#~ msgstr "Terminalkommando får inte vara ett skalkommando."
+
+#~ msgid "Cannot start the terminal emulator '%1'."
+#~ msgstr "Kan inte starta terminalen '%1'."
+
+#~ msgid "Cannot create socket '%1': %2"
+#~ msgstr "Kan inte skapa uttag '%1': %2"
+
+#~ msgid "The process '%1' could not be started: %2"
+#~ msgstr "Processen '%1' kunde inte startas: %2"
+
+#~ msgid "Cannot obtain a handle to the inferior: %1"
+#~ msgstr "Kan inte erhålla grepp till underliggande: %1"
+
+#~ msgid "Cannot obtain exit status from inferior: %1"
+#~ msgstr "Kan inte erhålla slutstatus från underliggande: %1"
+
+#~ msgid "Details"
+#~ msgstr "Detaljinformation"
+
+#~ msgid "'%1' is an invalid ELF object (%2)"
+#~ msgstr "'%1' är ett ogiltigt ELF-objekt (%2)"
+
+#~ msgid "'%1' is not an ELF object (file too small)"
+#~ msgstr "'%1' är inte ett ELF-objekt (filen är för liten)"
+
+#~ msgid "'%1' is not an ELF object"
+#~ msgstr "'%1' är inte ett ELF-objekt"
+
+#~ msgid "odd cpu architecture"
+#~ msgstr "oväntad CPU-arkitektur"
+
+#~ msgid "odd endianess"
+#~ msgstr "oväntat endian-värde"
+
+#~ msgid "unexpected e_shsize"
+#~ msgstr "oväntad e_shsize"
+
+#~ msgid "unexpected e_shentsize"
+#~ msgstr "oväntad e_shentsize"
+
+#~ msgid "string table seems to be at 0x%1"
+#~ msgstr "strängtabellen verkar vara vid 0x%1"
+
+#~ msgid "section name %1 of %2 behind end of file"
+#~ msgstr "sektionsnamnet %1 av %2 efter filens slut"
+
+#~ msgid "<UNSET>"
+#~ msgstr "<EJ ANGIVEN>"
+
+#~ msgid "Variable"
+#~ msgstr "Variabel"
+
+#~ msgid "Value"
+#~ msgstr "Värde"
+
+#~ msgid "<VARIABLE>"
+#~ msgstr "<VARIABEL>"
+
+#~ msgid "<VALUE>"
+#~ msgstr "<VÄRDE>"
+
+#~ msgid "Locked"
+#~ msgstr "Låst"
+
+#~ msgid "Reset to Default Layout"
+#~ msgstr "Återställ till standardlayout"
+
+#~ msgid "Name is empty."
+#~ msgstr "Namn är tomt."
+
+#~ msgid "Name contains white space."
+#~ msgstr "Namn innehåller blanktecken."
+
+#~ msgid "Invalid character '%1'."
+#~ msgstr "Ogiltigt tecken: '%1'."
+
+#~ msgid "Invalid characters '%1'."
+#~ msgstr "Ogiltiga tecken '%1'."
+
+#~ msgid "Name matches MS Windows device. (%1)."
+#~ msgstr "Namn matchar MS Windows enhet (%1)."
+
+#~ msgid "File extension %1 is required:"
+#~ msgstr "FIländelsen %1 krävs:"
+
+#~ msgid "File extensions %1 are required:"
+#~ msgstr "FIländelserna %1 krävs:"
+
+#~ msgid "Location"
+#~ msgstr "Plats"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Clear text"
+#~ msgstr "Klartext"
+
+#~ msgid "The IP address is not valid."
+#~ msgstr "IP-adressen är inte giltig."
+
+#~ msgid "Invalid base class name"
+#~ msgstr "Ogiltigt basklassnamn"
+
+#~ msgid "Invalid header file name: '%1'"
+#~ msgstr "Ogiltigt deklarationsfilnamn: '%1'"
+
+#~ msgid "Invalid source file name: '%1'"
+#~ msgstr "Ogiltigt källkodsfilnamn: '%1'"
+
+#~ msgid "Invalid form file name: '%1'"
+#~ msgstr "Ogiltigt formulärfilnamn: '%1'"
+
+#~ msgctxt "Utils::PathChooser"
+#~ msgid "Choose..."
+#~ msgstr "Välj..."
+
+#~ msgctxt "Utils::PathChooser"
+#~ msgid "Browse..."
+#~ msgstr "Bläddra..."
+
+#~ msgid "Choose Directory"
+#~ msgstr "Välj katalog"
+
+#~ msgid "Choose Executable"
+#~ msgstr "Välj körbar fil"
+
+#~ msgid "Choose File"
+#~ msgstr "Välj fil"
+
+#~ msgid "The path must not be empty."
+#~ msgstr "Sökvägen får inte vara tom."
+
+#~ msgid "The path '%1' expanded to an empty string."
+#~ msgstr "Sökvägen '%1' expanderades till en tom sträng."
+
+#~ msgid "The path '%1' does not exist."
+#~ msgstr "Sökvägen '%1' finns inte."
+
+#~ msgid "The path '%1' is not a directory."
+#~ msgstr "Sökvägen '%1' är inte en katalog."
+
+#~ msgid "Cannot execute '%1'."
+#~ msgstr "Kan inte köra '%1'."
+
+#~ msgid "The path <b>%1</b> is not a directory."
+#~ msgstr "Sökvägen <b>%1</b> är inte en katalog."
+
+#~ msgid "The path <b>%1</b> is not a file."
+#~ msgstr "Sökvägen <b>%1</b> är inte en fil."
+
+#~ msgid "The path <b>%1</b> is not a executable file."
+#~ msgstr "Sökvägen <b>%1</b> är inte en körbar fil."
+
+#~ msgid "Full path: <b>%1</b>"
+#~ msgstr "Fullständig sökväg: <b>%1</b>"
+
+#~ msgid "Insert..."
+#~ msgstr "Infoga..."
+
+#~ msgid "Add..."
+#~ msgstr "Lägg till..."
+
+#~ msgid "Delete Line"
+#~ msgstr "Ta bort rad"
+
+#~ msgid "Clear"
+#~ msgstr "Rensa"
+
+#~ msgid "From \"%1\""
+#~ msgstr "Från \"%1\""
+
+#~ msgid "<Enter_Name>"
+#~ msgstr "<Ange namn>"
+
+#~ msgid "The project already exists."
+#~ msgstr "Projektet finns redan."
+
+#~ msgid "A file with that name already exists."
+#~ msgstr "En fil med det namnet finns redan."
+
+#~ msgid "Invalid character '.'."
+#~ msgstr "Ogiltigt tecken '.'."
+
+#~ msgid "Error in command line."
+#~ msgstr "Fel på kommandorad."
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid "File Changed"
+#~ msgstr "Filen ändrad"
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid ""
+#~ "The unsaved file <i>%1</i> has been changed outside Qt Creator. Do you "
+#~ "want to reload it and discard your changes?"
+#~ msgstr ""
+#~ "Den osparade filen <i>%1</i> har ändrats utanför Qt Creator. Vill du läsa "
+#~ "in den igen och skriva över dina ändringar?"
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid ""
+#~ "The file <i>%1</i> has changed outside Qt Creator. Do you want to reload "
+#~ "it?"
+#~ msgstr ""
+#~ "Filen <i>%1</i> har ändrats utanför Qt Creator. Vill du läsa in den igen?"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "File has been removed"
+#~ msgstr "Filen har tagits bort"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid ""
+#~ "The file %1 has been removed outside Qt Creator. Do you want to save it "
+#~ "under a different name, or close the editor?"
+#~ msgstr ""
+#~ "Filen %1 har tagits bort utanför Qt Creator. Vill du spara den med ett "
+#~ "annat namn, eller stänga editorn?"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid ""
+#~ "The file %1 was removed. Do you want to save it under a different name, "
+#~ "or close the editor?"
+#~ msgstr ""
+#~ "Filen %1 har tagits bort. Vill du spara den med ett annat namn, eller "
+#~ "stänga editorn?"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "&Close"
+#~ msgstr "Stän&g"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "Save &as..."
+#~ msgstr "Spara s&om"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "&Save"
+#~ msgstr "&Spara"
+
+#~ msgid "Add"
+#~ msgstr "Lägg till"
+
+#~ msgid "Remove"
+#~ msgstr "Ta bort"
+
+#~ msgid "Rename"
+#~ msgstr "Byt namn"
+
+#~ msgid "Do you really want to delete the configuration <b>%1</b>?"
+#~ msgstr "Vill du verkligen ta bort inställningen <b>%1</b>?"
+
+#~ msgid "New name for configuration <b>%1</b>:"
+#~ msgstr "Nytt namn på inställningen <b>%1</b>:"
+
+#~ msgid "Rename..."
+#~ msgstr "Byt namn..."
+
+#~ msgid "&Commit"
+#~ msgstr "Ar&kivera"
+
+#~ msgid "Check All"
+#~ msgstr "Markera alla"
+
+#~ msgid "Uncheck All"
+#~ msgstr "Avmarkera alla"
+
+#~ msgid "The command '%1' finished successfully."
+#~ msgstr "Kommandot '%1' avslutades med lyckat resultat."
+
+#~ msgid "The command '%1' terminated with exit code %2."
+#~ msgstr "Kommandot '%1' avslutades med slutkod %2."
+
+#~ msgid "The command '%1' terminated abnormally."
+#~ msgstr "Kommandot '%1' avslutades onormalt."
+
+#~ msgid "The command '%1' could not be started."
+#~ msgstr "Kommandot '%1' kunde inte startas."
+
+#~ msgid "The command '%1' did not respond within the timeout limit (%2 ms)."
+#~ msgstr "Kommandot '%1' svarade inte inom tidsgränsen (%2 ms)."
+
+#~ msgid "Process not Responding"
+#~ msgstr "Processen svarar inte"
+
+#~ msgid "The process is not responding."
+#~ msgstr "Processen svarar inte."
+
+#~ msgid "The process '%1' is not responding."
+#~ msgstr "Processen '%1' svarar inte."
+
+#~ msgid "Would you like to terminate it?"
+#~ msgstr "Vill du avsluta den?"
+
+#~ msgctxt "Utils::TextFileFormat"
+#~ msgid "Out of memory."
+#~ msgstr "Slut på minne."
+
+#~ msgctxt "Utils::TextFileFormat"
+#~ msgid "An encoding error was encountered."
+#~ msgstr "Ett kodningsfel påträffades."
+
+#~ msgctxt "Utils::UnixTools"
+#~ msgid ""
+#~ "<table border=1 cellspacing=0 cellpadding=3><tr><th>Variable</"
+#~ "th><th>Expands to</th></tr><tr><td>%d</td><td>directory of current file</"
+#~ "td></tr><tr><td>%f</td><td>file name (with full path)</td></tr><tr><td>"
+#~ "%n</td><td>file name (without path)</td></tr><tr><td>%%</td><td>%</td></"
+#~ "tr></table>"
+#~ msgstr ""
+#~ "<table border=1 cellspacing=0 cellpadding=3><tr><th>Variabel</"
+#~ "th><th>Expanderas till</th></tr><tr><td>%d</td><td>katalog i aktuell fil</"
+#~ "td></tr><tr><td>%f</td><td>filnamn (med fullständig sökväg)</td></"
+#~ "tr><tr><td>%n</td><td>filnamn (utan sökväg)</td></tr><tr><td>%%</td><td>"
+#~ "%</td></tr></table>"
+
+#~ msgid "..."
+#~ msgstr "..."

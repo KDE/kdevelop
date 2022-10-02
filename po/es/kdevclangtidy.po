@@ -1,0 +1,352 @@
+# Spanish translations for kdevclangtidy.po package.
+# Copyright (C) 2017 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Automatically generated, 2017.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2018, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclangtidy\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 17:09+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: analyzer.cpp:29
+#, kde-format
+msgid "Clang-Tidy"
+msgstr "Clang-Tidy"
+
+#: config/checklistfilterproxysearchline.cpp:23
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Buscar..."
+
+#: config/checklistmodel.cpp:65
+#, kde-format
+msgctxt "@item"
+msgid "All checks"
+msgstr "Todas las comprobaciones"
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "Introduzca el nombre del nuevo conjunto de comprobaciones"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Nombre:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "Conjunto de comprobaciones:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "Añadir conjunto de comprobaciones"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "Clonar conjunto de comprobaciones"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "Eliminar conjunto de comprobaciones"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "Definir como predeterminado"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "Editar el nombre del conjunto de comprobaciones"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "Personalizado"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "Usar el predeterminado (actualmente: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1 (selección predeterminada)"
+
+#: config/clangtidypreferences.cpp:62 config/clangtidyprojectconfigpage.cpp:55
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clang-Tidy"
+msgstr "Clang-Tidy"
+
+#: config/clangtidypreferences.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clang-Tidy Settings"
+msgstr "Configurar las preferencias de Clang-Tidy"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/clangtidypreferences.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Rutas"
+
+#. i18n: ectx: property (text), widget (QLabel, clangtidyLabel)
+#: config/clangtidypreferences.ui:37
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Clang-&Tidy executable:"
+msgstr "Ejecutable de Clang-&Tidy:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_clangtidyPath)
+#: config/clangtidypreferences.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The full path to the Clang-Tidy executable"
+msgstr "Ruta completa al ejecutable de Clang-Tidy"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/clangtidypreferences.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "Ejecutar tareas de análisis en paralelo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/clangtidypreferences.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "Usar todos los núcleos de la CPU"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/clangtidypreferences.ui:101
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "Número máximo de hilos:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useConfigFile)
+#: config/clangtidyprojectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use .clang-tidy file(s)"
+msgstr "&Usar archivos .clang-tidy"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/clangtidyprojectconfigpage.ui:43
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Comprobaciones"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: config/clangtidyprojectconfigpage.ui:73
+#, kde-format
+msgctxt "@title:tab"
+msgid "Includes"
+msgstr "Cabeceras"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: config/clangtidyprojectconfigpage.ui:79
+#, kde-format
+msgctxt "@option:check"
+msgid "&Check system headers:"
+msgstr "&Comprobar las cabeceras del sistema:"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/clangtidyprojectconfigpage.ui:92
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header fi&lter:"
+msgstr "Fi&ltro de cabeceras:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/clangtidyprojectconfigpage.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from. Diagnostics from the main file of each translation unit are always "
+"displayed. Can be used together with -line-filter."
+msgstr ""
+"Expresión regular que coincide con los nombres de las cabeceras de las que "
+"se deben mostrar diagnósticos. Los diagnósticos del archivo principal de "
+"cada unidad de traducción siempre se muestran. Se puede usar junto a los "
+"filtros de línea."
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: config/clangtidyprojectconfigpage.ui:119
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Parámetros adicionales:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: config/clangtidyprojectconfigpage.ui:125
+#, kde-format
+msgctxt "@label.textbox"
+msgid "E&xtra parameters:"
+msgstr "&Parámetros adicionales:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_additionalParameters)
+#: config/clangtidyprojectconfigpage.ui:135
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional command line options to pass to Clang-Tidy."
+msgstr "Opciones adicionales para la línea de órdenes a pasar a Clang-Tidy."
+
+#: job.cpp:68
+#, kde-format
+msgid "Clang-Tidy Analysis"
+msgstr "Análisis de Clang-Tidy"
+
+#: job.cpp:142
+#, kde-format
+msgid "Failed to start Clang-Tidy process."
+msgstr "No se ha podido iniciar el proceso Clang-Tidy."
+
+#: job.cpp:147
+#, kde-format
+msgid "Clang-Tidy crashed."
+msgstr "Clang-Tidy se ha colgado."
+
+#: job.cpp:151
+#, kde-format
+msgid "Clang-Tidy process timed out."
+msgstr "El proceso de Clang-Tidy se ha quedado sin tiempo."
+
+#: job.cpp:155
+#, kde-format
+msgid "Write to Clang-Tidy process failed."
+msgstr "Ha fallado la escritura en el proceso de Clang-Tidy."
+
+#: job.cpp:159
+#, kde-format
+msgid "Read from Clang-Tidy process failed."
+msgstr "Ha fallado la lectura del proceso de Clang-Tidy."
+
+#~ msgid "Clang-tidy Error"
+#~ msgstr "Error de Clang-tidy"
+
+#~ msgid "Analyze Current File with Clang-Tidy"
+#~ msgstr "Analizar el archivo actual con Clang-Tidy"
+
+#~ msgid "Analyze Current Project with Clang-Tidy"
+#~ msgstr "Analizar el proyecto actual con Clang-Tidy"
+
+#~ msgid "Error starting clang-tidy"
+#~ msgstr "Error durante el inicio de clang-tidy"
+
+#~ msgid "No suitable active file, unable to deduce project."
+#~ msgstr ""
+#~ "Ningún archivo activo adecuado. No se ha podido deducir el proyecto."
+
+#~ msgid "Active file isn't in a project"
+#~ msgstr "El archivo activo no pertenece a un proyecto"
+
+#~ msgctxt "@title:window"
+#~ msgid "Test"
+#~ msgstr "Prueba"
+
+#~ msgid "Analysis started..."
+#~ msgstr "Análisis iniciado..."
+
+#~ msgctxt "@info:tooltip %1 is the path of the file"
+#~ msgid "Re-run last Clang-Tidy analysis (%1)"
+#~ msgstr "Volver a ejecutar el último análisis de Clang-Tidy (%1)"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Re-run last Clang-Tidy analysis"
+#~ msgstr "Volver a ejecutar el último análisis de Clang-Tidy"
+
+#~ msgid "Analysis completed, no problems detected."
+#~ msgstr "Análisis terminado: no se han detectado problemas."
+
+#~ msgid "Compilation database file not found: '%1'"
+#~ msgstr "Archivo de base de datos de la compilación no encontrado: «%1»"
+
+#~ msgid "Could not open compilation database file for reading: '%1'"
+#~ msgstr ""
+#~ "No se ha podido abrir el archivo de base de datos de la compilación para "
+#~ "su lectura: «%1»"
+
+#~ msgid "JSON error during parsing compilation database file '%1': %2"
+#~ msgstr ""
+#~ "Error JSON durante el análisis del archivo de base de datos de la "
+#~ "compilación «%1»: %2"
+
+#~ msgid ""
+#~ "JSON error during parsing compilation database file '%1': document is not "
+#~ "an array."
+#~ msgstr ""
+#~ "Error JSON durante el análisis del archivo de base de datos de la "
+#~ "compilación «%1»: el documento no es un array."
+
+#~ msgid "General"
+#~ msgstr "General"
+
+#~ msgid "Failed to find clang-tidy binary."
+#~ msgstr "No se ha podido encontrar el binario de clang-tidy."
+
+#~ msgid "Clang-tidy output"
+#~ msgstr "Salida de clang-tidy"
+
+#~ msgid "Enable additional checks"
+#~ msgstr "Activar comprobaciones adicionales"
+
+#~ msgid "Dump active configuration to .clang-tidy file"
+#~ msgstr "Volcar la configuración activa a un archivo .clang-tidy"
+
+#~ msgid "Can't load parameters. They must be set in the project settings."
+#~ msgstr ""
+#~ "No ha sido posible cargar los parámetros. Se deben ajustar en las "
+#~ "preferencias del proyecto."
+
+#~ msgid "Problems"
+#~ msgstr "Problemas"
+
+#~ msgid "Clang-Tidy Settings"
+#~ msgstr "Preferencias de Clang-Tidy"
+
+#~ msgid "Launches clang-tidy for current file"
+#~ msgstr "Lanza clang-tidy para el archivo actual"
+
+#~ msgid "Clang-Tidy (Current File)"
+#~ msgstr "Clang-Tidy (archivo actual)"

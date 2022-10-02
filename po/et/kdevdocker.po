@@ -1,0 +1,53 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-01-16 20:38+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: dockerplugin.cpp:117
+#, kde-format
+msgid "docker build '%1'"
+msgstr "dockeri ehitamine \"%1\""
+
+#: dockerplugin.cpp:121
+#, fuzzy, kde-format
+#| msgid "Choose tag name..."
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Vali sildi nimi ..."
+
+#: dockerplugin.cpp:122
+#, fuzzy, kde-format
+#| msgid "Tag name for '%1'"
+msgctxt "@label:textbox"
+msgid "Tag name for '%1':"
+msgstr "\"%1\" sildi nimi"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dockerpreferences.ui:29
+#, fuzzy, kde-format
+#| msgid "'docker run' arguments:"
+msgctxt "@label:textbox"
+msgid "'docker run' arguments:"
+msgstr "'docker run' argumendid:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dockerpreferences.ui:39
+#, fuzzy, kde-format
+#| msgid "Projects volume:"
+msgctxt "@label:textbox"
+msgid "Projects volume:"
+msgstr "Projekti maht:"

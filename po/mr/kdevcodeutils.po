@@ -1,0 +1,75 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Chetan Khona <chetan@kompkin.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-03-23 13:08+0530\n"
+"Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
+"Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, fuzzy, kde-format
+#| msgid "Document Declaration"
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr "दस्तऐवज डिक्लेरेशन"
+
+#: codeutilsplugin.cpp:50
+#, fuzzy, kde-format
+#| msgid "Alt+Shift+d"
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr "Alt+Shift+d"
+
+#: codeutilsplugin.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr ""
+
+#: codeutilsplugin.cpp:55
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr ""
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Code"
+#~ msgstr "कोड"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "चेतन खोना"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "chetan@kompkin.com"
+
+#, fuzzy
+#~| msgid "Code Utilities"
+#~ msgid "Code Utils"
+#~ msgstr "कोड उपकार्यक्रम"
+
+#~ msgid "Milian Wolff"
+#~ msgstr "मिलियन वूल्फ"
+
+#~ msgid "Author"
+#~ msgstr "लेखक"

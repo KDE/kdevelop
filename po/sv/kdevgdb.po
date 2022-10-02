@@ -1,0 +1,1213 @@
+# translation of kdevgdb.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2010.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgdb\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"PO-Revision-Date: 2022-08-03 09:57+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#, kde-format
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Assemblerkod och register"
+
+#: debuggerplugin.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Minne"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
+#: debuggertracingdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Tracing Configuration"
+msgstr "Spårningsinställning"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
+#: debuggertracingdialog.ui:26
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Custom format string</b>\n"
+"<p>Specify a C-style format string that will be used when printing the "
+"chosen expression. For example:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"If custom format string is not enabled, names and values of all expressions "
+"will be printed, using \"%d\" as format specifier for all expressions."
+msgstr ""
+"<b>Egen formatsträng</b>\n"
+"<p>Ange en formatsträng med C-stil som används när det valda uttrycket "
+"skrivs ut. Exempelvis:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"Om en egen formatsträng inte aktiveras, skrivs namn och värden ut för alla "
+"uttryck med \"%d\" som formatspecifikation för alla uttryck."
+
+#. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
+#: debuggertracingdialog.ui:36
+#, kde-format
+msgctxt "@label"
+msgid "Expressions to print:"
+msgstr "Uttryck att skriva ut:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:47
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"<b>Enable tracing</b>\n"
+"<p>Tracing is a mechanism to automatically print values of the chosen "
+"expressions and continue execution when breakpoint is hit. You can think of "
+"it as printf debugging that does not require modifying the source.</p>"
+msgstr ""
+"<b>Aktivera spårning</b>\n"
+"<p>Spårning är en mekanism att automatiskt skriva ut värden för valda "
+"uttryck och fortsätta köra när en brytpunkt träffas på. Du kan se det som "
+"avlusning med utskrifter i programmet som inte kräver att källkoden ändras.</"
+"p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable tracing"
+msgstr "Aktivera spårning"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
+#: debuggertracingdialog.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Custom format string"
+msgstr "Egen formatsträng"
+
+#: debugsession.cpp:170
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Ingen miljöprofil angiven. Detta verkar vara en felaktig inställning. "
+"Kontrollera körinställningen '%1'. Använder standardmiljöprofilen."
+
+#: debugsession.cpp:281
+#, kde-format
+msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+msgstr "<b>Du behöver gdb 7.0.0 eller senare.</b><br />Du använder: %1"
+
+#: debugsession.cpp:294
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Kunde inte starta avlusaren:</b><br />"
+
+#: debugsession.cpp:308
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Misslyckades ladda minnesdump</b><p>Avlusaren rapporterade följande fel:"
+"<p><tt>%1"
+
+#: gdb.cpp:69
+#, kde-format
+msgid "Could not locate the debugging shell '%1'."
+msgstr "Kunde inte hitta avlusningsskalet '%1'."
+
+#: gdbconfigpage.cpp:92
+#, kde-format
+msgctxt "@title:tab"
+msgid "GDB Configuration"
+msgstr "Inställning av GDB"
+
+#: gdbconfigpage.cpp:133
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Ett program håller redan på att avlusas. Vill du avbryta avlusningssessionen "
+"som pågår och fortsätta starten?"
+
+#: gdbconfigpage.cpp:135
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Avbryt aktuell session"
+
+#: gdbconfigpage.cpp:161
+#, kde-format
+msgid "Executes a native application in GDB"
+msgstr "Kör ett program för den här datorn i GDB"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: gdbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Avlusare"
+
+#. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
+#: gdbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger e&xecutable:"
+msgstr "&Körbart avlusningsprogram:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Gdb executable"
+msgstr "Körbart GDB-program"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:51
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
+"gdb, for example, for a different architecture, enter the executable name "
+"here. You can either run gdb from $PATH, but with a different name (say, "
+"\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+"executable."
+msgstr ""
+"Låt fältet vara tomt för att köra \"gdb\"-programmet i sökvägen. Skriv in "
+"namnet på det körbara programmet för att köra en egen gdb, till exempel för "
+"en annan arkitektur. Du kan antingen köra gdb från sökvägen men med ett "
+"annat namn (till exempel \"arm-gdb\") genom att skriva in namnet här, eller "
+"ange en fullständig sökväg till gdb-programmet."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:54
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to gdb executable..."
+msgstr "Överskrid sökväg till körbart GDB-program"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
+#: gdbconfigpage.ui:61 gdbconfigpage.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>If you want gdb to be executed by a special shell "
+"script, which for example properly sets the library path, insert it here e."
+"g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+"invoked like this: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+"span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Om du vill att gdb ska köras av ett särskilt skal-"
+"skript, som exempelvis ställer in bibliotekssökvägen på ett riktig sätt, "
+"infoga det här, t.ex.: /path/to/script.sh --skriptargument</p><p>Observera: "
+"Skriptet startas så här: /sökväg/till/script.sh --scriptArguments debugger --"
+"avlusarargument. Alltså <span style=\" font-weight:600;\">måste</span>  "
+"script.sh anropa det körbara programmet &quot;debugger&quot;</p></body></"
+"html>"
+
+#. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
+#: gdbconfigpage.ui:64
+#, kde-format
+msgctxt "@label:chooser"
+msgid "She&ll script:"
+msgstr "Ska&l-skript:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: gdbconfigpage.ui:87
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Alternativ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: gdbconfigpage.ui:96
+#, kde-format
+msgctxt "@option:check"
+msgid "Display static &members:"
+msgstr "Visa statiska &medlemmar:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
+#: gdbconfigpage.ui:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displaying static members makes GDB slower in\n"
+"producing data with Qt-based code.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on,\n"
+"but if you need to debug into these values then\n"
+"check this option."
+msgstr ""
+"Visning av statiska medlemmar gör GDB långsammare\n"
+"när det gäller att hantera data med Qt-baserad kod.\n"
+"Det kan ändra \"signatur\" för data som\n"
+"QString och liknande klasser förlitar sig på,\n"
+"men om du behöver avlusa dessa värden,\n"
+"markera då det här alternativet."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gdbconfigpage.ui:121
+#, kde-format
+msgctxt "@option:check"
+msgid "Display &demangled names:"
+msgstr "&Visa obehandlade namn:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
+#: gdbconfigpage.ui:133
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"When displaying the disassembled code you\n"
+"can select to see the methods' mangled names.\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"När assemblerkod visas kan du välja att\n"
+"se metodernas behandlade namn.\n"
+"Dock är icke-behandlade namn lättare att läsa."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gdbconfigpage.ui:143
+#, kde-format
+msgctxt "@label:listbox"
+msgid "S&tart debugger with:"
+msgstr "S&tarta avlusaren med:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:154
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Programutmatning"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:159
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "GDB Console"
+msgstr "GDB-terminal"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:164
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Aktiveringspoststack"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:178
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This script is intended for the actual commands needed to connect to a "
+"remotely running executable.\n"
+"\tshell sleep 5\twait for remote program to start\n"
+"\ttarget remote ...\tconnect to the remote debugger\n"
+"\tcontinue\t[optional] run debugging to the first breakpoint"
+msgstr ""
+"Det här skriptet är avsett för de verkliga kommandon som behövs för att "
+"ansluta till ett fjärrprogram som kör.\n"
+"\tshell sleep 5\tvänta på att fjärrprogrammet ska starta\n"
+"\ttarget remote ...\tanslut till fjärravlusaren\n"
+"\tcontinue\t[valfritt] kör avlusaren till första brytpunkten."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:181
+#, kde-format
+msgctxt "@title:group"
+msgid "Remote Debugging"
+msgstr "Fjärravlusning"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
+#: gdbconfigpage.ui:187 gdbconfigpage.ui:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to start remote application</p><p></p><p>This "
+"shell script is run after the Gdb Config script has been sourced by gdb.</"
+"p><p>It's purpose is to actually start the remote process.</p><p>1) Find a "
+"way to execute a command remotely - rsh, ssh, telnet, ...</p><p>2a) Execute "
+"&quot;gdbserver ... application&quot; on target.</p><p>or if your executable "
+"contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
+"p></body></html>"
+msgstr ""
+"<html><head/><body><p>Skript för att starta fjärrprogram.</p><p></p><p>Detta "
+"skal-skript körs efter att gdb:s inställningsskript har lästs av gdb.</"
+"p><p>Dess syfte är att starta själva fjärrprocessen.</p><p>1) Ta reda på ett "
+"sätt att köra ett kommando på målet: rsh, ssh, telnet, ...</p><p>2a) Kör "
+"&quot;gdbserver ... program&quot; på målet.</p><p>eller om det körbara "
+"programmet innehåller en gdb-stubbe:</p><p>2b) Kör &quot;program&quot; på "
+"målet.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
+#: gdbconfigpage.ui:190
+#, kde-format
+msgctxt "@label:chooser Shell script to be executed at run time"
+msgid "R&un shell script:"
+msgstr "Kör &GDB-skript:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
+#: gdbconfigpage.ui:210 gdbconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This script is sourced by gdb when the debugging starts."
+msgstr ""
+"<html><head/><body><p>Det här skriptet körs av GDB när avlusningen påbörjas."
+"</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
+#: gdbconfigpage.ui:213
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Gdb &config script:"
+msgstr "Inställningss&kript för GDB:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
+#. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:226 gdbconfigpage.ui:233
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to connect with remote application</p><p>For "
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Skript för att ansluta till fjärrprogrammet</"
+"p><p>Exempelvis:</p><p>\tshell sleep 5\tvänta på att fjärrprogrammet ska "
+"starta</p><p>\ttarget remote ...\tanslut till fjärravlusaren</p><p>\tcontinue"
+"\t[valfritt] kör avlusaren till första brytpunkten.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:236
+#, kde-format
+msgctxt "@label:chooser Gdb script to be executed at run time."
+msgid "Run &gdb script:"
+msgstr "Kör &GDB-skript:"
+
+#: gdboutputwidget.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB Output"
+msgstr "Utmatning från GDB"
+
+#: gdboutputwidget.cpp:48
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
+"issue any other GDB command while debugging.</p>"
+msgstr ""
+"<b>Utmatning från GDB</b><p>Visar alla GDB-kommandon som körs. Du kan också "
+"utföra alla andra GDB-kommandon under avlusning.</p>"
+
+#: gdboutputwidget.cpp:58
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&GDB command:"
+msgstr "&GDB-kommando:"
+
+#: gdboutputwidget.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter GDB commands"
+msgstr "Gör paus i körningen av programmet för att skriva in GDB-kommandon"
+
+#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Internal Commands"
+msgstr "Visa interna kommandon"
+
+#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Styr om kommandon som ges internt av KDevelop ska visas eller inte."
+"<br>Alternativet påverkar bara framtida kommandon, det lägger inte till "
+"eller tar bort kommandon som redan utförts."
+
+#: gdboutputwidget.cpp:381
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy All"
+msgstr "Kopiera alla"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevgdbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Avlusningsverktygsrad"
+
+#: memviewdlg.cpp:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Start:"
+msgstr "Start:"
+
+#: memviewdlg.cpp:69
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Amount:"
+msgstr "Storlek:"
+
+#: memviewdlg.cpp:96
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory View"
+msgstr "Minnesvy"
+
+#: memviewdlg.cpp:223
+#, kde-format
+msgid "%2 (1 byte)"
+msgid_plural "%2 (%1 bytes)"
+msgstr[0] "%2 (1 byte)"
+msgstr[1] "%2 (%1 byte)"
+
+#: memviewdlg.cpp:262
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "&Reload"
+msgstr "&Uppdatera"
+
+#: memviewdlg.cpp:271
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Format"
+msgstr "&Format"
+
+#: memviewdlg.cpp:274
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Binary"
+msgstr "&Binär"
+
+#: memviewdlg.cpp:279
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Octal"
+msgstr "&Oktal"
+
+#: memviewdlg.cpp:284
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Decimal"
+msgstr "&Decimal"
+
+#: memviewdlg.cpp:289
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Hexadecimal"
+msgstr "&Hexadecimal"
+
+#: memviewdlg.cpp:303
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Grouping"
+msgstr "&Gruppering"
+
+#: memviewdlg.cpp:306
+#, kde-format
+msgctxt "@item:inmenu no byte grouping"
+msgid "&0"
+msgstr "&0"
+
+#: memviewdlg.cpp:311
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&1"
+msgstr "&1"
+
+#: memviewdlg.cpp:316
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&2"
+msgstr "&2"
+
+#: memviewdlg.cpp:321
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&4"
+msgstr "&4"
+
+#: memviewdlg.cpp:326
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&8"
+msgstr "&8"
+
+#: memviewdlg.cpp:331
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "1&6"
+msgstr "1&6"
+
+#: memviewdlg.cpp:344
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Write Changes"
+msgstr "Skriv ändringar"
+
+#: memviewdlg.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Change Memory Range"
+msgstr "Ändra minnesintervall"
+
+#: memviewdlg.cpp:352
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close View"
+msgstr "Stäng vyn"
+
+#: memviewdlg.cpp:419
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory Viewer"
+msgstr "Minnesvisning"
+
+#: memviewdlg.cpp:423
+#, kde-format
+msgctxt "@action"
+msgid "New Memory Viewer"
+msgstr "Ny minnesvisning"
+
+#: memviewdlg.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open a new memory viewer"
+msgstr "Öppna en ny minnesvisning"
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "gdb error"
+#~ msgstr "Fel i gdb"
+
+#~ msgid "Startup error"
+#~ msgstr "Startfel"
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Avlusningsskal hittades inte"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Avlusningsinställningar"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Kör"
+
+#~ msgid "OK"
+#~ msgstr "Ok"
+
+#~ msgid "Cancel"
+#~ msgstr "Avbryt"
+
+#~ msgid "Address Selector"
+#~ msgstr "Adressväljare"
+
+#~ msgid "Change &address"
+#~ msgstr "Ändra &adress"
+
+#~ msgid "&Jump to Cursor"
+#~ msgstr "&Gå till markör"
+
+#~ msgid "Sets the execution pointer to the current cursor position."
+#~ msgstr "Ställ in körpekaren på nuvarande markörposition."
+
+#~ msgid "&Run to Cursor"
+#~ msgstr "&Kör till markör"
+
+#~ msgid "Continues execution until the cursor position is reached."
+#~ msgstr "Fortsätter köra till markörpositionen nås."
+
+#~ msgid "&AT&&T"
+#~ msgstr "&AT&&T"
+
+#~ msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+#~ msgstr ""
+#~ "GDB använder AT&T:s variant av assemblerkod (t.ex. mov 0xc(%ebp),%eax)."
+
+#~ msgid "&Intel"
+#~ msgstr "&Intel"
+
+#~ msgid ""
+#~ "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+#~ "+0xc])."
+#~ msgstr ""
+#~ "GDB använder Intels variant av assemblerkod (t.ex. mov eax, DWORD PTR [ebp"
+#~ "+0xc])."
+
+#~ msgid "Disassembly flavor"
+#~ msgstr "Variant av assemblerkod"
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>Maskinkod</b><p>Visar maskinkoden för ditt program som kör, med den "
+#~ "nuvarande instruktionen markerad. Du kan stega instruktion för "
+#~ "instruktion med knapparna \"stega förbi instruktion\" och \"stega in i "
+#~ "instruktion\" på avlusarens verktygsrad."
+
+#~ msgid "Address"
+#~ msgstr "Adress"
+
+#~ msgid "Function"
+#~ msgstr "Funktion"
+
+#~ msgid "Instruction"
+#~ msgstr "Instruktion"
+
+#~ msgid "Disassemble/Registers View"
+#~ msgstr "Visning av assemblerkod och register"
+
+#~ msgid "Binary"
+#~ msgstr "Binär"
+
+#~ msgid "Octal"
+#~ msgstr "Oktal"
+
+#~ msgid "Decimal"
+#~ msgstr "Decimal"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "Hexadecimal"
+
+#~ msgid "Raw"
+#~ msgstr "Obehandlad"
+
+#~ msgid "Unsigned"
+#~ msgstr "Utan tecken"
+
+#~ msgid "General"
+#~ msgstr "Allmänt"
+
+#~ msgid "Flags"
+#~ msgstr "Flaggor"
+
+#~ msgid "VFP single-word"
+#~ msgstr "VFP enkelord"
+
+#~ msgid "VFP double-word"
+#~ msgstr "VFP dubbelord"
+
+#~ msgid "VFP quad-word"
+#~ msgstr "VFP fyrdubbelt ord"
+
+#~ msgid "FPU"
+#~ msgstr "FPU"
+
+#~ msgid "XMM"
+#~ msgstr "XMM"
+
+#~ msgid "Segment"
+#~ msgstr "Segment"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Mode"
+#~ msgstr "Läge"
+
+#~ msgid "Update"
+#~ msgstr "Uppdatera"
+
+#~ msgid "Address selector"
+#~ msgstr "Adressväljare"
+
+#~ msgid "Select the address to disassemble around"
+#~ msgstr "Välj adress att visa assembler kod omkring"
+
+#~ msgid "Select address to disassemble around"
+#~ msgstr "Välj adress att visa assembler kod omkring"
+
+#~ msgid "Examine Core File..."
+#~ msgstr "Undersök minnesdump..."
+
+#~ msgid "Examine core file"
+#~ msgstr "Undersök minnesdump"
+
+#~ msgid ""
+#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
+#~ "created after the application has crashed, e.g. with a segmentation "
+#~ "fault. The core file contains an image of the program memory at the time "
+#~ "it crashed, allowing you to do a post-mortem analysis.</p>"
+#~ msgstr ""
+#~ "<b>Undersök minnesdump</b><p>Detta laddar en minnesdump, core, som "
+#~ "typiskt har skapats efter programmet kraschat, t.ex. med ett "
+#~ "segmenteringsfel. Minnesdumpen innehåller en avbildning av programmets "
+#~ "minne vid tiden då det kraschade, vilket gör en post-mortem analys möjlig."
+#~ "</p>"
+
+#~ msgid "Attach to Process"
+#~ msgstr "Anslut till process"
+
+#~ msgid "Attach to process..."
+#~ msgstr "Anslut till process..."
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+#~ msgstr ""
+#~ "<b>Anslut till process</b><p>Ansluter avlusaren till en process som kör.</"
+#~ "p>"
+
+#~ msgid "KDevelop"
+#~ msgstr "KDevelop"
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "Beräkna: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Utvärdera uttryck</b><p>Visar värdet av uttrycket under markören.</p>"
+
+#~ msgid "Watch: %1"
+#~ msgstr "Bevaka: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Bevaka uttryck</b><p>Lägger till uttrycket under markören till "
+#~ "variabel/bevakningslistan.</p>"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Välj en minnesdump att undersöka..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "Undersöker minnesdump %1"
+
+#~ msgid "Debug core file"
+#~ msgstr "Avlusa minnesdump"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "Välj en process att ansluta till..."
+
+#~ msgid "Not attaching to process %1: cannot attach the debugger to itself."
+#~ msgstr ""
+#~ "Ansluter inte till processen %1: kan inte ansluta avlusaren till sig "
+#~ "själv."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "Ansluter till processen %1"
+
+#~ msgid "Debug process %1"
+#~ msgstr "Avlusa processen %1"
+
+#~ msgctxt "ProjectName: run configuration name"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Attach to a process"
+#~ msgstr "Anslut till en process"
+
+#~ msgid "Select Core File"
+#~ msgstr "Välj minnesdump"
+
+#~ msgid "Executable:"
+#~ msgstr "Körbart program:"
+
+#~ msgid "Core File:"
+#~ msgstr "Minnesdump:"
+
+#~ msgid "<br>Old value: %1"
+#~ msgstr "<br>Tidigare värde: %1"
+
+#~ msgid "<br>New value: %1"
+#~ msgstr "<br>Nytt värde: %1"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Avlusare stoppad"
+
+#~ msgid "Process exited"
+#~ msgstr "Processen avslutades"
+
+#~ msgid "Application is running"
+#~ msgstr "Programmet kör"
+
+#~ msgid "Application is paused"
+#~ msgstr "Programmet gör paus"
+
+#~ msgid "Debugger error"
+#~ msgstr "Fel i avlusaren"
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>Gdb avslutades onormalt</b><p>Det här är troligen ett fel i gdb. "
+#~ "Kontrollera utmatningsfönstret i gdb och stoppa därefter avlusaren."
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "Gdb avslutade onormalt"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>Kommando till gdb skickat när avlusaren inte kör</b><br>Kommandot är:"
+#~ "<br>%1"
+
+#~ msgid "Internal error"
+#~ msgstr "Internt fel"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>Felaktigt kommando till avlusaren</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "felaktigt avlusarkommando"
+
+#~ msgid "Exited with return code: %1"
+#~ msgstr "Avslutades med returkoden: %1"
+
+#~ msgid "Exited normally"
+#~ msgstr "Avslutade normalt"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "Avslutades med signal %1"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Programmet tog emot signalen %1 (%2)"
+
+#~ msgid "Running program"
+#~ msgstr "Kör programmet"
+
+#~ msgid "Warning"
+#~ msgstr "Varning"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Fel i avlusaren</b><p>Avlusaren rapporterade följande fel:<p><tt>%1"
+
+#~ msgid "1 command in queue\n"
+#~ msgid_plural "%1 commands in queue\n"
+#~ msgstr[0] "1 kommando i kö\n"
+#~ msgstr[1] "%1 kommandon i kö\n"
+
+#~ msgctxt "Only the 0 and 1 cases need to be translated"
+#~ msgid "1 command being processed by gdb\n"
+#~ msgid_plural "%1 commands being processed by gdb\n"
+#~ msgstr[0] "1 kommando behandlas av gdb\n"
+#~ msgstr[1] "%1 kommandon behandlas av gdb\n"
+
+#~ msgid "Debugger state: %1\n"
+#~ msgstr "Avlusarens status: %1\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "Nuvarande kommandots klass: '%1'\n"
+#~ "Nuvarande kommandotext: '%2'\n"
+#~ "Nuvarande kommandots originaltext: '%3'\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "Avlusarens status"
+
+#~ msgid "<b>Could not attach debugger:</b><br />"
+#~ msgstr "<b>Kunde inte ansluta avlusaren:</b><br />"
+
+#~ msgctxt "<b>Internal debugger error</b>"
+#~ msgid ""
+#~ "<p>The debugger component encountered internal error while processing "
+#~ "reply from gdb. Please submit a bug report."
+#~ msgstr ""
+#~ "<p>Avlusningskomponenten upptäckte ett internt fel när ett svar från gdb "
+#~ "behandlades. Skicka gärna in en felrapport."
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "Undantaget är: %1\n"
+#~ "MI-svaret är: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "Internt fel i avlusaren"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>Kunde inte starta avlusaren.</b><p>Kunde inte köra '%1'. Försäkra dig "
+#~ "om att sökvägsnamnet är riktigt angivet."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Kunde inte starta avlusaren"
+
+#~ msgid ""
+#~ "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
+#~ "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
+#~ msgstr ""
+#~ "<b>Gdb kraschade.</b><p>På grund av det måste avlusningssessionen "
+#~ "avslutas.<br>Försök att upprepa kraschen med bara gdb och rapportera "
+#~ "felet.<br>"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Gdb kraschade"
+
+#~ msgid "(running)"
+#~ msgstr "(kör)"
+
+#~ msgid ""
+#~ "Cannot use the tty* or pty* devices.\n"
+#~ "Check the settings on /dev/tty* and /dev/pty*\n"
+#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
+#~ "the user to the tty group using \"usermod -aG tty username\"."
+#~ msgstr ""
+#~ "Kan inte använda tty* eller pty* enheter\n"
+#~ "Kontrollera inställningarna för /dev/tty* och /dev/pty*\n"
+#~ "Som root kan du behöva göra \"chmod ug+rw\" för tty* och pty* enheter och/"
+#~ "eller lägga till användaren till tty-gruppen med \"usermod -aG tty "
+#~ "användarnamn\"."
+
+#~ msgid "%1 is incorrect terminal name"
+#~ msgstr "%1 är felaktigt terminalnamn"
+
+#~ msgid "Can't create a temporary file"
+#~ msgstr "Kan inte skapa tillfällig fil"
+
+#~ msgid ""
+#~ "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
+#~ "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
+#~ "do sleep 3600;done\""
+#~ msgstr ""
+#~ "Kan inte hämta tty/pty %1. Kontrollera att %1 verkligen är en terminal "
+#~ "och att den accepterad följande argument: -e sh -c \"tty> %2 ;exec<&-;"
+#~ "exec>&-;while :;do sleep 3600;done\""
+
+#~ msgid "Application interrupted"
+#~ msgstr "Programmet avbrutet"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "GDB Support"
+#~ msgstr "Stöd för gdb"
+
+#~ msgid ""
+#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
+#~ "+ and more."
+#~ msgstr ""
+#~ "Insticksprogrammet tillhandahåller ett gränssnitt till GDB, en "
+#~ "källkodsavlusare för C, C++ med mera."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr "Kör gdb i ett särskilt skal (i huvudsak för automake-projekt)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Om du vill att gdb ska köras av ett särskilt skal eller verktyg, infoga "
+#~ "det här. Det huvudsakliga användarfallet är för projekt baserade på "
+#~ "Automake där programmet i själva verket bara är ett skript, och "
+#~ "<b>libtool</b> behövs för att få det att köra inne i gdb."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Om du vill att gdb ska köras av ett särskilt skal eller verktyg, infoga "
+#~ "det här. Det huvudsakliga användarfallet är för projekt baserade på "
+#~ "Automake där programmet i själva verket bara är ett skript, och libtool "
+#~ "behövs för att få det att köra inne i gdb."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "Avlusnings&skal:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Skript för att starta fjärrprogram"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "&Inställningsskript för gdb:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Skript för att ansluta till fjärrprogram"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Det här skriptet körs av gdb efter de två föregående skripten har körts.\n"
+#~ "Skriptet är avsett för de verkliga kommandon som behövs för att ansluta "
+#~ "till ett fjärrprogram som kör.\n"
+#~ "\tshell sleep 5\tvänta på att fjärrprogrammet ska starta\n"
+#~ "\ttarget remote ...\tanslut till fjärravlusaren\n"
+#~ "\tcontinue\t[valfritt] kör avlusaren till första brytpunkten."
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: konsol för avlusare"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Stöd för att köra C++ program i gdb"
+
+#~ msgid "Form"
+#~ msgstr "Formulär"
+
+#~ msgid "Start address:"
+#~ msgstr "Startadress:"
+
+#~ msgid "End Address:"
+#~ msgstr "Slutadress:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Visning"
+
+#~ msgid "Offset"
+#~ msgstr "Position"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Särskilda vyer i avlusaren"
+
+#~ msgid "Watches"
+#~ msgstr "Bevakning"
+
+#~ msgid "Recent"
+#~ msgstr "Senaste"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "Det här tillåter att du anger terminalinmatning när ditt\n"
+#~ "program innehåller terminalinmatningskod (t.ex. cin, fgets etc.)\n"
+#~ "Om du använder terminalinmatning i ditt program, markera det\n"
+#~ "här alternativet. Annars lämna det av."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr "Aktivera separat &terminal för programmets in- och utmatning"
+
+#~ msgid ""
+#~ "If GDB has not seen a library that will be loaded via\n"
+#~ "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~ "With this option, GDB will stop on a library load and hence\n"
+#~ "try to set the pending breakpoints. See the documentation\n"
+#~ "for more details relating to this behavior.\n"
+#~ "\n"
+#~ "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgstr ""
+#~ "Om GDB inte har sett ett bibliotek som ska laddas med\n"
+#~ "\"dlopen\", vägrar den sätta en brytpunkt i den koden.\n"
+#~ "Med det här alternativet stannar GDB när ett bibliotek\n"
+#~ "laddas, och försöker på så sätt sätta de vilande brytpunkterna.\n"
+#~ "Se dokumentationen för mer detaljer relaterat till beteendet.\n"
+#~ "\n"
+#~ "Om du inte använder \"dlopen\" för bibliotek, lämna det omarkerat."
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Försök sätta &brytpunkter när bibliotek laddas"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "Använd den flytande verktygsraden. Den här verktygsraden\n"
+#~ "förblir alltid över alla fönster så om programmet täcker KDevelop\n"
+#~ "så har du kontroll på det genom den lilla verktygsraden.\n"
+#~ "Dessutom kan den här verktygsraden dockas i panelen.\n"
+#~ "\n"
+#~ "Den här verktygsraden finns oberoende av verktygsraden i KDevelop."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Aktiverade &flytande verktygsrad"
+
+#~ msgid "Debug views"
+#~ msgstr "Vyer i avlusaren"
+
+#~ msgid "Viewers"
+#~ msgstr "Vyer"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "Avlusarvyer"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>Avlusarvyer</b><p>Diverse information om programmet som körs. Fyra "
+#~ "vyer är tillgängliga:<br><b>Minne</b><br><b>Assemblerkod</"
+#~ "b><br><b>Register</b><br><b>Bibliotek</b>"
+
+#~ msgid ""
+#~ "<b>Application does not exist</b><p>The application you are trying to "
+#~ "debug,<br>    %1\n"
+#~ "<br>does not exist. Check that you have specified the right application "
+#~ "in the debugger configuration."
+#~ msgstr ""
+#~ "<b>Programmet finns inte</b><p>Programmet du försöker avlusa,<br>    %1\n"
+#~ "<br>finns inte. Kontrollera att du har angivit rätt program i "
+#~ "avlusarinställningarna."
+
+#~ msgid "Application does not exist"
+#~ msgstr "Programmet finns inte"
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Kunde inte köra programmet '%1'.</b><p>Programmet har inte biten "
+#~ "körbar satt. Försök att bygga om projektet, eller ändra rättigheterna för "
+#~ "hand."
+
+#~ msgid "Could not run application"
+#~ msgstr "Kunde inte köra programmet"

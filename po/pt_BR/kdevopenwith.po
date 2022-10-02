@@ -1,0 +1,81 @@
+# Translation of kdevopenwith.po to Brazilian Portuguese
+# Copyright (C) 2010-2018 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2012, 2020, 2022.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2015, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevopenwith\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2022-07-14 09:47-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+#: openwithplugin.cpp:145
+#, kde-format
+msgctxt "@item:menu"
+msgid "Other..."
+msgstr "Outro..."
+
+#: openwithplugin.cpp:156
+#, kde-format
+msgctxt "@title:menu"
+msgid "Open With"
+msgstr "Abrir com"
+
+#: openwithplugin.cpp:161
+#, kde-format
+msgctxt "@title:menu"
+msgid "Embedded Editors"
+msgstr "Editores incorporados"
+
+#: openwithplugin.cpp:165
+#, kde-format
+msgctxt "@title:menu"
+msgid "External Applications"
+msgstr "Aplicativos externos"
+
+#: openwithplugin.cpp:172
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Open"
+msgstr "Abrir"
+
+#: openwithplugin.cpp:192
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Default Editor"
+msgstr "Editor padrão"
+
+#: openwithplugin.cpp:282
+#, kde-format
+msgctxt "%1: mime type name, %2: app/part name"
+msgid "Do you want to open all '%1' files by default with %2?"
+msgstr "Deseja abrir todos os arquivos '%1' por padrão com o %2?"
+
+#: openwithplugin.cpp:284
+#, kde-format
+msgctxt "@title:window"
+msgid "Set as Default?"
+msgstr "Definir como padrão?"
+
+#: openwithplugin.cpp:285
+#, kde-format
+msgctxt "@action:button"
+msgid "Set as Default"
+msgstr "Definir como padrão"
+
+#: openwithplugin.cpp:286
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Set"
+msgstr "Não definir"

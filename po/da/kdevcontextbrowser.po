@@ -1,0 +1,197 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Martin Schlander <mschlander@opensuse.org>, 2010, 2011, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2013-10-26 13:44+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: contextbrowser.cpp:164
+#, fuzzy, kde-format
+#| msgid "Go back in context history"
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Gå tilbage i konteksthistorikken"
+
+#: contextbrowser.cpp:176
+#, fuzzy, kde-format
+#| msgid "Go forward in context history"
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Gå frem i konteksthistorikken"
+
+#: contextbrowser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Omrids"
+
+#: contextbrowser.cpp:193
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Omrids"
+
+#: contextbrowser.cpp:194
+#, fuzzy, kde-format
+#| msgid "Navigate outline of active document, click to browse."
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Navigér omrids af det aktive dokument, klik for at gennemse."
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr ""
+
+#: contextbrowser.cpp:241
+#, fuzzy, kde-format
+#| msgid "&Previous Visited Context"
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Forrige besøgte kontekst"
+
+#: contextbrowser.cpp:247
+#, fuzzy, kde-format
+#| msgid "&Next Visited Context"
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Næste besøgte kontekst"
+
+#: contextbrowser.cpp:253
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "Fo&rrige brugstilfælde"
+
+#: contextbrowser.cpp:259
+#, fuzzy, kde-format
+#| msgid "&Next Use"
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "Næs&te brugstilfælde"
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Kontekstbrowser"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Kodebrowser"
+
+#: contextbrowser.cpp:312
+#, fuzzy, kde-format
+#| msgid "Find Uses"
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Find brugstilfælde"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(ændret)"
+
+#: contextbrowserview.cpp:178
+#, fuzzy, kde-format
+#| msgid "Declaration menu"
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Erklæringsmenu"
+
+#: contextbrowserview.cpp:181
+#, fuzzy, kde-format
+#| msgid "Declaration menu"
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Erklæringsmenu"
+
+#: contextbrowserview.cpp:185
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Lås nuværende visning"
+
+#: contextbrowserview.cpp:186
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Lås nuværende visning"
+
+#: contextbrowserview.cpp:187
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Lås nuværende visning"
+
+#: contextbrowserview.cpp:189
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Lås nuværende visning"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Kodebrowser-værktøjslinje"
+
+#~ msgid "Outline..."
+#~ msgstr "Omrids..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigation"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Slå kildekodebrowser-tilstand til/fra"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Når dette er slået til, kan du gennemse kildekode ved at klikke i "
+#~ "editoren."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Dette plugin viser information om den sprogkontekst i et sidepanel og "
+#~ "fremhæver relevante erklæringer og brug."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Viser information for den nuværende kontekst"

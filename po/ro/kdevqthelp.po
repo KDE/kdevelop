@@ -1,0 +1,247 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sergiu Bivol <sergiu@cip.md>, 2010.
+# Cristian Oneț <onet.cristian@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2011-06-11 13:17+0300\n"
+"Last-Translator: Cristian Oneț <onet.cristian@gmail.com>\n"
+"Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: qthelpconfig.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr ""
+
+#: qthelpconfig.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr ""
+
+#: qthelpconfig.cpp:67
+#, kde-format
+msgid "Name cannot be empty."
+msgstr ""
+
+#: qthelpconfig.cpp:101
+#, fuzzy, kde-format
+#| msgid "Check Qt Help documentation"
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "Verifică documentația de ajutor Qt"
+
+#: qthelpconfig.cpp:116
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr ""
+
+#: qthelpconfig.cpp:204
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr ""
+
+#: qthelpconfig.cpp:230
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr ""
+
+#: qthelpconfig.cpp:239
+#, kde-format
+msgid "Documentation already imported"
+msgstr ""
+
+#: qthelpconfig.cpp:291
+#, fuzzy, kde-format
+#| msgid "QtHelp"
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "QtHelp"
+
+#: qthelpconfig.cpp:296
+#, fuzzy, kde-format
+#| msgid "Check Qt Help documentation"
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "Verifică documentația de ajutor Qt"
+
+#: qthelpconfig.cpp:321
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr ""
+
+#: qthelpconfig.cpp:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr ""
+
+#: qthelpconfig.cpp:333
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Check Qt Help documentation"
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "Verifică documentația de ajutor Qt"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, fuzzy, kde-format
+#| msgid "Check Qt Help documentation"
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "Verifică documentația de ajutor Qt"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, kde-format
+msgctxt "@title:column"
+msgid "Path"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:73
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr ""
+
+#: qthelpdocumentation.cpp:181
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "Nu s-a putut găsi documentație pentru „%1”"
+
+#: qthelpdocumentation.cpp:276
+#, kde-format
+msgid "QtHelp Home Page"
+msgstr "Pagina QtHelp"
+
+#: qthelpqtdoc.cpp:142
+#, kde-format
+msgid "QtHelp"
+msgstr "QtHelp"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sergiu Bivol"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sergiu@ase.md"
+
+#, fuzzy
+#~| msgid "Check Qt Help documentation"
+#~ msgid "QtHelp Documentation"
+#~ msgstr "Verifică documentația de ajutor Qt"
+
+#, fuzzy
+#~| msgid "QtHelp Home Page"
+#~ msgid "Help page:"
+#~ msgstr "Pagina QtHelp"
+
+#~ msgid "Move Up"
+#~ msgstr "Mută în sus"
+
+#~ msgid "Move Down"
+#~ msgstr "Mută în jos"
+
+#, fuzzy
+#~| msgid "Check Qt Help documentation"
+#~ msgid "Manage QtHelp Documentation"
+#~ msgstr "Verifică documentația de ajutor Qt"

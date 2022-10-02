@@ -1,0 +1,49 @@
+# translation of kdevoutlineview.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2018, 2019, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevoutlineview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-04-17 20:45+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: outlinenode.cpp:169
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anonym>"
+
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Obrys"
+
+#: outlinewidget.cpp:47
+#, kde-format
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "Zoradiť podľa abecedy"
+
+#: outlinewidget.cpp:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "Zoradiť položky podľa abecedy"
+
+#: outlinewidget.cpp:60
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtrovať..."
+
+#~ msgid "Outline View"
+#~ msgstr "Pohľad obrysu"

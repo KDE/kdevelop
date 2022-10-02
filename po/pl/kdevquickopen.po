@@ -1,0 +1,321 @@
+# translation of kdevquickopen.po to
+# translation of kdevelop.po to
+# Version: $Revision$
+# KDevelop polish translation file.
+# Translation work:
+#       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
+# Corrections:
+#       Waldemar Kochaniec
+#       Jacek Stolarczyk
+#       Anna Wojdeł <ania@kbs.twi.tudelft.nl>
+#
+# Krzysztof Lichota, 2004.
+# Marta Rybczyńska <mrybczynsk@poczta.onet.pl>, 2003, 2004.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008.
+# Michał Smoczyk <msmoczyk@wp.pl>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2019, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevquickopen\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-07-10 17:06+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.03.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "Dokumentacja w %1"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "Już niedostępny: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "Już niedostępny"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Powrót: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Plik: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "Pasek szybkiego otwierania"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "Projekt %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "jeszcze nieprzetworzone"
+
+#: projectfilequickopen.cpp:178
+#, kde-format
+msgctxt "@item no project"
+msgid "none"
+msgstr "brak"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Klasy"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Funkcje"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Projekt"
+
+#: quickopenplugin.cpp:60
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Pliki dołączane"
+
+#: quickopenplugin.cpp:61
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Pliki dołączające"
+
+#: quickopenplugin.cpp:62
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "Obecnie otwarte"
+
+#: quickopenplugin.cpp:64
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Pliki"
+
+#: quickopenplugin.cpp:67
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "Dokumentacja"
+
+#: quickopenplugin.cpp:68
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Działania"
+
+#: quickopenplugin.cpp:279
+#, kde-format
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "Otwórz &szybko"
+
+#: quickopenplugin.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "Otwórz szybko &plik"
+
+#: quickopenplugin.cpp:291
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "Otwórz szybko &klasę"
+
+#: quickopenplugin.cpp:297
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "Otwórz szybko &funkcję"
+
+#: quickopenplugin.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "Otwórz szybko już otw&arty plik"
+
+#: quickopenplugin.cpp:308
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "Otwórz szybko &dokumentację"
+
+#: quickopenplugin.cpp:314
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "Działania szybkiego otwierani&a"
+
+#: quickopenplugin.cpp:319
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "Przejdź do deklaracji"
+
+#: quickopenplugin.cpp:325
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "Przejdź do definicji"
+
+#: quickopenplugin.cpp:330
+#, kde-format
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "Osadź szybkie otwieranie"
+
+#: quickopenplugin.cpp:337
+#, kde-format
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Następna funkcja"
+
+#: quickopenplugin.cpp:342
+#, kde-format
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Poprzednia funkcja"
+
+#: quickopenplugin.cpp:347
+#, kde-format
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Zarys"
+
+#: quickopenplugin.cpp:498
+#, kde-format
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "Szybkie otwieranie"
+
+#: quickopenplugin.cpp:832
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Zarys"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "Otwórz szybko..."
+
+#: quickopenplugin.cpp:943
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+"Szukanie plików, klas, funkcji i innych, pozwalając na szybkie poruszanie "
+"się po kodzie źródłowym."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Poszukaj:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Otwórz"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Anuluj"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "Zakre&sy:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "&Rzeczy:"
+
+#~ msgid "Project %1"
+#~ msgstr "Projekt %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lukasz.wojnilowicz@gmail.com"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "Ta wtyczka pozwala na szybki dostęp do plików projektu i elementów języka "
+#~ "takich jak klasy i funkcje."
+
+#~ msgid "Navigate"
+#~ msgstr "Nawiguj"
+
+#~ msgid "Quickly open resources such as files, classes and methods."
+#~ msgstr "Szybkie otwieranie zasobów takich jak pliki, klasy i metody."
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "&Nawigacja"
+
+#, fuzzy
+#~ msgid "Navigate Declaration"
+#~ msgstr "Otwórz deklarację"

@@ -1,0 +1,2714 @@
+# translation of kdevelop.po to Persian
+# Zahra Farahmandi <farahmandi@itland.ir>, 2006.
+# Mahdi Foladgar <foladgar@itland.ir>, 2006.
+# Nazanin Kazemi <kazemi@itland.ir>, 2006, 2007.
+# Nasim Daniarzadeh <daniarzadeh@itland.ir>, 2006, 2007.
+# Tahereh Dadkhahfar <dadkhahfar@itland.ir>, 2006, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2007-08-23 12:13+0330\n"
+"Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
+"Language-Team: Persian <kde-i18n-fa@kde.org>\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "زهرا فرهمندی"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "farahmandi@itland.ir"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "&تنظیمات‌"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, fuzzy, kde-format
+#| msgid "&Project"
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "&پروژه‌"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr ""
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr ""
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr ""
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr ""
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, fuzzy, kde-format
+#| msgid "&File"
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&پرونده‌"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&ویرایش‌"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, fuzzy, kde-format
+#| msgid "Code"
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "کد"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, fuzzy, kde-format
+#| msgid "&Window"
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&پنجره‌"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "&تنظیمات‌"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr ""
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "میله ابزار اصلی"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "کد"
+
+#: kdevideextension.cpp:47
+#, fuzzy, kde-format
+#| msgid "*.kdevelop|KDevelop 3 Project Files\n"
+msgid "KDevelop Project Files"
+msgstr "*.kdevelop|پرونده‌های پروژه KDevelop 3\n"
+
+#: main.cpp:85
+#, fuzzy, kde-format
+#| msgid "Could not open file '%1'"
+msgid "Could not open %1"
+msgstr "پرونده »%1« را نتوانست باز کند"
+
+#: main.cpp:219
+#, fuzzy, kde-format
+#| msgid "Could not open file '%1'"
+msgid "Could not open file '%1'."
+msgstr "پرونده »%1« را نتوانست باز کند"
+
+#: main.cpp:242
+#, fuzzy, kde-format
+#| msgid "Could not read project file: %1"
+msgid "Could not open project '%1': %2"
+msgstr "نتوانست پرونده پروژه را بخواند: %1"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr ""
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr ""
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr "محیط توسعه مجزای KDevelop "
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr ""
+
+#: main.cpp:397
+#, fuzzy, kde-format
+#| msgid "generating"
+msgid "GDB integration"
+msgstr "تولید"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr ""
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr ""
+
+#: main.cpp:399
+#, fuzzy, kde-format
+#| msgid ""
+#| "Release coordinator, API documentation, Doxygen and autoproject patches"
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr "هماهنگ‌کننده نشر، مستندات API، کژنه‌های autoproject و Doxygen"
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr ""
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr ""
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr ""
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr ""
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr "SnippetPart، اشکال‌زدا و کژنه‌های کاربردی"
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr "انتقال به پشتیبانی Qt ۳، کژنه‌ها، valgrind، perforce و تفاوت"
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr ""
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr ""
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "موًلفه ویرایشگر Kate"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr ""
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr "کد طراح"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr "ایده آغازین، معماری پایه، بیشتر کد منبع آغازین "
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr "KTabBar، رفع اشکالها"
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr "پشتیبانی جاوا و سی شیءگرا"
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr ""
+
+#: main.cpp:419
+#, kde-format
+msgid "Debugger frontend"
+msgstr "پایانه اشکال‌زدا"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr ""
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr "پشتیبانیPHP، کارمند گزینگان متن"
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr ""
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr "قالبهای کاربرد KDE"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr ""
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "Dist part، پشتیبانی bash، قالبهای کاربرد"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr ""
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr "چندین مؤلفه، نمایه‌سازی htdig"
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr ""
+
+#: main.cpp:424
+#, fuzzy, kde-format
+#| msgid "Help with Automake manager and persistant class store"
+msgid "Help with Automake manager and persistent class store"
+msgstr "کمک با مدیر Automake و ذخیره رده ماندگار"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr ""
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr "کمک با زیربنای KParts"
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr "پشتیبانی آدا"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr ""
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "مدیر پروژه QMake"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr ""
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr "حالتهای MDI، QEditor، bugfixes"
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr "PartExplorer، طراحی مجدد CvsPart، کژنه‌ها، اشکالها )اصلاحها("
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+"جایگزینی، چوب الفها، فهرست پرونده و وصله‌های CTags2. کژنه‌ها و پیشرفت نهایی"
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr "جزء ایجاد پرونده و بیتها و کژنه‌های دیگر"
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr ""
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr "پشتیبانی ClearCase "
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr ""
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr "پشتیبانی رابی"
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr ""
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "مستندات فرترن"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr ""
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr "برنامه سودمند مستندات پیتون"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "جادوگر Doxygen"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr ""
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr "موًلفه گزیننده پرونده"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr ""
+
+#: main.cpp:439
+#, fuzzy, kde-format
+#| msgid "C++ code completion, persistant class store"
+msgid "C++ code completion, persistent class store"
+msgstr "تکمیل کد ++C، ذخیره رده ماندگار"
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr ""
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "کژنه‌ها"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr ""
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr ""
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr "کمک با پشتیبانی پرل"
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr ""
+
+#: main.cpp:443
+#, kde-format
+msgid "Documentation index view"
+msgstr "نمای نمایه مستندات"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr "یابنده مستندات، کژنه‌های مدیر پروژه qmake، توسعه کارایی، رفع اشکالها..."
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr "کژنه‌های مدیر پروژه QMake"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr ""
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr "تصحیح و رفع اشکالهای qEditor، AutoMake و کارمندان بیشتر دیگر"
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr "کار هنری برای زبان رابی"
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr ""
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr ""
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr ""
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr ""
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr ""
+
+#: main.cpp:520
+#, fuzzy, kde-format
+#| msgid "Open Project"
+msgid "Name: Opened Projects"
+msgstr "باز کردن پروژه"
+
+#: main.cpp:529
+#, kde-format
+msgid "[running]"
+msgstr ""
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr ""
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr ""
+
+#: main.cpp:648
+#, fuzzy, kde-format
+#| msgid "Application Name:"
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "نام کاربرد:"
+
+#: main.cpp:654
+#, fuzzy, kde-format
+#| msgid "&Debug"
+msgid "Debug %1"
+msgstr "&اشکال‌زدایی‌"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr ""
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr ""
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr ""
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr ""
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr ""
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+#, fuzzy
+#| msgid "KDevelop Profile Editor"
+msgid "KDevelop Sessions"
+msgstr "ویرایشگر گزارش KDevelop"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr ""
+
+#~ msgid "Files to load"
+#~ msgstr "پرونده‌ها برای بارگذاری"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "&File"
+#~ msgstr "&پرونده‌"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgid "&Edit"
+#~ msgstr "&ویرایش‌"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "&View"
+#~ msgstr "&نما‌"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Tools"
+#~ msgstr "&ابزارها‌"
+
+#, fuzzy
+#~| msgid "Project options"
+#~ msgid "Word Completion"
+#~ msgstr "گزینه‌های پروژه‌"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings"
+#~ msgstr "&تنظیمات‌"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "ویرایش"
+
+#, fuzzy
+#~| msgid "Project options"
+#~ msgid "Deprecated options:"
+#~ msgstr "گزینه‌های پروژه‌"
+
+#~ msgid "HTML documentation component"
+#~ msgstr "موًلفه مستندات زنگام"
+
+#, fuzzy
+#~| msgid "Abort on first error:"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "ساقط کردن هنگام اولین خطا:"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debug your program"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Debug Area"
+#~ msgstr "&اشکال‌زدایی‌"
+
+#, fuzzy
+#~| msgid "&New Project..."
+#~ msgid "New Project"
+#~ msgstr "پروژه &جدید...‌"
+
+#~ msgid "Open project"
+#~ msgstr "باز کردن پروژه"
+
+#, fuzzy
+#~| msgid "Open project"
+#~ msgid "Fetch project"
+#~ msgstr "باز کردن پروژه"
+
+#, fuzzy
+#~| msgid "Open &Recent Project"
+#~ msgid "Recent Projects"
+#~ msgstr "باز کردن پروژه &اخیر‌"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Sessions"
+#~ msgstr "&تنظیمات‌"
+
+#, fuzzy
+#~| msgid "Documentation index view"
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "نمای نمایه مستندات"
+
+#, fuzzy
+#~| msgid "Starting GUI"
+#~ msgid "Starting"
+#~ msgstr "آغاز ونک"
+
+#, fuzzy
+#~| msgid "Remove Profile"
+#~ msgid "Remove lock file"
+#~ msgstr "حذف گزارش"
+
+#, fuzzy
+#~| msgid "Open project"
+#~ msgid "Import project"
+#~ msgstr "باز کردن پروژه"
+
+#, fuzzy
+#~| msgid "Project to load"
+#~ msgid "Url to project to load"
+#~ msgstr "پروژه برای بارگذاری"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Session contents"
+#~ msgstr "&تنظیمات‌"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "پرونده‌ها برای بارگذاری"
+
+#~ msgid "Profile to load"
+#~ msgstr "گزارش برای بارگذاری"
+
+#~ msgid "Version %1"
+#~ msgstr "نسخه %1"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "&پرونده‌"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "&نما‌"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "پروژه "
+
+#~ msgid ""
+#~ "QEditor component, code completion, Abbrev component, C++ support, Java "
+#~ "support"
+#~ msgstr ""
+#~ "مؤلفه QEditor، تکمیل کد، مؤلفه مختصرسازی، پشتیبانی ++C، پشتیبانی جاوا"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Rename %1"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create Class"
+#~ msgstr "ایجاد پروژه جدید"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgid "New name:"
+#~ msgstr "&نام:"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Rename"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Uses"
+#~ msgstr "رده"
+
+#~ msgid "Cached: "
+#~ msgstr "نهان‌شده: "
+
+#~ msgid "make-process failed"
+#~ msgstr "خرابی فرآیند mak"
+
+#~ msgid "output: %1"
+#~ msgstr "خروجی: %1"
+
+#~ msgid "Recursive make-call failed"
+#~ msgstr "خرابی فراخوانی بازگشتی make"
+
+#~ msgid "Recursive make-call malformed"
+#~ msgstr "فراخوانی بازگشتی make بدشکل"
+
+#~ msgid "Output was: %1"
+#~ msgstr "خروجی این بود: %1"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Preprocessed body:"
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "Declarations:"
+#~ msgstr "&توصیف:"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "Directory %1"
+#~ msgstr "فهرست راهنما:"
+
+#, fuzzy
+#~| msgid "Ada support"
+#~ msgid "C++ Support"
+#~ msgstr "پشتیبانی آدا"
+
+#, fuzzy
+#~| msgid "Files:"
+#~ msgid "Files"
+#~ msgstr "پرونده‌ها:"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create &New Class"
+#~ msgstr "ایجاد پروژه جدید"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Building uses"
+#~ msgstr "&نوع ساختن:‌"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Formals: %1"
+#~ msgstr "برگه"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "invalid input: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "&Generator:"
+#~ msgid "Generate Stub Class"
+#~ msgstr "&مولد:‌"
+
+#, fuzzy
+#~| msgid "&Generator:"
+#~ msgid "Generate Stub"
+#~ msgstr "&مولد:‌"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgid "Implement"
+#~ msgstr "توضیح"
+
+#~ msgid "Add"
+#~ msgstr "افزودن"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Test executable crashed."
+#~ msgstr "اجرایی ایجاد:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Test root."
+#~ msgstr "نام"
+
+#, fuzzy
+#~| msgid "Add Profile"
+#~ msgid "profile"
+#~ msgstr "افزودن گزارش"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest verbose output"
+#~ msgstr "نام"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Test executable timed out."
+#~ msgstr "اجرایی ایجاد:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest test"
+#~ msgstr "نام"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Class name:"
+#~ msgstr "رده"
+
+#~ msgid "Search"
+#~ msgstr "جستجو"
+
+#, fuzzy
+#~| msgid "Find in Fi&les..."
+#~ msgid "Find In Files"
+#~ msgstr "یافتن در &پرونده‌ها‌..."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Find in Fi&les..."
+#~ msgid "Find in Files"
+#~ msgstr "یافتن در &پرونده‌ها‌..."
+
+#, fuzzy
+#~| msgid "Profile to load"
+#~ msgid "Process failed to start."
+#~ msgstr "گزارش برای بارگذاری"
+
+#, fuzzy
+#~| msgid "make-process failed"
+#~ msgid "Process crashed."
+#~ msgstr "خرابی فرآیند mak"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Process timed out."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#~ msgid "Find in Fi&les..."
+#~ msgstr "یافتن در &پرونده‌ها‌..."
+
+#~ msgid "Create New Project"
+#~ msgstr "ایجاد پروژه جدید"
+
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "عمومی"
+
+#, fuzzy
+#~| msgid "Version %1"
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "نسخه %1"
+
+#, fuzzy
+#~| msgid "Project to load"
+#~ msgid "Project Wizard"
+#~ msgstr "پروژه برای بارگذاری"
+
+#~ msgid "Generate a new project from a template"
+#~ msgstr "تولید پروژه‌ای جدید از یک قالب"
+
+#~ msgid ""
+#~ "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
+#~ "you to generate a skeleton for your application from a set of templates.</"
+#~ "p>"
+#~ msgstr ""
+#~ "<b>پروژه جدید</b><p>جادوگر کاربرد، KDevelop را آغاز می‌کند. به شما کمک "
+#~ "می‌کند که اسکلتی از یک مجموعه از قالبها برای برگه کاربردتان تولید کنید.</p>"
+
+#, fuzzy
+#~| msgid "&Open Project..."
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&باز کردن پروژه...‌"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not import project into"
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not checkout imported project"
+#~ msgstr "نتوانست پرونده پروژه را بخواند: %1"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not import project"
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Could not create new project"
+#~ msgstr "ایجاد پروژه جدید"
+
+#~ msgid "The file %1 cannot be created."
+#~ msgstr "پرونده %1 را نمی‌توان ایجاد کرد."
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Project import error"
+#~ msgstr "قالبهای پروژه"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Invalid Location"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Project loaded."
+#~ msgid "Empty project name"
+#~ msgstr "پروژه بارگذاری شد."
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid project name"
+#~ msgstr "قالبهای پروژه"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid Project Template"
+#~ msgstr "قالبهای پروژه"
+
+#~ msgid "Project Templates"
+#~ msgstr "قالبهای پروژه"
+
+#~ msgid "Document View"
+#~ msgstr "نمای سند"
+
+#~ msgid "Documents"
+#~ msgstr "اسناد"
+
+#, fuzzy
+#~| msgid "Disabled:"
+#~ msgid "Disabled"
+#~ msgstr "غیرفعال‌شده:"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Active"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "کد"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Internal error"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Invalid debugger command"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not run application"
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger status"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Disable Plugin"
+#~ msgid "Disassemble View"
+#~ msgstr "غیرفعال کردن وصله"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgid "Address"
+#~ msgstr "افزودن"
+
+#~ msgid "Function"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Instruction"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "نتوانست وصله زبان را برای %1 ایجاد کند."
+
+#, fuzzy
+#~| msgid "KCachegrind Not Found"
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "KCachegrind یافت نشد"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Internal debugger error"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not start debugger"
+#~ msgstr "نتوانست وصله زبان را برای %1 ایجاد کند."
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#~ msgid "Edit"
+#~ msgstr "ویرایش"
+
+#, fuzzy
+#~| msgid "Disabled:"
+#~ msgid "Disable"
+#~ msgstr "غیرفعال‌شده:"
+
+#, fuzzy
+#~| msgid "Disable Plugin"
+#~ msgid "Disable all"
+#~ msgstr "غیرفعال کردن وصله"
+
+#, fuzzy
+#~| msgid "Enable Plugin"
+#~ msgid "Enable all"
+#~ msgstr "فعال‌سازی وصله"
+
+#, fuzzy
+#~| msgid "Disable Plugin"
+#~ msgid "Delete all"
+#~ msgstr "غیرفعال کردن وصله"
+
+#, fuzzy
+#~| msgid "Enabled:"
+#~ msgid "Enable"
+#~ msgstr "فعال‌شده:"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy All"
+#~ msgstr "مقدار"
+
+#, fuzzy
+#~| msgid "Core"
+#~ msgid "Ignore"
+#~ msgstr "هسته"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Watches"
+#~ msgstr "کژنه‌ها"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger Variables"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Remove All"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Re-evaluate All"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Format"
+#~ msgstr "برگه"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "Binary"
+#~ msgstr "دودویی CMake:"
+
+#, fuzzy
+#~| msgid "Remove Profile"
+#~ msgid "Remove Watch Variable"
+#~ msgstr "حذف گزارش"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgid "Watch Variable"
+#~ msgstr "مقدار"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Reevaluate Expression"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy Value"
+#~ msgstr "مقدار"
+
+#, fuzzy
+#~| msgid "(invalid)"
+#~ msgid "Invalid"
+#~ msgstr ")نامعتبر("
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Watchpoint"
+#~ msgstr "کژنه‌ها"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Special debugger views"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Breakpoint"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Enabled:"
+#~ msgid "Enabled"
+#~ msgstr "فعال‌شده:"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Location"
+#~ msgstr "محل:"
+
+#, fuzzy
+#~| msgid "Container: "
+#~ msgid "Condition"
+#~ msgstr "محتوی: "
+
+#, fuzzy
+#~| msgid "Core"
+#~ msgid "Ignore Count"
+#~ msgstr "هسته"
+
+#, fuzzy
+#~| msgid "creating"
+#~ msgid "Tracing"
+#~ msgstr "ایجاد"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame"
+#~ msgstr "نام"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "C++ Debugger"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Breakpoints"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgid "Variables"
+#~ msgstr "مقدار"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame Stack"
+#~ msgstr "نام"
+
+#, fuzzy
+#~| msgid "Disabled:"
+#~ msgid "Disassemble"
+#~ msgstr "غیرفعال‌شده:"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debug views"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Start in debugger"
+#~ msgstr "نتوانست وصله زبان را برای %1 ایجاد کند."
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Stop debugger"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Interrupt"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Interrupt application"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step over Ins&truction"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step over instruction"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step into I&nstruction"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step into instruction"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "Viewer"
+#~ msgid "Viewers"
+#~ msgstr "مشاهده‌گر"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger viewers"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Toggle breakpoint"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "Evaluate: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "Watch: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "Choose File to Add..."
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "انتخاب پرونده برای افزودن..."
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger stopped"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Container: "
+#~ msgid "&Continue"
+#~ msgstr "محتوی: "
+
+#, fuzzy
+#~| msgid "make-process failed"
+#~ msgid "Process exited"
+#~ msgstr "خرابی فرآیند mak"
+
+#~ msgid "Variable"
+#~ msgstr "مقدار"
+
+#~ msgid "Value"
+#~ msgstr "مقدار"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake Manager"
+#~ msgstr "دودویی CMake:"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not save the change."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "نتوانست پرونده پروژه را بخواند: %1"
+
+#~ msgid "Name"
+#~ msgstr "نام"
+
+#~ msgid "Comment"
+#~ msgstr "توضیح"
+
+#, fuzzy
+#~| msgid "make-process failed"
+#~ msgid "CMake process killed"
+#~ msgstr "خرابی فرآیند mak"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Action"
+#~ msgstr "تابع"
+
+#~ msgid "Remove"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "دودویی CMake:"
+
+#~ msgid "Build &Target"
+#~ msgstr "ساختن  &هدف‌"
+
+#~ msgid "Build target"
+#~ msgstr "ساختن  هدف"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>ساختن هدف</b><p>دستور <b>make targetname</b> را از فهرست پروژه اجرا "
+#~ "می‌کند.(targetname، نام هدف برگزیده است).</p><p>متغیرهای محیطی و "
+#~ "نشانوندهای make، می‌توانند در محاوره تنظیمات پروژه، تب<b>گزینه‌های ساختن</"
+#~ "b> مشخص شوند.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "ساختن این پروژه"
+
+#~ msgid "Build this target"
+#~ msgstr "ساختن این هدف"
+
+#~ msgid "Build this directory"
+#~ msgstr "ساختن این فهرست راهنما"
+
+#~ msgid "Parse QMake project files"
+#~ msgstr "تجزیه پرونده‌های پروژه QMake"
+
+#~ msgid "Enable output of the debug AST"
+#~ msgstr "فعال‌سازی خروجی اشکال‌زدایی AST"
+
+#~ msgid "QMake project files"
+#~ msgstr "پرونده‌های پروژه QMake"
+
+#, fuzzy
+#~| msgid "QMake projectmanager"
+#~ msgid "QMake Manager"
+#~ msgstr "مدیر پروژه QMake"
+
+#~ msgid "freedesktop.org Desktop Entry Files"
+#~ msgstr "پرونده‌های مدخل رومیزی freedesktop.org"
+
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "تعاریف KDE XMLGUI"
+
+#~ msgid "Installed headers"
+#~ msgstr "سرآیندهای نصب‌شده"
+
+#~ msgid "Uninstalled headers"
+#~ msgstr "سرآیندهای نصب‌شده"
+
+#, fuzzy
+#~| msgid "Number of simultaneous jobs:"
+#~ msgid "Number of times visited."
+#~ msgstr "تعداد کارهای همزمان:"
+
+#, fuzzy
+#~| msgid "Core"
+#~ msgid "source"
+#~ msgstr "هسته"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "coverage"
+#~ msgstr "پشتیبانی ClearCase "
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "تابع"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Report"
+#~ msgstr "پشتیبانی ClearCase "
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Support"
+#~ msgstr "پشتیبانی ClearCase "
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake Builder"
+#~ msgstr "دودویی CMake:"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "CMake: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "QMake Binary:"
+#~ msgid "QMake Builder"
+#~ msgstr "دودویی QMake:"
+
+#, fuzzy
+#~| msgid "QMake project files"
+#~ msgid "No project specified."
+#~ msgstr "پرونده‌های پروژه QMake"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "QMake: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "Make Builder"
+#~ msgstr "دودویی CMake:"
+
+#~ msgid "compiling"
+#~ msgstr "ترجمه"
+
+#~ msgid "generating"
+#~ msgstr "تولید"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "پیوند"
+
+#~ msgid "built"
+#~ msgstr "ساخت"
+
+#~ msgid "installing"
+#~ msgstr "نصب"
+
+#~ msgid "creating"
+#~ msgstr "ایجاد"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "Make: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "نتوانست وصله زبان را برای %1 ایجاد کند."
+
+#~ msgid "Valgrind Output"
+#~ msgstr "خروجی Valgrind "
+
+#~ msgid ""
+#~ "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/"
+#~ ">use of uninitialized memory<br/>reading/writing memory after it has been "
+#~ "free'd<br/>reading/writing off the end of malloc'd blocks<br/>reading/"
+#~ "writing inappropriate areas on the stack<br/>memory leaks -- where "
+#~ "pointers to malloc'd blocks are lost forever<br/>passing of uninitialised "
+#~ "and/or unaddressable memory to system calls<br/>mismatched use of malloc/"
+#~ "new/new [] vs free/delete/delete []<br/>some abuses of the POSIX pthread "
+#~ "API.</p>"
+#~ msgstr ""
+#~ "<b>Valgrind</b><p>خروجی Valgrind را نمایش می‌دهد. Valgrind </br>استفاده از "
+#~ "حافظه مقداردهی نشده<br/>خواندن/نوشتن حافظه بعد از آزاد شدن آن<br/>خاموش "
+#~ "کردن خواندن/نوشتن در انتهای بلوکهای اختصاص داده شده<br/>خواندن/نوشتن "
+#~ "نواحی نامناسب روی پشته<br/>رخنه‌های حافظه -- در جایی که اشاره‌گرهای اختصاص "
+#~ "داده‌شده به بلوکها گم شده‌اند<br/>گذر حافظه مقداردهی‌نشده و/یا آدرس‌دهی‌نشده "
+#~ "برای فراخوانیهای سیستم<br/>استفاده غیر تطبیقی از malloc/new/new [] vs "
+#~ "free/delete/delete []<br/> برخی استفاده‌های نادرست از  POSIX pthread API "
+#~ "را تشخیص می‌دهد.</p>"
+
+#, fuzzy
+#~| msgid "Valgrind Not Found"
+#~ msgid "Valgrind"
+#~ msgstr "Valgrind یافت نشد"
+
+#~ msgid "&Valgrind Memory Leak Check"
+#~ msgstr "بررسی رخنه حافظه &Valgrind‌"
+
+#, fuzzy
+#~| msgid "Valgrind memory leak check"
+#~ msgid "Valgrind memory leak check and other tools"
+#~ msgstr "بررسی رخنه حافظه Valgrind"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you "
+#~| "find memory-management problems in your programs.</p>"
+#~ msgid ""
+#~ "<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you "
+#~ "find memory-management problems in your programs, and other valgrind "
+#~ "tools.</p>"
+#~ msgstr ""
+#~ "<b>بررسی رخنه حافظه Valgrind</b><p>Valgrind را اجرا می‌کند - ابزاری که به "
+#~ "شما کمک می‌کند تا مسائل مدیریت حافظه را در برنامه‌هایتان بیابید.</p>"
+
+#~ msgid "Open Valgrind Output"
+#~ msgstr "باز کردن خروجی Valgrind"
+
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "نتوانست خروجی Valgrind را باز کند: %1"
+
+#, fuzzy
+#~| msgid "&Valgrind Memory Leak Check"
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "بررسی رخنه حافظه &Valgrind‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Valgrind Not Found"
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Valgrind یافت نشد"
+
+#, fuzzy
+#~| msgid "Valgrind Output"
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "خروجی Valgrind "
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind communication error"
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valgrind crashed."
+#~ msgstr "محل نهایی:‌"
+
+#, fuzzy
+#~| msgid "Valgrind Not Found"
+#~ msgid "Valgrind Error"
+#~ msgstr "Valgrind یافت نشد"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Valgrind process timed out."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "at: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "Value 1"
+#~ msgid "by: %1"
+#~ msgstr "مقدار ۱"
+
+#, fuzzy
+#~| msgid "Core"
+#~ msgid "Source"
+#~ msgstr "هسته"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Object"
+#~ msgstr "پروژه "
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a valid project file.\n"
+#~| "XML error in line %1, column %2:\n"
+#~| "%3"
+#~ msgid "Valgrind XML Parsing: error at line %1, column %2: %3"
+#~ msgstr ""
+#~ "این یک پرونده پروژه معتبر نیست.\n"
+#~ "خطای XML در خط %1، ستون %2:\n"
+#~ "%3"
+
+#, fuzzy
+#~| msgid "Designer code"
+#~ msgid "Qt Designer"
+#~ msgstr "کد طراح"
+
+#~ msgid "Widget Box"
+#~ msgstr "جعبه عنصر"
+
+#~ msgid "Property Editor"
+#~ msgstr "ویرایشگر ویژگی"
+
+#~ msgid "Action Editor"
+#~ msgstr "ویرایشگر کنش"
+
+#~ msgid "Object Inspector"
+#~ msgstr "بازرس شیء"
+
+#, fuzzy
+#~| msgid "Documents"
+#~ msgid "Close Document"
+#~ msgstr "اسناد"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Protected"
+#~ msgstr "پروژه "
+
+#, fuzzy
+#~| msgid "Project &Options"
+#~ msgid "C++ Options"
+#~ msgstr "&گزینه‌های پروژه‌"
+
+#, fuzzy
+#~| msgid "Enable Plugin"
+#~ msgid "Enable tracing"
+#~ msgstr "فعال‌سازی وصله"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgid "Command"
+#~ msgstr "توضیح"
+
+#, fuzzy
+#~| msgid "Designer Layout Toolbar"
+#~ msgid "Debugger Toolbar"
+#~ msgstr "میله ابزار طرح‌بندی طراح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger Configuration"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Debugger executable:"
+#~ msgstr "اجرایی ایجاد:"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Gdb executable"
+#~ msgstr "اجرایی ایجاد:"
+
+#, fuzzy
+#~| msgid "Project &Options"
+#~ msgid "Options"
+#~ msgstr "&گزینه‌های پروژه‌"
+
+#~ msgid "Profile Editor for The KDevelop Platform"
+#~ msgstr "ویرایشگر گزارش برای سکوی  KDevelop"
+
+#~ msgid "Add Profile"
+#~ msgstr "افزودن گزارش"
+
+#~ msgid "Description"
+#~ msgstr "توصیف"
+
+#~ msgid "Properties"
+#~ msgstr "ویژگیها"
+
+#~ msgid "Derived properties:"
+#~ msgstr "ویژگیهای مشتق‌شده:"
+
+#~ msgid "Own properties:"
+#~ msgstr "ویژگیهای شخصی:"
+
+#~ msgid "Lists of Explicitly Enabled && Disabled Plugins"
+#~ msgstr "فهرستهایی از وصله‌های صریحاً فعا‌ل‌شده و غیرفعال‌شده"
+
+#~ msgid "Enabled:"
+#~ msgstr "فعال‌شده:"
+
+#~ msgid "Plugin Name"
+#~ msgstr "نام وصله"
+
+#~ msgid "Disabled:"
+#~ msgstr "غیرفعال‌شده:"
+
+#~ msgid "Available plugins:"
+#~ msgstr "وصله‌های در دسترس:"
+
+#~ msgid "Generic Name"
+#~ msgstr "نام عمومی"
+
+#~ msgid "List of Plugins to Be Loaded"
+#~ msgstr "فهرست وصله‌هایی که باید بارگذاری شوند"
+
+#~ msgid "&Name:"
+#~ msgstr "&نام:"
+
+#~ msgid "&Generic name:"
+#~ msgstr "نام &عمومی:‌"
+
+#~ msgid "&Description:"
+#~ msgstr "&توصیف:"
+
+#, fuzzy
+#~| msgid "Build &directory:"
+#~ msgid "Build Directory Creator"
+#~ msgstr "&فهرست راهنمای ساختن:‌"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake &Binary:"
+#~ msgstr "دودویی CMake:"
+
+#, fuzzy
+#~| msgid "Build &directory:"
+#~ msgid "&Build Directory:"
+#~ msgstr "&فهرست راهنمای ساختن:‌"
+
+#, fuzzy
+#~| msgid "Installation &Prefix:"
+#~ msgid "&Installation Prefix:"
+#~ msgstr "&پیشوند نصب:‌"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Build &type:"
+#~ msgstr "&نوع ساختن:‌"
+
+#~ msgid "debug"
+#~ msgstr "اشکال‌زدایی"
+
+#, fuzzy
+#~| msgid "&Generator:"
+#~ msgid "Generator:"
+#~ msgstr "&مولد:‌"
+
+#~ msgid "Cache Values"
+#~ msgstr "مقادیر نهانگاه"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "CMake Directory"
+#~ msgstr "فهرست راهنما:"
+
+#~ msgid "Viewer"
+#~ msgstr "مشاهده‌گر"
+
+#~ msgid "Parse Tree"
+#~ msgstr "درخت تجزیه"
+
+#~ msgid "Value 1"
+#~ msgstr "مقدار ۱"
+
+#~ msgid "Value 2"
+#~ msgstr "مقدار ۲"
+
+#~ msgid "Source to Be Written Back"
+#~ msgstr "منبع باید پاسخ داده شود"
+
+#~ msgid "Add All From Directory"
+#~ msgstr "افزودن همه بر اساس فهرست"
+
+#~ msgid "Choose File to Add..."
+#~ msgstr "انتخاب پرونده برای افزودن..."
+
+#~ msgid "CMake Binary:"
+#~ msgstr "دودویی CMake:"
+
+#~ msgid "QMake Binary:"
+#~ msgstr "دودویی QMake:"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "View"
+#~ msgstr "&نما‌"
+
+#~ msgid "Abort on first error:"
+#~ msgstr "ساقط کردن هنگام اولین خطا:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Display commands but do not\n"
+#~| "execute them:"
+#~ msgid "Display commands but do not execute them:"
+#~ msgstr ""
+#~ "نمایش فرمانها بدون\n"
+#~ "اجرای آنها‌:"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "اجرای بیش از یک کار در یک لحظه:"
+
+#~ msgid "Number of simultaneous jobs:"
+#~ msgstr "تعداد کارهای همزمان:"
+
+#~ msgid "Make executable:"
+#~ msgstr "اجرایی ایجاد:"
+
+#~ msgid "Default make target:"
+#~ msgstr "هدف ایجاد پیش‌فرض:"
+
+#~ msgid "Additional make options:"
+#~ msgstr "گزینه‌های ایجاد اضافی:‌"
+
+#~ msgid "Pattern:"
+#~ msgstr "الگو:"
+
+#~ msgid "Template:"
+#~ msgstr "قالب:"
+
+#~ msgid "Directory:"
+#~ msgstr "فهرست راهنما:"
+
+#~ msgid "Limit to project files:"
+#~ msgstr "محدود به پرونده‌های پروژه:"
+
+#~ msgid "Files:"
+#~ msgstr "پرونده‌ها:"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory:"
+#~ msgstr "فهرست راهنما:"
+
+#, fuzzy
+#~| msgid "Project loaded."
+#~ msgid "Project &name:"
+#~ msgstr "پروژه بارگذاری شد."
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "&Build System:"
+#~ msgstr "&نوع ساختن:‌"
+
+#~ msgid "Location:"
+#~ msgstr "محل:"
+
+#~ msgid "Application Name:"
+#~ msgstr "نام کاربرد:"
+
+#~ msgid "(invalid)"
+#~ msgstr ")نامعتبر("
+
+#, fuzzy
+#~| msgid "generating"
+#~ msgid "Indentation"
+#~ msgstr "تولید"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Spaces"
+#~ msgstr "کژنه‌ها"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Cases"
+#~ msgstr "رده"
+
+#~ msgid "Class"
+#~ msgstr "رده"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Switches"
+#~ msgstr "کژنه‌ها"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Break"
+#~ msgstr "پایانه اشکال‌زدا"
+
+#~ msgid "&Executable:"
+#~ msgstr "&اجرایی:‌"
+
+#, fuzzy
+#~| msgid "&Parameters:"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "&پارامترها:"
+
+#, fuzzy
+#~| msgid "&Show still reachable blocks"
+#~ msgid "Show Reachable Blocks"
+#~ msgstr "باز هم بلوکهای قابل دسترس &نمایش داده شوند‌"
+
+#, fuzzy
+#~| msgid "Cached: "
+#~ msgid "&Cachegrind"
+#~ msgstr "نهان‌شده: "
+
+#, fuzzy
+#~| msgid "Cached: "
+#~ msgid "&Helgrind"
+#~ msgstr "نهان‌شده: "
+
+#~ msgid "&Parameters:"
+#~ msgstr "&پارامترها:"
+
+#~ msgid "&Trace children"
+#~ msgstr "&ردیابی فرزند‌ان‌"
+
+#~ msgid "E&xecutable:"
+#~ msgstr "&اجرایی:‌"
+
+#~ msgid "Additional p&arameters:"
+#~ msgstr "&پارامترهای اضافی:‌"
+
+#~ msgid "Executable:"
+#~ msgstr "اجرایی:"
+
+#~ msgid "Memory &leak check"
+#~ msgstr "بررسی &رخنه حافظه‌"
+
+#~ msgid "&Show still reachable blocks"
+#~ msgstr "باز هم بلوکهای قابل دسترس &نمایش داده شوند‌"
+
+#, fuzzy
+#~| msgid "F&orm"
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "&برگه‌"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "میله ابزار طرح‌بندی طراح"
+
+#~ msgid "Core"
+#~ msgstr "هسته"
+
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "سراسری"
+
+#~ msgid "Project"
+#~ msgstr "پروژه "
+
+#~ msgid "Core Plugins"
+#~ msgstr "وصله‌های هسته"
+
+#~ msgid "Global Plugins"
+#~ msgstr "وصله‌های سراسری"
+
+#~ msgid "Project Plugins"
+#~ msgstr "وصله‌های پروژه"
+
+#~ msgid "Remove selected profile and all its subprofiles?"
+#~ msgstr "گزارش برگزیده و همه زیرگزارشهایش حذف شود؟"
+
+#~ msgid ""
+#~ "Cannot remove this profile because it is not a local (user-created) "
+#~ "profile."
+#~ msgstr ""
+#~ "نمی‌تواند این گزارش را حذف کند، به این خاطر که گزارش محلی نیست )ایجادشده "
+#~ "توسط کاربر(."
+
+#~ msgid "This plugin is already contained in the list of disabled plugins."
+#~ msgstr "این وصله اکنون در فهرست وصله‌های غیرفعال‌شده است."
+
+#~ msgid "Enable Plugin"
+#~ msgstr "فعال‌سازی وصله"
+
+#~ msgid "This plugin is already contained in the list of enabled plugins."
+#~ msgstr "این وصله اکنون در فهرست وصله‌های فعال‌ شده است."
+
+#~ msgid "Disable Plugin"
+#~ msgstr "غیرفعال کردن وصله"
+
+#~ msgid ""
+#~ "The file %1 does not contain valid XML.\n"
+#~ "The loading of the session failed."
+#~ msgstr ""
+#~ "پرونده %1 شامل XML معتبر نیست.\n"
+#~ "خرابی در بارگذاری نشست."
+
+#~ msgid ""
+#~ "The file %1 does not contain a valid KDevelop project session "
+#~ "('KDevPrjSession').\n"
+#~ msgstr ""
+#~ "پرونده %1 شامل یک نشست پروژه KDevelop معتبر نیست )'KDevPrjSession'(.\n"
+
+#~ msgid "The document type seems to be: '%1'."
+#~ msgstr "به نظر می‌رسد نوع سند: »%1« باشد."
+
+#~ msgid "&Open Project..."
+#~ msgstr "&باز کردن پروژه...‌"
+
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr ""
+#~ "<b>باز کردن پروژه</b><p>یک پروژه KDevelop3 یا KDevelop2 باز می‌کند.</p>"
+
+#~ msgid "Open recent project"
+#~ msgstr "باز کردن پروژه اخیر"
+
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr "<b>باز کردن پروژه اخیر</b><p>پروژه اخیراً بازشده را باز می‌کند.</p>"
+
+#~ msgid "C&lose Project"
+#~ msgstr "&بستن پروژه‌"
+
+#~ msgid "Close project"
+#~ msgstr "بستن پروژه‌"
+
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "<b>بستن پروژه</b><p>پروژه جاری را می‌بندد.</p>"
+
+#~ msgid "Project &Options"
+#~ msgstr "&گزینه‌های پروژه‌"
+
+#~ msgid "<b>Project options</b><p>Lets you customize project options.</p>"
+#~ msgstr ""
+#~ "<b>گزینه‌های پروژه</b><p>به شما اجازه سفارشی کردن گزینه‌های پروژه را می‌دهد."
+#~ "</p>"
+
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr "*.kdevelop|پرونده‌های پروژه KDevelop 3\n"
+
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "مطمئنید می‌خواهید پروژه جاری را دوباره باز کنید؟"
+
+#~ msgid "Changing plugin profile..."
+#~ msgstr "در حال تغییر گزارش وصله..."
+
+#~ msgid "Loading project plugins..."
+#~ msgstr "در حال بارگذاری وصله‌های پروژه..."
+
+#~ msgid "error during restoring of the KDevelop session"
+#~ msgstr "خطا هنگام بازگرداندن نشست KDevelop"
+
+#~ msgid "Project loaded."
+#~ msgstr "پروژه بارگذاری شد."
+
+#~ msgid ""
+#~ "This is not a valid project file.\n"
+#~ "XML error in line %1, column %2:\n"
+#~ "%3"
+#~ msgstr ""
+#~ "این یک پرونده پروژه معتبر نیست.\n"
+#~ "خطای XML در خط %1، ستون %2:\n"
+#~ "%3"
+
+#~ msgid "This is not a valid project file."
+#~ msgstr "این یک پرونده پروژه معتبر نیست."
+
+#~ msgid "Could not write the project file."
+#~ msgstr "نتوانست پرونده پروژه را بنویسد."
+
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "وصله مدیریت پروژه %1 یافت نشد."
+
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "نتوانست وصله مدیریت پروژه %1 را ایجاد کند."
+
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "وصله زبانی برای %1 پیدا نشد."
+
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "نتوانست وصله زبان را برای %1 ایجاد کند."
+
+#, fuzzy
+#~| msgid "F&orm"
+#~ msgid "Form"
+#~ msgstr "&برگه‌"
+
+#, fuzzy
+#~| msgid "Final Location:"
+#~ msgid "Valid Location"
+#~ msgstr "محل نهایی:‌"
+
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "ناشناخته"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "Forward Declaration"
+#~ msgstr "&توصیف:"
+
+#, fuzzy
+#~| msgid "&Generator:"
+#~ msgid "enumerator"
+#~ msgstr "&مولد:‌"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "&توصیف:"
+
+#~ msgid "Container: "
+#~ msgstr "محتوی: "
+
+#~ msgid "Scope: "
+#~ msgstr "دامنه: "
+
+#~ msgid "Access: "
+#~ msgstr "دستیابی: "
+
+#~ msgid "Kind: "
+#~ msgstr "نوع: "
+
+#~ msgid "Modifiers: "
+#~ msgstr "تغییردهنده‌ها: "
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "File Name"
+#~ msgstr "نام"
+
+#~ msgid "Maintainer"
+#~ msgstr "نگه‌دارنده"
+
+#, fuzzy
+#~| msgid "Are you sure you want to reopen the current project?"
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "مطمئنید می‌خواهید پروژه جاری را دوباره باز کنید؟"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "E&xit"
+#~ msgstr "ویرایش"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings..."
+#~ msgstr "&تنظیمات‌"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Toolbars"
+#~ msgstr "&ابزارها‌"
+
+#, fuzzy
+#~| msgid "Designer Layout Toolbar"
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "میله ابزار طرح‌بندی طراح"
+
+#, fuzzy
+#~| msgid "Access: "
+#~ msgid "Success"
+#~ msgstr "دستیابی: "
+
+#, fuzzy
+#~| msgid "Project &Options"
+#~ msgid "Exceptions"
+#~ msgstr "&گزینه‌های پروژه‌"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgid "Close"
+#~ msgstr "کد"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Failed to comply."
+#~ msgstr "پرونده‌ها برای بارگذاری"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory"
+#~ msgstr "فهرست راهنما:"
+
+#, fuzzy
+#~| msgid "Bu&ild"
+#~ msgid "Build"
+#~ msgstr "&ساختن‌"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "پروژه "
+
+#~ msgid "&Build"
+#~ msgstr "&ساختن‌"
+
+#~ msgid "F&orm"
+#~ msgstr "&برگه‌"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "&Watch"
+#~ msgstr "کژنه‌ها"
+
+#~ msgid "Build Toolbar"
+#~ msgstr "میله ابزار ساختن"
+
+#~ msgid "Browser Toolbar"
+#~ msgstr "میله ابزار مرورگر"
+
+#~ msgid "Extra Toolbar"
+#~ msgstr "میله ابزار اضافی"
+
+#, fuzzy
+#~| msgid "Build this directory"
+#~ msgid "No such file or directory."
+#~ msgstr "ساختن این فهرست راهنما"
+
+#~ msgid ""
+#~ "Could not find valgrind in your $PATH. Please make sure it is installed "
+#~ "properly."
+#~ msgstr ""
+#~ "نتوانست Valgrind را در $PATH شما بیابد. لطفاً، مطمئن شوید که صحیح نصب شده "
+#~ "باشد."
+
+#~ msgid ""
+#~ "Could not find calltree in your $PATH. Please make sure it is installed "
+#~ "properly."
+#~ msgstr ""
+#~ "نتوانست calltree را در $PATH شما بیابد. لطفاً، مطمئن شوید که به درستی نصب "
+#~ "شده است."
+
+#~ msgid "Calltree Not Found"
+#~ msgstr "Calltree یافت نشد"
+
+#~ msgid ""
+#~ "Could not find kcachegrind in your $PATH. Please make sure it is "
+#~ "installed properly."
+#~ msgstr ""
+#~ "نتوانست kcachegrind را در $PATH شما بیابد. لطفاً، مطمئن شوید که به درستی "
+#~ "نصب شده است."
+
+#~ msgid "KCachegrind Not Found"
+#~ msgstr "KCachegrind یافت نشد"
+
+#~ msgid "P&rofile with KCachegrind"
+#~ msgstr "&گزارش با KCachegrind‌"
+
+#~ msgid "Profile with KCachegrind"
+#~ msgstr "گزارش با KCachegrind"
+
+#~ msgid ""
+#~ "<b>Profile with KCachegrind</b><p>Runs your program in calltree and then "
+#~ "displays profiler information in KCachegrind.</p>"
+#~ msgstr ""
+#~ "<b>گزارش با KCachegrind</b><p>برنامه‌تان را در calltree اجرا و سپس اطلاعات "
+#~ "گزارشگر را در KCachegrind نمایش می‌دهد.</p>"
+
+#~ msgid "There is already an instance of valgrind running."
+#~ msgstr "اکنون نمونه‌ای از valgrind در حال اجراست."
+
+#, fuzzy
+#~| msgid "Project loaded."
+#~ msgid "Project file already exists."
+#~ msgstr "پروژه بارگذاری شد."
+
+#, fuzzy
+#~| msgid "Build this project"
+#~ msgid "Rebuild the project?"
+#~ msgstr "ساختن این پروژه"
+
+#~ msgid "Code View"
+#~ msgstr "نمای کد"
+
+#~ msgid "No active language part loaded!"
+#~ msgstr "هیچ جزء زبان فعالی بار نشد!"
+
+#~ msgid "Mode"
+#~ msgstr "حالت"
+
+#~ msgctxt "Current View"
+#~ msgid "&Current"
+#~ msgstr "&جاری‌"
+
+#~ msgctxt "Normalize View"
+#~ msgid "&Normalize"
+#~ msgstr "&نرمال‌سازی‌"
+
+#~ msgctxt "Aggregate View"
+#~ msgid "&Aggregate"
+#~ msgstr "&انبوهه‌"
+
+#~ msgid "Filter"
+#~ msgstr "پالایه"
+
+#, fuzzy
+#~| msgid "&CMake binary:"
+#~ msgid "CMake binary:"
+#~ msgstr "دودویی &CMake:"

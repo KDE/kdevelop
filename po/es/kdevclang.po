@@ -1,0 +1,415 @@
+# Spanish translations for kdevclang.po package.
+# Copyright (C) 2016 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Automatically generated, 2016.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2016, 2017, 2018, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclang\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-16 00:46+0000\n"
+"PO-Revision-Date: 2020-07-20 17:06+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Helpers"
+msgstr "Asistentes de C/C++"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure C/C++ Helpers"
+msgstr "Configurar los asistentes de C/C++"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: clangsettings/sessionsettings/sessionsettings.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "Terminación de código"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"If disabled, macros will not be included in the code completion results. "
+"This can improve the responsiveness of code completion in some cases."
+msgstr ""
+"Si está desactivada, las macros no se añadirán a los resultados de "
+"terminación de código. Esto puede mejorar el rendimiento de la terminación "
+"de código en algunos casos."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:38
+#, kde-format
+msgctxt "@option:check"
+msgid "Add macros to code completion"
+msgstr "Añadir macros a la terminación de código"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
+#: clangsettings/sessionsettings/sessionsettings.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable Look-ahead code completion"
+msgstr "Activar terminación de código anticipada"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: clangsettings/sessionsettings/sessionsettings.ui:64
+#, kde-format
+msgctxt "@title:group"
+msgid "Assistants"
+msgstr "Asistentes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
+#: clangsettings/sessionsettings/sessionsettings.ui:70
+#, kde-format
+msgctxt "@option:check"
+msgid "Forward declare assistant"
+msgstr "Asistente de declaración aplazada"
+
+#: clangsupport.cpp:171
+#, kde-format
+msgid ""
+"The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
+"Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix "
+"this.\n"
+"See also: https://bugs.kde.org/show_bug.cgi?id=393779"
+msgstr ""
+"La ruta de inclusión integrada de clang «%1» no es válida (falta el archivo "
+"de cabecera cpuid.h).\n"
+"Pruebe a definir la variable de entorno KDEV_CLANG_BUILTIN_DIR de forma "
+"manual para corregir este problema.\n"
+"Consulte también: https://bugs.kde.org/show_bug.cgi?id=393779"
+
+#: clangsupport.cpp:278
+#, kde-format
+msgctxt "@action"
+msgid "Rename Declaration"
+msgstr "Cambiar nombre de declaración"
+
+#: clangsupport.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Move into Source"
+msgstr "Mover en el código fuente"
+
+#: codecompletion/context.cpp:145
+#, kde-format
+msgid "Override %1"
+msgstr "Redefinir %1"
+
+#: codecompletion/context.cpp:342
+#, kde-format
+msgid "Implement %1"
+msgstr "Implementar %1"
+
+#: codecompletion/context.cpp:1305
+#, kde-format
+msgid "Special"
+msgstr "Especial"
+
+#: codecompletion/context.cpp:1306
+#, kde-format
+msgid "Look-ahead Matches"
+msgstr "Anticipar coincidencias"
+
+#: codecompletion/context.cpp:1307
+#, kde-format
+msgid "Builtin"
+msgstr "Integrado"
+
+#: codecompletion/context.cpp:1308
+#, kde-format
+msgid "Macros"
+msgstr "Macros"
+
+#: codecompletion/context.cpp:1351
+#, kde-format
+msgid "Abstract Override"
+msgstr "Redefinición abstracta"
+
+#: codecompletion/context.cpp:1352
+#, kde-format
+msgid "Virtual Override"
+msgstr "Redefinición virtual"
+
+#: codecompletion/context.cpp:1367
+#, kde-format
+msgid "Implement Function"
+msgstr "Implementar función"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update declaration signature"
+msgstr "Actualizar firma de declaración"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update definition signature"
+msgstr "Actualizar firma de definición"
+
+#: codegen/adaptsignatureaction.cpp:62
+#, kde-format
+msgid ""
+"Update declaration signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"Actualizar la firma de la declaración\n"
+"de: %1\n"
+"a: %2"
+
+#: codegen/adaptsignatureaction.cpp:63
+#, kde-format
+msgid ""
+"Update definition signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"Actualizar la firma de la definición\n"
+"de: %1\n"
+"a: %2"
+
+#: codegen/adaptsignatureaction.cpp:113
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "No ha sido posible aplicar los cambios: %1"
+
+#: codegen/adaptsignatureassistant.cpp:76
+#, kde-format
+msgid "Adapt Signature"
+msgstr "Adaptar firma"
+
+#: codegen/clangrefactoring.cpp:82
+#, kde-format
+msgctxt "@action"
+msgid "Rename %1"
+msgstr "Cambiar nombre de %1"
+
+#: codegen/clangrefactoring.cpp:94
+#, kde-format
+msgid "Create separate definition for %1"
+msgstr "Crear definición separada para %1"
+
+#: codegen/clangrefactoring.cpp:137
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "Ninguna declaración bajo el cursor"
+
+#: codegen/clangrefactoring.cpp:145
+#, kde-format
+msgid "No source file available for %1."
+msgstr "No hay ningún archivo de código fuente disponible para %1."
+
+#: codegen/clangrefactoring.cpp:157
+#, kde-format
+msgid "Failed to update DUChain for %1."
+msgstr "No se ha podido actualizar la DUChain para %1."
+
+#: codegen/clangrefactoring.cpp:161
+#, kde-format
+msgid "Declaration lost while updating."
+msgstr "Declaración perdida durante la actualización."
+
+#: codegen/clangrefactoring.cpp:167
+#, kde-format
+msgid "Cannot create definition for this declaration."
+msgstr "No se puede crear la definición para esta declaración."
+
+#: codegen/clangrefactoring.cpp:174
+#, kde-format
+msgid "No document for %1"
+msgstr "No hay ningún documento para %1"
+
+#: codegen/clangrefactoring.cpp:205
+#, kde-format
+msgid "Insertion failed"
+msgstr "No se ha podido insertar"
+
+#: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
+#, kde-format
+msgid "Applying changes failed: %1"
+msgstr "No ha sido posible aplicar los cambios: %1"
+
+#: duchain/clangproblem.cpp:204
+#, kde-format
+msgid "Fix-it Hints"
+msgstr "Sugerencias «Fix-it»"
+
+#: duchain/clangproblem.cpp:246
+#, kde-format
+msgid "Insert \"%1\" at line: %2, column: %3"
+msgstr "Insertar «%1» en la línea: %2, columna: %3"
+
+#: duchain/clangproblem.cpp:250
+#, kde-format
+msgid "Replace text at line: %1, column: %2 with: \"%3\""
+msgstr "Sustituir el texto de la línea: %1, columna: %2 con: «%3»"
+
+#: duchain/clangproblem.cpp:253
+#, kde-format
+msgid "Replace \"%1\" with: \"%2\""
+msgstr "Sustituir «%1» con: «%2»"
+
+#: duchain/clangproblem.cpp:256
+#, kde-format
+msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
+msgstr ""
+"Sustituir múltiples líneas que empiezan en la línea: %1, columna: %2 con: "
+"«%3»"
+
+#: duchain/headerguardassistant.cpp:45
+#, kde-format
+msgid "Add #pragma once"
+msgstr "Añadir #pragma once"
+
+#: duchain/headerguardassistant.cpp:46
+#, kde-format
+msgid "Add macro-based #ifndef/#define/#endif header guard"
+msgstr ""
+"Añadir una protección de cabecera basada en las macros #ifndef/#define/#endif"
+
+#: duchain/macrodefinition.cpp:112
+#, kde-format
+msgid "Macro %1"
+msgstr "Macro %1"
+
+#: duchain/macronavigationcontext.cpp:55
+#, kde-format
+msgctxt ""
+"%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
+"arguments"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Function macro"
+msgstr "Macro de función"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Macro"
+msgstr "Macro"
+
+#: duchain/macronavigationcontext.cpp:59
+#, kde-format
+msgctxt "%1: the link to the definition"
+msgid "Defined in: %1"
+msgstr "Definida en: %1"
+
+#: duchain/macronavigationcontext.cpp:63
+#, kde-format
+msgid "Show uses"
+msgstr "Mostrar usos"
+
+#: duchain/macronavigationcontext.cpp:66
+#, kde-format
+msgid "Body: "
+msgstr "Cuerpo:"
+
+#: duchain/missingincludepathproblem.cpp:35
+#, kde-format
+msgid "Add Custom Include Path"
+msgstr "Añadir ruta de inclusión personalizada"
+
+#: duchain/missingincludepathproblem.cpp:58
+#, kde-format
+msgid "Open Project"
+msgstr "Abrir proyecto"
+
+#: duchain/parsesession.cpp:530
+#, kde-format
+msgid "Requested here: %1"
+msgstr "Solicitado aquí: %1"
+
+#: duchain/parsesession.cpp:571
+#, kde-format
+msgid "In included file: %1"
+msgstr "En el archivo incluido: %1"
+
+#: duchain/parsesession.cpp:594
+#, kde-format
+msgid "Header is not guarded against multiple inclusions"
+msgstr "La cabecera no está protegida contra inclusiones múltiples"
+
+#: duchain/parsesession.cpp:595
+#, kde-format
+msgid ""
+"The given header is not guarded against multiple inclusions, either with the "
+"conventional #ifndef/#define/#endif macro guards or with #pragma once."
+msgstr ""
+"La cabecera indicada no está protegida contra inclusiones múltiples, ya sea "
+"con las protecciones convencionales de las macros «#ifndef/#define/#endif», "
+"o con «#pragma once»."
+
+#: duchain/unknowndeclarationproblem.cpp:373
+#, kde-format
+msgid "Insert '%1'"
+msgstr "Insertar «%1»"
+
+#: duchain/unknowndeclarationproblem.cpp:433
+#, kde-format
+msgid "Forward declare as 'class'"
+msgstr "Declaración aplazada como «clase»"
+
+#: duchain/unknowndeclarationproblem.cpp:440
+#, kde-format
+msgid "Forward declare as 'struct'"
+msgstr "Declaración aplazada como «struct»"
+
+#: util/clangutils.cpp:189
+#, kde-format
+msgid "<parse error>"
+msgstr "<error de análisis>"
+
+#~ msgid "1 Byte"
+#~ msgid_plural "%1 Bytes"
+#~ msgstr[0] "1 byte"
+#~ msgstr[1] "%1 bytes"
+
+#~ msgid "1 Bit"
+#~ msgid_plural "%1 Bits"
+#~ msgstr[0] "1 bit"
+#~ msgstr[1] "%1 bits"
+
+#~ msgctxt "%1: bytes, %2: bits"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "<p>offset in parent: %1; size: %2 Bytes; aligned to: %3 Bytes</p>"
+#~ msgstr ""
+#~ "<p>desplazamiento en el padre: %1; tamaño: %2 bytes; alineado a: %3 "
+#~ "bytes</p>"
+
+#~ msgid "<p>size: %1 Bytes; aligned to: %2 Bytes</p>"
+#~ msgstr "<p>tamaño: %1 bytes; alineado a: %2 bytes</p>"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Code"
+#~ msgstr "Código"
+
+#, fuzzy
+#~| msgid "Clang Language Support"
+#~ msgid "C++ Language Support"
+#~ msgstr "Implementación del lenguaje Clang"
+
+#~ msgid "declaration"
+#~ msgstr "declaración"
+
+#~ msgid "definition"
+#~ msgstr "definición"
+
+#~ msgid "Form"
+#~ msgstr "Formulario"

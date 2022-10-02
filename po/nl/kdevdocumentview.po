@@ -1,0 +1,83 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2013, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-30 00:43+0000\n"
+"PO-Revision-Date: 2020-07-21 11:55+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: kdevdocumentview.cpp:64
+#, kde-format
+msgid "Documents"
+msgstr "Documenten"
+
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
+#, kde-format
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "Documenten"
+
+#: kdevdocumentview.cpp:211
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "Herladen"
+
+#: kdevdocumentview.cpp:217
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "Sluiten"
+
+#: kdevdocumentview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "Alle anderen sluiten"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Documentcategorieën (mimetypes) tonen in de weergave"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype."
+#~ msgstr ""
+#~ "Wanneer deze optie is geactiveerd, zal de docmentweergave documenten\n"
+#~ "        tonen geordend via hun mimetype."
+
+#~ msgctxt "@option:check"
+#~ msgid "Display document &categories"
+#~ msgstr "Document&categorieën tonen"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "Document View"
+#~ msgstr "Documentweergave"
+
+#~ msgid ""
+#~ "This plugin displays a graphical view of all documents currently loaded "
+#~ "and separates them by mimetype."
+#~ msgstr ""
+#~ "Deze plugin toont een grafische voorstelling van alle nu geladen "
+#~ "documenten en scheidt deze door het mimetype."
+
+#~ msgid "A list of opened documents"
+#~ msgstr "Een lijst van geopende documenten"

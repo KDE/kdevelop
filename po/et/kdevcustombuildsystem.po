@@ -1,0 +1,492 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2011, 2012, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-01-14 20:55+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: configwidget.cpp:25
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Ehitamine"
+
+#: configwidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Seadistamine"
+
+#: configwidget.cpp:27
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Paigaldamine"
+
+#: configwidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Puhastamine"
+
+#: configwidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Eemaldamine"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, fuzzy, kde-format
+#| msgid "Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Ehitamiskataloog:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the directory where the tools are being executed in.\n"
+#| "If this is the same as the source directory you can leave it empty."
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Vali kataloog, kus käivitatakse tööriistad.\n"
+"Kui see on sama lähtekoodi kataloogiga, võib jätta tühjaks."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, fuzzy, kde-format
+#| msgid "The directory where the tools are executed"
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "Kataloog, kus tööriistad käivitatakse"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, fuzzy, kde-format
+#| msgid "Build Tools"
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Ehitamistööriistad"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, fuzzy, kde-format
+#| msgid "Action:"
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Toiming:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, fuzzy, kde-format
+#| msgid "Enable:"
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Lubatud:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Täitmisfail:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is the executable that should be executed when selecting the action "
+#| "from the Project menu"
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"See on täitmisfail, mis käivitatakse, kui valida menüüst Projekt toiming"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumendid:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, fuzzy, kde-format
+#| msgid "The arguments that the tool needs to execute properly."
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "Argumendid, mida tööriist vajab korrektseks tööks."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Keskkond:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, fuzzy, kde-format
+#| msgid "Choose a pre-configured environment for your tool"
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Eelseadistatud keskkonna valimine tööriistale"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Ehitamine: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Puhastamine: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Paigaldamine: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Paigaldamine: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Seadistamine: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Eemaldamine: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Defineerimata ehitamistüüp"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr "Kohandatud %1 tööriistale projektis \"%2\" pole käsku antud."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "Kohandatud %1 tööriist projektis \"%2\" on keelatud"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"Määratud argumendid vajavad tõelist shelli, mis ei ole praegu toetatud."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Käsu käivitamine nurjus."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Käsku tabas krahh."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Tundmatu tõrge käsu käivitamisel."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Nurjus ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Lõpetatud ***"
+
+#: custombuildsystemconfig.cpp:14
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "build"
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "ehitamine"
+
+#: custombuildsystemconfig.cpp:15
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "configure"
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "seadistamine"
+
+#: custombuildsystemconfig.cpp:16
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "install"
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "paigaldamine"
+
+#: custombuildsystemconfig.cpp:17
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "clean"
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "puhastamine"
+
+#: custombuildsystemconfig.cpp:18
+#, fuzzy, kde-format
+#| msgctxt "Custom build tool"
+#| msgid "prune"
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "eemaldamine"
+
+#: custombuildsystemconfig.cpp:19
+#, fuzzy, kde-format
+#| msgid "unknown"
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "teadmata"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, fuzzy, kde-format
+#| msgid "Build configuration:"
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Ehitamisseadistus:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Lisa"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Eemalda"
+
+#: kcm_custombuildsystem.cpp:53
+#, fuzzy, kde-format
+#| msgid "Custom Build System"
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Kohandatud ehitamissüsteem"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"Projektide kohandatud ehitamistööriista ning keeletoetuseks vajalike päiste "
+"ja definitsioonide seadistamine."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "qiilaq69@gmail.com"
+
+#~ msgid "No command given"
+#~ msgstr "Käsku pole antud"
+
+#~ msgid "This command is disabled"
+#~ msgstr "See käsk on keelatud"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr "Kohandatud ehitamissüsteemide ehitamise ja haldamise toetus "
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Autoriõigus 2010: Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Asukohapõhised keeleparameetrid"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr ""
+#~ "Siin topeltklõpsu tehes saab sisestada uue definitsiooni asukohas "
+#~ "kasutamiseks"
+
+#~ msgid "Define"
+#~ msgstr "Definitsioon"
+
+#~ msgid "Value"
+#~ msgstr "Väärtus"
+
+#~ msgid "Delete Define"
+#~ msgstr "Kustuta definitsioon"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Kustuta kaasatute asukoht"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr "Kas tõesti eemaldada valitud päise asukoht \"%1\"?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Parajasti näidatava URL-i lisamine päiste loendisse, kui seda seal veel "
+#~ "ei ole."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr "Uus päise asukoht määratud kataloogi failide parsimiseks"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Uue päise asukoha kirje loomine URL-i põhjal."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Praeguse päise asukoha kirje kustutamine."
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr "Kas tõesti eemaldada asukoha \"%1\" seadistus?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Uue alamprojekti asukoha kirje lisamine."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Praegu valitud asukoha asendamine uuega, säilitades valitud asukohale "
+#~ "määratud päised ja definitsioonid."
+
+#~ msgid "Replace"
+#~ msgstr "Asenda"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Praeguse alamprojekti asukoha kirje kustutamine."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "Kaasatud/imporditud"
+
+#~ msgid "Defines"
+#~ msgstr "Definitsioonid"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Delete current include path entry.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Praeguse päise asukoha kirje kustutamine.</p></"
+#~ "body></html>"
+
+#~| msgid "Custom BuildSystem"
+#~ msgid "CustomBuildSystem Config Ui Test App"
+#~ msgstr "Kohandatud ehitamissüsteemi seadistuse UI testrakendus"
+
+#~ msgid "kcm_uitest"
+#~ msgstr "kcm_uitest"
+
+#~| msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgid "(C) 2012 Andreas Pakulat"
+#~ msgstr "(C) 2012: Andreas Pakulat"
+
+#~ msgid "Andreas Pakulat"
+#~ msgstr "Andreas Pakulat"
+
+#~ msgid "Delete Project Path"
+#~ msgstr "Kustuta projekti asukoht"
+
+#~ msgid "Includes/Imports and Defines for Project Directories/Files"
+#~ msgstr "Projekti kataloogide/failide kaasatud/imporditud ja definitsioonid"
+
+#~ msgid "Directories/Files:"
+#~ msgstr "Kataloogid/failid:"
+
+#~ msgid ""
+#~ "A list of paths specifying project directories or files, for which "
+#~ "includes and\n"
+#~ "defines should be set up. \"/\" denotes the top level project directory. "
+#~ "If the\n"
+#~ "path identifies a directory the includes/defines are active for that "
+#~ "directory\n"
+#~ "and all sub (and sub-sub)directories."
+#~ msgstr ""
+#~ "Asukohtade loend, mis määrab kindlaks projekti kataloogid või failid,\n"
+#~ "millele tuleb määrata kaasatud ja definitsioonid. \"/\" tähistab projekti "
+#~ "tipptaseme kataloogi.\n"
+#~ "Kui asukoht määrab kataloogi, siis kehtivad kaasatud/definitsioonid\n"
+#~ "kogu selle kataloogi ja kõigi selle alam(ja alam-alam-)kataloogide kohta."
+
+#~ msgid "Switch between configuring Includes/Imports and Defines"
+#~ msgstr ""
+#~ "Lülitumine kaasatute/imporditute ja definitsioonide seadistamise vahel"
+
+#~ msgid "List of include paths for the selected project item"
+#~ msgstr "Valitud projekti elemendi kaasatute asukohtade loend"
+
+#~ msgid ""
+#~ "A list of absolute include paths that the KDevelop parser should be "
+#~ "using\n"
+#~ "when parsing the project files in the given project path."
+#~ msgstr ""
+#~ "Kaasatute absoluutsete asukohtade loend, mida KDevelopi parser\n"
+#~ "peab kasutama projektifailide parsimisel määratud projekti asukohas."
+
+#~ msgid ""
+#~ "Specify a list of pre-processor defines and their values that the "
+#~ "KDevelop parser should use when parsing the files in the given project "
+#~ "path."
+#~ msgstr ""
+#~ "Eelprotsessori definitsioonide ja nende väärtuste nimekiri, mida "
+#~ "KDevelopi parser\n"
+#~ "peab kasutama failide parsimisel määratud projekti asukohas."
+
+#~ msgid ""
+#~ "Double-Click here to insert a new include path to be used for the path"
+#~ msgstr ""
+#~ "Siin topeltklõpsu tehes saab sisestada uue kaasatute asukoha asukohas "
+#~ "kasutamiseks"
+
+#~ msgid "Double-Click here to insert a new path to a directory or file."
+#~ msgstr ""
+#~ "Siin topeltklõpsu tehes saab sisestada kataloogi või faili uue asukoha."

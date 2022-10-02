@@ -1,0 +1,568 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2013-05-31 02:17+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "%1 үшін құрастыру каталогын баптау"
+
+#: cmakebuilddirchooser.cpp:87
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "%1 үшін құрастыру каталогын баптау"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Құрастыру каталогын келтіру керек."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Бұрын құрған құрастыру каталогын пайдалану."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Жаңа құрастыру каталогын құру."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Құрастыру каталогы бапталған екен."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Бұл құрастыру каталогы %1 үшін, бірақ жоба каталогы %2"
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Құрастыру каталогын абсолютты жолымен көрсету керек."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Таңдалған құрастыру каталогы бос емес."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, fuzzy, kde-format
+#| msgid "Creating a new build directory."
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Жаңа құрастыру каталогын құру."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, fuzzy, kde-format
+#| msgid "&Build Directory:"
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Құ&растыру каталогы:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, fuzzy, kde-format
+#| msgid "&Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "Құ&растыру каталогы:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, fuzzy, kde-format
+#| msgid "&Installation Prefix:"
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Орнатылым префиксі:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "Құрастыру &түрі:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, fuzzy, kde-format
+#| msgid "Extra Arguments:"
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Қосымша аргументтері:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr ""
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "ЖАРАМСЫЗ"
+
+#: cmakecodecompletionmodel.cpp:197
+#, fuzzy, kde-format
+#| msgid "Command"
+msgctxt "@item"
+msgid "Command"
+msgstr "Командасы"
+
+#: cmakecodecompletionmodel.cpp:198
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgctxt "@item"
+msgid "Variable"
+msgstr "Айнымалы"
+
+#: cmakecodecompletionmodel.cpp:199
+#, fuzzy, kde-format
+#| msgid "Macro"
+msgctxt "@item"
+msgid "Macro"
+msgstr "Макрос"
+
+#: cmakecodecompletionmodel.cpp:200
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@item"
+msgid "Path"
+msgstr "Жолы"
+
+#: cmakecodecompletionmodel.cpp:201
+#, fuzzy, kde-format
+#| msgid "Target"
+msgctxt "@item"
+msgid "Target"
+msgstr "Мақсаты"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr ""
+
+#: cmakecommandscontents.cpp:29
+#, fuzzy, kde-format
+#| msgid "Commands"
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Командалар"
+
+#: cmakecommandscontents.cpp:30
+#, fuzzy, kde-format
+#| msgid "Variables"
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Айнымалылары"
+
+#: cmakecommandscontents.cpp:31
+#, fuzzy, kde-format
+#| msgid "Modules"
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Модульдер"
+
+#: cmakecommandscontents.cpp:32
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Қасиеттер"
+
+#: cmakecommandscontents.cpp:33
+#, fuzzy, kde-format
+#| msgid "Policies"
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Саясаттар"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Кэш өлшемі:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Құжаттама кэші:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "CMake мазмұны беті"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, fuzzy, kde-format
+#| msgid ""
+#| "KDevelop has found several possible project root for your project, please "
+#| "select the correct one."
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"KDevelop жобаның бірнеше мүмкін түбір каталогын табып отыр, керегін таңдаңыз."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, fuzzy, kde-format
+#| msgid "Cache Values"
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Кэш өлшемі"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, fuzzy, kde-format
+#| msgid "Comment:"
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Түсініктемесі:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, fuzzy, kde-format
+#| msgid "Show Advanced"
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Жетелеу"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Жетелеу"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, fuzzy, kde-format
+#| msgid "&Installation Prefix:"
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "&Орнатылым префиксі:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Құрастыру &түрі:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, fuzzy, kde-format
+#| msgid "Configure Environment"
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Ортаны баптау"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Қолданатын ортасын таңдау"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, fuzzy, kde-format
+#| msgid "Show Advanced Values"
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Жетелеген мәндері көрсетілсін"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr ""
+
+#: settings/cmakecachemodel.cpp:36
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Атауы"
+
+#: settings/cmakecachemodel.cpp:37
+#, fuzzy, kde-format
+#| msgid "Type"
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Түрі"
+
+#: settings/cmakecachemodel.cpp:38
+#, fuzzy, kde-format
+#| msgid "Value"
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Мәні"
+
+#: settings/cmakecachemodel.cpp:39
+#, fuzzy, kde-format
+#| msgid "Comment"
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Түсініктемесі"
+
+#: settings/cmakecachemodel.cpp:40
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Жетелеу"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:343
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"%1 каталогы KDevelop тізімінен өшірілмек\n"
+"KDevelop оны файл жүйесінен де өшірсін бе?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:352
+#, fuzzy, kde-format
+#| msgid "Could not remove: %1.\n"
+msgid "Could not remove: %1"
+msgstr "Өшірілмеді: %1.\n"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr ""
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "%1 сынақ дестесін талдау"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr ""
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] ""
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - CMake қолдауы"
+
+#~ msgid "Add"
+#~ msgstr "Қосу"
+
+#~ msgid "Remove"
+#~ msgstr "Өшіру"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 деген ескірген команда, ол қолдануға тиіс емес"
+
+#, fuzzy
+#~| msgid "Unfinished function. "
+#~ msgid "Unfinished function."
+#~ msgstr "Аяқталмаған функция. "
+
+#, fuzzy
+#~| msgid "You need to select a cmake binary."
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "cmake бинарлы файлын таңдау керек."
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Құрастыру каталогын баптау"
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake &бинарлы файлы:"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Build Type:"
+#~ msgstr "Құрастыру &түрі:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake &бинарлы файлы:"
+
+#, fuzzy
+#~| msgid "&Installation Prefix:"
+#~ msgid "Installation Prefix"
+#~ msgstr "&Орнатылым префиксі:"
+
+#, fuzzy
+#~| msgid "Extra Arguments:"
+#~ msgid "Extra Arguments"
+#~ msgstr "Қосымша аргументтері:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary"
+#~ msgstr "CMake &бинарлы файлы:"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake орнатылмаған"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "CMake параметрлерін '%1' файлға сақтауы болмады.\n"
+#~ "Бұнда жазу рұқсатыңыз бар екенін тексеріңіз"
+
+#~ msgid "CMake Documentation"
+#~ msgstr "CMake құжаттамасы"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "CMake құжаттамасын қолдау "
+
+#~ msgid "CMake Manager"
+#~ msgstr "CMake менеджері"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "CMake жобалар басқаруын қолдау"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Мақсат анықтамасына ауысу"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "CMakeLists тізіміндегі файлдар мен қапшықтар былай жылжытылсын:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "CMakeLists тізімін өзгерту жаңылды, жылжыту доғарылсын ба?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Мынау CMakeLists тізіміндегі файлдар мен қапшықтар өшірілсін:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "CMakeLists тізімін өзгерту жаңылды, өшіру доғарылсын ба?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Жобаның мақсатарын былай өзгерту:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "'%1' қапшығын құру:"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Өзгерістер сақталмады."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "'%1' мақсатын былай өзгерту:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "CMakeLists өзгерту жаңылды."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "'%1' дегенді '%2' деп атауын өзгерту:"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "CMakeLists тізімін өзгерту жаңылды, атауын өзгерту доғарылсын ба?"

@@ -1,0 +1,366 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Shinjo Park <kde@peremen.name>, 2020, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-16 00:46+0000\n"
+"PO-Revision-Date: 2022-05-07 02:06+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Helpers"
+msgstr "C/C++ 도우미"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure C/C++ Helpers"
+msgstr "C/C++ 도우미 설정"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: clangsettings/sessionsettings/sessionsettings.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "코드 자동 완성"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"If disabled, macros will not be included in the code completion results. "
+"This can improve the responsiveness of code completion in some cases."
+msgstr ""
+"이 설정을 사용하지 않으면 코드 자동 완성 결과에서 매크로를 제외합니다. 일부 "
+"경우에 코드 자동 완성 응답 속도를 개선할 수 있습니다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:38
+#, kde-format
+msgctxt "@option:check"
+msgid "Add macros to code completion"
+msgstr "코드 자동 완성에 매크로 추가"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
+#: clangsettings/sessionsettings/sessionsettings.ui:51
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable Look-ahead code completion"
+msgstr "룩어헤드 자동 완성 활성화"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: clangsettings/sessionsettings/sessionsettings.ui:64
+#, kde-format
+msgctxt "@title:group"
+msgid "Assistants"
+msgstr "도우미"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
+#: clangsettings/sessionsettings/sessionsettings.ui:70
+#, kde-format
+msgctxt "@option:check"
+msgid "Forward declare assistant"
+msgstr "전방 선언 도우미"
+
+#: clangsupport.cpp:171
+#, kde-format
+msgid ""
+"The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
+"Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix "
+"this.\n"
+"See also: https://bugs.kde.org/show_bug.cgi?id=393779"
+msgstr ""
+"clang 내장 인클루드 경로 \"%1\"이(가) 잘못되었습니다(cpuid.h 헤더가 없음).\n"
+"KDEV_CLANG_BUILTIN_DIR 환경 변수를 수동으로 설정하십시오.\n"
+"같이 보기: https://bugs.kde.org/show_bug.cgi?id=393779"
+
+#: clangsupport.cpp:278
+#, kde-format
+msgctxt "@action"
+msgid "Rename Declaration"
+msgstr "선언 이름 바꾸기"
+
+#: clangsupport.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Move into Source"
+msgstr "소스로 이동"
+
+#: codecompletion/context.cpp:145
+#, kde-format
+msgid "Override %1"
+msgstr "%1 재정의"
+
+#: codecompletion/context.cpp:342
+#, kde-format
+msgid "Implement %1"
+msgstr "%1 구현"
+
+#: codecompletion/context.cpp:1305
+#, kde-format
+msgid "Special"
+msgstr "특수 기능"
+
+#: codecompletion/context.cpp:1306
+#, kde-format
+msgid "Look-ahead Matches"
+msgstr "룩어헤드 일치"
+
+#: codecompletion/context.cpp:1307
+#, kde-format
+msgid "Builtin"
+msgstr "내장"
+
+#: codecompletion/context.cpp:1308
+#, kde-format
+msgid "Macros"
+msgstr "매크로"
+
+#: codecompletion/context.cpp:1351
+#, kde-format
+msgid "Abstract Override"
+msgstr "추상 재정의"
+
+#: codecompletion/context.cpp:1352
+#, kde-format
+msgid "Virtual Override"
+msgstr "가상 재정의"
+
+#: codecompletion/context.cpp:1367
+#, kde-format
+msgid "Implement Function"
+msgstr "구현 함수"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update declaration signature"
+msgstr "선언 서명 업데이트"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update definition signature"
+msgstr "정의 서명 업데이트"
+
+#: codegen/adaptsignatureaction.cpp:62
+#, kde-format
+msgid ""
+"Update declaration signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"선언 서명 업데이트\n"
+"원본: %1\n"
+"대상: %2"
+
+#: codegen/adaptsignatureaction.cpp:63
+#, kde-format
+msgid ""
+"Update definition signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"정의 서명 업데이트\n"
+"원본: %1\n"
+"대상: %2"
+
+#: codegen/adaptsignatureaction.cpp:113
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "변경 사항을 적용할 수 없음: %1"
+
+#: codegen/adaptsignatureassistant.cpp:76
+#, kde-format
+msgid "Adapt Signature"
+msgstr "서명에 맞게 변경"
+
+#: codegen/clangrefactoring.cpp:82
+#, kde-format
+msgctxt "@action"
+msgid "Rename %1"
+msgstr "%1 이름 바꾸기"
+
+#: codegen/clangrefactoring.cpp:94
+#, kde-format
+msgid "Create separate definition for %1"
+msgstr "%1의 별도 정의 생성"
+
+#: codegen/clangrefactoring.cpp:137
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "커서 아래에 선언 없음"
+
+#: codegen/clangrefactoring.cpp:145
+#, kde-format
+msgid "No source file available for %1."
+msgstr "%1의 소스 코드 파일이 없습니다."
+
+#: codegen/clangrefactoring.cpp:157
+#, kde-format
+msgid "Failed to update DUChain for %1."
+msgstr "%1의 DUChain을 업데이트할 수 없습니다."
+
+#: codegen/clangrefactoring.cpp:161
+#, kde-format
+msgid "Declaration lost while updating."
+msgstr "업데이트 중 선언이 사라졌습니다."
+
+#: codegen/clangrefactoring.cpp:167
+#, kde-format
+msgid "Cannot create definition for this declaration."
+msgstr "이 선언의 정의를 만들 수 없습니다."
+
+#: codegen/clangrefactoring.cpp:174
+#, kde-format
+msgid "No document for %1"
+msgstr "%1의 문서 없음"
+
+#: codegen/clangrefactoring.cpp:205
+#, kde-format
+msgid "Insertion failed"
+msgstr "삽입 실패"
+
+#: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
+#, kde-format
+msgid "Applying changes failed: %1"
+msgstr "변경 사항 적용 실패: %1"
+
+#: duchain/clangproblem.cpp:204
+#, kde-format
+msgid "Fix-it Hints"
+msgstr "Fix-it 힌트"
+
+#: duchain/clangproblem.cpp:246
+#, kde-format
+msgid "Insert \"%1\" at line: %2, column: %3"
+msgstr "줄: %2, 칸: %3에 \"%1\" 삽입"
+
+#: duchain/clangproblem.cpp:250
+#, kde-format
+msgid "Replace text at line: %1, column: %2 with: \"%3\""
+msgstr "줄: %1, 칸: %2의 텍스트를 다음으로 변경: \"%3\""
+
+#: duchain/clangproblem.cpp:253
+#, kde-format
+msgid "Replace \"%1\" with: \"%2\""
+msgstr "\"%1\"을 \"%2\"(으)로 변경"
+
+#: duchain/clangproblem.cpp:256
+#, kde-format
+msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
+msgstr "줄: %1, 칸: %2에서 시작하는 여러 줄을 다음으로 변경: \"%3\""
+
+#: duchain/headerguardassistant.cpp:45
+#, kde-format
+msgid "Add #pragma once"
+msgstr "#pragma once 추가"
+
+#: duchain/headerguardassistant.cpp:46
+#, kde-format
+msgid "Add macro-based #ifndef/#define/#endif header guard"
+msgstr "매크로 기반 #ifndef/#define/#endif 헤더 가드 삽입"
+
+#: duchain/macrodefinition.cpp:112
+#, kde-format
+msgid "Macro %1"
+msgstr "매크로 %1"
+
+#: duchain/macronavigationcontext.cpp:55
+#, kde-format
+msgctxt ""
+"%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
+"arguments"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Function macro"
+msgstr "함수 매크로"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Macro"
+msgstr "매크로"
+
+#: duchain/macronavigationcontext.cpp:59
+#, kde-format
+msgctxt "%1: the link to the definition"
+msgid "Defined in: %1"
+msgstr "정의: %1"
+
+#: duchain/macronavigationcontext.cpp:63
+#, kde-format
+msgid "Show uses"
+msgstr "사용하는 곳 표시"
+
+#: duchain/macronavigationcontext.cpp:66
+#, kde-format
+msgid "Body: "
+msgstr "본문:"
+
+#: duchain/missingincludepathproblem.cpp:35
+#, kde-format
+msgid "Add Custom Include Path"
+msgstr "사용자 정의 인클루드 경로 추가"
+
+#: duchain/missingincludepathproblem.cpp:58
+#, kde-format
+msgid "Open Project"
+msgstr "프로젝트 열기"
+
+#: duchain/parsesession.cpp:530
+#, kde-format
+msgid "Requested here: %1"
+msgstr "요청 위치: %1"
+
+#: duchain/parsesession.cpp:571
+#, kde-format
+msgid "In included file: %1"
+msgstr "포함된 파일: %1"
+
+#: duchain/parsesession.cpp:594
+#, kde-format
+msgid "Header is not guarded against multiple inclusions"
+msgstr "헤더 파일이 여러 번 포함으로부터 보호되지 않음"
+
+#: duchain/parsesession.cpp:595
+#, kde-format
+msgid ""
+"The given header is not guarded against multiple inclusions, either with the "
+"conventional #ifndef/#define/#endif macro guards or with #pragma once."
+msgstr ""
+"지정한 헤더 파일이 여러 번 포함으로부터 보호되지 않습니다. 전통적인 #ifndef/"
+"#define/#endif 매크로 가드나 #pragma once를 사용하십시오."
+
+#: duchain/unknowndeclarationproblem.cpp:373
+#, kde-format
+msgid "Insert '%1'"
+msgstr "'%1' 삽입"
+
+#: duchain/unknowndeclarationproblem.cpp:433
+#, kde-format
+msgid "Forward declare as 'class'"
+msgstr "'class'로 전방 선언"
+
+#: duchain/unknowndeclarationproblem.cpp:440
+#, kde-format
+msgid "Forward declare as 'struct'"
+msgstr "'struct'로 전방 선언"
+
+#: util/clangutils.cpp:189
+#, kde-format
+msgid "<parse error>"
+msgstr "<해석 오류>"

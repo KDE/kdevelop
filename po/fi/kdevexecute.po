@@ -1,0 +1,505 @@
+# Finnish messages for kdevexecute.
+# Copyright © 2011, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevplatform package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2015, 2016.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
+# KDE Finnish translation sprint participants:
+# Author: Artnay
+# Author: Lliehu
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecute\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-01-21 11:26+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:20:29+0000\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Käynnistysmäärityksessä ”%1” on lainausmerkkivirhe argumenteissa. "
+"Käynnistäminen keskeytetään."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” argumentteihin, "
+"tätä ei nykyisin tueta. Käynnistäminen keskeytetään."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "Riippuvuuden %1 selvittäminen epäonnistui"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Kelvollista suoritettavaa tiedostoa ei ole määritetty"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Käynnistysmäärityksen ”%1” suoritettavassa tiedostossa on "
+"lainausmerkkivirhe. Käynnistäminen keskeytetään."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Komentotulkin metamerkki sisältyy käynnistysmäärityksen ”%1” suoritettavaan "
+"tiedostoon, tätä ei nykyisin tueta. Käynnistäminen keskeytetään."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr ""
+
+#: nativeappconfig.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr ""
+
+#: nativeappconfig.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr ""
+
+#: nativeappconfig.cpp:156
+#, fuzzy, kde-format
+#| msgid "Configure Native Application"
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Natiivin sovelluksen asetukset"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "Suorittaa natiiveja sovelluksia"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "Natiivi sovellus"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "Käännetty binaari"
+
+#: nativeappconfig.cpp:322
+#, fuzzy, kde-format
+#| msgid "Project Executables"
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Projektin suoritettavat tiedostot"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Executable"
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Suoritettava tiedosto"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, fuzzy, kde-format
+#| msgid "Project &Target:"
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "P&rojektikohde:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, fuzzy, kde-format
+#| msgid "E&xecutable:"
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "&Suoritettava tiedosto:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr ""
+"Kirjoita suoritettavan tiedoston nimi tai suoritettavan tiedoston "
+"absoluuttinen polku"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr ""
+"Kirjoita suoritettavan tiedoston nimi tai suoritettavan tiedoston "
+"absoluuttinen polku"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Toiminta"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, fuzzy, kde-format
+#| msgid "Ar&guments:"
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "&Argumentit:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Enter arguments to give to the executable.<br/>You "
+#| "can pass arguments containing space characters by putting them in double-"
+#| "quotes.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Kirjoita suoritettavalla tiedostolle annettavat "
+"parametrit.<br/>Voit kirjoittaa välin sisältävän parametrin laittamalla sen "
+"lainausmerkkeihin.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, fuzzy, kde-format
+#| msgid "Working &Directory:"
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "&Työhakemisto:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, fuzzy, kde-format
+#| msgid "Select a working directory for the executable"
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Valitse suoritettavien tiedostojen työhakemisto"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, fuzzy, kde-format
+#| msgid "E&nvironment:"
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "&Ympäristö:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Valitse käytettävä ympäristö"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>By default applications will be run in the background and only their "
+#| "output will be displayed in a toolview. This makes it impossible to "
+#| "interact with applications requiring user input from a terminal emulator. "
+#| "To run such applications, you should use an external terminal.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Oletuksena sovellukset suoritetaan taustalla ja vain niiden tulosteet "
+"näytetään työkalunäkymässä. Tämä tekee mahdottomaksi työskennellä "
+"vuorovaikutteisesti sovellusten kanssa, jotka vaativat käyttäjien "
+"syöttötoimintoa pääteikkunaemulaattorista. Sellaisten sovellusten "
+"suorittamiseksi pitäisi käyttää ulkoista pääteikkunaa.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, fuzzy, kde-format
+#| msgid "Use External Terminal:"
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Käytä ulkoista pääteikkunaa:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "<p>Defines the command to execute the external terminal emulator. Use the "
+#| "following placeholders:</p>\n"
+#| "<dl>\n"
+#| "<dt><code>%exe</code></dt>\n"
+#| "<dd>The path to the executable selected above.</dd>\n"
+#| "<dt><code>%workdir</code></dt>\n"
+#| "<dd>The path to the working directory selected above.</dd>\n"
+#| "</dl>\n"
+#| "<p>The arguments defined above will get appended to this command.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Määrittää ulkoisessa pääteikkunaemulaattorissa suoritettavan komennon. "
+"Käytä seuraavia korvaajia:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>Polku yllä valittuun suoritettavaan tiedostoon.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>Polku yllä valittuun työhakemistoon.</dd>\n"
+"</dl>\n"
+"<p>Yllä määritellyt argumentit liitetään tähän komentoon.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Riippuvuudet"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, fuzzy, kde-format
+#| msgid "Act&ion:"
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "Toi&minto:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, fuzzy, kde-format
+#| msgid ""
+#| "Specifies the action to take for the dependencies before starting the "
+#| "executable."
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr ""
+"Määrittää riippuvuuksille suoritettava toiminto ennen suoritettavan "
+"tiedoston käynnistämistä."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected action will be run before the executable is started.  This "
+#| "allows there to be parts of a project, upon which the executable does not "
+#| "directly depend, to be built and/or installed before running the "
+#| "application."
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"Valittu toiminto suoritetaan ennen suoritettavan tiedoston käynnistämistä.  "
+"Tämä sallii projektin osat, milloin suoritettava tiedosto ei suoraan riipu "
+"niistä, kääntämisen tai asentamisen ennen ohjelman suorittamista."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, fuzzy, kde-format
+#| msgid "Do Nothing"
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "Älä tee mitään"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Käännä"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build and Install"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Käännä ja asenna"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Kohteet:"
+
+# Run configuration tarkoittaa tässä samaa kuin launch configuration.
+#: nativeappjob.cpp:66
+#, fuzzy, kde-format
+#| msgid ""
+#| "No environment group specified, looks like a broken configuration, please "
+#| "check run configuration '%1'. Using default environment group."
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Ympäristöryhmää ei ole määritetty. Näyttää rikkoutuneelta määritykseltä, "
+"tarkista käynnistysmääritys ”%1”. Käytetään oletusympäristöryhmää."
+
+#: nativeappjob.cpp:142
+#, fuzzy, kde-format
+#| msgid "Job already running"
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "Työ on jo käynnissä"
+
+#: nativeappjob.cpp:143
+#, fuzzy, kde-format
+#| msgid ""
+#| "'%1' is already being executed. Should we kill the previous instance?"
+msgid "'%1' is already being executed."
+msgstr "”%1” on jo käynnissä. Pitäisikö sen edellinen instanssi tappaa?"
+
+#: nativeappjob.cpp:145
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr ""
+
+#: nativeappjob.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr ""
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr ""
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Kirjoita suoritettavalle tiedostolle annettavat argumentit"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Käynnistetään: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Sovellus tapettiin ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Päättyi normaalisti ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Päättyi paluuarvolla: %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Prosessi keskeytettiin ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Kaatui paluuarvolla: %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "*** Ei voitu käynnistää ohjelmaa ”%1”. Varmista, että määritetty polku on "
+#~ "oikea ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Kirjoita luetteloon lisättävä riippuvuus"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Lisää luetellun kohteen riippuvuusluetteloon."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Epäsuorien riippuvuuskohteiden luettelo."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Tämä luettelo sisältää kohteet, joista sovellus ei ole suoraan "
+#~ "riippuvainen, mutta joille täytyy tehdä toimintoja ennen sovelluksen "
+#~ "suorittamista."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Poistaa valitut riippuvuudet luettelosta."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Siirtää riippuvuuden luettelossa ylemmäs."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Siirtää valitun riippuvuuden luettelossa alemmas."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu, Jorma Karvonen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com, karvonen.jorma@gmail.com"
+
+#~ msgid "Execute support"
+#~ msgstr "Suoritustuki"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "Tämä liitännäinen mahdollistaa ohjelmien suorittamisen ilman "
+#~ "välikappaletta, ts. natiivisti nykyisellä tietokoneella."
+
+#~ msgid "Application"
+#~ msgstr "Sovellus"
+
+#~ msgid "Allows running of native apps"
+#~ msgstr "Mahdollistaa natiivien sovellusten suorittamisen"
+
+#~ msgid "Could not start application"
+#~ msgstr "Ei voitu käynnistää sovellusta"

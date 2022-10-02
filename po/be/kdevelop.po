@@ -1,0 +1,2367 @@
+# translation of kdevelop.po to Belarusian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Darafei Praliaskouski <komzpa@licei2.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2007-12-09 18:08+0200\n"
+"Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
+"Language-Team: Belarusian <i18n@mova.org>\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Дарафей Праляскоўскі"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "komzpa@licei2.com"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "&Настаўленні"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "Праект"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, fuzzy, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "&Выканаць"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr ""
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr ""
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr ""
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, fuzzy, kde-format
+#| msgid "&File"
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Файл"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&Змяніць"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, fuzzy, kde-format
+#| msgid "Code"
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Код"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, fuzzy, kde-format
+#| msgid "&Window"
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&Акно"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "&Настаўленні"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, fuzzy, kde-format
+#| msgid "&Help"
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "&Дапамога"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Галоўная панель начыння"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "Код"
+
+#: kdevideextension.cpp:47
+#, kde-format
+msgid "KDevelop Project Files"
+msgstr ""
+
+#: main.cpp:85
+#, fuzzy, kde-format
+msgid "Could not open %1"
+msgstr "Немагчыма адкрыць файл '%1'"
+
+#: main.cpp:219
+#, fuzzy, kde-format
+msgid "Could not open file '%1'."
+msgstr "Немагчыма адкрыць файл '%1'"
+
+#: main.cpp:242
+#, fuzzy, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "Немагчыма адкрыць файл '%1'"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr ""
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr ""
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr ""
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "GDB integration"
+msgstr ""
+
+#: main.cpp:398
+#, fuzzy, kde-format
+msgid "Hamish Rodda"
+msgstr "Хаміш Родда"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr ""
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr ""
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr ""
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr ""
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr ""
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr ""
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr ""
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr ""
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr ""
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr ""
+
+#: main.cpp:416
+#, fuzzy, kde-format
+msgid "Bernd Gehrmann"
+msgstr "Вернд Германн"
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr ""
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr ""
+
+#: main.cpp:419
+#, fuzzy, kde-format
+#| msgid "&Debug"
+msgid "Debugger frontend"
+msgstr "Адладка"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr ""
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr ""
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr ""
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr ""
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr ""
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr ""
+
+#: main.cpp:423
+#, fuzzy, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr "Матыяс Хёльцэр-Клюпфэл"
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr ""
+
+#: main.cpp:425
+#, fuzzy, kde-format
+msgid "Simon Hausmann"
+msgstr "Сайман Хаўсман"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr ""
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr ""
+
+#: main.cpp:427
+#, fuzzy, kde-format
+#| msgid "&Repository:"
+msgid "QMake projectmanager"
+msgstr "С&ховішча:"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr ""
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr ""
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr ""
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr ""
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr ""
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr ""
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr ""
+
+#: main.cpp:434
+#, fuzzy, kde-format
+#| msgid "General"
+msgid "Fortran documentation"
+msgstr "Агульныя"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr ""
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr ""
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr ""
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr ""
+
+#: main.cpp:438
+#, fuzzy, kde-format
+msgid "Matt Newell"
+msgstr "Мэтт Ньюэл"
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr ""
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr ""
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, fuzzy, kde-format
+#| msgid "Source:"
+msgid "Patches"
+msgstr "Крыніца:"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr ""
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr ""
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr ""
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr ""
+
+#: main.cpp:443
+#, fuzzy, kde-format
+#| msgid "Documents"
+msgid "Documentation index view"
+msgstr "Дакументы"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr ""
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr ""
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr ""
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr ""
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr ""
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr ""
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr ""
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Name: Opened Projects"
+msgstr ""
+
+#: main.cpp:529
+#, fuzzy, kde-format
+msgid "[running]"
+msgstr "Выконваецца"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr ""
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr ""
+
+#: main.cpp:648
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr ""
+
+#: main.cpp:654
+#, fuzzy, kde-format
+#| msgid "&Debug"
+msgid "Debug %1"
+msgstr "Адладка"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr ""
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr ""
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr ""
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr ""
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr ""
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr ""
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Files to load"
+#~ msgstr "Файлы для загрузкі"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "&File"
+#~ msgstr "&Файл"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgid "&Edit"
+#~ msgstr "&Змяніць"
+
+#, fuzzy
+#~| msgid "Advanced"
+#~ msgid "&Advanced"
+#~ msgstr "Асаблівы"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "&View"
+#~ msgstr "&Выгляд"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Tools"
+#~ msgstr "Н&ачынне"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgid "Word Completion"
+#~ msgstr "Імпартаваць"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings"
+#~ msgstr "&Настаўленні"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "Deprecated options:"
+#~ msgstr "&Апісанне:"
+
+#, fuzzy
+#~| msgid "Configure %1"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Настаўленне %1"
+
+#, fuzzy
+#~| msgid "Extra Toolbar"
+#~ msgid "Debug your program"
+#~ msgstr "Дадатковая панель"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Debug Area"
+#~ msgstr "Адладка"
+
+#, fuzzy
+#~| msgid "&Project"
+#~ msgid "New Project"
+#~ msgstr "&Праект"
+
+#, fuzzy
+#~| msgid "&Project"
+#~ msgid "Open project"
+#~ msgstr "&Праект"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Fetch project"
+#~ msgstr "&Назва праекту:"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Recent Projects"
+#~ msgstr "Праект"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Sessions"
+#~ msgstr "&Настаўленні"
+
+#, fuzzy
+#~| msgid "Documents"
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Дакументы"
+
+#, fuzzy
+#~| msgid "State"
+#~ msgid "Starting"
+#~ msgstr "Запусціць"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Remove lock file"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Url to project to load"
+#~ msgstr "Праект"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Session contents"
+#~ msgstr "&Настаўленні"
+
+#, fuzzy
+#~ msgid "Session to load"
+#~ msgstr "Файлы для загрузкі"
+
+#, fuzzy
+#~ msgid "Profile to load"
+#~ msgstr "Файлы для загрузкі"
+
+#, fuzzy
+#~ msgid "Version %1"
+#~ msgstr "Версія %1"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "Файл"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "&Выгляд"
+
+#~ msgid "Run"
+#~ msgstr "Выканаць"
+
+#~ msgid "Cancel"
+#~ msgstr "Скасаваць"
+
+#, fuzzy
+#~| msgid "Username"
+#~ msgid "Rename %1"
+#~ msgstr "Імя карыстальніка"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "New name:"
+#~ msgstr "Назва:"
+
+#, fuzzy
+#~| msgid "Username"
+#~ msgid "Rename"
+#~ msgstr "Імя карыстальніка"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Uses"
+#~ msgstr "Карыстальнік"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "output: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "Connect"
+#~ msgid "Connect to"
+#~ msgstr "Злучыцца"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "In %1th include-path"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Included through"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Directory %1"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Includes"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Include Path"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Includers"
+#~ msgstr "&Выканальны файл:"
+
+#~ msgid "Files"
+#~ msgstr "Файлы"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Building uses"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~ msgid "Ready"
+#~ msgstr "Абнавіць"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Formals: %1"
+#~ msgstr "Фармат"
+
+#, fuzzy
+#~ msgid "character %1"
+#~ msgstr "Знак"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "invalid input: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "Generate Stub Class"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "Generate Stub"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~| msgid "Save"
+#~ msgid "Save to "
+#~ msgstr "Запісаць"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgid "Implement"
+#~ msgstr "Каментар"
+
+#~ msgid "Add"
+#~ msgstr "Дадаць"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Test executable crashed."
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Test root."
+#~ msgstr "Назва"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest verbose output"
+#~ msgstr "Назва"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Test executable timed out."
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "xTest"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest test"
+#~ msgstr "Назва"
+
+#, fuzzy
+#~| msgid "New Folder"
+#~ msgid "New QTest"
+#~ msgstr "Новая тэчка"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Class name:"
+#~ msgstr "Клас"
+
+#, fuzzy
+#~ msgid "Search"
+#~ msgstr "Пошук"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "Grep: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~| msgid "Import Error"
+#~ msgid "Project import error"
+#~ msgstr "Памылка імпарту"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Invalid Location"
+#~ msgstr "Адрас:"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Invalid project name"
+#~ msgstr "Адрас:"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Invalid Project Template"
+#~ msgstr "Адрас:"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Project Templates"
+#~ msgstr "Адрас:"
+
+#~ msgid "Documents"
+#~ msgstr "Дакументы"
+
+#~ msgid "Disabled"
+#~ msgstr "Выключана"
+
+#, fuzzy
+#~| msgid "Sending %1"
+#~ msgid "Pending (add)"
+#~ msgstr "Адпраўленне %1"
+
+#, fuzzy
+#~| msgid "Sending %1"
+#~ msgid "Pending (clear)"
+#~ msgstr "Адпраўленне %1"
+
+#, fuzzy
+#~| msgid "Sending %1"
+#~ msgid "Pending (modify)"
+#~ msgstr "Адпраўленне %1"
+
+#, fuzzy
+#~ msgid "Active"
+#~ msgstr "Актыўная"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Код"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr "Паведамленне"
+
+#, fuzzy
+#~ msgid "Warning"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Running program"
+#~ msgstr "Выконваецца"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Debugger status"
+#~ msgstr "Адладка"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Disassemble View"
+#~ msgstr "Выключыць"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgid "Address"
+#~ msgstr "Дадаць"
+
+#~ msgid "Function"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Instruction"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Немагчыма адкрыць файл '%1'"
+
+#, fuzzy
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Новы"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Дата"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Дата"
+
+#, fuzzy
+#~| msgid "Show"
+#~ msgid "Show text"
+#~ msgstr "Паказаць"
+
+#~ msgid "Edit"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Disable"
+#~ msgstr "Выключыць"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Delete"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Disable all"
+#~ msgstr "Выключыць"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Enable all"
+#~ msgstr "Уключаны"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Delete all"
+#~ msgstr "Выдаліць"
+
+#~ msgid "Enable"
+#~ msgstr "Уключаны"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy All"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~| msgid "Reject"
+#~ msgid "Recent"
+#~ msgstr "Адмовіць"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Debugger Variables"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Re-evaluate All"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Format"
+#~ msgstr "Фармат"
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgid "Hexadecimal"
+#~ msgstr "Дыялог"
+
+#, fuzzy
+#~| msgid "Dialog"
+#~ msgid "Decimal"
+#~ msgstr "Дыялог"
+
+#, fuzzy
+#~ msgid "Character"
+#~ msgstr "Знак"
+
+#, fuzzy
+#~ msgid "Binary"
+#~ msgstr "Двойкавы"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Watch Variable"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy Value"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~ msgid "Invalid"
+#~ msgstr "Некарэктны"
+
+#~ msgid "OK"
+#~ msgstr "Добра"
+
+#, fuzzy
+#~| msgid "New Window"
+#~ msgid "Memory view"
+#~ msgstr "Новае акно"
+
+#, fuzzy
+#~ msgid "Reload"
+#~ msgstr "Абнавіць"
+
+#, fuzzy
+#~| msgid "New Window"
+#~ msgid "Special debugger views"
+#~ msgstr "Новае акно"
+
+#, fuzzy
+#~ msgid "Breakpoint"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Enabled"
+#~ msgstr "Уключаны"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgid "Type"
+#~ msgstr "Тып"
+
+#~ msgid "Status"
+#~ msgstr "Статус"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Location"
+#~ msgstr "Месцазнаходжанне"
+
+#, fuzzy
+#~| msgid "Maintainer"
+#~ msgid "Condition"
+#~ msgstr "Умова"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame"
+#~ msgstr "Назва"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "C++ Debugger"
+#~ msgstr "Адладка"
+
+#, fuzzy
+#~ msgid "Breakpoints"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Variables"
+#~ msgstr "Пераменныя"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame Stack"
+#~ msgstr "Назва"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Disassemble"
+#~ msgstr "Выключыць"
+
+#, fuzzy
+#~| msgid "New Window"
+#~ msgid "Debug views"
+#~ msgstr "Новае акно"
+
+#, fuzzy
+#~| msgid "State"
+#~ msgid "&Start"
+#~ msgstr "&Стартаваць"
+
+#, fuzzy
+#~| msgid "State"
+#~ msgid "&Restart"
+#~ msgstr "&Стартаваць"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgid "Sto&p"
+#~ msgstr "&Спыніць"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Stop debugger"
+#~ msgstr "Адладка"
+
+#, fuzzy
+#~ msgid "Interrupt"
+#~ msgstr "Перапыненні"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Interrupt application"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step over instruction"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step into instruction"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Viewer"
+#~ msgid "Viewers"
+#~ msgstr "Праглядчык"
+
+#, fuzzy
+#~| msgid "New Window"
+#~ msgid "Debugger viewers"
+#~ msgstr "Новае акно"
+
+#, fuzzy
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "Evaluate: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "Watch: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Debugger"
+#~ msgstr "Адладка"
+
+#, fuzzy
+#~| msgid "Maintainer"
+#~ msgid "&Continue"
+#~ msgstr "&Працягнуць"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Process exited"
+#~ msgstr "Праект"
+
+#~ msgid "Variable"
+#~ msgstr "Зменная"
+
+#~ msgid "Value"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "Немагчыма адкрыць файл '%1'"
+
+#~ msgid "Name"
+#~ msgstr "Назва"
+
+#~ msgid "Comment"
+#~ msgstr "Каментар"
+
+#, fuzzy
+#~| msgid "Cancel"
+#~ msgid "&Cancel"
+#~ msgstr "&Скасаваць"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Text"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Action"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "Cancel"
+#~ msgid "Change"
+#~ msgstr "Скасаваць"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Перапыненні"
+
+#~ msgid "Remove"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Build &Target"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Build target"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Build this project"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Build this directory"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "Source:"
+#~ msgid "source"
+#~ msgstr "Крыніца:"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "Функцыя"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "CMake Builder"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "CMake: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "QMake Builder"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "QMake: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Make Builder"
+#~ msgstr "С&ховішча:"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "generating"
+#~ msgstr "Агульныя"
+
+#~ msgid "installing"
+#~ msgstr "устаноўка"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "creating"
+#~ msgstr "Месцазнаходжанне"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "Make: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~ msgid "Valgrind Output"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "Немагчыма адкрыць файл '%1'"
+
+#, fuzzy
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Valgrind communication error"
+#~ msgstr "Адрас:"
+
+#, fuzzy
+#~ msgid "Valgrind crashed."
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~ msgid "Valgrind Error"
+#~ msgstr "Папярэджанне"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "at: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "File: %1"
+#~ msgid "by: %1"
+#~ msgstr "Файл: %1"
+
+#, fuzzy
+#~| msgid "Source:"
+#~ msgid "Source"
+#~ msgstr "Крыніца:"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Object"
+#~ msgstr "Праект"
+
+#~ msgid "Property Editor"
+#~ msgstr "Рэдактар уласцівасці"
+
+#~ msgid "Action Editor"
+#~ msgstr "Рэдактар дзеяння"
+
+#, fuzzy
+#~| msgid "Documents"
+#~ msgid "Close Document"
+#~ msgstr "Дакументы"
+
+#~ msgid "%{APPNAME}"
+#~ msgstr "%{APPNAME}"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "C++ Options"
+#~ msgstr "Настаўленні"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Enable tracing"
+#~ msgstr "Уключаны"
+
+#, fuzzy
+#~| msgid "State"
+#~ msgid "Stat"
+#~ msgstr "Стан"
+
+#~ msgid "Time"
+#~ msgstr "Час"
+
+#~ msgid "Command"
+#~ msgstr "Каманда"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Выканаць"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Debugger executable:"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Gdb executable"
+#~ msgstr "&Выканальны файл:"
+
+#~ msgid "Options"
+#~ msgstr "Настаўленні"
+
+#~ msgid "Description"
+#~ msgstr "Апісанне"
+
+#~ msgid "Properties"
+#~ msgstr "Уласцівасці"
+
+#~ msgid "->"
+#~ msgstr "->"
+
+#~ msgid "&Name:"
+#~ msgstr "&Імя:"
+
+#~ msgid "&Description:"
+#~ msgstr "&Апісанне:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "Build Directory Creator"
+#~ msgstr "С&ховішча:"
+
+#~ msgid "debug"
+#~ msgstr "адладка"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "Generator:"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "TextLabel"
+#~ msgstr "Тэкст"
+
+#~ msgid "Comment:"
+#~ msgstr "Каментар:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "CMake Directory"
+#~ msgstr "С&ховішча:"
+
+#~ msgid "Viewer"
+#~ msgstr "Праглядчык"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "View"
+#~ msgstr "&Выгляд"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Make executable:"
+#~ msgstr "&Выканальны файл:"
+
+#~ msgid "Pattern:"
+#~ msgstr "Узор:"
+
+#~ msgid "Template:"
+#~ msgstr "Шаблон:"
+
+#~ msgid "Directory:"
+#~ msgstr "Тэчка:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Рэкурсіўна:"
+
+#~ msgid "Files:"
+#~ msgstr "Файлы:"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Exclude:"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory:"
+#~ msgstr "Тэчка:"
+
+#, fuzzy
+#~| msgid "&Module:"
+#~ msgid "Fetch &Module"
+#~ msgstr "&Модуль:"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Project &name:"
+#~ msgstr "&Назва праекту:"
+
+#, fuzzy
+#~| msgid "&Repository:"
+#~ msgid "&Build System:"
+#~ msgstr "С&ховішча:"
+
+#~ msgid "CMake"
+#~ msgstr "CMake"
+
+#~ msgid "QMake"
+#~ msgstr "QMake"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#~ msgid "Location:"
+#~ msgstr "Адрас:"
+
+#, fuzzy
+#~ msgid "Brackets"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Cases"
+#~ msgstr "Клас"
+
+#~ msgid "Class"
+#~ msgstr "Клас"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Labels"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgid "No change"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgid "Break"
+#~ msgstr "Пункты прыпынення"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgid "Linux"
+#~ msgstr "Лінейны"
+
+#~ msgid "&Executable:"
+#~ msgstr "&Выканальны файл:"
+
+#, fuzzy
+#~| msgid "&Parameters:"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "&Парамэтры:"
+
+#, fuzzy
+#~| msgid "Log"
+#~ msgid "Low"
+#~ msgstr "Часопіс"
+
+#, fuzzy
+#~| msgid "Menu"
+#~ msgid "Medium"
+#~ msgstr "Меню"
+
+#, fuzzy
+#~| msgid "Highlight"
+#~ msgid "High"
+#~ msgstr "Падсветка"
+
+#~ msgid "All"
+#~ msgstr "Усе"
+
+#~ msgid "&Parameters:"
+#~ msgstr "&Парамэтры:"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "Форма"
+
+#, fuzzy
+#~| msgid "Global"
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Form"
+#~ msgstr "Форма"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Valid Location"
+#~ msgstr "Адрас:"
+
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "Невядомы"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "Forward Declaration"
+#~ msgstr "&Апісанне:"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgid "enumerator"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~| msgid "&Description:"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "&Апісанне:"
+
+#~ msgid "Container: "
+#~ msgstr "Кантэйнер: "
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid "Decl.: "
+#~ msgstr "Апісанне:"
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid " Def.: "
+#~ msgstr "Апісанне:"
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid " Decl.: "
+#~ msgstr "Апісанне:"
+
+#, fuzzy
+#~| msgid "Messages"
+#~ msgid "Message"
+#~ msgstr "Паведамленні"
+
+#, fuzzy
+#~| msgid "File Manager"
+#~ msgid "File Name"
+#~ msgstr "Кіраўнік файлаў"
+
+#~ msgid "Maintainer"
+#~ msgstr "Падтрымка"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Delete style"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~ msgid "QxRunner"
+#~ msgstr "&Выканаць"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgid "S&top"
+#~ msgstr "&Спыніць"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Select &All"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Exit"
+#~ msgid "E&xit"
+#~ msgstr "Выйсці"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings..."
+#~ msgstr "&Настаўленні"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Toolbars"
+#~ msgstr "Н&ачынне"
+
+#, fuzzy
+#~| msgid "Extra Toolbar"
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "Дадатковая панель"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "Выканаць"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Selected:"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Run:"
+#~ msgstr "Выканаць"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "Exceptions"
+#~ msgstr "Настаўленні"
+
+#, fuzzy
+#~ msgid "Warnings"
+#~ msgstr "Папярэджанне"
+
+#~ msgid "Close"
+#~ msgstr "Закрыць"
+
+#, fuzzy
+#~ msgid "Failed to comply."
+#~ msgstr "Файлы для загрузкі"
+
+#~ msgid "&Directory"
+#~ msgstr "Тэчка"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "StatusWidget"
+#~ msgstr "Статус"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "Праект"
+
+#~ msgid "Extra Toolbar"
+#~ msgstr "Дадатковая панель"
+
+#, fuzzy
+#~| msgid "Source file or directory"
+#~ msgid "No such file or directory."
+#~ msgstr "Зыходны файл або тэчка"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgid "Imports"
+#~ msgstr "Імпартаваць"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgid "Importers"
+#~ msgstr "Імпартаваць"
+
+#, fuzzy
+#~| msgid "State"
+#~ msgctxt "To start something"
+#~ msgid "Start"
+#~ msgstr "Стан"
+
+#~ msgid "Mode"
+#~ msgstr "Рэжым"
+
+#~ msgid "Filter"
+#~ msgstr "Фільтр"
+
+#~ msgid "User Interface"
+#~ msgstr "Інтэрфейс карыстальніка"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Build Difference Between"
+#~ msgstr "Пабудаваць розніцу паміж"
+
+#~ msgid "Revision A:"
+#~ msgstr "Рэвізія A:"
+
+#~ msgid "Revision B:"
+#~ msgstr "Рэвізія B:"
+
+#~ msgid "&Vendor tag:"
+#~ msgstr "П&азнака распрацоўніка:"
+
+#~ msgid "Password"
+#~ msgstr "Пароль"
+
+#~ msgid "C&ancel"
+#~ msgstr "&Скасаваць"
+
+#~ msgid "Item"
+#~ msgstr "Прадмет"
+
+#~ msgid "Accept"
+#~ msgstr "Прыняць"
+
+#~ msgid "Servers"
+#~ msgstr "Серверы"
+
+#~ msgid "History"
+#~ msgstr "Гісторыя"
+
+#~ msgid "Author:"
+#~ msgstr "Аўтар:"
+
+#~ msgid "State:"
+#~ msgstr "Стан:"
+
+#~ msgid "Apply"
+#~ msgstr "Ужыць"
+
+#~ msgid "From:"
+#~ msgstr "Ад:"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Keywords"
+#~ msgstr "Ключавыя словы"
+
+#~ msgid "Show statusbar"
+#~ msgstr "Паказваць радок статусу"
+
+#~ msgid "&New Window"
+#~ msgstr "&Новае акно"
+
+#~ msgid "Split View &Top/Bottom"
+#~ msgstr "Падзяліць выгляд &гарызантальна"
+
+#~ msgid "Split View &Left/Right"
+#~ msgstr "Падзяліць выгляд &вертыкальна"
+
+#~ msgid "Machine"
+#~ msgstr "Машына"
+
+#~ msgid "Repository"
+#~ msgstr "Сховішча"
+
+#~ msgid "Edit..."
+#~ msgstr "Рэдагаваць..."
+
+#~ msgid "Annotate..."
+#~ msgstr "Натаваць..."
+
+#~ msgid "Diff"
+#~ msgstr "Diff"
+
+#~ msgid "CVS"
+#~ msgstr "CVS"
+
+#~ msgid "Revision"
+#~ msgstr "Рэвізія"
+
+#~ msgid "Adding %1."
+#~ msgstr "Даданне %1."
+
+#~ msgid "Deleting %1."
+#~ msgstr "Выдаленне %1."
+
+#~ msgid "Replacing %1."
+#~ msgstr "Замена %1."
+
+#~ msgid "Transmitting file data "
+#~ msgstr "Перадача дадзеных файлаў "
+
+#~| msgid "Configure %1"
+#~ msgid "Copied %1"
+#~ msgstr "Скапіявана %1"
+
+#~ msgid "Update"
+#~ msgstr "Абнавіць"
+
+#, fuzzy
+#~| msgid "Notification"
+#~ msgid "Subversion Notification"
+#~ msgstr "Нагадванне"
+
+#~ msgid "Destination:"
+#~ msgstr "Прызначэнне:"
+
+#~ msgid "Author"
+#~ msgstr "Аўтар"
+
+#~ msgid "Contents"
+#~ msgstr "Змест"
+
+#~ msgid "Teamwork"
+#~ msgstr "Камандная праца"
+
+#~ msgid "New Folder..."
+#~ msgstr "Новая тэчка..."
+
+#~ msgid "Konsole"
+#~ msgstr "Кансоль"
+
+#~ msgid "Add Repository"
+#~ msgstr "Дадаць сховішча"
+
+#~ msgid "Sync"
+#~ msgstr "Сінхранізаваць"
+
+#~ msgid "Hide"
+#~ msgstr "Схаваць"
+
+#~ msgid "&Stop"
+#~ msgstr "&Спыніць"

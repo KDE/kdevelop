@@ -1,0 +1,210 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2013, 2015.
+# Frederik Schwarzer <schwarzer@kde.org>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"PO-Revision-Date: 2020-08-19 18:21+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: filtermodel.cpp:74
+#, kde-format
+msgctxt "@title:column"
+msgid "Pattern"
+msgstr "Muster"
+
+#: filtermodel.cpp:76
+#, kde-format
+msgctxt "@title:column"
+msgid "Targets"
+msgstr "Ziele"
+
+#: filtermodel.cpp:78
+#, kde-format
+msgctxt "@title:column"
+msgid "Action"
+msgstr "Aktion"
+
+#: filtermodel.cpp:107
+#, kde-format
+msgid ""
+"The wildcard pattern defines whether a file or folder is included in a "
+"project or not.<br />The pattern is matched case-sensitively against the "
+"items relative path to the project root. The relative path starts with a "
+"forward slash, trailing slashes of folders are removed.<br />Patterns ending "
+"on <code>\"/\"</code> are implicitly considered to match against folders "
+"only.<br />Patterns which do not explicitly start with either <code>\"/\"</"
+"code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
+"thus match any item with a relative path ending on the given pattern."
+msgstr ""
+"Das Muster für die Platzhalter legt fest, ob eine Datei oder ein Ordner in "
+"einem Projekt eingeschlossen wird oder nicht.<br />Das Muster wird unter "
+"Beachtung von Groß- und Kleinschreibung mit dem relativen Pfad zur Basis des "
+"Projekts verglichen. Der relative Pfad beginnt mit einem Schrägstrich, "
+"führende Schrägstriche von Ordnern werden entfernt.<br />Muster, die mit "
+"<code>/</code> enden, werden ausdrücklich mit Ordnern verglichen.<br /"
+">Muster, die nicht ausdrücklich mit <code>/</code> oder <code>*</code> "
+"beginnen, erhalten ein <code>*/</code> vorangestellt und passen daher auf "
+"jeden Eintragmit einem relativen Pfad, der mit dem angegebenen Muster endet."
+
+#: filtermodel.cpp:119
+#, kde-format
+msgid ""
+"The target defines what type of item the filter is matched against.<br /"
+">Filters either apply only to files, only to folders or to both."
+msgstr ""
+"Das Ziel definiert, mit welcher Art von Einträgen der Filter verglichen wird."
+"<br />Filter werden entweder nur auf Dateien, nur auf Ordner oder auf beide "
+"angewendet."
+
+#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#, kde-format
+msgctxt "@item"
+msgid "Files and Folders"
+msgstr "Dateien und Ordner"
+
+#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#, kde-format
+msgctxt "@item"
+msgid "Folders"
+msgstr "Ordner"
+
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#, kde-format
+msgctxt "@item"
+msgid "Files"
+msgstr "Dateien"
+
+#: filtermodel.cpp:141
+#, kde-format
+msgid ""
+"Filters by default exclude items from the project. Inclusive patterns can be "
+"used to include items which where matched by previous exclusive patterns."
+"<br />E.g. to only include files ending on <code>\".cpp\"</code> in your "
+"project, you could exclude all files via <code>\"*\"</code> and then apply "
+"an inclusive <code>\"*.cpp\"</code> pattern."
+msgstr ""
+"Als Voreinstellung schließen Filter Einträge vom Projekt aus. Muster zum "
+"Einschließen können verwendet werden, um bereits vorher durch das Muster "
+"ausgeschlossene Einträge wieder einzuschließen.<br />Um z. B. nur Dateien "
+"mit der Erweiterung <code>.cpp</code> in Ihr Projekt einzuschließen, können "
+"Sie zuerst alle Dateien mit dem Muster <code>*</code> ausschließen und dann "
+"ein Muster <code>*.cpp</code> anwenden."
+
+#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#, kde-format
+msgctxt "@item"
+msgid "Include"
+msgstr "Einschließen"
+
+#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#, kde-format
+msgctxt "@item"
+msgid "Exclude"
+msgstr "Ausschließen"
+
+#: projectfilterconfigpage.cpp:172
+#, kde-format
+msgid ""
+"A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
+"to make this explicit."
+msgstr ""
+"Ein Filter mit einem leeren Feld trifft auf alle Einträge zu. Benutzen Sie "
+"<code>„*“</code>, um dies ausdrücklich zu verwenden."
+
+#: projectfilterconfigpage.cpp:175
+#, kde-format
+msgid "A filter ending on <code>\"/\"</code> can never match a file."
+msgstr "Ein Filter mit <code>„/“</code> kann niemals auf eine Datei zutreffen."
+
+#: projectfilterconfigpage.cpp:198
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Project Filter"
+msgstr "Projektfilter einrichten"
+
+#: projectfilterconfigpage.cpp:208
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project Filter"
+msgstr "Projektfilter"
+
+#: projectfilterprovider.cpp:76
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Exclude Item from Project"
+msgid_plural "Exclude Items from Project"
+msgstr[0] "Eintrag vom Projekt ausschließen"
+msgstr[1] "Einträge vom Projekt ausschließen"
+
+#: projectfilterprovider.cpp:115
+#, kde-format
+msgid ""
+"A filter for the item was added. To undo, use the project filter settings."
+msgid_plural ""
+"A filter for the items was added. To undo, use the project filter settings."
+msgstr[0] ""
+"Ein Filter für den Eintrag wurde hinzugefügt. Um dies zurückzusetzen, "
+"benutzen Sie die Einstellungen für die Projektfilter."
+msgstr[1] ""
+"Ein Filter für die Einträge wurde hinzugefügt. Um dies zurückzusetzen, "
+"benutzen Sie die Einstellungen für die Projektfilter."
+
+#: projectfilterprovider.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Filter Added"
+msgstr "Projektfilter wurde hinzugefügt"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectfiltersettings.ui:20
+#, kde-format
+msgid ""
+"Configure which files and folders inside the project folder should be "
+"included or excluded:"
+msgstr ""
+"Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder "
+"ausgeschlossen werden sollen:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: projectfiltersettings.ui:34
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Hinzufügen"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: projectfiltersettings.ui:49
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Entfernen"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveUp)
+#: projectfiltersettings.ui:61
+#, kde-format
+msgctxt "@action:button"
+msgid "Move Up"
+msgstr "Nach oben"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveDown)
+#: projectfiltersettings.ui:73
+#, kde-format
+msgctxt "@action:button"
+msgid "Move Down"
+msgstr "Nach unten"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Burkhard Lück"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lueck@hube-lueck.de"

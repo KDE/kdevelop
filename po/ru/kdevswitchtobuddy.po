@@ -1,0 +1,63 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Alexander Potashev <aspotashev@gmail.com>, 2016.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-03-15 16:31+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.1\n"
+
+#: switchtobuddyplugin.cpp:114
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Перейти к «%1»"
+
+#: switchtobuddyplugin.cpp:128
+#, kde-format
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr "Перейти к &объявлению/определению"
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr "Перейти к заголовку/коду"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Александр Лахин"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "exclusion@gmail.com"
+
+#, fuzzy
+#~ msgid "Switch To"
+#~ msgstr "Перейти к «%1»"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Переход к связанному"
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Автор"
+
+#~ msgid "Switch to buddy document in code editor."
+#~ msgstr "Переход к связанному документу в редакторе кода"

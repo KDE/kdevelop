@@ -1,0 +1,80 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-04 20:15+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "권한"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "보기"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "책갈피"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr "주 도구 모음"
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "문서 \"%1\"에 저장되지 않은 변경 사항이 있습니다. 저장하시겠습니까?"
+
+#: oktetadocument.cpp:125
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "문서 닫기"
+
+#: oktetaplugin.cpp:97
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "16진수 편집기"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "바이트 배열 보기 프로필 관리..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "디자이너 레이아웃 도구 모음"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "KDevelop용 Okteta 플러그인"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "간단한 16진수 편집기 제공"

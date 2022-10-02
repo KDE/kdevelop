@@ -1,0 +1,3193 @@
+# translation of kdevelop.po to
+# Copyright (C) 2003, 2004, 2006, 2007 Free Software Foundation, Inc.
+# Nuriddin S. Aminagha <nuriddin@haydarlinux.org>, 2003.
+# Ahmad M. Zawawi <zawawi@arabeyes.org>, 2004.
+# Tarig Abdu Taha <ihassan@kacst.edu.sa>, 2004.
+# tarig abdu taha <Ihassan@kacst.edu.sa>, 2004.
+# محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+# Safa Alfulaij <safa1996alfulaij@gmail.com>, 2015, 2017, 2018.
+# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2022-01-20 18:45+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: ar\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 21.07.70\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "صفا الفليج"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "safa1996alfulaij@gmail.com"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, kde-format
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "جلسة"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "م&شروع"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "&شغّل"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "افحص الملفّ اللّبّ"
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr "أرفق إلى عمليّة"
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "&تنقّل"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, kde-format
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&ملفّ"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "ت&حرير"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, kde-format
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "كود"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr "حلّل الملفّ الحاليّ بِ‍"
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr "حلّل المشروع الحاليّ بِ‍"
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&نافذة"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, kde-format
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "إعدادات"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "مساعدة"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "شريط الأدوات الرّئيسيّ"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "كود"
+
+#: kdevideextension.cpp:47
+#, kde-format
+msgid "KDevelop Project Files"
+msgstr "ملفّات مشاريع مطوّرك"
+
+#: main.cpp:85
+#, kde-format
+msgid "Could not open %1"
+msgstr "تعذّر فتح %1"
+
+#: main.cpp:219
+#, kde-format
+msgid "Could not open file '%1'."
+msgstr "تعذّر فتح الملفّ ’%1‘."
+
+#: main.cpp:242
+#, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "تعذّر فتح المشروع ’%1‘: ‏%2"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr "اختر جلسة لفتح المستند فيها"
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+"تعذّر فتح الجلسة %1 المجهولة. طالع المبدّل ’‎--list-sessions‘ للجلسات المتوفّرة "
+"أو استخدم ’‎-n‘ لإنشاء واحدة."
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr "مطوّرك"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr "مطوّرك - بيئة التّطوير المتكاملة"
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr "الحقوق محفوظة ١٩٩٩-%1، مطوّري «مطوّرك»"
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr "Kevin Funk"
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr "منسّق مشارك، C++/Clang، ضمان الجودة، دعم «وندوز»، الأداء، موقع الويب"
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr "Sven Brauch"
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr "منسّق مشارك، AppImage، دعم بايثون، تحسينات لواجهة المستخدم"
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr "Aleix Pol Gonzalez"
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr "دعم CMake، دعم ”شغّل“، دعم Kross"
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr "Milian Wolff"
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr "‏C++/Clang، والمدير العامّ، وملحقات تطوير الوبّ، والقصاصات والأداء"
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr "Olivier JG"
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr "‏C++/Clang، وDUChain وإصلاحات للعلل"
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr "Andreas Pakulat"
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr "البنية، دعم VCS، دعم إدارة المشاريع، مدير مشاريع QMake"
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr "Alexander Dymo"
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr "البنية، واجهة مستخدم رائع، دعم روبي"
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr "David Nolden"
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+"تسلسلات Definition-Use، دعم سي++، التّنقّل في الكود، إكمال الكود، إرشاد في "
+"التّطوير، تحسينات على الكود"
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr "Vladimir Prus"
+
+#: main.cpp:397
+#, kde-format
+msgid "GDB integration"
+msgstr "تكامل GDB"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr "Hamish Rodda"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr "تكامل محرّر النّصوص،  تسلسل Definition-Use"
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr "Amilcar do Carmo Lucas"
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr "مدير الموقع، توثيق واجهة البرمجيّات، رُقع لِ‍ «دوكسيجين» وautoproject"
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr "Niko Sams"
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr "تكامل GDB، ملحقات تطوير الوبّ"
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr "Friedrich W. H. Kossebau"
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr "Matt Rogers"
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr "Cédric Pasteur"
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr "دعم astyle والإزاحة"
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr "Evgeniy Ivanov"
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr "نظام إدارة الإصدارات الموزّع، غِت وMercurial"
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr "Robert Gruber"
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr "جزء القصاصات، رقعات للمنقّح والاستخدام"
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr "Dukju Ahn"
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr "ملحقة Subversion، مدير صناعة مخصّص، تحسينات عامّة"
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr "Harald Fernengel"
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr "النّقل إلى «كيوت ٣»، دعم valgrind والفروق وperforce"
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr "Roberto Raggi"
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr "محلّل سي++"
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr "مؤلّفو «كاتبك»"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "عنصر محرّر كيت"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr "مؤسّسة نوكيا/برمجيّات كيوت"
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr "كود المصمّم"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr "المساهمين في الإصدارات السّابقة:"
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr "Bernd Gehrmann"
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr "الفكرة المبدئيّة، البنية الأساسيّة، أغلب النّصّ المصدريّ الأوّليّ"
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr "Caleb Tennis"
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr "إصلاحات علل و KTabBar"
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr "Richard Dale"
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr "دعم جافا وأبجكتيف سي"
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr "John Birch"
+
+#: main.cpp:419
+#, kde-format
+msgid "Debugger frontend"
+msgstr "صدر منقّح"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr "Sandy Meier"
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr "دعم PHP، الكثير من أمور قائمة السّياق"
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr "Kurt Granroth"
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr "قوالب تطبيقات كدي"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr "Ian Reinhart Geiser"
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "جزء Dist، دعم الصّدفة، قوالب التّطبيقات"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr "Matthias Hoelzer-Kluepfel"
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr "مكوّنات مختلفة، فهرسة htdig"
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr "Victor Roeder"
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr "مساعدة في مدير Automake وتخزين الأصناف المستمرّ"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr "Simon Hausmann"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr "مساعدة مع بنية «أجزاءك»"
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr "Oliver Kellogg"
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr "دعم Ada"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr "Jakob Simon-Gaarde"
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "مدير مشاريع QMake"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr "Falk Brettschneider"
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr "أوضاع MDI، ‏QEditor، إصلاحات علل"
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr "Mario Scalas"
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr "متصفّح الأجزاء، إعادة تصميم جزء CSV، رُقع، إصلاحات (للعلل)"
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr "Jens Dagerbo"
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr "ملحقات الاستبدال، والعلامات، وقائمة الملفّات وCTags2. تحسينات عامّة ورُقع"
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr "Julian Rockey"
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr "جزء ”إنشاء الملفّات“ وأمور ورُقع أخرى"
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr "Ajay Guleria"
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr "دعم ClearCase"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr "Marek Janukowicz"
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr "دعم روبي"
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr "Robert Moniot"
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "توثيق Fortran"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr "Ka-Ping Yee"
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr "أدوات توثيق بايثون"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr "Dimitri van Heesch"
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "مرشد «دوكسجين»"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr "Hugo Varotto"
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr "مكوّن محدّد الملفّات"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr "Matt Newell"
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr "Daniel Engelschalt"
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr "إكمال أكواد سي++، تخزين الأصناف المستمرّ"
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr "Stephane Ancelot"
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "رُقع"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr "Jens Zurheide"
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr "Luc Willems"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr "مساعدة في دعم بيرل"
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr "Marcel Turino"
+
+#: main.cpp:443
+#, kde-format
+msgid "Documentation index view"
+msgstr "عرض فهرس التّوثيق"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr "Yann Hodique"
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr "Tobias Gläßer"
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+"البحث في التّوثيق، رُقع لمدير مشاريع QMake، تحسينات للاستخدام وإصلاحات علل "
+"وغيرها"
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr "Andreas Koepfle"
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr "رُقع لمدير مشاريع QMake"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr "Sascha Cunz"
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr "تنظيفات وإصلاحات علل لِـ QEditor، ‏AutoMake والكثير من الأمور الأخرى"
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr "Zoran Karavla"
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr "عمل لغة روبي الفنّيّ"
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr "افتح مطوّرك بجلسة جديدة باستخدام الاسم المعطى."
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"افتح مطوّرك بالجلسة المعطاة.\n"
+"يمكنك تمرير التلبيدة أو اسم الجلسة."
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"احذف الجلسة المعطاة.\n"
+"يمكنك تمرير التلبيدة أو اسم الجلسة."
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr "يظهر كلّ الجلسات المتوفّرة ويدعك تحدّد واحدة لفتحها."
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr "يسرد كلّ الجلسات المتوفّرة في الصّدفة ويتيح لك اختيار ما تريد فتحه."
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr "يعرض كلّ الجلسات المتوفّرة ويخرج."
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "افتح «مطوّرك» وحمّل المشروع من <repo url> المعطى."
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+"افتح «مطوّرك» وحمّل المشروع المعطى. يمكن أن يكون <project> ملفّ ‎.kdev4 أو مسارًا "
+"إلى دليل."
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+"ابدأ تنقيح تطبيق في «مطورّك» بالمنقّح المقدّم.\n"
+"يجب أن يتبع التّنفيذيّ الذي سيُنقّح - شاملًا معاملاته.\n"
+"مثال: kdevelop --debug gdb myapp --foo bar"
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr "الملفّات لتُحمّل، أو الأدلّة لتُحمّل كمشاريع"
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr "الجلسات المتوفّرة (استخدم ’‎-s HASH‘ أو ’‎-s NAME‘ لفتح واحدة معيّنة):"
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr "التلبيدة"
+
+#: main.cpp:520
+#, kde-format
+msgid "Name: Opened Projects"
+msgstr "الاسم: المشاريع المفتوحة"
+
+#: main.cpp:529
+#, kde-format
+msgid "[running]"
+msgstr "[يعمل]"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr "حدّد جلسة تودّ استخدامها"
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr "حدّد التّنفيذيّ الّذي تريد تنقيحه."
+
+#: main.cpp:648
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "التّنفيذيّ المحدّد غير موجود."
+
+#: main.cpp:654
+#, kde-format
+msgid "Debug %1"
+msgstr "نقّح %1"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr "توجد جلسة بالاسم %1 بالفعل. استخدم المبدّل ‎-s لفتحها."
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr "لا جلسة بالاسم %1."
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr "تعذّر قفل الجلسة %1 لحذفها."
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr "أُزيلت الجلسة المسمّاة %1 بنجاح."
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr "تعذّر العثور على نوع ضبط إطلاق أصيل"
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr "تعذّر العثور على المطلق %1"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr "جلسات مطوّرك"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr "سلسلة اعتباطيّة تقول شيئًا"
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "يعثر على جلسات مطوّرك المطابقة لِـ :q:."
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr "يعرض كلّ جلسات محرّر مطوّرك في حسابك."
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "افتح جلسة مطوّرك"
+
+#~ msgid "Files to load"
+#~ msgstr "الملفّات لتحميلها"
+
+#~ msgid "&File"
+#~ msgstr "&ملفّ"
+
+#~ msgid "&Edit"
+#~ msgstr "&حرّر"
+
+#~ msgid "&Advanced"
+#~ msgstr "مت&قدّم"
+
+#~ msgid "&View"
+#~ msgstr "من&ظور"
+
+#~ msgid "&Code Folding"
+#~ msgstr "&طيّ الشِّفرة"
+
+#~ msgid "&Tools"
+#~ msgstr "أ&دوات"
+
+#~ msgid "Word Completion"
+#~ msgstr "إكمال الكلمات"
+
+#~ msgid "&Settings"
+#~ msgstr "إ&عدادات"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "محرّر"
+
+#, fuzzy
+#~ msgid "Deprecated options:"
+#~ msgstr "خيارات المشروع"
+
+#, fuzzy
+#~ msgid "The KHTML authors"
+#~ msgstr "الـ محرك KHTML"
+
+#~ msgid "HTML documentation component"
+#~ msgstr "مكونات توثيق ال HTML"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Develop"
+#~ msgstr "KDevelop"
+
+#, fuzzy
+#~ msgid "Configure a new Launcher"
+#~ msgstr "إلغاء يعمل الأوّل خطأ:"
+
+#, fuzzy
+#~ msgid "Debug your program"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Debug Area"
+#~ msgstr "&تنقيح"
+
+#, fuzzy
+#~ msgid "New Project"
+#~ msgstr "مشروع &جديد..."
+
+#~ msgid "Open project"
+#~ msgstr "افتح مشروع"
+
+#, fuzzy
+#~ msgid "Fetch project"
+#~ msgstr "افتح مشروع"
+
+#, fuzzy
+#~ msgid "Recent Projects"
+#~ msgstr "افتح حديثاستقبال DCC : %1????أخير مشروع"
+
+#, fuzzy
+#~ msgid "Sessions"
+#~ msgstr "إ&عدادات"
+
+#, fuzzy
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "عرض فهرس التوثيق"
+
+#, fuzzy
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "KDevelop"
+
+#, fuzzy
+#~ msgid "Starting"
+#~ msgstr "جاري تشغيل الواجهة الرسومية للمستخدم"
+
+#, fuzzy
+#~ msgid "Learn KDevelop!"
+#~ msgstr "KDevelop"
+
+#, fuzzy
+#~| msgid "union"
+#~ msgid "Execute your program"
+#~ msgstr "يعمل"
+
+#, fuzzy
+#~ msgid "Remove lock file"
+#~ msgstr "احذف الملف الشخصي"
+
+#, fuzzy
+#~| msgid "Open project"
+#~ msgid "Import project"
+#~ msgstr "افتح مشروع"
+
+#, fuzzy
+#~ msgid "Url to project to load"
+#~ msgstr "مشروع إلى التحميل"
+
+#, fuzzy
+#~ msgid "Session contents"
+#~ msgstr "إ&عدادات"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "ملفات لتحميلها"
+
+#~ msgid "Profile to load"
+#~ msgstr "تلميح لتحميل"
+
+#, fuzzy
+#~ msgid "Version %1"
+#~ msgstr "الإصدار %1"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "&ملف"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "ا&عرض"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "مشروع"
+
+#~ msgid "Run"
+#~ msgstr "تشغيل"
+
+#, fuzzy
+#~ msgid ""
+#~ "QEditor component, code completion, Abbrev component, C++ support, Java "
+#~ "support"
+#~ msgstr "مكوّن رمز إختصار لكلمة إختصار مكوّن C دعم Java دعم"
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "إل&غاء"
+
+#, fuzzy
+#~ msgid "Rename %1"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create Class"
+#~ msgstr "إنشاء مشروع جديد"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgid "New name:"
+#~ msgstr "الإ&سم:"
+
+#, fuzzy
+#~ msgid "Rename"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Uses"
+#~ msgstr "الفئة"
+
+#, fuzzy
+#~ msgid ""
+#~ "tried include-path-resolution while another resolution-process was still "
+#~ "running"
+#~ msgstr "تضمين المسار استبانة بينما استبانة إجراء جاري التنفيذ"
+
+#, fuzzy
+#~ msgid "Makefile is missing in folder \"%1\""
+#~ msgstr "Makefile هو مفقود بوصة مجلد"
+
+#, fuzzy
+#~ msgid "problem while trying to resolve include-paths for %1"
+#~ msgstr "بينما إلى حلّ ،فرَّق ،حلَّل تضمين لـ 1"
+
+#, fuzzy
+#~ msgid "Cached: "
+#~ msgstr "مخبّأ "
+
+#, fuzzy
+#~ msgid "Filename %1 seems to be malformed"
+#~ msgstr "اسم الملف إلى"
+
+#, fuzzy
+#~ msgid "make-process failed"
+#~ msgstr "make إجراء failed"
+
+#, fuzzy
+#~ msgid "output: %1"
+#~ msgstr "مخرجات 1"
+
+#, fuzzy
+#~ msgid "Recursive make-call failed"
+#~ msgstr "مكرر make نداء failed"
+
+#, fuzzy
+#~ msgid ""
+#~ "The parameter-string \"%1\" does not seem to be valid. Output was: %2"
+#~ msgstr "الـ معلمة سلسلة نص ليس إلى سليم مخرجات 2"
+
+#, fuzzy
+#~ msgid "The directory \"%1\" does not exist. Output was: %2"
+#~ msgstr "الـ دليل ليس مخرجات 2"
+
+#, fuzzy
+#~ msgid "Recursive make-call malformed"
+#~ msgstr "مكرر make نداء"
+
+#, fuzzy
+#~ msgid "Output was: %1"
+#~ msgstr "مخرجات 1"
+
+#, fuzzy
+#~ msgid "Could not extract include-paths from make-output"
+#~ msgstr "يمكن أن ليس استخراج تضمين من make مخرجات"
+
+#, fuzzy
+#~ msgid "Folder: \"%1\"  Command: \"%2\"Output: \"%3\""
+#~ msgstr "مجلّد الأمر مخرجات"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Preprocessed body:"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "متضمّن"
+
+#, fuzzy
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "متضمّن أداء"
+
+#, fuzzy
+#~| msgid "Predefined macros"
+#~ msgctxt "Count of macros defined in this header"
+#~ msgid "Defined macros"
+#~ msgstr "معرّف"
+
+#, fuzzy
+#~| msgid "Declarator"
+#~ msgid "Declarations:"
+#~ msgstr "الإعلانات:"
+
+#, fuzzy
+#~ msgid "not parsed yet"
+#~ msgstr "ليس"
+
+#, fuzzy
+#~ msgid "This file imports the current open document<br/>"
+#~ msgstr "هذا ملفّ واردات الحالي فتح مستند<br/>"
+
+#, fuzzy
+#~ msgid "In %1th include-path"
+#~ msgstr "عثر على بوصة تضمين المسار"
+
+#, fuzzy
+#~| msgid "Include path"
+#~ msgid "Included through"
+#~ msgstr "متضمّن"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "Directory %1"
+#~ msgstr "دليل 1"
+
+#, fuzzy
+#~ msgid "Includes"
+#~ msgstr "متضمّن"
+
+#, fuzzy
+#~| msgid "Include path"
+#~ msgid "Include Path"
+#~ msgstr "متضمّن"
+
+#, fuzzy
+#~ msgid "Includers"
+#~ msgstr "متضمّن"
+
+#, fuzzy
+#~| msgid "Ada support"
+#~ msgid "C++ Support"
+#~ msgstr "دعم الAda"
+
+#, fuzzy
+#~ msgid "Files"
+#~ msgstr "ملفات"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create &New Class"
+#~ msgstr "إنشاء مشروع جديد"
+
+#, fuzzy
+#~ msgid "Building uses"
+#~ msgstr "ابني نوع:"
+
+#, fuzzy
+#~ msgid "Formals: %1"
+#~ msgstr "استمارة"
+
+#, fuzzy
+#~ msgid "KDE forwarding header generator"
+#~ msgstr "كدي عنوان رأسي مولِّد"
+
+#, fuzzy
+#~ msgid ""
+#~ "An application which creates forwarding headers (like Qt headers) from "
+#~ "source code."
+#~ msgstr "أداة تعريف تطبيق مثل Qt من مصدر رمز."
+
+#, fuzzy
+#~ msgid "(c) 2006, Hamish Rodda"
+#~ msgstr "c"
+
+#, fuzzy
+#~ msgid ""
+#~ "KDE include directory - headers go into <placeholder>includes</"
+#~ "placeholder>/KDE"
+#~ msgstr "كدي تضمين دليل اذهب<placeholder></placeholder> كدي"
+
+#, fuzzy
+#~ msgid "Build information from the cmake XML generator"
+#~ msgstr "ابني معلومات من XML مولِّد"
+
+#, fuzzy
+#~ msgid "invalid input: %1"
+#~ msgstr "القيمة 1"
+
+#, fuzzy
+#~ msgid "Generate Stub Class"
+#~ msgstr "المولّد:"
+
+#, fuzzy
+#~ msgid "Generate Stub"
+#~ msgstr "المولّد:"
+
+#, fuzzy
+#~ msgid "Implement"
+#~ msgstr "تعليق"
+
+#, fuzzy
+#~ msgid "Add"
+#~ msgstr "إضافة"
+
+#, fuzzy
+#~ msgid "Test executable crashed."
+#~ msgstr "Make تنفيذي:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Test root."
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~ msgid "profile"
+#~ msgstr "أضِف حساب شخصي"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest verbose output"
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~ msgid "Test executable timed out."
+#~ msgstr "Make تنفيذي:"
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "Unknown error occurred."
+#~ msgstr "حدث خطأ"
+
+#, fuzzy
+#~ msgid "xTest"
+#~ msgstr "TextLabel4"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest test"
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Class name:"
+#~ msgstr "الفئة"
+
+#~ msgid "Search"
+#~ msgstr "بحث"
+
+#, fuzzy
+#~ msgid "Find In Files"
+#~ msgstr "ابحث داخل ملفات"
+
+#, fuzzy
+#~ msgid "Grep: %1"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "عاجز إلى إ_نشئ a مؤقت ملفّ لـ ابحث."
+
+#, fuzzy
+#~ msgid "Find in Files"
+#~ msgstr "ابحث داخل ملفات"
+
+#, fuzzy
+#~| msgid "Profile to load"
+#~ msgid "Process failed to start."
+#~ msgstr "تلميح لتحميل"
+
+#, fuzzy
+#~ msgid "Process crashed."
+#~ msgstr "make إجراء failed"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Process timed out."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "Unknown process error."
+#~ msgstr "حدث خطأ"
+
+#, fuzzy
+#~ msgid "Find in Fi&les..."
+#~ msgstr "ابحث بوصة ملفات."
+
+#~ msgid "Search for expressions over several files"
+#~ msgstr "بحث لـلتعبير فى ملفات مختلفة"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Find in files</b><p>Opens the 'Find in files' dialog. There you can "
+#~ "enter a regular expression which is then searched for within all files in "
+#~ "the directories you specify. Matches will be displayed, you can switch to "
+#~ "a match directly.</p>"
+#~ msgstr ""
+#~ "<b> ابحث بوصة ملفات</b><p> يفتح ابحث بوصة ملفات حوار هناك أدخل a عادي "
+#~ "تعبير هو لـ الكل ملفات بوصة تحديد مطابقات تحول إلى a طابق</p>"
+
+#~ msgid "Create New Project"
+#~ msgstr "إنشاء مشروع جديد"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "عام"
+
+#, fuzzy
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "الإصدار %1"
+
+#, fuzzy
+#~ msgid "Project Wizard"
+#~ msgstr "مشروع إلى التحميل"
+
+#~ msgid "Generate a new project from a template"
+#~ msgstr "توليد مشروع جديد من قالب "
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
+#~| "you to generate a skeleton for your application from a set of templates."
+#~ msgid ""
+#~ "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
+#~ "you to generate a skeleton for your application from a set of templates.</"
+#~ "p>"
+#~ msgstr ""
+#~ "<b> جديد مشروع</b><p> هذا KDevelop s تطبيق مرشد itإيطالياهو إلى توليد a "
+#~ "لـ تطبيق من a set من قوالب</p>"
+
+#, fuzzy
+#~| msgid "&Open Project..."
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&فتح مشروع..."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not import project into"
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not checkout imported project"
+#~ msgstr "لايمكن قراة ملف المشروع %1"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not import project"
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Could not create new project"
+#~ msgstr "إنشاء مشروع جديد"
+
+#, fuzzy
+#~ msgid "The file %1 cannot be created."
+#~ msgstr "الـ ملفّ."
+
+#, fuzzy
+#~ msgid "Project import error"
+#~ msgstr "مشروع قوالب"
+
+#, fuzzy
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "عاجز إلى إ_نشئ a مؤقت ملفّ لـ ابحث."
+
+#, fuzzy
+#~ msgid "Invalid Location"
+#~ msgstr "نهائي الموقع:"
+
+#, fuzzy
+#~ msgid "Empty project name"
+#~ msgstr "مشروع تمَ التحميل."
+
+#, fuzzy
+#~ msgid "Invalid project name"
+#~ msgstr "مشروع قوالب"
+
+#, fuzzy
+#~ msgid "Invalid Project Template"
+#~ msgstr "مشروع قوالب"
+
+#, fuzzy
+#~ msgid "Project Templates"
+#~ msgstr "مشروع قوالب"
+
+#, fuzzy
+#~ msgid "Document View"
+#~ msgstr "عرض المستند"
+
+#, fuzzy
+#~ msgid "Documents"
+#~ msgstr "مستندات"
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "معطل:"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Active"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "الرّمز"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Internal error"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Invalid debugger command"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "union"
+#~ msgid "Running program"
+#~ msgstr "يعمل"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not run application"
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger status"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Disassemble View"
+#~ msgstr "عطّل ملحق"
+
+#, fuzzy
+#~ msgid "Address"
+#~ msgstr "إضافة"
+
+#~ msgid "Function"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Instruction"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "لا يمكن إنشاء لغة توصيل ل %1."
+
+#, fuzzy
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "KCachegrind لا عثر على"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Internal debugger error"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not start debugger"
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "تحرير"
+
+#, fuzzy
+#~ msgid "Disable"
+#~ msgstr "معطل:"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "Delete"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~ msgid "Disable all"
+#~ msgstr "عطّل ملحق"
+
+#, fuzzy
+#~ msgid "Enable all"
+#~ msgstr "مكّن ملحق"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "Delete all"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~ msgid "Enable"
+#~ msgstr "ممكّن:"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy All"
+#~ msgstr "القيمة"
+
+#, fuzzy
+#~ msgid "Ignore"
+#~ msgstr "اللبّ"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Watches"
+#~ msgstr "تصحيح برنامج"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger Variables"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Recent Expressions"
+#~ msgstr "عادي تعبير:"
+
+#, fuzzy
+#~ msgid "Remove All"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgid "Re-evaluate All"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgid "Format"
+#~ msgstr "استمارة"
+
+#, fuzzy
+#~ msgid "Binary"
+#~ msgstr "CMake ثنائي:"
+
+#, fuzzy
+#~ msgid "Remove Watch Variable"
+#~ msgstr "احذف الملف الشخصي"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgid "Watch Variable"
+#~ msgstr "متغير"
+
+#, fuzzy
+#~ msgid "Reevaluate Expression"
+#~ msgstr "عادي تعبير:"
+
+#, fuzzy
+#~ msgid "Remove Expression"
+#~ msgstr "عادي تعبير:"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy Value"
+#~ msgstr "القيمة"
+
+#, fuzzy
+#~ msgid "Invalid"
+#~ msgstr "غير صالح"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Watchpoint"
+#~ msgstr "تصحيح برنامج"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Special debugger views"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Breakpoint"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Enabled"
+#~ msgstr "ممكّن:"
+
+#~ msgid "Type"
+#~ msgstr "نوع"
+
+#, fuzzy
+#~ msgid "Location"
+#~ msgstr "الموقع:"
+
+#, fuzzy
+#~ msgid "Condition"
+#~ msgstr "حاوي "
+
+#, fuzzy
+#~ msgid "Ignore Count"
+#~ msgstr "اللبّ"
+
+#, fuzzy
+#~| msgid "creating"
+#~ msgid "Tracing"
+#~ msgstr "إنشاء"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame"
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "C++ Debugger"
+#~ msgstr "&تنقيح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Breakpoints"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgid "Variables"
+#~ msgstr "متغير"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Frame Stack"
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~ msgid "Disassemble"
+#~ msgstr "معطل:"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debug views"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Start in debugger"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Stop debugger"
+#~ msgstr "&تنقيح"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Interrupt"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Interrupt application"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step over Ins&truction"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step over instruction"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step into I&nstruction"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Step into instruction"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~ msgid "Viewers"
+#~ msgstr "المستعرض"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger viewers"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Toggle breakpoint"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Evaluate: %1"
+#~ msgstr "القيمة 1"
+
+#, fuzzy
+#~ msgid "Watch: %1"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "اختر ملف إلى إضافة."
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Debugger"
+#~ msgstr "&تنقيح"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger stopped"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "&Continue"
+#~ msgstr "حاوي "
+
+#, fuzzy
+#~ msgid "Process exited"
+#~ msgstr "make إجراء failed"
+
+#~ msgid "Variable"
+#~ msgstr "متغير"
+
+#~ msgid "Value"
+#~ msgstr "القيمة"
+
+#, fuzzy
+#~ msgid "CMake Manager"
+#~ msgstr "CMake ثنائي:"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not save the change."
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "لايمكن قراة ملف المشروع %1"
+
+#~ msgid "Name"
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~ msgid "Comment"
+#~ msgstr "تعليق"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "إل&غاء"
+
+#, fuzzy
+#~ msgid "CMake process killed"
+#~ msgstr "CMake إجراء"
+
+#, fuzzy
+#~ msgid "Created successfully"
+#~ msgstr "تاريخ الإنشاء"
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "An error occurred"
+#~ msgstr "حدث خطأ"
+
+#, fuzzy
+#~| msgid "You have to select a file to import."
+#~ msgid "You need to select a cmake binary"
+#~ msgstr "أنت إلى تحديد a ثنائى"
+
+#, fuzzy
+#~ msgid "You need to specify a build directory"
+#~ msgstr "الإستعمال بناء دليل"
+
+#, fuzzy
+#~ msgid "Already used build directory"
+#~ msgstr "الإستعمال بناء دليل"
+
+#, fuzzy
+#~ msgid "Using an already created build directory"
+#~ msgstr "الإستعمال بناء دليل"
+
+#, fuzzy
+#~ msgid "The selected build directory is not empty"
+#~ msgstr "الـ مُنتقى دليل ليس أو هو ليس فارغ"
+
+#, fuzzy
+#~ msgid "This build directory is for %1, but the project directory is %2"
+#~ msgstr "الـ مُنتقى دليل ليس أو هو ليس فارغ"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "TextLabel4"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Action"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "إل&غاء"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "CMake ثنائي:"
+
+#~ msgid "Build &Target"
+#~ msgstr "&هدف التشيد"
+
+#~ msgid "Build target"
+#~ msgstr "هدف تشيد"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~| "directory (targetname is the name of the target selected)."
+#~| "<br>Environment variables and make arguments can be specified in the "
+#~| "project settings dialog, <b>Build Options</b> tab."
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b> ابني هدف</b><p> المرّات<b> make</b> من مشروع دليل هو الاسم من هدف "
+#~ "مُنتقى</p><p> البيئة و make المعاملات بوصة مشروع خصائص حوار<b> ابني "
+#~ "خيارات</b> لسان</p>"
+
+#, fuzzy
+#~ msgid "Build this project"
+#~ msgstr "ابني مشروع"
+
+#, fuzzy
+#~ msgid "Build this target"
+#~ msgstr "ابني هدف"
+
+#, fuzzy
+#~ msgid "Build this directory"
+#~ msgstr "ابني دليل"
+
+#, fuzzy
+#~ msgid "Parse QMake project files"
+#~ msgstr "يُعرْب :: تُعرب مشروع ملفات"
+
+#, fuzzy
+#~ msgid "Enable output of the debug AST"
+#~ msgstr ""
+#~ "مكّن مخرجات من يصحح\n"
+#~ "تنقيح"
+
+#, fuzzy
+#~ msgid "QMake project files"
+#~ msgstr "مشروع ملفات"
+
+#, fuzzy
+#~| msgid "QMake projectmanager"
+#~ msgid "QMake Manager"
+#~ msgstr "مدير مشروع  QMake"
+
+#, fuzzy
+#~ msgid "freedesktop.org Desktop Entry Files"
+#~ msgstr "سطح المكتب مُدخل ملفات"
+
+#, fuzzy
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "كدي تعريفات"
+
+#, fuzzy
+#~ msgid "Installed headers"
+#~ msgstr "مثبت"
+
+#, fuzzy
+#~ msgid "Uninstalled headers"
+#~ msgstr "ترويسات خاصة"
+
+#, fuzzy
+#~ msgid "Number of times visited."
+#~ msgstr "الرقم من:"
+
+#, fuzzy
+#~ msgid "source"
+#~ msgstr "اللبّ"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "coverage"
+#~ msgstr "ClearCase support"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "دالة"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Report"
+#~ msgstr "ClearCase support"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Support"
+#~ msgstr "ClearCase support"
+
+#, fuzzy
+#~ msgid "CMake Builder"
+#~ msgstr "CMake ثنائي:"
+
+#, fuzzy
+#~ msgid "CMake: %1"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "QMake Builder"
+#~ msgstr "ثنائي:"
+
+#, fuzzy
+#~ msgid "No project specified."
+#~ msgstr "مشروع ملفات"
+
+#, fuzzy
+#~ msgid "QMake: %1"
+#~ msgstr "1"
+
+#, fuzzy
+#~ msgid "Make Builder"
+#~ msgstr "CMake ثنائي:"
+
+#~ msgid "compiling"
+#~ msgstr "تصنيف"
+
+#~ msgid "generating"
+#~ msgstr "توليد"
+
+#, fuzzy
+#~| msgid "linking"
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "ربط"
+
+#, fuzzy
+#~ msgid "built"
+#~ msgstr "البناء"
+
+#~ msgid "installing"
+#~ msgstr "تثبيت"
+
+#~ msgid "creating"
+#~ msgstr "إنشاء"
+
+#, fuzzy
+#~ msgid "Make: %1"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "الإستعمال بناء دليل"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "لا يمكن إنشاء لغة توصيل ل %1."
+
+#, fuzzy
+#~ msgid "Valgrind Output"
+#~ msgstr "Valgrind مخرجات"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/"
+#~ ">use of uninitialized memory<br/>reading/writing memory after it has been "
+#~ "free'd<br/>reading/writing off the end of malloc'd blocks<br/>reading/"
+#~ "writing inappropriate areas on the stack<br/>memory leaks -- where "
+#~ "pointers to malloc'd blocks are lost forever<br/>passing of uninitialised "
+#~ "and/or unaddressable memory to system calls<br/>mismatched use of malloc/"
+#~ "new/new [] vs free/delete/delete []<br/>some abuses of the POSIX pthread "
+#~ "API.</p>"
+#~ msgstr ""
+#~ "<b> Valgrind</b><p> المعارض مخرجات من Valgrind<br/> استخدام من ذاكرة<br/> "
+#~ "القراءة ذاكرة بعد الإيطالية حرّة d<br/> القراءة موقف end من d صناديق<br/> "
+#~ "القراءة يعمل رصة\n"
+#~ "رصّ<br/> ذاكرة إلى d صناديق إلى الأبد<br/> من و أو ذاكرة إلى نظام<br/> "
+#~ "استخدام من جديد جديد حرّة حذف حذف<br/> بعض من</p>"
+
+#~ msgid "Valgrind"
+#~ msgstr "Valgrind"
+
+#~ msgid "&Valgrind Memory Leak Check"
+#~ msgstr "التحقق من تسرب ذاكرة &فالجريندق"
+
+#, fuzzy
+#~| msgid "Valgrind memory leak check"
+#~ msgid "Valgrind memory leak check and other tools"
+#~ msgstr "تحقق تسرب ذاكرة Valgrind"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you "
+#~ "find memory-management problems in your programs, and other valgrind "
+#~ "tools.</p>"
+#~ msgstr ""
+#~ "<b> Valgrind ذاكرة تسريب تفقّد</b><p> المرّات Valgrind a أداة إلى مساعدة "
+#~ "ابحث ذاكرة إدارة بوصة</p>"
+
+#~ msgid "Open Valgrind Output"
+#~ msgstr "فتح مخرجات فالجريند"
+
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "لايمكن فتح مخرجات  فالجريند:%1"
+
+#, fuzzy
+#~| msgid "&Valgrind Memory Leak Check"
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "التحقق من تسرب ذاكرة &فالجريندق"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "Valgrind communication error"
+#~ msgstr "نهائي الموقع:"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind crashed."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind Error"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind process timed out."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "at: %1"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "by: %1"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "Source"
+#~ msgstr "اللبّ"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Object"
+#~ msgstr "مشروع"
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a valid project file.\n"
+#~| "XML error in line %1, column %2:\n"
+#~| "%3"
+#~ msgid "Valgrind XML Parsing: error at line %1, column %2: %3"
+#~ msgstr ""
+#~ "هذا ليس ملف المشروع الصحيح.\n"
+#~ "خطاء XML فى السطر %1، العمود %2:\n"
+#~ "%3"
+
+#, fuzzy
+#~| msgid "Designer code"
+#~ msgid "Qt Designer"
+#~ msgstr "شفرة مصمم"
+
+#, fuzzy
+#~ msgid "Widget Box"
+#~ msgstr "كائن صندوق"
+
+#, fuzzy
+#~ msgid "Property Editor"
+#~ msgstr "محرر الخصائص"
+
+#, fuzzy
+#~ msgid "Action Editor"
+#~ msgstr "إجراء المحرر"
+
+#, fuzzy
+#~ msgid "Object Inspector"
+#~ msgstr "كائن المفتش"
+
+#, fuzzy
+#~ msgid "Close Document"
+#~ msgstr "مستندات"
+
+#, fuzzy
+#~ msgid "%{APPNAME}"
+#~ msgstr "$APPNAME$"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Protected"
+#~ msgstr "مشروع"
+
+#, fuzzy
+#~ msgid "C++ Options"
+#~ msgstr "مشروع خيارات"
+
+#, fuzzy
+#~ msgid "Enable tracing"
+#~ msgstr "مكّن ملحق"
+
+#, fuzzy
+#~ msgid "Command"
+#~ msgstr "تعليق"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "تشغيل"
+
+#, fuzzy
+#~ msgid "Debugger Toolbar"
+#~ msgstr "المصمم التصميم شريط الأدوات"
+
+#, fuzzy
+#~| msgid "Debugger frontend"
+#~ msgid "Debugger Configuration"
+#~ msgstr "الواجهة الامامية للمُنقح"
+
+#, fuzzy
+#~ msgid "Debugger executable:"
+#~ msgstr "Make تنفيذي:"
+
+#, fuzzy
+#~ msgid "Gdb executable"
+#~ msgstr "Make تنفيذي:"
+
+#, fuzzy
+#~ msgid "Options"
+#~ msgstr "مشروع خيارات"
+
+#, fuzzy
+#~ msgid "Profile Editor for The KDevelop Platform"
+#~ msgstr "الملف الشخصي المحرر لـ الـ KDevelop المنصّة"
+
+#, fuzzy
+#~ msgid "Add Profile"
+#~ msgstr "أضِف حساب شخصي"
+
+#~ msgid "Description"
+#~ msgstr "الوصف"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "خصائص"
+
+#, fuzzy
+#~ msgid "Derived properties:"
+#~ msgstr ""
+#~ "مشتق :: مستمد :: مستنتج :: مردود إلى أصل :: منشأ (من مصدر ما) خصائِص:"
+
+#, fuzzy
+#~ msgid "Own properties:"
+#~ msgstr "الملك خصائِص:"
+
+#, fuzzy
+#~ msgid "Lists of Explicitly Enabled && Disabled Plugins"
+#~ msgstr "القوائم من بشكل واضح ممكّن معطل ملحقات"
+
+#, fuzzy
+#~ msgid "Enabled:"
+#~ msgstr "ممكّن:"
+
+#, fuzzy
+#~ msgid "Plugin Name"
+#~ msgstr "اسم الملحق"
+
+#, fuzzy
+#~ msgid "Disabled:"
+#~ msgstr "معطل:"
+
+#~ msgid "<-"
+#~ msgstr "<-"
+
+#, fuzzy
+#~ msgid "Available plugins:"
+#~ msgstr "متوفر:"
+
+#, fuzzy
+#~ msgid "Generic Name"
+#~ msgstr "اسم عام"
+
+#~ msgid "->"
+#~ msgstr "->"
+
+#, fuzzy
+#~ msgid "List of Plugins to Be Loaded"
+#~ msgstr "قائمة من ملحقات إلى كن محمل"
+
+#~ msgid "&Name:"
+#~ msgstr "الإ&سم:"
+
+#, fuzzy
+#~ msgid "&Generic name:"
+#~ msgstr "عام الاسم:"
+
+#~ msgid "&Description:"
+#~ msgstr "&وصف:"
+
+#, fuzzy
+#~ msgid "Build Directory Creator"
+#~ msgstr "ابني دليل المنشئ"
+
+#, fuzzy
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake ثنائي:"
+
+#, fuzzy
+#~ msgid "&Build Directory:"
+#~ msgstr "ابني دليل:"
+
+#, fuzzy
+#~ msgid "&Installation Prefix:"
+#~ msgstr "تثبيت ملحق التنصيب:"
+
+#, fuzzy
+#~ msgid "Build &type:"
+#~ msgstr "ابني نوع:"
+
+#, fuzzy
+#~| msgid "Debug"
+#~ msgid "debug"
+#~ msgstr ""
+#~ "يصحح\n"
+#~ "تنقيح"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "release"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~ msgid "MinSizeRel"
+#~ msgstr "تصغير ال&كل"
+
+#, fuzzy
+#~ msgid "Generator:"
+#~ msgstr "المولّد:"
+
+#, fuzzy
+#~ msgid "TextLabel"
+#~ msgstr "TextLabel4"
+
+#, fuzzy
+#~ msgid "Cache Values"
+#~ msgstr "الذّاكرة المؤقّتة القيم"
+
+#, fuzzy
+#~| msgid "Co&mment:"
+#~ msgid "Comment:"
+#~ msgstr "تعليق:"
+
+#, fuzzy
+#~| msgid "Show included files"
+#~ msgid "Show Advanced"
+#~ msgstr "اعرض متقدم"
+
+#, fuzzy
+#~| msgid "Make Active Directory"
+#~ msgid "CMake Directory"
+#~ msgstr "CMake دليل"
+
+#, fuzzy
+#~| msgid "Show included files"
+#~ msgid "Show Advanced Values"
+#~ msgstr "اعرض متقدم القيم"
+
+#, fuzzy
+#~ msgid "Viewer"
+#~ msgstr "المستعرض"
+
+#, fuzzy
+#~ msgid "Parse Tree"
+#~ msgstr "يُعرْب :: تُعرب شجرة"
+
+#, fuzzy
+#~ msgid "Value 1"
+#~ msgstr "القيمة 1"
+
+#, fuzzy
+#~ msgid "Value 2"
+#~ msgstr "القيمة 2"
+
+#, fuzzy
+#~ msgid "Source to Be Written Back"
+#~ msgstr "المصدر إلى كن كتب الخلف"
+
+#, fuzzy
+#~ msgid "Add All From Directory"
+#~ msgstr "إضافة الكل من دليل"
+
+#, fuzzy
+#~ msgid "Choose File to Add..."
+#~ msgstr "اختر ملف إلى إضافة."
+
+#, fuzzy
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake ثنائي:"
+
+#, fuzzy
+#~ msgid "QMake Binary:"
+#~ msgstr "ثنائي:"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "ا&عرض"
+
+#, fuzzy
+#~ msgid "Abort on first error:"
+#~ msgstr "إلغاء يعمل الأوّل خطأ:"
+
+#, fuzzy
+#~ msgid "Display commands but do not execute them:"
+#~ msgstr "العرض ليس:"
+
+#, fuzzy
+#~ msgid "Run more than one job at once:"
+#~ msgstr "شغّل المزيد شغل عند:"
+
+#, fuzzy
+#~ msgid "Number of simultaneous jobs:"
+#~ msgstr "الرقم من:"
+
+#, fuzzy
+#~ msgid "Make executable:"
+#~ msgstr "Make تنفيذي:"
+
+#, fuzzy
+#~ msgid "Default make target:"
+#~ msgstr "افتراضي make هدف:"
+
+#, fuzzy
+#~ msgid "Additional make options:"
+#~ msgstr "إضافي make خيارات:"
+
+#, fuzzy
+#~ msgid "Active Environment Profile:"
+#~ msgstr "نشط البيئة الملف الشخصي "
+
+#, fuzzy
+#~| msgid "&Pattern:"
+#~ msgid "Pattern:"
+#~ msgstr "نمط:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter the regular expression you want to search for here.<p>Possible meta "
+#~ "characters are:<ul><li><b>.</b> - Matches any character</li><li><b>^</b> "
+#~ "- Matches the beginning of a line</li><li><b>$</b> - Matches the end of a "
+#~ "line</li><li><b>\\&lt;</b> - Matches the beginning of a word</li><li><b>"
+#~ "\\&gt;</b> - Matches the end of a word</li></ul>The following repetition "
+#~ "operators exist:<ul><li><b>?</b> - The preceding item is matched at most "
+#~ "once</li><li><b>*</b> - The preceding item is matched zero or more times</"
+#~ "li><li><b>+</b> - The preceding item is matched one or more times</"
+#~ "li><li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> "
+#~ "times</li><li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> "
+#~ "or more times</li><li><b>{,<i>n</i>}</b> - The preceding item is matched "
+#~ "at most <i>n</i> times</li><li><b>{<i>n</i>,<i>m</i>}</b> - The preceding "
+#~ "item is matched at least <i>n</i>, but at most <i>m</i> times.</li></"
+#~ "ul>Furthermore, backreferences to bracketed subexpressions are available "
+#~ "via the notation \\<i>n</i>.</p>"
+#~ msgstr ""
+#~ "إدخال عادي تعبير إلى ابحث لـ<p> محتمل أعلى محارف<ul><li><b></b> مطابقات "
+#~ "أي منها رمز\n"
+#~ "حرف\n"
+#~ "مِحرف</li><li><b></b> مطابقات من a سطر</li><li><b></b> مطابقات end من a "
+#~ "سطر</li><li><b>&lt;</b> مطابقات من a كلمة</li><li><b>&gt;</b> مطابقات end "
+#~ "من a كلمة</li></ul> الـ متابعة<ul><li><b></b> الـ سابق عنصر هو عند</"
+#~ "li><li><b></b> الـ سابق عنصر هو يضع أصفارا\n"
+#~ "صفر أو المزيد الوقت</li><li><b></b> الـ سابق عنصر هو أو المزيد الوقت</"
+#~ "li><li><b><i> n</i></b> الـ سابق عنصر هو<i> n</i> الوقت</li><li><b><i> n</"
+#~ "i></b> الـ سابق عنصر هو<i> n</i> أو المزيد الوقت</li><li><b><i> n</i></b> "
+#~ "الـ سابق عنصر هو عند<i> n</i> الوقت</li><li><b><i> n</i><i> m</i></b> الـ "
+#~ "سابق عنصر هو عند<i> n</i> عند<i> m</i> الوقت</li></ul> علاوة على ذلك إلى "
+#~ "متوفّر تدوين<i> n</i></p>"
+
+#, fuzzy
+#~| msgid "&Template:"
+#~ msgid "Template:"
+#~ msgstr "قالب:"
+
+#, fuzzy
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#, fuzzy
+#~ msgid "Regular Expression:"
+#~ msgstr "عادي تعبير:"
+
+#, fuzzy
+#~| msgid "C&ase sensitive"
+#~ msgid "Case Sensitive:"
+#~ msgstr "الحالة حساس:"
+
+#~ msgid "Directory:"
+#~ msgstr "الدليل:"
+
+#, fuzzy
+#~ msgid "Recursive:"
+#~ msgstr "مكرر:"
+
+#, fuzzy
+#~ msgid "Limit to project files:"
+#~ msgstr "الحدّ إلى مشروع ملفات:"
+
+#, fuzzy
+#~| msgid "&File(s):"
+#~ msgid "Files:"
+#~ msgstr "الملفات:"
+
+#~ msgid ""
+#~ "Enter the file name pattern of the files to search here. You may give "
+#~ "several patterns separated by commas"
+#~ msgstr ""
+#~ "ادخل نقش اسم الملف للملفات للبحث هنا.ربما تعطى نقوش مختلفة تميز بفواصل"
+
+#, fuzzy
+#~ msgid "Exclude:"
+#~ msgstr "إستثنِ:"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can choose a template for the pattern from the combo box and edit it "
+#~| "here. The string %s in the template is replaced by the pattern input "
+#~| "field, resulting in the regular expression to search for."
+#~ msgid ""
+#~ "You can choose a template for the pattern from the combo box and edit it "
+#~ "here. The string %s in the template is replaced  by the pattern input "
+#~ "field, resulting in the regular expression to search for."
+#~ msgstr ""
+#~ "أنت اختيار a قالب لـ التشكيلة من مربّع و حرّر الإيطالية الـ سلسلة نص s بوصة "
+#~ "قالب هو أداء التشكيلة دَخْل حقل بوصة عادي تعبير إلى ابحث لـ."
+
+#, fuzzy
+#~ msgid "Suppress find errors:"
+#~ msgstr "إقمع ابحث:"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory:"
+#~ msgstr "الدليل:"
+
+#, fuzzy
+#~ msgid "Project &name:"
+#~ msgstr "مشروع تمَ التحميل."
+
+#, fuzzy
+#~ msgid "&Build System:"
+#~ msgstr "ابني نوع:"
+
+#, fuzzy
+#~ msgid "CMake"
+#~ msgstr "Make 1"
+
+#, fuzzy
+#~ msgid "QMake"
+#~ msgstr "1"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "الموقع:"
+
+#, fuzzy
+#~ msgid "Application Name:"
+#~ msgstr "تطبيق الاسم:"
+
+#, fuzzy
+#~ msgid "(invalid)"
+#~ msgstr "غير صالح"
+
+#, fuzzy
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "العرض مستند فئات بوصة اعرض"
+
+#, fuzzy
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype. If this option is not set, the Document View "
+#~ "will not\n"
+#~ "        organize the open documents by type."
+#~ msgstr ""
+#~ "إذا خيار هو set مستند عرض تنظيم مستندات\n"
+#~ " أداء إذا خيار هو ليس set مستند عرض ليس\n"
+#~ " تنظيم فتح مستندات أداء نوع."
+
+#, fuzzy
+#~ msgid "Display document &categories"
+#~ msgstr "العرض مستند فئات"
+
+#, fuzzy
+#~| msgid "generating"
+#~ msgid "Indentation"
+#~ msgstr "توليد"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Spaces"
+#~ msgstr "تصحيح برنامج"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Cases"
+#~ msgstr "الفئة"
+
+#~ msgid "Class"
+#~ msgstr "الفئة"
+
+#, fuzzy
+#~ msgid "Labels"
+#~ msgstr "TextLabel4"
+
+#, fuzzy
+#~ msgid "Namespaces"
+#~ msgstr "مجال أسماء المجلّدات كنية"
+
+#, fuzzy
+#~| msgid "Patches"
+#~ msgid "Switches"
+#~ msgstr "تصحيح برنامج"
+
+#~ msgid "&Executable:"
+#~ msgstr "ال&تنفيذي:"
+
+#, fuzzy
+#~| msgid "&Parameters:"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "&مُعاملات:"
+
+#, fuzzy
+#~ msgid "&Memcheck"
+#~ msgstr "التحقق من &تسرب الذاكرة"
+
+#, fuzzy
+#~| msgid "&Show still reachable blocks"
+#~ msgid "Show Reachable Blocks"
+#~ msgstr "اظهر الحزم الجارى إستخدامها"
+
+#, fuzzy
+#~ msgid "&Cachegrind"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "Ca&llgrind"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "&Helgrind"
+#~ msgstr "Valgrind"
+
+#~ msgid "&Parameters:"
+#~ msgstr "&مُعاملات:"
+
+#, fuzzy
+#~ msgid "Callgrind"
+#~ msgstr "Valgrind"
+
+#~ msgid "&Trace children"
+#~ msgstr "&تتبع الابناء "
+
+#~ msgid "E&xecutable:"
+#~ msgstr "قا&بل للتّنفيذ:"
+
+#~ msgid "Additional p&arameters:"
+#~ msgstr "مُ&دخلات إضافية:"
+
+#, fuzzy
+#~ msgid "KCacheGrind"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "Executable:"
+#~ msgstr "تنفيذي:"
+
+#, fuzzy
+#~ msgid "Memcheck"
+#~ msgstr "التحقق من &تسرب الذاكرة"
+
+#~ msgid "Memory &leak check"
+#~ msgstr "التحقق من &تسرب الذاكرة"
+
+#~ msgid "&Show still reachable blocks"
+#~ msgstr "اظهر الحزم الجارى إستخدامها"
+
+#, fuzzy
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "استمارة"
+
+#, fuzzy
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "المصمم التصميم شريط الأدوات"
+
+#, fuzzy
+#~ msgid "KDevelop Profile Editor"
+#~ msgstr "KDevelop الملف الشخصي المحرر"
+
+#, fuzzy
+#~ msgid "(c) 2004, The KDevelop Developers"
+#~ msgstr "c الـ KDevelop المطوّرون"
+
+#, fuzzy
+#~ msgid "Core"
+#~ msgstr "اللبّ"
+
+#, fuzzy
+#~| msgid "Global"
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "شامل"
+
+#~ msgid "Project"
+#~ msgstr "مشروع"
+
+#, fuzzy
+#~ msgid "Core Plugins"
+#~ msgstr "اللبّ ملحقات"
+
+#, fuzzy
+#~ msgid "Global Plugins"
+#~ msgstr "شامل ملحقات"
+
+#, fuzzy
+#~ msgid "Project Plugins"
+#~ msgstr "مشروع ملحقات"
+
+#, fuzzy
+#~ msgid "Remove selected profile and all its subprofiles?"
+#~ msgstr "احذف مُنتقى التوصيف و الكل?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Cannot remove this profile because it is not a local (user-created) "
+#~ "profile."
+#~ msgstr "لا يستطيع أزِل التوصيف الإيطالية هو ليس a محليّ مستخدم التوصيف."
+
+#, fuzzy
+#~ msgid "This plugin is already contained in the list of disabled plugins."
+#~ msgstr "هذا ملحق هو بوصة قائمة من معطل."
+
+#, fuzzy
+#~ msgid "Enable Plugin"
+#~ msgstr "مكّن ملحق"
+
+#, fuzzy
+#~ msgid "This plugin is already contained in the list of enabled plugins."
+#~ msgstr "هذا ملحق هو بوصة قائمة من ممكن."
+
+#, fuzzy
+#~ msgid "Disable Plugin"
+#~ msgstr "عطّل ملحق"
+
+#~ msgid ""
+#~ "The file %1 does not contain valid XML.\n"
+#~ "The loading of the session failed."
+#~ msgstr ""
+#~ "الملف %1 لايحتوى على XML صحيحة.\n"
+#~ "فشل تحميل الحيز."
+
+#~ msgid ""
+#~ "The file %1 does not contain a valid KDevelop project session "
+#~ "('KDevPrjSession').\n"
+#~ msgstr ""
+#~ "الملف %1 لايحتوى على حيز مشروع KDevelop صحيح\n"
+#~ "('KDevPrjSession').\n"
+
+#~ msgid "The document type seems to be: '%1'."
+#~ msgstr "نوع المستند يظهر أنه: '%1'."
+
+#~ msgid "&Open Project..."
+#~ msgstr "&فتح مشروع..."
+
+#, fuzzy
+#~| msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project."
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr "<b> افتح مشروع</b><p> يفتح a أو مشروع</p>"
+
+#~ msgid "Open recent project"
+#~ msgstr "فتح مشروع حديث..."
+
+#, fuzzy
+#~| msgid "<b>Open recent project</b><p>Opens recently opened project."
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr "<b> افتح مشروع</b><p> يفتح مشروع</p>"
+
+#~ msgid "C&lose Project"
+#~ msgstr "إ&غلاق مشروع"
+
+#~ msgid "Close project"
+#~ msgstr "إغلاق مشروع"
+
+#, fuzzy
+#~| msgid "<b>Close project</b><p>Closes the current project."
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "<b> إغلاق مشروع</b><p> يغلق الحالي مشروع</p>"
+
+#, fuzzy
+#~ msgid "Project &Options"
+#~ msgstr "مشروع خيارات"
+
+#, fuzzy
+#~| msgid "<b>Project options</b><p>Lets you customize project options."
+#~ msgid "<b>Project options</b><p>Lets you customize project options.</p>"
+#~ msgstr "<b> مشروع خيارات</b><p> العوائق تخصيص مشروع خيارات</p>"
+
+#, fuzzy
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr "KDevelop مشروع ملفات n"
+
+#, fuzzy
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "هل إلى الحالي مشروع?"
+
+#, fuzzy
+#~ msgid "Changing plugin profile..."
+#~ msgstr "التغيير ملحق التوصيف."
+
+#, fuzzy
+#~ msgid "Loading project plugins..."
+#~ msgstr "جاري التّحميل مشروع."
+
+#, fuzzy
+#~ msgid "error during restoring of the KDevelop session"
+#~ msgstr "خطأ من KDevelop جلسة"
+
+#, fuzzy
+#~ msgid "Project loaded."
+#~ msgstr "مشروع تمَ التحميل."
+
+#~ msgid ""
+#~ "This is not a valid project file.\n"
+#~ "XML error in line %1, column %2:\n"
+#~ "%3"
+#~ msgstr ""
+#~ "هذا ليس ملف المشروع الصحيح.\n"
+#~ "خطاء XML فى السطر %1، العمود %2:\n"
+#~ "%3"
+
+#~ msgid "This is not a valid project file."
+#~ msgstr "هذا ليس ملف المشروع الصحيح."
+
+#~ msgid "Could not write the project file."
+#~ msgstr "لا يمكن كتابة ملف المشروع."
+
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "لايوجد توصيل ادارة مشروع %1."
+
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "غير قادر على إنشاء توصيل ادارة مشروع %1."
+
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "لم يجد لغة توصيل ل %1."
+
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "لا يمكن إنشاء لغة توصيل ل %1."
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "استمارة"
+
+#, fuzzy
+#~ msgid "Valid Location"
+#~ msgstr "نهائي الموقع:"
+
+#, fuzzy
+#~| msgid "Un&known:"
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "مجهول"
+
+#, fuzzy
+#~| msgid "Name&space:"
+#~ msgid "Namespace import"
+#~ msgstr "مجال أسماء المجلّدات استيراد"
+
+#, fuzzy
+#~ msgid "Namespace alias"
+#~ msgstr "مجال أسماء المجلّدات كنية"
+
+#, fuzzy
+#~ msgid "Forward Declaration"
+#~ msgstr "أمام تعريف"
+
+#, fuzzy
+#~ msgid "enumerator"
+#~ msgstr "المولّد:"
+
+#, fuzzy
+#~| msgid "expected a declaration"
+#~ msgid "resolved forward-declaration"
+#~ msgstr "أمام تعريف"
+
+#, fuzzy
+#~| msgid "expected a declaration"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "أمام تعريف"
+
+#, fuzzy
+#~ msgid "Container: "
+#~ msgstr "حاوي "
+
+#, fuzzy
+#~ msgid "Scope: "
+#~ msgstr "المجال "
+
+#, fuzzy
+#~ msgid "Access: "
+#~ msgstr "النفاذ "
+
+#, fuzzy
+#~ msgid "Kind: "
+#~ msgstr "النوع "
+
+#, fuzzy
+#~| msgid "&Modified:"
+#~ msgid "Modifiers: "
+#~ msgstr "مغيّرات "
+
+#, fuzzy
+#~ msgid "Decl.: "
+#~ msgstr "ا&لمعلن:"
+
+#, fuzzy
+#~ msgid " Def.: "
+#~ msgstr "ا&لمعلن:"
+
+#, fuzzy
+#~ msgid " Decl.: "
+#~ msgstr "ا&لمعلن:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "File Name"
+#~ msgstr "الاسم"
+
+#, fuzzy
+#~ msgid "Maintainer"
+#~ msgstr "المشرف"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "Delete style"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "هل إلى الحالي مشروع?"
+
+#, fuzzy
+#~| msgid "&Run"
+#~ msgid "QxRunner"
+#~ msgstr "&تشغيل"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "Select &All"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~ msgid "E&xit"
+#~ msgstr "تحرير"
+
+#, fuzzy
+#~ msgid "&Settings..."
+#~ msgstr "إ&عدادات"
+
+#, fuzzy
+#~ msgid "&Toolbars"
+#~ msgstr "أ&دوات"
+
+#, fuzzy
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "المصمم التصميم شريط الأدوات"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "تشغيل"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "Selected:"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Run:"
+#~ msgstr "تشغيل"
+
+#, fuzzy
+#~ msgid "Success"
+#~ msgstr "النفاذ "
+
+#, fuzzy
+#~ msgid "Exceptions"
+#~ msgstr "مشروع خيارات"
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "الرّمز"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Failed to comply."
+#~ msgstr "ملفات لتحميلها"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory"
+#~ msgstr "الدليل:"
+
+#, fuzzy
+#~ msgid "Click run when you are ready"
+#~ msgstr "نقر تنفيذ جاهز"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "إصدار"
+
+#, fuzzy
+#~| msgid "Bu&ild"
+#~ msgid "Build"
+#~ msgstr "&أبنى"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "مشروع"
+
+#~ msgid "&Build"
+#~ msgstr "&بناء"
+
+#, fuzzy
+#~ msgid "F&orm"
+#~ msgstr "استمارة"
+
+#~ msgid "Build Toolbar"
+#~ msgstr "شريط أدوات البناء"
+
+#~ msgid "Browser Toolbar"
+#~ msgstr "شريط ادوات المُتصفح"
+
+#, fuzzy
+#~ msgid "Extra Toolbar"
+#~ msgstr "شريط أدوات إضافي"
+
+#, fuzzy
+#~ msgid "(bad forward-declaration)"
+#~ msgstr "أمام تعريف"
+
+#, fuzzy
+#~ msgid "(forward-declaration)"
+#~ msgstr "أمام تعريف"
+
+#, fuzzy
+#~ msgid "No such file or directory."
+#~ msgstr "ابني دليل"
+
+#~ msgid ""
+#~ "Could not find valgrind in your $PATH. Please make sure it is installed "
+#~ "properly."
+#~ msgstr "لايجد valgrind فى $PATH لديك. رجاء تاكد من تثبيتها بالصورة الصحيحة."
+
+#~ msgid "Valgrind Not Found"
+#~ msgstr "لا توجد فالجريند"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not find calltree in your $PATH. Please make sure it is installed "
+#~ "properly."
+#~ msgstr "يمكن أن ليس ابحث بوصة المسار رجاء make الإيطالية هو مُثبّتة."
+
+#, fuzzy
+#~ msgid "Calltree Not Found"
+#~ msgstr "لا عثر على"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not find kcachegrind in your $PATH. Please make sure it is "
+#~ "installed properly."
+#~ msgstr "يمكن أن ليس ابحث بوصة المسار رجاء make الإيطالية هو مُثبّتة."
+
+#, fuzzy
+#~ msgid "KCachegrind Not Found"
+#~ msgstr "KCachegrind لا عثر على"
+
+#, fuzzy
+#~ msgid "Importers"
+#~ msgstr "المستوردون"
+
+#, fuzzy
+#~ msgid "Project file already exists."
+#~ msgstr "مشروع تمَ التحميل."
+
+#, fuzzy
+#~ msgid "P&rofile with KCachegrind"
+#~ msgstr "الملف الشخصي مع KCacheg&rind"
+
+#, fuzzy
+#~ msgid "Profile with KCachegrind"
+#~ msgstr "الملف الشخصي مع KCachegrind"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Profile with KCachegrind</b><p>Runs your program in calltree and then "
+#~ "displays profiler information in KCachegrind.</p>"
+#~ msgstr ""
+#~ "<b> الملف الشخصي مع KCachegrind</b><p> المرّات برنامج بوصة و معلومات بوصة "
+#~ "KCachegrind</p>"
+
+#~ msgid "There is already an instance of valgrind running."
+#~ msgstr "هناك اساساً مثيل لـفالجريند تعمل."
+
+#, fuzzy
+#~ msgid "Code View"
+#~ msgstr "الرّمز عرض"
+
+#, fuzzy
+#~ msgid "No active language part loaded!"
+#~ msgstr "لا نشط لغة جزء تمَ التحميل!"
+
+#, fuzzy
+#~ msgid "Active language part does not offer a proper codemodel!"
+#~ msgstr "نشط لغة جزء ليس a!"
+
+#, fuzzy
+#~ msgid "Mode"
+#~ msgstr "الوضع"
+
+#, fuzzy
+#~ msgctxt "Current View"
+#~ msgid "&Current"
+#~ msgstr "ال&حالي"
+
+#, fuzzy
+#~ msgctxt "Normalize View"
+#~ msgid "&Normalize"
+#~ msgstr "جعله عادي "
+
+#, fuzzy
+#~ msgctxt "Aggregate View"
+#~ msgid "&Aggregate"
+#~ msgstr "مُجمَل"
+
+#, fuzzy
+#~ msgid "Filter"
+#~ msgstr "تصفية"

@@ -1,0 +1,176 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2016, 2017, 2018.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2021-08-30 09:36+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: contextbrowser.cpp:164
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Pojdi nazaj v kontekstni zgodovini"
+
+#: contextbrowser.cpp:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Pojdi naprej v kontekstni zgodovini"
+
+#: contextbrowser.cpp:192
+#, kde-format
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Oris"
+
+#: contextbrowser.cpp:193
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Oris"
+
+#: contextbrowser.cpp:194
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Krmarite po orisu dejavnega dokumenta, kliknite za brskanje"
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Način &brskanja po izvorni kodi"
+
+#: contextbrowser.cpp:241
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Predhodno obiskan kontekst"
+
+#: contextbrowser.cpp:247
+#, kde-format
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Naslednji obiskan kontekst"
+
+#: contextbrowser.cpp:253
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Predhodna uporaba"
+
+#: contextbrowser.cpp:259
+#, kde-format
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Naslednja uporaba"
+
+#: contextbrowser.cpp:265
+#, kde-format
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Brskalnik po kontekstu"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, kde-format
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Brskalnik po kodi"
+
+#: contextbrowser.cpp:312
+#, kde-format
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Najdi uporabe"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(spremenjeno)"
+
+#: contextbrowserview.cpp:178
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Pokaži meni deklaracij"
+
+#: contextbrowserview.cpp:181
+#, kde-format
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Meni deklaracij"
+
+#: contextbrowserview.cpp:185
+#, kde-format
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Zakleni trenutni pogled"
+
+#: contextbrowserview.cpp:186
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Zakleni trenutni pogled"
+
+#: contextbrowserview.cpp:187
+#, kde-format
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Odkleni trenutni pogled"
+
+#: contextbrowserview.cpp:189
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Odkleni trenutni pogled"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Orodna vrstica brskalnika po kodi"
+
+#~ msgid "Outline..."
+#~ msgstr "Oris ..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Krmarjenje"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Omogoči/onemogoči način brskanja po izvorni kodi"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Ko je to omogočeno, lahko brskate po izvorni kodi s klikom v urejevalniku."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Vstavek prikazuje podatke o trenutnem kontekstu jezika in poudari "
+#~ "pomembne deklaracije in uporabe."

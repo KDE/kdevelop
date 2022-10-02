@@ -1,0 +1,432 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2015, 2017, 2018.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 08:38+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"V argumentih za nastavitve zagona '%1' obstaja napaka navajanja. Prekinjanje "
+"zagona."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"V argumentih za nastavitve zagona '%1' obstaja meta znak lupine, ki trenutno "
+"ni podprt. Prekinjanje zagona."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "Ni bilo mogoče razrešiti odvisnosti: %1"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Ni podane veljavne izvedljive datoteke"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"V izvedljivi datoteki za nastavitve zagona '%1' obstaja napaka navajanja. "
+"Prekinjanje zagona."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"V izvedljivi datoteki za nastavitve zagona '%1' obstaja meta znak lupine, ki "
+"trenutno ni podprt. Prekinjanje zagona."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr "Vprašaj, če je v teku"
+
+#: nativeappconfig.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "Uniči vse pojavke"
+
+#: nativeappconfig.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "Zaženi še enega"
+
+#: nativeappconfig.cpp:156
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Nastavi lastni program"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "Izvede lastne programe"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "Lastni program"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "Izgrajena izvedljiva datoteka"
+
+#: nativeappconfig.cpp:322
+#, kde-format
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Izvedljive datoteke projekta"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, kde-format
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Izvedljiva datoteka"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "Cilj projek&ta:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "Izvedljiva datoteka:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "ime izvedljive datoteke ali pot/do/izvedljive datoteke"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr ""
+"Vnesite ime izvedljive datoteke ali absolutno pot do izvedljive datoteke"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Obnašanje"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "Ar&gumenti:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Vnesite argumente, ki za izvedljivo datoteko.<br/"
+">Argumente, ki vsebujejo presledne znake, lahko dodate tako, da jih obdate z "
+"dvojnimi narekovaji.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "Delovna mapa:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Izberite delovno mapo za izvedljivo datoteko"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "Okolje:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Izberite okolje, ki naj bo uporabljeno"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Privzeto bodo programi tekli v ozadju in v prikazu orodja bo prikazan le "
+"njihov izhod. Tako je nemogoče posegati v tiste, ki zahtevajo uporabniški "
+"vhod iz posnemovalnika terminala. Za zagon takih programov morate uporabiti "
+"razširjen terminal.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, kde-format
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Uporabi zunanji terminal:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Določi ukaz, ki bo izvedel razširjen posnemovalnik terminala. Uporabite "
+"naslednje vsebnike:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>Pot do zgoraj izbrane izvedljive datoteke.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>Pot do zgoraj izbrane delovne mape.</dd>\n"
+"</dl>\n"
+"<p>Zgoraj določeni argumenti bodo pripeti temu ukazu.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr "Ponovni zagon"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Odvisnosti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "Dejanje:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr ""
+"Določa dejanje, ki bo izvedeno za odvisnosti pred zagonom izvedljive "
+"datoteke."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"Izbrano dejanje bo zagnano preden bo zagnana izvedljiva datoteka. To "
+"dovoljuje, da se del projekta od katerega izvedljiva datoteka ni neposredno "
+"odvisna, izgradi in/ali namesti pred zagonom programa."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "Ne naredi ničesar"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Izgradi"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Izgradi in namesti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Cilji:"
+
+#: nativeappjob.cpp:66
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Ni bilo podanega profila okolja, kar namiguje na pokvarjene nastavitve. "
+"Preverite zagonske nastavitve '%1'. Uporabljen bo privzeti profil okolja."
+
+#: nativeappjob.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "Posel že teče"
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "'%1' se že izvaja."
+
+#: nativeappjob.cpp:145
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "Uniči vse pojavke"
+
+#: nativeappjob.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "Zaženi še enega"
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr "Zapomni si izbiro"
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Vnesite argumente, ki bodo podani izvedljivi datoteki"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Zaganjanje: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Program uničen ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Končano normalno ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Končano z izhodno kodo: %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Opravilo prekinjeno ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Sesuto z izhodno kodo: %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "*** Ni bilo mogoče zagnati programa '%1'. Prepričajte se, da je podana "
+#~ "pot pravilna. ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Vnesite odvisnost, da bo dodana na seznam"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Doda prikazan cilj na seznam odvisnosti."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Seznam posrednih odvisnih ciljev."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Ta seznam naj bi vseboval cilje, od katerih program ni neposredno "
+#~ "odvisen, ampak se morajo na njih izvesti dejanja preden se zažene program."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Odstrani izbrane odvisnosti iz seznama."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Premakne odvisnosti navzgor po seznamu."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Premakne odvisnosti navzdol po seznamu."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Execute support"
+#~ msgstr "Podpora izvajanju"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "Vstavek omogoča zaganjanje programov, za katere v KDevelop ni posebnega "
+#~ "grafičnega vmesnika."

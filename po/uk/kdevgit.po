@@ -1,0 +1,794 @@
+# Translation of kdevgit.po to Ukrainian
+# Copyright (C) 2009-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2013, 2014, 2016, 2017, 2019, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgit\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-09-26 08:38+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: committoolview.cpp:206 committoolview.cpp:207
+#, kde-format
+msgid "Filter by filename/project name"
+msgstr "Фільтрувати за назвою файла або проєкту"
+
+#: committoolview.cpp:224
+#, kde-format
+msgid "Refresh"
+msgstr "Оновити"
+
+#: committoolview.cpp:225
+#, kde-format
+msgid "Stage selected"
+msgstr "Позначити вибрані"
+
+#: committoolview.cpp:227
+#, kde-format
+msgid "Unstage selected"
+msgstr "Скасувати позначення вибраних"
+
+#: committoolview.cpp:229
+#, kde-format
+msgid "Revert unstaged edits"
+msgstr "Скасувати непозначені редагування"
+
+#: committoolview.cpp:482
+#, kde-format
+msgid "Committing failed. See Version Control tool view."
+msgstr "Не вдалося внести. Подробиці на панелі засобу керування версіями."
+
+#: diffviewsctrl.cpp:50
+#, kde-format
+msgid "Stage selected lines or hunk"
+msgstr "Позначити зміни у позначених рядках або фрагменті"
+
+#: diffviewsctrl.cpp:52
+#, kde-format
+msgid "Unstage selected lines or hunk"
+msgstr "Скасувати позначення вибраних рядків або фрагмента"
+
+#: diffviewsctrl.cpp:54
+#, kde-format
+msgid "Revert selected lines or hunk"
+msgstr "Скасувати зміни у позначених рядках або фрагменті"
+
+#: diffviewsctrl.cpp:56
+#, kde-format
+msgid "Go to line in source"
+msgstr "Перейти до рядка у коді"
+
+#: diffviewsctrl.cpp:101
+#, kde-format
+msgid "Unstage selected lines"
+msgstr "Скасувати позначення вибраних рядків"
+
+#: diffviewsctrl.cpp:102
+#, kde-format
+msgid "Stage selected lines"
+msgstr "Позначити зміни у позначених рядках"
+
+#: diffviewsctrl.cpp:103
+#, kde-format
+msgid "Revert selected lines"
+msgstr "Скасувати зміни у позначених рядках"
+
+#: diffviewsctrl.cpp:105
+#, kde-format
+msgid "Unstage selected hunk"
+msgstr "Скасувати позначення вибраного фрагмента"
+
+#: diffviewsctrl.cpp:106
+#, kde-format
+msgid "Stage selected hunk"
+msgstr "Позначити зміни у позначеному фрагменті"
+
+#: diffviewsctrl.cpp:107
+#, kde-format
+msgid "Revert selected hunk"
+msgstr "Скасувати зміни у позначеному фрагменті"
+
+#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#, kde-format
+msgid "S"
+msgstr "S"
+
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#, kde-format
+msgid "G"
+msgstr "G"
+
+#: diffviewsctrl.cpp:170
+#, kde-format
+msgid "%1 (staged)"
+msgstr "%1 (позначено)"
+
+#: diffviewsctrl.cpp:172
+#, kde-format
+msgid "Staged (%1)"
+msgstr "Позначено (%1)"
+
+#: diffviewsctrl.cpp:174
+#, kde-format
+msgid "Unstaged (%1)"
+msgstr "Не позначено (%1)"
+
+#: diffviewsctrl.cpp:176
+#, kde-format
+msgid "%1 (unstaged)"
+msgstr "%1 (не позначено)"
+
+#: diffviewsctrl.cpp:330
+#, kde-format
+msgid ""
+"The selected lines will be reverted and the changes lost. This operation "
+"cannot be undone. Continue?"
+msgstr ""
+"Зміни у позначених рядка буде скасовано і втрачено. Скасувати наслідки такої "
+"дії неможливо. Продовжити виконання дії?"
+
+#: diffviewsctrl.cpp:332
+#, kde-format
+msgctxt "@action:button"
+msgid "Revert"
+msgstr "Скасувати"
+
+#: gitmessagehighlighter.cpp:66
+#, kde-format
+msgid "Try to keep summary length below %1 characters."
+msgstr "Намагатися не перевищувати довжину резюме у %1 символів."
+
+#: gitmessagehighlighter.cpp:82
+#, kde-format
+msgid "Separate summary from details with one empty line."
+msgstr "Розділяти резюме та подробиці порожнім рядком"
+
+#: gitmessagehighlighter.cpp:92
+#, kde-format
+msgid "Try to keep line length below %1 characters."
+msgstr "Намагатися не перевищувати довжину рядка у %1 символів."
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
+#: gitnameemaildialog.ui:17
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure Name and Email for Git"
+msgstr "Налаштовування імені і електронної пошти для Git"
+
+#. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
+#: gitnameemaildialog.ui:23
+#, kde-format
+msgid ""
+"<html><head/><body><p>You have not yet configured the name and email to be "
+"associated with your Git commits.<br/>The values you enter here will be "
+"written to the Git configuration, either locally for the current project "
+"only, or globally for all Git projects.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Вами ще не налаштовано імені та адреси електронної "
+"пошти для ваших внесків у сховища Git.<br/>Вказані тут значення буде "
+"записано до налаштувань Git, локально лише для поточного проєкту або "
+"глобально для усіх проєктів Git.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gitnameemaildialog.ui:35
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "&Ім’я:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gitnameemaildialog.ui:48
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Emai&l:"
+msgstr "&Ел. пошта:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
+#: gitnameemaildialog.ui:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Write to global config"
+msgstr "Записати до загальних налаштувань"
+
+#: gitplugin.cpp:181
+#, kde-format
+msgid "Unable to find git executable. Is it installed on the system?"
+msgstr ""
+"Не вдалося виявити виконуваний файл git. Чи встановлено його у вашій системі?"
+
+#: gitplugin.cpp:190
+#, kde-format
+msgid "Git Commit"
+msgstr "Внесок до git"
+
+#: gitplugin.cpp:242
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rebase"
+msgstr "Перенести основу"
+
+#: gitplugin.cpp:243
+#, kde-format
+msgctxt "@title:menu"
+msgid "Git Stashes"
+msgstr "Записи реєстру Git"
+
+#: gitplugin.cpp:244
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Stash Manager"
+msgstr "Керування реєстром"
+
+#: gitplugin.cpp:245
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Push Stash"
+msgstr "Застосувати запис"
+
+#: gitplugin.cpp:246
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Pop Stash"
+msgstr "Виштовхнути запис реєстру"
+
+#: gitplugin.cpp:279
+#, kde-format
+msgid "error: %1"
+msgstr "помилка: %1"
+
+#: gitplugin.cpp:378 gitplugin.cpp:389
+#, kde-format
+msgid "Did not specify the list of files"
+msgstr "Не вказано список файлів"
+
+#: gitplugin.cpp:451
+#, kde-format
+msgid "Could not reset changes (empty list of paths)"
+msgstr "Не вдалося скинути зміни (порожній список шляхів)"
+
+#: gitplugin.cpp:486
+#, kde-format
+msgid "Could not revert changes"
+msgstr "Не вдалося скасувати зміни"
+
+#: gitplugin.cpp:496
+#, kde-format
+msgid ""
+"The following files have uncommitted changes, which will be lost. Continue?"
+msgstr ""
+"До вказаних нижче файлів було внесено зміни, які не зареєстровано у сховищі. "
+"Ці зміни буде втрачено. Виконати дію попри це?"
+
+#: gitplugin.cpp:521
+#, kde-format
+msgid "No files or message specified"
+msgstr "Не вказано файлів або повідомлення"
+
+#: gitplugin.cpp:525 gitplugin.cpp:544
+#, kde-format
+msgid "Email or name for Git not specified"
+msgstr "Не вказано адреси електронної пошти або імені для Git"
+
+#: gitplugin.cpp:541
+#, kde-format
+msgid "No message specified"
+msgstr "Повідомлення не вказано"
+
+#: gitplugin.cpp:615
+#, kde-format
+msgid "No files to remove"
+msgstr "Немає файлів для вилучення"
+
+#: gitplugin.cpp:855
+#, kde-format
+msgid "There are pending changes, do you want to stash them first?"
+msgstr "У черзі є внесені зміни. Бажаєте спочатку зареєструвати їх?"
+
+#: gitplugin.cpp:856
+#, kde-format
+msgctxt "@action:button"
+msgid "Stash"
+msgstr "Накопичити"
+
+#: gitplugin.cpp:857
+#, kde-format
+msgctxt "@action:button"
+msgid "Keep"
+msgstr "Зберегти"
+
+#: rebasedialog.cpp:25
+#, kde-format
+msgctxt "@title:window"
+msgid "Branch Selection"
+msgstr "Вибір гілки"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
+#: rebasedialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Rebase"
+msgstr "Перенести основу"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rebasedialog.ui:20
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Base branch:"
+msgstr "Базова гілка:"
+
+#. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
+#: rebasedialog.ui:40
+#, kde-format
+msgctxt "@action:button"
+msgid "Rebase"
+msgstr "Перенести основу"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
+#: rebasedialog.ui:60
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: repostatusmodel.cpp:64
+#, kde-format
+msgctxt "Files in a vcs which have changes staged for commit"
+msgid "Staged changes"
+msgstr "Позначені зміни"
+
+#: repostatusmodel.cpp:67
+#, kde-format
+msgctxt "Files in a vcs which have changes not yet staged for commit"
+msgid "Unstaged changes"
+msgstr "Несформовані зміни"
+
+#: repostatusmodel.cpp:70
+#, kde-format
+msgctxt "Files in a vcs which have unresolved (merge) conflits"
+msgid "Conflicts"
+msgstr "Конфлікти"
+
+#: repostatusmodel.cpp:72
+#, kde-format
+msgctxt "Files which are not tracked by a vcs"
+msgid "Untracked files"
+msgstr "Невраховані файли"
+
+#: repostatusmodel.cpp:82
+#, kde-format
+msgctxt "Files in a vcs which have changes staged for commit"
+msgid "Staged"
+msgstr "Позначено"
+
+#: repostatusmodel.cpp:84
+#, kde-format
+msgid "Files with changes staged for commit"
+msgstr "Файли, зміни у яких позначено до внеску"
+
+#: repostatusmodel.cpp:89
+#, kde-format
+msgctxt "Files in a vcs which have changes not checked in to repo"
+msgid "Modified"
+msgstr "Змінено"
+
+#: repostatusmodel.cpp:91
+#, kde-format
+msgid "Files with changes"
+msgstr "Файли зі змінами"
+
+#: repostatusmodel.cpp:96
+#, kde-format
+msgctxt "Files in git which have unresolved (merge) conflits"
+msgid "Conflicts"
+msgstr "Конфлікти"
+
+#: repostatusmodel.cpp:98
+#, kde-format
+msgid "Files with unresolved (merge) conflicts"
+msgstr "Файли із нерозв'язаними конфліктами об'єднання"
+
+#: repostatusmodel.cpp:103
+#, kde-format
+msgctxt "Files which are not tracked by a vcs"
+msgid "Untracked"
+msgstr "Не враховано"
+
+#: repostatusmodel.cpp:104
+#, kde-format
+msgid "Files not tracked in VCS"
+msgstr "Файли, які перебувають поза стеженням СКВ"
+
+#: repostatusmodel.cpp:222
+#, kde-format
+msgctxt "@item file has unstaged changes"
+msgid "Modified (unstaged)"
+msgstr "Змінено (не позначено)"
+
+#: repostatusmodel.cpp:224
+#, kde-format
+msgctxt "@item file was deleted from worktree"
+msgid "Deleted (unstaged)"
+msgstr "Вилучено (не позначено)"
+
+#: repostatusmodel.cpp:226
+#, kde-format
+msgctxt "@item file was renamed in worktree"
+msgid "Renamed (unstaged)"
+msgstr "Перейменовано (не позначено)"
+
+#: repostatusmodel.cpp:228
+#, kde-format
+msgctxt "@item file was copied in worktree"
+msgid "Copied (unstaged)"
+msgstr "Скопійовано (не позначено)"
+
+#: repostatusmodel.cpp:230
+#, kde-format
+msgctxt "@item file has staged changes"
+msgid "Modified (staged)"
+msgstr "Змінено (позначено)"
+
+#: repostatusmodel.cpp:232
+#, kde-format
+msgctxt "@item file has both staged and unstaged changes"
+msgid "Modified (unstaged changes)"
+msgstr "Змінено (непозначені зміни)"
+
+#: repostatusmodel.cpp:234
+#, kde-format
+msgctxt "@item file has staged changes and was deleted in worktree"
+msgid "Modified (unstaged deletion)"
+msgstr "Змінено (непозначене вилучення)"
+
+#: repostatusmodel.cpp:237
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
+msgid "Added (unstaged changes)"
+msgstr "Додано (непозначені зміни)"
+
+#: repostatusmodel.cpp:240
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
+msgid "Added (unstaged deletion)"
+msgstr "Додано (непозначене вилучення)"
+
+#: repostatusmodel.cpp:243
+#, kde-format
+msgctxt ""
+"@item file was deleted from versioncontrolsystem and renamed in worktree"
+msgid "Deleted (unstaged rename)"
+msgstr "Вилучено (непозначене перейменування)"
+
+#: repostatusmodel.cpp:246
+#, kde-format
+msgctxt ""
+"@item file was deleted from versioncontrolsystem and copied in worktree"
+msgid "Deleted (unstaged copy)"
+msgstr "Вилучено (непозначена копія)"
+
+#: repostatusmodel.cpp:248
+#, kde-format
+msgctxt "@item file was renamed in versioncontrolsystem"
+msgid "Renamed (staged)"
+msgstr "Перейменовано (позначено)"
+
+#: repostatusmodel.cpp:251
+#, kde-format
+msgctxt ""
+"@item file was renamed in versioncontrolsystem and has unstaged changes"
+msgid "Renamed (unstaged changes)"
+msgstr "Перейменовано (непозначені зміни)"
+
+#: repostatusmodel.cpp:254
+#, kde-format
+msgctxt ""
+"@item file was renamed in versioncontrolsystem and was deleted in worktree"
+msgid "Renamed (unstaged deletion)"
+msgstr "Перейменовано (непозначене вилучення)"
+
+#: repostatusmodel.cpp:256
+#, kde-format
+msgctxt "@item file was copied in versioncontrolsystem"
+msgid "Copied"
+msgstr "Скопійовано"
+
+#: repostatusmodel.cpp:259
+#, kde-format
+msgctxt ""
+"@item file was copied in versioncontrolsystem and has unstaged changes"
+msgid "Copied (unstaged changes)"
+msgstr "Скопійовано (непозначені зміни)"
+
+#: repostatusmodel.cpp:262
+#, kde-format
+msgctxt ""
+"@item file was copied in versioncontrolsystem and was deleted in worktree"
+msgid "Copied (unstaged deletion)"
+msgstr "Скопійовано (непозначене вилучення)"
+
+#: repostatusmodel.cpp:264
+#, kde-format
+msgctxt "@item file has unresolved merge conflicts"
+msgid "Unresolved conflicts"
+msgstr "Нерозв'язані конфлікти"
+
+#: repostatusmodel.cpp:266
+#, kde-format
+msgctxt "@item file is not under vcs"
+msgid "Untracked"
+msgstr "Не враховано"
+
+#: repostatusmodel.cpp:269
+#, kde-format
+msgctxt "file in unknown (invalid) state"
+msgid "Unknown"
+msgstr "Невідомо"
+
+#: repostatusmodel.cpp:362
+#, kde-format
+msgid " (staged)"
+msgstr " (позначено)"
+
+#: repostatusmodel.cpp:370
+#, kde-format
+msgid " (unstaged)"
+msgstr " (не позначено)"
+
+#: repostatusmodel.cpp:378
+#, kde-format
+msgid " (conflicts)"
+msgstr " (конфлікти)"
+
+#: repostatusmodel.cpp:386
+#, kde-format
+msgid " (untracked)"
+msgstr " (не враховано)"
+
+#: repostatusmodel.cpp:580
+#, kde-format
+msgid "no branch"
+msgstr "немає гілки"
+
+#: repostatusmodel.cpp:581
+#, kde-format
+msgctxt "project name (branch name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: simplecommitform.cpp:40
+#, kde-format
+msgid "Commit"
+msgstr "Внести"
+
+#: simplecommitform.cpp:65
+#, kde-format
+msgid "Extended commit description"
+msgstr "Розширений опис внеску"
+
+#: simplecommitform.cpp:73
+#, kde-format
+msgid "Commit summary"
+msgstr "Резюме внеску"
+
+#: simplecommitform.cpp:88 simplecommitform.cpp:172
+#, kde-format
+msgid "To commit changes, please write a commit message first"
+msgstr ""
+"Для внесення змін, будь ласка, спочатку впишіть повідомлення щодо внеску"
+
+#: simplecommitform.cpp:91 simplecommitform.cpp:169
+#, kde-format
+msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
+msgstr "Внесення змін до <b>%1</b> до гілки <b>%2</b>"
+
+#: simplecommitform.cpp:122
+#, kde-format
+msgid "To commit changes, please select a project first"
+msgstr "Для внесення змін, будь ласка, спочатку виберіть проєкт"
+
+#: simplecommitform.cpp:163
+#, kde-format
+msgid "Please stage some changes before committing."
+msgstr "Будь ласка, позначте якісь зміни, перш ніж робити внесок."
+
+#: stashmanagerdialog.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "Stash Manager"
+msgstr "Керування реєстром"
+
+#: stashmanagerdialog.cpp:117
+#, kde-format
+msgid "Are you sure you want to drop the stash '%1'?"
+msgstr "Ви справді бажаєте викинути з реєстру запис «%1»?"
+
+#. i18n: ectx: property (text), widget (QPushButton, drop)
+#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Drop"
+msgstr "Викинути"
+
+#: stashmanagerdialog.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Git Stash"
+msgstr "Запис реєстру Git"
+
+#: stashmanagerdialog.cpp:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for the new branch:"
+msgstr "Назва нової гілки:"
+
+#: stashmanagerdialog.cpp:148
+#, kde-format
+msgctxt "%1: stack depth, %2: branch, %3: parent description"
+msgid "%1. %2: %3"
+msgstr "%1. %2: %3"
+
+#: stashmanagerdialog.cpp:158
+#, kde-format
+msgid "%1 created on %2"
+msgstr "%1 створено %2"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, drop)
+#: stashmanagerdialog.ui:23
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove the selected stash"
+msgstr "Вилучити позначений запис"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pop)
+#: stashmanagerdialog.ui:37
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply stash's patch and drop the stash"
+msgstr "Застосувати латку з реєстру і вилучити запис реєстру"
+
+#. i18n: ectx: property (text), widget (QPushButton, pop)
+#: stashmanagerdialog.ui:40
+#, kde-format
+msgctxt "@action:button"
+msgid "Pop"
+msgstr "Виштовхнути"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, show)
+#: stashmanagerdialog.ui:51
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show the content of the stash"
+msgstr "Показати вміст запису реєстру"
+
+#. i18n: ectx: property (text), widget (QPushButton, show)
+#: stashmanagerdialog.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Show"
+msgstr "Показати"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, apply)
+#: stashmanagerdialog.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply stash's patch"
+msgstr "Застосовує латку з реєстру"
+
+#. i18n: ectx: property (text), widget (QPushButton, apply)
+#: stashmanagerdialog.ui:88
+#, kde-format
+msgctxt "@action:button"
+msgid "Apply"
+msgstr "Застосувати"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, branch)
+#: stashmanagerdialog.ui:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create a new branch and apply the stash there, then drop the stash"
+msgstr ""
+"Створити нову гілку і застосувати запис реєстру у ній, а потім вилучити "
+"запис реєстру."
+
+#. i18n: ectx: property (text), widget (QPushButton, branch)
+#: stashmanagerdialog.ui:115
+#, kde-format
+msgctxt "@action:button"
+msgid "Branch"
+msgstr "Створити гілку"
+
+#~ msgid "KDevelop - Git Stash"
+#~ msgstr "KDevelop — Реєстр Git"
+
+#~ msgid "git is not installed"
+#~ msgstr "git не встановлено"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Git"
+#~ msgstr "Git"
+
+#~ msgid "A plugin to support git version control systems"
+#~ msgstr "Додаток для підтримки систем керування версіями git"
+
+#~ msgid "Could not reset"
+#~ msgstr "Не вдалося відновити"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Git"
+#~ msgstr "Git"
+
+#~ msgid "Could not initialize the repository"
+#~ msgstr "Не вдалося ініціалізувати сховище"
+
+#~ msgid "Could not create the working copy"
+#~ msgstr "Не вдалося створити робочу копію"
+
+#~ msgid "Could not add the files"
+#~ msgstr "Не вдалося додати файли"
+
+#~ msgid "Could not get the status"
+#~ msgstr "Не вдалося отримати дані щодо стану"
+
+#~ msgid "Could not create the patch"
+#~ msgstr "Не вдалося створити латку"
+
+#~ msgid "Committing failed"
+#~ msgstr "Спроба надсилання завершилася невдало"
+
+#~ msgid "Could not remove the files"
+#~ msgstr "Не вдалося вилучити файли"
+
+#~ msgid "Could not generate the log"
+#~ msgstr "Не вдалося створити журнал"
+
+#~ msgid "Could not read the annotations"
+#~ msgstr "Не вдалося прочитати анотації"
+
+#~ msgid "Could not retrieve some repository variable"
+#~ msgstr "Не вдалося отримати деякі змінні сховища"
+
+#~ msgid "Could not switch the branch"
+#~ msgstr "Не вдалося перемкнутися на гілку"
+
+#~ msgid "Could not list or operate with branches"
+#~ msgstr "Не вдалося створити список або виконати дію над гілками"
+
+#~ msgid "Could not list files"
+#~ msgstr "Не вдалося створити список файлів"
+
+#~ msgid "Could not get the rev list"
+#~ msgstr "Не вдалося отримати список модифікації"
+
+#~ msgid "Could not get the repository location"
+#~ msgstr "Не вдалося отримати адресу сховища"
+
+#~ msgid "Could not send the local changes"
+#~ msgstr "Не вдалося надіслати внесені локально зміни"
+
+#~ msgid "Could update to the specified revision"
+#~ msgstr "Не вдалося виконати оновлення до вказаної версії"
+
+#~ msgid "Thanks for the translation! Have a nice day, mr. translator!"
+#~ msgstr "Дякуємо вам за переклад! Доброго дня вам, пане перекладач!"
+
+#~ msgid "Not in a git repository"
+#~ msgstr "Немає у сховищі git"

@@ -1,0 +1,413 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-16 00:46+0000\n"
+"PO-Revision-Date: 2020-01-16 20:31+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:36
+#, fuzzy, kde-format
+#| msgid "C/C++ Helpers"
+msgctxt "@title:tab"
+msgid "C/C++ Helpers"
+msgstr "C/C++ abilised"
+
+#: clangsettings/sessionsettings/sessionsettings.cpp:41
+#, fuzzy, kde-format
+#| msgid "Configure C/C++ Helpers"
+msgctxt "@title:tab"
+msgid "Configure C/C++ Helpers"
+msgstr "C/C++ abiliste seadistamine"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: clangsettings/sessionsettings/sessionsettings.ui:29
+#, fuzzy, kde-format
+#| msgid "Code-completion"
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "Koodilõpetus"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:35
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If disabled, macros will not be included in the "
+#| "code-completion results. This can improve the responsiveness of code-"
+#| "completion in some cases.</p><p><br/></p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"If disabled, macros will not be included in the code completion results. "
+"This can improve the responsiveness of code completion in some cases."
+msgstr ""
+"<html><head/><body><p>Keelamise korral makrosid koodilõpetuse tulemustesse "
+"ei kaasata. See võib mõnel juhul parandada koodilõpetuse reageerimiskiirust."
+"</p><p><br/></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_macros)
+#: clangsettings/sessionsettings/sessionsettings.ui:38
+#, fuzzy, kde-format
+#| msgid "Add macros to code-completion"
+msgctxt "@option:check"
+msgid "Add macros to code completion"
+msgstr "Makrode lisamine koodilõpetusse"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_lookAhead)
+#: clangsettings/sessionsettings/sessionsettings.ui:51
+#, fuzzy, kde-format
+#| msgid "Enable Look-ahead code-completion"
+msgctxt "@option:check"
+msgid "Enable Look-ahead code completion"
+msgstr "Ettevaatava koodilõpetuse lubamine"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: clangsettings/sessionsettings/sessionsettings.ui:64
+#, fuzzy, kde-format
+#| msgid "Assistants"
+msgctxt "@title:group"
+msgid "Assistants"
+msgstr "Abilised"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_forwardDeclare)
+#: clangsettings/sessionsettings/sessionsettings.ui:70
+#, fuzzy, kde-format
+#| msgid "Forward declare assistant"
+msgctxt "@option:check"
+msgid "Forward declare assistant"
+msgstr "Eeldeklaratsiooni abiline"
+
+#: clangsupport.cpp:171
+#, kde-format
+msgid ""
+"The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
+"Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix "
+"this.\n"
+"See also: https://bugs.kde.org/show_bug.cgi?id=393779"
+msgstr ""
+
+#: clangsupport.cpp:278
+#, fuzzy, kde-format
+#| msgid "Rename Declaration"
+msgctxt "@action"
+msgid "Rename Declaration"
+msgstr "Muuda deklaratsiooni nime"
+
+#: clangsupport.cpp:285
+#, fuzzy, kde-format
+#| msgid "Move into Source"
+msgctxt "@action"
+msgid "Move into Source"
+msgstr "Liigu lähtekoodi"
+
+#: codecompletion/context.cpp:145
+#, kde-format
+msgid "Override %1"
+msgstr "Alista %1"
+
+#: codecompletion/context.cpp:342
+#, kde-format
+msgid "Implement %1"
+msgstr "Teosta %1"
+
+#: codecompletion/context.cpp:1305
+#, kde-format
+msgid "Special"
+msgstr "Spetsiaalne"
+
+#: codecompletion/context.cpp:1306
+#, kde-format
+msgid "Look-ahead Matches"
+msgstr "Ettevaatamise sobivused"
+
+#: codecompletion/context.cpp:1307
+#, kde-format
+msgid "Builtin"
+msgstr "Sisseehitatud"
+
+#: codecompletion/context.cpp:1308
+#, kde-format
+msgid "Macros"
+msgstr "Makrod"
+
+#: codecompletion/context.cpp:1351
+#, kde-format
+msgid "Abstract Override"
+msgstr "Abstraktne tühistus"
+
+#: codecompletion/context.cpp:1352
+#, kde-format
+msgid "Virtual Override"
+msgstr "Virtuaalne tühistus"
+
+#: codecompletion/context.cpp:1367
+#, kde-format
+msgid "Implement Function"
+msgstr "Funktsiooni teostus"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update declaration signature"
+msgstr "Uuenda deklaratsiooni allkirja"
+
+#: codegen/adaptsignatureaction.cpp:51
+#, kde-format
+msgid "Update definition signature"
+msgstr "Uuenda definitsiooni allkirja"
+
+#: codegen/adaptsignatureaction.cpp:62
+#, kde-format
+msgid ""
+"Update declaration signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"Uuenda deklaratsiooni allkirja\n"
+"%1 pealt\n"
+"%2 peale"
+
+#: codegen/adaptsignatureaction.cpp:63
+#, kde-format
+msgid ""
+"Update definition signature\n"
+"from: %1\n"
+"to: %2"
+msgstr ""
+"Uuenda definitsiooni allkirja\n"
+"%1 pealt\n"
+"%2 peale"
+
+#: codegen/adaptsignatureaction.cpp:113
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "Muudatuste rakendamine nurjus: %1"
+
+#: codegen/adaptsignatureassistant.cpp:76
+#, kde-format
+msgid "Adapt Signature"
+msgstr "Allkirja kohendamine"
+
+#: codegen/clangrefactoring.cpp:82
+#, fuzzy, kde-format
+#| msgid "Rename %1"
+msgctxt "@action"
+msgid "Rename %1"
+msgstr "Muuda %1 nime"
+
+#: codegen/clangrefactoring.cpp:94
+#, kde-format
+msgid "Create separate definition for %1"
+msgstr "Loo %1 eraldi definitsioon"
+
+#: codegen/clangrefactoring.cpp:137
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "Kursori all pole deklaratsiooni"
+
+#: codegen/clangrefactoring.cpp:145
+#, kde-format
+msgid "No source file available for %1."
+msgstr "%1 lähtefail pole kättesaadav."
+
+#: codegen/clangrefactoring.cpp:157
+#, kde-format
+msgid "Failed to update DUChain for %1."
+msgstr "%1 DU-ahela uuendamine nurjus."
+
+#: codegen/clangrefactoring.cpp:161
+#, kde-format
+msgid "Declaration lost while updating."
+msgstr "Deklaratsioon läks uuendamisel kaotsi."
+
+#: codegen/clangrefactoring.cpp:167
+#, kde-format
+msgid "Cannot create definition for this declaration."
+msgstr "Definitsiooni loomine sellele deklaratsioonile nurjus."
+
+#: codegen/clangrefactoring.cpp:174
+#, kde-format
+msgid "No document for %1"
+msgstr "%1 dokument puudub"
+
+#: codegen/clangrefactoring.cpp:205
+#, kde-format
+msgid "Insertion failed"
+msgstr "Lisamine nurjus"
+
+#: codegen/clangrefactoring.cpp:211 codegen/clangrefactoring.cpp:219
+#, kde-format
+msgid "Applying changes failed: %1"
+msgstr "Muudatuste rakendamine nurjus: %1"
+
+#: duchain/clangproblem.cpp:204
+#, kde-format
+msgid "Fix-it Hints"
+msgstr ""
+
+#: duchain/clangproblem.cpp:246
+#, kde-format
+msgid "Insert \"%1\" at line: %2, column: %3"
+msgstr "Lisa \"%1\" reas %2 veerus %3"
+
+#: duchain/clangproblem.cpp:250
+#, kde-format
+msgid "Replace text at line: %1, column: %2 with: \"%3\""
+msgstr "Asenda tekst reas %1 veerus %2 tekstiga \"%3\""
+
+#: duchain/clangproblem.cpp:253
+#, kde-format
+msgid "Replace \"%1\" with: \"%2\""
+msgstr "Asenda \"%1\" tekstiga \"%2\""
+
+#: duchain/clangproblem.cpp:256
+#, kde-format
+msgid "Replace multiple lines starting at line: %1, column: %2 with: \"%3\""
+msgstr "Asenda mitu rida alates reast %1 veerust %2 tekstiga \"%3\""
+
+#: duchain/headerguardassistant.cpp:45
+#, kde-format
+msgid "Add #pragma once"
+msgstr "#pragma lisamine ühekordselt"
+
+#: duchain/headerguardassistant.cpp:46
+#, kde-format
+msgid "Add macro-based #ifndef/#define/#endif header guard"
+msgstr "Makropõhise #ifndef/#define/#endif päisekaitsja lisamine"
+
+#: duchain/macrodefinition.cpp:112
+#, kde-format
+msgid "Macro %1"
+msgstr "Makro %1"
+
+#: duchain/macronavigationcontext.cpp:55
+#, kde-format
+msgctxt ""
+"%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
+"arguments"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Function macro"
+msgstr "Funktsiooni makro"
+
+#: duchain/macronavigationcontext.cpp:56
+#, kde-format
+msgid "Macro"
+msgstr "Makro"
+
+#: duchain/macronavigationcontext.cpp:59
+#, kde-format
+msgctxt "%1: the link to the definition"
+msgid "Defined in: %1"
+msgstr "Definitsioon: %1"
+
+#: duchain/macronavigationcontext.cpp:63
+#, kde-format
+msgid "Show uses"
+msgstr "Näita kasutusi"
+
+#: duchain/macronavigationcontext.cpp:66
+#, kde-format
+msgid "Body: "
+msgstr "Põhitekst: "
+
+#: duchain/missingincludepathproblem.cpp:35
+#, kde-format
+msgid "Add Custom Include Path"
+msgstr "Lisa kohandatud päise asukoht"
+
+#: duchain/missingincludepathproblem.cpp:58
+#, kde-format
+msgid "Open Project"
+msgstr "Ava projekt"
+
+#: duchain/parsesession.cpp:530
+#, kde-format
+msgid "Requested here: %1"
+msgstr "Nõutud siin: %1"
+
+#: duchain/parsesession.cpp:571
+#, kde-format
+msgid "In included file: %1"
+msgstr "Kaasatud failis: %1"
+
+#: duchain/parsesession.cpp:594
+#, kde-format
+msgid "Header is not guarded against multiple inclusions"
+msgstr "Päis ei ole kaitstud mitmekordse kaasamise eest"
+
+#: duchain/parsesession.cpp:595
+#, kde-format
+msgid ""
+"The given header is not guarded against multiple inclusions, either with the "
+"conventional #ifndef/#define/#endif macro guards or with #pragma once."
+msgstr ""
+"Antud päis ei ole kaitstud mitmekordse kaasamise eest ei tavapäraste "
+"makrokaitsete #ifndef/#define/#endif ega ka #pragma abil."
+
+#: duchain/unknowndeclarationproblem.cpp:373
+#, kde-format
+msgid "Insert '%1'"
+msgstr "Lisa \"%1\""
+
+#: duchain/unknowndeclarationproblem.cpp:433
+#, kde-format
+msgid "Forward declare as 'class'"
+msgstr ""
+
+#: duchain/unknowndeclarationproblem.cpp:440
+#, kde-format
+msgid "Forward declare as 'struct'"
+msgstr ""
+
+#: util/clangutils.cpp:189
+#, kde-format
+msgid "<parse error>"
+msgstr ""
+
+#~ msgid "1 Byte"
+#~ msgid_plural "%1 Bytes"
+#~ msgstr[0] "1 bait"
+#~ msgstr[1] "%1 baiti"
+
+#~ msgid "1 Bit"
+#~ msgid_plural "%1 Bits"
+#~ msgstr[0] "1 bitt"
+#~ msgstr[1] "%1 bitti"
+
+#~ msgctxt "%1: bytes, %2: bits"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "<p>offset in parent: %1; size: %2 Bytes; aligned to: %3 Bytes</p>"
+#~ msgstr "<p>nihe eellases: %1; suurus: %2 baiti; joondatud: %3 baiti</p>"
+
+#~ msgid "<p>size: %1 Bytes; aligned to: %2 Bytes</p>"
+#~ msgstr "<p>suurus: %1 baiti; joondatud: %2 baiti</p>"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Code"
+#~ msgstr "Kood"
+
+#, fuzzy
+#~| msgid "Clang Language Support"
+#~ msgid "C++ Language Support"
+#~ msgstr "Clangi keele toetus"
+
+#~ msgid "declaration"
+#~ msgstr "deklaratsiooni"
+
+#~ msgid "definition"
+#~ msgstr "definitsiooni"

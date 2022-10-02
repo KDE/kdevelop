@@ -1,0 +1,198 @@
+# Translation of kdevghprovider.po to Brazilian Portuguese
+# Copyright (C) 2013-2015 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2014, 2015.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevghprovider\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-23 15:28-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+
+#: ghdialog.cpp:25
+#, kde-format
+msgid ""
+"You have not authorized KDevelop to use your GitHub account. If you "
+"authorize KDevelop, you will be able to fetch your public/private "
+"repositories and the repositories from your organizations."
+msgstr ""
+"Você não autorizou o KDevelop a usar sua conta GitHub. Se você autorizar o "
+"KDevelop, você poderá baixar seus repositórios público/privado e os "
+"repositórios de suas organizações."
+
+#: ghdialog.cpp:34
+#, kde-format
+msgctxt "%1 is the URL with the GitHub token settings"
+msgid "You can check the authorization for this application and others at %1"
+msgstr "Você pode verificar a autorização para este aplicativo e outros em %1"
+
+#: ghdialog.cpp:54
+#, kde-format
+msgid "You are logged in as <b>%1</b>.<br/>%2"
+msgstr "Você está autenticado como <b>%1</b>.<br/>%2"
+
+#: ghdialog.cpp:58
+#, kde-format
+msgctxt "@action:button"
+msgid "Log Out"
+msgstr "Encerrar sessão"
+
+#: ghdialog.cpp:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Force Sync"
+msgstr "Forçar sincronização"
+
+#: ghdialog.cpp:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Authorize"
+msgstr "Autorizar"
+
+#: ghdialog.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account"
+msgstr "Conta GitHub"
+
+#: ghdialog.cpp:98
+#, kde-format
+msgid "Enter a login and a password"
+msgstr "Digite um nome de usuário e uma senha"
+
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#, kde-format
+msgid "Waiting for response"
+msgstr "Aguardando resposta"
+
+#: ghdialog.cpp:126
+#, kde-format
+msgid ""
+"Authentication failed. Please try again.\n"
+"\n"
+"Could not create token: \"%1\"\n"
+"%2"
+msgstr ""
+"Falha de autenticação. Tente novamente.\n"
+"\n"
+"Não foi possível criar o token: \"%1\"\n"
+"%2"
+
+#: ghdialog.cpp:129
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Authorization Failed"
+msgstr "Falha na autorização do GitHub"
+
+#: ghdialog.cpp:133
+#, kde-format
+msgid ""
+"Authentication succeeded.\n"
+"\n"
+"Created token: \"%1\"\n"
+"%2"
+msgstr ""
+"Autenticação bem sucedida.\n"
+"\n"
+"Token criado: \"%1\"\n"
+"%2"
+
+#: ghdialog.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account Authorized"
+msgstr "Conta GitHub autorizada"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@title:window"
+msgid "Authentication Code"
+msgstr "Código de autenticação"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OTP Code:"
+msgstr "Código OTP"
+
+#: ghdialog.cpp:176
+#, kde-format
+msgid "Please, write your password here."
+msgstr "Digite sua senha aqui."
+
+#: ghproviderplugin.cpp:35
+#, kde-format
+msgid "GitHub"
+msgstr "GitHub"
+
+#: ghproviderwidget.cpp:57
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Pesquisar..."
+
+#: ghproviderwidget.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "You can press the Return key if you do not want to wait."
+msgstr "Você pode pressionar a tecla Return se não quiser aguardar."
+
+#: ghproviderwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure your GitHub account"
+msgstr "Configurar a sua conta no GitHub"
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgid ""
+"The Git plugin could not be loaded which is required to import a GitHub "
+"project."
+msgstr ""
+"Não foi possível carregar o plugin do Git, o qual é necessário para importar "
+"um projeto do GitHub."
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Provider Error"
+msgstr "Erro do provedor do GitHub"
+
+#: ghproviderwidget.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User"
+msgstr "Usuário"
+
+#: ghproviderwidget.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Organization"
+msgstr "Organização"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "André Marcelo Alvarenga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "alvarenga@kde.org"
+
+#~ msgid "Github"
+#~ msgstr "GitHub"
+
+#~ msgid "Github Provider"
+#~ msgstr "Fornecedor do Github"
+
+#~ msgid "Import projects from Github"
+#~ msgstr "Importar projetos do GitHub"

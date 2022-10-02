@@ -1,0 +1,588 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Alexander Lakhin <exclusion@gmail.com>, 2013.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2021.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-03-10 12:03+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.1\n"
+
+#: classidentifierpage.cpp:31
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Class name, including any namespaces"
+msgstr "Имя класса, включая пространства имён"
+
+#: classidentifierpage.cpp:32
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Inheritance type and base class name"
+msgstr "Тип наследования и имя базового класса"
+
+#: classmemberspage.cpp:29
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Variable type and identifier"
+msgstr "Тип и имя переменной"
+
+#: filetemplatesplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Создать из шаблона..."
+
+#: filetemplatesplugin.cpp:71
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Allows you to create new source code files, such as classes or unit tests, "
+"using templates."
+msgstr ""
+"Позволяет получать новые файлы исходного кода, например классов и модульных "
+"тестов, из шаблонов."
+
+#: filetemplatesplugin.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create new files from a template"
+msgstr "Создать новый файл из шаблона"
+
+#: filetemplatesplugin.cpp:76 filetemplatesplugin.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Template Preview"
+msgstr "Предпросмотр шаблона"
+
+#: filetemplatesplugin.cpp:115
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create from Template..."
+msgstr "Создать из шаблона…"
+
+#: filetemplatesplugin.cpp:135
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Template Preview"
+msgstr "Открыть предпросмотр шаблона"
+
+#: filetemplatesplugin.cpp:147
+#, kde-format
+msgid "File Templates"
+msgstr "Шаблоны файлов"
+
+#: licensepage.cpp:85
+#, kde-format
+msgctxt "@item:inlistbox other license"
+msgid "Other"
+msgstr "Другой"
+
+#: licensepage.cpp:143
+#, kde-format
+msgid "Could not load previous license"
+msgstr "Загрузить предыдущую лицензию не удалось"
+
+#: licensepage.cpp:158
+#, kde-format
+msgid "The specified license already exists. Please provide a different name."
+msgstr "Указанная лицензия уже существует. Выберите другое имя."
+
+#: licensepage.cpp:170
+#, kde-format
+msgid "Failed to write custom license template to file %1."
+msgstr "Не удалось записать пользовательский шаблон лицензии в файл %1."
+
+#: outputpage.cpp:117
+#, kde-format
+msgid "Invalid output file: %2"
+msgid_plural "Invalid output files: %2"
+msgstr[0] "Недопустимые выходные файлы: %2"
+msgstr[1] "Недопустимые выходные файлы: %2"
+msgstr[2] "Недопустимые выходные файлы: %2"
+msgstr[3] "Недопустимые выходные файлы: %2"
+
+#: outputpage.cpp:171
+#, kde-format
+msgctxt "@title:group"
+msgid "Output File"
+msgid_plural "Output Files"
+msgstr[0] "Выходные файлы"
+msgstr[1] "Выходные файлы"
+msgstr[2] "Выходные файлы"
+msgstr[3] "Выходной файл"
+
+#: outputpage.cpp:172
+#, kde-format
+msgctxt "@title:group"
+msgid "Location within Existing File"
+msgid_plural "Location within Existing Files"
+msgstr[0] "Размещение в существующих файлах"
+msgstr[1] "Размещение в существующих файлах"
+msgstr[2] "Размещение в существующих файлах"
+msgstr[3] "Размещение в существующем файле"
+
+#: outputpage.cpp:178
+#, kde-format
+msgctxt "@label:chooser file name arg"
+msgid "%1:"
+msgstr "%1:"
+
+#: outputpage.cpp:194
+#, kde-format
+msgid "Line: "
+msgstr "Строка: "
+
+#: outputpage.cpp:200
+#, kde-format
+msgid "Column: "
+msgstr "Столбец: "
+
+#: overridespage.cpp:37
+#, kde-format
+msgctxt "@item access policy"
+msgid "Public"
+msgstr "Открытый"
+
+#: overridespage.cpp:39
+#, kde-format
+msgctxt "@item access policy"
+msgid "Protected"
+msgstr "Защищённый"
+
+#: overridespage.cpp:41
+#, kde-format
+msgctxt "@item access policy"
+msgid "Private"
+msgstr "Закрытый"
+
+#: overridespage.cpp:51
+#, kde-format
+msgctxt "@item function property"
+msgid "Constructor"
+msgstr "Конструктор"
+
+#: overridespage.cpp:53
+#, kde-format
+msgctxt "@item function property"
+msgid "Destructor"
+msgstr "Деструктор"
+
+#: overridespage.cpp:55
+#, kde-format
+msgctxt "@item function property"
+msgid "Signal"
+msgstr "Сигнал"
+
+#: overridespage.cpp:57
+#, kde-format
+msgctxt "@item function property"
+msgid "Slot"
+msgstr "Слот"
+
+#: overridespage.cpp:59
+#, kde-format
+msgctxt "@item function property"
+msgid "Abstract function"
+msgstr "Абстрактная функция"
+
+#: templateclassassistant.cpp:190
+#, kde-format
+msgid ""
+"Choose one target to add the file or cancel if you do not want to do so."
+msgstr ""
+"Выберите цель, в которую вы хотите добавить файл, или нажмите Отмена, если "
+"не хотите этого делать."
+
+#: templateclassassistant.cpp:280 templateclassassistant.cpp:527
+#, kde-kuit-format
+msgctxt "@title:window"
+msgid "Create Files from Template in <filename>%1</filename>"
+msgstr "Создание файлов из шаблона в <filename>%1</filename>"
+
+#: templateclassassistant.cpp:284 templateclassassistant.cpp:531
+#, kde-format
+msgctxt "@title:window"
+msgid "Create Files from Template"
+msgstr "Создание файлов из шаблона"
+
+#: templateclassassistant.cpp:289
+#, kde-format
+msgctxt "@title:tab"
+msgid "Language and Template"
+msgstr "Язык и шаблон"
+
+#: templateclassassistant.cpp:319
+#, kde-kuit-format
+msgctxt "@title:window"
+msgid ""
+"Create Files from Template <filename>%1</filename> in <filename>%2</filename>"
+msgstr ""
+"Создание файлов из шаблона <filename>%1</filename> в <filename>%2</filename>"
+
+#: templateclassassistant.cpp:325
+#, kde-kuit-format
+msgctxt "@title:window"
+msgid "Create Files from Template <filename>%1</filename>"
+msgstr "Создание файлов из шаблона <filename>%1</filename>"
+
+#: templateclassassistant.cpp:331
+#, kde-format
+msgctxt "@title:tab"
+msgid "Class Basics"
+msgstr "Основа класса"
+
+#: templateclassassistant.cpp:337
+#, kde-format
+msgctxt "@title:tab"
+msgid "Override Methods"
+msgstr "Переопределение методов"
+
+#: templateclassassistant.cpp:342
+#, kde-format
+msgctxt "@title:tab"
+msgid "Class Members"
+msgstr "Члены класса"
+
+#: templateclassassistant.cpp:370
+#, kde-format
+msgctxt "@title:tab"
+msgid "Test Cases"
+msgstr "Варианты теста"
+
+#: templateclassassistant.cpp:380
+#, kde-format
+msgctxt "@title:tab"
+msgid "License"
+msgstr "Лицензия"
+
+#: templateclassassistant.cpp:386
+#, kde-format
+msgctxt "@title:tab"
+msgid "Output"
+msgstr "Вывод"
+
+#: templateclassassistant.cpp:396
+#, kde-format
+msgctxt "@title:tab"
+msgid "Template Options"
+msgstr "Параметры шаблона"
+
+#: templateclassassistant.cpp:479
+#, kde-format
+msgctxt "@item default declarations"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: templateoptionspage.cpp:124
+#, kde-format
+msgctxt "@label"
+msgid "%1:"
+msgstr "%1:"
+
+#: templatepreviewtoolview.cpp:92
+#, kde-kuit-format
+msgid ""
+"The active text document is not a <application>KDevelop</application> "
+"template"
+msgstr ""
+"Текущий текстовый документ не является шаблоном <application>KDevelop</"
+"application>"
+
+#: templatepreviewtoolview.cpp:94
+#, kde-format
+msgid "No active text document."
+msgstr "Необходимо открыть текстовый документ."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: templatepreviewtoolview.ui:30
+#, kde-format
+msgctxt "@title:group"
+msgid "Template Type"
+msgstr "Тип шаблона"
+
+#. i18n: ectx: property (text), widget (QRadioButton, projectRadioButton)
+#: templatepreviewtoolview.ui:39
+#, kde-format
+msgctxt "@option:radio"
+msgid "Project template"
+msgstr "Шаблон проекта"
+
+#. i18n: ectx: property (text), widget (QRadioButton, classRadioButton)
+#: templatepreviewtoolview.ui:49
+#, kde-format
+msgctxt "@option:radio"
+msgid "Class template"
+msgstr "Шаблон класса"
+
+#. i18n: ectx: property (text), widget (QLabel, emptyLinesPolicyLabel)
+#: templatepreviewtoolview.ui:61
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Empty lines policy:"
+msgstr "&Обработка пустых строк:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:78
+#, kde-format
+msgctxt "@item:inlistbox empty line policy"
+msgid "Keep Empty Lines"
+msgstr "Сохранить"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:83
+#, kde-format
+msgctxt "@item:inlistbox empty line policy"
+msgid "Remove Repeated Empty Lines"
+msgstr "Удалить повторения"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:88
+#, kde-format
+msgctxt "@item:inlistbox empty line policy"
+msgid "Remove All Empty Lines"
+msgstr "Удалить все"
+
+#: templateselectionpage.cpp:73
+#, kde-format
+msgctxt "%1: template comment"
+msgid "<b>Preview:</b> %1"
+msgstr "<b>Предпросмотр:</b> %1"
+
+#: templateselectionpage.cpp:203
+#, kde-format
+msgctxt "@title:column"
+msgid "Language"
+msgstr "Язык"
+
+#: templateselectionpage.cpp:204
+#, kde-format
+msgctxt "@title:column"
+msgid "Framework"
+msgstr "Платформа"
+
+#: templateselectionpage.cpp:205
+#, kde-format
+msgctxt "@title:column"
+msgid "Template"
+msgstr "Шаблон"
+
+#: templateselectionpage.cpp:240
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates..."
+msgstr "Получить другие шаблоны..."
+
+#: templateselectionpage.cpp:245
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Загрузить шаблон из файла"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/licensechooser.ui:29
+#, kde-format
+msgid "Choose the license under which to place the generated content."
+msgstr "Выберите тип лицензии для создаваемого содержимого."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/licensechooser.ui:44
+#, kde-format
+msgctxt "@label:listbox"
+msgid "License type:"
+msgstr "Тип лицензии:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, saveLicense)
+#: ui/licensechooser.ui:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable if you want to save this license for future use"
+msgstr ""
+"Установите этот флажок, если следует сохранить эту лицензию для "
+"использования в будущем"
+
+#. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
+#: ui/licensechooser.ui:67
+#, kde-format
+msgctxt "@option:check"
+msgid "Save license"
+msgstr "Сохранить лицензию"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/licensechooser.ui:94
+#, kde-format
+msgid ""
+"<p>You can use <code>&lt;year&gt;</code>, <code>&lt;month&gt;</code>, "
+"<code>&lt;day&gt;</code> and <code>&lt;copyright holder&gt;</code> as "
+"placeholders.</p>"
+msgstr ""
+"<p>В качестве заменителей в лицензии можно использовать <code>&lt;year&gt;</"
+"code>, <code>&lt;month&gt;</code>, <code>&lt;day&gt;</code> и <code>&lt;"
+"copyright holder&gt;</code>.</p>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/newclass.ui:29
+#, kde-format
+msgid "Identify the class and any classes from which it is to inherit."
+msgstr "Определите имя класса и классы, от которых он будет наследоваться."
+
+#. i18n: ectx: property (text), widget (QLabel, identifierLabel)
+#: ui/newclass.ui:35 ui/testcases.ui:35
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Identifier:"
+msgstr "&Идентификатор:"
+
+#. i18n: ectx: property (text), widget (QLabel, inheritanceLabel)
+#: ui/newclass.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "In&heritance:"
+msgstr "На&следование:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: ui/outputlocation.ui:29
+#, kde-format
+msgid "Choose where to save the generated content."
+msgstr "Выберите, где будет сохранено создаваемое содержимое."
+
+#. i18n: ectx: property (text), widget (QCheckBox, lowerFilenameCheckBox)
+#: ui/outputlocation.ui:59
+#, kde-format
+msgctxt "@option:check"
+msgid "Lower case file names"
+msgstr "Имена файлов в нижнем регистре"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/overridevirtuals.ui:20
+#, kde-format
+msgid "Select any methods you would like to override in the new class."
+msgstr ""
+"Отметьте методы, которые вы хотите переопределить в создаваемом классе."
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:42
+#, kde-format
+msgctxt "@title:column"
+msgid "Superclass -> Function"
+msgstr "Базовый класс -> Функция"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:47
+#, kde-format
+msgctxt "@title:column"
+msgid "Access"
+msgstr "Доступ"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:52
+#, kde-format
+msgctxt "@title:column"
+msgid "Properties"
+msgstr "Свойства"
+
+#. i18n: ectx: property (text), widget (QPushButton, selectAllPushButton)
+#: ui/overridevirtuals.ui:62
+#, kde-format
+msgctxt "@action:button"
+msgid "Select &All"
+msgstr "Вы&делить все"
+
+#. i18n: ectx: property (text), widget (QPushButton, deselectAllPushButton)
+#: ui/overridevirtuals.ui:69
+#, kde-format
+msgctxt "@action:button"
+msgid "&Deselect All"
+msgstr "&Снять выделение"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/testcases.ui:29
+#, kde-format
+msgid "Set the test name and its test cases."
+msgstr "Задайте название теста и определите его варианты."
+
+#. i18n: ectx: property (text), widget (QLabel, testCasesLabel)
+#: ui/testcases.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Test cases:"
+msgstr "Варианты &теста:"
+
+#~ msgid "There was an error writing the file."
+#~ msgstr "Ошибка записи в файл."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Александр Лахин"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "exclusion@gmail.com"
+
+#~ msgid "File Templates Configuration"
+#~ msgstr "Настройка шаблонов файлов"
+
+#~ msgid "Add currently selected items from project tree view to buildset."
+#~ msgstr "Добавить выбранные сейчас объекты из дерева проектов в сборку."
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Remove currently selected item from buildset."
+#~ msgstr "Удалить выбранные сейчас объекты из сборки"
+
+#~ msgid "Move the selected items to the top"
+#~ msgstr "Поднять выбранные объекты вверх"
+
+#~ msgid "Move the selected items up"
+#~ msgstr "Переместить выбранные объекты выше"
+
+#~ msgid "Move the selected item down"
+#~ msgstr "Переместить выбранные объекты ниже"
+
+#~ msgid "Move the selected items to the bottom"
+#~ msgstr "Опустить выбранные объекты вниз"
+
+#~ msgid "Type"
+#~ msgstr "Тип"
+
+#~ msgid "Identifier"
+#~ msgstr "Идентификатор"
+
+#~ msgid "Class Options"
+#~ msgstr "Параметры класса"
+
+#~ msgid "Abstract class (allow pure virtuals)"
+#~ msgstr "Абстрактный класс (может быть полностью виртуальным)"
+
+#~ msgid "Disable copy"
+#~ msgstr "Запретить копирование"
+
+#~ msgid "Implicit Sharing"
+#~ msgstr "Неявное разделение"
+
+#~ msgid "D-Pointer"
+#~ msgstr "D-указатель"
+
+#~ msgid "Qt-style shared d-pointer"
+#~ msgstr "Доступный d-указатель в стиле Qt"
+
+#~ msgid "Virtual Hook"
+#~ msgstr "Возможность виртуализации"
+
+#~ msgid "Group by access specifier (public / private etc)"
+#~ msgstr "Группировать по уровню доступа (открытый, закрытый и т.д.)"
+
+#~ msgid "Support for managing file templates"
+#~ msgstr "Поддерживает управление шаблонами файлов"

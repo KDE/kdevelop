@@ -1,0 +1,196 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2013-10-06 10:54+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: contextbrowser.cpp:164
+#, fuzzy, kde-format
+#| msgid "Go back in context history"
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Visszalépés a környezetelőzményekben"
+
+#: contextbrowser.cpp:176
+#, fuzzy, kde-format
+#| msgid "Go forward in context history"
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Előrelépés a környezetelőzményekben"
+
+#: contextbrowser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Körvonal"
+
+#: contextbrowser.cpp:193
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Körvonal"
+
+#: contextbrowser.cpp:194
+#, fuzzy, kde-format
+#| msgid "Navigate outline of active document, click to browse."
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Az aktív dokumentum körvonalára navigálás, kattintson a böngészéshez."
+
+#: contextbrowser.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr ""
+
+#: contextbrowser.cpp:241
+#, fuzzy, kde-format
+#| msgid "&Previous Visited Context"
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Előző látogatott környezet"
+
+#: contextbrowser.cpp:247
+#, fuzzy, kde-format
+#| msgid "&Next Visited Context"
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Következő látogatott környezet"
+
+#: contextbrowser.cpp:253
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Előző használat"
+
+#: contextbrowser.cpp:259
+#, fuzzy, kde-format
+#| msgid "&Next Use"
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Következő használat"
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Környezetböngésző"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Kódböngésző"
+
+#: contextbrowser.cpp:312
+#, fuzzy, kde-format
+#| msgid "Find Uses"
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Használatok keresése"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(módosítva)"
+
+#: contextbrowserview.cpp:178
+#, fuzzy, kde-format
+#| msgid "Declaration menu"
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Deklaráció menü"
+
+#: contextbrowserview.cpp:181
+#, fuzzy, kde-format
+#| msgid "Declaration menu"
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Deklaráció menü"
+
+#: contextbrowserview.cpp:185
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Jelenlegi nézet zárolása"
+
+#: contextbrowserview.cpp:186
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Jelenlegi nézet zárolása"
+
+#: contextbrowserview.cpp:187
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Jelenlegi nézet zárolása"
+
+#: contextbrowserview.cpp:189
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Jelenlegi nézet zárolása"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Kódböngésző eszköztár"
+
+#~ msgid "Outline..."
+#~ msgstr "Körvonal…"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigáció"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Forrásböngésző mód engedélyezése/tiltása"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Ha ez engedélyezve van, böngészheti a forráskódot a szerkesztőben való "
+#~ "kattintgatással."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Ez a bővítmény a jelenlegi nyelvi környezetről jelenít meg információkat "
+#~ "egy oldalnézetben és kiemeli a lényeges deklarációkat és használatokat."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Információt jelenít meg a jelenlegi környezetről"

@@ -1,0 +1,88 @@
+# Bosnian translation for kdevelop
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-18 20:23+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:07+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Ovlašćenja"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "Pogled"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Zabilješke"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "Dokument \"%1\" ima nesnimljene promjene. Želite li ih snimiti?"
+
+#: oktetadocument.cpp:125
+#, fuzzy, kde-format
+#| msgid "Close Document"
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Zatvori dokument"
+
+#: oktetaplugin.cpp:97
+#, fuzzy, kde-format
+#| msgid "Hex Editor"
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "Heksadekadni uređivač"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Upravljaj profilima poglaeda na niz bajtova..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Alatna traka za raspored u dizajneru"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "Okteta dodatak za KDevelop"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "Daje jednostavno heksadekadno uređivanje"

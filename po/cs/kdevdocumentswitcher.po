@@ -1,0 +1,49 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Vít Pelčák <vit@pelcak.org>, 2011, 2013, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-16 15:46+0200\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: documentswitcherplugin.cpp:65
+#, kde-format
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Naposledy použité pohledy"
+
+#: documentswitcherplugin.cpp:68
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr "Otevře seznam pro procházení seznamem naposledy použitých pohledů."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Procházet seznamem naposledy použitých pohledů"
+
+#: documentswitcherplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "Naposledy použité pohledy (Pozpátku)"
+
+#: documentswitcherplugin.cpp:76
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr ""
+"Otevře seznam pro zpětné procházení seznamem naposledy použitých pohledů."

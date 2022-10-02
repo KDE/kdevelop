@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcompileanalyzercommon.pot\n"
+"X-Crowdin-File-ID: 11895\n"
+
+#: compileanalyzeproblemmodel.cpp:84
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "分析已完成，未检测到任何问题。"
+
+#: compileanalyzeproblemmodel.cpp:107
+#, kde-format
+msgid "Analysis started..."
+msgstr "分析已开始..."
+
+#: compileanalyzeproblemmodel.cpp:110
+#, kde-format
+msgctxt "@info:tooltip %2 is the path of the file"
+msgid "Re-run last %1 analysis (%2)"
+msgstr "重新运行上次的 %1 分析 (%2)"
+
+#: compileanalyzeproblemmodel.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last %1 analysis"
+msgstr "重新运行上次的 %1 分析"
+
+#: compileanalyzer.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with %1"
+msgstr "分析当前文件，使用 %1"
+
+#: compileanalyzer.cpp:79
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with %1"
+msgstr "分析当前工程，使用 %1"
+
+#: compileanalyzer.cpp:161
+#, kde-format
+msgid "No suitable active file, unable to deduce project."
+msgstr "没有合适的活动文件，无法推断工程。"
+
+#: compileanalyzer.cpp:173
+#, kde-format
+msgid "Active file isn't in a project."
+msgstr "活动文件不在工程中。"
+
+#: compileanalyzer.cpp:186
+#, kde-format
+msgid ""
+"Unable to start check for '%1':\n"
+"\n"
+"%2"
+msgstr ""
+"无法为 %1 启动检查：\n"
+"\n"
+"%2"
+
+#: compileanalyzer.cpp:216
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "测试"
+
+#: compileanalyzeutils.cpp:45
+#, kde-format
+msgid "Compilation database file not found: '%1'"
+msgstr "未找到编译数据库文件：“%1”"
+
+#: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
+#, kde-format
+msgid ""
+"Nothing to check: compilation database file '%1' contains no matching items."
+msgstr "没有要检查的内容：编译数据库文件“%1”不包含任何匹配项。"
+
+#: compileanalyzeutils.cpp:57
+#, kde-format
+msgid "Could not open compilation database file for reading: '%1'"
+msgstr "无法打开并读取编译数据库文件：“%1”"
+
+#: compileanalyzeutils.cpp:65
+#, kde-format
+msgid "JSON error during parsing compilation database file '%1': %2"
+msgstr "解析编译数据库文件“%1”遇到 JSON 错误：%2"
+
+#: compileanalyzeutils.cpp:70
+#, kde-format
+msgid ""
+"JSON error during parsing compilation database file '%1': document is not an "
+"array."
+msgstr "解析编译数据库文件“%1”遇到 JSON 错误：文档不是数组。"

@@ -1,0 +1,298 @@
+# translation of kdevquickopen.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2012, 2013, 2015, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevquickopen\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-07-24 12:17+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "Dokumentation i %1"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "Inte längre tillgänglig: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "Inte längre tillgänglig"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Returvärde: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Fil: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "Snabböppningsverktygsrad"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "Projekt %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "Inte ännu tolkad"
+
+#: projectfilequickopen.cpp:178
+#, kde-format
+msgctxt "@item no project"
+msgid "none"
+msgstr "inget"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Klasser"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Funktioner"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Projekt"
+
+#: quickopenplugin.cpp:60
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Inkluderar"
+
+#: quickopenplugin.cpp:61
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Inkluderad av"
+
+#: quickopenplugin.cpp:62
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "För närvarande öppen"
+
+#: quickopenplugin.cpp:64
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Filer"
+
+#: quickopenplugin.cpp:67
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: quickopenplugin.cpp:68
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Åtgärder"
+
+#: quickopenplugin.cpp:279
+#, kde-format
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "&Snabböppna"
+
+#: quickopenplugin.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "Snabböppna &fil"
+
+#: quickopenplugin.cpp:291
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "Snabböppna &klass"
+
+#: quickopenplugin.cpp:297
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "Snabböppna f&unktion"
+
+#: quickopenplugin.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "Sn&abböppna redan öppen fil"
+
+#: quickopenplugin.cpp:308
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "Snabböppna &dokumentation"
+
+#: quickopenplugin.cpp:314
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "Snabböppna åt&gärder"
+
+#: quickopenplugin.cpp:319
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "Gå till deklaration"
+
+#: quickopenplugin.cpp:325
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "Gå till definition"
+
+#: quickopenplugin.cpp:330
+#, kde-format
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "Inbäddad snabböppning"
+
+#: quickopenplugin.cpp:337
+#, kde-format
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Nästa funktion"
+
+#: quickopenplugin.cpp:342
+#, kde-format
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Föregående funktion"
+
+#: quickopenplugin.cpp:347
+#, kde-format
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Översikt"
+
+#: quickopenplugin.cpp:498
+#, kde-format
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "Snabböppna"
+
+#: quickopenplugin.cpp:832
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Översikt"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "Snabböppna..."
+
+#: quickopenplugin.cpp:943
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+"Sök efter filer, klasser, funktioner m.m., för att möjliggöra snabb "
+"navigering i källkod."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Sök:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Öppna"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Avbryt"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "Om&fattningar:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "&Objekt:"
+
+#~ msgid "Project %1"
+#~ msgstr "Projekt %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "Insticksprogrammet ger snabb åtkomst av projektfiler och språkobjekt som "
+#~ "klasser och funktioner."
+
+#~ msgid "Navigate"
+#~ msgstr "Navigera"
+
+#~ msgid "Quickly open resources such as files, classes and methods."
+#~ msgstr "Snabböppna resurser som filer, klasser och metoder."

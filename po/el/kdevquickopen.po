@@ -1,0 +1,342 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Stelios <sstavra@gmail.com>, 2011.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevquickopen\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-03-20 22:09+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "Τεκμηρίωση στο %1"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "Μη διαθέσιμο πλέον: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "Μη διαθέσιμα πλέον"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "Επιστρέφει: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "Αρχείο: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "Γρήγορο άνοιγμα γραμμής εργαλείων"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "Έργο %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "Δεν αναλύθηκε ακόμη"
+
+#: projectfilequickopen.cpp:178
+#, fuzzy, kde-format
+#| msgid "none"
+msgctxt "@item no project"
+msgid "none"
+msgstr "κανένα"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "Κλάσεις"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "Συναρτήσεις"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Project"
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "Έργο"
+
+#: quickopenplugin.cpp:60
+#, fuzzy, kde-format
+#| msgid "Includes"
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "Ενσωματώσεις"
+
+#: quickopenplugin.cpp:61
+#, fuzzy, kde-format
+#| msgid "Includers"
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "Ενσωματωτές"
+
+#: quickopenplugin.cpp:62
+#, fuzzy, kde-format
+#| msgid "Currently Open"
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "Τρέχοντα ανοιχτά"
+
+#: quickopenplugin.cpp:64
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "Αρχεία"
+
+#: quickopenplugin.cpp:67
+#, fuzzy, kde-format
+#| msgid "Documentation"
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "Τεκμηρίωση"
+
+#: quickopenplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "Συναρτήσεις"
+
+#: quickopenplugin.cpp:279
+#, fuzzy, kde-format
+#| msgid "&Quick Open"
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "&Γρήγορο άνοιγμα"
+
+#: quickopenplugin.cpp:285
+#, fuzzy, kde-format
+#| msgid "Quick Open &File"
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "Γρήγορο άνοιγμα &αρχείου"
+
+#: quickopenplugin.cpp:291
+#, fuzzy, kde-format
+#| msgid "Quick Open &Class"
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "Γρήγορο άνοιγμα &κλάσης"
+
+#: quickopenplugin.cpp:297
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "Γρήγορο άνοιγμα &συνάρτησης"
+
+#: quickopenplugin.cpp:303
+#, fuzzy, kde-format
+#| msgid "Quick Open &Open Files"
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "Γρήγορο άνοιγμα α&νοιχτών αρχείων"
+
+#: quickopenplugin.cpp:308
+#, fuzzy, kde-format
+#| msgid "Quick Open &Documentation"
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "Γρήγορο άνοιγμα &τεκμηρίωσσης"
+
+#: quickopenplugin.cpp:314
+#, fuzzy, kde-format
+#| msgid "Quick Open &Function"
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "Γρήγορο άνοιγμα &συνάρτησης"
+
+#: quickopenplugin.cpp:319
+#, fuzzy, kde-format
+#| msgid "Jump to Declaration"
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "Μετάβαση στη δήλωση"
+
+#: quickopenplugin.cpp:325
+#, fuzzy, kde-format
+#| msgid "Jump to Definition"
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "Μετάβαση στον ορισμό"
+
+#: quickopenplugin.cpp:330
+#, fuzzy, kde-format
+#| msgid "Embedded Quick Open"
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "Ενσωματωμένο γρήγορο άνοιγμα"
+
+#: quickopenplugin.cpp:337
+#, fuzzy, kde-format
+#| msgid "Next Function"
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "Επόμενη συνάρτηση"
+
+#: quickopenplugin.cpp:342
+#, fuzzy, kde-format
+#| msgid "Previous Function"
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "Προηγούμενη συνάρτηση"
+
+#: quickopenplugin.cpp:347
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "Περίγραμμα"
+
+#: quickopenplugin.cpp:498
+#, fuzzy, kde-format
+#| msgid "Quick Open"
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "Γρήγορο άνοιγμα"
+
+#: quickopenplugin.cpp:832
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Περίγραμμα"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, fuzzy, kde-format
+#| msgid "Quick Open..."
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "Γρήγορο άνοιγμα..."
+
+#: quickopenplugin.cpp:943
+#, fuzzy, kde-format
+#| msgid ""
+#| "Search for files, classes, functions and more, allowing you to quickly "
+#| "navigate in your source code."
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr ""
+"Η αναζήτηση για αρχεία, κλάσεις, συναρτήσεις και άλλα, σάς επιτρέπει γρήγορη "
+"πλοήγηση στον πηγαίο κώδικα."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Search:"
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "Αναζήτηση:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "@action:button"
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, fuzzy, kde-format
+#| msgid "Cancel"
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, fuzzy, kde-format
+#| msgid "&Scopes:"
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "&Εμβέλειες:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, fuzzy, kde-format
+#| msgid "&Items:"
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "Αντ&ικείμενα:"
+
+#~ msgid "Project %1"
+#~ msgstr "Έργο %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "Το πρόσθετο αυτό επιτρέπει τη γρήγορη πρόσβαση σε αρχεία έργου και "
+#~ "αντικείμενα γλώσσας όπως κλάσεις/συναρτήσεις."
+
+#~ msgid "Navigate"
+#~ msgstr "Πλοήγηση"
+
+#~ msgid "Quickly open resources such as files, classes and methods."
+#~ msgstr "Γρήγορο άνοιγμα πόρων όπως αρχείων, κλάσεων και μεθόδων."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Πλοήγηση"
+
+#~ msgid "Navigate Declaration"
+#~ msgstr "Πλοήγηση δήλωσης"
+
+#~ msgid "List:"
+#~ msgstr "Λίστα:"

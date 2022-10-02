@@ -1,0 +1,92 @@
+# Copyright © 2011 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevelop package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014.
+#
+# KDE Finnish translation sprint participants:
+# Author: Lliehu
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevokteta\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-03-31 04:16+0300\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:20:31+0000\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Käyttöoikeudet"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "Näytä"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Kirjanmerkit"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "Tiedostossa ”%1” on tallentamattomia muutoksia. Haluatko tallentaa ne?"
+
+#: oktetadocument.cpp:125
+#, fuzzy, kde-format
+#| msgid "Close Document"
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Sulje tiedosto"
+
+#: oktetaplugin.cpp:97
+#, fuzzy, kde-format
+#| msgid "Hex Editor"
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "Heksaeditori"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Hallinnoi tavutaulukon näyttöprofiileja…"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com"
+
+# Tämä viesti on tarpeeton eikä tätä käytetä missään. Designer viittaa luultavasti Qt Designeriin.
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Designerin asettelutyökalurivi"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "Okteta-liitännäinen KDevelopiin"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "Tarjoaa yksinkertaisen heksadesimaalimuokkauksen"
+
+#~ msgid "Open As Byte Array"
+#~ msgstr "Avaa tavutaulukkona"

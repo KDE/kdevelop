@@ -1,0 +1,193 @@
+# translation of kdevperforce.po to Slovak
+# Roman Paholik <wizzardsk@gmail.com>, 2012, 2013, 2016, 2018, 2019, 2022.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevperforce\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-04-17 20:47+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: perforceplugin.cpp:108
+#, kde-format
+msgid "The variable P4CONFIG is not set. Is perforce installed on the system?"
+msgstr ""
+"Premenná P4CONFIG nie je nastavená. Je perforce nainštalovaný v systéme?"
+
+#: perforceplugin.cpp:122
+#, kde-format
+msgid "Perforce"
+msgstr "Perforce"
+
+#: perforceplugin.cpp:232 perforceplugin.cpp:249
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Prosím vyberte iba jednu položku pre túto operáciu"
+
+#: perforceplugin.cpp:282
+#, kde-format
+msgid "No files or message specified"
+msgstr "Neurčený súbor alebo správa"
+
+#: perforceplugin.cpp:365 perforceplugin.cpp:381
+#, kde-format
+msgid "Please select a file for this operation"
+msgstr "Prosím vyberte súbor pre túto operáciu"
+
+#: perforceplugin.cpp:366 perforceplugin.cpp:382
+#, kde-format
+msgid "Directory not supported for this operation"
+msgstr "Adresár nepodporovaný pre túto operáciu"
+
+#: perforceplugin.cpp:462
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "Edit"
+msgstr "Upraviť"
+
+#: perforceplugin.cpp:671
+#, kde-format
+msgid "error: %1"
+msgstr "chyba: %1"
+
+#: ui/perforceimportmetadatawidget.cpp:124
+#, kde-format
+msgid ""
+"Unable to find perforce executable. Is it installed on the system? Is it in "
+"your PATH?"
+msgstr ""
+
+#: ui/perforceimportmetadatawidget.cpp:152
+#, kde-format
+msgid "P4 Client failed with exit code: %1"
+msgstr ""
+
+#: ui/perforceimportmetadatawidget.cpp:196
+#, kde-format
+msgid "P4 Client failed with error code: %1"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelUrl)
+#: ui/perforceimportmetadatawidget.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Zdrojový adresár:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelExec)
+#: ui/perforceimportmetadatawidget.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "P4 executable:"
+msgstr "Spustiteľný P4:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4port)
+#: ui/perforceimportmetadatawidget.ui:49
+#, kde-format
+msgid "P4 Port"
+msgstr "P4 Port"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, p4portEdit)
+#: ui/perforceimportmetadatawidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The format of P4PORT for Perforce applications is protocol:host:port, or "
+"port by itself if both the Perforce application and versioning service are "
+"running on the same host. Port numbers must be in the range 1024 through "
+"32767"
+msgstr ""
+"Formát P4PORT pre aplikácie Perforce je protokol:hostiteľ:port alebo samotný "
+"port, ak sú na rovnakom hostiteľovi spustené aplikácie Perforce aj služba "
+"verziovania. Čísla portov musia byť v rozsahu 1024 až 32767"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4user)
+#: ui/perforceimportmetadatawidget.ui:90
+#, kde-format
+msgid "P4 User"
+msgstr "P4 Používateľ"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, p4userEdit)
+#: ui/perforceimportmetadatawidget.ui:97
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Current Perforce user name. By default, the Perforce username is the same as "
+"the OS username"
+msgstr ""
+"Aktuálne užívateľské meno v službe Perforce. V predvolenom nastavení je "
+"používateľské meno Perforce rovnaké ako používateľské meno OS"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4client)
+#: ui/perforceimportmetadatawidget.ui:104
+#, kde-format
+msgid "P4 Client"
+msgstr "P4 Klient"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, p4clientEdit)
+#: ui/perforceimportmetadatawidget.ui:111
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Name of current client workspace on the Perforce server"
+msgstr "Názov aktuálneho pracovného priestoru klienta na serveri Perforce"
+
+#. i18n: ectx: property (text), widget (QLabel, labelP4config)
+#: ui/perforceimportmetadatawidget.ui:118
+#, kde-format
+msgid "P4 Config"
+msgstr "Konfigurácia P4"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, p4configEdit)
+#: ui/perforceimportmetadatawidget.ui:128
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Contains a file name without a path. The specified file is used to store "
+"other Perforce environment variables "
+msgstr ""
+"Obsahuje názov súboru bez cesty. Zadaný súbor sa používa na ukladanie "
+"ďalších premenných prostredia Perforce"
+
+#. i18n: ectx: property (text), widget (QPushButton, testP4setupButton)
+#: ui/perforceimportmetadatawidget.ui:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Test"
+msgstr "Test"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButtonConfig)
+#: ui/perforceimportmetadatawidget.ui:197
+#, kde-format
+msgctxt "@option:radio"
+msgid "Config File"
+msgstr "Konfiguračný súbor"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioButtonVariables)
+#: ui/perforceimportmetadatawidget.ui:213
+#, kde-format
+msgctxt "@option:radio"
+msgid "User/Port Config"
+msgstr "Konfigurácia používateľa/portu"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Upraviť"
+
+#~ msgid "Support for Perforce Version Control System"
+#~ msgstr "Podpora pre verzionovací systém Perforce"

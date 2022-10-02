@@ -1,0 +1,111 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-01-16 15:32+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: compileanalyzeproblemmodel.cpp:84
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "Analüüs on valmis, mingeid probleeme ei leitud."
+
+#: compileanalyzeproblemmodel.cpp:107
+#, kde-format
+msgid "Analysis started..."
+msgstr "Alustati analüüsiga ..."
+
+#: compileanalyzeproblemmodel.cpp:110
+#, kde-format
+msgctxt "@info:tooltip %2 is the path of the file"
+msgid "Re-run last %1 analysis (%2)"
+msgstr "Viimase %1 analüüsi taassooritamine (%2) "
+
+#: compileanalyzeproblemmodel.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last %1 analysis"
+msgstr "Viimase %1 analüüsi taassooritamine"
+
+#: compileanalyzer.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with %1"
+msgstr "Analüüsi aktiivset faili tööriistaga %1"
+
+#: compileanalyzer.cpp:79
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with %1"
+msgstr "Analüüsi aktiivset projekti tööriistaga %1"
+
+#: compileanalyzer.cpp:161
+#, kde-format
+msgid "No suitable active file, unable to deduce project."
+msgstr "Sobivat aktiivset faili ei ole, projekti ei õnnestunud ära arvata."
+
+#: compileanalyzer.cpp:173
+#, kde-format
+msgid "Active file isn't in a project."
+msgstr "Aktiivne fail ei kuulu projekti."
+
+#: compileanalyzer.cpp:186
+#, kde-format
+msgid ""
+"Unable to start check for '%1':\n"
+"\n"
+"%2"
+msgstr ""
+"\"%1\" kontrollimise alustamine nurjus:\n"
+"\n"
+"%2"
+
+#: compileanalyzer.cpp:216
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Test"
+
+#: compileanalyzeutils.cpp:45
+#, kde-format
+msgid "Compilation database file not found: '%1'"
+msgstr "Kompileerimise andmebaasi ei leitud: \"%1\""
+
+#: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
+#, kde-format
+msgid ""
+"Nothing to check: compilation database file '%1' contains no matching items."
+msgstr ""
+"Pole midagi kontrollida: kompileerimise andmebaas \"%1\" ei sisalda ühtegi "
+"sobivat elementi."
+
+#: compileanalyzeutils.cpp:57
+#, kde-format
+msgid "Could not open compilation database file for reading: '%1'"
+msgstr "Kompileerimise andmebaasi avamine lugemiseks nurjus: \"%1\""
+
+#: compileanalyzeutils.cpp:65
+#, kde-format
+msgid "JSON error during parsing compilation database file '%1': %2"
+msgstr "JSON-i tõrge kompileerimise andmebaasi faili \"%1\" parsimisel: %2"
+
+#: compileanalyzeutils.cpp:70
+#, kde-format
+msgid ""
+"JSON error during parsing compilation database file '%1': document is not an "
+"array."
+msgstr ""
+"JSON-i tõrge kompileerimise andmebaasi faili \"%1\" parsimisel: dokument ei "
+"ole massiiv."

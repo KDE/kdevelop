@@ -1,0 +1,134 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Alexander Potashev <aspotashev@gmail.com>, 2019.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-03-15 15:45+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.12.1\n"
+
+#: scratchpad.cpp:104 scratchpadview.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Scratchpad"
+msgstr "Блокнот"
+
+#: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
+#, kde-format
+msgctxt "prefix to distinguish scratch tabs"
+msgid "scratch:%1"
+msgstr "заметка:%1"
+
+#: scratchpad.cpp:168
+#, kde-format
+msgid "Failed to remove scratch: %1"
+msgstr "Не удалось удалить заметку: %1"
+
+#: scratchpad.cpp:175
+#, kde-format
+msgid "Failed to create scratch: Name already in use"
+msgstr "Не удалось создать заметку: название уже используется"
+
+#: scratchpad.cpp:187
+#, kde-format
+msgid "Failed to create new scratch"
+msgstr "Не удалось создать новую заметку"
+
+#: scratchpad.cpp:196
+#, kde-format
+msgid "Failed to rename scratch: Names must not include path separator"
+msgstr ""
+"Не удалось переименовать заметку: в названии не должно быть разделителя "
+"элементов пути"
+
+#: scratchpad.cpp:226
+#, kde-format
+msgid "Failed renaming scratch."
+msgstr "Не удалось переименовать заметку."
+
+#: scratchpadjob.cpp:57
+#, kde-format
+msgid "Running %1..."
+msgstr "Выполняется %1..."
+
+#: scratchpadjob.cpp:73
+#, kde-format
+msgid "Process finished with exit code %1."
+msgstr "Процесс завершил работу с кодом выхода %1."
+
+#: scratchpadjob.cpp:80
+#, kde-format
+msgid "Failed to run scratch: %1"
+msgstr "Не удалось запустить заметку: %1"
+
+#: scratchpadview.cpp:100
+#, kde-format
+msgid ""
+"Scratchpad lets you quickly run and experiment with code without a full "
+"project, and even store todos. Create a new scratch to start."
+msgstr ""
+"С помощью блокнота можно быстро создать фрагмент кода и поэкспериментировать "
+"с ним без создания полноценного проекта. Также возможно сохранять задачи. "
+"Создайте новую заметку, чтобы начать работу с блокнотом."
+
+#: scratchpadview.cpp:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Command to run this scratch. '$f' will expand to the scratch path."
+msgstr ""
+"Команда для запуска этой заметки. Символы «$f» будут развёрнуты в путь к "
+"заметке."
+
+#: scratchpadview.cpp:137
+#, kde-format
+msgctxt "@action"
+msgid "New Scratch"
+msgstr "Создать заметку"
+
+#: scratchpadview.cpp:141
+#, kde-format
+msgctxt "@action"
+msgid "Remove Scratch"
+msgstr "Удалить заметку"
+
+#: scratchpadview.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Rename Scratch"
+msgstr "Переименовать заметку"
+
+#: scratchpadview.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Run Scratch"
+msgstr "Запустить заметку"
+
+#: scratchpadview.cpp:164
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Фильтр..."
+
+#: scratchpadview.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Scratch"
+msgstr "Создание новой заметки"
+
+#: scratchpadview.cpp:205
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for scratch file:"
+msgstr "Имя файла заметки:"

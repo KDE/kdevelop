@@ -1,0 +1,292 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2012, 2013, 2014, 2015, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-10-18 15:09+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: appwizarddialog.cpp:23
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Nieuw project aanmaken"
+
+#: appwizarddialog.cpp:37
+#, kde-format
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Algemeen"
+
+#: appwizarddialog.cpp:39
+#, kde-format
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Versiebeheer"
+
+#: appwizardplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Nieuw van sjabloon..."
+
+#: appwizardplugin.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Genereert een nieuw project vanuit een sjabloon"
+
+#: appwizardplugin.cpp:72
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Dit start de toepassingenassistent van KDevelop. Deze helpt u bij het "
+"aanmaken van een skelet van uw toepassing aan de hand van een set sjablonen."
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr "Kon geen project aanmaken vanaf sjabloon."
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Zie de hulpmiddelweergave van versiebeheer"
+
+#: appwizardplugin.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Fout in versiebeheersysteem"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "DVCS-repository kon niet worden geïnitialiseerd"
+
+#: appwizardplugin.cpp:161
+#, kde-format
+msgid "Could not check status of the DVCS repository"
+msgstr "Kon status van DVCS-opslagruimte niet controleren"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Kon geen bestanden toevoegen aan DVCS-repository"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Kon geen project importeren in %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Kon project niet importeren"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Kon geen checkout doen op geïmporteerd project"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Kon geen nieuw project aanmaken"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Het bestand %1 kan niet worden aangemaakt."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Projectsjablonen"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Categorie"
+
+#: projectselectionpage.cpp:57
+#, kde-format
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Type project"
+
+#: projectselectionpage.cpp:67
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Meer sjablonen ophalen"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Sjabloon uit bestand laden"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Ongeldige locatie"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Lege projectnaam"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Ongeldige projectnaam"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr ""
+"Niet in staat om submappen aan te maken, ontbrekende toegangsrechten op: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Ongeldig projectsjabloon, kies een blad-item"
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Pad bestaat al en bevat bestanden. Open het als een project."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"Het gespecificeerde pad bestaat al en bevat bestanden. Wilt u verder gaan?"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Sjabloon uit bestand laden"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, kde-format
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Eigenschappen"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Projectnaam:"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Locatie:"
+
+#: projectvcspage.cpp:33
+#, kde-format
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Geen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Versiebeheersysteem:"
+
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Project aanmaken is mislukt"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Project"
+
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Programma-assistent"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kristof Bal,Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kristof.bal@gmail.com,freekdekruijf@kde.nl"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Projectassistent"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Ondersteuning voor aanmaken en importeren van projecten"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "Bestaand project &importeren..."
+
+#~ msgid "Import existing project"
+#~ msgstr "Bestaand project importeren"
+
+#~ msgid "Import Existing Project"
+#~ msgstr "Bestaand project importeren"
+
+#, fuzzy
+#~ msgid "&Directory:"
+#~ msgstr "Map"
+
+#~ msgid "Choose directory to import"
+#~ msgstr "Map voor de import"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "Op&halen van:"
+
+#~ msgid "Fetch &Module"
+#~ msgstr "&Module ophalen"
+
+#~ msgid "&Build System:"
+#~ msgstr "&Bouw-systeem:"
+
+#~ msgid "CMake"
+#~ msgstr "CMake"
+
+#~ msgid "QMake"
+#~ msgstr "QMake"
+
+#~ msgid "Custom Makefiles"
+#~ msgstr "Aangepaste makefiles"
+
+#~ msgid "(invalid)"
+#~ msgstr "(ongeldig)"

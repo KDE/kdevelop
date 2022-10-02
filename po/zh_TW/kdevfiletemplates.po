@@ -1,0 +1,563 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Franklin Weng <franklin at goodhorse dot idv dot tw>, 2013, 2014.
+# pan93412 <pan93412@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2019-09-30 19:07+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: classidentifierpage.cpp:31
+#, fuzzy, kde-format
+#| msgid "Class name, including any namespaces"
+msgctxt "@info:placeholder"
+msgid "Class name, including any namespaces"
+msgstr "類別名稱，包含任何命名空間"
+
+#: classidentifierpage.cpp:32
+#, fuzzy, kde-format
+#| msgid "Inheritance type and base class name"
+msgctxt "@info:placeholder"
+msgid "Inheritance type and base class name"
+msgstr "繼承形態與基礎類別名稱"
+
+#: classmemberspage.cpp:29
+#, fuzzy, kde-format
+#| msgid "Variable type and identifier"
+msgctxt "@info:placeholder"
+msgid "Variable type and identifier"
+msgstr "變數型態與識別子"
+
+#: filetemplatesplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "New From Template..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "由樣本建立…"
+
+#: filetemplatesplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid ""
+#| "Allows you to create new source code files, such as classes or unit "
+#| "tests, using templates."
+msgctxt "@info:whatsthis"
+msgid ""
+"Allows you to create new source code files, such as classes or unit tests, "
+"using templates."
+msgstr "允許您由樣本建立新的源碼檔，如類別或單元測試等。"
+
+#: filetemplatesplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid "Create new files from a template"
+msgctxt "@info:tooltip"
+msgid "Create new files from a template"
+msgstr "從樣本建立新檔案"
+
+#: filetemplatesplugin.cpp:76 filetemplatesplugin.cpp:308
+#, fuzzy, kde-format
+#| msgid "Template Preview"
+msgctxt "@title:window"
+msgid "Template Preview"
+msgstr "樣本預覽"
+
+#: filetemplatesplugin.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create From Template..."
+msgctxt "@action:inmenu"
+msgid "Create from Template..."
+msgstr "從樣本建立…"
+
+#: filetemplatesplugin.cpp:135
+#, fuzzy, kde-format
+#| msgid "Show Template Preview"
+msgctxt "@action:inmenu"
+msgid "Show Template Preview"
+msgstr "顯示樣本預覽"
+
+#: filetemplatesplugin.cpp:147
+#, kde-format
+msgid "File Templates"
+msgstr "檔案樣本"
+
+#: licensepage.cpp:85
+#, fuzzy, kde-format
+#| msgid "Other"
+msgctxt "@item:inlistbox other license"
+msgid "Other"
+msgstr "其他"
+
+#: licensepage.cpp:143
+#, kde-format
+msgid "Could not load previous license"
+msgstr "無法載入前一個授權"
+
+#: licensepage.cpp:158
+#, kde-format
+msgid "The specified license already exists. Please provide a different name."
+msgstr "指定的授權檔已存在，請另外指定新名稱。"
+
+#: licensepage.cpp:170
+#, kde-format
+msgid "Failed to write custom license template to file %1."
+msgstr "無法寫入自訂授權條款範本至 %1 檔案。"
+
+#: outputpage.cpp:117
+#, kde-format
+msgid "Invalid output file: %2"
+msgid_plural "Invalid output files: %2"
+msgstr[0] "不合法的輸出檔：%2"
+
+#: outputpage.cpp:171
+#, fuzzy, kde-format
+#| msgid "Output file"
+#| msgid_plural "Output files"
+msgctxt "@title:group"
+msgid "Output File"
+msgid_plural "Output Files"
+msgstr[0] "輸出檔案"
+
+#: outputpage.cpp:172
+#, fuzzy, kde-format
+#| msgid "Location within existing file"
+#| msgid_plural "Location within existing files"
+msgctxt "@title:group"
+msgid "Location within Existing File"
+msgid_plural "Location within Existing Files"
+msgstr[0] "現存檔案位置"
+
+#: outputpage.cpp:178
+#, fuzzy, kde-format
+#| msgid "%1:"
+msgctxt "@label:chooser file name arg"
+msgid "%1:"
+msgstr "%1："
+
+#: outputpage.cpp:194
+#, kde-format
+msgid "Line: "
+msgstr "行號： "
+
+#: outputpage.cpp:200
+#, kde-format
+msgid "Column: "
+msgstr "欄："
+
+#: overridespage.cpp:37
+#, fuzzy, kde-format
+#| msgid "Public"
+msgctxt "@item access policy"
+msgid "Public"
+msgstr "公開（public）"
+
+#: overridespage.cpp:39
+#, fuzzy, kde-format
+#| msgid "Protected"
+msgctxt "@item access policy"
+msgid "Protected"
+msgstr "保護（protected）"
+
+#: overridespage.cpp:41
+#, fuzzy, kde-format
+#| msgid "Private"
+msgctxt "@item access policy"
+msgid "Private"
+msgstr "私有（private）"
+
+#: overridespage.cpp:51
+#, fuzzy, kde-format
+#| msgid "Constructor"
+msgctxt "@item function property"
+msgid "Constructor"
+msgstr "建構子"
+
+#: overridespage.cpp:53
+#, fuzzy, kde-format
+#| msgid "Destructor"
+msgctxt "@item function property"
+msgid "Destructor"
+msgstr "解構子"
+
+#: overridespage.cpp:55
+#, fuzzy, kde-format
+#| msgid "Signal"
+msgctxt "@item function property"
+msgid "Signal"
+msgstr "信號"
+
+#: overridespage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Slot"
+msgctxt "@item function property"
+msgid "Slot"
+msgstr "信號槽"
+
+#: overridespage.cpp:59
+#, fuzzy, kde-format
+#| msgid "Abstract function"
+msgctxt "@item function property"
+msgid "Abstract function"
+msgstr "抽象函式"
+
+#: templateclassassistant.cpp:190
+#, kde-format
+msgid ""
+"Choose one target to add the file or cancel if you do not want to do so."
+msgstr "選擇要將檔案加到哪個目標。若您不打算這樣做可以選擇取消。"
+
+#: templateclassassistant.cpp:280 templateclassassistant.cpp:527
+#, fuzzy, kde-kuit-format
+#| msgid "Create Files from Template in <filename>%1</filename>"
+msgctxt "@title:window"
+msgid "Create Files from Template in <filename>%1</filename>"
+msgstr "從 <filename>%1</filename> 的樣本建立檔案"
+
+#: templateclassassistant.cpp:284 templateclassassistant.cpp:531
+#, fuzzy, kde-format
+#| msgid "Create Files from Template"
+msgctxt "@title:window"
+msgid "Create Files from Template"
+msgstr "從樣本建立檔案"
+
+#: templateclassassistant.cpp:289
+#, fuzzy, kde-format
+#| msgid "Language and Template"
+msgctxt "@title:tab"
+msgid "Language and Template"
+msgstr "語言與樣本"
+
+#: templateclassassistant.cpp:319
+#, fuzzy, kde-kuit-format
+#| msgid ""
+#| "Create Files from Template <filename>%1</filename> in <filename>%2</"
+#| "filename>"
+msgctxt "@title:window"
+msgid ""
+"Create Files from Template <filename>%1</filename> in <filename>%2</filename>"
+msgstr "從 <filename>%2</filename> 的樣本 <filename>%1</filename> 建立檔案"
+
+#: templateclassassistant.cpp:325
+#, fuzzy, kde-kuit-format
+#| msgid "Create Files from Template <filename>%1</filename>"
+msgctxt "@title:window"
+msgid "Create Files from Template <filename>%1</filename>"
+msgstr "從樣本 <filename>%1</filename> 建立檔案"
+
+#: templateclassassistant.cpp:331
+#, fuzzy, kde-format
+#| msgid "Class Basics"
+msgctxt "@title:tab"
+msgid "Class Basics"
+msgstr "類別基本"
+
+#: templateclassassistant.cpp:337
+#, fuzzy, kde-format
+#| msgid "Override Methods"
+msgctxt "@title:tab"
+msgid "Override Methods"
+msgstr "覆寫方法"
+
+#: templateclassassistant.cpp:342
+#, fuzzy, kde-format
+#| msgid "Class Members"
+msgctxt "@title:tab"
+msgid "Class Members"
+msgstr "類別成員"
+
+#: templateclassassistant.cpp:370
+#, fuzzy, kde-format
+#| msgid "Test Cases"
+msgctxt "@title:tab"
+msgid "Test Cases"
+msgstr "測試項目"
+
+#: templateclassassistant.cpp:380
+#, fuzzy, kde-format
+#| msgid "License"
+msgctxt "@title:tab"
+msgid "License"
+msgstr "版權"
+
+#: templateclassassistant.cpp:386
+#, fuzzy, kde-format
+#| msgid "Output"
+msgctxt "@title:tab"
+msgid "Output"
+msgstr "輸出"
+
+#: templateclassassistant.cpp:396
+#, fuzzy, kde-format
+#| msgid "Template Options"
+msgctxt "@title:tab"
+msgid "Template Options"
+msgstr "樣本選項"
+
+#: templateclassassistant.cpp:479
+#, fuzzy, kde-format
+#| msgid "Default"
+msgctxt "@item default declarations"
+msgid "Default"
+msgstr "預設"
+
+#: templateoptionspage.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1:"
+msgctxt "@label"
+msgid "%1:"
+msgstr "%1："
+
+#: templatepreviewtoolview.cpp:92
+#, kde-kuit-format
+msgid ""
+"The active text document is not a <application>KDevelop</application> "
+"template"
+msgstr "目前的文字文件不是 <application>KDevelop</application> 的樣本"
+
+#: templatepreviewtoolview.cpp:94
+#, kde-format
+msgid "No active text document."
+msgstr "沒有作用中的文字文件。"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: templatepreviewtoolview.ui:30
+#, fuzzy, kde-format
+#| msgid "Template type"
+msgctxt "@title:group"
+msgid "Template Type"
+msgstr "樣本型態"
+
+#. i18n: ectx: property (text), widget (QRadioButton, projectRadioButton)
+#: templatepreviewtoolview.ui:39
+#, fuzzy, kde-format
+#| msgid "Project template"
+msgctxt "@option:radio"
+msgid "Project template"
+msgstr "專案樣本"
+
+#. i18n: ectx: property (text), widget (QRadioButton, classRadioButton)
+#: templatepreviewtoolview.ui:49
+#, fuzzy, kde-format
+#| msgid "Class template"
+msgctxt "@option:radio"
+msgid "Class template"
+msgstr "類別樣本"
+
+#. i18n: ectx: property (text), widget (QLabel, emptyLinesPolicyLabel)
+#: templatepreviewtoolview.ui:61
+#, fuzzy, kde-format
+#| msgid "&Empty lines policy"
+msgctxt "@label:listbox"
+msgid "&Empty lines policy:"
+msgstr "空白行政策(&E)"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:78
+#, fuzzy, kde-format
+#| msgid "Keep empty lines"
+msgctxt "@item:inlistbox empty line policy"
+msgid "Keep Empty Lines"
+msgstr "保留空白行"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:83
+#, fuzzy, kde-format
+#| msgid "Remove repeated empty lines"
+msgctxt "@item:inlistbox empty line policy"
+msgid "Remove Repeated Empty Lines"
+msgstr "移除連續的空白行只保留一行"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:88
+#, fuzzy, kde-format
+#| msgid "Remove all empty lines"
+msgctxt "@item:inlistbox empty line policy"
+msgid "Remove All Empty Lines"
+msgstr "移除所有的空白行"
+
+#: templateselectionpage.cpp:73
+#, kde-format
+msgctxt "%1: template comment"
+msgid "<b>Preview:</b> %1"
+msgstr "<b>預覽：</b>%1"
+
+#: templateselectionpage.cpp:203
+#, fuzzy, kde-format
+#| msgid "Language"
+msgctxt "@title:column"
+msgid "Language"
+msgstr "語言"
+
+#: templateselectionpage.cpp:204
+#, fuzzy, kde-format
+#| msgid "Framework"
+msgctxt "@title:column"
+msgid "Framework"
+msgstr "架構"
+
+#: templateselectionpage.cpp:205
+#, fuzzy, kde-format
+#| msgid "Template"
+msgctxt "@title:column"
+msgid "Template"
+msgstr "樣本"
+
+#: templateselectionpage.cpp:240
+#, fuzzy, kde-format
+#| msgid "Get More Templates..."
+msgctxt "@action:button"
+msgid "Get More Templates..."
+msgstr "取得更多樣本..."
+
+#: templateselectionpage.cpp:245
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "從檔案載入樣本"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/licensechooser.ui:29
+#, kde-format
+msgid "Choose the license under which to place the generated content."
+msgstr "請選擇產生內容的授權條款。"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/licensechooser.ui:44
+#, fuzzy, kde-format
+#| msgid "License type:"
+msgctxt "@label:listbox"
+msgid "License type:"
+msgstr "授權型態："
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, saveLicense)
+#: ui/licensechooser.ui:64
+#, fuzzy, kde-format
+#| msgid "Click here if you want to save this license for future use"
+msgctxt "@info:tooltip"
+msgid "Enable if you want to save this license for future use"
+msgstr "若您要儲存此授權以便將來使用，請點擊此處"
+
+#. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
+#: ui/licensechooser.ui:67
+#, fuzzy, kde-format
+#| msgid "Save license"
+msgctxt "@option:check"
+msgid "Save license"
+msgstr "儲存授權"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/licensechooser.ui:94
+#, kde-format
+msgid ""
+"<p>You can use <code>&lt;year&gt;</code>, <code>&lt;month&gt;</code>, "
+"<code>&lt;day&gt;</code> and <code>&lt;copyright holder&gt;</code> as "
+"placeholders.</p>"
+msgstr ""
+"<p>您可使用 <code>&lt;year&gt;</code>, <code>&lt;month&gt;</code>, <code>&lt;"
+"day&gt;</code> and <code>&lt;copyright holder&gt;</code> 作為替代符。</p>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/newclass.ui:29
+#, kde-format
+msgid "Identify the class and any classes from which it is to inherit."
+msgstr "類別的身份，以及其繼承的類別。"
+
+#. i18n: ectx: property (text), widget (QLabel, identifierLabel)
+#: ui/newclass.ui:35 ui/testcases.ui:35
+#, fuzzy, kde-format
+#| msgid "&Identifier:"
+msgctxt "@label:textbox"
+msgid "&Identifier:"
+msgstr "辨識子(&I)"
+
+#. i18n: ectx: property (text), widget (QLabel, inheritanceLabel)
+#: ui/newclass.ui:48
+#, fuzzy, kde-format
+#| msgid "In&heritance:"
+msgctxt "@label:listbox"
+msgid "In&heritance:"
+msgstr "繼承(&H)："
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: ui/outputlocation.ui:29
+#, kde-format
+msgid "Choose where to save the generated content."
+msgstr "請選擇產生內容的儲存位置。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, lowerFilenameCheckBox)
+#: ui/outputlocation.ui:59
+#, fuzzy, kde-format
+#| msgid "Lower case file names"
+msgctxt "@option:check"
+msgid "Lower case file names"
+msgstr "小寫檔名"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/overridevirtuals.ui:20
+#, kde-format
+msgid "Select any methods you would like to override in the new class."
+msgstr "選取您要在新類別中覆寫的方法。"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:42
+#, fuzzy, kde-format
+#| msgid "Superclass -> Function"
+msgctxt "@title:column"
+msgid "Superclass -> Function"
+msgstr "超類別 => 函式"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:47
+#, fuzzy, kde-format
+#| msgid "Access"
+msgctxt "@title:column"
+msgid "Access"
+msgstr "存取"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:52
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:column"
+msgid "Properties"
+msgstr "屬性"
+
+#. i18n: ectx: property (text), widget (QPushButton, selectAllPushButton)
+#: ui/overridevirtuals.ui:62
+#, fuzzy, kde-format
+#| msgid "Select &All"
+msgctxt "@action:button"
+msgid "Select &All"
+msgstr "全部選取(&A)"
+
+#. i18n: ectx: property (text), widget (QPushButton, deselectAllPushButton)
+#: ui/overridevirtuals.ui:69
+#, fuzzy, kde-format
+#| msgid "&Deselect All"
+msgctxt "@action:button"
+msgid "&Deselect All"
+msgstr "全部取消選取(&D)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/testcases.ui:29
+#, kde-format
+msgid "Set the test name and its test cases."
+msgstr "設定測試名稱與測試項目。"
+
+#. i18n: ectx: property (text), widget (QLabel, testCasesLabel)
+#: ui/testcases.ui:48
+#, fuzzy, kde-format
+#| msgid "&Test cases:"
+msgctxt "@label:listbox"
+msgid "&Test cases:"
+msgstr "測試項目(&T)："

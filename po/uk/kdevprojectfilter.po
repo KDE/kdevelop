@@ -1,0 +1,228 @@
+# Translation of kdevprojectfilter.po to Ukrainian
+# Copyright (C) 2013-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2013, 2015, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevprojectfilter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"PO-Revision-Date: 2020-09-11 12:16+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.11.70\n"
+
+#: filtermodel.cpp:74
+#, kde-format
+msgctxt "@title:column"
+msgid "Pattern"
+msgstr "Взірець"
+
+#: filtermodel.cpp:76
+#, kde-format
+msgctxt "@title:column"
+msgid "Targets"
+msgstr "Призначення"
+
+#: filtermodel.cpp:78
+#, kde-format
+msgctxt "@title:column"
+msgid "Action"
+msgstr "Дія"
+
+#: filtermodel.cpp:107
+#, kde-format
+msgid ""
+"The wildcard pattern defines whether a file or folder is included in a "
+"project or not.<br />The pattern is matched case-sensitively against the "
+"items relative path to the project root. The relative path starts with a "
+"forward slash, trailing slashes of folders are removed.<br />Patterns ending "
+"on <code>\"/\"</code> are implicitly considered to match against folders "
+"only.<br />Patterns which do not explicitly start with either <code>\"/\"</"
+"code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
+"thus match any item with a relative path ending on the given pattern."
+msgstr ""
+"Взірець визначає, чи буде включено файл чи теку до проєкту.<br />Порівняння "
+"зі взірцем виконується з врахуванням регістру за відносним шляхом щодо "
+"кореневої теки проєкту. Відносний шлях починається з прямої похилої риски, "
+"кінцеві похилі риски для тек буде вилучено.<br />Взірці, записи яких "
+"завершуються на <code>«/»</code>, неявним чином вважатимуться взірцями, що "
+"визначають лише теки.<br />До взірців, записи яких не починаються з "
+"<code>«/»</code> або <code>«*»</code>, неявно буде додано на початку "
+"<code>«*/»</code>, отже їм відповідатиме будь-який запис, відносний шлях "
+"якого завершується на вказаний у взірці рядок."
+
+#: filtermodel.cpp:119
+#, kde-format
+msgid ""
+"The target defines what type of item the filter is matched against.<br /"
+">Filters either apply only to files, only to folders or to both."
+msgstr ""
+"Призначення визначає, до якого типу записів буде застосовано фільтрування."
+"<br />Фільтрування можна застосовувати лише до файлів, лише до тек або до "
+"файлів і тек одночасно."
+
+#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#, kde-format
+msgctxt "@item"
+msgid "Files and Folders"
+msgstr "Файли і теки"
+
+#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#, kde-format
+msgctxt "@item"
+msgid "Folders"
+msgstr "Теки"
+
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#, kde-format
+msgctxt "@item"
+msgid "Files"
+msgstr "Файли"
+
+#: filtermodel.cpp:141
+#, kde-format
+msgid ""
+"Filters by default exclude items from the project. Inclusive patterns can be "
+"used to include items which where matched by previous exclusive patterns."
+"<br />E.g. to only include files ending on <code>\".cpp\"</code> in your "
+"project, you could exclude all files via <code>\"*\"</code> and then apply "
+"an inclusive <code>\"*.cpp\"</code> pattern."
+msgstr ""
+"Типово, фільтри виключатимуть записи з проєкту. За допомогою взірців "
+"включення можна включити записи, які було виключено певними взірцями "
+"виключення.<br />Наприклад, щоб включити лише файли, назви яких завершуються "
+"на <code>«.cpp»</code>, до вашого проєкту, ви можете виключити усі файли за "
+"допомогою взірця <code>«*»</code>, а потім застосувати взірець включення "
+"<code>«*.cpp»</code>."
+
+#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#, kde-format
+msgctxt "@item"
+msgid "Include"
+msgstr "Включити"
+
+#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#, kde-format
+msgctxt "@item"
+msgid "Exclude"
+msgstr "Виключити"
+
+#: projectfilterconfigpage.cpp:172
+#, kde-format
+msgid ""
+"A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
+"to make this explicit."
+msgstr ""
+"Фільтр з порожнім зразком відповідатиме усіх записам. Ви можете скористатися "
+"<code>«*»</code>, щоб явно вказати усі записи."
+
+#: projectfilterconfigpage.cpp:175
+#, kde-format
+msgid "A filter ending on <code>\"/\"</code> can never match a file."
+msgstr ""
+"Фільтр, що завершується на <code>«/»</code>, не буде пройдено жодним файлом."
+
+#: projectfilterconfigpage.cpp:198
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Project Filter"
+msgstr "Налаштовування фільтра проєкту"
+
+#: projectfilterconfigpage.cpp:208
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project Filter"
+msgstr "Фільтр проєкту"
+
+#: projectfilterprovider.cpp:76
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Exclude Item from Project"
+msgid_plural "Exclude Items from Project"
+msgstr[0] "Виключити записи з проєкту"
+msgstr[1] "Виключити записи з проєкту"
+msgstr[2] "Виключити записи з проєкту"
+msgstr[3] "Виключити запис з проєкту"
+
+#: projectfilterprovider.cpp:115
+#, kde-format
+msgid ""
+"A filter for the item was added. To undo, use the project filter settings."
+msgid_plural ""
+"A filter for the items was added. To undo, use the project filter settings."
+msgstr[0] ""
+"Додано фільтр для цих записів. Щоб скасувати фільтрування, скористайтеся "
+"параметрами фільтрування проєкту."
+msgstr[1] ""
+"Додано фільтр для цих записів. Щоб скасувати фільтрування, скористайтеся "
+"параметрами фільтрування проєкту."
+msgstr[2] ""
+"Додано фільтр для цих записів. Щоб скасувати фільтрування, скористайтеся "
+"параметрами фільтрування проєкту."
+msgstr[3] ""
+"Додано фільтр для цього запису. Щоб скасувати фільтрування, скористайтеся "
+"параметрами фільтрування проєкту."
+
+#: projectfilterprovider.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Filter Added"
+msgstr "Додано фільтр проєкту"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectfiltersettings.ui:20
+#, kde-format
+msgid ""
+"Configure which files and folders inside the project folder should be "
+"included or excluded:"
+msgstr ""
+"За допомогою цього модуля можна визначити, які файли і теки у теці проєкту "
+"має бути включено або виключено з його складу:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: projectfiltersettings.ui:34
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Додати"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: projectfiltersettings.ui:49
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Вилучити"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveUp)
+#: projectfiltersettings.ui:61
+#, kde-format
+msgctxt "@action:button"
+msgid "Move Up"
+msgstr "Пересунути вище"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveDown)
+#: projectfiltersettings.ui:73
+#, kde-format
+msgctxt "@action:button"
+msgid "Move Down"
+msgstr "Пересунути нижче"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Type"
+#~ msgstr "Тип"

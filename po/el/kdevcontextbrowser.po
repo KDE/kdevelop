@@ -1,0 +1,199 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2017, 2019.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcontextbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2019-08-27 10:17+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: contextbrowser.cpp:164
+#, fuzzy, kde-format
+#| msgid "Go back in context history"
+msgctxt "@info:tooltip"
+msgid "Go back in context history"
+msgstr "Κινηθείτε προς τα πίσω στο ιστορικό περιεχομένου"
+
+#: contextbrowser.cpp:176
+#, fuzzy, kde-format
+#| msgid "Go forward in context history"
+msgctxt "@info:tooltip"
+msgid "Go forward in context history"
+msgstr "Κινηθείτε προς τα εμπρός στο ιστορικό περιεχομένου"
+
+#: contextbrowser.cpp:192
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "item quick open item type"
+msgid "Outline"
+msgstr "Περίγραμμα"
+
+#: contextbrowser.cpp:193
+#, fuzzy, kde-format
+#| msgid "Outline"
+msgctxt "@info:placeholder"
+msgid "Outline"
+msgstr "Περίγραμμα"
+
+#: contextbrowser.cpp:194
+#, fuzzy, kde-format
+#| msgid "Navigate outline of active document, click to browse."
+msgctxt "@info:tooltip"
+msgid "Navigate outline of active document, click to browse"
+msgstr "Πλοήγηση στο περίγραμμα του ενεργού εγγράφου, κάντε κλικ για εμφάνιση."
+
+#: contextbrowser.cpp:235
+#, fuzzy, kde-format
+#| msgid "Source &Browse Mode"
+msgctxt "@action"
+msgid "Source &Browse Mode"
+msgstr "Λειτουργία &περιήγησης κώδικα"
+
+#: contextbrowser.cpp:241
+#, fuzzy, kde-format
+#| msgid "&Previous Visited Context"
+msgctxt "@action"
+msgid "&Previous Visited Context"
+msgstr "&Προηγούμενο περιεχόμενο"
+
+#: contextbrowser.cpp:247
+#, fuzzy, kde-format
+#| msgid "&Next Visited Context"
+msgctxt "@action"
+msgid "&Next Visited Context"
+msgstr "&Επόμενο περιεχόμενο"
+
+#: contextbrowser.cpp:253
+#, fuzzy, kde-format
+#| msgid "&Previous Use"
+msgctxt "@action"
+msgid "&Previous Use"
+msgstr "&Προηγούμενη χρήση"
+
+#: contextbrowser.cpp:259
+#, fuzzy, kde-format
+#| msgid "&Next Use"
+msgctxt "@action"
+msgid "&Next Use"
+msgstr "&Επόμενη χρήση"
+
+#: contextbrowser.cpp:265
+#, fuzzy, kde-format
+#| msgid "Context Browser"
+msgctxt "@action"
+msgid "Context Browser"
+msgstr "Περιηγητής περιεχομένου"
+
+#: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
+#, fuzzy, kde-format
+#| msgid "Code Browser"
+msgctxt "@title:window"
+msgid "Code Browser"
+msgstr "Περιηγητής κώδικα"
+
+#: contextbrowser.cpp:312
+#, fuzzy, kde-format
+#| msgid "Find Uses"
+msgctxt "@action"
+msgid "Find Uses"
+msgstr "Εύρεση χρήσεων"
+
+#: contextbrowser.cpp:1567
+#, kde-format
+msgid "(changed)"
+msgstr "(τροποποιήθηκε)"
+
+#: contextbrowserview.cpp:178
+#, fuzzy, kde-format
+#| msgid "Show declaration menu"
+msgctxt "@info:tooltip"
+msgid "Show declaration menu"
+msgstr "Εμφάνιση μενού δήλωσης"
+
+#: contextbrowserview.cpp:181
+#, fuzzy, kde-format
+#| msgid "Declaration Menu"
+msgctxt "@action"
+msgid "Declaration Menu"
+msgstr "Μενού δήλωσης"
+
+#: contextbrowserview.cpp:185
+#, fuzzy, kde-format
+#| msgid "Lock Current View"
+msgctxt "@action"
+msgid "Lock Current View"
+msgstr "Κλείδωμα τρέχουσας προβολής"
+
+#: contextbrowserview.cpp:186
+#, fuzzy, kde-format
+#| msgid "Lock current view"
+msgctxt "@info:tooltip"
+msgid "Lock current view"
+msgstr "Κλείδωμα τρέχουσας προβολής"
+
+#: contextbrowserview.cpp:187
+#, fuzzy, kde-format
+#| msgid "Unlock Current View"
+msgctxt "@action"
+msgid "Unlock Current View"
+msgstr "Ξεκλείδωμα τρέχουσας προβολής"
+
+#: contextbrowserview.cpp:189
+#, fuzzy, kde-format
+#| msgid "Unlock current view"
+msgctxt "@info:tooltip"
+msgid "Unlock current view"
+msgstr "Ξεκλείδωμα τρέχουσας προβολής"
+
+#. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
+#: kdevcontextbrowser.rc:25
+#, kde-format
+msgid "Code Browser Toolbar"
+msgstr "Γραμμή εργαλείων περιηγητή κώδικα"
+
+#~ msgid "Outline..."
+#~ msgstr "Περίγραμμα..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Πλοήγηση"
+
+#~ msgid "Enable/disable source browse mode"
+#~ msgstr "Ενεργοποίηση/απενεργοποίηση λειτουργίας περιήγησης κώδικα"
+
+#~ msgid ""
+#~ "When this is enabled, you can browse the source-code by clicking in the "
+#~ "editor."
+#~ msgstr ""
+#~ "Αν ενεργοποιηθεί αυτή η επιλογή, μπορείτε να περιηγηθείτε στον πηγαίο "
+#~ "κώδικα με κλικ στην επεξεργασία κειμένου."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid ""
+#~ "This plugin shows information about the current language context in a "
+#~ "side view, and highlights relevant declarations and uses."
+#~ msgstr ""
+#~ "Αυτό το πρόσθετο εμφανίζει πληροφορίες σχετικά με την τρέχουσα γλώσσα σε "
+#~ "μια πλευρική προβολή, και τονίζει τις σχετικές δηλώσεις και χρήσεις."
+
+#~ msgid "Shows information for the current context"
+#~ msgstr "Εμφάνιση πληροφοριών για το τρέχον περιεχόμενο"

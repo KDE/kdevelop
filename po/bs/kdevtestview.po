@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevphp.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2013-10-18 22:34+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: bs <bs@kde.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:21+0000\n"
+
+#: testview.cpp:56 testviewplugin.cpp:70
+#, fuzzy, kde-format
+#| msgid "Unit Tests"
+msgctxt "@title:window"
+msgid "Unit Tests"
+msgstr "Testovi jedinica"
+
+#: testview.cpp:78
+#, fuzzy, kde-format
+#| msgid "Show Source"
+msgctxt "@action:inmenu"
+msgid "Show Source"
+msgstr "Prikaži izvorni kod"
+
+#: testview.cpp:85
+#, fuzzy, kde-format
+#| msgid "Run Selected Tests"
+msgctxt "@action"
+msgid "Run Selected Tests"
+msgstr "Pokreni odabrane testove"
+
+#: testview.cpp:90
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filter..."
+
+#: testview.cpp:292
+#, kde-format
+msgid "Run 1 test"
+msgid_plural "Run %1 tests"
+msgstr[0] "Pokreni %1 test"
+msgstr[1] "Pokreni %1 testa"
+msgstr[2] "Pokreni %1 testova"
+
+#: testviewplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Run All Tests"
+msgctxt "@action"
+msgid "Run All Tests"
+msgstr "Pokreni sve testove"
+
+#: testviewplugin.cpp:63
+#, kde-format
+msgctxt "@action"
+msgid "Stop Running Tests"
+msgstr ""
+
+#: testviewplugin.cpp:104
+#, kde-format
+msgid "Run 1 test in %2"
+msgid_plural "Run %1 tests in %2"
+msgstr[0] "Pokreni %1 test na %2"
+msgstr[1] "Pokreni %1 testa na %2"
+msgstr[2] "Pokreni %1 testova na %2"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Pokreni"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the test view for matching test suites "
+#~ "and cases."
+#~ msgstr ""
+#~ "Ubacite džoker znakove da filtrirate testni pogled za odgovarajuća "
+#~ "testiranja i slučajeve."
+
+#~ msgid "Unit Test View"
+#~ msgstr "Pogled testa jedinice"
+
+#~ msgid "Lets you see and run unit tests"
+#~ msgstr "Omogućava pogled na jedinične testove"

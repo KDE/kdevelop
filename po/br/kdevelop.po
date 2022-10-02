@@ -1,0 +1,9717 @@
+# KDE breton translation
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Thierry Vignaud <tvignaud@mandriva.com>, 2004-2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KDevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2004-09-20 15:34+0200\n"
+"Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
+"Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
+"Language: br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Thierry Vignaud, Jañ-Mai Drapier"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "tvignaud@mandriva.com, jdrapier@club-internet.fr"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, fuzzy, kde-format
+#| msgid "Session"
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "Dalc'h"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, fuzzy, kde-format
+#| msgid "&Project"
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "&Raktres"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, fuzzy, kde-format
+#| msgid "&Run"
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "&Seveniñ"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, fuzzy, kde-format
+#| msgid "Create New File..."
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "Krouiñ ur restr nevez ..."
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr ""
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, fuzzy, kde-format
+#| msgid "Functions Navigation"
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "Merdeadurezh e fonksionoù"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, fuzzy, kde-format
+#| msgid "&File"
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Restr"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&Aozañ"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, fuzzy, kde-format
+#| msgid "Code"
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Kod"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, fuzzy, kde-format
+#| msgid "&Window"
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "&Prenestr"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "&Kefluniadur"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, fuzzy, kde-format
+#| msgid "&Help"
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "&Skoazell"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Barrenn kentañ an ostilhoù"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "Kod"
+
+#: kdevideextension.cpp:47
+#, fuzzy, kde-format
+msgid "KDevelop Project Files"
+msgstr "*.pro|Restroù raktres QMAKE"
+
+#: main.cpp:85
+#, fuzzy, kde-format
+#| msgid "Could not open file '%1'"
+msgid "Could not open %1"
+msgstr "N'hellan ket digeriñ ar restr '%1'"
+
+#: main.cpp:219
+#, fuzzy, kde-format
+#| msgid "Could not open file '%1'"
+msgid "Could not open file '%1'."
+msgstr "N'hellan ket digeriñ ar restr '%1'"
+
+#: main.cpp:242
+#, fuzzy, kde-format
+#| msgid "Could not read project file: %1"
+msgid "Could not open project '%1': %2"
+msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr ""
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr "KDevelop"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr ""
+
+#: main.cpp:386
+#, fuzzy, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr "(c) 1999-2004, Diorroerien KDevelop"
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr ""
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr ""
+
+#: main.cpp:397
+#, fuzzy, kde-format
+#| msgid "generating"
+msgid "GDB integration"
+msgstr "emaon o krouiñ"
+
+#: main.cpp:398
+#, fuzzy, kde-format
+#| msgid "Hamish Rodda"
+msgid "Hamish Rodda"
+msgstr "Hamish Rodda"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr ""
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr ""
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr ""
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr ""
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr ""
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr ""
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr "Harald Fernengel"
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr ""
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr ""
+
+#: main.cpp:411
+#, fuzzy, kde-format
+#| msgid "Parser"
+msgid "C++ parser"
+msgstr "Lenner"
+
+#: main.cpp:412
+#, fuzzy, kde-format
+msgid "The KWrite authors"
+msgstr "Oberour"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "Aozer ar parzhioù Kate"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr ""
+
+#: main.cpp:413
+#, fuzzy, kde-format
+#| msgid "Qt Designer"
+msgid "Designer code"
+msgstr "Ergrafer Qt"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr ""
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr ""
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr ""
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr ""
+
+#: main.cpp:419
+#, fuzzy, kde-format
+#| msgid "Debugger stopped"
+msgid "Debugger frontend"
+msgstr "Paouezet eo an dizraener"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr ""
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr ""
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr ""
+
+#: main.cpp:421
+#, fuzzy, kde-format
+#| msgid "A KDE Application"
+msgid "KDE application templates"
+msgstr "Ur meziant KDE"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr ""
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr ""
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr ""
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr ""
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr ""
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr "Simon Hausmann"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr ""
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr ""
+
+#: main.cpp:426
+#, fuzzy, kde-format
+#| msgid "Add subproject"
+msgid "Ada support"
+msgstr "Ouzhpennañ un israktres"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr ""
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "Merour raktres QMake"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr ""
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr ""
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr ""
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr ""
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr ""
+
+#: main.cpp:432
+#, fuzzy, kde-format
+msgid "ClearCase support"
+msgstr "Daveiñ :"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr ""
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr ""
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr ""
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "Teuliadur Fortran"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr ""
+
+#: main.cpp:435
+#, fuzzy, kde-format
+#| msgid "Python documentation"
+msgid "Python documentation utility"
+msgstr "Teuliadur python"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr ""
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "Skoazeller Doxygen"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr ""
+
+#: main.cpp:437 main.cpp:438
+#, fuzzy, kde-format
+#| msgid "Kate editor component"
+msgid "Fileselector component"
+msgstr "Aozer ar parzhioù Kate"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr ""
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr ""
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr ""
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, fuzzy, kde-format
+msgid "Patches"
+msgstr "&Hent :"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr ""
+
+#: main.cpp:442
+#, fuzzy, kde-format
+#| msgid "Source Files"
+msgid "Luc Willems"
+msgstr "Restroù tarzh"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr ""
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr ""
+
+#: main.cpp:443
+#, fuzzy, kde-format
+#| msgid "Documentation data"
+msgid "Documentation index view"
+msgstr "Roadoù an teuliadur"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr ""
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr ""
+
+#: main.cpp:446
+#, fuzzy, kde-format
+#| msgid "QMake projectmanager"
+msgid "QMake project manager patches"
+msgstr "Merour raktres QMake"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr ""
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr ""
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr ""
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr ""
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr ""
+
+#: main.cpp:488
+#, fuzzy, kde-format
+#| msgid "KDevelop Assistant"
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "Skoazeller KDevelop"
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr ""
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr ""
+
+#: main.cpp:520
+#, fuzzy, kde-format
+msgid "Name: Opened Projects"
+msgstr "Digeriñ ar raktres"
+
+#: main.cpp:529
+#, fuzzy, kde-format
+#| msgid "Running program"
+msgid "[running]"
+msgstr "Program o seveniñ"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr ""
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr ""
+
+#: main.cpp:648
+#, fuzzy, kde-format
+#| msgid "'%1' does not exist."
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "N'eo ket endeo '%1'."
+
+#: main.cpp:654
+#, fuzzy, kde-format
+#| msgid "Debugger"
+msgid "Debug %1"
+msgstr "Dizraener"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+
+#: main.cpp:678
+#, fuzzy, kde-format
+#| msgid "A file with this name already exists."
+msgid "No session with the name %1 exists."
+msgstr "Ur restr gant an anv-se a zo c'hoazh."
+
+#: main.cpp:685
+#, fuzzy, kde-format
+#| msgid "Could not open file for writing."
+msgid "Could not lock session %1 for deletion."
+msgstr "N'hellan ket digeriñ ar restr evit skrivañ."
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr ""
+
+#: main.cpp:794
+#, fuzzy, kde-format
+#| msgid "Cannot find the htdig configuration file."
+msgid "Cannot find native launch configuration type"
+msgstr "N'hellan ket kavout restr gefluniadur htdig."
+
+#: main.cpp:814
+#, fuzzy, kde-format
+msgid "Cannot find launcher %1"
+msgstr "Ne m'eus ket gallet kavout ar restr"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+#, fuzzy
+#| msgid "KDevelop Assistant"
+msgid "KDevelop Sessions"
+msgstr "Skoazeller KDevelop"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, fuzzy, kde-format
+#| msgid "KDevelop Assistant"
+msgid "Open KDevelop Session"
+msgstr "Skoazeller KDevelop"
+
+#~ msgid "Files to load"
+#~ msgstr "Restroù da gargañ"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "&File"
+#~ msgstr "&Restr"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgid "&Edit"
+#~ msgstr "&Aozañ"
+
+#, fuzzy
+#~| msgid "Advanced"
+#~ msgid "&Advanced"
+#~ msgstr "Barek"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "&View"
+#~ msgstr "&Gwel"
+
+#, fuzzy
+#~| msgid "Code Comp&letion"
+#~ msgid "&Code Folding"
+#~ msgstr "Klok&adur a god"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Tools"
+#~ msgstr "&Ostilhoù"
+
+#, fuzzy
+#~| msgid "Code Comp&letion"
+#~ msgid "Word Completion"
+#~ msgstr "Klok&adur a god"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings"
+#~ msgstr "&Kefluniadur"
+
+#, fuzzy
+#~| msgid "Editor"
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Aozer"
+
+#, fuzzy
+#~| msgid "Project options"
+#~ msgid "Deprecated options:"
+#~ msgstr "Dibarzhoù ar raktres"
+
+#, fuzzy
+#~ msgid "The KHTML authors"
+#~ msgstr "Oberour"
+
+#, fuzzy
+#~| msgid "CHM Documentation Collection"
+#~ msgid "HTML documentation component"
+#~ msgstr "Dastumad teuliadur evit CHM"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Develop"
+#~ msgstr "KDevelop"
+
+#, fuzzy
+#~| msgid "Settings changed"
+#~ msgid "Getting Started"
+#~ msgstr "Dibarzhoù kemmet"
+
+#, fuzzy
+#~ msgid "Configure a new Launcher"
+#~ msgstr "S&erriñ ar raktres "
+
+#, fuzzy
+#~| msgid "Main pr&ogram"
+#~ msgid "Debug your program"
+#~ msgstr "Goulev &kentañ :"
+
+#, fuzzy
+#~| msgid "Debugger"
+#~ msgid "Debug Area"
+#~ msgstr "Dizraener"
+
+#, fuzzy
+#~ msgid "Review a Patch"
+#~ msgstr "Hent"
+
+#, fuzzy
+#~ msgid "Review Area"
+#~ msgstr "Hent"
+
+#~ msgid "New Project"
+#~ msgstr "Raktres nevez"
+
+#~ msgid "Open project"
+#~ msgstr "Digeriñ ur raktres"
+
+#, fuzzy
+#~| msgid "new project"
+#~ msgid "Fetch project"
+#~ msgstr "raktres nevez"
+
+#, fuzzy
+#~| msgid "Open &Recent Project"
+#~ msgid "Recent Projects"
+#~ msgstr "Digeriñ ur raktres nevezig"
+
+#, fuzzy
+#~| msgid "Session"
+#~ msgid "Sessions"
+#~ msgstr "Dalc'h"
+
+#, fuzzy
+#~| msgid "Username"
+#~ msgid "Userbase"
+#~ msgstr "Anv an arveriad"
+
+#, fuzzy
+#~| msgid "Documentation browser"
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Furcher an teuliadur"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "KDevelop"
+
+#, fuzzy
+#~| msgid "The file %1 could not be saved"
+#~ msgid "Some of the requested files could not be opened."
+#~ msgstr "N'em eus ket enrollañ ar restr %1"
+
+#, fuzzy
+#~| msgid "String"
+#~ msgid "Starting"
+#~ msgstr "Hedad"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Learn KDevelop!"
+#~ msgstr "KDevelop"
+
+#, fuzzy
+#~| msgid "Execute program"
+#~ msgid "Execute your program"
+#~ msgstr "Seveniñ ar goulev"
+
+#, fuzzy
+#~| msgid "Remove file"
+#~ msgid "Remove lock file"
+#~ msgstr "Distruj ar restr"
+
+#, fuzzy
+#~| msgid "Failed to load file '%1'"
+#~ msgid "Failed to Lock Session %1"
+#~ msgstr "N'hellan ket kargañ ar restr '%1'"
+
+#, fuzzy
+#~| msgid "Failed to load file '%1'"
+#~ msgid "Failed to remove lock file %1."
+#~ msgstr "N'hellan ket kargañ ar restr '%1'"
+
+#, fuzzy
+#~| msgid "Import existing project"
+#~ msgid "Import project"
+#~ msgstr "Enporzh ur raktres a zo c'hoazh"
+
+#, fuzzy
+#~| msgid "Failed to load file '%1'"
+#~ msgid "<p>Failed to lock the session <em>%1</em>, "
+#~ msgstr "N'hellan ket kargañ ar restr '%1'"
+
+#, fuzzy
+#~ msgid "Url to project to load"
+#~ msgstr "Karget eo ar raktres."
+
+#, fuzzy
+#~ msgid "Copyright 1999-2009, The KDevelop developers"
+#~ msgstr "(c) 1999-2004, Diorroerien KDevelop"
+
+#, fuzzy
+#~| msgid "Session"
+#~ msgid "Session contents"
+#~ msgstr "Dalc'h"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "Restroù da gargañ"
+
+#~ msgid "Profile to load"
+#~ msgstr "Profil da gargañ"
+
+#~ msgid "Version %1"
+#~ msgstr "Doare %1"
+
+#, fuzzy
+#~ msgid "Definition-Use Chain, C++ Support"
+#~ msgstr "T&ermenadur"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "&Restr"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Aozañ"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "&Gwel"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Raktres"
+
+#~ msgid "Run"
+#~ msgstr "Seveniñ"
+
+#, fuzzy
+#~| msgid "Window"
+#~ msgctxt "@title:menu"
+#~ msgid "Window"
+#~ msgstr "Prenestr"
+
+#~ msgid "Cancel"
+#~ msgstr "Nullañ"
+
+#, fuzzy
+#~| msgid "Re&name"
+#~ msgid "Rename %1"
+#~ msgstr "Ad&envel"
+
+#, fuzzy
+#~| msgid "Create &new class"
+#~ msgid "Create Class"
+#~ msgstr "Krouiñ ur renkad &nevez"
+
+#, fuzzy
+#~| msgid "File name:"
+#~ msgid "New name:"
+#~ msgstr "Anv ar restr :"
+
+#, fuzzy
+#~| msgid "Re&name"
+#~ msgid "Rename"
+#~ msgstr "Ad&envel"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Uses"
+#~ msgstr "Arveriad"
+
+#, fuzzy
+#~| msgid "Save changes to '%1'?"
+#~ msgid "Searching uses of \"%1\""
+#~ msgstr "Enrollañ ar c'hemmoù da '%1' ?"
+
+#, fuzzy
+#~| msgid "KCacheGrind"
+#~ msgid "Cached: "
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "make-process failed"
+#~ msgstr "Merour raktres QMake"
+
+#, fuzzy
+#~ msgid "output: %1"
+#~ msgstr "Dilemel ar meuziad"
+
+#, fuzzy
+#~| msgid "Output path"
+#~ msgid "Output was: %1"
+#~ msgstr "Hent ezkas"
+
+#, fuzzy
+#~| msgid "Connect"
+#~ msgid "Connect to"
+#~ msgstr "Kevreañ"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "Fonksion"
+
+#, fuzzy
+#~| msgid "macro"
+#~ msgid "Macro"
+#~ msgstr "makro"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Preprocessed body:"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgid "Body:"
+#~ msgstr "Druz"
+
+#, fuzzy
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~| msgid "Include types"
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid "Declarations:"
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~| msgid "The file %1 could not be saved"
+#~ msgid "File could not be read from."
+#~ msgstr "N'em eus ket enrollañ ar restr %1"
+
+#, fuzzy
+#~| msgid "Search in Documentation: %1"
+#~ msgid ""
+#~ "Searched include path:\n"
+#~ "%1"
+#~ msgstr "Klask en teuliadur : %1"
+
+#, fuzzy
+#~ msgid "This file imports the current open document<br/>"
+#~ msgstr "Serriñ ar raktres pe an teul red"
+
+#, fuzzy
+#~ msgid "In %1th include-path"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~ msgid "Included through"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "Directory %1"
+#~ msgstr "Renkell :"
+
+#, fuzzy
+#~ msgid "Includes"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~ msgid "Include Path"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~ msgid "Includers"
+#~ msgstr "Seurtoù resevet"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "Files"
+#~ msgstr "&Restr"
+
+#, fuzzy
+#~| msgid "Create &new class"
+#~ msgid "Create &New Class"
+#~ msgstr "Krouiñ ur renkad &nevez"
+
+#, fuzzy
+#~| msgid "Parsing file: %1"
+#~ msgid "Parsing included files"
+#~ msgstr "O lenn ar restr : %1"
+
+#, fuzzy
+#~| msgid "Parsing file: %1"
+#~ msgid "Parsing actual file"
+#~ msgstr "O lenn ar restr : %1"
+
+#, fuzzy
+#~| msgid "Building Package"
+#~ msgid "Building uses"
+#~ msgstr "Emaon o sevel ar pakad"
+
+#, fuzzy
+#~ msgid "Ready"
+#~ msgstr "Adkargañ ar gwezenn"
+
+#, fuzzy
+#~| msgid "Parse Error"
+#~ msgid "Macro error"
+#~ msgstr "Fazi en ur lenn"
+
+#, fuzzy
+#~| msgid "Folder: %1"
+#~ msgid "Formals: %1"
+#~ msgstr "Renkell : %1"
+
+#, fuzzy
+#~| msgid "Character Coding"
+#~ msgid "character %1"
+#~ msgstr "Kodadur an arouezenn"
+
+#, fuzzy
+#~| msgid "&Menu text:"
+#~ msgid "Input text: %1"
+#~ msgstr "Skrid ar &meuziad :"
+
+#, fuzzy
+#~ msgid "invalid input: %1"
+#~ msgstr "Aozañ ar gwerzh"
+
+#, fuzzy
+#~| msgid "Generate G&TK+ class"
+#~ msgid "Generate Stub Class"
+#~ msgstr "Krouiñ ur renkad G&TK+"
+
+#, fuzzy
+#~| msgid "Generate"
+#~ msgid "Generate Stub"
+#~ msgstr "Krouiñ"
+
+#, fuzzy
+#~| msgid "Save Form"
+#~ msgid "Save to "
+#~ msgstr "Enrollañ ar paperenn-reol"
+
+#, fuzzy
+#~| msgid "Generate a new class"
+#~ msgid "Generate Unit Under Test"
+#~ msgstr "Krouiñ ur renkad nevez"
+
+#, fuzzy
+#~| msgid "Generate a new class"
+#~ msgid "&Switch Test/Unit Under Test"
+#~ msgstr "Krouiñ ur renkad nevez"
+
+#, fuzzy
+#~| msgid "Overwrite"
+#~ msgid "Override"
+#~ msgstr "Rasklañ"
+
+#, fuzzy
+#~ msgid "Implement"
+#~ msgstr "Teuliadur"
+
+#~ msgid "Add"
+#~ msgstr "Ouzhpennañ"
+
+#, fuzzy
+#~| msgid "or"
+#~ msgid "for"
+#~ msgstr "pe"
+
+#, fuzzy
+#~| msgid "Cannot start the htsearch executable."
+#~ msgid "Failed to start test executable."
+#~ msgstr "N'em eus ket loc'hañ ar programm htsearch."
+
+#, fuzzy
+#~| msgid "PHP &executable:"
+#~ msgid "Test executable crashed."
+#~ msgstr "&Goulev PHP :"
+
+#, fuzzy
+#~| msgid "Type Name"
+#~ msgid "Test root."
+#~ msgstr "Anv ar seurt"
+
+#, fuzzy
+#~| msgid "Add Profile"
+#~ msgid "profile"
+#~ msgstr "Ouzhpennañ ur profil"
+
+#, fuzzy
+#~ msgid "QTest verbose output"
+#~ msgstr "&Subversion"
+
+#, fuzzy
+#~| msgid "PHP &executable:"
+#~ msgid "Test executable timed out."
+#~ msgstr "&Goulev PHP :"
+
+#, fuzzy
+#~| msgid "Cannot start the htsearch executable."
+#~ msgid "Failed to write to test executable."
+#~ msgstr "N'em eus ket loc'hañ ar programm htsearch."
+
+#, fuzzy
+#~| msgid "Cannot start the htsearch executable."
+#~ msgid "Failed to read from test executable."
+#~ msgstr "N'em eus ket loc'hañ ar programm htsearch."
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "Unknown error occurred."
+#~ msgstr "Degouezhet ez eus ur fazi :"
+
+#, fuzzy
+#~| msgid "&Test"
+#~ msgid "xTest"
+#~ msgstr "&Arnodiñ"
+
+#, fuzzy
+#~| msgid "Type Name"
+#~ msgid "QTest test"
+#~ msgstr "Anv ar seurt"
+
+#, fuzzy
+#~| msgid "Add New Target"
+#~ msgid "New QTest"
+#~ msgstr "Ouzhpennañ ur wenn nevez"
+
+#~ msgid "Class name:"
+#~ msgstr "Anv ar renkad :"
+
+#, fuzzy
+#~| msgid "Search"
+#~ msgid "Search"
+#~ msgstr "Klask"
+
+#, fuzzy
+#~| msgid "Find in Files"
+#~ msgid "Find In Files"
+#~ msgstr "Klask er restroù"
+
+#~ msgid "Grep: %1"
+#~ msgstr "Grep : %1"
+
+#, fuzzy
+#~| msgid "Cannot create temporary file '%1'"
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "N'hellan ket krouiñ ar restr padennek '%1'"
+
+#, fuzzy
+#~| msgid "Find in Files"
+#~ msgid "Find in Files"
+#~ msgstr "Klask er restroù"
+
+#, fuzzy
+#~ msgid "Process failed to start."
+#~ msgstr "*** Kuitet evel boas ***"
+
+#, fuzzy
+#~ msgid "Process crashed."
+#~ msgstr "Lakaat dre ziouer"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Process timed out."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Error While Adding Files"
+#~ msgid "Error while writing to process."
+#~ msgstr "Fazi en ur ouzhpennañ ar restroù"
+
+#, fuzzy
+#~| msgid "Error While Adding Files"
+#~ msgid "Error while reading from process."
+#~ msgstr "Fazi en ur ouzhpennañ ar restroù"
+
+#, fuzzy
+#~| msgid "Unknown error."
+#~ msgid "Unknown process error."
+#~ msgstr "Fazi dianav."
+
+#~ msgid "Find in Fi&les..."
+#~ msgstr "Klask er &restroù ..."
+
+#, fuzzy
+#~| msgctxt "no version control system"
+#~| msgid "None"
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#~ msgid "Create New Project"
+#~ msgstr "Krouiñ ur raktres nevez"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "Pennañ"
+
+#, fuzzy
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "Doare %1"
+
+#, fuzzy
+#~| msgid "Project age:"
+#~ msgid "Project Wizard"
+#~ msgstr "Oad ar raktres :"
+
+#~ msgid "&New Project..."
+#~ msgstr "Raktres &nevez ..."
+
+#~ msgid "Generate a new project from a template"
+#~ msgstr "Krouiñ ur raktres nevez eus ur patrom"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&Enporzh ur raktres a zo endeo ..."
+
+#, fuzzy
+#~| msgid "Add to repository"
+#~ msgid "Could not initialize DVCS repository"
+#~ msgstr "Ouzhpennañ d'an daveiñ"
+
+#, fuzzy
+#~| msgid "Add file to repository"
+#~ msgid "Could not add files to the DVCS repository"
+#~ msgstr "Ouzhpennañ ar restr d'an daveiñ"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not import project into"
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not checkout imported project"
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not import project"
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Could not create new project"
+#~ msgstr "Krouiñ ur raktres nevez"
+
+#~ msgid "The file %1 cannot be created."
+#~ msgstr "Ne m'eus ket krouet ar restr %1."
+
+#, fuzzy
+#~| msgid "Please, choose a valid working directory"
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Dibabit ur renkell labour"
+
+#, fuzzy
+#~| msgid "You have to choose a project name."
+#~ msgid "Please choose a project name."
+#~ msgstr "Ret eo deoc'h anv ur raktres."
+
+#, fuzzy
+#~| msgid "Project directory:"
+#~ msgid "Project import error"
+#~ msgstr "Renkell ar raktres :"
+
+#, fuzzy
+#~| msgid "Could not open file '%1'"
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "N'hellan ket digeriñ ar restr '%1'"
+
+#, fuzzy
+#~ msgid "Invalid Location"
+#~ msgstr "Lec'hia&dur :"
+
+#, fuzzy
+#~| msgid "Project name"
+#~ msgid "Empty project name"
+#~ msgstr "Anv ar raktres"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid project name"
+#~ msgstr "Patromoù ar raktres"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid Project Template"
+#~ msgstr "Patromoù ar raktres"
+
+#~ msgid "Project Templates"
+#~ msgstr "Patromoù ar raktres"
+
+#, fuzzy
+#~ msgid "Document View"
+#~ msgstr "Teuliadur"
+
+#, fuzzy
+#~| msgid "Saves all open documents"
+#~ msgid "A list of opened documents"
+#~ msgstr "Enrollañ a ra pep teul digoret"
+
+#~ msgid "Documents"
+#~ msgstr "Teulioù"
+
+#~ msgid "Disabled"
+#~ msgstr "Marv"
+
+#, fuzzy
+#~| msgid "Loading: %1"
+#~ msgid "Pending (add)"
+#~ msgstr "Emaon o kargañ %1"
+
+#, fuzzy
+#~| msgid "Loading: %1"
+#~ msgid "Pending (clear)"
+#~ msgstr "Emaon o kargañ %1"
+
+#, fuzzy
+#~| msgid "Loading: %1"
+#~ msgid "Pending (modify)"
+#~ msgstr "Emaon o kargañ %1"
+
+#~ msgid "Active"
+#~ msgstr "Bev"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Kod"
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Internal error"
+#~ msgstr "Fazi diabarzh"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Invalid debugger command"
+#~ msgstr "Fazi diabarzh"
+
+#, fuzzy
+#~| msgid "Add new signal"
+#~ msgid "Exited on signal %1"
+#~ msgstr "Ouzhpennañ an arhent nevez"
+
+#, fuzzy
+#~| msgid "Delete signal"
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Dilemel an arhent"
+
+#, fuzzy
+#~| msgid "Delete signal"
+#~ msgid "Received signal"
+#~ msgstr "Dilemel an arhent"
+
+#, fuzzy
+#~| msgid "rdb message:\n"
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr "kemennad rdb :\n"
+
+#, fuzzy
+#~| msgid "Parsing"
+#~ msgid "Warning"
+#~ msgstr "O lenn"
+
+#, fuzzy
+#~| msgid "Main pr&ogram"
+#~ msgid "Running program"
+#~ msgstr "Goulev &kentañ :"
+
+#, fuzzy
+#~ msgid "Could not run application"
+#~ msgstr "Krouiñ un arload"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "Debugger error"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#, fuzzy
+#~| msgid "Debugger stopped"
+#~ msgid "Debugger status"
+#~ msgstr "Paouezet eo an dizraener"
+
+#, fuzzy
+#~| msgid "Disable index"
+#~ msgid "Disassemble View"
+#~ msgstr "Marvaat ar meneger"
+
+#, fuzzy
+#~| msgid "Address"
+#~ msgid "Address"
+#~ msgstr "Chomlec'h"
+
+#~ msgid "Function"
+#~ msgstr "Fonksion"
+
+#, fuzzy
+#~| msgid "set"
+#~ msgid "Offset"
+#~ msgstr "lakaat"
+
+#, fuzzy
+#~ msgid "Instruction"
+#~ msgstr "&Lec'hiadur :"
+
+#, fuzzy
+#~| msgid "Could not create the new file."
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Ne m'eus ket gallet krouiñ ar restr nevez."
+
+#, fuzzy
+#~| msgid "KCachegrind Not Found"
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "N'eo ket bet kavet KCachegrind"
+
+#, fuzzy
+#~| msgid "Internal Error"
+#~ msgid "Internal debugger error"
+#~ msgstr "Fazi diabarzh"
+
+#, fuzzy
+#~| msgid "Stop debugger"
+#~ msgid "Could not start debugger"
+#~ msgstr "Herzel an dizraener"
+
+#, fuzzy
+#~| msgid "Debugger Configuration"
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Kefluniadur an dizraener"
+
+#, fuzzy
+#~| msgid "New"
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Nevez"
+
+#, fuzzy
+#~| msgid "Data File"
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Restr roadoù"
+
+#, fuzzy
+#~| msgid "Data File"
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Restr roadoù"
+
+#, fuzzy
+#~| msgid "New text"
+#~ msgid "Show text"
+#~ msgstr "Skrid nevez"
+
+#~ msgid "Edit"
+#~ msgstr "Aozañ"
+
+#~ msgid "Disable"
+#~ msgstr "Marvaat "
+
+#~ msgid "Delete"
+#~ msgstr "Dilemel"
+
+#, fuzzy
+#~| msgid "Disable"
+#~ msgid "Disable all"
+#~ msgstr "Marvaat "
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Enable all"
+#~ msgstr "Bevaat"
+
+#, fuzzy
+#~| msgid "Delete signal"
+#~ msgid "Delete all"
+#~ msgstr "Dilemel an arhent"
+
+#~ msgid "Enable"
+#~ msgstr "Bevaat"
+
+#, fuzzy
+#~ msgid "GDB Output"
+#~ msgstr "&Subversion"
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "Urzhiad &GDB :"
+
+#, fuzzy
+#~| msgid "Collapse All"
+#~ msgid "Copy All"
+#~ msgstr "Serriñ an holl re"
+
+#, fuzzy
+#~| msgid "No filter"
+#~ msgid "Not hit yet"
+#~ msgstr "Sil ebet"
+
+#, fuzzy
+#~| msgid "Ignored"
+#~ msgid "Ignore"
+#~ msgstr "Divrud"
+
+#, fuzzy
+#~| msgid "Reset"
+#~ msgid "Recent"
+#~ msgstr "Adkorañ"
+
+#, fuzzy
+#~ msgid "Debugger Variables"
+#~ msgstr "Dilemel ar gwerzh"
+
+#, fuzzy
+#~ msgid "Recent Expressions"
+#~ msgstr "Dilemel ur gevreadenn"
+
+#~ msgid "Remove All"
+#~ msgstr "Lemel an holl re"
+
+#, fuzzy
+#~ msgid "Re-evaluate All"
+#~ msgstr "Erlec'hiañ pep tra"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "Format"
+#~ msgstr "Paperenn-reol"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Natural"
+#~ msgstr "Diwar zorn"
+
+#, fuzzy
+#~| msgid "Decimal"
+#~ msgid "Hexadecimal"
+#~ msgstr "Dre zegoù"
+
+#~ msgid "Decimal"
+#~ msgstr "Dre zegoù"
+
+#, fuzzy
+#~| msgid "Character Coding"
+#~ msgid "Character"
+#~ msgstr "Kodadur an arouezenn"
+
+#, fuzzy
+#~ msgid "Binary"
+#~ msgstr "Merour QMake"
+
+#~ msgid "Remember Value"
+#~ msgstr "Soñjal ar wezh"
+
+#, fuzzy
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Dilemel ar gwerzh"
+
+#, fuzzy
+#~ msgid "Watch Variable"
+#~ msgstr "Aozañ ar gizioù"
+
+#, fuzzy
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Dilemel ur gevreadenn"
+
+#, fuzzy
+#~ msgid "Remove Expression"
+#~ msgstr "Dilemel ur gevreadenn"
+
+#, fuzzy
+#~| msgid "Data File"
+#~ msgid "Data write breakpoint"
+#~ msgstr "Restr roadoù"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Copy Value"
+#~ msgstr "Gwerzh"
+
+#, fuzzy
+#~| msgid "(invalid)"
+#~ msgid "Invalid"
+#~ msgstr "(siek)"
+
+#, fuzzy
+#~ msgid "Watchpoint"
+#~ msgstr "&Hent :"
+
+#, fuzzy
+#~ msgid "Read Watchpoint"
+#~ msgstr "&Hent :"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgid "Start"
+#~ msgstr "&Loc'hañ :"
+
+#, fuzzy
+#~| msgid "&Ant"
+#~ msgid "Amount"
+#~ msgstr "&Merien"
+
+#~ msgid "OK"
+#~ msgstr "Mat eo"
+
+#, fuzzy
+#~| msgid "MemoryView:"
+#~ msgid "Memory view"
+#~ msgstr "Gwell ar memor :"
+
+#, fuzzy
+#~| msgid "Change property name"
+#~ msgid "Change memory range"
+#~ msgstr "Kemmañ anv an dibarzh"
+
+#, fuzzy
+#~ msgid "Reload"
+#~ msgstr "Adkargañ ar gwezenn"
+
+#, fuzzy
+#~| msgid "Close project"
+#~ msgid "Close this view"
+#~ msgstr "Serriñ ar raktres"
+
+#, fuzzy
+#~| msgid "Special &Headers"
+#~ msgid "Special debugger views"
+#~ msgstr "&Reollinoù dibar"
+
+#, fuzzy
+#~ msgid "Breakpoint"
+#~ msgstr "&Doare"
+
+#~ msgid " temporary"
+#~ msgstr " padennek"
+
+#, fuzzy
+#~| msgid "Enabled:"
+#~ msgid "Enabled"
+#~ msgstr "Bev :"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgid "Type"
+#~ msgstr "Rizh :"
+
+#~ msgid "Status"
+#~ msgstr "Stad"
+
+#, fuzzy
+#~| msgid "Location:"
+#~ msgid "Location"
+#~ msgstr "Lec'hiadur :"
+
+#, fuzzy
+#~| msgid "Connection"
+#~ msgid "Condition"
+#~ msgstr "Kevreadenn"
+
+#, fuzzy
+#~| msgid "Ignored"
+#~ msgid "Ignore Count"
+#~ msgstr "Divrud"
+
+#, fuzzy
+#~ msgid "Hits"
+#~ msgstr "Kuzhat %1"
+
+#, fuzzy
+#~ msgid "Tracing"
+#~ msgstr "emaon o grouiñ"
+
+#, fuzzy
+#~| msgid "Frame Stack"
+#~ msgid "Frame"
+#~ msgstr "Pilad ar sternoù"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "C++ Debugger"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#, fuzzy
+#~ msgid "Breakpoints"
+#~ msgstr "&Doare"
+
+#, fuzzy
+#~ msgid "Variables"
+#~ msgstr "Ouzhpennañ ur restr"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Pilad ar sternoù"
+
+#, fuzzy
+#~| msgid "Disable"
+#~ msgid "Disassemble"
+#~ msgstr "Marvaat "
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#, fuzzy
+#~| msgid "New view"
+#~ msgid "Debug views"
+#~ msgstr "Gwell nevez"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgid "&Start"
+#~ msgstr "&Loc'hañ :"
+
+#, fuzzy
+#~| msgid "Stop debugger"
+#~ msgid "Start in debugger"
+#~ msgstr "Herzel an dizraener"
+
+#~ msgid "&Restart"
+#~ msgstr "&Adloc'hañ"
+
+#, fuzzy
+#~ msgid "Restart program"
+#~ msgstr "Seveniñ ar goulev"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgid "Sto&p"
+#~ msgstr "Paouez"
+
+#~ msgid "Stop debugger"
+#~ msgstr "Herzel an dizraener"
+
+#~ msgid "Interrupt"
+#~ msgstr "Astaliñ"
+
+#, fuzzy
+#~| msgid "an application: "
+#~ msgid "Interrupt application"
+#~ msgstr "ur meziant : "
+
+#, fuzzy
+#~| msgid "Cursor"
+#~ msgid "Run to &Cursor"
+#~ msgstr "Reti"
+
+#, fuzzy
+#~| msgid "Cursor"
+#~ msgid "Run to cursor"
+#~ msgstr "Reti"
+
+#, fuzzy
+#~| msgid "Cursor"
+#~ msgid "Jump to cursor"
+#~ msgstr "Reti"
+
+#, fuzzy
+#~| msgid "Activates the next window"
+#~ msgid "Step over the next line"
+#~ msgstr "Bevaat ar prenestr a heul"
+
+#, fuzzy
+#~| msgid "Remove Function"
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Lemel ar fonksion"
+
+#, fuzzy
+#~| msgid "Remove Function"
+#~ msgid "Step over instruction"
+#~ msgstr "Lemel ar fonksion"
+
+#, fuzzy
+#~| msgid "<b>Next window</b><p>Switches to the next window."
+#~ msgid ""
+#~ "<b>Step over instruction</b><p>Steps over the next assembly instruction."
+#~ msgstr "<b>Prenestr kentañ</b><p>Gwintañ d'ar prenestr a heul."
+
+#, fuzzy
+#~| msgid "Activates the next window"
+#~ msgid "Step into the next statement"
+#~ msgstr "Bevaat ar prenestr a heul"
+
+#, fuzzy
+#~| msgid "Remove Function"
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Lemel ar fonksion"
+
+#, fuzzy
+#~| msgid "Remove Function"
+#~ msgid "Step into instruction"
+#~ msgstr "Lemel ar fonksion"
+
+#, fuzzy
+#~| msgid "<b>Next window</b><p>Switches to the next window."
+#~ msgid ""
+#~ "<b>Step into instruction</b><p>Steps into the next assembly instruction."
+#~ msgstr "<b>Prenestr kentañ</b><p>Gwintañ d'ar prenestr a heul."
+
+#~ msgid "Viewers"
+#~ msgstr "Gwelerien"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "Debugger viewers"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#, fuzzy
+#~| msgid "Scanning for files"
+#~ msgid "Examine core file"
+#~ msgstr "Emaon o tielfennañ evit restroù"
+
+#, fuzzy
+#~| msgid "Debugger Configuration"
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Kefluniadur an dizraener"
+
+#, fuzzy
+#~| msgid "Debugger Configuration"
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Kefluniadur an dizraener"
+
+#, fuzzy
+#~ msgid "Evaluate: %1"
+#~ msgstr "Aozañ ar gwerzh"
+
+#, fuzzy
+#~ msgid "Watch: %1"
+#~ msgstr "&Hent :"
+
+#, fuzzy
+#~ msgid "GDB exited abnormally"
+#~ msgstr "*** Kuitet evel boas ***"
+
+#, fuzzy
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Dibabit ur piksmap ..."
+
+#, fuzzy
+#~| msgid "Scanning for files"
+#~ msgid "Examining core file %1"
+#~ msgstr "Emaon o tielfennañ evit restroù"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "Debugger"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#, fuzzy
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Diskouez an nozel serriñ e-barzh barenn ar bevennigoù"
+
+#, fuzzy
+#~| msgid "&Continue"
+#~ msgid "&Continue"
+#~ msgstr "&Kenderc'hel"
+
+#, fuzzy
+#~| msgid "Include application icon"
+#~ msgid "Continues the application execution"
+#~ msgstr "Enlakaat arlun ar meziant"
+
+#, fuzzy
+#~ msgid "Process exited"
+#~ msgstr "Lakaat dre ziouer"
+
+#, fuzzy
+#~ msgid "Variable"
+#~ msgstr "Ouzhpennañ ur restr"
+
+#~ msgid "Value"
+#~ msgstr "Gwerzh"
+
+#, fuzzy
+#~| msgid "Include application icon"
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "Enlakaat arlun ar meziant"
+
+#, fuzzy
+#~| msgid "QMake Manager"
+#~ msgid "CMake Manager"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~ msgid "Create a folder called '%1'."
+#~ msgstr "Krouiñ ur restr nevez"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~| msgid "Could not create the template."
+#~ msgid "Could not save the change."
+#~ msgstr "Ne m'eus ket gallet krouiñ ar patrom."
+
+#, fuzzy
+#~| msgid "Remove File From '%1'"
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Lemel ar restr eus '%1'"
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#~ msgid "Name"
+#~ msgstr "Anv"
+
+#~ msgid "Comment"
+#~ msgstr "Askelenn"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Diri"
+
+#, fuzzy
+#~ msgid "CMake process killed"
+#~ msgstr "Merour raktres QMake"
+
+#, fuzzy
+#~| msgid "An error occurred:"
+#~ msgid "An error occurred"
+#~ msgstr "Degouezhet ez eus ur fazi :"
+
+#, fuzzy
+#~| msgid "You have to select a file to import."
+#~ msgid "You need to select a cmake binary"
+#~ msgstr "Red eo deoc'h da zibab ur restr da enporzh."
+
+#, fuzzy
+#~| msgid "You have to choose a directory."
+#~ msgid "You need to specify a build directory"
+#~ msgstr "Ret eo deoc'h dibab ur renkell."
+
+#, fuzzy
+#~| msgid "Add Subdirectory"
+#~ msgid "Already used build directory"
+#~ msgstr "Ouzhpennañ un is-renkell"
+
+#, fuzzy
+#~| msgid "Add Subdirectory"
+#~ msgid "Using an already created build directory"
+#~ msgstr "Ouzhpennañ un is-renkell"
+
+#, fuzzy
+#~| msgid "Add Subdirectory"
+#~ msgid "The selected build directory is not empty"
+#~ msgstr "Ouzhpennañ un is-renkell"
+
+#~ msgid "Text"
+#~ msgstr "Skrid"
+
+#~ msgid "Action"
+#~ msgstr "Gwezhiad"
+
+#, fuzzy
+#~| msgid "C&hangelog:"
+#~ msgid "Change"
+#~ msgstr "K&emmoù :"
+
+#, fuzzy
+#~| msgid "Insert %1"
+#~ msgid "Insert"
+#~ msgstr "Enlakaat %1"
+
+#~ msgid "Remove"
+#~ msgstr "Lemel"
+
+#, fuzzy
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Aozañ ar gizioù"
+
+#~ msgid "Build &Target"
+#~ msgstr "Sevel ur &wenn"
+
+#, fuzzy
+#~| msgid "Build &Target"
+#~ msgid "Build target"
+#~ msgstr "Sevel ur &wenn"
+
+#, fuzzy
+#~| msgid "Build project"
+#~ msgid "Build this project"
+#~ msgstr "Sevel ar raktres"
+
+#, fuzzy
+#~| msgid "Build active target"
+#~ msgid "Build this target"
+#~ msgstr "Sevel ur wenn bev"
+
+#, fuzzy
+#~ msgid "Build this directory"
+#~ msgstr "&Renkell :"
+
+#, fuzzy
+#~ msgid "Parse QMake project files"
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~ msgid "QMake project files"
+#~ msgstr "Merour raktres QMake"
+
+#~ msgid "QMake Manager"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "Mont d'an dermenadur"
+
+#, fuzzy
+#~| msgid "File '%1' is not readable"
+#~ msgid "Line not reachable."
+#~ msgstr "Ne m'eus ket gallet lenn ar restr '%1'"
+
+#, fuzzy
+#~| msgid "Source:"
+#~ msgid "source"
+#~ msgstr "Tarzh :"
+
+#, fuzzy
+#~ msgid "coverage"
+#~ msgstr "Daveiñ :"
+
+#, fuzzy
+#~| msgid "LinkVisited"
+#~ msgid "visited"
+#~ msgstr "Liamm gweladennet"
+
+#, fuzzy
+#~ msgid "Cov verbose output"
+#~ msgstr "&Subversion"
+
+#, fuzzy
+#~| msgid "Table:"
+#~ msgid "Total SLOC:"
+#~ msgstr "Taolenn :"
+
+#, fuzzy
+#~| msgid "&Connections:"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "&Kevreadennoù :"
+
+#, fuzzy
+#~ msgid "Coverage Report"
+#~ msgstr "Daveiñ :"
+
+#, fuzzy
+#~| msgid "Restart"
+#~ msgid "Reset Data"
+#~ msgstr "Adloc'hañ"
+
+#, fuzzy
+#~| msgid "Insert New File"
+#~ msgid "Insert Build Flags"
+#~ msgstr "Enlakaat ur restr nevez"
+
+#, fuzzy
+#~ msgid "CMake Builder"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "CMake: %1"
+#~ msgstr "Gwenn : %1"
+
+#, fuzzy
+#~ msgid "QMake Builder"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~ msgid "No project specified."
+#~ msgstr "Merour raktres QMake"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "QMake: %1"
+#~ msgstr "Gwenn : %1"
+
+#, fuzzy
+#~| msgid "&Makefile"
+#~ msgid "Make Builder"
+#~ msgstr "&Makefile"
+
+#, fuzzy
+#~| msgid "Scaling"
+#~ msgid "compiling"
+#~ msgstr "O skeulañ"
+
+#~ msgid "generating"
+#~ msgstr "emaon o krouiñ"
+
+#, fuzzy
+#~| msgid "Build"
+#~ msgid "built"
+#~ msgstr "Sevel"
+
+#~ msgid "installing"
+#~ msgstr "o staliañ"
+
+#~ msgid "creating"
+#~ msgstr "emaon o grouiñ"
+
+#, fuzzy
+#~| msgid "Target: %1"
+#~ msgid "Make: %1"
+#~ msgstr "Gwenn : %1"
+
+#, fuzzy
+#~| msgid "Add Subdirectory"
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Ouzhpennañ un is-renkell"
+
+#, fuzzy
+#~| msgid "Could not create subdirectory %1."
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "N'hellan ket krouiñ an is-renkell %1."
+
+#, fuzzy
+#~| msgid "*** Success ***"
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Berzh ***"
+
+#, fuzzy
+#~| msgid "*** Success ***"
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Berzh ***"
+
+#, fuzzy
+#~| msgid "*** Success ***"
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Berzh ***"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind Output"
+#~ msgstr "Valgrind"
+
+#~ msgid "Valgrind"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "&Valgrind Memory Leak Check"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "Open Valgrind Output"
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#, fuzzy
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "Valgrind communication error"
+#~ msgstr "Lec'hia&dur :"
+
+#, fuzzy
+#~| msgid "Failed to save file '%1'."
+#~ msgid "Failed to start valgrind from \"%1.\""
+#~ msgstr "N'hellan ket enrollañ ar restr '%1'."
+
+#, fuzzy
+#~| msgid "Failed to save file '%1'."
+#~ msgid "Failed to start Valgrind"
+#~ msgstr "N'hellan ket enrollañ ar restr '%1'."
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind crashed."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind Error"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind process timed out."
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~| msgid "Unknown error."
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "Fazi dianav."
+
+#, fuzzy
+#~ msgid "at: %1"
+#~ msgstr "&Hent :"
+
+#, fuzzy
+#~ msgid "by: %1"
+#~ msgstr "Restr : %1"
+
+#, fuzzy
+#~| msgid "Source:"
+#~ msgid "Source"
+#~ msgstr "Tarzh :"
+
+#, fuzzy
+#~| msgid "Objects"
+#~ msgid "Object"
+#~ msgstr "Traoñ"
+
+#, fuzzy
+#~ msgid "Valgrind XML Parsing: error at line %1, column %2: %3"
+#~ msgstr "N'eo ket ur restr raktres mat."
+
+#, fuzzy
+#~ msgid "Widget Box"
+#~ msgstr "Widget"
+
+#~ msgid "Property Editor"
+#~ msgstr "Aozer ar perzhioù"
+
+#~ msgid "Action Editor"
+#~ msgstr "Aozer ar wezhiad"
+
+#, fuzzy
+#~ msgid "Object Inspector"
+#~ msgstr "Digeriñ ur Restr"
+
+#, fuzzy
+#~| msgid "Current Document"
+#~ msgid "Close Document"
+#~ msgstr "Teul red"
+
+#~ msgid "%{APPNAME}"
+#~ msgstr "%{APPNAME}"
+
+#~ msgid "Public"
+#~ msgstr "Foran"
+
+#~ msgid "Protected"
+#~ msgstr "Gwarezet"
+
+#, fuzzy
+#~| msgctxt "member access"
+#~| msgid "Private"
+#~ msgid "Private"
+#~ msgstr "Prevez"
+
+#, fuzzy
+#~ msgid "Slot"
+#~ msgstr "&Rummañ"
+
+#~ msgid "Signal"
+#~ msgstr "Arhent"
+
+#~ msgid "C++ Options"
+#~ msgstr "Dibarzhoù C++"
+
+#, fuzzy
+#~| msgid "P&ort:"
+#~ msgid "&Export:"
+#~ msgstr "&Porzh :"
+
+#, fuzzy
+#~| msgid "macro"
+#~ msgid "&Macro:"
+#~ msgstr "makro"
+
+#, fuzzy
+#~ msgid "Tracing Configuration"
+#~ msgstr "Kefluniadur savadenn"
+
+#, fuzzy
+#~| msgid "Enable Plugin"
+#~ msgid "Enable tracing"
+#~ msgstr "Bevaat al lugent"
+
+#, fuzzy
+#~ msgid "Custom format string"
+#~ msgstr "Kefluniadur"
+
+#, fuzzy
+#~ msgid "Expressions to print:"
+#~ msgstr "&Doare :"
+
+#, fuzzy
+#~| msgid "Mid"
+#~ msgid "Pid"
+#~ msgstr "Kreiz"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgid "Stat"
+#~ msgstr "&Loc'hañ :"
+
+#, fuzzy
+#~| msgid "Tile"
+#~ msgid "Time"
+#~ msgstr "Adrenkañ"
+
+#~ msgid "Command"
+#~ msgstr "Urzhiad"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Seveniñ"
+
+#~ msgid "Debugger Toolbar"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Kefluniadur an dizraener"
+
+#, fuzzy
+#~| msgid "PHP &executable:"
+#~ msgid "Debugger executable:"
+#~ msgstr "&Goulev PHP :"
+
+#, fuzzy
+#~| msgid "PHP &executable:"
+#~ msgid "Gdb executable"
+#~ msgstr "&Goulev PHP :"
+
+#, fuzzy
+#~| msgid "O&ptions"
+#~ msgid "Options"
+#~ msgstr "&Dibaboù"
+
+#, fuzzy
+#~| msgid "Stop debugger"
+#~ msgid "Start Debugger With"
+#~ msgstr "Herzel an dizraener"
+
+#, fuzzy
+#~| msgid "Frame Stack"
+#~ msgid "Framestack"
+#~ msgstr "Pilad ar sternoù"
+
+#, fuzzy
+#~| msgid "Run gdb script:"
+#~ msgid "&Config gdb script:"
+#~ msgstr "Seveniñ an urzhiaoueg GDB :"
+
+#, fuzzy
+#~ msgid "Gdb configure script"
+#~ msgstr "Kefluniañ ar strollad"
+
+#, fuzzy
+#~| msgid "Run gdb script:"
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "Seveniñ an urzhiaoueg GDB :"
+
+#, fuzzy
+#~| msgid "Run gdb script:"
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Seveniñ an urzhiaoueg GDB :"
+
+#~ msgid "Add Profile"
+#~ msgstr "Ouzhpennañ ur profil"
+
+#~ msgid "Description"
+#~ msgstr "Deskrivadur"
+
+#, fuzzy
+#~ msgid "Remove Profile"
+#~ msgstr "Distruj ar profil"
+
+#~ msgid "Properties"
+#~ msgstr "Perzhioù"
+
+#, fuzzy
+#~ msgid "Derived properties:"
+#~ msgstr "&Perzhioù :"
+
+#, fuzzy
+#~ msgid "Own properties:"
+#~ msgstr "&Perzhioù :"
+
+#~ msgid "Enabled:"
+#~ msgstr "Bev :"
+
+#~ msgid "Plugin Name"
+#~ msgstr "Anv al lugent"
+
+#~ msgid "Disabled:"
+#~ msgstr "Marv :"
+
+#~ msgid "<-"
+#~ msgstr "<-"
+
+#~ msgid "Available plugins:"
+#~ msgstr "Lugentoù da gaout :"
+
+#~ msgid "Generic Name"
+#~ msgstr "Anv rummel"
+
+#~ msgid "->"
+#~ msgstr "->"
+
+#~ msgid "&Name:"
+#~ msgstr "&Anv :"
+
+#, fuzzy
+#~ msgid "&Generic name:"
+#~ msgstr "&Anv an arveriad :"
+
+#~ msgid "&Description:"
+#~ msgstr "&Deskrivadur :"
+
+#, fuzzy
+#~ msgid "Build Directory Creator"
+#~ msgstr "&Renkell :"
+
+#, fuzzy
+#~ msgid "CMake &Binary:"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~ msgid "&Build Directory:"
+#~ msgstr "&Renkell :"
+
+#, fuzzy
+#~ msgid "&Installation Prefix:"
+#~ msgstr "Staliadur"
+
+#, fuzzy
+#~ msgid "Build &type:"
+#~ msgstr "Sevel ur wenn"
+
+#, fuzzy
+#~| msgid "Release"
+#~ msgid "release"
+#~ msgstr "Rummad"
+
+#, fuzzy
+#~| msgid "Minimize"
+#~ msgid "MinSizeRel"
+#~ msgstr "Izelaat"
+
+#~ msgid "Generator:"
+#~ msgstr "Krouer :"
+
+#, fuzzy
+#~| msgid "Text Labels"
+#~ msgid "TextLabel"
+#~ msgstr "Skridennadoù skrid"
+
+#, fuzzy
+#~| msgid "theValue"
+#~ msgid "Cache Values"
+#~ msgstr "arGwerzh"
+
+#, fuzzy
+#~| msgid "Co&mment:"
+#~ msgid "Comment:"
+#~ msgstr "&Askelenn :"
+
+#, fuzzy
+#~| msgid "Package directory:"
+#~ msgid "CMake Directory"
+#~ msgstr "Renkell ar pakadoù :"
+
+#~ msgid "Viewer"
+#~ msgstr "Gweler"
+
+#~ msgid "Parse Tree"
+#~ msgstr "Gwezenn lenn"
+
+#~ msgid "Value 1"
+#~ msgstr "Gwerzh 1"
+
+#~ msgid "Value 2"
+#~ msgstr "Gwerzh 2"
+
+#, fuzzy
+#~ msgid "Add All From Directory"
+#~ msgstr "Ouzhpennañ renkell al levraoueg :"
+
+#, fuzzy
+#~ msgid "Choose File to Add..."
+#~ msgstr "Dibabit ur piksmap ..."
+
+#, fuzzy
+#~ msgid "CMake Binary:"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~ msgid "QMake Binary:"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "View"
+#~ msgstr "&Gwel"
+
+#, fuzzy
+#~| msgid "PHP &executable:"
+#~ msgid "Make executable:"
+#~ msgstr "&Goulev PHP :"
+
+#, fuzzy
+#~| msgid "Additional Options"
+#~ msgid "Additional make options:"
+#~ msgstr "Dibarzhoù ouzhpenn"
+
+#, fuzzy
+#~ msgid "Active Environment Profile:"
+#~ msgstr "Aozañ ar gizioù"
+
+#, fuzzy
+#~| msgid "&Pattern:"
+#~ msgid "Pattern:"
+#~ msgstr "&Sil :"
+
+#, fuzzy
+#~| msgid "&Template:"
+#~ msgid "Template:"
+#~ msgstr "&Patrom :"
+
+#, fuzzy
+#~| msgid "&Regular expression:"
+#~ msgid "Regular Expression:"
+#~ msgstr "Troienn &reolataet :"
+
+#, fuzzy
+#~| msgid "C&ase sensitive"
+#~ msgid "Case Sensitive:"
+#~ msgstr "E&vezhiek ouzh ar c'hef"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "Directory:"
+#~ msgstr "Renkell :"
+
+#, fuzzy
+#~ msgid "Recursive:"
+#~ msgstr "Degemerer"
+
+#, fuzzy
+#~ msgid "Limit to project files:"
+#~ msgstr "Restr ar &raktres :"
+
+#, fuzzy
+#~| msgid "&File(s):"
+#~ msgid "Files:"
+#~ msgstr "&Restr(où) :"
+
+#, fuzzy
+#~| msgid "&Executable:"
+#~ msgid "Exclude:"
+#~ msgstr "&Goulev :"
+
+#~ msgid "Import Existing Project"
+#~ msgstr "Enporzh ur raktres a zo c'hoazh"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory:"
+#~ msgstr "Renkell :"
+
+#, fuzzy
+#~ msgid "Choose directory to import"
+#~ msgstr "Aozer ar parzhioù Kate"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "&Degas eus :"
+
+#, fuzzy
+#~| msgid "&Fetch Modules List"
+#~ msgid "Fetch &Module"
+#~ msgstr "&Degas roll ar molladoù"
+
+#~ msgid "Project &name:"
+#~ msgstr "&Anv ar raktres :"
+
+#, fuzzy
+#~| msgid "File System"
+#~ msgid "&Build System:"
+#~ msgstr "Reizhiad restroù"
+
+#, fuzzy
+#~| msgid "&Make"
+#~ msgid "CMake"
+#~ msgstr "&Ober"
+
+#, fuzzy
+#~| msgid "&Make"
+#~ msgid "QMake"
+#~ msgstr "&Ober"
+
+#, fuzzy
+#~ msgid "Custom Makefiles"
+#~ msgstr "Aozañ ar gizioù"
+
+#, fuzzy
+#~| msgctxt "no version control system"
+#~| msgid "None"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#~ msgid "Location:"
+#~ msgstr "Lec'hiadur :"
+
+#~ msgid "Application Name:"
+#~ msgstr "Anv ar meziant :"
+
+#~ msgid "(invalid)"
+#~ msgstr "(siek)"
+
+#, fuzzy
+#~| msgid "&Indentation"
+#~ msgid "Indentation"
+#~ msgstr "&Keflosk"
+
+#, fuzzy
+#~| msgid "Use Tabs"
+#~ msgid "Tabs"
+#~ msgstr "Implijit ar bevennigoù"
+
+#, fuzzy
+#~| msgid "Use &tabs"
+#~ msgid "Force tabs"
+#~ msgstr "Implijit ar &bevennigoù"
+
+#, fuzzy
+#~| msgid "Sparc"
+#~ msgid "Spaces"
+#~ msgstr "Sparc"
+
+#, fuzzy
+#~| msgid "File Templates"
+#~ msgid "Fill empt&y lines"
+#~ msgstr "Patromoù restr"
+
+#, fuzzy
+#~| msgid "Index"
+#~ msgid "Indent"
+#~ msgstr "Meneger"
+
+#, fuzzy
+#~| msgid "block"
+#~ msgid "Blocks"
+#~ msgstr "stankañ"
+
+#, fuzzy
+#~ msgid "Brackets"
+#~ msgstr "&War-gil"
+
+#, fuzzy
+#~| msgid "Classes"
+#~ msgid "Cases"
+#~ msgstr "Renkadoù"
+
+#~ msgid "Class"
+#~ msgstr "Renkad"
+
+#, fuzzy
+#~| msgid "&Label:"
+#~ msgid "Labels"
+#~ msgstr "&Skridennad :"
+
+#, fuzzy
+#~| msgid "Names"
+#~ msgid "Namespaces"
+#~ msgstr "Anvoù"
+
+#, fuzzy
+#~| msgid "Switch To"
+#~ msgid "Switches"
+#~ msgstr "Gwintañ da"
+
+#, fuzzy
+#~| msgid "&Other"
+#~ msgid "Other"
+#~ msgstr "&All"
+
+#, fuzzy
+#~| msgctxt "no version control system"
+#~| msgid "None"
+#~ msgid "No change"
+#~ msgstr "Hini ebet"
+
+#, fuzzy
+#~| msgid "&Attach"
+#~ msgid "Attach"
+#~ msgstr "&Stagañ"
+
+#, fuzzy
+#~ msgid "Break"
+#~ msgstr "&Doare"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#, fuzzy
+#~| msgid "&Parsing"
+#~ msgid "Padding"
+#~ msgstr "&O lenn"
+
+#, fuzzy
+#~| msgid "Unnamed"
+#~ msgid "Unpad"
+#~ msgstr "Anv ebet"
+
+#, fuzzy
+#~| msgid "Underline"
+#~ msgid "One liners"
+#~ msgstr "Islinañ"
+
+#~ msgid "&Executable:"
+#~ msgstr "&Goulev :"
+
+#, fuzzy
+#~| msgid "&Parameters:"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "&Rannbennadoù :"
+
+#, fuzzy
+#~| msgid "S&ummary:"
+#~ msgid "Leak Summary:"
+#~ msgstr "D&iverrañ :"
+
+#, fuzzy
+#~| msgid "S&ummary:"
+#~ msgid "Summary"
+#~ msgstr "D&iverrañ :"
+
+#, fuzzy
+#~| msgid "Lower"
+#~ msgid "Low"
+#~ msgstr "Izelaat"
+
+#, fuzzy
+#~| msgid "Minimum"
+#~ msgid "Medium"
+#~ msgstr "Izelañ"
+
+#, fuzzy
+#~| msgid "height"
+#~ msgid "High"
+#~ msgstr "uhelder"
+
+#, fuzzy
+#~| msgid "KCacheGrind"
+#~ msgid "&Cachegrind"
+#~ msgstr "KCachegrind"
+
+#, fuzzy
+#~ msgid "Ca&llgrind"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~ msgid "&Helgrind"
+#~ msgstr "Valgrind"
+
+#, fuzzy
+#~| msgid "&Thread"
+#~ msgid "Threads"
+#~ msgstr "&Neudenn"
+
+#~ msgid "All"
+#~ msgstr "Holl"
+
+#~ msgid "&Parameters:"
+#~ msgstr "&Rannbennadoù :"
+
+#, fuzzy
+#~ msgid "Callgrind"
+#~ msgstr "Valgrind"
+
+#~ msgid "E&xecutable:"
+#~ msgstr "G&oulev :"
+
+#~ msgid "Additional p&arameters:"
+#~ msgstr "D&ibarzhoù ouzhpenn :"
+
+#~ msgid "KCacheGrind"
+#~ msgstr "KCachegrind"
+
+#~ msgid "Executable:"
+#~ msgstr "Goulev :"
+
+#, fuzzy
+#~| msgid "F&orm"
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "P&aperenn-reol"
+
+#, fuzzy
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Barenn ostilh an doare"
+
+#~ msgid "KDevelop Profile Editor"
+#~ msgstr "Aozer profil evit KDevelop"
+
+#~ msgid "(c) 2004, The KDevelop Developers"
+#~ msgstr "(c) 2004, Diorroerien KDevelop"
+
+#~ msgid "Core"
+#~ msgstr "Kalon"
+
+#, fuzzy
+#~| msgid "Global"
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "Hollek"
+
+#~ msgid "Project"
+#~ msgstr "Raktres"
+
+#~ msgid "Core Plugins"
+#~ msgstr "Lugentoù kentañ"
+
+#~ msgid "Global Plugins"
+#~ msgstr "Lugentoù hollek"
+
+#~ msgid "Project Plugins"
+#~ msgstr "Lugentoù ar raktres"
+
+#~ msgid "Remove selected profile and all its subprofiles?"
+#~ msgstr "Emaon o lenn an teuliadur KDE ..."
+
+#~ msgid "Enable Plugin"
+#~ msgstr "Bevaat al lugent"
+
+#~ msgid "Disable Plugin"
+#~ msgstr "Marvaat al lugent"
+
+#~ msgid "&Open Project..."
+#~ msgstr "&Digeriñ ar raktres ..."
+
+#, fuzzy
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr ""
+#~ "<b>Dilemel eus ar raktres</b><p>Dilemel a ra ar restr red eus ar raktres."
+
+#~ msgid "Open recent project"
+#~ msgstr "Digeriñ ar raktres nevezig"
+
+#, fuzzy
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr ""
+#~ "<b>Dilemel eus ar raktres</b><p>Dilemel a ra ar restr red eus ar raktres."
+
+#~ msgid "C&lose Project"
+#~ msgstr "S&erriñ ar raktres "
+
+#~ msgid "Close project"
+#~ msgstr "Serriñ ar raktres"
+
+#, fuzzy
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "<b>Restr Nevez</b>Krouiñ ur restr nevez."
+
+#~ msgid "Project &Options"
+#~ msgstr "&Dibarzhoù ar raktres"
+
+#, fuzzy
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr ""
+#~ "*.kdevelop|Restroù raktres KDevelop 3\n"
+#~ "*.kdevprj|Restroù raktres KDevelop 2"
+
+#~ msgid "Open Project"
+#~ msgstr "Digeriñ ar raktres"
+
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "Ha sur oc'h bezañ mennet da zilemel ar raktres-red ?"
+
+#~ msgid "Changing plugin profile..."
+#~ msgstr "Emaon o kemmañ profil al lugent ..."
+
+#~ msgid "Loading project plugins..."
+#~ msgstr "Emaon o kargañ lugentoù ar raktres ..."
+
+#~ msgid "Project loaded."
+#~ msgstr "Karget eo ar raktres."
+
+#, fuzzy
+#~ msgid ""
+#~ "This is not a valid project file.\n"
+#~ "XML error in line %1, column %2:\n"
+#~ "%3"
+#~ msgstr "N'eo ket ur restr raktres mat."
+
+#~ msgid "This is not a valid project file."
+#~ msgstr "N'eo ket ur restr raktres mat."
+
+#~ msgid "Could not write the project file."
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#, fuzzy
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "N'hellan ket krouiñ ar raktres mererezh %1."
+
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "N'hellan ket krouiñ ar raktres mererezh %1."
+
+#, fuzzy
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "N'hellan ket krouiñ lugent ar yezh evit %1."
+
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "N'hellan ket krouiñ lugent ar yezh evit %1."
+
+#, fuzzy
+#~| msgid "Add New Target"
+#~ msgid "Check Test"
+#~ msgstr "Ouzhpennañ ur wenn nevez"
+
+#, fuzzy
+#~| msgid "F&orm"
+#~ msgid "Form"
+#~ msgstr "P&aperenn-reol"
+
+#, fuzzy
+#~| msgid "Compiler &options:"
+#~ msgid "Import options:"
+#~ msgstr "&Dibarzhoù an dastumer :"
+
+#, fuzzy
+#~ msgid "Valid Location"
+#~ msgstr "Lec'hia&dur :"
+
+#, fuzzy
+#~| msgid "Un&known:"
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "Dia&nav :"
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid "Forward Declaration"
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "enumerator"
+#~ msgstr "Krouer :"
+
+#, fuzzy
+#~| msgid "Description:"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~| msgid "&Continue"
+#~ msgid "Container: "
+#~ msgstr "&Kenderc'hel"
+
+#, fuzzy
+#~| msgid "Score"
+#~ msgid "Scope: "
+#~ msgstr "Merk"
+
+#, fuzzy
+#~| msgid "Accept"
+#~ msgid "Access: "
+#~ msgstr "Aotren"
+
+#, fuzzy
+#~| msgid "&Find:"
+#~ msgid "Kind: "
+#~ msgstr "&Klask :"
+
+#, fuzzy
+#~| msgid "&Modified:"
+#~ msgid "Modifiers: "
+#~ msgstr "&Kemmet :"
+
+#, fuzzy
+#~ msgid "Decl.: "
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~ msgid " Def.: "
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~ msgid " Decl.: "
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~| msgid "&Results"
+#~ msgid "Result"
+#~ msgstr "&Disoc'hoù"
+
+#~ msgid "Message"
+#~ msgstr "Kemennad"
+
+#, fuzzy
+#~| msgid "File Names"
+#~ msgid "File Name"
+#~ msgstr "Anvoù ar restr"
+
+#~ msgid "Maintainer"
+#~ msgstr "Ratreer"
+
+#, fuzzy
+#~| msgid "&Style"
+#~ msgid "Style"
+#~ msgstr "&Giz"
+
+#, fuzzy
+#~| msgid "Close current file"
+#~ msgid "Save current theme"
+#~ msgstr "Serriñ ar restr red"
+
+#~ msgid "Preview"
+#~ msgstr "Rakgwel"
+
+#, fuzzy
+#~| msgid "&Open Form Source"
+#~ msgid "&Reformat Source"
+#~ msgstr "&Digeriñ eus an tarzh"
+
+#, fuzzy
+#~| msgid "Footer file"
+#~ msgid "Format files"
+#~ msgstr "Restr an traoñ"
+
+#, fuzzy
+#~| msgid "Unable to open file."
+#~ msgid "Unable to read %1"
+#~ msgstr "N'hellan ket digeriñ ar restr."
+
+#, fuzzy
+#~ msgid "Unable to write to %1"
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#~ msgid "Custom"
+#~ msgstr "Diouzhoc'h"
+
+#, fuzzy
+#~| msgid "&Delete Item"
+#~ msgid "Delete style"
+#~ msgstr "&Lemel an tra"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "C'hoant ho peus da zilemel <b>%1</b> ?"
+
+#, fuzzy
+#~| msgid "New title"
+#~ msgid "New style"
+#~ msgstr "Titl nevez"
+
+#, fuzzy
+#~| msgid "Please enter a name for the new file:"
+#~ msgid "Please enter a name for the new style"
+#~ msgstr "Roit un anv evit ar restr nevez mar plij :"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgid "Custom Style"
+#~ msgstr "Diouzhoc'h"
+
+#, fuzzy
+#~| msgid "&Run"
+#~ msgid "QxRunner"
+#~ msgstr "&Seveniñ"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgid "S&top"
+#~ msgstr "Paouez"
+
+#~ msgid "Select &All"
+#~ msgstr "Dibabit an &holl re"
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgid "&Unselect All"
+#~ msgstr "Dibabit an &holl re"
+
+#, fuzzy
+#~| msgid "About Qt"
+#~ msgid "&About"
+#~ msgstr "Diwar-benn Qt"
+
+#, fuzzy
+#~| msgid "Exit"
+#~ msgid "E&xit"
+#~ msgstr "Er-maez"
+
+#, fuzzy
+#~| msgid "Collapse All Items"
+#~ msgid "&Collapse All"
+#~ msgstr "Serriñ an holl re"
+
+#, fuzzy
+#~| msgid "Expand All"
+#~ msgid "&Expand All"
+#~ msgstr "Digeriñ an holl re"
+
+#, fuzzy
+#~| msgid "Co&lumns"
+#~ msgid "C&olumns..."
+#~ msgstr "Ba&nnoù"
+
+#~ msgid "&Results"
+#~ msgstr "&Disoc'hoù"
+
+#, fuzzy
+#~| msgid "&Form Settings..."
+#~ msgid "&Settings..."
+#~ msgstr "Dibarzhoù ar &paperenn-reol ..."
+
+#, fuzzy
+#~| msgid "Tool&bars"
+#~ msgid "&Toolbars"
+#~ msgstr "Barr&ennoù ostilhoù"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "Barrenn ostilhoù an dizraener"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "Seveniñ"
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#, fuzzy
+#~| msgid "Icons"
+#~ msgid "seconds"
+#~ msgstr "Arlunioù"
+
+#, fuzzy
+#~| msgid "&Selected:"
+#~ msgid "Selected:"
+#~ msgstr "&Diuzet :"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Run:"
+#~ msgstr "Seveniñ"
+
+#, fuzzy
+#~| msgid "Sources"
+#~ msgid "Success"
+#~ msgstr "Tarzhoù"
+
+#, fuzzy
+#~| msgid "E&xceptions "
+#~ msgid "Exceptions"
+#~ msgstr "D&ireolderoù "
+
+#, fuzzy
+#~| msgid "False"
+#~ msgid "Fatals"
+#~ msgstr "N'eo ket gwir"
+
+#~ msgid "Errors"
+#~ msgstr "Fazioù"
+
+#, fuzzy
+#~| msgid "Parsing"
+#~ msgid "Warnings"
+#~ msgstr "O lenn"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "Infos"
+#~ msgstr "Titouroù"
+
+#, fuzzy
+#~| msgid "Save All"
+#~ msgid "Save"
+#~ msgstr "Enrollañ an holl re"
+
+#~ msgid "Close"
+#~ msgstr "Serriñ"
+
+#, fuzzy
+#~| msgid "File to open"
+#~ msgid "Failed to comply."
+#~ msgstr "Restr da zigeriñ"
+
+#, fuzzy
+#~| msgid "select a project view"
+#~ msgid "Select a project in the qtest view."
+#~ msgstr "dibabit ur well raktres"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory"
+#~ msgstr "Renkell :"
+
+#, fuzzy
+#~| msgid "&Results"
+#~ msgid "Results"
+#~ msgstr "&Disoc'hoù"
+
+#, fuzzy
+#~| msgid "S&ummary:"
+#~ msgid "dummy"
+#~ msgstr "D&iverrañ :"
+
+#, fuzzy
+#~ msgid "Stopping..."
+#~ msgstr "Emaon o krouiñ ..."
+
+#, fuzzy
+#~| msgid "Delete Item"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Lemel an tra"
+
+#, fuzzy
+#~| msgid "Delete Item"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Lemel an tra"
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "StatusWidget"
+#~ msgstr "Stad"
+
+#, fuzzy
+#~| msgid "Bu&ild"
+#~ msgid "Build"
+#~ msgstr "Se&vel"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "Raktres"
+
+#, fuzzy
+#~| msgid "int x() const;"
+#~ msgid "Hit count"
+#~ msgstr "int x() const;"
+
+#, fuzzy
+#~ msgid "&Evaluate"
+#~ msgstr "Aozañ ar gwerzh"
+
+#, fuzzy
+#~ msgid "&Watch"
+#~ msgstr "&Hent :"
+
+#, fuzzy
+#~ msgid "Evaluate the expression."
+#~ msgstr "Dilemel ur gevreadenn"
+
+#~ msgid "&Build"
+#~ msgstr "&Sevel"
+
+#~ msgid "F&orm"
+#~ msgstr "P&aperenn-reol"
+
+#, fuzzy
+#~| msgid "Thread"
+#~ msgid "Thread %1"
+#~ msgstr "Neudenn"
+
+#~ msgid "Build Toolbar"
+#~ msgstr "Furcher barrenn an ostilhoù"
+
+#~ msgid "Browser Toolbar"
+#~ msgstr "Furcher barrenn an ostilhoù"
+
+#~ msgid "Extra Toolbar"
+#~ msgstr "Barenn ouzhpenn"
+
+#, fuzzy
+#~| msgid "No such file or directory."
+#~ msgid "No such file or directory."
+#~ msgstr "Hevelep restr pe renkell ebet."
+
+#~ msgid "Valgrind Not Found"
+#~ msgstr "N'eo ket bet kavet Valgrind"
+
+#~ msgid "KCachegrind Not Found"
+#~ msgstr "N'eo ket bet kavet KCachegrind"
+
+#~ msgid "P&rofile with KCachegrind"
+#~ msgstr "P&rofil gant KCachegrind"
+
+#~ msgid "Profile with KCachegrind"
+#~ msgstr "Profil gant KCachegrind"
+
+#, fuzzy
+#~| msgid "local"
+#~ msgid "Locals"
+#~ msgstr "lec'hel"
+
+#, fuzzy
+#~| msgid "Alt+A"
+#~ msgid "Alt+M"
+#~ msgstr "Alt+A"
+
+#, fuzzy
+#~ msgid "Alt+N"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~| msgid "Alt+A"
+#~ msgid "Alt+I"
+#~ msgstr "Alt+A"
+
+#, fuzzy
+#~| msgid "File %1 already exists"
+#~ msgid "Project file already exists."
+#~ msgstr "Ar restr %1 a zo endeo"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgid "Imports"
+#~ msgstr "Enporzh"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgid "Importers"
+#~ msgstr "Enporzh"
+
+#, fuzzy
+#~| msgid "&Start:"
+#~ msgctxt "To start something"
+#~ msgid "Start"
+#~ msgstr "&Loc'hañ :"
+
+#, fuzzy
+#~ msgid "Restart the program in the debugger"
+#~ msgstr "Diskouez an nozel serriñ e-barzh barenn ar bevennigoù"
+
+#, fuzzy
+#~| msgid "Octal"
+#~ msgid "Oct&al"
+#~ msgstr "Dre eizhoù"
+
+#, fuzzy
+#~| msgid "Decimal"
+#~ msgid "He&xadecimal"
+#~ msgstr "Dre zegoù"
+
+#, fuzzy
+#~| msgid "Rebuild project"
+#~ msgid "Rebuild the project?"
+#~ msgstr "Adsevel ar raktres"
+
+#, fuzzy
+#~| msgid "Main pr&ogram"
+#~ msgid "Continuing program"
+#~ msgstr "Goulev &kentañ :"
+
+#, fuzzy
+#~ msgid "Code View"
+#~ msgstr "Gweloù ar raktres"
+
+#, fuzzy
+#~ msgid "No active language part loaded!"
+#~ msgstr "N'eus gwenn bev kavet ebet"
+
+#~ msgid "Mode"
+#~ msgstr "Mod"
+
+#, fuzzy
+#~| msgid "&Current"
+#~ msgctxt "Current View"
+#~ msgid "&Current"
+#~ msgstr "&Hini red"
+
+#, fuzzy
+#~ msgctxt "Normalize View"
+#~ msgid "&Normalize"
+#~ msgstr "Mod reoliek"
+
+#, fuzzy
+#~ msgctxt "Aggregate View"
+#~ msgid "&Aggregate"
+#~ msgstr "K&rouiñ"
+
+#~ msgid "Filter"
+#~ msgstr "Sil"
+
+#, fuzzy
+#~ msgid "CMake binary:"
+#~ msgstr "Merour QMake"
+
+#, fuzzy
+#~| msgid "default"
+#~ msgid "debugfull"
+#~ msgstr "dre ziouer"
+
+#, fuzzy
+#~| msgid "Accept"
+#~ msgid "Scope: %1<br />"
+#~ msgstr "Aotren"
+
+#, fuzzy
+#~| msgid "Accept"
+#~ msgid "Kind: %1<br />"
+#~ msgstr "Aotren"
+
+#, fuzzy
+#~| msgid "Accept"
+#~ msgid "Modifiers: %1<br />"
+#~ msgstr "Aotren"
+
+#, fuzzy
+#~| msgid "Internet"
+#~ msgid "isInternal"
+#~ msgstr "Kenrouedad"
+
+#~ msgid "Form2"
+#~ msgstr "Paperenn-reol 2"
+
+#~ msgid "Please enter a search pattern"
+#~ msgstr "Roit ur sil klask mar plij"
+
+#~ msgid "Search Results"
+#~ msgstr "Klask an disoc'hoù"
+
+#~ msgid "User Interface"
+#~ msgstr "Etrefas arveriad"
+
+#, fuzzy
+#~ msgid "Vertical Tabs:"
+#~ msgstr "&A-blomm"
+
+#, fuzzy
+#~| msgid "Dock"
+#~ msgid "LeftDock"
+#~ msgstr "Ensoc'hañ"
+
+#, fuzzy
+#~| msgid "Dock"
+#~ msgid "TopDock"
+#~ msgstr "Ensoc'hañ"
+
+#, fuzzy
+#~| msgid "Light"
+#~ msgid "RightDock"
+#~ msgstr "Sklerijenn"
+
+#, fuzzy
+#~ msgid "Choose Revisions to Diff"
+#~ msgstr "Dibabit lec'hiadur an daveiñ"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#, fuzzy
+#~ msgid "Revision A:"
+#~ msgstr "Doare %1"
+
+#, fuzzy
+#~ msgid "Revision B:"
+#~ msgstr "Doare %1"
+
+#~ msgid "&CVS"
+#~ msgstr "&CVS"
+
+#~ msgid "&Repository:"
+#~ msgstr "&Daveiñ :"
+
+#~ msgid "Mo&dule:"
+#~ msgstr "Molla&d :"
+
+#~ msgid "&Vendor tag:"
+#~ msgstr "Liketenn ar &werzher :"
+
+#~ msgid "vendor"
+#~ msgstr "gwerzher"
+
+#, fuzzy
+#~ msgid "Re&lease tag:"
+#~ msgstr "R&ummad :"
+
+#~ msgid "start"
+#~ msgstr "loc'hañ"
+
+#~ msgid "&Local destination directory:"
+#~ msgstr "Renkell dehaezadur &lec'hel :"
+
+#, fuzzy
+#~| msgid "&Server path (e.g. :pserver:marios@cvs.kde.org:/home/kde):"
+#~ msgid "&Server path (e.g. :pserver:username@cvs.example.com:/cvsroot):"
+#~ msgstr "&Hent ar servijer  (e.g. :pserver:marios@cvs.kde.org:/home/kde) :"
+
+#~ msgid "&Module:"
+#~ msgstr "&Mollad :"
+
+#, fuzzy
+#~| msgid "&Tag/branch:"
+#~ msgid "Tag/Branch:"
+#~ msgstr "&Brank/liketen :"
+
+#, fuzzy
+#~ msgid "Commit to Repository"
+#~ msgstr "Ereañ d'an daveiñ ..."
+
+#~ msgid "Editors"
+#~ msgstr "Aozerien"
+
+#~ msgid "Log"
+#~ msgstr "Kerzlevr"
+
+#, fuzzy
+#~ msgid "GroupBox"
+#~ msgstr "Strollad"
+
+#~ msgid "&Subversion"
+#~ msgstr "&Subversion"
+
+#, fuzzy
+#~ msgid "Target repository Url. "
+#~ msgstr "Krouiñ ur mollad en daveiñ"
+
+#, fuzzy
+#~ msgid "Non recursive"
+#~ msgstr "Degemerer"
+
+#, fuzzy
+#~ msgid "Subversion Login"
+#~ msgstr "Subversion"
+
+#, fuzzy
+#~ msgid "Login for"
+#~ msgstr "Ereañ ouzh ar servijer"
+
+#~ msgid "Password"
+#~ msgstr "Tremenger"
+
+#~ msgid "Save Password"
+#~ msgstr "Enrollañ an tremenger"
+
+#, fuzzy
+#~ msgid "Select Files to commit"
+#~ msgstr "Ouzhpennañ ar restroù dibabet d'ar raktres"
+
+#, fuzzy
+#~ msgid "Files to commit"
+#~ msgstr "Restroù da eilañ :"
+
+#~ msgid "O&K"
+#~ msgstr "Mat &eo"
+
+#~ msgid "Alt+K"
+#~ msgstr "Alt+K"
+
+#~ msgid "C&ancel"
+#~ msgstr "&Nullañ"
+
+#, fuzzy
+#~ msgid "Ignore external entries"
+#~ msgstr "Levraouegoù diabarzh"
+
+#, fuzzy
+#~ msgid "Select Revision"
+#~ msgstr "Obererezhioù d&ibabet :"
+
+#~ msgid "HEAD"
+#~ msgstr "HEAD"
+
+#, fuzzy
+#~ msgid "SSL Server Certificate"
+#~ msgstr "Kefluniadur ar servijer CVS"
+
+#~ msgid "Item"
+#~ msgstr "Tra"
+
+#~ msgid "Accept"
+#~ msgstr "Aotren"
+
+#~ msgid "Reject"
+#~ msgstr "Nac'h"
+
+#, fuzzy
+#~ msgid "Annotate Type"
+#~ msgstr "Notennañ"
+
+#, fuzzy
+#~ msgid "Repository Annotation"
+#~ msgstr "Lec'hiadur an daveiñ :"
+
+#, fuzzy
+#~ msgid "Log Type"
+#~ msgstr "Seurt"
+
+#, fuzzy
+#~ msgid "Repository History"
+#~ msgstr "Daveiñ :"
+
+#, fuzzy
+#~| msgid "Local Directory"
+#~ msgid "Local server"
+#~ msgstr "Renkell lec'hel"
+
+#, fuzzy
+#~| msgid "&Connections:"
+#~ msgid "Connected clients:"
+#~ msgstr "&Kevreadennoù :"
+
+#, fuzzy
+#~| msgid "Never"
+#~ msgid "Servers"
+#~ msgstr "Gwech ebet"
+
+#, fuzzy
+#~| msgid "Developer"
+#~ msgid "Developers"
+#~ msgstr "Diorrer"
+
+#, fuzzy
+#~| msgid "&Available:"
+#~ msgid "Available:"
+#~ msgstr "&Da gaout :"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgid "Messaging"
+#~ msgstr "Kemennad"
+
+#, fuzzy
+#~| msgid "Preferences"
+#~ msgid "Reference:"
+#~ msgstr "Dibaboù"
+
+#, fuzzy
+#~| msgid "Clean"
+#~ msgid "Clear"
+#~ msgstr "Skarañ"
+
+#, fuzzy
+#~| msgid "gdb message:\n"
+#~ msgid "&Send message"
+#~ msgstr "kemennad gdb:\n"
+
+#, fuzzy
+#~| msgid "Local"
+#~ msgid "Local state"
+#~ msgstr "Lec'hel"
+
+#~ msgid "Messages"
+#~ msgstr "Kemennadoù"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgid "All Users"
+#~ msgstr "Pep restr"
+
+#, fuzzy
+#~ msgid "History"
+#~ msgstr "Daveiñ :"
+
+#, fuzzy
+#~ msgid "Enable Collaboration"
+#~ msgstr "Bevaat al lugent"
+
+#~ msgid "Dialog"
+#~ msgstr "Kendiviz"
+
+#, fuzzy
+#~| msgctxt ""
+#~| "Breakpoint state. The 'clear ' state is appended to the other states"
+#~| msgid "clear "
+#~ msgid "Clear Log"
+#~ msgstr "goullonderiñ"
+
+#, fuzzy
+#~| msgid "Find"
+#~ msgid "Finish"
+#~ msgstr "Klask"
+
+#, fuzzy
+#~| msgid "Tile"
+#~ msgid "Tail"
+#~ msgstr "Adrenkañ"
+
+#, fuzzy
+#~| msgid "Replace Text"
+#~ msgid "replacement-text"
+#~ msgstr "Erlec'hiañ ar skrid"
+
+#, fuzzy
+#~| msgid "Edit Palette"
+#~ msgid "Edit Patch"
+#~ msgstr "Aozañ an daolenn-livioù"
+
+#, fuzzy
+#~| msgid "No File"
+#~ msgid "To File"
+#~ msgstr "Restr ebet"
+
+#, fuzzy
+#~| msgid "Previous"
+#~ msgid "Previous Hunk"
+#~ msgstr "Kent"
+
+#, fuzzy
+#~| msgid "Next"
+#~ msgid "Next Hunk"
+#~ msgstr "A heul"
+
+#, fuzzy
+#~| msgid "&Author:"
+#~ msgid "Author:"
+#~ msgstr "&Oberour :"
+
+#, fuzzy
+#~| msgid "Delete item"
+#~ msgid "Determine"
+#~ msgstr "Lemel an dra"
+
+#, fuzzy
+#~| msgctxt "the beginning"
+#~| msgid "Start:"
+#~ msgid "State:"
+#~ msgstr "Loc'hañ :"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgid "Choose"
+#~ msgstr "Serriñ"
+
+#~ msgid "Apply"
+#~ msgstr "Arloañ"
+
+#, fuzzy
+#~| msgid "Shadow"
+#~ msgid "Show"
+#~ msgstr "Skeud"
+
+#, fuzzy
+#~| msgid "Available plugins:"
+#~ msgid "Available patches:"
+#~ msgstr "Lugentoù da gaout :"
+
+#, fuzzy
+#~| msgid "Repository"
+#~ msgid "position"
+#~ msgstr "Daveiñ"
+
+#, fuzzy
+#~| msgid "Preferences"
+#~ msgid "referenceType"
+#~ msgstr "Dibaboù"
+
+#, fuzzy
+#~| msgid "Form"
+#~ msgid "From:"
+#~ msgstr "Paperenn-reol"
+
+#, fuzzy
+#~ msgid "Until:"
+#~ msgstr "Gant munudoù"
+
+#, fuzzy
+#~ msgid "Context:"
+#~ msgstr "Dilemel ar meuziad"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgid "Internal Message"
+#~ msgstr "Kemennad"
+
+#, fuzzy
+#~| msgid "Actions"
+#~ msgid "actions"
+#~ msgstr "Oberoù"
+
+#, fuzzy
+#~| msgid "Add Menu"
+#~ msgid "Menu"
+#~ msgstr "Ouzhpennañ ur meuziad"
+
+#, fuzzy
+#~| msgid "Email:"
+#~ msgid "E-Mail"
+#~ msgstr "Postel :"
+
+#, fuzzy
+#~| msgctxt "To start something"
+#~| msgid "Start"
+#~ msgid "State"
+#~ msgstr "Loc'hañ"
+
+#, fuzzy
+#~| msgid "Light"
+#~ msgid "Rights"
+#~ msgstr "Sklerijenn"
+
+#~ msgid "Direction"
+#~ msgstr "Keñver"
+
+#, fuzzy
+#~ msgid "Add an existing Repository"
+#~ msgstr "Ouzhpennañ d'an daveiñ"
+
+#~ msgid "..."
+#~ msgstr " ..."
+
+#~ msgid "Name:"
+#~ msgstr "Anv :"
+
+#, fuzzy
+#~ msgid "Edit Snippet"
+#~ msgstr "Aozañ ar skrid"
+
+#, fuzzy
+#~ msgid "Snippet"
+#~ msgstr "&Ment :"
+
+#~ msgid "Keywords"
+#~ msgstr "Gerioù alc'hwez"
+
+#, fuzzy
+#~ msgid "New Location"
+#~ msgstr "Lec'hiadur"
+
+#~ msgid "Apply filter"
+#~ msgstr "Arloañ ar sil"
+
+#~ msgid "Error Invoking Command"
+#~ msgstr "Fazi en ur galv an urzhiad"
+
+#, fuzzy
+#~ msgid "Select Tool View to Add"
+#~ msgstr "Gwell ostilh a-heul"
+
+#~ msgid "Configure %1"
+#~ msgstr "Kefluniañ %1"
+
+#~ msgid "Configure &Editor..."
+#~ msgstr "Kefluniañ an &aozer ..."
+
+#~ msgid "Configure editor settings"
+#~ msgstr "Kefluniañ dibarzhoù an aozer"
+
+#~ msgid "Show &Statusbar"
+#~ msgstr "Diskouez barren a stad"
+
+#~ msgid "Show statusbar"
+#~ msgstr "Diskouez ar barrenn a stad"
+
+#~ msgid "&Next Window"
+#~ msgstr "Prenestr a &heul"
+
+#~ msgid "Next window"
+#~ msgstr "Prenestr a-heul"
+
+#~ msgid "&Previous Window"
+#~ msgstr "Prenestr &diaraok"
+
+#~ msgid "Previous window"
+#~ msgstr "Prenestr diaraok"
+
+#~ msgid "Last accessed window"
+#~ msgstr "Prenestr moned diwezhañ"
+
+#~ msgid "&New Window"
+#~ msgstr "Prenestr &nevez"
+
+#~ msgid "New Window"
+#~ msgstr "Prenestr nevez"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>New Window</b><p>Creates a new window with a duplicate of current area."
+#~ msgstr ""
+#~ "<b>Dilemel ar restr</b><p>Dilemel a ra ar restr eus ar strollad red. Ne "
+#~ "zilemelan ket ar restr eus ar bladenn."
+
+#, fuzzy
+#~ msgid "Split Horizontal"
+#~ msgstr "&A-blaen"
+
+#, fuzzy
+#~ msgid "Split Vertical"
+#~ msgstr "&A-blomm"
+
+#~ msgid "&New File"
+#~ msgstr "Restr &Nevez"
+
+#~ msgid "New File"
+#~ msgstr "Restr Nevez"
+
+#, fuzzy
+#~ msgid "<b>New File</b><p>Creates an empty file."
+#~ msgstr "<b>Restr Nevez</b>Krouiñ ur restr nevez."
+
+#, fuzzy
+#~ msgid "&Close File"
+#~ msgstr "Serriñ an holl re"
+
+#, fuzzy
+#~ msgid "Close File"
+#~ msgstr "Serriñ an holl re"
+
+#, fuzzy
+#~ msgid "&Add Tool View..."
+#~ msgstr "&Ouzhpennañ ur Restr ..."
+
+#, fuzzy
+#~ msgid "Add Tool View"
+#~ msgstr "Ouzhpennañ un ostilh"
+
+#, fuzzy
+#~ msgid "Unable to load the project file %1"
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#, fuzzy
+#~ msgid "Could not load project management plugin %1."
+#~ msgstr "N'hellan ket krouiñ ar raktres mererezh %1."
+
+#, fuzzy
+#~ msgid "Reopen the current project?"
+#~ msgstr "Digeriñ ar raktres nevezig"
+
+#, fuzzy
+#~ msgid "Could not load project management view plugin %1."
+#~ msgstr "N'hellan ket krouiñ ar raktres mererezh %1."
+
+#, fuzzy
+#~| msgid "hw %1"
+#~ msgid " (%1)"
+#~ msgstr "hw %1"
+
+#, fuzzy
+#~ msgid "Document is Modified"
+#~ msgstr "Kemmet eo ar restr"
+
+#, fuzzy
+#~ msgid "Document Externally Modified"
+#~ msgstr "Kemmet eo ar restr"
+
+#, fuzzy
+#~ msgid "Error on importing"
+#~ msgstr "Fazi e pydoc"
+
+#~ msgid "Import Error"
+#~ msgstr "Fazi en ur enporzh"
+
+#~ msgid "Date"
+#~ msgstr "Deiziad"
+
+#~ msgid "Machine"
+#~ msgstr "Benveg"
+
+#~ msgid "Repository"
+#~ msgstr "Daveiñ"
+
+#~ msgid "Show log"
+#~ msgstr "Diskouez ar c'herzlevr"
+
+#~ msgid "Show differences..."
+#~ msgstr "Aozañ an dibarzhoù ..."
+
+#~ msgid "Edit..."
+#~ msgstr "Aozañ ..."
+
+#~ msgid "Unedit..."
+#~ msgstr "Diaozañ"
+
+#, fuzzy
+#~ msgid "Show Editors..."
+#~ msgstr "&Diskouez an aozerien"
+
+#~ msgid "Add Files..."
+#~ msgstr "Ouzhpennañ ar Restroù ..."
+
+#, fuzzy
+#~ msgid "Remove Files..."
+#~ msgstr "Lemel ar restr"
+
+#, fuzzy
+#~ msgid "Commit Files..."
+#~ msgstr "Personelañ ..."
+
+#, fuzzy
+#~ msgid "Update Files..."
+#~ msgstr "Emaon o bremañaat ..."
+
+#, fuzzy
+#~ msgid "Import Directory..."
+#~ msgstr "Renkell an &tarzh"
+
+#, fuzzy
+#~| msgid "Add Annotation..."
+#~ msgid "Annotate..."
+#~ msgstr "Ouzhpennañ un notenn ..."
+
+#, fuzzy
+#~ msgid "Checkout..."
+#~ msgstr "Personelañ ..."
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "Status..."
+#~ msgstr "Stad"
+
+#, fuzzy
+#~ msgid "Annotate"
+#~ msgstr "Notennañ"
+
+#~ msgid "Diff"
+#~ msgstr "Diff"
+
+#, fuzzy
+#~ msgid "Do you really want to unedit the selected files?"
+#~ msgstr ""
+#~ "C'hoant ho peus da vat zilemel an istrollad %1 gant pep wenn ha pep "
+#~ "restr ?"
+
+#, fuzzy
+#~ msgid "Unedit Files"
+#~ msgstr "Klask er restroù"
+
+#, fuzzy
+#~ msgid "Error on checkout"
+#~ msgstr "Fazi e pydoc"
+
+#, fuzzy
+#~| msgid "&Next Error"
+#~ msgid "Checkout Error"
+#~ msgstr "&Fazi a heul"
+
+#~ msgid "CVS"
+#~ msgstr "CVS"
+
+#, fuzzy
+#~ msgid "No log information found"
+#~ msgstr "Titouroù diwar-benn an arouez lec'hel"
+
+#, fuzzy
+#~ msgid "Revision"
+#~ msgstr "Doare %1"
+
+#, fuzzy
+#~| msgid "Added "
+#~ msgid "Added %1"
+#~ msgstr "Ouzhpennet "
+
+#, fuzzy
+#~| msgid "Deleted "
+#~ msgid "Deleted %1"
+#~ msgstr "Dilamet "
+
+#, fuzzy
+#~| msgid "Updated "
+#~ msgid "Updated %1"
+#~ msgstr "Bremañaet "
+
+#, fuzzy
+#~ msgid "Revision %1"
+#~ msgstr "Doare %1"
+
+#, fuzzy
+#~ msgid "Updating externals: %1"
+#~ msgstr "Sil : %1"
+
+#, fuzzy
+#~| msgid "Adding file: %1"
+#~ msgid "Adding mimetype %1. %2"
+#~ msgstr "Emaon oc'h ouzhpennañ ar restr : %1"
+
+#, fuzzy
+#~| msgid "Adding file: %1"
+#~ msgid "Adding %1."
+#~ msgstr "Emaon oc'h ouzhpennañ ar restr : %1"
+
+#, fuzzy
+#~ msgid "Deleting %1."
+#~ msgstr "Deskrivadur :"
+
+#, fuzzy
+#~| msgid "Reading file '%1'..."
+#~ msgid "Replacing %1."
+#~ msgstr "Emaon o lenn ar restr '%1' ..."
+
+#, fuzzy
+#~| msgid "Configure %1"
+#~ msgid "Copied %1"
+#~ msgstr "Kefluniañ %1"
+
+#, fuzzy
+#~ msgid "Committed"
+#~ msgstr "Personelañ ..."
+
+#, fuzzy
+#~ msgid "Checkout from repository..."
+#~ msgstr "Lemel eus an daveiñ"
+
+#, fuzzy
+#~ msgid "Add to version control..."
+#~ msgstr "Doare %1"
+
+#~ msgid "Remove from repository..."
+#~ msgstr "Lemel eus an daveiñ"
+
+#, fuzzy
+#~ msgid "Commit to repository..."
+#~ msgstr "Ereañ d'an daveiñ ..."
+
+#, fuzzy
+#~ msgid "Update to..."
+#~ msgstr "Emaon o bremañaat ..."
+
+#, fuzzy
+#~ msgid "Show Subversion Log..."
+#~ msgstr "Raktres Subversion nevez"
+
+#, fuzzy
+#~ msgid "Log View"
+#~ msgstr "Gweloù ar raktres"
+
+#, fuzzy
+#~ msgid "Blame (Annotate)"
+#~ msgstr "&Notennañ"
+
+#~ msgid "Update"
+#~ msgstr "Bremañaat"
+
+#, fuzzy
+#~ msgid "Commit..."
+#~ msgstr "Personelañ ..."
+
+#, fuzzy
+#~ msgid "Remove from version control"
+#~ msgstr "Doare %1"
+
+#, fuzzy
+#~ msgid "No active docuement to add"
+#~ msgstr "N'eus gwenn bev kavet ebet"
+
+#, fuzzy
+#~ msgid "No active docuement to update"
+#~ msgstr "Sellout ouzh e meneger an teuliadur"
+
+#~ msgid "Certificate has expired."
+#~ msgstr "Kabac'het eo an testeni."
+
+#, fuzzy
+#~ msgid "Other unknown failures"
+#~ msgstr "Restroù all :"
+
+#, fuzzy
+#~ msgid "Subversion Import"
+#~ msgstr "Subversion"
+
+#~ msgid "Subversion"
+#~ msgstr "Subversion"
+
+#~ msgid "subversion"
+#~ msgstr "subVersion"
+
+#, fuzzy
+#~ msgid "Subversion Notification"
+#~ msgstr "Subversion"
+
+#, fuzzy
+#~ msgid "Log History"
+#~ msgstr "Daveiñ :"
+
+#, fuzzy
+#~ msgid "Blame"
+#~ msgstr "Anv"
+
+#, fuzzy
+#~ msgid "The output diff file cannot be located"
+#~ msgstr "Ne m'eus ket krouet ar restr %1."
+
+#, fuzzy
+#~ msgid " Abort"
+#~ msgstr "Porzh"
+
+#~ msgid "Destination:"
+#~ msgstr "Dehaezadur :"
+
+#~ msgid "Progress:"
+#~ msgstr "Araogenn :"
+
+#, fuzzy
+#~ msgid "Diff to previous revision"
+#~ msgstr "Mont d'ar fazi diaraok"
+
+#~ msgid "Line"
+#~ msgstr "Linenn"
+
+#, fuzzy
+#~ msgid "Rev"
+#~ msgstr "ruz"
+
+#~ msgid "Author"
+#~ msgstr "Oberour"
+
+#~ msgid "Contents"
+#~ msgstr "Endalc'had"
+
+#, fuzzy
+#~ msgid "Project Overview"
+#~ msgstr "Doare ar raktres"
+
+#, fuzzy
+#~ msgid "Project Details"
+#~ msgstr "Dibarzhoù ar raktres"
+
+#~ msgid "Project Manager"
+#~ msgstr "Merour ar raktres"
+
+#, fuzzy
+#~ msgid "Build Selected Project"
+#~ msgstr "&Sevel ar raktres"
+
+#~ msgid "File: %1"
+#~ msgstr "Restr : %1"
+
+#, fuzzy
+#~ msgid "Could not parse diff output."
+#~ msgstr "Ne m'eus ket gallet lenn restr ar raktres : %1"
+
+#, fuzzy
+#~| msgid "This file is already in the target."
+#~ msgid "The files are identical."
+#~ msgstr "Ar restr-mañ a zo endeo e-barzh ar wenn."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "N'em eus ket skrivañ restr ar raktres."
+
+#~ msgid "New Folder"
+#~ msgstr "Renkell nevez"
+
+#~ msgid "File Manager"
+#~ msgstr "Merour restroù"
+
+#~ msgid "New Folder..."
+#~ msgstr "Renkell nevez ..."
+
+#~ msgid "Konsole"
+#~ msgstr "Konsole"
+
+#, fuzzy
+#~ msgid "Snippets"
+#~ msgstr "&Ment :"
+
+#, fuzzy
+#~ msgid "Add Repository"
+#~ msgstr "Ouzhpennañ d'an daveiñ"
+
+#, fuzzy
+#~ msgid "Add Snippet"
+#~ msgstr "Aozañ ar skrid"
+
+#, fuzzy
+#~ msgid "Create Subrepository"
+#~ msgstr "Krouiñ ur mollad en daveiñ"
+
+#~ msgid "Hide"
+#~ msgstr "Kuzhat"
+
+#, fuzzy
+#~ msgid "New Snippet"
+#~ msgstr "&Ment :"
+
+#, fuzzy
+#~ msgid "Create a new subrepository"
+#~ msgstr "Krouiñ ur mollad en daveiñ"
+
+#, fuzzy
+#~ msgid "Directoryname"
+#~ msgstr "Renkell"
+
+#, fuzzy
+#~ msgid "Empty name"
+#~ msgstr "Roit hoc'h anv"
+
+#, fuzzy
+#~ msgid "Please enter a name and a location"
+#~ msgstr "Roit un anv evit an dra nevez mar plij :"
+
+#, fuzzy
+#~ msgid "Please enter a name"
+#~ msgstr "Roit un hent mar plij."
+
+#, fuzzy
+#~ msgid "DUChain Viewer"
+#~ msgstr "Gweler"
+
+#, fuzzy
+#~ msgid "Definition: %1"
+#~ msgstr "T&ermenadur"
+
+#, fuzzy
+#~ msgid "Unknown object!"
+#~ msgstr "Fazi dianav"
+
+#~ msgid "&Stop"
+#~ msgstr "&Plaenaozañ"
+
+#, fuzzy
+#~ msgid "KDevelop GUI Builder"
+#~ msgstr "Diorrer"
+
+#~ msgid "Notification"
+#~ msgstr "Kemenn"
+
+#, fuzzy
+#~ msgid "Subversion Commit"
+#~ msgstr "Subversion"
+
+#, fuzzy
+#~ msgid "Subversion Update"
+#~ msgstr "&Subversion"
+
+#, fuzzy
+#~ msgid "Subversion Logview"
+#~ msgstr "Subversion"
+
+#, fuzzy
+#~ msgid "Subversion Blame"
+#~ msgstr "Subversion"
+
+#, fuzzy
+#~ msgid "Subversion Status"
+#~ msgstr "&Subversion"
+
+#, fuzzy
+#~ msgid "Subversion Difference"
+#~ msgstr "Subversion"
+
+#, fuzzy
+#~ msgid "Standard"
+#~ msgstr "Nod&rezh standard :"
+
+#, fuzzy
+#~ msgid "Local Project"
+#~ msgstr "<Raktres ebet>"
+
+#, fuzzy
+#~ msgid "Global Project"
+#~ msgstr "&An holl raktresoù"
+
+#~ msgid "Could Not Open File"
+#~ msgstr "Ne m'eus ket gallet digeriñ ar restr"
+
+#, fuzzy
+#~ msgid "KDevelop could not open"
+#~ msgstr "Kefluniadur"
+
+#, fuzzy
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "Skridennad4"
+
+#~ msgid "What Do You Want to Do?"
+#~ msgstr "Petra e fell deoc'h d'ober ?"
+
+#~ msgid "Lo&ad last project on startup"
+#~ msgstr "Kargañ ar raktres diwezhañ pa loc'her"
+
+#, fuzzy
+#~ msgid "Open the last project that was loaded on startup"
+#~ msgstr "Kargañ ar raktres diwezhañ pa loc'her"
+
+#, fuzzy
+#~ msgid "Docked Window"
+#~ msgstr "Prenestr a &heul"
+
+#~ msgid "General Settings"
+#~ msgstr "Dibarzhoù hollek"
+
+#~ msgid "Version:"
+#~ msgstr "Doare :"
+
+#~ msgid "Value:"
+#~ msgstr "Gwerzh :"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Kuitet evel boas ***"
+
+#~ msgid "Duplicate Tab"
+#~ msgstr "Eilañ ar vevennig"
+
+#~ msgid "Forward"
+#~ msgstr "War-raok"
+
+#~ msgid "Open in New Tab"
+#~ msgstr "Digeriñ en ur vevennig nevez"
+
+#~ msgid "Save &Selected"
+#~ msgstr "Enrollañ an hini &diuzet"
+
+#~ msgid "Saves all selected files"
+#~ msgstr "Enrollañ a ra pep restr dibabet"
+
+#~ msgid "Save &None"
+#~ msgstr "Enrollañ &netra"
+
+#~ msgid "Save &All"
+#~ msgstr "Enrol&lañ an holl re"
+
+#~ msgid "Saves all modified files"
+#~ msgstr "Enrollañ a ra pep teul cheñchet"
+
+#~ msgid "(c) 1999-2005, The KDevelop developers"
+#~ msgstr "(c) 1999-2004, Diorroerien KDevelop"
+
+#~ msgid "Loading Settings"
+#~ msgstr "Emaon o kargañ an dibarzhoù"
+
+#~ msgid "Please enter a path."
+#~ msgstr "Roit un hent mar plij."
+
+#, fuzzy
+#~ msgid "'%1' is not an absolute path."
+#~ msgstr "N'eo ket ur renkell '%1'."
+
+#, fuzzy
+#~ msgid "'%1' is not a relative path."
+#~ msgstr "N'eo ket ur renkell '%1'."
+
+#~ msgid "'%1' is not a directory."
+#~ msgstr "N'eo ket ur renkell '%1'."
+
+#~ msgid "'%1' is a valid project directory."
+#~ msgstr "Ur renkell raktres mat eo '%1'."
+
+#~ msgid "Set as Default"
+#~ msgstr "Lakaat dre ziouer"
+
+#, fuzzy
+#~ msgid "Choose Editor..."
+#~ msgstr "Kefluniañ an &aozer ..."
+
+#, fuzzy
+#~ msgid "Close the current document view"
+#~ msgstr "Serriñ ar raktres pe an teul red"
+
+#, fuzzy
+#~ msgid "Sho&w Path"
+#~ msgstr "&Hent :"
+
+#, fuzzy
+#~ msgid "&About Editor Component"
+#~ msgstr "Aozer ar parzhioù Kate"
+
+#~ msgid "Open File"
+#~ msgstr "Digeriñ ur Restr"
+
+#~ msgid " Line: %1 Col: %2 "
+#~ msgstr " Linenn : %1  Bann : %2 "
+
+#~ msgid "Document to open"
+#~ msgstr "Teul da zigeriñ"
+
+#, fuzzy
+#~ msgid "KWrite"
+#~ msgstr "Prevez"
+
+#, fuzzy
+#~ msgid "Core Developer"
+#~ msgstr "Diorrer"
+
+#, fuzzy
+#~ msgid "Former Core Developer"
+#~ msgstr "Kefluniañ KDevelop"
+
+#, fuzzy
+#~ msgid "Highlighting for VHDL"
+#~ msgstr "Splannadur"
+
+#, fuzzy
+#~ msgid "Highlighting for SQL"
+#~ msgstr "Splannadur"
+
+#~ msgid "&Move"
+#~ msgstr "&Dilec'hiañ"
+
+#~ msgid "C&ustom"
+#~ msgstr "&Diouzhoc'h"
+
+#~ msgid "Tools Toolbar"
+#~ msgstr "Barrenn ostilhoù"
+
+#~ msgid "Background color:"
+#~ msgstr "Liv an drekleur :"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Liv war-c'horre :"
+
+#, fuzzy
+#~ msgid "%{APPNAMELC}_base"
+#~ msgstr "%{APPNAME}"
+
+#~ msgid "Output"
+#~ msgstr "Ezkas"
+
+#~ msgid "Screen Saver Config"
+#~ msgstr "Kefluniadur an damanter skramm"
+
+#, fuzzy
+#~ msgid "Show close buttons on the right of tabs"
+#~ msgstr "Diskouez an nozel serriñ war ar bevennigoù"
+
+#~ msgid "Some URL"
+#~ msgstr "Lod URL"
+
+#~ msgid "Please select a project directory"
+#~ msgstr "Dibabit renkell ar raktres mar plij"
+
+#, fuzzy
+#~ msgid "<qt><h3>Project Settings</h3></qt>"
+#~ msgstr "Dibarzhoù ar raktres"
+
+#, fuzzy
+#~ msgid "Alt+W"
+#~ msgstr "Alt+1"
+
+#~ msgid "Window &font:"
+#~ msgstr "&Nodrezh ar prenestr :"
+
+#~ msgid "Very Short"
+#~ msgstr "Bihan-tre"
+
+#~ msgid "Short"
+#~ msgstr "Bihan"
+
+#, fuzzy
+#~ msgid "Alt+V"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Alt+D"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "Run Qt Desi&gner"
+#~ msgstr "Ergrafer Qt"
+
+#, fuzzy
+#~ msgid "Alt+G"
+#~ msgstr "Alt+1"
+
+#~ msgid "&Other:"
+#~ msgstr "&All :"
+
+#, fuzzy
+#~ msgid "Alt+O"
+#~ msgstr "Alt+1"
+
+#~ msgid "Use &KDE setting"
+#~ msgstr "Impl&ijit ar gefluniadur KDE"
+
+#, fuzzy
+#~ msgid "<qt><h3>Terminal Emulation</h3></qt>"
+#~ msgstr "Kendarvanerezh termenell"
+
+#, fuzzy
+#~ msgid "<qt><h3>Output View Settings</h3></qt>"
+#~ msgstr "Kefluniadur"
+
+#, fuzzy
+#~ msgid "Default pro&jects directory:"
+#~ msgstr "Renkell ar raktres :"
+
+#~ msgid "KDE service &type:"
+#~ msgstr "&Rizh ar servij KDE :"
+
+#~ msgid "&Whole words only"
+#~ msgstr "Gerioù &klok hepken"
+
+#~ msgid "Regular e&xpression:"
+#~ msgstr "T&roienn reolataet :"
+
+#~ msgid "Enter the regexp here"
+#~ msgstr "Roit an troiennoù reolataet amañ"
+
+#~ msgid "Target Files in Project"
+#~ msgstr "Restroù wenn e-barzh ar raktres"
+
+#~ msgid "A&ll files"
+#~ msgstr "An holl r&estroù"
+
+#~ msgid "&Open files only"
+#~ msgstr "&Digeriñ ar restroù hepken"
+
+#~ msgid "&Find && Replace"
+#~ msgstr "&Klask ha Erlec'hiañ"
+
+#~ msgid "Strings"
+#~ msgstr "Hedadoù"
+
+#~ msgid "&Text to find:"
+#~ msgstr "&Skrid da klask :"
+
+#~ msgid "External Tools"
+#~ msgstr "Ostilhoù diavaez"
+
+#~ msgid "&Tools Menu"
+#~ msgstr "Meuziad &ostilhoù"
+
+#~ msgid "&Add..."
+#~ msgstr "&Ouzhpennañ ..."
+
+#~ msgid "Output Filter Settings"
+#~ msgstr "Kefluniadur ar sil ezkas"
+
+#~ msgid "Filter Options"
+#~ msgstr "Dibarzhoù ar sil"
+
+#~ msgid "Filter for string"
+#~ msgstr "Sil evit hedad"
+
+#~ msgid "Application"
+#~ msgstr "Meziant"
+
+#~ msgid "&Never"
+#~ msgstr "&Gwech ebet"
+
+#~ msgid "&Always"
+#~ msgstr "&Bepred"
+
+#~ msgid "%{APPNAME} Preferences"
+#~ msgstr "Dibarzhoù %{APPNAME}"
+
+#~ msgid "First Page"
+#~ msgstr "Pajenn kentañ"
+
+#~ msgid "Page One Options"
+#~ msgstr "Dibarzhoù ar bajenn kentañ"
+
+#~ msgid "Second Page"
+#~ msgstr "Pajenn eil"
+
+#~ msgid "Page Two Options"
+#~ msgstr "Dibarzhoù ar bajenn eil"
+
+#~ msgid "Add something here"
+#~ msgstr "Ouzhpennañ un dra bennak amañ"
+
+#~ msgid "Open Location"
+#~ msgstr "Digeriñ al lec'hienn"
+
+#~ msgid "A KDE KPart Application"
+#~ msgstr "Ur meziant Kpart evit KDE"
+
+#~ msgid "&Do Something..."
+#~ msgstr "&Ober un dra bennak ..."
+
+#~ msgid "Do something"
+#~ msgstr "Ober un dra bennak"
+
+#~ msgid "%{APPNAME} Plugin"
+#~ msgstr "Lugent %{APPNAME}"
+
+#~ msgid "Hello there."
+#~ msgstr "Demat bremañ."
+
+#~ msgid "%{APPNAME}Part"
+#~ msgstr "Perzh%{APPNAME}"
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
+
+#~ msgid "The URL you entered is not valid, please correct it and try again"
+#~ msgstr ""
+#~ "N'eo ket mat an URL e skrivit, difaziañ anezhi mar plij ha klask adarre"
+
+#~ msgid "%{APPNAME} import"
+#~ msgstr "enporzh %{APPNAME}"
+
+#~ msgid "This is a help box"
+#~ msgstr "Ur boest skoazell eo"
+
+#~ msgid "This is a preferences box"
+#~ msgstr "Setu prenestr an dibarzhoù"
+
+#~ msgid "%{APPNAME} Information"
+#~ msgstr "Titouroù %{APPNAME}"
+
+#~ msgid "Items"
+#~ msgstr "Traoù"
+
+#~ msgid "Size"
+#~ msgstr "Ment"
+
+#~ msgid "Terminal"
+#~ msgstr "Termenell"
+
+#~ msgid "%{APPNAMELC}Part"
+#~ msgstr "Perzh%{APPNAMELC}"
+
+#~ msgid "%{APPNAME} Settings"
+#~ msgstr "Dibarzhoù %{APPNAME}"
+
+#~ msgid "Play"
+#~ msgstr "Seniñ"
+
+#~ msgid "Playlist"
+#~ msgstr "Roll tonioù"
+
+#~ msgid "No File Loaded"
+#~ msgstr "Restr karget ebet"
+
+#~ msgid "Random play"
+#~ msgstr "Seniñ dre zegouezh"
+
+#~ msgid "Save Modified Files?"
+#~ msgstr "Enrollañ ar restroù kemmet ?"
+
+#~ msgid "Configure KDevelop"
+#~ msgstr "Kefluniañ KDevelop"
+
+#~ msgid "Could Not Find Plugins"
+#~ msgstr "Ne m'eus ket gallet kavout al lugentoù"
+
+#~ msgid "Close All Others"
+#~ msgstr "Serriñ ar re all"
+
+#~ msgid "Duplicate"
+#~ msgstr "Eilañ"
+
+#~ msgid "unnamed"
+#~ msgstr "anv ebet"
+
+#~ msgid "Open file"
+#~ msgstr "Digeriñ ur restr"
+
+#~ msgid "Save Al&l"
+#~ msgstr "Enrollañ an ho&ll re"
+
+#~ msgid "Save all modified files"
+#~ msgstr "Enrollañ an holl restroù kemmet"
+
+#~ msgid "Closes current file."
+#~ msgstr "Serriñ a ra ar restr red."
+
+#~ msgid "Close all files"
+#~ msgstr "Serriñ an holl restroù"
+
+#~ msgid "Close other files"
+#~ msgstr "Serriñ ar restroù all"
+
+#~ msgid "Switch To..."
+#~ msgstr "Gwintañ da ..."
+
+#~ msgid "Switch to"
+#~ msgstr "Gwintañ da"
+
+#, fuzzy
+#~ msgid "Document Deleted"
+#~ msgstr "Munudoù an teul"
+
+#, fuzzy
+#~ msgid "Document Changed"
+#~ msgstr "Teuliadur"
+
+#~ msgid "Project Options"
+#~ msgstr "Dibarzhoù ar raktres"
+
+#~ msgid "Plugins"
+#~ msgstr "Lugentoù"
+
+#~ msgid "Invalid URL."
+#~ msgstr "URL siek."
+
+#~ msgid "You do not have 'kdevprj2kdevelop' installed."
+#~ msgstr "N'eo ket staliet 'kdevprj2kdevelop'."
+
+#~ msgid "Delete item(s)"
+#~ msgstr "Lemel an tra(où)"
+
+#~ msgid "&Save As..."
+#~ msgstr "&Enrollañ e ..."
+
+#~ msgid "Property"
+#~ msgstr "Perzh"
+
+#~ msgid "&Search"
+#~ msgstr "&Klask"
+
+#~ msgid "&Part Explorer"
+#~ msgstr "Furcher &perzh"
+
+#~ msgid "Add to Tools Menu"
+#~ msgstr "Ouzhpennañ d'ar meuziad Ostilh"
+
+#~ msgid "&Applications:"
+#~ msgstr "Meziantoù :"
+
+#~ msgid "&Tools menu:"
+#~ msgstr "Meuziad &ostilhoù :"
+
+#~ msgid "Known Applications"
+#~ msgstr "Arloadoù anavet"
+
+#~ msgid "Tools Menu"
+#~ msgstr "Meuziad ostilhoù"
+
+#, fuzzy
+#~ msgid "Quick Open..."
+#~ msgstr "Digeriñ buan"
+
+#, fuzzy
+#~ msgid "Quick open locations in project"
+#~ msgstr "Klask ar renkad er raktres"
+
+#, fuzzy
+#~ msgid "Part not available"
+#~ msgstr "&Da gaout :"
+
+#~ msgid "Choose projects directory"
+#~ msgstr "Dibabit renkell ar raktres"
+
+#~ msgid "Set"
+#~ msgstr "Lakaat"
+
+#~ msgid "Do Not Set"
+#~ msgstr "Ne lakit ket"
+
+#~ msgid " (dir/file already exist)"
+#~ msgstr " (ar renkell/restr a zo endeo)"
+
+#~ msgid "Press Enter to continue!"
+#~ msgstr "Gwaskit Entree evit kenderc'hel !"
+
+#~ msgid "Filter Output"
+#~ msgstr "Sil ezkas"
+
+#~ msgid "Go to the next error"
+#~ msgstr "Mont d'ar fazi a-heul"
+
+#~ msgid "&Previous Error"
+#~ msgstr "&Fazi diaraok"
+
+#~ msgid "Open With"
+#~ msgstr "Digeriñ gant"
+
+#~ msgid "File Selector"
+#~ msgstr "Dibaber ar restr"
+
+#~ msgid "File selector"
+#~ msgstr "Dibaber ar restr"
+
+#~ msgid "Current Document Directory"
+#~ msgstr "Renkell-red an teul"
+
+#~ msgid "Clear filter"
+#~ msgstr "Goullonderiñ ar sil"
+
+#~ msgid "Toolbar"
+#~ msgstr "Barrenn ostilhoù"
+
+#~ msgid "When a document is o&pened"
+#~ msgstr "Pa vez di&goret un teul"
+
+#~ msgid "No."
+#~ msgstr "Niver"
+
+#~ msgid "Expand All Items"
+#~ msgstr "Digeriñ an holl re"
+
+#~ msgid ", line "
+#~ msgstr ", linenn"
+
+#~ msgid "Remove This Bookmark"
+#~ msgstr "Distruj ar sined-se"
+
+#~ msgid ", All"
+#~ msgstr ", an holl"
+
+#~ msgid "Remove These Bookmarks"
+#~ msgstr "Distruj ar sinedoù-se"
+
+#~ msgid "Source bookmarks"
+#~ msgstr "Sinedoù an tarzh"
+
+#~ msgid "Could not find file"
+#~ msgstr "Ne m'eus ket gallet kavout ar restr"
+
+#~ msgid "&CVS Service"
+#~ msgstr "Servij &CVS"
+
+#~ msgid "&Perforce"
+#~ msgstr "&Perforce"
+
+#, fuzzy
+#~ msgid "Projectviews Toolbar"
+#~ msgstr "Furcher barrenn an ostilhoù"
+
+#~ msgid "S&cripts"
+#~ msgstr "U&rzhiaouegoù"
+
+#~ msgid "&Layout"
+#~ msgstr "&Doare"
+
+#~ msgid "File Toolbar"
+#~ msgstr "Barrenn ostilhoù ar restroù"
+
+#~ msgid "Add Class"
+#~ msgstr "Ouzhpennañ ur renkad"
+
+#~ msgid "&Class"
+#~ msgstr "&Renkad"
+
+#~ msgid "&Interface"
+#~ msgstr "&Etrefas"
+
+#~ msgid "&Public"
+#~ msgstr "&Foran"
+
+#~ msgid "P&rotected"
+#~ msgstr "G&warezet"
+
+#~ msgid "Pri&vate"
+#~ msgstr "Pre&vez"
+
+#~ msgid "&Source path:"
+#~ msgstr "Hent an &tarzh :"
+
+#~ msgid "&Documentation"
+#~ msgstr "&Teuliadur"
+
+#~ msgid "&License:"
+#~ msgstr "&Aotre :"
+
+#~ msgid "LGPL"
+#~ msgstr "LGPL"
+
+#~ msgid "GPL"
+#~ msgstr "GPL"
+
+#~ msgid "QPL"
+#~ msgstr "QPL"
+
+#~ msgid "&Add"
+#~ msgstr "&Ouzhpennañ"
+
+#~ msgid "New Class"
+#~ msgstr "Renkad nevez"
+
+#~ msgid "Class &Information"
+#~ msgstr "&Titouroù diwar-benn ar renkad"
+
+#~ msgid "Docu&mentation:"
+#~ msgstr "Teul&iadur :"
+
+#~ msgid "&Header:"
+#~ msgstr "&Reollin :"
+
+#~ msgid "Move &Up"
+#~ msgstr "&Pignit"
+
+#~ msgid "Move &Down"
+#~ msgstr "&Diskennit"
+
+#~ msgid "&Base class:"
+#~ msgstr "Renkad &diazez :"
+
+#~ msgid "Virtual"
+#~ msgstr "Galloudel"
+
+#~ msgid "Use Objective-C"
+#~ msgstr "Implijit Objective-C"
+
+#~ msgid "Ad&vanced Information"
+#~ msgstr "Titouroù bare&k"
+
+#~ msgid "C&lear Selection"
+#~ msgstr "G&oullonderiñ an diuzadenn"
+
+#~ msgid "&Header"
+#~ msgstr "&Reollin"
+
+#~ msgid "&Source"
+#~ msgstr "&Tarzh"
+
+#~ msgid "Methods"
+#~ msgstr "Hentennoù"
+
+#~ msgid "New Modifier"
+#~ msgstr "Kemmer nevez"
+
+#~ msgid "&Generation Options"
+#~ msgstr "Dibarzhoù ar &grouidigezh"
+
+#~ msgid "&inline"
+#~ msgstr "&enlinenn"
+
+#~ msgid "&set method"
+#~ msgstr "&lakaat an hentenn"
+
+#~ msgid "i&nline"
+#~ msgstr "e&nlinenn"
+
+#~ msgid "Choose Library"
+#~ msgstr "Dibabit al levraoueg"
+
+#~ msgid "Library Settings"
+#~ msgstr "Kefluniadur al levraoueg"
+
+#~ msgid "msec"
+#~ msgstr "msec"
+
+#~ msgid "&General"
+#~ msgstr "&Pennañ"
+
+#~ msgid "&Qt"
+#~ msgstr "&Qt"
+
+#~ msgid "Use Qt in this project"
+#~ msgstr "Implijit Qt er rakres-se"
+
+#~ msgid "Version"
+#~ msgstr "Doare"
+
+#~ msgid "Qt root path:"
+#~ msgstr "Hent gwrizienn Qt :"
+
+#, fuzzy
+#~ msgid "Automatic &arguments hint:"
+#~ msgstr "&Arventennoù ar meziant :"
+
+#~ msgid "Column 1"
+#~ msgstr "Bann 1"
+
+#, fuzzy
+#~ msgid "Click to start the Code Completion database creation wizard."
+#~ msgstr "Krouiñ ur &patrom ..."
+
+#~ msgid "Variable name:"
+#~ msgstr "Anv ar valigant :"
+
+#~ msgid "m_x"
+#~ msgstr "m_x"
+
+#~ msgid "m_"
+#~ msgstr "m_"
+
+#~ msgid "Add Method"
+#~ msgstr "Ouzhpennañ un hentenn"
+
+#~ msgid "Inline"
+#~ msgstr "Enlinenn"
+
+#~ msgid "&Add Method"
+#~ msgstr "&Ouzhpennañ un hentenn"
+
+#~ msgid "&Delete Method"
+#~ msgstr "&Dilemel an hantenn"
+
+#~ msgid "Method Properties"
+#~ msgstr "Dibarzhoù an hantenn"
+
+#~ msgid "&Inline"
+#~ msgstr "&Enlinenn"
+
+#~ msgid "T&ype:"
+#~ msgstr "R&izh :"
+
+#~ msgid "C&lass name:"
+#~ msgstr "A&nv ar renkad :"
+
+#~ msgid "F&ile name:"
+#~ msgstr "A&nv ar restr :"
+
+#~ msgid "Method"
+#~ msgstr "Hantenn"
+
+#~ msgid "Class &Templates"
+#~ msgstr "&Patromoù a renkad"
+
+#~ msgid "Cpp Header"
+#~ msgstr "Reollin Cpp"
+
+#~ msgid "Cpp Source"
+#~ msgstr "Tarzh Cpp"
+
+#~ msgid "Objective-C Header"
+#~ msgstr "Reollin Objective-C"
+
+#~ msgid "Objective-C Source"
+#~ msgstr "Tarzh Objective-C"
+
+#~ msgid "GTK C Header"
+#~ msgstr "Reollin GTK C"
+
+#~ msgid "GTK C Source"
+#~ msgstr "TarzhGTK C"
+
+#~ msgid "&File names:"
+#~ msgstr "&Anvoù ar restr :"
+
+#~ msgid "Lowercase"
+#~ msgstr "Lizherennoù vihan"
+
+#~ msgid "Uppercase"
+#~ msgstr "Lizherennoù vras"
+
+#~ msgid "Class Documentation"
+#~ msgstr "Teuliadur ar renkad"
+
+#~ msgid "Program &arguments:"
+#~ msgstr "&Arventennoù ar meziant :"
+
+#, fuzzy
+#~ msgid "Path to gdb"
+#~ msgstr "Hent ar skeudennoù"
+
+#~ msgid "Configuration:"
+#~ msgstr "Kefluniadur :"
+
+#~ msgid "KDE Libs Headers"
+#~ msgstr "Reollinoù al levraouegoù KDE"
+
+#~ msgid "All KDE Headers"
+#~ msgstr "An holl reollinoù KDE"
+
+#~ msgid "Parse:"
+#~ msgstr "Lenn :"
+
+#~ msgid "Database name:"
+#~ msgstr "Anv ar stlennvon :"
+
+#~ msgid "Class Name"
+#~ msgstr "Anv ar renkad"
+
+#~ msgid "&File name:"
+#~ msgstr "&Anv ar restr :"
+
+#~ msgid "Class &name:"
+#~ msgstr "&Anv ar renkad :"
+
+#~ msgid "Class &template:"
+#~ msgstr "&Patrom a renkad :"
+
+#~ msgid "PHP Information"
+#~ msgstr "Titouroù diwar-benn PHP"
+
+#~ msgid "PHP Options"
+#~ msgstr "Dibarzhoù PHP"
+
+#~ msgid "Genera&l"
+#~ msgstr "Pennañ"
+
+#~ msgid "&Startup"
+#~ msgstr "&Loc'hadur"
+
+#~ msgid "Use current file in editor"
+#~ msgstr "Implij ar restr red en aozer"
+
+#, fuzzy
+#~ msgid "Use &this file as default:"
+#~ msgstr "Lakaat dre ziouer"
+
+#, fuzzy
+#~ msgid "&Enable code completion"
+#~ msgstr "&Roit un deskrivadur :"
+
+#~ msgid "Pro&ject root URL on webserver:"
+#~ msgstr "URL gwrizienn ar rak&tres war ar servijer gwiad :"
+
+#~ msgid "&Shell"
+#~ msgstr "&Shell"
+
+#~ msgid "Plugin"
+#~ msgstr "Lugent"
+
+#~ msgid "Database Name"
+#~ msgstr "Anv ar stlennvon"
+
+#~ msgid "Host"
+#~ msgstr "Ostiz"
+
+#~ msgid "&Special Headers"
+#~ msgstr "Reollinoù &dibar"
+
+#~ msgid "Perl"
+#~ msgstr "Perl"
+
+#, fuzzy
+#~ msgid "Run applications in &terminal"
+#~ msgstr "ur meziant : "
+
+#~ msgid "&Selected window"
+#~ msgstr "&Prenestr diuzet"
+
+#~ msgid "ASCII"
+#~ msgstr "ASCII"
+
+#~ msgid "S&JIS"
+#~ msgstr "S&JIS"
+
+#~ msgid "UTF-&8"
+#~ msgstr "UTF-&8"
+
+#~ msgid "EUC"
+#~ msgstr "EUC"
+
+#~ msgid "&Main program:"
+#~ msgstr "&Program kentañ :"
+
+#, fuzzy
+#~ msgid "This is the name of the main program source file"
+#~ msgstr "Roit anv restr an tarzh nevez :"
+
+#, fuzzy
+#~ msgid "%{APPNAMESC}_base"
+#~ msgstr "%{APPNAME}"
+
+#~ msgid "&1"
+#~ msgstr "&1"
+
+#~ msgid "Ar&guments:"
+#~ msgstr "Ar&ventennoù :"
+
+#~ msgid "&2"
+#~ msgstr "&2"
+
+#~ msgid "&3"
+#~ msgstr "&3"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Company"
+#~ msgstr "Embregerezh"
+
+#, fuzzy
+#~ msgid "Use Qt Designer externally"
+#~ msgstr "Qt Designer - Nevez/Digeriñ"
+
+#~ msgid "&Import address:"
+#~ msgstr "&Enporzh ar chomlec'h :"
+
+#~ msgid "Server Settings"
+#~ msgstr "Dibarzhoù ar servijer"
+
+#~ msgid "Do not do anything"
+#~ msgstr "Ne gra ket netra"
+
+#~ msgid "Enter the name of the repository"
+#~ msgstr "Roit anv an daveiñ :"
+
+#~ msgid "Enter the vendor name"
+#~ msgstr "Roit anv ar werzher"
+
+#~ msgid "&Message:"
+#~ msgstr "&Kemennadenn :"
+
+#~ msgid "&Server path:"
+#~ msgstr "&Hent ar servijer :"
+
+#~ msgid "CVS_&RSH:"
+#~ msgstr "CVS_&RSH :"
+
+#~ msgid "ssh"
+#~ msgstr "ssh"
+
+#~ msgid "&Message"
+#~ msgstr "&Kemennad"
+
+#~ msgid "&Add to changelog:"
+#~ msgstr "&Ouzhpennañ d'ar changelog :"
+
+#~ msgid "Select Module"
+#~ msgstr "Dibab ur mollad"
+
+#~ msgid "Tag/Branch &name:"
+#~ msgstr "&Anv ar brank/liketenn :"
+
+#~ msgid "CVS Options"
+#~ msgstr "Dibarzhoù CVS"
+
+#~ msgid "Common Settings"
+#~ msgstr "Dibarzhoù boutin"
+
+#~ msgid "CVS server &location:"
+#~ msgstr "&Lec'hiadur ar servijer CVS :"
+
+#~ msgid "Create &new directories (if any)"
+#~ msgstr "Krouiñ renkelloù &nevez (ma vez unan bennak)"
+
+#~ msgid "&Branch tag:"
+#~ msgstr "Liketen ar &brank :"
+
+#~ msgid "Fetch &List"
+#~ msgstr "Degas ar &roll"
+
+#~ msgid "Log Message"
+#~ msgstr "Kemennad ar c'herzlevr"
+
+#~ msgid "[NAME]"
+#~ msgstr "[ANV]"
+
+#~ msgid "[ITEM LIST]"
+#~ msgstr "[ROLL AN TRAOÙ]"
+
+#~ msgid "Source Options"
+#~ msgstr "Dibarzhoù an tarzh"
+
+#~ msgid "%n-%v"
+#~ msgstr "%n-%v"
+
+#~ msgid "Create Source &Archive"
+#~ msgstr "Krouiñ un &diell tarzh"
+
+#~ msgid "R&eset"
+#~ msgstr "&Adkorañ"
+
+#~ msgid "File &list:"
+#~ msgstr "&Roll ar restroù :"
+
+#~ msgid "&Package Information"
+#~ msgstr "Titouroù diwar ar &pakd"
+
+#~ msgid "Ve&ndor:"
+#~ msgstr "&Gwerzher :"
+
+#~ msgid "&Application name:"
+#~ msgstr "Anv ar meziant :"
+
+#~ msgid "R&elease:"
+#~ msgstr "R&ummad :"
+
+#~ msgid "&Version:"
+#~ msgstr "&Doare :"
+
+#~ msgid "&Group:"
+#~ msgstr "&Strollad :"
+
+#~ msgid "Pac&kager:"
+#~ msgstr "Pa&kader :"
+
+#~ msgid "Advanced Package Op&tions"
+#~ msgstr "D&ibaboù barek ar pakad"
+
+#~ msgid "i386"
+#~ msgstr "i386"
+
+#~ msgid "i586"
+#~ msgstr "i586"
+
+#~ msgid "i686"
+#~ msgstr "i686"
+
+#~ msgid "AMD K6"
+#~ msgstr "AMD K6"
+
+#~ msgid "AMD K7"
+#~ msgstr "AMD K7"
+
+#~ msgid "PPC"
+#~ msgstr "PPC"
+
+#~ msgid "PPC G3"
+#~ msgstr "PCC G3"
+
+#~ msgid "PPC Altevec"
+#~ msgstr "PPC Altevec"
+
+#~ msgid "Dec Alpha (AXP)"
+#~ msgstr "Dec Alpha (AXP)"
+
+#~ msgid "Local Options"
+#~ msgstr "Dibaboù lec'hel"
+
+#~ msgid "Re&mote Options"
+#~ msgstr "Dibarzhoù a-&bell"
+
+#~ msgid "+"
+#~ msgstr "+"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "Upload to custom FTP site"
+#~ msgstr "Ezkargañ ouzh al lec'hienn FTP diouzhoc'h"
+
+#~ msgid "Upload files to ftp.kde.org"
+#~ msgstr "Ezkargañ ar restroù da ftp.kde.org"
+
+#~ msgid "Submit"
+#~ msgstr "Kas"
+
+#~ msgid "ftp://username:password@ftp.server.com/path/"
+#~ msgstr "ftp://anv:tremenger@ftp.servijer.com/hent/"
+
+#~ msgid "Upload to apps.kde.com"
+#~ msgstr "Ezkargañ ouzh apps.kde.com"
+
+#~ msgid "&Project type:"
+#~ msgstr "&Rizh ar raktres :"
+
+#~ msgid "&Email:"
+#~ msgstr "&Postel :"
+
+#~ msgid "Vcs Form"
+#~ msgstr "Paperenn-reol Vcs"
+
+#~ msgid "&Show all project templates"
+#~ msgstr "&Diskouez an holl patromoù raktres"
+
+#~ msgid "&Favorites"
+#~ msgstr "Dibaboù &gwellañ"
+
+#~ msgid "&Location:"
+#~ msgstr "&Lec'hiadur :"
+
+#~ msgid "General Options"
+#~ msgstr "Dibarzhoù hollek"
+
+#~ msgid "0.1"
+#~ msgstr "0.1"
+
+#~ msgid "License:"
+#~ msgstr "Aotre :"
+
+#~ msgid "Custom Options"
+#~ msgstr "Dibarzhoù diouzoc'h"
+
+#~ msgid "Customize"
+#~ msgstr "Personelañ"
+
+#~ msgid "Base class:"
+#~ msgstr "R&enkad diazez :"
+
+#~ msgid "Header file:"
+#~ msgstr "Restr reollin :"
+
+#~ msgid "Classes:"
+#~ msgstr "Renkadoù :"
+
+#~ msgid "&Project Types"
+#~ msgstr "&Rizhioù ar raktres"
+
+#~ msgid "Re&move Type"
+#~ msgstr "Dile&mel ar seurt"
+
+#~ msgid "&Edit Type..."
+#~ msgstr "&Aozañ ar c'hiz ..."
+
+#~ msgid "&New Type..."
+#~ msgstr "Rizh &nevez ..."
+
+#~ msgid "Icon"
+#~ msgstr "Arlun"
+
+#~ msgid "Edit Temp&late"
+#~ msgstr "Aozañ ar pa&trom"
+
+#~ msgid "Template Name"
+#~ msgstr "Anv ar patrom"
+
+#~ msgid "&New Template..."
+#~ msgstr "Patrom &nevez ..."
+
+#~ msgid "Re&move Template"
+#~ msgstr "Le&mel ar patrom"
+
+#~ msgid "&Edit Template"
+#~ msgstr "&Aozañ ar patrom"
+
+#~ msgid "File Template"
+#~ msgstr "Patromoù restr"
+
+#~ msgid "Template &name:"
+#~ msgstr "&Anv ar patrom :"
+
+#~ msgid "File Type"
+#~ msgstr "Rizh ar restr"
+
+#~ msgid "Type &extension:"
+#~ msgstr "&Astenn ar seurt :"
+
+#~ msgid "Type &name:"
+#~ msgstr "&Anv ar seurt :"
+
+#~ msgid "Type &description:"
+#~ msgstr "&Deskrivadur ar seurt :"
+
+#~ msgid "Group:"
+#~ msgstr "Strollad :"
+
+#~ msgid "Tooltips"
+#~ msgstr "Lagadennoù"
+
+#~ msgid "File List"
+#~ msgstr "Roll ar restroù"
+
+#, fuzzy
+#~ msgid "Projectviews"
+#~ msgstr "Doare ar raktres"
+
+#~ msgid "&Added:"
+#~ msgstr "&Ouzhpennet :"
+
+#~ msgid "&Sticky:"
+#~ msgstr "&Peget :"
+
+#~ msgid "&Default:"
+#~ msgstr "&Dre ziouer :"
+
+#~ msgid "File Group View"
+#~ msgstr "Gwell ar strolladoù restroù"
+
+#~ msgid "Pattern"
+#~ msgstr "Sil"
+
+#~ msgid "&Add Group..."
+#~ msgstr "&Ouzhpennañ ur strollad ..."
+
+#~ msgid "&Edit Group..."
+#~ msgstr "&Aozañ ar strollad ..."
+
+#~ msgid "De&lete Group"
+#~ msgstr "&Lemel ar strollad"
+
+#~ msgid "&Templates:"
+#~ msgstr "&Patromoù :"
+
+#~ msgid "Template"
+#~ msgstr "Patrom"
+
+#~ msgid "Suffixes"
+#~ msgstr "Dibennoù-ger"
+
+#~ msgid "&Suffixes:"
+#~ msgstr "&Dibennoù-ger :"
+
+#~ msgid "&ANSI"
+#~ msgstr "&ANSI"
+
+#~ msgid "&Linux"
+#~ msgstr "&Linux"
+
+#~ msgid "G&NU"
+#~ msgstr "G&NU"
+
+#~ msgid "&JAVA"
+#~ msgstr "&JAVA"
+
+#~ msgid "&User defined"
+#~ msgstr "&Spisaet gant an arveriad"
+
+#~ msgid "&Kernighan && Ritchie"
+#~ msgstr "&Kernighan && Ritchie"
+
+#~ msgid "Example"
+#~ msgstr "Skouer"
+
+#~ msgid "Li&nux style"
+#~ msgstr "Giz Li&nux"
+
+#~ msgid "Closes the dialog"
+#~ msgstr "Serriñ ar prenestr"
+
+#~ msgid "Regular Expression T&ype"
+#~ msgstr "S&eurt an troiennoù reolataet"
+
+#~ msgid "&QRegExp syntax"
+#~ msgstr "Ereadurezh &QRegExp"
+
+#~ msgid "Copy To"
+#~ msgstr "Eilañ da"
+
+#~ msgid "Traditional"
+#~ msgstr "Da gustum"
+
+#, fuzzy
+#~ msgid "Relative"
+#~ msgstr "erlec'hiañ"
+
+#~ msgid "Show \"Go To Definition\""
+#~ msgstr "Diskouez « Mont d'an dermenadur »"
+
+#~ msgid "Show \"CTags Lookup\""
+#~ msgstr "Diskouez « Klask CTAGS »"
+
+#~ msgid "Paths"
+#~ msgstr "Hentoù"
+
+#, fuzzy
+#~ msgid "Path to ctags binary:"
+#~ msgstr "Hent ar skeudennoù"
+
+#~ msgid "Tag"
+#~ msgstr "Liketenn"
+
+#~ msgid "Lookup:"
+#~ msgstr "Klask :"
+
+#~ msgid "Date:"
+#~ msgstr "Deiziad :"
+
+#~ msgid "Regenerate"
+#~ msgstr "Adgrouiñ"
+
+#, fuzzy
+#~ msgid "Project API Documentation"
+#~ msgstr "Kefluniadur"
+
+#~ msgid "Choose Topic"
+#~ msgstr "Dibabit an dodenn"
+
+#~ msgid "&Title:"
+#~ msgstr "&Titl :"
+
+#~ msgid "Database di&rectory:"
+#~ msgstr "Renkell ar stl&ennvon :"
+
+#~ msgid "O&ther"
+#~ msgstr "&All"
+
+#~ msgid "&Find in documentation"
+#~ msgstr "&Klask en teuliadur"
+
+#~ msgid "Fonts && Sizes"
+#~ msgstr "Nodrezhoù ha mentoù"
+
+#~ msgid "Fi&xed font:"
+#~ msgstr "No&drezh ingal :"
+
+#~ msgid "&Zoom factor:"
+#~ msgstr "Feur &strishaat :"
+
+#~ msgid "20"
+#~ msgstr "20"
+
+#~ msgid "40"
+#~ msgstr "40"
+
+#~ msgid "60"
+#~ msgstr "60"
+
+#~ msgid "80"
+#~ msgstr "80"
+
+#~ msgid "90"
+#~ msgstr "90"
+
+#~ msgid "95"
+#~ msgstr "95"
+
+#~ msgid "100"
+#~ msgstr "100"
+
+#~ msgid "105"
+#~ msgstr "105"
+
+#~ msgid "110"
+#~ msgstr "110"
+
+#~ msgid "120"
+#~ msgstr "120"
+
+#~ msgid "140"
+#~ msgstr "140"
+
+#~ msgid "160"
+#~ msgstr "160"
+
+#~ msgid "180"
+#~ msgstr "180"
+
+#~ msgid "200"
+#~ msgstr "200"
+
+#~ msgid "250"
+#~ msgstr "250"
+
+#~ msgid "300"
+#~ msgstr "300"
+
+#~ msgid "Find Documentation"
+#~ msgstr "Klask an teuliadur"
+
+#~ msgid "Always"
+#~ msgstr "Bepred"
+
+#~ msgid "Text and icons"
+#~ msgstr "Skrid hag arlunioù"
+
+#~ msgid "Tabbed Browsing"
+#~ msgstr "Furchal gant bevennigoù"
+
+#~ msgid "Open &new tab after current tab"
+#~ msgstr "Digeriñ ar vevennig &nevez goude ar vevennig red"
+
+#~ msgid "Show icons on document tabs"
+#~ msgstr "Diskouez arlunioù e bevennigoù an teul"
+
+#~ msgid "Show close button in tab bar"
+#~ msgstr "Diskouez an nozel serriñ e-barzh barenn ar bevennigoù"
+
+#, fuzzy
+#~ msgid "Scripting"
+#~ msgstr "Deskrivadur"
+
+#~ msgid "&Embedded Editor"
+#~ msgstr "Aozer &enframmet"
+
+#~ msgid "Do nothing"
+#~ msgstr "Ober netra"
+
+#~ msgid "Graphic Filter"
+#~ msgstr "Sil grafik"
+
+#~ msgid "TV mode"
+#~ msgstr "Mod TV"
+
+#~ msgid "2xSaI"
+#~ msgstr "2xSaI"
+
+#~ msgid "Super 2xSal"
+#~ msgstr "Super 2xSal"
+
+#~ msgid "Super Eagle"
+#~ msgstr "Super Eagle"
+
+#~ msgid "Additional parameters:"
+#~ msgstr "Rannbennadoù ouzhpenn :"
+
+#~ msgid "1x"
+#~ msgstr "1x"
+
+#~ msgid "2x"
+#~ msgstr "2x"
+
+#~ msgid "3x"
+#~ msgstr "3x"
+
+#~ msgid "4x"
+#~ msgstr "4x"
+
+#~ msgid "Full screen"
+#~ msgstr "Skramm leun"
+
+#~ msgid "Start in external terminal"
+#~ msgstr "Loc'hañ e-barzh un termenell diavaez"
+
+#~ msgid "Ada Compiler"
+#~ msgstr "Dastumer Ada"
+
+#~ msgid "Ada &compiler:"
+#~ msgstr "&Dastumer Ada :"
+
+#~ msgid "Compiler co&mmand:"
+#~ msgstr "Urzh&iad an dastumer :"
+
+#~ msgid "&Build file:"
+#~ msgstr "&Sevel ar restr :"
+
+#~ msgid "Class&path"
+#~ msgstr "&Hent ar renkad"
+
+#~ msgid "Value 3"
+#~ msgstr "Gwerzh 3"
+
+#~ msgid "C&ustom directory:"
+#~ msgstr "Renkell &diouzhoc'h :"
+
+#~ msgid "Program"
+#~ msgstr "Goulev"
+
+#~ msgid "Start in external &terminal"
+#~ msgstr "Loc'hañ e-barzh un &termenell diavaez"
+
+#~ msgid "Start the main program in an external terminal (konsole)"
+#~ msgstr "Loc'hañ ar programm kentañ e-barzh un termenell diavaez (konsole)"
+
+#~ msgid "[REMOVE SUBPROJECT]"
+#~ msgstr "[LEMEL AN ISRAKTRES]"
+
+#~ msgid "&Information"
+#~ msgstr "&Titouroù"
+
+#~ msgid "[REMOVE QUESTION]"
+#~ msgstr "[LEMEL AR C'HOULENN]"
+
+#~ msgid "A&dd / Copy"
+#~ msgstr "&Ouzhpennañ / Eilañ"
+
+#~ msgid "&Name of make executable:"
+#~ msgstr "&Anv ar goulev make :"
+
+#~ msgid "Widget Properties"
+#~ msgstr "Dibarzhoù ar widget"
+
+#~ msgid "Caption:"
+#~ msgstr "Skridennad :"
+
+#~ msgid "New Item"
+#~ msgstr "Tra nevez"
+
+#~ msgid "QMake Subproject Configuration"
+#~ msgstr "Kefluniadur an israktres QMake"
+
+#, fuzzy
+#~ msgid "&Basics"
+#~ msgstr "&Renkad"
+
+#~ msgid "&Application"
+#~ msgstr "&Meziant"
+
+#~ msgid "Create an application"
+#~ msgstr "Krouiñ un arload"
+
+#~ msgid "Librar&y"
+#~ msgstr "Levrao&ueg"
+
+#~ msgid "Create a library"
+#~ msgstr "Krouiñ ul levraoueg"
+
+#~ msgid "S&ubdirectories"
+#~ msgstr "&Is-renkelloù"
+
+#~ msgid "Target"
+#~ msgstr "Gwenn"
+
+#~ msgid "Output &file:"
+#~ msgstr "&Restr ezkas :"
+
+#~ msgid "&Browse..."
+#~ msgstr "&Furchañ ..."
+
+#~ msgid "Browse"
+#~ msgstr "Furchal"
+
+#~ msgid "Target Installation"
+#~ msgstr "Staliadur ar wenn"
+
+#~ msgid "I&nstall"
+#~ msgstr "S&taliañ"
+
+#~ msgid "&Installation path:"
+#~ msgstr "Hent ar staliadur :"
+
+#~ msgid "Build Mode"
+#~ msgstr "Mod sevel"
+
+#~ msgid "&Release"
+#~ msgstr "&Rummad"
+
+#~ msgid "Open&GL"
+#~ msgstr "Open&GL"
+
+#~ msgid "X&11"
+#~ msgstr "X&11"
+
+#~ msgid "RTT&I"
+#~ msgstr "RTT&I"
+
+#~ msgid "&STL"
+#~ msgstr "&STL"
+
+#~ msgid "Console"
+#~ msgstr "Letrin"
+
+#~ msgid "Library Options"
+#~ msgstr "Dibarzhoù al levraoueg"
+
+#~ msgid "St&atic library"
+#~ msgstr "Levraoueg st&atek"
+
+#~ msgid "Pl&ugin"
+#~ msgstr "Lu&gent"
+
+#~ msgid "Create pkgconf file"
+#~ msgstr "Krouiñ ur restr pkgconf"
+
+#, fuzzy
+#~ msgid "&Build as DLL"
+#~ msgstr "&Sevel"
+
+#~ msgid "Librar&y version:"
+#~ msgstr "Stumm al levraou&eg :"
+
+#~ msgid "Move U&p"
+#~ msgstr "Pi&gnit"
+
+#~ msgid "Move Dow&n"
+#~ msgstr "Diskenni&t"
+
+#~ msgid "Libr&aries"
+#~ msgstr "Levr&aouegoù"
+
+#~ msgid "External Libraries"
+#~ msgstr "Levraouegoù diavaez"
+
+#~ msgid "Targets in Project"
+#~ msgstr "Gwennioù e-barzh ar raktres"
+
+#~ msgid "Miscellaneous Targets"
+#~ msgstr "Gwennioù a bep seurt"
+
+#~ msgid "Bu&ild Options"
+#~ msgstr "Dibarzhoù se&vel"
+
+#~ msgid "Compiler Options"
+#~ msgstr "Dibarzhoù an dastumer"
+
+#~ msgid "&MOC files:"
+#~ msgstr "Restroù &MOC :"
+
+#~ msgid "Corba"
+#~ msgstr "Corba"
+
+#~ msgid "Compiler o&ptions:"
+#~ msgstr "D&ibarzhoù an dastumer :"
+
+#~ msgid "&IDL compiler:"
+#~ msgstr "Dastumer &IDL :"
+
+#~ msgid "&New"
+#~ msgstr "&Nevez"
+
+#~ msgid "Select Subproject"
+#~ msgstr "Dibab un israktres"
+
+#~ msgid "Subprojects"
+#~ msgstr "Israktresoù"
+
+#~ msgid "Haskell Compiler/Interpreter"
+#~ msgstr "Dastumer/Kendroer Haskell"
+
+#~ msgid "&Options:"
+#~ msgstr "&Dibaboù :"
+
+#~ msgid "Haskell &compiler/interpreter:"
+#~ msgstr "&Dastumer/Kendroer Haskell :"
+
+#~ msgid "Co&mmand:"
+#~ msgstr "&Urzhiad :"
+
+#~ msgid "Pascal Compiler"
+#~ msgstr "Dastumer Pascal"
+
+#~ msgid "Con&figuration:"
+#~ msgstr "Ke&fluniadur :"
+
+#~ msgid "Compiler op&tions:"
+#~ msgstr "Di&barzhoù an dastumer :"
+
+#~ msgid "&Pascal compiler:"
+#~ msgstr "Dastumer &Pascal :"
+
+#~ msgid "Build Tool"
+#~ msgstr "Ostilh sevel"
+
+#~ msgid "Name of make e&xecutable:"
+#~ msgstr "Anv ar goulev make :"
+
+#~ msgid "E&nvironment:"
+#~ msgstr "E&ndro :"
+
+#~ msgid "Co&py"
+#~ msgstr "&Eilañ"
+
+#~ msgid "Confi&guration"
+#~ msgstr "Keflu&niadur"
+
+#~ msgid "Script Project Options"
+#~ msgstr "Dibarzhoù ar raktres urzhiaoueg"
+
+#~ msgid "Subproject Information"
+#~ msgstr "Titouroù diwar-benn an israktres"
+
+#~ msgid "Target:"
+#~ msgstr "Gwenn :"
+
+#~ msgid "[DIRECTORY]"
+#~ msgstr "[RENKELL]"
+
+#~ msgid "[TARGET]"
+#~ msgstr "[GWENN]"
+
+#~ msgid "A&dd All"
+#~ msgstr "O&uzhpennañ an holl re"
+
+#~ msgid "&Add Selected"
+#~ msgstr "&Ouzhpennañ an hini dibabet"
+
+#~ msgid "R&emove All"
+#~ msgstr "L&emel an holl re"
+
+#~ msgid "Removes all added files."
+#~ msgstr "Lemel ar ra pep restr ouzhpenn."
+
+#~ msgid "&Remove Selected"
+#~ msgstr "&Lemel an hini dibabet"
+
+#~ msgid "Removes the selected files."
+#~ msgstr "Lemel a ra restroù diuzet."
+
+#~ msgid "Add New Application .desktop File"
+#~ msgstr "Ouzhpennañ ur restr meziant .desktop nevez"
+
+#~ msgid "&Application File"
+#~ msgstr "Restr &meziant"
+
+#~ msgid "Start in t&erminal"
+#~ msgstr "Loc'hañ e-barzh un t&ermenell"
+
+#~ msgid "Games"
+#~ msgstr "C'hoarioù"
+
+#~ msgid "Development"
+#~ msgstr "Diorren"
+
+#~ msgid "Graphics"
+#~ msgstr "Grafikoù"
+
+#~ msgid "Multimedia"
+#~ msgstr "Liesvedia"
+
+#~ msgid "Office"
+#~ msgstr "Burev"
+
+#~ msgid "System"
+#~ msgstr "Reizhiad"
+
+#~ msgid "Toys"
+#~ msgstr "C'hoarielloù"
+
+#~ msgid "Utilities"
+#~ msgstr "Mavegoù"
+
+#~ msgid "&Icon:"
+#~ msgstr "&Arlun :"
+
+#~ msgid "&Section:"
+#~ msgstr "&Dachenn :"
+
+#~ msgid "Mime &Types"
+#~ msgstr "&Rizhioù Mime"
+
+#~ msgid "Automake Manager - Choose Target"
+#~ msgstr "Merour Automake - Diuzit ur wenn"
+
+#~ msgid "Add new files to m&y active target"
+#~ msgstr "Ouzhpennañ ar restroù nevez d'am wenn red"
+
+#~ msgid "Choose &another target"
+#~ msgstr "Dibabit ur gwenn &all"
+
+#~ msgid "Choose &Target"
+#~ msgstr "Dibabit ur &gwenn"
+
+#~ msgid "Add New Service"
+#~ msgstr "Ouzhpennañ ur servijer nevez"
+
+#~ msgid "&Service File"
+#~ msgstr "Restr ar &Servijer"
+
+#~ msgid "&Library:"
+#~ msgstr "&Levraoueg :"
+
+#~ msgid "Service &Types"
+#~ msgstr "&Rizhioù ar servij"
+
+#~ msgid "Target Options"
+#~ msgstr "Dibarzhoù ar wenn"
+
+#~ msgid "&Flags"
+#~ msgstr "&Bannielioù"
+
+#~ msgid "Li&nker flags (LDFLAGS):"
+#~ msgstr "Bannielioù al lia&mmer (LDFLAGS) :"
+
+#~ msgid "O&ther:"
+#~ msgstr "&All :"
+
+#~ msgid "&Libraries"
+#~ msgstr "&Levraouegoù"
+
+#~ msgid "Ar&guments"
+#~ msgstr "Ar&ventennoù"
+
+#~ msgid "Configure Options"
+#~ msgstr "Kefluniañ an dibaboù"
+
+#~ msgid "&Linker flags (LDFLAGS):"
+#~ msgstr "Bannielioù al &liammer (LDFLAGS) :"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "Compiler f&lags (CFLAGS):"
+#~ msgstr "Ba&nnielioù an dastumer (CFLAGS) :"
+
+#~ msgid "Compiler co&mmand (CC):"
+#~ msgstr "Urzh&iad an dastumer (CC) :"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Compiler co&mmand (CXX):"
+#~ msgstr "Urzh&iad an dastumer (CXX) :"
+
+#~ msgid "Compiler f&lags (CXXFLAGS):"
+#~ msgstr "Ba&nnielioù an dastumer (CXXFLAGS) :"
+
+#~ msgid "Fortran"
+#~ msgstr "Fortran"
+
+#~ msgid "Compiler co&mmand (F77):"
+#~ msgstr "Urzh&iad an dastumer (F77) :"
+
+#~ msgid "Compiler f&lags (FFLAGS):"
+#~ msgstr "Ba&nnielioù an dastumer (FFLAGS) :"
+
+#~ msgid "Add New Subproject"
+#~ msgstr "Ouzhpennañ un israktres nevez"
+
+#~ msgid "Subproject"
+#~ msgstr "Israktres"
+
+#~ msgid "Subproject &name:"
+#~ msgstr "&Anv an israktres :"
+
+#~ msgid "Menu Text"
+#~ msgstr "Skrid ar meuziad"
+
+#~ msgid "Command Type"
+#~ msgstr "Seurt urzhiad"
+
+#~ msgid "Add New Icon"
+#~ msgstr "Ouzhpennañ un Arlun Nevez"
+
+#~ msgid "&Type:"
+#~ msgstr "&Seurt :"
+
+#~ msgid "&Size:"
+#~ msgstr "&Ment :"
+
+#~ msgid "unknown"
+#~ msgstr "dianav"
+
+#~ msgid "Remove Target From [SUBPROJECT]"
+#~ msgstr "Lemel ar wenn eus [ISRAKTRES]"
+
+#~ msgid "[TARGET DIRECTORY]"
+#~ msgstr "[RENKELL WENN]"
+
+#~ msgid "[TARGET NAME]"
+#~ msgstr "[ANV AR WENN]"
+
+#~ msgid "&Target Information"
+#~ msgstr "Titouroù diwar-benn ar &wenn"
+
+#~ msgid "Subproject Options"
+#~ msgstr "Dibarzhoù an israktres"
+
+#~ msgid "Co&mpiler"
+#~ msgstr "Da&stumer"
+
+#~ msgid "Compiler flags for C compiler (CFLA&GS):"
+#~ msgstr "Bannielioù evit an dastumer (C&FLAGS) :"
+
+#~ msgid "Compiler flags for C++ compiler (C&XXFLAGS):"
+#~ msgstr "Bannielioù evit an dastumer (C&XXFLAGS) :"
+
+#~ msgid "Compiler flags for Fortran compiler (&FFLAGS):"
+#~ msgstr "Bannielioù evit an dastumer (&FFLAGS) :"
+
+#~ msgid "Directories in&side project:"
+#~ msgstr "Renkelloù e-&barzh ar raktres :"
+
+#~ msgid "&Prefixes"
+#~ msgstr "&Rakgerioù"
+
+#~ msgid "Path"
+#~ msgstr "Hent"
+
+#~ msgid "&Build Order"
+#~ msgstr "&Sevel un hini all"
+
+#~ msgid "&Target"
+#~ msgstr "&Gwenn"
+
+#~ msgid "&Primary:"
+#~ msgstr "&Kentañ :"
+
+#~ msgid "Pre&fix:"
+#~ msgstr "Rak&ger :"
+
+#~ msgid "File &name:"
+#~ msgstr "Anv ar &restr :"
+
+#~ msgid "Linker Flags (&LDFLAGS)"
+#~ msgstr "Bannielioù al liammer (&LDFLAGS)"
+
+#~ msgid "Ot&her:"
+#~ msgstr "&All :"
+
+#~ msgid "Add New Created File to Target"
+#~ msgstr "Ouzhpennañ ar restroù nevez d'ar wenn"
+
+#~ msgid "File Information"
+#~ msgstr "Titouroù diwar-benn ar restr"
+
+#~ msgid "&Use file template"
+#~ msgstr "&Implij ur restr patrom"
+
+#~ msgid "New file &name (with extension):"
+#~ msgstr "&Anv restr nevez (gant astenn) :"
+
+#~ msgid "Remove File From This Target"
+#~ msgstr "Dilemel ar restr eus ar wenn-mañ"
+
+#~ msgid "&File Information"
+#~ msgstr "&Titouroù diwar-benn ar restr"
+
+#~ msgid "[DIRECTORY NAME]"
+#~ msgstr "[ANV AR RENKELL]"
+
+#~ msgid "Wizard Page Editor"
+#~ msgstr "Aozer pajennoù ar skoazeller"
+
+#~ msgid "Wizard pages:"
+#~ msgstr "Pajennoù ar skoazeller :"
+
+#~ msgid "Apply all changes."
+#~ msgstr "Arloañ an holl gemmoù."
+
+#~ msgid "Preview Window"
+#~ msgstr "Prenestr ar ragwel"
+
+#~ msgid "ButtonGroup"
+#~ msgstr "Strollad an nozelioù"
+
+#~ msgid "ButtonGroup2"
+#~ msgstr "Strollad an nozelioù 2"
+
+#~ msgid ""
+#~ "<p>\n"
+#~ "<a href=\"http://www.trolltech.com/\">http://www.trolltech.com</a>\n"
+#~ "</p>\n"
+#~ "<p>\n"
+#~ "<a href=\"http://www.kde.org/\">http://www.kde.org</a>\n"
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>\n"
+#~ "<a href=\"http://www.trolltech.com/\">http://www.trolltech.com</a>\n"
+#~ "</p>\n"
+#~ "<p>\n"
+#~ "<a href=\"http://www.kde.org/\">http://www.kde.org</a>\n"
+#~ "</p>"
+
+#~ msgid "Create a new form using the selected template."
+#~ msgstr "Krouiñ ur paperenn-reol nevez gant ar patrom dibabet."
+
+#~ msgid "&Insert into:"
+#~ msgstr "&Enlakaat e-barzh :"
+
+#~ msgid "View & Edit Connections"
+#~ msgstr "Sell ouzh & aozañ ar gevreadennoù"
+
+#~ msgid "Select &palette:"
+#~ msgstr "Dibabit an &daolenn-livioù :"
+
+#~ msgid "Active Palette"
+#~ msgstr "Daolenn-livioù bev"
+
+#~ msgid "Inactive Palette"
+#~ msgstr "Daolenn-livioù marv"
+
+#~ msgid "Disabled Palette"
+#~ msgstr "Daolenn-livioù marv"
+
+#~ msgid "Auto"
+#~ msgstr "Emgefreek"
+
+#~ msgid "Background"
+#~ msgstr "Drekleur"
+
+#~ msgid "Foreground"
+#~ msgstr "War-c'horre"
+
+#~ msgid "Button"
+#~ msgstr "Nozel"
+
+#~ msgid "Base"
+#~ msgstr "Sol"
+
+#~ msgid "ButtonText"
+#~ msgstr "Skrid an nozelioù"
+
+#~ msgid "Link"
+#~ msgstr "Liamm"
+
+#~ msgid "Choose pi&xmap:"
+#~ msgstr "Dibabit ur pi&ksmap :"
+
+#~ msgid "Select a pixmap"
+#~ msgstr "Dibab ur piksmap"
+
+#~ msgid "&Select color:"
+#~ msgstr "&Dibabit ul liv :"
+
+#~ msgid "Choose a color"
+#~ msgstr "Dibabit ul liv"
+
+#~ msgid "Dark"
+#~ msgstr "Teñval"
+
+#~ msgid "Select co&lor:"
+#~ msgstr "Dibabit ul &liv :"
+
+#~ msgid "R&eplace:"
+#~ msgstr "&Erlec'hiañ :"
+
+#~ msgid "&Replace"
+#~ msgstr "&Erlec'hiañ"
+
+#~ msgid "Replace &All"
+#~ msgstr "Erlec'hiañ pep tra"
+
+#~ msgid "Case &sensitive"
+#~ msgstr "Evezh&iek ouzh ar c'hef"
+
+#~ msgid "Forwar&d"
+#~ msgstr "War-ra&ok"
+
+#~ msgid "Bac&kward"
+#~ msgstr "War&-dreñv"
+
+#~ msgid "Edit Actions"
+#~ msgstr "Aozañ an obererezhioù"
+
+#~ msgid "Connection Details"
+#~ msgstr "Mududoù ar gevreadenn"
+
+#~ msgid "&New Item"
+#~ msgstr "Tra &nevez"
+
+#~ msgid "Add an item"
+#~ msgstr "Ouzhpennañ un hini"
+
+#~ msgid "Delete the selected item."
+#~ msgstr "Lemel an hini dibabet."
+
+#~ msgid "&Item Properties"
+#~ msgstr "&Dibarzhoù an dra"
+
+#~ msgid "&Text:"
+#~ msgstr "&Skrid :"
+
+#~ msgid "Change text"
+#~ msgstr "Kemmañ ar skrid"
+
+#~ msgid "&Pixmap:"
+#~ msgstr "&Piksmap :"
+
+#~ msgid "Delete Pixmap"
+#~ msgstr "Lemel ur piksmap"
+
+#~ msgid "Select a Pixmap"
+#~ msgstr "Dibab ur piksmap"
+
+#~ msgid "Create Template"
+#~ msgstr "Krouiñ ur patrom"
+
+#~ msgid "Name of the new template"
+#~ msgstr "Anv ar patrom nevez"
+
+#~ msgid "Enter the name of the new template"
+#~ msgstr "Roit anv ar patrom nevez :"
+
+#~ msgid "Creates the new template"
+#~ msgstr "Krouiñ a ra ar patrom nevez"
+
+#~ msgid "Closes the Dialog"
+#~ msgstr "Serriñ ar c'hendiviz"
+
+#~ msgid "Plu&gin Paths"
+#~ msgstr "Hentoù al &lugent"
+
+#~ msgid "Ge&neral"
+#~ msgstr "&Pennañ"
+
+#~ msgid "Show &splash screen on startup"
+#~ msgstr "Diskouez ar skramm-&degemer pa loc'her"
+
+#~ msgid "Show Splashscreen"
+#~ msgstr "Diskouez ar skramm-degemer"
+
+#~ msgid "G&rid"
+#~ msgstr "&Kael"
+
+#~ msgid "Grid resolution"
+#~ msgstr "Spister ar gael"
+
+#~ msgid "Grid-&X:"
+#~ msgstr "Kael X :"
+
+#~ msgid "Grid-&Y:"
+#~ msgstr "Kael Y :"
+
+#~ msgid "Backgro&und"
+#~ msgstr "&Drekleur"
+
+#~ msgid "Co&lor"
+#~ msgstr "&Liv"
+
+#~ msgid "Use a background color"
+#~ msgstr "Implij ul liv drekleur"
+
+#~ msgid "Use a background color."
+#~ msgstr "Implij ul liv drekleur."
+
+#~ msgid "&Pixmap"
+#~ msgstr "&Piksmap"
+
+#~ msgid "Choose a pixmap file."
+#~ msgstr "Dibabit ur restr piksmap."
+
+#~ msgid "&Items"
+#~ msgstr "&Traoù"
+
+#~ msgid "Item Properties"
+#~ msgstr "Dibarzhoù an dra"
+
+#~ msgid "Pi&xmap:"
+#~ msgstr "Pi&ksmap :"
+
+#~ msgid "Change column"
+#~ msgstr "Kemmañ ar bann"
+
+#~ msgid "Colu&mn:"
+#~ msgstr "&Bann :"
+
+#~ msgid "The list of items."
+#~ msgstr "Roll an traoù."
+
+#~ msgid "New &Subitem"
+#~ msgstr "&Istra nevez"
+
+#~ msgid "Move up"
+#~ msgstr "Pignit"
+
+#~ msgid "Move down"
+#~ msgstr "Diskennit"
+
+#~ msgid "Move left"
+#~ msgstr "Fiñval d'a-gleiz"
+
+#~ msgid "Move right"
+#~ msgstr "Fiñval d'a-zehou"
+
+#~ msgid "Enter column text"
+#~ msgstr "Roit skrid ar vann"
+
+#~ msgid "&Delete Column"
+#~ msgstr "&Lemel ar bann"
+
+#~ msgid "Delete column"
+#~ msgstr "Lemel ar bann"
+
+#~ msgid "Deletes the selected Column."
+#~ msgstr "Dilemel ar bann diuzet."
+
+#~ msgid "&New Column"
+#~ msgstr "Bann &nevez"
+
+#~ msgid "Add a Column"
+#~ msgstr "Ouzhpennañ ur bann"
+
+#~ msgid "The list of columns."
+#~ msgstr "Roll ar bannoù."
+
+#~ msgid "Build Palette"
+#~ msgstr "Sevel an daolenn-livioù"
+
+#~ msgid "Back&ground:"
+#~ msgstr "Drek&leur :"
+
+#~ msgid "Edit Custom Widgets"
+#~ msgstr "Aozañ ar widgetoù diouzhoc'h ..."
+
+#, fuzzy
+#~ msgid "&New Widget"
+#~ msgstr "Restr nevez"
+
+#~ msgid "Add new custom widget."
+#~ msgstr "Ouzhpennañ ur widget diouzhoc'h."
+
+#~ msgid "&Delete Widget"
+#~ msgstr "&Lemel ar widget"
+
+#~ msgid "Delete custom widget"
+#~ msgstr "Dilemel ar widget diouzhoc'h"
+
+#~ msgid "Closes the Dialog."
+#~ msgstr "Serriñ ar c'hendiviz."
+
+#~ msgid "&Load Descriptions..."
+#~ msgstr "&Kargañ an deskrivadurioù ..."
+
+#~ msgid "&Save Descriptions..."
+#~ msgstr "&Enrollañ an deskrivadurioù ..."
+
+#~ msgid "Saves widget description file"
+#~ msgstr "Enrollañ restr deskrivadur ar widget"
+
+#~ msgid "Enter filename"
+#~ msgstr "Roit anv ar restr"
+
+#~ msgid "Choose headerfile"
+#~ msgstr "Dibabit restr ar reollin"
+
+#~ msgid "Change classname"
+#~ msgstr "Kemmañ anv ar renkad"
+
+#~ msgid "Heade&rfile:"
+#~ msgstr "Restr ar &reollin :"
+
+#~ msgid "Cl&ass:"
+#~ msgstr "Re&nkad :"
+
+#~ msgid "Pixmap:"
+#~ msgstr "Piksmap :"
+
+#~ msgid "Size p&olicy:"
+#~ msgstr "P&olitikerez ar ment :"
+
+#~ msgid "Fixed"
+#~ msgstr "Digemm"
+
+#~ msgid "Maximum"
+#~ msgstr "Uhelañ"
+
+#~ msgid "Preferred"
+#~ msgstr "Gwellañ karet"
+
+#~ msgid "Expanding"
+#~ msgstr "Emaon o tigeriñ"
+
+#~ msgid "Si&gnals"
+#~ msgstr "A&rhentoù"
+
+#~ msgid "N&ew Signal"
+#~ msgstr "Arhent nevez"
+
+#~ msgid "Dele&te Signal"
+#~ msgstr "Dile&mel an arhent"
+
+#~ msgid "S&ignal:"
+#~ msgstr "Ar&hent :"
+
+#~ msgid "public"
+#~ msgstr "foran"
+
+#~ msgid "protected"
+#~ msgstr "gwarezet"
+
+#~ msgid "&Properties"
+#~ msgstr "&Perzhioù"
+
+#~ msgid "N&ew Property"
+#~ msgstr "D&ibarzh nevez"
+
+#~ msgid "Dele&te Property"
+#~ msgstr "Dil&emel ar perzh"
+
+#~ msgid "Delete property"
+#~ msgstr "Lemel ar perzh"
+
+#~ msgid "CString"
+#~ msgstr "CString"
+
+#, fuzzy
+#~ msgid "StringList"
+#~ msgstr "Kefluniadur"
+
+#~ msgid "Color"
+#~ msgstr "Liv"
+
+#~ msgid "Point"
+#~ msgstr "Pik"
+
+#~ msgid "Pixmap"
+#~ msgstr "Piksmap"
+
+#~ msgid "Palette"
+#~ msgstr "Taolenn-livioù"
+
+#~ msgid "SizePolicy"
+#~ msgstr "Politikerez ar ment"
+
+#~ msgid "P&roperty name:"
+#~ msgstr "A&nv ar perzh :"
+
+#~ msgid "Find Text"
+#~ msgstr "Klask ur skrid"
+
+#~ msgid "F&ind:"
+#~ msgstr "K&avout :"
+
+#~ msgid "&Find"
+#~ msgstr "&Klask"
+
+#~ msgid "Version 3.2"
+#~ msgstr "Doare 3.2"
+
+#~ msgid "Copyright (C) 2000-2003 Trolltech AS. All Rights Reserved."
+#~ msgstr "Copyright (C) 2000-2003 Trolltech AS. Pep gwir miret strizh."
+
+#~ msgid "&Project file:"
+#~ msgstr "Restr ar &raktres :"
+
+#~ msgid "&Language:"
+#~ msgstr "&Yezh :"
+
+#~ msgid "&Database file:"
+#~ msgstr "&Restr ar stlennvon :"
+
+#~ msgid "Form Settings"
+#~ msgstr "Dibarzhoù ar paperenn-reol"
+
+#~ msgid "Pixmaps"
+#~ msgstr "Piksmap"
+
+#, fuzzy
+#~ msgid "Save in&line"
+#~ msgstr "Enrollañ an ho&ll re"
+
+#~ msgid "Project &image file"
+#~ msgstr "Restr &skeudenn ar raktres"
+
+#~ msgid "Change class name"
+#~ msgstr "Kemmañ anv ar renkad"
+
+#~ msgid "A&uthor:"
+#~ msgstr "O&berour :"
+
+#~ msgid "Enter your name."
+#~ msgstr "Roit hoc'h anv."
+
+#~ msgid "Enter a comment about the form."
+#~ msgstr "Roit un askelenn diwar-benn ar paperenn-reol."
+
+#~ msgid "La&youts"
+#~ msgstr "Doa&reoù"
+
+#~ msgid "S&pacing:"
+#~ msgstr "S&pas :"
+
+#~ msgid "Ma&rgin:"
+#~ msgstr "B&evenn :"
+
+#~ msgid "Edit Database Connection"
+#~ msgstr "Aozañ kevreadenn ar stlennvon"
+
+#~ msgid "&Database name:"
+#~ msgstr "&Anv ar stlennvon :"
+
+#~ msgid "&Username:"
+#~ msgstr "Anv &arveriad :"
+
+#~ msgid "&Password:"
+#~ msgstr "&Tremenger :"
+
+#~ msgid "D&river:"
+#~ msgstr "Stu&rier :"
+
+#~ msgid "&Hostname:"
+#~ msgstr "&Anv an ostiz :"
+
+#~ msgid "Delete the selected item"
+#~ msgstr "Lemel an hini dibabet"
+
+#~ msgid "Move the selected item down."
+#~ msgstr "Diskennit an dra dibabet."
+
+#~ msgid "Edit Text"
+#~ msgstr "Aozañ ar skrid"
+
+#~ msgid "Choose Pixmap"
+#~ msgstr "Dibabit ur piksmap"
+
+#~ msgid "QPixmap("
+#~ msgstr "QPixmap("
+
+#~ msgid ")"
+#~ msgstr ")"
+
+#~ msgid "Edit Table"
+#~ msgstr "Aozañ an daolenn"
+
+#~ msgid "&Field:"
+#~ msgstr "&Tachenn :"
+
+#~ msgid "<no table>"
+#~ msgstr "<taolenn ebet>"
+
+#~ msgid "&Rows"
+#~ msgstr "&Linennoù"
+
+#~ msgid "&New Row"
+#~ msgstr "Linenn &nevez"
+
+#~ msgid "&Delete Row"
+#~ msgstr "&Lemel ul linenn"
+
+#~ msgid "Available Tools"
+#~ msgstr "Ostilhoù da gaout"
+
+#~ msgid "Qt Designer - New/Open"
+#~ msgstr "Qt Designer - Nevez/Digeriñ"
+
+#~ msgid "&New File/Project"
+#~ msgstr "&Restr/Raktres nevez"
+
+#~ msgid "&Open File/Project"
+#~ msgstr "&Digeriñ ur restr/raktres"
+
+#~ msgid "Manage Image Collection"
+#~ msgstr "Merañ dastumad ar skeudennoù"
+
+#~ msgid "Goto Line"
+#~ msgstr "Mont d'al linenn"
+
+#~ msgid "&Line:"
+#~ msgstr "&Linenn :"
+
+#~ msgid "&Goto"
+#~ msgstr "&Kit da"
+
+#~ msgid "Font Properties"
+#~ msgstr "Dibarzhoù an nodrezh"
+
+#~ msgid "&Font:"
+#~ msgstr "&Nodrezh :"
+
+#, fuzzy
+#~ msgid "Rel. &size:"
+#~ msgstr "&Ment :"
+
+#~ msgid "C&olor:"
+#~ msgstr "L&iv :"
+
+#~ msgid "-4"
+#~ msgstr "-4"
+
+#~ msgid "-3"
+#~ msgstr "-3"
+
+#~ msgid "-2"
+#~ msgstr "-2"
+
+#~ msgid "-1"
+#~ msgstr "-1"
+
+#~ msgid "+1"
+#~ msgstr "+1"
+
+#~ msgid "+2"
+#~ msgstr "+2"
+
+#~ msgid "+3"
+#~ msgstr "+3"
+
+#~ msgid "+4"
+#~ msgstr "+4"
+
+#~ msgid "Edit Database Connections"
+#~ msgstr "Aozañ kevreadennoù ar stlennvon"
+
+#~ msgid "&New Connection"
+#~ msgstr "Kevreadenn &nevez"
+
+#~ msgid "&Delete Connection"
+#~ msgstr "&Dilemel ar gevreadenn"
+
+#~ msgid "Connec&t"
+#~ msgstr "Kevrea&ñ"
+
+#~ msgid "In Use"
+#~ msgstr "Implijet"
+
+#~ msgid "&New Function"
+#~ msgstr "Fonksion &nevez ..."
+
+#~ msgid "&Delete Function"
+#~ msgstr "&Lemel ar fonksion"
+
+#~ msgid "Delete function"
+#~ msgstr "Lemel ar fonksion"
+
+#~ msgid "F&unction:"
+#~ msgstr "F&onksion :"
+
+#~ msgid "private"
+#~ msgstr "prevez"
+
+#~ msgid "Problems"
+#~ msgstr "Kudennoù"
+
+#~ msgid "Done"
+#~ msgstr "Graet"
+
+#~ msgid "Level"
+#~ msgstr "Live"
+
+#~ msgid "Problem"
+#~ msgstr "Diaster"
+
+#~ msgid "Remove Database"
+#~ msgstr "Lemel ar stlennvon"
+
+#~ msgid "Cannot write to header file"
+#~ msgstr "Ne m'eus ket gallet skrivañ er restr reollin"
+
+#~ msgid "Unset"
+#~ msgstr "Anlakaet"
+
+#~ msgid "replace"
+#~ msgstr "erlec'hiañ"
+
+#~ msgid "You must enter a classname."
+#~ msgstr "Ret eo deoc'h reiñ anv ar renkad."
+
+#~ msgid "You must enter a name for the header file."
+#~ msgstr "Ret eo deoc'h reiñ un anv evit restr ar reollin."
+
+#~ msgid "New Class..."
+#~ msgstr "Renkad nevez ..."
+
+#~ msgid "Extract Interface..."
+#~ msgstr "Eztennañ an etrefas ..."
+
+#~ msgid "Please select a class."
+#~ msgstr "Dibabit ur renkad mar plij."
+
+#~ msgid "Type of %1 is %2"
+#~ msgstr "Rizh %1 a zo %2"
+
+#~ msgid "Todo"
+#~ msgstr "Traoù d'ober"
+
+#, fuzzy
+#~ msgid "Filtered: %1"
+#~ msgstr "Anv ar restr :"
+
+#~ msgid "Column"
+#~ msgstr "Bann"
+
+#~ msgid "Looking for %1..."
+#~ msgstr "Emaon o klask evit %1 ..."
+
+#~ msgid "Level 1"
+#~ msgstr "Live 1"
+
+#~ msgid "Level 2"
+#~ msgstr "Live 2"
+
+#~ msgid "Dialect"
+#~ msgstr "Rannyezh"
+
+#~ msgid "GNU C Compiler Options"
+#~ msgstr "Dibarzhoù dastumer C GNU"
+
+#~ msgid "GNU C++ Compiler Options"
+#~ msgstr "Dibarzhoù dastumer C++ GNU"
+
+#~ msgid "GNU Fortran 77 Compiler Options"
+#~ msgstr "Dibarzhoù dastumer Fortran 77 GNU"
+
+#~ msgid "Dock to Panel"
+#~ msgstr "Ensoc'hañ er panell"
+
+#~ msgid "Dock to Panel && Iconify KDevelop"
+#~ msgstr "Ensoc'hañ er panell && arlunañ KDevelop"
+
+#~ msgid "Activate"
+#~ msgstr "Bevaat"
+
+#~ msgid "No source: %1"
+#~ msgstr "N'eus tarzh ebet : %1"
+
+#~ msgid "No stack"
+#~ msgstr "Pilad ebet"
+
+#~ msgid " <Alt+A>"
+#~ msgstr " <Alt+A>"
+
+#~ msgid " <Return>"
+#~ msgstr " <Distro>"
+
+#~ msgid "File:line"
+#~ msgstr "Restr:linenn"
+
+#~ msgid "Method()"
+#~ msgstr "Hentenn()"
+
+#~ msgid "Copy to Clipboard"
+#~ msgstr "Eilañ d'ar golver"
+
+#~ msgid "Memory/Misc Viewer"
+#~ msgstr "Gweler memor/a bep seurt"
+
+#~ msgid "Memory&View:"
+#~ msgstr "&Gwell ar memor :"
+
+#~ msgid "&Memory"
+#~ msgstr "&Memor"
+
+#~ msgid "Directories to Parse"
+#~ msgstr "Renkelloù da lenn"
+
+#~ msgid "Undefined function"
+#~ msgstr "Fonksion didermenet"
+
+#~ msgid "&New Class..."
+#~ msgstr "Renkad &nevez ..."
+
+#~ msgid "New class"
+#~ msgstr "Renkad nevez"
+
+#~ msgid "PHP"
+#~ msgstr "PHP"
+
+#~ msgid "PHP Settings"
+#~ msgstr "Kefluniadur PHP"
+
+#~ msgid "Customize PHP Mode"
+#~ msgstr "Personelañ ar mod PHP"
+
+#~ msgid "<no database server>"
+#~ msgstr "<servijer stlennvon ebet>"
+
+#~ msgid "<error - no connection %1>"
+#~ msgstr "<fazi - kevreadenn %1 ebet>"
+
+#~ msgid "&Database Connections"
+#~ msgstr "Kevreadennoù ouzh ar &stlennvon"
+
+#~ msgid "SQL"
+#~ msgstr "SQL"
+
+#~ msgid "Specify Your Database Connections"
+#~ msgstr "Spisait ho gevreadennoù ouzh ar stlennvon"
+
+#~ msgid "No such connection: %1"
+#~ msgstr "Hevelep kevreadenn ebet : %1"
+
+#~ msgid "Driver"
+#~ msgstr "Sturier"
+
+#~ msgid "Database"
+#~ msgstr "Stlennvon"
+
+#, fuzzy
+#~ msgid "Remove item(s)"
+#~ msgstr "Lemel un dra"
+
+#~ msgid "\ttemporary"
+#~ msgstr "\tpadennek"
+
+#~ msgid "\tdisabled"
+#~ msgstr "\tmarv"
+
+#~ msgid "\tif %1"
+#~ msgstr "\tma %1"
+
+#~ msgctxt "Breakpoint state. The 'add ' state is appended to the other states"
+#~ msgid "add "
+#~ msgstr "ouzhpennañ"
+
+#~ msgctxt ""
+#~ "Breakpoint state. The 'modify ' state is appended to the other states"
+#~ msgid "modify "
+#~ msgstr "kemmañ"
+
+#~ msgid "%1>\t%2"
+#~ msgstr "%1>\t%2"
+
+#~ msgid "&Frame Stack"
+#~ msgstr "Pilad ar &sternoù"
+
+#~ msgid "Memory"
+#~ msgstr "Memor"
+
+#~ msgid "Libraries"
+#~ msgstr "Levraouegoù"
+
+#~ msgid "Filename: %1 at line: %2"
+#~ msgstr "Anv ar restr : %1 war al linenn : %2"
+
+#~ msgid "&Enable"
+#~ msgstr "&Bevaat"
+
+#~ msgid "Execute Main Program"
+#~ msgstr "Seveniñ ar goulev kentañ"
+
+#~ msgid "Runs the Perl program"
+#~ msgstr "Seveniñ a ra ar programm Perl"
+
+#~ msgid "String to execute:"
+#~ msgstr "Hedad da seveniñ :"
+
+#~ msgid "Show Perl Documentation"
+#~ msgstr "Diskouez teuliadur Perl"
+
+#~ msgid "Error in perldoc"
+#~ msgstr "Fazi e perldoc"
+
+#~ msgid "Cannot write to file"
+#~ msgstr "Ne m'eus ket gallet skrivañ ar restr"
+
+#~ msgid "RDB"
+#~ msgstr "RDB"
+
+#~ msgid "&RDB cmd:"
+#~ msgstr "Urzhiad &RDB :"
+
+#~ msgid "&Ftnchek"
+#~ msgstr "&Ftnchek"
+
+#~ msgid "Run ftnchek"
+#~ msgstr "Seveniñ ftnchek"
+
+#~ msgid "There is currently a job running."
+#~ msgstr "Bez eus un dlead o seveniñ bremañ."
+
+#~ msgid "Ftnchek"
+#~ msgstr "Ftnchek"
+
+#~ msgid "PGHPF Compiler Options"
+#~ msgstr "Dibarzhoù an dastumer PGHPF"
+
+#~ msgid "PGF77 Compiler Options"
+#~ msgstr "Dibarzhoù an dastumer PGF77"
+
+#~ msgid "HPF"
+#~ msgstr "HPF"
+
+#~ msgid "Glasgow Haskell Compiler"
+#~ msgstr "Dastumer Haskell Glasgow"
+
+#~ msgid "Found 1 problem"
+#~ msgid_plural "Found %1 problems"
+#~ msgstr[0] "%1 kudenn kavet"
+
+#~ msgid "Free Pascal Compiler Options"
+#~ msgstr "Dibarzhoù an dastumer Pascal dieub"
+
+#~ msgid "Language"
+#~ msgstr "Yezh"
+
+#~ msgid "Locations I"
+#~ msgstr "Lec'hiadurioù I"
+
+#~ msgid "Locations II"
+#~ msgstr "Lec'hiadurioù II"
+
+#~ msgid "Assembler"
+#~ msgstr "Stroller"
+
+#~ msgid "Linker"
+#~ msgstr "Liammer"
+
+#~ msgid "Feedback"
+#~ msgstr "Evezhiadennoù"
+
+#~ msgid "Show only errors"
+#~ msgstr "Diskouez hepken an fazioù"
+
+#~ msgid "Other Information"
+#~ msgstr "Titouroù all"
+
+#~ msgid "Executable name:"
+#~ msgstr "Anv ar program :"
+
+#~ msgid "Location of as and ld programs:"
+#~ msgstr "Lec'hiadur programmoù as ha ld :"
+
+#~ msgid "Assembler Info"
+#~ msgstr "Titouroù diwar-benn ar stroller"
+
+#~ msgid "Do not delete assembler files"
+#~ msgstr "Ne zilemel ket restroù ar stroller"
+
+#~ msgid "Use default reader"
+#~ msgstr "Implijit reollin dre ziouer"
+
+#~ msgid "AT&T style assembler"
+#~ msgstr "Stroller giz AT&T"
+
+#~ msgid "Intel style assembler"
+#~ msgstr "Stroller giz Intel"
+
+#~ msgid "Use GNU as"
+#~ msgstr "Implijit GNU as"
+
+#~ msgid "Use GNU asaout"
+#~ msgstr "Implijit GNU asaout"
+
+#~ msgid "Use NASM coff"
+#~ msgstr "Implijit NASM coff"
+
+#~ msgid "Use NASM elf"
+#~ msgstr "Implijit NASM elf"
+
+#~ msgid "Use NASM obj"
+#~ msgstr "Implijit NASM obj"
+
+#~ msgid "Use MASM"
+#~ msgstr "Implijit MASM"
+
+#~ msgid "Use TASM"
+#~ msgstr "Implijit TASM"
+
+#~ msgid "Use coff"
+#~ msgstr "Implij coff"
+
+#~ msgid "Generate information for GDB"
+#~ msgstr "Krouiñ titouroù diwar-benn GDB"
+
+#~ msgid "Generate information for DBX"
+#~ msgstr "Krouiñ titouroù diwar-benn DBX"
+
+#~ msgid "Level 3"
+#~ msgstr "Live 3"
+
+#~ msgid "386/486"
+#~ msgstr "386/486"
+
+#~ msgid "Pentium/PentiumMMX"
+#~ msgstr "Pentium/PentiumMMX"
+
+#~ msgid "PentiumPro/PII/Cyrix 6x86/K6"
+#~ msgstr "PentiumPro/PII/Cyrix 6x86/K6"
+
+#~ msgid "Stack size:"
+#~ msgstr "Ment ar pilad :"
+
+#~ msgid "Create dynamic library"
+#~ msgstr "Krouiñ ul levraoueg buhezek"
+
+#~ msgid "Link with dynamic libraries"
+#~ msgstr "Liammañ gant al levraouegoù buhezek"
+
+#~ msgid "Link with the C library"
+#~ msgstr "Liammañ gant al levraoueg C"
+
+#~ msgid "Compiler configuration file:"
+#~ msgstr "Restr kefluniadur an dastumer :"
+
+#~ msgid "Browser Info"
+#~ msgstr "Titouroù diwar-benn ar furcher"
+
+#~ msgid "No browser info"
+#~ msgstr "N'eus titouroù diwar-benn ar furcher ebet"
+
+#~ msgid "Target OS"
+#~ msgstr "RK wenn"
+
+#~ msgid "WINDOWS 32 bit"
+#~ msgstr "WINDOWS 32 bit"
+
+#~ msgid "SunOS/Solaris"
+#~ msgstr "SunOS/Solaris"
+
+#~ msgid "BeOS"
+#~ msgstr "BeOS"
+
+#~ msgid "Delphi Compiler Options"
+#~ msgstr "Dibarzhoù an dastumer Delphi"
+
+#~ msgid "Map File"
+#~ msgstr "Restr gartenn"
+
+#~ msgid "Packages"
+#~ msgstr "Pakadoù"
+
+#~ msgid "Write symbol info in an .rsm file"
+#~ msgstr "Skrivañ titouroù diwar-benn an arouezoù en ur restr .rsm"
+
+#~ msgid "Execute Program"
+#~ msgstr "Seveniñ ar goulev"
+
+#~ msgid "Python Documentation..."
+#~ msgstr "Teuliadur python ..."
+
+#~ msgid "Show Python Documentation"
+#~ msgstr "Diskouez an teuliadur Python"
+
+#~ msgid "Show Python documentation on keyword:"
+#~ msgstr "Diskouez an teuliadur Python diwar-benn ar ger alc'hwezl :"
+
+#~ msgid "KJS Console"
+#~ msgstr "Letrin KJS"
+
+#~ msgid "} missing"
+#~ msgstr "mankout a ra }"
+
+#~ msgid "Syntax Error before '%1'"
+#~ msgstr "Fazi ereadurezh en ur lenn a-raok '%1'"
+
+#~ msgid "Parse Error before '%1'"
+#~ msgstr "Fazi en ur lenn a-raok '%1'"
+
+#~ msgid "Flags"
+#~ msgstr "Bannielioù"
+
+#~ msgid "Close &Others"
+#~ msgstr "Serriñ ar re &all"
+
+#~ msgid "Ok"
+#~ msgstr "Mat eo"
+
+#~ msgid "x"
+#~ msgstr "x"
+
+#~ msgid "y"
+#~ msgstr "y"
+
+#~ msgid "Arrow"
+#~ msgstr "Bir"
+
+#~ msgid "Cross"
+#~ msgstr "Kroaz"
+
+#~ msgid "Waiting"
+#~ msgstr "Emaon o c'hortoz"
+
+#~ msgid "Blank"
+#~ msgstr "Goullonderiñ"
+
+#~ msgid "Forbidden"
+#~ msgstr "Arrabat eo"
+
+#~ msgid "What's This?"
+#~ msgstr "Petra zo ?"
+
+#~ msgid "true"
+#~ msgstr "gwir"
+
+#~ msgid "false"
+#~ msgstr "n'eo ket gwir"
+
+#~ msgid " Bold"
+#~ msgstr " Druz"
+
+#~ msgid " Italic"
+#~ msgstr " Italek"
+
+#~ msgid "Tool &Views"
+#~ msgstr "&Gweloù an ostilhoù"
+
+#~ msgid "MDI Mode"
+#~ msgstr "Mod MDI"
+
+#~ msgid "I&DEAl Mode"
+#~ msgstr "Mod I&DEAl"
+
+#~ msgid "Previous Tool View"
+#~ msgstr "Gwell ostilh diaraok"
+
+#~ msgid "Show %1"
+#~ msgstr "Diskouez %1"
+
+#~ msgid "Undock"
+#~ msgstr "Anensoc'hañ"
+
+#~ msgid "Maximize"
+#~ msgstr "Uhelaat"
+
+#~ msgid "Operations"
+#~ msgstr "Oberoù"
+
+#~ msgid "Close &All"
+#~ msgstr "Serriñ an &holl re"
+
+#~ msgid "&Minimize All"
+#~ msgstr "&Izelaat an holl re"
+
+#~ msgid "&MDI Mode"
+#~ msgstr "Mod &MDI"
+
+#~ msgid "&Tile"
+#~ msgstr "&Adrenkañ"
+
+#~ msgid "Ca&scade Windows"
+#~ msgstr "Pr&enestr en diri"
+
+#~ msgid "Expand &Vertically"
+#~ msgstr "Brasaat a-&blomm"
+
+#~ msgid "Expand &Horizontally"
+#~ msgstr "Brasaat a-b&laen"
+
+#~ msgid "Tile V&ertically"
+#~ msgstr "Adrenkañ a-bl&omm"
+
+#~ msgid "&Dock/Undock"
+#~ msgstr "&Ensoc'hañ/Anensoc'hañ"
+
+#~ msgid "&Restore"
+#~ msgstr "&Assav"
+
+#~ msgid "R&esize"
+#~ msgstr "Adv&entañ"
+
+#~ msgid "M&inimize"
+#~ msgstr "I&zelaat"
+
+#~ msgid "M&aximize"
+#~ msgstr "U&helaat"
+
+#~ msgid "&Maximize"
+#~ msgstr "&Uhelaat"
+
+#~ msgid "&Minimize"
+#~ msgstr "&Izelaat"
+
+#~ msgid "M&ove"
+#~ msgstr "&Dilec'hiañ"
+
+#~ msgid "&Resize"
+#~ msgstr "&Adventañ"
+
+#~ msgid "&Undock"
+#~ msgstr "&Anensoc'hañ"
+
+#~ msgctxt "Dock this window"
+#~ msgid "Dock"
+#~ msgstr "Ensoc'hañ"
+
+#~ msgid "Detach"
+#~ msgstr "Distagañ"
+
+#~ msgid "Do Not Reload"
+#~ msgstr "N'adkargit ket"
+
+#~ msgid "Do Not Overwrite"
+#~ msgstr "Ne rasklit ket"
+
+#~ msgid "File Deleted"
+#~ msgstr "Lemelet eo ar restr"
+
+#~ msgid "&Tile..."
+#~ msgstr "&Adrenkañ ..."
+
+#~ msgid "Reopen"
+#~ msgstr "Adigeriñ"
+
+#~ msgid "Do Not Reopen"
+#~ msgstr "Ne zigerit ket adarre"
+
+#~ msgid "Actions for %1"
+#~ msgstr "Oberoù evit %1"
+
+#~ msgid "Create Element"
+#~ msgstr "Krouiñ un dra"
+
+#, fuzzy
+#~ msgid "Reserve"
+#~ msgstr "&Assav"
+
+#~ msgid "&Add to Repository"
+#~ msgstr "&Ouzhpennañ d'an daveiñ"
+
+#~ msgid "<b>Add file to repository</b><p>Adds file to repository."
+#~ msgstr ""
+#~ "<b>Ouzhpennañ ar restroù d'an daveiñ</b></p>Ouzhpennañ a ra ar restroù "
+#~ "d'an daveiñ."
+
+#~ msgid "&Remove From Repository"
+#~ msgstr "&Lemel eus an daveiñ"
+
+#~ msgid "<b>Remove from repository</b><p>Removes file(s) from repository."
+#~ msgstr "<b>Lemel eus an daveiñ</b></p>Lemel a ra ar restroù en daveiñ."
+
+#~ msgid "&Revert"
+#~ msgstr "&Lemel"
+
+#~ msgid "Revert"
+#~ msgstr "Lemel"
+
+#, fuzzy
+#~ msgid "Re&solve Conflicting State"
+#~ msgstr "Dilemel ur gevreadenn"
+
+#, fuzzy
+#~ msgid "CVS - Unedit Files"
+#~ msgstr "Klask er restroù"
+
+#~ msgid "Creating Tag/Branch for files ..."
+#~ msgstr "Emaon o krouiñ brank/liketen evit ar restroù ..."
+
+#~ msgid "Removing Tag/Branch from files ..."
+#~ msgstr "Emaon o lemel ar brank/liketen eus ar restroù ..."
+
+#~ msgid "CVS - New Files Added to Project"
+#~ msgstr "CVS - Restroù nevez ouzhpennet d'ar raktres"
+
+#~ msgid "Do Not Add"
+#~ msgstr "Ne ouzhpennit ket"
+
+#~ msgid "CVS - Files Removed From Project"
+#~ msgstr "CVS - Restroù lemet eus ar raktres"
+
+#~ msgid "Show in %1"
+#~ msgstr "Diskouez er %1"
+
+#, fuzzy
+#~ msgid "CVS Annotate Dialog"
+#~ msgstr "Serriñ ar c'hendiviz"
+
+#~ msgid "CvsService"
+#~ msgstr "Servij Cvs"
+
+#, fuzzy
+#~ msgid "Generate annotations"
+#~ msgstr "Krouiñ al liammoù"
+
+#~ msgid "&Edit Files"
+#~ msgstr "&Aozañ ar restroù"
+
+#, fuzzy
+#~ msgid "Remove editing mark from files"
+#~ msgstr "Emaon o lemel ar brank/liketen eus ar restroù ..."
+
+#, fuzzy
+#~ msgid "<b>Remove editing mark</b><p>Remove the editing mark from the files."
+#~ msgstr ""
+#~ "<b>Dilemel eus ar raktres</b><p>Dilemel a ra ar restr red eus ar raktres."
+
+#~ msgid "Show editors"
+#~ msgstr "Diskouez an aozerien"
+
+#~ msgid "Add to Repository as &Binary"
+#~ msgstr "Ouzhpennañ d'an daveiñ e mod &binarel"
+
+#~ msgid "Add file to repository as binary"
+#~ msgstr "Ouzhpennañ ar restr d'an daveiñ e mod binarel"
+
+#~ msgid "R&emove Sticky Flag"
+#~ msgstr "L&emel ar banniel peget"
+
+#~ msgid "Remove sticky flag"
+#~ msgstr "Lemel ar banniel peget"
+
+#~ msgid "<b>Remove sticky flag</b><p>Removes sticky flag from file(s)."
+#~ msgstr ""
+#~ "<b>Lemel ar banniel peget</b><p>Lemel a ra ar banniel peget eus ar "
+#~ "restr(où)."
+
+#~ msgid "&Delete Tag/Branch"
+#~ msgstr "&Lemel ar brank/liketen"
+
+#~ msgid "Delete tag/branch"
+#~ msgstr "Lemel ar brank/liketenn"
+
+#~ msgid ""
+#~ "<b>Delete tag/branch</b><p>Delete tag/branches from selected file(s)."
+#~ msgstr ""
+#~ "<b>Lemel ar brank/liketenn</b>Lemel ar brank/liketenn eus ar restr(où) "
+#~ "dibaet."
+
+#~ msgid "Logout from server"
+#~ msgstr "Kuitaat ar servijer"
+
+#, fuzzy
+#~ msgid "Annotate Failed"
+#~ msgstr "Notennoù"
+
+#~ msgid "Please, choose a CVS server."
+#~ msgstr "Dibabit ur servijer CVS mar plij."
+
+#~ msgid "Remove From Repository"
+#~ msgstr "Lemel eus an daveiñ"
+
+#~ msgid "Perforce"
+#~ msgstr "Perforce"
+
+#, fuzzy
+#~ msgid "Do Not Revert"
+#~ msgstr "&Gwech ebet"
+
+#~ msgid "&Enter description:"
+#~ msgstr "&Roit un deskrivadur :"
+
+#~ msgid "C&lient:"
+#~ msgstr "K&liant :"
+
+#~ msgid "&User:"
+#~ msgstr "&Arveriad :"
+
+#~ msgid "Please enter the P4 client name."
+#~ msgstr "Roit anv an arlun P4 mar plij."
+
+#~ msgid "Name: %1 | Type: %2 | Value: %3"
+#~ msgstr "Anv : %1 | Rizh : %2 | Gwerzh : %3"
+
+#~ msgid "Class &list:"
+#~ msgstr "&Roll ar renkad :"
+
+#~ msgid "Function &name:"
+#~ msgstr "Anv ar fonksion :"
+
+#~ msgid "Function &list:"
+#~ msgstr "Roll ar fonksionoù :"
+
+#~ msgid "Browse to a file"
+#~ msgstr "Furchal ur restr"
+
+#~ msgid "Browse to a folder"
+#~ msgstr "Furchal ur renkell"
+
+#~ msgid "Add item"
+#~ msgstr "Ouzhpennañ un hini"
+
+#~ msgid "Delete selected item"
+#~ msgstr "Lemel an hini dibabet"
+
+#~ msgid "Cannot write Doxyfile."
+#~ msgstr "Ne m'eus ket gallet skrivañ Doxyfile."
+
+#~ msgid "Doxygen"
+#~ msgstr "Doxygen"
+
+#~ msgid "Project version"
+#~ msgstr "Doare ar raktres"
+
+#~ msgid "Output language"
+#~ msgstr "Yezh ezkas"
+
+#~ msgid "Tab size"
+#~ msgstr "Ment ar bevennig"
+
+#~ msgid "Aliases"
+#~ msgstr "Lesanvioù"
+
+#~ msgid "Input"
+#~ msgstr "Enkas"
+
+#~ msgid "Path to images"
+#~ msgstr "Hent ar skeudennoù"
+
+#~ msgid "Input filter"
+#~ msgstr "Sil enkaz"
+
+#~ msgid "Source Browser"
+#~ msgstr "Furcher an tarzhoù"
+
+#~ msgid "Columns in index"
+#~ msgstr "Bannoù er meneger"
+
+#~ msgid "HTML"
+#~ msgstr "HTML"
+
+#~ msgid "Generate HTML"
+#~ msgstr "Krouiñ e HTML"
+
+#~ msgid "Header file"
+#~ msgstr "Restr ar reollin"
+
+#~ msgid "Stylesheet"
+#~ msgstr "Folenn c'hiz"
+
+#~ msgid "Generate HTML-help"
+#~ msgstr "Krouiñ ur skoazell HTML"
+
+#~ msgid "CHM file"
+#~ msgstr "Restr CHM"
+
+#~ msgid "Generate .chi file"
+#~ msgstr "Krouiñ ur restr .chi"
+
+#~ msgid "Expand TOC"
+#~ msgstr "Digeriñ TOC"
+
+#~ msgid "Treeview width"
+#~ msgstr "Ledander ar gwel gwezenn"
+
+#~ msgid "LaTeX"
+#~ msgstr "LaTeX"
+
+#~ msgid "Generate LaTeX"
+#~ msgstr "Krouiñ e LaTeX"
+
+#~ msgid "LaTeX command name"
+#~ msgstr "Anv an urzhiad LaTeX"
+
+#~ msgid "Paper type"
+#~ msgstr "Rizh ar paper"
+
+#~ msgid "Include extra packages"
+#~ msgstr "Enlakaat pakadoù ouzhpenn"
+
+#~ msgid "LaTeX Header file"
+#~ msgstr "Restr reollin LaTeX"
+
+#~ msgid "Use pdflatex"
+#~ msgstr "Implijit pdflatex"
+
+#~ msgid "RTF"
+#~ msgstr "RTF"
+
+#~ msgid "Generate RTF"
+#~ msgstr "Krouiñ e RTF"
+
+#~ msgid "Extensions file"
+#~ msgstr "Astennoù restr"
+
+#~ msgid "Generate links"
+#~ msgstr "Krouiñ al liammoù"
+
+#~ msgid "XML"
+#~ msgstr "XML"
+
+#~ msgid "Generate XML"
+#~ msgstr "Krouiñ e XML"
+
+#~ msgid "XML schema"
+#~ msgstr "Steu±v XML"
+
+#~ msgid "XML DTD file"
+#~ msgstr "Restr DTD XML"
+
+#~ msgid "DEF"
+#~ msgstr "DEF"
+
+#~ msgid "Generate Perl module"
+#~ msgstr "Krouiñ ar mollad Perl"
+
+#~ msgid "External"
+#~ msgstr "Diavaez"
+
+#~ msgid "Tagfiles"
+#~ msgstr "Restroù liketenn"
+
+#~ msgid "External groups"
+#~ msgstr "Strolladoù diavaez"
+
+#~ msgid "Path to Perl"
+#~ msgstr "Hent Perl"
+
+#~ msgid "Dot"
+#~ msgstr "Pik"
+
+#~ msgid "Generate legend"
+#~ msgstr "Krouiñ ar skridennad"
+
+#~ msgid "Search engine"
+#~ msgstr "Keflusker klask"
+
+#~ msgid "CGI name"
+#~ msgstr "Anv CGI"
+
+#~ msgid "Documentation URL"
+#~ msgstr "URL an teuliadur"
+
+#~ msgid "Paths to external documentation"
+#~ msgstr "Hentoù an teuliadur diavaez"
+
+#~ msgid "Archive Done"
+#~ msgstr "Graet eo an diell"
+
+#~ msgid "&Add to Favorites"
+#~ msgstr "&Ouzhpennañ d'an dibaboù gwellañ"
+
+#~ msgid "&Remove Favorite"
+#~ msgstr "&Lemel an hini wellañ"
+
+#~ msgid "The template %1 cannot be opened."
+#~ msgstr "N'em eus ket digeriñ ar patrom %1."
+
+#~ msgid "The directory %1 cannot be created."
+#~ msgstr "Ne m'eus ket krouet ar renkell %1."
+
+#~ msgid "The archive %1 cannot be opened."
+#~ msgstr "N'em eus ket digeriñ an diell %1."
+
+#~ msgid "Template for .%1 Files"
+#~ msgstr "Patrom evit ar restroù .%1"
+
+#~ msgid "Cannot open project template."
+#~ msgstr "N'hellan ket digeriñ patrom ar raktres."
+
+#~ msgid "Do Not Generate"
+#~ msgstr "Ne savit ket"
+
+#~ msgid "Global Types"
+#~ msgstr "Rizhioù hollek"
+
+#~ msgid "Project templates in "
+#~ msgstr "Patromoù ar raktres e"
+
+#~ msgid "File Create"
+#~ msgstr "Krouiñ ar restr"
+
+#~ msgid "Create a new file"
+#~ msgstr "Krouiñ ur restr nevez"
+
+#~ msgid "File creation"
+#~ msgstr "Krouidigezh ar restr"
+
+#~ msgid "Template Location"
+#~ msgstr "Lec'hiadur ar patromoù"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "Type extension:"
+#~ msgstr "Astenn ar seurt :"
+
+#~ msgid "Type name:"
+#~ msgstr "Anv ar seurt :"
+
+#~ msgid "Template location:"
+#~ msgstr "Lec'hiadur ar patrom :"
+
+#~ msgid "Icon:"
+#~ msgstr "Arlun :"
+
+#~ msgctxt "New file dialog (title)"
+#~ msgid "New File"
+#~ msgstr "Restr nevez"
+
+#~ msgid "<b>New File Creation</b>"
+#~ msgstr "<b>Krouidigezh ur restr nevez</b>"
+
+#~ msgctxt "Add to project (on checkbox)"
+#~ msgid "&Add to project"
+#~ msgstr "&Ouzhpennañ d'ar raktres"
+
+#~ msgid "A file with this name already exists"
+#~ msgstr "Ur restr gant an anv-se a zo c'hoazh"
+
+#~ msgid "File Exists"
+#~ msgstr "Ar restr a zo endeo"
+
+#~ msgid "(c) 2003"
+#~ msgstr "(c) 2003"
+
+#~ msgid "Add Group"
+#~ msgstr "Ouzhpennañ ur strollad"
+
+#~ msgid "Language:"
+#~ msgstr "Yezh :"
+
+#~ msgid "Edit Group"
+#~ msgstr "Aozañ ar strollad"
+
+#~ msgid "Add Item..."
+#~ msgstr "Ouzhpennañ un hini ..."
+
+#~ msgid "Add Group..."
+#~ msgstr "Ouzhpennañ ur strollad ..."
+
+#~ msgid "Please enter the value for <b>%1</b>:"
+#~ msgstr "Roit ar gwerzh evit <b>%1</b> mar plij :"
+
+#~ msgid "Enter Values for Variables"
+#~ msgstr "Roit ar gwerzhioù evit ar gizioù"
+
+#, fuzzy
+#~ msgid "Enter the replacement values for %1:"
+#~ msgstr "Roit ar gwerzh evit <b>%1</b> mar plij :"
+
+#~ msgid "Open files"
+#~ msgstr "Digeriñ ar restroù"
+
+#~ msgid "Open Project View..."
+#~ msgstr "Digeriñ gwell ar raktres ... ..."
+
+#~ msgid "Open project view"
+#~ msgstr "Digeriñ gwell ar raktres ..."
+
+#~ msgid "Save Project View"
+#~ msgstr "Enrollañ ar well raktres"
+
+#~ msgid "New Project View..."
+#~ msgstr "Gwell raktres nevez ..."
+
+#~ msgid "Delete Project View"
+#~ msgstr "Lemel gwell ar raktres"
+
+#~ msgid "Delete project view"
+#~ msgstr "Lemel gwell ar raktres"
+
+#~ msgid "Save Project View As"
+#~ msgstr "Enrollañ ar well raktres e"
+
+#~ msgid "Enter the name of the view:"
+#~ msgstr "Roit anv ar gwell :"
+
+#~ msgid ""
+#~ "<qt>A project view named <b>%1</b> already exists.<br>Do you want to "
+#~ "overwrite it?</qt>"
+#~ msgstr ""
+#~ "<qt>Ur well raktres gant an anv <b>%1</b> a zo c'hoazh.<br>Fell a ra "
+#~ "deoc'h resklañ anezhi ?</qt>"
+
+#~ msgid "Close Selected"
+#~ msgstr "Serriñ an hini diuzet"
+
+#~ msgid "Save Selected"
+#~ msgstr "Enrollañ an hini dibabet"
+
+#~ msgid "Reload Selected"
+#~ msgstr "Adkargañ an hini diuzet"
+
+#~ msgid "File Tree"
+#~ msgstr "Gwezenn ar restroù"
+
+#~ msgid "Show VCS Fields"
+#~ msgstr "Diskouez an tachennoù VCS"
+
+#~ msgid "File Groups"
+#~ msgstr "Strolladoù a restroù"
+
+#~ msgid "File groups in the project directory"
+#~ msgstr "Strolladoù a restroù e-barzh renkell ar strollad"
+
+#~ msgid "Add File Group"
+#~ msgstr "Ouzhpennañ ur strollad restr"
+
+#~ msgid "Edit File Group"
+#~ msgstr "Aozañ strollad ar restr"
+
+#~ msgid "Translations"
+#~ msgstr "Troidigezh"
+
+#~ msgid "Others"
+#~ msgstr "Ar re all"
+
+#~ msgid "Display Location Column"
+#~ msgstr "Diskouez bann al lec'hiadur"
+
+#~ msgid "Customize File Groups"
+#~ msgstr "Neuziañ ar strolladoù restr"
+
+#~ msgid "Expand Text"
+#~ msgstr "Digeriñ ar skrid"
+
+#~ msgid "Expand current word"
+#~ msgstr "Digeriñ ar ger red"
+
+#~ msgctxt "No Version Control System"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#~ msgid "Formatting"
+#~ msgstr "Emaon o furmadiñ"
+
+#~ msgid "No match"
+#~ msgstr "Kendoare ebet"
+
+#~ msgid "Copy To..."
+#~ msgstr "Eilañ da ..."
+
+#~ msgid "CTags Lookup"
+#~ msgstr "Klask CTags"
+
+#~ msgid "CTags"
+#~ msgstr "CTags"
+
+#~ msgid "CTags lookup results"
+#~ msgstr "Disoc'hoù klask CTags"
+
+#~ msgid "Lookup Current Text"
+#~ msgstr "Klask ar skrid red"
+
+#~ msgid "CTags - Go to Definition: %1"
+#~ msgstr "CTags - Mont d'an dermenadur : %1"
+
+#~ msgid "CTags - Lookup: %1"
+#~ msgstr "CTags - Klask : %1"
+
+#~ msgid "No CTags database found"
+#~ msgstr "Stlennvon CTAGS kavet ebet"
+
+#~ msgid "label"
+#~ msgstr "skridennad"
+
+#~ msgid "function"
+#~ msgstr "fonksion"
+
+#~ msgid "subroutine"
+#~ msgstr "isroudennad"
+
+#~ msgid "pattern"
+#~ msgstr "sil"
+
+#~ msgid "class"
+#~ msgstr "renkad"
+
+#~ msgid "paragraph"
+#~ msgstr "rannbennad"
+
+#~ msgid "feature"
+#~ msgstr "arc'hwel"
+
+#~ msgid "common"
+#~ msgstr "boutin"
+
+#~ msgid "entry"
+#~ msgstr "bouetadur"
+
+#~ msgid "interface"
+#~ msgstr "etrefas"
+
+#~ msgid "module"
+#~ msgstr "mollad"
+
+#~ msgid "program"
+#~ msgstr "goulev"
+
+#~ msgid "type"
+#~ msgstr "seurt"
+
+#~ msgid "field"
+#~ msgstr "tachenn"
+
+#~ msgid "method"
+#~ msgstr "hantenn"
+
+#~ msgid "package"
+#~ msgstr "pakad"
+
+#~ msgid "Project Documentation"
+#~ msgstr "Teuliadur ar raktres"
+
+#~ msgid "Documentation Settings"
+#~ msgstr "Kefluniadur an teuliadur"
+
+#~ msgid "&Search in Documentation..."
+#~ msgstr "&Enrollañ en teuliadur ..."
+
+#~ msgid "Info Page..."
+#~ msgstr "Pajenn titouroù ..."
+
+#~ msgid "Show an infopage"
+#~ msgstr "Diskouez pajenn titouroù"
+
+#~ msgid "Show Info Page"
+#~ msgstr "Diskouez pajenn an titouroù"
+
+#~ msgid "Find Documentation: %1"
+#~ msgstr "Klask an teuliadur : %1"
+
+#~ msgid "Look in Documentation Index: %1"
+#~ msgstr "Sellout ouzh e meneger an teuliadur : %1"
+
+#~ msgid "Open in Current Tab"
+#~ msgstr "Digeriñ er vevennig red"
+
+#~ msgid "Bookmark This Location"
+#~ msgstr "Ouzhpennañ ur sined evit al lec'hiadur-se"
+
+#~ msgid "TOC"
+#~ msgstr "TOC"
+
+#~ msgid "Title"
+#~ msgstr "Titl"
+
+#~ msgid "Edit Bookmark"
+#~ msgstr "Aozañ ar sinedoù"
+
+#~ msgid "Custom..."
+#~ msgstr "Diouzhoc'h ..."
+
+#~ msgid "Add Bookmark"
+#~ msgstr "Ouzhpennañ ur sined"
+
+#~ msgid "Google"
+#~ msgstr "Google"
+
+#, fuzzy
+#~ msgid "Finder"
+#~ msgstr "&Prenestr"
+
+#~ msgid "Se&arch"
+#~ msgstr "&Klask"
+
+#~ msgid "and"
+#~ msgstr "ha"
+
+#~ msgid "&Method:"
+#~ msgstr "&Hentenn :"
+
+#~ msgid "S&ort by:"
+#~ msgstr "R&ummañ dre :"
+
+#~ msgid "Search &results:"
+#~ msgstr "&Disoc'hoù ar glask :"
+
+#~ msgid "Update Config"
+#~ msgstr "Bremañaat ar gefluniadur"
+
+#~ msgid "&Look for:"
+#~ msgstr "&Kavout :"
+
+#~ msgid "Generating Search Index"
+#~ msgstr "Emaon o krouiñ ar meneger glask"
+
+#~ msgid "Generating index..."
+#~ msgstr "Emaon o krouiñ ar meneger ..."
+
+#, fuzzy
+#~ msgid "Configuration file updated."
+#~ msgstr "Kefluniadur :"
+
+#~ msgid "Qt Documentation Collection"
+#~ msgstr "Dastumad teuliadur evit Qt"
+
+#~ msgid "PalmDoc documentation plugin"
+#~ msgstr "Lugent an teuliadur PalmDoc"
+
+#~ msgid "PalmDoc Documentation Collection"
+#~ msgstr "Dastumad teuliadur Palmdoc"
+
+#~ msgid "PDF documentation plugin"
+#~ msgstr "Lugent an teuliadur PDF"
+
+#~ msgid "PDF Documentation Collection"
+#~ msgstr "Dastumad teuliadur PDF"
+
+#~ msgid "Djvu documentation plugin"
+#~ msgstr "Lugent an teuliadur Djvu"
+
+#~ msgid "Djvu Documentation Collection"
+#~ msgstr "Dastumad teuliadur evit Djvu"
+
+#~ msgid "KDevelopTOC Documentation Collection"
+#~ msgstr "Dastumad teuliadur evit KDevelopTOC"
+
+#~ msgid "Devhelp Documentation Collection"
+#~ msgstr "Dastumad teuliadur evit Devhelp"
+
+#~ msgid "Doxygen Documentation Collection"
+#~ msgstr "Dastumad teuliadur evit Doxygen"
+
+#~ msgid "Custom Documentation Collection"
+#~ msgstr "Dastumad teuliadur diouzhoc'h"
+
+#~ msgid "KChm"
+#~ msgstr "KChm"
+
+#~ msgid "Execute Command..."
+#~ msgstr "Seveniñ an urzhiad ..."
+
+#~ msgid "Execute shell command"
+#~ msgstr "Seveniñ an urzhiad shell"
+
+#~ msgid "Filter Selection Through Command..."
+#~ msgstr "Choazh ur sil dre un ruzhiad ..."
+
+#~ msgid "Execute Command"
+#~ msgstr "Seveniñ an urzhiad"
+
+#~ msgid "Filter Selection Through Command"
+#~ msgstr "Choazh ur sil dre un ruzhiad"
+
+#~ msgid "Security Widget"
+#~ msgstr "Widget surantez"
+
+#~ msgid "Suggestion"
+#~ msgstr "Kinnig"
+
+#~ msgid "Entering directory %1"
+#~ msgstr "Emaon o vont er renkell %1"
+
+#~ msgid "Text Structure"
+#~ msgstr "Skeledenn ar skrid"
+
+#~ msgid "Text structure"
+#~ msgstr "Skeledenn ar skrid"
+
+#~ msgid "Open as UTF-8"
+#~ msgstr "Digerñ evel UTF-8"
+
+#~ msgid "Open With..."
+#~ msgstr "Digeriñ gant ..."
+
+#~ msgctxt "member access"
+#~ msgid "All"
+#~ msgstr "An holl re"
+
+#~ msgctxt "member access"
+#~ msgid "Public"
+#~ msgstr "Foran"
+
+#~ msgctxt "member access"
+#~ msgid "Protected"
+#~ msgstr "Gwarezet"
+
+#~ msgctxt "member access"
+#~ msgid "Package"
+#~ msgstr "Pakad"
+
+#~ msgid "Children"
+#~ msgstr "Bugale"
+
+#~ msgid "%1 of Class %2"
+#~ msgstr "%1 diwar renkad %2"
+
+#~ msgid "Class Browser"
+#~ msgstr "Furcher ar renkadoù"
+
+#~ msgid "Class browser"
+#~ msgstr "Furcher ar renkadoù"
+
+#, fuzzy
+#~ msgid "Functions in file"
+#~ msgstr "Ne m'eus ket gallet kavout ar restr"
+
+#~ msgid "Group by Directories"
+#~ msgstr "Strollad gant renkelloù"
+
+#~ msgid "Plain List"
+#~ msgstr "Roll leun"
+
+#~ msgid "Java Like Mode"
+#~ msgstr "Mod a-seurt Java"
+
+#~ msgid "View Mode"
+#~ msgstr "Mod gwell"
+
+#~ msgid "Add Method..."
+#~ msgstr "Ouzhpennañ un hentenn ..."
+
+#~ msgid "Class Tool"
+#~ msgstr "Ostilh ar renkadoù"
+
+#~ msgid "Class Tool..."
+#~ msgstr "Ostilh ar renkadoù ..."
+
+#~ msgid "Add Annotation"
+#~ msgstr "Ouzhpennañ un notenn"
+
+#~ msgid "Add Annotations"
+#~ msgstr "Ouzhpennañ notennoù"
+
+#, fuzzy
+#~ msgid "Annotation Plugin"
+#~ msgstr "Lugent an teuliadur PDF"
+
+#, fuzzy
+#~ msgid "annotationPart"
+#~ msgstr "Ouzhpennañ ur gevreadenn"
+
+#~ msgid "(c) 2005"
+#~ msgstr "(c) 2005"
+
+#~ msgid "Annotations"
+#~ msgstr "Notennoù"
+
+#~ msgid "Ant Options"
+#~ msgstr "Dibarzhoù ar merien"
+
+#~ msgid "Classpath"
+#~ msgstr "Hent ar renkad"
+
+#~ msgid "Remove %1 From Project"
+#~ msgstr "Dilemel %1 eus ar raktres"
+
+#~ msgid "Add %1 to Project"
+#~ msgstr "Ouzhpennañ %1 d'ar raktres"
+
+#~ msgid "Copy File(s)"
+#~ msgstr "Eilañ ar restr(où)"
+
+#~ msgid "&Value:"
+#~ msgstr "&Gwerzh :"
+
+#~ msgid "Select Directory"
+#~ msgstr "Dibab ur renkell"
+
+#~ msgid "Select Main Program Executable"
+#~ msgstr "Dibabit ar goulev kentañ"
+
+#~ msgid "&Rebuild Project"
+#~ msgstr "&Adsevel ar raktres"
+
+#~ msgid "&Clean Project"
+#~ msgstr "&Naetaat ar raktres"
+
+#~ msgid "Clean project"
+#~ msgstr "Skarañ ar raktres"
+
+#~ msgid "Execute main program"
+#~ msgstr "Seveniñ ar goulev kentañ"
+
+#~ msgid "&Build Subproject"
+#~ msgstr "&Sevel an israktres"
+
+#~ msgid "Build subproject"
+#~ msgstr "Sevel un israktres"
+
+#~ msgid "&Rebuild Subproject"
+#~ msgstr "&Adsevel an israktres"
+
+#~ msgid "Rebuild subproject"
+#~ msgstr "Adsevel an israktres"
+
+#~ msgid "&Clean Subproject"
+#~ msgstr "&Naetaat un israktres"
+
+#~ msgid "Clean subproject"
+#~ msgstr "Skarañ an israktres"
+
+#~ msgid "Open browser"
+#~ msgstr "Digeriñ ar furcher"
+
+#~ msgid "Up"
+#~ msgstr "Uhel"
+
+#~ msgid "Down"
+#~ msgstr "Izel"
+
+#~ msgid "Edit value"
+#~ msgstr "Aozañ ar gwerzh"
+
+#~ msgid "Remove value"
+#~ msgstr "Dilemel ar gwerzh"
+
+#~ msgid "Add Library"
+#~ msgstr "Ouzhpennañ ul levraoureg ..."
+
+#~ msgid "Add library directory:"
+#~ msgstr "Ouzhpennañ renkell al levraoueg :"
+
+#~ msgid "Change Library"
+#~ msgstr "Kemmañ al levraoueg"
+
+#~ msgid "Change library directory:"
+#~ msgstr "Kemmañ renkell al levraoueg :"
+
+#~ msgid "Add target:"
+#~ msgstr "Ouzhpennañ ur wenn :"
+
+#~ msgid "Change target:"
+#~ msgstr "Kemmañ ar gwenn :"
+
+#~ msgid "Headers"
+#~ msgstr "Reollinoù"
+
+#~ msgid "Corba IDLs"
+#~ msgstr "IDLoù Corba"
+
+#~ msgid "Lexsources"
+#~ msgstr "Tarzh Lex"
+
+#~ msgid "Yaccsources"
+#~ msgstr "Tarzh Yacc"
+
+#~ msgid "Images"
+#~ msgstr "Skeudennoù"
+
+#~ msgid "Install object"
+#~ msgstr "Staliañ an dra"
+
+#~ msgid "Subproject settings"
+#~ msgstr "Kefluniadur an israktres"
+
+#~ msgid "Add existing files"
+#~ msgstr "Ouzhpennañ ar restroù a zo c'hoazh"
+
+#~ msgid ""
+#~ "<b>Remove file</b><p>Removes file from a current group. Does not remove "
+#~ "file from disk."
+#~ msgstr ""
+#~ "<b>Dilemel ar restr</b><p>Dilemel a ra ar restr eus ar strollad red. Ne "
+#~ "zilemelan ket ar restr eus ar bladenn."
+
+#~ msgid "Please enter a name for the subdirectory: "
+#~ msgstr "Roit anv an is-renkell mar plij :"
+
+#~ msgid "Subproject %1"
+#~ msgstr "Israktres %1"
+
+#~ msgid "Run qmake"
+#~ msgstr "Seveniñ qmake"
+
+#~ msgid "Remove Subproject..."
+#~ msgstr "Lemel an israktres ..."
+
+#~ msgid "Subproject Settings"
+#~ msgstr "Kefluniadur an israktres"
+
+#~ msgid "a library: "
+#~ msgstr "ul levrouag : "
+
+#~ msgid "Install Path..."
+#~ msgstr "Staliañ un hent ..."
+
+#~ msgid "Add Existing Files..."
+#~ msgstr "Ouzhpennañ ar restroù a zo c'hoazh ..."
+
+#~ msgid "Update Translation Files"
+#~ msgstr "Bremañaat restroù an droidigezh"
+
+#~ msgid "Choose Install Path"
+#~ msgstr "Dibabit hent ar staliadur"
+
+#~ msgid "Enter a path (example /usr/local/share/... ):"
+#~ msgstr "Roit un hent (e.g: /usr/local/share/...) :"
+
+#~ msgid "Create New File"
+#~ msgstr "Krouiñ ur restr nevez"
+
+#~ msgid "Enter a name for the new file:"
+#~ msgstr "Roit anv evit ar restr nevez :"
+
+#~ msgid "Enter a name for the new object:"
+#~ msgstr "Roit un anv evit an dra nevez :"
+
+#~ msgid "Open ui.h File"
+#~ msgstr "Digeriñ ar restr ui.h"
+
+#~ msgid "Properties..."
+#~ msgstr "Perzhioù ..."
+
+#~ msgid "Edit Pattern"
+#~ msgstr "Aozañ ar sil"
+
+#~ msgid ""
+#~ "Are you sure you wish to remove <strong>%1</strong> from this project?"
+#~ msgstr ""
+#~ "Ha sur oc'h bezañ mennet da zilemel <strong>%1</strong> eus ar raktres--"
+#~ "mañ ?"
+
+#~ msgid "No Executable Name Given"
+#~ msgstr "N'eus anv goulev roet ebet"
+
+#~ msgid "Do Not Run"
+#~ msgstr "Ne sevenit ket"
+
+#~ msgid "Haskell Options"
+#~ msgstr "Dibarzhoù Haskell"
+
+#~ msgid "Build Options"
+#~ msgstr "Dibarzhoù sevel"
+
+#~ msgid "Ma&ke"
+#~ msgstr "Ob&er"
+
+#~ msgid "Remove Selected Files From Project"
+#~ msgstr "Lemel ar restroù diuzet eus ar raktres"
+
+#, fuzzy
+#~ msgid "Populate"
+#~ msgstr "Patrom"
+
+#~ msgid "Object Files"
+#~ msgstr "Restroù tradoù"
+
+#~ msgid "Build All"
+#~ msgstr "Sevel an holl re"
+
+#~ msgid "Add File"
+#~ msgstr "Ouzhpennañ ur restr"
+
+#~ msgid "Add Target"
+#~ msgstr "Ouzhpennañ ur wenn"
+
+#~ msgid "Add Folder"
+#~ msgstr "Ouzhpennañ ur renkell"
+
+#~ msgid "%1 in %2"
+#~ msgstr "%1 e %2"
+
+#~ msgid "%1 (%2 in %3)"
+#~ msgstr "%1 (%2 e %3)"
+
+#~ msgid "Library"
+#~ msgstr "Levraoueg"
+
+#~ msgid "Libtool Library"
+#~ msgstr "Levraoueg Libtool"
+
+#~ msgid "Script"
+#~ msgstr "Skrid"
+
+#~ msgid "Header"
+#~ msgstr "Reollin"
+
+#~ msgid "Data"
+#~ msgstr "Roadoù"
+
+#~ msgid "Java"
+#~ msgstr "Java"
+
+#~ msgid "Importing... %p%"
+#~ msgstr "Emaon oc'h enporzh ...%p%"
+
+#~ msgid "Subproject Options for '%1'"
+#~ msgstr "Dibarzhoù an israktres evit '%1'"
+
+#~ msgid "Do you really want to remove <b>%1</b>?"
+#~ msgstr "C'hoant ho peus da zilemel <b>%1</b> ?"
+
+#~ msgctxt "no dependency"
+#~ msgid "<none>"
+#~ msgstr "<hini ebet>"
+
+#~ msgid "Removing Target... %p%"
+#~ msgstr "Emaon o lemel ar wenn ...%p%"
+
+#, fuzzy
+#~ msgid "Rerun"
+#~ msgstr "Seveniñ"
+
+#~ msgid "Add Prefix"
+#~ msgstr "Ouzhpennañ ur rakger"
+
+#~ msgid "Target Options for '%1'"
+#~ msgstr "Dibarzhoù ar wenn evit '%1'"
+
+#~ msgid "Add library:"
+#~ msgstr "Ouzhpennañ ul levraoueg :"
+
+#~ msgid "Edit External Library"
+#~ msgstr "Aozañ al levraoueg diavaez"
+
+#~ msgid "Edit external library:"
+#~ msgstr "Aozañ al levraoueg diavaez :"
+
+#~ msgid "You have to give the subproject a name."
+#~ msgstr "Red eo deoc'h da reiñ anv ar israktres."
+
+#~ msgid "A subproject with this name already exists."
+#~ msgstr "Bez' ez eus un israktres a vez graet an anv-mañ dioutañ endeo."
+
+#~ msgid "A file named %1 already exists."
+#~ msgstr "Bez' ez eus un restr gant an anv %1 endeo."
+
+#~ msgid ""
+#~ "A subdirectory %1 already exists. Do you wish to add it as a subproject?"
+#~ msgstr ""
+#~ "An isrenkell %1 a zo c'hoazh. Ha fell a ra deoc'h ouzhpennañ anezhañ evel "
+#~ "un israktres ?"
+
+#~ msgid "Could not access the subdirectory %1."
+#~ msgstr "Ne m'eus ket gallet tizhout an isrenkell %1."
+
+#~ msgid "Could not create Makefile.am in subdirectory %1."
+#~ msgstr "N'hellan ket krouiñ Makefile.am er renkell %1."
+
+#~ msgid "Automake Manager"
+#~ msgstr "Merour Automake"
+
+#~ msgid "Automake manager"
+#~ msgstr "Merour Automake"
+
+#~ msgid "Add Translation..."
+#~ msgstr "Ouzhpennañ un droidigezh ..."
+
+#~ msgid "Add translation"
+#~ msgstr "Ouzhpennañ un droidigezh"
+
+#~ msgid "Install"
+#~ msgstr "Staliañ"
+
+#~ msgid "Build Configuration"
+#~ msgstr "Kefluniadur savadenn"
+
+#~ msgid "Build configuration menu"
+#~ msgstr "Sevel meuziad ar gefluniadur"
+
+#, fuzzy
+#~ msgid "Run Them"
+#~ msgstr "Seveniñ ftnchek"
+
+#~ msgid "Application Already Running"
+#~ msgstr "Bev eo ar meziant c'hoazh"
+
+#~ msgid "&Restart Application"
+#~ msgstr "&Adloc'hañ ar meziant"
+
+#~ msgid "Do &Nothing"
+#~ msgstr "Obe&r netra"
+
+#~ msgid "Options..."
+#~ msgstr "Dibarzhoù ..."
+
+#~ msgid "Add Existing Subprojects..."
+#~ msgstr "Ouzhpennañ an israktresoù ..."
+
+#~ msgid "Add Target..."
+#~ msgstr "Ouzhpennañ ur wenn ..."
+
+#~ msgid "Add Service..."
+#~ msgstr "Ouzhpennañ ur servij ..."
+
+#~ msgid "Add Application..."
+#~ msgstr "Ouzhpennañ ur meziant ..."
+
+#~ msgid "Expand Subtree"
+#~ msgstr "Digeriñ ar rannwezenn"
+
+#~ msgid "Collapse Subtree"
+#~ msgstr "Serriñ ar rannwezenn"
+
+#~ msgid "Manage Custom Commands..."
+#~ msgstr "Merañ an urzhiadoù diouzoc'h ..."
+
+#~ msgid "Subproject: %1"
+#~ msgstr "Israktres : %1"
+
+#~ msgid "Add New Subproject to '%1'"
+#~ msgstr "Ouzhpennañ un israktres nevez da '%1'"
+
+#~ msgid "Add Existing Subproject to '%1'"
+#~ msgstr "Ouzhpennañ un israktres a zo endeo da '%1'"
+
+#~ msgid "Add New Target to '%1'"
+#~ msgstr "Ouzhpennañ ur wenn nevez da '%1'"
+
+#~ msgid "Add New Service to '%1'"
+#~ msgstr "Ouzhpennañ ur servijer nevez da '%1'"
+
+#~ msgid "Add New Application to '%1'"
+#~ msgstr "Ouzhpennañ ur meziant nevez da '%1'"
+
+#~ msgid "This item cannot be removed"
+#~ msgstr "N'hell ket bet lemet an dra"
+
+#~ msgid "Remove Subproject %1"
+#~ msgstr "Lemel an israktres %1"
+
+#~ msgid ""
+#~ "Do you really want to remove subproject %1 with all targets and files?"
+#~ msgstr ""
+#~ "C'hoant ho peus da vat zilemel an istrollad %1 gant pep wenn ha pep "
+#~ "restr ?"
+
+#~ msgid "Manage Custom Commands"
+#~ msgstr "Merañ an urzhiadoù diouzoc'h"
+
+#~ msgid "Add Icon..."
+#~ msgstr "Ouzhpennañ un Arlun ..."
+
+#~ msgid "Build Target..."
+#~ msgstr "Sevel ur wenn ..."
+
+#~ msgid "Add New File to '%1'"
+#~ msgstr "Ouzhpennañ ur restr nevez da '%1'"
+
+#~ msgid "Add Existing Files to '%1'"
+#~ msgstr "Ouzhpennañ restroù a zo c'hoazh da '%1'"
+
+#~ msgid "Remove Target From '%1'"
+#~ msgstr "Lemel ar wenn eus '%1'"
+
+#~ msgid "Add Translation"
+#~ msgstr "Ouzhpennañ un droidigezh"
+
+#~ msgid "Device"
+#~ msgstr "Trobarzhell"
+
+#~ msgid "MIME Type"
+#~ msgstr "Rizh MIME"
+
+#~ msgid "You have to enter a file name."
+#~ msgstr "Red eo deoc'h da reiñ anv ur restr."
+
+#~ msgid "You have to enter an application name."
+#~ msgstr "Red eo deoc'h da reiñ anv ur meziant."
+
+#~ msgid "A file with this name exists already."
+#~ msgstr "Ur restr gant an anv-se a zo c'hoazh."
+
+#~ msgid "Short View"
+#~ msgstr "Gwell berr"
+
+#~ msgid "Home directory"
+#~ msgstr "Renkell ar gêr"
+
+#~ msgid "Previous directory"
+#~ msgstr "Renkell diaraok"
+
+#~ msgid "Next directory"
+#~ msgstr "Renkell a-heul"
+
+#~ msgid "Enter Value"
+#~ msgstr "Roit ur gwerzh"
+
+#~ msgid "Property %1:"
+#~ msgstr "Perzh %1 :"
+
+#~ msgid "You have to enter a service name."
+#~ msgstr "Red eo deoc'h da reiñ anv ur servij."
+
+#~ msgid ""
+#~ "<b>A file with this name already exists.</b><br><br>Please use the \"Add "
+#~ "existing file\" dialog."
+#~ msgstr ""
+#~ "<b>Ur restr gant an anv-se a zo c'hoazh.</b><br><br>Implijit ar prenestre "
+#~ "« Ouzhpennañ ur restr a zo c'hoazh » mar plij."
+
+#~ msgid "You have to give the target a name"
+#~ msgstr "Red eo deoc'h da reiñ un anv d'ar wenn."
+
+#~ msgid "Libraries must have a lib prefix."
+#~ msgstr "Red eo d'al levraouegoù da gaout ur rakger levr."
+
+#~ msgid "A target with this name already exists."
+#~ msgstr "Bez' ez eus ur wenn a vez graet an anv-mañ dioutañ endeo."
+
+#~ msgid "'%1' saved."
+#~ msgstr "Enrollet eo '%1'."
+
+#~ msgid "*|All Files"
+#~ msgstr "*|Pep restr"
+
+#~ msgid "Save Form '%1' As"
+#~ msgstr "Enrollañ ar paperenn-reol '%1' e"
+
+#~ msgid "File Already Exists"
+#~ msgstr "Ar restr a zo endeo"
+
+#~ msgid "The file already exists. Do you wish to overwrite it?"
+#~ msgstr "Ar restr a zo endeo. C'hoant ho peus e rasklañ ?"
+
+#~ msgid "Edit %1"
+#~ msgstr "Aozañ %1"
+
+#~ msgid "Save changes to form '%1'?"
+#~ msgstr "Enrollañ ar c'hemmoù d'ar paperenn-reol '%1' ?"
+
+#~ msgid "&Yes"
+#~ msgstr "&Ya"
+
+#~ msgid "&No"
+#~ msgstr "&N'eo ket"
+
+#~ msgid "Using ui.h File"
+#~ msgstr "Oc'h implij ar restr ui.h"
+
+#, fuzzy
+#~ msgid "Use Existing"
+#~ msgstr "Ar restr a zo endeo"
+
+#~ msgid "Create New"
+#~ msgstr "Krouiñ un hini nevez"
+
+#~ msgid "Creating ui.h file"
+#~ msgstr "Emaon o krouiñ ar restr ui.h"
+
+#, fuzzy
+#~ msgid "Do you want to create an new \"ui.h\" file?"
+#~ msgstr "Ne m'eus ket gallet krouiñ ar restr nevez."
+
+#~ msgid "Invalid Filename"
+#~ msgstr "N'eo ket un anv restr mad"
+
+#~ msgid "True"
+#~ msgstr "Gwir"
+
+#~ msgid "width"
+#~ msgstr "ledander"
+
+#~ msgid "Green"
+#~ msgstr "Gwer"
+
+#~ msgid "Blue"
+#~ msgstr "Glas"
+
+#~ msgid "Family"
+#~ msgstr "Familh"
+
+#~ msgid "Point Size"
+#~ msgstr "Ment ar pik"
+
+#~ msgid "Table"
+#~ msgstr "Taolenn"
+
+#~ msgid "Field"
+#~ msgstr "Tachenn"
+
+#~ msgid "%1/%2/%3/%4"
+#~ msgstr "%1/%2/%3/%4"
+
+#~ msgid "Reset '%1' of '%2'"
+#~ msgstr "Adkorañ '%1' diwar '%2'"
+
+#, fuzzy
+#~ msgid "New Signal Handler"
+#~ msgstr "Restr nevez"
+
+#~ msgid "Remove Connection"
+#~ msgstr "Dilemel ur gevreadenn"
+
+#~ msgid "Add Connection"
+#~ msgstr "Ouzhpennañ ur gevreadenn"
+
+#, fuzzy
+#~ msgid "Add Function"
+#~ msgstr "&Ouzhpennañ dibaboù :"
+
+#~ msgid "Property Editor (%1)"
+#~ msgstr "Aozer ar perzhioù (%1)"
+
+#~ msgid "New &Action"
+#~ msgstr "&Ober nevez"
+
+#~ msgid "New Action &Group"
+#~ msgstr "&Strollad ober nevez"
+
+#~ msgid "QMAKE Project Files (*.pro)"
+#~ msgstr "Restroù raktres QMAKE (*.pro)"
+
+#~ msgid "All Files (*)"
+#~ msgstr "An holl restroù (*)"
+
+#~ msgid "Loading File"
+#~ msgstr "Emaon o kargañ ar restr"
+
+#, fuzzy
+#~ msgid ""
+#~ "Error loading %1.\n"
+#~ "The widget %2 could not be created."
+#~ msgstr "Ne m'eus ket krouet ar restr %1."
+
+#~ msgid "Tab 1"
+#~ msgstr "Bevennig 1"
+
+#~ msgid "Tab 2"
+#~ msgstr "Bevennig 2"
+
+#~ msgid "Page 1"
+#~ msgstr "Pajenn 1"
+
+#~ msgid "Page 2"
+#~ msgstr "Pajenn 2"
+
+#, fuzzy
+#~ msgid "&Redo: Not Available"
+#~ msgstr "&Da gaout :"
+
+#~ msgid "Cu&t"
+#~ msgstr "&Troc'hañ"
+
+#~ msgid "Deletes the selected widgets"
+#~ msgstr "Lemel a ra ar widgetoù dibabet."
+
+#~ msgid "Selects all widgets"
+#~ msgstr "Dibab a ra pep widget"
+
+#~ msgid "Connections"
+#~ msgstr "Kevreadennoù"
+
+#~ msgid "Co&nnections..."
+#~ msgstr "Kevreade&nnoù ..."
+
+#~ msgid "&Source..."
+#~ msgstr "&Tarzh ..."
+
+#~ msgid "Preferences..."
+#~ msgstr "Dibaboù ..."
+
+#~ msgid "Opens a dialog to change preferences"
+#~ msgstr "Digeriñ a ra ur prenestr da kemmañ an dibarzhoù"
+
+#, fuzzy
+#~ msgid "Find Incremental"
+#~ msgstr "Klask an teuliadur"
+
+#, fuzzy
+#~ msgid "Find &Incremental"
+#~ msgstr "Klask an teuliadur"
+
+#~ msgid "&Goto Line..."
+#~ msgstr "&Mont d'al linenn ..."
+
+#~ msgid "Adjust Size"
+#~ msgstr "Lakaat ar ment"
+
+#~ msgid "Adjust &Size"
+#~ msgstr "Lakaat ar &ment"
+
+#, fuzzy
+#~ msgid "Breaks the selected layout"
+#~ msgstr "Dilemel ar bann diuzet."
+
+#~ msgid "Layout"
+#~ msgstr "Doare"
+
+#~ msgid "Insert a %1"
+#~ msgstr "Enlakaat ur %1"
+
+#~ msgid "<b>The Layout toolbar</b>%1"
+#~ msgstr "<b>Ar varenn ostilh an doare</b>%1"
+
+#~ msgid "Pointer"
+#~ msgstr "Buker"
+
+#~ msgid "&Pointer"
+#~ msgstr "&Buker"
+
+#~ msgid "Selects the pointer tool"
+#~ msgstr "Dibab a ra an ostil buker"
+
+#, fuzzy
+#~ msgid "Connect Signal/Slots"
+#~ msgstr "&Kevreadennoù :"
+
+#~ msgid "Selects the connection tool"
+#~ msgstr "Dibabit ostilh ar gevreadenn"
+
+#~ msgid "Tab Order"
+#~ msgstr "Urzhiad ar bevennigoù"
+
+#~ msgid "Tab &Order"
+#~ msgstr "&Urzhiad ar bevennigoù"
+
+#~ msgid "<b>The Tools toolbar</b>%1"
+#~ msgstr "<b>Ar varrenn ostilhoù</b>%1"
+
+#~ msgid "Custom Widgets"
+#~ msgstr "Widgetoù diouzhoc'h"
+
+#~ msgid "Edit &Custom Widgets..."
+#~ msgstr "Aozañ ar widget &diouzhoc'h ..."
+
+#~ msgid "<b>The %1</b>%2"
+#~ msgstr "<b>Ar %1</b>%2"
+
+#~ msgid "<b>A %1</b>"
+#~ msgstr "<b>Ur %1</b>"
+
+#~ msgid "<b>The File toolbar</b>%1"
+#~ msgstr "<b>Ar varrenn ostilhoù restr</b>%1"
+
+#~ msgid "New dialog or file"
+#~ msgstr "Restr pe kendiviz nevez"
+
+#~ msgid "&New..."
+#~ msgstr "&Nevez ..."
+
+#~ msgid "Creates a new project, form or source file."
+#~ msgstr ""
+#~ "Krouiñ a ra ur raktres nevez, ur paperenn-reol nevez pe ur restr tarzh "
+#~ "nevez ..."
+
+#~ msgid "Creates a new dialog or file"
+#~ msgstr "Krouiñ ur restr nevez pe ur c'hendiviz nevez"
+
+#~ msgid "New Dialog"
+#~ msgstr "Kendiviz nevez"
+
+#~ msgid "&Dialog..."
+#~ msgstr "&Kendiviz ..."
+
+#~ msgid "Creates a new dialog."
+#~ msgstr "Krouiñ ur c'hendiviz nevez."
+
+#~ msgid "&File..."
+#~ msgstr "&Restr ..."
+
+#~ msgid "Creates a new file."
+#~ msgstr "Krouiñ ur restr nevez."
+
+#~ msgid "Saves the current project or document"
+#~ msgstr "Enrollañ a ra ar raktres pe an teul red"
+
+#~ msgid "Save &As..."
+#~ msgstr "Enrollañ e ..."
+
+#~ msgid "Saves the current form with a new filename"
+#~ msgstr "Enrollañ a ra ar paperenn-reol red gant un anv-restr nevez"
+
+#~ msgid "Sa&ve All"
+#~ msgstr "En&rollañ an holl re"
+
+#~ msgid "Create &Template..."
+#~ msgstr "Krouiñ ur &patrom ..."
+
+#~ msgid "Creates a new template"
+#~ msgstr "Krouiñ a ra ur patrom nevez"
+
+#~ msgid "Pr&oject"
+#~ msgstr "Ra&ktres"
+
+#~ msgid "Active Project"
+#~ msgstr "Raktres bev"
+
+#~ msgid "Adds a file to the current project"
+#~ msgstr "Ouzhpennañ ur restr d'ar raktres red"
+
+#~ msgid "Image Collection..."
+#~ msgstr "Dastumad skeudennoù ..."
+
+#~ msgid "&Image Collection..."
+#~ msgstr "Dastumad &skeudennoù ..."
+
+#~ msgid "Database Connections..."
+#~ msgstr "Kevreadennoù ouzh ar stlennvon ..."
+
+#~ msgid "&Database Connections..."
+#~ msgstr "Kevreadennoù ouzh ar &stlennvon ..."
+
+#~ msgid "Project Settings..."
+#~ msgstr "Dibarzhoù ar raktres ..."
+
+#~ msgid "&Project Settings..."
+#~ msgstr "&Dibarzhoù ar raktres ..."
+
+#~ msgid "&Preview"
+#~ msgstr "&Rakgwel"
+
+#, fuzzy
+#~ msgid "Preview Form"
+#~ msgstr "Trobarzhell"
+
+#~ msgid "Cascade"
+#~ msgstr "Diri"
+
+#~ msgid "Cl&ose"
+#~ msgstr "Se&rriñ"
+
+#~ msgid "Closes the active window"
+#~ msgstr "Serriñ ar prenestr bev"
+
+#~ msgid "Close Al&l"
+#~ msgstr "Serriñ an ho&ll re"
+
+#~ msgid "Closes all form windows"
+#~ msgstr "Serriñ a ra an holl prenester ar paperennoù-reol"
+
+#~ msgid "Ne&xt"
+#~ msgstr "A &heul"
+
+#~ msgid "Pre&vious"
+#~ msgstr "Ken&t"
+
+#, fuzzy
+#~ msgid "Activates the previous window"
+#~ msgstr "Prenestr diaraok"
+
+#~ msgid "&Manual"
+#~ msgstr "&Diwar zorn"
+
+#~ msgid "About &Qt"
+#~ msgstr "Diwar-benn &Qt"
+
+#, fuzzy
+#~ msgid "Register Qt"
+#~ msgstr "Adloc'hañ"
+
+#~ msgid "Create a new project, form or source file..."
+#~ msgstr ""
+#~ "Krouiñ ur raktres nevez, ur paperenn-reol nevez pe ur restr tarzh "
+#~ "nevez ..."
+
+#~ msgid "Name of File"
+#~ msgstr "Anv ar restr"
+
+#~ msgid "Enter the name of the new source file:"
+#~ msgstr "Roit anv restr an tarzh nevez :"
+
+#~ msgid "Save Project Settings"
+#~ msgstr "Enrollañ kefluniadur ar raktres"
+
+#~ msgid "Selected project '%1'"
+#~ msgstr "Raktres dibabet '%1'"
+
+#~ msgid "Open a file..."
+#~ msgstr "Digeriñ ur restr ..."
+
+#~ msgid "*.ui *.pro|Designer Files"
+#~ msgstr "*.ui *.pro|Restroù Designer"
+
+#~ msgid "Importing '%1' using import filter ..."
+#~ msgstr "Emaon oc'h enporzh '%1' gant ar sil enporzh ..."
+
+#~ msgid "Loaded file '%1'"
+#~ msgstr "Karget eo ar restr '%1'"
+
+#~ msgid "Load File"
+#~ msgstr "Kargañ ar restr"
+
+#, fuzzy
+#~ msgid "Project '%1' saved."
+#~ msgstr "Karget eo ar raktres."
+
+#~ msgid "Enter a filename..."
+#~ msgstr "Roit anv ar restr ..."
+
+#~ msgid "NewTemplate"
+#~ msgstr "PatromNevez"
+
+#~ msgid "Paste Error"
+#~ msgstr "Pegañ ar fazi"
+
+#~ msgid "Edit Source"
+#~ msgstr "Aozañ an tarzh"
+
+#~ msgid "Edit the current form's settings..."
+#~ msgstr "Aozañ dibarzhoù ar paperenn-reol red ..."
+
+#~ msgid "Edit custom widgets..."
+#~ msgstr "Aozañ ar widgetoù diouzhoc'h ..."
+
+#, fuzzy
+#~ msgid "Set 'name' Property"
+#~ msgstr "Strollad nevez"
+
+#~ msgid "Load Template"
+#~ msgstr "Kargañ ar patrom"
+
+#~ msgid "Could not load form description from template '%1'"
+#~ msgstr "N'em eus ket kargañ deskrivadur ar paperenn-reol eus ar patrom '%1'"
+
+#~ msgid "%1 Project"
+#~ msgstr "Raktres %1"
+
+#~ msgid "Wizard"
+#~ msgstr "Skoazeller"
+
+#~ msgid "Main Window"
+#~ msgstr "Prenestr kentañ"
+
+#~ msgid "&Styles"
+#~ msgstr "&Gizioù"
+
+#~ msgid "Typewriter"
+#~ msgstr "Mekanik da skrivañ"
+
+#~ msgid "Paragraph"
+#~ msgstr "Rannbennad"
+
+#~ msgid "Align left"
+#~ msgstr "Steudañ d'a-gleiz"
+
+#~ msgid "Align center"
+#~ msgstr "Steudañ d'ar c'hreiz"
+
+#~ msgid "Align right"
+#~ msgstr "Steudañ d'a-zehou"
+
+#~ msgid "&Font"
+#~ msgstr "&Nodrezh"
+
+#~ msgid "Fontsize +1"
+#~ msgstr "Ment an nodrezh +1"
+
+#~ msgid "Fontsize -1"
+#~ msgstr "Ment an nodrezh -1"
+
+#~ msgid "Headline 1"
+#~ msgstr "Reollin 1"
+
+#~ msgid "Headline 2"
+#~ msgstr "Reollin 2"
+
+#~ msgid "Headline 3"
+#~ msgstr "Reollin 3"
+
+#~ msgid "Set the Text of '%1'"
+#~ msgstr "Lakaat skrid « %1 »"
+
+#~ msgid "Ne&xt Form"
+#~ msgstr "Paperenn-reol a he&ul"
+
+#~ msgid "Pre&vious Form"
+#~ msgstr "Paperenn-reol dia&raok"
+
+#~ msgid "Configure &KDevDesigner..."
+#~ msgstr "Kefluniañ &KDevDesigner ..."
+
+#~ msgid "KDevDesignerPart"
+#~ msgstr "KDevDesignerPart"
+
+#~ msgid "Edit Wizard Pages"
+#~ msgstr "Aozañ pajenooù ar skoazeler"
+
+#~ msgid "Add Page to %1"
+#~ msgstr "Ouzhpennañ ar pajenn da %1"
+
+#~ msgid "Delete Page %1 of %2"
+#~ msgstr "Lemel ar bajenn %1 diwar %2"
+
+#~ msgid "Rename page %1 of %2"
+#~ msgstr "Adenvel ar bajenn %1 diwar %2"
+
+#~ msgid "Move Page %1 to %2 in %3"
+#~ msgstr "Fiñval ar bajenn %1 da %2 e-barzh %3"
+
+#~ msgid "%1/%2"
+#~ msgstr "%1/%2"
+
+#~ msgid "Resize"
+#~ msgstr "Adventañ"
+
+#, fuzzy
+#~ msgid "&Connect Action..."
+#~ msgstr "Kevreade&nnoù ..."
+
+#, fuzzy
+#~ msgid "Delete Action"
+#~ msgstr "&Dilemel ar gevreadenn"
+
+#~ msgid "&Open Source File"
+#~ msgstr "&Digeriñ ar restr tarzh"
+
+#~ msgid "&Remove Source File From Project"
+#~ msgstr "&Dilemel ar restr tarzh eus ar raktres"
+
+#~ msgid "&Open Form"
+#~ msgstr "&Digeriñ ar paperenn-reol"
+
+#~ msgid "&Remove Form From Project"
+#~ msgstr "&Lemel ar paperenn-reol eus ar raktres"
+
+#, fuzzy
+#~ msgid "&Remove Source File From Form"
+#~ msgstr "&Dilemel ar restr tarzh eus ar raktres"
+
+#~ msgid "&Open Source"
+#~ msgstr "&Digeriñ an tarzh"
+
+#~ msgid "Sender"
+#~ msgstr "Kaser"
+
+#~ msgid "Delete Toolbar"
+#~ msgstr "Dilemel ar barenn ostilhoù"
+
+#~ msgid "Delete Toolbar '%1'"
+#~ msgstr "Dilemel ar barenn ostilhoù '%1'"
+
+#~ msgid "Delete Separator"
+#~ msgstr "Lemel an troc'h"
+
+#~ msgid "Insert Separator"
+#~ msgstr "Enlakaat un troc'h"
+
+#, fuzzy
+#~ msgid "Delete Action '%1' From Toolbar '%2'"
+#~ msgstr "Ouzhpennañ ur wezhiad '%1' da varenn an ostilhoù '%2'"
+
+#~ msgid "Add Action '%1' to Toolbar '%2'"
+#~ msgstr "Ouzhpennañ ur wezhiad '%1' da varenn an ostilhoù '%2'"
+
+#~ msgid "Add Widget '%1' to Toolbar '%2'"
+#~ msgstr "Ouzhpennañ ar widget '%1' da varenn ostilh '%2'"
+
+#, fuzzy
+#~ msgid "Class Variables"
+#~ msgstr "Aozañ ar gizioù"
+
+#~ msgid "Functions"
+#~ msgstr "Fonksionoù"
+
+#~ msgid "New..."
+#~ msgstr "Nevez ..."
+
+#~ msgid "Members"
+#~ msgstr "Ezelioù"
+
+#~ msgid "Adding Custom Widget"
+#~ msgstr "Oc'h ouzhpennañ ur widget diouzhoc'h"
+
+#~ msgid "Removing Custom Widget"
+#~ msgstr "O lemel ar widget diouzoc'h"
+
+#~ msgid "*.h *.h++ *.hxx *.hh|Header Files"
+#~ msgstr "*.h *.h++ *.hxx *.hh|Restroù reollin"
+
+#~ msgid "Renaming Custom Widget"
+#~ msgstr "Adenvel ar widget diouzoc'h"
+
+#~ msgid "new menu"
+#~ msgstr "meuziad nevez"
+
+#~ msgid "separator"
+#~ msgstr "troc'h"
+
+#~ msgid "Cut Menu"
+#~ msgstr "Troc'hañ ar meuziad"
+
+#~ msgid "Delete Menu"
+#~ msgstr "Dilemel ar meuziad"
+
+#~ msgid "Move Menu Left"
+#~ msgstr "Fiñval ar meudiad d'a-gleiz"
+
+#~ msgid "Move Menu Right"
+#~ msgstr "Fiñval ar meudiad d'a-zehou"
+
+#~ msgid "Rename Menu"
+#~ msgstr "Adenvel ar meuziad"
+
+#~ msgid "New Column"
+#~ msgstr "Bann nevez"
+
+#, fuzzy
+#~ msgid "Subitem"
+#~ msgstr "Restr nevez"
+
+#~ msgid "new item"
+#~ msgstr "tra nevez"
+
+#~ msgid "Cut Item"
+#~ msgstr "Troc'hañ an dra"
+
+#~ msgid "Set Icon"
+#~ msgstr "Lakaat an arlun"
+
+#~ msgid "Add Item"
+#~ msgstr "Ouzhpennañ un hini"
+
+#~ msgid "Remove Item"
+#~ msgstr "Lemel un dra"
+
+#~ msgid "Rename Item"
+#~ msgstr "Adenvel an dra"
+
+#~ msgid "Remove Icon"
+#~ msgstr "Lemel an Arlun"
+
+#~ msgid "Move Item Up"
+#~ msgstr "Pignit an dra"
+
+#~ msgid "Move Item Down"
+#~ msgstr "Diskennit an dra"
+
+#~ msgid "Output Window"
+#~ msgstr "Prenestr ezkas"
+
+#~ msgid "Toolbox"
+#~ msgstr "Boest ostilhoù"
+
+#~ msgid "Cannot create an invalid project."
+#~ msgstr "N'hellan ket krouiñ ur raktres siek."
+
+#~ msgid "&Undo: %1"
+#~ msgstr "&Dizober : %1"
+
+#~ msgid "&Redo: %1"
+#~ msgstr "&Adober : %1"
+
+#~ msgid "Choose Pixmap..."
+#~ msgstr "Dibabit ur piksmap ..."
+
+#~ msgid "Edit Text..."
+#~ msgstr "Aozañ ar skrid ..."
+
+#~ msgid "Edit Title..."
+#~ msgstr "Aozañ an titl ..."
+
+#, fuzzy
+#~ msgid "Edit Page Title..."
+#~ msgstr "&Aozañ ar c'hiz ..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Lemel ur bajenn"
+
+#~ msgid "Add Page"
+#~ msgstr "Ouzhpennañ ar pajenn"
+
+#~ msgid "Previous Page"
+#~ msgstr "Pajenn diaraok"
+
+#~ msgid "Next Page"
+#~ msgstr "Pajenn da heul"
+
+#~ msgid "Rename Current Page..."
+#~ msgstr "Adenvel ar bajenn-se ..."
+
+#~ msgid "Edit Pages..."
+#~ msgstr "Aozañ ar pajennoù ..."
+
+#~ msgid "Add Menu Item"
+#~ msgstr "Ouzhpennañ un hini d'ar meuziad"
+
+#~ msgid "Add Toolbar"
+#~ msgstr "Ouzhpennañ barenn an ostilhoù"
+
+#~ msgid "Set the 'title' of '%2'"
+#~ msgstr "Lakaat titl '%2'"
+
+#~ msgid "Page Title"
+#~ msgstr "Titl ar bajenn"
+
+#~ msgid "New page title"
+#~ msgstr "Titl nevez ar bajenn"
+
+#~ msgid "Rename Page %1 to %2"
+#~ msgstr "Adenvel ar bajenn %1 da %2"
+
+#~ msgid "Add Toolbar to '%1'"
+#~ msgstr "Ouzhpennañ barenn an ostilhoù da %1"
+
+#~ msgid "Add Menu to '%1'"
+#~ msgstr "Ouzhpennañ ur meuziad da '%1'"
+
+#~ msgid "Edit %1..."
+#~ msgstr "Aozañ %1 ..."
+
+#~ msgid "Insert a %1 (custom widget)"
+#~ msgstr "Enlakaat ur %1 (widget diouzhoc'h)"
+
+#~ msgid "Restoring Last Session"
+#~ msgstr "Emaon oc'h adoazañ an dalc'h diwezhañ"
+
+#~ msgid "Could not open '%1'. File does not exist."
+#~ msgstr "N'hellan ket digeriñ '%1'. N'eus ket ur restr."
+
+#~ msgid "&Horizontal"
+#~ msgstr "&A-blaen"
+
+#~ msgid "A %1 (custom widget)"
+#~ msgstr "Ur %1 (widget diouzhoc'h)"
+
+#~ msgid "Connect '%1' with..."
+#~ msgstr "Kevreañ '%1' ouzh ..."
+
+#, fuzzy
+#~ msgid "Change Tab Order"
+#~ msgstr "Kemmañ al levraoueg"
+
+#~ msgid "Connect '%1' to '%2'"
+#~ msgstr "Kevreañ '%1' ouzh '%2'"
+
+#~ msgid "Inserting Widget"
+#~ msgstr "Oc'h enlakaat ur widget"
+
+#~ msgid "&Select"
+#~ msgstr "&Dibabit"
+
+#~ msgid "Raise"
+#~ msgstr "Sevel"
+
+#~ msgid "Edit connections..."
+#~ msgstr "Aozañ ar gevreadennoù ..."
+
+#~ msgid ""
+#~ "*.db|Database Files\n"
+#~ "*|All Files"
+#~ msgstr ""
+#~ "*.db|Restroù stlennvon \n"
+#~ "*|Pep restr"
+
+#~ msgid ""
+#~ "*.pro|Project Files\n"
+#~ "*|All Files"
+#~ msgstr ""
+#~ "*.pro|Restroù raktres\n"
+#~ "*|Pep restr"

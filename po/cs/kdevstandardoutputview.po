@@ -1,0 +1,135 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2015, 2016, 2020.
+# Vit Pelcak <vpelcak@suse.cz>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevstandardoutputview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-04-23 12:27+0200\n"
+"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.12.3\n"
+
+#: outputwidget.cpp:53
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Pohled na výstup"
+
+#: outputwidget.cpp:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Uzavřít právě aktivní pohled na výstup"
+
+#: outputwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Zavřít všechny ostatní pohledy na výstup"
+
+#: outputwidget.cpp:81
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Předchozí výstup"
+
+#: outputwidget.cpp:84
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Následující výstup"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Vybrat aktivovanou položku"
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr ""
+
+#: outputwidget.cpp:105
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "První položka"
+
+#: outputwidget.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Předchozí položka"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Následující položka"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Poslední položka"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Vyčistit"
+
+#: outputwidget.cpp:141
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Hledat..."
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr ""
+"Zadat regulární výraz ignorující malá nebo velká písmena pro filtrování "
+"pohledu na výstup"
+
+#: standardoutputview.cpp:101
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Sestavení"
+
+#: standardoutputview.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Spustit"
+
+#: standardoutputview.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Ladění"
+
+#: standardoutputview.cpp:116
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Test"
+
+#: standardoutputview.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Správa verzí"

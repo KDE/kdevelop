@@ -1,0 +1,49 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Vít Pelčák <vit@pelcak.org>, 2017, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-09-16 15:48+0200\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: dockerplugin.cpp:117
+#, kde-format
+msgid "docker build '%1'"
+msgstr "docker build '%1'"
+
+#: dockerplugin.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Vyberte název značky"
+
+#: dockerplugin.cpp:122
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Tag name for '%1':"
+msgstr "Název značky pro '%1':"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dockerpreferences.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "'docker run' arguments:"
+msgstr "Argumenty pro 'docker run':"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dockerpreferences.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects volume:"
+msgstr ""

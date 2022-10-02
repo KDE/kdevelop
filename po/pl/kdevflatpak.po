@@ -1,0 +1,111 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2017, 2019, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"PO-Revision-Date: 2021-01-06 01:45+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 20.12.1\n"
+
+#: flatpakplugin.cpp:45
+#, kde-format
+msgctxt "@action"
+msgid "Rebuild Environment"
+msgstr "Przebuduj środowisko"
+
+#: flatpakplugin.cpp:46
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Recompiles all dependencies for a fresh environment."
+msgstr "Przekompilowuje wszystkie zależności dla świeżego środowiska."
+
+#: flatpakplugin.cpp:51
+#, kde-format
+msgctxt "@action"
+msgid "Export Flatpak Bundle..."
+msgstr "Wyeksportuj pęk Flatpaka..."
+
+#: flatpakplugin.cpp:52
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Exports the current build into a 'bundle.flatpak' file."
+msgstr "Eksportuje bieżącą budowę do pliku 'bundle.flatpak'."
+
+#: flatpakplugin.cpp:57
+#, kde-format
+msgctxt "@action"
+msgid "Send to Device..."
+msgstr "Wyślij na urządzenie..."
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "Export %1"
+msgstr "Wyeksportuj %1"
+
+#: flatpakplugin.cpp:92
+#, kde-format
+msgid "Flatpak Bundle (*.flatpak)"
+msgstr "Pęk Flatpaka (*.flatpak)"
+
+#: flatpakplugin.cpp:176
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Build Flatpak %1 for %2"
+msgstr "Zbuduj Flatpaka %1 dla %2"
+
+#: flatpakplugin.cpp:198
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Wybierz nazwę znacznika"
+
+#: flatpakplugin.cpp:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Device hostname:"
+msgstr "Nazwa gospodarza urządzenia:"
+
+#: flatpakruntime.cpp:53
+#, kde-format
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: flatpakruntime.cpp:144
+#, kde-format
+msgid "Bundling"
+msgstr "Dołączanie"
+
+#: flatpakruntime.cpp:166
+#, kde-format
+msgid "Run on Device"
+msgstr "Wykonaj na urządzeniu"
+
+#~ msgid "Export %1 to..."
+#~ msgstr "Eksportuj do %1..."
+
+#~ msgid "Creating Flatpak %1"
+#~ msgstr "Tworzenie Flatpaka %1"
+
+#~ msgid "Transferring flatpak to %1"
+#~ msgstr "Przenoszenie flatpaka na %1"
+
+#~ msgid "Transferring replicate.sh to %1"
+#~ msgstr "Przenoszenie replicate.sh na %1"
+
+#~ msgid "Installing %1 to %2"
+#~ msgstr "Wgrywanie %1 w %2"
+
+#~ msgid "Running %1 on %2"
+#~ msgstr "Uruchomiono %1 na %2"

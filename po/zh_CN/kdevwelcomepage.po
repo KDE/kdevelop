@@ -1,0 +1,198 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-20 00:43+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevwelcomepage.pot\n"
+"X-Crowdin-File-ID: 4915\n"
+
+#: qml/area_code.qml:76
+msgid "Need Help?"
+msgstr "需要帮助？"
+
+#: qml/area_code.qml:84
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#: qml/area_code.qml:91
+msgid "Learn about KDevelop"
+msgstr "学习 KDevelop"
+
+#: qml/area_code.qml:96
+msgid "Join KDevelop's team!"
+msgstr "加入 KDevelop 团队！"
+
+#: qml/area_code.qml:101
+msgid "Handbook"
+msgstr "手册"
+
+#: qml/area_debug.qml:18 qml/area_review.qml:16
+msgid "Back to code"
+msgstr "返回代码"
+
+#: qml/area_debug.qml:37
+msgid "Configure a new Launcher"
+msgstr "配置新启动器"
+
+#: qml/area_debug.qml:38
+msgid "Attach to Process"
+msgstr "附加到进程"
+
+#: qml/area_debug.qml:39
+msgid "Debug your program"
+msgstr "调试您的程序"
+
+#: qml/area_debug.qml:41
+msgid "Debug Area"
+msgstr "调试区域"
+
+#: qml/area_debug.qml:44
+msgid ""
+"On the <em>Debug</em> area you will be able to see and analyze how your "
+"program works on execution. On the <em>Run</em> menu you will find all the "
+"possible options."
+msgstr ""
+"在 <em>调试</em> 区域中，您将能够查看和分析程序在执行过程中的工作情况。在 "
+"<em>运行</em> 菜单中，您可以找到所有可能的选项。"
+
+#: qml/area_debug.qml:50
+msgid ""
+"As you can see, here you can just execute your application or debug it if "
+"you need further runtime information. You can select what is going to be run "
+"by configuring the launches and selecting the one you want to use in the "
+"<em>Current Launch Configuration</em> sub-menu."
+msgstr ""
+"如您所见，在这里您可以只执行应用程序，或者如果您需要进一步的运行时信息，可以"
+"调试它。通过配置启动流程并选择要在 <em>当前启动配置</em> 子菜单中使用的选项, "
+"可以选择要运行的内容。"
+
+#: qml/area_review.qml:38
+msgid "Review a Patch"
+msgstr "审核补丁"
+
+#: qml/area_review.qml:46
+msgid "Review Area"
+msgstr "审核区域"
+
+#: qml/area_review.qml:50
+msgid ""
+"On the <em>Review</em> area you will be able to find the tools you need to "
+"review changes in your projects, either the ones you made or some external "
+"patch."
+msgstr ""
+"在 <em>审核</em> 区域，您可以找到用于审核工程更改所需的工具，包括您自己的和外"
+"部的补丁。"
+
+#: qml/area_review.qml:56
+msgid ""
+"Also it will help you send the changes to the community you're contributing "
+"to, either by committing the changes, sending them by e-mail or putting them "
+"on a ReviewBoard service."
+msgstr ""
+"此外，它还将帮助您将更改发送到您所贡献的社区，或者通过提交更改、通过电子邮件"
+"发送它们或将它们放在 ReviewBoard 服务上。"
+
+#: qml/Develop.qml:32
+msgid "New Project"
+msgstr "新建工程"
+
+#: qml/Develop.qml:37
+msgid "Open Project"
+msgstr "打开工程"
+
+#: qml/Develop.qml:43
+msgid "Fetch Project"
+msgstr "获取工程"
+
+#: qml/Develop.qml:50
+msgid "Recent Projects"
+msgstr "最近的工程"
+
+#: qml/Develop.qml:65
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>欢迎使用 KDevelop！</h3>\n"
+"<p>您可以打开现有的工程或通过上面的按钮创建一个新工程来开始工作。</p>\n"
+"<p>如果您需要帮助, 请查阅<a href=\"https://userbase.kde.org/KDevelop\">用户手"
+"册</a>。</p>"
+
+#: qml/Develop.qml:70
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Windows 用户请注意</h3>\n"
+"<p>请注意 KDevelop 的 Windows 版本没有预装 C/C++ 编译器！</p>\n"
+"<p>您需要通过 MinGW 安装 GCC，或者安装 Microsoft Visual Studio 的最新版本，并"
+"在启动<i>之前</i>确保环境安装正确。</p>\n"
+"<p>如果需要进一步的帮助, 请查阅 <a href=\"https://userbase.kde.org/KDevelop4/"
+"Manual/WindowsSetup\">KDevelop Windows 版说明</a>。</p>"
+
+#: qml/Develop.qml:107
+msgid "%1: %2"
+msgstr "%1：(%2)"
+
+#: qml/Develop.qml:126
+msgid "Sessions"
+msgstr "会话"
+
+#: qml/GettingStarted.qml:49
+msgid "Go!"
+msgstr "开始！"
+
+#: qml/GettingStarted.qml:57
+msgid "Documentation for KDevelop users"
+msgstr "KDevelop 用户文档"
+
+#: qml/GettingStarted.qml:62
+msgid "Keep up with KDevelop's development"
+msgstr "紧跟 KDevelop 的发展！"
+
+#: qml/GettingStarted.qml:67
+msgid "Help us improve KDevelop"
+msgstr "帮助我们改善 KDevelop！"
+
+#: qml/NewsFeed.qml:136
+msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+msgid "%1 (new)"
+msgstr "%1 (新)"
+
+#: qml/NewsFeed.qml:147
+msgid "Fetching feeds..."
+msgstr "正在抓取订阅..."
+
+#: qml/NewsFeed.qml:148
+msgid "No recent news"
+msgstr "没有新闻"
+
+#: qml/plugins/Branches.qml:16
+msgid "Branches"
+msgstr "分支"
+
+#: qml/plugins/Projects.qml:15
+msgid "Projects"
+msgstr "工程"

@@ -1,0 +1,156 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2016, 2017.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 09:46+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: makebuilderpreferences.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr "Nastavi možnosti za Make"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "Prekini ob prvi n&apaki:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "Prikaži ukaze, ampak jih ne izvedi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "Namesti kot skrbnik:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "Ukaz za namestitev kot skrbnik:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "Število sočasnih poslov:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "Napravi izvedljivo datoteko:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "Privzet cilj za make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Dodatne možnosti za ma&ke:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Dejaven &profil okolja:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr "Prepiši število &poslov:"
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Predmet izgradnje ni več na voljo"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Notranja napaka: ni mogoče izgraditi predmeta datoteke"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "gksu"
+#~ msgstr "gksu"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Pogled"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Make Builder"
+#~ msgstr "Izgrajevalnik Make"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Podpora za izgradnjo projektov Make"

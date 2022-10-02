@@ -1,0 +1,415 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <megaribi@epn.ba>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustombuildsystem.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-18 20:28+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: bs <bs@kde.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:10+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: configwidget.cpp:25
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Gradi"
+
+#: configwidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Konfiguriši"
+
+#: configwidget.cpp:27
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Instaliraj"
+
+#: configwidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Očisti"
+
+#: configwidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Kreši"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, fuzzy, kde-format
+#| msgid "Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Direktorij za gradnju:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the directory where the tools are being executed in.\n"
+#| "If this is the same as the source directory you can leave it empty."
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Odaberite direktorij u kome se izvršavaju alati.\n"
+"Ako je to isto kao izvorni direktorij, ostavite prazno."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, fuzzy, kde-format
+#| msgid "The directory where the tools are executed"
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "Direktorij u kome se alati izvtšavaju"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, fuzzy, kde-format
+#| msgid "Build Tools"
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Alati za gradnju"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, fuzzy, kde-format
+#| msgid "Action:"
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Akcija:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, fuzzy, kde-format
+#| msgid "Enable:"
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Omogući:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Izvršni program:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, fuzzy, kde-format
+#| msgid ""
+#| "This is the executable that should be executed when selecting the action "
+#| "from the Project menu"
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Ovaj izvršni program se treba izvršiti kada se izabere akcija iz  Projekt "
+"menija"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumenti:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, fuzzy, kde-format
+#| msgid "The arguments that the tool needs to execute properly."
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "Argumenti koje alat traži za ispravno izvršenje."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Okruženje:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, fuzzy, kde-format
+#| msgid "Choose a pre-configured environment for your tool"
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Izaberi prekonfigurisano okruženje za alat"
+
+#: custombuildjob.cpp:67
+#, fuzzy, kde-format
+#| msgid "Building:"
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Gradnja:"
+
+#: custombuildjob.cpp:70
+#, fuzzy, kde-format
+#| msgid "Cleaning:"
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Čišćenje:"
+
+#: custombuildjob.cpp:73
+#, fuzzy, kde-format
+#| msgid "Installing:"
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Instalacija:"
+
+#: custombuildjob.cpp:74
+#, fuzzy, kde-format
+#| msgid "Installing:"
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Instalacija:"
+
+#: custombuildjob.cpp:77
+#, fuzzy, kde-format
+#| msgid "Configuring:"
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Konfigurisanje:"
+
+#: custombuildjob.cpp:80
+#, fuzzy, kde-format
+#| msgid "Pruning:"
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Odsjecanje:"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Nedefinisan tip gradnje"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr ""
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr ""
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr "Dati argumenti traže pravu školjku, ovo nije trenutno podržano."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Neuspjelo pokretanje naredbe."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Naredba neuspjela."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Nepoznata greška pri izvršenju naredbe."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Neuspjeli ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Završeno ***"
+
+#: custombuildsystemconfig.cpp:14
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "Gradi"
+
+#: custombuildsystemconfig.cpp:15
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "Konfiguriši"
+
+#: custombuildsystemconfig.cpp:16
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "Instaliraj"
+
+#: custombuildsystemconfig.cpp:17
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "Očisti"
+
+#: custombuildsystemconfig.cpp:18
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "Kreši"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, fuzzy, kde-format
+#| msgid "Build Configuration:"
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Konfiguracija gradnje:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Dodaj"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Ukloni"
+
+#: kcm_custombuildsystem.cpp:53
+#, fuzzy, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Vlastiti sistem gradnje"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid "No command given"
+#~ msgstr "Naredba nije data"
+
+#~ msgid "This command is disabled"
+#~ msgstr "Naredba je onemogućena"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Jezički parametri specifični za stazu"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr "Podrška za gradnju i upravljanje vlastitim sistemima gradnje"
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Autorska prava 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr ""
+#~ "Dva puta kliknite da unesete kako se nova definicija koristi za stazu"
+
+#~ msgid "Define"
+#~ msgstr "Definiši"
+
+#~ msgid "Value"
+#~ msgstr "Vrijednost"
+
+#~ msgid "Delete Define"
+#~ msgstr "Obriši definiciju"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Obriši stazu uključenja"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr ""
+#~ "Da li ste sigurni da želite ukloniti izabranu stazu uključenja '%1'?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Dodaj trenutno prikazani URL na listu uključenja ako on već nije na listi."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr ""
+#~ "Nova staza uključenja korištena za parsiranje datoteka pod datim "
+#~ "direktorijem"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Kreiraj novi element staze za uključenje iz ovog URL."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Briši trenutni element staze za uključenje."
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr "Da li ste sigurni da želite ukloniti konfiguraciju za stazu '%1'?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Dodaj stazu za pod-projekt."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Zamijeni trenutno izabranu stazu novom vrijednošću čuvajući uključenja i "
+#~ "definicije postavljene za odabranu stazu."
+
+#~ msgid "Replace"
+#~ msgstr "Zamijeni"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Obriši element staze podprojekta."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "Uključenja/Uvoženja"
+
+#~ msgid "Defines"
+#~ msgstr "Definicije"

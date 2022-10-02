@@ -1,0 +1,152 @@
+# Lithuanian translations for kdevstandardoutputview package.
+# This file is distributed under the same license as the kdevstandardoutputview package.
+#
+# Andrius Štikonas <andrius@stikonas.eu>, 2009.
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011.
+# Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevstandardoutputview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-08-30 17:36+0200\n"
+"Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: outputwidget.cpp:53
+#, fuzzy, kde-format
+#| msgid "Output View"
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Išvesties peržiūra"
+
+#: outputwidget.cpp:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr ""
+
+#: outputwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr ""
+
+#: outputwidget.cpp:81
+#, fuzzy, kde-format
+#| msgid "Previous"
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Ankstesnis"
+
+#: outputwidget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Previous"
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Ankstesnis"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr ""
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr ""
+
+#: outputwidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "Next"
+msgctxt "@action"
+msgid "First Item"
+msgstr "Kitas"
+
+#: outputwidget.cpp:109
+#, fuzzy, kde-format
+#| msgid "Previous"
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Ankstesnis"
+
+#: outputwidget.cpp:113
+#, fuzzy, kde-format
+#| msgid "Next"
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Kitas"
+
+#: outputwidget.cpp:117
+#, fuzzy, kde-format
+#| msgid "Next"
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Kitas"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr ""
+
+#: outputwidget.cpp:141
+#, fuzzy, kde-format
+#| msgid "Search..."
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Ieškoti..."
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr ""
+
+#: standardoutputview.cpp:101
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Kompiliuoti"
+
+#: standardoutputview.cpp:106
+#, fuzzy, kde-format
+#| msgid "Run"
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Vykdyti"
+
+#: standardoutputview.cpp:111
+#, fuzzy, kde-format
+#| msgid "Debug"
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Derinti"
+
+#: standardoutputview.cpp:116
+#, fuzzy, kde-format
+#| msgid "Test"
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Testuoti"
+
+#: standardoutputview.cpp:121
+#, fuzzy, kde-format
+#| msgid "Version Control"
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Versijų kontrolė"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Naršymas"

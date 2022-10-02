@@ -1,0 +1,220 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"PO-Revision-Date: 2020-01-15 23:18+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: filtermodel.cpp:74
+#, fuzzy, kde-format
+#| msgid "Pattern"
+msgctxt "@title:column"
+msgid "Pattern"
+msgstr "Muster"
+
+#: filtermodel.cpp:76
+#, fuzzy, kde-format
+#| msgid "Targets"
+msgctxt "@title:column"
+msgid "Targets"
+msgstr "Sihtmärgid"
+
+#: filtermodel.cpp:78
+#, fuzzy, kde-format
+#| msgid "Action"
+msgctxt "@title:column"
+msgid "Action"
+msgstr "Toiming"
+
+#: filtermodel.cpp:107
+#, kde-format
+msgid ""
+"The wildcard pattern defines whether a file or folder is included in a "
+"project or not.<br />The pattern is matched case-sensitively against the "
+"items relative path to the project root. The relative path starts with a "
+"forward slash, trailing slashes of folders are removed.<br />Patterns ending "
+"on <code>\"/\"</code> are implicitly considered to match against folders "
+"only.<br />Patterns which do not explicitly start with either <code>\"/\"</"
+"code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
+"thus match any item with a relative path ending on the given pattern."
+msgstr ""
+"Metamärgimuster määrab kindlaks, kas fail või kataloog kaasatakse projekti "
+"või mitte.<br />Mustrit võrreldakse tõstutundlikult elementidega projekti "
+"juurkataloogi suhtelises asukohas. Suhteline asukoht algab kaldkriipsuga, "
+"kataloogide lõpukaldkriipsud eemaldatakse.<br />Mustrit, mille lõpus seisab "
+"<code>\"/\"</code>, käsitletakse sellistena, millega tuleb võrrelda ainult "
+"katalooge.<br />Mustritele, mille alguses ei seisa <code>\"/\"</code> ega "
+"<code>\"*\"</code>, lisatakse vaikimisi ette <code>\"*/\"</code>, nii et "
+"need leiavad kõik antud mustrile vastavad elemendid suhtelises asukohas."
+
+#: filtermodel.cpp:119
+#, kde-format
+msgid ""
+"The target defines what type of item the filter is matched against.<br /"
+">Filters either apply only to files, only to folders or to both."
+msgstr ""
+"Sihtmärk määrab kindlaks, millist tüüpi elementidega filtrit võrreldakse."
+"<br />Filter võib rakenduda ainult failidele, ainult kataloogidele või "
+"mõlematele."
+
+#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#, fuzzy, kde-format
+#| msgid "Files and Folders"
+msgctxt "@item"
+msgid "Files and Folders"
+msgstr "Failid ja kataloogid"
+
+#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Folders"
+msgctxt "@item"
+msgid "Folders"
+msgstr "Kataloogid"
+
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item"
+msgid "Files"
+msgstr "Failid"
+
+#: filtermodel.cpp:141
+#, kde-format
+msgid ""
+"Filters by default exclude items from the project. Inclusive patterns can be "
+"used to include items which where matched by previous exclusive patterns."
+"<br />E.g. to only include files ending on <code>\".cpp\"</code> in your "
+"project, you could exclude all files via <code>\"*\"</code> and then apply "
+"an inclusive <code>\"*.cpp\"</code> pattern."
+msgstr ""
+"Vaikimisi jätavad filtrid projektist elemente välja. Kaasaarvamise mustreid "
+"võib tarvitada nende elementide kaasamiseks, mis sobivad varasema "
+"välistamise mustriga.<br />Näiteks ainult failide kaasamiseks, mille lõpus "
+"seisab <code>\".cpp\"</code>, oma projekti tuleks välja jätta kõik failid "
+"mustriga <code>\"*\"</code> ja siis rakendada kaasavat mustrit <code>\".cpp"
+"\"</code>."
+
+#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#, fuzzy, kde-format
+#| msgid "Include"
+msgctxt "@item"
+msgid "Include"
+msgstr "Kaasa arvatud"
+
+#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#, fuzzy, kde-format
+#| msgid "Exclude"
+msgctxt "@item"
+msgid "Exclude"
+msgstr "Välja arvatud"
+
+#: projectfilterconfigpage.cpp:172
+#, kde-format
+msgid ""
+"A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
+"to make this explicit."
+msgstr ""
+"Puuduva mustriga filter leiab vasteks kõik elemendid. Selle kinnitamiseks "
+"kasuta metamärki <code>\"*\"</code>."
+
+#: projectfilterconfigpage.cpp:175
+#, kde-format
+msgid "A filter ending on <code>\"/\"</code> can never match a file."
+msgstr ""
+"Filter, mille lõpus seisab <code>\"/\"</code>, ei leia kunagi ühtegi vastet."
+
+#: projectfilterconfigpage.cpp:198
+#, fuzzy, kde-format
+#| msgid "Configure Project Filter"
+msgctxt "@title:tab"
+msgid "Configure Project Filter"
+msgstr "Projektifiltri seadistamine"
+
+#: projectfilterconfigpage.cpp:208
+#, fuzzy, kde-format
+#| msgid "Project Filter"
+msgctxt "@title:tab"
+msgid "Project Filter"
+msgstr "Projektifilter"
+
+#: projectfilterprovider.cpp:76
+#, fuzzy, kde-format
+#| msgid "Exclude Item From Project"
+#| msgid_plural "Exclude Items From Project"
+msgctxt "@action:inmenu"
+msgid "Exclude Item from Project"
+msgid_plural "Exclude Items from Project"
+msgstr[0] "Jäta element projektist välja"
+msgstr[1] "Jäta elemendid projektist välja"
+
+#: projectfilterprovider.cpp:115
+#, kde-format
+msgid ""
+"A filter for the item was added. To undo, use the project filter settings."
+msgid_plural ""
+"A filter for the items was added. To undo, use the project filter settings."
+msgstr[0] ""
+"Lisati elemendi filter. Tagasivõtmiseks kasuta projektifiltri seadistusi."
+msgstr[1] ""
+"Lisati elementide filter. Tagasivõtmiseks kasuta projektifiltri seadistusi."
+
+#: projectfilterprovider.cpp:117
+#, fuzzy, kde-format
+#| msgid "Project Filter Added"
+msgctxt "@title:window"
+msgid "Project Filter Added"
+msgstr "Lisati projektifilter"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectfiltersettings.ui:20
+#, kde-format
+msgid ""
+"Configure which files and folders inside the project folder should be "
+"included or excluded:"
+msgstr ""
+"Seadistamine, millised projektikataloogi failid ja kataloogid kaasa arvata "
+"või välja jätta:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: projectfiltersettings.ui:34
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Lisa"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: projectfiltersettings.ui:49
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Eemalda"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveUp)
+#: projectfiltersettings.ui:61
+#, fuzzy, kde-format
+#| msgid "Move Up"
+msgctxt "@action:button"
+msgid "Move Up"
+msgstr "Liiguta üles"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveDown)
+#: projectfiltersettings.ui:73
+#, fuzzy, kde-format
+#| msgid "Move Down"
+msgctxt "@action:button"
+msgid "Move Down"
+msgstr "Liiguta alla"

@@ -1,0 +1,349 @@
+# Translation of kdevqmljssupport.po to Brazilian Portuguese
+# Copyright (C) 2013-2014 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2013, 2014.
+# Aracele Torres <aracele@kde.org>, 2014.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmljssupport\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-01 21:21-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr "Escolha a localização"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "Nome:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "Caminho:"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr "Nome da &classe:"
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr "Classe de &base:"
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr "&Tipo de informação:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "Nenhum"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr "Herda de QObject"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr "Herda de QWidget"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr "Herda de QDeclarativeItem - Qt Quick 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr "Herda de QQuickItem - Qt Quick 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr "Baseada no QSharedDat"
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr "&Arquivo de cabeçalho:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr "&Arquivo de origem:"
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr "&Gerar o formulário:"
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr "Arquivo do &formulário:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "&Caminho:"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr "Introdução e localização do projeto"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr "Criar em:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr "Usar como localização padrão do projeto"
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "Projeto:"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+"Possível incompatibilidade de tipo entre o tipo de argumento (%1) e o valor "
+"passado como argumento (%2)"
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr ""
+"Módulo não encontrado, alguns tipos ou propriedades não podem ser "
+"reconhecidos"
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr ""
+"Incompatibilidade entre o tipo de valor (%1) e do tipo de propriedade (%2)"
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Ocorreu um erro ao carregar o arquivo QML: %1"
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr "Duração em milésimos de segundo"
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr ""
+"Yuri viu um pequeno jabuti xereta e<br>dez cegonhas felizes comendo kiwi."
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr "Família da fonte"
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr "Tamanho da fonte"
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr "Altura de um item em pixels"
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr "Opacidade de um item"
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr "Espaçamento entre os itens"
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr "Largura de um item em pixels"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "André Marcelo Alvarenga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "alvarenga@kde.org"
+
+#~ msgid "Subversion Submit"
+#~ msgstr "Envio para o Subversion"
+
+#~ msgid "Descriptio&n"
+#~ msgstr "De&scrição"
+
+#~ msgid "F&iles"
+#~ msgstr "Arqu&ivos"
+
+#~ msgid "Check a&ll"
+#~ msgstr "Se&lecionar tudo"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal syntax for exponential number"
+#~ msgstr "Sintaxe inválida para o número exponencial"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Stray newline in string literal"
+#~ msgstr "Mudança de linha extra na string literal"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal unicode escape sequence"
+#~ msgstr "A sequência de escape Unicode é inválida"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal hexadecimal escape sequence"
+#~ msgstr "A sequência de escape hexadecimal é inválida"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Octal escape sequences are not allowed"
+#~ msgstr "As sequências de escape octais não são permitidas"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unclosed string at end of line"
+#~ msgstr "Uma string não fechada até ao fim da linha"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Decimal numbers can't start with '0'"
+#~ msgstr "Os números decimais não podem começar com '0'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "At least one hexadecimal digit is required after '0%1'"
+#~ msgstr "É necessário pelo menos um dígito em hexadecimal após o '0%1'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Invalid regular expression flag '%0'"
+#~ msgstr "A opção da expressão regular '%0' é inválida"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression backslash sequence"
+#~ msgstr "A sequência de escape da expressão regular não está terminada"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression class"
+#~ msgstr "A classe da expressão regular não está terminada"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression literal"
+#~ msgstr "O literal da expressão regular não está terminado"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Syntax error"
+#~ msgstr "Erro de sintaxe"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unexpected token `%1'"
+#~ msgstr "O item '%1' é inesperado"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Expected token `%1'"
+#~ msgstr "Era esperado o item '%1'"
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Refusing to remove root directory."
+#~ msgstr "Não é possível remover a pasta de raiz."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Refusing to remove your home directory."
+#~ msgstr "Não é possível remover a sua pasta pessoal."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to remove directory \"%1\"."
+#~ msgstr "Não foi possível remover a pasta \"%1\"."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to remove file \"%1\"."
+#~ msgstr "Não foi possível remover o arquivo \"%1\"."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to create directory \"%1\"."
+#~ msgstr "Não foi possível criar a pasta \"%1\"."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Could not copy file \"%1\" to \"%2\"."
+#~ msgstr "Não foi possível copiar o arquivo \"%1\" para \"%2\"."
+
+#~ msgid "Cannot open %1 for reading: %2"
+#~ msgstr "Não é possível abrir %1 para leitura: %2"
+
+#~ msgid "Cannot read %1: %2"
+#~ msgstr "Não foi possível ler %1: %2"
+
+#~ msgid "File Error"
+#~ msgstr "Erro no arquivo"
+
+#~ msgid "Cannot write file %1. Disk full?"
+#~ msgstr "Não é possível gravar o arquivo '%1'. Disco cheio?"
+
+#~ msgid "Cannot overwrite file %1: %2"
+#~ msgstr "Não é possível sobrescrever o arquivo %1: %2"
+
+#~ msgid "Cannot create file %1: %2"
+#~ msgstr "Não foi possível criar o arquivo %1: %2"
+
+#~ msgid "Cannot create temporary file in %1: %2"
+#~ msgstr "Não é possível criar o arquivo temporário em %1: %2"
+
+#~ msgid "QML/JS Support"
+#~ msgstr "Suporte à QML/JS"
+
+#~ msgid "Support for QML and JS Languages"
+#~ msgstr "Suporte para linguagens QML e JS"

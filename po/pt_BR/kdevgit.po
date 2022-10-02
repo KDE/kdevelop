@@ -1,0 +1,727 @@
+# Translation of kdevgit.po to Brazilian Portuguese
+# Copyright (C) 2010-2020 This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2010, 2011, 2013, 2014, 2016, 2018, 2020.
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2011, 2012.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kkdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-07-14 09:51-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+#: committoolview.cpp:206 committoolview.cpp:207
+#, kde-format
+msgid "Filter by filename/project name"
+msgstr ""
+
+#: committoolview.cpp:224
+#, kde-format
+msgid "Refresh"
+msgstr "Atualizar"
+
+#: committoolview.cpp:225
+#, kde-format
+msgid "Stage selected"
+msgstr ""
+
+#: committoolview.cpp:227
+#, kde-format
+msgid "Unstage selected"
+msgstr ""
+
+#: committoolview.cpp:229
+#, kde-format
+msgid "Revert unstaged edits"
+msgstr ""
+
+#: committoolview.cpp:482
+#, kde-format
+msgid "Committing failed. See Version Control tool view."
+msgstr ""
+
+#: diffviewsctrl.cpp:50
+#, kde-format
+msgid "Stage selected lines or hunk"
+msgstr ""
+
+#: diffviewsctrl.cpp:52
+#, kde-format
+msgid "Unstage selected lines or hunk"
+msgstr ""
+
+#: diffviewsctrl.cpp:54
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Remove the selected branch"
+msgid "Revert selected lines or hunk"
+msgstr "Remove a ramificação selecionada"
+
+#: diffviewsctrl.cpp:56
+#, kde-format
+msgid "Go to line in source"
+msgstr ""
+
+#: diffviewsctrl.cpp:101
+#, kde-format
+msgid "Unstage selected lines"
+msgstr ""
+
+#: diffviewsctrl.cpp:102
+#, kde-format
+msgid "Stage selected lines"
+msgstr ""
+
+#: diffviewsctrl.cpp:103
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Remove the selected branch"
+msgid "Revert selected lines"
+msgstr "Remove a ramificação selecionada"
+
+#: diffviewsctrl.cpp:105
+#, kde-format
+msgid "Unstage selected hunk"
+msgstr ""
+
+#: diffviewsctrl.cpp:106
+#, kde-format
+msgid "Stage selected hunk"
+msgstr ""
+
+#: diffviewsctrl.cpp:107
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Remove the selected branch"
+msgid "Revert selected hunk"
+msgstr "Remove a ramificação selecionada"
+
+#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#, kde-format
+msgid "S"
+msgstr ""
+
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#, kde-format
+msgid "G"
+msgstr ""
+
+#: diffviewsctrl.cpp:170
+#, kde-format
+msgid "%1 (staged)"
+msgstr ""
+
+#: diffviewsctrl.cpp:172
+#, kde-format
+msgid "Staged (%1)"
+msgstr ""
+
+#: diffviewsctrl.cpp:174
+#, kde-format
+msgid "Unstaged (%1)"
+msgstr ""
+
+#: diffviewsctrl.cpp:176
+#, kde-format
+msgid "%1 (unstaged)"
+msgstr ""
+
+#: diffviewsctrl.cpp:330
+#, kde-format
+msgid ""
+"The selected lines will be reverted and the changes lost. This operation "
+"cannot be undone. Continue?"
+msgstr ""
+
+#: diffviewsctrl.cpp:332
+#, kde-format
+msgctxt "@action:button"
+msgid "Revert"
+msgstr ""
+
+#: gitmessagehighlighter.cpp:66
+#, kde-format
+msgid "Try to keep summary length below %1 characters."
+msgstr "Tente manter o comprimento do resumo abaixo de %1 caracteres."
+
+#: gitmessagehighlighter.cpp:82
+#, kde-format
+msgid "Separate summary from details with one empty line."
+msgstr "Separe o resumo dos detalhes com uma linha vazia."
+
+#: gitmessagehighlighter.cpp:92
+#, kde-format
+msgid "Try to keep line length below %1 characters."
+msgstr "Tente manter o comprimento da linha abaixo de %1 caracteres."
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
+#: gitnameemaildialog.ui:17
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure Name and Email for Git"
+msgstr "Configurar o nome e e-mail para o Git"
+
+#. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
+#: gitnameemaildialog.ui:23
+#, kde-format
+msgid ""
+"<html><head/><body><p>You have not yet configured the name and email to be "
+"associated with your Git commits.<br/>The values you enter here will be "
+"written to the Git configuration, either locally for the current project "
+"only, or globally for all Git projects.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Você ainda não configurou o nome e o e-mail a associar "
+"com os seus commits para o Git.<br/>Os valores que introduzir aqui serão "
+"gravados na configuração no Git, em nível local para o projeto atual ou "
+"globalmente para todos os projetos do Git.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gitnameemaildialog.ui:35
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "&Nome:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gitnameemaildialog.ui:48
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Emai&l:"
+msgstr "E-mai&l:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
+#: gitnameemaildialog.ui:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Write to global config"
+msgstr "Gravar na configuração global"
+
+#: gitplugin.cpp:181
+#, kde-format
+msgid "Unable to find git executable. Is it installed on the system?"
+msgstr ""
+"Não foi possível encontrar o executável git. Ele está instalado no sistema?"
+
+#: gitplugin.cpp:190
+#, kde-format
+msgid "Git Commit"
+msgstr ""
+
+#: gitplugin.cpp:242
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rebase"
+msgstr "Rebase"
+
+#: gitplugin.cpp:243
+#, kde-format
+msgctxt "@title:menu"
+msgid "Git Stashes"
+msgstr "Modificações temporárias do Git"
+
+#: gitplugin.cpp:244
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Stash Manager"
+msgstr "Gerenciador de modificações temporárias"
+
+#: gitplugin.cpp:245
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Push Stash"
+msgstr "Guardar uma modificação temporária"
+
+#: gitplugin.cpp:246
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Pop Stash"
+msgstr "Repor uma modificação temporária"
+
+#: gitplugin.cpp:279
+#, kde-format
+msgid "error: %1"
+msgstr "erro: %1"
+
+#: gitplugin.cpp:378 gitplugin.cpp:389
+#, kde-format
+msgid "Did not specify the list of files"
+msgstr "Não foi especificada a lista de arquivos"
+
+#: gitplugin.cpp:451
+#, fuzzy, kde-format
+#| msgid "Could not revert changes"
+msgid "Could not reset changes (empty list of paths)"
+msgstr "Não foi possível reverter as alterações"
+
+#: gitplugin.cpp:486
+#, kde-format
+msgid "Could not revert changes"
+msgstr "Não foi possível reverter as alterações"
+
+#: gitplugin.cpp:496
+#, kde-format
+msgid ""
+"The following files have uncommitted changes, which will be lost. Continue?"
+msgstr ""
+"Os arquivos a seguir têm modificações a enviar que serão perdidas. Deseja "
+"continuar?"
+
+#: gitplugin.cpp:521
+#, kde-format
+msgid "No files or message specified"
+msgstr "Não foram indicados arquivos ou uma mensagem"
+
+#: gitplugin.cpp:525 gitplugin.cpp:544
+#, kde-format
+msgid "Email or name for Git not specified"
+msgstr "Não foi indicado o e-mail ou o nome para o Git"
+
+#: gitplugin.cpp:541
+#, fuzzy, kde-format
+#| msgid "No files or message specified"
+msgid "No message specified"
+msgstr "Não foram indicados arquivos ou uma mensagem"
+
+#: gitplugin.cpp:615
+#, kde-format
+msgid "No files to remove"
+msgstr "Não existem arquivos para remover"
+
+#: gitplugin.cpp:855
+#, kde-format
+msgid "There are pending changes, do you want to stash them first?"
+msgstr ""
+"Existem alterações pendentes, deseja guardar temporariamente essas "
+"modificações?"
+
+#: gitplugin.cpp:856
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Pop Stash"
+msgctxt "@action:button"
+msgid "Stash"
+msgstr "Repor uma modificação temporária"
+
+#: gitplugin.cpp:857
+#, kde-format
+msgctxt "@action:button"
+msgid "Keep"
+msgstr "Manter"
+
+#: rebasedialog.cpp:25
+#, kde-format
+msgctxt "@title:window"
+msgid "Branch Selection"
+msgstr "Seleção de ramificação"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
+#: rebasedialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Rebase"
+msgstr "Rebase"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rebasedialog.ui:20
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Base branch:"
+msgstr "Ramificação base:"
+
+#. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
+#: rebasedialog.ui:40
+#, kde-format
+msgctxt "@action:button"
+msgid "Rebase"
+msgstr "Rebase"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
+#: rebasedialog.ui:60
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: repostatusmodel.cpp:64
+#, kde-format
+msgctxt "Files in a vcs which have changes staged for commit"
+msgid "Staged changes"
+msgstr ""
+
+#: repostatusmodel.cpp:67
+#, kde-format
+msgctxt "Files in a vcs which have changes not yet staged for commit"
+msgid "Unstaged changes"
+msgstr ""
+
+#: repostatusmodel.cpp:70
+#, kde-format
+msgctxt "Files in a vcs which have unresolved (merge) conflits"
+msgid "Conflicts"
+msgstr "Conflitos"
+
+#: repostatusmodel.cpp:72
+#, kde-format
+msgctxt "Files which are not tracked by a vcs"
+msgid "Untracked files"
+msgstr ""
+
+#: repostatusmodel.cpp:82
+#, kde-format
+msgctxt "Files in a vcs which have changes staged for commit"
+msgid "Staged"
+msgstr ""
+
+#: repostatusmodel.cpp:84
+#, kde-format
+msgid "Files with changes staged for commit"
+msgstr ""
+
+#: repostatusmodel.cpp:89
+#, kde-format
+msgctxt "Files in a vcs which have changes not checked in to repo"
+msgid "Modified"
+msgstr "Modificado"
+
+#: repostatusmodel.cpp:91
+#, kde-format
+msgid "Files with changes"
+msgstr "Arquivos com alterações"
+
+#: repostatusmodel.cpp:96
+#, kde-format
+msgctxt "Files in git which have unresolved (merge) conflits"
+msgid "Conflicts"
+msgstr "Conflitos"
+
+#: repostatusmodel.cpp:98
+#, kde-format
+msgid "Files with unresolved (merge) conflicts"
+msgstr ""
+
+#: repostatusmodel.cpp:103
+#, kde-format
+msgctxt "Files which are not tracked by a vcs"
+msgid "Untracked"
+msgstr ""
+
+#: repostatusmodel.cpp:104
+#, kde-format
+msgid "Files not tracked in VCS"
+msgstr ""
+
+#: repostatusmodel.cpp:222
+#, kde-format
+msgctxt "@item file has unstaged changes"
+msgid "Modified (unstaged)"
+msgstr ""
+
+#: repostatusmodel.cpp:224
+#, kde-format
+msgctxt "@item file was deleted from worktree"
+msgid "Deleted (unstaged)"
+msgstr ""
+
+#: repostatusmodel.cpp:226
+#, kde-format
+msgctxt "@item file was renamed in worktree"
+msgid "Renamed (unstaged)"
+msgstr ""
+
+#: repostatusmodel.cpp:228
+#, kde-format
+msgctxt "@item file was copied in worktree"
+msgid "Copied (unstaged)"
+msgstr ""
+
+#: repostatusmodel.cpp:230
+#, kde-format
+msgctxt "@item file has staged changes"
+msgid "Modified (staged)"
+msgstr ""
+
+#: repostatusmodel.cpp:232
+#, kde-format
+msgctxt "@item file has both staged and unstaged changes"
+msgid "Modified (unstaged changes)"
+msgstr ""
+
+#: repostatusmodel.cpp:234
+#, kde-format
+msgctxt "@item file has staged changes and was deleted in worktree"
+msgid "Modified (unstaged deletion)"
+msgstr ""
+
+#: repostatusmodel.cpp:237
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
+msgid "Added (unstaged changes)"
+msgstr ""
+
+#: repostatusmodel.cpp:240
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
+msgid "Added (unstaged deletion)"
+msgstr ""
+
+#: repostatusmodel.cpp:243
+#, kde-format
+msgctxt ""
+"@item file was deleted from versioncontrolsystem and renamed in worktree"
+msgid "Deleted (unstaged rename)"
+msgstr ""
+
+#: repostatusmodel.cpp:246
+#, kde-format
+msgctxt ""
+"@item file was deleted from versioncontrolsystem and copied in worktree"
+msgid "Deleted (unstaged copy)"
+msgstr ""
+
+#: repostatusmodel.cpp:248
+#, kde-format
+msgctxt "@item file was renamed in versioncontrolsystem"
+msgid "Renamed (staged)"
+msgstr ""
+
+#: repostatusmodel.cpp:251
+#, kde-format
+msgctxt ""
+"@item file was renamed in versioncontrolsystem and has unstaged changes"
+msgid "Renamed (unstaged changes)"
+msgstr ""
+
+#: repostatusmodel.cpp:254
+#, kde-format
+msgctxt ""
+"@item file was renamed in versioncontrolsystem and was deleted in worktree"
+msgid "Renamed (unstaged deletion)"
+msgstr ""
+
+#: repostatusmodel.cpp:256
+#, kde-format
+msgctxt "@item file was copied in versioncontrolsystem"
+msgid "Copied"
+msgstr "Copiado"
+
+#: repostatusmodel.cpp:259
+#, fuzzy, kde-format
+#| msgid "Could not revert changes"
+msgctxt ""
+"@item file was copied in versioncontrolsystem and has unstaged changes"
+msgid "Copied (unstaged changes)"
+msgstr "Não foi possível reverter as alterações"
+
+#: repostatusmodel.cpp:262
+#, kde-format
+msgctxt ""
+"@item file was copied in versioncontrolsystem and was deleted in worktree"
+msgid "Copied (unstaged deletion)"
+msgstr ""
+
+#: repostatusmodel.cpp:264
+#, kde-format
+msgctxt "@item file has unresolved merge conflicts"
+msgid "Unresolved conflicts"
+msgstr "Conflitos não resolvidos"
+
+#: repostatusmodel.cpp:266
+#, kde-format
+msgctxt "@item file is not under vcs"
+msgid "Untracked"
+msgstr ""
+
+#: repostatusmodel.cpp:269
+#, kde-format
+msgctxt "file in unknown (invalid) state"
+msgid "Unknown"
+msgstr "Desconhecido"
+
+#: repostatusmodel.cpp:362
+#, kde-format
+msgid " (staged)"
+msgstr ""
+
+#: repostatusmodel.cpp:370
+#, kde-format
+msgid " (unstaged)"
+msgstr ""
+
+#: repostatusmodel.cpp:378
+#, kde-format
+msgid " (conflicts)"
+msgstr ""
+
+#: repostatusmodel.cpp:386
+#, kde-format
+msgid " (untracked)"
+msgstr ""
+
+#: repostatusmodel.cpp:580
+#, fuzzy, kde-format
+#| msgctxt "@label:listbox"
+#| msgid "Base branch:"
+msgid "no branch"
+msgstr "Ramificação base:"
+
+#: repostatusmodel.cpp:581
+#, kde-format
+msgctxt "project name (branch name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: simplecommitform.cpp:40
+#, kde-format
+msgid "Commit"
+msgstr ""
+
+#: simplecommitform.cpp:65
+#, kde-format
+msgid "Extended commit description"
+msgstr ""
+
+#: simplecommitform.cpp:73
+#, kde-format
+msgid "Commit summary"
+msgstr ""
+
+#: simplecommitform.cpp:88 simplecommitform.cpp:172
+#, kde-format
+msgid "To commit changes, please write a commit message first"
+msgstr ""
+
+#: simplecommitform.cpp:91 simplecommitform.cpp:169
+#, kde-format
+msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
+msgstr ""
+
+#: simplecommitform.cpp:122
+#, kde-format
+msgid "To commit changes, please select a project first"
+msgstr ""
+
+#: simplecommitform.cpp:163
+#, kde-format
+msgid "Please stage some changes before committing."
+msgstr ""
+
+#: stashmanagerdialog.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "Stash Manager"
+msgstr "Gerenciador de modificações temporárias"
+
+#: stashmanagerdialog.cpp:117
+#, kde-format
+msgid "Are you sure you want to drop the stash '%1'?"
+msgstr "Deseja realmente remover a modificação temporária '%1'?"
+
+#. i18n: ectx: property (text), widget (QPushButton, drop)
+#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Drop"
+msgstr "Soltar"
+
+#: stashmanagerdialog.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Git Stash"
+msgstr "Modificações temporárias do Git"
+
+#: stashmanagerdialog.cpp:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for the new branch:"
+msgstr "Nome para a nova ramificação:"
+
+#: stashmanagerdialog.cpp:148
+#, kde-format
+msgctxt "%1: stack depth, %2: branch, %3: parent description"
+msgid "%1. %2: %3"
+msgstr ""
+
+#: stashmanagerdialog.cpp:158
+#, kde-format
+msgid "%1 created on %2"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, drop)
+#: stashmanagerdialog.ui:23
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Remove the selected branch"
+msgctxt "@info:tooltip"
+msgid "Remove the selected stash"
+msgstr "Remove a ramificação selecionada"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pop)
+#: stashmanagerdialog.ui:37
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply stash's patch and drop the stash"
+msgstr "Aplica a correção em si e a apaga da lista de correções temporárias"
+
+#. i18n: ectx: property (text), widget (QPushButton, pop)
+#: stashmanagerdialog.ui:40
+#, kde-format
+msgctxt "@action:button"
+msgid "Pop"
+msgstr "Pop"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, show)
+#: stashmanagerdialog.ui:51
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show the content of the stash"
+msgstr "Mostrar o conteúdo da modificação temporária"
+
+#. i18n: ectx: property (text), widget (QPushButton, show)
+#: stashmanagerdialog.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Show"
+msgstr "Mostrar"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, apply)
+#: stashmanagerdialog.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply stash's patch"
+msgstr "Aplica a correção temporária"
+
+#. i18n: ectx: property (text), widget (QPushButton, apply)
+#: stashmanagerdialog.ui:88
+#, kde-format
+msgctxt "@action:button"
+msgid "Apply"
+msgstr "Aplicar"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, branch)
+#: stashmanagerdialog.ui:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create a new branch and apply the stash there, then drop the stash"
+msgstr ""
+"Cria uma nova ramificação e aplica ali a modificação, retirando-a depois da "
+"lista de modificações temporárias."
+
+#. i18n: ectx: property (text), widget (QPushButton, branch)
+#: stashmanagerdialog.ui:115
+#, kde-format
+msgctxt "@action:button"
+msgid "Branch"
+msgstr "Branch"
+
+#~ msgid "KDevelop - Git Stash"
+#~ msgstr "KDevelop - Modificação temporária do Git"

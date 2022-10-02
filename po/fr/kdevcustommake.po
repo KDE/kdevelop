@@ -1,0 +1,118 @@
+# translation of kdevcustommake.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcornavi@club-internet.fr>, 2008, 2009.
+# Joëlle Cornavin <jcornavin@laposte.net>, 2010.
+# xavier <xavier.besnard@neuf.fr>, 2013.
+# Vincent Pinon <vpinon@kde.org>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-11-21 13:07+0100\n"
+"Last-Translator: Vincent Pinon <vpinon@kde.org>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Résolution d'emplacements d'inclusion tentée alors qu'un autre processus de "
+"résolution était encore actif"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Le fichier Makefile dans le dossier « %1 » est manquant"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Problème en essayant de résoudre les emplacements à inclure pour %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "En cache : %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Le nom de fichier %1 semble mal formé"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Impossible d'extraire le nouveau dossier de travail"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "La sortie était : %1 "
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "L'appel récursif a make a échoué"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+"La chaîne de paramètres « %1 » ne semble pas valable. La sortie était : %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "Le dossier « %1 » n'existe pas. La sortie était : %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "L'appel récursif a make est mal formé"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr ""
+"Impossible d'extraire les emplacements à inclure depuis la sortie de make"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Dossier : « %1 » Commande : « %2 » Sortie : « %3 »"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Exécuter"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Joëlle Cornavin"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jcornavin@laposte.net"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Gestionnaire personnalisé de fichiers « Makefile » "
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr ""
+#~ "Prise en charge de la gestion de projets personnalisés de fichiers "
+#~ "« Makefile » "

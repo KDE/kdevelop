@@ -1,0 +1,710 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008, 2009.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2013, 2019.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2019-08-27 10:08+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, fuzzy, kde-format
+#| msgid "Configure a build directory - %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Διαμόρφωση καταλόγου κατασκευής - %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Διαμόρφωση καταλόγου κατασκευής για το %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Θα πρέπει να ορίσετε κατάλογο κατασκευής."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Χρήση ενός υπάρχοντος καταλόγου κατασκευής."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Δημιουργία νέου καταλόγου κατασκευής."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Ο κατάλογος κατασκευής ήδη διαμορφώθηκε."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr ""
+"Ο επιλεγμένος κατάλογος κατασκευής είναι για το %1, αλλά ο κατάλογος έργου "
+"είναι ο %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Δεν μπορείτε να επιλέξετε ένα σχετικό κατάλογο κατασκευής."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Ο επιλεγμένος κατάλογος κατασκευής δεν είναι κενός."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, fuzzy, kde-format
+#| msgid "Available build directories:"
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "διαθέσιμοι κατάλογοι κατασκευής:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, fuzzy, kde-format
+#| msgid "New build directory"
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Νέος κατάλογος κατασκευής"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, fuzzy, kde-format
+#| msgid "Build &directory:"
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "Κατάλογος &κατασκευής:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, fuzzy, kde-format
+#| msgid "&Installation prefix:"
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Πρόθεμα εγκατάστασης:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, fuzzy, kde-format
+#| msgid ""
+#| "The prefix under which the project will be installed. Leaving this empty "
+#| "will let CMake use its default install prefix."
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Το πρόθεμα με το οποίο θα εγκατασταθεί το έργο. Αν μείνει κενό, το CMake θα "
+"χρησιμοποιήσει το προκαθορισμένο δικό του."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, fuzzy, kde-format
+#| msgid "CMake's default install prefix"
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Το προκαθορισμένο πρόθεμα εγκατάστασης του CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "&Τύπος κατασκευής:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, fuzzy, kde-format
+#| msgid "Extra arguments:"
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Επιπλέον ορίσματα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, fuzzy, kde-format
+#| msgid "CMake &executable:"
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "CMake &εκτελέσιμο:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "ΜΗ ΕΓΚΥΡΟ"
+
+#: cmakecodecompletionmodel.cpp:197
+#, fuzzy, kde-format
+#| msgid "Command"
+msgctxt "@item"
+msgid "Command"
+msgstr "Εντολή"
+
+#: cmakecodecompletionmodel.cpp:198
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgctxt "@item"
+msgid "Variable"
+msgstr "Μεταβλητή"
+
+#: cmakecodecompletionmodel.cpp:199
+#, fuzzy, kde-format
+#| msgid "Macro"
+msgctxt "@item"
+msgid "Macro"
+msgstr "Μακροεντολή"
+
+#: cmakecodecompletionmodel.cpp:200
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@item"
+msgid "Path"
+msgstr "Διαδρομή"
+
+#: cmakecodecompletionmodel.cpp:201
+#, fuzzy, kde-format
+#| msgid "Target"
+msgctxt "@item"
+msgid "Target"
+msgstr "Προορισμός"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "λάθος"
+
+#: cmakecommandscontents.cpp:29
+#, fuzzy, kde-format
+#| msgid "Commands"
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Εντολές"
+
+#: cmakecommandscontents.cpp:30
+#, fuzzy, kde-format
+#| msgid "Variables"
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Μεταβλητές"
+
+#: cmakecommandscontents.cpp:31
+#, fuzzy, kde-format
+#| msgid "Modules"
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Αρθρώματα"
+
+#: cmakecommandscontents.cpp:32
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#: cmakecommandscontents.cpp:33
+#, fuzzy, kde-format
+#| msgid "Policies"
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Πολιτικές"
+
+#: cmakecommandscontents.cpp:102
+#, fuzzy, kde-format
+#| msgid "<p>For better cmake documentation rendering, install rst2html</p>"
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+"<p>Για καλύτερη αποτύπωση της cmake τεκμηρίωσης, εγκαταστήστε το rst2html</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+"Αδυναμία εύρεσης ενός CMake εκτελέσιμου. Εχει εγκατασταθεί κάποιο στο "
+"σύστημα;"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Τιμή λανθάνουσας μνήμης:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Τεκμηρίωση λανθάνουσας μνήμης:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "Σελίδα περιεχομένου CMake"
+
+#: cmakemanager.cpp:644
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to configure the project (error message: %1). As a result, "
+#| "KDevelop's code understanding will likely be broken.\n"
+#| "\n"
+#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
+#| "are correct, and KDevelop is configured to use the correct CMake version "
+#| "and settings. Then right-click the project item in the projects tool view "
+#| "and click 'Reload'."
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Αποτυχία διαμόρφωσης του έργου (μήνυμα σφάλματος: %1). Ως αποτέλεσμα η "
+"κατανόηση του κώδικα του KDevelop είναι πιθανόν να καταστραφεί.\n"
+"\n"
+"Για να διορθωθεί αυτό, βεβαιωθείτε ότι τα αρχεία CMakeLists.txt του έργου "
+"είναι σωστά και το KDevelop έχει διαμορφωθεί να χρησιμοποιεί τη σωστή έκδοση "
+"και ρυθμίσεις του CMake. Έπειτα κάνετε δεξί κλικ στο αντικείμενο στην "
+"προβολή εργαλείων του έργου και κλικ στην 'Επαναφόρτωση'."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"Το KDevelop εντόπισε διάφορους πιθανούς ριζικούς καταλόγους για το έργο σας, "
+"παρακαλώ επιλέξτε τον σωστό."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, fuzzy, kde-format
+#| msgid "Cache Values"
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Τιμές λανθάνουσας μνήμης"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, fuzzy, kde-format
+#| msgid "Comment:"
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Σχόλιο:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, fuzzy, kde-format
+#| msgid "Show Advanced"
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Εμφάνιση προχωρημένων"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Για προχωρημένους"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, fuzzy, kde-format
+#| msgid "Installation prefix:"
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "&Πρόθεμα εγκατάστασης:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, fuzzy, kde-format
+#| msgid "Build type:"
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Τύπος κατασκευής:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, fuzzy, kde-format
+#| msgid "Configure environment:"
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Διαμόρφωση περιβάλλοντος:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Επιλέξτε περιβάλλον για χρήση"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, fuzzy, kde-format
+#| msgid "Show advanced values"
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Εμφάνιση προχωρημένων τιμών"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, fuzzy, kde-format
+#| msgid "CMake executable:"
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "CMake εκτελέσιμο:"
+
+#: settings/cmakecachemodel.cpp:36
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Όνομα"
+
+#: settings/cmakecachemodel.cpp:37
+#, fuzzy, kde-format
+#| msgid "Type"
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Τύπος"
+
+#: settings/cmakecachemodel.cpp:38
+#, fuzzy, kde-format
+#| msgid "Value"
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Τιμή"
+
+#: settings/cmakecachemodel.cpp:39
+#, fuzzy, kde-format
+#| msgid "Comment"
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Σχόλιο"
+
+#: settings/cmakecachemodel.cpp:40
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Για προχωρημένους"
+
+#: settings/cmakecachemodel.cpp:41
+#, fuzzy, kde-format
+#| msgid "Strings"
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Συμβολοσειρές"
+
+#: settings/cmakepreferences.cpp:343
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Ο κατάλογος %1 πρόκειται να αφαιρεθεί από τη λίστα του KDevelop.\n"
+"Επιθυμείτε την αφαίρεσή του από το σύστημα αρχείων επίσης;"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Αδυναμία αφαίρεσης: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, fuzzy, kde-format
+#| msgid "Configure CMake settings"
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "Διαμόρφωση ρυθμίσεων CMake"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Ανάλυση σουίτας δοκιμών %1"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - υποστήριξη CMake"
+
+#~ msgid "Add"
+#~ msgstr "Προσθήκη"
+
+#~ msgid "Remove"
+#~ msgstr "Αφαίρεση"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr ""
+#~ "Η %1 είναι μια ανεπιθύμητη εντολή και δεν θα πρέπει να χρησιμοποιείται"
+
+#, fuzzy
+#~| msgid "Unfinished function. "
+#~ msgid "Unfinished function."
+#~ msgstr "Ανολοκλήρωτη λειτουργία. "
+
+#, fuzzy
+#~| msgid "You need to select a cmake binary."
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Θα πρέπει να επιλέξετε ένα εκτελέσιμο cmake."
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Διαμόρφωση καταλόγου κατασκευής"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "Εκτε&λέσιμο CMake:"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Build Type:"
+#~ msgstr "&Τύπος κατασκευής:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary:"
+#~ msgstr "Εκτε&λέσιμο CMake:"
+
+#, fuzzy
+#~| msgid "&Installation Prefix:"
+#~ msgid "Installation Prefix"
+#~ msgstr "&Πρόθεμα εγκατάστασης:"
+
+#, fuzzy
+#~| msgid "Extra Arguments:"
+#~ msgid "Extra Arguments"
+#~ msgstr "Επιπλέον ορίσματα:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary"
+#~ msgstr "Εκτε&λέσιμο CMake:"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "Το cmake δεν έχει εγκατασταθεί"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Αδυναμία εγγραφής των ρυθμίσεων για το CMake στο αρχείο '%1'.\n"
+#~ "Ελέγξτε την πρόσβαση για εγγραφή σε αυτό"
+
+#~ msgid "CMake Documentation"
+#~ msgstr "Τεκμηρίωση για το CMake"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Υποστήριξη τεκμηρίωσης CMake"
+
+#~ msgid "CMake Manager"
+#~ msgstr "Διαχειριστής CMake"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Υποστήριξη διαχείρισης έργων CMake"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Μετάβαση στο ορισμό προορισμού"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Μετακίνηση αρχείων και φακέλων από CMakeLists ως ακολούθως:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Αποτυχία αλλαγών σε CMakeLists, εγκατάλειψη μετακίνησης;"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Αφαίρεση αρχείων και φακέλων από CMakeLists ως ακολούθως:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Αποτυχία αλλαγών σε CMakeLists, εγκατάλειψη διαγραφής;"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Τροποποίηση στόχων έργου ως ακολούθως:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Δημιουργία φακέλου '%1':"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Αδυναμία αποθήκευσης της τροποποίησης."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Τροποποίηση στόχου '%1' ως ακολούθως:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "Αποτυχία αλλαγών σε CMakeLists."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "Μετονομασία του '%1' σε '%2':"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Αποτυχία αλλαγών σε CMakeLists, εγκατάλειψη μετονομασίας;"
+
+#~ msgid "CMake Directory"
+#~ msgstr "Κατάλογος CMake"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "Ο κατάλογος κατασκευής δεν υπήρξε και δεν δημιουργήθηκε."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Σφάλμα κατά τη δημιουργία καταλόγου κατασκευής"
+
+#~ msgid "Error"
+#~ msgstr "Σφάλμα"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "Προσθήκη αρχείου με όνομα '%1' στον προορισμό '%2'."
+
+#~ msgid "Cannot save the change."
+#~ msgstr "Αδυναμία αποθήκευσης της τροποποίησης."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "Αφαίρεση αρχείου με όνομα '%1'."
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "Μετονομασία φακέλου με όνομα '%1'."
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "General"
+#~ msgstr "Δημιουργός:"
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Αφαίρεση φακέλου με όνομα '%1'."
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Αδυναμία δημιουργίας του αρχείου CMakeLists.txt στον κατάλογο."
+
+#~ msgid "debug"
+#~ msgstr "αποσφαλμάτωση"
+
+#~ msgid "release"
+#~ msgstr "κυκλοφορία"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "Κυκλοφορία με αποσφαλμάτωση"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "Κυκλοφορία ελάχιστου μεγέθους"
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "Αδυναμία αφαίρεσης του αρχείου."
+
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#~ msgid "Action"
+#~ msgstr "Ενέργεια"
+
+#~ msgid "Change"
+#~ msgstr "Τροποποίηση"
+
+#~ msgid "Insert"
+#~ msgstr "Εισαγωγή"
+
+#, fuzzy
+#~| msgid "CMake Directory"
+#~ msgid "Choose CMake Build Directory"
+#~ msgstr "Κατάλογος CMake"
+
+#~ msgid "TextLabel"
+#~ msgstr "ετικέταΚειμένου"
+
+#~ msgid "Generator:"
+#~ msgstr "Δημιουργός:"
+
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid ""
+#~ "The %1 build directory is not valid. It will be removed from the list"
+#~ msgstr ""
+#~ "Ο κατάλογος κατασκευής %1 δεν είναι έγκυρος. Θα αφαιρεθεί από τη λίστα"
+
+#~ msgid ""
+#~ "The %1 directory does not exist, but is needed before the build directory "
+#~ "is created.\n"
+#~ "Do you want KDevelop to create it for you?"
+#~ msgstr ""
+#~ "Ο κατάλογος %1 δεν υπάρχει, αλλά θα έπρεπε να υπάρχει πριν τη δημιουργία "
+#~ "του καταλόγου κατασκευής.\n"
+#~ "Επιθυμείτε τη δημιουργία του από το KDevelop για εσάς;"
+
+#~ msgid "Running"
+#~ msgstr "Εκτελείται"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Ακύρωση"
+
+#~ msgid "&Run"
+#~ msgstr "&Εκτέλεση"
+
+#~ msgid "CMake process killed"
+#~ msgstr "Η διεργασία CMake σκοτώθηκε"
+
+#~ msgid "Created successfully"
+#~ msgstr "Δημιουργία με επιτυχία"
+
+#~ msgid "An error occurred"
+#~ msgstr "Συνέβη ένα σφάλμα"
+
+#~ msgid "Click the Run button to run CMake"
+#~ msgstr "Κλικ στο κουμπί εκτέλεσης για την εκτέλεση του CMake"

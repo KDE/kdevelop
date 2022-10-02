@@ -1,0 +1,673 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevdebuggercommon.pot\n"
+"X-Crowdin-File-ID: 4932\n"
+
+#: dialogs/processselection.cpp:28
+#, kde-format
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr "附加到进程"
+
+#: dialogs/processselection.cpp:48
+#, kde-format
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "附件"
+
+#: dialogs/selectcoredialog.cpp:18
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr "选择核心文件"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "可执行文件："
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr "核心文件："
+
+#: mibreakpointcontroller.cpp:741
+#, kde-format
+msgid "<br>Old value: %1"
+msgstr "<br>旧值：%1"
+
+#: mibreakpointcontroller.cpp:744
+#, kde-format
+msgid "<br>New value: %1"
+msgstr "<br>新值：%1"
+
+#: midebugger.cpp:327
+#, kde-format
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+"<p>调试器组件在处理 debugger 响应时遇到内部错误。请提交错误报告。调试会话将会"
+"结束以防止潜在的崩溃"
+
+#: midebugger.cpp:330
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"异常为：%1\n"
+"MI 响应为：%2"
+
+#: midebugger.cpp:333
+#, kde-format
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr "内部调试器错误"
+
+#: midebugger.cpp:345 midebugsession.cpp:415
+#, kde-format
+msgid "Process exited"
+msgstr "进程已退出"
+
+#: midebugger.cpp:354
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr "<b>无法启动调试器。</b><p>“%1”不能运行。请确认您指定的路径名无误。"
+
+#: midebugger.cpp:362
+#, kde-format
+msgid "Process failed to start"
+msgstr "开启进程失败"
+
+#: midebugger.cpp:367
+#, kde-format
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>调试程序已经崩溃。</b><p>调试程序进程 %1 已经崩溃。<br>调试会话已经因此终"
+"止。<br>请尝试在不使用 KDevelop 的情况下重现此崩溃情景，并向 KDevelop 报告程"
+"序缺陷。<br>"
+
+#: midebugger.cpp:372
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr "调试器已崩溃"
+
+#: midebugger.cpp:375
+#, kde-format
+msgid "Process crashed"
+msgstr "进程已崩溃"
+
+#: midebuggerplugin.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr "使用 %1 检验核心文件"
+
+#: midebuggerplugin.cpp:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+"<b>检查溃核文件</b><p>加载 core 溃核文件。它通常在程序崩溃后产生，比如段错误"
+"等。溃核文件包含程序崩溃时的内存镜像，能让您进行后期崩溃分析。</p>"
+
+#: midebuggerplugin.cpp:123
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr "将 %1 附加到进程"
+
+#: midebuggerplugin.cpp:125
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr "<b>附加到进程</b><p>将调试器附加到正在运行的进程。</p>"
+
+#: midebuggerplugin.cpp:138
+#, kde-format
+msgid "KDevelop (%1) - %2"
+msgstr "KDevelop (%1) - %2"
+
+#: midebuggerplugin.cpp:212
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Evaluate: %1"
+msgstr "计算：%1"
+
+#: midebuggerplugin.cpp:214
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Evaluate expression</b><p>Shows the value of the expression under the "
+"cursor.</p>"
+msgstr "<b>计算表达式</b><p>显示光标下表达式的值。</p>"
+
+#: midebuggerplugin.cpp:222
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Watch: %1"
+msgstr "监视：%1"
+
+#: midebuggerplugin.cpp:224
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Watch expression</b><p>Adds the expression under the cursor to the "
+"Variables/Watch list.</p>"
+msgstr "<b>观察表达式</b><p>将光标下的表达式添加到变量/观察列表。</p>"
+
+#: midebuggerplugin.cpp:237
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "选择要剖析的核心文件..."
+
+#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr "一个程序正在被调试。你想终止正在运行的调试会话并继续吗？"
+
+#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: midebuggerplugin.cpp:257
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "选择要附加到的进程..."
+
+#: midebuggerplugin.cpp:281
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr "未附加到进程 %1：无法将调试器附加到其自身。"
+
+#: midebuggerplugin.cpp:301
+#, kde-format
+msgid "Debugger"
+msgstr "调试器"
+
+#: midebugjobs.cpp:49
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr "%1：(%2)"
+
+#: midebugjobs.cpp:73
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr "%1 不是可执行程序"
+
+#: midebugjobs.cpp:147
+#, kde-format
+msgid "Debug core file"
+msgstr "调试核心文件"
+
+#: midebugjobs.cpp:185
+#, kde-format
+msgid "Debug process %1"
+msgstr "调试进程 %1"
+
+#: midebugsession.cpp:210
+#, kde-format
+msgid "Running program"
+msgstr "程序正在运行"
+
+#: midebugsession.cpp:287
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "正在附加到进程 %1"
+
+#: midebugsession.cpp:318
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>无法附加调试器：</b><br />"
+
+#: midebugsession.cpp:328
+#, kde-format
+msgid "Examining core file %1"
+msgstr "正在剖析核心文件 %1"
+
+#: midebugsession.cpp:400
+#, kde-format
+msgid "Debugger stopped"
+msgstr "调试器已停止"
+
+#: midebugsession.cpp:420
+#, kde-format
+msgid "Application is running"
+msgstr "应用程序正在运行"
+
+#: midebugsession.cpp:425
+#, kde-format
+msgid "Application is paused"
+msgstr "应用程序已暂停"
+
+#: midebugsession.cpp:735
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr "<b>在调试器运行前发送了 GDB 命令</b><br>命令为：<br> %1"
+
+#: midebugsession.cpp:847
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>无效的调试器命令</b><br>%1"
+
+#: midebugsession.cpp:985
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "退出并返回代码：%1"
+
+#: midebugsession.cpp:987
+#, kde-format
+msgid "Exited normally"
+msgstr "正常退出"
+
+#: midebugsession.cpp:994
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "以信号 %1 退出"
+
+#: midebugsession.cpp:1029
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "程序收到了信号 %1(%2)"
+
+#: midebugsession.cpp:1161
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] "队列中有 %1 条命令\n"
+
+#: midebugsession.cpp:1162
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] "gdb 已经处理了 %1 条命令\n"
+
+#: midebugsession.cpp:1163
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "调试器状态：%1\n"
+
+#: midebugsession.cpp:1166
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"当前命令类别：“%1”\n"
+"当前命令文本：“%2”\n"
+"当前命令的原文：“%3”\n"
+
+#: midebugsession.cpp:1242
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr "<b>调试器错误</b><p>调试器报告了以下错误：<p><tt>%1"
+
+#: miframestackmodel.cpp:69
+#, kde-format
+msgid "(running)"
+msgstr "(正在运行)"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "二进制"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "八进制"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "十进制"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "十六进制"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "Raw"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "无符号"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "常规"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "标志"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP 单字"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP 双字"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP 四字"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "线段"
+
+#: registers/registersview.cpp:51
+#, kde-format
+msgctxt "@title:menu"
+msgid "Format"
+msgstr "格式化"
+
+#: registers/registersview.cpp:60
+#, kde-format
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr "权限模式"
+
+#: registers/registersview.cpp:195
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "更新"
+
+#: stty.cpp:243
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"gdb 无法使用 tty* 或 pty* 设备。\n"
+"请检查 /dev/tty* 和 /dev/pty* 的设置\n"
+"\n"
+"您也许需要作为超级用户对 tty* 和 pty* 设备使用“chmod ug+rw”命令并且/或者使"
+"用“usermod -G tty username”命令将用户添加到 tty 组中。"
+
+#: stty.cpp:295
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "%1 不是正确的终端名"
+
+#: stty.cpp:301
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "无法创建临时文件"
+
+#: stty.cpp:348
+#, kde-format
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+msgstr ""
+"无法接收 %1 tty/pty。请检查 %1 确实是一个终端并可以接受参数： -e sh -c "
+"\"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\""
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr "调试器控制台"
+
+#: widgets/debuggerconsoleview.cpp:49
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+"<b>GDB 输出</b><p>显示所有已执行过的 gdb 命令。您也可以在调试时分派任意其他 "
+"gdb 命令。</p>"
+
+#: widgets/debuggerconsoleview.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr "点击回车时重复最后一个命令"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr "暂停执行中的程序以输入调试器命令"
+
+#: widgets/debuggerconsoleview.cpp:72
+#, kde-format
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr "显示内部命令"
+
+#: widgets/debuggerconsoleview.cpp:76
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"控制是否显示 KDevelop 内部执行的命令。<br>此命令仅会影响以后的命令，而不会将"
+"已经执行的命令从视图中添加或移除。"
+
+#: widgets/debuggerconsoleview.cpp:137
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr "命令(&C)："
+
+#: widgets/debuggerconsoleview.cpp:159
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr "%1 命令栏"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "中断"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, kde-format
+msgctxt "@action"
+msgid "Repeat"
+msgstr "转发"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr "点击 <回车> 时重复最后一个发送的命令"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr "地址选择器"
+
+#: widgets/disassemblewidget.cpp:88
+#, kde-format
+msgctxt "@action"
+msgid "Change &Address"
+msgstr "更改地址(&A)"
+
+#: widgets/disassemblewidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr "跳转到光标处(&J)"
+
+#: widgets/disassemblewidget.cpp:93
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr "将执行指针设置为当前光标位置。"
+
+#: widgets/disassemblewidget.cpp:96
+#, kde-format
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr "运行到光标处(&R)"
+
+#: widgets/disassemblewidget.cpp:97
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "继续执行，直到到达光标位置。"
+
+#: widgets/disassemblewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr "&AT&&T"
+
+#: widgets/disassemblewidget.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr "GDB 将使用 AT&T 反汇编风格 (例如 mov 0xc(%ebp),%eax)。"
+
+#: widgets/disassemblewidget.cpp:105
+#, kde-format
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr "&Intel"
+
+#: widgets/disassemblewidget.cpp:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr "GDB 将使用 Intel 反汇编风格 (例如 mov eax, DWORD PTR [ebp+0xc])。"
+
+#: widgets/disassemblewidget.cpp:143
+#, kde-format
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr "反汇编风格"
+
+#: widgets/disassemblewidget.cpp:174
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+"<b>机器码显示</b><p>显示机器代码的视图，里面显示您当前运行的程序中的指令并且"
+"当前指令被加亮。您可以使用调试器工具栏中的“单步指令”和“单步跟进指令”按钮来逐"
+"条执行指令。"
+
+#: widgets/disassemblewidget.cpp:190
+#, kde-format
+msgctxt "@title:column"
+msgid "Address"
+msgstr "地址"
+
+#: widgets/disassemblewidget.cpp:191
+#, kde-format
+msgctxt "@title:column"
+msgid "Function"
+msgstr "函数"
+
+#: widgets/disassemblewidget.cpp:192
+#, kde-format
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr "指令"
+
+#: widgets/disassemblewidget.cpp:212
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr "反汇编/寄存器视图"
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr "选择要反汇编的地址区域"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr "要反汇编的地址区域："

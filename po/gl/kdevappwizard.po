@@ -1,0 +1,285 @@
+# translation of kdevappwizard.po to Galician
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# mvillarino <mvillarino@users.sourceforge.net>, 2008.
+# Marce Villarino <mvillarino@kde-espana.es>, 2009.
+# Xosé <xosecalvo@gmail.com>, 2009, 2013.
+# Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013.
+# Xabier Villar <xabier.villar@gmail.com>, 2012.
+# Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2013, 2015, 2017.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-02-16 09:29+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.3\n"
+
+#: appwizarddialog.cpp:23
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Crear un proxecto novo"
+
+#: appwizarddialog.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "Page for general configuration options"
+#| msgid "General"
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Xeral"
+
+#: appwizarddialog.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Control de versións"
+
+#: appwizardplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "New From Template..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Novo a partir dun modelo…"
+
+#: appwizardplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid "Generate a new project from a template"
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Xera un proxecto novo a partir dun modelo"
+
+#: appwizardplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid ""
+#| "This starts KDevelop's application wizard. It helps you to generate a "
+#| "skeleton for your application from a set of templates."
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Isto inicia o asistente de aplicacións de KDevelop. Axudarao a xerar un "
+"esqueleto para a súa aplicación a partir duns modelos."
+
+#: appwizardplugin.cpp:106
+#, kde-format
+msgid "Could not create project from template."
+msgstr "Non foi posíbel crear un proxecto novo a partir dun modelo."
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Vexa a vista «Control de versións»."
+
+#: appwizardplugin.cpp:136
+#, fuzzy, kde-format
+#| msgid "Version Control System Error"
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Erro do sistema de control de versións"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Non foi posíbel inicializar o repositorio do DVCS"
+
+#: appwizardplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Could not add files to the DVCS repository"
+msgid "Could not check status of the DVCS repository"
+msgstr "Non foi posíbel engadir os ficheiros ao repositorio do DVCS"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Non foi posíbel engadir os ficheiros ao repositorio do DVCS"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Non foi posíbel importar o proxecto en %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Non foi posíbel importar o proxecto"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Non foi posíbel obter o proxecto importado"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Non foi posíbel crear un proxecto novo"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Non se pode crear o ficheiro %1."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Modelos de proxecto"
+
+#: projectselectionpage.cpp:56
+#, fuzzy, kde-format
+#| msgid "Category"
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Categoría"
+
+#: projectselectionpage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Project Type"
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Tipo de proxecto"
+
+#: projectselectionpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Obter máis modelos"
+
+#: projectselectionpage.cpp:74
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Cargar un modelo desde un ficheiro"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Lugar incorrecto"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "O nome do proxecto está baleiro"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "O nome do proxecto é incorrecto"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Non foi posíbel crear subcartafoles, non ten permisos en: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "O modelo de proxecto é incorrecto, escolla un elemento terminal"
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Ese cartafol xa existe e contén ficheiros. Ábrao como un proxecto."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"A rota que se indicou xa existe e contén ficheiros. Está seguro de que quere "
+"continuar?"
+
+#: projectselectionpage.cpp:308
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Cargar un modelo desde un ficheiro"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Propiedades"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, fuzzy, kde-format
+#| msgid "Project name:"
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Nome do proxecto:"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Localización:"
+
+#: projectvcspage.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "No Version Control Support chosen"
+#| msgid "None"
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Ningún"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, fuzzy, kde-format
+#| msgid "Version control system:"
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Sistema de control de versións:"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Fallou a creación do proxecto"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Proxecto"
+
+#, fuzzy
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Nome do programa:"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Marce Villarino,\n"
+#~ "Xosé Calvo"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "mvillarino@users.sourceforge.net,\n"
+#~ "xosecalvo@gmail.com"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Asistente de proxectos"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Soporte para crear e importar proxectos"

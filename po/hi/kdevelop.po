@@ -1,0 +1,3414 @@
+# translation of kdevelop.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2008-03-26 18:53+0530\n"
+"Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "raviratlami@aol.in,"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "विन्यास (&S)"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, fuzzy, kde-format
+#| msgid "&Project"
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "परियोजना (&P)"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, fuzzy, kde-format
+#| msgid "&Run"
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "चलाएँ (&R)"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, fuzzy, kde-format
+#| msgid "Examine Core File..."
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "कोर फ़ाइल का परीक्षण करें..."
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, fuzzy, kde-format
+#| msgid "Attach to Process"
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr "प्रक्रिया में जोड़ें"
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, fuzzy, kde-format
+#| msgid "&Navigation"
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "नेविगेशन (&N)"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, fuzzy, kde-format
+#| msgid "&File"
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "फ़ाइल (&F)"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, fuzzy, kde-format
+#| msgid "&Edit"
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "संपादन (&E)"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, fuzzy, kde-format
+#| msgid "Code"
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "कोड"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr ""
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr ""
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, fuzzy, kde-format
+#| msgid "&Window"
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "विंडो (&W)"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "विन्यास (&S)"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, fuzzy, kde-format
+#| msgid "&Help"
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "मदद (&H)"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "मुख्य औज़ार पट्टी"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "कोड"
+
+#: kdevideextension.cpp:47
+#, fuzzy, kde-format
+#| msgid "*.kdevelop|KDevelop 3 Project Files\n"
+msgid "KDevelop Project Files"
+msgstr "*.kdevelop|के-डेवलप 3 परियोजना फ़ाइलें\n"
+
+#: main.cpp:85
+#, fuzzy, kde-format
+#| msgid "Could not open file '%1'"
+msgid "Could not open %1"
+msgstr "फ़ाइल '%1' खोल नहीं सकते"
+
+#: main.cpp:219
+#, fuzzy, kde-format
+#| msgid "Could not open file '%1'"
+msgid "Could not open file '%1'."
+msgstr "फ़ाइल '%1' खोल नहीं सकते"
+
+#: main.cpp:242
+#, fuzzy, kde-format
+#| msgid "Could not read project file: %1"
+msgid "Could not open project '%1': %2"
+msgstr "परियोजना फ़ाइलः %1 पढ़ नहीं सका"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr ""
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr "के-डेवलप"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr "के-डेवलप एकीकृत डेवलपमेंट वातावरण"
+
+#: main.cpp:386
+#, fuzzy, kde-format
+#| msgid "(c) 1999-2007, The KDevelop developers"
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr "(c) 1999-2007, के-डेवलप डेवलपर्स"
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr ""
+
+#: main.cpp:389
+#, kde-format
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr ""
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr ""
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr ""
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr ""
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr ""
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr "आंद्रेयास पाकुलेट"
+
+#: main.cpp:394
+#, fuzzy, kde-format
+#| msgid "Project Management Support, QMake Projectmanager"
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr "परियोजना प्रबंधन समर्थन, क्यूमेक परियोजनाप्रबंधक"
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr "अलेक्ज़ेंडर दायमो"
+
+#: main.cpp:395
+#, fuzzy, kde-format
+#| msgid "Co-maintainer, architecture, Sublime UI, Ruby support"
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr "सह-मेंटेनर, आर्कीटेक्चर, सबलाइम यूआई, रूबी समर्थन"
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr ""
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr ""
+
+#: main.cpp:397
+#, fuzzy, kde-format
+#| msgid "generating"
+msgid "GDB integration"
+msgstr "बनाया जा रहा है"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr "हामिश रोदा"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr "पाठ संपादक एकीकरण, परिभाषा-उपयोग चैन"
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr "एमिलकार दो कारमो लुकास"
+
+#: main.cpp:399
+#, fuzzy, kde-format
+#| msgid ""
+#| "Release coordinator, API documentation, Doxygen and autoproject patches"
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr "रिलीज को-ऑर्डिनेटर, एपीआई दस्तावेज, डॉक्सीजन तथा स्वतःपरियोजित पैच"
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr ""
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr ""
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr ""
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr "मैट रोजर्स"
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr ""
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr ""
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr ""
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr "रॉबर्ट ग्रुबर"
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr "स्निपेट-पार्ट, डिबगर तथा उपयोगिता पैचेस"
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr "दुकजु एन"
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr "सबवर्सन प्लगइन, मनपसंद मेक प्रबंधक, परिपूर्ण सुधार"
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr "हेराल्ड फेर्नेगल"
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr "क्यू ३ में पोर्ट, पैच, वेलग्रिंड, डिफ तथा परफोर्स समर्थन"
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr "रॉबर्टो रैग्गी"
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr ""
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr "केराइट लेखक"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "के-एटीई संपादक समर्थन"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr ""
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr "डिज़ाइनर कोड"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr ""
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr "बर्नद गेहमन"
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr "आरंभिक आइडिया, मूल आर्कीटेक्चर, बहुत से आरंभिक स्रोत कोड"
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr "केलैब टेनिस"
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr "के-टैब-बार बगफिक्सेस"
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr "रिचार्ड डेल"
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr "जावा व ऑब्जेक्टिव सी समर्थन"
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr "जॉन बिर्च"
+
+#: main.cpp:419
+#, kde-format
+msgid "Debugger frontend"
+msgstr "डिबगर फ्रन्टएण्ड"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr "सैंडी मेइयर"
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr "पीएचपी समर्थन, कॉन्टेक्स्ट मेन्यू स्टफ़"
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr "कुर्त ग्रेनॉर्थ"
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr "केडीई अनुप्रयोग टैम्प्लेट्स"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr "इयान रेनहार्ट गीसर"
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "डिस्ट पार्ट, बाश समर्थन, अनुप्रयोग प्रारूप"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr "मैथियास होल्ज़र-क्लूपफेल"
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr "भिन्न अवयव, htdig इंडेक्सिंग"
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr "विक्टर रोडर"
+
+#: main.cpp:424
+#, fuzzy, kde-format
+#| msgid "Help with Automake manager and persistant class store"
+msgid "Help with Automake manager and persistent class store"
+msgstr "आटोमेक प्रबंधक तथा परसिस्टेंस वर्ग स्टोर से मदद"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr "साइमन हाउसमेन"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr "के-पार्ट्स इन्फ्रास्ट्रक्चर के साथ मदद"
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr "ओलिवर केल्लॉग"
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr "एडीए समर्थन"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr "जैकब साइमन-गार्दे"
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "क्यू-मेक परियोजना-प्रबंधक"
+
+#: main.cpp:428
+#, fuzzy, kde-format
+#| msgid "F@lk Brettschneider"
+msgid "Falk Brettschneider"
+msgstr "फॉक ब्रेट्शेइंडर"
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr "एमडीआई मोड्स, क्यू-प्रबंधक, बग-फ़िक्सेस"
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr "मारियो स्केलास"
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr "पार्ट-एक्सप्लोरर, सीवीएस-पार्ट, पैचेस, बग्स(फिक्सेस) की री-डिज़ाइन"
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr "जेंस डेग्रेबो"
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr "जूलियन रॉकी"
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr "फ़ाइल-क्रिएट भाग तथा अन्य बिट्स एण्ड पैचेस"
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr "अजय गुलेरिया"
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr "क्लीयर-केस समर्थन"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr "मार्क जानुकोविक्ज"
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr "रूबी समर्थन"
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr "रॉबर्ट मोनियोट"
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "फ़ोरट्रॉन दस्तावेज़"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr "के-पिंग यी"
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr "पायथन दस्तावेज़ीकरण यूटिलिटी"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr "दिमित्री वान हेश"
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "डॉक्सीज़ेन विजार्ड"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr "ह्यूगो वारोटो"
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr "फ़ाइल-सलेक्टर अवयव"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr "मैट न्यूवेल"
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr "डेनियल एंगेलचेट"
+
+#: main.cpp:439
+#, fuzzy, kde-format
+#| msgid "C++ code completion, persistant class store"
+msgid "C++ code completion, persistent class store"
+msgstr "सी++ कोड पूर्णता, परसिस्टेंट वर्ग भण्डार"
+
+#: main.cpp:440
+#, fuzzy, kde-format
+#| msgid "Stephane ANCELOT"
+msgid "Stephane Ancelot"
+msgstr "स्टीफन एंसेलोट"
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "पैचेस"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr "जेंस जुरहेड"
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr "लुक विलएम्स"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr "पर्ल समर्थन के साथ मदद"
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr "मार्सल टुरिनो"
+
+#: main.cpp:443
+#, kde-format
+msgid "Documentation index view"
+msgstr "दस्तावेज़ निर्देशिका दृश्य"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr "यान होडीक"
+
+#: main.cpp:445
+#, fuzzy, kde-format
+#| msgid "Tobias Gläßer"
+msgid "Tobias Gläßer"
+msgstr "टॉबियस ग्लाबेर"
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr "आंद्रेयास कोएपफ़्ले"
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr "क्यूमेक परियोजना प्रबंधक पैचेस"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr "शासा कुन्ज"
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr "क्यूएडीटर, आटोमेक तथा अन्य बहुतों के लिए साफ सफ़ाई तथा बग सुधार"
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr "जोरान कापाव्ला"
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr "रूबी लैंग्वेज के लिए कलाकृतियाँ"
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr ""
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr ""
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr ""
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr ""
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr ""
+
+#: main.cpp:520
+#, fuzzy, kde-format
+#| msgid "Open Project"
+msgid "Name: Opened Projects"
+msgstr "परियोजना खोलें"
+
+#: main.cpp:529
+#, fuzzy, kde-format
+#| msgid "Running"
+msgid "[running]"
+msgstr "चल रहा है"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr ""
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr ""
+
+#: main.cpp:648
+#, fuzzy, kde-format
+#| msgid "Application does not exist"
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "अनुप्रयोग अस्तित्व में नहीं है"
+
+#: main.cpp:654
+#, fuzzy, kde-format
+#| msgid "&Debug"
+msgid "Debug %1"
+msgstr "डिबग (&D)"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr ""
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr ""
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr ""
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr ""
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr ""
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+#, fuzzy
+#| msgid "KDevelop"
+msgid "KDevelop Sessions"
+msgstr "के-डेवलप"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr ""
+
+#~ msgid "Files to load"
+#~ msgstr "लोड करने के लिए फ़ाइलें"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "&File"
+#~ msgstr "फ़ाइल (&F)"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgid "&Edit"
+#~ msgstr "संपादन (&E)"
+
+#, fuzzy
+#~| msgid "Advanced"
+#~ msgid "&Advanced"
+#~ msgstr "विस्तृत"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "&View"
+#~ msgstr "देखें (&V)"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Tools"
+#~ msgstr "औज़ार (&T)"
+
+#, fuzzy
+#~| msgid "Importoptions:"
+#~ msgid "Word Completion"
+#~ msgstr "आयातविकल्प:"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings"
+#~ msgstr "विन्यास (&S)"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Project options"
+#~ msgid "Deprecated options:"
+#~ msgstr "परियोजना विकल्प "
+
+#~ msgid "The KHTML authors"
+#~ msgstr "केएचटीएमएल लेखक"
+
+#~ msgid "HTML documentation component"
+#~ msgstr "एचटीएमएल दस्तावेज़ अवयव"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Develop"
+#~ msgstr "के-डेवलप"
+
+#, fuzzy
+#~| msgid "Abort on first error:"
+#~ msgid "Configure a new Launcher"
+#~ msgstr "पहली त्रुटि में ही छोड़ें:"
+
+#, fuzzy
+#~| msgid "Debugger error"
+#~ msgid "Debug your program"
+#~ msgstr "डिबगर त्रुटि"
+
+#, fuzzy
+#~| msgid "&Debug"
+#~ msgid "Debug Area"
+#~ msgstr "डिबग (&D)"
+
+#, fuzzy
+#~| msgid "&New Project..."
+#~ msgid "New Project"
+#~ msgstr "नई परियोजना... (&N)"
+
+#~ msgid "Open project"
+#~ msgstr "परियोजना खोलें"
+
+#, fuzzy
+#~| msgid "Open project"
+#~ msgid "Fetch project"
+#~ msgstr "परियोजना खोलें"
+
+#, fuzzy
+#~| msgid "Open &Recent Project"
+#~ msgid "Recent Projects"
+#~ msgstr "मौज़ूदा परियोजना खोलें (&R)"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Sessions"
+#~ msgstr "विन्यास (&S)"
+
+#, fuzzy
+#~| msgid "Documentation index view"
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "दस्तावेज़ निर्देशिका दृश्य"
+
+#, fuzzy
+#~| msgid "Debugging &shell:"
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "डिबगिंग शैलः (&s)"
+
+#, fuzzy
+#~| msgid "Starting GUI"
+#~ msgid "Starting"
+#~ msgstr "जीयूआई प्रारंभ किया जा रहा है"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Learn KDevelop!"
+#~ msgstr "के-डेवलप"
+
+#, fuzzy
+#~| msgid "Restart program"
+#~ msgid "Execute your program"
+#~ msgstr "प्रोग्राम फिर से  प्रारंभ करें"
+
+#, fuzzy
+#~| msgid "Remove Profile"
+#~ msgid "Remove lock file"
+#~ msgstr "प्रोफ़ाइल मिटाएँ"
+
+#, fuzzy
+#~| msgid "Import existing project"
+#~ msgid "Import project"
+#~ msgstr "मौज़ूदा परियोजना आयात करें"
+
+#, fuzzy
+#~| msgid "Project to load"
+#~ msgid "Url to project to load"
+#~ msgstr "लोड करने हेतु परियोजना"
+
+#, fuzzy
+#~| msgid "(c) 1999-2007, The KDevelop developers"
+#~ msgid "Copyright 1999-2009, The KDevelop developers"
+#~ msgstr "(c) 1999-2007, के-डेवलप डेवलपर्स"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Session contents"
+#~ msgstr "विन्यास (&S)"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "लोड करने के लिए फ़ाइलें"
+
+#~ msgid "Profile to load"
+#~ msgstr "लोड करने के लिए प्रोफ़ाइल"
+
+#~ msgid "Version %1"
+#~ msgstr "संस्करण %1"
+
+#~ msgid "Trolltech AS"
+#~ msgstr "ट्रॉलटैक एएस"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "@title:menu"
+#~ msgid "File"
+#~ msgstr "फ़ाइल (&F)"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "@title:menu"
+#~ msgid "View"
+#~ msgstr "देखें (&V)"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "परियोजना"
+
+#~ msgid "Run"
+#~ msgstr "चलाएँ"
+
+#~ msgid ""
+#~ "QEditor component, code completion, Abbrev component, C++ support, Java "
+#~ "support"
+#~ msgstr "क्यू एडीटर अवयव, कोड पूर्णता, अब्रेव अवयव, सी++ समर्थन, जावा समर्थन"
+
+#~ msgid "Cancel"
+#~ msgstr "रद्द करें"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Rename %1"
+#~ msgstr "हटाएँ"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create Class"
+#~ msgstr "नई परियोजना बनाएँ"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgid "New name:"
+#~ msgstr "नाम: (&N)"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgid "Rename"
+#~ msgstr "हटाएँ"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Uses"
+#~ msgstr "वर्ग"
+
+#~ msgid "Makefile is missing in folder \"%1\""
+#~ msgstr "फ़ोल्डर \"%1\" में मेकफ़ाइल गुम है"
+
+#~ msgid "problem while trying to resolve include-paths for %1"
+#~ msgstr "%1 के लिए इनक्लूड पथ की समस्या को हल करने के दौरान त्रुटि"
+
+#~ msgid "Cached: "
+#~ msgstr "कैश:"
+
+#~ msgid "Filename %1 seems to be malformed"
+#~ msgstr "प्रतीत होता है कि फ़ाइलनाम %1 गलत है"
+
+#~ msgid "make-process failed"
+#~ msgstr "मेक-प्रक्रिया असफल"
+
+#~ msgid "output: %1"
+#~ msgstr "आउटपुट: %1"
+
+#~ msgid "Recursive make-call failed"
+#~ msgstr "रीकर्सिव मेक-काल असफल"
+
+#~ msgid ""
+#~ "The parameter-string \"%1\" does not seem to be valid. Output was: %2"
+#~ msgstr "पैरामीटर वाक्यांश %1 प्रतीत होता है कि वैध नहीं है. आउटपुट था: %2"
+
+#~ msgid "The directory \"%1\" does not exist. Output was: %2"
+#~ msgstr "डिरेक्ट्री \"%1\" मौजूद नहीं है. आउटपुट था: %2"
+
+#~ msgid "Recursive make-call malformed"
+#~ msgstr "रीकर्सिव मेक-काल गलत है"
+
+#~ msgid "Output was: %1"
+#~ msgstr "आउटपुट था: %1"
+
+#~ msgid "Could not extract include-paths from make-output"
+#~ msgstr "मेक आउटपुट से इनक्लूड पथ निकाल नहीं सका"
+
+#~ msgid "Folder: \"%1\"  Command: \"%2\"Output: \"%3\""
+#~ msgstr "फ़ोल्डर: \"%1\"  कमांड: \"%2\"आउटपुट: \"%3\""
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Function macro"
+#~ msgstr "फंक्शन"
+
+#, fuzzy
+#~| msgid "Macro error"
+#~ msgid "Macro"
+#~ msgstr "मेक्रो त्रुटि"
+
+#, fuzzy
+#~| msgid "Valgrind process timed out."
+#~ msgid "Preprocessed body:"
+#~ msgstr "वेलग्रिंड प्रक्रिया की अवधि समाप्त हो गई."
+
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "इनक्लूडेड"
+
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "इनक्लूडेड-बाइ"
+
+#~ msgctxt "Count of macros defined in this header"
+#~ msgid "Defined macros"
+#~ msgstr "पारिभाषित मेक्रो"
+
+#~ msgid "Declarations:"
+#~ msgstr "डिक्लेरेशन्स:"
+
+#~ msgid "not parsed yet"
+#~ msgstr "अभी तक पार्स्ड नहीं"
+
+#~ msgid "Included file was not found: %1"
+#~ msgstr "इनक्लूड फ़ाइल नहीं मिला: %1"
+
+#~ msgid ""
+#~ "Searched include path:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "ढूंढा गया इनक्लूड:\n"
+#~ "%1"
+
+#~ msgid "This file imports the current open document<br/>"
+#~ msgstr "यह फ़ाइल वर्तमान खुले दस्तावेज़ को आयात करती है<br/>"
+
+#, fuzzy
+#~| msgid "Found in %1th include-path"
+#~ msgid "In %1th include-path"
+#~ msgstr "%1 वें इनक्लूड पथ में मिला"
+
+#~ msgid "Included through"
+#~ msgstr "इनक्लूडेड थ्रो"
+
+#~ msgid "Directory %1"
+#~ msgstr "डिरेक्ट्री %1"
+
+#~ msgid "Includes"
+#~ msgstr "शामिल करें"
+
+#~ msgid "Include Path"
+#~ msgstr "इनक्लूड पथ"
+
+#~ msgid "Includers"
+#~ msgstr "इनक्लूडर्स"
+
+#, fuzzy
+#~| msgid "Ada support"
+#~ msgid "C++ Support"
+#~ msgstr "एडीए समर्थन"
+
+#~ msgid "Files"
+#~ msgstr "फ़ाइल"
+
+#~ msgid "&Switch Definition/Declaration"
+#~ msgstr "परिभाषा/डिक्लेरेशन स्विच करें(&S)"
+
+#, fuzzy
+#~| msgid "Create New Project"
+#~ msgid "Create &New Class"
+#~ msgstr "नई परियोजना बनाएँ"
+
+#, fuzzy
+#~| msgid "Build-manager did not return an include-path"
+#~ msgid "Build manager for project %1 did not return a build directory"
+#~ msgstr "बिल्ड प्रबंधक ने कोई इनक्लूड पथ नहीं लौटाया"
+
+#~ msgid "Build-manager did not return an include-path"
+#~ msgstr "बिल्ड प्रबंधक ने कोई इनक्लूड पथ नहीं लौटाया"
+
+#~ msgid "Include-path resolver:"
+#~ msgstr "इनक्लूड पथ रीसॉल्वर:"
+
+#~ msgid ""
+#~ "Used build directory: \"%1\"\n"
+#~ "Include-path resolver: %2"
+#~ msgstr ""
+#~ "प्रयोग में बिल्ड डिरेक्ट्री: \"%1\"\n"
+#~ "इनक्लूड पथ रीज़ॉल्वर: %2"
+
+#, fuzzy
+#~| msgid "&Build System"
+#~ msgid "Building uses"
+#~ msgstr "बिल्ड सिस्टम (&B)"
+
+#, fuzzy
+#~| msgid "Reload"
+#~ msgid "Ready"
+#~ msgstr "री-लोड"
+
+#~ msgid "Macro error"
+#~ msgstr "मेक्रो त्रुटि"
+
+#~ msgid "Call to macro %1 missing argument number %2"
+#~ msgstr "मेक्रो %1 पर काल में आर्गुमेंट संख्या %2 नहीं मिला"
+
+#~ msgid "Formals: %1"
+#~ msgstr "फ़ॉर्मल्स: %1"
+
+#~ msgid "Unterminated #if statement"
+#~ msgstr "बिना बंद हुआ #if कथन"
+
+#~ msgid "character %1"
+#~ msgstr "अक्षर %1"
+
+#~ msgid "Expected \"identifier\", found: %1"
+#~ msgstr "वांछित \"आइडेंटिफ़ायर\" मिला: %1"
+
+#~ msgid "<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>"
+#~ msgstr "<h5>टोकन पाठ</h5><pre>%1</pre><h5>इनपुट</h5><pre>%2</pre>"
+
+#~ msgid "Expected \")\", found %1"
+#~ msgstr "\")\" वांछित है, मिला %1"
+
+#~ msgid "Division by zero"
+#~ msgstr "शून्य से भागित"
+
+#~ msgid "Input text: %1"
+#~ msgstr "इनपुट पाठ: %1"
+
+#~ msgid "expected ``:'' = %1"
+#~ msgstr "प्रत्याशित ``:'' = %1"
+
+#~ msgid "#else without #if"
+#~ msgstr "#else इसके बगैर #if"
+
+#~ msgid "#endif without #if at output line %1"
+#~ msgstr "आउटपुट पंक्ति %1 पर #endif जो कि #if के बगैर है"
+
+#~ msgid "KDE forwarding header generator"
+#~ msgstr "केडीई फ़ॉरवर्डिंग हेडर जेनरेटर"
+
+#~ msgid "(c) 2006, Hamish Rodda"
+#~ msgstr "(c) 2006, हामिश रोद्दा"
+
+#~ msgid ""
+#~ "KDE include directory - headers go into <placeholder>includes</"
+#~ "placeholder>/KDE"
+#~ msgstr ""
+#~ "केडीीई इनक्लूड डिरेक्ट्री - हेडर्स यहाँ जाते हैं: <placeholder>इनक्लूड</placeholder>/"
+#~ "केडीई"
+
+#~ msgid "Build information from the cmake XML generator"
+#~ msgstr "सीमेक एक्सएमएल जनरेटर के बिल्ड जानकारी"
+
+#, fuzzy
+#~| msgid "Evaluate: %1"
+#~ msgid "invalid input: %1"
+#~ msgstr "मूल्यांकन करें: %1"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "Generate Stub Class"
+#~ msgstr "जेनरेटर:"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "Generate Stub"
+#~ msgstr "जेनरेटर:"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgid "Implement"
+#~ msgstr "टिप्पणी"
+
+#~ msgid "Add"
+#~ msgstr "जोड़ें"
+
+#, fuzzy
+#~| msgid "Failed to start Valgrind"
+#~ msgid "Failed to start test executable."
+#~ msgstr "वेलग्रिंड प्रारंभ करने में अक्षम"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Test executable crashed."
+#~ msgstr "मेक एक्जीक्यूटेबल:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Test root."
+#~ msgstr "नाम"
+
+#, fuzzy
+#~| msgid "Add Profile"
+#~ msgid "profile"
+#~ msgstr "प्रोफ़ाइल जोड़ें"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest verbose output"
+#~ msgstr "नाम"
+
+#, fuzzy
+#~| msgid "Make executable:"
+#~ msgid "Test executable timed out."
+#~ msgstr "मेक एक्जीक्यूटेबल:"
+
+#, fuzzy
+#~| msgid "Failed to start Valgrind"
+#~ msgid "Failed to write to test executable."
+#~ msgstr "वेलग्रिंड प्रारंभ करने में अक्षम"
+
+#, fuzzy
+#~| msgid "Failed to start Valgrind"
+#~ msgid "Failed to read from test executable."
+#~ msgstr "वेलग्रिंड प्रारंभ करने में अक्षम"
+
+#, fuzzy
+#~| msgid "An error occurred"
+#~ msgid "Unknown error occurred."
+#~ msgstr "एक त्रुटि हुई"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "xTest"
+#~ msgstr "पाठ लेबल"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "QTest test"
+#~ msgstr "नाम"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Class name:"
+#~ msgstr "वर्ग"
+
+#~ msgid "Search"
+#~ msgstr "ढूंढें"
+
+#~ msgid "Find In Files"
+#~ msgstr "फ़ाइलों में ढूढें"
+
+#, fuzzy
+#~| msgid "Make: %1"
+#~ msgid "Grep: %1"
+#~ msgstr "मेक: %1"
+
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "ढूंढने के लिए अस्थाई फ़ाइल बनाने में अक्षम."
+
+#, fuzzy
+#~| msgid "Find In Files"
+#~ msgid "Find in Files"
+#~ msgstr "फ़ाइलों में ढूढें"
+
+#, fuzzy
+#~| msgid "Process didn't start"
+#~ msgid "Process failed to start."
+#~ msgstr "प्रक्रिया प्रारंभ नहीं हुई"
+
+#, fuzzy
+#~| msgid "Process exited"
+#~ msgid "Process crashed."
+#~ msgstr "प्रक्रिया बाहर हो गया"
+
+#, fuzzy
+#~| msgid "Valgrind process timed out."
+#~ msgid "Process timed out."
+#~ msgstr "वेलग्रिंड प्रक्रिया की अवधि समाप्त हो गई."
+
+#, fuzzy
+#~| msgid "Unknown Valgrind process error."
+#~ msgid "Unknown process error."
+#~ msgstr "अज्ञात वेलग्रिंड प्रक्रिया त्रुटि."
+
+#~ msgid "Find in Fi&les..."
+#~ msgstr "फ़ाइलों में ढूंढें... (&l)"
+
+#~ msgid "Search for expressions over several files"
+#~ msgstr "बहुत सी फ़ाइलों में एक्सप्रेशन ढूंढें"
+
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#~ msgid "Create New Project"
+#~ msgstr "नई परियोजना बनाएँ"
+
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "सामान्य"
+
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "संस्करण नियंत्रण"
+
+#, fuzzy
+#~| msgid "Project to load"
+#~ msgid "Project Wizard"
+#~ msgstr "लोड करने हेतु परियोजना"
+
+#~ msgid "Generate a new project from a template"
+#~ msgstr "टैम्प्लेट से नई परियोजना बनाएँ"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "मौज़ूदा परियोजना आयात करें... (&I)"
+
+#, fuzzy
+#~| msgid "Couldn't import project"
+#~ msgid "Could not import project into"
+#~ msgstr "परियोजना आयात नहीं की जा सकी"
+
+#, fuzzy
+#~| msgid "Couldn't checkout imported project"
+#~ msgid "Could not checkout imported project"
+#~ msgstr "आयातित परियोजना को चेकआउट नहीं किया जा सका"
+
+#, fuzzy
+#~| msgid "Couldn't import project"
+#~ msgid "Could not import project"
+#~ msgstr "परियोजना आयात नहीं की जा सकी"
+
+#, fuzzy
+#~| msgid "Couldn't create new project"
+#~ msgid "Could not create new project"
+#~ msgstr "नई परियोजना बनाई नहीं जा सकी"
+
+#~ msgid "The file %1 cannot be created."
+#~ msgstr "फ़ाइल %1 बनया नहीं जा सका."
+
+#, fuzzy
+#~| msgid "Please chose an existing directory."
+#~ msgid "Please choose an existing folder."
+#~ msgstr "कृपया एक मौजूदा डिरेक्ट्री चुनें."
+
+#~ msgid "Please choose a project name."
+#~ msgstr "कृपया कोई परियोजना नाम चुनें."
+
+#~ msgid "Project import error"
+#~ msgstr "परियोजना आयात त्रुटि"
+
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "अपलोड करने के लिए अस्थाई फ़ाइल बनाई नहीं जा सकी."
+
+#~ msgid "Invalid Location"
+#~ msgstr "अवैध स्थान"
+
+#, fuzzy
+#~| msgid "Project &name:"
+#~ msgid "Empty project name"
+#~ msgstr "परियोजना नाम: (&n)"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid project name"
+#~ msgstr "परियोजना टैम्प्लेट्स"
+
+#, fuzzy
+#~| msgid "Project Templates"
+#~ msgid "Invalid Project Template"
+#~ msgstr "परियोजना टैम्प्लेट्स"
+
+#~ msgid "Project Templates"
+#~ msgstr "परियोजना टैम्प्लेट्स"
+
+#~ msgid "Document View"
+#~ msgstr "दस्तावेज़ दृश्य"
+
+#~ msgid "Documents"
+#~ msgstr "दस्तावेज़"
+
+#~ msgid "<%1 items>"
+#~ msgstr "<%1 वस्तुएँ>"
+
+#~ msgid "Disabled"
+#~ msgstr "अक्षम"
+
+#~ msgid "Pending (add)"
+#~ msgstr "लंबित (जोड़ें)"
+
+#~ msgid "Pending (clear)"
+#~ msgstr "लंबित (साफ करें)"
+
+#~ msgid "Pending (modify)"
+#~ msgstr "लंबित (परिवर्धित करें)"
+
+#~ msgid "Active"
+#~ msgstr "सक्रिय"
+
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "कोड"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>जब डीबगर नहीं चल रहा था तो जीडीबी कमांड भेजा गया</b><br>कमांड थाााााा:<br> "
+#~ "%1"
+
+#~ msgid "Internal error"
+#~ msgstr "आंतरिक त्रुटि"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>अवैध डीबगर कमांड</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "अवैध डीबगर कमांड"
+
+#, fuzzy
+#~| msgid "The gdb reply is: bla-bla-bla"
+#~ msgid "The gdb reply is: invalid"
+#~ msgstr "जीडीबी का जवाब है: ब्ला-ब्ला-ब्ला"
+
+#~ msgid "Invalid gdb reply"
+#~ msgstr "अवैध जीडीबी जवाब"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "सिगनल %1 पर बाहर हुआ"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "प्रोग्राम ने संकेत प्राप्त किया %1 (%2)"
+
+#~ msgid "Received signal"
+#~ msgstr "प्राप्त संकेत"
+
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "जीडीबी संदेश:\n"
+#~ "%1"
+
+#~ msgid "Warning"
+#~ msgstr "चेतावनी"
+
+#~ msgid "Running program"
+#~ msgstr "चल रहे प्रोग्राम"
+
+#~ msgid "Could not run application"
+#~ msgstr "अनुप्रयोग चला नहीं सका"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr "<b>डीबगर त्रुटि</b><p>डीबगर ने निम्न त्रुटि की रपट दी:<p><tt>%1"
+
+#~ msgid ""
+#~ "%1 commands in queue\n"
+#~ "%2 commands being processed by gdb\n"
+#~ "Debugger state: %3\n"
+#~ msgstr ""
+#~ "कतार में %1 कमांड\n"
+#~ "जीडीबी द्वारा %2 कमांड प्रक्रिया में\n"
+#~ "डीबगर स्थिति: %3\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "वर्तमान कमांड क्लास: '%1'\n"
+#~ "वर्तमान कमांड पाठ: '%2'\n"
+#~ "वर्तमान कमांड मूल पाठ: '%3'\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "डीबगर स्थिति"
+
+#~ msgid "Disassemble View"
+#~ msgstr "डिसअसेंबल दृश्य"
+
+#~ msgid "Address"
+#~ msgstr "पता"
+
+#~ msgid "Function"
+#~ msgstr "फंक्शन"
+
+#~ msgid "Offset"
+#~ msgstr "ऑफसेट"
+
+#~ msgid "Instruction"
+#~ msgstr "निर्देश"
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "डिबगिंग शेल '%1' लोकेट नहीं कर सकता."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "डिबगिंग शेल नहीं मिला"
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "एक्सेप्शन है: %1\n"
+#~ "एमआई की प्रतिक्रिया है: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "आंतरिक डीबगर त्रुटि"
+
+#~ msgid "Could not start debugger"
+#~ msgstr "डीबगर प्रारंभ नहीं कर सका"
+
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "डिबगर ब्रेकपाइन्ट्स"
+
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "नया"
+
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "डाटा लिखें"
+
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "डाटा पढ़ा"
+
+#~ msgid "Show text"
+#~ msgstr "पाठ दिखाएँ"
+
+#~ msgid "Edit"
+#~ msgstr "संपादन"
+
+#~ msgid "Disable"
+#~ msgstr "अक्षम"
+
+#~ msgid "Delete"
+#~ msgstr "मिटाएँ"
+
+#~ msgid "Disable all"
+#~ msgstr "सभी अक्षम करें"
+
+#~ msgid "Enable all"
+#~ msgstr "सभी सक्षम करें"
+
+#~ msgid "Delete all"
+#~ msgstr "सभी मिटाएँ"
+
+#~ msgid ""
+#~ "<b>Data write breakpoint</b><br>Expression: %1<br>Address: 0x%2<br>Old "
+#~ "value: %3<br>New value: %4"
+#~ msgstr ""
+#~ "<b>डाटा राइट ब्रेकपाइंट</b><br>एक्सप्रेशन: %1<br>पता: 0x%2<br>पुराना मूल्य: "
+#~ "%3<br>नया मूल्य: %4"
+
+#~ msgid "Enable"
+#~ msgstr "सक्षम करें"
+
+#~ msgid "GDB Output"
+#~ msgstr "जीडीबी आउटपुट"
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "&GDB cmd:"
+
+#~ msgid "Pause execution of the app to enter gdb commands"
+#~ msgstr "जीडीबी कमांड्स प्रविष्ट करने के लिए अनु. के कार्यान्वयन ठहराएँ"
+
+#~ msgid "Show Internal Commands"
+#~ msgstr "आंतरिक कमांडों को दिखाएँ"
+
+#~ msgid "Copy All"
+#~ msgstr "सभी नक़ल करें"
+
+#, fuzzy
+#~| msgid "Ignore Count"
+#~ msgid "Ignore"
+#~ msgstr "काउन्ट नज़र अंदाज़ करें"
+
+#~ msgid "Watches"
+#~ msgstr "निगरानी"
+
+#~ msgid "Recent"
+#~ msgstr "हालिया"
+
+#~ msgid "Debugger Variables"
+#~ msgstr "डीबगर वेरिएबल"
+
+#, fuzzy
+#~| msgid "<b>Expression entry</b><p>Type in expression to evaluate."
+#~ msgid "<b>Expression entry</b><p>Type in expression to watch."
+#~ msgstr "<b>एक्सप्रेशन प्रविष्टि</b><p>मूल्यांकन के लिए एक्सप्रेशन में क़िस्म."
+
+#~ msgid "Recent Expressions"
+#~ msgstr "हाल ही के एक्सप्रेशन्स"
+
+#~ msgid "Remove All"
+#~ msgstr "सभी मिटाएँ"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "सभी का फिर से मूल्यांकन करें"
+
+#~ msgid "Format"
+#~ msgstr "फॉर्मेट"
+
+#~ msgid "Natural"
+#~ msgstr "प्राकृतिक"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "हेक्साडेसीमल"
+
+#~ msgid "Decimal"
+#~ msgstr "दशमलव"
+
+#~ msgid "Character"
+#~ msgstr "अक्षर"
+
+#~ msgid "Binary"
+#~ msgstr "द्विचर"
+
+#~ msgid "Remember Value"
+#~ msgstr "मूल्य याद रखें"
+
+#~ msgid "Remove Watch Variable"
+#~ msgstr "निगरानी वेरिएबल मिटाएँ"
+
+#~ msgid "Watch Variable"
+#~ msgstr "वेरिएबल देखें"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "एक्सप्रेशन का पुनर्मूल्यांकन करें"
+
+#~ msgid "Remove Expression"
+#~ msgstr "एक्सप्रेशन मिटाएँ"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "डाटा लिखना ब्रेकपाइंट"
+
+#~ msgid "Copy Value"
+#~ msgstr "मान नक़ल करें"
+
+#~ msgid "Invalid"
+#~ msgstr "अवैध"
+
+#~ msgid "Watchpoint"
+#~ msgstr "वाच-पाइंट"
+
+#~ msgid "Read Watchpoint"
+#~ msgstr "वाचपॉइन्ट पढ़ें"
+
+#~ msgid "Start"
+#~ msgstr "प्रारंभ"
+
+#~ msgid "Amount"
+#~ msgstr "मात्रा"
+
+#~ msgid "OK"
+#~ msgstr "ठीक"
+
+#~ msgid "Memory view"
+#~ msgstr "मेमोरी दृश्य"
+
+#~ msgid "Change memory range"
+#~ msgstr "मेमोरी सीमा बदलें"
+
+#~ msgid "Reload"
+#~ msgstr "री-लोड"
+
+#~ msgid "Close this view"
+#~ msgstr "इस दृश्य को बदलें"
+
+#~ msgid "Special debugger views"
+#~ msgstr "विशिष्ट डीबगर दृश्य"
+
+#~ msgid "Breakpoint"
+#~ msgstr "ब्रेकपाइंट"
+
+#~ msgid " temporary"
+#~ msgstr "अस्थायी"
+
+#~ msgid " hw"
+#~ msgstr " hw"
+
+#~ msgid "Enabled"
+#~ msgstr "सक्षम"
+
+#~ msgid "Type"
+#~ msgstr "क़िस्म"
+
+#~ msgid "Status"
+#~ msgstr "स्थिति"
+
+#~ msgid "Location"
+#~ msgstr "स्थान"
+
+#~ msgid "Condition"
+#~ msgstr "स्थिति"
+
+#~ msgid "Ignore Count"
+#~ msgstr "काउन्ट नज़र अंदाज़ करें"
+
+#~ msgid "Hits"
+#~ msgstr "हिट्स"
+
+#~ msgid "Tracing"
+#~ msgstr "ट्रेसिंग"
+
+#~ msgid "Frame"
+#~ msgstr "ढांचा"
+
+#, fuzzy
+#~| msgid "Debugger"
+#~ msgid "C++ Debugger"
+#~ msgstr "डिबगर"
+
+#~ msgid "Breakpoints"
+#~ msgstr "ब्रेकपाइन्ट्स"
+
+#~ msgid "Variables"
+#~ msgstr "चर"
+
+#~ msgid "Frame Stack"
+#~ msgstr "फ्रेम स्टेक"
+
+#~ msgid "Disassemble"
+#~ msgstr "डिसअसेंबल"
+
+#~ msgid "GDB"
+#~ msgstr "जीडीबी"
+
+#~ msgid "Debug views"
+#~ msgstr "डीबग दृश्य"
+
+#~ msgid "&Start"
+#~ msgstr "प्रारंभ (&S)"
+
+#~ msgid "Start in debugger"
+#~ msgstr "डिबगर में प्रारंभ करें"
+
+#~ msgid "&Restart"
+#~ msgstr "फिर से प्रारंभ करें (&R)"
+
+#~ msgid ""
+#~ "<b>Restarts application</b><p>Restarts applications from the beginning."
+#~ msgstr ""
+#~ "<b>अनुप्रयोग फिर से प्रारंभ करें</b><p>अनुप्रयोग को प्रारंभ से फिर से चालू करता है."
+
+#~ msgid "Sto&p"
+#~ msgstr "बन्द (&p)"
+
+#~ msgid "Stop debugger"
+#~ msgstr "डिबगर बन्द करें"
+
+#~ msgid "<b>Stop debugger</b><p>Kills the executable and exits the debugger."
+#~ msgstr "<b>डिबगर बन्द करें</b><p>एक्जीक्यूटेबल बन्द करें तथा डिबगर से बाहर हों"
+
+#~ msgid "Interrupt"
+#~ msgstr "इंटरप्ट"
+
+#~ msgid "Interrupt application"
+#~ msgstr "इंटरप्ट अनुप्रयोग"
+
+#~ msgid ""
+#~ "<b>Interrupt application</b><p>Interrupts the debugged process or current "
+#~ "GDB command."
+#~ msgstr ""
+#~ "<b>इंटरप्ट अनुप्रयोग</b><p>डीबग्ड प्रक्रिया या वर्तमान जीडीबी कमांड को रोकता है."
+
+#~ msgid "Run to &Cursor"
+#~ msgstr "संकेतक पर चलाएँ (&C)"
+
+#~ msgid "Run to cursor"
+#~ msgstr "संकेतक पर चलाएँ"
+
+#~ msgid ""
+#~ "<b>Run to cursor</b><p>Continues execution until the cursor position is "
+#~ "reached."
+#~ msgstr "<b>संकेतक तक चलाएं</b><p>जब तक संकेतक स्थिति आ नहीं जाती तब तक चलाता है."
+
+#~ msgid "Set E&xecution Position to Cursor"
+#~ msgstr "संकेतक स्थान तक चलाने की स्थिति सेट करें (&x)"
+
+#~ msgid "Jump to cursor"
+#~ msgstr "संकेतक स्थान पर कूदें"
+
+#~ msgid ""
+#~ "<b>Set Execution Position </b><p>Set the execution pointer to the current "
+#~ "cursor position."
+#~ msgstr ""
+#~ "<b>चलाने का स्थान सेट करें </b><p>वर्तमान संकेतक स्थान पर चलाने का संकेतक सेट करें."
+
+#~ msgid "Step &Over"
+#~ msgstr "आगे बढ़ें (&O)"
+
+#~ msgid "Step over the next line"
+#~ msgstr "अगली पंक्ति में आगे बढ़ें"
+
+#~ msgid "Step over Ins&truction"
+#~ msgstr "आगे बढ़ने के लिए हिदायतें (&t)"
+
+#~ msgid "Step over instruction"
+#~ msgstr "आगे बढ़ने के लिए हिदायतें"
+
+#~ msgid ""
+#~ "<b>Step over instruction</b><p>Steps over the next assembly instruction."
+#~ msgstr "<b>आगे बढ़ने के लिए हिदायतें</b><p>अगली असेंबली हिदायत पर आगे बढ़ता है."
+
+#~ msgid "Step &Into"
+#~ msgstr "यहाँ जाएँ (&I)"
+
+#~ msgid "Step into the next statement"
+#~ msgstr "अगले कथन पर जाएँ"
+
+#~ msgid "Step into I&nstruction"
+#~ msgstr "हिदायत पर जाएँ (&n)"
+
+#~ msgid "Step into instruction"
+#~ msgstr "हिदायत पर जाएँ"
+
+#~ msgid ""
+#~ "<b>Step into instruction</b><p>Steps into the next assembly instruction."
+#~ msgstr "<b>हिदायत पर जाएँ</b><p>अगले असेंबली हिदायत पर जाता है."
+
+#~ msgid "Step O&ut"
+#~ msgstr "बाहर आएँ (&u)"
+
+#~ msgid "Steps out of the current function"
+#~ msgstr "मौज़ूदा फंक्शन से बाहर आता है"
+
+#~ msgid "Viewers"
+#~ msgstr "प्रदर्शक"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "डिबगर प्रदर्शक"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>डिबगर प्रदर्शक</b><p>कार्यान्वित किए जा रहे अनुप्रयोग के बारे में बहुत सी "
+#~ "जानकारियाँ. यहाँ 4 दृश्य उपलब्ध हैं:<br><b>मेमोरी</b><br><b>डिसअसेंबल</"
+#~ "b><br><b>रजिस्टर्स</b><br><b>लाइब्रेरीज़</b>"
+
+#~ msgid "Examine core file"
+#~ msgstr "कोर फ़ाइल का परीक्षण करें"
+
+#~ msgid "Attach to process"
+#~ msgstr "प्रक्रिया में जोड़ें"
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process."
+#~ msgstr "<b>प्रक्रिया में जोड़ें</b><p>डिबगर को रनिंग प्रक्रिया में जोड़ें"
+
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "ब्रेकपाइन्ट टॉगल करें"
+
+#~ msgid "Toggle breakpoint"
+#~ msgstr "ब्रेकपाइन्ट टॉगल करें"
+
+#~ msgid ""
+#~ "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
+#~ "editor."
+#~ msgstr "<b>ब्रेकपाइन्ट टॉगल करें</b><p>मौज़ूदा पंक्ति संपादक पर ब्रेकपाइन्ट टॉगल करता है."
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "मूल्यांकन करें: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor."
+#~ msgstr "<b>एक्सप्रेशन मूल्यांकन करें</b><p>संकेतक के स्थान पर एक्सप्रेशन का मूल्य बताता है."
+
+#~ msgid "Watch: %1"
+#~ msgstr "निगरानी: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list."
+#~ msgstr ""
+#~ "<b>निगरानी एक्सप्रेशन</b><p>वेरिएबल्स/निगरानी सूची में संकेतक के स्थान पर एक एक्सप्रेशन "
+#~ "जोड़ता है."
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "जीडीबी असाधारण रूप से बाहर हुआ"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "परीक्षण के लिए एक कोर फ़ाइल चुनें..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "कोर फ़ाइल %1 का परीक्षण किया जा रहा है"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "संलग्न करने के लिए एक प्रक्रिया चुनें..."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "प्रक्रिया %1 में संलग्न किया जा रहा है"
+
+#~ msgid "Debugger"
+#~ msgstr "डिबगर"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "डिबगर बन्द हो गया"
+
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "प्रोग्राम को डिबगर में चलाता है"
+
+#~ msgid "&Continue"
+#~ msgstr "जारी रखें (&C)"
+
+#~ msgid "Continues the application execution"
+#~ msgstr "अनुप्रयोग क्रियान्वयन जारी रखता है"
+
+#~ msgid "Process exited"
+#~ msgstr "प्रक्रिया बाहर हो गया"
+
+#~ msgid "Variable"
+#~ msgstr "परिवर्तनीय"
+
+#~ msgid "Value"
+#~ msgstr "मान"
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "के-डेवलपः डिबग अनुप्रयोग कंसोल"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake Manager"
+#~ msgstr "सीमेक बाइनरी:"
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "परियोजना फ़ाइल लिख नहीं सका."
+
+#, fuzzy
+#~| msgid "Could not write the project file."
+#~ msgid "Could not save the change."
+#~ msgstr "परियोजना फ़ाइल लिख नहीं सका."
+
+#, fuzzy
+#~| msgid "Could not read project file: %1"
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "परियोजना फ़ाइलः %1 पढ़ नहीं सका"
+
+#~ msgid "Name"
+#~ msgstr "नाम"
+
+#~ msgid "Comment"
+#~ msgstr "टिप्पणी"
+
+#~ msgid "&Cancel"
+#~ msgstr "रद्द करें (&C)"
+
+#~ msgid "CMake process killed"
+#~ msgstr "सीमेक परियोजना बन्द किया गया"
+
+#~ msgid "Created successfully"
+#~ msgstr "सफलता पूर्वक बनाया गया"
+
+#~ msgid "An error occurred"
+#~ msgstr "एक त्रुटि हुई"
+
+#~ msgid "You need to select a cmake binary"
+#~ msgstr "आपको सीमेक बाइनरी चुनना होगा"
+
+#, fuzzy
+#~| msgid "Using an already created build directory"
+#~ msgid "You need to specify a build directory"
+#~ msgstr "पहले से ही बनाई गई बिल्ड डिरेक्ट्री प्रयोग की जा रही है"
+
+#, fuzzy
+#~| msgid "Using an already created build directory"
+#~ msgid "Already used build directory"
+#~ msgstr "पहले से ही बनाई गई बिल्ड डिरेक्ट्री प्रयोग की जा रही है"
+
+#~ msgid "Using an already created build directory"
+#~ msgstr "पहले से ही बनाई गई बिल्ड डिरेक्ट्री प्रयोग की जा रही है"
+
+#, fuzzy
+#~| msgid "The selected build directory does not exist or is not empty"
+#~ msgid "The selected build directory is not empty"
+#~ msgstr "चयनित बिल्ड डिरेक्ट्री उपलब्ध नहीं है या रिक्त नहीं है"
+
+#, fuzzy
+#~| msgid "The selected build directory is for another kind of project"
+#~ msgid "This build directory is for %1, but the project directory is %2"
+#~ msgstr "चयनित बिल्ड डिरेक्ट्री किसी भिन्न क़िस्म की परियोजना के लिए है"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "Text"
+#~ msgstr "पाठ लेबल"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Action"
+#~ msgstr "फंक्शन"
+
+#, fuzzy
+#~| msgid "Cancel"
+#~ msgid "Change"
+#~ msgstr "रद्द करें"
+
+#, fuzzy
+#~| msgid "Interrupt"
+#~ msgid "Insert"
+#~ msgstr "इंटरप्ट"
+
+#~ msgid "Remove"
+#~ msgstr "हटाएँ"
+
+#, fuzzy
+#~| msgid "Custom Makefiles"
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "मनपसंद मेकफ़ाइलें"
+
+#~ msgid "Build &Target"
+#~ msgstr "बिल्ड लक्ष्य (&T)"
+
+#~ msgid "Build target"
+#~ msgstr "बिल्ड लक्ष्य"
+
+#~ msgid "Build this project"
+#~ msgstr "यह परियोजना बिल्ड करें"
+
+#~ msgid "Build this target"
+#~ msgstr "यह लक्ष्य बिल्ड करें"
+
+#~ msgid "Build this directory"
+#~ msgstr "यह डिरेक्ट्री बिल्ड करें"
+
+#~ msgid "qmake-parser"
+#~ msgstr "क्यूमेक-पारसर"
+
+#~ msgid "Parse QMake project files"
+#~ msgstr "क्यूमेक परियोजना फ़ाइलें पार्स करें"
+
+#~ msgid "Enable output of the debug AST"
+#~ msgstr "डिबग एएसटी का आउटपुट सक्षम करें"
+
+#~ msgid "QMake project files"
+#~ msgstr "क्यूमेक परियोजना फ़ाइलें"
+
+#, fuzzy
+#~| msgid "QMake projectmanager"
+#~ msgid "QMake Manager"
+#~ msgstr "क्यू-मेक परियोजना-प्रबंधक"
+
+#~ msgid "freedesktop.org Desktop Entry Files"
+#~ msgstr "freedesktop.org डेस्कटॉप प्रविष्टि फ़ाइलें"
+
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "केडीई एक्सएमएलजीयूआई परिभाषाएँ"
+
+#~ msgid "Installed headers"
+#~ msgstr "संस्थापित शीर्ष-सूचनाएँ"
+
+#~ msgid "Uninstalled headers"
+#~ msgstr "असंस्थापित शीर्ष-सूचनाएँ"
+
+#, fuzzy
+#~| msgid "Number of simultaneous jobs:"
+#~ msgid "Number of times visited."
+#~ msgstr "एक साथ किए जाने वाले कार्यों की संख्या:"
+
+#, fuzzy
+#~| msgid "Source"
+#~ msgid "source"
+#~ msgstr "स्रोत"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "coverage"
+#~ msgstr "क्लीयर-केस समर्थन"
+
+#, fuzzy
+#~| msgid "Instruction"
+#~ msgid "Instrumented Lines:"
+#~ msgstr "निर्देश"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Report"
+#~ msgstr "क्लीयर-केस समर्थन"
+
+#, fuzzy
+#~| msgid "ClearCase support"
+#~ msgid "Coverage Support"
+#~ msgstr "क्लीयर-केस समर्थन"
+
+#, fuzzy
+#~| msgid "&Restart"
+#~ msgid "Reset Data"
+#~ msgstr "फिर से प्रारंभ करें (&R)"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "CMake Builder"
+#~ msgstr "सीमेक बाइनरी:"
+
+#~ msgid "CMake: %1"
+#~ msgstr "सी-मेक: %1"
+
+#, fuzzy
+#~| msgid "QMake Binary:"
+#~ msgid "QMake Builder"
+#~ msgstr "क्यूमेक बाइनरी:"
+
+#, fuzzy
+#~| msgid "QMake project files"
+#~ msgid "No project specified."
+#~ msgstr "क्यूमेक परियोजना फ़ाइलें"
+
+#~ msgid "QMake: %1"
+#~ msgstr "क्यू-मेक: %1"
+
+#, fuzzy
+#~| msgid "CMake Binary:"
+#~ msgid "Make Builder"
+#~ msgstr "सीमेक बाइनरी:"
+
+#~ msgid "compiling"
+#~ msgstr "कम्पाइल किया जा रहा है"
+
+#~ msgid "generating"
+#~ msgstr "बनाया जा रहा है"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "लिंक किया जा रहा है"
+
+#~ msgid "built"
+#~ msgstr "बिल्ट"
+
+#~ msgid "installing"
+#~ msgstr "संस्थापित किया जा रहा है"
+
+#~ msgid "creating"
+#~ msgstr "बनाया जा रहा है"
+
+#~ msgid "Make: %1"
+#~ msgstr "मेक: %1"
+
+#, fuzzy
+#~| msgid "Using an already created build directory"
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "पहले से ही बनाई गई बिल्ड डिरेक्ट्री प्रयोग की जा रही है"
+
+#, fuzzy
+#~| msgid "Could not create language plugin for %1."
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "%1 के लिए भाषा प्लगइन बना नहीं सका."
+
+#~ msgid "Valgrind Output"
+#~ msgstr "वेलग्रिंड आउटपुट"
+
+#~ msgid "Valgrind"
+#~ msgstr "वेलग्रिंड"
+
+#~ msgid "&Valgrind Memory Leak Check"
+#~ msgstr "वेलग्रिंड मेमोरी लीक जाँच (&V)"
+
+#~ msgid "Valgrind memory leak check and other tools"
+#~ msgstr "वेलग्रिंग मेमोरी लीक जांच तथा अन्य औजार"
+
+#~ msgid "Open Valgrind Output"
+#~ msgstr "वेलग्रिंड आउटपुट खोलें"
+
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "वेलग्रिंड आउटपुट: %1 खोल नहीं सका"
+
+#, fuzzy
+#~| msgid "&Valgrind Memory Leak Check"
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "वेलग्रिंड मेमोरी लीक जाँच (&V)"
+
+#, fuzzy
+#~| msgid "Callgrind"
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "कालग्रिंड"
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "वेलग्रिंड क्रैश हो गया."
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "वेलग्रिंड क्रैश हो गया."
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "वेलग्रिंड क्रैश हो गया."
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "वेलग्रिंड"
+
+#, fuzzy
+#~| msgid "Valgrind"
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "वेलग्रिंड"
+
+#, fuzzy
+#~| msgid "Valgrind crashed."
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "वेलग्रिंड क्रैश हो गया."
+
+#, fuzzy
+#~| msgid "Valid Location"
+#~ msgid "Valgrind communication error"
+#~ msgstr "वैध स्थान"
+
+#~ msgid "Failed to start valgrind from \"%1.\""
+#~ msgstr "\"%1\" से वेलग्रिंड प्रारंभ होने में असफल."
+
+#~ msgid "Failed to start Valgrind"
+#~ msgstr "वेलग्रिंड प्रारंभ करने में अक्षम"
+
+#~ msgid "Valgrind crashed."
+#~ msgstr "वेलग्रिंड क्रैश हो गया."
+
+#~ msgid "Valgrind Error"
+#~ msgstr "वेलग्रिंड त्रुटि"
+
+#~ msgid "Valgrind process timed out."
+#~ msgstr "वेलग्रिंड प्रक्रिया की अवधि समाप्त हो गई."
+
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "वेलग्रिंड प्रक्रिया लिखने में असफल."
+
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "वेलग्रिंड प्रक्रिया से पढ़ने में असफल."
+
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "अज्ञात वेलग्रिंड प्रक्रिया त्रुटि."
+
+#~ msgid "at: %1"
+#~ msgstr "यहाँ पर: %1"
+
+#~ msgid "by: %1"
+#~ msgstr "द्वारा: %1"
+
+#~ msgid "Source"
+#~ msgstr "स्रोत"
+
+#~ msgid "Object"
+#~ msgstr "वस्तु"
+
+#~ msgid "Valgrind XML Parsing: error at line %1, column %2: %3"
+#~ msgstr "वेलग्रिड एक्सएमएल पारसिंग: पंक्ति %1, स्तम्भ %2 पर त्रुटि: %3"
+
+#, fuzzy
+#~| msgid "Designer code"
+#~ msgid "Qt Designer"
+#~ msgstr "डिज़ाइनर कोड"
+
+#~ msgid "Widget Box"
+#~ msgstr "विजेट बक्सा"
+
+#~ msgid "Property Editor"
+#~ msgstr "गुण संपादक"
+
+#~ msgid "Action Editor"
+#~ msgstr "क्रिया संपादक"
+
+#~ msgid "Object Inspector"
+#~ msgstr "ऑब्जैक्ट इंसपेक्टर"
+
+#, fuzzy
+#~| msgid "Documents"
+#~ msgid "Close Document"
+#~ msgstr "दस्तावेज़"
+
+#~ msgid "%{APPNAME}"
+#~ msgstr "%{APPNAME}"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "Protected"
+#~ msgstr "परियोजना"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "C++ Options"
+#~ msgstr "विकल्प"
+
+#, fuzzy
+#~| msgid "Macro error"
+#~ msgid "&Macro:"
+#~ msgstr "मेक्रो त्रुटि"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr " कॉन्फ़िगरेश ट्रेस की जा रही हैन"
+
+#~ msgid "Enable tracing"
+#~ msgstr "इक्वलाइजर सक्षम करें"
+
+#~ msgid "Custom format string"
+#~ msgstr "मनपसंद वाक्यांश फ़ॉर्मेट"
+
+#~ msgid "Expressions to print:"
+#~ msgstr "छापा जाने वाला एक्सप्रेशन:"
+
+#~ msgid "Pid"
+#~ msgstr "पीआईडी"
+
+#~ msgid "TTY"
+#~ msgstr "टीटीवाई"
+
+#~ msgid "Stat"
+#~ msgstr "स्टेट"
+
+#~ msgid "Time"
+#~ msgstr "समय"
+
+#~ msgid "Command"
+#~ msgstr "कमांड"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "चलाएँ"
+
+#~ msgid "Debugger Toolbar"
+#~ msgstr "डिबगर औज़ार पट्टी"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "डिबगर कॉन्फ़िगरेशन"
+
+#~ msgid "Debugger executable:"
+#~ msgstr "डीबगर एक्ज़ीक्यूटेबल:"
+
+#~ msgid "Gdb executable"
+#~ msgstr "जीडीबी एक्जीक्यूटेबल"
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr "जीडीबी को विशिष्ट शैल में चलाएं (मुख्यतः आटोमेक परियोजनाओं के लिए)"
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "डिबगिंग शैलः (&s)"
+
+#~ msgid "Options"
+#~ msgstr "विकल्प"
+
+#~ msgid "Display static &members"
+#~ msgstr "स्थिर सदस्यों को दिखाएँ (&m)"
+
+#~ msgid "Display &demangled names"
+#~ msgstr "बिगड़े नाम दिखाएँ (&d)"
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "लाइब्रेरी लोडिंग पर ब्रेकपाइंट्स विन्यास आज़माएँ (&b)"
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "तैरता औज़ार-पट्टी सक्षम करें (&n)"
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr "अनुप्रयोग आई-ओ के लिए अलग टर्मिनल सक्षम करें (&I)"
+
+#~ msgid "Start Debugger With"
+#~ msgstr "इसके साथ डीबगर प्रारंभ करें"
+
+#~ msgid "Framestack"
+#~ msgstr "फ्रेमस्टैक"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "रिमोट डिबगिंग"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "जीडीबी स्क्रिप्ट कॉन्फ़िगर करें: (&C)"
+
+#~ msgid "Gdb configure script"
+#~ msgstr "जीडीबी स्क्रिप्ट कॉन्फ़िगर करें"
+
+#~ msgid "This script is sourced by gdb when the debugging starts."
+#~ msgstr "जब डीबगिंग प्रारंभ होता है तब यह स्क्रिप्ट जीडीबी द्वारा सोर्स्ड होता है."
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "शेल स्क्रिप्ट चलाएं: (&u)"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "रिमोट अनुप्रयोग प्रारंभ करने के लिए स्क्रिप्ट"
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "जीडीबी स्क्रिप्ट चलाएँ: (&g)"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "रिमोट अनुप्रयोग से जुड़ने के लिए स्क्रिप्ट"
+
+#~ msgid "Profile Editor for The KDevelop Platform"
+#~ msgstr "के-डेवलप प्लेटफ़ॉर्म में प्रोफ़ाइल संपादक"
+
+#~ msgid "Add Profile"
+#~ msgstr "प्रोफ़ाइल जोड़ें"
+
+#~ msgid "Description"
+#~ msgstr "वर्णन"
+
+#~ msgid "Properties"
+#~ msgstr "गुण"
+
+#~ msgid "Derived properties:"
+#~ msgstr "प्राप्त गुण:"
+
+#~ msgid "Own properties:"
+#~ msgstr "स्वयं के गुण:"
+
+#~ msgid "Lists of Explicitly Enabled && Disabled Plugins"
+#~ msgstr "सुस्पस्ट सक्षम तथा अक्षम किए प्लगइन्स की सूची (&&)"
+
+#~ msgid "Enabled:"
+#~ msgstr "सक्षम:"
+
+#~ msgid "Plugin Name"
+#~ msgstr "प्लगइन नाम"
+
+#~ msgid "Disabled:"
+#~ msgstr "अक्षम:"
+
+#~ msgid "<-"
+#~ msgstr "<-"
+
+#~ msgid "Available plugins:"
+#~ msgstr "उपलब्ध प्लगइन्सः"
+
+#~ msgid "Generic Name"
+#~ msgstr "जेनेरिक नाम"
+
+#~ msgid "->"
+#~ msgstr "->"
+
+#~ msgid "List of Plugins to Be Loaded"
+#~ msgstr "लोड किए जाने वाले प्लगइन्स की सूची"
+
+#~ msgid "&Name:"
+#~ msgstr "नाम: (&N)"
+
+#~ msgid "&Generic name:"
+#~ msgstr "जेनेरिक नाम: (&G)"
+
+#~ msgid "&Description:"
+#~ msgstr "वर्णनः (&D)"
+
+#~ msgid "Build Directory Creator"
+#~ msgstr "डिरेक्ट्री सृजक बनाएं"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "सीमेक बाइनरी: (&B)"
+
+#~ msgid "&Build Directory:"
+#~ msgstr "बिल्ड डिरेक्ट्री: (&B)"
+
+#~ msgid "&Installation Prefix:"
+#~ msgstr "संस्थापना प्रीफिक्स: (&I)"
+
+#~ msgid "Build &type:"
+#~ msgstr "बिल्ड क़िस्म: (&t)"
+
+#~ msgid "debug"
+#~ msgstr "डिबग"
+
+#~ msgid "release"
+#~ msgstr "रिलीज"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "रेलविथडेबइन्फ़ो"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "मिनसाइजरेल"
+
+#~ msgid "Generator:"
+#~ msgstr "जेनरेटर:"
+
+#~ msgid "TextLabel"
+#~ msgstr "पाठ लेबल"
+
+#~ msgid "Cache Values"
+#~ msgstr "कैश मूल्य"
+
+#~ msgid "Comment:"
+#~ msgstr "टिप्पणीः"
+
+#~ msgid "Show Advanced"
+#~ msgstr "विस्तृत दिखाएँ"
+
+#~ msgid "CMake Directory"
+#~ msgstr "सीमेक डिरेक्ट्री"
+
+#~ msgid "Show Advanced Values"
+#~ msgstr "विस्तृत मूल्य दिखाएँ"
+
+#~ msgid "Viewer"
+#~ msgstr "प्रदर्शक"
+
+#~ msgid "Parse Tree"
+#~ msgstr "पार्से ट्री"
+
+#~ msgid "Value 1"
+#~ msgstr "मूल्य १"
+
+#~ msgid "Value 2"
+#~ msgstr "मूल्य २"
+
+#~ msgid "Source to Be Written Back"
+#~ msgstr "स्रोत जिसे वापस लिखना है"
+
+#~ msgid "Add All From Directory"
+#~ msgstr "डिरेक्ट्री से सभी जोड़ें"
+
+#~ msgid "Choose File to Add..."
+#~ msgstr "जोड़ने हेतु फ़ाइल चुनें..."
+
+#~ msgid "CMake Binary:"
+#~ msgstr "सीमेक बाइनरी:"
+
+#~ msgid "QMake Binary:"
+#~ msgstr "क्यूमेक बाइनरी:"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgid "View"
+#~ msgstr "देखें (&V)"
+
+#~ msgid "Abort on first error:"
+#~ msgstr "पहली त्रुटि में ही छोड़ें:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Display commands but do not\n"
+#~| "execute them:"
+#~ msgid "Display commands but do not execute them:"
+#~ msgstr ""
+#~ "कमांड दिखाएँ परंतु\n"
+#~ "चलाएं नहीं:"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "एक समय में एक से ज्यादा कार्य चलाएं:"
+
+#~ msgid "Number of simultaneous jobs:"
+#~ msgstr "एक साथ किए जाने वाले कार्यों की संख्या:"
+
+#~ msgid "Make executable:"
+#~ msgstr "मेक एक्जीक्यूटेबल:"
+
+#~ msgid "Default make target:"
+#~ msgstr "डिफ़ॉल्ट मेक लक्ष्य:"
+
+#~ msgid "Additional make options:"
+#~ msgstr "अतिरिक्त मेक विकल्प:"
+
+#, fuzzy
+#~| msgid "Active Environment Profile: "
+#~ msgid "Active Environment Profile:"
+#~ msgstr "सक्रिय वातावरण प्रोफ़ाइल:"
+
+#~ msgid "Pattern:"
+#~ msgstr "पैटर्न:"
+
+#~ msgid "Template:"
+#~ msgstr "टैम्प्लेट:"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Regular Expression:"
+#~ msgstr "रेग्युलर एक्सप्रेशन:"
+
+#~ msgid "Case Sensitive:"
+#~ msgstr "केस सेंसिटिव:"
+
+#~ msgid "Directory:"
+#~ msgstr "डिरेक्ट्री:"
+
+#~ msgid "Recursive:"
+#~ msgstr "रिकर्सिव:"
+
+#~ msgid "Limit to project files:"
+#~ msgstr "परियोजना फ़ाइलों में सीमित करें:"
+
+#~ msgid "Files:"
+#~ msgstr "फ़ाइलें:"
+
+#~ msgid ""
+#~ "Enter the file name pattern of the files to search here. You may give "
+#~ "several patterns separated by commas"
+#~ msgstr ""
+#~ "ढूंढने के लिए फ़ाइल नाम पैटर्न यहाँ भरें. आप बहुत सारे पैटर्न जो कॉमा से अलग किए हों, दे "
+#~ "सकते हैं"
+
+#~ msgid "Exclude:"
+#~ msgstr "एक्सक्लूड:"
+
+#~ msgid "Suppress find errors:"
+#~ msgstr "प्राप्त त्रुटियों का दमन करें:"
+
+#~ msgid "Import Existing Project"
+#~ msgstr "मौज़ूदा परियोजना आयात करें"
+
+#, fuzzy
+#~| msgid "Directory:"
+#~ msgid "&Directory:"
+#~ msgstr "डिरेक्ट्री:"
+
+#~ msgid "Choose directory to import"
+#~ msgstr "आयात करने के लिए डिरेक्ट्री चुनें"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "से लाएँ: (&F)"
+
+#~ msgid "Fetch &Module"
+#~ msgstr "मॉड्यूल लाएँ (&M)"
+
+#~ msgid "Project &name:"
+#~ msgstr "परियोजना नाम: (&n)"
+
+#, fuzzy
+#~| msgid "&Build System"
+#~ msgid "&Build System:"
+#~ msgstr "बिल्ड सिस्टम (&B)"
+
+#~ msgid "CMake"
+#~ msgstr "सी-मेक"
+
+#~ msgid "QMake"
+#~ msgstr "क्यू-मेक"
+
+#~ msgid "Custom Makefiles"
+#~ msgstr "मनपसंद मेकफ़ाइलें"
+
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#~ msgid "Version Control System:"
+#~ msgstr "संस्करण नियंत्रण तंत्र"
+
+#~ msgid "Location:"
+#~ msgstr "स्थानः"
+
+#~ msgid "Application Name:"
+#~ msgstr "अनुप्रयोग नाम:"
+
+#~ msgid "(invalid)"
+#~ msgstr "(अवैध)"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "दृश्य में दस्तावेज़ श्रेणियाँ (माइमक़िस्में) प्रदर्शित करें"
+
+#~ msgid "Display document &categories"
+#~ msgstr "दस्तावेज़ श्रेणियाँ प्रदर्शित करें (&c)"
+
+#, fuzzy
+#~| msgid "generating"
+#~ msgid "Indentation"
+#~ msgstr "बनाया जा रहा है"
+
+#, fuzzy
+#~| msgid "Watches"
+#~ msgid "Spaces"
+#~ msgstr "निगरानी"
+
+#, fuzzy
+#~| msgid "Breakpoints"
+#~ msgid "Brackets"
+#~ msgstr "ब्रेकपाइन्ट्स"
+
+#, fuzzy
+#~| msgid "Class"
+#~ msgid "Cases"
+#~ msgstr "वर्ग"
+
+#~ msgid "Class"
+#~ msgstr "वर्ग"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "Labels"
+#~ msgstr "पाठ लेबल"
+
+#, fuzzy
+#~| msgid "Namespace alias"
+#~ msgid "Namespaces"
+#~ msgstr "नेमस्पेस अलाएस"
+
+#, fuzzy
+#~| msgid "Watches"
+#~ msgid "Switches"
+#~ msgstr "निगरानी"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgid "No change"
+#~ msgstr "कुछ नहीं"
+
+#, fuzzy
+#~| msgid "Breakpoint"
+#~ msgid "Break"
+#~ msgstr "ब्रेकपाइंट"
+
+#, fuzzy
+#~| msgid "Step into the next statement"
+#~ msgid "&Keep one-line statements"
+#~ msgstr "अगले कथन पर जाएँ"
+
+#~ msgid "&Executable:"
+#~ msgstr "चलाने-योग्यः (&E)"
+
+#, fuzzy
+#~| msgid "Extra &Parameters"
+#~ msgid "Extra &Parameters:"
+#~ msgstr "अतिरिक्त पैरामीटर (&P)"
+
+#~ msgid "Display stack to &depth:"
+#~ msgstr "स्टैक को गहराई तक दिखाएं: (&d)"
+
+#, fuzzy
+#~| msgid "Maximum &frame stack size"
+#~ msgid "Maximum &frame stack size:"
+#~ msgstr "अधिकतम फ्रेम स्टैक आकार (&f)"
+
+#~ msgid " bytes"
+#~ msgstr "बाइट्स"
+
+#~ msgid "Limit &identical error display"
+#~ msgstr "एक जैसी त्रुटियों को दिखाना सीमित करें (&i)"
+
+#~ msgid "&Memcheck"
+#~ msgstr "मेमोरीजांच (&M)"
+
+#~ msgid "Leak Summary:"
+#~ msgstr "लीक सारांश:"
+
+#~ msgid "Summary"
+#~ msgstr "सारांश"
+
+#~ msgid "Full"
+#~ msgstr "पूरा"
+
+#~ msgid "Leak Resolution Matching:"
+#~ msgstr "लीक रीज़ोल्यूशन जोड़ मिलाना:"
+
+#~ msgid "Low"
+#~ msgstr "निम्न"
+
+#~ msgid "Medium"
+#~ msgstr "मध्यम"
+
+#~ msgid "High"
+#~ msgstr "उच्च"
+
+#~ msgid "Show Reachable Blocks"
+#~ msgstr "पहुँच योग्य ब्लॉक दिखाएँ"
+
+#, fuzzy
+#~| msgid "Free block list size"
+#~ msgid "Free block list size:"
+#~ msgstr "मुक्त ब्लॉक सूची आकार"
+
+#~ msgid "&Cachegrind"
+#~ msgstr "कैशग्रिंड (&C)"
+
+#~ msgid "Ca&llgrind"
+#~ msgstr "कालग्रिंड (&l)"
+
+#~ msgid "Separate Thread Reporting"
+#~ msgstr "अलग थ्रेड रिपोर्टिंग"
+
+#~ msgid "Full Cache Simulation"
+#~ msgstr "पूरा कैश सिमुलेशन"
+
+#~ msgid "Simulate Hardware Prefetcher"
+#~ msgstr "हार्डवेयर प्रीफेचर सिमुलेट करें"
+
+#~ msgid "Massi&f"
+#~ msgstr "मासिफ (&f)"
+
+#, fuzzy
+#~| msgid "&Hellgrind"
+#~ msgid "&Helgrind"
+#~ msgstr "हेलग्रिंड (&H)"
+
+#, fuzzy
+#~| msgid "Extra Synchronization Events"
+#~ msgid "Extra Synchronization Events:"
+#~ msgstr "अतिरिक्त सिंक्रोनाइज़ेशन घटनाएँ"
+
+#~ msgid "None (Locks Only)"
+#~ msgstr "कुछ नहीं (सिर्फ ताला)"
+
+#~ msgid "Threads"
+#~ msgstr "लड़ियाँ"
+
+#~ msgid "All"
+#~ msgstr "सभी"
+
+#~ msgid "&Parameters:"
+#~ msgstr "पैरामीटर्सः (&P)"
+
+#~ msgid "Callgrind"
+#~ msgstr "कालग्रिंड"
+
+#~ msgid "&Trace children"
+#~ msgstr "चिल्ड्रन ट्रेस करें (&T)"
+
+#~ msgid "E&xecutable:"
+#~ msgstr "एक्जीक्यूटेबलः (&x)"
+
+#~ msgid "Additional p&arameters:"
+#~ msgstr "अतिरिक्त पैरामीटर्सः (&a)"
+
+#~ msgid "KCacheGrind"
+#~ msgstr "के-केश-ग्रिंड"
+
+#~ msgid "Executable:"
+#~ msgstr "चलाने-योग्यः"
+
+#~ msgid "Memcheck"
+#~ msgstr "मेमोरीजांच"
+
+#~ msgid "Memory &leak check"
+#~ msgstr "मेमोरी लीक चेक करें (&l)"
+
+#~ msgid "&Show still reachable blocks"
+#~ msgstr "अब तक पहुँच योग्य ब्लॉक दिखाएँ (&S)"
+
+#, fuzzy
+#~| msgid "F&orm"
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "फ़ॉर्म (&o)"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "डिजाइनर खाका औज़ार-पट्टी"
+
+#~ msgid "KDevelop Profile Editor"
+#~ msgstr "के-डेवलप प्रोफ़ाइल संपादक"
+
+#~ msgid "(c) 2004, The KDevelop Developers"
+#~ msgstr "(c) 2004, के-डेवलप डेवलपर्स"
+
+#~ msgid "Core"
+#~ msgstr "कोर"
+
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "वैश्विक"
+
+#~ msgid "Project"
+#~ msgstr "परियोजना"
+
+#~ msgid "Core Plugins"
+#~ msgstr "कोर प्लगइन्स"
+
+#~ msgid "Global Plugins"
+#~ msgstr "वैश्विक प्लगइन्स"
+
+#~ msgid "Project Plugins"
+#~ msgstr "परियोजना प्लगइन्स"
+
+#~ msgid "Remove selected profile and all its subprofiles?"
+#~ msgstr "चयनित प्रोफ़ाइल तथा इसके सभी सब प्रोफ़ाइलों को मिटाएँ?"
+
+#~ msgid ""
+#~ "Cannot remove this profile because it is not a local (user-created) "
+#~ "profile."
+#~ msgstr ""
+#~ "यह प्रोफ़ाइल मिटाया नहीं जा सकता चूंकि यह स्थानीय (उपयोक्ता द्वारा बनाया गया) "
+#~ "प्रोफ़ाइल नहीं है."
+
+#~ msgid "This plugin is already contained in the list of disabled plugins."
+#~ msgstr "यह प्लगइन पहले से ही अक्षम प्लगइनों की सूची में है."
+
+#~ msgid "Enable Plugin"
+#~ msgstr "प्लगइन सक्षम करें"
+
+#~ msgid "This plugin is already contained in the list of enabled plugins."
+#~ msgstr "यह प्लगइन पहले से ही अक्षम प्लगइनों की सूची में है."
+
+#~ msgid "Disable Plugin"
+#~ msgstr "प्लगइन अक्षम करें"
+
+#~ msgid ""
+#~ "The file %1 does not contain a valid KDevelop project session "
+#~ "('KDevPrjSession').\n"
+#~ msgstr "फ़ाइल %1 में वैध केडेवलप परियोजना सत्र ('KDevPrjSession') नहीं है.\n"
+
+#~ msgid "The document type seems to be: '%1'."
+#~ msgstr "दस्तावेज क़िस्म प्रतीत होता है कि: '%1' है."
+
+#~ msgid "&Open Project..."
+#~ msgstr "परियोजना खोलें... (&O)"
+
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr "<b>परियोजना खोलें</b><p>के-डेवलप2 या के-डेवलप3 परियोजना खोलता है.</p>"
+
+#~ msgid "Open recent project"
+#~ msgstr "मौज़ूदा परियोजना खोलें"
+
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr "<b>मौज़ूदा परियोजना खोलें</b><p>मौज़ूदा परियोजना खोलता है.</p>"
+
+#~ msgid "C&lose Project"
+#~ msgstr "परियोजना बन्द करें (&l)"
+
+#~ msgid "Close project"
+#~ msgstr "परियोजना बन्द करें"
+
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "<b>परियोजना बन्द करें</b><p>वर्तमान परियोजना बन्द करता है.</p>"
+
+#~ msgid "Project &Options"
+#~ msgstr "परियोजना विकल्प (&O)"
+
+#~ msgid "<b>Project options</b><p>Lets you customize project options.</p>"
+#~ msgstr "<b>परियोजना विकल्प</b><p>आपको परियोजना विकल्प मनपसंद बनाने देता है.</p>"
+
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr "*.kdevelop|के-डेवलप 3 परियोजना फ़ाइलें\n"
+
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "क्या आप वाकई परियोजना को फिर से खोलना चाहते हैं?"
+
+#~ msgid "Changing plugin profile..."
+#~ msgstr "प्लगइन प्रोफ़ाइल बदला जा रहा है..."
+
+#~ msgid "Loading project plugins..."
+#~ msgstr "परियोजना प्लगइन्स लोड किया जा रहा है..."
+
+#~ msgid "error during restoring of the KDevelop session"
+#~ msgstr "केडेवलप सत्र बहाल करने के दौरान त्रुटि हुई"
+
+#~ msgid "Project loaded."
+#~ msgstr "परियोजना लोड हो गया."
+
+#~ msgid ""
+#~ "This is not a valid project file.\n"
+#~ "XML error in line %1, column %2:\n"
+#~ "%3"
+#~ msgstr ""
+#~ "यह कोई वैध परियोजना फ़ाइल नहीं है..\n"
+#~ "पंक्ति %1, स्तम्भ %2 में एक्सएमएल त्रुटि:\n"
+#~ "%3"
+
+#~ msgid "This is not a valid project file."
+#~ msgstr "यह कोई वैध परियोजना फ़ाइल नहीं है."
+
+#~ msgid "Could not write the project file."
+#~ msgstr "परियोजना फ़ाइल लिख नहीं सका."
+
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "%1 के लिए कोई परियोजना प्रबंधन प्लगइन नहीं मिला."
+
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "परियोजना प्रबंधन प्लगइन %1 बना नहीं पाया."
+
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "%1 के लिए कोई भाषा प्लगइन नहीं मिला."
+
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "%1 के लिए भाषा प्लगइन बना नहीं सका."
+
+#, fuzzy
+#~| msgid "F&orm"
+#~ msgid "Form"
+#~ msgstr "फ़ॉर्म (&o)"
+
+#~ msgid "Valid Location"
+#~ msgstr "वैध स्थान"
+
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "अज्ञात"
+
+#~ msgid "Namespace import"
+#~ msgstr "नेमस्पेस आयात"
+
+#~ msgid "Namespace alias"
+#~ msgstr "नेमस्पेस अलाएस"
+
+#~ msgid "Forward Declaration"
+#~ msgstr "फ़ॉरवर्ड डिक्लेरेशन"
+
+#, fuzzy
+#~| msgid "Generator:"
+#~ msgid "enumerator"
+#~ msgstr "जेनरेटर:"
+
+#~ msgid "resolved forward-declaration"
+#~ msgstr "फ़ॉरवर्ड डिक्लेरेशन रीजॉल्व्ड"
+
+#, fuzzy
+#~| msgid "resolved forward-declaration"
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "फ़ॉरवर्ड डिक्लेरेशन रीजॉल्व्ड"
+
+#~ msgid "Container: "
+#~ msgstr "कन्टेनर:"
+
+#~ msgid "Scope: "
+#~ msgstr "स्कोप:"
+
+#~ msgid "Access: "
+#~ msgstr "पहुँच:"
+
+#~ msgid "Kind: "
+#~ msgstr "क़िस्म:"
+
+#~ msgid "Modifiers: "
+#~ msgstr "परिवर्धक:"
+
+#~ msgid "Def.: "
+#~ msgstr "डीईएफ़.:"
+
+#~ msgid "Decl.: "
+#~ msgstr "डीईसीएल:"
+
+#, fuzzy
+#~| msgid "Def.: "
+#~ msgid " Def.: "
+#~ msgstr "डीईएफ़.:"
+
+#, fuzzy
+#~| msgid "Decl.: "
+#~ msgid " Decl.: "
+#~ msgstr "डीईसीएल:"
+
+#~ msgid "<br />Uses:<br />"
+#~ msgstr "<br />उपयोग:<br />"
+
+#, fuzzy
+#~| msgid "&Restart"
+#~ msgid "Result"
+#~ msgstr "फिर से प्रारंभ करें (&R)"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "File Name"
+#~ msgstr "नाम"
+
+#~ msgid "Maintainer"
+#~ msgstr "मेंटेनर"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Format files"
+#~ msgstr "फॉर्मेट"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "Delete style"
+#~ msgstr "सभी मिटाएँ"
+
+#, fuzzy
+#~| msgid "Are you sure you want to reopen the current project?"
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "क्या आप वाकई परियोजना को फिर से खोलना चाहते हैं?"
+
+#, fuzzy
+#~| msgid "Custom Makefiles"
+#~ msgid "Custom Style"
+#~ msgstr "मनपसंद मेकफ़ाइलें"
+
+#, fuzzy
+#~| msgid "&Run"
+#~ msgid "QxRunner"
+#~ msgstr "चलाएँ (&R)"
+
+#, fuzzy
+#~| msgid "Sto&p"
+#~ msgid "S&top"
+#~ msgstr "बन्द (&p)"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "Select &All"
+#~ msgstr "सभी मिटाएँ"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "&Unselect All"
+#~ msgstr "सभी मिटाएँ"
+
+#, fuzzy
+#~| msgid "Amount"
+#~ msgid "&About"
+#~ msgstr "मात्रा"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "E&xit"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Copy All"
+#~ msgid "&Collapse All"
+#~ msgstr "सभी नक़ल करें"
+
+#, fuzzy
+#~| msgid "&Restart"
+#~ msgid "&Results"
+#~ msgstr "फिर से प्रारंभ करें (&R)"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "&Settings..."
+#~ msgstr "विन्यास (&S)"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgid "&Toolbars"
+#~ msgstr "औज़ार (&T)"
+
+#, fuzzy
+#~| msgid "Debugger Toolbar"
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "डिबगर औज़ार पट्टी"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "चलाएँ"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgid "Selected:"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Run:"
+#~ msgstr "चलाएँ"
+
+#, fuzzy
+#~| msgid "Access: "
+#~ msgid "Success"
+#~ msgstr "पहुँच:"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "Exceptions"
+#~ msgstr "विकल्प"
+
+#, fuzzy
+#~| msgid "Natural"
+#~ msgid "Fatals"
+#~ msgstr "प्राकृतिक"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgid "Warnings"
+#~ msgstr "चेतावनी"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgid "Close"
+#~ msgstr "कोड"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Failed to comply."
+#~ msgstr "लोड करने के लिए फ़ाइलें"
+
+#~ msgid "&Directory"
+#~ msgstr "डिरेक्ट्री (&D)"
+
+#~ msgid "Click run when you are ready"
+#~ msgstr "जब आप तैयार हों तो चलाएं पर क्लिक करें"
+
+#, fuzzy
+#~| msgid "Summary"
+#~ msgid "dummy"
+#~ msgstr "सारांश"
+
+#, fuzzy
+#~| msgid "<Loading...>"
+#~ msgid "Stopping..."
+#~ msgstr "<लोड किया जा रहा है...>"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Status"
+#~ msgid "StatusWidget"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Bu&ild"
+#~ msgid "Build"
+#~ msgstr "बिल्ड (&i)"
+
+#, fuzzy
+#~| msgid "Project"
+#~ msgctxt "@title:meu"
+#~ msgid "Project"
+#~ msgstr "परियोजना"
+
+#~ msgid "&Evaluate"
+#~ msgstr "मूल्यांकन करें (&E)"
+
+#~ msgid "&Watch"
+#~ msgstr "निगरानी (&W)"
+
+#~ msgid "Evaluate the expression."
+#~ msgstr "एक्सप्रेशन मूल्यांकन करें."
+
+#~ msgid "Evaluate the expression and auto-update the value when stepping."
+#~ msgstr "जब स्टेपिंग कर रहे हों तो एक्सप्रेशन का मूल्यांकन करें तथा स्वचालित अद्यतन करें."
+
+#~ msgid "&Build"
+#~ msgstr "बिल्ड (&B)"
+
+#~ msgid "Thread %1"
+#~ msgstr "थ्रेड %1"
+
+#~ msgid "ID"
+#~ msgstr "आईडी"
+
+#~ msgid "Build Toolbar"
+#~ msgstr "बिल्ड औज़ार पट्टी"
+
+#~ msgid "Browser Toolbar"
+#~ msgstr "ब्राउज़र औज़ार पट्टी"
+
+#~ msgid "Extra Toolbar"
+#~ msgstr "अतिरिक्त औज़ार पट्टी"
+
+#~ msgid "(bad forward-declaration)"
+#~ msgstr "(खराब फ़ॉरवर्ड डिक्लेरेशन)"

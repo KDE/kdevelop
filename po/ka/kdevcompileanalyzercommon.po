@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-04-24 19:25+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: compileanalyzeproblemmodel.cpp:84
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "ანალიზი დასრულდა. პრობლემები გამოვლენილი არაა."
+
+#: compileanalyzeproblemmodel.cpp:107
+#, kde-format
+msgid "Analysis started..."
+msgstr "ანალიზი დაწყებულია..."
+
+#: compileanalyzeproblemmodel.cpp:110
+#, kde-format
+msgctxt "@info:tooltip %2 is the path of the file"
+msgid "Re-run last %1 analysis (%2)"
+msgstr "ბოლო %1 ანალიზის თავიდან გაშვება (%2)"
+
+#: compileanalyzeproblemmodel.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last %1 analysis"
+msgstr "ბოლო %1 ანალიზის თავიდან გაშვება"
+
+#: compileanalyzer.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with %1"
+msgstr "მიმდინარე ფაილის %1-ით ანალიზი"
+
+#: compileanalyzer.cpp:79
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with %1"
+msgstr "მიმდინარე პროექტის %1-ით ანალიზი"
+
+#: compileanalyzer.cpp:161
+#, kde-format
+msgid "No suitable active file, unable to deduce project."
+msgstr "შესატყვისი აქტიური ფაილი არ არსებობს. პროექტს ვერ მივხვდი."
+
+#: compileanalyzer.cpp:173
+#, kde-format
+msgid "Active file isn't in a project."
+msgstr "აქტიური ფაილი პროექტს არ წარმოადგენს."
+
+#: compileanalyzer.cpp:186
+#, kde-format
+msgid ""
+"Unable to start check for '%1':\n"
+"\n"
+"%2"
+msgstr ""
+"'%1-ის შემოწმების დაწყების შეცდომა:\n"
+"\n"
+"%2"
+
+#: compileanalyzer.cpp:216
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "ტესტი"
+
+#: compileanalyzeutils.cpp:45
+#, kde-format
+msgid "Compilation database file not found: '%1'"
+msgstr "კომპილაციის ბაზის ფაილი %1 ვერ ვიპოვე"
+
+#: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
+#, kde-format
+msgid ""
+"Nothing to check: compilation database file '%1' contains no matching items."
+msgstr ""
+"შესამოწმებელი არაფერია: კომპილაციის ბაზის ფაილი %1 დამთხვეულ ელემენტებს არ "
+"შეიცავს."
+
+#: compileanalyzeutils.cpp:57
+#, kde-format
+msgid "Could not open compilation database file for reading: '%1'"
+msgstr "კომპილაციის ბაზის ფაილი %1 წასაკითხად ვერ გაიხსნა"
+
+#: compileanalyzeutils.cpp:65
+#, kde-format
+msgid "JSON error during parsing compilation database file '%1': %2"
+msgstr "JSON-ის შეცდომა კომპილაციის ბაზის ფაილის '%1'-ის დამუშავებისას: %2"
+
+#: compileanalyzeutils.cpp:70
+#, kde-format
+msgid ""
+"JSON error during parsing compilation database file '%1': document is not an "
+"array."
+msgstr ""
+"JSON-ის შეცდომა კომპილაციის ბაზის ფაილის '%1'-ის  დამუშავებისას: დოკუმენტი "
+"მასივს არ წარმოადგენს."

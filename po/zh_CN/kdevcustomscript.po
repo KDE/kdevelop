@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcustomscript.pot\n"
+"X-Crowdin-File-ID: 6450\n"
+
+#: customscript_plugin.cpp:86
+#, kde-format
+msgid ""
+"<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
+"external formatting tools that can be invoked through the command-line.<br /"
+">For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b> "
+"formatters can be used.<br />The advantage of command-line formatters is "
+"that formatting configurations can be easily shared by all team members, "
+"independent of their preferred IDE."
+msgstr ""
+"<b>缩进并格式化源代码。</b><br />此插件可使用强大的外部命令行格式化工具。"
+"<br />例如 <b>uncrustify</b>, <b>astyle</b> 或 <b>indent</b> 格式化工具都可以"
+"使用。<br />命令行格式化工具的优势在于格式化配置可以方便地与其他团队成员共"
+"享，而不受限制于他们使用的 IDE。"
+
+#: customscript_plugin.cpp:98
+#, kde-format
+msgctxt "@info formatter usage hint"
+msgid ""
+"Note: each custom script style requires a certain tool executable to be "
+"installed. Otherwise, code will not be formatted."
+msgstr ""
+"注意：每个自定义脚本样式都需要安装特定的工具可执行文件。否则，代码将不会被格"
+"式化。"
+
+#: customscript_plugin.cpp:235
+#, kde-format
+msgid "Gnu Indent: GNU"
+msgstr "Gnu 缩进：GNU 风格"
+
+#: customscript_plugin.cpp:246
+#, kde-format
+msgid "Gnu Indent: Kernighan & Ritchie"
+msgstr "Gnu 缩进：Kernighan 与 Ritchie 风格"
+
+#: customscript_plugin.cpp:257
+#, kde-format
+msgid "Gnu Indent: Original Berkeley indent style"
+msgstr "Gnu 缩进：原伯克利风格"
+
+#: customscript_plugin.cpp:268
+#, kde-format
+msgid "Clang Format"
+msgstr "Clang 格式化"
+
+#: customscript_plugin.cpp:271
+#, kde-format
+msgid ""
+"Description:<br /><br /><b>clang-format</b> is an automatic source formater "
+"by the LLVM project. It supports a variety of formatting style options via a "
+"<b>.clang-format</b> configuration file, usually located in the project root "
+"directory."
+msgstr ""
+"描述：<br /><br /><b>clang-format</b>是由 LLVM 项目提供的自动源代码格式化器。"
+"它支持多种的格式化样式选项，通过 <b>.clang-format</b> 配置文件控制，通常位于"
+"项目的根目录。"
+
+#: customscript_plugin.cpp:287
+#, kde-format
+msgid ""
+"Description:<br /><b>kdev_format_source</b> is a script bundled with "
+"KDevelop which allows using fine-grained formatting rules by placing meta-"
+"files called <b>format_sources</b> into the file-system.<br /><br />Each "
+"line of the <b>format_sources</b> files defines a list of wildcards followed "
+"by a colon and the used formatting-command.<br /><br />The formatting-"
+"command should use <b>$TMPFILE</b> to reference the temporary file to "
+"reformat.<br /><br />Example:<br /><b>*.cpp *.h : myformatter $TMPFILE</"
+"b><br />This will reformat all files ending with <b>.cpp</b> or <b>.h</b> "
+"using the custom formatting script <b>myformatter</b>.<br /><br />Example: "
+"<br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
+"$TMPFILE</b> <br />This will reformat all files in subdirectory <b>subdir</"
+"b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
+"config</b>."
+msgstr ""
+"描述：<br /><b>kdev_format_source</b> 是一个随 KDevelop 捆绑的脚本，可以使用"
+"精细的格式化规则，将 <b>format_sources</b> 元文件存放在文件系统中。<br /"
+"><br /><b>format_sources</b> 文件的每一行定义一个通配符列表，紧跟着是冒号，再"
+"之后是所用的格式化命令。<br /><br />格式化命令应该使用 <b>$TMPFILE</b> 指带要"
+"格式化的临时文件。<br /><br />例如：<br /><b>*.cpp *.h : myformatter "
+"$TMPFILE</b><br />这将格式化所有以 <b>.cpp</b> 或 <b>.h</b> 结尾的文件，使用"
+"自定义格式化脚本 <b>myformatter</b>。<br /><br />例如：<br /><b>subdir/* : "
+"uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />这将"
+"格式化子文目录 <b>subdir</b> 中的所有文件，使用 <b>uncrustify</b> 工具和配置"
+"文件 <b>uncrustify.config</b>。"
+
+#: customscript_plugin.cpp:544
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Command:"
+msgstr "命令："
+
+#: customscript_plugin.cpp:553
+#, kde-format
+msgid ""
+"<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
+"code is reached to the command <br />through the standard input, and the "
+"<br />formatted result is read from the standard output.<br /><br />If you "
+"add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
+"for transferring the code."
+msgstr ""
+"<i>您可以输入任何 Shell 命令。</i><br />未格式化的源代码通过标准输入传递给命"
+"令，格式化的结果从标准输出获取。<br /><br />如果您在命令中添加了 <b>"
+"$TMPFILE</b>，那么临时文件将用于传递代码。"
+
+#: customscript_plugin.cpp:565
+#, kde-format
+msgctxt "@action:button"
+msgid "More Variables"
+msgstr "更多变量"
+
+#: customscript_plugin.cpp:575
+#, kde-format
+msgid "Style: %1"
+msgstr "样式：%1"
+
+#: customscript_plugin.cpp:588
+#, kde-format
+msgid ""
+"<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+">The code will be written into the file, the temporary <br />file will be "
+"substituted into that position, and the result <br />will be read out of "
+"that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+"original file. <br />The contents of the file must not be modified, changes "
+"are allowed <br />only in $TMPFILE.<br /><br /><b>${&lt;project name&gt;}</"
+"b> will be replaced by the path of <br />a currently open project whose name "
+"is &lt;project name&gt;."
+msgstr ""
+"<b>$TMPFILE</b> 将会被临时文件的路径替换 <br /> 代码将会被写入文件，而临时的 "
+"<br /> 文件将会被写入该位置，同时结果 <br /> 将会从此文件读取. <br /><br /"
+"><b>$FILE</b> 将会被原始文件的路径替代。 <br /> 此文件的内容不允许被修改，而"
+"只有 <br />$TMPFILE.<br />可以修改。<br /><b>${&lt;project name&gt;}</b> 将会"
+"被 <br /> 这一当前打开的名叫&lt;project name&gt;的项目之路径替代."
+
+#: customscript_plugin.cpp:600
+#, kde-format
+msgctxt "@title:window"
+msgid "Variable Replacements"
+msgstr "变量替换"

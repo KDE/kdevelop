@@ -1,0 +1,180 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Franklin Weng <franklin at goodhorse dot idv dot tw>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-11-04 15:40+0800\n"
+"Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
+"Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ghdialog.cpp:25
+#, kde-format
+msgid ""
+"You have not authorized KDevelop to use your GitHub account. If you "
+"authorize KDevelop, you will be able to fetch your public/private "
+"repositories and the repositories from your organizations."
+msgstr ""
+
+#: ghdialog.cpp:34
+#, kde-format
+msgctxt "%1 is the URL with the GitHub token settings"
+msgid "You can check the authorization for this application and others at %1"
+msgstr ""
+
+#: ghdialog.cpp:54
+#, kde-format
+msgid "You are logged in as <b>%1</b>.<br/>%2"
+msgstr ""
+
+#: ghdialog.cpp:58
+#, fuzzy, kde-format
+#| msgid "Log out"
+msgctxt "@action:button"
+msgid "Log Out"
+msgstr "登出"
+
+#: ghdialog.cpp:64
+#, fuzzy, kde-format
+#| msgid "Force sync"
+msgctxt "@action:button"
+msgid "Force Sync"
+msgstr "強制同步"
+
+#: ghdialog.cpp:78
+#, fuzzy, kde-format
+#| msgid "Authorize"
+msgctxt "@action:button"
+msgid "Authorize"
+msgstr "認證"
+
+#: ghdialog.cpp:92
+#, fuzzy, kde-format
+#| msgid "Github Account"
+msgctxt "@title:window"
+msgid "GitHub Account"
+msgstr "Github 帳號"
+
+#: ghdialog.cpp:98
+#, kde-format
+msgid "Enter a login and a password"
+msgstr "輸入帳號與密碼"
+
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#, kde-format
+msgid "Waiting for response"
+msgstr "等待回應"
+
+#: ghdialog.cpp:126
+#, fuzzy, kde-format
+#| msgid "Authentication failed! Please, try again"
+msgid ""
+"Authentication failed. Please try again.\n"
+"\n"
+"Could not create token: \"%1\"\n"
+"%2"
+msgstr "認證失敗。請再試一次"
+
+#: ghdialog.cpp:129
+#, fuzzy, kde-format
+#| msgid "Github Account"
+msgctxt "@title:window"
+msgid "GitHub Authorization Failed"
+msgstr "Github 帳號"
+
+#: ghdialog.cpp:133
+#, fuzzy, kde-format
+#| msgid "Authentication failed! Please, try again"
+msgid ""
+"Authentication succeeded.\n"
+"\n"
+"Created token: \"%1\"\n"
+"%2"
+msgstr "認證失敗。請再試一次"
+
+#: ghdialog.cpp:136
+#, fuzzy, kde-format
+#| msgid "Github Account"
+msgctxt "@title:window"
+msgid "GitHub Account Authorized"
+msgstr "Github 帳號"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@title:window"
+msgid "Authentication Code"
+msgstr ""
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OTP Code:"
+msgstr ""
+
+#: ghdialog.cpp:176
+#, kde-format
+msgid "Please, write your password here."
+msgstr "請在此輸入您的密碼。"
+
+#: ghproviderplugin.cpp:35
+#, kde-format
+msgid "GitHub"
+msgstr ""
+
+#: ghproviderwidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Search"
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "搜尋"
+
+#: ghproviderwidget.cpp:58
+#, fuzzy, kde-format
+#| msgid "You can press the Return key if you don't want to wait"
+msgctxt "@info:tooltip"
+msgid "You can press the Return key if you do not want to wait."
+msgstr "如果您不想等，可以按下 Return"
+
+#: ghproviderwidget.cpp:70
+#, fuzzy, kde-format
+#| msgid "Click this button to configure your Github account"
+msgctxt "@info:tooltip"
+msgid "Configure your GitHub account"
+msgstr "點擊此按鍵來設定您的 Github 帳號"
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgid ""
+"The Git plugin could not be loaded which is required to import a GitHub "
+"project."
+msgstr ""
+
+#: ghproviderwidget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Github Provider"
+msgctxt "@title:window"
+msgid "GitHub Provider Error"
+msgstr "Github 提供者"
+
+#: ghproviderwidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "User"
+msgctxt "@item:inlistbox"
+msgid "User"
+msgstr "使用者"
+
+#: ghproviderwidget.cpp:106
+#, fuzzy, kde-format
+#| msgid "Organization"
+msgctxt "@item:inlistbox"
+msgid "Organization"
+msgstr "組織"

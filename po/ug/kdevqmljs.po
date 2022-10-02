@@ -1,0 +1,370 @@
+# Uyghur translation for kdevqmljssupport.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Gheyret Kenji <gheyret@gmail.com>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmljssupport\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-09-08 07:05+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "ئاتى:"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "يول:"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "يوق"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "يول(&P):"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "قۇرۇلۇش:"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr ""
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr ""
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr ""
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr ""
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr ""
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr ""
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr ""
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr ""
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr ""
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr ""
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+
+#, fuzzy
+#~| msgid "Check All"
+#~ msgid "Check a&ll"
+#~ msgstr "ھەممىنى تەكشۈر"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal syntax for exponential number"
+#~ msgstr "كۆرسەتكۈچ ساننىڭ قانۇنسىز تىلقۇرمىسى"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal unicode escape sequence"
+#~ msgstr "قانۇنسىز يۇنىكود كۆچمە مەنىلىك تەرتىپ"
+
+#, fuzzy
+#~| msgctxt "QmlParser"
+#~| msgid "Illegal unicode escape sequence"
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal hexadecimal escape sequence"
+#~ msgstr "قانۇنسىز يۇنىكود كۆچمە مەنىلىك تەرتىپ"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unclosed string at end of line"
+#~ msgstr "قۇر ئاخىرىدىكى ئاخىرلاشمىغان ھەرپ تىزىقى"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Invalid regular expression flag '%0'"
+#~ msgstr "ئىناۋەتسىز مۇنتىزىم ئىپادە بايراق '%0'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression backslash sequence"
+#~ msgstr "ئاخىرلاشمىغان مۇنتىزىم ئىپادە تەتۈر يانتۇ سىزىق تەرتىپى"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression class"
+#~ msgstr "ئاخىرلاشمىغان مۇنتىزىم ئىپادە خىلى"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression literal"
+#~ msgstr "ئاخىرلاشمىغان مۇنتىزىم ئىپادە ھەرپى"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Syntax error"
+#~ msgstr "گرامماتىكىلىق خاتالىق"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unexpected token `%1'"
+#~ msgstr "كۈتمىگەن بەلگە `%1'"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Expected token `%1'"
+#~ msgstr "كۈتكەن بەلگە `%1'"
+
+#, fuzzy
+#~| msgctxt "Utils::FileUtils"
+#~| msgid "Could not copy file '%1' to '%2'."
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Could not copy file \"%1\" to \"%2\"."
+#~ msgstr "ھۆججەت ‹%1› نى ‹%2› غا كۆچۈرگىلى بولمىدى."
+
+#~ msgid "File Error"
+#~ msgstr "ھۆججەت خاتالىقى"
+
+#~ msgid "Do not ask again"
+#~ msgstr "قايتا سورىما"
+
+#~ msgid "Details"
+#~ msgstr "تەپسىلاتلار"
+
+#~ msgid "'%1' is an invalid ELF object (%2)"
+#~ msgstr "'%1' بىر ئىناۋەتسىز ELF نەڭ (%2)"
+
+#~ msgid "'%1' is not an ELF object"
+#~ msgstr "'%1' بىر ELF نەڭ ئەمەس"
+
+#~ msgid "Variable"
+#~ msgstr "ئۆزگىرىشچان"
+
+#~ msgid "Value"
+#~ msgstr "قىممەت"
+
+#~ msgid "Locked"
+#~ msgstr "قۇلۇپلانغان"
+
+#~ msgid "Location"
+#~ msgstr "ئورنى"
+
+#~ msgid "Filter"
+#~ msgstr "سۈزگۈچ"
+
+#~ msgid "Clear text"
+#~ msgstr "تېكىستنى تازىلا"
+
+#~ msgctxt "Utils::PathChooser"
+#~ msgid "Choose..."
+#~ msgstr "تاللا…"
+
+#~ msgctxt "Utils::PathChooser"
+#~ msgid "Browse..."
+#~ msgstr "كۆز يۈگۈرت…"
+
+#~ msgid "Choose File"
+#~ msgstr "ھۆججەت تاللاڭ"
+
+#~ msgid "Insert..."
+#~ msgstr "قىستۇر…"
+
+#~ msgid "Add..."
+#~ msgstr "قوش…"
+
+#~ msgid "Delete Line"
+#~ msgstr "قۇر ئۆچۈر"
+
+#~ msgid "Clear"
+#~ msgstr "تازىلا"
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid "File Changed"
+#~ msgstr "ھۆججەت ئۆزگەرتىلگەن"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "&Close"
+#~ msgstr "ياپ(&C)"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "Save &as..."
+#~ msgstr "باشقا ئاتتا ساقلا(&A)…"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "&Save"
+#~ msgstr "ساقلا(&S)"
+
+#~ msgid "Add"
+#~ msgstr "قوش"
+
+#~ msgid "Remove"
+#~ msgstr "چىقىرىۋەت"
+
+#~ msgid "Rename"
+#~ msgstr "ئات ئۆزگەرت"
+
+#~ msgid "Rename..."
+#~ msgstr "ئات ئۆزگەرت…"
+
+#~ msgid "&Commit"
+#~ msgstr "تاپشۇر(&C)"
+
+#~ msgctxt "Utils::TextFileFormat"
+#~ msgid "Out of memory."
+#~ msgstr "ئەسلەك يېتىشمىدى."
+
+#~ msgid "..."
+#~ msgstr "…"

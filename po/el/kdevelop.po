@@ -1,0 +1,4327 @@
+# translation of kdevelop.po to greek
+# translation of kdevelop.po to
+# Copyright (C) 2002,2003, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+#
+# Stergios Dramis <sdramis@egnatia.ee.auth.gr>, 2002-2003.
+# Andreas Vlachos <avlach@gmail.com>, 2005.
+# Spiros Georgaras <sng@hellug.gr>, 2005, 2006, 2007, 2008.
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2005, 2007, 2008, 2009.
+# Σπύρος Γεωργαράς <sngeorgaras@otenet.gr>, 2008.
+# Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2019.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Antonis Geralis <gaantonio@civil.auth.gr>, 2013.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"PO-Revision-Date: 2019-08-27 13:48+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Τούσης Μανώλης,Σπύρος Γεωργαράς,Stelios"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "manolis@koppermind.homelinux.org,sng@hellug.gr,sstavra@gmail.com"
+
+#. i18n: ectx: Menu (session)
+#: kdevelopui.rc:6
+#, kde-format
+msgctxt "@title:menu"
+msgid "Session"
+msgstr "Συνεδρία"
+
+#. i18n: ectx: Menu (project)
+#: kdevelopui.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Project"
+msgstr "Έρ&γο"
+
+#. i18n: ectx: Menu (run)
+#: kdevelopui.rc:29
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Run"
+msgstr "Εκτέλε&ση"
+
+#. i18n: ectx: Menu (debug_core_menu)
+#: kdevelopui.rc:39
+#, kde-format
+msgctxt "@title:menu"
+msgid "Examine Core File"
+msgstr "Εξέταση αρχείου πυρήνα"
+
+#. i18n: ectx: Menu (debug_attach_menu)
+#: kdevelopui.rc:43
+#, kde-format
+msgctxt "@title:menu"
+msgid "Attach to Process"
+msgstr "Σύναψη σε διεργασία"
+
+#. i18n: ectx: Menu (navigation)
+#: kdevelopui.rc:65
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Navigation"
+msgstr "Π&λοήγηση"
+
+#. i18n: ectx: Menu (file)
+#: kdevelopui.rc:89
+#, kde-format
+msgctxt "@title:menu"
+msgid "&File"
+msgstr "&Αρχείο"
+
+#. i18n: ectx: Menu (edit)
+#: kdevelopui.rc:100
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Edit"
+msgstr "&Επεξεργασία"
+
+#. i18n: ectx: Menu (code)
+#: kdevelopui.rc:113
+#, kde-format
+msgctxt "@title:menu"
+msgid "Code"
+msgstr "Κώδικας"
+
+#. i18n: ectx: Menu (analyze_file)
+#: kdevelopui.rc:115
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr "Ανάλυση τρέχοντος αρχείου με"
+
+#. i18n: ectx: Menu (analyze_project)
+#: kdevelopui.rc:119
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr "Ανάλυση τρέχοντος έργου με"
+
+#. i18n: ectx: Menu (window)
+#: kdevelopui.rc:128
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Window"
+msgstr "Παρά&θυρο"
+
+#. i18n: ectx: Menu (settings)
+#: kdevelopui.rc:170
+#, kde-format
+msgctxt "@title:menu"
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+#. i18n: ectx: Menu (help)
+#: kdevelopui.rc:178
+#, kde-format
+msgctxt "@title:menu"
+msgid "Help"
+msgstr "Βοήθεια"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevelopui.rc:185
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Κύρια γραμμή εργαλείων"
+
+#: kdevideextension.cpp:36
+#, kde-format
+msgid "Code"
+msgstr "Κώδικας"
+
+#: kdevideextension.cpp:47
+#, kde-format
+msgid "KDevelop Project Files"
+msgstr "Αρχεία έργου KDevelop"
+
+#: main.cpp:85
+#, kde-format
+msgid "Could not open %1"
+msgstr "Αδυναμία ανοίγματος του '%1'"
+
+#: main.cpp:219
+#, kde-format
+msgid "Could not open file '%1'."
+msgstr "Αδυναμία ανοίγματος του αρχείου '%1'."
+
+#: main.cpp:242
+#, kde-format
+msgid "Could not open project '%1': %2"
+msgstr "Αδυναμία ανοίγματος έργου: '%1': %2"
+
+#: main.cpp:273
+#, kde-format
+msgid "Select the session to open the document in"
+msgstr ""
+"Επιλογή της συνεδρίας που προτιμάτε Επιλογή της συνεδρίας που θα ανοίξει το "
+"έγγραφο"
+
+#: main.cpp:300
+#, kde-format
+msgid ""
+"Cannot open unknown session %1. See `--list-sessions` switch for available "
+"sessions or use `-n` to create a new one."
+msgstr ""
+"Αδυναμία ανοίγματος της άγνωστης συνεδρίας %1. Δείτε το διακόπτη `--list-"
+"sessions` για τις διαθέσιμες συνεδρίες ή χρησιμοποιήστε `-n` για να "
+"ξεκινήσετε μία νέα."
+
+#: main.cpp:383
+#, kde-format
+msgid "KDevelop"
+msgstr "KDevelop"
+
+#: main.cpp:385
+#, kde-format
+msgid "The KDevelop Integrated Development Environment"
+msgstr "Το περιβάλλον ανάπτυξης του KDevelop"
+
+#: main.cpp:386
+#, kde-format
+msgid "Copyright 1999-%1, The KDevelop developers"
+msgstr "Copyright 1999-%1, Οι προγραμματιστές του KDevelop"
+
+#: main.cpp:389
+#, kde-format
+msgid "Kevin Funk"
+msgstr "Kevin Funk"
+
+#: main.cpp:389
+#, fuzzy, kde-format
+#| msgid "Co-maintainer, C++/Clang, QA, Windows Support"
+msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+msgstr "Εκ των συντηρητών, C++/Clang, QA, υποστήριξη Windows"
+
+#: main.cpp:390
+#, kde-format
+msgid "Sven Brauch"
+msgstr "Sven Brauch"
+
+#: main.cpp:390
+#, kde-format
+msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+msgstr ""
+"Εκ των συντηρητών, AppImage, υποστήριξη Python, Βελτιώσεις στο περιβάλλον "
+"χρήστη"
+
+#: main.cpp:391
+#, kde-format
+msgid "Aleix Pol Gonzalez"
+msgstr "Aleix Pol Gonzalez"
+
+#: main.cpp:391
+#, kde-format
+msgid "CMake Support, Run Support, Kross Support"
+msgstr "Υποστήριξη CMake, υποστήριξη εκτέλεσης, υποστήριξη Kross"
+
+#: main.cpp:392
+#, kde-format
+msgid "Milian Wolff"
+msgstr "Milian Wolff"
+
+#: main.cpp:392
+#, kde-format
+msgid ""
+"C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
+msgstr ""
+"C++/Clang, γενική διαχείριση, πρόσθετα Webdevelopment, αποσπάσματα κώδικα, "
+"μέτρηση επιδόσεων"
+
+#: main.cpp:393
+#, kde-format
+msgid "Olivier JG"
+msgstr "Olivier JG"
+
+#: main.cpp:393
+#, kde-format
+msgid "C++/Clang, DUChain, Bug Fixes"
+msgstr "C++/Clang, DUChain, διορθώσεις σφαλμάτων"
+
+#: main.cpp:394
+#, kde-format
+msgid "Andreas Pakulat"
+msgstr "Andreas Pakulat"
+
+#: main.cpp:394
+#, kde-format
+msgid ""
+"Architecture, VCS Support, Project Management Support, QMake Projectmanager"
+msgstr ""
+"Αρχιτεκτονική, υποστήριξη VCS, υποστήριξη διαχείρισης έργου, διαχείριση "
+"έργου QMake"
+
+#: main.cpp:395
+#, kde-format
+msgid "Alexander Dymo"
+msgstr "Alexander Dymo"
+
+#: main.cpp:395
+#, kde-format
+msgid "Architecture, Sublime UI, Ruby support"
+msgstr "Αρχιτεκτονική, Περιβάλλον εργασίας Sublime, υποστήριξη Ruby"
+
+#: main.cpp:396
+#, kde-format
+msgid "David Nolden"
+msgstr "David Nolden"
+
+#: main.cpp:396
+#, kde-format
+msgid ""
+"Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
+"Assistance, Refactoring"
+msgstr ""
+"Αλυσίδα χρήσεων ορισμού, υποστήριξη C++, πλοήγηση κώδικα, ολοκλήρωση κώδικα, "
+"βοήθεια σε προγράμματα, refactoring"
+
+#: main.cpp:397
+#, kde-format
+msgid "Vladimir Prus"
+msgstr "Vladimir Prus"
+
+#: main.cpp:397
+#, kde-format
+msgid "GDB integration"
+msgstr "Ενσωμάτωση GDB"
+
+#: main.cpp:398
+#, kde-format
+msgid "Hamish Rodda"
+msgstr "Hamish Rodda"
+
+#: main.cpp:398
+#, kde-format
+msgid "Text editor integration, definition-use chain"
+msgstr "Ενσωμάτωση κειμενογράφου, αλυσίδα χρήσεων ορισμού"
+
+#: main.cpp:399
+#, kde-format
+msgid "Amilcar do Carmo Lucas"
+msgstr "Amilcar do Carmo Lucas"
+
+#: main.cpp:399
+#, kde-format
+msgid "Website admin, API documentation, Doxygen and autoproject patches"
+msgstr ""
+"Διαχείριση ιστοχώρου, τεκμηρίωση API, διορθώσεις Doxygen και autoproject"
+
+#: main.cpp:400
+#, kde-format
+msgid "Niko Sams"
+msgstr "Niko Sams"
+
+#: main.cpp:400
+#, kde-format
+msgid "GDB integration, Webdevelopment Plugins"
+msgstr "Ενσωμάτωση GDB, πρόσθετα για Webdevelopment"
+
+#: main.cpp:401
+#, kde-format
+msgid "Friedrich W. H. Kossebau"
+msgstr "Friedrich W. H. Kossebau"
+
+#: main.cpp:403
+#, kde-format
+msgid "Matt Rogers"
+msgstr "Matt Rogers"
+
+#: main.cpp:404
+#, kde-format
+msgid "Cédric Pasteur"
+msgstr "Cédric Pasteur"
+
+#: main.cpp:404
+#, kde-format
+msgid "astyle and indent support"
+msgstr "υποστήριξη για astyle και εσοχές κειμένου"
+
+#: main.cpp:405
+#, kde-format
+msgid "Evgeniy Ivanov"
+msgstr "Evgeniy Ivanov"
+
+#: main.cpp:405
+#, kde-format
+msgid "Distributed VCS, Git, Mercurial"
+msgstr "Κατανεμημένο VCS, Git, Mercurial"
+
+#. i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+#: main.cpp:408
+#, kde-format
+msgid "Robert Gruber"
+msgstr "Robert Gruber"
+
+#: main.cpp:408
+#, kde-format
+msgid "SnippetPart, debugger and usability patches"
+msgstr "SnippetPart, debugger και διορθώσεις χρηστικότητας"
+
+#: main.cpp:409
+#, kde-format
+msgid "Dukju Ahn"
+msgstr "Dukju Ahn"
+
+#: main.cpp:409
+#, kde-format
+msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+msgstr ""
+"Πρόσθετο Subversion, προσαρμοσμένος διαχειριστής Make, συνολικές βελτιώσεις"
+
+#: main.cpp:410
+#, kde-format
+msgid "Harald Fernengel"
+msgstr "Harald Fernengel"
+
+#: main.cpp:410
+#, kde-format
+msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
+msgstr "Μεταφορά στο Qt 3, διορθώσεις, valgrind, υποστήριξη diff και perforce"
+
+#: main.cpp:411
+#, kde-format
+msgid "Roberto Raggi"
+msgstr "Roberto Raggi"
+
+#: main.cpp:411
+#, kde-format
+msgid "C++ parser"
+msgstr "Συντακτικός αναλυτής C++"
+
+#: main.cpp:412
+#, kde-format
+msgid "The KWrite authors"
+msgstr "Οι προγραμματιστές του KWrite"
+
+#: main.cpp:412
+#, kde-format
+msgid "Kate editor component"
+msgstr "Συστατικό επεξεργαστή Kate"
+
+#: main.cpp:413
+#, kde-format
+msgid "Nokia Corporation/Qt Software"
+msgstr "Nokia Corporation/Qt Software"
+
+#: main.cpp:413
+#, kde-format
+msgid "Designer code"
+msgstr "Κώδικας σχεδιαστή"
+
+#: main.cpp:415
+#, kde-format
+msgid "Contributors to older versions:"
+msgstr "Συντελεστές παλαιότερων εκδόσεων:"
+
+#: main.cpp:416
+#, kde-format
+msgid "Bernd Gehrmann"
+msgstr "Bernd Gehrmann"
+
+#: main.cpp:416
+#, kde-format
+msgid "Initial idea, basic architecture, much initial source code"
+msgstr "Αρχική ιδέα, βασική αρχιτεκτονική, αρχικός πηγαίος κώδικας"
+
+#: main.cpp:417
+#, kde-format
+msgid "Caleb Tennis"
+msgstr "Caleb Tennis"
+
+#: main.cpp:417
+#, kde-format
+msgid "KTabBar, bugfixes"
+msgstr "KTabBar, διορθώσεις"
+
+#: main.cpp:418
+#, kde-format
+msgid "Richard Dale"
+msgstr "Richard Dale"
+
+#: main.cpp:418
+#, kde-format
+msgid "Java & Objective C support"
+msgstr "υποστήριξη Java & Objective C"
+
+#: main.cpp:419
+#, kde-format
+msgid "John Birch"
+msgstr "John Birch"
+
+#: main.cpp:419
+#, kde-format
+msgid "Debugger frontend"
+msgstr "Περιβάλλον διορθωτή"
+
+#: main.cpp:420
+#, kde-format
+msgid "Sandy Meier"
+msgstr "Sandy Meier"
+
+#: main.cpp:420
+#, kde-format
+msgid "PHP support, context menu stuff"
+msgstr "Υποστήριξη PHP, υλικό στα σχετικά μενού"
+
+#: main.cpp:421
+#, kde-format
+msgid "Kurt Granroth"
+msgstr "Kurt Granroth"
+
+#: main.cpp:421
+#, kde-format
+msgid "KDE application templates"
+msgstr "Πρότυπα εφαρμογών KDE"
+
+#: main.cpp:422
+#, kde-format
+msgid "Ian Reinhart Geiser"
+msgstr "Ian Reinhart Geiser"
+
+#: main.cpp:422
+#, kde-format
+msgid "Dist part, bash support, application templates"
+msgstr "Τμήμα διανομής, υποστήριξη bash, πρότυπα εφαρμογών"
+
+#: main.cpp:423
+#, kde-format
+msgid "Matthias Hoelzer-Kluepfel"
+msgstr "Matthias Hoelzer-Kluepfel"
+
+#: main.cpp:423
+#, kde-format
+msgid "Several components, htdig indexing"
+msgstr "Διάφορα συστατικά, αναζήτηση htdig"
+
+#: main.cpp:424
+#, kde-format
+msgid "Victor Roeder"
+msgstr "Victor Roeder"
+
+#: main.cpp:424
+#, kde-format
+msgid "Help with Automake manager and persistent class store"
+msgstr ""
+"Βοήθεια με το διαχειριστή Automake και την αντικειμενοστραφή αποθήκη κλάσεων"
+
+#: main.cpp:425
+#, kde-format
+msgid "Simon Hausmann"
+msgstr "Simon Hausmann"
+
+#: main.cpp:425
+#, kde-format
+msgid "Help with KParts infrastructure"
+msgstr "Βοήθεια με τη δομή KParts"
+
+#: main.cpp:426
+#, kde-format
+msgid "Oliver Kellogg"
+msgstr "Oliver Kellogg"
+
+#: main.cpp:426
+#, kde-format
+msgid "Ada support"
+msgstr "υποστήριξη Ada"
+
+#: main.cpp:427
+#, kde-format
+msgid "Jakob Simon-Gaarde"
+msgstr "Jakob Simon-Gaarde"
+
+#: main.cpp:427
+#, kde-format
+msgid "QMake projectmanager"
+msgstr "Διαχειριστής έργου QMake"
+
+#: main.cpp:428
+#, kde-format
+msgid "Falk Brettschneider"
+msgstr "Falk Brettschneider"
+
+#: main.cpp:428
+#, kde-format
+msgid "MDI modes, QEditor, bugfixes"
+msgstr "Λειτουργίες MDI, QEditor, διορθώσεις"
+
+#: main.cpp:429
+#, kde-format
+msgid "Mario Scalas"
+msgstr "Mario Scalas"
+
+#: main.cpp:429
+#, kde-format
+msgid "PartExplorer, redesign of CvsPart, patches, bugs(fixes)"
+msgstr ""
+"PartExplorer, επανασχεδιασμός του CvsPart, διορθώσεις, διορθώσεις σφαλμάτων"
+
+#: main.cpp:430
+#, kde-format
+msgid "Jens Dagerbo"
+msgstr "Jens Dagerbo"
+
+#: main.cpp:430
+#, kde-format
+msgid ""
+"Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and "
+"patches"
+msgstr ""
+"Αντικατάσταση, σελιδοδείκτες, πρόσθετα λίστας αρχείων και CTags2. Καθολικές "
+"βελτιώσεις και διορθώσεις"
+
+#: main.cpp:431
+#, kde-format
+msgid "Julian Rockey"
+msgstr "Julian Rockey"
+
+#: main.cpp:431
+#, kde-format
+msgid "Filecreate part and other bits and patches"
+msgstr "Τμήμα δημιουργίας αρχείων και άλλα κομμάτια και διορθώσεις"
+
+#: main.cpp:432
+#, kde-format
+msgid "Ajay Guleria"
+msgstr "Ajay Guleria"
+
+#: main.cpp:432
+#, kde-format
+msgid "ClearCase support"
+msgstr "Υποστήριξη ClearCase"
+
+#: main.cpp:433
+#, kde-format
+msgid "Marek Janukowicz"
+msgstr "Marek Janukowicz"
+
+#: main.cpp:433
+#, kde-format
+msgid "Ruby support"
+msgstr "Υποστήριξη Ruby"
+
+#: main.cpp:434
+#, kde-format
+msgid "Robert Moniot"
+msgstr "Robert Moniot"
+
+#: main.cpp:434
+#, kde-format
+msgid "Fortran documentation"
+msgstr "Τεκμηρίωση Fortran"
+
+#: main.cpp:435
+#, kde-format
+msgid "Ka-Ping Yee"
+msgstr "Ka-Ping Yee"
+
+#: main.cpp:435
+#, kde-format
+msgid "Python documentation utility"
+msgstr "Εργαλείο τεκμηρίωσης Python"
+
+#: main.cpp:436
+#, kde-format
+msgid "Dimitri van Heesch"
+msgstr "Dimitri van Heesch"
+
+#: main.cpp:436
+#, kde-format
+msgid "Doxygen wizard"
+msgstr "Μάγος Doxygen"
+
+#: main.cpp:437
+#, kde-format
+msgid "Hugo Varotto"
+msgstr "Hugo Varotto"
+
+#: main.cpp:437 main.cpp:438
+#, kde-format
+msgid "Fileselector component"
+msgstr "Συστατικό επιλογής αρχείων"
+
+#: main.cpp:438
+#, kde-format
+msgid "Matt Newell"
+msgstr "Matt Newell"
+
+#: main.cpp:439
+#, kde-format
+msgid "Daniel Engelschalt"
+msgstr "Daniel Engelschalt"
+
+#: main.cpp:439
+#, kde-format
+msgid "C++ code completion, persistent class store"
+msgstr "C++ συμπλήρωση κώδικα, αντικειμενοστραφής αποθήκη κλάσεων"
+
+#: main.cpp:440
+#, kde-format
+msgid "Stephane Ancelot"
+msgstr "Stephane Ancelot"
+
+#: main.cpp:440 main.cpp:441 main.cpp:444
+#, kde-format
+msgid "Patches"
+msgstr "Διορθώσεις"
+
+#: main.cpp:441
+#, kde-format
+msgid "Jens Zurheide"
+msgstr "Jens Zurheide"
+
+#: main.cpp:442
+#, kde-format
+msgid "Luc Willems"
+msgstr "Luc Willems"
+
+#: main.cpp:442
+#, kde-format
+msgid "Help with Perl support"
+msgstr "Βοήθεια με την υποστήριξη Perl"
+
+#: main.cpp:443
+#, kde-format
+msgid "Marcel Turino"
+msgstr "Marcel Turino"
+
+#: main.cpp:443
+#, kde-format
+msgid "Documentation index view"
+msgstr "Προβολή περιεχομένων τεκμηρίωσης"
+
+#: main.cpp:444
+#, kde-format
+msgid "Yann Hodique"
+msgstr "Yann Hodique"
+
+#: main.cpp:445
+#, kde-format
+msgid "Tobias Gläßer"
+msgstr "Tobias Gläßer"
+
+#: main.cpp:445
+#, kde-format
+msgid ""
+"Documentation Finder,  qmake projectmanager patches, usability improvements, "
+"bugfixes ... "
+msgstr ""
+"Αναζήτηση τεκμηρίωσης,  διορθώσεις του διαχειριστή έργου qmake, βελτιώσεις "
+"χρηστικότητας, διορθώσεις σφαλμάτων ... "
+
+#: main.cpp:446
+#, kde-format
+msgid "Andreas Koepfle"
+msgstr "Andreas Koepfle"
+
+#: main.cpp:446
+#, kde-format
+msgid "QMake project manager patches"
+msgstr "Διορθώσεις διαχειριστή έργου QMake"
+
+#: main.cpp:447
+#, kde-format
+msgid "Sascha Cunz"
+msgstr "Sascha Cunz"
+
+#: main.cpp:447
+#, kde-format
+msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
+msgstr "Καθαρισμός και διορθώσεις του qEditor, αυτόματης δημιουργίας και άλλων"
+
+#: main.cpp:448
+#, kde-format
+msgid "Zoran Karavla"
+msgstr "Zoran Karavla"
+
+#: main.cpp:448
+#, kde-format
+msgid "Artwork for the ruby language"
+msgstr "Γραφικά για τη γλώσσα Ruby"
+
+#: main.cpp:471
+#, kde-format
+msgid "Open KDevelop with a new session using the given name."
+msgstr "Άνοιγμα του KDevelop με νέα συνεδρία χρησιμοποιώντας το δοσμένο όνομα."
+
+#: main.cpp:474
+#, kde-format
+msgid ""
+"Open KDevelop with the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"Άνοιγμα του KDevelop με τη δοσμένη συνεδρία.\n"
+"Μπορείτε να δώσετε ως όρισμα ή δίεση ή το όνομα της συνεδρίας."
+
+#: main.cpp:478
+#, kde-format
+msgid ""
+"Delete the given session.\n"
+"You can pass either hash or the name of the session."
+msgstr ""
+"Διαγραφή της δοσμένης συνεδρίας.\n"
+"Μπορείτε να δώσετε ως όρισμα ή δίεση ή το όνομα της συνεδρίας."
+
+#: main.cpp:482
+#, kde-format
+msgid "Shows all available sessions and lets you select one to open."
+msgstr ""
+"Εμφανίζει όλες τις διαθέσιμες συνεδρίες και σας επιτρέπει να επιλέξετε μία "
+"για άνοιγμα."
+
+#: main.cpp:484
+#, kde-format
+msgid "List all available sessions on shell and lets you select one to open."
+msgstr ""
+"Καταγράφει όλες τις διαθέσιμες συνεδρίες στο κέλυφος και σας επιτρέπει να "
+"επιλέξετε να ανοίξετε μία."
+
+#: main.cpp:486
+#, kde-format
+msgid "List available sessions and quit."
+msgstr "Εμφάνισε τη λίστα με τις διαθέσιμες συνεδρίες και εγκατέλειψε."
+
+#: main.cpp:488
+#, kde-format
+msgid "Open KDevelop and fetch the project from the given <repo url>."
+msgstr "Άνοιγμα του KDevelop και φόρτωση του έργου από το δοσμένο <repo url>."
+
+#: main.cpp:491
+#, kde-format
+msgid ""
+"Open KDevelop and load the given project. <project> can be either a .kdev4 "
+"file or a directory path."
+msgstr ""
+"Άνοιγμα του KDevelop και φόρτωση του δοσμένου έργου. Το <project> μπορεί να "
+"είναι ή ένα .kdev4 αρχείο ή μια διαδρομή καταλόγου."
+
+#: main.cpp:494
+#, kde-format
+msgid ""
+"Start debugging an application in KDevelop with the given debugger.\n"
+"The executable that should be debugged must follow - including arguments.\n"
+"Example: kdevelop --debug gdb myapp --foo bar"
+msgstr ""
+"Έναρξη διόρθωσης εφαρμογής στο KDevelop με τον δοσμένο debugger.\n"
+"Το προς διόρθωση εκτελέσιμο θα πρέπει να ακολουθεί - μαζί με τα ορίσματα.\n"
+"Παράδειγμα: kdevelop --debug gdb myapp --foo bar"
+
+#: main.cpp:508
+#, kde-format
+msgid "Files to load, or directories to load as projects"
+msgstr "Αρχεία για φόρτωση ή κατάλογοι για φόρτωση ως έργα"
+
+#: main.cpp:519
+#, kde-format
+msgid "Available sessions (use '-s HASH' or '-s NAME' to open a specific one):"
+msgstr ""
+"Διαθέσιμες συνεδρίες (χρησιμοποίησε '-s HASH' ή '-s NAME' για άνοιγμα μιας "
+"συγκεκριμένης):"
+
+#: main.cpp:520
+#, kde-format
+msgid "Hash"
+msgstr "Δίεση"
+
+#: main.cpp:520
+#, kde-format
+msgid "Name: Opened Projects"
+msgstr "Όνομα: Ανοιχτά έργα"
+
+#: main.cpp:529
+#, kde-format
+msgid "[running]"
+msgstr "[εκτελείται]"
+
+#: main.cpp:631
+#, kde-format
+msgid "Select the session you would like to use"
+msgstr "Επιλογή της συνεδρίας που προτιμάτε"
+
+#: main.cpp:639
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specify the executable you want to debug."
+msgstr "Προσδιορίστε το εκτελέσιμο που θέλετε να διορθώσετε."
+
+#: main.cpp:648
+#, kde-format
+msgctxt "@info:shell"
+msgid "Specified executable does not exist."
+msgstr "Το δοσμένο εκτελέσιμο δεν υπάρχει."
+
+#: main.cpp:654
+#, kde-format
+msgid "Debug %1"
+msgstr "Εντοπισμός σφαλμάτων %1"
+
+#: main.cpp:662
+#, kde-format
+msgid ""
+"A session with the name %1 exists already. Use the -s switch to open it."
+msgstr ""
+"Μια συνεδρία με όνομα %1 ήδη υπάρχει. Χρησιμοποιήστε το διακόπτη -s για να "
+"την ανοίξετε"
+
+#: main.cpp:678
+#, kde-format
+msgid "No session with the name %1 exists."
+msgstr "Δεν υπάρχει συνεδρία με όνομα %1."
+
+#: main.cpp:685
+#, kde-format
+msgid "Could not lock session %1 for deletion."
+msgstr "Αδυναμία κλειδώματος της συνεδρίας %1 για διαγραφή."
+
+#: main.cpp:690
+#, kde-format
+msgid "Session with name %1 was successfully removed."
+msgstr "Η συνεδρία με το όνομα %1 αφαιρέθηκε με επιτυχία."
+
+#: main.cpp:794
+#, kde-format
+msgid "Cannot find native launch configuration type"
+msgstr "Αδυναμία εύρεσης εγγενούς τύπου διαμόρφωσης για εκκίνηση"
+
+#: main.cpp:814
+#, kde-format
+msgid "Cannot find launcher %1"
+msgstr "Αδυναμία εύρεσης προγράμματος εκκίνησης %1"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr "Συνεδρίες KDevelop"
+
+#: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr "Αυθαίρετη συμβολοσειρά που σημαίνει κάτι"
+
+#: plasma/runner/kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "Βρίσκει συνεδρίες KDevelop που ταιριάζουν με :q:."
+
+#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr ""
+"Τοποθετεί σε λίστα όλες τις συνεδρίες επεξεργαστή KDevelop του λογαριασμού "
+"σας."
+
+#: plasma/runner/kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "Άνοιγμα συνεδρίας KDevelop"
+
+#~ msgid "Files to load"
+#~ msgstr "Αρχεία για φόρτωση"
+
+#~ msgid "&File"
+#~ msgstr "&Αρχείο"
+
+#~ msgid "&Edit"
+#~ msgstr "&Επεξεργασία"
+
+#~ msgid "&Advanced"
+#~ msgstr "Για προ&χωρημένους"
+
+#~ msgid "&View"
+#~ msgstr "&Προβολή"
+
+#~ msgid "&Code Folding"
+#~ msgstr "Folding &κώδικα"
+
+#~ msgid "&Tools"
+#~ msgstr "Ε&ργαλεία"
+
+#~ msgid "Word Completion"
+#~ msgstr "Ολοκλήρωση λέξης"
+
+#~ msgid "&Settings"
+#~ msgstr "&Ρυθμίσεις"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Editor"
+#~ msgstr "Κειμενογράφος"
+
+#~ msgid "Deprecated options:"
+#~ msgstr "Ανεπιθύμητες επιλογές:"
+
+#~ msgid "Same as -l / --list-sessions"
+#~ msgstr "Ίδιο με το -l / --list-sessions"
+
+#~ msgid "Same as -n / --new-session"
+#~ msgstr "Ίδιο με το -n / --new-session"
+
+#~ msgid "The KHTML authors"
+#~ msgstr "Οι προγραμματιστές του KHTML"
+
+#~ msgid "HTML documentation component"
+#~ msgstr "Συστατικό τεκμηρίωσης HTML"
+
+#, fuzzy
+#~| msgid "KDevelop"
+#~ msgid "Develop"
+#~ msgstr "KDevelop"
+
+#~ msgid "Getting Started"
+#~ msgstr "Ξεκινώντας"
+
+#~ msgid "Back to code"
+#~ msgstr "Πίσω στον κώδικα"
+
+#~ msgid "Configure a new Launcher"
+#~ msgstr "Διαμόρφωση νέου εκτελεστή"
+
+#~ msgid "Debug your program"
+#~ msgstr "Διορθώστε σφάλματα στο πρόγραμμά σας"
+
+#~ msgid "Debug Area"
+#~ msgstr "Περιοχή εντοπισμού σφαλμάτων"
+
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. On the <em>Run</em> menu you will find all "
+#~ "the possible options.<br/><br/>As you can see, here you can just execute "
+#~ "your application or debug it if you need further runtime information. You "
+#~ "can select what is going to be run by configuring the launches and "
+#~ "selecting the one you want to use in the <em>Current Launch "
+#~ "Configuration</em> sub-menu."
+#~ msgstr ""
+#~ "Στην περιοχή <em>Διόρθωση</em> θα μπορείτε να δείτε και να αναλύσετε πώς "
+#~ "το πρόγραμμά σας λειτουργεί κατά την εκτέλεση. Στο μενού <em>Εκτέλεση</"
+#~ "em> θα βρείτε όλες τις πιθανές επιλογές.<br/><br/>Όπως μπορείτε να δείτε, "
+#~ "εδώ μπορείτε απλώς να εκτελέσετε την εφαρμογή σας ή να κάνετε διόρθωση "
+#~ "σφαλμάτων αν χρειάζεστε περισσότερες πληροφορίες εκτέλεσης. Μπορείτε να "
+#~ "επιλέξετε τι πρόκειται να εκτελεστεί διαμορφώνοντας τις εκκινήσεις και "
+#~ "επιλέγοντας εκείνη που θέλετε να χρησιμοποιήσετε στο υπομενού "
+#~ "<em>Τρέχουσα διαμόρφωση εκκίνησης</em>."
+
+#~ msgid "Review a Patch"
+#~ msgstr "Επιθεωρήστε μια διόρθωση"
+
+#~ msgid "Review Area"
+#~ msgstr "Περιοχή επιθεώρησης"
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ "to review changes in your projects, either the ones you made or some "
+#~ "external patch.<br/> Also it will help you send the changes to the "
+#~ "community you're contributing to, either by committing the changes, "
+#~ "sending them by e-mail or putting them on a ReviewBoard service."
+#~ msgstr ""
+#~ "Στην περιοχή <em>Επιθεώρηση</em> θα μπορείτε να βρείτε τα εργαλεία που "
+#~ "χρειάζεστε για να επιθεωρήσετε τις τροποποιήσεις στα έργα σας, ή εκείνες "
+#~ "που κάνατε ή κάποια εξωτερική διόρθωση.<br/> Επίσης θα σας βοηθήσει να "
+#~ "στείλετε τις τροποποιήσεις στην κοινότητα στην οποία συνεισφέρετε, ή με "
+#~ "την υποβολή των τροποποιήσεων, στέλνοντάς τις με ηλεκτρονική αλληλογραφία "
+#~ "(e-mail) ή τοποθετώντας τις σε μια υπηρεσία ReviewBoard."
+
+#~ msgid "New Project"
+#~ msgstr "Νέο έργο"
+
+#~ msgid "Open project"
+#~ msgstr "Άνοιγμα έργου"
+
+#~ msgid "Fetch project"
+#~ msgstr "Προσκόμιση έργου"
+
+#~ msgid "Recent Projects"
+#~ msgstr "Πρόσφατα έργα"
+
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Sessions"
+#~ msgstr "Συνεδρίες"
+
+#~ msgid "Official Website"
+#~ msgstr "Επίσημος ιστότοπος"
+
+#~ msgid "Userbase"
+#~ msgstr "Βάση χρηστών"
+
+#~ msgid "Techbase"
+#~ msgstr "Τεχνική βάση"
+
+#~ msgid "Handbook"
+#~ msgstr "Εγχειρίδιο"
+
+#~ msgid "Go!"
+#~ msgstr "Go!"
+
+#~ msgid "Documentation for KDevelop users"
+#~ msgstr "Τεκμηρίωση για χρήστες του KDevelop"
+
+#~ msgid "Keep up with KDevelop's development"
+#~ msgstr "Συντονιστείτε με την ανάπτυξη του KDevelop"
+
+#~ msgid "Help us improve KDevelop"
+#~ msgstr "Βοηθήστε μας να βελτιώσουμε το KDevelop"
+
+#~ msgctxt "name: content"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Some of the requested files could not be opened."
+#~ msgstr "Μερικά από τα αρχεία που ζητήθηκαν ήταν αδύνατο να ανοιχτούν."
+
+#~ msgid "Starting"
+#~ msgstr "Εκκίνηση"
+
+#~ msgid "Learn KDevelop!"
+#~ msgstr "Μάθετε το KDevelop!"
+
+#~ msgid "Execute your program"
+#~ msgstr "Εκτέλεση προγράμματος"
+
+#~ msgid "made running kdevelop instance (PID: %1) visible"
+#~ msgstr "το εκτελούμενο kdevelop (PID: %1) έγινε ορατό"
+
+#~ msgid ""
+#~ "<p>Failed to lock the session <em>%1</em>, already locked by %2 (PID %4) "
+#~ "on %3.<br>The given application did not respond to a DBUS call, it may "
+#~ "have crashed or is hanging.</p><p>Do you want to remove the lock file and "
+#~ "force a new KDevelop instance?<br/><strong>Beware:</strong> Only do this "
+#~ "if you are sure there is no running KDevelop process using this session.</"
+#~ "p>"
+#~ msgstr ""
+#~ "<p>Αποτυχία κλειδώματος της συνεδρίας <em>%1</em>, είναι ήδη κλειδωμένη "
+#~ "από τη %2 (PID %4) στο %3.<br>Η δοσμένη εφαρμογή δεν ανταποκρίθηκε σε "
+#~ "κλήση DBUS, μπορεί να έχει καταρρεύσει ή να κρέμεται.</p><p>Θέλετε να "
+#~ "αφαιρέσετε το αρχείο κλειδώματος και να εξαναγκάσετε επανεκτέλεση του "
+#~ "KDevelop;<br/><strong>Προσοχή:</strong> Να το κάνετε αυτό μόνο αν είστε "
+#~ "βέβαιοι ότι δεν εκτελείται διεργασία KDevelop που να χρησιμοποιεί αυτήν "
+#~ "τη συνεδρία.</p>"
+
+#~ msgid "Remove lock file"
+#~ msgstr "Αφαίρεση αρχείου κλειδώματος"
+
+#~ msgid "Failed to Lock Session %1"
+#~ msgstr "Αποτυχία κλειδώματος συνεδρίας %1"
+
+#~ msgid "Failed to remove lock file %1."
+#~ msgstr "Αποτυχία αφαίρεσης αρχείου κλειδώματος %1."
+
+#~ msgid "Import project"
+#~ msgstr "Εισαγωγή έργου"
+
+#, fuzzy
+#~| msgid "Open KDevelop and load the given project."
+#~ msgid "Open KDevelop with the given session.\n"
+#~ msgstr "Άνοιγμα του KDevelop και φόρτωση του δοσμένου έργου."
+
+#, fuzzy
+#~| msgid "Failed to Lock Session %1"
+#~ msgid "<p>Failed to lock the session <em>%1</em>, "
+#~ msgstr "Αποτυχία κλειδώματος συνεδρίας %1"
+
+#~ msgid ""
+#~ "On the <em>Debug</em> area you will be able to see and analyze how your "
+#~ "program works on execution. "
+#~ msgstr ""
+#~ "Στην περιοχή <em>Διόρθωση σφαλμάτων</em> θα μπορείτε να δείτε και να "
+#~ "αναλύσετε πώς το πρόγραμμά σας λειτουργεί κατά την εκτέλεση. "
+
+#~ msgid ""
+#~ "On the <em>Review</em> area you will be able to find the tools you need "
+#~ msgstr ""
+#~ "Στην περιοχή <em>Επιθεώρηση</em> θα μπορείτε να βρείτε τα εργαλεία που "
+#~ "χρειάζεστε "
+
+#, fuzzy
+#~| msgid "Project to load"
+#~ msgid "Url to project to load"
+#~ msgstr "Έργο για φόρτωση"
+
+#, fuzzy
+#~| msgid "(c) 1999-2009, The KDevelop developers"
+#~ msgid "Copyright 1999-2009, The KDevelop developers"
+#~ msgstr "(c) 1999-2009, Οι προγραμματιστές του KDevelop"
+
+#, fuzzy
+#~| msgctxt "@title:menu"
+#~| msgid "Settings"
+#~ msgid "Session contents"
+#~ msgstr "Ρυθμίσεις"
+
+#, fuzzy
+#~| msgid "Files to load"
+#~ msgid "Session to load"
+#~ msgstr "Αρχεία για φόρτωση"
+
+#~ msgid "Profile to load"
+#~ msgstr "Προφίλ προς φόρτωση"
+
+#~ msgid "Version %1"
+#~ msgstr "Έκδοση %1"
+
+#~ msgid "kdev4"
+#~ msgstr "kdev4"
+
+#~ msgid "Trolltech AS"
+#~ msgstr "Trolltech AS"
+
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid ""
+#~ "QEditor component, code completion, Abbrev component, C++ support, Java "
+#~ "support"
+#~ msgstr ""
+#~ "Συστατικό QEditor, συμπλήρωση κώδικα, συστατικό συντομογραφιών, "
+#~ "υποστήριξη C++, υποστήριξη Java"
+
+#~ msgid "Cancel"
+#~ msgstr "Ακύρωση"
+
+#~ msgid ""
+#~ "Refactoring is an experimental feature, it may damage your code. Before "
+#~ "using it, make sure to make a backup."
+#~ msgstr ""
+#~ "Η ανασχεδίαση είναι ένα πειραματικό χαρακτηριστικό και μπορεί να "
+#~ "καταστρέψει τον κώδικά σας. Πριν  τη χρήση του, σιγουρευτείτε ότι έχετε αντίγραφο ασφαλείας."
+
+#~ msgid "Rename %1"
+#~ msgstr "Μετονομασία %1"
+
+#~ msgid "Create Class"
+#~ msgstr "Δημιουργία κλάσης"
+
+#~ msgid "New name:"
+#~ msgstr "Νέο όνομα:"
+
+#~ msgid "Rename"
+#~ msgstr "Μετονομασία"
+
+#~ msgid ""
+#~ "Note: All overloaded functions, overloads, forward-declarations, etc. "
+#~ "will be renamed too"
+#~ msgstr ""
+#~ "Σημείωση: όλες οι υπερκαλύψεις συνάρτησεις, οι υπερκαλύψεις, οι δηλώσεις "
+#~ "προς τα εμπρός, κτλ θα  μετονομαστούν επίσης"
+
+#~ msgid "Uses"
+#~ msgstr "Χρήσεις"
+
+#~ msgid "Searching uses of \"%1\""
+#~ msgstr "Αναζήτηση χρήσεων του \"%1\""
+
+#~ msgid "Applying changes failed: %1"
+#~ msgstr "Αποτυχία εφαρμογής τροποποιήσεων: %1"
+
+#~ msgid "Unable to open '%1' to write the new class header."
+#~ msgstr ""
+#~ "Αδυναμία ανοίγματος του αρχείου '%1' για εγγραφή της κεφαλίδας της νέας "
+#~ "κλάσης."
+
+#~ msgid "Header generation error"
+#~ msgstr "Σφάλμα δημιουργίας κεφαλίδας"
+
+#~ msgid "Unable to open '%1' to write the new class implementation."
+#~ msgstr ""
+#~ "Αδυναμία ανοίγματος του αρχείου '%1' για εγγραφή της υλοποίησης της νέας "
+#~ "κλάσης."
+
+#~ msgid "Implementation generation error"
+#~ msgstr "Σφάλμα δημιουργίας υλοποίησης"
+
+#~ msgid ""
+#~ "tried include-path-resolution while another resolution-process was still "
+#~ "running"
+#~ msgstr ""
+#~ "έγινε προσπάθεια επίλυσης διαδρομής ενσωμάτωσης (include) ενώ γινόταν "
+#~ "εκτέλεση μιας άλλης διεργασίας επίλυσης"
+
+#~ msgid "Makefile is missing in folder \"%1\""
+#~ msgstr "Το Makefile λείπει από το φάκελο \"%1\""
+
+#~ msgid "problem while trying to resolve include-paths for %1"
+#~ msgstr ""
+#~ "πρόβλημα κατά την προσπάθεια επίλυσης διαδρομών ενσωμάτωσης (include) για "
+#~ "το %1"
+
+#~ msgid "Cached: "
+#~ msgstr "Στη λανθάνουσα μνήμη: "
+
+#~ msgid "Filename %1 seems to be malformed"
+#~ msgstr "Το όνομα αρχείου %1 φαίνεται να μην έχει σωστή μορφή"
+
+#~ msgid "make-process failed"
+#~ msgstr "αποτυχία διεργασίας make"
+
+#~ msgid "output: %1"
+#~ msgstr "έξοδος: %1"
+
+#~ msgid "Recursive make-call failed"
+#~ msgstr "Αποτυχία αναδρομικής κλήσης make"
+
+#~ msgid ""
+#~ "The parameter-string \"%1\" does not seem to be valid. Output was: %2"
+#~ msgstr ""
+#~ "Η συμβολοσειρά παράμετρος \"%1\" δεν πρέπει να είναι έγκυρη. Η έξοδος "
+#~ "ήταν: %2"
+
+#~ msgid "The directory \"%1\" does not exist. Output was: %2"
+#~ msgstr "Ο κατάλογος \"%1\" δεν υπάρχει. Η έξοδος ήταν: %2"
+
+#~ msgid "Recursive make-call malformed"
+#~ msgstr "Εσφαλμένη μορφή αναδρομικής κλήσης make"
+
+#~ msgid "Output was: %1"
+#~ msgstr "Η έξοδος ήταν: %1"
+
+#~ msgid "Could not extract include-paths from make-output"
+#~ msgstr ""
+#~ "Αδύνατη η εξαγωγή των διαδρομών ενσωμάτωσης (include) από την έξοδο του "
+#~ "make"
+
+#~ msgid "Folder: \"%1\"  Command: \"%2\"Output: \"%3\""
+#~ msgstr "Φάκελος: \"%1\"  Εντολή: \"%2\"Έξοδος: \"%3\""
+
+#~ msgid "%1 overloads of"
+#~ msgstr "%1 υπερκαλύψεις του"
+
+#~ msgid "Connect to"
+#~ msgstr "Σύνδεση με"
+
+#~ msgid "Function macro"
+#~ msgstr "Μακροεντολή συνάρτησης"
+
+#~ msgid "Macro"
+#~ msgstr "Μακροεντολή"
+
+#~ msgid "Preprocessed body:"
+#~ msgstr "Σώμα προεπεξεργασίας:"
+
+#~ msgid "Body:"
+#~ msgstr "Σώμα:"
+
+#~ msgctxt "Headers included into this header"
+#~ msgid "Included"
+#~ msgstr "Ενσωματώθηκαν"
+
+#~ msgctxt "Count of files this header was included into"
+#~ msgid "Included by"
+#~ msgstr "Ενσωμάτωση από"
+
+#~ msgctxt "Count of macros defined in this header"
+#~ msgid "Defined macros"
+#~ msgstr "Ορισμένες μακροεντολές"
+
+#~ msgid "Declarations:"
+#~ msgstr "Ορισμοί:"
+
+#~ msgid "not parsed yet"
+#~ msgstr "δεν αναλύθηκε ακόμη"
+
+#~ msgid "File could not be read from."
+#~ msgstr "Αδυναμία ανάγνωσης αρχείου."
+
+#~ msgid "File permissions prevent opening for read."
+#~ msgstr "Οι άδειες του αρχείου αποτρέπουν το άνοιγμα για ανάγνωση."
+
+#~ msgid "File was included recursively from within itself: %1"
+#~ msgstr "Το αρχείο περιλήφθηκε αναδρομικά από το ίδιο: %1"
+
+#~ msgid "Included file was not found: %1"
+#~ msgstr "Το ενσωματωμένο αρχείο δε βρέθηκε: %1"
+
+#~ msgid ""
+#~ "Searched include path:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Διαδρομή ενσωμάτωσης:\n"
+#~ "%1"
+
+#~ msgid "This file imports the current open document<br/>"
+#~ msgstr "Αυτό το αρχείο εισάγει το τρέχον ανοιγμένο έγγραφο<br/>"
+
+#~ msgid "In %1th include-path"
+#~ msgstr "Στη %1η διαδρομή ενσωμάτωσης (include)"
+
+#~ msgid "Included through"
+#~ msgstr "Ενσωμάτωση από"
+
+#~ msgid "Directory %1"
+#~ msgstr "Κατάλογος %1"
+
+#~ msgid "Includes"
+#~ msgstr "Ενσωματώσεις"
+
+#~ msgid "Include Path"
+#~ msgstr "Διαδρομή ενσωμάτωσης"
+
+#~ msgid "Includers"
+#~ msgstr "Ενσωματώσεις"
+
+#~ msgid "C++ Support"
+#~ msgstr "Υποστήριξη C++"
+
+#~ msgid "Support for C++ Language"
+#~ msgstr "Υποστήριξη για τη γλώσσα C++"
+
+#~ msgid "Files"
+#~ msgstr "Αρχεία"
+
+#~ msgid "&Switch Definition/Declaration"
+#~ msgstr "&Εναλλαγή Ορισμός/Δήλωση"
+
+#~ msgid "Create &New Class"
+#~ msgstr "Δημιουργία &νέας κλάσης"
+
+#~ msgid "Build manager for project %1 did not return a build directory"
+#~ msgstr ""
+#~ "Ο διαχειριστής κατασκευής για το έργο %1 δεν επέστρεψε μια διαδρομή "
+#~ "κατασκευής"
+
+#~ msgid ""
+#~ "The include path resolver needs the build directory to resolve additional "
+#~ "include paths. Consider setting up a build directory in the project "
+#~ "manager if you have not done so yet."
+#~ msgstr ""
+#~ "Ο επιλυτής διαδρομών ενσωμάτωσης απαιτεί τον κατάλογο κατασκευής για την "
+#~ "επίλυση πρόσθετων διαδρομών. Θα πρέπει να ορίσετε έναν κατάλογο "
+#~ "κατασκευής στον διαχειριστή έργου αν δεν το έχετε κάνει ήδη."
+
+#~ msgid "Build-manager did not return an include-path"
+#~ msgstr "Ο διαχειριστής κατασκευής δεν επέστρεψε μια διαδρομή ενσωμάτωσης"
+
+#~ msgid ""
+#~ "The build-manager did not return the include-path %1, which could be "
+#~ "resolved by the include-path resolver"
+#~ msgstr ""
+#~ "Ο διαχειριστής κατασκευής δεν επέστρεψε τη διαδρομή ενσωμάτωσης %1, η "
+#~ "οποία αναλύθηκε από τον επιλυτή διαδρομής ενσωμάτωσης"
+
+#~ msgid "Include-path resolver:"
+#~ msgstr "Επιλυτής διαδρομής ενσωμάτωσης:"
+
+#~ msgid ""
+#~ "Used build directory: \"%1\"\n"
+#~ "Include-path resolver: %2"
+#~ msgstr ""
+#~ "Κατάλογος κατασκευής: \"%1\"\n"
+#~ "Επιλυτής διαδρομής ενσωμάτωσης:%2"
+
+#~ msgid "Emptied by preprocessor<br />"
+#~ msgstr "Καθαρισμός από τον προεπεξεργαστή<br />"
+
+#~ msgid "Parsing included files"
+#~ msgstr "Ανάλυση αρχείων ενσωμάτωσης"
+
+#~ msgid "Parsing actual file"
+#~ msgstr "Ανάλυση πραγματικού αρχείου"
+
+#~ msgid "Building uses"
+#~ msgstr "Κατασκευή χρήσεων"
+
+#~ msgid "Ready"
+#~ msgstr "Έτοιμο"
+
+#~ msgid "Macro error"
+#~ msgstr "Σφάλμα μακροεντολής"
+
+#~ msgid "Call to macro %1 missing argument number %2"
+#~ msgstr "Στην κλήση της μακροεντολής %1 λείπει η παράμετρος %2"
+
+#~ msgid "Formals: %1"
+#~ msgstr "Συμβάσεις: %1"
+
+#~ msgid "Unterminated #if statement"
+#~ msgstr "Μη τερματισμένη εντολή #if"
+
+#~ msgid "character %1"
+#~ msgstr "χαρακτήρας %1"
+
+#~ msgid "Expected \"identifier\", found: %1"
+#~ msgstr "Αναμένονταν \"αναγνωριστικό\", βρέθηκε: %1"
+
+#~ msgid "<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>"
+#~ msgstr ""
+#~ "<h5>Κείμενο ενδεικτικού</h5><pre>%1</pre><h5>Είσοδος</h5><pre>%2</pre>"
+
+#~ msgid "Expected \")\", found %1"
+#~ msgstr "αναμένονταν \")\", βρέθηκε %1"
+
+#~ msgid "Division by zero"
+#~ msgstr "Διαίρεση με το μηδέν"
+
+#~ msgid "Input text: %1"
+#~ msgstr "Κείμενο εισόδου: %1"
+
+#~ msgid "expected ``:'' = %1"
+#~ msgstr "αναμένονταν ``:'' = %1"
+
+#~ msgid "#else without #if"
+#~ msgstr "#else χωρίς #if"
+
+#~ msgid "#endif without #if at output line %1"
+#~ msgstr "#endif χωρίς #if στη γραμμή εξόδου %1"
+
+#~ msgid "KDE forwarding header generator"
+#~ msgstr "Δημιουργός προώθησης κεφαλίδων του KDE"
+
+#~ msgid ""
+#~ "An application which creates forwarding headers (like Qt headers) from "
+#~ "source code."
+#~ msgstr ""
+#~ "Μια εφαρμογή δημιουργίας κεφαλίδων προώθησης (όπως οι κεφαλίδες Qt) από "
+#~ "τον πηγαίο κώδικα."
+
+#~ msgid "(c) 2006, Hamish Rodda"
+#~ msgstr "(c) 2006, Hamish Rodda"
+
+#~ msgid ""
+#~ "KDE include directory - headers go into <placeholder>includes</"
+#~ "placeholder>/KDE"
+#~ msgstr ""
+#~ "Κατάλογος ενσωμάτωσης KDE (include) - οι κεφαλίδες βρίσκονται στο "
+#~ "<placeholder>includes</placeholder>/KDE"
+
+#~ msgid "Build information from the cmake XML generator"
+#~ msgstr "Κατασκευή πληροφοριών από το δημιουργό XML του cmake"
+
+#~ msgid "invalid input: %1"
+#~ msgstr "Μη έγκυρη είσοδος: %1"
+
+#~ msgid "Generate Stub Class"
+#~ msgstr "Δημιουργία κλάσης Stub"
+
+#~ msgid "Generate Stub"
+#~ msgstr "Δημιουργία Stub"
+
+#~ msgid "Save to "
+#~ msgstr "Αποθήκευση σε"
+
+#~ msgid "Generate Unit Under Test"
+#~ msgstr "Δημιουργία μονάδας ελέγχου"
+
+#~ msgid "&Switch Test/Unit Under Test"
+#~ msgstr "&Εναλλαγή ελέγχου/μονάδας ελέγχου"
+
+#~ msgid "Override"
+#~ msgstr "Αντικατάσταση"
+
+#~ msgid "Implement"
+#~ msgstr "Υλοποίηση"
+
+#~ msgid "Add"
+#~ msgstr "Προσθήκη"
+
+#~ msgid "for"
+#~ msgstr "για"
+
+#~ msgid "Failed to start test executable."
+#~ msgstr "Αποτυχία εκκίνησης του εκτελέσιμου ελέγχου."
+
+#~ msgid "Test executable crashed."
+#~ msgstr "Το εκτελέσιμο ελέγχου κατέρρευσε."
+
+#~ msgid "Test registration XML."
+#~ msgstr "Έλεγχος εγγραφής XML."
+
+#~ msgid "Test root."
+#~ msgstr "Έλεγχος ριζικής διαδρομής."
+
+#~ msgid "profile"
+#~ msgstr "προφίλ"
+
+#~ msgid "QTest verbose output"
+#~ msgstr "Έξοδος μηνυμάτων QTest"
+
+#~ msgid "Test executable timed out."
+#~ msgstr "Λήξη χρονικού ορίου εκτελέσιμου ελέγχου."
+
+#~ msgid "Failed to write to test executable."
+#~ msgstr "Αποτυχία εγγραφής στο εκτελέσιμο ελέγχου."
+
+#~ msgid "Failed to read from test executable."
+#~ msgstr "Αποτυχία ανάγνωσης από το εκτελέσιμο ελέγχου."
+
+#~ msgid "Unknown error occurred."
+#~ msgstr "Συνέβη άγνωστο σφάλμα."
+
+#~ msgid "Failed to fetch test locations. Not a CMake project [todo]"
+#~ msgstr ""
+#~ "Αποτυχία ανάκτησης τοποθεσιών ελέγχου. Δεν πρόκειται για έργο CMake [προς "
+#~ "υλοποίηση]"
+
+#~ msgid "xTest"
+#~ msgstr "xTest"
+
+#~ msgid "QTest test"
+#~ msgstr "Έλεγχος QTest"
+
+#~ msgid "Support for running QTest unit tests"
+#~ msgstr "Υποστήριξη εκτέλεσης ελέγχων μονάδων QTest"
+
+#~ msgid "Print each QVERIFY/QCOMPARE"
+#~ msgstr "Εμφάνιση κάθε QVERIFY/QCOMPARE"
+
+#~ msgid "Print every signal emitted"
+#~ msgstr "Εμφάνιση κάθε σήματος που εκπέμπεται"
+
+#~ msgid "New QTest"
+#~ msgstr "Νέο QTest"
+
+#~ msgid "Class name:"
+#~ msgstr "Όνομα κλάσης:"
+
+#~ msgid "Search"
+#~ msgstr "Αναζήτηση"
+
+#~ msgid "Find In Files"
+#~ msgstr "Αναζήτηση σε αρχεία"
+
+#~ msgid "Grep: %1"
+#~ msgstr "Grep: %1"
+
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "Αδυναμία δημιουργίας προσωρινού αρχείου για αναζήτηση."
+
+#~ msgid "Find in Files"
+#~ msgstr "Αναζήτηση σε αρχεία"
+
+#~ msgid "Process failed to start."
+#~ msgstr "Η διεργασία απέτυχε να εκκινήσει."
+
+#~ msgid "Process crashed."
+#~ msgstr "Η διεργασία κατέρρευσε."
+
+#~ msgid "Process timed out."
+#~ msgstr "Λήξη χρονικού ορίου διεργασίας."
+
+#~ msgid "Error while writing to process."
+#~ msgstr "Σφάλμα κατά την εγγραφή στη διεργασία."
+
+#~ msgid "Error while reading from process."
+#~ msgstr "Σφάλμα κατά την ανάγνωση από τη διεργασία."
+
+#~ msgid "Unknown process error."
+#~ msgstr "Άγνωστο σφάλμα διεργασίας."
+
+#~ msgid "Support for running grep over a list of files"
+#~ msgstr "Υποστήριξη εκτέλεσης του grep σε μια λίστα αρχείων"
+
+#~ msgid "Find in Fi&les..."
+#~ msgstr "Αναζήτηση σε &αρχεία..."
+
+#~ msgid "Ctrl+Alt+f"
+#~ msgstr "Ctrl+Alt+f"
+
+#~ msgid "Search for expressions over several files"
+#~ msgstr "Αναζήτηση εκφράσεων σε πολλαπλά αρχεία"
+
+#~ msgid ""
+#~ "<b>Find in files</b><p>Opens the 'Find in files' dialog. There you can "
+#~ "enter a regular expression which is then searched for within all files in "
+#~ "the directories you specify. Matches will be displayed, you can switch to "
+#~ "a match directly.</p>"
+#~ msgstr ""
+#~ "<b>Αναζήτηση σε αρχεία</b><p>Άνοιγμα του διαλόγου 'Αναζήτηση σε αρχεία'. "
+#~ "Σε αυτό μπορεί να εισάγετε μια κανονική έκφραση για αναζήτηση σε όλα τα "
+#~ "αρχεία και καταλόγους που ορίζετε. Τα ταιριάσματα θα εμφανιστούν, ενώ "
+#~ "μπορείτε να μεταβείτε άμεσα σε ένα κατάλογο με ταίριασμα.</p>"
+
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgid "Create New Project"
+#~ msgstr "Δημιουργία νέου Έργου"
+
+#~ msgctxt "Page for general configuration options"
+#~ msgid "General"
+#~ msgstr "Γενικά"
+
+#~ msgctxt "Page for version control options"
+#~ msgid "Version Control"
+#~ msgstr "Έλεγχος εκδόσεων"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Μάγος έργου"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Υποστήριξη δημιουργίας και εισαγωγής έργων"
+
+#~ msgid "Generate a new project from a template"
+#~ msgstr "Δημιουργία ενός νέου έργου από ένα πρότυπο"
+
+#~ msgid ""
+#~ "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
+#~ "you to generate a skeleton for your application from a set of templates.</"
+#~ "p>"
+#~ msgstr ""
+#~ "<b>Νέο έργο</b><p>Αυτό εκκινεί το μάγο εφαρμογής του KDevelop. Σας βοηθά "
+#~ "στη δημιουργία ενός σκελετού για την εφαρμογή σας από ένα σύνολο προτύπων."
+#~ "</p>"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&Εισαγωγή υπάρχοντος έργου..."
+
+#~ msgid "Could not initialize DVCS repository"
+#~ msgstr "Αδυναμία αρχικοποίησης χώρου αποθήκευσης DVCS"
+
+#~ msgid "Could not add files to the DVCS repository"
+#~ msgstr "Αδυναμία προσθήκης αρχείων στο χώρο αποθήκευσης DVCS"
+
+#~ msgid "Could not import project into"
+#~ msgstr "Αδυναμία εισαγωγής του έργου"
+
+#~ msgid "Could not checkout imported project"
+#~ msgstr "Αδυναμία ελέγχου του έργου που έχει εισαχθεί"
+
+#~ msgid "Could not import project"
+#~ msgstr "Αδυναμία εισαγωγής του έργου"
+
+#~ msgid "Could not create new project"
+#~ msgstr "Αδυναμία δημιουργίας νέου έργου"
+
+#~ msgid "The file %1 cannot be created."
+#~ msgstr "Το αρχείο %1 δεν μπορεί να δημιουργηθεί."
+
+#~ msgid ""
+#~ "The given name is used by an already opened project. Choose a different "
+#~ "name"
+#~ msgstr ""
+#~ "Το δοσμένο όνομα χρησιμοποιείται από ένα ήδη ανοιχτό έργο. Επιλέξτε "
+#~ "διαφορετικό όνομα"
+
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Παρακαλώ επιλέξτε έναν υπάρχοντα κατάλογο."
+
+#~ msgid "Please choose a project name."
+#~ msgstr "Παρακαλώ επιλέξτε ένα όνομα έργου."
+
+#~ msgid ""
+#~ "Cannot create project file.<p><b>Suggestion</b>: check permissions on the "
+#~ "selected directory"
+#~ msgstr ""
+#~ "Αδυναμία δημιουργίας αρχείου έργου.<p><b>Πρόταση</b>: ελέγξτε τις άδειες "
+#~ "στον επιλεγμένο κατάλογο"
+
+#~ msgid "Project import error"
+#~ msgstr "Σφάλμα εισαγωγής έργου"
+
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "Αδυναμία δημιουργίας προσωρινού αρχείου για αποστολή."
+
+#~ msgid "Invalid Location"
+#~ msgstr "Μη έγκυρη τοποθεσία"
+
+#~ msgid "Empty project name"
+#~ msgstr "Κενό όνομα έργου"
+
+#~ msgid "Invalid project name"
+#~ msgstr "Μη έγκυρο όνομα έργου"
+
+#~ msgid "Unable to create subdirectories, missing permissions on: %1"
+#~ msgstr "Αδυναμία δημιουργίας υποκαταλόγων, μη επαρκείς άδειες στο: %1"
+
+#~ msgid "Directory already exists and is not empty!"
+#~ msgstr "Ο κατάλογος υπάρχει ήδη και δεν είναι κενός!"
+
+#~ msgid "Invalid Project Template"
+#~ msgstr "Μη έγκυρο πρότυπο έργου"
+
+#~ msgid "Project Templates"
+#~ msgstr "Πρότυπα έργου"
+
+#~ msgid "Document View"
+#~ msgstr "Προβολή έργου"
+
+#~ msgid "A list of opened documents"
+#~ msgstr "Μια λίστα με τα ανοιχτά έγγραφα"
+
+#~ msgid "Documents"
+#~ msgstr "Έγγραφα"
+
+#~ msgid "<%1 items>"
+#~ msgstr "<%1 αντικείμενα>"
+
+#~ msgid "Disabled"
+#~ msgstr "Ανενεργό"
+
+#~ msgid "Pending (add)"
+#~ msgstr "Σε αναμονή (προσθήκη)"
+
+#~ msgid "Pending (clear)"
+#~ msgstr "Σε αναμονή (καθαρισμός)"
+
+#~ msgid "Pending (modify)"
+#~ msgstr "Σε αναμονή (τροποποίηση)"
+
+#~ msgid "Active"
+#~ msgstr "Ενεργό"
+
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Κώδικας"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>Στάλθηκε εντολή Gdb χωρίς να εκτελείται ο αποσφαλματωτής</b><br>Η "
+#~ "εντολή ήταν η:<br> %1"
+
+#~ msgid "Internal error"
+#~ msgstr "Εσωτερικό σφάλμα"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>Μη έγκυρη εντολή αποσφαλματωτή</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Μη έγκυρη εντολή αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Invalid gdb reply</b><p>The 'stopped' packet does not include the "
+#~ "'reason' field."
+#~ msgstr ""
+#~ "<b>Μη έγκυρη απάντηση της gdb</b><p>Το πακέτο 'παύσης' δεν περιλαμβάνει "
+#~ "το πεδίο 'αιτίας'."
+
+#~ msgid "The gdb reply is: invalid"
+#~ msgstr "Η απάντηση της gdb δεν είναι έγκυρη"
+
+#~ msgid "Invalid gdb reply"
+#~ msgstr "Μη έγκυρη απάντηση της gdb"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "Έξοδος με σήμα %1"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Το πρόγραμμα έλαβε το σήμα %1 (%2)"
+
+#~ msgid "Received signal"
+#~ msgstr "Λήφθηκε σήμα"
+
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "μήνυμα gdb:\n"
+#~ "%1"
+
+#~ msgid "Warning"
+#~ msgstr "Προειδοποίηση"
+
+#~ msgid "Running program"
+#~ msgstr "Εκτέλεση προγράμματος"
+
+#~ msgid ""
+#~ "GDB cannot use the tty* or pty* devices.\n"
+#~ "Check the settings on /dev/tty* and /dev/pty*\n"
+#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
+#~ "the user to the tty group using \"usermod -G tty username\"."
+#~ msgstr ""
+#~ "Το GDB δεν μπορεί να χρησιμοποιήσει τις συσκευές tty* ή pty*.\n"
+#~ "Ελέγξτε τις ρυθμίσεις στις /dev/tty* και /dev/pty*\n"
+#~ "Ως βασικός χρήστης (root) ίσως χρειαστεί να εκτελέσετε την \"chmod ug+rw"
+#~ "\" tty* και στις συσκευές pty* και/ή να προσθέσετε το χρήστη στην ομάδα "
+#~ "tty χρησιμοποιώντας την \"usermod -G tty όνομαχρήστη\"."
+
+#~ msgid ""
+#~ "<b>Application does not exist</b><p>The application you're trying to "
+#~ "debug,<br>    %1\n"
+#~ "<br>does not exist. Check that you've specified the right application in "
+#~ "the debugger configuration."
+#~ msgstr ""
+#~ "<b>Η εφαρμογή δεν υπάρχει</b><p>Η εφαρμογή που προσπαθείτε να "
+#~ "αποσφαλματώσετε,<br>    %1\n"
+#~ "<br>δεν υπάρχει. Ελέγξτε ότι έχετε καθορίσει τη σωστή εφαρμογή στις "
+#~ "ρυθμίσεις του αποσφαλματωτή."
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Αδυναμία εκτέλεσης της εφαρμογής '%1'.</b><p>Η εφαρμογή δεν έχει την "
+#~ "εκτελέσιμη ιδιότητα ορισμένη. Δοκιμάστε να ανακατασκευάσετε το έργο, ή να "
+#~ "αλλάξετε τα δικαιώματα χειροκίνητα."
+
+#~ msgid "Could not run application"
+#~ msgstr "Αδυναμία εκτέλεσης της εφαρμογής"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Σφάλμα αποσφαλματωτή</b><p>Ο αποσφαλματωτής ανέφερε το παρακάτω σφάλμα:"
+#~ "<p><tt>%1"
+
+#~ msgid ""
+#~ "%1 commands in queue\n"
+#~ "%2 commands being processed by gdb\n"
+#~ "Debugger state: %3\n"
+#~ msgstr ""
+#~ "%1 εντολές σε αναμονή\n"
+#~ "%2 εντολές επεξεργάζονται από το gdb\n"
+#~ "Κατάσταση αποσφαλματωτή: %3\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "Τρέχουσα κλάση εντολής: '%1'\n"
+#~ "Τρέχον κείμενο εντολής: '%2'\n"
+#~ "Αρχικό κείμενο τρέχουσας εντολής: '%3'\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "Κατάσταση αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>Προβολή του κώδικα μηχανής</b><p>Μια προβολή του κώδικα μηχανής του "
+#~ "τρέχοντος εκτελούμενου αρχείου με την τρέχουσα εντολή τονισμένη. Μπορείτε "
+#~ "να κάνετε βήματα εντολή εντολή χρησιμοποιώντας τα κουμπιά της γραμμής "
+#~ "εργαλείων του αποσφαλματωτή \"βήμα πάνω\" από εντολή και \"βήμα μέσα\" "
+#~ "στην εντολή."
+
+#~ msgid "Disassemble View"
+#~ msgstr "Προβολή μετατροπής σε τελεστές μηχανής"
+
+#~ msgid "Address"
+#~ msgstr "Διεύθυνση"
+
+#~ msgid "Function"
+#~ msgstr "Συνάρτηση"
+
+#~ msgid "Offset"
+#~ msgstr "Μετατόπιση"
+
+#~ msgid "Instruction"
+#~ msgstr "Τελεστής"
+
+#~ msgid ""
+#~ "<b>Frame stack</b><p>Often referred to as the \"call stack\", this is a "
+#~ "list showing what function is currently active and who called each "
+#~ "function to get to this point in your program. By clicking on an item you "
+#~ "can see the values in any of the previous calling functions."
+#~ msgstr ""
+#~ "<b>Πλαίσιο στοίβας</b><p>Συχνά αποκαλείται \"στοίβα κλήσης\", αυτή είναι "
+#~ "η λίστα που εμφανίζει την τρέχουσα ενεργή συνάρτηση καθώς και ποιος "
+#~ "κάλεσε κάθε συνάρτηση μέχρι να βρεθεί η εκτέλεση σε αυτό το σημείο του "
+#~ "προγράμματος. Κάνοντας κλικ σε ένα αντικείμενο μπορείτε να δείτε τις "
+#~ "τιμές σε οποιαδήποτε από τις προηγούμενες συναρτήσεις."
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Αδυναμία εντοπισμού του κελύφους αποσφαλμάτωσης '%1'."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Το κέλυφος αποσφαλμάτωσης δε βρέθηκε"
+
+#~ msgctxt "<b>Internal debugger error</b>"
+#~ msgid ""
+#~ "<p>The debugger component encountered internal error while processing "
+#~ "reply from gdb. Please submit a bug report."
+#~ msgstr ""
+#~ "<p>Το συστατικό αποσφαλματωτή εμφανίστηκε εσωτερικό σφάλμα κατά την "
+#~ "επεξεργασία της απάντησης από το gdb. Παρακαλώ υποβάλετε μια αναφορά "
+#~ "σφάλματος."
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "Η εξαίρεση είναι: %1\n"
+#~ "Η απάντηση MI είναι: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "Εσωτερικό σφάλμα αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>Αδυναμία εκκίνησης του αποσφαλματωτή.</b><p>Αδυναμία εκτέλεσης του "
+#~ "'%1'. Σιγουρευτείτε ότι δώσατε τη διαδρομή και το όνομα σωστά."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Αδυναμία εκκίνησης του αποσφαλματωτή"
+
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Σημεία διακοπής αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Breakpoint list</b><p>Displays a list of breakpoints with their "
+#~ "current status. Clicking on a breakpoint item allows you to change the "
+#~ "breakpoint and will take you to the source in the editor window."
+#~ msgstr ""
+#~ "<b>Λίστα σημείων διακοπής</b><p>Εμφανίζει μια λίστα των σημείων διακοπής "
+#~ "καθώς και την τρέχουσα κατάστασή τους. Κάνοντας κλικ σε ένα σημείο "
+#~ "διακοπής σας επιτρέπει την τροποποίηση του σημείου διακοπής και σας "
+#~ "μεταφέρει στον κώδικα στο παράθυρο του επεξεργαστή."
+
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Νέο"
+
+#~ msgctxt "Data breakpoint"
+#~ msgid "Data write"
+#~ msgstr "Εγγραφή δεδομένων"
+
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Ανάγνωση δεδομένων"
+
+#~ msgid "Show text"
+#~ msgstr "Εμφάνιση κειμένου"
+
+#~ msgid "Disable"
+#~ msgstr "Απενεργοποίηση"
+
+#~ msgid "Delete"
+#~ msgstr "Διαγραφή"
+
+#~ msgid "Disable all"
+#~ msgstr "Απενεργοποίηση όλων"
+
+#~ msgid "Enable all"
+#~ msgstr "Ενεργοποίηση όλων"
+
+#~ msgid "Delete all"
+#~ msgstr "Διαγραφή όλων"
+
+#~ msgid ""
+#~ "<b>Data write breakpoint</b><br>Expression: %1<br>Address: 0x%2<br>Old "
+#~ "value: %3<br>New value: %4"
+#~ msgstr ""
+#~ "<b>Σημείο διακοπής εγγραφής δεδομένων</b><br>Έκφραση: %1<br>Διεύθυνση: 0x"
+#~ "%2<br>Παλιά τιμή: %3<br>Νέα τιμή: %4"
+
+#~ msgid "Enable"
+#~ msgstr "Ενεργοποίηση"
+
+#~ msgid "GDB Output"
+#~ msgstr "Έξοδος GDB"
+
+#~ msgid ""
+#~ "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
+#~ "issue any other gdb command while debugging."
+#~ msgstr ""
+#~ "<b>Έξοδος GDB</b><p>Εμφανίζει όλες τις εντολές gdb που εκτελούνται. "
+#~ "Μπορείτε επίσης να καλέσετε οποιαδήποτε άλλη εντολή gdb κατά την "
+#~ "αποσφαλμάτωση."
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "εντολή &GDB:"
+
+#~ msgid "Pause execution of the app to enter gdb commands"
+#~ msgstr "Παύση εκτέλεσης της εφαρμογής για εισαγωγή gdb εντολών"
+
+#~ msgid "Show Internal Commands"
+#~ msgstr "Εμφάνιση εσωτερικών εντολών"
+
+#~ msgid ""
+#~ "Controls if commands issued internally by KDevelop will be shown or not."
+#~ "<br>This option will affect only future commands, it will not add or "
+#~ "remove already issued commands from the view."
+#~ msgstr ""
+#~ "Ελέγχει αν οι εντολές που εκτελούνται εσωτερικά από το KDevelop θα "
+#~ "εμφανίζονται ή όχι.<br>Αυτή η εντολή έχει αποτέλεσμα μόνο στις "
+#~ "μελλοντικές εντολές, δε θα προσθέσει ή αφαιρέσει εκτελεσμένες εντολές από "
+#~ "την προβολή."
+
+#~ msgid "Copy All"
+#~ msgstr "Αντιγραφή όλων"
+
+#~ msgid "Not hit yet"
+#~ msgstr "Μη εμφάνιση ακόμη"
+
+#~ msgid "Ignore"
+#~ msgstr "Αγνόηση"
+
+#~ msgid "next hits"
+#~ msgstr "επόμενες εμφανίσεις"
+
+#~ msgid "Watches"
+#~ msgstr "Παρακολουθήσεις"
+
+#~ msgid "Recent"
+#~ msgstr "Πρόσφατο"
+
+#~ msgid "Debugger Variables"
+#~ msgstr "Μεταβλητές αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Variable tree</b><p>The variable tree allows you to see the values of "
+#~ "local variables and arbitrary expressions.<p>Local variables are "
+#~ "displayed automatically and are updated as you step through your program. "
+#~ "For each expression you enter, you can either evaluate it once, or \"watch"
+#~ "\" it (make it auto-updated). Expressions that are not auto-updated can "
+#~ "be updated manually from the context menu. Expressions can be renamed to "
+#~ "more descriptive names by clicking on the name column.<p>To change the "
+#~ "value of a variable or an expression, click on the value."
+#~ msgstr ""
+#~ "<b>Δέντρο μεταβλητών</b><p>Το δέντρο μεταβλητών σας επιτρέπει να δείτε "
+#~ "τις τιμές των τοπικών μεταβλητών και άλλων εκφράσεων.<p>Οι τοπικές "
+#~ "μεταβλητές εμφανίζονται αυτόματα και ενημερώνονται καθώς βηματίζετε μέσα "
+#~ "στο πρόγραμμά σας. Για κάθε έκφραση που εισάγετε, μπορείτε είτε να την "
+#~ "υπολογίσετε είτε να την \"παρακολουθήσετε\" (με αυτόματη ενημέρωση). Οι "
+#~ "εκφράσεις που δεν ενημερώνονται αυτόματα μπορούν χειροκίνητα μέσω του "
+#~ "σχετικού μενού. Οι εκφράσεις μπορούν να μετονομαστούν σε πιο περιγραφικά "
+#~ "ονόματα κάνοντας κλικ στη στήλη όνομα.<p>Για την αλλαγή της τιμής μιας "
+#~ "μεταβλητής ή μιας έκφρασης κάντε κλικ στην τιμή."
+
+#~ msgid "<b>Expression entry</b><p>Type in expression to watch."
+#~ msgstr ""
+#~ "<b>Καταχώρηση έκφρασης</b><p>Εισάγετε μια έκφραση για παρακολούθηση."
+
+#~ msgid "Recent Expressions"
+#~ msgstr "Πρόσφατες εκφράσεις"
+
+#~ msgid "Remove All"
+#~ msgstr "Αφαίρεση όλων"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "Επαναϋπολογισμός όλων"
+
+#~ msgid "Format"
+#~ msgstr "Μορφή"
+
+#~ msgid "Natural"
+#~ msgstr "Φυσικός"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "Δεκαεξαδικό"
+
+#~ msgid "Decimal"
+#~ msgstr "Δεκαδικό"
+
+#~ msgid "Character"
+#~ msgstr "Χαρακτήρας"
+
+#~ msgid "Binary"
+#~ msgstr "Δυαδικό"
+
+#~ msgid "Remember Value"
+#~ msgstr "Διατήρηση της τιμής"
+
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Αφαίρεση μεταβλητής παρακολούθησης"
+
+#~ msgid "Watch Variable"
+#~ msgstr "Μεταβλητή παρακολούθησης"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Επαναϋπολογισμός έκφρασης"
+
+#~ msgid "Remove Expression"
+#~ msgstr "Αφαίρεση έκφρασης"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "Σημείο διακοπής εγγραφής δεδομένων"
+
+#~ msgid "Copy Value"
+#~ msgstr "Αντιγραφή τιμής"
+
+#~ msgid "Invalid"
+#~ msgstr "Μη έγκυρο"
+
+#~ msgid "Watchpoint"
+#~ msgstr "Σημείο παρακολούθησης"
+
+#~ msgid "Read Watchpoint"
+#~ msgstr "Ανάγνωση σημείου παρακολούθησης"
+
+#~ msgid "Start"
+#~ msgstr "Αρχή"
+
+#~ msgid "Amount"
+#~ msgstr "Ποσότητα"
+
+#~ msgid "OK"
+#~ msgstr "Εντάξει"
+
+#~ msgid "Memory view"
+#~ msgstr "Προβολή μνήμης"
+
+#~ msgid "Change memory range"
+#~ msgstr "Τροποποίηση εύρους μνήμης"
+
+#~ msgid "Reload"
+#~ msgstr "Επαναφόρτωση"
+
+#~ msgid "Close this view"
+#~ msgstr "Κλείσιμο αυτής της προβολής"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Ειδικές προβολές αποσφαλμάτωσης"
+
+#~ msgid "Double-click to create new code breakpoint"
+#~ msgstr "Διπλό κλικ για τη δημιουργία νέας διακοπής κώδικα"
+
+#~ msgid "Breakpoint"
+#~ msgstr "Σημείο διακοπής"
+
+#~ msgid " temporary"
+#~ msgstr " προσωρινό"
+
+#~ msgid " hw"
+#~ msgstr " υλικό"
+
+#~ msgid "Enabled"
+#~ msgstr "Ενεργοποιημένο"
+
+#~ msgid "Type"
+#~ msgstr "Τύπος"
+
+#~ msgid "Status"
+#~ msgstr "Κατάσταση"
+
+#~ msgid "Location"
+#~ msgstr "Τοποθεσία"
+
+#~ msgid "Condition"
+#~ msgstr "Συνθήκη"
+
+#~ msgid "Ignore Count"
+#~ msgstr "Μετρητής παράβλεψης"
+
+#~ msgid "Hits"
+#~ msgstr "Μετρητής"
+
+#~ msgid "Tracing"
+#~ msgstr "Ανίχνευση"
+
+#~ msgid "Frame"
+#~ msgstr "Πλαίσιο"
+
+#~ msgid "C++ Debugger"
+#~ msgstr "Αποσφαλματωτής C++"
+
+#~ msgid "Support for running C++ apps in GDB"
+#~ msgstr "Υποστήριξη εκτέλεσης εφαρμογών C++ στο GDB"
+
+#~ msgid "Breakpoints"
+#~ msgstr "Σημεία διακοπής"
+
+#~ msgid "Variables"
+#~ msgstr "Μεταβλητές"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Πλαίσιο στοίβας"
+
+#~ msgid "Disassemble"
+#~ msgstr "Μετατροπή σε τελεστές μηχανής"
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#~ msgid "Debug views"
+#~ msgstr "Προβολές αποσφαλμάτωσης"
+
+#~ msgid "&Start"
+#~ msgstr "Ε&κκίνηση"
+
+#~ msgid "Start in debugger"
+#~ msgstr "Εκκίνηση στον αποσφαλματωτή"
+
+#~ msgid ""
+#~ "<b>Start in debugger</b><p>Starts the debugger with the project's main "
+#~ "executable. You may set some breakpoints before this, or you can "
+#~ "interrupt the program while it is running, in order to get information "
+#~ "about variables, frame stack, and so on."
+#~ msgstr ""
+#~ "<b>Εκκίνηση στον αποσφαλματωτή</b><p>Εκκινεί τον αποσφαλματωτή με το "
+#~ "κύριο εκτελέσιμο του έργου. Μπορείτε να ορίσετε κάποια σημεία διακοπής "
+#~ "πριν από αυτό, ή μπορείτε να διακόψετε το πρόγραμμα που εκτελείται, για "
+#~ "να ανακτήσετε πληροφορίες σχετικά με μεταβλητές, το πλαίσιο στοίβας και "
+#~ "άλλα."
+
+#~ msgid "&Restart"
+#~ msgstr "&Επανεκκίνηση"
+
+#~ msgid ""
+#~ "<b>Restarts application</b><p>Restarts applications from the beginning."
+#~ msgstr ""
+#~ "<b>Επανεκκίνηση της εφαρμογής</b><p>Επανεκκινεί τις εφαρμογές από την "
+#~ "αρχή."
+
+#~ msgid "Sto&p"
+#~ msgstr "&Σταμάτημα"
+
+#~ msgid "Stop debugger"
+#~ msgstr "Σταμάτημα αποσφαλματωτή"
+
+#~ msgid "<b>Stop debugger</b><p>Kills the executable and exits the debugger."
+#~ msgstr ""
+#~ "<b>Σταμάτημα αποσφαλματωτή</b><p>Τερματίζει το εκτελέσιμο και βγαίνει από "
+#~ "τον αποσφαλματωτή."
+
+#~ msgid "Interrupt"
+#~ msgstr "Διακοπή"
+
+#~ msgid "Interrupt application"
+#~ msgstr "Διακοπή εφαρμογής"
+
+#~ msgid ""
+#~ "<b>Interrupt application</b><p>Interrupts the debugged process or current "
+#~ "GDB command."
+#~ msgstr ""
+#~ "<b>Διακοπή εφαρμογής</b><p>Διακόπτει τη διαδικασία που αποσφαλματώνεται ή "
+#~ "την τρέχουσα εντολή του GDB."
+
+#~ msgid "Run to &Cursor"
+#~ msgstr "Εκτέλεση μέχρι το &δρομέα"
+
+#~ msgid "Run to cursor"
+#~ msgstr "Εκτέλεση μέχρι το δρομέα"
+
+#~ msgid ""
+#~ "<b>Run to cursor</b><p>Continues execution until the cursor position is "
+#~ "reached."
+#~ msgstr ""
+#~ "<b>Εκτέλεση μέχρι το δρομέα</b><p>Συνεχίζει την εκτέλεση μέχρι τη θέση "
+#~ "του δρομέα."
+
+#~ msgid "Set E&xecution Position to Cursor"
+#~ msgstr "Ορισμός θέσης ε&κτέλεσης στο δρομέα"
+
+#~ msgid "Jump to cursor"
+#~ msgstr "Μετάβαση στο δρομέα"
+
+#~ msgid ""
+#~ "<b>Set Execution Position </b><p>Set the execution pointer to the current "
+#~ "cursor position."
+#~ msgstr ""
+#~ "<b>Ορισμός θέσης εκτέλεσης</b><p>Ορισμός του δείκτη εκτέλεσης στην "
+#~ "τρέχουσα θέση του δρομέα."
+
+#~ msgid "Step &Over"
+#~ msgstr "Βήμα από &πάνω"
+
+#~ msgid "Step over the next line"
+#~ msgstr "Βήμα πάνω από την επόμενη γραμμή"
+
+#~ msgid ""
+#~ "<b>Step over</b><p>Executes one line of source in the current source "
+#~ "file. If the source line is a call to a function the whole function is "
+#~ "executed and the app will stop at the line following the function call."
+#~ msgstr ""
+#~ "<b>Βήμα από πάνω</b><p>Εκτελεί μια γραμμή του κώδικα στο τρέχον αρχείο "
+#~ "κώδικα. Αν η γραμμή είναι κλήση σε μια συνάρτηση τότε εκτελείται όλη η "
+#~ "συνάρτηση και η εφαρμογή θα σταματήσει στην επόμενη γραμμή μετά την κλήση "
+#~ "της συνάρτησης."
+
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Βήμα πάνω από &τελεστή"
+
+#~ msgid "Step over instruction"
+#~ msgstr "Βήμα πάνω από τελεστή"
+
+#~ msgid ""
+#~ "<b>Step over instruction</b><p>Steps over the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Βήμα πάνω από τελεστή</b><p>Βήμα πάνω από τον επόμενο τελεστή κώδικα "
+#~ "μηχανής."
+
+#~ msgid "Step &Into"
+#~ msgstr "Βήμα &μέσα"
+
+#~ msgid "Step into the next statement"
+#~ msgstr "Βήμα μέσα στην επόμενη εντολή"
+
+#~ msgid ""
+#~ "<b>Step into</b><p>Executes exactly one line of source. If the source "
+#~ "line is a call to a function then execution will stop after the function "
+#~ "has been entered."
+#~ msgstr ""
+#~ "<b>Βήμα μέσα</b><p>Εκτελεί ακριβώς μια γραμμή κώδικα. Αν η γραμμή κώδικα "
+#~ "είναι μια κλήση συνάρτησης τότε η εκτέλεση θα σταματήσει στην είσοδο της "
+#~ "συνάρτησης."
+
+#~ msgid "Step into I&nstruction"
+#~ msgstr "Βήμα μέσα σε έναν τε&λεστή"
+
+#~ msgid "Step into instruction"
+#~ msgstr "Βήμα μέσα σε έναν τελεστή"
+
+#~ msgid ""
+#~ "<b>Step into instruction</b><p>Steps into the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Βήμα μέσα σε έναν τελεστή</b><p>Βήμα μέσα στον επόμενο τελεστή κώδικα "
+#~ "μηχανής."
+
+#~ msgid "Step O&ut"
+#~ msgstr "Βήμα έ&ξω"
+
+#~ msgid "Steps out of the current function"
+#~ msgstr "Βήμα έξω από την τρέχουσα συνάρτηση"
+
+#~ msgid ""
+#~ "<b>Step out</b><p>Executes the application until the currently executing "
+#~ "function is completed. The debugger will then display the line after the "
+#~ "original call to that function. If program execution is in the outermost "
+#~ "frame (i.e. in main()) then this operation has no effect."
+#~ msgstr ""
+#~ "<b>Βήμα έξω</b><p>Εκτελεί την εφαρμογή μέχρι την ολοκλήρωση της τρέχουσας "
+#~ "συνάρτησης. Ο αποσφαλματωτής θα εμφανίσει τη γραμμή μετά την αρχική κλήση "
+#~ "της συνάρτησης. Αν η εκτέλεση βρίσκεται στο πιο έξω πλαίσιο (π.χ. στην "
+#~ "main()) τότε αυτή η λειτουργία δεν έχει κανένα αποτέλεσμα."
+
+#~ msgid "Viewers"
+#~ msgstr "Προβολείς"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "Προβολείς αποσφαλμάτωσης"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>Προβολείς αποσφαλμάτωσης</b><p>Διάφορες πληροφορίες σχετικά με την "
+#~ "εφαρμογή που εκτελείται. Υπάρχουν 4 διαθέσιμες προβολές:<br><b>Μνήμη</"
+#~ "b><br><b>Τελεστές κώδικα μηχανής</b><br><b>Καταχωρητές</"
+#~ "b><br><b>Βιβλιοθήκες</b>"
+
+#~ msgid "Examine core file"
+#~ msgstr "Εξέταση αρχείου πυρήνα"
+
+#~ msgid ""
+#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
+#~ "created after the application has crashed, e.g. with a segmentation "
+#~ "fault. The core file contains an image of the program memory at the time "
+#~ "it crashed, allowing you to do a post-mortem analysis."
+#~ msgstr ""
+#~ "<b>Εξέταση αρχείου πυρήνα</b><p>Αυτό φορτώνει το αρχείο πυρήνα, το οποίο "
+#~ "συνήθως είναι το αρχείο που δημιουργείται όταν η εφαρμογή τερμάτισε "
+#~ "απροειδοποίητα, π.χ. με ένα σφάλμα κατακερματισμού. Το αρχείο πυρήνα "
+#~ "περιέχει την εικόνα της μνήμης του προγράμματος τη στιγμή που τερμάτισε "
+#~ "δίνοντας τη δυνατότητα για περαιτέρω ανάλυση."
+
+#~ msgid "Attach to process"
+#~ msgstr "Σύναψη σε διεργασία"
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process."
+#~ msgstr ""
+#~ "<b>Σύναψη σε διεργασία</b><p>Σύναψη του αποσφαλματωτή σε μια εκτελούμενη "
+#~ "διεργασία."
+
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Εναλλαγή σημείου διακοπής"
+
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Εναλλαγή σημείου διακοπής"
+
+#~ msgid ""
+#~ "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
+#~ "editor."
+#~ msgstr ""
+#~ "<b>Εναλλαγή σημείου διακοπής</b><p>Εναλλάσσει την κατάσταση του σημείου "
+#~ "διακοπής στην τρέχουσα γραμμή του επεξεργαστή."
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "Υπολογισμός: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor."
+#~ msgstr ""
+#~ "<b>Υπολογισμός έκφρασης</b><p>Εμφανίζει την τιμή της έκφρασης κάτω από το "
+#~ "δρομέα."
+
+#~ msgid "Watch: %1"
+#~ msgstr "Παρακολούθηση: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list."
+#~ msgstr ""
+#~ "<b>Παρακολούθηση έκφρασης</b><p>Προσθήκη μιας έκφρασης κάτω από το δρομέα "
+#~ "στη λίστα παρακολουθήσεων μεταβλητών."
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>Ο GDB τερμάτισε αντικανονικά</b><p>Αυτό πιθανόν να είναι ένα σφάλμα "
+#~ "στο GDB. Ελέγξτε το παράθυρο εξόδου του gdb και έπειτα σταματήστε τον "
+#~ "αποσφαλματωτή"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "Ο GDB τερμάτισε αντικανονικά"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Επιλογή αρχείου πυρήνα για εξέταση..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "Εξέταση αρχείου πυρήνα %1"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "Επιλογή μιας διεργασίας για σύναψη..."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "Σύναψη με διεργασία %1"
+
+#~ msgid "Debugger"
+#~ msgstr "Αποσφαλματωτής"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Ο αποσφαλματωτής σταμάτησε"
+
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Εκτέλεση του προγράμματος στον αποσφαλματωτή"
+
+#~ msgid ""
+#~ "Start in debugger\n"
+#~ "\n"
+#~ "Starts the debugger with the project's main executable. You may set some "
+#~ "breakpoints before this, or you can interrupt the program while it is "
+#~ "running, in order to get information about variables, frame stack, and so "
+#~ "on."
+#~ msgstr ""
+#~ "Εκκίνηση μέσα στον αποσφαλματωτή\n"
+#~ "\n"
+#~ "Εκκινεί τον αποσφαλματωτή με το κύριο εκτελέσιμο του έργου. Μπορείτε να "
+#~ "ορίσετε κάποια σημεία διακοπής πριν από αυτό, ή μπορείτε να διακόψετε το "
+#~ "πρόγραμμα που εκτελείται, για να ανακτήσετε πληροφορίες σχετικά με "
+#~ "μεταβλητές, τη στοίβα κλήσης και άλλα."
+
+#~ msgid "&Continue"
+#~ msgstr "&Συνέχεια"
+
+#~ msgid "Continues the application execution"
+#~ msgstr "Συνέχεια της εκτέλεσης της εφαρμογής"
+
+#~ msgid ""
+#~ "Continue application execution\n"
+#~ "\n"
+#~ "Continues the execution of your application in the debugger. This only "
+#~ "takes effect when the application has been halted by the debugger (i.e. a "
+#~ "breakpoint has been activated or the interrupt was pressed)."
+#~ msgstr ""
+#~ "Συνέχεια της εκτέλεσης της εφαρμογής\n"
+#~ "\n"
+#~ "Συνεχίζει την εκτέλεση της εφαρμογής στον αποσφαλματωτή. Αυτό έχει "
+#~ "αποτέλεσμα μόνο όταν η εφαρμογή έχει σταματήσει από τον αποσφαλματωτή (π."
+#~ "χ. με ένα σημείο διακοπής ή με χειροκίνητη διακοπή)."
+
+#~ msgid "Process exited"
+#~ msgstr "Η διεργασία τερμάτισε"
+
+#~ msgid "Variable"
+#~ msgstr "Μεταβλητή"
+
+#~ msgid "Value"
+#~ msgstr "Τιμή"
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: κονσόλα αποσφαλμάτωσης εφαρμογής"
+
+#~ msgid "CMake Manager"
+#~ msgstr "Διαχειριστής CMake"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Υποστήριξη διαχείρισης έργων CMake"
+
+#~ msgid "Jump to target definition"
+#~ msgstr "Μετάβαση στο ορισμό προορισμού"
+
+#~ msgid "Create a folder called '%1'."
+#~ msgstr "Δημιουργία ενός φακέλου με όνομα '%1'."
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - υποστήριξη CMake"
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Αδυναμία δημιουργίας του αρχείου CMakeLists.txt στον κατάλογο."
+
+#~ msgid "Could not save the change."
+#~ msgstr "Αδυναμία αποθήκευσης της τροποποίησης."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Αφαίρεση ενός φακέλου με όνομα '%1'."
+
+#~ msgid ""
+#~ "The %1 build directory is not valid. It will be removed from the list"
+#~ msgstr ""
+#~ "Ο κατάλογος κατασκευής %1 δεν είναι έγκυρος. Θα αφαιρεθεί από τη λίστα"
+
+#~ msgid ""
+#~ "The %1 directory is about to be removed in KDevelop's list.\n"
+#~ "Do you want KDevelop to remove it in the file system as well?"
+#~ msgstr ""
+#~ "Ο κατάλογος %1 πρόκειται να αφαιρεθεί από τη λίστα του KDevelop.\n"
+#~ "Επιθυμείτε την αφαίρεσή του από το σύστημα αρχείων επίσης;"
+
+#~ msgid "Could not remove: %1.\n"
+#~ msgstr "Αδυναμία αφαίρεσης του: %1.\n"
+
+#~ msgid "Name"
+#~ msgstr "Όνομα"
+
+#~ msgid "Comment"
+#~ msgstr "Σχόλιο"
+
+#~ msgid ""
+#~ "The %1 directory does not exist, but is needed before the build directory "
+#~ "is created.\n"
+#~ "Do you want KDevelop to create it for you?"
+#~ msgstr ""
+#~ "Ο κατάλογος %1 δεν υπάρχει, αλλά θα έπρεπε να υπάρχει πριν τη δημιουργία "
+#~ "του καταλόγου κατασκευής.\n"
+#~ "Επιθυμείτε τη δημιουργία του από το KDevelop για εσάς;"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Ακύρωση"
+
+#~ msgid "CMake process killed"
+#~ msgstr "Η διεργασίας CMake σκοτώθηκε"
+
+#~ msgid "Created successfully"
+#~ msgstr "Δημιουργία με επιτυχία"
+
+#~ msgid "An error occurred"
+#~ msgstr "Συνέβη ένα σφάλμα"
+
+#~ msgid "You need to select a cmake binary"
+#~ msgstr "Θα πρέπει να επιλέξετε ένα εκτελέσιμο cmake"
+
+#~ msgid "You need to specify a build directory"
+#~ msgstr "Απαιτείται ο καθορισμός ενός καταλόγου κατασκευής"
+
+#~ msgid "Already used build directory"
+#~ msgstr "Κατάλογος κατασκευής ήδη σε χρήση"
+
+#~ msgid "Using an already created build directory"
+#~ msgstr "Χρήση ενός υπάρχοντος καταλόγου κατασκευής"
+
+#~ msgid "Click the Run button to run CMake"
+#~ msgstr "Κλικ στο κουμπί εκτέλεσης για την εκτέλεση του CMake"
+
+#~ msgid "The selected build directory is not empty"
+#~ msgstr "Ο επιλεγμένος κατάλογος κατασκευής δεν είναι κενός"
+
+#~ msgid "This build directory is for %1, but the project directory is %2"
+#~ msgstr ""
+#~ "Ο επιλεγμένος κατάλογος κατασκευής είναι για το %1, αλλά ο κατάλογος "
+#~ "έργου είναι ο %2"
+
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#~ msgid "Action"
+#~ msgstr "Ενέργεια"
+
+#~ msgid "Change"
+#~ msgstr "Τροποποίηση"
+
+#~ msgid "Insert"
+#~ msgstr "Εισαγωγή"
+
+#~ msgid "Remove"
+#~ msgstr "Αφαίρεση"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Διαχειριστής προσαρμοσμένων Makefile"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Υποστήριξη διαχείρισης έργων με προσαρμοσμένο makefile"
+
+#~ msgid "Build &Target"
+#~ msgstr "Κατασκευή &προορισμού"
+
+#~ msgid "Build target"
+#~ msgstr "Κατασκευή προορισμού"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Κατασκευή προορισμού</b><p>Εκτελεί την <b>make όνομα προορισμού</b> "
+#~ "από τον κατάλογο του έργου (το όνομα προορισμού είναι το όνομα του "
+#~ "επιλεγμένου προορισμού).<p></p>Μεταβλητές περιβάλλοντος και παράμετροι "
+#~ "make μπορούν να ορισθούν στο διάλογο ρυθμίσεων του έργου, στην καρτέλα "
+#~ "<b>Επιλογές κατασκευής</b>.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "Κατασκευή αυτού του έργου"
+
+#~ msgid "Build this target"
+#~ msgstr "Κατασκευή αυτού του προορισμού"
+
+#~ msgid "Build this directory"
+#~ msgstr "Κατασκευή αυτού του καταλόγου"
+
+#~ msgid "qmake-parser"
+#~ msgstr "qmake-parser"
+
+#~ msgid "Parse QMake project files"
+#~ msgstr "Ανάλυση αρχείων έργου QMake"
+
+#~ msgid "Enable output of the debug AST"
+#~ msgstr "Ενεργοποίηση εξόδου αποσφαλμάτωσης AST"
+
+#~ msgid "QMake project files"
+#~ msgstr "Αρχεία έργου QMake"
+
+#~ msgid "QMake Manager"
+#~ msgstr "Διαχειριστής QMake"
+
+#~ msgid "Support for managing QMake projects"
+#~ msgstr "Υποστήριξη διαχείρισης έργων QMake"
+
+#~ msgid "freedesktop.org Desktop Entry Files"
+#~ msgstr "Αρχεία καταχώρησης επιφάνειας εργασίας freedesktop.org"
+
+#~ msgid "KDE XMLGUI Definitions"
+#~ msgstr "Ορισμοί XMLGUI του KDE"
+
+#~ msgid "Installed headers"
+#~ msgstr "Εγκατεστημένες κεφαλίδες"
+
+#~ msgid "Uninstalled headers"
+#~ msgstr "Απεγκατεστημένες κεφαλίδες"
+
+#~ msgid "Number of times visited."
+#~ msgstr "Αριθμός επισκέψεων."
+
+#~ msgid "Line not reachable."
+#~ msgstr "Μη προσπελάσιμη γραμμή."
+
+#~ msgid "source"
+#~ msgstr "πηγή"
+
+#~ msgid "coverage"
+#~ msgstr "κάλυψη"
+
+#~ msgid "visited"
+#~ msgstr "ακολουθημένος"
+
+#~ msgid "SLOC"
+#~ msgstr "SLOC"
+
+#~ msgid "Cov verbose output"
+#~ msgstr "Έξοδος μηνυμάτων Cov"
+
+#~ msgid "Line Coverage:"
+#~ msgstr "Κάλυψη γραμμής:"
+
+#~ msgid "Total SLOC:"
+#~ msgstr "Σύνολο SLOC:"
+
+#~ msgid "Instrumented Lines:"
+#~ msgstr "Ενεργούμενες γραμμές:"
+
+#~ msgid "Coverage Report"
+#~ msgstr "Αναφορά κάλυψης"
+
+#~ msgid "GCOV code coverage statistics."
+#~ msgstr "Στατιστικά κάλυψης κώδικα GCOV."
+
+#~| msgid "Coverage Report"
+#~ msgid "Coverage Support"
+#~ msgstr "Υποστήριξη κάλυψης"
+
+#~| msgid "Support for running grep over a list of files"
+#~ msgid "Support for running coverage tools"
+#~ msgstr "Υποστήριξη εκτέλεσης εργαλείων κάλυψης"
+
+#~ msgid "Spawn Report"
+#~ msgstr "Εμφάνιση αναφοράς"
+
+#~ msgid "Reset Data"
+#~ msgstr "Μηδενισμός δεδομένων"
+
+#~ msgid "Insert Build Flags"
+#~ msgstr "Εισαγωγή σημαιών κατασκευής"
+
+#~ msgid "Astyle Formatter"
+#~ msgstr "Μορφοποίηση Astyle"
+
+#~ msgid "A formatting tool using astyle"
+#~ msgstr "Ένα εργαλείο μορφοποίησης με χρήση του astyle"
+
+#~ msgid ""
+#~ "<b>Artistic Style</b> is a source code indenter, formatter, and "
+#~ "beautifier for the C, C++, C# and Java programming languages.<br />Home "
+#~ "Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle."
+#~ "sourceforge.net</a>"
+#~ msgstr ""
+#~ "Το <b>Καλλιτεχνικό στυλ</b> είναι ένας δημιουργός εσοχών, μορφοποιητής "
+#~ "και βελτιωτής εμφάνισης του πηγαίου κώδικα για τις γλώσσες "
+#~ "προγραμματισμού C, C++, C# και Java.<br />Αρχική σελίδα: <a href=\"http://"
+#~ "astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+
+#~ msgid "Indent Formatter"
+#~ msgstr "Μορφοποίηση εσοχών"
+
+#~ msgid "A formatter using indent"
+#~ msgstr "Μορφοποίηση εσοχών με τη χρήση του indent"
+
+#~ msgid ""
+#~ "<b>Indent and Format C Program Source.</b><br />The `indent' program can "
+#~ "be used to make code easier to read. It can also convert from one style "
+#~ "of writing C to another.<br /><b>indent</b> understands a substantial "
+#~ "amount about the syntax of C, but it also attempts to cope with "
+#~ "incomplete and misformed syntax.<br />Home Page: <a href=\"http://www.gnu."
+#~ "org/software/indent/\">http://www.gnu.org/software/indent</a>/"
+#~ msgstr ""
+#~ "<b>Εσοχές και μορφοποίηση πηγαίων κώδικα C.</b><br />Το πρόγραμμα "
+#~ "`indent' μπορεί  να χρησιμοποιηθεί για πιο ευανάγνωστο κώδικα. Μπορεί επίσης να μετατρέψει "
+#~ "τη γραφή C  από το ένα στυλ στο άλλο.<br />Το <b>indent</b> αναγνωρίζει έναν "
+#~ "σημαντικό αριθμό στοιχείων  σύνταξης της C, ενώ ταυτόχρονα συνεργάζεται με ατελή ή εσφαλμένης μορφής "
+#~ "σύνταξη.<br />Αρχική σελίδα: <a href=\"http://www.gnu.org/software/ "
+
+#~ msgid "CMake Builder"
+#~ msgstr "Κατασκευαστής CMake"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Υποστήριξη κατασκευής έργων CMake"
+
+#~ msgid "Job failed"
+#~ msgstr "Αποτυχία εργασίας"
+
+#~ msgid "CMake: %1"
+#~ msgstr "CMake: %1"
+
+#~ msgid "QMake Builder"
+#~ msgstr "Κατασκευαστής QMake"
+
+#~ msgid "Support for building QMake projects"
+#~ msgstr "Υποστήριξη κατασκευής έργων QMake"
+
+#~ msgid "No project specified."
+#~ msgstr "Δεν καθορίστηκε έργο."
+
+#~ msgid "QMake: %1"
+#~ msgstr "QMake: %1"
+
+#~ msgid "Make Builder"
+#~ msgstr "Κατασκευαστής Make"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Υποστήριξη κατασκευής έργων Make"
+
+#~ msgid "compiling"
+#~ msgstr "μεταγλώττιση"
+
+#~ msgid "generating"
+#~ msgstr "δημιουργία"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "σύνδεση"
+
+#~ msgid "built"
+#~ msgstr "κατασκευή"
+
+#~ msgid "installing"
+#~ msgstr "εγκατάσταση"
+
+#~ msgid "creating"
+#~ msgstr "δημιουργία"
+
+#~ msgid "Make: %1"
+#~ msgstr "Δημιουργία: %1"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Μη έγκυρος κατάλογος κατασκευής '%1'"
+
+#~ msgid "Could not create build command for target '%1'"
+#~ msgstr "Αδυναμία δημιουργίας εντολής κατασκευής για τον προορισμό '%1'"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Αποτυχία ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Εγκατάλειψη ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Ολοκλήρωση ***"
+
+#~ msgid "Valgrind Output"
+#~ msgstr "Έξοδος του Valgrind"
+
+#~ msgid ""
+#~ "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/"
+#~ ">use of uninitialized memory<br/>reading/writing memory after it has been "
+#~ "free'd<br/>reading/writing off the end of malloc'd blocks<br/>reading/"
+#~ "writing inappropriate areas on the stack<br/>memory leaks -- where "
+#~ "pointers to malloc'd blocks are lost forever<br/>passing of uninitialised "
+#~ "and/or unaddressable memory to system calls<br/>mismatched use of malloc/"
+#~ "new/new [] vs free/delete/delete []<br/>some abuses of the POSIX pthread "
+#~ "API.</p>"
+#~ msgstr ""
+#~ "<b>Valgrind</b><p> Εμφανίζει την έξοδο του valgrind. Το Valgrind "
+#~ "ανιχνεύει<br />τη χρήση μη αρχικοποιημένης μνήμης<br />την ανάγνωση/"
+#~ "εγγραφή μνήμης που έχει απελευθερωθεί<br />την ανάγνωση/εγγραφή πέρα από "
+#~ "το τέλος των τμημάτων malloc<br />την ανάγνωση/εγγραφή ακατάλληλων "
+#~ "περιοχών της στοίβας<br />τις διαρροές μνήμης -- όπου δείκτες των "
+#~ "τμημάτων malloc έχουν χαθεί<br />τη χρήση μη αρχικοποιημένης και/ή μη "
+#~ "προσπελάσιμης μνήμης σε κλήσεις συστήματος<br />τη λανθασμένη χρήση των "
+#~ "malloc/new/new [] με τις  free/delete/delete []<br />κάποιες κακοποιήσεις "
+#~ "του POSIX pthread API.</p>"
+
+#~ msgid "Valgrind"
+#~ msgstr "Valgrind"
+
+#~ msgid "Support for running valgrind"
+#~ msgstr "Υποστήριξη εκτέλεσης του valgrind"
+
+#~ msgid "&Valgrind Memory Leak Check"
+#~ msgstr "Έλεγχος διαρροής μνήμης &Valgrind"
+
+#~ msgid "Valgrind memory leak check and other tools"
+#~ msgstr "Έλεγχος διαρροής μνήμης Valgrind και άλλα εργαλεία"
+
+#~ msgid ""
+#~ "<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you "
+#~ "find memory-management problems in your programs, and other valgrind "
+#~ "tools.</p>"
+#~ msgstr ""
+#~ "<b>Έλεγχος διαρροής μνήμης Valgrind</b><p>Εκτελεί το Valgrind - ένα "
+#~ "εργαλείο που βοηθά στην εύρεση προβλημάτων σχετικά με τη διαχείριση "
+#~ "μνήμης στα προγράμματά σας, και άλλα χρήσιμα εργαλεία.</p>"
+
+#~ msgid "Open Valgrind Output"
+#~ msgstr "Άνοιγμα εξόδου Valgrind"
+
+#~ msgid "Could not open valgrind output: %1"
+#~ msgstr "Αδυναμία ανοίγματος της εξόδου valgrind: %1"
+
+#~ msgid "Valgrind (Memcheck)"
+#~ msgstr "Valgrind (Memcheck)"
+
+#~ msgid "Valgrind (Callgrind)"
+#~ msgstr "Valgrind (Callgrind)"
+
+#~ msgid "Valgrind (Cachegrind)"
+#~ msgstr "Valgrind (Cachegrind)"
+
+#~ msgid "Valgrind (Helgrind)"
+#~ msgstr "Valgrind (Helgrind)"
+
+#~ msgid "Valgrind (Massif)"
+#~ msgstr "Valgrind (Massif)"
+
+#~ msgid "Valgrind (DRD)"
+#~ msgstr "Valgrind (DRD)"
+
+#~ msgid "Valgrind (Omega)"
+#~ msgstr "Valgrind (Omega)"
+
+#~ msgid "Valgrind (Lackey)"
+#~ msgstr "Valgrind (Lackey)"
+
+#~ msgid "Socket error while communicating with valgrind: \"%1\""
+#~ msgstr "Σφάλμα υποδοχής κατά την επικοινωνία με το valgrind: \"%1\""
+
+#~ msgid "Valgrind communication error"
+#~ msgstr "Σφάλμα επικοινωνίας valgrind"
+
+#~ msgid "Failed to start valgrind from \"%1.\""
+#~ msgstr "Αποτυχία εκκίνησης του valgrind από \"%1.\""
+
+#~ msgid "Failed to start Valgrind"
+#~ msgstr "Η εκκίνηση του Valgrind απέτυχε"
+
+#~ msgid "Valgrind crashed."
+#~ msgstr "Το Valgrind κατέρρευσε."
+
+#~ msgid "Valgrind Error"
+#~ msgstr "Σφάλμα του Valgrind"
+
+#~ msgid "Valgrind process timed out."
+#~ msgstr "Λήξη χρονικού ορίου διεργασίας Valgrind."
+
+#~ msgid "Write to Valgrind process failed."
+#~ msgstr "Η εγγραφή στη διεργασία Valgrind απέτυχε."
+
+#~ msgid "Read from Valgrind process failed."
+#~ msgstr "Η ανάγνωση από τη διεργασία Valgrind απέτυχε."
+
+#~ msgid "Unknown Valgrind process error."
+#~ msgstr "Άγνωστο σφάλμα διεργασίας Valgrind."
+
+#~ msgid "at: %1"
+#~ msgstr "στο: %1"
+
+#~ msgid "by: %1"
+#~ msgstr "με: %1"
+
+#~ msgid "Source"
+#~ msgstr "Πηγή"
+
+#~ msgid "Object"
+#~ msgstr "Αντικείμενο"
+
+#~ msgid "Valgrind XML Parsing: error at line %1, column %2: %3"
+#~ msgstr "Ανάλυση XML του Valgrind: σφάλμα στη γραμμή %1, στήλη %2: %3"
+
+#~ msgid "Qt Designer"
+#~ msgstr "Σχεδιαστής Qt"
+
+#~ msgid "A GUI form designer for the Qt toolkit"
+#~ msgstr "Ένας σχεδιαστής φόρμας GUI για την εργαλειοθήκη Qt"
+
+#~ msgid "Widget Box"
+#~ msgstr "Πλαίσιο γραφικού συστατικού"
+
+#~ msgid "Property Editor"
+#~ msgstr "Επεξεργαστής ιδιοτήτων"
+
+#~ msgid "Action Editor"
+#~ msgstr "Επεξεργαστής ενεργειών"
+
+#~ msgid "Object Inspector"
+#~ msgstr "Επιθεώρηση αντικειμένων"
+
+#~ msgid ""
+#~ "The document \"%1\" has unsaved changes. Would you like to save them?"
+#~ msgstr ""
+#~ "Το έγγραφο \"%1\" περιέχει μη αποθηκευμένες τροποποιήσεις. Θέλετε να το "
+#~ "αποθηκεύσετε;"
+
+#~ msgid "Close Document"
+#~ msgstr "Κλείσιμο εγγράφου"
+
+#~ msgid "%{APPNAME}"
+#~ msgstr "%{APPNAME}"
+
+#~ msgid "Public"
+#~ msgstr "Δημόσιο"
+
+#~ msgid "Protected"
+#~ msgstr "Προστατευμένο"
+
+#~ msgid "Private"
+#~ msgstr "Ιδιωτικό"
+
+#~ msgid "Slot"
+#~ msgstr "Υποδοχή"
+
+#~ msgid "Signal"
+#~ msgstr "Σήμα"
+
+#~ msgid "C++ Options"
+#~ msgstr "Επιλογές C++"
+
+#~ msgid "&Export:"
+#~ msgstr "&Εξαγωγή"
+
+#~ msgid "&Macro:"
+#~ msgstr "&Μακροεντολή:"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr "Ρύθμιση ανίχνευσης"
+
+#~ msgid ""
+#~ "<b>Enable tracing</b>\n"
+#~ "<p>Tracing is a mechanism to automatically print values of the chosen "
+#~ "expressions and continue execution when breakpoint is hit. You can think "
+#~ "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgstr ""
+#~ "<b>Ενεργοποίηση ανίχνευσης</b>\n"
+#~ "<p>Η ανίχνευση είναι ένας μηχανισμός που αυτόματα εμφανίζει τιμές των "
+#~ "επιλεγμένων εκφράσεων και της συνέχισης της εκτέλεσης μετά από σημείο "
+#~ "διακοπής. Μπορείτε να το φανταστείτε ως μία εντολή printf κατά την "
+#~ "αποσφαλμάτωση η οποία δεν απαιτεί τροποποίηση του κώδικα.</p>"
+
+#~ msgid "Enable tracing"
+#~ msgstr "Ενεργοποίηση ανίχνευσης"
+
+#~ msgid "Custom format string"
+#~ msgstr "Συμβολοσειρά προσαρμοσμένης μορφής"
+
+#~ msgid ""
+#~ "<b>Custom format string</b>\n"
+#~ "<p>Specify a C-style format string that will be used when printing the "
+#~ "chosen expression. For example:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "If custom format string is not enabled, names and values of all "
+#~ "expressions will be printed, using \"%d\" as format specifier for all "
+#~ "expressions."
+#~ msgstr ""
+#~ "<b>Συμβολοσειρά προσαρμοσμένης μορφής</b>\n"
+#~ "<p>Ορίστε μία συμβολοσειρά C-μορφής το οποίο θα χρησιμοποιείται για την "
+#~ "εμφάνιση της επιλεγμένης έκφρασης. Για παράδειγμα:\n"
+#~ "<p align=\"center\"> <tt>Σημείο ανίχνευσης 1: g = %d</tt></p>\n"
+#~ "Αν δεν είναι ενεργοποιημένο, τα ονόματα και οι τιμές όλων των εκφράσεων "
+#~ "θα εμφανίζονται, χρησιμοποιώντας το \"%d\" για τον ορισμό μορφής τους."
+
+#~ msgid "Expressions to print:"
+#~ msgstr "Εκφράσεις για εμφάνιση:"
+
+#~ msgid "Pid"
+#~ msgstr "Pid"
+
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#~ msgid "Stat"
+#~ msgstr "Κατάστ"
+
+#~ msgid "Time"
+#~ msgstr "Ώρα"
+
+#~ msgid "Command"
+#~ msgstr "Εντολή"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid "Debugger Toolbar"
+#~ msgstr "Γραμμή εργαλείων αποσφαλμάτωσης"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Ρύθμιση αποσφαλματωτή"
+
+#~ msgid ""
+#~ "Debug arguments can be set on the Run Options page\n"
+#~ " or directly in the project manager"
+#~ msgstr ""
+#~ "Οι παράμετροι αποσφαλμάτωσης μπορούν να οριστούν στη σελίδα επιλογών "
+#~ "εκτέλεσης\n"
+#~ " ή απευθείας στον διαχειριστή έργου"
+
+#~ msgid "Debugger executable:"
+#~ msgstr "Εκτελέσιμο αποσφαλματωτή:"
+
+#~ msgid "Gdb executable"
+#~ msgstr "Εκτελέσιμο gdb"
+
+#~ msgid ""
+#~ "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
+#~ "gdb, for example, for a different architecture, enter the executable name "
+#~ "here. You can either run gdb from $PATH, but with a different name (say, "
+#~ "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+#~ "executable."
+#~ msgstr ""
+#~ "Για την εκτέλεση του \"gdb\" από τη $PATH, αφήστε το πεδίο αυτό κενό. Για "
+#~ "την εκτέλεση ενός προσαρμοσμένου gdb, π.χ. για διαφορετική εφαρμογή, "
+#~ "εισάγετε εδώ το όνομά του. Μπορείτε επίσης να εκτελέσετε το gdb από τη "
+#~ "$PATH, αλλά με κάποιο άλλο όνομα (π.χ. \"arm-gdb\"),  πληκτρολογώντας εδώ "
+#~ "το όνομα, ή καθορίζοντας την πλήρη διαδρομή του εκτελέσιμου."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr "Εκτέλεση gdb σε ειδικό κέλυφος (κυρίως για έργα automake)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Αν επιθυμείτε την εκτέλεση του gdb μέσω ειδικού κελύφους ή εργαλείου "
+#~ "εισάγετέ το εδώ. Η κύρια χρήση αυτού είναι για έργα βασισμένα στο "
+#~ "Automake για τα οποία η εφαρμογή είναι στην πράξη ένα σενάριο οπότε "
+#~ "απαιτείται το libtool για την εκτέλεσή του μέσα στο gdb."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "&Κέλυφος αποσφαλμάτωσης:"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Αν επιθυμείτε την εκτέλεση του gdb μέσω ειδικού κελύφους ή εργαλείου "
+#~ "εισάγετέ το εδώ. Η κύρια χρήση αυτού είναι για έργα βασισμένα στο "
+#~ "Automake για τα οποία η εφαρμογή είναι στην πράξη ένα σενάριο οπότε "
+#~ "απαιτείται το <b>libtool</b> για την εκτέλεσή του μέσα στο gdb."
+
+#~ msgid "Options"
+#~ msgstr "Επιλογές"
+
+#~ msgid ""
+#~ "Displaying static members makes GDB slower in\n"
+#~ "producing data within KDE and Qt.\n"
+#~ "It may change the \"signature\" of the data\n"
+#~ "which QString and friends rely on,\n"
+#~ "but if you need to debug into these values then\n"
+#~ "check this option."
+#~ msgstr ""
+#~ "Η εμφάνιση στατικών μελών κάνει το GDB αργότερο στην\n"
+#~ "παραγωγή δεδομένων εντός του KDE και του Qt.\n"
+#~ "Μπορεί να αλλάξει την \"υπογραφή\" των δεδομένων στα\n"
+#~ "οποία το GString και οι φίλες τάξεις βασίζονται,\n"
+#~ "αλλά αν χρειάζεστε να αποσφαλματώσετε σε αυτές τις τιμές\n"
+#~ "τότε ενεργοποιήστε αυτή την επιλογή."
+
+#~ msgid "Display static &members"
+#~ msgstr "Εμφάνιση στατικών &μελών"
+
+#~ msgid ""
+#~ "When displaying the disassembled code you\n"
+#~ "can select to see the methods' mangled names.\n"
+#~ "However, non-mangled names are easier to read."
+#~ msgstr ""
+#~ "Όταν εμφανίζεται ο τελεστικός κώδικας μηχανής μπορείτε να επιλέξετε\n"
+#~ "να δείτε τις μεθόδους με τα κωδικά τους ονόματα.\n"
+#~ "Όμως, τα αποκωδικοποιημένα ονόματα είναι πιο ευανάγνωστα."
+
+#~ msgid "Display &demangled names"
+#~ msgstr "Εμφάνιση &αποκωδικοποιημένων ονομάτων"
+
+#~ msgid ""
+#~ "If GDB has not seen a library that will be loaded via\n"
+#~ "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~ "We can get GDB to stop on a library load and hence\n"
+#~ "try to set the pending breakpoints. See the documentation\n"
+#~ "for more details relating to this behavior.\n"
+#~ "\n"
+#~ "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgstr ""
+#~ "Αν το GDB δεν έχει δει μια βιβλιοθήκη η οποία θα φορτωθεί μέσω\n"
+#~ "\"dlopen\" τότε θα αρνηθεί να θέσει σημείο διακοπής σε αυτόν τον κώδικα.\n"
+#~ "Μπορούμε να βάλουμε το GDB να σταματά κατά τη φόρτωση μιας βιβλιοθήκης\n"
+#~ "και να προσπαθήσουμε να θέσουμε τα εκκρεμή σημεία διακοπής. Ανατρέξτε "
+#~ "στην\n"
+#~ "τεκμηρίωση για περισσότερες λεπτομέρειες σχετικά με αυτή τη συμπεριφορά.\n"
+#~ "\n"
+#~ "Αν δε φορτώνετε βιβλιοθήκες με το \"dlopen\" τότε μην ενεργοποιήσετε αυτή "
+#~ "την επιλογή."
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Προσπάθεια εισαγωγής σημείων &διακοπής κατά τη φόρτωση βιβλιοθηκών"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "Χρησιμοποιήστε την κινητή γραμμή εργαλείων. Αυτή η\n"
+#~ "γραμμή εργαλείων παραμένει πάνω από όλα τα παράθυρα ώστε αν\n"
+#~ "η εφαρμογή καλύψει το KDevelop έχετε τον έλεγχό της μέσω της μικρής\n"
+#~ "γραμμής εργασιών. Μπορεί επίσης να προσαρτηθεί στον πίνακα.\n"
+#~ "\n"
+#~ "Αυτή η γραμμή εργασιών είναι πρόσθετη τη γραμμής εργαλείων του KDevelop."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Ενεργοποίηση &κινητής γραμμής εργαλείων"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "Αυτή η επιλογή σας επιτρέπει να εισάγετε τερματική είσοδο όταν η\n"
+#~ "εφαρμογή σας περιέχει κώδικα εισόδου τερματικού (π.χ. cin, fgets, κτλ.).\n"
+#~ "Αν χρησιμοποιείτε είσοδο τερματικού στην εφαρμογή σας τότε ενεργοποιήστε "
+#~ "αυτή την επιλογή.\n"
+#~ "Σε άλλη περίπτωση μην την ενεργοποιήσετε."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr ""
+#~ "Ενεργοποίηση χωριστού &τερματικού για την είσοδο/έξοδο της εφαρμογής"
+
+#~ msgid "Start Debugger With"
+#~ msgstr "Εκκίνηση του αποσφαλματωτή με"
+
+#~ msgid "Framestack"
+#~ msgstr "Πλαίσιο στοίβας"
+
+#~ msgid ""
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgstr ""
+#~ "Το σενάριο αυτό προορίζεται για τις απαιτούμενες εντολές σύνδεσης σε ένα "
+#~ "απομακρυσμένο εκτελέσιμο.\n"
+#~ "\tshell sleep 5\tαναμονή για εκκίνηση του απομακρυσμένου προγράμματος\n"
+#~ "\ttarget remote ...\tσύνδεση στον απομακρυσμένο αποσφαλματωτή\n"
+#~ "\tcontinue\t[προαιρετικό] εκτέλεση αποσφαλμάτωσης έως το πρώτο σημείο "
+#~ "διακοπής"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "Απομακρυσμένη αποσφαλμάτωση"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "&Ρύθμιση σεναρίου gdb:"
+
+#~ msgid "Gdb configure script"
+#~ msgstr "Σενάριο ρύθμισης gdb"
+
+#~ msgid "This script is sourced by gdb when the debugging starts."
+#~ msgstr ""
+#~ "Αυτό το σενάριο εκτελείται από το gdb κατά την εκκίνηση της "
+#~ "αποσφαλμάτωσης."
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "&Εκτέλεση σεναρίου κελύφους:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Σενάριο εκκίνησης απομακρυσμένης εφαρμογής"
+
+#~ msgid ""
+#~ "This shell script is run after the Config gdb script has been sourced by "
+#~ "gdb.\n"
+#~ "When debugging remotely this script is intended to actually start the "
+#~ "remote process.\n"
+#~ "[It is expected that the debug executable can be reached on the target, "
+#~ "maybe by downloading it as a final build step]\n"
+#~ "1) Find a way to execute a command remotely - rsh, ssh, telnet, ...\n"
+#~ "2a) Execute \"gdbserver ... application\" on target.\n"
+#~ "or if your executable contains the gdb stub\n"
+#~ "2b) Execute \"application\" on target."
+#~ msgstr ""
+#~ "Αυτό το σενάριο εκτελείται αφού το σενάριο Config gdb έχει εκτελεστεί από "
+#~ "το gdb.\n"
+#~ "Κατά την απομακρυσμένη αποσφαλμάτωση αυτό το σενάριο προορίζεται για να "
+#~ "εκκινηθεί η απομακρυσμένη διεργασία.\n"
+#~ "[Αναμένεται ότι το προς αποσφαλμάτωση εκτελέσιμο μπορεί να προσεγγιστεί, "
+#~ "ίσως λαμβάνοντάς το ως τελικό βήμα στην κατασκευή]\n"
+#~ "1) Αναζήτηση ενός τρόπου απομακρυσμένης εκτέλεσης εντολών - rsh, ssh, "
+#~ "telnet, ...\n"
+#~ "2)α) Εκτέλεση \"gdbserver ... εφαρμογή\" απομακρυσμένα.\n"
+#~ "ή αν το εκτελέσιμο περιέχει το \"ίχνος\" του gdb\n"
+#~ "2β) Εκτέλεση της \"εφαρμογής\" στον προορισμό."
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Εκτέλεση σεναρίου &gdb:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Σενάριο για τη σύνδεση με την απομακρυσμένη εφαρμογή"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Αυτό το σενάριο δημιουργείται από το gdb μετά την εκτέλεση των δύο "
+#~ "προηγούμενων.\n"
+#~ "Το σενάριο προορίζεται για τις ακριβείς εντολές που χρειάζεται για να "
+#~ "συνδεθείτε με μια απομακρυσμένη τρέχουσα διεργασία.\n"
+#~ "\tshell sleep 5\tαναμονή για την εκκίνηση του απομακρυσμένου "
+#~ "προγράμματος\n"
+#~ "\ttarget remote ...\tσύνδεση με τον απομακρυσμένο αποσφαλματωτή\n"
+#~ "\tcontinue\t[προαιρετικό] εκτέλεση αποσφαλμάτωσης μέχρι το πρώτο σημείο "
+#~ "διακοπής."
+
+#~ msgid "Profile Editor for The KDevelop Platform"
+#~ msgstr "Επεξεργαστής προφίλ για την πλατφόρμα KDevelop"
+
+#~ msgid "Add Profile"
+#~ msgstr "Προσθήκη προφίλ"
+
+#~ msgid "Description"
+#~ msgstr "Περιγραφή"
+
+#~ msgid "Properties"
+#~ msgstr "Ιδιότητες"
+
+#~ msgid "Derived properties:"
+#~ msgstr "Προερχόμενες ιδιότητες:"
+
+#~ msgid "Own properties:"
+#~ msgstr "Ίδιες ιδιότητες:"
+
+#~ msgid "Lists of Explicitly Enabled && Disabled Plugins"
+#~ msgstr "Λίστες από άμεσα ενεργοποιημένα && απενεργοποιημένα πρόσθετα"
+
+#~ msgid "Enabled:"
+#~ msgstr "Ενεργοποιημένα:"
+
+#~ msgid "Plugin Name"
+#~ msgstr "Όνομα πρόσθετου"
+
+#~ msgid "Disabled:"
+#~ msgstr "Απενεργοποιημένα:"
+
+#~ msgid "<-"
+#~ msgstr "<-"
+
+#~ msgid "Available plugins:"
+#~ msgstr "Διαθέσιμα πρόσθετα:"
+
+#~ msgid "Generic Name"
+#~ msgstr "Γενικό όνομα"
+
+#~ msgid "->"
+#~ msgstr "->"
+
+#~ msgid "List of Plugins to Be Loaded"
+#~ msgstr "Λίστα από πρόσθετα για φόρτωση"
+
+#~ msgid "&Name:"
+#~ msgstr "Ό&νομα:"
+
+#~ msgid "&Generic name:"
+#~ msgstr "&Γενικό όνομα:"
+
+#~ msgid "&Description:"
+#~ msgstr "&Περιγραφή:"
+
+#~ msgid ""
+#~ "KDevelop has found several possible project root for your project, please "
+#~ "select the correct one."
+#~ msgstr "Το KDevelop εντόπισα πολλαπλές βάσεις για το έργο σας, παρακαλώ  επιλέξτε τη σωστή."
+
+#~ msgid "Build Directory Creator"
+#~ msgstr "Δημιουργός καταλόγου κατασκευής"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "&Εκτελέσιμο CMake:"
+
+#~ msgid "&Build Directory:"
+#~ msgstr "&Κατάλογος κατασκευής:"
+
+#~ msgid "&Installation Prefix:"
+#~ msgstr "Πρόθεμα &εγκατάστασης:"
+
+#~ msgid "Build &type:"
+#~ msgstr "&Τύπος κατασκευής:"
+
+#~ msgid "release"
+#~ msgstr "κυκλοφορία"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "Κυκλοφορία με αποσφαλμάτωση"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "Κυκλοφορία ελάχιστου μεγέθους"
+
+#~ msgid "Generator:"
+#~ msgstr "Γεννήτρια:"
+
+#~ msgid "TextLabel"
+#~ msgstr "ΕτικέταΚειμένου"
+
+#~ msgid "Cache Values"
+#~ msgstr "Τιμές λανθάνουσας μνήμης"
+
+#~ msgid "Comment:"
+#~ msgstr "Σχόλιο:"
+
+#~ msgid "Show Advanced"
+#~ msgstr "Εμφάνιση προχωρημένων"
+
+#~ msgid "CMake Directory"
+#~ msgstr "CMake στον κατάλογο"
+
+#~ msgid "Show Advanced Values"
+#~ msgstr "Εμφάνιση προχωρημένων τιμών"
+
+#~ msgid "Viewer"
+#~ msgstr "Προβολέας"
+
+#~ msgid "Parse Tree"
+#~ msgstr "Ανάλυση δέντρου"
+
+#~ msgid "Value 1"
+#~ msgstr "Τιμή 1"
+
+#~ msgid "Value 2"
+#~ msgstr "Τιμή 2"
+
+#~ msgid "Source to Be Written Back"
+#~ msgstr "Ο κώδικας που θα γραφτεί πίσω"
+
+#~ msgid "Add All From Directory"
+#~ msgstr "Προσθήκη όλων από κατάλογο"
+
+#~ msgid "Choose File to Add..."
+#~ msgstr "Επιλογή αρχείου για προσθήκη..."
+
+#~ msgid "CMake Binary:"
+#~ msgstr "Εκτελέσιμο CMake:"
+
+#~ msgid "QMake Binary:"
+#~ msgstr "Εκτελέσιμο QMake:"
+
+#~ msgid "View"
+#~ msgstr "Προβολή"
+
+#~ msgid "Abort on first error:"
+#~ msgstr "Εγκατάλειψη στο πρώτο σφάλμα:"
+
+#~ msgid "Display commands but do not execute them:"
+#~ msgstr "Εμφάνιση εντολών χωρίς την εκτέλεσή τους:"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Εκτέλεση πάνω από μίας εργασιών ταυτόχρονα:"
+
+#~ msgid "Number of simultaneous jobs:"
+#~ msgstr "Αριθμός ταυτόχρονων εργασιών:"
+
+#~ msgid "Make executable:"
+#~ msgstr "Εκτελέσιμο του make:"
+
+#~ msgid "Default make target:"
+#~ msgstr "Προκαθορισμένος στόχος του make:"
+
+#~ msgid "Additional make options:"
+#~ msgstr "Επιπλέον παράμετροι του make:"
+
+#~ msgid "Active Environment Profile:"
+#~ msgstr "Προφίλ ενεργού περιβάλλοντος:"
+
+#~ msgid "Pattern:"
+#~ msgstr "Μοτίβο:"
+
+#~ msgid ""
+#~ "Enter the regular expression you want to search for here.<p>Possible meta "
+#~ "characters are:<ul><li><b>.</b> - Matches any character</li><li><b>^</b> "
+#~ "- Matches the beginning of a line</li><li><b>$</b> - Matches the end of a "
+#~ "line</li><li><b>\\&lt;</b> - Matches the beginning of a word</li><li><b>"
+#~ "\\&gt;</b> - Matches the end of a word</li></ul>The following repetition "
+#~ "operators exist:<ul><li><b>?</b> - The preceding item is matched at most "
+#~ "once</li><li><b>*</b> - The preceding item is matched zero or more times</"
+#~ "li><li><b>+</b> - The preceding item is matched one or more times</"
+#~ "li><li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> "
+#~ "times</li><li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> "
+#~ "or more times</li><li><b>{,<i>n</i>}</b> - The preceding item is matched "
+#~ "at most <i>n</i> times</li><li><b>{<i>n</i>,<i>m</i>}</b> - The preceding "
+#~ "item is matched at least <i>n</i>, but at most <i>m</i> times.</li></"
+#~ "ul>Furthermore, backreferences to bracketed subexpressions are available "
+#~ "via the notation \\<i>n</i>.</p>"
+#~ msgstr ""
+#~ "Εισάγετε εδώ την κανονική έκφραση που επιθυμείτε να αναζητήσετε."
+#~ "<p>Δυνατοί μεταχαρακτήρες είναι:<ul><li><b>.</b> - Ταιριάζει σε "
+#~ "οποιονδήποτε χαρακτήρα</li><li><b>^</b> - Ταιριάζει στην αρχή μιας "
+#~ "γραμμής</li><li><b>$</b> - Ταιριάζει στο τέλος μιας γραμμής</li><li><b>"
+#~ "\\&lt;</b> - Ταιριάζει με την αρχή μιας λέξης</li><li><b>\\&gt;</b> - "
+#~ "Ταιριάζει με το τέλος μιας λέξης</li></ul>Υπάρχουν οι παρακάτω τελεστές "
+#~ "επανάληψης:<ul><li><b>?</b> -Το προπορευόμενο αντικείμενο ταιριάζει το "
+#~ "πολύ μια  φορά</li><li><b>*</b> - Το προπορευόμενο αντικείμενο ταιριάζει "
+#~ "μηδέν ή περισσότερες φορές</li><li><b>+</b> - Το προπορευόμενο "
+#~ "αντικείμενο ταιριάζει μία ή περισσότερες φορές</li><li><b>{<i>n</i>}</b> "
+#~ "- Το προπορευόμενο αντικείμενο ταιριάζει ακριβώς <i>n</i> φορές</"
+#~ "li><li><b>{<i>n</i>,}</b> - Το προπορευόμενο αντικείμενο ταιριάζει <i>n</"
+#~ "i> ή περισσότερες φορές</li><li><b>{,<i>n</i>}</b> - Το προπορευόμενο "
+#~ "αντικείμενο ταιριάζει το πολύ <i>n</i> φορές</li><li><b>{<i>n</i>,<i>m</"
+#~ "i>}</b> - Το προπορευόμενο αντικείμενο ταιριάζει τουλάχιστον <i>n</i>, "
+#~ "αλλά το πολύ <i>m</i> φορές.</li></ul>Επιπλέον, είναι δυνατές οι προς τα "
+#~ "πίσω αναφορές σε υποεκφράσεις με αγκύλες μέσω της σύνταξης \\<i>n</i>.</p>"
+
+#~ msgid "Template:"
+#~ msgstr "Πρότυπο:"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Regular Expression:"
+#~ msgstr "Κανονική έκφραση:"
+
+#~ msgid "Case Sensitive:"
+#~ msgstr "Διάκριση πεζών/κεφαλαίων:"
+
+#~ msgid "Directory:"
+#~ msgstr "Κατάλογος:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Αναδρομικά:"
+
+#~ msgid "Limit to project files:"
+#~ msgstr "Περιορισμός στα αρχεία έργου:"
+
+#~ msgid "Files:"
+#~ msgstr "Αρχεία:"
+
+#~ msgid ""
+#~ "Enter the file name pattern of the files to search here. You may give "
+#~ "several patterns separated by commas"
+#~ msgstr ""
+#~ "Εισάγετε εδώ το μοτίβο ονόματος αρχείων για αναζήτηση. Μπορείτε να "
+#~ "εισάγετε πολλαπλά μοτίβα διαχωρισμένα με κόμματα"
+
+#~ msgid "Exclude:"
+#~ msgstr "Εξαίρεση:"
+
+#~ msgid ""
+#~ "You can choose a template for the pattern from the combo box and edit it "
+#~ "here. The string %s in the template is replaced  by the pattern input "
+#~ "field, resulting in the regular expression to search for."
+#~ msgstr ""
+#~ "Μπορείτε να επιλέξετε ένα πρότυπο για το μοτίβο από το πλαίσιο συνδυασμών "
+#~ "και έπειτα να το επεξεργαστείτε. Η συμβολοσειρά %s στο πρότυπο γίνεται "
+#~ "αντικατάσταση με το πεδίο εισαγωγής μοτίβου, δημιουργώντας την κανονική "
+#~ "έκφραση προς αναζήτηση."
+
+#~ msgid "Suppress find errors:"
+#~ msgstr "Καταστολή σφαλμάτων αναζήτησης:"
+
+#~ msgid "Import Existing Project"
+#~ msgstr "Εισαγωγή υπάρχοντος έργου"
+
+#~ msgid "&Directory:"
+#~ msgstr "Κ&ατάλογος:"
+
+#~ msgid "Choose directory to import"
+#~ msgstr "Επιλέξτε κατάλογο για εισαγωγή"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "&Ανάκτηση από:"
+
+#~ msgid "Fetch &Module"
+#~ msgstr "Ανάκτηση α&ρθρώματος"
+
+#~ msgid "Project &name:"
+#~ msgstr "Ό&νομα έργου:"
+
+#~ msgid "&Build System:"
+#~ msgstr "&Σύστημα κατασκευής:"
+
+#~ msgid "CMake"
+#~ msgstr "CMake"
+
+#~ msgid "QMake"
+#~ msgstr "QMake"
+
+#~ msgid "Custom Makefiles"
+#~ msgstr "Προσαρμοσμένα Makefiles"
+
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgid "Version Control System:"
+#~ msgstr "Σύστημα ελέγχου έκδοσης:"
+
+#~ msgid "Location:"
+#~ msgstr "Τοποθεσία:"
+
+#~ msgid "Application Name:"
+#~ msgstr "Όνομα εφαρμογής:"
+
+#~ msgid "(invalid)"
+#~ msgstr "(μη έγκυρο)"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Εμφάνιση κατηγοριών εγγράφων (τύποι mime) στην προβολή"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype. If this option is not set, the Document View "
+#~ "will not\n"
+#~ "        organize the open documents by type."
+#~ msgstr ""
+#~ "Αν οριστεί αυτή η επιλογή, η προβολή εγγράφων θα οργανώσει τα έγγραφα\n"
+#~ "        κατά τον τύπο τους mime. Αν δεν οριστεί η επιλογή, η προβολή "
+#~ "εγγράφων δε θα \n"
+#~ "        οργανώσει τα ανοιχτά έγγραφα κατά τον τύπο τους."
+
+#~ msgid "Display document &categories"
+#~ msgstr "Εμφάνιση &κατηγοριών εγγράφων"
+
+#~ msgid "Indentation"
+#~ msgstr "Χρήση εσοχών"
+
+#~ msgid "Tabs"
+#~ msgstr "Στηλοθέτες"
+
+#~ msgid "Force tabs"
+#~ msgstr "Εξαναγκασμός στηλοθετών"
+
+#~ msgid "Spaces"
+#~ msgstr "Κενά"
+
+#~ msgid ""
+#~ "Number of spaces that will be converted to a tab.\n"
+#~ "The number of spaces per tab is controled by the editor."
+#~ msgstr ""
+#~ "Αριθμός κενών που θα μετατρέπονται σ' έναν στηλοθέτη.\n"
+#~ "Ο αριθμός κενών ανά στηλοθέτη ελέγχεται από τον επεξεργαστή κειμένου."
+
+#~ msgid "Convert tabs to spaces."
+#~ msgstr "Μετατροπή στηλοθετών σε κενούς χαρακτήρες."
+
+#~ msgid "Con&vert tabs into spaces"
+#~ msgstr "Μετατρο&πή στηλοθετών σε κενούς χαρακτήρες"
+
+#~ msgid "Fill empty lines with the white space of their previous lines."
+#~ msgstr ""
+#~ "Συμπλήρωση κενών γραμμών με το κενό χαρακτήρα των προηγούμενων γραμμών "
+#~ "τους."
+
+#~ msgid "Fill empt&y lines"
+#~ msgstr "Γέμισμα &κενών γραμμών"
+
+#~ msgid "Indent"
+#~ msgstr "Εσοχή"
+
+#~ msgid "Blocks"
+#~ msgstr "Τμήματα"
+
+#~ msgid "Brackets"
+#~ msgstr "Αγκύλες"
+
+#~ msgid "Cases"
+#~ msgstr "Περιπτώσεις"
+
+#~ msgid "Class"
+#~ msgstr "Κλάση"
+
+#~ msgid "Labels"
+#~ msgstr "Ετικέτες"
+
+#~ msgid "Namespaces"
+#~ msgstr "Χώροι ονομάτων"
+
+#~ msgid "Preprocessor directives"
+#~ msgstr "Οδηγίες προεπεξεργασίας"
+
+#~ msgid "Switches"
+#~ msgstr "Διακόπτες"
+
+#~ msgid ""
+#~ "Indent a maximal # spaces in a continuous statement,\n"
+#~ "relative to the previous line."
+#~ msgstr ""
+#~ "Εσοχή κατά ένα μέγιστο αριθμό κενών σε μια συνεχή δήλωση,\n"
+#~ "σε σχέση με την προηγούμενη γραμμή."
+
+#~ msgid ""
+#~ "Indent a minimal # spaces in a continuous conditional\n"
+#~ "belonging to a conditional header."
+#~ msgstr ""
+#~ "Εσοχή κατά ένα ελάχιστο αριθμό κενών σε μια συνεχή συνθήκη\n"
+#~ "που ανήκει σε μια κεφαλίδα συνθήκης."
+
+#~ msgid "Minimum in conditional:"
+#~ msgstr "Ελάχιστο μέσα σε συνθήκη:"
+
+#~ msgid "Twice current"
+#~ msgstr "Διπλάσιο του τρέχοντος"
+
+#~ msgid "Maximum in statement:"
+#~ msgstr "Μέγιστο μέσα σε εντολή:"
+
+#~ msgid "Other"
+#~ msgstr "Άλλο"
+
+#~ msgid ""
+#~ "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
+#~ "from their immediately preceding closing brackets."
+#~ msgstr ""
+#~ "Διακοπή αγκύλων πριν τις κεφαλίδες κλεισίματος (π.χ. 'else', "
+#~ "'catch', ...)\n"
+#~ "από τις αμέσως προηγούμενες αγκύλες κλεισίματος."
+
+#~ msgid "Brea&k closing headers"
+#~ msgstr "Δια&κοπή κεφαλίδων κλεισίματος"
+
+#~ msgid "No change"
+#~ msgstr "Καμία αλλαγή"
+
+#~ msgid "Attach"
+#~ msgstr "Επισύναψη"
+
+#~ msgid "Break"
+#~ msgstr "Διακοπή"
+
+#~ msgid "Linux"
+#~ msgstr "Linux"
+
+#~ msgid ""
+#~ "Insert empty lines around unrelated blocks, labels, classes,...\n"
+#~ "Known problems:\n"
+#~ "\n"
+#~ "1. If a statement is NOT part of a block, \n"
+#~ "the following statements are all double spaced. \n"
+#~ "Statements enclosed in a block are formatted \n"
+#~ "correctly.\n"
+#~ "\n"
+#~ "2. Comments are broken from the block.\n"
+#~ msgstr ""
+#~ "Εισαγωγή κενών γραμμών γύρο από μη σχετιζόμενα τμήματα κώδικα, ετικέτες, "
+#~ "κλάσεις,...\n"
+#~ "Γνωστά προβλήματα:\n"
+#~ "\n"
+#~ "1. Αν μια εντολή δεν είναι μέρος ενός τμήματος κώδικα, \n"
+#~ "στις ακόλουθες εντολές τοποθετούνται διπλά κενά. \n"
+#~ "Οι εντολές μέσα σε τμήματα κώδικα μορφοποιούνται \n"
+#~ "σωστά.\n"
+#~ "\n"
+#~ "2. Τα σχόλια διακόπτονται από το τμήμα κώδικα.\n"
+
+#~ msgid "&Break blocks"
+#~ msgstr "&Διακοπή τμημάτων"
+
+#~ msgid ""
+#~ "Like --break-blocks, except also insert empty lines \n"
+#~ "around closing headers (e.g. 'else', 'catch', ...).\n"
+#~ "\n"
+#~ "Known problems:\n"
+#~ "\n"
+#~ "1. If a statement is NOT part of a block, \n"
+#~ "the following statements are all double spaced. \n"
+#~ "Statements enclosed in a block are formatted \n"
+#~ "correctly.\n"
+#~ "\n"
+#~ "2. Comments are broken from the block.\n"
+#~ msgstr ""
+#~ "Όπως η επιλογή --break-blocks, ενώ επιπλέον εισαγωγή κενών γραμμών \n"
+#~ "γύρω από τις περιέχοντες κεφαλίδες (π.χ. 'else', 'catch', ...).\n"
+#~ "\n"
+#~ "Γνωστά προβλήματα:\n"
+#~ "\n"
+#~ "1. Αν μια εντολή δεν είναι μέρος ενός τμήματος κώδικα, \n"
+#~ "στις ακόλουθες εντολές τοποθετούνται διπλά κενά. \n"
+#~ "Οι εντολές μέσα σε τμήματα κώδικα μορφοποιούνται \n"
+#~ "σωστά.\n"
+#~ "\n"
+#~ "2. Τα σχόλια διακόπτονται από το τμήμα κώδικα.\n"
+
+#~ msgid "Break bl&ocks all"
+#~ msgstr "Διακοπή όλων των &τμημάτων"
+
+#~ msgid "Break 'else if()' statements into two different lines."
+#~ msgstr "Διακοπή των εντολών 'else if()' σε δυο διαφορετικές γραμμές."
+
+#~ msgid "Break i&f-else"
+#~ msgstr "Διακοπή i&f-else"
+
+#~ msgid "Padding"
+#~ msgstr "Μετακίνηση"
+
+#~ msgid "Pad parenthesis"
+#~ msgstr "Μετακίνηση παρενθέσεων"
+
+#~ msgid "Unpad"
+#~ msgstr "Αναίρεση μετακίνησης"
+
+#~ msgid "Inside only"
+#~ msgstr "Μόνο μέσα"
+
+#~ msgid "Outside only"
+#~ msgstr "Μόνο έξω"
+
+#~ msgid "Inside and outside"
+#~ msgstr "Μέσα και έξω"
+
+#~ msgid ""
+#~ "Insert space padding around operators.\n"
+#~ "Once padded, operators stay padded.\n"
+#~ "There is no unpad operator option."
+#~ msgstr ""
+#~ "Εισαγωγή κενών μετακίνησης γύρω από τελεστές.\n"
+#~ "Αν εκτελεστεί η ενέργεια αυτή, οι τελεστές παραμένουν στη νέα θέση.\n"
+#~ "Δεν υπάρχει επιλογή αναίρεσης της μετακίνησης."
+
+#~ msgid "&Add spaces around operators"
+#~ msgstr "&Προσθήκη κενών γύρω από τελεστές"
+
+#~ msgid "One liners"
+#~ msgstr "Εντολές μιας γραμμής"
+
+#~ msgid ""
+#~ "Do not break lines containing multiple statements into\n"
+#~ "multiple single-statement lines."
+#~ msgstr ""
+#~ "Μη διακοπή των γραμμών που περιέχουν πολλαπλές εντολές\n"
+#~ "σε πολλές γραμμές με μια εντολή η κάθε μία."
+
+#~ msgid "&Keep one-line statements"
+#~ msgstr "&Διατήρηση εντολών μιας γραμμής"
+
+#~ msgid "Do not break blocks residing completely on one line."
+#~ msgstr ""
+#~ "Μη διακοπή των τμημάτων κώδικα που βρίσκονται εξολοκλήρου σε μια γραμμή."
+
+#~ msgid "Keep o&ne-line blocks"
+#~ msgstr "Διατήρηση τμημάτων &μιας γραμμής"
+
+#~ msgid "&Executable:"
+#~ msgstr "&Εκτελέσιμο:"
+
+#~ msgid "Extra &Parameters:"
+#~ msgstr "Επιπλέον &παράμετροι:"
+
+#~ msgid "Display stack to &depth:"
+#~ msgstr "Εμφάνιση στοίβας έως &βάθος:"
+
+#~ msgid "Maximum &frame stack size:"
+#~ msgstr "Μέγιστο μέγεθος &πλαισίου στοίβας:"
+
+#~ msgid " bytes"
+#~ msgstr " byte"
+
+#~ msgid "Limit &identical error display"
+#~ msgstr "Περιορισμός εμφάνισης πα&ρόμοιων λαθών"
+
+#~ msgid "&Memcheck"
+#~ msgstr "Έ&λεγχος μνήμης"
+
+#~ msgid "Leak Summary:"
+#~ msgstr "Περίληψη διαρροής μνήμης:"
+
+#~ msgid "Summary"
+#~ msgstr "Περίληψη"
+
+#~ msgid "Full"
+#~ msgstr "Πλήρης"
+
+#~ msgid "Leak Resolution Matching:"
+#~ msgstr "Ταίριασμα ανάλυσης διαρροής:"
+
+#~ msgid "Low"
+#~ msgstr "Χαμηλό"
+
+#~ msgid "Medium"
+#~ msgstr "Μεσαίο"
+
+#~ msgid "High"
+#~ msgstr "Υψηλό"
+
+#~ msgid "Show Reachable Blocks"
+#~ msgstr "Εμφάνιση προσβάσιμων τμημάτων"
+
+#~ msgid "Free block list size:"
+#~ msgstr "Ελεύθερο μέγεθος λίστας τμημάτων:"
+
+#~ msgid "&Cachegrind"
+#~ msgstr "&Cachegrind"
+
+#~ msgid "Ca&llgrind"
+#~ msgstr "Ca&llgrind"
+
+#~ msgid "Separate Thread Reporting"
+#~ msgstr "Ξεχωριστή αναφορά Νημάτων"
+
+#~ msgid "Full Cache Simulation"
+#~ msgstr "Πλήρης εξομοίωση λανθάνουσας μνήμης"
+
+#~ msgid "Simulate Hardware Prefetcher"
+#~ msgstr "Εξομοίωση υλικού προανάκτησης (Prefetcher)"
+
+#~ msgid "Massi&f"
+#~ msgstr "Massi&f"
+
+#~ msgid "&Helgrind"
+#~ msgstr "&Hellgrind"
+
+#~ msgid "Extra Synchronization Events:"
+#~ msgstr "Επιπλέον γεγονότα συγχρονισμού:"
+
+#~ msgid "None (Locks Only)"
+#~ msgstr "Τίποτα (Κλείδωμα μόνο)"
+
+#~ msgid "Threads"
+#~ msgstr "Νήματα"
+
+#~ msgid "All"
+#~ msgstr "Όλα"
+
+#~ msgid "&Parameters:"
+#~ msgstr "&Παράμετροι:"
+
+#~ msgid "Callgrind"
+#~ msgstr "Callgrind"
+
+#~ msgid "&Trace children"
+#~ msgstr "&Ανίχνευση απογόνων"
+
+#~ msgid "E&xecutable:"
+#~ msgstr "&Εκτελέσιμο:"
+
+#~ msgid "Additional p&arameters:"
+#~ msgstr "Επιπλέον &παράμετροι:"
+
+#~ msgid "KCacheGrind"
+#~ msgstr "KCacheGrind"
+
+#~ msgid "Executable:"
+#~ msgstr "Εκτελέσιμο:"
+
+#~ msgid "Memcheck"
+#~ msgstr "Memcheck"
+
+#~ msgid "Memory &leak check"
+#~ msgstr "Έλεγχος δια&ρροής μνήμης"
+
+#~ msgid "&Show still reachable blocks"
+#~ msgstr "Εμ&φάνιση ακόμη καλούμενων τμημάτων"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Form"
+#~ msgstr "Φόρμα"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Γραμμή εργαλείων διάταξης"
+
+#~ msgid "KDevelop Profile Editor"
+#~ msgstr "Επεξεργαστής προφίλ του KDevelop"
+
+#~ msgid "(c) 2004, The KDevelop Developers"
+#~ msgstr "(c) 2004, Οι προγραμματιστές του KDevelop"
+
+#~ msgid "Core"
+#~ msgstr "Πυρήνας"
+
+#~ msgctxt "list of global plugins"
+#~ msgid "Global"
+#~ msgstr "Καθολικά"
+
+#~ msgid "Project"
+#~ msgstr "Έργο"
+
+#~ msgid "Core Plugins"
+#~ msgstr "Πρόσθετα πυρήνα"
+
+#~ msgid "Global Plugins"
+#~ msgstr "Καθολικά πρόσθετα"
+
+#~ msgid "Project Plugins"
+#~ msgstr "Πρόσθετα έργου"
+
+#~ msgid "Remove selected profile and all its subprofiles?"
+#~ msgstr "Αφαίρεση του επιλεγμένου προφίλ και όλων των υποπροφίλ του;"
+
+#~ msgid ""
+#~ "Cannot remove this profile because it is not a local (user-created) "
+#~ "profile."
+#~ msgstr ""
+#~ "Αδυναμία αφαίρεσης αυτού προφίλ επειδή δεν είναι ένα τοπικό προφίλ "
+#~ "(δημιουργημένο από χρήστη)."
+
+#~ msgid "This plugin is already contained in the list of disabled plugins."
+#~ msgstr ""
+#~ "Αυτό το πρόσθετο περιέχεται ήδη στη λίστα των απενεργοποιημένων πρόσθετων."
+
+#~ msgid "Enable Plugin"
+#~ msgstr "Ενεργοποίηση πρόσθετου"
+
+#~ msgid "This plugin is already contained in the list of enabled plugins."
+#~ msgstr ""
+#~ "Αυτό το πρόσθετο περιέχεται ήδη στη λίστα των ενεργοποιημένων πρόσθετων."
+
+#~ msgid "Disable Plugin"
+#~ msgstr "Απενεργοποίηση πρόσθετου"
+
+#~ msgid ""
+#~ "The file %1 does not contain valid XML.\n"
+#~ "The loading of the session failed."
+#~ msgstr ""
+#~ "Το αρχείο %1 δεν περιέχει έγκυρη XML.\n"
+#~ "Η φόρτωση της συνεδρίας απέτυχε."
+
+#~ msgid ""
+#~ "The file %1 does not contain a valid KDevelop project session "
+#~ "('KDevPrjSession').\n"
+#~ msgstr ""
+#~ "Το αρχείο %1 δεν περιέχει μια έγκυρη συνεδρία έργου του "
+#~ "KDevelop('KDevPrjSession').\n"
+
+#~ msgid "The document type seems to be: '%1'."
+#~ msgstr "Ο τύπος του εγγράφου μοιάζει να είναι: '%1'."
+
+#~ msgid "&Open Project..."
+#~ msgstr "Άν&οιγμα έργου..."
+
+#~ msgid "<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project.</p>"
+#~ msgstr "<b>Άνοιγμα έργου</b><p>Ανοίγει ένα έργο KDevelop3 ή KDevelop2.</p>"
+
+#~ msgid "Open recent project"
+#~ msgstr "Άνοιγμα πρόσφατου έργου"
+
+#~ msgid "<b>Open recent project</b><p>Opens recently opened project.</p>"
+#~ msgstr ""
+#~ "<b>Άνοιγμα πρόσφατου έργου</b><p>Άνοιγμα του πρόσφατα ανοιγμένου έργου.</"
+#~ "p>"
+
+#~ msgid "C&lose Project"
+#~ msgstr "Κ&λείσιμο έργου"
+
+#~ msgid "Close project"
+#~ msgstr "Κλείσιμο έργου"
+
+#~ msgid "<b>Close project</b><p>Closes the current project.</p>"
+#~ msgstr "<b>Κλείσιμο έργου</b><p>Κλείνει το τρέχον έργο.</p>"
+
+#~ msgid "Project &Options"
+#~ msgstr "Επιλ&ογές έργου"
+
+#~ msgid "<b>Project options</b><p>Lets you customize project options.</p>"
+#~ msgstr ""
+#~ "<b>Επιλογές έργου</b><p>Επιτρέπει την προσαρμογή των επιλογών του έργου.</"
+#~ "p>"
+
+#~ msgid "*.kdevelop|KDevelop 3 Project Files\n"
+#~ msgstr "*.kdevelop|Αρχεία έργου KDevelop 3\n"
+
+#~ msgid "Are you sure you want to reopen the current project?"
+#~ msgstr "Είστε σίγουροι για την επανάληψη ανοίγματος του τρέχοντος έργου;"
+
+#~ msgid "Changing plugin profile..."
+#~ msgstr "Αλλαγή προφίλ πρόσθετου..."
+
+#~ msgid "Loading project plugins..."
+#~ msgstr "Φόρτωση πρόσθετων έργου..."
+
+#~ msgid "error during restoring of the KDevelop session"
+#~ msgstr "σφάλμα κατά την επαναφορά της συνεδρίας του KDevelop"
+
+#~ msgid "Project loaded."
+#~ msgstr "Το έργο φορτώθηκε."
+
+#~ msgid ""
+#~ "This is not a valid project file.\n"
+#~ "XML error in line %1, column %2:\n"
+#~ "%3"
+#~ msgstr ""
+#~ "Αυτό δεν είναι ένα έγκυρο αρχείο έργου.\n"
+#~ "Σφάλμα XML στη γραμμή %1, στήλη %2:\n"
+#~ "%3"
+
+#~ msgid "This is not a valid project file."
+#~ msgstr "Αυτό δεν είναι ένα έγκυρο αρχείο έργου."
+
+#~ msgid "Could not write the project file."
+#~ msgstr "Αδυναμία εγγραφής του αρχείου έργου."
+
+#~ msgid "No project management plugin %1 found."
+#~ msgstr "Δε βρέθηκε πρόσθετο διαχείρισης έργου %1."
+
+#~ msgid "Could not create project management plugin %1."
+#~ msgstr "Αδυναμία δημιουργίας πρόσθετου διαχείρισης έργου %1."
+
+#~ msgid "No language plugin for %1 found."
+#~ msgstr "Δε βρέθηκε πρόσθετο γλώσσας για %1."
+
+#~ msgid "Could not create language plugin for %1."
+#~ msgstr "Αδυναμία δημιουργίας πρόσθετου γλώσσας για %1."
+
+#~ msgid "CppUnit test"
+#~ msgstr "Έλεγχος CppUnit"
+
+#~ msgid "Support running CppUnit tests"
+#~ msgstr "Υποστήριξη εκτέλεσης ελέγχων CppUnit"
+
+#~ msgid "Check Test"
+#~ msgstr "Δοκιμές ελέγχου"
+
+#~ msgid "Support for running check unit tests"
+#~ msgstr "Υποστήριξη εκτέλεσης δοκιμών ελέγχου μονάδων"
+
+#~ msgid "Form"
+#~ msgstr "Φόρμα"
+
+#~ msgid "No buildsystem active, failed to fetch tests. [todo]"
+#~ msgstr ""
+#~ "Κανένα σύστημα κατασκευής ενεργό, αποτυχία ανάκτησης ελέγχων. [προς "
+#~ "υλοποίηση]"
+
+#~ msgid "Buildsystem does not offer test executable information. [todo]"
+#~ msgstr ""
+#~ "Το σύστημα κατασκευής δεν υποστηρίζει πληροφορίες εκτελέσιμου ελέγχου. "
+#~ "[προς υλοποίηση]"
+
+#~ msgid "Valid Location"
+#~ msgstr "Έγκυρη τοποθεσία"
+
+#~ msgctxt "An unknown c++ declaration that is unknown"
+#~ msgid "Unknown"
+#~ msgstr "Άγνωστο"
+
+#~ msgid "Namespace import"
+#~ msgstr "Εισαγωγή χώρου ονομάτων"
+
+#~ msgid "Namespace alias"
+#~ msgstr "Ψευδώνυμο χώρου ονομάτων"
+
+#~ msgid "Forward Declaration"
+#~ msgstr "Προς τα εμπρός δήλωση"
+
+#~ msgid "enumerator"
+#~ msgstr "αριθμητικό"
+
+#~ msgid "resolved forward-declaration"
+#~ msgstr "επιλύθηκε προς τα εμπρός δήλωση"
+
+#~ msgid "(unresolved forward-declaration)"
+#~ msgstr "(μη επιλύσιμη προς τα εμπρός δήλωση)"
+
+#~ msgid "Enum: "
+#~ msgstr "Αριθμ: "
+
+#~ msgid "Container: "
+#~ msgstr "Υποδοχέας: "
+
+#~ msgid "Scope: "
+#~ msgstr "Εμβέλεια: "
+
+#~ msgid "Access: "
+#~ msgstr "Πρόσβαση: "
+
+#~ msgid "Kind: "
+#~ msgstr "Είδος: "
+
+#~ msgid "Modifiers: "
+#~ msgstr "Τροποποιητές: "
+
+#~ msgid "Def.: "
+#~ msgstr "Ορισμ.: "
+
+#~ msgid "Decl.: "
+#~ msgstr "Δηλ.: "
+
+#~ msgid " Def.: "
+#~ msgstr " Ορισμ.:"
+
+#~ msgid " Decl.: "
+#~ msgstr " Δηλ.: "
+
+#~ msgid "Run '%1'"
+#~ msgstr "Εκτέλεση '%1'"
+
+#~ msgid "<br />Uses:<br />"
+#~ msgstr "<br />Χρησιμοποιεί:<br />"
+
+#~ msgid "Test Registration Location:"
+#~ msgstr "Έλεγχος τοποθεσίας εγγραφής:"
+
+#~ msgid "Result"
+#~ msgstr "Αποτέλεσμα"
+
+#~ msgid "Message"
+#~ msgstr "Μήνυμα"
+
+#~ msgid "File Name"
+#~ msgstr "Όνομα αρχείου"
+
+#~ msgid "Line Number"
+#~ msgstr "Αριθμός γραμμής"
+
+#~ msgid "Maintainer"
+#~ msgstr "Συντηρητής"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Format files"
+#~ msgstr "Μορφή"
+
+#, fuzzy
+#~| msgid "Delete all"
+#~ msgid "Delete style"
+#~ msgstr "Διαγραφή όλων"
+
+#, fuzzy
+#~| msgid "Are you sure you want to reopen the current project?"
+#~ msgid "Are you sure you want to delete this style?"
+#~ msgstr "Είστε σίγουροι για την επανάληψη ανοίγματος του τρέχοντος έργου;"
+
+#, fuzzy
+#~| msgid "New QTest"
+#~ msgid "New style"
+#~ msgstr "Νέο QTest"
+
+#, fuzzy
+#~| msgid "Custom Makefiles"
+#~ msgid "Custom Style"
+#~ msgstr "Προσαρμοσμένα Makefiles"
+
+#~ msgid "QxRunner"
+#~ msgstr "QxRunner"
+
+#~ msgid "S&top"
+#~ msgstr "&Σταμάτημα"
+
+#~ msgid "Select &All"
+#~ msgstr "Επιλογή ό&λων"
+
+#~ msgid "&Unselect All"
+#~ msgstr "Α&ποεπιλογή όλων"
+
+#~ msgid "&About"
+#~ msgstr "&Σχετικά"
+
+#~ msgid "E&xit"
+#~ msgstr "Έ&ξοδος"
+
+#~ msgid "&Collapse All"
+#~ msgstr "&Σύμπτυξη όλων"
+
+#~ msgid "&Expand All"
+#~ msgstr "&Ανάπτυξη όλων"
+
+#~ msgid "&Minimal Update"
+#~ msgstr "&Ελάχιστη ενημέρωση"
+
+#~ msgid "C&olumns..."
+#~ msgstr "Σ&τήλες..."
+
+#~ msgid "&Results"
+#~ msgstr "&Αποτελέσματα"
+
+#~ msgid "&Settings..."
+#~ msgstr "&Ρυθμίσεις..."
+
+#~ msgid "&Toolbars"
+#~ msgstr "&Γραμμές εργαλείων"
+
+#~ msgid "Ru&nner Toolbar"
+#~ msgstr "Γραμμή εργαλείων &εκτελεστή"
+
+#, fuzzy
+#~| msgid "Run"
+#~ msgid "Ran"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "Selected:"
+#~ msgstr "Επιλογή:"
+
+#~ msgid "Run:"
+#~ msgstr "Εκτέλεση:"
+
+#~ msgid "Success"
+#~ msgstr "Επιτυχία"
+
+#~ msgid "Exceptions"
+#~ msgstr "Εξαιρέσεις"
+
+#~ msgid "Fatals"
+#~ msgstr "Καταρρεύσεις"
+
+#~ msgid "Errors"
+#~ msgstr "Σφάλματα"
+
+#~ msgid "Warnings"
+#~ msgstr "Προειδοποιήσεις"
+
+#~ msgid "Infos"
+#~ msgstr "Πληροφορίες"
+
+#, fuzzy
+#~| msgid "Code"
+#~ msgid "Close"
+#~ msgstr "Κώδικας"
+
+#~ msgid "Failed to comply."
+#~ msgstr "Αποτυχία συμμόρφωσης"
+
+#~ msgid "Select a project in the qtest view."
+#~ msgstr "Επιλέξτε ένα έργο στην προβολή qtest."

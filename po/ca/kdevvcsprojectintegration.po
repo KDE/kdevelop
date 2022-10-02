@@ -1,0 +1,66 @@
+# Translation of kdevvcsprojectintegration.po to Catalan
+# Copyright (C) 2012-2022 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2012, 2020, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-07-08 15:41+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: vcschangesview.cpp:84
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Refresh"
+msgstr "Actualitza"
+
+#: vcschangesviewplugin.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Changes"
+msgstr "Canvis al projecte"
+
+#: vcschangesviewplugin.cpp:65
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Ubica el document actual"
+
+#: vcschangesviewplugin.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locate the current document and select it"
+msgstr "Ubica el document actual i el selecciona"
+
+#: vcschangesviewplugin.cpp:70
+#, kde-format
+msgctxt "@action"
+msgid "Reload View"
+msgstr "Actualitza la vista"
+
+#: vcschangesviewplugin.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Refresh the view for all projects, in case anything changed"
+msgstr "Actualitza la vista de tots els projectes, en cas de qualsevol canvi"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Josep M. Ferrer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "txemaq@gmail.com"

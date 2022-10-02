@@ -1,0 +1,286 @@
+# Finnish messages for kdevqthelp.
+# Copyright © 2009, 2011, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevelop package.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2016.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqthelp\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2016-06-12 18:09+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:20:33+0000\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: qthelpconfig.cpp:47
+#, fuzzy, kde-format
+#| msgid "Modify Entry"
+msgctxt "@title:window"
+msgid "Modify Entry"
+msgstr "Muuta tietuetta"
+
+#: qthelpconfig.cpp:49
+#, fuzzy, kde-format
+#| msgid "Add New Entry"
+msgctxt "@title:window"
+msgid "Add New Entry"
+msgstr "Lisää uusi tietue"
+
+#: qthelpconfig.cpp:67
+#, kde-format
+msgid "Name cannot be empty."
+msgstr "Nimi ei voi olla tyhjä."
+
+#: qthelpconfig.cpp:101
+#, fuzzy, kde-format
+#| msgctxt "Allow user to get some API documentation with GHNS"
+#| msgid "Get New Documentation"
+msgctxt "@action:button Allow user to get some API documentation with GHNS"
+msgid "Get New Documentation"
+msgstr "Hae uusia dokumentaatioita"
+
+#: qthelpconfig.cpp:116
+#, kde-format
+msgid ""
+"The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
+msgstr "Komento ”qmake -query” ei antanut sijaintia QtHelp (QCH) -tiedostoon."
+
+#: qthelpconfig.cpp:204
+#, kde-format
+msgid "Documentation provided by GHNS"
+msgstr "GHNS:n tarjoama dokumentaatio"
+
+#: qthelpconfig.cpp:230
+#, kde-format
+msgid "Qt Compressed Help file is not valid."
+msgstr "Pakattu Qt-ohjetiedosto ei ole kelvollinen."
+
+#: qthelpconfig.cpp:239
+#, kde-format
+msgid "Documentation already imported"
+msgstr "Dokumentaatio on jo tuotu"
+
+#: qthelpconfig.cpp:291
+#, fuzzy, kde-format
+#| msgid "QtHelp"
+msgctxt "@title:tab"
+msgid "Qt Help"
+msgstr "Qt-ohje"
+
+#: qthelpconfig.cpp:296
+#, fuzzy, kde-format
+#| msgid "Check Qt Help documentation"
+msgctxt "@title:tab"
+msgid "Configure Qt Help Settings"
+msgstr "Tarkista Qt-ohjedokumentaatio"
+
+#: qthelpconfig.cpp:321
+#, fuzzy, kde-format
+#| msgid "Modify"
+msgctxt "@info:tooltip"
+msgid "Modify"
+msgstr "Muuta"
+
+#: qthelpconfig.cpp:327
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgctxt "@info:tooltip"
+msgid "Delete"
+msgstr "Poista"
+
+#: qthelpconfig.cpp:333
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Please uninstall this via GHNS."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
+#: qthelpconfig.ui:23
+#, fuzzy, kde-format
+#| msgid "Load QtHelp Documentation from System Locations"
+msgctxt "@title:group"
+msgid "Load Qt Help Documentation from System Locations"
+msgstr "Lataa QtHelp-dokumentaatio järjestelmäsijainneista"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
+#: qthelpconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Load Qt API documentation:"
+msgctxt "@option:check"
+msgid "&Load Qt API documentation:"
+msgstr "Lataa Qt:n API-dokumentaatio:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
+#: qthelpconfig.ui:46
+#, fuzzy, kde-format
+#| msgid "Load QtHelp files from directory:"
+msgctxt "@label:textbox"
+msgid "Load Qt Help files from directory:"
+msgstr "Lataa QtHelp-tiedostot kansiosta:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
+#: qthelpconfig.ui:69
+#, fuzzy, kde-format
+#| msgid "Install Additional Documentation Files"
+msgctxt "@title:group"
+msgid "Install Additional Documentation Files"
+msgstr "Asenna lisää dokumentaatiotiedostoja"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:104
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Nimi"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
+#: qthelpconfig.ui:109
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@title:column"
+msgid "Path"
+msgstr "Polku"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: qthelpconfig.ui:134
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Lisää"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qthelpconfigeditdialog.ui:17
+#, fuzzy, kde-format
+#| msgid "Icon:"
+msgctxt "@label:chooser"
+msgid "Icon:"
+msgstr "Kuvake:"
+
+#. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
+#: qthelpconfigeditdialog.ui:24
+#, fuzzy, kde-format
+#| msgid "Select an icon"
+msgctxt "@info:tooltip"
+msgid "Select an icon"
+msgstr "Valitse kuvake"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qthelpconfigeditdialog.ui:37
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Nimi:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:44
+#, fuzzy, kde-format
+#| msgid "Enter a name"
+msgctxt "@info:tooltip"
+msgid "Enter a name"
+msgstr "Kirjoita nimi"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
+#: qthelpconfigeditdialog.ui:47
+#, fuzzy, kde-format
+#| msgid "Select a name"
+msgctxt "@info:placeholder"
+msgid "Select a name..."
+msgstr "Valitse nimi"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qthelpconfigeditdialog.ui:54
+#, fuzzy, kde-format
+#| msgid "Path:"
+msgctxt "@label:textbox"
+msgid "Path:"
+msgstr "Polku:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:67
+#, fuzzy, kde-format
+#| msgid "Select a QtHelp file..."
+msgctxt "@info:tooltip"
+msgid "Select a Qt Help file..."
+msgstr "Valitse Qt-ohjetiedosto…"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
+#: qthelpconfigeditdialog.ui:73
+#, fuzzy, kde-format
+#| msgid "Select a QtHelp file..."
+msgctxt "@info:placeholder"
+msgid "Select a Qt Help file..."
+msgstr "Valitse Qt-ohjetiedosto…"
+
+#: qthelpdocumentation.cpp:181
+#, kde-format
+msgid "Could not find any documentation for '%1'"
+msgstr "Ei löydetty mitään dokumentaatiota kohteesta ”%1”"
+
+#: qthelpdocumentation.cpp:276
+#, kde-format
+msgid "QtHelp Home Page"
+msgstr "Qt-ohjeen aloitussivu"
+
+#: qthelpqtdoc.cpp:142
+#, kde-format
+msgid "QtHelp"
+msgstr "Qt-ohje"
+
+#~ msgid "Dialog"
+#~ msgstr "Ikkuna"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Jorma Karvonen, Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "karvonen.jorma@gmail.com,lasse.liehu@gmail.com"
+
+#~ msgid "QtHelp Documentation"
+#~ msgstr "Qt-ohjedokumentaatio"
+
+#~ msgid "Identifier to search:"
+#~ msgstr "Etsittävä tunniste:"
+
+#~ msgid "Help page:"
+#~ msgstr "Ohjesivu:"
+
+#~ msgid "about:blank"
+#~ msgstr "about:blank"
+
+#~ msgid "Debug info:"
+#~ msgstr "Virheenpaikannustiedot:"
+
+#~ msgid "Search QtHelp files in this directory..."
+#~ msgstr "Etsi QtHelp-tiedostoja tästä kansiosta…"
+
+#~ msgid "Remove"
+#~ msgstr "Poista"
+
+#~ msgid "Move Up"
+#~ msgstr "Siirrä ylemmäs"
+
+#~ msgid "Move Down"
+#~ msgstr "Siirrä alemmas"
+
+#~ msgid "Choose dir"
+#~ msgstr "Valitse kansio"
+
+#~ msgid "Manage QtHelp Documentation"
+#~ msgstr "Hallitse Qt-ohjedokumentaatiota"
+
+#~ msgid "Ghns"
+#~ msgstr "Ghns"

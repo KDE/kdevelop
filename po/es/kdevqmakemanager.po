@@ -1,0 +1,182 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2009, 2010, 2011, 2014, 2015, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevqmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 19:35+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.07.80\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Eloy Cuadra"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ecuadra@eloihr.net"
+
+#: qmakebuilddirchooser.cpp:124
+#, kde-format
+msgid "Please specify path to QMake executable."
+msgstr "Especifique la ruta al ejecutable de QMake."
+
+#: qmakebuilddirchooser.cpp:129
+#, kde-format
+msgid "QMake executable \"%1\" does not exist."
+msgstr "El ejecutable de QMake «%1» no existe."
+
+#: qmakebuilddirchooser.cpp:132
+#, kde-format
+msgid "QMake executable is not a file."
+msgstr "El ejecutable de QMake no es un archivo."
+
+#: qmakebuilddirchooser.cpp:135
+#, kde-format
+msgid "QMake executable is not executable."
+msgstr "El ejecutable de QMake no es ejecutable."
+
+#: qmakebuilddirchooser.cpp:140
+#, kde-format
+msgid "QMake executable cannot be queried for variables."
+msgstr "No es posible consultar variables en el ejecutable de QMake."
+
+#: qmakebuilddirchooser.cpp:143
+#, kde-format
+msgid "No basic MkSpec file could be found for the given QMake executable."
+msgstr ""
+"No se puede encontrar ningún archivo MkSpec básico para el ejecutable de "
+"QMake indicado."
+
+#: qmakebuilddirchooser.cpp:150
+#, kde-format
+msgid "Please specify a build folder."
+msgstr "Especifique una carpeta de construcción."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: qmakebuilddirchooser.ui:23
+#, kde-format
+msgctxt "@label:textbox"
+msgid "QMake &executable:"
+msgstr "&Ejecutable de QMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qmakebuilddirchooser.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Build directory:"
+msgstr "&Directorio de construcción:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qmakebuilddirchooser.ui:62
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Install to (target.path):"
+msgstr "&Instalar en (ruta de destino):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qmakebuilddirchooser.ui:85
+#, kde-format
+msgctxt "@labal:listbox"
+msgid "Build &type:"
+msgstr "&Tipo de construcción:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
+#: qmakebuilddirchooser.ui:115
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "(Use default from .pro file)"
+msgstr "(Usar por omisión del archivo .pro)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: qmakebuilddirchooser.ui:123
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra arguments:"
+msgstr "Argumentos adicionales:"
+
+#: qmakebuilddirchooserdialog.cpp:22
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory"
+msgstr "Configurar un directorio de construcción"
+
+#: qmakejob.cpp:33
+#, kde-format
+msgid "Run QMake in %1"
+msgstr "Ejecutar QMake en %1"
+
+#: qmakejob.cpp:137
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Terminado con el código: %1 ***"
+
+#: qmakejob.cpp:139
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Proceso interrumpido ***"
+
+#: qmakejob.cpp:141
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Colgado con el código: %1 ***"
+
+#: qmakemanager.cpp:75
+#, kde-format
+msgctxt "@action"
+msgid "Run QMake"
+msgstr "Ejecutar QMake"
+
+#~ msgid "QMake &binary:"
+#~ msgstr "&Binario de QMake:"
+
+#~ msgid "qmake-parser"
+#~ msgstr "qmake-parser"
+
+#~ msgid "Parse QMake project files"
+#~ msgstr "Analizar archivos de proyecto QMake"
+
+#~ msgid "Enable output of the debug AST"
+#~ msgstr "Activar salida del depurador AST"
+
+#~ msgid "QMake project files"
+#~ msgstr "Archivos de proyecto QMake"
+
+#~ msgid "QMake Manager"
+#~ msgstr "Gestor de QMake"
+
+#~ msgid "Support for managing QMake projects"
+#~ msgstr "Gestión de proyectos QMake"
+
+#~ msgid "QMake binary path is invalid."
+#~ msgstr "La ruta del binario de QMake no es válida."
+
+#~ msgid "QMake binary must be a local path."
+#~ msgstr "El binario de QMake debe estar en una ruta local."
+
+#~ msgid "Build folder is invalid."
+#~ msgstr "La carpeta de construcción no es válida."
+
+#~ msgid "Build folder must be a local path."
+#~ msgstr "La carpeta de construcción debe ser una ruta local."
+
+#~ msgid "Install prefix is invalid (may also be left empty)."
+#~ msgstr ""
+#~ "El prefijo de instalación no es válido (también se puede haber dejado "
+#~ "vacío)."
+
+#~ msgid "Install prefix must be a local path (may also be left empty)."
+#~ msgstr ""
+#~ "El prefijo de instalación debe ser una ruta local (también se puede haber "
+#~ "dejado vacío)."

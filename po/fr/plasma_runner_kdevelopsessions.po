@@ -1,0 +1,43 @@
+# translation of plasma_runner_kdevelopsessions.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2011.
+# Joëlle Cornavin <jcorn@free.fr>, 2011, 2013.
+# xavier <xavier.besnard@neuf.fr>, 2013, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma_runner_kdevelopsessions\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-01-11 19:10+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.12.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: kdevelopsessions.cpp:33
+#, kde-format
+msgid "Finds KDevelop sessions matching :q:."
+msgstr "Cherche des sessions « KDevelop » correspondant à :q:."
+
+#: kdevelopsessions.cpp:38 kdevelopsessions.cpp:40
+#, kde-format
+msgid "Lists all the KDevelop editor sessions in your account."
+msgstr "Liste toutes les sessions de l'éditeur KDevelop dans votre compte."
+
+#: kdevelopsessions.cpp:115
+#, kde-format
+msgid "Open KDevelop Session"
+msgstr "Ouvrir une session KDevelop"
+
+#~ msgctxt "name: content"
+#~ msgid "%1: %2"
+#~ msgstr "%1 : %2"

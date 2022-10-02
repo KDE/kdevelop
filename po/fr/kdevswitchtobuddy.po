@@ -1,0 +1,75 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2013.
+# xavier <xavier.besnard@neuf.fr>, 2013.
+# Vincent PINON <vpinon@kde.org>, 2013.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+# Johnny Jazeix <jazeix@gmail.com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-23 21:59+0200\n"
+"Last-Translator: Johnny Jazeix <jazeix@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.3\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: switchtobuddyplugin.cpp:114
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Basculer vers « %1 »"
+
+#: switchtobuddyplugin.cpp:128
+#, kde-format
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr "Basculer entre la définition et la déclaration"
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr "Basculer entre l'en-tête et la source"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Joëlle Cornavin, Vincent Pinon"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jcorn@free.fr, vpinon@kde.org"
+
+#, fuzzy
+#~| msgid "Switch to '%1'"
+#~ msgid "Switch To"
+#~ msgstr "Basculer vers « %1 »"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Basculer vers le document relié"
+
+#~ msgid ""
+#~ "Allows switching between buddy documents like implementation and header "
+#~ "file."
+#~ msgstr ""
+#~ "Permet de basculer vers des documents reliés tels que les fichiers "
+#~ "d'implémentation et d'en-têtes."
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Auteur"
+
+#~ msgid "Switch to buddy document in code editor."
+#~ msgstr "Bascule vers un document associé dans l'éditeur de code."

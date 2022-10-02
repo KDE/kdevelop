@@ -1,0 +1,294 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustombuildsystem\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 14:39+0100\n"
+"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
+"Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-POFile-SpellExtra: Pakulat KDevelop Andreas\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-POFile-IgnoreConsistency: Clean\n"
+
+#: configwidget.cpp:25
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Compilar"
+
+#: configwidget.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Configurar"
+
+#: configwidget.cpp:27
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Instalar"
+
+#: configwidget.cpp:28
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Limpar"
+
+#: configwidget.cpp:29
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Eliminar"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Pasta de compilação:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Seleccione a pasta onde serão executadas as ferramentas.\n"
+"Se for a mesma que a pasta de origem, poderá deixá-la em branco."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "A pasta onde serão executadas as ferramentas"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Ferramentas de Compilação"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Acção:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Activar:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Executável:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Este é o executável que será invocado ao seleccionar a acção no menu Projecto"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumentos:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr "Os argumentos que a ferramenta precisa para executar adequadamente."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Ambiente:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Escolha um ambiente pré-configurado para a sua ferramenta"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "A compilar: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "A limpar: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "A instalar: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "A instalar: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "A configurar: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "A eliminar: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Tipo de Compilação Indefinido"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr ""
+"Não foi indicado nenhum comando para a ferramenta personalizada %1 no "
+"projecto \"%2\"."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "A ferramenta personalizada %1 no projecto \"%2\" está desactivada"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"Os argumentos indicados necessitariam de uma consola real; isto não é "
+"suportado de momento."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Não foi possível iniciar o comando."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "O comando estoirou."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Ocorreu um erro desconhecido ao executar o comando."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Sem sucesso ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Terminado ***"
+
+#: custombuildsystemconfig.cpp:14
+#, kde-format
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "compilar"
+
+#: custombuildsystemconfig.cpp:15
+#, kde-format
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "configurar"
+
+#: custombuildsystemconfig.cpp:16
+#, kde-format
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "instalar"
+
+#: custombuildsystemconfig.cpp:17
+#, kde-format
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "limpar"
+
+#: custombuildsystemconfig.cpp:18
+#, kde-format
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "eliminar"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "desconhecida"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Configuração de compilação:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Adicionar"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Remover"
+
+#: kcm_custombuildsystem.cpp:53
+#, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Sistema de Compilação Personalizado"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"Configure uma ferramenta de compilação de projectos personalizada e as "
+"inclusões/definições para o suporte à linguagem."

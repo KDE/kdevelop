@@ -1,0 +1,180 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Stelios <sstavra@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2019-08-27 13:13+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: customscript_plugin.cpp:86
+#, kde-format
+msgid ""
+"<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
+"external formatting tools that can be invoked through the command-line.<br /"
+">For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b> "
+"formatters can be used.<br />The advantage of command-line formatters is "
+"that formatting configurations can be easily shared by all team members, "
+"independent of their preferred IDE."
+msgstr ""
+"<b>Δημιουργία εσοχών και διαμόρφωση πηγαίου κώδικα.</b><br />Αυτό το "
+"πρόσθετο επιτρέπει τη χρήση ισχυρών εξωτερικών εργαλείων διαμόρφωσης που "
+"καλούνται από τη γραμμή εντολών.<br />Για παράδειγμα, μπορεί να "
+"χρησιμοποιηθούν οι διαμορφωτές <b>uncrustify</b>, <b>astyle</b> ή <b>indent</"
+"b>.<br />Το πλεονέκτημα των διαμορφωτών από τη γραμμή εντολών είναι ότι οι "
+"διαμορφώσεις μπορούν να διαμοιραστούν εύκολα από όλα τα μέλη της ομάδας "
+"ανεξάρτητα από το προτιμώμενο περιβάλλον ανάπτυξης."
+
+#: customscript_plugin.cpp:98
+#, kde-format
+msgctxt "@info formatter usage hint"
+msgid ""
+"Note: each custom script style requires a certain tool executable to be "
+"installed. Otherwise, code will not be formatted."
+msgstr ""
+
+#: customscript_plugin.cpp:235
+#, kde-format
+msgid "Gnu Indent: GNU"
+msgstr "Gnu εσοχή: GNU"
+
+#: customscript_plugin.cpp:246
+#, kde-format
+msgid "Gnu Indent: Kernighan & Ritchie"
+msgstr "Gnu εσοχή: Kernighan & Ritchie"
+
+#: customscript_plugin.cpp:257
+#, kde-format
+msgid "Gnu Indent: Original Berkeley indent style"
+msgstr "Gnu εσοχή: Πρωτότυπο στιλ εσοχής του Berkeley"
+
+#: customscript_plugin.cpp:268
+#, kde-format
+msgid "Clang Format"
+msgstr "Clang διαμόρφωση"
+
+#: customscript_plugin.cpp:271
+#, kde-format
+msgid ""
+"Description:<br /><br /><b>clang-format</b> is an automatic source formater "
+"by the LLVM project. It supports a variety of formatting style options via a "
+"<b>.clang-format</b> configuration file, usually located in the project root "
+"directory."
+msgstr ""
+"Περιγραφή:<br /><br />Το <b>clang-format</b> είναι ένας αυτόματος "
+"διαμορφωτής πηγαίου κώδικα από το έργο LLVM. Υποστηρίζει μια ποικιλία "
+"επιλογών στιλ διαμόρφωσης με ένα <b>.clang-format</b> αρχείο διαμόρφωσης, "
+"που συνήθως βρίσκεται στον κατάλογο root."
+
+#: customscript_plugin.cpp:287
+#, kde-format
+msgid ""
+"Description:<br /><b>kdev_format_source</b> is a script bundled with "
+"KDevelop which allows using fine-grained formatting rules by placing meta-"
+"files called <b>format_sources</b> into the file-system.<br /><br />Each "
+"line of the <b>format_sources</b> files defines a list of wildcards followed "
+"by a colon and the used formatting-command.<br /><br />The formatting-"
+"command should use <b>$TMPFILE</b> to reference the temporary file to "
+"reformat.<br /><br />Example:<br /><b>*.cpp *.h : myformatter $TMPFILE</"
+"b><br />This will reformat all files ending with <b>.cpp</b> or <b>.h</b> "
+"using the custom formatting script <b>myformatter</b>.<br /><br />Example: "
+"<br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
+"$TMPFILE</b> <br />This will reformat all files in subdirectory <b>subdir</"
+"b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
+"config</b>."
+msgstr ""
+"Περιγραφή:<br />Το <b>kdev_format_source</b> είναι ένα σενάριο πακεταρισμένο "
+"με το KDevelop το οποίο επιτρέπει τη χρήση λεπτομερών κανόνων διαμόρφωσης "
+"τοποθετώντας στο σύστημα αρχείων μετα-αρχεία που λέγονται <b>format_sources</"
+"b>.<br /><br />Κάθε γραμμή των <b>format_sources</b> αρχείων ορίζει μια "
+"λίστα από αντικαταστάτες που ακολουθούνται από κόμμα και την εντολή "
+"διαμόρφωσης.<br /><br />Η εντολή διαμόρφωσης πρέπει να χρησιμοποιεί την <b>"
+"$TMPFILE</b> για την αναδιαμόρφωση του προσωρινού αρχείου.<br /><br /"
+">Παράδειγμα:<br /><b>*.cpp *.h : myformatter $TMPFILE</b><br />Αυτό θα "
+"αναδιαμορφώσει όλα τα αρχεία που τελειώνουν με <b>.cpp</b> ή <b>.h</b> με "
+"χρήση του προσαρμοσμένου σεναρίου διαμόρφωσης <b>myformatter</b>.<br /><br /"
+">Παράδειγμα: <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify."
+"config -o $TMPFILE</b> <br />Αυτό θα αναδιαμορφώσει όλα τα αρχεία στον "
+"υποκατάλογο <b>subdir</b> με χρήση του εργαλείου <b>uncrustify</b> με το "
+"αρχείο διαμόρφωσης config-file <b>uncrustify.config</b>."
+
+#: customscript_plugin.cpp:544
+#, fuzzy, kde-format
+#| msgid "Command:"
+msgctxt "@label:textbox"
+msgid "Command:"
+msgstr "Εντολή:"
+
+#: customscript_plugin.cpp:553
+#, kde-format
+msgid ""
+"<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
+"code is reached to the command <br />through the standard input, and the "
+"<br />formatted result is read from the standard output.<br /><br />If you "
+"add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
+"for transferring the code."
+msgstr ""
+"<i>Μπορείτε να δώσετε όποια εντολή κελύφους θέλετε.</i><br />Ο μη "
+"διαμορφωμένος πηγαίος κώδικας εισάγεται στην εντολή <br />με την τυπική <br /"
+">είσοδο και το αποτέλεσμα διαβάζεται από την τυπική έξοδο..<br /><br />Αν "
+"προσθέσετε την <b>$TMPFILE</b> στην εντολή, <br />ένα προσωρινό αρχείο "
+"χρησιμοποιείται για τη μεταφορά του κώδικαa."
+
+#: customscript_plugin.cpp:565
+#, fuzzy, kde-format
+#| msgid "More Variables"
+msgctxt "@action:button"
+msgid "More Variables"
+msgstr "Περισσότερες μεταβλητές"
+
+#: customscript_plugin.cpp:575
+#, kde-format
+msgid "Style: %1"
+msgstr "Στιλ: %1"
+
+#: customscript_plugin.cpp:588
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+#| ">The code will be written into the file, the temporary <br />file will be "
+#| "substituted into that position, and the result <br />will be read out of "
+#| "that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+#| "original file. <br />The contents of the file must not be modified, "
+#| "changes are allowed <br />only in $TMPFILE.<br /><br /><b>${PROJECT_NAME}"
+#| "</b> will be replaced by the path of <br />the currently open project "
+#| "with the matching name."
+msgid ""
+"<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+">The code will be written into the file, the temporary <br />file will be "
+"substituted into that position, and the result <br />will be read out of "
+"that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+"original file. <br />The contents of the file must not be modified, changes "
+"are allowed <br />only in $TMPFILE.<br /><br /><b>${&lt;project name&gt;}</"
+"b> will be replaced by the path of <br />a currently open project whose name "
+"is &lt;project name&gt;."
+msgstr ""
+"Η <b>$TMPFILE</b> θα αντικατασταθεί με τη διαδρομή σε ένα προσωρινό αρχείο. "
+"<br />Ο κώδικας θα γραφτεί στο αρχείο, το προσωρινό <br />αρχείο θα "
+"υποκατασταθεί στη θέση εκείνη και το αποτέλεσμα <br />θα διαβαστεί από το "
+"αρχείο. <br /><br />Η <b>$FILE</b> θα αντικατασταθεί με τη διαδρομή του "
+"αρχικού αρχείου. <br />Τα περιεχόμενα του αρχείου δεν πρέπει να αλλάξουν, "
+"αλλαγές επιτρέπονται <br />μόνο στην $TMPFILE.<br /><br />Η <b>"
+"${PROJECT_NAME}</b> θα αντικατασταθεί από τη διαδρομή <br />του τρέχοντος "
+"έργου με το όνομα που ταιριάζει."
+
+#: customscript_plugin.cpp:600
+#, fuzzy, kde-format
+#| msgid "Variable Replacements"
+msgctxt "@title:window"
+msgid "Variable Replacements"
+msgstr "Αντικαταστάσεις μεταβλητών"

@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevsourceformatter.pot\n"
+"X-Crowdin-File-ID: 6365\n"
+
+#: config/projectconfigpage.cpp:44
+#, kde-format
+msgctxt "@title:tab"
+msgid "Source Formatter"
+msgstr "源代码格式化器"
+
+#: config/projectconfigpage.cpp:49
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Source Formatter"
+msgstr "配置源代码格式化器"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
+#: config/projectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use default"
+msgstr "使用默认(&U)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
+#: config/projectconfigpage.ui:36
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr "常规"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without a Kate modeline."
+msgstr "按照格式化样式对没有 Kate 模式行的文档覆盖编辑器缩进模式。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:45
+#, kde-format
+msgctxt "@option:check"
+msgid "Override editor indentation mode"
+msgstr "覆盖编辑器缩进模式"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr "向已格式化的文档依照格式化样式添加 Kate 模式行。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:55
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate modeline"
+msgstr "添加 Kate 模式行"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
+#: config/projectconfigpage.ui:65
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr "格式化样式"

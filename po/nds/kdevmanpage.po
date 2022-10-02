@@ -1,0 +1,59 @@
+# translation of kdevmanpage.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmanpage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2011-06-10 16:11+0200\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Handbookinholt"
+
+#: manpagedocumentationwidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "Loading man pages ..."
+msgid "Loading man pages..."
+msgstr "Handbooksieden warrt laadt…"
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Handbooksiet"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m.j.wiese@web.de"
+
+#~ msgid "Could not find any documentation for '%1'"
+#~ msgstr "För \"%1\" lett sik keen Dokmentatschoon finnen."
+
+#~ msgid "ManPage"
+#~ msgstr "Handbooksiet"
+
+#~ msgid "Check Man Page documentation"
+#~ msgstr "Handbook-Dokmentatschoon naslaan"

@@ -1,0 +1,640 @@
+# Translation of kdevsubversion.po to Ukrainian
+# Copyright (C) 2008-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2014, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsubversion\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 08:21+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.07.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: kdevsvnplugin.cpp:334
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "Скопіювати…"
+
+#: kdevsvnplugin.cpp:341
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "Пересунути..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Будь ласка, оберіть лише один елемент для виконання цієї дії"
+
+#: kdevsvnplugin.cpp:370
+#, kde-format
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "Файл/Каталог призначення"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "Копіювання працює лише для локальних файлів"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "Файл/Каталог призначення"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "Пересування працює лише для локальних файлів/каталогів"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Додавання Subversion"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "Недостатньо відомостей для виконання завдання з додавання файла"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Анотація Subversion"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "Недостатньо відомостей для засудження адреси"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Отримання Subversion"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "Недостатньо відомостей для отримання"
+
+#: svncommitjob.cpp:109
+#, kde-format
+msgid "Subversion Commit"
+msgstr "Внесок до Subversion"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "Надсилання…"
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "Недостатньо відомостей для виконання процедури внеску"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Копіювання Subversion"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "Недостатньо відомостей для копіювання файла"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Diff Subversion"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "Надано недостатньо відомостей для виконання команди diff"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Імпорт Subversion"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "Недостатньо відомостей для імпортування"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Info Subversion"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "Недостатньо відомостей для виконання завдання з інформування"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "Додано %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "Вилучено %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "Вилучено %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "Додано %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "Модифікація %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "Оновлення зовнішніх записів: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "Надсилання %1"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "Додавання %1 на основі типу MIME %2."
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "Додавання %1."
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "Вилучення %1."
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "Заміна %1."
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "Перенесення даних файлів "
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "Завершено засудження для модифікації %1, шлях %2"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "Повернення робочої копії %1"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "Спроба повернення робочої копії %1 зазнала невдачі"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "Скопійовано %1"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "Сертифікат ще не набув чинності."
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "Строк дії сертифіката завершився."
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr "CN сертифіката (назва вузла) не збігається з назвою віддаленого вузла."
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "Невідомий видавець сертифіката."
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "Інша невідома помилка."
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "Введіть користувача для: %1"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "Виконано"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"Помилка під час виконання завдання:\n"
+"%1"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Журнал Subversion"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "Недостатньо відомостей для визначення адреси журналу"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Пересування Subversion"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "Недостатньо відомостей для пересування файла"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Вилучення Subversion"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "Недостатньо відомостей для виконання завдання з вилучення"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Повернути Subversion"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "Недостатньо відомостей для виконання повернення"
+
+#: svnssldialog.cpp:28
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "Сертифікат сервера SSL"
+
+#: svnssldialog.cpp:30
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "Довіритися назавжди"
+
+#: svnssldialog.cpp:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "Довіритися тимчасово"
+
+#: svnssldialog.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "SSL-сертифікат сервера: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Стан Subversion"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "Недостатньо відомостей для виконання завдання зі встановлення стану"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Оновлення Subversion"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "Недостатньо відомостей для виконання оновлення"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Каталог джерела:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "Сховище:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "Адреса сховища"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "Оберіть сховище, до якого буде імпортовано каталог джерела."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Повідомлення для внеску:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"Під час перевірки сертифіката сервера було виявлено помилки.\n"
+"Чи довіряєте ви цьому сертифікату?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "Причини невдалої спроби перевірки"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "Інформація про сертифікат"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "Назва вузла:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "someserver"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "Джерело:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "someissuer"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "Чинний з:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "validfrom"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "Чинний до:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "validuntil"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "Відбиток:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "fingerprint"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "Ssl-сертифікат сервера"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "Адреса сховища для імпортування"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "Імпортувати до сховища Subversion"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "Отримати зі сховища Subversion"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "Cat Subversion"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "Недостатньо відомостей для виконання команди cat"
+
+#~ msgid "Start Revision"
+#~ msgstr "Почати Модифікацію"
+
+#~ msgid "End Revision"
+#~ msgstr "Завершити Модифікацію"
+
+#~ msgid "Checkout"
+#~ msgstr "Перевірити"
+
+#~ msgid "Repository Url:"
+#~ msgstr "Адреса сховища:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "Шлях призначення:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Рекурсивно:"
+
+#~ msgid "Requested local path:"
+#~ msgstr "Локальний шлях запитів:"
+
+#~ msgid "Source"
+#~ msgstr "Джерело"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "Визначити за URL сховища"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "Визначити за локальною робочою копією"
+
+#~ msgid "Source revision"
+#~ msgstr "Модифікація джерела"
+
+#~ msgid "Destination"
+#~ msgstr "Призначення"
+
+#~ msgid "Specify either the full repository URL or local working path"
+#~ msgstr ""
+#~ "Вкажіть або повну адресу URL сховища або локальних шлях до робочої копії"
+
+#~ msgid "Target Url"
+#~ msgstr "Url цілі"
+
+#~ msgid "Non Recursive"
+#~ msgstr "Нерекурсивний"
+
+#~ msgid "No diff deleted"
+#~ msgstr "Не вилучено жодного diff"
+
+#~ msgid "Ignore contents type"
+#~ msgstr "Ігнорувати тип вмісту"
+
+#~ msgid "Subversion Log View Options"
+#~ msgstr "Параметри перегляду журналу Subversion"
+
+#~ msgid "Maximum number of logs to be displayed"
+#~ msgstr "Максимальна кількість показаних журналів"
+
+#~ msgid "Do not show logs before branching point"
+#~ msgstr "Не показувати журнали до точки створення гілки"
+
+#~ msgid "Forcefully delete locally modified and/or unversioned items"
+#~ msgstr "Примусово вилучити локально змінені і/або елементи без версій"
+
+#~ msgid "Select working copies to be reverted:"
+#~ msgstr "Виберіть робочі копії, які буде повернуто:"
+
+#~ msgid "Select"
+#~ msgstr "Вибрати"
+
+#~ msgid "Text Status"
+#~ msgstr "Текстовий стан"
+
+#~ msgid "Prop Status"
+#~ msgstr "Стан властивостей (Prop)"
+
+#~ msgid "Working Copy"
+#~ msgstr "Робоча копія"
+
+#~ msgid "Recursive"
+#~ msgstr "Рекурсивний"
+
+#~ msgid "Specify as number:"
+#~ msgstr "Вказати як номер:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "Вказати як ключове слово:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "Вказати як дату:"
+
+#~ msgid "Status Requested for:"
+#~ msgstr "Стан запиту для:"
+
+#~ msgid "Specify revision"
+#~ msgstr "Вказати модифікацію"
+
+#~ msgid "Non recursive"
+#~ msgstr "Не рекурсивно"
+
+#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
+#~ msgstr "Отримати лише «цікаві» записи (такі як локальні зміни)"
+
+#~ msgid "Contact repository and augment with repository information"
+#~ msgstr "Зв’язатися зі сховищем і поповнити відомості зі сховища"
+
+#~ msgid "Do not ignore svn:ignore"
+#~ msgstr "Не ігнорувати svn:ignore"
+
+#~ msgid "Ignore external items"
+#~ msgstr "Ігнорувати зовнішні елементи"
+
+#~ msgid "Update immediate children only (non-recursive)"
+#~ msgstr "Оновити лише теки першого рівня (не рекурсивно)"
+
+#~ msgid "Ignore external entries"
+#~ msgstr "Ігнорувати зовнішні записи"
+
+#~ msgid "Select Revision"
+#~ msgstr "Вибрати модифікацію"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Support for Subversion version control systems"
+#~ msgstr "Підтримка для систем керування версіями Subversion"
+
+#~ msgid "Subversion Log (%1)"
+#~ msgstr "Журнал Subversion (%1)"
+
+#~ msgid "SvnLogViewOptionDlgBase"
+#~ msgstr "SvnLogViewOptionDlgBase"

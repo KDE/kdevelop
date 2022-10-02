@@ -1,0 +1,59 @@
+# Translation of kdevbazaar.po to Low Saxon
+# translation of kdevbazaar.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Manfred Wiese <m.j.wiese@web.de>, 2008, 2009.
+# Sönke Dibbern <s_dibbern@web.de>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevbazaar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2009-03-08 06:51+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: bazaarplugin.cpp:36
+#, kde-format
+msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sönke Dibbern, Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "s_dibbern@web.de, m.j.wiese@web.de"
+
+#~ msgid "Bazaar Plugin"
+#~ msgstr "Bazaar-Moduul"
+
+#~ msgid "Bazaar version control system support"
+#~ msgstr "Ünnerstütten för't Verschoonkuntrull-Systeem Bazaar"
+
+#~ msgid "Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>"
+#~ msgstr "Copyright 2008, Evgeniy Ivanov <powerfox@kde.ru>"
+
+#~ msgid "Bazaar"
+#~ msgstr "Bazaar"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Bazaar"
+#~ msgstr "Bazaar"
+
+#~ msgid ""
+#~ "It is easier to change the specification to fit the program than vice "
+#~ "versa. It means it easier to use git than make a good DVCS from Bzr ;)"
+#~ msgstr ""
+#~ "Dat is eenfacher, wenn Du de Verkloren dat Programm topasst as annersrüm. "
+#~ "Bruuk also lever \"git\", as dat Du dat versöchst un ut Bazaar en goot "
+#~ "Verdeelt Verschoonkuntrullsysteem (engl. \"Distributed Version Control "
+#~ "System\", \"DVCS\") maakst."

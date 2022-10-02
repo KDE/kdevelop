@@ -1,0 +1,84 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Morten Anton Bach Sjøgren <m_abs@mabs.dk>, 2010.
+# Claus Christensen <claus_chr@webspeed.dk>, 2012.
+# Martin Schlander <mschlander@opensuse.org>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-26 13:42+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Klasser"
+
+#: classbrowserplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Find in &Class Browser"
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Find i &klassebrowser"
+
+#: classwidget.cpp:72
+#, fuzzy, kde-format
+#| msgid "S&earch:"
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "&Søg:"
+
+#: classwidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Class Browser"
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Klassebrowser"
+
+#~ msgid "All projects classes"
+#~ msgstr "Alle projektets klasser"
+
+#~ msgid "Base classes"
+#~ msgstr "Basisklasser"
+
+#~ msgid "Derived classes"
+#~ msgstr "Afledte klasser"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Klasser i projekt %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Morten Anton Bach Sjøgren,Claus Christensen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m_abs@mabs.dk,claus_chr@webspeed.dk"
+
+#~ msgid ""
+#~ "This plugin provides a browsable model of the currently parsed classes "
+#~ "and other items."
+#~ msgstr ""
+#~ "Dette plugin tilbyder en model der kan gennemses for de fortolkede "
+#~ "klasser og andre elementer."
+
+#~ msgid "Browser for all known classes"
+#~ msgstr "Gennemse alle kendte klasser"
+
+#~ msgid "Show &Declaration"
+#~ msgstr "Vis &erklæring"
+
+#~ msgid "Show De&finition"
+#~ msgstr "Vis de&finition"

@@ -1,0 +1,653 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008, 2009.
+# Stelios <sstavra@gmail.com>, 2011, 2012.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevprojectmanagerview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2014-03-20 22:15+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: cutcopypastehelpers.cpp:78
+#, kde-format
+msgid "Move %1 item into %2"
+msgid_plural "Move %1 items into %2"
+msgstr[0] ""
+msgstr[1] ""
+
+#: cutcopypastehelpers.cpp:81
+#, kde-format
+msgid "Copy %1 item into %2"
+msgid_plural "Copy %1 items into %2"
+msgstr[0] ""
+msgstr[1] ""
+
+#: cutcopypastehelpers.cpp:84
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgid "Delete %1 item"
+msgid_plural "Delete %1 items"
+msgstr[0] "Διαγραφή αρχείων"
+msgstr[1] "Διαγραφή αρχείων"
+
+#: cutcopypastehelpers.cpp:93
+#, kde-format
+msgid "Move item %1 into %2"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:96
+#, kde-format
+msgid "Copy item %1 into %2"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:99
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgid "Delete item %1"
+msgstr "Διαγραφή αρχείων"
+
+#: cutcopypastehelpers.cpp:108
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation succeeded"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation failed"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation skipped to prevent data loss"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:287
+#, kde-format
+msgctxt "@title:window"
+msgid "Paste Failed"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:323
+#, kde-format
+msgid ""
+"Failed to paste. Below is a list of suboperations that have been attempted."
+msgstr ""
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevprojectmanagerview.rc:26
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: projectbuildsetwidget.cpp:123
+#, fuzzy, kde-format
+#| msgid "Build Set"
+msgctxt "@title:menu"
+msgid "Build Set"
+msgstr "Σύνολο κατασκευής"
+
+#: projectbuildsetwidget.cpp:124
+#, fuzzy, kde-format
+#| msgid "Remove From Build Set"
+msgctxt "@action:inmenu"
+msgid "Remove from Build Set"
+msgstr "Αφαίρεση από το σύνολο κατασκευής"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
+#: projectbuildsetwidget.ui:35
+#, fuzzy, kde-format
+#| msgid "Move the selected items to the top"
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the top"
+msgstr "Μετακίνηση των επιλεγμένων αντικειμένων στην κορυφή"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
+#: projectbuildsetwidget.ui:67
+#, fuzzy, kde-format
+#| msgid "Move the selected items up"
+msgctxt "@info:tooltip"
+msgid "Move the selected items up"
+msgstr "Μετακίνηση των επιλεγμένων αντικειμένων προς τα επάνω"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
+#: projectbuildsetwidget.ui:83
+#, fuzzy, kde-format
+#| msgid "Move the selected item down"
+msgctxt "@info:tooltip"
+msgid "Move the selected item down"
+msgstr "Μετακίνηση των επιλεγμένων αντικειμένων προς τα κάτω"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
+#: projectbuildsetwidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Move the selected items to the bottom"
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the bottom"
+msgstr "Μετακίνηση των επιλεγμένων αντικειμένων προς τη βάση"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#: projectbuildsetwidget.ui:177
+#, fuzzy, kde-format
+#| msgid "These items will be built in the order they are listed."
+msgctxt "@info:tooltip"
+msgid "These items will be built in the order they are listed."
+msgstr "Αυτά τα αντικείμενα θα κατασκευαστούν με τη σειρά που καταγράφονται."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectbuildsetwidget.ui:180
+#, fuzzy, kde-format
+#| msgid "Build Sequence"
+msgctxt "@title"
+msgid "Build Sequence"
+msgstr "Σειρά κατασκευής"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
+#: projectbuildsetwidget.ui:200
+#, fuzzy, kde-format
+#| msgid "Add currently selected items from project tree view to buildset."
+msgctxt "@info:tooltip"
+msgid "Add currently selected items from project tree view to the build set."
+msgstr ""
+"Προσθήκη επιλεγμένων αντικειμένων της προβολής έργου στο σύνολο κατασκευής."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
+#: projectbuildsetwidget.ui:216
+#, fuzzy, kde-format
+#| msgid "Remove currently selected item from buildset."
+msgctxt "@info:tooltip"
+msgid "Remove currently selected item from the build set."
+msgstr "Αφαίρεση του επιλεγμένου αντικειμένου από το σύνολο κατασκευής."
+
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#, fuzzy, kde-format
+#| msgid "Projects"
+msgctxt "@title:window"
+msgid "Projects"
+msgstr "Έργα"
+
+#: projectmanagerview.cpp:91
+#, fuzzy, kde-format
+#| msgid "Locate Current Document"
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Εντοπισμός τρέχοντος εγγράφου"
+
+#: projectmanagerview.cpp:92
+#, fuzzy, kde-format
+#| msgid "Locates the current document in the project tree and selects it."
+msgctxt "@info:tooltip"
+msgid "Locates the current document in the project tree and selects it."
+msgstr "Εντοπισμός του τρέχοντος εγγράφου στο δέντρο του έργου και επιλογή του"
+
+#: projectmanagerview.cpp:98
+#, fuzzy, kde-format
+#| msgid "Locate Current Document"
+msgctxt "@action"
+msgid "Auto-Select Current Document"
+msgstr "Εντοπισμός τρέχοντος εγγράφου"
+
+#: projectmanagerview.cpp:99
+#, fuzzy, kde-format
+#| msgid "Locates the current document in the project tree and selects it."
+msgctxt "@info:tooltip"
+msgid "Automatically select the current document in the project tree."
+msgstr "Εντοπισμός του τρέχοντος εγγράφου στο δέντρο του έργου και επιλογή του"
+
+#: projectmanagerview.cpp:118
+#, fuzzy, kde-format
+#| msgid "&Add to Target"
+msgctxt "@action"
+msgid "Show Build Targets"
+msgstr "&Προσθήκη στον προορισμό"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
+#: projectmanagerview.ui:33
+#, fuzzy, kde-format
+#| msgid "Project Overview"
+msgctxt "@info:whatsthis"
+msgid "Project Overview"
+msgstr "Επισκόπηση έργου"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
+#: projectmanagerview.ui:53
+#, fuzzy, kde-format
+#| msgid "Build Items:"
+msgctxt "@info:whatsthis"
+msgid "Build Items:"
+msgstr "Αντικείμενα κατασκευής:"
+
+#: projectmanagerviewplugin.cpp:142
+#, fuzzy, kde-format
+#| msgid "Build all Projects"
+msgctxt "@action"
+msgid "Build All Projects"
+msgstr "Κατασκευή όλων των έργων"
+
+#: projectmanagerviewplugin.cpp:147
+#, fuzzy, kde-format
+#| msgid "Build Selection"
+msgctxt "@action"
+msgid "Build Selection"
+msgstr "Κατασκευή επιλεγμένων"
+
+#: projectmanagerviewplugin.cpp:148
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@action:intoolbar"
+msgid "Build"
+msgstr "Κατασκευή"
+
+#: projectmanagerviewplugin.cpp:154
+#, fuzzy, kde-format
+#| msgid "Install Selection"
+msgctxt "@action"
+msgid "Install Selection"
+msgstr "Εγκατάσταση επιλεγμένων"
+
+#: projectmanagerviewplugin.cpp:155
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@action:intoolbar"
+msgid "Install"
+msgstr "Εγκατάσταση"
+
+#: projectmanagerviewplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Clean Selection"
+msgctxt "@action"
+msgid "Clean Selection"
+msgstr "Καθαρισμός επιλεγμένων"
+
+#: projectmanagerviewplugin.cpp:162
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@action:intoolbar"
+msgid "Clean"
+msgstr "Καθαρισμός"
+
+#: projectmanagerviewplugin.cpp:167
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Configure Selection"
+msgstr "Διαμόρφωση επιλεγμένων"
+
+#: projectmanagerviewplugin.cpp:169
+#, fuzzy, kde-format
+#| msgid "Configure"
+msgctxt "@action:intoolbar"
+msgid "Configure"
+msgstr "Διαμόρφωση"
+
+#: projectmanagerviewplugin.cpp:174
+#, fuzzy, kde-format
+#| msgid "Prune Selection"
+msgctxt "@action"
+msgid "Prune Selection"
+msgstr "Κλάδεμα επιλεγμένων"
+
+#: projectmanagerviewplugin.cpp:175
+#, fuzzy, kde-format
+#| msgid "Prune"
+msgctxt "@action:intoolbar"
+msgid "Prune"
+msgstr "Καθαρισμός ασυνεπειών (prune)"
+
+#: projectmanagerviewplugin.cpp:281
+#, fuzzy, kde-format
+#| msgid "Create File"
+msgctxt "@action:inmenu"
+msgid "Create &File..."
+msgstr "Δημιουργία αρχείου"
+
+#: projectmanagerviewplugin.cpp:287
+#, fuzzy, kde-format
+#| msgid "Create Folder"
+msgctxt "@action:inmenu"
+msgid "Create F&older..."
+msgstr "Δημιουργία φακέλου"
+
+#: projectmanagerviewplugin.cpp:294
+#, fuzzy, kde-format
+#| msgid "Build"
+msgctxt "@action:inmenu"
+msgid "&Build"
+msgstr "Κατασκευή"
+
+#: projectmanagerviewplugin.cpp:298
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@action:inmenu"
+msgid "&Install"
+msgstr "Εγκατάσταση"
+
+#: projectmanagerviewplugin.cpp:302
+#, fuzzy, kde-format
+#| msgid "Clean"
+msgctxt "@action:inmenu"
+msgid "&Clean"
+msgstr "Καθαρισμός"
+
+#: projectmanagerviewplugin.cpp:306
+#, fuzzy, kde-format
+#| msgid "Add to Build Set"
+msgctxt "@action:inmenu"
+msgid "&Add to Build Set"
+msgstr "Προσθήκη στο σύνολο κατασκευής"
+
+#: projectmanagerviewplugin.cpp:313
+#, fuzzy, kde-format
+#| msgid "Close Project"
+#| msgid_plural "Close Projects"
+msgctxt "@action:inmenu"
+msgid "C&lose Project"
+msgid_plural "Close Projects"
+msgstr[0] "Κλείσιμο έργου"
+msgstr[1] "Κλείσιμο έργων"
+
+#: projectmanagerviewplugin.cpp:319
+#, fuzzy, kde-format
+#| msgid "Reload"
+msgctxt "@action:inmenu"
+msgid "&Reload"
+msgstr "Επαναφόρτωση"
+
+#: projectmanagerviewplugin.cpp:350
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:inmenu"
+msgid "Remo&ve"
+msgstr "Αφαίρεση"
+
+#: projectmanagerviewplugin.cpp:354
+#, fuzzy, kde-format
+#| msgid "Rename..."
+msgctxt "@action:inmenu"
+msgid "Re&name..."
+msgstr "Μετονομασία..."
+
+#: projectmanagerviewplugin.cpp:360
+#, fuzzy, kde-format
+#| msgid "Remove From Target"
+msgctxt "@action:inmenu"
+msgid "Remove from &Target"
+msgstr "Αφαίρεση από τον προορισμό"
+
+#: projectmanagerviewplugin.cpp:547
+#, fuzzy, kde-format
+#| msgid "Create Folder in %1"
+msgctxt "@title:window"
+msgid "Create Folder in %1"
+msgstr "Δημιουργία φακέλου στο %1"
+
+#: projectmanagerviewplugin.cpp:548
+#, fuzzy, kde-format
+#| msgid "Folder Name"
+msgctxt "@label:textbox"
+msgid "Folder name:"
+msgstr "Όνομα φακέλου"
+
+#: projectmanagerviewplugin.cpp:600
+#, kde-format
+msgid "Do you really want to delete this item?"
+msgid_plural "Do you really want to delete these %1 items?"
+msgstr[0] "Επιθυμείτε την αφαίρεση αυτού του αντικειμένου;"
+msgstr[1] "Επιθυμείτε την αφαίρεση αυτών των %1 αντικειμένων;"
+
+#: projectmanagerviewplugin.cpp:603
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgctxt "@title:window"
+msgid "Delete Files"
+msgstr "Διαγραφή αρχείων"
+
+#: projectmanagerviewplugin.cpp:656
+#, fuzzy, kde-format
+#| msgid "Rename"
+msgctxt "@window:title"
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: projectmanagerviewplugin.cpp:657
+#, fuzzy, kde-format
+#| msgid "New name for '%1':"
+msgctxt "@label:textbox"
+msgid "New name for '%1':"
+msgstr "Νέο όνομα για το '%1':"
+
+#: projectmanagerviewplugin.cpp:669
+#, kde-format
+msgid "There is already a file named '%1'"
+msgstr "Υπάρχει ήδη αρχείο με όνομα '%1'"
+
+#: projectmanagerviewplugin.cpp:672
+#, kde-format
+msgid "Could not rename '%1'"
+msgstr "Αδυναμία μετονομασίας του '%1'"
+
+#: projectmanagerviewplugin.cpp:675
+#, kde-format
+msgid "'%1' is not a valid file name"
+msgstr "'%1' δεν είναι έγκυρο όνομα αρχείου"
+
+#: projectmanagerviewplugin.cpp:689
+#, fuzzy, kde-format
+#| msgid "Create File in %1"
+msgctxt "@title:window"
+msgid "Create File in %1"
+msgstr "Δημιουργία αρχείου στο %1"
+
+#: projectmanagerviewplugin.cpp:689
+#, fuzzy, kde-format
+#| msgid "File name:"
+msgctxt "@label:textbox"
+msgid "File name:"
+msgstr "Όνομα αρχείου:"
+
+#: projecttreeview.cpp:151
+#, fuzzy, kde-format
+#| msgid "&Move Here"
+msgctxt "@action:inmenu"
+msgid "&Move Here"
+msgstr "&Μετακίνηση εδώ"
+
+#: projecttreeview.cpp:157
+#, fuzzy, kde-format
+#| msgid "&Copy Here"
+msgctxt "@action:inmenu"
+msgid "&Copy Here"
+msgstr "Αντιγραφή εδώ"
+
+#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#, fuzzy, kde-format
+#| msgid "C&ancel"
+msgctxt "@action:inmenu"
+msgid "C&ancel"
+msgstr "&Ακύρωση"
+
+#: projecttreeview.cpp:218
+#, fuzzy, kde-format
+#| msgid "Add to Build Set"
+msgctxt "@action:inmenu"
+msgid "&Add to Build Target"
+msgstr "Προσθήκη στο σύνολο κατασκευής"
+
+#: projecttreeview.cpp:348
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze with"
+msgstr ""
+
+#: projecttreeview.cpp:364
+#, fuzzy, kde-format
+#| msgid "Open Configuration..."
+msgctxt "@action:inmenu"
+msgid "Open Configuration..."
+msgstr "Άνοιγμα διαμόρφωσης..."
+
+#: vcsoverlayproxymodel.cpp:105
+#, kde-format
+msgctxt "Version control: Currently not on a branch"
+msgid "(no branch)"
+msgstr ""
+
+#~ msgid "Rename..."
+#~ msgstr "Μετονομασία..."
+
+#~ msgid "&Add to Target"
+#~ msgstr "&Προσθήκη στον προορισμό"
+
+#~ msgid "Project Manager"
+#~ msgstr "Διαχειριστής έργου"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "@action"
+#~ msgid "Build"
+#~ msgstr "Κατασκευή"
+
+#~ msgctxt "@action"
+#~ msgid "Install"
+#~ msgstr "Εγκατάσταση"
+
+#~ msgctxt "@action"
+#~ msgid "Clean"
+#~ msgstr "Καθαρισμός"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#, fuzzy
+#~| msgid "Projects"
+#~ msgid "Projects View"
+#~ msgstr "Έργα"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Project Management View"
+#~ msgstr "Προβολή διαχείρισης έργων"
+
+#~ msgid "Toolview to do all the project management stuff"
+#~ msgstr "Εργαλειοπροβολή για όλες τις ενέργειες διαχείρισης έργων"
+
+#~ msgid "Filter..."
+#~ msgstr "Φίλτρο..."
+
+#, fuzzy
+#~| msgid ""
+#~| "Insert wildcard patterns to filter the project view for files and "
+#~| "targets for matching items."
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the project view for files and targets "
+#~ "for matching items.\n"
+#~ "Prepend patterns with an exclamation mark to negate them.\n"
+#~ "Separate different patterns with semicolons or spaces."
+#~ msgstr ""
+#~ "Εισαγωγή χαρακτήρων αντικατάστασης για φιλτράρισμα της προβολής έργου για "
+#~ "αρχεία και προορισμούς κατά την ανεύρεση αντικειμένων."
+
+#~ msgid "Project Selection"
+#~ msgstr "Επιλογή έργου"
+
+#~ msgid "List of items to be built"
+#~ msgstr "Λίστα αντικειμένων προς κατασκευή"
+
+#~ msgid "Project name: %1"
+#~ msgstr "Όνομα έργου: %1"
+
+#~ msgid "Project backend: %1"
+#~ msgstr "Σύστημα υποστήριξης έργου: %1"
+
+#, fuzzy
+#~| msgid "Do you want to remove the file from the filesystem too?"
+#~ msgid "Do you really to remove the file <i>%1</i>?"
+#~ msgstr "Επιθυμείτε την αφαίρεση του αρχείου και από το σύστημα αρχείων;"
+
+#~ msgid "Version Control "
+#~ msgstr "Έλεγχος εκδόσεων"
+
+#, fuzzy
+#~| msgid "Can't create folder."
+#~ msgid "Cannot create folder."
+#~ msgstr "Αδυναμία δημιουργίας φακέλου."
+
+#~ msgid "Cannot remove folder."
+#~ msgstr "Αδυναμία αφαίρεσης φακέλου."
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "Αδυναμία αφαίρεσης του αρχείου."
+
+#~ msgid "This file exists already."
+#~ msgstr "Το αρχείο αυτό υπάρχει ήδη."
+
+#, fuzzy
+#~| msgid "Can't create file."
+#~ msgid "Cannot create temporary file."
+#~ msgstr "Αδυναμία δημιουργίας του αρχείου."
+
+#, fuzzy
+#~| msgid "Can't create file."
+#~ msgid "Cannot create file."
+#~ msgstr "Αδυναμία δημιουργίας του αρχείου."
+
+#~ msgid "Remove Folder"
+#~ msgstr "Αφαίρεση φακέλου"
+
+#, fuzzy
+#~| msgid "Remove File"
+#~ msgid "Rename File"
+#~ msgstr "Αφαίρεση αρχείου"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Rename Folder"
+#~ msgstr "Αφαίρεση φακέλου"
+
+#, fuzzy
+#~| msgid "Can't create file."
+#~ msgid "Cannot rename '%1' to '%2'."
+#~ msgstr "Αδυναμία δημιουργίας του αρχείου."
+
+#~ msgid "Name"
+#~ msgstr "Όνομα"
+
+#~ msgid "Project"
+#~ msgstr "Έργο"
+
+#~ msgid "Folder"
+#~ msgstr "Φάκελος"
+
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgid "Build all items from the buildset"
+#~ msgstr "Κατασκευή όλων των αντικειμένων του συνόλου κατασκευής"
+
+#~ msgid "Install all items from the buildset"
+#~ msgstr "Εγκατάσταση όλων των αντικειμένων του συνόλου κατασκευής"
+
+#~ msgid "Clean all items from the buildset"
+#~ msgstr "Αφαίρεση όλων των αντικειμένων του συνόλου κατασκευής"

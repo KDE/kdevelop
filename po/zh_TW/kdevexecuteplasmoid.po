@@ -1,0 +1,141 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Franklin Weng <franklin at goodhorse dot idv dot tw>, 2013.
+# pan93412 <pan93412@gmail.com>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2018-12-02 21:18+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, fuzzy, kde-format
+#| msgid "Configure Plasmoid Execution"
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "設定 Plasmoid 執行"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "顯示 plasmoid"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Plasmoid 啟動器"
+
+#: plasmoidexecutionconfig.cpp:183
+#, kde-format
+msgid "Could not resolve the dependency: %1"
+msgstr "無法解決此相依性問題：%1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, fuzzy, kde-format
+#| msgid "Plasmoids"
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "小元件"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Plasmoid"
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoid"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Path or name:"
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "路徑或名稱："
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "行為"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, fuzzy, kde-format
+#| msgid "Form factor:"
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "表單因子："
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, fuzzy, kde-format
+#| msgid "Theme:"
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "主題："
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "相依性"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, fuzzy, kde-format
+#| msgid "&Targets:"
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "目標(&T)："
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Plasmoid 檢視器"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** 已砍掉 **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** 已失敗 ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** 已完成 ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr "在 %1 上執行 Plasmoid 失敗"
+
+#~ msgid "planar"
+#~ msgstr "平面"
+
+#~ msgid "horizontal"
+#~ msgstr "水平"
+
+#~ msgid "vertical"
+#~ msgstr "垂直"
+
+#~ msgid "mediacenter"
+#~ msgstr "媒體中心"

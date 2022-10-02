@@ -1,0 +1,6916 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jure Repinc <jlp@holodeck1.com>, 2010.
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2015, 2016, 2017, 2018.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-24 00:43+0000\n"
+"PO-Revision-Date: 2022-07-12 06:42+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 3.1\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Jure Repinc,Andrej Mernik"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "jlp@holodeck1.com,andrejm@ubuntu.si"
+
+#: debugger/breakpoint/breakpoint.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Error"
+msgstr "Napaka"
+
+#: debugger/breakpoint/breakpoint.cpp:150
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Dirty"
+msgstr "Umazano"
+
+#: debugger/breakpoint/breakpoint.cpp:152
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pending"
+msgstr "Na čakanju"
+
+#: debugger/breakpoint/breakpoint.cpp:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clean"
+msgstr "Čisto"
+
+#: debugger/breakpoint/breakpoint.cpp:186
+#, kde-format
+msgctxt "location (address)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: debugger/breakpoint/breakpointdetails.cpp:48
+#: debugger/breakpoint/breakpointdetails.cpp:127
+#, kde-format
+msgid "Not hit yet"
+msgstr "Še ni bila dosežena"
+
+#: debugger/breakpoint/breakpointdetails.cpp:52
+#, kde-format
+msgid "Ignore"
+msgstr "Prezri"
+
+#: debugger/breakpoint/breakpointdetails.cpp:60
+#, kde-format
+msgid "next hits"
+msgstr "naslednjih zadetkov"
+
+#: debugger/breakpoint/breakpointdetails.cpp:112
+#, kde-format
+msgid "Breakpoint is <a href=\"pending\">pending</a>"
+msgstr "Prekinitvena točka <a href=\"pending\">čaka</a>"
+
+#: debugger/breakpoint/breakpointdetails.cpp:115
+#, kde-format
+msgid "Breakpoint is <a href=\"dirty\">dirty</a>"
+msgstr "Prekinitvena točka je <a href=\"dirty\">umazana</a>"
+
+#: debugger/breakpoint/breakpointdetails.cpp:118
+#, kde-format
+msgid "Breakpoint is active"
+msgstr "Prekinitvena točka je dejavna"
+
+#: debugger/breakpoint/breakpointdetails.cpp:125
+#, kde-format
+msgid "Hit %1 time"
+msgid_plural "Hit %1 times"
+msgstr[0] "Dosežena %1 krat"
+msgstr[1] "Dosežena %1 krat"
+msgstr[2] "Dosežena %1 krat"
+msgstr[3] "Dosežena %1 krat"
+
+#: debugger/breakpoint/breakpointdetails.cpp:129
+#, kde-format
+msgid "Breakpoint has errors"
+msgstr "Prekinitvena točka ima napake"
+
+#: debugger/breakpoint/breakpointdetails.cpp:142
+#, kde-format
+msgid ""
+"<b>Breakpoint is pending</b><p>Pending breakpoints are those that have been "
+"passed to GDB, but which are not yet installed in the target, because GDB "
+"cannot find the function or file to which the breakpoint refers. The most "
+"common case is a breakpoint in a shared library: GDB will insert this "
+"breakpoint only when the library is loaded.</p>"
+msgstr ""
+"<b>Prekinitvena točka čaka</b><p>Prekinitvene točke, ki čakajo, so bile "
+"posredovane GDB-ju, a še niso nameščene na cilj, ker GDB ne more najti "
+"funkcije ali datoteke na katero se prekinitvena točka nanaša. Najpogostejši "
+"primer je prekinitvena točka v deljeni knjižnici: GDB bo prekinitveno točko "
+"vstavil, samo ko bo knjižnica naložena.</p>"
+
+#: debugger/breakpoint/breakpointdetails.cpp:155
+#, kde-format
+msgid ""
+"<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
+"debugger.</p>"
+msgstr ""
+"<b>Prekinitvena točka je umazana</b><p>Prekinitvena točka še ni bila "
+"posredovana razhroščevalniku.</p>"
+
+#: debugger/breakpoint/breakpointmodel.cpp:114
+#, kde-format
+msgid "Breakpoint"
+msgstr "Prekinitvena točka"
+
+#: debugger/breakpoint/breakpointmodel.cpp:156
+#, kde-format
+msgid "Breakpoint not found"
+msgstr "Prekinitvena točka ni bila najdena"
+
+#: debugger/breakpoint/breakpointmodel.cpp:156
+#, kde-format
+msgid "Couldn't find breakpoint at %1:%2"
+msgstr "Ni bilo mogoče najti prekinitvene točke pri %1:%2"
+
+#: debugger/breakpoint/breakpointmodel.cpp:162
+#, kde-format
+msgid "&Breakpoint"
+msgstr "Prekinit&vena točka"
+
+#: debugger/breakpoint/breakpointmodel.cpp:168
+#, kde-format
+msgid "&Disable Breakpoint"
+msgstr "O&nemogoči prekinitveno točko"
+
+#: debugger/breakpoint/breakpointmodel.cpp:169
+#, kde-format
+msgid "&Enable Breakpoint"
+msgstr "&Omogoči prekinitveno točko"
+
+#: debugger/breakpoint/breakpointmodel.cpp:172
+#, kde-format
+msgid "&Bookmark"
+msgstr "&Zaznamek"
+
+#: debugger/breakpoint/breakpointmodel.cpp:216
+#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variabletooltip.cpp:81
+#, kde-format
+msgid "Type"
+msgstr "Vrsta"
+
+#: debugger/breakpoint/breakpointmodel.cpp:217
+#, kde-format
+msgid "Location"
+msgstr "Mesto"
+
+#: debugger/breakpoint/breakpointmodel.cpp:218
+#, kde-format
+msgid "Condition"
+msgstr "Pogoj"
+
+#: debugger/breakpoint/breakpointmodel.cpp:222
+#, kde-format
+msgid "Active status"
+msgstr "Dejavno stanje"
+
+#: debugger/breakpoint/breakpointmodel.cpp:223
+#, kde-format
+msgid "State"
+msgstr "Stanje"
+
+#: debugger/breakpoint/breakpointwidget.cpp:62
+#, kde-format
+msgctxt "@title:window"
+msgid "Debugger Breakpoints"
+msgstr "Prekinitvene točke razhroščevalnika"
+
+#: debugger/breakpoint/breakpointwidget.cpp:63
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displays a list of breakpoints with their current status. Clicking on a "
+"breakpoint item allows you to change the breakpoint and will take you to the "
+"source in the editor window."
+msgstr ""
+"Prikaže seznam prekinitvenih točk in njihovih trenutnih stanj. Klik na "
+"prekinitveno točko vam omogoča spremembo prekinitvene točke in vas premakne "
+"v izvorno kodo v oknu urejevalnika."
+
+#: debugger/breakpoint/breakpointwidget.cpp:75
+#, kde-format
+msgid "Breakpoint Details"
+msgstr "Podrobnosti prekinitvene točke"
+
+#: debugger/breakpoint/breakpointwidget.cpp:84
+#, kde-format
+msgid "New code breakpoint ..."
+msgstr "Nova prekinitvena točka ..."
+
+#: debugger/breakpoint/breakpointwidget.cpp:85
+#, kde-format
+msgid "Enter condition ..."
+msgstr "Vnesite pogoj ..."
+
+#: debugger/breakpoint/breakpointwidget.cpp:117
+#, kde-format
+msgctxt "New breakpoint"
+msgid "&New"
+msgstr "&Nova"
+
+#: debugger/breakpoint/breakpointwidget.cpp:121
+#, kde-format
+msgctxt "Code breakpoint"
+msgid "&Code"
+msgstr "&Koda"
+
+#: debugger/breakpoint/breakpointwidget.cpp:129
+#, kde-format
+msgctxt "Data breakpoint"
+msgid "Data &Write"
+msgstr "Za&pisovanje podatkov"
+
+#: debugger/breakpoint/breakpointwidget.cpp:132
+#, kde-format
+msgctxt "Data read breakpoint"
+msgid "Data &Read"
+msgstr "B&ranje podatkov"
+
+#: debugger/breakpoint/breakpointwidget.cpp:135
+#, kde-format
+msgctxt "Data access breakpoint"
+msgid "Data &Access"
+msgstr "&Dostop do podatkov"
+
+#: debugger/breakpoint/breakpointwidget.cpp:140
+#, kde-format
+msgid "&Delete"
+msgstr "&Izbriši"
+
+#: debugger/breakpoint/breakpointwidget.cpp:149
+#, kde-format
+msgid "Disable &All"
+msgstr "Onemogoči &vse"
+
+#: debugger/breakpoint/breakpointwidget.cpp:150
+#, kde-format
+msgid "&Enable All"
+msgstr "&Omogoči vse"
+
+#: debugger/breakpoint/breakpointwidget.cpp:151
+#, kde-format
+msgid "&Remove All"
+msgstr "Odst&rani vse"
+
+#: debugger/breakpoint/breakpointwidget.cpp:333
+#, kde-format
+msgid "%2"
+msgid_plural "%2 (repeated %1 times)"
+msgstr[0] "%2 (ponovljeno %1 krat)"
+msgstr[1] "%2 (ponovljeno %1 krat)"
+msgstr[2] "%2 (ponovljeno %1 krat)"
+msgstr[3] "%2 (ponovljeno %1 krat)"
+
+#: debugger/framestack/framestackmodel.cpp:178
+#, kde-format
+msgctxt "#thread-id at function-name or address"
+msgid "#%1 at %2 (crashed)"
+msgstr "#%1 pri %2 (se je sesul)"
+
+#: debugger/framestack/framestackmodel.cpp:180
+#, kde-format
+msgctxt "#thread-id at function-name or address"
+msgid "#%1 at %2"
+msgstr "#%1 v/na %2"
+
+#: debugger/framestack/framestackmodel.cpp:279
+#, kde-format
+msgid "Depth"
+msgstr "Globina"
+
+#: debugger/framestack/framestackmodel.cpp:281
+#: language/duchain/navigation/abstractnavigationcontext.cpp:520
+#, kde-format
+msgid "Function"
+msgstr "Funkcija"
+
+#: debugger/framestack/framestackmodel.cpp:283
+#, kde-format
+msgid "Source"
+msgstr "Vir"
+
+#: debugger/framestack/framestackwidget.cpp:66
+#, kde-format
+msgid ""
+"<b>Frame stack</b>Often referred to as the \"call stack\", this is a list "
+"showing which function is currently active, and what called each function to "
+"get to this point in your program. By clicking on an item you can see the "
+"values in any of the previous calling functions."
+msgstr ""
+"<b>Sklad okvirjev</b>, pogosto imenovan »sklad klicev«, je seznam, ki "
+"prikazuje trenutno dejavno funkcijo in kaj je posamezno funkcijo klicalo, da "
+"je program prišel do trenutne točke v izvajanju. S klikom na predmet lahko "
+"vidite vrednosti v katerikoli izmed predhodno kličočih funkcij."
+
+#: debugger/framestack/framestackwidget.cpp:102
+#, kde-format
+msgid "Threads:"
+msgstr "Niti:"
+
+#: debugger/framestack/framestackwidget.cpp:223
+#, kde-format
+msgctxt "#frame function() at file"
+msgid "#%1 %2() at %3\n"
+msgstr "#%1 %2() v/na %3\n"
+
+#: debugger/framestack/framestackwidget.cpp:226
+#, kde-format
+msgctxt "#frame function() at file:line"
+msgid "#%1 %2() at %3:%4\n"
+msgstr "#%1 %2() v/na %3:%4\n"
+
+#: debugger/interfaces/ibreakpointcontroller.cpp:74
+#, kde-format
+msgid "Breakpoint hit: %1"
+msgstr "Dosežena prekinitvena točka: %1"
+
+#: debugger/interfaces/ibreakpointcontroller.cpp:81
+#, kde-format
+msgid "Watchpoint hit: %1"
+msgstr "Dosežena opazovalna točka: %1"
+
+#: debugger/util/pathmappings.cpp:86
+#, kde-format
+msgid "Remote Path"
+msgstr "Oddaljena pot"
+
+#: debugger/util/pathmappings.cpp:88
+#, kde-format
+msgid "Local Path"
+msgstr "Krajevna pot"
+
+#: debugger/util/pathmappings.cpp:217
+#, kde-format
+msgid "Delete"
+msgstr "Izbriši"
+
+#: debugger/variable/variablecollection.cpp:209
+#: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
+#, kde-format
+msgid "Error"
+msgstr "Napaka"
+
+#: debugger/variable/variablecollection.cpp:233
+#, kde-format
+msgid "Auto"
+msgstr "Samodejno"
+
+#. i18n: ectx: property (text), widget (QLabel, configName)
+#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variabletooltip.cpp:81
+#: shell/launchconfigurationdialog.ui:114
+#, kde-format
+msgid "Name"
+msgstr "Ime"
+
+#: debugger/variable/variablecollection.cpp:408
+#: debugger/variable/variabletooltip.cpp:81
+#, kde-format
+msgid "Value"
+msgstr "Vrednost"
+
+#: debugger/variable/variablecollection.cpp:505
+#, kde-format
+msgid "Locals"
+msgstr "Krajevne"
+
+#: debugger/variable/variabletooltip.cpp:119
+#, kde-format
+msgid "Watch This"
+msgstr "Opazuj to"
+
+#: debugger/variable/variabletooltip.cpp:121
+#, kde-format
+msgid "Stop on Change"
+msgstr "Ob spremembi se zaustavi"
+
+#: debugger/variable/variablewidget.cpp:71
+#, kde-format
+msgid "Debugger Variables"
+msgstr "Spremenljivke razhroščevalnika"
+
+#: debugger/variable/variablewidget.cpp:93
+#, kde-format
+msgid ""
+"<b>Variable tree</b>The variable tree allows you to see the values of local "
+"variables and arbitrary expressions.<br />Local variables are displayed "
+"automatically and are updated as you step through your program. For each "
+"expression you enter, you can either evaluate it once, or \"watch\" it (make "
+"it auto-updated). Expressions that are not auto-updated can be updated "
+"manually from the context menu. Expressions can be renamed to more "
+"descriptive names by clicking on the name column.<br />To change the value "
+"of a variable or an expression, click on the value.<br />"
+msgstr ""
+"<b>Drevo spremenljivk</b>, vam omogoča ogled vrednosti krajevnih "
+"spremenljivk in poljubnih izrazov.<br />Krajevne spremenljivke so prikazane "
+"samodejno in se med nadaljevanjem skozi program posodabljajo. Vsak izraz, ki "
+"ga vnesete, lahko ovrednotite enkrat ali pa ga »opazujete« (samodejno se "
+"posodablja). Izraze, ki se ne posodabljajo samodejno, lahko posodobite ročno "
+"z uporabo vsebinskega menija. S klikom v stolpcu z imenom lahko izraze "
+"preimenujete in jim podelite bolj opisno ime.<br />Da spremenljivki ali "
+"izrazu spremenite vrednost, kliknite v stolpcu z vrednostjo.<br />"
+
+#: debugger/variable/variablewidget.cpp:107
+#, kde-format
+msgid "<b>Expression entry</b>Type in expression to watch."
+msgstr "<b>Vnos izraza</b>Vnesite izraz, ki bi ga radi opazovali."
+
+#: debugger/variable/variablewidget.cpp:194
+#, kde-format
+msgid "&Format"
+msgstr "O&blika"
+
+#: debugger/variable/variablewidget.cpp:199
+#, kde-format
+msgid "&Natural"
+msgstr "&Naravno"
+
+#: debugger/variable/variablewidget.cpp:204
+#, kde-format
+msgid "&Binary"
+msgstr "&Dvojiško"
+
+#: debugger/variable/variablewidget.cpp:209
+#, kde-format
+msgid "&Octal"
+msgstr "&Osmiško"
+
+#: debugger/variable/variablewidget.cpp:214
+#, kde-format
+msgid "&Decimal"
+msgstr "D&esetiško"
+
+#: debugger/variable/variablewidget.cpp:219
+#, kde-format
+msgid "&Hexadecimal"
+msgstr "&Šestnajstiško"
+
+#: debugger/variable/variablewidget.cpp:234
+#, kde-format
+msgid "Remove Watch Variable"
+msgstr "Odstrani opazovano spremenljivko"
+
+#: debugger/variable/variablewidget.cpp:241
+#, kde-format
+msgid "&Copy Value"
+msgstr "&Kopiraj vrednost"
+
+#: debugger/variable/variablewidget.cpp:246
+#, kde-format
+msgid "&Stop on Change"
+msgstr "Zau&stavi ob spremembi"
+
+#: debugger/variable/variablewidget.cpp:327
+#, kde-format
+msgid "Recent Expressions"
+msgstr "Nedavni izrazi"
+
+#: debugger/variable/variablewidget.cpp:328
+#, kde-format
+msgid "Remove All"
+msgstr "Odstrani vse"
+
+#: debugger/variable/variablewidget.cpp:329
+#, kde-format
+msgid "Re-evaluate All"
+msgstr "Znova ovrednoti vse"
+
+#: debugger/variable/variablewidget.cpp:375
+#, kde-format
+msgid "Remember Value"
+msgstr "Zapomni si vrednost"
+
+#: debugger/variable/variablewidget.cpp:380
+#, kde-format
+msgid "Watch Variable"
+msgstr "Opazuj spremenljivko"
+
+#: debugger/variable/variablewidget.cpp:385
+#, kde-format
+msgid "Reevaluate Expression"
+msgstr "Znova ovrednoti izraz"
+
+#: debugger/variable/variablewidget.cpp:387
+#, kde-format
+msgid "Remove Expression"
+msgstr "Odstrani izraz"
+
+#: debugger/variable/variablewidget.cpp:393
+#, kde-format
+msgid "Data write breakpoint"
+msgstr "Prekinitvena točka pisanja podatkov"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: documentation/documentationfindwidget.ui:43
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Find:"
+msgstr "Najdi:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextButton)
+#: documentation/documentationfindwidget.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to next match"
+msgstr "Pojdi na naslednje ujemanje"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
+#: documentation/documentationfindwidget.ui:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to previous match"
+msgstr "Pojdi na predhodno ujemanje"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
+#: documentation/documentationfindwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Match case sensitive"
+msgstr "Ločevanje velikosti črk"
+
+#: documentation/documentationview.cpp:38
+#: shell/settings/documentationpreferences.cpp:25
+#, kde-format
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: documentation/documentationview.cpp:69
+#, kde-format
+msgctxt "@action go back"
+msgid "Back"
+msgstr "Nazaj"
+
+#: documentation/documentationview.cpp:74
+#, kde-format
+msgctxt "@action go forward"
+msgid "Forward"
+msgstr "Naprej"
+
+#: documentation/documentationview.cpp:79
+#, kde-format
+msgctxt "@action go to start page"
+msgid "Home"
+msgstr "Domov"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, branchFilterEdit)
+#: documentation/documentationview.cpp:93 shell/sessioncontroller.cpp:565
+#: vcs/dvcs/ui/branchmanager.ui:143
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Poišči ..."
+
+#: documentation/documentationview.cpp:111
+#, kde-format
+msgctxt "@action"
+msgid "Find in Text..."
+msgstr "Najdi v besedilu..."
+
+#: documentation/documentationview.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Find in text of current documentation page"
+msgstr "Najdi v besedilu trenutne strani dokumentacije"
+
+#: interfaces/contextmenuextension.cpp:133
+#, kde-format
+msgctxt "@title:menu"
+msgid "Debug"
+msgstr "Razhrošči"
+
+#: interfaces/contextmenuextension.cpp:134
+#, kde-format
+msgctxt "@title:menu"
+msgid "Refactor"
+msgstr "Preuredi"
+
+#: interfaces/contextmenuextension.cpp:136
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current File With"
+msgstr "Analiziraj trenutno datoteko z"
+
+#: interfaces/contextmenuextension.cpp:137
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze Current Project With"
+msgstr "Analiziraj trenutni projekt z"
+
+#: interfaces/isourceformatter.cpp:209
+#, kde-format
+msgid ""
+"The executable %1 cannot be found. Please make sure it is installed and can "
+"be executed. <br />The plugin will not work until you fix this problem."
+msgstr ""
+"Izvedljive datoteke %1 ni bilo mogoče najti. Preverite, ali je nameščena in "
+"ali jo je mogoče izvesti.<br />Vstavek ne bo deloval, dokler ne odpravite te "
+"težave."
+
+#: language/assistant/renameaction.cpp:69
+#, kde-format
+msgid "Rename \"%1\" to \"%2\""
+msgstr "Preimenuj \"%1\" v \"%2\""
+
+#: language/assistant/renameaction.cpp:109
+#: language/assistant/renamefileaction.cpp:76
+#: language/codegen/basicrefactoring.cpp:341
+#: language/codegen/basicrefactoring.cpp:351
+#: language/codegen/basicrefactoring.cpp:365
+#, kde-format
+msgid "Failed to apply changes: %1"
+msgstr "Sprememb ni bilo mogoče uveljaviti: %1"
+
+#: language/assistant/renameassistant.cpp:106
+#, kde-format
+msgid "Rename"
+msgstr "Preimenuj"
+
+#: language/assistant/renamefileaction.cpp:50
+#, kde-format
+msgid "Rename file from \"%1\" to \"%2\"."
+msgstr "Preimenuj datoteko iz \"%1\" v \"%2\"."
+
+#: language/backgroundparser/backgroundparser.cpp:305
+#, kde-format
+msgid "Parsing: %1"
+msgstr "Razčlenjevanje: %1"
+
+#: language/backgroundparser/backgroundparser.cpp:610
+#: shell/settings/bgpreferences.cpp:68
+#, kde-format
+msgid "Background Parser"
+msgstr "Razčlenjevalnik v ozadju"
+
+#: language/backgroundparser/parsejob.cpp:313
+#, kde-format
+msgctxt "%1: filename"
+msgid "Skipped file that is too large: '%1'"
+msgstr "Datoteka je bila preskočena, ker je prevelika: '%1'"
+
+#: language/backgroundparser/parsejob.cpp:315
+#, kde-format
+msgctxt "%1: file size, %2: limit file size"
+msgid "The file is %1 and exceeds the limit of %2."
+msgstr "Datoteka je %1 in presega omejitev %2."
+
+#: language/backgroundparser/parsejob.cpp:327
+#, kde-format
+msgid "Could not open file '%1'"
+msgstr "Ni bilo mogoče odpreti datoteke '%1'"
+
+#: language/backgroundparser/parsejob.cpp:330
+#, kde-format
+msgid "File could not be read from disk."
+msgstr "Datoteke ni bilo mogoče prebrati iz diska."
+
+#: language/backgroundparser/parsejob.cpp:333
+#, kde-format
+msgid "File could not be opened."
+msgstr "Datoteke ni bilo mogoče odpreti."
+
+#: language/backgroundparser/parsejob.cpp:336
+#, kde-format
+msgid "File could not be read from disk due to permissions."
+msgstr "Datoteke ni bilo mogoče prebrati iz diska zaradi dovoljenj."
+
+#: language/backgroundparser/parseprojectjob.cpp:75
+#, kde-format
+msgid "Process 1 file in %2"
+msgid_plural "Process %1 files in %2"
+msgstr[0] "Obdelanih %1 datotek v %2"
+msgstr[1] "Obdelana %1 datoteka v %2"
+msgstr[2] "Obdelani %1 datoteki v %2"
+msgstr[3] "Obdelane %1 datoteke v %2"
+
+#: language/classmodel/allclassesfolder.cpp:22
+#, kde-format
+msgid "All projects classes"
+msgstr "Razredi vseh projektov"
+
+#: language/classmodel/classmodelnode.cpp:343
+#, kde-format
+msgid "Base classes"
+msgstr "Osnovni razredi"
+
+#: language/classmodel/classmodelnode.cpp:374
+#, kde-format
+msgid "Derived classes"
+msgstr "Izpeljani razredi"
+
+#: language/classmodel/projectfolder.cpp:18
+#, kde-format
+msgid "Classes in project %1"
+msgstr "Razredi v projektu %1"
+
+#: language/codecompletion/codecompletionitem.cpp:126
+#, kde-format
+msgid "not implemented"
+msgstr "ni podprto"
+
+#: language/codegen/basicrefactoring.cpp:90
+#, kde-format
+msgctxt "@action"
+msgid "Rename \"%1\"..."
+msgstr "Preimenuj \"%1\"..."
+
+#: language/codegen/basicrefactoring.cpp:220
+#, kde-format
+msgid "No declaration under cursor"
+msgstr "Pod kazalko ni deklaracije"
+
+#: language/codegen/basicrefactoring.cpp:226
+#, kde-format
+msgid "Declaration is located in non-writable file %1."
+msgstr "Deklaracija se nahaja v datoteki %1, ki ni zapisljiva."
+
+#: language/codegen/basicrefactoring.cpp:295
+#, kde-format
+msgctxt "@title:window Renaming some declaration"
+msgid "Rename \"%1\""
+msgstr "Preimenuj \"%1\""
+
+#: language/codegen/basicrefactoring.cpp:299
+#, kde-format
+msgctxt "@title:tab"
+msgid "Uses"
+msgstr "Uporablja"
+
+#: language/codegen/basicrefactoring.cpp:301
+#, kde-format
+msgctxt "@title:tab"
+msgid "Declaration Info"
+msgstr "Informacije o deklaraciji"
+
+#: language/codegen/basicrefactoring.cpp:308
+#, kde-format
+msgid "Renaming \"%1\" to \"%2\""
+msgstr "Preimenovanje \"%1\" v \"%2\""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
+#: language/codegen/basicrefactoring.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename"
+msgstr "Preimenuj"
+
+#. i18n: ectx: property (text), widget (QLabel, newNameLabel)
+#: language/codegen/basicrefactoring.ui:22
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&New name:"
+msgstr "&Novo ime:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, goButton)
+#: language/codegen/basicrefactoring.ui:35
+#, kde-format
+msgid ""
+"<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
+"forward-declarations, etc. will be renamed too&quot;</p></body></html>"
+msgstr ""
+"<html><head/><body><p>&quot;Opomba: vse preobremenjene funkcije, "
+"preobremenitve, vnaprejšnje deklaracije itd. bodo tudi preimenovane&quot;</"
+"p></body></html>"
+
+#. i18n: ectx: property (text), widget (QPushButton, goButton)
+#: language/codegen/basicrefactoring.ui:38
+#, kde-format
+msgctxt "@action:button"
+msgid "&Rename"
+msgstr "Preimenuj"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: language/codegen/basicrefactoring.ui:45
+#, kde-format
+msgctxt "@action:button"
+msgid "&Cancel"
+msgstr "Prekliči"
+
+#: language/codegen/codegenerator.cpp:133
+#, kde-format
+msgid "Could not find an open document"
+msgstr "Ni bilo mogoče najti odprtega dokumenta"
+
+#: language/codegen/codegenerator.cpp:150
+#, kde-format
+msgid "Could not find the chain for the selected document: %1"
+msgstr "Ni bilo mogoče najti verige za izbran dokument: %1"
+
+#: language/codegen/codegenerator.cpp:167
+#, kde-format
+msgid "Error finding context for selection range"
+msgstr "Napaka med iskanjem konteksta za izbrani obseg"
+
+#: language/codegen/codegenerator.cpp:172
+#, kde-format
+msgid "Error checking conditions to generate code: %1"
+msgstr "Napaka med preverjanjem pogojev za ustvarjanje kode: %1"
+
+#: language/codegen/codegenerator.cpp:179
+#, kde-format
+msgid "Error Gathering user information: %1"
+msgstr "Napaka med zbiranjem uporabniških podatkov: %1"
+
+#: language/codegen/codegenerator.cpp:186
+#, kde-format
+msgid "Error generating code: %1"
+msgstr "Napaka med ustvarjanjem kode: %1"
+
+#: language/codegen/documentchangeset.cpp:114
+#, kde-format
+msgctxt "text range line:column->line:column"
+msgid "%1:%2->%3:%4"
+msgstr "%1:%2 -> %3:%4"
+
+#: language/codegen/documentchangeset.cpp:254
+#, kde-format
+msgid "Could not rename '%1' to '%2'"
+msgstr "Ni bilo mogoče preimenovati '%1' v '%2'"
+
+#: language/codegen/documentchangeset.cpp:344
+#, kde-format
+msgctxt ""
+"Inconsistent change in <filename> between <range>, found <oldText> "
+"(encountered <foundText>) -> <newText>"
+msgid ""
+"Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
+msgstr ""
+"Neskladna sprememba v %1 med %2, najdeno %3 (prišlo je do »%4«) -> »%5«"
+
+#: language/codegen/documentchangeset.cpp:365
+#, kde-format
+msgid "Could not replace text in the document: %1"
+msgstr "Ni bilo mogoče zamenjati besedila v dokumentu: %1"
+
+#: language/codegen/documentchangeset.cpp:472
+#, kde-format
+msgctxt ""
+"Inconsistent change in <document> at <range> = <oldText> (encountered "
+"<encountered>) -> <newText>"
+msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
+msgstr "Neskladna sprememba v %1 pri %2 = »%3«(prišlo je do »%4«) -> »%5«"
+
+#: language/codegen/documentchangeset.cpp:544
+#, kde-format
+msgctxt ""
+"Inconsistent change-request at <document>:intersecting changes: <previous-"
+"oldText> -> <previous-newText> @<range> & <new-oldText> -> <new-newText> "
+"@<range>"
+msgid ""
+"Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
+"\"%5\"->\"%6\"@%7 "
+msgstr ""
+"Neskladna zahteva po spremembi v %1; spremembe, ki se križajo: »%2« -> »%3«@"
+"%4 in »%5«->»%6«@%7 "
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
+#: language/codegen/progressdialogs/refactoringdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Refactoring"
+msgstr "Preurejanje"
+
+#. i18n: ectx: property (text), widget (QPushButton, abortButton)
+#: language/codegen/progressdialogs/refactoringdialog.ui:27
+#, kde-format
+msgctxt "@action:button"
+msgid "&Abort"
+msgstr "Prekini"
+
+#: language/duchain/aliasdeclaration.cpp:47
+#, kde-format
+msgid "Alias %1 as %2"
+msgstr "%1 naj ima vzdevek %2"
+
+#: language/duchain/aliasdeclaration.cpp:50
+#, kde-format
+msgid "Lost alias %1"
+msgstr "Izgubljen vzdevek %1"
+
+#: language/duchain/classfunctiondeclaration.cpp:94
+#, kde-format
+msgid "invalid member-function %1 type %2"
+msgstr "Neveljavna članska funkcija %1 vrste %2"
+
+#: language/duchain/declarationid.cpp:204
+#, kde-format
+msgid "(unknown direct declaration)"
+msgstr "(neznana neposredna deklaracija)"
+
+#: language/duchain/declarationid.cpp:207
+#, kde-format
+msgid "(missing)"
+msgstr "(manjkajoče)"
+
+#: language/duchain/forwarddeclaration.cpp:50
+#, kde-format
+msgid "context-free forward-declaration %1"
+msgstr "vnaprejšnja deklaracija %1 brez konteksta"
+
+#: language/duchain/namespacealiasdeclaration.cpp:94
+#, kde-format
+msgid "Import %1 as %2"
+msgstr "Uvozi %1 kot %2"
+
+#: language/duchain/namespacealiasdeclaration.cpp:96
+#, kde-format
+msgid "Import %1"
+msgstr "Uvozi %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:88
+#, kde-format
+msgid "lost declaration"
+msgstr "izgubljena deklaracija"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:95
+#, kde-format
+msgid "Back to %1<br />"
+msgstr "Nazaj na %1<br />"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:115
+#, kde-format
+msgid "enumerator "
+msgstr "številčnik "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
+#, kde-format
+msgid "namespace %1 "
+msgstr "Imenski prostor %1 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
+#, kde-format
+msgid "enumeration %1 "
+msgstr "številčenje %1 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
+#, kde-format
+msgid "(resolved forward-declaration: "
+msgstr "(razrešena vnaprejšnja deklaracija: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:173
+#, kde-format
+msgid ") "
+msgstr ") "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
+#, kde-format
+msgid "(unresolved forward-declaration) "
+msgstr "(nerazrešena vnaprejšnja deklaracija) "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
+#, kde-format
+msgid "possible resolution from"
+msgstr "možna razrešitev iz"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:205
+#, kde-format
+msgid "Returns: "
+msgstr "Vrne: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:207
+#, kde-format
+msgid "Type: "
+msgstr "Vrsta: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:226
+#, kde-format
+msgid "Enum: "
+msgstr "Štev.: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:228
+#, kde-format
+msgid "Container: "
+msgstr "Vsebnik: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
+#, kde-format
+msgid "Scope: %1 "
+msgstr "Obseg: %1 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:254
+#, kde-format
+msgid "Access: %1 "
+msgstr "Dostop: %1 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:273
+#, kde-format
+msgid "Kind: %1 %2 "
+msgstr "Vrsta: %1 %2 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:275
+#, kde-format
+msgid "Kind: %1 "
+msgstr "Vrsta: %1 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#, kde-format
+msgid "Deprecated"
+msgstr "Opuščeno"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
+#, kde-format
+msgid "Status: %1 "
+msgstr "Stanje: %1 "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:289
+#, kde-format
+msgid "Def.: "
+msgstr "Dol.: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:291
+#, kde-format
+msgid "Decl.: "
+msgstr "Dekl.: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:301
+#, kde-format
+msgid " Def.: "
+msgstr " Dol.: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:311
+#, kde-format
+msgid " Decl.: "
+msgstr " Dekl.: "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
+#, kde-format
+msgid "Show uses"
+msgstr "Prikaži uporabe"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:357
+#, kde-format
+msgid "Show documentation for "
+msgstr "Prikaži dokumentacijo za "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:463
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anonimno>"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
+#, kde-format
+msgid "Overrides a "
+msgstr "Prepiše "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:481
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:508
+#, kde-format
+msgid "function"
+msgstr "funkcijo"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:483
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:511
+#, kde-format
+msgid " from "
+msgstr " iz "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:507
+#, kde-format
+msgid "Hides a "
+msgstr "Skrije "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:531
+#, kde-format
+msgid "Overridden in "
+msgstr "Prepisano v "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
+#, kde-format
+msgid "Overriders possible, show all"
+msgstr "Mogoči prepisi, prikaži vse"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
+#, kde-format
+msgid "More overriders possible, show all"
+msgstr "Več mogočih prepisov, prikaži vse"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
+#, kde-format
+msgid "Inherited by "
+msgstr "Podedovano v "
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
+#, kde-format
+msgid "Inheriters possible, show all"
+msgstr "Mogoči dediči, prikaži vse"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:575
+#, kde-format
+msgid "More inheriters possible, show all"
+msgstr "Več mogočih dedičev, prikaži vse"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:782
+#, kde-format
+msgctxt "A declaration that is unknown"
+msgid "Unknown"
+msgstr "Neznana"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:808
+#, kde-format
+msgctxt "tells if a declaration is defining the variable's value"
+msgid "definition"
+msgstr "določilo"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:813
+#, kde-format
+msgctxt "as in c++ forward declaration"
+msgid "forward"
+msgstr "vnaprejšnja"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:818
+#, kde-format
+msgctxt "a variable that won't change, const"
+msgid "constant"
+msgstr "konstanta"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:871
+#, kde-format
+msgid "1 Byte"
+msgid_plural "%1 Bytes"
+msgstr[0] "%1 byt"
+msgstr[1] "%1 byta"
+msgstr[2] "%1 byti"
+msgstr[3] "%1 bytov"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:872
+#, kde-format
+msgid "1 Bit"
+msgid_plural "%1 Bits"
+msgstr[0] "%1 bit"
+msgstr[1] "%1 bita"
+msgstr[2] "%1 biti"
+msgstr[3] "%1 bitov"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:874
+#, kde-format
+msgid "offset in parent: %1"
+msgstr "odmik v predniku: %1"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:875
+#, kde-format
+msgctxt "%1: bytes, %2: bits"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:880
+#, kde-format
+msgid "size: %1 Bytes"
+msgstr "velikost: %1 bytov"
+
+#: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
+#, kde-format
+msgid "aligned to: %1 Bytes"
+msgstr "poravnano na: %1 byte"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
+#, kde-format
+msgid "Declarations:"
+msgstr "Deklaracije:"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:93
+#, kde-format
+msgid "not parsed yet"
+msgstr "še ni razčlenjeno"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:103
+#, kde-format
+msgctxt "Files included into this file"
+msgid "Includes"
+msgstr "Vključitve"
+
+#: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
+#, kde-format
+msgctxt "Count of files this file was included into"
+msgid "Included by"
+msgstr "Vključeno preko"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:502
+#, kde-format
+msgid "Typedef"
+msgstr "Določilo vrste"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:505
+#, kde-format
+msgid "Class"
+msgstr "Razred"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:507
+#, kde-format
+msgid "Variable"
+msgstr "Spremenljivka"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:509
+#, kde-format
+msgid "Namespace"
+msgstr "Imenski prostor"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:514
+#, kde-format
+msgid "Namespace import"
+msgstr "Uvoz imenskega prostora"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:516
+#, kde-format
+msgid "Namespace alias"
+msgstr "Vzdevek imenskega prostora"
+
+#: language/duchain/navigation/abstractnavigationcontext.cpp:523
+#, kde-format
+msgid "Forward Declaration"
+msgstr "Vnaprejšnja deklaracija"
+
+#: language/duchain/navigation/abstractnavigationwidget.cpp:194
+#, kde-format
+msgid ""
+"(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
+"<em>Enter</em>)"
+msgstr ""
+"(Držite <em>Alt</em> za prikaz. Krmarite s smernimi tipkami, omogočite pa s "
+"pritiskom tipke <em>Enter</em>)"
+
+#: language/duchain/navigation/abstractnavigationwidget.cpp:196
+#, kde-format
+msgid "(Hold <em>Alt</em> to show this tooltip)"
+msgstr "(Držite <em>Alt</em> za prikaz tega orodnega namiga)"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:85
+#, kde-format
+msgid "Problem"
+msgstr "Težava"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:114
+#, kde-format
+msgid "Problem in <i>%1</i>"
+msgstr "Težava v <i>%1</i>"
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:118
+#, kde-format
+msgid "Location: "
+msgstr "Mesto: "
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:156
+#: language/duchain/navigation/problemnavigationcontext.cpp:166
+#, kde-format
+msgid "<br>See: "
+msgstr "<br>Glejte: "
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:159
+#, kde-format
+msgid " in "
+msgstr " v "
+
+#: language/duchain/navigation/problemnavigationcontext.cpp:196
+#, kde-format
+msgid "Solution (%1)"
+msgstr "Rešitev (%1)"
+
+#: language/duchain/navigation/usescollector.cpp:414
+#, kde-format
+msgid "%1 still needs an update!"
+msgstr "%1 še vedno potrebuje posodobitev!"
+
+#: language/duchain/navigation/usesnavigationcontext.cpp:41
+#, kde-format
+msgid "Uses of "
+msgstr "Uporabe "
+
+#: language/duchain/navigation/usesnavigationcontext.cpp:46
+#, kde-format
+msgid "Uses of %1"
+msgstr "Uporabe %1"
+
+#: language/duchain/navigation/useswidget.cpp:129
+#, kde-format
+msgctxt "refers to a line in source code"
+msgid "Line <b>%1</b>:"
+msgstr "Vrstica <b>%1</b>:"
+
+#: language/duchain/navigation/useswidget.cpp:210
+#: language/duchain/navigation/useswidget.cpp:217
+#, kde-format
+msgctxt "Refers to a line in source code"
+msgid "Line <b>%1</b>:"
+msgstr "Vrstica <b>%1</b>:"
+
+#: language/duchain/navigation/useswidget.cpp:397
+#, kde-format
+msgid "Unknown context"
+msgstr "Neznan kontekst"
+
+#: language/duchain/navigation/useswidget.cpp:404
+#: shell/launchconfigurationdialog.cpp:480
+#, kde-format
+msgid "Global"
+msgstr "Globalno"
+
+#: language/duchain/navigation/useswidget.cpp:429
+#, kde-format
+msgctxt "%1: source file"
+msgid "In %1"
+msgstr "V %1"
+
+#: language/duchain/navigation/useswidget.cpp:459
+#, kde-format
+msgid "Definition"
+msgstr "Določilo"
+
+#: language/duchain/navigation/useswidget.cpp:459
+#, kde-format
+msgid "Declaration"
+msgstr "Deklaracija"
+
+#: language/duchain/navigation/useswidget.cpp:497
+#, kde-format
+msgctxt "%1: number of uses, %2: filename with uses"
+msgid "%2: 1 use"
+msgid_plural "%2: %1 uses"
+msgstr[0] "%2: %1 uporab"
+msgstr[1] "%2: %1 uporaba"
+msgstr[2] "%2: %1 uporabi"
+msgstr[3] "%2: %1 uporabe"
+
+#: language/duchain/navigation/useswidget.cpp:503
+#: language/duchain/navigation/useswidget.cpp:544
+#, kde-format
+msgctxt "Refers to closing a UI element"
+msgid "Collapse"
+msgstr "Zloži"
+
+#: language/duchain/navigation/useswidget.cpp:540
+#, kde-format
+msgctxt "Refers to opening a UI element"
+msgid "Expand"
+msgstr "Razširi"
+
+#: language/duchain/navigation/useswidget.cpp:625
+#, kde-format
+msgid "1 use found"
+msgid_plural "%1 uses found"
+msgstr[0] "Najdenih %1 uporab"
+msgstr[1] "Najdena %1 uporaba"
+msgstr[2] "Najdeni %1 uporabi"
+msgstr[3] "Najdene %1 uporabe"
+
+#: language/duchain/navigation/useswidget.cpp:627
+#, kde-format
+msgid "Expand all"
+msgstr "Razširi vse"
+
+#: language/duchain/navigation/useswidget.cpp:629
+#, kde-format
+msgid "Collapse all"
+msgstr "Zloži vse"
+
+#: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
+#, kde-format
+msgid "Warning"
+msgstr "Opozorilo"
+
+#: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
+#, kde-format
+msgid "Hint"
+msgstr "Namig"
+
+#: language/duchain/problem.cpp:203 shell/problem.cpp:76
+#, kde-format
+msgid "Disk"
+msgstr "Disk"
+
+#: language/duchain/problem.cpp:205 shell/problem.cpp:77
+#, kde-format
+msgid "Preprocessor"
+msgstr "Pred-obdelovalnik"
+
+#: language/duchain/problem.cpp:207 shell/problem.cpp:78
+#, kde-format
+msgid "Lexer"
+msgstr "Leksalni preučevalnik"
+
+#: language/duchain/problem.cpp:209 shell/problem.cpp:79
+#, kde-format
+msgid "Parser"
+msgstr "Razčlenjevalnik"
+
+#: language/duchain/problem.cpp:211
+#, kde-format
+msgid "Definition-Use Chain"
+msgstr "Veriga določilo-uporaba"
+
+#: language/duchain/problem.cpp:213 shell/problem.cpp:81
+#, kde-format
+msgid "Semantic analysis"
+msgstr "Semantično preučevanje"
+
+#: language/duchain/problem.cpp:215
+#, kde-format
+msgid "To-do"
+msgstr "Za narediti"
+
+#: language/duchain/problem.cpp:218 shell/problem.cpp:75
+#, kde-format
+msgid "Unknown"
+msgstr "Neznano"
+
+#: language/duchain/problem.cpp:225
+#, kde-format
+msgctxt ""
+"<severity>: <description> in <url>:[<range>]: <explanation> (found by "
+"<source>)"
+msgid "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
+msgstr "%1: %2 v %3:[(%4, %5),(%6, %7)]: %8 (najdeno s strani %9)"
+
+#: language/duchain/problem.cpp:233
+#, kde-format
+msgid "<no explanation>"
+msgstr "<ni pojasnila>"
+
+#: language/duchain/types/containertypes.cpp:74
+#, kde-format
+msgid "%1 of %2"
+msgstr "%1 od %2"
+
+#: language/duchain/types/containertypes.cpp:84
+#: language/duchain/types/containertypes.cpp:85
+#, kde-format
+msgid "unknown"
+msgstr "neznano"
+
+#: language/duchain/types/containertypes.cpp:87
+#, kde-format
+msgid "%1 of %2 : %3"
+msgstr "%1 od %2 : %3"
+
+#: language/util/debuglanguageparserhelper.h:183
+#, kde-format
+msgid ""
+"files or - to read from STDIN, the latter is the default if nothing is "
+"provided"
+msgstr ""
+"datoteke ali - za branje s standardnega vhoda, slednji je privzet, če ni "
+"podanega nič"
+
+#: language/util/debuglanguageparserhelper.h:186
+#, kde-format
+msgid "print generated AST tree"
+msgstr "izpiši ustvarjeno drevo AST"
+
+#: language/util/debuglanguageparserhelper.h:187
+#, kde-format
+msgid "print generated token stream"
+msgstr "izpiši ustvarjen pretok žetonov"
+
+#: language/util/debuglanguageparserhelper.h:188
+#, kde-format
+msgid "code to parse"
+msgstr "koda za razčleniti"
+
+#: outputview/outputexecutejob.cpp:194
+#, kde-format
+msgid "No build directory specified for a builder job."
+msgstr "Za posel izgradnje ni bilo podane mape za izgradnjo."
+
+#: outputview/outputexecutejob.cpp:196
+#, kde-format
+msgid "No working directory specified for a process."
+msgstr "Za opravilo ni bilo podane delovne mape."
+
+#: outputview/outputexecutejob.cpp:208
+#, kde-format
+msgid "Invalid build directory '%1'"
+msgstr "Neveljavna mapa za izgradnjo '%1'"
+
+#: outputview/outputexecutejob.cpp:210
+#, kde-format
+msgid "Invalid working directory '%1'"
+msgstr "Neveljavna delovna mapa '%1'"
+
+#: outputview/outputexecutejob.cpp:217
+#, kde-format
+msgid "Build directory '%1' is not a local path"
+msgstr "Mapa za izgradnjo '%1' ni krajevna pot"
+
+#: outputview/outputexecutejob.cpp:219
+#, kde-format
+msgid "Working directory '%1' is not a local path"
+msgstr "Delovna mapa '%1' ni krajevna pot"
+
+#: outputview/outputexecutejob.cpp:238
+#, kde-format
+msgid "Build directory '%1' does not exist or is not a directory"
+msgstr "Mapa za izgradnjo '%1' ne obstaja ali pa ni mapa"
+
+#: outputview/outputexecutejob.cpp:240
+#, kde-format
+msgid "Working directory '%1' does not exist or is not a directory"
+msgstr "Delovna mapa '%1' ne obstaja ali pa ni mapa"
+
+#: outputview/outputexecutejob.cpp:301
+#, kde-format
+msgid "Failed to specify program to start: %1"
+msgstr "Ni bilo mogoče podati programa za zagon: %1"
+
+#: outputview/outputexecutejob.cpp:302
+#, kde-format
+msgid "*** %1 ***"
+msgstr "*** %1 ***"
+
+#: outputview/outputexecutejob.cpp:328
+#, kde-format
+msgid "*** Killed process ***"
+msgstr "*** Opravilo uničeno ***"
+
+#: outputview/outputexecutejob.cpp:332
+#, kde-format
+msgid "*** Warning: could not kill the process ***"
+msgstr "*** Opozorilo: ni bilo mogoče uničiti opravila ***"
+
+#: outputview/outputexecutejob.cpp:353
+#, kde-format
+msgid "%1 has failed to start"
+msgstr "Zagon %1 ni uspel"
+
+#: outputview/outputexecutejob.cpp:357
+#, kde-format
+msgid "%1 has crashed"
+msgstr "%1  se je sesul"
+
+#: outputview/outputexecutejob.cpp:361
+#, kde-format
+msgid "Read error"
+msgstr "Napaka branja"
+
+#: outputview/outputexecutejob.cpp:365
+#, kde-format
+msgid "Write error"
+msgstr "Napaka pisanja"
+
+#: outputview/outputexecutejob.cpp:369
+#, kde-format
+msgid "Waiting for the process has timed out"
+msgstr "Čakanje na časovni pretek opravila"
+
+#: outputview/outputexecutejob.cpp:373
+#, kde-format
+msgid "Exit code %1"
+msgstr "Izhodna koda %1"
+
+#: outputview/outputexecutejob.cpp:386
+#, kde-format
+msgid "*** Failure: %1 ***"
+msgstr "*** Neuspeh: %1 ***"
+
+#: outputview/outputexecutejob.cpp:404
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Zaključeno ***"
+
+#: project/abstractfilemanagerplugin.cpp:325
+#, kde-format
+msgid ""
+"The base folder of project <b>%1</b> got deleted or moved outside of "
+"KDevelop.\n"
+"The project has to be closed."
+msgstr ""
+"Osnovna mapa projekta <b>%1</b> je bila izbrisana ali premaknjena zunaj "
+"KDevelop.\n"
+"Projekt morate zapreti."
+
+#: project/abstractfilemanagerplugin.cpp:328
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Folder Deleted"
+msgstr "Projektna mapa izbrisana"
+
+#: project/abstractfilemanagerplugin.cpp:354
+#, kde-format
+msgid ""
+"You tried to rename '%1' to '%2', but the latter is filtered and will be "
+"hidden.\n"
+"Do you want to continue?"
+msgstr ""
+"Poskusili ste preimenovati '%1' v '%2', ampak bo slednji skrit, saj je "
+"filtriran.\n"
+"Ali želite nadaljevati?"
+
+#: project/builderjob.cpp:76
+#, kde-format
+msgctxt "@info:status"
+msgid "build"
+msgstr "izgradi"
+
+#: project/builderjob.cpp:78
+#, kde-format
+msgctxt "@info:status"
+msgid "clean"
+msgstr "počisti"
+
+#: project/builderjob.cpp:80
+#, kde-format
+msgctxt "@info:status"
+msgid "configure"
+msgstr "nastavi"
+
+#: project/builderjob.cpp:82
+#, kde-format
+msgctxt "@info:status"
+msgid "install"
+msgstr "namesti"
+
+#: project/builderjob.cpp:84
+#, kde-format
+msgctxt "@info:status"
+msgid "prune"
+msgstr "očisti"
+
+#: project/builderjob.cpp:234
+#, kde-format
+msgctxt "Unspecified set of build items (e. g. projects, targets)"
+msgid "Various items"
+msgstr "Razni predmeti"
+
+#: project/helper.cpp:72
+#, kde-format
+msgid "Cannot remove folder <i>%1</i>."
+msgstr "Mape <i>%1</i> ni mogoče odstraniti."
+
+#: project/helper.cpp:73
+#, kde-format
+msgid "Cannot remove file <i>%1</i>."
+msgstr "Datoteke <i>%1</i> ni mogoče odstraniti."
+
+#: project/helper.cpp:95
+#, kde-format
+msgid "The file <i>%1</i> already exists."
+msgstr "Datoteka <i>%1</i> že obstaja."
+
+#: project/helper.cpp:105
+#, kde-format
+msgid "Cannot create file <i>%1</i>."
+msgstr "Ni mogoče ustvariti datoteke <i>%1</i>."
+
+#: project/helper.cpp:124
+#, kde-format
+msgid "Cannot create folder <i>%1</i>."
+msgstr "Ni mogoče ustvariti mape <i>%1</i>."
+
+#: project/importprojectjob.cpp:53
+#, kde-format
+msgid "Project Import: %1"
+msgstr "Uvoz projekta: %1"
+
+#: project/importprojectjob.cpp:85
+#, kde-format
+msgid "Project import canceled."
+msgstr "Uvoz projekta je bil preklican."
+
+#: project/projectbuildsetmodel.cpp:286
+#, kde-format
+msgctxt "@title:column buildset item name"
+msgid "Name"
+msgstr "Ime"
+
+#: project/projectbuildsetmodel.cpp:288
+#, kde-format
+msgctxt "@title:column buildset item path"
+msgid "Path"
+msgstr "Pot"
+
+#: project/projectchangesmodel.cpp:274
+#, kde-format
+msgctxt "@item:intext"
+msgid "no branch"
+msgstr "ni veje"
+
+#: project/projectchangesmodel.cpp:275
+#, kde-format
+msgctxt "project name (branch name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: project/projectitemlineedit.cpp:156
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter the path to an item from the projects tree..."
+msgstr "Vnesite pot do predmeta iz drevesa projekta..."
+
+#: project/projectitemlineedit.cpp:158
+#, kde-format
+msgctxt "@action"
+msgid "Select..."
+msgstr "Izberi..."
+
+#: project/projectitemlineedit.cpp:182
+#, kde-format
+msgctxt "@title:window"
+msgid "Select an Item"
+msgstr "Izberite predmet"
+
+#: project/projectitemlineedit.cpp:192
+#, kde-format
+msgid "Select the item you want to get the path from."
+msgstr "Izberite predmet, od katerega želite dobiti pot."
+
+#. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
+#: project/widgets/dependencieswidget.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a dependency to add to the list"
+msgstr "Vnesite odvisnost, da bo dodana na seznam"
+
+#. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
+#: project/widgets/dependencieswidget.ui:35
+#, kde-format
+msgctxt "@info:placedholder"
+msgid "Enter a dependency to add to the list..."
+msgstr "Vnesite odvisnost, da bo dodana na seznam..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
+#: project/widgets/dependencieswidget.ui:55
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add the listed target to the dependency list"
+msgstr "Dodaj prikazan cilj na seznam odvisnosti"
+
+#. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
+#: project/widgets/dependencieswidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "List of indirect dependent targets."
+msgstr "Seznam posrednih odvisnih ciljev."
+
+#. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
+#: project/widgets/dependencieswidget.ui:71
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This list should contain targets that the application does not directly "
+"depend on, but for which an action needs to be taken before running the "
+"application."
+msgstr ""
+"Ta seznam naj bi vseboval cilje, od katerih program ni neposredno odvisen, "
+"ampak se morajo na njih izvesti dejanja preden se zažene program."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
+#: project/widgets/dependencieswidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove the selected dependencies from the list"
+msgstr "Odstrani izbrane odvisnosti iz seznama"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
+#: project/widgets/dependencieswidget.ui:103
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected dependency up in the list"
+msgstr "Premakne izbrano odvisnost navzgor po seznamu"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
+#: project/widgets/dependencieswidget.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected dependency down in the list"
+msgstr "Premakne izbrano odvisnost navzdol po seznamu"
+
+#: serialization/itemrepository.h:204 serialization/itemrepository.h:1809
+#, kde-format
+msgid "Failed writing to %1, probably the disk is full"
+msgstr "Zapisovanje v %1 je spodletelo, verjetno je disk poln"
+
+#: serialization/itemrepositoryregistry.cpp:75
+#, kde-format
+msgid "The previous session crashed."
+msgid_plural "Session crashed %1 times in a row."
+msgstr[0] "Seja se je sesula %1 krat zaporedoma."
+msgstr[1] "Seja se je sesula %1 krat zaporedoma."
+msgstr[2] "Seja se je sesula %1 krat zaporedoma."
+msgstr[3] "Seja se je sesula %1 krat zaporedoma."
+
+#: serialization/itemrepositoryregistry.cpp:77
+#, kde-format
+msgctxt "tty action"
+msgid "Clear cache"
+msgstr "Počisti predpomnilnik"
+
+#: serialization/itemrepositoryregistry.cpp:78
+#, kde-format
+msgctxt "@title"
+msgid "Session Crashed"
+msgstr "Seja se je sesula"
+
+#: serialization/itemrepositoryregistry.cpp:79
+#, kde-format
+msgid ""
+"The crash may be caused by a corruption of cached data.\n"
+"\n"
+"Press Clear if you want KDevelop to clear the cache, otherwise press "
+"Continue if you are sure the crash has another origin."
+msgstr ""
+"Sesutje je morda povzročeno zaradi pokvarjenih predpomnjenih podatkov.\n"
+"\n"
+"Pritisnite Počisti, če želite da KDevelop počisti predpomnilnik. Če ste "
+"prepričani, da je vzrok sesutja drugje, pritisnite Nadaljuj."
+
+#: serialization/itemrepositoryregistry.cpp:81
+#, kde-format
+msgctxt "@action:button"
+msgid "Clear Cache"
+msgstr "Počisti predpomnilnik"
+
+#: serialization/itemrepositoryregistry.cpp:82
+#, kde-format
+msgctxt "@action:button"
+msgid "Continue"
+msgstr "Nadaljuj"
+
+#: shell/areadisplay.cpp:44
+#, kde-format
+msgid ""
+"Execute actions to change the area.<br />An area is a tool view "
+"configuration for a specific use case. From here you can also navigate back "
+"to the default code area."
+msgstr ""
+"Izvede dejanja za spremembo območja.<br />Območje je nastavitev orodnega "
+"prikaza za določen primer uporabe. Od tukaj lahko tudi krmarite nazaj na "
+"privzeto kodno območje."
+
+#: shell/areadisplay.cpp:70
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Back to Code"
+msgstr "Nazaj h kodi"
+
+#: shell/checkerstatus.cpp:37
+#, kde-format
+msgctxt "@info:progress"
+msgid "Running %1"
+msgstr "Zaganjanje %1"
+
+#: shell/colorschemechooser.cpp:44
+#, kde-format
+msgid "&Color Scheme"
+msgstr "Barvna shema"
+
+#: shell/configdialog.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure"
+msgstr "Nastavi"
+
+#: shell/configdialog.cpp:82
+#, kde-format
+msgid ""
+"The settings of the current module have changed.\n"
+"Do you want to apply the changes or discard them?"
+msgstr ""
+"Nastavitve trenutnega modula so se spremenile.\n"
+"Ali želite spremembe uveljaviti ali zavreči?"
+
+#: shell/configdialog.cpp:83
+#, kde-format
+msgctxt "@title:window"
+msgid "Apply Settings"
+msgstr "Uveljavi nastavitve"
+
+#: shell/core.cpp:114
+#, kde-format
+msgctxt "@title:window"
+msgid "No Plugins Found"
+msgstr "Ni najdenih vstavkov"
+
+#: shell/core.cpp:115
+#, kde-format
+msgid ""
+"<p>Could not find any plugins during startup.<br/>Please make sure "
+"QT_PLUGIN_PATH is set correctly.</p>Refer to <a href=\"https://community.kde."
+"org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
+"\">this article</a> for more information."
+msgstr ""
+"<p>Med zagonom ni bilo mogoče najti nobenih vstavkov.<br/>Prepričajte se, da "
+"je pravilno nastavljena spremenljivka QT_PLUGIN_PATH.</p>Za več podrobnosti "
+"si oglejte <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">ta članek</a>."
+
+#: shell/debugcontroller.cpp:90
+#, kde-format
+msgid "Debugger"
+msgstr "Razhroščevalnik"
+
+#: shell/debugcontroller.cpp:108
+#, kde-format
+msgctxt "@title:window"
+msgid "Frame Stack"
+msgstr "Sklad okvirov"
+
+#: shell/debugcontroller.cpp:114
+#, kde-format
+msgctxt "@title:window"
+msgid "Breakpoints"
+msgstr "Prekinitvene točke"
+
+#: shell/debugcontroller.cpp:120
+#, kde-format
+msgctxt "@title:window"
+msgid "Variables"
+msgstr "Spremenljivke"
+
+#: shell/debugcontroller.cpp:197
+#, kde-format
+msgid "&Restart"
+msgstr "&Znova zaženi"
+
+#: shell/debugcontroller.cpp:198
+#, kde-format
+msgid "Restart program"
+msgstr "Znova zažene program"
+
+#: shell/debugcontroller.cpp:199
+#, kde-format
+msgid "Restarts applications from the beginning."
+msgstr "Znova zažene program od začetka."
+
+#: shell/debugcontroller.cpp:205
+#, kde-format
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "Prekini"
+
+#: shell/debugcontroller.cpp:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Interrupt application"
+msgstr "Prekini program"
+
+#: shell/debugcontroller.cpp:207
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Interrupts the debugged process or current debugger command."
+msgstr "Prekini razhroščevano opravilo ali trenutni ukaz razhroščevalnika."
+
+#: shell/debugcontroller.cpp:211
+#, kde-format
+msgctxt "@action"
+msgid "Run to &Cursor"
+msgstr "Zaženi do kazalke"
+
+#: shell/debugcontroller.cpp:212
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Run to cursor"
+msgstr "Zaženi do kazalke"
+
+#: shell/debugcontroller.cpp:213
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "Nadaljuj izvajanje dokler ne doseže položaja kazalke."
+
+#: shell/debugcontroller.cpp:218
+#, kde-format
+msgctxt "@action"
+msgid "Set E&xecution Position to Cursor"
+msgstr "Nastavi položaj izvajanja na kazalko"
+
+#: shell/debugcontroller.cpp:219
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Jump to cursor"
+msgstr "Pojdi do kazalke"
+
+#: shell/debugcontroller.cpp:220
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Continue execution from the current cursor position."
+msgstr "Nadaljuj izvajanje od trenutnega položaja kazalke."
+
+#: shell/debugcontroller.cpp:224
+#, kde-format
+msgctxt "@action"
+msgid "Step &Over"
+msgstr "Prest&opi"
+
+#: shell/debugcontroller.cpp:226
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step over the next line"
+msgstr "Prestopi čez naslednjo vrstico"
+
+#: shell/debugcontroller.cpp:227
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes one line of source in the current source file. If the source line "
+"is a call to a function the whole function is executed and the app will stop "
+"at the line following the function call."
+msgstr ""
+"Izvedi eno vrstico izvorne kode v trenutni datoteki. Če je vrstica klic "
+"funkcije, se izvede celotna funkcija, program pa se zaustavi v vrstici, ki "
+"sledi klicu funkcije."
+
+#: shell/debugcontroller.cpp:235
+#, kde-format
+msgctxt "@action"
+msgid "Step over Ins&truction"
+msgstr "Prestopi čez ukaz"
+
+#: shell/debugcontroller.cpp:236
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step over instruction"
+msgstr "Prestopi čez ukaz"
+
+#: shell/debugcontroller.cpp:237
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Steps over the next assembly instruction."
+msgstr "Prestopi čez naslednji ukaz v zbirniku."
+
+#: shell/debugcontroller.cpp:242
+#, kde-format
+msgctxt "@action"
+msgid "Step &Into"
+msgstr "Vstop&i v"
+
+#: shell/debugcontroller.cpp:244
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step into the next statement"
+msgstr "Vstopi v naslednjo izjavo"
+
+#: shell/debugcontroller.cpp:245
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes exactly one line of source. If the source line is a call to a "
+"function then execution will stop after the function has been entered."
+msgstr ""
+"Izvede točno eno vrstico izvorne kode. Če je vrstica klic funkcije, se bo "
+"izvajanje ustavilo po vstopu v funkcijo."
+
+#: shell/debugcontroller.cpp:252
+#, kde-format
+msgctxt "@action"
+msgid "Step into I&nstruction"
+msgstr "Vstopi v navodilo"
+
+#: shell/debugcontroller.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step into instruction"
+msgstr "Vstopi v navodilo"
+
+#: shell/debugcontroller.cpp:254
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Steps into the next assembly instruction."
+msgstr "Vstopi v naslednje navodilo v zbirniku."
+
+#: shell/debugcontroller.cpp:258
+#, kde-format
+msgctxt "@action"
+msgid "Step O&ut"
+msgstr "Izstopi"
+
+#: shell/debugcontroller.cpp:260
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Step out of the current function"
+msgstr "Izstopi iz trenutne funkcije"
+
+#: shell/debugcontroller.cpp:261
+#, kde-format
+msgctxt "@whatsthis"
+msgid ""
+"Executes the application until the currently executing function is "
+"completed. The debugger will then display the line after the original call "
+"to that function. If program execution is in the outermost frame (i.e. in "
+"main()) then this operation has no effect."
+msgstr ""
+"Izvede program, dokler se trenutno izvajajoča funkcija ne zaključi. "
+"Razhroščevalnik bo nato prikazal vrstico za prvotnim klicem funkcije. Če je "
+"izvajanje programa v povsem zunanjem okviru (npr. v main()), to dejanje nima "
+"učinka."
+
+#: shell/debugcontroller.cpp:269
+#, kde-format
+msgctxt "@action"
+msgid "Toggle Breakpoint"
+msgstr "Preklopi prekinitveno točko"
+
+#: shell/debugcontroller.cpp:270
+#, kde-format
+msgid "Ctrl+Alt+B"
+msgstr "Ctrl+Alt+B"
+
+#: shell/debugcontroller.cpp:271
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle breakpoint"
+msgstr "Preklopi prekinitveno točko"
+
+#: shell/debugcontroller.cpp:272
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Toggles the breakpoint at the current line in editor."
+msgstr "Preklopi prekinitveno točko v trenutni vrstici urejevalnika."
+
+#: shell/debugcontroller.cpp:276
+#, kde-format
+msgctxt "@action"
+msgid "Show Current Line"
+msgstr "Prikaži trenutno vrstico"
+
+#: shell/debugcontroller.cpp:277
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show the current execution position"
+msgstr "Prikaži trenutno pozicijo izvajanja"
+
+#: shell/debugcontroller.cpp:278
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Jumps to the execution line in the editor."
+msgstr "Pojdi na izvajano vrstico v urejevalniku."
+
+#: shell/debugcontroller.cpp:390
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Razhrošči"
+
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:444
+#, kde-format
+msgctxt "@action"
+msgid "Debug Launch"
+msgstr "Zagon razhroščevanja"
+
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:447
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Debug current launch"
+msgstr "Razhrošči trenutni zagon"
+
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:448
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes the target or the program specified in currently active launch "
+"configuration inside a Debugger."
+msgstr ""
+"Izvede cilj ali program, ki je določen v trenutno dejavni nastavitvi zagona, "
+"znotraj razhroščevalnika."
+
+#: shell/debugcontroller.cpp:446
+#, kde-format
+msgctxt "@action"
+msgid "&Continue"
+msgstr "Nadaljuj"
+
+#: shell/debugcontroller.cpp:448
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Continue application execution"
+msgstr "Nadaljuje izvajanje programa"
+
+#: shell/debugcontroller.cpp:449
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Continues the execution of your application in the debugger. This only takes "
+"effect when the application has been halted by the debugger (i.e. a "
+"breakpoint has been activated or the interrupt was pressed)."
+msgstr ""
+"Nadaljuje izvajanje vašega programa v razhroščevalniku. To ima učinek le, ko "
+"je bil program zaustavljen v razhroščevalniku (npr. ko je bila omogočena "
+"prekinitvena točka ali pa je bil pritisnjen gumb za prekinitev)."
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: shell/debugger/kdevdebuggershellui.rc:25
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Orodna vrstica razhroščevalnika"
+
+#: shell/documentationcontroller.cpp:114
+#, kde-format
+msgctxt "@action"
+msgid "Show Documentation"
+msgstr "Prikaži dokumentacijo"
+
+#: shell/documentationcontroller.cpp:121 shell/documentationcontroller.cpp:230
+#, kde-format
+msgctxt "@title:window"
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#, kde-format
+msgid "Untitled"
+msgstr "Brez naslova"
+
+#: shell/documentcontroller.cpp:118
+#, kde-format
+msgctxt "@title:window"
+msgid "Open File"
+msgstr "Odpri datoteko"
+
+#: shell/documentcontroller.cpp:119
+#, kde-format
+msgid "*|Text File\n"
+msgstr "*|Besedilna datoteka\n"
+
+#: shell/documentcontroller.cpp:317
+#, kde-format
+msgid ""
+"KDevelop could not find the editor for file '%1' of type %2.\n"
+"Do you want to open it as plain text?"
+msgstr ""
+"KDevelop ni mogel najti urejevalnika za datoteko '%1' vrste %2.\n"
+"Ali jo želite odpreti kot navadno besedilo?"
+
+#: shell/documentcontroller.cpp:318
+#, kde-format
+msgctxt "@title:window"
+msgid "Could Not Find Editor"
+msgstr "Ni bilo mogoče najti urejevalnika"
+
+#: shell/documentcontroller.cpp:319
+#, kde-format
+msgctxt "@action:button"
+msgid "Open as Plain Text"
+msgstr "Odpri kot preprosto besedilo"
+
+#: shell/documentcontroller.cpp:320
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Open"
+msgstr "Ne odpri"
+
+#: shell/documentcontroller.cpp:603
+#, kde-format
+msgctxt "@action"
+msgid "&Open..."
+msgstr "&Odpri..."
+
+#: shell/documentcontroller.cpp:606
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open file"
+msgstr "Odpri datoteko"
+
+#: shell/documentcontroller.cpp:607
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens a file for editing."
+msgstr "Odpre datoteko za urejanje."
+
+#: shell/documentcontroller.cpp:611
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This lists files which you have opened recently, and allows you to easily "
+"open them again."
+msgstr ""
+"To je seznam datotek, ki ste jih odprli nedavno, in vam omogoča enostavno "
+"ponovno odprtje."
+
+#: shell/documentcontroller.cpp:616
+#, kde-format
+msgctxt "@action"
+msgid "Save Al&l"
+msgstr "Shrani vse"
+
+#: shell/documentcontroller.cpp:618
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all open documents"
+msgstr "Shrani vse odprte dokumente"
+
+#: shell/documentcontroller.cpp:619
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Save all open documents, prompting for additional information when necessary."
+msgstr ""
+"Shrani vse odprte dokumente, pri čemer po potrebi povpraša po dodatnih "
+"podrobnostih."
+
+#: shell/documentcontroller.cpp:625
+#, kde-format
+msgctxt "@action"
+msgid "Reload All"
+msgstr "Znova naloži vse"
+
+#: shell/documentcontroller.cpp:627
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Revert all open documents"
+msgstr "Povrni vse odprte dokumente"
+
+#: shell/documentcontroller.cpp:628
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Revert all open documents, returning to the previously saved state."
+msgstr ""
+"Povrne vse odprte dokumente, tako da jih vrne v predhodno shranjeno stanje."
+
+#: shell/documentcontroller.cpp:634
+#, kde-format
+msgctxt "@action"
+msgid "&Close"
+msgstr "Zapri"
+
+#: shell/documentcontroller.cpp:636
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close file"
+msgstr "Zapri datoteko"
+
+#: shell/documentcontroller.cpp:637
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Closes current file."
+msgstr "Zapre trenutno datoteko."
+
+#: shell/documentcontroller.cpp:642
+#, kde-format
+msgctxt "@action"
+msgid "Clos&e All"
+msgstr "Zapri vse"
+
+#: shell/documentcontroller.cpp:644
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all open documents"
+msgstr "Zapri vse odprte dokumente"
+
+#: shell/documentcontroller.cpp:645
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Close all open documents, prompting for additional information when "
+"necessary."
+msgstr ""
+"Zapri vse odprte dokumente, pri čemer po potrebi povprašaj po dodatnih "
+"podrobnostih."
+
+#: shell/documentcontroller.cpp:651
+#, kde-format
+msgctxt "@action"
+msgid "Close All Ot&hers"
+msgstr "Zapri vse ostale"
+
+#: shell/documentcontroller.cpp:653
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other documents"
+msgstr "Zapri vse ostale dokumente"
+
+#: shell/documentcontroller.cpp:654
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Close all open documents, with the exception of the currently active "
+"document."
+msgstr "Zapri vse odprte dokumente, z izjemo trenutno dejavnega dokumenta."
+
+#: shell/documentcontroller.cpp:659
+#, kde-format
+msgctxt "@action"
+msgid "Show Annotate on Current Document"
+msgstr "Prikaži Zabeleži na trenutnem dokumentu"
+
+#: shell/documentcontroller.cpp:660
+#, kde-format
+msgctxt "@action"
+msgid "Annotate"
+msgstr "Zabeleži"
+
+#: shell/documentcontroller.cpp:1279
+#, kde-format
+msgid ""
+"Could not annotate the document because it is not part of a version-"
+"controlled project."
+msgstr ""
+"Ni bilo mogoče zabeležiti različice, ker ni del projekta, ki je pod nadzorom "
+"različic."
+
+#: shell/editorconfigpage.cpp:86
+#, kde-format
+msgctxt "@title:tab"
+msgid "Editor"
+msgstr "Urejevalnik"
+
+#: shell/editorconfigpage.cpp:96
+#, kde-format
+msgid "Configure Text Editor"
+msgstr "Nastavi urejevalnik besedila"
+
+#: shell/environmentconfigurebutton.cpp:74
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure environment variables"
+msgstr "Nastavi okoljske spremenljivke"
+
+#: shell/launchconfigurationdialog.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "Launch Configurations"
+msgstr "Nastavitve zaganjanja"
+
+#: shell/launchconfigurationdialog.cpp:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add a new launch configuration."
+msgstr "Dodaj novo nastavitev zaganjanja."
+
+#: shell/launchconfigurationdialog.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete selected launch configuration."
+msgstr "Izbriši izbrano nastavitev zaganjanja."
+
+#: shell/launchconfigurationdialog.cpp:173
+#, kde-format
+msgid ""
+"No launch configurations available. (Is any of the Execute plugins loaded?)"
+msgstr ""
+"Ni razpoložljivih nastavitev zaganjanja (ali so naloženi vstavki za "
+"zaganjanje?)"
+
+#: shell/launchconfigurationdialog.cpp:196
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rename Configuration"
+msgstr "Preimenuj nastavitev"
+
+#: shell/launchconfigurationdialog.cpp:197
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Delete Configuration"
+msgstr "Izbriši nastavitev"
+
+#: shell/launchconfigurationdialog.cpp:251
+#, kde-format
+msgid ""
+"Selected Launch Configuration has unsaved changes. Do you want to save it?"
+msgstr ""
+"Izbrana nastavitev zaganjanja ima neshranjene spremembe. Ali jih želite "
+"shraniti?"
+
+#: shell/launchconfigurationdialog.cpp:251
+#, kde-format
+msgctxt "@title:window"
+msgid "Unsaved Changes"
+msgstr "Neshranjene spremembe"
+
+#: shell/launchconfigurationdialog.cpp:324
+#, kde-format
+msgctxt "%1 is a launcher name"
+msgid "No configuration is needed for '%1'"
+msgstr "Za '%1' ni potrebnega nastavljanja"
+
+#: shell/launchconfigurationdialog.cpp:368
+#, kde-format
+msgid ""
+"<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
+"button to add a new one.</i>"
+msgstr ""
+"<i>Na levi izberite nastavitev, ki jo želite urediti<br>ali kliknite gumb "
+"»Dodaj«, da dodate novo.</i>"
+
+#: shell/launchconfigurationdialog.cpp:436
+#, kde-format
+msgid "Editing %2: <b>%1</b>"
+msgstr "Urejanje %2: <b>%1</b>"
+
+#: shell/launchconfigurationdialog.cpp:709
+#, kde-format
+msgctxt "@title:column Name of the Launch Configurations"
+msgid "Name"
+msgstr "Ime"
+
+#: shell/launchconfigurationdialog.cpp:712
+#, kde-format
+msgctxt ""
+"@title:column Type of the Launch Configurations (i.e. Python Application, C+"
+"+ Application)"
+msgid "Type"
+msgstr "Vrsta"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: shell/launchconfigurationdialog.ui:29
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Dodaj"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteConfig)
+#: shell/launchconfigurationdialog.ui:41
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Odstrani"
+
+#. i18n: ectx: property (text), widget (QLabel, debugLabel)
+#: shell/launchconfigurationdialog.ui:88
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Debugger:"
+msgstr "Razhroščevalnik:"
+
+#: shell/loadedpluginsdialog.cpp:295
+#, kde-format
+msgctxt "@title:window"
+msgid "Loaded Plugins"
+msgstr "Naloženi vstavki"
+
+#: shell/loadedpluginsdialog.cpp:305
+#, kde-format
+msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
+msgstr "<html><font size=\"4\">Vstavki naloženi za <b>%1</b></font></html>"
+
+#: shell/mainwindow.cpp:445
+#, kde-format
+msgid " (read only)"
+msgstr " (samo za branje)"
+
+#: shell/mainwindow_p.cpp:221
+#, kde-format
+msgctxt "@info:tooltip %1 = application name"
+msgid "Configure %1"
+msgstr "Nastavi %1"
+
+#: shell/mainwindow_p.cpp:222
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Lets you customize %1."
+msgstr "Vam omogoča prilagoditi %1."
+
+#: shell/mainwindow_p.cpp:225
+#, kde-format
+msgctxt "@action"
+msgid "Configure Notifications..."
+msgstr "Nastavi obvestila..."
+
+#: shell/mainwindow_p.cpp:226
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure notifications"
+msgstr "Nastavi obvestila"
+
+#: shell/mainwindow_p.cpp:227
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Shows a dialog that lets you configure notifications."
+msgstr "Prikaže pogovorno okno, ki vam omogoča nastaviti obvestila."
+
+#: shell/mainwindow_p.cpp:231
+#, kde-format
+msgctxt "@action"
+msgid "Loaded Plugins"
+msgstr "Naloženi vtičniki"
+
+#: shell/mainwindow_p.cpp:232
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show a list of all loaded plugins"
+msgstr "Prikaži seznam naloženih vtičnikov"
+
+#: shell/mainwindow_p.cpp:233
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Shows a dialog with information about all loaded plugins."
+msgstr "Prikaže pogovorno okno s podrobnostmi o vseh naloženih vtičnikih."
+
+#: shell/mainwindow_p.cpp:236
+#, kde-format
+msgctxt "@action"
+msgid "&Next Window"
+msgstr "&Naslednje okno"
+
+#: shell/mainwindow_p.cpp:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next window"
+msgstr "Naslednje okno"
+
+#: shell/mainwindow_p.cpp:240
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the next window."
+msgstr "Preklopi v naslednje okno."
+
+#: shell/mainwindow_p.cpp:244
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Window"
+msgstr "&Predhodno okno"
+
+#: shell/mainwindow_p.cpp:247
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous window"
+msgstr "Predhodno okno"
+
+#: shell/mainwindow_p.cpp:248
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the previous window."
+msgstr "Preklopi v predhodno okno."
+
+#: shell/mainwindow_p.cpp:252
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Next Outputmark"
+msgstr "Pojdi na naslednji izhodni označevalnik"
+
+#: shell/mainwindow_p.cpp:258
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Previous Outputmark"
+msgstr "Pojdi na predhodni izhodni označevalnik"
+
+#: shell/mainwindow_p.cpp:265
+#, kde-format
+msgctxt "@action"
+msgid "Split View &Top/Bottom"
+msgstr "Razdeli prikaz vrh/dno"
+
+#: shell/mainwindow_p.cpp:268
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Split horizontal"
+msgstr "Razdeli vodoravno"
+
+#: shell/mainwindow_p.cpp:269
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Splits the current view horizontally."
+msgstr "Razdeli trenuten prikaz vodoravno."
+
+#: shell/mainwindow_p.cpp:273
+#, kde-format
+msgctxt "@action"
+msgid "Split View &Left/Right"
+msgstr "Razdeli prikaz &levo/desno"
+
+#: shell/mainwindow_p.cpp:276
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Split vertical"
+msgstr "Razdeli navpično"
+
+#: shell/mainwindow_p.cpp:277
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Splits the current view vertically."
+msgstr "Razdeli trenutni prikaz navpično."
+
+#: shell/mainwindow_p.cpp:280
+#, kde-format
+msgctxt "@action"
+msgid "&Next Split View"
+msgstr "&Naslednji razdeljen pogled"
+
+#: shell/mainwindow_p.cpp:283
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next split view"
+msgstr "Naslednji razdeljen pogled"
+
+#: shell/mainwindow_p.cpp:284
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the next split view."
+msgstr "Preklopi v naslednji razdeljeni pogled."
+
+#: shell/mainwindow_p.cpp:288
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Split View"
+msgstr "&Predhodni razdeljen pogled"
+
+#: shell/mainwindow_p.cpp:291
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous split view"
+msgstr "Predhodni razdeljen pogled"
+
+#: shell/mainwindow_p.cpp:292
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Switches to the previous split view."
+msgstr "Preklopi v predhodni razdeljeni pogled."
+
+#: shell/mainwindow_p.cpp:300
+#, kde-format
+msgctxt "@action new file"
+msgid "&New"
+msgstr "&Nova"
+
+#: shell/mainwindow_p.cpp:301
+#, kde-format
+msgctxt "@action Shorter Text for 'New File' shown in the toolbar"
+msgid "New"
+msgstr "Nova"
+
+#: shell/mainwindow_p.cpp:303
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "New file"
+msgstr "Nova datoteka"
+
+#: shell/mainwindow_p.cpp:304
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Creates an empty file."
+msgstr "Ustvari prazno datoteko."
+
+#: shell/mainwindow_p.cpp:309
+#, kde-format
+msgctxt "@action"
+msgid "&Add Tool View..."
+msgstr "&Dodaj prikaz orodja..."
+
+#: shell/mainwindow_p.cpp:311
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add tool view"
+msgstr "Dodaj prikaz orodja"
+
+#: shell/mainwindow_p.cpp:312
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Adds a new tool view to this window."
+msgstr "Temu oknu doda nov prikaz orodja."
+
+#: shell/mainwindow_p.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Top/Bottom"
+msgstr "Razdeli prikaz vrh/dno"
+
+#: shell/mainwindow_p.cpp:351
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Split View Left/Right"
+msgstr "Razdeli prikaz levo/desno"
+
+#: shell/mainwindow_p.cpp:355
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "New File"
+msgstr "Nova datoteka"
+
+#: shell/mainwindow_p.cpp:361
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "Znova naloži"
+
+#: shell/mainwindow_p.cpp:364
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload All"
+msgstr "Znova naloži vse"
+
+#: shell/mainwindow_p.cpp:404
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add Tool View"
+msgstr "Dodaj prikaz orodja"
+
+#: shell/mainwindow_p.cpp:427
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Lock the Panel from Hiding"
+msgstr "Prepreči skrivanje pulta"
+
+#: shell/openprojectdialog.cpp:112
+#, kde-format
+msgid "%1|All Project Files (%1)"
+msgstr "%1|Vse projektne datoteke (%1)"
+
+#: shell/openprojectdialog.cpp:121
+#, kde-format
+msgctxt "@title:tab"
+msgid "Select Source"
+msgstr "Izberi vir"
+
+#: shell/openprojectdialog.cpp:129
+#, kde-format
+msgid ""
+"Select a build system setup file, existing KDevelop project, or any folder "
+"to open as a project"
+msgstr ""
+"Izberite namestitveno datoteko sistema za gradnjo, obstoječ projekt KDevelop "
+"ali katerokoli mapo, ki bi jo želeli odpreti kot projekt"
+
+#: shell/openprojectdialog.cpp:136 shell/openprojectdialog.cpp:156
+#, kde-format
+msgctxt "@title:window"
+msgid "Open Project"
+msgstr "Odpri projekt"
+
+#: shell/openprojectdialog.cpp:144
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project Information"
+msgstr "Informacije o projektu"
+
+#: shell/openprojectdialog.cpp:205
+#, kde-format
+msgid "Open \"%1\" as project"
+msgstr "Odpri \"%1\" kot projekt"
+
+#: shell/openprojectdialog.cpp:209
+#, kde-format
+msgid "Selected URL is invalid"
+msgstr "Izbran naslov URL ni veljaven"
+
+#: shell/openprojectdialog.cpp:254
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Open existing file \"%1\""
+msgstr "Odpri obstoječo datoteko \"%1\""
+
+#: shell/partcontroller.cpp:252
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Use this command to show or hide the view's statusbar."
+msgstr "Uporabite ta ukaz za prikaz ali skritje vrstice stanja pogleda."
+
+#: shell/partdocument.cpp:103
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr "Dokument »%1« vsebuje neshranjene spremembe. Ali jih želite shraniti?"
+
+#: shell/partdocument.cpp:104 shell/partdocument.cpp:114
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Zapri dokument"
+
+#: shell/partdocument.cpp:112
+#, kde-format
+msgid ""
+"The document \"%1\" has unsaved changes and was modified by an external "
+"process.\n"
+"Do you want to overwrite the external changes?"
+msgstr ""
+"Dokument \"%1\" ima neshranjene spremembe in je bil spremenjen s strani "
+"zunanjega opravila.\n"
+"Ali želite prepisati zunanje spremembe?"
+
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:440
+#, kde-format
+msgctxt "@action:button"
+msgid "Overwrite External Changes"
+msgstr "Prepišite zunanje spremembe"
+
+#: shell/problem.cpp:40
+#, kde-format
+msgid "Plugin"
+msgstr "Vstavek"
+
+#: shell/problem.cpp:80
+#, kde-format
+msgid "DuchainBuilder"
+msgstr "IzgrajevalnikDuchain"
+
+#: shell/problem.cpp:82
+#, kde-format
+msgid "Todo"
+msgstr "Opravilo"
+
+#: shell/problem.cpp:167
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Hint"
+msgstr "Namig"
+
+#: shell/problem.cpp:168
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Warning"
+msgstr "Opozorilo"
+
+#: shell/problem.cpp:169
+#, kde-format
+msgctxt "@item problem severity"
+msgid "Error"
+msgstr "Napaka"
+
+#: shell/problemmodel.cpp:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-parse all watched documents"
+msgstr "Ponovno razčleni vse opazovane dokumente"
+
+#: shell/problemmodel.cpp:319
+#, kde-format
+msgctxt "@title:column source of problem"
+msgid "Source"
+msgstr "Vir"
+
+#: shell/problemmodel.cpp:321
+#, kde-format
+msgctxt "@title:column problem description"
+msgid "Problem"
+msgstr "Težava"
+
+#: shell/problemmodel.cpp:323
+#, kde-format
+msgctxt "@title:column file where problem was found"
+msgid "File"
+msgstr "Datoteka"
+
+#: shell/problemmodel.cpp:325
+#, kde-format
+msgctxt "@title:column line number with problem"
+msgid "Line"
+msgstr "Vrstica"
+
+#: shell/problemmodel.cpp:327
+#, kde-format
+msgctxt "@title:column column number with problem"
+msgid "Column"
+msgstr "Stolpec"
+
+#: shell/progresswidget/progressdialog.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Cancel this operation"
+msgstr "Prekliči to opravilo"
+
+#: shell/progresswidget/progressmanager.cpp:87
+#, kde-format
+msgctxt "@info"
+msgid "Aborting..."
+msgstr "Prekinjanje..."
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open detailed progress dialog"
+msgstr "Odpri pogovorno okno podrobnega napredka"
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:337
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide detailed progress window"
+msgstr "Skrij pogovorno okno podrobnega napredka"
+
+#: shell/progresswidget/statusbarprogresswidget.cpp:341
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show detailed progress window"
+msgstr "Pokaži pogovorno okno podrobnega napredka"
+
+#: shell/project.cpp:99
+#, kde-format
+msgid "Loading Project %1"
+msgstr "Nalaganje projekta %1"
+
+#: shell/project.cpp:107
+#, kde-format
+msgctxt "%1: Project name"
+msgid "Loading %1"
+msgstr "Nalaganje %1"
+
+#: shell/project.cpp:226
+#, kde-format
+msgid ""
+"Unable to load the project file %1.<br>The project has been removed from the "
+"session."
+msgstr ""
+"Ni mogoče naložiti projektne datoteke %1.<br>Projekt je bil odstranjen iz "
+"seje."
+
+#: shell/project.cpp:252
+#, kde-format
+msgid "Unable to create hidden dir (%1) for developer file"
+msgstr "Ni mogoče ustvariti skrite mape (%1) za razvijalčevo datoteko"
+
+#: shell/project.cpp:268
+#, kde-format
+msgid "Unable to get project file: %1"
+msgstr "Ni mogoče pridobiti projektne datoteke: %1"
+
+#: shell/project.cpp:308
+#, kde-format
+msgid "Could not load %1, a project with the same name '%2' is already open."
+msgstr "Ni bilo mogoče naložiti %1, projekt z istim imenom »%2« je že odprt."
+
+#: shell/project.cpp:339
+#, kde-format
+msgid ""
+"Could not load project management plugin <b>%1</b>.<br>Check that the "
+"required programs are installed, or see console output for more information."
+msgstr ""
+"Ni bilo mogoče naložiti vtičnika <b>%1</b> za upravljanje s projektom."
+"<br>Preverite, ali so zahtevani programi nameščeni ali pa si oglejte izpis "
+"konzole za več informacij."
+
+#: shell/project.cpp:349
+#, kde-format
+msgid ""
+"The project importing plugin (%1) does not support the IProjectFileManager "
+"interface."
+msgstr ""
+"Vtičnik (%1) za uvažanje projektov ne podpira vmesnika IProjectFileManager."
+
+#: shell/project.cpp:402
+#, kde-format
+msgid "Could not open project."
+msgstr "Projekta ni bilo mogoče odpreti."
+
+#: shell/project.cpp:560
+#, kde-format
+msgid ""
+"Could not store developer specific project configuration.\n"
+"Attention: The project settings you changed will be lost."
+msgstr ""
+"Nastavitev projekta, določenih za razvijalca, ni bilo mogoče shraniti.\n"
+"Pozor: vaše spremembe nastavitev projekta bodo izgubljene."
+
+#: shell/projectcontroller.cpp:160
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure Project %1"
+msgstr "Nastavi projekt %1"
+
+#: shell/projectcontroller.cpp:303
+#, kde-format
+msgid "Invalid Location: %1"
+msgstr "Neveljavno mesto: %1"
+
+#: shell/projectcontroller.cpp:313
+#, kde-format
+msgid "Already opening %1, not opening again"
+msgstr "Projekt %1 se že odpira in ne bo odprt še enkrat"
+
+#: shell/projectcontroller.cpp:474
+#, kde-format
+msgctxt "@action:button"
+msgid "Override"
+msgstr "Prepiši"
+
+#: shell/projectcontroller.cpp:475
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Continue to open the project and use the just provided project configuration"
+msgstr ""
+"Nadaljuj z odpiranjem projekta in uporabi le ponudene nastavitve projekta"
+
+#: shell/projectcontroller.cpp:476
+#, kde-format
+msgctxt "@action:button"
+msgid "Open Existing File"
+msgstr "Odpri obstoječo datoteko"
+
+#: shell/projectcontroller.cpp:477
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Continue to open the project but use the existing project configuration"
+msgstr ""
+"Nadaljuj z odpiranjem projekta in uporabi obstoječe nastavitve projekta"
+
+#: shell/projectcontroller.cpp:479
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Cancel and do not open the project"
+msgstr "Prekliči in ne odpri projekta"
+
+#: shell/projectcontroller.cpp:481
+#, kde-format
+msgid ""
+"There already exists a project configuration file at %1.\n"
+"Do you want to override it or open the existing file?"
+msgstr ""
+"Nastavitvena datoteka projekta že obstaja v %1.\n"
+"Ali jo želite prepisati ali odpreti obstoječo datoteko?"
+
+#: shell/projectcontroller.cpp:483
+#, kde-format
+msgctxt "@title:window"
+msgid "Override Existing Project Configuration"
+msgstr "Prepiši obstoječo nastavitev projekta"
+
+#: shell/projectcontroller.cpp:503
+#, kde-format
+msgid "Unable to create configuration file %1"
+msgstr "Ni bilo mogoče ustvariti nastavitvene datoteke %1"
+
+#: shell/projectcontroller.cpp:517
+#, kde-format
+msgid "Reopen the current project?"
+msgstr "Ali znova odprem trenutni projekt?"
+
+#: shell/projectcontroller.cpp:518
+#, kde-format
+msgctxt "@action:button"
+msgid "Reopen"
+msgstr "Ponovno odpri"
+
+#: shell/projectcontroller.cpp:558
+#, kde-format
+msgctxt "@action"
+msgid "Open / Import Project..."
+msgstr "Odpri / uvozi projekt ..."
+
+#: shell/projectcontroller.cpp:559
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open or import project"
+msgstr "Odpre ali uvozi projekt"
+
+#: shell/projectcontroller.cpp:560
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Open an existing KDevelop project or import an existing Project into "
+"KDevelop. This entry allows one to select a KDevelop project file or an "
+"existing directory to open it in KDevelop. When opening an existing "
+"directory that does not yet have a KDevelop project file, the file will be "
+"created."
+msgstr ""
+"Odprite obstoječ projekt KDevelop ali pa uvozite obstoječ projekt v "
+"KDevelop. Ta vnos omogoča izbor obstoječe projekte datoteke KDevelop ali pa "
+"obstoječe mape za odprtje v KDevelop. Če odprta obstoječa mapa še ne vsebuje "
+"projektne datoteke KDevelop, bo ustvarjena."
+
+#: shell/projectcontroller.cpp:571
+#, kde-format
+msgctxt "@action"
+msgid "Fetch Project..."
+msgstr "Pridobi projekt ..."
+
+#: shell/projectcontroller.cpp:573
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fetch project"
+msgstr "Pridobi projekt"
+
+#: shell/projectcontroller.cpp:574
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Guides the user through the project fetch and then imports it into KDevelop."
+msgstr ""
+"Uporabnika vodi skozi pridobivanje projekta in ga potem uvozi v KDevelop."
+
+#: shell/projectcontroller.cpp:589
+#, kde-format
+msgctxt "@action"
+msgid "Close Project(s)"
+msgstr "Zapri projekt(e)"
+
+#: shell/projectcontroller.cpp:591
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Closes all currently selected projects"
+msgstr "Zapre vse trenutno izbrane projekte"
+
+#: shell/projectcontroller.cpp:597
+#, kde-format
+msgctxt "@action"
+msgid "Open Configuration..."
+msgstr "Odpri nastavitev..."
+
+#: shell/projectcontroller.cpp:603
+#, kde-format
+msgctxt "@action"
+msgid "Commit Current Project..."
+msgstr "Uveljavi trenutni projekt..."
+
+#: shell/projectcontroller.cpp:604
+#, kde-format
+msgctxt "@action"
+msgid "Commit..."
+msgstr "Uveljavi..."
+
+#: shell/projectcontroller.cpp:615
+#, kde-format
+msgctxt "@action"
+msgid "Open Recent Project"
+msgstr "Odpri nedavni projekt"
+
+#: shell/projectcontroller.cpp:616
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Opens recently opened project."
+msgstr "Odpre nedavni projekt."
+
+#: shell/projectcontroller.cpp:621
+#, kde-format
+msgctxt "@action"
+msgid "Open Project for Current File"
+msgstr "Odpri projekt za trenutno datoteko"
+
+#: shell/projectcontroller.cpp:772
+#, kde-format
+msgid "Project already open: %1"
+msgstr "Projekt je že odprt: %1"
+
+#: shell/projectcontroller.cpp:776
+#, kde-format
+msgid "No active document"
+msgstr "Ni dejavnega dokumenta"
+
+#: shell/projectcontroller.cpp:857
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Already Open"
+msgstr "Projekt je že odprt"
+
+#: shell/projectcontroller.cpp:860
+#, kde-format
+msgid ""
+"The project you're trying to open is already open in at least one other "
+"session.<br>What do you want to do?"
+msgstr ""
+"Projekt, ki ga želite odpreti, je že odprt v vsaj eni izmed drugih sej.."
+"<br>Kaj želite storiti?"
+
+#: shell/projectcontroller.cpp:864
+#, kde-format
+msgctxt "@option:radio"
+msgid "Add project to current session"
+msgstr "Dodaj projekt k trenutni seji"
+
+#: shell/projectcontroller.cpp:868
+#, kde-format
+msgctxt "@option:radio"
+msgid "Open session %1"
+msgstr "Odpri sejo %1"
+
+#: shell/projectcontroller.cpp:929
+#, kde-format
+msgid "No enabled plugin supports this repository URL: %1"
+msgstr "Nobeden izmed omogočenih vstavkov ne podpira URL-ja tega skladišča: %1"
+
+#: shell/projectcontroller.cpp:1233
+#, kde-format
+msgctxt "@action"
+msgid "Reparse the Entire Project"
+msgstr "Ponovno razčleni celotni projekt"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
+#: shell/projectinfopage.ui:29 shell/projectinfopage.ui:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the Management Plugin to use for this project"
+msgstr "Izberite vtičnik za upravljanje, ki bo uporabljen za ta projekt"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/projectinfopage.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Project manager:"
+msgstr "Upravljalnik projektov:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: shell/projectinfopage.ui:39 shell/projectinfopage.ui:49
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Provide a name for the project"
+msgstr "Podajte ime projekta"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Ime:"
+
+#: shell/projectsourcepage.cpp:45
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "From File System"
+msgstr "Iz datotečnega sistema"
+
+#: shell/projectsourcepage.cpp:180
+#, kde-format
+msgid "Could not create the directory: %1"
+msgstr "Ni bilo mogoče ustvariti mape: %1"
+
+#: shell/projectsourcepage.cpp:213
+#, kde-format
+msgctxt "Format of the progress bar text. progress and info"
+msgid "%1 : %p%"
+msgstr "%1 : %p%"
+
+#: shell/projectsourcepage.cpp:254
+#, kde-format
+msgid ""
+"You need to specify a valid or nonexistent directory to check out a project"
+msgstr "Za prevzem projekta morate podati veljavno ali neobstoječo mapo"
+
+#: shell/projectsourcepage.cpp:256
+#, kde-format
+msgid "You need to specify the source for your remote project"
+msgstr "Za vaš oddaljen projekt morate navesti vir"
+
+#: shell/projectsourcepage.cpp:258
+#, kde-format
+msgid "You need to specify an empty folder as your project destination"
+msgstr "Za vaš cilj projekta morate navesti prazno mapo"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/projectsourcepage.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Source:"
+msgstr "Vir:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/projectsourcepage.ui:49
+#, kde-format
+msgctxt "@title:group"
+msgid "Destination"
+msgstr "Cilj"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/projectsourcepage.ui:55
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Directory:"
+msgstr "Imenik:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, workingDir)
+#: shell/projectsourcepage.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Select the directory to use..."
+msgstr "Izberite imenik, ki ga želite uporabiti..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
+#: shell/projectsourcepage.ui:78
+#, kde-format
+msgctxt "@title:group"
+msgid "Source"
+msgstr "Vir"
+
+#. i18n: ectx: property (text), widget (QPushButton, get)
+#: shell/projectsourcepage.ui:105
+#, kde-format
+msgctxt "@action:button"
+msgid "Get"
+msgstr "Pridobi"
+
+#: shell/runcontroller.cpp:89
+#, kde-format
+msgctxt "launch mode"
+msgid "Debug"
+msgstr "Razhrošči"
+
+#: shell/runcontroller.cpp:98
+#, kde-format
+msgctxt "launch mode"
+msgid "Profile"
+msgstr "Profil"
+
+#: shell/runcontroller.cpp:107
+#, kde-format
+msgctxt "launch mode"
+msgid "Execute"
+msgstr "Izvedi"
+
+#: shell/runcontroller.cpp:409
+#, kde-format
+msgid "The current launch configuration does not support the '%1' mode."
+msgstr "Trenutna nastavitev zagona ne podpira načina '%1'."
+
+#: shell/runcontroller.cpp:429
+#, kde-format
+msgctxt "@action"
+msgid "Configure Launches..."
+msgstr "Nastavi zagone..."
+
+#: shell/runcontroller.cpp:432
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open Launch Configuration Dialog"
+msgstr "Odpri pogovorno okno nastavitev zagonov"
+
+#: shell/runcontroller.cpp:433
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens a dialog to setup new launch configurations, or to change the existing "
+"ones."
+msgstr ""
+"Odpre pogovorno okno za nastavitev novih zagonov ali spremembo obstoječih."
+
+#: shell/runcontroller.cpp:436
+#, kde-format
+msgctxt "@action"
+msgid "Execute Launch"
+msgstr "Izvedi zagon"
+
+#: shell/runcontroller.cpp:437
+#, kde-format
+msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
+msgid "Execute"
+msgstr "Izvedi"
+
+#: shell/runcontroller.cpp:439
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Execute current launch"
+msgstr "Izvedi trenutni zagon"
+
+#: shell/runcontroller.cpp:440
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Executes the target or the program specified in currently active launch "
+"configuration."
+msgstr ""
+"Izvede cilj ali program, ki je določen v trenutno dejavni nastavitvi zagona."
+
+#: shell/runcontroller.cpp:446
+#, kde-format
+msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
+msgid "Debug"
+msgstr "Razhrošči"
+
+#. i18n("Profile Launch"), this);
+#. profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
+#. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
+#. ac->addAction("run_profile", profileAction);
+#. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
+#: shell/runcontroller.cpp:460
+#, kde-format
+msgctxt "@action"
+msgid "Stop All Jobs"
+msgstr "Zaustavi vse posle"
+
+#: shell/runcontroller.cpp:461
+#, kde-format
+msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
+msgid "Stop All"
+msgstr "Zaustavi vse"
+
+#: shell/runcontroller.cpp:464
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Stop all currently running jobs"
+msgstr "Zaustavi vse trenutno zagnane posle"
+
+#: shell/runcontroller.cpp:465
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Requests that all running jobs are stopped."
+msgstr "Od vseh tekočih poslov zahteva, da se zaustavijo."
+
+#: shell/runcontroller.cpp:471
+#, kde-format
+msgctxt "@action"
+msgid "Stop"
+msgstr "Zaustavi"
+
+#: shell/runcontroller.cpp:477
+#, kde-format
+msgctxt "@action Short text for 'Stop' used in the toolbar"
+msgid "Stop"
+msgstr "Zaustavi"
+
+#: shell/runcontroller.cpp:478
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Menu allowing to stop individual jobs"
+msgstr "Meni, ki omogoča zaustavitev posameznih poslov"
+
+#: shell/runcontroller.cpp:479
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "List of jobs that can be stopped individually."
+msgstr "Seznam poslov, ki jih lahko zaustavite posamezno."
+
+#: shell/runcontroller.cpp:483
+#, kde-format
+msgctxt "@title:menu"
+msgid "Current Launch Configuration"
+msgstr "Nastavitev trenutnega zagona"
+
+#: shell/runcontroller.cpp:484
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Current launch configuration"
+msgstr "Nastavitev trenutnega zagona"
+
+#: shell/runcontroller.cpp:485
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Select which launch configuration to run when run is invoked."
+msgstr "Izberite, katera nastavitev zagona bo uporabljena on zagonu."
+
+#: shell/runcontroller.cpp:602
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "<%1> Unnamed job"
+msgstr "<%1> Neimenovan posel"
+
+#: shell/runcontroller.cpp:983
+#, kde-format
+msgid "New %1 Launcher"
+msgstr "Nov zaganjalnik %1"
+
+#: shell/runcontroller.cpp:1020
+#, kde-format
+msgctxt "@title:menu"
+msgid "%1 As..."
+msgstr "%1 kot..."
+
+#: shell/runtimecontroller.cpp:25
+#, kde-format
+msgid "Host System"
+msgstr "Gostiteljski sistem"
+
+#: shell/runtimecontroller.cpp:80
+#, kde-format
+msgid "Allows to select a runtime"
+msgstr "Omogoča izbor izvajalne knjižnice"
+
+#: shell/runtimecontroller.cpp:84
+#, kde-format
+msgid "Runtime: %1"
+msgstr "Izvajalna knjižnica: %1"
+
+#: shell/savedialog.cpp:44
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Modified Files?"
+msgstr "Naj shranim spremenjene datoteke?"
+
+#: shell/savedialog.cpp:47
+#, kde-format
+msgid "The following files have been modified. Save them?"
+msgstr "Naslednje datoteke so bile spremenjene. Ali jih želite shraniti?"
+
+#: shell/savedialog.cpp:65
+#, kde-format
+msgctxt "@action:button"
+msgid "Save &None"
+msgstr "&Ne shrani nobene"
+
+#: shell/savedialog.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Discard all modifications"
+msgstr "Zavrzi vse spremembe"
+
+#: shell/session.cpp:178
+#, kde-format
+msgid "(no projects)"
+msgstr "(brez projektov)"
+
+#: shell/sessionchooserdialog.cpp:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete session"
+msgstr "Izbriši sejo"
+
+#: shell/sessionchooserdialog.cpp:49
+#, kde-format
+msgctxt "@title:window"
+msgid "Pick a Session"
+msgstr "Izberi sejo"
+
+#: shell/sessionchooserdialog.cpp:62
+#, kde-format
+msgctxt "@action:button"
+msgid "Run"
+msgstr "Zaženi"
+
+#: shell/sessionchooserdialog.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Active session.\n"
+"pid %1, app %2, host %3"
+msgstr ""
+"Dejavna seja.\n"
+"pid %1, program %2, gostitelj %3"
+
+#: shell/sessionchooserdialog.cpp:96
+#, kde-format
+msgid "Running"
+msgstr "V teku"
+
+#: shell/sessionchooserdialog.cpp:191
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Delete Session"
+msgstr "Ni mogoče izbrisati seje"
+
+#: shell/sessionchooserdialog.cpp:192
+#, kde-format
+msgctxt "@info"
+msgid "<p>Cannot delete a locked session."
+msgstr "<p>Ni mogoče izbrisati zaklenjene seje."
+
+#: shell/sessionchooserdialog.cpp:195
+#, kde-format
+msgctxt "@info"
+msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
+msgstr "<p>Sejo <b>%1</b> je zaklenil %2 na %3 (PID %4)."
+
+#: shell/sessionchooserdialog.cpp:203
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The session <b>%1</b> and all contained settings will be deleted. The "
+"projects will stay unaffected. Do you really want to continue?"
+msgstr ""
+"Trenutna seja <b>%1</b> in vse vsebovane nastavitve bodo izbrisane. Na "
+"projekte to ne bo vplivalo. Ali resnično želite nadaljevati?"
+
+#: shell/sessionchooserdialog.cpp:204
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Session"
+msgstr "Izbriši sejo"
+
+#: shell/sessioncontroller.cpp:129
+#, kde-format
+msgid ""
+"The current session and all contained settings will be deleted. The projects "
+"will stay unaffected. Do you really want to continue?"
+msgstr ""
+"Trenutna seja in vse vsebovane nastavitve bodo izbrisane. Na projekte to ne "
+"bo vplivalo. Ali resnično želite nadaljevati?"
+
+#: shell/sessioncontroller.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename Session"
+msgstr "Preimenuj sejo"
+
+#: shell/sessioncontroller.cpp:142
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New session name:"
+msgstr "Ime nove seje:"
+
+#: shell/sessioncontroller.cpp:249
+#, kde-format
+msgid "Session Manager"
+msgstr "Upravljalnik sej"
+
+#: shell/sessioncontroller.cpp:261
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Start New Session"
+msgstr "Začni novo sejo"
+
+#: shell/sessioncontroller.cpp:262
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Start a new KDevelop instance with an empty session"
+msgstr "Zaženi nov primerek KDevelop s prazno sejo"
+
+#: shell/sessioncontroller.cpp:268
+#, kde-format
+msgctxt "@action"
+msgid "Rename Current Session..."
+msgstr "Preimenuj trenutno sejo..."
+
+#: shell/sessioncontroller.cpp:274
+#, kde-format
+msgctxt "@action"
+msgid "Delete Current Session..."
+msgstr "Izbriši trenutno sejo..."
+
+#: shell/sessioncontroller.cpp:278
+#, kde-format
+msgctxt "@action"
+msgid "Quit"
+msgstr "Končaj"
+
+#: shell/sessioncontroller.cpp:498
+#, kde-format
+msgid "Copy of %1"
+msgstr "Kopija od %1"
+
+#: shell/sessioncontroller.cpp:588
+#, kde-format
+msgctxt "@title:column"
+msgid "Identity"
+msgstr "Istovetnost"
+
+#: shell/sessioncontroller.cpp:589
+#, kde-format
+msgctxt "@title:column"
+msgid "Contents"
+msgstr "Vsebina"
+
+#: shell/sessioncontroller.cpp:590
+#, kde-format
+msgctxt "@title:column"
+msgid "State"
+msgstr "Stanje"
+
+#: shell/sessioncontroller.cpp:591
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Ime"
+
+#: shell/sessioncontroller.cpp:597
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Filter:"
+msgstr "Filter:"
+
+#: shell/sessioncontroller.cpp:629
+#, kde-format
+msgid "Create New Session"
+msgstr "Ustvari novo sejo"
+
+#: shell/sessionlock.cpp:153
+#, kde-format
+msgctxt "@info:shell"
+msgid ""
+"Running %1 instance (PID: %2) detected, making this one visible instead of "
+"starting a new one"
+msgstr ""
+"Zaznan je bil zagnan primerek %1 (PID: %2), zato je slednji postal viden, "
+"novi pa ni bil zagnan"
+
+#: shell/sessionlock.cpp:158
+#, kde-format
+msgctxt "@info:shell"
+msgid "Running %1 instance (PID: %2) is apparently hung"
+msgstr "Zagnan primerek %1 (PID: %2) je očitno obvisel"
+
+#: shell/sessionlock.cpp:164
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The given application did not respond to a DBUS call, it may have crashed or "
+"is hanging."
+msgstr ""
+"Podan program se ne odzval na klic DBUS, lahko da se je sesul ali pa obvisel."
+
+#: shell/sessionlock.cpp:169
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
+msgstr ""
+"Ni bilo mogoče zakleniti seje <em>%1</em>, saj je že zaklenjena s strani %2 "
+"na %3 (PID %4)."
+
+#: shell/sessionlock.cpp:173
+#, kde-format
+msgctxt "@info"
+msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
+msgstr ""
+"Ni bilo mogoče zakleniti seje <em>%1</em> (zaklepna datoteka ni na voljo)"
+
+#: shell/sessionlock.cpp:177
+#, kde-format
+msgctxt "@info"
+msgid ""
+"<p>Please, close the offending application instance or choose another "
+"session to launch.</p>"
+msgstr ""
+"<p>Zaprite primerek programa, ki vam povzroča težave, ali pa izberite novo "
+"sejo za zagon.</p>"
+
+#: shell/sessionlock.cpp:183
+#, kde-format
+msgctxt "@action:button"
+msgid "Retry Startup"
+msgstr "Poskusi ponovni zagon"
+
+#: shell/sessionlock.cpp:186
+#, kde-format
+msgctxt "@action:button"
+msgid "Choose Another Session"
+msgstr "Izberite drugo sejo"
+
+#: shell/sessionlock.cpp:189
+#, kde-format
+msgctxt "@title:window"
+msgid "Failed to Lock Session %1"
+msgstr "Ni bilo mogoče zakleniti seje %1"
+
+#: shell/sessionlock.cpp:196
+#, kde-format
+msgctxt "@info"
+msgid "The session %1 is already active in another running instance."
+msgstr "Seja %1 je že dejavna v drugem tekočem primerku."
+
+#: shell/settings/analyzerspreferences.cpp:25
+#, kde-format
+msgid "Analyzers"
+msgstr "Preučevalniki"
+
+#: shell/settings/analyzerspreferences.cpp:35
+#, kde-format
+msgid "Configure Analyzers"
+msgstr "Nastavi preučevalnike"
+
+#: shell/settings/bgpreferences.cpp:73
+#, kde-format
+msgid "Configure Background Parser"
+msgstr "Nastavi razhroščevalnik v ozadju"
+
+#. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
+#: shell/settings/bgpreferences.ui:20
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Enables or disables the background parser.<br>If unsure, leave it "
+"enabled. Disabling the background parser will disable large parts of "
+"KDevelop's functionality.</p>"
+msgstr ""
+"<p>Omogoči ali onemogoči razčlenjevalnika v ozadju.<br>Če niste prepričani, "
+"pustite omogočeno. Če onemogočite razčlenjevalnik v ozadju, bo to "
+"onemogočilo velike dele zmožnosti KDevelopa.</p>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
+#: shell/settings/bgpreferences.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Enable Background Parser"
+msgstr "Omogoči razčlenjevalnik v ozadju"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
+#: shell/settings/bgpreferences.ui:35 shell/settings/bgpreferences.ui:45
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The time to wait before the document is re-analyzed when you edit it."
+msgstr "Čas, ki naj mine med urejanjem in ponovno analizo dokumenta."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/bgpreferences.ui:38
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Delay:"
+msgstr "Zakasnitev:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
+#: shell/settings/bgpreferences.ui:48
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " ms"
+msgstr " ms"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
+#: shell/settings/bgpreferences.ui:61 shell/settings/bgpreferences.ui:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The maximum number of parallel instances the background parser uses. If "
+"unsure, select 1 or 2."
+msgstr ""
+"Največje število vzporednih pojavkov, ki jih uporablja razčlenjevalnik v "
+"ozadju. Če niste prepričani, izberite 1 ali 2."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/bgpreferences.ui:64
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "Največje število niti:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
+#: shell/settings/bgpreferences.ui:74
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " threads"
+msgstr " niti"
+
+#: shell/settings/documentationpreferences.cpp:35
+#, kde-format
+msgid "Configure Documentation"
+msgstr "Nastavi dokumentacijo"
+
+#: shell/settings/editstyledialog.cpp:102
+#, kde-format
+msgid "No Source Formatter available"
+msgstr "Na voljo ni nobenega oblikovalnika kode"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPreview)
+#. i18n: ectx: property (text), widget (QLabel, previewLabel)
+#: shell/settings/editstyledialog.ui:40
+#: shell/sourceformatterselectionedit.ui:83
+#, kde-format
+msgctxt "@label"
+msgid "Preview:"
+msgstr "Predogled:"
+
+#: shell/settings/environmentpreferences.cpp:79
+#, kde-format
+msgid "Environment"
+msgstr "Okolje"
+
+#: shell/settings/environmentpreferences.cpp:84
+#, kde-format
+msgid "Configure Environment Variables"
+msgstr "Nastavi okoljske spremenljivke"
+
+#: shell/settings/environmentprofilelistmodel.cpp:48
+#, kde-format
+msgid "%1 (default profile)"
+msgstr "%1 (privzeti profil)"
+
+#: shell/settings/environmentprofilemodel.cpp:91
+#, kde-format
+msgctxt "@title:column"
+msgid "Variable"
+msgstr "Spremenljivka"
+
+#: shell/settings/environmentprofilemodel.cpp:93
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Vrednost"
+
+#: shell/settings/environmentwidget.cpp:81
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter variable..."
+msgstr "Vnesite spremenljivko..."
+
+#: shell/settings/environmentwidget.cpp:169
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Environment Profile"
+msgstr "Vnesite ime novega profila okolja"
+
+#: shell/settings/environmentwidget.cpp:233
+#, kde-format
+msgctxt "@title:window"
+msgid "Batch Edit Mode"
+msgstr "Paketni način urejanja"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/environmentwidget.ui:22
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Environment profile:"
+msgstr "Profil okolja:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addProfileButton)
+#: shell/settings/environmentwidget.ui:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add profile..."
+msgstr "Dodaj profil..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneProfileButton)
+#: shell/settings/environmentwidget.ui:49
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone profile..."
+msgstr "Podvoji profil..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeProfileButton)
+#: shell/settings/environmentwidget.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove profile"
+msgstr "Odstrani profil"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultProfileButton)
+#: shell/settings/environmentwidget.ui:69
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "Nastavi kot privzetega"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeVariableButton)
+#: shell/settings/environmentwidget.ui:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove variable"
+msgstr "Odstrani spremenljivko"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, batchModeEditButton)
+#: shell/settings/environmentwidget.ui:130
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Batch edit mode"
+msgstr "Paketni način urejanja"
+
+#: shell/settings/languagepreferences.cpp:35
+#, kde-format
+msgctxt "@item:valuesuffix"
+msgid " file"
+msgid_plural " files"
+msgstr[0] " datoteka"
+msgstr[1] " datoteki"
+msgstr[2] " datoteke"
+msgstr[3] " datotek"
+
+#: shell/settings/languagepreferences.cpp:77
+#, kde-format
+msgid "Language Support"
+msgstr "Podpora jeziku"
+
+#: shell/settings/languagepreferences.cpp:82
+#, kde-format
+msgid "Configure Code-Completion and Semantic Highlighting"
+msgstr "Nastavi dopolnjevanje kode in semantično poudarjanje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/languagepreferences.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Code Completion"
+msgstr "Dopolnjevanje kode"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_6)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_automaticInvocation)
+#: shell/settings/languagepreferences.ui:35
+#: shell/settings/languagepreferences.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "If disabled, the code completion widget will never show automatically."
+msgstr ""
+"Če je onemogočeno, se gradnik za dopolnjevanje kode ne bo nikoli prikazal "
+"samodejno."
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: shell/settings/languagepreferences.ui:38
+#, kde-format
+msgctxt "@label"
+msgid "Enable automatic invocation:"
+msgstr "Omogoči samodejni priklic:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_7)
+#: shell/settings/languagepreferences.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Choose whether to display additional information for the currently selected "
+"codecompletion item."
+msgstr ""
+"Izberite ali naj bodo prikazane dodatne podrobnosti za trenutno izbran "
+"predmet dopolnjevanja kode."
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: shell/settings/languagepreferences.ui:61
+#, kde-format
+msgctxt "@label"
+msgid "Additional information for current item:"
+msgstr "Dodatne informacije za trenutni predmet:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
+#: shell/settings/languagepreferences.ui:71
+#, kde-format
+msgctxt "info:tooltip"
+msgid ""
+"Choose whether to display additional information for the currently selected "
+"code completion item."
+msgstr ""
+"Izberite ali naj bodo prikazane dodatne podrobnosti za trenutno izbran "
+"predmet dopolnjevanja kode."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:81
+#: shell/settings/languagepreferences.ui:94
+#, kde-format
+msgid ""
+"<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
+"in what cases full code completion will be displayed.</p>"
+msgstr ""
+"<p>Uporabniški vmesnik za dopolnjevanje kode ima minimalni in podrobni način."
+"<br>Izberite kdaj bo prikazano celotno dopolnjevanje kode.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/settings/languagepreferences.ui:84
+#, kde-format
+msgctxt "@label"
+msgid "Detailed completion:"
+msgstr "Podrobno dopolnjevanje:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:101
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Never"
+msgstr "Nikoli"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "When Invoked Manually"
+msgstr "Ob ročnem priklicu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
+#: shell/settings/languagepreferences.ui:111
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr "Vedno"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/languagepreferences.ui:122
+#, kde-format
+msgctxt "@title:group"
+msgid "Semantic Code Highlighting"
+msgstr "Semantično poudarjanje kode"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
+#. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
+#: shell/settings/languagepreferences.ui:131
+#: shell/settings/languagepreferences.ui:144
+#, kde-format
+msgid ""
+"<p>This setting decides about the intensity of colors for local variables, "
+"for example function arguments, variables and the like.</p>"
+msgstr ""
+"<p>Ta nastavitev določa intenziteto barv za krajevne spremenljivke, na "
+"primer argumente funkcij, spremenljivke in podobno.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
+#: shell/settings/languagepreferences.ui:134
+#, kde-format
+msgctxt "@label:slider"
+msgid "Local colorization intensity:"
+msgstr "Intenziteta obarvanja krajevnega:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
+#. i18n: ectx: property (toolTip), widget (QLabel, label_9)
+#: shell/settings/languagepreferences.ui:166
+#: shell/settings/languagepreferences.ui:183
+#, kde-format
+msgid ""
+"<p>By default, the global colors for types, functions, namespaces and so "
+"forth are auto-generated and will adapt to the selected editor theme based "
+"on the global colorization intensity. If you want to have full control over "
+"the colors, you can instead use the editor theme as color source. You can "
+"then fine tune the colors in the settings under Editor &gt; Color Themes "
+"&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
+msgstr ""
+"<p>Privzeto so globalne barve za vrste, funkcije, imenske prostore itd. "
+"samodejno ustvarjene in se bodo prilagodile izbrani temi urejevalnika "
+"globalno intenzivnosti barve. Če želite imeti popoln nadzor nad barvami, "
+"lahko namesto tega uporabite temo urejevalnika kot vira barv. Nato lahko "
+"natančno prilagodite barve v nastavitvah urejevalnika pod Urejevalnik &gt; "
+"Barvne teme &gt; Označite besedilne sloge &gt; Kdevelop/semantične barve.</p>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
+#: shell/settings/languagepreferences.ui:170
+#, kde-format
+msgid "Auto-Generated"
+msgstr "Samodejno generirano"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
+#: shell/settings/languagepreferences.ui:175
+#, kde-format
+msgid "From Editor Theme"
+msgstr "Iz teme urejevalnika"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: shell/settings/languagepreferences.ui:186
+#, kde-format
+msgid "Global colors:"
+msgstr "Globalne barve:"
+
+#. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
+#. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
+#: shell/settings/languagepreferences.ui:196
+#: shell/settings/languagepreferences.ui:218
+#, kde-format
+msgid ""
+"<p>This settings lets you change the intensity of globally accessible types, "
+"for example classes, methods, functions etc.</p>"
+msgstr ""
+"<p>Ta nastavitev vam omogoča spremeniti intenziteto globalno dostopnih vrst, "
+"na primer razredov, metod, funkcij in podobno.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
+#: shell/settings/languagepreferences.ui:221
+#, kde-format
+msgctxt "@label:slider"
+msgid "Global colorization intensity:"
+msgstr "Intenziteta obarvanja globalnega:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_4)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
+#: shell/settings/languagepreferences.ui:231
+#: shell/settings/languagepreferences.ui:244
+#, kde-format
+msgid ""
+"<p>Highlight semantic problems, such as non-existent or inaccessible "
+"declarations.</p>"
+msgstr ""
+"<p>Poudari semantične težave, kot so na primer neobstoječe ali nedostopne "
+"deklaracije.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/settings/languagepreferences.ui:234
+#, kde-format
+msgctxt "@label"
+msgid "Highlight semantic problems:"
+msgstr "Poudari semantične težave:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
+#: shell/settings/languagepreferences.ui:254
+#: shell/settings/languagepreferences.ui:267
+#, kde-format
+msgid ""
+"<p>When enabled, lines with errors will get additionally highlighted and "
+"their positions get marked in the scrollbar.</p>"
+msgstr ""
+"<p>Ko je omogočeno, bodo vrstice z napakami še dodatno poudarjene, njihovi "
+"položaji pa označeni na drsniku.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: shell/settings/languagepreferences.ui:257
+#, kde-format
+msgctxt "@label"
+msgid "Highlight problematic lines:"
+msgstr "Poudari vrstice s težavami:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
+#: shell/settings/languagepreferences.ui:277
+#, kde-format
+msgid ""
+"<html><head/><body><p>Use bold font for declarations such as classes, "
+"functions, local variables, etc.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Uporabi krepko pisavo za določila kot so razredi, "
+"funkcije, krajevne spremenljivke, itd.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
+#: shell/settings/languagepreferences.ui:280
+#, kde-format
+msgctxt "@label"
+msgid "Bold font for declarations:"
+msgstr "Krepka pisava za določila:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: shell/settings/languagepreferences.ui:293
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Problems shown as inline notes:"
+msgstr "Problemi prikazani kot medvrstične opombe:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:304
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "None"
+msgstr "Nič"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:309
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Errors"
+msgstr "Napake"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:314
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Warnings and Errors"
+msgstr "Opozorila in napake"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
+#: shell/settings/languagepreferences.ui:319
+#, kde-format
+msgctxt "@item:inlistbox inline problems shown"
+msgid "Hints, Warnings and Errors"
+msgstr "Namigi, opozorila in napake"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#: shell/settings/languagepreferences.ui:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Space-separated list of words that make a comment represent a TODO item"
+msgstr ""
+"S presledki ločen seznam besed, ki opombo predstavijo kot nalogo v seznamu "
+"nalog"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/languagepreferences.ui:330
+#, kde-format
+msgctxt "@label:textbox"
+msgid "TODO marker words:"
+msgstr "Besede označevalnika za nalogo:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
+#: shell/settings/languagepreferences.ui:340
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Space-separated list of words that make a comment represent a TODO item."
+msgstr ""
+"S presledki ločen seznam besed, ki opombo predstavijo kot predmet v seznamu "
+"nalog."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: shell/settings/languagepreferences.ui:369
+#, kde-format
+msgctxt "@title:group"
+msgid "Project Parsing"
+msgstr "Razčlenjevanje projekta"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
+#: shell/settings/languagepreferences.ui:379
+#: shell/settings/languagepreferences.ui:399
+#, kde-format
+msgid ""
+"<p>When a project contains more files than this number, the project will be\n"
+"parsed in simplified mode, increasing the efficiency by gathering less "
+"information. Global code navigation and quickopen capabilities will be "
+"reduced.</p>"
+msgstr ""
+"<p>Ko projekt vsebuje večje število datotek, kot je navedeno tu, bo projekt\n"
+"razčlenjen v poenostavljenem načinu, kar poveča učinkovitost na račun "
+"zbiranja\n"
+"manjše količine podrobnosti. Zmožnosti globalnega krmarjenja po kodi in "
+"hitrega\n"
+"odpiranja bosta zmanjšani.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/settings/languagepreferences.ui:382
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Minimum project size for simplified parsing:"
+msgstr "Najmanjša velikost projekta za poenostavljeno razčlenjevanje:"
+
+#: shell/settings/pluginpreferences.cpp:48
+#, kde-format
+msgctxt "@title:group"
+msgid "Core"
+msgstr "Jedro"
+
+#: shell/settings/pluginpreferences.cpp:49
+#, kde-format
+msgctxt "@title:group"
+msgid "Project Management"
+msgstr "Upravljanje projektov"
+
+#: shell/settings/pluginpreferences.cpp:50
+#, kde-format
+msgctxt "@title:group"
+msgid "Version Control"
+msgstr "Nadzor različic"
+
+#: shell/settings/pluginpreferences.cpp:51
+#, kde-format
+msgctxt "@title:group"
+msgid "Utilities"
+msgstr "Pripomočki"
+
+#: shell/settings/pluginpreferences.cpp:52
+#, kde-format
+msgctxt "@title:group"
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: shell/settings/pluginpreferences.cpp:53
+#, kde-format
+msgctxt "@title:group"
+msgid "Language Support"
+msgstr "Podpora jeziku"
+
+#: shell/settings/pluginpreferences.cpp:54
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugging"
+msgstr "Razhroščevanje"
+
+#: shell/settings/pluginpreferences.cpp:55
+#, kde-format
+msgctxt "@title:group"
+msgid "Testing"
+msgstr "Preizkušanje"
+
+#: shell/settings/pluginpreferences.cpp:56
+#, kde-format
+msgctxt "@title:group"
+msgid "Analyzers"
+msgstr "Preučevalniki"
+
+#: shell/settings/pluginpreferences.cpp:57
+#, kde-format
+msgctxt "@title:group"
+msgid "Runtimes"
+msgstr "Izvajalne knjižnice"
+
+#: shell/settings/pluginpreferences.cpp:58
+#, kde-format
+msgctxt "@title:group"
+msgid "Other"
+msgstr "Drugo"
+
+#: shell/settings/pluginpreferences.h:32
+#, kde-format
+msgid "Plugins"
+msgstr "Vstavki"
+
+#: shell/settings/pluginpreferences.h:33
+#, kde-format
+msgid "Configure Plugins"
+msgstr "Nastavi vstavke"
+
+#. i18n: ectx: label, entry (parseAllProjectSources), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:11
+#, kde-format
+msgid ""
+"Schedule all project source code to be parsed by the language support in the "
+"background"
+msgstr ""
+"Razporedi vso izvorno kodo projekta, da bo razčlenjena s podporo jeziku v "
+"ozadju"
+
+#. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:15
+#, kde-format
+msgid ""
+"If this option is set, KDevelop will schedule all source code\n"
+"        found by the current build system for parsing by the appropriate "
+"language\n"
+"        support part.  This will enable more complete language support, but "
+"may\n"
+"        be slower."
+msgstr ""
+"Če je ta možnost omogočena, bo KDevelop vso izvorno kodo,\n"
+"        ki jo najde s sistemom za gradnjo, razporedil za razčlenjevanje z "
+"ustreznim\n"
+"        sestavnim delom za podporo jezikom. To omogoči obširnejšo podporo "
+"programskim\n"
+"        jezikom, a je lahko počasnejše."
+
+#. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:19
+#, kde-format
+msgid "Chooses the base directory where new projects are created."
+msgstr "Izbere osnovno mapo, v kateri bodo ustvarjeni novi projekti."
+
+#. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:23
+#, kde-format
+msgid "Save all open documents before building anything"
+msgstr "Pred izgradnjo shrani vse odprte dokumente"
+
+#. i18n: ectx: whatsthis, entry (saveDocuments), group (Project Manager)
+#: shell/settings/projectconfig.kcfg:24
+#, kde-format
+msgid ""
+"If this option is set all open documents will be automatically saved before "
+"any build is started."
+msgstr ""
+"Če je ta možnost omogočena, bodo vsi odprti dokumenti pred vsakim začetkom "
+"izgradnje, samodejno shranjeni."
+
+#: shell/settings/projectpreferences.cpp:44
+#, kde-format
+msgid "Projects"
+msgstr "Projekti"
+
+#: shell/settings/projectpreferences.cpp:49
+#, kde-format
+msgid "Configure Projects"
+msgstr "Nastavi projekte"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_3)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_projectsBaseDirectory)
+#: shell/settings/projectpreferences.ui:22
+#: shell/settings/projectpreferences.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select the base directory where new projects are to be created"
+msgstr "Izberite osnovni imenik, v katerem bodo ustvarjeni projekti"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: shell/settings/projectpreferences.ui:25
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects base directory:"
+msgstr "Osnovni imenik projektov:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_parseAllProjectSources)
+#: shell/settings/projectpreferences.ui:47
+#, kde-format
+msgctxt "@info:tolltip"
+msgid "Parse all files in a project after the project has been opened"
+msgstr "Po odprtju projekta razčleni vse datoteke v njem"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
+#: shell/settings/projectpreferences.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Schedule all project files for parsing"
+msgstr "Razporedi vse datoteke projekta za razčlenjevanje"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
+#: shell/settings/projectpreferences.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all modified documents when the \"build\" action is triggered"
+msgstr "Ob izvedbi izgradnje shrani vse spremenjene dokumente"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
+#: shell/settings/projectpreferences.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Save all documents before building"
+msgstr "Pred izgradnjo shrani vse dokumente"
+
+#: shell/settings/runtimespreferences.cpp:23
+#, kde-format
+msgid "Runtimes"
+msgstr "Izvajalne knjižnice"
+
+#: shell/settings/runtimespreferences.cpp:33
+#, kde-format
+msgid "Configure Runtimes"
+msgstr "Nastavi izvajalne knjižnice"
+
+#: shell/settings/sourceformattersettings.cpp:75
+#: shell/sourceformattercontroller.cpp:139
+#, kde-format
+msgid "Source Formatter"
+msgstr "Oblikovalnik izvorne kode"
+
+#: shell/settings/sourceformattersettings.cpp:80
+#, kde-format
+msgid "Configure Source Formatter"
+msgstr "Nastavi oblikovalnik izvorne kode"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/sourceformattersettings.ui:20
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr "Splošno"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateOverrideIndentation)
+#: shell/settings/sourceformattersettings.ui:26
+#, kde-format
+msgctxt "@info:tolltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without Kate modeline."
+msgstr ""
+"Prepiše način zamikanja urejevalnika glede na slog oblikovanja za dokumente "
+"brez načina zamikanja urejevalnika Kate."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
+#: shell/settings/sourceformattersettings.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "Override Kate Indentation Mode"
+msgstr "Prepiši način zamikanja Kate"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
+#: shell/settings/sourceformattersettings.ui:36
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr ""
+"Oblikovanim dokumentom dodaj spremenljivke dokumenta za Kate glede na slog "
+"oblikovanja."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
+#: shell/settings/sourceformattersettings.ui:39
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate Modeline"
+msgstr "Dodaj načine zamikanja za Kate"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/sourceformattersettings.ui:55
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr "Slogi oblikovanja"
+
+#: shell/settings/templateconfig.cpp:39
+#, kde-format
+msgid "Templates"
+msgstr "Predloge"
+
+#: shell/settings/templateconfig.cpp:44
+#, kde-format
+msgid "Configure Templates"
+msgstr "Nastavi predloge"
+
+#. i18n: ectx: property (text), widget (QPushButton, loadButton)
+#: shell/settings/templatepage.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template From File"
+msgstr "Naloži predlogo iz datoteke"
+
+#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
+#: shell/settings/templatepage.ui:38
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Pridobi več predlog"
+
+#. i18n: ectx: property (text), widget (QPushButton, extractButton)
+#: shell/settings/templatepage.ui:50
+#, kde-format
+msgctxt "@action:button"
+msgid "Clone Template"
+msgstr "Podvoji predlogo"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
+#: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
+#, kde-format
+msgid "User Interface"
+msgstr "Uporabniški vmesnik"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: shell/settings/uiconfig.ui:23
+#, kde-format
+msgctxt "@title:group"
+msgid "Dock Window Behavior"
+msgstr "Obnašanje zasidranih oken"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_4)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#: shell/settings/uiconfig.ui:29 shell/settings/uiconfig.ui:49
+#, kde-format
+msgid ""
+"<p>Controls whether the bottom left corner is occupied by the dock at the "
+"left, or by the dock at the bottom.</p>"
+msgstr ""
+"<p>Nadzira ali je spodnji levi kot zaseden z levim sidriščem ali spodnjim "
+"sidriščem.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/settings/uiconfig.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Bottom left corner occupied by:"
+msgstr "Spodnji levi kot je zaseden:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:39 shell/settings/uiconfig.ui:66
+#, kde-format
+msgid ""
+"<p>Controls whether the bottom right corner is occupied by the dock at the "
+"right, or by the dock at the bottom.</p>"
+msgstr ""
+"<p>Nadzira ali je spodnji desni kot zaseden z desnim sidriščem ali spodnjim "
+"sidriščem.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: shell/settings/uiconfig.ui:42
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Bottom right corner occupied by:"
+msgstr "Spodnji desni kot je zaseden:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#: shell/settings/uiconfig.ui:53
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Left Dock"
+msgstr "Levo sidrišče"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:58 shell/settings/uiconfig.ui:75
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Bottom Dock"
+msgstr "Spodnje sidrišče"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomRightCornerOwner)
+#: shell/settings/uiconfig.ui:70
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Right Dock"
+msgstr "Desno sidrišče"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: shell/settings/uiconfig.ui:86
+#, kde-format
+msgctxt "@title:group"
+msgid "Tabbed Browsing"
+msgstr "Brskanje z zavihki"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
+#: shell/settings/uiconfig.ui:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Controls whether to open new tabs next to the active one."
+msgstr "Nadzira ali se naj novi zavihki odprejo poleg dejavnega."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
+#: shell/settings/uiconfig.ui:95
+#, kde-format
+msgctxt "@option:check"
+msgid "Open new tab after current"
+msgstr "Odpri nov zavihek za trenutnim"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
+#: shell/settings/uiconfig.ui:106
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"When enabled, plugins can group related files side by side.\n"
+"For example, a header file will be opened next to the implementation file."
+msgstr ""
+"Če je to omogočeno, lahko vtičniki postavijo sorodne datoteke vštric.\n"
+"Na primer: datoteka glave bo odprta ob datoteki izvedbe."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
+#: shell/settings/uiconfig.ui:109
+#, kde-format
+msgctxt "@option:check"
+msgid "Arrange related documents side by side"
+msgstr "Razporedi sorodne dokumente vštric"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
+#: shell/settings/uiconfig.ui:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enables or disables the display of the tab bar at the top of the editor "
+"window."
+msgstr ""
+"Omogoči ali onemogoči prikaz vrstice z zavihki na vrhu okna urejevalnika."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
+#: shell/settings/uiconfig.ui:119
+#, kde-format
+msgctxt "@option:check"
+msgid "Show tabs"
+msgstr "Pokaži zavihke"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
+#: shell/settings/uiconfig.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Enables or disables the display of a close button in each tab in the tab bar "
+"at the top of the editor window."
+msgstr ""
+"Omogoči ali onemogoči prikaz vrstice z zavihki na vrhu okna urejevalnika."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
+#: shell/settings/uiconfig.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Show close buttons on tabs"
+msgstr "Na zavihkih prikaži gumbe za zapiranje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: shell/settings/uiconfig.ui:145
+#, kde-format
+msgctxt "@title:group"
+msgid "Coloring"
+msgstr "Barvanje"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ColorizeByProject)
+#: shell/settings/uiconfig.ui:151
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"When enabled, tabs and other widgets are colored based on the project "
+"affiliation"
+msgstr ""
+"Ko je omogočeno, so zavihki in drugi gradniki obarvani glede na projekt, v "
+"katerega spadajo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
+#: shell/settings/uiconfig.ui:154
+#, kde-format
+msgctxt "@option:check"
+msgid "Color widgets based on the project affiliation"
+msgstr "Obarvaj gradnike glede na projekt, v katerega spadajo"
+
+#: shell/settings/uipreferences.cpp:55
+#, kde-format
+msgid "Configure User Interface"
+msgstr "Nastavi uporabniški vmesnik"
+
+#: shell/sourceformattercontroller.cpp:145
+#, kde-format
+msgctxt "@action"
+msgid "&Reformat Source"
+msgstr "P&reoblikuj kodo"
+
+#: shell/sourceformattercontroller.cpp:149
+#, kde-format
+msgctxt "@action"
+msgid "Reformat Line"
+msgstr "Preoblikuj vrstico"
+
+#: shell/sourceformattercontroller.cpp:153
+#, kde-format
+msgctxt "@action"
+msgid "Reformat Files..."
+msgstr "Preoblikuj datoteke..."
+
+#: shell/sourceformattercontroller.cpp:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Format file(s) using the configured source formatter(s)"
+msgstr "Oblikuj datoteke z uporabo nastavljenih oblikovalnikov izvorne kode"
+
+#: shell/sourceformattercontroller.cpp:156
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Formatting functionality using the configured source formatter(s)."
+msgstr ""
+"Oblikuj funkcionalnost z uporabo nastavljenih oblikovalnikov izvorne kode."
+
+#: shell/sourceformattercontroller.cpp:523
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
+msgstr "Ponovno oblikuj izbiro ali datoteko z uporabo <i>%1</i> (<b>%2</b>)"
+
+#: shell/sourceformattercontroller.cpp:526
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Reformats selected text or the entire file if nothing is selected, using <i>"
+"%1</i> tool with <b>%2</b> style."
+msgstr ""
+"Ponovno oblikuj izbrano besedilo ali celotno datoteko, če ni ničesar "
+"izbranega, z uporabo orodja <i>%1</i> na način <b>%2</b>."
+
+#: shell/sourceformattercontroller.cpp:528
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
+msgstr "Ponovno oblikuj trenutno vrstico z uporabo <i>%1</i> (<b>%2</b>)"
+
+#: shell/sourceformattercontroller.cpp:531
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
+"style."
+msgstr ""
+"Ponovno oblikuj vrstico pod kazalko z uporabo orodja <i>%1</i> na način <b>"
+"%2</b>."
+
+#: shell/sourceformattercontroller.cpp:535
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat selection or file using the configured source formatter"
+msgstr ""
+"Ponovno oblikuj izbiro ali datoteko z uporabo nastavljenega oblikovalnika "
+"izvorne kode"
+
+#: shell/sourceformattercontroller.cpp:537
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Reformats selected text or the entire file if nothing is selected, using the "
+"configured source formatter."
+msgstr ""
+"Ponovno oblikuj izbiro ali celotno datoteko, če ni ničesar izbranega, z "
+"uporabo nastavljenega oblikovalnika izvorne kode."
+
+#: shell/sourceformattercontroller.cpp:539
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Reformat current line using the configured source formatter"
+msgstr ""
+"Preoblikuj trenutno vrstico z uporabo nastavljenega oblikovalnika izvorne "
+"kode"
+
+#: shell/sourceformattercontroller.cpp:541
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Source reformatting of line under cursor using the configured source "
+"formatter."
+msgstr ""
+"Preoblikovanje vrstice pod kazalko z uporabo nastavljenega oblikovalnika "
+"izvorne kode."
+
+#: shell/sourceformattercontroller.cpp:765
+#, kde-format
+msgctxt "@title:window"
+msgid "Reformat Files?"
+msgstr "Naj preoblikujem datoteke?"
+
+#: shell/sourceformattercontroller.cpp:766
+#, kde-format
+msgid "Reformat all files in the selected folder?"
+msgstr "Preoblikujem vse datoteke v izbrani mapi?"
+
+#: shell/sourceformattercontroller.cpp:770
+#, kde-format
+msgctxt "@action:button"
+msgid "Reformat"
+msgstr "Preoblikuj"
+
+#: shell/sourceformatterjob.cpp:38
+#, kde-format
+msgid "Reformatting"
+msgstr "Poteka preoblikovanje"
+
+#: shell/sourceformatterjob.cpp:49
+#, kde-format
+msgid "Reformat Files"
+msgstr "Preoblikuj datoteke"
+
+#: shell/sourceformatterjob.cpp:60
+#, kde-format
+msgid "Reformatting one file"
+msgid_plural "Reformatting %1 files"
+msgstr[0] "Preoblikovanje %1 datotek"
+msgstr[1] "Preoblikovanje %1 datoteke"
+msgstr[2] "Preoblikovanje %1 datotek"
+msgstr[3] "Preoblikovanje %1 datotek"
+
+#: shell/sourceformatterselectionedit.cpp:484
+#, kde-format
+msgid ""
+"The style %1 is also used for the following languages:\n"
+"%2.\n"
+"Are you sure you want to delete it?"
+msgstr ""
+"Slog %1 je uporabljen tudi za naslednje jezike:\n"
+"%2.\n"
+"Ali ste prepričani, da ga želite izbrisati?"
+
+#: shell/sourceformatterselectionedit.cpp:485
+#, kde-format
+msgctxt "@title:window"
+msgid "Deleting Style"
+msgstr "Brisanje sloga"
+
+#: shell/sourceformatterselectionedit.cpp:540
+#, kde-format
+msgid "New %1"
+msgstr "Nov %1"
+
+#: shell/sourceformatterselectionedit.cpp:543
+#, kde-format
+msgid "New Style"
+msgstr "Nov slog"
+
+#: shell/sourceformatterselectionedit.cpp:624
+#, kde-format
+msgid "No language selected"
+msgstr "Izbran ni noben jezik"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: shell/sourceformatterselectionedit.ui:29
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Language:"
+msgstr "Jezik:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: shell/sourceformatterselectionedit.ui:102
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Formatter:"
+msgstr "Oblikovalnik:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: shell/sourceformatterselectionedit.ui:132
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Style:"
+msgstr "Slog:"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
+#: shell/sourceformatterselectionedit.ui:150
+#, kde-format
+msgctxt "@action:button"
+msgid "New"
+msgstr "Nov"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnEditStyle)
+#: shell/sourceformatterselectionedit.ui:157
+#, kde-format
+msgctxt "@action:button"
+msgid "Edit..."
+msgstr "Uredi..."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDelStyle)
+#. i18n: ectx: property (text), widget (QPushButton, deleteButton)
+#: shell/sourceformatterselectionedit.ui:164
+#: shell/workingsets/workingsettooltipwidget.cpp:93
+#: vcs/dvcs/ui/branchmanager.ui:44
+#, kde-format
+msgctxt "@action:button"
+msgid "Delete"
+msgstr "Izbriši"
+
+#: shell/textdocument.cpp:436
+#, kde-format
+msgid ""
+"The file \"%1\" is modified on disk.\n"
+"\n"
+"Are you sure you want to overwrite it? (External changes will be lost.)"
+msgstr ""
+"Datoteka »%1« je bila spremenjena na disku.\n"
+"\n"
+"Ali ste prepričani, da jo želite prepisati? (Zunanje spremembe bodo "
+"izgubljene.)"
+
+#: shell/textdocument.cpp:439
+#, kde-format
+msgctxt "@title:window"
+msgid "Document Externally Modified"
+msgstr "Dokument je bil spremenjen od zunaj"
+
+#: shell/textdocument.cpp:703
+#, kde-format
+msgid " Line: %1 Col: %2 "
+msgstr " Vrstica: %1 Stolpec: %2 "
+
+#: shell/uicontroller.cpp:81
+#, kde-format
+msgctxt "area"
+msgid "Code"
+msgstr "Koda"
+
+#: shell/uicontroller.cpp:92
+#, kde-format
+msgctxt "area"
+msgid "Debug"
+msgstr "Razhrošči"
+
+#: shell/uicontroller.cpp:101
+#, kde-format
+msgctxt "area"
+msgid "Review"
+msgstr "Pregled"
+
+#: shell/uicontroller.cpp:460
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Tool View to Add"
+msgstr "Izberite prikaz orodja za dodajanje"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:74
+#, kde-format
+msgid "<b>Active Working Set</b>"
+msgstr "<b>Dejavni delovni nabor</b>"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:76
+#, kde-format
+msgid "<b>Working Set</b>"
+msgstr "<b>Delovni nabor</b>"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this working set. The contained documents are not affected."
+msgstr "Odstrani ta delovni nabor. To nima vpliva na vsebovane dokumente."
+
+#: shell/workingsets/workingsettooltipwidget.cpp:120
+#, kde-format
+msgctxt "@label"
+msgid "Documents:"
+msgstr "Dokumenti:"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:128
+#, kde-format
+msgctxt "@action:button"
+msgid "Add All"
+msgstr "Dodaj vse"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add all documents that are part of this working set to the currently active "
+"working set"
+msgstr ""
+"Dodaj vse dokumente, ki so del tega delovnega nabora v trenutno dejavni "
+"delovni nabor"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:136
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove All"
+msgstr "Odstrani vse"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Remove all documents that are part of this working set from the currently "
+"active working set"
+msgstr ""
+"Odstrani vse dokumente, ki so del tega delovnega nabora iz trenutno "
+"dejavnega delovnega nabora"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:170
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Click to open and activate this document."
+msgstr "Kliknite, da odprete in omogočite ta dokument."
+
+#: shell/workingsets/workingsettooltipwidget.cpp:281
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove this file from the current working set"
+msgstr "Odstrani to datoteko iz trenutnega delovnega nabora"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:286
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add this file to the current working set"
+msgstr "Dodaj to datoteko v trenutni delovni nabor"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:315
+#, kde-format
+msgctxt "@action:button"
+msgid "Stash"
+msgstr "Zaloga"
+
+#: shell/workingsets/workingsettooltipwidget.cpp:321
+#, kde-format
+msgctxt "@action:button"
+msgid "Load"
+msgstr "Naloži"
+
+#: sublime/container.cpp:285
+#, kde-format
+msgid "Line: 00000 Col: 000"
+msgstr "Vrstica: 00000 Stolpec: 000"
+
+#: sublime/container.cpp:319
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show sorted list of opened documents"
+msgstr "Prikaži razvrščen seznam odprtih dokumentov"
+
+#: sublime/container.cpp:331
+#, kde-format
+msgctxt "@info"
+msgid "(Press Ctrl+Tab to switch)"
+msgstr "(Pritisnite Ctrl+Tab za preklop)"
+
+#: sublime/container.cpp:724
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Filename"
+msgstr "Kopiraj ime datoteke"
+
+#: sublime/container.cpp:727
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "Zapri"
+
+#: sublime/container.cpp:729
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "Zapri vse druge"
+
+#: sublime/container.cpp:731
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All"
+msgstr "Zapri vse"
+
+#: sublime/idealbuttonbarwidget.cpp:37
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle '%1' tool view"
+msgstr "Preklopi prikaz orodja '%1'"
+
+#: sublime/idealbuttonbarwidget.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Right click to add new tool views."
+msgstr "Kliknite z desno, da dodate nove prikaze orodij."
+
+#: sublime/idealcontroller.cpp:94
+#, kde-format
+msgctxt "@title:window"
+msgid "%1 Toolbar"
+msgstr "Orodna vrstica %1"
+
+#: sublime/idealdockwidget.cpp:108
+#, kde-format
+msgctxt "@title:menu"
+msgid "Tool View Position"
+msgstr "Položaj prikaza orodja"
+
+#: sublime/idealdockwidget.cpp:112
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Left"
+msgstr "Levo"
+
+#: sublime/idealdockwidget.cpp:113
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Bottom"
+msgstr "Na dnu"
+
+#: sublime/idealdockwidget.cpp:114
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Right"
+msgstr "Desno"
+
+#: sublime/idealdockwidget.cpp:115
+#, kde-format
+msgctxt "@option:radio tool view position"
+msgid "Detached"
+msgstr "Odpeto"
+
+#: sublime/idealdockwidget.cpp:133
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Assign Shortcut..."
+msgstr "Dodeli bližnjico..."
+
+#: sublime/idealdockwidget.cpp:134
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Use this shortcut to trigger visibility of the tool view."
+msgstr "Uporabite to bližnjico, da preklopite vidnost prikaza orodja."
+
+#: sublime/idealdockwidget.cpp:137
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove Tool View"
+msgstr "Odstrani prikaz orodja"
+
+#: sublime/idealdockwidget.cpp:148
+#, kde-format
+msgctxt "@title:window"
+msgid "Assign Shortcut For '%1' Tool View"
+msgstr "Dodeli bližnjico prikazu orodja '%1'"
+
+#: sublime/mainwindow_p.cpp:79
+#, kde-format
+msgctxt "@option:check"
+msgid "Concentration Mode"
+msgstr "Način za koncentracijo"
+
+#: sublime/mainwindow_p.cpp:81
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove most of the controls so you can focus on what matters"
+msgstr ""
+"Odstrani večino nadzornikov, da se lahko osredotočite na pomembne stvari"
+
+#: sublime/mainwindow_p.cpp:88
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Left Dock"
+msgstr "Prikaži levo sidrišče"
+
+#: sublime/mainwindow_p.cpp:95
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Right Dock"
+msgstr "Prikaži desno sidrišče"
+
+#: sublime/mainwindow_p.cpp:101
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Bottom Dock"
+msgstr "Prikaži spodnje sidrišče"
+
+#: sublime/mainwindow_p.cpp:107
+#, kde-format
+msgctxt "@action"
+msgid "Focus Editor"
+msgstr "Urejevalnik v žarišče"
+
+#: sublime/mainwindow_p.cpp:112
+#, kde-format
+msgctxt "@action"
+msgid "Hide/Restore Docks"
+msgstr "Skrij/obnovi sidrišča"
+
+#: sublime/mainwindow_p.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Next Tool View"
+msgstr "Naslednji prikaz orodja"
+
+#: sublime/mainwindow_p.cpp:123
+#, kde-format
+msgctxt "@action"
+msgid "Previous Tool View"
+msgstr "Predhodni prikaz orodja"
+
+#: sublime/mainwindow_p.cpp:129
+#, kde-format
+msgctxt "@title:menu"
+msgid "Tool Views"
+msgstr "Prikazi orodij"
+
+#: sublime/mainwindow_p.cpp:139
+#, kde-format
+msgid "Left Button Bar"
+msgstr "Leva vrstica z gumbi"
+
+#: sublime/mainwindow_p.cpp:142
+#, kde-format
+msgid "Right Button Bar"
+msgstr "Desna vrstica z gumbi"
+
+#: sublime/mainwindow_p.cpp:145
+#, kde-format
+msgid "Bottom Button Bar"
+msgstr "Spodnja vrstica z gumbi"
+
+#: sublime/mainwindow_p.cpp:817
+#, kde-format
+msgctxt "@action"
+msgid "Close"
+msgstr "Zapri"
+
+#: sublime/mainwindow_p.cpp:818
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close message"
+msgstr "Zapri sporočilo"
+
+#: util/duchainify/main.cpp:255
+#, kde-format
+msgid "duchainify"
+msgstr "duchainify"
+
+#: util/duchainify/main.cpp:256
+#, kde-format
+msgid "DUChain builder application"
+msgstr "Program za izgradnjo DUChain"
+
+#: util/duchainify/main.cpp:257
+#, kde-format
+msgid "(c) 2009 David Nolden"
+msgstr "© 2009 David Nolden"
+
+#: util/duchainify/main.cpp:263
+#, kde-format
+msgid "file or directory"
+msgstr "datoteka ali mapa"
+
+#: util/duchainify/main.cpp:266
+#, kde-format
+msgid "Show warnings"
+msgstr "Prikaži opozorila"
+
+#: util/duchainify/main.cpp:268
+#, kde-format
+msgid "Show warnings and debug output"
+msgstr "Prikaži opozorila in razhroščevalni izhod"
+
+#: util/duchainify/main.cpp:270
+#, kde-format
+msgid "Enforce an update of the top-contexts corresponding to the given files"
+msgstr "Vsili posodobitev vrhnjih kontekstov, ki ustrezajo danim datotekam"
+
+#: util/duchainify/main.cpp:274
+#, kde-format
+msgid ""
+"Enforce an update of the top-contexts corresponding to the given files and "
+"all included files"
+msgstr ""
+"Vsili posodobitev vrhnjih kontekstov, ki ustrezajo danim datotekam in vsem "
+"vključenim datotekam"
+
+#: util/duchainify/main.cpp:276
+#, kde-format
+msgid "Number of threads to use"
+msgstr "Število niti, ki bodo uporabljene"
+
+#: util/duchainify/main.cpp:279
+#, kde-format
+msgid ""
+"Features to build. Options: empty, simplified-visible-declarations, visible-"
+"declarations (default), all-declarations, all-declarations-and-uses, all-"
+"declarations-and-uses-and-AST"
+msgstr ""
+"Zmožnosti za izgradnjo. Možnosti: empty, simplified-visible-declarations, "
+"visible-declarations (default), all-declarations, all-declarations-and-uses, "
+"all-declarations-and-uses-and-AST"
+
+#: util/duchainify/main.cpp:283
+#, kde-format
+msgid "Print complete Definition-Use Chain on successful parse"
+msgstr "Ob uspešni razčlenitvi izpiši popolno verigo določilo-uporaba"
+
+#: util/duchainify/main.cpp:285
+#, kde-format
+msgid "Print complete DUChain Definitions repository on successful parse"
+msgstr "Ob uspešni razčlenitvi izpiši popolno skladišče določilo DUChain"
+
+#: util/duchainify/main.cpp:288
+#, kde-format
+msgid ""
+"Print complete DUChain PersistentSymbolTable repository on successful parse"
+msgstr ""
+"Ob uspešni razčlenitvi izpiši popolno skladišče DUChain PersistentSymbolTable"
+
+#: util/duchainify/main.cpp:291
+#, kde-format
+msgid "Number defining the maximum depth where declaration details are printed"
+msgstr "Številka, ki podaja največjo globino za izpis podrobnosti deklaracije"
+
+#: util/duchainify/main.cpp:294
+#, kde-format
+msgid "Dump DUChain graph (in .dot format)"
+msgstr "Odloži graf DUChain (v obliki .dot)"
+
+#: util/duchainify/main.cpp:296
+#, kde-format
+msgid "Print problems encountered during parsing"
+msgstr "Izpiši težave nastale med razčlenjevanjem"
+
+#: util/duchainify/main.cpp:298
+#, kde-format
+msgid "Recursively dump errors from imported contexts."
+msgstr "Rekurzivno odloži izpis napak uvoženih kontekstov."
+
+#: util/environmentselectionmodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Profile"
+msgstr "Profil"
+
+#: util/environmentselectionmodel.cpp:51
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default profile (currently: %1)"
+msgstr "Uporabi privzet profil (trenutno: %1)"
+
+#: util/environmentselectionmodel.cpp:55
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (does not exist)"
+msgstr "%1 (ne obstaja)"
+
+#: util/jobstatus.cpp:30
+#, kde-format
+msgid "Task aborted"
+msgstr "Opravilo prekinjeno"
+
+#: util/projecttestjob.cpp:81
+#, kde-format
+msgid "Run all tests in %1"
+msgstr "Zaženi vse preizkuse v %1"
+
+#: util/shellutils.cpp:80
+#, kde-format
+msgid ""
+"You don't have write permissions for the following files; add write "
+"permissions for owner before saving?"
+msgstr ""
+"Nimate dovoljenj za pisanje v naslednje datoteke; ali naj bodo pred "
+"shranjevanjem dodana dovoljenja lastnika za pisanje?"
+
+#: util/shellutils.cpp:82
+#, kde-format
+msgctxt "@title:window"
+msgid "Some Files are Write-Protected"
+msgstr "Nekatere datoteke so zaščitene pred pisanjem"
+
+#: util/shellutils.cpp:83
+#, kde-format
+msgctxt "@action:button"
+msgid "Set Write Permissions"
+msgstr "Nastavite dovoljenja za pisanje"
+
+#: util/shellutils.cpp:84
+#, kde-format
+msgctxt "@action:button"
+msgid "Ignore"
+msgstr "Prezri"
+
+#: util/shellutils.cpp:97
+#, kde-format
+msgid "Failed adding write permissions for some files."
+msgstr "Za nekatere datoteke ni bilo mogoče dodati dovoljenj za pisanje."
+
+#: util/shellutils.cpp:98
+#, kde-format
+msgctxt "@title:window"
+msgid "Failed Setting Permissions"
+msgstr "Nastavljanje dovoljenj ni uspelo"
+
+#: vcs/dvcs/dvcsjob.cpp:173
+#, kde-format
+msgid "Working Directory does not exist: %1"
+msgstr "Delovni direktorij ne obstaja: %1"
+
+#: vcs/dvcs/dvcsjob.cpp:182
+#, kde-format
+msgid "Working Directory is not absolute: %1"
+msgstr "Delovni direktorij ni absolutni: %1"
+
+#: vcs/dvcs/dvcsjob.cpp:232
+#, kde-format
+msgid ""
+"Process '%1' exited with status %2\n"
+"%3"
+msgstr ""
+"Opravilo '%1' se je končalo s stanjem %2\n"
+"%3"
+
+#: vcs/dvcs/dvcsjob.cpp:263
+#, kde-format
+msgid "Command finished with error %1."
+msgstr "Ukaz se je končal z napako %1."
+
+#: vcs/dvcs/dvcsjob.cpp:277
+#, kde-format
+msgid "Command exited with value %1."
+msgstr "Ukaz se je končal z vrednostjo %1."
+
+#: vcs/dvcs/dvcsplugin.cpp:95
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Branches..."
+msgstr "Veje…"
+
+#: vcs/dvcs/ui/branchmanager.cpp:37
+#, kde-format
+msgctxt "@title:window"
+msgid "Branch Manager"
+msgstr "Upravljalnik vej"
+
+#: vcs/dvcs/ui/branchmanager.cpp:107
+#, kde-format
+msgid ""
+"You must select a base branch from the list before creating a new branch."
+msgstr "Preden ustvarite novo vejo, morate ustvariti osnovno vejo."
+
+#: vcs/dvcs/ui/branchmanager.cpp:112
+#, kde-format
+msgctxt "@title:window"
+msgid "New Branch"
+msgstr "Nova veja"
+
+#: vcs/dvcs/ui/branchmanager.cpp:112
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name of the new branch:"
+msgstr "Ime nove veje:"
+
+#: vcs/dvcs/ui/branchmanager.cpp:119
+#, kde-format
+msgid ""
+"Branch \"%1\" already exists.\n"
+"Please, choose another name."
+msgstr ""
+"Veja »%1« že obstaja.\n"
+"Izberite drugo ime."
+
+#: vcs/dvcs/ui/branchmanager.cpp:133
+#, kde-format
+msgid ""
+"Currently at the branch \"%1\".\n"
+"To delete it, please change to another branch."
+msgstr ""
+"Trenutno na veji \"%1\".\n"
+"Da jo zbrišete, preklopite na drugo vejo."
+
+#: vcs/dvcs/ui/branchmanager.cpp:140
+#, kde-format
+msgid "Are you sure you want to irreversibly delete the branch '%1'?"
+msgstr "Ali res želite nepovratno zbrisati vejo '%1'?"
+
+#: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
+#, kde-format
+msgid "Already on branch \"%1\"\n"
+msgstr "Že na veji »%1«\n"
+
+#: vcs/dvcs/ui/branchmanager.cpp:182
+#, kde-format
+msgid ""
+"Branch \"%1\" doesn't exists.\n"
+"Please, choose another name."
+msgstr ""
+"Veja »%1« ne obstaja.\n"
+"Izberite drugo ime."
+
+#: vcs/dvcs/ui/branchmanager.cpp:191
+#, kde-format
+msgid "You must select a branch to merge into current one from the list."
+msgstr "Za združitev v trenutno vejo morate izbrati vejo iz seznama."
+
+#: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
+#, kde-format
+msgid "Could not create a patch for the current version."
+msgstr "Ni bilo mogoče ustvariti popravka za trenutno različico."
+
+#: vcs/dvcs/ui/branchmanager.cpp:264
+#, kde-format
+msgctxt "@titlew:indow"
+msgid "Unable to Retrieve Diff"
+msgstr "Razlik ni mogoče pridobiti"
+
+#: vcs/dvcs/ui/branchmanager.cpp:271
+#, kde-format
+msgid "There are no committed differences."
+msgstr "Ni uveljavljenih razlik."
+
+#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:296
+#, kde-format
+msgctxt "@title:window"
+msgid "VCS Support"
+msgstr "Podpora sistemu VCS"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
+#: vcs/dvcs/ui/branchmanager.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Creates new branch based on the selected branch"
+msgstr "Ustvari novo vejo na osnovi izbrane veje"
+
+#. i18n: ectx: property (text), widget (QPushButton, newButton)
+#: vcs/dvcs/ui/branchmanager.ui:34
+#, kde-format
+msgctxt "@action:button new branch"
+msgid "New"
+msgstr "Nova"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, deleteButton)
+#: vcs/dvcs/ui/branchmanager.ui:41
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The same as git branch -D"
+msgstr "Isto kot git branch -D"
+
+#. i18n: ectx: property (text), widget (QPushButton, renameButton)
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#, kde-format
+msgctxt "@action:button"
+msgid "Rename"
+msgstr "Preimenuj"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, diffButton)
+#: vcs/dvcs/ui/branchmanager.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Show changes between the current branch (or staging area, if not empty) "
+"and the last commit on the selected branch.</p>"
+msgstr ""
+"<p>Pokaži razlike med trenutno vejo (ali čakalno vrsto, če ni prazna) in "
+"zadnjo uveljavitvijo izbrane veje.</p>"
+
+#. i18n: ectx: property (text), widget (QPushButton, diffButton)
+#: vcs/dvcs/ui/branchmanager.ui:80
+#, kde-format
+msgctxt "@action:button"
+msgid "Compare to Branch"
+msgstr "Primerjaj z vejo"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
+#: vcs/dvcs/ui/branchmanager.ui:103
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Checkout to the selected branch"
+msgstr "Prevzemi v izbrano vejo"
+
+#. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
+#: vcs/dvcs/ui/branchmanager.ui:106
+#, kde-format
+msgctxt "@action:button checkout a version"
+msgid "Checkout"
+msgstr "Prevzemi"
+
+#. i18n: ectx: property (text), widget (QPushButton, mergeButton)
+#: vcs/dvcs/ui/branchmanager.ui:116
+#, kde-format
+msgctxt "@action:button merge a branch"
+msgid "Merge"
+msgstr "Združi"
+
+#. i18n: ectx: property (text), widget (QLabel, labelUrl)
+#: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Izvorni direktorij:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:29
+#: vcs/widgets/vcsdiffpatchsources.cpp:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Sporočilo uveljavitve:"
+
+#: vcs/models/brancheslistmodel.cpp:63
+#, kde-format
+msgid "Branch \"%1\" already exists."
+msgstr "Veja »%1« že obstaja."
+
+#: vcs/models/brancheslistmodel.cpp:68
+#, kde-format
+msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
+msgstr "Ali ste prepričani, da želite preimenovati \"%1\" v \"%2\"?"
+
+#: vcs/models/vcsannotationmodel.cpp:116
+#, kde-format
+msgid "Author:"
+msgstr "Avtor:"
+
+#: vcs/models/vcsannotationmodel.cpp:117
+#, kde-format
+msgid "Date:"
+msgstr "Datum:"
+
+#: vcs/models/vcsannotationmodel.cpp:118
+#, kde-format
+msgid "Commit message:"
+msgstr "Sporočilo uveljavitve:"
+
+#: vcs/models/vcseventmodel.cpp:88
+#, kde-format
+msgctxt "@title:column"
+msgid "Revision"
+msgstr "Predelava"
+
+#: vcs/models/vcseventmodel.cpp:90
+#, kde-format
+msgctxt "@title:column"
+msgid "Message"
+msgstr "Sporočilo"
+
+#: vcs/models/vcseventmodel.cpp:92
+#, kde-format
+msgctxt "@title:column"
+msgid "Author"
+msgstr "Avtor"
+
+#: vcs/models/vcseventmodel.cpp:94
+#, kde-format
+msgctxt "@title:column"
+msgid "Date"
+msgstr "Datum"
+
+#: vcs/models/vcsfilechangesmodel.cpp:32
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem"
+msgid "Added"
+msgstr "Dodana"
+
+#: vcs/models/vcsfilechangesmodel.cpp:34
+#, kde-format
+msgctxt "@item file was deleted from versioncontrolsystem"
+msgid "Deleted"
+msgstr "Izbrisana"
+
+#: vcs/models/vcsfilechangesmodel.cpp:36
+#, kde-format
+msgctxt "@item file is conflicting (versioncontrolsystem)"
+msgid "Has Conflicts"
+msgstr "Ima spore"
+
+#: vcs/models/vcsfilechangesmodel.cpp:38
+#, kde-format
+msgctxt "@item version controlled file was modified"
+msgid "Modified"
+msgstr "Spremenjena"
+
+#: vcs/models/vcsfilechangesmodel.cpp:40
+#, kde-format
+msgctxt "@item file is up to date in versioncontrolsystem"
+msgid "Up To Date"
+msgstr "Posodobljena"
+
+#: vcs/models/vcsfilechangesmodel.cpp:43
+#, kde-format
+msgctxt "@item file is not known to versioncontrolsystem"
+msgid "Unknown"
+msgstr "Neznano"
+
+#: vcs/models/vcsfilechangesmodel.cpp:45
+#, kde-format
+msgctxt "@item Unknown VCS file status, probably a backend error"
+msgid "?"
+msgstr "?"
+
+#: vcs/models/vcsfilechangesmodel.cpp:131
+#, kde-format
+msgctxt "@title:column"
+msgid "Filename"
+msgstr "Ime datoteke"
+
+#: vcs/models/vcsfilechangesmodel.cpp:132
+#, kde-format
+msgctxt "@title:column"
+msgid "Status"
+msgstr "Stanje"
+
+#: vcs/models/vcsitemeventmodel.cpp:46
+#, kde-format
+msgctxt "@item"
+msgid "Added"
+msgstr "Dodana"
+
+#: vcs/models/vcsitemeventmodel.cpp:48
+#, kde-format
+msgctxt "@item"
+msgid "Deleted"
+msgstr "Izbrisana"
+
+#: vcs/models/vcsitemeventmodel.cpp:50
+#, kde-format
+msgctxt "@item"
+msgid "Modified"
+msgstr "Spremenjena"
+
+#: vcs/models/vcsitemeventmodel.cpp:52
+#, kde-format
+msgctxt "@item"
+msgid "Copied"
+msgstr "Kopirana"
+
+#: vcs/models/vcsitemeventmodel.cpp:54
+#, kde-format
+msgctxt "@item"
+msgid "Replaced"
+msgstr "Zamenjana"
+
+#: vcs/models/vcsitemeventmodel.cpp:61
+#, kde-format
+msgctxt "separates an action list"
+msgid ", "
+msgstr ", "
+
+#: vcs/models/vcsitemeventmodel.cpp:85
+#, kde-format
+msgctxt "@title:column"
+msgid "Location"
+msgstr "Mesto"
+
+#: vcs/models/vcsitemeventmodel.cpp:86
+#, kde-format
+msgctxt "@title:column"
+msgid "Actions"
+msgstr "Dejanja"
+
+#: vcs/models/vcsitemeventmodel.cpp:87
+#, kde-format
+msgctxt "@title:column"
+msgid "Source Location"
+msgstr "Mesto izvorne kode"
+
+#: vcs/models/vcsitemeventmodel.cpp:88
+#, kde-format
+msgctxt "@title:column"
+msgid "Source Revision"
+msgstr "Predelava izvorne kode"
+
+#: vcs/vcspluginhelper.cpp:87
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Commit..."
+msgstr "Uveljavi..."
+
+#: vcs/vcspluginhelper.cpp:88
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "Posodobi"
+
+#: vcs/vcspluginhelper.cpp:89
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add"
+msgstr "Dodaj"
+
+#: vcs/vcspluginhelper.cpp:90
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Differences..."
+msgstr "Prikaži razlike..."
+
+#: vcs/vcspluginhelper.cpp:91
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Revert"
+msgstr "Povrni"
+
+#: vcs/vcspluginhelper.cpp:92 vcs/vcspluginhelper.cpp:487
+#, kde-format
+msgctxt "@action:inmenu revision history"
+msgid "History..."
+msgstr "Zgodovina..."
+
+#: vcs/vcspluginhelper.cpp:93
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Annotation..."
+msgstr "Zabeležka..."
+
+#: vcs/vcspluginhelper.cpp:94
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Diff..."
+msgstr "Pokaži razliko..."
+
+#: vcs/vcspluginhelper.cpp:95
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Diff (All Files)..."
+msgstr "Pokaži razliko (vse datoteke)..."
+
+#: vcs/vcspluginhelper.cpp:96
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Push"
+msgstr "Objavi"
+
+#: vcs/vcspluginhelper.cpp:97
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Pull"
+msgstr "Prejmi"
+
+#: vcs/vcspluginhelper.cpp:295
+#, kde-format
+msgid "There are no differences."
+msgstr "Ni razlik."
+
+#: vcs/vcspluginhelper.cpp:302
+#, kde-format
+msgctxt "@title:window"
+msgid "Unable to Get Differences"
+msgstr "Razlik ni mogoče dobiti"
+
+#: vcs/vcspluginhelper.cpp:370
+#, kde-format
+msgctxt "@title:window %1: path or URL, %2: name of a version control system"
+msgid "%2 History (%1)"
+msgstr "Zgodovina za %2 (%1)"
+
+#: vcs/vcspluginhelper.cpp:443
+#, kde-format
+msgid ""
+"Cannot display annotations, missing interface KTextEditor::"
+"AnnotationInterface for the editor."
+msgstr ""
+"Zabeležk ni mogoče prikazati, saj manjka vmesnik urejevalnika KTextEditor::"
+"AnnotationInterface."
+
+#: vcs/vcspluginhelper.cpp:447
+#, kde-format
+msgid ""
+"Cannot execute annotate action because the document was not found, or was "
+"not a text document:\n"
+"%1"
+msgstr ""
+"Ni mogoče izvesti dejanja zabeležke, ker dokumenta ni bilo mogoče najti ali "
+"pa ni dokument z besedilom:\n"
+"%1"
+
+#: vcs/vcspluginhelper.cpp:482 vcs/widgets/vcseventwidget.cpp:46
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy Revision Id"
+msgstr "Kopiraj id predelave"
+
+#: vcs/widgets/standardvcslocationwidget.cpp:23
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter the repository URL..."
+msgstr "Vnesite URL skladišča..."
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:60
+#, kde-format
+msgctxt "@item age"
+msgid "%1 year"
+msgid_plural "%1 years"
+msgstr[0] "%1 leto"
+msgstr[1] "%1 leti"
+msgstr[2] "%1 leta"
+msgstr[3] "%1 let"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:70
+#, kde-format
+msgctxt "@item age"
+msgid "%1 month"
+msgid_plural "%1 months"
+msgstr[0] "%1 mesec"
+msgstr[1] "%1 meseca"
+msgstr[2] "%1 mesece"
+msgstr[3] "%1 mesecev"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:74
+#, kde-format
+msgctxt "@item age"
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "%1 dan"
+msgstr[1] "%1 dni"
+msgstr[2] "%1 dni"
+msgstr[3] "%1 dni"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:76
+#, kde-format
+msgctxt "@item age"
+msgid "Today"
+msgstr "Danes"
+
+#: vcs/widgets/vcsannotationitemdelegate.cpp:290
+#, kde-format
+msgctxt "By: commit author"
+msgid "By: %1"
+msgstr "Do: %1"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
+#: vcs/widgets/vcscommitdialog.ui:17
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Files to Commit"
+msgstr "Izberite datoteke za uveljavitev"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: vcs/widgets/vcscommitdialog.ui:23
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Commit files:"
+msgstr "Uveljavi datoteke:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
+#: vcs/widgets/vcscommitdialog.ui:33
+#, kde-format
+msgctxt "@option:check"
+msgid "Recursive"
+msgstr "Rekurzivno"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:53
+#, kde-format
+msgid "Old Messages"
+msgstr "Stara sporočila"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:109
+#, kde-format
+msgid "For more detailed information please see the Version Control tool view."
+msgstr "Za več podrobnosti si oglejte orodni pogled Nadzora različic."
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:111
+#, kde-format
+msgid "Unable to commit"
+msgstr "Ni mogoče uveljaviti"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Commit Unsuccessful"
+msgstr "Uveljavitev ni uspela"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:224
+#, kde-format
+msgctxt "@action:button To make a commit"
+msgid "Commit"
+msgstr "Uveljavi"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:257
+#, kde-format
+msgid ""
+"<qt>Files will be committed:\n"
+"<ul>%1</ul>\n"
+"With message:\n"
+" <pre>%2</pre></qt>"
+msgstr ""
+"<qt>Datoteke bodo uveljavljene:\n"
+"<ul>%1</ul>\n"
+"S sporočilom:\n"
+" <pre>%2</pre></qt>"
+
+#: vcs/widgets/vcsdiffpatchsources.cpp:259
+#, kde-format
+msgctxt "@title:window"
+msgid "About to Commit to Repository"
+msgstr "Tik pred uveljavitvijo v skladišče"
+
+#: vcs/widgets/vcsdiffwidget.cpp:86
+#, kde-format
+msgctxt "@label"
+msgid "Difference between revision %1 and %2:"
+msgstr "Razlika med predelavama %1 in %2:"
+
+#. i18n: ectx: property (text), widget (QLabel, revLabel)
+#: vcs/widgets/vcsdiffwidget.ui:28
+#, kde-format
+msgctxt "@label"
+msgid "Difference between revisions:"
+msgstr "Razlika med predelavama:"
+
+#: vcs/widgets/vcseventwidget.cpp:78
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Diff to Previous Revision"
+msgstr "Razlika glede na predhodno predelavo"
+
+#: vcs/widgets/vcseventwidget.cpp:81
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Diff between Revisions"
+msgstr "Razlika med predelavama"
+
+#: vcs/widgets/vcseventwidget.cpp:138
+#, kde-format
+msgctxt "@title:window"
+msgid "Difference To Previous"
+msgstr "Razlike glede na predhodno"
+
+#: vcs/widgets/vcseventwidget.cpp:167
+#, kde-format
+msgctxt "@title:window"
+msgid "Difference between Revisions"
+msgstr "Razlike med predelavama"
+
+#~ msgctxt "@action:button"
+#~ msgid "Share Templates"
+#~ msgstr "Deli predloge"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Reformat source using AStyle"
+#~ msgstr "Preoblikuj kodo s pomočjo AStyle"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid "Source reformatting functionality using <b>astyle</b> library."
+#~ msgstr ""
+#~ "Zmožnost preoblikovanja izvorne kode z uporabo knjižnice <b>astyle</b>."
+
+#~ msgctxt "@info:shell"
+#~ msgid "running %1 instance (PID: %2) is apparently hung"
+#~ msgstr "zagnan primerek %1 (PID: %2) je očitno obvisel"
+
+#~ msgid "Current launch Configuration"
+#~ msgstr "Nastavitev trenutnega zagona"
+
+#~ msgid "Open Launch Configuration Dialog"
+#~ msgstr "Odpri pogovorno okno nastavitev zagonov"
+
+#~ msgid "Execute current launch"
+#~ msgstr "Izvedi trenutni zagon"
+
+#~ msgid "Debug current launch"
+#~ msgstr "Razhrošči trenutni zagon"
+
+#~ msgid "Search..."
+#~ msgstr "Poišči ..."
+
+#~ msgid "Could not find any plugins"
+#~ msgstr "Ni bilo mogoče najti nobenih vstavkov"
+
+#~ msgid ""
+#~ "Executes the target or the program specified in currently active launch "
+#~ "configuration inside a Debugger."
+#~ msgstr ""
+#~ "Izvede cilj ali program, ki je določen v trenutno dejavni nastavitvi "
+#~ "zagona, znotraj razhroščevalnika."
+
+#~ msgctxt "Name of the Launch Configurations"
+#~ msgid "Name"
+#~ msgstr "Ime"
+
+#~ msgctxt ""
+#~ "The type of the Launch Configurations (i.e. Python Application, C++ "
+#~ "Application)"
+#~ msgid "Type"
+#~ msgstr "Vrsta"
+
+#~ msgctxt "Shorter Text for 'New File' shown in the toolbar"
+#~ msgid "New"
+#~ msgstr "Nova"
+
+#~ msgid "Close Document"
+#~ msgstr "Zapri dokument"
+
+#~ msgctxt "Short text for 'Execute launch' used in the toolbar"
+#~ msgid "Execute"
+#~ msgstr "Izvedi"
+
+#~ msgctxt "Short text for 'Debug launch' used in the toolbar"
+#~ msgid "Debug"
+#~ msgstr "Razhrošči"
+
+#~ msgctxt "Short text for 'Stop' used in the toolbar"
+#~ msgid "Stop"
+#~ msgstr "Zaustavi"
+
+#~ msgid "Search"
+#~ msgstr "Poišči"
+
+#~ msgid "Reformat files?"
+#~ msgstr "Preoblikujem datoteke?"
+
+#~ msgid "Style being deleted"
+#~ msgstr "Slog se briše"
+
+#~ msgctxt "file was added to versioncontrolsystem"
+#~ msgid "Added"
+#~ msgstr "Dodana"
+
+#~ msgctxt "file was deleted from versioncontrolsystem"
+#~ msgid "Deleted"
+#~ msgstr "Izbrisana"
+
+#~ msgctxt "version controlled file was modified"
+#~ msgid "Modified"
+#~ msgstr "Spremenjena"
+
+#~ msgctxt "file is not known to versioncontrolsystem"
+#~ msgid "Unknown"
+#~ msgstr "Neznana"
+
+#~ msgid "Commit Message:"
+#~ msgstr "Sporočilo uveljavitve:"
+
+#~ msgid "Applying changes failed: %1"
+#~ msgstr "Uveljavljanje sprememb je spodletelo: %1"
+
+#~ msgid "Project already being opened"
+#~ msgstr "Projekt se že odpira"
+
+#~ msgid "Process Error"
+#~ msgstr "Napaka opravila"
+
+#~ msgid "KDevelop Platform"
+#~ msgstr "Okolje KDevelop"
+
+#~ msgid "Development Platform for IDE-like Applications"
+#~ msgstr "Razvojno okolje za programe podobne integriranim razvojnim okoljem"
+
+#, fuzzy
+#~| msgid "Copyright 2004-2017, The KDevelop developers"
+#~ msgid "Copyright 2004-%1, The KDevelop developers"
+#~ msgstr "Avtorske pravice 2004-2017, razvijalci KDevelopa"
+
+#~ msgid "Andreas Pakulat"
+#~ msgstr "Andreas Pakulat"
+
+#~ msgid ""
+#~ "Architecture, VCS Support, Project Management Support, QMake "
+#~ "Projectmanager"
+#~ msgstr ""
+#~ "Arhitektura, podpora sistemom za nadzor različic, podpora za upravljanje "
+#~ "s projekti, podpora za projekte QMake"
+
+#~ msgid "Alexander Dymo"
+#~ msgstr "Alexander Dymo"
+
+#~ msgid "Architecture, Sublime UI, Ruby support"
+#~ msgstr "Arhitektura, uporabniški vmesnik Sublime, podpora za Ruby"
+
+#~ msgid "David Nolden"
+#~ msgstr "David Nolden"
+
+#~ msgid "Definition-Use Chain, C++ Support"
+#~ msgstr "Veriga določilo-uporaba, podpora za C++"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "CMake Support, Run Support, Kross Support"
+#~ msgstr "Podpora za CMake, podpora za zaganjanje, podpora za skripte Kross"
+
+#~ msgid "Vladimir Prus"
+#~ msgstr "Vladimir Prus"
+
+#~ msgid "GDB integration"
+#~ msgstr "Vključitev GDB"
+
+#~ msgid "Hamish Rodda"
+#~ msgstr "Hamish Rodda"
+
+#~ msgid "Text editor integration, definition-use chain"
+#~ msgstr "Vključitev urejevalnika besedil, veriga določilo-uporaba"
+
+#~ msgid "Matt Rogers"
+#~ msgstr "Matt Rogers"
+
+#~ msgid "Cédric Pasteur"
+#~ msgstr "Cédric Pasteur"
+
+#~ msgid "astyle and indent support"
+#~ msgstr "Podpora za astyle in zamikanje"
+
+#~ msgid "Evgeniy Ivanov"
+#~ msgstr "Evgeniy Ivanov"
+
+#~ msgid "Distributed VCS, Git, Mercurial"
+#~ msgstr "Porazdeljeni sistemi upravljanja različic, Git, Mercurial"
+
+#~ msgid "Robert Gruber"
+#~ msgstr "Robert Gruber"
+
+#~ msgid "SnippetPart, debugger and usability patches"
+#~ msgstr "Sestavni del za izrezke, popravki za razhroščevalnik in uporabnost"
+
+#~ msgid "Dukju Ahn"
+#~ msgstr "Dukju Ahn"
+
+#~ msgid "Subversion plugin, Custom Make Manager, Overall improvements"
+#~ msgstr ""
+#~ "Vstavek za Subversion, upravljalnik za Make po meri, splošne izboljšave"
+
+#~ msgid "Niko Sams"
+#~ msgstr "Niko Sams"
+
+#~ msgid "GDB integration, Webdevelopment Plugins"
+#~ msgstr "Vključitev GDB, vstavki za spletni razvoj"
+
+#~ msgid "Milian Wolff"
+#~ msgstr "Milian Wolff"
+
+#~ msgid "Generic manager, Webdevelopment Plugins, Snippets, Performance"
+#~ msgstr ""
+#~ "Splošni upravljalnik, vstavki za spletni razvoj, vstavek izrezki, "
+#~ "pohitritve"
+
+#~ msgid "Kevin Funk"
+#~ msgstr "Kevin Funk"
+
+#~ msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
+#~ msgstr ""
+#~ "So-vzdrževalec, C++/Clang, nadzor kakovosti, podpora za Windows, hitrost "
+#~ "delovanja, spletišče"
+
+#~ msgid "Sven Brauch"
+#~ msgstr "Sven Brauch"
+
+#~ msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
+#~ msgstr ""
+#~ "So-vzdrževalec, AppImage, Podpora Pythonu, izboljšave uporabniškega "
+#~ "vmesnika"
+
+#~ msgid "About KDevelop Platform"
+#~ msgstr "O okolju KDevelop"
+
+#~ msgid "Show Information about KDevelop Platform"
+#~ msgstr "Prikaži podatke o okolju KDevelop"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid "Shows a dialog with information about KDevelop Platform."
+#~ msgstr "Prikaže pogovorno okno s podrobnostmi o okolju KDevelop."
+
+#~ msgid "<br /> lost declaration <br />"
+#~ msgstr "<br /> izgubljena deklaracija <br />"
+
+#~ msgid "Import"
+#~ msgstr "Uvozi"
+
+#~ msgid "Logview"
+#~ msgstr "Prikaz dnevnika"
+
+#~ msgid "Copy revision number"
+#~ msgstr "Kopiraj številko predelave"
+
+#~ msgid "Find"
+#~ msgstr "Najdi"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Next"
+#~ msgstr "Naslednje"
+
+#~ msgid "Previous"
+#~ msgstr "Predhodno"
+
+#~ msgid "Documentation Tool Bar"
+#~ msgstr "Orodna vrstica dokumentacije"
+
+#~ msgid "Preview"
+#~ msgstr "Predogled"
+
+#~ msgid "Format Files"
+#~ msgstr "Oblikuj datoteke"
+
+#~ msgid "Close File"
+#~ msgstr "Zapri datoteko"
+
+#~ msgid "Close Other Files"
+#~ msgstr "Zapri ostale datoteke"
+
+#~ msgid "Close All Files"
+#~ msgstr "Zapri vse datoteke"
+
+#~ msgid "&Delete Breakpoint"
+#~ msgstr "Iz&briši prekinitveno točko"
+
+#~ msgid "Folder %1"
+#~ msgstr "Mapa %1 "
+
+#~ msgid "Project %1"
+#~ msgstr "Projekt %1"
+
+#~ msgid ""
+#~ "Author: %1\n"
+#~ "Date: %2\n"
+#~ "Commit Message: %3"
+#~ msgstr ""
+#~ "Avtor: %1\n"
+#~ "Datum: %2\n"
+#~ "Sporočilo uveljavitve: %3"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Zaženi"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Session"
+#~ msgstr "Seja"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Uredi"
+
+#~ msgid "Version Control"
+#~ msgstr "Nadzor različic"
+
+#~ msgctxt "a copy of the existing environment was created"
+#~ msgid "%1 (Cloned %2)"
+#~ msgstr "%1 (podvojena %2)"
+
+#~ msgid "Add Group"
+#~ msgstr "Dodaj skupino"
+
+#~ msgid "Clone Group"
+#~ msgstr "Podvoji skupino"
+
+#~ msgid "Remove Group"
+#~ msgstr "Odstrani skupino"
+
+#~ msgid "Remove Selected"
+#~ msgstr "Odstrani izbrano"
+
+#, fuzzy
+#~| msgid "Enum: "
+#~ msgid "Bb Enum"
+#~ msgstr "Štev.: "
+
+#~ msgid "Revision Graph..."
+#~ msgstr "Graf predelav ..."
+
+#~ msgid ""
+#~ "The installed Kate version does not support the MovingInterface which is "
+#~ "crucial for KDevelop starting from version 4.2.\n"
+#~ "\n"
+#~ "To use KDevelop with KDE SC prior to 4.6, where the SmartInterface is "
+#~ "used instead of the MovingInterface, you need KDevelop 4.1 or lower."
+#~ msgstr ""
+#~ "Nameščena različica Kate ne podpira MovingInterface, ki je kritična za "
+#~ "KDevelop novejši od različice 4.1.\n"
+#~ "\n"
+#~ "Da uporabite KDevelop s KDE SC nižjim od 4.6, kjer je uporabljen "
+#~ "SmartInterface namesto MovingInterface, potrebujete KDevelop 4.1 ali "
+#~ "nižji."
+
+#~ msgctxt "@info:shell"
+#~ msgid "made running %1 instance (PID: %2) visible"
+#~ msgstr "zagnan primerek %1 (PID: %2) je postal viden"
+
+#~ msgid "Could not load project management plugin %1."
+#~ msgstr "Ni bilo mogoče naložiti vstavka %1 za upravljanje s projektom."
+
+#~ msgctxt "Refers to a line in source code"
+#~ msgid "Line <b>%1</b>"
+#~ msgstr "Vrstica <b>%1</b>"
+
+#~ msgid "Solve: %1"
+#~ msgstr "Reši: %1 "
+
+#~ msgid "Solve"
+#~ msgstr "Reši"
+
+#~ msgid "Hide"
+#~ msgstr "Skrij"
+
+#~ msgid "All Project Files (%1)"
+#~ msgstr "Vse projektne datoteke (%1)"
+
+#~ msgid "Build System:"
+#~ msgstr "Sistem za izgradnjo:"
+
+#~ msgid "Configure Sessions..."
+#~ msgstr "Nastavi seje ..."
+
+#~ msgid "Create/Delete/Activate Sessions"
+#~ msgstr "Ustvari / izbriši / omogoči seje"
+
+#~ msgid ""
+#~ "Shows a dialog to Create/Delete Sessions and set a new active session."
+#~ msgstr ""
+#~ "Prikaže pogovorno okno za ustvarjanje / izbris sej in nastavitev nove "
+#~ "dejavne seje."
+
+#~ msgid "Configure Sessions"
+#~ msgstr "Nastavi seje"
+
+#~ msgid "Clone"
+#~ msgstr "Podvoji"
+
+#~ msgid "Make Active"
+#~ msgstr "Napravi dejavno"
+
+#~ msgid "Form"
+#~ msgstr "Obrazec"
+
+#~ msgid "Build finished"
+#~ msgstr "Izgrajevanje zaključeno"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Prekinjeno ***"
+
+#~ msgctxt "compiling a file: %1 file %2 compiler"
+#~ msgid "compiling %1 (%2)"
+#~ msgstr "prevajanje %1 (%2)"
+
+#~ msgctxt "generating a file: %1 file %2 generator tool"
+#~ msgid "generating %1 (%2)"
+#~ msgstr "ustvarjanje %1 (%2)"
+
+#~ msgctxt ""
+#~ "Linking object files into a library or executable: %1 target, %2 linker"
+#~ msgid "linking %1 (%2)"
+#~ msgstr "povezovanje %1 (%2)"
+
+#~ msgctxt ""
+#~ "Linking object files into a library or executable: %1 file, %2 linker"
+#~ msgid "linking %1 (%2)"
+#~ msgstr "povezovanje %1 (%2)"
+
+#~ msgctxt ""
+#~ "Linking object files into a library or executable: %1 file, %2 compiler"
+#~ msgid "linking %1 (%2)"
+#~ msgstr "povezovanje %1 (%2)"
+
+#~ msgctxt "finished building a target: %1 target name"
+#~ msgid "built %1"
+#~ msgstr "cilj %1 izgrajen"
+
+#~ msgctxt "Linking object files into a library or executable: %1 target"
+#~ msgid "linking %1"
+#~ msgstr "povezovanje %1"
+
+#~ msgctxt "installing a file: %1 file"
+#~ msgid "installing %1"
+#~ msgstr "nameščanje %1"
+
+#~ msgctxt "creating a folder: %1 path"
+#~ msgid "creating %1"
+#~ msgstr "ustvarjanje %1"
+
+#~ msgctxt "change directory: %1: path"
+#~ msgid "entering %1 (%2)"
+#~ msgstr "vstopanje v %1 (%2)"
+
+#~ msgid "New Environment Variables"
+#~ msgstr "Nove okoljske spremenljivke"
+
+#~ msgid "Add Multiple Variables"
+#~ msgstr "Dodaj več spremenljivk"
+
+#~ msgid "Recover"
+#~ msgstr "Obnovi"
+
+#~ msgctxt "%1: date of the last snapshot"
+#~ msgid ""
+#~ "The session crashed the last time it was used. The following modified "
+#~ "files can be recovered from a backup from %1."
+#~ msgstr ""
+#~ "Seja se je sesula, ko je bila nazadnje uporabljena. Iz varnostne kopije "
+#~ "iz dne %1 lahko obnovite naslednje spremenjene datoteke."
+
+#~ msgid "Crash Recovery"
+#~ msgstr "Obnovitev po sesutju"
+
+#~ msgid "Could not recover %1, the recovery file is empty"
+#~ msgstr "%1 ni bilo mogoče obnoviti, ker je obnovitvena datoteka prazna"
+
+#~ msgid "Recovery"
+#~ msgstr "Obnovitev"
+
+#~ msgid ""
+#~ "Failed to write recovery copies to %1. Please make sure that your home "
+#~ "directory is writable and not full. This application requires available "
+#~ "space in the home directory to run stable. You may experience application "
+#~ "crashes until you free up some space."
+#~ msgstr ""
+#~ "Ni bilo mogoče zapisati obnovitvenih kopij v %1. Prepričajte se, da je "
+#~ "vaša domača mapa zapisljiva in da ni polna. Ta program potrebuje "
+#~ "razpoložljiv prostor v domači mapi, da teče stabilno. Dokler ne boste "
+#~ "sprostili nekaj prostora, se bo program morda sesuval."
+
+#~ msgid "Recovery Error"
+#~ msgstr "Napaka obnovitve"
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Premakne odvisnosti navzgor po seznamu."
+
+#~ msgctxt "change directory: %1: path"
+#~ msgid "cd %1"
+#~ msgstr "pojdi v %1"
+
+#~ msgctxt ""
+#~ msgid "generating"
+#~ msgstr "ustvarjanje"
+
+#~ msgid ""
+#~ "Plugin '%1' could not be loaded correctly and was disabled.\n"
+#~ "Reason: %2."
+#~ msgstr ""
+#~ "Vstavka '%1' ni bilo mogoče naložiti pravilno in je bil onemogočen.\n"
+#~ "Razlog: %2."
+
+#~ msgid "Cannot create temporary file to create <i>%1</i>."
+#~ msgstr "Ni mogoče ustvariti začasne datoteke za ustvaritev <i>%1</i>."
+
+#~ msgid "Save &Selected"
+#~ msgstr "Shrani &izbrane"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Saves all selected files"
+#~ msgstr "Shrani vse izbrane datoteke"
+
+#~ msgid "Example 1"
+#~ msgstr "Primer 1"
+
+#~ msgid "(c) 2007, Alexander Dymo"
+#~ msgstr "© 2007, Alexander Dymo"
+
+#~ msgid "Example 2"
+#~ msgstr "Primer 2"
+
+#~ msgid "Simple KDE ssh client provider"
+#~ msgstr "Preprost KDE-jev ponudnik za SSH"
+
+#~ msgid ""
+#~ "Displays a KDE Password Dialog and establishes an ssh connection using "
+#~ "libssh. After connecting it executes 'svnserve -t' to provide tunneling."
+#~ msgstr ""
+#~ "Prikaže KDE-jevo pogovorno okno za gesla in vzpostavi povezavo SSH z "
+#~ "uporabo libssh. Ob povezavi izvede »svnserve -t«, ki omogoča tuneliranje."
+
+#~ msgid "(c) 2009"
+#~ msgstr "© 2009"
+
+#~ msgid ""
+#~ "Use this client instead of standard ssh when using subversion to provide "
+#~ "a KDE Password Dialog instead of a command-line ssh password prompt."
+#~ msgstr ""
+#~ "Ob uporabi Subversion uporabite tega odjemalca namesto običajnega SSH, da "
+#~ "dobite KDE-jevo pogovorno okno za geslo namesto SSH-jevega poziva za "
+#~ "geslo v ukazni vrstici."
+
+#~ msgid "Hostname to connect"
+#~ msgstr "Gostitelj za povezavo"
+
+#~ msgid "Subversion command to call"
+#~ msgstr "Ukaz Subversion, ki bo klican"
+
+#~ msgid "svnserve option"
+#~ msgstr "Možnost za svnserve"
+
+#~ msgid "Cannot create socket, operation aborted."
+#~ msgstr "Vtiča ni mogoče ustvariti, dejanje prekinjeno."
+
+#~ msgid "Get host by name failed, operation aborted."
+#~ msgstr "Pridobitev gostitelja po imenu ni uspela, dejanje prekinjeno."
+
+#~ msgid "Cannot connect to host, operation aborted."
+#~ msgstr "Ni se mogoče povezati z gostiteljem, dejanje prekinjeno."
+
+#~ msgid "Cannot start an ssh session, operation aborted."
+#~ msgstr "Seje SSH ni mogoče zagnati, dejanje prekinjeno."
+
+#~ msgid "SSH connection failed, operation aborted."
+#~ msgstr "Povezava SSH ni uspela, dejanje prekinjeno."
+
+#~ msgid ""
+#~ "Server does not support any authentication methods for the user, "
+#~ "operation aborted."
+#~ msgstr ""
+#~ "Strežnik ne podpira nobenega načina overjanja uporabnika, dejanje "
+#~ "prekinjeno."
+
+#~ msgid "ssh auth"
+#~ msgstr "Overjanje SSH"
+
+#~ msgid ""
+#~ "Unsupported authentication type, could possibly be a bug. Operation "
+#~ "aborted."
+#~ msgstr "Nepodprta vrsta overjanja, morda je to hrošč. Dejanje prekinjeno."
+
+#~ msgid "Authentication failed, operation aborted."
+#~ msgstr "Overitev ni uspela, dejanje prekinjeno."
+
+#~ msgid "Cannot open ssh channel, operation aborted."
+#~ msgstr "Ni mogoče odpreti kanala SSH, dejanje prekinjeno."
+
+#~ msgid "Failed to launch 'svnserve -t', operation aborted."
+#~ msgstr "Zagon »svnserver -t« ni uspel, dejanje prekinjeno."
+
+#~ msgid "Cannot set non-blocking mode for stdin, operation aborted."
+#~ msgstr ""
+#~ "Za standardni vhod ni mogoče nastaviti načina brez blokiranja, dejanje "
+#~ "prekinjeno."
+
+#~ msgid "&Username:"
+#~ msgstr "&Uporabniško ime:"
+
+#~ msgid "&Password or passphrase:"
+#~ msgstr "&Geslo ali šifrirna fraza:"
+
+#~ msgid "Publi&c key:"
+#~ msgstr "&Javni ključ:"
+
+#~ msgid "P&rivate key:"
+#~ msgstr "&Zasebni ključ:"
+
+#~ msgid "Password auth"
+#~ msgstr "Overjanje z geslom"
+
+#~ msgid "Public key auth"
+#~ msgstr "Overjanje z javnim ključem"
+
+#~ msgid "No auth type supported by server"
+#~ msgstr "Strežnik ne podpira nobene vrste overjanja"
+
+#~ msgid "Select keys"
+#~ msgstr "Izberite ključe"
+
+#~ msgid "Language Support Settings"
+#~ msgstr "Nastavitve podpore jezikov"
+
+#~ msgid "Environment Settings"
+#~ msgstr "Nastavitve okolja"
+
+#~ msgid "Projects Settings"
+#~ msgstr "Nastavitve projekta"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid "Configure various aspects of this editor."
+#~ msgstr "Nastavite različne lastnosti tega urejevalnika."
+
+#~ msgid ""
+#~ "Could not find KTextEditor::Factory, check your installation:\n"
+#~ "Make sure that Kate is installed, KDEDIRS is set properly and that you "
+#~ "ran kbuildsycoca4."
+#~ msgstr ""
+#~ "Ni bilo mogoče najti KTextEditor::Factory, preverite vašo namestitev:\n"
+#~ "Prepričajte se, da je nameščen Kate, da so pravilno nastavljeni KDEDIRS "
+#~ "in da ste zagnali kbuildsycoca4."
+
+#~ msgid "System Configuration Error"
+#~ msgstr "Napaka sistemskih nastavitev"
+
+#~ msgid "Parser Background Settings"
+#~ msgstr "Nastavitve razčlenjevalnika v ozadju"
+
+#~ msgid ""
+#~ "A KDE text-editor component could not be found.\n"
+#~ "Please check your KDE installation."
+#~ msgstr ""
+#~ "Sestavnega dela KDE za urejanje besedila ni bilo mogoče najti.\n"
+#~ "Preverite vašo namestitev KDE."
+
+#~ msgid "Plugin Selection"
+#~ msgstr "Izbor vstavkov"
+
+#~ msgid "User Interface Settings"
+#~ msgstr "Nastavitve uporabniškega vmesnika"
+
+#~ msgid "Unable to read %1"
+#~ msgstr "Ni mogoče prebrati %1"
+
+#~ msgid "Unable to write to %1"
+#~ msgstr "Ni mogoče pisati v %1"
+
+#~ msgid "Modifiers: %1 "
+#~ msgstr "Spremenilniki: %1 "
+
+#~ msgid "TODO"
+#~ msgstr "NAREDI"
+
+#~ msgid "'%1' + '%2'"
+#~ msgstr "'%1' + '%2'"
+
+#~ msgid "<a href=\"add_watch\">Watch this</a>"
+#~ msgstr "<a href=\"add_watch\">Opazuj to</a>"
+
+#~ msgid "<a href=\"watchpoint\">Stop on change</a>"
+#~ msgstr "<a href=\"watchpoint\">Ob spremembi se zaustavi</a>"
+
+#~ msgctxt "toolview position"
+#~ msgid "Top"
+#~ msgstr "Na vrhu"
+
+#~ msgid "duchaintokross"
+#~ msgstr "duchaintokross"
+
+#~ msgid "Wrapper generator from C++ to Kross"
+#~ msgstr "Ustvarjalnik ovoja iz C++ v Kross"
+
+#~ msgid "(c) 2008, The KDevelop developers"
+#~ msgstr "© 2008, razvijalci KDevelop"
+
+#~ msgid "input .cpp file"
+#~ msgstr "vhodna datoteka .cpp"
+
+#~ msgid "include directories for the parser (colon separated)"
+#~ msgstr "mape z vključitvami za razčlenjevalnik (ločene z dvopičjem)"
+
+#~ msgid ""
+#~ "include directories that the generated implementation file will have "
+#~ "(colon separated)"
+#~ msgstr ""
+#~ "mape z vključitvami, ki jih bo imela ustvarjena datoteka z izvedbo "
+#~ "(ločene z dvopičjem)"
+
+#~ msgid "build dir where the Makefile for the input is added"
+#~ msgstr "mapa za izgradnjo, kamor bo dodana datoteka Makefile za vhod"
+
+#~ msgid "filename to be used for the .moc and the .h file"
+#~ msgstr "ime za datoteki .moc in .h"
+
+#~ msgid "directory where to put the .h output"
+#~ msgstr "mapa za izhodno datoteko .h"
+
+#~ msgid "directory where to put the code output"
+#~ msgstr "mapa za izhodno izvorno kodo"
+
+#~ msgid "Verbose output"
+#~ msgstr "Podrobni izpis"
+
+#~ msgid ""
+#~ "Cannot execute annotate action because the document was not found, it was "
+#~ "not versioned or it was not a text document:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Ni mogoče izvesti dejanja zabeležke, ker dokumenta ni bilo mogoče najti. "
+#~ "Nima različice ali pa ni dokument z besedilom:\n"
+#~ "%1"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "error"
+#~ msgstr "napaka"
+
+#~ msgid "Double-click to create new code breakpoint"
+#~ msgstr "Dvokliknite, da ustvarite novo prekinitveno točko v kodi"
+
+#~ msgid "&Remove all"
+#~ msgstr "O&dstrani vse"
+
+#~ msgid "Session crashed %1 time in a row"
+#~ msgid_plural "Session crashed %1 times in a row"
+#~ msgstr[0] "Seja se je sesula %1 krat zaporedno"
+#~ msgstr[1] "Seja se je sesula %1 krat"
+#~ msgstr[2] "Seja se je sesula %1 krat zaporedno"
+#~ msgstr[3] "Seja se je sesula %1 krat zaporedno"
+
+#~ msgctxt "Name of an environment variable"
+#~ msgid "Variable Name:"
+#~ msgstr "Ime spremenljivke:"
+
+#~ msgctxt "Value of an environment variable"
+#~ msgid "Variable Value:"
+#~ msgstr "Vrednost spremenljivke:"
+
+#~ msgid "Subtract All"
+#~ msgstr "Odstrani vse"

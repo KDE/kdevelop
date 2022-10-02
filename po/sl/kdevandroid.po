@@ -1,0 +1,68 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-07-20 02:08+0200\n"
+"PO-Revision-Date: 2021-08-30 10:52+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.2\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, label)
+#: androidpreferences.ui:29
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Android KDE extra-cmake-modules toolchain file"
+msgstr "Datoteka Android KDE extra-cmake-modules toolchain"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: androidpreferences.ui:32
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Android toolchain:"
+msgstr "Android toolchain:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: androidpreferences.ui:46
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Android NDK:"
+msgstr "Android NDK:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: androidpreferences.ui:60
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Android SDK:"
+msgstr "Android SDK:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: androidpreferences.ui:74
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Architecture:"
+msgstr "Arhitektura:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: androidpreferences.ui:84
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Toolchain:"
+msgstr "Toolchain:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: androidpreferences.ui:94
+#, kde-format
+msgctxt "@label:textbox"
+msgid "ABI:"
+msgstr "ABI:"

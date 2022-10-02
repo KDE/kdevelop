@@ -1,0 +1,155 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2014, 2015, 2016, 2017.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-09-01 09:33+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 3.0\n"
+
+#: outputwidget.cpp:53
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Prikaz izhoda"
+
+#: outputwidget.cpp:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Zapre trenutno dejaven prikaz izhoda"
+
+#: outputwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Zapri vse druge prikaze izhoda"
+
+#: outputwidget.cpp:81
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Predhodni izhod"
+
+#: outputwidget.cpp:84
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Naslednji izhod"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Izberi dejaven predmet"
+
+#: outputwidget.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "V žarišče ob izboru predmeta"
+
+#: outputwidget.cpp:105
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Prvi predmet"
+
+#: outputwidget.cpp:109
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Prehodni predmet"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Naslednji predmet"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Zadnji predmet"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Počisti"
+
+#: outputwidget.cpp:141
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Poišči..."
+
+#: outputwidget.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "Vnesite niz z nadomestnimi znaki, da filtrirate prikaz izhoda"
+
+#: standardoutputview.cpp:101
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Izgradi"
+
+#: standardoutputview.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Zaženi"
+
+#: standardoutputview.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Razhrošči"
+
+#: standardoutputview.cpp:116
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Preizkusi"
+
+#: standardoutputview.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Nadzor različic"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Krmarjenje"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Provides toolviews for presenting the output of running apps"
+#~ msgstr "Ponuja orodne poglede za predstavitev izhoda zagnanih programov"
+
+#~ msgid "Select &All"
+#~ msgstr "Izberi &vse"
+
+#~ msgid "&Copy"
+#~ msgstr "&Kopiraj"

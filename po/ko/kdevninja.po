@@ -1,0 +1,125 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-10-04 20:13+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ninjabuilder.cpp:30
+#, kde-format
+msgid "Unable to find ninja executable. Is it installed on the system?"
+msgstr "ninja 실행 파일을 찾을 수 없습니다. 시스템에 설치되어 있습니까?"
+
+#: ninjabuilder.cpp:197
+#, kde-format
+msgid "Cannot specify prefix in %1, on ninja"
+msgstr "Ninja에서 %1의 접두사를 지정할 수 없음"
+
+#: ninjabuilderpreferences.cpp:35
+#, kde-format
+msgctxt "@title:tab"
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjabuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Ninja settings"
+msgstr "Ninja 설정"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: ninjaconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "프로그램을 실제로 실행하지 않고 명령어만 표시(&D):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: ninjaconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "Install as &root:"
+msgstr "루트 사용자로 설치(&R):"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: ninjaconfig.ui:75
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Root installation &command:"
+msgstr "루트 설치 명령(&C):"
+
+#. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
+#: ninjaconfig.ui:110
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "동시에 실행할 작업 개수(&N):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: ninjaconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Count of &errors to be tolerated:"
+msgstr "인정할 오류 개수(&E):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ninjaconfig.ui:153
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ninja &options:"
+msgstr "추가 Ninja 옵션(&O):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ninjaconfig.ui:173
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "활성 환경 프로필(&P):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ninjaconfig.ui:208
+#, kde-format
+msgctxt "@option:check"
+msgid "O&verride number of jobs:"
+msgstr "작업 개수 재정의(&V):"
+
+#: ninjajob.cpp:72
+#, kde-format
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjajob.cpp:94
+#, kde-format
+msgid "Ninja (%1): %2"
+msgstr "Ninja (%1): %2"
+
+#: ninjajob.cpp:96
+#, kde-format
+msgid "Ninja (%1)"
+msgstr "Ninja (%1)"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgid "Build finished"
+#~ msgstr "빌드 완료됨"
+
+#~ msgid "Ninja Builder"
+#~ msgstr "Ninja 빌더"
+
+#~ msgid "Support for building Ninja projects"
+#~ msgstr "Ninja 프로젝트 빌드 지원"

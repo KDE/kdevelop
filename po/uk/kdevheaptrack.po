@@ -1,0 +1,108 @@
+# Translation of kdevheaptrack.po to Ukrainian
+# Copyright (C) 2018-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2018, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevheaptrack\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 08:38+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.07.70\n"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgctxt "@title:tab"
+msgid "Heaptrack"
+msgstr "Heaptrack"
+
+#: config/globalconfigpage.cpp:34
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Heaptrack Settings"
+msgstr "Налаштовування параметрів Heaptrack"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Executables"
+msgstr "Виконувані файли"
+
+#. i18n: ectx: property (text), widget (QLabel, heaptrackExecutableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Heaptrack:"
+msgstr "Heaptrack:"
+
+#. i18n: ectx: property (text), widget (QLabel, heaptrackGuiExecutableLabel)
+#: config/globalconfigpage.ui:51
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Visualizer:"
+msgstr "Візуалізатор:"
+
+#: job.cpp:100
+#, kde-format
+msgid "Heaptrack Analysis (%1)"
+msgstr "Аналіз Heaptrack (%1)"
+
+#: plugin.cpp:50
+#, kde-format
+msgctxt "@action"
+msgid "Run Heaptrack Analysis"
+msgstr "Виконати аналіз Heaptrack"
+
+#: plugin.cpp:59
+#, kde-format
+msgctxt "@action"
+msgid "Attach to Process with Heaptrack"
+msgstr "Приєднатися до процесу за допомогою Heaptrack"
+
+#: plugin.cpp:86
+#, kde-format
+msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
+msgstr "Не вдалося розпочати аналіз Heaptrack — не завантажено додаток «%1»."
+
+#: plugin.cpp:100
+#, kde-format
+msgid "Heaptrack analysis can be started only for native applications."
+msgstr ""
+"Аналіз Heaptrack можна виконувати лише для природних для системи програм."
+
+#: visualizer.cpp:33
+#, kde-format
+msgid "Failed to start Heaptrack visualizer from \"%1\"."
+msgstr "Не вдалося запустити візуалізатор Heaptrack з «%1»."
+
+#: visualizer.cpp:35
+#, kde-format
+msgid "Check your settings and install the visualizer if necessary."
+msgstr ""
+"Перевірте, чи правильно вказано параметри, і, якщо потрібно, встановіть "
+"візуалізатор."
+
+#: visualizer.cpp:37
+#, kde-format
+msgid "Error during Heaptrack visualizer execution:"
+msgstr "Помилка під час спроби запустити візуалізатор Heaptrack:"
+
+#~ msgid "Heaptrack Error"
+#~ msgstr "Помилка Heaptrack"
+
+#~ msgid "Heaptrack Settings"
+#~ msgstr "Параметри Heaptrack"
+
+#~ msgid "Cppcheck Settings"
+#~ msgstr "Параметри Cppcheck"

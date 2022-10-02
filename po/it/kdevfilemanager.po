@@ -1,0 +1,80 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevfilemanager package.
+# Simone Solinas <ksolsim@gmail.com>, 2009, 2010, 2013.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevfilemanager\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-25 16:41+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
+#, kde-format
+msgctxt "@title:window"
+msgid "File System"
+msgstr "Filesystem"
+
+#: filemanager.cpp:127
+#, kde-format
+msgctxt "@title:menu"
+msgid "Bookmarks"
+msgstr "Segnalibri"
+
+#: filemanager.cpp:138
+#, kde-format
+msgctxt "@action switch to directory of current document"
+msgid "Current Document Directory"
+msgstr "Cartella del documento corrente"
+
+#: filemanager.cpp:155
+#, kde-format
+msgctxt "@action"
+msgid "New File..."
+msgstr "Nuovo file..."
+
+#: filemanager.cpp:162
+#, kde-format
+msgctxt "@title:window"
+msgid "Create New File"
+msgstr "Crea nuovo file"
+
+#: filemanager.cpp:178
+#, kde-format
+msgid "Unable to create file '%1'"
+msgstr "Impossibile creare il file «%1»"
+
+#~ msgid "Filesystem"
+#~ msgstr "Filesystem"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid "Filename:"
+#~ msgstr "Nome file:"
+
+#~ msgid "File Manager"
+#~ msgstr "Gestore file"
+
+#~ msgid "This plugin brings a filemanager to KDevelop."
+#~ msgstr "Questa estensione porta un gestore di file in KDevelop."
+
+#~ msgid "Browse the filesystem"
+#~ msgstr "Sfoglia il filesystem"
+
+#~ msgid "Filesystem Browser"
+#~ msgstr "Browser del filesystem"

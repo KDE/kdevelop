@@ -1,0 +1,244 @@
+# Translation of kdevappwizard into Japanese.
+# Yukiko Bando <ybando@k6.dion.ne.jp>, 2008.
+# Fumiaki Okushi <okushi@kde.gr.jp>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2010-07-16 23:44-0700\n"
+"Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: appwizarddialog.cpp:23
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "新しいプロジェクトを作成"
+
+#: appwizarddialog.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "Page for general configuration options"
+#| msgid "General"
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "全般"
+
+#: appwizarddialog.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "バージョン管理"
+
+#: appwizardplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "New From Template..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "テンプレートから新規作成..."
+
+#: appwizardplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid "Generate a new project from a template"
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "テンプレートから新しいプロジェクトを生成"
+
+#: appwizardplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>New project</b><p>This starts KDevelop's application wizard. It helps "
+#| "you to generate a skeleton for your application from a set of templates.</"
+#| "p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"<b>新しいプロジェクト</b><p>KDevelop のアプリケーションウィザードを起動しま"
+"す。テンプレートからアプリケーションの骨組みを生成します。</p>"
+
+#: appwizardplugin.cpp:106
+#, fuzzy, kde-format
+#| msgid "Could not create project from template\n"
+msgid "Could not create project from template."
+msgstr "テンプレートからプロジェクトを作成できませんでした\n"
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr ""
+
+#: appwizardplugin.cpp:136
+#, fuzzy, kde-format
+#| msgid "Version Control System:"
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "バージョン管理システム:"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "DVCS リポジトリを初期化できませんでした"
+
+#: appwizardplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Could not add files to the DVCS repository"
+msgid "Could not check status of the DVCS repository"
+msgstr "DVCS リポジトリにファイルを追加できませんでした"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "DVCS リポジトリにファイルを追加できませんでした"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "%1 にプロジェクトをインポートできませんでした。"
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "プロジェクトをインポートできませんでした"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "インポートしたプロジェクトからチェックアウトできませんでした"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "新しいプロジェクトを作成できませんでした"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "ファイル ‘%1’ を作成できません。"
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "プロジェクトテンプレート"
+
+#: projectselectionpage.cpp:56
+#, kde-format
+msgctxt "@title:column"
+msgid "Category"
+msgstr ""
+
+#: projectselectionpage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Project Templates"
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "プロジェクトテンプレート"
+
+#: projectselectionpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Project Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "プロジェクトテンプレート"
+
+#: projectselectionpage.cpp:74
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr ""
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "無効な場所"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "空のプロジェクト名"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "無効なプロジェクト名"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "サブディレクトリを作成できませんでした。%1 に許可が不足しています。"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr ""
+
+#: projectselectionpage.cpp:245
+#, fuzzy, kde-format
+#| msgid "Path already exists and contains files"
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "パスは既に存在し、ファイルを含んでいます"
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"指定したパスは既に存在し、ファイルを含んでいます。本当に次へ進みますか？"
+
+#: projectselectionpage.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "プロパティ"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, fuzzy, kde-format
+#| msgid "Project Templates"
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "プロジェクトテンプレート"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "場所:"
+
+#: projectvcspage.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "No Version Control Support chosen"
+#| msgid "None"
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "なし"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, fuzzy, kde-format
+#| msgid "Version Control System:"
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "バージョン管理システム:"

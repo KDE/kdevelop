@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevoutlineview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-07-20 12:01+0100\n"
+"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
+"Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: outlinenode.cpp:169
+#, kde-format
+msgctxt "An anonymous declaration (class, function, etc.)"
+msgid "<anonymous>"
+msgstr "<anónima>"
+
+#: outlineviewplugin.cpp:49 outlinewidget.cpp:33
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "Destaque"
+
+#: outlinewidget.cpp:47
+#, kde-format
+msgctxt "@action"
+msgid "Sort Alphabetically"
+msgstr "Ordenação Alfabética"
+
+#: outlinewidget.cpp:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Sort items alphabetically"
+msgstr "Ordenar os itens de forma alfabética"
+
+#: outlinewidget.cpp:60
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filtro..."

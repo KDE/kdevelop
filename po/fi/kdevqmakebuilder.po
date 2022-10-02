@@ -1,0 +1,87 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2015-12-06 12:44+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: qmakebuilderpreferences.cpp:80
+#, fuzzy, kde-format
+#| msgid "QMake"
+msgctxt "@title:tab"
+msgid "QMake"
+msgstr "QMake"
+
+#: qmakebuilderpreferences.cpp:138
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Hakemistoa %1 ollaan poistamassa KDevelop-ohjelman luettelosta.\n"
+"Haluatko, että KDevelop poistaa sen myös tiedostojärjestelmästä?"
+
+#: qmakebuilderpreferences.cpp:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: qmakebuilderpreferences.cpp:146
+#, kde-format
+msgid "Could not remove: %1."
+msgstr "Ei voitu poistaa: %1."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: qmakeconfig.ui:77
+#, fuzzy, kde-format
+#| msgid "Build Settings"
+msgctxt "@title:group"
+msgid "Build Settings"
+msgstr "Koostamisasetukset"
+
+#: qmakejob.cpp:32
+#, fuzzy, kde-format
+#| msgid "QMake"
+msgctxt "@title:window"
+msgid "QMake"
+msgstr "QMake"
+
+#: qmakejob.cpp:43
+#, kde-format
+msgid "No project specified."
+msgstr "Ei annettu projektia."
+
+#: qmakejob.cpp:82
+#, kde-format
+msgid "QMake: %1"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:92
+#, kde-format
+msgid "Configure error"
+msgstr "Virhe tehtäessä asetuksia"
+
+#~ msgid "Add"
+#~ msgstr "Lisää"
+
+#~ msgid "Remove"
+#~ msgstr "Poista"
+
+#~ msgid "Current changes will be lost. Would you want to save them?"
+#~ msgstr "Nykyiset muutokset menetetään. Haluatko tallentaa ne?"

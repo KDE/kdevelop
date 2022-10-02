@@ -1,0 +1,87 @@
+# Translation of kdevsourceformatter.po to Ukrainian
+# Copyright (C) 2017-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevsourceformatter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 08:30+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.07.70\n"
+
+#: config/projectconfigpage.cpp:44
+#, kde-format
+msgctxt "@title:tab"
+msgid "Source Formatter"
+msgstr "Форматування коду"
+
+#: config/projectconfigpage.cpp:49
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Source Formatter"
+msgstr "Налаштовування форматування коду"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
+#: config/projectconfigpage.ui:29
+#, kde-format
+msgctxt "@option:check"
+msgid "&Use default"
+msgstr "Ви&користовувати типове"
+
+#. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
+#: config/projectconfigpage.ui:36
+#, kde-format
+msgctxt "@title:group"
+msgid "General"
+msgstr "Загальне"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Override the editor indentation mode according to the formatting style for "
+"documents without a Kate modeline."
+msgstr ""
+"Перевизначити режим відступів редактора відповідно до стилю форматування для "
+"документів без визначення рядка режиму Kate."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
+#: config/projectconfigpage.ui:45
+#, kde-format
+msgctxt "@option:check"
+msgid "Override editor indentation mode"
+msgstr "Перевизначити режим відступів редактора"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add a Kate modeline according to the formatting style to formatted documents."
+msgstr "Додавати рядок режиму Kate до стилю форматованих документів."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
+#: config/projectconfigpage.ui:55
+#, kde-format
+msgctxt "@option:check"
+msgid "Add Kate modeline"
+msgstr "Додати рядок режиму Kate"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
+#: config/projectconfigpage.ui:65
+#, kde-format
+msgctxt "@title:group"
+msgid "Formatting Styles"
+msgstr "Стилі форматування"

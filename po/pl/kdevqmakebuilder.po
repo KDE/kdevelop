@@ -1,0 +1,96 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2022-07-29 16:34+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.03.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: qmakebuilderpreferences.cpp:80
+#, kde-format
+msgctxt "@title:tab"
+msgid "QMake"
+msgstr "QMake"
+
+#: qmakebuilderpreferences.cpp:138
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Katalog %1 zaraz zostanie usunięty z listy KDevelopa.\n"
+"Czy KDevelop ma go też usunąć z dysku?"
+
+#: qmakebuilderpreferences.cpp:141
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr "Nie usuwaj"
+
+#: qmakebuilderpreferences.cpp:146
+#, kde-format
+msgid "Could not remove: %1."
+msgstr "Nie można usunąć: %1."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: qmakeconfig.ui:77
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Settings"
+msgstr "Ustawienia budowania"
+
+#: qmakejob.cpp:32
+#, kde-format
+msgctxt "@title:window"
+msgid "QMake"
+msgstr "QMake"
+
+#: qmakejob.cpp:43
+#, kde-format
+msgid "No project specified."
+msgstr "Nie podano projektu."
+
+#: qmakejob.cpp:82
+#, kde-format
+msgid "QMake: %1"
+msgstr "QMake: %1"
+
+#: qmakejob.cpp:92
+#, kde-format
+msgid "Configure error"
+msgstr "Błąd ustawień"
+
+#~ msgid "Add"
+#~ msgstr "Dodaj"
+
+#~ msgid "Remove"
+#~ msgstr "Usuń"
+
+#~ msgid "Current changes will be lost. Would you want to save them?"
+#~ msgstr "Obecne zmiany zostaną utracone. Czy chcesz je zapisać?"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Łukasz Wojniłowicz"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lukasz.wojnilowicz@gmail.com"
+
+#~ msgid "QMake Builder"
+#~ msgstr "Budowanie QMake"
+
+#~ msgid "Support for building QMake projects"
+#~ msgstr "Wsparcie dla budowania projektów QMake"

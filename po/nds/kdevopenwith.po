@@ -1,0 +1,99 @@
+# translation of kdevopenwith.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2010, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevopenwith\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2014-03-18 18:15+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: openwithplugin.cpp:145
+#, kde-format
+msgctxt "@item:menu"
+msgid "Other..."
+msgstr ""
+
+#: openwithplugin.cpp:156
+#, fuzzy, kde-format
+#| msgid "Open With"
+msgctxt "@title:menu"
+msgid "Open With"
+msgstr "Opmaken mit"
+
+#: openwithplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Embedded Editors"
+msgctxt "@title:menu"
+msgid "Embedded Editors"
+msgstr "Inbett Editoren"
+
+#: openwithplugin.cpp:165
+#, fuzzy, kde-format
+#| msgid "External Applications"
+msgctxt "@title:menu"
+msgid "External Applications"
+msgstr "Extern Programmen"
+
+#: openwithplugin.cpp:172
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "@action:inmenu"
+msgid "Open"
+msgstr "Opmaken"
+
+#: openwithplugin.cpp:192
+#, fuzzy, kde-format
+#| msgid "Default Editor"
+msgctxt "@item:inmenu"
+msgid "Default Editor"
+msgstr "Standard-Editor"
+
+#: openwithplugin.cpp:282
+#, kde-format
+msgctxt "%1: mime type name, %2: app/part name"
+msgid "Do you want to open all '%1' files by default with %2?"
+msgstr "Wullt Du all \"%1\"-Dateien standardwies mit %2 opmaken?"
+
+#: openwithplugin.cpp:284
+#, fuzzy, kde-format
+#| msgid "Set as default?"
+msgctxt "@title:window"
+msgid "Set as Default?"
+msgstr "As Standard fastleggen?"
+
+#: openwithplugin.cpp:285
+#, fuzzy, kde-format
+#| msgid "Set as default?"
+msgctxt "@action:button"
+msgid "Set as Default"
+msgstr "As Standard fastleggen?"
+
+#: openwithplugin.cpp:286
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Set"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m.j.wiese@web.de"
+
+#~ msgid ""
+#~ "This plugin allows to open files with associated external applications."
+#~ msgstr ""
+#~ "Mit dit Moduul laat sik Dateien mit towiest extern Programmen opmaken."

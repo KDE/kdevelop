@@ -1,0 +1,504 @@
+# # translation of kdevpatchreview.po into [el]
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2011, 2012.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+# Petros Vidalis <pvidalis@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevpatchreview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2016-11-02 15:52+0200\n"
+"Last-Translator: Petros Vidalis <pvidalis@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-doc@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "Προσαρμοσμένη διόρθωση"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Patch"
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "Διόρθωση"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, fuzzy, kde-format
+#| msgid "From File"
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "Από αρχείο"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, fuzzy, kde-format
+#| msgid "From Command"
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "Από εντολή"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, fuzzy, kde-format
+#| msgid "Patch is already applied on local version"
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "Η διόρθωση ήδη εφαρμόστηκε στην τοπική έκδοση"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, fuzzy, kde-format
+#| msgid "Already applied"
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "Εφαρμόστηκε ήδη"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">Σύγκρουση</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "Εφαρμόστηκε.<br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "Εισαγωγή<br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, kde-format
+msgid "Removal<br/>"
+msgstr "Αφαίρεση<br/>"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "Προηγούμενο:<br/>"
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "Επαναφέρθηκε.<br/>"
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "Εναλλακτικό:<br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr ""
+"Αδυναμία εφαρμογής της αλλαγής: Το κείμενο θα έπρεπε να είναι \"%1\", αλλά "
+"είναι \"%2\"."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, fuzzy, kde-format
+#| msgid "Insertion"
+msgctxt "@item"
+msgid "Insertion"
+msgstr "Εισαγωγή"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, fuzzy, kde-format
+#| msgid "Removal"
+msgctxt "@item"
+msgid "Removal"
+msgstr "Αφαίρεση"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, fuzzy, kde-format
+#| msgid "Change"
+msgctxt "@item"
+msgid "Change"
+msgstr "Αλλαγή"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, fuzzy, kde-format
+#| msgid "Kompare Model Update"
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Σύγκριση ενημερωμένων υποδειγμάτων"
+
+#: patchreview.cpp:457
+#, fuzzy, kde-format
+#| msgid "Overview"
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "Επισκόπηση"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "Επιθεώρηση διόρθωσης"
+
+#: patchreview.cpp:470
+#, fuzzy, kde-format
+#| msgid "The base directory of the patch must be an absolute directory"
+msgid "The base directory of the patch must be an absolute directory."
+msgstr "Ο βασικός φάκελος της διόρθωσης πρέπει να έχει απόλυτη διαδρομή"
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "Τέλος επιθεώρησης"
+
+#: patchreview.cpp:603
+#, fuzzy, kde-format
+#| msgid "Review Patch"
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "Επιθεώρηση διόρθωσης"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, fuzzy, kde-format
+#| msgid "Previous file"
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "Προηγούμενο αρχείο"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, fuzzy, kde-format
+#| msgid "Previous difference"
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "Προηγούμενη διαφορά"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, fuzzy, kde-format
+#| msgid "Next difference"
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "Επόμενη διαφορά"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, fuzzy, kde-format
+#| msgid "Next file"
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "Επόμενο αρχείο"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Ενημέρωση"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, fuzzy, kde-format
+#| msgid "Run Tests"
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "Έλεγχοι εκτέλεσης"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, fuzzy, kde-format
+#| msgid "Export Diff..."
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Εξαγωγή διαφορών..."
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, fuzzy, kde-format
+#| msgid "Cancel Review"
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "Ακύρωση επιθεώρησης"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "Τέλος επιθεώρησης"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, fuzzy, kde-format
+#| msgid "Changes"
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "Αλλαγές"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (1 τεμάχιο)"
+msgstr[1] "%2 (%1 τεμάχια)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+"<qt>Μπορείτε να βρείτε το νέο αίτημα στο:<br /><a href='%1'>%1</a> </qt>"
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+"Αδυναμία εξαγωγής της διόρθωσης.\n"
+"%1"
+
+#: patchreviewtoolview.cpp:255
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgctxt "@action"
+msgid "Select All"
+msgstr "Επιλογή όλων"
+
+#: patchreviewtoolview.cpp:257
+#, fuzzy, kde-format
+#| msgid "Deselect All"
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "Αναίρεση επιλογής όλων"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "Εκτελούμενοι έλεγχοι: %p%"
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "Έλεγχος επιτυχής"
+msgstr[1] "Όλοι οι %1 έλεγχοι ήταν επιτυχείς"
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "Αποτελέσματα ελέγχων: %1 επιτυχία, %2 αποτυχία, %3 σφάλματα"
+
+#~ msgid "Base:"
+#~ msgstr "Βάση:"
+
+#~ msgid "Patch base..."
+#~ msgstr "Βάση διορθώσεων..."
+
+#~ msgid "Patch location..."
+#~ msgstr "Θέση διόρθωσης..."
+
+#~ msgid "Command's output..."
+#~ msgstr "Έξοδος εντολής..."
+
+#~ msgid "Error exporting"
+#~ msgstr "Εξαγωγής σφάλματος"
+
+#~ msgid "Edit Patch"
+#~ msgstr "Επεξεργασία διόρθωσης"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Save As..."
+#~ msgstr "Αποθήκευση ως..."
+
+#~ msgid "Send..."
+#~ msgstr "Αποστολή..."
+
+#~ msgid "Send to contact..."
+#~ msgstr "Αποστολή στην επαφή..."
+
+#~ msgid "Side view (Kompare)..."
+#~ msgstr "Πλευρική προβολή (Kompare)..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>Απουσία υποδειγμάτων ή διαφορών, αυτό το αρχείο: <b>%1</b>, δεν είναι "
+#~ "ένα έγκυρο αρχείο diff.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>Υπήρξαν προβλήματα κατά την εφαρμογή του diff <b>%1</b> στο αρχείο <b>"
+#~ "%2</b>.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>Υπήρξαν προβλήματα κατά την εφαρμογή του diff <b>%1</b> στο φάκελο <b>"
+#~ "%2</b>.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr ""
+#~ "<qt>Αδυναμία εγγραφής στο προσωρινό αρχείο, <b>%1</b>, διαγράφεται.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>Αδυναμία δημιουργίας καταλόγου προορισμού <b>%1</b>.\n"
+#~ "Το αρχείο δεν έχει αποθηκευθεί.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>Αδυναμία φόρτωσης του προσωρινού αρχείου στη θέση προορισμού <b>%1</"
+#~ "b>. Το προσωρινό αρχείο είναι ακόμη διαθέσιμο στο: <b>%2</b>. Μπορείτε να "
+#~ "το αντιγράψετε χειροκίνητα στη σωστή θέση.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "Αδυναμία συντακτικής ανάλυσης της εξόδου του diff."
+
+#~ msgid "The files are identical."
+#~ msgstr "Τα αρχεία είναι ταυτόσημα."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Αδυναμία εγγραφής στο προσωρινό αρχείο."
+
+#~ msgid "Highlights code affected by a patch"
+#~ msgstr "Δίνει έμφαση στον κώδικα που επηρεάζεται από μια διόρθωση"
+
+#~ msgid "Show"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">File:</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Αρχείο:</"
+#~ "span></p></body></html>"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Command:</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Εντολή:</"
+#~ "span></p></body></html>"
+
+#~ msgid "Depth:"
+#~ msgstr "Βάθος:"
+
+#~ msgid "Patch depth - see \"patch -p\""
+#~ msgstr "Βάθος διόρθωσης - δείτε \"patch -p\""
+
+#~ msgctxt "VCS file status"
+#~ msgid "Added"
+#~ msgstr "Προστέθηκε"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Deleted"
+#~ msgstr "Διαγράφηκε"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Has Conflicts"
+#~ msgstr "Περιέχει συγκρούσεις"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Modified"
+#~ msgstr "Τροποποιήθηκε"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Up To Date"
+#~ msgstr "Ενημερωμένο"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Unknown"
+#~ msgstr "Άγνωστο"
+
+#~ msgctxt "Unknown VCS file status, probably a backend error"
+#~ msgid "?"
+#~ msgstr ";"
+
+#~ msgctxt "%1: number of changed hunks, %2: file name, %3: vcs file state"
+#~ msgid "%2 (1 hunk, %3)"
+#~ msgid_plural "%2 (%1 hunks, %3)"
+#~ msgstr[0] "%2 (1 τεμάχιο, %3)"
+#~ msgstr[1] "%2 (%1 τεμάχια, %3)"

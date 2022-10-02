@@ -1,0 +1,320 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrej Mernik <andrejm@ubuntu.si>, 2013, 2015, 2016, 2017, 2018.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"PO-Revision-Date: 2021-11-12 08:57+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 20.12.2\n"
+
+#: problemreporterplugin.cpp:94
+#, kde-format
+msgid "Parser"
+msgstr "Razčlenjevalnik"
+
+#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemsview.cpp:324
+#, kde-format
+msgctxt "@title:window"
+msgid "Problems"
+msgstr "Težave"
+
+#: problemreporterplugin.cpp:229
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve Problem"
+msgstr "Reši težavo"
+
+#: problemreporterplugin.cpp:231
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve: %1"
+msgstr "Reši: %1"
+
+#: problemsview.cpp:37
+#, kde-format
+msgctxt "@action"
+msgid "Force Full Update"
+msgstr "Vsili polno posodobitev"
+
+#: problemsview.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Which files to display the problems for"
+msgstr "Za katere datoteke bodo prikazane težave"
+
+#: problemsview.cpp:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Document"
+msgstr "Trenutni dokument"
+
+#: problemsview.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current document"
+msgstr "Prikaže težave v trenutnem dokumentu"
+
+#: problemsview.cpp:62
+#, kde-format
+msgctxt "@option:check"
+msgid "Open Documents"
+msgstr "Odprti dokumenti"
+
+#: problemsview.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all open documents"
+msgstr "Prikaži težave v vseh odprtih dokumentih"
+
+#: problemsview.cpp:66
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Project"
+msgstr "Trenutni projekt"
+
+#: problemsview.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current project"
+msgstr "Prikaže težave v trenutnem projektu"
+
+#: problemsview.cpp:70
+#, kde-format
+msgctxt "@option:check"
+msgid "All Projects"
+msgstr "Vsi projekti"
+
+#: problemsview.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all projects"
+msgstr "Prikaže težave v vseh projektih"
+
+#: problemsview.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Path"
+msgstr "Dokumenti v poti"
+
+#: problemsview.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in a specific path"
+msgstr "Prikaže težave v vseh datotekah na določeni poti"
+
+#: problemsview.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Current Path"
+msgstr "Dokumenti na trenutni poti"
+
+#: problemsview.cpp:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in the path of the current document"
+msgstr "Prikaži težave iz vseh datotek na poti trenutnega dokumenta"
+
+#: problemsview.cpp:83
+#, kde-format
+msgctxt "@option:check"
+msgid "Show All"
+msgstr "Pokaži vse"
+
+#: problemsview.cpp:84
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display all problems"
+msgstr "Pokaži vse težave"
+
+#: problemsview.cpp:105
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Path Filter..."
+msgstr "Filte poti..."
+
+#: problemsview.cpp:137
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Imports"
+msgstr "Pokaži uvoze"
+
+#: problemsview.cpp:138
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in imported files"
+msgstr "Pokaži težave v uvoženih datotekah"
+
+#: problemsview.cpp:148
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display errors"
+msgstr "Pokaži napake"
+
+#: problemsview.cpp:150
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Errors"
+msgstr "Pokaži napake"
+
+#: problemsview.cpp:153
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display warnings"
+msgstr "Pokaži opozorila"
+
+#: problemsview.cpp:155
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Warnings"
+msgstr "Pokaži opozorila"
+
+#: problemsview.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display hints"
+msgstr "Pokaži namige"
+
+#: problemsview.cpp:160
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Hints"
+msgstr "Pokaži namige"
+
+#: problemsview.cpp:180
+#, kde-format
+msgctxt "@title:menu"
+msgid "Grouping"
+msgstr "Združevanje"
+
+#: problemsview.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "None"
+msgstr "Brez"
+
+#: problemsview.cpp:190
+#, kde-format
+msgctxt "@option:check"
+msgid "Path"
+msgstr "Pot"
+
+#: problemsview.cpp:191
+#, kde-format
+msgctxt "@option:check"
+msgid "Severity"
+msgstr "Resnost"
+
+#: problemsview.cpp:219
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Poišči..."
+
+#: problemsview.cpp:462
+#, kde-format
+msgctxt "@title:tab %1: tab name, %2: number of problems"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: problemsview.cpp:500
+#, kde-format
+msgctxt "@title:menu"
+msgid "Scope: %1"
+msgstr "Obseg: %1"
+
+#: problemtreeview.cpp:94
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Problems"
+msgstr "Težave"
+
+#: problemtreeview.cpp:205
+#, kde-format
+msgctxt "@title:menu"
+msgid "Problem"
+msgstr "Težava"
+
+#: problemtreeview.cpp:207
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Description"
+msgstr "Kopiraj opis"
+
+#: problemtreeview.cpp:226
+#, kde-format
+msgctxt "@title:menu"
+msgid "Solve: %1"
+msgstr "Reši: %1"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Re-parse all watched documents"
+#~ msgstr "Znova razčleni vse opazovane dokumente"
+
+#~ msgid "Solve"
+#~ msgstr "Reši"
+
+#~ msgid "Problem in <b>%1</b>:<br/>"
+#~ msgstr "Težava v <b>%1</b>:<br/>"
+
+#~ msgid " in "
+#~ msgstr " v "
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Display errors, warnings and hints"
+#~ msgstr "Prikaže napake, opozorila in namige"
+
+#~ msgid "Scope"
+#~ msgstr "Obseg"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select the lowest level of problem severity to be displayed"
+#~ msgstr "Izberite najnižjo raven resnosti težave, ki bo prikazana"
+
+#~ msgid "Hint"
+#~ msgstr "Namig"
+
+#~ msgctxt "@title:column source of problem"
+#~ msgid "Source"
+#~ msgstr "Vir"
+
+#~ msgctxt "@title:column file where problem was found"
+#~ msgid "File"
+#~ msgstr "Datoteka"
+
+#~ msgctxt "@title:column line number with problem"
+#~ msgid "Line"
+#~ msgstr "Vrstica"
+
+#~ msgctxt "@title:column column number with problem"
+#~ msgid "Column"
+#~ msgstr "Stolpec"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrejm@ubuntu.si"
+
+#~ msgid "Problem Reporter"
+#~ msgstr "Poročevalec o težavah"
+
+#~ msgid "Shows errors in source code"
+#~ msgstr "Prikaže napake v izvorni kodi"
+
+#~ msgid "In file included from:"
+#~ msgstr "V datoteki vključeni od:"

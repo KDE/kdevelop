@@ -1,0 +1,368 @@
+# Uyghur translation for kdevpatchreview.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevpatchreview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "ئۆزلەشتۈرۈلگەن ياماق"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Patch"
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "ياماق"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, fuzzy, kde-format
+#| msgid "From File"
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "ھۆججەتتىن"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, kde-format
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr ""
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, fuzzy, kde-format
+#| msgid "Insertion"
+msgid "Insertion<br/>"
+msgstr "قىستۇر"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, fuzzy, kde-format
+#| msgid "Removal"
+msgid "Removal<br/>"
+msgstr "چىقىرىش"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr ""
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr ""
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, fuzzy, kde-format
+#| msgid "Insertion"
+msgctxt "@item"
+msgid "Insertion"
+msgstr "قىستۇر"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, fuzzy, kde-format
+#| msgid "Removal"
+msgctxt "@item"
+msgid "Removal"
+msgstr "چىقىرىش"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, fuzzy, kde-format
+#| msgid "Change"
+msgctxt "@item"
+msgid "Change"
+msgstr "ئۆزگەرت"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, kde-format
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr ""
+
+#: patchreview.cpp:457
+#, fuzzy, kde-format
+#| msgid "Overview"
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "قىسقىچە بايان"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "ياماق باھالاش"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr ""
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "ياماق باھالاش"
+
+#: patchreview.cpp:603
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:button"
+msgid "Update"
+msgstr "يېڭىلا"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, kde-format
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "ياماق باھالاش"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "ياماق باھالاش"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, fuzzy, kde-format
+#| msgid "Changes"
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "ئۆزگىرىشلەر"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] ""
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+
+#: patchreviewtoolview.cpp:255
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgctxt "@action"
+msgid "Select All"
+msgstr "ھەممىنى تاللا"
+
+#: patchreviewtoolview.cpp:257
+#, fuzzy, kde-format
+#| msgid "Deselect All"
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "تاللاشنىڭ ھەممىسىنى بىكار قىل"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr ""
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] ""
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr ""
+
+#~ msgid "..."
+#~ msgstr "…"
+
+#~ msgid "Save As..."
+#~ msgstr "باشقا ئاتتا ساقلا…"
+
+#~ msgid "Send..."
+#~ msgstr "ئەۋەت…"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "ۋاقىتلىق ھۆججەتنى ئاچالمىدى."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr "<qt>ۋاقىتلىق ھۆججەت<b>%1</b> كە يازغىلى بولمىدى، ئۆچۈرۈۋاتىدۇ.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "diff نىڭ نەتىجىسىنى تەھلىل قىلالمىدى."
+
+#~ msgid "The files are identical."
+#~ msgstr "ھۆججەتلەر ئوپئوخشاش."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "ۋاقىتلىق ھۆججەتكە يازالمىدى."
+
+#~ msgid "Show"
+#~ msgstr "كۆرسەت"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Added"
+#~ msgstr "قوشۇلدى"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Deleted"
+#~ msgstr "ئۆچۈرۈلدى"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Modified"
+#~ msgstr "ئۆزگەرتكەن"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Unknown"
+#~ msgstr "نامەلۇم"
+
+#~ msgctxt "Unknown VCS file status, probably a backend error"
+#~ msgid "?"
+#~ msgstr "؟"

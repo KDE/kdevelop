@@ -1,0 +1,1498 @@
+# translation of kdevgdb.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2012, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgdb\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-01-15 14:24+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.1\n"
+
+#: dialogs/processselection.cpp:28
+#, fuzzy, kde-format
+#| msgid "Attach to a Process"
+msgctxt "@title:window"
+msgid "Attach to a Process"
+msgstr "Seonda protsessiga"
+
+#: dialogs/processselection.cpp:48
+#, fuzzy, kde-format
+#| msgid "Attach"
+msgctxt "@action:button"
+msgid "Attach"
+msgstr "Seonda"
+
+#: dialogs/selectcoredialog.cpp:18
+#, fuzzy, kde-format
+#| msgid "Select Core File"
+msgctxt "@title:window"
+msgid "Select Core File"
+msgstr "Mälupildifaili valimine"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/selectcoredialog.ui:19
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Täitmisfail:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/selectcoredialog.ui:32
+#, fuzzy, kde-format
+#| msgid "Core file:"
+msgctxt "@label:chooser"
+msgid "Core file:"
+msgstr "Mälupildifail:"
+
+#: mibreakpointcontroller.cpp:741
+#, kde-format
+msgid "<br>Old value: %1"
+msgstr "<br>Vana väärtus: %1"
+
+#: mibreakpointcontroller.cpp:744
+#, kde-format
+msgid "<br>New value: %1"
+msgstr "<br>Uus väärtus: %1"
+
+#: midebugger.cpp:327
+#, kde-format
+msgctxt "<b>Internal debugger error</b>"
+msgid ""
+"<p>The debugger component encountered an internal error while processing the "
+"reply from the debugger. Please submit a bug report. The debug session will "
+"now end to prevent potential crash"
+msgstr ""
+"<p>Siluri komponenti tabas siluri vastuse töötlemisel sisemine viga. Palun "
+"anna veast teada. Võimaliku krahhi vältimiseks siluri seanss praegu "
+"lõpetatakse."
+
+#: midebugger.cpp:330
+#, kde-format
+msgid ""
+"The exception is: %1\n"
+"The MI response is: %2"
+msgstr ""
+"Erind on: %1\n"
+"MI vastus on: %2"
+
+#: midebugger.cpp:333
+#, fuzzy, kde-format
+#| msgid "Internal debugger error"
+msgctxt "@title:window"
+msgid "Internal Debugger Error"
+msgstr "Sisemine siluri viga"
+
+#: midebugger.cpp:345 midebugsession.cpp:415
+#, kde-format
+msgid "Process exited"
+msgstr "Protsess lõpetas"
+
+#: midebugger.cpp:354
+#, kde-format
+msgid ""
+"<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+"path name is specified correctly."
+msgstr ""
+"<b>Siluri käivitamine nurjus.</b><p>\"%1\" käivitamine nurjus. Kontrolli, "
+"kas asukoht on korrektselt määratud."
+
+#: midebugger.cpp:362
+#, kde-format
+msgid "Process failed to start"
+msgstr "Protsessi käivitamine nurjus"
+
+#: midebugger.cpp:367
+#, kde-format
+msgid ""
+"<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
+"that the debug session has to be ended.<br>Try to reproduce the crash "
+"without KDevelop and report a bug.<br>"
+msgstr ""
+"<b>Silurit tabas krahh.</b><p>Siluri protsessi \"%1\" tabas krahh."
+"<br>Seepärast tuli lõpetada silumisseanss.<br>Proovi krahhi korrata ainult "
+"ilma KDevelopita ja anna veast teada.<br>"
+
+#: midebugger.cpp:372
+#, fuzzy, kde-format
+#| msgid "Debugger crashed"
+msgctxt "@title:window"
+msgid "Debugger Crashed"
+msgstr "Silurit tabas krahh"
+
+#: midebugger.cpp:375
+#, kde-format
+msgid "Process crashed"
+msgstr "Protsessi tabas krahh"
+
+#: midebuggerplugin.cpp:109
+#, fuzzy, kde-format
+#| msgid "Examine Core File with %1"
+msgctxt "@action"
+msgid "Examine Core File with %1"
+msgstr "Uuri mälupildifaili rakendusega %1"
+
+#: midebuggerplugin.cpp:111
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Examine core file</b><p>This loads a core file, which is typically "
+#| "created after the application has crashed, e.g. with a segmentation "
+#| "fault. The core file contains an image of the program memory at the time "
+#| "it crashed, allowing you to do a post-mortem analysis.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Examine core file</b><p>This loads a core file, which is typically "
+"created after the application has crashed, e.g. with a segmentation fault. "
+"The core file contains an image of the program memory at the time it "
+"crashed, allowing you to do a post-mortem analysis.</p>"
+msgstr ""
+"<b>Mälupildifaili uurimine</b><p>Laadib mälupildifaili, mis tavaliselt "
+"luuakse pärast rakenduse krahhi. See fail sisaldab rakenduse mälu tõmmist "
+"krahhi hetkel, võimaldades nii omamoodi \"lahkamist\".</p>"
+
+#: midebuggerplugin.cpp:123
+#, fuzzy, kde-format
+#| msgid "Attach to Process with %1"
+msgctxt "@action"
+msgid "Attach to Process with %1"
+msgstr "Seonda protsessiga rakenduse %1 abil"
+
+#: midebuggerplugin.cpp:125
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+msgstr ""
+"<b>Protsessiga seondamine</b><p>Seondab siluri töötava protsessiga.</p>"
+
+#: midebuggerplugin.cpp:138
+#, kde-format
+msgid "KDevelop (%1) - %2"
+msgstr "KDevelop (%1) - %2"
+
+#: midebuggerplugin.cpp:212
+#, fuzzy, kde-format
+#| msgid "Evaluate: %1"
+msgctxt "@action:inmenu"
+msgid "Evaluate: %1"
+msgstr "Hinda: %1"
+
+#: midebuggerplugin.cpp:214
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#| "cursor.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Evaluate expression</b><p>Shows the value of the expression under the "
+"cursor.</p>"
+msgstr ""
+"<b>Avaldise hindamine</b><p>Näitab kursori all oleva avaldise väärtust.</p>"
+
+#: midebuggerplugin.cpp:222
+#, fuzzy, kde-format
+#| msgid "Watch: %1"
+msgctxt "@action:inmenu"
+msgid "Watch: %1"
+msgstr "Jälgi: %1"
+
+#: midebuggerplugin.cpp:224
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Watch expression</b><p>Adds the expression under the cursor to the "
+#| "Variables/Watch list.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Watch expression</b><p>Adds the expression under the cursor to the "
+"Variables/Watch list.</p>"
+msgstr ""
+"<b>Avaldise jälgimine</b><p>Lisab kursori all oleva avaldise muutujate/"
+"jälgimisnimekirja.</p>"
+
+#: midebuggerplugin.cpp:237
+#, kde-format
+msgid "Choose a core file to examine..."
+msgstr "Vali uuritav mälupildifail..."
+
+#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue?"
+msgstr ""
+"Programmi juba silutakse. Kas loobuda parajasti käivast silumisseansist ja "
+"jätkata?"
+
+#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: midebuggerplugin.cpp:257
+#, kde-format
+msgid "Choose a process to attach to..."
+msgstr "Vali protsess, millega seondada..."
+
+#: midebuggerplugin.cpp:281
+#, kde-format
+msgid "Not attaching to process %1: cannot attach the debugger to itself."
+msgstr "Protsessiga %1 ei seondata: silurit ei saa seondada iseendaga."
+
+#: midebuggerplugin.cpp:301
+#, kde-format
+msgid "Debugger"
+msgstr "Silur"
+
+#: midebugjobs.cpp:49
+#, kde-format
+msgctxt "ProjectName: run configuration name"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: midebugjobs.cpp:73
+#, kde-format
+msgid "'%1' is not an executable"
+msgstr "\"%1\" ei ole täitmisfail"
+
+#: midebugjobs.cpp:147
+#, kde-format
+msgid "Debug core file"
+msgstr "Mälupildifaili silumine"
+
+#: midebugjobs.cpp:185
+#, kde-format
+msgid "Debug process %1"
+msgstr "Protsessi %1 silumine"
+
+#: midebugsession.cpp:210
+#, kde-format
+msgid "Running program"
+msgstr "Programm töötab"
+
+#: midebugsession.cpp:287
+#, kde-format
+msgid "Attaching to process %1"
+msgstr "Seondamine protsessiga %1"
+
+#: midebugsession.cpp:318
+#, kde-format
+msgid "<b>Could not attach debugger:</b><br />"
+msgstr "<b>Siluri kaasamine nurjus.</b><br />"
+
+#: midebugsession.cpp:328
+#, kde-format
+msgid "Examining core file %1"
+msgstr "Mälupildifaili %1 uurimine"
+
+#: midebugsession.cpp:400
+#, kde-format
+msgid "Debugger stopped"
+msgstr "Silur peatatud"
+
+#: midebugsession.cpp:420
+#, kde-format
+msgid "Application is running"
+msgstr "Rakendus töötab"
+
+#: midebugsession.cpp:425
+#, kde-format
+msgid "Application is paused"
+msgstr "Rakenduse töös on paus"
+
+#: midebugsession.cpp:735
+#, kde-format
+msgid ""
+"<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
+"%1"
+msgstr "<b>Saadeti GDB käsk, kui silur ei töötanud</b><br>Käsk oli:<br> %1"
+
+#: midebugsession.cpp:847
+#, kde-format
+msgid "<b>Invalid debugger command</b><br>%1"
+msgstr "<b>Vigane siluri käsk</b><br>%1"
+
+#: midebugsession.cpp:985
+#, kde-format
+msgid "Exited with return code: %1"
+msgstr "Väljuti koodiga %1"
+
+#: midebugsession.cpp:987
+#, kde-format
+msgid "Exited normally"
+msgstr "Lõpetati normaalselt"
+
+#: midebugsession.cpp:994
+#, kde-format
+msgid "Exited on signal %1"
+msgstr "Lõpetati signaaliga %1"
+
+#: midebugsession.cpp:1029
+#, kde-format
+msgid "Program received signal %1 (%2)"
+msgstr "Programm sai signaali %1 (%2)"
+
+#: midebugsession.cpp:1161
+#, kde-format
+msgid "1 command in queue\n"
+msgid_plural "%1 commands in queue\n"
+msgstr[0] "1 käsk järjekorras\n"
+msgstr[1] "%1 käsku järjekorras\n"
+
+#: midebugsession.cpp:1162
+#, kde-format
+msgctxt "Only the 0 and 1 cases need to be translated"
+msgid "1 command being processed by gdb\n"
+msgid_plural "%1 commands being processed by gdb\n"
+msgstr[0] "GDB töötleb 1 käsku\n"
+msgstr[1] "GDB töötleb %1 käsku\n"
+
+#: midebugsession.cpp:1163
+#, kde-format
+msgid "Debugger state: %1\n"
+msgstr "Siluri olek: %1\n"
+
+#: midebugsession.cpp:1166
+#, kde-format
+msgid ""
+"Current command class: '%1'\n"
+"Current command text: '%2'\n"
+"Current command original text: '%3'\n"
+msgstr ""
+"Aktiivse käsu klass: '%1'\n"
+"Aktiivse käsu tekst: '%2'\n"
+"Aktiivse käsu originaaltekst: '%3'\n"
+
+#: midebugsession.cpp:1242
+#, kde-format
+msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+msgstr "<b>Siluri viga</b><p>Silur andis teada järgmisest veast:<p><tt>%1"
+
+#: miframestackmodel.cpp:69
+#, kde-format
+msgid "(running)"
+msgstr "(töös)"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Binary"
+msgstr "2nd"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Octal"
+msgstr "8nd"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Decimal"
+msgstr "10nd"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Hexadecimal"
+msgstr "16nd"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Raw"
+msgstr "Toores"
+
+#: registers/converters.cpp:17
+#, kde-format
+msgid "Unsigned"
+msgstr "Märgita"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "General"
+msgstr "Üldine"
+
+#: registers/registercontroller_arm.cpp:100
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Flags"
+msgstr "Lipud"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP single-word"
+msgstr "VFP üksiksõna"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP double-word"
+msgstr "VFP kaksiksõna"
+
+#: registers/registercontroller_arm.cpp:100
+#, kde-format
+msgid "VFP quad-word"
+msgstr "VFP neliksõna"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "FPU"
+msgstr "FPU"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "XMM"
+msgstr "XMM"
+
+#: registers/registercontroller_x86.cpp:100
+#, kde-format
+msgid "Segment"
+msgstr "Segment"
+
+#: registers/registersview.cpp:51
+#, fuzzy, kde-format
+#| msgid "Format"
+msgctxt "@title:menu"
+msgid "Format"
+msgstr "Vorming"
+
+#: registers/registersview.cpp:60
+#, fuzzy, kde-format
+#| msgid "Mode"
+msgctxt "@title:menu"
+msgid "Mode"
+msgstr "Režiim"
+
+#: registers/registersview.cpp:195
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:inmenu"
+msgid "Update"
+msgstr "Uuenda"
+
+#: stty.cpp:243
+#, kde-format
+msgid ""
+"Cannot use the tty* or pty* devices.\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
+"user to the tty group using \"usermod -aG tty username\"."
+msgstr ""
+"Tty* ja pty* seadmete kasutamine ei ole võimalik.\n"
+"Kontrolli /dev/tty* ja /dev/pty* õigusi.\n"
+"Võib-olla pead administraatorina (root) tegema tty* ja pty* seadmetele "
+"\"chmod ug+rw\" ja/või lisama kasutaja tty gruppi käsuga \"usermod -aG tty "
+"kasutajanimi\"."
+
+#: stty.cpp:295
+#, kde-format
+msgid "%1 is incorrect terminal name"
+msgstr "%1 on vigane terminali nimi"
+
+#: stty.cpp:301
+#, kde-format
+msgid "Can't create a temporary file"
+msgstr "Ajutise faili loomine nurjus"
+
+#: stty.cpp:348
+#, kde-format
+msgid ""
+"Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it "
+"accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
+"sleep 3600;done\""
+msgstr ""
+"%1 tty/pty hankimine nurjus. Kontrolli, kas %1 on ikka tegelikult terminal "
+"ja ka see tunnistab järgmisi argumente: -e sh -c \"tty> %2 ;exec<&-;exec>&-;"
+"while :;do sleep 3600;done\""
+
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
+#, fuzzy, kde-format
+#| msgid "Debugger Console"
+msgctxt "@title:window"
+msgid "Debugger Console"
+msgstr "Siluri konsool"
+
+#: widgets/debuggerconsoleview.cpp:49
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+#| "can also issue any other debugger command while debugging.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
+"can also issue any other debugger command while debugging.</p>"
+msgstr ""
+"<b>Siluri konsool</b><p>Kõigi täidetavate silurikäskude näitamine. Silumise "
+"ajal võib anda ka mis tahes muid silurikäske.</p>"
+
+#: widgets/debuggerconsoleview.cpp:58
+#, fuzzy, kde-format
+#| msgid "Repeat last command when hit Return"
+msgctxt "@info:tooltip"
+msgid "Repeat last command when hit Return"
+msgstr "Viimase käsu kordamine Returni vajutamisel"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.cpp:67 widgets/debuggerconsoleview.ui:56
+#, fuzzy, kde-format
+#| msgid "Pause execution of the app to enter gdb commands"
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter debugger commands"
+msgstr "Paus rakenduse täitmises GDB käskude sisestamiseks"
+
+#: widgets/debuggerconsoleview.cpp:72
+#, fuzzy, kde-format
+#| msgid "Show Internal Commands"
+msgctxt "@action"
+msgid "Show Internal Commands"
+msgstr "Näita sisemisi käske"
+
+#: widgets/debuggerconsoleview.cpp:76
+#, fuzzy, kde-format
+#| msgid ""
+#| "Controls if commands issued internally by KDevelop will be shown or not."
+#| "<br>This option will affect only future commands, it will not add or "
+#| "remove already issued commands from the view."
+msgctxt "@info:whatsthis"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Määrab, kas KDevelopi poolt sisemiselt antud käske näidatakse või mitte. "
+"<br>See mõjutab ainult tulevasi käske ning ei lisa ega eemalda vaatest juba "
+"antud käske."
+
+#: widgets/debuggerconsoleview.cpp:137
+#, fuzzy, kde-format
+#| msgid "&Command:"
+msgctxt "@label:listbox"
+msgid "&Command:"
+msgstr "&Käsk:"
+
+#: widgets/debuggerconsoleview.cpp:159
+#, fuzzy, kde-format
+#| msgid "%1 Command Bar"
+msgctxt "@title:window"
+msgid "%1 Command Bar"
+msgstr "%1 käsuriba"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:53
+#, fuzzy, kde-format
+#| msgid "Interrupt"
+msgctxt "@action"
+msgid "Interrupt"
+msgstr "Katkestus"
+
+#. i18n: ectx: property (text), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:70
+#, fuzzy, kde-format
+#| msgid "Repeat"
+msgctxt "@action"
+msgid "Repeat"
+msgstr "Kordus"
+
+#. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
+#: widgets/debuggerconsoleview.ui:73
+#, fuzzy, kde-format
+#| msgid "Repeat last sent command when hit <Return>"
+msgctxt "@info:tooltip"
+msgid "Repeat last sent command when hit <Return>"
+msgstr "Viimase käsu kordamine <Return> vajutamisel"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
+#: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
+#, fuzzy, kde-format
+#| msgid "Address Selector"
+msgctxt "@title:window"
+msgid "Address Selector"
+msgstr "Aadressivalija"
+
+#: widgets/disassemblewidget.cpp:88
+#, fuzzy, kde-format
+#| msgid "Change &address"
+msgctxt "@action"
+msgid "Change &Address"
+msgstr "Muuda &aadressi"
+
+#: widgets/disassemblewidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "&Jump to Cursor"
+msgctxt "@action"
+msgid "&Jump to Cursor"
+msgstr "&Hüppa kursorile"
+
+#: widgets/disassemblewidget.cpp:93
+#, fuzzy, kde-format
+#| msgid "Sets the execution pointer to the current cursor position."
+msgctxt "@info:whatsthis"
+msgid "Sets the execution pointer to the current cursor position."
+msgstr "Täitmise viida määramine kursori aktiivsesse asukohta."
+
+#: widgets/disassemblewidget.cpp:96
+#, fuzzy, kde-format
+#| msgid "&Run to Cursor"
+msgctxt "@action"
+msgid "&Run to Cursor"
+msgstr "&Täida kursorini"
+
+#: widgets/disassemblewidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Continues execution until the cursor position is reached."
+msgctxt "@info:whatsthis"
+msgid "Continues execution until the cursor position is reached."
+msgstr "Täitmise jätkamine kuni kursori asukohani."
+
+#: widgets/disassemblewidget.cpp:100
+#, fuzzy, kde-format
+#| msgid "&AT&&T"
+msgctxt "@option:check"
+msgid "&AT&&T"
+msgstr "&AT&&T"
+
+#: widgets/disassemblewidget.cpp:101
+#, fuzzy, kde-format
+#| msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgctxt "@info:tooltip"
+msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+msgstr "GDB kasutab AT&T pöördtransleerimist (nt mov 0xc(%ebp),%eax)."
+
+#: widgets/disassemblewidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "&Intel"
+msgctxt "@option:check"
+msgid "&Intel"
+msgstr "&Intel"
+
+#: widgets/disassemblewidget.cpp:106
+#, fuzzy, kde-format
+#| msgid ""
+#| "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+#| "+0xc])."
+msgctxt "@info:tooltip"
+msgid ""
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+"+0xc])."
+msgstr ""
+"GDB kasutab Inteli pöördtransleerimist (nt mov eax, DWORD PTR [ebp+0xc])."
+
+#: widgets/disassemblewidget.cpp:143
+#, fuzzy, kde-format
+#| msgid "Disassembly flavor"
+msgctxt "@title:menu"
+msgid "Disassembly Flavor"
+msgstr "Pöördtransleerimine"
+
+#: widgets/disassemblewidget.cpp:174
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Machine code display</b><p>A machine code view into your running "
+#| "executable with the current instruction highlighted. You can step "
+#| "instruction by instruction using the debuggers toolbar buttons of \"step "
+#| "over\" instruction and \"step into\" instruction."
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Machine code display</b><p>A machine code view into your running "
+"executable with the current instruction highlighted. You can step "
+"instruction by instruction using the debuggers toolbar buttons of \"step over"
+"\" instruction and \"step into\" instruction."
+msgstr ""
+"<b>Masinkoodi kuvamine</b><p>Täitmisfaili masinkood, kus aktiivne "
+"instruktsioon on esile tõstetud. Instruktsioonidesse saab sisse või neist "
+"üle astuda siluri tööriistariba nuppudega \"astu üle\" ja \"astu sisse\"."
+
+#: widgets/disassemblewidget.cpp:190
+#, fuzzy, kde-format
+#| msgid "Address"
+msgctxt "@title:column"
+msgid "Address"
+msgstr "Aadress"
+
+#: widgets/disassemblewidget.cpp:191
+#, fuzzy, kde-format
+#| msgid "Function"
+msgctxt "@title:column"
+msgid "Function"
+msgstr "Funktsioon"
+
+#: widgets/disassemblewidget.cpp:192
+#, fuzzy, kde-format
+#| msgid "Instruction"
+msgctxt "@title:column"
+msgid "Instruction"
+msgstr "Instruktsioon"
+
+#: widgets/disassemblewidget.cpp:212
+#, fuzzy, kde-format
+#| msgid "Disassemble/Registers View"
+msgctxt "@title:window"
+msgid "Disassemble/Registers View"
+msgstr "Pöördtransleerimise/registrite vaade"
+
+#. i18n: ectx: property (toolTip), widget (QDialog, SelectAddressDialog)
+#: widgets/selectaddressdialog.ui:17
+#, fuzzy, kde-format
+#| msgid "Select the address to disassemble around"
+msgctxt "@info:tooltip"
+msgid "Select the address to disassemble around"
+msgstr "Aadressi valimine pöördtransleerimiseks"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/selectaddressdialog.ui:23
+#, fuzzy, kde-format
+#| msgid "Select address to disassemble around"
+msgctxt "@label:listbox"
+msgid "Address to disassemble around:"
+msgstr "Aadressi valimine pöördtransleerimiseks"
+
+#~ msgid "toolBar"
+#~ msgstr "tööriistariba"
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Siluri käivitamine nurjus"
+
+#~ msgid "warning"
+#~ msgstr "hoiatus"
+
+#~ msgid "Startup error"
+#~ msgstr "Käivitamise viga"
+
+#~ msgid "Internal error"
+#~ msgstr "Sisemine viga"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Vigane siluri käsk"
+
+#~ msgid "Debugger status"
+#~ msgstr "Siluri olek"
+
+#~ msgid "Debugger error"
+#~ msgstr "Siluri viga"
+
+#~ msgid "Address selector"
+#~ msgstr "Aadressivalija"
+
+#~ msgid "Examine core file"
+#~ msgstr "Uuri mälupildifaili"
+
+#, fuzzy
+#~| msgid "Attach to process..."
+#~ msgid "Attach to Process... (%1)"
+#~ msgstr "Seonda protsessiga..."
+
+#, fuzzy
+#~| msgid "Attach to a process"
+#~ msgid "Attach to process"
+#~ msgstr "Seonda protsessiga"
+
+#~ msgid ""
+#~ "<b>Failed to load core file</b><p>Debugger reported the following error:"
+#~ "<p><tt>%1"
+#~ msgstr ""
+#~ "<b>Mälupildifaili laadimine nurjus</b><p>Silur andis teada järgmisest "
+#~ "veast:<p><tt>%1"
+
+#~ msgid "Disassemble/Registers"
+#~ msgstr "Pöördtransleerimine/registrid"
+
+#~ msgid "GDB"
+#~ msgstr "GDB"
+
+#~ msgid "Memory"
+#~ msgstr "Mälu"
+
+#~ msgid "Tracing Configuration"
+#~ msgstr "Jälituse seadistamine"
+
+#~ msgid ""
+#~ "<b>Enable tracing</b>\n"
+#~ "<p>Tracing is a mechanism to automatically print values of the chosen "
+#~ "expressions and continue execution when breakpoint is hit. You can think "
+#~ "of it as printf debugging that does not require modifying the source.</p>"
+#~ msgstr ""
+#~ "<b>Jälituse lubamine</b>\n"
+#~ "<p>Jälitus on mehhanism, mis näitab automaatselt valitud avaldiste "
+#~ "väärtusi ning jätkab täitmist kuni katkestuspunktini. Seda võib võrrelda "
+#~ "printf silumisega, mis ei nõua lähtekoodi muutmist.</p>"
+
+#~ msgid "Enable tracing"
+#~ msgstr "Jälituse lubamine"
+
+#~ msgid "Cancel"
+#~ msgstr "Loobu"
+
+#~ msgid "Custom format string"
+#~ msgstr "Kohandatud vormindusstring"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid ""
+#~ "<b>Custom format string</b>\n"
+#~ "<p>Specify a C-style format string that will be used when printing the "
+#~ "chosen expression. For example:\n"
+#~ "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#~ "If custom format string is not enabled, names and values of all "
+#~ "expressions will be printed, using \"%d\" as format specifier for all "
+#~ "expressions."
+#~ msgstr ""
+#~ "<b>Kohandatud vormindusstring</b>\n"
+#~ "<p>Määra C keele vormindusstring, mida kasutatakse valitud avaldise "
+#~ "näitamisel. Näide:\n"
+#~ "<p align=\"center\"> <tt>Jälituspunkt 1: g = %d</tt></p>\n"
+#~ "Kui kohandatud vormindusstringi pole määratud, näidatakse kõigi avaldiste "
+#~ "nimesid ja väärtusi, kasutades kõigi avaldiste korral vorminduse "
+#~ "määratlejana \"%d\"."
+
+#~ msgid "Expressions to print:"
+#~ msgstr "Näidatavad avaldised:"
+
+#~ msgid ""
+#~ "No environment group specified, looks like a broken configuration, please "
+#~ "check run configuration '%1'. Using default environment group."
+#~ msgstr ""
+#~ "Keskkonnagruppi pole määratud, tundub, et tegemist on katkise "
+#~ "seadistusega. Palun käivita kontrolliks '%1' konfigureerimine. "
+#~ "Kasutatakse vaikimisi keskkonnagruppi."
+
+#~ msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+#~ msgstr "<b>Vajalik on GDB 7.0.0 või uuem.</b><br />Sina kasutad: %1"
+
+#~ msgid "gdb error"
+#~ msgstr "GDB viga"
+
+#~ msgid "<b>Could not start debugger:</b><br />"
+#~ msgstr "<b>Siluri käivitamine nurjus.</b><br />"
+
+#~ msgid "Could not locate the debugging shell '%1'."
+#~ msgstr "Silumisshelli \"%1\" tuvastamine nurjus."
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "Silumisshelli ei leitud"
+
+#~ msgid "GDB Configuration"
+#~ msgstr "GDB seadistamine"
+
+#~ msgid "Executes a Native application in GDB"
+#~ msgstr "Omarakenduse käivitamine GDB-s"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Siluri seadistamine"
+
+#~ msgid "Debugger e&xecutable:"
+#~ msgstr "Siluri täitmis&fail:"
+
+#~ msgid "Gdb executable"
+#~ msgstr "GDB täitmisfail"
+
+#~ msgid ""
+#~ "To run \"gdb\" binary from $PATH, leave this field empty. To run custom "
+#~ "gdb, for example, for a different architecture, enter the executable name "
+#~ "here. You can either run gdb from $PATH, but with a different name (say, "
+#~ "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+#~ "executable."
+#~ msgstr ""
+#~ "Binaarfaili \"gdb\" käivitamiseks asukohast ($PATH) jäta väli tühjaks. "
+#~ "Kohandatud GDB käivitamiseks, näiteks mõnel muul arhitektuuril, sisesta "
+#~ "siia täitmisfaili nimi. GDB võib käivitada asukohast ($PATH) lihtsalt "
+#~ "teise nimega (nt. \"arm-gdb\"), millisel juhul tuleb see nimi siin anda, "
+#~ "või siis määrata GDB täitmisfaili täielik asukoht."
+
+#~ msgid ""
+#~ "<html><head/><body><p>If you want gdb to be executed by a special shell "
+#~ "script, which for example properly sets the library path, insert it here "
+#~ "e.g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+#~ "invoked like this: /path/to/script.sh --scriptArguments debugger --"
+#~ "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+#~ "span> invoke \"debugger\" executable manually.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Kui soovid, et gdb käivitataks spetsiaalse "
+#~ "shelliskriptiga, mis näiteks määrab korrektselt teegi asukoha, sisesta "
+#~ "see siia nt. nii: /skripti/asukoht.sh --skriptiArgumendid</p><p>Märkus: "
+#~ "skript kutsutakse välja järgmiselt: /skritpi/asukoht.sh --"
+#~ "skriptiArgumendid silur --siluriArgumendid. Niisiis skript.sh <span style="
+#~ "\" font-weight:600;\">peab</span> \"siluri\" täitmisfaili välja kutsuma "
+#~ "käsitsi.</p></body></html>"
+
+#~ msgid "She&ll script:"
+#~ msgstr "&Shelliskript:"
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "Options"
+#~ msgstr "Valikud"
+
+#~ msgid "Display static &members:"
+#~ msgstr "Staatiliste liik&mete näitamine:"
+
+#~ msgid ""
+#~ "Displaying static members makes GDB slower in\n"
+#~ "producing data within KDE and Qt.\n"
+#~ "It may change the \"signature\" of the data\n"
+#~ "which QString and friends rely on,\n"
+#~ "but if you need to debug into these values then\n"
+#~ "check this option."
+#~ msgstr ""
+#~ "Staatiliste liikmete näitamine muudab GDB\n"
+#~ "aeglasemaks andmete loomisel KDE ja Qt keskkonnas.\n"
+#~ "See võib muuta andmete \"allkirja\",\n"
+#~ "millele tuginevad QString ja sõbrad,\n"
+#~ "aga kui pead neid väärtusi siluma,\n"
+#~ "siis märgi see valik."
+
+#~ msgid "Display &demangled names:"
+#~ msgstr "Moonutusvaba&de nimede näitamine:"
+
+#~ msgid ""
+#~ "When displaying the disassembled code you\n"
+#~ "can select to see the methods' mangled names.\n"
+#~ "However, non-mangled names are easier to read."
+#~ msgstr ""
+#~ "Pöördtransleeritud koodi näitamisel\n"
+#~ "võid valida meetodite moonutatud nimede näitamise.\n"
+#~ "Mittemoonutatud nimesid on samas hõlpsam lugeda."
+
+#~ msgid "S&tart Debugger with:"
+#~ msgstr "Silu&ri käivitamine järgnevaga:"
+
+#~ msgid "Application Output"
+#~ msgstr "Rakenduse väljund"
+
+#~ msgid "GDB Console"
+#~ msgstr "GDB konsool"
+
+#~ msgid "Frame Stack"
+#~ msgstr "Väljakutsete pinu"
+
+#~ msgid ""
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint"
+#~ msgstr ""
+#~ "See skript on mõeldud tegelike käskude jaoks, mida on tarvis ühendumiseks "
+#~ "eemalt käivitatava rakendusega.\n"
+#~ "\tshell sleep 5\tootab määratud aja kaugprogrammi käivitumist\n"
+#~ "\ttarget remote ...\tühendumine kaugsiluriga\n"
+#~ "\tcontinue\t[lisavõimalus] silumise täitmine esimese katkestuspunktini"
+
+#~ msgid "Remote Debugging"
+#~ msgstr "Kaugsilumine"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Script to start remote application</p><p></"
+#~ "p><p>This shell script is run after the Gdb Config script has been "
+#~ "sourced by gdb.</p><p>It's purpose is to actually start the remote "
+#~ "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
+#~ "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
+#~ "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
+#~ "\"application\" on target.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Skript kaugrakenduse käivitamiseks</p><p></p><p>See "
+#~ "shelliskript käivitatakse pärast seda, kui GDB on muutnud GDB "
+#~ "seadistusskripti allikaks.</p><p>Kaugsilumise korral käivitab see skript "
+#~ "tegelikult kaugprotsessi.</p><p>1) Leia võimalus käivitada käske "
+#~ "kaugmasinas - rsh, ssh, telnet...</p><p>2a) Käivita sihtkohas "
+#~ "\"gdbserver ... rakendus\".</p><p>kui sinu täitmisfail sisaldab GDB "
+#~ "tüvirakendust.</p><p>2b) Käivita sihtkohas \"rakendus\".</p></body></html>"
+
+#~ msgctxt "Shell script to be executed at run time"
+#~ msgid "R&un shell script:"
+#~ msgstr "Kä&ivitamise shelliskript:"
+
+#~ msgid ""
+#~ "<html><head/><body><p>This script is sourced by gdb when the debugging "
+#~ "starts.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>GDB muudab selle skripti allikaks silumise "
+#~ "käivitamisel.</p></body></html>"
+
+#~ msgid "Gdb &config script:"
+#~ msgstr "GDB kon&figureerimise skript:"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Script to connect with remote application</p><p>For "
+#~ "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+#~ "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+#~ "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Skript ühendumiseks kaugrakendusega</p><p>Näide:</"
+#~ "p><p>\tshell sleep 5\t #ootab määratud aja kaugprogrammi käivitumist</"
+#~ "p><p>\ttarget remote ...\t #ühendumine kaugsiluriga</p><p>\tcontinue\t "
+#~ "#[lisavõimalus] silumise täitmine esimese katkestuspunktini.</p></body></"
+#~ "html>"
+
+#~ msgctxt "Gdb script to be executed at run time."
+#~ msgid "Run &gdb script:"
+#~ msgstr "Käivitamise &GDB skript:"
+
+#~ msgid "GDB Output"
+#~ msgstr "GDB väljund"
+
+#~ msgid "&GDB cmd:"
+#~ msgstr "&GDB käsk:"
+
+#~ msgid "Copy All"
+#~ msgstr "Kopeeri kõik"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Käivitamine"
+
+#~ msgid "Start"
+#~ msgstr "Algus"
+
+#~ msgid "Amount"
+#~ msgstr "Hulk"
+
+#~ msgid "Memory view"
+#~ msgstr "Mäluvaade"
+
+#~ msgid "%2 (1 byte)"
+#~ msgid_plural "%2 (%1 bytes)"
+#~ msgstr[0] "%2 (1 bait)"
+#~ msgstr[1] "%2 (%1 baiti)"
+
+#~ msgid "&Reload"
+#~ msgstr "Laa&di uuesti"
+
+#~ msgid "&Format"
+#~ msgstr "&Vorming"
+
+#~ msgid "&Binary"
+#~ msgstr "&2nd"
+
+#~ msgid "&Octal"
+#~ msgstr "&8nd"
+
+#~ msgid "&Decimal"
+#~ msgstr "1&0nd"
+
+#~ msgid "&Hexadecimal"
+#~ msgstr "1&6nd"
+
+#~ msgid "&Grouping"
+#~ msgstr "&Rühmitamine"
+
+#~ msgid "&0"
+#~ msgstr "&0"
+
+#~ msgid "&1"
+#~ msgstr "&1"
+
+#~ msgid "&2"
+#~ msgstr "&2"
+
+#~ msgid "&4"
+#~ msgstr "&4"
+
+#~ msgid "&8"
+#~ msgstr "&8"
+
+#~ msgid "1&6"
+#~ msgstr "1&6"
+
+#~ msgid "Write changes"
+#~ msgstr "Kirjuta muudatused"
+
+#~ msgid "Change memory range"
+#~ msgstr "Muuda mäluvahemikku"
+
+#~ msgid "Close this view"
+#~ msgstr "Sulge vaade"
+
+#~ msgid "Memory viewer"
+#~ msgstr "Mälunäitaja"
+
+#~ msgid "New memory viewer"
+#~ msgstr "Uus mälunäitaja"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Open a new memory viewer."
+#~ msgstr "Uue mälunäitaja avamine."
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>GDB lõpetas ebanormaalselt</b><p>Arvatavasti on tegemist GDB veaga. "
+#~ "Uuri GDB väljundi akent ja peata silur"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "GDB lõpetas ebanormaalselt"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Gdb-d tabas krahh"
+
+#~ msgid "Application interrupted"
+#~ msgstr "Rakenduse töö katkestatud"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "GDB Support"
+#~ msgstr "GDB toetus"
+
+#~ msgid ""
+#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
+#~ "+ and more."
+#~ msgstr ""
+#~ "See plugin pakub GDB kasutajaliidest. GDB on C, C++ ja veel mitme keele "
+#~ "lähtekoodi tasandil tegutsev siluja."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr "GDB käivitamine erishellis (peamiselt automake'i projektidele)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Kui soovid käivitada GDB erishellis või -tööriistas, määra see siin. "
+#~ "Peamiselt on see mõeldud Automake'i põhistele projektidele, kus rakendus "
+#~ "on tegelikult vaid skript ning selleks, et see töötaks GDB sees, on "
+#~ "vajalik <b>libtool</b>."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Kui soovid käivitada GDB erishellis või -tööriistas, määra see siin. "
+#~ "Peamiselt on see mõeldud Automake'i põhistele projektidele, kus rakendus "
+#~ "on tegelikult vaid skript ning selleks, et see töötaks GDB sees, on "
+#~ "vajalik libtool."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "&Silumisshell:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Skript kaugrakenduse käivitamiseks"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "&GDB konfigureerimise skript:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Skript ühendumiseks kaugrakendusega"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "See skript muudetakse GDB allikaks pärast kahe eelneva skripti täitmist.\n"
+#~ "Seda skripti kasutatakse tegelikeks käskudejs, millega luua ühendus mujal "
+#~ "käivitatavale failile.\n"
+#~ "\tshell sleep 5\toodatakse kaugprogrammi käivitumist\n"
+#~ "\ttarget remote ...\tühendumine kaugsiluriga\n"
+#~ "\tcontinue\t[mittekohustuslik] silumine esimese katkestuspunktini."
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "kdevelop: rakenduse silumise konsool"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Rakenduste GDB-s töötamise toetus"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Vorming"
+
+#~ msgid "Start address:"
+#~ msgstr "Algusaadress:"
+
+#~ msgid "End Address:"
+#~ msgstr "Lõppaadress:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Kuva"
+
+#~ msgid "Offset"
+#~ msgstr "Suhtaadress"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Siluri erivaated"
+
+#~ msgid "Watches"
+#~ msgstr "Jälgijad"
+
+#~ msgid "Recent"
+#~ msgstr "Viimati kasutatud"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "Võimaldab sisestada terminalist, kui rakendus sisaldab\n"
+#~ "terminalist lugemise funktsioone (nt. cin, fgets jne).\n"
+#~ "Kui kasutad rakenduses terminalist sisestamist, siis märgista\n"
+#~ "see valik, muidu mitte."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr "Eraldi terminali lubamine rakenduse &IO jaoks"
+
+#~ msgid ""
+#~ "If GDB has not seen a library that will be loaded via\n"
+#~ "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~ "With this option, GDB will stop on a library load and hence\n"
+#~ "try to set the pending breakpoints. See the documentation\n"
+#~ "for more details relating to this behavior.\n"
+#~ "\n"
+#~ "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgstr ""
+#~ "Tavaliselt keeldub GDB seadmast katkestuspunkte \"dlopen\"\n"
+#~ "kaudu avatavate tundmatutesse teekidesse.\n"
+#~ "Selle valikuga saab panna GDB peatuma teegi laadimisel ja sellega\n"
+#~ "anda katkestuspunktide seadmise võimaluse. Täpsema info\n"
+#~ "saamiseks vaata dokumentatsiooni.\n"
+#~ "\n"
+#~ "Kui sa ei ava teeke \"dlopen\" abil, siis jäta märgistamata."
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Katkestuspunktid &proovitakse määrata teegi laadimisel"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "Hõljuva tööriistariba kasutamine. See jääb alati\n"
+#~ "kõigi akende peale, nii et kui rakendus katab KDevelopi.\n"
+#~ "saad siiski rakendust juhtida väikese tööriistariba abil.\n"
+#~ "Samuti saab seda dokkida paneelile.\n"
+#~ "\n"
+#~ "See tööriistariba lisandub KDevelopi tööriistaribale."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Hõljuva tööriistariba lubami&ne"
+
+#~ msgid "Debug views"
+#~ msgstr "Silumisvaated"
+
+#~ msgid "Viewers"
+#~ msgstr "Vaated"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "Siluri vaated"
+
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>Siluri vaated</b><p>Mitmesugune info käivitatava rakenduse kohta. "
+#~ "Kasutada saab nelja vaadet:<br><b>Mälu</b><br>Pöördtransleerimine</"
+#~ "b><br><b>Registrid</b><br><b>Teegid</b>"
+
+#~ msgid ""
+#~ "<b>Application does not exist</b><p>The application you are trying to "
+#~ "debug,<br>    %1\n"
+#~ "<br>does not exist. Check that you have specified the right application "
+#~ "in the debugger configuration."
+#~ msgstr ""
+#~ "<b>Rakendust ei ole olemas</b><p>Rakendust %1, <br>    mida proovid "
+#~ "siluda, ei ole olemas.\n"
+#~ "<br>Kontrolli, kas oled määranud siluri seadistuses õige rakenduse."
+
+#~ msgid "Application does not exist"
+#~ msgstr "Rakendust ei ole olemas"
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Rakenduse '%1' käivitamine nurjus.</b><p>Rakendusele pole määratud "
+#~ "käivitamisbitti. Ürita projekt ümber ehitada või muuda õigusi käsitsi."
+
+#~ msgid "Could not run application"
+#~ msgstr "Rakenduse käivitamine nurjus"
+
+#, fuzzy
+#~ msgid "Received signal"
+#~ msgstr "Saadud signaal"
+
+#, fuzzy
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr "teade 1"
+
+#, fuzzy
+#~ msgid "<%1 items>"
+#~ msgstr "elemendid"
+
+#, fuzzy
+#~ msgid "<a href=add_watch>Watch this</a>"
+#~ msgstr "<a href=add_watch> Jälgi</a>"
+
+#, fuzzy
+#~ msgid "<a href=watchpoint>Stop on change</a>"
+#~ msgstr "<a href=watchpoint> Peata sees</a>"
+
+#, fuzzy
+#~ msgid "Debugger Variables"
+#~ msgstr "Silur Muutujad"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Variable tree</b><p>The variable tree allows you to see the values of "
+#~ "local variables and arbitrary expressions.</p><p>Local variables are "
+#~ "displayed automatically and are updated as you step through your program. "
+#~ "For each expression you enter, you can either evaluate it once, or \"watch"
+#~ "\" it (make it auto-updated). Expressions that are not auto-updated can "
+#~ "be updated manually from the context menu. Expressions can be renamed to "
+#~ "more descriptive names by clicking on the name column.</p><p>To change "
+#~ "the value of a variable or an expression, click on the value.</p>"
+#~ msgstr ""
+#~ "<b> Muutuja</b><p> muutlik kuni  /  kohalik muutujad ja väljendid<p> "
+#~ "Kohalik muutujad ja kui step kuni programm avaldis või make automaatne "
+#~ "Väljendid mitte automaatne   menüü Väljendid kuni rohkem x sees nimi<p> "
+#~ "Kellele väärtus  /  a muutlik või avaldis sees väärtus."
+
+#, fuzzy
+#~ msgid "<b>Expression entry</b><p>Type in expression to watch.</p>"
+#~ msgstr "<b> Avaldis entry</b><p> Tüüp asukohas avaldis kuni."
+
+#, fuzzy
+#~ msgid "Recent Expressions"
+#~ msgstr "Viimati kasutatud Väljendid"
+
+#, fuzzy
+#~ msgid "Remove All"
+#~ msgstr "Eemalda kõik"
+
+#, fuzzy
+#~ msgid "Re-evaluate All"
+#~ msgstr "Kõik"
+
+#, fuzzy
+#~ msgid "Natural"
+#~ msgstr "Loomulik"
+
+#, fuzzy
+#~ msgid "Character"
+#~ msgstr "Märk"
+
+#, fuzzy
+#~ msgid "Remember Value"
+#~ msgstr "Jäetakse meelde Väärtus"
+
+#, fuzzy
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Eemalda Jälgi Muutuja"
+
+#, fuzzy
+#~ msgid "Watch Variable"
+#~ msgstr "Jälgi Muutuja"
+
+#, fuzzy
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Avaldis"
+
+#, fuzzy
+#~ msgid "Remove Expression"
+#~ msgstr "Eemalda Avaldis"
+
+#, fuzzy
+#~ msgid "Data write breakpoint"
+#~ msgstr "Andmed write"
+
+#, fuzzy
+#~ msgid "Copy Value"
+#~ msgstr "Kopeeri Väärtus"
+
+#, fuzzy
+#~ msgid "Variables"
+#~ msgstr "Muutujad"
+
+#, fuzzy
+#~ msgid "Variable"
+#~ msgstr "Muutuja"
+
+#, fuzzy
+#~ msgid "Value"
+#~ msgstr "Väärtus"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Tüüp"
+
+#, fuzzy
+#~ msgid "Installing via sudo is not yet implemented"
+#~ msgstr "Paigaldamine sudo on mitte"
+
+#, fuzzy
+#~ msgid "Not implemented"
+#~ msgstr "Pole teostatud"
+
+#, fuzzy
+#~ msgid "No executable specified"
+#~ msgstr "Ei"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is a quoting error in the executable for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr "on a viga asukohas tingimusel seadistamine start."
+
+#, fuzzy
+#~ msgid ""
+#~ "A shell meta character was included in the executable for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr "A shell asukohas tingimusel seadistamine on mitte start."
+
+#, fuzzy
+#~ msgid ""
+#~ "There is a quoting error in the arguments for the launch configuration "
+#~ "'%1'. Aborting start."
+#~ msgstr "on a viga asukohas arguments tingimusel seadistamine start."
+
+#, fuzzy
+#~ msgid ""
+#~ "A shell meta character was included in the arguments for the launch "
+#~ "configuration '%1', this is not supported currently. Aborting start."
+#~ msgstr "A shell asukohas arguments tingimusel seadistamine on mitte start."
+
+#, fuzzy
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Aeg"
+
+#, fuzzy
+#~ msgid ""
+#~ "Debug arguments can be set on the Run Options page\n"
+#~ " or directly in the project manager"
+#~ msgstr ""
+#~ "Silumine arguments sees Käivita Valikud lehekülg\n"
+#~ " või asukohas projekt haldur"

@@ -1,0 +1,72 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jure Repinc <jlp@holodeck1.com>, 2010.
+# Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-30 06:49+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.2\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, kde-format
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Razredi"
+
+#: classbrowserplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Najdi v brskalniku po razredih"
+
+#: classwidget.cpp:72
+#, kde-format
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "Poišči:"
+
+#: classwidget.cpp:89
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Brskalnik po razredih"
+
+#~ msgid "All projects classes"
+#~ msgstr "Razredi vseh projektov"
+
+#~ msgid "Base classes"
+#~ msgstr "Osnovni razredi"
+
+#~ msgid "Derived classes"
+#~ msgstr "Izpeljani razredi"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Razredi v projektu %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Jure Repinc,Andrej Mernik"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jlp@holodeck1.com,andrejm@ubuntu.si"
+
+#~ msgid ""
+#~ "This plugin provides a browsable model of the currently parsed classes "
+#~ "and other items."
+#~ msgstr ""
+#~ "Vstavek prinaša model trenutno razčlenjenih razredov in drugih predmetov, "
+#~ "po katerih je mogoče brskati."

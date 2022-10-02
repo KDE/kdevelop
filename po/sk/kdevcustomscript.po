@@ -1,0 +1,164 @@
+# translation of kdevcustomscript.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2017, 2022.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustomscript\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2022-04-17 20:46+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: customscript_plugin.cpp:86
+#, kde-format
+msgid ""
+"<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
+"external formatting tools that can be invoked through the command-line.<br /"
+">For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b> "
+"formatters can be used.<br />The advantage of command-line formatters is "
+"that formatting configurations can be easily shared by all team members, "
+"independent of their preferred IDE."
+msgstr ""
+"<b>Odsadiť a formátovať zdrojový kód.</b><br />Tento plugin umožní používať "
+"silnéexterné formátovacie nástroje, ktoré sa dajú vyvolať cez príkazový "
+"riadok.<br /> Napríklad formátovače <b>uncrustify</b>, <b>astyle</b> alebo "
+"<b>indent</b> sa dajú použiť.<br />Výhoda formátovačov cez príkazový riadok "
+"je tá, že nastavenia formátovania sa dajú jednoducho zdieľať všetkými členmi "
+"tímu, nezávisle od ich preferovaného IDE."
+
+#: customscript_plugin.cpp:98
+#, kde-format
+msgctxt "@info formatter usage hint"
+msgid ""
+"Note: each custom script style requires a certain tool executable to be "
+"installed. Otherwise, code will not be formatted."
+msgstr ""
+"Poznámka: každý vlastný štýl skriptu vyžaduje nainštalovaný určitý program. "
+"Inak sa kód nebude formátovať."
+
+#: customscript_plugin.cpp:235
+#, kde-format
+msgid "Gnu Indent: GNU"
+msgstr "Gnu odsadenie: GNU"
+
+#: customscript_plugin.cpp:246
+#, kde-format
+msgid "Gnu Indent: Kernighan & Ritchie"
+msgstr "Gnu odsadenie: Kernighan & Ritchie"
+
+#: customscript_plugin.cpp:257
+#, kde-format
+msgid "Gnu Indent: Original Berkeley indent style"
+msgstr "Gnu odsadenie: Pôvodný štýl Berkeley"
+
+#: customscript_plugin.cpp:268
+#, kde-format
+msgid "Clang Format"
+msgstr "Formát Clang"
+
+#: customscript_plugin.cpp:271
+#, kde-format
+msgid ""
+"Description:<br /><br /><b>clang-format</b> is an automatic source formater "
+"by the LLVM project. It supports a variety of formatting style options via a "
+"<b>.clang-format</b> configuration file, usually located in the project root "
+"directory."
+msgstr ""
+"Popis: <br /><br /><b>clang-format</b> je automatický zdrojový formátovací "
+"prostriedok projektu LLVM. Podporuje rôzne možnosti štýlu formátovania "
+"prostredníctvom konfiguračného súboru <b>.clang-format</b>, ktorý sa "
+"zvyčajne nachádza v koreňovom adresári projektu."
+
+#: customscript_plugin.cpp:287
+#, kde-format
+msgid ""
+"Description:<br /><b>kdev_format_source</b> is a script bundled with "
+"KDevelop which allows using fine-grained formatting rules by placing meta-"
+"files called <b>format_sources</b> into the file-system.<br /><br />Each "
+"line of the <b>format_sources</b> files defines a list of wildcards followed "
+"by a colon and the used formatting-command.<br /><br />The formatting-"
+"command should use <b>$TMPFILE</b> to reference the temporary file to "
+"reformat.<br /><br />Example:<br /><b>*.cpp *.h : myformatter $TMPFILE</"
+"b><br />This will reformat all files ending with <b>.cpp</b> or <b>.h</b> "
+"using the custom formatting script <b>myformatter</b>.<br /><br />Example: "
+"<br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
+"$TMPFILE</b> <br />This will reformat all files in subdirectory <b>subdir</"
+"b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
+"config</b>."
+msgstr ""
+"Popis:<br /><b>kdev_format_source</b> je script dodaný s KDevelop, ktorý "
+"umožňuje používať jemnozrnné formátovacie pravidlá umiestnením metasúborov "
+"nazvaných <b>format_sources</b> do súborového systému.<br /><br />Každý "
+"riadok súborov <b>format_sources</b> definuje zoznam divokých kariet "
+"nasledovaných dvojbodkou a použitým príkazom formátovania.<br /><br />Príkaz "
+"formátovania by mal používať <b>$TMPFILE</b> na referenciu dočasného súboru "
+"na reformátovanie. <br /><br />Príklad:<br /><b>*.cpp *.h : myformatter "
+"$TMPFILE</b><br /> Toto preformátuje všetky súbory končiace na <b>.cpp</b> "
+"alebo <b>.h</b> použitím vlastného formátovacieho skriptu <b>myformatter</b>."
+"<br /><br />Príklad: <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c "
+"uncrustify.config -o $TMPFILE</b> <br />Toto preformátuje všetky súbory v "
+"podadresári <b>subdir</b> pomocou nástroja <b>uncrustify</b> s konfiguračným "
+"súborom <b>uncrustify.config</b>."
+
+#: customscript_plugin.cpp:544
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Command:"
+msgstr "Príkaz:"
+
+#: customscript_plugin.cpp:553
+#, kde-format
+msgid ""
+"<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
+"code is reached to the command <br />through the standard input, and the "
+"<br />formatted result is read from the standard output.<br /><br />If you "
+"add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
+"for transferring the code."
+msgstr ""
+"<i>Môžete zadať ľubovoľný shellovský príkaz.</i><br />Neformátovaný zdrojový "
+"kód sa dosiahne príkazom <br />cez štandardný vstup a <br />formátovaný "
+"výsledok sa načíta zo štandardného výstupu.<br /><br />Ak pridáte <b>"
+"$TMPFILE</b> do príkazu, potom <br />sa na prenos kódu použije dočasný súbor."
+
+#: customscript_plugin.cpp:565
+#, kde-format
+msgctxt "@action:button"
+msgid "More Variables"
+msgstr "Viac premenných"
+
+#: customscript_plugin.cpp:575
+#, kde-format
+msgid "Style: %1"
+msgstr "Štýl: %1"
+
+#: customscript_plugin.cpp:588
+#, kde-format
+msgid ""
+"<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+">The code will be written into the file, the temporary <br />file will be "
+"substituted into that position, and the result <br />will be read out of "
+"that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+"original file. <br />The contents of the file must not be modified, changes "
+"are allowed <br />only in $TMPFILE.<br /><br /><b>${&lt;project name&gt;}</"
+"b> will be replaced by the path of <br />a currently open project whose name "
+"is &lt;project name&gt;."
+msgstr ""
+"<b>$TMPFILE</b> sa nahradí cestou k dočasnému súboru. <br /> Kód sa zapíše "
+"do súboru dočasný <br />súbor bude  nahradený do tej polohy, a výsledok <br /"
+">bude načítaný z toho súboru. <br /> <br /><b>$FILE</b> sa nahradí cestou "
+"pôvodného súboru. <br /> Obsah súboru sa nesmie zmeniť, zmeny sú povolené "
+"<br /> iba v $TMPFILE.<br /><br /><b>${PROJECT_NAME}</b> sa nahradí cestou "
+"<br />aktuálne otvoreného súboru projektu s daným názvom."
+
+#: customscript_plugin.cpp:600
+#, kde-format
+msgctxt "@title:window"
+msgid "Variable Replacements"
+msgstr "Nahradenia premennej"

@@ -1,0 +1,91 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kiszel Kristóf <ulysses@kubuntu.org>, 2010, 2012.
+# Balázs Úr <urbalazs@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-30 00:43+0000\n"
+"PO-Revision-Date: 2013-10-06 11:01+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: kdevdocumentview.cpp:64
+#, kde-format
+msgid "Documents"
+msgstr "Dokumentumok"
+
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Documents"
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "Dokumentumok"
+
+#: kdevdocumentview.cpp:211
+#, fuzzy, kde-format
+#| msgid "Reload"
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "Újratöltés"
+
+#: kdevdocumentview.cpp:217
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr ""
+
+#: kdevdocumentview.cpp:218
+#, fuzzy, kde-format
+#| msgid "Close Other Files"
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "Egyéb fájlok bezárása"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Dokumentumkategóriák (MIME-típusok) megjelenítése a nézetben"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype."
+#~ msgstr ""
+#~ "Ha ez az opció be van állítva, a Dokumentumnézet MIME-típus szerint\n"
+#~ "        rendezi a dokumentumokat."
+
+#, fuzzy
+#~| msgid "Display document &categories"
+#~ msgctxt "@option:check"
+#~ msgid "Display document &categories"
+#~ msgstr "Dokumentum&kategóriák megjelenítése"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org"
+
+#~ msgid "Document View"
+#~ msgstr "Dokumentumnézet"
+
+#~ msgid ""
+#~ "This plugin displays a graphical view of all documents currently loaded "
+#~ "and separates them by mimetype."
+#~ msgstr ""
+#~ "Ez a bővítmény megjeleníti minden jelenleg betöltött dokumentum grafikus "
+#~ "nézetét és szétválasztja őket MIME-típus szerint."
+
+#~ msgid "A list of opened documents"
+#~ msgstr "A megnyitott dokumentumok listája"
+
+#~ msgid "Version Control "
+#~ msgstr "Verzió követés"

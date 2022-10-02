@@ -1,0 +1,65 @@
+# translation of kdevmanpage.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Joëlle Cornavin <jcorn@free.fr>, 2011.
+# xavier <xavier.besnard@neuf.fr>, 2013.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmanpage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-06 00:44+0000\n"
+"PO-Revision-Date: 2018-06-08 11:35+0800\n"
+"Last-Translator: Simon Depiets <sdepiets@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: manpagedocumentation.cpp:261
+#, kde-format
+msgid "Man Content Page"
+msgstr "Page de contenu du manuel"
+
+#: manpagedocumentationwidget.cpp:32
+#, kde-format
+msgid "Loading man pages..."
+msgstr "Chargement des pages de manuel..."
+
+#: manpagedocumentationwidget.cpp:86
+#, kde-format
+msgid ""
+"Error while loading man pages:\n"
+"%1"
+msgstr ""
+"Erreur lors du chargement des pages de manuel :\n"
+"%1"
+
+#: manpageplugin.cpp:53
+#, kde-format
+msgid "Man Page"
+msgstr "Page de manuel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Joëlle Cornavin"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jcornavin@laposte.net"
+
+#~ msgid "Could not find any documentation for '%1'"
+#~ msgstr "Impossible de trouver une quelconque documentation pour « %1 »"
+
+#~ msgid "ManPage"
+#~ msgstr "Page de manuel"
+
+#~ msgid "Check Man Page documentation"
+#~ msgstr "Vérifier la documentation des pages de manuel"

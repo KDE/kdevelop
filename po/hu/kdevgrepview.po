@@ -1,0 +1,868 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-03-19 21:24+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: grepdialog.cpp:52
+#, fuzzy, kde-format
+#| msgid "All Open Files"
+msgctxt "@item:inlistbox"
+msgid "All Open Files"
+msgstr "Minden fájl megnyitása"
+
+#: grepdialog.cpp:53
+#, fuzzy, kde-format
+#| msgid "All Open Projects"
+msgctxt "@item:inlistbox"
+msgid "All Open Projects"
+msgstr "Minden projekt megnyitása"
+
+#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#, fuzzy, kde-format
+#| msgid "Find/Replace in Files"
+msgctxt "@title:window"
+msgid "Find/Replace in Files"
+msgstr "Keresés/csere fájlokban"
+
+#: grepdialog.cpp:189
+#, fuzzy, kde-format
+#| msgid "Search..."
+msgctxt "@action:button"
+msgid "Search..."
+msgstr "Keresés…"
+
+#: grepdialog.cpp:256
+#, fuzzy, kde-format
+#| msgid "Select a directory to search in."
+msgctxt "@title:window"
+msgid "Select Directory to Search in"
+msgstr "Válasszon egy könyvtárat a kereséshez."
+
+#: grepdialog.cpp:512
+#, kde-format
+msgid "%2, and %1 more item"
+msgid_plural "%2, and %1 more items"
+msgstr[0] "%2, és %1 további elem"
+msgstr[1] "%2, és %1 további elem"
+
+#: grepdialog.cpp:525
+#, fuzzy, kde-format
+#| msgid "Search \"%1\" in %2 (at time %3)"
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2"
+msgstr "„%1” keresése itt: %2 (ekkor: %3)"
+
+#: grepdialog.cpp:530
+#, fuzzy, kde-format
+#| msgid "Search \"%1\" in %2 (at time %3)"
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2 (at time %3)"
+msgstr "„%1” keresése itt: %2 (ekkor: %3)"
+
+#: grepjob.cpp:97
+#, kde-format
+msgid "Find in Files"
+msgstr "Keresés fájlokban"
+
+#: grepjob.cpp:113 grepjob.cpp:216
+#, kde-format
+msgid "Search aborted"
+msgstr "Keresés megszakítva"
+
+#: grepjob.cpp:122
+#, kde-format
+msgid "No files found matching the wildcard patterns"
+msgstr "Nem találhatók a helyettesítő karakter mintákra illeszkedő fájlok"
+
+#: grepjob.cpp:140
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "Capture is the text which is \"captured\" with () in regular expressions "
+#| "see http://doc.trolltech.com/qregexp.html#capturedTexts"
+#| msgid "Captures are not allowed in pattern string"
+msgctxt ""
+"Capture is the text which is \"captured\" with () in regular expressions see "
+"https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
+msgid "Captures are not allowed in pattern string"
+msgstr "A rögzítések nem engedélyezettek a minta karakterláncban"
+
+#: grepjob.cpp:161
+#, kde-format
+msgid "Searching for <b>%2</b> in one file"
+msgid_plural "Searching for <b>%2</b> in %1 files"
+msgstr[0] "<b>%2</b> keresése egy fájlban"
+msgstr[1] "<b>%2</b> keresése %1 fájlban"
+
+#: grepjob.cpp:182
+#, kde-format
+msgid "Collecting files..."
+msgstr "Fájlok begyűjtése…"
+
+#: grepjob.cpp:260
+#, kde-format
+msgid "Failed: %1"
+msgstr "Meghiúsult: %1"
+
+#: grepjob.cpp:263
+#, kde-format
+msgid "No results found"
+msgstr "Nincs találat"
+
+#: grepjob.cpp:282
+#, kde-format
+msgid "Grep: %1"
+msgstr "Grep: %1"
+
+#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#, kde-format
+msgid "Line %1: "
+msgstr "%1. sor: "
+
+#: grepoutputmodel.cpp:377
+#, kde-format
+msgid "<b>1</b> match"
+msgid_plural "<b>%1</b> matches"
+msgstr[0] "<b>1</b> találat"
+msgstr[1] "<b>%1</b> találat"
+
+#: grepoutputmodel.cpp:378
+#, kde-format
+msgid "<b>1</b> file"
+msgid_plural "<b>%1</b> files"
+msgstr[0] "<b>1</b> fájl"
+msgstr[1] "<b>%1</b> fájl"
+
+#: grepoutputmodel.cpp:380
+#, fuzzy, kde-format
+#| msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
+#| msgid "<h3>%1 in %2</h3>"
+msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
+msgid "<b>%1 in %2</b>"
+msgstr "<h3>%1 ebben: %2</h3>"
+
+#: grepoutputmodel.cpp:382
+#, kde-format
+msgid "%2: 1 match"
+msgid_plural "%2: %1 matches"
+msgstr[0] ""
+msgstr[1] ""
+
+#: grepoutputmodel.cpp:452
+#, kde-format
+msgctxt ""
+"%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
+"its row and column"
+msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
+msgstr "Nem sikerült <b>%1</b> cseréje ezzel: <b>%2</b> itt: %3:%4:%5"
+
+#: grepoutputview.cpp:71
+#, kde-format
+msgctxt "@title:window"
+msgid "Find/Replace Output View"
+msgstr "Kimenet nézet keresése vagy cseréje"
+
+#: grepoutputview.cpp:74
+#, fuzzy, kde-format
+#| msgid "&Previous Item"
+msgctxt "@action"
+msgid "&Previous Item"
+msgstr "&Előző elem"
+
+#: grepoutputview.cpp:75
+#, fuzzy, kde-format
+#| msgid "&Next Item"
+msgctxt "@action"
+msgid "&Next Item"
+msgstr "&Következő elem"
+
+#: grepoutputview.cpp:80
+#, fuzzy, kde-format
+#| msgid "C&ollapse All"
+msgctxt "@action"
+msgid "C&ollapse All"
+msgstr "Ö&sszes összecsukása"
+
+#: grepoutputview.cpp:82
+#, fuzzy, kde-format
+#| msgid "&Expand All"
+msgctxt "@action"
+msgid "&Expand All"
+msgstr "Összes &kinyitása"
+
+#: grepoutputview.cpp:86
+#, fuzzy, kde-format
+#| msgid "New &Search"
+msgctxt "@action"
+msgid "New &Search"
+msgstr "Ú&j keresés…"
+
+#: grepoutputview.cpp:87
+#, kde-format
+msgctxt "@action"
+msgid "Refresh"
+msgstr ""
+
+#: grepoutputview.cpp:89
+#, fuzzy, kde-format
+#| msgid "Clear Search History"
+msgctxt "@action"
+msgid "Clear Search History"
+msgstr "Keresési előzmények törlése"
+
+#: grepoutputview.cpp:323
+#, kde-format
+msgid "Do you want to replace with an empty string?"
+msgstr "Szeretné egy üres karakterlánccal helyettesíteni?"
+
+#: grepoutputview.cpp:324
+#, fuzzy, kde-format
+#| msgid "Start replacement"
+msgctxt "@title:window"
+msgid "Start Replacement"
+msgstr "Helyettesítés indítása"
+
+#: grepoutputview.cpp:325
+#, fuzzy, kde-format
+#| msgid "&Replace"
+msgctxt "@action:button"
+msgid "Replace"
+msgstr "&Csere"
+
+#. i18n: ectx: property (text), widget (QLabel, replacementLabel)
+#: grepoutputview.ui:41
+#, fuzzy, kde-format
+#| msgid "Replacement &Text:"
+msgctxt "@label:listbox"
+msgid "Replacement &text:"
+msgstr "Helyettesítő &szöveg:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
+#: grepoutputview.ui:57
+#, fuzzy, kde-format
+#| msgid "Enter the replacement pattern."
+msgctxt "@info:tooltip"
+msgid "Enter the replacement pattern"
+msgstr "Adja meg a helyettesítő mintát."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
+#: grepoutputview.ui:76
+#, fuzzy, kde-format
+#| msgid "Apply replacement on selected items."
+msgctxt "@info:tooltip"
+msgid "Apply replacement on selected items"
+msgstr "Csere alkalmazása a kijelölt elemeken."
+
+#. i18n: ectx: property (text), widget (QPushButton, applyButton)
+#: grepoutputview.ui:79
+#, fuzzy, kde-format
+#| msgid "&Replace"
+msgctxt "@action:button"
+msgid "&Replace"
+msgstr "&Csere"
+
+#: grepviewplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Find/Replace in Fi&les..."
+msgctxt "@action"
+msgid "Find/Replace in Fi&les..."
+msgstr "Keresés/csere fáj&lokban…"
+
+#: grepviewplugin.cpp:79
+#, fuzzy, kde-format
+#| msgid "Search for expressions over several files"
+msgctxt "@info:tooltip"
+msgid "Search for expressions over several files"
+msgstr "Kifejezések keresése több fájlban"
+
+#: grepviewplugin.cpp:81
+#, fuzzy, kde-format
+#| msgid ""
+#| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
+#| "expression which is then searched for within all files in the directories "
+#| "you specify. Matches will be displayed, you can switch to a match "
+#| "directly. You can also do replacement."
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens the 'Find/Replace in Files' dialog. There you can enter a regular "
+"expression which is then searched for within all files in the directories "
+"you specify. Matches will be displayed, you can switch to a match directly. "
+"You can also do replacement."
+msgstr ""
+"Megnyitja a „Keresés/csere fájlokban” párbeszédablakot. Itt megadhatja azt a "
+"reguláris kifejezést, amely keresve lesz minden fájlban a megadott "
+"könyvtárban. A találatok meg lesznek jelenítve, közvetlenül válthat a "
+"találatra. Csinálhat cserét is."
+
+#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#, fuzzy, kde-format
+#| msgid "Find/Replace in This Folder"
+msgctxt "@action:inmenu"
+msgid "Find/Replace in This Folder..."
+msgstr "Keresés/csere ebben a mappában"
+
+#: grepviewplugin.cpp:140
+#, fuzzy, kde-format
+#| msgid "Find/Replace in Fi&les..."
+msgctxt "@action:inmenu"
+msgid "&Find/Replace in Files..."
+msgstr "Keresés/csere fáj&lokban…"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
+#: grepwidget.ui:35
+#, fuzzy, kde-format
+#| msgid "Enter the regular expression you want to search for here."
+msgctxt "@info:tooltip"
+msgid "Enter the regular expression you want to search for"
+msgstr "Adja meg itt azt a reguláris kifejezést, amelyre keresni szeretne."
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
+#: grepwidget.ui:59
+#, fuzzy, kde-format
+#| msgid ""
+#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#| "REC-html40/strict.dtd\">\n"
+#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#| "css\">\n"
+#| "p, li { white-space: pre-wrap; }\n"
+#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; "
+#| "font-weight:400; font-style:normal;\">\n"
+#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
+#| "expression you want to search for here.</p>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
+#| "\"Regular Expression\" below, this is considered a raw string. That "
+#| "means, all meta characters are escaped.</p>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta "
+#| "characters are:</p>\n"
+#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+#| "indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
+#| "character</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">^</span> - Matches the beginning of a line</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">$</span> - Matches the end of a line</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">\\b</span> - Matches a word boundary</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
+#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">The following "
+#| "repetition operators exist:</p>\n"
+#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+#| "indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
+#| "item is matched at most once</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">*</span> - The preceding item is matched zero or more "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">+</span> - The preceding item is matched one or more times</"
+#| "li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
+#| "item is matched exactly <span style=\" font-style:italic;\">n</span> "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding "
+#| "item is matched <span style=\" font-style:italic;\">n</span> or more "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
+#| "item is matched at most <span style=\" font-style:italic;\">n</span> "
+#| "times</li>\n"
+#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+#| "\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+#| "weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;"
+#| "\">}</span> - The preceding item is matched at least <span style=\" font-"
+#| "style:italic;\">n</span>, but at most <span style=\" font-style:italic;"
+#| "\">m</span> times.</li></ul>\n"
+#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
+#| "backreferences to bracketed subexpressions are available via the notation "
+#| "\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#| "right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
+#| "look at <a href=\"http://www.pcre.org\"><span style=\" text-decoration: "
+#| "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" "
+#| "font-style:italic;\">man pcresyntax.</span></p></body></html>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
+"expression you want to search for here.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
+"\"Regular Expression\" below, this is considered a raw string. That means, "
+"all meta characters are escaped.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta characters "
+"are:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
+"character</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - Matches the beginning of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Matches the end of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Matches a word boundary</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">The following repetition "
+"operators exist:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
+"item is matched at most once</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - The preceding item is matched zero or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - The preceding item is matched one or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched exactly <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding item "
+"is matched <span style=\" font-style:italic;\">n</span> or more times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched at most <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - The preceding item is matched at least <span style=\" font-style:"
+"italic;\">n</span>, but at most <span style=\" font-style:italic;\">m</span> "
+"times.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
+"backreferences to bracketed subexpressions are available via the notation "
+"\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
+"look at <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
+"style:italic;\">man pcresyntax.</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Itt adja meg azt a "
+"reguláris kifejezést, amelyre keresni szeretne.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Ha nem választja ki a "
+"„Reguláris kifejezést” lent, akkor ez nyers karakterláncként lesz figyelembe "
+"véve. Ez azt jelenti, hogy minden meta karakter el lesz fedve.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Lehetséges meta karakterek:"
+"</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Bármely "
+"karakterre illeszkedik</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - A sor kezdetése illeszkedik</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - A sor végére illeszkedik</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - A szóhatárra illeszkedik</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Bármilyen üres hely karakterre illeszkedik</li></"
+"ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">A következő ismétlés "
+"operátorok léteznek:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - A megelőző elem "
+"legfeljebb egyszer illeszkedik</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - A megelőző elem nulla vagy többször illeszkedik</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - A megelőző elem egyszer vagy többször illeszkedik</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - A megelőző elem "
+"pontosan <span style=\" font-style:italic;\">n</span>-szer illeszkedik</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - A megelőző elem "
+"<span style=\" font-style:italic;\">n</span>-szer vagy többször illeszkedik</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - A megelőző elem "
+"legfeljebb <span style=\" font-style:italic;\">n</span>-szer illeszkedik</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - A megelőző elem legalább <span style=\" font-style:italic;\">n</"
+"span>-szer, de legfeljebb <span style=\" font-style:italic;\">m</span>-szer "
+"illeszkedik.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Továbbá visszahivatkozások "
+"érhetők el a zárójelben lévő alkifejezésre a\\<span style=\" font-style:"
+"italic;\">n</span> jelölésen keresztül.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">További hivatkozásért "
+"nézze meg a <a href=\"http://www.pcre.org\"><span style=\" text-decoration:"
+"underline; color:#0057ae;\">www.pcre.org</span></a> honlapot vagy a <span "
+"style=\" font-style:italic;\">man pcresyntax</span> kézikönyvoldalt.</p></"
+"body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: grepwidget.ui:69
+#, fuzzy, kde-format
+#| msgid "Template:"
+msgctxt "@label:listbox"
+msgid "Template:"
+msgstr "Sablon:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
+#: grepwidget.ui:82
+#, fuzzy, kde-format
+#| msgid "This is the regular expression template."
+msgctxt "@info:tooltip"
+msgid "This is the regular expression template."
+msgstr "Ez a reguláris kifejezés sablon."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
+#: grepwidget.ui:85
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "This is the regular expression template. <i>%s</i> will be replaced by "
+#| "the pattern, while <i>%%</i> will be replaced by <i>%</i>."
+msgctxt "@info:whatsthis"
+msgid ""
+"This is the regular expression template. <i>%s</i> will be replaced by the "
+"pattern, while <i>%%</i> will be replaced by <i>%</i>."
+msgstr ""
+"Ez a reguláris kifejezés sablon. <i>%s</i> ki lesz cserélve a mintával, míg "
+"a <i>%%</i> ki lesz cserélve ezzel: <i>%</i>."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
+#: grepwidget.ui:92
+#, fuzzy, kde-format
+#| msgid "Quickly select location from a set of directories"
+msgctxt "@info:tooltip"
+msgid "Quickly select location from a set of directories"
+msgstr "Hely gyors kijelölése egy halom könyvtár közül"
+
+#. i18n: ectx: property (text), widget (QPushButton, syncButton)
+#: grepwidget.ui:95
+#, fuzzy, kde-format
+#| msgid "Quick Select"
+msgctxt "@action:button"
+msgid "Quick Select"
+msgstr "Gyors kijelölés"
+
+#. i18n: ectx: property (text), widget (QLabel, depthLabel)
+#: grepwidget.ui:102
+#, fuzzy, kde-format
+#| msgid "Depth:"
+msgctxt "@label:spinbox"
+msgid "Depth:"
+msgstr "Mélység:"
+
+#. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, fuzzy, kde-format
+#| msgid "Full"
+msgctxt "@item full recursion"
+msgid "Full"
+msgstr "Teljes"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: grepwidget.ui:131
+#, fuzzy, kde-format
+#| msgid "Pattern:"
+msgctxt "@label:listbox"
+msgid "Pattern:"
+msgstr "Minta:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: grepwidget.ui:144
+#, fuzzy, kde-format
+#| msgid "Files:"
+msgctxt "@label:listbox"
+msgid "Files:"
+msgstr "Fájlok:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: grepwidget.ui:157
+#, fuzzy, kde-format
+#| msgid "Case Sensitive:"
+msgctxt "@option:check"
+msgid "Case sensitive:"
+msgstr "Kis- és nagybetű érzékeny:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
+#: grepwidget.ui:176
+#, fuzzy, kde-format
+#| msgid "Case-sensitive searching."
+msgctxt "@info:tooltip"
+msgid "Case-sensitive searching."
+msgstr "Kis- és nagybetű érzékeny keresés."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: grepwidget.ui:189
+#, fuzzy, kde-format
+#| msgid "Location(s):"
+msgctxt "@label:listbox"
+msgid "Location(s):"
+msgstr "Helyek:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
+#: grepwidget.ui:202
+#, fuzzy, kde-format
+#| msgid "Files filter."
+msgctxt "@info:tooltip"
+msgid "Files filter"
+msgstr "Fájlok szűrő."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
+#: grepwidget.ui:205
+#, fuzzy, kde-format
+#| msgid ""
+#| "Enter the file name pattern of the files to search here. You may give "
+#| "several patterns separated by commas or spaces."
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to search here. You may give "
+"several patterns separated by commas or spaces."
+msgstr ""
+"Adja meg itt a keresendő fájlok fájlnévmintáját. Több minta is megadható "
+"vesszővel vagy szóközzel elválasztva."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: grepwidget.ui:218
+#, fuzzy, kde-format
+#| msgid "Exclude:"
+msgctxt "@label:listbox"
+msgid "Exclude:"
+msgstr "Kizárás:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:231
+#, fuzzy, kde-format
+#| msgid "Files pattern to exclude"
+msgctxt "@info:tooltip"
+msgid "Files pattern to exclude"
+msgstr "Kizárandó fájlminták"
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:234
+#, fuzzy, kde-format
+#| msgid ""
+#| "Enter the file name pattern of the files to exclude from the search here. "
+#| "You may give several patterns separated by commas or spaces.<p>Every "
+#| "pattern is internally surrounded by asterisks, so that each pattern can "
+#| "match parts of the file paths.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to exclude from the search here. "
+"You may give several patterns separated by commas or spaces.<p>Every pattern "
+"is internally surrounded by asterisks, so that each pattern can match parts "
+"of the file paths.</p>"
+msgstr ""
+"Adja meg itt a azoknak a keresendő fájloknak a fájlnévmintáját, amelyeket "
+"kizár a keresésből. Több minta is megadható vesszővel vagy szóközzel "
+"elválasztva.<p>Minden minta belsőleg körül lesz véve csillaggal, így minden "
+"minta illeszkedhet a fájl útvonalainak részleteire.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: grepwidget.ui:314
+#, fuzzy, kde-format
+#| msgid "Regular Expression:"
+msgctxt "@option:check"
+msgid "Regular expression:"
+msgstr "Reguláris kifejezés:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
+#: grepwidget.ui:327
+#, fuzzy, kde-format
+#| msgid "Enable or disable regular expression."
+msgctxt "@info:tooltip"
+msgid "Enable or disable regular expression."
+msgstr "Reguláris kifejezés engedélyezése vagy tiltása."
+
+#. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
+#: grepwidget.ui:340
+#, fuzzy, kde-format
+#| msgid "Limit to project files:"
+msgctxt "@option:check"
+msgid "Limit to project files:"
+msgstr "Korlátozás projektfájlokra:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
+#: grepwidget.ui:369
+#, fuzzy, kde-format
+#| msgid "Enter the replacement template."
+msgctxt "@info:tooltip"
+msgid "Enter the replacement template"
+msgstr "Adja meg a helyettesítő sablont."
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: grepwidget.ui:376
+#, fuzzy, kde-format
+#| msgid "Replacement Template:"
+msgctxt "@label:textbox"
+msgid "Replacement template:"
+msgstr "Helyettesítő sablon:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
+#: grepwidget.ui:389
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the location where you want to search. It can be a directory, a "
+#| "file, or a semicolon separated (without spaces) list of directories/files."
+msgctxt "@info:tooltip"
+msgid ""
+"Select the location where you want to search. It can be a directory, a file, "
+"or a semicolon separated (without spaces) list of directories/files."
+msgstr ""
+"Válassza ki azt a helyet, ahol keresni szeretne. Ez lehet egy könyvtár, egy "
+"fájl vagy pontosvesszővel elválasztott (szóközök nélküli) fájl- vagy "
+"könyvtárlista."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
+#: grepwidget.ui:414
+#, fuzzy, kde-format
+#| msgid "Select a directory to search in."
+msgctxt "@info:tooltip"
+msgid "Select a directory to search in"
+msgstr "Válasszon egy könyvtárat a kereséshez."
+
+#~ msgid "Find-Replace In Files"
+#~ msgstr "Keresés-csere fájlokban"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Szerkesztés"
+
+#~ msgid "<big>%2 <i>(one match)</i></big>"
+#~ msgid_plural "<big>%2 <i>(%1 matches)</i></big>"
+#~ msgstr[0] "<big>%2 <i>(egy találat)</i></big>"
+#~ msgstr[1] "<big>%2 <i>(%1 találat)</i></big>"
+
+#, fuzzy
+#~| msgid "Find/Replace in Files"
+#~ msgid "Find/Replace"
+#~ msgstr "Keresés/csere fájlokban"
+
+#~ msgid "&Find/Replace in Files"
+#~ msgstr "&Keresés/csere fájlokban"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid ""
+#~ "Allows fast searching of multiple files using patterns or regular "
+#~ "expressions. And allow to replace it too."
+#~ msgstr ""
+#~ "Lehetővé teszi több fájl gyors keresését minták és reguláris kifejezések "
+#~ "használatával. És lehetővé teszi a cserét is."
+
+#~ msgid "..."
+#~ msgstr "…"
+
+#~ msgid "Ctrl+Alt+f"
+#~ msgstr "Ctrl+Alt+f"
+
+#~ msgid "Synchronize with current document directory."
+#~ msgstr "Szinkronizálás a jelenlegi dokumentum könyvtárral."
+
+#~ msgid "&Change Search Settings"
+#~ msgstr "Keresési beállítások &módosítása"
+
+#~ msgid "Support for running grep over a list of files"
+#~ msgstr "A grep futtatásának támogatása a fájlok listáján"
+
+#~ msgid "Find/Replace In Files"
+#~ msgstr "Keresés/csere fájlokban"

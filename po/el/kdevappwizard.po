@@ -1,0 +1,343 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008, 2009.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2013, 2017, 2019.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevappwizard\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2019-08-19 11:03+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: appwizarddialog.cpp:23
+#, fuzzy, kde-format
+#| msgid "Create New Project"
+msgctxt "@title:window"
+msgid "Create New Project"
+msgstr "Δημιουργία νέου έργου"
+
+#: appwizarddialog.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "Page for general configuration options"
+#| msgid "General"
+msgctxt "@title:tab Page for general configuration options"
+msgid "General"
+msgstr "Γενικά"
+
+#: appwizarddialog.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Page for version control options"
+#| msgid "Version Control"
+msgctxt "@title:tab Page for version control options"
+msgid "Version Control"
+msgstr "Έλεγχος εκδόσεων"
+
+#: appwizardplugin.cpp:69
+#, fuzzy, kde-format
+#| msgid "New From Template..."
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Νέο από πρότυπο..."
+
+#: appwizardplugin.cpp:71
+#, fuzzy, kde-format
+#| msgid "Generate a new project from a template"
+msgctxt "@info:tooltip"
+msgid "Generate a new project from a template"
+msgstr "Δημιουργία ενός νέου έργου από ένα πρότυπο"
+
+#: appwizardplugin.cpp:72
+#, fuzzy, kde-format
+#| msgid ""
+#| "This starts KDevelop's application wizard. It helps you to generate a "
+#| "skeleton for your application from a set of templates."
+msgctxt "@info:whatsthis"
+msgid ""
+"This starts KDevelop's application wizard. It helps you to generate a "
+"skeleton for your application from a set of templates."
+msgstr ""
+"Αυτό εκκινεί το βοηθό εφαρμογής του KDevelop. Σας βοηθά στη δημιουργία "
+"σκελετού για την εφαρμογή σας από ένα σύνολο προτύπων."
+
+#: appwizardplugin.cpp:106
+#, fuzzy, kde-format
+#| msgid "Could not create project from template\n"
+msgid "Could not create project from template."
+msgstr "Αδυναμία δημιουργίας έργου από πρότυπο\n"
+
+#: appwizardplugin.cpp:134
+#, kde-format
+msgid "Please see the Version Control tool view."
+msgstr "Δείτε την προβολή εργαλείων ελέγχου έκδοσης."
+
+#: appwizardplugin.cpp:136
+#, fuzzy, kde-format
+#| msgid "Version Control System Error"
+msgctxt "@title:window"
+msgid "Version Control System Error"
+msgstr "Σφάλμα συστήματος ελέγχου έκδοσης"
+
+#: appwizardplugin.cpp:152
+#, kde-format
+msgid "Could not initialize DVCS repository"
+msgstr "Αδυναμία αρχικοποίησης αποθετηρίου DVCS"
+
+#: appwizardplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Could not add files to the DVCS repository"
+msgid "Could not check status of the DVCS repository"
+msgstr "Αδυναμία προσθήκης αρχείων στο αποθετήριο DVCS"
+
+#: appwizardplugin.cpp:174
+#, kde-format
+msgid "Could not add files to the DVCS repository"
+msgstr "Αδυναμία προσθήκης αρχείων στο αποθετήριο DVCS"
+
+#: appwizardplugin.cpp:182
+#, kde-format
+msgid "Could not import project into %1."
+msgstr "Αδυναμία εισαγωγής του έργου στο %1."
+
+#: appwizardplugin.cpp:199
+#, kde-format
+msgid "Could not import project"
+msgstr "Αδυναμία εισαγωγής του έργου"
+
+#: appwizardplugin.cpp:207
+#, kde-format
+msgid "Could not checkout imported project"
+msgstr "Αδυναμία checkout του έργου που έχει εισαχθεί"
+
+#: appwizardplugin.cpp:332
+#, kde-format
+msgid "Could not create new project"
+msgstr "Αδυναμία δημιουργίας νέου έργου"
+
+#: appwizardplugin.cpp:467
+#, kde-format
+msgid "The file %1 cannot be created."
+msgstr "Το αρχείο %1 δεν μπορεί να δημιουργηθεί."
+
+#: appwizardplugin.cpp:570
+#, kde-format
+msgid "Project Templates"
+msgstr "Πρότυπα έργου"
+
+#: projectselectionpage.cpp:56
+#, fuzzy, kde-format
+#| msgid "Category"
+msgctxt "@title:column"
+msgid "Category"
+msgstr "Κατηγορία"
+
+#: projectselectionpage.cpp:57
+#, fuzzy, kde-format
+#| msgid "Project Type"
+msgctxt "@title:column"
+msgid "Project Type"
+msgstr "Τύπος έργου"
+
+#: projectselectionpage.cpp:67
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Ανάκτηση περισσότερων προτύπων"
+
+#: projectselectionpage.cpp:74
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Φόρτωση προτύπων από αρχείο"
+
+#: projectselectionpage.cpp:170
+#, kde-format
+msgid "Invalid location"
+msgstr "Μη έγκυρη τοποθεσία"
+
+#: projectselectionpage.cpp:177
+#, kde-format
+msgid "Empty project name"
+msgstr "Κενό όνομα έργου"
+
+#: projectselectionpage.cpp:198
+#, kde-format
+msgid "Invalid project name"
+msgstr "Μη έγκυρο όνομα έργου"
+
+#: projectselectionpage.cpp:217
+#, kde-format
+msgid "Unable to create subdirectories, missing permissions on: %1"
+msgstr "Αδυναμία δημιουργίας υποκαταλόγων, μη επαρκείς άδειες στο: %1"
+
+#: projectselectionpage.cpp:232
+#, kde-format
+msgid "Invalid project template, please choose a leaf item"
+msgstr "Μη έγκυρο πρότυπο έργου, παρακαλώ επιλέξτε έναν κόμβο-φύλλο"
+
+#: projectselectionpage.cpp:245
+#, kde-format
+msgid "Path already exists and contains files. Open it as a project."
+msgstr "Η διαδρομή υπάρχει ήδη και περιέχει αρχεία. Ανοίξτε τη ως έργο."
+
+#: projectselectionpage.cpp:291
+#, kde-format
+msgid ""
+"The specified path already exists and contains files. Are you sure you want "
+"to proceed?"
+msgstr ""
+"Η καθορισμένη διαδρομή υπάρχει ήδη και περιέχει αρχεία. Επιθυμείτε σίγουρα "
+"τη συνέχεια;"
+
+#: projectselectionpage.cpp:308
+#, fuzzy, kde-format
+#| msgid "Load Template From File"
+msgctxt "@title:window"
+msgid "Load Template from File"
+msgstr "Φόρτωση προτύπων από αρχείο"
+
+#. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
+#: projectselectionpage.ui:38
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@title:group"
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
+#: projectselectionpage.ui:44
+#, fuzzy, kde-format
+#| msgid "Project name:"
+msgctxt "@label:textbox"
+msgid "Project name:"
+msgstr "Όνομα έργου:"
+
+#. i18n: ectx: property (text), widget (QLabel, locationLabel)
+#: projectselectionpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "@label:textbox"
+msgid "Location:"
+msgstr "Τοποθεσία:"
+
+#: projectvcspage.cpp:33
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "@item:inlistbox No Version Control Support chosen"
+msgid "None"
+msgstr "Κανένα"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectvcspage.ui:30
+#, fuzzy, kde-format
+#| msgid "Version control system:"
+msgctxt "@label:listbox"
+msgid "Version control system:"
+msgstr "Σύστημα ελέγχου έκδοσης:"
+
+#~ msgctxt "No Version Control Support chosen"
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#~ msgid "Failed to create project"
+#~ msgstr "Αδυναμία δημιουργίας έργου"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Project"
+#~ msgstr "Έργο"
+
+#, fuzzy
+#~| msgid "Application Name:"
+#~ msgid "Application Wizard"
+#~ msgstr "Όνομα εφαρμογής:"
+
+#~ msgid "KSqueezedTextLabel"
+#~ msgstr "KSqueezedTextLabel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Τούσης Μανώλης"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "manolis@koppermind.homelinux.org"
+
+#~ msgid "Project Wizard"
+#~ msgstr "Οδηγός έργου"
+
+#~ msgid "Support for creating and importing projects"
+#~ msgstr "Υποστήριξη δημιουργίας και εισαγωγής έργων"
+
+#~ msgid "&Import Existing Project..."
+#~ msgstr "&Εισαγωγή υπάρχοντος έργου..."
+
+#~ msgid "Import existing project"
+#~ msgstr "Εισαγωγή υπάρχοντος έργου"
+
+#~ msgid ""
+#~ "The given name is used by an already opened project. Choose a different "
+#~ "name"
+#~ msgstr ""
+#~ "Το δοσμένο όνομα χρησιμοποιείται από ένα ήδη ανοιχτό έργο. Επιλέξτε "
+#~ "διαφορετικό όνομα"
+
+#~ msgid "Please choose an existing folder."
+#~ msgstr "Παρακαλώ επιλέξτε έναν υπάρχοντα κατάλογο."
+
+#~ msgid "Please choose a project name."
+#~ msgstr "Παρακαλώ επιλέξτε ένα όνομα έργου."
+
+#~ msgid ""
+#~ "Cannot create project file.<p><b>Suggestion</b>: check permissions on the "
+#~ "selected directory"
+#~ msgstr ""
+#~ "Αδυναμία δημιουργίας αρχείου έργου.<p><b>Πρόταση</b>: ελέγξτε τις άδειες "
+#~ "στον επιλεγμένο κατάλογο"
+
+#~ msgid "Project import error"
+#~ msgstr "Σφάλμα εισαγωγής έργου"
+
+#~ msgid "Could not create temporary file to upload."
+#~ msgstr "Αδυναμία δημιουργίας προσωρινού αρχείου για αποστολή."
+
+#~ msgid "Import Existing Project"
+#~ msgstr "Εισαγωγή υπάρχοντος έργου"
+
+#~ msgid "&Directory:"
+#~ msgstr "&Κατάλογος:"
+
+#~ msgid "Choose directory to import"
+#~ msgstr "Επιλέξτε κατάλογο για εισαγωγή"
+
+#~ msgid "&Fetch from:"
+#~ msgstr "&Ανάκτηση από:"
+
+#~ msgid "Fetch &Module"
+#~ msgstr "Ανάκτηση α&ρθρώματος"
+
+#~ msgid "&Build System:"
+#~ msgstr "&Σύστημα κατασκευής:"
+
+#~ msgid "CMake"
+#~ msgstr "CMake"
+
+#~ msgid "QMake"
+#~ msgstr "QMake"
+
+#~ msgid "Custom Makefiles"
+#~ msgstr "Προσαρμοσμένα Makefiles"
+
+#~ msgid "(invalid)"
+#~ msgstr "(μη έγκυρο)"

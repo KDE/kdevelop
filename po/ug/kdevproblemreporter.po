@@ -1,0 +1,312 @@
+# Uyghur translation for kdevproblemreporter.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevproblemreporter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: problemreporterplugin.cpp:94
+#, kde-format
+msgid "Parser"
+msgstr ""
+
+#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemsview.cpp:324
+#, fuzzy, kde-format
+#| msgid "Problems"
+msgctxt "@title:window"
+msgid "Problems"
+msgstr "مەسىلىلەر"
+
+#: problemreporterplugin.cpp:229
+#, fuzzy, kde-format
+#| msgid "Solve Problem"
+msgctxt "@action:inmenu"
+msgid "Solve Problem"
+msgstr "مەسىلە ھەل قىلىش"
+
+#: problemreporterplugin.cpp:231
+#, fuzzy, kde-format
+#| msgid "Solve: %1"
+msgctxt "@action:inmenu"
+msgid "Solve: %1"
+msgstr "يېشىم: %1"
+
+#: problemsview.cpp:37
+#, kde-format
+msgctxt "@action"
+msgid "Force Full Update"
+msgstr ""
+
+#: problemsview.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Which files to display the problems for"
+msgstr ""
+
+#: problemsview.cpp:58
+#, fuzzy, kde-format
+#| msgid "Current Document"
+msgctxt "@option:check"
+msgid "Current Document"
+msgstr "نۆۋەتتىكى پۈتۈك"
+
+#: problemsview.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current document"
+msgstr ""
+
+#: problemsview.cpp:62
+#, fuzzy, kde-format
+#| msgid "Open Documents"
+msgctxt "@option:check"
+msgid "Open Documents"
+msgstr "پۈتۈك ئاچ"
+
+#: problemsview.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all open documents"
+msgstr ""
+
+#: problemsview.cpp:66
+#, fuzzy, kde-format
+#| msgid "Current Project"
+msgctxt "@option:check"
+msgid "Current Project"
+msgstr "نۆۋەتتىكى قۇرۇلۇش"
+
+#: problemsview.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current project"
+msgstr ""
+
+#: problemsview.cpp:70
+#, kde-format
+msgctxt "@option:check"
+msgid "All Projects"
+msgstr ""
+
+#: problemsview.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all projects"
+msgstr ""
+
+#: problemsview.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Path"
+msgstr ""
+
+#: problemsview.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in a specific path"
+msgstr ""
+
+#: problemsview.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Current Path"
+msgstr ""
+
+#: problemsview.cpp:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in the path of the current document"
+msgstr ""
+
+#: problemsview.cpp:83
+#, kde-format
+msgctxt "@option:check"
+msgid "Show All"
+msgstr ""
+
+#: problemsview.cpp:84
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display all problems"
+msgstr ""
+
+#: problemsview.cpp:105
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Path Filter..."
+msgstr ""
+
+#: problemsview.cpp:137
+#, fuzzy, kde-format
+#| msgid "Error"
+msgctxt "@option:check"
+msgid "Show Imports"
+msgstr "خاتالىق"
+
+#: problemsview.cpp:138
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in imported files"
+msgstr ""
+
+#: problemsview.cpp:148
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display errors"
+msgstr ""
+
+#: problemsview.cpp:150
+#, fuzzy, kde-format
+#| msgid "Error"
+msgctxt "@option:check"
+msgid "Show Errors"
+msgstr "خاتالىق"
+
+#: problemsview.cpp:153
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display warnings"
+msgstr ""
+
+#: problemsview.cpp:155
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@option:check"
+msgid "Show Warnings"
+msgstr "ئاگاھلاندۇرۇش"
+
+#: problemsview.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display hints"
+msgstr ""
+
+#: problemsview.cpp:160
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@option:check"
+msgid "Show Hints"
+msgstr "ئاگاھلاندۇرۇش"
+
+#: problemsview.cpp:180
+#, kde-format
+msgctxt "@title:menu"
+msgid "Grouping"
+msgstr ""
+
+#: problemsview.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "None"
+msgstr ""
+
+#: problemsview.cpp:190
+#, kde-format
+msgctxt "@option:check"
+msgid "Path"
+msgstr ""
+
+#: problemsview.cpp:191
+#, fuzzy, kde-format
+#| msgid "Severity"
+msgctxt "@option:check"
+msgid "Severity"
+msgstr "مۇھىملىقى"
+
+#: problemsview.cpp:219
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr ""
+
+#: problemsview.cpp:462
+#, kde-format
+msgctxt "@title:tab %1: tab name, %2: number of problems"
+msgid "%1 (%2)"
+msgstr ""
+
+#: problemsview.cpp:500
+#, fuzzy, kde-format
+#| msgid "Solve: %1"
+msgctxt "@title:menu"
+msgid "Scope: %1"
+msgstr "يېشىم: %1"
+
+#: problemtreeview.cpp:94
+#, fuzzy, kde-format
+#| msgid "Problems"
+msgctxt "@info:whatsthis"
+msgid "Problems"
+msgstr "مەسىلىلەر"
+
+#: problemtreeview.cpp:205
+#, fuzzy, kde-format
+#| msgctxt "@title:column problem description"
+#| msgid "Problem"
+msgctxt "@title:menu"
+msgid "Problem"
+msgstr "مەسىلە"
+
+#: problemtreeview.cpp:207
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Description"
+msgstr ""
+
+#: problemtreeview.cpp:226
+#, fuzzy, kde-format
+#| msgid "Solve: %1"
+msgctxt "@title:menu"
+msgid "Solve: %1"
+msgstr "يېشىم: %1"
+
+#, fuzzy
+#~| msgid "Solve: %1"
+#~ msgid "Solve"
+#~ msgstr "يېشىم: %1"
+
+#~ msgid "Scope"
+#~ msgstr "دائىرە"
+
+#~ msgid "Hint"
+#~ msgstr "كۆرسەتمە(Hint)"
+
+#~ msgctxt "@title:column source of problem"
+#~ msgid "Source"
+#~ msgstr "مەنبە"
+
+#~ msgctxt "@title:column file where problem was found"
+#~ msgid "File"
+#~ msgstr "ھۆججەت"
+
+#~ msgctxt "@title:column line number with problem"
+#~ msgid "Line"
+#~ msgstr "قۇر"
+
+#~ msgctxt "@title:column column number with problem"
+#~ msgid "Column"
+#~ msgstr "ئىستون"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+
+#~ msgid "Problem Reporter"
+#~ msgstr "مەسىلە مەلۇم قىلغۇچ"

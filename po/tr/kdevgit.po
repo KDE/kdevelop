@@ -1,0 +1,707 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
+# Volkan Gezer <volkangezer@gmail.com>, 2014.
+# Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: extragear-kdevelop-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-09-26 22:19+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.08.1\n"
+
+#: committoolview.cpp:206 committoolview.cpp:207
+#, kde-format
+msgid "Filter by filename/project name"
+msgstr "Dosya/proje adı ile süz"
+
+#: committoolview.cpp:224
+#, kde-format
+msgid "Refresh"
+msgstr "Yenile"
+
+#: committoolview.cpp:225
+#, kde-format
+msgid "Stage selected"
+msgstr "Seçiliyi hazırla"
+
+#: committoolview.cpp:227
+#, kde-format
+msgid "Unstage selected"
+msgstr "Seçiliyi hazırlıktan çıkar"
+
+#: committoolview.cpp:229
+#, kde-format
+msgid "Revert unstaged edits"
+msgstr "Hazırlıktan çıkarılmaş düzenlemeleri geri al"
+
+#: committoolview.cpp:482
+#, kde-format
+msgid "Committing failed. See Version Control tool view."
+msgstr "İşleme başarısız. Sürüm Denetimi araç görünümüne bakın."
+
+#: diffviewsctrl.cpp:50
+#, kde-format
+msgid "Stage selected lines or hunk"
+msgstr "Seçili satırları veya parçayı hazırla"
+
+#: diffviewsctrl.cpp:52
+#, kde-format
+msgid "Unstage selected lines or hunk"
+msgstr "Seçili satırları veya parçayı hazırlıktan çıkar"
+
+#: diffviewsctrl.cpp:54
+#, kde-format
+msgid "Revert selected lines or hunk"
+msgstr "Seçili satırları veya parçayı geri al"
+
+#: diffviewsctrl.cpp:56
+#, kde-format
+msgid "Go to line in source"
+msgstr "Kaynakta satıra git"
+
+#: diffviewsctrl.cpp:101
+#, kde-format
+msgid "Unstage selected lines"
+msgstr "Seçili satırları hazırlıktan çıkar"
+
+#: diffviewsctrl.cpp:102
+#, kde-format
+msgid "Stage selected lines"
+msgstr "Seçili satırları hazırla"
+
+#: diffviewsctrl.cpp:103
+#, kde-format
+msgid "Revert selected lines"
+msgstr "Seçili satırları geri al"
+
+#: diffviewsctrl.cpp:105
+#, kde-format
+msgid "Unstage selected hunk"
+msgstr "Seçili parçayı hazırlıktan çıkar"
+
+#: diffviewsctrl.cpp:106
+#, kde-format
+msgid "Stage selected hunk"
+msgstr "Seçili parçayı hazırla"
+
+#: diffviewsctrl.cpp:107
+#, kde-format
+msgid "Revert selected hunk"
+msgstr "Seçili parçayı geri al"
+
+#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#, kde-format
+msgid "S"
+msgstr "S"
+
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#, kde-format
+msgid "G"
+msgstr "G"
+
+#: diffviewsctrl.cpp:170
+#, kde-format
+msgid "%1 (staged)"
+msgstr "%1 (hazırlandı)"
+
+#: diffviewsctrl.cpp:172
+#, kde-format
+msgid "Staged (%1)"
+msgstr "Hazırlanan (%1)"
+
+#: diffviewsctrl.cpp:174
+#, kde-format
+msgid "Unstaged (%1)"
+msgstr "Hazırlıktan Çıkarılan (%1)"
+
+#: diffviewsctrl.cpp:176
+#, kde-format
+msgid "%1 (unstaged)"
+msgstr "%1 (hazırlanmadı)"
+
+#: diffviewsctrl.cpp:330
+#, kde-format
+msgid ""
+"The selected lines will be reverted and the changes lost. This operation "
+"cannot be undone. Continue?"
+msgstr ""
+"Seçili satırlar geri alınacak ve değişiklikler kaybolacak. Bu işlem geri "
+"alınamaz. Sürdürülsün mü?"
+
+#: diffviewsctrl.cpp:332
+#, kde-format
+msgctxt "@action:button"
+msgid "Revert"
+msgstr "Geri Al"
+
+#: gitmessagehighlighter.cpp:66
+#, kde-format
+msgid "Try to keep summary length below %1 characters."
+msgstr "Özet uzunluğunu, %1 karakterin altında tutmaya çalış."
+
+#: gitmessagehighlighter.cpp:82
+#, kde-format
+msgid "Separate summary from details with one empty line."
+msgstr "Özeti, ayrıntılardan bir boş satırla ayır."
+
+#: gitmessagehighlighter.cpp:92
+#, kde-format
+msgid "Try to keep line length below %1 characters."
+msgstr "Satır uzunluğunu, %1 karakterin altında tutmaya çalış."
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, GitNameEmailDialog)
+#: gitnameemaildialog.ui:17
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure Name and Email for Git"
+msgstr "Git için Ad ve E-posta Yapılandır"
+
+#. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
+#: gitnameemaildialog.ui:23
+#, kde-format
+msgid ""
+"<html><head/><body><p>You have not yet configured the name and email to be "
+"associated with your Git commits.<br/>The values you enter here will be "
+"written to the Git configuration, either locally for the current project "
+"only, or globally for all Git projects.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Git, işlemelerinizle ilişkilendirilecek ad ve e-posta "
+"yapılandırılmamış.<br/>Buraya girdiğiniz değerler, Git yapılandırmasına "
+"yazılır; geçerli profil için yerel olarak veya tüm Git projeleri için.</p></"
+"body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gitnameemaildialog.ui:35
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "&Ad:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gitnameemaildialog.ui:48
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Emai&l:"
+msgstr "E-&posta:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, globalCheckBox)
+#: gitnameemaildialog.ui:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Write to global config"
+msgstr "Global yapılandırmaya yaz"
+
+#: gitplugin.cpp:181
+#, kde-format
+msgid "Unable to find git executable. Is it installed on the system?"
+msgstr "Git yürütülebiliri bulunamadı. Sistemde kurulu mu?"
+
+#: gitplugin.cpp:190
+#, kde-format
+msgid "Git Commit"
+msgstr "Git İşle"
+
+#: gitplugin.cpp:242
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rebase"
+msgstr "Yeniden Temellendir"
+
+#: gitplugin.cpp:243
+#, kde-format
+msgctxt "@title:menu"
+msgid "Git Stashes"
+msgstr "Git Zulaları"
+
+#: gitplugin.cpp:244
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Stash Manager"
+msgstr "Zula Yöneticisi"
+
+#: gitplugin.cpp:245
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Push Stash"
+msgstr "Zulayı İt"
+
+#: gitplugin.cpp:246
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Pop Stash"
+msgstr "Zulayı Patlat"
+
+#: gitplugin.cpp:279
+#, kde-format
+msgid "error: %1"
+msgstr "hata: %1"
+
+#: gitplugin.cpp:378 gitplugin.cpp:389
+#, kde-format
+msgid "Did not specify the list of files"
+msgstr "Dosyaların listesi belirtilmedi"
+
+#: gitplugin.cpp:451
+#, kde-format
+msgid "Could not reset changes (empty list of paths)"
+msgstr "Değişiklikler sıfırlanamadı (boş yol listesi)"
+
+#: gitplugin.cpp:486
+#, kde-format
+msgid "Could not revert changes"
+msgstr "Değişiklikler geri alınamadı"
+
+#: gitplugin.cpp:496
+#, kde-format
+msgid ""
+"The following files have uncommitted changes, which will be lost. Continue?"
+msgstr ""
+"Aşağıdaki dosyalarda işlenmemiş ve kaybolacak değişiklikler var. Sürdürülsün "
+"mü?"
+
+#: gitplugin.cpp:521
+#, kde-format
+msgid "No files or message specified"
+msgstr "Dosya veya ileti belirtilmedi"
+
+#: gitplugin.cpp:525 gitplugin.cpp:544
+#, kde-format
+msgid "Email or name for Git not specified"
+msgstr "Git için e-posta veya ad belirtilmemiş"
+
+#: gitplugin.cpp:541
+#, kde-format
+msgid "No message specified"
+msgstr "Bir ileti belirtilmedi"
+
+#: gitplugin.cpp:615
+#, kde-format
+msgid "No files to remove"
+msgstr "Kaldırılacak dosya yok"
+
+#: gitplugin.cpp:855
+#, kde-format
+msgid "There are pending changes, do you want to stash them first?"
+msgstr "Bekleyen değişiklikler var, önce bunları zulalamak istiyor musunuz?"
+
+#: gitplugin.cpp:856
+#, kde-format
+msgctxt "@action:button"
+msgid "Stash"
+msgstr "Zulala"
+
+#: gitplugin.cpp:857
+#, kde-format
+msgctxt "@action:button"
+msgid "Keep"
+msgstr "Tut"
+
+#: rebasedialog.cpp:25
+#, kde-format
+msgctxt "@title:window"
+msgid "Branch Selection"
+msgstr "Dal Seçimi"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
+#: rebasedialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Rebase"
+msgstr "Yeniden Temellendir"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rebasedialog.ui:20
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Base branch:"
+msgstr "Taban dal:"
+
+#. i18n: ectx: property (text), widget (QPushButton, rebaseButton)
+#: rebasedialog.ui:40
+#, kde-format
+msgctxt "@action:button"
+msgid "Rebase"
+msgstr "Yeniden Temellendir"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_2)
+#: rebasedialog.ui:60
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "İptal"
+
+#: repostatusmodel.cpp:64
+#, kde-format
+msgctxt "Files in a vcs which have changes staged for commit"
+msgid "Staged changes"
+msgstr "Hazırlanmış değişiklikler"
+
+#: repostatusmodel.cpp:67
+#, kde-format
+msgctxt "Files in a vcs which have changes not yet staged for commit"
+msgid "Unstaged changes"
+msgstr "Hazırlanmamış değişiklikler"
+
+#: repostatusmodel.cpp:70
+#, kde-format
+msgctxt "Files in a vcs which have unresolved (merge) conflits"
+msgid "Conflicts"
+msgstr "Çakışmalar"
+
+#: repostatusmodel.cpp:72
+#, kde-format
+msgctxt "Files which are not tracked by a vcs"
+msgid "Untracked files"
+msgstr "İzlenmeyen dosyalar"
+
+#: repostatusmodel.cpp:82
+#, kde-format
+msgctxt "Files in a vcs which have changes staged for commit"
+msgid "Staged"
+msgstr "Hazırlanan"
+
+#: repostatusmodel.cpp:84
+#, kde-format
+msgid "Files with changes staged for commit"
+msgstr "İşleme için değişiklikleri hazırlanan dosyalar"
+
+#: repostatusmodel.cpp:89
+#, kde-format
+msgctxt "Files in a vcs which have changes not checked in to repo"
+msgid "Modified"
+msgstr "Değiştirilen"
+
+#: repostatusmodel.cpp:91
+#, kde-format
+msgid "Files with changes"
+msgstr "Değişiklikleri olan dosyalar"
+
+#: repostatusmodel.cpp:96
+#, kde-format
+msgctxt "Files in git which have unresolved (merge) conflits"
+msgid "Conflicts"
+msgstr "Çakışmalar"
+
+#: repostatusmodel.cpp:98
+#, kde-format
+msgid "Files with unresolved (merge) conflicts"
+msgstr "Çözülmemiş (birleştirme) çakışmaları olan dosyalar"
+
+#: repostatusmodel.cpp:103
+#, kde-format
+msgctxt "Files which are not tracked by a vcs"
+msgid "Untracked"
+msgstr "İzlenmeyen"
+
+#: repostatusmodel.cpp:104
+#, kde-format
+msgid "Files not tracked in VCS"
+msgstr "SDS içinde izlenmeyen dosyalar"
+
+#: repostatusmodel.cpp:222
+#, kde-format
+msgctxt "@item file has unstaged changes"
+msgid "Modified (unstaged)"
+msgstr "Değiştirilmiş (hazırlanmamış)"
+
+#: repostatusmodel.cpp:224
+#, kde-format
+msgctxt "@item file was deleted from worktree"
+msgid "Deleted (unstaged)"
+msgstr "Silinmiş (hazırlanmamış)"
+
+#: repostatusmodel.cpp:226
+#, kde-format
+msgctxt "@item file was renamed in worktree"
+msgid "Renamed (unstaged)"
+msgstr "Yeniden adlandırılmış (hazırlanmamış)"
+
+#: repostatusmodel.cpp:228
+#, kde-format
+msgctxt "@item file was copied in worktree"
+msgid "Copied (unstaged)"
+msgstr "Kopyalanmış (hazırlanmamış)"
+
+#: repostatusmodel.cpp:230
+#, kde-format
+msgctxt "@item file has staged changes"
+msgid "Modified (staged)"
+msgstr "Değiştirilmiş (hazırlanmış)"
+
+#: repostatusmodel.cpp:232
+#, kde-format
+msgctxt "@item file has both staged and unstaged changes"
+msgid "Modified (unstaged changes)"
+msgstr "Değiştirilmiş (hazırlanmamış değişiklikler)"
+
+#: repostatusmodel.cpp:234
+#, kde-format
+msgctxt "@item file has staged changes and was deleted in worktree"
+msgid "Modified (unstaged deletion)"
+msgstr "Değiştirilmiş (hazırlanmamış silme)"
+
+#: repostatusmodel.cpp:237
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem and has unstaged changes"
+msgid "Added (unstaged changes)"
+msgstr "Eklenmiş (hazırlanmamış değişiklikler)"
+
+#: repostatusmodel.cpp:240
+#, kde-format
+msgctxt "@item file was added to versioncontrolsystem and deleted in worktree"
+msgid "Added (unstaged deletion)"
+msgstr "Eklenmiş (hazırlanmamış silme)"
+
+#: repostatusmodel.cpp:243
+#, kde-format
+msgctxt ""
+"@item file was deleted from versioncontrolsystem and renamed in worktree"
+msgid "Deleted (unstaged rename)"
+msgstr "Silinmiş (hazırlanmamış yeniden adlandırma)"
+
+#: repostatusmodel.cpp:246
+#, kde-format
+msgctxt ""
+"@item file was deleted from versioncontrolsystem and copied in worktree"
+msgid "Deleted (unstaged copy)"
+msgstr "Silinmiş (hazırlanmamış kopya)"
+
+#: repostatusmodel.cpp:248
+#, kde-format
+msgctxt "@item file was renamed in versioncontrolsystem"
+msgid "Renamed (staged)"
+msgstr "Yeniden adlandırılmış (hazırlanmış)"
+
+#: repostatusmodel.cpp:251
+#, kde-format
+msgctxt ""
+"@item file was renamed in versioncontrolsystem and has unstaged changes"
+msgid "Renamed (unstaged changes)"
+msgstr "Yeniden adlandırılmış (hazırlanmamış değişiklikler)"
+
+#: repostatusmodel.cpp:254
+#, kde-format
+msgctxt ""
+"@item file was renamed in versioncontrolsystem and was deleted in worktree"
+msgid "Renamed (unstaged deletion)"
+msgstr "Yeniden adlandırılmış (hazırlanmamış silme)"
+
+#: repostatusmodel.cpp:256
+#, kde-format
+msgctxt "@item file was copied in versioncontrolsystem"
+msgid "Copied"
+msgstr "Kopyalanmış"
+
+#: repostatusmodel.cpp:259
+#, kde-format
+msgctxt ""
+"@item file was copied in versioncontrolsystem and has unstaged changes"
+msgid "Copied (unstaged changes)"
+msgstr "Kopyalanmış (hazırlanmamış değişiklikler)"
+
+#: repostatusmodel.cpp:262
+#, kde-format
+msgctxt ""
+"@item file was copied in versioncontrolsystem and was deleted in worktree"
+msgid "Copied (unstaged deletion)"
+msgstr "Kopyalanmış (hazırlanmamış silme)"
+
+#: repostatusmodel.cpp:264
+#, kde-format
+msgctxt "@item file has unresolved merge conflicts"
+msgid "Unresolved conflicts"
+msgstr "Çözülmemiş çakışmalar"
+
+#: repostatusmodel.cpp:266
+#, kde-format
+msgctxt "@item file is not under vcs"
+msgid "Untracked"
+msgstr "İzlenmeyen"
+
+#: repostatusmodel.cpp:269
+#, kde-format
+msgctxt "file in unknown (invalid) state"
+msgid "Unknown"
+msgstr "Bilinmeyen"
+
+#: repostatusmodel.cpp:362
+#, kde-format
+msgid " (staged)"
+msgstr " (hazırlanmış)"
+
+#: repostatusmodel.cpp:370
+#, kde-format
+msgid " (unstaged)"
+msgstr " (hazırlanmamış)"
+
+#: repostatusmodel.cpp:378
+#, kde-format
+msgid " (conflicts)"
+msgstr " (çakışma)"
+
+#: repostatusmodel.cpp:386
+#, kde-format
+msgid " (untracked)"
+msgstr " (izlenmeyen)"
+
+#: repostatusmodel.cpp:580
+#, kde-format
+msgid "no branch"
+msgstr "dal yok"
+
+#: repostatusmodel.cpp:581
+#, kde-format
+msgctxt "project name (branch name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: simplecommitform.cpp:40
+#, kde-format
+msgid "Commit"
+msgstr "İşle"
+
+#: simplecommitform.cpp:65
+#, kde-format
+msgid "Extended commit description"
+msgstr "Genişletilmiş işleme açıklaması"
+
+#: simplecommitform.cpp:73
+#, kde-format
+msgid "Commit summary"
+msgstr "İşleme özeti"
+
+#: simplecommitform.cpp:88 simplecommitform.cpp:172
+#, kde-format
+msgid "To commit changes, please write a commit message first"
+msgstr "Değişiklikleri işlemek için önce bir işleme iletisi yazın"
+
+#: simplecommitform.cpp:91 simplecommitform.cpp:169
+#, kde-format
+msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
+msgstr "Değişiklikleri, <b>%2</b> dalındaki <b>%1</b> için işle"
+
+#: simplecommitform.cpp:122
+#, kde-format
+msgid "To commit changes, please select a project first"
+msgstr "Değişiklikleri işlemek için önce bir proje seçin"
+
+#: simplecommitform.cpp:163
+#, kde-format
+msgid "Please stage some changes before committing."
+msgstr "İşlemeden önce değişiklikleri hazırlayın."
+
+#: stashmanagerdialog.cpp:30
+#, kde-format
+msgctxt "@title:window"
+msgid "Stash Manager"
+msgstr "Zula Yöneticisi"
+
+#: stashmanagerdialog.cpp:117
+#, kde-format
+msgid "Are you sure you want to drop the stash '%1'?"
+msgstr "'%1' zulasını bırakmak istediğinize emin misiniz?"
+
+#. i18n: ectx: property (text), widget (QPushButton, drop)
+#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Drop"
+msgstr "Bırak"
+
+#: stashmanagerdialog.cpp:127
+#, kde-format
+msgctxt "@title:window"
+msgid "Git Stash"
+msgstr "Git Zulala"
+
+#: stashmanagerdialog.cpp:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name for the new branch:"
+msgstr "Yeni dal adı:"
+
+#: stashmanagerdialog.cpp:148
+#, kde-format
+msgctxt "%1: stack depth, %2: branch, %3: parent description"
+msgid "%1. %2: %3"
+msgstr "%1. %2: %3"
+
+#: stashmanagerdialog.cpp:158
+#, kde-format
+msgid "%1 created on %2"
+msgstr "%1, %2 tarihinde oluşturuldu"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, drop)
+#: stashmanagerdialog.ui:23
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove the selected stash"
+msgstr "Seçili zulayı kaldır"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pop)
+#: stashmanagerdialog.ui:37
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply stash's patch and drop the stash"
+msgstr "Zulanın yamasını uygula ve zulayı bırak"
+
+#. i18n: ectx: property (text), widget (QPushButton, pop)
+#: stashmanagerdialog.ui:40
+#, kde-format
+msgctxt "@action:button"
+msgid "Pop"
+msgstr "Patlat"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, show)
+#: stashmanagerdialog.ui:51
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show the content of the stash"
+msgstr "Zulanın içeriğini göster"
+
+#. i18n: ectx: property (text), widget (QPushButton, show)
+#: stashmanagerdialog.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Show"
+msgstr "Göster"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, apply)
+#: stashmanagerdialog.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply stash's patch"
+msgstr "Zulanın yamasını uygula"
+
+#. i18n: ectx: property (text), widget (QPushButton, apply)
+#: stashmanagerdialog.ui:88
+#, kde-format
+msgctxt "@action:button"
+msgid "Apply"
+msgstr "Uygula"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, branch)
+#: stashmanagerdialog.ui:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create a new branch and apply the stash there, then drop the stash"
+msgstr "Yeni bir dal oluştur ve zulayı buraya uygula, sonra zulayı bırak"
+
+#. i18n: ectx: property (text), widget (QPushButton, branch)
+#: stashmanagerdialog.ui:115
+#, kde-format
+msgctxt "@action:button"
+msgid "Branch"
+msgstr "Dal"

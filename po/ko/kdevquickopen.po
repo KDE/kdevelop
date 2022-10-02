@@ -1,0 +1,285 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-05-07 02:09+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: actionsquickopenprovider.cpp:36
+#, kde-format
+msgctxt "description (shortcut)"
+msgid "%1 (%2)"
+msgstr "%1(%2)"
+
+#: documentationquickopenprovider.cpp:33
+#, kde-format
+msgid "Documentation in the %1"
+msgstr "%1의 문서"
+
+#: duchainitemquickopen.cpp:38
+#, kde-format
+msgid "Not available any more: %1"
+msgstr "더 이상 사용할 수 없음: %1"
+
+#: duchainitemquickopen.cpp:124
+#, kde-format
+msgid "Not available any more"
+msgstr "더 이상 사용할 수 없음"
+
+#: duchainitemquickopen.cpp:132
+#, kde-format
+msgctxt "%1: function signature"
+msgid "Return: %1"
+msgstr "반환값: %1"
+
+#: duchainitemquickopen.cpp:136
+#, kde-format
+msgctxt "%1: file path"
+msgid "File: %1"
+msgstr "파일: %1"
+
+#. i18n: ectx: ToolBar (quickOpenToolBar)
+#: kdevquickopen.rc:42
+#, kde-format
+msgid "Quick Open Toolbar"
+msgstr "빠른 열기 도구 모음"
+
+#: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
+#, kde-format
+msgctxt "%1: project name"
+msgid "Project %1"
+msgstr "프로젝트 %1"
+
+#: projectfilequickopen.cpp:159
+#, kde-format
+msgid "Not parsed yet"
+msgstr "아직 해석되지 않음"
+
+#: projectfilequickopen.cpp:178
+#, kde-format
+msgctxt "@item no project"
+msgid "none"
+msgstr "없음"
+
+#: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
+#: quickopenplugin.cpp:66
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Classes"
+msgstr "클래스"
+
+#: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
+#: quickopenplugin.cpp:65
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Functions"
+msgstr "함수"
+
+#: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Project"
+msgstr "프로젝트"
+
+#: quickopenplugin.cpp:60
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includes"
+msgstr "포함"
+
+#: quickopenplugin.cpp:61
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Includers"
+msgstr "포함하는 항목"
+
+#: quickopenplugin.cpp:62
+#, kde-format
+msgctxt "@item quick open scope"
+msgid "Currently Open"
+msgstr "현재 열림"
+
+#: quickopenplugin.cpp:64
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Files"
+msgstr "파일"
+
+#: quickopenplugin.cpp:67
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Documentation"
+msgstr "문서"
+
+#: quickopenplugin.cpp:68
+#, kde-format
+msgctxt "@item quick open item type"
+msgid "Actions"
+msgstr "동작"
+
+#: quickopenplugin.cpp:279
+#, kde-format
+msgctxt "@action"
+msgid "&Quick Open"
+msgstr "바로 열기(&Q)"
+
+#: quickopenplugin.cpp:285
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &File"
+msgstr "빠른 파일 열기(&F)"
+
+#: quickopenplugin.cpp:291
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Class"
+msgstr "빠른 클래스 열기(&C)"
+
+#: quickopenplugin.cpp:297
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Function"
+msgstr "빠른 함수 열기(&F)"
+
+#: quickopenplugin.cpp:303
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Already Open File"
+msgstr "빠른 이미 열린 파일 열기(&A)"
+
+#: quickopenplugin.cpp:308
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Documentation"
+msgstr "빠른 문서 열기(&D)"
+
+#: quickopenplugin.cpp:314
+#, kde-format
+msgctxt "@action"
+msgid "Quick Open &Actions"
+msgstr "빠른 열기 동작(&A)"
+
+#: quickopenplugin.cpp:319
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Declaration"
+msgstr "선언으로 가기"
+
+#: quickopenplugin.cpp:325
+#, kde-format
+msgctxt "@action"
+msgid "Jump to Definition"
+msgstr "정의로 가기"
+
+#: quickopenplugin.cpp:330
+#, kde-format
+msgctxt "@action"
+msgid "Embedded Quick Open"
+msgstr "내장된 빠른 열기"
+
+#: quickopenplugin.cpp:337
+#, kde-format
+msgctxt "@action jump to"
+msgid "Next Function"
+msgstr "다음 함수"
+
+#: quickopenplugin.cpp:342
+#, kde-format
+msgctxt "@action jump to"
+msgid "Previous Function"
+msgstr "이전 함수"
+
+#: quickopenplugin.cpp:347
+#, kde-format
+msgctxt "@action open outline quick open menu"
+msgid "Outline"
+msgstr "요약"
+
+#: quickopenplugin.cpp:498
+#, kde-format
+msgctxt "@title:window"
+msgid "Quick Open"
+msgstr "빠른 열기"
+
+#: quickopenplugin.cpp:832
+#, kde-format
+msgctxt "@title:window"
+msgid "Outline"
+msgstr "요약"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
+#: quickopenplugin.cpp:942 quickopenwidget.ui:47
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Quick Open..."
+msgstr "빠른 열기..."
+
+#: quickopenplugin.cpp:943
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Search for files, classes, functions and more, allowing you to quickly "
+"navigate in your source code."
+msgstr "소스 코드를 빠르게 탐색할 수 있도록 파일, 클래스, 함수 등을 찾습니다."
+
+#. i18n: ectx: property (text), widget (QLabel, searchLabel)
+#: quickopenwidget.ui:37
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Search:"
+msgstr "찾기:"
+
+#. i18n: ectx: property (text), widget (QPushButton, okButton)
+#: quickopenwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Open"
+msgstr "열기"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: quickopenwidget.ui:61
+#, kde-format
+msgctxt "@action:button"
+msgid "Cancel"
+msgstr "취소"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: quickopenwidget.ui:91
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Scopes:"
+msgstr "범위(&S):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: quickopenwidget.ui:136
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Items:"
+msgstr "항목(&I):"
+
+#~ msgid "Project %1"
+#~ msgstr "프로젝트 %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgid ""
+#~ "This plugin allows quick access to project files and language-items like "
+#~ "classes/functions."
+#~ msgstr ""
+#~ "이 플러그인은 프로젝트 파일과 클래스/함수와 같은 언어 항목에 빠르게 접근"
+#~ "할 수 있도록 합니다."

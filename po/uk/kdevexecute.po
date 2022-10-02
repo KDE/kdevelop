@@ -1,0 +1,491 @@
+# Translation of kdevexecute.po to Ukrainian
+# Copyright (C) 2008-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2012, 2013, 2015, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevexecute\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 08:26+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.07.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Під час спроби виконання файла було виявлено помилку у використанні лапок у "
+"параметрах налаштуваннях запуску «%1». Запуск перервано."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"У параметрах налаштуваннях запуску було використано метасимвол оболонки "
+"«%1», підтримку таких символів ще не реалізовано. Запуск перервано."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "Не вдалося розв’язати залежності: %1"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Не вказано коректного виконуваного файла"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Під час визначення виконуваного файла у налаштуваннях запуску виявлено "
+"помилку у використанні лапок «%1». Запуск перервано."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"У визначенні виконуваного файла налаштувань запуску було використано "
+"метасимвол оболонки «%1», підтримку таких символів ще не реалізовано. Запуск "
+"перервано."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr "Запитати, якщо запущено"
+
+#: nativeappconfig.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr "Вбити усі екземпляри"
+
+#: nativeappconfig.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr "Запустити ще один"
+
+#: nativeappconfig.cpp:156
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Налаштувати рідну програму"
+
+#: nativeappconfig.cpp:166
+#, kde-format
+msgid "Executes Native Applications"
+msgstr "Виконує рідні програми"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "Рідна програма"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr "Зібраний виконуваний файл"
+
+#: nativeappconfig.cpp:322
+#, kde-format
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Виконувані файли проєкту"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, kde-format
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Виконуваний файл"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "&Ціль проєкту:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "Ви&конуваний файл:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "виконуваний файл або /шлях/до/виконуваного_файла"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr "Введіть назву виконуваного файла або абсолютний шлях до нього"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Поведінка"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "&Параметри:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Вкажіть параметри, які буде передано виконуваному "
+"файлу.<br/>Параметри з пробілами можна передати за допомогою додавання "
+"навколо них подвійних лапок.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "&Робочий каталог:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Виберіть робочий каталог для виконуваного файла"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, kde-format
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "С&ередовище:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Виберіть середовище, яке буде використано"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Типово, програми буде запущено у фоновому режимі. На панелі буде показано "
+"лише виведені ними дані. Отже взаємодія з програмою, яка працює у "
+"інтерактивному режимі, неможлива. Щоб вводити дані у програмах з "
+"інтерактивним керуванням, вам слід скористатися зовнішнім терміналом.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, kde-format
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Використовувати зовнішній термінал:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, no-c-format, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Визначає команду, яку слід виконати у зовнішньому емуляторі термінала. "
+"Можна використовувати такі позначення:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>Адреса виконуваного файла, вибраний вище.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>Адреса робочого каталогу, вибрана вище.</dd>\n"
+"</dl>\n"
+"<p>Визначені вище аргументи буде додано до цієї команди.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr "Перезапустити"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Залежності"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "&Дія:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr ""
+"Визначає дію, яку слід виконати для залежностей перед запуском виконуваного "
+"файла."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"Вказану дію буде виконано до запуску виконуваного файла, таким чином можна "
+"наказати системі зібрати і/або встановити до запуску виконуваного файла "
+"певні частини проєкту, які є непрямими залежностями."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "Нічого не робити"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Зібрати"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, kde-format
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Зібрати і встановити"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Цілі:"
+
+#: nativeappjob.cpp:66
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Не вказано профіль середовища, схоже, ви припустилися помилки під час "
+"налаштування, будь ласка, перевірте налаштування запуску «%1». Буде "
+"використано типовий профіль середовища."
+
+#: nativeappjob.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr "Завдання вже виконується"
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr "«%1» вже виконується."
+
+#: nativeappjob.cpp:145
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr "Вбити усі екземпляри"
+
+#: nativeappjob.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr "Запустити ще один"
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr "Запам'ятати вибір"
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Введіть параметри, які буде передано виконуваному файлу"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Запуск: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Перервана програма ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Нормальне завершення ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Завершення з повернутим кодом: %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Аварійне завершення процесу ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Аварійне завершення з повернутим кодом: %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "*** Не вдалося запустити програму «%1». Переконайтеся, що шлях вказано "
+#~ "правильно. ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Введіть залежність, яку слід додати до списку"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Додає ціль зі списку до списку залежностей."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Список непрямих залежних цілей."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "У цьому списку слід вказати непрямі залежності програми, для яких слід "
+#~ "виконати певні дії до запуску файла програми."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Вилучає вибрані залежності зі списку."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Пересуває вибрану залежність вгору списком."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Пересуває вибрану залежність вниз списком."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Execute support"
+#~ msgstr "Підтримка виконання"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "За допомогою цього додатка можна запускати програми безпосередньо на "
+#~ "поточному вузлі."
+
+#~ msgid "Application"
+#~ msgstr "Програма"
+
+#~ msgid "Allows running of native apps"
+#~ msgstr "Надає змогу запускати вбудовані програми"
+
+#~ msgid "Could not start application"
+#~ msgstr "Не вдалося запустити програму"
+
+#~ msgid "configure environment variables"
+#~ msgstr "налаштувати змінні середовища"
+
+#~ msgid "..."
+#~ msgstr "…"
+
+#~ msgid "Enter a project target as path in the tree"
+#~ msgstr "Введіть ціль проєкту як шлях у дереві проєкту"
+
+#~ msgid "Installing via sudo is not yet implemented"
+#~ msgstr "Встановлення за допомогою sudo ще не реалізовано"
+
+#~ msgid "Not implemented"
+#~ msgstr "Не реалізовано"
+
+#~ msgid "Build and Install (as Superuser)"
+#~ msgstr "Зібрати і встановити (від адміністратора)"
+
+#~ msgid "When enabled, runs the application in an external terminal."
+#~ msgstr "Якщо позначено, програму буде запущено у зовнішньому терміналі."
+
+#~ msgid "Enter the path to an item from the projects tree"
+#~ msgstr "Введіть шлях до елемента з дерева проєкту"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "Up"
+#~ msgstr "Вгору"
+
+#~ msgid "Down"
+#~ msgstr "Вниз"
+
+#~ msgid "+"
+#~ msgstr "+"
+
+#~ msgid "enter a dependency to add to the list"
+#~ msgstr "введіть залежність, яку слід додати до списку"
+
+#~ msgid "Run"
+#~ msgstr "Запустити"
+
+#~ msgid "Run in external konsole"
+#~ msgstr "Виконати ззовні у konsole"
+
+#~ msgid "Unsupported instrumentor"
+#~ msgstr "Непідтримуваний інструментарій"

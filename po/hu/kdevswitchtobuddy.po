@@ -1,0 +1,75 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-09-08 15:15+0200\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: switchtobuddyplugin.cpp:114
+#, fuzzy, kde-format
+#| msgid "Switch to '%1'"
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Váltás erre: „%1”"
+
+#: switchtobuddyplugin.cpp:128
+#, fuzzy, kde-format
+#| msgid "&Switch Definition/Declaration"
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr "Váltá&s a definícióra/deklarációra"
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf,Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#, fuzzy
+#~| msgid "Switch to '%1'"
+#~ msgid "Switch To"
+#~ msgstr "Váltás erre: „%1”"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigáció"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Váltás a Buddy-ra"
+
+#~ msgid ""
+#~ "Allows switching between buddy documents like implementation and header "
+#~ "file."
+#~ msgstr ""
+#~ "Lehetővé teszi az ismerős dokumentum mint megvalósítás és a fejlécfájl "
+#~ "közötti váltást."
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
+#~ msgid "Switch to buddy document in code editor."
+#~ msgstr "Váltás a buddy-dokumentumra a kódszerkesztőben."

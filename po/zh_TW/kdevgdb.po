@@ -1,0 +1,721 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# Frank Weng (a.k.a. Franklin) <franklin@goodhorse.idv.tw>, 2009.
+# Franklin Weng <franklin@mail.everfocus.com.tw>, 2010, 2012, 2013, 2014.
+# pan93412 <pan93412@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcppdebugger\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"PO-Revision-Date: 2019-09-30 18:42+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#, kde-format
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:113
+#, fuzzy, kde-format
+#| msgid "Disassemble/Registers"
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "反組譯/暫存器"
+
+#: debuggerplugin.cpp:117
+#, fuzzy, kde-format
+#| msgid "GDB"
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:126
+#, fuzzy, kde-format
+#| msgid "Memory"
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "記憶體"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
+#: debuggertracingdialog.ui:14
+#, fuzzy, kde-format
+#| msgid "Tracing Configuration"
+msgctxt "@title:window"
+msgid "Tracing Configuration"
+msgstr "追蹤設定"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
+#: debuggertracingdialog.ui:26
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "<b>Custom format string</b>\n"
+#| "<p>Specify a C-style format string that will be used when printing the "
+#| "chosen expression. For example:\n"
+#| "<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+#| "If custom format string is not enabled, names and values of all "
+#| "expressions will be printed, using \"%d\" as format specifier for all "
+#| "expressions."
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Custom format string</b>\n"
+"<p>Specify a C-style format string that will be used when printing the "
+"chosen expression. For example:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"If custom format string is not enabled, names and values of all expressions "
+"will be printed, using \"%d\" as format specifier for all expressions."
+msgstr ""
+"<b>自訂格式字串</b>\n"
+"<p>指定 C 樣式的格式字串，它會用於印出選定的表示式計算出來的值。例如：\n"
+"<p align=\"center\"><tt>Tracepoint 1： g = %d </tt></p>\n"
+"如果沒有開啟自訂格式字串的功能，則會印出名稱與數值，所有的數值都預設使用 \"%d"
+"\"。"
+
+#. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
+#: debuggertracingdialog.ui:36
+#, fuzzy, kde-format
+#| msgid "Expressions to print:"
+msgctxt "@label"
+msgid "Expressions to print:"
+msgstr "要列印的表示式："
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:47
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>Enable tracing</b>\n"
+#| "<p>Tracing is a mechanism to automatically print values of the chosen "
+#| "expressions and continue execution when breakpoint is hit. You can think "
+#| "of it as printf debugging that does not require modifying the source.</p>"
+msgctxt "@info:whatthis"
+msgid ""
+"<b>Enable tracing</b>\n"
+"<p>Tracing is a mechanism to automatically print values of the chosen "
+"expressions and continue execution when breakpoint is hit. You can think of "
+"it as printf debugging that does not require modifying the source.</p>"
+msgstr ""
+"<b>開啟追蹤</b> <p>所謂的追蹤是一個在遇到中斷點時，會自動印出選定的表示式計算"
+"出來的值，並繼續執行的機制。您可以把它當成用 printf 來除錯，只不過不需要變更"
+"源碼。</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:50
+#, fuzzy, kde-format
+#| msgid "Enable tracing"
+msgctxt "@option:check"
+msgid "Enable tracing"
+msgstr "開啟追蹤"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
+#: debuggertracingdialog.ui:60
+#, fuzzy, kde-format
+#| msgid "Custom format string"
+msgctxt "@option:check"
+msgid "Custom format string"
+msgstr "自訂格式字串"
+
+#: debugsession.cpp:170
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"沒有指定環境設定檔，似乎是設定有問題。請檢查執行設定 %1。將改用預設的環境設定"
+"檔。"
+
+#: debugsession.cpp:281
+#, kde-format
+msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+msgstr "<b>您需要 gdb 7.0.0 版以上。</b><br />您目前的版本是：%1"
+
+#: debugsession.cpp:294
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>無法啟動除錯器：</b><br />"
+
+#: debugsession.cpp:308
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr "<b>無法載入核心檔案</b><p>除錯器回報了以下錯誤：<p><tt>%1"
+
+#: gdb.cpp:69
+#, kde-format
+msgid "Could not locate the debugging shell '%1'."
+msgstr "無法找到除錯 shell %1。"
+
+#: gdbconfigpage.cpp:92
+#, fuzzy, kde-format
+#| msgid "GDB Configuration"
+msgctxt "@title:tab"
+msgid "GDB Configuration"
+msgstr "除錯器設定"
+
+#: gdbconfigpage.cpp:133
+#, fuzzy, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"某個應用程式正在除錯中。是否中止目前執行的除錯階段，並使用此啟動階段繼續？"
+
+#: gdbconfigpage.cpp:135
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: gdbconfigpage.cpp:161
+#, kde-format
+msgid "Executes a native application in GDB"
+msgstr "在 GDB 執行原生應用程式"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: gdbconfigpage.ui:29
+#, fuzzy, kde-format
+#| msgid "Debugger"
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "除錯器"
+
+#. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
+#: gdbconfigpage.ui:35
+#, fuzzy, kde-format
+#| msgid "Debugger e&xecutable:"
+msgctxt "@label:chooser"
+msgid "Debugger e&xecutable:"
+msgstr "除錯器執行檔(&X)："
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:48
+#, fuzzy, kde-format
+#| msgid "Gdb executable"
+msgctxt "@info:tooltip"
+msgid "Gdb executable"
+msgstr "Gdb 執行檔"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:51
+#, fuzzy, kde-format
+#| msgid ""
+#| "To run \"gdb\" executable from $PATH, leave this field empty. To run "
+#| "custom gdb, for example, for a different architecture, enter the "
+#| "executable name here. You can either run gdb from $PATH, but with a "
+#| "different name (say, \"arm-gdb\"), by typing the name here, or specify "
+#| "full path to the gdb executable."
+msgctxt "@info:whatsthis"
+msgid ""
+"To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
+"gdb, for example, for a different architecture, enter the executable name "
+"here. You can either run gdb from $PATH, but with a different name (say, "
+"\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+"executable."
+msgstr ""
+"若要從 $PATH 執行「gdb」執行檔，請留白此欄位。若要執行自訂 gdb，例如其他平台"
+"的 gdb，請在此輸入執行檔名稱。你亦可從 $PATH 執行不同名稱的 gdb（例如「arm-"
+"gdb」），請在此輸入其名稱，或指定指向該 gdb 執行檔的完整路徑。"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:54
+#, fuzzy, kde-format
+#| msgid "Override path to gdb executable"
+msgctxt "@info:placeholder"
+msgid "Override path to gdb executable..."
+msgstr "覆蓋 gdb 可執行檔的路徑"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
+#: gdbconfigpage.ui:61 gdbconfigpage.ui:77
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If you want gdb to be executed by a special shell "
+#| "script, which for example properly sets the library path, insert it here "
+#| "e.g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+#| "invoked like this: /path/to/script.sh --scriptArguments debugger --"
+#| "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+#| "span> invoke \"debugger\" executable manually.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>If you want gdb to be executed by a special shell "
+"script, which for example properly sets the library path, insert it here e."
+"g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+"invoked like this: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+"span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>若您要 gdb 用一個特殊的 shell 文稿來執行，比方說可能要"
+"設定額外的函式庫路徑等等，請設定在此處。例如：/path/to/script.sh --"
+"scriptArguments</p><p>注意：您的文稿將會以這種方式啟動：/path/to/script.sh --"
+"scriptArguments debugger --debuggerArguments。因此 script.sh 裡<span style="
+"\" font-weight:600;\">必須</span>手動啟動除錯器。</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
+#: gdbconfigpage.ui:64
+#, fuzzy, kde-format
+#| msgid "She&ll script:"
+msgctxt "@label:chooser"
+msgid "She&ll script:"
+msgstr "Shell 文稿(&L)："
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: gdbconfigpage.ui:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "@title:group"
+msgid "Options"
+msgstr "選項"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: gdbconfigpage.ui:96
+#, fuzzy, kde-format
+#| msgid "Display static &members:"
+msgctxt "@option:check"
+msgid "Display static &members:"
+msgstr "顯示靜態成員(&M)："
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
+#: gdbconfigpage.ui:111
+#, fuzzy, kde-format
+#| msgid ""
+#| "Displaying static members makes GDB slower in\n"
+#| "producing data within KDE and Qt.\n"
+#| "It may change the \"signature\" of the data\n"
+#| "which QString and friends rely on,\n"
+#| "but if you need to debug into these values then\n"
+#| "check this option."
+msgctxt "@info:whatsthis"
+msgid ""
+"Displaying static members makes GDB slower in\n"
+"producing data with Qt-based code.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on,\n"
+"but if you need to debug into these values then\n"
+"check this option."
+msgstr ""
+"若要顯示靜態成員，在 KDE 與 Qt 中因為要產生資料，所以會讓 GDB 變慢。它也可能"
+"改變資料的「簽章」，通常 QString 與其朋友成員會需要檢視。不過如果您真的需要對"
+"靜態成員的值做除錯，則需要勾選此選項。"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gdbconfigpage.ui:121
+#, fuzzy, kde-format
+#| msgid "Display &demangled names:"
+msgctxt "@option:check"
+msgid "Display &demangled names:"
+msgstr "顯示未被改變過的名稱(&D)："
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
+#: gdbconfigpage.ui:133
+#, fuzzy, kde-format
+#| msgid ""
+#| "When displaying the disassembled code you\n"
+#| "can select to see the methods' mangled names.\n"
+#| "However, non-mangled names are easier to read."
+msgctxt "@info:whatthis"
+msgid ""
+"When displaying the disassembled code you\n"
+"can select to see the methods' mangled names.\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"顯示反組譯程式碼時，您可以選擇要查看改變過後的方法名稱。\n"
+"通常沒改變過的名稱會比較好閱讀。"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gdbconfigpage.ui:143
+#, fuzzy, kde-format
+#| msgid "S&tart debugger with:"
+msgctxt "@label:listbox"
+msgid "S&tart debugger with:"
+msgstr "除錯器開啟方式(&T)："
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:154
+#, fuzzy, kde-format
+#| msgid "Application Output"
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "應用程式輸出"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:159
+#, fuzzy, kde-format
+#| msgid "GDB Console"
+msgctxt "@item:inlistbox start debugger with"
+msgid "GDB Console"
+msgstr "GDB 主控台"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:164
+#, fuzzy, kde-format
+#| msgid "Frame Stack"
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "框架堆疊"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:178
+#, fuzzy, kde-format
+#| msgid ""
+#| "This script is intended for the actual commands needed to connect to a "
+#| "remotely running executable.\n"
+#| "\tshell sleep 5\twait for remote program to start\n"
+#| "\ttarget remote ...\tconnect to the remote debugger\n"
+#| "\tcontinue\t[optional] run debugging to the first breakpoint"
+msgctxt "@info:whatsthis"
+msgid ""
+"This script is intended for the actual commands needed to connect to a "
+"remotely running executable.\n"
+"\tshell sleep 5\twait for remote program to start\n"
+"\ttarget remote ...\tconnect to the remote debugger\n"
+"\tcontinue\t[optional] run debugging to the first breakpoint"
+msgstr ""
+"此文稿是用於需要連接到遠端執行的程式時使用的實際指令。\n"
+"\tshell sleep 5\t等待遠端的程式啟動\n"
+"\ttarget remote ...\t連線到遠端的除錯器\n"
+"\tcontinue\t【可選擇的】執行除錯器，直到第一個中斷點"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:181
+#, fuzzy, kde-format
+#| msgid "Remote Debugging"
+msgctxt "@title:group"
+msgid "Remote Debugging"
+msgstr "遠端除錯"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
+#: gdbconfigpage.ui:187 gdbconfigpage.ui:203
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Script to start remote application</p><p></"
+#| "p><p>This shell script is run after the Gdb Config script has been "
+#| "sourced by gdb.</p><p>It's purpose is to actually start the remote "
+#| "process.</p><p>1) Find a way to execute a command remotely - rsh, ssh, "
+#| "telnet, ...</p><p>2a) Execute \"gdbserver ... application\" on target.</"
+#| "p><p>or if your executable contains the gdb stub:</p><p>2b) Execute "
+#| "\"application\" on target.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to start remote application</p><p></p><p>This "
+"shell script is run after the Gdb Config script has been sourced by gdb.</"
+"p><p>It's purpose is to actually start the remote process.</p><p>1) Find a "
+"way to execute a command remotely - rsh, ssh, telnet, ...</p><p>2a) Execute "
+"&quot;gdbserver ... application&quot; on target.</p><p>or if your executable "
+"contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
+"p></body></html>"
+msgstr ""
+"<html><head/><body><p>啟動遠端應用程式</p><p>此 shell 文稿會在 gdb 執行完設定"
+"文稿之後執行。當需要遠端除錯時這個文稿會啟動遠端的程式。</p><p>1) 尋找一個方"
+"法可以遠端執行指令─例如 rsh，ssh，telnet 等等。</p><p>2a) 在目標平台上執行 "
+"\"gdserver ... app\"。</p><p>若是您的執行檔中有包含 gdb 需要的東西，也可以。"
+"</p><p>2b) 直接在目標平台上執行 \"app\"。</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
+#: gdbconfigpage.ui:190
+#, fuzzy, kde-format
+#| msgctxt "Shell script to be executed at run time"
+#| msgid "R&un shell script:"
+msgctxt "@label:chooser Shell script to be executed at run time"
+msgid "R&un shell script:"
+msgstr "執行 shell 文稿(&U)："
+
+#. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
+#: gdbconfigpage.ui:210 gdbconfigpage.ui:249
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>This script is sourced by gdb when the debugging "
+#| "starts.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid "This script is sourced by gdb when the debugging starts."
+msgstr "<html><head/><body><p>gdb 會在啟動時讀取此文稿。</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
+#: gdbconfigpage.ui:213
+#, fuzzy, kde-format
+#| msgid "Gdb &config script:"
+msgctxt "@label:chooser"
+msgid "Gdb &config script:"
+msgstr "GDB 設定文稿(&C)："
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
+#. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:226 gdbconfigpage.ui:233
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Script to connect with remote application</p><p>For "
+#| "example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+#| "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+#| "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to connect with remote application</p><p>For "
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>此文稿是用於需要連接到遠端執行的程式</p><p>例如：</"
+"p><p>\tshell sleep 5\t#等待遠端的程式啟動</p><p>\ttarget remote ...\t#連線到"
+"遠端的除錯器</p><p>\tcontinue\t#【可選擇的】執行除錯器，直到第一個中斷點。</"
+"p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:236
+#, fuzzy, kde-format
+#| msgctxt "Gdb script to be executed at run time."
+#| msgid "Run &gdb script:"
+msgctxt "@label:chooser Gdb script to be executed at run time."
+msgid "Run &gdb script:"
+msgstr "執行 gdb 文稿(&G)："
+
+#: gdboutputwidget.cpp:47
+#, fuzzy, kde-format
+#| msgid "GDB Output"
+msgctxt "@title:window"
+msgid "GDB Output"
+msgstr "GDB 輸出"
+
+#: gdboutputwidget.cpp:48
+#, fuzzy, kde-format
+#| msgid ""
+#| "<b>GDB output</b><p>Shows all gdb commands being executed. You can also "
+#| "issue any other gdb command while debugging.</p>"
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
+"issue any other GDB command while debugging.</p>"
+msgstr ""
+"<b>GDB 輸出</b><p>顯示所有執行中的 gdb 指令。您也可以在除錯時產生其它的 gdb "
+"指令。</p>"
+
+#: gdboutputwidget.cpp:58
+#, fuzzy, kde-format
+#| msgid "&GDB cmd:"
+msgctxt "@label:listbox"
+msgid "&GDB command:"
+msgstr "GDB 指令(&G)："
+
+#: gdboutputwidget.cpp:63
+#, fuzzy, kde-format
+#| msgid "Pause execution of the app to enter gdb commands"
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter GDB commands"
+msgstr "暫停執行應用程式，以輸入 gdb 指令"
+
+#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#, fuzzy, kde-format
+#| msgid "Show Internal Commands"
+msgctxt "@action:inmenu"
+msgid "Show Internal Commands"
+msgstr "顯示內部指令"
+
+#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#, fuzzy, kde-format
+#| msgid ""
+#| "Controls if commands issued internally by KDevelop will be shown or not."
+#| "<br>This option will affect only future commands, it will not add or "
+#| "remove already issued commands from the view."
+msgctxt "@info:tooltip"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"控制 KDevelop 內部產生的指令是否要顯示。<br/> 這個選項只會影響以後的指令，而"
+"不會新增或移除任何已產生的指令。"
+
+#: gdboutputwidget.cpp:381
+#, fuzzy, kde-format
+#| msgid "Copy All"
+msgctxt "@action:inmenu"
+msgid "Copy All"
+msgstr "全部複製"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevgdbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "除錯器工具列"
+
+#: memviewdlg.cpp:66
+#, fuzzy, kde-format
+#| msgid "Start:"
+msgctxt "@label:textbox"
+msgid "Start:"
+msgstr "開啟："
+
+#: memviewdlg.cpp:69
+#, fuzzy, kde-format
+#| msgid "Amount:"
+msgctxt "@label:textbox"
+msgid "Amount:"
+msgstr "數量："
+
+#: memviewdlg.cpp:96
+#, fuzzy, kde-format
+#| msgid "Memory view"
+msgctxt "@title:window"
+msgid "Memory View"
+msgstr "記憶體檢視"
+
+#: memviewdlg.cpp:223
+#, kde-format
+msgid "%2 (1 byte)"
+msgid_plural "%2 (%1 bytes)"
+msgstr[0] "%2 (%1 位元組)"
+
+#: memviewdlg.cpp:262
+#, fuzzy, kde-format
+#| msgid "&Reload"
+msgctxt "@action::inmenu"
+msgid "&Reload"
+msgstr "重新載入(&R)"
+
+#: memviewdlg.cpp:271
+#, fuzzy, kde-format
+#| msgid "&Format"
+msgctxt "@title:menu"
+msgid "&Format"
+msgstr "格式化(&F)"
+
+#: memviewdlg.cpp:274
+#, fuzzy, kde-format
+#| msgid "&Binary"
+msgctxt "@item:inmenu display format"
+msgid "&Binary"
+msgstr "二進位(&B)"
+
+#: memviewdlg.cpp:279
+#, fuzzy, kde-format
+#| msgid "&Octal"
+msgctxt "@item:inmenu display format"
+msgid "&Octal"
+msgstr "八進位(&O)"
+
+#: memviewdlg.cpp:284
+#, fuzzy, kde-format
+#| msgid "&Decimal"
+msgctxt "@item:inmenu display format"
+msgid "&Decimal"
+msgstr "十進位(&D)"
+
+#: memviewdlg.cpp:289
+#, fuzzy, kde-format
+#| msgid "&Hexadecimal"
+msgctxt "@item:inmenu display format"
+msgid "&Hexadecimal"
+msgstr "十六進位(&H)"
+
+#: memviewdlg.cpp:303
+#, fuzzy, kde-format
+#| msgid "&Grouping"
+msgctxt "@title:menu"
+msgid "&Grouping"
+msgstr "群組(&G)"
+
+#: memviewdlg.cpp:306
+#, fuzzy, kde-format
+#| msgid "&0"
+msgctxt "@item:inmenu no byte grouping"
+msgid "&0"
+msgstr "&0"
+
+#: memviewdlg.cpp:311
+#, fuzzy, kde-format
+#| msgid "&1"
+msgctxt "@item:inmenu byte group size"
+msgid "&1"
+msgstr "&1"
+
+#: memviewdlg.cpp:316
+#, fuzzy, kde-format
+#| msgid "&2"
+msgctxt "@item:inmenu byte group size"
+msgid "&2"
+msgstr "&2"
+
+#: memviewdlg.cpp:321
+#, fuzzy, kde-format
+#| msgid "&4"
+msgctxt "@item:inmenu byte group size"
+msgid "&4"
+msgstr "&4"
+
+#: memviewdlg.cpp:326
+#, fuzzy, kde-format
+#| msgid "&8"
+msgctxt "@item:inmenu byte group size"
+msgid "&8"
+msgstr "&8"
+
+#: memviewdlg.cpp:331
+#, fuzzy, kde-format
+#| msgid "1&6"
+msgctxt "@item:inmenu byte group size"
+msgid "1&6"
+msgstr "1&6"
+
+#: memviewdlg.cpp:344
+#, fuzzy, kde-format
+#| msgid "Write changes"
+msgctxt "@action:inmenu"
+msgid "Write Changes"
+msgstr "寫入變更"
+
+#: memviewdlg.cpp:348
+#, fuzzy, kde-format
+#| msgid "Change memory range"
+msgctxt "@action:inmenu"
+msgid "Change Memory Range"
+msgstr "改變記憶體範圍"
+
+#: memviewdlg.cpp:352
+#, fuzzy, kde-format
+#| msgid "Close this view"
+msgctxt "@action:inmenu"
+msgid "Close View"
+msgstr "關閉此檢視"
+
+#: memviewdlg.cpp:419
+#, fuzzy, kde-format
+#| msgid "Memory viewer"
+msgctxt "@title:window"
+msgid "Memory Viewer"
+msgstr "記憶體檢視器"
+
+#: memviewdlg.cpp:423
+#, fuzzy, kde-format
+#| msgid "New memory viewer"
+msgctxt "@action"
+msgid "New Memory Viewer"
+msgstr "新增記憶體檢視器"
+
+#: memviewdlg.cpp:424
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Open a new memory viewer."
+msgctxt "@info:tooltip"
+msgid "Open a new memory viewer"
+msgstr "開啟新的記憶體檢視器。"
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "gdb error"
+#~ msgstr "gdb 錯誤"
+
+#~ msgid "Startup error"
+#~ msgstr "啟動錯誤"
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "找不到除錯 Shell"

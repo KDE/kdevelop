@@ -1,0 +1,573 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevprojectmanagerview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2021-11-11 10:23+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cutcopypastehelpers.cpp:78
+#, kde-format
+msgid "Move %1 item into %2"
+msgid_plural "Move %1 items into %2"
+msgstr[0] "%1 item verplaatsen naar %2"
+msgstr[1] "%1 items verplaatsen in %2"
+
+#: cutcopypastehelpers.cpp:81
+#, kde-format
+msgid "Copy %1 item into %2"
+msgid_plural "Copy %1 items into %2"
+msgstr[0] "%1 item kopiëren naar %2"
+msgstr[1] "%1 items kopiëren in %2"
+
+#: cutcopypastehelpers.cpp:84
+#, kde-format
+msgid "Delete %1 item"
+msgid_plural "Delete %1 items"
+msgstr[0] "%1 item verwijderen"
+msgstr[1] "%1 items verwijderen"
+
+#: cutcopypastehelpers.cpp:93
+#, kde-format
+msgid "Move item %1 into %2"
+msgstr "Item %1 verplaatsen naar %2"
+
+#: cutcopypastehelpers.cpp:96
+#, kde-format
+msgid "Copy item %1 into %2"
+msgstr "%1 item kopiëren naar %2"
+
+#: cutcopypastehelpers.cpp:99
+#, kde-format
+msgid "Delete item %1"
+msgstr "Item %1 verwijderen"
+
+#: cutcopypastehelpers.cpp:108
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation succeeded"
+msgstr "Subbewerking is gelukt"
+
+#: cutcopypastehelpers.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation failed"
+msgstr "Subbewerking is mislukt"
+
+#: cutcopypastehelpers.cpp:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation skipped to prevent data loss"
+msgstr "Subbewerking overgeslagen om verlies van gegevens te voorkomen"
+
+#: cutcopypastehelpers.cpp:287
+#, kde-format
+msgctxt "@title:window"
+msgid "Paste Failed"
+msgstr "Plakken is mislukt"
+
+#: cutcopypastehelpers.cpp:323
+#, kde-format
+msgid ""
+"Failed to paste. Below is a list of suboperations that have been attempted."
+msgstr ""
+"Plakken is mislukt. Hier onder is een lijst met subbewerkingen die zijn "
+"geprobeerd."
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevprojectmanagerview.rc:26
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Hoofdwerkbalk"
+
+#: projectbuildsetwidget.cpp:123
+#, kde-format
+msgctxt "@title:menu"
+msgid "Build Set"
+msgstr "Bouwset"
+
+#: projectbuildsetwidget.cpp:124
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from Build Set"
+msgstr "Uit bouwset verwijderen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
+#: projectbuildsetwidget.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the top"
+msgstr "De geselecteerde items helemaal naar boven verplaatsen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
+#: projectbuildsetwidget.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items up"
+msgstr "De geselecteerde items omhoog verplaatsen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
+#: projectbuildsetwidget.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected item down"
+msgstr "Geselecteerd item omlaag verplaatsen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
+#: projectbuildsetwidget.ui:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the bottom"
+msgstr "De geselecteerde items helemaal naar onder verplaatsen"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#: projectbuildsetwidget.ui:177
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "These items will be built in the order they are listed."
+msgstr ""
+"Deze items zullen gebouwd worden in de volgorde waarin ze in de lijst staan."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectbuildsetwidget.ui:180
+#, kde-format
+msgctxt "@title"
+msgid "Build Sequence"
+msgstr "Sequentie bouwen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
+#: projectbuildsetwidget.ui:200
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add currently selected items from project tree view to the build set."
+msgstr ""
+"De nu geselecteerde items van de projectboomstructuur toevoegen aan de "
+"bouwset."
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
+#: projectbuildsetwidget.ui:216
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove currently selected item from the build set."
+msgstr "Het nu geselecteerde item uit de bouwset verwijderen."
+
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#, kde-format
+msgctxt "@title:window"
+msgid "Projects"
+msgstr "Projecten"
+
+#: projectmanagerview.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr "Huidige document lokaliseren"
+
+#: projectmanagerview.cpp:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locates the current document in the project tree and selects it."
+msgstr ""
+"Zoekt het huidige document in de boomstructuur van het project en selecteert "
+"het."
+
+#: projectmanagerview.cpp:98
+#, kde-format
+msgctxt "@action"
+msgid "Auto-Select Current Document"
+msgstr "Huidig document automatisch selecteren"
+
+#: projectmanagerview.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically select the current document in the project tree."
+msgstr ""
+"Het huidige document in de boomstructuur van het project automatisch "
+"selecteren."
+
+#: projectmanagerview.cpp:118
+#, kde-format
+msgctxt "@action"
+msgid "Show Build Targets"
+msgstr "Bouwdoelen tonen"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
+#: projectmanagerview.ui:33
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Project Overview"
+msgstr "Projectoverzicht"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
+#: projectmanagerview.ui:53
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Build Items:"
+msgstr "Bouwitems:"
+
+#: projectmanagerviewplugin.cpp:142
+#, kde-format
+msgctxt "@action"
+msgid "Build All Projects"
+msgstr "Alle projecten bouwen"
+
+#: projectmanagerviewplugin.cpp:147
+#, kde-format
+msgctxt "@action"
+msgid "Build Selection"
+msgstr "Selectie bouwen"
+
+#: projectmanagerviewplugin.cpp:148
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Build"
+msgstr "Bouwen"
+
+#: projectmanagerviewplugin.cpp:154
+#, kde-format
+msgctxt "@action"
+msgid "Install Selection"
+msgstr "Selectie installeren"
+
+#: projectmanagerviewplugin.cpp:155
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Install"
+msgstr "Installeren"
+
+#: projectmanagerviewplugin.cpp:161
+#, kde-format
+msgctxt "@action"
+msgid "Clean Selection"
+msgstr "Selectie opschonen"
+
+#: projectmanagerviewplugin.cpp:162
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Clean"
+msgstr "Opschonen"
+
+#: projectmanagerviewplugin.cpp:167
+#, kde-format
+msgctxt "@action"
+msgid "Configure Selection"
+msgstr "Selectie instellen"
+
+#: projectmanagerviewplugin.cpp:169
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Configure"
+msgstr "Configureren"
+
+#: projectmanagerviewplugin.cpp:174
+#, kde-format
+msgctxt "@action"
+msgid "Prune Selection"
+msgstr "Rommel verwijderen uit selectie"
+
+#: projectmanagerviewplugin.cpp:175
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Prune"
+msgstr "Rommel verwijderen"
+
+#: projectmanagerviewplugin.cpp:281
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create &File..."
+msgstr "&Bestand aanmaken..."
+
+#: projectmanagerviewplugin.cpp:287
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create F&older..."
+msgstr "&Map aanmaken..."
+
+#: projectmanagerviewplugin.cpp:294
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Build"
+msgstr "&Bouwen"
+
+#: projectmanagerviewplugin.cpp:298
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Install"
+msgstr "&Installeren"
+
+#: projectmanagerviewplugin.cpp:302
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Clean"
+msgstr "&Opschonen"
+
+#: projectmanagerviewplugin.cpp:306
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Set"
+msgstr "Aan bouwset &toevoegen"
+
+#: projectmanagerviewplugin.cpp:313
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&lose Project"
+msgid_plural "Close Projects"
+msgstr[0] "Project sluiten"
+msgstr[1] "Project instellen"
+
+#: projectmanagerviewplugin.cpp:319
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Reload"
+msgstr "He&rladen"
+
+#: projectmanagerviewplugin.cpp:350
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remo&ve"
+msgstr "&Verwijderen"
+
+#: projectmanagerviewplugin.cpp:354
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Re&name..."
+msgstr "Her&noemen..."
+
+#: projectmanagerviewplugin.cpp:360
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from &Target"
+msgstr "Uit &doel verwijderen"
+
+#: projectmanagerviewplugin.cpp:547
+#, kde-format
+msgctxt "@title:window"
+msgid "Create Folder in %1"
+msgstr "Map aanmaken in %1"
+
+#: projectmanagerviewplugin.cpp:548
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Folder name:"
+msgstr "Mapnaam:"
+
+#: projectmanagerviewplugin.cpp:600
+#, kde-format
+msgid "Do you really want to delete this item?"
+msgid_plural "Do you really want to delete these %1 items?"
+msgstr[0] "Wilt u dit item verwijderen?"
+msgstr[1] "Wilt u deze %1 items verwijderen?"
+
+#: projectmanagerviewplugin.cpp:603
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Files"
+msgstr "Bestanden verwijderen"
+
+#: projectmanagerviewplugin.cpp:656
+#, kde-format
+msgctxt "@window:title"
+msgid "Rename"
+msgstr "Hernoemen"
+
+#: projectmanagerviewplugin.cpp:657
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New name for '%1':"
+msgstr "Nieuwe naam voor '%1':"
+
+#: projectmanagerviewplugin.cpp:669
+#, kde-format
+msgid "There is already a file named '%1'"
+msgstr "Er is al een bestand met de naam '%1'"
+
+#: projectmanagerviewplugin.cpp:672
+#, kde-format
+msgid "Could not rename '%1'"
+msgstr "Kon '%1' niet hernoemen"
+
+#: projectmanagerviewplugin.cpp:675
+#, kde-format
+msgid "'%1' is not a valid file name"
+msgstr "'%1' is geen geldige bestandsnaam"
+
+#: projectmanagerviewplugin.cpp:689
+#, kde-format
+msgctxt "@title:window"
+msgid "Create File in %1"
+msgstr "Nieuw bestand aanmaken in %1"
+
+#: projectmanagerviewplugin.cpp:689
+#, kde-format
+msgctxt "@label:textbox"
+msgid "File name:"
+msgstr "Bestandsnaam:"
+
+#: projecttreeview.cpp:151
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Move Here"
+msgstr "Hierheen &verplaatsen"
+
+#: projecttreeview.cpp:157
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Here"
+msgstr "Hierheen &kopiëren"
+
+#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&ancel"
+msgstr "&Annuleren"
+
+#: projecttreeview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Target"
+msgstr "Aan bouwdoel &toevoegen"
+
+#: projecttreeview.cpp:348
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze with"
+msgstr "Analyseren met"
+
+#: projecttreeview.cpp:364
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Open Configuration..."
+msgstr "Configuratie openen..."
+
+#: vcsoverlayproxymodel.cpp:105
+#, kde-format
+msgctxt "Version control: Currently not on a branch"
+msgid "(no branch)"
+msgstr "(geen branch)"
+
+#~ msgid "Rename..."
+#~ msgstr "Hernoemen..."
+
+#~ msgid "&Add to Target"
+#~ msgstr "Aan doel &toevoegen"
+
+#~ msgid "Project Manager"
+#~ msgstr "Projectenbeheer"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "@action"
+#~ msgid "Build"
+#~ msgstr "Bouwen"
+
+#~ msgctxt "@action"
+#~ msgid "Install"
+#~ msgstr "Installeren"
+
+#~ msgctxt "@action"
+#~ msgid "Clean"
+#~ msgstr "Schoon"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Uitvoeren"
+
+#~| msgid "Projects"
+#~ msgid "Projects View"
+#~ msgstr "Projectenweergave"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "Project Management View"
+#~ msgstr "Projectbeheerweergave"
+
+#~ msgid "Toolview to do all the project management stuff"
+#~ msgstr "Weergave vanuit hulpmiddelen om alle projectbeheer te doen"
+
+#~ msgid "Filter..."
+#~ msgstr "Filter..."
+
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the project view for files and targets "
+#~ "for matching items.\n"
+#~ "Prepend patterns with an exclamation mark to negate them.\n"
+#~ "Separate different patterns with semicolons or spaces."
+#~ msgstr ""
+#~ "Jokerpatronen invoegen om de projectweergave te filteren op bestanden en "
+#~ "doelen voor overeenkomstige items.\n"
+#~ "Zet er een uitroepteken voor om ze om te keren.\n"
+#~ "Scheid verschillende patronen met dubbelepunt of spaties."
+
+#~ msgid "Project Selection"
+#~ msgstr "Selectie van project"
+
+#~ msgid "List of items to be built"
+#~ msgstr "Lijst met te bouwen items"
+
+#~ msgid "Project name: %1"
+#~ msgstr "Projectnaam: %1"
+
+#~ msgid "Project backend: %1"
+#~ msgstr "Projectbackend: %1"
+
+#~ msgid "Do you really to remove the file <i>%1</i>?"
+#~ msgstr "Wilt u het bestand <i>%1</i> verwijderen?"
+
+#, fuzzy
+#~ msgid "Version Control "
+#~ msgstr "Versiebeheer"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Cannot create folder."
+#~ msgstr "Map verwijderen"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Cannot remove folder."
+#~ msgstr "Map verwijderen"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Cannot create temporary file."
+#~ msgstr "Map verwijderen"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Cannot create file."
+#~ msgstr "Map verwijderen"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Map verwijderen"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Rename Folder"
+#~ msgstr "Map verwijderen"
+
+#, fuzzy
+#~| msgid "Remove Folder"
+#~ msgid "Cannot rename '%1' to '%2'."
+#~ msgstr "Map verwijderen"
+
+#~ msgid "Run"
+#~ msgstr "Uitvoeren"

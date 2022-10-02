@@ -1,0 +1,595 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-07-24 12:29+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.04.3\n"
+
+#: mesonbuilder.cpp:48
+#, kde-format
+msgid "    *** MESON ERROR ***\n"
+msgstr "    *** MESON FEL ***\n"
+
+#: mesonbuilder.cpp:75
+#, kde-format
+msgid "Failed to set the internally used Ninja builder"
+msgstr "Misslyckades ställa in det internt använda byggverktyget Ninja"
+
+#: mesonbuilder.cpp:78
+#, kde-format
+msgid "Failed to acquire the Ninja builder plugin"
+msgstr "Misslyckades erhålla insticksprogram för byggverktyget Ninja"
+
+#: mesonbuilder.cpp:141 mesonbuilder.cpp:265
+#, kde-format
+msgid "The current build directory for %1 is invalid"
+msgstr "Aktuell byggkatalog för %1 är ogiltig"
+
+#: mesonbuilder.cpp:164
+#, kde-format
+msgid ""
+"The directory '%1' is not empty and does not seem to be an already "
+"configured build directory"
+msgstr ""
+"Katalogen '%1' är inte tom och verkar inte vara en byggkatalog som redan är "
+"inställd."
+
+#: mesonbuilder.cpp:169
+#, kde-format
+msgid "The directory '%1' cannot be used as a meson build directory"
+msgstr "Katalogen '%1' kan inte användas som en meson-byggkatalog"
+
+#: mesonbuilder.cpp:172 mesonjobprune.cpp:55
+#, kde-format
+msgid ""
+"The current build configuration is broken, because the build directory is "
+"not specified"
+msgstr ""
+"Den aktuella bygginställningen är felaktig, eftersom byggkatalogen inte är "
+"angiven"
+
+#: mesonbuilder.cpp:176
+#, kde-format
+msgid ""
+"Congratulations: You have reached unreachable code!\n"
+"Please report a bug at https://bugs.kde.org/\n"
+"FILE: %1:%2"
+msgstr ""
+"Gratulerar: Du har kommit till kod som inte går att nå.\n"
+"Rapportera ett fel på https://bugs.kde.org/\n"
+"FIL: %1:%2"
+
+#: mesonbuilder.cpp:191 mesonbuilder.cpp:221
+#, kde-format
+msgid "Internal error: The buildsystem manager is not the MesonManager"
+msgstr "Internt fel: Byggsystemhanteraren är inte Meson-hanteraren"
+
+#: mesonbuilder.cpp:196 mesonbuilder.cpp:226
+#, kde-format
+msgid "Failed to create a new build directory"
+msgstr "Misslyckades skapa en ny byggkatalog"
+
+#: mesonjob.cpp:27 mesonjobprune.cpp:27
+#, kde-format
+msgid "Meson"
+msgstr "Meson"
+
+#: mesonjobprune.cpp:43
+#, kde-format
+msgid "The directory '%1' is already pruned"
+msgstr "Katalogen '%1' är redan beskuren"
+
+#: mesonjobprune.cpp:49
+#, kde-format
+msgid "The directory '%1' does not appear to be a meson build directory"
+msgstr "Katalogen '%1' verkar inte vara en meson-byggkatalog"
+
+#: mesonjobprune.cpp:50
+#, kde-format
+msgid "Aborting prune operation"
+msgstr "Avbryter beskärningsåtgärd"
+
+#: mesonjobprune.cpp:70
+#, kde-format
+msgid "Deleting contents of '%1'"
+msgstr "Tar bort innehållet i '%1'"
+
+#: mesonjobprune.cpp:76
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Borttagning lyckades **"
+
+#: mesonjobprune.cpp:78
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Borttagning misslyckades: %1 **"
+
+#: mesonmanager.cpp:64
+#, kde-format
+msgctxt "@title:window"
+msgid "Project Import Failed"
+msgstr "Projektimport misslyckades"
+
+#: mesonmanager.cpp:111
+#, kde-format
+msgid "Meson builder error: %1"
+msgstr "Meson byggfel: %1"
+
+#: mesonmanager.cpp:251
+#, kde-format
+msgid "Importing %1 failed because no build directory could be created."
+msgstr "Import av %1 misslyckades eftersom en byggkatalog inte kunde skapas."
+
+#: mintro/mesonintrospectjob.cpp:115
+#, kde-format
+msgid "Introspection file '%1' does not exist"
+msgstr "Introspektionsfilen '%1' finns inte"
+
+#: mintro/mesonintrospectjob.cpp:119
+#, kde-format
+msgid "Failed to open introspection file '%1'"
+msgstr "Misslyckades öppna introspektionsfilen '%1'"
+
+#: mintro/mesonintrospectjob.cpp:125
+#, kde-format
+msgid "In %1:%2: %3"
+msgstr "I %1:%2: %3"
+
+#: mintro/mesonintrospectjob.cpp:133
+#, kde-format
+msgid "The introspection file '%1' contains neither an array nor an object"
+msgstr "Introspektionsfilen '%1' innehåller varken ett fält eller ett objekt"
+
+#: mintro/mesonintrospectjob.cpp:154 rewriter/mesonrewriterjob.cpp:59
+#, kde-format
+msgid "%1 returned %2"
+msgstr "%1 returnerade %2"
+
+#: mintro/mesonintrospectjob.cpp:160 rewriter/mesonrewriterjob.cpp:70
+#, kde-format
+msgid "JSON parser error: %1"
+msgstr "JSON-tolkfel: %1"
+
+#: mintro/mesonintrospectjob.cpp:168
+#, kde-format
+msgid ""
+"The introspection output of '%1' contains neither an array nor an object"
+msgstr ""
+"Introspektionsdata från '%1' innehåller varken ett fält eller ett objekt"
+
+#: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
+#, kde-format
+msgid "The current build directory is invalid"
+msgstr "Aktuell byggkatalog är ogiltig"
+
+#: rewriter/mesonrewriterjob.cpp:42
+#, kde-format
+msgid "Failed to create a temporary file."
+msgstr "Misslyckades skapa en tillfällig fil."
+
+#: rewriter/mesonrewriterjob.cpp:74
+#, kde-format
+msgid "The rewriter output of '%1' is not an object"
+msgstr "Omskrivningsdata från '%1' är inte ett objekt"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_showAdvanced)
+#: settings/mesonadvancedsettings.ui:29
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced Configuration"
+msgstr "Visa avancerad inställning"
+
+#. i18n: ectx: property (title), widget (QGroupBox, container)
+#: settings/mesonadvancedsettings.ui:36
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced Configuration"
+msgstr "Avancerad inställning"
+
+#. i18n: ectx: property (text), widget (QLabel, l_mesonArgs)
+#: settings/mesonadvancedsettings.ui:44
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra Meson arguments:"
+msgstr "Extra Meson-argument:"
+
+#. i18n: ectx: property (text), widget (QLabel, l_backend)
+#: settings/mesonadvancedsettings.ui:57
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Meson backend:"
+msgstr "Meson-gränssnitt:"
+
+#. i18n: ectx: property (text), widget (QLabel, l_mesonExe)
+#: settings/mesonadvancedsettings.ui:70
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Meson executable:"
+msgstr "Meson körbart program:"
+
+#. i18n: ectx: property (toolTip), widget (KLineEdit, i_mesonArgs)
+#: settings/mesonadvancedsettings.ui:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Changing this will reset the build options."
+msgstr "Ändras detta nollställs byggalternativen"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_mesonExe)
+#: settings/mesonadvancedsettings.ui:93
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/mesonexecutable"
+msgstr "/sökväg/till/Meson-körbar-fil"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_hideAdvanced)
+#: settings/mesonadvancedsettings.ui:102
+#, kde-format
+msgctxt "@action:button"
+msgid "Hide Advanced Configuration"
+msgstr "Dölj avancerad inställning"
+
+#: settings/mesonconfigpage.cpp:177 settings/mesonrewriterpage.cpp:174
+#, kde-format
+msgid "Status: %1"
+msgstr "Status: %1"
+
+#: settings/mesonconfigpage.cpp:182
+#, kde-format
+msgid "The current build directory does not exist"
+msgstr "Aktuell byggkatalog finns inte"
+
+#: settings/mesonconfigpage.cpp:185
+#, kde-format
+msgid "The current build directory is empty"
+msgstr "Aktuell byggkatalog är tom"
+
+#: settings/mesonconfigpage.cpp:188
+#, kde-format
+msgid "Build directory configured"
+msgstr "Byggkatalog inställd"
+
+#: settings/mesonconfigpage.cpp:191
+#, kde-format
+msgid "This meson build directory is not fully configured"
+msgstr "Den här Meson-byggkatalogen är inte fullständigt inställd"
+
+#: settings/mesonconfigpage.cpp:197
+#, kde-format
+msgid "This directory does not seem to be a meson build directory"
+msgstr "Den här katalogen verkar inte vara en meson-byggkatalog"
+
+#: settings/mesonconfigpage.cpp:200
+#, kde-format
+msgid "Invalid build directory configuration (empty build directory string)"
+msgstr "Ogiltig inställning av byggkatalog (tom byggkatalogsträng)"
+
+#: settings/mesonconfigpage.cpp:203
+#, kde-format
+msgid "Something went very wrong. This is a bug"
+msgstr "Någonting gick allvarligt fel. Det är ett fel."
+
+#: settings/mesonconfigpage.cpp:218 settings/mesonrewriterpage.cpp:208
+#, kde-format
+msgid "No changes"
+msgstr "Inga ändringar"
+
+#: settings/mesonconfigpage.cpp:221 settings/mesonrewriterpage.cpp:211
+#, kde-format
+msgid "%1 option changed"
+msgid_plural "%1 options changed"
+msgstr[0] "%1 alternativ ändrat"
+msgstr[1] "%1 alternativ ändrade"
+
+#: settings/mesonconfigpage.cpp:332
+#, kde-format
+msgctxt "@title:tab"
+msgid "Meson"
+msgstr "Meson"
+
+#: settings/mesonconfigpage.cpp:337
+#, kde-format
+msgctxt "@title:tab"
+msgid "Meson Project Configuration"
+msgstr "Meson-projektinställning"
+
+#. i18n: ectx: property (text), widget (QToolButton, b_addDir)
+#. i18n: ectx: property (text), widget (QToolButton, b_rmDir)
+#: settings/mesonconfigpage.ui:41 settings/mesonconfigpage.ui:51
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, l_status)
+#. i18n: ectx: property (text), widget (QLabel, l_statusMessage)
+#: settings/mesonconfigpage.ui:71 settings/mesonnewbuilddir.ui:49
+#: settings/mesonrewriterpage.ui:187
+#, kde-format
+msgid "Status message..."
+msgstr "Statusmeddelande..."
+
+#. i18n: ectx: property (text), widget (QLabel, l_changed)
+#: settings/mesonconfigpage.ui:78 settings/mesonrewriterpage.ui:194
+#, kde-format
+msgid "Num changed"
+msgstr "Num ändrat"
+
+#: settings/mesonlisteditor.cpp:50
+#, kde-format
+msgid "<NEW>"
+msgstr "<NY>"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, MesonListEditor)
+#: settings/mesonlisteditor.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Dialogruta"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_new)
+#: settings/mesonlisteditor.ui:38
+#, kde-format
+msgid "New"
+msgstr "Ny"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_del)
+#: settings/mesonlisteditor.ui:48
+#, kde-format
+msgid "Delete"
+msgstr "Ta bort"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_first)
+#: settings/mesonlisteditor.ui:65
+#, kde-format
+msgid "First"
+msgstr "Första"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_up)
+#: settings/mesonlisteditor.ui:75
+#, kde-format
+msgid "Up"
+msgstr "Upp"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_down)
+#: settings/mesonlisteditor.ui:85
+#, kde-format
+msgid "Down"
+msgstr "Ner"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_last)
+#: settings/mesonlisteditor.ui:95
+#, kde-format
+msgid "Last"
+msgstr "Sista"
+
+#: settings/mesonnewbuilddir.cpp:39
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Anpassa en byggkatalog - %1"
+
+#: settings/mesonnewbuilddir.cpp:137
+#, kde-format
+msgid "Specified meson executable does not exist"
+msgstr "Angivet Meson körbart program finns inte"
+
+#: settings/mesonnewbuilddir.cpp:145
+#, kde-format
+msgid "Creating new build directory"
+msgstr "Skapar ny byggkatalog"
+
+#: settings/mesonnewbuilddir.cpp:148
+#, kde-format
+msgid "Using an already configured build directory"
+msgstr "Använder en redan inställd byggkatalog"
+
+#: settings/mesonnewbuilddir.cpp:151
+#, kde-format
+msgid "Using a broken meson build directory (this should be fine)"
+msgstr "Använder en felaktig Meson byggkatalog (ska inte vara ett problem)"
+
+#: settings/mesonnewbuilddir.cpp:154
+#, kde-format
+msgid "Cannot use specified directory"
+msgstr "Kan inte använda angiven katalog"
+
+#: settings/mesonnewbuilddir.cpp:157
+#, kde-format
+msgid "There are already files in the build directory"
+msgstr "Det finns redan filer i byggkatalogen"
+
+#: settings/mesonnewbuilddir.cpp:160
+#, kde-format
+msgid "The build directory field must not be empty"
+msgstr "Byggkatalogfältet får inte vara tomt"
+
+#: settings/mesonnewbuilddir.cpp:163
+#, kde-format
+msgid "You have reached unreachable code. This is a bug"
+msgstr "Du har kommit till kod som inte går att nå. Det är ett fel."
+
+#. i18n: ectx: property (text), widget (QLabel, l_buildDir)
+#: settings/mesonnewbuilddir.ui:19
+#, kde-format
+msgid "Build directory:"
+msgstr "Byggkatalog:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, i_buildDir)
+#: settings/mesonnewbuilddir.ui:32
+#, kde-format
+msgid "Full Path to the new build directory"
+msgstr "Fullständig sökväg till den nya byggkatalogen"
+
+#. i18n: ectx: property (text), widget (QLabel, l_name)
+#. i18n: ectx: property (text), widget (QLabel, l_dispProject)
+#: settings/mesonoptionbaseview.ui:41 settings/mesonrewriterinput.ui:41
+#: settings/mesonrewriterpage.ui:61
+#, kde-format
+msgid "Name:"
+msgstr "Namn:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, b_reset)
+#: settings/mesonoptionbaseview.ui:48
+#, kde-format
+msgid "Reset to default value"
+msgstr "Återställ till standardvärde"
+
+#. i18n: ectx: property (title), widget (QGroupBox, c_main)
+#: settings/mesonoptionsview.ui:32
+#, kde-format
+msgid "Meson Options"
+msgstr "Meson-alternativ"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_core)
+#: settings/mesonoptionsview.ui:45
+#, kde-format
+msgid "Core"
+msgstr "Kärna"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_backend)
+#: settings/mesonoptionsview.ui:102
+#, kde-format
+msgid "Backend"
+msgstr "Gränssnitt"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_base)
+#: settings/mesonoptionsview.ui:159
+#, kde-format
+msgid "Base"
+msgstr "Bas"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_compiler)
+#: settings/mesonoptionsview.ui:216
+#, kde-format
+msgid "Compiler"
+msgstr "Kompilator"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_directory)
+#: settings/mesonoptionsview.ui:273
+#, kde-format
+msgid "Directories"
+msgstr "Kataloger"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_user)
+#. i18n: ectx: attribute (title), widget (QWidget, t_project)
+#: settings/mesonoptionsview.ui:330 settings/mesonrewriterpage.ui:36
+#, kde-format
+msgid "Project"
+msgstr "Projekt"
+
+#. i18n: ectx: attribute (title), widget (QWidget, t_test)
+#: settings/mesonoptionsview.ui:387
+#, kde-format
+msgid "Testing"
+msgstr "Test"
+
+#: settings/mesonrewriterpage.cpp:179 settings/mesonrewriterpage.cpp:188
+#, kde-format
+msgid "Initializing GUI"
+msgstr "Initierar grafiskt användargränssnitt"
+
+#: settings/mesonrewriterpage.cpp:182
+#, kde-format
+msgid "Loading project data..."
+msgstr "Läser in projektdata..."
+
+#: settings/mesonrewriterpage.cpp:185
+#, kde-format
+msgid "Writing project data..."
+msgstr "Skriver projektdata..."
+
+#: settings/mesonrewriterpage.cpp:191
+#, kde-format
+msgid "Loading meson rewriter data failed"
+msgstr "Inläsning av Meson omskrivningsdata misslyckades"
+
+#: settings/mesonrewriterpage.cpp:406
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Additional Meson Option"
+msgstr "Välj ytterligare Meson-alternativ"
+
+#: settings/mesonrewriterpage.cpp:407
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Meson option to add:"
+msgstr "Välj Meson-alternativ att lägga till:"
+
+#: settings/mesonrewriterpage.cpp:438
+#, kde-format
+msgctxt "@title:tab"
+msgid "Project"
+msgstr "Projekt"
+
+#: settings/mesonrewriterpage.cpp:443
+#, kde-format
+msgctxt "@title:tab"
+msgid "Meson Project Settings"
+msgstr "Meson-projektinställningar"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, MesonRewriterPage)
+#: settings/mesonrewriterpage.ui:14
+#, kde-format
+msgid "Meson project settings"
+msgstr "Meson-projektinställningar"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, t_project)
+#: settings/mesonrewriterpage.ui:39
+#, kde-format
+msgid "Project settings"
+msgstr "Projektinställningar"
+
+#. i18n: ectx: property (text), widget (QLabel, l_project)
+#: settings/mesonrewriterpage.ui:74
+#, kde-format
+msgid "<html><head/><body><h3>projectName</h3></body></html>"
+msgstr "<html><head/><body><h3>projektnamn</h3></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, l_defOpts)
+#: settings/mesonrewriterpage.ui:112
+#, kde-format
+msgid "Project default options"
+msgstr "Projektets standardalternativ"
+
+#. i18n: ectx: property (text), widget (QPushButton, b_newOpt)
+#: settings/mesonrewriterpage.ui:152
+#, kde-format
+msgid "New Option"
+msgstr "Nytt alternativ"
+
+#~ msgid "Importing project failed"
+#~ msgstr "Misslyckades importera projekt"
+
+#~ msgid "Extra meson configuration arguments"
+#~ msgstr "Extra meson-inställningsargument"
+
+#~ msgid "Form"
+#~ msgstr "Formulär"
+
+#~ msgid "Basic configuration"
+#~ msgstr "Grundinställning"
+
+#~ msgid "Build type:"
+#~ msgstr "Byggtyp:"
+
+#~ msgid "Full path to the installation prefix"
+#~ msgstr "Fullständig sökväg till installationsprefix"
+
+#~ msgid "Installation prefix:"
+#~ msgstr "Installationsprefix:"
+
+#~ msgid "Build configuration"
+#~ msgstr "Bygginställning"
+
+#~ msgid "TODO -- Implement in separate UI file"
+#~ msgstr "ATT GÖRA -- Implementera i separat UI-fil"

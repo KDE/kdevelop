@@ -1,0 +1,512 @@
+# Lithuanian translations for kdevprojectmanagerview package.
+# This file is distributed under the same license as the kdevprojectmanagerview package.
+#
+# Andrius Štikonas <andrius@stikonas.eu>, 2009.
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevprojectmanagerview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2011-07-27 20:55+0300\n"
+"Last-Translator: Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 1.2\n"
+
+#: cutcopypastehelpers.cpp:78
+#, kde-format
+msgid "Move %1 item into %2"
+msgid_plural "Move %1 items into %2"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: cutcopypastehelpers.cpp:81
+#, kde-format
+msgid "Copy %1 item into %2"
+msgid_plural "Copy %1 items into %2"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: cutcopypastehelpers.cpp:84
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgid "Delete %1 item"
+msgid_plural "Delete %1 items"
+msgstr[0] "Pašalinti failus"
+msgstr[1] "Pašalinti failus"
+msgstr[2] "Pašalinti failus"
+msgstr[3] "Pašalinti failus"
+
+#: cutcopypastehelpers.cpp:93
+#, kde-format
+msgid "Move item %1 into %2"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:96
+#, kde-format
+msgid "Copy item %1 into %2"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:99
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgid "Delete item %1"
+msgstr "Pašalinti failus"
+
+#: cutcopypastehelpers.cpp:108
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation succeeded"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation failed"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:116
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Suboperation skipped to prevent data loss"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:287
+#, kde-format
+msgctxt "@title:window"
+msgid "Paste Failed"
+msgstr ""
+
+#: cutcopypastehelpers.cpp:323
+#, kde-format
+msgid ""
+"Failed to paste. Below is a list of suboperations that have been attempted."
+msgstr ""
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevprojectmanagerview.rc:26
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: projectbuildsetwidget.cpp:123
+#, kde-format
+msgctxt "@title:menu"
+msgid "Build Set"
+msgstr ""
+
+#: projectbuildsetwidget.cpp:124
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from Build Set"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
+#: projectbuildsetwidget.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the top"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
+#: projectbuildsetwidget.ui:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items up"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
+#: projectbuildsetwidget.ui:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected item down"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
+#: projectbuildsetwidget.ui:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Move the selected items to the bottom"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#: projectbuildsetwidget.ui:177
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "These items will be built in the order they are listed."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectbuildsetwidget.ui:180
+#, kde-format
+msgctxt "@title"
+msgid "Build Sequence"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
+#: projectbuildsetwidget.ui:200
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add currently selected items from project tree view to the build set."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
+#: projectbuildsetwidget.ui:216
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove currently selected item from the build set."
+msgstr ""
+
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#, fuzzy, kde-format
+#| msgid "Projects"
+msgctxt "@title:window"
+msgid "Projects"
+msgstr "Projektai"
+
+#: projectmanagerview.cpp:91
+#, kde-format
+msgctxt "@action"
+msgid "Locate Current Document"
+msgstr ""
+
+#: projectmanagerview.cpp:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Locates the current document in the project tree and selects it."
+msgstr ""
+
+#: projectmanagerview.cpp:98
+#, kde-format
+msgctxt "@action"
+msgid "Auto-Select Current Document"
+msgstr ""
+
+#: projectmanagerview.cpp:99
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically select the current document in the project tree."
+msgstr ""
+
+#: projectmanagerview.cpp:118
+#, kde-format
+msgctxt "@action"
+msgid "Show Build Targets"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
+#: projectmanagerview.ui:33
+#, fuzzy, kde-format
+#| msgid "Project Selection"
+msgctxt "@info:whatsthis"
+msgid "Project Overview"
+msgstr "Projekto pasirinkimas"
+
+#. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
+#: projectmanagerview.ui:53
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Build Items:"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:142
+#, fuzzy, kde-format
+#| msgid "Projects"
+msgctxt "@action"
+msgid "Build All Projects"
+msgstr "Projektai"
+
+#: projectmanagerviewplugin.cpp:147
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Build Selection"
+msgstr "Konfigūruoti pasirinkimą"
+
+#: projectmanagerviewplugin.cpp:148
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Build"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:154
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Install Selection"
+msgstr "Konfigūruoti pasirinkimą"
+
+#: projectmanagerviewplugin.cpp:155
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@action:intoolbar"
+msgid "Install"
+msgstr "Diegti"
+
+#: projectmanagerviewplugin.cpp:161
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Clean Selection"
+msgstr "Konfigūruoti pasirinkimą"
+
+#: projectmanagerviewplugin.cpp:162
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Clean"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:167
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Configure Selection"
+msgstr "Konfigūruoti pasirinkimą"
+
+#: projectmanagerviewplugin.cpp:169
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action:intoolbar"
+msgid "Configure"
+msgstr "Konfigūruoti pasirinkimą"
+
+#: projectmanagerviewplugin.cpp:174
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action"
+msgid "Prune Selection"
+msgstr "Konfigūruoti pasirinkimą"
+
+#: projectmanagerviewplugin.cpp:175
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Prune"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:281
+#, fuzzy, kde-format
+#| msgid "Create File"
+msgctxt "@action:inmenu"
+msgid "Create &File..."
+msgstr "Sukurti failą"
+
+#: projectmanagerviewplugin.cpp:287
+#, fuzzy, kde-format
+#| msgid "Create Folder"
+msgctxt "@action:inmenu"
+msgid "Create F&older..."
+msgstr "Sukurti aplanką"
+
+#: projectmanagerviewplugin.cpp:294
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Build"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:298
+#, fuzzy, kde-format
+#| msgid "Install"
+msgctxt "@action:inmenu"
+msgid "&Install"
+msgstr "Diegti"
+
+#: projectmanagerviewplugin.cpp:302
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Clean"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:306
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Set"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:313
+#, fuzzy, kde-format
+#| msgid "Close Project"
+#| msgid_plural "Close Projects"
+msgctxt "@action:inmenu"
+msgid "C&lose Project"
+msgid_plural "Close Projects"
+msgstr[0] "Užverti projektą"
+msgstr[1] "Užverti projektus"
+msgstr[2] "Užverti projektus"
+msgstr[3] "Užverti projektus"
+
+#: projectmanagerviewplugin.cpp:319
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Reload"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:350
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:inmenu"
+msgid "Remo&ve"
+msgstr "Pašalinti"
+
+#: projectmanagerviewplugin.cpp:354
+#, fuzzy, kde-format
+#| msgid "Rename..."
+msgctxt "@action:inmenu"
+msgid "Re&name..."
+msgstr "Pervadinti..."
+
+#: projectmanagerviewplugin.cpp:360
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Remove from &Target"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:547
+#, fuzzy, kde-format
+#| msgid "Create Folder in %1"
+msgctxt "@title:window"
+msgid "Create Folder in %1"
+msgstr "Sukurti aplanką %1"
+
+#: projectmanagerviewplugin.cpp:548
+#, fuzzy, kde-format
+#| msgid "Folder Name"
+msgctxt "@label:textbox"
+msgid "Folder name:"
+msgstr "Aplanko pavadinimas"
+
+#: projectmanagerviewplugin.cpp:600
+#, kde-format
+msgid "Do you really want to delete this item?"
+msgid_plural "Do you really want to delete these %1 items?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: projectmanagerviewplugin.cpp:603
+#, fuzzy, kde-format
+#| msgid "Delete Files"
+msgctxt "@title:window"
+msgid "Delete Files"
+msgstr "Pašalinti failus"
+
+#: projectmanagerviewplugin.cpp:656
+#, fuzzy, kde-format
+#| msgid "Rename"
+msgctxt "@window:title"
+msgid "Rename"
+msgstr "Pervadinti"
+
+#: projectmanagerviewplugin.cpp:657
+#, kde-format
+msgctxt "@label:textbox"
+msgid "New name for '%1':"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:669
+#, kde-format
+msgid "There is already a file named '%1'"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:672
+#, kde-format
+msgid "Could not rename '%1'"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:675
+#, kde-format
+msgid "'%1' is not a valid file name"
+msgstr ""
+
+#: projectmanagerviewplugin.cpp:689
+#, fuzzy, kde-format
+#| msgid "Create File in %1"
+msgctxt "@title:window"
+msgid "Create File in %1"
+msgstr "Sukurti failą %1"
+
+#: projectmanagerviewplugin.cpp:689
+#, fuzzy, kde-format
+#| msgid "File Name"
+msgctxt "@label:textbox"
+msgid "File name:"
+msgstr "Failo pavadinimas"
+
+#: projecttreeview.cpp:151
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Move Here"
+msgstr ""
+
+#: projecttreeview.cpp:157
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Here"
+msgstr ""
+
+#: projecttreeview.cpp:163 projecttreeview.cpp:224
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "C&ancel"
+msgstr ""
+
+#: projecttreeview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Add to Build Target"
+msgstr ""
+
+#: projecttreeview.cpp:348
+#, kde-format
+msgctxt "@title:menu"
+msgid "Analyze with"
+msgstr ""
+
+#: projecttreeview.cpp:364
+#, fuzzy, kde-format
+#| msgid "Configure Selection"
+msgctxt "@action:inmenu"
+msgid "Open Configuration..."
+msgstr "Konfigūruoti pasirinkimą"
+
+#: vcsoverlayproxymodel.cpp:105
+#, kde-format
+msgctxt "Version control: Currently not on a branch"
+msgid "(no branch)"
+msgstr ""
+
+#~ msgid "Rename..."
+#~ msgstr "Pervadinti..."
+
+#, fuzzy
+#~| msgid "Projects"
+#~ msgid "Project Manager"
+#~ msgstr "Projektai"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Install"
+#~ msgctxt "@action"
+#~ msgid "Install"
+#~ msgstr "Diegti"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Vykdyti"
+
+#, fuzzy
+#~| msgid "Projects"
+#~ msgid "Projects View"
+#~ msgstr "Projektai"

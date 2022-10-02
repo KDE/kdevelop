@@ -1,0 +1,83 @@
+# translation of kdevclassbrowser.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2011, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclassbrowser\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-06-11 03:32+0300\n"
+"Last-Translator: Marek Laane <bald@smail.ee>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "Classes"
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Klassid"
+
+#: classbrowserplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Find in &Class Browser"
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Otsi &klassibrauseris"
+
+#: classwidget.cpp:72
+#, fuzzy, kde-format
+#| msgid "S&earch:"
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "&Otsing:"
+
+#: classwidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Class Browser"
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Klassibrauser"
+
+#~ msgid "All projects classes"
+#~ msgstr "Kõigi projektide klassid"
+
+#~ msgid "Base classes"
+#~ msgstr "Baasklassid"
+
+#~ msgid "Derived classes"
+#~ msgstr "Tuletatud klassid"
+
+#~ msgid "Classes in project %1"
+#~ msgstr "Projekti %1 klassid"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid ""
+#~ "This plugin provides a browsable model of the currently parsed classes "
+#~ "and other items."
+#~ msgstr ""
+#~ "See plugin pakub parajasti parsitavate klasside ja teiste elementide "
+#~ "sirvitavat mudelit."
+
+#~ msgid "Browser for all known classes"
+#~ msgstr "Kõigi tuntud klasside brauser"
+
+#~ msgid "Show &Declaration"
+#~ msgstr "Näita &deklaratsiooni"
+
+#~ msgid "Show De&finition"
+#~ msgstr "Näita de&finitsiooni"

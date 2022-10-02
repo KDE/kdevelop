@@ -1,0 +1,82 @@
+# Irish translation of kdevcodeutils
+# Copyright (C) 2011 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevcodeutils package.
+# Kevin Scannell <kscanne@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcodeutils\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2011-12-28 12:28-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, fuzzy, kde-format
+#| msgid "Document Declaration"
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr "Doiciméadaigh Fógra"
+
+#: codeutilsplugin.cpp:50
+#, fuzzy, kde-format
+#| msgid "Alt+Shift+d"
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr "Alt+Shift+d"
+
+#: codeutilsplugin.cpp:52
+#, fuzzy, kde-format
+#| msgid "Add Doxygen skeleton for declaration under cursor."
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr "Cruthaigh creatlach Doxygen le haghaidh an fhógra faoin chúrsóir."
+
+#: codeutilsplugin.cpp:55
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr ""
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#~ msgctxt "@title:menu"
+#~ msgid "Code"
+#~ msgstr "Cód"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kevin Scannell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kscanne@gmail.com"
+
+#, fuzzy
+#~| msgid "Code Utilities"
+#~ msgid "Code Utils"
+#~ msgstr "Uirlisí Ríomhchláraithe"
+
+#~ msgid "Milian Wolff"
+#~ msgstr "Milian Wolff"
+
+#~ msgid "Author"
+#~ msgstr "Údar"
+
+#~ msgid "Various utilities that help you code faster."
+#~ msgstr "Uirlisí éagsúla a chabhraíonn leat ríomhchlárú níos tapúla."
+
+#~ msgid "Defaults to %1."
+#~ msgstr "Réamhshocrú: %1."

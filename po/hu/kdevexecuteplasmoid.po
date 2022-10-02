@@ -1,0 +1,191 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-07-05 22:55+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, fuzzy, kde-format
+#| msgid "Configure Plasmoid Execution"
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Plasmoid végrehajtás beállítása"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Egy plasmoid megjelenítése"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Plasmoid indító"
+
+#: plasmoidexecutionconfig.cpp:183
+#, fuzzy, kde-format
+#| msgid "Couldn't resolve the dependency: %1"
+msgid "Could not resolve the dependency: %1"
+msgstr "Nem sikerült feloldani a függőséget: %1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, fuzzy, kde-format
+#| msgid "Plasmoids"
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plasmoidok"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Plasmoid"
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoid"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Path or name:"
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Útvonal vagy név:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Viselkedés"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, fuzzy, kde-format
+#| msgid "Form Factor"
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Alaktényező"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, fuzzy, kde-format
+#| msgid "Theme"
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Téma"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Függőségek"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "Célok:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Plasmoid megjelenítő"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Kilőtt **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Sikertelen ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Befejeződött ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr ""
+
+#~ msgid "planar"
+#~ msgstr "síkbeli"
+
+#~ msgid "horizontal"
+#~ msgstr "vízszintes"
+
+#~ msgid "vertical"
+#~ msgstr "függőleges"
+
+#~ msgid "mediacenter"
+#~ msgstr "médiaközpont"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Írjon be egy függőséget a listához való hozzáadáshoz"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Hozzáadja a listázott célt a függőségi listához."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "A közvetlenül függő célok listája."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Ez a lista olyan célokat tartalmazhat, amelyektől az alkalmazás nem függ "
+#~ "közvetlenül, de egy műveletnek szüksége van rá az alkalmazás futtatása "
+#~ "előtt."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Eltávolítja a kijelölt függőségeket a listáról."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Függőség felfelé mozgatása a listában."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Lefelé mozgatja a kijelölt függőségeket a listában."
+
+#~ msgid "Ninja failed to compile %1"
+#~ msgstr "A Ninja nem tudta lefordítani: %1"
+
+#~ msgid "Execute plasmoid support"
+#~ msgstr "Plasmoid támogatás végrehajtása"
+
+#~ msgid "Allows running of plasmoids"
+#~ msgstr "Lehetővé teszi plasmoidok futtatását"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Author"
+#~ msgstr "Szerző"

@@ -1,0 +1,1071 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Vincent Pinon <vincent.pinon@laposte.net>, 2013.
+# Vincent PINON <vpinon@april.org>, 2014.
+# Simon Depiets <sdepiets@gmail.com>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2018-06-08 11:25+0800\n"
+"Last-Translator: Simon Depiets <sdepiets@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::WizardPage)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:14
+#, kde-format
+msgid "Choose the Location"
+msgstr "Choisissez l'emplacement"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:20
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:55
+#, kde-format
+msgid "Name:"
+msgstr "Nom :"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/filewizardpage.ui:30
+#, kde-format
+msgid "Path:"
+msgstr "Emplacement :"
+
+#. i18n: ectx: property (text), widget (QLabel, classNameLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:15
+#, kde-format
+msgid "&Class name:"
+msgstr "Nom de &classe :"
+
+#. i18n: ectx: property (text), widget (QLabel, baseClassLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:28
+#, kde-format
+msgid "&Base class:"
+msgstr "Classe de &base :"
+
+#. i18n: ectx: property (text), widget (QLabel, classTypeLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:48
+#, kde-format
+msgid "&Type information:"
+msgstr "Information de &type :"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:59
+#, kde-format
+msgid "None"
+msgstr "Aucun"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:64
+#, kde-format
+msgid "Inherits QObject"
+msgstr "Hérite de QObject"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:69
+#, kde-format
+msgid "Inherits QWidget"
+msgstr "Hérite de QWidget"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:74
+#, kde-format
+msgid "Inherits QDeclarativeItem - Qt Quick 1"
+msgstr "Hérite de QDeclarativeItem - Qt Quick 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:79
+#, kde-format
+msgid "Inherits QQuickItem - Qt Quick 2"
+msgstr "Hérite de QQuickItem - Qt Quick 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, classTypeComboBox)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:84
+#, kde-format
+msgid "Based on QSharedData"
+msgstr "Basé sur QSharedData"
+
+#. i18n: ectx: property (text), widget (QLabel, headerLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:124
+#, kde-format
+msgid "&Header file:"
+msgstr "Fichier &en-tête :"
+
+#. i18n: ectx: property (text), widget (QLabel, sourceLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:137
+#, kde-format
+msgid "&Source file:"
+msgstr "Fichier &source :"
+
+#. i18n: ectx: property (text), widget (QLabel, generateFormLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:150
+#, kde-format
+msgid "&Generate form:"
+msgstr "&Générer un formulaire :"
+
+#. i18n: ectx: property (text), widget (QLabel, formLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:167
+#, kde-format
+msgid "&Form file:"
+msgstr "Fichier &formulaire :"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/newclasswidget.ui:180
+#, kde-format
+msgid "&Path:"
+msgstr "&Emplacement :"
+
+#. i18n: ectx: property (title), widget (QWizardPage, Utils::ProjectIntroPage)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:14
+#, kde-format
+msgid "Introduction and Project Location"
+msgstr "Introduction et emplacement du projet"
+
+#. i18n: ectx: property (text), widget (QLabel, pathLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:65
+#, kde-format
+msgid "Create in:"
+msgstr "Créer dans :"
+
+#. i18n: ectx: property (text), widget (QCheckBox, projectsDirectoryCheckBox)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:91
+#, kde-format
+msgid "Use as default project location"
+msgstr "Utiliser comme emplacement de projet par défaut"
+
+#. i18n: ectx: property (text), widget (QLabel, projectLabel)
+#: 3rdparty/qtcreator-libs/utils/projectintropage.ui:98
+#, kde-format
+msgid "Project:"
+msgstr "Projet :"
+
+#: duchain/declarationbuilder.cpp:359
+#, kde-format
+msgid ""
+"Possible type mismatch between the argument type (%1) and the value passed "
+"as argument (%2)"
+msgstr ""
+"Incohérence possible entre le type de l'argument (%1) et la valeur passée en "
+"argument (%2)"
+
+#: duchain/declarationbuilder.cpp:1008
+#, kde-format
+msgid "Module not found, some types or properties may not be recognized"
+msgstr ""
+"Module introuvable, il est possible que certains types ou propriétés ne "
+"soient pas reconnus"
+
+#: duchain/declarationbuilder.cpp:1203
+#, kde-format
+msgid "Mismatch between the value type (%1) and the property type (%2)"
+msgstr ""
+"Incohérence entre le type de la valeur (%1) et le type de la propriété (%2)"
+
+#: navigation/propertypreviewwidget.cpp:163
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Erreur lors du chargement du fichier QML : %1"
+
+#: navigation/propertywidgets/Duration.qml:21
+#, kde-format
+msgid "Duration in milliseconds"
+msgstr "Durée en millisecondes"
+
+#: navigation/propertywidgets/FontFamily.qml:30
+#: navigation/propertywidgets/FontSize.qml:39
+#, kde-format
+msgctxt "example text to test a font"
+msgid "The lazy dog jumps over<br>the quick brown fox."
+msgstr "Voix ambiguë d'un cœur qui,<br>au zéphyr, préfère les jattes de kiwis."
+
+#: navigation/propertywidgets/FontFamily.qml:37
+#, kde-format
+msgid "Font family"
+msgstr "Famille de polices"
+
+#: navigation/propertywidgets/FontSize.qml:22
+#, kde-format
+msgid "Font size"
+msgstr "Taille de la police"
+
+#: navigation/propertywidgets/Height.qml:25
+#, kde-format
+msgid "Height of an item in pixels"
+msgstr "Hauteur d'un élément en pixels"
+
+#: navigation/propertywidgets/Opacity.qml:21
+#, kde-format
+msgid "Opacity of an item"
+msgstr "Opacité d'un élément"
+
+#: navigation/propertywidgets/Spacing.qml:32
+#, kde-format
+msgid "Spacing between items"
+msgstr "Espace entre les éléments"
+
+#: navigation/propertywidgets/Width.qml:24
+#, kde-format
+msgid "Width of an item in pixels"
+msgstr "Largeur d'un élément en pixels"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Vincent Pinon"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "vincent.pinon@laposte.net"
+
+#~ msgid "Subversion Submit"
+#~ msgstr "Soumission Subversion"
+
+#~ msgid "Descriptio&n"
+#~ msgstr "Descriptio&n"
+
+#~ msgid "F&iles"
+#~ msgstr "F&ichiers"
+
+#~ msgid "Check a&ll"
+#~ msgstr "&Tout cocher"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal syntax for exponential number"
+#~ msgstr "Syntaxe illégale pour un nombre exponentiel"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Stray newline in string literal"
+#~ msgstr "Omettre le retour à la ligne dans un littéral de chaîne"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal unicode escape sequence"
+#~ msgstr "Séquence d'échappement unicode illégale"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Illegal hexadecimal escape sequence"
+#~ msgstr "Séquence d'échappement hexadécimale illégale"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Octal escape sequences are not allowed"
+#~ msgstr "Les séquence d'échappement octales ne sont pas permises"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unclosed string at end of line"
+#~ msgstr "Chaîne non fermée à la fin de la ligne"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Decimal numbers can't start with '0'"
+#~ msgstr "Les nombres décimaux ne doivent pas commencer par « 0 »"
+
+#~ msgctxt "QmlParser"
+#~ msgid "At least one hexadecimal digit is required after '0%1'"
+#~ msgstr "Au moins un chiffre hexadécimal doit apparaître après « 0%1 »"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Invalid regular expression flag '%0'"
+#~ msgstr "Drapeau d'expression rationnelle « %0 » non valable"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression backslash sequence"
+#~ msgstr ""
+#~ "Séquence à barre oblique inversée non terminée dans l'expression "
+#~ "rationnelle"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression class"
+#~ msgstr "Classe d'expression rationnelle non terminée"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unterminated regular expression literal"
+#~ msgstr "Littéral d'expression rationnelle non terminé"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Syntax error"
+#~ msgstr "Erreur de syntaxe"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Unexpected token `%1'"
+#~ msgstr "Marque inattendue « %1 »"
+
+#~ msgctxt "QmlParser"
+#~ msgid "Expected token `%1'"
+#~ msgstr "Marque attendue « %1 »"
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Refusing to remove root directory."
+#~ msgstr "Refus de supprimer le dossier racine."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Refusing to remove your home directory."
+#~ msgstr "Refus de supprimer votre dossier personnel."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to remove directory \"%1\"."
+#~ msgstr "Impossible de supprimer le dossier « %1 »."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to remove file \"%1\"."
+#~ msgstr "Impossible de supprimer le fichier « %1 »."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Failed to create directory \"%1\"."
+#~ msgstr "Impossible de créer le dossier « %1 »."
+
+#~ msgctxt "Utils::FileUtils"
+#~ msgid "Could not copy file \"%1\" to \"%2\"."
+#~ msgstr "Impossible de copier le fichier « %1 » vers « %2 »."
+
+#~ msgid "Cannot open %1 for reading: %2"
+#~ msgstr "Impossible d'ouvrir le ficher « %1 » en lecture : %2"
+
+#~ msgid "Cannot read %1: %2"
+#~ msgstr "Impossible de lire %1 : %2"
+
+#~ msgid "File Error"
+#~ msgstr "Erreur de fichier"
+
+#~ msgid "Cannot write file %1. Disk full?"
+#~ msgstr "Impossible d'écrire le fichier %1. Disque plein ?"
+
+#~ msgid "Cannot overwrite file %1: %2"
+#~ msgstr "Impossible d'écraser le ficher %1 : %2"
+
+#~ msgid "Cannot create file %1: %2"
+#~ msgstr "Impossible de créer le fichier %1 : %2"
+
+#~ msgid "Cannot create temporary file in %1: %2"
+#~ msgstr "Impossible de créer un fichier temporaire dans %1 : %2"
+
+#~ msgid "QML/JS Support"
+#~ msgstr "Prise en charge de QML/JS"
+
+#~ msgid "Support for QML and JS Languages"
+#~ msgstr "Prise en charge des langages QML et JS"
+
+#~ msgid "expected two numbers separated by a dot"
+#~ msgstr "Deux nombres séparés par un point sont attendus"
+
+#~ msgid "package import requires a version number"
+#~ msgstr "L'import de paquet requiert un numéro de versio"
+
+#~ msgid "'int' or 'real'"
+#~ msgstr "« int » ou « real »"
+
+#~ msgid ""
+#~ "Errors while loading qmltypes from %1:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Erreurs au chargement de qmltypes depuis %1:\n"
+#~ "%2"
+
+#~ msgid ""
+#~ "Warnings while loading qmltypes from %1:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Avertissements au chargement de qmltypes depuis %1:\n"
+#~ "%2"
+
+#~ msgid "file or directory not found"
+#~ msgstr "Impossible de trouver le fichier ou le dossier"
+
+#~ msgid ""
+#~ "QML module not found\n"
+#~ "\n"
+#~ "Import paths:\n"
+#~ "%1\n"
+#~ "\n"
+#~ "For qmake projects, use the QML_IMPORT_PATH variable to add import "
+#~ "paths.\n"
+#~ "For qmlproject projects, use the importPaths property to add import paths."
+#~ msgstr ""
+#~ "Module QML non trouvé\n"
+#~ "\n"
+#~ "Emplacements d'import :\n"
+#~ "%1\n"
+#~ "\n"
+#~ "Pour les projets qmake, utilisez la variable QML_IMPORT_PATH pour ajouter "
+#~ "des emplacements d'import.\n"
+#~ "Pour les projets qmlproject , utilisez la propriété importPaths pour "
+#~ "ajouter des emplacements d'import."
+
+#~ msgid ""
+#~ "QML module contains C++ plugins, currently reading type information..."
+#~ msgstr ""
+#~ "Le module QML contient des modules complémentaires C++, lecture des "
+#~ "informations de type..."
+
+#~ msgid "do not use '%1' as a constructor"
+#~ msgstr "N'utilisez pas « %1 » comme constructeur"
+
+#~ msgid "invalid value for enum"
+#~ msgstr "Valeur non valable pour l'enum"
+
+#~ msgid "enum value must be a string or a number"
+#~ msgstr "enum doit être une chaîne ou un nombre"
+
+#~ msgid "number value expected"
+#~ msgstr "Valeur numérique attendue"
+
+#~ msgid "boolean value expected"
+#~ msgstr "Valeur booléenne attendue"
+
+#~ msgid "string value expected"
+#~ msgstr "Valeur chaîne attendue"
+
+#~ msgid "invalid URL"
+#~ msgstr "URL non valable"
+
+#~ msgid "file or directory does not exist"
+#~ msgstr "Le fichier ou le dossier n'existe pas"
+
+#~ msgid "invalid color"
+#~ msgstr "Couleur non valable"
+
+#~ msgid "anchor line expected"
+#~ msgstr "Ligne d'ancrage attendue"
+
+#~ msgid "duplicate property binding"
+#~ msgstr "liaison de propriété dupliquée"
+
+#~ msgid "id expected"
+#~ msgstr "identifiant attendue"
+
+#~ msgid "invalid id"
+#~ msgstr "identifiant non valable"
+
+#~ msgid "duplicate id"
+#~ msgstr "identifiant dupliqué"
+
+#~ msgid "invalid property name '%1'"
+#~ msgstr "nom de propriété « %1 » non valable"
+
+#~ msgid "'%1' does not have members"
+#~ msgstr "« %1 » n'a pas de membres"
+
+#~ msgid "'%1' is not a member of '%2'"
+#~ msgstr "« %1 » n'est pas un membre de « %2 »"
+
+#~ msgid "assignment in condition"
+#~ msgstr "affectation dans la condition"
+
+#~ msgid "unterminated non-empty case block"
+#~ msgstr "bloc de case non vide non terminé"
+
+#~ msgid "do not use 'eval'"
+#~ msgstr "N'utilisez pas « eval »"
+
+#~ msgid "unreachable"
+#~ msgstr "inatteignable"
+
+#~ msgid "do not use 'with'"
+#~ msgstr "N'utilisez pas « with »"
+
+#~ msgid "do not use comma expressions"
+#~ msgstr "N'utilisez pas d'expressions à virgule"
+
+#~ msgid "'%1' is already a formal parameter"
+#~ msgstr "« %1 » est déjà un paramètre formel"
+
+#~ msgid "unnecessary message suppression"
+#~ msgstr "suppression de messages non nécessaires"
+
+#~ msgid "'%1' is already a function"
+#~ msgstr "« %1 » est déjà une fonction"
+
+#~ msgid "var '%1' is used before its declaration"
+#~ msgstr "la variable « %1 » est utilisée avant sa déclaration"
+
+#~ msgid "'%1' is already a var"
+#~ msgstr "« %1 » est déjà une variable"
+
+#~ msgid "'%1' is declared more than once"
+#~ msgstr "« %1 » est déclaré plus d'une fois"
+
+#~ msgid "function '%1' is used before its declaration"
+#~ msgstr "la fonction « %1 » est utilisée avant sa déclaration"
+
+#~ msgid ""
+#~ "the 'function' keyword and the opening parenthesis should be separated by "
+#~ "a single space"
+#~ msgstr ""
+#~ "le mot clé « function » et la parenthèse ouvrante devraient être séparés "
+#~ "par un seul espace"
+
+#~ msgid "do not use stand-alone blocks"
+#~ msgstr "N'utilisez pas de blocs autonomes"
+
+#~ msgid "do not use void expressions"
+#~ msgstr "N'utilisez pas d'expressions void"
+
+#~ msgid "confusing pluses"
+#~ msgstr "plus peu clairs"
+
+#~ msgid "confusing minuses"
+#~ msgstr "moins peu clairs"
+
+#~ msgid "declare all function vars on a single line"
+#~ msgstr "déclarer toutes les variables d'une fonction sur une seule ligne"
+
+#~ msgid "unnecessary parentheses"
+#~ msgstr "parenthèses non nécessaires"
+
+#~ msgid "== and != may perform type coercion, use === or !== to avoid"
+#~ msgstr ""
+#~ "== et != peuvent appliquer une contrainte de type, utilisez === ou !== "
+#~ "pour l'éviter"
+
+#~ msgid ""
+#~ "expression statements should be assignments, calls or delete expressions "
+#~ "only"
+#~ msgstr ""
+#~ "les déclarations doivent être des affectations, des appels ou des "
+#~ "expressions de suppression uniquement"
+
+#~ msgid "var declarations should be at the start of a function"
+#~ msgstr ""
+#~ "les déclarations de variables devraient être au début d'une fonction"
+
+#~ msgid "only use one statement per line"
+#~ msgstr "utilisez une seule déclaration par ligne"
+
+#~ msgid "unknown component"
+#~ msgstr "composant inconnu"
+
+#~ msgid "could not resolve the prototype '%1' of '%2'"
+#~ msgstr "impossible de résoudre le prototype « %1 » de « %2 »"
+
+#~ msgid "could not resolve the prototype '%1'"
+#~ msgstr "impossible de résoudre le prototype « %1 »"
+
+#~ msgid "prototype cycle, the last non-repeated component is '%1'"
+#~ msgstr "cycle de prototype, le dernier composant non répété est « %1 »"
+
+#~ msgid "invalid property type '%1'"
+#~ msgstr "type de propriété « %1 » non valable"
+
+#~ msgid "== and != perform type coercion, use === or !== to avoid"
+#~ msgstr ""
+#~ "== et != appliquent une contrainte de type, utilisez === ou !== pour "
+#~ "l'éviter"
+
+#~ msgid ""
+#~ "calls of functions that start with an uppercase letter should use 'new'"
+#~ msgstr ""
+#~ "l'appel de fonctions qui commencent par une lettre majuscule devraient "
+#~ "utiliser « new »"
+
+#~ msgid ""
+#~ "'new' should only be used with functions that start with an uppercase "
+#~ "letter"
+#~ msgstr ""
+#~ " « new » devrait être utilisé uniquement avec des fonctions qui "
+#~ "commencent par une lettre majuscule"
+
+#~ msgid "use spaces around binary operators"
+#~ msgstr "utilisez des espaces autour des opérateurs binaires"
+
+#~ msgid "unintentional empty block, use ({}) for empty object literal"
+#~ msgstr ""
+#~ "bloc vide non intentionnel, utilisez ({}) comme littéral d'objet vide"
+
+#~ msgid "use %1 instead of 'var' or 'variant' to improve performance"
+#~ msgstr ""
+#~ "utilisez « %1 » plutôt que « var » ou « variant » pour améliorer les "
+#~ "performances"
+
+#~ msgid "missing property '%1'"
+#~ msgstr "propriété « %1 » manquante"
+
+#~ msgid "object value expected"
+#~ msgstr "valeur objet attendue"
+
+#~ msgid "array value expected"
+#~ msgstr "valeur tableau attendue"
+
+#~ msgid "%1 value expected"
+#~ msgstr "valeur %1 attendue"
+
+#~ msgid "maximum number value is %1"
+#~ msgstr "la valeur maximale du nombre est %1"
+
+#~ msgid "minimum number value is %1"
+#~ msgstr "la valeur minimale du nombre est %1"
+
+#~ msgid "maximum number value is exclusive"
+#~ msgstr "la valeur maximale du nombre est exclusive"
+
+#~ msgid "minimum number value is exclusive"
+#~ msgstr "la valeur minimale du nombre est exclusive"
+
+#~ msgid "string value does not match required pattern"
+#~ msgstr "la valeur de la chaîne ne correspond pas au motif requis"
+
+#~ msgid "minimum string value length is %1"
+#~ msgstr "la longueur minimale de la valeur de chaîne est %1"
+
+#~ msgid "maximum string value length is %1"
+#~ msgstr "la longueur maximale de la valeur de chaîne est %1"
+
+#~ msgid "%1 elements expected in array value"
+#~ msgstr "%1 éléments attendus dans la valeur tableau"
+
+#~ msgid "Imperative code is not supported in the Qt Quick Designer"
+#~ msgstr "le code impératif n'est pas pris en charge dans Qt Quick Designer"
+
+#~ msgid "This type is not supported in the Qt Quick Designer"
+#~ msgstr "ce type n'est pas pris en charge dans Qt Quick Designer"
+
+#~ msgid ""
+#~ "Reference to parent item cannot be resolved correctly by the Qt Quick "
+#~ "Designer"
+#~ msgstr ""
+#~ "la référence à l'élément parent ne peut pas être résolu correctement dans "
+#~ "Qt Quick Designer"
+
+#~ msgid ""
+#~ "This visual property binding cannot be evaluated in the local context and "
+#~ "might not show up in Qt Quick Designer as expected"
+#~ msgstr ""
+#~ "cette liaison visuelle de propriétés ne peut être évaluée dans le "
+#~ "contexte local et peut ne pas s'afficher comme attendu dans Qt Quick "
+#~ "Designer"
+
+#~ msgid "Qt Quick Designer only supports states in the root item "
+#~ msgstr ""
+#~ "Qt Quick Designer prend en charge les états uniquement dans l'élément "
+#~ "racine"
+
+#~ msgid "Adjust Column Widths to Contents"
+#~ msgstr "Ajuster la largeur des colonnes au contenu"
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "The target directory %1 could not be created."
+#~ msgstr "Impossible de créer le dossier cible %1."
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "The existing file %1 could not be removed."
+#~ msgstr "Le fichier existant %1 ne peut être supprimé."
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "The file %1 could not be copied to %2."
+#~ msgstr "Le fichier %1 n'a pas pu être copié vers %2."
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Cannot start process: %1"
+#~ msgstr "Impossible de démarrer le processus : %1"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Timeout after %1s."
+#~ msgstr "Délai expiré après %1s."
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "The process crashed."
+#~ msgstr "Le processus a planté."
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid ""
+#~ "The process returned exit code %1:\n"
+#~ "%2"
+#~ msgstr ""
+#~ "Le processus a retourné le code de sortie %1 :\n"
+#~ "%2"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Error running '%1' in %2: %3"
+#~ msgstr "Erreur à l'exécution de « %1 » dans %2 : %3"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Building helper '%1' in %2\n"
+#~ msgstr "Assistant de construction « %1 » dans %2\n"
+
+#~ msgctxt "ProjectExplorer::DebuggingHelperLibrary"
+#~ msgid "%1 not found in PATH\n"
+#~ msgstr "%1 introuvable dans PATH\n"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Running %1 %2...\n"
+#~ msgstr "Exécution %1 %2...\n"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "Running %1 %2 ...\n"
+#~ msgstr "Exécution %1 %2...\n"
+
+#~ msgctxt "ProjectExplorer::BuildableHelperLibrary"
+#~ msgid "%1 not found in PATH\n"
+#~ msgstr "%1 introuvable dans PATH\n"
+
+#~ msgid "Do not ask again"
+#~ msgstr "Ne plus poser la question"
+
+#~ msgid "The class name must not contain namespace delimiters."
+#~ msgstr "Le nom de classe ne doit pas contenir de délimiteurs de namespace."
+
+#~ msgid "Please enter a class name."
+#~ msgstr "Veuillez saisir un nom de classe."
+
+#~ msgid "The class name contains invalid characters."
+#~ msgstr "Le nom de classe contient des caractères non valables."
+
+#~ msgid "Cannot set up communication channel: %1"
+#~ msgstr "Impossible d'établir le canal de communication : %1"
+
+#~ msgid "Press <RETURN> to close this window..."
+#~ msgstr "Pressez <Entrée> pour fermer cette fenêtre..."
+
+#~ msgid "Cannot create temporary file: %1"
+#~ msgstr "Impossible de créer le fichier temporaire : %1"
+
+#~ msgid "Cannot write temporary file. Disk full?"
+#~ msgstr "Impossible d'écrire dans le fichier temporaire. Disque plein ?"
+
+#~ msgid "Cannot create temporary directory '%1': %2"
+#~ msgstr "Impossible de créer le dossier temporaire « %1 » : %2"
+
+#~ msgid "Unexpected output from helper program (%1)."
+#~ msgstr "Sortie inattendue du programme assistant (%1)."
+
+#~ msgid "Cannot change to working directory '%1': %2"
+#~ msgstr "Impossible d'accéder au dossier de travail « %1 » : %2"
+
+#~ msgid "Cannot execute '%1': %2"
+#~ msgstr "Impossible d'exécuter « %1» : %2"
+
+#~ msgid "Quoting error in command."
+#~ msgstr "Erreur de guillemets dans la commande"
+
+#~ msgid ""
+#~ "Debugging complex shell commands in a terminal is currently not supported."
+#~ msgstr ""
+#~ "Le déboguage de commandes shell complexes dans un terminal n'est pas pris "
+#~ "en charge actuellement."
+
+#~ msgid "Quoting error in terminal command."
+#~ msgstr "Erreur de guillemets dans la commande du terminal."
+
+#~ msgid "Terminal command may not be a shell command."
+#~ msgstr "La commande du terminal n'est peut-être pas une commande shell."
+
+#~ msgid "Cannot start the terminal emulator '%1'."
+#~ msgstr "Impossible de démarrer l'émulateur de terminal « %1 »."
+
+#~ msgid "Cannot create socket '%1': %2"
+#~ msgstr "Impossible de créer le socket « %1 » : %2"
+
+#~ msgid "The process '%1' could not be started: %2"
+#~ msgstr "Le processus « %1 » n'a pas pu démarrer : %2"
+
+#~ msgid "Cannot obtain a handle to the inferior: %1"
+#~ msgstr "Impossible d'obtenir un handle vers l'inférieur : %1"
+
+#~ msgid "Cannot obtain exit status from inferior: %1"
+#~ msgstr "Impossible d'obtenir l'état de sortie de l'inférieur : %1"
+
+#~ msgid "Details"
+#~ msgstr "Détails"
+
+#~ msgid "'%1' is an invalid ELF object (%2)"
+#~ msgstr "« %1 » n'est pas un objet ELF valable (%2)"
+
+#~ msgid "'%1' is not an ELF object (file too small)"
+#~ msgstr "« %1 » n'est pas un objet ELF (fichier trop petit)"
+
+#~ msgid "'%1' is not an ELF object"
+#~ msgstr "« %1 » n'est pas un objet ELF"
+
+#~ msgid "odd cpu architecture"
+#~ msgstr "Architecture CPU spéciale"
+
+#~ msgid "odd endianess"
+#~ msgstr "Boutisme spécial"
+
+#~ msgid "unexpected e_shsize"
+#~ msgstr "e_shsize inattendue"
+
+#~ msgid "unexpected e_shentsize"
+#~ msgstr "e_shentsize inattendue"
+
+#~ msgid "string table seems to be at 0x%1"
+#~ msgstr "la table de chaînes semble être à 0x%1"
+
+#~ msgid "section name %1 of %2 behind end of file"
+#~ msgstr "le nom de section %1 de %2 est après la fin du fichier"
+
+#~ msgid "<UNSET>"
+#~ msgstr "<INDEFINIE>"
+
+#~ msgid "Variable"
+#~ msgstr "Variable"
+
+#~ msgid "Value"
+#~ msgstr "Valeur"
+
+#~ msgid "<VARIABLE>"
+#~ msgstr "<VARIABLE>"
+
+#~ msgid "<VALUE>"
+#~ msgstr "<VALEUR>"
+
+#~ msgid "Locked"
+#~ msgstr "Verrouillé"
+
+#~ msgid "Reset to Default Layout"
+#~ msgstr "Réinitialiser à l'organisation par défaut"
+
+#~ msgid "Name is empty."
+#~ msgstr "Le nom est vide."
+
+#~ msgid "Name contains white space."
+#~ msgstr "Le nom contient un espace."
+
+#~ msgid "Invalid character '%1'."
+#~ msgstr "Caractère non valable « %1 »."
+
+#~ msgid "Invalid characters '%1'."
+#~ msgstr "Caractères non valables « %1 »."
+
+#~ msgid "Name matches MS Windows device. (%1)."
+#~ msgstr "Le nom correspond à un périphérique MS Windows. (%1)."
+
+#~ msgid "File extension %1 is required:"
+#~ msgstr "L'extension de fichier %1 est requise :"
+
+#~ msgid "File extensions %1 are required:"
+#~ msgstr "Les extensions de fichier %1 sont requises :"
+
+#~ msgid "Location"
+#~ msgstr "Emplacement"
+
+#~ msgid "Filter"
+#~ msgstr "Filtre"
+
+#~ msgid "Clear text"
+#~ msgstr "Effacer le texte"
+
+#~ msgid "The IP address is not valid."
+#~ msgstr "L'adresse IP n'est pas valable."
+
+#~ msgid "Invalid base class name"
+#~ msgstr "Nom de classe de base non valable"
+
+#~ msgid "Invalid header file name: '%1'"
+#~ msgstr "Nom de fichier d'en-tête non valable : « %1 »"
+
+#~ msgid "Invalid source file name: '%1'"
+#~ msgstr "Nom de fichier source non valable : « %1 »"
+
+#~ msgid "Invalid form file name: '%1'"
+#~ msgstr "Nom de fichier formulaire non valable : « %1 »"
+
+#~ msgctxt "Utils::PathChooser"
+#~ msgid "Choose..."
+#~ msgstr "Choisir..."
+
+#~ msgctxt "Utils::PathChooser"
+#~ msgid "Browse..."
+#~ msgstr "Explorer..."
+
+#~ msgid "Choose Directory"
+#~ msgstr "Choisissez un dossier"
+
+#~ msgid "Choose Executable"
+#~ msgstr "Choisissez un exécutable"
+
+#~ msgid "Choose File"
+#~ msgstr "Choisissez un fichier"
+
+#~ msgid "The path must not be empty."
+#~ msgstr "L'emplacement ne doit pas être vide."
+
+#~ msgid "The path '%1' expanded to an empty string."
+#~ msgstr "L'emplacement « %1 » a été étendu à une chaîne vide."
+
+#~ msgid "The path '%1' does not exist."
+#~ msgstr "L'emplacement « %1 » n'existe pas."
+
+#~ msgid "The path '%1' is not a directory."
+#~ msgstr "L'emplacement « %1 » n'est pas un dossier."
+
+#~ msgid "Cannot execute '%1'."
+#~ msgstr "Impossible d'exécuter « %1»."
+
+#~ msgid "The path <b>%1</b> is not a directory."
+#~ msgstr "L'emplacement <b>%1</b> n'est pas un dossier."
+
+#~ msgid "The path <b>%1</b> is not a file."
+#~ msgstr "L'emplacement <b>%1</b> n'est pas un fichier."
+
+#~ msgid "The path <b>%1</b> is not a executable file."
+#~ msgstr "L'emplacement <b>%1</b> n'est pas un exécutable."
+
+#~ msgid "Full path: <b>%1</b>"
+#~ msgstr "Emplacement complet : <b>%1</b>"
+
+#~ msgid "Insert..."
+#~ msgstr "Insérer..."
+
+#~ msgid "Add..."
+#~ msgstr "Ajouter..."
+
+#~ msgid "Delete Line"
+#~ msgstr "Supprimer la ligne"
+
+#~ msgid "Clear"
+#~ msgstr "Effacer"
+
+#~ msgid "From \"%1\""
+#~ msgstr "De « %1 »"
+
+#~ msgid "<Enter_Name>"
+#~ msgstr "<Entrer_Nom>"
+
+#~ msgid "The project already exists."
+#~ msgstr "Le projet existe déjà."
+
+#~ msgid "A file with that name already exists."
+#~ msgstr "Un fichier avec ce nom existe déjà."
+
+#~ msgid "Invalid character '.'."
+#~ msgstr "Caractère non valable « . »."
+
+#~ msgid "Error in command line."
+#~ msgstr "Erreur dans la ligne de commande."
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid "File Changed"
+#~ msgstr "Le fichier a changé"
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid ""
+#~ "The unsaved file <i>%1</i> has been changed outside Qt Creator. Do you "
+#~ "want to reload it and discard your changes?"
+#~ msgstr ""
+#~ "Le fichier non enregistré <i>%1</i> a été modifié en dehors de Qt "
+#~ "Creator. Voulez-vous le recharger et abandonner vos modifications ?"
+
+#~ msgctxt "Utils::reloadPrompt"
+#~ msgid ""
+#~ "The file <i>%1</i> has changed outside Qt Creator. Do you want to reload "
+#~ "it?"
+#~ msgstr ""
+#~ "Le fichier <i>%1</i> a été modifié en dehors de Qt Creator. Voulez-vous "
+#~ "le recharger ?"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "File has been removed"
+#~ msgstr "Le fichier a été supprimé"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid ""
+#~ "The file %1 has been removed outside Qt Creator. Do you want to save it "
+#~ "under a different name, or close the editor?"
+#~ msgstr ""
+#~ "Le fichier %1 a été supprimé en dehors de Qt Creator. Voulez-vous "
+#~ "l'enregistrer sous un nom différent, ou fermer l'éditeur ?"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid ""
+#~ "The file %1 was removed. Do you want to save it under a different name, "
+#~ "or close the editor?"
+#~ msgstr ""
+#~ "Le fichier %1 a été supprimé. Voulez-vous l'enregistrer sous un nom "
+#~ "différent, ou fermer l'éditeur ?"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "&Close"
+#~ msgstr "&Fermer"
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "Save &as..."
+#~ msgstr "Enregistrer &sous..."
+
+#~ msgctxt "Utils::fileDeletedPrompt"
+#~ msgid "&Save"
+#~ msgstr "&Enregistrer"
+
+#~ msgid "Add"
+#~ msgstr "Ajouter"
+
+#~ msgid "Remove"
+#~ msgstr "Supprimer"
+
+#~ msgid "Rename"
+#~ msgstr "Renommer"
+
+#~ msgid "Do you really want to delete the configuration <b>%1</b>?"
+#~ msgstr "Voulez-vous vraiment supprimer la configuration <b>%1</b> ?"
+
+#~ msgid "New name for configuration <b>%1</b>:"
+#~ msgstr "Nouveau nom pour la configuration <b>%1</b> :"
+
+#~ msgid "Rename..."
+#~ msgstr "Renommer..."
+
+#~ msgid "&Commit"
+#~ msgstr "&Publication"
+
+#~ msgid "Check All"
+#~ msgstr "Tout cocher"
+
+#~ msgid "Uncheck All"
+#~ msgstr "Tout décocher"
+
+#~ msgid "The command '%1' finished successfully."
+#~ msgstr "La commande « %1 » a terminé avec succès."
+
+#~ msgid "The command '%1' terminated with exit code %2."
+#~ msgstr "La commande « %1 » a terminé avec le code de sortie %2."
+
+#~ msgid "The command '%1' terminated abnormally."
+#~ msgstr "La commande « %1 » a terminé anormalement."
+
+#~ msgid "The command '%1' could not be started."
+#~ msgstr "La commande « %1 » n'a pas pu démarrer."
+
+#~ msgid "The command '%1' did not respond within the timeout limit (%2 ms)."
+#~ msgstr "La commande « %1 » n'a pas répondu dans la limite de délai (%2 ms)."
+
+#~ msgid "Process not Responding"
+#~ msgstr "Le processus ne répond pas"
+
+#~ msgid "The process is not responding."
+#~ msgstr "Le processus ne répond pas."
+
+#~ msgid "The process '%1' is not responding."
+#~ msgstr "Le processus « %1 » ne répond pas."
+
+#~ msgid "Would you like to terminate it?"
+#~ msgstr "Voulez-vous l'arrêter ?"
+
+#~ msgctxt "Utils::TextFileFormat"
+#~ msgid "Out of memory."
+#~ msgstr "Mémoire pleine."
+
+#~ msgctxt "Utils::TextFileFormat"
+#~ msgid "An encoding error was encountered."
+#~ msgstr "Une erreur d'encodage est survenue."
+
+#~ msgctxt "Utils::UnixTools"
+#~ msgid ""
+#~ "<table border=1 cellspacing=0 cellpadding=3><tr><th>Variable</"
+#~ "th><th>Expands to</th></tr><tr><td>%d</td><td>directory of current file</"
+#~ "td></tr><tr><td>%f</td><td>file name (with full path)</td></tr><tr><td>"
+#~ "%n</td><td>file name (without path)</td></tr><tr><td>%%</td><td>%</td></"
+#~ "tr></table>"
+#~ msgstr ""
+#~ "<table border=1 cellspacing=0 cellpadding=3><tr><th>Variable</"
+#~ "th><th>Étendue en</th></tr><tr><td>%d</td><td>dossier du fichier courant</"
+#~ "td></tr><tr><td>%f</td><td>nom de fichier (emplacement complet)</td></"
+#~ "tr><tr><td>%n</td><td>nom de fichier (sans l'emplacement)</td></"
+#~ "tr><tr><td>%%</td><td>%</td></tr></table>"
+
+#~ msgid "..."
+#~ msgstr "..."

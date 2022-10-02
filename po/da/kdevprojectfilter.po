@@ -1,0 +1,231 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"PO-Revision-Date: 2013-12-29 15:00+0100\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: filtermodel.cpp:74
+#, fuzzy, kde-format
+#| msgid "Pattern"
+msgctxt "@title:column"
+msgid "Pattern"
+msgstr "Mønster"
+
+#: filtermodel.cpp:76
+#, fuzzy, kde-format
+#| msgid "Targets"
+msgctxt "@title:column"
+msgid "Targets"
+msgstr "Mål"
+
+#: filtermodel.cpp:78
+#, fuzzy, kde-format
+#| msgid "Action"
+msgctxt "@title:column"
+msgid "Action"
+msgstr "Handling"
+
+#: filtermodel.cpp:107
+#, kde-format
+msgid ""
+"The wildcard pattern defines whether a file or folder is included in a "
+"project or not.<br />The pattern is matched case-sensitively against the "
+"items relative path to the project root. The relative path starts with a "
+"forward slash, trailing slashes of folders are removed.<br />Patterns ending "
+"on <code>\"/\"</code> are implicitly considered to match against folders "
+"only.<br />Patterns which do not explicitly start with either <code>\"/\"</"
+"code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
+"thus match any item with a relative path ending on the given pattern."
+msgstr ""
+"Jokertegn-mønstret definerer om en fil eller mappe medtages i et projekt "
+"eller ej.<br />Mønstret matches versalfølsomt imod elementets relative sti "
+"til projektets rodmappe. Den relative sti begynder med en skråstreg, "
+"afsluttende skråstreger for mapper fjernes.<br />Mønstre der slutter med "
+"<code>\"/\"</code> antages kun at skulle matches imod mapper.<br />Mønstre "
+"som ikke starter med enten <code>\"/\"</code> eller <code>\"*\"</code> får "
+"implicit sat <code>\"*/\"</code> foran og matcher således alle elementer med "
+"en relativ sti der slutter med det givne mønster."
+
+#: filtermodel.cpp:119
+#, kde-format
+msgid ""
+"The target defines what type of item the filter is matched against.<br /"
+">Filters either apply only to files, only to folders or to both."
+msgstr ""
+"Målet definerer hvilke typer af elementer filteret matches imod.<br />Filtre "
+"anvendes enten kun på filer, kun på mapper eller begge dele."
+
+#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#, fuzzy, kde-format
+#| msgid "Files and Folders"
+msgctxt "@item"
+msgid "Files and Folders"
+msgstr "Filer og mapper"
+
+#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#, fuzzy, kde-format
+#| msgid "Folders"
+msgctxt "@item"
+msgid "Folders"
+msgstr "Mapper"
+
+#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#, fuzzy, kde-format
+#| msgid "Files"
+msgctxt "@item"
+msgid "Files"
+msgstr "Filer"
+
+#: filtermodel.cpp:141
+#, kde-format
+msgid ""
+"Filters by default exclude items from the project. Inclusive patterns can be "
+"used to include items which where matched by previous exclusive patterns."
+"<br />E.g. to only include files ending on <code>\".cpp\"</code> in your "
+"project, you could exclude all files via <code>\"*\"</code> and then apply "
+"an inclusive <code>\"*.cpp\"</code> pattern."
+msgstr ""
+"Filtre undtager som standard elementer fra projektet. Inkluderende mønstre "
+"kan bruges til at medtage elementer som blev matchet af tidligere "
+"ekskluderende mønstre.<br />Hvis du for eksempel kun vil medtage filer der "
+"slutter med <code>\".cpp\"</code> i dit projekt, kunne du undtage alle filer "
+"via <code>\"*\"</code> og derefter anvende et inkluderende <code>\"*.cpp\"</"
+"code>-mønster."
+
+#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#, fuzzy, kde-format
+#| msgid "Include"
+msgctxt "@item"
+msgid "Include"
+msgstr "Inkludér"
+
+#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#, fuzzy, kde-format
+#| msgid "Exclude"
+msgctxt "@item"
+msgid "Exclude"
+msgstr "Ekskludér"
+
+#: projectfilterconfigpage.cpp:172
+#, kde-format
+msgid ""
+"A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
+"to make this explicit."
+msgstr ""
+"Et filter med et tomt mønster vil matche alle elementer. Brug <code>\"*\"</"
+"code> for at gøre dette eksplicit."
+
+#: projectfilterconfigpage.cpp:175
+#, kde-format
+msgid "A filter ending on <code>\"/\"</code> can never match a file."
+msgstr "Et filter som slutter med <code>\"/\"</code> kan aldrig matche en fil."
+
+#: projectfilterconfigpage.cpp:198
+#, fuzzy, kde-format
+#| msgid "Project Filter"
+msgctxt "@title:tab"
+msgid "Configure Project Filter"
+msgstr "Projektfilter"
+
+#: projectfilterconfigpage.cpp:208
+#, fuzzy, kde-format
+#| msgid "Project Filter"
+msgctxt "@title:tab"
+msgid "Project Filter"
+msgstr "Projektfilter"
+
+#: projectfilterprovider.cpp:76
+#, fuzzy, kde-format
+#| msgid "Exclude Item From Project"
+#| msgid_plural "Exclude Items From Project"
+msgctxt "@action:inmenu"
+msgid "Exclude Item from Project"
+msgid_plural "Exclude Items from Project"
+msgstr[0] "Undtag element fra projekt"
+msgstr[1] "Undtag elementer fra projekt"
+
+#: projectfilterprovider.cpp:115
+#, kde-format
+msgid ""
+"A filter for the item was added. To undo, use the project filter settings."
+msgid_plural ""
+"A filter for the items was added. To undo, use the project filter settings."
+msgstr[0] ""
+"Der blev tilføjet et filter for elementet. Brug projektfilter-"
+"indstillingerne for at fortryde."
+msgstr[1] ""
+"Der blev tilføjet et filter for elementerne. Brug projektfilter-"
+"indstillingerne for at fortryde."
+
+#: projectfilterprovider.cpp:117
+#, fuzzy, kde-format
+#| msgid "Project Filter Added"
+msgctxt "@title:window"
+msgid "Project Filter Added"
+msgstr "Projektfilter tilføjet"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: projectfiltersettings.ui:20
+#, fuzzy, kde-format
+#| msgid ""
+#| "Configure which files and folders inside the project folder should be "
+#| "included or excluded."
+msgid ""
+"Configure which files and folders inside the project folder should be "
+"included or excluded:"
+msgstr ""
+"Indstil hvilke filer og mapper i projektmappen der skal medtages eller "
+"undtages."
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: projectfiltersettings.ui:34
+#, fuzzy, kde-format
+#| msgid "Add"
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Tilføj"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: projectfiltersettings.ui:49
+#, fuzzy, kde-format
+#| msgid "Remove"
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Fjern"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveUp)
+#: projectfiltersettings.ui:61
+#, fuzzy, kde-format
+#| msgid "Move Up"
+msgctxt "@action:button"
+msgid "Move Up"
+msgstr "Flyt op"
+
+#. i18n: ectx: property (text), widget (QPushButton, moveDown)
+#: projectfiltersettings.ui:73
+#, fuzzy, kde-format
+#| msgid "Move Down"
+msgctxt "@action:button"
+msgid "Move Down"
+msgstr "Flyt ned"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Martin Schlander"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mschlander@opensuse.org"

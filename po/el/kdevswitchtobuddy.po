@@ -1,0 +1,71 @@
+# kdevswitchtobuddy.po translation el
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevswitchtobuddy\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-03-20 21:59+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: switchtobuddyplugin.cpp:114
+#, fuzzy, kde-format
+#| msgid "Switch to '%1'"
+msgctxt "@action:inmenu"
+msgid "Switch to '%1'"
+msgstr "Εναλλαγή στο '%1'"
+
+#: switchtobuddyplugin.cpp:128
+#, kde-format
+msgctxt "@action"
+msgid "&Switch Definition/Declaration"
+msgstr ""
+
+#: switchtobuddyplugin.cpp:133
+#, kde-format
+msgctxt "@action"
+msgid "Switch Header/Source"
+msgstr ""
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#, fuzzy
+#~| msgid "Switch to '%1'"
+#~ msgid "Switch To"
+#~ msgstr "Εναλλαγή στο '%1'"
+
+#~ msgid "Switch to Buddy"
+#~ msgstr "Εναλλαγή στο συμπληρωματικό"
+
+#~ msgid ""
+#~ "Allows switching between buddy documents like implementation and header "
+#~ "file."
+#~ msgstr ""
+#~ "Επιτρέπει την εναλλαγή ανάμεσα σε συμπληρωματικά έγγραφα όπως αρχεία "
+#~ "υλοποίησης (implementation) και κεφαλίδας (header)."
+
+#~ msgid "André Stein"
+#~ msgstr "André Stein"
+
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#~ msgid "Switch to buddy document in code editor."
+#~ msgstr "Εναλλαγή στο συμπληρωματικό έγγραφο στον επεξεργαστή κώδικα."

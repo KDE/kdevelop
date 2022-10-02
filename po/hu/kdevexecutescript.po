@@ -1,0 +1,428 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-11-08 19:48+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: executescriptplugin.cpp:61
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Nincs érvényes végrehajtható megadva"
+
+#: executescriptplugin.cpp:71
+#, kde-format
+msgid ""
+"There is a quoting error in the script for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Hivatkozási hiba van az indítási beállítás parancsfájljában: „%1”. Indítás "
+"megszakítása."
+
+#: executescriptplugin.cpp:76
+#, kde-format
+msgid ""
+"A shell meta character was included in the script for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Egy héj meta karaktert tartalmaz a parancsfájl az indítási beállításhoz: "
+"„%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
+
+#: executescriptplugin.cpp:93
+#, kde-format
+msgid "No remote host set for launch configuration '%1'. Aborting start."
+msgstr ""
+"Nincs távoli gép beállítva az indítási beállításhoz: „%1”. Indítás "
+"megszakítása."
+
+#: executescriptplugin.cpp:116
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"Hivatkozási hiba van az indítási beállítás paramétereiben: „%1”. Indítás "
+"megszakítása."
+
+#: executescriptplugin.cpp:120
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Egy héj meta karaktert tartalmaznak a paraméterek az indítási beállításhoz: "
+"„%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
+
+#: executescriptplugin.cpp:173
+#, kde-format
+msgid "No valid interpreter specified"
+msgstr "Nincs érvényes értelmező megadva"
+
+#: executescriptplugin.cpp:183
+#, kde-format
+msgid ""
+"There is a quoting error in the interpreter for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"Hivatkozási hiba van az indítási beállítás értelmezőjében: „%1”. Indítás "
+"megszakítása."
+
+#: executescriptplugin.cpp:188
+#, kde-format
+msgid ""
+"A shell meta character was included in the interpreter for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"Egy héj meta karaktert tartalmaz az értelmező az indítási beállításhoz: "
+"„%1”. Jelenleg ezt nem támogatott. Indítás megszakítása."
+
+#: scriptappconfig.cpp:83
+#, fuzzy, kde-format
+#| msgid "Type or select an interpreter"
+msgctxt "@info:placeholder"
+msgid "Type or select an interpreter..."
+msgstr "Gépelje be vagy válasszon egy értelmezőt"
+
+#: scriptappconfig.cpp:116
+#, fuzzy, kde-format
+#| msgid "Configure Script Application"
+msgctxt "@title:tab"
+msgid "Configure Script Application"
+msgstr "Parancsfájl alkalmazás beállítása"
+
+#: scriptappconfig.cpp:126
+#, kde-format
+msgid "Executes Script Applications"
+msgstr "Végrehajtja a parancsfájl alkalmazást"
+
+#: scriptappconfig.cpp:136 scriptappconfig.cpp:186
+#, kde-format
+msgid "Script Application"
+msgstr "Parancsfájl alkalmazás"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: scriptappconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Interpreter"
+msgctxt "@title:group"
+msgid "Interpreter"
+msgstr "Értelmező"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: scriptappconfig.ui:44
+#, fuzzy, kde-format
+#| msgid "Script interpreter:"
+msgctxt "@label:listbox"
+msgid "Script interpreter:"
+msgstr "Parancsfájl értelmező:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: scriptappconfig.ui:95
+#, fuzzy, kde-format
+#| msgid "Script file"
+msgctxt "@title:group"
+msgid "Script file"
+msgstr "Parancsfájl"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
+#: scriptappconfig.ui:101
+#, fuzzy, kde-format
+#| msgid "Run the file currently open in the editor"
+msgctxt "@option:radio"
+msgid "Run the file currently open in the editor"
+msgstr "A szerkesztőben jelenleg megnyitott fájl futtatása"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runFixedFile)
+#: scriptappconfig.ui:111
+#, fuzzy, kde-format
+#| msgid "Always run the same file"
+msgctxt "@option:radio"
+msgid "Always run the same file"
+msgstr "Mindig ugyanazt a fájlt futtassa"
+
+#. i18n: ectx: property (text), widget (QLabel, scriptLabel)
+#: scriptappconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Script file:"
+msgctxt "@label:chooser"
+msgid "Script file:"
+msgstr "Parancsfájl:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: scriptappconfig.ui:133
+#, fuzzy, kde-format
+#| msgid "Enter the absolute path to the script to run"
+msgctxt "@info:tooltip"
+msgid "Enter the absolute path to the script to run"
+msgstr "Adja meg az abszolút elérési utat a futtatandó parancsfájlhoz"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: scriptappconfig.ui:136
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/script"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: scriptappconfig.ui:148
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Viselkedés"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scriptappconfig.ui:160
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Paraméterek:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: scriptappconfig.ui:170
+#, fuzzy, kde-format
+#| msgid "Enter arguments to give to the executable"
+msgctxt "@info:tooltip"
+msgid "Enter arguments to give to the executable"
+msgstr "Adja meg a végrehajthatónak átadandó paramétereket"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scriptappconfig.ui:177
+#, fuzzy, kde-format
+#| msgid "Working Directory:"
+msgctxt "@label:chooser"
+msgid "Working directory:"
+msgstr "Munkakönyvtár:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: scriptappconfig.ui:187
+#, fuzzy, kde-format
+#| msgid "Select a working directory for the executable"
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Munkakönyvtár kiválasztása a végrehajthatóhoz"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: scriptappconfig.ui:194
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Környezet:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: scriptappconfig.ui:212
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "A használni kívánt környezetet kiválasztása"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: scriptappconfig.ui:224
+#, fuzzy, kde-format
+#| msgid "Output Filter:"
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "Kimenet szűrő:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:231
+#, fuzzy, kde-format
+#| msgid ""
+#| "Select the filter to applied to the output. E.g. to mark errors with red "
+#| "text"
+msgctxt "@info:tooltip"
+msgid ""
+"Select the filter to applied to the output. E.g. to mark errors with red text"
+msgstr ""
+"Válassza ki a kimenetre alkalmazandó szűrőt. Például hibák jelölése piros "
+"szöveggel"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:235
+#, fuzzy, kde-format
+#| msgid "No Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "Nincs szűrő"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:240
+#, fuzzy, kde-format
+#| msgid "Compiler Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "Fordító szűrő"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:245
+#, fuzzy, kde-format
+#| msgid "Script Error Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "Parancsfájl hiba szűrő"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
+#: scriptappconfig.ui:250
+#, fuzzy, kde-format
+#| msgid "Static Analysis Filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "Statikus elemző szűrő"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: scriptappconfig.ui:267
+#, fuzzy, kde-format
+#| msgid "Execute on Host"
+msgctxt "@title:group"
+msgid "Execute on Host"
+msgstr "Végrehajtás a kiszolgálón"
+
+#. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
+#: scriptappconfig.ui:273
+#, fuzzy, kde-format
+#| msgid "Execute on remote host"
+msgctxt "@option:check"
+msgid "Execute on remote host"
+msgstr "Végrehajtás a távoli gépen"
+
+#. i18n: ectx: property (text), widget (QLabel, remoteHostLabel)
+#: scriptappconfig.ui:285
+#, fuzzy, kde-format
+#| msgid "Remote host (ssh):"
+msgctxt "@label:textbox"
+msgid "Remote host (ssh):"
+msgstr "Távoli gép (ssh):"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, remoteHost)
+#: scriptappconfig.ui:298
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "user@host"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, remoteHost)
+#: scriptappconfig.ui:301
+#, fuzzy, kde-format
+#| msgid "Enter a remote host (user@example.com)"
+msgctxt "@info:tooltip"
+msgid "Enter a remote host (user@host)"
+msgstr "Adja meg a távoli kiszolgálót (felhasznalo@pelda.com)"
+
+#: scriptappjob.cpp:76
+#, kde-format
+msgid "There is no active document to launch."
+msgstr "Nincs indítandó aktív dokumentum."
+
+#: scriptappjob.cpp:98
+#, fuzzy, kde-format
+#| msgid ""
+#| "No environment group specified, looks like a broken configuration, please "
+#| "check run configuration '%1'. Using default environment group."
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Nincs környezetcsoport meghatározva. Úgy tűnik, hibás a beállítás. Kérem "
+"ellenőrizze a futási beállítást: „%1”. Az alapértelmezett környezetcsoport "
+"használata."
+
+#: scriptappjob.cpp:170
+#, kde-format
+msgid "Starting: %1"
+msgstr "Kezdés: %1"
+
+#: scriptappjob.cpp:184
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** Kilőtt alkalmazás ***"
+
+#: scriptappjob.cpp:195
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** Normálisan lépett ki ***"
+
+#: scriptappjob.cpp:197
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Kilépett ezzel a visszatérési kóddal: %1 ***"
+
+#: scriptappjob.cpp:200
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Folyamat megszakítva ***"
+
+#: scriptappjob.cpp:203
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Összeomlott ezzel a visszatérési kóddal: %1 ***"
+
+#: scriptappjob.cpp:218
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr ""
+"*** Nem indítható a(z) „%1” program. Győződjön meg arról, hogy az elérési út "
+"helyesen van-e megadva ***"
+
+#~ msgid "python"
+#~ msgstr "Python"
+
+#~ msgid "ruby"
+#~ msgstr "Ruby"
+
+#~ msgid "bash"
+#~ msgstr "Bash"
+
+#~ msgid "php"
+#~ msgstr "PHP"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "urbalazs@gmail.com"
+
+#~ msgid "Execute script support"
+#~ msgstr "Parancsfájl végrehajtás támogatás"
+
+#~ msgid "Allows running of scripts"
+#~ msgstr "Lehetővé teszi parancsfájlok futtatását"
+
+#~ msgid "Niko Sams"
+#~ msgstr "Niko Sams"
+
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
+#~ msgid "Script"
+#~ msgstr "Parancsfájl"
+
+#~ msgid "Could not start application"
+#~ msgstr "Nem indítható az alkalmazás"
+
+#~ msgid "Enter a project target as path in the tree"
+#~ msgstr "Adja meg a projektcélt útként a fában"
+
+#~ msgid "Project Target:"
+#~ msgstr "Projekt cél:"
+
+#~ msgid "Local Host"
+#~ msgstr "Helyi kiszolgáló"

@@ -1,0 +1,93 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevopenwith package.
+# Simone Solinas <ksolsim@gmail.com>, 2011, 2013.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2020, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevopenwith\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2022-07-11 00:49+0200\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+#: openwithplugin.cpp:145
+#, kde-format
+msgctxt "@item:menu"
+msgid "Other..."
+msgstr "Altro..."
+
+#: openwithplugin.cpp:156
+#, kde-format
+msgctxt "@title:menu"
+msgid "Open With"
+msgstr "Apri con"
+
+#: openwithplugin.cpp:161
+#, kde-format
+msgctxt "@title:menu"
+msgid "Embedded Editors"
+msgstr "Editor integrati"
+
+#: openwithplugin.cpp:165
+#, kde-format
+msgctxt "@title:menu"
+msgid "External Applications"
+msgstr "Applicazioni esterne"
+
+#: openwithplugin.cpp:172
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Open"
+msgstr "Apri"
+
+#: openwithplugin.cpp:192
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Default Editor"
+msgstr "Editor predefinito"
+
+#: openwithplugin.cpp:282
+#, kde-format
+msgctxt "%1: mime type name, %2: app/part name"
+msgid "Do you want to open all '%1' files by default with %2?"
+msgstr "Vuoi aprire tutti i file «%1» in maniera predefinita con %2?"
+
+#: openwithplugin.cpp:284
+#, kde-format
+msgctxt "@title:window"
+msgid "Set as Default?"
+msgstr "Imposta come predefinito?"
+
+#: openwithplugin.cpp:285
+#, kde-format
+msgctxt "@action:button"
+msgid "Set as Default"
+msgstr "Imposta come predefinito"
+
+#: openwithplugin.cpp:286
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Set"
+msgstr "Non impostare"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Simone Solinas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ksolsim@gmail.com"
+
+#~ msgid ""
+#~ "This plugin allows to open files with associated external applications."
+#~ msgstr ""
+#~ "Questa estensione permette di aprire i file con le relative applicazioni "
+#~ "esterne."

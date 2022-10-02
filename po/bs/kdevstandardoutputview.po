@@ -1,0 +1,157 @@
+# Bosnian translation for kdevplatform
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevplatform package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevplatform\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-01-12 22:29+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-15 06:08+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: outputwidget.cpp:53
+#, fuzzy, kde-format
+#| msgid "Output View"
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Pregled izlaza"
+
+#: outputwidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Close the currently active output view"
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Zatvori trenutni aktivni izlazni pregled"
+
+#: outputwidget.cpp:70
+#, fuzzy, kde-format
+#| msgid "Close all other output views"
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Zatvori sve druge izlazne poglede"
+
+#: outputwidget.cpp:81
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Skojk na prethodni izlazni marker"
+
+#: outputwidget.cpp:84
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Skojk na sljedeći izlazni marker"
+
+#: outputwidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Select activated Item"
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Odaberi aktiviranu stavku"
+
+#: outputwidget.cpp:91
+#, fuzzy, kde-format
+#| msgid "Focus when selecting Item"
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Fokus pri izboru objekta"
+
+#: outputwidget.cpp:105
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Sljedeća"
+
+#: outputwidget.cpp:109
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Prethodna"
+
+#: outputwidget.cpp:113
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Sljedeća"
+
+#: outputwidget.cpp:117
+#, fuzzy, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Sljedeća"
+
+#: outputwidget.cpp:130
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr ""
+
+#: outputwidget.cpp:141
+#, fuzzy, kde-format
+#| msgid "Search..."
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Traži..."
+
+#: outputwidget.cpp:144
+#, fuzzy, kde-format
+#| msgid "Enter a wild card string to filter the output view"
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "Unesi džoker za filtriranje izlaza"
+
+#: standardoutputview.cpp:101
+#, kde-format
+msgctxt "@title:window"
+msgid "Build"
+msgstr "Izgradi"
+
+#: standardoutputview.cpp:106
+#, kde-format
+msgctxt "@title:window"
+msgid "Run"
+msgstr "Pokreni"
+
+#: standardoutputview.cpp:111
+#, kde-format
+msgctxt "@title:window"
+msgid "Debug"
+msgstr "Ispravka grešaka"
+
+#: standardoutputview.cpp:116
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Test"
+
+#: standardoutputview.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Version Control"
+msgstr "Upravljanje verzijama"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigacija"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kenan Dervišević,Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "Kd@etf.unsa.ba,samir.ribic@etf.unsa.ba"
+
+#~ msgid "Provides toolviews for presenting the output of running apps"
+#~ msgstr "Nudi alatne poglede za predstavljanje izlaza aktivnih programa"

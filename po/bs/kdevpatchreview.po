@@ -1,0 +1,444 @@
+# Bosnian translation for kdevplatform
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the kdevplatform package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevplatform\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-02-10 00:14+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Launchpad (build 16807)\n"
+"X-Launchpad-Export-Date: 2013-10-20 04:55+0000\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "Vlasitta zakrpa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Patch"
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "Zakrpa"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, fuzzy, kde-format
+#| msgid "From File"
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "Iz datoteke"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, fuzzy, kde-format
+#| msgid "From Command"
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr "Iz komande"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, fuzzy, kde-format
+#| msgid "Patch is already applied on local version"
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr "Zakrpa je već primijenjena na lokalnu verziju"
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, fuzzy, kde-format
+#| msgid "Already applied"
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "Već primjenjena"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">Konflikt</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, kde-format
+msgid "Applied.<br/>"
+msgstr "Primijenjeno.<br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, kde-format
+msgid "Insertion<br/>"
+msgstr "Ubacivanje<br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, kde-format
+msgid "Removal<br/>"
+msgstr "Uklanjanje<br/>"
+
+#: patchhighlighter.cpp:98
+#, kde-format
+msgid "Previous:<br/>"
+msgstr "Prethodno:<br/>"
+
+#: patchhighlighter.cpp:103
+#, kde-format
+msgid "Reverted.<br/>"
+msgstr "Vraćeno.<br/>"
+
+#: patchhighlighter.cpp:111
+#, kde-format
+msgid "Alternative:<br/>"
+msgstr "Alternativa:<br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr "Ne mogu primijeniti promjenu: Tekst treba biti \"%1\", ali je \"%2\"."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, fuzzy, kde-format
+#| msgid "Insertion"
+msgctxt "@item"
+msgid "Insertion"
+msgstr "Umetanje"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, fuzzy, kde-format
+#| msgid "Removal"
+msgctxt "@item"
+msgid "Removal"
+msgstr "Uklanjanje"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, fuzzy, kde-format
+#| msgid "Change"
+msgctxt "@item"
+msgid "Change"
+msgstr "Promijeni"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, fuzzy, kde-format
+#| msgid "Kompare Model Update"
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Ažuriranje Kompare modela"
+
+#: patchreview.cpp:457
+#, fuzzy, kde-format
+#| msgid "Overview"
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "Pregled"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "Pregled zakrpa"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr ""
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "Završi recenziju"
+
+#: patchreview.cpp:603
+#, fuzzy, kde-format
+#| msgid "Edit Patch"
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "Uredi zakrpu"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, fuzzy, kde-format
+#| msgid "Previous file"
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "Prethodna datoteka"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, fuzzy, kde-format
+#| msgid "Previous difference"
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "Prethodna razlila"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, fuzzy, kde-format
+#| msgid "Next difference"
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "Naredna razlika"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, fuzzy, kde-format
+#| msgid "Next file"
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr "Naredna datoteka"
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Nadogradnja"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, fuzzy, kde-format
+#| msgid "Run Tests"
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr "Pokreni testove"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, fuzzy, kde-format
+#| msgid "Export Diff..."
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Izvezi Diff..."
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, fuzzy, kde-format
+#| msgid "Cancel Review"
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "Otkaži recenziju"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "Završi recenziju"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, fuzzy, kde-format
+#| msgid "Changes"
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "Izmjene"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (%1 komad)"
+msgstr[1] "%2 (%1 komada)"
+msgstr[2] "%2 (%1 komada)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+
+#: patchreviewtoolview.cpp:255
+#, fuzzy, kde-format
+#| msgid "Select All"
+msgctxt "@action"
+msgid "Select All"
+msgstr "Izaberi sve"
+
+#: patchreviewtoolview.cpp:257
+#, fuzzy, kde-format
+#| msgid "Deselect All"
+msgctxt "@action"
+msgid "Deselect All"
+msgstr "Poništi izbor"
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr "Pokrećem testove: %p%"
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] "%1 test prošao"
+msgstr[1] "%1 testa prošla"
+msgstr[2] "%1 testova prošlo"
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr "Rezultati testa: %1 prošlo, %2 neuspjelo, %3 greške"
+
+#~ msgid "Base:"
+#~ msgstr "Osnova:"
+
+#~ msgid "Patch base..."
+#~ msgstr "Baza zakrpa"
+
+#~ msgid "Patch location..."
+#~ msgstr "Lokacija zakrpe..."
+
+#~ msgid "Command's output..."
+#~ msgstr "Izlaz komande..."
+
+#~ msgid "Edit Patch"
+#~ msgstr "Uredi zakrpu"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Save As..."
+#~ msgstr "Snimi kao..."
+
+#~ msgid "Send..."
+#~ msgstr "Pošalji..."
+
+#~ msgid "Send to contact..."
+#~ msgstr "Pošalji kontakt osobi..."
+
+#~ msgid "Side view (Kompare)..."
+#~ msgstr "Bočni pogled (Kompare)..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Samir Ribić"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "samir.ribic@etf.unsa.ba"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>Nema modela ili nema razlika, ova datoteka: <b>%1</b>, nije ispravana "
+#~ "datoteka razlike</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>Došlo je do problema prilikom primjene razlike <b>%1</b> na datoteku "
+#~ "<b>%2</b>.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>Došlo je do problema prilikom primjene razlike <b>%1</b> na "
+#~ "direktorij <b>%2</b>.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "Nisam mogao otvoriti privremenu datoteku."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr ""
+#~ "<qt>Nisam mogao da pišem u privremenu datoteku <b>%1</b>, brišem je.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>Nisam mogao da napravim odredišni direktorij <b>%1</b>.\n"
+#~ "Datoteka nije snimljena.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>Nisam mogao da pošaljem privremenu datoteku na odredišnu lokaciju <b>"
+#~ "%1</b>. Privremena datoteka je još uvijek dostupana pod: <b>%2</b>. "
+#~ "Možete je ručno iskopirati na pravo mjesto.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "Nisam mogao da analiziram izlaz razlike."
+
+#~ msgid "The files are identical."
+#~ msgstr "Datoteke su identične."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Nisam mogao da pišem u privremenu datoteku."
+
+#~ msgid "Highlights code affected by a patch"
+#~ msgstr "Označava kod na koji utiče zakrpa"
+
+#~ msgid "<b>Reverted.</b><br/>"
+#~ msgstr "<b>Vraćeno.</b><br/>"
+
+#~ msgid "<b>Applied.</b><br/>"
+#~ msgstr "<b>Primijenjeno.</b><br/>"
+
+#~ msgid "<b>Insertion</b><br/>"
+#~ msgstr "<b>Ubacivanje</b><br/>"
+
+#~ msgid "<b>Removal</b><br/>"
+#~ msgstr "<b>Uklanjanje</b><br/>"
+
+#~ msgid "<b>Previous:</b><br/>"
+#~ msgstr "<b>Prethodno:</b><br/>"
+
+#~ msgid "<b>Alternative:</b><br/>"
+#~ msgstr "<b>Alternativa:</b><br/>"
+
+#~ msgid "Show"
+#~ msgstr "Prikaži"

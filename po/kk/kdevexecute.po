@@ -1,0 +1,489 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-11-11 04:48+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: executeplugin.cpp:68
+#, kde-format
+msgid ""
+"There is a quoting error in the arguments for the launch configuration '%1'. "
+"Aborting start."
+msgstr ""
+"'%1' жегу баптауында, аргументінде тырнақша қолдану қатесі тап болды. Жегу "
+"доғарылды."
+
+#: executeplugin.cpp:72
+#, kde-format
+msgid ""
+"A shell meta character was included in the arguments for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"'%1' жегу баптауында, аргументінде мета символ тап болды. Әзірше ондайдың "
+"қолдауы жоқ. Жегу доғарылды."
+
+#: executeplugin.cpp:99
+#, kde-format
+msgid "Couldn't resolve the dependency: %1"
+msgstr "Тәуелдігі шешілмеді: %1"
+
+#: executeplugin.cpp:154
+#, kde-format
+msgid "No valid executable specified"
+msgstr "Дұрыс орындайтын файл келтірілмеген"
+
+#: executeplugin.cpp:164
+#, kde-format
+msgid ""
+"There is a quoting error in the executable for the launch configuration "
+"'%1'. Aborting start."
+msgstr ""
+"'%1' жегу баптауында, орындалатын файлда тырнақша қолдану қатесі тап болды. "
+"Жегу доғарылды."
+
+#: executeplugin.cpp:169
+#, kde-format
+msgid ""
+"A shell meta character was included in the executable for the launch "
+"configuration '%1', this is not supported currently. Aborting start."
+msgstr ""
+"'%1' жегу баптауында, орындалатын файлда мета символ тап болды. Әзірше "
+"ондайдың қолдауы жоқ. Жегу доғарылды."
+
+#: nativeappconfig.cpp:104
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Ask If Running"
+msgstr ""
+
+#: nativeappconfig.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Kill All Instances"
+msgstr ""
+
+#: nativeappconfig.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Start Another"
+msgstr ""
+
+#: nativeappconfig.cpp:156
+#, fuzzy, kde-format
+#| msgid "Configure Native Application"
+msgctxt "@title:tab"
+msgid "Configure Native Application"
+msgstr "Жүйе құрамындағы қолданбаны баптау"
+
+#: nativeappconfig.cpp:166
+#, fuzzy, kde-format
+#| msgid "Native Application"
+msgid "Executes Native Applications"
+msgstr "\"Туған\" бағдарлама"
+
+#: nativeappconfig.cpp:176
+#, kde-format
+msgid "Native Application"
+msgstr "\"Туған\" бағдарлама"
+
+#: nativeappconfig.cpp:241
+#, kde-format
+msgid "Compiled Binary"
+msgstr ""
+
+#: nativeappconfig.cpp:322
+#, fuzzy, kde-format
+#| msgid "Project Executables"
+msgctxt "@title:menu"
+msgid "Project Executables"
+msgstr "Жобаның орындалатын файлдары"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: nativeappconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Executable"
+msgctxt "@title:group"
+msgid "Executable"
+msgstr "Орындалатын файл"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: nativeappconfig.ui:41
+#, fuzzy, kde-format
+#| msgid "Project Target:"
+msgctxt "@label:chooser"
+msgid "Project &target:"
+msgstr "Жоба мақсаты:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: nativeappconfig.ui:81
+#, fuzzy, kde-format
+#| msgid "Executable:"
+msgctxt "@label:chooser"
+msgid "E&xecutable:"
+msgstr "Орындалатын файл:"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:106
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:placeholder"
+msgid "executable or /path/to/executable"
+msgstr "Орындалатын файл атауын не орындалатын файлының толық жолын келтіру"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
+#: nativeappconfig.ui:109
+#, fuzzy, kde-format
+#| msgid "Enter the executable name or absolute path to an executable file"
+msgctxt "@info:tooltip"
+msgid "Enter the executable name or the absolute path to the executable file"
+msgstr "Орындалатын файл атауын не орындалатын файлының толық жолын келтіру"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: nativeappconfig.ui:121
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Тәртібі"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: nativeappconfig.ui:127
+#, fuzzy, kde-format
+#| msgid "Arguments:"
+msgctxt "@label:textbox"
+msgid "Ar&guments:"
+msgstr "Аргументтері:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
+#: nativeappconfig.ui:137
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Enter arguments to give to the executable.<br/>You "
+#| "can pass arguments containing space characters by putting them in double-"
+#| "quotes.</p></body></html>"
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Enter arguments to give to the executable.<br/>You can "
+"pass arguments containing space characters by putting them in double-quotes."
+"</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Бағдарламаға тапсыратын аргументтерді келтіру. <br/"
+">Қос тырнақшалап бос орыны бар өрнектерді келтіруге болады. </p></body></"
+"html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: nativeappconfig.ui:144
+#, fuzzy, kde-format
+#| msgid "Working Directory:"
+msgctxt "@label:chooser"
+msgid "Working &directory:"
+msgstr "Жұмыс каталогы:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
+#: nativeappconfig.ui:154
+#, fuzzy, kde-format
+#| msgid "Select a working directory for the executable"
+msgctxt "@info:tooltip"
+msgid "Select a working directory for the executable"
+msgstr "Оррындалатын файлының жұмыс каталогын таңдау"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: nativeappconfig.ui:161
+#, fuzzy, kde-format
+#| msgid "Environment:"
+msgctxt "@label:chooser"
+msgid "E&nvironment:"
+msgstr "Ортасы:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: nativeappconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Қолданатын ортасын таңдау"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:206
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>By default applications will be run in the background and only their "
+#| "output will be displayed in a toolview. This makes it impossible to "
+#| "interact with applications requiring user input from a terminal emulator. "
+#| "To run such applications, you should use an external terminal.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>By default applications will be run in the background and only their "
+"output will be displayed in a tool view. This makes it impossible to "
+"interact with applications requiring user input from a terminal emulator. To "
+"run such applications, you should use an external terminal.</p>"
+msgstr ""
+"<p>Әдетте бағдарлама аяда жегіліп, панелінде тек шығысы ғана көрсетіледі. Ол "
+"пайдаланушыдан керегіне бірдемені енгізуді мүмкін емес қылады. Ондай "
+"бағдарламаны кәдімгі (сыртқы) терминалда орындау керек.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
+#: nativeappconfig.ui:209
+#, fuzzy, kde-format
+#| msgid "Use External Terminal:"
+msgctxt "@option:check"
+msgid "Use external terminal:"
+msgstr "Сыртқы терминал қолдану командасы:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
+#: nativeappconfig.ui:234
+#, fuzzy, no-c-format, kde-format
+#| msgid ""
+#| "<p>Defines the command to execute the external terminal emulator. Use the "
+#| "following placeholders:</p>\n"
+#| "<dl>\n"
+#| "<dt><code>%exe</code></dt>\n"
+#| "<dd>The path to the executable selected above.</dd>\n"
+#| "<dt><code>%workdir</code></dt>\n"
+#| "<dd>The path to the working directory selected above.</dd>\n"
+#| "</dl>\n"
+#| "<p>The arguments defined above will get appended to this command.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command to execute the external terminal emulator. Use the "
+"following placeholders:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>The path to the executable selected above.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>The path to the working directory selected above.</dd>\n"
+"</dl>\n"
+"<p>The arguments defined above will get appended to this command.</p>"
+msgstr ""
+"<p>Сыртқы терминал эмуляторында орындайтын командасы. Келесі орынбасарларды "
+"қолданыңыз:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>Жоғарда таңдалған орындалатын файлдың жолы.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>Жоғарда таңдалған жұмыс каталогының жолы.</dd>\n"
+"</dl>\n"
+"<p>Жоғарда анықталған аргументтер командадан кейін қосылады.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: nativeappconfig.ui:259
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Restart"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: nativeappconfig.ui:272
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Ілеспелер"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: nativeappconfig.ui:278
+#, fuzzy, kde-format
+#| msgid "Action:"
+msgctxt "@label:listbox"
+msgid "Act&ion:"
+msgstr "Амалы:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:288
+#, fuzzy, kde-format
+#| msgid ""
+#| "Specifies the action to take for the dependencies before starting the "
+#| "executable."
+msgctxt "@info:tooltip"
+msgid ""
+"Specifies the action to take for the dependencies before starting the "
+"executable."
+msgstr "Файлды орындау алдында ілеспелеріне арналған әрекетті келтіру."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:291
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected action will be run before the executable is started.  This "
+#| "allows there to be parts of a project, upon which the executable does not "
+#| "directly depend, to be built and/or installed before running the "
+#| "application."
+msgctxt "@info:whatsthis"
+msgid ""
+"The selected action will be run before the executable is started.  This "
+"allows there to be parts of a project, upon which the executable does not "
+"directly depend, to be built and/or installed before running the application."
+msgstr ""
+"Таңдалған амал орындалатын файлды жегу алдында жегіледі. Бұл бағдарламаны "
+"орындаудын алдында жобаның жанамалы тәуелді ілеспе бөліктерін құрастырып "
+"орнатуға арналған мүмкіндік."
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:298
+#, fuzzy, kde-format
+#| msgid "Do Nothing"
+msgctxt "@item:inlistbox dependency action"
+msgid "Do Nothing"
+msgstr "Ештеңе істемеу"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:303
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build"
+msgstr "Құрастыру"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
+#: nativeappconfig.ui:308
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Build and Install"
+msgctxt "@item:inlistbox dependency action"
+msgid "Build and Install"
+msgstr "Құрастырып орнату"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: nativeappconfig.ui:316
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "Targets:"
+msgstr "Мақсаттары:"
+
+#: nativeappjob.cpp:66
+#, fuzzy, kde-format
+#| msgid ""
+#| "No environment group specified, looks like a broken configuration, please "
+#| "check run configuration '%1'. Using default environment group."
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Орталар тобы келтірілмеген, жегу баптауы жарамсыз секілді, '%1' жегу "
+"баптауын тексеріңіз. Әдетті орталар тобы қолданбақ."
+
+#: nativeappjob.cpp:142
+#, kde-format
+msgctxt "@title:window"
+msgid "Job Already Running"
+msgstr ""
+
+#: nativeappjob.cpp:143
+#, kde-format
+msgid "'%1' is already being executed."
+msgstr ""
+
+#: nativeappjob.cpp:145
+#, kde-format
+msgctxt "@action:button"
+msgid "Kill All Instances"
+msgstr ""
+
+#: nativeappjob.cpp:146
+#, kde-format
+msgctxt "@action:button"
+msgid "Start Another"
+msgstr ""
+
+#: nativeappjob.cpp:149
+#, kde-format
+msgctxt "@option:check"
+msgid "Remember choice"
+msgstr ""
+
+#~ msgid "Enter arguments to give to the executable"
+#~ msgstr "Орындалатын файлға тапсырылатын аргументтерді келтіру"
+
+#~ msgid "Starting: %1"
+#~ msgstr "Бастау: %1"
+
+#~ msgid "*** Killed Application ***"
+#~ msgstr "*** Құртып кетірген бағдарлама ***"
+
+#~ msgid "*** Exited normally ***"
+#~ msgstr "*** Дұрыс аяқталды ***"
+
+#~ msgid "*** Exited with return code: %1 ***"
+#~ msgstr "*** Шығу коды: %1 ***"
+
+#~ msgid "*** Process aborted ***"
+#~ msgstr "*** Процес доғарылды ***"
+
+#~ msgid "*** Crashed with return code: %1 ***"
+#~ msgstr "*** Қирап шығу коды: %1 ***"
+
+#~ msgid ""
+#~ "*** Could not start program '%1'. Make sure that the path is specified "
+#~ "correctly ***"
+#~ msgstr ""
+#~ "*** '%1' бағдарламасы жегілмеді. Жолы дұрыс келтірілгенін тексеріңіз ***"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Тізімге ілеспелерін келтіріп қосу"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Тізімделген мақсатарды ілеспелер тізіміне қосу."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Жанама ілеспе мақсаттар тізімі."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Бұнда тікелей тәуелді емес ілеспе мақсатты бағдарламалар тізімделеді. Бұл "
+#~ "бағдарламалар әрекеті негізгі бағдарламаны жегудің алдында керек деп "
+#~ "табылады."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Таңдалған ілеспелерді тізімінен өшіру."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Ілеспені тізімінде жоғарлату."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Таңдалған ілеспені тізімінде төмендету."
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid "Execute support"
+#~ msgstr "Орындауын қолдау"
+
+#~ msgid ""
+#~ "This plugin allows running of programs with no instrumentor, ie. natively "
+#~ "by the current host."
+#~ msgstr ""
+#~ "Бұл плагин көмегімен бағдарламаны тікелей назардағы хостта жегуге болады."
+
+#~ msgid "Application"
+#~ msgstr "Қолданба"
+
+#~ msgid "Allows running of native apps"
+#~ msgstr "Жүйе құрамындағы бағдарламаларды жегуін қолдау"
+
+#~ msgid "Could not start application"
+#~ msgstr "Бағдарлама жегілмеді"

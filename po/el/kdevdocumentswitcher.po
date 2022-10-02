@@ -1,0 +1,77 @@
+# # translation of kdevdocumentswitcher.po into [el]
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentswitcher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-02-03 12:58+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: documentswitcherplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Last Used Views"
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Πρόσφατες αναγνώσεις"
+
+#: documentswitcherplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr "Ανοίγει μια λίστα διάσχισης στις πρόσφατες αναγνώσεις."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Walk through the list of last used views"
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Διασχίστε τη λίστα των πρόσφατων αναγνώσεων"
+
+#: documentswitcherplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Last Used Views (Reverse)"
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "Πρόσφατες αναγνώσεις (αντίστροφα)"
+
+#: documentswitcherplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views in reverse."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr ""
+"Ανοίγει μια λίστα διάσχισης με αντίστροφη σειρά ανάμεσα σε όσα έχουν "
+"διαβαστεί πρόσφατα."
+
+#~ msgid "Document Switcher"
+#~ msgstr "Εναλλάκτης εγγράφων"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Switch between open documents using most-recently-used list"
+#~ msgstr ""
+#~ "Εναλλάσσει μεταξύ ανοιχτών εγγράφων από μια λίστα με τα πιο πρόσφατα "
+
+#~ msgid ""
+#~ "<b>Walk through last used Views</b><br/>Opens a list to walk through the "
+#~ "list of last used views."
+#~ msgstr ""
+#~ "<b>Διάσχιση πρόσφατων αναγνώσεων</b><br/>Ανοίγει μια λίστα διάσχισης "
+#~ "ανάμεσα σε όσα έχουν διαβαστεί πρόσφατα."

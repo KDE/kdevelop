@@ -1,0 +1,90 @@
+# # translation of kdevokteta.po into [el]
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevokteta\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2012-11-04 11:28+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr "Δικαιώματα"
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr "Προβολή"
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:124
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr ""
+"Το έγγραφο \"%1\" περιέχει μη αποθηκευμένες αλλαγές. Επιθυμείτε να τις "
+"αποθηκεύσετε;"
+
+#: oktetadocument.cpp:125
+#, fuzzy, kde-format
+#| msgid "Close Document"
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr "Κλείσιμο εγγράφου"
+
+#: oktetaplugin.cpp:97
+#, fuzzy, kde-format
+#| msgid "Hex Editor"
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr "Επεξεργαστής δεκαεξαδικών"
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr "Διαχείριση προφίλ προβολών διανύσματος δυαδικών ψηφίων..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Designer Layout Toolbar"
+#~ msgstr "Γραμμή εργαλείων σχεδιαστή σελιδοποίησης"
+
+#~ msgid "Okteta Plugin for KDevelop"
+#~ msgstr "Πρόσθετο Okteta για το KDevelop"
+
+#~ msgid "Provides simple Hex Editing"
+#~ msgstr "Παρέχει απλή επεξεργασία δεκαεξαδικών"
+
+#~ msgid "Open As Byte Array"
+#~ msgstr "Άνοιγμα ως διάνυσμα δυαδικών ψηφίων"

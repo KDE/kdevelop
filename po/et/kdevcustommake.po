@@ -1,0 +1,138 @@
+# translation of kdevcustommake.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2016-01-29 00:38+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Püüti lahendada päise asukohta ajal, mil teine lahendamisprotsess veel käis"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Kataloogis \"%1\" puudub Makefile"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Probleem %1 päiste asukohtade lahendamisel"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Puhverdatud: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Failinimi %1 paistab olevat vigane"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Uue töökataloogi ekstraktimine nurjus"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "Väljund oli: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Rekursiivne make'i väljakutse nurjus"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "Parameetristring \"%1\" ei paista olevat korrektne. Väljundi oli: %2"
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "Kataloogi \"%1\" ei ole olemas. Väljund oli: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Vigane rekursiivne make'i väljakutse"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Make'i väljundist ei õnnestunud kätte saada päiste asukohti"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Kataloog: \"%1\"  Käsk: \"%2\"  Väljund: \"%3\""
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Käivitamine"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Kohandatud Makefile'i haldur"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Kohandatud Makefile'i projektide haldamise toetus"
+
+#, fuzzy
+#~ msgid "Build &Target"
+#~ msgstr "Ehi&tamine Sihtmärk"
+
+#, fuzzy
+#~ msgid "Build target"
+#~ msgstr "Ehitamine sihtmärk"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b> Ehitamine sihtmärk</b><p><b> make</b>   projekt on nimi  /  sihtmärk</"
+#~ "p><p> Keskkond muutujad ja make arguments asukohas projekt seadistused<b> "
+#~ "Ehitamine Valikud</b></p>"
+
+#, fuzzy
+#~ msgid "Build this project"
+#~ msgstr "Ehitamine projekt"
+
+#, fuzzy
+#~ msgid "Build this target"
+#~ msgstr "Ehitamine sihtmärk"
+
+#, fuzzy
+#~ msgid "Build this directory"
+#~ msgstr "Ehitamine"

@@ -1,0 +1,86 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Andrew Coles <andrew_coles@yahoo.co.uk>, 2009.
+# Steve Allewell <steve.allewell@gmail.com>, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-30 00:43+0000\n"
+"PO-Revision-Date: 2020-09-27 13:38+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: kdevdocumentview.cpp:64
+#, kde-format
+msgid "Documents"
+msgstr "Documents"
+
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
+#, kde-format
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "Documents"
+
+#: kdevdocumentview.cpp:211
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "Reload"
+
+#: kdevdocumentview.cpp:217
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "Close"
+
+#: kdevdocumentview.cpp:218
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "Close All Other"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Display document categories (mimetypes) in the view"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype."
+#~ msgstr ""
+#~ "If this option is set, the Document View will organise documents\n"
+#~ "        by their mimetype."
+
+#~ msgctxt "@option:check"
+#~ msgid "Display document &categories"
+#~ msgstr "Display document &categories"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrew Coles, Steve Allewell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "andrew_coles@yahoo.co.uk, steve.allewell@gmail.com"
+
+#~ msgid "Document View"
+#~ msgstr "Document View"
+
+#~ msgid ""
+#~ "This plugin displays a graphical view of all documents currently loaded "
+#~ "and separates them by mimetype."
+#~ msgstr ""
+#~ "This plugin displays a graphical view of all documents currently loaded "
+#~ "and separates them by mimetype."
+
+#~ msgid "A list of opened documents"
+#~ msgstr "A list of opened documents"
+
+#~ msgid "Version Control "
+#~ msgstr "Version Control "

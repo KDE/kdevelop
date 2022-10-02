@@ -1,0 +1,824 @@
+# translation of kdevgrepview.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2010.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevgrepview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-08-03 09:57+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: grepdialog.cpp:52
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Open Files"
+msgstr "Alla öppna filer"
+
+#: grepdialog.cpp:53
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "All Open Projects"
+msgstr "Alla öppna projekt"
+
+#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#, kde-format
+msgctxt "@title:window"
+msgid "Find/Replace in Files"
+msgstr "Sök eller ersätt i filer"
+
+#: grepdialog.cpp:189
+#, kde-format
+msgctxt "@action:button"
+msgid "Search..."
+msgstr "Sök..."
+
+#: grepdialog.cpp:256
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Directory to Search in"
+msgstr "Välj en katalog att söka i"
+
+#: grepdialog.cpp:512
+#, kde-format
+msgid "%2, and %1 more item"
+msgid_plural "%2, and %1 more items"
+msgstr[0] "%2, och %1 ytterligare objekt"
+msgstr[1] "%2, och %1 ytterligare objekt"
+
+#: grepdialog.cpp:525
+#, kde-format
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2"
+msgstr "Sök efter \"%1\" i %2"
+
+#: grepdialog.cpp:530
+#, kde-format
+msgctxt "@item search result"
+msgid "Search \"%1\" in %2 (at time %3)"
+msgstr "Sök efter \"%1\" i %2 (med tid %3)"
+
+#: grepjob.cpp:97
+#, kde-format
+msgid "Find in Files"
+msgstr "Sök i filer"
+
+#: grepjob.cpp:113 grepjob.cpp:216
+#, kde-format
+msgid "Search aborted"
+msgstr "Sökning avbruten"
+
+#: grepjob.cpp:122
+#, kde-format
+msgid "No files found matching the wildcard patterns"
+msgstr "Inga filer hittades som motsvarar mönstren med jokertecken"
+
+#: grepjob.cpp:140
+#, kde-format
+msgctxt ""
+"Capture is the text which is \"captured\" with () in regular expressions see "
+"https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
+msgid "Captures are not allowed in pattern string"
+msgstr "Infångningar tillåts inte i mönstersträng"
+
+#: grepjob.cpp:161
+#, kde-format
+msgid "Searching for <b>%2</b> in one file"
+msgid_plural "Searching for <b>%2</b> in %1 files"
+msgstr[0] "Söker efter <b>%2</b> i en fil"
+msgstr[1] "Söker efter <b>%2</b> i %1 filer"
+
+#: grepjob.cpp:182
+#, kde-format
+msgid "Collecting files..."
+msgstr "Samlar filer..."
+
+#: grepjob.cpp:260
+#, kde-format
+msgid "Failed: %1"
+msgstr "Misslyckades: %1"
+
+#: grepjob.cpp:263
+#, kde-format
+msgid "No results found"
+msgstr "Inga resultat hittades"
+
+#: grepjob.cpp:282
+#, kde-format
+msgid "Grep: %1"
+msgstr "Flerfilsökning: %1"
+
+#: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
+#, kde-format
+msgid "Line %1: "
+msgstr "Rad %1: "
+
+#: grepoutputmodel.cpp:377
+#, kde-format
+msgid "<b>1</b> match"
+msgid_plural "<b>%1</b> matches"
+msgstr[0] "<b>1</b> träff"
+msgstr[1] "<b>%1</b> träffar"
+
+#: grepoutputmodel.cpp:378
+#, kde-format
+msgid "<b>1</b> file"
+msgid_plural "<b>%1</b> files"
+msgstr[0] "<b>1</b> fil"
+msgstr[1] "<b>%1</b> filer"
+
+#: grepoutputmodel.cpp:380
+#, kde-format
+msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
+msgid "<b>%1 in %2</b>"
+msgstr "<b>%1 i %2</b>"
+
+#: grepoutputmodel.cpp:382
+#, kde-format
+msgid "%2: 1 match"
+msgid_plural "%2: %1 matches"
+msgstr[0] "%2: 1 träff"
+msgstr[1] "%2: %1 träffar"
+
+#: grepoutputmodel.cpp:452
+#, kde-format
+msgctxt ""
+"%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
+"its row and column"
+msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
+msgstr "Misslyckades ersätta <b>%1</b> med <b>%2</b> i %3:%4:%5"
+
+#: grepoutputview.cpp:71
+#, kde-format
+msgctxt "@title:window"
+msgid "Find/Replace Output View"
+msgstr "Visning av sök- eller ersättningsutmatning"
+
+#: grepoutputview.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "&Previous Item"
+msgstr "&Föregående värde"
+
+#: grepoutputview.cpp:75
+#, kde-format
+msgctxt "@action"
+msgid "&Next Item"
+msgstr "&Nästa värde"
+
+#: grepoutputview.cpp:80
+#, kde-format
+msgctxt "@action"
+msgid "C&ollapse All"
+msgstr "&Dra ihop alla"
+
+#: grepoutputview.cpp:82
+#, kde-format
+msgctxt "@action"
+msgid "&Expand All"
+msgstr "&Expandera alla"
+
+#: grepoutputview.cpp:86
+#, kde-format
+msgctxt "@action"
+msgid "New &Search"
+msgstr "Ny &sökning"
+
+#: grepoutputview.cpp:87
+#, kde-format
+msgctxt "@action"
+msgid "Refresh"
+msgstr "Uppdatera"
+
+#: grepoutputview.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Clear Search History"
+msgstr "Rensa sökhistorik"
+
+#: grepoutputview.cpp:323
+#, kde-format
+msgid "Do you want to replace with an empty string?"
+msgstr "Vill du ersätta med en tom sträng?"
+
+#: grepoutputview.cpp:324
+#, kde-format
+msgctxt "@title:window"
+msgid "Start Replacement"
+msgstr "Starta ersättning"
+
+#: grepoutputview.cpp:325
+#, kde-format
+msgctxt "@action:button"
+msgid "Replace"
+msgstr "Ersätt"
+
+#. i18n: ectx: property (text), widget (QLabel, replacementLabel)
+#: grepoutputview.ui:41
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Replacement &text:"
+msgstr "Ersättnings&text:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
+#: grepoutputview.ui:57
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the replacement pattern"
+msgstr "Skriv in ersättningsvärdet."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
+#: grepoutputview.ui:76
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Apply replacement on selected items"
+msgstr "Utför ersättning av markerade värden."
+
+#. i18n: ectx: property (text), widget (QPushButton, applyButton)
+#: grepoutputview.ui:79
+#, kde-format
+msgctxt "@action:button"
+msgid "&Replace"
+msgstr "&Ersätt"
+
+#: grepviewplugin.cpp:76
+#, kde-format
+msgctxt "@action"
+msgid "Find/Replace in Fi&les..."
+msgstr "Sök eller ersätt i fi&ler..."
+
+#: grepviewplugin.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Search for expressions over several files"
+msgstr "Söker efter uttryck i flera filer"
+
+#: grepviewplugin.cpp:81
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Opens the 'Find/Replace in Files' dialog. There you can enter a regular "
+"expression which is then searched for within all files in the directories "
+"you specify. Matches will be displayed, you can switch to a match directly. "
+"You can also do replacement."
+msgstr ""
+"Öppnar dialogrutan 'Sök eller ersätt i filer'. Där kan du ange ett reguljärt "
+"uttryck som därefter används för att söka i alla filer i katalogerna du "
+"anger. Träffar visas, och du kan direkt gå till en träff. Du kan också "
+"utföra ersättning."
+
+#: grepviewplugin.cpp:129 grepviewplugin.cpp:152
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Find/Replace in This Folder..."
+msgstr "Sök och ersätt i den här katalogen..."
+
+#: grepviewplugin.cpp:140
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Find/Replace in Files..."
+msgstr "Sök eller ersätt i &filer..."
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
+#: grepwidget.ui:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the regular expression you want to search for"
+msgstr "Skriv in det reguljära uttrycket att söka efter här."
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
+#: grepwidget.ui:59
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
+"expression you want to search for here.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
+"\"Regular Expression\" below, this is considered a raw string. That means, "
+"all meta characters are escaped.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta characters "
+"are:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
+"character</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - Matches the beginning of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Matches the end of a line</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Matches a word boundary</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">The following repetition "
+"operators exist:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
+"item is matched at most once</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - The preceding item is matched zero or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - The preceding item is matched one or more times</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched exactly <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding item "
+"is matched <span style=\" font-style:italic;\">n</span> or more times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - The preceding item "
+"is matched at most <span style=\" font-style:italic;\">n</span> times</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - The preceding item is matched at least <span style=\" font-style:"
+"italic;\">n</span>, but at most <span style=\" font-style:italic;\">m</span> "
+"times.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
+"backreferences to bracketed subexpressions are available via the notation "
+"\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
+"look at <a href=\"https://www.pcre.org/\"><span style=\" text-decoration: "
+"underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
+"style:italic;\">man pcresyntax.</span></p></body></html>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Ange det reguljära "
+"uttrycket att söka efter här.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Om \"Reguljärt uttryck\" "
+"inte markeras nedan, anses det vara en enkel sträng. Det betyder att alla "
+"metatecken skyddas.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Möjliga metatecken är:</"
+"p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Motsvarar ett "
+"godtyckligt tecken</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">^</span> - Motsvarar början på en rad</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Motsvarar slutet på en rad</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Motsvarar en ordgräns</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\s</span> - Motsvarar vilket blanktecken som helst</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Det finns följande "
+"upprepningsoperatorer:</p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
+"right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> - Föregående objekt "
+"matchas som mest en gång</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">*</span> - Föregående objekt matchas noll eller flera gånger</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">+</span> - Föregående objekt matchas en eller flera gånger</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - Föregående objekt "
+"matchas exakt <span style=\" font-style:italic;\">n</span> gånger</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> - Föregående objekt "
+"matchas <span style=\" font-style:italic;\">n</span> eller flera gånger</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">}</span> - Föregående objekt "
+"matchas som mest <span style=\" font-style:italic;\">n</span> gånger</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
+"weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
+"</span> - Föregående objekt matchas som minst <span style=\" font-style:"
+"italic;\">n</span> gånger, men som mest <span style=\" font-style:italic;"
+"\">m</span> gånger.</li></ul>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Dessutom är "
+"bakåtreferenser till deluttryck inom parentes tillgängliga via notationen "
+"\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">För ytterligare "
+"information se <a href=\"https://www.pcre.org\"><span style=\" text-"
+"decoration: underline; color:#0057ae;\">www.pcre.org</span></a> eller <span "
+"style=\" font-style:italic;\">man pcresyntax.</span></p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: grepwidget.ui:69
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Template:"
+msgstr "Mall:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
+#: grepwidget.ui:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This is the regular expression template."
+msgstr "Det här är mallen för det reguljära uttrycket."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
+#: grepwidget.ui:85
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This is the regular expression template. <i>%s</i> will be replaced by the "
+"pattern, while <i>%%</i> will be replaced by <i>%</i>."
+msgstr ""
+"Det här är den reguljära uttrycksmallen. <i>%s</i> ersätts av mönstret, "
+"medan <i>%%</i> ersätts av <i>%</i>."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
+#: grepwidget.ui:92
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Quickly select location from a set of directories"
+msgstr "Välj snabbt plats från en uppsättning kataloger"
+
+#. i18n: ectx: property (text), widget (QPushButton, syncButton)
+#: grepwidget.ui:95
+#, kde-format
+msgctxt "@action:button"
+msgid "Quick Select"
+msgstr "Snabbval"
+
+#. i18n: ectx: property (text), widget (QLabel, depthLabel)
+#: grepwidget.ui:102
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Depth:"
+msgstr "Djup:"
+
+#. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
+#: grepwidget.ui:118
+#, kde-format
+msgctxt "@item full recursion"
+msgid "Full"
+msgstr "Fullständigt"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: grepwidget.ui:131
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Pattern:"
+msgstr "Mönster:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: grepwidget.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Files:"
+msgstr "Filer:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: grepwidget.ui:157
+#, kde-format
+msgctxt "@option:check"
+msgid "Case sensitive:"
+msgstr "Skiftlägeskänsligt:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
+#: grepwidget.ui:176
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Case-sensitive searching."
+msgstr "Skiftlägeskänslig sökning."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: grepwidget.ui:189
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Location(s):"
+msgstr "Plats(er):"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
+#: grepwidget.ui:202
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Files filter"
+msgstr "Filfilter."
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
+#: grepwidget.ui:205
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to search here. You may give "
+"several patterns separated by commas or spaces."
+msgstr ""
+"Ange filnamnsmönster för filer som skall sökas i här. Du kan ange flera "
+"mönster åtskilda med kommatecken eller mellanslag."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: grepwidget.ui:218
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Exclude:"
+msgstr "Undanta:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:231
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Files pattern to exclude"
+msgstr "Filmönster att undanta"
+
+#. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
+#: grepwidget.ui:234
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter the file name pattern of the files to exclude from the search here. "
+"You may give several patterns separated by commas or spaces.<p>Every pattern "
+"is internally surrounded by asterisks, so that each pattern can match parts "
+"of the file paths.</p>"
+msgstr ""
+"Ange filnamnsmönster för filer som skall undantas från sökningen här. Du kan "
+"ange flera mönster åtskilda med kommatecken eller mellanslag.<p>Varje "
+"mönster omges internt med asterisker, så att varje mönster kan matcha delar "
+"av filsökvägarna.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: grepwidget.ui:314
+#, kde-format
+msgctxt "@option:check"
+msgid "Regular expression:"
+msgstr "Reguljärt uttryck:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
+#: grepwidget.ui:327
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable or disable regular expression."
+msgstr "Aktivera eller inaktivera reguljärt uttryck."
+
+#. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
+#: grepwidget.ui:340
+#, kde-format
+msgctxt "@option:check"
+msgid "Limit to project files:"
+msgstr "Begränsa till projektfiler:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
+#: grepwidget.ui:369
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter the replacement template"
+msgstr "Skriv in ersättningsmallen."
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: grepwidget.ui:376
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Replacement template:"
+msgstr "Ersättningsmall:"
+
+#. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
+#: grepwidget.ui:389
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the location where you want to search. It can be a directory, a file, "
+"or a semicolon separated (without spaces) list of directories/files."
+msgstr ""
+"Välj platsen där du vill söka. Den kan vara en katalog, en fil, eller en "
+"lista med kataloger och filer åtskilda av semikolon (utan mellanslag)."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
+#: grepwidget.ui:414
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a directory to search in"
+msgstr "Välj en katalog att söka i."
+
+#~ msgid "Find-Replace In Files"
+#~ msgstr "Sök och ersätt i filer"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Edit"
+#~ msgstr "Redigera"
+
+#~ msgid "<big>%2 <i>(one match)</i></big>"
+#~ msgid_plural "<big>%2 <i>(%1 matches)</i></big>"
+#~ msgstr[0] "<big>%2 <i>(en träff)</i></big>"
+#~ msgstr[1] "<big>%2 <i>(%1 träffar)</i></big>"
+
+#~| msgid "Replace"
+#~ msgid "Find/Replace"
+#~ msgstr "Sök och ersätt"
+
+#~ msgid "&Find/Replace in Files"
+#~ msgstr "&Sök eller ersätt i filer"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid ""
+#~ "Allows fast searching of multiple files using patterns or regular "
+#~ "expressions. And allow to replace it too."
+#~ msgstr ""
+#~ "Tillåter snabb sökning i flera filer med mönster eller reguljära uttryck, "
+#~ "och tillåter dessutom ersättning."
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Ctrl+Alt+f"
+#~ msgstr "Ctrl+Alt+f"
+
+#~ msgid "Synchronize with current document directory."
+#~ msgstr "Synkronisera med aktuell dokumentkatalog."
+
+#~ msgid "&Change Search Settings"
+#~ msgstr "Ä&ndra sökinställningar"
+
+#~ msgid "Support for running grep over a list of files"
+#~ msgstr "Stöd för att köra grep med en lista av filer"
+
+#~ msgid "Recursive:"
+#~ msgstr "Rekursivt:"
+
+#~ msgid "Find/Replace In Files"
+#~ msgstr "Sök eller ersätt i filer"
+
+#~ msgid "&Change criteria"
+#~ msgstr "Ändra &kriterier"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Directory:"
+#~ msgstr "Katalog:"
+
+#~ msgid "Replace in files"
+#~ msgstr "Ersätt i filer"
+
+#~ msgid "Replace with: "
+#~ msgstr "Ersätt med: "
+
+#~ msgid "Apply"
+#~ msgstr "Verkställ"
+
+#~ msgid "%1 matches in %2 files"
+#~ msgstr "%1 träffar i %2 filer"
+
+#~ msgid "Replace <b>%2</b> by <b>%3</b> in one file"
+#~ msgid_plural "Replace <b>%2</b> by <b>%3</b> in %1 files"
+#~ msgstr[0] "Ersätt <b>%2</b> med <b>%3</b> i en fil"
+#~ msgstr[1] "Ersätt <b>%2</b> med <b>%3</b> i %1 filer"
+
+#~ msgid "Form"
+#~ msgstr "Formulär"
+
+#~ msgid "Find in Files aborted"
+#~ msgstr "Sökning i filer avbruten"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Navigation"
+#~ msgstr "Navigering"
+
+#~ msgid "Searching for \"%1\""
+#~ msgstr "Söker efter %1\""
+
+#~ msgid "Missing tools"
+#~ msgstr "Saknar verktyg"
+
+#~ msgid "The following needed tools are missing on your system:"
+#~ msgstr "Följande nödvändiga verktyg saknas på systemet:"
+
+#~ msgid "Unable to create a temporary file for search."
+#~ msgstr "Kunde inte skapa tillfällig fil för sökning."
+
+#~ msgid "Process failed to start."
+#~ msgstr "Start av processen misslyckades."
+
+#~ msgid "Process crashed."
+#~ msgstr "Processen kraschade."
+
+#~ msgid "Process timed out."
+#~ msgstr "Tidsgräns för processen gick ut."
+
+#~ msgid "Error while writing to process."
+#~ msgstr "Fel vid skrivning till processen."
+
+#~ msgid "Error while reading from process."
+#~ msgstr "Fel vid läsning från processen."
+
+#~ msgid "Unknown process error."
+#~ msgstr "Okänt processfel."
+
+#~ msgid ""
+#~ "Enter the regular expression you want to search for here.<p>Possible meta "
+#~ "characters are:<ul><li><b>.</b> - Matches any character</li><li><b>^</b> "
+#~ "- Matches the beginning of a line</li><li><b>$</b> - Matches the end of a "
+#~ "line</li><li><b>\\&lt;</b> - Matches the beginning of a word</li><li><b>"
+#~ "\\&gt;</b> - Matches the end of a word</li></ul>The following repetition "
+#~ "operators exist:<ul><li><b>?</b> - The preceding item is matched at most "
+#~ "once</li><li><b>*</b> - The preceding item is matched zero or more times</"
+#~ "li><li><b>+</b> - The preceding item is matched one or more times</"
+#~ "li><li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> "
+#~ "times</li><li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> "
+#~ "or more times</li><li><b>{,<i>n</i>}</b> - The preceding item is matched "
+#~ "at most <i>n</i> times</li><li><b>{<i>n</i>,<i>m</i>}</b> - The preceding "
+#~ "item is matched at least <i>n</i>, but at most <i>m</i> times.</li></"
+#~ "ul>Furthermore, backreferences to bracketed subexpressions are available "
+#~ "via the notation \\<i>n</i>.</p>"
+#~ msgstr ""
+#~ "Ange det reguljära uttryck som du vill söka efter här.<p>Möjliga "
+#~ "specialtecken är:<ul><li><b>.</b> - Matchar alla tecken</li><li><b>^</b> "
+#~ "- Matchar början på en rad</li><li><b>$</b> - Matchar slutet på en rad</"
+#~ "li><li><b>\\&lt;</b> - Matchar början av ett ord</li><li><b>\\&gt;</b> - "
+#~ "Matchar slutet av ett ord</li></ul>Följande tecken för upprepning finns:"
+#~ "<ul><li><b>?</b> - Föregående objekt matchas en gång som mest</"
+#~ "li><li><b>*</b> - Föregående objekt matchas noll eller flera gånger</"
+#~ "li><li><b>+</b> - Föregående objekt matchas en eller flera gånger</"
+#~ "li><li><b>{<i>n</i>}</b> - Föregående objekt matchas exakt <i>n</i> "
+#~ "gånger</li><li><b>{<i>n</i>,}</b> - Föregående objekt matchas <i>n</i> "
+#~ "eller flera gånger</li><li><b>{,<i>n</i>}</b> - Föregående objekt matchas "
+#~ "som mest <i>n</i> gånger</li><li><b>{<i>n</i>,<i>m</i>}</b> - Föregående "
+#~ "objekt matchas som minst <i>n</i>, men som mest <i>m</i> gånger.</li></"
+#~ "ul>Bakåtreferenser till parentetiserade deluttryck är också tillgängliga, "
+#~ "och anges med \\<i>n</i>.</p>"
+
+#~ msgid ""
+#~ "You can choose a template for the pattern from the combo box and edit it "
+#~ "here. The string %s in the template is replaced by the pattern input "
+#~ "field, resulting in the regular expression to search for."
+#~ msgstr ""
+#~ "Här kan du välja en mall för mönstret från listan och redigera den. "
+#~ "Strängen %s i mallen ersätts med mallens inmatningsfält, vilket "
+#~ "resulterar i det reguljära uttryck som används vid sökningen."
+
+#~ msgid "Suppress find errors:"
+#~ msgstr "Visa inte sökfel:"

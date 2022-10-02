@@ -1,0 +1,204 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2009, 2013, 2014, 2016, 2017.
+# Rene Landert <rene.landert@bluewin.ch>, 2008.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2020.
+# Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-08-19 18:13+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makebuilderpreferences.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr "Make-Einstellungen einrichten"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "Beim &ersten Fehler abbrechen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Befehle anzeigen, aber nicht ausführen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "Als &Systemverwalter installieren:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "&Installationsbefehl für den Systemverwalter:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "&Anzahl parallel ausgeführter Aufträge:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "&Make-Programmdatei:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "Standardziel &für Make:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Weitere Ma&ke-Optionen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Aktives &Umgebungsprofil:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr "An&zahl der Aufträge überschreiben:"
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Das zu erstellende Element ist nicht mehr verfügbar"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Interner Fehler: eine Datei kann nicht erstellt werden"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "gksu"
+#~ msgstr "gksu"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Ansicht"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "Make Builder"
+#~ msgstr "Make-Builder"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Unterstützt das Generieren von Make-Projekten"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Ungültiger Build-Ordner „%1“"
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "„%1“ ist kein lokaler Pfad"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "„%1“ ist kein Ordner"
+
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Der Befehl zur Erstellung der Ziele „%1“ kann nicht erzeugt werden."
+
+#~ msgid "Job failed"
+#~ msgstr "Auftrag fehlgeschlagen"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Fehlgeschlagen ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Beendet ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Abgebrochen ***"
+
+#, fuzzy
+#~| msgid "Install as &root:"
+#~ msgid "Build, then install as root"
+#~ msgstr "Als &Systemverwalter installieren:"
+
+#~ msgid "compiling"
+#~ msgstr "Kompilieren"
+
+#~ msgid "generating"
+#~ msgstr "Erstellen"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "Linken"
+
+#~ msgid "built"
+#~ msgstr "Erstellt"
+
+#~ msgid "installing"
+#~ msgstr "Installieren"
+
+#~ msgid "creating"
+#~ msgstr "Anlegen von"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Mehrere Aufgaben parallel ausführen:"

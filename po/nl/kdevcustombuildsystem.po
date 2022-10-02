@@ -1,0 +1,466 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2012, 2014, 2015, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-21 11:49+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: configwidget.cpp:25
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Build"
+msgstr "Bouwen"
+
+#: configwidget.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Configure"
+msgstr "Configureren"
+
+#: configwidget.cpp:27
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Install"
+msgstr "Installeren"
+
+#: configwidget.cpp:28
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Clean"
+msgstr "Schonen"
+
+#: configwidget.cpp:29
+#, kde-format
+msgctxt "@item:inlistbox build action"
+msgid "Prune"
+msgstr "Rommel verwijderen"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: configwidget.ui:19
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build directory:"
+msgstr "Bouwmap:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, buildDir)
+#: configwidget.ui:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Select the directory where the tools are being executed in.\n"
+"If this is the same as the source directory you can leave it empty."
+msgstr ""
+"Selecteer de map waarin de hulpmiddelen worden uitgevoerd.\n"
+"Als dit hetzelfde is als de map met de broncode dan kunt u het leeg laten."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, buildDir)
+#: configwidget.ui:30
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "The directory where the tools are executed in"
+msgstr "De map waarin de hulpmiddelen worden uitgevoerd"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: configwidget.ui:42
+#, kde-format
+msgctxt "@title:group"
+msgid "Build Tools"
+msgstr "Hulpmiddelen voor bouwen"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: configwidget.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Action:"
+msgstr "Actie:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: configwidget.ui:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable:"
+msgstr "Inschakelen:"
+
+#. i18n: ectx: property (text), widget (QLabel, execLabel)
+#: configwidget.ui:75
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Executable:"
+msgstr "Uitvoerbaar bestand:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, actionExecutable)
+#: configwidget.ui:85
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This is the executable that should be executed when selecting the action "
+"from the Project menu"
+msgstr ""
+"Dit is het uitvoerbare bestand dat uitgevoerd moet worden wanneer de actie "
+"uit het projectmenu wordt geselecteerd"
+
+#. i18n: ectx: property (text), widget (QLabel, argLabel)
+#: configwidget.ui:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Arguments:"
+msgstr "Argumenten:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, actionArguments)
+#: configwidget.ui:105
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The arguments that the tool needs to execute properly."
+msgstr ""
+"De argumenten die het hulpmiddel nodig heeft om juist te worden uitgevoerd."
+
+#. i18n: ectx: property (text), widget (QLabel, envLabel)
+#: configwidget.ui:115
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr "Omgeving:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, actionEnvironment)
+#: configwidget.ui:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Choose a pre-configured environment for your tool"
+msgstr "Kies een voor-geconfigureerde omgeving voor uw hulpmiddel"
+
+#: custombuildjob.cpp:67
+#, kde-format
+msgctxt "Building: <command> <project item name>"
+msgid "Building: %1 %2"
+msgstr "Bezig met bouwen: %1 %2"
+
+#: custombuildjob.cpp:70
+#, kde-format
+msgctxt "Cleaning: <command> <project item name>"
+msgid "Cleaning: %1 %2"
+msgstr "Opschonen van: %1 %2"
+
+#: custombuildjob.cpp:73
+#, kde-format
+msgctxt "Installing: <command> <project item name>"
+msgid "Installing: %1 %2"
+msgstr "Installeren van: %1 %2"
+
+#: custombuildjob.cpp:74
+#, kde-format
+msgctxt "Installing: <command> <project item name> <installPrefix>"
+msgid "Installing: %1 %2 %3"
+msgstr "Installeren van: %1 %2 %3"
+
+#: custombuildjob.cpp:77
+#, kde-format
+msgctxt "Configuring: <command> <project item name>"
+msgid "Configuring: %1 %2"
+msgstr "Bezig met instellen van: %1 %2"
+
+#: custombuildjob.cpp:80
+#, kde-format
+msgctxt "Pruning: <command> <project item name>"
+msgid "Pruning: %1 %2"
+msgstr "Bezig met rommel verwijderen: %1 %2"
+
+#: custombuildjob.cpp:95
+#, kde-format
+msgid "Undefined Build type"
+msgstr "Ongedefinieerd bouwtype"
+
+#: custombuildjob.cpp:99
+#, kde-format
+msgid "No command given for custom %1 tool in project \"%2\"."
+msgstr "Geen commando gegeven voor eigen %1-hulpmiddel in project \"%2\"."
+
+#: custombuildjob.cpp:104
+#, kde-format
+msgid "The custom %1 tool in project \"%2\" is disabled"
+msgstr "Het eigen %1-hulpmiddel in project \"%2\" is uitgeschakeld"
+
+#: custombuildjob.cpp:116
+#, kde-format
+msgid ""
+"The given arguments would need a real shell, this is not supported currently."
+msgstr ""
+"De gegeven argumenten zouden een echte shell nodig hebben, dit wordt nu niet "
+"ondersteund."
+
+#: custombuildjob.cpp:166
+#, kde-format
+msgid "Failed to start command."
+msgstr "Het commando starten is mislukt."
+
+#: custombuildjob.cpp:169
+#, kde-format
+msgid "Command crashed."
+msgstr "Commando is gecrasht."
+
+#: custombuildjob.cpp:172
+#, kde-format
+msgid "Unknown error executing command."
+msgstr "Onbekende fout bij het uitvoeren van commando."
+
+#: custombuildjob.cpp:189
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Mislukt ***"
+
+#: custombuildjob.cpp:191
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Voltooid ***"
+
+#: custombuildsystemconfig.cpp:14
+#, kde-format
+msgctxt "@item:intext custom 'build' tool"
+msgid "build"
+msgstr "bouwen"
+
+#: custombuildsystemconfig.cpp:15
+#, kde-format
+msgctxt "@item:intext custom 'configure' tool"
+msgid "configure"
+msgstr "configureren"
+
+#: custombuildsystemconfig.cpp:16
+#, kde-format
+msgctxt "@item:intext custom 'install' tool"
+msgid "install"
+msgstr "installeren"
+
+#: custombuildsystemconfig.cpp:17
+#, kde-format
+msgctxt "@item:intext custom 'clean' tool"
+msgid "clean"
+msgstr "opschonen"
+
+#: custombuildsystemconfig.cpp:18
+#, kde-format
+msgctxt "@item:intext custom 'prune' tool"
+msgid "prune"
+msgstr "rommel verwijderen"
+
+#: custombuildsystemconfig.cpp:19
+#, kde-format
+msgctxt "@item:intext custom 'unknown' tool"
+msgid "unknown"
+msgstr "onbekend"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: custombuildsystemconfigwidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build configuration:"
+msgstr "Bouwconfiguratie:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addConfig)
+#: custombuildsystemconfigwidget.ui:54
+#, kde-format
+msgctxt "@action:button"
+msgid "Add"
+msgstr "Toevoegen"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeConfig)
+#: custombuildsystemconfigwidget.ui:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: kcm_custombuildsystem.cpp:53
+#, kde-format
+msgctxt "@title:tab"
+msgid "Custom Build System"
+msgstr "Eigen bouwsysteem"
+
+#: kcm_custombuildsystem.cpp:58
+#, kde-format
+msgid ""
+"Configure a projects custom build tool and includes/defines for the language "
+"support."
+msgstr ""
+"Stel het eigen bouwhulpmiddel van een project in en voeg toe/definieer de "
+"ondersteuning van taal."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "No command given"
+#~ msgstr "Geen commando gegeven"
+
+#~ msgid "This command is disabled"
+#~ msgstr "Dit commando is uitgeschakeld"
+
+#~ msgid "Support for building and managing custom build systems"
+#~ msgstr "Ondersteuning voor het bouwen en beheren van een eigen bouwsystemen"
+
+#~ msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgstr "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+
+#~ msgid "Path-specific language parameters"
+#~ msgstr "Pad-specifieke taalparameters"
+
+#~ msgid "Double-click here to insert a new define to be used for the path"
+#~ msgstr ""
+#~ "Dubbelklik hier om een nieuwe 'define' in te voegen om te gebruiken voor "
+#~ "het pad"
+
+#~ msgid "Define"
+#~ msgstr "Definiëren"
+
+#~ msgid "Value"
+#~ msgstr "Waarde"
+
+#~ msgid "Delete Define"
+#~ msgstr "Define verwijderen"
+
+#~ msgid "Delete Include Path"
+#~ msgstr "Include-pad verwijderen"
+
+#~ msgid "Are you sure you want to remove the selected include path '%1'?"
+#~ msgstr "Wilt u het geselecteerde include-pad '%1' verwijderen?"
+
+#~ msgid ""
+#~ "Add the currently displayed URL to the list of includes if it is not in "
+#~ "the list yet."
+#~ msgstr ""
+#~ "Voegt de nu getoonde URL toe aan de lijst met includes als het nog niet "
+#~ "in de lijst zit."
+
+#~ msgid "A new include path to use for parsing files under given directory"
+#~ msgstr ""
+#~ "Een nieuw te gebruiken include-pad voor ontleden van bestanden onder de "
+#~ "gegeven map"
+
+#~ msgid "Create a new include path entry from this URL."
+#~ msgstr "Maak een nieuw include-pad-item aan uit deze URL."
+
+#~ msgid "Delete current include path entry."
+#~ msgstr "Huidige include-pad-item verwijderen"
+
+#~ msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#~ msgstr "Wilt u de configuratie voor het pad '%1' verwijderen?"
+
+#~ msgid "Add a new sub-project path entry."
+#~ msgstr "Voeg een nieuw subprojectpad-item toe."
+
+#~ msgid ""
+#~ "Replace the currently selected path with a new value keeping the includes "
+#~ "and defines currently set for the selected path."
+#~ msgstr ""
+#~ "Vervang het nu geselecteerde pad door een nieuwe waarde met behoud van de "
+#~ "'includes' en 'defines' die nu zijn ingesteld voor het geselecteerde pad."
+
+#~ msgid "Replace"
+#~ msgstr "Vervangen"
+
+#~ msgid "Delete current sub-project path entry."
+#~ msgstr "Vervang het huidige subprojectpad-item."
+
+#~ msgid "Includes/Imports"
+#~ msgstr "In te voegen/te importeren"
+
+#~ msgid "Defines"
+#~ msgstr "Te definiëren"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Delete current include path entry.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Huidige include-pad-item verwijderen.</p></body></"
+#~ "html>"
+
+#~| msgid "Custom BuildSystem"
+#~ msgid "CustomBuildSystem Config Ui Test App"
+#~ msgstr "CustomBuildSystem Config Ui Test App"
+
+#~ msgid "kcm_uitest"
+#~ msgstr "kcm_uitest"
+
+#~| msgid "Copyright 2010 Andreas Pakulat <apaku@gmx.de>"
+#~ msgid "(C) 2012 Andreas Pakulat"
+#~ msgstr "(C) 2012 Andreas Pakulat"
+
+#~ msgid "Andreas Pakulat"
+#~ msgstr "Andreas Pakulat"
+
+#~ msgid "Delete Project Path"
+#~ msgstr "Projectpad verwijderen"
+
+#~ msgid "Includes/Imports and Defines for Project Directories/Files"
+#~ msgstr ""
+#~ "In te voegen/te importeren en te definiëren voor projectmappen/bestanden"
+
+#~ msgid "Directories/Files:"
+#~ msgstr "Mappen/bestanden:"
+
+#~ msgid ""
+#~ "A list of paths specifying project directories or files, for which "
+#~ "includes and\n"
+#~ "defines should be set up. \"/\" denotes the top level project directory. "
+#~ "If the\n"
+#~ "path identifies a directory the includes/defines are active for that "
+#~ "directory\n"
+#~ "and all sub (and sub-sub)directories."
+#~ msgstr ""
+#~ "Een lijst met paden die projectmappen of bestanden specificeren, waarvoor "
+#~ "'include's en\n"
+#~ "'define's zouden moeten worden ingesteld. \"/\" geeft de projectmap op "
+#~ "het hoogste niveau weer.\n"
+#~ "Als het pad een map aangeeft dan zijn de 'include's/'define's actief voor "
+#~ "die map\n"
+#~ "en alle sub (en sub-sub)mappen."
+
+#~ msgid "Switch between configuring Includes/Imports and Defines"
+#~ msgstr ""
+#~ "Schakel tussen instellen van in te voegen/te importeren en te definiëren"
+
+#~ msgid "List of include paths for the selected project item"
+#~ msgstr "Lijst met 'include path's voor het geselecteerd projectitem"
+
+#~ msgid ""
+#~ "A list of absolute include paths that the KDevelop parser should be "
+#~ "using\n"
+#~ "when parsing the project files in the given project path."
+#~ msgstr ""
+#~ "Een lijst met absolute 'include path's die de ontleder van KDevelop zou "
+#~ "moeten\n"
+#~ "gebruiken bij het ontleden van de projectbestanden in het gegeven "
+#~ "projectpad."
+
+#~ msgid ""
+#~ "Specify a list of pre-processor defines and their values that the "
+#~ "KDevelop parser should use when parsing the files in the given project "
+#~ "path."
+#~ msgstr ""
+#~ "Een lijst met preprocessor 'define's en hun waarden die de ontleder van "
+#~ "KDevelop zou moeten gebruiken bij het ontleden van de bestanden in het "
+#~ "gegeven projectpad."
+
+#~ msgid ""
+#~ "Double-Click here to insert a new include path to be used for the path"
+#~ msgstr ""
+#~ "Dubbelklik hier om een nieuw 'include path' in te voegen om te gebruiken "
+#~ "voor het pad"
+
+#~ msgid "Double-Click here to insert a new path to a directory or file."
+#~ msgstr ""
+#~ "Dubbelklik hier om een nieuw pad naar een map of bestand in te voegen."

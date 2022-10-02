@@ -1,0 +1,348 @@
+# translation of kdevproblemreporter.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevproblemreporter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"PO-Revision-Date: 2021-11-10 17:26+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: problemreporterplugin.cpp:94
+#, kde-format
+msgid "Parser"
+msgstr "Tolk"
+
+#: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
+#: problemsview.cpp:324
+#, kde-format
+msgctxt "@title:window"
+msgid "Problems"
+msgstr "Problem"
+
+#: problemreporterplugin.cpp:229
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve Problem"
+msgstr "Lös problem"
+
+#: problemreporterplugin.cpp:231
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Solve: %1"
+msgstr "Lös: %1 "
+
+#: problemsview.cpp:37
+#, kde-format
+msgctxt "@action"
+msgid "Force Full Update"
+msgstr "Tvinga fullständig uppdatering"
+
+#: problemsview.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Which files to display the problems for"
+msgstr "Vilka filer som problem ska visas för"
+
+#: problemsview.cpp:58
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Document"
+msgstr "Aktuellt dokument"
+
+#: problemsview.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current document"
+msgstr "Visa problem i aktuellt dokument"
+
+#: problemsview.cpp:62
+#, kde-format
+msgctxt "@option:check"
+msgid "Open Documents"
+msgstr "Öppna dokument"
+
+#: problemsview.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all open documents"
+msgstr "Visa problem i alla öppna dokument"
+
+#: problemsview.cpp:66
+#, kde-format
+msgctxt "@option:check"
+msgid "Current Project"
+msgstr "Aktuellt projekt"
+
+#: problemsview.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in current project"
+msgstr "Visa problem i aktuellt projekt"
+
+#: problemsview.cpp:70
+#, kde-format
+msgctxt "@option:check"
+msgid "All Projects"
+msgstr "Alla projekt"
+
+#: problemsview.cpp:71
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in all projects"
+msgstr "Visa problem i alla projekt"
+
+#: problemsview.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Path"
+msgstr "Dokument i sökväg"
+
+#: problemsview.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in a specific path"
+msgstr "Visa problem från alla filer med en angiven sökväg"
+
+#: problemsview.cpp:78
+#, kde-format
+msgctxt "@option:check"
+msgid "Documents In Current Path"
+msgstr "Dokument i aktuell sökväg"
+
+#: problemsview.cpp:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems from all files in the path of the current document"
+msgstr ""
+"Visa problem i från alla filer med sökvägen för det aktuella dokumentet"
+
+#: problemsview.cpp:83
+#, kde-format
+msgctxt "@option:check"
+msgid "Show All"
+msgstr "Visa alla"
+
+#: problemsview.cpp:84
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display all problems"
+msgstr "Visa alla problem"
+
+#: problemsview.cpp:105
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Path Filter..."
+msgstr "Sökvägsfilter..."
+
+#: problemsview.cpp:137
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Imports"
+msgstr "Visa importer"
+
+#: problemsview.cpp:138
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display problems in imported files"
+msgstr "Visa problem i importerade filer"
+
+#: problemsview.cpp:148
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display errors"
+msgstr "Visa fel"
+
+#: problemsview.cpp:150
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Errors"
+msgstr "Visa fel"
+
+#: problemsview.cpp:153
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display warnings"
+msgstr "Visa varningar"
+
+#: problemsview.cpp:155
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Warnings"
+msgstr "Visa varningar"
+
+#: problemsview.cpp:158
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Display hints"
+msgstr "Visa tips"
+
+#: problemsview.cpp:160
+#, kde-format
+msgctxt "@option:check"
+msgid "Show Hints"
+msgstr "Visa tips"
+
+#: problemsview.cpp:180
+#, kde-format
+msgctxt "@title:menu"
+msgid "Grouping"
+msgstr "Gruppering"
+
+#: problemsview.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "None"
+msgstr "Ingen"
+
+#: problemsview.cpp:190
+#, kde-format
+msgctxt "@option:check"
+msgid "Path"
+msgstr "Sökväg"
+
+#: problemsview.cpp:191
+#, kde-format
+msgctxt "@option:check"
+msgid "Severity"
+msgstr "Svårighetsgrad"
+
+#: problemsview.cpp:219
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Sök..."
+
+#: problemsview.cpp:462
+#, kde-format
+msgctxt "@title:tab %1: tab name, %2: number of problems"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: problemsview.cpp:500
+#, kde-format
+msgctxt "@title:menu"
+msgid "Scope: %1"
+msgstr "Omfattning: %1"
+
+#: problemtreeview.cpp:94
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Problems"
+msgstr "Problem"
+
+#: problemtreeview.cpp:205
+#, kde-format
+msgctxt "@title:menu"
+msgid "Problem"
+msgstr "Problem"
+
+#: problemtreeview.cpp:207
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "&Copy Description"
+msgstr "&Kopiera beskrivning"
+
+#: problemtreeview.cpp:226
+#, kde-format
+msgctxt "@title:menu"
+msgid "Solve: %1"
+msgstr "Lös: %1 "
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Re-parse all watched documents"
+#~ msgstr "Tolka om alla bevakade dokument"
+
+#~ msgid "Solve"
+#~ msgstr "Lös"
+
+#~ msgid "Problem in <b>%1</b>:<br/>"
+#~ msgstr "Problem i <b>%1</b>:<br/>"
+
+#~ msgid " in "
+#~ msgstr " i "
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Display errors, warnings and hints"
+#~ msgstr "Visa fel, varningar och tips"
+
+#~ msgid "Scope"
+#~ msgstr "Omfattning"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select the lowest level of problem severity to be displayed"
+#~ msgstr "Välj lägsta nivå av problemens svårighetsgrad att visa"
+
+#~ msgid "Hint"
+#~ msgstr "Tips"
+
+#~ msgctxt "@title:column source of problem"
+#~ msgid "Source"
+#~ msgstr "Källa"
+
+#~ msgctxt "@title:column file where problem was found"
+#~ msgid "File"
+#~ msgstr "Fil"
+
+#~ msgctxt "@title:column line number with problem"
+#~ msgid "Line"
+#~ msgstr "Rad"
+
+#~ msgctxt "@title:column column number with problem"
+#~ msgid "Column"
+#~ msgstr "Kolumn"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Problem Reporter"
+#~ msgstr "Problemrapporter"
+
+#~ msgid "Shows errors in source code"
+#~ msgstr "Visar fel i källkod"
+
+#~ msgid "In file included from:"
+#~ msgstr "I fil inkluderad från:"
+
+#~ msgid "Auto Resize Columns"
+#~ msgstr "Ändra automatiskt kolumnstorlekar"
+
+#~ msgid "Automatically resize columns to their data size"
+#~ msgstr "Ändra automatiskt kolumnstorlekar till deras datastorlek"
+
+#~ msgid "Re-parse the current file and all its imports."
+#~ msgstr "Tolka aktuell fil och allt den importerar igen."
+
+#~ msgid "Unknown"
+#~ msgstr "Okänd"
+
+#~ msgid "Disk"
+#~ msgstr "Disk"
+
+#~ msgid "Preprocessor"
+#~ msgstr "Preprocessor"
+
+#~ msgid "Lexer"
+#~ msgstr "Lexikalanalys"
+
+#~ msgid "Definition-Use Chain"
+#~ msgstr "Definition-användningskedja"
+
+#~ msgid "Semantic Analysis"
+#~ msgstr "Semantisk analys"

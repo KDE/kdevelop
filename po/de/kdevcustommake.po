@@ -1,0 +1,134 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2008, 2014.
+# Thomas Reitelbach <tr@erdfunkstelle.de>, 2009.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-09-08 06:12+0200\n"
+"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Es wurde versucht, die Include-Pfade aufzulösen während ein anderer "
+"Auflösungsprozess läuft"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Das Makefile ist nicht im Ordner „%1“ "
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Beim Auflösen des Include-Pfades für „%1“ ist ein Fehler aufgetreten"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Zwischengespeichert: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Der Dateiname „%1“ scheint ungültig zu sein"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Der neue Arbeitsordner kann nicht gefunden werden"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "Die Ausgabe lautet: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Rekursiver Make-Aufruf fehlgeschlagen"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr ""
+"Der Parameterstring „%1“ scheint nicht in Ordnung zu sein. Die Ausgabe "
+"lautet: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "Der Ordner „%1“ existiert nicht. Die Ausgabe lautet: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Ungültiger rekursiver Make-Aufruf"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Die Include-Pfade können nicht aus der Make-Ausgabe extrahiert werden"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Ordner: „%1“ Befehl: „%2“ Ausgabe: „%3“"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Ausführen"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Verwaltung für eigene Makefiles"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Unterstützung für die Verwaltung eigener Makefiles"
+
+#~ msgid "Build &Target"
+#~ msgstr "&Target erstellen"
+
+#~ msgid "Build target"
+#~ msgstr "Target erstellen"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Target erstellen</b><p>Führt den Befehl <b>make Targetname</b> im "
+#~ "Projektordner aus. Hierbei ist Targetname der Name des ausgewählten "
+#~ "Targets.</p> <p>Umgebungsvariablen und make-Schalter können im "
+#~ "Einstellungsdialog für das Projekt im Karteireiter <b>Erstellen</b> "
+#~ "angegeben werden.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "Dieses Projekt erstellen"
+
+#~ msgid "Build this target"
+#~ msgstr "Dieses Target erstellen"
+
+#~ msgid "Build this directory"
+#~ msgstr "Diesen Ordner erstellen"

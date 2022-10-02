@@ -1,0 +1,206 @@
+# Finnish messages for kdevmakebuilder.
+# Copyright © 2009, 2011, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdevelop package.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014.
+# Tommi Nieminen <translator@legisign.org>, 2021.
+#
+# KDE Finnish translation sprint participants:
+# Author: Lliehu
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-27 15:41+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#: makebuilderpreferences.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr "make-asetukset"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "K&eskeytä ensimmäiseen virheeseen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Näytä komennot, mutta älä suorita niitä:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "&Asenna pääkäyttäjänä:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "&Pääkäyttäjäoikeuksin asentamisen komento:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "&Samanaikaisia töitä:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "make-ohjelma&tiedosto:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "&make-oletuskohde:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "make-&lisävalitsimet:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Aktiivinen ympäristöpro&fiili:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr "&Ohita töiden määrä:"
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Käännöskohde ei ole enää saatavilla"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Sisäinen virhe: tiedostokohdetta ei voi kääntää"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Näytä"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu,Jorma Karvonen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com,karvonen.jorma@gmail.com"
+
+#~ msgid "Make Builder"
+#~ msgstr "Make-käännin"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Tuki Make-projektien kääntämiselle"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Virheellinen käännöshakemisto ”%1”"
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "”%1” ei ole paikallinen polku"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "”%1” ei ole hakemisto"
+
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Ei voitu luoda käännöskomentoa kohteille ”%1”"
+
+#~ msgid "Job failed"
+#~ msgstr "Työ epäonnistui"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Epäonnistui ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Päättyi ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Keskeytetty ***"
+
+#~ msgid "Build, then install as root"
+#~ msgstr "Käännä ja asenna sitten pääkäyttäjänä"
+
+#~ msgid "compiling"
+#~ msgstr "käännetään"
+
+#~ msgid "generating"
+#~ msgstr "generoidaan"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "linkitetään"
+
+#~ msgid "built"
+#~ msgstr "rakennettu"
+
+#~ msgid "installing"
+#~ msgstr "asennetaan"
+
+#~ msgid "creating"
+#~ msgstr "luodaan"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Suorita enemmän kuin yksi työ kerrallaan:"

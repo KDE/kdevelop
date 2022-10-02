@@ -1,0 +1,583 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"PO-Revision-Date: 2014-09-08 22:56+0200\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: editexternalscript.cpp:30
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the command that should be executed when this script is run. "
+"Basic shell features of your platform should be available.</p>\n"
+"<p>There are a few placeholders you can use in the command:</p>\n"
+"<dl>\n"
+"  <dt><code>%u</code></dt>\n"
+"  <dd>Gets replaced by the URL of the active document.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd>Gets replaced by the local filepath to the active document.</dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document, including its "
+"extension.</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>Gets replaced by the name of the active document without its extension."
+"</dd>\n"
+"  <dt><code>%d</code></dt>\n"
+"  <dd>Gets replaced by the path to the directory of the active document.</"
+"dd>\n"
+"  <dt><code>%p</code></dt>\n"
+"  <dd>Gets replaced by the URL to the project of the active document.</dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>Gets replaced with the shell escaped contents of the selection in the "
+"active document.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>Gets replaced with the PID of the currently running KDevelop process.</"
+"dd>\n"
+"</dl>\n"
+"<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
+"commands that could lead to data loss.</p>\n"
+msgstr ""
+
+#: editexternalscript.cpp:56
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what the external script should get as input (via <code>STDIN</"
+"code>).</p>"
+msgstr ""
+
+#: editexternalscript.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
+"the script.</p>"
+msgstr ""
+
+#: editexternalscript.cpp:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of "
+"the script.</p><p>Note: if the action is the same as that chosen for the "
+"output, the channels will be merged and handled together.</p>"
+msgstr ""
+
+#: editexternalscript.cpp:76
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
+msgstr ""
+
+#: editexternalscript.cpp:82
+#, fuzzy, kde-format
+#| msgid "<p>Defines shortcuts you can use to execute this script.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines the shortcut(s) you can use to execute this external script.</p>"
+msgstr ""
+"<p>Gyorsbillentyűket határoz meg a parancsfájl a végrehajtásának "
+"használatához.</p>"
+
+#: editexternalscript.cpp:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether documents should be saved before the script gets executed."
+"</p>"
+msgstr ""
+
+#: editexternalscript.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines whether the output of the script should be shown in a tool view.</"
+"p>"
+msgstr ""
+
+#: editexternalscript.cpp:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Defines what type of filtering should be applied to the output. E.g. to "
+"indicate errors by red text.</p>"
+msgstr ""
+
+#: editexternalscript.cpp:106
+#, fuzzy, kde-format
+#| msgid "Create new external script"
+msgctxt "@title:window"
+msgid "Create New External Script"
+msgstr "Új külső parancsfájl létrehozása"
+
+#: editexternalscript.cpp:108
+#, fuzzy, kde-format
+#| msgid "Edit external script '%1'"
+msgctxt "@title:window"
+msgid "Edit External Script '%1'"
+msgstr "Külső parancsfájl („%1”) szerkesztése"
+
+#. i18n: ectx: property (text), widget (QLabel, nameLabel)
+#: editexternalscript.ui:19
+#, fuzzy, kde-format
+#| msgid "&Name:"
+msgctxt "@label:textbox"
+msgid "&Name:"
+msgstr "&Név:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
+#: editexternalscript.ui:30
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>The name will also be used as the identifier during code completion.</"
+#| "p>\n"
+#| "<p><b>Note:</b> No spaces allowed.</p>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>The name will also be used as the identifier during code completion.</p>\n"
+"  <p><b>Note:</b> No spaces allowed.</p>"
+msgstr ""
+"<p>A név is azonosítóként lesz használva a kódkiegészítés során.</p>\n"
+"<p><b>Megjegyzés:</b> szóköz nem engedélyezett.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, commandLabel)
+#: editexternalscript.ui:37
+#, fuzzy, kde-format
+#| msgid "&Command:"
+msgctxt "@label:textbox"
+msgid "&Command:"
+msgstr "&Parancs:"
+
+#. i18n: ectx: property (text), widget (QLabel, stdinLabel)
+#: editexternalscript.ui:51
+#, fuzzy, kde-format
+#| msgid "&Input:"
+msgctxt "@label:listbox"
+msgid "&Input:"
+msgstr "&Bemenet:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:62
+#, fuzzy, kde-format
+#| msgid "nothing"
+msgctxt "@item:inlistbox input source"
+msgid "Nothing"
+msgstr "semmi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:67
+#, fuzzy, kde-format
+#| msgid "selection in current file or nothing"
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Nothing"
+msgstr "kijelölés a jelenlegi fájlban vagy semmi"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:72
+#, fuzzy, kde-format
+#| msgid "selection in current file or whole file"
+msgctxt "@item:inlistbox input source"
+msgid "Selection in Current File or Whole File"
+msgstr "kijelölés a jelenlegi fájlban vagy az egész fájl"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
+#: editexternalscript.ui:77
+#, fuzzy, kde-format
+#| msgid "contents of current file"
+msgctxt "@item:inlistbox input source"
+msgid "Contents of Current File"
+msgstr "a jelenlegi fájl tartalma"
+
+#. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
+#: editexternalscript.ui:85
+#, fuzzy, kde-format
+#| msgid "&Output:"
+msgctxt "@label:listbox"
+msgid "&Output:"
+msgstr "&Kimenet:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:96
+#, fuzzy, kde-format
+#| msgid "ignore"
+msgctxt "@item:inlistbox handle output"
+msgid "Ignore"
+msgstr "mellőzés"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:101
+#, fuzzy, kde-format
+#| msgid "insert at cursor position of current file"
+msgctxt "@item:inlistbox handle output"
+msgid "Insert at Cursor Position of Current File"
+msgstr "beszúrás a jelenlegi fájl kurzorának pozíciójához"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:106
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or insert at cursor position"
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr ""
+"a jelenlegi fájl kijelölésének cseréje vagy beszúrás a kurzor pozíciójához"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:111
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or whole file"
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "a jelenlegi fájl kijelölésének vagy az egész fájl cseréje"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:116
+#, fuzzy, kde-format
+#| msgid "replace contents of current file"
+msgctxt "@item:inlistbox handle output"
+msgid "Replace Contents of Current File"
+msgstr "a jelenlegi fájl tartalmának cseréje"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
+#: editexternalscript.ui:121
+#, fuzzy, kde-format
+#| msgid "create new file"
+msgctxt "@item:inlistbox handle output"
+msgid "Create New File"
+msgstr "új fájl létrehozása"
+
+#. i18n: ectx: property (text), widget (QLabel, stderrLabel)
+#: editexternalscript.ui:129
+#, fuzzy, kde-format
+#| msgid "Errors:"
+msgctxt "@label:listbox"
+msgid "Errors:"
+msgstr "Hibák:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:140
+#, fuzzy, kde-format
+#| msgid "ignore"
+msgctxt "@item:inlistbox handle errors"
+msgid "Ignore"
+msgstr "mellőzés"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:145
+#, fuzzy, kde-format
+#| msgid "merge with normal output"
+msgctxt "@item:inlistbox handle errors"
+msgid "Merge with Normal Output"
+msgstr "egyesítés a normál kimenettel"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:150
+#, fuzzy, kde-format
+#| msgid "insert at cursor position of current file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Insert at Cursor Position of Current File"
+msgstr "beszúrás a jelenlegi fájl kurzorának pozíciójához"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:155
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or insert at cursor position"
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Insert at Cursor Position"
+msgstr ""
+"a jelenlegi fájl kijelölésének cseréje vagy beszúrás a kurzor pozíciójához"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:160
+#, fuzzy, kde-format
+#| msgid "replace selection of current file or whole file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Selection of Current File or Whole File"
+msgstr "a jelenlegi fájl kijelölésének vagy az egész fájl cseréje"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:165
+#, fuzzy, kde-format
+#| msgid "replace contents of current file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Replace Contents of Current File"
+msgstr "a jelenlegi fájl tartalmának cseréje"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
+#: editexternalscript.ui:170
+#, fuzzy, kde-format
+#| msgid "create new file"
+msgctxt "@item:inlistbox handle errors"
+msgid "Create New File"
+msgstr "új fájl létrehozása"
+
+#. i18n: ectx: property (text), widget (QLabel, saveLabel)
+#: editexternalscript.ui:178
+#, fuzzy, kde-format
+#| msgid "Save &Mode:"
+msgctxt "@label:listbox"
+msgid "Save &mode:"
+msgstr "Mentés &mód:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:189
+#, fuzzy, kde-format
+#| msgid "save nothing"
+msgctxt "@item:inlistbox save mode"
+msgid "Save Nothing"
+msgstr "ne mentsen semmit"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:194
+#, fuzzy, kde-format
+#| msgid "save active document"
+msgctxt "@item:inlistbox save mode"
+msgid "Save Active Document"
+msgstr "aktív dokumentum mentése"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
+#: editexternalscript.ui:199
+#, fuzzy, kde-format
+#| msgid "save all open documents"
+msgctxt "@item:inlistbox save mode"
+msgid "Save All Open Documents"
+msgstr "minden megnyitott dokumentum mentése"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: editexternalscript.ui:207
+#, fuzzy, kde-format
+#| msgid "Show Out&put"
+msgctxt "@option:check"
+msgid "Show out&put:"
+msgstr "Kimenet &megjelenítése"
+
+#. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
+#: editexternalscript.ui:224
+#, fuzzy, kde-format
+#| msgid "Output Filter:"
+msgctxt "@label:listbox"
+msgid "Output filter:"
+msgstr "Kimenet szűrő:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:235
+#, fuzzy, kde-format
+#| msgid "no filter"
+msgctxt "@item:inlistbox output filter"
+msgid "No Filter"
+msgstr "nincs szűrő"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:240
+#, fuzzy, kde-format
+#| msgid "compiler filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Compiler Filter"
+msgstr "fordító szűrő"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:245
+#, fuzzy, kde-format
+#| msgid "script error filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Script Error Filter"
+msgstr "parancsfájl hiba szűrő"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
+#: editexternalscript.ui:250
+#, fuzzy, kde-format
+#| msgid "static analysis error filter"
+msgctxt "@item:inlistbox output filter"
+msgid "Static Analysis Filter"
+msgstr "statikus elemző hiba szűrő"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:258
+#, fuzzy, kde-format
+#| msgid "<p>Defines shortcuts you can use to execute this script.</p>"
+msgctxt "@info:tooltip"
+msgid "Defines shortcuts you can use to execute this script."
+msgstr ""
+"<p>Gyorsbillentyűket határoz meg a parancsfájl a végrehajtásának "
+"használatához.</p>"
+
+#. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
+#: editexternalscript.ui:261
+#, fuzzy, kde-format
+#| msgid "Shortcut:"
+msgctxt "@label:chooser"
+msgid "Shortcut:"
+msgstr "Gyorsbillentyű:"
+
+#: externalscriptjob.cpp:88
+#, kde-format
+msgid ""
+"Cannot run script '%1' since it tries to access the editor contents but no "
+"document is open."
+msgstr ""
+
+#: externalscriptjob.cpp:224
+#, kde-format
+msgid "Running external script: %1"
+msgstr "Külső parancsfájl futtatása: %1"
+
+#: externalscriptjob.cpp:268
+#, kde-format
+msgid "*** Killed Application ***"
+msgstr "*** Kilőtt alkalmazás ***"
+
+#: externalscriptjob.cpp:348
+#, kde-format
+msgid "*** Exited normally ***"
+msgstr "*** Normálisan lépett ki ***"
+
+#: externalscriptjob.cpp:351
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Kilépett ezzel a visszatérési kóddal: %1 ***"
+
+#: externalscriptjob.cpp:354
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Folyamat megszakítva ***"
+
+#: externalscriptjob.cpp:356
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Összeomlott ezzel a visszatérési kóddal: %1 ***"
+
+#: externalscriptjob.cpp:368
+#, kde-format
+msgid ""
+"*** Could not start program '%1'. Make sure that the path is specified "
+"correctly ***"
+msgstr ""
+"*** Nem indítható a(z) „%1” program. Győződjön meg arról, hogy az elérési út "
+"helyesen van-e megadva ***"
+
+#: externalscriptplugin.cpp:125
+#, kde-format
+msgid "External Scripts"
+msgstr "Külső parancsfájlok"
+
+#: externalscriptplugin.cpp:136
+#, kde-format
+msgid "Quick Compile"
+msgstr "Gyors fordítás"
+
+#: externalscriptplugin.cpp:142
+#, kde-format
+msgid "Sort Selection"
+msgstr "Kijelölés rendezése"
+
+#: externalscriptplugin.cpp:150
+#, kde-format
+msgid "Google Selection"
+msgstr "Google kijelölés"
+
+#: externalscriptplugin.cpp:156
+#, kde-format
+msgid "Paste to Hastebin"
+msgstr ""
+
+#: externalscriptplugin.cpp:238
+#, fuzzy, kde-format
+#| msgid "External Scripts"
+msgctxt "@title:menu"
+msgid "External Scripts"
+msgstr "Külső parancsfájlok"
+
+#: externalscriptview.cpp:30
+#, fuzzy, kde-format
+#| msgid "External Scripts"
+msgctxt "@title:window"
+msgid "External Scripts"
+msgstr "Külső parancsfájlok"
+
+#: externalscriptview.cpp:48
+#, fuzzy, kde-format
+#| msgid "Add External Script"
+msgctxt "@action"
+msgid "Add External Script"
+msgstr "Külső parancsfájl hozzáadása"
+
+#: externalscriptview.cpp:53
+#, fuzzy, kde-format
+#| msgid "Edit External Script"
+msgctxt "@action"
+msgid "Edit External Script"
+msgstr "Külső parancsfájl szerkesztése"
+
+#: externalscriptview.cpp:58
+#, fuzzy, kde-format
+#| msgid "Remove External Script"
+msgctxt "@action"
+msgid "Remove External Script"
+msgstr "Külső parancsfájl eltávolítása"
+
+#: externalscriptview.cpp:145
+#, kde-format
+msgid ""
+"<p>Do you really want to remove the external script configuration for <i>%1</"
+"i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
+msgstr ""
+
+#: externalscriptview.cpp:148
+#, fuzzy, kde-format
+#| msgid "Confirm External Script Removal"
+msgctxt "@title:window"
+msgid "Confirm External Script Removal"
+msgstr "Külső parancsfájl eltávolításának megerősítése"
+
+#: externalscriptview.cpp:149
+#, kde-format
+msgctxt "@action:button"
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
+#: externalscriptview.ui:35
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Szűrő…"
+
+#~ msgid "please insert a name"
+#~ msgstr "kérjük szúrjon be egy nevet"
+
+#~ msgid "please insert a command to execute"
+#~ msgstr "kérjük szúrja be a végrehajtandó parancsot"
+
+#~ msgid "Define filter here"
+#~ msgstr "Szűrő meghatározása itt"
+
+#~ msgid "No Document Open"
+#~ msgstr "Nincs megnyitandó dokumentum"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf,Úr Balázs"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#~ msgid "Support for running external scripts."
+#~ msgstr "Támogatás külső parancsfájlok futtatásához."
+
+#~ msgid "Could not start application"
+#~ msgstr "Nem indítható az alkalmazás"

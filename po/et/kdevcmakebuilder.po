@@ -1,0 +1,160 @@
+# translation of kdevcmakebuilder.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2011, 2012, 2014, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-02-21 11:14+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "Make'i ehitajat ei leitud. Kontrolli oma paigaldust"
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "%1 jaoks ei leitud ehitajat"
+
+#: cmakebuilder.cpp:195
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot install"
+msgid "No build directory configured, cannot install"
+msgstr "Ehituskataloogi pole määratud, ei saa paigaldada"
+
+#: cmakebuilder.cpp:205
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot configure"
+msgid "No build directory configured, cannot configure"
+msgstr "Ehituskataloogi pole määratud, ei saa konfigureerida"
+
+#: cmakebuilderpreferences.cpp:40
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, fuzzy, kde-format
+#| msgid "Configure Global CMake Settings"
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "CMake'i globaalsete valikute seadistamine"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, fuzzy, kde-format
+#| msgid "Default CMake executable:"
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "CMake'i vaikimisi täitmisfail:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, fuzzy, kde-format
+#| msgid "Default generator:"
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Vaikimisi genereerija:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Sisemine tõrge: seadistamiseks pole määratud ühtegi projekti."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Ehituskataloogi %1 loomine nurjus."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot clear the build directory"
+msgid "No build directory configured, cannot clear the build directory"
+msgstr "Ehituskataloogi pole määratud, ei saa seda tühjendada"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Vale ehituskataloog, seda ei saa tühjendada"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Eemaldamine õnnestus **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Eemaldamine nurjus: %1 **"
+
+#, fuzzy
+#~| msgid "Aborting build"
+#~ msgid "Aborting"
+#~ msgstr "Ehitamisest loobumine"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Konfigureerimisest loobumine"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "Ehituskataloogi pole määratud, ei saa ehitada"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Ehituskataloogi pole määratud, ei saa puhastada"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Puhastamisest loobumine"
+
+#~ msgid "Aborting install"
+#~ msgstr "Paigaldamisest loobumine"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "CMake Builder"
+#~ msgstr "CMake'i ehitaja"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "CMake'i projektide ehitamise toetus"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "Ehituskataloogi pole võimalik tühjendada"
+
+#~ msgid "Job failed"
+#~ msgstr "Töö nurjus"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake'i binaar:"

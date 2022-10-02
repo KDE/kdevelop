@@ -1,0 +1,216 @@
+# translation of kdevmakebuilder.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-24 12:16+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makebuilderpreferences.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr "Anpassa inställningar för Make"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "&Avbryt vid första felet:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Visa kommandon men kör dem inte:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, kde-format
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "Insta&llera som systemadministratör:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "&Kommando för att installera som systemadministratör:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "A&ntal samtidiga jobb:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "Körbart &byggprogram:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "Standardbygg&mål:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Ytterligare &byggväljare:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Aktiv miljö&profil:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr "Överskrid antal &jobb:"
+
+#: makejob.cpp:80
+#, kde-format
+msgid "Make (%1): %2"
+msgstr "Make (%1): %2"
+
+#: makejob.cpp:82
+#, kde-format
+msgid "Make (%1)"
+msgstr "Make (%1)"
+
+#: makejob.cpp:84
+#, kde-format
+msgid "Make"
+msgstr "Make"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Byggobjekt inte längre tillgängligt"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Internt fel: Kan inte bygga ett filobjekt"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "gksu"
+#~ msgstr "gksu"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Visa"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "Make Builder"
+#~ msgstr "Make-byggverktyg"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Stöd för att bygga Make-projekt"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Felaktig byggkatalog '%1'"
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "'%1' är inte en lokal sökväg"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "'%1' är inte en katalog"
+
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Kunde inte skapa byggkommando för målen '%1'"
+
+#~ msgid "Job failed"
+#~ msgstr "Jobb misslyckades"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Misslyckades ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Klar ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Avbruten ***"
+
+#~ msgid "Build, then install as root"
+#~ msgstr "Bygg, installera därefter som systemadministratör"
+
+#~ msgid "compiling"
+#~ msgstr "kompilerar"
+
+#~ msgid "generating"
+#~ msgstr "skapar"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "länkar"
+
+#~ msgid "built"
+#~ msgstr "byggt"
+
+#~ msgid "installing"
+#~ msgstr "installerar"
+
+#~ msgid "creating"
+#~ msgstr "skapar"
+
+#~ msgid ""
+#~ "If checked and some include files cannot be resolved, make will be "
+#~ "invoked in dry mode to try and figure out include paths from the command "
+#~ "line."
+#~ msgstr ""
+#~ "Om markerad, och vissa deklarationsfiler inte kan bestämmas, startas make "
+#~ "i torrkörningsläge för att försöka räkna ut sökvägar till inkluderade "
+#~ "filer från kommandoraden."
+
+#~ msgid "Use make to find unresolved &includes:"
+#~ msgstr "Använd make för att hitta olösta &inkluderade filer:"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Kör mer än ett jobb samtidigt:"

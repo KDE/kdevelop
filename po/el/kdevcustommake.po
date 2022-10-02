@@ -1,0 +1,135 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustommake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2017-04-27 16:49+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: makefileresolver/makefileresolver.cpp:230
+#, kde-format
+msgid ""
+"Tried include path resolution while another resolution process was still "
+"running"
+msgstr ""
+"Επιχειρήθηκε να συμπεριληφθεί η επίλυση διαδρομής ενώ μια άλλη διεργασία "
+"επίλυσης εκτελείτο"
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Makefile is missing in folder \"%1\""
+msgstr "Λείπει το Makefile στο φάκελο \"%1\""
+
+#: makefileresolver/makefileresolver.cpp:276
+#, kde-format
+msgid "Problem while trying to resolve include paths for %1"
+msgstr "Πρόβλημα στην προσπάθεια επίλυσης διαδρομών include για το %1"
+
+#: makefileresolver/makefileresolver.cpp:310
+#, kde-format
+msgid "Cached: %1"
+msgstr "Σε λανθάνουσα μνήμη: %1"
+
+#: makefileresolver/makefileresolver.cpp:339
+#, kde-format
+msgid "Filename %1 seems to be malformed"
+msgstr "Το όνομα αρχείου %1 φαίνεται να έχει λάθος μορφή"
+
+#: makefileresolver/makefileresolver.cpp:475
+#, kde-format
+msgid "Failed to extract new working directory"
+msgstr "Αποτυχία εξαγωγής νέου καταλόγου εργασίας"
+
+#: makefileresolver/makefileresolver.cpp:475
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Output was: %1"
+msgstr "Το αποτέλεσμα ήταν: %1"
+
+#: makefileresolver/makefileresolver.cpp:497
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "Recursive make call failed"
+msgstr "Αποτυχία αναδρομικής κλήσης του make"
+
+#: makefileresolver/makefileresolver.cpp:497
+#, kde-format
+msgid "The parameter string \"%1\" does not seem to be valid. Output was: %2."
+msgstr "Η συμβολοσειρά \"%1\" δε φαίνεται έγκυρη. Το αποτέλεσμα ήταν: %2."
+
+#: makefileresolver/makefileresolver.cpp:500
+#, kde-format
+msgid "The directory \"%1\" does not exist. Output was: %2."
+msgstr "Ο κατάλογος \"%1\" δεν υπάρχει. Το αποτέλεσμα ήταν: %2."
+
+#: makefileresolver/makefileresolver.cpp:504
+#, kde-format
+msgid "Malformed recursive make call"
+msgstr "Λάθος μορφή αναδρομικής κλήσης του make"
+
+#: makefileresolver/makefileresolver.cpp:516
+#, kde-format
+msgid "Could not extract include paths from make output"
+msgstr "Αδυναμία εξαγωγής διαδρομών include από το αποτέλεσμα του make"
+
+#: makefileresolver/makefileresolver.cpp:517
+#, kde-format
+msgid "Folder: \"%1\"  Command: \"%2\"  Output: \"%3\""
+msgstr "Φάκελος: \"%1\"  Εντολή: \"%2\"  Αποτέλεσμα: \"%3\""
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Εκτέλεση"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stelios"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sstavra@gmail.com"
+
+#~ msgid "Custom Makefile Manager"
+#~ msgstr "Διαχειριστής προσαρμοσμένου Makefile"
+
+#~ msgid "Support for managing custom makefile projects"
+#~ msgstr "Υποστήριξη διαχείρισης έργων με προσαρμοσμένο Makefile"
+
+#~ msgid "Build &Target"
+#~ msgstr "Προορισμός &κατασκευής"
+
+#~ msgid "Build target"
+#~ msgstr "Προορισμός κατασκευής"
+
+#~ msgid ""
+#~ "<b>Build target</b><p>Runs <b>make targetname</b> from the project "
+#~ "directory (targetname is the name of the target selected).</"
+#~ "p><p>Environment variables and make arguments can be specified in the "
+#~ "project settings dialog, <b>Build Options</b> tab.</p>"
+#~ msgstr ""
+#~ "<b>Προορισμός κατασκευής</b><p>Εκτελεί την <b>make όνομα προορισμού</b> "
+#~ "από τον κατάλογο του έργου (το όνομα προορισμού είναι το όνομα του "
+#~ "επιλεγμένου προορισμού).<p></p>Μεταβλητές περιβάλλοντος και παράμετροι "
+#~ "make μπορούν να ορισθούν στο διάλογο ρυθμίσεων του έργου, στην καρτέλα "
+#~ "<b>Επιλογές κατασκευής</b>.</p>"
+
+#~ msgid "Build this project"
+#~ msgstr "Κατασκευή αυτού του έργου"
+
+#~ msgid "Build this target"
+#~ msgstr "Κατασκευή αυτού του προορισμού"
+
+#~ msgid "Build this directory"
+#~ msgstr "Κατασκευή αυτού του καταλόγου"

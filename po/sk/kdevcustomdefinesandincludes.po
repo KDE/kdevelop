@@ -1,0 +1,535 @@
+# translation of kdevcustomdefinesandincludes.po to Slovak
+# Roman Paholik <wizzardsk@gmail.com>, 2016, 2017, 2022.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcustomdefinesandincludes\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2022-04-17 20:52+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: compilerprovider/compilerprovider.cpp:32
+#, kde-format
+msgctxt "@item no compiler"
+msgid "None"
+msgstr "Žiadne"
+
+#: compilerprovider/widget/compilersmodel.cpp:117
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Názov"
+
+#: compilerprovider/widget/compilersmodel.cpp:117
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Typ"
+
+#: compilerprovider/widget/compilersmodel.cpp:119
+#, kde-format
+msgctxt "@item"
+msgid "Auto-detected"
+msgstr "Zistené automaticky"
+
+#: compilerprovider/widget/compilersmodel.cpp:120
+#, kde-format
+msgctxt "@item"
+msgid "Manual"
+msgstr "Ručne"
+
+#: compilerprovider/widget/compilerswidget.cpp:50
+#, kde-format
+msgctxt "@action"
+msgid "Delete Compiler"
+msgstr "Vymazať prekladač"
+
+#: compilerprovider/widget/compilerswidget.cpp:215
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Compilers"
+msgstr "Prekladače C/C++"
+
+#: compilerprovider/widget/compilerswidget.cpp:220
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure C/C++ Compilers"
+msgstr "Nastaviť prekladače C/C++"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#: compilerprovider/widget/compilerswidget.ui:25
+#, kde-format
+msgctxt "@action:button"
+msgid "&Add"
+msgstr "&Pridať"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#: compilerprovider/widget/compilerswidget.ui:35
+#, kde-format
+msgctxt "@action:button"
+msgid "&Remove"
+msgstr "O&dstrániť"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: compilerprovider/widget/compilerswidget.ui:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Názov:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: compilerprovider/widget/compilerswidget.ui:76
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Compiler executable:"
+msgstr "Cesta prekladača:"
+
+#: kcm_widget/definesandincludesconfigpage.cpp:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "Language Support"
+msgstr "Jazyková podpora"
+
+#: kcm_widget/definesandincludesconfigpage.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Language Support"
+msgstr "Nastaviť podporu jazykov"
+
+#: kcm_widget/definesmodel.cpp:31
+#, kde-format
+msgid "Double-click here to insert a new define to be used for the path"
+msgstr "Dvakrát kliknite sem na vloženie novej definície na použitie pre cestu"
+
+#: kcm_widget/definesmodel.cpp:67
+#, kde-format
+msgctxt "@title:column"
+msgid "Define"
+msgstr "Definovať"
+
+#: kcm_widget/definesmodel.cpp:69
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Hodnota"
+
+#: kcm_widget/defineswidget.cpp:29
+#, kde-format
+msgctxt "@action"
+msgid "Delete Define"
+msgstr "Vymazať definíciu"
+
+#: kcm_widget/includeswidget.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Delete Include Path"
+msgstr "Vymazať cestu zahrnutia"
+
+#: kcm_widget/includeswidget.cpp:138
+#, kde-format
+msgctxt "%1 is an include path"
+msgid "%1 does not exist"
+msgstr "%1 neexistuje"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, includePathRequester)
+#: kcm_widget/includeswidget.ui:31
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Add the currently displayed URL to the list of includes if it is not in the "
+"list yet."
+msgstr ""
+"Pridať aktuálne zobrazené URL do zoznamu zahrnutí, ak ešte nie je v zozname."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
+#: kcm_widget/includeswidget.ui:34
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "A new include path/file to use for parsing files under given directory"
+msgstr ""
+"Nové zahrnutie cesty/súboru pre spracovanie súborov pod daným adresárom"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addIncludePath)
+#: kcm_widget/includeswidget.ui:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create a new include path entry from this URL"
+msgstr "Vytvoriť novú položku cesty zahrnutia z tejto URL"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeIncludePath)
+#: kcm_widget/includeswidget.ui:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete current include path entry"
+msgstr "Vymazať aktuálnu položku cesty zahrnutia"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, parseHeadersInPlainC)
+#: kcm_widget/parserwidget.ui:20
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Check this if you want <code>*.h</code> headers to be "
+"parsed in plain C mode. By default they are parsed as C++ headers.</p></"
+"body></html>"
+msgstr ""
+"<html><head/><body><p>Zaškrtnite, ak chcete hlavičky <code>*.h<code/> "
+"spracovať v čistom C režime. Predvolene sa spracujú ako C++ hlavičky.</p></"
+"body></html>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, parseHeadersInPlainC)
+#: kcm_widget/parserwidget.ui:23
+#, kde-format
+msgctxt "@option:check"
+msgid "Parse *.h headers in plain C"
+msgstr "Spracovať hlavičky *.h v čistom C"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: kcm_widget/parserwidget.ui:36
+#, kde-format
+msgctxt "@label:listbox"
+msgid "C++ profi&le:"
+msgstr "C++ Profi&l:"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsOpenCl)
+#. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCuda)
+#: kcm_widget/parserwidget.ui:52 kcm_widget/parserwidget.ui:136
+#: kcm_widget/parserwidget.ui:220 kcm_widget/parserwidget.ui:289
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Choose language profile. </p><p>Use &quot;Custom&quot; "
+"profile to modify parser command-line arguments</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Vyberte profil jazyka. </p><p>Použite profil \"Vlastný"
+"\" na zmenu argumentov príkazového riadka spracovača</p></body></html>"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCpp)
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsC)
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsOpenCl)
+#. i18n: ectx: property (text), item, widget (QComboBox, languageStandardsCuda)
+#: kcm_widget/parserwidget.ui:56 kcm_widget/parserwidget.ui:140
+#: kcm_widget/parserwidget.ui:224 kcm_widget/parserwidget.ui:293
+#, kde-format
+msgctxt "@item:inlistbox language standard"
+msgid "Custom"
+msgstr "Vlastné"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel)
+#: kcm_widget/parserwidget.ui:94
+#, kde-format
+msgctxt "@label:textbox"
+msgid "C++ co&mmand-line arguments:"
+msgstr "Príkazové argumenty C++:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: kcm_widget/parserwidget.ui:120
+#, kde-format
+msgctxt "@label:listbox"
+msgid "C profi&le:"
+msgstr "C Profi&l:"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel_2)
+#: kcm_widget/parserwidget.ui:178
+#, kde-format
+msgctxt "@label:textbox"
+msgid "C co&mmand-line arguments:"
+msgstr "Príkazové argumenty C:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: kcm_widget/parserwidget.ui:204
+#, kde-format
+msgctxt "@label:listbox"
+msgid "OpenCL C &profile:"
+msgstr "OpenCL C Profi&l:"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel_3)
+#: kcm_widget/parserwidget.ui:247
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OpenCL C comma&nd-line arguments:"
+msgstr "Príkazové argumenty OpenCL C:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: kcm_widget/parserwidget.ui:273
+#, kde-format
+msgctxt "@label:listbox"
+msgid "CUDA C P&rofile:"
+msgstr "CUDA C Profi&l:"
+
+#. i18n: ectx: property (text), widget (QLabel, argumentsLabel_4)
+#: kcm_widget/parserwidget.ui:321
+#, kde-format
+msgctxt "@label:textbox"
+msgid "CUDA C comman&d-line arguments:"
+msgstr "Príkazové argumenty CUDA C:"
+
+#: kcm_widget/projectpathswidget.cpp:168
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Project Path"
+msgstr "Vybrať cestu projektu"
+
+#: kcm_widget/projectpathswidget.cpp:182
+#, fuzzy, kde-format
+#| msgid "Are you sure you want to remove the configuration for the path '%1'?"
+msgid "Are you sure you want to delete the configuration for the path '%1'?"
+msgstr "Určite chcete vymazať nastavenie pre cestu '%1'?"
+
+#: kcm_widget/projectpathswidget.cpp:183
+#, kde-format
+msgctxt "@title:window"
+msgid "Delete Path Configuration"
+msgstr ""
+
+#: kcm_widget/projectpathswidget.cpp:221
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit Include Directories/Files"
+msgstr "Upraviť zahrnuté adresáre/súbory"
+
+#: kcm_widget/projectpathswidget.cpp:229
+#, kde-format
+msgctxt "@title:window"
+msgid "Edit Defined Macros"
+msgstr "Upraviť definované makrá"
+
+#: kcm_widget/projectpathswidget.cpp:285
+#, kde-format
+msgid "Configure C/C++ parser"
+msgstr "Nastaviť C/C++ spracovač"
+
+#. i18n: ectx: property (text), widget (QLabel, configureLabel)
+#: kcm_widget/projectpathswidget.cpp:289 kcm_widget/projectpathswidget.ui:20
+#, kde-format
+msgid ""
+"Configure which macros and include directories/files will be added to the "
+"parser during project parsing:"
+msgstr ""
+"Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača "
+"počas spracovania projektu:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_reparse)
+#: kcm_widget/projectpathswidget.ui:29
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Check this if you want the project to be reparsed to apply the changes."
+msgstr ""
+"Označte toto, ak chcete, aby bol projekt znovu spracovaný na použitie zmien."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_reparse)
+#: kcm_widget/projectpathswidget.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "Reparse the project"
+msgstr "Znovu spracovať dokument"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QComboBox, compiler)
+#: kcm_widget/projectpathswidget.ui:70 kcm_widget/projectpathswidget.ui:80
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Select compiler that will be used to retrieve standard "
+"include directories and defined macros.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Vyberte prekladať, ktorý sa použije na obnovenie "
+"štandardných adresárov zahrnutí a definovaných makier.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: kcm_widget/projectpathswidget.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Compiler for path:"
+msgstr "Prekladač pre cestu:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, batchEdit)
+#: kcm_widget/projectpathswidget.ui:90
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit multiple includes/defines at the same time."
+msgstr "Upraviť viaceré zahrnutia/definície v jednom čase."
+
+#. i18n: ectx: property (text), widget (QPushButton, batchEdit)
+#: kcm_widget/projectpathswidget.ui:93
+#, kde-format
+msgctxt "@action:button"
+msgid "&Batch Edit..."
+msgstr "Dávková úprava..."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addPath)
+#: kcm_widget/projectpathswidget.ui:119
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add a new sub-project path entry."
+msgstr "Pridať novú položku cesty podprojektu."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removePath)
+#: kcm_widget/projectpathswidget.ui:135
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete current sub-project path entry."
+msgstr "Vymazať aktuálnu položku cesty podprojektu."
+
+#. i18n: ectx: attribute (title), widget (QWidget, includePathsPage)
+#: kcm_widget/projectpathswidget.ui:165
+#, kde-format
+msgctxt "@title:tab"
+msgid "Includes/Imports"
+msgstr "Zahrnutia/importy"
+
+#. i18n: ectx: attribute (title), widget (QWidget, definesPage)
+#: kcm_widget/projectpathswidget.ui:182
+#, kde-format
+msgctxt "@title:tab"
+msgid "Defines"
+msgstr "Definície"
+
+#. i18n: ectx: attribute (title), widget (QWidget, parserPage)
+#: kcm_widget/projectpathswidget.ui:199
+#, kde-format
+msgctxt "@title:tab"
+msgid "C/C++ Parser"
+msgstr "C/C++ spracovač"
+
+#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:24
+#, kde-format
+msgctxt "@title:window"
+msgid "Setup Custom Include Paths"
+msgstr "Nastavenie vlastných ciest vloženia"
+
+#: noprojectincludesanddefines/noprojectcustomincludepaths.cpp:57
+#, kde-format
+msgctxt "@title:window"
+msgid "Select Directory to Include"
+msgstr "Vyberte adresár na zahrnutie"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
+#, kde-format
+msgctxt "@title:group"
+msgid "Storage Directory:"
+msgstr "Adresár úložiska:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, storageDirectory)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:25
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The custom include-path will be stored in a special file called \"."
+"kdev_include_paths\" stored within a source directory."
+msgstr ""
+"Vlastná cesta zahrnutia sa uloží v špeciálnom súbore \".kdev_include_paths\" "
+"v zdrojovom adresári."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:37
+#, kde-format
+msgctxt "@title:group"
+msgid "Custom include paths or #define's"
+msgstr "Vlastné cesty zahrnutia alebo #define"
+
+#. i18n: ectx: property (toolTip), widget (QPlainTextEdit, customIncludePaths)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:45
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The plain list of include paths. You may also define custom macros here by "
+"adding \"#define NAME VALUE\" lines."
+msgstr ""
+"Čistý zoznam ciest zahrnutí. Môžete tiež definovať vlastné makrá pridaním "
+"riadkov \"#define názov hodnota\"."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select a directory to include."
+msgstr "Vyberte adresár na zahrnutie."
+
+#. i18n: ectx: property (text), widget (QPushButton, directorySelector)
+#: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69
+#, kde-format
+msgctxt "@action:button"
+msgid "..."
+msgstr "..."
+
+#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:86
+#, kde-format
+msgid "Bad #define directive in %1: %2"
+msgstr "Zlá direktíva #define v %1: %2"
+
+#: noprojectincludesanddefines/noprojectincludepathsmanager.cpp:139
+#, kde-format
+msgid "Failed to save custom include paths in directory: %1"
+msgstr "Zlyhalo uloženie vlastných ciest vloženia v adresári: %1"
+
+#~ msgid "c++98"
+#~ msgstr "c++98"
+
+#~ msgid "c++03"
+#~ msgstr "c++03"
+
+#~ msgid "c++11"
+#~ msgstr "c++11"
+
+#~ msgid "c++14"
+#~ msgstr "c++14"
+
+#~ msgid "c++17"
+#~ msgstr "c++17"
+
+#~ msgid "c++2a"
+#~ msgstr "c++2a"
+
+#~ msgid "c89"
+#~ msgstr "c89"
+
+#~ msgid "gnu89"
+#~ msgstr "gnu89"
+
+#~ msgid "c99"
+#~ msgstr "c99"
+
+#~ msgid "gnu99"
+#~ msgstr "gnu99"
+
+#~ msgid "c11"
+#~ msgstr "c11"
+
+#~ msgid "gnu11"
+#~ msgstr "gnu11"
+
+#~ msgid "CL1.1"
+#~ msgstr "CL1.1"
+
+#~ msgid "CL1.2"
+#~ msgstr "CL1.2"
+
+#~ msgid "CL2.0"
+#~ msgstr "CL2.0"
+
+#, fuzzy
+#~| msgid "c++11"
+#~ msgid "c++1z"
+#~ msgstr "c++11"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgid "Form"
+#~ msgstr "Formulár"

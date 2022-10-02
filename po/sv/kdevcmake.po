@@ -1,0 +1,720 @@
+# translation of kdevcmake.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2010.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-08-03 09:56+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Anpassa en byggkatalog - %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Anpassa en byggkatalog för %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Du måste ange en byggkatalog."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Använder en byggkatalog som redan skapats."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Skapar en ny byggkatalog."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Byggkatalog redan inställd."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Den här byggkatalogen är för %1, men projektkatalogen är %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Du får inte välja en relativ byggkatalog."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "Den valda byggkatalogen är inte tom."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Tillgängliga byggkatalog:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Ny byggkatalog"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "Bygg&katalog:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Installationsprefix:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Prefix som projektet kommer att installeras med. Lämnas det tomt använder "
+"CMake förvalt installationsprefix."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Förvalt installationsprefix i CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "Bygg&typ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Extra argument:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "CMak&e körbart program:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "OGILTIG"
+
+#: cmakecodecompletionmodel.cpp:197
+#, kde-format
+msgctxt "@item"
+msgid "Command"
+msgstr "Kommando"
+
+#: cmakecodecompletionmodel.cpp:198
+#, kde-format
+msgctxt "@item"
+msgid "Variable"
+msgstr "Variabel"
+
+#: cmakecodecompletionmodel.cpp:199
+#, kde-format
+msgctxt "@item"
+msgid "Macro"
+msgstr "Makro"
+
+#: cmakecodecompletionmodel.cpp:200
+#, kde-format
+msgctxt "@item"
+msgid "Path"
+msgstr "Sökväg"
+
+#: cmakecodecompletionmodel.cpp:201
+#, kde-format
+msgctxt "@item"
+msgid "Target"
+msgstr "Mål"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "fel"
+
+#: cmakecommandscontents.cpp:29
+#, kde-format
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Kommandon"
+
+#: cmakecommandscontents.cpp:30
+#, kde-format
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Variabler"
+
+#: cmakecommandscontents.cpp:31
+#, kde-format
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Moduler"
+
+#: cmakecommandscontents.cpp:32
+#, kde-format
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Egenskaper"
+
+#: cmakecommandscontents.cpp:33
+#, kde-format
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Policyer"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+"<p>Installera rst2html för bättre återgivning av CMake-dokumentation</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr "Kan inte hitta CMake körbart program. Är det installerat på systemet?"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Cache-värde:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Cache-dokumentation:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "CMake innehållssida"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Inställning av projektet '%1' misslyckades (felmeddelande: %2). Av denna "
+"anledning är KDevelops kodförståelse troligen sönder.\n"
+"\n"
+"Säkerställ att projektets CMakeLists.txt filer är riktiga, och att KDevelop "
+"är inställt att använda korrekt CMake-version och inställningar. Högerklicka "
+"därefter på projektobjektet i projektets verktygsvy och klicka på "
+"'Uppdatera'."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"KDevelop har hittat flera möjliga rotkataloger för projektet. Välj den "
+"riktiga."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Cachevärden"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, kde-format
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Kommentar:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Visa avancerat"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Avancerat"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "Installationsprefix:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Byggtyp:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Anpassa miljö:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Välj en miljö att använda"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, kde-format
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Visa avancerade värden"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "CMake körbart program:"
+
+#: settings/cmakecachemodel.cpp:36
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Namn"
+
+#: settings/cmakecachemodel.cpp:37
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Typ"
+
+#: settings/cmakecachemodel.cpp:38
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Värde"
+
+#: settings/cmakecachemodel.cpp:39
+#, kde-format
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Kommentar"
+
+#: settings/cmakecachemodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Avancerat"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Strängar"
+
+#: settings/cmakepreferences.cpp:343
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"Katalogen %1 kommer nu att tas bort från KDevelops lista.\n"
+"Vill du att KDevelop också ska ta bort den i filsystemet?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr "Ta inte bort"
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Kunde inte ta bort: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "Anpassa inställningar för CMake"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Tolka testsvit %1"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - Stöd för CMake"
+
+#~ msgid "Add"
+#~ msgstr "Lägg till"
+
+#~ msgid "Remove"
+#~ msgstr "Ta bort"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 är ett kommando som avråds från, och som inte ska användas"
+
+#~ msgid "Unfinished function."
+#~ msgstr "Ofärdig funktion. "
+
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Du måste välja ett CMake-binärprogram."
+
+#~ msgid "&CMake executable:"
+#~ msgstr "&CMake körbart program:"
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Anpassa en byggkatalog"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake-&binärfil:"
+
+#~ msgid "Build Type:"
+#~ msgstr "Byggtyp:"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake-binärfil:"
+
+#~ msgid "Installation Prefix"
+#~ msgstr "Installationsprefix"
+
+#~ msgid "Extra Arguments"
+#~ msgstr "Extra argument"
+
+#~ msgid "CMake Binary"
+#~ msgstr "CMake-binärfil"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake är inte installerat"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Kunde inte skriva CMake-inställningar i filen '%1'.\n"
+#~ "Kontrollera att du har skrivrättigheter för den."
+
+#~ msgid "CMake Documentation"
+#~ msgstr "CMake-dokumentation"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Stöd för CMake-dokumentation"
+
+#~ msgid "CMake Manager"
+#~ msgstr "Hantering av CMake"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Stöd för att hantera CMake-projekt"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Gå till måldefinition"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Flytta filer och kataloger inom CMakeLists på följande sätt:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Ändringar av CMakeLists misslyckades. Avbryt förflyttning?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Ta bort filer och kataloger från CMakeLists på följande sätt:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Ändringar av CMakeLists misslyckades. Avbryt borttagning?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Ändra projektmål på följande sätt:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Skapa katalog '%1':"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Kunde inte spara ändringen."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Ändra mål '%1' på följande sätt:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "Ändringar av CMakeLists misslyckades."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "Byt namn på '%1' till '%2':"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Ändringar av CMakeLists misslyckades. Avbryt namnbyte?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "CMake-katalog"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "Byggkatalogen fanns inte och kunde inte skapas."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Fel när byggkatalogen skulle skapas"
+
+#~ msgid "Error"
+#~ msgstr "Fel"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "Lägg till en fil som heter '%1' till målet '%2'."
+
+#~ msgid "Cannot save the change."
+#~ msgstr "Kan inte spara ändringen."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "Ta bort en fil som heter '%1'."
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "Byt namn på en katalog som heter '%1'."
+
+#~ msgid "Swi&tch Colors"
+#~ msgstr "By&t färger"
+
+#~ msgid "General"
+#~ msgstr "Allmänt"
+
+#~ msgid "This project is one day old"
+#~ msgid_plural "This project is %1 days old"
+#~ msgstr[0] "Projektet är 1 dag gammalt"
+#~ msgstr[1] "Projektet är %1 dagar gammalt"
+
+#~ msgid "Settings changed"
+#~ msgstr "Inställningar ändrades"
+
+#~ msgid "A KDE 4 Application"
+#~ msgstr "Ett KDE4-program"
+
+#~ msgid "kde4app"
+#~ msgstr "kde4pgm"
+
+#~ msgid "(C) 2007 %{AUTHOR}"
+#~ msgstr "(C) 2007 %{AUTHOR}"
+
+#~ msgid "%{AUTHOR}"
+#~ msgstr "%{AUTHOR}"
+
+#~ msgid "Document to open"
+#~ msgstr "Dokument att öppna"
+
+#~ msgid "&Move"
+#~ msgstr "&Flytta"
+
+#~ msgid "kapp4_base"
+#~ msgstr "kapp4_base"
+
+#~ msgid "hello, world"
+#~ msgstr "hej, allesamman"
+
+#~ msgid "Background color:"
+#~ msgstr "Bakgrundsfärg:"
+
+#~ msgid "Choose a new background color"
+#~ msgstr "Välj en ny bakgrundsfärg"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">background</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Ändra <span style=\" "
+#~ "font-weight:600;\">bakgrundsfärg</span> genom att klicka här och välja ny "
+#~ "<span style=\" color:#ff0000;\">färg</span> i <span style=\" font-style:"
+#~ "italic;\">färgdialogrutan</span>.</p></body></html>"
+
+#~ msgid "Project age:"
+#~ msgstr "Projektålder:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Förgrundsfärg:"
+
+#~ msgid "Choose a new foreground color"
+#~ msgstr "Välj en ny förgrundsfärg"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">foreground</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Ändra <span style=\" "
+#~ "font-weight:600;\">förgrundsfärg</span> genom att klicka här och välja ny "
+#~ "<span style=\" color:#ff0000;\">färg</span> i <span style=\" font-style:"
+#~ "italic;\">färgdialogrutan</span>.</p></body></html>"
+
+#~ msgid "Set the project age (in days)"
+#~ msgstr "Ställ in projektets ålder (i dagar)"
+
+#~ msgid "Change the project age (in days) by choosing a new number of days."
+#~ msgstr ""
+#~ "Ändra projektets ålder (i dagar) genom att välja ett nytt antal dagar."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Ta bort en katalog som heter '%1'."
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Kunde inte skapa filen CMakeLists.txt i katalogen."
+
+#~ msgid "debug"
+#~ msgstr "avlusning"
+
+#~ msgid "release"
+#~ msgstr "utgåva"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "RelWithDebInfo"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "MinSizeRel"
+
+#~ msgid "Status:"
+#~ msgstr "Status:"
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "Kan inte ta bort filen."
+
+#~ msgid ""
+#~ "<html><b>Contents:</b> Use the index to select what you are looking for."
+#~ "<p />"
+#~ msgstr ""
+#~ "<html><b>Innehåll:</b> Använd index för att välja vad du letar efter.<p />"
+
+#~ msgid "<b>Commands:</b> <p %1>%2</p>"
+#~ msgstr "<b>Kommandon:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Variables:</b> <p %1>%2</p>"
+#~ msgstr "<b>Variabler:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Modules:</b> <p %1>%2</p>"
+#~ msgstr "<b>Moduler:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Properties:</b> <p %1>%2</p>"
+#~ msgstr "<b>Egenskaper:</b> <p %1>%2</p>"
+
+#~ msgid "<b>Policies:</b> <p %1>%2</p>"
+#~ msgstr "<b>Policier:</b> <p %1>%2</p>"
+
+#~ msgid "</html>"
+#~ msgstr "</html>"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Action"
+#~ msgstr "Åtgärd"
+
+#~ msgid "Change"
+#~ msgstr "Ändra"
+
+#~ msgid "Insert"
+#~ msgstr "Infoga"

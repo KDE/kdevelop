@@ -1,0 +1,653 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-04-24 03:16+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: kdevsvnplugin.cpp:334
+#, fuzzy, kde-format
+#| msgid "Copy..."
+msgctxt "@action:inmenu"
+msgid "Copy..."
+msgstr "Көшірмелеу..."
+
+#: kdevsvnplugin.cpp:341
+#, fuzzy, kde-format
+#| msgid "Move..."
+msgctxt "@action:inmenu"
+msgid "Move..."
+msgstr "Жылжыту..."
+
+#: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
+#, kde-format
+msgid "Please select only one item for this operation"
+msgstr "Бұл амалға бір ғана аталымды таңдаңыз"
+
+#: kdevsvnplugin.cpp:370
+#, fuzzy, kde-format
+#| msgid "Destination file/directory"
+msgctxt "@label"
+msgid "Destination file/directory"
+msgstr "Мақсатты файл/каталог"
+
+#: kdevsvnplugin.cpp:382
+#, kde-format
+msgid "Copying only works on local files"
+msgstr "Көшірмелеу тек жергілікті файлмен ғана істейді"
+
+#: kdevsvnplugin.cpp:406
+#, kde-format
+msgid "Destination file/directory"
+msgstr "Мақсатты файл/каталог"
+
+#: kdevsvnplugin.cpp:418
+#, kde-format
+msgid "Moving only works on local files/dirs"
+msgstr "Жылжыту тек жергілікті файл/каталогымен ғана істейді"
+
+#: kdevsvnplugin.cpp:425
+#, kde-format
+msgid "Subversion"
+msgstr "Subversion"
+
+#: svnaddjob.cpp:73
+#, kde-format
+msgid "Subversion Add"
+msgstr "Subversion қосуы"
+
+#: svnaddjob.cpp:85
+#, kde-format
+msgid "Not enough information to add file"
+msgstr "Файлды қосу үшін мәлімет жеткіліксіз"
+
+#: svnblamejob.cpp:130
+#, kde-format
+msgid "Subversion Annotate"
+msgstr "Subversion аңдатпасы"
+
+#: svnblamejob.cpp:144
+#, kde-format
+msgid "Not enough information to blame location"
+msgstr "Жауыптыны қору үшін мәлімет жеткіліксіз"
+
+#: svncheckoutjob.cpp:84
+#, kde-format
+msgid "Subversion Checkout"
+msgstr "Subversion қоймадан көшіріп алуы"
+
+#: svncheckoutjob.cpp:96
+#, kde-format
+msgid "Not enough information to checkout"
+msgstr "Қоймадан көшіріп алу үшін мәлімет жеткіліксіз"
+
+#: svncommitjob.cpp:109
+#, fuzzy, kde-format
+#| msgid "Subversion Cat"
+msgid "Subversion Commit"
+msgstr "Subversion файл мазмұнын қарау"
+
+#: svncommitjob.cpp:125
+#, kde-format
+msgid "Committing..."
+msgstr "Тапсыру..."
+
+#: svncommitjob.cpp:129
+#, kde-format
+msgid "Not enough information to execute commit"
+msgstr "Тапсыруды орындау үшін мәлімет жеткіліксіз"
+
+#: svncopyjob.cpp:71
+#, kde-format
+msgid "Subversion Copy"
+msgstr "Subversion көшірмелеу"
+
+#: svncopyjob.cpp:83
+#, kde-format
+msgid "Not enough information to copy file"
+msgstr "Файлды көшірмелеу үшін мәлімет жеткіліксіз"
+
+#: svndiffjob.cpp:253
+#, kde-format
+msgid "Subversion Diff"
+msgstr "Subversion айырмашылығы"
+
+#: svndiffjob.cpp:270
+#, kde-format
+msgid "Not enough information given to execute diff"
+msgstr "Айырмашылығын қарау үшін мәлімет жеткіліксіз"
+
+#: svnimportjob.cpp:86
+#, kde-format
+msgid "Subversion Import"
+msgstr "Subversion импорты"
+
+#: svnimportjob.cpp:99
+#, kde-format
+msgid "Not enough information to import"
+msgstr "Импорттау үшін мәлімет жеткіліксіз"
+
+#: svninfojob.cpp:81
+#, kde-format
+msgid "Subversion Info"
+msgstr "Subversion ақпары"
+
+#: svninfojob.cpp:113
+#, kde-format
+msgid "Not enough information to execute info job"
+msgstr "Ақапарды қарау үшін мәлімет жеткіліксіз"
+
+#: svninternaljobbase.cpp:86
+#, kde-format
+msgctxt "A file was marked to be added to svn"
+msgid "Added %1"
+msgstr "Қосылмақ: %1"
+
+#: svninternaljobbase.cpp:89
+#, kde-format
+msgctxt "A file was marked for deletion from svn"
+msgid "Deleted %1"
+msgstr "Өшірілмек: %1"
+
+#: svninternaljobbase.cpp:93
+#, kde-format
+msgctxt "A file was deleted during an svn update operation"
+msgid "Deleted %1"
+msgstr "Өшірілген: %1"
+
+#: svninternaljobbase.cpp:96
+#, kde-format
+msgctxt "A file was added during an svn update operation"
+msgid "Added %1"
+msgstr "Қосылған: %1"
+
+#: svninternaljobbase.cpp:136
+#, kde-format
+msgid "Revision %1"
+msgstr "Жетілдірімі: %1"
+
+#: svninternaljobbase.cpp:139
+#, kde-format
+msgid "Updating externals: %1"
+msgstr "Сыртқы жазуларды жаңарту: %1"
+
+#: svninternaljobbase.cpp:147
+#, kde-format
+msgid "Sending %1"
+msgstr "%1 жіберуі"
+
+#: svninternaljobbase.cpp:151
+#, kde-format
+msgid "Adding %1 using mimetype %2."
+msgstr "%2 MIME түрімен %1 дегенді жіберу"
+
+#: svninternaljobbase.cpp:153
+#, kde-format
+msgid "Adding %1."
+msgstr "%1 қосуы"
+
+#: svninternaljobbase.cpp:157
+#, kde-format
+msgid "Deleting %1."
+msgstr "%1 өшіруі"
+
+#: svninternaljobbase.cpp:160
+#, kde-format
+msgid "Replacing %1."
+msgstr "%1 алмастыруы"
+
+#: svninternaljobbase.cpp:165
+#, kde-format
+msgid "Transmitting file data "
+msgstr "Файл дерегін тасымалдау"
+
+#: svninternaljobbase.cpp:171
+#, kde-format
+msgid "Blame finished for revision %1, path %2"
+msgstr "%1 (%2 жолындағы) жетілдірім жауыптысын білу аяқталды"
+
+#: svninternaljobbase.cpp:174
+#, kde-format
+msgid "Reverted working copy %1"
+msgstr "%1 жұмыс көшірмесі қайтарылды"
+
+#: svninternaljobbase.cpp:177
+#, kde-format
+msgid "Reverting failed on working copy %1"
+msgstr "%1 жұмыс көшірмесін қайтару жаңылысы"
+
+#: svninternaljobbase.cpp:180
+#, kde-format
+msgid "Copied %1"
+msgstr "%1 көшірмеленді"
+
+#: svninternaljobbase.cpp:235
+#, kde-format
+msgid "Certificate is not yet valid."
+msgstr "Куәлік әзірше жарамсыз."
+
+#: svninternaljobbase.cpp:239
+#, kde-format
+msgid "Certificate has expired."
+msgstr "Куәлігі ескірген."
+
+#: svninternaljobbase.cpp:243
+#, kde-format
+msgid "Certificate's CN (hostname) doesn't match the remote hostname."
+msgstr "Куәлік CN-ні (хост атауы) қашық хост атауымен сәйкес келмейді."
+
+#: svninternaljobbase.cpp:247
+#, kde-format
+msgid "Certificate authority is unknown."
+msgstr "Куәландыру орталығы беймәлім."
+
+#: svninternaljobbase.cpp:251
+#, kde-format
+msgid "Other unknown error."
+msgstr "Басқа беймәлім қате."
+
+#: svnjobbase.cpp:74
+#, kde-format
+msgid "Enter Login for: %1"
+msgstr "%1 кіру мәліметін келтіру"
+
+#: svnjobbase.cpp:160
+#, kde-format
+msgid "Completed"
+msgstr "Бітті"
+
+#: svnjobbase.cpp:175
+#, kde-format
+msgid ""
+"Error executing Job:\n"
+"%1"
+msgstr ""
+"%1\n"
+"тапсырмасын орындау қатесі"
+
+#: svnlogjob.cpp:105
+#, kde-format
+msgid "Subversion Log"
+msgstr "Subversion журналы"
+
+#: svnlogjob.cpp:120
+#, kde-format
+msgid "Not enough information to log location"
+msgstr "Журналын табу үшін мәлімет жеткіліксіз"
+
+#: svnmovejob.cpp:83
+#, kde-format
+msgid "Subversion Move"
+msgstr "Subversion жылжытуы"
+
+#: svnmovejob.cpp:95
+#, kde-format
+msgid "Not enough information to move file"
+msgstr "Файлды жылжыту үшін мәлімет жеткіліксіз"
+
+#: svnremovejob.cpp:76
+#, kde-format
+msgid "Subversion Remove"
+msgstr "Subversion өшіруі"
+
+#: svnremovejob.cpp:88
+#, kde-format
+msgid "Not enough information to execute remove job"
+msgstr "Өшіруді орындау үшін мәлімет жеткіліксіз"
+
+#: svnrevertjob.cpp:74
+#, kde-format
+msgid "Subversion Revert"
+msgstr "Subversion қайтаруы"
+
+#: svnrevertjob.cpp:86
+#, kde-format
+msgid "Not enough information to execute revert"
+msgstr "Қайтаруды орындау үшін мәлімет жеткіліксіз"
+
+#: svnssldialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "SSL Server Certificate"
+msgctxt "@title:window"
+msgid "SSL Server Certificate"
+msgstr "SSL сервердің куәлігі"
+
+#: svnssldialog.cpp:30
+#, fuzzy, kde-format
+#| msgid "Trust Permanently"
+msgctxt "@action:button"
+msgid "Trust Permanently"
+msgstr "Тұрақты сенім арттыру"
+
+#: svnssldialog.cpp:31
+#, fuzzy, kde-format
+#| msgid "Trust Temporarily"
+msgctxt "@action:button"
+msgid "Trust Temporarily"
+msgstr "Уақытша сенім арттыру"
+
+#: svnssldialog.cpp:62
+#, fuzzy, kde-format
+#| msgid "Ssl Server Certificate: %1"
+msgctxt "@title:window"
+msgid "SSL Server Certificate: %1"
+msgstr "Сервердің SSL куәлігі: %1"
+
+#: svnstatusjob.cpp:117
+#, kde-format
+msgid "Subversion Status"
+msgstr "Subversion күй-жайы"
+
+#: svnstatusjob.cpp:131
+#, kde-format
+msgid "Not enough information to execute status job"
+msgstr "Күй-жайды білуді орындау үшін мәлімет жеткіліксіз"
+
+#: svnupdatejob.cpp:107
+#, kde-format
+msgid "Subversion Update"
+msgstr "Subversion жаңартуы"
+
+#: svnupdatejob.cpp:120
+#, kde-format
+msgid "Not enough Information to execute update"
+msgstr "Жаңартуды орындау үшін мәлімет жеткіліксіз"
+
+#. i18n: ectx: property (text), widget (QLabel, labelForSrc)
+#: ui/importmetadatawidget.ui:20
+#, fuzzy, kde-format
+#| msgid "Source directory:"
+msgctxt "@label:textbox"
+msgid "Source directory:"
+msgstr "Бастапқы каталогы:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/importmetadatawidget.ui:27
+#, fuzzy, kde-format
+#| msgid "Repository:"
+msgctxt "@label:textbox"
+msgid "Repository:"
+msgstr "Қоймасы:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Repository Location"
+msgctxt "@info:tooltip"
+msgid "Repository location"
+msgstr "Қойма орыны"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
+#: ui/importmetadatawidget.ui:37
+#, fuzzy, kde-format
+#| msgid "Choose the repository into which the source directory is imported"
+msgctxt "@info:whatsthis"
+msgid "Choose the repository into which the source directory is imported"
+msgstr "Бастапқы каталогы қай қоймаға импортталатынын таңдау"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/importmetadatawidget.ui:57
+#, fuzzy, kde-format
+#| msgid "Commit Message:"
+msgctxt "@label:textbox"
+msgid "Commit message:"
+msgstr "Тапсыру түсініктемесі:"
+
+#. i18n: ectx: property (text), widget (QLabel, msgLabel)
+#: ui/ssltrustdialog.ui:17
+#, kde-format
+msgid ""
+"There were errors validating the server certificate.\n"
+"Do you want to trust this certificate?"
+msgstr ""
+"Сервер куәлігін тексеруде қателер болды.\n"
+"Бұл куәлікке сенім артасыз ба?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/ssltrustdialog.ui:30
+#, kde-format
+msgid "Reasons why the validation failed"
+msgstr "Тексеру жаңылыстың себептері"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui/ssltrustdialog.ui:52
+#, fuzzy, kde-format
+#| msgid "Certificate Information"
+msgctxt "@title:group"
+msgid "Certificate Information"
+msgstr "Куәлік мәліметі"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/ssltrustdialog.ui:64
+#, fuzzy, kde-format
+#| msgid "Hostname:"
+msgctxt "@label:textbox"
+msgid "Hostname:"
+msgstr "Хост атауы:"
+
+#. i18n: ectx: property (text), widget (QLabel, hostname)
+#: ui/ssltrustdialog.ui:77
+#, kde-format
+msgid "someserver"
+msgstr "someserver"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/ssltrustdialog.ui:84
+#, fuzzy, kde-format
+#| msgid "Issuer:"
+msgctxt "@label:textbox"
+msgid "Issuer:"
+msgstr "Шығарушысы:"
+
+#. i18n: ectx: property (text), widget (QLabel, issuer)
+#: ui/ssltrustdialog.ui:97
+#, kde-format
+msgid "someissuer"
+msgstr "someissuer"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ui/ssltrustdialog.ui:104
+#, fuzzy, kde-format
+#| msgid "Valid From:"
+msgctxt "@label:textbox"
+msgid "Valid from:"
+msgstr "Қашаннан бастап күшінде:"
+
+#. i18n: ectx: property (text), widget (QLabel, validFrom)
+#: ui/ssltrustdialog.ui:117
+#, kde-format
+msgid "validfrom"
+msgstr "validfrom"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: ui/ssltrustdialog.ui:124
+#, fuzzy, kde-format
+#| msgid "Valid Until:"
+msgctxt "@label:textbox"
+msgid "Valid until:"
+msgstr "Жарамдылық мерзімі:"
+
+#. i18n: ectx: property (text), widget (QLabel, validUntil)
+#: ui/ssltrustdialog.ui:137
+#, kde-format
+msgid "validuntil"
+msgstr "validuntil"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ui/ssltrustdialog.ui:144
+#, fuzzy, kde-format
+#| msgid "Fingerprint:"
+msgctxt "@label:textbox"
+msgid "Fingerprint:"
+msgstr "Қолтаңбасы:"
+
+#. i18n: ectx: property (text), widget (QLabel, fingerprint)
+#: ui/ssltrustdialog.ui:157
+#, kde-format
+msgid "fingerprint"
+msgstr "fingerprint"
+
+#~ msgid "Ssl Server Certificate"
+#~ msgstr "SSL сервердің куәлігі"
+
+#~ msgid "Repository Location to import into"
+#~ msgstr "Импорттауға арналған қойма орны"
+
+#~ msgid "Import into Subversion repository"
+#~ msgstr "Subversion қоймасына импорттау"
+
+#~ msgid "Checkout from Subversion repository"
+#~ msgstr "Subversion қоймасынан көшіріп алу"
+
+#~ msgid "Subversion Cat"
+#~ msgstr "Subversion файл мазмұнын қарау"
+
+#~ msgid "Not enough information to execute cat"
+#~ msgstr "Мазмұнын қарау үшін мәлімет жеткіліксіз"
+
+#~ msgid "Start Revision"
+#~ msgstr "Жетілдірімін бастау"
+
+#~ msgid "End Revision"
+#~ msgstr "Жетілдірімін аяқтау"
+
+#~ msgid "Checkout"
+#~ msgstr "Жүктеп алу"
+
+#~ msgid "Repository Url:"
+#~ msgstr "Қойма URL-адресі:"
+
+#~ msgid "Destination Path:"
+#~ msgstr "Орналастыру жолы:"
+
+#~ msgid "Recursive:"
+#~ msgstr "Рекурсивті:"
+
+#~ msgid "Requested local path:"
+#~ msgstr "Сұралған жергілікті жолы:"
+
+#~ msgid "Source"
+#~ msgstr "Алатын көзі"
+
+#~ msgid "Specify by repository URL"
+#~ msgstr "Қойма URL бойынша келтіру"
+
+#~ msgid "Specify by local working copy"
+#~ msgstr "Жергілікті көшірме бойынша келтіру"
+
+#~ msgid "Source revision"
+#~ msgstr "Көзінің жетілдірімі"
+
+#~ msgid "Destination"
+#~ msgstr "Мақсаты"
+
+#~ msgid "Specify either the full repository URL or local working path"
+#~ msgstr "Қойма URL немесе жергілікті көшірменің жолын келтіріңіз"
+
+#~ msgid "Target Url"
+#~ msgstr "Мақсат  URL-і"
+
+#~ msgid "Non Recursive"
+#~ msgstr "Рекурсивті емес"
+
+#~ msgid "No diff deleted"
+#~ msgstr "Өшірілген айырмашылық жоқ"
+
+#~ msgid "Ignore contents type"
+#~ msgstr "Мазмұнның түрін елемеу"
+
+#~ msgid "Subversion Log View Options"
+#~ msgstr "Subversion журналын көрсету параметрлері"
+
+#~ msgid "Maximum number of logs to be displayed"
+#~ msgstr "Көрсетілетін журналдар санының шегі"
+
+#~ msgid "Do not show logs before branching point"
+#~ msgstr "Тармақ бөліну дейінгі журнал жазуы көрсетілмесін"
+
+#~ msgid "Forcefully delete locally modified and/or unversioned items"
+#~ msgstr ""
+#~ "Жергілікті өзгертілген не/және нұсқасы белгіленбегендер мәжбүрлеп "
+#~ "өшірілсін"
+
+#~ msgid "Select working copies to be reverted:"
+#~ msgstr "Қайтарылатын жұмыс көшірмесі:"
+
+#~ msgid "Select"
+#~ msgstr "Таңдау"
+
+#~ msgid "Text Status"
+#~ msgstr "Мәтіннің күй-жайы"
+
+#~ msgid "Prop Status"
+#~ msgstr "Қасиеттің күй-жайы"
+
+#~ msgid "Working Copy"
+#~ msgstr "Жұмыс көшірмесі"
+
+#~ msgid "Recursive"
+#~ msgstr "Рекурсивті"
+
+#~ msgid "Specify as number:"
+#~ msgstr "Сан ретінде:"
+
+#~ msgid "Specify as keyword:"
+#~ msgstr "Түйінді сөз ретінде:"
+
+#~ msgid "Specify as date:"
+#~ msgstr "Күн ретінде:"
+
+#~ msgid "Status Requested for:"
+#~ msgstr "Мынау үшін күй-жайын сұрау:"
+
+#~ msgid "Specify revision"
+#~ msgstr "Жетілдірімін келтіру"
+
+#~ msgid "Non recursive"
+#~ msgstr "Рекурсивті емес"
+
+#~ msgid "Retrieve only \"interesting\" entries (such as local modifications)"
+#~ msgstr "\"Қызық\" қана жазулар қабылдансын (жергілікті өзгерістер сияқты)"
+
+#~ msgid "Contact repository and augment with repository information"
+#~ msgstr "Қоймамен байланысып қойма мәліметімен толықтырылсын"
+
+#~ msgid "Do not ignore svn:ignore"
+#~ msgstr "svn:ignore дегенді елемей кетпеу"
+
+#~ msgid "Ignore external items"
+#~ msgstr "Сыртқы аталымдары елемей қалсын"
+
+#~ msgid "Update immediate children only (non-recursive)"
+#~ msgstr "Тікелей еншілестері ғана жаңартылсын (рекурсивті емес)"
+
+#~ msgid "Ignore external entries"
+#~ msgstr "Сыртқы жазулары елемей қалсын"
+
+#~ msgid "Select Revision"
+#~ msgstr "Нұсқасын таңдау"
+
+#
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgid "Support for Subversion version control systems"
+#~ msgstr "Subversion нұсқаларды қадағалау жүйелерін қолдау"

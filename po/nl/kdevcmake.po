@@ -1,0 +1,704 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012.
+# Freek de Kruijf <f.de.kruijf@gmail.com>, 2010, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2022-07-09 10:25+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.04.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "Een bouwmap configureren - %1"
+
+#: cmakebuilddirchooser.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "Een bouwmap instellen voor %1"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Specificeer een bouw-map."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "Een reeds aangemaakt bouw-map gebruiken."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "Een nieuwe bouw-map aan maken"
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Bouw-map is al ingesteld."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "Deze bouwmap is voor %1, maar de projectmap is %2."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "U mag geen relatieve bouwmap selecteren."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "De geselecteerde bouwmap is niet leeg."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Beschikbare bouwmappen:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "Nieuwe bouwmap"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "Bouw&map:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Installatievoorvoegsel:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+"Het voorvoegsel waaronder het project geïnstalleerd zal worden. Bij dit leeg "
+"laten zal CMake zijn standaard installatievoorvoegsel gebruiken."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr "Standaard installatievoorvoegsel van CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "Bouw&type:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Extra argumenten:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr "CMake &uitvoerbaar programma:"
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "ONGELDIG"
+
+#: cmakecodecompletionmodel.cpp:197
+#, kde-format
+msgctxt "@item"
+msgid "Command"
+msgstr "Commando"
+
+#: cmakecodecompletionmodel.cpp:198
+#, kde-format
+msgctxt "@item"
+msgid "Variable"
+msgstr "Variabele"
+
+#: cmakecodecompletionmodel.cpp:199
+#, kde-format
+msgctxt "@item"
+msgid "Macro"
+msgstr "Macro"
+
+#: cmakecodecompletionmodel.cpp:200
+#, kde-format
+msgctxt "@item"
+msgid "Path"
+msgstr "Pad"
+
+#: cmakecodecompletionmodel.cpp:201
+#, kde-format
+msgctxt "@item"
+msgid "Target"
+msgstr "Doel"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "verkeerd"
+
+#: cmakecommandscontents.cpp:29
+#, kde-format
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Commando's"
+
+#: cmakecommandscontents.cpp:30
+#, kde-format
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Variabelen"
+
+#: cmakecommandscontents.cpp:31
+#, kde-format
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Modules"
+
+#: cmakecommandscontents.cpp:32
+#, kde-format
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Eigenschappen"
+
+#: cmakecommandscontents.cpp:33
+#, kde-format
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Beleidsregels"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+"<p>Voor betere rendering van CMake documentatie, installeer rst2html.</p>"
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+"Kan het CMake uitvoerbaar programma niet vinden. Is er een geïnstalleerd op "
+"het systeem?"
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Cache-waarde:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Cache-documentatie:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "Inhoudspagina van CMake"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+"Het project '%1' configureren is mislukt (foutmelding: %2). Als resultaat, "
+"begrijpen van code door KDevelop zal waarschijnlijk gebroken zijn.\n"
+"\n"
+"Om dit probleem op te lossen, ga na dat de CMakeLists.txt bestanden van het "
+"project juist zijn and KDevelop geconfigureerd is om de juiste CMake-versie "
+"en instellingen te gebruiken. Klik daarna rechts op het projectitem in de "
+"weergave van het projectenhulpmiddel en klik 'Herladen'."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, kde-format
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"KDevelop heeft verschillende mogelijke beginmappen van uw project gevonden, "
+"gaarne de juiste selecteren."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, kde-format
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Cache-waarden"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, kde-format
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Toelichting:"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, kde-format
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Geavanceerd tonen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, kde-format
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "Installatievoorvoegsel:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Bouwtype:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Configuratieomgeving:"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "Selecteer een te gebruiken omgeving"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, kde-format
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Geavanceerd waarden tonen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr "CMake uitvoerbaar programma:"
+
+#: settings/cmakecachemodel.cpp:36
+#, kde-format
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Naam"
+
+#: settings/cmakecachemodel.cpp:37
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Type"
+
+#: settings/cmakecachemodel.cpp:38
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Waarde"
+
+#: settings/cmakecachemodel.cpp:39
+#, kde-format
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Toelichting"
+
+#: settings/cmakecachemodel.cpp:40
+#, kde-format
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr "Tekenreeksen"
+
+#: settings/cmakepreferences.cpp:343
+#, kde-format
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"De map %1 staat op het punt te worden verwijderd uit de lijst van KDevelop.\n"
+"Wilt u dat KDevelop het ook in het bestandssysteem verwijderd?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr "Niet verwijderen"
+
+#: settings/cmakepreferences.cpp:352
+#, kde-format
+msgid "Could not remove: %1"
+msgstr "Kon niet verwijderen: %1"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr "CMake-instellingen configureren"
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr "Testsuite %1 ontleden"
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "CTest"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr "CTest %1: %2"
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop - CMake-ondersteuning"
+
+#~ msgid "Add"
+#~ msgstr "Toevoegen"
+
+#~ msgid "Remove"
+#~ msgstr "Verwijderen"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 is een verouderd commando en zou niet gebruikt moeten worden"
+
+#~ msgid "Unfinished function."
+#~ msgstr "Niet beëindigde functie. "
+
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "U moet een CMake uitvoerbaar programma selecteren."
+
+#~ msgid "&CMake executable:"
+#~ msgstr "&CMake uitvoerbaar programma:"
+
+#~ msgid "Configure a build directory"
+#~ msgstr "Een bouw-map instellen"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake-&binary:"
+
+#~ msgid "Build Type:"
+#~ msgstr "Bouwtype:"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake-programmabestand:"
+
+#~ msgid "Installation Prefix"
+#~ msgstr "Installatievoorvoegsel"
+
+#~ msgid "Extra Arguments"
+#~ msgstr "Extra argumenten"
+
+#~ msgid "CMake Binary"
+#~ msgstr "CMake-programmabestand"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "cmake is niet geïnstalleerd"
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "Kon de CMake-instellingen niet naar bestand '%1' schrijven.\n"
+#~ "Controleer of u er schrijftoegang tot hebt"
+
+#~ msgid "CMake Documentation"
+#~ msgstr "CMake-documentatie"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Ondersteuning voor CMake-documentatie"
+
+#~ msgid "CMake Manager"
+#~ msgstr "CMake-beheerder"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Ondersteuning voor het beheren van CMake-projecten"
+
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Ga naar doel-definitie"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Bestanden en mappen uit CMakeLists als volgt verplaatsen:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Wijzigingen van CMakeLists is mislukt, verplaatsen afbreken?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Bestanden en mappen uit CMakeLists als volgt verwijderen:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Wijzigingen van CMakeLists is mislukt, verwijderen afbreken?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Projectdoelen als volgt wijzigen:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Map '%1' aanmaken:"
+
+#~ msgid "Could not save the change."
+#~ msgstr "Kon de wijziging niet opslaan."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Doel '%1' als volgt wijzigen:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "Wijzigingen in CMakeLists zijn mislukt."
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "'%1' hernoemen naar '%2':"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Wijzigen van CMakeLists is mislukt, hernoemen afbreken?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "CMake-map"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "De bouwmap bestaat niet en kon niet worden aangemaakt."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Fout bij aanmaken van bouwmap"
+
+#~ msgid "Error"
+#~ msgstr "Fout"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "Een bestand genaamd '%1' toevoegen aan doel '%2'."
+
+#~ msgid "Cannot save the change."
+#~ msgstr "Kan de wijziging niet opslaan."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "Een bestand genaamd '%1' verwijderen."
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "Een map genaamd '%1' hernoemen."
+
+#~ msgid "Swi&tch Colors"
+#~ msgstr "&Kleur wisselen"
+
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#~ msgid "This project is one day old"
+#~ msgid_plural "This project is %1 days old"
+#~ msgstr[0] "Dit project is één dag oud"
+#~ msgstr[1] "Dit project is %1 dagen oud."
+
+#~ msgid "Settings changed"
+#~ msgstr "Instellingen gewijzigd"
+
+#~ msgid "A KDE 4 Application"
+#~ msgstr "Een KDE 4 programma"
+
+#~ msgid "kde4app"
+#~ msgstr "kde4app"
+
+#~ msgid "(C) 2007 %{AUTHOR}"
+#~ msgstr "(C) 2007 %{AUTHOR}"
+
+#~ msgid "%{AUTHOR}"
+#~ msgstr "%{AUTHOR}"
+
+#~ msgid "Document to open"
+#~ msgstr "Te openen document"
+
+#~ msgid "&Move"
+#~ msgstr "&Verplaatsen"
+
+#~ msgid "kapp4_base"
+#~ msgstr "kapp4_base"
+
+#~ msgid "hello, world"
+#~ msgstr "hallo, wereld"
+
+#~ msgid "Background color:"
+#~ msgstr "Achtergrondkleur:"
+
+#~ msgid "Choose a new background color"
+#~ msgstr "Een nieuwe achtergrondkleur kiezen"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">background</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Wijzig de <span style="
+#~ "\" font-weight:600;\">achtergrond</span>kleur door hier te klikken en "
+#~ "kies de nieuwe <span style=\" color:#ff0000;\">kleur</span> in de <span "
+#~ "style=\" font-style:italic;\">kleurdialoog</span>.</p></body></html>"
+
+#~ msgid "Project age:"
+#~ msgstr "Projectleeftijd:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Voorgrondkleur:"
+
+#~ msgid "Choose a new foreground color"
+#~ msgstr "Een nieuwe voorgrondkleur kiezen"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">foreground</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Wijzig de <span style="
+#~ "\" font-weight:600;\">voorgrond</span>kleur door hier te klikken en kies "
+#~ "de nieuwe <span style=\" color:#ff0000;\">kleur</span> in de <span style="
+#~ "\" font-style:italic;\">kleurdialoog</span>.</p></body></html>"
+
+#~ msgid "Set the project age (in days)"
+#~ msgstr "Stel de projectleeftijd in op (in dagen)"
+
+#~ msgid "Change the project age (in days) by choosing a new number of days."
+#~ msgstr ""
+#~ "Wijzig de projectleeftijd (in dagen) door een nieuw aantal dagen te "
+#~ "kiezen."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "Een map genaamd '%1' verwijderen."
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "Kan het bestand CMakeLists.txt van de map niet aanmaken"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Action"
+#~ msgstr "Actie"
+
+#~ msgid "Change"
+#~ msgstr "Wijzigen"
+
+#~ msgid "Insert"
+#~ msgstr "Invoegen"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "TextLabel"
+#~ msgstr "Tekst"
+
+#, fuzzy
+#~| msgid "&Run"
+#~ msgid "Run"
+#~ msgstr "Uitvoe&ren"
+
+#~ msgid "Running"
+#~ msgstr "Actief"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Annuleren"
+
+#~ msgid "&Run"
+#~ msgstr "Uitvoe&ren"
+
+#, fuzzy
+#~ msgid "An error occurred"
+#~ msgstr "Er deed zich een fout voor:"

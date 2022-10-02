@@ -1,0 +1,786 @@
+# Translation of kdevcmake.po to Low Saxon
+# translation of kdevcmake.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2008, 2009, 2010, 2011, 2012, 2014.
+# Sönke Dibbern <s_dibbern@web.de>, 2008, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmake\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"PO-Revision-Date: 2014-03-18 18:24+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilddirchooser.cpp:29
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory - %1"
+msgstr "En Buuorner för %1 inrichten"
+
+#: cmakebuilddirchooser.cpp:87
+#, fuzzy, kde-format
+#| msgid "Configure a build directory for %1"
+msgctxt "@title:window"
+msgid "Configure a Build Directory for %1"
+msgstr "En Buuorner för %1 inrichten"
+
+#: cmakebuilddirchooser.cpp:197
+#, kde-format
+msgid "You need to specify a build directory."
+msgstr "Du muttst en Buuorner angeven."
+
+#: cmakebuilddirchooser.cpp:204
+#, kde-format
+msgid "Using an already created build directory."
+msgstr "En al opstellt Buuorner warrt bruukt."
+
+#: cmakebuilddirchooser.cpp:215
+#, kde-format
+msgid "Creating a new build directory."
+msgstr "En nieg Buuorner warrt opstellt."
+
+#: cmakebuilddirchooser.cpp:221
+#, kde-format
+msgid "Build directory already configured."
+msgstr "Buuorner is al inricht."
+
+#: cmakebuilddirchooser.cpp:223
+#, kde-format
+msgid "This build directory is for %1, but the project directory is %2."
+msgstr "De utsöchte Buuorner is för \"%1\", man de Projektorner is \"%2\"."
+
+#: cmakebuilddirchooser.cpp:226
+#, kde-format
+msgid "You may not select a relative build directory."
+msgstr "Relatiev Buuornern laat sik nich utsöken."
+
+#: cmakebuilddirchooser.cpp:228
+#, kde-format
+msgid "The selected build directory is not empty."
+msgstr "De utsöchte Buuorner is nich leddig."
+
+#. i18n: ectx: property (text), widget (QLabel, availableLabel)
+#: cmakebuilddirchooser.ui:32
+#, fuzzy, kde-format
+#| msgid "Already used build directory"
+msgctxt "@label:listbox"
+msgid "Available build directories:"
+msgstr "Al bruukt Buuorner"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
+#: cmakebuilddirchooser.ui:40
+#, fuzzy, kde-format
+#| msgid "&Build Directory:"
+msgctxt "@item:inlistbox"
+msgid "New build directory"
+msgstr "&Buuorner:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: cmakebuilddirchooser.ui:48
+#, fuzzy, kde-format
+#| msgid "&Build Directory:"
+msgctxt "@label:chooser"
+msgid "Build &directory:"
+msgstr "&Buuorner:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakebuilddirchooser.ui:84
+#, fuzzy, kde-format
+#| msgid "&Installation Prefix:"
+msgctxt "@label:chooser"
+msgid "&Installation prefix:"
+msgstr "&Installeerprefix:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The prefix under which the project will be installed. Leaving this empty "
+"will let CMake use its default install prefix."
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
+#: cmakebuilddirchooser.ui:112
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "CMake's default install prefix"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: cmakebuilddirchooser.ui:119
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build &type:"
+msgstr "Buu-&Typ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#. i18n: ectx: property (text), widget (QLabel, extraArgumentsLabel)
+#: cmakebuilddirchooser.ui:162 settings/cmakebuildsettings.ui:178
+#, fuzzy, kde-format
+#| msgid "Extra Arguments:"
+msgctxt "@label:listbox"
+msgid "Extra arguments:"
+msgstr "Bito-Argumenten:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: cmakebuilddirchooser.ui:182
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake &executable:"
+msgstr ""
+
+#: cmakecodecompletionmodel.cpp:189
+#, kde-format
+msgid "INVALID"
+msgstr "Leeg"
+
+#: cmakecodecompletionmodel.cpp:197
+#, fuzzy, kde-format
+#| msgid "Command"
+msgctxt "@item"
+msgid "Command"
+msgstr "Befehl"
+
+#: cmakecodecompletionmodel.cpp:198
+#, fuzzy, kde-format
+#| msgid "Variable"
+msgctxt "@item"
+msgid "Variable"
+msgstr "Variabel"
+
+#: cmakecodecompletionmodel.cpp:199
+#, fuzzy, kde-format
+#| msgid "Macro"
+msgctxt "@item"
+msgid "Macro"
+msgstr "Makro"
+
+#: cmakecodecompletionmodel.cpp:200
+#, fuzzy, kde-format
+#| msgid "Path"
+msgctxt "@item"
+msgid "Path"
+msgstr "Padd"
+
+#: cmakecodecompletionmodel.cpp:201
+#, fuzzy, kde-format
+#| msgid "Target"
+msgctxt "@item"
+msgid "Target"
+msgstr "Teel"
+
+#: cmakecodecompletionmodel.cpp:253
+#, kde-format
+msgid "wrong"
+msgstr "leeg"
+
+#: cmakecommandscontents.cpp:29
+#, fuzzy, kde-format
+#| msgid "Commands"
+msgctxt "@item cmake"
+msgid "Commands"
+msgstr "Befehlen"
+
+#: cmakecommandscontents.cpp:30
+#, fuzzy, kde-format
+#| msgid "Variables"
+msgctxt "@item cmake"
+msgid "Variables"
+msgstr "Variabeln"
+
+#: cmakecommandscontents.cpp:31
+#, fuzzy, kde-format
+#| msgid "Modules"
+msgctxt "@item cmake"
+msgid "Modules"
+msgstr "Modulen"
+
+#: cmakecommandscontents.cpp:32
+#, fuzzy, kde-format
+#| msgid "Properties"
+msgctxt "@item cmake"
+msgid "Properties"
+msgstr "Egenschappen"
+
+#: cmakecommandscontents.cpp:33
+#, fuzzy, kde-format
+#| msgid "Policies"
+msgctxt "@item cmake"
+msgid "Policies"
+msgstr "Regeln"
+
+#: cmakecommandscontents.cpp:102
+#, kde-format
+msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
+msgstr ""
+
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#, kde-format
+msgid "Unable to find a CMake executable. Is one installed on the system?"
+msgstr ""
+
+#: cmakedocumentation.cpp:81
+#, kde-format
+msgid "<br /><em>Cache Value:</em> %1\n"
+msgstr "<br /><em>Weert twischenspiekern:</em> %1\n"
+
+#: cmakedocumentation.cpp:84
+#, kde-format
+msgid "<br /><em>Cache Documentation:</em> %1\n"
+msgstr "<br /><em>Dokmentatschoon twischenspiekern:</em> %1\n"
+
+#: cmakehelpdocumentation.cpp:21
+#, kde-format
+msgid "CMake Content Page"
+msgstr "CMake-Inholtsiet"
+
+#: cmakemanager.cpp:644
+#, kde-format
+msgid ""
+"Failed to configure project '%1' (error message: %2). As a result, "
+"KDevelop's code understanding will likely be broken.\n"
+"\n"
+"To fix this issue, please ensure that the project's CMakeLists.txt files are "
+"correct, and KDevelop is configured to use the correct CMake version and "
+"settings. Then right-click the project item in the projects tool view and "
+"click 'Reload'."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: cmakepossibleroots.ui:16
+#, fuzzy, kde-format
+#| msgid ""
+#| "KDevelop has found several possible project root for your project, please "
+#| "select the correct one."
+msgid ""
+"KDevelop has found several possible root directories for your project, "
+"please select the correct one."
+msgstr ""
+"Kdevelop hett en Reeg Projekt-Wörtelornern funnen, bitte söök den Richtigen "
+"ut."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: settings/cmakebuildsettings.ui:74
+#, fuzzy, kde-format
+#| msgid "Cache Values"
+msgctxt "@title:group"
+msgid "Cache Values"
+msgstr "Twischenspieker-Weerten"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: settings/cmakebuildsettings.ui:89
+#, fuzzy, kde-format
+#| msgid "Comment:"
+msgctxt "@label"
+msgid "Comment:"
+msgstr "Kommentar"
+
+#. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
+#: settings/cmakebuildsettings.ui:106
+#, fuzzy, kde-format
+#| msgid "Show Advanced"
+msgctxt "@action:button"
+msgid "Show Advanced"
+msgstr "Verwiedert wiesen"
+
+#. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
+#: settings/cmakebuildsettings.ui:125
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:group"
+msgid "Advanced"
+msgstr "Verwiedert"
+
+#. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
+#: settings/cmakebuildsettings.ui:134
+#, fuzzy, kde-format
+#| msgid "&Installation Prefix:"
+msgctxt "@label:chooser"
+msgid "Installation prefix:"
+msgstr "&Installeerprefix:"
+
+#. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
+#: settings/cmakebuildsettings.ui:144
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@label:listbox"
+msgid "Build type:"
+msgstr "Buu-&Typ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: settings/cmakebuildsettings.ui:198
+#, fuzzy, kde-format
+#| msgid "Configure Environment"
+msgctxt "@label:chooser"
+msgid "Configure environment:"
+msgstr "Ümgeven instellen"
+
+#. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
+#: settings/cmakebuildsettings.ui:213
+#, fuzzy, kde-format
+#| msgid "Select an environment to be used"
+msgctxt "@info:tooltip"
+msgid "Select an environment to be used"
+msgstr "De Ümgeven utsöken, de Du bruken wullt"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showInternal)
+#: settings/cmakebuildsettings.ui:225
+#, fuzzy, kde-format
+#| msgid "Show Advanced Values"
+msgctxt "@option:check"
+msgid "Show advanced values"
+msgstr "Verwiedert Weerten wiesen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: settings/cmakebuildsettings.ui:235
+#, kde-format
+msgctxt "@label:chooser"
+msgid "CMake executable:"
+msgstr ""
+
+#: settings/cmakecachemodel.cpp:36
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Naam"
+
+#: settings/cmakecachemodel.cpp:37
+#, fuzzy, kde-format
+#| msgid "Type"
+msgctxt "@title:column"
+msgid "Type"
+msgstr "Typ"
+
+#: settings/cmakecachemodel.cpp:38
+#, fuzzy, kde-format
+#| msgid "Value"
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Weert"
+
+#: settings/cmakecachemodel.cpp:39
+#, fuzzy, kde-format
+#| msgid "Comment"
+msgctxt "@title:column"
+msgid "Comment"
+msgstr "Kommentar"
+
+#: settings/cmakecachemodel.cpp:40
+#, fuzzy, kde-format
+#| msgid "Advanced"
+msgctxt "@title:column"
+msgid "Advanced"
+msgstr "Verwiedert"
+
+#: settings/cmakecachemodel.cpp:41
+#, kde-format
+msgctxt "@title:column"
+msgid "Strings"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:343
+#, fuzzy, kde-format
+#| msgid ""
+#| "The %1 directory is about to be removed in KDevelop's list.\n"
+#| "Do you want KDevelop to remove it in the file system as well?"
+msgid ""
+"The %1 directory is about to be removed in KDevelop's list.\n"
+"Do you want KDevelop to delete it in the file system as well?"
+msgstr ""
+"De Orner \"%1\" warrt vun KDevelop sien List wegmaakt.\n"
+"Wullt Du, dat KDevelop em ok ut dat Dateisysteem wegmaakt?"
+
+#: settings/cmakepreferences.cpp:346
+#, kde-format
+msgctxt "@action:button"
+msgid "Do Not Delete"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:352
+#, fuzzy, kde-format
+#| msgid "Could not remove: %1.\n"
+msgid "Could not remove: %1"
+msgstr "\"%1\" lett sik nich wegmaken.\n"
+
+#: settings/cmakepreferences.cpp:398
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr ""
+
+#: settings/cmakepreferences.cpp:403
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure CMake Settings"
+msgstr ""
+
+#: testing/ctestfindjob.cpp:24
+#, kde-format
+msgid "Parse test suite %1"
+msgstr ""
+
+#: testing/ctestrunjob.cpp:75
+#, kde-format
+msgid "CTest"
+msgstr "C-Test"
+
+#: testing/ctestrunjob.cpp:117
+#, kde-format
+msgctxt "running test %1, %2 test case"
+msgid "CTest %1: %2"
+msgstr ""
+
+#: testing/ctestrunjob.cpp:119
+#, kde-format
+msgctxt "running test %1, %2 number of test cases"
+msgid "CTest %2 (%1)"
+msgid_plural "CTest %2 (%1)"
+msgstr[0] ""
+msgstr[1] ""
+
+#~ msgid "KDevelop - CMake Support"
+#~ msgstr "KDevelop-Ünnerstütten för CMake"
+
+#~ msgid "Add"
+#~ msgstr "Tofögen"
+
+#~ msgid "Remove"
+#~ msgstr "Wegmaken"
+
+#~ msgid "%1 is a deprecated command and should not be used"
+#~ msgstr "%1 is överhaalt, un schull nich mehr bruukt warrn."
+
+#, fuzzy
+#~| msgid "Unfinished function. "
+#~ msgid "Unfinished function."
+#~ msgstr "Nich afslaten Funkschoon. "
+
+#, fuzzy
+#~| msgid "You need to select a cmake binary."
+#~ msgid "You need to select a CMake executable."
+#~ msgstr "Du muttst en Programm för \"cmake\" angeven."
+
+#~ msgid "Configure a build directory"
+#~ msgstr "En Buuorner inrichten"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sönke Dibbern, Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "s_dibbern@web.de, m.j.wiese@web.de"
+
+#~ msgid "CMake &Binary:"
+#~ msgstr "CMake-&Programm:"
+
+#, fuzzy
+#~| msgid "Build &type:"
+#~ msgid "Build Type:"
+#~ msgstr "Buu-&Typ:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake-&Programm:"
+
+#, fuzzy
+#~| msgid "&Installation Prefix:"
+#~ msgid "Installation Prefix"
+#~ msgstr "&Installeerprefix:"
+
+#, fuzzy
+#~| msgid "Extra Arguments:"
+#~ msgid "Extra Arguments"
+#~ msgstr "Bito-Argumenten:"
+
+#, fuzzy
+#~| msgid "CMake &Binary:"
+#~ msgid "CMake Binary"
+#~ msgstr "CMake-&Programm:"
+
+#~ msgid "cmake is not installed"
+#~ msgstr "\"cmake\" is nich installeert."
+
+#~ msgid ""
+#~ "Could not write CMake settings to file '%1'.\n"
+#~ "Check that you have write access to it"
+#~ msgstr ""
+#~ "CMake-Instellen laat sik nich na Datei \"%1\" schrieven.\n"
+#~ "Prööv, wat Du dor Schriefverlööf för hest."
+
+#~ msgid "CMake Documentation"
+#~ msgstr "CMake-Dokmentatschoon"
+
+#~ msgid "Support for CMake documentation"
+#~ msgstr "Ünnerstütten för CMake-Dokmentatschoon"
+
+#~ msgid "CMake Manager"
+#~ msgstr "CMake-Pleger"
+
+#~ msgid "Support for managing CMake projects"
+#~ msgstr "Ünnerstütten för't Plegen vun CMake-Projekten"
+
+#, fuzzy
+#~| msgid "Jump to target definition"
+#~ msgid "Jump to Target Definition"
+#~ msgstr "Na Teel-Definitschoon jumpen"
+
+#~ msgid "Move files and folders within CMakeLists as follows:"
+#~ msgstr "Disse Dateien un Ornern binnen CMakeLists verschuven:"
+
+#~ msgid "Changes to CMakeLists failed, abort move?"
+#~ msgstr "Ännern vun CMakeLists fehlslaan. Verschuven afbreken?"
+
+#~ msgid "Remove files and folders from CMakeLists as follows:"
+#~ msgstr "Disse Dateien un Ornern ut CMakeLists wegmaken:"
+
+#~ msgid "Changes to CMakeLists failed, abort deletion?"
+#~ msgstr "Ännern vun CMakeLists fehlslaan. Wegmaken afbreken?"
+
+#~ msgid "Modify project targets as follows:"
+#~ msgstr "Disse Projekttelen ännern:"
+
+#~ msgid "Create folder '%1':"
+#~ msgstr "Orner \"%1\" opstellen"
+
+#~ msgid "Could not save the change."
+#~ msgstr "De Ännern lett sik nich sekern."
+
+#~ msgid "Modify target '%1' as follows:"
+#~ msgstr "Teel \"%1\" so ännern:"
+
+#~ msgid "CMakeLists changes failed."
+#~ msgstr "CMakeLists-Ännern fehlslaan"
+
+#~ msgid "Rename '%1' to '%2':"
+#~ msgstr "\"'%1\" to \"'%2\" ümnömen"
+
+#~ msgid "Changes to CMakeLists failed, abort rename?"
+#~ msgstr "Ännern vun CMakeLists fehlslaan. Ümnömen afbreken?"
+
+#~ msgid "CMake Directory"
+#~ msgstr "CMake-Orner"
+
+#~ msgid "The build directory did not exist and could not be created."
+#~ msgstr "Dat gifft den Buuorner nich, un he lett sik nich opstellen."
+
+#~ msgid "Error creating build directory"
+#~ msgstr "Fehler bi't Opstellen vun den Buuorner"
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Add a file called '%1' to target '%2'."
+#~ msgstr "En Datei mit den Naam \"%1\" na Teel \"%2\" tofögen"
+
+#~ msgid "Cannot save the change."
+#~ msgstr "De Ännern lett sik nich sekern."
+
+#~ msgid "Remove a file called '%1'."
+#~ msgstr "En Datei mit den Naam \"%1\" wegmaken"
+
+#~ msgid "Rename a folder called '%1'."
+#~ msgstr "En Orner mit den Naam \"%1\" ümnömen"
+
+#~ msgid "Swi&tch Colors"
+#~ msgstr "Klören &wesseln"
+
+#~ msgid "General"
+#~ msgstr "Allmeen"
+
+#~ msgid "This project is one day old"
+#~ msgid_plural "This project is %1 days old"
+#~ msgstr[0] "Dit Projekt is een Dag oolt."
+#~ msgstr[1] "Dit Projekt is %1 Daag oolt."
+
+#~ msgid "Settings changed"
+#~ msgstr "Instellen ännert"
+
+#~ msgid "A KDE 4 Application"
+#~ msgstr "En KDE-4-Programm"
+
+#~ msgid "kde4app"
+#~ msgstr "kde4prog"
+
+#~ msgid "(C) 2007 %{AUTHOR}"
+#~ msgstr "© 2009 %{AUTHOR}"
+
+#~ msgid "%{AUTHOR}"
+#~ msgstr "%{AUTHOR}"
+
+#~ msgid "Document to open"
+#~ msgstr "Dokment, dat Du opmaken wullt"
+
+#~ msgid "&Move"
+#~ msgstr "Ver&schuven"
+
+#~ msgid "kapp4_base"
+#~ msgstr "kapp4_base"
+
+#~ msgid "hello, world"
+#~ msgstr "Moin, Welt"
+
+#~ msgid "Background color:"
+#~ msgstr "Achtergrundklöör:"
+
+#~ msgid "Choose a new background color"
+#~ msgstr "En anner Klöör för den Achtergrund utsöken"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">background</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Du kannst de <span "
+#~ "style=\" font-weight:600;\">Achtergrundklöör</span> wesseln, wenn Du hier "
+#~ "klickst un de niege <span style=\" color:#ff0000;\">Klöör</span> binnen "
+#~ "den <span style=\" font-style:italic;\">Klöördialoog</span> utsöchst.</"
+#~ "p></body></html>"
+
+#~ msgid "Project age:"
+#~ msgstr "Projektöller:"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Vörgrundklöör:"
+
+#~ msgid "Choose a new foreground color"
+#~ msgstr "En nieg Vörgrundklöör utsöken"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Change the <span style="
+#~ "\" font-weight:600;\">foreground</span> color by clicking here and choose "
+#~ "the new <span style=\" color:#ff0000;\">color</span> in the <span style="
+#~ "\" font-style:italic;\">color dialog</span>.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'DejaVu Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">Du kannst de <span "
+#~ "style=\" font-weight:600;\">Vörgrundklöör</span> wesseln, wenn Du hier "
+#~ "klickst un de niege <span style=\" color:#ff0000;\">Klöör</span> binnen "
+#~ "den <span style=\" font-style:italic;\">Klöördialoog</span> utsöchst.</"
+#~ "p></body></html>"
+
+#~ msgid "Set the project age (in days)"
+#~ msgstr "Projektöller in Daag fastleggen"
+
+#~ msgid "Change the project age (in days) by choosing a new number of days."
+#~ msgstr "Hier kannst Du dat Öller vun't Projekt, meten in Daag, ännern."
+
+#~ msgid "Remove a folder called '%1'."
+#~ msgstr "En Orner mit den Naam \"%1\" wegmaken"
+
+#~ msgid "Could not create the directory's CMakeLists.txt file."
+#~ msgstr "De Datei \"CMakeLists.txt\" för den Orner lett sik nich opstellen."
+
+#~ msgid "debug"
+#~ msgstr "Fehlersöök"
+
+#~ msgid "release"
+#~ msgstr "Utgaav"
+
+#~ msgid "RelWithDebInfo"
+#~ msgstr "UtgMitFSInfo"
+
+#~ msgid "MinSizeRel"
+#~ msgstr "MinGröttUtg"
+
+#~ msgid "Status:"
+#~ msgstr "Status:"
+
+#~ msgid "Cannot remove the file."
+#~ msgstr "De Datei lett sik nich wegmaken."
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Action"
+#~ msgstr "Akschoon"
+
+#~ msgid "Change"
+#~ msgstr "Ännern"
+
+#~ msgid "Insert"
+#~ msgstr "Infögen"
+
+#~ msgid "Choose CMake Build Directory"
+#~ msgstr "CMake-Buuorner utsöken"
+
+#~ msgid "TextLabel"
+#~ msgstr "Textbeteker"
+
+#~ msgid "Generator:"
+#~ msgstr "Opsteller:"
+
+#~ msgid "Run"
+#~ msgstr "Utföhren"
+
+#~ msgid ""
+#~ "The %1 build directory is not valid. It will be removed from the list"
+#~ msgstr "\"%1\" gellt nich as Buuorner, he warrt vun de List wegmaakt."
+
+#~ msgid ""
+#~ "The %1 directory does not exist, but is needed before the build directory "
+#~ "is created.\n"
+#~ "Do you want KDevelop to create it for you?"
+#~ msgstr ""
+#~ "Den Orner \"%1\" gifft dat nich, man he warrt bruukt, ehr de Buuorner "
+#~ "opstellt warrt.\n"
+#~ "Schall KDevelop em opstellen?"
+
+#~ msgid "Running"
+#~ msgstr "Löppt"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Afbreken"
+
+#~ msgid "&Run"
+#~ msgstr "&Utföhren"
+
+#~ msgid "CMake process killed"
+#~ msgstr "CMake-Perzess afschaten"
+
+#~ msgid "Created successfully"
+#~ msgstr "Mit Spood opstellt"
+
+#~ msgid "An error occurred"
+#~ msgstr "Dat geev en Fehler"
+
+#~ msgid "Click the Run button to run CMake"
+#~ msgstr "Klick op \"Utföhren\", wenn Du CMake utföhren wullt"

@@ -1,0 +1,219 @@
+# translation of kdevmakebuilder.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2008, 2009, 2010, 2011, 2012.
+# Sönke Dibbern <s_dibbern@web.de>, 2008, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2012-02-08 22:12+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: makebuilderpreferences.cpp:70
+#, fuzzy, kde-format
+#| msgid "Make: %1"
+msgctxt "@title:tab"
+msgid "Make"
+msgstr "Make: %1"
+
+#: makebuilderpreferences.cpp:75
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Make Settings"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: makeconfig.ui:32
+#, fuzzy, kde-format
+#| msgid "&Abort on first error:"
+msgctxt "@option:check"
+msgid "&Abort on first error:"
+msgstr "Bi eerst Fehler &afbreken:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: makeconfig.ui:52
+#, fuzzy, kde-format
+#| msgid "&Display commands but do not execute them:"
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "Befehlen &wiesen, man nich utföhren:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: makeconfig.ui:72
+#, fuzzy, kde-format
+#| msgid "Install as &root:"
+msgctxt "@option:check"
+msgid "Insta&ll as root:"
+msgstr "As &Systeempleger installeren:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: makeconfig.ui:95
+#, fuzzy, kde-format
+#| msgid "Root installation &command:"
+msgctxt "@label:listbox"
+msgid "Root installation &command:"
+msgstr "Systeempleger-Installeer&befehl:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: makeconfig.ui:133
+#, fuzzy, kde-format
+#| msgid "&Number of simultaneous jobs:"
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "&Tall vun op eenmaal utföhrt Opgaven:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: makeconfig.ui:156
+#, fuzzy, kde-format
+#| msgid "&Make executable:"
+msgctxt "@label:chooser"
+msgid "&Make executable:"
+msgstr "&Make-Programm:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: makeconfig.ui:179
+#, fuzzy, kde-format
+#| msgid "Default make &target:"
+msgctxt "@label:textbox"
+msgid "Default make &target:"
+msgstr "&Standardteel för \"make\":"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: makeconfig.ui:199
+#, fuzzy, kde-format
+#| msgid "Additional make &options:"
+msgctxt "@label:textbox"
+msgid "Additional ma&ke options:"
+msgstr "Anner \"make\"-&Optschonen:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: makeconfig.ui:219
+#, fuzzy, kde-format
+#| msgid "Active Environment &Profile:"
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "Anmaakt Ümgeven&profil:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: makeconfig.ui:263
+#, kde-format
+msgctxt "@option:check"
+msgid "Override number of &jobs:"
+msgstr ""
+
+#: makejob.cpp:80
+#, fuzzy, kde-format
+#| msgid "Make: %1"
+msgid "Make (%1): %2"
+msgstr "Make: %1"
+
+#: makejob.cpp:82
+#, fuzzy, kde-format
+#| msgid "Make: %1"
+msgid "Make (%1)"
+msgstr "Make: %1"
+
+#: makejob.cpp:84
+#, fuzzy, kde-format
+#| msgid "Make: %1"
+msgid "Make"
+msgstr "Make: %1"
+
+#: makejob.cpp:98
+#, kde-format
+msgid "Build item no longer available"
+msgstr "Buu-Element is nich mehr verföögbor"
+
+#: makejob.cpp:105
+#, kde-format
+msgid "Internal error: cannot build a file item"
+msgstr "Intern Fehler: En Datei-Element lett sik nich buen"
+
+#~ msgid "kdesu"
+#~ msgstr "kdesu"
+
+#~ msgid "kdesudo"
+#~ msgstr "kdesudo"
+
+#~ msgid "sudo"
+#~ msgstr "sudo"
+
+#~ msgid "View"
+#~ msgstr "Ansicht"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Sönke Dibbern, Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "s_dibbern@web.de, m.j.wiese@web.de"
+
+#~ msgid "Make Builder"
+#~ msgstr "Make-Buumoduul"
+
+#~ msgid "Support for building Make projects"
+#~ msgstr "Ünnerstütten för't Buen vun Make-Projekten"
+
+#~ msgid "Invalid build directory '%1'"
+#~ msgstr "Buuorner \"%1\" is leeg"
+
+#~ msgid "'%1' is not a local path"
+#~ msgstr "\"%1\" is keen lokaal Padd"
+
+#~ msgid "'%1' is not a directory"
+#~ msgstr "\"%1\" is keen Orner"
+
+#, fuzzy
+#~| msgid "Could not create build command for target '%1'"
+#~ msgid "Could not create build command for targets '%1'"
+#~ msgstr "Buubefehl för't Teel \"%1\" lett sik nich opstellen"
+
+#~ msgid "Job failed"
+#~ msgstr "Opgaav fehlslaan"
+
+#~ msgid "*** Failed ***"
+#~ msgstr "*** Fehlslaan ***"
+
+#~ msgid "*** Finished ***"
+#~ msgstr "*** Afslaten ***"
+
+#~ msgid "*** Aborted ***"
+#~ msgstr "*** Afbraken ***"
+
+#, fuzzy
+#~| msgid "Install as &root:"
+#~ msgid "Build, then install as root"
+#~ msgstr "As &Systeempleger installeren:"
+
+#~ msgid "compiling"
+#~ msgstr "An't Kompileren"
+
+#~ msgid "generating"
+#~ msgstr "An't Opstellen"
+
+#~ msgctxt "Linking object files into a library or executable"
+#~ msgid "linking"
+#~ msgstr "An't Linken"
+
+#~ msgid "built"
+#~ msgstr "buut"
+
+#~ msgid "installing"
+#~ msgstr "An't Installeren"
+
+#~ msgid "creating"
+#~ msgstr "An't Opstellen"
+
+#~ msgid "Run more than one job at once:"
+#~ msgstr "Mehr Opgaven op eenmaal utföhren:"

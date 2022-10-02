@@ -1,0 +1,489 @@
+# translation of kdevpatchreview.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2009, 2010, 2011, 2012.
+# Sönke Dibbern <s_dibbern@web.de>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevpatchreview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2012-02-02 07:40+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: localpatchsource.cpp:34
+#, kde-format
+msgid "Custom Patch"
+msgstr "Egen Kodeplaster"
+
+#. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
+#: localpatchwidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Patch"
+msgctxt "@title:group"
+msgid "Patch"
+msgstr "Kodeplaster"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: localpatchwidget.ui:38
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Base directory:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
+#: localpatchwidget.ui:45
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch/base"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, fileTab)
+#: localpatchwidget.ui:56
+#, fuzzy, kde-format
+#| msgid "From file"
+msgctxt "@title:tab"
+msgid "From File"
+msgstr "Ut Datei"
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
+#: localpatchwidget.ui:62
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/patch"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, commandTab)
+#: localpatchwidget.ui:70
+#, kde-format
+msgctxt "@title:tab"
+msgid "From Command"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
+#: localpatchwidget.ui:76
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Enter command to take output from..."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
+#: localpatchwidget.ui:87
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Patch is already applied on local version"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, applied)
+#: localpatchwidget.ui:90
+#, fuzzy, kde-format
+#| msgid "Already applied"
+msgctxt "@option:check"
+msgid "Already applied"
+msgstr "Al övernahmen"
+
+#: patchhighlighter.cpp:83
+#, kde-format
+msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
+msgstr "<b><span style=\"color:red\">Konflikt</span></b><br/>"
+
+#: patchhighlighter.cpp:91
+#, fuzzy, kde-format
+#| msgid "<b>Applied.</b><br/>"
+msgid "Applied.<br/>"
+msgstr "<b>Övernahmen</b><br/>"
+
+#: patchhighlighter.cpp:94 patchhighlighter.cpp:109
+#, fuzzy, kde-format
+#| msgid "<b>Insertion</b><br/>"
+msgid "Insertion<br/>"
+msgstr "<b>Infögen</b><br/>"
+
+#: patchhighlighter.cpp:97 patchhighlighter.cpp:106
+#, fuzzy, kde-format
+#| msgid "<b>Removal</b><br/>"
+msgid "Removal<br/>"
+msgstr "<b>Wegmaken</b><br/>"
+
+#: patchhighlighter.cpp:98
+#, fuzzy, kde-format
+#| msgid "<b>Previous:</b><br/>"
+msgid "Previous:<br/>"
+msgstr "<b>Verleden:</b><br/>"
+
+#: patchhighlighter.cpp:103
+#, fuzzy, kde-format
+#| msgid "<b>Reverted.</b><br/>"
+msgid "Reverted.<br/>"
+msgstr "<b>Torüchdreiht</b><br/>"
+
+#: patchhighlighter.cpp:111
+#, fuzzy, kde-format
+#| msgid "<b>Alternative:</b><br/>"
+msgid "Alternative:<br/>"
+msgstr "<b>Alternatiev:</b><br/>"
+
+#: patchhighlighter.cpp:201
+#, kde-format
+msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
+msgstr ""
+"De Ännern laat sik nich övernehmen. Text schull »%1« wesen, man is »%2«."
+
+#: patchhighlighter.cpp:411 patchhighlighter.cpp:418
+#, fuzzy, kde-format
+#| msgid "Insertion"
+msgctxt "@item"
+msgid "Insertion"
+msgstr "Infögen"
+
+#: patchhighlighter.cpp:413 patchhighlighter.cpp:420
+#, fuzzy, kde-format
+#| msgid "Removal"
+msgctxt "@item"
+msgid "Removal"
+msgstr "Wegmaken"
+
+#: patchhighlighter.cpp:415 patchhighlighter.cpp:422
+#, fuzzy, kde-format
+#| msgid "Change"
+msgctxt "@item"
+msgid "Change"
+msgstr "Ännern"
+
+#: patchreview.cpp:295 patchreview.cpp:297
+#, fuzzy, kde-format
+#| msgid "Kompare Model Update"
+msgctxt "@title:window"
+msgid "Kompare Model Update"
+msgstr "Kompare-Modell opfrischen"
+
+#: patchreview.cpp:457
+#, fuzzy, kde-format
+#| msgid "Overview"
+msgctxt "@title complete patch"
+msgid "Overview"
+msgstr "Översicht"
+
+#: patchreview.cpp:463 patchreview.cpp:539
+#, fuzzy, kde-format
+#| msgid "Patch Review"
+msgctxt "@title:window"
+msgid "Patch Review"
+msgstr "Kodeplaster bekieken"
+
+#: patchreview.cpp:470
+#, kde-format
+msgid "The base directory of the patch must be an absolute directory."
+msgstr ""
+
+#: patchreview.cpp:502 patchreview.cpp:528
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action"
+msgid "Finish Review"
+msgstr "Bekieken afsluten"
+
+#: patchreview.cpp:603
+#, fuzzy, kde-format
+#| msgid "Edit Patch"
+msgctxt "@action:inmenu"
+msgid "Review Patch"
+msgstr "Kodeplaster bewerken"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
+#: patchreview.ui:21
+#, fuzzy, kde-format
+#| msgid "Previous difference"
+msgctxt "@info:tooltip"
+msgid "Previous file"
+msgstr "Verleden Verscheel"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
+#: patchreview.ui:32
+#, fuzzy, kde-format
+#| msgid "Previous difference"
+msgctxt "@info:tooltip"
+msgid "Previous difference"
+msgstr "Verleden Verscheel"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
+#: patchreview.ui:43
+#, fuzzy, kde-format
+#| msgid "Next difference"
+msgctxt "@info:tooltip"
+msgid "Next difference"
+msgstr "Nakamen Verscheel"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
+#: patchreview.ui:54
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Next file"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, updateButton)
+#: patchreview.ui:78
+#, fuzzy, kde-format
+#| msgid "Update"
+msgctxt "@action:button"
+msgid "Update"
+msgstr "Opfrischen"
+
+#. i18n: ectx: property (text), widget (QToolButton, testsButton)
+#: patchreview.ui:92
+#, kde-format
+msgctxt "@action:button"
+msgid "Run Tests"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, exportReview)
+#: patchreview.ui:126
+#, fuzzy, kde-format
+#| msgid "Export Diff..."
+msgctxt "@action:button"
+msgid "Export Diff..."
+msgstr "Verscheel exporteren..."
+
+#. i18n: ectx: property (text), widget (QToolButton, cancelReview)
+#: patchreview.ui:142
+#, fuzzy, kde-format
+#| msgid "Cancel Review"
+msgctxt "@action:button"
+msgid "Cancel Review"
+msgstr "Bekieken afbreken"
+
+#. i18n: ectx: property (text), widget (QToolButton, finishReview)
+#: patchreview.ui:156
+#, fuzzy, kde-format
+#| msgid "Finish Review"
+msgctxt "@action:button"
+msgid "Finish Review"
+msgstr "Bekieken afsluten"
+
+#. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
+#: patchreview.ui:175
+#, fuzzy, kde-format
+#| msgid "Changes"
+msgctxt "@title:group"
+msgid "Changes"
+msgstr "Ännern"
+
+#: patchreviewtoolview.cpp:81
+#, kde-format
+msgctxt "%1: number of changed hunks, %2: file name"
+msgid "%2 (1 hunk)"
+msgid_plural "%2 (%1 hunks)"
+msgstr[0] "%2 (1 Block)"
+msgstr[1] "%2 (%1 Blöck)"
+
+#: patchreviewtoolview.cpp:221
+#, kde-format
+msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
+msgstr ""
+
+#: patchreviewtoolview.cpp:224
+#, kde-format
+msgid ""
+"Couldn't export the patch.\n"
+"%1"
+msgstr ""
+
+#: patchreviewtoolview.cpp:255
+#, kde-format
+msgctxt "@action"
+msgid "Select All"
+msgstr ""
+
+#: patchreviewtoolview.cpp:257
+#, kde-format
+msgctxt "@action"
+msgid "Deselect All"
+msgstr ""
+
+#: patchreviewtoolview.cpp:555
+#, kde-format
+msgid "Running tests: %p%"
+msgstr ""
+
+#: patchreviewtoolview.cpp:587
+#, kde-format
+msgid "Test passed"
+msgid_plural "All %1 tests passed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: patchreviewtoolview.cpp:591
+#, kde-format
+msgid "Test results: %1 passed, %2 failed, %3 errors"
+msgstr ""
+
+#~ msgid "Base:"
+#~ msgstr "Basis:"
+
+#~ msgid "Command's output..."
+#~ msgstr "Utgaav vun den Befehl..."
+
+#~ msgid "Edit Patch"
+#~ msgstr "Kodeplaster bewerken"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Save As..."
+#~ msgstr "Sekern as..."
+
+#~ msgid "Send..."
+#~ msgstr "Loosstüern..."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Manfred Wiese"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "m.j.wiese@web.de"
+
+#~ msgid ""
+#~ "<qt>No models or no differences, this file: <b>%1</b>, is not a valid "
+#~ "diff file.</qt>"
+#~ msgstr ""
+#~ "<qt>Keen Modellen oder keen Verschelen. De Datei <b>%1</b> is keen gellen "
+#~ "Verscheeldatei.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the file <b>%2</b>."
+#~ "</qt>"
+#~ msgstr ""
+#~ "<qt>Bi't Anwennen vun den Verscheel <b>%1</b> op de Datei <b>%2</b> hett "
+#~ "dat Problemen geven.</qt>"
+
+#~ msgid ""
+#~ "<qt>There were problems applying the diff <b>%1</b> to the folder <b>%2</"
+#~ "b>.</qt>"
+#~ msgstr ""
+#~ "<qt>Bi't Anwennen vun den Verscheel <b>%1</b> na den Orner <b>%2</b> hett "
+#~ "dat Problemen geven.</qt>"
+
+#~ msgid "Could not open a temporary file."
+#~ msgstr "Temporeerdatei lett sik nich opmaken."
+
+#~ msgid ""
+#~ "<qt>Could not write to the temporary file <b>%1</b>, deleting it.</qt>"
+#~ msgstr ""
+#~ "<qt>Nich mööglich, na de Temporeerdatei <b>%1</b> to schrieven. Se warrt "
+#~ "wegdaan.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not create destination directory <b>%1</b>.\n"
+#~ "The file has not been saved.</qt>"
+#~ msgstr ""
+#~ "<qt>De Teelorner <b>%1</b> lett sik nich opstellen.\n"
+#~ "De Datei wöör nich sekert.</qt>"
+
+#~ msgid ""
+#~ "<qt>Could not upload the temporary file to the destination location <b>"
+#~ "%1</b>. The temporary file is still available under: <b>%2</b>. You can "
+#~ "manually copy it to the right place.</qt>"
+#~ msgstr ""
+#~ "<qt>De Temporeerdatei lett sik nich na den Teeloort <b>%1</b> hoochladen. "
+#~ "Dat gifft de Temporeerdatei noch ünner <b>%2</b>. Du kannst ehr vun Hand "
+#~ "na de richtige Steed koperen.</qt>"
+
+#~ msgid "Could not parse diff output."
+#~ msgstr "Diff-Utgaav lett sik nich inlesen."
+
+#~ msgid "The files are identical."
+#~ msgstr "De Dateien sünd liek."
+
+#~ msgid "Could not write to the temporary file."
+#~ msgstr "Nich mööglich, na de Temporeerdatei to schrieven."
+
+#~ msgid "Highlights code affected by a patch"
+#~ msgstr "Heevt de Kodeverschelen vun en Kodeplaster rut"
+
+#~ msgid "Show"
+#~ msgstr "Wiesen"
+
+#~ msgid "File"
+#~ msgstr "Datei"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">File:</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Datei:</"
+#~ "span></p></body></html>"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Command:</"
+#~ "span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style="
+#~ "\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-"
+#~ "weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-"
+#~ "top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+#~ "indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Befehl:</"
+#~ "span></p></body></html>"
+
+#~ msgid "Depth:"
+#~ msgstr "Deepde:"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Added"
+#~ msgstr "Toföögt"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Deleted"
+#~ msgstr "Wegdaan"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Has Conflicts"
+#~ msgstr "Hett Konflikten"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Modified"
+#~ msgstr "Ännert"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Up To Date"
+#~ msgstr "Op Stand"
+
+#~ msgctxt "VCS file status"
+#~ msgid "Unknown"
+#~ msgstr "Nich begäng"
+
+#~ msgctxt "Unknown VCS file status, probably a backend error"
+#~ msgid "?"
+#~ msgstr "?"
+
+#~ msgctxt "%1: number of changed hunks, %2: file name, %3: vcs file state"
+#~ msgid "%2 (1 hunk, %3)"
+#~ msgid_plural "%2 (%1 hunks, %3)"
+#~ msgstr[0] "%2 (1 Block, %3)"
+#~ msgstr[1] "%2 (%1 Blöck, %3)"
+
+#~ msgid ", %1"
+#~ msgstr ", %1"
+
+#~ msgid ")"
+#~ msgstr ")"

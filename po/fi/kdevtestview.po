@@ -1,0 +1,98 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2014-05-30 21:58+0300\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: testview.cpp:56 testviewplugin.cpp:70
+#, fuzzy, kde-format
+#| msgid "Unit Tests"
+msgctxt "@title:window"
+msgid "Unit Tests"
+msgstr "Yksikkötestit"
+
+#: testview.cpp:78
+#, fuzzy, kde-format
+#| msgid "Show Source"
+msgctxt "@action:inmenu"
+msgid "Show Source"
+msgstr "Näytä lähdekoodi"
+
+#: testview.cpp:85
+#, fuzzy, kde-format
+#| msgid "Run Selected Tests"
+msgctxt "@action"
+msgid "Run Selected Tests"
+msgstr "Suorita valitut testit"
+
+#: testview.cpp:90
+#, fuzzy, kde-format
+#| msgid "Filter..."
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Suodata…"
+
+#: testview.cpp:292
+#, kde-format
+msgid "Run 1 test"
+msgid_plural "Run %1 tests"
+msgstr[0] "Suorita yksi testi"
+msgstr[1] "Suorita %1 testiä"
+
+#: testviewplugin.cpp:59
+#, fuzzy, kde-format
+#| msgid "Run All Tests"
+msgctxt "@action"
+msgid "Run All Tests"
+msgstr "Suorita kaikki testit"
+
+#: testviewplugin.cpp:63
+#, fuzzy, kde-format
+#| msgid "Stop Running Tests"
+msgctxt "@action"
+msgid "Stop Running Tests"
+msgstr "Pysäytä testien suoritus"
+
+#: testviewplugin.cpp:104
+#, kde-format
+msgid "Run 1 test in %2"
+msgid_plural "Run %1 tests in %2"
+msgstr[0] "Suorita yksi projektin %2 testi"
+msgstr[1] "Suorita %1 projektin %2 testiä"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Suorita"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Lasse Liehu"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lasse.liehu@gmail.com"
+
+# Ei pistettä lopussa, koska on työkaluvihje.
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the test view for matching test suites "
+#~ "and cases."
+#~ msgstr "Voit suodattaa testisarjoja sekä testeja käyttäen jokerimerkkejä"
+
+#~ msgid "Unit Test View"
+#~ msgstr "Yksikkötestinäkymä"
+
+#~ msgid "Lets you see and run unit tests"
+#~ msgstr "Mahdollistaa yksikkötestien tarkastelemisen ja suorittamisen"

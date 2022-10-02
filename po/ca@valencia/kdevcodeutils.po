@@ -1,0 +1,57 @@
+# Translation of kdevcodeutils.po to Catalan (Valencian)
+# Copyright (C) 2010-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Manuel Tortosa <manutortosa@chakra-project.org>, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2011, 2017, 2020.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 13:05+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr "Documenta la declaració"
+
+#: codeutilsplugin.cpp:50
+#, kde-format
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr "Alt+Maj+d"
+
+#: codeutilsplugin.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr "Afig un esquelet de Doxygen per a la declaració baix el cursor."
+
+#: codeutilsplugin.cpp:55
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr ""
+"Afig un esquelet de comentari bàsic de Doxygen davant de la declaració baix "
+"el cursor, p. ex. amb tots els paràmetres d'una funció."
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr "..."

@@ -1,0 +1,220 @@
+# Translation of kdevwelcomepage.po to Ukrainian
+# Copyright (C) 2016-2017 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2016, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevwelcomepage\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-20 00:43+0000\n"
+"PO-Revision-Date: 2017-09-29 08:30+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: qml/area_code.qml:76
+msgid "Need Help?"
+msgstr "Потрібна допомога?"
+
+#: qml/area_code.qml:84
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#: qml/area_code.qml:91
+msgid "Learn about KDevelop"
+msgstr "Дізнайтеся більше про KDevelop"
+
+#: qml/area_code.qml:96
+msgid "Join KDevelop's team!"
+msgstr "Долучіться до команди KDevelop!"
+
+#: qml/area_code.qml:101
+msgid "Handbook"
+msgstr "Підручник"
+
+#: qml/area_debug.qml:18 qml/area_review.qml:16
+msgid "Back to code"
+msgstr "Повернутися до коду"
+
+#: qml/area_debug.qml:37
+msgid "Configure a new Launcher"
+msgstr "Налаштувати новий інструмент запуску"
+
+#: qml/area_debug.qml:38
+msgid "Attach to Process"
+msgstr "Приєднати до процесу"
+
+#: qml/area_debug.qml:39
+msgid "Debug your program"
+msgstr "Розпочати діагностику програми"
+
+#: qml/area_debug.qml:41
+msgid "Debug Area"
+msgstr "Область діагностики"
+
+#: qml/area_debug.qml:44
+msgid ""
+"On the <em>Debug</em> area you will be able to see and analyze how your "
+"program works on execution. On the <em>Run</em> menu you will find all the "
+"possible options."
+msgstr ""
+"За допомогою області <em>Діагностика</em> ви зможете переглядати і "
+"аналізувати виконання вашої програми. Керувати параметрами виконання можна "
+"за допомогою меню <em>Виконання</em>."
+
+#: qml/area_debug.qml:50
+msgid ""
+"As you can see, here you can just execute your application or debug it if "
+"you need further runtime information. You can select what is going to be run "
+"by configuring the launches and selecting the one you want to use in the "
+"<em>Current Launch Configuration</em> sub-menu."
+msgstr ""
+"Як можна бачити, тут ви можете просто запустити вашу програму або виконати "
+"діагностику, якщо вам потрібні розширені дані щодо її виконання. Ви можете "
+"визначити дії, які буде виконано за допомогою налаштовування засобі запуску "
+"і визначення того з них, який ви хочете використати, за допомогою підменю "
+"<em>Поточні налаштування запуску</em>."
+
+#: qml/area_review.qml:38
+msgid "Review a Patch"
+msgstr "Розглянути латку"
+
+#: qml/area_review.qml:46
+msgid "Review Area"
+msgstr "Область рецензування"
+
+#: qml/area_review.qml:50
+msgid ""
+"On the <em>Review</em> area you will be able to find the tools you need to "
+"review changes in your projects, either the ones you made or some external "
+"patch."
+msgstr ""
+"За допомогою області <em>рецензування</em> ви зможете скористатися "
+"інструментами рецензування змін у ваших проєктах, внесених вами або "
+"надісланих іншими розробниками."
+
+#: qml/area_review.qml:56
+msgid ""
+"Also it will help you send the changes to the community you're contributing "
+"to, either by committing the changes, sending them by e-mail or putting them "
+"on a ReviewBoard service."
+msgstr ""
+"Крім того, за її допомогою ви зможете надіслати зміни до спільноти "
+"розробників прямим внесенням змін до сховища, надсиланням латки електронною "
+"поштою або розміщенням змін на сторінці служби ReviewBoard."
+
+#: qml/Develop.qml:32
+msgid "New Project"
+msgstr "Створити проєкт"
+
+#: qml/Develop.qml:37
+msgid "Open Project"
+msgstr "Відкрити проєкт"
+
+#: qml/Develop.qml:43
+msgid "Fetch Project"
+msgstr "Отримати проєкт"
+
+#: qml/Develop.qml:50
+msgid "Recent Projects"
+msgstr "Нещодавні проєкти"
+
+#: qml/Develop.qml:65
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Вітаємо у KDevelop!</h3>\n"
+"<p>Ви можете розпочати роботу над проєктом, відкривши наявний або створивши "
+"новий за допомогою натискання відповідних кнопок.</p>\n"
+"<p>Якщо ви хочете ознайомитися із довідкою, зверніться до <a href=\"https://"
+"userbase.kde.org/Special:myLanguage/KDevelop\">Підручника користувача</a>.</"
+"p>"
+
+#: qml/Develop.qml:70
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Зауваження для користувачів Windows</h3>\n"
+"<p>Зверніть увагу на те, що KDevelop НЕ постачається з компілятором C/C++ у "
+"Windows!</p>\n"
+"<p>Вам доведеться встановити або GCC з MinGW або новітню версію комплексного "
+"середовища розробки Microsoft Visual Studio і належним чином налаштувати "
+"середовище <i>до</i> запуску KDevelop.</p>\n"
+"<p>Якщо вам потрібна довідкова інформація, будь ласка, зверніться до <a href="
+"\"https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/WindowsSetup"
+"\">настанов щодо KDevelop у Windows</a>.</p>"
+
+#: qml/Develop.qml:107
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: qml/Develop.qml:126
+msgid "Sessions"
+msgstr "Сеанси"
+
+#: qml/GettingStarted.qml:49
+msgid "Go!"
+msgstr "Перейти"
+
+#: qml/GettingStarted.qml:57
+msgid "Documentation for KDevelop users"
+msgstr "Документація для користувачів KDevelop"
+
+#: qml/GettingStarted.qml:62
+msgid "Keep up with KDevelop's development"
+msgstr "Стежте за розробкою KDevelop"
+
+#: qml/GettingStarted.qml:67
+msgid "Help us improve KDevelop"
+msgstr "Допоможіть нам у покращенні KDevelop"
+
+#: qml/NewsFeed.qml:136
+msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+msgid "%1 (new)"
+msgstr "%1 (нове)"
+
+#: qml/NewsFeed.qml:147
+msgid "Fetching feeds..."
+msgstr "Отримуємо подачі…"
+
+#: qml/NewsFeed.qml:148
+msgid "No recent news"
+msgstr "Немає свіжих новин"
+
+#: qml/plugins/Branches.qml:16
+msgid "Branches"
+msgstr "Гілки"
+
+#: qml/plugins/Projects.qml:15
+msgid "Projects"
+msgstr "Проєкти"
+
+#~ msgid "News"
+#~ msgstr "Новини"
+
+#~ msgid "<h3>Welcome to KDevelop!</h3>"
+#~ msgstr "<h3>Вітаємо у KDevelop!</h3>"
+
+#~ msgid "<br/>"
+#~ msgstr "<br/>"

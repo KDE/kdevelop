@@ -1,0 +1,85 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kiszel Kristóf <ulysses@kubuntu.org>, 2010, 2012.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-06 11:04+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
+#, fuzzy, kde-format
+#| msgid "Filesystem"
+msgctxt "@title:window"
+msgid "File System"
+msgstr "Fájlrendszer"
+
+#: filemanager.cpp:127
+#, fuzzy, kde-format
+#| msgid "Bookmarks"
+msgctxt "@title:menu"
+msgid "Bookmarks"
+msgstr "Könyvjelzők"
+
+#: filemanager.cpp:138
+#, fuzzy, kde-format
+#| msgid "Current Document Directory"
+msgctxt "@action switch to directory of current document"
+msgid "Current Document Directory"
+msgstr "Jelenlegi dokumentummappa"
+
+#: filemanager.cpp:155
+#, fuzzy, kde-format
+#| msgid "New File..."
+msgctxt "@action"
+msgid "New File..."
+msgstr "Új fájl…"
+
+#: filemanager.cpp:162
+#, fuzzy, kde-format
+#| msgid "Create New File"
+msgctxt "@title:window"
+msgid "Create New File"
+msgstr "Új fájl létrehozása"
+
+#: filemanager.cpp:178
+#, kde-format
+msgid "Unable to create file '%1'"
+msgstr "Nem lehet létrehozni a(z) „%1” fájlt"
+
+#~ msgid "Filesystem"
+#~ msgstr "Fájlrendszer"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org"
+
+#~ msgid "Filename:"
+#~ msgstr "Fájlnév:"
+
+#~ msgid "File Manager"
+#~ msgstr "Fájlkezelő"
+
+#~ msgid "This plugin brings a filemanager to KDevelop."
+#~ msgstr "Ez a bővítmény egy fájlkezelőt hoz a KDevelophoz."
+
+#~ msgid "Browse the filesystem"
+#~ msgstr "A fájlrendszer böngészése"
+
+#~ msgid "Filesystem Browser"
+#~ msgstr "Fájlrendszerböngésző"

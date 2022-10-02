@@ -1,0 +1,28 @@
+# Translation of kdevbazaar.po to Brazilian Portuguese
+# Copyright (C) 2008-2018 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2008.
+# Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2010, 2012.
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevbazaar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2018-08-25 09:18-0300\n"
+"Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: bazaarplugin.cpp:36
+#, kde-format
+msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
+msgstr ""
+"Não foi possível encontrar o executável do Bazaar (bzr). Ele está instalado "
+"no sistema?"

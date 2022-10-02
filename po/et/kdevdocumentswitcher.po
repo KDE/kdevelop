@@ -1,0 +1,76 @@
+# translation of kdevdocumentswitcher.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentswitcher\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-06-11 03:34+0300\n"
+"Last-Translator: Marek Laane <bald@smail.ee>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: documentswitcherplugin.cpp:65
+#, fuzzy, kde-format
+#| msgid "Last Used Views"
+msgctxt "@action"
+msgid "Last Used Views"
+msgstr "Viimati kasutatud vaated"
+
+#: documentswitcherplugin.cpp:68
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views."
+msgstr "Avab nimekirja liikumiseks viimati kasutatud vaadete vahel."
+
+#: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Walk through the list of last used views"
+msgctxt "@info:tooltip"
+msgid "Walk through the list of last used views"
+msgstr "Liikumine viimati kasutatud vaadete vahel"
+
+#: documentswitcherplugin.cpp:73
+#, fuzzy, kde-format
+#| msgid "Last Used Views (Reverse)"
+msgctxt "@action"
+msgid "Last Used Views (Reverse)"
+msgstr "Viimati kasutatud vaated (teistpidi)"
+
+#: documentswitcherplugin.cpp:76
+#, fuzzy, kde-format
+#| msgid "Opens a list to walk through the list of last used views in reverse."
+msgctxt "@info:whatsthis"
+msgid "Opens a list to walk through the list of last used views in reverse."
+msgstr "Avab nimekirja liikumiseks viimati kasutatud vaadete vahel teistpidi."
+
+#~ msgid "Document Switcher"
+#~ msgstr "Dokumendivahetaja"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "Switch between open documents using most-recently-used list"
+#~ msgstr ""
+#~ "Avatud dokumentide vahel liikumine viimati kasutatute nimekirja abil"
+
+#~ msgid ""
+#~ "<b>Walk through last used Views</b><br/>Opens a list to walk through the "
+#~ "list of last used views."
+#~ msgstr ""
+#~ "<b>Liikumine viimati kasutatud vaadete vahel</b><br/>Avab nimekirja "
+#~ "liikumiseks viimati kasutatud vaadete vahel."

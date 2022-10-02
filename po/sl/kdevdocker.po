@@ -1,0 +1,50 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2021-08-31 08:25+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#: dockerplugin.cpp:117
+#, kde-format
+msgid "docker build '%1'"
+msgstr "izgradnja docker '%1'"
+
+#: dockerplugin.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "Izberi ime značke"
+
+#: dockerplugin.cpp:122
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Tag name for '%1':"
+msgstr "Ime značke za '%1':"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dockerpreferences.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "'docker run' arguments:"
+msgstr "argumenti 'docker run':"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dockerpreferences.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects volume:"
+msgstr "Naslov projektov:"

@@ -1,0 +1,116 @@
+# Translation of kdevninja.po to Catalan (Valencian)
+# Copyright (C) 2013-2022 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2017, 2020, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-04 11:56+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 22.08.0\n"
+
+#: ninjabuilder.cpp:30
+#, kde-format
+msgid "Unable to find ninja executable. Is it installed on the system?"
+msgstr ""
+"No s'ha pogut trobar l'executable de «ninja». Està instal·lat en el sistema?"
+
+#: ninjabuilder.cpp:197
+#, kde-format
+msgid "Cannot specify prefix in %1, on ninja"
+msgstr "No es pot especificar el prefix a %1, sobre el ninja"
+
+#: ninjabuilderpreferences.cpp:35
+#, kde-format
+msgctxt "@title:tab"
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjabuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Ninja settings"
+msgstr "Configura la configuració de Ninja"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: ninjaconfig.ui:32
+#, kde-format
+msgctxt "@option:check"
+msgid "&Display commands but do not execute them:"
+msgstr "&Mostra les ordres però no les executes:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_31)
+#: ninjaconfig.ui:52
+#, kde-format
+msgctxt "@option:check"
+msgid "Install as &root:"
+msgstr "Instal·la com a «&root»:"
+
+#. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
+#: ninjaconfig.ui:75
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Root installation &command:"
+msgstr "&Ordre d'instal·lació com a «root»:"
+
+#. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
+#: ninjaconfig.ui:110
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "&Number of simultaneous jobs:"
+msgstr "&Nombre de treballs simultanis:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: ninjaconfig.ui:133
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Count of &errors to be tolerated:"
+msgstr "Nombre d'errors a tolerar:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: ninjaconfig.ui:153
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional ninja &options:"
+msgstr "&Opcions addicionals de Ninja:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ninjaconfig.ui:173
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Active environment &profile:"
+msgstr "&Perfil de l'entorn actiu:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: ninjaconfig.ui:208
+#, kde-format
+msgctxt "@option:check"
+msgid "O&verride number of jobs:"
+msgstr "&Superposa el nombre de treballs:"
+
+#: ninjajob.cpp:72
+#, kde-format
+msgid "Ninja"
+msgstr "Ninja"
+
+#: ninjajob.cpp:94
+#, kde-format
+msgid "Ninja (%1): %2"
+msgstr "Ninja (%1): %2"
+
+#: ninjajob.cpp:96
+#, kde-format
+msgid "Ninja (%1)"
+msgstr "Ninja (%1)"

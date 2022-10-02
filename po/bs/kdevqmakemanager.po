@@ -1,0 +1,177 @@
+# Bosnian translations for kde package.
+# Copyright (C) 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kde package.
+# Samir Ribic <megaribi@epn.ba>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kde 49i410\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2014-10-20 19:29+0000\n"
+"Last-Translator: Adnela Čavčić <acavcic1@etf.unsa.ba>\n"
+"Language-Team: Bosnian\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17341)\n"
+"X-Launchpad-Export-Date: 2015-02-17 06:22+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Samir Ribić,Adnela Čavčić"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "Samir.ribic@etf.unsa.ba,acavcic1@etf.unsa.ba"
+
+#: qmakebuilddirchooser.cpp:124
+#, fuzzy, kde-format
+#| msgid "Please specify path to QMake binary."
+msgid "Please specify path to QMake executable."
+msgstr "Navedite put do QMake binarno."
+
+#: qmakebuilddirchooser.cpp:129
+#, fuzzy, kde-format
+#| msgid "Qmake binary \"%1\" does not exist."
+msgid "QMake executable \"%1\" does not exist."
+msgstr "Qmake binarna datoteka \"%1\" ne postoji."
+
+#: qmakebuilddirchooser.cpp:132
+#, fuzzy, kde-format
+#| msgid "QMake binary is not a file."
+msgid "QMake executable is not a file."
+msgstr "QMake binarni nije fajl."
+
+#: qmakebuilddirchooser.cpp:135
+#, fuzzy, kde-format
+#| msgid "QMake binary is not executable."
+msgid "QMake executable is not executable."
+msgstr "QMake binarni nije izvršiv."
+
+#: qmakebuilddirchooser.cpp:140
+#, fuzzy, kde-format
+#| msgid "QMake binary cannot be queried for variables."
+msgid "QMake executable cannot be queried for variables."
+msgstr "Qmake binarna datoteka se ne može upitati za varijable"
+
+#: qmakebuilddirchooser.cpp:143
+#, fuzzy, kde-format
+#| msgid "No basic MkSpec file could be found for the given QMake binary."
+msgid "No basic MkSpec file could be found for the given QMake executable."
+msgstr ""
+"Nijedna osnovna MkSpec datoteka se ne može naći za dati QMake binarni "
+"program."
+
+#: qmakebuilddirchooser.cpp:150
+#, kde-format
+msgid "Please specify a build folder."
+msgstr "Molimo odredite početni folder."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: qmakebuilddirchooser.ui:23
+#, fuzzy, kde-format
+#| msgid "QMake binary is not executable."
+msgctxt "@label:textbox"
+msgid "QMake &executable:"
+msgstr "QMake binarni nije izvršiv."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: qmakebuilddirchooser.ui:46
+#, fuzzy, kde-format
+#| msgid "&Build directory:"
+msgctxt "@label:textbox"
+msgid "&Build directory:"
+msgstr "&Napravi direktorij:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: qmakebuilddirchooser.ui:62
+#, fuzzy, kde-format
+#| msgid "&Install to (target.path):"
+msgctxt "@label:textbox"
+msgid "&Install to (target.path):"
+msgstr "&Instaliraj na (target.path):"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: qmakebuilddirchooser.ui:85
+#, fuzzy, kde-format
+#| msgid "Build &type:"
+msgctxt "@labal:listbox"
+msgid "Build &type:"
+msgstr "&Tip izgradnje:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
+#: qmakebuilddirchooser.ui:115
+#, fuzzy, kde-format
+#| msgid "(Use default from .pro file)"
+msgctxt "@item:inlistbox"
+msgid "(Use default from .pro file)"
+msgstr "(Koristi zadani iz .pro fajla)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: qmakebuilddirchooser.ui:123
+#, fuzzy, kde-format
+#| msgid "Extra arguments:"
+msgctxt "@label:textbox"
+msgid "Extra arguments:"
+msgstr "Dodatni argumenti:"
+
+#: qmakebuilddirchooserdialog.cpp:22
+#, fuzzy, kde-format
+#| msgid "Configure QMake build settings"
+msgctxt "@title:window"
+msgid "Configure a Build Directory"
+msgstr "Konfigurirajte QMake početne postavke"
+
+#: qmakejob.cpp:33
+#, kde-format
+msgid "Run QMake in %1"
+msgstr "Pokreni QMake u %1"
+
+#: qmakejob.cpp:137
+#, kde-format
+msgid "*** Exited with return code: %1 ***"
+msgstr "*** Izlaz s povratnim kodom: %1 ***"
+
+#: qmakejob.cpp:139
+#, kde-format
+msgid "*** Process aborted ***"
+msgstr "*** Proces prekinut ***"
+
+#: qmakejob.cpp:141
+#, kde-format
+msgid "*** Crashed with return code: %1 ***"
+msgstr "*** Krah s izlaznim kodom: %1 ***"
+
+#: qmakemanager.cpp:75
+#, fuzzy, kde-format
+#| msgid "Run QMake"
+msgctxt "@action"
+msgid "Run QMake"
+msgstr "Pokreni QMake"
+
+#~ msgid "QMake &binary:"
+#~ msgstr "QMake &binarno:"
+
+#~ msgid "qmake-parser"
+#~ msgstr "qmake-rastavljač"
+
+#~ msgid "Parse QMake project files"
+#~ msgstr "Raščlaniti QMake projektne fajlove"
+
+#~ msgid "Enable output of the debug AST"
+#~ msgstr "Omogućite izlaz debug AST"
+
+#~ msgid "QMake project files"
+#~ msgstr "QMake projektni fajlovi"
+
+#~ msgid "QMake Manager"
+#~ msgstr "QMake Menadzer"
+
+#~ msgid "Support for managing QMake projects"
+#~ msgstr "Podrska u upravljanju QMake projekata"

@@ -1,0 +1,669 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+#
+# Stelios <sstavra@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2019-08-26 10:15+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: astyle_plugin.cpp:230
+#, kde-format
+msgid ""
+"<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
+"for the C, C++, C# and Java programming languages.<br />Home Page: <a href="
+"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+msgstr ""
+"Το <b>Artistic Style</b> είναι ένα πρόγραμμα εσοχών, διαμόρφωσης και "
+"καλλωπισμού πηγαίου κώδικα για τις γλώσσες προγραμματισμού C, C++, C# και "
+"Java.<br />Αρχιή σελίδα: <a href=\"http://astyle.sourceforge.net/\">http://"
+"astyle.sourceforge.net</a>"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
+#: astyle_preferences.ui:33
+#, fuzzy, kde-format
+#| msgid "Indentation"
+msgctxt "@title:tab"
+msgid "Indentation"
+msgstr "Εσοχή"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:48
+#, fuzzy, kde-format
+#| msgctxt "Indentation type"
+#| msgid "Tabs"
+msgctxt "@item:inlistbox Indentation type"
+msgid "Tabs"
+msgstr "Καρτέλες"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:53
+#, fuzzy, kde-format
+#| msgctxt "Indentation type"
+#| msgid "Force tabs"
+msgctxt "@item:inlistbox Indentation type"
+msgid "Force tabs"
+msgstr "Εξαναγμασμός καρτελών"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:58
+#, fuzzy, kde-format
+#| msgctxt "Indentation type"
+#| msgid "Spaces"
+msgctxt "@item:inlistbox Indentation type"
+msgid "Spaces"
+msgstr "Κενά"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpNuberSpaces)
+#: astyle_preferences.ui:86
+#, fuzzy, kde-format
+#| msgid ""
+#| "Number of spaces that will be converted to a tab.\n"
+#| "The number of spaces per tab is controlled by the editor."
+msgctxt "@info:tooltip"
+msgid ""
+"Number of spaces that will be converted to a tab.\n"
+"The number of spaces per tab is controlled by the editor."
+msgstr ""
+"Πλήθος κενών που θα μετατραπούν σε καετέλες.\n"
+"Το πλήθος κενών ανά καρτέλα ελέγχεται από τον επεξεργαστή."
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
+#: astyle_preferences.ui:104
+#, fuzzy, kde-format
+#| msgid "Convert tabs to spaces."
+msgctxt "@info:tooltip"
+msgid "Convert tabs to spaces."
+msgstr "Μετατρέπει καρτέλες σε κενά."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkConvertTabs)
+#: astyle_preferences.ui:107
+#, fuzzy, kde-format
+#| msgid "Con&vert tabs into spaces"
+msgctxt "@option:check"
+msgid "Con&vert tabs into spaces"
+msgstr "Μετα&τρέπει καρτέλες σε κενά"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkFillEmptyLines)
+#: astyle_preferences.ui:114
+#, fuzzy, kde-format
+#| msgid "Fill empty lines with the white space of their previous lines."
+msgctxt "@info:tooltip"
+msgid "Fill empty lines with the white space of their previous lines."
+msgstr "Γέμισμα κενών γραμμών με το κενό των προηγούμενων."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
+#: astyle_preferences.ui:117
+#, fuzzy, kde-format
+#| msgid "Fill empt&y lines"
+msgctxt "@option:check"
+msgid "Fill empt&y lines"
+msgstr "Γέμισμα κ&ενών γραμμών"
+
+#. i18n: ectx: property (text), widget (QLabel, lblIndentObjects)
+#: astyle_preferences.ui:139
+#, fuzzy, kde-format
+#| msgid "Indent:"
+msgctxt "@label:listbox"
+msgid "Indent:"
+msgstr "Εσοχή:"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:153
+#, fuzzy, kde-format
+#| msgid "Blocks"
+msgctxt "@item:inlistbox"
+msgid "Blocks"
+msgstr "Ενότητες"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:158
+#, fuzzy, kde-format
+#| msgid "Brackets"
+msgctxt "@item:inlistbox"
+msgid "Brackets"
+msgstr "Αγκύλες"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:163
+#, fuzzy, kde-format
+#| msgid "Cases"
+msgctxt "@item:inlistbox"
+msgid "Cases"
+msgstr "Cases"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:168
+#, fuzzy, kde-format
+#| msgid "Class"
+msgctxt "@item:inlistbox"
+msgid "Class"
+msgstr "Κλάση"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:173
+#, fuzzy, kde-format
+#| msgid "Labels"
+msgctxt "@item:inlistbox"
+msgid "Labels"
+msgstr "Ετικέτες"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:178
+#, fuzzy, kde-format
+#| msgid "Namespaces"
+msgctxt "@item:inlistbox"
+msgid "Namespaces"
+msgstr "Χώροι ονομάτων"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:183
+#, fuzzy, kde-format
+#| msgid "Preprocessor directives"
+msgctxt "@item:inlistbox"
+msgid "Preprocessor directives"
+msgstr "Κατευθύνσεις προεπεξεργαστή"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:188
+#, fuzzy, kde-format
+#| msgid "Switches"
+msgctxt "@item:inlistbox"
+msgid "Switches"
+msgstr "Διακόπτες"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpMaxStatement)
+#. i18n: ectx: property (toolTip), widget (QLabel, TextLabel2_2)
+#: astyle_preferences.ui:201 astyle_preferences.ui:243
+#, fuzzy, kde-format
+#| msgid ""
+#| "Indent a maximal # spaces in a continuous statement,\n"
+#| "relative to the previous line."
+msgctxt "@info:tooltip"
+msgid ""
+"Indent a maximal # spaces in a continuous statement,\n"
+"relative to the previous line."
+msgstr ""
+"Δημιουργία εσοχής με μέγιστο # κενών σε μια συνεχή πρόταση,\n"
+"σχετική με την προηγούμενη γραμμή."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
+#: astyle_preferences.ui:212 astyle_preferences.ui:226
+#, fuzzy, kde-format
+#| msgid ""
+#| "Indent a minimal # spaces in a continuous conditional\n"
+#| "belonging to a conditional header."
+msgctxt "@info:tooltip"
+msgid ""
+"Indent a minimal # spaces in a continuous conditional\n"
+"belonging to a conditional header."
+msgstr ""
+"Δημιουργία εσοχής με ελάχιστο # κενών σε μια συνεχή υποθετική πρόταση\n"
+"που ανήκει σε μια κεφαλίδα υποθετικής πρότασης."
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: astyle_preferences.ui:215
+#, fuzzy, kde-format
+#| msgid "Minimum in conditional:"
+msgctxt "@label:spinbox"
+msgid "Minimum in conditional:"
+msgstr "Ελάχιστο σε υποθετική:"
+
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
+#: astyle_preferences.ui:229
+#, fuzzy, kde-format
+#| msgid "Twice current"
+msgctxt "@item"
+msgid "Twice current"
+msgstr "Δύο φορές τρέχουσα"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
+#: astyle_preferences.ui:246
+#, fuzzy, kde-format
+#| msgid "Maximum in statement:"
+msgctxt "@label:spinbox"
+msgid "Maximum in statement:"
+msgstr "Μέγιστο στην πρόταση:"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
+#: astyle_preferences.ui:256
+#, fuzzy, kde-format
+#| msgid "Number of indents"
+msgctxt "@info:tooltip"
+msgid "Number of indents"
+msgstr "Αριθμός εσοχών"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAfterParens)
+#: astyle_preferences.ui:269
+#, fuzzy, kde-format
+#| msgid ""
+#| "Indent, instead of align, continuation lines following lines that contain "
+#| "an opening paren '(' or an assignment '='."
+msgctxt "@info:tooltip"
+msgid ""
+"Indent, instead of align, continuation lines following lines that contain an "
+"opening paren '(' or an assignment '='."
+msgstr ""
+"Εσοχή αντί για στοίχιση, σε συνεχόμενες γραμμές που ακολουθούν γραμμές που "
+"περιέχουν άνοιγμα παρένθεσης '(' ή καταχώρηση '='."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
+#: astyle_preferences.ui:272
+#, fuzzy, kde-format
+#| msgid "Continuation lines:"
+msgctxt "@option:check"
+msgid "Continuation lines:"
+msgstr "Συνεχόμενες γραμμές:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabOther)
+#: astyle_preferences.ui:295
+#, fuzzy, kde-format
+#| msgid "Other"
+msgctxt "@title:tab"
+msgid "Other"
+msgstr "Άλλο"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpBrackets)
+#: astyle_preferences.ui:301
+#, fuzzy, kde-format
+#| msgid "Brackets"
+msgctxt "@title:group"
+msgid "Brackets"
+msgstr "Αγκύλες"
+
+#. i18n: ectx: property (text), widget (QLabel, lblBrackets)
+#: astyle_preferences.ui:315
+#, fuzzy, kde-format
+#| msgid "Type:"
+msgctxt "@label:listbox"
+msgid "Type:"
+msgstr "Τύπος:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracketsCloseHeaders)
+#: astyle_preferences.ui:326
+#, fuzzy, kde-format
+#| msgid ""
+#| "Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
+#| "from their immediately preceding closing brackets."
+msgctxt "@info:tooltip"
+msgid ""
+"Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
+"from their immediately preceding closing brackets."
+msgstr ""
+"Αλλαγή αγκυλών πριν το κλείσιμο κεφαλίδων (π.χ. 'else', 'catch', ...)\n"
+"από το αμέσως προηγούμενο κλείσιμο αγκυλών."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
+#: astyle_preferences.ui:329
+#, fuzzy, kde-format
+#| msgid "Brea&k closing headers"
+msgctxt "@option:check"
+msgid "Brea&k closing headers"
+msgstr "Αλλαγή &κλεισίματος κεφαλίδων"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:343
+#, fuzzy, kde-format
+#| msgid "No change"
+msgctxt "@item:inlistbox brackets style"
+msgid "No change"
+msgstr "Χωρίς αλλαγή"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:348
+#, fuzzy, kde-format
+#| msgid "Attach"
+msgctxt "@item:inlistbox brackets style"
+msgid "Attach"
+msgstr "Επισύναψη"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:353
+#, fuzzy, kde-format
+#| msgid "Break"
+msgctxt "@item:inlistbox brackets style"
+msgid "Break"
+msgstr "Αλλαγή γραμμής"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:358
+#, fuzzy, kde-format
+#| msgid "Linux"
+msgctxt "@item:inlistbox brackets style"
+msgid "Linux"
+msgstr "Linux"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:363
+#, fuzzy, kde-format
+#| msgid "Run-In"
+msgctxt "@item:inlistbox brackets style"
+msgid "Run-In"
+msgstr "Χωρίς εσοχή"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
+#: astyle_preferences.ui:376
+#, fuzzy, kde-format
+#| msgid "Blocks"
+msgctxt "@title:group"
+msgid "Blocks"
+msgstr "Ενότητες"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
+#: astyle_preferences.ui:391
+#, fuzzy, kde-format
+#| msgid ""
+#| "Insert empty lines around unrelated blocks, labels, classes,...\n"
+#| "Known problems:\n"
+#| "\n"
+#| "1. If a statement is NOT part of a block, \n"
+#| "the following statements are all double spaced. \n"
+#| "Statements enclosed in a block are formatted \n"
+#| "correctly.\n"
+#| "\n"
+#| "2. Comments are broken from the block.\n"
+msgctxt "@info:tooltip"
+msgid ""
+"Insert empty lines around unrelated blocks, labels, classes,...\n"
+"Known problems:\n"
+"\n"
+"1. If a statement is NOT part of a block, \n"
+"the following statements are all double spaced. \n"
+"Statements enclosed in a block are formatted \n"
+"correctly.\n"
+"\n"
+"2. Comments are broken from the block.\n"
+msgstr ""
+"Εισαγωγή κενών γραμμών γύρω από άσχετες ενότητες, ετικέτες, κλάσεις,...\n"
+"Γνωστά προβλήματα:\n"
+"\n"
+"1. Αν μια πρόταση ΔΕΝ είναι τμήμα μιας ενότητας, \n"
+"οι ακόλουθες προτάσεις είναι όλες με διπλό κενό. \n"
+"Προτάσεις κλεισμένες σε μια ενότητα έχουν διαμορφωθεί \n"
+"σωστά.\n"
+"\n"
+"2. Τα σχόλια είναι εκτός ενότητας.\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
+#: astyle_preferences.ui:394
+#, fuzzy, kde-format
+#| msgctxt "Means break unrelated blocks by a newline"
+#| msgid "&Break blocks"
+msgctxt "@option:check break unrelated blocks by a newline"
+msgid "&Break blocks"
+msgstr "&Αλλαγή γραμμής ενοτήτων"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
+#: astyle_preferences.ui:412
+#, fuzzy, kde-format
+#| msgid ""
+#| "Like --break-blocks, except also insert empty lines \n"
+#| "around closing headers (e.g. 'else', 'catch', ...).\n"
+#| "\n"
+#| "Known problems:\n"
+#| "\n"
+#| "1. If a statement is NOT part of a block, \n"
+#| "the following statements are all double spaced. \n"
+#| "Statements enclosed in a block are formatted \n"
+#| "correctly.\n"
+#| "\n"
+#| "2. Comments are broken from the block.\n"
+msgctxt "@info:tooltip"
+msgid ""
+"Like --break-blocks, except also insert empty lines \n"
+"around closing headers (e.g. 'else', 'catch', ...).\n"
+"\n"
+"Known problems:\n"
+"\n"
+"1. If a statement is NOT part of a block, \n"
+"the following statements are all double spaced. \n"
+"Statements enclosed in a block are formatted \n"
+"correctly.\n"
+"\n"
+"2. Comments are broken from the block.\n"
+msgstr ""
+"Όπως η --break-blocks, εκτός από εισαγωγή κενών γραμμών \n"
+"γύρω από κλείσιμο κεφαλίδων (π.χ. 'else', 'catch', ...).\n"
+"\n"
+"Γνωστά προβλήματα:\n"
+"\n"
+"1. Αν μια πρόταση ΔΕΝ είναι τμήμα ενότητας, \n"
+"οι ακόλουθες προτάσεις είναι όλες με διπλό κενό. \n"
+"Προτάσεις κλεισμένες σε μια ενότητα έχουν διαμορφωθεί \n"
+"σωστά.\n"
+"\n"
+"2. Τα σχόλια είναι εκτός ενότητας.\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
+#: astyle_preferences.ui:415
+#, fuzzy, kde-format
+#| msgctxt "Means break all blocks with a newline"
+#| msgid "Break all bl&ocks"
+msgctxt "@option:check break all blocks with a newline"
+msgid "Break all bl&ocks"
+msgstr "Αλλαγή γραμμής όλων των εν&οτήτων"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
+#: astyle_preferences.ui:422
+#, fuzzy, kde-format
+#| msgid "Break 'else if()' statements into two different lines."
+msgctxt "@info:tooltip"
+msgid "Break 'else if()' statements into two different lines."
+msgstr "Αλλαγή 'else if()' προτάσεων σε δύο διαφορετικές γραμμές."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
+#: astyle_preferences.ui:425
+#, fuzzy, kde-format
+#| msgctxt "Means break else if() into separate lines"
+#| msgid "Break i&f-else"
+msgctxt "@option:check break else if() into separate lines"
+msgid "Break i&f-else"
+msgstr "Αλλαγή γραμμής i&f-else"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
+#: astyle_preferences.ui:435
+#, fuzzy, kde-format
+#| msgid "Padding"
+msgctxt "@title:group"
+msgid "Padding"
+msgstr "Απόσταση"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:450
+#, fuzzy, kde-format
+#| msgid "No change"
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "No change"
+msgstr "Χωρίς αλλαγή"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:455
+#, fuzzy, kde-format
+#| msgid "Unpad"
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Unpad"
+msgstr "Αναίρεση απόστασης"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:460
+#, fuzzy, kde-format
+#| msgid "Inside only"
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Inside only"
+msgstr "Μέσα μόνο"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:465
+#, fuzzy, kde-format
+#| msgid "Outside only"
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Outside only"
+msgstr "Έξω μόνο"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:470
+#, fuzzy, kde-format
+#| msgid "Inside and outside"
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Inside and outside"
+msgstr "Μέσα και έξω"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
+#: astyle_preferences.ui:480
+#, fuzzy, kde-format
+#| msgid ""
+#| "Insert space padding around operators.\n"
+#| "Once padded, operators stay padded.\n"
+#| "There is no unpad operator option."
+msgctxt "@info:tooltip"
+msgid ""
+"Insert space padding around operators.\n"
+"Once padded, operators stay padded.\n"
+"There is no unpad operator option."
+msgstr ""
+"Εισαγωγή απόστασης κενού γύρω από τελεστές.\n"
+"Όταν είναι σε απόσταση, οι τελεστές παραμένουν έτσι.\n"
+"Δεν υπάρχει επιλογή αναίρεσης της απόστασης."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
+#: astyle_preferences.ui:483
+#, fuzzy, kde-format
+#| msgid "&Add spaces around operators"
+msgctxt "@option:check"
+msgid "&Add spaces around operators"
+msgstr "&Προσθήκη κενών γύρω από τελεστές"
+
+#. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
+#: astyle_preferences.ui:490
+#, fuzzy, kde-format
+#| msgid "Pad parenthesis:"
+msgctxt "@label:listbox"
+msgid "Pad parenthesis:"
+msgstr "Απόσταση σε παρένθεση:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
+#: astyle_preferences.ui:497
+#, fuzzy, kde-format
+#| msgid ""
+#| "Insert space padding after parenthesis headers (e.g. 'if', 'for', "
+#| "'while', ...)"
+msgctxt "@info:tooltip"
+msgid ""
+"Insert space padding after parenthesis headers (e.g. 'if', 'for', "
+"'while', ...)"
+msgstr ""
+"Εισαγωγή απόστασης κενών μετά από κεφαλίδες παρένθεσης (π.χ. 'if', 'for', "
+"'while', ...)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
+#: astyle_preferences.ui:500
+#, fuzzy, kde-format
+#| msgid "Add spaces after parenthesis &headers"
+msgctxt "@option:check"
+msgid "Add spaces after parenthesis &headers"
+msgstr "Προσθήκη κενών μετά από κεφαλίδες παρένθεσ&ης"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
+#: astyle_preferences.ui:512
+#, fuzzy, kde-format
+#| msgid "One liners"
+msgctxt "@title:group"
+msgid "One Liners"
+msgstr "Σε μία γραμμή"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
+#: astyle_preferences.ui:519
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do not break lines containing multiple statements into\n"
+#| "multiple single-statement lines."
+msgctxt "@info:tooltip"
+msgid ""
+"Do not break lines containing multiple statements into\n"
+"multiple single-statement lines."
+msgstr ""
+"Να μην αλλάζουν γραμμές που περιέχουν πολλές προτάσεις σε\n"
+"πολλές γραμμές μιας πρότασης."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
+#: astyle_preferences.ui:522
+#, fuzzy, kde-format
+#| msgid "&Keep one-line statements"
+msgctxt "@option:check"
+msgid "&Keep one-line statements"
+msgstr "&Να διατηρηθούν οι προτάσεις μιας γραμμής"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
+#: astyle_preferences.ui:529
+#, fuzzy, kde-format
+#| msgid "Do not break blocks residing completely on one line."
+msgctxt "@info:tooltip"
+msgid "Do not break blocks residing completely on one line."
+msgstr "Να μην αλλάζει η γραμμή σε ενότητες μιας γραμμής."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
+#: astyle_preferences.ui:532
+#, fuzzy, kde-format
+#| msgid "Keep o&ne-line blocks"
+msgctxt "@option:check"
+msgid "Keep o&ne-line blocks"
+msgstr "Να διατηρηθούν οι ε&νότητες μιας γραμμής"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpOther)
+#: astyle_preferences.ui:542
+#, fuzzy, kde-format
+#| msgid "Other"
+msgctxt "@title:group"
+msgid "Other"
+msgstr "Άλλο"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
+#: astyle_preferences.ui:548
+#, fuzzy, kde-format
+#| msgid "Pointer Alignment:"
+msgctxt "@label:listbox"
+msgid "Pointer Alignment:"
+msgstr "Στοίχιση δείκτη:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:556
+#, fuzzy, kde-format
+#| msgid "No change"
+msgctxt "@item:inlistbox pointer alignment"
+msgid "No change"
+msgstr "Χωρίς αλλαγή"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:561
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Name"
+msgstr "Όνομα"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:566
+#, fuzzy, kde-format
+#| msgid "Middle"
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Middle"
+msgstr "Μεσαίο"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:571
+#, fuzzy, kde-format
+#| msgid "Type"
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Type"
+msgstr "Τύπος"

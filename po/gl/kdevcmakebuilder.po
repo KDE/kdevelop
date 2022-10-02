@@ -1,0 +1,168 @@
+# translation of kdevcmakebuilder.po to Galician
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# mvillarino <mvillarino@users.sourceforge.net>, 2008.
+# Marce Villarino <mvillarino@kde-espana.es>, 2009.
+# Marce Villarino <mvillarino@kde-espana.es>, 2009, 2013.
+# Xabier Villar <xabier.villar@gmail.com>, 2012.
+# Xosé <xosecalvo@gmail.com>, 2013.
+# Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-03-07 07:58+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.3\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "Non se puido atopar o construtor de make. Revise a súa instalación."
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "Non se puido atopar un construtor para %1."
+
+#: cmakebuilder.cpp:195
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot install"
+msgid "No build directory configured, cannot install"
+msgstr ""
+"Non é posíbel instalar porque non se configurou un directorio de construción"
+
+#: cmakebuilder.cpp:205
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot configure"
+msgid "No build directory configured, cannot configure"
+msgstr ""
+"Non é posíbel configurar porque non se configurou o directorio de construción"
+
+#: cmakebuilderpreferences.cpp:40
+#, fuzzy, kde-format
+#| msgid "CMake"
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, fuzzy, kde-format
+#| msgid "Configure Global CMake Settings"
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Configurar a configuración global de CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, fuzzy, kde-format
+#| msgid "Default CMake executable:"
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Executábel predeterminado de CMake:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, fuzzy, kde-format
+#| msgid "Default generator:"
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Xerador predeterminado:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Erro interno: non se indicou un proxecto para configurar."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Non se puido crear un o directorio de construción %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, fuzzy, kde-format
+#| msgid "No Build Directory configured, cannot clear the build directory"
+msgid "No build directory configured, cannot clear the build directory"
+msgstr ""
+"Non se pode limpar o directorio de construción porque non se configurou."
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Non é posíbel  limpar o directorio de construción porque é incorrecto"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Redución con éxito **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** A redución fallou: %1 **"
+
+#~ msgid "Aborting"
+#~ msgstr "Interrompendo"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Estase a interromper a configuración"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr ""
+#~ "Non é posíbel construír porque non se configurou un cartafol de "
+#~ "construción"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr ""
+#~ "Non é posíbel limpar porque non se configurou un cartafol de construción"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Estase a interromper a limpeza"
+
+#~ msgid "Aborting install"
+#~ msgstr "Estase a interromper a instalación"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Marce Villarino,\n"
+#~ "Xosé Calvo"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "mvillarino@gmail.com,\n"
+#~ "xosecalvo@gmail.com"
+
+#~ msgid "CMake Builder"
+#~ msgstr "Construtor con CMake"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Soporte de construción de proxectos con CMake"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "Non é posíbel limpar o directorio de construción"

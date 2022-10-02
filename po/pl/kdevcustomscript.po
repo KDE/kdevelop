@@ -1,0 +1,168 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2017, 2019, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"PO-Revision-Date: 2022-01-23 20:25+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 22.03.70\n"
+
+#: customscript_plugin.cpp:86
+#, kde-format
+msgid ""
+"<b>Indent and Format Source Code.</b><br />This plugin allows using powerful "
+"external formatting tools that can be invoked through the command-line.<br /"
+">For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b> "
+"formatters can be used.<br />The advantage of command-line formatters is "
+"that formatting configurations can be easily shared by all team members, "
+"independent of their preferred IDE."
+msgstr ""
+"<b>Wcinaj i formatuj kod źródłowy.</b><br />Wtyczka ta pozwala na używanie "
+"potężnych zewnętrznych narzędzi formatowania, które można wywołać przez "
+"linię wiersza poleceń.<br />Można na przykład użyć formatowań <b>uncrustify</"
+"b>, <b>astyle</b> lub <b>indent</b>.<br />Przewagą formatowań w wierszu "
+"poleceń jest to, że ustawienia formatowania mogą być łatwo współdzielone "
+"między wszystkich członków zespołu, niezależnie od używanego przez nich IDE."
+
+#: customscript_plugin.cpp:98
+#, kde-format
+msgctxt "@info formatter usage hint"
+msgid ""
+"Note: each custom script style requires a certain tool executable to be "
+"installed. Otherwise, code will not be formatted."
+msgstr ""
+"Uwaga: każdy własny wygląd skryptu wymaga wgrania danego pliku wykonywalnego "
+"narzędzia. W przeciwnym przypadku, nie będzie można formatować kodu."
+
+#: customscript_plugin.cpp:235
+#, kde-format
+msgid "Gnu Indent: GNU"
+msgstr "Wcięcie gnu: GNU"
+
+#: customscript_plugin.cpp:246
+#, kde-format
+msgid "Gnu Indent: Kernighan & Ritchie"
+msgstr "Wcięcie gnu: Kernighan & Ritchie"
+
+#: customscript_plugin.cpp:257
+#, kde-format
+msgid "Gnu Indent: Original Berkeley indent style"
+msgstr "Wcięcie gnu: Oryginalny styl wcięć Berkeley"
+
+#: customscript_plugin.cpp:268
+#, kde-format
+msgid "Clang Format"
+msgstr "Format Clang"
+
+#: customscript_plugin.cpp:271
+#, kde-format
+msgid ""
+"Description:<br /><br /><b>clang-format</b> is an automatic source formater "
+"by the LLVM project. It supports a variety of formatting style options via a "
+"<b>.clang-format</b> configuration file, usually located in the project root "
+"directory."
+msgstr ""
+"Opis:<br /><br /><b>clang-format</b> jest programem formatującym źródło "
+"przez projekt LLVM. Obsługuje wiele formatowań poprzez pliki ustawień <b>."
+"clang-format</b>, umieszczone zazwyczaj w głównym katalogu projektu."
+
+#: customscript_plugin.cpp:287
+#, kde-format
+msgid ""
+"Description:<br /><b>kdev_format_source</b> is a script bundled with "
+"KDevelop which allows using fine-grained formatting rules by placing meta-"
+"files called <b>format_sources</b> into the file-system.<br /><br />Each "
+"line of the <b>format_sources</b> files defines a list of wildcards followed "
+"by a colon and the used formatting-command.<br /><br />The formatting-"
+"command should use <b>$TMPFILE</b> to reference the temporary file to "
+"reformat.<br /><br />Example:<br /><b>*.cpp *.h : myformatter $TMPFILE</"
+"b><br />This will reformat all files ending with <b>.cpp</b> or <b>.h</b> "
+"using the custom formatting script <b>myformatter</b>.<br /><br />Example: "
+"<br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o "
+"$TMPFILE</b> <br />This will reformat all files in subdirectory <b>subdir</"
+"b> using the <b>uncrustify</b> tool with the config-file <b>uncrustify."
+"config</b>."
+msgstr ""
+"Opis:<br /><b>kdev_format_source</b> jest skryptem dostarczanym z KDevelop, "
+"który pozwala na używanie szczegółowo dostrojonych zasad formatowania przez "
+"umieszczanie metaplików zwanych <b>format_sources</b> do systemu plików.<br /"
+"><br />Każdy wiersz plików <b>format_sources</b> definiuje listę znaków "
+"wieloznacznych po, których następuje średnik i używane polecenie "
+"formatowania.<br /><br />Polecenie formatowania powinno używać <b>$TMPFILE</"
+"b>, aby odwołać się do tymczasowego pliku, aby ten uległ przeformatowaniu."
+"<br /><br />Przykład:<br /><b>*.cpp *.h : myformatter.sh $TMPFILE</b><br /"
+">Przeformatuje to wszystkie pliki zakończone na <b>.cpp</b> lub <b>.h</b> "
+"wykorzystując własny skrypt formatujący <b>myformatter.sh</b>.<br /><br /"
+">Przykład: <br /><b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify."
+"config -o $TMPFILE</b> <br />Przeformatuje to wszystkie pliki w podkatalogu "
+"<b>subdir</b> wykorzystując narzędzie <b>uncrustify</b> przy użyciu pliku "
+"ustawień <b>uncrustify.config</b>."
+
+#: customscript_plugin.cpp:544
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Command:"
+msgstr "Polecenie:"
+
+#: customscript_plugin.cpp:553
+#, kde-format
+msgid ""
+"<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
+"code is reached to the command <br />through the standard input, and the "
+"<br />formatted result is read from the standard output.<br /><br />If you "
+"add <b>$TMPFILE</b> into the command, then <br />a temporary file is used "
+"for transferring the code."
+msgstr ""
+"<i>Możesz podać dowolne polecenie powłoki.</i><br />Niesformatowany kod "
+"źródłowy zostanie przekazany do polecenia <br />przez standardowe wejście, a "
+"<br />sformatowany wyniki będzie można odczytać na standardowym wyjściu.<br /"
+"><br />Jeśli dodasz <b>$TMPFILE</b> do polecenia, to <br /> do przesłania "
+"kodu zostanie użyty plik tymczasowy."
+
+#: customscript_plugin.cpp:565
+#, kde-format
+msgctxt "@action:button"
+msgid "More Variables"
+msgstr "Więcej zmiennych"
+
+#: customscript_plugin.cpp:575
+#, kde-format
+msgid "Style: %1"
+msgstr "Styl: %1"
+
+#: customscript_plugin.cpp:588
+#, kde-format
+msgid ""
+"<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
+">The code will be written into the file, the temporary <br />file will be "
+"substituted into that position, and the result <br />will be read out of "
+"that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
+"original file. <br />The contents of the file must not be modified, changes "
+"are allowed <br />only in $TMPFILE.<br /><br /><b>${&lt;project name&gt;}</"
+"b> will be replaced by the path of <br />a currently open project whose name "
+"is &lt;project name&gt;."
+msgstr ""
+"<b>$TMPFILE</b> zostanie zastąpiony ścieżką do pliku tymczasowego. <br />Kod "
+"zostanie zapisany do tego pliku, plik <br />tymczasowy zostanie zastąpiony "
+"na tej pozycji, a wynik <br />będzie można odczytać z tego pliku. <br /><br /"
+"><b>$FILE</b> zostanie zastąpiony ścieżka oryginalnego pliku. <br />Treść "
+"pliku nie może ulec zmianie, zmiany są dozwolone <br />tylko w $TMPFILE.<br /"
+"><br /><b>${&lt;project name&gt;}</b>  zostanie zastąpione ścieżką <br /"
+">obecnie otwartego projektu, którego nazwa to  &lt;project name&gt;."
+
+#: customscript_plugin.cpp:600
+#, kde-format
+msgctxt "@title:window"
+msgid "Variable Replacements"
+msgstr "Zastąpienia zmiennych"

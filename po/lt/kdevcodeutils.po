@@ -1,0 +1,51 @@
+# Lithuanian translations for l package.
+# Copyright (C) 2011 This_file_is_part_of_KDE
+# This file is distributed under the same license as the l package.
+# Automatically generated, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcodeutils\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2010-11-21 06:24+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: lt\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+
+#. i18n: action name; 'Document' is a verb
+#: codeutilsplugin.cpp:49
+#, kde-format
+msgctxt "@action"
+msgid "Document Declaration"
+msgstr ""
+
+#: codeutilsplugin.cpp:50
+#, kde-format
+msgctxt "default shortcut for \"Document Declaration\""
+msgid "Alt+Shift+d"
+msgstr ""
+
+#: codeutilsplugin.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add Doxygen skeleton for declaration under cursor."
+msgstr ""
+
+#: codeutilsplugin.cpp:55
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"Adds a basic Doxygen comment skeleton in front of the declaration under the "
+"cursor, e.g. with all the parameter of a function."
+msgstr ""
+
+#: codeutilsplugin.cpp:85
+#, kde-format
+msgid "..."
+msgstr ""

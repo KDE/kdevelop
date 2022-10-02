@@ -1,0 +1,154 @@
+# translation of kdevcmakebuilder.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcmakebuilder\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-24 12:21+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: cmakebuilder.cpp:105
+#, kde-format
+msgid "Could not find the make builder. Check your installation"
+msgstr "Kunde inte hitta byggprogrammet make. Kontrollera installationen."
+
+#: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
+#, kde-format
+msgid "Could not find a builder for %1"
+msgstr "Kunde inte hitta ett byggprogram för %1"
+
+#: cmakebuilder.cpp:195
+#, kde-format
+msgid "No build directory configured, cannot install"
+msgstr "Ingen byggkatalog inställd, kan inte installera"
+
+#: cmakebuilder.cpp:205
+#, kde-format
+msgid "No build directory configured, cannot configure"
+msgstr "Ingen byggkatalog inställd, kan inte konfigurera"
+
+#: cmakebuilderpreferences.cpp:40
+#, kde-format
+msgctxt "@title:tab"
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakebuilderpreferences.cpp:45
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Global CMake Settings"
+msgstr "Anpassa globala inställningar för CMake"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: cmakebuilderpreferences.ui:20
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Default CMake executable:"
+msgstr "Förvald CMake körbar fil:"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: cmakebuilderpreferences.ui:37
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Default generator:"
+msgstr "Standardgenerator:"
+
+#: cmakejob.cpp:38 prunejob.cpp:25
+#, kde-format
+msgid "CMake"
+msgstr "CMake"
+
+#: cmakejob.cpp:56
+#, kde-format
+msgid "Internal error: no project specified to configure."
+msgstr "Internt fel: Inget projekt specificerat att konfigurera."
+
+#: cmakejob.cpp:63
+#, kde-format
+msgid "Failed to create build directory %1."
+msgstr "Misslyckades skapa byggkatalogen %1."
+
+#: cmakejob.cpp:139
+#, kde-format
+msgid "CMake: %1"
+msgstr "CMake: %1"
+
+#: prunejob.cpp:39
+#, kde-format
+msgid "No build directory configured, cannot clear the build directory"
+msgstr "Ingen byggkatalog inställd, kan inte rensa byggkatalogen"
+
+#: prunejob.cpp:45
+#, kde-format
+msgid "Wrong build directory, cannot clear the build directory"
+msgstr "Felaktig byggkatalog, kan inte rensa byggkatalogen"
+
+#: prunejob.cpp:57
+#, kde-format
+msgid "%1> rm -rf %2"
+msgstr "%1> rm -rf %2"
+
+#: prunejob.cpp:72
+#, kde-format
+msgid "** Prune successful **"
+msgstr "** Borttagning lyckades **"
+
+#: prunejob.cpp:74
+#, kde-format
+msgid "** Prune failed: %1 **"
+msgstr "** Borttagning misslyckades: %1 **"
+
+#~ msgid "Aborting"
+#~ msgstr "Avbryter"
+
+#~ msgid "Aborting configure"
+#~ msgstr "Avbryter konfigurering"
+
+#~ msgid "No Build Directory configured, cannot build"
+#~ msgstr "Ingen byggkatalog inställd, kan inte bygga"
+
+#~ msgid "No Build Directory configured, cannot clean"
+#~ msgstr "Ingen byggkatalog inställd, kan inte rensa"
+
+#~ msgid "Aborting clean"
+#~ msgstr "Avbryter rensning"
+
+#~ msgid "Aborting install"
+#~ msgstr "Avbryter installation"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgid "CMake Builder"
+#~ msgstr "Bygg med CMake"
+
+#~ msgid "Support for building CMake projects"
+#~ msgstr "Stöd för att bygga projekt med CMake"
+
+#~ msgid "No clearing of builddir possible"
+#~ msgstr "Det är inte möjligt att rensa byggkatalogen"
+
+#~ msgid "Job failed"
+#~ msgstr "Jobb misslyckades"
+
+#~ msgid "CMake Binary:"
+#~ msgstr "CMake-binärprogram:"
+
+#~ msgid "'%1' + '%2'"
+#~ msgstr "'%1' + '%2'"

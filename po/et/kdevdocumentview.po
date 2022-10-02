@@ -1,0 +1,92 @@
+# translation of kdevdocumentview.po to Estonian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <bald@smail.ee>, 2009, 2010, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevdocumentview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-01-30 00:43+0000\n"
+"PO-Revision-Date: 2020-01-14 20:55+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: kdevdocumentview.cpp:64
+#, kde-format
+msgid "Documents"
+msgstr "Dokumendid"
+
+#: kdevdocumentview.cpp:67 kdevdocumentviewplugin.cpp:77
+#, fuzzy, kde-format
+#| msgid "Documents"
+msgctxt "@title:window"
+msgid "Documents"
+msgstr "Dokumendid"
+
+#: kdevdocumentview.cpp:211
+#, fuzzy, kde-format
+#| msgid "Reload"
+msgctxt "@action:inmenu"
+msgid "Reload"
+msgstr "Laadi uuesti"
+
+#: kdevdocumentview.cpp:217
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "@action:inmenu"
+msgid "Close"
+msgstr "Sulge"
+
+#: kdevdocumentview.cpp:218
+#, fuzzy, kde-format
+#| msgid "Close All Other"
+msgctxt "@action:inmenu"
+msgid "Close All Other"
+msgstr "Sulge kõik teised"
+
+#~ msgid "Display document categories (mimetypes) in the view"
+#~ msgstr "Dokumendikategooriate (MIME tüüpide) näitamine vaates"
+
+#~ msgid ""
+#~ "If this option is set, the Document View will organize documents\n"
+#~ "        by their mimetype."
+#~ msgstr ""
+#~ "Sisselülitamisel korraldab dokumendivaade dokumendid\n"
+#~ "        MIME tüübi järgi."
+
+#, fuzzy
+#~| msgid "Display document &categories"
+#~ msgctxt "@option:check"
+#~ msgid "Display document &categories"
+#~ msgstr "Dokumendikate&gooriate näitamine"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "bald@smail.ee"
+
+#~ msgid "Document View"
+#~ msgstr "Dokumendivaade"
+
+#~ msgid ""
+#~ "This plugin displays a graphical view of all documents currently loaded "
+#~ "and separates them by mimetype."
+#~ msgstr ""
+#~ "See plugin näitab graafiliselt kõiki laaditud dokumente ja eraldab need "
+#~ "MIME tüübi alusel."
+
+#~ msgid "A list of opened documents"
+#~ msgstr "Avatud dokumentide nimekiri"
+
+#~ msgid "Version Control "
+#~ msgstr "Versioonihaldus "

@@ -1,0 +1,190 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2013-10-21 21:03+0200\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, fuzzy, kde-format
+#| msgid "Configure Plasmoid Execution"
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Indstil kørsel af plasmoids"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Vis en plasmoid"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Plasmoid-starter"
+
+#: plasmoidexecutionconfig.cpp:183
+#, fuzzy, kde-format
+#| msgid "Couldn't resolve the dependency: %1"
+msgid "Could not resolve the dependency: %1"
+msgstr "Kunne ikke løse afhængigheden: %1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, fuzzy, kde-format
+#| msgid "Plasmoids"
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plasmoids"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, fuzzy, kde-format
+#| msgid "Plasmoid"
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoid"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, fuzzy, kde-format
+#| msgid "Path or name:"
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Sti eller navn:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, fuzzy, kde-format
+#| msgid "Behavior"
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Opførsel"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, fuzzy, kde-format
+#| msgid "Form Factor"
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Formfaktor"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, fuzzy, kde-format
+#| msgid "Theme"
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Tema"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, fuzzy, kde-format
+#| msgid "Dependencies"
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Afhængigheder"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, fuzzy, kde-format
+#| msgid "Targets:"
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "Mål:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Plasmoid-fremviser"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Dræbt **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Mislykkedes ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Færdig ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr ""
+
+#~ msgid "planar"
+#~ msgstr "Planar"
+
+#~ msgid "horizontal"
+#~ msgstr "vandret"
+
+#~ msgid "vertical"
+#~ msgstr "lodret"
+
+#~ msgid "mediacenter"
+#~ msgstr "mediecenter"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Martin Schlander"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mschlander@opensuse.org"
+
+#~ msgid "Enter a dependency to add to the list"
+#~ msgstr "Angiv en afhængighed der skal føjes til listen"
+
+#~ msgid "Adds the listed target to the dependency list."
+#~ msgstr "Føj det viste mål til afhængighedslisten."
+
+#~ msgid "List of indirect dependent targets."
+#~ msgstr "Liste over indirekte afhængige mål."
+
+#~ msgid ""
+#~ "This list should contain targets that the application does not directly "
+#~ "depend on, but for which an action needs to be taken before running the "
+#~ "application."
+#~ msgstr ""
+#~ "Denne liste bør indeholde mål som applikationen ikke er direkte afhængig "
+#~ "af, men for hvilke der skal udføres en handling, før applikationen køres."
+
+#~ msgid "Removes the selected dependencies from the list."
+#~ msgstr "Fjerner den valgte afhængighed fra listen."
+
+#~ msgid "Move a dependency up in the list."
+#~ msgstr "Flyt en afhængighed op i listen."
+
+#~ msgid "Moves the selected dependency down in the list."
+#~ msgstr "Flytter den valgte afhængighed ned på listen."
+
+#~ msgid "Ninja failed to compile %1"
+#~ msgstr "Ninja kunne ikke oversættes %1"
+
+#~ msgid "Execute plasmoid support"
+#~ msgstr "Understøttelse af kørsel af plasmoids"
+
+#~ msgid "Allows running of plasmoids"
+#~ msgstr "Muliggør kørsel af plasmoids"
+
+#~ msgid "Aleix Pol Gonzalez"
+#~ msgstr "Aleix Pol Gonzalez"
+
+#~ msgid "Author"
+#~ msgstr "Ophavsmand"

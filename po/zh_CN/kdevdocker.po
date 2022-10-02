@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kdeorg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2022-09-20 01:55\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevdocker.pot\n"
+"X-Crowdin-File-ID: 6183\n"
+
+#: dockerplugin.cpp:117
+#, kde-format
+msgid "docker build '%1'"
+msgstr "Docker 构建 %1"
+
+#: dockerplugin.cpp:121
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose Tag Name"
+msgstr "选择标签名称"
+
+#: dockerplugin.cpp:122
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Tag name for '%1':"
+msgstr "“%1”的标签名称："
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dockerpreferences.ui:29
+#, kde-format
+msgctxt "@label:textbox"
+msgid "'docker run' arguments:"
+msgstr "“docker run”的参数："
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dockerpreferences.ui:39
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Projects volume:"
+msgstr "工程数量："

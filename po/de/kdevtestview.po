@@ -1,0 +1,90 @@
+# Burkhard Lück <lueck@hube-lueck.de>, 2013.
+# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"PO-Revision-Date: 2020-08-19 18:30+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: testview.cpp:56 testviewplugin.cpp:70
+#, kde-format
+msgctxt "@title:window"
+msgid "Unit Tests"
+msgstr "Unit-Tests"
+
+#: testview.cpp:78
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Source"
+msgstr "Quelle anzeigen"
+
+#: testview.cpp:85
+#, kde-format
+msgctxt "@action"
+msgid "Run Selected Tests"
+msgstr "Ausgewählte Tests ausführen"
+
+#: testview.cpp:90
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Filter..."
+msgstr "Filter ..."
+
+#: testview.cpp:292
+#, kde-format
+msgid "Run 1 test"
+msgid_plural "Run %1 tests"
+msgstr[0] "Einen Test ausführen"
+msgstr[1] "%1 Tests ausführen"
+
+#: testviewplugin.cpp:59
+#, kde-format
+msgctxt "@action"
+msgid "Run All Tests"
+msgstr "Alle Tests ausführen"
+
+#: testviewplugin.cpp:63
+#, kde-format
+msgctxt "@action"
+msgid "Stop Running Tests"
+msgstr "Laufende Tests abbrechen"
+
+#: testviewplugin.cpp:104
+#, kde-format
+msgid "Run 1 test in %2"
+msgid_plural "Run %1 tests in %2"
+msgstr[0] "Einen Test in %2 ausführen"
+msgstr[1] "%1 Tests in %2 ausführen"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Ausführen"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Burkhard Lück"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "lueck@hube-lueck.de"
+
+#~ msgid ""
+#~ "Insert wildcard patterns to filter the test view for matching test suites "
+#~ "and cases."
+#~ msgstr ""
+#~ "Geben Sie Suchmuster ein, um die Testansicht nach passenden Testgruppen "
+#~ "und Testfälle zu filtern."
+
+#~ msgid "Unit Test View"
+#~ msgstr "Unit-Test-Ansicht"
+
+#~ msgid "Lets you see and run unit tests"
+#~ msgstr "Unit-Tests anzeigen und ausführen"

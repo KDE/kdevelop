@@ -1,0 +1,1743 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Kristof Bal <kristof.bal@gmail.com>, 2008.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcppdebugger\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"PO-Revision-Date: 2022-07-09 10:26+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.04.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#, kde-format
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:113
+#, kde-format
+msgctxt "@title:window"
+msgid "Disassemble/Registers"
+msgstr "Disassembleren/registers"
+
+#: debuggerplugin.cpp:117
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB"
+msgstr "GDB"
+
+#: debuggerplugin.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory"
+msgstr "Geheugen"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
+#: debuggertracingdialog.ui:14
+#, kde-format
+msgctxt "@title:window"
+msgid "Tracing Configuration"
+msgstr "Traceer-instellingen"
+
+#. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
+#: debuggertracingdialog.ui:26
+#, no-c-format, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>Custom format string</b>\n"
+"<p>Specify a C-style format string that will be used when printing the "
+"chosen expression. For example:\n"
+"<p align=\"center\"> <tt>Tracepoint 1: g = %d</tt></p>\n"
+"If custom format string is not enabled, names and values of all expressions "
+"will be printed, using \"%d\" as format specifier for all expressions."
+msgstr ""
+"<b>Aangepaste formatteringstekens</b>\n"
+"<p>Specificeer C-stijl formatteringstekens die zullen worden gebruikt bij "
+"het tonen van de gekozen expressie. Bijvoorbeeld:\n"
+"<p align=\"center\"> <tt>Traceringspunt 1: g = %d</tt></p>\n"
+"Als aangepaste formatteringstekens niet is ingeschakeld, zullen namen en "
+"waarden van alle expressies worden getoond, met \"%d\" als "
+"formatteringsspecificatie."
+
+#. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
+#: debuggertracingdialog.ui:36
+#, kde-format
+msgctxt "@label"
+msgid "Expressions to print:"
+msgstr "Af te drukken expressie:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:47
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"<b>Enable tracing</b>\n"
+"<p>Tracing is a mechanism to automatically print values of the chosen "
+"expressions and continue execution when breakpoint is hit. You can think of "
+"it as printf debugging that does not require modifying the source.</p>"
+msgstr ""
+"<b>Tracering inschakelen</b>\n"
+"<p>Tracering is een mechanisme om automatisch waarden af te drukken van de "
+"gekozen expressies en met uitvoeren door te gaan wanneer het breekpunt is "
+"bereikt. Het is alsof het een printf-debugging doet die geen wijziging van "
+"de broncode vereist.</p>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enable)
+#: debuggertracingdialog.ui:50
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable tracing"
+msgstr "Traceren activeren"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
+#: debuggertracingdialog.ui:60
+#, kde-format
+msgctxt "@option:check"
+msgid "Custom format string"
+msgstr "Eigen formaat"
+
+#: debugsession.cpp:170
+#, kde-format
+msgid ""
+"No environment profile specified, looks like a broken configuration, please "
+"check run configuration '%1'. Using default environment profile."
+msgstr ""
+"Geen omgevingsprofiel gespecificeerd, lijkt op een gebroken configuratie, "
+"controleer de uitvoeringsconfiguratie '%1'. Met gebruik van het standaard "
+"omgevingsprofiel."
+
+#: debugsession.cpp:281
+#, kde-format
+msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
+msgstr "<b>U hebt gdb 7.0.0 of hoger nodig.</b><br />U gebruikt: %1"
+
+#: debugsession.cpp:294
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr "<b>Kon debugger niet starten:</b><br />"
+
+#: debugsession.cpp:308
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+"<b>Kernbestand laden is mislukt</b><p>De debugger melde de volgende fout:"
+"<p><tt>%1"
+
+#: gdb.cpp:69
+#, kde-format
+msgid "Could not locate the debugging shell '%1'."
+msgstr "De debugger '%1' is niet gevonden."
+
+#: gdbconfigpage.cpp:92
+#, kde-format
+msgctxt "@title:tab"
+msgid "GDB Configuration"
+msgstr "GDB-instellingen"
+
+#: gdbconfigpage.cpp:133
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+"Een programma wordt al gedebugd. Wilt u de nu actieve debugsessie afbreken "
+"en doorgaan met het starten?"
+
+#: gdbconfigpage.cpp:135
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr "Huidige sessie afbreken"
+
+#: gdbconfigpage.cpp:161
+#, kde-format
+msgid "Executes a native application in GDB"
+msgstr "Een eigen applicatie uitvoeren in GDB"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: gdbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr "Debugger"
+
+#. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
+#: gdbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger e&xecutable:"
+msgstr "Debugger&programma:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Gdb executable"
+msgstr "Gdb programma"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:51
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"To run \"gdb\" executable from $PATH, leave this field empty. To run custom "
+"gdb, for example, for a different architecture, enter the executable name "
+"here. You can either run gdb from $PATH, but with a different name (say, "
+"\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
+"executable."
+msgstr ""
+"Wanneer u het \"gdb\" uitvoerbare programma vanuit $PATH wilt starten dan "
+"laat u dit veld leeg. Om een bepaalde versie van gdb te starten, "
+"bijvoorbeeld voor een andere architectuur, dan geeft u hier de naam van het "
+"uitvoerbare bestand op. U kunt ofwel gdb vanuit $PATH starten, maar met een "
+"andere naam (bv: \"arm-gdb\"), door hier de naam op te geven of het "
+"volledige pad naar een andere gdb-versie op te geven."
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
+#: gdbconfigpage.ui:54
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to gdb executable..."
+msgstr "Overschrijf pad naar uitvoerbaar bestand van gdb..."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
+#: gdbconfigpage.ui:61 gdbconfigpage.ui:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>If you want gdb to be executed by a special shell "
+"script, which for example properly sets the library path, insert it here e."
+"g.: /path/to/script.sh --scriptArguments</p><p>Note: your script'll be "
+"invoked like this: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
+"span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Als u wilt dat gdb wordt uitgevoerd door een speciaal "
+"shell-script, die bijvoorbeeld het pad naar de bibliotheek instelt, voeg het "
+"dan hier in, bijv.: /pad/naar/script.sh --scriptArguments</p><p>Opmerking: "
+"uw script zal aangeroepen worden als volgt: /pad/naar/script.sh --"
+"scriptArguments debugger --debuggerArguments. Dus script.sh <span style="
+"\"font-weight:600;\">moet</span> het &quot;debugger&quot;-programma "
+"handmatig aanroepen.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
+#: gdbconfigpage.ui:64
+#, kde-format
+msgctxt "@label:chooser"
+msgid "She&ll script:"
+msgstr "She&ll-script:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: gdbconfigpage.ui:87
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr "Opties"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: gdbconfigpage.ui:96
+#, kde-format
+msgctxt "@option:check"
+msgid "Display static &members:"
+msgstr "Statische &members tonen:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
+#: gdbconfigpage.ui:111
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Displaying static members makes GDB slower in\n"
+"producing data with Qt-based code.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on,\n"
+"but if you need to debug into these values then\n"
+"check this option."
+msgstr ""
+"Het tonen van statische members vertraagt GDB in\n"
+"het produceren van data met op Qt gebaseerde code.\n"
+"Het kan de \"signatuur\" van de data veranderen\n"
+"waar QString en consorten op vertrouwen.\n"
+"Maar als u deze waarden wilt debuggen dient u\n"
+"deze optie te selecteren."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: gdbconfigpage.ui:121
+#, kde-format
+msgctxt "@option:check"
+msgid "Display &demangled names:"
+msgstr "Gedecodeerde symboolaan&duidingen tonen:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
+#: gdbconfigpage.ui:133
+#, kde-format
+msgctxt "@info:whatthis"
+msgid ""
+"When displaying the disassembled code you\n"
+"can select to see the methods' mangled names.\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"Bij het weergeven van gedisassembleerde code kunt\n"
+"u de gecodeerde aanduidingen van de methoden\n"
+"die door de compiler worden afgegeven laten weergeven.\n"
+"De gedecodeerde aanduidingen zijn echter eenvoudiger om te lezen."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: gdbconfigpage.ui:143
+#, kde-format
+msgctxt "@label:listbox"
+msgid "S&tart debugger with:"
+msgstr "Debugger s&tarten met:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:154
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr "Uitvoer van toepassing"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:159
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "GDB Console"
+msgstr "GDB-console"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
+#: gdbconfigpage.ui:164
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr "Aanroeplijst"
+
+#. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:178
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"This script is intended for the actual commands needed to connect to a "
+"remotely running executable.\n"
+"\tshell sleep 5\twait for remote program to start\n"
+"\ttarget remote ...\tconnect to the remote debugger\n"
+"\tcontinue\t[optional] run debugging to the first breakpoint"
+msgstr ""
+"Dit script is bedoeld voor de commando's die nodig zijn om verbinding te "
+"maken met een uitvoerbaar bestand dat op afstand draait.\n"
+"\tshell sleep 5\twacht totdat het programma op afstand is opgestart\n"
+"\ttarget remote ...\tmaak verbinding met de debugger op afstand\n"
+"\tcontinue\t[optional] voer debugging uit tot het eerste breekpunt"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: gdbconfigpage.ui:181
+#, kde-format
+msgctxt "@title:group"
+msgid "Remote Debugging"
+msgstr "Debuggen op afstand"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
+#: gdbconfigpage.ui:187 gdbconfigpage.ui:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to start remote application</p><p></p><p>This "
+"shell script is run after the Gdb Config script has been sourced by gdb.</"
+"p><p>It's purpose is to actually start the remote process.</p><p>1) Find a "
+"way to execute a command remotely - rsh, ssh, telnet, ...</p><p>2a) Execute "
+"&quot;gdbserver ... application&quot; on target.</p><p>or if your executable "
+"contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
+"p></body></html>"
+msgstr ""
+"<html><head/><body><p>Script voor het starten van een toepassing op afstand</"
+"p><p></p><p>Dit shell-script wordt uitgevoerd nadat het Config-script van "
+"Gdb is binnengehaald door gdb.</p><p>Het doel ervan is om het proces op "
+"afstand te starten.</p><p>1) Zoek een manier om een commando op afstand uit "
+"te voeren - rsh, ssh, telnet, ...</p><p>2a) Voer de &quot;gdbserver ... "
+"toepassing&quot; uit op het doelsysteem.</p><p>of als uw programma de gdb-"
+"stub bevat:</p><p>2b) Voer &quot;toepassing&quot; uit op het doelsysteem.</"
+"p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
+#: gdbconfigpage.ui:190
+#, kde-format
+msgctxt "@label:chooser Shell script to be executed at run time"
+msgid "R&un shell script:"
+msgstr "Shell-script &uitvoeren:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
+#: gdbconfigpage.ui:210 gdbconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This script is sourced by gdb when the debugging starts."
+msgstr "Dit script wordt opgehaald door gdb wanneer het debuggen start."
+
+#. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
+#: gdbconfigpage.ui:213
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Gdb &config script:"
+msgstr "gdb &config-script:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
+#. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:226 gdbconfigpage.ui:233
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<html><head/><body><p>Script to connect with remote application</p><p>For "
+"example:</p><p>\tshell sleep 5\t #wait for remote program to start</p><p>"
+"\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
+"\t#[optional] run debugging to the first breakpoint.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Script om verbinding te maken met een programma dat op "
+"afstand draait.</p><p>\tshell sleep 5\t #wacht totdat het programma op "
+"afstand is opgestart</p><p>\ttarget remote ...\t#maak verbinding met de "
+"debugger op afstand</p><p>\tcontinue\t#[optioneel] voer debugging uit tot "
+"het eerste breekpunt.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
+#: gdbconfigpage.ui:236
+#, kde-format
+msgctxt "@label:chooser Gdb script to be executed at run time."
+msgid "Run &gdb script:"
+msgstr "&gdb-script uitvoeren:"
+
+#: gdboutputwidget.cpp:47
+#, kde-format
+msgctxt "@title:window"
+msgid "GDB Output"
+msgstr "GDB-uitvoer"
+
+#: gdboutputwidget.cpp:48
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
+"issue any other GDB command while debugging.</p>"
+msgstr ""
+"<b>GDB-uitvoer</b><p>Toont alle uitgevoerde GDB-commando's. U kunt ook elk "
+"ander GDB-commando aanroepen tijdens het debuggen.</p>"
+
+#: gdboutputwidget.cpp:58
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&GDB command:"
+msgstr "&GDB-commando:"
+
+#: gdboutputwidget.cpp:63
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Pause execution of the app to enter GDB commands"
+msgstr ""
+"De uitvoering van de toepassing wordt aangehouden zodat u een GDB-commando "
+"kunt invoeren"
+
+#: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Internal Commands"
+msgstr "Toon interne commando's"
+
+#: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Controls if commands issued internally by KDevelop will be shown or not."
+"<br>This option will affect only future commands, it will not add or remove "
+"already issued commands from the view."
+msgstr ""
+"Bestuurt of commando's, intern uitgevoerd door KDevelop, getoond zullen "
+"worden of niet. <br>Deze optie beïnvloedt alleen toekomstige commando's, het "
+"voegt geen eerder gegeven commando's toe of verwijdert deze uit de weergave."
+
+#: gdboutputwidget.cpp:381
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Copy All"
+msgstr "Alles kopiëren"
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevgdbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr "Debuggerwerkbalk"
+
+#: memviewdlg.cpp:66
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Start:"
+msgstr "Begin:"
+
+#: memviewdlg.cpp:69
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Amount:"
+msgstr "Aantal:"
+
+#: memviewdlg.cpp:96
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory View"
+msgstr "Geheugenweergave"
+
+#: memviewdlg.cpp:223
+#, kde-format
+msgid "%2 (1 byte)"
+msgid_plural "%2 (%1 bytes)"
+msgstr[0] "%2 (1 byte)"
+msgstr[1] "%2 (%1 bytes)"
+
+#: memviewdlg.cpp:262
+#, kde-format
+msgctxt "@action::inmenu"
+msgid "&Reload"
+msgstr "He&rladen"
+
+#: memviewdlg.cpp:271
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Format"
+msgstr "&Formatteren"
+
+#: memviewdlg.cpp:274
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Binary"
+msgstr "&Binair"
+
+#: memviewdlg.cpp:279
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Octal"
+msgstr "&Octaal"
+
+#: memviewdlg.cpp:284
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Decimal"
+msgstr "&Decimaal"
+
+#: memviewdlg.cpp:289
+#, kde-format
+msgctxt "@item:inmenu display format"
+msgid "&Hexadecimal"
+msgstr "&Hexadecimaal"
+
+#: memviewdlg.cpp:303
+#, kde-format
+msgctxt "@title:menu"
+msgid "&Grouping"
+msgstr "&Groeperen"
+
+#: memviewdlg.cpp:306
+#, kde-format
+msgctxt "@item:inmenu no byte grouping"
+msgid "&0"
+msgstr "&0"
+
+#: memviewdlg.cpp:311
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&1"
+msgstr "&1"
+
+#: memviewdlg.cpp:316
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&2"
+msgstr "&2"
+
+#: memviewdlg.cpp:321
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&4"
+msgstr "&4"
+
+#: memviewdlg.cpp:326
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "&8"
+msgstr "&8"
+
+#: memviewdlg.cpp:331
+#, kde-format
+msgctxt "@item:inmenu byte group size"
+msgid "1&6"
+msgstr "1&6"
+
+#: memviewdlg.cpp:344
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Write Changes"
+msgstr "Wijzigingen wegschrijven"
+
+#: memviewdlg.cpp:348
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Change Memory Range"
+msgstr "Geheugenbereik wijzigen"
+
+#: memviewdlg.cpp:352
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Close View"
+msgstr "Weergave sluiten"
+
+#: memviewdlg.cpp:419
+#, kde-format
+msgctxt "@title:window"
+msgid "Memory Viewer"
+msgstr "Geheugenweergave"
+
+#: memviewdlg.cpp:423
+#, kde-format
+msgctxt "@action"
+msgid "New Memory Viewer"
+msgstr "Nieuwe geheugenweergave"
+
+#: memviewdlg.cpp:424
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open a new memory viewer"
+msgstr "Open een nieuwe geheugenweergave."
+
+#~ msgid "<html><head/><body><p><br/></p></body></html>"
+#~ msgstr "<html><head/><body><p><br/></p></body></html>"
+
+#~ msgid "gdb error"
+#~ msgstr "gdb-fout"
+
+#~ msgid "Startup error"
+#~ msgstr "Opstart-fout"
+
+#~ msgid "Debugging Shell Not Found"
+#~ msgstr "De debugger is niet gevonden"
+
+#~ msgid "Debugger Configuration"
+#~ msgstr "Debuggerinstellingen"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Run"
+#~ msgstr "Uitvoeren"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Cancel"
+#~ msgstr "Annuleren"
+
+#~ msgid "Address Selector"
+#~ msgstr "Adreskiezer"
+
+#~ msgid "Change &address"
+#~ msgstr "&Adres wijzigen"
+
+#~ msgid "&Jump to Cursor"
+#~ msgstr "Naar cursor &springen"
+
+#~ msgid "Sets the execution pointer to the current cursor position."
+#~ msgstr ""
+#~ "Hiermee stelt u in dat het programma is uitgevoerd tot aan de huidige "
+#~ "cursorpositie."
+
+#~ msgid "&Run to Cursor"
+#~ msgstr "Tot aan cu&rsor uitvoeren"
+
+#~ msgid "Continues execution until the cursor position is reached."
+#~ msgstr "Voert het programma uit totdat de huidige cursorpositie is bereikt."
+
+#~ msgid "&AT&&T"
+#~ msgstr "&AT&&T"
+
+#~ msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
+#~ msgstr ""
+#~ "GDB zal de AT&T dis-assemblage smaak gebruiken (bijv. mov 0xc(%ebp),%eax)."
+
+#~ msgid "&Intel"
+#~ msgstr "&Intel"
+
+#~ msgid ""
+#~ "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
+#~ "+0xc])."
+#~ msgstr ""
+#~ "GDB zal de Intel dis-assemblage smaak gebruiken (bijv. mov eax, DWORD PTR "
+#~ "[ebp+0xc])."
+
+#~ msgid "Disassembly flavor"
+#~ msgstr "Dis-assemblage smaak"
+
+#~ msgid ""
+#~ "<b>Machine code display</b><p>A machine code view into your running "
+#~ "executable with the current instruction highlighted. You can step "
+#~ "instruction by instruction using the debuggers toolbar buttons of \"step "
+#~ "over\" instruction and \"step into\" instruction."
+#~ msgstr ""
+#~ "<b>Assemblerweergave</b><p>Een weergave van de machinecode van het "
+#~ "momenteel lopende programma. De huidige instructie is gemarkeerd. U kunt "
+#~ "de instructies stapsgewijs doorlopen met behulp van de knoppen "
+#~ "\"Overspringen\" en \"Inspringen\" op de werkbalk van de debugger."
+
+#~ msgid "Address"
+#~ msgstr "Adres"
+
+#~ msgid "Function"
+#~ msgstr "Functie"
+
+#~ msgid "Instruction"
+#~ msgstr "Instructie"
+
+#~ msgid "Disassemble/Registers View"
+#~ msgstr "Beeld van disassembleren/registers"
+
+#~ msgid "Binary"
+#~ msgstr "Binair"
+
+#~ msgid "Octal"
+#~ msgstr "Octaal"
+
+#~ msgid "Decimal"
+#~ msgstr "Decimaal"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "Hexadecimaal"
+
+#~ msgid "Raw"
+#~ msgstr "Raw"
+
+#~ msgid "Unsigned"
+#~ msgstr "Zonder teken"
+
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#~ msgid "Flags"
+#~ msgstr "Vlaggen"
+
+#~ msgid "VFP single-word"
+#~ msgstr "VFP enkelvoudig woord"
+
+#~ msgid "VFP double-word"
+#~ msgstr "VFP dubbel woord"
+
+#~ msgid "VFP quad-word"
+#~ msgstr "VFP viervoudig woord"
+
+#~ msgid "FPU"
+#~ msgstr "FPU"
+
+#~ msgid "XMM"
+#~ msgstr "XMM"
+
+#~ msgid "Segment"
+#~ msgstr "Segment"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Mode"
+#~ msgstr "Modus"
+
+#~ msgid "Update"
+#~ msgstr "Bijwerken"
+
+#~ msgid "Address selector"
+#~ msgstr "Adreskiezer"
+
+#~ msgid "Select the address to disassemble around"
+#~ msgstr "Kies het adres waar omheen te disassembleren"
+
+#~ msgid "Select address to disassemble around"
+#~ msgstr "Kies adres waar omheen te disassembleren"
+
+#~ msgid "Examine Core File..."
+#~ msgstr "Core-bestand onderzoeken..."
+
+#~ msgid "Examine core file"
+#~ msgstr "Core-bestand onderzoeken"
+
+#~ msgid ""
+#~ "<b>Examine core file</b><p>This loads a core file, which is typically "
+#~ "created after the application has crashed, e.g. with a segmentation "
+#~ "fault. The core file contains an image of the program memory at the time "
+#~ "it crashed, allowing you to do a post-mortem analysis.</p>"
+#~ msgstr ""
+#~ "<b>Core-bestand onderzoeken</b> <p>Dit laadt een core-bestand, die na een "
+#~ "programma-crash aangemaakt wordt, bijv. na een segmentatiefout. Het core-"
+#~ "bestand bevat een beeld van het programmageheugen op het moment dat het "
+#~ "programma gecrashed is, zodat u een post-mortem-analyse kunt uitvoeren.</"
+#~ "p>"
+
+#~ msgid "Attach to Process"
+#~ msgstr "Aan proces hechten"
+
+#~ msgid "Attach to process..."
+#~ msgstr "Aan proces hechten..."
+
+#~ msgid ""
+#~ "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
+#~ msgstr ""
+#~ "<b>Aan proces hechten</b><p>Hecht de debugger aan een actief proces.</p>"
+
+#~ msgid "KDevelop"
+#~ msgstr "KDevelop"
+
+#~ msgid "Evaluate: %1"
+#~ msgstr "Evalueren: %1"
+
+#~ msgid ""
+#~ "<b>Evaluate expression</b><p>Shows the value of the expression under the "
+#~ "cursor.</p>"
+#~ msgstr ""
+#~ "<b>Expressie evalueren</b><p>Toont de waarde van de expressie onder de "
+#~ "cursor.</p>"
+
+#~ msgid "Watch: %1"
+#~ msgstr "Watch: %1"
+
+#~ msgid ""
+#~ "<b>Watch expression</b><p>Adds an expression under the cursor to the "
+#~ "Variables/Watch list.</p>"
+#~ msgstr ""
+#~ "<b>Expressie volgen</b><p>Voegt de expressie onder de cursor toe aan de "
+#~ "variabelen-/observeerlijst.</p>"
+
+#~ msgid "Choose a core file to examine..."
+#~ msgstr "Voer hier de naam van het te onderzoeken Core-bestand in..."
+
+#~ msgid "Examining core file %1"
+#~ msgstr "Code-bestand %1 wordt onderzocht"
+
+#~ msgid "Debug core file"
+#~ msgstr "Core-bestand debuggen"
+
+#~ msgid "Choose a process to attach to..."
+#~ msgstr "Kies een proces dat aan de debugger zal worden gehecht..."
+
+#~ msgid "Not attaching to process %1: cannot attach the debugger to itself."
+#~ msgstr ""
+#~ "Niet aan proces %1 hechten: kan de debugger niet aan zichzelf hechten."
+
+#~ msgid "Attaching to process %1"
+#~ msgstr "Aan proces %1 hechten"
+
+#~ msgid "Debug process %1"
+#~ msgstr "Proces %1 debuggen"
+
+#~ msgctxt "ProjectName: run configuration name"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Attach to a process"
+#~ msgstr "Aan een proces hechten"
+
+#~ msgid "Select Core File"
+#~ msgstr "Core-bestand selecteren"
+
+#~ msgid "Executable:"
+#~ msgstr "Uitvoerbaar bestand:"
+
+#~ msgid "Core File:"
+#~ msgstr "Core-bestand:"
+
+#~ msgid "<br>Old value: %1"
+#~ msgstr "<br>Oude waarde: %1"
+
+#~ msgid "<br>New value: %1"
+#~ msgstr "<br>Nieuwe waarde: %1"
+
+#~ msgid "Debugger stopped"
+#~ msgstr "Debugger is gestopt"
+
+#~ msgid "Process exited"
+#~ msgstr "Proces is geëindigd"
+
+#~ msgid "Application is running"
+#~ msgstr "De toepassing is actief"
+
+#~ msgid "Application is paused"
+#~ msgstr "De toepassing is gepauzeerd"
+
+#~ msgid "Debugger error"
+#~ msgstr "Debuggerfout"
+
+#~ msgid ""
+#~ "<b>GDB exited abnormally</b><p>This is likely a bug in GDB. Examine the "
+#~ "gdb output window and then stop the debugger"
+#~ msgstr ""
+#~ "<b>GDB is onverwacht geëindigd</b><p>Dit is waarschijnlijk een bug in "
+#~ "GDB. Bekijk de gdb-uitvoer en stop vervolgens de debugger"
+
+#~ msgid "GDB exited abnormally"
+#~ msgstr "GDB onverwacht geëindigd"
+
+#~ msgid ""
+#~ "<b>Gdb command sent when debugger is not running</b><br>The command was:"
+#~ "<br> %1"
+#~ msgstr ""
+#~ "<b>Gdb-commando gegeven terwijl de debugger niet loopt</b><br> Het "
+#~ "commando was:<br> %1"
+
+#~ msgid "Internal error"
+#~ msgstr "Interne fout"
+
+#~ msgid "<b>Invalid debugger command</b><br>%1"
+#~ msgstr "<b>Ongeldige debugger-commando</b><br>%1"
+
+#~ msgid "Invalid debugger command"
+#~ msgstr "Ongeldige debugger-commando"
+
+#~ msgid "Exited with return code: %1"
+#~ msgstr "Beëindigd met returncode: %1"
+
+#~ msgid "Exited normally"
+#~ msgstr "Normaal beëindigd"
+
+#~ msgid "Exited on signal %1"
+#~ msgstr "Beëindigd met signaal %1"
+
+#~ msgid "Program received signal %1 (%2)"
+#~ msgstr "Het programma heeft het signaal %1 (%2) ontvangen"
+
+#~ msgid "Running program"
+#~ msgstr "Programma aan het uitvoeren"
+
+#~ msgid "Warning"
+#~ msgstr "Waarschuwing"
+
+#~ msgid ""
+#~ "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
+#~ msgstr "<b>Debuggerfout</b><p>De debugger melde de volgende fout:<p><tt>%1"
+
+#~ msgid "1 command in queue\n"
+#~ msgid_plural "%1 commands in queue\n"
+#~ msgstr[0] "1 commando in wachtrij\n"
+#~ msgstr[1] "%1 commando's in wachtrij\n"
+
+#~ msgctxt "Only the 0 and 1 cases need to be translated"
+#~ msgid "1 command being processed by gdb\n"
+#~ msgid_plural "%1 commands being processed by gdb\n"
+#~ msgstr[0] "1 commando dat uitgevoerd wordt door gdb\n"
+#~ msgstr[1] "%1 commando's die uitgevoerd worden door gdb\n"
+
+#~ msgid "Debugger state: %1\n"
+#~ msgstr "Debuggerstatus: %1\n"
+
+#~ msgid ""
+#~ "Current command class: '%1'\n"
+#~ "Current command text: '%2'\n"
+#~ "Current command original text: '%3'\n"
+#~ msgstr ""
+#~ "Huidige commando-klasse: '%1'\n"
+#~ "Huidige commando-tekst: '%2'\n"
+#~ "Huidige commando originele tekst: '%3'\n"
+
+#~ msgid "Debugger status"
+#~ msgstr "Debuggerstatus"
+
+#~ msgid "<b>Could not attach debugger:</b><br />"
+#~ msgstr "<b>Kon debugger niet aanhechten:</b><br />"
+
+#~ msgctxt "<b>Internal debugger error</b>"
+#~ msgid ""
+#~ "<p>The debugger component encountered internal error while processing "
+#~ "reply from gdb. Please submit a bug report."
+#~ msgstr ""
+#~ "<p>De component debugger kwam terecht in een interne fout bij het "
+#~ "verwerken van een antwoord van gdb. Gaarne een bug-report indienen."
+
+#~ msgid ""
+#~ "The exception is: %1\n"
+#~ "The MI response is: %2"
+#~ msgstr ""
+#~ "De uitzondering is: %1\n"
+#~ "Het antwoord van MI is: %2"
+
+#~ msgid "Internal debugger error"
+#~ msgstr "Interne debuggerfout"
+
+#~ msgid ""
+#~ "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
+#~ "path name is specified correctly."
+#~ msgstr ""
+#~ "<b>Kon debugger niet uitvoeren.</b><p>Kon '%1' niet uitvoeren. Controleer "
+#~ "of het pad correct is opgegeven."
+
+#~ msgid "Could not start debugger"
+#~ msgstr "Kon debugger niet starten"
+
+#~ msgid ""
+#~ "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
+#~ "<br>Try to reproduce the crash with plain gdb and report a bug.<br>"
+#~ msgstr ""
+#~ "<b>Gdb is gecrasht.</b><p>Daarom moest de debugsessie worden beëindigd."
+#~ "<br>Probeer de crash te reproduceren met de gewone gdb en rapporteer een "
+#~ "bug.<br>"
+
+#~ msgid "Gdb crashed"
+#~ msgstr "Gdb is gecrasht"
+
+#~ msgid "(running)"
+#~ msgstr "(actief)"
+
+#~ msgid ""
+#~ "Cannot use the tty* or pty* devices.\n"
+#~ "Check the settings on /dev/tty* and /dev/pty*\n"
+#~ "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add "
+#~ "the user to the tty group using \"usermod -aG tty username\"."
+#~ msgstr ""
+#~ "Kan de apparaatbestanden tty* of pty* niet gebruiken.\n"
+#~ "Controleer de instellingen voor /dev/tty* en /dev/pty*\n"
+#~ "Mogelijk dient u als root de opdracht \"chmod ug+rw\" voor de "
+#~ "apparaatbestanden /dev/tty* en /dev/pty* uit te voeren en/of de gebruiker "
+#~ "aan de tty-groep toe te voegen met het commando \"usermod -aG tty "
+#~ "gebruikersnaam\"."
+
+#~ msgid "%1 is incorrect terminal name"
+#~ msgstr "%1 is een onjuiste terminalnaam"
+
+#~ msgid "Can't create a temporary file"
+#~ msgstr "Tijdelijk bestand aanmaken lukt niet"
+
+#~ msgid ""
+#~ "Can't receive %1 tty/pty. Check that %1 is actually a terminal and that "
+#~ "it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;"
+#~ "do sleep 3600;done\""
+#~ msgstr ""
+#~ "Kan %1 tty/pty niet ontvangen. Controleer dat %1 echt een terminal is en "
+#~ "dat het deze argumenten accepteert: -e sh -c \"tty> %2 ;exec<&-;exec>&-;"
+#~ "while :;do sleep 3600;done\""
+
+#~ msgid "Application interrupted"
+#~ msgstr "Toepassing onderbroken"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "GDB Support"
+#~ msgstr "Ondersteuning voor GDB"
+
+#~ msgid ""
+#~ "This plugin provides a frontend for GDB, a source-level debugger for C, C+"
+#~ "+ and more."
+#~ msgstr ""
+#~ "Deze plugin levert een frontend voor GDB, een broncodedebugger voor C, C+"
+#~ "+ en meer."
+
+#~ msgid "Run gdb in a special shell (mainly for automake projects)"
+#~ msgstr "gdb starten in een speciale shell (vooral voor automake projecten)"
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and <b>libtool</b> is needed to get it to run "
+#~ "inside gdb."
+#~ msgstr ""
+#~ "Wanneer u wilt dat gdb door een speciale shell of hulpprogramma gestart "
+#~ "wordt kunt u dat hier opgeven. De voornaamste toepassing hiervoor zijn "
+#~ "Automake gebaseerde projecten waarbij de eigenlijke toepassing een script "
+#~ "is en libtool nodig is om het binnen gdb uit te voeren."
+
+#~ msgid ""
+#~ "If you want gdb to be executed by a special shell or tool insert it here. "
+#~ "The main use-case is for Automake based projects where the application is "
+#~ "actually only a script and libtool is needed to get it to run inside gdb."
+#~ msgstr ""
+#~ "Wanneer u wilt dat gdb door een speciale shell of hulpprogramma gestart "
+#~ "wordt kunt u dat hier opgeven. De voornaamste toepassing hiervoor zijn "
+#~ "Automake gebaseerde projecten waarbij de eigenlijke toepassing een script "
+#~ "is en libtool nodig is om het binnen gdb uit te voeren."
+
+#~ msgid "Debugging &shell:"
+#~ msgstr "Debugging-&shell:"
+
+#~ msgid "Script to start remote application"
+#~ msgstr "Script om toepassing op afstand mee te starten"
+
+#~ msgid "&Config gdb script:"
+#~ msgstr "gdb-script &instellen:"
+
+#~ msgid "Script to connect with remote application"
+#~ msgstr "Script om verbinding te maken met toepassing op afstand"
+
+#~ msgid ""
+#~ "This script is sourced by gdb after the two preceding scripts have been "
+#~ "executed.\n"
+#~ "This script is intended for the actual commands needed to connect to a "
+#~ "remotely running executable.\n"
+#~ "\tshell sleep 5\twait for remote program to start\n"
+#~ "\ttarget remote ...\tconnect to the remote debugger\n"
+#~ "\tcontinue\t[optional] run debugging to the first breakpoint."
+#~ msgstr ""
+#~ "Dit script wordt opgehaald door gdb nadat de twee voorgaande scripts "
+#~ "uitgevoerd zijn.\n"
+#~ "Dit script is bedoeld voor de commando's die nodig zijn om verbinding te "
+#~ "maken met een uitvoerbaar bestand dat op afstand draait.\n"
+#~ "\tshell sleep 5\twacht totdat het programma op afstand is opgestart\n"
+#~ "\ttarget remote ...\tmaak verbinding met de debugger op afstand\n"
+#~ "\tcontinue\t[optional] voer debugging uit tot het eerste breekpunt."
+
+#~ msgid "Can't get "
+#~ msgstr "Kan niet verkrijgen "
+
+#~ msgid "kdevelop: Debug application console"
+#~ msgstr "KDevelop: toepassingsconsole debuggen"
+
+#~ msgid "Support for running apps in GDB"
+#~ msgstr "Ondersteuning voor het uitvoeren van applicaties in GDB"
+
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Formulier"
+
+#~ msgid "Start address:"
+#~ msgstr "Beginadres:"
+
+#~ msgid "End Address:"
+#~ msgstr "Eindadres:"
+
+#~ msgctxt "@action:button"
+#~ msgid "Display"
+#~ msgstr "Weergave"
+
+#~ msgid "Offset"
+#~ msgstr "Offset"
+
+#~ msgid "Special debugger views"
+#~ msgstr "Speciale debuggerweergaven"
+
+#~ msgid "Watches"
+#~ msgstr "Bewaken"
+
+#~ msgid "Recent"
+#~ msgstr "Recent"
+
+#~ msgid ""
+#~ "This allows you to enter terminal input when your\n"
+#~ "application contains terminal input code (e.g. cin, fgets, etc.).\n"
+#~ "If you use terminal input in your application then check this option.\n"
+#~ "Otherwise leave it unchecked."
+#~ msgstr ""
+#~ "Hiermee kunt u gegevens in een terminal invoeren wanneer uw toepassing\n"
+#~ "gebruik maakt van terminalinvoercode (zoals cin, fgets, etc.).\n"
+#~ "Als u terminalinvoer gebruikt in uw toepassing, activeer dan deze optie.\n"
+#~ "Zo niet, laat deze optie gedeactiveerd."
+
+#~ msgid "Enable separate terminal for application &IO"
+#~ msgstr "Aparte &terminal voor toepassing-I/O activeren"
+
+#~ msgid ""
+#~ "If GDB has not seen a library that will be loaded via\n"
+#~ "\"dlopen\" then it will refuse to set a breakpoint in that code.\n"
+#~ "With this option, GDB will stop on a library load and hence\n"
+#~ "try to set the pending breakpoints. See the documentation\n"
+#~ "for more details relating to this behavior.\n"
+#~ "\n"
+#~ "If you are not \"dlopen\"ing libs then leave this unchecked."
+#~ msgstr ""
+#~ "Als GDB een bibliotheek die geladen zal worden via \"dlopen\" niet heeft\n"
+#~ "gezien, dan weigert GDB om een breekpunt in die code te plaatsen.\n"
+#~ "Met deze optie zal GDB stoppen bij het laden van een bibliotheek en\n"
+#~ "zal dan de resterende breekpunten proberen te plaatsen. Lees de\n"
+#~ "documentatie voor meer details over dit gedrag.\n"
+#~ "\n"
+#~ "Activeer deze optie alleen wanneer u gebruik maakt van \"dlopen\"."
+
+#~ msgid "Try setting &breakpoints on library loading"
+#~ msgstr "Probeer &breekpunten te zetten bij laden van bibliotheek"
+
+#~ msgid ""
+#~ "Use the floating toolbar. This toolbar always stays\n"
+#~ "on top of all windows so that if the app covers KDevelop\n"
+#~ "you have control of the app through the small toolbar. It\n"
+#~ "can also be docked into the panel.\n"
+#~ "\n"
+#~ "This toolbar is in addition to the toolbar in KDevelop."
+#~ msgstr ""
+#~ "De zwevende knoppenbalk gebruiken. Deze knoppenbalk zal altijd boven alle "
+#~ "geopende vensters worden geplaatst. Dus als het toepassingsvenster "
+#~ "KDevelop bedekt hebt u nog steeds controle over de toepassing via de "
+#~ "kleine werkbalk. Deze knoppenbalk kan ook in het systeemvak worden "
+#~ "geplaatst.\n"
+#~ "\n"
+#~ "Deze werkbalk is een toevoeging naast de werkbalk in KDevelop."
+
+#~ msgid "E&nable floating toolbar"
+#~ msgstr "Z&wevende knoppenbalk activeren"
+
+#~ msgid "Debug views"
+#~ msgstr "Debuggerweergaven"
+
+#~ msgid "Viewers"
+#~ msgstr "Weergaveprogramma's"
+
+#~ msgid "Debugger viewers"
+#~ msgstr "Debuggerweergaven"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Debugger viewers</b><p>Various information about application being "
+#~ "executed. There are 4 views available:<br><b>Memory</"
+#~ "b><br><b>Disassemble</b><br><b>Registers</b><br><b>Libraries</b>"
+#~ msgstr ""
+#~ "<b>debuggerweergaves</b> <p>Verschillende soorten informatie over de "
+#~ "uitgevoerde toepassing. Er zijn 4 weergaves beschikbaar: <br><b>Geheugen</"
+#~ "b> <br><b>Machinecode</b> <br><b>>Registers</b> <br><b>Bibliotheken</b>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Application does not exist</b><p>The application you are trying to "
+#~ "debug,<br>    %1\n"
+#~ "<br>does not exist. Check that you have specified the right application "
+#~ "in the debugger configuration."
+#~ msgstr ""
+#~ "<b>De toepassing bestaat niet</b><p>De toepassing, die u probeert te "
+#~ "debuggen,<br>    %1\n"
+#~ "<br>bestaat niet. Kontroleer of u de juiste toepassing in de "
+#~ "debuggerconfiguratie ingesteld heeft."
+
+#~ msgid "Application does not exist"
+#~ msgstr "De toepassing bestaat niet"
+
+#~ msgid ""
+#~ "<b>Could not run application '%1'.</b><p>The application does not have "
+#~ "the executable bit set. Try rebuilding the project, or change permissions "
+#~ "manually."
+#~ msgstr ""
+#~ "<b>Kon applicatie '%1' niet uitvoeren.</b><p>De applicatie is niet "
+#~ "gemarkeerd als uitvoerbaar. Probeer het project opnieuw te bouwen of "
+#~ "verander de permissies van het bestand handmatig."
+
+#~ msgid "Could not run application"
+#~ msgstr "Kon applicatie niet uitvoeren"
+
+#~ msgid "Received signal"
+#~ msgstr "Ontvangen signaal"
+
+#~ msgid ""
+#~ "gdb message:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "gdb-melding:\n"
+#~ "%1"
+
+#~ msgid "<%1 items>"
+#~ msgstr "<%1 items>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Variable tree</b><p>The variable tree allows you to see the values of "
+#~ "local variables and arbitrary expressions.</p><p>Local variables are "
+#~ "displayed automatically and are updated as you step through your program. "
+#~ "For each expression you enter, you can either evaluate it once, or \"watch"
+#~ "\" it (make it auto-updated). Expressions that are not auto-updated can "
+#~ "be updated manually from the context menu. Expressions can be renamed to "
+#~ "more descriptive names by clicking on the name column.</p><p>To change "
+#~ "the value of a variable or an expression, click on the value.</p>"
+#~ msgstr ""
+#~ "<b>Variabelenboom</b><p>Deze variabelenboom maakt het mogelijk om de "
+#~ "waarden van de lokale variabelen en willekeurige expressies te bekijken. "
+#~ "<p>Lokale variabelen worden automatisch getoond en bijgewerkt wanneer u "
+#~ "door het programma heen stapt. Voor iedere expressie die u opgeeft kunt u "
+#~ "het eenmalig laten evalueren of het 'volgen'. Dit zorgt er voor dat deze "
+#~ "steeds bijgewerkt zal worden. Expressies die niet automatisch worden "
+#~ "bijgewerkt, kunt u bijwerken vanuit het contextmenu. Expressies kunnen "
+#~ "hernoemd worden door in de naamkolom te klikken. Om de waarde te "
+#~ "veranderen, klikt u op de huidige waarde."
+
+#~ msgid "Recent Expressions"
+#~ msgstr "Recente expressies"
+
+#~ msgid "Remove All"
+#~ msgstr "Alles verwijderen"
+
+#~ msgid "Natural"
+#~ msgstr "Natuurlijk"
+
+#~ msgid "Character"
+#~ msgstr "Teken"
+
+#~ msgid "Remember Value"
+#~ msgstr "Waarde onthouden"
+
+#~ msgid "Remove Watch Variable"
+#~ msgstr "Watch-variabele verwijderen"
+
+#~ msgid "Watch Variable"
+#~ msgstr "Variabele volgen"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Expressie evalueren"
+
+#~ msgid "Remove Expression"
+#~ msgstr "Verwijder expressie"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "Gegevensschrijftoegang breekpunten"
+
+#~ msgid "Copy Value"
+#~ msgstr "Waarde kopiëren"
+
+#~ msgid "Variables"
+#~ msgstr "Variabelen"
+
+#~ msgid "Variable"
+#~ msgstr "Variabele"
+
+#~ msgid "Value"
+#~ msgstr "Waarde"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Framestack"
+#~ msgstr "Framestack"
+
+#, fuzzy
+#~ msgid "Pid"
+#~ msgstr "Pid:"
+
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#~ msgid ""
+#~ "Debug arguments can be set on the Run Options page\n"
+#~ " or directly in the project manager"
+#~ msgstr ""
+#~ "Debug argumenten kunnen in de Uitvoeropties pagina\n"
+#~ "of direct in de Projectbeheerder ingesteld worden"
+
+#~ msgid ""
+#~ "<b>Invalid gdb reply</b><p>The 'stopped' packet does not include the "
+#~ "'reason' field."
+#~ msgstr ""
+#~ "<b>Ongeldig gdb antwoord</b><p>Het 'gestopte' pakket bevat geen 'reden' "
+#~ "veld."
+
+#~ msgid "Invalid gdb reply"
+#~ msgstr "Ongeldig antwoord van gdb"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgctxt "Process Niceness"
+#~ msgid "Normal"
+#~ msgstr "Formatteren"
+
+#, fuzzy
+#~| msgid "Debugger stopped"
+#~ msgctxt "process status"
+#~ msgid "stopped"
+#~ msgstr "Debugger is gestopt"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "process status"
+#~ msgid "paging"
+#~ msgstr "Waarschuwing"
+
+#, fuzzy
+#~| msgid "Application does not exist"
+#~ msgid "Show Application Window"
+#~ msgstr "De toepassing bestaat niet"
+
+#, fuzzy
+#~| msgid "&Continue"
+#~ msgid "Continue (CONT)"
+#~ msgstr "&Doorgaan"
+
+#, fuzzy
+#~| msgid "Interrupt"
+#~ msgid "Interrupt (INT)"
+#~ msgstr "Interrupt"
+
+#, fuzzy
+#~| msgid "Received signal"
+#~ msgid "Send Signal"
+#~ msgstr "Ontvangen signaal"
+
+#, fuzzy
+#~| msgid "Recent"
+#~ msgid "Percentage"
+#~ msgstr "Recent"
+
+#, fuzzy
+#~| msgid "Display &demangled names"
+#~ msgid "Display command line options"
+#~ msgstr "Gedecodeerde symboolaan&duidingen tonen"
+
+#, fuzzy
+#~| msgid "Frame"
+#~ msgctxt "process heading"
+#~ msgid "Name"
+#~ msgstr "Frame"
+
+#, fuzzy
+#~| msgid "TTY"
+#~ msgctxt "process heading"
+#~ msgid "TTY"
+#~ msgstr "TTY"
+
+#, fuzzy
+#~| msgid "Attach to Process"
+#~ msgid "All Processes"
+#~ msgstr "Aan proces hechten"
+
+#, fuzzy
+#~| msgid "Process exited"
+#~ msgid "All Processes, Tree"
+#~ msgstr "Proces is geëindigd"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Normal"
+#~ msgstr "Formatteren"
+
+#, fuzzy
+#~| msgid "Attaching to process %1"
+#~ msgid "Stop monitoring the process"
+#~ msgstr "Aan proces %1 hechten"
+
+#~ msgid "Start in debugger"
+#~ msgstr "In debugger uitvoeren"
+
+#~ msgid ""
+#~ "<b>Start in debugger</b><p>Starts the debugger with the project's main "
+#~ "executable. You may set some breakpoints before this, or you can "
+#~ "interrupt the program while it is running, in order to get information "
+#~ "about variables, frame stack, and so on."
+#~ msgstr ""
+#~ "<b>In Debugger uitvoeren</b><p>Het hoofdprogramma van een project wordt "
+#~ "in de debugger uitgevoerd. U kunt enkele voorgaande breekpunten plaatsen "
+#~ "of het programma tijdens het uitvoeren onderbreken om informatie over "
+#~ "variabelen, de aanroeplijst etc. te bekijken."
+
+#~ msgid "Breakpoints"
+#~ msgstr "Breekpunten"
+
+#, fuzzy
+#~| msgid ""
+#~| "<b>Frame stack</b><p>Often referred to as the \"call stack\", this is a "
+#~| "list showing what function is currently active and who called each "
+#~| "function to get to this point in your program. By clicking on an item "
+#~| "you can see the values in any of the previous calling functions."
+#~ msgid ""
+#~ "<b>Frame stack</b><p>Often referred to as the \"call stack\", this is a "
+#~ "list showing which function is currently active, and what called each "
+#~ "function to get to this point in your program. By clicking on an item you "
+#~ "can see the values in any of the previous calling functions."
+#~ msgstr ""
+#~ "<b>Aanroeplijst</b><p>Deze lijst, vaak \"Call Stack\" genoemd, toont "
+#~ "welke functie momenteel actief is en vanwaar de functie is aangeroepen. "
+#~ "Door een item aan te klikken kunt u de variabelewaarden van een "
+#~ "aanroepende functie in de variabelenboomstructuur laten weergeven."
+
+#, fuzzy
+#~| msgid "Breakpoints"
+#~ msgid "Breakpoint is active"
+#~ msgstr "Breekpunten"
+
+#~ msgid "Ignore"
+#~ msgstr "Negeren"
+
+#, fuzzy
+#~| msgid "Breakpoints"
+#~ msgid "Breakpoint is %1"
+#~ msgstr "Breekpunten"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Breakpoint is dirty</b><p>The breakpoint is not yet communicated to "
+#~ "GDB."
+#~ msgstr ""
+#~ "<b>Breekpunt aan/uit</b> <p>Zet een breekpunt voor de huidige regel aan "
+#~ "of uit."
+
+#~ msgid "Debugger Breakpoints"
+#~ msgstr "Debugger breekpunten"
+
+#~ msgid ""
+#~ "<b>Breakpoint list</b><p>Displays a list of breakpoints with their "
+#~ "current status. Clicking on a breakpoint item allows you to change the "
+#~ "breakpoint and will take you to the source in the editor window."
+#~ msgstr ""
+#~ "<b>Overzicht van breekpunten</b><p>Dit toont een lijst met breekpunten "
+#~ "met hun huidige status. Het klikken op een breekpunt met de rechter "
+#~ "muisknop toont een contextmenu waarin u de breekpunt kunt manipuleren. "
+#~ "Het dubbelklikken op een breekpunt brengt u naar de broncode in het "
+#~ "editorvenster."
+
+#~ msgctxt "New breakpoint"
+#~ msgid "New"
+#~ msgstr "Nieuw"
+
+#~ msgctxt "Code breakpoint"
+#~ msgid "Code"
+#~ msgstr "Code"
+
+#~ msgctxt "Data read breakpoint"
+#~ msgid "Data read"
+#~ msgstr "Gegevens gelezen"
+
+#~ msgid "Show text"
+#~ msgstr "Tekst tonen"
+
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#~ msgid "Disable"
+#~ msgstr "Uitschakelen"
+
+#~ msgid "Delete"
+#~ msgstr "Verwijderen"
+
+#~ msgid "Disable all"
+#~ msgstr "Alle uitschakelen"
+
+#~ msgid "Enable all"
+#~ msgstr "Alle inschakelen"
+
+#~ msgid "Delete all"
+#~ msgstr "Alles verwijderen"
+
+#~ msgid "Enable"
+#~ msgstr "Inschakelen"
+
+#~ msgid "&Start"
+#~ msgstr "&Starten"
+
+#~ msgid "&Restart"
+#~ msgstr "&Opnieuw"
+
+#~ msgid "Restart program"
+#~ msgstr "Toepassing herstarten"
+
+#~ msgid ""
+#~ "<b>Restarts application</b><p>Restarts applications from the beginning."
+#~ msgstr "<b>Toepassing herstarten</b><p>Start de applicatie vanaf het begin."
+
+#~ msgid "Sto&p"
+#~ msgstr "Sto&ppen"
+
+#~ msgid "Stop debugger"
+#~ msgstr "Debugger beëindigen"
+
+#~ msgid "<b>Stop debugger</b><p>Kills the executable and exits the debugger."
+#~ msgstr ""
+#~ "<b>Debugger beëindigen</b><p>Breekt het programma af en beëindigd de "
+#~ "Debugger."
+
+#~ msgid "Interrupt application"
+#~ msgstr "Uitvoeren van de toepassing onderbreken"
+
+#~ msgid ""
+#~ "<b>Interrupt application</b><p>Interrupts the debugged process or current "
+#~ "GDB command."
+#~ msgstr ""
+#~ "<b>Uitvoeren van de toepassing onderbreken</b><p>Onderbreekt het in de "
+#~ "debugger lopende proces of het huidige GDB-commando."
+
+#~ msgid "Run to cursor"
+#~ msgstr "Tot aan cursor uitvoeren"
+
+#~ msgid "Set E&xecution Position to Cursor"
+#~ msgstr "&Uitvoerpunt is cursorpositie"
+
+#~ msgid "Step &Over"
+#~ msgstr "&Overspringen"
+
+#~ msgid "Step over the next line"
+#~ msgstr "Volgende regel overspringen"
+
+#~ msgid ""
+#~ "<b>Step over</b><p>Executes one line of source in the current source "
+#~ "file. If the source line is a call to a function the whole function is "
+#~ "executed and the app will stop at the line following the function call."
+#~ msgstr ""
+#~ "<b>Functie overspringen</b><p>Voert een regel broncode in het huidige "
+#~ "bestand uit. Als de broncoderegel een functieaanroep bevat dan wordt de "
+#~ "hele functie uitgevoerd en zal de toepassing stoppen op de regel na de "
+#~ "functieaanroep."
+
+#~ msgid "Step over Ins&truction"
+#~ msgstr "Machine&instructie overspringen"
+
+#~ msgid "Step over instruction"
+#~ msgstr "Machineinstructie overspringen"
+
+#~ msgid ""
+#~ "<b>Step over instruction</b><p>Steps over the next assembly instruction."
+#~ msgstr ""
+#~ "<b>Machineinstructie overspringen</b><p>Springt over de volgende "
+#~ "assemblerinstructie."
+
+#~ msgid "Step &Into"
+#~ msgstr "&Inspringen"
+
+#~ msgid "Step into the next statement"
+#~ msgstr "In de volgende machineaanwijzing springen"
+
+#~ msgid ""
+#~ "<b>Step into</b><p>Executes exactly one line of source. If the source "
+#~ "line is a call to a function then execution will stop after the function "
+#~ "has been entered."
+#~ msgstr ""
+#~ "<b>Inspringen</b><p>Voert precies één coderegel uit. Als het om een "
+#~ "functieaanroep gaat, dan wordt de uitvoering na het binnentreden van de "
+#~ "functie gestopt."
+
+#~ msgid "Step into I&nstruction"
+#~ msgstr "In machinein&structie springen"
+
+#~ msgid "Step into instruction"
+#~ msgstr "In machineinstructie springen"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Step into instruction</b><p>Steps into the next assembly instruction."
+#~ msgstr ""
+#~ "<b>In machineinstructie springen</b>Springt in de volgende "
+#~ "assembleerinstructie."
+
+#~ msgid "Step O&ut"
+#~ msgstr "&Uitstappen"
+
+#~ msgid "Steps out of the current function"
+#~ msgstr "Voert de functie tot het einde uit"
+
+#~ msgid ""
+#~ "<b>Step out</b><p>Executes the application until the currently executing "
+#~ "function is completed. The debugger will then display the line after the "
+#~ "original call to that function. If program execution is in the outermost "
+#~ "frame (i.e. in main()) then this operation has no effect."
+#~ msgstr ""
+#~ "<b>Uitstappen</b><p>Voert de toepassing uit tot aan het einde van huidige "
+#~ "functie. De debugger toont de regel na de oorspronkelijke functieaanroep. "
+#~ "Als u zich bij aanvang in de aanroeplijst bevindt (dus main()), dan heeft "
+#~ "deze handeling geen effect."
+
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Breekpunt aan/uit"
+
+#~ msgid "Toggle breakpoint"
+#~ msgstr "Breekpunt aan/uit"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in "
+#~ "editor."
+#~ msgstr ""
+#~ "<b>Breekpunt aan/uit</b> <p>Zet een breekpunt voor de huidige regel aan "
+#~ "of uit."
+
+#~ msgid "Runs the program in the debugger"
+#~ msgstr "Voert de toepassing in de debugger uit"
+
+#, fuzzy
+#~ msgid ""
+#~ "Start in debugger\n"
+#~ "\n"
+#~ "Starts the debugger with the project's main executable. You may set some "
+#~ "breakpoints before this, or you can interrupt the program while it is "
+#~ "running, in order to get information about variables, frame stack, and so "
+#~ "on."
+#~ msgstr ""
+#~ "In debugger uitvoeren\n"
+#~ "\n"
+#~ "Het hoofdprogramma in het project wordt in de debugger uitgevoerd. U kunt "
+#~ "vooraf breekpunten plaatsen of het programma tijdens het uitvoeren "
+#~ "onderbreken om de aanroeplijst en andere informatie te bekijken."
+
+#~ msgid "Continues the application execution"
+#~ msgstr "Zet de uitvoering van de toepassing voort"
+
+#, fuzzy
+#~ msgid ""
+#~ "Continue application execution\n"
+#~ "\n"
+#~ "Continues the execution of your application in the debugger. This only "
+#~ "takes effect when the application has been halted by the debugger (i.e. a "
+#~ "breakpoint has been activated or the interrupt was pressed)."
+#~ msgstr ""
+#~ "Uitvoeren voortzetten\n"
+#~ "\n"
+#~ "Zet de uitvoer van uw toepassing in de debugger voort. Dit heeft alleen "
+#~ "effect wanneer de toepassing wordt aangehouden door de debugger (bijv. "
+#~ "omdat een breekpunt is geactiveerd of het uitvoeren is gestopt door de "
+#~ "gebruiker)."
+
+#~ msgid "Breakpoint"
+#~ msgstr "Breekpunt"
+
+#~ msgid " temporary"
+#~ msgstr " tijdelijk"
+
+#~ msgid " hw"
+#~ msgstr " hw"
+
+#~ msgid "Enabled"
+#~ msgstr "Ingeschakeld"
+
+#~ msgid "Disabled"
+#~ msgstr "Uitgeschakeld"
+
+#~ msgid "Status"
+#~ msgstr "Status"
+
+#~ msgid "Location"
+#~ msgstr "Locatie"
+
+#~ msgid "Condition"
+#~ msgstr "Voorwaarde"
+
+#~ msgid "Ignore Count"
+#~ msgstr "Teller negeren"
+
+#~ msgid "Hits"
+#~ msgstr "Treffers"
+
+#~ msgid "Tracing"
+#~ msgstr "Volgen"
+
+#~ msgid "Pending (add)"
+#~ msgstr "Wachtend (toevoegen)"
+
+#~ msgid "Pending (clear)"
+#~ msgstr "Wachtend (wissen)"
+
+#~ msgid "Pending (modify)"
+#~ msgstr "Wachtend (bewerken)"
+
+#~ msgid "Active"
+#~ msgstr "Actief"
+
+#~ msgid ""
+#~ "<b>Data write breakpoint</b><br>Expression: %1<br>Address: 0x%2<br>Old "
+#~ "value: %3<br>New value: %4"
+#~ msgstr ""
+#~ "<b>Gegevensschrijftoegang breekpunt</b><br>Expressie: %1<br>Adres: 0x"
+#~ "%2<br>Oude waarde: %3<br>Nieuwe waarde: %4"
+
+#~ msgid "Invalid"
+#~ msgstr "Ongeldig"
+
+#~ msgid "Watchpoint"
+#~ msgstr "Watchpoint"
+
+#~ msgid "Read Watchpoint"
+#~ msgstr "Watchpoint lezen"

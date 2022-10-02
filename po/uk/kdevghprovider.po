@@ -1,0 +1,201 @@
+# Translation of kdevghprovider.po to Ukrainian
+# Copyright (C) 2013-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2013, 2014, 2015, 2016, 2017, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevghprovider\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2020-07-20 08:27+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.07.70\n"
+
+#: ghdialog.cpp:25
+#, kde-format
+msgid ""
+"You have not authorized KDevelop to use your GitHub account. If you "
+"authorize KDevelop, you will be able to fetch your public/private "
+"repositories and the repositories from your organizations."
+msgstr ""
+"Ви не уповноважили KDevelop на використання вашого облікового запису GitHub. "
+"Якщо ви уповноважите KDevelop, ви зможете отримувати дані з ваших відкритих "
+"та закритих сховищ та сховищ вашої організації."
+
+#: ghdialog.cpp:34
+#, kde-format
+msgctxt "%1 is the URL with the GitHub token settings"
+msgid "You can check the authorization for this application and others at %1"
+msgstr ""
+"Ви можете ознайомитися із параметрами допуску для цієї та інших програм на "
+"сторінці %1"
+
+#: ghdialog.cpp:54
+#, kde-format
+msgid "You are logged in as <b>%1</b>.<br/>%2"
+msgstr "Ви увійшли до системи як <b>%1</b>.<br/>%2"
+
+#: ghdialog.cpp:58
+#, kde-format
+msgctxt "@action:button"
+msgid "Log Out"
+msgstr "Вийти"
+
+#: ghdialog.cpp:64
+#, kde-format
+msgctxt "@action:button"
+msgid "Force Sync"
+msgstr "Примусова синхронізація"
+
+#: ghdialog.cpp:78
+#, kde-format
+msgctxt "@action:button"
+msgid "Authorize"
+msgstr "Уповноважити"
+
+#: ghdialog.cpp:92
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account"
+msgstr "Обліковий запис GitHub"
+
+#: ghdialog.cpp:98
+#, kde-format
+msgid "Enter a login and a password"
+msgstr "Вкажіть ім’я користувача і пароль"
+
+#: ghdialog.cpp:101 ghdialog.cpp:157 ghproviderwidget.cpp:44
+#, kde-format
+msgid "Waiting for response"
+msgstr "Очікуємо на відповідь"
+
+#: ghdialog.cpp:126
+#, kde-format
+msgid ""
+"Authentication failed. Please try again.\n"
+"\n"
+"Could not create token: \"%1\"\n"
+"%2"
+msgstr ""
+"Не вдалося пройти розпізнавання. Будь ласка, повторіть спробу.\n"
+"\n"
+"Не вдалося створити ключ: «%1»\n"
+"%2"
+
+#: ghdialog.cpp:129
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Authorization Failed"
+msgstr "Не вдалося пройти розпізнавання на GitHub"
+
+#: ghdialog.cpp:133
+#, kde-format
+msgid ""
+"Authentication succeeded.\n"
+"\n"
+"Created token: \"%1\"\n"
+"%2"
+msgstr ""
+"Успішне розпізнавання!\n"
+"\n"
+"Створено ключ: «%1»\n"
+"%2"
+
+#: ghdialog.cpp:136
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Account Authorized"
+msgstr "Пройдено розпізнавання на обліковому записі GitHub"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@title:window"
+msgid "Authentication Code"
+msgstr "Код розпізнавання"
+
+#: ghdialog.cpp:144
+#, kde-format
+msgctxt "@label:textbox"
+msgid "OTP Code:"
+msgstr "Код OTP:"
+
+#: ghdialog.cpp:176
+#, kde-format
+msgid "Please, write your password here."
+msgstr "Будь ласка, впишіть сюди ваш пароль."
+
+#: ghproviderplugin.cpp:35
+#, kde-format
+msgid "GitHub"
+msgstr "GitHub"
+
+#: ghproviderwidget.cpp:57
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Шукати…"
+
+#: ghproviderwidget.cpp:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "You can press the Return key if you do not want to wait."
+msgstr "Ви можете натиснути клавішу Enter, якщо не хочете чекати."
+
+#: ghproviderwidget.cpp:70
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure your GitHub account"
+msgstr "Налаштувати ваш обліковий запис GitHub"
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgid ""
+"The Git plugin could not be loaded which is required to import a GitHub "
+"project."
+msgstr ""
+"Не вдалося завантажити додаток Git, який потрібен для імпортування проєкту "
+"GitHub."
+
+#: ghproviderwidget.cpp:87
+#, kde-format
+msgctxt "@title:window"
+msgid "GitHub Provider Error"
+msgstr "Помилка надавача даних GitHub"
+
+#: ghproviderwidget.cpp:105
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "User"
+msgstr "Користувач"
+
+#: ghproviderwidget.cpp:106
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Organization"
+msgstr "Організація"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgid "Github"
+#~ msgstr "Github"
+
+#~ msgid "Github Provider"
+#~ msgstr "Надавач даних Github"
+
+#~ msgid "Import projects from Github"
+#~ msgstr "Імпортування проєктів з Github"
