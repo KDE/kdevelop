@@ -85,14 +85,23 @@ bool endsWithWordBoundary(QStringView str)
 
 bool isOperator(const QString& str, int pos)
 {
+    const auto op = QLatin1String("operator");
+    if (pos < op.size()) {
+        return false;
+    }
+
     const auto c = str[pos];
     Q_ASSERT(c == QLatin1Char('<') || c == QLatin1Char('>'));
 
     --pos;
 
-    // handle `operator<<` and `operator>>`
-    if (pos > 0 && str[pos] == c) {
+    // note: due to the `pos < op.size()` check above, the below conditionals don't need to check boundaries
+    if (str[pos] == c) {
+        // handle `operator<<` and `operator>>`
         --pos;
+    } else if (c == QLatin1Char('>') && str[pos] == QLatin1Char('=') && str[pos - 1] == QLatin1Char('<')) {
+        // handle `operator<=>`
+        pos -= 2;
     }
 
     // skip spaces, e.g. `operator <`
@@ -101,7 +110,6 @@ bool isOperator(const QString& str, int pos)
     }
 
     auto prefix = QStringView(str).left(pos + 1);
-    const auto op = QLatin1String("operator");
     if (!prefix.endsWith(op)) {
         return false;
     }

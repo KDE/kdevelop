@@ -158,12 +158,18 @@ void TestStringHelpers::testParamIterator_data()
     addTest("A<\">\\\">\">", {"\">\\\">\""});
     addTest("A<'>'>", {"'>'"});
     addTest("myoperator<anoperator<anotheroperator>, my_operator>", {"anoperator<anotheroperator>", "my_operator"});
+    // c++17 operator<=
     addTest("Y<decltype(&X::operator<=), &X::operator<=>", {"decltype(&X::operator<=)", "&X::operator<="});
+    // c++20 operator<=>
+    addTest("Y<decltype(&X::operator<=>), &X::operator<=>>", {"decltype(&X::operator<=>)", "&X::operator<=>"});
     addTest("Y<decltype(&X::operator->), &X::operator->>", {"decltype(&X::operator->)", "&X::operator->"});
     addTest("Y<decltype(&X::operator->), Z<&X::operator->>>", {"decltype(&X::operator->)", "Z<&X::operator->>"});
     addTest("Y<decltype(&X::operator--), &X::operator-->", {"decltype(&X::operator--)", "&X::operator--"});
     addTest("Y<decltype(&X::operator--), Z<&X::operator-->>", {"decltype(&X::operator--)", "Z<&X::operator-->"});
+    // c++17 operator<=
     addTest("Y<decltype(&X::operator<=), Z<&X::operator<=>>", {"decltype(&X::operator<=)", "Z<&X::operator<=>"});
+    // c++20 operator<=>
+    addTest("Y<decltype(&X::operator<=>), Z<&X::operator<=>>>", {"decltype(&X::operator<=>)", "Z<&X::operator<=>>"});
     // NOTE: this identifier here is invalid but we shouldn't trigger UB either, so the test is just that we get _something_ (even if it's wrong)
     addTest("bogus<_Tp, _Up, invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>", {"_Tp", "_Up", "invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>"});
     addTest("hardToParse<A<B>", {"A<B"});
@@ -180,10 +186,18 @@ void TestStringHelpers::testParamIterator()
     auto it = KDevelop::ParamIterator(parens, source);
 
     QEXPECT_FAIL("hardToParse<A<B>", "quasi impossible to parse without semantic knowledge of the types", Abort);
+
+    int i = 0;
     while (!params.isEmpty()) {
         QVERIFY(it);
+        if (i == 1) {
+            QEXPECT_FAIL("Y<decltype(&X::operator<=), &X::operator<=>", "clang triggers warning for this C++17 code, due to C++20 spaceship op", Continue);
+            QEXPECT_FAIL("Y<decltype(&X::operator<=), Z<&X::operator<=>>",
+                         "clang triggers warning for this C++17 code, due to C++20 spaceship op", Continue);
+        }
         QCOMPARE(*it, params.takeFirst());
         ++it;
+        ++i;
     }
 
     QVERIFY(!it);
