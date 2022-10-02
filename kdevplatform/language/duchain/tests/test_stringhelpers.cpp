@@ -166,6 +166,8 @@ void TestStringHelpers::testParamIterator_data()
     addTest("Y<decltype(&X::operator<=), Z<&X::operator<=>>", {"decltype(&X::operator<=)", "Z<&X::operator<=>"});
     // NOTE: this identifier here is invalid but we shouldn't trigger UB either, so the test is just that we get _something_ (even if it's wrong)
     addTest("bogus<_Tp, _Up, invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>", {"_Tp", "_Up", "invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>"});
+    addTest("hardToParse<A<B>", {"A<B"});
+    addTest("hardToParse<(A>B)>", {"(A>B)"});
 }
 
 void TestStringHelpers::testParamIterator()
@@ -177,6 +179,7 @@ void TestStringHelpers::testParamIterator()
 
     auto it = KDevelop::ParamIterator(parens, source);
 
+    QEXPECT_FAIL("hardToParse<A<B>", "quasi impossible to parse without semantic knowledge of the types", Abort);
     while (!params.isEmpty()) {
         QVERIFY(it);
         QCOMPARE(*it, params.takeFirst());
