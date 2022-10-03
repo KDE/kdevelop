@@ -23,6 +23,14 @@
 
 #include <language/util/setrepository.h>
 
+#if defined(QT_NO_DEBUG) && !defined(QT_FORCE_ASSERTS)
+#define VERIFY_VISIT_NESTING 0
+#define ifVerifyVisitNesting(x)
+#else
+#define VERIFY_VISIT_NESTING 1
+#define ifVerifyVisitNesting(x) x
+#endif
+
 namespace KDevelop {
 
 namespace {
@@ -181,7 +189,8 @@ using FilteredDeclarationIterator =
                                             CachedIndexedRecursiveImports, DeclarationTopContextExtractor>;
 
 // Maps declaration-ids to declarations, together with some caches
-class PersistentSymbolTableRepo : public ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem>
+class PersistentSymbolTableRepo
+    : public ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, true, QRecursiveMutex>
 {
     using ItemRepository::ItemRepository;
 
@@ -191,7 +200,32 @@ public:
     // We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache
     // utilization
     QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports> importsCache;
+
+    /// Counts how many recursive calls to PersistentSymbolTable::visit* functions are ongoing
+    /// and hold the repository's mutex lock. Is used only to assert correct API use.
+    mutable uint ongoingIterations = 0;
 };
+
+#if VERIFY_VISIT_NESTING
+struct IterationCounter
+{
+    explicit IterationCounter(const PersistentSymbolTableRepo& repo)
+        : repo(repo)
+    {
+        ++repo.ongoingIterations;
+    }
+
+    ~IterationCounter()
+    {
+        --repo.ongoingIterations;
+    }
+
+private:
+    Q_DISABLE_COPY_MOVE(IterationCounter)
+
+    const PersistentSymbolTableRepo& repo;
+};
+#endif
 }
 
 template<>
@@ -200,7 +234,7 @@ class ItemRepositoryFor<PersistentSymbolTable>
     friend struct LockedItemRepository;
     static PersistentSymbolTableRepo& repo()
     {
-        static QMutex mutex;
+        static QRecursiveMutex mutex;
         static PersistentSymbolTableRepo repo { QStringLiteral("Persistent Declaration Table"), &mutex };
         return repo;
     }
@@ -209,6 +243,8 @@ class ItemRepositoryFor<PersistentSymbolTable>
 void PersistentSymbolTable::clearCache()
 {
     LockedItemRepository::write<PersistentSymbolTable>([](PersistentSymbolTableRepo& repo) {
+        Q_ASSERT_X(repo.ongoingIterations == 0, Q_FUNC_INFO, "don't call clearCache directly from a visitor");
+
         repo.importsCache.clear();
         repo.declarationsCache.clear();
     });
@@ -232,6 +268,8 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
     item.id = id;
 
     LockedItemRepository::write<PersistentSymbolTable>([&item, &declaration](PersistentSymbolTableRepo& repo) {
+        Q_ASSERT_X(repo.ongoingIterations == 0, Q_FUNC_INFO, "don't call addDeclaration directly from a visitor");
+
         repo.declarationsCache.remove(item.id);
 
         uint index = repo.findIndex(item);
@@ -282,6 +320,8 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     item.id = id;
 
     LockedItemRepository::write<PersistentSymbolTable>([&item, &declaration](PersistentSymbolTableRepo& repo) {
+        Q_ASSERT_X(repo.ongoingIterations == 0, Q_FUNC_INFO, "don't call removeDeclaration directly from a visitor");
+
         repo.declarationsCache.remove(item.id);
 
         uint index = repo.findIndex(item);
@@ -331,6 +371,8 @@ void PersistentSymbolTable::visitDeclarations(const IndexedQualifiedIdentifier& 
     item.id = id;
 
     LockedItemRepository::read<PersistentSymbolTable>([&item, &visitor](const PersistentSymbolTableRepo& repo) {
+        ifVerifyVisitNesting(const auto guard = IterationCounter(repo);)
+
         uint index = repo.findIndex(item);
 
         if (!index) {
@@ -359,6 +401,8 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
     item.id = id;
 
     LockedItemRepository::write<PersistentSymbolTable>([&](PersistentSymbolTableRepo& repo) {
+        ifVerifyVisitNesting(const auto guard = IterationCounter(repo);)
+
         uint index = repo.findIndex(item);
         if (!index) {
             return;
@@ -480,6 +524,8 @@ void PersistentSymbolTable::dump(const QTextStream& out)
     DebugVisitor v(out);
 
     LockedItemRepository::read<PersistentSymbolTable>([&](const PersistentSymbolTableRepo& repo) {
+        Q_ASSERT_X(repo.ongoingIterations == 0, Q_FUNC_INFO, "don't call dump directly from a visitor");
+
         repo.visitAllItems(v);
 
         qout << "Statistics:" << Qt::endl;

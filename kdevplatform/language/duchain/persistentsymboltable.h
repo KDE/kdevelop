@@ -41,7 +41,8 @@ public:
         Break,
         Continue,
     };
-    ///@warning The visitor must not call any other PersistentSymbolTable API as that would deadlock
+    ///@warning The visitor must not call any PersistentSymbolTable API that would mutate its contents
+    ///         i.e. do not call `addDeclaration` or `removeDeclaration` directly from the visitor.
     using DeclarationVisitor = std::function<VisitorState(const IndexedDeclaration&)>;
 
     /// Iterate over all the declarations for a given IndexedQualifiedIdentifier in an efficient way.
