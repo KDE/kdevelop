@@ -333,8 +333,8 @@ msgstr "El programa ha rebut el senyal %1 (%2)"
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
-msgstr[0] "1 ordre a la pila\n"
-msgstr[1] "%1 ordres a la pila\n"
+msgstr[0] "1 ordre en la pila\n"
+msgstr[1] "%1 ordres en la pila\n"
 
 #: midebugsession.cpp:1162
 #, kde-format

@@ -31,7 +31,7 @@ msgstr "%1 (%2)"
 #: documentationquickopenprovider.cpp:33
 #, kde-format
 msgid "Documentation in the %1"
-msgstr "Documentació a la %1"
+msgstr "Documentació en la %1"
 
 #: duchainitemquickopen.cpp:38
 #, kde-format

@@ -213,7 +213,7 @@ msgstr "Sven Brauch"
 #, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
 msgstr ""
-"Co-mantenidor, AppImage, implementació de Python, millores a la interfície "
+"Co-mantenidor, AppImage, implementació de Python, millores en la interfície "
 "d'usuari"
 
 #: main.cpp:391

@@ -1777,14 +1777,14 @@ msgstr "Elimina les dependències seleccionades de la llista"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr "Mou la dependència seleccionada cap amunt a la llista"
+msgstr "Mou la dependència seleccionada cap amunt en la llista"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr "Mou la dependència seleccionada cap avall a la llista"
+msgstr "Mou la dependència seleccionada cap avall en la llista"
 
 #: serialization/itemrepository.h:204 serialization/itemrepository.h:1809
 #, kde-format
@@ -1818,7 +1818,8 @@ msgid ""
 "Press Clear if you want KDevelop to clear the cache, otherwise press "
 "Continue if you are sure the crash has another origin."
 msgstr ""
-"La fallada pot ser causada per una corrupció de les dades a la memòria cau.\n"
+"La fallada pot estar causada per una corrupció de les dades en la memòria "
+"cau.\n"
 "\n"
 "Premeu Neteja si voleu que KDevelop netege la memòria cau, en cas contrari, "
 "premeu Continua si sabeu que la fallada té un altre origen."
@@ -2057,7 +2058,7 @@ msgid ""
 "function then execution will stop after the function has been entered."
 msgstr ""
 "Executa exactament una línia de codi. Si la línia de codi és una crida a una "
-"funció, l'execució es pararà després d'entrar a la funció."
+"funció, l'execució es pararà després d'entrar en la funció."
 
 #: shell/debugcontroller.cpp:252
 #, kde-format
@@ -3269,7 +3270,7 @@ msgstr "Afig-lo a la sessió actual"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr "Obri'l a la sessió %1"
+msgstr "Obri'l en la sessió %1"
 
 #: shell/projectcontroller.cpp:929
 #, kde-format
@@ -4805,7 +4806,7 @@ msgid ""
 "at the top of the editor window."
 msgstr ""
 "Activa o desactiva la visualització d'un botó per a tancar en cada pestanya "
-"a la part superior de la finestra de l'editor."
+"en la part superior de la finestra de l'editor."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
@@ -5654,7 +5655,7 @@ msgstr "Segur que voleu suprimir irreversiblement la branca «%1»?"
 #: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr "Ja esteu a la branca «%1»\n"
+msgstr "Ja esteu en la branca «%1»\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:182
 #, kde-format
@@ -5731,7 +5732,7 @@ msgid ""
 "and the last commit on the selected branch.</p>"
 msgstr ""
 "<p>Mostra els canvis entre la branca actual (o l'àrea d'espera, si no està "
-"buida) i l'última entrega a la branca seleccionada.</p>"
+"buida) i l'última entrega en la branca seleccionada.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
