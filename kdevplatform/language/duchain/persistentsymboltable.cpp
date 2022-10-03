@@ -400,6 +400,8 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
     PersistentSymbolTableItem item;
     item.id = id;
 
+    // This function does not modify the item repository. write() rather than read() is called only in order to modify
+    // declarationsCache and importsCache. Making these two cache data members mutable would allow to call read() here.
     LockedItemRepository::write<PersistentSymbolTable>([&](PersistentSymbolTableRepo& repo) {
         ifVerifyVisitNesting(const auto guard = IterationCounter(repo);)
 
@@ -412,6 +414,24 @@ void PersistentSymbolTable::visitFilteredDeclarations(const IndexedQualifiedIden
         const auto declarations = Declarations(repositoryItem->declarations(), repositoryItem->declarationsSize(),
                                                repositoryItem->centralFreeItem);
 
+        // TODO Qt6: revisit when porting as this code - when called recursively - relies on QHash reference stability:
+        // 1. `cachedImports` is a copy of a value inside importsCache, so it doesn't rely on QHash reference stability.
+        // 2. `cached` is a reference to a value inside declarationsCache, but it is not used after the visitor is
+        //    called, so it does not rely on QHash reference stability either.
+        // 3. `cache` is a reference to a value inside a value inside declarationsCache. `cache` is filled before
+        //    `filterIterator` is constructed, so it is recursion-safe. `cache` is not used after the visitor is called,
+        //    so it also does not rely on QHash reference stability.
+        // 4. `filterIterator` contains a copy of the constData() pointer of a KDevVarLengthArray value inside a QHash.
+        //    If QVarLengthArray::size() is less or equal to its Prealloc, constData() points to an array within the
+        //    QVarLengthArray object. A next recursive call to visitFilteredDeclarations() may insert an id into
+        //    declarationsCache or a visibility into a value of declarationsCache. Such an insertion can move the
+        //    QVarLengthArray object in memory and make the copy of constData() pointer in `filterIterator` dangling.
+        //    A possible fix is to store raw pointers KDevVarLengthArray* as values of values of declarationsCache;
+        //    delete the pointers in ~PersistentSymbolTableRepo() and before removing values or values of values of
+        //    declarationsCache. An alternative fix is to create a local copy of the KDevVarLengthArray and pass the
+        //    copy's constData() to filterIterator. Better yet, make CachedDeclarations = QVector<IndexedDeclaration>
+        //    instead of KDevVarLengthArray<IndexedDeclaration>: the QVector::constData() pointer does not change until
+        //    the QVector is modified, which it isn't in this case.
         CachedIndexedRecursiveImports cachedImports;
         auto it = repo.importsCache.constFind(visibility);
         if (it != repo.importsCache.constEnd()) {
