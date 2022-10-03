@@ -85,6 +85,8 @@ bool endsWithWordBoundary(QStringView str)
 
 bool isOperator(const QString& str, int pos)
 {
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
     const auto op = QLatin1String("operator");
     if (pos < op.size()) {
         return false;
@@ -121,12 +123,16 @@ bool isOperator(const QString& str, int pos)
 // check for operator-> but don't get confused by operator-->
 bool isArrowOperator(const QString& str, int pos)
 {
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
     Q_ASSERT(str[pos] == QLatin1Char('>'));
     return pos > 0 && str[pos - 1] == QLatin1Char('-') && (pos == 1 || str[pos - 2] != QLatin1Char('-'));
 }
 
 int skipStringOrCharLiteral(const QString& str, int pos)
 {
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
     const auto quote = str[pos];
     Q_ASSERT(quote == QLatin1Char('\'') || quote == QLatin1Char('"'));
 
@@ -172,6 +178,8 @@ bool parenFits(QChar c1, QChar c2)
 
 int findClose(const QString& str, int pos)
 {
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
     int depth = 1;
     QVarLengthArray<QChar, 16> st;
     st.append(str[pos]);
@@ -217,6 +225,12 @@ int findClose(const QString& str, int pos)
 
 int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
 {
+    if (pos == str.size()) {
+        return pos;
+    }
+
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
     for (int a = pos; a < str.length(); a++) {
         switch (str[a].unicode()) {
         case '"':
