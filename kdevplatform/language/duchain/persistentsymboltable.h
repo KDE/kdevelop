@@ -67,6 +67,8 @@ public:
     void dump(const QTextStream& out);
 
     //Clears the internal cache. Should be called regularly to save memory
+    // TODO: currently the cache is never cleared. The sizes of the cache containers grow steadily and never shrink.
+    // Consider clearing the cache when at least some of its entries become useless, e.g. when a project is closed.
     void clearCache();
 };
 }
