@@ -22,6 +22,7 @@
 #include <KActionMenu>
 #include <KJobWidgets>
 #include <KConfigGroup>
+#include <kio_version.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
@@ -133,6 +134,8 @@ void FileManager::setupActions()
     action->setText(i18nc("@action switch to directory of current document", "Current Document Directory"));
     action->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     connect(action, &QAction::triggered, this, &FileManager::syncCurrentDocumentDirectory);
+
+#if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
     auto* diropActionCollection = dirop->actionCollection();
     tbActions = {
         diropActionCollection->action(QStringLiteral("back")),
@@ -144,6 +147,18 @@ void FileManager::setupActions()
         action,
         diropActionCollection->action(QStringLiteral("sorting menu")),
         diropActionCollection->action(QStringLiteral("show hidden")),
+#else
+    tbActions = {
+        dirop->action(KDirOperator::Back),
+        dirop->action(KDirOperator::Up),
+        dirop->action(KDirOperator::Home),
+        dirop->action(KDirOperator::Forward),
+        dirop->action(KDirOperator::Reload),
+        acmBookmarks,
+        action,
+        dirop->action(KDirOperator::SortMenu),
+        dirop->action(KDirOperator::ShowHiddenFiles),
+#endif
     };
 
     newFileAction = new QAction(this);
