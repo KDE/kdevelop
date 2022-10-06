@@ -80,7 +80,7 @@ msgstr "&Navegació"
 #, kde-format
 msgctxt "@title:menu"
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (edit)
 #: kdevelopui.rc:100

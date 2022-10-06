@@ -455,7 +455,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "&Add spaces around operators"
-msgstr "&Afig espais al voltant dels operadors"
+msgstr "Afi&g espais al voltant dels operadors"
 
 #. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
 #: astyle_preferences.ui:490
@@ -505,7 +505,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "&Keep one-line statements"
-msgstr "&Mantín declaracions d'una línia"
+msgstr "Man&tín declaracions d'una línia"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
 #: astyle_preferences.ui:529

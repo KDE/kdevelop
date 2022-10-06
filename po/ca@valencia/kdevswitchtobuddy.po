@@ -31,7 +31,7 @@ msgstr "Canvia a «%1»"
 #, kde-format
 msgctxt "@action"
 msgid "&Switch Definition/Declaration"
-msgstr "&Canvia entre definició/declaració"
+msgstr "Can&via entre definició/declaració"
 
 #: switchtobuddyplugin.cpp:133
 #, kde-format

@@ -168,7 +168,7 @@ msgstr "Nombre màxim de fils:"
 #, kde-format
 msgctxt "@option:check"
 msgid "&Use .clang-tidy file(s)"
-msgstr "&Utilitza els fitxers «.clang-tidy»"
+msgstr "Utilit&za els fitxers «.clang-tidy»"
 
 #. i18n: ectx: attribute (title), widget (QWidget, checksTab)
 #: config/clangtidyprojectconfigpage.ui:43

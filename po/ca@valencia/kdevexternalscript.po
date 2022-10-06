@@ -235,7 +235,7 @@ msgstr "Contingut del fitxer actual"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Output:"
-msgstr "&Eixida:"
+msgstr "Ei&xida:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:96

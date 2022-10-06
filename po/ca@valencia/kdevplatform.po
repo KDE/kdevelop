@@ -796,14 +796,14 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Rename"
-msgstr "&Canvia el nom"
+msgstr "Ca&nvia el nom"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: language/codegen/basicrefactoring.ui:45
 #, kde-format
 msgctxt "@action:button"
 msgid "&Cancel"
-msgstr "&Cancel·la"
+msgstr "C&ancel·la"
 
 #: language/codegen/codegenerator.cpp:133
 #, kde-format
@@ -2262,7 +2262,7 @@ msgstr "No l'òbrigues"
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
-msgstr "&Obri..."
+msgstr "O&bri..."
 
 #: shell/documentcontroller.cpp:606
 #, kde-format
@@ -2746,7 +2746,7 @@ msgstr "Crea un fitxer buit."
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr "&Afig una vista d'eina..."
+msgstr "Afi&g una vista d'eina..."
 
 #: shell/mainwindow_p.cpp:311
 #, kde-format

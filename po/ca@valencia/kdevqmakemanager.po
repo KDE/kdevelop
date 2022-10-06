@@ -87,7 +87,7 @@ msgstr "&Directori de construcció:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
-msgstr "&Instal·la a (camí.objectiu):"
+msgstr "I&nstal·la a (camí.objectiu):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85

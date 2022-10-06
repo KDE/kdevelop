@@ -53,7 +53,7 @@ msgstr "&Mostra les ordres però no les executes:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Insta&ll as root:"
-msgstr "I&nstala com a «root»:"
+msgstr "I&nstal·la com a «root»:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: makeconfig.ui:95

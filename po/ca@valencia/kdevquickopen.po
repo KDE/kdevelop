@@ -144,7 +144,7 @@ msgstr "Obertura &ràpida"
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &File"
-msgstr "Obri ràpidament un &fitxer"
+msgstr "Obri ràpidament un fi&txer"
 
 #: quickopenplugin.cpp:291
 #, kde-format

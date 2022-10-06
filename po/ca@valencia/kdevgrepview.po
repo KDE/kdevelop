@@ -63,13 +63,13 @@ msgstr[1] "%2, i %1 elements més"
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
-msgstr "Busca «%1» a %2"
+msgstr "Busca «%1» en %2"
 
 #: grepdialog.cpp:530
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
-msgstr "Busca «%1» a %2 (a l'hora %3)"
+msgstr "Busca «%1» en %2 (a l'hora %3)"
 
 #: grepjob.cpp:97
 #, kde-format
@@ -189,7 +189,7 @@ msgstr "Reduïx-ho t&ot"
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
-msgstr "&Expandix-ho tot"
+msgstr "Ex&pandix-ho tot"
 
 #: grepoutputview.cpp:86
 #, kde-format
@@ -252,7 +252,7 @@ msgstr "Aplica la substitució a tots els elements seleccionats"
 #, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
-msgstr "&Substituïx"
+msgstr "Su&bstituïx"
 
 #: grepviewplugin.cpp:76
 #, kde-format

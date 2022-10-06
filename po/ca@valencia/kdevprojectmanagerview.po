@@ -286,7 +286,7 @@ msgstr "Elimina"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
-msgstr "Crea un &fitxer..."
+msgstr "Crea un fi&txer..."
 
 #: projectmanagerviewplugin.cpp:287
 #, kde-format
@@ -298,13 +298,13 @@ msgstr "Crea una &carpeta..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
-msgstr "&Construïx"
+msgstr "Cons&truix"
 
 #: projectmanagerviewplugin.cpp:298
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
-msgstr "&Instal·la"
+msgstr "I&nstal·la"
 
 #: projectmanagerviewplugin.cpp:302
 #, kde-format
@@ -316,7 +316,7 @@ msgstr "&Neteja"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
-msgstr "&Afig al conjunt de construcció"
+msgstr "Afi&g al conjunt de construcció"
 
 #: projectmanagerviewplugin.cpp:313
 #, kde-format
@@ -436,7 +436,7 @@ msgstr "C&ancel·la"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
-msgstr "&Afig a l'objectiu de construcció"
+msgstr "Afi&g a l'objectiu de construcció"
 
 #: projecttreeview.cpp:348
 #, kde-format

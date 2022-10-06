@@ -74,7 +74,7 @@ msgstr "Configura els compiladors de C/C++"
 #, kde-format
 msgctxt "@action:button"
 msgid "&Add"
-msgstr "&Afig"
+msgstr "Afi&g"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #: compilerprovider/widget/compilerswidget.ui:35
