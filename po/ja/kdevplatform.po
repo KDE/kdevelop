@@ -6393,23 +6393,3 @@ msgstr "前のリビジョンとの差分"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "リビジョン間の差分"
-
-#, fuzzy
-#~| msgid "Configure Launches..."
-#~ msgctxt "@action:button"
-#~ msgid "Share Templates"
-#~ msgstr "起動設定..."
-
-#, fuzzy
-#~| msgid "Reformat source using AStyle"
-#~ msgctxt "@info:tooltip"
-#~ msgid "Reformat source using AStyle"
-#~ msgstr "AStyle を使ってソースを整形"
-
-#, fuzzy
-#~| msgid ""
-#~| "<b>Format files</b><p>Formatting functionality using <b>astyle</b> "
-#~| "library.</p>"
-#~ msgctxt "@info:whatsthis"
-#~ msgid "Source reformatting functionality using <b>astyle</b> library."
-#~ msgstr "<b>ファイルを整形</b><p><b>astyle</b> ライブラリを使って整形。</p>"
