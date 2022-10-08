@@ -225,13 +225,10 @@ int findClose(const QString& str, int pos)
 
 int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
 {
-    if (pos == str.size()) {
-        return pos;
-    }
+    const auto size = str.size();
+    Q_ASSERT(pos >= 0 && pos <= size);
 
-    Q_ASSERT(pos >= 0 && pos < str.size());
-
-    for (int a = pos; a < str.length(); a++) {
+    for (int a = pos; a < size; a++) {
         switch (str[a].unicode()) {
         case '"':
         case '\'':
@@ -246,7 +243,7 @@ int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
         case '{':
             a = findClose(str, a);
             if (a == -1)
-                return str.length();
+                return size;
             break;
         case '>':
             if (isOperator(str, a) || isArrowOperator(str, a))
@@ -264,7 +261,7 @@ int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
         }
     }
 
-    return str.length();
+    return size;
 }
 
 QString reduceWhiteSpace(const QString& str_)
