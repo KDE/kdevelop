@@ -34,24 +34,6 @@ int KDEVPLATFORMLANGUAGE_EXPORT findClose(const QString& str, int pos);
 int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(const QString& str, int pos, QChar validEnd = QLatin1Char( ' ' ));
 
 /**
- * Removes white space at the beginning and end, and replaces contiguous inner white-spaces with single white-spaces. Newlines are treated as whitespaces, the returned text will have no more newlines.
- */
-QString KDEVPLATFORMLANGUAGE_EXPORT reduceWhiteSpace(const QString& str);
-
-QString KDEVPLATFORMLANGUAGE_EXPORT stripFinalWhitespace(const QString& str);
-//
-/**
- * Fills all c++-style comments  within the given code with the given 'replacement' character
- * Newlines are preserved.
- */
-QString KDEVPLATFORMLANGUAGE_EXPORT clearComments(const QString& str, QChar replacement = QLatin1Char( ' ' ));
-/**
- * Fills all c++-strings within the given code with the given 'replacement' character
- * Comments should have been removed before.
- */
-QString KDEVPLATFORMLANGUAGE_EXPORT clearStrings(const QString& str, QChar replacement = QLatin1Char( ' ' ));
-
-/**
  * Extracts the interesting information out of a comment.
  * For example it removes all the stars at the beginning, and re-indents the text.
  */
@@ -62,20 +44,6 @@ QString KDEVPLATFORMLANGUAGE_EXPORT formatComment(const QString& comment);
  * For example it removes all the stars at the beginning, and re-indents the text.
  */
 QByteArray KDEVPLATFORMLANGUAGE_EXPORT formatComment(const QByteArray& comment);
-
-/**
- * Remove characters in @p str from the end of @p from
- *
- * @return number of stripped characters
- */
-int KDEVPLATFORMLANGUAGE_EXPORT rStrip(const QByteArray& str, QByteArray& from);
-
-/**
- * Remove characters in @p str from the beginning of @p from
- *
- * @return number of stripped characters
- */
-int KDEVPLATFORMLANGUAGE_EXPORT strip(const QByteArray& str, QByteArray& from);
 
 /**
  * Removes all whitespace from the string
