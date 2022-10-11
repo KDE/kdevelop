@@ -520,12 +520,14 @@ struct Visitor
         return new StructureType();
     }
 
+#if CINDEX_VERSION_MINOR >= 60
     template <CXTypeKind TK, EnableIf<TK == CXType_Atomic> = dummy>
     AbstractType* createType(CXType type, CXCursor parent)
     {
         // Decompose the atomic type.
         return makeType(clang_Type_getValueType(type), parent);
     }
+#endif
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::isPointerType(TK)> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
@@ -901,9 +903,11 @@ void Visitor::setTypeModifiers(CXType type, AbstractType* kdevType) const
     if (clang_isVolatileQualifiedType(type)) {
         modifiers |= AbstractType::VolatileModifier;
     }
+#if CINDEX_VERSION_MINOR >= 60
     if (TK == CXType_Atomic) {
         modifiers |= AbstractType::AtomicModifier;
     }
+#endif
     if (TK == CXType_Short || TK == CXType_UShort) {
         modifiers |= AbstractType::ShortModifier;
     }
@@ -1399,7 +1403,9 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
 #if CINDEX_VERSION_MINOR >= 38
     UseKind(CXType_Float128);
 #endif
+#if CINDEX_VERSION_MINOR >= 60
     UseKind(CXType_Atomic);
+#endif
     UseKind(CXType_Complex);
     UseKind(CXType_OCLImage1dRO);
     UseKind(CXType_OCLImage1dArrayRO);
