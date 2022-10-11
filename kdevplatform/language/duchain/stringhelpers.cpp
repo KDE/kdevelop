@@ -86,9 +86,15 @@ namespace KDevelop {
 class ParamIteratorPrivate
 {
 public:
+    explicit ParamIteratorPrivate(const QString& parens, const QString& source)
+        : m_parens(parens)
+        , m_source(source)
+    {
+    }
+
+    const QString m_parens;
+    const QString m_source;
     QString m_prefix;
-    QString m_source;
-    QString m_parens;
     int m_cur;
     int m_curEnd;
     int m_end;
@@ -305,12 +311,9 @@ QString removeWhitespace(const QString& str)
 ParamIterator::~ParamIterator() = default;
 
 ParamIterator::ParamIterator(const QString& parens, const QString& source, int offset)
-    : d_ptr(new ParamIteratorPrivate)
+    : d_ptr(new ParamIteratorPrivate{parens, source})
 {
     Q_D(ParamIterator);
-
-    d->m_source = source;
-    d->m_parens = parens;
 
     d->m_cur = offset;
     d->m_curEnd = offset;
