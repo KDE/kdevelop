@@ -234,7 +234,7 @@ public:
     }
 
     //Constructs m_identifiers
-    void splitIdentifiers(const QString& str, int start)
+    void splitIdentifiers(QStringView str, int start)
     {
         Q_ASSERT(dynamic);
         uint currentStart = start;
@@ -387,7 +387,7 @@ Identifier::Identifier(const IndexedString& str)
     }
 }
 
-Identifier::Identifier(const QString& id, uint start, uint* takenRange)
+Identifier::Identifier(QStringView id, uint start, uint* takenRange)
 {
     if (id.isEmpty()) {
         m_index = emptyConstantIdentifierPrivateIndex();
@@ -399,7 +399,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
     dd = new IdentifierPrivate<true>;
 
     ///Extract template-parameters
-    ParamIterator paramIt(QStringLiteral("<>:"), id, start);
+    ParamIterator paramIt(u"<>:", id, start);
     dd->m_identifier = IndexedString(paramIt.prefix().trimmed());
     while (paramIt) {
         appendTemplateIdentifier(IndexedTypeIdentifier(IndexedQualifiedIdentifier(QualifiedIdentifier(*paramIt))));
@@ -533,7 +533,7 @@ const IndexedString Identifier::identifier() const
         return cd->m_identifier;
 }
 
-void Identifier::setIdentifier(const QString& identifier)
+void Identifier::setIdentifier(QStringView identifier)
 {
     IndexedString id(identifier);
     if (id != this->identifier()) {
@@ -679,7 +679,7 @@ QualifiedIdentifier::QualifiedIdentifier(uint index)
 {
 }
 
-QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
+QualifiedIdentifier::QualifiedIdentifier(QStringView id, bool isExpression)
 {
     if (id.isEmpty()) {
         m_index = emptyConstantQualifiedIdentifierPrivateIndex();
@@ -1294,7 +1294,7 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const IndexedQualifiedIdentifier& i
     , m_pointerConstMask(0)
 { }
 
-IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isExpression)
+IndexedTypeIdentifier::IndexedTypeIdentifier(QStringView identifier, bool isExpression)
     : m_identifier(QualifiedIdentifier(identifier, isExpression))
     , m_isConstant(false)
     , m_isReference(false)

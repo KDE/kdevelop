@@ -10,6 +10,7 @@
 //krazy:excludeall=dpointer,inline
 
 #include <QMetaType>
+#include <QStringView>
 #include <QUrl>
 
 #include "referencecounting.h"
@@ -76,7 +77,11 @@ public:
      *
      * @note This is expensive.
      */
-    explicit IndexedString(const QString& str);
+    explicit IndexedString(QStringView str);
+    explicit IndexedString(const QString& str)
+        : IndexedString(QStringView{str})
+    {
+    }
 
     /**
      * When the information is already available, try using the other constructor.

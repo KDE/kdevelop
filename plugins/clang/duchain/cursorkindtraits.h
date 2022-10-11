@@ -288,14 +288,14 @@ constexpr bool isIdentifiedType(CXCursorKind CK)
     return isClass(CK) || isAliasType(CK) || CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl;
 }
 
-constexpr const char* delayedTypeName(CXTypeKind TK)
+constexpr const char16_t* delayedTypeName(CXTypeKind TK)
 {
-    return TK == CXType_Int128  ? "__int128"
-         : TK == CXType_UInt128 ? "unsigned __int128"
-         : TK == CXType_ObjCId  ? "id"
-         : TK == CXType_ObjCSel ? "SEL"
-         : TK == CXType_NullPtr ? "nullptr_t"
-         : nullptr;
+    return TK == CXType_Int128 ? u"__int128"
+        : TK == CXType_UInt128 ? u"unsigned __int128"
+        : TK == CXType_ObjCId  ? u"id"
+        : TK == CXType_ObjCSel ? u"SEL"
+        : TK == CXType_NullPtr ? u"nullptr_t"
+                               : nullptr;
 }
 
 }

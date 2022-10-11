@@ -37,6 +37,8 @@
 
 #include <clang-c/Documentation.h>
 
+#include <QVarLengthArray>
+
 #include <unordered_map>
 #include <typeinfo>
 
@@ -622,7 +624,7 @@ struct Visitor
     AbstractType *createType(CXType, CXCursor /*parent*/)
     {
         auto t = new DelayedType;
-        static const IndexedTypeIdentifier id(QLatin1String(CursorKindTraits::delayedTypeName(TK)));
+        static const IndexedTypeIdentifier id(CursorKindTraits::delayedTypeName(TK));
         t->setIdentifier(id);
         return t;
     }
@@ -737,12 +739,12 @@ struct Visitor
             return createDelayedType(type);
         }
 
-        QStringList typesStr;
-        QString tStr = ClangString(clang_getTypeSpelling(type)).toString();
-        ParamIterator iter(QStringLiteral("<>"), tStr);
+        const QString tStr = ClangString(clang_getTypeSpelling(type)).toString();
+        QVarLengthArray<QStringView, 8> typesStr;
+        ParamIterator iter(u"<>", tStr);
 
         while (iter) {
-            typesStr.append(*iter);
+            typesStr.push_back(*iter);
             ++iter;
         }
 
@@ -1061,8 +1063,8 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
             start = closingParen + 2; // + ')' + ' '
 
             // extract macro function parameters
-            const QString parameters = contents.mid(firstOpeningParen, closingParen - firstOpeningParen + 1);
-            ParamIterator paramIt(QStringLiteral("():"), parameters, 0);
+            const auto parameters = QStringView{contents}.mid(firstOpeningParen, closingParen - firstOpeningParen + 1);
+            ParamIterator paramIt(u"():", parameters, 0);
             while (paramIt) {
                 decl->addParameter(IndexedString(*paramIt));
                 ++paramIt;

@@ -236,7 +236,7 @@ IndexedString::IndexedString(const QUrl& url)
     Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
 }
 
-IndexedString::IndexedString(const QString& string)
+IndexedString::IndexedString(QStringView string)
     : IndexedString(string.toUtf8())
 {}
 

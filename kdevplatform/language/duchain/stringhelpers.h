@@ -14,6 +14,7 @@
 
 class QByteArray;
 class QString;
+class QStringView;
 
 namespace KDevelop {
 class ParamIteratorPrivate;
@@ -21,7 +22,7 @@ class ParamIteratorPrivate;
 /**
  * Searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
  */
-int KDEVPLATFORMLANGUAGE_EXPORT findClose(const QString& str, int pos);
+int KDEVPLATFORMLANGUAGE_EXPORT findClose(QStringView str, int pos);
 
 /**
  * Searches in the given string for a ',' or closing brace,
@@ -31,7 +32,7 @@ int KDEVPLATFORMLANGUAGE_EXPORT findClose(const QString& str, int pos);
  * @param validEnd when this is set differently, the function will stop when it finds a comma or the given character, and not at closing-braces.
  * @return  On fail, str.length() is returned, else the position of the closing character.
  */
-int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(const QString& str, int pos, QChar validEnd = QLatin1Char( ' ' ));
+int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(QStringView str, int pos, QChar validEnd = QLatin1Char(' '));
 
 /**
  * Extracts the interesting information out of a comment.
@@ -62,8 +63,10 @@ public:
      * If that end-character is encountered in the prefix, the iteration will be stopped.
      *
      * Example: When "<>:" is given, ParamIterator will only parse the first identifier of a C++ scope
+     *
+     * @warning The QStringView arguments must remain valid and unchanged during ParamIterator's lifetime.
      */
-    ParamIterator(const QString& parens, const QString& source, int start = 0);
+    explicit ParamIterator(QStringView parens, QStringView source, int start = 0);
     ~ParamIterator();
 
     ParamIterator& operator ++();
@@ -71,7 +74,7 @@ public:
     /**
      * Returns current found parameter
      */
-    QString operator*() const;
+    QStringView operator*() const;
 
     /**
      * Returns whether there is a current found parameter
@@ -81,7 +84,7 @@ public:
     /**
      * Returns the text in front of the first opening-paren(if none found then the whole text)
      */
-    QString prefix() const;
+    QStringView prefix() const;
 
     uint position() const;
 

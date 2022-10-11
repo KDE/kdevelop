@@ -424,8 +424,8 @@ void TestDUChain::testTemplate()
     QVERIFY(fooDecl->internalContext());
     QCOMPARE(fooDecl->internalContext()->localDeclarations().size(), 2);
 
-    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo< T >")).size(), 1);
-    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo< T >::bar")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier(u"foo< T >")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier(u"foo< T >::bar")).size(), 1);
 
     auto mainCtx = file.topContext()->localDeclarations().last()->internalContext()->childContexts().first();
     QVERIFY(mainCtx);
@@ -469,9 +469,9 @@ void TestDUChain::testNamespace()
     QCOMPARE(baz->qualifiedIdentifier().toString(), QString("foo::bar::baz"));
 
     for (auto ctx : {top, mainCtx}) {
-        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
-        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
-        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo::bar::baz")).size(), 1);
+        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier(u"foo")).size(), 1);
+        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier(u"foo::bar")).size(), 1);
+        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier(u"foo::bar::baz")).size(), 1);
     }
 }
 
@@ -490,9 +490,9 @@ void TestDUChain::testAutoTypeDeduction()
     DUContext* ctx = file.topContext().data();
     QVERIFY(ctx);
     QCOMPARE(ctx->localDeclarations().size(), 4);
-    QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
+    QCOMPARE(ctx->findDeclarations(QualifiedIdentifier(u"foo")).size(), 1);
     Declaration* decl = ctx->findDeclarations(QualifiedIdentifier(QStringLiteral("foo")))[0];
-    QCOMPARE(decl->identifier(), Identifier("foo"));
+    QCOMPARE(decl->identifier(), Identifier(u"foo"));
 #if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
 #endif
@@ -528,7 +528,7 @@ void TestDUChain::testTypeDeductionInTemplateInstantiation()
     // check 'foo' declaration
     decl = ctx->localDeclarations()[0];
     QVERIFY(decl);
-    QCOMPARE(decl->identifier(), Identifier("foo< T >"));
+    QCOMPARE(decl->identifier(), Identifier(u"foo< T >"));
 
     // check type of 'member' inside declaration-scope
     QCOMPARE(ctx->childContexts().size(), 1);
@@ -537,13 +537,13 @@ void TestDUChain::testTypeDeductionInTemplateInstantiation()
     // Should there really be two declarations?
     QCOMPARE(fooCtx->localDeclarations().size(), 2);
     decl = fooCtx->localDeclarations()[1];
-    QCOMPARE(decl->identifier(), Identifier("member"));
+    QCOMPARE(decl->identifier(), Identifier(u"member"));
 
     // check type of 'member' in definition of 'f'
     decl = ctx->localDeclarations()[1];
-    QCOMPARE(decl->identifier(), Identifier("f"));
+    QCOMPARE(decl->identifier(), Identifier(u"f"));
     decl = ctx->localDeclarations()[2];
-    QCOMPARE(decl->identifier(), Identifier("i"));
+    QCOMPARE(decl->identifier(), Identifier(u"i"));
 #if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
 #endif
@@ -564,7 +564,7 @@ void TestDUChain::testVirtualMemberFunction()
     QCOMPARE(top->localDeclarations().count(), 3);
     QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
     Declaration* decl = top->childContexts()[2]->localDeclarations()[0];
-    QCOMPARE(decl->identifier(), Identifier("ret"));
+    QCOMPARE(decl->identifier(), Identifier(u"ret"));
     QVERIFY(DUChainUtils::overridden(decl));
 }
 
@@ -579,10 +579,10 @@ void TestDUChain::testBaseClasses()
 
     QCOMPARE(top->localDeclarations().count(), 2);
     Declaration* baseDecl = top->localDeclarations().first();
-    QCOMPARE(baseDecl->identifier(), Identifier("Base"));
+    QCOMPARE(baseDecl->identifier(), Identifier(u"Base"));
 
     ClassDeclaration* inheritedDecl = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[1]);
-    QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
+    QCOMPARE(inheritedDecl->identifier(), Identifier(u"Inherited"));
 
     QVERIFY(inheritedDecl);
     QCOMPARE(inheritedDecl->baseClassesSize(), 1u);
@@ -671,14 +671,14 @@ void TestDUChain::testGetInheriters()
 
     QCOMPARE(top->localDeclarations().count(), 2);
     Declaration* baseDecl = top->localDeclarations().first();
-    QCOMPARE(baseDecl->identifier(), Identifier("Base"));
+    QCOMPARE(baseDecl->identifier(), Identifier(u"Base"));
 
     DUContext* baseCtx = baseDecl->internalContext();
     QVERIFY(baseCtx);
     QCOMPARE(baseCtx->localDeclarations().count(), 1);
 
     Declaration* innerDecl = baseCtx->localDeclarations().first();
-    QCOMPARE(innerDecl->identifier(), Identifier("Inner"));
+    QCOMPARE(innerDecl->identifier(), Identifier(u"Inner"));
     if (auto forward = dynamic_cast<ForwardDeclaration*>(innerDecl)) {
         innerDecl = forward->resolve(top);
     }
@@ -686,7 +686,7 @@ void TestDUChain::testGetInheriters()
 
     Declaration* inheritedDecl = top->localDeclarations().last();
     QVERIFY(inheritedDecl);
-    QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
+    QCOMPARE(inheritedDecl->identifier(), Identifier(u"Inherited"));
 
     uint maxAllowedSteps = uint(-1);
     auto baseInheriters = DUChainUtils::inheriters(baseDecl, maxAllowedSteps);
@@ -1213,20 +1213,20 @@ void TestDUChain::testMacroDependentHeader()
 
     // validate uses:
     QCOMPARE(top->usesCount(), 14);
-    QCOMPARE(top->uses()[0].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A"));
-    QCOMPARE(top->uses()[1].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A"));
-    QCOMPARE(top->uses()[2].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A::Q"));
-    QCOMPARE(top->uses()[3].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B"));
-    QCOMPARE(top->uses()[4].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B"));
-    QCOMPARE(top->uses()[5].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B::Q"));
-    QCOMPARE(top->uses()[6].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("a"));
-    QCOMPARE(top->uses()[7].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A::m"));
-    QCOMPARE(top->uses()[8].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("aq"));
-    QCOMPARE(top->uses()[9].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("A::Q::m"));
-    QCOMPARE(top->uses()[10].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("b"));
-    QCOMPARE(top->uses()[11].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B::m"));
-    QCOMPARE(top->uses()[12].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("bq"));
-    QCOMPARE(top->uses()[13].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier("B::Q::m"));
+    QCOMPARE(top->uses()[0].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"A"));
+    QCOMPARE(top->uses()[1].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"A"));
+    QCOMPARE(top->uses()[2].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"A::Q"));
+    QCOMPARE(top->uses()[3].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"B"));
+    QCOMPARE(top->uses()[4].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"B"));
+    QCOMPARE(top->uses()[5].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"B::Q"));
+    QCOMPARE(top->uses()[6].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"a"));
+    QCOMPARE(top->uses()[7].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"A::m"));
+    QCOMPARE(top->uses()[8].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"aq"));
+    QCOMPARE(top->uses()[9].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"A::Q::m"));
+    QCOMPARE(top->uses()[10].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"b"));
+    QCOMPARE(top->uses()[11].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"B::m"));
+    QCOMPARE(top->uses()[12].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"bq"));
+    QCOMPARE(top->uses()[13].usedDeclaration(top)->qualifiedIdentifier(), QualifiedIdentifier(u"B::Q::m"));
 }
 
 void TestDUChain::testHeaderParsingOrder1()
@@ -1668,7 +1668,7 @@ void TestDUChain::testExternC()
     DUChainReadLocker lock;
     auto top = file.topContext();
     QVERIFY(top);
-    QVERIFY(!top->findDeclarations(QualifiedIdentifier("foo")).isEmpty());
+    QVERIFY(!top->findDeclarations(QualifiedIdentifier(u"foo")).isEmpty());
 }
 
 void TestDUChain::testIncludeExternC()

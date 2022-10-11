@@ -20,7 +20,7 @@ bool endsWithWordBoundary(QStringView str)
     return !boundary.isLetterOrNumber() && boundary != QLatin1Char('_');
 }
 
-bool isOperator(const QString& str, int pos)
+bool isOperator(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
 
@@ -48,7 +48,7 @@ bool isOperator(const QString& str, int pos)
         --pos;
     }
 
-    auto prefix = QStringView(str).left(pos + 1);
+    auto prefix = str.left(pos + 1);
     if (!prefix.endsWith(op)) {
         return false;
     }
@@ -58,7 +58,7 @@ bool isOperator(const QString& str, int pos)
 }
 
 // check for operator-> but don't get confused by operator-->
-bool isArrowOperator(const QString& str, int pos)
+bool isArrowOperator(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
 
@@ -66,7 +66,7 @@ bool isArrowOperator(const QString& str, int pos)
     return pos > 0 && str[pos - 1] == QLatin1Char('-') && (pos == 1 || str[pos - 2] != QLatin1Char('-'));
 }
 
-int skipStringOrCharLiteral(const QString& str, int pos)
+int skipStringOrCharLiteral(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
 
@@ -85,19 +85,25 @@ int skipStringOrCharLiteral(const QString& str, int pos)
 namespace KDevelop {
 class ParamIteratorPrivate
 {
+    Q_DISABLE_COPY_MOVE(ParamIteratorPrivate)
 public:
-    explicit ParamIteratorPrivate(const QString& parens, const QString& source)
+    explicit ParamIteratorPrivate(QStringView parens, QStringView source)
         : m_parens(parens)
         , m_source(source)
     {
     }
 
-    const QString m_parens;
-    const QString m_source;
-    QString m_prefix;
+    const QStringView m_parens;
+    const QStringView m_source;
+    QStringView m_prefix;
     int m_cur;
     int m_curEnd;
     int m_end;
+
+    QStringView sourceRange(int first, int last) const
+    {
+        return m_source.mid(first, last - first);
+    }
 
     int next() const
     {
@@ -119,7 +125,7 @@ bool parenFits(QChar c1, QChar c2)
         return false;
 }
 
-int findClose(const QString& str, int pos)
+int findClose(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
 
@@ -166,7 +172,7 @@ int findClose(const QString& str, int pos)
     return -1;
 }
 
-int findCommaOrEnd(const QString& str, int pos, QChar validEnd)
+int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
 {
     const auto size = str.size();
     Q_ASSERT(pos >= 0 && pos <= size);
@@ -310,7 +316,7 @@ QString removeWhitespace(const QString& str)
 
 ParamIterator::~ParamIterator() = default;
 
-ParamIterator::ParamIterator(const QString& parens, const QString& source, int offset)
+ParamIterator::ParamIterator(QStringView parens, QStringView source, int offset)
     : d_ptr(new ParamIteratorPrivate{parens, source})
 {
     Q_D(ParamIterator);
@@ -332,7 +338,7 @@ ParamIterator::ParamIterator(const QString& parens, const QString& source, int o
 
     if (foundEnd != -1) {
         //We have to stop the search, because we found an interrupting end-sign before the opening-paren
-        d->m_prefix = d->m_source.mid(offset, foundEnd - offset);
+        d->m_prefix = d->sourceRange(offset, foundEnd);
 
         d->m_curEnd = d->m_end = d->m_cur = foundEnd;
     } else {
@@ -341,7 +347,7 @@ ParamIterator::ParamIterator(const QString& parens, const QString& source, int o
             d->m_cur = parenBegin + 1;
             d->m_curEnd = d->next();
             if (d->m_curEnd != d->m_source.length()) {
-                d->m_prefix = d->m_source.mid(offset, parenBegin - offset);
+                d->m_prefix = d->sourceRange(offset, parenBegin);
                 return;
             } // else: the paren was not closed. It might be an identifier like "operator<", so count everything as prefix.
         } // else: we have neither found an ending-character, nor an opening-paren, so take the whole input and end.
@@ -373,13 +379,13 @@ ParamIterator& ParamIterator::operator ++()
     return *this;
 }
 
-QString ParamIterator::operator*() const
+QStringView ParamIterator::operator*() const
 {
     Q_D(const ParamIterator);
 
     Q_ASSERT(*this);
 
-    return d->m_source.mid(d->m_cur, d->m_curEnd - d->m_cur).trimmed();
+    return d->sourceRange(d->m_cur, d->m_curEnd).trimmed();
 }
 
 ParamIterator::operator bool() const
@@ -389,7 +395,7 @@ ParamIterator::operator bool() const
     return d->m_cur < d->m_end;
 }
 
-QString ParamIterator::prefix() const
+QStringView ParamIterator::prefix() const
 {
     Q_D(const ParamIterator);
 

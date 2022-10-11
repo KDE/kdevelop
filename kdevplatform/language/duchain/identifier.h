@@ -10,6 +10,8 @@
 
 #include <QList>
 #include <QMetaType>
+#include <QStringView>
+
 #include <util/kdevvarlengtharray.h>
 
 #include <language/languageexport.h>
@@ -156,7 +158,12 @@ public:
      * @warning The identifier is parsed in a C++-similar way, and the result may not be what you expect.
      *          If you want to prevent that parsing, use the constructor that takes IndexedString.
      */
-    explicit Identifier(const QString& str, uint start = 0, uint* takenRange = nullptr);
+    explicit Identifier(QStringView str, uint start = 0, uint* takenRange = nullptr);
+    explicit Identifier(const QString& str, uint start = 0, uint* takenRange = nullptr)
+        : Identifier(QStringView{str}, start, takenRange)
+    {
+    }
+
     /**
      * Preferred constructor, use this if you already have an IndexedString available. This does not decompose the given string.
      */
@@ -183,7 +190,7 @@ public:
     void setUnique(int token);
 
     const IndexedString identifier() const;
-    void setIdentifier(const QString& identifier);
+    void setIdentifier(QStringView identifier);
     /**
      * Should be preferred over the other version
      */
@@ -241,7 +248,12 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 {
 public:
-    explicit QualifiedIdentifier(const QString& id, bool isExpression = false);
+    explicit QualifiedIdentifier(QStringView id, bool isExpression = false);
+    explicit QualifiedIdentifier(const QString& id, bool isExpression = false)
+        : QualifiedIdentifier(QStringView{id}, isExpression)
+    {
+    }
+
     explicit QualifiedIdentifier(const Identifier& id);
     QualifiedIdentifier(const QualifiedIdentifier& id);
     explicit QualifiedIdentifier(uint index);
@@ -381,7 +393,7 @@ public:
      * Variables like pointerDepth, isReference, etc. are not parsed from the string, so this parsing is quite limited.
      */
     explicit IndexedTypeIdentifier(const IndexedQualifiedIdentifier& identifier = IndexedQualifiedIdentifier());
-    explicit IndexedTypeIdentifier(const QString& identifer, bool isExpression = false);
+    explicit IndexedTypeIdentifier(QStringView identifer, bool isExpression = false);
 
     bool isReference() const;
     void setIsReference(bool);

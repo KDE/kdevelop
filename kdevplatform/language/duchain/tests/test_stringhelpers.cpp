@@ -182,7 +182,7 @@ void TestStringHelpers::testParamIterator()
     QFETCH(QString, source);
     QFETCH(QStringList, params);
 
-    const auto parens = QStringLiteral("<>:");
+    const auto parens = u"<>:";
 
     auto it = KDevelop::ParamIterator(parens, source);
 
