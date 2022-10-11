@@ -370,9 +370,9 @@ ParamIterator& ParamIterator::operator ++()
     return *this;
 }
 
-QString ParamIterator::operator *()
+QString ParamIterator::operator*() const
 {
-    Q_D(ParamIterator);
+    Q_D(const ParamIterator);
 
     Q_ASSERT(*this);
 

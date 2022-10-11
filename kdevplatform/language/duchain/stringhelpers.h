@@ -71,7 +71,7 @@ public:
     /**
      * Returns current found parameter
      */
-    QString operator *();
+    QString operator*() const;
 
     /**
      * Returns whether there is a current found parameter
