@@ -99,9 +99,13 @@ void Plugin::launchHeaptrack()
     auto defaultLaunch = runController->defaultLaunch();
     if (!defaultLaunch) {
         runController->showConfigurationDialog();
+        defaultLaunch = runController->defaultLaunch();
+        if (!defaultLaunch) {
+            postErrorMessage(i18n("Configure a native application launch to perform Heaptrack analysis on."));
+            return;
+        }
     }
 
-    // TODO: catch if still no defaultLaunch
     if (!defaultLaunch->type()->launcherForId(QStringLiteral("nativeAppLauncher"))) {
         postErrorMessage(i18n("Heaptrack analysis can be started only for native applications."));
         return;
