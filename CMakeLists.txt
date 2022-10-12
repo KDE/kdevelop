@@ -14,7 +14,7 @@ if (_micro LESS "10")
 endif()
 set(RELEASE_SERVICE_BASED_PATCHLEVEL "${RELEASE_SERVICE_VERSION_MAJOR}${RELEASE_SERVICE_VERSION_MINOR}${_micro}")
 
-project(KDevelop VERSION "5.9.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
+project(KDevelop VERSION "5.10.${RELEASE_SERVICE_BASED_PATCHLEVEL}")
 
 # KDevelop SOVERSION
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
