@@ -140,6 +140,12 @@ void TestStringHelpers::testParamIterator_data()
     addTest("Empty", {});
     addTest("Foo<T1, T2>", {"T1", "T2"});
     addTest("operator<", {});
+
+    // These are valid C++ snippets, but I couldn't make such strings be passed to ParamIterator in practice.
+    addTest("operator< <QString>", {"QString"});
+    addTest("operator<<<KDevVarLengthArray, Path >", {"KDevVarLengthArray", "Path"});
+    addTest("operator<=>< QRegularExpression,IndexedString*,char\t>", {"QRegularExpression", "IndexedString*", "char"});
+
     addTest("__not_overloaded2<_Tp, foo<bar>, __void_t<decltype(std::declval<_Tp>().operator<(std::declval<_Up>()))>>",
             {"_Tp", "foo<bar>", "__void_t<decltype(std::declval<_Tp>().operator<(std::declval<_Up>()))>"});
     addTest("__not_overloaded2<_Tp, foo<bar>, __void_t<decltype(std::declval<_Tp>().operator>(std::declval<_Up>()))>>",

@@ -326,7 +326,10 @@ ParamIterator::ParamIterator(QStringView parens, QStringView source, int offset)
     d->m_end = d->m_source.length();
 
     ///The whole search should be stopped when: A) The end-sign is found on the top-level B) A closing-brace of parameters was found
-    int parenBegin = d->m_source.indexOf(parens[0], offset);
+    int parenBegin = offset - 1;
+    do {
+        parenBegin = d->m_source.indexOf(parens[0], parenBegin + 1);
+    } while (parenBegin != -1 && source[parenBegin] == QLatin1Char{'<'} && isOperator(source, parenBegin));
 
     //Search for an interrupting end-sign that comes before the found paren-begin
     int foundEnd = -1;
