@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2022-09-07 18:03+0300\n"
+"PO-Revision-Date: 2022-10-13 00:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: scratchpad.cpp:104 scratchpadview.cpp:87
 #, kde-format
@@ -75,9 +75,9 @@ msgid ""
 "Scratchpad lets you quickly run and experiment with code without a full "
 "project, and even store todos. Create a new scratch to start."
 msgstr ""
-"Karalama Defteri, tam bir proje başlatmadan hızlıca kod çalıştırmanızı, "
-"deneyler yapmanızı ve hatta yapılacaklar saklamanızı sağlar. Başlamak için "
-"yeni bir tane oluşturun."
+"Karalama Defteri, tam bir proje başlatmadan tez kod çalıştırmanızı, deneyler "
+"yapmanızı ve hatta yapılacaklar saklamanızı sağlar. Başlamak için yeni bir "
+"tane oluşturun."
 
 #: scratchpadview.cpp:114
 #, kde-format

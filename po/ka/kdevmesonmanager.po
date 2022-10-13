@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2022-09-12 09:37+0200\n"
+"PO-Revision-Date: 2022-10-12 09:58+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -510,13 +510,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Additional Meson Option"
-msgstr ""
+msgstr "აირჩიეთ Meson-ის დამატებითი პარამეტრი"
 
 #: settings/mesonrewriterpage.cpp:407
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
-msgstr ""
+msgstr "Meson-ისთვის მისამატებელი პარამეტრი:"
 
 #: settings/mesonrewriterpage.cpp:438
 #, kde-format

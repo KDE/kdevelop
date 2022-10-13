@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2022-08-29 20:35+0300\n"
+"PO-Revision-Date: 2022-10-13 00:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: appwizarddialog.cpp:23
 #, kde-format
@@ -37,7 +37,7 @@ msgstr "Genel"
 #, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
-msgstr "Sürüm Denetim"
+msgstr "Sürüm Denetimi"
 
 #: appwizardplugin.cpp:69
 #, kde-format
@@ -69,13 +69,13 @@ msgstr "Şablondan yeni proje oluşturulamadı."
 #: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
-msgstr "Lütfen Sürüm Denetim aracı görünümüne göz atın."
+msgstr "Lütfen Sürüm Denetimi araç görünümüne bakın."
 
 #: appwizardplugin.cpp:136
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr "Sürüm Denetim Sistemi Hatası"
+msgstr "Sürüm Denetimi Sistemi Hatası"
 
 #: appwizardplugin.cpp:152
 #, kde-format
@@ -223,4 +223,4 @@ msgstr "Hiçbiri"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
-msgstr "Sürüm denetim sistemi:"
+msgstr "Sürüm denetimi sistemi:"

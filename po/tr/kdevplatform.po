@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-09-24 00:43+0000\n"
-"PO-Revision-Date: 2022-09-07 20:10+0300\n"
+"PO-Revision-Date: 2022-10-13 00:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1940,7 +1940,7 @@ msgstr "Uygulamaları baştan başlatır."
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
-msgstr "Yarıda Kesme"
+msgstr "Yarıda Kes"
 
 #: shell/debugcontroller.cpp:206
 #, kde-format
@@ -2018,7 +2018,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
-msgstr "Yöner&Genin üzerinden atla"
+msgstr "Yöner&genin Üzerinden Atla"
 
 #: shell/debugcontroller.cpp:236
 #, kde-format
@@ -2058,7 +2058,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
-msgstr "Yönergenin Arasına Gir"
+msgstr "Yönergenin A&rasına Gir"
 
 #: shell/debugcontroller.cpp:253
 #, kde-format
@@ -2393,7 +2393,7 @@ msgid ""
 "Could not annotate the document because it is not part of a version-"
 "controlled project."
 msgstr ""
-"Belgeye bilgi notu yazılamadı; çünkü sürüm denetim ile izlenen bir proje "
+"Belgeye bilgi notu yazılamadı; çünkü sürüm denetimi ile izlenen bir proje "
 "değil."
 
 #: shell/editorconfigpage.cpp:86
@@ -2807,8 +2807,8 @@ msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
-"Var olan bir KDevelop projesinin yapı sistemi ayar dosyasını veya bir proje "
-"açmak için herhangi bir dizini seçin"
+"Bir projeyi açmak için yapı sistemi dosyası, KDevelop projesi veya bir "
+"klasör açın"
 
 #: shell/openprojectdialog.cpp:136 shell/openprojectdialog.cpp:156
 #, kde-format
@@ -4346,8 +4346,8 @@ msgid ""
 msgstr ""
 "<p>Bir proje bu sayıdan daha fazla dosyaya sahip olduğunda, "
 "basitleştirilmiş\n"
-"kipe ayrıştırılacak ve daha az bilgi toplayarak verimlilik arttırılacaktır. "
-"Genel kod gezintisi ve hızlı açma yetenekleri kısıtlanacaktır.</p>"
+"kipe ayrıştırılacak ve daha az bilgi toplayarak verimlilik artırılacaktır. "
+"Genel kod gezintisi ve tez açma yetenekleri kısıtlanacaktır.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/settings/languagepreferences.ui:382
@@ -4579,7 +4579,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr "Kate Girintileme Kipinin Üzerine Yaz"
+msgstr "Kate Girintileme Kipini Geçersiz Kıl"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36

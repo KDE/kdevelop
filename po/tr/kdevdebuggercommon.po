@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2022-09-02 11:59+0300\n"
+"PO-Revision-Date: 2022-10-13 00:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: dialogs/processselection.cpp:28
 #, kde-format
@@ -147,7 +147,7 @@ msgid ""
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
 "<b>Çekirdek dosyasını gözden geçir</b><p>Bu, genel olarak uygulamanın "
-"çöküşünden, örneğin ayrıştırma hatasından sonra oluşan çekirdek dosyayı "
+"çöküşünden, örneğin bölütleme hatasından sonra oluşan çekirdek dosyayı "
 "yükler. Çekirdek dosyası uygulamanın çökme sırasındaki belleğinin bir "
 "görüntüsünü sunar ve bu görüntü çökme sonrası çözümleme yapabilmenizi sağlar."
 "</p>"
@@ -438,7 +438,7 @@ msgstr "XMM"
 #: registers/registercontroller_x86.cpp:100
 #, kde-format
 msgid "Segment"
-msgstr "Parça"
+msgstr "Bölüt"
 
 #: registers/registersview.cpp:51
 #, kde-format
@@ -559,7 +559,7 @@ msgstr "%1 Komut Çubuğu"
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
-msgstr "Yarıda Kesme"
+msgstr "Yarıda Kes"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:70

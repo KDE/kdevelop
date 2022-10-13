@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevwelcomepage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-20 00:43+0000\n"
-"PO-Revision-Date: 2022-09-07 20:10+0300\n"
+"PO-Revision-Date: 2022-10-13 00:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: qml/area_code.qml:76
 msgid "Need Help?"
@@ -27,11 +27,11 @@ msgstr "KDevelop.org"
 
 #: qml/area_code.qml:91
 msgid "Learn about KDevelop"
-msgstr "KDevelop'u Öğrenin"
+msgstr "KDevelop'u öğrenin"
 
 #: qml/area_code.qml:96
 msgid "Join KDevelop's team!"
-msgstr "KDevelop ekibine katılın!"
+msgstr "KDevelop takımına katılın!"
 
 #: qml/area_code.qml:101
 msgid "Handbook"
@@ -47,7 +47,7 @@ msgstr "Yeni bir Başlatıcı yapılandır"
 
 #: qml/area_debug.qml:38
 msgid "Attach to Process"
-msgstr "Sürece Ekle"
+msgstr "Sürece İliştir"
 
 #: qml/area_debug.qml:39
 msgid "Debug your program"
@@ -135,7 +135,7 @@ msgstr ""
 "<p>Yukarıdaki düğmeler aracığıyla var olan bir projeyi açarak veya yeni bir "
 "tane oluşturarak çalışmaya başlayabilirsiniz.</p>\n"
 "<p>Yardıma gereksiniminiz varsa lütfen <a href=\"https://userbase.kde.org/"
-"KDevelop\"> Kullanıcı Kılavuzu'na bir göz atın.</a></p>"
+"KDevelop\"> Kullanıcı Kılavuzu'na</a> bir göz atın.</p>"
 
 #: qml/Develop.qml:70
 msgid ""
@@ -157,8 +157,8 @@ msgstr ""
 "Microsoft Visual Studio IDE'nin son bir sürümünü kurmanız ve ortamın "
 "düzgünce kurulduğundan emin olmanız gerekmektedir.</p>\n"
 "<p>Daha fazla yardıma gereksiniminiz varsa lütfen <a href=\"https://userbase."
-"kde.org/KDevelop4/Manual/WindowsSetup\">Windows yönergeleri altında "
-"KDevelop'a bakın.</a></p>"
+"kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop Windows sürümü yönergeleri</"
+"a>'ne bakın.</p>"
 
 #: qml/Develop.qml:107
 msgid "%1: %2"

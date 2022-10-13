@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2022-09-07 17:58+0300\n"
+"PO-Revision-Date: 2022-10-13 00:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: actionsquickopenprovider.cpp:36
 #, kde-format
@@ -58,7 +58,7 @@ msgstr "Dosya: %1"
 #: kdevquickopen.rc:42
 #, kde-format
 msgid "Quick Open Toolbar"
-msgstr "Hızlı Aç Araç Çubuğu"
+msgstr "Tez Aç Araç Çubuğu"
 
 #: projectfilequickopen.cpp:89 projectfilequickopen.cpp:158
 #, kde-format
@@ -137,43 +137,43 @@ msgstr "Eylemler"
 #, kde-format
 msgctxt "@action"
 msgid "&Quick Open"
-msgstr "&Hızlı Aç"
+msgstr "&Tez Aç"
 
 #: quickopenplugin.cpp:285
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &File"
-msgstr "Hızlı &Dosya Aç"
+msgstr "Tez &Dosya Aç"
 
 #: quickopenplugin.cpp:291
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Class"
-msgstr "Hızlı &Sınıf Aç"
+msgstr "Tez &Sınıf "
 
 #: quickopenplugin.cpp:297
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Function"
-msgstr "Hızlı &İşlev Aç"
+msgstr "Tez &İşlev Aç"
 
 #: quickopenplugin.cpp:303
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Already Open File"
-msgstr "&Açık Dosyayı Hızlı Aç"
+msgstr "Önceden&Açılmış Dosyayı Tez Aç"
 
 #: quickopenplugin.cpp:308
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Documentation"
-msgstr "Hızlı &Belgelendirme Aç"
+msgstr "Tez &Belgelendirme Aç"
 
 #: quickopenplugin.cpp:314
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Actions"
-msgstr "Hızlı &Açma Eylemleri"
+msgstr "Tez &Açma Eylemleri"
 
 #: quickopenplugin.cpp:319
 #, kde-format
@@ -191,7 +191,7 @@ msgstr "Tanımlamaya Git"
 #, kde-format
 msgctxt "@action"
 msgid "Embedded Quick Open"
-msgstr "Gömülü Hızlı Aç"
+msgstr "Gömülü Tez Aç"
 
 #: quickopenplugin.cpp:337
 #, kde-format
@@ -215,7 +215,7 @@ msgstr "Ana Hat"
 #, kde-format
 msgctxt "@title:window"
 msgid "Quick Open"
-msgstr "Hızlı Aç"
+msgstr "Tez Aç"
 
 #: quickopenplugin.cpp:832
 #, kde-format
@@ -228,7 +228,7 @@ msgstr "Ana Hat"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
-msgstr "Hızlı Aç..."
+msgstr "Tez Aç..."
 
 #: quickopenplugin.cpp:943
 #, kde-format
