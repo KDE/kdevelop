@@ -39,6 +39,7 @@
 
 #include <QVarLengthArray>
 
+#include <algorithm>
 #include <unordered_map>
 #include <typeinfo>
 
@@ -1049,36 +1050,55 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
     // And no way to get the actual definition text range
     // Should be quite easy to expose that in libclang, though
     // Let' still get some basic support for this and parse on our own, it's not that difficult
-    const QString contents = ClangUtils::getRawContents(unit, range);
-    const int firstOpeningParen = contents.indexOf(QLatin1Char('('));
-    const int firstWhitespace = contents.indexOf(QLatin1Char(' '));
-    const bool isFunctionLike = (firstOpeningParen != -1) && (firstOpeningParen < firstWhitespace);
-    decl->setFunctionLike(isFunctionLike);
 
-    // now extract the actual definition text
-    int start = -1;
-    if (isFunctionLike) {
-        const int closingParen = findClose(contents, firstOpeningParen);
-        if (closingParen != -1) {
-            start = closingParen + 2; // + ')' + ' '
+    // Macro definition strings get '\n' replaced with "<br/>", then are rendered as HTML, which ignores whitespace.
+    // Newline characters are escaped in macro definiton C++ code. ClangUtils::getRawContents() preserves the escape
+    // characters: its return value contains "\\\n". ClangUtils::getRawContents() removes whitespace, including the
+    // escaped newline characters, at the end of the definition string.
+    // Trim definition string views before passing them to MacroDefinition::setDefinition() to facilitate testing.
+    // This trimming never strips newline characters in practice (shouldn't have been a problem even if it did).
+    const auto setDefinition = [decl](QStringView definition) {
+        decl->setDefinition(IndexedString{definition.trimmed()});
+    };
 
-            // extract macro function parameters
-            const auto parameters = QStringView{contents}.mid(firstOpeningParen, closingParen - firstOpeningParen + 1);
-            ParamIterator paramIt(u"():", parameters, 0);
-            while (paramIt) {
-                decl->addParameter(IndexedString(*paramIt));
-                ++paramIt;
-            }
-        }
-    } else {
-        start = firstWhitespace + 1; // + ' '
+    const QString rawContentsString = ClangUtils::getRawContents(unit, range);
+    // Use a QStringView contents, because it works as fast as or faster than a QString in the code below.
+    const QStringView contents(rawContentsString);
+
+    const auto isPartOfIdentifier = [](QChar c) {
+        return c.isLetterOrNumber() || c == QLatin1Char('_');
+    };
+    const int posAfterMacroId =
+        std::find_if_not(contents.cbegin(), contents.cend(), isPartOfIdentifier) - contents.cbegin();
+
+    if (posAfterMacroId == contents.size() || contents[posAfterMacroId] != QLatin1Char{'('}) {
+        // '(', a space, a tab or '/' (a comment) usually follows a macro identifier.
+        // Compilers consider a macro function-like only if '(' immediately follows its identifier.
+        decl->setFunctionLike(false);
+        setDefinition(contents.mid(posAfterMacroId));
+        return;
     }
-    if (start == -1) {
+
+    decl->setFunctionLike(true);
+
+    const auto openingParen = posAfterMacroId;
+    const auto closingParen = findClose(contents, openingParen);
+    if (closingParen == -1) {
         // unlikely: invalid macro definition, insert the complete #define statement
-        decl->setDefinition(IndexedString(QLatin1String("#define ") + contents));
-    } else if (start < contents.size()) {
-        decl->setDefinition(IndexedString(contents.mid(start)));
-    } // else: macro has no body => leave the definition text empty
+        const QString definition = QLatin1String("#define ") + contents;
+        setDefinition(definition);
+        return;
+    }
+
+    setDefinition(contents.mid(closingParen + 1));
+
+    // extract macro function parameters
+    const auto parameters = contents.mid(openingParen, closingParen - openingParen + 1); // include both '(' and ')'
+    ParamIterator paramIt(u"():", parameters, 0);
+    while (paramIt) {
+        decl->addParameter(IndexedString(*paramIt));
+        ++paramIt;
+    }
 }
 
 template<CXCursorKind CK>

@@ -256,17 +256,29 @@ void TestDUChain::testMacroDefinition_data()
             << QString{"#define " + code} << definition << isFunctionLike << parameters;
     };
 
+    addTest("macro", "");
     addTest("m1 1", "1");
     addTest("m int x", "int x");
     addTest("m (u + v)", "(u + v)");
+    addTest("m\tn", "n");
+    addTest("m/*o*/long", "/*o*/long");
+    addTest("m/*(x)*/ long", "/*(x)*/ long");
 
+    addTest("mac(x)", "", true, {"x"});
+    addTest("VARG_1(...)", "", true, {"..."});
     addTest("mac(x) x", "x", true, {"x"});
     addTest("mc(u)\tu *2 \t/  Limit", "u *2 \t/  Limit", true, {"u"});
+    addTest("m(x)x", "x", true, {"x"});
+    addTest("m(x)long x", "long x", true, {"x"});
+    addTest("m(x)/*A*/x", "/*A*/x", true, {"x"});
     addTest("XYZ_(...) __VA_ARGS__", "__VA_ARGS__", true, {"..."});
 
+    addTest("macro(may,be)", "", true, {"may", "be"});
     addTest("m(x, \ty)\tx", "x", true, {"x", "y"});
     addTest("m(x, y) x / y", "x / y", true, {"x", "y"});
     addTest("M_N(X, ...) f(X __VA_OPT__(,) __VA_ARGS__)", "f(X __VA_OPT__(,) __VA_ARGS__)", true, {"X", "..."});
+
+    addTest("MM\t\\\n\t471", "\\\n\t471");
 }
 
 void TestDUChain::testInclude()
