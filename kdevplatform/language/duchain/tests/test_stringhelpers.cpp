@@ -130,11 +130,15 @@ void TestStringHelpers::benchFormatComment()
 
 void TestStringHelpers::testParamIterator_data()
 {
+    QTest::addColumn<QString>("parens");
     QTest::addColumn<QString>("source");
     QTest::addColumn<QStringList>("params");
 
     auto addTest = [](const QString& source, const QStringList& params) {
-        QTest::addRow("%s", qPrintable(source)) << source << params;
+        QTest::addRow("%s", qPrintable(source)) << QStringLiteral("<>:") << source << params;
+    };
+    auto addMacroTest = [](const QString& source, const QStringList& params) {
+        QTest::addRow("%s", qPrintable(source)) << QStringLiteral("()") << source << params;
     };
 
     addTest("Empty", {});
@@ -181,14 +185,15 @@ void TestStringHelpers::testParamIterator_data()
     addTest("bogus<_Tp, _Up, invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>", {"_Tp", "_Up", "invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>"});
     addTest("hardToParse<A<B>", {"A<B"});
     addTest("hardToParse<(A>B)>", {"(A>B)"});
+
+    addMacroTest("( /*a)b*/ x , /*,*/y,z )", {"/*a)b*/ x", "/*,*/y", "z"});
 }
 
 void TestStringHelpers::testParamIterator()
 {
+    QFETCH(QString, parens);
     QFETCH(QString, source);
     QFETCH(QStringList, params);
-
-    const auto parens = u"<>:";
 
     auto it = KDevelop::ParamIterator(parens, source);
 

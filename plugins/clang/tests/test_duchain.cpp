@@ -278,6 +278,9 @@ void TestDUChain::testMacroDefinition_data()
     addTest("m(x, y) x / y", "x / y", true, {"x", "y"});
     addTest("M_N(X, ...) f(X __VA_OPT__(,) __VA_ARGS__)", "f(X __VA_OPT__(,) __VA_ARGS__)", true, {"X", "..."});
 
+    addTest("m( /*a)b*/ x )x", "x", true, {"/*a)b*/ x"});
+    addTest("_(\t/* u,v,*/c\t)\tc/3*(c-5)", "c/3*(c-5)", true, {"/* u,v,*/c"});
+
     addTest("MM\t\\\n\t471", "\\\n\t471");
 }
 

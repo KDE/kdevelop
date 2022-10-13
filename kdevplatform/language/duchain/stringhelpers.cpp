@@ -80,7 +80,26 @@ int skipStringOrCharLiteral(QStringView str, int pos)
     }
     return pos;
 }
+
+/// Skips multi-line comments.
+/// No need to support single-line comments, because they cannot appear within a macro parameter list;
+/// in other contexts libclang removes comments from each string that ends up here.
+int skipComment(QStringView str, int pos)
+{
+    Q_ASSERT(pos >= 0 && pos < str.size());
+    Q_ASSERT(str[pos] == QLatin1Char{'/'});
+
+    if (pos + 1 == str.size() || str[pos + 1] != QLatin1Char{'*'})
+        return pos; // not a comment
+    pos += 2;
+
+    while (pos < str.size() && (str[pos] != QLatin1Char{'/'} || str[pos - 1] != QLatin1Char{'*'})) {
+        ++pos;
+    }
+
+    return pos;
 }
+} // unnamed namespace
 
 namespace KDevelop {
 class ParamIteratorPrivate
@@ -162,6 +181,9 @@ int findClose(QStringView str, int pos)
         case '\'':
             a = skipStringOrCharLiteral(str, a);
             break;
+        case '/':
+            a = skipComment(str, a);
+            break;
         }
 
         if (depth == 0) {
@@ -182,6 +204,9 @@ int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
         case '"':
         case '\'':
             a = skipStringOrCharLiteral(str, a);
+            break;
+        case '/':
+            a = skipComment(str, a);
             break;
         case '<':
             if (isOperator(str, a))
