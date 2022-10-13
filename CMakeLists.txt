@@ -36,9 +36,7 @@ if (APPLE)
 endif()
 
 # plugin version as used e.g. in plugin installation path
-# started off as 30 when 5.2 was released, incremented along the SO version so far
-# TODO: perhaps switch directly to KDEVELOP_SOVERSION?
-math(EXPR KDEV_PLUGIN_VERSION "30 + ${KDEVELOP_SOVERSION} - 52")
+set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
