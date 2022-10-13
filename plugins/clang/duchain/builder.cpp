@@ -1094,7 +1094,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
 
     // extract macro function parameters
     const auto parameters = contents.mid(openingParen, closingParen - openingParen + 1); // include both '(' and ')'
-    ParamIterator paramIt(u"():", parameters, 0);
+    ParamIterator paramIt(u"()", parameters, 0);
     while (paramIt) {
         decl->addParameter(IndexedString(*paramIt));
         ++paramIt;
