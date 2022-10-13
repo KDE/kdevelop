@@ -66,6 +66,9 @@ bool isArrowOperator(QStringView str, int pos)
     return pos > 0 && str[pos - 1] == QLatin1Char('-') && (pos == 1 || str[pos - 2] != QLatin1Char('-'));
 }
 
+/// Skips literals enclosed in single or double quotes.
+/// No need to support raw string literals, because they cannot appear within a macro parameter list;
+/// in other contexts libclang converts them into non-raw string literals in each string that ends up here.
 int skipStringOrCharLiteral(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
