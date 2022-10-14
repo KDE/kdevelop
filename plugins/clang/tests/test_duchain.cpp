@@ -282,6 +282,9 @@ void TestDUChain::testMacroDefinition_data()
     addTest("_(\t/* u,v,*/c\t)\tc/3*(c-5)", "c/3*(c-5)", true, {"/* u,v,*/c"});
 
     addTest("MM\t\\\n\t471", "\\\n\t471");
+    addTest("S1\\\n get()", "get()");
+    addTest("A0B9\\\n(N)\\\n(N-9)", "\\\n(N-9)", true, {"N"});
+    addTest("\t     \\\t\nmacro\\ \n\\\nIden\\\ntifier(x,\\\t\n    y)x \t\ty", "x \t\ty", true, {"x", "\\\t\n    y"});
 }
 
 void TestDUChain::testInclude()

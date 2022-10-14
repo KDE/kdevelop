@@ -1032,6 +1032,45 @@ void Visitor::setDeclData(CXCursor cursor, Declaration *decl, bool setComment) c
     decl->setDeprecated(isAlwaysDeprecated);
 }
 
+/// @return the position in @p contents where the macro identifier ends.
+static int skipMacroIdentifier(QStringView contents)
+{
+    const auto isPartOfIdentifier = [](QChar c) {
+        return c.isLetterOrNumber() || c == QLatin1Char('_');
+    };
+
+    int posAfterMacroId = 0;
+    while (posAfterMacroId < contents.size()) {
+        posAfterMacroId = std::find_if_not(contents.cbegin() + posAfterMacroId, contents.cend(), isPartOfIdentifier)
+            - contents.cbegin();
+
+        // Escaped newline characters can separate parts of a macro identifier or a macro identifier and '(' in a
+        // function-like macro. And the escape character can be separated from the '\n' it escapes by any number of
+        // whitespace characters other than '\n'. Furthermore, the same escaped-newline pattern can precede the macro
+        // identifier. Simply skip such escape and whitespace characters as displaying them in a tooltip is not useful.
+        if (posAfterMacroId == contents.size() || contents[posAfterMacroId] != QLatin1Char{'\\'}) {
+            break; // no escape character => the macro identifier ends here
+        }
+        ++posAfterMacroId;
+
+        bool foundNewLineCharacter = false;
+        while (posAfterMacroId < contents.size() && contents[posAfterMacroId].isSpace()) {
+            if (contents[posAfterMacroId++] == QLatin1Char{'\n'}) {
+                foundNewLineCharacter = true;
+                break;
+            }
+        }
+        if (!foundNewLineCharacter) {
+            // The escape character does not escape a newline character. The code probably does not compile. Go back to
+            // the previous character to prevent the calling code from wrongly considering this macro function-like.
+            --posAfterMacroId;
+            break;
+        }
+    }
+
+    return posAfterMacroId;
+}
+
 template<CXCursorKind CK>
 void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
 {
@@ -1065,11 +1104,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
     // Use a QStringView contents, because it works as fast as or faster than a QString in the code below.
     const QStringView contents(rawContentsString);
 
-    const auto isPartOfIdentifier = [](QChar c) {
-        return c.isLetterOrNumber() || c == QLatin1Char('_');
-    };
-    const int posAfterMacroId =
-        std::find_if_not(contents.cbegin(), contents.cend(), isPartOfIdentifier) - contents.cbegin();
+    const int posAfterMacroId = skipMacroIdentifier(contents);
 
     if (posAfterMacroId == contents.size() || contents[posAfterMacroId] != QLatin1Char{'('}) {
         // '(', a space, a tab or '/' (a comment) usually follows a macro identifier.
