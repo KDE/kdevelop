@@ -33,6 +33,9 @@ private Q_SLOTS:
     void testElaboratedType();
     void testElaboratedType_data();
 
+    void testMacroDefinition();
+    void testMacroDefinition_data();
+
     void testInclude();
     void testMissingInclude();
     void testIncludeLocking();

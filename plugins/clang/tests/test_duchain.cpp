@@ -39,6 +39,7 @@
 #include "duchain/clangparsingenvironment.h"
 #include "duchain/parsesession.h"
 #include "duchain/clanghelpers.h"
+#include "duchain/macrodefinition.h"
 
 #include "testprovider.h"
 
@@ -48,6 +49,7 @@
 #include <QSignalSpy>
 #include <QLoggingCategory>
 #include <QThread>
+#include <QVector>
 #include <QVersionNumber>
 
 QTEST_MAIN(TestDUChain)
@@ -206,6 +208,65 @@ void TestDUChain::testElaboratedType_data()
     QTest::newRow("typedef")
         << "namespace NS{typedef int type;} NS::type foo();"
         << AbstractType::TypeAlias;
+}
+
+void TestDUChain::testMacroDefinition()
+{
+    QFETCH(QString, code);
+    QFETCH(QString, definition);
+    QFETCH(bool, isFunctionLike);
+    QFETCH(QVector<QString>, parameters);
+
+    TestFile file(code, QStringLiteral("cpp"));
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    QCOMPARE(top->localDeclarations().size(), 1);
+
+    const auto decl = top->localDeclarations().constFirst();
+    QVERIFY(decl);
+
+    const auto macro = dynamic_cast<const MacroDefinition*>(decl);
+    QVERIFY(macro);
+
+    QCOMPARE(macro->definition().str(), definition);
+
+    QCOMPARE(macro->isFunctionLike(), isFunctionLike);
+    QCOMPARE(macro->parametersSize(), parameters.size());
+
+    const IndexedString* actualParam = macro->parameters();
+    for (const auto& expectedParam : parameters) {
+        QCOMPARE(actualParam->str(), expectedParam);
+        ++actualParam;
+    }
+}
+
+void TestDUChain::testMacroDefinition_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<QString>("definition");
+    QTest::addColumn<bool>("isFunctionLike");
+    QTest::addColumn<QVector<QString>>("parameters");
+
+    const auto addTest = [](const QString& code, const QString& definition, bool isFunctionLike = false,
+                            const QVector<QString>& parameters = {}) {
+        QTest::addRow("%s", qPrintable(code))
+            << QString{"#define " + code} << definition << isFunctionLike << parameters;
+    };
+
+    addTest("m1 1", "1");
+    addTest("m int x", "int x");
+    addTest("m (u + v)", "(u + v)");
+
+    addTest("mac(x) x", "x", true, {"x"});
+    addTest("mc(u)\tu *2 \t/  Limit", "u *2 \t/  Limit", true, {"u"});
+    addTest("XYZ_(...) __VA_ARGS__", "__VA_ARGS__", true, {"..."});
+
+    addTest("m(x, \ty)\tx", "x", true, {"x", "y"});
+    addTest("m(x, y) x / y", "x / y", true, {"x", "y"});
+    addTest("M_N(X, ...) f(X __VA_OPT__(,) __VA_ARGS__)", "f(X __VA_OPT__(,) __VA_ARGS__)", true, {"X", "..."});
 }
 
 void TestDUChain::testInclude()
