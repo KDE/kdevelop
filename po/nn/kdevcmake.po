@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
 "PO-Revision-Date: 2008-11-26 17:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -205,7 +205,7 @@ msgstr ""
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:80
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -225,7 +225,7 @@ msgstr ""
 msgid "CMake Content Page"
 msgstr ""
 
-#: cmakemanager.cpp:645
+#: cmakemanager.cpp:644
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

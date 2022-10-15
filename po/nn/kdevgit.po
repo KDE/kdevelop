@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-26 00:43+0000\n"
+"POT-Creation-Date: 2022-10-02 00:45+0000\n"
 "PO-Revision-Date: 2008-11-26 17:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -17,32 +17,32 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: committoolview.cpp:207 committoolview.cpp:208
+#: committoolview.cpp:206 committoolview.cpp:207
 #, kde-format
 msgid "Filter by filename/project name"
 msgstr ""
 
-#: committoolview.cpp:225
+#: committoolview.cpp:224
 #, kde-format
 msgid "Refresh"
 msgstr ""
 
-#: committoolview.cpp:226
+#: committoolview.cpp:225
 #, kde-format
 msgid "Stage selected"
 msgstr ""
 
-#: committoolview.cpp:228
+#: committoolview.cpp:227
 #, kde-format
 msgid "Unstage selected"
 msgstr ""
 
-#: committoolview.cpp:230
+#: committoolview.cpp:229
 #, kde-format
 msgid "Revert unstaged edits"
 msgstr ""
 
-#: committoolview.cpp:483
+#: committoolview.cpp:482
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
