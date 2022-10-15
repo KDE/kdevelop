@@ -186,6 +186,15 @@ void TestStringHelpers::testParamIterator_data()
     addTest("hardToParse<A<B>", {"A<B"});
     addTest("hardToParse<(A>B)>", {"(A>B)"});
 
+    // Such zero/empty tparam strings are actually passed to ParamIterator() while libstdc++ headers are parsed.
+    addTest("_Index_tuple<>", {});
+    addTest("const __shared_count<  \t>", {});
+    addTest("_Rb_tree_impl<_Key_compare, >", {"_Key_compare", ""});
+    addTest("__hash_enum<_Tp,\t  \t>", {"_Tp", ""});
+    addTest("__uniq_ptr_data<_Tp, _Dp, , >", {"_Tp", "_Dp", "", ""});
+
+    addMacroTest("Q_UNIMPLEMENTED() qWarning(\"Unimplemented code.\")", {});
+    addMacroTest("Q_FALLTHROUGH( ) [[clang::fallthrough]]", {});
     addMacroTest("( /*a)b*/ x , /*,*/y,z )", {"/*a)b*/ x", "/*,*/y", "z"});
 }
 

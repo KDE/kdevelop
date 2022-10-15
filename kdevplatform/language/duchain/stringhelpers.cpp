@@ -388,6 +388,16 @@ ParamIterator::ParamIterator(QStringView parens, QStringView source, int offset)
             d->m_curEnd = d->next();
             if (d->m_curEnd != d->m_source.length()) {
                 d->m_prefix = d->sourceRange(offset, parenBegin);
+
+                if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
+                    const auto singleParam = d->sourceRange(d->m_cur, d->m_curEnd);
+                    if (consistsOfWhitespace(singleParam)) {
+                        // Only whitespace characters are present between parentheses => assume that
+                        // there are zero parameters, not a single empty parameter, and stop iterating.
+                        d->m_cur = d->m_end = d->m_curEnd + 1;
+                    }
+                }
+
                 return;
             } // else: the paren was not closed. It might be an identifier like "operator<", so count everything as prefix.
         } // else: we have neither found an ending-character, nor an opening-paren, so take the whole input and end.

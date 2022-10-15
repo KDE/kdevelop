@@ -30,21 +30,30 @@ QString MacroNavigationContext::name() const
     return m_macro->identifier().toString();
 }
 
+static QString parameterListString(const MacroDefinition& macro)
+{
+    // A function-like macro can have 0 parameters, e.g. `#define m() 1`.
+    // Check isFunctionLike() rather than parametersSize() here in order to display "()" in this case.
+    if (!macro.isFunctionLike()) {
+        Q_ASSERT(macro.parametersSize() == 0);
+        return QString();
+    }
+
+    QStringList parameterList;
+    parameterList.reserve(macro.parametersSize());
+    FOREACH_FUNCTION (const auto& parameter, macro.parameters) {
+        parameterList << parameter.str();
+    }
+
+    return QLatin1Char('(') + parameterList.join(QLatin1String(", ")) + QLatin1Char(')');
+}
+
 QString MacroNavigationContext::html(bool shorten)
 {
     Q_UNUSED(shorten);
     clear();
 
     modifyHtml() += QStringLiteral("<html><body><p>");
-
-    QStringList parameterList;
-    parameterList.reserve(m_macro->parametersSize());
-    FOREACH_FUNCTION(const auto& parameter, m_macro->parameters) {
-        parameterList << parameter.str();
-    }
-    const QString parameters = (!parameterList.isEmpty() ?
-        QLatin1Char('(') + parameterList.join(QLatin1String(", ")) + QLatin1Char(')') :
-        QString());
 
     const QUrl url = m_macro->url().toUrl();
     const QString path = url.toLocalFile();
@@ -54,7 +63,7 @@ QString MacroNavigationContext::html(bool shorten)
                           "%2: the macro name and arguments",
                           "%1: %2",
                           (m_macro->isFunctionLike() ? i18n("Function macro") : i18n("Macro")),
-                          importantHighlight(name()) + parameters);
+                          importantHighlight(name()) + parameterListString(*m_macro));
     modifyHtml() += QStringLiteral("<br/>");
     modifyHtml() += i18nc("%1: the link to the definition", "Defined in: %1",
                           createLink(QStringLiteral("%1 :%2").arg(url.fileName()).arg(cursor.line()+1), path, action));

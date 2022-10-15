@@ -234,6 +234,11 @@ void TestDUChain::testMacroDefinition()
     QCOMPARE(macro->definition().str(), definition);
 
     QCOMPARE(macro->isFunctionLike(), isFunctionLike);
+
+    // The displayed tooltip for these incorrectly parsed macros looks good, but the bogus
+    // single macro parameter in the MacroDefinition object could cause issues in the future.
+    QEXPECT_FAIL("only_escaped_newline_in_parens(\\\n)", "difficult to parse, uncommon, not yet a problem", Continue);
+    QEXPECT_FAIL("only_comment_in_parens(/*comment*/)", "difficult to parse, uncommon, not yet a problem", Continue);
     QCOMPARE(macro->parametersSize(), parameters.size());
 
     const IndexedString* actualParam = macro->parameters();
@@ -264,6 +269,9 @@ void TestDUChain::testMacroDefinition_data()
     addTest("m/*o*/long", "/*o*/long");
     addTest("m/*(x)*/ long", "/*(x)*/ long");
 
+    addTest("m()", "", true);
+    addTest("macro(    ) C", "C", true);
+
     addTest("mac(x)", "", true, {"x"});
     addTest("VARG_1(...)", "", true, {"..."});
     addTest("mac(x) x", "x", true, {"x"});
@@ -283,8 +291,13 @@ void TestDUChain::testMacroDefinition_data()
 
     addTest("MM\t\\\n\t471", "\\\n\t471");
     addTest("S1\\\n get()", "get()");
+    addTest("S1\\\nget(\t)", "", true);
+    addTest("m_2\\  \t\n(){return;}", "{return;}", true);
     addTest("A0B9\\\n(N)\\\n(N-9)", "\\\n(N-9)", true, {"N"});
     addTest("\t     \\\t\nmacro\\ \n\\\nIden\\\ntifier(x,\\\t\n    y)x \t\ty", "x \t\ty", true, {"x", "\\\t\n    y"});
+
+    addTest("only_escaped_newline_in_parens(\\\n)", "", true);
+    addTest("only_comment_in_parens(/*comment*/)", "", true);
 }
 
 void TestDUChain::testInclude()
