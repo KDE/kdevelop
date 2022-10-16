@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the kdevplatform package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2016.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2016-03-21 16:17+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2022-08-30 21:08+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -21,39 +22,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2013-01-13 20:43:13+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: grepdialog.cpp:52
-#, fuzzy, kde-format
-#| msgid "All Open Files"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
 msgstr "Kaikki avoimet tiedostot"
 
 #: grepdialog.cpp:53
-#, fuzzy, kde-format
-#| msgid "All Open Projects"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "Kaikki avoimet projektit"
 
 #: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
-#, fuzzy, kde-format
-#| msgid "Find/Replace in Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Etsi ja korvaa tiedostoista"
 
 #: grepdialog.cpp:189
-#, fuzzy, kde-format
-#| msgid "Search..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Etsi…"
 
 #: grepdialog.cpp:256
-#, fuzzy, kde-format
-#| msgid "Select a directory to search in."
+#, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "Valitse kansio, josta etsiä"
@@ -66,15 +62,13 @@ msgstr[0] "%2 ja %1 muu sijainti"
 msgstr[1] "%2 ja %1 muuta sijaintia"
 
 #: grepdialog.cpp:525
-#, fuzzy, kde-format
-#| msgid "Search \"%1\" in %2 (at time %3)"
+#, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
-msgstr "Etsi ”%1” kohteesta %2 (kello %3)"
+msgstr "Etsi ”%1” kohteesta %2"
 
 #: grepdialog.cpp:530
-#, fuzzy, kde-format
-#| msgid "Search \"%1\" in %2 (at time %3)"
+#, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
 msgstr "Etsi ”%1” kohteesta %2 (kello %3)"
@@ -82,7 +76,7 @@ msgstr "Etsi ”%1” kohteesta %2 (kello %3)"
 #: grepjob.cpp:97
 #, kde-format
 msgid "Find in Files"
-msgstr "Etsi tiedostoissa"
+msgstr "Etsi tiedostoista"
 
 #: grepjob.cpp:113 grepjob.cpp:216
 #, kde-format
@@ -95,16 +89,12 @@ msgid "No files found matching the wildcard patterns"
 msgstr "Jokerimerkkejä vastaavia tiedostoja ei löytynyt"
 
 #: grepjob.cpp:140
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Capture is the text which is \"captured\" with () in regular expressions "
-#| "see http://doc.trolltech.com/qregexp.html#capturedTexts"
-#| msgid "Captures are not allowed in pattern string"
+#, kde-format
 msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
 "https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
 msgid "Captures are not allowed in pattern string"
-msgstr "Mallissa ei sallita osamerkkijonoja"
+msgstr "Mallijonossa ei sallita osamerkkijonoja"
 
 #: grepjob.cpp:161
 #, kde-format
@@ -153,9 +143,7 @@ msgstr[0] "<b>1</b> tiedostossa"
 msgstr[1] "<b>%1</b> tiedostossa"
 
 #: grepoutputmodel.cpp:380
-#, fuzzy, kde-format
-#| msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
-#| msgid "<h3>%1 in %2</h3>"
+#, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
 msgstr "<h3>%1 %2</h3>"
@@ -164,8 +152,8 @@ msgstr "<h3>%1 %2</h3>"
 #, kde-format
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2: 1 osuma"
+msgstr[1] "%2: %1 osumaa"
 
 #: grepoutputmodel.cpp:452
 #, kde-format
@@ -184,36 +172,31 @@ msgid "Find/Replace Output View"
 msgstr "Etsinnän ja korvauksen tulokset"
 
 #: grepoutputview.cpp:74
-#, fuzzy, kde-format
-#| msgid "&Previous Item"
+#, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
-msgstr "&Edellinen osuma"
+msgstr "E&dellinen kohta"
 
 #: grepoutputview.cpp:75
-#, fuzzy, kde-format
-#| msgid "&Next Item"
+#, kde-format
 msgctxt "@action"
 msgid "&Next Item"
-msgstr "&Seuraava osuma"
+msgstr "&Seuraava kohta"
 
 #: grepoutputview.cpp:80
-#, fuzzy, kde-format
-#| msgid "C&ollapse All"
+#, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
-msgstr "&Pienennä kaikki"
+msgstr "&Supista kaikki"
 
 #: grepoutputview.cpp:82
-#, fuzzy, kde-format
-#| msgid "&Expand All"
+#, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "&Laajenna kaikki"
 
 #: grepoutputview.cpp:86
-#, fuzzy, kde-format
-#| msgid "New &Search"
+#, kde-format
 msgctxt "@action"
 msgid "New &Search"
 msgstr "Uusi &haku"
@@ -222,11 +205,10 @@ msgstr "Uusi &haku"
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
-msgstr ""
+msgstr "Virkistä"
 
 #: grepoutputview.cpp:89
-#, fuzzy, kde-format
-#| msgid "Clear Search History"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "Tyhjennä hakuhistoria"
@@ -237,72 +219,59 @@ msgid "Do you want to replace with an empty string?"
 msgstr "Haluatko korvata tyhjällä merkkijonolla?"
 
 #: grepoutputview.cpp:324
-#, fuzzy, kde-format
-#| msgid "Start replacement"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "Aloita korvaaminen"
 
 #: grepoutputview.cpp:325
-#, fuzzy, kde-format
-#| msgid "&Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr "&Korvaa"
+msgstr "Korvaa"
 
 #. i18n: ectx: property (text), widget (QLabel, replacementLabel)
 #: grepoutputview.ui:41
-#, fuzzy, kde-format
-#| msgid "Replacement &Text:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Replacement &text:"
-msgstr "Korvaus&teksti:"
+msgstr "Ko&rvaava teksti:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
 #: grepoutputview.ui:57
-#, fuzzy, kde-format
-#| msgid "Enter the replacement pattern."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr "Kirjoita korvausmalli"
+msgstr "Kirjoita korvauksen malli"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
-#, fuzzy, kde-format
-#| msgid "Apply replacement on selected items."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr "Käytä korvausta valituissa osumissa"
+msgstr "Käytä korvausta valittuihin kohtiin"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
-#, fuzzy, kde-format
-#| msgid "&Replace"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
-msgstr "&Korvaa"
+msgstr "Ko&rvaa"
 
 #: grepviewplugin.cpp:76
-#, fuzzy, kde-format
-#| msgid "Find/Replace in Fi&les..."
+#, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
 msgstr "Etsi ja korvaa &tiedostoista…"
 
 #: grepviewplugin.cpp:79
-#, fuzzy, kde-format
-#| msgid "Search for expressions over several files"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr "Etsi lausekkeita useista tiedostoista"
+msgstr "Etsi lausekkeita monista tiedostoista"
 
 #: grepviewplugin.cpp:81
-#, fuzzy, kde-format
-#| msgid ""
-#| "Opens the 'Find/Replace in files' dialog. There you can enter a regular "
-#| "expression which is then searched for within all files in the directories "
-#| "you specify. Matches will be displayed, you can switch to a match "
-#| "directly. You can also do replacement."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Opens the 'Find/Replace in Files' dialog. There you can enter a regular "
@@ -310,122 +279,33 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
-"Avaa Etsi ja korvaa tiedostoista -ikkunan. Siinä voit kirjoittaa "
-"säännöllisiä lausekkeita, joita sitten etsitään kaikista tiedostoista "
-"hakemistoista, jotka määrittelet. Osumat näytetään ja voit vaihtaa osumaan "
-"heti. Voit myös korvata."
+"Avaa Etsi ja korvaa tiedostoista -ikkunan, johon voi kirjoittaa säännöllisiä "
+"lausekkeita, joita etsitään kaikkien annettujen kansioiden kaikista "
+"tiedostoista. Osumat näytetään, ja osumaan voi vaihtaa suoraan. Myös "
+"korvaaminen on mahdollista."
 
 #: grepviewplugin.cpp:129 grepviewplugin.cpp:152
-#, fuzzy, kde-format
-#| msgid "Find/Replace in This Folder..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
 msgstr "Etsi ja korvaa tästä kansiosta…"
 
 #: grepviewplugin.cpp:140
-#, fuzzy, kde-format
-#| msgid "&Find/Replace in Files..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
 msgstr "Etsi ja korvaa &tiedostoista…"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Enter the regular expression you want to search for here."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr "Kirjoita tähän säännöllinen lauseke, jota haluat etsiä."
+msgstr "Kirjoita tähän säännöllinen lauseke, jota haluat etsiä"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the regular "
-#| "expression you want to search for here.</p>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">If you do not check "
-#| "\"Regular Expression\" below, this is considered a raw string. That "
-#| "means, all meta characters are escaped.</p>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Possible meta "
-#| "characters are:</p>\n"
-#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
-#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
-#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-#| "indent:0px;\"><span style=\" font-weight:600;\">.</span> - Matches any "
-#| "character</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">^</span> - Matches the beginning of a line</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">$</span> - Matches the end of a line</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">\\b</span> - Matches a word boundary</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">\\s</span> - Matches any whitespace character</li></ul>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">The following "
-#| "repetition operators exist:</p>\n"
-#| "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
-#| "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
-#| "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-#| "indent:0px;\"><span style=\" font-weight:600;\">?</span> - The preceding "
-#| "item is matched at most once</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">*</span> - The preceding item is matched zero or more "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">+</span> - The preceding item is matched one or more times</"
-#| "li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
-#| "item is matched exactly <span style=\" font-style:italic;\">n</span> "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">,}</span> - The preceding "
-#| "item is matched <span style=\" font-style:italic;\">n</span> or more "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">}</span> - The preceding "
-#| "item is matched at most <span style=\" font-style:italic;\">n</span> "
-#| "times</li>\n"
-#| "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-#| "\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
-#| "weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;"
-#| "\">}</span> - The preceding item is matched at least <span style=\" font-"
-#| "style:italic;\">n</span>, but at most <span style=\" font-style:italic;"
-#| "\">m</span> times.</li></ul>\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">Furthermore, "
-#| "backreferences to bracketed subexpressions are available via the notation "
-#| "\\<span style=\" font-style:italic;\">n</span>.</p>\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\">For further reference, "
-#| "look at <a href=\"http://www.pcre.org\"><span style=\" text-decoration: "
-#| "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" "
-#| "font-style:italic;\">man pcresyntax.</span></p></body></html>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -519,133 +399,125 @@ msgstr ""
 "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Kirjoita säännöllinen "
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Anna tähän säännöllinen "
 "lauseke, jota haluat etsiä.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Tätä käsitellään pelkkänä "
-"merkkijonona, jos et valitse ”Säännöllinen lauseke” alla. Tarkoittaen, että "
-"kaikki metamerkit lainataan.</p>\n"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Ellei ”Säännöllinen "
+"lauseke” ole alla valittu, tämä tulkitaan täsmälliseksi merkkijonoksi. Näin "
+"ollen kaikki metamerkit lainataan.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Mahdollisia metamerkkejä "
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Mahdolliset metamerkit "
 "ovat:</p>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
 "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
 "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Osuu mihin "
-"tahansa merkkiin</li>\n"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> – vastaa mitä "
+"tahansa merkkiä</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">^</span> - Osuu rivin alkuun</li>\n"
+"weight:600;\">^</span> – vastaa rivin alkua</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">$</span> - Osuu rivin loppuun</li>\n"
+"weight:600;\">$</span> – vastaa rivin loppua</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">\\b</span> - Osuu sanarajaan</li>\n"
+"weight:600;\">\\b</span> – vastaa sananrajaa</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">\\s</span> - Osuu tyhjämerkkiin</li></ul>\n"
+"weight:600;\">\\s</span> – vastaa mitä tahansa ei-tyhjemerkkiä</li></ul>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Seuraavat toistomerkit "
-"ovat olemassa:</p>\n"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Seuraavia toisto-"
+"operaattoreita voi käyttää:</p>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-"
 "right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
 "bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-"indent:0px;\"><span style=\" font-weight:600;\">?</span> - Edeltävään "
-"alkioon osutaan korkeintaan kerran</li>\n"
+"indent:0px;\"><span style=\" font-weight:600;\">?</span> – edellinen kohta "
+"esiintyy enintään kerran</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">*</span> - Edeltävään alkioon osutaan nolla tai useampia "
-"kertoja</li>\n"
+"weight:600;\">*</span> – edellinen kohta esiintyy nolla kertaa tai useammin</"
+"li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">+</span> - Edeltävään alkioon osutaan yhden tai useamman "
-"kerran</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-"\">n</span><span style=\" font-weight:600;\">}</span> - Edeltävään alkioon "
-"osutaan tasan <span style=\" font-style:italic;\">n</span> kertaa</li>\n"
+"weight:600;\">+</span> – edellinen kohta esiintyy kerran tai useammin</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
-"\">n</span><span style=\" font-weight:600;\">,}</span> - Edeltävään alkioon "
-"osutaan <span style=\" font-style:italic;\">n</span> tai useampaan kertaan</"
+"\">n</span><span style=\" font-weight:600;\">}</span> - edellinen kohta "
+"esiintyy täsmälleen <span style=\" font-style:italic;\">n</span> kertaa</"
+"li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
+"\">n</span><span style=\" font-weight:600;\">,}</span> – edellinen kohta "
+"esiintyy <span style=\" font-style:italic;\">n</span> kertaa tai useammin</"
 "li>\n"
 "<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">{,</span><span style=\" font-weight:600; font-style:italic;"
-"\">n</span><span style=\" font-weight:600;\">}</span> - Edeltävään alkioon "
-"osutaan korkeintaan <span style=\" font-style:italic;\">n</span> kertaa</"
-"li>\n"
+"\">n</span><span style=\" font-weight:600;\">}</span> – edellinen kohta "
+"esiintyy enintään <span style=\" font-style:italic;\">n</span> kertaa</li>\n"
 "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "weight:600;\">{</span><span style=\" font-weight:600; font-style:italic;"
 "\">n</span><span style=\" font-weight:600;\">,</span><span style=\" font-"
 "weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;\">}"
-"</span> - Edeltävään alkioon osutaan vähintään <span style=\" font-style:"
-"italic;\">n</span>, mutta korkeintaan <span style=\" font-style:italic;\">m</"
-"span> kertaa.</li></ul>\n"
+"</span> – edellinen kohta esiintyy vähintään <span style=\" font-style:"
+"italic;\">n</span>, but at most <span style=\" font-style:italic;\">m</span> "
+"kertaa.</li></ul>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Sulkeissa kirjoitettuihin "
-"osamerkkijonoihin voi lisäksi viitata merkinnällä \\<span style=\" font-"
-"style:italic;\">n</span>.</p>\n"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Lisäisin "
+"takaisinviittaukset sulkeistettuihin osalausekkeisiin ovat käytettävissä "
+"merkinnällä \\<span style=\" font-style:italic;\">n</span>.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Lisätietoja osoitteessa <a "
-"href=\"http://www.pcre.org\"><span style=\" text-decoration: underline; "
-"color:#0057ae;\">www.pcre.org</span></a> tai <span style=\" font-style:"
-"italic;\">man pcresyntax.</span></p></body></html>"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Lisätietoa löytyy "
+"osoitteesta <a href=\"https://www.pcre.org/\"><span style=\" text-"
+"decoration: underline; color:#0057ae;\">www.pcre.org</span></a> tai "
+"komennolla <span style=\" font-style:italic;\">man pcresyntax.</span></p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Template:"
 msgstr "Malli:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
 #: grepwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "This is the regular expression template."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
-msgstr "Malli (säännöllinen lauseke)"
+msgstr "Tämä on säännöllinen mallilauseke."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, templateEdit)
 #: grepwidget.ui:85
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "This is the regular expression template. <i>%s</i> will be replaced by "
-#| "the pattern, while <i>%%</i> will be replaced by <i>%</i>."
+#, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
-"Malli (säännöllinen lauseke). <i>%s</i> korvataan mallilla, kun taas <i>%%</"
-"i> korvataan <i>%</i>-merkillä."
+"Tämä on säännöllinen mallilauseke. <i>%s</i> korvataan kuviolla, kun taas <i>"
+"%%</i> korvataan merkillä <i>%</i>."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
-#, fuzzy, kde-format
-#| msgid "Quickly select location from a set of directories"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr "Valitse sijainti pikaisesti joukosta kansioita"
+msgstr "Valitse sijainti pikaisesti kansiojoukosta"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Quick Select"
+#, kde-format
 msgctxt "@action:button"
 msgid "Quick Select"
 msgstr "Pikavalinta"
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
-#, fuzzy, kde-format
-#| msgid "Depth:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Depth:"
 msgstr "Syvyys:"
@@ -653,98 +525,81 @@ msgstr "Syvyys:"
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
 #: grepwidget.ui:118
-#, fuzzy, kde-format
-#| msgid "Full"
+#, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
 msgstr "Täysi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Pattern:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "Malli:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: grepwidget.ui:144
-#, fuzzy, kde-format
-#| msgid "Files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
 msgstr "Tiedostot:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:157
-#, fuzzy, kde-format
-#| msgid "Case Sensitive:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
-msgstr "Huomioi kirjainkoko:"
+msgstr "Erota pien- ja suuraakkoset:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
 #: grepwidget.ui:176
-#, fuzzy, kde-format
-#| msgid "Case-sensitive searching."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
-msgstr "Kirjainkoon huomioiva haku"
+msgstr "Pien- ja suuraakkoset erottava haku."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: grepwidget.ui:189
-#, fuzzy, kde-format
-#| msgid "Location(s):"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
 msgstr "Sijainnit:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:202
-#, fuzzy, kde-format
-#| msgid "Files filter."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
 msgstr "Tiedostosuodatin"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enter the file name pattern of the files to search here. You may give "
-#| "several patterns separated by commas or spaces."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the file name pattern of the files to search here. You may give "
 "several patterns separated by commas or spaces."
 msgstr ""
-"Kirjoita tähän tiedostonimimalli tiedostoista, joista etsit. Voit antaa "
-"useita pilkuin tai välilyönnein eroteltuja malleja."
+"Kirjoita tähän niiden tiedostojen nimien kuvio, joista etsitään. Kuvioita "
+"voi antaa pilkuin tai sanavälein erotettuna."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:218
-#, fuzzy, kde-format
-#| msgid "Exclude:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
 msgstr "Jätä pois:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:231
-#, fuzzy, kde-format
-#| msgid "Files pattern to exclude"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr "Poisjätettävien tiedostojen malli"
+msgstr "Pois jätettävät tiedostokuviot"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enter the file name pattern of the files to exclude from the search here. "
-#| "You may give several patterns separated by commas or spaces.<p>Every "
-#| "pattern is internally surrounded by asterisks, so that each pattern can "
-#| "match parts of the file paths.</p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the file name pattern of the files to exclude from the search here. "
@@ -752,72 +607,62 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
-"Kirjoita tähän tiedostonimimalli niistä tiedostoista, joista ei etsitä. Voit "
-"antaa useita pilkuin tai välilyönnein eroteltuja malleja.<p>Jokainen malli "
-"ympäröidään sisäisesti tähdillä, jotta jokainen malli voi osua myös "
-"tiedostopolkujen osiin.</p>"
+"Kirjoita tähän hausta pois jätettävien tiedostonimien kuvio. Kuvioita voi "
+"antaa useita pilkuin tai sanavälein erotettuna.<p>Sisäisesti kukin malli "
+"ympäröidään tähdin, jotta se voi täsmätä myös tiedostopolkujen osiin.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:314
-#, fuzzy, kde-format
-#| msgid "Regular Expression:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
 msgstr "Säännöllinen lauseke:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
 #: grepwidget.ui:327
-#, fuzzy, kde-format
-#| msgid "Enable or disable regular expression."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr "Käytetäänkö säännöllisiä lausekkeita"
+msgstr "Käytetäänkö säännöllisiä lausekkeita."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:340
-#, fuzzy, kde-format
-#| msgid "Limit to project files:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr "Rajoita projektitiedostoihin:"
+msgstr "Rajaa projektitiedostoihin:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:369
-#, fuzzy, kde-format
-#| msgid "Enter the replacement template."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr "Kirjoita korvausmalli."
+msgstr "Kirjoita korvausmalli"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:376
-#, fuzzy, kde-format
-#| msgid "Replacement Template:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
 msgstr "Korvausmalli:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
 #: grepwidget.ui:389
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the location where you want to search. It can be a directory, a "
-#| "file, or a semicolon separated (without spaces) list of directories/files."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
-"Valitse sijainti, josta haluat etsiä. Se voi olla hakemisto, tiedosto tai "
-"puolipisteillä eroteltu luettelo hakemistoista/tiedostoista."
+"Valitse sijainti, josta haluat etsiä. Se voi olla kansio, tiedosto tai "
+"puolipistein erotettu luettelo kansioita tai tiedostoja."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:414
-#, fuzzy, kde-format
-#| msgid "Select a directory to search in."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr "Valitse kansio, josta etsiä"
+msgstr "Valitse kansio, josta etsitään"
 
 #~ msgid "Find-Replace In Files"
 #~ msgstr "Etsi ja korvaa tiedostoista"

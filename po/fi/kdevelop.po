@@ -9,6 +9,7 @@
 # Ilpo Kantonen <ilpo@iki.fi>, 2005.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2005, 2006, 2011, 2012, 2013, 2014, 2015, 2016.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009,2011.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -17,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-10 00:16+0000\n"
-"PO-Revision-Date: 2016-01-05 23:30+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2022-08-19 14:39+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -26,19 +27,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:29+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Tapio Kautto,Teemu Rytilahti,Tapio Mattila,Jorma Karvonen,Lasse Liehu"
+msgstr ""
+"Tapio Kautto,Teemu Rytilahti,Tapio Mattila,Jorma Karvonen,Lasse Liehu,Tommi "
+"Nieminen"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "eleknader@phnet.fi,teemu.rytilahti@d5k.net,tapio.mattila@kde-fi.org,karvonen."
-"jorma@gmail.com,lasse.liehu@gmail.com"
+"jorma@gmail.com,lasse.liehu@gmail.com,translator@legisign.org"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
@@ -56,23 +59,21 @@ msgstr "&Projekti"
 
 #. i18n: ectx: Menu (run)
 #: kdevelopui.rc:29
-#, fuzzy, kde-format
-#| msgid "&Run"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Run"
-msgstr "&Suorita"
+msgstr "S&uorita"
 
 #. i18n: ectx: Menu (debug_core_menu)
 #: kdevelopui.rc:39
 #, kde-format
 msgctxt "@title:menu"
 msgid "Examine Core File"
-msgstr ""
+msgstr "Tutki core-tiedostoa"
 
 #. i18n: ectx: Menu (debug_attach_menu)
 #: kdevelopui.rc:43
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Attach to Process"
 msgstr "Liity prosessiin"
@@ -110,14 +111,14 @@ msgstr "Koodi"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "Tutki nykyistä tiedostoa ohjelmalla"
 
 #. i18n: ectx: Menu (analyze_project)
 #: kdevelopui.rc:119
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "Tutki nykyistä projektia ohjelmalla"
 
 #. i18n: ectx: Menu (window)
 #: kdevelopui.rc:128
@@ -162,16 +163,14 @@ msgid "Could not open %1"
 msgstr "Ei voitu avata %1"
 
 #: main.cpp:219
-#, fuzzy, kde-format
-#| msgid "Could not open file %1."
+#, kde-format
 msgid "Could not open file '%1'."
-msgstr "Tiedoston %1 avaaminen epäonnistui."
+msgstr "Ei voitu avata tiedostoa ”%1”."
 
 #: main.cpp:242
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open project '%1': %2"
-msgstr "Ei voitu avata %1"
+msgstr "Ei voitu avata projektia ”%1”: %2"
 
 #: main.cpp:273
 #, kde-format
@@ -179,16 +178,13 @@ msgid "Select the session to open the document in"
 msgstr "Valitse istunto, johon tiedosto avataan"
 
 #: main.cpp:300
-#, fuzzy, kde-format
-#| msgid ""
-#| "Cannot open unknown session %1. See --sessions switch for available "
-#| "sessions or use -cs to create a new one."
+#, kde-format
 msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
-"Tuntematonta istuntoa %1 ei voitu avata. Katso, mitä istuntoja on olemassa "
-"valitsimella --sessions tai luo uusi valitsimella -cs."
+"Tuntematonta istuntoa %1 ei voitu avata. Mahdolliset istunnot näkee "
+"valitsimella ”--list-sessions” ja uuden voi luoda valitsimella ”-n”."
 
 # pmap: =/elat=KDevelopista/
 # pmap: =/gen=KDevelopin/
@@ -204,10 +200,9 @@ msgid "The KDevelop Integrated Development Environment"
 msgstr "KDevelop-sovelluskehitysympäristö"
 
 #: main.cpp:386
-#, fuzzy, kde-format
-#| msgid "Copyright 1999-2015, The KDevelop developers"
+#, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
-msgstr "Copyright 1999–2015 KDevelop-kehittäjät"
+msgstr "Tekijänoikeudet 1999–%1 KDevelop-kehittäjät"
 
 #: main.cpp:389
 #, kde-format
@@ -215,10 +210,10 @@ msgid "Kevin Funk"
 msgstr "Kevin Funk"
 
 #: main.cpp:389
-#, fuzzy, kde-format
-#| msgid "C++/Clang, General Improvements, QA, Windows Support"
+#, kde-format
 msgid "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website"
-msgstr "C++/Clang, Yleisiä parannuksia, laadunvarmistus, Windows-tuki"
+msgstr ""
+"Rinnakkaisylläpitäjä, C++/Clang, QA, Windows-tuki, suorituskyky, sivusto"
 
 #: main.cpp:390
 #, kde-format
@@ -226,10 +221,9 @@ msgid "Sven Brauch"
 msgstr "Sven Brauch"
 
 #: main.cpp:390
-#, fuzzy, kde-format
-#| msgid "Python Support, User Interface improvements"
+#, kde-format
 msgid "Co-maintainer, AppImage, Python Support, User Interface improvements"
-msgstr "Python-tuki, käyttöliittymäparannuksia"
+msgstr "Rinnakkaisylläpitäjä, AppImage, Python-tuki, käyttöliittymäparannukset"
 
 #: main.cpp:391
 #, kde-format
@@ -237,10 +231,9 @@ msgid "Aleix Pol Gonzalez"
 msgstr "Aleix Pol Gonzalez"
 
 #: main.cpp:391
-#, fuzzy, kde-format
-#| msgid "Co-Maintainer, CMake Support, Run Support, Kross Support"
+#, kde-format
 msgid "CMake Support, Run Support, Kross Support"
-msgstr "Toinen ylläpitäjä, CMake-tuki, suoritusympäristötuki, Kross-tuki"
+msgstr "CMake-, suoritus- ja Kross-tuki"
 
 #: main.cpp:392
 #, kde-format
@@ -249,15 +242,11 @@ msgstr "Milian Wolff"
 
 # ”Generic manager” tarkoittaa todennäköisesti samaa kuin ”Generic project manager”.
 #: main.cpp:392
-#, fuzzy, kde-format
-#| msgid ""
-#| "Co-Maintainer, C++/Clang, Generic manager, Webdevelopment Plugins, "
-#| "Snippets, Performance"
+#, kde-format
 msgid ""
 "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance"
 msgstr ""
-"Toinen ylläpitäjä, C++/Clang, yleinen projektinhallinta, web-"
-"kehitysliitännäiset, katkelmat, suorituskyky"
+"C++/Clang, yleishallinta, verkkokehitysliitännäiset, katkelmat, suorituskyky"
 
 #: main.cpp:393
 #, kde-format
@@ -302,8 +291,8 @@ msgid ""
 "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding "
 "Assistance, Refactoring"
 msgstr ""
-"Määrittely-Käyttöketju, C++-tuki, koodissa siirtyminen, koodin "
-"täydentäminen, koodausavustaja, refaktorointi"
+"Määrittely–käyttö-ketju, C++-tuki, koodinavigointi, koodintäydennys, "
+"koodausavustaja, refaktorointi"
 
 #: main.cpp:397
 #, kde-format
@@ -313,7 +302,7 @@ msgstr "Vladimir Prus"
 #: main.cpp:397
 #, kde-format
 msgid "GDB integration"
-msgstr "GDB-integraatio"
+msgstr "GDB-integrointi"
 
 #: main.cpp:398
 #, kde-format
@@ -323,7 +312,7 @@ msgstr "Hamish Rodda"
 #: main.cpp:398
 #, kde-format
 msgid "Text editor integration, definition-use chain"
-msgstr "Tekstimuokkainintegraatio, määrittely-käyttöketju"
+msgstr "Tekstimuokkainintegrointi, määrittely–käyttö-ketju"
 
 #: main.cpp:399
 #, kde-format
@@ -334,8 +323,7 @@ msgstr "Amilcar do Carmo Lucas"
 #, kde-format
 msgid "Website admin, API documentation, Doxygen and autoproject patches"
 msgstr ""
-"Julkaisukoordinaattori, API dokumentaatio-, Doxygen- ja autoproject-"
-"korjauksia"
+"Julkaisukoordinaattori, API-ohjeistus, Doxygen- ja autoproject-paikkauksia"
 
 #: main.cpp:400
 #, kde-format
@@ -345,12 +333,12 @@ msgstr "Niko Sams"
 #: main.cpp:400
 #, kde-format
 msgid "GDB integration, Webdevelopment Plugins"
-msgstr "GDB-integraatio, web-kehitysliitännäiset"
+msgstr "GDB-integrointi, verkkokehitysliitännäisiä"
 
 #: main.cpp:401
 #, kde-format
 msgid "Friedrich W. H. Kossebau"
-msgstr ""
+msgstr "Friedrich W. H. Kossebau"
 
 #: main.cpp:403
 #, kde-format
@@ -406,7 +394,7 @@ msgstr "Harald Fernengel"
 #: main.cpp:410
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
-msgstr "Soveltanut Qt 3:een, korjauksia, valgrind-, diff- ja perforce-tuki"
+msgstr "Siirros Qt 3:een, korjauksia, valgrind-, diff- ja perforce-tuki"
 
 #: main.cpp:411
 #, kde-format
@@ -421,12 +409,12 @@ msgstr "C++-jäsennin"
 #: main.cpp:412
 #, kde-format
 msgid "The KWrite authors"
-msgstr "KWrite-tekijä"
+msgstr "KWriten tekijät"
 
 #: main.cpp:412
 #, kde-format
 msgid "Kate editor component"
-msgstr "Kate editori-komponentti"
+msgstr "Kate-muokkainosa"
 
 #: main.cpp:413
 #, kde-format
@@ -481,7 +469,7 @@ msgstr "John Birch"
 #: main.cpp:419
 #, kde-format
 msgid "Debugger frontend"
-msgstr "Virheenpaikantimen käyttöliittymä"
+msgstr "Virheenpaikannuskäyttöliittymä"
 
 #: main.cpp:420
 #, kde-format
@@ -511,7 +499,7 @@ msgstr "Ian Reinhart Geiser"
 #: main.cpp:422
 #, kde-format
 msgid "Dist part, bash support, application templates"
-msgstr "Dist-osa, bash-tuki, sovelluspohjia"
+msgstr "Dist-osa, Bash-tuki, sovelluspohjia"
 
 #: main.cpp:423
 #, kde-format
@@ -521,7 +509,7 @@ msgstr "Matthias Hoelzer-Klüpfel"
 #: main.cpp:423
 #, kde-format
 msgid "Several components, htdig indexing"
-msgstr "Useita konponentteja, htdig-indeksointi"
+msgstr "Useita komponentteja, htdig-indeksointi"
 
 #: main.cpp:424
 #, kde-format
@@ -531,7 +519,7 @@ msgstr "Victor Röder"
 #: main.cpp:424
 #, kde-format
 msgid "Help with Automake manager and persistent class store"
-msgstr "Avustanut Automake-managerissa ja persistenttiluokkasäilön kanssa"
+msgstr "Avustanut Automake-hallinnassa ja persistenttiluokkasäilön kanssa"
 
 #: main.cpp:425
 #, kde-format
@@ -541,7 +529,7 @@ msgstr "Simon Hausmann"
 #: main.cpp:425
 #, kde-format
 msgid "Help with KParts infrastructure"
-msgstr "Avustanut KPartsin perusrakenteessa"
+msgstr "Avustus KPartsin perusrakenteessa"
 
 #: main.cpp:426
 #, kde-format
@@ -561,7 +549,7 @@ msgstr "Jakob Simon-Gaarde"
 #: main.cpp:427
 #, kde-format
 msgid "QMake projectmanager"
-msgstr "QMake-projektimanageri"
+msgstr "QMake-projektihallinta"
 
 #: main.cpp:428
 #, kde-format
@@ -571,7 +559,7 @@ msgstr "Falk Brettschneider"
 #: main.cpp:428
 #, kde-format
 msgid "MDI modes, QEditor, bugfixes"
-msgstr "MDI-moodit, QEditor, virhekorjauksia"
+msgstr "MDI-tilat, QEditor, virheenkorjauksia"
 
 #: main.cpp:429
 #, kde-format
@@ -606,7 +594,7 @@ msgstr "Julian Rockey"
 #: main.cpp:431
 #, kde-format
 msgid "Filecreate part and other bits and patches"
-msgstr "Tiedostoluonti-osa ja muita palasia ja korjauksia"
+msgstr "Tiedostoluonti-osa sekä muita palasia ja paikkauksia"
 
 #: main.cpp:432
 #, kde-format
@@ -706,7 +694,7 @@ msgstr "Luc Willems"
 #: main.cpp:442
 #, kde-format
 msgid "Help with Perl support"
-msgstr "Avustanut Perl-tuessa"
+msgstr "Avustus Perl-tukeen"
 
 #: main.cpp:443
 #, kde-format
@@ -716,7 +704,7 @@ msgstr "Marcel Turino"
 #: main.cpp:443
 #, kde-format
 msgid "Documentation index view"
-msgstr "Dokumentaation hakemistonäkymä"
+msgstr "Ohjeistuksen hakemistonäkymä"
 
 #: main.cpp:444
 #, kde-format
@@ -734,8 +722,8 @@ msgid ""
 "Documentation Finder,  qmake projectmanager patches, usability improvements, "
 "bugfixes ... "
 msgstr ""
-"Dokumentaatioetsijä,  qmake-projektinhallintakorjauksia, "
-"käytettävyysparannuksia, virheenkorjauksia…"
+"Ohjeistushaku,  qmake-projektinhallintapaikkauksia, käytettävyysparannuksia, "
+"virheenkorjauksia…"
 
 #: main.cpp:446
 #, kde-format
@@ -745,7 +733,7 @@ msgstr "Andreas Köpfle"
 #: main.cpp:446
 #, kde-format
 msgid "QMake project manager patches"
-msgstr "QMake-projektimanagerin paikkoja"
+msgstr "QMake-projektihallinnan paikkauksia"
 
 #: main.cpp:447
 #, kde-format
@@ -755,9 +743,7 @@ msgstr "Sascha Cunz"
 #: main.cpp:447
 #, kde-format
 msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
-msgstr ""
-"Ohjelman qEditor siistiminen ja virhekorjauksia, AutoMake ja paljon muita "
-"asioita"
+msgstr "qEditorin siistiminen ja virheenkorjauksia, AutoMake ja paljon muuta"
 
 #: main.cpp:448
 #, kde-format
@@ -767,12 +753,12 @@ msgstr "Zoran Karavla"
 #: main.cpp:448
 #, kde-format
 msgid "Artwork for the ruby language"
-msgstr "Kuvia ruby-kielellä"
+msgstr "Kuvia Ruby-kielelle"
 
 #: main.cpp:471
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
-msgstr "Avaa KDevelop uudella istunnolla käyttäen annettua nimeä."
+msgstr "Avaa uusi, annetun niminen KDevelop-istunto."
 
 # Hash ei ole oikea suomennos, mutta en keksinyt hyvää ja selkeätä. Sellaista, jonka hash-termin tietävä ymmärtäisi, vaikka ei olisi koskaan nähnyt suomennosta.
 #: main.cpp:474
@@ -786,16 +772,13 @@ msgstr ""
 
 # Hash ei ole oikea suomennos, mutta en keksinyt hyvää ja selkeätä. Sellaista, jonka hash-termin tietävä ymmärtäisi, vaikka ei olisi koskaan nähnyt suomennosta.
 #: main.cpp:478
-#, fuzzy, kde-format
-#| msgid ""
-#| "Open KDevelop with the given session.\n"
-#| "You can pass either hash or the name of the session."
+#, kde-format
 msgid ""
 "Delete the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"Avaa KDevelop annetulla istunnolla.\n"
-"Voit antaa joko hashin tai istunnon nimen."
+"Poista annettu istunto.\n"
+"Istunnon voi määrittää joko tiivisteenä tai nimenä."
 
 #: main.cpp:482
 #, kde-format
@@ -813,10 +796,9 @@ msgid "List available sessions and quit."
 msgstr "Luettele kaikki istunnot ja lopeta."
 
 #: main.cpp:488
-#, fuzzy, kde-format
-#| msgid "Open KDevelop and load the given project."
+#, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr "Avaa KDevelop ja annettu projekti."
+msgstr "Avaa KDevelop ja nouda projekti annetusta <lähdeosoitteesta>."
 
 #: main.cpp:491
 #, kde-format
@@ -824,28 +806,25 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
+"Avaa KDevelop ja lataa annettu projekti. <projekti> voi olla joko .kdev4-"
+"tiedosto tai kansion sijainti."
 
 #: main.cpp:494
-#, fuzzy, kde-format
-#| msgid ""
-#| "Start debugging an application in KDevelop with the given debugger.\n"
-#| "The binary that should be debugged must follow - including arguments.\n"
-#| "Example: kdevelop --debug gdb myapp --foo bar"
+#, kde-format
 msgid ""
 "Start debugging an application in KDevelop with the given debugger.\n"
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
-"Aloita sovelluksen virheiden paikantaminen KDevelopissa käyttäen annettua "
-"virheenpaikanninta.\n"
-"Paikannuksessa käytettävän binaarin tulisi olla perässä, mukaan lukien "
-"kaikki sille annettavat parametrit.\n"
+"Aloita sovelluksen virheiden paikantaminen KDevelopissa annetulla "
+"virheenpaikantimella.\n"
+"Ohjelmatiedoston tulee seurata kaikkine sille annettavine parametreineen.\n"
 "Esimerkiksi: kdevelop --debug gdb myapp --foo bar"
 
 #: main.cpp:508
 #, kde-format
 msgid "Files to load, or directories to load as projects"
-msgstr ""
+msgstr "Ladattavat tiedostot tai projekteina ladattavat kansiot"
 
 #: main.cpp:519
 #, kde-format
@@ -873,20 +852,16 @@ msgid "Select the session you would like to use"
 msgstr "Valitse käytettävä istunto"
 
 #: main.cpp:639
-#, fuzzy, kde-format
-#| msgctxt "@info:shell"
-#| msgid "Specify the binary you want to debug."
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specify the executable you want to debug."
 msgstr "Valitse ohjelmatiedosto, jonka virheitä haluat paikantaa."
 
 #: main.cpp:648
-#, fuzzy, kde-format
-#| msgctxt "@info:shell"
-#| msgid "Specify the binary you want to debug."
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
-msgstr "Valitse ohjelmatiedosto, jonka virheitä haluat paikantaa."
+msgstr "Annettua ohjelmatiedostoa ei ole olemassa."
 
 #: main.cpp:654
 #, kde-format
@@ -900,21 +875,19 @@ msgid ""
 msgstr "Nimellä %1 on jo istunto. Avaa se valitsimella -s."
 
 #: main.cpp:678
-#, fuzzy, kde-format
-#| msgid ""
-#| "A session with the name %1 exists already. Use the -s switch to open it."
+#, kde-format
 msgid "No session with the name %1 exists."
-msgstr "Nimellä %1 on jo istunto. Avaa se valitsimella -s."
+msgstr "Istuntoa nimeltä %1 ei ole olemassa."
 
 #: main.cpp:685
 #, kde-format
 msgid "Could not lock session %1 for deletion."
-msgstr ""
+msgstr "Istuntoa %1 ei voitu lukita poistamista varten."
 
 #: main.cpp:690
 #, kde-format
 msgid "Session with name %1 was successfully removed."
-msgstr ""
+msgstr "Istunnon nimeltä %1 poistaminen onnistui."
 
 #: main.cpp:794
 #, kde-format

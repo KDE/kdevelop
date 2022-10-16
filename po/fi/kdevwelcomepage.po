@@ -1,0 +1,203 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kdevelop package.
+# Tommi Nieminen <translator@legisign.org>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-08-20 00:43+0000\n"
+"PO-Revision-Date: 2022-08-30 14:25+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#: qml/area_code.qml:76
+msgid "Need Help?"
+msgstr "Tarvitaanko apua?"
+
+#: qml/area_code.qml:84
+msgid "KDevelop.org"
+msgstr "KDevelop.org"
+
+#: qml/area_code.qml:91
+msgid "Learn about KDevelop"
+msgstr "Lisätietoa KDevelopista"
+
+#: qml/area_code.qml:96
+msgid "Join KDevelop's team!"
+msgstr "Liity KDevelop-työryhmään!"
+
+#: qml/area_code.qml:101
+msgid "Handbook"
+msgstr "Käsikirja"
+
+#: qml/area_debug.qml:18 qml/area_review.qml:16
+msgid "Back to code"
+msgstr "Palaa koodiin"
+
+#: qml/area_debug.qml:37
+msgid "Configure a new Launcher"
+msgstr "Määritä uusi käynnistin"
+
+#: qml/area_debug.qml:38
+msgid "Attach to Process"
+msgstr "Kiinnity prosessiin"
+
+#: qml/area_debug.qml:39
+msgid "Debug your program"
+msgstr "Paikanna ohjelman virheet"
+
+#: qml/area_debug.qml:41
+msgid "Debug Area"
+msgstr "Virheenpaikannusalue"
+
+#: qml/area_debug.qml:44
+msgid ""
+"On the <em>Debug</em> area you will be able to see and analyze how your "
+"program works on execution. On the <em>Run</em> menu you will find all the "
+"possible options."
+msgstr ""
+"<em>Virheenpaikannus</em>-alueella voi nähdä ja analysoida, miten ohjelma "
+"suoritettaessa toimii. <em>Suorita</em>-valikosta löytyvät kaikki "
+"käytettävissä olevat valinnat."
+
+#: qml/area_debug.qml:50
+msgid ""
+"As you can see, here you can just execute your application or debug it if "
+"you need further runtime information. You can select what is going to be run "
+"by configuring the launches and selecting the one you want to use in the "
+"<em>Current Launch Configuration</em> sub-menu."
+msgstr ""
+"Kuten näkyy, tässä voi suorittaa ohjelman tai paikantaa sen virheitä, jos "
+"tarvitset lisää suoritusaikaista tietoa. Voit valita, mitä suoritetaan, "
+"määrittämällä käynnistykset ja valitsemalla haluamasi <em>Nykyinen "
+"käynnistysmääritys</em> -alivalikosta."
+
+#: qml/area_review.qml:38
+msgid "Review a Patch"
+msgstr "Tarkista paikkaus"
+
+#: qml/area_review.qml:46
+msgid "Review Area"
+msgstr "Tarkistusalue"
+
+#: qml/area_review.qml:50
+msgid ""
+"On the <em>Review</em> area you will be able to find the tools you need to "
+"review changes in your projects, either the ones you made or some external "
+"patch."
+msgstr ""
+"<em>Tarkistus</em>-alueelta löytyvät työkalut projektien muutosten "
+"tarkistamiseen – joko omiesi tai ulkoisten paikkausten."
+
+#: qml/area_review.qml:56
+msgid ""
+"Also it will help you send the changes to the community you're contributing "
+"to, either by committing the changes, sending them by e-mail or putting them "
+"on a ReviewBoard service."
+msgstr ""
+"Se auttaa myös lähettämään muutokset avustamallesi yhteisölle joko "
+"toimittamalla versionhallintaan, lähettämällä sähköpostitse tai viemällä ne "
+"ReviewBoard-palveluun."
+
+#: qml/Develop.qml:32
+msgid "New Project"
+msgstr "Uusi projekti"
+
+#: qml/Develop.qml:37
+msgid "Open Project"
+msgstr "Avaa projekti"
+
+#: qml/Develop.qml:43
+msgid "Fetch Project"
+msgstr "Nouda projekti"
+
+#: qml/Develop.qml:50
+msgid "Recent Projects"
+msgstr "Viimeisimmät projektit"
+
+#: qml/Develop.qml:65
+msgid ""
+"<h3>Welcome to KDevelop!</h3>\n"
+"<p>You can start working on a project by opening an existing or creating a "
+"new one via the above buttons.</p>\n"
+"<p>If you need help, please check out the <a href=\"https://userbase.kde.org/"
+"KDevelop\">User Manual.</a></p>"
+msgstr ""
+"<h3>Tervetuloa KDevelopiin!</h3>\n"
+"<p>Voit aloittaa työt projektissa avaamalla olemassa olevan tai luomalla "
+"uuden yllä olevin painikkein.</p>\n"
+"<p>Jos tarvitset apua, katso <a href=\"https://userbase.kde.org/KDevelop"
+"\">käyttöopasta</a>.</p>"
+
+#: qml/Develop.qml:70
+msgid ""
+"<br/>\n"
+"<h3>Note for Windows users</h3>\n"
+"<p>Note that KDevelop does NOT ship a C/C++ compiler on Windows!</p>\n"
+"<p>You need to install either GCC via MinGW or install a recent version of "
+"the Microsoft Visual Studio IDE and make sure the environment is setup "
+"correctly <i>before</i> starting KDevelop.</p>\n"
+"<p>If you need further assistance, please check out the <a href=\"https://"
+"userbase.kde.org/KDevelop4/Manual/WindowsSetup\">KDevelop under Windows "
+"instructions.</a></p>"
+msgstr ""
+"<br/>\n"
+"<h3>Huomautus Windows-käyttäjille</h3>\n"
+"<p>Huomaa, ettei KDevelopin mukana Windowsissa tule C/C++-kääntäjää!</p>\n"
+"<p>Sinun on asennettava joko GCC MinGW:llä tai tuore versio Microsoft Visual "
+"Studio IDEstä ja varmistettava ympäristön toiminta <i>ennen</i> KDevelopin "
+"käynnistämistä.</p>\n"
+"<p>Jos tarvitset lisäapua, katso <a href=\"https://userbase.kde.org/"
+"KDevelop4/Manual/WindowsSetup\">KDevelop Windowsissa</a> -ohjetta.</p>"
+
+#: qml/Develop.qml:107
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#: qml/Develop.qml:126
+msgid "Sessions"
+msgstr "Istunnot"
+
+#: qml/GettingStarted.qml:49
+msgid "Go!"
+msgstr "Menoksi!"
+
+#: qml/GettingStarted.qml:57
+msgid "Documentation for KDevelop users"
+msgstr "Ohjeistus KDevelopin käyttäjille"
+
+#: qml/GettingStarted.qml:62
+msgid "Keep up with KDevelop's development"
+msgstr "Pysy ajan tasalla KDevelopin kehityksestä"
+
+#: qml/GettingStarted.qml:67
+msgid "Help us improve KDevelop"
+msgstr "Auta meitä parantamaan KDevelopia"
+
+#: qml/NewsFeed.qml:136
+msgctxt "Example: Tue, 03 Jan 2017 10:00:00 (new)"
+msgid "%1 (new)"
+msgstr "%1 (uusi)"
+
+#: qml/NewsFeed.qml:147
+msgid "Fetching feeds..."
+msgstr "Noudetaan syötteitä…"
+
+#: qml/NewsFeed.qml:148
+msgid "No recent news"
+msgstr "Ei viimeaikaisia uutisia"
+
+#: qml/plugins/Branches.qml:16
+msgid "Branches"
+msgstr "Haarat"
+
+#: qml/plugins/Projects.qml:15
+msgid "Projects"
+msgstr "Projektit"

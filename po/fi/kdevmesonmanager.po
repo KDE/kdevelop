@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Tommi Nieminen <translator@legisign.org>, 2020.
+# Tommi Nieminen <translator@legisign.org>, 2020, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2020-07-31 13:38+0300\n"
+"PO-Revision-Date: 2022-08-30 14:31+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: mesonbuilder.cpp:48
 #, kde-format
@@ -35,7 +35,7 @@ msgstr ""
 #: mesonbuilder.cpp:141 mesonbuilder.cpp:265
 #, kde-format
 msgid "The current build directory for %1 is invalid"
-msgstr ""
+msgstr "%1 – nykyinen koostamiskansio on kelvoton"
 
 #: mesonbuilder.cpp:164
 #, kde-format
@@ -43,11 +43,12 @@ msgid ""
 "The directory '%1' is not empty and does not seem to be an already "
 "configured build directory"
 msgstr ""
+"Kansio ”%1” ei ole tyhjä eikä vaikuta jo määritetyltä koostamiskansiolta"
 
 #: mesonbuilder.cpp:169
 #, kde-format
 msgid "The directory '%1' cannot be used as a meson build directory"
-msgstr ""
+msgstr "Kansiota ”%1” ei voi käyttää Mesonin koostamiskansioksi"
 
 #: mesonbuilder.cpp:172 mesonjobprune.cpp:55
 #, kde-format
@@ -55,6 +56,7 @@ msgid ""
 "The current build configuration is broken, because the build directory is "
 "not specified"
 msgstr ""
+"Koostamiskansiomääritys on rikki, koska koostamiskansiota ei ole asetettu"
 
 #: mesonbuilder.cpp:176
 #, kde-format
@@ -63,67 +65,70 @@ msgid ""
 "Please report a bug at https://bugs.kde.org/\n"
 "FILE: %1:%2"
 msgstr ""
+"Onnea! Olet törmännyt saavuttamattomissa olevaan koodiin!\n"
+"Ilmoita ohjelmavirheestä osoitteessa https://bugs.kde.org/\n"
+"TIEDOSTO: %1:%2"
 
 #: mesonbuilder.cpp:191 mesonbuilder.cpp:221
 #, kde-format
 msgid "Internal error: The buildsystem manager is not the MesonManager"
-msgstr ""
+msgstr "Sisäinen virhe: koostamisjärjestelmäohjelma ei ole MesonManager"
 
 #: mesonbuilder.cpp:196 mesonbuilder.cpp:226
 #, kde-format
 msgid "Failed to create a new build directory"
-msgstr ""
+msgstr "Uutta koostamiskansiota ei voitu luoda"
 
 #: mesonjob.cpp:27 mesonjobprune.cpp:27
 #, kde-format
 msgid "Meson"
-msgstr ""
+msgstr "Meson"
 
 #: mesonjobprune.cpp:43
 #, kde-format
 msgid "The directory '%1' is already pruned"
-msgstr ""
+msgstr "Kansio ”%1” on jo tyhjennetty"
 
 #: mesonjobprune.cpp:49
 #, kde-format
 msgid "The directory '%1' does not appear to be a meson build directory"
-msgstr ""
+msgstr "Kansio ”%1” ei vaikuta Mesonin koostamiskansiolta"
 
 #: mesonjobprune.cpp:50
 #, kde-format
 msgid "Aborting prune operation"
-msgstr ""
+msgstr "Keskeytetään tyhjennystoimenpide"
 
 #: mesonjobprune.cpp:70
 #, kde-format
 msgid "Deleting contents of '%1'"
-msgstr ""
+msgstr "Poistetaan sisältöä – ”%1”"
 
 #: mesonjobprune.cpp:76
 #, kde-format
 msgid "** Prune successful **"
-msgstr ""
+msgstr "** Tyhjentäminen onnistui **"
 
 #: mesonjobprune.cpp:78
 #, kde-format
 msgid "** Prune failed: %1 **"
-msgstr ""
+msgstr "** Tyhjentäminen epäonnistui: %1 **"
 
 #: mesonmanager.cpp:64
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Import Failed"
-msgstr ""
+msgstr "Projektin tuonti epäonnistui"
 
 #: mesonmanager.cpp:111
 #, kde-format
 msgid "Meson builder error: %1"
-msgstr ""
+msgstr "Meson-koostamisvirhe: %1"
 
 #: mesonmanager.cpp:251
 #, kde-format
 msgid "Importing %1 failed because no build directory could be created."
-msgstr ""
+msgstr "%1 – tuonti epäonnistui, koska koostamiskansiota ei voitu luoda."
 
 #: mintro/mesonintrospectjob.cpp:115
 #, kde-format
@@ -164,12 +169,12 @@ msgstr ""
 #: mintro/mesonintrospectjob.cpp:241 settings/mesonconfigpage.cpp:194
 #, kde-format
 msgid "The current build directory is invalid"
-msgstr ""
+msgstr "Nykyinen koostamiskansio on kelvoton"
 
 #: rewriter/mesonrewriterjob.cpp:42
 #, kde-format
 msgid "Failed to create a temporary file."
-msgstr ""
+msgstr "Väliaikaistiedostoa ei voitu luoda."
 
 #: rewriter/mesonrewriterjob.cpp:74
 #, kde-format
@@ -485,7 +490,7 @@ msgstr "Projekti"
 #: settings/mesonoptionsview.ui:387
 #, kde-format
 msgid "Testing"
-msgstr ""
+msgstr "Testataan"
 
 #: settings/mesonrewriterpage.cpp:179 settings/mesonrewriterpage.cpp:188
 #, kde-format

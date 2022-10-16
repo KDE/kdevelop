@@ -1,6 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -9,8 +10,8 @@ msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-11 00:16+0000\n"
-"PO-Revision-Date: 2016-03-21 16:18+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2022-08-19 16:39+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -18,391 +19,346 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:33+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: cutcopypastehelpers.cpp:78
 #, kde-format
 msgid "Move %1 item into %2"
 msgid_plural "Move %1 items into %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Siirrä %1 kohde kansioon %2"
+msgstr[1] "Siirrä %1 kohdetta kansioon %2"
 
 #: cutcopypastehelpers.cpp:81
 #, kde-format
 msgid "Copy %1 item into %2"
 msgid_plural "Copy %1 items into %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kopioi %1 kohde kansioon %2"
+msgstr[1] "Kopioi %1 kohdetta kansioon %2"
 
 #: cutcopypastehelpers.cpp:84
-#, fuzzy, kde-format
-#| msgid "Delete Files"
+#, kde-format
 msgid "Delete %1 item"
 msgid_plural "Delete %1 items"
-msgstr[0] "Poista tiedostot"
-msgstr[1] "Poista tiedostot"
+msgstr[0] "Poista %1 tietue"
+msgstr[1] "Poista %1 tietuetta"
 
 #: cutcopypastehelpers.cpp:93
 #, kde-format
 msgid "Move item %1 into %2"
-msgstr ""
+msgstr "Siirrä %1 kansioon %2"
 
 #: cutcopypastehelpers.cpp:96
 #, kde-format
 msgid "Copy item %1 into %2"
-msgstr ""
+msgstr "Kopioi %1 kansioon %2"
 
 #: cutcopypastehelpers.cpp:99
-#, fuzzy, kde-format
-#| msgid "Delete Files"
+#, kde-format
 msgid "Delete item %1"
-msgstr "Poista tiedostot"
+msgstr "Poista %1"
 
 #: cutcopypastehelpers.cpp:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation succeeded"
-msgstr ""
+msgstr "Alitoimenpide onnistui"
 
 #: cutcopypastehelpers.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation failed"
-msgstr ""
+msgstr "Alitoimenpide epäonnistui"
 
 #: cutcopypastehelpers.cpp:116
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation skipped to prevent data loss"
-msgstr ""
+msgstr "Alitoimenpide sivuutettiin, jottei tietoa menetettäisi"
 
 #: cutcopypastehelpers.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Paste Failed"
-msgstr ""
+msgstr "Liittäminen epäonnistui"
 
 #: cutcopypastehelpers.cpp:323
 #, kde-format
 msgid ""
 "Failed to paste. Below is a list of suboperations that have been attempted."
-msgstr ""
+msgstr "Liittäminen epäonnistui. Alla luetellaan yritetyt alitoimenpiteet."
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevprojectmanagerview.rc:26
 #, kde-format
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Päätyökalurivi"
 
 #: projectbuildsetwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Build Set"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Build Set"
-msgstr "Käännösjoukko"
+msgstr "Koostamisjoukko"
 
 #: projectbuildsetwidget.cpp:124
-#, fuzzy, kde-format
-#| msgid "Remove From Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from Build Set"
-msgstr "Poista käännösjoukosta"
+msgstr "Poista koostamisjoukosta"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
 #: projectbuildsetwidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Move the selected items to the top"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the top"
-msgstr "Siirrä valitut kohteet ylimmäksi"
+msgstr "Siirrä valitut kohteet ylimmäisiksi"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
 #: projectbuildsetwidget.ui:67
-#, fuzzy, kde-format
-#| msgid "Move the selected items up"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items up"
 msgstr "Siirrä valittuja kohteita ylemmäs"
 
+# Tämä on ainoa yksiköllinen (”item”, ei ”items”), noinkohan on ollut tarkoitus?
 #. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
 #: projectbuildsetwidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Move the selected item down"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected item down"
-msgstr "Siirrä valittuja kohteita alemmas"
+msgstr "Siirrä valittua kohteita alemmas"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
 #: projectbuildsetwidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Move the selected items to the bottom"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the bottom"
 msgstr "Siirrä valitut kohteet alimmaisiksi"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: projectbuildsetwidget.ui:177
-#, fuzzy, kde-format
-#| msgid "These items will be built in the order they are listed."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "These items will be built in the order they are listed."
-msgstr "Nämä kohteet käännetään luettelon mukaisessa järjestyksessä"
+msgstr "Nämä kohteet koostetaan luetellussa järjestyksessä."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectbuildsetwidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Build Sequence"
+#, kde-format
 msgctxt "@title"
 msgid "Build Sequence"
-msgstr "Käännössarja"
+msgstr "Rakenna sarja"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
 #: projectbuildsetwidget.ui:200
-#, fuzzy, kde-format
-#| msgid "Add currently selected items from project tree view to buildset."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Add currently selected items from project tree view to the build set."
-msgstr "Lisää projektin puunäkymän valitut kohteet käännösjoukkoon"
+msgstr "Lisää projektipuusta valitut kohteet koostamisjoukkoon."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
 #: projectbuildsetwidget.ui:216
-#, fuzzy, kde-format
-#| msgid "Remove currently selected item from buildset."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
-msgstr "Poista valitut kohteet käännösjoukosta"
+msgstr "Poistaa valitun kohteen koostamisjoukosta."
 
 #: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:window"
 msgid "Projects"
 msgstr "Projektit"
 
 #: projectmanagerview.cpp:91
-#, fuzzy, kde-format
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
-msgstr "Paikallista nykyinen tiedosto"
+msgstr "Paikanna nykyinen tiedosto"
 
 #: projectmanagerview.cpp:92
-#, fuzzy, kde-format
-#| msgid "Locates the current document in the project tree and selects it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
-msgstr "Paikallista projektin nykyinen tiedosto ja valitse se"
+msgstr "Paikantaa ja valitsee nykyisen tiedoston projektipuusta."
 
 #: projectmanagerview.cpp:98
-#, fuzzy, kde-format
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
-msgstr "Paikallista nykyinen tiedosto"
+msgstr "Valitse nykyinen tiedosto automaattisesti"
 
 #: projectmanagerview.cpp:99
-#, fuzzy, kde-format
-#| msgid "Locates the current document in the project tree and selects it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
-msgstr "Paikallista projektin nykyinen tiedosto ja valitse se"
+msgstr "Valitse projektipuusta automaattisesti nykyinen tiedosto."
 
 #: projectmanagerview.cpp:118
-#, fuzzy, kde-format
-#| msgid "Show Targets"
+#, kde-format
 msgctxt "@action"
 msgid "Show Build Targets"
-msgstr "Näytä kohteet"
+msgstr "Näytä koostamiskohteet"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
 #: projectmanagerview.ui:33
-#, fuzzy, kde-format
-#| msgid "Project Overview"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Project Overview"
 msgstr "Projektin yleiskuva"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
 #: projectmanagerview.ui:53
-#, fuzzy, kde-format
-#| msgid "Build Items:"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Build Items:"
-msgstr "Käännä kohteet:"
+msgstr "Koosta kohteet:"
 
 #: projectmanagerviewplugin.cpp:142
-#, fuzzy, kde-format
-#| msgid "Build all Projects"
+#, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
-msgstr "Käännä kaikki projektit"
+msgstr "Koosta kaikki projektit"
 
 #: projectmanagerviewplugin.cpp:147
-#, fuzzy, kde-format
-#| msgid "Build Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Build Selection"
-msgstr "Käännä valinta"
+msgstr "Koosta valinta"
 
 #: projectmanagerviewplugin.cpp:148
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
-msgstr "Käännä"
+msgstr "Koosta"
 
 #: projectmanagerviewplugin.cpp:154
-#, fuzzy, kde-format
-#| msgid "Install Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Install Selection"
 msgstr "Asenna valinta"
 
 #: projectmanagerviewplugin.cpp:155
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "Asenna"
 
 #: projectmanagerviewplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Clean Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
-msgstr "Puhdista valinta"
+msgstr "Siivoa valinta"
 
 #: projectmanagerviewplugin.cpp:162
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
-msgstr "Puhdista"
+msgstr "Siivoa"
 
 # Tätä voi miettiä vielä paremmaksi. Tarkoittaa esim. cmaken, qmaken, automaken configure-komennon ajamista. Build systemin komento, joka tarkistaa ja tekee tarvittavat asetukset ja toimet, että make voidaan ajaa.
 #: projectmanagerviewplugin.cpp:167
-#, fuzzy, kde-format
-#| msgid "Configure Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Configure Selection"
-msgstr "Tee valinnan asetukset"
+msgstr "Määritä valinta"
 
 # Tätä voi miettiä vielä paremmaksi. Tarkoittaa esim. cmaken, qmaken, automaken configure-komennon ajamista. Build systemin komento, joka tarkistaa ja tekee tarvittavat asetukset ja toimet, että make voidaan ajaa.
 #: projectmanagerviewplugin.cpp:169
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Configure"
-msgstr "Tee asetukset"
+msgstr "Määritä"
 
-# Tätäkin voi vielä miettiä
 #: projectmanagerviewplugin.cpp:174
-#, fuzzy, kde-format
-#| msgid "Prune Selection"
+#, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
-msgstr "Tyhjennä valinta"
+msgstr "Karsi valinta"
 
 #: projectmanagerviewplugin.cpp:175
-#, fuzzy, kde-format
-#| msgid "Prune"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
-msgstr "Tyhjennä"
+msgstr "Karsi"
 
 #: projectmanagerviewplugin.cpp:281
-#, fuzzy, kde-format
-#| msgid "Create File..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
-msgstr "Luo tiedosto…"
+msgstr "Luo &tiedosto…"
 
 #: projectmanagerviewplugin.cpp:287
-#, fuzzy, kde-format
-#| msgid "Create Folder..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
-msgstr "Luo kansio…"
+msgstr "Luo &kansio…"
 
 #: projectmanagerviewplugin.cpp:294
-#, fuzzy, kde-format
-#| msgid "Build"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
-msgstr "Käännä"
+msgstr "K&oosta"
 
 #: projectmanagerviewplugin.cpp:298
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
-msgstr "Asenna"
+msgstr "&Asenna"
 
 #: projectmanagerviewplugin.cpp:302
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
-msgstr "Puhdista"
+msgstr "Sii&voa"
 
 #: projectmanagerviewplugin.cpp:306
-#, fuzzy, kde-format
-#| msgid "Add to Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
-msgstr "Lisää käännösjoukkoon"
+msgstr "L&isää koostamisjoukkoon"
 
 #: projectmanagerviewplugin.cpp:313
-#, fuzzy, kde-format
-#| msgid "Close Project"
-#| msgid_plural "Close Projects"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
 msgid_plural "Close Projects"
-msgstr[0] "Sulje projekti"
+msgstr[0] "&Sulje projekti"
 msgstr[1] "Sulje projektit"
 
 #: projectmanagerviewplugin.cpp:319
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
-msgstr "Päivitä"
+msgstr "Lataa &uudelleen"
 
 #: projectmanagerviewplugin.cpp:350
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
-msgstr "Poista"
+msgstr "&Poista"
 
 #: projectmanagerviewplugin.cpp:354
-#, fuzzy, kde-format
-#| msgid "Rename..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
-msgstr "Muuta nimeä…"
+msgstr "&Muuta nimeä…"
 
 #: projectmanagerviewplugin.cpp:360
-#, fuzzy, kde-format
-#| msgid "Remove From Target"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
-msgstr "Poista kohteesta"
+msgstr "P&oista kohteesta"
 
 #: projectmanagerviewplugin.cpp:547
-#, fuzzy, kde-format
-#| msgid "Create Folder in %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create Folder in %1"
-msgstr "Luo kansio sijaintiin %1"
+msgstr "Luo kansio kohteeseen %1"
 
 #: projectmanagerviewplugin.cpp:548
-#, fuzzy, kde-format
-#| msgid "Folder Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Folder name:"
-msgstr "Kansion nimi"
+msgstr "Kansion nimi:"
 
 #: projectmanagerviewplugin.cpp:600
 #, kde-format
@@ -412,25 +368,22 @@ msgstr[0] "Haluatko varmasti poistaa tämän kohteen?"
 msgstr[1] "Haluatko varmasti poistaa nämä %1 kohdetta?"
 
 #: projectmanagerviewplugin.cpp:603
-#, fuzzy, kde-format
-#| msgid "Delete Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "Poista tiedostot"
 
 #: projectmanagerviewplugin.cpp:656
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "Muuta nimeä"
 
 #: projectmanagerviewplugin.cpp:657
-#, fuzzy, kde-format
-#| msgid "New name for '%1':"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
-msgstr "Uusi nimi kohteelle ”%1”:"
+msgstr "Kohteen ”%1” uusi nimi:"
 
 #: projectmanagerviewplugin.cpp:669
 #, kde-format
@@ -440,7 +393,7 @@ msgstr "Tiedosto ”%1” on jo olemassa"
 #: projectmanagerviewplugin.cpp:672
 #, kde-format
 msgid "Could not rename '%1'"
-msgstr "”%1” nimeä ei voitu muuttaa"
+msgstr "Kohteen ”%1” nimeä ei voitu muuttaa"
 
 #: projectmanagerviewplugin.cpp:675
 #, kde-format
@@ -448,59 +401,52 @@ msgid "'%1' is not a valid file name"
 msgstr "”%1” ei ole kelvollinen tiedostonimi"
 
 #: projectmanagerviewplugin.cpp:689
-#, fuzzy, kde-format
-#| msgid "Create File in %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create File in %1"
-msgstr "Luo tiedosto sijaintiin %1"
+msgstr "Luo tiedosto kansioon %1"
 
 #: projectmanagerviewplugin.cpp:689
-#, fuzzy, kde-format
-#| msgid "File name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "File name:"
 msgstr "Tiedostonimi:"
 
 #: projecttreeview.cpp:151
-#, fuzzy, kde-format
-#| msgid "&Move Here"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
 msgstr "&Siirrä tähän"
 
 #: projecttreeview.cpp:157
-#, fuzzy, kde-format
-#| msgid "&Copy Here"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
 msgstr "&Kopioi tähän"
 
 #: projecttreeview.cpp:163 projecttreeview.cpp:224
-#, fuzzy, kde-format
-#| msgid "C&ancel"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
 msgstr "&Peru"
 
 #: projecttreeview.cpp:218
-#, fuzzy, kde-format
-#| msgid "Add to Build Set"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
-msgstr "Lisää käännösjoukkoon"
+msgstr "L&isää koostamisjoukkoon"
 
 #: projecttreeview.cpp:348
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
-msgstr ""
+msgstr "Tutki ohjelmalla"
 
 #: projecttreeview.cpp:364
-#, fuzzy, kde-format
-#| msgid "Open Configuration..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."
-msgstr "Avaa asetukset…"
+msgstr "Avaa määritys…"
 
 #: vcsoverlayproxymodel.cpp:105
 #, kde-format

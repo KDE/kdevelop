@@ -1,12 +1,12 @@
 # KDE Finnish translation sprint participants:
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2018.
+# Tommi Nieminen <translator@legisign.org>, 2018, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevswitchtobuddy\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2018-08-19 17:07+0200\n"
+"PO-Revision-Date: 2022-08-30 14:25+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -14,26 +14,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-POT-Import-Date: 2013-01-13 21:18:05+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: switchtobuddyplugin.cpp:114
-#, fuzzy, kde-format
-#| msgid "Switch to '%1'"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Switch to '%1'"
 msgstr "Vaihta tiedostoon ”%1”"
 
 #: switchtobuddyplugin.cpp:128
-#, fuzzy, kde-format
-#| msgid "&Switch Definition/Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "&Switch Definition/Declaration"
 msgstr "&Vaihda määrittelyyn/esittelyyn"
 
 #: switchtobuddyplugin.cpp:133
-#, fuzzy, kde-format
-#| msgid "Switch Header/Source"
+#, kde-format
 msgctxt "@action"
 msgid "Switch Header/Source"
 msgstr "Vaihda otsakkeeseen/lähteeseen"

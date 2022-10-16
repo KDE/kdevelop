@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the extragear package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2010.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -10,52 +11,48 @@ msgstr ""
 "Project-Id-Version: kdevdocumentswitcher\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2014-03-27 23:33+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
-"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"PO-Revision-Date: 2022-08-19 16:43+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:29+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: documentswitcherplugin.cpp:65
-#, fuzzy, kde-format
-#| msgid "Last Used Views"
+#, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
 msgstr "Viimeksi käytetyt näkymät"
 
 #: documentswitcherplugin.cpp:68
-#, fuzzy, kde-format
-#| msgid "Opens a list to walk through the list of last used views."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
-msgstr "Avaa luettelon viimeksi käytetyistä näkymistä."
+msgstr "Avaa selattavaksi luettelon viimeksi käytetyistä näkymistä."
 
 #: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
-#, fuzzy, kde-format
-#| msgid "Walk through the list of last used views"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
 msgstr "Selaa viimeksi käytettyjä näkymien luetteloa"
 
 #: documentswitcherplugin.cpp:73
-#, fuzzy, kde-format
-#| msgid "Last Used Views (Reverse)"
+#, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
-msgstr "Viimeksi käytetyt näkymät (käänteisessä järjestyksessä)"
+msgstr "Viimeksi käytetyt näkymät (käänteisjärjestyksessä)"
 
 #: documentswitcherplugin.cpp:76
-#, fuzzy, kde-format
-#| msgid "Opens a list to walk through the list of last used views in reverse."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."
 msgstr ""
-"Avaa luettelon viimeksi käytetyistä näkymistä käänteisessä järjestyksessä."
+"Avaa käänteisjärjestyksessä selattavaksi luettelon viimeksi käytetyistä "
+"näkymistä."
 
 #~ msgid "Document Switcher"
 #~ msgstr "Tiedostovaihtaja"

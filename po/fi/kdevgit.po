@@ -1,6 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2016.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -8,8 +9,8 @@ msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-02 00:45+0000\n"
-"PO-Revision-Date: 2016-02-04 21:21+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2022-08-30 14:35+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -17,17 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: committoolview.cpp:206 committoolview.cpp:207
 #, kde-format
 msgid "Filter by filename/project name"
-msgstr ""
+msgstr "Suodata tiedoston tai projektin nimellä"
 
 #: committoolview.cpp:224
 #, kde-format
 msgid "Refresh"
-msgstr ""
+msgstr "Virkistä"
 
 #: committoolview.cpp:225
 #, kde-format
@@ -110,17 +111,17 @@ msgstr ""
 #: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
 #, kde-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: diffviewsctrl.cpp:170
 #, kde-format
 msgid "%1 (staged)"
-msgstr ""
+msgstr "%1 (vaiheistettu)"
 
 #: diffviewsctrl.cpp:172
 #, kde-format
 msgid "Staged (%1)"
-msgstr ""
+msgstr "Vaiheistettu (%1)"
 
 #: diffviewsctrl.cpp:174
 #, kde-format
@@ -143,7 +144,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
-msgstr ""
+msgstr "Palauta"
 
 #: gitmessagehighlighter.cpp:66
 #, kde-format
@@ -180,8 +181,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gitnameemaildialog.ui:35
-#, fuzzy, kde-format
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
 msgstr "&Nimi:"
@@ -210,7 +210,7 @@ msgstr ""
 #: gitplugin.cpp:190
 #, kde-format
 msgid "Git Commit"
-msgstr ""
+msgstr "Git-toimitus"
 
 #: gitplugin.cpp:242
 #, kde-format
@@ -304,11 +304,10 @@ msgid "There are pending changes, do you want to stash them first?"
 msgstr "Muutoksia on odottamassa. Haluatko kätkeä ne ensin?"
 
 #: gitplugin.cpp:856
-#, fuzzy, kde-format
-#| msgid "Pop Stash"
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "Ota kätköstä"
+msgstr "Kätkö"
 
 #: gitplugin.cpp:857
 #, kde-format
@@ -320,7 +319,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Selection"
-msgstr ""
+msgstr "Haaran valinta"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RebaseDialog)
 #: rebasedialog.ui:14
@@ -349,7 +348,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel"
-msgstr ""
+msgstr "Peru"
 
 #: repostatusmodel.cpp:64
 #, kde-format
@@ -367,57 +366,57 @@ msgstr ""
 #, kde-format
 msgctxt "Files in a vcs which have unresolved (merge) conflits"
 msgid "Conflicts"
-msgstr ""
+msgstr "Ristiriidat"
 
 #: repostatusmodel.cpp:72
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked files"
-msgstr ""
+msgstr "Ei-jäljitetyt tiedostot"
 
 #: repostatusmodel.cpp:82
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged"
-msgstr ""
+msgstr "Vaiheistettu"
 
 #: repostatusmodel.cpp:84
 #, kde-format
 msgid "Files with changes staged for commit"
-msgstr ""
+msgstr "Muuttuneet ja toimitettavaksi vaiheistetut tiedostot"
 
 #: repostatusmodel.cpp:89
 #, kde-format
 msgctxt "Files in a vcs which have changes not checked in to repo"
 msgid "Modified"
-msgstr ""
+msgstr "Muuttunut"
 
 #: repostatusmodel.cpp:91
 #, kde-format
 msgid "Files with changes"
-msgstr ""
+msgstr "Muuttuneet tiedostot"
 
 #: repostatusmodel.cpp:96
 #, kde-format
 msgctxt "Files in git which have unresolved (merge) conflits"
 msgid "Conflicts"
-msgstr ""
+msgstr "Ristiriidat"
 
 #: repostatusmodel.cpp:98
 #, kde-format
 msgid "Files with unresolved (merge) conflicts"
-msgstr ""
+msgstr "Tiedostot, joissa on ratkaisemattomia (yhdistämis-) ristiriitoja"
 
 #: repostatusmodel.cpp:103
 #, kde-format
 msgctxt "Files which are not tracked by a vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "Ei jäljitetty"
 
 #: repostatusmodel.cpp:104
 #, kde-format
 msgid "Files not tracked in VCS"
-msgstr ""
+msgstr "Tiedostot, joita ei jäljitetä VCS:ssä"
 
 #: repostatusmodel.cpp:222
 #, kde-format
@@ -511,7 +510,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item file was copied in versioncontrolsystem"
 msgid "Copied"
-msgstr ""
+msgstr "Kopioitu"
 
 #: repostatusmodel.cpp:259
 #, fuzzy, kde-format
@@ -532,24 +531,24 @@ msgstr ""
 #, kde-format
 msgctxt "@item file has unresolved merge conflicts"
 msgid "Unresolved conflicts"
-msgstr ""
+msgstr "Ratkaisemattomia ristiriitoja"
 
 #: repostatusmodel.cpp:266
 #, kde-format
 msgctxt "@item file is not under vcs"
 msgid "Untracked"
-msgstr ""
+msgstr "Ei jäljitetty"
 
 #: repostatusmodel.cpp:269
 #, kde-format
 msgctxt "file in unknown (invalid) state"
 msgid "Unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 #: repostatusmodel.cpp:362
 #, kde-format
 msgid " (staged)"
-msgstr ""
+msgstr " (vaiheistettu)"
 
 #: repostatusmodel.cpp:370
 #, kde-format
@@ -559,12 +558,12 @@ msgstr ""
 #: repostatusmodel.cpp:378
 #, kde-format
 msgid " (conflicts)"
-msgstr ""
+msgstr " (ristiriita)"
 
 #: repostatusmodel.cpp:386
 #, kde-format
 msgid " (untracked)"
-msgstr ""
+msgstr " (ei jäljitetty)"
 
 #: repostatusmodel.cpp:580
 #, fuzzy, kde-format
@@ -576,27 +575,27 @@ msgstr "Haara"
 #, kde-format
 msgctxt "project name (branch name)"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: simplecommitform.cpp:40
 #, kde-format
 msgid "Commit"
-msgstr ""
+msgstr "Toimita"
 
 #: simplecommitform.cpp:65
 #, kde-format
 msgid "Extended commit description"
-msgstr ""
+msgstr "Laaja toimituskuvaus"
 
 #: simplecommitform.cpp:73
 #, kde-format
 msgid "Commit summary"
-msgstr ""
+msgstr "Toimituksen yhteenveto"
 
 #: simplecommitform.cpp:88 simplecommitform.cpp:172
 #, kde-format
 msgid "To commit changes, please write a commit message first"
-msgstr ""
+msgstr "Muutosten toimittamiseksi kirjoita ensin toimitusviesti"
 
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
@@ -627,11 +626,10 @@ msgstr "Haluatko varmasti pudottaa kätkön”%1”?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
 #: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
-#, fuzzy, kde-format
-#| msgid "Drop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Drop"
-msgstr "Pudota"
+msgstr "Hylkää"
 
 #: stashmanagerdialog.cpp:127
 #, fuzzy, kde-format
@@ -676,11 +674,10 @@ msgstr "Tekee kätkön muutokset ja pudottaa sitten kätkön"
 
 #. i18n: ectx: property (text), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Pop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Pop"
-msgstr "Nosta"
+msgstr "Pop"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, show)
 #: stashmanagerdialog.ui:51

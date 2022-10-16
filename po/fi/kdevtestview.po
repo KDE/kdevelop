@@ -1,46 +1,43 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2014-05-30 21:58+0300\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
-"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"PO-Revision-Date: 2022-08-30 14:18+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: testview.cpp:56 testviewplugin.cpp:70
-#, fuzzy, kde-format
-#| msgid "Unit Tests"
+#, kde-format
 msgctxt "@title:window"
 msgid "Unit Tests"
 msgstr "Yksikkötestit"
 
 #: testview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Show Source"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Source"
 msgstr "Näytä lähdekoodi"
 
 #: testview.cpp:85
-#, fuzzy, kde-format
-#| msgid "Run Selected Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Run Selected Tests"
 msgstr "Suorita valitut testit"
 
 #: testview.cpp:90
-#, fuzzy, kde-format
-#| msgid "Filter..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
 msgstr "Suodata…"
@@ -53,15 +50,13 @@ msgstr[0] "Suorita yksi testi"
 msgstr[1] "Suorita %1 testiä"
 
 #: testviewplugin.cpp:59
-#, fuzzy, kde-format
-#| msgid "Run All Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Run All Tests"
 msgstr "Suorita kaikki testit"
 
 #: testviewplugin.cpp:63
-#, fuzzy, kde-format
-#| msgid "Stop Running Tests"
+#, kde-format
 msgctxt "@action"
 msgid "Stop Running Tests"
 msgstr "Pysäytä testien suoritus"

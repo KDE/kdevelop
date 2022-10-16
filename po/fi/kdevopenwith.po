@@ -1,6 +1,7 @@
 # Copyright © 2011 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2015.
+# Tommi Nieminen <translator@legisign.org>, 2022.
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -8,8 +9,8 @@ msgstr ""
 "Project-Id-Version: kdevopenwith\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-07-09 00:43+0000\n"
-"PO-Revision-Date: 2015-11-29 14:13+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2022-08-30 14:27+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -17,46 +18,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:31+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: openwithplugin.cpp:145
-#, fuzzy, kde-format
-#| msgid "other..."
+#, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
-msgstr "Muulla…"
+msgstr "Muu…"
 
 #: openwithplugin.cpp:156
-#, fuzzy, kde-format
-#| msgid "Open With"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Avaa ohjelmalla"
 
 #: openwithplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Embedded Editors"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Upotetut muokkaimet"
 
 #: openwithplugin.cpp:165
-#, fuzzy, kde-format
-#| msgid "External Applications"
+#, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Ulkoiset sovellukset"
 
 #: openwithplugin.cpp:172
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Avaa"
 
 #: openwithplugin.cpp:192
-#, fuzzy, kde-format
-#| msgid "Default Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Oletusmuokkain"
@@ -65,28 +60,25 @@ msgstr "Oletusmuokkain"
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
-msgstr ""
-"Haluatko avata kaikki %1-tyyppiset tiedostot oletusarvoisesti ohjelmalla %2?"
+msgstr "Haluatko avata kaikki ”%1”-tiedostot oletuksena ohjelmalla %2?"
 
 #: openwithplugin.cpp:284
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
-msgstr "Aseta oletukseksi?"
+msgstr "Asetetaanko oletukseksi?"
 
 #: openwithplugin.cpp:285
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr "Aseta oletukseksi?"
+msgstr "Aseta oletukseksi"
 
 #: openwithplugin.cpp:286
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
-msgstr ""
+msgstr "Älä aseta"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"
