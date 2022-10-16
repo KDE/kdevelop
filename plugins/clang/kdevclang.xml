@@ -10,6 +10,7 @@
         <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
         <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
         <comment xml:lang="eu">NVIDIA CUDA C sorburu-kodea</comment>
+        <comment xml:lang="fi">NVIDIA CUDA -C-lähdekoodi</comment>
         <comment xml:lang="fr">Code source « C » pour « Nvidia CUDA »</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
         <comment xml:lang="ka">NVIDIA CUDA-ის C-ის საწყისი კოდი</comment>
@@ -39,6 +40,7 @@
         <comment xml:lang="en_GB">NVIDIA CUDA C header</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
         <comment xml:lang="eu">NVIDIA CUDA C goiburua</comment>
+        <comment xml:lang="fi">NVIDIA CUDA -C-otsake</comment>
         <comment xml:lang="fr">En-tête « C » pour « Nvidia CUDA »</comment>
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
         <comment xml:lang="ka">NVIDIA CUDA-ის C-ის თავსართი</comment>
