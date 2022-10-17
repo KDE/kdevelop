@@ -91,8 +91,8 @@ msgstr "No s'ha trobat el fitxer de base de dades de la compilació: «%1»"
 msgid ""
 "Nothing to check: compilation database file '%1' contains no matching items."
 msgstr ""
-"No hi ha res a comprovar: el fitxer de base de dades de compilació «%1» no "
-"conté elements coincidents."
+"No hi ha res que calga comprovar: el fitxer de base de dades de compilació "
+"«%1» no conté elements coincidents."
 
 #: compileanalyzeutils.cpp:57
 #, kde-format

@@ -1521,7 +1521,7 @@ msgstr "El directori de treball «%1» no existix o no és cap directori"
 #: outputview/outputexecutejob.cpp:301
 #, kde-format
 msgid "Failed to specify program to start: %1"
-msgstr "No s'ha pogut especificar el programa que cal iniciar: %1"
+msgstr "No s'ha pogut especificar el programa que s'ha d'iniciar: %1"
 
 #: outputview/outputexecutejob.cpp:302
 #, kde-format
@@ -3290,7 +3290,7 @@ msgstr "Torna a analitzar el projecte sencer"
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
 msgstr ""
-"Seleccioneu un connector de gestió que s'utilitzarà per a este projecte"
+"Seleccioneu un connector de gestió que s'haja d'utilitzar per a este projecte"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
@@ -3376,7 +3376,7 @@ msgstr "Directori:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr "Seleccioneu el directori que s'utilitzarà..."
+msgstr "Seleccioneu el directori que s'ha d'utilitzar..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3886,7 +3886,7 @@ msgstr "Activa l'analitzador en segon pla"
 msgctxt "@info:tooltip"
 msgid "The time to wait before the document is re-analyzed when you edit it."
 msgstr ""
-"El temps que cal esperar abans de tornar a analitzar el document quan "
+"El temps que s'ha d'esperar abans de tornar a analitzar el document quan "
 "l'editeu."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -5445,7 +5445,7 @@ msgstr ""
 #: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Number of threads to use"
-msgstr "Nombre de fils que s'utilitzaran"
+msgstr "Nombre de fils que s'han d'utilitzar"
 
 #: util/duchainify/main.cpp:279
 #, kde-format
@@ -5454,10 +5454,10 @@ msgid ""
 "declarations (default), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 msgstr ""
-"Característiques que cal construir. Opcions: buit, declaracions-visibles-"
-"simplificades, declaracions-visibles (de manera predeterminada), totes-les-"
-"declaracions, totes-les-declaracions-i-usos, totes-les-declaracions-i-usos-i-"
-"AST"
+"Característiques que s'han de construir. Opcions: buit, declaracions-"
+"visibles-simplificades, declaracions-visibles (de manera predeterminada), "
+"totes-les-declaracions, totes-les-declaracions-i-usos, totes-les-"
+"declaracions-i-usos-i-AST"
 
 #: util/duchainify/main.cpp:283
 #, kde-format
@@ -5655,7 +5655,7 @@ msgstr "Segur que voleu suprimir irreversiblement la branca «%1»?"
 #: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr "Ja esteu en la branca «%1»\n"
+msgstr "Ja vos trobeu en la branca «%1»\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:182
 #, kde-format
@@ -5670,8 +5670,7 @@ msgstr ""
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr ""
-"Cal seleccionar una branca que s'ha de fusionar dins l'actual des de la "
-"llista."
+"Cal seleccionar una branca per a fusionar dins l'actual des de la llista."
 
 #: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format

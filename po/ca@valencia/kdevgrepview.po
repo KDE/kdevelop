@@ -74,7 +74,7 @@ msgstr "Busca «%1» en %2 (a l'hora %3)"
 #: grepjob.cpp:97
 #, kde-format
 msgid "Find in Files"
-msgstr "Busca a fitxers"
+msgstr "Busca en fitxers"
 
 #: grepjob.cpp:113 grepjob.cpp:216
 #, kde-format
@@ -578,8 +578,8 @@ msgid ""
 "Enter the file name pattern of the files to search here. You may give "
 "several patterns separated by commas or spaces."
 msgstr ""
-"Introduïu ací el patró de nom de fitxer dels fitxers a buscar. Podeu indicar "
-"diversos patrons separats per comes o espais."
+"Introduïu ací el patró de nom de fitxer dels fitxers que es buscaran. Podeu "
+"indicar diversos patrons separats per comes o espais."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:218
@@ -605,8 +605,8 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
-"Introduïu ací el patró de nom de fitxer dels fitxers que s'hagen d'excloure "
-"de la busca. Podeu indicar diversos patrons separats per comes o espais."
+"Introduïu ací el patró de nom de fitxer dels fitxers que s'exclouran de la "
+"busca. Podeu indicar diversos patrons separats per comes o espais."
 "<p>Internament cada patró s'envoltarà amb asteriscs, de manera que cada "
 "patró puga coincidir amb parts dels camins dels fitxers.</p>"
 

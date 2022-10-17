@@ -202,7 +202,7 @@ msgstr "E&ntorn:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr "Seleccioneu un entorn que s'utilitzarà"
+msgstr "Seleccioneu un entorn que s'haja d'utilitzar"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206

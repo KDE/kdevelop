@@ -534,7 +534,7 @@ msgstr "Seleccioneu una opció addicional de Meson"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Meson option to add:"
-msgstr "Opció de Meson a afegir:"
+msgstr "Opció de Meson que s'ha d'afegir:"
 
 #: settings/mesonrewriterpage.cpp:438
 #, kde-format

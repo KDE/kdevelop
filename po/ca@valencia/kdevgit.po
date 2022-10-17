@@ -293,7 +293,7 @@ msgstr "No s'ha especificat cap missatge"
 #: gitplugin.cpp:615
 #, kde-format
 msgid "No files to remove"
-msgstr "No hi ha fitxers a eliminar"
+msgstr "No hi ha fitxers per a eliminar"
 
 #: gitplugin.cpp:855
 #, kde-format

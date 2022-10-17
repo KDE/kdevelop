@@ -422,7 +422,7 @@ msgstr "Configuració personalitzada dels camins cap als «include»"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Include"
-msgstr "Seleccioneu un directori a incloure"
+msgstr "Seleccioneu un directori que s'haja d'incloure"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:17
@@ -466,7 +466,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to include."
-msgstr "Seleccioneu un directori a incloure."
+msgstr "Seleccioneu un directori que s'inclourà."
 
 #. i18n: ectx: property (text), widget (QPushButton, directorySelector)
 #: noprojectincludesanddefines/noprojectcustomincludepaths.ui:69

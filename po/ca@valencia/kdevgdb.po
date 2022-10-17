@@ -77,7 +77,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
-msgstr "Expressions a imprimir:"
+msgstr "Expressions que s'han d'imprimir:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:47
