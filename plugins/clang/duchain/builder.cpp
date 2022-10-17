@@ -1116,23 +1116,20 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
 
     decl->setFunctionLike(true);
 
-    const auto openingParen = posAfterMacroId;
-    const auto closingParen = findClose(contents, openingParen);
-    if (closingParen == -1) {
-        // unlikely: invalid macro definition, insert the complete #define statement
-        const QString definition = QLatin1String("#define ") + contents;
-        setDefinition(definition);
-        return;
-    }
-
-    setDefinition(contents.mid(closingParen + 1));
-
     // extract macro function parameters
-    const auto parameters = contents.mid(openingParen, closingParen - openingParen + 1); // include both '(' and ')'
-    ParamIterator paramIt(u"()", parameters, 0);
+    ParamIterator paramIt(u"()", contents, posAfterMacroId);
     while (paramIt) {
         decl->addParameter(IndexedString(*paramIt));
         ++paramIt;
+    }
+
+    const auto paramEndPosition = paramIt.position();
+    if (paramEndPosition > 0 && contents[paramEndPosition - 1] == QLatin1Char{')'}) {
+        setDefinition(contents.mid(paramEndPosition));
+    } else {
+        // unlikely: invalid macro definition, insert the complete #define statement
+        const QString definition = QLatin1String("#define ") + contents;
+        setDefinition(definition);
     }
 }
 
