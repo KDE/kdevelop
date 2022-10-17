@@ -7,6 +7,7 @@
 
 #include "ilanguagesupport.h"
 #include "../duchain/duchain.h"
+#include "../duchain/stringhelpers.h"
 
 #include <QReadWriteLock>
 
@@ -93,13 +94,9 @@ int ILanguageSupport::suggestedReparseDelayForChange(KTextEditor::Document* doc,
                                                      const KTextEditor::Range& changedRange,
                                                      const QString& /*removedText*/, bool /*removal*/) const
 {
-    auto text = doc->text(changedRange);
-    bool joinedWord = doc->wordRangeAt(changedRange.start()).isEmpty() ||
-                      doc->wordRangeAt(changedRange.end()).isEmpty();
-
-    auto isWhitespace = std::all_of(text.begin(), text.end(), [](const QChar& c) {
-            return c.isSpace();
-        });
-    return (isWhitespace && !joinedWord) ? NoUpdateRequired : DefaultDelay;
+    const auto joinedWord = [doc, &changedRange] {
+        return doc->wordRangeAt(changedRange.start()).isEmpty() || doc->wordRangeAt(changedRange.end()).isEmpty();
+    };
+    return consistsOfWhitespace(doc->text(changedRange)) && !joinedWord() ? NoUpdateRequired : DefaultDelay;
 }
 }

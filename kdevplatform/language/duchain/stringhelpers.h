@@ -20,6 +20,11 @@ namespace KDevelop {
 class ParamIteratorPrivate;
 
 /**
+ * @return true if QChar::isSpace() returns true for all elements of @p str.
+ */
+bool KDEVPLATFORMLANGUAGE_EXPORT consistsOfWhitespace(QStringView str);
+
+/**
  * Searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
  */
 int KDEVPLATFORMLANGUAGE_EXPORT findClose(QStringView str, int pos);

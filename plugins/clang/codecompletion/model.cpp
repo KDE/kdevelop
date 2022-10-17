@@ -18,6 +18,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/stringhelpers.h>
 
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
@@ -27,11 +28,6 @@
 using namespace KDevelop;
 
 namespace {
-
-bool isSpaceOnly(const QString& string)
-{
-    return std::find_if(string.begin(), string.end(), [] (const QChar c) { return !c.isSpace(); }) == string.end();
-}
 
 bool includePathCompletionRequired(const QString& text)
 {
@@ -173,7 +169,7 @@ bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, co
 {
     const QString noCompletionAfter = QStringLiteral(";{}]) ");
 
-    if (inserted.isEmpty() || isSpaceOnly(inserted)) {
+    if (inserted.isEmpty() || consistsOfWhitespace(inserted)) {
         return false;
     }
     const auto lastChar = inserted.at(inserted.size() - 1);

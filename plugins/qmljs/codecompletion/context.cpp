@@ -491,12 +491,4 @@ DeclarationPointer CodeCompletionContext::declarationAtEndOfString(const QString
 
     return visitor.lastDeclaration();
 }
-
-bool CodeCompletionContext::containsOnlySpaces(const QString& str)
-{
-    return std::all_of(str.begin(), str.end(), [](const QChar c) {
-        return c.isSpace();
-    });
-}
-
 }

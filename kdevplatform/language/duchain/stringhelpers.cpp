@@ -10,6 +10,8 @@
 #include <QString>
 #include <QVarLengthArray>
 
+#include <algorithm>
+
 namespace {
 bool endsWithWordBoundary(QStringView str)
 {
@@ -105,6 +107,13 @@ int skipComment(QStringView str, int pos)
 } // unnamed namespace
 
 namespace KDevelop {
+bool consistsOfWhitespace(QStringView str)
+{
+    return std::all_of(str.cbegin(), str.cend(), [](QChar c) {
+        return c.isSpace();
+    });
+}
+
 class ParamIteratorPrivate
 {
     Q_DISABLE_COPY_MOVE(ParamIteratorPrivate)

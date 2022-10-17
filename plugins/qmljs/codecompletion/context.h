@@ -81,7 +81,6 @@ private:
 
     KDevelop::Stack<ExpressionStackEntry> expressionStack(const QString& expression);    /*!< @see ExpressionStackEntry */
     KDevelop::DeclarationPointer declarationAtEndOfString(const QString& expression);
-    bool containsOnlySpaces(const QString &str);
 
 private:
     enum CompletionKind {
