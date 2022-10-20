@@ -164,42 +164,41 @@ int findClose(QStringView str, int pos)
     QVarLengthArray<QChar, 16> st;
     st.append(str[pos]);
 
-    for (int a = pos + 1; a < str.length(); a++) {
-        switch (str[a].unicode()) {
+    for (++pos; pos < str.size(); ++pos) {
+        switch (str[pos].unicode()) {
         case '<':
-            if (isOperator(str, a))
+            if (isOperator(str, pos))
                 break;
             [[fallthrough]];
         case '(':
         case '[':
         case '{':
-            st.insert(0, str[a]);
+            st.insert(0, str[pos]);
             depth++;
             break;
         case '>':
-            if (isOperator(str, a) || isArrowOperator(str, a))
+            if (isOperator(str, pos) || isArrowOperator(str, pos))
                 break;
-
             [[fallthrough]];
         case ')':
         case ']':
         case '}':
-            if (!st.isEmpty() && parenFits(st.front(), str[a])) {
+            if (!st.isEmpty() && parenFits(st.front(), str[pos])) {
                 depth--;
                 st.remove(0);
             }
             break;
         case '"':
         case '\'':
-            a = skipStringOrCharLiteral(str, a);
+            pos = skipStringOrCharLiteral(str, pos);
             break;
         case '/':
-            a = skipComment(str, a);
+            pos = skipComment(str, pos);
             break;
         }
 
         if (depth == 0) {
-            return a;
+            return pos;
         }
     }
 
@@ -211,39 +210,38 @@ int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
     const auto size = str.size();
     Q_ASSERT(pos >= 0 && pos <= size);
 
-    for (int a = pos; a < size; a++) {
-        switch (str[a].unicode()) {
+    for (; pos < size; ++pos) {
+        switch (str[pos].unicode()) {
         case '"':
         case '\'':
-            a = skipStringOrCharLiteral(str, a);
+            pos = skipStringOrCharLiteral(str, pos);
             break;
         case '/':
-            a = skipComment(str, a);
+            pos = skipComment(str, pos);
             break;
         case '<':
-            if (isOperator(str, a))
+            if (isOperator(str, pos))
                 break;
             [[fallthrough]];
         case '(':
         case '[':
         case '{':
-            a = findClose(str, a);
-            if (a == -1)
+            pos = findClose(str, pos);
+            if (pos == -1)
                 return size;
             break;
         case '>':
-            if (isOperator(str, a) || isArrowOperator(str, a))
+            if (isOperator(str, pos) || isArrowOperator(str, pos))
                 break;
-
             [[fallthrough]];
         case ')':
         case ']':
         case '}':
-            if (validEnd != QLatin1Char(' ') && validEnd != str[a])
+            if (validEnd != QLatin1Char(' ') && validEnd != str[pos])
                 break;
             [[fallthrough]];
         case ',':
-            return a;
+            return pos;
         }
     }
 
