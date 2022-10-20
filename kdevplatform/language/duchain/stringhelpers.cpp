@@ -8,7 +8,6 @@
 #include <debug.h>
 
 #include <QString>
-#include <QVarLengthArray>
 
 #include <algorithm>
 
@@ -161,63 +160,96 @@ public:
     }
 };
 
-bool parenFits(QChar c1, QChar c2)
+namespace {
+QChar fittingClosingNonAngleBracket(QChar openingBracket)
 {
-    if (c1 == QLatin1Char('<') && c2 == QLatin1Char('>'))
-        return true;
-    else if (c1 == QLatin1Char('(') && c2 == QLatin1Char(')'))
-        return true;
-    else if (c1 == QLatin1Char('[') && c2 == QLatin1Char(']'))
-        return true;
-    else if (c1 == QLatin1Char('{') && c2 == QLatin1Char('}'))
-        return true;
-    else
-        return false;
+    switch (openingBracket.unicode()) {
+    case '(':
+        return QLatin1Char(')');
+    case '[':
+        return QLatin1Char(']');
+    case '{':
+        return QLatin1Char('}');
+    default:
+        Q_UNREACHABLE();
+    }
 }
 
-int findClose(QStringView str, int pos)
+// findClosingNonAngleBracket() and findClosingAngleBracket() have different implementations for the following reason.
+// Taking all bracket types into account while looking for a closing angle bracket may improve correctness, because the
+// characters of other bracket types are always brackets, not [parts of] operators; distinguishing between angle
+// brackets and operators is heuristic and unreliable. For example, in `Foo<(A>B)>` the round brackets help to recognize
+// the first '>' character as an operator rather than a closing angle bracket. Conversely, taking all bracket types into
+// account while looking for a closing non-angle bracket may adversely affect correctness. For example, in `Foo<(A<B)>`
+// the second '<' character would be regarded as an opening angle bracket, which would prevent recognizing the closing
+// round bracket.
+
+/// Finds in @p str the position of a fitting closing bracket for the opening bracket @p str[@p pos], e.g. ')' for '('.
+/// @return the position of a fitting closing bracket or str.size() if not found.
+/// @warning This function does not support angle brackets. Use findClosingAngleBracket() for that.
+int findClosingNonAngleBracket(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
+    Q_ASSERT(str[pos] == QLatin1Char{'('} || str[pos] == QLatin1Char{'['} || str[pos] == QLatin1Char{'{'});
+
+    const auto openingBracket = str[pos];
+    const auto closingBracket = fittingClosingNonAngleBracket(openingBracket);
 
     int depth = 1;
-    QVarLengthArray<QChar, 16> st;
-    st.append(str[pos]);
+
+    for (++pos; pos < str.size(); ++pos) {
+        if (str[pos] == openingBracket) {
+            ++depth;
+        } else if (str[pos] == closingBracket) {
+            if (--depth == 0) {
+                return pos;
+            }
+        } else {
+            pos = trySkipStringOrCharLiteralOrComment(str, pos);
+        }
+    }
+
+    Q_ASSERT(depth > 0);
+    return str.size();
+}
+
+/// Finds in @p str the position of a fitting closing angle bracket for the opening angle bracket @p str[@p pos] == '<'.
+/// @return the position of a fitting closing bracket or str.size() if not found.
+int findClosingAngleBracket(QStringView str, int pos)
+{
+    Q_ASSERT(pos >= 0 && pos < str.size());
+    Q_ASSERT(str[pos] == QLatin1Char{'<'});
+
+    int depth = 1;
 
     for (++pos; pos < str.size(); ++pos) {
         switch (str[pos].unicode()) {
         case '<':
-            if (isOperator(str, pos))
-                break;
-            [[fallthrough]];
+            if (!isOperator(str, pos)) {
+                ++depth;
+            }
+            break;
+        case '>':
+            if (!isOperatorOrArrowOperator(str, pos)) {
+                if (--depth == 0) {
+                    return pos;
+                }
+            }
+            break;
         case '(':
         case '[':
         case '{':
-            st.insert(0, str[pos]);
-            depth++;
-            break;
-        case '>':
-            if (isOperatorOrArrowOperator(str, pos))
-                break;
-            [[fallthrough]];
-        case ')':
-        case ']':
-        case '}':
-            if (!st.isEmpty() && parenFits(st.front(), str[pos])) {
-                depth--;
-                st.remove(0);
-            }
+            pos = findClosingNonAngleBracket(str, pos);
             break;
         default:
             pos = trySkipStringOrCharLiteralOrComment(str, pos);
         }
-
-        if (depth == 0) {
-            return pos;
-        }
     }
 
-    return -1;
+    Q_ASSERT(depth > 0);
+    return str.size();
 }
+} // unnamed namespace
 
 int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
 {
@@ -226,16 +258,16 @@ int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
 
     for (; pos < size; ++pos) {
         switch (str[pos].unicode()) {
+        // Take into account brackets of all types, not just the validEnd type, to skip ',' within them.
         case '<':
-            if (isOperator(str, pos))
-                break;
-            [[fallthrough]];
+            if (!isOperator(str, pos)) {
+                pos = findClosingAngleBracket(str, pos);
+            }
+            break;
         case '(':
         case '[':
         case '{':
-            pos = findClose(str, pos);
-            if (pos == -1)
-                return size;
+            pos = findClosingNonAngleBracket(str, pos);
             break;
         case ',':
             return pos;

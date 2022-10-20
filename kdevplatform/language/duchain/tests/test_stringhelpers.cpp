@@ -181,10 +181,17 @@ void TestStringHelpers::testParamIterator_data()
     addTest("Y<decltype(&X::operator<=), Z<&X::operator<=>>", {"decltype(&X::operator<=)", "Z<&X::operator<=>"});
     // c++20 operator<=>
     addTest("Y<decltype(&X::operator<=>), Z<&X::operator<=>>>", {"decltype(&X::operator<=>)", "Z<&X::operator<=>>"});
-    // NOTE: this identifier here is invalid but we shouldn't trigger UB either, so the test is just that we get _something_ (even if it's wrong)
-    addTest("bogus<_Tp, _Up, invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>", {"_Tp", "_Up", "invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>"});
+    // NOTE: the "bogus" identifiers below are invalid but shouldn't trigger UB, so the tests verify that we get
+    // _something_ (even if it's wrong).
+    addTest("bogus<_Tp, _Up, invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>>",
+            {"_Tp", "_Up", "invalid<decltype(<=(std::declval<_Tp>(), std::declval<_Up>()))>"});
+    addTest("bogus<_Tp, _Up, invalid<<=(std::declval<_Tp>(), std::declval<_Up>())>>",
+            {"_Tp", "_Up", "invalid<<=(std::declval<_Tp>(), std::declval<_Up>())>>"});
     addTest("hardToParse<A<B>", {"A<B"});
+    addTest("hardToParse<(A<B)>", {"(A<B)"});
     addTest("hardToParse<(A>B)>", {"(A>B)"});
+    addTest("hardToParse<Foo<(A<B)>>", {"Foo<(A<B)>"});
+    addTest("hardToParse<Foo<(A>B)>>", {"Foo<(A>B)>"});
 
     // Such zero/empty tparam strings are actually passed to ParamIterator() while libstdc++ headers are parsed.
     addTest("_Index_tuple<>", {});

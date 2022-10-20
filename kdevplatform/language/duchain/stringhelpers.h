@@ -25,11 +25,6 @@ class ParamIteratorPrivate;
 bool KDEVPLATFORMLANGUAGE_EXPORT consistsOfWhitespace(QStringView str);
 
 /**
- * Searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
- */
-int KDEVPLATFORMLANGUAGE_EXPORT findClose(QStringView str, int pos);
-
-/**
  * Searches in the given string for a ',' or a closing bracket equal to @p validEnd,
  * while skipping everything between opened brackets, string and character literals, comments.
  * @param str string to search
