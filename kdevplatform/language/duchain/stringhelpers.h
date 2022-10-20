@@ -30,14 +30,14 @@ bool KDEVPLATFORMLANGUAGE_EXPORT consistsOfWhitespace(QStringView str);
 int KDEVPLATFORMLANGUAGE_EXPORT findClose(QStringView str, int pos);
 
 /**
- * Searches in the given string for a ',' or closing brace,
- * while skipping everything between opened braces.
+ * Searches in the given string for a ',' or a closing bracket equal to @p validEnd,
+ * while skipping everything between opened brackets, string and character literals, comments.
  * @param str string to search
  * @param pos position where to start searching
- * @param validEnd when this is set differently, the function will stop when it finds a comma or the given character, and not at closing-braces.
+ * @param validEnd a closing bracket type that stops the search
  * @return  On fail, str.length() is returned, else the position of the closing character.
  */
-int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(QStringView str, int pos, QChar validEnd = QLatin1Char(' '));
+int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(QStringView str, int pos, QChar validEnd);
 
 /**
  * Extracts the interesting information out of a comment.

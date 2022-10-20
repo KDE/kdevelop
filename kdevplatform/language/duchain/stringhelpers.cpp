@@ -68,6 +68,11 @@ bool isArrowOperator(QStringView str, int pos)
     return pos > 0 && str[pos - 1] == QLatin1Char('-') && (pos == 1 || str[pos - 2] != QLatin1Char('-'));
 }
 
+bool isOperatorOrArrowOperator(QStringView str, int pos)
+{
+    return isOperator(str, pos) || isArrowOperator(str, pos);
+}
+
 /// Skips literals enclosed in single or double quotes.
 /// No need to support raw string literals, because they cannot appear within a macro parameter list;
 /// in other contexts libclang converts them into non-raw string literals in each string that ends up here.
@@ -177,7 +182,7 @@ int findClose(QStringView str, int pos)
             depth++;
             break;
         case '>':
-            if (isOperator(str, pos) || isArrowOperator(str, pos))
+            if (isOperatorOrArrowOperator(str, pos))
                 break;
             [[fallthrough]];
         case ')':
@@ -230,18 +235,12 @@ int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
             if (pos == -1)
                 return size;
             break;
-        case '>':
-            if (isOperator(str, pos) || isArrowOperator(str, pos))
-                break;
-            [[fallthrough]];
-        case ')':
-        case ']':
-        case '}':
-            if (validEnd != QLatin1Char(' ') && validEnd != str[pos])
-                break;
-            [[fallthrough]];
         case ',':
             return pos;
+        default:
+            if (str[pos] == validEnd && !(str[pos] == QLatin1Char('>') && isOperatorOrArrowOperator(str, pos))) {
+                return pos;
+            }
         }
     }
 
