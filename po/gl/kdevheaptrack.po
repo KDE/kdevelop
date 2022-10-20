@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2020-02-16 09:30+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -60,28 +60,33 @@ msgstr "Visualizador:"
 msgid "Heaptrack Analysis (%1)"
 msgstr "Análise de Heaptrack (%1)"
 
-#: plugin.cpp:50
+#: plugin.cpp:58
 #, fuzzy, kde-format
 #| msgid "Run Heaptrack Analysis"
 msgctxt "@action"
 msgid "Run Heaptrack Analysis"
 msgstr "Executar a análise de Heaptrack"
 
-#: plugin.cpp:59
+#: plugin.cpp:67
 #, fuzzy, kde-format
 #| msgid "Attach to Process with Heaptrack"
 msgctxt "@action"
 msgid "Attach to Process with Heaptrack"
 msgstr "Anexar a un proceso con Heaptrack"
 
-#: plugin.cpp:86
+#: plugin.cpp:94
 #, kde-format
 msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
 msgstr ""
 "Non se pode iniciar a análise de Heaptrack; o complemento «%1» non está "
 "cargado."
 
-#: plugin.cpp:100
+#: plugin.cpp:104
+#, kde-format
+msgid "Configure a native application launch to perform Heaptrack analysis on."
+msgstr ""
+
+#: plugin.cpp:110
 #, kde-format
 msgid "Heaptrack analysis can be started only for native applications."
 msgstr "A análise de Heaptrack só pode iniciarse para aplicacións nativas."

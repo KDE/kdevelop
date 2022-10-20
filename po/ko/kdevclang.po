@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-16 00:46+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2022-05-07 02:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -277,7 +277,7 @@ msgstr "매크로 기반 #ifndef/#define/#endif 헤더 가드 삽입"
 msgid "Macro %1"
 msgstr "매크로 %1"
 
-#: duchain/macronavigationcontext.cpp:55
+#: duchain/macronavigationcontext.cpp:64
 #, kde-format
 msgctxt ""
 "%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
@@ -285,28 +285,28 @@ msgctxt ""
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: duchain/macronavigationcontext.cpp:56
+#: duchain/macronavigationcontext.cpp:65
 #, kde-format
 msgid "Function macro"
 msgstr "함수 매크로"
 
-#: duchain/macronavigationcontext.cpp:56
+#: duchain/macronavigationcontext.cpp:65
 #, kde-format
 msgid "Macro"
 msgstr "매크로"
 
-#: duchain/macronavigationcontext.cpp:59
+#: duchain/macronavigationcontext.cpp:68
 #, kde-format
 msgctxt "%1: the link to the definition"
 msgid "Defined in: %1"
 msgstr "정의: %1"
 
-#: duchain/macronavigationcontext.cpp:63
+#: duchain/macronavigationcontext.cpp:72
 #, kde-format
 msgid "Show uses"
 msgstr "사용하는 곳 표시"
 
-#: duchain/macronavigationcontext.cpp:66
+#: duchain/macronavigationcontext.cpp:75
 #, kde-format
 msgid "Body: "
 msgstr "본문:"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-16 00:46+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2016-09-22 20:30+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -267,7 +267,7 @@ msgstr ""
 msgid "Macro %1"
 msgstr ""
 
-#: duchain/macronavigationcontext.cpp:55
+#: duchain/macronavigationcontext.cpp:64
 #, kde-format
 msgctxt ""
 "%1: macro type, i.e.: 'Function macro' or just 'Macro'%2: the macro name and "
@@ -275,28 +275,28 @@ msgctxt ""
 msgid "%1: %2"
 msgstr ""
 
-#: duchain/macronavigationcontext.cpp:56
+#: duchain/macronavigationcontext.cpp:65
 #, kde-format
 msgid "Function macro"
 msgstr ""
 
-#: duchain/macronavigationcontext.cpp:56
+#: duchain/macronavigationcontext.cpp:65
 #, kde-format
 msgid "Macro"
 msgstr ""
 
-#: duchain/macronavigationcontext.cpp:59
+#: duchain/macronavigationcontext.cpp:68
 #, kde-format
 msgctxt "%1: the link to the definition"
 msgid "Defined in: %1"
 msgstr ""
 
-#: duchain/macronavigationcontext.cpp:63
+#: duchain/macronavigationcontext.cpp:72
 #, kde-format
 msgid "Show uses"
 msgstr ""
 
-#: duchain/macronavigationcontext.cpp:66
+#: duchain/macronavigationcontext.cpp:75
 #, kde-format
 msgid "Body: "
 msgstr ""
