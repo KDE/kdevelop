@@ -192,7 +192,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum in conditional:"
-msgstr "Mínim a condicional:"
+msgstr "Mínim en condicional:"
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
 #: astyle_preferences.ui:229

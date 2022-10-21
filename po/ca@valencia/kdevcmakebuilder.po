@@ -78,7 +78,8 @@ msgstr "CMake"
 #, kde-format
 msgid "Internal error: no project specified to configure."
 msgstr ""
-"S'ha produït un error intern: no s'ha especificat el projecte a configurar."
+"S'ha produït un error intern: no s'ha especificat el projecte que es "
+"configurarà."
 
 #: cmakejob.cpp:63
 #, kde-format

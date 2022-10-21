@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdevheaptrack\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2020-07-20 14:45+0100\n"
+"PO-Revision-Date: 2022-10-20 09:25+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -74,6 +74,8 @@ msgstr ""
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
 msgstr ""
+"Configurar o lançamento de uma aplicação nativa sobre a qual efectuar a "
+"análise do Heaptrack."
 
 #: plugin.cpp:110
 #, kde-format

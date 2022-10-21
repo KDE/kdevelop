@@ -77,7 +77,7 @@ msgstr "&Nombre de treballs simultanis:"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Count of &errors to be tolerated:"
-msgstr "Nombre d'errors a tolerar:"
+msgstr "Nombre d'errors que s'han de tolerar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ninjaconfig.ui:153

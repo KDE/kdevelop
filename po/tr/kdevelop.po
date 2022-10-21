@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-10 00:16+0000\n"
-"PO-Revision-Date: 2022-10-13 00:35+0300\n"
+"PO-Revision-Date: 2022-10-20 12:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -815,7 +815,7 @@ msgid ""
 msgstr ""
 "Belirtilen hata ayıklayıcı ile KDevelop içinde bir uygulamanın hatalarını "
 "ayıklamayı başlatır.\n"
-"Hata ayıklaması yapılacak ikili dosya şu argümanları içermelidir.\n"
+"Hata ayıklaması yapılacak yürütülebilir, şu argümanları içermelidir.\n"
 "Örnek: kdevelop --debug gdb myapp --foo bar"
 
 #: main.cpp:508
@@ -860,7 +860,7 @@ msgstr "Hata ayıklama yapılacak yürütülebiliri belirtin."
 #, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
-msgstr "Belirtilen çalıştırılabilir yok."
+msgstr "Belirtilen yürütülebilir yok."
 
 #: main.cpp:654
 #, kde-format

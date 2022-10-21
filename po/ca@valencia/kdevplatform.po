@@ -3161,11 +3161,11 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
-"Obri un projecte existent de KDevelop o importa un projecte existent a "
-"KDevelop. Esta entrada permet seleccionar un fitxer de projecte de KDevelop "
-"o un directori existent per a obrir-lo a KDevelop. En obrir un directori "
-"existent que encara no té cap fitxer de projecte de KDevelop, es crearà el "
-"fitxer."
+"Obri un projecte existent de KDevelop o importa un projecte existent a dins "
+"de KDevelop. Esta entrada permet seleccionar un fitxer de projecte de "
+"KDevelop o un directori existent per a obrir-lo en KDevelop. En obrir un "
+"directori existent que encara no té cap fitxer de projecte de KDevelop, es "
+"crearà el fitxer."
 
 #: shell/projectcontroller.cpp:571
 #, kde-format

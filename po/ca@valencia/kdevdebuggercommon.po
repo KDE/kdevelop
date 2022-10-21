@@ -205,7 +205,7 @@ msgstr ""
 #: midebuggerplugin.cpp:237
 #, kde-format
 msgid "Choose a core file to examine..."
-msgstr "Seleccioneu un fitxer de nucli a examinar..."
+msgstr "Seleccioneu un fitxer de nucli que s'haja d'examinar..."
 
 #: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
 #, kde-format

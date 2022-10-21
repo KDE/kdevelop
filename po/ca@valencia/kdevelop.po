@@ -819,7 +819,9 @@ msgstr ""
 #: main.cpp:508
 #, kde-format
 msgid "Files to load, or directories to load as projects"
-msgstr "Fitxers que s'han de carregar, o directoris a carregar com a projectes"
+msgstr ""
+"Fitxers que s'han de carregar, o directoris que s'hagen de carregar com a "
+"projectes"
 
 #: main.cpp:519
 #, kde-format
