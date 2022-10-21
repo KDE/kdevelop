@@ -109,6 +109,20 @@ int skipComment(QStringView str, int pos)
 
     return pos;
 }
+
+int trySkipStringOrCharLiteralOrComment(QStringView str, int pos)
+{
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
+    switch (str[pos].unicode()) {
+    case '"':
+    case '\'':
+        return skipStringOrCharLiteral(str, pos);
+    case '/':
+        return skipComment(str, pos);
+    }
+    return pos;
+}
 } // unnamed namespace
 
 namespace KDevelop {
@@ -193,13 +207,8 @@ int findClose(QStringView str, int pos)
                 st.remove(0);
             }
             break;
-        case '"':
-        case '\'':
-            pos = skipStringOrCharLiteral(str, pos);
-            break;
-        case '/':
-            pos = skipComment(str, pos);
-            break;
+        default:
+            pos = trySkipStringOrCharLiteralOrComment(str, pos);
         }
 
         if (depth == 0) {
@@ -217,13 +226,6 @@ int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
 
     for (; pos < size; ++pos) {
         switch (str[pos].unicode()) {
-        case '"':
-        case '\'':
-            pos = skipStringOrCharLiteral(str, pos);
-            break;
-        case '/':
-            pos = skipComment(str, pos);
-            break;
         case '<':
             if (isOperator(str, pos))
                 break;
@@ -241,6 +243,7 @@ int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
             if (str[pos] == validEnd && !(str[pos] == QLatin1Char('>') && isOperatorOrArrowOperator(str, pos))) {
                 return pos;
             }
+            pos = trySkipStringOrCharLiteralOrComment(str, pos);
         }
     }
 
