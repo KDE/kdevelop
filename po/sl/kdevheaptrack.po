@@ -1,16 +1,16 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 #
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2021.
-# Martin Srebotnjak <miles@filmsi.net>, 2022.
 #
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2021, 2022.
+# Martin Srebotnjak <miles@filmsi.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-01-03 09:44+0100\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"PO-Revision-Date: 2022-10-21 08:23+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: config/globalconfigpage.cpp:29
 #, kde-format
@@ -78,7 +78,7 @@ msgstr "Ni mogoče zagnati analize Heaptrack - vtičnik \"%1\" ni naložen."
 #: plugin.cpp:104
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
-msgstr ""
+msgstr "Konfiguriraj zagon domače aplikacije za izvedbo analize Heaptracka."
 
 #: plugin.cpp:110
 #, kde-format
