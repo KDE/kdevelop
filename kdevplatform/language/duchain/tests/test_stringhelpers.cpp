@@ -200,6 +200,29 @@ void TestStringHelpers::testParamIterator_data()
     addTest("__hash_enum<_Tp,\t  \t>", {"_Tp", ""});
     addTest("__uniq_ptr_data<_Tp, _Dp, , >", {"_Tp", "_Dp", "", ""});
 
+    const auto addSpacedOperatorTest = [addTest](const QString& op) {
+        const auto tArg1 = QStringLiteral("x %1 y").arg(op);
+        const auto tArg2 = QStringLiteral("Foo<%1>").arg(tArg1);
+        for (const auto& templateArgument : {tArg1, tArg2}) {
+            addTest(QStringLiteral("spaced<%1>").arg(templateArgument), {templateArgument});
+        }
+    };
+
+    addSpacedOperatorTest("<");
+    addSpacedOperatorTest(">");
+    addSpacedOperatorTest("<=");
+    addSpacedOperatorTest(">=");
+    addSpacedOperatorTest("<<");
+    addSpacedOperatorTest(">>");
+    addSpacedOperatorTest("<<=");
+    addSpacedOperatorTest(">>=");
+    addSpacedOperatorTest("<=>");
+
+    addSpacedOperatorTest("->");
+    // -> must be recognized even when not surrounded with spaces
+    addTest("arrow<u->v>", {"u->v"});
+    addTest("arrow<Foo<u->v>>", {"Foo<u->v>"});
+
     addMacroTest("Q_UNIMPLEMENTED() qWarning(\"Unimplemented code.\")", {});
     addMacroTest("Q_FALLTHROUGH( ) [[clang::fallthrough]]", {});
     addMacroTest("( /*a)b*/ x , /*,*/y,z )", {"/*a)b*/ x", "/*,*/y", "z"});

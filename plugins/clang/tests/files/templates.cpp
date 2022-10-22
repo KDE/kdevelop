@@ -39,6 +39,34 @@ Class_volatile_const<int> instance;
 /// "type" : { "toString" : "TemplateTest< const TemplateTest< int, 100 >, 30 >" }
 TemplateTest<const TemplateTest<int, 100>, 30> tst;
 
+/// "toString" : "class BoolTParam< X >"
+template<bool X>
+class BoolTParam{};
+
+/// "type" : { "toString" : "BoolTParam< 1 < 2 >" }
+BoolTParam<1<2> ltOperatorTArg;
+
+/// "type" : { "toString" : "BoolTParam< 1 <= -1 >" }
+BoolTParam<1<=-1> lteOperatorTArg;
+
+/// "type" : { "toString" : "TemplateTest< TemplateTest< BoolTParam< 1 < 0 >, 1 << 5 > >" }
+TemplateTest < TemplateTest < BoolTParam < 1 < 0 > , 1 << 5 > > spacesEverywhere;
+
+/// "toString" : "class SpacedDefaultParam< int >"
+template < int =5<<2 > class SpacedDefaultParam {};
+
+/// "type" : { "toString" : "SpacedDefaultParam< 20 >" }
+SpacedDefaultParam spacedDefaultParam;
+
+/// "type" : { "toString" : "SpacedDefaultParam<  >" }
+SpacedDefaultParam<> spacedDefaultParamEmpty;
+
+/// "type" : { "toString" : "SpacedDefaultParam< 8 << 5 >" }
+SpacedDefaultParam<8<<5> spacedDefaultParamLeftShift;
+
+/// "type" : { "toString" : "SpacedDefaultParam< (1 > 9) >" }
+SpacedDefaultParam< (1>9) > spacedDefaultParamGt;
+
 /// "toString" : "void test< Type >()",
 /// "EXPECT_FAIL": {"toString": "No way to get template parameters with libclang, and display name would duplicate the signature"}
 template<class Type>

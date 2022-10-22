@@ -21,9 +21,50 @@ bool endsWithWordBoundary(QStringView str)
     return !boundary.isLetterOrNumber() && boundary != QLatin1Char('_');
 }
 
+/// libclang surrounds binary operators but not angle brackets with spaces.
+bool isOperatorSurroundedWithSpaces(QStringView str, int pos)
+{
+    Q_ASSERT(pos >= 0 && pos < str.size());
+
+    if (pos == 0 || pos == str.size() - 1) {
+        return false; // there is no place for surrounding spaces
+    }
+
+    constexpr QLatin1Char lt{'<'}, gt{'>'}, eq{'='}, space{' '};
+
+    const auto c = str[pos];
+    Q_ASSERT(c == lt || c == gt);
+
+    // Note: due to the `pos == 0 || pos == str.size() - 1` check above,
+    // most conditionals below don't need to check boundaries.
+    int operatorEnd = pos + 1;
+    if (str[pos + 1] == c)
+        ++operatorEnd; // << or >>
+    else if (str[pos - 1] == c) {
+        --pos; // << or >>
+    } else {
+        // <=>
+        if (c == lt && str[pos + 1] == eq && pos + 2 < str.size() && str[pos + 2] == gt) {
+            operatorEnd += 2;
+        } else if (c == gt && str[pos - 1] == eq && pos >= 2 && str[pos - 2] == lt) {
+            pos -= 2;
+        }
+    }
+
+    if (operatorEnd - pos < 3 && operatorEnd < str.size() && str[operatorEnd] == eq) {
+        ++operatorEnd; // <= or >= or <<= or >>=
+    }
+
+    return pos > 0 && str[pos - 1] == space && operatorEnd < str.size() && str[operatorEnd] == space;
+}
+
 bool isOperator(QStringView str, int pos)
 {
     Q_ASSERT(pos >= 0 && pos < str.size());
+
+    if (isOperatorSurroundedWithSpaces(str, pos)) {
+        return true;
+    }
 
     const auto op = QLatin1String("operator");
     if (pos < op.size()) {

@@ -136,6 +136,8 @@ void TestFiles::testFiles()
 
     if (QTest::currentDataTag() == QLatin1String("lambdas.cpp")) {
         m_provider->parserArguments += "-std=c++14";
+    } else if (QTest::currentDataTag() == QLatin1String("templates.cpp")) {
+        m_provider->parserArguments += "-std=c++17";
     }
 
     const IndexedString indexedFileName(fileName);
