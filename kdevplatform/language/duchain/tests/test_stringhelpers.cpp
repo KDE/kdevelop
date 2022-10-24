@@ -153,7 +153,9 @@ void TestStringHelpers::testParamIterator_data()
     addTest("Foo<T1, T2>", {"T1", "T2"});
     addTest("operator<", {});
 
-    // These are valid C++ snippets, but I couldn't make such strings be passed to ParamIterator in practice.
+    // Such strings are passed to ParamIterator() when an Identifier is constructed from a template argument inside the
+    // call to Visitor::makeType() in Visitor::createClassTemplateSpecializationType(). For example, the following valid
+    // C++ code `K< &operator<< <S> > k;` passes the string "&operator<<<S>" to ParamIterator().
     addTest("operator< <QString>", {"QString"});
     addTest("operator<<<KDevVarLengthArray, Path >", {"KDevVarLengthArray", "Path"});
     addTest("operator<=>< QRegularExpression,IndexedString*,char\t>", {"QRegularExpression", "IndexedString*", "char"});
