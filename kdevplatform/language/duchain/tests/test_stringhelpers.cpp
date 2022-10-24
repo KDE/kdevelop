@@ -11,6 +11,8 @@
 
 #include <language/duchain/stringhelpers.h>
 
+#include <cstring>
+
 QTEST_MAIN(TestStringHelpers)
 
 using namespace KDevelop;
@@ -133,12 +135,18 @@ void TestStringHelpers::testParamIterator_data()
     QTest::addColumn<QString>("parens");
     QTest::addColumn<QString>("source");
     QTest::addColumn<QStringList>("params");
+    QTest::addColumn<int>("endPosition");
 
-    auto addTest = [](const QString& source, const QStringList& params) {
-        QTest::addRow("%s", qPrintable(source)) << QStringLiteral("<>:") << source << params;
+    auto addGeneralTest = [](const QString& parens, const QString& source, const QStringList& params,
+                             int endPosition = -1) {
+        QTest::addRow("%s", qPrintable(source))
+            << parens << source << params << (endPosition == -1 ? source.size() : endPosition);
     };
-    auto addMacroTest = [](const QString& source, const QStringList& params) {
-        QTest::addRow("%s", qPrintable(source)) << QStringLiteral("()") << source << params;
+    auto addTest = [addGeneralTest](const QString& source, const QStringList& params, int endPosition = -1) {
+        addGeneralTest("<>:", source, params, endPosition);
+    };
+    auto addMacroTest = [addGeneralTest](const QString& source, const QStringList& params, int endPosition = -1) {
+        addGeneralTest("()", source, params, endPosition);
     };
 
     addTest("Empty", {});
@@ -223,8 +231,11 @@ void TestStringHelpers::testParamIterator_data()
     addTest("arrow<u->v>", {"u->v"});
     addTest("arrow<Foo<u->v>>", {"Foo<u->v>"});
 
-    addMacroTest("Q_UNIMPLEMENTED() qWarning(\"Unimplemented code.\")", {});
-    addMacroTest("Q_FALLTHROUGH( ) [[clang::fallthrough]]", {});
+    addTest("X::Y<Z>", {}, 1);
+    addTest("X<Z::C>", {"Z::C"});
+
+    addMacroTest("Q_UNIMPLEMENTED() qWarning(\"Unimplemented code.\")", {}, std::strlen("Q_UNIMPLEMENTED()"));
+    addMacroTest("Q_FALLTHROUGH( ) [[clang::fallthrough]]", {}, std::strlen("Q_FALLTHROUGH( )"));
     addMacroTest("( /*a)b*/ x , /*,*/y,z )", {"/*a)b*/ x", "/*,*/y", "z"});
 }
 
@@ -233,6 +244,7 @@ void TestStringHelpers::testParamIterator()
     QFETCH(QString, parens);
     QFETCH(QString, source);
     QFETCH(QStringList, params);
+    QFETCH(int, endPosition);
 
     auto it = KDevelop::ParamIterator(parens, source);
 
@@ -252,4 +264,5 @@ void TestStringHelpers::testParamIterator()
     }
 
     QVERIFY(!it);
+    QCOMPARE(it.position(), endPosition);
 }
