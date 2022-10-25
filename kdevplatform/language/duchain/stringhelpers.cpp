@@ -290,6 +290,50 @@ int findClosingAngleBracket(QStringView str, int pos)
     Q_ASSERT(depth > 0);
     return str.size();
 }
+
+/// Finds in @p str the position of @p parens[0] or @p parens[2] starting from @p pos at the top level.
+/// @return the position of the found symbol or str.size() if not found.
+/// @param parens see ParamIterator().
+int findOpeningBracketOrEnd(QStringView parens, QStringView str, int pos)
+{
+    Q_ASSERT(pos >= 0 && pos <= str.size());
+
+    Q_ASSERT(parens.size() == 2 || parens.size() == 3);
+
+    Q_ASSERT(QStringView(u"<([{").contains(parens[0]));
+    Q_ASSERT(parens.left(2) == u"<>" || parens[1] == fittingClosingNonAngleBracket(parens[0]));
+
+    Q_ASSERT(parens.size() == 2 || !QStringView(u"<>()[]{}").contains(parens[2]));
+
+    for (; pos < str.size(); ++pos) {
+        switch (str[pos].unicode()) {
+        // Take into account brackets of all types to skip searched-for symbols within them (i.e. not at the top level).
+        case '<':
+            if (!isOperator(str, pos)) {
+                if (str[pos] == parens[0]) {
+                    return pos;
+                }
+                pos = findClosingAngleBracket(str, pos);
+            }
+            break;
+        case '(':
+        case '[':
+        case '{':
+            if (str[pos] == parens[0]) {
+                return pos;
+            }
+            pos = findClosingNonAngleBracket(str, pos);
+            break;
+        default:
+            if (parens.size() > 2 && str[pos] == parens[2]) {
+                return pos;
+            }
+            pos = trySkipStringOrCharLiteralOrComment(str, pos);
+        }
+    }
+
+    return str.size();
+}
 } // unnamed namespace
 
 int findCommaOrEnd(QStringView str, int pos, QChar validEnd)
@@ -431,53 +475,38 @@ ParamIterator::ParamIterator(QStringView parens, QStringView source, int offset)
 {
     Q_D(ParamIterator);
 
-    d->m_cur = offset;
-    d->m_curEnd = offset;
-    d->m_end = d->m_source.length();
+    const auto foundPos = findOpeningBracketOrEnd(parens, source, offset);
+    if (foundPos != source.size()) {
+        if (parens.size() > 2 && source[foundPos] == parens[2]) {
+            //We have to stop the search, because we found an interrupting end-sign before the opening-paren
+            d->m_prefix = d->sourceRange(offset, foundPos);
+            d->m_curEnd = d->m_end = d->m_cur = foundPos;
+            return;
+        }
 
-    ///The whole search should be stopped when: A) The end-sign is found on the top-level B) A closing-brace of parameters was found
-    int parenBegin = offset - 1;
-    do {
-        parenBegin = d->m_source.indexOf(parens[0], parenBegin + 1);
-    } while (parenBegin != -1 && source[parenBegin] == QLatin1Char{'<'} && isOperator(source, parenBegin));
+        Q_ASSERT(source[foundPos] == parens[0]);
+        //We have a valid prefix before an opening-paren. Take the prefix, and start iterating parameters.
+        d->m_cur = foundPos + 1;
+        d->m_curEnd = d->next();
+        if (d->m_curEnd != d->m_source.length()) {
+            d->m_prefix = d->sourceRange(offset, foundPos);
+            d->m_end = d->m_source.size();
 
-    //Search for an interrupting end-sign that comes before the found paren-begin
-    int foundEnd = -1;
-    if (parens.length() > 2) {
-        foundEnd = d->m_source.indexOf(parens[2], offset);
-        if (foundEnd > parenBegin && parenBegin != -1)
-            foundEnd = -1;
-    }
-
-    if (foundEnd != -1) {
-        //We have to stop the search, because we found an interrupting end-sign before the opening-paren
-        d->m_prefix = d->sourceRange(offset, foundEnd);
-
-        d->m_curEnd = d->m_end = d->m_cur = foundEnd;
-    } else {
-        if (parenBegin != -1) {
-            //We have a valid prefix before an opening-paren. Take the prefix, and start iterating parameters.
-            d->m_cur = parenBegin + 1;
-            d->m_curEnd = d->next();
-            if (d->m_curEnd != d->m_source.length()) {
-                d->m_prefix = d->sourceRange(offset, parenBegin);
-
-                if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
-                    const auto singleParam = d->sourceRange(d->m_cur, d->m_curEnd);
-                    if (consistsOfWhitespace(singleParam)) {
-                        // Only whitespace characters are present between parentheses => assume that
-                        // there are zero parameters, not a single empty parameter, and stop iterating.
-                        d->m_cur = d->m_end = d->m_curEnd + 1;
-                    }
+            if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
+                const auto singleParam = d->sourceRange(d->m_cur, d->m_curEnd);
+                if (consistsOfWhitespace(singleParam)) {
+                    // Only whitespace characters are present between parentheses => assume that
+                    // there are zero parameters, not a single empty parameter, and stop iterating.
+                    d->m_cur = d->m_end = d->m_curEnd + 1;
                 }
+            }
 
-                return;
-            } // else: the paren was not closed. It might be an identifier like "operator<", so count everything as prefix.
-        } // else: we have neither found an ending-character, nor an opening-paren, so take the whole input and end.
+            return;
+        } // else: the paren was not closed. It might be an identifier like "operator<", so count everything as prefix.
+    } // else: we have neither found an ending-character, nor an opening-paren, so take the whole input and end.
 
-        d->m_prefix = d->m_source.mid(offset);
-        d->m_curEnd = d->m_end = d->m_cur = d->m_source.length();
-    }
+    d->m_prefix = d->m_source.mid(offset);
+    d->m_curEnd = d->m_end = d->m_cur = d->m_source.length();
 }
 
 ParamIterator& ParamIterator::operator ++()

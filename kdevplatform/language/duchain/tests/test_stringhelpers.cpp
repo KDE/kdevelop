@@ -159,6 +159,11 @@ void TestStringHelpers::testParamIterator_data()
     addTest("operator< <QString>", {"QString"});
     addTest("operator<<<KDevVarLengthArray, Path >", {"KDevVarLengthArray", "Path"});
     addTest("operator<=>< QRegularExpression,IndexedString*,char\t>", {"QRegularExpression", "IndexedString*", "char"});
+    // The valid C++ code `C<decltype(A::f<int>)> c;` passes the string "decltype(A::f<int>)" to ParamIterator().
+    addTest("decltype(f<int>)", {});
+    addTest("decltype(A::f)", {});
+    addTest("decltype(A::f<int>)", {});
+    addTest("decltype(N::operator<  <N::String>)", {});
 
     addTest("__not_overloaded2<_Tp, foo<bar>, __void_t<decltype(std::declval<_Tp>().operator<(std::declval<_Up>()))>>",
             {"_Tp", "foo<bar>", "__void_t<decltype(std::declval<_Tp>().operator<(std::declval<_Up>()))>"});
