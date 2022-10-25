@@ -67,6 +67,56 @@ SpacedDefaultParam<8<<5> spacedDefaultParamLeftShift;
 /// "type" : { "toString" : "SpacedDefaultParam< (1 > 9) >" }
 SpacedDefaultParam< (1>9) > spacedDefaultParamGt;
 
+namespace FormattingBug {
+// The upstream bug https://github.com/llvm/llvm-project/issues/58602 is tested in this namespace.
+
+/// "toString" : "class X"
+class X{};
+/// "toString" : "bool operator> (FormattingBug::X, int)"
+bool operator>(X, int) { return true; }
+/// "toString" : "bool operator<= (FormattingBug::X, int)"
+bool operator<=(X, int) { return true; }
+/// "toString" : "bool operator>= (FormattingBug::X, int)"
+bool operator>=(X, int) { return true; }
+/// "toString" : "bool operator- (FormattingBug::X, int)"
+bool operator-(X, int) { return true; }
+
+/// "toString" : "bool operator< (T, int)"
+template<typename T> bool operator<(T, int) { return true; }
+/// "toString" : "bool operator<= (T, int)"
+template<typename T> bool operator<=(T, int) { return true; }
+
+/// "toString" : "class C< decltype(operator>) * >"
+template<decltype(operator>)> class C{};
+
+// `ge` and `leT` are fine, but analogous formatting of `gt`, `le`, `minus` and `lt` does not compile.
+/// "type" : { "toString" : "FormattingBug::C< &operator>= >" }
+C<&operator>= > ge;     // pretty-printed as "C<&operator>=>"
+/// "type" : { "toString" : "FormattingBug::C< &operator<=< FormattingBug::X > >" }
+C<&operator<= <X>> leT; // pretty-printed as "C<&operator<=<FormattingBug::X>>"
+
+/// "type" : {
+///     "toString" : "FormattingBug::C< &operator> >",
+///     "EXPECT_FAIL": {"toString": "Wrong formatting of the pretty-printed return value of clang_getTypeSpelling()"}
+/// }
+C<&operator> > gt;      // pretty-printed as "C<&operator>>"
+/// "type" : {
+///     "toString" : "FormattingBug::C< &operator<= >",
+///     "EXPECT_FAIL": {"toString": "Wrong formatting of the pretty-printed return value of clang_getTypeSpelling()"}
+/// }
+C<&operator<= > le;     // pretty-printed as "C<&operator<=>"
+/// "type" : {
+///     "toString" : "FormattingBug::C< &operator- >",
+///     "EXPECT_FAIL": {"toString": "Wrong formatting of the pretty-printed return value of clang_getTypeSpelling()"}
+/// }
+C<&operator- > minus;   // pretty-printed as "C<&operator->"
+/// "type" : {
+///     "toString" : "FormattingBug::C< &operator<\t< FormattingBug::X > >",
+///     "EXPECT_FAIL": {"toString": "Wrong formatting of the pretty-printed return value of clang_getTypeSpelling()"}
+/// }
+C<&operator< <X>> lt;   // pretty-printed as "C<&operator<<FormattingBug::X>>"
+}
+
 /// "toString" : "void test< Type >()",
 /// "EXPECT_FAIL": {"toString": "No way to get template parameters with libclang, and display name would duplicate the signature"}
 template<class Type>
