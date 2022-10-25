@@ -207,7 +207,7 @@ msgid ""
 "source in the editor window."
 msgstr ""
 "Mostra una llista dels punts d'interrupció amb el seu estat actual. Clicant "
-"a un punt d'interrupció podreu modificar-lo i anar al seu codi font en la "
+"en un punt d'interrupció podreu modificar-lo i anar al seu codi font en la "
 "finestra de l'editor."
 
 #: debugger/breakpoint/breakpointwidget.cpp:75
@@ -2491,7 +2491,7 @@ msgid ""
 "button to add a new one.</i>"
 msgstr ""
 "<i>Seleccioneu una configuració de l'esquerra per a editar-la,<br>o cliqueu "
-"el botó «Afig» per a afegir-ne una de nova.</i>"
+"en el botó «Afig» per a afegir-ne una de nova.</i>"
 
 #: shell/launchconfigurationdialog.cpp:436
 #, kde-format
