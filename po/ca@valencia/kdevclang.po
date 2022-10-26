@@ -98,7 +98,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Rename Declaration"
-msgstr "Canvia el nom la declaració"
+msgstr "Canvia el nom de la declaració"
 
 #: clangsupport.cpp:285
 #, kde-format
@@ -198,7 +198,7 @@ msgstr "Adapta la signatura"
 #, kde-format
 msgctxt "@action"
 msgid "Rename %1"
-msgstr "Canvia el nom %1"
+msgstr "Canvia el nom de %1"
 
 #: codegen/clangrefactoring.cpp:94
 #, kde-format
