@@ -16,6 +16,7 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevCraftFactory, "kdevcraft.json", registerPlugin<CraftPlugin>();)
 
@@ -33,12 +34,12 @@ bool wantAutoEnable(KDevelop::IProject* project, const QString& craftRoot)
             "under a Craft root [%2] .\nDo you want to automatically switch to the Craft runtime?",
             project->name(), craftRoot);
 
-        auto answer = KMessageBox::questionYesNo(
+        auto answer = KMessageBox::questionTwoActions(
             ICore::self()->uiController()->activeMainWindow(), msgboxText, QString(),
             KGuiItem(i18nc("@action:button", "Switch to Craft Runtime"), QStringLiteral("dialog-ok")),
             KGuiItem(i18nc("@action:button", "Do not switch automatically"), QStringLiteral("dialog-cancel")));
-        projectConfigGroup.writeEntry("AutoEnableCraftRuntime", answer == KMessageBox::Yes);
-        return answer == KMessageBox::Yes;
+        projectConfigGroup.writeEntry("AutoEnableCraftRuntime", answer == KMessageBox::PrimaryAction);
+        return answer == KMessageBox::PrimaryAction;
     } else {
         return projectConfigGroup.readEntry("AutoEnableCraftRuntime", false);
     }

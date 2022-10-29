@@ -17,6 +17,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 #include <KTextEditor/ModificationInterface>
@@ -431,15 +432,16 @@ bool TextDocument::save(DocumentSaveMode mode)
         case IDocument::DirtyAndModified:
             if (!(mode & Silent))
             {
-                int code = KMessageBox::warningYesNoCancel(
+                int code = KMessageBox::warningTwoActionsCancel(
                     Core::self()->uiController()->activeMainWindow(),
                     i18n("The file \"%1\" is modified on disk.\n\nAre "
-                        "you sure you want to overwrite it? (External "
-                        "changes will be lost.)", d->document->url().toLocalFile()),
+                         "you sure you want to overwrite it? (External "
+                         "changes will be lost.)",
+                         d->document->url().toLocalFile()),
                     i18nc("@title:window", "Document Externally Modified"),
                     KGuiItem(i18nc("@action:button", "Overwrite External Changes"), QStringLiteral("document-save")),
                     KStandardGuiItem::discard());
-                if (code != KMessageBox::Yes)
+                if (code != KMessageBox::PrimaryAction)
                     return false;
             }
             break;

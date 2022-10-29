@@ -19,6 +19,7 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
 #include <KIO/Paste>
@@ -595,14 +596,12 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
         return;
     }
 
-    if (KMessageBox::warningYesNoList(
-            QApplication::activeWindow(),
-            i18np("Do you really want to delete this item?",
-                  "Do you really want to delete these %1 items?",
-                  itemPaths.size()),
-            itemPaths, i18nc("@title:window", "Delete Files"),
-            KStandardGuiItem::del(), KStandardGuiItem::cancel()
-        ) == KMessageBox::No) {
+    if (KMessageBox::warningTwoActionsList(QApplication::activeWindow(),
+                                           i18np("Do you really want to delete this item?",
+                                                 "Do you really want to delete these %1 items?", itemPaths.size()),
+                                           itemPaths, i18nc("@title:window", "Delete Files"), KStandardGuiItem::del(),
+                                           KStandardGuiItem::cancel())
+        == KMessageBox::SecondaryAction) {
         return;
     }
 

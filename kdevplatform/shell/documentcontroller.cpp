@@ -27,6 +27,7 @@
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KProtocolInfo>
 #include <KRecentFilesAction>
 #include <KTextEditor/Document>
@@ -307,14 +308,16 @@ public:
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText =
-                        KMessageBox::questionYesNo(nullptr,
-                                                   i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType.name()),
-                                                   i18nc("@title:window", "Could Not Find Editor"),
-                                                   KGuiItem(i18nc("@action:button", "Open as Plain Text"), QStringLiteral("text-plaim")),
-                                                   KGuiItem(i18nc("@action:button", "Do Not Open"), QStringLiteral("dialog-cancel")),
-                                                   QStringLiteral("AskOpenWithTextEditor"));
-                    if (openAsText == KMessageBox::Yes)
+                    int openAsText = KMessageBox::questionTwoActions(
+                        nullptr,
+                        i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as "
+                             "plain text?",
+                             url.fileName(), mimeType.name()),
+                        i18nc("@title:window", "Could Not Find Editor"),
+                        KGuiItem(i18nc("@action:button", "Open as Plain Text"), QStringLiteral("text-plaim")),
+                        KGuiItem(i18nc("@action:button", "Do Not Open"), QStringLiteral("dialog-cancel")),
+                        QStringLiteral("AskOpenWithTextEditor"));
+                    if (openAsText == KMessageBox::PrimaryAction)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
                         return nullptr;

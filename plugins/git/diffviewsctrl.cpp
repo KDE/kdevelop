@@ -19,6 +19,7 @@
 #include <KColorScheme>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KTextEditor/MovingInterface>
 #include <KTextEditor/View>
 
@@ -326,12 +327,12 @@ void DiffViewsCtrl::diffReady(KDevelop::VcsJob* diffJob)
 
 void DiffViewsCtrl::revertSelected()
 {
-    auto res = KMessageBox::questionYesNo(nullptr,
-                                          i18n("The selected lines will be reverted and the changes lost. This "
-                                               "operation cannot be undone. Continue?"), {},
-                                          KGuiItem(i18nc("@action:button", "Revert"), QStringLiteral("list-remove")),
-                                          KStandardGuiItem::cancel());
-    if (res != KMessageBox::Yes)
+    auto res = KMessageBox::questionTwoActions(
+        nullptr,
+        i18n("The selected lines will be reverted and the changes lost. This "
+             "operation cannot be undone. Continue?"),
+        {}, KGuiItem(i18nc("@action:button", "Revert"), QStringLiteral("list-remove")), KStandardGuiItem::cancel());
+    if (res != KMessageBox::PrimaryAction)
         return;
 
     applySelected(Revert);

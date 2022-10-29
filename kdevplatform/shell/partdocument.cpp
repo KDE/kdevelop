@@ -9,6 +9,7 @@
 #include <QMimeDatabase>
 
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 #include <KTextEditor/Cursor>
 
@@ -98,26 +99,25 @@ bool PartDocument::askForCloseFeedback()
 {
     int code = -1;
     if (state() == IDocument::Modified) {
-        code = KMessageBox::warningYesNoCancel(
+        code = KMessageBox::warningTwoActionsCancel(
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
-            i18nc("@title:window", "Close Document"),
-            KStandardGuiItem::save(),
-            KStandardGuiItem::discard());
+            i18nc("@title:window", "Close Document"), KStandardGuiItem::save(), KStandardGuiItem::discard());
 
     /// @todo Is this behavior right?
     } else if (state() == IDocument::DirtyAndModified) {
-        code = KMessageBox::warningYesNoCancel(
+        code = KMessageBox::warningTwoActionsCancel(
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes and was modified by an external process.\n"
-                 "Do you want to overwrite the external changes?", url().toLocalFile()),
+                 "Do you want to overwrite the external changes?",
+                 url().toLocalFile()),
             i18nc("@title:window", "Close Document"),
             KGuiItem(i18nc("@action:button", "Overwrite External Changes"), QStringLiteral("document-save")),
             KStandardGuiItem::discard());
     }
 
     if (code >= 0) {
-        if (code == KMessageBox::Yes) {
+        if (code == KMessageBox::PrimaryAction) {
             if (!save(Default))
                 return false;
 

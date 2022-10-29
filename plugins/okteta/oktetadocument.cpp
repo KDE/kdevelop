@@ -32,6 +32,7 @@
 #include <sublime/controller.h>
 // KF
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 #include <KTextEditor/Cursor>
 // Qt
@@ -119,14 +120,12 @@ bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
             if( state() == IDocument::Modified )
             {
                 // TODO: use Kasten::*Manager
-                int code = KMessageBox::warningYesNoCancel(
+                int code = KMessageBox::warningTwoActionsCancel(
                     qApp->activeWindow(),
                     i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
-                    i18nc("@title:window", "Close Document"),
-                    KStandardGuiItem::save(),
-                    KStandardGuiItem::cancel());
+                    i18nc("@title:window", "Close Document"), KStandardGuiItem::save(), KStandardGuiItem::cancel());
 
-                if (code == KMessageBox::Yes) {
+                if (code == KMessageBox::PrimaryAction) {
                     if (!save(mode))
                 isCanceled = true;
 

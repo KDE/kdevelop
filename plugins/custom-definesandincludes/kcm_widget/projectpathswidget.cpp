@@ -22,6 +22,7 @@
 #include <debug.h>
 
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 
@@ -179,10 +180,12 @@ void ProjectPathsWidget::addProjectPath()
 void ProjectPathsWidget::deleteProjectPath()
 {
     const QModelIndex idx = pathsModel->index( ui->projectPaths->currentIndex(), 0 );
-    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to delete the configuration for the path '%1'?", pathsModel->data( idx, Qt::DisplayRole ).toString() ),
-                                    i18nc("@title:window", "Delete Path Configuration"),
-                                    KStandardGuiItem::del(),
-                                    KStandardGuiItem::cancel()) == KMessageBox::Yes ) {
+    if (KMessageBox::questionTwoActions(this,
+                                        i18n("Are you sure you want to delete the configuration for the path '%1'?",
+                                             pathsModel->data(idx, Qt::DisplayRole).toString()),
+                                        i18nc("@title:window", "Delete Path Configuration"), KStandardGuiItem::del(),
+                                        KStandardGuiItem::cancel())
+        == KMessageBox::PrimaryAction) {
         pathsModel->removeRows( ui->projectPaths->currentIndex(), 1 );
     }
     updateEnablements();

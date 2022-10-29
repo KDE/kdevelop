@@ -17,6 +17,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KApplicationTrader>
 #include <KMimeTypeTrader>
 #include <KParts/MainWindow>
@@ -253,16 +254,15 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
 
     KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
     if (service->storageId() != config.readEntry(m_mimeType, QString())) {
-        int setDefault = KMessageBox::questionYesNo(
+        int setDefault = KMessageBox::questionTwoActions(
             qApp->activeWindow(),
             i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
-                 m_mimeType, service->name() ),
+                  m_mimeType, service->name()),
             i18nc("@title:window", "Set as Default?"),
             KGuiItem(i18nc("@action:button", "Set as Default"), QStringLiteral("dialog-ok")),
             KGuiItem(i18nc("@action:button", "Do Not Set"), QStringLiteral("dialog-cancel")),
-            QStringLiteral("OpenWith-%1").arg(m_mimeType)
-        );
-        if (setDefault == KMessageBox::Yes) {
+            QStringLiteral("OpenWith-%1").arg(m_mimeType));
+        if (setDefault == KMessageBox::PrimaryAction) {
             config.writeEntry(m_mimeType, service->storageId());
         }
     }

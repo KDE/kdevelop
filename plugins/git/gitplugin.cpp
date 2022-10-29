@@ -45,6 +45,7 @@
 #include <KIO/DeleteJob>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KTextEdit>
 #include <KTextEditor/Document>
 
@@ -493,11 +494,12 @@ VcsJob* GitPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionContro
         }
     }
     if (!modified.isEmpty()) {
-        auto res = KMessageBox::questionYesNo(nullptr, i18n("The following files have uncommitted changes, "
-                                              "which will be lost. Continue?") + QLatin1String("<br/><br/>") + modified, {},
-                                              KStandardGuiItem::discard(),
-                                              KStandardGuiItem::cancel());
-        if (res != KMessageBox::Yes) {
+        auto res = KMessageBox::questionTwoActions(nullptr,
+                                                   i18n("The following files have uncommitted changes, "
+                                                        "which will be lost. Continue?")
+                                                       + QLatin1String("<br/><br/>") + modified,
+                                                   {}, KStandardGuiItem::discard(), KStandardGuiItem::cancel());
+        if (res != KMessageBox::PrimaryAction) {
             return errorsFound(QString(), OutputJob::Silent);
         }
     }
@@ -852,10 +854,11 @@ VcsJob* GitPlugin::switchBranch(const QUrl &repository, const QString &branch)
     QDir d=urlDir(repository);
 
     if(hasModifications(d)) {
-        auto answer = KMessageBox::questionYesNoCancel(nullptr, i18n("There are pending changes, do you want to stash them first?"), {},
-                                                       KGuiItem(i18nc("@action:button", "Stash"), QStringLiteral("vcs-stash")),
-                                                       KGuiItem(i18nc("@action:button", "Keep"), QStringLiteral("dialog-cancel")));
-        if (answer == KMessageBox::Yes) {
+        auto answer = KMessageBox::questionTwoActionsCancel(
+            nullptr, i18n("There are pending changes, do you want to stash them first?"), {},
+            KGuiItem(i18nc("@action:button", "Stash"), QStringLiteral("vcs-stash")),
+            KGuiItem(i18nc("@action:button", "Keep"), QStringLiteral("dialog-cancel")));
+        if (answer == KMessageBox::PrimaryAction) {
             QScopedPointer<VcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
             stash->exec();
         } else if (answer == KMessageBox::Cancel) {

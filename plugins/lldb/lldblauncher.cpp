@@ -20,6 +20,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 #include <QApplication>
 
@@ -69,12 +70,13 @@ KJob *LldbLauncher::start(const QString &launchMode, KDevelop::ILaunchConfigurat
 
     if (launchMode == QLatin1String("debug")) {
         if (ICore::self()->debugController()->currentSession()) {
-            auto ans = KMessageBox::warningYesNo(qApp->activeWindow(),
+            auto ans = KMessageBox::warningTwoActions(
+                qApp->activeWindow(),
                 i18n("A program is already being debugged. Do you want to abort the "
-                     "currently running debug session and continue with the launch?"), {},
-                KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+                     "currently running debug session and continue with the launch?"),
+                {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
                 KStandardGuiItem::cancel());
-            if (ans == KMessageBox::No)
+            if (ans == KMessageBox::SecondaryAction)
                 return nullptr;
         }
 

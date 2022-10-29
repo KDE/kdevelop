@@ -11,6 +11,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 #include <QDBusConnectionInterface>
 #include <QFile>
@@ -186,13 +187,13 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
     choose.setText(i18nc("@action:button", "Choose Another Session"));
 
     KGuiItem cancel = KStandardGuiItem::quit();
-    int ret = KMessageBox::warningYesNoCancel(nullptr, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName),
-                                              retry, choose, cancel);
+    int ret = KMessageBox::warningTwoActionsCancel(
+        nullptr, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName), retry, choose, cancel);
     switch( ret ) {
-    case KMessageBox::Yes:
+    case KMessageBox::PrimaryAction:
         return sessionId;
 
-    case KMessageBox::No: {
+    case KMessageBox::SecondaryAction: {
         QString errmsg = i18nc("@info", "The session %1 is already active in another running instance.",
                                sessionName);
         return SessionController::showSessionChooserDialog(errmsg);

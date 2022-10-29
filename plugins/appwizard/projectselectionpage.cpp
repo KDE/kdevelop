@@ -16,6 +16,7 @@
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KNS3/DownloadDialog>
 
 #include <interfaces/icore.h>
@@ -288,11 +289,11 @@ bool ProjectSelectionPage::shouldContinue()
     {
         if (!QDir(fi.absoluteFilePath()).entryList(QDir::NoDotAndDotDot | QDir::AllEntries).isEmpty())
         {
-            int res = KMessageBox::questionYesNo(this, i18n("The specified path already exists and contains files. "
-                                                            "Are you sure you want to proceed?"), {},
-                                                 KStandardGuiItem::cont(),
-                                                 KStandardGuiItem::cancel());
-            return res == KMessageBox::Yes;
+            int res = KMessageBox::questionTwoActions(this,
+                                                      i18n("The specified path already exists and contains files. "
+                                                           "Are you sure you want to proceed?"),
+                                                      {}, KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+            return res == KMessageBox::PrimaryAction;
         }
     }
     return true;

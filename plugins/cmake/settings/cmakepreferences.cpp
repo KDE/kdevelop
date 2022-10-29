@@ -11,6 +11,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KJobWidgets>
 #include <KIO/DeleteJob>
 
@@ -339,13 +340,14 @@ void CMakePreferences::removeBuildDir()
     QString removed = removedPath.toLocalFile();
     if(QDir(removed).exists())
     {
-        int ret = KMessageBox::warningYesNo(this,
-                i18n("The %1 directory is about to be removed in KDevelop's list.\n"
-                     "Do you want KDevelop to delete it in the file system as well?", removed), {},
-                KStandardGuiItem::del(),
-                KGuiItem(i18nc("@action:button", "Do Not Delete"), QStringLiteral("dialog-cancel")));
-        if(ret == KMessageBox::Yes)
-        {
+        int ret = KMessageBox::warningTwoActions(
+            this,
+            i18n("The %1 directory is about to be removed in KDevelop's list.\n"
+                 "Do you want KDevelop to delete it in the file system as well?",
+                 removed),
+            {}, KStandardGuiItem::del(),
+            KGuiItem(i18nc("@action:button", "Do Not Delete"), QStringLiteral("dialog-cancel")));
+        if (ret == KMessageBox::PrimaryAction) {
             auto deleteJob = KIO::del(removedPath.toUrl());
             KJobWidgets::setWindow(deleteJob, this);
             if (!deleteJob->exec())

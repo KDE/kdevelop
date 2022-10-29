@@ -17,6 +17,7 @@
 #include <KComboBox>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 #include <interfaces/launchconfigurationpage.h>
 #include <interfaces/iproject.h>
@@ -248,10 +249,11 @@ void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected,
             disconnect(l, &LaunchConfiguration::nameChanged, this,  &LaunchConfigurationDialog::updateNameLabel);
             if( currentPageChanged )
             {
-                if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18nc("@title:window", "Unsaved Changes"),
-                                                KStandardGuiItem::save(),
-                                                KStandardGuiItem::discard()) == KMessageBox::Yes )
-                {
+                if (KMessageBox::questionTwoActions(
+                        this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"),
+                        i18nc("@title:window", "Unsaved Changes"), KStandardGuiItem::save(),
+                        KStandardGuiItem::discard())
+                    == KMessageBox::PrimaryAction) {
                     saveConfig( deselected.indexes().first() );
                 } else {
                     auto* tab = qobject_cast<LaunchConfigPagesContainer*>( stack->currentWidget() );

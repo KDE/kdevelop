@@ -28,6 +28,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KShell>
 
 #include <QApplication>
@@ -385,17 +386,15 @@ void DebugSession::handleVersion(const QStringList& s)
             qFatal("You need a graphical application.");
         }
 
-        auto ans = KMessageBox::warningYesNo(
+        auto ans = KMessageBox::warningTwoActions(
             qApp->activeWindow(),
             i18n("<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</b><br/>"
                  "See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information.<br/>"
                  "Debugger console will be disabled to prevent crash.<br/>"
                  "Do you want to continue?"),
-            i18n("LLDB Version Unsupported"),
-            KStandardGuiItem::cont(),
-            KStandardGuiItem::cancel(),
+            i18n("LLDB Version Unsupported"), KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
             QStringLiteral("unsupported-lldb-debugger"));
-        if (ans == KMessageBox::ButtonCode::No) {
+        if (ans == KMessageBox::SecondaryAction) {
             programFinished(QStringLiteral("Stopped because of unsupported LLDB version"));
             stopDebugger();
         }

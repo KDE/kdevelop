@@ -13,6 +13,7 @@
 #include <QPointer>
 
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 #include <iplugin.h>
@@ -72,21 +73,24 @@ int ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetIt
     Q_UNUSED(current);
 
     if (!m_currentPageHasChanges) {
-        return KMessageBox::Yes;
+        return KMessageBox::PrimaryAction;
     }
 
     // before must be non-null, because if we change from nothing to a new page m_currentPageHasChanges must also be false!
     Q_ASSERT(before);
     auto oldPage = qobject_cast<ConfigPage*>(before->widget());
     Q_ASSERT(oldPage);
-    auto dialogResult = KMessageBox::warningYesNoCancel(this, i18n("The settings of the current module have changed.\n"
-            "Do you want to apply the changes or discard them?"), i18nc("@title:window", "Apply Settings"), KStandardGuiItem::apply(),
-            KStandardGuiItem::discard(), KStandardGuiItem::cancel());
-    if (dialogResult == KMessageBox::No) {
+    auto dialogResult =
+        KMessageBox::warningTwoActionsCancel(this,
+                                             i18n("The settings of the current module have changed.\n"
+                                                  "Do you want to apply the changes or discard them?"),
+                                             i18nc("@title:window", "Apply Settings"), KStandardGuiItem::apply(),
+                                             KStandardGuiItem::discard(), KStandardGuiItem::cancel());
+    if (dialogResult == KMessageBox::SecondaryAction) {
         oldPage->reset();
         m_currentPageHasChanges = false;
         button(QDialogButtonBox::Apply)->setEnabled(false);
-    } else if (dialogResult == KMessageBox::Yes) {
+    } else if (dialogResult == KMessageBox::PrimaryAction) {
         applyChanges(oldPage);
     } else if (dialogResult == KMessageBox::Cancel) {
         // restore old state

@@ -32,6 +32,7 @@
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KRecentFilesAction>
 #include <KSharedConfig>
 #include <KStandardAction>
@@ -472,15 +473,15 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
             no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration"));
             KGuiItem cancel = KStandardGuiItem::cancel();
             cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project"));
-            int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
+            int ret = KMessageBox::questionTwoActionsCancel(
+                qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
-                     "Do you want to override it or open the existing file?", projectFileUrl.toDisplayString(QUrl::PreferLocalFile)),
-                i18nc("@title:window", "Override Existing Project Configuration"), yes, no, cancel );
-            if ( ret == KMessageBox::No )
-            {
+                     "Do you want to override it or open the existing file?",
+                     projectFileUrl.toDisplayString(QUrl::PreferLocalFile)),
+                i18nc("@title:window", "Override Existing Project Configuration"), yes, no, cancel);
+            if (ret == KMessageBox::SecondaryAction) {
                 writeProjectConfigToFile = false;
-            } else if ( ret == KMessageBox::Cancel )
-            {
+            } else if (ret == KMessageBox::Cancel) {
                 return QUrl();
             } // else fall through and write new file
         } else {
@@ -508,11 +509,12 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
 bool ProjectDialogProvider::userWantsReopen()
 {
     Q_ASSERT(d);
-    return (KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                                        i18n( "Reopen the current project?" ), {},
-                                        KGuiItem(i18nc("@action:button", "Reopen"), QStringLiteral("view-refresh")),
-                                        KStandardGuiItem::cancel())
-                == KMessageBox::No) ? false : true;
+    return (KMessageBox::questionTwoActions(
+                d->m_core->uiControllerInternal()->defaultMainWindow(), i18n("Reopen the current project?"), {},
+                KGuiItem(i18nc("@action:button", "Reopen"), QStringLiteral("view-refresh")), KStandardGuiItem::cancel())
+            == KMessageBox::SecondaryAction)
+        ? false
+        : true;
 }
 
 void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)

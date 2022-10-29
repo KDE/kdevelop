@@ -20,6 +20,7 @@
 #include <QIcon>
 
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 using namespace std;
@@ -64,11 +65,11 @@ class BranchItem : public QStandardItem
                     return;
                 }
 
-                int ret = KMessageBox::warningYesNo(nullptr,
-                                                    i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch), {},
-                                                    KGuiItem(i18nc("@action:button", "Rename"), QStringLiteral("edit-rename")),
-                                                    KStandardGuiItem::cancel());
-                if (ret == KMessageBox::No) {
+                int ret = KMessageBox::warningTwoActions(
+                    nullptr, i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch), {},
+                    KGuiItem(i18nc("@action:button", "Rename"), QStringLiteral("edit-rename")),
+                    KStandardGuiItem::cancel());
+                if (ret == KMessageBox::SecondaryAction) {
                     return; // ignore event
                 }
 

@@ -20,6 +20,7 @@
 
 #include <KConfigGroup>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KColorScheme>
 #include <KLocalizedString>
 
@@ -319,12 +320,13 @@ void GrepOutputView::onApply()
     {
         Q_ASSERT(model()->rowCount());
         // ask a confirmation before an empty string replacement
-        if(replacementCombo->currentText().length() == 0 &&
-           KMessageBox::questionYesNo(this, i18n("Do you want to replace with an empty string?"),
-                                            i18nc("@title:window", "Start Replacement"),
-                                      KGuiItem(i18nc("@action:button", "Replace"), QStringLiteral("dialog-ok-apply")),
-                                      KStandardGuiItem::cancel()) == KMessageBox::No)
-        {
+        if (replacementCombo->currentText().length() == 0
+            && KMessageBox::questionTwoActions(
+                   this, i18n("Do you want to replace with an empty string?"),
+                   i18nc("@title:window", "Start Replacement"),
+                   KGuiItem(i18nc("@action:button", "Replace"), QStringLiteral("dialog-ok-apply")),
+                   KStandardGuiItem::cancel())
+                == KMessageBox::SecondaryAction) {
             return;
         }
 

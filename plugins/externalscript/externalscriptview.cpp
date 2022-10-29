@@ -17,6 +17,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 #include <util/scopeddialog.h>
 
@@ -140,16 +141,14 @@ void ExternalScriptView::removeScript()
         return;
     }
 
-    int ret = KMessageBox::questionYesNo(this,
-                                         i18n(
-                                             "<p>Do you really want to remove the external script configuration for <i>%1</i>?</p>"
-                                             "<p><i>Note:</i> The script itself will not be removed.</p>",
-                                             item->text()),
-                                         i18nc("@title:window", "Confirm External Script Removal"),
-                                         KGuiItem(i18nc("@action:button", "Remove"), QStringLiteral("document-close")),
-                                         KStandardGuiItem::cancel()
-              );
-    if (ret == KMessageBox::Yes) {
+    int ret = KMessageBox::questionTwoActions(
+        this,
+        i18n("<p>Do you really want to remove the external script configuration for <i>%1</i>?</p>"
+             "<p><i>Note:</i> The script itself will not be removed.</p>",
+             item->text()),
+        i18nc("@title:window", "Confirm External Script Removal"),
+        KGuiItem(i18nc("@action:button", "Remove"), QStringLiteral("document-close")), KStandardGuiItem::cancel());
+    if (ret == KMessageBox::PrimaryAction) {
         m_plugin->model()->removeRow(
             m_plugin->model()->indexFromItem(item).row()
         );

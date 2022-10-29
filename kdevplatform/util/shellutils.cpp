@@ -15,6 +15,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KParts/MainWindow>
 
 namespace KDevelop {
@@ -52,12 +53,10 @@ bool askUser(const QString& mainText,
         okButton.setText(confirmText);
         auto rejectButton = KStandardGuiItem::cancel();
         rejectButton.setText(rejectText);
-        int userAnswer = KMessageBox::questionYesNo(ICore::self()->uiController()->activeMainWindow(),
-                                                    mainText + QLatin1String("\n\n") + mboxAdditionalText,
-                                                    mboxTitle,
-                                                    okButton,
-                                                    rejectButton);
-        return userAnswer == KMessageBox::Yes;
+        int userAnswer = KMessageBox::questionTwoActions(ICore::self()->uiController()->activeMainWindow(),
+                                                         mainText + QLatin1String("\n\n") + mboxAdditionalText,
+                                                         mboxTitle, okButton, rejectButton);
+        return userAnswer == KMessageBox::PrimaryAction;
     }
 }
 
@@ -75,15 +74,15 @@ bool ensureWritable(const QList<QUrl>& urls)
     }
 
     if (!notWritable.isEmpty()) {
-        int answer = KMessageBox::questionYesNoCancel(ICore::self()->uiController()->activeMainWindow(),
-                                                      i18n(
-                                                          "You don't have write permissions for the following files; add write permissions for owner before saving?") +
-                                                      QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
-                                                      i18nc("@title:window", "Some Files are Write-Protected"),
-                                                      KGuiItem(i18nc("@action:button", "Set Write Permissions"), QStringLiteral("dialog-ok")),
-                                                      KGuiItem(i18nc("@action:button", "Ignore"), QStringLiteral("dialog-cancel")),
-                                                      KStandardGuiItem::cancel());
-        if (answer == KMessageBox::Yes) {
+        int answer = KMessageBox::questionTwoActionsCancel(
+            ICore::self()->uiController()->activeMainWindow(),
+            i18n("You don't have write permissions for the following files; add write permissions for owner before "
+                 "saving?")
+                + QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
+            i18nc("@title:window", "Some Files are Write-Protected"),
+            KGuiItem(i18nc("@action:button", "Set Write Permissions"), QStringLiteral("dialog-ok")),
+            KGuiItem(i18nc("@action:button", "Ignore"), QStringLiteral("dialog-cancel")), KStandardGuiItem::cancel());
+        if (answer == KMessageBox::PrimaryAction) {
             bool success = true;
             for (const QString& filename : qAsConst(notWritable)) {
                 QFile file(filename);

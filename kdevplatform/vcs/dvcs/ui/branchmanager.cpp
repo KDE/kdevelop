@@ -9,6 +9,7 @@
 #include <QInputDialog>
 
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 #include <KLocalizedString>
 
 #include "../dvcsplugin.h"
@@ -136,11 +137,10 @@ void BranchManager::deleteBranch()
         return;
     }
 
-    int ret = KMessageBox::warningYesNo(this,
-                                        i18n("Are you sure you want to irreversibly delete the branch '%1'?", baseBranch), {},
-                                        KStandardGuiItem::del(),
-                                        KStandardGuiItem::cancel());
-    if (ret == KMessageBox::Yes)
+    int ret = KMessageBox::warningTwoActions(
+        this, i18n("Are you sure you want to irreversibly delete the branch '%1'?", baseBranch), {},
+        KStandardGuiItem::del(), KStandardGuiItem::cancel());
+    if (ret == KMessageBox::PrimaryAction)
         m_model->removeBranch(baseBranch);
 }
 

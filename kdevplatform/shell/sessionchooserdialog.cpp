@@ -18,6 +18,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 using namespace KDevelop;
 
@@ -205,7 +206,7 @@ void SessionChooserDialog::deleteButtonPressed()
     const KGuiItem deleteItem = KStandardGuiItem::del();
     const KGuiItem cancelItem = KStandardGuiItem::cancel();
 
-    if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
+    if (KMessageBox::warningTwoActions(this, text, caption, deleteItem, cancelItem) == KMessageBox::PrimaryAction) {
         SessionController::deleteSessionFromDisk(result.lock);
 
         m_model->removeRows( m_deleteCandidateRow, 1 );

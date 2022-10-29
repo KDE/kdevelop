@@ -26,6 +26,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageBox_KDevCompat>
 
 using namespace KDevelop;
 namespace Config = KDevMI::GDB::Config;
@@ -128,13 +129,13 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         Q_ASSERT(m_plugin);
 
         if (KDevelop::ICore::self()->debugController()->currentSession() != nullptr) {
-            KMessageBox::ButtonCode answer = KMessageBox::warningYesNo(
+            KMessageBox::ButtonCode answer = KMessageBox::warningTwoActions(
                 nullptr,
                 i18n("A program is already being debugged. Do you want to abort the "
-                     "currently running debug session and continue with the launch?"), {},
-                KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
+                     "currently running debug session and continue with the launch?"),
+                {}, KGuiItem(i18nc("@action:button", "Abort Current Session"), QStringLiteral("application-exit")),
                 KStandardGuiItem::cancel());
-            if (answer == KMessageBox::No)
+            if (answer == KMessageBox::SecondaryAction)
                 return nullptr;
         }
 
