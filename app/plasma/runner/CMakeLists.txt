@@ -11,8 +11,4 @@ target_link_libraries(krunner_kdevelopsessions
 
 install(TARGETS krunner_kdevelopsessions DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/krunner )
 
-if(KF5Runner_VERSION VERSION_LESS 5.72.0)
-    install(FILES kdevelopsessions.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
-else()
-    kcoreaddons_desktop_to_json(krunner_kdevelopsessions kdevelopsessions.desktop)
-endif()
+kcoreaddons_desktop_to_json(krunner_kdevelopsessions kdevelopsessions.desktop)

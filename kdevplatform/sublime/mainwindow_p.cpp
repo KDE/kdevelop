@@ -18,7 +18,6 @@
 #include <KActionMenu>
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <kwidgetsaddons_version.h>
 
 #include "area.h"
 #include "view.h"
@@ -127,11 +126,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     ac->addAction(QStringLiteral("select_previous_dock"), action);
 
     auto* const toolViewsMenu = new KActionMenu(i18nc("@title:menu", "Tool Views"), this);
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
     toolViewsMenu->setPopupMode(QToolButton::InstantPopup);
-#else
-    toolViewsMenu->setDelayed(false);
-#endif
     ac->addAction(QStringLiteral("docks_submenu"), toolViewsMenu);
 
     idealController = new IdealController(m_mainWindow);

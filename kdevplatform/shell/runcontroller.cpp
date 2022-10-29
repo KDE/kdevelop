@@ -17,7 +17,6 @@
 #include <KDialogJobUiDelegate>
 #include <KLocalizedString>
 #include <KSelectAction>
-#include <kwidgetsaddons_version.h>
 
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
@@ -469,11 +468,7 @@ void RunController::setupActions()
     Core::self()->uiControllerInternal()->area(0, QStringLiteral("debug"))->addAction(action);
 
     action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme(QStringLiteral("process-stop")), i18nc("@action", "Stop"), this);
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
     d->stopJobsMenu->setPopupMode(QToolButton::InstantPopup);
-#else
-    d->stopJobsMenu->setDelayed(false);
-#endif
     action->setIconText(i18nc("@action Short text for 'Stop' used in the toolbar", "Stop"));
     action->setToolTip(i18nc("@info:tooltip", "Menu allowing to stop individual jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "List of jobs that can be stopped individually."));

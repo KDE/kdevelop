@@ -33,11 +33,7 @@ ki18n_wrap_ui(kdevfiletemplates_PART_SRCS
     ui/testcases.ui
 )
 
-if(NOT KF5_VERSION VERSION_LESS "5.57.0")
 install(FILES kdevfiletemplates.knsrc  DESTINATION ${KDE_INSTALL_KNSRCDIR})
-else()
-qt5_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplatesknsrc.qrc)
-endif()
 qt5_add_resources(kdevfiletemplates_PART_SRCS kdevfiletemplates.qrc)
 
 kdevplatform_add_plugin(kdevfiletemplates SOURCES ${kdevfiletemplates_PART_SRCS})

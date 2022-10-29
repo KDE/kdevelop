@@ -77,11 +77,6 @@ target_link_libraries(kdevclangtidy
     KF5::ConfigCore
     KF5::I18n
 )
-if(Qt5_VERSION VERSION_LESS "5.10.0")
-target_link_libraries(kdevclangtidy
-    KF5::ItemModels
-)
-endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)

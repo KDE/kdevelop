@@ -27,11 +27,8 @@ ecm_add_test(test_controller.cpp
 ecm_add_test(test_viewactivation.cpp
     LINK_LIBRARIES Qt5::Test KF5::Parts KDev::Sublime)
 
-if(Qt5_VERSION VERSION_LESS "5.11.0")
-    set(test_aggregatemodel_extra_link_libs KDev::Tests)
-endif()
 ecm_add_test(test_aggregatemodel.cpp
-    LINK_LIBRARIES Qt5::Test KF5::Parts KDev::Sublime ${test_aggregatemodel_extra_link_libs})
+    LINK_LIBRARIES Qt5::Test KF5::Parts KDev::Sublime)
 
 ecm_add_test(test_toolviewtoolbar.cpp
     LINK_LIBRARIES Qt5::Test KF5::Parts KDev::Sublime)

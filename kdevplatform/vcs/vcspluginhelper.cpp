@@ -25,7 +25,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/ModificationInterface>
 #include <KTextEditor/View>
-#include <ktexteditor_version.h>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -43,9 +42,7 @@
 #include <util/scopeddialog.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
-#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
 #include <vcs/widgets/vcsannotationitemdelegate.h>
-#endif
 #include <vcs/widgets/vcseventwidget.h>
 #include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/vcsjob.h>
@@ -424,7 +421,6 @@ void VcsPluginHelper::annotation()
                                                                                    foreground, background);
             annotateiface->setAnnotationModel(model);
 
-#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
             auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
             if (viewifaceV2) {
                 // TODO: only create delegate if there is none yet
@@ -432,7 +428,7 @@ void VcsPluginHelper::annotation()
                 viewifaceV2->setAnnotationItemDelegate(delegate);
                 viewifaceV2->setAnnotationUniformItemSizes(true);
             }
-#endif
+
             viewiface->setAnnotationBorderVisible(true);
             // can't use new signal slot syntax here, AnnotationInterface is not a QObject
             connect(view, SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
@@ -453,12 +449,10 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 {
     Q_D(VcsPluginHelper);
 
-#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
     auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
     if (viewifaceV2) {
         viewifaceV2->annotationItemDelegate()->hideTooltip(view);
     }
-#endif
 
     KTextEditor::AnnotationInterface* annotateiface =
         qobject_cast<KTextEditor::AnnotationInterface*>(view->document());

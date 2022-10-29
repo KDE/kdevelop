@@ -22,11 +22,7 @@ ki18n_wrap_ui(kdevqthelp_SRCS
     qthelpconfigeditdialog.ui
 )
 
-if(NOT KF5_VERSION VERSION_LESS "5.57.0")
 install(FILES kdevelop-qthelp.knsrc  DESTINATION ${KDE_INSTALL_KNSRCDIR})
-else()
-qt5_add_resources(kdevqthelp_SRCS kdevqthelp.qrc)
-endif()
 
 kdevplatform_add_plugin(kdevqthelp SOURCES ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp

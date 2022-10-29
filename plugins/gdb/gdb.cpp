@@ -18,7 +18,6 @@
 #include <sublime/message.h>
 
 #include <KConfigGroup>
-#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 #include <KShell>
 
@@ -84,11 +83,7 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(m_process);
 
     qCDebug(DEBUGGERGDB) << "Starting GDB with command" << fullCommand;
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 78, 0)
-    qCDebug(DEBUGGERGDB) << "GDB process pid:" << m_process->pid();
-#else
     qCDebug(DEBUGGERGDB) << "GDB process pid:" << m_process->processId();
-#endif
     emit userCommandOutput(fullCommand + QLatin1Char('\n'));
     return true;
 }

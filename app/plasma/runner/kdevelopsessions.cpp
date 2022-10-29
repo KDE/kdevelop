@@ -14,19 +14,10 @@
 #include <QDebug>
 #include <QCollator>
 
-#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 72, 0)
 K_EXPORT_PLASMA_RUNNER_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
-#else
-K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
-#endif
 
-#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 77, 0)
 KDevelopSessions::KDevelopSessions(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
     : Plasma::AbstractRunner(parent, metaData, args)
-#else
-KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
-    : Plasma::AbstractRunner(parent, args)
-#endif
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
 
@@ -34,11 +25,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     s.addExampleQuery(QStringLiteral("kdevelop :q:"));
     addSyntax(s);
 
-#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 76, 0)
     addSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
-#else
-    setDefaultSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
-#endif
 }
 
 KDevelopSessions::~KDevelopSessions()

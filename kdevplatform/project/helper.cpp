@@ -21,7 +21,6 @@
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <kio_version.h>
 
 #include <interfaces/iproject.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -40,11 +39,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
 
     QWidget* window = QApplication::activeWindow();
 
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
     auto job = KIO::statDetails(url, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
-#else
-    auto job = KIO::stat(url, KIO::StatJob::DestinationSide, 0);
-#endif
     KJobWidgets::setWindow(job, window);
     if (!job->exec()) {
         qCWarning(PROJECT) << "tried to remove non-existing url:" << url << project << isFolder;
@@ -85,11 +80,7 @@ bool KDevelop::removePath(const KDevelop::IProject* project, const KDevelop::Pat
 
 bool KDevelop::createFile(const QUrl& file)
 {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
     auto statJob = KIO::statDetails(file, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
-#else
-    auto statJob = KIO::stat(file, KIO::StatJob::DestinationSide, 0);
-#endif
     KJobWidgets::setWindow(statJob, QApplication::activeWindow());
     if (statJob->exec()) {
         const QString messageText = i18n("The file <i>%1</i> already exists.", file.toDisplayString(QUrl::PreferLocalFile));

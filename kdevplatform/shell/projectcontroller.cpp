@@ -25,7 +25,6 @@
 
 #include <KActionCollection>
 #include <KConfigGroup>
-#include <kio_version.h>
 #include <KIO/DeleteJob>
 #include <KIO/FileCopyJob>
 #include <KIO/ListJob>
@@ -409,11 +408,7 @@ bool projectFileExists( const QUrl& u )
         return QFileInfo::exists( u.toLocalFile() );
     } else
     {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
         auto statJob = KIO::statDetails(u, KIO::StatJob::DestinationSide, KIO::StatNoDetails, KIO::HideProgressInfo);
-#else
-        auto statJob = KIO::stat(u, KIO::StatJob::DestinationSide, 0, KIO::HideProgressInfo);
-#endif
         KJobWidgets::setWindow(statJob, Core::self()->uiControllerInternal()->activeMainWindow());
         return statJob->exec();
     }

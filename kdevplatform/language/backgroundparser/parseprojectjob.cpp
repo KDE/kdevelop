@@ -16,7 +16,6 @@
 
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 
 #include <QCoreApplication>
@@ -108,11 +107,7 @@ void ParseProjectJob::queueFilesToParse()
     Q_D(ParseProjectJob);
 
     const auto isJobKilled = [this] {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 75, 0)
         if (Q_UNLIKELY(isFinished())) {
-#else
-        if (Q_UNLIKELY(error() == KilledJobError)) {
-#endif
             qCDebug(LANGUAGE) << "Aborting queuing project files to parse."
                                  " This job has been killed:" << objectName();
             return true;

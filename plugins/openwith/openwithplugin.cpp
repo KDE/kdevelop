@@ -13,26 +13,18 @@
 #include <QMimeType>
 #include <QVariantList>
 
-#include <kio_version.h>
-#include <kservice_version.h>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#if KSERVICE_VERSION >= QT_VERSION_CHECK(5, 68, 0)
 #include <KApplicationTrader>
-#endif
 #include <KMimeTypeTrader>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
 #include <KService>
 #include <KOpenWithDialog>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
-#else
-#include <KRun>
-#endif
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -75,11 +67,7 @@ bool canOpenDefault(const QString& mimeType)
 {
     if (defaultForMimeType(mimeType).isEmpty() && mimeType == QLatin1String("inode/directory")) {
         // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
-#if KSERVICE_VERSION >= QT_VERSION_CHECK(5, 68, 0)
         return KApplicationTrader::preferredService(mimeType);
-#else
-        return KMimeTypeTrader::self()->preferredService(mimeType);
-#endif
     } else {
         return true;
     }
@@ -224,20 +212,12 @@ void OpenWithPlugin::openDefault()
 
     // default handlers
     if (m_mimeType == QLatin1String("inode/directory")) {
-#if KSERVICE_VERSION >= QT_VERSION_CHECK(5, 68, 0)
         KService::Ptr service = KApplicationTrader::preferredService(m_mimeType);
-#else
-        KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
-#endif
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
         auto* job = new KIO::ApplicationLauncherJob(service);
         job->setUrls(m_urls);
         job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
                                                   ICore::self()->uiController()->activeMainWindow()));
         job->start();
-#else
-        KRun::runService(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
-#endif
     } else {
         for (const QUrl& u : qAsConst(m_urls)) {
             ICore::self()->documentController()->openDocument( u );
@@ -253,15 +233,11 @@ void OpenWithPlugin::open( const QString& storageid )
 void OpenWithPlugin::openService(const KService::Ptr& service)
 {
     if (service->isApplication()) {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
         auto* job = new KIO::ApplicationLauncherJob(service);
         job->setUrls(m_urls);
         job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
                                                   ICore::self()->uiController()->activeMainWindow()));
         job->start();
-#else
-        KRun::runService( *service, m_urls, ICore::self()->uiController()->activeMainWindow() );
-#endif
     } else {
         QString prefName = service->desktopEntryName();
         if (isTextEditor(service)) {
