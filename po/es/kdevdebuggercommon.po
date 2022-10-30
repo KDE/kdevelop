@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-07-09 18:26+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -60,7 +60,7 @@ msgstr "<br>Valor anterior: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Valor nuevo: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -72,7 +72,7 @@ msgstr ""
 "procesaba la respuesta del depurador. Por favor, informe de este fallo. La "
 "sesión de depuración terminará ahora para prevenir un cuelgue potencial."
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -81,18 +81,18 @@ msgstr ""
 "La excepción es: %1\n"
 "La respuesta MI es: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Error interno del depurador"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Proceso terminado"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -101,12 +101,12 @@ msgstr ""
 "<b>No se puede iniciar el depurador.</b><p>No se puede ejecutar «%1». "
 "Asegúrese de que la ruta especificada es correcta."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "El inicio del proceso ha fallado"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -117,13 +117,13 @@ msgstr ""
 "p><p>Como consecuencia, la sesión de depuración no ha terminado.<br>Trate de "
 "reproducir el fallo sin KDevelop e informe del fallo.<br>"
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "El depurador ha fallado"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "El proceso ha fallado"

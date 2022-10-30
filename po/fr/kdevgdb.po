@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-07-10 12:33+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -144,7 +144,7 @@ msgstr ""
 "<b>Impossible de créer le fichier core</b><p>Le débogueur a signalé l'erreur "
 "suivante :<p><tt>%1"
 
-#: gdb.cpp:69
+#: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Il est impossible de trouver le shell de débogage « %1 »."

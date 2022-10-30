@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2019-08-27 13:18+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -66,7 +66,7 @@ msgstr "<br>Παλιά τιμή: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Νέα τιμή: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -79,7 +79,7 @@ msgstr ""
 "συνεδρία αποσφαλμάτωσης θα τερματιστεί τώρα για την αποφυγή πιθανής "
 "κατάρρευσης"
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -88,19 +88,19 @@ msgstr ""
 "Η εξαίρεση είναι: %1\n"
 "Η απάντηση MI είναι: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Εσωτερικό σφάλμα debugger"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Η διεργασία τερμάτισε"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -109,12 +109,12 @@ msgstr ""
 "<b>Αδυναμία εκκίνησης του debugger.</b><p>Αδυναμία εκτέλεσης του '%1'. "
 "Σιγουρευτείτε ότι δώσατε τη διαδρομή και το όνομα σωστά."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Αποτυχία έναρξης διεργασίας"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -126,14 +126,14 @@ msgstr ""
 "<br>Προσπαθήστε να αναπαραγάγετε την κατάρρευση χωρίς το KDevelop και "
 "στείλτε αναφορά σφάλματος.<br>"
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, fuzzy, kde-format
 #| msgid "Debugger crashed"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Ο debugger κατέρρευσε"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Η διεργασία κατέρρευσε"

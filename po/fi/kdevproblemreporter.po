@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2016-01-28 11:51+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -25,7 +25,7 @@ msgid "Parser"
 msgstr ""
 
 #: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
-#: problemsview.cpp:324
+#: problemsview.cpp:315
 #, fuzzy, kde-format
 #| msgid "Problems"
 msgctxt "@title:window"
@@ -46,78 +46,78 @@ msgctxt "@action:inmenu"
 msgid "Solve: %1"
 msgstr "Ratkaise: %1"
 
-#: problemsview.cpp:37
+#: problemsview.cpp:36
 #, fuzzy, kde-format
 #| msgid "Force Full Update"
 msgctxt "@action"
 msgid "Force Full Update"
 msgstr "Pakota täysi päivitys"
 
-#: problemsview.cpp:52
+#: problemsview.cpp:47
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Which files to display the problems for"
 msgstr "Mille tiedostoille ongelmat näytetään"
 
-#: problemsview.cpp:58
+#: problemsview.cpp:53
 #, fuzzy, kde-format
 #| msgid "Current Document"
 msgctxt "@option:check"
 msgid "Current Document"
 msgstr "Nykyinen tiedosto"
 
-#: problemsview.cpp:59
+#: problemsview.cpp:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current document"
 msgstr "Näytä nykyisen tiedoston ongelmat"
 
-#: problemsview.cpp:62
+#: problemsview.cpp:57
 #, fuzzy, kde-format
 #| msgid "Open Documents"
 msgctxt "@option:check"
 msgid "Open Documents"
 msgstr "Avoimet tiedostot"
 
-#: problemsview.cpp:63
+#: problemsview.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all open documents"
 msgstr "Näytä kaikkien avoimien tiedostojen ongelmat"
 
-#: problemsview.cpp:66
+#: problemsview.cpp:61
 #, fuzzy, kde-format
 #| msgid "Current Project"
 msgctxt "@option:check"
 msgid "Current Project"
 msgstr "Nykyinen projekti"
 
-#: problemsview.cpp:67
+#: problemsview.cpp:62
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current project"
 msgstr "Näytä nykyisen projektin ongelmat"
 
-#: problemsview.cpp:70
+#: problemsview.cpp:65
 #, fuzzy, kde-format
 #| msgid "All Projects"
 msgctxt "@option:check"
 msgid "All Projects"
 msgstr "Kaikki projektit"
 
-#: problemsview.cpp:71
+#: problemsview.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all projects"
 msgstr "Näytä kaikkien projektien ongelmat"
 
-#: problemsview.cpp:74
+#: problemsview.cpp:69
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Path"
 msgstr ""
 
-#: problemsview.cpp:75
+#: problemsview.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Display problems in all projects"
@@ -125,13 +125,13 @@ msgctxt "@info:tooltip"
 msgid "Display problems from all files in a specific path"
 msgstr "Näytä kaikkien projektien ongelmat"
 
-#: problemsview.cpp:78
+#: problemsview.cpp:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Current Path"
 msgstr ""
 
-#: problemsview.cpp:80
+#: problemsview.cpp:75
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Display problems in current document"
@@ -139,14 +139,14 @@ msgctxt "@info:tooltip"
 msgid "Display problems from all files in the path of the current document"
 msgstr "Näytä nykyisen tiedoston ongelmat"
 
-#: problemsview.cpp:83
+#: problemsview.cpp:78
 #, fuzzy, kde-format
 #| msgid "Show All"
 msgctxt "@option:check"
 msgid "Show All"
 msgstr "Näytä kaikki"
 
-#: problemsview.cpp:84
+#: problemsview.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Display ALL problems"
@@ -154,99 +154,99 @@ msgctxt "@info:tooltip"
 msgid "Display all problems"
 msgstr "Näytä KAIKKI ongelmat"
 
-#: problemsview.cpp:105
+#: problemsview.cpp:100
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
 msgstr ""
 
-#: problemsview.cpp:137
+#: problemsview.cpp:132
 #, fuzzy, kde-format
 #| msgid "Show Imports"
 msgctxt "@option:check"
 msgid "Show Imports"
 msgstr "Näytä tuodut"
 
-#: problemsview.cpp:138
+#: problemsview.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in imported files"
 msgstr "Näytä tuotujen tiedostojen ongelmat"
 
-#: problemsview.cpp:148
+#: problemsview.cpp:143
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display errors"
 msgstr "Näytä virheet"
 
-#: problemsview.cpp:150
+#: problemsview.cpp:145
 #, fuzzy, kde-format
 #| msgid "Error"
 msgctxt "@option:check"
 msgid "Show Errors"
 msgstr "Virhe"
 
-#: problemsview.cpp:153
+#: problemsview.cpp:148
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display warnings"
 msgstr "Näytä varoitukset"
 
-#: problemsview.cpp:155
+#: problemsview.cpp:150
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@option:check"
 msgid "Show Warnings"
 msgstr "Varoitus"
 
-#: problemsview.cpp:158
+#: problemsview.cpp:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display hints"
 msgstr "Näytä vinkit"
 
-#: problemsview.cpp:160
+#: problemsview.cpp:155
 #, fuzzy, kde-format
 #| msgid "Show Imports"
 msgctxt "@option:check"
 msgid "Show Hints"
 msgstr "Näytä tuodut"
 
-#: problemsview.cpp:180
+#: problemsview.cpp:175
 #, fuzzy, kde-format
 #| msgid "Grouping"
 msgctxt "@title:menu"
 msgid "Grouping"
 msgstr "Ryhmittely"
 
-#: problemsview.cpp:189
+#: problemsview.cpp:180
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@option:check"
 msgid "None"
 msgstr "Ei ryhmittelyä"
 
-#: problemsview.cpp:190
+#: problemsview.cpp:181
 #, fuzzy, kde-format
 #| msgid "Path"
 msgctxt "@option:check"
 msgid "Path"
 msgstr "Sijainti"
 
-#: problemsview.cpp:191
+#: problemsview.cpp:182
 #, fuzzy, kde-format
 #| msgid "Severity"
 msgctxt "@option:check"
 msgid "Severity"
 msgstr "Vakavuus"
 
-#: problemsview.cpp:219
+#: problemsview.cpp:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr ""
 
-#: problemsview.cpp:462
+#: problemsview.cpp:453
 #, fuzzy, kde-format
 #| msgctxt "%1: tab name, %2: number of problems"
 #| msgid "%1 (%2)"
@@ -254,7 +254,7 @@ msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:500
+#: problemsview.cpp:491
 #, fuzzy, kde-format
 #| msgid "Scope: %1"
 msgctxt "@title:menu"

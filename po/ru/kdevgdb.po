@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-03-10 15:35+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -139,7 +139,7 @@ msgstr ""
 "<b>Не удалось загрузить файл дампа</b><p>Отладчик сообщил о следующей ошибке:"
 "<p><tt>%1"
 
-#: gdb.cpp:69
+#: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Не удалось найти отладочную оболочку «%1»."

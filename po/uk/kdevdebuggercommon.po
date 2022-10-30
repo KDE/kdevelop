@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-07-09 08:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -62,7 +62,7 @@ msgstr "<br>Попереднє значення: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Нове значення: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -75,7 +75,7 @@ msgstr ""
 "сеанс діагностики буде припинено, щоб запобігти потенційному аварійному "
 "завершенню роботи системи."
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -84,18 +84,18 @@ msgstr ""
 "Виключення: %1\n"
 "Відповідь макроінструкції: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Внутрішня помилка засобу діагностики"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Процес завершився"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -104,12 +104,12 @@ msgstr ""
 "<b>Не вдалося запустити зневадник.</b><p>Не вдалося виконати «%1». "
 "Перевірте, чи вірно ви вказали шлях."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Спроба запуску процесу зазнала невдачі"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -121,13 +121,13 @@ msgstr ""
 "діагностики довелося завершити.<br>Спробуйте відтворити аварію без KDevelop "
 "і повідомте про ваду, якщо таку буде виявлено.<br>"
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Аварійне завершення засобу діагностики"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Аварійне завершення процесу"

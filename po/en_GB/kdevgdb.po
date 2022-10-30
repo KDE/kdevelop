@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-07-22 16:07+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -132,7 +132,7 @@ msgstr ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 
-#: gdb.cpp:69
+#: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Could not locate the debugging shell '%1'."

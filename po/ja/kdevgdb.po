@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-01 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2010-07-18 15:54-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -128,7 +128,7 @@ msgid ""
 msgstr ""
 "<b>デバッガのエラー</b><p>デバッガが以下のエラーを報告しました:</p><p><tt>%1"
 
-#: gdb.cpp:69
+#: gdb.cpp:68
 #, kde-format
 msgid "Could not locate the debugging shell '%1'."
 msgstr "デバッグシェル “%1” を見つけることができませんでした。"

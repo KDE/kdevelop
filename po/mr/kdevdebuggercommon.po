@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2013-04-02 15:22+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -60,7 +60,7 @@ msgstr ""
 msgid "<br>New value: %1"
 msgstr ""
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -69,38 +69,38 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
 "The MI response is: %2"
 msgstr ""
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, fuzzy, kde-format
 #| msgid "Internal error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "अंतर्गत त्रुटी"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr ""
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -108,14 +108,14 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, fuzzy, kde-format
 #| msgid "Executable:"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "एक्जीक्यूटेबल :"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr ""

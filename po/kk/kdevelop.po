@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2013-11-11 04:42+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -910,17 +910,17 @@ msgstr "KDevelop сеанстары"
 msgid "Arbitrary String Which Says Something"
 msgstr "Бірдеме дейтін мәтін жолы"
 
-#: plasma/runner/kdevelopsessions.cpp:33
+#: plasma/runner/kdevelopsessions.cpp:24
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "KDevelop сеанстарынан :q: дегенге сәйкестіні іздеу."
 
-#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#: plasma/runner/kdevelopsessions.cpp:28
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Тіркелгіңіздің KDevelop редактор сеанстарын тізімдеу."
 
-#: plasma/runner/kdevelopsessions.cpp:115
+#: plasma/runner/kdevelopsessions.cpp:102
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "KDevelop сеансын ашу"

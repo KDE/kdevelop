@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-08-13 22:50+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -68,7 +68,7 @@ msgstr "<br>Старое значение: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Новое значение: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -81,7 +81,7 @@ msgstr ""
 "сеанс отладки будет прекращён, чтобы предотвратить потенциальное аварийное "
 "завершение работы."
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -90,18 +90,18 @@ msgstr ""
 "Исключение: %1\n"
 "Ответ, полученный от MI: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Внутренняя ошибка отладчика"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Процесс завершён"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -110,12 +110,12 @@ msgstr ""
 "<b>Невозможно запустить отладчик.</b><p>Не удалось запустить «%1». Проверьте "
 "правильность заданного пути."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Не удалось запустить процесс"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -126,13 +126,13 @@ msgstr ""
 "за этого пришлось завершить сеанс отладки.<br>Попробуйте воспроизвести сбой "
 "без KDevelop и сообщите об ошибке.<br>"
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Отладчик аварийно завершил работу"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Процесс аварийно завершился"

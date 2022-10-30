@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-06-28 14:08+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -24,7 +24,7 @@ msgid "Parser"
 msgstr "Analyzátor"
 
 #: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
-#: problemsview.cpp:324
+#: problemsview.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
@@ -42,193 +42,193 @@ msgctxt "@action:inmenu"
 msgid "Solve: %1"
 msgstr "Vyřešit: %1"
 
-#: problemsview.cpp:37
+#: problemsview.cpp:36
 #, kde-format
 msgctxt "@action"
 msgid "Force Full Update"
 msgstr "Vynutit plnou aktualizaci"
 
-#: problemsview.cpp:52
+#: problemsview.cpp:47
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Which files to display the problems for"
 msgstr "Soory, pro které zobrazovat problémy"
 
-#: problemsview.cpp:58
+#: problemsview.cpp:53
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Document"
 msgstr "Současný dokument"
 
-#: problemsview.cpp:59
+#: problemsview.cpp:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current document"
 msgstr "Zobrazit problémy v současném dokumentu"
 
-#: problemsview.cpp:62
+#: problemsview.cpp:57
 #, kde-format
 msgctxt "@option:check"
 msgid "Open Documents"
 msgstr "Otevřené dokumenty"
 
-#: problemsview.cpp:63
+#: problemsview.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all open documents"
 msgstr "Zobrazit problémy ve všech otevřených dokumentech"
 
-#: problemsview.cpp:66
+#: problemsview.cpp:61
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Project"
 msgstr "Aktuální projekt"
 
-#: problemsview.cpp:67
+#: problemsview.cpp:62
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current project"
 msgstr "Zobrazit problémy v současném projektu"
 
-#: problemsview.cpp:70
+#: problemsview.cpp:65
 #, kde-format
 msgctxt "@option:check"
 msgid "All Projects"
 msgstr "Všechny projekty"
 
-#: problemsview.cpp:71
+#: problemsview.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all projects"
 msgstr "Zobrazit problémy ve všech projektech"
 
-#: problemsview.cpp:74
+#: problemsview.cpp:69
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Path"
 msgstr "Dokumenty v cestě"
 
-#: problemsview.cpp:75
+#: problemsview.cpp:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in a specific path"
 msgstr "Zobrazit problémy ve všech souborech v dané cestě"
 
-#: problemsview.cpp:78
+#: problemsview.cpp:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Current Path"
 msgstr "Dokumenty v současné cestě"
 
-#: problemsview.cpp:80
+#: problemsview.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in the path of the current document"
 msgstr "Zobrazit problémy ve všech souborech v cestě současného dokumentu"
 
-#: problemsview.cpp:83
+#: problemsview.cpp:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Show All"
 msgstr "Zobrazit všechny"
 
-#: problemsview.cpp:84
+#: problemsview.cpp:79
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display all problems"
 msgstr "Zobrazit VŠECHNY problémy"
 
-#: problemsview.cpp:105
+#: problemsview.cpp:100
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
 msgstr "Filtr cest..."
 
-#: problemsview.cpp:137
+#: problemsview.cpp:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Imports"
 msgstr "Zobrazit importy"
 
-#: problemsview.cpp:138
+#: problemsview.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in imported files"
 msgstr "Zobrazit problémy v importovaných souborech"
 
-#: problemsview.cpp:148
+#: problemsview.cpp:143
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display errors"
 msgstr "Zobrazit chyby"
 
-#: problemsview.cpp:150
+#: problemsview.cpp:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Errors"
 msgstr "Zobrazit chyby"
 
-#: problemsview.cpp:153
+#: problemsview.cpp:148
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display warnings"
 msgstr "Zobrazit varování"
 
-#: problemsview.cpp:155
+#: problemsview.cpp:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Warnings"
 msgstr "Zobrazit varování"
 
-#: problemsview.cpp:158
+#: problemsview.cpp:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display hints"
 msgstr "Zobrazit rady"
 
-#: problemsview.cpp:160
+#: problemsview.cpp:155
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Hints"
 msgstr "Ukázat rady"
 
-#: problemsview.cpp:180
+#: problemsview.cpp:175
 #, kde-format
 msgctxt "@title:menu"
 msgid "Grouping"
 msgstr "Seskupování"
 
-#: problemsview.cpp:189
+#: problemsview.cpp:180
 #, kde-format
 msgctxt "@option:check"
 msgid "None"
 msgstr "Žádné"
 
-#: problemsview.cpp:190
+#: problemsview.cpp:181
 #, kde-format
 msgctxt "@option:check"
 msgid "Path"
 msgstr "Cesta"
 
-#: problemsview.cpp:191
+#: problemsview.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Severity"
 msgstr "Závažnost"
 
-#: problemsview.cpp:219
+#: problemsview.cpp:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Hledat..."
 
-#: problemsview.cpp:462
+#: problemsview.cpp:453
 #, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:500
+#: problemsview.cpp:491
 #, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"

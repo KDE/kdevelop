@@ -1,5 +1,5 @@
 # translation of kdevelop.po to
-# Version: $Revision: 1612089 $
+# Version: $Revision: 1637015 $
 # KDevelop polish translation file.
 # Translation work:
 #       Jacek Wojdeł <wojdel@kbs.twi.tudelft.nl>
@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-10 00:16+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2020-04-05 07:34+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -909,17 +909,17 @@ msgstr "Sesje KDevelop"
 msgid "Arbitrary String Which Says Something"
 msgstr "Dowolny ciąg znaków, który coś mówi "
 
-#: plasma/runner/kdevelopsessions.cpp:33
+#: plasma/runner/kdevelopsessions.cpp:24
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
 msgstr "Znajduje sesje KDevelop pasujące do :q:."
 
-#: plasma/runner/kdevelopsessions.cpp:38 plasma/runner/kdevelopsessions.cpp:40
+#: plasma/runner/kdevelopsessions.cpp:28
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
 msgstr "Sporządza listę wszystkich sesji edytora KDevelop na twoim koncie."
 
-#: plasma/runner/kdevelopsessions.cpp:115
+#: plasma/runner/kdevelopsessions.cpp:102
 #, kde-format
 msgid "Open KDevelop Session"
 msgstr "Otwórz sesję KDevelop"

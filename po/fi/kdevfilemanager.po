@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2015-10-14 14:05+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -21,42 +21,42 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
+#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:67
 #, fuzzy, kde-format
 #| msgid "File System"
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Tiedostojärjestelmä"
 
-#: filemanager.cpp:127
+#: filemanager.cpp:126
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: filemanager.cpp:138
+#: filemanager.cpp:133
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Nykyinen tiedostokansio"
 
-#: filemanager.cpp:155
+#: filemanager.cpp:150
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Uusi tiedosto…"
 
-#: filemanager.cpp:162
+#: filemanager.cpp:157
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Luo uusi tiedosto"
 
-#: filemanager.cpp:178
+#: filemanager.cpp:173
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Tiedoston ”%1” luonti epäonnistui"

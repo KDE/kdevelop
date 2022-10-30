@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-26 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2021-11-10 10:15+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -28,7 +28,7 @@ msgid "Parser"
 msgstr "Analitzador"
 
 #: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
-#: problemsview.cpp:324
+#: problemsview.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
@@ -46,194 +46,194 @@ msgctxt "@action:inmenu"
 msgid "Solve: %1"
 msgstr "Resol: %1"
 
-#: problemsview.cpp:37
+#: problemsview.cpp:36
 #, kde-format
 msgctxt "@action"
 msgid "Force Full Update"
 msgstr "Força actualització completa"
 
-#: problemsview.cpp:52
+#: problemsview.cpp:47
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Which files to display the problems for"
 msgstr "Els fitxers per als quals es mostraran els problemes"
 
-#: problemsview.cpp:58
+#: problemsview.cpp:53
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Document"
 msgstr "Document actual"
 
-#: problemsview.cpp:59
+#: problemsview.cpp:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current document"
 msgstr "Visualitza els problemes en el document actual"
 
-#: problemsview.cpp:62
+#: problemsview.cpp:57
 #, kde-format
 msgctxt "@option:check"
 msgid "Open Documents"
 msgstr "Documents oberts"
 
-#: problemsview.cpp:63
+#: problemsview.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all open documents"
 msgstr "Visualitza els problemes en tots els documents oberts"
 
-#: problemsview.cpp:66
+#: problemsview.cpp:61
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Project"
 msgstr "Projecte actual"
 
-#: problemsview.cpp:67
+#: problemsview.cpp:62
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current project"
 msgstr "Visualitza els problemes en el projecte actual"
 
-#: problemsview.cpp:70
+#: problemsview.cpp:65
 #, kde-format
 msgctxt "@option:check"
 msgid "All Projects"
 msgstr "Tots els projectes"
 
-#: problemsview.cpp:71
+#: problemsview.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all projects"
 msgstr "Visualitza els problemes en tots els projectes"
 
-#: problemsview.cpp:74
+#: problemsview.cpp:69
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Path"
 msgstr "Documents en un camí"
 
-#: problemsview.cpp:75
+#: problemsview.cpp:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in a specific path"
 msgstr "Visualitza els problemes en tots els projectes d'un camí específic"
 
-#: problemsview.cpp:78
+#: problemsview.cpp:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Current Path"
 msgstr "Documents en el camí actual"
 
-#: problemsview.cpp:80
+#: problemsview.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in the path of the current document"
 msgstr ""
 "Visualitza els problemes de tots els fitxers del camí del document actual"
 
-#: problemsview.cpp:83
+#: problemsview.cpp:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Show All"
 msgstr "Mostra-ho tot"
 
-#: problemsview.cpp:84
+#: problemsview.cpp:79
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display all problems"
 msgstr "Visualitza tots els problemes"
 
-#: problemsview.cpp:105
+#: problemsview.cpp:100
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
 msgstr "Filtre de camí..."
 
-#: problemsview.cpp:137
+#: problemsview.cpp:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Imports"
 msgstr "Mostra les importacions"
 
-#: problemsview.cpp:138
+#: problemsview.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in imported files"
 msgstr "Visualitza els problemes en els fitxers importats"
 
-#: problemsview.cpp:148
+#: problemsview.cpp:143
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display errors"
 msgstr "Visualitza els errors"
 
-#: problemsview.cpp:150
+#: problemsview.cpp:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Errors"
 msgstr "Mostra els errors"
 
-#: problemsview.cpp:153
+#: problemsview.cpp:148
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display warnings"
 msgstr "Visualitza els avisos"
 
-#: problemsview.cpp:155
+#: problemsview.cpp:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Warnings"
 msgstr "Mostra els avisos"
 
-#: problemsview.cpp:158
+#: problemsview.cpp:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display hints"
 msgstr "Visualitza els suggeriments"
 
-#: problemsview.cpp:160
+#: problemsview.cpp:155
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Hints"
 msgstr "Mostra els consells"
 
-#: problemsview.cpp:180
+#: problemsview.cpp:175
 #, kde-format
 msgctxt "@title:menu"
 msgid "Grouping"
 msgstr "Agrupament"
 
-#: problemsview.cpp:189
+#: problemsview.cpp:180
 #, kde-format
 msgctxt "@option:check"
 msgid "None"
 msgstr "Sense"
 
-#: problemsview.cpp:190
+#: problemsview.cpp:181
 #, kde-format
 msgctxt "@option:check"
 msgid "Path"
 msgstr "Camí"
 
-#: problemsview.cpp:191
+#: problemsview.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Severity"
 msgstr "Gravetat"
 
-#: problemsview.cpp:219
+#: problemsview.cpp:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Busca..."
 
-#: problemsview.cpp:462
+#: problemsview.cpp:453
 #, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: problemsview.cpp:500
+#: problemsview.cpp:491
 #, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"

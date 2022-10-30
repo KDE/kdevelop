@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-24 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -701,7 +701,7 @@ msgstr "Faili avamine nurjus."
 msgid "File could not be read from disk due to permissions."
 msgstr "Faili lugemine kettalt nurjus õiguste tõttu."
 
-#: language/backgroundparser/parseprojectjob.cpp:75
+#: language/backgroundparser/parseprojectjob.cpp:74
 #, kde-format
 msgid "Process 1 file in %2"
 msgid_plural "Process %1 files in %2"
@@ -1662,27 +1662,27 @@ msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
 msgstr "Mitmesugused elemendid"
 
-#: project/helper.cpp:72
+#: project/helper.cpp:67
 #, kde-format
 msgid "Cannot remove folder <i>%1</i>."
 msgstr "Kataloogi <i>%1</i> eemaldamine nurjus."
 
-#: project/helper.cpp:73
+#: project/helper.cpp:68
 #, kde-format
 msgid "Cannot remove file <i>%1</i>."
 msgstr "Faili <i>%1</i> eemaldamine nurjus."
 
-#: project/helper.cpp:95
+#: project/helper.cpp:86
 #, kde-format
 msgid "The file <i>%1</i> already exists."
 msgstr "Fail <i>%1</i> on juba olemas."
 
-#: project/helper.cpp:105
+#: project/helper.cpp:96
 #, kde-format
 msgid "Cannot create file <i>%1</i>."
 msgstr "Faili <i>%1</i> loomine nurjus."
 
-#: project/helper.cpp:124
+#: project/helper.cpp:115
 #, kde-format
 msgid "Cannot create folder <i>%1</i>."
 msgstr "Kataloogi <i>%1</i> loomine nurjus."
@@ -2238,20 +2238,20 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Silumine"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:443
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Silu käivitamist"
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:447
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Aktiivse käivitamise silumine"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:448
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:447
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2311,24 +2311,24 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentatsioon"
 
-#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:60 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Nimetu"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:117
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Faili avamine"
 
-#: shell/documentcontroller.cpp:119
+#: shell/documentcontroller.cpp:118
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Tekstifail\n"
 
-#: shell/documentcontroller.cpp:317
+#: shell/documentcontroller.cpp:312
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2337,46 +2337,46 @@ msgstr ""
 "KDevelop ei leidnud failile \"%1\" tüübiga %2 redaktorit.\n"
 "Kas soovid selle avada lihttekstina?"
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:313
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Redaktorit ei leitud"
 
-#: shell/documentcontroller.cpp:319
+#: shell/documentcontroller.cpp:314
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:320
+#: shell/documentcontroller.cpp:315
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:603
+#: shell/documentcontroller.cpp:598
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Ava..."
 
-#: shell/documentcontroller.cpp:606
+#: shell/documentcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Ava fail"
 
-#: shell/documentcontroller.cpp:607
+#: shell/documentcontroller.cpp:602
 #, fuzzy, kde-format
 #| msgid "Opens a file for editing."
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Avab faili muutmiseks."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:606
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2388,21 +2388,21 @@ msgid ""
 msgstr ""
 "Näitab faile, mida on viimati avatud, ja lubab neid hõlpsasti taas avada."
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:611
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Sa&lvesta kõik"
 
-#: shell/documentcontroller.cpp:618
+#: shell/documentcontroller.cpp:613
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Salvesta kõik avatud dokumendid"
 
-#: shell/documentcontroller.cpp:619
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid ""
 #| "Save all open documents, prompting for additional information when "
@@ -2412,21 +2412,21 @@ msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr "Salvestab kõik avatud dokumendid, küsides vajaduse korral lisateavet."
 
-#: shell/documentcontroller.cpp:625
+#: shell/documentcontroller.cpp:620
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Laadi kõik uuesti"
 
-#: shell/documentcontroller.cpp:627
+#: shell/documentcontroller.cpp:622
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Lähtesta kõik avatud dokumendid"
 
-#: shell/documentcontroller.cpp:628
+#: shell/documentcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "Revert all open documents, returning to the previously saved state."
 msgctxt "@info:whatsthis"
@@ -2434,42 +2434,42 @@ msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 "Lähtestab kõik avatud dokumendid nende varasemasse salvestatud seisundisse."
 
-#: shell/documentcontroller.cpp:634
+#: shell/documentcontroller.cpp:629
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Sulge"
 
-#: shell/documentcontroller.cpp:636
+#: shell/documentcontroller.cpp:631
 #, fuzzy, kde-format
 #| msgid "Close file"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Sulge fail"
 
-#: shell/documentcontroller.cpp:637
+#: shell/documentcontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid "Closes current file."
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Aktiivse faili sulgemine."
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:637
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Sulg&e kõik"
 
-#: shell/documentcontroller.cpp:644
+#: shell/documentcontroller.cpp:639
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Sulge kõik avatud dokumendid"
 
-#: shell/documentcontroller.cpp:645
+#: shell/documentcontroller.cpp:640
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, prompting for additional information when "
@@ -2480,21 +2480,21 @@ msgid ""
 "necessary."
 msgstr "Sulgeb kõik avatud dokumendid, küsides vajaduse korral lisateavet."
 
-#: shell/documentcontroller.cpp:651
+#: shell/documentcontroller.cpp:646
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Sulge kõik &teised"
 
-#: shell/documentcontroller.cpp:653
+#: shell/documentcontroller.cpp:648
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Sulge kõik teised dokumendid"
 
-#: shell/documentcontroller.cpp:654
+#: shell/documentcontroller.cpp:649
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, with the exception of the currently active "
@@ -2505,21 +2505,21 @@ msgid ""
 "document."
 msgstr "Sulgeb kõik avatud dokumendid, välja arvatud aktiivne dokument."
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:654
 #, fuzzy, kde-format
 #| msgid "Show Annotate on current document"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Näita avatud dokumendi annoteerimist"
 
-#: shell/documentcontroller.cpp:660
+#: shell/documentcontroller.cpp:655
 #, fuzzy, kde-format
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Annoteeri"
 
-#: shell/documentcontroller.cpp:1279
+#: shell/documentcontroller.cpp:1274
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2661,14 +2661,14 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Silur:"
 
-#: shell/loadedpluginsdialog.cpp:295
+#: shell/loadedpluginsdialog.cpp:281
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Laaditud pluginad"
 
-#: shell/loadedpluginsdialog.cpp:305
+#: shell/loadedpluginsdialog.cpp:287
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\"><b>%1</b> laaditud pluginad</font></html>"
@@ -3217,31 +3217,31 @@ msgstr ""
 "Arendajale omase projekti seadistuse salvestamine nurjus.\n"
 "Tähelepanu: projekti seadistused, mida oled muutnud, lähevad kaotsi."
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:159
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Projekti %1 seadistamine"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:302
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Vigane asukoht: %1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:312
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "%1 juba avatakse, seda ei hakata uuesti avama"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:469
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Tühista "
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:470
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3252,14 +3252,14 @@ msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "Edasi projekti avamisega, kasutades äsja määratud projekti seadistust."
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Ava olemasolev fail"
 
-#: shell/projectcontroller.cpp:477
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3269,7 +3269,7 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Edasi projekti avamisega, aga kasutades olemasolevat projekti seadistust."
 
-#: shell/projectcontroller.cpp:479
+#: shell/projectcontroller.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3277,7 +3277,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Loobumine projekti avamisest."
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3286,42 +3286,42 @@ msgstr ""
 "Projekti seadistustefail %1 on juba olemas.\n"
 "Kas tühistada see või avada olemasolev fail?"
 
-#: shell/projectcontroller.cpp:483
+#: shell/projectcontroller.cpp:478
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Tühista olemasolev projekti seadistus"
 
-#: shell/projectcontroller.cpp:503
+#: shell/projectcontroller.cpp:498
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Seadistustefaili %1 loomine nurjus"
 
-#: shell/projectcontroller.cpp:517
+#: shell/projectcontroller.cpp:512
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Kas avada aktiivne projekt uuesti?"
 
-#: shell/projectcontroller.cpp:518
+#: shell/projectcontroller.cpp:513
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:558
+#: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Ava/impordi projekt..."
 
-#: shell/projectcontroller.cpp:559
+#: shell/projectcontroller.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Projekti avamine või import"
 
-#: shell/projectcontroller.cpp:560
+#: shell/projectcontroller.cpp:555
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3343,19 +3343,19 @@ msgstr ""
 "kataloogi avamiseks KDevelopis. Kui avatakse olemasolev kataloog, milles "
 "pole veel KDevelop 4 projektifaili, viimane luuakse."
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Tõmba projekt..."
 
-#: shell/projectcontroller.cpp:573
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Projekti tõmbamine"
 
-#: shell/projectcontroller.cpp:574
+#: shell/projectcontroller.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3368,77 +3368,77 @@ msgstr ""
 "Juhendab kasutajat projekti tõmbamise ajal ning võimaldab selle importida "
 "KDevelop 4."
 
-#: shell/projectcontroller.cpp:589
+#: shell/projectcontroller.cpp:584
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Sulge projektid"
 
-#: shell/projectcontroller.cpp:591
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Sulgeb kõik parajasti valitud projektid"
 
-#: shell/projectcontroller.cpp:597
+#: shell/projectcontroller.cpp:592
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Ava seadistus..."
 
-#: shell/projectcontroller.cpp:603
+#: shell/projectcontroller.cpp:598
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Kanna aktiivne projekt sisse..."
 
-#: shell/projectcontroller.cpp:604
+#: shell/projectcontroller.cpp:599
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Kanna sisse..."
 
-#: shell/projectcontroller.cpp:615
+#: shell/projectcontroller.cpp:610
 #, fuzzy, kde-format
 #| msgid "Open Recent Project"
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Ava viimati avatud projekt"
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Viimati avatud projekti avamine."
 
-#: shell/projectcontroller.cpp:621
+#: shell/projectcontroller.cpp:616
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Ava aktiivse faili projekt"
 
-#: shell/projectcontroller.cpp:772
+#: shell/projectcontroller.cpp:767
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Projekt on juba avatud: %1"
 
-#: shell/projectcontroller.cpp:776
+#: shell/projectcontroller.cpp:771
 #, kde-format
 msgid "No active document"
 msgstr "Ükski dokument pole aktiivnedid"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:852
 #, fuzzy, kde-format
 #| msgid "Project Already Open"
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Projekt on juba avatud"
 
-#: shell/projectcontroller.cpp:860
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3447,26 +3447,26 @@ msgstr ""
 "Projekt, mida proovid avada, on juba avatud vähemalt ühes seansis.<br>Mida "
 "soovid ette võtta?"
 
-#: shell/projectcontroller.cpp:864
+#: shell/projectcontroller.cpp:859
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Lisa projekt aktiivsesse seanssi"
 
-#: shell/projectcontroller.cpp:868
+#: shell/projectcontroller.cpp:863
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Ava seanss %1"
 
-#: shell/projectcontroller.cpp:929
+#: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Ükski lubatud plugin ei toeta selle hoidla URL-i: %1"
 
-#: shell/projectcontroller.cpp:1233
+#: shell/projectcontroller.cpp:1228
 #, fuzzy, kde-format
 #| msgid "Reparse the Entire Project"
 msgctxt "@action"
@@ -3589,46 +3589,46 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Hangi"
 
-#: shell/runcontroller.cpp:89
+#: shell/runcontroller.cpp:88
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Silumine"
 
-#: shell/runcontroller.cpp:98
+#: shell/runcontroller.cpp:97
 #, fuzzy, kde-format
 #| msgid "Profile"
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profiil"
 
-#: shell/runcontroller.cpp:107
+#: shell/runcontroller.cpp:106
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Täitmine"
 
-#: shell/runcontroller.cpp:409
+#: shell/runcontroller.cpp:408
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Aktiivne käivitamisseadistus ei toeta \"%1\" režiimi."
 
-#: shell/runcontroller.cpp:429
+#: shell/runcontroller.cpp:428
 #, fuzzy, kde-format
 #| msgid "Configure Launches..."
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Seadista käivitamist..."
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Käivitamise seadistustedialoogi avamine"
 
-#: shell/runcontroller.cpp:433
+#: shell/runcontroller.cpp:432
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3638,27 +3638,27 @@ msgstr ""
 "Avab dialoogi uute käivitamisseadistuste loomiseks või olemasolevate "
 "muutmiseks."
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:435
 #, fuzzy, kde-format
 #| msgid "Execute Launch"
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Täida käivitamine"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:436
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Täitmine"
 
-#: shell/runcontroller.cpp:439
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Aktiivse käivitamise täitmine"
 
-#: shell/runcontroller.cpp:440
+#: shell/runcontroller.cpp:439
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3668,7 +3668,7 @@ msgstr ""
 "Täidab sihtmärgi või programmi, mis on määratud aktiivses "
 "käivitamisseadistuses."
 
-#: shell/runcontroller.cpp:446
+#: shell/runcontroller.cpp:445
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
@@ -3680,14 +3680,14 @@ msgstr "Silumine"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:459
 #, fuzzy, kde-format
 #| msgid "Stop All Jobs"
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Peata kõik tööd"
 
-#: shell/runcontroller.cpp:461
+#: shell/runcontroller.cpp:460
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
 #| msgid "Stop All"
@@ -3695,77 +3695,77 @@ msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Peata kõik"
 
-#: shell/runcontroller.cpp:464
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Kõigi aktiivsete tööde peatamine"
 
-#: shell/runcontroller.cpp:465
+#: shell/runcontroller.cpp:464
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Kõik käimas tööd pannakse seisma."
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:470
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "@action"
 msgid "Stop"
 msgstr "Peata"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Peata"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Konkreetseid töid peatada võimaldav menüü"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:474
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Tööde loend, mida saab eraldi peatada."
 
-#: shell/runcontroller.cpp:483
+#: shell/runcontroller.cpp:478
 #, fuzzy, kde-format
 #| msgid "Current Launch Configuration"
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Aktiivne käivitamisseadistus"
 
-#: shell/runcontroller.cpp:484
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Aktiivne käivitamisseadistus"
 
-#: shell/runcontroller.cpp:485
+#: shell/runcontroller.cpp:480
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 "Vali, milline käivitamisseadistus tööle panna, kui programm käivitatakse."
 
-#: shell/runcontroller.cpp:602
+#: shell/runcontroller.cpp:597
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Nimetu töö"
 
-#: shell/runcontroller.cpp:983
+#: shell/runcontroller.cpp:978
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Uus %1 käivitaja"
 
-#: shell/runcontroller.cpp:1020
+#: shell/runcontroller.cpp:1015
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -5668,97 +5668,97 @@ msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
 msgstr "Kiirklahvi omistamine \"%1\" tööriistavaatele"
 
-#: sublime/mainwindow_p.cpp:79
+#: sublime/mainwindow_p.cpp:78
 #, fuzzy, kde-format
 #| msgid "Concentration Mode"
 msgctxt "@option:check"
 msgid "Concentration Mode"
 msgstr "Keskendumisrežiim"
 
-#: sublime/mainwindow_p.cpp:81
+#: sublime/mainwindow_p.cpp:80
 #, fuzzy, kde-format
 #| msgid "Removes most of the controls so you can focus on what matters."
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr "Enamiku juhtelementide kõrvaldamine, et saaks keskenduda olulisele."
 
-#: sublime/mainwindow_p.cpp:88
+#: sublime/mainwindow_p.cpp:87
 #, fuzzy, kde-format
 #| msgid "Show Left Dock"
 msgctxt "@option:check"
 msgid "Show Left Dock"
 msgstr "Näita vasakdokki"
 
-#: sublime/mainwindow_p.cpp:95
+#: sublime/mainwindow_p.cpp:94
 #, fuzzy, kde-format
 #| msgid "Show Right Dock"
 msgctxt "@option:check"
 msgid "Show Right Dock"
 msgstr "Näita paremdokki"
 
-#: sublime/mainwindow_p.cpp:101
+#: sublime/mainwindow_p.cpp:100
 #, fuzzy, kde-format
 #| msgid "Show Bottom Dock"
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
 msgstr "Näita aladokki"
 
-#: sublime/mainwindow_p.cpp:107
+#: sublime/mainwindow_p.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
 msgstr "Fookus redaktorile"
 
-#: sublime/mainwindow_p.cpp:112
+#: sublime/mainwindow_p.cpp:111
 #, fuzzy, kde-format
 #| msgid "Hide/Restore Docks"
 msgctxt "@action"
 msgid "Hide/Restore Docks"
 msgstr "Peida/taasta dokid"
 
-#: sublime/mainwindow_p.cpp:117
+#: sublime/mainwindow_p.cpp:116
 #, fuzzy, kde-format
 #| msgid "Next Tool View"
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "Järgmine tööriistavaade"
 
-#: sublime/mainwindow_p.cpp:123
+#: sublime/mainwindow_p.cpp:122
 #, fuzzy, kde-format
 #| msgid "Previous Tool View"
 msgctxt "@action"
 msgid "Previous Tool View"
 msgstr "Eelmine tööriistavaade"
 
-#: sublime/mainwindow_p.cpp:129
+#: sublime/mainwindow_p.cpp:128
 #, fuzzy, kde-format
 #| msgid "Tool Views"
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Tööriistavaated"
 
-#: sublime/mainwindow_p.cpp:139
+#: sublime/mainwindow_p.cpp:134
 #, kde-format
 msgid "Left Button Bar"
 msgstr "Vasak nupuriba"
 
-#: sublime/mainwindow_p.cpp:142
+#: sublime/mainwindow_p.cpp:137
 #, kde-format
 msgid "Right Button Bar"
 msgstr "Parem nupuriba"
 
-#: sublime/mainwindow_p.cpp:145
+#: sublime/mainwindow_p.cpp:140
 #, kde-format
 msgid "Bottom Button Bar"
 msgstr "Alumine nupuriba"
 
-#: sublime/mainwindow_p.cpp:817
+#: sublime/mainwindow_p.cpp:812
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Sulge"
 
-#: sublime/mainwindow_p.cpp:818
+#: sublime/mainwindow_p.cpp:813
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
@@ -6054,7 +6054,7 @@ msgstr "Erinevuse hankimine nurjus"
 msgid "There are no committed differences."
 msgstr "Erinevusi pole."
 
-#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:296
+#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -6305,90 +6305,90 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Allika versioon"
 
-#: vcs/vcspluginhelper.cpp:87
+#: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Kanna sisse ..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Uuenda"
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Lisa"
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Näita erinevusi ..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:88
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Lähtesta"
 
-#: vcs/vcspluginhelper.cpp:92 vcs/vcspluginhelper.cpp:487
+#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:481
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Ajalugu ..."
 
-#: vcs/vcspluginhelper.cpp:93
+#: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Annotatsioon ..."
 
-#: vcs/vcspluginhelper.cpp:94
+#: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Näita erinevust ..."
 
-#: vcs/vcspluginhelper.cpp:95
+#: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Näita (kõigi failide) erinevust ..."
 
-#: vcs/vcspluginhelper.cpp:96
+#: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Kanna sisse ..."
 
-#: vcs/vcspluginhelper.cpp:97
+#: vcs/vcspluginhelper.cpp:94
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Võta välja ..."
 
-#: vcs/vcspluginhelper.cpp:295
+#: vcs/vcspluginhelper.cpp:292
 #, kde-format
 msgid "There are no differences."
 msgstr "Erinevusi pole."
 
-#: vcs/vcspluginhelper.cpp:302
+#: vcs/vcspluginhelper.cpp:299
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Erinevuse hankimine nurjus"
 
-#: vcs/vcspluginhelper.cpp:370
+#: vcs/vcspluginhelper.cpp:367
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 ajalugu (%1)"
 
-#: vcs/vcspluginhelper.cpp:443
+#: vcs/vcspluginhelper.cpp:439
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6397,7 +6397,7 @@ msgstr ""
 "Annotatsioonide näitamine nurjus, redaktorile puudub liides KTextEditor::"
 "AnnotationInterface."
 
-#: vcs/vcspluginhelper.cpp:447
+#: vcs/vcspluginhelper.cpp:443
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6408,7 +6408,7 @@ msgstr ""
 "tekstidokument:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:482 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:476 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

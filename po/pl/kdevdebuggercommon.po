@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-07-29 16:34+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -75,7 +75,7 @@ msgstr "<br>Stara wartość: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Nowa wartość: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -88,7 +88,7 @@ msgstr ""
 "Sesja diagnostyczna zostanie teraz zakończona, aby uniknąć potencjalnej "
 "usterki"
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -97,18 +97,18 @@ msgstr ""
 "Wyjątek: %1\n"
 "Odpowiedź MI: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Błąd wewnętrzny programu diagnostycznego"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Proces wyszedł"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -117,12 +117,12 @@ msgstr ""
 "<b>Nie można uruchomić programu diagnostycznego</b> <p>Nie można uruchomić "
 "\"%1\". Sprawdź, czy ścieżka jest podana prawidłowo."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "Nie udało się uruchomić procesu"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -133,13 +133,13 @@ msgstr ""
 "'%1' uległ usterce.<br>Ze względu na to sesja diagnostyczna musi zostać "
 "zakończona. <br>Spróbuj powtórzyć usterkę bez KDevelop i zgłoś błąd.<br>"
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Usterka programu diagnostycznego"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "Proces uległ usterce"

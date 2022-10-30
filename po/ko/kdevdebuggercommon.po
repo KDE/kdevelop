@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -56,7 +56,7 @@ msgstr "<br>이전 값: %1"
 msgid "<br>New value: %1"
 msgstr "<br>새 값: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -68,7 +68,7 @@ msgstr ""
 "다. 버그를 보고해 주십시오. 더 이상의 충돌을 막으려고 디버그 세션을 종료합니"
 "다."
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -77,18 +77,18 @@ msgstr ""
 "예외: %1\n"
 "MI 응답: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "디버거 내부 오류"
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "프로세스 종료됨"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -97,12 +97,12 @@ msgstr ""
 "<b>디버거를 시작할 수 없습니다.</b><p>'%1'을(를) 실행할 수 없습니다. 경로가 "
 "올바른지 확인하십시오."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr "프로세스를 시작할 수 없음"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -113,13 +113,13 @@ msgstr ""
 "따라서 디버그 세션이 종료되었습니다.<br>KDevelop 밖에서도 충돌하는지 확인한 "
 "다음 버그를 보고해 주십시오.<br>"
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "디버거 충돌함"
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr "프로세스 충돌함"

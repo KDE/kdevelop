@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-24 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2020-09-29 18:06+0200\n"
 "Last-Translator: Gontzal Pujana <gontzalpujana@protonmail.com>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -691,7 +691,7 @@ msgstr "Ezin izan da fitxategia ireki."
 msgid "File could not be read from disk due to permissions."
 msgstr "Ezin izan da fitxategia diskotik irakurri baimenengatik."
 
-#: language/backgroundparser/parseprojectjob.cpp:75
+#: language/backgroundparser/parseprojectjob.cpp:74
 #, kde-format
 msgid "Process 1 file in %2"
 msgid_plural "Process %1 files in %2"
@@ -1642,27 +1642,27 @@ msgctxt "Unspecified set of build items (e. g. projects, targets)"
 msgid "Various items"
 msgstr "Hainbat elementu"
 
-#: project/helper.cpp:72
+#: project/helper.cpp:67
 #, kde-format
 msgid "Cannot remove folder <i>%1</i>."
 msgstr "Ezin da <i>%1</i> karpeta kendu."
 
-#: project/helper.cpp:73
+#: project/helper.cpp:68
 #, kde-format
 msgid "Cannot remove file <i>%1</i>."
 msgstr "Ezin da <i>%1</i> fitxategia kendu."
 
-#: project/helper.cpp:95
+#: project/helper.cpp:86
 #, kde-format
 msgid "The file <i>%1</i> already exists."
 msgstr "<i>%1</i> fitxategia existitzen da dagoeneko."
 
-#: project/helper.cpp:105
+#: project/helper.cpp:96
 #, kde-format
 msgid "Cannot create file <i>%1</i>."
 msgstr "Ezin da <i>%1</i> fitxategia sortu."
 
-#: project/helper.cpp:124
+#: project/helper.cpp:115
 #, kde-format
 msgid "Cannot create folder <i>%1</i>."
 msgstr "Ezin da <i>%1</i> karpeta sortu."
@@ -2151,19 +2151,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Araztu"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Araztu abiarazpena"
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:447
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Araztu uneko abiarazpena"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:448
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:447
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2215,23 +2215,23 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentazioa"
 
-#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:60 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Izengabea"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Ireki fitxategia"
 
-#: shell/documentcontroller.cpp:119
+#: shell/documentcontroller.cpp:118
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Testu-fitxategia\n"
 
-#: shell/documentcontroller.cpp:317
+#: shell/documentcontroller.cpp:312
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2240,43 +2240,43 @@ msgstr ""
 "KDevelopek ezin izan du '%2' motako '%1' fitxategirako editorea aurkitu.\n"
 "Testu plano bezala ireki nahi duzu?"
 
-#: shell/documentcontroller.cpp:318
+#: shell/documentcontroller.cpp:313
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Ezin izan da editorea aurkitu"
 
-#: shell/documentcontroller.cpp:319
+#: shell/documentcontroller.cpp:314
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:320
+#: shell/documentcontroller.cpp:315
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:603
+#: shell/documentcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Ireki..."
 
-#: shell/documentcontroller.cpp:606
+#: shell/documentcontroller.cpp:601
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Ireki fitxategia"
 
-#: shell/documentcontroller.cpp:607
+#: shell/documentcontroller.cpp:602
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Editatzeko fitxategi bat irekitzen du."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2286,19 +2286,19 @@ msgstr ""
 "Hemen duela gutxi iraki dituzun fitxategiak zerrendatzen dira, eta erraz "
 "irekitzen uzten dizkizu."
 
-#: shell/documentcontroller.cpp:616
+#: shell/documentcontroller.cpp:611
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Gorde guz&tiak"
 
-#: shell/documentcontroller.cpp:618
+#: shell/documentcontroller.cpp:613
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Gorde irekitako dokumentu guztiak"
 
-#: shell/documentcontroller.cpp:619
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2307,56 +2307,56 @@ msgstr ""
 "Gorde irekitako dokumentu guztiak, informazio gehigarria erakutsiz "
 "beharrezkoa denean."
 
-#: shell/documentcontroller.cpp:625
+#: shell/documentcontroller.cpp:620
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Freskatu guztiak"
 
-#: shell/documentcontroller.cpp:627
+#: shell/documentcontroller.cpp:622
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Leheneratu irekitako dokumentu guztiak"
 
-#: shell/documentcontroller.cpp:628
+#: shell/documentcontroller.cpp:623
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 "Leheneratu irekitako dokumentu guztiak, gordetako azkean egoerara bueltatuz."
 
-#: shell/documentcontroller.cpp:634
+#: shell/documentcontroller.cpp:629
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "It&xi"
 
-#: shell/documentcontroller.cpp:636
+#: shell/documentcontroller.cpp:631
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Itxi fitxategia"
 
-#: shell/documentcontroller.cpp:637
+#: shell/documentcontroller.cpp:632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Uneko fitxategia ixten du."
 
-#: shell/documentcontroller.cpp:642
+#: shell/documentcontroller.cpp:637
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Itx&i guztiak"
 
-#: shell/documentcontroller.cpp:644
+#: shell/documentcontroller.cpp:639
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Itxi irekitako dokumentu guztiak"
 
-#: shell/documentcontroller.cpp:645
+#: shell/documentcontroller.cpp:640
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2366,19 +2366,19 @@ msgstr ""
 "Itxi irekitako dokumentu guztiak, informazio gehigarria erakutsiz "
 "beharrezkoa denean."
 
-#: shell/documentcontroller.cpp:651
+#: shell/documentcontroller.cpp:646
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Itxi &beste guztiak"
 
-#: shell/documentcontroller.cpp:653
+#: shell/documentcontroller.cpp:648
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Beste fitxategi guztiak itxi"
 
-#: shell/documentcontroller.cpp:654
+#: shell/documentcontroller.cpp:649
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2387,19 +2387,19 @@ msgid ""
 msgstr ""
 "Itxi irekitako dokumentu guztiak, unean aktibo dagoen dokumentua izan ezik."
 
-#: shell/documentcontroller.cpp:659
+#: shell/documentcontroller.cpp:654
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Erakutsi oharrak uneko dokumentuan"
 
-#: shell/documentcontroller.cpp:660
+#: shell/documentcontroller.cpp:655
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Idatzi"
 
-#: shell/documentcontroller.cpp:1279
+#: shell/documentcontroller.cpp:1274
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2532,13 +2532,13 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Araztailea"
 
-#: shell/loadedpluginsdialog.cpp:295
+#: shell/loadedpluginsdialog.cpp:281
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Kargatutako pluginak"
 
-#: shell/loadedpluginsdialog.cpp:305
+#: shell/loadedpluginsdialog.cpp:287
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
@@ -3058,29 +3058,29 @@ msgstr ""
 "Ezin izan da garatzaileak zehaztutako proiektuaren konfigurazioa gorde.\n"
 "Kontuz: Aldatu dituzun proiektuaren ezarpenak galduko dira."
 
-#: shell/projectcontroller.cpp:160
+#: shell/projectcontroller.cpp:159
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Konfiguratu %1 proiektua"
 
-#: shell/projectcontroller.cpp:303
+#: shell/projectcontroller.cpp:302
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Kokaleku baliogabea: %1"
 
-#: shell/projectcontroller.cpp:313
+#: shell/projectcontroller.cpp:312
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "%1 irekitzen dagoeneko, ez da berriro irekiko"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:469
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Gainidatzi"
 
-#: shell/projectcontroller.cpp:475
+#: shell/projectcontroller.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3089,26 +3089,26 @@ msgstr ""
 "Jarraitu proiektua irekitzen eta erabili orain emandako proiektuaren "
 "konfigurazioa"
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Ireki dagoen fitxategia"
 
-#: shell/projectcontroller.cpp:477
+#: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Jarraitu proiektua irekitzen eta erabili dagoen proiektuaren konfigurazioa"
 
-#: shell/projectcontroller.cpp:479
+#: shell/projectcontroller.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Utzi eta ez ireki proiektua"
 
-#: shell/projectcontroller.cpp:481
+#: shell/projectcontroller.cpp:476
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3117,41 +3117,41 @@ msgstr ""
 "Proiektuaren konfigurazio fitxategi bat dago %1(e)n.\n"
 "Gainidatzi ala dagoeneko fitxategia ireki nahi duzu?"
 
-#: shell/projectcontroller.cpp:483
+#: shell/projectcontroller.cpp:478
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Gainidatzi dagoen proiektuaren konfigurazioa"
 
-#: shell/projectcontroller.cpp:503
+#: shell/projectcontroller.cpp:498
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Ezin izan da %1 konfigurazio-fitxategia sortu"
 
-#: shell/projectcontroller.cpp:517
+#: shell/projectcontroller.cpp:512
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Ireki dagoen proiektua berriro?"
 
-#: shell/projectcontroller.cpp:518
+#: shell/projectcontroller.cpp:513
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:558
+#: shell/projectcontroller.cpp:553
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Ireki / Inportatu proiektua"
 
-#: shell/projectcontroller.cpp:559
+#: shell/projectcontroller.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Ireki edo inportatu proiektua"
 
-#: shell/projectcontroller.cpp:560
+#: shell/projectcontroller.cpp:555
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3173,19 +3173,19 @@ msgstr ""
 "hautatzen uzten du KDevelopen irekitzeko. KDevelop4 proiektu-fitxategi bat "
 "ez duen dagoen karpeta bat irekitzean, fitxategia sortuko da."
 
-#: shell/projectcontroller.cpp:571
+#: shell/projectcontroller.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Eskuratu proiektua..."
 
-#: shell/projectcontroller.cpp:573
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Eskuratu proiektua"
 
-#: shell/projectcontroller.cpp:574
+#: shell/projectcontroller.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3198,71 +3198,71 @@ msgstr ""
 "Erabiltzailea gidatzen du proiektuaren eskuraketatik eta gero KDevelop 4ra "
 "inportatzen du."
 
-#: shell/projectcontroller.cpp:589
+#: shell/projectcontroller.cpp:584
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Itxi proiektua(k)"
 
-#: shell/projectcontroller.cpp:591
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Unean hautatutako proiektu guztiak ixten ditu"
 
-#: shell/projectcontroller.cpp:597
+#: shell/projectcontroller.cpp:592
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Ireki konfigurazioa..."
 
-#: shell/projectcontroller.cpp:603
+#: shell/projectcontroller.cpp:598
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Berretsi uneko proiektua..."
 
-#: shell/projectcontroller.cpp:604
+#: shell/projectcontroller.cpp:599
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Berretsi..."
 
-#: shell/projectcontroller.cpp:615
+#: shell/projectcontroller.cpp:610
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Ireki azkenaldiko proiektua"
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Azkenaldiko proiektu bat irekitzen du."
 
-#: shell/projectcontroller.cpp:621
+#: shell/projectcontroller.cpp:616
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Ireki uneko fitxategiaren proiektua"
 
-#: shell/projectcontroller.cpp:772
+#: shell/projectcontroller.cpp:767
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Proiektua irekita dagoeneko: %1"
 
-#: shell/projectcontroller.cpp:776
+#: shell/projectcontroller.cpp:771
 #, kde-format
 msgid "No active document"
 msgstr "Ez dago dokumentu aktiborik"
 
-#: shell/projectcontroller.cpp:857
+#: shell/projectcontroller.cpp:852
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Proiektua irekita dagoeneko"
 
-#: shell/projectcontroller.cpp:860
+#: shell/projectcontroller.cpp:855
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3271,24 +3271,24 @@ msgstr ""
 "Irekitzen saiatzen ari zaren proiektua gutxienez beste saio batean irekita "
 "dago.<br>Zer egin nahi duzu?"
 
-#: shell/projectcontroller.cpp:864
+#: shell/projectcontroller.cpp:859
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Gehitu proiektua uneko saiora"
 
-#: shell/projectcontroller.cpp:868
+#: shell/projectcontroller.cpp:863
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Ireki %1 saioa"
 
-#: shell/projectcontroller.cpp:929
+#: shell/projectcontroller.cpp:924
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Ez dago biltegi URL hau onartzen duen gaitutako pluginik: %1"
 
-#: shell/projectcontroller.cpp:1233
+#: shell/projectcontroller.cpp:1228
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3399,42 +3399,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Lortu"
 
-#: shell/runcontroller.cpp:89
+#: shell/runcontroller.cpp:88
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Araztu"
 
-#: shell/runcontroller.cpp:98
+#: shell/runcontroller.cpp:97
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profila"
 
-#: shell/runcontroller.cpp:107
+#: shell/runcontroller.cpp:106
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Exekutatu"
 
-#: shell/runcontroller.cpp:409
+#: shell/runcontroller.cpp:408
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Uneko abiarazpen konfigurazioak ez du '%1' modua onartzen"
 
-#: shell/runcontroller.cpp:429
+#: shell/runcontroller.cpp:428
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Konfiguratu abiarazpenak..."
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Ireki abiarazpen konfigurazio elkarrizketa"
 
-#: shell/runcontroller.cpp:433
+#: shell/runcontroller.cpp:432
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3444,25 +3444,25 @@ msgstr ""
 "Elkarrizketa bat irekitzen du abiarazpen konfigurazio berriak "
 "konfiguratzeko, edo daudenak aldatzeko."
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Exekutatu abiarazpena"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:436
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Exekutatu"
 
-#: shell/runcontroller.cpp:439
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Exekutatu uneko abiarazpena"
 
-#: shell/runcontroller.cpp:440
+#: shell/runcontroller.cpp:439
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3472,7 +3472,7 @@ msgstr ""
 "Helburua edo programa unean aktibo dagoen abiarazpen konfigurazioarekin "
 "exekutatzen du."
 
-#: shell/runcontroller.cpp:446
+#: shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3483,85 +3483,85 @@ msgstr "Araztu"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Gelditu lan guztiak"
 
-#: shell/runcontroller.cpp:461
+#: shell/runcontroller.cpp:460
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Gelditu guztia"
 
-#: shell/runcontroller.cpp:464
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Abioan dauden lan guztiak gelditzen ditu"
 
-#: shell/runcontroller.cpp:465
+#: shell/runcontroller.cpp:464
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Abioan dauden lan guztiak gelditu daitezen eskatzen du."
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:470
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Gelditu"
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Gelditu"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Banako lanak gelditzeko menua"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:474
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Banaka gelditu daitezkeen lanen zerrenda."
 
-#: shell/runcontroller.cpp:483
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Uneko abiarazpen konfigurazioa"
 
-#: shell/runcontroller.cpp:484
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Uneko abiarazpen konfigurazioa"
 
-#: shell/runcontroller.cpp:485
+#: shell/runcontroller.cpp:480
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 "Hautatu zein abiarazpen konfigurazio erabiliko den abiarazpena hastean."
 
-#: shell/runcontroller.cpp:602
+#: shell/runcontroller.cpp:597
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Izenik gabeko lana"
 
-#: shell/runcontroller.cpp:983
+#: shell/runcontroller.cpp:978
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "%1 abiarazle berria"
 
-#: shell/runcontroller.cpp:1020
+#: shell/runcontroller.cpp:1015
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -5302,88 +5302,88 @@ msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
 msgstr "Esleitu lasterbidea '%1' tresna-ikuspegirako"
 
-#: sublime/mainwindow_p.cpp:79
+#: sublime/mainwindow_p.cpp:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
 msgstr "Konzentrazio modua"
 
-#: sublime/mainwindow_p.cpp:81
+#: sublime/mainwindow_p.cpp:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr "Kendu kontrol gehienak garrantzitsua denean konzentratzeko"
 
-#: sublime/mainwindow_p.cpp:88
+#: sublime/mainwindow_p.cpp:87
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Left Dock"
 msgstr "Erakutsi ezkerreko aingura"
 
-#: sublime/mainwindow_p.cpp:95
+#: sublime/mainwindow_p.cpp:94
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Right Dock"
 msgstr "Erakutsi eskuineko aingura"
 
-#: sublime/mainwindow_p.cpp:101
+#: sublime/mainwindow_p.cpp:100
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Bottom Dock"
 msgstr "Erakutsi beheko aingura"
 
-#: sublime/mainwindow_p.cpp:107
+#: sublime/mainwindow_p.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
 msgstr "Kontzentrazio-editorea"
 
-#: sublime/mainwindow_p.cpp:112
+#: sublime/mainwindow_p.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Hide/Restore Docks"
 msgstr "Ezkutatu/Berezarri aingurak"
 
-#: sublime/mainwindow_p.cpp:117
+#: sublime/mainwindow_p.cpp:116
 #, kde-format
 msgctxt "@action"
 msgid "Next Tool View"
 msgstr "Hurrengo tresna-ikuspegia"
 
-#: sublime/mainwindow_p.cpp:123
+#: sublime/mainwindow_p.cpp:122
 #, kde-format
 msgctxt "@action"
 msgid "Previous Tool View"
 msgstr "Aurreko tresna-ikuspegia"
 
-#: sublime/mainwindow_p.cpp:129
+#: sublime/mainwindow_p.cpp:128
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool Views"
 msgstr "Tresna-ikuspegiak"
 
-#: sublime/mainwindow_p.cpp:139
+#: sublime/mainwindow_p.cpp:134
 #, kde-format
 msgid "Left Button Bar"
 msgstr "Ezkerreko botoi-barra"
 
-#: sublime/mainwindow_p.cpp:142
+#: sublime/mainwindow_p.cpp:137
 #, kde-format
 msgid "Right Button Bar"
 msgstr "Eskuineko botoi-barra"
 
-#: sublime/mainwindow_p.cpp:145
+#: sublime/mainwindow_p.cpp:140
 #, kde-format
 msgid "Bottom Button Bar"
 msgstr "Beheko botoi-barra"
 
-#: sublime/mainwindow_p.cpp:817
+#: sublime/mainwindow_p.cpp:812
 #, kde-format
 msgctxt "@action"
 msgid "Close"
 msgstr "Itxi"
 
-#: sublime/mainwindow_p.cpp:818
+#: sublime/mainwindow_p.cpp:813
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close message"
@@ -5681,7 +5681,7 @@ msgstr "Ezin izan da Diff-a bueltatu"
 msgid "There are no committed differences."
 msgstr "Ez dago berretsitako desberdintasunik."
 
-#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:296
+#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5932,90 +5932,90 @@ msgctxt "@title:column"
 msgid "Source Revision"
 msgstr "Iturri-berrikuspena"
 
-#: vcs/vcspluginhelper.cpp:87
+#: vcs/vcspluginhelper.cpp:84
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
 msgstr "Berretsi..."
 
-#: vcs/vcspluginhelper.cpp:88
+#: vcs/vcspluginhelper.cpp:85
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Update"
 msgstr "Eguneratu"
 
-#: vcs/vcspluginhelper.cpp:89
+#: vcs/vcspluginhelper.cpp:86
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add"
 msgstr "Gehitu"
 
-#: vcs/vcspluginhelper.cpp:90
+#: vcs/vcspluginhelper.cpp:87
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Differences..."
 msgstr "Erakutsi desberdintasunak..."
 
-#: vcs/vcspluginhelper.cpp:91
+#: vcs/vcspluginhelper.cpp:88
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Leheneratu"
 
-#: vcs/vcspluginhelper.cpp:92 vcs/vcspluginhelper.cpp:487
+#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:481
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
 msgstr "Historia..."
 
-#: vcs/vcspluginhelper.cpp:93
+#: vcs/vcspluginhelper.cpp:90
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
 msgstr "Oharpena..."
 
-#: vcs/vcspluginhelper.cpp:94
+#: vcs/vcspluginhelper.cpp:91
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff..."
 msgstr "Erakutsi diff..."
 
-#: vcs/vcspluginhelper.cpp:95
+#: vcs/vcspluginhelper.cpp:92
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Diff (All Files)..."
 msgstr "Erakutsi diff (fitxategi guztiak)..."
 
-#: vcs/vcspluginhelper.cpp:96
+#: vcs/vcspluginhelper.cpp:93
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push"
 msgstr "Bultzatu"
 
-#: vcs/vcspluginhelper.cpp:97
+#: vcs/vcspluginhelper.cpp:94
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Tiratu"
 
-#: vcs/vcspluginhelper.cpp:295
+#: vcs/vcspluginhelper.cpp:292
 #, kde-format
 msgid "There are no differences."
 msgstr "Ez dago desberdintasunik."
 
-#: vcs/vcspluginhelper.cpp:302
+#: vcs/vcspluginhelper.cpp:299
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Ezin izan dira desberdintasunak lortu"
 
-#: vcs/vcspluginhelper.cpp:370
+#: vcs/vcspluginhelper.cpp:367
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 historia (%1)"
 
-#: vcs/vcspluginhelper.cpp:443
+#: vcs/vcspluginhelper.cpp:439
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -6024,7 +6024,7 @@ msgstr ""
 "Ezin dira oharpenak erakutsi, KTextEditor::AnnotationInterface interfazea "
 "falta da editorean."
 
-#: vcs/vcspluginhelper.cpp:447
+#: vcs/vcspluginhelper.cpp:443
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6035,7 +6035,7 @@ msgstr ""
 "zelako testu-dokumentu bat:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:482 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:476 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"
