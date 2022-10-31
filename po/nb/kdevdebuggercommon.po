@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-10-30 00:45+0000\n"
 "PO-Revision-Date: 2013-09-16 12:41+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -61,7 +61,7 @@ msgstr "<br>Gammel verdi: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Ny verdi: %1"
 
-#: midebugger.cpp:327
+#: midebugger.cpp:319
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -70,7 +70,7 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:330
+#: midebugger.cpp:322
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -79,18 +79,18 @@ msgstr ""
 "Unntaket er: %1\n"
 "MI-svaret er: %2"
 
-#: midebugger.cpp:333
+#: midebugger.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr ""
 
-#: midebugger.cpp:345 midebugsession.cpp:415
+#: midebugger.cpp:337 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Prosessen avsluttet"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:346
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -99,12 +99,12 @@ msgstr ""
 "<b>Klarte ikke starte feilsøkeren.<b> <p>Klarte ikke å kjøre «%1». Forsikre "
 "deg om at sti-navnet er oppgitt riktig."
 
-#: midebugger.cpp:362
+#: midebugger.cpp:354
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:367
+#: midebugger.cpp:359
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -112,13 +112,13 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:372
+#: midebugger.cpp:364
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr ""
 
-#: midebugger.cpp:375
+#: midebugger.cpp:367
 #, kde-format
 msgid "Process crashed"
 msgstr ""
@@ -603,8 +603,8 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
-"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
-"+0xc])."
+"GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR "
+"[ebp+0xc])."
 msgstr ""
 
 #: widgets/disassemblewidget.cpp:143
@@ -619,8 +619,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<b>Machine code display</b><p>A machine code view into your running "
 "executable with the current instruction highlighted. You can step "
-"instruction by instruction using the debuggers toolbar buttons of \"step over"
-"\" instruction and \"step into\" instruction."
+"instruction by instruction using the debuggers toolbar buttons of \"step "
+"over\" instruction and \"step into\" instruction."
 msgstr ""
 
 #: widgets/disassemblewidget.cpp:190
