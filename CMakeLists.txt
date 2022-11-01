@@ -56,6 +56,7 @@ include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(ECMQtDeclareLoggingCategory)
+include(ECMDeprecationSettings)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
@@ -125,11 +126,16 @@ remove_definitions(
     -DQT_NO_KEYWORDS
 )
 add_definitions(
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050900
-    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-    -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x053200
-    -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
+)
+ecm_set_disabled_deprecation_versions(
+    QT 5.9 # QMLJS possibly
+    KF 5.91
+    KNEWSTUFF 5.79 # KNS3::DownloadDialog
+    KSERVICE 5.81 # KMimeTypeTrader
+    KCOREADDONS 5.85 # KPluginLoader::factory()
+    KRUNNER 5.87 # K_EXPORT_PLASMA_RUNNER_WITH_JSON
+    KI18N 5.88 # I18N_NOOP
 )
 
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
