@@ -13,6 +13,7 @@
 
 #include <KBookmarkManager>
 #include <KBookmarkMenu>
+#include <KBookmarkOwner>
 
 #include <QObject>
 
