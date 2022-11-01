@@ -38,11 +38,8 @@ endif()
 # plugin version as used e.g. in plugin installation path
 set(KDEV_PLUGIN_VERSION "${KDEVELOP_SOVERSION}")
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(QT_MIN_VERSION "5.15.2")
 set(KF5_DEP_VERSION "5.91.0")
-set(KDE_COMPILERSETTINGS_LEVEL "5.84.0")
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM ${KF5_DEP_VERSION} REQUIRED NO_MODULE)
@@ -123,21 +120,16 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
 
 find_package(SharedMimeInfo 1.9 REQUIRED)
 
+# added by KDE_COMPILERSETTINGS_LEVEL 5.85.0
+remove_definitions(
+    -DQT_NO_KEYWORDS
+)
 add_definitions(
-    -DQT_DEPRECATED_WARNINGS
     -DQT_DISABLE_DEPRECATED_BEFORE=0x050900
     -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-    -DQT_NO_URL_CAST_FROM_STRING
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_CAST_TO_ASCII
-    -DQT_NO_CAST_FROM_BYTEARRAY
-    -DQT_STRICT_ITERATORS
-    -DQT_USE_QSTRINGBUILDER
-    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
     -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x053200
     -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
-    -DQT_NO_FOREACH
 )
 
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
