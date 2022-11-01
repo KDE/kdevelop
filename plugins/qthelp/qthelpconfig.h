@@ -10,7 +10,8 @@
 
 #include <interfaces/configpage.h>
 
-#include <KNS3/Entry>
+// KNSCore::Entry is only a typedef in KF5, defined here
+#include <KNSWidgets/Button>
 
 class QTreeWidgetItem;
 class QtHelpPlugin;
@@ -41,7 +42,7 @@ public:
       void add();
       void remove(QTreeWidgetItem* item);
       void modify(QTreeWidgetItem* item);
-      void knsUpdate(const KNS3::Entry::List& list);
+      void knsUpdate(const QList<KNSCore::Entry>& list);
 
     public Q_SLOTS:
       void apply() override;

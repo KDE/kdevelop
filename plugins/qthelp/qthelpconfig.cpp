@@ -15,7 +15,7 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KNS3/Button>
+#include <KNSWidgets/Button>
 
 #include "ui_qthelpconfig.h"
 #include "ui_qthelpconfigeditdialog.h"
@@ -98,9 +98,11 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     m_configWidget->qchTable->header()->setSectionResizeMode(ConfigColumn, QHeaderView::Fixed);
 
     // Add GHNS button
-    auto* knsButton = new KNS3::Button(i18nc("@action:button Allow user to get some API documentation with GHNS", "Get New Documentation"), QStringLiteral("kdevelop-qthelp.knsrc"), m_configWidget->boxQchManage);
+    auto* knsButton = new KNSWidgets::Button(
+        i18nc("@action:button Allow user to get some API documentation with GHNS", "Get New Documentation"),
+        QStringLiteral("kdevelop-qthelp.knsrc"), m_configWidget->boxQchManage);
     m_configWidget->tableCtrlLayout->insertWidget(1, knsButton);
-    connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
+    connect(knsButton, &KNSWidgets::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled,
             this, QOverload<>::of(&QtHelpConfig::changed));
     m_configWidget->qchSearchDir->setMode(KFile::Directory);
@@ -253,12 +255,12 @@ void QtHelpConfig::remove(QTreeWidgetItem* item)
     emit changed();
 }
 
-void QtHelpConfig::knsUpdate(const KNS3::Entry::List& list)
+void QtHelpConfig::knsUpdate(const QList<KNSCore::Entry>& list)
 {
     if (list.isEmpty())
         return;
 
-    for (const KNS3::Entry& e : list) {
+    for (const auto& e : list) {
         if(e.status() == KNS3::Entry::Installed) {
             // For zipped/tarred QCH fules KNewStuff also adds the directory as installed file, first file entry is assumed to be QCH file though
             if (e.installedFiles().size() >= 1) {

@@ -26,8 +26,17 @@ install(FILES kdevelop-qthelp.knsrc  DESTINATION ${KDE_INSTALL_KNSRCDIR})
 
 kdevplatform_add_plugin(kdevqthelp SOURCES ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
-    KF5::KCMUtils KF5::I18n KF5::KIOWidgets KF5::TextEditor KF5::IconThemes Qt5::Help KF5::NewStuff
-    KDev::Language KDev::Documentation KDev::Interfaces)
+    KDev::Language
+    KDev::Documentation
+    KDev::Interfaces
+    KF5::KCMUtils
+    KF5::I18n
+    KF5::KIOWidgets
+    KF5::TextEditor
+    KF5::IconThemes
+    KF5::NewStuffWidgets
+    Qt5::Help
+)
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
