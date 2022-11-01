@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui version="149" name="kdevelop" translationDomain="kdevelop">
+<gui version="150" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -168,7 +168,8 @@
 
   <Menu name="settings">
     <text context="@title:menu">Settings</text>
-    <Action name="colorscheme_menu"/>
+    <Action name="colorscheme_menu" group="color"/>
+    <DefineGroup name="color"/><!-- Used by katepart5ui.rc to place "view_schemas" action -->
     <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
     <DefineGroup append="show_merge" name="show_merge" />
     <DefineGroup append="configure_merge" name="configure_merge" />
