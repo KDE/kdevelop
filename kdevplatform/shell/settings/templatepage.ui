@@ -19,7 +19,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="buttonLayout">
      <item>
       <widget class="QPushButton" name="loadButton">
        <property name="text">
@@ -27,18 +27,6 @@
        </property>
        <property name="icon">
         <iconset theme="application-x-archive">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="getNewButton">
-       <property name="text">
-        <string comment="@action:button">Get More Templates</string>
-       </property>
-       <property name="icon">
-        <iconset theme="get-hot-new-stuff">
          <normaloff/>
         </iconset>
        </property>

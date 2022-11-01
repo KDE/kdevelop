@@ -12,7 +12,6 @@
 #include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatesmodel.h>
 
-#include <KNS3/DownloadDialog>
 #include <KArchive>
 #include <KZip>
 #include <KTar>
@@ -25,9 +24,12 @@ m_provider(provider)
     ui = new Ui::TemplatePage;
     ui->setupUi(this);
 
-    ui->getNewButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
-    connect(ui->getNewButton, &QPushButton::clicked,
-            this, &TemplatePage::getMoreTemplates);
+    if (!m_provider->knsConfigurationFile().isEmpty()) {
+        auto* getNewButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
+                                                    m_provider->knsConfigurationFile(), this);
+        connect(getNewButton, &KNSWidgets::Button::dialogFinished, this, &TemplatePage::handleNewStuffDialogFinished);
+        ui->buttonLayout->insertWidget(1, getNewButton);
+    }
 
     ui->loadButton->setVisible(!m_provider->supportedMimeTypes().isEmpty());
     connect(ui->loadButton, &QPushButton::clicked,
@@ -66,16 +68,9 @@ void TemplatePage::loadFromFile()
     m_provider->reload();
 }
 
-void TemplatePage::getMoreTemplates()
+void TemplatePage::handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries)
 {
-    KDevelop::ScopedDialog<KNS3::DownloadDialog> dialog(m_provider->knsConfigurationFile(), this);
-
-    if (!dialog->exec()) {
-        return;
-    }
-
-    if (!dialog->changedEntries().isEmpty())
-    {
+    if (!changedEntries.isEmpty()) {
         m_provider->reload();
     }
 }

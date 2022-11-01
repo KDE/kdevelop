@@ -17,7 +17,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageBox_KDevCompat>
-#include <KNS3/DownloadDialog>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -65,10 +64,10 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->templateType, QOverload<int>::of(&QComboBox::currentIndexChanged),
              this, &ProjectSelectionPage::templateChanged );
 
-    auto* getMoreButton = new QPushButton(i18nc("@action:button", "Get More Templates"), ui->listView);
-    getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
-    connect (getMoreButton, &QPushButton::clicked,
-             this, &ProjectSelectionPage::moreTemplatesClicked);
+    auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates"),
+                                                 QStringLiteral("kdevappwizard.knsrc"), ui->listView);
+    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this,
+            &ProjectSelectionPage::handleNewStuffDialogFinished);
     ui->listView->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(ui->listView);
@@ -326,22 +325,16 @@ void ProjectSelectionPage::loadFileClicked()
     }
 }
 
-void ProjectSelectionPage::moreTemplatesClicked()
+void ProjectSelectionPage::handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries)
 {
-    ScopedDialog<KNS3::DownloadDialog> dialog(QStringLiteral("kdevappwizard.knsrc"), this);
-
-    if (!dialog->exec())
-        return;
-
-    const auto entries = dialog->changedEntries();
-    if (entries.isEmpty()) {
+    if (changedEntries.isEmpty()) {
         return;
     }
 
     m_templatesModel->refresh();
     bool updated = false;
 
-    for (const KNS3::Entry& entry : entries) {
+    for (const auto& entry : changedEntries) {
         if (!entry.installedFiles().isEmpty())
         {
             updated = true;

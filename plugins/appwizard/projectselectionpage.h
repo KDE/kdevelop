@@ -10,6 +10,9 @@
 #include "appwizardpagewidget.h"
 #include "appwizarddialog.h"
 
+// KNSCore::Entry is only a typedef in KF5, defined here
+#include <KNSWidgets/Button>
+
 namespace Ui {
 class ProjectSelectionPage;
 }
@@ -43,8 +46,7 @@ private Q_SLOTS:
     void templateChanged(int);
 
     void loadFileClicked();
-    void moreTemplatesClicked();
-
+    void handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries);
 
 private:
     inline QByteArray encodedProjectName();

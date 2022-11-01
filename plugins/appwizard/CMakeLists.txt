@@ -35,8 +35,6 @@ target_link_libraries(kdevappwizard
     KDev::Sublime
     KDev::Util
     KF5::KIOWidgets
-    KF5::NewStuff
+    KF5::NewStuffWidgets
     KF5::Archive
 )
-
-

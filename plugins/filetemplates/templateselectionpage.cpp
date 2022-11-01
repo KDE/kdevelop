@@ -28,7 +28,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KNS3/DownloadDialog>
+#include <KNSWidgets/Button>
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
@@ -50,7 +50,7 @@ public:
     TemplatesModel* model;
 
     void currentTemplateChanged(const QModelIndex& index);
-    void getMoreClicked();
+    void handleNewStuffDialogFinished();
     void loadFileClicked();
     void previewTemplate(const QString& templateFile);
 };
@@ -135,9 +135,8 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     return;
 }
 
-void TemplateSelectionPagePrivate::getMoreClicked()
+void TemplateSelectionPagePrivate::handleNewStuffDialogFinished()
 {
-    KNS3::DownloadDialog(QStringLiteral("kdevfiletemplates.knsrc"), ui->view).exec();
     model->refresh();
 }
 
@@ -237,9 +236,11 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
 
     d->ui->view->setCurrentIndex(templateIndex);
 
-    auto* getMoreButton = new QPushButton(i18nc("@action:button", "Get More Templates..."), d->ui->view);
-    getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
-    connect (getMoreButton, &QPushButton::clicked, this, [&] { d->getMoreClicked(); });
+    auto* getMoreButton = new KNSWidgets::Button(i18nc("@action:button", "Get More Templates..."),
+                                                 QStringLiteral("kdevfiletemplates.knsrc"), d->ui->view);
+    connect(getMoreButton, &KNSWidgets::Button::dialogFinished, this, [&]() {
+        d->handleNewStuffDialogFinished();
+    });
     d->ui->view->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18nc("@action:button", "Load Template from File"), d->ui->view);

@@ -7,6 +7,8 @@
 #ifndef KDEVPLATFORM_TEMPLATEPAGE_H
 #define KDEVPLATFORM_TEMPLATEPAGE_H
 
+// KNSCore::Entry is only a typedef in KF5, defined here
+#include <KNSWidgets/Button>
 #include <QWidget>
 
 class QModelIndex;
@@ -29,7 +31,7 @@ public:
 
 private Q_SLOTS:
     void loadFromFile();
-    void getMoreTemplates();
+    void handleNewStuffDialogFinished(const QList<KNSCore::Entry>& changedEntries);
     void currentIndexChanged(const QModelIndex& index);
     void extractTemplate();
 
