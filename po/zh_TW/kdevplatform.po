@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2014-04-23 15:00+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -1342,7 +1342,7 @@ msgid "Unknown context"
 msgstr "未知的內文"
 
 #: language/duchain/navigation/useswidget.cpp:404
-#: shell/launchconfigurationdialog.cpp:480
+#: shell/launchconfigurationdialog.cpp:482
 #, kde-format
 msgid "Global"
 msgstr "全域"
@@ -1906,7 +1906,7 @@ msgstr "執行中"
 msgid "&Color Scheme"
 msgstr ""
 
-#: shell/configdialog.cpp:30
+#: shell/configdialog.cpp:31
 #, fuzzy, kde-format
 #| msgctxt "@info:status"
 #| msgid "configure"
@@ -1914,14 +1914,14 @@ msgctxt "@title:window"
 msgid "Configure"
 msgstr "設定"
 
-#: shell/configdialog.cpp:82
+#: shell/configdialog.cpp:85
 #, kde-format
 msgid ""
 "The settings of the current module have changed.\n"
 "Do you want to apply the changes or discard them?"
 msgstr ""
 
-#: shell/configdialog.cpp:83
+#: shell/configdialog.cpp:87
 #, fuzzy, kde-format
 #| msgid "Run Settings"
 msgctxt "@title:window"
@@ -2298,24 +2298,24 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "文件"
 
-#: shell/documentcontroller.cpp:60 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "未命名"
 
-#: shell/documentcontroller.cpp:117
+#: shell/documentcontroller.cpp:118
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "開啟檔案"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:119
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*.*|文字檔\n"
 
-#: shell/documentcontroller.cpp:312
+#: shell/documentcontroller.cpp:313
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2324,46 +2324,46 @@ msgstr ""
 "KDevelop 找不到編輯器編輯型態為 %2 的檔案 %1。\n"
 "您要以純文字模式開啟嗎？"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "找不到編輯器"
 
-#: shell/documentcontroller.cpp:314
+#: shell/documentcontroller.cpp:317
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:315
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:598
+#: shell/documentcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "開啟(&O)..."
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:604
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "開啟檔案"
 
-#: shell/documentcontroller.cpp:602
+#: shell/documentcontroller.cpp:605
 #, fuzzy, kde-format
 #| msgid "Opens a file for editing."
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "開啟檔案以編輯。"
 
-#: shell/documentcontroller.cpp:606
+#: shell/documentcontroller.cpp:609
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2374,21 +2374,21 @@ msgid ""
 "open them again."
 msgstr "這是您最近開啟的檔案清單，並且讓您可以很容易的再次開啟它們。"
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "全部儲存(&L)"
 
-#: shell/documentcontroller.cpp:613
+#: shell/documentcontroller.cpp:616
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "儲存所有開啟的文件"
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:617
 #, fuzzy, kde-format
 #| msgid ""
 #| "Save all open documents, prompting for additional information when "
@@ -2398,63 +2398,63 @@ msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr "儲存所有開啟的文件，若需要的話會提示詢問更多資訊。"
 
-#: shell/documentcontroller.cpp:620
+#: shell/documentcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "全部重新載入"
 
-#: shell/documentcontroller.cpp:622
+#: shell/documentcontroller.cpp:625
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "回復所有開啟的文件"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, fuzzy, kde-format
 #| msgid "Revert all open documents, returning to the previously saved state."
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr "回復所有開啟的文件，回到先前未變更的狀態。"
 
-#: shell/documentcontroller.cpp:629
+#: shell/documentcontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "關閉(&C)"
 
-#: shell/documentcontroller.cpp:631
+#: shell/documentcontroller.cpp:634
 #, fuzzy, kde-format
 #| msgid "Close file"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "關閉檔案"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, fuzzy, kde-format
 #| msgid "Closes current file."
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "關閉目前的檔案。"
 
-#: shell/documentcontroller.cpp:637
+#: shell/documentcontroller.cpp:640
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "全部關閉(&C)"
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "關閉所有開啟的文件。"
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:643
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, prompting for additional information when "
@@ -2465,21 +2465,21 @@ msgid ""
 "necessary."
 msgstr "關閉所有開啟的文件，若需要的話會提示詢問更多資訊。"
 
-#: shell/documentcontroller.cpp:646
+#: shell/documentcontroller.cpp:649
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "關閉所有其它的文件(&H)"
 
-#: shell/documentcontroller.cpp:648
+#: shell/documentcontroller.cpp:651
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "關閉所有其它的文件"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, with the exception of the currently active "
@@ -2490,21 +2490,21 @@ msgid ""
 "document."
 msgstr "關閉所有開啟的文件，只留下目前編輯中的文件。"
 
-#: shell/documentcontroller.cpp:654
+#: shell/documentcontroller.cpp:657
 #, fuzzy, kde-format
 #| msgid "Show Annotate on current document"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "顯示目前文件的註記"
 
-#: shell/documentcontroller.cpp:655
+#: shell/documentcontroller.cpp:658
 #, fuzzy, kde-format
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
 msgstr "最後狀態註記"
 
-#: shell/documentcontroller.cpp:1274
+#: shell/documentcontroller.cpp:1277
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2531,65 +2531,65 @@ msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "設定環境變數"
 
-#: shell/launchconfigurationdialog.cpp:47
+#: shell/launchconfigurationdialog.cpp:48
 #, fuzzy, kde-format
 #| msgid "Launch Configurations"
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "啟動設定"
 
-#: shell/launchconfigurationdialog.cpp:57
+#: shell/launchconfigurationdialog.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new launch configuration."
 msgstr "新增啟動設定。"
 
-#: shell/launchconfigurationdialog.cpp:59
+#: shell/launchconfigurationdialog.cpp:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
 msgstr "刪除選取的啟動設定。"
 
-#: shell/launchconfigurationdialog.cpp:173
+#: shell/launchconfigurationdialog.cpp:174
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
 msgstr ""
 
-#: shell/launchconfigurationdialog.cpp:196
+#: shell/launchconfigurationdialog.cpp:197
 #, fuzzy, kde-format
 #| msgid "Rename configuration"
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "重新命名設定"
 
-#: shell/launchconfigurationdialog.cpp:197
+#: shell/launchconfigurationdialog.cpp:198
 #, fuzzy, kde-format
 #| msgid "Delete configuration"
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "刪除設定"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:253
 #, kde-format
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr "選取的啟動設定有未儲存的變更。您要儲存它嗎？"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:254
 #, fuzzy, kde-format
 #| msgid "Unsaved Changes"
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "未儲存的改變"
 
-#: shell/launchconfigurationdialog.cpp:324
+#: shell/launchconfigurationdialog.cpp:326
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
 msgstr "%1 不需要設定"
 
-#: shell/launchconfigurationdialog.cpp:368
+#: shell/launchconfigurationdialog.cpp:370
 #, fuzzy, kde-format
 #| msgid ""
 #| "<i>Select a configuration to edit from the left,<br>or click the \"Add New"
@@ -2599,19 +2599,19 @@ msgid ""
 "button to add a new one.</i>"
 msgstr "<i>從左方選擇要編輯的設定，<br/>或是點擊「新增」來新增設定。</i>"
 
-#: shell/launchconfigurationdialog.cpp:436
+#: shell/launchconfigurationdialog.cpp:438
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
 msgstr "編輯 %2：<b>%1</b>"
 
-#: shell/launchconfigurationdialog.cpp:709
+#: shell/launchconfigurationdialog.cpp:711
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "名稱"
 
-#: shell/launchconfigurationdialog.cpp:712
+#: shell/launchconfigurationdialog.cpp:714
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt ""
@@ -2992,19 +2992,19 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr ""
 
-#: shell/partdocument.cpp:103
+#: shell/partdocument.cpp:104
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "文件 %1 有未儲存的變更。您要儲存它嗎？"
 
-#: shell/partdocument.cpp:104 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "關閉文件"
 
-#: shell/partdocument.cpp:112
+#: shell/partdocument.cpp:111
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document \"%1\" has unsaved changes and was modified by an external "
@@ -3018,7 +3018,7 @@ msgstr ""
 "文件 \"%1\" 裡有未儲存的變更，同時原檔案又已被外部行程所改變。\n"
 "您要直接把外部所做的變更覆蓋掉嗎？"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:440
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3198,31 +3198,31 @@ msgstr ""
 "無法儲存開發者指定專案設定。\n"
 "注意：您對此專案所做的設定變更將遺失。"
 
-#: shell/projectcontroller.cpp:159
+#: shell/projectcontroller.cpp:160
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "設定專案 %1"
 
-#: shell/projectcontroller.cpp:302
+#: shell/projectcontroller.cpp:303
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "不合法的位置：%1"
 
-#: shell/projectcontroller.cpp:312
+#: shell/projectcontroller.cpp:313
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "已開啟 %1，不用再開了"
 
-#: shell/projectcontroller.cpp:469
+#: shell/projectcontroller.cpp:470
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "覆寫"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3233,14 +3233,14 @@ msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "繼續使用剛剛提供的專案設定來開啟專案。"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "開啟現有的檔案"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3249,7 +3249,7 @@ msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "使用現有的專案設定來開啟專案。"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:475
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3257,7 +3257,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "取消，不要開啟專案。"
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:478
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3266,42 +3266,42 @@ msgstr ""
 "已經有個專案設定檔在 %1。\n"
 "您要覆寫它，還是要開啟現有的檔案？"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:481
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "覆蓋現有的專案設定"
 
-#: shell/projectcontroller.cpp:498
+#: shell/projectcontroller.cpp:499
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "無法建立設定檔 %1"
 
-#: shell/projectcontroller.cpp:512
+#: shell/projectcontroller.cpp:513
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "要重新開啟目前的專案嗎？"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:553
+#: shell/projectcontroller.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "開啟 / 匯入專案..."
 
-#: shell/projectcontroller.cpp:554
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "開啟 / 匯入專案"
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3322,19 +3322,19 @@ msgstr ""
 "KDevelop4 專案檔或讓您在 KDevelop 中開啟現有的專案目錄。開啟的目錄中若沒有 "
 "KDevelop4 專案檔，則會建立新的專案檔。"
 
-#: shell/projectcontroller.cpp:566
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "抓取專案..."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:570
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "抓取專案"
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:571
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3345,103 +3345,103 @@ msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr "引導使用者抓取專案，並匯入 KDevelop 4。"
 
-#: shell/projectcontroller.cpp:584
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "關閉專案"
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "關閉所有目前選取的專案"
 
-#: shell/projectcontroller.cpp:592
+#: shell/projectcontroller.cpp:594
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "開啟設定..."
 
-#: shell/projectcontroller.cpp:598
+#: shell/projectcontroller.cpp:600
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "提交目前的專案..."
 
-#: shell/projectcontroller.cpp:599
+#: shell/projectcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "提交..."
 
-#: shell/projectcontroller.cpp:610
+#: shell/projectcontroller.cpp:612
 #, fuzzy, kde-format
 #| msgid "Open Recent Project"
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "開啟最近的專案"
 
-#: shell/projectcontroller.cpp:611
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "開啟最近的專案。"
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:618
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "為目前檔案開啟專案"
 
-#: shell/projectcontroller.cpp:767
+#: shell/projectcontroller.cpp:769
 #, kde-format
 msgid "Project already open: %1"
 msgstr "專案已開啟：%1"
 
-#: shell/projectcontroller.cpp:771
+#: shell/projectcontroller.cpp:773
 #, kde-format
 msgid "No active document"
 msgstr "沒有目前的文件。"
 
-#: shell/projectcontroller.cpp:852
+#: shell/projectcontroller.cpp:854
 #, fuzzy, kde-format
 #| msgid "Project Already Open"
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "專案已開啟"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:857
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr "您要開啟的專案已經在另一個工作階段中開啟了。<br/>您要怎麼做？"
 
-#: shell/projectcontroller.cpp:859
+#: shell/projectcontroller.cpp:861
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "將專案加入目前的工作階段"
 
-#: shell/projectcontroller.cpp:863
+#: shell/projectcontroller.cpp:865
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "開啟工作階段 %1"
 
-#: shell/projectcontroller.cpp:924
+#: shell/projectcontroller.cpp:926
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 
-#: shell/projectcontroller.cpp:1228
+#: shell/projectcontroller.cpp:1230
 #, fuzzy, kde-format
 #| msgid "Reopen the current project?"
 msgctxt "@action"
@@ -3793,7 +3793,7 @@ msgstr "丟棄所有的變更"
 msgid "(no projects)"
 msgstr "（沒有專案）"
 
-#: shell/sessionchooserdialog.cpp:36
+#: shell/sessionchooserdialog.cpp:37
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Delete session"
@@ -3801,21 +3801,21 @@ msgctxt "@info:tooltip"
 msgid "Delete session"
 msgstr "刪除工作階段..."
 
-#: shell/sessionchooserdialog.cpp:49
+#: shell/sessionchooserdialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Pick a Session"
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "選擇工作階段"
 
-#: shell/sessionchooserdialog.cpp:62
+#: shell/sessionchooserdialog.cpp:63
 #, fuzzy, kde-format
 #| msgid "Run"
 msgctxt "@action:button"
 msgid "Run"
 msgstr "執行"
 
-#: shell/sessionchooserdialog.cpp:94
+#: shell/sessionchooserdialog.cpp:95
 #, fuzzy, kde-format
 #| msgid ""
 #| "Active session.\n"
@@ -3828,12 +3828,12 @@ msgstr ""
 "執行中的工作階段。\n"
 "pid %1，應用程式 %2，主機 %3"
 
-#: shell/sessionchooserdialog.cpp:96
+#: shell/sessionchooserdialog.cpp:97
 #, kde-format
 msgid "Running"
 msgstr "執行中"
 
-#: shell/sessionchooserdialog.cpp:191
+#: shell/sessionchooserdialog.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Cannot Delete Session"
@@ -3841,13 +3841,13 @@ msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "無法刪除工作階段"
 
-#: shell/sessionchooserdialog.cpp:192
+#: shell/sessionchooserdialog.cpp:193
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
 msgstr "<p>無法刪除鎖定的工作階段。"
 
-#: shell/sessionchooserdialog.cpp:195
+#: shell/sessionchooserdialog.cpp:196
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "<p>The session is locked by %1 on %2 (PID %3)."
@@ -3855,7 +3855,7 @@ msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
 msgstr "此工作階段被 %1 於 %2 鎖定（行程代碼 %3）。"
 
-#: shell/sessionchooserdialog.cpp:203
+#: shell/sessionchooserdialog.cpp:204
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3867,7 +3867,7 @@ msgid ""
 "projects will stay unaffected. Do you really want to continue?"
 msgstr "此作業階段與所有的設定將被刪除。此專案則不受影響。您確定要繼續嗎？"
 
-#: shell/sessionchooserdialog.cpp:204
+#: shell/sessionchooserdialog.cpp:205
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Delete Session"
@@ -3980,7 +3980,7 @@ msgstr "過濾器："
 msgid "Create New Session"
 msgstr "建立新的作業階段"
 
-#: shell/sessionlock.cpp:153
+#: shell/sessionlock.cpp:154
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3988,7 +3988,7 @@ msgid ""
 "starting a new one"
 msgstr ""
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, fuzzy, kde-format
 #| msgctxt "@info:shell"
 #| msgid "running %1 instance (PID: %2) is apparently hung"
@@ -3996,7 +3996,7 @@ msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "執行中的 %1 實體（行程代碼：%2）顯然已卡住"
 
-#: shell/sessionlock.cpp:164
+#: shell/sessionlock.cpp:165
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4004,7 +4004,7 @@ msgid ""
 "is hanging."
 msgstr "指定的應用程式未回應 DBUS 呼叫。可能已經崩潰或是卡住。"
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4012,13 +4012,13 @@ msgid ""
 msgstr ""
 "鎖定工作階段 <em>%1</em> 失敗，因為已經由 %2 於 %3 鎖定（行程代碼 %4）。"
 
-#: shell/sessionlock.cpp:173
+#: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "鎖定工作階段 <em>%1</em> 失敗（無法取得鎖定檔）。"
 
-#: shell/sessionlock.cpp:177
+#: shell/sessionlock.cpp:178
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4026,7 +4026,7 @@ msgid ""
 "session to launch.</p>"
 msgstr "<p>請關掉此應用程式實體並選擇啟動另一個工作階段。</p>"
 
-#: shell/sessionlock.cpp:183
+#: shell/sessionlock.cpp:184
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -4034,7 +4034,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "重新嘗試啟動"
 
-#: shell/sessionlock.cpp:186
+#: shell/sessionlock.cpp:187
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -4042,13 +4042,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "關閉其它工作階段"
 
-#: shell/sessionlock.cpp:189
+#: shell/sessionlock.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "鎖定工作階段 %1 失敗"
 
-#: shell/sessionlock.cpp:196
+#: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
@@ -5336,7 +5336,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "刪除"
 
-#: shell/textdocument.cpp:436
+#: shell/textdocument.cpp:437
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5347,13 +5347,13 @@ msgstr ""
 "\n"
 "您確定要覆寫它嗎？（別人所做的變更將會遺失）"
 
-#: shell/textdocument.cpp:439
+#: shell/textdocument.cpp:441
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "文件已被別人變更"
 
-#: shell/textdocument.cpp:703
+#: shell/textdocument.cpp:705
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " 行: %1 欄: %2 "
@@ -5836,7 +5836,7 @@ msgstr ""
 msgid "Run all tests in %1"
 msgstr "已經於 %1 執行所有測試"
 
-#: util/shellutils.cpp:80
+#: util/shellutils.cpp:79
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5864,12 +5864,12 @@ msgctxt "@action:button"
 msgid "Ignore"
 msgstr "忽略"
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr ""
 
-#: util/shellutils.cpp:98
+#: util/shellutils.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5911,34 +5911,34 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "分支..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:37
+#: vcs/dvcs/ui/branchmanager.cpp:38
 #, fuzzy, kde-format
 #| msgid "Branch Manager"
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "分支管理員"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:108
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "您必須從清單中選擇基礎分支來建立新的分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "新增分支"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "新分支名稱："
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5947,7 +5947,7 @@ msgstr ""
 "分支 %1 已存在。\n"
 "請選擇其它名稱。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -5959,7 +5959,7 @@ msgstr ""
 "您目前在分支 %1 上。\n"
 "若要移除的話，請變更到其它的分支。"
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
@@ -6039,7 +6039,7 @@ msgid "The same as git branch -D"
 msgstr "與使用 git branch -D 相同"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
-#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
 #, fuzzy, kde-format
 #| msgid "Rename"
 msgctxt "@action:button"
@@ -6103,12 +6103,12 @@ msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "提交訊息："
 
-#: vcs/models/brancheslistmodel.cpp:63
+#: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
 msgid "Branch \"%1\" already exists."
 msgstr "分支 %1 已存在。"
 
-#: vcs/models/brancheslistmodel.cpp:68
+#: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "您確定要將 \"%1\" 重新命名為 \"%2\" 嗎？"

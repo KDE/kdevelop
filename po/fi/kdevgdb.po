@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2016-01-07 18:24+0200\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -167,14 +167,14 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Ei voitu paikallistaa virheenpaikannuskomentotulkkia ”%1”."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:93
 #, fuzzy, kde-format
 #| msgid "GDB Configuration"
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "GDB-asetus"
 
-#: gdbconfigpage.cpp:133
+#: gdbconfigpage.cpp:134
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -183,13 +183,13 @@ msgstr ""
 "Tämän ohjelman virheiden paikantaminen on jo meneillään. Haluatko keskeyttää "
 "nykyisen virheenpaikannusistunnon ja jatkaa käynnistämistä?"
 
-#: gdbconfigpage.cpp:135
+#: gdbconfigpage.cpp:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: gdbconfigpage.cpp:161
+#: gdbconfigpage.cpp:162
 #, fuzzy, kde-format
 #| msgid "Executes a Native application in GDB"
 msgid "Executes a native application in GDB"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -148,66 +148,66 @@ msgctxt ""
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr "%3:%4:%5에서 <b>%1</b> 문자열을 <b>%2</b> 문자열로 대체할 수 없음"
 
-#: grepoutputview.cpp:71
+#: grepoutputview.cpp:72
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
 msgstr "찾기/바꾸기 출력 보기"
 
-#: grepoutputview.cpp:74
+#: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
 msgstr "이전 항목(&P)"
 
-#: grepoutputview.cpp:75
+#: grepoutputview.cpp:76
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
 msgstr "다음 항목(&N)"
 
-#: grepoutputview.cpp:80
+#: grepoutputview.cpp:81
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
 msgstr "모두 접기(&O)"
 
-#: grepoutputview.cpp:82
+#: grepoutputview.cpp:83
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
 msgstr "모두 펴기(&E)"
 
-#: grepoutputview.cpp:86
+#: grepoutputview.cpp:87
 #, kde-format
 msgctxt "@action"
 msgid "New &Search"
 msgstr "새로 검색(&N)"
 
-#: grepoutputview.cpp:87
+#: grepoutputview.cpp:88
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
 msgstr "새로 고침"
 
-#: grepoutputview.cpp:89
+#: grepoutputview.cpp:90
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
 msgstr "검색 기록 삭제"
 
-#: grepoutputview.cpp:323
+#: grepoutputview.cpp:325
 #, kde-format
 msgid "Do you want to replace with an empty string?"
 msgstr "빈 문자열로 바꾸시겠습니까?"
 
-#: grepoutputview.cpp:324
+#: grepoutputview.cpp:326
 #, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
 msgstr "바꾸기 시작"
 
-#: grepoutputview.cpp:325
+#: grepoutputview.cpp:327
 #, kde-format
 msgctxt "@action:button"
 msgid "Replace"

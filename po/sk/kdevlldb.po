@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-04-17 20:49+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(beží)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#: debuggerplugin.cpp:28 lldblauncher.cpp:45
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -31,23 +31,23 @@ msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "LLDB konzola"
 
-#: debugsession.cpp:136
+#: debugsession.cpp:137
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr ""
 "Pokus o vykonanie používateľského príkazu na nepodporovanej verzii LLDB"
 
-#: debugsession.cpp:335
+#: debugsession.cpp:336
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Nepodarilo sa spustiť ladiaci program:</b><br />"
 
-#: debugsession.cpp:346
+#: debugsession.cpp:347
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Chyba pripojenia na vzdialený cieľ:</b><br />"
 
-#: debugsession.cpp:359
+#: debugsession.cpp:360
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -56,7 +56,7 @@ msgstr ""
 "<b>Zlyhalo načítanie súboru jadra</b><p>Ladič oznámil nasledovné chyby:"
 "<p><tt>%1"
 
-#: debugsession.cpp:390
+#: debugsession.cpp:391
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -68,12 +68,12 @@ msgstr ""
 "<br/>Pozrite https://llvm.org/bugs/show_bug.cgi?id=28026 pre viac informácií."
 "<br/>Konzola ladenia sa zakáže, aby sa predišlo pádu. <br/>Chcete pokračovať?"
 
-#: debugsession.cpp:394
+#: debugsession.cpp:395
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "LLDB verzia nepodporovaná"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:441
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -86,12 +86,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Panel nástrojov ladenia"
 
-#: lldblauncher.cpp:49
+#: lldblauncher.cpp:50
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Ladiť natívnu aplikáciu v LLDB"
 
-#: lldblauncher.cpp:73
+#: lldblauncher.cpp:75
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -100,7 +100,7 @@ msgstr ""
 "Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
 "pokračovať so spustením?"
 
-#: lldblauncher.cpp:75
+#: lldblauncher.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

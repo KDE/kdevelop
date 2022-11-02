@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2014-02-10 00:29+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -388,7 +388,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:345
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -400,25 +400,25 @@ msgstr ""
 "Direktorij %1 je predviđen za brisanje u KDevelop-ovoj listi.\n"
 "Želite li da ga KDevelop ukloni i iz datotečnog sistema?"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:349
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:354
 #, fuzzy, kde-format
 #| msgid "Could not remove: %1.\n"
 msgid "Could not remove: %1"
 msgstr "Ne mogu ukloniti: %1.\n"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:400
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:405
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

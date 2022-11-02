@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2019-08-27 10:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -417,7 +417,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Συμβολοσειρές"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:345
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -429,25 +429,25 @@ msgstr ""
 "Ο κατάλογος %1 πρόκειται να αφαιρεθεί από τη λίστα του KDevelop.\n"
 "Επιθυμείτε την αφαίρεσή του από το σύστημα αρχείων επίσης;"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:349
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:354
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Αδυναμία αφαίρεσης: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:400
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:405
 #, fuzzy, kde-format
 #| msgid "Configure CMake settings"
 msgctxt "@title:tab"

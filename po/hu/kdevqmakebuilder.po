@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2015-01-10 12:48+0100\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: qmakebuilderpreferences.cpp:80
+#: qmakebuilderpreferences.cpp:81
 #, fuzzy, kde-format
 #| msgid "QMake"
 msgctxt "@title:tab"
 msgid "QMake"
 msgstr "QMake"
 
-#: qmakebuilderpreferences.cpp:138
+#: qmakebuilderpreferences.cpp:140
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -37,13 +37,13 @@ msgstr ""
 "A(z) %1 könyvtár hamarosan el lesz távolítva a KDevelop listájából.\n"
 "Szeretné, hogy a KDevelop eltávolítsa azt a fájlrendszerből is?"
 
-#: qmakebuilderpreferences.cpp:141
+#: qmakebuilderpreferences.cpp:144
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: qmakebuilderpreferences.cpp:146
+#: qmakebuilderpreferences.cpp:149
 #, kde-format
 msgid "Could not remove: %1."
 msgstr "Nem sikerült eltávolítani: %1."

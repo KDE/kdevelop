@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -126,13 +126,13 @@ msgstr "Ladenie spadlo"
 msgid "Process crashed"
 msgstr "Proces spadol"
 
-#: midebuggerplugin.cpp:109
+#: midebuggerplugin.cpp:110
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Preskúmať súbor core s %1"
 
-#: midebuggerplugin.cpp:111
+#: midebuggerplugin.cpp:112
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -146,13 +146,13 @@ msgstr ""
 "obsahuje obraz pamäte programu v čase, keď havaroval, čo vám umožňuje "
 "vykonať následnú analýzu.</p>"
 
-#: midebuggerplugin.cpp:123
+#: midebuggerplugin.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Pripojiť k procesu s %1"
 
-#: midebuggerplugin.cpp:125
+#: midebuggerplugin.cpp:126
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -160,18 +160,18 @@ msgid ""
 msgstr ""
 "<b>Pripojiť k procesu</b><p>Pripojí ladiaci program k bežiacemu procesu.</p>"
 
-#: midebuggerplugin.cpp:138
+#: midebuggerplugin.cpp:139
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:212
+#: midebuggerplugin.cpp:213
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Vyhodnotiť: %1"
 
-#: midebuggerplugin.cpp:214
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -179,13 +179,13 @@ msgid ""
 "cursor.</p>"
 msgstr "<b>Vyhodnotiť výraz</b><p>Ukazuje hodnotu výrazu pod kurzorom.</p>"
 
-#: midebuggerplugin.cpp:222
+#: midebuggerplugin.cpp:223
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "Sledovanie: %1"
 
-#: midebuggerplugin.cpp:224
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -195,12 +195,12 @@ msgstr ""
 "<b>Sledovať výraz</b><p>Pridá výraz pod kurzorom do zoznamu Premenných/"
 "Sledovaných.</p>"
 
-#: midebuggerplugin.cpp:237
+#: midebuggerplugin.cpp:238
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Zvoliť súbor core, ktorý sa preskúma..."
 
-#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -209,25 +209,25 @@ msgstr ""
 "Program sa už ladí. Chcete prerušiť aktuálne bežiace ladiace sedenie a "
 "pokračovať so spustením?"
 
-#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: midebuggerplugin.cpp:257
+#: midebuggerplugin.cpp:258
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Vybrať proces na pripojenie sa...."
 
-#: midebuggerplugin.cpp:281
+#: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
 "Žiadne pripojenie k procesu %1: nemožno pripojiť ladiaci program k sebe "
 "samému."
 
-#: midebuggerplugin.cpp:301
+#: midebuggerplugin.cpp:302
 #, kde-format
 msgid "Debugger"
 msgstr "Debugger"

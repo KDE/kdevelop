@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1335,7 +1335,7 @@ msgid "Unknown context"
 msgstr "Tundmatu kontekst"
 
 #: language/duchain/navigation/useswidget.cpp:404
-#: shell/launchconfigurationdialog.cpp:480
+#: shell/launchconfigurationdialog.cpp:482
 #, kde-format
 msgid "Global"
 msgstr "Globaalne"
@@ -1905,14 +1905,14 @@ msgstr "%1 töötab"
 msgid "&Color Scheme"
 msgstr "&Värviskeem"
 
-#: shell/configdialog.cpp:30
+#: shell/configdialog.cpp:31
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Seadistamine"
 
-#: shell/configdialog.cpp:82
+#: shell/configdialog.cpp:85
 #, kde-format
 msgid ""
 "The settings of the current module have changed.\n"
@@ -1921,7 +1921,7 @@ msgstr ""
 "Aktiivse mooduli seadistusi on muudetud.\n"
 "Kas muudatused rakendada või tühistada?"
 
-#: shell/configdialog.cpp:83
+#: shell/configdialog.cpp:87
 #, fuzzy, kde-format
 #| msgid "Apply Settings"
 msgctxt "@title:window"
@@ -2311,24 +2311,24 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Dokumentatsioon"
 
-#: shell/documentcontroller.cpp:60 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Nimetu"
 
-#: shell/documentcontroller.cpp:117
+#: shell/documentcontroller.cpp:118
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Faili avamine"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:119
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Tekstifail\n"
 
-#: shell/documentcontroller.cpp:312
+#: shell/documentcontroller.cpp:313
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2337,46 +2337,46 @@ msgstr ""
 "KDevelop ei leidnud failile \"%1\" tüübiga %2 redaktorit.\n"
 "Kas soovid selle avada lihttekstina?"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Redaktorit ei leitud"
 
-#: shell/documentcontroller.cpp:314
+#: shell/documentcontroller.cpp:317
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:315
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:598
+#: shell/documentcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "&Open..."
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Ava..."
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:604
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Ava fail"
 
-#: shell/documentcontroller.cpp:602
+#: shell/documentcontroller.cpp:605
 #, fuzzy, kde-format
 #| msgid "Opens a file for editing."
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Avab faili muutmiseks."
 
-#: shell/documentcontroller.cpp:606
+#: shell/documentcontroller.cpp:609
 #, fuzzy, kde-format
 #| msgid ""
 #| "This lists files which you have opened recently, and allows you to easily "
@@ -2388,21 +2388,21 @@ msgid ""
 msgstr ""
 "Näitab faile, mida on viimati avatud, ja lubab neid hõlpsasti taas avada."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, fuzzy, kde-format
 #| msgid "Save Al&l"
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Sa&lvesta kõik"
 
-#: shell/documentcontroller.cpp:613
+#: shell/documentcontroller.cpp:616
 #, fuzzy, kde-format
 #| msgid "Save all open documents"
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Salvesta kõik avatud dokumendid"
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:617
 #, fuzzy, kde-format
 #| msgid ""
 #| "Save all open documents, prompting for additional information when "
@@ -2412,21 +2412,21 @@ msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr "Salvestab kõik avatud dokumendid, küsides vajaduse korral lisateavet."
 
-#: shell/documentcontroller.cpp:620
+#: shell/documentcontroller.cpp:623
 #, fuzzy, kde-format
 #| msgid "Reload All"
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Laadi kõik uuesti"
 
-#: shell/documentcontroller.cpp:622
+#: shell/documentcontroller.cpp:625
 #, fuzzy, kde-format
 #| msgid "Revert all open documents"
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Lähtesta kõik avatud dokumendid"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, fuzzy, kde-format
 #| msgid "Revert all open documents, returning to the previously saved state."
 msgctxt "@info:whatsthis"
@@ -2434,42 +2434,42 @@ msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
 "Lähtestab kõik avatud dokumendid nende varasemasse salvestatud seisundisse."
 
-#: shell/documentcontroller.cpp:629
+#: shell/documentcontroller.cpp:632
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Sulge"
 
-#: shell/documentcontroller.cpp:631
+#: shell/documentcontroller.cpp:634
 #, fuzzy, kde-format
 #| msgid "Close file"
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Sulge fail"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, fuzzy, kde-format
 #| msgid "Closes current file."
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Aktiivse faili sulgemine."
 
-#: shell/documentcontroller.cpp:637
+#: shell/documentcontroller.cpp:640
 #, fuzzy, kde-format
 #| msgid "Clos&e All"
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Sulg&e kõik"
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, fuzzy, kde-format
 #| msgid "Close all open documents"
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Sulge kõik avatud dokumendid"
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:643
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, prompting for additional information when "
@@ -2480,21 +2480,21 @@ msgid ""
 "necessary."
 msgstr "Sulgeb kõik avatud dokumendid, küsides vajaduse korral lisateavet."
 
-#: shell/documentcontroller.cpp:646
+#: shell/documentcontroller.cpp:649
 #, fuzzy, kde-format
 #| msgid "Close All Ot&hers"
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Sulge kõik &teised"
 
-#: shell/documentcontroller.cpp:648
+#: shell/documentcontroller.cpp:651
 #, fuzzy, kde-format
 #| msgid "Close all other documents"
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Sulge kõik teised dokumendid"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, fuzzy, kde-format
 #| msgid ""
 #| "Close all open documents, with the exception of the currently active "
@@ -2505,21 +2505,21 @@ msgid ""
 "document."
 msgstr "Sulgeb kõik avatud dokumendid, välja arvatud aktiivne dokument."
 
-#: shell/documentcontroller.cpp:654
+#: shell/documentcontroller.cpp:657
 #, fuzzy, kde-format
 #| msgid "Show Annotate on current document"
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Näita avatud dokumendi annoteerimist"
 
-#: shell/documentcontroller.cpp:655
+#: shell/documentcontroller.cpp:658
 #, fuzzy, kde-format
 #| msgid "Annotate"
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Annoteeri"
 
-#: shell/documentcontroller.cpp:1274
+#: shell/documentcontroller.cpp:1277
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2546,26 +2546,26 @@ msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Keskkonnamuutujate seadistamine"
 
-#: shell/launchconfigurationdialog.cpp:47
+#: shell/launchconfigurationdialog.cpp:48
 #, fuzzy, kde-format
 #| msgid "Launch Configurations"
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "Käivitusseadistused"
 
-#: shell/launchconfigurationdialog.cpp:57
+#: shell/launchconfigurationdialog.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new launch configuration."
 msgstr "Uue käivitusseadistuse lisamine."
 
-#: shell/launchconfigurationdialog.cpp:59
+#: shell/launchconfigurationdialog.cpp:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
 msgstr "Valitud käivitusseadistuse kustutamine."
 
-#: shell/launchconfigurationdialog.cpp:173
+#: shell/launchconfigurationdialog.cpp:174
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
@@ -2573,41 +2573,41 @@ msgstr ""
 "Ühtegi käivitusseadistust pole saadaval. (Kas mõni täitmisplugin on ikka "
 "laaditud?)"
 
-#: shell/launchconfigurationdialog.cpp:196
+#: shell/launchconfigurationdialog.cpp:197
 #, fuzzy, kde-format
 #| msgid "Rename configuration"
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "Muuda seadistuse nime"
 
-#: shell/launchconfigurationdialog.cpp:197
+#: shell/launchconfigurationdialog.cpp:198
 #, fuzzy, kde-format
 #| msgid "Delete configuration"
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "Kustuta seadistus"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:253
 #, kde-format
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr ""
 "Valitud käivitusseadistuses on salvestamata muudatusi. Kas salvestada need?"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:254
 #, fuzzy, kde-format
 #| msgid "Unsaved Changes"
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "Salvestamata muudatused"
 
-#: shell/launchconfigurationdialog.cpp:324
+#: shell/launchconfigurationdialog.cpp:326
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
 msgstr "\"%1\" ei vaja mingit seadistust"
 
-#: shell/launchconfigurationdialog.cpp:368
+#: shell/launchconfigurationdialog.cpp:370
 #, kde-format
 msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
@@ -2616,19 +2616,19 @@ msgstr ""
 "<i>Vali muutmiseks seadistus vasakult<br>või klõpsa uue lisamiseks nupule "
 "\"Lisa\".</i>"
 
-#: shell/launchconfigurationdialog.cpp:436
+#: shell/launchconfigurationdialog.cpp:438
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
 msgstr "%2 muutmine: <b>%1</b>"
 
-#: shell/launchconfigurationdialog.cpp:709
+#: shell/launchconfigurationdialog.cpp:711
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "Nimi"
 
-#: shell/launchconfigurationdialog.cpp:712
+#: shell/launchconfigurationdialog.cpp:714
 #, fuzzy, kde-format
 #| msgid "Type"
 msgctxt ""
@@ -3013,18 +3013,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "Kasuta seda käsku vaate olekuriba näitamiseks/peitmiseks"
 
-#: shell/partdocument.cpp:103
+#: shell/partdocument.cpp:104
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "Dokumendis \"%1\" on salvestamata muudatusi. Kas salvestada need?"
 
-#: shell/partdocument.cpp:104 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Dokumendi sulgemine"
 
-#: shell/partdocument.cpp:112
+#: shell/partdocument.cpp:111
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document \"%1\" has unsaved changes and was modified by an external "
@@ -3039,7 +3039,7 @@ msgstr ""
 "protsess.\n"
 "Kas tühistada välised muudatused?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:440
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3217,31 +3217,31 @@ msgstr ""
 "Arendajale omase projekti seadistuse salvestamine nurjus.\n"
 "Tähelepanu: projekti seadistused, mida oled muutnud, lähevad kaotsi."
 
-#: shell/projectcontroller.cpp:159
+#: shell/projectcontroller.cpp:160
 #, fuzzy, kde-format
 #| msgid "Configure Project %1"
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Projekti %1 seadistamine"
 
-#: shell/projectcontroller.cpp:302
+#: shell/projectcontroller.cpp:303
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Vigane asukoht: %1"
 
-#: shell/projectcontroller.cpp:312
+#: shell/projectcontroller.cpp:313
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "%1 juba avatakse, seda ei hakata uuesti avama"
 
-#: shell/projectcontroller.cpp:469
+#: shell/projectcontroller.cpp:470
 #, fuzzy, kde-format
 #| msgid "Override"
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Tühista "
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3252,14 +3252,14 @@ msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr "Edasi projekti avamisega, kasutades äsja määratud projekti seadistust."
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Ava olemasolev fail"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -3269,7 +3269,7 @@ msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Edasi projekti avamisega, aga kasutades olemasolevat projekti seadistust."
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:475
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Cancel and do not open the project."
@@ -3277,7 +3277,7 @@ msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Loobumine projekti avamisest."
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:478
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3286,42 +3286,42 @@ msgstr ""
 "Projekti seadistustefail %1 on juba olemas.\n"
 "Kas tühistada see või avada olemasolev fail?"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:481
 #, fuzzy, kde-format
 #| msgid "Override existing project configuration"
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Tühista olemasolev projekti seadistus"
 
-#: shell/projectcontroller.cpp:498
+#: shell/projectcontroller.cpp:499
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Seadistustefaili %1 loomine nurjus"
 
-#: shell/projectcontroller.cpp:512
+#: shell/projectcontroller.cpp:513
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Kas avada aktiivne projekt uuesti?"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:553
+#: shell/projectcontroller.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Ava/impordi projekt..."
 
-#: shell/projectcontroller.cpp:554
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Projekti avamine või import"
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3343,19 +3343,19 @@ msgstr ""
 "kataloogi avamiseks KDevelopis. Kui avatakse olemasolev kataloog, milles "
 "pole veel KDevelop 4 projektifaili, viimane luuakse."
 
-#: shell/projectcontroller.cpp:566
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Tõmba projekt..."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:570
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Projekti tõmbamine"
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:571
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3368,77 +3368,77 @@ msgstr ""
 "Juhendab kasutajat projekti tõmbamise ajal ning võimaldab selle importida "
 "KDevelop 4."
 
-#: shell/projectcontroller.cpp:584
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Sulge projektid"
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Sulgeb kõik parajasti valitud projektid"
 
-#: shell/projectcontroller.cpp:592
+#: shell/projectcontroller.cpp:594
 #, fuzzy, kde-format
 #| msgid "Open Configuration..."
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Ava seadistus..."
 
-#: shell/projectcontroller.cpp:598
+#: shell/projectcontroller.cpp:600
 #, fuzzy, kde-format
 #| msgid "Commit Current Project..."
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Kanna aktiivne projekt sisse..."
 
-#: shell/projectcontroller.cpp:599
+#: shell/projectcontroller.cpp:601
 #, fuzzy, kde-format
 #| msgid "Commit..."
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Kanna sisse..."
 
-#: shell/projectcontroller.cpp:610
+#: shell/projectcontroller.cpp:612
 #, fuzzy, kde-format
 #| msgid "Open Recent Project"
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Ava viimati avatud projekt"
 
-#: shell/projectcontroller.cpp:611
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Viimati avatud projekti avamine."
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:618
 #, fuzzy, kde-format
 #| msgid "Open Project for Current File"
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Ava aktiivse faili projekt"
 
-#: shell/projectcontroller.cpp:767
+#: shell/projectcontroller.cpp:769
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Projekt on juba avatud: %1"
 
-#: shell/projectcontroller.cpp:771
+#: shell/projectcontroller.cpp:773
 #, kde-format
 msgid "No active document"
 msgstr "Ükski dokument pole aktiivnedid"
 
-#: shell/projectcontroller.cpp:852
+#: shell/projectcontroller.cpp:854
 #, fuzzy, kde-format
 #| msgid "Project Already Open"
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Projekt on juba avatud"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:857
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3447,26 +3447,26 @@ msgstr ""
 "Projekt, mida proovid avada, on juba avatud vähemalt ühes seansis.<br>Mida "
 "soovid ette võtta?"
 
-#: shell/projectcontroller.cpp:859
+#: shell/projectcontroller.cpp:861
 #, fuzzy, kde-format
 #| msgid "Add project to current session"
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Lisa projekt aktiivsesse seanssi"
 
-#: shell/projectcontroller.cpp:863
+#: shell/projectcontroller.cpp:865
 #, fuzzy, kde-format
 #| msgid "Open session %1"
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Ava seanss %1"
 
-#: shell/projectcontroller.cpp:924
+#: shell/projectcontroller.cpp:926
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Ükski lubatud plugin ei toeta selle hoidla URL-i: %1"
 
-#: shell/projectcontroller.cpp:1228
+#: shell/projectcontroller.cpp:1230
 #, fuzzy, kde-format
 #| msgid "Reparse the Entire Project"
 msgctxt "@action"
@@ -3818,7 +3818,7 @@ msgstr "Unustab kõik muudatused"
 msgid "(no projects)"
 msgstr "(projekt puudub)"
 
-#: shell/sessionchooserdialog.cpp:36
+#: shell/sessionchooserdialog.cpp:37
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Delete session"
@@ -3826,21 +3826,21 @@ msgctxt "@info:tooltip"
 msgid "Delete session"
 msgstr "Seansi kustutamine"
 
-#: shell/sessionchooserdialog.cpp:49
+#: shell/sessionchooserdialog.cpp:50
 #, fuzzy, kde-format
 #| msgid "Pick a Session"
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "Seansi valimine"
 
-#: shell/sessionchooserdialog.cpp:62
+#: shell/sessionchooserdialog.cpp:63
 #, fuzzy, kde-format
 #| msgid "Run"
 msgctxt "@action:button"
 msgid "Run"
 msgstr "Käivita"
 
-#: shell/sessionchooserdialog.cpp:94
+#: shell/sessionchooserdialog.cpp:95
 #, fuzzy, kde-format
 #| msgid ""
 #| "Active session.\n"
@@ -3853,12 +3853,12 @@ msgstr ""
 "Aktiivne seanss:\n"
 "pid %1, rakendus %2, masin %3"
 
-#: shell/sessionchooserdialog.cpp:96
+#: shell/sessionchooserdialog.cpp:97
 #, kde-format
 msgid "Running"
 msgstr "Töötab"
 
-#: shell/sessionchooserdialog.cpp:191
+#: shell/sessionchooserdialog.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Cannot Delete Session"
@@ -3866,19 +3866,19 @@ msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "Seansi kustutamine nurjus"
 
-#: shell/sessionchooserdialog.cpp:192
+#: shell/sessionchooserdialog.cpp:193
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
 msgstr "<p>Lukustatud seanssi ei saa kustutada."
 
-#: shell/sessionchooserdialog.cpp:195
+#: shell/sessionchooserdialog.cpp:196
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
 msgstr "<p>Seansi <b>%1</b> on lukustanud %2 masinas %3 (PID %4)."
 
-#: shell/sessionchooserdialog.cpp:203
+#: shell/sessionchooserdialog.cpp:204
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3888,7 +3888,7 @@ msgstr ""
 "Seanss <b>%1</b> ja kõik selles sisalduvad seadistused kustutatakse. Projekt "
 "jääb puutumata. Kas tõesti jätkata?"
 
-#: shell/sessionchooserdialog.cpp:204
+#: shell/sessionchooserdialog.cpp:205
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Delete Session"
@@ -4002,7 +4002,7 @@ msgstr "Filter:"
 msgid "Create New Session"
 msgstr "Loo uus seanss"
 
-#: shell/sessionlock.cpp:153
+#: shell/sessionlock.cpp:154
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -4011,13 +4011,13 @@ msgid ""
 msgstr ""
 "Leiti töötav %1 isend (PID: %2), mis tehakse nähtavaks ega käivitata uut"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Töötav %1 isend (PID %2) on nähtavasti hangunud"
 
-#: shell/sessionlock.cpp:164
+#: shell/sessionlock.cpp:165
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4027,7 +4027,7 @@ msgstr ""
 "Määratud rakendus ei vasta D-Busi väljakutsele, seda võib olla tabanud krahh "
 "või on see hangunud."
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4036,13 +4036,13 @@ msgstr ""
 "Seansi <em>%1</em> lukustamine nurjus, selle on juba lukustanud %2 masinas "
 "%3 (PID %4)."
 
-#: shell/sessionlock.cpp:173
+#: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "Seansi <em>%1</em> lukustamine nurjus (lukustusfail pole kättesaadav)."
 
-#: shell/sessionlock.cpp:177
+#: shell/sessionlock.cpp:178
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4050,7 +4050,7 @@ msgid ""
 "session to launch.</p>"
 msgstr "<p>Palun sulge tõrkuv rakenduse isend või käivita uus seanss.</p>"
 
-#: shell/sessionlock.cpp:183
+#: shell/sessionlock.cpp:184
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Retry startup"
@@ -4058,7 +4058,7 @@ msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Proovi uuesti käivitada"
 
-#: shell/sessionlock.cpp:186
+#: shell/sessionlock.cpp:187
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Choose another session"
@@ -4066,13 +4066,13 @@ msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Vali teine seanss"
 
-#: shell/sessionlock.cpp:189
+#: shell/sessionlock.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Seansi %1 lukustamine nurjus"
 
-#: shell/sessionlock.cpp:196
+#: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
@@ -5390,7 +5390,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Kustuta"
 
-#: shell/textdocument.cpp:436
+#: shell/textdocument.cpp:437
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5401,13 +5401,13 @@ msgstr ""
 "\n"
 "Kas tõesti see üle kirjutada? (Välised muudatused lähevad kaotsi.)"
 
-#: shell/textdocument.cpp:439
+#: shell/textdocument.cpp:441
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Dokumenti on väliselt muudetud"
 
-#: shell/textdocument.cpp:703
+#: shell/textdocument.cpp:705
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Rida: %1 Veerg: %2 "
@@ -5891,7 +5891,7 @@ msgstr "Ülesanne katkestati"
 msgid "Run all tests in %1"
 msgstr "Kõigi projekti %1 testide käivitamine"
 
-#: util/shellutils.cpp:80
+#: util/shellutils.cpp:79
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5921,12 +5921,12 @@ msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Eira"
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Mõnele failide kirjutusõiguse andmine nurjus."
 
-#: util/shellutils.cpp:98
+#: util/shellutils.cpp:97
 #, fuzzy, kde-format
 #| msgid "Failed setting permissions"
 msgctxt "@title:window"
@@ -5968,31 +5968,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Harud ..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:37
+#: vcs/dvcs/ui/branchmanager.cpp:38
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Haruhaldur"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:108
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Enne uue haru loomist tuleb nimekirjast valida baasharu."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Uus haru"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Uue haru nimi:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -6001,7 +6001,7 @@ msgstr ""
 "Haru \"%1\" on juba olemas.\n"
 "Palun vali mõni muu nimi."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -6013,7 +6013,7 @@ msgstr ""
 "Praegu viibitakse harus \"%1\".\n"
 "Selle eemaldamiseks tuleb liikuda mõnda muusse harru."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
@@ -6082,7 +6082,7 @@ msgid "The same as git branch -D"
 msgstr "Sama, mis git branch -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
-#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Rename"
@@ -6142,12 +6142,12 @@ msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Sissekandeteade:"
 
-#: vcs/models/brancheslistmodel.cpp:63
+#: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
 msgid "Branch \"%1\" already exists."
 msgstr "Haru \"%1\" on juba olemas."
 
-#: vcs/models/brancheslistmodel.cpp:68
+#: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "Kas tõesti muuta nime, nii et \"%1\" oleks \"%2\"?"

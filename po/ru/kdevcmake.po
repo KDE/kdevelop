@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-03-04 16:57+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -374,7 +374,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Строки"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:345
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -386,24 +386,24 @@ msgstr ""
 "Каталог %1 будет удалён из списка KDevelop.\n"
 "Удалить его также из файловой системы?"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:349
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:354
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Не удалось удалить: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:400
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:405
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

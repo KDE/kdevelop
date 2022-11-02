@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-03-15 10:16+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -1333,7 +1333,7 @@ msgid "Unknown context"
 msgstr "Неизвестный контекст"
 
 #: language/duchain/navigation/useswidget.cpp:404
-#: shell/launchconfigurationdialog.cpp:480
+#: shell/launchconfigurationdialog.cpp:482
 #, kde-format
 msgid "Global"
 msgstr "Глобальная"
@@ -1885,13 +1885,13 @@ msgstr "Выполняется %1"
 msgid "&Color Scheme"
 msgstr "&Цветовая схема"
 
-#: shell/configdialog.cpp:30
+#: shell/configdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Настройка"
 
-#: shell/configdialog.cpp:82
+#: shell/configdialog.cpp:85
 #, kde-format
 msgid ""
 "The settings of the current module have changed.\n"
@@ -1900,7 +1900,7 @@ msgstr ""
 "В текущем модуле имеются несохранённые изменения.\n"
 "Применить их или отбросить?"
 
-#: shell/configdialog.cpp:83
+#: shell/configdialog.cpp:87
 #, kde-format
 msgctxt "@title:window"
 msgid "Apply Settings"
@@ -2238,23 +2238,23 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Документация"
 
-#: shell/documentcontroller.cpp:60 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Безымянный"
 
-#: shell/documentcontroller.cpp:117
+#: shell/documentcontroller.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Открытие файла"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:119
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Текстовые файлы\n"
 
-#: shell/documentcontroller.cpp:312
+#: shell/documentcontroller.cpp:313
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2263,43 +2263,43 @@ msgstr ""
 "KDevelop не смог найти редактор для файла «%1» типа %2.\n"
 "Открыть его как обычный текстовый файл?"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Подходящий редактор не найден"
 
-#: shell/documentcontroller.cpp:314
+#: shell/documentcontroller.cpp:317
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:315
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:598
+#: shell/documentcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Открыть..."
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:604
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Открыть файл"
 
-#: shell/documentcontroller.cpp:602
+#: shell/documentcontroller.cpp:605
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Открывает файл для редактирования."
 
-#: shell/documentcontroller.cpp:606
+#: shell/documentcontroller.cpp:609
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2309,19 +2309,19 @@ msgstr ""
 "Это список файлов, которые были открыты последними и могут быть легко "
 "открыты вновь."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "&Сохранить все"
 
-#: shell/documentcontroller.cpp:613
+#: shell/documentcontroller.cpp:616
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Сохранить все открытые документы"
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2330,19 +2330,19 @@ msgstr ""
 "Сохраняет все открытые документы, при необходимости запрашивая информацию у "
 "пользователя."
 
-#: shell/documentcontroller.cpp:620
+#: shell/documentcontroller.cpp:623
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Перезагрузить все"
 
-#: shell/documentcontroller.cpp:622
+#: shell/documentcontroller.cpp:625
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Восстановить все открытые документы"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
@@ -2350,37 +2350,37 @@ msgstr ""
 "Восстанавливает все открытые документы, возвращая их последнее сохранённое "
 "состояние."
 
-#: shell/documentcontroller.cpp:629
+#: shell/documentcontroller.cpp:632
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Закрыть"
 
-#: shell/documentcontroller.cpp:631
+#: shell/documentcontroller.cpp:634
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Закрыть файл"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Закрывает текущий файл."
 
-#: shell/documentcontroller.cpp:637
+#: shell/documentcontroller.cpp:640
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "Зак&рыть все"
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Закрыть все открытые документы"
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:643
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2390,19 +2390,19 @@ msgstr ""
 "Закрывает все открытые документы, при необходимости запрашивая информацию у "
 "пользователя."
 
-#: shell/documentcontroller.cpp:646
+#: shell/documentcontroller.cpp:649
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Закрыть все &остальные"
 
-#: shell/documentcontroller.cpp:648
+#: shell/documentcontroller.cpp:651
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Закрыть все остальные документы"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2412,19 +2412,19 @@ msgstr ""
 "Закрывает все открытые документы, за исключением текущего активного "
 "документа."
 
-#: shell/documentcontroller.cpp:654
+#: shell/documentcontroller.cpp:657
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Показать заметки для текущего документа"
 
-#: shell/documentcontroller.cpp:655
+#: shell/documentcontroller.cpp:658
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Добавить заметки"
 
-#: shell/documentcontroller.cpp:1274
+#: shell/documentcontroller.cpp:1277
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2450,63 +2450,63 @@ msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Настроить переменные окружения"
 
-#: shell/launchconfigurationdialog.cpp:47
+#: shell/launchconfigurationdialog.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "Конфигурации запуска"
 
-#: shell/launchconfigurationdialog.cpp:57
+#: shell/launchconfigurationdialog.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new launch configuration."
 msgstr "Добавить новую конфигурацию запуска"
 
-#: shell/launchconfigurationdialog.cpp:59
+#: shell/launchconfigurationdialog.cpp:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
 msgstr "Удалить выбранную конфигурацию запуска"
 
-#: shell/launchconfigurationdialog.cpp:173
+#: shell/launchconfigurationdialog.cpp:174
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
 msgstr ""
 "Нет доступных конфигураций запуска. (Загружены ли модули для выполнения?)"
 
-#: shell/launchconfigurationdialog.cpp:196
+#: shell/launchconfigurationdialog.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "Переименовать конфигурацию"
 
-#: shell/launchconfigurationdialog.cpp:197
+#: shell/launchconfigurationdialog.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "Удалить конфигурацию"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:253
 #, kde-format
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr ""
 "В выбранной конфигурации запуска есть несохранённые изменения. Сохранить их?"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:254
 #, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "Несохранённые изменения"
 
-#: shell/launchconfigurationdialog.cpp:324
+#: shell/launchconfigurationdialog.cpp:326
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
 msgstr "Для запуска «%1» не нужна конфигурация"
 
-#: shell/launchconfigurationdialog.cpp:368
+#: shell/launchconfigurationdialog.cpp:370
 #, kde-format
 msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
@@ -2515,18 +2515,18 @@ msgstr ""
 "<i>Выберите слева конфигурацию для редактирования<br>или нажмите кнопку "
 "«Добавить» для создания новой.</i>"
 
-#: shell/launchconfigurationdialog.cpp:436
+#: shell/launchconfigurationdialog.cpp:438
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
 msgstr "Редактирование %2: <b>%1</b>"
 
-#: shell/launchconfigurationdialog.cpp:709
+#: shell/launchconfigurationdialog.cpp:711
 #, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "Название"
 
-#: shell/launchconfigurationdialog.cpp:712
+#: shell/launchconfigurationdialog.cpp:714
 #, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
@@ -2878,18 +2878,18 @@ msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
 msgstr "Показать или скрыть строку состояния."
 
-#: shell/partdocument.cpp:103
+#: shell/partdocument.cpp:104
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "В документе «%1» есть несохранённые изменения. Хотите их сохранить?"
 
-#: shell/partdocument.cpp:104 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Закрытие документа"
 
-#: shell/partdocument.cpp:112
+#: shell/partdocument.cpp:111
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2904,7 +2904,7 @@ msgstr ""
 "процессом.\n"
 "Вы хотите заменить внешние изменения?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:440
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3076,29 +3076,29 @@ msgstr ""
 "Сохранить конфигурацию проекта, относящуюся к разработке, не удалось.\n"
 "Внимание: ваши изменения в настройках проекта будут потеряны."
 
-#: shell/projectcontroller.cpp:159
+#: shell/projectcontroller.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "Настройка проекта %1"
 
-#: shell/projectcontroller.cpp:302
+#: shell/projectcontroller.cpp:303
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Недопустимое расположение: %1"
 
-#: shell/projectcontroller.cpp:312
+#: shell/projectcontroller.cpp:313
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "Проект %1 уже открывается и не будет открыт повторно"
 
-#: shell/projectcontroller.cpp:469
+#: shell/projectcontroller.cpp:470
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Заменить"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3106,25 +3106,25 @@ msgid ""
 msgstr ""
 "Продолжить открытие проекта и использовать только что выбранную конфигурацию"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Открыть существующий файл"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr "Продолжить открытие проекта, но использовать существующую конфигурацию"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "Отменить операцию и не открывать проект"
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:478
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3133,41 +3133,41 @@ msgstr ""
 "Файл конфигурации проекта уже существует в %1.\n"
 "Вы хотите заменить его или открыть существующий файл?"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:481
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Замена существующей конфигурации проекта"
 
-#: shell/projectcontroller.cpp:498
+#: shell/projectcontroller.cpp:499
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "Не удалось создать файл конфигурации %1"
 
-#: shell/projectcontroller.cpp:512
+#: shell/projectcontroller.cpp:513
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Открыть текущий проект заново?"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:553
+#: shell/projectcontroller.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Открыть/импортировать проект..."
 
-#: shell/projectcontroller.cpp:554
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Открыть или импортировать проект"
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:557
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3188,19 +3188,19 @@ msgstr ""
 "файл проекта KDevelop 4 или существующий каталог (если в этом каталоге не "
 "найдётся файл проекта KDevelop 4, он будет создан)."
 
-#: shell/projectcontroller.cpp:566
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Получить проект..."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:570
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Получить проект"
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:571
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3212,71 +3212,71 @@ msgid ""
 msgstr ""
 "Помогает пользователю получить внешний проект и импортирует его в KDevelop 4."
 
-#: shell/projectcontroller.cpp:584
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Закрыть проект(ы)"
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Закрыть все выбранные проекты"
 
-#: shell/projectcontroller.cpp:592
+#: shell/projectcontroller.cpp:594
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Настроить проект..."
 
-#: shell/projectcontroller.cpp:598
+#: shell/projectcontroller.cpp:600
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Зафиксировать проект..."
 
-#: shell/projectcontroller.cpp:599
+#: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Зафиксировать..."
 
-#: shell/projectcontroller.cpp:610
+#: shell/projectcontroller.cpp:612
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Открыть проект из последних"
 
-#: shell/projectcontroller.cpp:611
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Открывает проект, открывавшийся одним из последних."
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:618
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Открыть проект для текущего файла"
 
-#: shell/projectcontroller.cpp:767
+#: shell/projectcontroller.cpp:769
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Проект «%1» уже открыт."
 
-#: shell/projectcontroller.cpp:771
+#: shell/projectcontroller.cpp:773
 #, kde-format
 msgid "No active document"
 msgstr "Нет активного документа."
 
-#: shell/projectcontroller.cpp:852
+#: shell/projectcontroller.cpp:854
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Проект уже открыт"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:857
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3285,25 +3285,25 @@ msgstr ""
 "Проект, который вы пытаетесь открыть, уже открыт как минимум в одном другом "
 "сеансе.<br>Как вы хотите поступить?"
 
-#: shell/projectcontroller.cpp:859
+#: shell/projectcontroller.cpp:861
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Добавить проект в текущий сеанс"
 
-#: shell/projectcontroller.cpp:863
+#: shell/projectcontroller.cpp:865
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "Открыть сеанс %1"
 
-#: shell/projectcontroller.cpp:924
+#: shell/projectcontroller.cpp:926
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr ""
 "Ни одно из включённых расширений не поддерживает этот адрес репозитория: %1"
 
-#: shell/projectcontroller.cpp:1228
+#: shell/projectcontroller.cpp:1230
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3625,25 +3625,25 @@ msgstr "Отбросить все изменения"
 msgid "(no projects)"
 msgstr "(нет открытых проектов)"
 
-#: shell/sessionchooserdialog.cpp:36
+#: shell/sessionchooserdialog.cpp:37
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
 msgstr "Удалить сеанс"
 
-#: shell/sessionchooserdialog.cpp:49
+#: shell/sessionchooserdialog.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "Выбор сеанса"
 
-#: shell/sessionchooserdialog.cpp:62
+#: shell/sessionchooserdialog.cpp:63
 #, kde-format
 msgctxt "@action:button"
 msgid "Run"
 msgstr "Запустить"
 
-#: shell/sessionchooserdialog.cpp:94
+#: shell/sessionchooserdialog.cpp:95
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3653,31 +3653,31 @@ msgstr ""
 "Активный сеанс.\n"
 "код процесса %1, приложение %2, компьютер %3"
 
-#: shell/sessionchooserdialog.cpp:96
+#: shell/sessionchooserdialog.cpp:97
 #, kde-format
 msgid "Running"
 msgstr "Выполняется"
 
-#: shell/sessionchooserdialog.cpp:191
+#: shell/sessionchooserdialog.cpp:192
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "Ошибка удаления сеанса"
 
-#: shell/sessionchooserdialog.cpp:192
+#: shell/sessionchooserdialog.cpp:193
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
 msgstr "<p>Удалить заблокированный сеанс нельзя."
 
-#: shell/sessionchooserdialog.cpp:195
+#: shell/sessionchooserdialog.cpp:196
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
 msgstr ""
 "<p>Сеанс <b>%1</b> заблокирован приложением %2 на компьютере %3 (PID %4)."
 
-#: shell/sessionchooserdialog.cpp:203
+#: shell/sessionchooserdialog.cpp:204
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3687,7 +3687,7 @@ msgstr ""
 "Сеанс <b>%1</b> и все связанные с ним параметры будут удалены. Проекты "
 "изменены не будут. Удалить сеанс?"
 
-#: shell/sessionchooserdialog.cpp:204
+#: shell/sessionchooserdialog.cpp:205
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
@@ -3789,7 +3789,7 @@ msgstr "Фильтр:"
 msgid "Create New Session"
 msgstr "Создать новый сеанс"
 
-#: shell/sessionlock.cpp:153
+#: shell/sessionlock.cpp:154
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3799,13 +3799,13 @@ msgstr ""
 "Выявлен запущенный экземпляр %1 (PID: %2), он сделан видимым вместо запуска "
 "нового"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "Похоже, запущенный экземпляр %1 (PID: %2) завис"
 
-#: shell/sessionlock.cpp:164
+#: shell/sessionlock.cpp:165
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3815,7 +3815,7 @@ msgstr ""
 "Данное приложение не отвечает на вызов DBUS, возможно оно прекратило работу "
 "или повисло."
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3824,14 +3824,14 @@ msgstr ""
 "Заблокировать сеанс <em>%1</em> не удалось, так как он уже заблокирован "
 "приложением %2 (PID %4) на компьютере %3."
 
-#: shell/sessionlock.cpp:173
+#: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
 "Заблокировать сеанс <em>%1</em> не удалось (файл блокировки недоступен)."
 
-#: shell/sessionlock.cpp:177
+#: shell/sessionlock.cpp:178
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3840,25 +3840,25 @@ msgid ""
 msgstr ""
 "<p>Закройте мешающий вам экземпляр приложения или выберите другой сеанс.</p>"
 
-#: shell/sessionlock.cpp:183
+#: shell/sessionlock.cpp:184
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Повторить попытку запуска"
 
-#: shell/sessionlock.cpp:186
+#: shell/sessionlock.cpp:187
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Выбрать другой сеанс"
 
-#: shell/sessionlock.cpp:189
+#: shell/sessionlock.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "Ошибка блокировки сеанса %1"
 
-#: shell/sessionlock.cpp:196
+#: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
@@ -5073,7 +5073,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Удалить"
 
-#: shell/textdocument.cpp:436
+#: shell/textdocument.cpp:437
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5084,13 +5084,13 @@ msgstr ""
 "\n"
 "Заменить содержимое этого файла? (Внешние изменения будут потеряны.)"
 
-#: shell/textdocument.cpp:439
+#: shell/textdocument.cpp:441
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Документ изменён внешней программой"
 
-#: shell/textdocument.cpp:703
+#: shell/textdocument.cpp:705
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Строка: %1 Столбец: %2 "
@@ -5540,7 +5540,7 @@ msgstr "Задача прервана"
 msgid "Run all tests in %1"
 msgstr "Запустить все тесты в %1"
 
-#: util/shellutils.cpp:80
+#: util/shellutils.cpp:79
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5570,12 +5570,12 @@ msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Пропустить"
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Не удалось добавить права доступа на запись для некоторых файлов."
 
-#: util/shellutils.cpp:98
+#: util/shellutils.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5616,32 +5616,32 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Ветви..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:37
+#: vcs/dvcs/ui/branchmanager.cpp:38
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Управление ветвями"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:108
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr ""
 "Прежде чем создавать новую ветвь, вы должны выбрать в этом списке базовую."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Новая ветвь"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Имя новой ветви:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5650,7 +5650,7 @@ msgstr ""
 "Ветвь «%1» уже существует.\n"
 "Выберите другое имя."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -5662,7 +5662,7 @@ msgstr ""
 "В данный момент выбрана ветвь «%1».\n"
 "Чтобы удалить её, необходимо сначала переключиться на другую."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
@@ -5733,7 +5733,7 @@ msgid "The same as git branch -D"
 msgstr "То же, что и git branch -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
-#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Rename"
@@ -5793,12 +5793,12 @@ msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Сообщение фиксации:"
 
-#: vcs/models/brancheslistmodel.cpp:63
+#: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
 msgid "Branch \"%1\" already exists."
 msgstr "Ветвь «%1» уже существует."
 
-#: vcs/models/brancheslistmodel.cpp:68
+#: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "Переименовать «%1» в «%2»?"

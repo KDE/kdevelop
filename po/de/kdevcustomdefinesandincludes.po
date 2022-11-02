@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-07-23 22:32+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -278,42 +278,42 @@ msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
 msgstr "CUDA-C-Befehlszeilenargu&mente:"
 
-#: kcm_widget/projectpathswidget.cpp:168
+#: kcm_widget/projectpathswidget.cpp:169
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
 msgstr "Projektpfad auswählen"
 
-#: kcm_widget/projectpathswidget.cpp:182
+#: kcm_widget/projectpathswidget.cpp:184
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
 msgstr "Möchten Sie die Konfiguration für den Pfad „%1“ wirklich löschen?"
 
-#: kcm_widget/projectpathswidget.cpp:183
+#: kcm_widget/projectpathswidget.cpp:186
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
 msgstr "Pfad-Konfiguration löschen"
 
-#: kcm_widget/projectpathswidget.cpp:221
+#: kcm_widget/projectpathswidget.cpp:224
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
 msgstr "Include-Pfade/-Dateien bearbeiten"
 
-#: kcm_widget/projectpathswidget.cpp:229
+#: kcm_widget/projectpathswidget.cpp:232
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
 msgstr "Definierte Makros bearbeiten"
 
-#: kcm_widget/projectpathswidget.cpp:285
+#: kcm_widget/projectpathswidget.cpp:288
 #, kde-format
 msgid "Configure C/C++ parser"
 msgstr "C/C++-Parser konfigurieren"
 
 #. i18n: ectx: property (text), widget (QLabel, configureLabel)
-#: kcm_widget/projectpathswidget.cpp:289 kcm_widget/projectpathswidget.ui:20
+#: kcm_widget/projectpathswidget.cpp:292 kcm_widget/projectpathswidget.ui:20
 #, kde-format
 msgid ""
 "Configure which macros and include directories/files will be added to the "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -1309,7 +1309,7 @@ msgid "Unknown context"
 msgstr "Bilinməyən şərait"
 
 #: language/duchain/navigation/useswidget.cpp:404
-#: shell/launchconfigurationdialog.cpp:480
+#: shell/launchconfigurationdialog.cpp:482
 #, kde-format
 msgid "Global"
 msgstr "Ümumi"
@@ -1856,13 +1856,13 @@ msgstr "İşə düşür %1"
 msgid "&Color Scheme"
 msgstr "&Rəng Sxemi"
 
-#: shell/configdialog.cpp:30
+#: shell/configdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Tənzimləmək"
 
-#: shell/configdialog.cpp:82
+#: shell/configdialog.cpp:85
 #, kde-format
 msgid ""
 "The settings of the current module have changed.\n"
@@ -1871,7 +1871,7 @@ msgstr ""
 "Hazırkı modulun ayarları dəyişdirildi.\n"
 "Dəyişiklikləri tətbiq etmək, yoxsa ləğv etmək istəyirsiniz?"
 
-#: shell/configdialog.cpp:83
+#: shell/configdialog.cpp:87
 #, kde-format
 msgctxt "@title:window"
 msgid "Apply Settings"
@@ -2207,23 +2207,23 @@ msgctxt "@title:window"
 msgid "Documentation"
 msgstr "Sənədləşmə"
 
-#: shell/documentcontroller.cpp:60 sublime/urldocument.cpp:56
+#: shell/documentcontroller.cpp:61 sublime/urldocument.cpp:56
 #, kde-format
 msgid "Untitled"
 msgstr "Adsız"
 
-#: shell/documentcontroller.cpp:117
+#: shell/documentcontroller.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Open File"
 msgstr "Faylı açmaq"
 
-#: shell/documentcontroller.cpp:118
+#: shell/documentcontroller.cpp:119
 #, kde-format
 msgid "*|Text File\n"
 msgstr "*|Mətn faylı\n"
 
-#: shell/documentcontroller.cpp:312
+#: shell/documentcontroller.cpp:313
 #, kde-format
 msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
@@ -2232,43 +2232,43 @@ msgstr ""
 "KDevelop %2 növünün '%1' faylı üçün redaktoru tapa bilmədi.\n"
 "Onu adi mətn kimi açmaq istəyirsiniz?"
 
-#: shell/documentcontroller.cpp:313
+#: shell/documentcontroller.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
 msgstr "Redaktor tapıla bilmədi"
 
-#: shell/documentcontroller.cpp:314
+#: shell/documentcontroller.cpp:317
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
 msgstr ""
 
-#: shell/documentcontroller.cpp:315
+#: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
 msgstr ""
 
-#: shell/documentcontroller.cpp:598
+#: shell/documentcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "&Open..."
 msgstr "&Açmaq..."
 
-#: shell/documentcontroller.cpp:601
+#: shell/documentcontroller.cpp:604
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open file"
 msgstr "Faylı açın"
 
-#: shell/documentcontroller.cpp:602
+#: shell/documentcontroller.cpp:605
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
 msgstr "Düzəliş etmək üçün faylı açın."
 
-#: shell/documentcontroller.cpp:606
+#: shell/documentcontroller.cpp:609
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2278,19 +2278,19 @@ msgstr ""
 "Bu, ən son açdığınız faylların siyahısını göstərir və onları asanlıqla "
 "yebidın açmağa icazə verir."
 
-#: shell/documentcontroller.cpp:611
+#: shell/documentcontroller.cpp:614
 #, kde-format
 msgctxt "@action"
 msgid "Save Al&l"
 msgstr "Hamısını sax&layın"
 
-#: shell/documentcontroller.cpp:613
+#: shell/documentcontroller.cpp:616
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all open documents"
 msgstr "Bütün açıq sənədləri saxlayın"
 
-#: shell/documentcontroller.cpp:614
+#: shell/documentcontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2298,19 +2298,19 @@ msgid ""
 msgstr ""
 "Lazım gələrsə əlavə məlumatdan istifadə edərək açıq sənədləri saxlayın."
 
-#: shell/documentcontroller.cpp:620
+#: shell/documentcontroller.cpp:623
 #, kde-format
 msgctxt "@action"
 msgid "Reload All"
 msgstr "Hamısını yenidən yükləyin"
 
-#: shell/documentcontroller.cpp:622
+#: shell/documentcontroller.cpp:625
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
 msgstr "Bütün açıq sənədləri geri qaytarın"
 
-#: shell/documentcontroller.cpp:623
+#: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
@@ -2318,37 +2318,37 @@ msgstr ""
 "Bütün açıq sənədləri, onların sonuncu saxlanılan vəziyyətinə geri qaytararaq "
 "bərpa edin"
 
-#: shell/documentcontroller.cpp:629
+#: shell/documentcontroller.cpp:632
 #, kde-format
 msgctxt "@action"
 msgid "&Close"
 msgstr "&Bağlayın"
 
-#: shell/documentcontroller.cpp:631
+#: shell/documentcontroller.cpp:634
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close file"
 msgstr "Faylı bağlayın"
 
-#: shell/documentcontroller.cpp:632
+#: shell/documentcontroller.cpp:635
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Closes current file."
 msgstr "Cari faylı bağlayır"
 
-#: shell/documentcontroller.cpp:637
+#: shell/documentcontroller.cpp:640
 #, kde-format
 msgctxt "@action"
 msgid "Clos&e All"
 msgstr "&Hamısını bağlayın"
 
-#: shell/documentcontroller.cpp:639
+#: shell/documentcontroller.cpp:642
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all open documents"
 msgstr "Bütün açıq sənədləri bağlayın"
 
-#: shell/documentcontroller.cpp:640
+#: shell/documentcontroller.cpp:643
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2357,19 +2357,19 @@ msgid ""
 msgstr ""
 "Lazım gələrsə əlavə məlumatdan istifadə edərək bütün açıq sənədləri saxlayın."
 
-#: shell/documentcontroller.cpp:646
+#: shell/documentcontroller.cpp:649
 #, kde-format
 msgctxt "@action"
 msgid "Close All Ot&hers"
 msgstr "Digərilərinin &hamısını bağlayın"
 
-#: shell/documentcontroller.cpp:648
+#: shell/documentcontroller.cpp:651
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
 msgstr "Digər sənədlərin hamısını bağlayın"
 
-#: shell/documentcontroller.cpp:649
+#: shell/documentcontroller.cpp:652
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2377,19 +2377,19 @@ msgid ""
 "document."
 msgstr "Cari aktiv sənəd istisna olmaqla bütün açıq sənədləri bağlayın."
 
-#: shell/documentcontroller.cpp:654
+#: shell/documentcontroller.cpp:657
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
 msgstr "Cari sənədin izahatları göstərilsin"
 
-#: shell/documentcontroller.cpp:655
+#: shell/documentcontroller.cpp:658
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
 msgstr "Qısa izahatı"
 
-#: shell/documentcontroller.cpp:1274
+#: shell/documentcontroller.cpp:1277
 #, kde-format
 msgid ""
 "Could not annotate the document because it is not part of a version-"
@@ -2415,25 +2415,25 @@ msgctxt "@info:tooltip"
 msgid "Configure environment variables"
 msgstr "Mühit dəyişənlərini tənzimləyin"
 
-#: shell/launchconfigurationdialog.cpp:47
+#: shell/launchconfigurationdialog.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Launch Configurations"
 msgstr "Başlatma tənzimləmələri"
 
-#: shell/launchconfigurationdialog.cpp:57
+#: shell/launchconfigurationdialog.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new launch configuration."
 msgstr "Yeni başlatma tənzimləməsi əlavə edin."
 
-#: shell/launchconfigurationdialog.cpp:59
+#: shell/launchconfigurationdialog.cpp:60
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete selected launch configuration."
 msgstr "Seçilmiş başılatma tənzimləməsini silin"
 
-#: shell/launchconfigurationdialog.cpp:173
+#: shell/launchconfigurationdialog.cpp:174
 #, kde-format
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
@@ -2441,19 +2441,19 @@ msgstr ""
 "Başlatma tənzimləməsi əlçatan deyil. (Qoşulmuş İcra modullarından hər hansı "
 "biri yüklənib)"
 
-#: shell/launchconfigurationdialog.cpp:196
+#: shell/launchconfigurationdialog.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rename Configuration"
 msgstr "Tənzimləmənin adını dəyişin"
 
-#: shell/launchconfigurationdialog.cpp:197
+#: shell/launchconfigurationdialog.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Delete Configuration"
 msgstr "Tənzimləməni silin"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:253
 #, kde-format
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
@@ -2461,19 +2461,19 @@ msgstr ""
 "Seçilmiş Başlatma tənzimləməsində saxlanılmamış dəyişikliklər var. Saxlamaq "
 "istəyirsiniz?"
 
-#: shell/launchconfigurationdialog.cpp:251
+#: shell/launchconfigurationdialog.cpp:254
 #, kde-format
 msgctxt "@title:window"
 msgid "Unsaved Changes"
 msgstr "Saxlanılmamış dəyişikliklər"
 
-#: shell/launchconfigurationdialog.cpp:324
+#: shell/launchconfigurationdialog.cpp:326
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
 msgstr "\"%1\" üçün tənzimləməyə ehtiyac yoxdur"
 
-#: shell/launchconfigurationdialog.cpp:368
+#: shell/launchconfigurationdialog.cpp:370
 #, kde-format
 msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
@@ -2482,18 +2482,18 @@ msgstr ""
 "<i>Düzəliş etmək üçün tənzimləməni soldan seçin,<br>və ya yenisini əlavə "
 "etmək üçün \"Əlavə edin\" düyməsinə vurun.</i>"
 
-#: shell/launchconfigurationdialog.cpp:436
+#: shell/launchconfigurationdialog.cpp:438
 #, kde-format
 msgid "Editing %2: <b>%1</b>"
 msgstr "%2 düzəliş edilir: <b>%1</b>"
 
-#: shell/launchconfigurationdialog.cpp:709
+#: shell/launchconfigurationdialog.cpp:711
 #, kde-format
 msgctxt "@title:column Name of the Launch Configurations"
 msgid "Name"
 msgstr "Adı"
 
-#: shell/launchconfigurationdialog.cpp:712
+#: shell/launchconfigurationdialog.cpp:714
 #, kde-format
 msgctxt ""
 "@title:column Type of the Launch Configurations (i.e. Python Application, C+"
@@ -2846,20 +2846,20 @@ msgstr ""
 "Görünüş sahəsinin vəziyyət çubuğunu göstərmək və ya gizlətmək üçün bu əmrdən "
 "istifadə edin."
 
-#: shell/partdocument.cpp:103
+#: shell/partdocument.cpp:104
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
 "\"%1\" sənədində saxlanılmamış dəyişikliklər var. Onları saxlamaq "
 "istəyirsiniz?"
 
-#: shell/partdocument.cpp:104 shell/partdocument.cpp:114
+#: shell/partdocument.cpp:105 shell/partdocument.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Sənədi Bağlayın"
 
-#: shell/partdocument.cpp:112
+#: shell/partdocument.cpp:111
 #, fuzzy, kde-format
 #| msgid ""
 #| "The document \"%1\" has unsaved changes and was modified by an external "
@@ -2874,7 +2874,7 @@ msgstr ""
 "tərəfindən dəyişdirilib.\n"
 "Siz xarici dəyişikliklərin üzərinə yazmaq istəyirsiniz?"
 
-#: shell/partdocument.cpp:115 shell/textdocument.cpp:440
+#: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
@@ -3045,29 +3045,29 @@ msgstr ""
 "Tərtibatçıya aid layihənin tənzimləməsi saxlanıla bilmədi.\n"
 "Diqqət: Layihənin ayarlarında etdiyiniz dəyişiklik itiriləcəkdir."
 
-#: shell/projectcontroller.cpp:159
+#: shell/projectcontroller.cpp:160
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Project %1"
 msgstr "%1 layihəsini tənzimləyin"
 
-#: shell/projectcontroller.cpp:302
+#: shell/projectcontroller.cpp:303
 #, kde-format
 msgid "Invalid Location: %1"
 msgstr "Yer düzgün deyil: %1"
 
-#: shell/projectcontroller.cpp:312
+#: shell/projectcontroller.cpp:313
 #, kde-format
 msgid "Already opening %1, not opening again"
 msgstr "%1 artıq açılır, bir daha açılmır"
 
-#: shell/projectcontroller.cpp:469
+#: shell/projectcontroller.cpp:470
 #, kde-format
 msgctxt "@action:button"
 msgid "Override"
 msgstr "Əvəzləmək"
 
-#: shell/projectcontroller.cpp:470
+#: shell/projectcontroller.cpp:471
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3076,26 +3076,26 @@ msgstr ""
 "Layihəni açmağa davam edin və indicə seçilmiş layihənin tənzimləməsini "
 "istifadə edin"
 
-#: shell/projectcontroller.cpp:471
+#: shell/projectcontroller.cpp:472
 #, kde-format
 msgctxt "@action:button"
 msgid "Open Existing File"
 msgstr "Mövcud faylı açın"
 
-#: shell/projectcontroller.cpp:472
+#: shell/projectcontroller.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
 msgstr ""
 "Layihəni açmağa davam edin və mövcud layihənin tənzimləməsini istifadə edin"
 
-#: shell/projectcontroller.cpp:474
+#: shell/projectcontroller.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel and do not open the project"
 msgstr "İmtina edin və layihəni açmayın"
 
-#: shell/projectcontroller.cpp:476
+#: shell/projectcontroller.cpp:478
 #, kde-format
 msgid ""
 "There already exists a project configuration file at %1.\n"
@@ -3104,41 +3104,41 @@ msgstr ""
 "%1 artıq layihə tənzimləməsindən ibarətdir.\n"
 "Onu əvəzləmək, yoxsa mövcud faylı açmaq istəyirsiniz?"
 
-#: shell/projectcontroller.cpp:478
+#: shell/projectcontroller.cpp:481
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
 msgstr "Mövcud layihə tənzimləməsini əvəzləyin"
 
-#: shell/projectcontroller.cpp:498
+#: shell/projectcontroller.cpp:499
 #, kde-format
 msgid "Unable to create configuration file %1"
 msgstr "%1 tənzimləmə faylı yaradıla bilmədi"
 
-#: shell/projectcontroller.cpp:512
+#: shell/projectcontroller.cpp:513
 #, kde-format
 msgid "Reopen the current project?"
 msgstr "Cari layihə yenidən açılsın?"
 
-#: shell/projectcontroller.cpp:513
+#: shell/projectcontroller.cpp:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
 msgstr ""
 
-#: shell/projectcontroller.cpp:553
+#: shell/projectcontroller.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Open / Import Project..."
 msgstr "Layihəni açın / idxal edin..."
 
-#: shell/projectcontroller.cpp:554
+#: shell/projectcontroller.cpp:556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open or import project"
 msgstr "Layihəni açın və ya idxal edin"
 
-#: shell/projectcontroller.cpp:555
+#: shell/projectcontroller.cpp:557
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3153,19 +3153,19 @@ msgstr ""
 "qovluğunu KDevelopdə açmağa icazə verir. KDevelop layihəsi faylı olmayan "
 "qovluq açıldığı zaman belə bir fayl yaradılacaqdır."
 
-#: shell/projectcontroller.cpp:566
+#: shell/projectcontroller.cpp:568
 #, kde-format
 msgctxt "@action"
 msgid "Fetch Project..."
 msgstr "Layihəni alın..."
 
-#: shell/projectcontroller.cpp:568
+#: shell/projectcontroller.cpp:570
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fetch project"
 msgstr "Layihəni alın"
 
-#: shell/projectcontroller.cpp:569
+#: shell/projectcontroller.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3174,71 +3174,71 @@ msgstr ""
 "Layihənin lınmasında və onun KDevelopə idxal edilməsində istifadəçiyə yol "
 "göstərir."
 
-#: shell/projectcontroller.cpp:584
+#: shell/projectcontroller.cpp:586
 #, kde-format
 msgctxt "@action"
 msgid "Close Project(s)"
 msgstr "Layihə(lər)i bağlayın"
 
-#: shell/projectcontroller.cpp:586
+#: shell/projectcontroller.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
 msgstr "Bütün cari seçilmiş layihələri bağlayın"
 
-#: shell/projectcontroller.cpp:592
+#: shell/projectcontroller.cpp:594
 #, kde-format
 msgctxt "@action"
 msgid "Open Configuration..."
 msgstr "Tənzimləməni açın..."
 
-#: shell/projectcontroller.cpp:598
+#: shell/projectcontroller.cpp:600
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
 msgstr "Cari layihəni göndərin..."
 
-#: shell/projectcontroller.cpp:599
+#: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
 msgstr "Göndərin..."
 
-#: shell/projectcontroller.cpp:610
+#: shell/projectcontroller.cpp:612
 #, kde-format
 msgctxt "@action"
 msgid "Open Recent Project"
 msgstr "Ən sonuncu layihəni açın"
 
-#: shell/projectcontroller.cpp:611
+#: shell/projectcontroller.cpp:613
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
 msgstr "Ən son açılan layihəni açır."
 
-#: shell/projectcontroller.cpp:616
+#: shell/projectcontroller.cpp:618
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
 msgstr "Cari fayl üçün layihəni açın"
 
-#: shell/projectcontroller.cpp:767
+#: shell/projectcontroller.cpp:769
 #, kde-format
 msgid "Project already open: %1"
 msgstr "Layihə artıq açıqdır: %1"
 
-#: shell/projectcontroller.cpp:771
+#: shell/projectcontroller.cpp:773
 #, kde-format
 msgid "No active document"
 msgstr "Aktiv sənəd yoxdur"
 
-#: shell/projectcontroller.cpp:852
+#: shell/projectcontroller.cpp:854
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
 msgstr "Layihə artıq açıqdır"
 
-#: shell/projectcontroller.cpp:855
+#: shell/projectcontroller.cpp:857
 #, kde-format
 msgid ""
 "The project you're trying to open is already open in at least one other "
@@ -3247,24 +3247,24 @@ msgstr ""
 "Açmağa cəhd etdiyiniz layihə artıq ən azı bir başqa sessiyada açıqdır. "
 "<br>Nə etmək istəyirsiniz?"
 
-#: shell/projectcontroller.cpp:859
+#: shell/projectcontroller.cpp:861
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
 msgstr "Layihəni cari sessiyaya əlavə etmək"
 
-#: shell/projectcontroller.cpp:863
+#: shell/projectcontroller.cpp:865
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
 msgstr "%1 sessiyasını açmaq"
 
-#: shell/projectcontroller.cpp:924
+#: shell/projectcontroller.cpp:926
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
 msgstr "Bu saxlama yeri URL-nu dəstəkləyən aktiv qoşma yoxdur: %1"
 
-#: shell/projectcontroller.cpp:1228
+#: shell/projectcontroller.cpp:1230
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
@@ -3586,25 +3586,25 @@ msgstr "Bütün dəyişiklikləri ləğv edin"
 msgid "(no projects)"
 msgstr "(layihə yoxdur)"
 
-#: shell/sessionchooserdialog.cpp:36
+#: shell/sessionchooserdialog.cpp:37
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete session"
 msgstr "Sesiyanı silin"
 
-#: shell/sessionchooserdialog.cpp:49
+#: shell/sessionchooserdialog.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Pick a Session"
 msgstr "Bir sessiya seçin"
 
-#: shell/sessionchooserdialog.cpp:62
+#: shell/sessionchooserdialog.cpp:63
 #, kde-format
 msgctxt "@action:button"
 msgid "Run"
 msgstr "İşə salın"
 
-#: shell/sessionchooserdialog.cpp:94
+#: shell/sessionchooserdialog.cpp:95
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -3614,30 +3614,30 @@ msgstr ""
 "Aktiv sessiya.\n"
 "pid %1, tətbiq %2, host %3"
 
-#: shell/sessionchooserdialog.cpp:96
+#: shell/sessionchooserdialog.cpp:97
 #, kde-format
 msgid "Running"
 msgstr "İşləyir"
 
-#: shell/sessionchooserdialog.cpp:191
+#: shell/sessionchooserdialog.cpp:192
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Delete Session"
 msgstr "Sessiya silinə bilmir"
 
-#: shell/sessionchooserdialog.cpp:192
+#: shell/sessionchooserdialog.cpp:193
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
 msgstr "<p>Kilidlənmiş sessiya silinə bilmir."
 
-#: shell/sessionchooserdialog.cpp:195
+#: shell/sessionchooserdialog.cpp:196
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
 msgstr "<p>%3 üzərindəki <b>%1</b> sessiyası %2 tərəfindən kilidlənib (PİD %4)"
 
-#: shell/sessionchooserdialog.cpp:203
+#: shell/sessionchooserdialog.cpp:204
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3647,7 +3647,7 @@ msgstr ""
 "<b>%1</b> sessiyası və bütün tərkibindəki ayarlar silinəcəkdir. Layihə "
 "olduğu kimi qalacaqdır. Davam etmək istəyirsiniz?"
 
-#: shell/sessionchooserdialog.cpp:204
+#: shell/sessionchooserdialog.cpp:205
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Session"
@@ -3749,7 +3749,7 @@ msgstr "Süzgəc:"
 msgid "Create New Session"
 msgstr "Yeni sessiya yaradın"
 
-#: shell/sessionlock.cpp:153
+#: shell/sessionlock.cpp:154
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -3759,13 +3759,13 @@ msgstr ""
 "İşlək %1 nümunısi (PİD: %2) aşkarlandı, Yenisini başlatmaq əvəzinə bu birini "
 "görünən etmək"
 
-#: shell/sessionlock.cpp:158
+#: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
 msgstr "İşlək %1 nümunəsinin (PİD: %2) ilişdiyi görünür"
 
-#: shell/sessionlock.cpp:164
+#: shell/sessionlock.cpp:165
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3775,7 +3775,7 @@ msgstr ""
 "Verilmiş tətbiq DBUS çağırışına cavab vermədi, həmin tətbiq çöküb və ya "
 "ilişib."
 
-#: shell/sessionlock.cpp:169
+#: shell/sessionlock.cpp:170
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3784,13 +3784,13 @@ msgstr ""
 "<em>%1</em> sessiyası kilidlənməsi alınmadı, o, artıq %3 üzərində, %2 "
 "tərəfindən kilidlənib (PİD: %4)."
 
-#: shell/sessionlock.cpp:173
+#: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr "<em>%1</em> sessiyasını kilidləmək alınmadı (kilid faylı əlçatmazdır)."
 
-#: shell/sessionlock.cpp:177
+#: shell/sessionlock.cpp:178
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3800,25 +3800,25 @@ msgstr ""
 "<p>Lütfən, problem yaradan tətbiq nümunəsini bağlayın və ya başlatmaq üçün "
 "başqa sessiyanı seçin.</p>"
 
-#: shell/sessionlock.cpp:183
+#: shell/sessionlock.cpp:184
 #, kde-format
 msgctxt "@action:button"
 msgid "Retry Startup"
 msgstr "Başlatmanı təkrarlayın"
 
-#: shell/sessionlock.cpp:186
+#: shell/sessionlock.cpp:187
 #, kde-format
 msgctxt "@action:button"
 msgid "Choose Another Session"
 msgstr "Başqa sessiyanı seçin"
 
-#: shell/sessionlock.cpp:189
+#: shell/sessionlock.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
 msgstr "%1 sessiyasının kilidlənməsi alınmadı"
 
-#: shell/sessionlock.cpp:196
+#: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
@@ -5034,7 +5034,7 @@ msgctxt "@action:button"
 msgid "Delete"
 msgstr "Silin"
 
-#: shell/textdocument.cpp:436
+#: shell/textdocument.cpp:437
 #, kde-format
 msgid ""
 "The file \"%1\" is modified on disk.\n"
@@ -5046,13 +5046,13 @@ msgstr ""
 "Onun üzərinə yazmaq istəyirsinizə əminsiniz? (Xarici dəyişikliklər "
 "itiriləcəkdir)."
 
-#: shell/textdocument.cpp:439
+#: shell/textdocument.cpp:441
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
 msgstr "Sənəd xarici proqramla dəyişdirilib"
 
-#: shell/textdocument.cpp:703
+#: shell/textdocument.cpp:705
 #, kde-format
 msgid " Line: %1 Col: %2 "
 msgstr " Sətir: %1 Süt: %2 "
@@ -5498,7 +5498,7 @@ msgstr "Tapşırıq ləğv edildi"
 msgid "Run all tests in %1"
 msgstr "%1 üzərində bütün testləri işə salın"
 
-#: util/shellutils.cpp:80
+#: util/shellutils.cpp:79
 #, kde-format
 msgid ""
 "You don't have write permissions for the following files; add write "
@@ -5528,12 +5528,12 @@ msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Ötürün"
 
-#: util/shellutils.cpp:97
+#: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
 msgstr "Bəzi fayllar üçün yazmaq icazəsi əlavə edilə bilmədi"
 
-#: util/shellutils.cpp:98
+#: util/shellutils.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
@@ -5574,31 +5574,31 @@ msgctxt "@action:inmenu"
 msgid "Branches..."
 msgstr "Bölmələr..."
 
-#: vcs/dvcs/ui/branchmanager.cpp:37
+#: vcs/dvcs/ui/branchmanager.cpp:38
 #, kde-format
 msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Bölmələr meneceri"
 
-#: vcs/dvcs/ui/branchmanager.cpp:107
+#: vcs/dvcs/ui/branchmanager.cpp:108
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Yeni bölmə yaratmadan öncə siyahıdan əsas bölməni seçməlisiniz."
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Yeni bölmə"
 
-#: vcs/dvcs/ui/branchmanager.cpp:112
+#: vcs/dvcs/ui/branchmanager.cpp:113
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Yeni bölmənin adı:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:119
+#: vcs/dvcs/ui/branchmanager.cpp:120
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5607,7 +5607,7 @@ msgstr ""
 "\"%1\" bölməsi artıq mövcuddur.\n"
 "Lütfən, başqa ad seçin."
 
-#: vcs/dvcs/ui/branchmanager.cpp:133
+#: vcs/dvcs/ui/branchmanager.cpp:134
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -5619,7 +5619,7 @@ msgstr ""
 "Hal-hazırda \"%1\" bölməsində.\n"
 "Onu silmək üçün, lütfən başqa bölmə seçin."
 
-#: vcs/dvcs/ui/branchmanager.cpp:140
+#: vcs/dvcs/ui/branchmanager.cpp:141
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
@@ -5688,7 +5688,7 @@ msgid "The same as git branch -D"
 msgstr "git bölməsi -D ilə eyni"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
-#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:69
+#: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
 #, kde-format
 msgctxt "@action:button"
 msgid "Rename"
@@ -5748,12 +5748,12 @@ msgctxt "@label:textbox"
 msgid "Commit message:"
 msgstr "Göndəriş ismarıcı:"
 
-#: vcs/models/brancheslistmodel.cpp:63
+#: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
 msgid "Branch \"%1\" already exists."
 msgstr "\"%1\" bölməsi artıq mövcuddur."
 
-#: vcs/models/brancheslistmodel.cpp:68
+#: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
 msgid "Are you sure you want to rename \"%1\" to \"%2\"?"
 msgstr "\"%1\" adını \"%2\" kimi dəyimək istədiyinizə əminsiniz?"

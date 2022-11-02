@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2011-07-27 20:55+0300\n"
 "Last-Translator: Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -167,7 +167,7 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr ""
 
-#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@title:window"
@@ -219,120 +219,120 @@ msgctxt "@info:whatsthis"
 msgid "Build Items:"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:142
+#: projectmanagerviewplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "Projektai"
 
-#: projectmanagerviewplugin.cpp:147
+#: projectmanagerviewplugin.cpp:148
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action"
 msgid "Build Selection"
 msgstr "Konfigūruoti pasirinkimą"
 
-#: projectmanagerviewplugin.cpp:148
+#: projectmanagerviewplugin.cpp:149
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:154
+#: projectmanagerviewplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action"
 msgid "Install Selection"
 msgstr "Konfigūruoti pasirinkimą"
 
-#: projectmanagerviewplugin.cpp:155
+#: projectmanagerviewplugin.cpp:156
 #, fuzzy, kde-format
 #| msgid "Install"
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "Diegti"
 
-#: projectmanagerviewplugin.cpp:161
+#: projectmanagerviewplugin.cpp:162
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action"
 msgid "Clean Selection"
 msgstr "Konfigūruoti pasirinkimą"
 
-#: projectmanagerviewplugin.cpp:162
+#: projectmanagerviewplugin.cpp:163
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:167
+#: projectmanagerviewplugin.cpp:168
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action"
 msgid "Configure Selection"
 msgstr "Konfigūruoti pasirinkimą"
 
-#: projectmanagerviewplugin.cpp:169
+#: projectmanagerviewplugin.cpp:170
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "Konfigūruoti pasirinkimą"
 
-#: projectmanagerviewplugin.cpp:174
+#: projectmanagerviewplugin.cpp:175
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action"
 msgid "Prune Selection"
 msgstr "Konfigūruoti pasirinkimą"
 
-#: projectmanagerviewplugin.cpp:175
+#: projectmanagerviewplugin.cpp:176
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:281
+#: projectmanagerviewplugin.cpp:282
 #, fuzzy, kde-format
 #| msgid "Create File"
 msgctxt "@action:inmenu"
 msgid "Create &File..."
 msgstr "Sukurti failą"
 
-#: projectmanagerviewplugin.cpp:287
+#: projectmanagerviewplugin.cpp:288
 #, fuzzy, kde-format
 #| msgid "Create Folder"
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
 msgstr "Sukurti aplanką"
 
-#: projectmanagerviewplugin.cpp:294
+#: projectmanagerviewplugin.cpp:295
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:298
+#: projectmanagerviewplugin.cpp:299
 #, fuzzy, kde-format
 #| msgid "Install"
 msgctxt "@action:inmenu"
 msgid "&Install"
 msgstr "Diegti"
 
-#: projectmanagerviewplugin.cpp:302
+#: projectmanagerviewplugin.cpp:303
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:306
+#: projectmanagerviewplugin.cpp:307
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:313
+#: projectmanagerviewplugin.cpp:314
 #, fuzzy, kde-format
 #| msgid "Close Project"
 #| msgid_plural "Close Projects"
@@ -344,40 +344,40 @@ msgstr[1] "Užverti projektus"
 msgstr[2] "Užverti projektus"
 msgstr[3] "Užverti projektus"
 
-#: projectmanagerviewplugin.cpp:319
+#: projectmanagerviewplugin.cpp:320
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:350
+#: projectmanagerviewplugin.cpp:351
 #, fuzzy, kde-format
 #| msgid "Remove"
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
 msgstr "Pašalinti"
 
-#: projectmanagerviewplugin.cpp:354
+#: projectmanagerviewplugin.cpp:355
 #, fuzzy, kde-format
 #| msgid "Rename..."
 msgctxt "@action:inmenu"
 msgid "Re&name..."
 msgstr "Pervadinti..."
 
-#: projectmanagerviewplugin.cpp:360
+#: projectmanagerviewplugin.cpp:361
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:547
+#: projectmanagerviewplugin.cpp:548
 #, fuzzy, kde-format
 #| msgid "Create Folder in %1"
 msgctxt "@title:window"
 msgid "Create Folder in %1"
 msgstr "Sukurti aplanką %1"
 
-#: projectmanagerviewplugin.cpp:548
+#: projectmanagerviewplugin.cpp:549
 #, fuzzy, kde-format
 #| msgid "Folder Name"
 msgctxt "@label:textbox"
@@ -393,49 +393,49 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: projectmanagerviewplugin.cpp:603
+#: projectmanagerviewplugin.cpp:602
 #, fuzzy, kde-format
 #| msgid "Delete Files"
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "Pašalinti failus"
 
-#: projectmanagerviewplugin.cpp:656
+#: projectmanagerviewplugin.cpp:655
 #, fuzzy, kde-format
 #| msgid "Rename"
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "Pervadinti"
 
-#: projectmanagerviewplugin.cpp:657
+#: projectmanagerviewplugin.cpp:656
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:669
+#: projectmanagerviewplugin.cpp:668
 #, kde-format
 msgid "There is already a file named '%1'"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:672
+#: projectmanagerviewplugin.cpp:671
 #, kde-format
 msgid "Could not rename '%1'"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:675
+#: projectmanagerviewplugin.cpp:674
 #, kde-format
 msgid "'%1' is not a valid file name"
 msgstr ""
 
-#: projectmanagerviewplugin.cpp:689
+#: projectmanagerviewplugin.cpp:688
 #, fuzzy, kde-format
 #| msgid "Create File in %1"
 msgctxt "@title:window"
 msgid "Create File in %1"
 msgstr "Sukurti failą %1"
 
-#: projectmanagerviewplugin.cpp:689
+#: projectmanagerviewplugin.cpp:688
 #, fuzzy, kde-format
 #| msgid "File Name"
 msgctxt "@label:textbox"

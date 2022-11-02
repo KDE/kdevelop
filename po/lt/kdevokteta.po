@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevokteta\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2010-08-22 05:53+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -43,12 +43,12 @@ msgstr ""
 msgid "Main Toolbar"
 msgstr ""
 
-#: oktetadocument.cpp:124
+#: oktetadocument.cpp:125
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
 
-#: oktetadocument.cpp:125
+#: oktetadocument.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-10-20 12:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -131,13 +131,13 @@ msgstr "Hata Ayıklayıcı Çöktü"
 msgid "Process crashed"
 msgstr "Süreç çöktü"
 
-#: midebuggerplugin.cpp:109
+#: midebuggerplugin.cpp:110
 #, kde-format
 msgctxt "@action"
 msgid "Examine Core File with %1"
 msgstr "Çekirdek Dosyayı %1 ile Gözden Geçir"
 
-#: midebuggerplugin.cpp:111
+#: midebuggerplugin.cpp:112
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -152,31 +152,31 @@ msgstr ""
 "görüntüsünü sunar ve bu görüntü çökme sonrası çözümleme yapabilmenizi sağlar."
 "</p>"
 
-#: midebuggerplugin.cpp:123
+#: midebuggerplugin.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with %1"
 msgstr "Sürece %1 ile İliştir"
 
-#: midebuggerplugin.cpp:125
+#: midebuggerplugin.cpp:126
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr "<b>Sürece iliştir</b><p>Hata ayıklayıcıyı bir sürece iliştirir.</p>"
 
-#: midebuggerplugin.cpp:138
+#: midebuggerplugin.cpp:139
 #, kde-format
 msgid "KDevelop (%1) - %2"
 msgstr "KDevelop (%1) - %2"
 
-#: midebuggerplugin.cpp:212
+#: midebuggerplugin.cpp:213
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Evaluate: %1"
 msgstr "Değerlendir: %1"
 
-#: midebuggerplugin.cpp:214
+#: midebuggerplugin.cpp:215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -185,13 +185,13 @@ msgid ""
 msgstr ""
 "<b>İfadeyi değerlendir</b><p>İmleç altındaki ifadenin değerini gösterir.</p>"
 
-#: midebuggerplugin.cpp:222
+#: midebuggerplugin.cpp:223
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Watch: %1"
 msgstr "İzle: %1"
 
-#: midebuggerplugin.cpp:224
+#: midebuggerplugin.cpp:225
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -201,12 +201,12 @@ msgstr ""
 "<b>İzleme ifadesi</b><p>Değişkenler/İzleme listesine imleç altına ifade "
 "ekler.</p>"
 
-#: midebuggerplugin.cpp:237
+#: midebuggerplugin.cpp:238
 #, kde-format
 msgid "Choose a core file to examine..."
 msgstr "Gözden geçirmek için bir çekirdek dosyası seçin..."
 
-#: midebuggerplugin.cpp:242 midebuggerplugin.cpp:262
+#: midebuggerplugin.cpp:243 midebuggerplugin.cpp:263
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -215,23 +215,23 @@ msgstr ""
 "Bir programın hataları zaten ayıklanıyor. Çalışmakta olan hata ayıklama "
 "oturumunu sonlandırıp sürdürmek istiyor musunuz?"
 
-#: midebuggerplugin.cpp:244 midebuggerplugin.cpp:264
+#: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr "Geçerli Oturumu İptal Et"
 
-#: midebuggerplugin.cpp:257
+#: midebuggerplugin.cpp:258
 #, kde-format
 msgid "Choose a process to attach to..."
 msgstr "Kendisine iliştirilecek bir süreç seçin..."
 
-#: midebuggerplugin.cpp:281
+#: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr "%1 sürecine iliştirilmiyor: Hata ayıklayıcı kendine iliştirilemez."
 
-#: midebuggerplugin.cpp:301
+#: midebuggerplugin.cpp:302
 #, kde-format
 msgid "Debugger"
 msgstr "Hata Ayıklayıcı"

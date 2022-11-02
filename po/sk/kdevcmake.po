@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -362,7 +362,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Reťazce"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:345
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -374,24 +374,24 @@ msgstr ""
 "Adresár %1 sa ide odstrániť zo zoznamu v KDevelop.\n"
 "Chcete, aby ho KDevelop odstránil aj v súborovom systéme?"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:349
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:354
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Nemôžem odstrániť: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:400
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:405
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

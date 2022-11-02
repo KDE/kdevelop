@@ -70,7 +70,7 @@ msgid ""
 "The number of spaces per tab is controlled by the editor."
 msgstr ""
 "Nombre d'espais que es convertiran en una tabulació.\n"
-"El nombre d'espais per tabulació és controlat en l'editor."
+"El nombre d'espais per tabulació és controlat per l'editor."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
 #: astyle_preferences.ui:104

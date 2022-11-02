@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-11 00:43+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-03-11 11:05+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "(running)"
 msgstr "(выполняется)"
 
-#: debuggerplugin.cpp:28 lldblauncher.cpp:44
+#: debuggerplugin.cpp:28 lldblauncher.cpp:45
 #, kde-format
 msgid "LLDB"
 msgstr "LLDB"
@@ -35,22 +35,22 @@ msgctxt "@title:window"
 msgid "LLDB Console"
 msgstr "Консоль LLDB"
 
-#: debugsession.cpp:136
+#: debugsession.cpp:137
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
 msgstr "Попытка выполнить команду пользователя на неподдерживаемой версии LLDB"
 
-#: debugsession.cpp:335
+#: debugsession.cpp:336
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
 msgstr "<b>Не удалось запустить отладчик:</b><br />"
 
-#: debugsession.cpp:346
+#: debugsession.cpp:347
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
 msgstr "<b>Ошибка соединения с удалённой целью:</b><br />"
 
-#: debugsession.cpp:359
+#: debugsession.cpp:360
 #, kde-format
 msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
@@ -59,7 +59,7 @@ msgstr ""
 "<b>Не удалось загрузить файл дампа</b><p>Отладчик сообщил о следующей ошибке:"
 "<p><tt>%1"
 
-#: debugsession.cpp:390
+#: debugsession.cpp:391
 #, kde-format
 msgid ""
 "<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
@@ -72,12 +72,12 @@ msgstr ""
 "https://llvm.org/bugs/show_bug.cgi?id=28026.<br/>Консоль отладчика будет "
 "отключена для предотвращения сбоя.<br/>Продолжить?"
 
-#: debugsession.cpp:394
+#: debugsession.cpp:395
 #, kde-format
 msgid "LLDB Version Unsupported"
 msgstr "Неподдерживаемая версия LLDB"
 
-#: debugsession.cpp:442
+#: debugsession.cpp:441
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
@@ -91,12 +91,12 @@ msgstr ""
 msgid "Debugger Toolbar"
 msgstr "Панель инструментов отладки"
 
-#: lldblauncher.cpp:49
+#: lldblauncher.cpp:50
 #, kde-format
 msgid "Debug a native application in LLDB"
 msgstr "Выполнить отладку обычного приложения в LLDB"
 
-#: lldblauncher.cpp:73
+#: lldblauncher.cpp:75
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -105,7 +105,7 @@ msgstr ""
 "Отладка программы уже выполняется. Прервать текущий сеанс отладки и "
 "продолжить запуск?"
 
-#: lldblauncher.cpp:75
+#: lldblauncher.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"

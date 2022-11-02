@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2013-01-21 17:31+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -42,12 +42,12 @@ msgstr "書籤"
 msgid "Main Toolbar"
 msgstr ""
 
-#: oktetadocument.cpp:124
+#: oktetadocument.cpp:125
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "文件 %1 有未儲存的變更。您要儲存它嗎？"
 
-#: oktetadocument.cpp:125
+#: oktetadocument.cpp:126
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@title:window"

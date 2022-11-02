@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-04-17 20:49+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -117,68 +117,68 @@ msgstr "Súbor %1 sa nedá vytvoriť."
 msgid "Project Templates"
 msgstr "Šablóny projektov"
 
-#: projectselectionpage.cpp:56
+#: projectselectionpage.cpp:57
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Kategória"
 
-#: projectselectionpage.cpp:57
+#: projectselectionpage.cpp:58
 #, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Typ projektu"
 
-#: projectselectionpage.cpp:67
+#: projectselectionpage.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Získať viac šablón"
 
-#: projectselectionpage.cpp:74
+#: projectselectionpage.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Načítať šablónu zo súboru"
 
-#: projectselectionpage.cpp:170
+#: projectselectionpage.cpp:171
 #, kde-format
 msgid "Invalid location"
 msgstr "Neplatné umiestnenie"
 
-#: projectselectionpage.cpp:177
+#: projectselectionpage.cpp:178
 #, kde-format
 msgid "Empty project name"
 msgstr "Prázdny názov projektu"
 
-#: projectselectionpage.cpp:198
+#: projectselectionpage.cpp:199
 #, kde-format
 msgid "Invalid project name"
 msgstr "Neplatný názov projektu"
 
-#: projectselectionpage.cpp:217
+#: projectselectionpage.cpp:218
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "Nie je možné vytvoriť podadresáre, chýbajú oprávnenia na: %1"
 
-#: projectselectionpage.cpp:232
+#: projectselectionpage.cpp:233
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Neplatný šablóna projekty, prosím vyberte listovú položku"
 
-#: projectselectionpage.cpp:245
+#: projectselectionpage.cpp:246
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "Cesta už existuje a obsahuje súbory. Otvorte to ako projekt."
 
-#: projectselectionpage.cpp:291
+#: projectselectionpage.cpp:293
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "Zadaná cesta už existuje a obsahuje súbory. Určite chcete pokračovať?"
 
-#: projectselectionpage.cpp:308
+#: projectselectionpage.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

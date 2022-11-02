@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-09-26 10:41+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -53,87 +53,87 @@ msgid "Committing failed. See Version Control tool view."
 msgstr ""
 "No s'ha pogut fer l'entrega. Vegeu la vista d'eina del Control de versions."
 
-#: diffviewsctrl.cpp:50
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "Marca les línies o el fragment seleccionat"
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "Desmarca les línies o el fragment seleccionat"
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "Revertix les línies o el fragment seleccionat"
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr "Ves a la línia en el codi font"
 
-#: diffviewsctrl.cpp:101
+#: diffviewsctrl.cpp:102
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "Desmarca les línies seleccionades"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:103
 #, kde-format
 msgid "Stage selected lines"
 msgstr "Marca les línies seleccionades"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:104
 #, kde-format
 msgid "Revert selected lines"
 msgstr "Revertix les línies seleccionades"
 
-#: diffviewsctrl.cpp:105
+#: diffviewsctrl.cpp:106
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "Desmarca el fragment seleccionat"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:107
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "Marca el fragment seleccionat"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "Revertix el fragment seleccionat"
 
-#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:170
+#: diffviewsctrl.cpp:171
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (marcat)"
 
-#: diffviewsctrl.cpp:172
+#: diffviewsctrl.cpp:173
 #, kde-format
 msgid "Staged (%1)"
 msgstr "Marcat (%1)"
 
-#: diffviewsctrl.cpp:174
+#: diffviewsctrl.cpp:175
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "Sense marcar (%1)"
 
-#: diffviewsctrl.cpp:176
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (sense marcar)"
 
-#: diffviewsctrl.cpp:330
+#: diffviewsctrl.cpp:332
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -142,7 +142,7 @@ msgstr ""
 "Les línies seleccionades es revertiran i es perdran els canvis. Esta "
 "operació no es pot desfer. Voleu continuar?"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:334
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -206,68 +206,68 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "Escriu a la configuració global"
 
-#: gitplugin.cpp:181
+#: gitplugin.cpp:182
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 "No s'ha pogut trobar l'executable de «git». Està instal·lat en el sistema?"
 
-#: gitplugin.cpp:190
+#: gitplugin.cpp:191
 #, kde-format
 msgid "Git Commit"
 msgstr "Publicació de Git («commit»)"
 
-#: gitplugin.cpp:242
+#: gitplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "Rebase"
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Modificacions temporals de Git («stashes»)"
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:245
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "Gestor de modificacions temporals"
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "Publica («push») la modificació temporal"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "Aplica («pop») una modificació temporal"
 
-#: gitplugin.cpp:279
+#: gitplugin.cpp:280
 #, kde-format
 msgid "error: %1"
 msgstr "error: %1"
 
-#: gitplugin.cpp:378 gitplugin.cpp:389
+#: gitplugin.cpp:379 gitplugin.cpp:390
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "No heu indicat cap llista de fitxers"
 
-#: gitplugin.cpp:451
+#: gitplugin.cpp:452
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "No s'han pogut restablir els canvis (la llista de camins està buida)"
 
-#: gitplugin.cpp:486
+#: gitplugin.cpp:487
 #, kde-format
 msgid "Could not revert changes"
 msgstr "No es poden revertir els canvis"
 
-#: gitplugin.cpp:496
+#: gitplugin.cpp:498
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -275,39 +275,39 @@ msgstr ""
 "Els fitxers següents tenen canvis sense entregar que es perdran. Voleu "
 "continuar?"
 
-#: gitplugin.cpp:521
+#: gitplugin.cpp:523
 #, kde-format
 msgid "No files or message specified"
 msgstr "No s'ha especificat cap fitxer o missatge"
 
-#: gitplugin.cpp:525 gitplugin.cpp:544
+#: gitplugin.cpp:527 gitplugin.cpp:546
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "No s'ha especificat el correu o nom per a Git"
 
-#: gitplugin.cpp:541
+#: gitplugin.cpp:543
 #, kde-format
 msgid "No message specified"
 msgstr "No s'ha especificat cap missatge"
 
-#: gitplugin.cpp:615
+#: gitplugin.cpp:617
 #, kde-format
 msgid "No files to remove"
 msgstr "No hi ha fitxers per a eliminar"
 
-#: gitplugin.cpp:855
+#: gitplugin.cpp:858
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 "Hi ha canvis pendents, voleu fer primer una modificació temporal («stash»)?"
 
-#: gitplugin.cpp:856
+#: gitplugin.cpp:859
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "Modificació temporal («stash»)"
 
-#: gitplugin.cpp:857
+#: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -607,43 +607,43 @@ msgstr "Per a publicar els canvis, primer cal seleccionar un projecte"
 msgid "Please stage some changes before committing."
 msgstr "Marqueu alguns canvis abans de publicar."
 
-#: stashmanagerdialog.cpp:30
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "Gestor de modificacions temporals"
 
-#: stashmanagerdialog.cpp:117
+#: stashmanagerdialog.cpp:118
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "Segur que voleu llençar la modificació temporal «%1»?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "Llença («Drop»)"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Modificacions temporals de Git"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "Nom de la branca nova:"
 
-#: stashmanagerdialog.cpp:148
+#: stashmanagerdialog.cpp:149
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr "%1. %2: %3"
 
-#: stashmanagerdialog.cpp:158
+#: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
 msgstr "%1 creat %2"

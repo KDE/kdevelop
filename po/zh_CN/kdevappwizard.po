@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-10-30 07:48\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -118,68 +118,68 @@ msgstr "无法创建文件 %1。"
 msgid "Project Templates"
 msgstr "工程模板"
 
-#: projectselectionpage.cpp:56
+#: projectselectionpage.cpp:57
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "类别"
 
-#: projectselectionpage.cpp:57
+#: projectselectionpage.cpp:58
 #, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "工程类型"
 
-#: projectselectionpage.cpp:67
+#: projectselectionpage.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "获取更多模板"
 
-#: projectselectionpage.cpp:74
+#: projectselectionpage.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "从文件加载模板"
 
-#: projectselectionpage.cpp:170
+#: projectselectionpage.cpp:171
 #, kde-format
 msgid "Invalid location"
 msgstr "无效位置"
 
-#: projectselectionpage.cpp:177
+#: projectselectionpage.cpp:178
 #, kde-format
 msgid "Empty project name"
 msgstr "空工程名称"
 
-#: projectselectionpage.cpp:198
+#: projectselectionpage.cpp:199
 #, kde-format
 msgid "Invalid project name"
 msgstr "无效的工程名称"
 
-#: projectselectionpage.cpp:217
+#: projectselectionpage.cpp:218
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "无法创建子目录，缺少权限于：%1"
 
-#: projectselectionpage.cpp:232
+#: projectselectionpage.cpp:233
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "无效的工程模板，请选择子项目"
 
-#: projectselectionpage.cpp:245
+#: projectselectionpage.cpp:246
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "路径已经存在并包含文件。将它作为工程打开。"
 
-#: projectselectionpage.cpp:291
+#: projectselectionpage.cpp:293
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr "指定的路径已经存在并且包含文件。您确定要继续吗？"
 
-#: projectselectionpage.cpp:308
+#: projectselectionpage.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-09-06 22:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,62 +21,62 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.08.0\n"
 
-#: openwithplugin.cpp:133
+#: openwithplugin.cpp:134
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
 msgstr "Diğer..."
 
-#: openwithplugin.cpp:144
+#: openwithplugin.cpp:145
 #, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Birlikte Aç"
 
-#: openwithplugin.cpp:149
+#: openwithplugin.cpp:150
 #, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Gömülü Düzenleyiciler"
 
-#: openwithplugin.cpp:153
+#: openwithplugin.cpp:154
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Dış Uygulamalar"
 
-#: openwithplugin.cpp:160
+#: openwithplugin.cpp:161
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Aç"
 
-#: openwithplugin.cpp:180
+#: openwithplugin.cpp:181
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Öntanımlı Düzenleyici"
 
-#: openwithplugin.cpp:258
+#: openwithplugin.cpp:259
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr ""
 "'%1' dosyalarının tümünü öntanımlı olarak %2 ile açmak istiyor musunuz?"
 
-#: openwithplugin.cpp:260
+#: openwithplugin.cpp:261
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
 msgstr "Öntanımlı olarak ayarlansın mı?"
 
-#: openwithplugin.cpp:261
+#: openwithplugin.cpp:262
 #, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
 msgstr "Öntanımlı Olarak Ayarla"
 
-#: openwithplugin.cpp:262
+#: openwithplugin.cpp:263
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"

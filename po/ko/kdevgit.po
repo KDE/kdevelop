@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-07-13 13:06+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -47,87 +47,87 @@ msgstr "스테이지하지 않은 편집 되돌리기"
 msgid "Committing failed. See Version Control tool view."
 msgstr "커밋이 실패했습니다. 버전 관리 도구 보기를 참조하십시오."
 
-#: diffviewsctrl.cpp:50
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "선택한 줄이나 조각 스테이지"
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "선택한 줄이나 조각 스테이지 해제"
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "선택한 줄이나 조각 되돌리기"
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr "소스 코드의 줄로 이동"
 
-#: diffviewsctrl.cpp:101
+#: diffviewsctrl.cpp:102
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "선택한 줄 스테이지 해제"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:103
 #, kde-format
 msgid "Stage selected lines"
 msgstr "선택한 줄 스테이지"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:104
 #, kde-format
 msgid "Revert selected lines"
 msgstr "선택한 줄 되돌리기"
 
-#: diffviewsctrl.cpp:105
+#: diffviewsctrl.cpp:106
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "선택한 조각 스테이지 해제"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:107
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "선택한 조각 스테이지"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "선택한 조각 되돌리기"
 
-#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:170
+#: diffviewsctrl.cpp:171
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1(스테이지됨)"
 
-#: diffviewsctrl.cpp:172
+#: diffviewsctrl.cpp:173
 #, kde-format
 msgid "Staged (%1)"
 msgstr "스테이지됨(%1)"
 
-#: diffviewsctrl.cpp:174
+#: diffviewsctrl.cpp:175
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "스테이지 해제됨(%1)"
 
-#: diffviewsctrl.cpp:176
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1(스테이지 해제됨)"
 
-#: diffviewsctrl.cpp:330
+#: diffviewsctrl.cpp:332
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
@@ -136,7 +136,7 @@ msgstr ""
 "선택한 줄을 되돌리며 변경 사항이 손실됩니다. 이 작업은 실행 취소할 수 없습니"
 "다. 계속 진행하시겠습니까?"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:334
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -198,67 +198,67 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "전역 설정에 저장"
 
-#: gitplugin.cpp:181
+#: gitplugin.cpp:182
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "git 실행 파일을 찾을 수 없습니다. 시스템에 설치되어 있습니까?"
 
-#: gitplugin.cpp:190
+#: gitplugin.cpp:191
 #, kde-format
 msgid "Git Commit"
 msgstr "Git 커밋"
 
-#: gitplugin.cpp:242
+#: gitplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "리베이스"
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git 스태시"
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:245
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "스태시 관리자"
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "스태시 푸시"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "스태시 팝"
 
-#: gitplugin.cpp:279
+#: gitplugin.cpp:280
 #, kde-format
 msgid "error: %1"
 msgstr "오류: %1"
 
-#: gitplugin.cpp:378 gitplugin.cpp:389
+#: gitplugin.cpp:379 gitplugin.cpp:390
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "파일 목록을 지정하지 않았음"
 
-#: gitplugin.cpp:451
+#: gitplugin.cpp:452
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "변경 사항을 되돌릴 수 없음(경로 목록이 비어 있음)"
 
-#: gitplugin.cpp:486
+#: gitplugin.cpp:487
 #, kde-format
 msgid "Could not revert changes"
 msgstr "변경 사항을 되돌릴 수 없음"
 
-#: gitplugin.cpp:496
+#: gitplugin.cpp:498
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
@@ -266,38 +266,38 @@ msgstr ""
 "다음 파일에 커밋하지 않은 변경 사항이 있으며 손실됩니다. 계속 진행하시겠습니"
 "까?"
 
-#: gitplugin.cpp:521
+#: gitplugin.cpp:523
 #, kde-format
 msgid "No files or message specified"
 msgstr "파일이나 메시지가 지정되지 않았음"
 
-#: gitplugin.cpp:525 gitplugin.cpp:544
+#: gitplugin.cpp:527 gitplugin.cpp:546
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "Git 이름이나 이메일이 지정되지 않았음"
 
-#: gitplugin.cpp:541
+#: gitplugin.cpp:543
 #, kde-format
 msgid "No message specified"
 msgstr "메시지가 지정되지 않았음"
 
-#: gitplugin.cpp:615
+#: gitplugin.cpp:617
 #, kde-format
 msgid "No files to remove"
 msgstr "삭제할 파일 없음"
 
-#: gitplugin.cpp:855
+#: gitplugin.cpp:858
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "대기 중인 변경 사항이 있습니다. 스태시에 추가하시겠습니까?"
 
-#: gitplugin.cpp:856
+#: gitplugin.cpp:859
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr "스태시"
 
-#: gitplugin.cpp:857
+#: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -597,43 +597,43 @@ msgstr "변경 사항을 커밋하려면 프로젝트를 선택하십시오"
 msgid "Please stage some changes before committing."
 msgstr "커밋하기 전에 변경 사항을 스테이지하십시오."
 
-#: stashmanagerdialog.cpp:30
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "스태시 관리자"
 
-#: stashmanagerdialog.cpp:117
+#: stashmanagerdialog.cpp:118
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "스태시 '%1'을(를) 삭제하시겠습니까?"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "삭제"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git 스태시"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "새 브랜치 이름 입력:"
 
-#: stashmanagerdialog.cpp:148
+#: stashmanagerdialog.cpp:149
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr ""
 
-#: stashmanagerdialog.cpp:158
+#: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
 msgstr ""

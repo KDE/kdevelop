@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2016-01-29 04:41+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: qmakebuilderpreferences.cpp:80
+#: qmakebuilderpreferences.cpp:81
 #, fuzzy, kde-format
 #| msgid "QMake"
 msgctxt "@title:tab"
 msgid "QMake"
 msgstr "QMake"
 
-#: qmakebuilderpreferences.cpp:138
+#: qmakebuilderpreferences.cpp:140
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -37,13 +37,13 @@ msgstr ""
 "%1 kataloog eemaldatakse KDevelopi nimekirjast.\n"
 "Kas KDevelop peaks selle eemaldama ka failisüsteemist?"
 
-#: qmakebuilderpreferences.cpp:141
+#: qmakebuilderpreferences.cpp:144
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: qmakebuilderpreferences.cpp:146
+#: qmakebuilderpreferences.cpp:149
 #, kde-format
 msgid "Could not remove: %1."
 msgstr "Eemaldamine nurjus: %1."

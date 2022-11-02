@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevokteta\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -42,12 +42,12 @@ msgstr "خەتكۈشلەر"
 msgid "Main Toolbar"
 msgstr ""
 
-#: oktetadocument.cpp:124
+#: oktetadocument.cpp:125
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "پۈتۈك «%1» نىڭ ساقلانمىغان ئۆزگەرتىشلىرى بار. بۇلارنى ساقلامسىز؟"
 
-#: oktetadocument.cpp:125
+#: oktetadocument.cpp:126
 #, fuzzy, kde-format
 #| msgid "Close Document"
 msgctxt "@title:window"

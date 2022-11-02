@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -47,94 +47,94 @@ msgstr ""
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
 
-#: diffviewsctrl.cpp:50
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr ""
 
-#: diffviewsctrl.cpp:101
+#: diffviewsctrl.cpp:102
 #, kde-format
 msgid "Unstage selected lines"
 msgstr ""
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:103
 #, kde-format
 msgid "Stage selected lines"
 msgstr ""
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:104
 #, kde-format
 msgid "Revert selected lines"
 msgstr ""
 
-#: diffviewsctrl.cpp:105
+#: diffviewsctrl.cpp:106
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:107
 #, kde-format
 msgid "Stage selected hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Revert selected hunk"
 msgstr ""
 
-#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
 #, kde-format
 msgid "S"
 msgstr ""
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
 #, kde-format
 msgid "G"
 msgstr ""
 
-#: diffviewsctrl.cpp:170
+#: diffviewsctrl.cpp:171
 #, kde-format
 msgid "%1 (staged)"
 msgstr ""
 
-#: diffviewsctrl.cpp:172
+#: diffviewsctrl.cpp:173
 #, kde-format
 msgid "Staged (%1)"
 msgstr ""
 
-#: diffviewsctrl.cpp:174
+#: diffviewsctrl.cpp:175
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr ""
 
-#: diffviewsctrl.cpp:176
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr ""
 
-#: diffviewsctrl.cpp:330
+#: diffviewsctrl.cpp:332
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr ""
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:334
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -193,105 +193,105 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr ""
 
-#: gitplugin.cpp:181
+#: gitplugin.cpp:182
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr ""
 
-#: gitplugin.cpp:190
+#: gitplugin.cpp:191
 #, kde-format
 msgid "Git Commit"
 msgstr ""
 
-#: gitplugin.cpp:242
+#: gitplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr ""
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr ""
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:245
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr ""
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr ""
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr ""
 
-#: gitplugin.cpp:279
+#: gitplugin.cpp:280
 #, kde-format
 msgid "error: %1"
 msgstr "خاتالىق: %1"
 
-#: gitplugin.cpp:378 gitplugin.cpp:389
+#: gitplugin.cpp:379 gitplugin.cpp:390
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr ""
 
-#: gitplugin.cpp:451
+#: gitplugin.cpp:452
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr ""
 
-#: gitplugin.cpp:486
+#: gitplugin.cpp:487
 #, kde-format
 msgid "Could not revert changes"
 msgstr ""
 
-#: gitplugin.cpp:496
+#: gitplugin.cpp:498
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr ""
 
-#: gitplugin.cpp:521
+#: gitplugin.cpp:523
 #, kde-format
 msgid "No files or message specified"
 msgstr "ھۆججەت يوق ياكى ئۇچۇر بەلگىلەنمىگەن"
 
-#: gitplugin.cpp:525 gitplugin.cpp:544
+#: gitplugin.cpp:527 gitplugin.cpp:546
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr ""
 
-#: gitplugin.cpp:541
+#: gitplugin.cpp:543
 #, fuzzy, kde-format
 #| msgid "No files or message specified"
 msgid "No message specified"
 msgstr "ھۆججەت يوق ياكى ئۇچۇر بەلگىلەنمىگەن"
 
-#: gitplugin.cpp:615
+#: gitplugin.cpp:617
 #, kde-format
 msgid "No files to remove"
 msgstr ""
 
-#: gitplugin.cpp:855
+#: gitplugin.cpp:858
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr ""
 
-#: gitplugin.cpp:856
+#: gitplugin.cpp:859
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr ""
 
-#: gitplugin.cpp:857
+#: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -593,44 +593,44 @@ msgstr ""
 msgid "Please stage some changes before committing."
 msgstr ""
 
-#: stashmanagerdialog.cpp:30
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr ""
 
-#: stashmanagerdialog.cpp:117
+#: stashmanagerdialog.cpp:118
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
 #, fuzzy, kde-format
 #| msgid "Drop"
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "سۆرەپ تاشلا"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr ""
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr ""
 
-#: stashmanagerdialog.cpp:148
+#: stashmanagerdialog.cpp:149
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr ""
 
-#: stashmanagerdialog.cpp:158
+#: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
 msgstr ""

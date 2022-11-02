@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-09 00:43+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2019-09-30 18:59+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -568,35 +568,35 @@ msgctxt "@title:menu"
 msgid "External Scripts"
 msgstr "外部文稿"
 
-#: externalscriptview.cpp:30
+#: externalscriptview.cpp:31
 #, fuzzy, kde-format
 #| msgid "External Scripts"
 msgctxt "@title:window"
 msgid "External Scripts"
 msgstr "外部文稿"
 
-#: externalscriptview.cpp:48
+#: externalscriptview.cpp:49
 #, fuzzy, kde-format
 #| msgid "Add External Script"
 msgctxt "@action"
 msgid "Add External Script"
 msgstr "新增外部文稿"
 
-#: externalscriptview.cpp:53
+#: externalscriptview.cpp:54
 #, fuzzy, kde-format
 #| msgid "Edit External Script"
 msgctxt "@action"
 msgid "Edit External Script"
 msgstr "編輯外部文稿"
 
-#: externalscriptview.cpp:58
+#: externalscriptview.cpp:59
 #, fuzzy, kde-format
 #| msgid "Remove External Script"
 msgctxt "@action"
 msgid "Remove External Script"
 msgstr "移除外部文稿"
 
-#: externalscriptview.cpp:145
+#: externalscriptview.cpp:146
 #, kde-format
 msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
@@ -605,14 +605,14 @@ msgstr ""
 "<p>您確定要移除為 %1 設定的外部文稿嗎？</p> <p><i>注意：</i>文稿本身不會被移"
 "除。</p>"
 
-#: externalscriptview.cpp:148
+#: externalscriptview.cpp:149
 #, fuzzy, kde-format
 #| msgid "Confirm External Script Removal"
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
 msgstr "確認移除外部文稿"
 
-#: externalscriptview.cpp:149
+#: externalscriptview.cpp:150
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"

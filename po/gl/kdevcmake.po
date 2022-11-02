@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2020-02-16 09:30+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -412,7 +412,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Cadeas"
 
-#: settings/cmakepreferences.cpp:343
+#: settings/cmakepreferences.cpp:345
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -424,25 +424,25 @@ msgstr ""
 "Estase a piques de retirar o directorio %1 da lista de KDevelop.\n"
 "Quere que KDevelop o elimine tamén do sistema de ficheiros?"
 
-#: settings/cmakepreferences.cpp:346
+#: settings/cmakepreferences.cpp:349
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:352
+#: settings/cmakepreferences.cpp:354
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Non se puido retirar: %1"
 
-#: settings/cmakepreferences.cpp:398
+#: settings/cmakepreferences.cpp:400
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:403
+#: settings/cmakepreferences.cpp:405
 #, fuzzy, kde-format
 #| msgid "Configure CMake settings"
 msgctxt "@title:tab"

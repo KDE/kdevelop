@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-03-15 11:15+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -175,7 +175,7 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "Удалить текущий выбранный объект из комплекта сборки."
 
-#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
 #, kde-format
 msgctxt "@title:window"
 msgid "Projects"
@@ -225,109 +225,109 @@ msgctxt "@info:whatsthis"
 msgid "Build Items:"
 msgstr "Элементы сборки:"
 
-#: projectmanagerviewplugin.cpp:142
+#: projectmanagerviewplugin.cpp:143
 #, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "Собрать все проекты"
 
-#: projectmanagerviewplugin.cpp:147
+#: projectmanagerviewplugin.cpp:148
 #, kde-format
 msgctxt "@action"
 msgid "Build Selection"
 msgstr "Собрать выделенное"
 
-#: projectmanagerviewplugin.cpp:148
+#: projectmanagerviewplugin.cpp:149
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
 msgstr "Собрать"
 
-#: projectmanagerviewplugin.cpp:154
+#: projectmanagerviewplugin.cpp:155
 #, kde-format
 msgctxt "@action"
 msgid "Install Selection"
 msgstr "Установить выделенное"
 
-#: projectmanagerviewplugin.cpp:155
+#: projectmanagerviewplugin.cpp:156
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "Установить"
 
-#: projectmanagerviewplugin.cpp:161
+#: projectmanagerviewplugin.cpp:162
 #, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
 msgstr "Очистить выделенное"
 
-#: projectmanagerviewplugin.cpp:162
+#: projectmanagerviewplugin.cpp:163
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr "Очистить"
 
-#: projectmanagerviewplugin.cpp:167
+#: projectmanagerviewplugin.cpp:168
 #, kde-format
 msgctxt "@action"
 msgid "Configure Selection"
 msgstr "Сконфигурировать выделенное"
 
-#: projectmanagerviewplugin.cpp:169
+#: projectmanagerviewplugin.cpp:170
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "Сконфигурировать"
 
-#: projectmanagerviewplugin.cpp:174
+#: projectmanagerviewplugin.cpp:175
 #, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
 msgstr "Прибрать выделенное"
 
-#: projectmanagerviewplugin.cpp:175
+#: projectmanagerviewplugin.cpp:176
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
 msgstr "Прибрать"
 
-#: projectmanagerviewplugin.cpp:281
+#: projectmanagerviewplugin.cpp:282
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
 msgstr "Создать &файл..."
 
-#: projectmanagerviewplugin.cpp:287
+#: projectmanagerviewplugin.cpp:288
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
 msgstr "Создать &каталог..."
 
-#: projectmanagerviewplugin.cpp:294
+#: projectmanagerviewplugin.cpp:295
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
 msgstr "Со&брать"
 
-#: projectmanagerviewplugin.cpp:298
+#: projectmanagerviewplugin.cpp:299
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
 msgstr "&Установить"
 
-#: projectmanagerviewplugin.cpp:302
+#: projectmanagerviewplugin.cpp:303
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
 msgstr "&Очистить"
 
-#: projectmanagerviewplugin.cpp:306
+#: projectmanagerviewplugin.cpp:307
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
 msgstr "&Добавить в комплект сборки"
 
-#: projectmanagerviewplugin.cpp:313
+#: projectmanagerviewplugin.cpp:314
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
@@ -337,37 +337,37 @@ msgstr[1] "Закрыть проекты"
 msgstr[2] "Закрыть проекты"
 msgstr[3] "&Закрыть проект"
 
-#: projectmanagerviewplugin.cpp:319
+#: projectmanagerviewplugin.cpp:320
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
 msgstr "&Перезагрузить"
 
-#: projectmanagerviewplugin.cpp:350
+#: projectmanagerviewplugin.cpp:351
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
 msgstr "&Удалить"
 
-#: projectmanagerviewplugin.cpp:354
+#: projectmanagerviewplugin.cpp:355
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
 msgstr "&Переименовать..."
 
-#: projectmanagerviewplugin.cpp:360
+#: projectmanagerviewplugin.cpp:361
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
 msgstr "Удалить из &цели"
 
-#: projectmanagerviewplugin.cpp:547
+#: projectmanagerviewplugin.cpp:548
 #, kde-format
 msgctxt "@title:window"
 msgid "Create Folder in %1"
 msgstr "Создание каталога в %1"
 
-#: projectmanagerviewplugin.cpp:548
+#: projectmanagerviewplugin.cpp:549
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Folder name:"
@@ -382,46 +382,46 @@ msgstr[1] "Удалить следующие %1 объекта?"
 msgstr[2] "Удалить следующие %1 объектов?"
 msgstr[3] "Удалить этот объект?"
 
-#: projectmanagerviewplugin.cpp:603
+#: projectmanagerviewplugin.cpp:602
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "Удаление файлов"
 
-#: projectmanagerviewplugin.cpp:656
+#: projectmanagerviewplugin.cpp:655
 #, kde-format
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "Переименование"
 
-#: projectmanagerviewplugin.cpp:657
+#: projectmanagerviewplugin.cpp:656
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
 msgstr "Новое имя для «%1»:"
 
-#: projectmanagerviewplugin.cpp:669
+#: projectmanagerviewplugin.cpp:668
 #, kde-format
 msgid "There is already a file named '%1'"
 msgstr "Файл с именем «%1» уже существует."
 
-#: projectmanagerviewplugin.cpp:672
+#: projectmanagerviewplugin.cpp:671
 #, kde-format
 msgid "Could not rename '%1'"
 msgstr "Не удалось переименовать «%1»."
 
-#: projectmanagerviewplugin.cpp:675
+#: projectmanagerviewplugin.cpp:674
 #, kde-format
 msgid "'%1' is not a valid file name"
 msgstr "«%1» не является допустимым именем файла."
 
-#: projectmanagerviewplugin.cpp:689
+#: projectmanagerviewplugin.cpp:688
 #, kde-format
 msgctxt "@title:window"
 msgid "Create File in %1"
 msgstr "Создание файла в %1"
 
-#: projectmanagerviewplugin.cpp:689
+#: projectmanagerviewplugin.cpp:688
 #, kde-format
 msgctxt "@label:textbox"
 msgid "File name:"

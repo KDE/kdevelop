@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-07-13 13:05+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -273,42 +273,42 @@ msgctxt "@label:textbox"
 msgid "CUDA C comman&d-line arguments:"
 msgstr "CUDA C 명령행 인자(&D):"
 
-#: kcm_widget/projectpathswidget.cpp:168
+#: kcm_widget/projectpathswidget.cpp:169
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Project Path"
 msgstr "프로젝트 경로 선택"
 
-#: kcm_widget/projectpathswidget.cpp:182
+#: kcm_widget/projectpathswidget.cpp:184
 #, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
 msgstr "경로 '%1'의 설정을 삭제하시겠습니까?"
 
-#: kcm_widget/projectpathswidget.cpp:183
+#: kcm_widget/projectpathswidget.cpp:186
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
 msgstr "경로 설정 삭제"
 
-#: kcm_widget/projectpathswidget.cpp:221
+#: kcm_widget/projectpathswidget.cpp:224
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Include Directories/Files"
 msgstr "인클루드 디렉터리/파일 편집"
 
-#: kcm_widget/projectpathswidget.cpp:229
+#: kcm_widget/projectpathswidget.cpp:232
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Defined Macros"
 msgstr "정의된 매크로 편집"
 
-#: kcm_widget/projectpathswidget.cpp:285
+#: kcm_widget/projectpathswidget.cpp:288
 #, kde-format
 msgid "Configure C/C++ parser"
 msgstr "C/C++ 파서 설정"
 
 #. i18n: ectx: property (text), widget (QLabel, configureLabel)
-#: kcm_widget/projectpathswidget.cpp:289 kcm_widget/projectpathswidget.ui:20
+#: kcm_widget/projectpathswidget.cpp:292 kcm_widget/projectpathswidget.ui:20
 #, kde-format
 msgid ""
 "Configure which macros and include directories/files will be added to the "

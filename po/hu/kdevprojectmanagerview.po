@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2014-02-08 22:58+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -173,7 +173,7 @@ msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
 msgstr "A jelenleg kijelölt elem eltávolítása a fordítókészletből"
 
-#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:190
+#: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
 #, fuzzy, kde-format
 #| msgid "Projects"
 msgctxt "@title:window"
@@ -231,126 +231,126 @@ msgctxt "@info:whatsthis"
 msgid "Build Items:"
 msgstr "Elemek fordítása:"
 
-#: projectmanagerviewplugin.cpp:142
+#: projectmanagerviewplugin.cpp:143
 #, fuzzy, kde-format
 #| msgid "Build all Projects"
 msgctxt "@action"
 msgid "Build All Projects"
 msgstr "Minden projekt fordítása"
 
-#: projectmanagerviewplugin.cpp:147
+#: projectmanagerviewplugin.cpp:148
 #, fuzzy, kde-format
 #| msgid "Build Selection"
 msgctxt "@action"
 msgid "Build Selection"
 msgstr "Kijelölés fordítása"
 
-#: projectmanagerviewplugin.cpp:148
+#: projectmanagerviewplugin.cpp:149
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@action:intoolbar"
 msgid "Build"
 msgstr "Fordítás"
 
-#: projectmanagerviewplugin.cpp:154
+#: projectmanagerviewplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Install Selection"
 msgctxt "@action"
 msgid "Install Selection"
 msgstr "Kijelölés telepítése"
 
-#: projectmanagerviewplugin.cpp:155
+#: projectmanagerviewplugin.cpp:156
 #, fuzzy, kde-format
 #| msgid "Install"
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "Telepítés"
 
-#: projectmanagerviewplugin.cpp:161
+#: projectmanagerviewplugin.cpp:162
 #, fuzzy, kde-format
 #| msgid "Clean Selection"
 msgctxt "@action"
 msgid "Clean Selection"
 msgstr "Kijelölés tisztítása"
 
-#: projectmanagerviewplugin.cpp:162
+#: projectmanagerviewplugin.cpp:163
 #, fuzzy, kde-format
 #| msgid "Clean"
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr "Tisztítás"
 
-#: projectmanagerviewplugin.cpp:167
+#: projectmanagerviewplugin.cpp:168
 #, fuzzy, kde-format
 #| msgid "Configure Selection"
 msgctxt "@action"
 msgid "Configure Selection"
 msgstr "Kijelölés beállítása"
 
-#: projectmanagerviewplugin.cpp:169
+#: projectmanagerviewplugin.cpp:170
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "Beállítás"
 
-#: projectmanagerviewplugin.cpp:174
+#: projectmanagerviewplugin.cpp:175
 #, fuzzy, kde-format
 #| msgid "Prune Selection"
 msgctxt "@action"
 msgid "Prune Selection"
 msgstr "Kijelölés törlése"
 
-#: projectmanagerviewplugin.cpp:175
+#: projectmanagerviewplugin.cpp:176
 #, fuzzy, kde-format
 #| msgid "Prune"
 msgctxt "@action:intoolbar"
 msgid "Prune"
 msgstr "Törlés"
 
-#: projectmanagerviewplugin.cpp:281
+#: projectmanagerviewplugin.cpp:282
 #, fuzzy, kde-format
 #| msgid "Create File"
 msgctxt "@action:inmenu"
 msgid "Create &File..."
 msgstr "Fájl létrehozása"
 
-#: projectmanagerviewplugin.cpp:287
+#: projectmanagerviewplugin.cpp:288
 #, fuzzy, kde-format
 #| msgid "Create Folder"
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
 msgstr "Mappa létrehozása"
 
-#: projectmanagerviewplugin.cpp:294
+#: projectmanagerviewplugin.cpp:295
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@action:inmenu"
 msgid "&Build"
 msgstr "Fordítás"
 
-#: projectmanagerviewplugin.cpp:298
+#: projectmanagerviewplugin.cpp:299
 #, fuzzy, kde-format
 #| msgid "Install"
 msgctxt "@action:inmenu"
 msgid "&Install"
 msgstr "Telepítés"
 
-#: projectmanagerviewplugin.cpp:302
+#: projectmanagerviewplugin.cpp:303
 #, fuzzy, kde-format
 #| msgid "Clean"
 msgctxt "@action:inmenu"
 msgid "&Clean"
 msgstr "Tisztítás"
 
-#: projectmanagerviewplugin.cpp:306
+#: projectmanagerviewplugin.cpp:307
 #, fuzzy, kde-format
 #| msgid "Add to Build Set"
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
 msgstr "Hozzáadás a fordítókészlethez"
 
-#: projectmanagerviewplugin.cpp:313
+#: projectmanagerviewplugin.cpp:314
 #, fuzzy, kde-format
 #| msgid "Close Project"
 #| msgid_plural "Close Projects"
@@ -360,42 +360,42 @@ msgid_plural "Close Projects"
 msgstr[0] "Projekt bezárása"
 msgstr[1] "Projektek bezárása"
 
-#: projectmanagerviewplugin.cpp:319
+#: projectmanagerviewplugin.cpp:320
 #, fuzzy, kde-format
 #| msgid "Reload"
 msgctxt "@action:inmenu"
 msgid "&Reload"
 msgstr "Újratöltés"
 
-#: projectmanagerviewplugin.cpp:350
+#: projectmanagerviewplugin.cpp:351
 #, fuzzy, kde-format
 #| msgid "Remove"
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
 msgstr "Eltávolítás"
 
-#: projectmanagerviewplugin.cpp:354
+#: projectmanagerviewplugin.cpp:355
 #, fuzzy, kde-format
 #| msgid "Rename..."
 msgctxt "@action:inmenu"
 msgid "Re&name..."
 msgstr "Átnevezés…"
 
-#: projectmanagerviewplugin.cpp:360
+#: projectmanagerviewplugin.cpp:361
 #, fuzzy, kde-format
 #| msgid "Remove From Target"
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
 msgstr "Eltávolítás a célból"
 
-#: projectmanagerviewplugin.cpp:547
+#: projectmanagerviewplugin.cpp:548
 #, fuzzy, kde-format
 #| msgid "Create Folder in %1"
 msgctxt "@title:window"
 msgid "Create Folder in %1"
 msgstr "Mappa létrehozása itt: %1"
 
-#: projectmanagerviewplugin.cpp:548
+#: projectmanagerviewplugin.cpp:549
 #, fuzzy, kde-format
 #| msgid "Folder Name"
 msgctxt "@label:textbox"
@@ -409,50 +409,50 @@ msgid_plural "Do you really want to delete these %1 items?"
 msgstr[0] "Biztosan törölni szeretné ezt az elemet?"
 msgstr[1] "Biztosan törölni szeretné ezt a(z) %1 elemet?"
 
-#: projectmanagerviewplugin.cpp:603
+#: projectmanagerviewplugin.cpp:602
 #, fuzzy, kde-format
 #| msgid "Delete Files"
 msgctxt "@title:window"
 msgid "Delete Files"
 msgstr "Fájlok törlése"
 
-#: projectmanagerviewplugin.cpp:656
+#: projectmanagerviewplugin.cpp:655
 #, fuzzy, kde-format
 #| msgid "Rename"
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: projectmanagerviewplugin.cpp:657
+#: projectmanagerviewplugin.cpp:656
 #, fuzzy, kde-format
 #| msgid "New name for '%1':"
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
 msgstr "„%1” új neve:"
 
-#: projectmanagerviewplugin.cpp:669
+#: projectmanagerviewplugin.cpp:668
 #, kde-format
 msgid "There is already a file named '%1'"
 msgstr "Már van „%1” nevű fájl"
 
-#: projectmanagerviewplugin.cpp:672
+#: projectmanagerviewplugin.cpp:671
 #, kde-format
 msgid "Could not rename '%1'"
 msgstr "Nem nevezhető át: „%1”"
 
-#: projectmanagerviewplugin.cpp:675
+#: projectmanagerviewplugin.cpp:674
 #, kde-format
 msgid "'%1' is not a valid file name"
 msgstr "„%1” nem érvényes fájlnév"
 
-#: projectmanagerviewplugin.cpp:689
+#: projectmanagerviewplugin.cpp:688
 #, fuzzy, kde-format
 #| msgid "Create File in %1"
 msgctxt "@title:window"
 msgid "Create File in %1"
 msgstr "Fájl létrehozása itt: %1"
 
-#: projectmanagerviewplugin.cpp:689
+#: projectmanagerviewplugin.cpp:688
 #, fuzzy, kde-format
 #| msgid "File name:"
 msgctxt "@label:textbox"

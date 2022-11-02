@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-03-10 15:35+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -25,7 +25,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: debuggerplugin.cpp:41 gdbconfigpage.cpp:115
+#: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
 #, kde-format
 msgid "GDB"
 msgstr "GDB"
@@ -144,13 +144,13 @@ msgstr ""
 msgid "Could not locate the debugging shell '%1'."
 msgstr "Не удалось найти отладочную оболочку «%1»."
 
-#: gdbconfigpage.cpp:92
+#: gdbconfigpage.cpp:93
 #, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Настройка GDB"
 
-#: gdbconfigpage.cpp:133
+#: gdbconfigpage.cpp:134
 #, kde-format
 msgid ""
 "A program is already being debugged. Do you want to abort the currently "
@@ -159,13 +159,13 @@ msgstr ""
 "Отладка программы уже выполняется. Прервать текущий сеанс отладки и "
 "продолжить запуск?"
 
-#: gdbconfigpage.cpp:135
+#: gdbconfigpage.cpp:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
 msgstr ""
 
-#: gdbconfigpage.cpp:161
+#: gdbconfigpage.cpp:162
 #, kde-format
 msgid "Executes a native application in GDB"
 msgstr "Выполняет обычное приложение в GDB"

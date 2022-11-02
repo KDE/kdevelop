@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:45+0000\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
 "PO-Revision-Date: 2022-10-30 07:48\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -47,94 +47,94 @@ msgstr "还原未暂存的更改"
 msgid "Committing failed. See Version Control tool view."
 msgstr "提交失败。请查看版本控制工具视图。"
 
-#: diffviewsctrl.cpp:50
+#: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
 msgstr "暂存所选的行或块"
 
-#: diffviewsctrl.cpp:52
+#: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
 msgstr "取消暂存所选的行或块"
 
-#: diffviewsctrl.cpp:54
+#: diffviewsctrl.cpp:55
 #, kde-format
 msgid "Revert selected lines or hunk"
 msgstr "还原所选的行或块"
 
-#: diffviewsctrl.cpp:56
+#: diffviewsctrl.cpp:57
 #, kde-format
 msgid "Go to line in source"
 msgstr "在源文件中查看此行"
 
-#: diffviewsctrl.cpp:101
+#: diffviewsctrl.cpp:102
 #, kde-format
 msgid "Unstage selected lines"
 msgstr "取消暂存所选的行"
 
-#: diffviewsctrl.cpp:102
+#: diffviewsctrl.cpp:103
 #, kde-format
 msgid "Stage selected lines"
 msgstr "暂存所选的行"
 
-#: diffviewsctrl.cpp:103
+#: diffviewsctrl.cpp:104
 #, kde-format
 msgid "Revert selected lines"
 msgstr "还原所选的行"
 
-#: diffviewsctrl.cpp:105
+#: diffviewsctrl.cpp:106
 #, kde-format
 msgid "Unstage selected hunk"
 msgstr "取消暂存所选的块"
 
-#: diffviewsctrl.cpp:106
+#: diffviewsctrl.cpp:107
 #, kde-format
 msgid "Stage selected hunk"
 msgstr "暂存所选的块"
 
-#: diffviewsctrl.cpp:107
+#: diffviewsctrl.cpp:108
 #, kde-format
 msgid "Revert selected hunk"
 msgstr "还原所选的块"
 
-#: diffviewsctrl.cpp:117 diffviewsctrl.cpp:123
+#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
 #, kde-format
 msgid "S"
 msgstr "S"
 
-#: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
+#: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: diffviewsctrl.cpp:170
+#: diffviewsctrl.cpp:171
 #, kde-format
 msgid "%1 (staged)"
 msgstr "%1 (已暂存)"
 
-#: diffviewsctrl.cpp:172
+#: diffviewsctrl.cpp:173
 #, kde-format
 msgid "Staged (%1)"
 msgstr "已暂存 (%1)"
 
-#: diffviewsctrl.cpp:174
+#: diffviewsctrl.cpp:175
 #, kde-format
 msgid "Unstaged (%1)"
 msgstr "已取消暂存 (%1)"
 
-#: diffviewsctrl.cpp:176
+#: diffviewsctrl.cpp:177
 #, kde-format
 msgid "%1 (unstaged)"
 msgstr "%1 (已取消暂存)"
 
-#: diffviewsctrl.cpp:330
+#: diffviewsctrl.cpp:332
 #, kde-format
 msgid ""
 "The selected lines will be reverted and the changes lost. This operation "
 "cannot be undone. Continue?"
 msgstr "选中的行会被还原，对它们进行的修改将会丢失。此操作无法撤销，是否继续？"
 
-#: diffviewsctrl.cpp:332
+#: diffviewsctrl.cpp:334
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
@@ -196,104 +196,104 @@ msgctxt "@option:check"
 msgid "Write to global config"
 msgstr "写入全局配置"
 
-#: gitplugin.cpp:181
+#: gitplugin.cpp:182
 #, kde-format
 msgid "Unable to find git executable. Is it installed on the system?"
 msgstr "无法找到 git 执行文件，您安装它了吗？"
 
-#: gitplugin.cpp:190
+#: gitplugin.cpp:191
 #, kde-format
 msgid "Git Commit"
 msgstr "Git 提交"
 
-#: gitplugin.cpp:242
+#: gitplugin.cpp:243
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rebase"
 msgstr "变基"
 
-#: gitplugin.cpp:243
+#: gitplugin.cpp:244
 #, kde-format
 msgctxt "@title:menu"
 msgid "Git Stashes"
 msgstr "Git 暂存"
 
-#: gitplugin.cpp:244
+#: gitplugin.cpp:245
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Stash Manager"
 msgstr "暂存管理器"
 
-#: gitplugin.cpp:245
+#: gitplugin.cpp:246
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Push Stash"
 msgstr "推送暂存"
 
-#: gitplugin.cpp:246
+#: gitplugin.cpp:247
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pop Stash"
 msgstr "弹出暂存"
 
-#: gitplugin.cpp:279
+#: gitplugin.cpp:280
 #, kde-format
 msgid "error: %1"
 msgstr "错误：%1"
 
-#: gitplugin.cpp:378 gitplugin.cpp:389
+#: gitplugin.cpp:379 gitplugin.cpp:390
 #, kde-format
 msgid "Did not specify the list of files"
 msgstr "不指定文件列表"
 
-#: gitplugin.cpp:451
+#: gitplugin.cpp:452
 #, kde-format
 msgid "Could not reset changes (empty list of paths)"
 msgstr "无法重置更改 (路径的列表为空)"
 
-#: gitplugin.cpp:486
+#: gitplugin.cpp:487
 #, kde-format
 msgid "Could not revert changes"
 msgstr "不还原更改"
 
-#: gitplugin.cpp:496
+#: gitplugin.cpp:498
 #, kde-format
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr "如下文件有未提交的更改，这些修改会丢失。是否继续？"
 
-#: gitplugin.cpp:521
+#: gitplugin.cpp:523
 #, kde-format
 msgid "No files or message specified"
 msgstr "未指定文件或消息"
 
-#: gitplugin.cpp:525 gitplugin.cpp:544
+#: gitplugin.cpp:527 gitplugin.cpp:546
 #, kde-format
 msgid "Email or name for Git not specified"
 msgstr "没有指定用于 Git 的姓名与电子邮件地址"
 
-#: gitplugin.cpp:541
+#: gitplugin.cpp:543
 #, kde-format
 msgid "No message specified"
 msgstr "提交信息为空"
 
-#: gitplugin.cpp:615
+#: gitplugin.cpp:617
 #, kde-format
 msgid "No files to remove"
 msgstr "没有要删除的文件"
 
-#: gitplugin.cpp:855
+#: gitplugin.cpp:858
 #, kde-format
 msgid "There are pending changes, do you want to stash them first?"
 msgstr "有推迟的更改，您想要先暂存它们吗？"
 
-#: gitplugin.cpp:856
+#: gitplugin.cpp:859
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
 msgstr ""
 
-#: gitplugin.cpp:857
+#: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
@@ -593,43 +593,43 @@ msgstr "要提交更改，请先选择一个项目"
 msgid "Please stage some changes before committing."
 msgstr "请在提交前暂存更改。"
 
-#: stashmanagerdialog.cpp:30
+#: stashmanagerdialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "Stash Manager"
 msgstr "暂存管理器"
 
-#: stashmanagerdialog.cpp:117
+#: stashmanagerdialog.cpp:118
 #, kde-format
 msgid "Are you sure you want to drop the stash '%1'?"
 msgstr "您确定您想要删除暂存“%1”吗？"
 
 #. i18n: ectx: property (text), widget (QPushButton, drop)
-#: stashmanagerdialog.cpp:118 stashmanagerdialog.ui:26
+#: stashmanagerdialog.cpp:119 stashmanagerdialog.ui:26
 #, kde-format
 msgctxt "@action:button"
 msgid "Drop"
 msgstr "删除"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Git Stash"
 msgstr "Git 暂存"
 
-#: stashmanagerdialog.cpp:127
+#: stashmanagerdialog.cpp:128
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for the new branch:"
 msgstr "新分支名称："
 
-#: stashmanagerdialog.cpp:148
+#: stashmanagerdialog.cpp:149
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
 msgstr ""
 
-#: stashmanagerdialog.cpp:158
+#: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
 msgstr ""
