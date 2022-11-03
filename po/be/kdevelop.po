@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2007-12-09 18:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -129,7 +129,7 @@ msgid "Settings"
 msgstr "&Настаўленні"
 
 #. i18n: ectx: Menu (help)
-#: kdevelopui.rc:178
+#: kdevelopui.rc:179
 #, fuzzy, kde-format
 #| msgid "&Help"
 msgctxt "@title:menu"
@@ -137,7 +137,7 @@ msgid "Help"
 msgstr "&Дапамога"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: kdevelopui.rc:185
+#: kdevelopui.rc:186
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Галоўная панель начыння"

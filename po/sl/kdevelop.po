@@ -2,7 +2,7 @@
 # Translation of kdevelop.po to Slovenian
 # KDEVELOP translation to Slovenian language.
 # Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: kdevelop.po 1637015 2022-10-30 01:38:09Z scripty $
+# $Id: kdevelop.po 1637224 2022-11-03 01:39:44Z scripty $
 # $Source$
 #
 # Roman Maurer <roman.maurer@amis.net>, 2002.
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2021-08-31 08:31+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -130,14 +130,14 @@ msgid "Settings"
 msgstr "Nastavitve"
 
 #. i18n: ectx: Menu (help)
-#: kdevelopui.rc:178
+#: kdevelopui.rc:179
 #, kde-format
 msgctxt "@title:menu"
 msgid "Help"
 msgstr "Pomoč"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: kdevelopui.rc:185
+#: kdevelopui.rc:186
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Glavna orodna vrstica"

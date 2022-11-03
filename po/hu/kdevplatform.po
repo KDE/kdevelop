@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2014-09-08 22:58+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1808,7 +1808,7 @@ msgstr "telepítés"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
-msgid "&Color Scheme"
+msgid "&Window Color Scheme"
 msgstr ""
 
 #: shell/configdialog.cpp:31

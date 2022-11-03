@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2008-03-26 18:53+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -131,7 +131,7 @@ msgid "Settings"
 msgstr "विन्यास (&S)"
 
 #. i18n: ectx: Menu (help)
-#: kdevelopui.rc:178
+#: kdevelopui.rc:179
 #, fuzzy, kde-format
 #| msgid "&Help"
 msgctxt "@title:menu"
@@ -139,7 +139,7 @@ msgid "Help"
 msgstr "मदद (&H)"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: kdevelopui.rc:185
+#: kdevelopui.rc:186
 #, kde-format
 msgid "Main Toolbar"
 msgstr "मुख्य औज़ार पट्टी"

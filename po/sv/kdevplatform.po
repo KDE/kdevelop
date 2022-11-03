@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2022-08-03 09:58+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1853,8 +1853,9 @@ msgid "Running %1"
 msgstr "Kör %1"
 
 #: shell/colorschemechooser.cpp:44
-#, kde-format
-msgid "&Color Scheme"
+#, fuzzy, kde-format
+#| msgid "&Color Scheme"
+msgid "&Window Color Scheme"
 msgstr "&Färgschema"
 
 #: shell/configdialog.cpp:31

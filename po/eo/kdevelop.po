@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2008-01-02 18:01+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -126,7 +126,7 @@ msgid "Settings"
 msgstr "&Agordo"
 
 #. i18n: ectx: Menu (help)
-#: kdevelopui.rc:178
+#: kdevelopui.rc:179
 #, fuzzy, kde-format
 #| msgid "&Help"
 msgctxt "@title:menu"
@@ -134,7 +134,7 @@ msgid "Help"
 msgstr "&Helpo"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: kdevelopui.rc:185
+#: kdevelopui.rc:186
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Ĉefa Ilobreto"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2011-10-28 20:53+0300\n"
 "Last-Translator: Remigijus\n"
 "Language-Team: Lithuanian <kde-i18n-doc@kde.org>\n"
@@ -1866,7 +1866,7 @@ msgstr "Įkeliamas %1"
 
 #: shell/colorschemechooser.cpp:44
 #, kde-format
-msgid "&Color Scheme"
+msgid "&Window Color Scheme"
 msgstr ""
 
 #: shell/configdialog.cpp:31

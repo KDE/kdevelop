@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-03 00:44+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -1852,8 +1852,9 @@ msgid "Running %1"
 msgstr "İşə düşür %1"
 
 #: shell/colorschemechooser.cpp:44
-#, kde-format
-msgid "&Color Scheme"
+#, fuzzy, kde-format
+#| msgid "&Color Scheme"
+msgid "&Window Color Scheme"
 msgstr "&Rəng Sxemi"
 
 #: shell/configdialog.cpp:31
