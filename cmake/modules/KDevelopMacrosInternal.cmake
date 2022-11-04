@@ -236,20 +236,9 @@ function(_install_qt_logging_categories)
         get_property(_description GLOBAL PROPERTY "${_propertyprefix}_DESCRIPTION_${_category}")
         get_property(_identifier GLOBAL PROPERTY "${_propertyprefix}_IDENTIFIER_${_category}")
 
-        # kdebugsettings >= 18.12 supports/pushes for some newer, not backward-compatible format.
-        # In case of no presence of kdebugsettings at build time, we have to make a guess anyway,
-        # so to simplify code whe just always guess (other software does not even guess, but just switched)
-        # For ECM >= 5.59 we install categories files to new location, which is only supported by
-        # newer kdebugsettings also supporting the new content format, so we use that as base.
-        if (ECM_VERSION VERSION_GREATER "5.58.0")
-            # Format:
-            # logname<space>description(optional <space> DEFAULT_SEVERITY [DEFAULT_CATEGORY] as WARNING/DEBUG/INFO/CRITICAL) optional IDENTIFIER [...])
-            string(APPEND _content "${_category} ${_description} IDENTIFIER [${_identifier}]\n")
-        else()
-            # Format:
-            # logname<space>description
-            string(APPEND _content "${_category} ${_description}\n")
-        endif()
+        # Format:
+        # logname<space>description(optional <space> DEFAULT_SEVERITY [DEFAULT_CATEGORY] as WARNING/DEBUG/INFO/CRITICAL) optional IDENTIFIER [...])
+        string(APPEND _content "${_category} ${_description} IDENTIFIER [${_identifier}]\n")
     endforeach()
 
     if (NOT IS_ABSOLUTE ${ARGS_FILE})
@@ -260,17 +249,10 @@ function(_install_qt_logging_categories)
         CONTENT "${_content}"
     )
 
-    if (ECM_VERSION VERSION_GREATER "5.58.0")
-        install(
-            FILES "${ARGS_FILE}"
-            DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
-        )
-    else()
-        install(
-            FILES "${ARGS_FILE}"
-            DESTINATION ${KDE_INSTALL_CONFDIR}
-        )
-    endif()
+    install(
+        FILES "${ARGS_FILE}"
+        DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
+    )
 endfunction()
 
 # install_qt_logging_categories(TYPE LIBRARY|APP_PLUGIN)
