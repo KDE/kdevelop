@@ -13,7 +13,6 @@
 #include <KAboutData>
 #include <KActionCollection>
 #include <KActionMenu>
-#include <kcoreaddons_version.h>
 #include <KDialogJobUiDelegate>
 #include <KLocalizedString>
 #include <KSelectAction>
@@ -606,11 +605,7 @@ void KDevelop::RunController::registerJob(KJob * job)
 
         connect( job, &KJob::finished, this, &RunController::finished );
         connect( job, &KJob::destroyed, this, &RunController::jobDestroyed );
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 80, 0)
-        connect(job, QOverload<KJob*, unsigned long>::of(&KJob::percent), this, &RunController::jobPercentChanged);
-#else
         connect(job, &KJob::percentChanged, this, &RunController::jobPercentChanged);
-#endif
 
         IRunController::registerJob(job);
 

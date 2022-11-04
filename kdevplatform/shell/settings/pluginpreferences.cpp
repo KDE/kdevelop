@@ -8,13 +8,8 @@
 
 #include <QVBoxLayout>
 
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
 #include <KPluginWidget>
 #include <KConfigGroup>
-#else
-#include <KPluginSelector>
-#include <KPluginInfo>
-#endif
 
 #include <interfaces/isession.h>
 
@@ -31,19 +26,11 @@ PluginPreferences::PluginPreferences(QWidget* parent)
 {
     auto* lay = new QVBoxLayout(this );
     lay->setContentsMargins(0, 0, 0, 0);
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
     selector = new KPluginWidget( this );
     KConfigGroup cfgGroup(Core::self()->activeSession()->config(), "Plugins");
     selector->setConfig(cfgGroup);
-#else
-    selector = new KPluginSelector( this );
-#endif
     lay->addWidget( selector );
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
     QMap<QString, QVector<KPluginMetaData>> plugins;
-#else
-    QMap<QString, QList<KPluginInfo>> plugins;
-#endif
     const QMap<QString, QString> categories = {
         { QStringLiteral("Core"),               i18nc("@title:group", "Core") },
         { QStringLiteral("Project Management"), i18nc("@title:group", "Project Management") },
@@ -69,32 +56,15 @@ PluginPreferences::PluginPreferences(QWidget* parent)
                 }
                 category = QStringLiteral("Other");
             }
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
             plugins[category] << info;
-#else
-            KPluginInfo kpi(info);
-            plugins[category] << kpi;
-#endif
         } else
             qCDebug(SHELL) << "skipping..." << info.pluginId() << info.value(QStringLiteral("X-KDevelop-Category")) << loadMode;
     }
 
     for (auto it = plugins.constBegin(), end = plugins.constEnd(); it != end; ++it) {
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
         selector->addPlugins(it.value(), categories.value(it.key()));
-#else
-        selector->addPlugins(it.value(), KPluginSelector::ReadConfigFile,
-                             categories.value(it.key()),
-                             // no filter by category key, we did it ourselves above & will not work with "Other"
-                             QString(),
-                             Core::self()->activeSession()->config());
-#endif
     }
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
     connect(selector, &KPluginWidget::changed, this, &PluginPreferences::changed);
-#else
-    connect(selector, &KPluginSelector::changed, this, &PluginPreferences::changed);
-#endif
 }
 
 void PluginPreferences::defaults()

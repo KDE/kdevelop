@@ -10,7 +10,6 @@
 #include <vcsannotation.h>
 #include <debug.h>
 
-#include <ktexteditor_version.h>
 #include <KTextEditor/AnnotationInterface>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
@@ -38,11 +37,7 @@ VcsAnnotationItemDelegate::VcsAnnotationItemDelegate(KTextEditor::View* view, KT
 {
     // dump background brushes on schema change
     Q_ASSERT(qobject_cast<KTextEditor::ConfigInterface*>(view));
-#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5, 79, 0)
     connect(view, &KTextEditor::View::configChanged, this, &VcsAnnotationItemDelegate::resetBackgrounds);
-#else
-    connect(view, SIGNAL(configChanged()), this, SLOT(resetBackgrounds()));
-#endif
 
     view->installEventFilter(this);
 }

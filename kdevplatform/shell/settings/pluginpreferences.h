@@ -10,15 +10,10 @@
 #include <QIcon>
 
 #include <KLocalizedString>
-#include <kcmutils_version.h>
 
 #include <interfaces/configpage.h>
 
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
 class KPluginWidget;
-#else
-class KPluginSelector;
-#endif
 
 namespace KDevelop
 {
@@ -39,11 +34,7 @@ public Q_SLOTS:
     void defaults() override;
 
 private:
-#if KCMUTILS_VERSION >= QT_VERSION_CHECK(5, 91, 0)
     KPluginWidget* selector;
-#else
-    KPluginSelector* selector;
-#endif
 };
 
 }

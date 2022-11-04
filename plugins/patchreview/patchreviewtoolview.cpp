@@ -34,7 +34,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -558,11 +557,7 @@ void PatchReviewToolView::runTests()
 
     auto* job = new ProjectTestJob(project, this);
     connect(job, &ProjectTestJob::finished, this, &PatchReviewToolView::testJobResult);
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 80, 0)
-    connect(job, QOverload<KJob*, unsigned long>::of(&KJob::percent), this, &PatchReviewToolView::testJobPercent);
-#else
     connect(job, &KJob::percentChanged, this, &PatchReviewToolView::testJobPercent);
-#endif
     ICore::self()->runController()->registerJob(job);
 }
 

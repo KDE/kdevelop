@@ -17,7 +17,6 @@
 
 #include <QVBoxLayout>
 
-#include <kcoreaddons_version.h>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -193,11 +192,7 @@ void ProjectSourcePage::checkoutVcsProject()
     m_ui->get->setEnabled(false);
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     connect(job, &VcsJob::result, this, &ProjectSourcePage::projectReceived);
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 80, 0)
-    connect(job, QOverload<KJob*, unsigned long>::of(&KJob::percent), this, &ProjectSourcePage::progressChanged);
-#else
     connect(job, &KJob::percentChanged, this, &ProjectSourcePage::progressChanged);
-#endif
     connect(job, &VcsJob::infoMessage, this, &ProjectSourcePage::infoMessage);
     ICore::self()->runController()->registerJob(job);
 }
