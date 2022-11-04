@@ -13,7 +13,6 @@
 #include <language/duchain/duchain.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)

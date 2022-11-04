@@ -15,7 +15,6 @@
 #include <interfaces/iuicontroller.h>
 #include <sublime/message.h>
 
-#include <kcoreaddons_version.h>
 #include <KLocalizedString>
 #include <KMessageBox>
 

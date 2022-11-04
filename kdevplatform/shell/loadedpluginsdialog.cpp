@@ -19,7 +19,6 @@
 #include <KLocalizedString>
 #include <KTitleWidget>
 #include <KWidgetItemDelegate>
-#include <kwidgetsaddons_version.h>
 
 #include <util/scopeddialog.h>
 
