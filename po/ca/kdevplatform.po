@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-03 00:44+0000\n"
-"PO-Revision-Date: 2022-07-11 11:32+0200\n"
+"PO-Revision-Date: 2022-11-03 13:08+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1857,10 +1857,9 @@ msgid "Running %1"
 msgstr "S'està executant %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "Esquema de &color"
+msgstr "Esquema de color de les &finestres"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -6185,7 +6184,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgctxt "@action:button"
-#~ msgid "Share Templates"
-#~ msgstr "Comparteix les plantilles"

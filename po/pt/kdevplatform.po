@@ -1877,10 +1877,9 @@ msgid "Running %1"
 msgstr "A executar o %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "Esquema de &Cores"
+msgstr "Esquema de Cores da &Janela"
 
 #: shell/configdialog.cpp:31
 #, kde-format

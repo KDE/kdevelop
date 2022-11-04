@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-03 00:44+0000\n"
-"PO-Revision-Date: 2022-10-13 00:49+0300\n"
+"PO-Revision-Date: 2022-11-03 12:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -679,12 +679,12 @@ msgstr "'%1' dosyası açılamadı"
 #: language/backgroundparser/parsejob.cpp:330
 #, kde-format
 msgid "File could not be read from disk."
-msgstr "Dosya, diskten okunamadı."
+msgstr "Dosya diskten okunamadı."
 
 #: language/backgroundparser/parsejob.cpp:333
 #, kde-format
 msgid "File could not be opened."
-msgstr "Dosya, açılamadı."
+msgstr "Dosya açılamadı."
 
 #: language/backgroundparser/parsejob.cpp:336
 #, kde-format
@@ -695,8 +695,8 @@ msgstr "Dosya, izinler yüzünden diskten okunamadı."
 #, kde-format
 msgid "Process 1 file in %2"
 msgid_plural "Process %1 files in %2"
-msgstr[0] "%2 içinde 1 dosya işle"
-msgstr[1] "%2 içinde %1 dosya işle"
+msgstr[0] "1/%2 dosya işle"
+msgstr[1] "%1/%2 dosya işle"
 
 #: language/classmodel/allclassesfolder.cpp:22
 #, kde-format
@@ -898,7 +898,7 @@ msgstr "&İptal"
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
 msgid "Alias %1 as %2"
-msgstr "%1 için %2 arması"
+msgstr "%1 ögesini %2 olarak armala"
 
 #: language/duchain/aliasdeclaration.cpp:50
 #, kde-format
@@ -953,12 +953,12 @@ msgstr "numaralandırıcı "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
 #, kde-format
 msgid "namespace %1 "
-msgstr "ad alanı %1 "
+msgstr "%1 ad alanı "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
 #, kde-format
 msgid "enumeration %1 "
-msgstr "numaralandırma %1 "
+msgstr "%1 numaralandırması "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
 #, kde-format
@@ -1854,10 +1854,9 @@ msgid "Running %1"
 msgstr "%1 Çalışıyor"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Renk Şeması"
+msgstr "&Pencere Renk Şeması"
 
 #: shell/configdialog.cpp:31
 #, kde-format
