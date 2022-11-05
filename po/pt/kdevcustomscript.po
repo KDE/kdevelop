@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2021-11-12 12:10+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -52,27 +52,27 @@ msgstr ""
 "Nota: cada estilo personalizado do programa necessita de ter instalado um "
 "dado executável da ferramenta. Caso contrário, o código não será formatado."
 
-#: customscript_plugin.cpp:235
+#: customscript_plugin.cpp:226
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Indentação da GNU: GNU"
 
-#: customscript_plugin.cpp:246
+#: customscript_plugin.cpp:237
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Indentação da GNU: Kernighan & Ritchie"
 
-#: customscript_plugin.cpp:257
+#: customscript_plugin.cpp:248
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Indentação da GNU: Estilo de indentação original da Berkeley"
 
-#: customscript_plugin.cpp:268
+#: customscript_plugin.cpp:259
 #, kde-format
 msgid "Clang Format"
 msgstr "Formato do Clang"
 
-#: customscript_plugin.cpp:271
+#: customscript_plugin.cpp:262
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -85,7 +85,7 @@ msgstr ""
 "formatação com o ficheiro de configuração <b>.clang-format</b>, normalmente "
 "localizado na pasta de topo do projecto."
 
-#: customscript_plugin.cpp:287
+#: customscript_plugin.cpp:278
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -117,13 +117,13 @@ msgstr ""
 "ficheiros em <b>sub-pasta</b>, usando a ferramenta <b>uncrustify</b> com o "
 "ficheiro de configuração <b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:544
+#: customscript_plugin.cpp:537
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Comando:"
 
-#: customscript_plugin.cpp:553
+#: customscript_plugin.cpp:546
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -138,18 +138,18 @@ msgstr ""
 "'standard-output'.<br/><br/>Se adicionar <b>$TMPFILE</b> no comando, "
 "então<br/>o código será gravado num ficheiro temporário."
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:558
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Mais Variáveis"
 
-#: customscript_plugin.cpp:575
+#: customscript_plugin.cpp:568
 #, kde-format
 msgid "Style: %1"
 msgstr "Estilo: %1"
 
-#: customscript_plugin.cpp:588
+#: customscript_plugin.cpp:581
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -170,7 +170,7 @@ msgstr ""
 "${PROJECT_NAME}</b> será substituído pela localização do <br />projecto "
 "aberto de momento com o nome &lt;nome do projecto&gt;."
 
-#: customscript_plugin.cpp:600
+#: customscript_plugin.cpp:593
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

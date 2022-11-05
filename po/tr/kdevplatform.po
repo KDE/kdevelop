@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-11-03 12:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -831,18 +831,18 @@ msgstr "Kullanıcı bilgisi toplarken hata: %1"
 msgid "Error generating code: %1"
 msgstr "Kod oluştururken hata: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
 msgstr "%1:%2->%3:%4"
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
 msgstr "'%1', '%2' olarak yeniden adlandırılamadı"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -853,12 +853,12 @@ msgstr ""
 "%1 ile %2 arasında uyumsuz değişim, %3 bulundu (karşılaştırılan \"%4\") -> "
 "\"%5\""
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
 msgstr "Belgedeki metin değiştirilemedi: %1"
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -868,7 +868,7 @@ msgstr ""
 "%1 belgesinde %2 konumunda uyumsuz değişiklik = \"%3\"(karşılaştırılan "
 "\"%4\") -> \"%5\""
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -2520,13 +2520,13 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Hata Ayıklayıcı:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Yüklenmiş Eklentiler"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
@@ -4546,7 +4546,7 @@ msgid "Configure Runtimes"
 msgstr "Çalışma Zamanlarını Yapılandır"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
 msgstr "Kaynak Biçimlendirici"
@@ -4813,32 +4813,32 @@ msgstr "Araç takımlarını projeye uygun renklendir"
 msgid "Configure User Interface"
 msgstr "Kullanıcı Arayüzünü Yapılandır"
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "Kaynağı &Yeniden Biçimlendir"
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Satırı Yeniden Biçimlendir"
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Dosyaları Yeniden Biçimlendir..."
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr ""
 "Dosyaları, yapılandırılmış kaynak biçimlendiricilerini kullanarak biçimlendir"
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
@@ -4846,14 +4846,14 @@ msgstr ""
 "İşlevsellik, yapılandırılmış kaynak biçimlendiricileri kullanılarak "
 "biçimlendiriliyor."
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 "Seçimi veya dosyayı, <i>%1</i> kullanarak yeniden biçimlendir (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4863,13 +4863,13 @@ msgstr ""
 "Seçili metni veya seçili öge yoksa tüm dosyayı, <i>%1</i> aracını kullanarak "
 "<b>%2</b> biçemiyle yeniden biçimlendir."
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Geçerli satırı, <i>%1</i> kullanarak yeniden biçimlendir (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4879,7 +4879,7 @@ msgstr ""
 "İmlecin altındaki satırı, <i>%1</i> aracını kullanarak <b>%2</b> biçemiyle "
 "yeniden biçimlendir."
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4887,7 +4887,7 @@ msgstr ""
 "Seçimi veya dosyayı yapılandırılmış kaynak biçimlendiricisini kullanarak "
 "yeniden biçimlendir"
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4897,7 +4897,7 @@ msgstr ""
 "Seçili metni veya seçili öge yoksa tüm dosyayı, yapılandırılmış kaynak "
 "biçimlendiricisini kullanarak yeniden biçimlendir."
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4905,7 +4905,7 @@ msgstr ""
 "Geçerli satırı, yapılandırılmış kaynak biçimlendirisini kullanarak yeniden "
 "biçimlendir"
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4915,34 +4915,34 @@ msgstr ""
 "İmlecin altındaki satırı, yapılandırılmış kaynak biçimlendiricisini "
 "kullanarak yeniden biçimlendir."
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Dosyaları Yeniden Biçimlendir?"
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Seçili klasördeki tüm dosyalar yeniden biçimlendirilsin mi?"
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "Yeniden Biçimlendir"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
 msgstr "Yeniden Biçimlendiriliyor"
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
 msgstr "Dosyaları Yeniden Biçimlendir"
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"

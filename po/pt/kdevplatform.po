@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-07-11 14:26+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -853,18 +853,18 @@ msgstr "Erro ao recolher a informação do utilizador: %1"
 msgid "Error generating code: %1"
 msgstr "Erro ao gerar o código: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
 msgstr "%1:%2->%3:%4"
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
 msgstr "Não foi possível mudar o nome de '%1' para '%2'"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -875,12 +875,12 @@ msgstr ""
 "Mudança inconsistente no %1 entre %2, descobriu-se %3 (encontrou-se \"%4\") -"
 "> \"%5\""
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
 msgstr "Não foi possível substituir o texto no documento: %1"
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -889,7 +889,7 @@ msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr ""
 "Mudança inconsistente no %1 em %2 = \"%3\"(foi encontrado \"%4\") -> \"%5\""
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -2552,13 +2552,13 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Depurador:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "'Plugins' Carregados"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
@@ -4592,7 +4592,7 @@ msgid "Configure Runtimes"
 msgstr "Configurar os Ambientes de Execução"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
 msgstr "Formatador de Código"
@@ -4860,31 +4860,31 @@ msgstr "Colorir os elementos com base na afiliação ao projecto"
 msgid "Configure User Interface"
 msgstr "Configurar a Interface de Utilizador"
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "&Formatar o Código"
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Formatar de Novo a Linha"
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Formatar de Novo os Ficheiros..."
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr "Formatar os ficheiros com os formatadores de código configurados"
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
@@ -4892,13 +4892,13 @@ msgstr ""
 "Funcionalidade de formatação com a(s) ferramenta(s) de formatação "
 "configuradas."
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Formatar de novo a selecção ou ficheiro com o <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4908,13 +4908,13 @@ msgstr ""
 "Volta a formatar o texto seleccionado, ou o ficheiro inteiro caso nada "
 "esteja seleccionado, usando a ferramenta <i>%1</i> com o estilo <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Formatar de novo a linha actual com o <b>%1</b> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4924,7 +4924,7 @@ msgstr ""
 "Formatação de código da linha sob o cursor, usando a ferramenta <b>%1</b> "
 "com o estilo <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4932,7 +4932,7 @@ msgstr ""
 "Formatar de novo a selecção ou o ficheiro, usando o formatador de código "
 "seleccionado"
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4942,14 +4942,14 @@ msgstr ""
 "Formatar de novo o texto seleccionado, ou o ficheiro inteiro caso nada "
 "esteja seleccionado, usando o formatador de código seleccionado."
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr ""
 "Formatar de novo a linha actual, usando o formatador de código configurado"
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4958,34 +4958,34 @@ msgid ""
 msgstr ""
 "Formatação da linha sob o cursor, usando o formatador de código configurado."
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Formatar de Novo os Ficheiros?"
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Deseja voltar a formatar todos os ficheiros na pasta seleccionada?"
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "Formatar de Novo"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
 msgstr "A Formatar de Novo"
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
 msgstr "Formatar de Novo os Ficheiros"
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"

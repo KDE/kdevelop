@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -58,7 +58,7 @@ msgstr "<br>Stará hodnota: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Nová hodnota: %1"
 
-#: midebugger.cpp:319
+#: midebugger.cpp:318
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -70,7 +70,7 @@ msgstr ""
 "odpovede z gdb. Prosím zašlite správu o chybe. Toto sedenie sa teraz ukončí, "
 "aby sa zamedzilo pádu"
 
-#: midebugger.cpp:322
+#: midebugger.cpp:321
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -79,18 +79,18 @@ msgstr ""
 "Výnimka je: %1\n"
 "Odpoveď MI je: %2"
 
-#: midebugger.cpp:325
+#: midebugger.cpp:324
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Vnútorná chyba ladenia"
 
-#: midebugger.cpp:337 midebugsession.cpp:415
+#: midebugger.cpp:336 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Proces ukončený"
 
-#: midebugger.cpp:346
+#: midebugger.cpp:345
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -99,12 +99,12 @@ msgstr ""
 "<b>Nepodarilo sa spustiť ladiaci program.</b><p>Nepodarilo sa spustiť '%1'. "
 "Uistite sa, že názov cesty je zadaný správne."
 
-#: midebugger.cpp:354
+#: midebugger.cpp:353
 #, kde-format
 msgid "Process failed to start"
 msgstr "Proces sa nepodarilo spustiť"
 
-#: midebugger.cpp:359
+#: midebugger.cpp:358
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -115,13 +115,13 @@ msgstr ""
 "byť ladiace sedenie ukončené.<br> Pokúste sa reprodukovať pád bez KDevelop a "
 "nahláste chybu.<br>"
 
-#: midebugger.cpp:364
+#: midebugger.cpp:363
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Ladenie spadlo"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:366
 #, kde-format
 msgid "Process crashed"
 msgstr "Proces spadol"

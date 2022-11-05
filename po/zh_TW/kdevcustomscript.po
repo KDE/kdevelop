@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2019-09-30 19:18+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -40,27 +40,27 @@ msgid ""
 "installed. Otherwise, code will not be formatted."
 msgstr ""
 
-#: customscript_plugin.cpp:235
+#: customscript_plugin.cpp:226
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu Indent: GNU 式縮排"
 
-#: customscript_plugin.cpp:246
+#: customscript_plugin.cpp:237
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu Indent: Kernighan & Ritchie 式縮排"
 
-#: customscript_plugin.cpp:257
+#: customscript_plugin.cpp:248
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu Indent：原始的 Berkeley 式縮排"
 
-#: customscript_plugin.cpp:268
+#: customscript_plugin.cpp:259
 #, kde-format
 msgid "Clang Format"
 msgstr "Clang 格式"
 
-#: customscript_plugin.cpp:271
+#: customscript_plugin.cpp:262
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -72,7 +72,7 @@ msgstr ""
 "工具。其支援透過通常放在專案根目錄的 <b>.clang-format</b> 設定檔指定各種格式"
 "化樣式選項。"
 
-#: customscript_plugin.cpp:287
+#: customscript_plugin.cpp:278
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -100,14 +100,14 @@ msgstr ""
 "$TMPFILE</b> <br /> 這會將子目錄 <b>subdir</b> 裡所有的檔案，用 "
 "<b>uncrustify</b> 工具，參考設定檔 <b>uncrustify.config</b> 來重新做排版。"
 
-#: customscript_plugin.cpp:544
+#: customscript_plugin.cpp:537
 #, fuzzy, kde-format
 #| msgid "Command:"
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "指令： "
 
-#: customscript_plugin.cpp:553
+#: customscript_plugin.cpp:546
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -120,19 +120,19 @@ msgstr ""
 "傳送給此指令，結果則會輸出到標準輸出。<br/> <br/> 若是您在指令中加上 <b>"
 "$TMPFILE</b>，則此暫存檔會被用來傳輸源碼。"
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:558
 #, fuzzy, kde-format
 #| msgid "More Variables"
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "更多變數"
 
-#: customscript_plugin.cpp:575
+#: customscript_plugin.cpp:568
 #, kde-format
 msgid "Style: %1"
 msgstr "樣式： %1"
 
-#: customscript_plugin.cpp:588
+#: customscript_plugin.cpp:581
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -160,7 +160,7 @@ msgstr ""
 "${PROJECT_NAME}</b> 會被取代為目前開啟專案<br />\n"
 "的路徑。"
 
-#: customscript_plugin.cpp:600
+#: customscript_plugin.cpp:593
 #, fuzzy, kde-format
 #| msgid "Variable Replacements"
 msgctxt "@title:window"

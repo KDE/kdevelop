@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2010-07-08 13:18-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -37,27 +37,27 @@ msgid ""
 "installed. Otherwise, code will not be formatted."
 msgstr ""
 
-#: customscript_plugin.cpp:235
+#: customscript_plugin.cpp:226
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr ""
 
-#: customscript_plugin.cpp:246
+#: customscript_plugin.cpp:237
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr ""
 
-#: customscript_plugin.cpp:257
+#: customscript_plugin.cpp:248
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr ""
 
-#: customscript_plugin.cpp:268
+#: customscript_plugin.cpp:259
 #, kde-format
 msgid "Clang Format"
 msgstr ""
 
-#: customscript_plugin.cpp:271
+#: customscript_plugin.cpp:262
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -66,7 +66,7 @@ msgid ""
 "directory."
 msgstr ""
 
-#: customscript_plugin.cpp:287
+#: customscript_plugin.cpp:278
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -84,13 +84,13 @@ msgid ""
 "config</b>."
 msgstr ""
 
-#: customscript_plugin.cpp:544
+#: customscript_plugin.cpp:537
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr ""
 
-#: customscript_plugin.cpp:553
+#: customscript_plugin.cpp:546
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -100,18 +100,18 @@ msgid ""
 "for transferring the code."
 msgstr ""
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:558
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr ""
 
-#: customscript_plugin.cpp:575
+#: customscript_plugin.cpp:568
 #, kde-format
 msgid "Style: %1"
 msgstr ""
 
-#: customscript_plugin.cpp:588
+#: customscript_plugin.cpp:581
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -124,7 +124,7 @@ msgid ""
 "is &lt;project name&gt;."
 msgstr ""
 
-#: customscript_plugin.cpp:600
+#: customscript_plugin.cpp:593
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevformatters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2020-07-31 14:14+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
 "X-Generator: Lokalize 20.04.2\n"
 
-#: astyle_plugin.cpp:230
+#: astyle_plugin.cpp:227
 #, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "

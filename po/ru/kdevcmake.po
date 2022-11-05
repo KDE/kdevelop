@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-03-04 16:57+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -409,7 +409,7 @@ msgctxt "@title:tab"
 msgid "Configure CMake Settings"
 msgstr "Настройка параметров CMake"
 
-#: testing/ctestfindjob.cpp:24
+#: testing/ctestfindjob.cpp:23
 #, kde-format
 msgid "Parse test suite %1"
 msgstr "Комплект тестов %1"

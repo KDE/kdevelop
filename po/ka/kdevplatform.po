@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
-"PO-Revision-Date: 2022-10-12 09:43+0200\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"PO-Revision-Date: 2022-11-04 07:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -716,7 +716,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window Renaming some declaration"
 msgid "Rename \"%1\""
-msgstr ""
+msgstr "\"%1\"-ის გადარქმევა"
 
 #: language/codegen/basicrefactoring.cpp:299
 #, kde-format
@@ -801,18 +801,18 @@ msgstr ""
 msgid "Error generating code: %1"
 msgstr "კოდის გენერაციის შეცდომა: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
-msgstr ""
+msgstr "%1:%2->%3:%4"
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
-msgstr ""
+msgstr "\"%1\"-ის სახელის \"%2\"-ზე შეცვლის შეცდომა"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -821,12 +821,12 @@ msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
 msgstr ""
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
 msgstr ""
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -834,7 +834,7 @@ msgctxt ""
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr ""
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -1596,7 +1596,7 @@ msgstr ""
 #: project/helper.cpp:67
 #, kde-format
 msgid "Cannot remove folder <i>%1</i>."
-msgstr ""
+msgstr "<i>%1</i> საქაღალდის წაშლა შეუძლებელია."
 
 #: project/helper.cpp:68
 #, kde-format
@@ -1800,10 +1800,9 @@ msgid "Running %1"
 msgstr "%1-ის გაშვება"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&ფერების სქემა"
+msgstr "&ფანჯრის ფერების სქემა"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -1830,7 +1829,7 @@ msgstr "პარამეტრების გადატარება"
 #, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr ""
+msgstr "დამატებები ნაპოვნი არაა"
 
 #: shell/core.cpp:115
 #, kde-format
@@ -2437,13 +2436,13 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "გამმართველი:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "ჩატვირთული დამატებები"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
@@ -2451,7 +2450,7 @@ msgstr ""
 #: shell/mainwindow.cpp:445
 #, kde-format
 msgid " (read only)"
-msgstr ""
+msgstr "(მხოლოდ-კითხვადი)"
 
 #: shell/mainwindow_p.cpp:221
 #, kde-format
@@ -2738,7 +2737,7 @@ msgstr ""
 #: shell/openprojectdialog.cpp:205
 #, kde-format
 msgid "Open \"%1\" as project"
-msgstr ""
+msgstr "\"%1\"-ის, როგორც პროექტის გახსნა"
 
 #: shell/openprojectdialog.cpp:209
 #, kde-format
@@ -3008,7 +3007,7 @@ msgstr ""
 #: shell/projectcontroller.cpp:513
 #, kde-format
 msgid "Reopen the current project?"
-msgstr ""
+msgstr "გავხსნა თავიდან მიმდინარე პროექტი?"
 
 #: shell/projectcontroller.cpp:514
 #, kde-format
@@ -3139,7 +3138,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Open session %1"
-msgstr ""
+msgstr "%1 სესიის გახსნა"
 
 #: shell/projectcontroller.cpp:926
 #, kde-format
@@ -3150,7 +3149,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr ""
+msgstr "მთლიანი პროექტის თავიდან ანალიზი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
@@ -3241,7 +3240,7 @@ msgstr "საქაღალდე:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select the directory to use..."
-msgstr ""
+msgstr "აირჩიეთ სამუშაო საქაღალდე..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, sourceBox)
 #: shell/projectsourcepage.ui:78
@@ -3359,7 +3358,7 @@ msgstr "ყველა ამჟამად გაშვებული სა
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
-msgstr "ყველა ამჟამად გაშვებული სამუშაოს გაჩერების მოთხოვნა"
+msgstr "ყველა ამჟამად გაშვებული სამუშაოს გაჩერების მოთხოვნა."
 
 #: shell/runcontroller.cpp:470
 #, kde-format
@@ -4368,7 +4367,7 @@ msgid "Configure Runtimes"
 msgstr ""
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
 msgstr "წყაროს ფორმატირება"
@@ -4574,7 +4573,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show tabs"
-msgstr ""
+msgstr "ჩანართების ჩვენება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:129
@@ -4620,43 +4619,43 @@ msgstr ""
 msgid "Configure User Interface"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4664,13 +4663,13 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4678,13 +4677,13 @@ msgid ""
 "style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4692,13 +4691,13 @@ msgid ""
 "configured source formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4706,34 +4705,34 @@ msgid ""
 "formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "გადაფორმატება"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
 msgstr ""
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
 msgstr ""
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"
@@ -5690,7 +5689,7 @@ msgstr "ისტორია..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Annotation..."
-msgstr ""
+msgstr "ანოტაცია..."
 
 #: vcs/vcspluginhelper.cpp:91
 #, kde-format

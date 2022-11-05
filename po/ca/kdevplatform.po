@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-11-03 13:08+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -835,18 +835,18 @@ msgstr "Error en recollir la informació de l'usuari: %1"
 msgid "Error generating code: %1"
 msgstr "Error de generació de codi: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
 msgstr "%1:%2->%3:%4"
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
 msgstr "No s'ha pogut reanomenar el fitxer «%1» a «%2»"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -856,12 +856,12 @@ msgid ""
 msgstr ""
 "Canvi incoherent a %1 entre %2, s'ha cercat %3 (s'ha trobat «%4») -> «%5»"
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
 msgstr "No s'ha pogut substituir el text en el document: %1"
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -869,7 +869,7 @@ msgctxt ""
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr "Canvi incoherent a %1 entre %2 = «%3» (s'ha trobat «%4») -> «%5»"
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -2530,13 +2530,13 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Depurador:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Connectors carregats"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr ""
@@ -4571,7 +4571,7 @@ msgid "Configure Runtimes"
 msgstr "Configura els temps d'execució"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
 msgstr "Formatador del codi font"
@@ -4839,32 +4839,32 @@ msgstr "Els ginys seran de color basant-se en l'afiliació del projecte"
 msgid "Configure User Interface"
 msgstr "Configura la interfície d'usuari"
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "To&rna a donar format al codi font"
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Torna a donar format a la línia"
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Torna a donar format als fitxers..."
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr ""
 "Dona format al/s fitxer/s usant el/s formatador/s de codi font configurat/s"
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
@@ -4872,14 +4872,14 @@ msgstr ""
 "Funcionalitat de donar format que usa el/s formatador/s de codi font que hi "
 "ha configurat/s."
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 "Torna a donar format a la selecció o el fitxer usant <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4889,13 +4889,13 @@ msgstr ""
 "Torna a donar format al text seleccionat o tot el fitxer si no se selecciona "
 "res, usant l'eina <i>%1</i> amb l'estil <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Torna a donar format a la línia actual usant <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4905,7 +4905,7 @@ msgstr ""
 "Torna a donar format al codi font de la línia sota el cursor usant l'eina <i>"
 "%1</i> amb l'estil <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4913,7 +4913,7 @@ msgstr ""
 "Torna a donar format a la selecció o el fitxer usant el formatador de codi "
 "font configurat"
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4923,7 +4923,7 @@ msgstr ""
 "Torna a donar format al text seleccionat o tot el fitxer si no hi ha res "
 "seleccionat, usant el formatador de codi font que hi ha configurat."
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4931,7 +4931,7 @@ msgstr ""
 "Torna a donar format a la línia actual usant el formatador de codi font "
 "configurat"
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4941,34 +4941,34 @@ msgstr ""
 "Torna a donar format al codi font de la línia sota el cursor usant el "
 "formatador de codi font que hi ha configurat."
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Torna a donar format als fitxers"
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Torna a donar format a tots els fitxers de la carpeta seleccionada?"
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "Torna a donar format"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
 msgstr "Torna a donar format"
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
 msgstr "Torna a donar format als fitxers"
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"

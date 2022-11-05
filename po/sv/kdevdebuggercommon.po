@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-08-03 09:56+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -61,7 +61,7 @@ msgstr "<br>Tidigare värde: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Nytt värde: %1"
 
-#: midebugger.cpp:319
+#: midebugger.cpp:318
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -73,7 +73,7 @@ msgstr ""
 "behandlades. Skicka gärna in en felrapport. Avlusningssessionen avslutas nu "
 "för att undvika en potentiell krasch."
 
-#: midebugger.cpp:322
+#: midebugger.cpp:321
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -82,18 +82,18 @@ msgstr ""
 "Undantaget är: %1\n"
 "MI-svaret är: %2"
 
-#: midebugger.cpp:325
+#: midebugger.cpp:324
 #, kde-format
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Internt fel i avlusaren"
 
-#: midebugger.cpp:337 midebugsession.cpp:415
+#: midebugger.cpp:336 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Processen avslutades"
 
-#: midebugger.cpp:346
+#: midebugger.cpp:345
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -102,12 +102,12 @@ msgstr ""
 "<b>Kunde inte starta avlusaren.</b><p>Kunde inte köra '%1'. Försäkra dig om "
 "att sökvägsnamnet är riktigt angivet."
 
-#: midebugger.cpp:354
+#: midebugger.cpp:353
 #, kde-format
 msgid "Process failed to start"
 msgstr "Processen misslyckades starta"
 
-#: midebugger.cpp:359
+#: midebugger.cpp:358
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -118,13 +118,13 @@ msgstr ""
 "grund av det måste avlusningssessionen avslutas.<br>Försök att upprepa "
 "kraschen utan KDevelop och rapportera felet.<br>"
 
-#: midebugger.cpp:364
+#: midebugger.cpp:363
 #, kde-format
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Avlusaren kraschade"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:366
 #, kde-format
 msgid "Process crashed"
 msgstr "Processen kraschade"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-04-07 08:54+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -50,27 +50,27 @@ msgstr ""
 "встановлено виконуваний файл певного інструмента. Якщо такий файл не буде "
 "встановлено, програма не зможе виконати форматування коду."
 
-#: customscript_plugin.cpp:235
+#: customscript_plugin.cpp:226
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "Gnu Indent: GNU"
 
-#: customscript_plugin.cpp:246
+#: customscript_plugin.cpp:237
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "Gnu Indent: Керніган і Річі"
 
-#: customscript_plugin.cpp:257
+#: customscript_plugin.cpp:248
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "Gnu Indent: типовий стиль відступів Берклі"
 
-#: customscript_plugin.cpp:268
+#: customscript_plugin.cpp:259
 #, kde-format
 msgid "Clang Format"
 msgstr "Формат Clang"
 
-#: customscript_plugin.cpp:271
+#: customscript_plugin.cpp:262
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -83,7 +83,7 @@ msgstr ""
 "форматування, які визначаються у файлі налаштувань <b>.clang-format</b>, "
 "який з розташовано у кореневому каталозі проєкту."
 
-#: customscript_plugin.cpp:287
+#: customscript_plugin.cpp:278
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -116,13 +116,13 @@ msgstr ""
 "допомогою програми <b>uncrustify</b> на основі файла налаштувань "
 "<b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:544
+#: customscript_plugin.cpp:537
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Команда:"
 
-#: customscript_plugin.cpp:553
+#: customscript_plugin.cpp:546
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -136,18 +136,18 @@ msgstr ""
 "виводу даних.<br /><br />Якщо ви додасте до команди параметр <b>$TMPFILE</b>,"
 "<br /> код буде передано через файл тимчасових даних."
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:558
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Інші змінні"
 
-#: customscript_plugin.cpp:575
+#: customscript_plugin.cpp:568
 #, kde-format
 msgid "Style: %1"
 msgstr "Стиль: %1"
 
-#: customscript_plugin.cpp:588
+#: customscript_plugin.cpp:581
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -167,7 +167,7 @@ msgstr ""
 ">лише до $TMPFILE.<br /><br /><b>${&lt;назва проєкту&gt;}</b> буде замінено "
 "на шлях до <br />поточного відкритого проєкту з назвою &lt;назва проєкту&gt;."
 
-#: customscript_plugin.cpp:600
+#: customscript_plugin.cpp:593
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

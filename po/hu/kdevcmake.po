@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2015-09-08 10:41+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -424,7 +424,7 @@ msgctxt "@title:tab"
 msgid "Configure CMake Settings"
 msgstr "A CMake beállításainak módosítása"
 
-#: testing/ctestfindjob.cpp:24
+#: testing/ctestfindjob.cpp:23
 #, kde-format
 msgid "Parse test suite %1"
 msgstr "Teszt alkalmazáscsomag (%1) feldolgozása"

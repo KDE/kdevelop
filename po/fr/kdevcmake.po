@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-07-10 12:40+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -409,7 +409,7 @@ msgctxt "@title:tab"
 msgid "Configure CMake Settings"
 msgstr "Configurer les paramètres de CMake"
 
-#: testing/ctestfindjob.cpp:24
+#: testing/ctestfindjob.cpp:23
 #, kde-format
 msgid "Parse test suite %1"
 msgstr "Analyser syntaxiquement la suite de tests %1"

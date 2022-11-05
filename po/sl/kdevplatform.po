@@ -8,17 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
-"PO-Revision-Date: 2022-07-12 06:42+0200\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"PO-Revision-Date: 2022-11-04 08:27+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.1\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -837,18 +837,18 @@ msgstr "Napaka med zbiranjem uporabniških podatkov: %1"
 msgid "Error generating code: %1"
 msgstr "Napaka med ustvarjanjem kode: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
 msgstr "%1:%2 -> %3:%4"
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
 msgstr "Ni bilo mogoče preimenovati '%1' v '%2'"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -858,12 +858,12 @@ msgid ""
 msgstr ""
 "Neskladna sprememba v %1 med %2, najdeno %3 (prišlo je do »%4«) -> »%5«"
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
 msgstr "Ni bilo mogoče zamenjati besedila v dokumentu: %1"
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -871,7 +871,7 @@ msgctxt ""
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr "Neskladna sprememba v %1 pri %2 = »%3«(prišlo je do »%4«) -> »%5«"
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -911,7 +911,7 @@ msgstr "Izgubljen vzdevek %1"
 #: language/duchain/classfunctiondeclaration.cpp:94
 #, kde-format
 msgid "invalid member-function %1 type %2"
-msgstr "Neveljavna članska funkcija %1 vrste %2"
+msgstr "neveljavna članska funkcija %1 vrste %2"
 
 #: language/duchain/declarationid.cpp:204
 #, kde-format
@@ -956,7 +956,7 @@ msgstr "številčnik "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
 #, kde-format
 msgid "namespace %1 "
-msgstr "Imenski prostor %1 "
+msgstr "imenski prostor %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
 #, kde-format
@@ -1868,10 +1868,9 @@ msgid "Running %1"
 msgstr "Zaganjanje %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "Barvna shema"
+msgstr "Barvna shema okna"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -2540,13 +2539,13 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Razhroščevalnik:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Naloženi vstavki"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Vstavki naloženi za <b>%1</b></font></html>"
@@ -4562,7 +4561,7 @@ msgid "Configure Runtimes"
 msgstr "Nastavi izvajalne knjižnice"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
 msgstr "Oblikovalnik izvorne kode"
@@ -4826,44 +4825,44 @@ msgstr "Obarvaj gradnike glede na projekt, v katerega spadajo"
 msgid "Configure User Interface"
 msgstr "Nastavi uporabniški vmesnik"
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, kde-format
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "P&reoblikuj kodo"
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Preoblikuj vrstico"
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, kde-format
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Preoblikuj datoteke..."
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr "Oblikuj datoteke z uporabo nastavljenih oblikovalnikov izvorne kode"
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr ""
 "Oblikuj funkcionalnost z uporabo nastavljenih oblikovalnikov izvorne kode."
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr "Ponovno oblikuj izbiro ali datoteko z uporabo <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4873,13 +4872,13 @@ msgstr ""
 "Ponovno oblikuj izbrano besedilo ali celotno datoteko, če ni ničesar "
 "izbranega, z uporabo orodja <i>%1</i> na način <b>%2</b>."
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Ponovno oblikuj trenutno vrstico z uporabo <i>%1</i> (<b>%2</b>)"
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4889,7 +4888,7 @@ msgstr ""
 "Ponovno oblikuj vrstico pod kazalko z uporabo orodja <i>%1</i> na način <b>"
 "%2</b>."
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
@@ -4897,7 +4896,7 @@ msgstr ""
 "Ponovno oblikuj izbiro ali datoteko z uporabo nastavljenega oblikovalnika "
 "izvorne kode"
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4907,7 +4906,7 @@ msgstr ""
 "Ponovno oblikuj izbiro ali celotno datoteko, če ni ničesar izbranega, z "
 "uporabo nastavljenega oblikovalnika izvorne kode."
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
@@ -4915,7 +4914,7 @@ msgstr ""
 "Preoblikuj trenutno vrstico z uporabo nastavljenega oblikovalnika izvorne "
 "kode"
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4925,34 +4924,34 @@ msgstr ""
 "Preoblikovanje vrstice pod kazalko z uporabo nastavljenega oblikovalnika "
 "izvorne kode."
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, kde-format
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Naj preoblikujem datoteke?"
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Preoblikujem vse datoteke v izbrani mapi?"
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, kde-format
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "Preoblikuj"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
 msgstr "Poteka preoblikovanje"
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
 msgstr "Preoblikuj datoteke"
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"

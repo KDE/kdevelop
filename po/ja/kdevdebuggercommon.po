@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2010-07-18 15:54-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -67,7 +67,7 @@ msgstr "<br>古い値: %1"
 msgid "<br>New value: %1"
 msgstr "<br>新しい値: %1"
 
-#: midebugger.cpp:319
+#: midebugger.cpp:318
 #, kde-format
 msgctxt "<b>Internal debugger error</b>"
 msgid ""
@@ -76,26 +76,26 @@ msgid ""
 "now end to prevent potential crash"
 msgstr ""
 
-#: midebugger.cpp:322
+#: midebugger.cpp:321
 #, kde-format
 msgid ""
 "The exception is: %1\n"
 "The MI response is: %2"
 msgstr ""
 
-#: midebugger.cpp:325
+#: midebugger.cpp:324
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "デバッガの内部エラー"
 
-#: midebugger.cpp:337 midebugsession.cpp:415
+#: midebugger.cpp:336 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "プロセスは終了しました"
 
-#: midebugger.cpp:346
+#: midebugger.cpp:345
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -104,12 +104,12 @@ msgstr ""
 "<b>デバッガを開始できませんでした。</b><p><tt>%1</tt> を実行できませんでし"
 "た。パス名が正しく指定されているか確認してください。"
 
-#: midebugger.cpp:354
+#: midebugger.cpp:353
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:359
+#: midebugger.cpp:358
 #, kde-format
 msgid ""
 "<b>Debugger crashed.</b><p>The debugger process '%1' crashed.<br>Because of "
@@ -117,14 +117,14 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 
-#: midebugger.cpp:364
+#: midebugger.cpp:363
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "デバッガ停止"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:366
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"

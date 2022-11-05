@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -852,18 +852,18 @@ msgstr "Viga kasutaja teabe kogumisel: %1"
 msgid "Error generating code: %1"
 msgstr "Viga koodi genereerimisel: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
 msgstr "%1:%2->%3:%4"
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
 msgstr "Failile \"%1\" nime \"'%2\" andmine nurjus"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -873,12 +873,12 @@ msgid ""
 msgstr ""
 "Ebaühtlane muutus failis %1 vahemikus %2, leiti %3 (kohati \"%4\") -> \"%5\""
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
 msgstr "Teksti asendamine dokumendis nurjus: %1"
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -888,7 +888,7 @@ msgstr ""
 "Ebaühtlane muutus dokumendis %1 vahemikus %2 = \"%3\" (kohati \"%4\") -> "
 "\"%5\""
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -2662,14 +2662,14 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Silur:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Laaditud pluginad"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\"><b>%1</b> laaditud pluginad</font></html>"
@@ -4867,7 +4867,7 @@ msgid "Configure Runtimes"
 msgstr "Käitusaegade seadistamine"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, kde-format
 msgid "Source Formatter"
 msgstr "Lähtekoodi vormindaja"
@@ -5171,48 +5171,48 @@ msgstr "Vidinate toonimine vastavalt projekti kuuluvusele"
 msgid "Configure User Interface"
 msgstr "Kasutajaliidese seadistamine"
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid "&Reformat Source"
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "Vo&minda lähtekood uuesti"
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Vorminda rida uuesti"
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, fuzzy, kde-format
 #| msgid "Reformat Files..."
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Vorminda failid uuesti ..."
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, fuzzy, kde-format
 #| msgid "Format file(s) using the current theme"
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr "Vorminda failid uuesti aktiivse teemaga"
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Formatting functionality using <b>astyle</b> library."
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "Vormindamise võimalus <b> astyle</b>'i abil."
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5220,14 +5220,14 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Vorminda aktiivne rida Astyle'i abil"
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, fuzzy, kde-format
 #| msgid ""
 #| "Source reformatting of line under cursor using <b>astyle</b> library."
@@ -5239,13 +5239,13 @@ msgstr ""
 "Kursori all asuva lähtekoodi rea ümbervormindamise võimalus <b>astyle</b>'i "
 "abil."
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5253,14 +5253,14 @@ msgid ""
 "configured source formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr "Vorminda aktiivne rida Astyle'i abil"
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, fuzzy, kde-format
 #| msgid ""
 #| "Source reformatting of line under cursor using <b>astyle</b> library."
@@ -5272,36 +5272,36 @@ msgstr ""
 "Kursori all asuva lähtekoodi rea ümbervormindamise võimalus <b>astyle</b>'i "
 "abil."
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, fuzzy, kde-format
 #| msgid "Reformat Files"
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Failide taasvormindamine"
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr "Kas vormindada kõik failid valitud kataloogis?"
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, fuzzy, kde-format
 #| msgid "Reformat"
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "Vorminda uuesti"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, kde-format
 msgid "Reformatting"
 msgstr "Taasvormindamine"
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, kde-format
 msgid "Reformat Files"
 msgstr "Failide taasvormindamine"
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, kde-format
 msgid "Reformatting one file"
 msgid_plural "Reformatting %1 files"

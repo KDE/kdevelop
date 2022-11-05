@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2014-08-24 21:48+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -64,7 +64,7 @@ msgstr "<br>Gammel værdi: %1"
 msgid "<br>New value: %1"
 msgstr "<br>Ny værdi: %1"
 
-#: midebugger.cpp:319
+#: midebugger.cpp:318
 #, fuzzy, kde-format
 #| msgctxt "<b>Internal debugger error</b>"
 #| msgid ""
@@ -79,7 +79,7 @@ msgstr ""
 "<p>Fejlsøgerkomponenten kom ud for en intern fejl under behandling af svar "
 "fra GDB. Indsend venligst en fejlreport."
 
-#: midebugger.cpp:322
+#: midebugger.cpp:321
 #, kde-format
 msgid ""
 "The exception is: %1\n"
@@ -88,19 +88,19 @@ msgstr ""
 "Undtagelsen er: %1\n"
 "MI svaret er: %2"
 
-#: midebugger.cpp:325
+#: midebugger.cpp:324
 #, fuzzy, kde-format
 #| msgid "Internal debugger error"
 msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern fejlsøger-fejl"
 
-#: midebugger.cpp:337 midebugsession.cpp:415
+#: midebugger.cpp:336 midebugsession.cpp:415
 #, kde-format
 msgid "Process exited"
 msgstr "Processen endte"
 
-#: midebugger.cpp:346
+#: midebugger.cpp:345
 #, kde-format
 msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
@@ -109,12 +109,12 @@ msgstr ""
 "<b>Kunne ikke starte fejlsøger.</b><p>Kunne ikke køre \"%1\". Sørg for at "
 "stien er angivet korrekt."
 
-#: midebugger.cpp:354
+#: midebugger.cpp:353
 #, kde-format
 msgid "Process failed to start"
 msgstr ""
 
-#: midebugger.cpp:359
+#: midebugger.cpp:358
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>Gdb crashed.</b><p>Because of that the debug session has to be ended."
@@ -128,14 +128,14 @@ msgstr ""
 "afsluttet.<br>Prøv at reproducere sammenbruddet med gdb alene og indsend en "
 "fejlrapport.<br>"
 
-#: midebugger.cpp:364
+#: midebugger.cpp:363
 #, fuzzy, kde-format
 #| msgid "Debugger stopped"
 msgctxt "@title:window"
 msgid "Debugger Crashed"
 msgstr "Fejlsøger stoppet"
 
-#: midebugger.cpp:367
+#: midebugger.cpp:366
 #, fuzzy, kde-format
 #| msgid "Process exited"
 msgid "Process crashed"

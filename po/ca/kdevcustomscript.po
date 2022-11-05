@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-11 00:16+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2021-11-11 19:27+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -50,27 +50,27 @@ msgstr ""
 "Nota: Cada estil personalitzat de script requereix que estigui instal·lat un "
 "executable concret d'eina. Altrament, no es donarà format al codi."
 
-#: customscript_plugin.cpp:235
+#: customscript_plugin.cpp:226
 #, kde-format
 msgid "Gnu Indent: GNU"
 msgstr "GNU Indent: GNU"
 
-#: customscript_plugin.cpp:246
+#: customscript_plugin.cpp:237
 #, kde-format
 msgid "Gnu Indent: Kernighan & Ritchie"
 msgstr "GNU Indent: Kernighan & Ritchie"
 
-#: customscript_plugin.cpp:257
+#: customscript_plugin.cpp:248
 #, kde-format
 msgid "Gnu Indent: Original Berkeley indent style"
 msgstr "GNU Indent: Estil de sagnat original de Berkeley"
 
-#: customscript_plugin.cpp:268
+#: customscript_plugin.cpp:259
 #, kde-format
 msgid "Clang Format"
 msgstr "Format del Clang"
 
-#: customscript_plugin.cpp:271
+#: customscript_plugin.cpp:262
 #, kde-format
 msgid ""
 "Description:<br /><br /><b>clang-format</b> is an automatic source formater "
@@ -84,7 +84,7 @@ msgstr ""
 "al directori arrel del projecte."
 
 # skip-rule: t-sp_2p
-#: customscript_plugin.cpp:287
+#: customscript_plugin.cpp:278
 #, kde-format
 msgid ""
 "Description:<br /><b>kdev_format_source</b> is a script bundled with "
@@ -116,13 +116,13 @@ msgstr ""
 "l'eina <b>uncrustify</b> amb el fitxer de configuració <b>uncrustify.config</"
 "b>."
 
-#: customscript_plugin.cpp:544
+#: customscript_plugin.cpp:537
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Ordre:"
 
-#: customscript_plugin.cpp:553
+#: customscript_plugin.cpp:546
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -137,18 +137,18 @@ msgstr ""
 "> Si afegiu <b>$TMPFILE</b> en l'ordre, llavors <br />s'utilitzarà un fitxer "
 "temporal per a transferir el codi."
 
-#: customscript_plugin.cpp:565
+#: customscript_plugin.cpp:558
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Més variables"
 
-#: customscript_plugin.cpp:575
+#: customscript_plugin.cpp:568
 #, kde-format
 msgid "Style: %1"
 msgstr "Estil: %1"
 
-#: customscript_plugin.cpp:588
+#: customscript_plugin.cpp:581
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -168,7 +168,7 @@ msgstr ""
 "$TMPFILE.<br /><br /><b>${&lt;nom del projecte&gt;}</b> se substituirà pel "
 "camí d'un <br />projecte obert amb el nom &lt;nom del projecte&gt;."
 
-#: customscript_plugin.cpp:600
+#: customscript_plugin.cpp:593
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

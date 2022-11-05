@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2022-10-30 07:48\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevastyle.pot\n"
 "X-Crowdin-File-ID: 6449\n"
 
-#: astyle_plugin.cpp:230
+#: astyle_plugin.cpp:227
 #, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "

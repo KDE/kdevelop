@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:44+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -886,18 +886,18 @@ msgstr "Σφάλμα συλλογής πληροφοριών χρήστη: %1"
 msgid "Error generating code: %1"
 msgstr "Σφάλμα παραγωγής κώδικα: %1"
 
-#: language/codegen/documentchangeset.cpp:114
+#: language/codegen/documentchangeset.cpp:112
 #, kde-format
 msgctxt "text range line:column->line:column"
 msgid "%1:%2->%3:%4"
 msgstr ""
 
-#: language/codegen/documentchangeset.cpp:254
+#: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
 msgstr "Αδυναμία μετονομασίας του '%1' σε '%2'"
 
-#: language/codegen/documentchangeset.cpp:344
+#: language/codegen/documentchangeset.cpp:342
 #, kde-format
 msgctxt ""
 "Inconsistent change in <filename> between <range>, found <oldText> "
@@ -906,13 +906,13 @@ msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
 msgstr ""
 
-#: language/codegen/documentchangeset.cpp:365
+#: language/codegen/documentchangeset.cpp:363
 #, fuzzy, kde-format
 #| msgid "Could not create the directory: %1"
 msgid "Could not replace text in the document: %1"
 msgstr "Αδυναμία ανοίγματος του καταλόγου: %1"
 
-#: language/codegen/documentchangeset.cpp:472
+#: language/codegen/documentchangeset.cpp:467
 #, kde-format
 msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
@@ -920,7 +920,7 @@ msgctxt ""
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr ""
 
-#: language/codegen/documentchangeset.cpp:544
+#: language/codegen/documentchangeset.cpp:539
 #, kde-format
 msgctxt ""
 "Inconsistent change-request at <document>:intersecting changes: <previous-"
@@ -2704,14 +2704,14 @@ msgctxt "@label:listbox"
 msgid "Debugger:"
 msgstr "Διορθωτής σφαλμάτων:"
 
-#: shell/loadedpluginsdialog.cpp:281
+#: shell/loadedpluginsdialog.cpp:280
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgctxt "@title:window"
 msgid "Loaded Plugins"
 msgstr "Φορτωμένα πρόσθετα"
 
-#: shell/loadedpluginsdialog.cpp:287
+#: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
 msgstr "<html><font size=\"4\">Φορτώθηκαν πρόσθετα για <b>%1</b></font></html>"
@@ -4968,7 +4968,7 @@ msgid "Configure Runtimes"
 msgstr "Διαμόρφωση συνεδριών"
 
 #: shell/settings/sourceformattersettings.cpp:75
-#: shell/sourceformattercontroller.cpp:139
+#: shell/sourceformattercontroller.cpp:228
 #, fuzzy, kde-format
 #| msgid "No Source Formatter available"
 msgid "Source Formatter"
@@ -5273,48 +5273,48 @@ msgstr ""
 msgid "Configure User Interface"
 msgstr "Περιβάλλον χρήστη"
 
-#: shell/sourceformattercontroller.cpp:145
+#: shell/sourceformattercontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid "&Reformat Source"
 msgctxt "@action"
 msgid "&Reformat Source"
 msgstr "Αναδιαμόρ&φωση πηγαίου κώδικα"
 
-#: shell/sourceformattercontroller.cpp:149
+#: shell/sourceformattercontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action"
 msgid "Reformat Line"
 msgstr "Αναδιαμόρφωση γραμμής"
 
-#: shell/sourceformattercontroller.cpp:153
+#: shell/sourceformattercontroller.cpp:242
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action"
 msgid "Reformat Files..."
 msgstr "Αναδιαμόρφωση γραμμής"
 
-#: shell/sourceformattercontroller.cpp:154
+#: shell/sourceformattercontroller.cpp:243
 #, fuzzy, kde-format
 #| msgid "Format file(s) using the current theme"
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
 msgstr "Διαμόρφωση αρχείου(ων) με χρήση του τρέχοντος θέματος"
 
-#: shell/sourceformattercontroller.cpp:156
+#: shell/sourceformattercontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Formatting functionality using <b>astyle</b> library."
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
 msgstr "Λειτουργία διαμόρφωσης με τη χρήση της βιβλιοθήκης <b>astyle</b>."
 
-#: shell/sourceformattercontroller.cpp:523
+#: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:526
+#: shell/sourceformattercontroller.cpp:606
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5322,14 +5322,14 @@ msgid ""
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:528
+#: shell/sourceformattercontroller.cpp:608
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
 msgstr "Αναδιαμόρφωση τρέχουσας γραμμής με τη χρήση του AStyle"
 
-#: shell/sourceformattercontroller.cpp:531
+#: shell/sourceformattercontroller.cpp:611
 #, fuzzy, kde-format
 #| msgid ""
 #| "Source reformatting of line under cursor using <b>astyle</b> library."
@@ -5341,13 +5341,13 @@ msgstr ""
 "Αναδιαμόρφωση γραμμής κάτω από το δρομέα με τη χρήση της βιβλιοθήκης "
 "<b>astyle</b>."
 
-#: shell/sourceformattercontroller.cpp:535
+#: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:537
+#: shell/sourceformattercontroller.cpp:617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5355,14 +5355,14 @@ msgid ""
 "configured source formatter."
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:539
+#: shell/sourceformattercontroller.cpp:619
 #, fuzzy, kde-format
 #| msgid "Reformat current line using AStyle"
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
 msgstr "Αναδιαμόρφωση τρέχουσας γραμμής με τη χρήση του AStyle"
 
-#: shell/sourceformattercontroller.cpp:541
+#: shell/sourceformattercontroller.cpp:621
 #, fuzzy, kde-format
 #| msgid ""
 #| "Source reformatting of line under cursor using <b>astyle</b> library."
@@ -5374,38 +5374,38 @@ msgstr ""
 "Αναδιαμόρφωση γραμμής κάτω από το δρομέα με τη χρήση της βιβλιοθήκης "
 "<b>astyle</b>."
 
-#: shell/sourceformattercontroller.cpp:765
+#: shell/sourceformattercontroller.cpp:856
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@title:window"
 msgid "Reformat Files?"
 msgstr "Αναδιαμόρφωση γραμμής"
 
-#: shell/sourceformattercontroller.cpp:766
+#: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
 msgstr ""
 
-#: shell/sourceformattercontroller.cpp:770
+#: shell/sourceformattercontroller.cpp:861
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgctxt "@action:button"
 msgid "Reformat"
 msgstr "Αναδιαμόρφωση γραμμής"
 
-#: shell/sourceformatterjob.cpp:38
+#: shell/sourceformatterjob.cpp:36
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgid "Reformatting"
 msgstr "Αναδιαμόρφωση γραμμής"
 
-#: shell/sourceformatterjob.cpp:49
+#: shell/sourceformatterjob.cpp:47
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgid "Reformat Files"
 msgstr "Αναδιαμόρφωση γραμμής"
 
-#: shell/sourceformatterjob.cpp:60
+#: shell/sourceformatterjob.cpp:58
 #, fuzzy, kde-format
 #| msgid "Reformat Line"
 msgid "Reformatting one file"
