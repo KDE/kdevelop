@@ -41,6 +41,8 @@
 #include <QVersionNumber>
 #include <QStandardPaths>
 
+#include <optional>
+
 int main(int argc, char** argv)
 {
     KDevelop::sanitizerTestInit(argv);
@@ -56,14 +58,16 @@ using ClangCodeCompletionItemTester = CodeCompletionItemTester<ClangCodeCompleti
 
 struct CompletionItems {
     CompletionItems(){}
-    CompletionItems(const KTextEditor::Cursor& position, const QStringList& completions, const QStringList& declarationItems = {})
+    CompletionItems(const KTextEditor::Cursor& position, const QStringList& completions,
+                    const QStringList& declarationItems = {}, const std::optional<QString>& code = std::nullopt)
         : position(position)
         , completions(completions)
         , declarationItems(declarationItems)
-    {};
+        , code(code){};
     KTextEditor::Cursor position;
     QStringList completions;
     QStringList declarationItems; ///< completion items that have associated declarations. Declarations with higher match quality at the top. @sa KTextEditor::CodeCompletionModel::MatchQuality
+    std::optional<QString> code; ///< If we expect the completion (not) to change the code, e.g., arrow-to-dot
 };
 Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(CompletionItems)
@@ -266,6 +270,11 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
     auto context = createContext(top, sessionData, expectedCompletionItems.position, code);
 
     QApplication::processEvents();
+
+    if (expectedCompletionItems.code) {
+        QCOMPARE(document->textDocument()->text(), *expectedCompletionItems.code);
+    }
+
     document->close(KDevelop::IDocument::Silent);
 
     // The previous ClangCodeCompletionContext call should replace member access.
@@ -567,24 +576,64 @@ void TestCodeCompletion::testReplaceMemberAccess_data()
     QTest::addColumn<QString>("code");
     QTest::addColumn<CompletionItems>("expectedItems");
 
-    QTest::newRow("replace arrow to dot")
-    <<  "struct Struct { void function(); };"
-        "int main() { Struct s; \ns-> "
-    << CompletionItems{{1, 3}, {
-        "function"
-    }};
+    {
+        const auto code = QString::fromLatin1(
+            "struct Struct { void function(); };"
+            "int main() { Struct s; \ns");
 
-    QTest::newRow("replace dot to arrow")
-    <<  "struct Struct { void function(); };"
-        "int main() { Struct* s; \ns.  "
-    << CompletionItems{{1, 3}, {
-        "function"
-    }};
+        CompletionItems cis;
+        cis.position = {1, 3};
+        cis.completions = QStringList{"function"};
+        cis.code = code + ".";
+        QTest::newRow("replace arrow to dot") << (code + "->") << cis;
+    }
 
-    QTest::newRow("no replacement needed")
-    <<  "int main() { double a = \n0.  "
-    << CompletionItems{{1, 2}, {
-    }};
+    {
+        const auto code = QString::fromLatin1(
+            "struct Struct { void function(); };"
+            "int main() { Struct* s; \ns");
+
+        CompletionItems cis;
+        cis.position = {1, 3};
+        cis.completions = QStringList{"function"};
+        cis.code = code + "->";
+        QTest::newRow("replace dot to arrow") << (code + ".") << cis;
+    }
+
+    {
+        const auto code = QString::fromLatin1("int main() { double a = \n0.  ");
+
+        CompletionItems cis;
+        cis.position = {1, 2};
+        cis.completions = QStringList{};
+        cis.code = code;
+        QTest::newRow("no replacement needed") << code << cis;
+    }
+
+    // See https://bugs.kde.org/show_bug.cgi?id=460870
+    {
+        const auto code = QString::fromLatin1(
+            "struct S { double a; double b; };"
+            "int main() { S c[2] = { {.6, \n.");
+
+        CompletionItems cis;
+        cis.position = {1, 1};
+        cis.completions = QStringList{};
+        cis.code = code;
+        QTest::newRow("no replacement in aggregate initializer with floating point number") << code << cis;
+    }
+
+    {
+        const auto code = QString::fromLatin1(
+            "typedef struct myStruct { int x; } myStruct;"
+            "myStruct fn() { return (myStruct) { \n.");
+
+        CompletionItems cis;
+        cis.position = {1, 1};
+        cis.completions = QStringList{"x"};
+        cis.code = code;
+        QTest::newRow("no replacement in aggregate initializer with member") << code << cis;
+    }
 }
 
 void TestCodeCompletion::testVirtualOverride()

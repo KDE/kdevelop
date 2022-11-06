@@ -950,12 +950,27 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
                                                  allUnsaved.data(), allUnsaved.size(),
                                                  clang_defaultCodeCompleteOptions()));
 
-            if (m_results && m_results->NumResults) {
-                QMetaObject::invokeMethod(&s_memberAccessReplacer, "replaceCurrentAccess", Qt::QueuedConnection,
-                                          Q_ARG(MemberAccessReplacer::Type, MemberAccessReplacer::DotToArrow));
+            m_valid = false;
+
+            if (!m_results || m_results->NumResults == 0) {
+                return;
             }
 
-            m_valid = false;
+            const auto diagnostic = clang_codeCompleteGetDiagnostic(m_results.get(), 0);
+            const ClangString str(clang_getDiagnosticCategoryText(diagnostic));
+
+            // This is unfortunately not documented anywhere in clang
+            const bool isParseIssue = (qstrcmp(str.c_str(), "Parse Issue") == 0);
+            clang_disposeDiagnostic(diagnostic);
+
+            // Do not perform subsitution if we get a parsing issue with the ->
+            if (isParseIssue) {
+                return;
+            }
+
+            QMetaObject::invokeMethod(&s_memberAccessReplacer, "replaceCurrentAccess", Qt::QueuedConnection,
+                                      Q_ARG(MemberAccessReplacer::Type, MemberAccessReplacer::DotToArrow));
+
             return;
         }
     }
