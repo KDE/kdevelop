@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2022-07-11 11:32+0200\n"
+"PO-Revision-Date: 2022-11-03 13:08+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1860,10 +1860,9 @@ msgid "Running %1"
 msgstr "S'està executant %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "Esquema de &color"
+msgstr "Esquema de color de les &finestres"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -4196,7 +4195,7 @@ msgid ""
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
 "<p>De manera predeterminada, els colors globals per als tipus, funcions, "
-"espais de noms, etc. es generen automàticament i s'adaptaran al tema de "
+"espais de nom, etc. es generen automàticament i s'adaptaran al tema de "
 "l'editor seleccionat basat en la intensitat de coloració global. Si voleu "
 "tindre un control complet sobre els colors, en el seu lloc podeu utilitzar "
 "el tema de l'editor com a font de color. A continuació, podreu ajustar els "
