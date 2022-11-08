@@ -53,6 +53,3 @@ msgid "Opens a list to walk through the list of last used views in reverse."
 msgstr ""
 "Obre una llista per a recórrer a l'inrevés les vistes emprades per darrera "
 "vegada."
-
-#~ msgid "Document Switcher"
-#~ msgstr "Commutador de documents"

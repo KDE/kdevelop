@@ -50,18 +50,3 @@ msgstr "Tanca"
 msgctxt "@action:inmenu"
 msgid "Close All Other"
 msgstr "Tanca tots els altres"
-
-#~ msgid "Display document categories (mimetypes) in the view"
-#~ msgstr "Visualitza al visor les categories dels documents (tipus MIME)"
-
-#~ msgid ""
-#~ "If this option is set, the Document View will organize documents\n"
-#~ "        by their mimetype."
-#~ msgstr ""
-#~ "Si s'estableix aquesta opció, el visor de documents organitzarà els "
-#~ "documents\n"
-#~ "        pel seu tipus MIME."
-
-#~ msgctxt "@option:check"
-#~ msgid "Display document &categories"
-#~ msgstr "Mostra les &categories dels documents"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
 "PO-Revision-Date: 2013-09-16 12:38+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19,16 +19,16 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: astyle_plugin.cpp:230
+#: astyle_plugin.cpp:227
 #, kde-format
 msgid ""
 "<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
-"for the C, C++, C# and Java programming languages.<br />Home Page: <a href="
-"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"for the C, C++, C# and Java programming languages.<br />Home Page: <a "
+"href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
 msgstr ""
 "<b>Artistisk Stil</b> lager innrykk, formatterer, og pynter opp kildekoden "
-"for programmeringsspråkene C, C++, C# og Java.<br /> Nettside:  <a href="
-"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+"for programmeringsspråkene C, C++, C# og Java.<br /> Nettside:  <a "
+"href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
 #: astyle_preferences.ui:33

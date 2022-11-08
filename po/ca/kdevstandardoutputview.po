@@ -137,7 +137,3 @@ msgstr "Prova"
 msgctxt "@title:window"
 msgid "Version Control"
 msgstr "Control de versions"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Navigation"
-#~ msgstr "Navegació"

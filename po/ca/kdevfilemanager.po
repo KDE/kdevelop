@@ -56,6 +56,3 @@ msgstr "Crea un fitxer nou"
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "No s'ha pogut crear el fitxer «%1»"
-
-#~ msgid "Filesystem"
-#~ msgstr "Sistema de fitxers"
