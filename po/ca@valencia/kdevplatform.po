@@ -5537,8 +5537,8 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
-"No teniu permisos d'escriptura per als fitxers següents. Afig permisos "
-"d'escriptura per al propietari abans de guardar?"
+"No teniu permisos d'escriptura per als fitxers següents. Voleu afegir "
+"permisos d'escriptura per al propietari abans de guardar?"
 
 #: util/shellutils.cpp:82
 #, kde-format
