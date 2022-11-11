@@ -429,8 +429,8 @@ msgstr ""
 "o «observar-les» (fer que s'actualitzen automàticament). Les expressions que "
 "no s'actualitzen automàticament es poden actualitzar manualment des del menú "
 "contextual. Les expressions poden ser canviades de nom a un nom més "
-"descriptiu clicant al nom de la columna.<br />Per a canviar el valor d'una "
-"variable o una expressió, cliqueu al valor.<br />"
+"descriptiu clicant en el nom de la columna.<br />Per a canviar el valor "
+"d'una variable o una expressió, cliqueu en el valor.<br />"
 
 #: debugger/variable/variablewidget.cpp:107
 #, kde-format
@@ -5644,7 +5644,7 @@ msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
-"Esteu a la branca «%1».\n"
+"Esteu en la branca «%1».\n"
 "Per a suprimir-la, heu de canviar a una altra branca."
 
 #: vcs/dvcs/ui/branchmanager.cpp:141

@@ -595,7 +595,7 @@ msgstr "Per a publicar els canvis, primer cal escriure un missatge d'entrega"
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
 msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
-msgstr "Publica els canvis a <b>%1</b> a la branca <b>%2</b>"
+msgstr "Publica els canvis a <b>%1</b> en la branca <b>%2</b>"
 
 #: simplecommitform.cpp:122
 #, kde-format

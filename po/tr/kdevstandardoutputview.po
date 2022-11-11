@@ -111,7 +111,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
-msgstr "Yap"
+msgstr "Yapı"
 
 #: standardoutputview.cpp:106
 #, kde-format
