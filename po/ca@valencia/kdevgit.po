@@ -140,7 +140,7 @@ msgid ""
 "cannot be undone. Continue?"
 msgstr ""
 "Les línies seleccionades es revertiran i es perdran els canvis. Esta "
-"operació no es pot desfer. Voleu continuar?"
+"operació no es podrà desfer. Voleu continuar?"
 
 #: diffviewsctrl.cpp:334
 #, kde-format
