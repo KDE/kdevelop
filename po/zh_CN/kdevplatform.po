@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-11-13 00:44+0000\n"
 "PO-Revision-Date: 2022-11-06 01:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2104,19 +2104,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "调试"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "调试启动"
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "调试当前启动"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:447
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3223,35 +3223,35 @@ msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "名称："
 
-#: shell/projectsourcepage.cpp:45
+#: shell/projectsourcepage.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
 msgstr "来自文件系统"
 
-#: shell/projectsourcepage.cpp:180
+#: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
 msgstr "无法创建目录：%1"
 
-#: shell/projectsourcepage.cpp:213
+#: shell/projectsourcepage.cpp:208
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
 msgstr "%1：%p%"
 
-#: shell/projectsourcepage.cpp:254
+#: shell/projectsourcepage.cpp:249
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr "您需要指定有效的或不存在的目录以检出工程"
 
-#: shell/projectsourcepage.cpp:256
+#: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
 msgstr "您需要指定有效的或不存在的目录以检出工程"
 
-#: shell/projectsourcepage.cpp:258
+#: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
 msgstr "您需要指定一个空文件夹作为您项目的目标地址"
@@ -3298,42 +3298,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "获取"
 
-#: shell/runcontroller.cpp:88
+#: shell/runcontroller.cpp:87
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "调试"
 
-#: shell/runcontroller.cpp:97
+#: shell/runcontroller.cpp:96
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "配置"
 
-#: shell/runcontroller.cpp:106
+#: shell/runcontroller.cpp:105
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "执行"
 
-#: shell/runcontroller.cpp:408
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "当前的启动配置不支持“%1”模式。"
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "配置启动..."
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "打开启动器配置对话框"
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3341,25 +3341,25 @@ msgid ""
 "ones."
 msgstr "<b>当前目标</b><p>选择调用运行时要运行的目标。</p>"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "执行启动"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "执行"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "执行当前启动"
 
-#: shell/runcontroller.cpp:439
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3369,7 +3369,7 @@ msgstr ""
 "<b>执行程序</b><p>执行当前活动的目标或工程设置<b>运行选项</b>标签中所指定的主"
 "程序。</p>"
 
-#: shell/runcontroller.cpp:445
+#: shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3380,84 +3380,84 @@ msgstr "调试"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "停止所有作业"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "全部停止"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "停止全部当前运行的作业"
 
-#: shell/runcontroller.cpp:464
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "请求停止全部正在运行的作业。"
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "停止"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "停止"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "分别停止单个作业的菜单"
 
-#: shell/runcontroller.cpp:474
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "可以单独分别停止的作业的列表。"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "当前启动配置"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "当前启动配置"
 
-#: shell/runcontroller.cpp:480
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "<b>当前目标</b><p>选择调用运行时要运行的目标。</p>"
 
-#: shell/runcontroller.cpp:597
+#: shell/runcontroller.cpp:596
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> 未命名作业"
 
-#: shell/runcontroller.cpp:978
+#: shell/runcontroller.cpp:973
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "新建 %1 启动器"
 
-#: shell/runcontroller.cpp:1015
+#: shell/runcontroller.cpp:1010
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -4243,78 +4243,78 @@ msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
 msgstr "简化解析的最小工程大小："
 
-#: shell/settings/pluginpreferences.cpp:48
+#: shell/settings/pluginpreferences.cpp:35
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
 msgstr "核心"
 
-#: shell/settings/pluginpreferences.cpp:49
+#: shell/settings/pluginpreferences.cpp:36
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Management"
 msgstr "工程管理"
 
-#: shell/settings/pluginpreferences.cpp:50
+#: shell/settings/pluginpreferences.cpp:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Version Control"
 msgstr "版本控制"
 
-#: shell/settings/pluginpreferences.cpp:51
+#: shell/settings/pluginpreferences.cpp:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
 msgstr "工具"
 
-#: shell/settings/pluginpreferences.cpp:52
+#: shell/settings/pluginpreferences.cpp:39
 #, kde-format
 msgctxt "@title:group"
 msgid "Documentation"
 msgstr "文档"
 
-#: shell/settings/pluginpreferences.cpp:53
+#: shell/settings/pluginpreferences.cpp:40
 #, kde-format
 msgctxt "@title:group"
 msgid "Language Support"
 msgstr "语言支持"
 
-#: shell/settings/pluginpreferences.cpp:54
+#: shell/settings/pluginpreferences.cpp:41
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugging"
 msgstr "调试"
 
-#: shell/settings/pluginpreferences.cpp:55
+#: shell/settings/pluginpreferences.cpp:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
 msgstr "测试"
 
-#: shell/settings/pluginpreferences.cpp:56
+#: shell/settings/pluginpreferences.cpp:43
 #, kde-format
 msgctxt "@title:group"
 msgid "Analyzers"
 msgstr "分析器"
 
-#: shell/settings/pluginpreferences.cpp:57
+#: shell/settings/pluginpreferences.cpp:44
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
 msgstr "运行时"
 
-#: shell/settings/pluginpreferences.cpp:58
+#: shell/settings/pluginpreferences.cpp:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
 msgstr "其他"
 
-#: shell/settings/pluginpreferences.h:32
+#: shell/settings/pluginpreferences.h:27
 #, kde-format
 msgid "Plugins"
 msgstr "插件"
 
-#: shell/settings/pluginpreferences.h:33
+#: shell/settings/pluginpreferences.h:28
 #, kde-format
 msgid "Configure Plugins"
 msgstr "配置插件"
@@ -5313,7 +5313,7 @@ msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
 msgstr "%1 (不存在)"
 
-#: util/jobstatus.cpp:30
+#: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
 msgstr "任务终止"
@@ -5836,34 +5836,34 @@ msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "输入仓库 URL..."
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:60
+#: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
 msgid_plural "%1 years"
 msgstr[0] "%1 年"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:70
+#: vcs/widgets/vcsannotationitemdelegate.cpp:65
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
 msgid_plural "%1 months"
 msgstr[0] "%1 个月"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:74
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] "%1 天"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:76
+#: vcs/widgets/vcsannotationitemdelegate.cpp:71
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr "今天"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:290
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"

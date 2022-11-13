@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevplatform.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-11-13 00:44+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -2182,19 +2182,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Dífhabhtaigh"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr ""
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr ""
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:447
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3394,36 +3394,36 @@ msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Ainm:"
 
-#: shell/projectsourcepage.cpp:45
+#: shell/projectsourcepage.cpp:44
 #, fuzzy, kde-format
 #| msgid "Format Files"
 msgctxt "@item:inlistbox"
 msgid "From File System"
 msgstr "Formáidigh Comhaid"
 
-#: shell/projectsourcepage.cpp:180
+#: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
 msgstr ""
 
-#: shell/projectsourcepage.cpp:213
+#: shell/projectsourcepage.cpp:208
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
 msgstr ""
 
-#: shell/projectsourcepage.cpp:254
+#: shell/projectsourcepage.cpp:249
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
 
-#: shell/projectsourcepage.cpp:256
+#: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
 msgstr ""
 
-#: shell/projectsourcepage.cpp:258
+#: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
 msgstr ""
@@ -3476,33 +3476,33 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Faigh"
 
-#: shell/runcontroller.cpp:88
+#: shell/runcontroller.cpp:87
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Dífhabhtaigh"
 
-#: shell/runcontroller.cpp:97
+#: shell/runcontroller.cpp:96
 #, fuzzy, kde-format
 #| msgid "Profile"
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Próifíl"
 
-#: shell/runcontroller.cpp:106
+#: shell/runcontroller.cpp:105
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Rith"
 
-#: shell/runcontroller.cpp:408
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr ""
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:427
 #, fuzzy, kde-format
 #| msgctxt "%1 = application name"
 #| msgid "Configure %1"
@@ -3510,13 +3510,13 @@ msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Cumraigh %1"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr ""
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3524,27 +3524,27 @@ msgid ""
 "ones."
 msgstr ""
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:434
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Rith"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:435
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Rith"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr ""
 
-#: shell/runcontroller.cpp:439
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3552,7 +3552,7 @@ msgid ""
 "configuration."
 msgstr ""
 
-#: shell/runcontroller.cpp:445
+#: shell/runcontroller.cpp:444
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
@@ -3564,87 +3564,87 @@ msgstr "Dífhabhtaigh"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr ""
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr ""
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr ""
 
-#: shell/runcontroller.cpp:464
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr ""
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr ""
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr ""
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr ""
 
-#: shell/runcontroller.cpp:474
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr ""
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:477
 #, fuzzy, kde-format
 #| msgid "Launch Configurations"
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Tosaigh Cumraíochtaí"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:478
 #, fuzzy, kde-format
 #| msgid "Launch Configurations"
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Tosaigh Cumraíochtaí"
 
-#: shell/runcontroller.cpp:480
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 
-#: shell/runcontroller.cpp:597
+#: shell/runcontroller.cpp:596
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Jab gan ainm"
 
-#: shell/runcontroller.cpp:978
+#: shell/runcontroller.cpp:973
 #, kde-format
 msgid "New %1 Launcher"
 msgstr ""
 
-#: shell/runcontroller.cpp:1015
+#: shell/runcontroller.cpp:1010
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -4473,79 +4473,79 @@ msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
 msgstr ""
 
-#: shell/settings/pluginpreferences.cpp:48
+#: shell/settings/pluginpreferences.cpp:35
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
 msgstr "Croí"
 
-#: shell/settings/pluginpreferences.cpp:49
+#: shell/settings/pluginpreferences.cpp:36
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Management"
 msgstr "Bainistíocht Tionscadal"
 
-#: shell/settings/pluginpreferences.cpp:50
+#: shell/settings/pluginpreferences.cpp:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Version Control"
 msgstr ""
 
-#: shell/settings/pluginpreferences.cpp:51
+#: shell/settings/pluginpreferences.cpp:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
 msgstr "Uirlisí"
 
-#: shell/settings/pluginpreferences.cpp:52
+#: shell/settings/pluginpreferences.cpp:39
 #, kde-format
 msgctxt "@title:group"
 msgid "Documentation"
 msgstr "Doiciméadú"
 
-#: shell/settings/pluginpreferences.cpp:53
+#: shell/settings/pluginpreferences.cpp:40
 #, kde-format
 msgctxt "@title:group"
 msgid "Language Support"
 msgstr "Tacaíocht Teanga"
 
-#: shell/settings/pluginpreferences.cpp:54
+#: shell/settings/pluginpreferences.cpp:41
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugging"
 msgstr "Dífhabhtú"
 
-#: shell/settings/pluginpreferences.cpp:55
+#: shell/settings/pluginpreferences.cpp:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
 msgstr "Tástáil"
 
-#: shell/settings/pluginpreferences.cpp:56
+#: shell/settings/pluginpreferences.cpp:43
 #, kde-format
 msgctxt "@title:group"
 msgid "Analyzers"
 msgstr ""
 
-#: shell/settings/pluginpreferences.cpp:57
+#: shell/settings/pluginpreferences.cpp:44
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
 msgstr ""
 
-#: shell/settings/pluginpreferences.cpp:58
+#: shell/settings/pluginpreferences.cpp:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
 msgstr "Eile"
 
-#: shell/settings/pluginpreferences.h:32
+#: shell/settings/pluginpreferences.h:27
 #, fuzzy, kde-format
 #| msgid "Loaded Plugins"
 msgid "Plugins"
 msgstr "Breiseáin Luchtaithe"
 
-#: shell/settings/pluginpreferences.h:33
+#: shell/settings/pluginpreferences.h:28
 #, fuzzy, kde-format
 #| msgctxt "%1 = application name"
 #| msgid "Configure %1"
@@ -5612,7 +5612,7 @@ msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
 msgstr ""
 
-#: util/jobstatus.cpp:30
+#: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
 msgstr ""
@@ -6197,7 +6197,7 @@ msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "Oscail Cumraíocht..."
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:60
+#: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
@@ -6208,7 +6208,7 @@ msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:70
+#: vcs/widgets/vcsannotationitemdelegate.cpp:65
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
@@ -6219,7 +6219,7 @@ msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:74
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
@@ -6230,13 +6230,13 @@ msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:76
+#: vcs/widgets/vcsannotationitemdelegate.cpp:71
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr ""
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:290
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"

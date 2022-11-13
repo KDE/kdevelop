@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-11-13 00:44+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -2221,20 +2221,20 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Ladiť"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:442
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Odladiť spustenie"
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Odladiť aktuálne spustenie"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:447
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3482,25 +3482,25 @@ msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Názov:"
 
-#: shell/projectsourcepage.cpp:45
+#: shell/projectsourcepage.cpp:44
 #, fuzzy, kde-format
 #| msgid "From File System"
 msgctxt "@item:inlistbox"
 msgid "From File System"
 msgstr "Zo súborového systému"
 
-#: shell/projectsourcepage.cpp:180
+#: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
 msgstr "Nepodarilo sa vytvoriť adresár %1"
 
-#: shell/projectsourcepage.cpp:213
+#: shell/projectsourcepage.cpp:208
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
 msgstr "%1 : %p%"
 
-#: shell/projectsourcepage.cpp:254
+#: shell/projectsourcepage.cpp:249
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
@@ -3508,12 +3508,12 @@ msgstr ""
 "Je potrebné, aby ste určili platný alebo neexistujúci adresár, aby ste si "
 "overili projekt."
 
-#: shell/projectsourcepage.cpp:256
+#: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
 msgstr "Musíte určiť zdroj pre váš vzdialený projekt"
 
-#: shell/projectsourcepage.cpp:258
+#: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
 msgstr "Musíte určiť prázdny adresár ako vaše umiestnenie projektu"
@@ -3563,46 +3563,46 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Získať %1..."
 
-#: shell/runcontroller.cpp:88
+#: shell/runcontroller.cpp:87
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Ladenie"
 
-#: shell/runcontroller.cpp:97
+#: shell/runcontroller.cpp:96
 #, fuzzy, kde-format
 #| msgid "Profile"
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profil"
 
-#: shell/runcontroller.cpp:106
+#: shell/runcontroller.cpp:105
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Spustiť"
 
-#: shell/runcontroller.cpp:408
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Aktuálna konfigurácia spustenia nepodporuje režim '%1'."
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:427
 #, fuzzy, kde-format
 #| msgid "Configure Launches..."
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Konfigurovať spustenia..."
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Otvoriť konfiguračný dialóg spustenia"
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3612,27 +3612,27 @@ msgstr ""
 "Otvorí dialóg pre nastavenie nových konfigurácií spustenia alebo pre zmenu "
 "existujúcich."
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:434
 #, fuzzy, kde-format
 #| msgid "Execute Launch"
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Vykonať spustenie"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:435
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Spustiť"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Vykonať aktuálne spustenie"
 
-#: shell/runcontroller.cpp:439
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3641,7 +3641,7 @@ msgid ""
 msgstr ""
 "Vykoná cieľ alebo program určený v práve aktívnej konfigurácii spustenia."
 
-#: shell/runcontroller.cpp:445
+#: shell/runcontroller.cpp:444
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
@@ -3653,88 +3653,88 @@ msgstr "Ladenie"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:458
 #, fuzzy, kde-format
 #| msgid "Stop All Jobs"
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Zastaviť všetky úlohy"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Zastaviť všetko"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Zastaviť všetky práve bežiace úlohy"
 
-#: shell/runcontroller.cpp:464
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Požaduje, aby sa všetky bežiace úlohy zastavili."
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Zastaviť"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Zastaviť"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Menu umožňuje zastaviť jednotlivé úlohy"
 
-#: shell/runcontroller.cpp:474
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Zoznam úloh, ktoré sa môžu zastaviť individuálne."
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:477
 #, fuzzy, kde-format
 #| msgid "Current Launch Configuration"
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Súčasná konfigurácia spustenia"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Súčasná konfigurácia spustenia"
 
-#: shell/runcontroller.cpp:480
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr ""
 "Vybrať, ktorú konfiguráciu spustenia spustiť, keď je vyvolané spustenie."
 
-#: shell/runcontroller.cpp:597
+#: shell/runcontroller.cpp:596
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> nepomenovaná úloha"
 
-#: shell/runcontroller.cpp:978
+#: shell/runcontroller.cpp:973
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Nový %1 spúšťač"
 
-#: shell/runcontroller.cpp:1015
+#: shell/runcontroller.cpp:1010
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"
@@ -4624,78 +4624,78 @@ msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
 msgstr "Minimálna veľkosť projektu pre zjednodušenú analýzu:"
 
-#: shell/settings/pluginpreferences.cpp:48
+#: shell/settings/pluginpreferences.cpp:35
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
 msgstr "Jadro"
 
-#: shell/settings/pluginpreferences.cpp:49
+#: shell/settings/pluginpreferences.cpp:36
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Management"
 msgstr "Správa projektov"
 
-#: shell/settings/pluginpreferences.cpp:50
+#: shell/settings/pluginpreferences.cpp:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Version Control"
 msgstr "Správa verzií"
 
-#: shell/settings/pluginpreferences.cpp:51
+#: shell/settings/pluginpreferences.cpp:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
 msgstr "Nástroje"
 
-#: shell/settings/pluginpreferences.cpp:52
+#: shell/settings/pluginpreferences.cpp:39
 #, kde-format
 msgctxt "@title:group"
 msgid "Documentation"
 msgstr "Dokumentácia"
 
-#: shell/settings/pluginpreferences.cpp:53
+#: shell/settings/pluginpreferences.cpp:40
 #, kde-format
 msgctxt "@title:group"
 msgid "Language Support"
 msgstr "Jazyková podpora"
 
-#: shell/settings/pluginpreferences.cpp:54
+#: shell/settings/pluginpreferences.cpp:41
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugging"
 msgstr "Ladenie"
 
-#: shell/settings/pluginpreferences.cpp:55
+#: shell/settings/pluginpreferences.cpp:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
 msgstr "Testovanie"
 
-#: shell/settings/pluginpreferences.cpp:56
+#: shell/settings/pluginpreferences.cpp:43
 #, kde-format
 msgctxt "@title:group"
 msgid "Analyzers"
 msgstr "Analyzátory"
 
-#: shell/settings/pluginpreferences.cpp:57
+#: shell/settings/pluginpreferences.cpp:44
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
 msgstr "Behové prostredia"
 
-#: shell/settings/pluginpreferences.cpp:58
+#: shell/settings/pluginpreferences.cpp:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
 msgstr "Iné"
 
-#: shell/settings/pluginpreferences.h:32
+#: shell/settings/pluginpreferences.h:27
 #, kde-format
 msgid "Plugins"
 msgstr "Moduly"
 
-#: shell/settings/pluginpreferences.h:33
+#: shell/settings/pluginpreferences.h:28
 #, kde-format
 msgid "Configure Plugins"
 msgstr "Nastaviť pluginy"
@@ -5828,7 +5828,7 @@ msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
 msgstr "%1 (neexistuje)"
 
-#: util/jobstatus.cpp:30
+#: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
 msgstr "Úloha ukončená"
@@ -6414,7 +6414,7 @@ msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "Zadajte URL repozitára..."
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:60
+#: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
@@ -6423,7 +6423,7 @@ msgstr[0] "%1 rok"
 msgstr[1] "%1 roky"
 msgstr[2] "%1 rokov"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:70
+#: vcs/widgets/vcsannotationitemdelegate.cpp:65
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
@@ -6432,7 +6432,7 @@ msgstr[0] "%1 mesiac"
 msgstr[1] "%1 mesiace"
 msgstr[2] "%1 mesiacov"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:74
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
@@ -6441,13 +6441,13 @@ msgstr[0] "%1 deň"
 msgstr[1] "%1 dni"
 msgstr[2] "%1 dní"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:76
+#: vcs/widgets/vcsannotationitemdelegate.cpp:71
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr "Dnes"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:290
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"

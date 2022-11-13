@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-11-13 00:44+0000\n"
 "PO-Revision-Date: 2022-08-03 09:58+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -2145,19 +2145,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Avlusa"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Avlusa start"
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Avlusa nuvarande start"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:447
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3301,35 +3301,35 @@ msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Namn:"
 
-#: shell/projectsourcepage.cpp:45
+#: shell/projectsourcepage.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "From File System"
 msgstr "Från filsystem"
 
-#: shell/projectsourcepage.cpp:180
+#: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
 msgstr "Kunde inte skapa katalogen: %1"
 
-#: shell/projectsourcepage.cpp:213
+#: shell/projectsourcepage.cpp:208
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
 msgstr "%1 : %p %"
 
-#: shell/projectsourcepage.cpp:254
+#: shell/projectsourcepage.cpp:249
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr "Du måste ange en giltig eller ny katalog för att checka ut ett projekt"
 
-#: shell/projectsourcepage.cpp:256
+#: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
 msgstr "Du måste ange fjärrprojektets källa"
 
-#: shell/projectsourcepage.cpp:258
+#: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
 msgstr "Du måste ange en tom katalog som projektmål"
@@ -3376,42 +3376,42 @@ msgctxt "@action:button"
 msgid "Get"
 msgstr "Hämta"
 
-#: shell/runcontroller.cpp:88
+#: shell/runcontroller.cpp:87
 #, kde-format
 msgctxt "launch mode"
 msgid "Debug"
 msgstr "Avlusa"
 
-#: shell/runcontroller.cpp:97
+#: shell/runcontroller.cpp:96
 #, kde-format
 msgctxt "launch mode"
 msgid "Profile"
 msgstr "Profilera"
 
-#: shell/runcontroller.cpp:106
+#: shell/runcontroller.cpp:105
 #, kde-format
 msgctxt "launch mode"
 msgid "Execute"
 msgstr "Kör"
 
-#: shell/runcontroller.cpp:408
+#: shell/runcontroller.cpp:407
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Aktuell startinställning stöder inte läget '%1'."
 
-#: shell/runcontroller.cpp:428
+#: shell/runcontroller.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Anpassa starter..."
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Öppna startinställningsdialogruta"
 
-#: shell/runcontroller.cpp:432
+#: shell/runcontroller.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3421,25 +3421,25 @@ msgstr ""
 "Visar en dialogruta för att ställa in en ny startinställning eller ändra de "
 "befintliga."
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Kör start"
 
-#: shell/runcontroller.cpp:436
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Kör"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:437
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Kör nuvarande start"
 
-#: shell/runcontroller.cpp:439
+#: shell/runcontroller.cpp:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3449,7 +3449,7 @@ msgstr ""
 "Kör målet eller programmet som är angivet i startinställningen som för "
 "närvarande är aktiv."
 
-#: shell/runcontroller.cpp:445
+#: shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3460,84 +3460,84 @@ msgstr "Avlusa"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:458
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Stoppa alla jobb"
 
-#: shell/runcontroller.cpp:460
+#: shell/runcontroller.cpp:459
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Stoppa alla"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Stoppar alla jobb som för närvarande kör"
 
-#: shell/runcontroller.cpp:464
+#: shell/runcontroller.cpp:463
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Begär att alla jobb som kör ska stoppas."
 
-#: shell/runcontroller.cpp:470
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Stoppa"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Stoppa"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:472
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Meny som gör det möjligt att stoppa individuella jobb"
 
-#: shell/runcontroller.cpp:474
+#: shell/runcontroller.cpp:473
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Lista över jobb som kan stoppas individuellt."
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Nuvarande startinställning"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Nuvarande startinställning"
 
-#: shell/runcontroller.cpp:480
+#: shell/runcontroller.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "Välj vilken startinställning som ska köras när körning begärs."
 
-#: shell/runcontroller.cpp:597
+#: shell/runcontroller.cpp:596
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Namnlöst jobb"
 
-#: shell/runcontroller.cpp:978
+#: shell/runcontroller.cpp:973
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Nytt startprogram %1"
 
-#: shell/runcontroller.cpp:1015
+#: shell/runcontroller.cpp:1010
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."
@@ -4364,78 +4364,78 @@ msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
 msgstr "Minimal projektstorlek för förenklad tolkning:"
 
-#: shell/settings/pluginpreferences.cpp:48
+#: shell/settings/pluginpreferences.cpp:35
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
 msgstr "Kärna"
 
-#: shell/settings/pluginpreferences.cpp:49
+#: shell/settings/pluginpreferences.cpp:36
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Management"
 msgstr "Projekthantering"
 
-#: shell/settings/pluginpreferences.cpp:50
+#: shell/settings/pluginpreferences.cpp:37
 #, kde-format
 msgctxt "@title:group"
 msgid "Version Control"
 msgstr "Versionskontroll"
 
-#: shell/settings/pluginpreferences.cpp:51
+#: shell/settings/pluginpreferences.cpp:38
 #, kde-format
 msgctxt "@title:group"
 msgid "Utilities"
 msgstr "Verktyg"
 
-#: shell/settings/pluginpreferences.cpp:52
+#: shell/settings/pluginpreferences.cpp:39
 #, kde-format
 msgctxt "@title:group"
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: shell/settings/pluginpreferences.cpp:53
+#: shell/settings/pluginpreferences.cpp:40
 #, kde-format
 msgctxt "@title:group"
 msgid "Language Support"
 msgstr "Språkstöd"
 
-#: shell/settings/pluginpreferences.cpp:54
+#: shell/settings/pluginpreferences.cpp:41
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugging"
 msgstr "Avlusning"
 
-#: shell/settings/pluginpreferences.cpp:55
+#: shell/settings/pluginpreferences.cpp:42
 #, kde-format
 msgctxt "@title:group"
 msgid "Testing"
 msgstr "Test"
 
-#: shell/settings/pluginpreferences.cpp:56
+#: shell/settings/pluginpreferences.cpp:43
 #, kde-format
 msgctxt "@title:group"
 msgid "Analyzers"
 msgstr "Analysatorer"
 
-#: shell/settings/pluginpreferences.cpp:57
+#: shell/settings/pluginpreferences.cpp:44
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
 msgstr "Körtidsprogram"
 
-#: shell/settings/pluginpreferences.cpp:58
+#: shell/settings/pluginpreferences.cpp:45
 #, kde-format
 msgctxt "@title:group"
 msgid "Other"
 msgstr "Övrigt"
 
-#: shell/settings/pluginpreferences.h:32
+#: shell/settings/pluginpreferences.h:27
 #, kde-format
 msgid "Plugins"
 msgstr "Insticksprogram"
 
-#: shell/settings/pluginpreferences.h:33
+#: shell/settings/pluginpreferences.h:28
 #, kde-format
 msgid "Configure Plugins"
 msgstr "Anpassa insticksprogram"
@@ -5471,7 +5471,7 @@ msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
 msgstr "%1 (finns inte)"
 
-#: util/jobstatus.cpp:30
+#: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
 msgstr "Uppgift avbruten"
@@ -6002,7 +6002,7 @@ msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
 msgstr "Ange arkivets webbadress..."
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:60
+#: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format
 msgctxt "@item age"
 msgid "%1 year"
@@ -6010,7 +6010,7 @@ msgid_plural "%1 years"
 msgstr[0] "%1 år"
 msgstr[1] "%1 år"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:70
+#: vcs/widgets/vcsannotationitemdelegate.cpp:65
 #, kde-format
 msgctxt "@item age"
 msgid "%1 month"
@@ -6018,7 +6018,7 @@ msgid_plural "%1 months"
 msgstr[0] "%1 månad"
 msgstr[1] "%1 månader"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:74
+#: vcs/widgets/vcsannotationitemdelegate.cpp:69
 #, kde-format
 msgctxt "@item age"
 msgid "%1 day"
@@ -6026,13 +6026,13 @@ msgid_plural "%1 days"
 msgstr[0] "%1 dag"
 msgstr[1] "%1 dagar"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:76
+#: vcs/widgets/vcsannotationitemdelegate.cpp:71
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
 msgstr "I dag"
 
-#: vcs/widgets/vcsannotationitemdelegate.cpp:290
+#: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"

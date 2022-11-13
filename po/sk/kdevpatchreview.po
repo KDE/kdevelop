@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-13 00:44+0000\n"
 "PO-Revision-Date: 2022-04-17 20:50+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -247,7 +247,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Zmeny"
 
-#: patchreviewtoolview.cpp:81
+#: patchreviewtoolview.cpp:80
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -256,12 +256,12 @@ msgstr[0] "%2 (1 väzba)"
 msgstr[1] "%2 (%1 väzby)"
 msgstr[2] "%2 (%1 väzieb)"
 
-#: patchreviewtoolview.cpp:221
+#: patchreviewtoolview.cpp:220
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>Môžete nájsť novú požiadavku na:<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:224
+#: patchreviewtoolview.cpp:223
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -270,24 +270,24 @@ msgstr ""
 "Nemôžem exportovať záplatu.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:255
+#: patchreviewtoolview.cpp:254
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
 msgstr "Vybrať všetko"
 
-#: patchreviewtoolview.cpp:257
+#: patchreviewtoolview.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Zrušiť výber"
 
-#: patchreviewtoolview.cpp:555
+#: patchreviewtoolview.cpp:554
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Spúšťam testy: %p%"
 
-#: patchreviewtoolview.cpp:587
+#: patchreviewtoolview.cpp:582
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
@@ -295,7 +295,7 @@ msgstr[0] "Test prešiel"
 msgstr[1] "Všetky %1 testy prešli"
 msgstr[2] "Všetkých %1 testov prešlo"
 
-#: patchreviewtoolview.cpp:591
+#: patchreviewtoolview.cpp:586
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Výsledky testu: %1 prešlo, %2 zlyhalo, %3 chýb"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-13 00:44+0000\n"
 "PO-Revision-Date: 2018-12-02 21:20+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -274,19 +274,19 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "變更"
 
-#: patchreviewtoolview.cpp:81
+#: patchreviewtoolview.cpp:80
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
 msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2（%1 個區塊）"
 
-#: patchreviewtoolview.cpp:221
+#: patchreviewtoolview.cpp:220
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>您能於該位置尋找新請求：<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:224
+#: patchreviewtoolview.cpp:223
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -295,32 +295,32 @@ msgstr ""
 "無法匯出補丁。\n"
 "%1"
 
-#: patchreviewtoolview.cpp:255
+#: patchreviewtoolview.cpp:254
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgctxt "@action"
 msgid "Select All"
 msgstr "全部選擇"
 
-#: patchreviewtoolview.cpp:257
+#: patchreviewtoolview.cpp:256
 #, fuzzy, kde-format
 #| msgid "Deselect All"
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "全部取消選擇"
 
-#: patchreviewtoolview.cpp:555
+#: patchreviewtoolview.cpp:554
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "執行測試：%p%"
 
-#: patchreviewtoolview.cpp:587
+#: patchreviewtoolview.cpp:582
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "所有 %1 個測試均已通過"
 
-#: patchreviewtoolview.cpp:591
+#: patchreviewtoolview.cpp:586
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "測試結果：%1 個通過，%2 個失敗，%3 個錯誤"
