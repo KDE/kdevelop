@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2019, 2020.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2019, 2020, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2020-07-25 16:38+0200\n"
+"PO-Revision-Date: 2022-11-13 00:09+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.1\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #: config/globalconfigpage.cpp:29
 #, kde-format
@@ -78,6 +78,8 @@ msgstr ""
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
 msgstr ""
+"Configura un avviatore di applicazione nativo su cui eseguire l'analisi di "
+"Heaptrack."
 
 #: plugin.cpp:110
 #, kde-format
