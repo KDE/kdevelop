@@ -319,11 +319,6 @@ int main( int argc, char *argv[] )
     // like https://bugs.kde.org/show_bug.cgi?id=386527.
     QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
 
-    // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
-    qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
-#endif
-
     // Useful for valgrind runs, just `export KDEV_DISABLE_JIT=1`
     if (qEnvironmentVariableIsSet("KDEV_DISABLE_JIT")) {
         qputenv("KDEV_DISABLE_WELCOMEPAGE", "1");

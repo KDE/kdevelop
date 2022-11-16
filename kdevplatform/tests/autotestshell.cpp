@@ -15,9 +15,6 @@ AutoTestShell::~AutoTestShell() = default;
 void AutoTestShell::init(const QStringList& plugins)
 {
     // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
-    qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
-#endif
     qputenv("CLEAR_DUCHAIN_DIR", "1"); // Always clear duchain dir (also to avoid popups asking the user to clear it)
 
     QStandardPaths::setTestModeEnabled(true);

@@ -423,7 +423,6 @@ export LD_LIBRARY_PATH=\$DIR/usr/lib/:\$LD_LIBRARY_PATH
 export QT_PLUGIN_PATH=\$DIR/usr/lib/qt5/plugins/
 export XDG_DATA_DIRS=\$DIR/usr/share/:\$XDG_DATA_DIRS
 export PATH=\$DIR/usr/bin:\$PATH
-export KDE_FORK_SLAVES=1
 export PYTHONHOME=\$DIR/usr/
 
 export APPIMAGE_STARTUP_QML2_IMPORT_PATH=\$QML2_IMPORT_PATH
