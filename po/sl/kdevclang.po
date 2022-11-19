@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-01-03 13:08+0100\n"
+"PO-Revision-Date: 2022-11-18 11:05+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
@@ -313,7 +313,7 @@ msgstr "Pokaži uporabe"
 #: duchain/macronavigationcontext.cpp:75
 #, kde-format
 msgid "Body: "
-msgstr "Telo:"
+msgstr "Telo: "
 
 #: duchain/missingincludepathproblem.cpp:35
 #, kde-format
