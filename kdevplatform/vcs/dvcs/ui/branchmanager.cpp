@@ -104,8 +104,7 @@ void BranchManager::createBranch()
 {
     const QModelIndex currentBranchIdx = m_ui->branchView->currentIndex();
     if (!currentBranchIdx.isValid()) {
-        KMessageBox::messageBox(this, KMessageBox::Error,
-                                i18n("You must select a base branch from the list before creating a new branch."));
+        KMessageBox::error(this, i18n("You must select a base branch from the list before creating a new branch."));
         return;
     }
     QString baseBranch = currentBranchIdx.data().toString();
@@ -187,8 +186,7 @@ void BranchManager::mergeBranch()
             close();
         }
     } else {
-        KMessageBox::messageBox(this, KMessageBox::Error,
-                                i18n("You must select a branch to merge into current one from the list."));
+        KMessageBox::error(this, i18n("You must select a branch to merge into current one from the list."));
     }
 }
 
@@ -238,7 +236,7 @@ void BranchManager::diffFromBranch()
     const auto dest = m_model->currentBranch();
     const auto src = m_ui->branchView->currentIndex().data().toString();
     if (src == dest) {
-        KMessageBox::messageBox(this, KMessageBox::Information, i18n("Already on branch \"%1\"\n", src));
+        KMessageBox::information(this, i18n("Already on branch \"%1\"\n", src));
         return;
     }
 
