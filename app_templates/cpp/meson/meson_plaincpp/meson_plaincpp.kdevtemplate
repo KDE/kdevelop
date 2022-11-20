@@ -3,6 +3,7 @@
 Name=Meson C++
 Name[ca]=Meson C++
 Name[ca@valencia]=Meson C++
+Name[de]=Meson C++
 Name[en_GB]=Meson C++
 Name[es]=Meson C++
 Name[fr]=Meson C++
@@ -18,6 +19,7 @@ Name[x-test]=xxMeson C++xx
 Comment=Simple Meson-based C++ application
 Comment[ca]=Aplicació senzilla en C++ basada en el Meson
 Comment[ca@valencia]=Aplicació senzilla en C++ basada en Meson
+Comment[de]=Einfache auf Meson basierende C-Anwendung
 Comment[en_GB]=Simple Meson-based C++ application
 Comment[es]=Aplicación C++ sencilla basada en Meson
 Comment[fr]=Une application simple conçue avec Meson C++
