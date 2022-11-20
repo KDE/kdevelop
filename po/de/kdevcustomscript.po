@@ -1,21 +1,23 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2017, 2019, 2021.
 # Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2021-04-15 14:33+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2022-09-29 21:36+0200\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.08.0\n"
 
 #: customscript_plugin.cpp:86
 #, kde-format
@@ -42,6 +44,9 @@ msgid ""
 "Note: each custom script style requires a certain tool executable to be "
 "installed. Otherwise, code will not be formatted."
 msgstr ""
+"Hinweis: Für jeden benutzerdefinierten Skriptstil muss ein bestimmtes "
+"ausführbares Tool installiert sein. Andernfalls wird der Code nicht "
+"formatiert."
 
 #: customscript_plugin.cpp:226
 #, kde-format
@@ -144,16 +149,7 @@ msgid "Style: %1"
 msgstr "Stil: %1"
 
 #: customscript_plugin.cpp:581
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
-#| ">The code will be written into the file, the temporary <br />file will be "
-#| "substituted into that position, and the result <br />will be read out of "
-#| "that file. <br /><br /><b>$FILE</b> will be replaced with the path of the "
-#| "original file. <br />The contents of the file must not be modified, "
-#| "changes are allowed <br />only in $TMPFILE.<br /><br /><b>${PROJECT_NAME}"
-#| "</b> will be replaced by the path of <br />the currently open project "
-#| "with the matching name."
+#, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
 ">The code will be written into the file, the temporary <br />file will be "
@@ -169,8 +165,9 @@ msgstr ""
 ">verschoben wird. Das Ergebnis wird aus dieser Datei gelesen.<br /><br /><b>"
 "$FILE</b> wird mit dem Pfad der Originaldatei ersetzt.<br />Der Inhalt der "
 "Datei darf nicht verändert werden; Änderungen sind<br />nur in $TMPFILE "
-"erlaubt.<br /><br /><b>${PROJECT_NAME}</b> wird mit dem Pfad und dem Namen "
-"des aktuell<br />geöffneten Projekts ersetzt."
+"erlaubt.<br /><br /><b>$(&lt;project name&gt;}</b> wird mit dem Pfad des "
+"aktuell<br />geöffneten Projekts ersetzt, dessen Name &lt;project name&gt; "
+"ist."
 
 #: customscript_plugin.cpp:593
 #, kde-format

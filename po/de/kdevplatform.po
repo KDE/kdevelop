@@ -3,20 +3,21 @@
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
 # Rolf Eike Beer <kde@opensource.sf-tec.de>, 2013.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2022-07-23 22:28+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2022-09-29 23:24+0200\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 22.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4850,12 +4851,10 @@ msgid "Reformat Files..."
 msgstr "Dateien neu formatieren ..."
 
 #: shell/sourceformattercontroller.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Format file(s) using the current theme"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Datei(en) nach dem aktuellen Schema formatieren"
+msgstr "Datei(en) mit dem eingerichteten Quelltextformatierer(n) formatieren"
 
 #: shell/sourceformattercontroller.cpp:245
 #, fuzzy, kde-format

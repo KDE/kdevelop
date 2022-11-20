@@ -1,21 +1,23 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2017, 2018, 2019.
 # Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-12-18 00:42+0000\n"
-"PO-Revision-Date: 2020-08-22 09:38+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2022-11-11 12:47+0100\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: flatpakplugin.cpp:45
 #, kde-format
@@ -28,6 +30,7 @@ msgstr "Umgebung neu erstellen"
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
 msgstr ""
+"Kompiliert alle Abhängigkeiten für eine neu eingerichtete Umgebung erneut."
 
 #: flatpakplugin.cpp:51
 #, kde-format
@@ -39,7 +42,7 @@ msgstr "Flatpak-Paket exportieren ..."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
-msgstr ""
+msgstr "Exportiert das aktuell gebaute Paket in eine „bundle.flatpak“-Datei."
 
 #: flatpakplugin.cpp:57
 #, kde-format
@@ -74,7 +77,7 @@ msgstr "Tag-Namen auswählen"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
-msgstr ""
+msgstr "Hostname des Geräts:"
 
 #: flatpakruntime.cpp:53
 #, kde-format
@@ -84,7 +87,7 @@ msgstr "Flatpak"
 #: flatpakruntime.cpp:144
 #, kde-format
 msgid "Bundling"
-msgstr ""
+msgstr "Bündeln"
 
 #: flatpakruntime.cpp:166
 #, kde-format

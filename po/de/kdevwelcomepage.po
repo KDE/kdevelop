@@ -2,20 +2,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Frederik Schwarzer <schwarzer@kde.org>, 2016.
 # Burkhard Lück <lueck@hube-lueck.de>, 2016, 2017, 2021.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-20 00:43+0000\n"
-"PO-Revision-Date: 2021-06-11 14:22+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2022-09-29 21:55+0200\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.08.0\n"
 
 #: qml/area_code.qml:76
 msgid "Need Help?"
@@ -63,6 +65,9 @@ msgid ""
 "program works on execution. On the <em>Run</em> menu you will find all the "
 "possible options."
 msgstr ""
+"Im <em>Debug</em>-Bereich können Sie sehen und analysieren, wie Ihr Programm "
+"bei der Ausführung funktioniert. Im Menü <em>Ausführen</em> finden Sie alle "
+"möglichen Optionen."
 
 #: qml/area_debug.qml:50
 msgid ""
@@ -90,6 +95,9 @@ msgid ""
 "review changes in your projects, either the ones you made or some external "
 "patch."
 msgstr ""
+"Im Bereich <em>Durchsicht</em> finden Sie die Werkzeuge, die Sie benötigen, "
+"um Änderungen an Ihren Projekten zu überprüfen, die durch eigene oder fremde "
+"Patche durchgeführt wurden."
 
 #: qml/area_review.qml:56
 msgid ""
