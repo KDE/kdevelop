@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:44+0000\n"
+"POT-Creation-Date: 2022-11-20 00:45+0000\n"
 "PO-Revision-Date: 2019-06-02 13:10+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -6055,28 +6055,28 @@ msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Haarojen hallinta"
 
-#: vcs/dvcs/ui/branchmanager.cpp:108
+#: vcs/dvcs/ui/branchmanager.cpp:107
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr ""
 "Sinun täytyy valita perushaara luettelosta ennen uuden haaran luomista."
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, fuzzy, kde-format
 #| msgid "New branch"
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Uusi haara"
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, fuzzy, kde-format
 #| msgid "Name of the new branch:"
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Uuden haaran nimi:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:120
+#: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -6085,7 +6085,7 @@ msgstr ""
 "Haara ”%1” on jo olemassa.\n"
 "Valitse toinen nimi."
 
-#: vcs/dvcs/ui/branchmanager.cpp:134
+#: vcs/dvcs/ui/branchmanager.cpp:133
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -6097,18 +6097,18 @@ msgstr ""
 "Ollaan parhaillaan haarassa ”%1”.\n"
 "Vaihda toisen haaraan, jotta voit poistaa sen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:141
+#: vcs/dvcs/ui/branchmanager.cpp:140
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Haluatko varmasti poistaa haaran %1 pysyvästi?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
+#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Ollaan jo haarassa ”%1”\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:182
+#: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -6117,30 +6117,30 @@ msgstr ""
 "Haaraa ”%1” ei ole olemassa.\n"
 "Valitse toinen nimi."
 
-#: vcs/dvcs/ui/branchmanager.cpp:191
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "Sinun täytyy valita luettelosta haara, joka yhdistetään nykyiseen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Nykyiselle versiolle ei voitu luoda korjausta."
 
-#: vcs/dvcs/ui/branchmanager.cpp:264
+#: vcs/dvcs/ui/branchmanager.cpp:262
 #, fuzzy, kde-format
 #| msgid "Unable to get difference."
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Eroja ei saatu haettua."
 
-#: vcs/dvcs/ui/branchmanager.cpp:271
+#: vcs/dvcs/ui/branchmanager.cpp:269
 #, fuzzy, kde-format
 #| msgid "There are no differences."
 msgid "There are no committed differences."
 msgstr "Ei eroja."
 
-#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
 #, fuzzy, kde-format
 #| msgid "VCS support"
 msgctxt "@title:window"

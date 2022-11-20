@@ -3,20 +3,21 @@
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
 # Rolf Eike Beer <kde@opensource.sf-tec.de>, 2013.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:44+0000\n"
-"PO-Revision-Date: 2022-07-23 22:28+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"PO-Revision-Date: 2022-09-29 23:24+0200\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 22.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4850,12 +4851,10 @@ msgid "Reformat Files..."
 msgstr "Dateien neu formatieren ..."
 
 #: shell/sourceformattercontroller.cpp:243
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Format file(s) using the current theme"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Datei(en) nach dem aktuellen Schema formatieren"
+msgstr "Datei(en) mit dem eingerichteten Quelltextformatierer(n) formatieren"
 
 #: shell/sourceformattercontroller.cpp:245
 #, fuzzy, kde-format
@@ -5598,7 +5597,7 @@ msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Zweige-Verwaltung"
 
-#: vcs/dvcs/ui/branchmanager.cpp:108
+#: vcs/dvcs/ui/branchmanager.cpp:107
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
@@ -5606,19 +5605,19 @@ msgstr ""
 "Sie müssen einen Basis-Zweig aus der Liste wählen, bevor Sie einen neuen "
 "Zweig anlegen können."
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Neuer Zweig"
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Name des neuen Zweigs:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:120
+#: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5627,7 +5626,7 @@ msgstr ""
 "Zweig „%1“ existiert bereits.\n"
 "Bitte wählen Sie einen anderen Namen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:134
+#: vcs/dvcs/ui/branchmanager.cpp:133
 #, fuzzy, kde-format
 #| msgid ""
 #| "Currently at the branch \"%1\".\n"
@@ -5639,18 +5638,18 @@ msgstr ""
 "„%1“ ist der aktuelle Zweig.\n"
 "Um ihn zu entfernen, wechseln Sie bitte in einen anderen Zweig."
 
-#: vcs/dvcs/ui/branchmanager.cpp:141
+#: vcs/dvcs/ui/branchmanager.cpp:140
 #, fuzzy, kde-format
 #| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Möchten Sie den Zweig „%1“ unwiderruflich löschen?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
+#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Bereits auf Zweig „%1“\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:182
+#: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5659,30 +5658,30 @@ msgstr ""
 "Zweig „%1“ existiert nicht.\n"
 "Bitte wählen Sie einen anderen Namen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:191
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr ""
 "Sie müssen einen Zweig zum Zusammenführen in den aktuellen aus der Liste "
 "wählen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Patch für die aktuelle Version kann nicht erstellt werden."
 
-#: vcs/dvcs/ui/branchmanager.cpp:264
+#: vcs/dvcs/ui/branchmanager.cpp:262
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Unterschiede können nicht geholt werden"
 
-#: vcs/dvcs/ui/branchmanager.cpp:271
+#: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgid "There are no committed differences."
 msgstr "Es gibt keine eingespielten Unterschiede."
 
-#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

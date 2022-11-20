@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:44+0000\n"
+"POT-Creation-Date: 2022-11-20 00:45+0000\n"
 "PO-Revision-Date: 2022-11-03 10:17+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -5597,25 +5597,25 @@ msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Керування гілками"
 
-#: vcs/dvcs/ui/branchmanager.cpp:108
+#: vcs/dvcs/ui/branchmanager.cpp:107
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
 msgstr "Перед створенням нової гілки вам слід вибрати основну гілку зі списку."
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Нова гілка"
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Назва нової гілки:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:120
+#: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5624,7 +5624,7 @@ msgstr ""
 "Гілка з назвою «%1» вже існує.\n"
 "Будь ласка, вкажіть іншу назву."
 
-#: vcs/dvcs/ui/branchmanager.cpp:134
+#: vcs/dvcs/ui/branchmanager.cpp:133
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5633,17 +5633,17 @@ msgstr ""
 "Ви працюєте з гілкою «%1»\n"
 "Щоб вилучити її, вам слід змінити гілку."
 
-#: vcs/dvcs/ui/branchmanager.cpp:141
+#: vcs/dvcs/ui/branchmanager.cpp:140
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Ви справді бажаєте остаточно вилучити гілку «%1»?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
+#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Гілку «%1» вже активовано\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:182
+#: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5652,30 +5652,30 @@ msgstr ""
 "Гілки з назвою «%1» не існує.\n"
 "Будь ласка, вкажіть іншу назву."
 
-#: vcs/dvcs/ui/branchmanager.cpp:191
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr ""
 "Перед об’єднанням поточної гілки із іншою вам слід вибрати цю іншу гілку зі "
 "списку."
 
-#: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Не вдалося створити латку для поточної версії."
 
-#: vcs/dvcs/ui/branchmanager.cpp:264
+#: vcs/dvcs/ui/branchmanager.cpp:262
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Не вдалося отримати відмінності"
 
-#: vcs/dvcs/ui/branchmanager.cpp:271
+#: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgid "There are no committed differences."
 msgstr "Внесених відмінностей не виявлено."
 
-#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

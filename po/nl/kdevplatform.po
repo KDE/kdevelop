@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:44+0000\n"
+"POT-Creation-Date: 2022-11-20 00:45+0000\n"
 "PO-Revision-Date: 2022-11-03 13:19+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -5591,7 +5591,7 @@ msgctxt "@title:window"
 msgid "Branch Manager"
 msgstr "Branchbeheerder"
 
-#: vcs/dvcs/ui/branchmanager.cpp:108
+#: vcs/dvcs/ui/branchmanager.cpp:107
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
@@ -5599,19 +5599,19 @@ msgstr ""
 "U moet een basis branch uit de lijst selecteren alvorens een nieuwe branch "
 "aan te maken."
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "New Branch"
 msgstr "Nieuwe branch"
 
-#: vcs/dvcs/ui/branchmanager.cpp:113
+#: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
 msgstr "Naam van nieuwe branch:"
 
-#: vcs/dvcs/ui/branchmanager.cpp:120
+#: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
 msgid ""
 "Branch \"%1\" already exists.\n"
@@ -5620,7 +5620,7 @@ msgstr ""
 "Branch \"%1\" bestaat reeds.\n"
 "Kies een andere naam."
 
-#: vcs/dvcs/ui/branchmanager.cpp:134
+#: vcs/dvcs/ui/branchmanager.cpp:133
 #, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
@@ -5629,17 +5629,17 @@ msgstr ""
 "Momenteel in de branch \"%1\".\n"
 "Om deze te verwijderen zal naar een andere branch gegaan moeten worden."
 
-#: vcs/dvcs/ui/branchmanager.cpp:141
+#: vcs/dvcs/ui/branchmanager.cpp:140
 #, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Wilt u branch '%1' onherroepelijk verwijderen?"
 
-#: vcs/dvcs/ui/branchmanager.cpp:161 vcs/dvcs/ui/branchmanager.cpp:241
+#: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
 msgstr "Is reeds in branch \"%1\"\n"
 
-#: vcs/dvcs/ui/branchmanager.cpp:182
+#: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
 msgid ""
 "Branch \"%1\" doesn't exists.\n"
@@ -5648,28 +5648,28 @@ msgstr ""
 "Branch \"%1\" bestaat niet.\n"
 "Kies een andere naam."
 
-#: vcs/dvcs/ui/branchmanager.cpp:191
+#: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
 msgstr "U moet een branch selecteren om in de huidige uit de lijst te mengen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:229 vcs/widgets/vcsdiffpatchsources.cpp:299
+#: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
 msgstr "Kon geen patch aanmaken voor de huidige versie."
 
-#: vcs/dvcs/ui/branchmanager.cpp:264
+#: vcs/dvcs/ui/branchmanager.cpp:262
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
 msgstr "Kan diff niet ophalen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:271
+#: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgid "There are no committed differences."
 msgstr "Er zijn geen vastgelegde (committed) verschillen."
 
-#: vcs/dvcs/ui/branchmanager.cpp:272 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"

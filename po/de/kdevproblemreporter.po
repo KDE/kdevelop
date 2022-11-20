@@ -1,20 +1,21 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2008, 2013, 2015, 2016, 2017.
 # Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020, 2022.
 # Gerhard Stengel <gstengel@gmx.net>, 2012.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-30 00:45+0000\n"
-"PO-Revision-Date: 2022-04-15 04:03+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2022-09-29 22:02+0200\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.08.0\n"
 
 #: problemreporterplugin.cpp:94
 #, kde-format
@@ -104,29 +105,25 @@ msgstr "Probleme in allen Projekten anzeigen"
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Path"
-msgstr ""
+msgstr "Dokumente im Pfad"
 
 #: problemsview.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Display problems in all projects"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in a specific path"
-msgstr "Probleme in allen Projekten anzeigen"
+msgstr "Probleme von allen Dateien in einem angegebenen Pfad anzeigen"
 
 #: problemsview.cpp:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Current Path"
-msgstr ""
+msgstr "Dokumente im aktuellen Pfad"
 
 #: problemsview.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Display problems in current document"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in the path of the current document"
-msgstr "Probleme im aktuellen Dokument anzeigen"
+msgstr "Probleme von allen Dateien im Pfad des aktuellen Dokuments anzeigen"
 
 #: problemsview.cpp:78
 #, kde-format

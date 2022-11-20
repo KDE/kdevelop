@@ -1,21 +1,23 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2017, 2019.
 # Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Alois Spitzbart <spitz234@hotmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2020-08-19 17:14+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2022-11-11 12:46+0100\n"
+"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: astyle_plugin.cpp:227
 #, kde-format
@@ -218,13 +220,16 @@ msgid ""
 "Indent, instead of align, continuation lines following lines that contain an "
 "opening paren '(' or an assignment '='."
 msgstr ""
+"Fortsetzungszeilen, die auf Zeilen folgen, welche ein öffnendes "
+"Klammerzeichen „(“ oder eine Zuweisung „=“ enthalten, werden eingerückt, "
+"anstatt ausgerichtet."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
 #: astyle_preferences.ui:272
 #, kde-format
 msgctxt "@option:check"
 msgid "Continuation lines:"
-msgstr ""
+msgstr "Fortsetzungszeilen:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOther)
 #: astyle_preferences.ui:295
