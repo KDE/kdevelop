@@ -168,8 +168,12 @@ bool directoriesInProject(const QString& dir)
 const int pathsMaxCount = 25;
 }
 
-GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
-    : QDialog(parent), Ui::GrepWidget(), m_plugin(plugin), m_show(show)
+GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget* parent, bool show)
+    : QDialog(parent)
+    , Ui::GrepWidget()
+    , m_plugin(plugin)
+    , m_toolView(toolView)
+    , m_show(show)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -515,10 +519,13 @@ void GrepDialog::startSearch()
         }
     }
 
-    GrepOutputView *toolView =
-        static_cast<GrepOutputView*>(ICore::self()->uiController()->findToolView(
+    GrepOutputView* toolView = m_toolView;
+    if (!toolView) {
+        toolView = static_cast<GrepOutputView*>(ICore::self()->uiController()->findToolView(
             i18nc("@title:window", "Find/Replace in Files"), m_plugin->toolViewFactory(),
             m_settings.fromHistory ? IUiController::Create : IUiController::CreateAndRaise));
+        Q_ASSERT_X(toolView, Q_FUNC_INFO, "This branch may be taken only after UiController::loadAllAreas() returns.");
+    }
 
     if (m_settings.fromHistory) {
         // when restored from history, only display the parameters

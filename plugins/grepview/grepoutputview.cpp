@@ -168,7 +168,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     }
 
     // rerun the grep jobs with settings from the history
-    auto* dlg = new GrepDialog(m_plugin, this, false);
+    auto* const dlg = new GrepDialog(m_plugin, this, this, false);
     dlg->historySearch(m_settingsHistory);
 
     updateCheckable();
@@ -354,7 +354,7 @@ void GrepOutputView::refresh()
         });
         refresh_history.first().fromHistory = false;
 
-        auto* dlg = new GrepDialog(m_plugin, this, false);
+        auto* const dlg = new GrepDialog(m_plugin, this, this, false);
         dlg->historySearch(refresh_history);
     }
 }

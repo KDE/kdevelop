@@ -16,6 +16,7 @@
 #include "grepjob.h"
 #include "ui_grepwidget.h"
 
+class GrepOutputView;
 class GrepViewPlugin;
 
 class GrepDialog : public QDialog, private Ui::GrepWidget
@@ -23,7 +24,10 @@ class GrepDialog : public QDialog, private Ui::GrepWidget
     Q_OBJECT
 
 public:
-    explicit GrepDialog(GrepViewPlugin *plugin, QWidget *parent = nullptr, bool show = true);
+    /// Search results are displayed in: @p toolView if it is not null,
+    /// or in a possibly created and raised GrepOutputView in the current area.
+    explicit GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView = nullptr, QWidget* parent = nullptr,
+                        bool show = true);
     ~GrepDialog() override;
 
     void setSettings(const GrepJobSettings &settings);
@@ -69,6 +73,7 @@ private:
     void updateSettings();
 
     GrepViewPlugin * m_plugin;
+    GrepOutputView* const m_toolView;
     ///Allow to show a dialog
     const bool m_show;
     ///Current setting
