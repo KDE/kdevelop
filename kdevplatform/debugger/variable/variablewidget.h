@@ -46,7 +46,6 @@ private:
     VariableTree *m_varTree;
     KHistoryComboBox *m_watchVarEditor;
     VariablesRoot *m_variablesRoot;
-    QSortFilterProxyModel *m_proxy;
 };
 
 /***************************************************************************/

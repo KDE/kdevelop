@@ -70,8 +70,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     setWindowIcon(QIcon::fromTheme(QStringLiteral("debugger"), windowIcon()));
     setWindowTitle(i18n("Debugger Variables"));
 
-    m_proxy = new VariableSortProxyModel(this);
-    m_varTree = new VariableTree(controller, this, m_proxy);
+    m_varTree = new VariableTree(controller, this, new VariableSortProxyModel(this));
     setFocusProxy(m_varTree);
 
     m_watchVarEditor = new KHistoryComboBox( this );
