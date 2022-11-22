@@ -33,6 +33,7 @@
 #include "../debugger/variable/variablewidget.h"
 #include "../debugger/framestack/framestackmodel.h"
 #include "../debugger/framestack/framestackwidget.h"
+#include "../debugger/variable/variablecollection.h"
 #include "core.h"
 #include "debug.h"
 #include "uicontroller.h"

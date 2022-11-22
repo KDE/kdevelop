@@ -9,7 +9,6 @@
 
 #include <debugger/debuggerexport.h>
 #include "../util/treeview.h"
-#include "variablecollection.h"
 
 class KHistoryComboBox;
 class QSortFilterProxyModel;
@@ -20,8 +19,9 @@ namespace KDevelop
 
 class IDebugController;
 class TreeModel;
+class Variable;
+class VariablesRoot;
 class VariableTree;
-class AbstractVariableItem;
 
 class KDEVPLATFORMDEBUGGER_EXPORT VariableWidget : public QWidget
 {
@@ -60,8 +60,6 @@ public:
     VariableTree(IDebugController *controller, VariableWidget *parent, QSortFilterProxyModel *proxy);
     ~VariableTree() override;
 
-    VariableCollection* collection() const;
-
 private:
     void setupActions();
     void contextMenuEvent(QContextMenuEvent* event) override;
@@ -73,25 +71,6 @@ private Q_SLOTS:
     void copyVariableValue();
     void stopOnChange();
 
-#if 0
-Q_SIGNALS:
-    void toggleWatchpoint(const QString &varName);
-
-protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event);
-    virtual void keyPressEvent(QKeyEvent* e);
-    virtual void showEvent(QShowEvent* event);
-
-private: // helper functions
-    void handleAddressComputed(const GDBMI::ResultRecord& r);
-
-    void updateCurrentFrame();
-
-    void copyToClipboard(AbstractVariableItem* item);
-
-    QMenu* activePopup_;
-    QAction* toggleWatch_;
-#endif
 private:
     QAction *m_contextMenuTitle;
     QMenu *m_formatMenu;
