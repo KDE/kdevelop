@@ -11,13 +11,12 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QScreen>
-#include <QSortFilterProxyModel>
 
 using namespace KDevelop;
 
-AsyncTreeView::AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWidget *parent = nullptr)
+AsyncTreeView::AsyncTreeView(TreeModel& treeModel, QWidget* parent)
     : QTreeView(parent)
-    , m_proxy(proxy)
+    , m_treeModel(treeModel)
 {
     connect (this, &AsyncTreeView::expanded,
              this, &AsyncTreeView::slotExpanded);
@@ -25,25 +24,24 @@ AsyncTreeView::AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWi
              this, &AsyncTreeView::slotCollapsed);
     connect (this, &AsyncTreeView::clicked,
              this, &AsyncTreeView::slotClicked);
-    connect (model, &TreeModel::itemChildrenReady,
-            this, &AsyncTreeView::slotExpandedDataReady);
+    connect(&m_treeModel, &TreeModel::itemChildrenReady, this, &AsyncTreeView::slotExpandedDataReady);
 }
 
 
 void AsyncTreeView::slotExpanded(const QModelIndex &index)
 {
-    static_cast<TreeModel*>(model())->expanded(m_proxy->mapToSource(index));
+    m_treeModel.expanded(mapViewIndexToTreeModelIndex(index));
 }
 
 void AsyncTreeView::slotCollapsed(const QModelIndex &index)
 {
-    static_cast<TreeModel*>(model())->collapsed(m_proxy->mapToSource(index));
+    m_treeModel.collapsed(mapViewIndexToTreeModelIndex(index));
     resizeColumns();
 }
 
 void AsyncTreeView::slotClicked(const QModelIndex &index)
 {
-    static_cast<TreeModel*>(model())->clicked(m_proxy->mapToSource(index));
+    m_treeModel.clicked(mapViewIndexToTreeModelIndex(index));
     resizeColumns();
 }
 
@@ -67,8 +65,17 @@ void AsyncTreeView::resizeColumns()
     this->updateGeometry();
 }
 
+TreeModel& AsyncTreeView::treeModel()
+{
+    return m_treeModel;
+}
+
 void AsyncTreeView::slotExpandedDataReady()
 {
     resizeColumns();
 }
 
+QModelIndex AsyncTreeView::mapViewIndexToTreeModelIndex(const QModelIndex& viewIndex) const
+{
+    return viewIndex;
+}

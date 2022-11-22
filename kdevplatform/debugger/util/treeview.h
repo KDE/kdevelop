@@ -11,7 +11,6 @@
 
 #include <debugger/debuggerexport.h>
 
-class QSortFilterProxyModel;
 namespace KDevelop
 {
 class TreeModel;
@@ -20,13 +19,16 @@ class TreeModel;
     {
         Q_OBJECT
     public:
-        AsyncTreeView(TreeModel* model, QSortFilterProxyModel *proxy, QWidget *parent);
+        explicit AsyncTreeView(TreeModel& treeModel, QWidget* parent = nullptr);
 
         QSize sizeHint() const override;
         void resizeColumns();
 
         // Well, I really, really, need this.
         using QTreeView::indexRowSizeHint;
+
+    protected:
+        TreeModel& treeModel();
 
     private Q_SLOTS:
         void slotExpanded(const QModelIndex &index);
@@ -35,7 +37,9 @@ class TreeModel;
         void slotExpandedDataReady();
 
     private:
-        QSortFilterProxyModel *m_proxy;
+        virtual QModelIndex mapViewIndexToTreeModelIndex(const QModelIndex& viewIndex) const;
+
+        TreeModel& m_treeModel;
     };
 
 }

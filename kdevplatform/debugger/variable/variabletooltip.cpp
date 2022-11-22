@@ -17,7 +17,6 @@
 #include <QDesktopWidget>
 #include <KLocalizedString>
 #include <QPainter>
-#include <QSortFilterProxyModel>
 
 #include "variablecollection.h"
 #include "../util/treeview.h"
@@ -90,11 +89,9 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
 
     auto* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
-    // setup proxy model
-    m_proxy = new QSortFilterProxyModel;
-    m_view = new AsyncTreeView(m_model, m_proxy, this);
-    m_proxy->setSourceModel(m_model);
-    m_view->setModel(m_proxy);
+
+    m_view = new AsyncTreeView(*m_model, this);
+    m_view->setModel(m_model);
     m_view->header()->resizeSection(0, 150);
     m_view->header()->resizeSection(1, 90);
     m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -103,7 +100,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
     m_view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     l->addWidget(m_view);
 
-    QModelIndex varIndex = m_proxy->mapFromSource(m_model->indexForItem(m_var, 0));
+    const QModelIndex varIndex = m_model->indexForItem(m_var, 0);
     m_itemHeight = m_view->indexRowSizeHint(varIndex);
     connect(m_view->verticalScrollBar(),
             &QScrollBar::rangeChanged,
@@ -155,9 +152,7 @@ void VariableToolTip::slotLinkActivated(const QString& link)
     QItemSelection s = m_selection->selection();
     if (!s.empty())
     {
-        QModelIndex index = s.front().topLeft();
-        const auto sourceIndex = m_proxy->mapToSource(index);
-        TreeItem *item = m_model->itemForIndex(sourceIndex);
+        TreeItem* const item = m_model->itemForIndex(s.front().topLeft());
         if (item)
         {
             auto* v2 = qobject_cast<Variable*>(item);

@@ -18,7 +18,6 @@ namespace KDevelop
 {
 
 class IDebugController;
-class TreeModel;
 class Variable;
 class VariablesRoot;
 class VariableTree;
@@ -62,6 +61,7 @@ public:
 private:
     void setupActions();
     void contextMenuEvent(QContextMenuEvent* event) override;
+    QModelIndex mapViewIndexToTreeModelIndex(const QModelIndex& viewIndex) const override;
     Variable *selectedVariable() const;
 
 private Q_SLOTS:
@@ -77,7 +77,6 @@ private:
     QAction *m_copyVariableValue;
     QAction *m_stopOnChange;
     QSortFilterProxyModel *m_proxy;
-    TreeModel *m_model;
 };
 
 }

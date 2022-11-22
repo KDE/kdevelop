@@ -144,9 +144,8 @@ void VariableWidget::showEvent(QShowEvent* e)
 // **************************************************************************
 // **************************************************************************
 
-VariableTree::VariableTree(IDebugController *controller,
-                           VariableWidget *parent, QSortFilterProxyModel *proxy)
-    : AsyncTreeView(controller->variableCollection(), proxy, parent)
+VariableTree::VariableTree(IDebugController* controller, VariableWidget* parent, QSortFilterProxyModel* proxy)
+    : AsyncTreeView(*controller->variableCollection(), parent)
     , m_proxy(proxy)
 #if 0
 ,
@@ -158,8 +157,7 @@ VariableTree::VariableTree(IDebugController *controller,
     setAllColumnsShowFocus(true);
 
     // setting proxy model
-    m_model = controller->variableCollection();
-    m_proxy->setSourceModel(m_model);
+    m_proxy->setSourceModel(&treeModel());
     setModel(m_proxy);
     setSortingEnabled(true);
     sortByColumn(VariableCollection::NameColumn, Qt::AscendingOrder);
@@ -273,6 +271,11 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     contextMenu.addAction(m_stopOnChange);
 
     contextMenu.exec(event->globalPos());
+}
+
+QModelIndex VariableTree::mapViewIndexToTreeModelIndex(const QModelIndex& viewIndex) const
+{
+    return m_proxy->mapToSource(viewIndex);
 }
 
 void VariableTree::changeVariableFormat(int format)
