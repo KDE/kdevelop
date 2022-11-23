@@ -211,7 +211,8 @@ public:
             file->flush();
             file->seek(offset);
 
-            uint available, freeItemCount, monsterBucketExtent;
+            uint available, freeItemCount;
+            int monsterBucketExtent;
             short unsigned int largestFree;
             bool dirty;
 
@@ -2046,7 +2047,7 @@ private:
 
 #ifdef DEBUG_MONSTERBUCKETS
 
-            for (uint index = bucketNumber + 1; index < bucketNumber + 1 + extent; ++index) {
+            for (int index = bucketNumber + 1; index < bucketNumber + 1 + extent; ++index) {
                 Q_ASSERT(!m_buckets[index]);
             }
 
@@ -2115,7 +2116,7 @@ private:
     {
         Q_ASSERT(bucketNumber);
 #ifdef DEBUG_MONSTERBUCKETS
-        for (uint offset = 1; offset < 5; ++offset) {
+        for (int offset = 1; offset < 5; ++offset) {
             int test = bucketNumber - offset;
             if (test >= 0 && m_buckets[test]) {
                 Q_ASSERT(m_buckets[test]->monsterBucketExtent() < offset);
