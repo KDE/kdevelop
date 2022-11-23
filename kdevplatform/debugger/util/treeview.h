@@ -23,6 +23,7 @@ class TreeModel;
 
         QSize sizeHint() const override;
         void resizeColumns();
+        void setAutoResizeColumns(bool on);
 
         // Well, I really, really, need this.
         using QTreeView::indexRowSizeHint;
@@ -38,8 +39,10 @@ class TreeModel;
 
     private:
         virtual QModelIndex mapViewIndexToTreeModelIndex(const QModelIndex& viewIndex) const;
+        void resizeColumnsAutomatically();
 
         TreeModel& m_treeModel;
+        bool m_autoResizeColumns;
     };
 
 }

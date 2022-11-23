@@ -155,6 +155,7 @@ VariableTree::VariableTree(IDebugController* controller, VariableWidget* parent,
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
+    setAutoResizeColumns(false);
 
     // setting proxy model
     m_proxy->setSourceModel(&treeModel());

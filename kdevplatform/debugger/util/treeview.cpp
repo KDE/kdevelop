@@ -17,6 +17,7 @@ using namespace KDevelop;
 AsyncTreeView::AsyncTreeView(TreeModel& treeModel, QWidget* parent)
     : QTreeView(parent)
     , m_treeModel(treeModel)
+    , m_autoResizeColumns(true)
 {
     connect (this, &AsyncTreeView::expanded,
              this, &AsyncTreeView::slotExpanded);
@@ -36,13 +37,13 @@ void AsyncTreeView::slotExpanded(const QModelIndex &index)
 void AsyncTreeView::slotCollapsed(const QModelIndex &index)
 {
     m_treeModel.collapsed(mapViewIndexToTreeModelIndex(index));
-    resizeColumns();
+    resizeColumnsAutomatically();
 }
 
 void AsyncTreeView::slotClicked(const QModelIndex &index)
 {
     m_treeModel.clicked(mapViewIndexToTreeModelIndex(index));
-    resizeColumns();
+    resizeColumnsAutomatically();
 }
 
 QSize AsyncTreeView::sizeHint() const
@@ -65,6 +66,12 @@ void AsyncTreeView::resizeColumns()
     this->updateGeometry();
 }
 
+void AsyncTreeView::setAutoResizeColumns(bool on)
+{
+    m_autoResizeColumns = on;
+    resizeColumnsAutomatically();
+}
+
 TreeModel& AsyncTreeView::treeModel()
 {
     return m_treeModel;
@@ -72,10 +79,17 @@ TreeModel& AsyncTreeView::treeModel()
 
 void AsyncTreeView::slotExpandedDataReady()
 {
-    resizeColumns();
+    resizeColumnsAutomatically();
 }
 
 QModelIndex AsyncTreeView::mapViewIndexToTreeModelIndex(const QModelIndex& viewIndex) const
 {
     return viewIndex;
+}
+
+void AsyncTreeView::resizeColumnsAutomatically()
+{
+    if (m_autoResizeColumns) {
+        resizeColumns();
+    }
 }
