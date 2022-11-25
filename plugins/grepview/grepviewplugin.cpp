@@ -164,7 +164,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
     // check if dialog pointers are still valid, remove them otherwise
     m_currentDialogs.removeAll(QPointer<GrepDialog>());
 
-    auto* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), show );
+    auto* const dlg = new GrepDialog(this, nullptr, core()->uiController()->activeMainWindow(), show);
     m_currentDialogs << dlg;
 
     GrepJobSettings dlgSettings = dlg->settings();
