@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2022-10-13 00:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -38,58 +38,58 @@ msgstr "Yeni Girdi Ekle"
 msgid "Name cannot be empty."
 msgstr "Ad, boş olamaz."
 
-#: qthelpconfig.cpp:101
+#: qthelpconfig.cpp:102
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Yeni Belgelendirme Al"
 
-#: qthelpconfig.cpp:116
+#: qthelpconfig.cpp:118
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr "\"qmake -query\" komutu, QtHelp dosyası için (QCH) yol sağlayamadı."
 
-#: qthelpconfig.cpp:204
+#: qthelpconfig.cpp:206
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Belgelendirme, GHNS tarafından sağlanmaktadır"
 
-#: qthelpconfig.cpp:230
+#: qthelpconfig.cpp:232
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Qt Sıkıştırılmış Yardım dosyası, geçerli değil."
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:241
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Belgelendirme, halihazırda içe aktarıldı"
 
-#: qthelpconfig.cpp:291
+#: qthelpconfig.cpp:293
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt Yardımı"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:298
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Qt Yardımı Ayarlarını Yapılandır"
 
-#: qthelpconfig.cpp:321
+#: qthelpconfig.cpp:323
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Değiştir"
 
-#: qthelpconfig.cpp:327
+#: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Sil"
 
-#: qthelpconfig.cpp:333
+#: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

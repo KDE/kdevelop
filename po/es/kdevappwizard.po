@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2020-10-18 21:02+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -119,61 +119,61 @@ msgstr "No se puede crear el archivo %1."
 msgid "Project Templates"
 msgstr "Plantillas de proyectos"
 
-#: projectselectionpage.cpp:57
+#: projectselectionpage.cpp:56
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
 msgstr "Categoría"
 
-#: projectselectionpage.cpp:58
+#: projectselectionpage.cpp:57
 #, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
 msgstr "Tipo de proyecto"
 
-#: projectselectionpage.cpp:68
+#: projectselectionpage.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Obtener más plantillas"
 
-#: projectselectionpage.cpp:75
+#: projectselectionpage.cpp:74
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
 msgstr "Cargar plantilla de un archivo"
 
-#: projectselectionpage.cpp:171
+#: projectselectionpage.cpp:170
 #, kde-format
 msgid "Invalid location"
 msgstr "Ubicación no válida"
 
-#: projectselectionpage.cpp:178
+#: projectselectionpage.cpp:177
 #, kde-format
 msgid "Empty project name"
 msgstr "Nombre de proyecto vacío"
 
-#: projectselectionpage.cpp:199
+#: projectselectionpage.cpp:198
 #, kde-format
 msgid "Invalid project name"
 msgstr "Nombre de proyecto no válido"
 
-#: projectselectionpage.cpp:218
+#: projectselectionpage.cpp:217
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
 msgstr "No es posible crear subcarpetas. Faltan permisos en: %1"
 
-#: projectselectionpage.cpp:233
+#: projectselectionpage.cpp:232
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
 msgstr "Plantilla de proyecto no válida; seleccione un elemento de hoja"
 
-#: projectselectionpage.cpp:246
+#: projectselectionpage.cpp:245
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
 msgstr "La ruta ya existe y contiene archivos. Ábralo como proyecto."
 
-#: projectselectionpage.cpp:293
+#: projectselectionpage.cpp:292
 #, kde-format
 msgid ""
 "The specified path already exists and contains files. Are you sure you want "
@@ -182,7 +182,7 @@ msgstr ""
 "La ruta especifica ya existe y contiene archivos. ¿Seguro que quiere "
 "continuar?"
 
-#: projectselectionpage.cpp:309
+#: projectselectionpage.cpp:308
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"

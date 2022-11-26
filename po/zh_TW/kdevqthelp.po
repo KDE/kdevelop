@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2018-12-08 11:42+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -38,7 +38,7 @@ msgstr "新增項目"
 msgid "Name cannot be empty."
 msgstr "名稱不能為空白。"
 
-#: qthelpconfig.cpp:101
+#: qthelpconfig.cpp:102
 #, fuzzy, kde-format
 #| msgctxt "Allow user to get some API documentation with GHNS"
 #| msgid "Get New Documentation"
@@ -46,56 +46,56 @@ msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "取得新文件"
 
-#: qthelpconfig.cpp:116
+#: qthelpconfig.cpp:118
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr "指令「qmake -query」無法提供 QtHelp 檔案 (QCH) 的路徑。"
 
-#: qthelpconfig.cpp:204
+#: qthelpconfig.cpp:206
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "由 GHNS 提供的文件"
 
-#: qthelpconfig.cpp:230
+#: qthelpconfig.cpp:232
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Qt 壓縮說明檔不合法。"
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:241
 #, kde-format
 msgid "Documentation already imported"
 msgstr "文件已匯入"
 
-#: qthelpconfig.cpp:291
+#: qthelpconfig.cpp:293
 #, fuzzy, kde-format
 #| msgid "Qt Help"
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Qt 說明"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:298
 #, fuzzy, kde-format
 #| msgid "Configure Qt Help Settings"
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "設定 Qt 說明"
 
-#: qthelpconfig.cpp:321
+#: qthelpconfig.cpp:323
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "變更"
 
-#: qthelpconfig.cpp:327
+#: qthelpconfig.cpp:329
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "刪除"
 
-#: qthelpconfig.cpp:333
+#: qthelpconfig.cpp:335
 #, fuzzy, kde-format
 #| msgid "Please uninstall this via GHNS"
 msgctxt "@info:tooltip"

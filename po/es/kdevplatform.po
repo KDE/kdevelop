@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2022-11-03 12:20+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -4643,6 +4643,12 @@ msgstr "Plantillas"
 msgid "Configure Templates"
 msgstr "Configurar plantillas"
 
+#: shell/settings/templatepage.cpp:28
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Obtener más plantillas"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, kde-format
@@ -4650,15 +4656,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Cargar plantilla de un archivo"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, kde-format
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "Obtener más plantillas"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"

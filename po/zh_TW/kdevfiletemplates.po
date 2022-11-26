@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2019-09-30 19:07+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -390,35 +390,35 @@ msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>預覽：</b>%1"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:202
 #, fuzzy, kde-format
 #| msgid "Language"
 msgctxt "@title:column"
 msgid "Language"
 msgstr "語言"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:203
 #, fuzzy, kde-format
 #| msgid "Framework"
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "架構"
 
-#: templateselectionpage.cpp:205
+#: templateselectionpage.cpp:204
 #, fuzzy, kde-format
 #| msgid "Template"
 msgctxt "@title:column"
 msgid "Template"
 msgstr "樣本"
 
-#: templateselectionpage.cpp:240
+#: templateselectionpage.cpp:239
 #, fuzzy, kde-format
 #| msgid "Get More Templates..."
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "取得更多樣本..."
 
-#: templateselectionpage.cpp:245
+#: templateselectionpage.cpp:246
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"

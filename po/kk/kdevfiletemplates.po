@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2013-11-12 03:32+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -366,35 +366,35 @@ msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Мынаны қарап-шығу:</b> %1"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:202
 #, fuzzy, kde-format
 #| msgid "Language"
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Тілі"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:203
 #, fuzzy, kde-format
 #| msgid "Framework"
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Платформасы"
 
-#: templateselectionpage.cpp:205
+#: templateselectionpage.cpp:204
 #, fuzzy, kde-format
 #| msgid "Template"
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Үлгі"
 
-#: templateselectionpage.cpp:240
+#: templateselectionpage.cpp:239
 #, fuzzy, kde-format
 #| msgid "Get More Templates..."
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Тағы үлгілерін табу..."
 
-#: templateselectionpage.cpp:245
+#: templateselectionpage.cpp:246
 #, fuzzy, kde-format
 #| msgid "Load Template From File"
 msgctxt "@action:button"

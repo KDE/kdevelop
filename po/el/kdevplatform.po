@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -5051,6 +5051,13 @@ msgstr "Κοινή χρήση προτύπων"
 msgid "Configure Templates"
 msgstr "Διαμόρφωση ενάρξεων..."
 
+#: shell/settings/templatepage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Ανάκτηση περισσότερων προτύπων"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, fuzzy, kde-format
@@ -5059,16 +5066,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Φόρτωση προτύπου από αρχείο"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "Ανάκτηση περισσότερων προτύπων"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 #| msgid "Clone Template"
 msgctxt "@action:button"

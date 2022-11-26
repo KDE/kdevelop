@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2022-05-08 17:52+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -361,31 +361,31 @@ msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Vista prèvia:</b> %1"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:202
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Llenguatge"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:203
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Marc de treball"
 
-#: templateselectionpage.cpp:205
+#: templateselectionpage.cpp:204
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Plantilla"
 
-#: templateselectionpage.cpp:240
+#: templateselectionpage.cpp:239
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Obtín més plantilles..."
 
-#: templateselectionpage.cpp:245
+#: templateselectionpage.cpp:246
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

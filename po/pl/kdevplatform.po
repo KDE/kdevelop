@@ -21,15 +21,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
-"PO-Revision-Date: 2022-09-23 11:00+0200\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"PO-Revision-Date: 2022-11-25 21:53+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.04.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -1873,10 +1873,9 @@ msgid "Running %1"
 msgstr "Wykonywanie %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "Zestaw &barw"
+msgstr "Zestaw bar&w okien"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -4647,6 +4646,12 @@ msgstr "Szablony"
 msgid "Configure Templates"
 msgstr "Ustawienia szablonów"
 
+#: shell/settings/templatepage.cpp:28
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Pobierz szablony"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, kde-format
@@ -4654,15 +4659,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Wczytaj szablon z pliku"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, kde-format
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "Pobierz szablony"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"

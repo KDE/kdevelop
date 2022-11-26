@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -4527,6 +4527,12 @@ msgstr ""
 msgid "Configure Templates"
 msgstr "संयोजीत करा %1"
 
+#: shell/settings/templatepage.cpp:28
+#, fuzzy, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "संयोजीत करा %1"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, kde-format
@@ -4534,15 +4540,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, fuzzy, kde-format
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "संयोजीत करा %1"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"

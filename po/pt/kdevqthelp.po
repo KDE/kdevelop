@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2020-07-20 12:03+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -31,13 +31,13 @@ msgstr "Adicionar um Novo Item"
 msgid "Name cannot be empty."
 msgstr "O nome não pode estar em branco."
 
-#: qthelpconfig.cpp:101
+#: qthelpconfig.cpp:102
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Obter Nova Documentação"
 
-#: qthelpconfig.cpp:116
+#: qthelpconfig.cpp:118
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
@@ -45,46 +45,46 @@ msgstr ""
 "O comando \"qmake -query\" não conseguiu devolver a localização do ficheiro "
 "do QtHelp (QCH)."
 
-#: qthelpconfig.cpp:204
+#: qthelpconfig.cpp:206
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Documentação fornecida pelo GHNS"
 
-#: qthelpconfig.cpp:230
+#: qthelpconfig.cpp:232
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "O ficheiro de ajuda comprimido do Qt não é válido."
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:241
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Documentação já importada"
 
-#: qthelpconfig.cpp:291
+#: qthelpconfig.cpp:293
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Ajuda do Qt"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:298
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Configurar as Definições de Ajuda do Qt"
 
-#: qthelpconfig.cpp:321
+#: qthelpconfig.cpp:323
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Modificar"
 
-#: qthelpconfig.cpp:327
+#: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Apagar"
 
-#: qthelpconfig.cpp:333
+#: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2022-11-19 14:48\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -341,31 +341,31 @@ msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>预览：</b> %1"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:202
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "语言"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:203
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "框架"
 
-#: templateselectionpage.cpp:205
+#: templateselectionpage.cpp:204
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "模板"
 
-#: templateselectionpage.cpp:240
+#: templateselectionpage.cpp:239
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "获取更多模板..."
 
-#: templateselectionpage.cpp:245
+#: templateselectionpage.cpp:246
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

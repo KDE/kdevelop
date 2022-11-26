@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-29 00:44+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2021-01-03 10:00+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -35,13 +35,13 @@ msgstr "Dodaj nowy wpis"
 msgid "Name cannot be empty."
 msgstr "Nazwa nie może być pusta."
 
-#: qthelpconfig.cpp:101
+#: qthelpconfig.cpp:102
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
 msgstr "Pobierz nową dokumentację"
 
-#: qthelpconfig.cpp:116
+#: qthelpconfig.cpp:118
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
@@ -49,46 +49,46 @@ msgstr ""
 "Polecenie \"qmake -query\" nie może dostarczyć ścieżki do pliku Pomoc Qt "
 "(QCH)."
 
-#: qthelpconfig.cpp:204
+#: qthelpconfig.cpp:206
 #, kde-format
 msgid "Documentation provided by GHNS"
 msgstr "Dokumentacja dostarczona przez GHNS"
 
-#: qthelpconfig.cpp:230
+#: qthelpconfig.cpp:232
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
 msgstr "Nieprawidłowy skompresowany plik pomocy Qt."
 
-#: qthelpconfig.cpp:239
+#: qthelpconfig.cpp:241
 #, kde-format
 msgid "Documentation already imported"
 msgstr "Zaimportowano już dokumentację"
 
-#: qthelpconfig.cpp:291
+#: qthelpconfig.cpp:293
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
 msgstr "Pomoc Qt"
 
-#: qthelpconfig.cpp:296
+#: qthelpconfig.cpp:298
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
 msgstr "Ustawienia Pomocy Qt"
 
-#: qthelpconfig.cpp:321
+#: qthelpconfig.cpp:323
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
 msgstr "Zmień"
 
-#: qthelpconfig.cpp:327
+#: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
 msgstr "Usuń"
 
-#: qthelpconfig.cpp:333
+#: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."

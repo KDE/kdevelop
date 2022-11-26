@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2022-11-14 07:16+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -4647,6 +4647,12 @@ msgstr "Txantiloiak"
 msgid "Configure Templates"
 msgstr "Konfiguratu txantiloiak"
 
+#: shell/settings/templatepage.cpp:28
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Lortu txantiloi gehiago"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, kde-format
@@ -4654,15 +4660,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Kargatu txantiloia fitxategitik"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, kde-format
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "Lortu txantiloi gehiago"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"

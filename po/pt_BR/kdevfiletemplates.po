@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2020-08-13 11:25-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -354,31 +354,31 @@ msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Visualização:</b> %1"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:202
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Linguagem"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:203
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Plataforma"
 
-#: templateselectionpage.cpp:205
+#: templateselectionpage.cpp:204
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Modelo"
 
-#: templateselectionpage.cpp:240
+#: templateselectionpage.cpp:239
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Obter mais modelos..."
 
-#: templateselectionpage.cpp:245
+#: templateselectionpage.cpp:246
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

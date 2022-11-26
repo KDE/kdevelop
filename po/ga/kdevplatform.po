@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform/kdevplatform.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -4732,15 +4732,7 @@ msgstr ""
 msgid "Configure Templates"
 msgstr "Cumraigh %1"
 
-#. i18n: ectx: property (text), widget (QPushButton, loadButton)
-#: shell/settings/templatepage.ui:26
-#, kde-format
-msgctxt "@action:button"
-msgid "Load Template From File"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
+#: shell/settings/templatepage.cpp:28
 #, fuzzy, kde-format
 #| msgctxt "%1 = application name"
 #| msgid "Configure %1"
@@ -4748,8 +4740,15 @@ msgctxt "@action:button"
 msgid "Get More Templates"
 msgstr "Cumraigh %1"
 
+#. i18n: ectx: property (text), widget (QPushButton, loadButton)
+#: shell/settings/templatepage.ui:26
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template From File"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 #| msgctxt "%1 = application name"
 #| msgid "Configure %1"

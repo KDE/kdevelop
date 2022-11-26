@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2014-09-08 22:58+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -4548,6 +4548,13 @@ msgstr "Sablonok megosztása"
 msgid "Configure Templates"
 msgstr "Sablon klónozása"
 
+#: shell/settings/templatepage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "További sablonok beszerzése"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, fuzzy, kde-format
@@ -4556,16 +4563,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Sablon betöltése fájlból"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "További sablonok beszerzése"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 #| msgid "Clone Template"
 msgctxt "@action:button"

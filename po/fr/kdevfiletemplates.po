@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2020-07-24 08:56+0200\n"
 "Last-Translator: Johnny Jazeix <jazeix@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -360,31 +360,31 @@ msgctxt "%1: template comment"
 msgid "<b>Preview:</b> %1"
 msgstr "<b>Aperçu :</b> %1"
 
-#: templateselectionpage.cpp:203
+#: templateselectionpage.cpp:202
 #, kde-format
 msgctxt "@title:column"
 msgid "Language"
 msgstr "Langue"
 
-#: templateselectionpage.cpp:204
+#: templateselectionpage.cpp:203
 #, kde-format
 msgctxt "@title:column"
 msgid "Framework"
 msgstr "Environnement"
 
-#: templateselectionpage.cpp:205
+#: templateselectionpage.cpp:204
 #, kde-format
 msgctxt "@title:column"
 msgid "Template"
 msgstr "Modèle"
 
-#: templateselectionpage.cpp:240
+#: templateselectionpage.cpp:239
 #, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates..."
 msgstr "Obtenir plus de modèles…"
 
-#: templateselectionpage.cpp:245
+#: templateselectionpage.cpp:246
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2021-05-15 15:28+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -4759,6 +4759,13 @@ msgstr ""
 msgid "Configure Templates"
 msgstr "Configurare lansări..."
 
+#: shell/settings/templatepage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Configure Launches..."
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Configurare lansări..."
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, kde-format
@@ -4766,16 +4773,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, fuzzy, kde-format
-#| msgid "Configure Launches..."
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "Configurare lansări..."
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 #| msgid "Configure Launches..."
 msgctxt "@action:button"

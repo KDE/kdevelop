@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2014-04-23 15:00+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -4905,6 +4905,13 @@ msgstr "分享樣本"
 msgid "Configure Templates"
 msgstr "設定啟動器..."
 
+#: shell/settings/templatepage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "取得更多樣本"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, fuzzy, kde-format
@@ -4913,16 +4920,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "從檔案載入樣本"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "取得更多樣本"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 #| msgid "Clone Template"
 msgctxt "@action:button"

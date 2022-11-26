@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:45+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -4896,6 +4896,13 @@ msgstr "Үлгілері ортақтастыру"
 msgid "Configure Templates"
 msgstr "Жегуді баптау..."
 
+#: shell/settings/templatepage.cpp:28
+#, fuzzy, kde-format
+#| msgid "Get More Templates"
+msgctxt "@action:button"
+msgid "Get More Templates"
+msgstr "Тағы үлгілерін табу"
+
 #. i18n: ectx: property (text), widget (QPushButton, loadButton)
 #: shell/settings/templatepage.ui:26
 #, fuzzy, kde-format
@@ -4904,16 +4911,8 @@ msgctxt "@action:button"
 msgid "Load Template From File"
 msgstr "Үлгіні файлдан жүктеп алу"
 
-#. i18n: ectx: property (text), widget (QPushButton, getNewButton)
-#: shell/settings/templatepage.ui:38
-#, fuzzy, kde-format
-#| msgid "Get More Templates"
-msgctxt "@action:button"
-msgid "Get More Templates"
-msgstr "Тағы үлгілерін табу"
-
 #. i18n: ectx: property (text), widget (QPushButton, extractButton)
-#: shell/settings/templatepage.ui:50
+#: shell/settings/templatepage.ui:38
 #, fuzzy, kde-format
 #| msgid "Clone Template"
 msgctxt "@action:button"

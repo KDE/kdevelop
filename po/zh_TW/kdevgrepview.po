@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
 "PO-Revision-Date: 2019-09-30 19:11+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -35,20 +35,20 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "所有已開啟專案"
 
-#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "在檔案中尋找/取代"
 
-#: grepdialog.cpp:189
+#: grepdialog.cpp:193
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "搜尋..."
 
-#: grepdialog.cpp:256
+#: grepdialog.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Select directory to search in"
@@ -56,20 +56,20 @@ msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "請選取要搜尋的目錄"
 
-#: grepdialog.cpp:512
+#: grepdialog.cpp:516
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2，還有 %1 個項目"
 
-#: grepdialog.cpp:525
+#: grepdialog.cpp:532
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2"
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "在 %2 搜尋「%1」"
 
-#: grepdialog.cpp:530
+#: grepdialog.cpp:537
 #, fuzzy, kde-format
 #| msgid "Search \"%1\" in %2 (at time %3)"
 msgctxt "@item search result"
