@@ -167,7 +167,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
         }
     }
 
-    // rerun the grep jobs with settings from the history
+    // Restore the grep jobs with settings from the history without performing a search.
     auto* const dlg = new GrepDialog(m_plugin, this, this, false);
     dlg->historySearch(m_settingsHistory);
 
