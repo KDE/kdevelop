@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop/kdevgrepview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 02:26+0000\n"
 "PO-Revision-Date: 2009-01-20 10:11-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -29,27 +29,27 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr ""
 
-#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
 #, fuzzy, kde-format
 #| msgid "Find/Replace in Files"
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "Aimsigh/Ionadaigh i gComhaid"
 
-#: grepdialog.cpp:189
+#: grepdialog.cpp:193
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "Cuardaigh..."
 
-#: grepdialog.cpp:256
+#: grepdialog.cpp:260
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr ""
 
-#: grepdialog.cpp:512
+#: grepdialog.cpp:516
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
@@ -59,13 +59,13 @@ msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 
-#: grepdialog.cpp:525
+#: grepdialog.cpp:532
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr ""
 
-#: grepdialog.cpp:530
+#: grepdialog.cpp:537
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"

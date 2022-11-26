@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2022-11-26 02:26+0000\n"
 "PO-Revision-Date: 2022-09-12 09:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -30,38 +30,38 @@ msgctxt "@item:inlistbox"
 msgid "All Open Projects"
 msgstr "ყველა ღია პროექტი"
 
-#: grepdialog.cpp:181 grepdialog.cpp:520 grepviewplugin.cpp:91
+#: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
 #, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
 msgstr "ფაილებში ძებნა/ჩანაცვლება"
 
-#: grepdialog.cpp:189
+#: grepdialog.cpp:193
 #, kde-format
 msgctxt "@action:button"
 msgid "Search..."
 msgstr "ძებნა..."
 
-#: grepdialog.cpp:256
+#: grepdialog.cpp:260
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
 msgstr "აირჩიეთ მოსაძებნი საქაღალდე"
 
-#: grepdialog.cpp:512
+#: grepdialog.cpp:516
 #, kde-format
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] "%2 და კიდევ %1 ჩანაწერი"
 msgstr[1] "%2 და კიდევ %1 ჩანაწერი"
 
-#: grepdialog.cpp:525
+#: grepdialog.cpp:532
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
 msgstr "\"%1\"-ის \"%2\"-ში მოძებნა"
 
-#: grepdialog.cpp:530
+#: grepdialog.cpp:537
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
