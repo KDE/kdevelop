@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-07-22 16:08+0100\n"
+"PO-Revision-Date: 2022-11-26 15:06+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
 "Language: en_GB\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: committoolview.cpp:206 committoolview.cpp:207
 #, kde-format
@@ -632,21 +632,19 @@ msgstr "Name for the new branch:"
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1 created on %2"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr "Remove the selected branch"
+msgstr "Remove the selected stash"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:37
