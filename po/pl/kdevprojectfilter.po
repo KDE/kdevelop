@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2014, 2015, 2021.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2014, 2015, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-01-26 00:43+0000\n"
-"PO-Revision-Date: 2021-01-06 01:37+0100\n"
+"PO-Revision-Date: 2022-11-26 11:02+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 20.12.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: filtermodel.cpp:74
 #, kde-format
@@ -146,9 +146,9 @@ msgstr "Filtr projektu"
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] "Wyklucz element z projektu"
-msgstr[1] "Wyklucz elementy z projektu"
-msgstr[2] "Wyklucz elementy z projektu"
+msgstr[0] "Wyklucz rzecz z projektu"
+msgstr[1] "Wyklucz rzeczy z projektu"
+msgstr[2] "Wyklucz rzeczy z projektu"
 
 #: projectfilterprovider.cpp:115
 #, kde-format
