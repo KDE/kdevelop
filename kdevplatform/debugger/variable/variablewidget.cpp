@@ -15,9 +15,10 @@
 #include <QMenu>
 #include <QVBoxLayout>
 
+#include <KConfigGroup>
 #include <KHistoryComboBox>
 #include <KLocalizedString>
-#include <QSortFilterProxyModel>
+#include <KSharedConfig>
 
 #include "../util/treemodel.h"
 #include "../../interfaces/icore.h"
@@ -54,6 +55,17 @@
 // **************************************************************************
 // **************************************************************************
 
+namespace {
+
+constexpr const char* autoResizeColumnsKey = "autoResizeColumns";
+
+auto variablesViewConfigGroup()
+{
+    return KSharedConfig::openConfig()->group("Variables View");
+}
+
+}
+
 namespace KDevelop
 {
 
@@ -61,7 +73,6 @@ VariableCollection *variableCollection()
 {
     return ICore::self()->debugController()->variableCollection();
 }
-
 
 VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), m_variablesRoot(controller->variableCollection()->root())
@@ -82,6 +93,19 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 
     connect(m_watchVarEditor, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
             this, &VariableWidget::slotAddWatch);
+
+    const bool autoResizeColumns = variablesViewConfigGroup().readEntry(autoResizeColumnsKey, true);
+    m_varTree->setAutoResizeColumns(autoResizeColumns);
+
+    auto* const autoResizeColumnsAction = new QAction(i18nc("@option:check", "Auto-resize columns on click"), this);
+    autoResizeColumnsAction->setIcon(QIcon::fromTheme(QStringLiteral("resizecol")));
+    autoResizeColumnsAction->setCheckable(true);
+    autoResizeColumnsAction->setChecked(autoResizeColumns);
+    connect(autoResizeColumnsAction, &QAction::triggered, [this](bool on) {
+        m_varTree->setAutoResizeColumns(on);
+        variablesViewConfigGroup().writeEntry(autoResizeColumnsKey, on);
+    });
+    addAction(autoResizeColumnsAction);
 
     //TODO
     //connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
@@ -155,7 +179,6 @@ VariableTree::VariableTree(IDebugController* controller, VariableWidget* parent,
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
-    setAutoResizeColumns(false);
 
     // setting proxy model
     m_proxy->setSourceModel(&treeModel());

@@ -41,46 +41,69 @@
 
 namespace KDevelop {
 
-template<class T>
-class DebuggerToolFactory : public KDevelop::IToolViewFactory
+class DebuggerToolFactoryBase : public KDevelop::IToolViewFactory
 {
 public:
-  DebuggerToolFactory(DebugController* controller, const QString &id, Qt::DockWidgetArea defaultArea)
-  : m_controller(controller), m_id(id), m_defaultArea(defaultArea) {}
+    DebuggerToolFactoryBase(DebugController* controller, const QString& id, Qt::DockWidgetArea defaultArea)
+        : m_controller(controller)
+        , m_id(id)
+        , m_defaultArea(defaultArea)
+    {
+    }
 
-  QWidget* create(QWidget *parent = nullptr) override
-  {
-    return new T(m_controller, parent);
-  }
+    QString id() const override
+    {
+        return m_id;
+    }
 
-  QString id() const override
-  {
-    return m_id;
-  }
+    Qt::DockWidgetArea defaultPosition() const override
+    {
+        return m_defaultArea;
+    }
 
-  Qt::DockWidgetArea defaultPosition() const override
-  {
-    return m_defaultArea;
-  }
+    void viewCreated(Sublime::View* view) override
+    {
+        if (view->widget()->metaObject()->indexOfSignal("requestRaise()") != -1)
+            QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
+    }
 
-  void viewCreated(Sublime::View* view) override
-  {
-      if (view->widget()->metaObject()->indexOfSignal("requestRaise()") != -1)
-          QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
-  }
-
-  /* At present, some debugger widgets (e.g. breakpoint) contain actions so that shortcuts
-     work, but they don't need any toolbar.  So, suppress toolbar action.  */
-  QList<QAction*> toolBarActions( QWidget* viewWidget ) const override
-  {
-      Q_UNUSED(viewWidget);
-      return QList<QAction*>();
-  }
+protected:
+    auto controller() const
+    {
+        return m_controller;
+    }
 
 private:
     DebugController* const m_controller;
     const QString m_id;
     const Qt::DockWidgetArea m_defaultArea;
+};
+
+template<class T>
+class DebuggerToolFactory : public DebuggerToolFactoryBase
+{
+public:
+    using DebuggerToolFactoryBase::DebuggerToolFactoryBase;
+
+    QWidget* create(QWidget* parent = nullptr) override
+    {
+        return new T(controller(), parent);
+    }
+};
+
+template<class T>
+class DebuggerToolWithoutToolbarFactory : public DebuggerToolFactory<T>
+{
+public:
+    using DebuggerToolFactory<T>::DebuggerToolFactory;
+
+    // At present, some debugger widgets (e.g. breakpoint) contain actions so that shortcuts
+    // work, but they don't need any toolbar.  So, suppress toolbar action.
+    QList<QAction*> toolBarActions(QWidget* viewWidget) const override
+    {
+        Q_UNUSED(viewWidget);
+        return {};
+    }
 };
 
 DebugController::DebugController(QObject *parent)
@@ -107,21 +130,18 @@ void DebugController::initializeUi()
 
     ICore::self()->uiController()->addToolView(
         i18nc("@title:window", "Frame Stack"),
-        new DebuggerToolFactory<FramestackWidget>(
-            this, QStringLiteral("org.kdevelop.debugger.StackView"),
-            Qt::BottomDockWidgetArea));
+        new DebuggerToolWithoutToolbarFactory<FramestackWidget>(this, QStringLiteral("org.kdevelop.debugger.StackView"),
+                                                                Qt::BottomDockWidgetArea));
 
     ICore::self()->uiController()->addToolView(
         i18nc("@title:window", "Breakpoints"),
-        new DebuggerToolFactory<BreakpointWidget>(
-            this, QStringLiteral("org.kdevelop.debugger.BreakpointsView"),
-            Qt::BottomDockWidgetArea));
+        new DebuggerToolWithoutToolbarFactory<BreakpointWidget>(
+            this, QStringLiteral("org.kdevelop.debugger.BreakpointsView"), Qt::BottomDockWidgetArea));
 
     ICore::self()->uiController()->addToolView(
         i18nc("@title:window", "Variables"),
-        new DebuggerToolFactory<VariableWidget>(
-            this, QStringLiteral("org.kdevelop.debugger.VariablesView"),
-            Qt::LeftDockWidgetArea));
+        new DebuggerToolFactory<VariableWidget>(this, QStringLiteral("org.kdevelop.debugger.VariablesView"),
+                                                Qt::LeftDockWidgetArea));
 
     const auto parts = KDevelop::ICore::self()->partController()->parts();
     for (KParts::Part* p : parts) {
