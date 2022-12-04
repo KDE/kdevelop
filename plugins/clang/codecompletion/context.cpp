@@ -1130,14 +1130,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         FunctionSignatureState signatureState = Before;
         //END function signature parsing
 
-        std::function<void (CXCompletionString)> processChunks = [&] (CXCompletionString completionString) {
+        const auto processChunks = [&](CXCompletionString completionString, const auto& self) -> void {
             const uint chunks = clang_getNumCompletionChunks(completionString);
             for (uint j = 0; j < chunks; ++j) {
                 const auto kind = clang_getCompletionChunkKind(completionString, j);
                 if (kind == CXCompletionChunk_Optional) {
                     completionString = clang_getCompletionChunkCompletionString(completionString, j);
                     if (completionString) {
-                        processChunks(completionString);
+                        self(completionString, self);
                     }
                     continue;
                 }
@@ -1202,7 +1202,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
         };
 
-        processChunks(result.CompletionString);
+        processChunks(result.CompletionString, processChunks);
 
         // we have our own implementation of an override helper
         // TODO: use the clang-provided one, if available
