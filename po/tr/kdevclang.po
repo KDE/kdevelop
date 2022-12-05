@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2022-12-05 00:44+0000\n"
 "PO-Revision-Date: 2022-08-30 12:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -110,37 +110,37 @@ msgstr "Geçersiz Kıl: %1"
 msgid "Implement %1"
 msgstr "Gerçekleştir: %1"
 
-#: codecompletion/context.cpp:1305
+#: codecompletion/context.cpp:1320
 #, kde-format
 msgid "Special"
 msgstr "Özel"
 
-#: codecompletion/context.cpp:1306
+#: codecompletion/context.cpp:1321
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Önden Bakış Eşleşmeleri"
 
-#: codecompletion/context.cpp:1307
+#: codecompletion/context.cpp:1322
 #, kde-format
 msgid "Builtin"
 msgstr "Birlikte Gelen"
 
-#: codecompletion/context.cpp:1308
+#: codecompletion/context.cpp:1323
 #, kde-format
 msgid "Macros"
 msgstr "Makrolar"
 
-#: codecompletion/context.cpp:1351
+#: codecompletion/context.cpp:1366
 #, kde-format
 msgid "Abstract Override"
 msgstr "Soyut Geçersiz Kılma"
 
-#: codecompletion/context.cpp:1352
+#: codecompletion/context.cpp:1367
 #, kde-format
 msgid "Virtual Override"
 msgstr "Sanal Geçersiz Kılma"
 
-#: codecompletion/context.cpp:1367
+#: codecompletion/context.cpp:1382
 #, kde-format
 msgid "Implement Function"
 msgstr "İşlev Gerçekleştirme"

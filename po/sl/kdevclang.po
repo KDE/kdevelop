@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2022-12-05 00:44+0000\n"
 "PO-Revision-Date: 2022-01-03 13:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -113,37 +113,37 @@ msgstr "Preglasi %1"
 msgid "Implement %1"
 msgstr "Implementiraj %1"
 
-#: codecompletion/context.cpp:1305
+#: codecompletion/context.cpp:1320
 #, kde-format
 msgid "Special"
 msgstr "Posebno"
 
-#: codecompletion/context.cpp:1306
+#: codecompletion/context.cpp:1321
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Ujemanja s pogledom naprej"
 
-#: codecompletion/context.cpp:1307
+#: codecompletion/context.cpp:1322
 #, kde-format
 msgid "Builtin"
 msgstr "Vgrajeno"
 
-#: codecompletion/context.cpp:1308
+#: codecompletion/context.cpp:1323
 #, kde-format
 msgid "Macros"
 msgstr "Makri"
 
-#: codecompletion/context.cpp:1351
+#: codecompletion/context.cpp:1366
 #, kde-format
 msgid "Abstract Override"
 msgstr "Abstraktno preglasi"
 
-#: codecompletion/context.cpp:1352
+#: codecompletion/context.cpp:1367
 #, kde-format
 msgid "Virtual Override"
 msgstr "Navidezno preglasi"
 
-#: codecompletion/context.cpp:1367
+#: codecompletion/context.cpp:1382
 #, kde-format
 msgid "Implement Function"
 msgstr "Implementiraj funkcijo"
