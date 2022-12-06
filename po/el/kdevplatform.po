@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2022-12-06 00:43+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -175,7 +175,7 @@ msgstr ""
 
 #: debugger/breakpoint/breakpointmodel.cpp:216
 #: debugger/variable/variablecollection.cpp:408
-#: debugger/variable/variabletooltip.cpp:81
+#: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Type"
 msgstr "Τύπος"
@@ -402,14 +402,14 @@ msgstr "Αυτόματο"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:408
-#: debugger/variable/variabletooltip.cpp:81
+#: debugger/variable/variabletooltip.cpp:80
 #: shell/launchconfigurationdialog.ui:114
 #, kde-format
 msgid "Name"
 msgstr "Όνομα"
 
 #: debugger/variable/variablecollection.cpp:408
-#: debugger/variable/variabletooltip.cpp:81
+#: debugger/variable/variabletooltip.cpp:80
 #, kde-format
 msgid "Value"
 msgstr "Τιμή"
@@ -419,13 +419,13 @@ msgstr "Τιμή"
 msgid "Locals"
 msgstr "Τοπικά"
 
-#: debugger/variable/variabletooltip.cpp:119
+#: debugger/variable/variabletooltip.cpp:116
 #, fuzzy, kde-format
 #| msgid "Match case"
 msgid "Watch This"
 msgstr "Ταίριασμα περίπτωσης"
 
-#: debugger/variable/variabletooltip.cpp:121
+#: debugger/variable/variabletooltip.cpp:118
 #, fuzzy, kde-format
 #| msgid "&Stop on change"
 msgid "Stop on Change"
@@ -436,7 +436,7 @@ msgstr "&Διακοπή σε αλλαγή"
 msgid "Debugger Variables"
 msgstr "Μεταβλητές για debugger"
 
-#: debugger/variable/variablewidget.cpp:93
+#: debugger/variable/variablewidget.cpp:92
 #, kde-format
 msgid ""
 "<b>Variable tree</b>The variable tree allows you to see the values of local "
@@ -458,96 +458,56 @@ msgstr ""
 ">Για αλλαγή της τιμής μιας μεταβλητής ή μιας έκφρασης, κάντε κλικ στην τιμή."
 "<br />"
 
-#: debugger/variable/variablewidget.cpp:107
+#: debugger/variable/variablewidget.cpp:106
 #, kde-format
 msgid "<b>Expression entry</b>Type in expression to watch."
 msgstr "<b>Εισαγωγή έκφρασης</b>Πληκτρολογήστε μια έκφραση προς παρατήρηση."
 
-#: debugger/variable/variablewidget.cpp:194
+#: debugger/variable/variablewidget.cpp:183
 #, kde-format
 msgid "&Format"
 msgstr "Μορ&φή"
 
-#: debugger/variable/variablewidget.cpp:199
+#: debugger/variable/variablewidget.cpp:188
 #, kde-format
 msgid "&Natural"
 msgstr "Φυ&σική"
 
-#: debugger/variable/variablewidget.cpp:204
+#: debugger/variable/variablewidget.cpp:193
 #, kde-format
 msgid "&Binary"
 msgstr "&Δυαδική"
 
-#: debugger/variable/variablewidget.cpp:209
+#: debugger/variable/variablewidget.cpp:198
 #, kde-format
 msgid "&Octal"
 msgstr "&Οκταδική"
 
-#: debugger/variable/variablewidget.cpp:214
+#: debugger/variable/variablewidget.cpp:203
 #, kde-format
 msgid "&Decimal"
 msgstr "Δε&καδική"
 
-#: debugger/variable/variablewidget.cpp:219
+#: debugger/variable/variablewidget.cpp:208
 #, kde-format
 msgid "&Hexadecimal"
 msgstr "Δεκαε&ξαδική"
 
-#: debugger/variable/variablewidget.cpp:234
+#: debugger/variable/variablewidget.cpp:223
 #, kde-format
 msgid "Remove Watch Variable"
 msgstr "Αφαίρεση της προς παρατήρηση μεταβλητής"
 
-#: debugger/variable/variablewidget.cpp:241
+#: debugger/variable/variablewidget.cpp:230
 #, kde-format
 msgid "&Copy Value"
 msgstr "Αντιγρα&φή τιμής"
 
-#: debugger/variable/variablewidget.cpp:246
+#: debugger/variable/variablewidget.cpp:235
 #, fuzzy, kde-format
 #| msgid "&Stop on change"
 msgid "&Stop on Change"
 msgstr "&Διακοπή σε αλλαγή"
-
-#: debugger/variable/variablewidget.cpp:327
-#, kde-format
-msgid "Recent Expressions"
-msgstr "Πρόσφατες εκφράσεις"
-
-#: debugger/variable/variablewidget.cpp:328
-#, kde-format
-msgid "Remove All"
-msgstr "Αφαίρεση όλων"
-
-#: debugger/variable/variablewidget.cpp:329
-#, kde-format
-msgid "Re-evaluate All"
-msgstr "Επαναξιολόγηση όλων"
-
-#: debugger/variable/variablewidget.cpp:375
-#, kde-format
-msgid "Remember Value"
-msgstr "Διατήρηση τιμής στη μνήμη"
-
-#: debugger/variable/variablewidget.cpp:380
-#, kde-format
-msgid "Watch Variable"
-msgstr "Μεταβλητή προς παρατήρηση"
-
-#: debugger/variable/variablewidget.cpp:385
-#, kde-format
-msgid "Reevaluate Expression"
-msgstr "Επαναξιολόγηση έκφρασης"
-
-#: debugger/variable/variablewidget.cpp:387
-#, kde-format
-msgid "Remove Expression"
-msgstr "Αφαίρεση έκφρασης"
-
-#: debugger/variable/variablewidget.cpp:393
-#, kde-format
-msgid "Data write breakpoint"
-msgstr "Σημείο προσωρινής παύσης σε εγγραφή"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:43
@@ -1980,126 +1940,126 @@ msgid ""
 "\">this article</a> for more information."
 msgstr ""
 
-#: shell/debugcontroller.cpp:90
+#: shell/debugcontroller.cpp:91
 #, fuzzy, kde-format
 #| msgid "Debugger:"
 msgid "Debugger"
 msgstr "Διορθωτής σφαλμάτων:"
 
-#: shell/debugcontroller.cpp:108
+#: shell/debugcontroller.cpp:109
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Frame Stack"
 
-#: shell/debugcontroller.cpp:114
+#: shell/debugcontroller.cpp:115
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Σημεία προσωρινής παύσης"
 
-#: shell/debugcontroller.cpp:120
+#: shell/debugcontroller.cpp:121
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Μεταβλητές"
 
-#: shell/debugcontroller.cpp:197
+#: shell/debugcontroller.cpp:198
 #, kde-format
 msgid "&Restart"
 msgstr "&Επανεκκίνηση"
 
-#: shell/debugcontroller.cpp:198
+#: shell/debugcontroller.cpp:199
 #, kde-format
 msgid "Restart program"
 msgstr "Επανεκκίνηση προγράμματος"
 
-#: shell/debugcontroller.cpp:199
+#: shell/debugcontroller.cpp:200
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Επανεκκινεί εφαρμογές από την αρχή."
 
-#: shell/debugcontroller.cpp:205
+#: shell/debugcontroller.cpp:206
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Διακοπή"
 
-#: shell/debugcontroller.cpp:206
+#: shell/debugcontroller.cpp:207
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Διακοπή εφαρμογής"
 
-#: shell/debugcontroller.cpp:207
+#: shell/debugcontroller.cpp:208
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "Διακόπτει τη διαδικασία διόρθωσης ή την τρέχουσα εντολή του debugger."
 
-#: shell/debugcontroller.cpp:211
+#: shell/debugcontroller.cpp:212
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "Εκτέλεση μέχρι το &δρομέα"
 
-#: shell/debugcontroller.cpp:212
+#: shell/debugcontroller.cpp:213
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "Εκτέλεση μέχρι το δρομέα"
 
-#: shell/debugcontroller.cpp:213
+#: shell/debugcontroller.cpp:214
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "Συνεχίζει την εκτέλεση μέχρι το ύψος της θέσης του δρομέα."
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:219
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Ορισμός του δρομέα ως θέση ε&κτέλεσης"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:220
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "Άλμα στο δρομέα"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:221
 #, fuzzy, kde-format
 #| msgid "Sets the execution pointer to the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Τοποθετεί το δείκτη εκτέλεσης στην τρέχουσα θέση του δρομέα."
 
-#: shell/debugcontroller.cpp:224
+#: shell/debugcontroller.cpp:225
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Πρ&οσπέραση"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:227
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Προσπέραση στην επόμενη γραμμή"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:228
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -2115,42 +2075,42 @@ msgstr ""
 "είναι μια κλήση σε συνάρτηση, όλη η συνάρτηση εκτελείται και η εφαρμογή θα "
 "σταματήσει στη γραμμή που ακολουθεί την κλήση της συνάρτησης."
 
-#: shell/debugcontroller.cpp:235
+#: shell/debugcontroller.cpp:236
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Προσπέραση εν&τολής"
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:237
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Προσπέραση εντολής"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Προσπερνά την επόμενη εντολή assembly."
 
-#: shell/debugcontroller.cpp:242
+#: shell/debugcontroller.cpp:243
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Προώ&θηση"
 
-#: shell/debugcontroller.cpp:244
+#: shell/debugcontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Προώθηση στην επόμενη δήλωση"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2163,42 +2123,42 @@ msgstr ""
 "Εκτελεί ακριβώς μία γραμμή κώδικα. Αν η γραμμή είναι κλήση σε συνάρτηση τότε "
 "η εκτέλεση θα σταματήσει αφού η συνάρτηση θα έχει εισαχθεί."
 
-#: shell/debugcontroller.cpp:252
+#: shell/debugcontroller.cpp:253
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Προώθηση στην ε&ντολή"
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:254
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Προώθηση στην εντολή"
 
-#: shell/debugcontroller.cpp:254
+#: shell/debugcontroller.cpp:255
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Προωθείται στην επόμενη εντολή assembly."
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:259
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Απομάκρ&υνση"
 
-#: shell/debugcontroller.cpp:260
+#: shell/debugcontroller.cpp:261
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Απομάκρυνση από την τρέχουσα συνάρτηση"
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:262
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2217,26 +2177,26 @@ msgstr ""
 "συνάρτηση. Αν η εκτέλεση του προγράμματος βρίσκεται στην εξωτερική συνάρτηση "
 "(δηλ. στη main()) τότε αυτή η λειτουργία δεν έχει αποτέλεσμα."
 
-#: shell/debugcontroller.cpp:269
+#: shell/debugcontroller.cpp:270
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Εναλλαγή σημείου προσωρινής παύσης"
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:271
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:272
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Εναλλαγή σημείου προσωρινής παύσης"
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:273
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
@@ -2245,47 +2205,47 @@ msgstr ""
 "Εναλλάσσει το σημείο προσωρινής παύσης στην τρέχουσα γραμμή του "
 "κειμενογράφου."
 
-#: shell/debugcontroller.cpp:276
+#: shell/debugcontroller.cpp:277
 #, fuzzy, kde-format
 #| msgid "Show Documentation"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Εμφάνιση τεκμηρίωσης"
 
-#: shell/debugcontroller.cpp:277
+#: shell/debugcontroller.cpp:278
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Απομάκρυνση από την τρέχουσα συνάρτηση"
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:390
+#: shell/debugcontroller.cpp:391
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Διόρθωση"
 
-#: shell/debugcontroller.cpp:440 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:441 shell/runcontroller.cpp:442
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Διόρθωση έναρξης"
 
-#: shell/debugcontroller.cpp:442 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Διόρθωση σφαλμάτων τρέχουσας έναρξης"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:444 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2295,21 +2255,21 @@ msgstr ""
 "Εκτελεί τον προορισμό ή το πρόγραμμα που ορίστηκε στην τρέχουσα ενεργή "
 "διαμόρφωση έναρξης μέσα στο πρόγραμμα διόρθωσης σφαλμάτων (debugger)."
 
-#: shell/debugcontroller.cpp:446
+#: shell/debugcontroller.cpp:447
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Συνέχεια"
 
-#: shell/debugcontroller.cpp:448
+#: shell/debugcontroller.cpp:449
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Συνέχεια εκτέλεσης της εφαρμογής"
 
-#: shell/debugcontroller.cpp:449
+#: shell/debugcontroller.cpp:450
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "
@@ -6746,6 +6706,30 @@ msgstr "Διαφορά με προηγούμενη"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Διαφορά μεταξύ αναθεωρήσεων"
+
+#~ msgid "Recent Expressions"
+#~ msgstr "Πρόσφατες εκφράσεις"
+
+#~ msgid "Remove All"
+#~ msgstr "Αφαίρεση όλων"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "Επαναξιολόγηση όλων"
+
+#~ msgid "Remember Value"
+#~ msgstr "Διατήρηση τιμής στη μνήμη"
+
+#~ msgid "Watch Variable"
+#~ msgstr "Μεταβλητή προς παρατήρηση"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "Επαναξιολόγηση έκφρασης"
+
+#~ msgid "Remove Expression"
+#~ msgstr "Αφαίρεση έκφρασης"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "Σημείο προσωρινής παύσης σε εγγραφή"
 
 #, fuzzy
 #~| msgid "Share Templates"
