@@ -1,4 +1,4 @@
-# Translation for kdevbazaar.po to Euskara/Basque (eu).
+# Translation for kdevclassbrowser.po to Euskara/Basque (eu).
 # Copyright (C) 2022 This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 # KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
@@ -10,18 +10,36 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2022-12-04 22:31+0100\n"
+"PO-Revision-Date: 2022-12-05 07:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 22.08.3\n"
 
-#: bazaarplugin.cpp:36
+#: classbrowserplugin.cpp:70 classbrowserplugin.cpp:121 classwidget.cpp:35
 #, kde-format
-msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
-msgstr ""
-"Ez da Bazaar (bzr) exekutagarria aurkitzeko gai. Sisteman instalatuta dago?"
+msgctxt "@title:window"
+msgid "Classes"
+msgstr "Klaseak"
+
+#: classbrowserplugin.cpp:73
+#, kde-format
+msgctxt "@action"
+msgid "Find in &Class Browser"
+msgstr "Bilatu &Klase-arakatzailean"
+
+#: classwidget.cpp:72
+#, kde-format
+msgctxt "@label:textbox"
+msgid "S&earch:"
+msgstr "B&ilatu:"
+
+#: classwidget.cpp:89
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Class Browser"
+msgstr "Klase-arakatzailea"
