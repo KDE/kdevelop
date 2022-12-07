@@ -146,9 +146,11 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         includedFiles.insert(file, context);
 
         auto envFile = dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
-        Q_ASSERT(envFile);
-        if (!envFile)
+        if (!envFile) {
+            qCWarning(KDEV_CLANG) << "no suitable environment file for context" << file
+                                  << context->parsingEnvironmentFile();
             return context;
+        }
 
         if (update) {
             /*
