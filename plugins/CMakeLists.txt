@@ -36,24 +36,28 @@ ecm_optional_add_subdirectory(custom-definesandincludes)
 
 ecm_optional_add_subdirectory(qmljs)
 
-find_package(Clang 6.0)
+find_package(Clang CONFIG)
 set(clangSearchHint "")
-if (NOT CLANG_FOUND)
-    set(clangSearchHint "Please install a package providing libclang. Either pass -DLLVM_ROOT=/path/to/llvm-prefix or install the 'llvm-config' command-line utility for auto-detection.")
+if (NOT Clang_FOUND)
+    set(clangSearchHint "
+        Please install a package providing libclang.
+        You can pass -DClang_DIR=/path/to/lib/cmake/clang to cmake.
+        You may need to remove stale CLANG_BUILTIN_DIR and LLVM_DIR CMake cache variables.")
 endif()
 set_package_properties(Clang PROPERTIES
-    DESCRIPTION "Clang libraries from the LLVM project. ${clangSearchHint}"
+    DESCRIPTION "Clang libraries from the LLVM project, required version >= 6.0${clangSearchHint}"
     PURPOSE "Used for KDevelop's C++/C support plugin."
     TYPE REQUIRED
 )
 
-if (CLANG_FOUND)
-    if (NOT CLANG_CLANG_LIB)
-        message(FATAL_ERROR "Could not find the Clang C library: libclang")
-    endif()
+if (Clang_FOUND)
+    message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+    message(STATUS "  Using LLVMConfig.cmake in:  ${LLVM_DIR}")
+    message(STATUS "  Using ClangConfig.cmake in: ${Clang_DIR}")
 
-    add_library(Clang::clang UNKNOWN IMPORTED)
-    set_property(TARGET Clang::clang PROPERTY IMPORTED_LOCATION ${CLANG_CLANG_LIB})
+    if (NOT TARGET Clang::libclang)
+        add_library(Clang::libclang ALIAS libclang)
+    endif()
     ecm_optional_add_subdirectory(clang)
 endif()
 # END: Languages

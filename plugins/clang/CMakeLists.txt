@@ -1,6 +1,18 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevclang\")
-add_definitions(${LLVM_CFLAGS})
-include_directories(${CLANG_INCLUDE_DIRS})
+
+if (CLANG_INCLUDE_DIRS)
+    # Targets that link against libclang should inherit Clang include directories
+    # automatically from it. However, when new API is added to a libclang version
+    # not installed in the system and this new API is used in KDevelop, KDevelop
+    # does not compile without the manual include_directories() command below.
+    # This is probably an upstream Clang issue, which KDevelop has to work around.
+    include_directories(${CLANG_INCLUDE_DIRS})
+else()
+    message(WARNING "CLANG_INCLUDE_DIRS CMake variable is not set. \
+Has ClangConfig.cmake renamed this variable or removed it as no longer needed?")
+endif()
+
+include(Locate_CLANG_BUILTIN_DIR.cmake)
 
 set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
 check_cxx_source_compiles(
@@ -89,7 +101,7 @@ PUBLIC
     KDev::Language
     KDev::Project
     KDev::Util
-    Clang::clang
+    Clang::libclang
 PRIVATE
     Qt5::Core
     KF5::TextEditor
