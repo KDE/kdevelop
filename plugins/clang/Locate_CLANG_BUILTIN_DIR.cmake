@@ -13,9 +13,7 @@ find_path(CLANG_BUILTIN_DIR
     NAMES "cpuid.h"
     PATHS   "${LLVM_LIBRARY_DIRS}"
             "${CLANG_INCLUDE_DIRS}"
-    PATH_SUFFIXES   "clang/${CLANG_VERSION}/include"
-                    "../../../clang/${CLANG_VERSION}/include"
-                    "clang/${CLANG_VERSION_CLEAN}/include"
+    PATH_SUFFIXES   "clang/${CLANG_VERSION_CLEAN}/include"
                     "../../../clang/${CLANG_VERSION_CLEAN}/include"
     NO_DEFAULT_PATH
 )
