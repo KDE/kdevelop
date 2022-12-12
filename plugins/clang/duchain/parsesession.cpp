@@ -56,6 +56,7 @@ void removeHarmfulArguments(QVector<QByteArray>& arguments)
     const auto shouldRemove = [](const QByteArray& argument) {
         constexpr const char* toRemove[] = {
             "-Werror",
+            "-Wlogical-op", // prevent runtime -Wunknown-warning-option warning because Clang does not support this flag
 #if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
             "-Wdocumentation",
 #endif
