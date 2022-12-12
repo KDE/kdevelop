@@ -51,12 +51,32 @@ QVector<QByteArray> extraArgs()
     return result;
 }
 
+void removeHarmfulArguments(QVector<QByteArray>& arguments)
+{
+    const auto shouldRemove = [](const QByteArray& argument) {
+        constexpr const char* toRemove[] = {
+            "-Werror",
+#if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
+            "-Wdocumentation",
+#endif
+        };
+        return std::any_of(std::cbegin(toRemove), std::cend(toRemove), [&argument](const char* rm) {
+            return argument == rm;
+        });
+    };
+
+    const auto end = arguments.end();
+    const auto logicalEnd = std::remove_if(arguments.begin(), end, shouldRemove);
+    arguments.erase(logicalEnd, end);
+}
+
 void sanitizeArguments(QVector<QByteArray>& arguments)
 {
+    removeHarmfulArguments(arguments);
+
     // We remove the -Werror flag, and replace -Werror=foo by -Wfoo.
     // Warning as error may cause problem to the clang parser.
     const auto asError = QByteArrayLiteral("-Werror=");
-    const auto documentation = QByteArrayLiteral("-Wdocumentation");
     // Silence common warning that arises when we parse as a GCC-lookalike.
     // Note how clang warns us about emulating GCC, which is exactly what we want here.
     const auto noGnuZeroVaridicMacroArguments = QByteArrayLiteral("-Wno-gnu-zero-variadic-macro-arguments");
@@ -65,18 +85,10 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
     const auto sizedDealloc = QByteArrayLiteral("-fsized-deallocation");
     bool sizedDeallocFound = false;
     for (auto& argument : arguments) {
-        if (argument == "-Werror") {
-            argument.clear();
-        } else if (argument.startsWith(asError)) {
+        if (argument.startsWith(asError)) {
             // replace -Werror=foo by -Wfoo
             argument.remove(2, asError.length() - 2);
-        }
-#if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
-        else if (argument == documentation) {
-            argument.clear();
-        }
-#endif
-        else if (!noGnuZeroVaridicMacroArgumentsFound && argument == noGnuZeroVaridicMacroArguments) {
+        } else if (!noGnuZeroVaridicMacroArgumentsFound && argument == noGnuZeroVaridicMacroArguments) {
             noGnuZeroVaridicMacroArgumentsFound = true;
         } else if (!isCpp && argument == "-xc++") {
             isCpp = true;
