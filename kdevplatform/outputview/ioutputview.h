@@ -10,6 +10,7 @@
 #include <QMetaType>
 #include <QFlags>
 #include <QIcon>
+#include <QtPlugin>
 
 #include "outputviewexport.h"
 

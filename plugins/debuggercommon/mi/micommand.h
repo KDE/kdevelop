@@ -10,6 +10,7 @@
 
 #include "mi/mi.h"
 
+#include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QPointer>

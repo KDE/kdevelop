@@ -8,6 +8,8 @@
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
 
 #include <QExplicitlySharedDataPointer>
+#include <QObject>
+#include <QSharedData>
 
 #include <language/languageexport.h>
 #include "../indexeddeclaration.h"

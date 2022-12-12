@@ -12,6 +12,7 @@
 
 #include <QUrl>
 #include <QMap>
+#include <QObject>
 #include <QPointer>
 
 namespace KDevelop {
