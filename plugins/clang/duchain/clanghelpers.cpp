@@ -385,6 +385,12 @@ QString ClangHelpers::clangVersion()
     return clangVersion;
 }
 
+static QString majorClangVersion()
+{
+    const QString version = ClangHelpers::clangVersion();
+    return version.left(version.indexOf(QLatin1Char{'.'}));
+}
+
 bool ClangHelpers::isValidClangBuiltingIncludePath(const QString& path)
 {
     return QFile::exists(path + QLatin1String("/cpuid.h"));
@@ -401,10 +407,15 @@ QString ClangHelpers::clangBuiltinIncludePath()
             return dir;
         }
 
+        // Since https://github.com/llvm/llvm-project/commit/e1b88c8a09be25b86b13f98755a9bd744b4dbf14
+        // Clang's resource directory includes only the major version.
+        const QString majorVersion = majorClangVersion();
+        const QString versionSubdir = majorVersion.toInt() >= 16 ? majorVersion : clangVersion();
+
 #ifdef Q_OS_WIN32
         // attempt to use the bundled copy on Windows
-        dir = QDir::cleanPath(QStringLiteral("%1/../lib/clang/%2/include")
-            .arg(QCoreApplication::applicationDirPath(), clangVersion()));
+        dir = QDir::cleanPath(
+            QStringLiteral("%1/../lib/clang/%2/include").arg(QCoreApplication::applicationDirPath(), versionSubdir));
         if (isValidClangBuiltingIncludePath(dir)) {
             clangDebug() << "Using builtin dir:" << dir;
             return dir;
@@ -415,7 +426,7 @@ QString ClangHelpers::clangBuiltinIncludePath()
         // changed. Try to generate the correct builtin_dir for the current
         // major.minor.patchlevel version: pop the last 2 components then
         // chdir through with the updated version directory.
-        dir = QDir::cleanPath(QStringLiteral(KDEV_CLANG_BUILTIN_DIR "/../../%1/include").arg(clangVersion()));
+        dir = QDir::cleanPath(QStringLiteral(KDEV_CLANG_BUILTIN_DIR "/../../%1/include").arg(versionSubdir));
         if (isValidClangBuiltingIncludePath(dir)) {
             clangDebug() << "Using builtin dir:" << dir;
             return dir;
@@ -427,8 +438,8 @@ QString ClangHelpers::clangBuiltinIncludePath()
         // we find it by pass any symbol in libclang to dladdr
         Dl_info info;
         if (dladdr(reinterpret_cast<void*>(&clang_getClangVersion), &info)) {
-            dir = QDir::cleanPath(QStringLiteral("%1/../clang/%2/include")
-                .arg(QString::fromUtf8(info.dli_fname), clangVersion()));
+            dir = QDir::cleanPath(
+                QStringLiteral("%1/../clang/%2/include").arg(QString::fromUtf8(info.dli_fname), versionSubdir));
             if (isValidClangBuiltingIncludePath(dir)) {
                 clangDebug() << "Using builtin dir:" << dir;
                 return dir;
