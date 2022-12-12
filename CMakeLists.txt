@@ -131,7 +131,6 @@ add_definitions(
 ecm_set_disabled_deprecation_versions(
     QT 5.9 # QMLJS possibly
     KF 5.91
-    KNEWSTUFF 5.79 # KNS3::DownloadDialog
     KSERVICE 5.81 # KMimeTypeTrader
     KCOREADDONS 5.85 # KPluginLoader::factory()
     KRUNNER 5.87 # K_EXPORT_PLASMA_RUNNER_WITH_JSON
