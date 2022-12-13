@@ -26,6 +26,7 @@
 #include <tests/json/jsontypetests.h>
 #include <interfaces/ilanguagecontroller.h>
 
+#include <QDebug>
 #include <QTest>
 #include <QLoggingCategory>
 #include <QProcess>
@@ -49,7 +50,7 @@ QRegularExpression rangeRegularExpression()
     return QRegularExpression{QRegularExpression::anchoredPattern(rangeRegexp)};
 }
 
-void adjustTestData(QVariantMap& testData)
+void expandTestFilesDir(QVariantMap& testData)
 {
     const auto idIt = testData.find("identifier");
     if (idIt == testData.end()) {
@@ -85,6 +86,42 @@ void adjustTestData(QVariantMap& testData)
     static const auto regexp = rangeRegularExpression();
     QVERIFY(range.contains(regexp));
     *rangeIt = range.replace(regexp, "[\\1, \\1]");
+}
+
+/// libclang 16.0.0 and later does not qualify template arguments redundantly.
+void adjustTemplateArgumentQualification(QVariantMap& testData)
+{
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(16, 0, 0)) {
+        return; // nothing to adjust
+    }
+
+    const auto typeIt = testData.find("type");
+    if (typeIt == testData.end()) {
+        return; // nothing to adjust
+    }
+
+    QCOMPARE(typeIt->userType(), QMetaType::QVariantMap);
+    auto typeData = typeIt->toMap();
+
+    const auto toStringIt = typeData.find("toString");
+    QVERIFY(toStringIt != typeData.end());
+    QCOMPARE(toStringIt->userType(), QMetaType::QString);
+    auto typeString = toStringIt->toString();
+
+    static const QLatin1String qualifiedTemplateArgument("FormattingBug::X");
+    static const QLatin1String unqualifiedTemplateArgument("X");
+    if (typeString.contains(qualifiedTemplateArgument)) {
+        typeString.replace(qualifiedTemplateArgument, unqualifiedTemplateArgument);
+        qDebug() << "Removing template argument qualification:" << toStringIt->toString() << "=>" << typeString;
+        *toStringIt = typeString;
+        *typeIt = typeData;
+    }
+}
+
+void adjustTestData(QVariantMap& testData)
+{
+    expandTestFilesDir(testData);
+    adjustTemplateArgumentQualification(testData);
 }
 } // unnamed namespace
 
