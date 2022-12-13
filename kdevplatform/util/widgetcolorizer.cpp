@@ -209,9 +209,11 @@ void WidgetColorizer::convertDocumentToDarkTheme(QTextDocument* doc)
     collectRanges(doc->rootFrame(), fgcolor, bgcolor, false, ranges);
 
     auto cur = QTextCursor(doc);
+    cur.beginEditBlock();
     for (const auto& [start, end, format] : ranges) {
         cur.setPosition(start);
         cur.setPosition(end, QTextCursor::KeepAnchor);
         cur.setCharFormat(format);
     }
+    cur.endEditBlock();
 }
