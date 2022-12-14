@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-06 00:43+0000\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -1773,7 +1773,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr ""
 
-#: serialization/itemrepository.h:204 serialization/itemrepository.h:1809
+#: serialization/itemrepository.h:204 serialization/itemrepository.h:1810
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr ""
@@ -6352,24 +6352,3 @@ msgstr "前のリビジョンとの差分"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "リビジョン間の差分"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "最近の式"
-
-#~ msgid "Remove All"
-#~ msgstr "すべてを削除"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "すべてを再評価"
-
-#~ msgid "Remember Value"
-#~ msgstr "値を記憶"
-
-#~ msgid "Watch Variable"
-#~ msgstr "変数をウォッチ"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "式を再評価"
-
-#~ msgid "Remove Expression"
-#~ msgstr "式を削除"

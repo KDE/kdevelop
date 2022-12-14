@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-06 00:43+0000\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
 "PO-Revision-Date: 2022-07-13 13:28+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1717,7 +1717,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "선택한 의존성을 목록에서 아래로 이동"
 
-#: serialization/itemrepository.h:204 serialization/itemrepository.h:1809
+#: serialization/itemrepository.h:204 serialization/itemrepository.h:1810
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "%1에 쓸 수 없음, 디스크 공간이 부족할 수 있음"

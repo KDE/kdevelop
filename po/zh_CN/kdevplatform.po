@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-06 00:43+0000\n"
-"PO-Revision-Date: 2022-12-01 06:52\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"PO-Revision-Date: 2022-12-13 12:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1707,7 +1707,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "下移列表中选中的依赖"
 
-#: serialization/itemrepository.h:204 serialization/itemrepository.h:1809
+#: serialization/itemrepository.h:204 serialization/itemrepository.h:1810
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "写入 %1 失败，磁盘可能已满"
@@ -5931,27 +5931,3 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "最近表达式"
-
-#~ msgid "Remove All"
-#~ msgstr "全部删除"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "全部重算"
-
-#~ msgid "Remember Value"
-#~ msgstr "记住值"
-
-#~ msgid "Watch Variable"
-#~ msgstr "监视变量"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "重算表达式"
-
-#~ msgid "Remove Expression"
-#~ msgstr "删除表达式"
-
-#~ msgid "Data write breakpoint"
-#~ msgstr "数据写入断点"
