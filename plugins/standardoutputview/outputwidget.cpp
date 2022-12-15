@@ -14,7 +14,7 @@
 #include <QClipboard>
 #include <QIcon>
 #include <QLineEdit>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSortFilterProxyModel>
 #include <QStackedWidget>
 #include <QTabWidget>
@@ -648,9 +648,18 @@ void OutputWidget::outputFilter(const QString& filter)
         proxyModel->setSourceModel(view->model());
         view->setModel(proxyModel);
     }
-    QRegExp regExp(filter, Qt::CaseInsensitive);
-    proxyModel->setFilterRegExp(regExp);
     fvIt->filter = filter;
+
+    // Don't capture anything as the captures are not used anyway.
+    QRegularExpression regex(filter, QRegularExpression::CaseInsensitiveOption | QRegularExpression::DontCaptureOption);
+    if (!regex.isValid()) {
+        // Setting an invalid regex as the model filter hides all output as expected, but also causes runtime warnings:
+        // "QString::contains: invalid QRegularExpression object".
+        // Set a valid regex that matches nothing to hide all output and avoid the warnings.
+        static const QRegularExpression matchNothing(QStringLiteral("$z"));
+        regex = matchNothing;
+    }
+    proxyModel->setFilterRegularExpression(regex);
 }
 
 void OutputWidget::updateFilter(int index)
