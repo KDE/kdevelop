@@ -5862,21 +5862,3 @@ msgstr "Разлики с предишната"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Разлики между ревизии"
-
-#~ msgid "Remove All"
-#~ msgstr "Премахване на всички"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "Преоценка на всички"
-
-#~ msgid "Remember Value"
-#~ msgstr "Запомняне на стойността"
-
-#~ msgid "Watch Variable"
-#~ msgstr "Следене на променливата"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "Преоценка на израза"
-
-#~ msgid "Remove Expression"
-#~ msgstr "Премахване на израза"
