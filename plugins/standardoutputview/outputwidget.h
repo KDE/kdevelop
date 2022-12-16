@@ -9,6 +9,7 @@
 #define KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 
 #include <QHash>
+#include <QRegularExpression>
 #include <QWidget>
 
 #include <interfaces/itoolviewactionlistener.h>
@@ -92,11 +93,17 @@ private:
     struct FilteredView {
         QTreeView* view = nullptr;
         QSortFilterProxyModel* proxyModel = nullptr;
-        QString filter;
+        /// Contains possibly invalid pattern entered by the user verbatim, which may differ
+        /// from always valid (if proxyModel != nullptr) proxyModel->filterRegularExpression().
+        QRegularExpression filter;
     };
-    QHash<int, FilteredView>::iterator findFilteredView(QAbstractItemView *view);
+    using FilteredViewCollection = QHash<int, FilteredView>;
+    using FilteredViewIterator = FilteredViewCollection::iterator;
 
-    QHash<int, FilteredView> m_views;
+    FilteredViewIterator findFilteredView(QAbstractItemView* view);
+    void updateFilterInputAppearance(FilteredViewIterator currentView);
+
+    FilteredViewCollection m_views;
     QTabWidget* m_tabwidget;
     QStackedWidget* m_stackwidget;
     const ToolViewData* data;

@@ -24,6 +24,7 @@
 #include <QWidgetAction>
 
 #include <KActionCollection>
+#include <KColorScheme>
 #include <KLocalizedString>
 #include <KStandardAction>
 #include <KToggleAction>
@@ -35,6 +36,13 @@
 #include "outputmodel.h"
 #include "toolviewdata.h"
 #include <debug.h>
+
+namespace {
+QString validFilterInputToolTip()
+{
+    return i18nc("@info:tooltip", "Enter a case-insensitive regular expression to filter the output view");
+}
+}
 
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     : QWidget( parent )
@@ -140,8 +148,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         m_filterInput = new KExpandableLineEdit(this);
         m_filterInput->setPlaceholderText(i18nc("@info:placeholder", "Search..."));
         m_filterInput->setClearButtonEnabled(true);
-        m_filterInput->setToolTip(i18nc("@info:tooltip",
-                                        "Enter a case-insensitive regular expression to filter the output view"));
+        m_filterInput->setToolTip(validFilterInputToolTip());
         m_filterAction = new QWidgetAction(this);
         m_filterAction->setText(m_filterInput->placeholderText());
         connect(m_filterAction, &QAction::triggered, this, [this]() {m_filterInput->setFocus();});
@@ -648,10 +655,11 @@ void OutputWidget::outputFilter(const QString& filter)
         proxyModel->setSourceModel(view->model());
         view->setModel(proxyModel);
     }
-    fvIt->filter = filter;
 
     // Don't capture anything as the captures are not used anyway.
     QRegularExpression regex(filter, QRegularExpression::CaseInsensitiveOption | QRegularExpression::DontCaptureOption);
+    fvIt->filter = regex; // store away the original regex to be restored when the current tab/widget changes
+
     if (!regex.isValid()) {
         // Setting an invalid regex as the model filter hides all output as expected, but also causes runtime warnings:
         // "QString::contains: invalid QRegularExpression object".
@@ -660,6 +668,8 @@ void OutputWidget::outputFilter(const QString& filter)
         regex = matchNothing;
     }
     proxyModel->setFilterRegularExpression(regex);
+
+    updateFilterInputAppearance(fvIt);
 }
 
 void OutputWidget::updateFilter(int index)
@@ -668,13 +678,14 @@ void OutputWidget::updateFilter(int index)
         ? m_tabwidget->widget(index) : m_stackwidget->widget(index);
     auto fvIt = findFilteredView(qobject_cast<QAbstractItemView*>(view));
 
-    if (fvIt != m_views.end() && !fvIt->filter.isEmpty())
-    {
-        m_filterInput->setText(fvIt->filter);
-    } else
-    {
+    const QString filterText = fvIt == m_views.end() ? QString{} : fvIt->filter.pattern();
+    if (filterText.isEmpty()) {
         m_filterInput->clear();
+    } else {
+        m_filterInput->setText(filterText);
     }
+
+    updateFilterInputAppearance(fvIt);
 }
 
 void OutputWidget::setTitle(int outputId, const QString& title)
@@ -688,7 +699,7 @@ void OutputWidget::setTitle(int outputId, const QString& title)
     }
 }
 
-QHash<int, OutputWidget::FilteredView>::iterator OutputWidget::findFilteredView(QAbstractItemView *view)
+OutputWidget::FilteredViewIterator OutputWidget::findFilteredView(QAbstractItemView* view)
 {
     for (auto it = m_views.begin(); it != m_views.end(); ++it) {
         if (it->view == view) {
@@ -696,4 +707,21 @@ QHash<int, OutputWidget::FilteredView>::iterator OutputWidget::findFilteredView(
         }
     }
     return m_views.end();
+}
+
+void OutputWidget::updateFilterInputAppearance(FilteredViewIterator currentView)
+{
+    if (currentView == m_views.end() || currentView->filter.isValid()) {
+        m_filterInput->setPalette(QPalette{});
+        m_filterInput->setToolTip(validFilterInputToolTip());
+    } else {
+        QPalette background(m_filterInput->palette());
+        KColorScheme::adjustBackground(background, KColorScheme::NegativeBackground);
+        m_filterInput->setPalette(background);
+
+        m_filterInput->setToolTip(
+            i18nc("@info:tooltip %1 - position in the pattern, %2 - textual description of the error",
+                  "Filter regular expression pattern error at offset %1: %2", currentView->filter.patternErrorOffset(),
+                  currentView->filter.errorString()));
+    }
 }
