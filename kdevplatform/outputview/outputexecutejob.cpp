@@ -345,7 +345,8 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
         return;
     d->m_status = OutputExecuteJob::JobFailed;
 
-    qCWarning(OUTPUTVIEW) << processError << d->m_process->errorString();
+    qCWarning(OUTPUTVIEW) << "process error:" << processError << d->m_process->errorString()
+                          << ", the command line:" << d->joinCommandLine();
 
     QString errorValue;
     switch( processError ) {
