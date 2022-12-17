@@ -95,7 +95,9 @@ static QDir toReplyDir(const QString& buildDirectory)
 ReplyIndex findReplyIndexFile(const QString& buildDirectory)
 {
     const auto replyDir = toReplyDir(buildDirectory);
-    for (const auto& entry : replyDir.entryInfoList({QStringLiteral("index-*.json")}, QDir::Files, QDir::Name | QDir::Reversed)) {
+    const auto fileList =
+        replyDir.entryInfoList({QStringLiteral("index-*.json")}, QDir::Files, QDir::Name | QDir::Reversed);
+    for (const auto& entry : fileList) {
         const auto object = parseFile(entry.absoluteFilePath());
         if (isKDevelopClientResponse(object)) {
             return {entry.lastModified(), object};
