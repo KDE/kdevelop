@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-17 00:48+0000\n"
 "PO-Revision-Date: 2022-12-13 12:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -321,22 +321,22 @@ msgstr "添加自定义包含路径"
 msgid "Open Project"
 msgstr "打开工程"
 
-#: duchain/parsesession.cpp:530
+#: duchain/parsesession.cpp:543
 #, kde-format
 msgid "Requested here: %1"
 msgstr "请求于此：%1"
 
-#: duchain/parsesession.cpp:571
+#: duchain/parsesession.cpp:584
 #, kde-format
 msgid "In included file: %1"
 msgstr "在包含的文件：%1"
 
-#: duchain/parsesession.cpp:594
+#: duchain/parsesession.cpp:607
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "头文件没有针对多次包含进行保护"
 
-#: duchain/parsesession.cpp:595
+#: duchain/parsesession.cpp:608
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

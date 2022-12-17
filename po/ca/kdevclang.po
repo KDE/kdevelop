@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-17 00:48+0000\n"
 "PO-Revision-Date: 2020-07-20 12:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -330,22 +330,22 @@ msgstr "Afegeix camí cap a una inclusió personalitzada"
 msgid "Open Project"
 msgstr "Obre un projecte"
 
-#: duchain/parsesession.cpp:530
+#: duchain/parsesession.cpp:543
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Sol·licitat aquí: %1"
 
-#: duchain/parsesession.cpp:571
+#: duchain/parsesession.cpp:584
 #, kde-format
 msgid "In included file: %1"
 msgstr "Al fitxer inclòs: %1"
 
-#: duchain/parsesession.cpp:594
+#: duchain/parsesession.cpp:607
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "La capçalera no està protegida contra múltiples inclusions"
 
-#: duchain/parsesession.cpp:595
+#: duchain/parsesession.cpp:608
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-17 00:48+0000\n"
 "PO-Revision-Date: 2020-07-26 21:44+0200\n"
 "Last-Translator: Johnny Jazeix <jazeix@gmail.com>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -332,22 +332,22 @@ msgstr "Ajouter un dossier personnalisé de fichiers à inclure"
 msgid "Open Project"
 msgstr "Ouvrir un projet"
 
-#: duchain/parsesession.cpp:530
+#: duchain/parsesession.cpp:543
 #, kde-format
 msgid "Requested here: %1"
 msgstr "Demandé ici : %1"
 
-#: duchain/parsesession.cpp:571
+#: duchain/parsesession.cpp:584
 #, kde-format
 msgid "In included file: %1"
 msgstr "Dans le fichier inclus : %1"
 
-#: duchain/parsesession.cpp:594
+#: duchain/parsesession.cpp:607
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr "L'en-tête n'est pas protégée contre les inclusions multiples"
 
-#: duchain/parsesession.cpp:595
+#: duchain/parsesession.cpp:608
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "

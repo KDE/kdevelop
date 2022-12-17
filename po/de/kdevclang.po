@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-17 00:48+0000\n"
 "PO-Revision-Date: 2022-07-24 15:08+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -320,22 +320,22 @@ msgstr "Eigenen Include-Pfad hinzufügen"
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
-#: duchain/parsesession.cpp:530
+#: duchain/parsesession.cpp:543
 #, kde-format
 msgid "Requested here: %1"
 msgstr ""
 
-#: duchain/parsesession.cpp:571
+#: duchain/parsesession.cpp:584
 #, kde-format
 msgid "In included file: %1"
 msgstr ""
 
-#: duchain/parsesession.cpp:594
+#: duchain/parsesession.cpp:607
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
 msgstr ""
 
-#: duchain/parsesession.cpp:595
+#: duchain/parsesession.cpp:608
 #, kde-format
 msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
