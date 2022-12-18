@@ -271,6 +271,9 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 {
     const auto& data = m_projects[item->project()].data.compilationData;
+    if (!data.isValid) {
+        return {};
+    }
 
     auto toCanonicalPath = [](const Path &path) -> Path {
         // if the path contains a symlink, then we will not find it in the lookup table
