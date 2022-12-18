@@ -612,9 +612,9 @@ msgstr "El camí cap a la documentació de Clazy està buit."
 #: jobparameters.cpp:75
 #, kde-format
 msgid "Clazy documentation path '%1' does not exists."
-msgstr "El camí «%1» a la documentació de Clazy no existix."
+msgstr "El camí «%1» cap a la documentació de Clazy no existix."
 
 #: jobparameters.cpp:80
 #, kde-format
 msgid "Clazy documentation path '%1' is not a directory."
-msgstr "El camí «%1» a la documentació de Clazy no és un directori."
+msgstr "El camí «%1» cap a la documentació de Clazy no és un directori."

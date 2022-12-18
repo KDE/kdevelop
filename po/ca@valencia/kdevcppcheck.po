@@ -172,10 +172,10 @@ msgid ""
 msgstr ""
 "<p>Força la comprovació dels fitxers que tenen una gran quantitat de "
 "configuracions. Es mostrarà un error si es troba un d'estos fitxers, de "
-"manera que no hi ha cap motiu per a emprar-lo per defecte. Si s'utilitza "
-"juntament amb «--max-configs=», l'última opció serà l'efectiva.<br/><br/"
-">Aneu amb compte amb l'ús d'esta opció -pot fer que la comprovació siga "
-"dràsticament lenta-.</p>"
+"manera que no hi ha cap motiu per a emprar-lo de manera predeterminada. Si "
+"s'utilitza juntament amb «--max-configs=», l'última opció serà l'efectiva."
+"<br/><br/>Aneu amb compte amb l'ús d'esta opció -pot fer que la comprovació "
+"siga dràsticament lenta-.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112

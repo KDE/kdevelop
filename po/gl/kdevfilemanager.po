@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-12-18 00:51+0000\n"
 "PO-Revision-Date: 2015-10-24 11:45+0100\n"
 "Last-Translator: Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail."
 "com>\n"
@@ -21,42 +21,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:67
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
 #, fuzzy, kde-format
 #| msgid "File System"
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Sistema de ficheiros"
 
-#: filemanager.cpp:126
+#: filemanager.cpp:127
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: filemanager.cpp:133
+#: filemanager.cpp:134
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Directorio do documento actual"
 
-#: filemanager.cpp:150
+#: filemanager.cpp:165
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Novo ficheiro…"
 
-#: filemanager.cpp:157
+#: filemanager.cpp:172
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Crear un ficheiro novo"
 
-#: filemanager.cpp:173
+#: filemanager.cpp:188
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Non foi posíbel crear o ficheiro «%1»"

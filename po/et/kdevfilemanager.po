@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-12-18 00:51+0000\n"
 "PO-Revision-Date: 2016-01-29 01:20+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -18,42 +18,42 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:67
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
 #, fuzzy, kde-format
 #| msgid "File System"
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Failisüsteem"
 
-#: filemanager.cpp:126
+#: filemanager.cpp:127
 #, fuzzy, kde-format
 #| msgid "Bookmarks"
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
-#: filemanager.cpp:133
+#: filemanager.cpp:134
 #, fuzzy, kde-format
 #| msgid "Current Document Directory"
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Aktiivse dokumendi kataloog"
 
-#: filemanager.cpp:150
+#: filemanager.cpp:165
 #, fuzzy, kde-format
 #| msgid "New File..."
 msgctxt "@action"
 msgid "New File..."
 msgstr "Uus fail..."
 
-#: filemanager.cpp:157
+#: filemanager.cpp:172
 #, fuzzy, kde-format
 #| msgid "Create New File"
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Uue faili loomine"
 
-#: filemanager.cpp:173
+#: filemanager.cpp:188
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Faili \"%1\" loomine nurjus"

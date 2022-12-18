@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:45+0000\n"
+"POT-Creation-Date: 2022-12-18 00:51+0000\n"
 "PO-Revision-Date: 2010-07-03 22:50+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -17,37 +17,37 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: filemanager.cpp:46 kdevfilemanagerplugin.cpp:67
+#: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Файлова система"
 
-#: filemanager.cpp:126
+#: filemanager.cpp:127
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr ""
 
-#: filemanager.cpp:133
+#: filemanager.cpp:134
 #, fuzzy, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Директория на текущия документ"
 
-#: filemanager.cpp:150
+#: filemanager.cpp:165
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "Нов файл..."
 
-#: filemanager.cpp:157
+#: filemanager.cpp:172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Създаване на нов файл"
 
-#: filemanager.cpp:173
+#: filemanager.cpp:188
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Грешка при създаване на файла \"%1\""

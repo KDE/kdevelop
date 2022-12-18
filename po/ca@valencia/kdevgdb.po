@@ -117,7 +117,7 @@ msgid ""
 msgstr ""
 "No s'ha especificat cap perfil d'entorn, pareix que s'ha malmés la "
 "configuració. Comproveu la configuració d'execució de «%1». S'utilitzarà el "
-"perfil d'entorn per defecte."
+"perfil d'entorn predeterminat."
 
 #: debugsession.cpp:281
 #, kde-format
