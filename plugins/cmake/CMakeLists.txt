@@ -60,10 +60,6 @@ set( cmakemanager_SRCS
   ${cmake_testing_LOG_SRCS}
 )
 
-set( cmakemanager_UI
-  cmakepossibleroots.ui
-)
-
 set( cmakesettings_SRCS
   settings/cmakepreferences.cpp
   settings/cmakecachemodel.cpp
@@ -99,7 +95,6 @@ target_link_libraries(KDevCMakeCommon
         KF5::TextEditor
 )
 
-ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
 target_compile_definitions(kdevcmakemanagernosettings PRIVATE CMAKEMANAGER_NO_SETTINGS)
 target_link_libraries(kdevcmakemanagernosettings
