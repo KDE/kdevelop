@@ -6,7 +6,6 @@
 */
 
 #include "cmakemanager.h"
-#include "cmakeedit.h"
 #include "cmakeutils.h"
 #include "cmakeprojectdata.h"
 #include "duchain/cmakeparsejob.h"

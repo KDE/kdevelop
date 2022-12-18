@@ -48,8 +48,6 @@ set( cmakemanager_SRCS
   duchain/declarationbuilder.cpp
   duchain/contextbuilder.cpp
   cmakecodecompletionmodel.cpp
-#   cmakecommitchangesjob.cpp
-#   cmakeedit.cpp
   ${cmake_LOG_SRCS}
 )
 

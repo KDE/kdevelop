@@ -22,7 +22,6 @@
 #include "icmakemanager.h"
 
 class WaitAllJobs;
-class CMakeCommitChangesJob;
 struct CMakeProjectData;
 class QObject;
 class CMakeHighlighting;
