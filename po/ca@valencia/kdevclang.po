@@ -48,7 +48,7 @@ msgid ""
 "If disabled, macros will not be included in the code completion results. "
 "This can improve the responsiveness of code completion in some cases."
 msgstr ""
-"Si està desactivat, les macros no s'inclouran en els resultats de la "
+"Si està desactivada, les macros no s'inclouran en els resultats de la "
 "compleció de codi. Açò pot millorar la resposta de la compleció de codi en "
 "algun cas."
 

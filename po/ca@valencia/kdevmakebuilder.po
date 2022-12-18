@@ -81,7 +81,7 @@ msgstr "Executable de Make:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Default make &target:"
-msgstr "Objec&tiu de «make» per defecte:"
+msgstr "Objec&tiu predeterminat de «make»:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: makeconfig.ui:199

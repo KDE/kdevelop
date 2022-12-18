@@ -62,7 +62,7 @@ msgstr "Editor predeterminat"
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
-msgstr "Voleu obrir tots els fitxers «%1» per defecte amb %2?"
+msgstr "Voleu obrir tots els fitxers «%1» de manera predeterminada amb %2?"
 
 #: openwithplugin.cpp:261
 #, kde-format
