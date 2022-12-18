@@ -6,7 +6,7 @@
 
 #include "ctestfindjob.h"
 #include "ctestsuite.h"
-#include <debug.h>
+#include <debug_testing.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -19,14 +19,14 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
 {
-    qCDebug(CMAKE) << "Created a CTestFindJob";
+    qCDebug(CMAKE_TESTING) << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", suite->name()));
     setCapabilities(Killable);
 }
 
 void CTestFindJob::start()
 {
-    qCDebug(CMAKE) << "Finding test cases";
+    qCDebug(CMAKE_TESTING) << "Finding test cases";
     QMetaObject::invokeMethod(this, &CTestFindJob::findTestCases, Qt::QueuedConnection);
 }
 
@@ -43,7 +43,7 @@ void CTestFindJob::findTestCases()
             m_pendingFiles << file;
         }
     }
-    qCDebug(CMAKE) << "Source files to update:" << m_pendingFiles;
+    qCDebug(CMAKE_TESTING) << "Source files to update:" << m_pendingFiles;
 
     if (m_pendingFiles.isEmpty()) {
         m_suite = nullptr;
@@ -65,13 +65,13 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
     }
 
     if (Q_UNLIKELY(!m_suite->project())) {
-        qCDebug(CMAKE) << "Cannot add test suite" << m_suite->name()
-                       << "because its project is already destroyed (probably closed by the user).";
+        qCDebug(CMAKE_TESTING) << "Cannot add test suite" << m_suite->name()
+                               << "because its project is already destroyed (probably closed by the user).";
         kill();
         return;
     }
 
-    qCDebug(CMAKE) << "context update ready" << m_pendingFiles << document.str();
+    qCDebug(CMAKE_TESTING) << "context update ready" << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 

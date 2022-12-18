@@ -7,7 +7,7 @@
 #include "ctestrunjob.h"
 #include "ctestsuite.h"
 #include "qttestdelegate.h"
-#include <debug.h>
+#include <debug_testing.h>
 
 #include <algorithm>
 #include <interfaces/ilaunchconfiguration.h>
@@ -46,7 +46,7 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
     LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( QStringLiteral("Native Application") );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
 
-    qCDebug(CMAKE) << "got mode and type:" << type << type->id() << mode << mode->id();
+    qCDebug(CMAKE_TESTING) << "got mode and type:" << type << type->id() << mode << mode->id();
     Q_ASSERT(type && mode);
 
     ILauncher* launcher = [type, mode]() {
@@ -74,9 +74,9 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
                                                 nullptr, //TODO add project
                                                 i18n("CTest") );
         ilaunch->config().writeEntry("ConfiguredByCTest", true);
-        //qCDebug(CMAKE) << "created config, launching";
+        //qCDebug(CMAKE_TESTING) << "created config, launching";
     } else {
-        //qCDebug(CMAKE) << "reusing generated config, launching";
+        //qCDebug(CMAKE_TESTING) << "reusing generated config, launching";
     }
     if (!workingDirectory.isEmpty())
         ilaunch->config().writeEntry( "Working Directory", QUrl::fromLocalFile( workingDirectory ) );
@@ -89,7 +89,7 @@ void CTestRunJob::start()
 //     if (!m_suite->cases().isEmpty())
 //     {
         // TODO: Find a better way of determining whether QTestLib is used by this test
-//         qCDebug(CMAKE) << "Setting a QtTestDelegate";
+//         qCDebug(CMAKE_TESTING) << "Setting a QtTestDelegate";
 //         setDelegate(new QtTestDelegate);
 //     }
 //     setStandardToolView(IOutputView::RunView);
@@ -159,7 +159,7 @@ void CTestRunJob::processFinished(KJob* job)
             setErrorText(QStringLiteral("Child job was killed."));
         }
 
-        qCDebug(CMAKE) << result.suiteResult << result.testCaseResults;
+        qCDebug(CMAKE_TESTING) << result.suiteResult << result.testCaseResults;
         ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
         emitResult();
     };

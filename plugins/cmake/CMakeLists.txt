@@ -12,6 +12,14 @@ declare_qt_logging_category(cmake_LOG_SRCS
     CATEGORY_BASENAME "cmake"
 )
 
+declare_qt_logging_category(cmake_testing_LOG_SRCS
+    TYPE PLUGIN
+    HEADER "debug_testing.h"
+    IDENTIFIER CMAKE_TESTING
+    CATEGORY_BASENAME "cmake.testing"
+    DESCRIPTION "cmake testing"
+)
+
 set( cmakecommon_SRCS
   parser/cmListFileLexer.c
   parser/cmakecachereader.cpp
@@ -49,6 +57,7 @@ set( cmakemanager_SRCS
   duchain/contextbuilder.cpp
   cmakecodecompletionmodel.cpp
   ${cmake_LOG_SRCS}
+  ${cmake_testing_LOG_SRCS}
 )
 
 set( cmakemanager_UI

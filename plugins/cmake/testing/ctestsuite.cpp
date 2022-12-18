@@ -6,7 +6,7 @@
 
 #include "ctestsuite.h"
 #include "ctestrunjob.h"
-#include <debug.h>
+#include <debug_testing.h>
 
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
@@ -35,7 +35,7 @@ m_project(project),
 m_properties(properties)
 {
     Q_ASSERT(project);
-    qCDebug(CMAKE) << m_name << m_executable << m_project->name();
+    qCDebug(CMAKE_TESTING) << m_name << m_executable << m_project->name();
 }
 
 CTestSuite::~CTestSuite()
@@ -46,14 +46,15 @@ CTestSuite::~CTestSuite()
 bool CTestSuite::findCaseDeclarations(const QVector<Declaration*> &classDeclarations)
 {
     for (Declaration* decl : classDeclarations) {
-        qCDebug(CMAKE) << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
+        qCDebug(CMAKE_TESTING) << "Found declaration" << decl->toString()
+                               << decl->identifier().identifier().byteArray();
 
         const auto* const function = dynamic_cast<ClassFunctionDeclaration*>(decl);
         if (!function || !(function->accessPolicy() == Declaration::Private && function->isSlot())) {
             continue;
         }
         QString name = function->qualifiedIdentifier().last().toString();
-        qCDebug(CMAKE) << "Found private slot in test" << name;
+        qCDebug(CMAKE_TESTING) << "Found private slot in test" << name;
 
         if (name.endsWith(QLatin1String("_data"))) {
             continue;
@@ -64,7 +65,7 @@ bool CTestSuite::findCaseDeclarations(const QVector<Declaration*> &classDeclarat
             // function declarations with arguments are not valid test functions
             continue;
         }
-        qCDebug(CMAKE) << "Found test case function declaration" << function->identifier().toString();
+        qCDebug(CMAKE_TESTING) << "Found test case function declaration" << function->identifier().toString();
 
         if (name != QLatin1String("initTestCase") && name != QLatin1String("cleanupTestCase") &&
             name != QLatin1String("init") && name != QLatin1String("cleanup"))
@@ -85,7 +86,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     DUChainReadLocker locker(DUChain::lock());
     TopDUContext* topContext = DUChainUtils::contentContextFromProxyContext(ref.data());
     if (!topContext) {
-        qCDebug(CMAKE) << "No top context in" << document.str();
+        qCDebug(CMAKE_TESTING) << "No top context in" << document.str();
         return;
     }
 
@@ -98,7 +99,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
             continue;
         }
         RangeInRevision contextRange = tmpInternalContext->range();
-        qCDebug(CMAKE) << "Found a definition for a function 'main()' at" << contextRange;
+        qCDebug(CMAKE_TESTING) << "Found a definition for a function 'main()' at" << contextRange;
 
         /*
             * This function tries to deduce the test class from the main function definition of
@@ -119,7 +120,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
         }
         const auto mainDeclarations = innerContext->localDeclarations(topContext);
         for (auto it = mainDeclarations.rbegin(); it != mainDeclarations.rend(); ++it) {
-            qCDebug(CMAKE) << "Main declaration" << (*it)->toString();
+            qCDebug(CMAKE_TESTING) << "Main declaration" << (*it)->toString();
 
             auto type = (*it)->abstractType();
             // Strip pointer and reference types to finally get to the structure type of the test class
@@ -152,7 +153,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     if (testClass && testClass->internalContext()) {
         m_suiteDeclaration = IndexedDeclaration(testClass);
     } else {
-        qCDebug(CMAKE) << "No test class found or internal context missing in " << document.str();
+        qCDebug(CMAKE_TESTING) << "No test class found or internal context missing in " << document.str();
     }
 }
 
@@ -163,7 +164,7 @@ KJob* CTestSuite::launchCase(const QString& testCase, TestJobVerbosity verbosity
 
 KJob* CTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJobVerbosity verbosity)
 {
-    qCDebug(CMAKE) << "Launching test run" << m_name << "with cases" << testCases;
+    qCDebug(CMAKE_TESTING) << "Launching test run" << m_name << "with cases" << testCases;
 
     OutputJob::OutputJobVerbosity outputVerbosity = (verbosity == Verbose) ? OutputJob::Verbose : OutputJob::Silent;
     return new CTestRunJob(this, testCases, outputVerbosity);

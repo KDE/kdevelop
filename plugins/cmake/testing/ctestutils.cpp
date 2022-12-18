@@ -11,7 +11,7 @@
 #include "ctestutils.h"
 #include "ctestsuite.h"
 #include "ctestfindjob.h"
-#include <debug.h>
+#include <debug_testing.h>
 
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -66,7 +66,8 @@ CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites,
             executablePath = target.artifacts.first();
         }
 
-        qCDebug(CMAKE) << "looking for tests in test" << test.name << "target" << target.name << "with sources" << target.sources;
+        qCDebug(CMAKE_TESTING) << "looking for tests in test" << test.name << "target" << target.name << "with sources"
+                               << target.sources;
 
         suites.push_back(std::make_unique<CTestSuite>(test.name, executablePath, target.sources.toList(), project,
                                                       test.arguments, test.properties));
