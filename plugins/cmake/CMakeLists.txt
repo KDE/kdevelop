@@ -6,10 +6,6 @@ if(BUILD_TESTING)
 endif()
 add_subdirectory(icons)
 
-# enable this if you want to have the cmake debug visitor run on each CMakeLists.txt
-# the debug visitor prints out the Ast for the CMakeLists.txt file.
-#add_definitions( -DCMAKEDEBUGVISITOR )
-
 declare_qt_logging_category(cmake_LOG_SRCS
     TYPE PLUGIN
     IDENTIFIER CMAKE
