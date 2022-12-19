@@ -7,6 +7,8 @@
 #include "cmakeprojectdata.h"
 #include "cmakeutils.h"
 
+#include <QTextStream>
+
 void CMakeFile::addDefine(const QString& define)
 {
     if (define.isEmpty())
@@ -55,4 +57,16 @@ CMakeTarget::Type CMakeTarget::typeToEnum(const QString& value)
         {QStringLiteral("INTERFACE_LIBRARY"), CMakeTarget::Library}
     };
     return s_types.value(value, CMakeTarget::Custom);
+}
+
+QDebug operator<<(QDebug debug, PrintLastModified p)
+{
+    const QDebugStateSaver saver(debug);
+    debug.noquote().nospace();
+    if (p.whatWasModified) {
+        // Align the printed timestamps to facilitate comparison.
+        debug << "last modified " << qSetFieldWidth(21) << p.whatWasModified << qSetFieldWidth(0) << ": ";
+    }
+    debug << p.lastModified.toString(Qt::ISODateWithMs);
+    return debug;
 }

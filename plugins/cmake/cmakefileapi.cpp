@@ -80,6 +80,10 @@ void writeClientQueryFile(const QString& buildDirectory)
         return;
     }
 
+    // Pad output with spaces to align the printed timestamp with others and facilitate comparison.
+    qCDebug(CMAKE) << "writing API client query file at    " << PrintLastModified{nullptr, QDateTime::currentDateTime()}
+                   << "- within" << buildDirectory;
+
     queryFile.write(R"({"requests": [{"kind": "codemodel", "version": 2}, {"kind": "cmakeFiles", "version": 1}]})");
 }
 
@@ -100,7 +104,10 @@ ReplyIndex findReplyIndexFile(const QString& buildDirectory)
     for (const auto& entry : fileList) {
         const auto object = parseFile(entry.absoluteFilePath());
         if (isKDevelopClientResponse(object)) {
-            return {entry.lastModified(), object};
+            ReplyIndex result{entry.lastModified(), object};
+            qCDebug(CMAKE) << PrintLastModified{"API reply index file", result.lastModified} << "- within"
+                           << buildDirectory;
+            return result;
         }
     }
     qCWarning(CMAKE) << "no cmake-file-api reply index file found in" << replyDir.absolutePath();
@@ -268,6 +275,8 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
             }
         } else if (kind == QLatin1String("cmakeFiles")) {
             cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner, &lastModifiedCMakeFile);
+            qCDebug(CMAKE) << PrintLastModified{"source CMake file", lastModifiedCMakeFile} << "- within"
+                           << buildDirectory;
         }
     }
 

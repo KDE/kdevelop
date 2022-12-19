@@ -199,14 +199,12 @@ private:
         auto* importJob = new CMake::FileApi::ImportJob(project, this);
         connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this](const CMakeProjectData& data) {
             if (!data.compilationData.isValid || data.lastModifiedCMakeFile > data.lastModifiedProjectData) {
-                qCDebug(CMAKE) << "reconfigure, project data is outdated" << data.lastModifiedCMakeFile
-                               << data.lastModifiedProjectData;
-
+                qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is"
+                               << (data.compilationData.isValid ? "outdated" : "invalid");
                 reconfigureThenImport();
             } else {
-                qCDebug(CMAKE) << "skip configure, project data is up to date" << data.lastModifiedCMakeFile
-                               << data.lastModifiedProjectData;
-
+                qCDebug(CMAKE) << "skipping configure project" << project->name()
+                               << "because project data is up to date";
                 fileImportDone(data);
             }
         });
@@ -359,8 +357,10 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     qCDebug(CMAKE) << "reloading" << folder->path();
 
     IProject* project = folder->project();
-    if (!project->isReady())
+    if (!project->isReady()) {
+        qCDebug(CMAKE) << "the project is being reloaded, aborting reload!";
         return false;
+    }
 
     KJob* job = createImportJob(folder, true);
     project->setReloadJob(job);

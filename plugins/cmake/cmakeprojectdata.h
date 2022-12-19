@@ -103,6 +103,14 @@ struct KDEVCMAKECOMMON_EXPORT CMakeTest
 };
 Q_DECLARE_TYPEINFO(CMakeTest, Q_MOVABLE_TYPE);
 
+struct PrintLastModified
+{
+    /// If not null, a prefix including this string is printed before formatted @a lastModified.
+    const char* const whatWasModified;
+    const QDateTime& lastModified;
+};
+QDebug KDEVCMAKECOMMON_EXPORT operator<<(QDebug debug, PrintLastModified p);
+
 struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
 {
     CMakeFilesCompilationData compilationData;
