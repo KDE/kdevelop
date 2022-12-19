@@ -45,8 +45,10 @@ Q_DECLARE_TYPEINFO(CMakeFile, Q_MOVABLE_TYPE);
 
 inline QDebug operator<<(QDebug debug, const CMakeFile& file)
 {
-    debug << "CMakeFile(-I" << file.includes << ", -F" << file.frameworkDirectories << ", -D" << file.defines << ", " << file.language << ")";
-    return debug.maybeSpace();
+    const QDebugStateSaver saver(debug);
+    debug.nospace() << "CMakeFile(-I " << file.includes << ", -F " << file.frameworkDirectories << ", -D "
+                    << file.defines << ", " << file.language << ")";
+    return debug;
 }
 
 struct KDEVCMAKECOMMON_EXPORT CMakeFilesCompilationData
@@ -80,7 +82,9 @@ Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
 
 inline QDebug operator<<(QDebug debug, const CMakeTarget& target)
 {
-    debug << target.type << ':' << target.name; return debug.maybeSpace();
+    const QDebugStateSaver saver(debug);
+    debug.nospace() << target.type << ':' << target.name;
+    return debug;
 }
 
 inline bool operator==(const CMakeTarget& lhs, const CMakeTarget& rhs)
