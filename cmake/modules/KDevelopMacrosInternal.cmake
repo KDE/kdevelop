@@ -101,6 +101,11 @@ macro(_declare_qt_logging_category sources)
         CATEGORY_NAME ${ARGS_CATEGORY_NAME}
     )
 
+    if (NOT IS_ABSOLUTE "${ARGS_HEADER}")
+        set(ARGS_HEADER "${CMAKE_CURRENT_BINARY_DIR}/${ARGS_HEADER}")
+    endif()
+    list(APPEND ${sources} "${ARGS_HEADER}")
+
     set(_propertyprefix "KDEV_QT_LOGGING_CATEGORY_${ARGS_EXPORT}")
     set_property(GLOBAL APPEND PROPERTY "${_propertyprefix}_CATEGORIES" ${ARGS_CATEGORY_NAME})
     set_property(GLOBAL PROPERTY "${_propertyprefix}_IDENTIFIER_${ARGS_CATEGORY_NAME}" "${ARGS_IDENTIFIER}")
