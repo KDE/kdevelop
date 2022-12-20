@@ -10,6 +10,7 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KProcess>
+#include <KShell>
 #include <util/path.h>
 #include "core.h"
 #include "uicontroller.h"
@@ -25,17 +26,11 @@ public:
     QString name() const override { return i18n("Host System"); }
 
     void startProcess(KProcess *process) const override {
-        connect(process, &QProcess::errorOccurred,
-            this, [](QProcess::ProcessError error) {
-            qCWarning(SHELL) << "process finished with error:" << error;
-        });
+        catchErrors(*process);
         process->start();
     }
     void startProcess(QProcess *process) const override {
-        connect(process, &QProcess::errorOccurred,
-            this, [](QProcess::ProcessError error) {
-            qCWarning(SHELL) << "process finished with error:" << error;
-        });
+        catchErrors(*process);
         process->start();
     }
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override { return runtimePath; }
@@ -47,6 +42,17 @@ public:
     void setEnabled(bool /*enabled*/) override {}
     QByteArray getenv(const QByteArray & varname) const override { return qgetenv(varname.constData()); }
     KDevelop::Path buildPath() const override { return {}; }
+
+private:
+    static void catchErrors(const QProcess& process)
+    {
+        connect(&process, &QProcess::errorOccurred, [&process](QProcess::ProcessError error) {
+            qCWarning(SHELL).noquote().nospace()
+                << "process finished with error: " << error << " \"" << process.errorString()
+                << "\", the command line: \"" << KShell::quoteArg(process.program()) << ' '
+                << KShell::joinArgs(process.arguments()) << '"';
+        });
+    }
 };
 
 KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
