@@ -50,10 +50,10 @@ ki18n_wrap_ui(mesonbuilder_SRCS
               settings/mesonrewriteroptioncontainer.ui
               settings/mesonrewriterpage.ui
 )
-ecm_qt_declare_logging_category(mesonbuilder_SRCS
-    HEADER debug.h
+declare_qt_logging_category(mesonbuilder_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_Meson
-    CATEGORY_NAME "kdevelop.plugins.meson"
+    CATEGORY_BASENAME "meson"
 )
 
 kdevplatform_add_plugin(kdevmesonmanager
