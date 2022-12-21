@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2010-01-24 17:03+0100\n"
 "Last-Translator: Andrej Dundovic <adundovi@gmail.com>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -1464,44 +1464,44 @@ msgstr ""
 msgid "*** Warning: could not kill the process ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:353
+#: outputview/outputexecutejob.cpp:354
 #, kde-format
 msgid "%1 has failed to start"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:357
+#: outputview/outputexecutejob.cpp:358
 #, kde-format
 msgid "%1 has crashed"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:361
+#: outputview/outputexecutejob.cpp:362
 #, fuzzy, kde-format
 #| msgid "error"
 msgid "Read error"
 msgstr "pogreška"
 
-#: outputview/outputexecutejob.cpp:365
+#: outputview/outputexecutejob.cpp:366
 #, fuzzy, kde-format
 #| msgid "error"
 msgid "Write error"
 msgstr "pogreška"
 
-#: outputview/outputexecutejob.cpp:369
+#: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:373
+#: outputview/outputexecutejob.cpp:374
 #, kde-format
 msgid "Exit code %1"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:386
+#: outputview/outputexecutejob.cpp:387
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr ""
 
-#: outputview/outputexecutejob.cpp:404
+#: outputview/outputexecutejob.cpp:405
 #, kde-format
 msgid "*** Finished ***"
 msgstr ""

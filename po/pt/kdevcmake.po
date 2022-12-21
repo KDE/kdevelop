@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-07-09 13:01+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -210,7 +210,7 @@ msgstr ""
 "<p>Para uma melhor apresentação da documentação do CMake, instale o "
 "'rst2html'</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -232,7 +232,7 @@ msgstr "<br /><em>Documentação em 'Cache':</em> %1\n"
 msgid "CMake Content Page"
 msgstr "Página de Conteúdo do CMake"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -252,16 +252,6 @@ msgstr ""
 "para usar a versão e configurações correctas do CMake. Depois, carregue com "
 "o botão direito sobre o item do projecto na área de ferramentas do projecto "
 "e carregue em 'Actualizar'."
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"O KDevelop encontrou diferentes raizes para o seu projecto; seleccione por "
-"favor a correcta."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -424,3 +414,10 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "O KDevelop encontrou diferentes raizes para o seu projecto; seleccione "
+#~ "por favor a correcta."

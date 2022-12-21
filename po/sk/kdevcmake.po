@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-04-17 20:51+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -207,7 +207,7 @@ msgstr "Pravidlá"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr "<p>Na lepšie zobrazenie dokumentácie cmake nainštalujte rst2html</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr "Nemôžem nájsť program cmake. Je nainštalovaný v systéme?"
@@ -227,7 +227,7 @@ msgstr "<br /><em>Dokumentácia cache:</em> %1\n"
 msgid "CMake Content Page"
 msgstr "Stránka obsahu CMake"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -245,16 +245,6 @@ msgstr ""
 "sú správne a KDevelop je nastavený na použitie správnej verzie CMake a "
 "nastavení. Potom kliknite pravým na položku projektu v projektovom zobrazení "
 "a kliknite na 'Znovu načítať'."
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"KDevelop našiel niekoľko možných koreňov projektu pre váš projekt, prosím "
-"vyberte správny."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -421,6 +411,13 @@ msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
 msgstr[2] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "KDevelop našiel niekoľko možných koreňov projektu pre váš projekt, prosím "
+#~ "vyberte správny."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop - podpora CMake"

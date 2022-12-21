@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-07-13 13:05+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -206,7 +206,7 @@ msgstr "정책"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr "<p>CMake 문서를 더 예쁘게 보려면 rst2html을 설치하십시오</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr "CMake 실행 파일을 찾을 수 없습니다. 시스템에 설치되어 있습니까?"
@@ -226,7 +226,7 @@ msgstr "<br /><em>캐시 문서:</em> %1\n"
 msgid "CMake Content Page"
 msgstr "CMake 내용 페이지"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -243,14 +243,6 @@ msgstr ""
 "이 문제를 고치려면 프로젝트의 CMakeLists.txt 파일이 올바른지 확인하고 올바른 "
 "CMake 버전과 설정을 사용하도록 설정했는지 확인하십시오. 그 다음 프로젝트 목록"
 "의 프로젝트 항목을 오른쪽 단추로 클릭한 다음 '새로 고침'을 선택하십시오."
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr "프로젝트 루트 디렉터리를 여러 개 찾았습니다. 올바른 것을 선택하십시오."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -412,6 +404,12 @@ msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2(%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "프로젝트 루트 디렉터리를 여러 개 찾았습니다. 올바른 것을 선택하십시오."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop - CMake 지원"

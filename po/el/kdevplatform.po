@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2013-07-08 05:49+0200\n"
 "Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1564,42 +1564,42 @@ msgstr "*** Προειδοποίηση: αδυναμία τερματισμού 
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** Προειδοποίηση: αδυναμία τερματισμού της διεργασίας ***"
 
-#: outputview/outputexecutejob.cpp:353
+#: outputview/outputexecutejob.cpp:354
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "Η %1 απέτυχε να ξεκινήσει"
 
-#: outputview/outputexecutejob.cpp:357
+#: outputview/outputexecutejob.cpp:358
 #, kde-format
 msgid "%1 has crashed"
 msgstr "Η %1 έχει καταρρεύσει"
 
-#: outputview/outputexecutejob.cpp:361
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "Read error"
 msgstr "Σφάλμα ανάγνωσης"
 
-#: outputview/outputexecutejob.cpp:365
+#: outputview/outputexecutejob.cpp:366
 #, kde-format
 msgid "Write error"
 msgstr "Σφάλμα εγγραφής"
 
-#: outputview/outputexecutejob.cpp:369
+#: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "Ο χρόνος αναμονής για τη διεργασία έχει εκπνεύσει"
 
-#: outputview/outputexecutejob.cpp:373
+#: outputview/outputexecutejob.cpp:374
 #, kde-format
 msgid "Exit code %1"
 msgstr "Κώδικας εξόδου %1"
 
-#: outputview/outputexecutejob.cpp:386
+#: outputview/outputexecutejob.cpp:387
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** Αποτυχία: %1 ***"
 
-#: outputview/outputexecutejob.cpp:404
+#: outputview/outputexecutejob.cpp:405
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** Τερματίστηκε ***"

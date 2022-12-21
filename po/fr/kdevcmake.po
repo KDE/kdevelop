@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-07-10 12:40+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -219,7 +219,7 @@ msgstr ""
 "<p>Pour un meilleur rendu de la documentation « cmake », installez "
 "« rst2html ».</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -241,7 +241,7 @@ msgstr "<br /><em>Documentation en cache :</em> %1\n"
 msgid "CMake Content Page"
 msgstr "Page de contenu de CMake"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -260,16 +260,6 @@ msgstr ""
 "projet soient corrects et que KDevelop soit configuré pour utiliser la bonne "
 "version et les bons paramètres de CMake. Effectuez ensuite un clic droit sur "
 "l'élément du projet dans la vue projets et cliquez sur « Recharger »."
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"KDevelop a trouvé plusieurs dossiers racines possibles pour votre projet. "
-"Veuillez choisir celle qui convient."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -432,6 +422,13 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "KDevelop a trouvé plusieurs dossiers racines possibles pour votre projet. "
+#~ "Veuillez choisir celle qui convient."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop - Prise en charge de CMake"

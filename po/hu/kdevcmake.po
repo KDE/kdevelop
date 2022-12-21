@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2015-09-08 10:41+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -224,7 +224,7 @@ msgstr "Házirendek"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -244,7 +244,7 @@ msgstr "<br /><em>Gyorsítótár dokumentáció:</em> %1\n"
 msgid "CMake Content Page"
 msgstr "CMake tartalom oldal"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -255,16 +255,6 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"A KDevelop több lehetséges gyökérkönyvtárat talált a projektjéhez, kérjük "
-"válassza ki a helyeset."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -447,6 +437,13 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "A KDevelop több lehetséges gyökérkönyvtárat talált a projektjéhez, kérjük "
+#~ "válassza ki a helyeset."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop - CMake támogatás"

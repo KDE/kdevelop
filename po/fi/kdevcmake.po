@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-08-30 14:17+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -213,7 +213,7 @@ msgstr "Käytänteet"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr "<p>Paranna CMaken ohjeistuksen hahmonnusta asentamalla rst2html.</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr "CMake-ohjelmatiedostoa ei löytynyt. Onko se asennettu?"
@@ -233,7 +233,7 @@ msgstr "<br /><em>Välimuistidokumentaatio:</em> %1\n"
 msgid "CMake Content Page"
 msgstr "CMake-sisältösivu"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -251,16 +251,6 @@ msgstr ""
 "ovat oikein ja että KDevelop on asetettu käyttämään oikeaa CMaken versiota "
 "oikein asetuksin. Napsauta sitten hiiren oikealla painikkeella "
 "projektityökalunäkymässä projektitietuetta ja valitse ”Lataa uudelleen”."
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"KDevelop löysi useita mahdollisia juurihakemistoja projektillesi; valitse "
-"niistä oikea."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -423,6 +413,13 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "KDevelop löysi useita mahdollisia juurihakemistoja projektillesi; valitse "
+#~ "niistä oikea."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop – CMake-tuki"

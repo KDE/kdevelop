@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2014-08-24 21:50+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -1535,42 +1535,42 @@ msgstr "*** Advarsel: Kunne ikke dræbe processen ***"
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** Advarsel: Kunne ikke dræbe processen ***"
 
-#: outputview/outputexecutejob.cpp:353
+#: outputview/outputexecutejob.cpp:354
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1 kunne ikke starte"
 
-#: outputview/outputexecutejob.cpp:357
+#: outputview/outputexecutejob.cpp:358
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1 brød sammen"
 
-#: outputview/outputexecutejob.cpp:361
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "Read error"
 msgstr "Læsefejl"
 
-#: outputview/outputexecutejob.cpp:365
+#: outputview/outputexecutejob.cpp:366
 #, kde-format
 msgid "Write error"
 msgstr "Skrivefejl"
 
-#: outputview/outputexecutejob.cpp:369
+#: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "Venter på at processen har tidsudløb"
 
-#: outputview/outputexecutejob.cpp:373
+#: outputview/outputexecutejob.cpp:374
 #, kde-format
 msgid "Exit code %1"
 msgstr "Afslutningskode %1"
 
-#: outputview/outputexecutejob.cpp:386
+#: outputview/outputexecutejob.cpp:387
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** Mislykket: %1 ***"
 
-#: outputview/outputexecutejob.cpp:404
+#: outputview/outputexecutejob.cpp:405
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** Færdig ***"

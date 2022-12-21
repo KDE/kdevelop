@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-07-13 13:28+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1470,42 +1470,42 @@ msgstr "*** 프로세스가 죽었음 ***"
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** 경고: 프로세스를 죽일 수 없음 ***"
 
-#: outputview/outputexecutejob.cpp:353
+#: outputview/outputexecutejob.cpp:354
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1을(를) 시작할 수 없음"
 
-#: outputview/outputexecutejob.cpp:357
+#: outputview/outputexecutejob.cpp:358
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1이(가) 충돌함"
 
-#: outputview/outputexecutejob.cpp:361
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "Read error"
 msgstr "읽기 오류"
 
-#: outputview/outputexecutejob.cpp:365
+#: outputview/outputexecutejob.cpp:366
 #, kde-format
 msgid "Write error"
 msgstr "쓰기 오류"
 
-#: outputview/outputexecutejob.cpp:369
+#: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "프로세스 대기 시간이 초과됨"
 
-#: outputview/outputexecutejob.cpp:373
+#: outputview/outputexecutejob.cpp:374
 #, kde-format
 msgid "Exit code %1"
 msgstr "종료 코드 %1"
 
-#: outputview/outputexecutejob.cpp:386
+#: outputview/outputexecutejob.cpp:387
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** 실패: %1 ***"
 
-#: outputview/outputexecutejob.cpp:404
+#: outputview/outputexecutejob.cpp:405
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** 완료됨 ***"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-12-13 12:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1463,42 +1463,42 @@ msgstr "*** 被杀死的进程 ***"
 msgid "*** Warning: could not kill the process ***"
 msgstr "*** 警告：无法杀死进程 ***"
 
-#: outputview/outputexecutejob.cpp:353
+#: outputview/outputexecutejob.cpp:354
 #, kde-format
 msgid "%1 has failed to start"
 msgstr "%1 启动失败"
 
-#: outputview/outputexecutejob.cpp:357
+#: outputview/outputexecutejob.cpp:358
 #, kde-format
 msgid "%1 has crashed"
 msgstr "%1 已崩溃"
 
-#: outputview/outputexecutejob.cpp:361
+#: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "Read error"
 msgstr "读取错误"
 
-#: outputview/outputexecutejob.cpp:365
+#: outputview/outputexecutejob.cpp:366
 #, kde-format
 msgid "Write error"
 msgstr "写入出错"
 
-#: outputview/outputexecutejob.cpp:369
+#: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
 msgstr "等待进程超时"
 
-#: outputview/outputexecutejob.cpp:373
+#: outputview/outputexecutejob.cpp:374
 #, kde-format
 msgid "Exit code %1"
 msgstr "退出代码 %1"
 
-#: outputview/outputexecutejob.cpp:386
+#: outputview/outputexecutejob.cpp:387
 #, kde-format
 msgid "*** Failure: %1 ***"
 msgstr "*** 失败：%1 ***"
 
-#: outputview/outputexecutejob.cpp:404
+#: outputview/outputexecutejob.cpp:405
 #, kde-format
 msgid "*** Finished ***"
 msgstr "*** 已完成 ***"

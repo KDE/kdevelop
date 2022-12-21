@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2014-06-07 16:23+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -225,7 +225,7 @@ msgstr "Politikker"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -245,7 +245,7 @@ msgstr "<br /><em>Cache-dokumentation:</em> %1\n"
 msgid "CMake Content Page"
 msgstr "Indholdsside til CMake"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -256,16 +256,6 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"KDevelop har fundet flere mulige rodmapper til dit projekt, vælg venligst "
-"det rigtige."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -446,6 +436,13 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "KDevelop har fundet flere mulige rodmapper til dit projekt, vælg venligst "
+#~ "det rigtige."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop - CMake-understøttelse"

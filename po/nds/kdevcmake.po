@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2014-03-18 18:24+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -226,7 +226,7 @@ msgstr "Regeln"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr ""
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr ""
@@ -246,7 +246,7 @@ msgstr "<br /><em>Dokmentatschoon twischenspiekern:</em> %1\n"
 msgid "CMake Content Page"
 msgstr "CMake-Inholtsiet"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -257,19 +257,6 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, fuzzy, kde-format
-#| msgid ""
-#| "KDevelop has found several possible project root for your project, please "
-#| "select the correct one."
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr ""
-"Kdevelop hett en Reeg Projekt-Wörtelornern funnen, bitte söök den Richtigen "
-"ut."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -450,6 +437,17 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] ""
 msgstr[1] ""
+
+#, fuzzy
+#~| msgid ""
+#~| "KDevelop has found several possible project root for your project, "
+#~| "please select the correct one."
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr ""
+#~ "Kdevelop hett en Reeg Projekt-Wörtelornern funnen, bitte söök den "
+#~ "Richtigen ut."
 
 #~ msgid "KDevelop - CMake Support"
 #~ msgstr "KDevelop-Ünnerstütten för CMake"

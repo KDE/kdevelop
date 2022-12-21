@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2022-12-21 00:45+0000\n"
 "PO-Revision-Date: 2022-12-13 12:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -205,7 +205,7 @@ msgstr "策略"
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
 msgstr "<p>要想渲染更好的 Cmake 文档，请安装 rst2html。</p>"
 
-#: cmakedocumentation.cpp:46 cmakemanager.cpp:79
+#: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
 msgstr "无法找到 CMake 执行文件，您安装它了吗？"
@@ -225,7 +225,7 @@ msgstr "<br /><em>缓存文档：</em>%1\n"
 msgid "CMake Content Page"
 msgstr "CMake 内容页面"
 
-#: cmakemanager.cpp:644
+#: cmakemanager.cpp:646
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
@@ -240,14 +240,6 @@ msgstr ""
 "\n"
 "要解决此问题，请确保工程的 CMakeLists.txt 文件正确无误，并且 KDevelop 配置了"
 "正确的 CMake 版本和设置。然后右击工程点击“重新加载”。"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: cmakepossibleroots.ui:16
-#, kde-format
-msgid ""
-"KDevelop has found several possible root directories for your project, "
-"please select the correct one."
-msgstr "KDevelop 发现有多个目录可能作为工程的根目录，请选择正确的根目录。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -407,3 +399,8 @@ msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr "KDevelop 发现有多个目录可能作为工程的根目录，请选择正确的根目录。"
