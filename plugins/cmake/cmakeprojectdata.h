@@ -60,6 +60,9 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFilesCompilationData
     /// this greatly speeds up fallback searching for information on untracked files
     /// based on their folder path
     QHash<KDevelop::Path, KDevelop::Path> fileForFolder;
+    mutable QSet<KDevelop::Path> missingFiles; ///< a cache of files, for which there is no compilation data
+
+    /// Clears @a missingFiles and recomputes @a fileForFolder. Should be called whenever @a files is modified.
     void rebuildFileForFolderMapping();
 };
 

@@ -270,8 +270,14 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 {
-    const auto& data = m_projects[item->project()].data.compilationData;
-    if (!data.isValid) {
+    const auto projectData = m_projects.constFind(item->project());
+    if (projectData == m_projects.cend()) {
+        return {};
+    }
+    const auto& data = projectData->data.compilationData;
+
+    const auto itemPath = item->path();
+    if (!data.isValid || data.missingFiles.contains(itemPath)) {
         return {};
     }
 
@@ -284,7 +290,7 @@ CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
         return (localPath == canonicalPath) ? path : Path(canonicalPath);
     };
 
-    auto path = item->path();
+    auto path = itemPath;
     if (!item->folder()) {
         // try to look for file meta data directly
         auto it = data.files.find(path);
@@ -321,7 +327,8 @@ CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
         path = path.parent();
     }
 
-    qCDebug(CMAKE) << "no information found for" << item->path();
+    qCDebug(CMAKE) << "no information found for" << itemPath;
+    data.missingFiles.insert(itemPath);
     return {};
 }
 

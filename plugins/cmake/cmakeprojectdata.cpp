@@ -23,6 +23,8 @@ void CMakeFile::addDefine(const QString& define)
 
 void CMakeFilesCompilationData::rebuildFileForFolderMapping()
 {
+    missingFiles.clear();
+
     fileForFolder.clear();
     // iterate over files and add all direct folders
     for (auto it = files.constBegin(), end = files.constEnd(); it != end; ++it) {
