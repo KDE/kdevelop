@@ -199,7 +199,7 @@ private:
         auto* importJob = new CMake::FileApi::ImportJob(project, this);
         importJob->setEmitInvalidData();
         connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this](const CMakeProjectData& data) {
-            if (!data.compilationData.isValid || data.lastModifiedCMakeFile > data.lastModifiedProjectData) {
+            if (!data.compilationData.isValid || data.isOutdated) {
                 qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is"
                                << (data.compilationData.isValid ? "outdated" : "invalid");
                 reconfigureThenImport();

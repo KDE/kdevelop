@@ -286,8 +286,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
         return {};
     }
 
-    codeModel.lastModifiedCMakeFile = lastModifiedCMakeFile;
-    codeModel.lastModifiedProjectData = replyIndex.lastModified;
+    codeModel.isOutdated = lastModifiedCMakeFile > replyIndex.lastModified;
     codeModel.cmakeFiles = cmakeFiles;
     return codeModel;
 }

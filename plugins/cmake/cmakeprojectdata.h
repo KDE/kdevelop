@@ -123,8 +123,7 @@ struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
         bool isCMake = false;
     };
     QHash<KDevelop::Path, CMakeFileFlags> cmakeFiles;
-    QDateTime lastModifiedCMakeFile;
-    QDateTime lastModifiedProjectData;
+    bool isOutdated = false;
 };
 
 #endif

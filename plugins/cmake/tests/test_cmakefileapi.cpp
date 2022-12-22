@@ -99,9 +99,7 @@ private Q_SLOTS:
         QVERIFY(projectData.cmakeFiles.contains(Path(project->path(), "CMakeLists.txt")));
         QVERIFY(projectData.cmakeFiles.contains(Path(subDirPath, "CMakeLists.txt")));
 
-        QCOMPARE(projectData.lastModifiedProjectData, index.lastModified);
-        QVERIFY(projectData.lastModifiedCMakeFile.isValid());
-        QVERIFY(projectData.lastModifiedCMakeFile < projectData.lastModifiedProjectData);
+        QVERIFY(!projectData.isOutdated);
     }
 };
 
