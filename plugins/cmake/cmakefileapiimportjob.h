@@ -22,7 +22,7 @@ class ImportJob : public KJob
 {
     Q_OBJECT
 public:
-    ImportJob(KDevelop::IProject* project, QObject* parent = nullptr);
+    explicit ImportJob(KDevelop::IProject* project, QObject* parent = nullptr);
     ~ImportJob();
 
     void start() override;
