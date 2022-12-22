@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:45+0000\n"
+"POT-Creation-Date: 2022-12-22 00:45+0000\n"
 "PO-Revision-Date: 2022-12-10 18:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -403,12 +403,18 @@ msgstr "Bunu İzle"
 msgid "Stop on Change"
 msgstr "Değişimde Durdur"
 
-#: debugger/variable/variablewidget.cpp:71
+#: debugger/variable/variablewidget.cpp:82
 #, kde-format
 msgid "Debugger Variables"
 msgstr "Hata Ayıklayıcı Değişkenleri"
 
-#: debugger/variable/variablewidget.cpp:92
+#: debugger/variable/variablewidget.cpp:100
+#, kde-format
+msgctxt "@option:check"
+msgid "Auto-resize columns on click"
+msgstr ""
+
+#: debugger/variable/variablewidget.cpp:116
 #, kde-format
 msgid ""
 "<b>Variable tree</b>The variable tree allows you to see the values of local "
@@ -429,52 +435,52 @@ msgstr ""
 "ad alanına tıklanarak değiştirilebilir.<br />Bir değişken veya ifadenin "
 "değerini değiştirmek için değer alanına tıklayın.<br />"
 
-#: debugger/variable/variablewidget.cpp:106
+#: debugger/variable/variablewidget.cpp:130
 #, kde-format
 msgid "<b>Expression entry</b>Type in expression to watch."
 msgstr "<b>İfade girdisi</b>İzlenecek ifadeyi yazın."
 
-#: debugger/variable/variablewidget.cpp:183
+#: debugger/variable/variablewidget.cpp:207
 #, kde-format
 msgid "&Format"
 msgstr "&Biçim"
 
-#: debugger/variable/variablewidget.cpp:188
+#: debugger/variable/variablewidget.cpp:212
 #, kde-format
 msgid "&Natural"
 msgstr "&Doğal"
 
-#: debugger/variable/variablewidget.cpp:193
+#: debugger/variable/variablewidget.cpp:217
 #, kde-format
 msgid "&Binary"
 msgstr "&İkilik"
 
-#: debugger/variable/variablewidget.cpp:198
+#: debugger/variable/variablewidget.cpp:222
 #, kde-format
 msgid "&Octal"
 msgstr "&Sekizlik"
 
-#: debugger/variable/variablewidget.cpp:203
+#: debugger/variable/variablewidget.cpp:227
 #, kde-format
 msgid "&Decimal"
 msgstr "&Ondalık"
 
-#: debugger/variable/variablewidget.cpp:208
+#: debugger/variable/variablewidget.cpp:232
 #, kde-format
 msgid "&Hexadecimal"
 msgstr "&Onaltılık"
 
-#: debugger/variable/variablewidget.cpp:223
+#: debugger/variable/variablewidget.cpp:247
 #, kde-format
 msgid "Remove Watch Variable"
 msgstr "İzleme Değişkenini Kaldır"
 
-#: debugger/variable/variablewidget.cpp:230
+#: debugger/variable/variablewidget.cpp:254
 #, kde-format
 msgid "&Copy Value"
 msgstr "Değeri Ko&pyala"
 
-#: debugger/variable/variablewidget.cpp:235
+#: debugger/variable/variablewidget.cpp:259
 #, kde-format
 msgid "&Stop on Change"
 msgstr "&Değişimde Durdur"
@@ -1858,112 +1864,112 @@ msgstr ""
 "\"https://community.kde.org/Frameworks/Building#Runtime_setup\">bu makaleye</"
 "a> göz atın."
 
-#: shell/debugcontroller.cpp:91
+#: shell/debugcontroller.cpp:114
 #, kde-format
 msgid "Debugger"
 msgstr "Hata Ayıklayıcı"
 
-#: shell/debugcontroller.cpp:109
+#: shell/debugcontroller.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "Çerçeve Yığını"
 
-#: shell/debugcontroller.cpp:115
+#: shell/debugcontroller.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "Kesme Noktaları"
 
-#: shell/debugcontroller.cpp:121
+#: shell/debugcontroller.cpp:142
 #, kde-format
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "Değişkenler"
 
-#: shell/debugcontroller.cpp:198
+#: shell/debugcontroller.cpp:218
 #, kde-format
 msgid "&Restart"
 msgstr "&Yeniden Başlat"
 
-#: shell/debugcontroller.cpp:199
+#: shell/debugcontroller.cpp:219
 #, kde-format
 msgid "Restart program"
 msgstr "Uygulamayı yeniden başlat"
 
-#: shell/debugcontroller.cpp:200
+#: shell/debugcontroller.cpp:220
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "Uygulamaları baştan başlatır."
 
-#: shell/debugcontroller.cpp:206
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "Yarıda Kes"
 
-#: shell/debugcontroller.cpp:207
+#: shell/debugcontroller.cpp:227
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "Uygulamayı yarıda kes"
 
-#: shell/debugcontroller.cpp:208
+#: shell/debugcontroller.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr ""
 "Hata ayıklanan süreci veya geçerli hata ayıklama komutunu yarıda keser."
 
-#: shell/debugcontroller.cpp:212
+#: shell/debugcontroller.cpp:232
 #, kde-format
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "&İmlece Kadar Çalıştır"
 
-#: shell/debugcontroller.cpp:213
+#: shell/debugcontroller.cpp:233
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "İmlece kadar çalıştır"
 
-#: shell/debugcontroller.cpp:214
+#: shell/debugcontroller.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "İmleç konumuna ulaşana kadar çalıştırmayı sürdürür."
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:239
 #, kde-format
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "Yürütme &Konumunu İmlece Ayarla"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:240
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "İmlece git"
 
-#: shell/debugcontroller.cpp:221
+#: shell/debugcontroller.cpp:241
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "Geçerli imleç konumundan yürütmeyi sürdür."
 
-#: shell/debugcontroller.cpp:225
+#: shell/debugcontroller.cpp:245
 #, kde-format
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "Üzerinden A&tla"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:247
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "Sonraki satırın üzerinden atla"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1974,37 +1980,37 @@ msgstr ""
 "Geçerli kaynak dosyadan bir kaynak satırı yürütür. Eğer bu satır bir işlevi "
 "çağırıyorsa tüm işlev yürütülür ve uygulama işlevi izleyen satırda durur."
 
-#: shell/debugcontroller.cpp:236
+#: shell/debugcontroller.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "Yöner&genin Üzerinden Atla"
 
-#: shell/debugcontroller.cpp:237
+#: shell/debugcontroller.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "Yönergenin üzerinden atla"
 
-#: shell/debugcontroller.cpp:238
+#: shell/debugcontroller.cpp:258
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "Sonraki Assembly yönergesinin üzerinden atla."
 
-#: shell/debugcontroller.cpp:243
+#: shell/debugcontroller.cpp:263
 #, kde-format
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "Ara&ya Gir"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:265
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "Bir sonraki ifadenin arasına gir"
 
-#: shell/debugcontroller.cpp:246
+#: shell/debugcontroller.cpp:266
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2014,37 +2020,37 @@ msgstr ""
 "Kaynağın tam olarak yalnızca bir satırını yürütür. Kaynak satırı, işleve bir "
 "çağrıysa işleve girildikten sonra yürütme duracaktır."
 
-#: shell/debugcontroller.cpp:253
+#: shell/debugcontroller.cpp:273
 #, kde-format
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "Yönergenin A&rasına Gir"
 
-#: shell/debugcontroller.cpp:254
+#: shell/debugcontroller.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "Yönergenin arasına gir"
 
-#: shell/debugcontroller.cpp:255
+#: shell/debugcontroller.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "Sonraki Assembly yönergesinin arasına gir."
 
-#: shell/debugcontroller.cpp:259
+#: shell/debugcontroller.cpp:279
 #, kde-format
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "Dışarı Çı&k"
 
-#: shell/debugcontroller.cpp:261
+#: shell/debugcontroller.cpp:281
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "Geçerli işlevden dışarı çık"
 
-#: shell/debugcontroller.cpp:262
+#: shell/debugcontroller.cpp:282
 #, kde-format
 msgctxt "@whatsthis"
 msgid ""
@@ -2058,66 +2064,66 @@ msgstr ""
 "görüntüleyecektir. Program yürütmesi en dış çerçevedeyse (örn. main() "
 "içinde) bu işlemin bir etkisi olmayacaktır."
 
-#: shell/debugcontroller.cpp:270
+#: shell/debugcontroller.cpp:290
 #, kde-format
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "Kesme Noktasını Aç/Kapat"
 
-#: shell/debugcontroller.cpp:271
+#: shell/debugcontroller.cpp:291
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:272
+#: shell/debugcontroller.cpp:292
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "Kesme noktasını aç/kapat"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:293
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "Kesme noktasını, düzenleyicideki geçerli satırda açar/kapatır."
 
-#: shell/debugcontroller.cpp:277
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "Geçerli Satırı Göster"
 
-#: shell/debugcontroller.cpp:278
+#: shell/debugcontroller.cpp:298
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "Geçerli yürütme konumunu göster"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr "Düzenleyicideki yürütme satırına gider."
 
-#: shell/debugcontroller.cpp:391
+#: shell/debugcontroller.cpp:411
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Hata Ayıkla"
 
-#: shell/debugcontroller.cpp:441 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Başlatma Hatalarını Ayıkla"
 
-#: shell/debugcontroller.cpp:443 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Geçerli başlatma hatalarını ayıkla"
 
-#: shell/debugcontroller.cpp:444 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:446
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2127,19 +2133,19 @@ msgstr ""
 "Hedefi veya geçerli etkin başlangıç yapılandırmasında belirtilen programı "
 "hata ayıklayıcı içinde yürütür."
 
-#: shell/debugcontroller.cpp:447
+#: shell/debugcontroller.cpp:467
 #, kde-format
 msgctxt "@action"
 msgid "&Continue"
 msgstr "&Sürdür"
 
-#: shell/debugcontroller.cpp:449
+#: shell/debugcontroller.cpp:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "Uygulama yürütmesini sürdür"
 
-#: shell/debugcontroller.cpp:450
+#: shell/debugcontroller.cpp:470
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
