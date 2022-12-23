@@ -695,8 +695,8 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* /*project*/
 
 void CMakeManager::projectClosing(IProject* p)
 {
-    auto it = m_projects.find(p);
-    if (it != m_projects.end()) {
+    const auto it = m_projects.constFind(p);
+    if (it != m_projects.cend()) {
         cleanupTestSuites(it->testSuites, it->testSuiteJobs);
         m_projects.erase(it);
     }
