@@ -370,8 +370,6 @@ void RunController::initialize()
             this, &RunController::slotProjectOpened);
     connect(Core::self()->projectController(), &IProjectController::projectClosing,
             this, &RunController::slotProjectClosing);
-    connect(Core::self()->projectController(), &IProjectController::projectConfigurationChanged,
-             this, &RunController::slotRefreshProject);
 
     if( (Core::self()->setupFlags() & Core::NoUi) == 0 )
     {
@@ -515,12 +513,6 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
                 d->currentTargetAction->actions().at(0)->setChecked(true);
         }
     }
-}
-
-void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
-{
-    slotProjectClosing(project);
-    slotProjectOpened(project);
 }
 
 void RunController::slotDebug()

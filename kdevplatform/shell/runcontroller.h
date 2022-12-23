@@ -118,7 +118,6 @@ protected Q_SLOTS:
     void resumed(KJob *job) override;
 
 private Q_SLOTS:
-    void slotRefreshProject(KDevelop::IProject* project);
     void slotExecute();
     void slotDebug();
     void slotProfile();
