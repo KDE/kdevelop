@@ -9,6 +9,7 @@
 #define CMAKEMANAGER_H
 
 #include <QList>
+#include <QPointer>
 #include <QString>
 #include <QVariant>
 
@@ -42,6 +43,10 @@ namespace KDevelop
     class ContextMenuExtension;
     class Context;
     class IRuntime;
+}
+
+namespace Sublime {
+class Message;
 }
 
 class CMakeFolderItem;
@@ -124,7 +129,7 @@ private:
     KTextEditor::Range termRangeAtPosition(const KTextEditor::Document* textDocument,
                                            const KTextEditor::Cursor& position) const;
 
-    void showConfigureErrorMessage(const QString& projectName, const QString& errorMessage) const;
+    void showConfigureErrorMessage(const KDevelop::IProject& project, const QString& errorMessage);
 
     KJob* createImportJob(KDevelop::ProjectFolderItem* item, bool forceConfigure);
 
@@ -137,6 +142,9 @@ private:
         QVector<CTestFindJob*> testSuiteJobs;
     };
     QHash<KDevelop::IProject*, PerProjectData> m_projects;
+    // When an error occurs during the initial project import, the project is not inserted into m_projects, but the
+    // project's status message must be stored to remove it once obsolete. Thus a separate QHash for the messages.
+    QHash<const KDevelop::IProject*, QPointer<Sublime::Message>> m_configureStatusMessages;
     KDevelop::ProjectFilterManager* m_filter;
     KDevelop::ICodeHighlighting* m_highlight;
 };

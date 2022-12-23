@@ -228,12 +228,14 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item, bool forceConfigure
 {
     auto project = item->project();
 
+    delete m_configureStatusMessages.value(project); // discard now-obsolete message from the previous configuration
+
     auto job = new ChooseCMakeInterfaceJob(project, this, forceConfigure);
     connect(job, &KJob::result, this, [this, job, project]() {
         if (job->error() != 0) {
             qCWarning(CMAKE) << "couldn't load project successfully" << project->name() << job->error()
                              << job->errorText();
-            showConfigureErrorMessage(project->name(), job->errorString());
+            showConfigureErrorMessage(*project, job->errorString());
         }
     });
 
@@ -493,7 +495,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
                 } else
                     qCDebug(CMAKE) << "unhandled signal response..." << project << response;
             } else if (response[QStringLiteral("type")] == QLatin1String("error")) {
-                showConfigureErrorMessage(project->name(), response[QStringLiteral("errorMessage")].toString());
+                showConfigureErrorMessage(*project, response[QStringLiteral("errorMessage")].toString());
             } else if (response[QStringLiteral("type")] == QLatin1String("reply")) {
                 const auto inReplyTo = response[QStringLiteral("inReplyTo")];
                 if (inReplyTo == QLatin1String("configure")) {
@@ -634,7 +636,7 @@ KTextEditor::Range CMakeManager::termRangeAtPosition(const KTextEditor::Document
     return KTextEditor::Range(start, end);
 }
 
-void CMakeManager::showConfigureErrorMessage(const QString& projectName, const QString& errorMessage) const
+void CMakeManager::showConfigureErrorMessage(const IProject& project, const QString& errorMessage)
 {
     const QString messageText = i18n(
         "Failed to configure project '%1' (error message: %2)."
@@ -643,8 +645,11 @@ void CMakeManager::showConfigureErrorMessage(const QString& projectName, const Q
         "To fix this issue, please ensure that the project's CMakeLists.txt files"
         " are correct, and KDevelop is configured to use the correct CMake version and settings."
         " Then right-click the project item in the projects tool view and click 'Reload'.",
-        projectName, errorMessage);
-    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        project.name(), errorMessage);
+
+    auto& message = m_configureStatusMessages[&project];
+    Q_ASSERT_X(!message, Q_FUNC_INFO, "The previous message must have been discarded earlier.");
+    message = new Sublime::Message(messageText, Sublime::Message::Error);
     ICore::self()->uiController()->postMessage(message);
 }
 
@@ -698,6 +703,8 @@ void CMakeManager::projectClosing(IProject* p)
         cleanupTestSuites(it->testSuites, it->testSuiteJobs);
         m_projects.erase(it);
     }
+
+    delete m_configureStatusMessages.take(p); // discard the message, because closing its project obsoletes it
 }
 
 ProjectFilterManager* CMakeManager::filterManager() const
