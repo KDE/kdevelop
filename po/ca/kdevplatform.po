@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-22 00:45+0000\n"
-"PO-Revision-Date: 2022-11-03 13:08+0100\n"
+"PO-Revision-Date: 2022-12-22 15:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -414,7 +414,7 @@ msgstr "Variables del depurador"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Redimensiona automàticament les columnes en fer clic"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -6149,27 +6149,3 @@ msgstr "Diferències amb l'anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferències entre revisions"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "Expressions recents"
-
-#~ msgid "Remove All"
-#~ msgstr "Elimina-ho tot"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "Torna a avaluar-ho tot"
-
-#~ msgid "Remember Value"
-#~ msgstr "Recorda el valor"
-
-#~ msgid "Watch Variable"
-#~ msgstr "Observa variable"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "Torna a avaluar l'expressió"
-
-#~ msgid "Remove Expression"
-#~ msgstr "Elimina expressió"
-
-#~ msgid "Data write breakpoint"
-#~ msgstr "Punt d'interrupció d'escriptura de dades"
