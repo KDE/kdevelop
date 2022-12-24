@@ -235,7 +235,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item, bool forceConfigure
         if (job->error() != 0) {
             qCWarning(CMAKE) << "couldn't load project successfully" << project->name() << job->error()
                              << job->errorText();
-            showConfigureErrorMessage(project->name(), job->errorText());
+            showConfigureErrorMessage(project->name(), job->errorString());
         }
     });
 
