@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-22 00:45+0000\n"
-"PO-Revision-Date: 2022-12-10 18:23+0300\n"
+"PO-Revision-Date: 2022-12-23 20:43+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -412,7 +412,7 @@ msgstr "Hata Ayıklayıcı Değişkenleri"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Tıklamada sütunları kendiliğinden yeniden boyutlandır"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
