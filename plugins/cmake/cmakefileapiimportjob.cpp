@@ -17,9 +17,13 @@ using namespace KDevelop;
 #include <project/projectmodel.h>
 #include <util/path.h>
 
+#include <KLocalizedString>
+
 #include <QtConcurrentRun>
 #include <QFile>
 #include <QJsonObject>
+
+#include <utility>
 
 namespace CMake {
 namespace FileApi {
@@ -29,12 +33,23 @@ ImportJob::ImportJob(KDevelop::IProject* project, QObject* parent)
     , m_project(project)
 {
     connect(&m_futureWatcher, &QFutureWatcher<CMakeProjectData>::finished, this, [this]() {
-        emit dataAvailable(m_futureWatcher.result());
+        auto data = m_futureWatcher.result();
+        if (m_emitInvalidData || data.compilationData.isValid) {
+            emit dataAvailable(std::move(data));
+        } else {
+            setError(InvalidProjectDataError);
+            setErrorText(i18nc("error message", "invalid CMake file API project data"));
+        }
         emitResult();
     });
 }
 
 ImportJob::~ImportJob() = default;
+
+void ImportJob::setEmitInvalidData()
+{
+    m_emitInvalidData = true;
+}
 
 void ImportJob::start()
 {

@@ -22,8 +22,18 @@ class ImportJob : public KJob
 {
     Q_OBJECT
 public:
+    enum {
+        // Add a "random" number to KJob::UserDefinedError and hopefully avoid
+        // clashes with OutputJob's, OutputExecuteJob's, etc. error codes.
+        InvalidProjectDataError = UserDefinedError + 172
+    };
+
     explicit ImportJob(KDevelop::IProject* project, QObject* parent = nullptr);
     ~ImportJob();
+
+    /// If this function is called, the job finishes without error and
+    /// dataAvailable() signal is emitted when project data is invalid.
+    void setEmitInvalidData();
 
     void start() override;
 
@@ -33,6 +43,7 @@ Q_SIGNALS:
 private:
     KDevelop::IProject* m_project = nullptr;
     QFutureWatcher<CMakeProjectData> m_futureWatcher;
+    bool m_emitInvalidData = false;
 };
 }
 }

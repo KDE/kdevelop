@@ -197,6 +197,7 @@ private:
     void tryDirectImport()
     {
         auto* importJob = new CMake::FileApi::ImportJob(project, this);
+        importJob->setEmitInvalidData();
         connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this](const CMakeProjectData& data) {
             if (!data.compilationData.isValid || data.lastModifiedCMakeFile > data.lastModifiedProjectData) {
                 qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is"
@@ -213,11 +214,8 @@ private:
 
     void fileImportDone(const CMakeProjectData& data)
     {
-        if (!data.compilationData.isValid) {
-            tryCMakeServer();
-        } else {
-            manager->integrateData(data, project);
-        }
+        Q_ASSERT(data.compilationData.isValid);
+        manager->integrateData(data, project);
     }
 
     QSharedPointer<CMakeServer> server;
