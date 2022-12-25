@@ -57,6 +57,16 @@ bool isKDevelopClientResponse(const QJsonObject& indexObject)
 {
     return indexObject.value(QLatin1String("reply")).toObject().contains(QLatin1String("client-kdevelop"));
 }
+
+QString queryDirPath(const QString& buildDirectory)
+{
+    return buildDirectory + QLatin1String("/.cmake/api/v1/query/client-kdevelop/");
+}
+
+QString queryFileName()
+{
+    return QStringLiteral("query.json");
+}
 }
 
 namespace CMake {
@@ -68,13 +78,13 @@ bool supported(const QString& cmakeExecutable)
 
 void writeClientQueryFile(const QString& buildDirectory)
 {
-    const QDir queryDir(buildDirectory + QLatin1String("/.cmake/api/v1/query/client-kdevelop/"));
+    const QDir queryDir(queryDirPath(buildDirectory));
     if (!queryDir.exists() && !queryDir.mkpath(QStringLiteral("."))) {
         qCWarning(CMAKE) << "failed to create file API query dir:" << queryDir.absolutePath();
         return;
     }
 
-    QFile queryFile(queryDir.absoluteFilePath(QStringLiteral("query.json")));
+    QFile queryFile(queryDir.absoluteFilePath(queryFileName()));
     if (!queryFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qCWarning(CMAKE) << "failed to open query file for writing:" << queryFile.fileName() << queryFile.errorString();
         return;
@@ -98,15 +108,51 @@ static QDir toReplyDir(const QString& buildDirectory)
 
 ReplyIndex findReplyIndexFile(const QString& buildDirectory)
 {
+    const QFileInfo cmakeCacheInfo(buildDirectory + QLatin1String{"/CMakeCache.txt"});
+    if (!cmakeCacheInfo.isFile()) {
+        // don't import data when no suitable CMakeCache file exists, which could happen
+        // because our prune job didn't use to delete the .cmake folder
+        qCDebug(CMAKE) << "no CMakeCache.txt found in" << cmakeCacheInfo.absolutePath();
+        return {};
+    }
+
+    const QFileInfo queryInfo(queryDirPath(buildDirectory) + queryFileName());
+    if (!queryInfo.isFile()) {
+        qCWarning(CMAKE) << "no API client query file found at" << queryInfo.absoluteFilePath();
+        return {};
+    }
+
+    const auto isReplyOutdated = [&buildDirectory, &cmakeCacheInfo](const QDateTime& queryLastModified,
+                                                                    const QDateTime& replyLastModified) {
+        qCDebug(CMAKE) << PrintLastModified{"API client query file", queryLastModified} << "- within" << buildDirectory;
+        qCDebug(CMAKE) << PrintLastModified{"API reply index file", replyLastModified} << "- within" << buildDirectory;
+        if (replyLastModified < queryLastModified) {
+            qCDebug(CMAKE) << "API reply index file is out of date (last modified before the client query file)";
+            return true;
+        }
+
+        const auto cmakeCacheLastModified = cmakeCacheInfo.lastModified();
+        qCDebug(CMAKE) << PrintLastModified{"CMakeCache.txt", cmakeCacheLastModified} << "- within" << buildDirectory;
+        // CMakeCache.txt can be modified during the CMake configure step - after KDevelop modifies the API
+        // client query file. The API reply index file is always modified during the CMake generate step.
+        if (replyLastModified < cmakeCacheLastModified) {
+            qCDebug(CMAKE) << "API reply index file is out of date (last modified before CMakeCache.txt)";
+            return true;
+        }
+
+        return false;
+    };
+
     const auto replyDir = toReplyDir(buildDirectory);
     const auto fileList =
         replyDir.entryInfoList({QStringLiteral("index-*.json")}, QDir::Files, QDir::Name | QDir::Reversed);
     for (const auto& entry : fileList) {
         const auto object = parseFile(entry.absoluteFilePath());
         if (isKDevelopClientResponse(object)) {
-            ReplyIndex result{entry.lastModified(), object};
-            qCDebug(CMAKE) << PrintLastModified{"API reply index file", result.lastModified} << "- within"
-                           << buildDirectory;
+            ReplyIndex result{queryInfo.lastModified(), object};
+            if (isReplyOutdated(result.queryLastModified, entry.lastModified())) {
+                result.markOutdated();
+            }
             return result;
         }
     }
@@ -237,7 +283,11 @@ parseCMakeFiles(const QJsonObject& cmakeFiles, PathInterner& sourcePathInterner,
         flags.isCMake = input.value(QLatin1String("isCMake")).toBool();
         ret[path] = flags;
 
-        if (path.isLocalFile()) {
+        // Generated CMake files can be modified during the CMake configure step - after KDevelop
+        // modifies the API client query file. Don't take into account last modified timestamps of
+        // generated files to prevent wrongly considering up-to-date data outdated. The user is
+        // not supposed to modify the generated files manually, so ignoring them should be fine.
+        if (!flags.isGenerated && path.isLocalFile()) {
             const auto info = QFileInfo(path.toLocalFile());
             *lastModifiedCMakeFile = std::max(info.lastModified(), *lastModifiedCMakeFile);
         }
@@ -261,7 +311,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
     CMakeProjectData codeModel;
     QHash<Path, CMakeProjectData::CMakeFileFlags> cmakeFiles;
 
-    QDateTime lastModifiedCMakeFile;
+    bool isOutdated = true; // consider the data outdated if the cmakeFiles object is absent or replyIndex is outdated
     for (const auto& responseValue : responses) {
         const auto response = responseValue.toObject();
         const auto kind = response.value(QLatin1String("kind"));
@@ -274,9 +324,26 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
                 break; // skip to printing a warning and the early return under the loop
             }
         } else if (kind == QLatin1String("cmakeFiles")) {
+            QDateTime lastModifiedCMakeFile;
             cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner, &lastModifiedCMakeFile);
             qCDebug(CMAKE) << PrintLastModified{"source CMake file", lastModifiedCMakeFile} << "- within"
                            << buildDirectory;
+            if (!replyIndex.isOutdated()) {
+                // KDevelop always writes the API client query file shortly before running the CMake configure step.
+                // Use its last modified timestamp as the time when the last CMake configure step started. This
+                // timestamp is normally a slight underestimate. However, when the user runs the CMake configure step
+                // manually while KDevelop is not running, the API client query file is not touched. Up-to-date project
+                // data can be marked outdated here in this case. KDevelop would reconfigure CMake needlessly then.
+                // TODO: determine when the last CMake configure step started more reliably, even if KDevelop is not
+                // running at the time. KDevelop always writes the same API client query, so the API reply written by
+                // CMake during the generate step is correct even if KDevelop does not rewrite the query file. If a
+                // future KDevelop version changes its API client query, the query file contents can be read and
+                // compared to determine whether the API reply is correct.
+                isOutdated = replyIndex.queryLastModified < lastModifiedCMakeFile;
+                if (isOutdated) {
+                    qCDebug(CMAKE) << "API client query file is out of date (last modified before a source CMake file)";
+                }
+            }
         }
     }
 
@@ -286,7 +353,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
         return {};
     }
 
-    codeModel.isOutdated = lastModifiedCMakeFile > replyIndex.lastModified;
+    codeModel.isOutdated = isOutdated;
     codeModel.cmakeFiles = cmakeFiles;
     return codeModel;
 }

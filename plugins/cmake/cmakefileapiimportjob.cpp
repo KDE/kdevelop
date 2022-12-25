@@ -46,6 +46,11 @@ ImportJob::ImportJob(KDevelop::IProject* project, QObject* parent)
 
 ImportJob::~ImportJob() = default;
 
+void ImportJob::setInvalidateOutdatedData()
+{
+    m_invalidateOutdatedData = true;
+}
+
 void ImportJob::setEmitInvalidData()
 {
     m_emitInvalidData = true;
@@ -57,24 +62,24 @@ void ImportJob::start()
     const auto sourceDirectory = m_project->path();
     const auto buildDirectory = bsm->buildDirectory(m_project->projectItem());
 
-    auto future = QtConcurrent::run([sourceDirectory, buildDirectory]() -> CMakeProjectData {
-        // don't import data when no suitable CMakeCache file exists, which could happen
-        // because our prune job didn't use to delete the .cmake folder
-        if (!QFile::exists(Path(buildDirectory, QStringLiteral("CMakeCache.txt")).toLocalFile())) {
-            return {};
-        }
+    auto future = QtConcurrent::run(
+        [sourceDirectory, buildDirectory, invalidateOutdatedData = m_invalidateOutdatedData]() -> CMakeProjectData {
+            const auto replyIndex = findReplyIndexFile(buildDirectory.toLocalFile());
+            if (!replyIndex.isValid() || (invalidateOutdatedData && replyIndex.isOutdated())) {
+                return {};
+            }
 
-        const auto replyIndex = findReplyIndexFile(buildDirectory.toLocalFile());
-        if (replyIndex.data.isEmpty()) {
-            return {};
-        }
-        auto ret = parseReplyIndexFile(replyIndex, sourceDirectory, buildDirectory);
-        if (!ret.compilationData.isValid) {
+            auto ret = parseReplyIndexFile(replyIndex, sourceDirectory, buildDirectory);
+            if (invalidateOutdatedData && ret.isOutdated) {
+                ret.compilationData.isValid = false;
+            }
+            if (!ret.compilationData.isValid) {
+                return ret;
+            }
+
+            ret.testSuites = CMake::importTestSuites(buildDirectory);
             return ret;
-        }
-        ret.testSuites = CMake::importTestSuites(buildDirectory);
-        return ret;
-    });
+        });
     m_futureWatcher.setFuture(future);
 }
 }

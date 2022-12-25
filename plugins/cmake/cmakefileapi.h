@@ -36,8 +36,21 @@ KDEVCMAKECOMMON_EXPORT bool supported(const QString &cmakeExecutable);
 KDEVCMAKECOMMON_EXPORT void writeClientQueryFile(const QString &buildDirectory);
 
 struct ReplyIndex {
-    QDateTime lastModified;
+    QDateTime queryLastModified;
     QJsonObject data;
+
+    bool isValid() const
+    {
+        return !data.isEmpty();
+    }
+    bool isOutdated() const
+    {
+        return !queryLastModified.isValid();
+    }
+    void markOutdated()
+    {
+        queryLastModified = {};
+    }
 };
 
 /**

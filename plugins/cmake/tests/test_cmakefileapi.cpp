@@ -69,8 +69,8 @@ private Q_SLOTS:
         QVERIFY(configureJob->exec());
 
         const auto index = CMake::FileApi::findReplyIndexFile(buildDir);
-        QVERIFY(index.lastModified.isValid());
-        QVERIFY(!index.data.isEmpty());
+        QVERIFY(index.isValid());
+        QVERIFY(!index.isOutdated());
 
         const auto projectData = CMake::FileApi::parseReplyIndexFile(index, project->path(), buildPath);
         QVERIFY(projectData.compilationData.isValid);

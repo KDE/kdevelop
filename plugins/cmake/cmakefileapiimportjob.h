@@ -31,6 +31,11 @@ public:
     explicit ImportJob(KDevelop::IProject* project, QObject* parent = nullptr);
     ~ImportJob();
 
+    /// Call this function if outdated data is going to be discarded to let this job return earlier.
+    /// After this is called, outdated data is considered invalid. Thus when the data is outdated, the job
+    /// finishes with InvalidProjectDataError, or emits invalid data if setEmitInvalidData() has been called.
+    void setInvalidateOutdatedData();
+
     /// If this function is called, the job finishes without error and
     /// dataAvailable() signal is emitted when project data is invalid.
     void setEmitInvalidData();
@@ -43,6 +48,7 @@ Q_SIGNALS:
 private:
     KDevelop::IProject* m_project = nullptr;
     QFutureWatcher<CMakeProjectData> m_futureWatcher;
+    bool m_invalidateOutdatedData = false;
     bool m_emitInvalidData = false;
 };
 }

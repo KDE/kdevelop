@@ -197,13 +197,15 @@ private:
     void tryDirectImport()
     {
         auto* importJob = new CMake::FileApi::ImportJob(project, this);
+        importJob->setInvalidateOutdatedData();
         importJob->setEmitInvalidData();
         connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this](const CMakeProjectData& data) {
-            if (!data.compilationData.isValid || data.isOutdated) {
-                qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is"
-                               << (data.compilationData.isValid ? "outdated" : "invalid");
+            if (!data.compilationData.isValid) {
+                qCDebug(CMAKE) << "reconfiguring project" << project->name() << "because project data is outdated";
                 reconfigureThenImport();
             } else {
+                Q_ASSERT_X(!data.isOutdated, Q_FUNC_INFO,
+                           "ImportJob::setInvalidateOutdatedData() failed to mark outdated data invalid.");
                 qCDebug(CMAKE) << "skipping configure project" << project->name()
                                << "because project data is up to date";
                 fileImportDone(data);
