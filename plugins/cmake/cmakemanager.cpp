@@ -489,6 +489,14 @@ static void cleanupTestSuites(const QVector<CTestSuite*>& testSuites, const QVec
 
 void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProject* project, const QSharedPointer<CMakeServer>& server)
 {
+    // TODO: show the warning message only after the entire import job finishes. When the message
+    // is shown here (earlier), the user can follow the advice and manage to reload the project
+    // before the current import finishes. Then KDevelop would print a kdevelop.plugins.cmake.debug
+    // message "the project is being reloaded, aborting reload!" and ignore the reload request.
+    if (data.isOutdated) {
+        showConfigureOutdatedMessage(*project);
+    }
+
     if (server) {
         connect(server.data(), &CMakeServer::response, project, [this, project](const QJsonObject& response) {
             if (response[QStringLiteral("type")] == QLatin1String("signal")) {
@@ -638,6 +646,17 @@ KTextEditor::Range CMakeManager::termRangeAtPosition(const KTextEditor::Document
     return KTextEditor::Range(start, end);
 }
 
+void CMakeManager::showConfigureOutdatedMessage(const KDevelop::IProject& project)
+{
+    const QString messageText = i18n(
+        "Configured project '%1' with outdated CMake data."
+        " As a result, KDevelop's code understanding may be wrong.\n"
+        "\n"
+        "To fix this issue, please right-click the project item in the projects tool view and click 'Reload'.",
+        project.name());
+    showConfigureStatusMessage(project, messageText, Sublime::Message::Warning);
+}
+
 void CMakeManager::showConfigureErrorMessage(const IProject& project, const QString& errorMessage)
 {
     const QString messageText = i18n(
@@ -648,10 +667,15 @@ void CMakeManager::showConfigureErrorMessage(const IProject& project, const QStr
         " are correct, and KDevelop is configured to use the correct CMake version and settings."
         " Then right-click the project item in the projects tool view and click 'Reload'.",
         project.name(), errorMessage);
+    showConfigureStatusMessage(project, messageText, Sublime::Message::Error);
+}
 
+void CMakeManager::showConfigureStatusMessage(const IProject& project, const QString& messageText,
+                                              Sublime::Message::MessageType messageType)
+{
     auto& message = m_configureStatusMessages[&project];
     Q_ASSERT_X(!message, Q_FUNC_INFO, "The previous message must have been discarded earlier.");
-    message = new Sublime::Message(messageText, Sublime::Message::Error);
+    message = new Sublime::Message(messageText, messageType);
     ICore::self()->uiController()->postMessage(message);
 }
 

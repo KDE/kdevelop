@@ -16,6 +16,7 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/abstractfilemanagerplugin.h>
+#include <sublime/message.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/iplugin.h>
 
@@ -43,10 +44,6 @@ namespace KDevelop
     class ContextMenuExtension;
     class Context;
     class IRuntime;
-}
-
-namespace Sublime {
-class Message;
 }
 
 class CMakeFolderItem;
@@ -129,7 +126,10 @@ private:
     KTextEditor::Range termRangeAtPosition(const KTextEditor::Document* textDocument,
                                            const KTextEditor::Cursor& position) const;
 
+    void showConfigureOutdatedMessage(const KDevelop::IProject& project);
     void showConfigureErrorMessage(const KDevelop::IProject& project, const QString& errorMessage);
+    void showConfigureStatusMessage(const KDevelop::IProject& project, const QString& messageText,
+                                    Sublime::Message::MessageType messageType);
 
     KJob* createImportJob(KDevelop::ProjectFolderItem* item, bool forceConfigure);
 
