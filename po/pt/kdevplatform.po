@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-22 00:45+0000\n"
-"PO-Revision-Date: 2022-07-11 14:26+0100\n"
+"PO-Revision-Date: 2022-12-23 22:40+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -430,7 +430,7 @@ msgstr "Variáveis do Depurador"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Dimensionar automaticamente as colunas ao carregar"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -6166,31 +6166,3 @@ msgstr "Diferenças para a Anterior"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "Diferenças entre Versões"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "Expressões Recentes"
-
-#~ msgid "Remove All"
-#~ msgstr "Remover Tudo"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "Avaliar Tudo de Novo"
-
-#~ msgid "Remember Value"
-#~ msgstr "Recordar o Valor"
-
-#~ msgid "Watch Variable"
-#~ msgstr "Vigiar a Variável"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "Avaliar de Novo a Expressão"
-
-#~ msgid "Remove Expression"
-#~ msgstr "Remover a Expressão"
-
-#~ msgid "Data write breakpoint"
-#~ msgstr "Ponto de paragem de escrita de dados"
-
-#~ msgctxt "@action:button"
-#~ msgid "Share Templates"
-#~ msgstr "Partilhar os Modelos"
