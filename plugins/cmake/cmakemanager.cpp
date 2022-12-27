@@ -531,10 +531,8 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
             reload(project->projectItem());
         });
         connect(projectWatcher(project), &KDirWatch::dirty, reloadTimer, [this, project, reloadTimer](const QString &strPath) {
-            const auto& cmakeFiles = m_projects[project].data.cmakeFiles;
-            KDevelop::Path path(strPath);
-            auto it = cmakeFiles.find(path);
-            if (it == cmakeFiles.end() || it->isGenerated || it->isExternal) {
+            const auto it = m_projects.constFind(project);
+            if (it == m_projects.cend() || !it->data.cmakeFiles.contains(Path{strPath})) {
                 return;
             }
             qCDebug(CMAKE) << "eventually starting reload due to change of" << strPath;

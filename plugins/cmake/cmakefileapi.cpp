@@ -269,27 +269,33 @@ static CMakeProjectData parseCodeModel(const QJsonObject& codeModel, const QDir&
     return ret;
 }
 
-static QHash<Path, CMakeProjectData::CMakeFileFlags>
-parseCMakeFiles(const QJsonObject& cmakeFiles, PathInterner& sourcePathInterner, QDateTime* lastModifiedCMakeFile)
+/// @return source CMake files (e.g. CMakeLists.txt, *.cmake), modifying which should trigger reloading the project.
+static QSet<Path> parseCMakeFiles(const QJsonObject& cmakeFiles, PathInterner& sourcePathInterner,
+                                  QDateTime* lastModifiedCMakeFile)
 {
     Q_ASSERT(lastModifiedCMakeFile);
-    QHash<Path, CMakeProjectData::CMakeFileFlags> ret;
+    QSet<Path> ret;
     for (const auto& jsonInput : cmakeFiles.value(QLatin1String("inputs")).toArray()) {
         const auto input = jsonInput.toObject();
         const auto path = sourcePathInterner.internPath(input.value(QLatin1String("path")).toString());
-        CMakeProjectData::CMakeFileFlags flags;
-        flags.isGenerated = input.value(QLatin1String("isGenerated")).toBool();
-        flags.isExternal = input.value(QLatin1String("isExternal")).toBool();
-        flags.isCMake = input.value(QLatin1String("isCMake")).toBool();
-        ret[path] = flags;
+        const auto isGenerated = input.value(QLatin1String("isGenerated")).toBool();
+        const auto isExternal = input.value(QLatin1String("isExternal")).toBool();
 
         // Generated CMake files can be modified during the CMake configure step - after KDevelop
         // modifies the API client query file. Don't take into account last modified timestamps of
         // generated files to prevent wrongly considering up-to-date data outdated. The user is
         // not supposed to modify the generated files manually, so ignoring them should be fine.
-        if (!flags.isGenerated && path.isLocalFile()) {
+        if (!isGenerated && path.isLocalFile()) {
             const auto info = QFileInfo(path.toLocalFile());
             *lastModifiedCMakeFile = std::max(info.lastModified(), *lastModifiedCMakeFile);
+        }
+
+        // Reloading the project when a generated CMake file is changed can cause a reload loop, and the user is not
+        // supposed to modify the generated files manually. External files are not under the top-level source or build
+        // directories, so AbstractFileManagerPlugin::projectWatcher() never watches them. Watching each individual
+        // external CMake file can be costly and cause issues elsewhere if a watched item count limit is reached.
+        if (!isGenerated && !isExternal) {
+            ret.insert(path);
         }
     }
     return ret;
@@ -309,7 +315,7 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
     PathInterner buildPathInterner(buildDirectory);
 
     CMakeProjectData codeModel;
-    QHash<Path, CMakeProjectData::CMakeFileFlags> cmakeFiles;
+    QSet<Path> cmakeFiles;
 
     bool isOutdated = true; // consider the data outdated if the cmakeFiles object is absent or replyIndex is outdated
     for (const auto& responseValue : responses) {

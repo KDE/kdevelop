@@ -12,6 +12,7 @@
 #include <QHash>
 #include <QDebug>
 #include <QDateTime>
+#include <QSet>
 
 #include <util/path.h>
 
@@ -116,13 +117,8 @@ struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
     CMakeFilesCompilationData compilationData;
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
     QVector<CMakeTest> testSuites;
-    struct CMakeFileFlags
-    {
-        bool isGenerated = false;
-        bool isExternal = false;
-        bool isCMake = false;
-    };
-    QHash<KDevelop::Path, CMakeFileFlags> cmakeFiles;
+    /// Source CMake files (e.g. CMakeLists.txt, *.cmake), modifying which triggers reloading the project.
+    QSet<KDevelop::Path> cmakeFiles;
     bool isOutdated = false;
 };
 
