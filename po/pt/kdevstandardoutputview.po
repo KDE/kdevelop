@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-10-16 09:56+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -17,91 +17,99 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: outputwidget.cpp:53
-#, kde-format
-msgctxt "@title:window"
-msgid "Output View"
-msgstr "Área de Resultados"
-
-#: outputwidget.cpp:64
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close the currently active output view"
-msgstr "Fechar a área de resultados activa no momento"
-
-#: outputwidget.cpp:70
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close all other output views"
-msgstr "Fechar todas as outras áreas de resultados"
-
-#: outputwidget.cpp:81
-#, kde-format
-msgctxt "@action"
-msgid "Previous Output"
-msgstr "Resultado Anterior"
-
-#: outputwidget.cpp:84
-#, kde-format
-msgctxt "@action"
-msgid "Next Output"
-msgstr "Resultado Seguinte"
-
-#: outputwidget.cpp:89
-#, kde-format
-msgctxt "@action"
-msgid "Select Activated Item"
-msgstr "Seleccionar o Item Activado"
-
-#: outputwidget.cpp:91
-#, kde-format
-msgctxt "@action"
-msgid "Focus when Selecting Item"
-msgstr "Colocar o Item Seleccionado em Primeiro Plano"
-
-#: outputwidget.cpp:105
-#, kde-format
-msgctxt "@action"
-msgid "First Item"
-msgstr "Primeiro Item"
-
-#: outputwidget.cpp:109
-#, kde-format
-msgctxt "@action"
-msgid "Previous Item"
-msgstr "Item Anterior"
-
-#: outputwidget.cpp:113
-#, kde-format
-msgctxt "@action"
-msgid "Next Item"
-msgstr "Item Seguinte"
-
-#: outputwidget.cpp:117
-#, kde-format
-msgctxt "@action"
-msgid "Last Item"
-msgstr "Último Item"
-
-#: outputwidget.cpp:130
-#, kde-format
-msgctxt "@action"
-msgid "Clear"
-msgstr "Limpar"
-
-#: outputwidget.cpp:141
-#, kde-format
-msgctxt "@info:placeholder"
-msgid "Search..."
-msgstr "Procurar..."
-
-#: outputwidget.cpp:144
+#: outputwidget.cpp:43
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 "Introduza uma sequência especial de caracteres, sem distinção de maiúsculas/"
 "minúsculas, para filtrar a área de resultados"
+
+#: outputwidget.cpp:61
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Área de Resultados"
+
+#: outputwidget.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Fechar a área de resultados activa no momento"
+
+#: outputwidget.cpp:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Fechar todas as outras áreas de resultados"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Resultado Anterior"
+
+#: outputwidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Resultado Seguinte"
+
+#: outputwidget.cpp:97
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Seleccionar o Item Activado"
+
+#: outputwidget.cpp:99
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Colocar o Item Seleccionado em Primeiro Plano"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Primeiro Item"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Item Anterior"
+
+#: outputwidget.cpp:121
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Item Seguinte"
+
+#: outputwidget.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Último Item"
+
+#: outputwidget.cpp:138
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Limpar"
+
+#: outputwidget.cpp:149
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Procurar..."
+
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

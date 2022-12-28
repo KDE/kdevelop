@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-10-13 00:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,91 +21,99 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.08.1\n"
 
-#: outputwidget.cpp:53
-#, kde-format
-msgctxt "@title:window"
-msgid "Output View"
-msgstr "Çıktı Görünümü"
-
-#: outputwidget.cpp:64
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close the currently active output view"
-msgstr "Geçerli etkin çıktı görünümünü kapat"
-
-#: outputwidget.cpp:70
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close all other output views"
-msgstr "Tüm diğer çıktı görünümlerini kapat"
-
-#: outputwidget.cpp:81
-#, kde-format
-msgctxt "@action"
-msgid "Previous Output"
-msgstr "Önceki Çıktı"
-
-#: outputwidget.cpp:84
-#, kde-format
-msgctxt "@action"
-msgid "Next Output"
-msgstr "Sonraki Çıktı"
-
-#: outputwidget.cpp:89
-#, kde-format
-msgctxt "@action"
-msgid "Select Activated Item"
-msgstr "Etkinleştirilmiş Ögeyi Seç"
-
-#: outputwidget.cpp:91
-#, kde-format
-msgctxt "@action"
-msgid "Focus when Selecting Item"
-msgstr "Ögeyi Seçerken Odaklan"
-
-#: outputwidget.cpp:105
-#, kde-format
-msgctxt "@action"
-msgid "First Item"
-msgstr "İlk Öge"
-
-#: outputwidget.cpp:109
-#, kde-format
-msgctxt "@action"
-msgid "Previous Item"
-msgstr "Önceki Öge"
-
-#: outputwidget.cpp:113
-#, kde-format
-msgctxt "@action"
-msgid "Next Item"
-msgstr "Sonraki Öge"
-
-#: outputwidget.cpp:117
-#, kde-format
-msgctxt "@action"
-msgid "Last Item"
-msgstr "Son Öge"
-
-#: outputwidget.cpp:130
-#, kde-format
-msgctxt "@action"
-msgid "Clear"
-msgstr "Temizle"
-
-#: outputwidget.cpp:141
-#, kde-format
-msgctxt "@info:placeholder"
-msgid "Search..."
-msgstr "Ara..."
-
-#: outputwidget.cpp:144
+#: outputwidget.cpp:43
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 "Çıktı görünümünü süzmek için BÜYÜK/küçük harf duyarsız bir düzenli ifade "
 "girin"
+
+#: outputwidget.cpp:61
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Çıktı Görünümü"
+
+#: outputwidget.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Geçerli etkin çıktı görünümünü kapat"
+
+#: outputwidget.cpp:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Tüm diğer çıktı görünümlerini kapat"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Önceki Çıktı"
+
+#: outputwidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Sonraki Çıktı"
+
+#: outputwidget.cpp:97
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Etkinleştirilmiş Ögeyi Seç"
+
+#: outputwidget.cpp:99
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Ögeyi Seçerken Odaklan"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "İlk Öge"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Önceki Öge"
+
+#: outputwidget.cpp:121
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Sonraki Öge"
+
+#: outputwidget.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Son Öge"
+
+#: outputwidget.cpp:138
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Temizle"
+
+#: outputwidget.cpp:149
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Ara..."
+
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

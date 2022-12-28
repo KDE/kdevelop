@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-17 00:48+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-01-16 20:31+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -110,47 +110,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "Liigu lähtekoodi"
 
-#: codecompletion/context.cpp:145
+#: codecompletion/context.cpp:147
 #, kde-format
 msgid "Override %1"
 msgstr "Alista %1"
 
-#: codecompletion/context.cpp:342
+#: codecompletion/context.cpp:344
 #, kde-format
 msgid "Implement %1"
 msgstr "Teosta %1"
 
-#: codecompletion/context.cpp:1320
+#: codecompletion/context.cpp:1350
 #, kde-format
 msgid "Special"
 msgstr "Spetsiaalne"
 
-#: codecompletion/context.cpp:1321
+#: codecompletion/context.cpp:1351
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Ettevaatamise sobivused"
 
-#: codecompletion/context.cpp:1322
+#: codecompletion/context.cpp:1352
 #, kde-format
 msgid "Builtin"
 msgstr "Sisseehitatud"
 
-#: codecompletion/context.cpp:1323
+#: codecompletion/context.cpp:1353
 #, kde-format
 msgid "Macros"
 msgstr "Makrod"
 
-#: codecompletion/context.cpp:1366
+#: codecompletion/context.cpp:1396
 #, kde-format
 msgid "Abstract Override"
 msgstr "Abstraktne tühistus"
 
-#: codecompletion/context.cpp:1367
+#: codecompletion/context.cpp:1397
 #, kde-format
 msgid "Virtual Override"
 msgstr "Virtuaalne tühistus"
 
-#: codecompletion/context.cpp:1382
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Implement Function"
 msgstr "Funktsiooni teostus"

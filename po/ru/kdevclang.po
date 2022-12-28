@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-17 00:48+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-03-04 11:36+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -104,47 +104,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "Переместить в код"
 
-#: codecompletion/context.cpp:145
+#: codecompletion/context.cpp:147
 #, kde-format
 msgid "Override %1"
 msgstr "Переопределить %1"
 
-#: codecompletion/context.cpp:342
+#: codecompletion/context.cpp:344
 #, kde-format
 msgid "Implement %1"
 msgstr "Реализовать %1"
 
-#: codecompletion/context.cpp:1320
+#: codecompletion/context.cpp:1350
 #, kde-format
 msgid "Special"
 msgstr "Особый"
 
-#: codecompletion/context.cpp:1321
+#: codecompletion/context.cpp:1351
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Упреждающие совпадения"
 
-#: codecompletion/context.cpp:1322
+#: codecompletion/context.cpp:1352
 #, kde-format
 msgid "Builtin"
 msgstr "Встроенный"
 
-#: codecompletion/context.cpp:1323
+#: codecompletion/context.cpp:1353
 #, kde-format
 msgid "Macros"
 msgstr "Макросы"
 
-#: codecompletion/context.cpp:1366
+#: codecompletion/context.cpp:1396
 #, kde-format
 msgid "Abstract Override"
 msgstr "Абстрактное переопределение"
 
-#: codecompletion/context.cpp:1367
+#: codecompletion/context.cpp:1397
 #, kde-format
 msgid "Virtual Override"
 msgstr "Виртуальное переопределение"
 
-#: codecompletion/context.cpp:1382
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Implement Function"
 msgstr "Реализовать функцию"

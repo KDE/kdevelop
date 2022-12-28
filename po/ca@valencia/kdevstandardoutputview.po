@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-10-16 12:54+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -22,91 +22,99 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
-#: outputwidget.cpp:53
-#, kde-format
-msgctxt "@title:window"
-msgid "Output View"
-msgstr "Vista de l'eixida"
-
-#: outputwidget.cpp:64
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close the currently active output view"
-msgstr "Tanca la vista d'eixida actualment activa"
-
-#: outputwidget.cpp:70
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close all other output views"
-msgstr "Tanca totes les altres vistes d'eixida"
-
-#: outputwidget.cpp:81
-#, kde-format
-msgctxt "@action"
-msgid "Previous Output"
-msgstr "Eixida anterior"
-
-#: outputwidget.cpp:84
-#, kde-format
-msgctxt "@action"
-msgid "Next Output"
-msgstr "Eixida següent"
-
-#: outputwidget.cpp:89
-#, kde-format
-msgctxt "@action"
-msgid "Select Activated Item"
-msgstr "Selecciona l'element activat"
-
-#: outputwidget.cpp:91
-#, kde-format
-msgctxt "@action"
-msgid "Focus when Selecting Item"
-msgstr "Focus en seleccionar un element"
-
-#: outputwidget.cpp:105
-#, kde-format
-msgctxt "@action"
-msgid "First Item"
-msgstr "Primer element"
-
-#: outputwidget.cpp:109
-#, kde-format
-msgctxt "@action"
-msgid "Previous Item"
-msgstr "Element anterior"
-
-#: outputwidget.cpp:113
-#, kde-format
-msgctxt "@action"
-msgid "Next Item"
-msgstr "Element següent"
-
-#: outputwidget.cpp:117
-#, kde-format
-msgctxt "@action"
-msgid "Last Item"
-msgstr "Últim element"
-
-#: outputwidget.cpp:130
-#, kde-format
-msgctxt "@action"
-msgid "Clear"
-msgstr "Neteja"
-
-#: outputwidget.cpp:141
-#, kde-format
-msgctxt "@info:placeholder"
-msgid "Search..."
-msgstr "Busca..."
-
-#: outputwidget.cpp:144
+#: outputwidget.cpp:43
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 "Introduïu una expressió regular sense distinció entre majúscules i "
 "minúscules per a filtrar la visualització de l'eixida"
+
+#: outputwidget.cpp:61
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Vista de l'eixida"
+
+#: outputwidget.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Tanca la vista d'eixida actualment activa"
+
+#: outputwidget.cpp:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Tanca totes les altres vistes d'eixida"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Eixida anterior"
+
+#: outputwidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Eixida següent"
+
+#: outputwidget.cpp:97
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Selecciona l'element activat"
+
+#: outputwidget.cpp:99
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Focus en seleccionar un element"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Primer element"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Element anterior"
+
+#: outputwidget.cpp:121
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Element següent"
+
+#: outputwidget.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Últim element"
+
+#: outputwidget.cpp:138
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Neteja"
+
+#: outputwidget.cpp:149
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Busca..."
+
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

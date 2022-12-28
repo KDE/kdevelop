@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevclang\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-17 00:48+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-07-20 17:06+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -104,47 +104,47 @@ msgctxt "@action"
 msgid "Move into Source"
 msgstr "Mover en el código fuente"
 
-#: codecompletion/context.cpp:145
+#: codecompletion/context.cpp:147
 #, kde-format
 msgid "Override %1"
 msgstr "Redefinir %1"
 
-#: codecompletion/context.cpp:342
+#: codecompletion/context.cpp:344
 #, kde-format
 msgid "Implement %1"
 msgstr "Implementar %1"
 
-#: codecompletion/context.cpp:1320
+#: codecompletion/context.cpp:1350
 #, kde-format
 msgid "Special"
 msgstr "Especial"
 
-#: codecompletion/context.cpp:1321
+#: codecompletion/context.cpp:1351
 #, kde-format
 msgid "Look-ahead Matches"
 msgstr "Anticipar coincidencias"
 
-#: codecompletion/context.cpp:1322
+#: codecompletion/context.cpp:1352
 #, kde-format
 msgid "Builtin"
 msgstr "Integrado"
 
-#: codecompletion/context.cpp:1323
+#: codecompletion/context.cpp:1353
 #, kde-format
 msgid "Macros"
 msgstr "Macros"
 
-#: codecompletion/context.cpp:1366
+#: codecompletion/context.cpp:1396
 #, kde-format
 msgid "Abstract Override"
 msgstr "Redefinición abstracta"
 
-#: codecompletion/context.cpp:1367
+#: codecompletion/context.cpp:1397
 #, kde-format
 msgid "Virtual Override"
 msgstr "Redefinición virtual"
 
-#: codecompletion/context.cpp:1382
+#: codecompletion/context.cpp:1412
 #, kde-format
 msgid "Implement Function"
 msgstr "Implementar función"

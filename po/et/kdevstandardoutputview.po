@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-01-14 21:08+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -18,103 +18,111 @@ msgstr ""
 "X-Generator: Lokalize 19.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: outputwidget.cpp:53
+#: outputwidget.cpp:43
+#, fuzzy, kde-format
+#| msgid "Enter a wild card string to filter the output view"
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "Sisesta metamärgiga string väljundvaate filtreerimiseks"
+
+#: outputwidget.cpp:61
 #, fuzzy, kde-format
 #| msgid "Output View"
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "Väljundivaade"
 
-#: outputwidget.cpp:64
+#: outputwidget.cpp:72
 #, fuzzy, kde-format
 #| msgid "Close the currently active output view"
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "Sulge aktiivne väljundivaade"
 
-#: outputwidget.cpp:70
+#: outputwidget.cpp:78
 #, fuzzy, kde-format
 #| msgid "Close all other output views"
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "Sulge kõik teised väljundivaated"
 
-#: outputwidget.cpp:81
+#: outputwidget.cpp:89
 #, fuzzy, kde-format
 #| msgid "Previous Output"
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "Eelmine väljund"
 
-#: outputwidget.cpp:84
+#: outputwidget.cpp:92
 #, fuzzy, kde-format
 #| msgid "Next Output"
 msgctxt "@action"
 msgid "Next Output"
 msgstr "Järgmine väljund"
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:97
 #, fuzzy, kde-format
 #| msgid "Select activated Item"
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "Vali aktiveeritud element"
 
-#: outputwidget.cpp:91
+#: outputwidget.cpp:99
 #, fuzzy, kde-format
 #| msgid "Focus when selecting Item"
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "Fookus elemendi valimisel"
 
-#: outputwidget.cpp:105
+#: outputwidget.cpp:113
 #, fuzzy, kde-format
 #| msgid "First Item"
 msgctxt "@action"
 msgid "First Item"
 msgstr "Esimene element"
 
-#: outputwidget.cpp:109
+#: outputwidget.cpp:117
 #, fuzzy, kde-format
 #| msgid "Previous Item"
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Eelmine element"
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:121
 #, fuzzy, kde-format
 #| msgid "Next Item"
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Järgmine element"
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:125
 #, fuzzy, kde-format
 #| msgid "Last Item"
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Viimane element"
 
-#: outputwidget.cpp:130
+#: outputwidget.cpp:138
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "@action"
 msgid "Clear"
 msgstr "Puhasta"
 
-#: outputwidget.cpp:141
+#: outputwidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Otsing..."
 
-#: outputwidget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Enter a wild card string to filter the output view"
-msgctxt "@info:tooltip"
-msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr "Sisesta metamärgiga string väljundvaate filtreerimiseks"
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

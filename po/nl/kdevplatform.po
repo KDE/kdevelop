@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-22 00:45+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-12-22 13:27+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -2116,19 +2116,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Debuggen"
 
-#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Opstarten debuggen"
 
-#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Huidig opstarten debuggen"
 
-#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3368,24 +3368,24 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "Uitvoeren"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:405
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "De huidige opstartconfiguratie ondersteunt geen '%1'-modus."
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:425
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Starters instellen..."
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "De configuratiedialoog voor opstarten openen"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:429
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3395,25 +3395,25 @@ msgstr ""
 "Opent een dialoog voor het instellen van nieuwe opstartconfiguraties of om "
 "de bestaande configuraties te wijzigen."
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:432
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Starter uitvoeren"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:433
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Uitvoeren"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Voer het huidige opstarten uit"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3423,7 +3423,7 @@ msgstr ""
 "Voert het doel uit of het programma dat is opgegeven in de nu actieve "
 "opstartconfiguratie."
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3434,67 +3434,67 @@ msgstr "Debuggen"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:456
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Alle jobs stoppen"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:457
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Alles stoppen"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Alle nu draaiende jobs stoppen"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Verzoekt om alle draaiende jobs te stoppen."
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:467
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Stoppen"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Stoppen"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Menu voor het toestaan van het stoppen van individuele jobs"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Lijst met jobs die individueel gestopt kunnen worden."
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:475
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Huidige opstartconfiguratie"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Huidige opstartconfiguratie"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
@@ -3502,18 +3502,18 @@ msgstr ""
 "De opstartconfiguratie selecteren die moet draaien wanneer uitvoeren wordt "
 "aangeroepen."
 
-#: shell/runcontroller.cpp:596
+#: shell/runcontroller.cpp:588
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Naamloze job"
 
-#: shell/runcontroller.cpp:973
+#: shell/runcontroller.cpp:965
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Nieuwe programmastarter %1"
 
-#: shell/runcontroller.cpp:1010
+#: shell/runcontroller.cpp:1002
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."

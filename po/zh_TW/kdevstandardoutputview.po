@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2018-12-08 11:40+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -20,103 +20,111 @@ msgstr ""
 "X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: outputwidget.cpp:53
+#: outputwidget.cpp:43
+#, fuzzy, kde-format
+#| msgid "Enter a wild card string to filter the output view"
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "輸入萬用字元來過濾輸出檢視"
+
+#: outputwidget.cpp:61
 #, fuzzy, kde-format
 #| msgid "Output View"
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "輸出檢視"
 
-#: outputwidget.cpp:64
+#: outputwidget.cpp:72
 #, fuzzy, kde-format
 #| msgid "Close the currently active output view"
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "關閉目前的輸出檢視"
 
-#: outputwidget.cpp:70
+#: outputwidget.cpp:78
 #, fuzzy, kde-format
 #| msgid "Close all other output views"
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "關閉所有其他的輸出檢視"
 
-#: outputwidget.cpp:81
+#: outputwidget.cpp:89
 #, fuzzy, kde-format
 #| msgid "Previous Output"
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "跳到前一個輸出"
 
-#: outputwidget.cpp:84
+#: outputwidget.cpp:92
 #, fuzzy, kde-format
 #| msgid "Next Output"
 msgctxt "@action"
 msgid "Next Output"
 msgstr "跳到下一個輸出"
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:97
 #, fuzzy, kde-format
 #| msgid "Select activated Item"
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "選取目前的項目"
 
-#: outputwidget.cpp:91
+#: outputwidget.cpp:99
 #, fuzzy, kde-format
 #| msgid "Focus when selecting Item"
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "選取項目時取得焦點"
 
-#: outputwidget.cpp:105
+#: outputwidget.cpp:113
 #, fuzzy, kde-format
 #| msgid "First Item"
 msgctxt "@action"
 msgid "First Item"
 msgstr "第一個"
 
-#: outputwidget.cpp:109
+#: outputwidget.cpp:117
 #, fuzzy, kde-format
 #| msgid "Previous Item"
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "前一個項目"
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:121
 #, fuzzy, kde-format
 #| msgid "Next Item"
 msgctxt "@action"
 msgid "Next Item"
 msgstr "下一個項目"
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:125
 #, fuzzy, kde-format
 #| msgid "Last Item"
 msgctxt "@action"
 msgid "Last Item"
 msgstr "最後一個"
 
-#: outputwidget.cpp:130
+#: outputwidget.cpp:138
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "@action"
 msgid "Clear"
 msgstr "清除"
 
-#: outputwidget.cpp:141
+#: outputwidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "搜尋..."
 
-#: outputwidget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Enter a wild card string to filter the output view"
-msgctxt "@info:tooltip"
-msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr "輸入萬用字元來過濾輸出檢視"
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

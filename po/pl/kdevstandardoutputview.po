@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2021-04-11 07:34+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -33,91 +33,99 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: outputwidget.cpp:53
-#, kde-format
-msgctxt "@title:window"
-msgid "Output View"
-msgstr "Widok wyniku"
-
-#: outputwidget.cpp:64
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close the currently active output view"
-msgstr "Zamknij bieżący widok wyniku"
-
-#: outputwidget.cpp:70
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close all other output views"
-msgstr "Zamknij wszystkie pozostałe widoki wyników"
-
-#: outputwidget.cpp:81
-#, kde-format
-msgctxt "@action"
-msgid "Previous Output"
-msgstr "Poprzedni wynik"
-
-#: outputwidget.cpp:84
-#, kde-format
-msgctxt "@action"
-msgid "Next Output"
-msgstr "Następny wynik"
-
-#: outputwidget.cpp:89
-#, kde-format
-msgctxt "@action"
-msgid "Select Activated Item"
-msgstr "Zaznacz uaktywniony element"
-
-#: outputwidget.cpp:91
-#, kde-format
-msgctxt "@action"
-msgid "Focus when Selecting Item"
-msgstr "Uaktywnij po zaznaczeniu elementu"
-
-#: outputwidget.cpp:105
-#, kde-format
-msgctxt "@action"
-msgid "First Item"
-msgstr "Pierwszy element"
-
-#: outputwidget.cpp:109
-#, kde-format
-msgctxt "@action"
-msgid "Previous Item"
-msgstr "Poprzedni element"
-
-#: outputwidget.cpp:113
-#, kde-format
-msgctxt "@action"
-msgid "Next Item"
-msgstr "Następny element"
-
-#: outputwidget.cpp:117
-#, kde-format
-msgctxt "@action"
-msgid "Last Item"
-msgstr "Ostatni element"
-
-#: outputwidget.cpp:130
-#, kde-format
-msgctxt "@action"
-msgid "Clear"
-msgstr "Wyczyść"
-
-#: outputwidget.cpp:141
-#, kde-format
-msgctxt "@info:placeholder"
-msgid "Search..."
-msgstr "Szukaj..."
-
-#: outputwidget.cpp:144
+#: outputwidget.cpp:43
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 "Wpisz wyrażenie regularne dowolną wielkością liter, aby odfiltrować widok "
 "wyniku"
+
+#: outputwidget.cpp:61
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Widok wyniku"
+
+#: outputwidget.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Zamknij bieżący widok wyniku"
+
+#: outputwidget.cpp:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Zamknij wszystkie pozostałe widoki wyników"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Poprzedni wynik"
+
+#: outputwidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Następny wynik"
+
+#: outputwidget.cpp:97
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Zaznacz uaktywniony element"
+
+#: outputwidget.cpp:99
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Uaktywnij po zaznaczeniu elementu"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Pierwszy element"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Poprzedni element"
+
+#: outputwidget.cpp:121
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Następny element"
+
+#: outputwidget.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Ostatni element"
+
+#: outputwidget.cpp:138
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Wyczyść"
+
+#: outputwidget.cpp:149
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Szukaj..."
+
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

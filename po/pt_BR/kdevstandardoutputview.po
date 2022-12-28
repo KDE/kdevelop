@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-11-04 16:01-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -20,91 +20,99 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 20.04.3\n"
 
-#: outputwidget.cpp:53
-#, kde-format
-msgctxt "@title:window"
-msgid "Output View"
-msgstr "Visualizar saída"
-
-#: outputwidget.cpp:64
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close the currently active output view"
-msgstr "Fechar a visão de saída atualmente ativa"
-
-#: outputwidget.cpp:70
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Close all other output views"
-msgstr "Fechar todas as outras visões de saída"
-
-#: outputwidget.cpp:81
-#, kde-format
-msgctxt "@action"
-msgid "Previous Output"
-msgstr "Saída anterior"
-
-#: outputwidget.cpp:84
-#, kde-format
-msgctxt "@action"
-msgid "Next Output"
-msgstr "Próxima saída"
-
-#: outputwidget.cpp:89
-#, kde-format
-msgctxt "@action"
-msgid "Select Activated Item"
-msgstr "Selecionar item ativo"
-
-#: outputwidget.cpp:91
-#, kde-format
-msgctxt "@action"
-msgid "Focus when Selecting Item"
-msgstr "Focar ao selecionar item"
-
-#: outputwidget.cpp:105
-#, kde-format
-msgctxt "@action"
-msgid "First Item"
-msgstr "Primeiro item"
-
-#: outputwidget.cpp:109
-#, kde-format
-msgctxt "@action"
-msgid "Previous Item"
-msgstr "Item anterior"
-
-#: outputwidget.cpp:113
-#, kde-format
-msgctxt "@action"
-msgid "Next Item"
-msgstr "Próximo item"
-
-#: outputwidget.cpp:117
-#, kde-format
-msgctxt "@action"
-msgid "Last Item"
-msgstr "Último item"
-
-#: outputwidget.cpp:130
-#, kde-format
-msgctxt "@action"
-msgid "Clear"
-msgstr "Limpar"
-
-#: outputwidget.cpp:141
-#, kde-format
-msgctxt "@info:placeholder"
-msgid "Search..."
-msgstr "Pesquisar..."
-
-#: outputwidget.cpp:144
+#: outputwidget.cpp:43
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 "Digite uma expressão regular sem diferenciar maiúsculas de minúsculas para "
 "filtrar a área de resultados"
+
+#: outputwidget.cpp:61
+#, kde-format
+msgctxt "@title:window"
+msgid "Output View"
+msgstr "Visualizar saída"
+
+#: outputwidget.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close the currently active output view"
+msgstr "Fechar a visão de saída atualmente ativa"
+
+#: outputwidget.cpp:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close all other output views"
+msgstr "Fechar todas as outras visões de saída"
+
+#: outputwidget.cpp:89
+#, kde-format
+msgctxt "@action"
+msgid "Previous Output"
+msgstr "Saída anterior"
+
+#: outputwidget.cpp:92
+#, kde-format
+msgctxt "@action"
+msgid "Next Output"
+msgstr "Próxima saída"
+
+#: outputwidget.cpp:97
+#, kde-format
+msgctxt "@action"
+msgid "Select Activated Item"
+msgstr "Selecionar item ativo"
+
+#: outputwidget.cpp:99
+#, kde-format
+msgctxt "@action"
+msgid "Focus when Selecting Item"
+msgstr "Focar ao selecionar item"
+
+#: outputwidget.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "First Item"
+msgstr "Primeiro item"
+
+#: outputwidget.cpp:117
+#, kde-format
+msgctxt "@action"
+msgid "Previous Item"
+msgstr "Item anterior"
+
+#: outputwidget.cpp:121
+#, kde-format
+msgctxt "@action"
+msgid "Next Item"
+msgstr "Próximo item"
+
+#: outputwidget.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Last Item"
+msgstr "Último item"
+
+#: outputwidget.cpp:138
+#, kde-format
+msgctxt "@action"
+msgid "Clear"
+msgstr "Limpar"
+
+#: outputwidget.cpp:149
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Pesquisar..."
+
+#: outputwidget.cpp:724
+#, kde-format
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

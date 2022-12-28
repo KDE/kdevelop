@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2021-09-01 09:33+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19,89 +19,97 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: outputwidget.cpp:53
+#: outputwidget.cpp:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "Vnesite niz z nadomestnimi znaki, da filtrirate prikaz izhoda"
+
+#: outputwidget.cpp:61
 #, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "Prikaz izhoda"
 
-#: outputwidget.cpp:64
+#: outputwidget.cpp:72
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "Zapre trenutno dejaven prikaz izhoda"
 
-#: outputwidget.cpp:70
+#: outputwidget.cpp:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "Zapri vse druge prikaze izhoda"
 
-#: outputwidget.cpp:81
+#: outputwidget.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "Predhodni izhod"
 
-#: outputwidget.cpp:84
+#: outputwidget.cpp:92
 #, kde-format
 msgctxt "@action"
 msgid "Next Output"
 msgstr "Naslednji izhod"
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:97
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "Izberi dejaven predmet"
 
-#: outputwidget.cpp:91
+#: outputwidget.cpp:99
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "V žarišče ob izboru predmeta"
 
-#: outputwidget.cpp:105
+#: outputwidget.cpp:113
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "Prvi predmet"
 
-#: outputwidget.cpp:109
+#: outputwidget.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Prehodni predmet"
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Naslednji predmet"
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:125
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Zadnji predmet"
 
-#: outputwidget.cpp:130
+#: outputwidget.cpp:138
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr "Počisti"
 
-#: outputwidget.cpp:141
+#: outputwidget.cpp:149
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Poišči..."
 
-#: outputwidget.cpp:144
+#: outputwidget.cpp:724
 #, kde-format
-msgctxt "@info:tooltip"
-msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr "Vnesite niz z nadomestnimi znaki, da filtrirate prikaz izhoda"
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format

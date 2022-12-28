@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-22 00:45+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2020-03-07 07:59+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -2216,20 +2216,20 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Depurar"
 
-#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Depurar o inicio"
 
-#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Depurar o inicio actual."
 
-#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3609,25 +3609,25 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "Executar"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:405
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "Esta configuración de iniciar non admite o modo «%1»."
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:425
 #, fuzzy, kde-format
 #| msgid "Configure Launches..."
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Configuración dos inicios…"
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Abrir o diálogo de configuración dos inicios"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:429
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3637,27 +3637,27 @@ msgstr ""
 "Abre un diálogo para preparar novas configuracións de iniciar ou para "
 "cambiar as existentes."
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:432
 #, fuzzy, kde-format
 #| msgid "Execute Launch"
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Executar o inicio"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:433
 #, fuzzy, kde-format
 #| msgid "Execute"
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Executar"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Executar o inicio actual."
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3667,7 +3667,7 @@ msgstr ""
 "Executa o obxectivo ou o programa que se especificase na configuración de "
 "iniciar actual."
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:442
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
@@ -3679,14 +3679,14 @@ msgstr "Depurar"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:456
 #, fuzzy, kde-format
 #| msgid "Stop All Jobs"
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Deter todas as tarefas"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:457
 #, fuzzy, kde-format
 #| msgctxt "Short text for 'Stop All Jobs' used in the toolbar"
 #| msgid "Stop All"
@@ -3694,58 +3694,58 @@ msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Detelas todas"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Detén todas as tarefas que estean a executarse."
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Pide que se deteñan todas as tarefas que estean en execución."
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:467
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "@action"
 msgid "Stop"
 msgstr "Deter"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:469
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Deter"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Menú que permite deter tarefas individuais"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr "Lista de tarefas que poden deterse de maneira individual."
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:475
 #, fuzzy, kde-format
 #| msgid "Current Launch Configuration"
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Configuración de iniciar actual"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Configuración de inicio actual."
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
@@ -3753,19 +3753,19 @@ msgstr ""
 "Escolla a configuración de iniciar para executar cando se invoque a "
 "execución."
 
-#: shell/runcontroller.cpp:596
+#: shell/runcontroller.cpp:588
 #, fuzzy, kde-format
 #| msgid "<%1> Unnamed job"
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Tarefa sen nome"
 
-#: shell/runcontroller.cpp:973
+#: shell/runcontroller.cpp:965
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Novo iniciador de %1"
 
-#: shell/runcontroller.cpp:1010
+#: shell/runcontroller.cpp:1002
 #, fuzzy, kde-format
 #| msgid "%1 As..."
 msgctxt "@title:menu"

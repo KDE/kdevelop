@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-22 00:45+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-12-22 05:29+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -2128,19 +2128,19 @@ msgctxt "@title:window"
 msgid "Debug"
 msgstr "Діагностика"
 
-#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:442
+#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:440
 #, kde-format
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "Налагоджувальний запуск"
 
-#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:445
+#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "Діагностувати вади у поточному запуску"
 
-#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:446
+#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3374,24 +3374,24 @@ msgctxt "launch mode"
 msgid "Execute"
 msgstr "Виконання"
 
-#: shell/runcontroller.cpp:407
+#: shell/runcontroller.cpp:405
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
 msgstr "У поточних налаштуваннях запуску не передбачено підтримки режиму «%1»."
 
-#: shell/runcontroller.cpp:427
+#: shell/runcontroller.cpp:425
 #, kde-format
 msgctxt "@action"
 msgid "Configure Launches..."
 msgstr "Налаштувати запуски…"
 
-#: shell/runcontroller.cpp:430
+#: shell/runcontroller.cpp:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open Launch Configuration Dialog"
 msgstr "Відкрити діалогове вікно налаштування запуску"
 
-#: shell/runcontroller.cpp:431
+#: shell/runcontroller.cpp:429
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3401,25 +3401,25 @@ msgstr ""
 "Відкриває діалогове вікно для встановлення нових налаштувань запуску або "
 "зміни вже наявних."
 
-#: shell/runcontroller.cpp:434
+#: shell/runcontroller.cpp:432
 #, kde-format
 msgctxt "@action"
 msgid "Execute Launch"
 msgstr "Виконати запуск"
 
-#: shell/runcontroller.cpp:435
+#: shell/runcontroller.cpp:433
 #, kde-format
 msgctxt "@action Short text for 'Execute Launch' used in the toolbar"
 msgid "Execute"
 msgstr "Виконати"
 
-#: shell/runcontroller.cpp:437
+#: shell/runcontroller.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute current launch"
 msgstr "Виконати поточний запуск"
 
-#: shell/runcontroller.cpp:438
+#: shell/runcontroller.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3428,7 +3428,7 @@ msgid ""
 msgstr ""
 "Виконує ціль або програму, вказану у поточних активних налаштуваннях запуску."
 
-#: shell/runcontroller.cpp:444
+#: shell/runcontroller.cpp:442
 #, kde-format
 msgctxt "@action Short text for 'Debug Launch' used in the toolbar"
 msgid "Debug"
@@ -3439,85 +3439,85 @@ msgstr "Діагностика"
 #. profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 #. ac->addAction("run_profile", profileAction);
 #. connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
-#: shell/runcontroller.cpp:458
+#: shell/runcontroller.cpp:456
 #, kde-format
 msgctxt "@action"
 msgid "Stop All Jobs"
 msgstr "Зупинити всі завдання"
 
-#: shell/runcontroller.cpp:459
+#: shell/runcontroller.cpp:457
 #, kde-format
 msgctxt "@action Short text for 'Stop All Jobs' used in the toolbar"
 msgid "Stop All"
 msgstr "Зупинити всі"
 
-#: shell/runcontroller.cpp:462
+#: shell/runcontroller.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
 msgstr "Зупинити виконання всіх запущених завдань"
 
-#: shell/runcontroller.cpp:463
+#: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
 msgstr "Надіслати запит на припинення виконання всіх запущених завдань."
 
-#: shell/runcontroller.cpp:469
+#: shell/runcontroller.cpp:467
 #, kde-format
 msgctxt "@action"
 msgid "Stop"
 msgstr "Зупинити"
 
-#: shell/runcontroller.cpp:471
+#: shell/runcontroller.cpp:469
 #, kde-format
 msgctxt "@action Short text for 'Stop' used in the toolbar"
 msgid "Stop"
 msgstr "Зупинити"
 
-#: shell/runcontroller.cpp:472
+#: shell/runcontroller.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
 msgstr "Меню для призупинення окремих завдань"
 
-#: shell/runcontroller.cpp:473
+#: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
 msgstr ""
 "Показати список завдань, за допомогою якого можна зупинити окремі завдання."
 
-#: shell/runcontroller.cpp:477
+#: shell/runcontroller.cpp:475
 #, kde-format
 msgctxt "@title:menu"
 msgid "Current Launch Configuration"
 msgstr "Поточні налаштування запуску"
 
-#: shell/runcontroller.cpp:478
+#: shell/runcontroller.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Current launch configuration"
 msgstr "Поточні налаштування запуску"
 
-#: shell/runcontroller.cpp:479
+#: shell/runcontroller.cpp:477
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
 msgstr "Виберіть налаштування запуску, які буде використано."
 
-#: shell/runcontroller.cpp:596
+#: shell/runcontroller.cpp:588
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "<%1> Unnamed job"
 msgstr "<%1> Завдання без назви"
 
-#: shell/runcontroller.cpp:973
+#: shell/runcontroller.cpp:965
 #, kde-format
 msgid "New %1 Launcher"
 msgstr "Новий інструмент запуску %1"
 
-#: shell/runcontroller.cpp:1010
+#: shell/runcontroller.cpp:1002
 #, kde-format
 msgctxt "@title:menu"
 msgid "%1 As..."

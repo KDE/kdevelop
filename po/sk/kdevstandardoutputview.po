@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-04-17 20:48+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -16,89 +16,97 @@ msgstr ""
 "X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: outputwidget.cpp:53
+#: outputwidget.cpp:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr "Zadajte reťazec masky na filtrovanie zobrazenia výstupu"
+
+#: outputwidget.cpp:61
 #, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "Pohľad na výstup"
 
-#: outputwidget.cpp:64
+#: outputwidget.cpp:72
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "Zatvoriť aktuálne aktívny výstupný pohľad"
 
-#: outputwidget.cpp:70
+#: outputwidget.cpp:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "Zatvoriť všetky ostatné výstupné pohľady"
 
-#: outputwidget.cpp:81
+#: outputwidget.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "Predošlý výstup"
 
-#: outputwidget.cpp:84
+#: outputwidget.cpp:92
 #, kde-format
 msgctxt "@action"
 msgid "Next Output"
 msgstr "Ďalší výstup"
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:97
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "Vybrať aktivovanú položku"
 
-#: outputwidget.cpp:91
+#: outputwidget.cpp:99
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "Zamerať pri vybraní položky"
 
-#: outputwidget.cpp:105
+#: outputwidget.cpp:113
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "Prvá položka"
 
-#: outputwidget.cpp:109
+#: outputwidget.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Predošlá položka"
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Ďalšia položka"
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:125
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Posledná položka"
 
-#: outputwidget.cpp:130
+#: outputwidget.cpp:138
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr "Vyčistiť"
 
-#: outputwidget.cpp:141
+#: outputwidget.cpp:149
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Hľadať..."
 
-#: outputwidget.cpp:144
+#: outputwidget.cpp:724
 #, kde-format
-msgctxt "@info:tooltip"
-msgid "Enter a case-insensitive regular expression to filter the output view"
-msgstr "Zadajte reťazec masky na filtrovanie zobrazenia výstupu"
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
+msgstr ""
 
 #: standardoutputview.cpp:101
 #, kde-format
