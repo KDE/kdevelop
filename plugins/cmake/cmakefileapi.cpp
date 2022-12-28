@@ -263,6 +263,9 @@ CMakeProjectData parseReplyIndexFile(const ReplyIndex& replyIndex, const Path& s
         if (kind == QLatin1String("codemodel")) {
             codeModel = parseCodeModel(parseFile(jsonFilePath), replyDir,
                                        stringInterner, sourcePathInterner, buildPathInterner);
+            if (!codeModel.compilationData.isValid) {
+                break; // skip to printing a warning and the early return under the loop
+            }
         } else if (kind == QLatin1String("cmakeFiles")) {
             cmakeFiles = parseCMakeFiles(parseFile(jsonFilePath), sourcePathInterner, &lastModifiedCMakeFile);
         }
