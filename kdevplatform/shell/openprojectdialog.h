@@ -7,6 +7,8 @@
 #ifndef KDEVPLATFORM_OPENPROJECTDIALOG_H
 #define KDEVPLATFORM_OPENPROJECTDIALOG_H
 
+#include <util/scopeddialog.h>
+
 #include <QUrl>
 
 #include <KAssistantDialog>
@@ -34,6 +36,7 @@ public:
     OpenProjectDialog(bool fetch, const QUrl& startUrl,
                       const QUrl& repoUrl = QUrl(), IPlugin* vcsOrProviderPlugin = nullptr,
                       QWidget* parent = nullptr);
+    ~OpenProjectDialog() override;
 
     /**
     * Return a QUrl pointing to the project's .kdev file.
@@ -69,7 +72,7 @@ private:
     QString m_projectManager;
     bool m_urlIsDirectory;
     /// Used to select files when we aren't in KDE
-    QFileDialog* nativeDialog = nullptr;
+    ScopedDialog<QFileDialog> nativeDialog{NullScopedDialog()};
     KPageWidgetItem* sourcePage;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;

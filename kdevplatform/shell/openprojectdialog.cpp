@@ -133,7 +133,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
             currentPage = openPage;
         }
     } else {
-        nativeDialog = new QFileDialog(this, i18nc("@title:window", "Open Project"));
+        nativeDialog.assign(parent, i18nc("@title:window", "Open Project"));
         nativeDialog->setDirectoryUrl(start);
         nativeDialog->setFileMode(QFileDialog::Directory);
     }
@@ -155,6 +155,8 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     setCurrentPage( currentPage );
     setWindowTitle(i18nc("@title:window", "Open Project"));
 }
+
+OpenProjectDialog::~OpenProjectDialog() = default;
 
 bool OpenProjectDialog::execNativeDialog()
 {

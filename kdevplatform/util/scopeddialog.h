@@ -13,6 +13,13 @@
 
 namespace KDevelop {
 
+/// A tag that requests construction of a null ScopedDialog, avoids ambiguity with the variadic template constructor.
+struct NullScopedDialog
+{
+    // The explicit default constructor ensures that ambiguous code `ScopedDialog<QDialog> d{{}};` does not compile.
+    explicit constexpr NullScopedDialog() noexcept = default;
+};
+
 /**
  * Wrapper class for QDialogs which should not be instantiated on stack.
  *
@@ -64,6 +71,18 @@ public:
     ~ScopedDialog()
     {
         delete ptr;
+    }
+
+    /// Construct a null scoped dialog, i.e. don't create a DialogType but initialize the dialog pointer with nullptr
+    explicit ScopedDialog(NullScopedDialog)
+    {
+    }
+    /// Destroy the previous dialog if present, then create a dialog with arguments accepted by DialogType()
+    template<typename... Arguments>
+    void assign(Arguments&&... args)
+    {
+        delete ptr;
+        ptr = new DialogType(std::forward<Arguments>(args)...);
     }
 
     /// Access the raw pointer to the dialog
