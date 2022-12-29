@@ -97,7 +97,6 @@ public:
     QString iconName;
     int row = -1;
     uint m_pathIndex = 0;
-    ProjectBaseItem::ProjectItemType type;
     Qt::ItemFlags flags;
 
     ProjectBaseItem::RenameStatus renameBaseItem(ProjectBaseItem* item, const QString& newName)
