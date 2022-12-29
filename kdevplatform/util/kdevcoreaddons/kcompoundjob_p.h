@@ -6,25 +6,25 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KCOMPOSITEJOB_P_H
-#define KCOMPOSITEJOB_P_H
+#ifndef KCOMPOUNDJOB_P_H
+#define KCOMPOUNDJOB_P_H
 
-#include "kcompositejob.h"
+#include "kcompoundjob.h"
 
 #include "kjob_p.h"
 
 // This is a private class, but it's exported for
 // KIO::Job's usage. Other Job classes in kdelibs may
 // use it too.
-class KCOREADDONS_EXPORT KCompositeJobPrivate : public KJobPrivate
+class KCOREADDONS_EXPORT KCompoundJobPrivate : public KJobPrivate
 {
 public:
-    KCompositeJobPrivate();
-    ~KCompositeJobPrivate() override;
+    KCompoundJobPrivate();
+    ~KCompoundJobPrivate() override;
 
     QList<KJob *> subjobs;
 
-    Q_DECLARE_PUBLIC(KCompositeJob)
+    Q_DECLARE_PUBLIC(KCompoundJob)
 };
 
 #endif

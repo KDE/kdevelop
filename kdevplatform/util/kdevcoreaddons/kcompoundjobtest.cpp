@@ -5,7 +5,7 @@
     SPDX-License-Identifier: LGPL-2.0-only
 */
 
-#include "kcompositejobtest.h"
+#include "kcompoundjobtest.h"
 
 #include <QSignalSpy>
 #include <QTest>
@@ -37,12 +37,12 @@ void CompositeJob::start()
 
 bool CompositeJob::addSubjob(KJob *job)
 {
-    return KCompositeJob::addSubjob(job);
+    return KCompoundJob::addSubjob(job);
 }
 
 void CompositeJob::slotResult(KJob *job)
 {
-    KCompositeJob::slotResult(job);
+    KCompoundJob::slotResult(job);
 
     if (!error() && hasSubjobs()) {
         // start next
@@ -54,7 +54,7 @@ void CompositeJob::slotResult(KJob *job)
     }
 }
 
-KCompositeJobTest::KCompositeJobTest()
+KCompoundJobTest::KCompoundJobTest()
     : loop(this)
 {
 }
@@ -65,7 +65,7 @@ KCompositeJobTest::KCompositeJobTest()
  *
  * see bug: https://bugs.kde.org/show_bug.cgi?id=230692
  */
-void KCompositeJobTest::testDeletionDuringExecution()
+void KCompoundJobTest::testDeletionDuringExecution()
 {
     QObject *someParent = new QObject;
     KJob *job = new TestJob(someParent);
@@ -80,7 +80,7 @@ void KCompositeJobTest::testDeletionDuringExecution()
     // check if job got reparented properly
     delete someParent;
     someParent = nullptr;
-    // the job should still exist, because it is a child of KCompositeJob now
+    // the job should still exist, because it is a child of KCompoundJob now
     QCOMPARE(destroyed_spy.size(), 0);
 
     // start async, the subjob takes 1 second to finish
@@ -93,4 +93,4 @@ void KCompositeJobTest::testDeletionDuringExecution()
     QCOMPARE(destroyed_spy.size(), 1);
 }
 
-QTEST_GUILESS_MAIN(KCompositeJobTest)
+QTEST_GUILESS_MAIN(KCompoundJobTest)

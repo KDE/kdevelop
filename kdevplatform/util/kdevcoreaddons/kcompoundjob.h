@@ -6,37 +6,37 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KCOMPOSITEJOB_H
-#define KCOMPOSITEJOB_H
+#ifndef KCOMPOUNDJOB_H
+#define KCOMPOUNDJOB_H
 
 #include <kcoreaddons_export.h>
 #include <kjob.h>
 
 #include <QList>
 
-class KCompositeJobPrivate;
+class KCompoundJobPrivate;
 /**
- * @class KCompositeJob kcompositejob.h KCompositeJob
+ * @class KCompoundJob kcompoundjob.h KCompoundJob
  *
  * The base class for all jobs able to be composed of one
  * or more subjobs.
  */
-class KCOREADDONS_EXPORT KCompositeJob : public KJob
+class KCOREADDONS_EXPORT KCompoundJob : public KJob
 {
     Q_OBJECT
 
 public:
     /**
-     * Creates a new KCompositeJob object.
+     * Creates a new KCompoundJob object.
      *
      * @param parent the parent QObject
      */
-    explicit KCompositeJob(QObject *parent = nullptr);
+    explicit KCompoundJob(QObject *parent = nullptr);
 
     /**
-     * Destroys a KCompositeJob object.
+     * Destroys a KCompoundJob object.
      */
-    ~KCompositeJob() override;
+    ~KCompoundJob() override;
 
 protected:
     /**
@@ -104,10 +104,10 @@ protected Q_SLOTS:
     virtual void slotInfoMessage(KJob *job, const QString &plain, const QString &rich);
 
 protected:
-    KCompositeJob(KCompositeJobPrivate &dd, QObject *parent);
+    KCompoundJob(KCompoundJobPrivate &dd, QObject *parent);
 
 private:
-    Q_DECLARE_PRIVATE(KCompositeJob)
+    Q_DECLARE_PRIVATE(KCompoundJob)
 };
 
 #endif

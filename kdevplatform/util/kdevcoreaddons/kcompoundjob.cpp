@@ -6,83 +6,83 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "kcompositejob.h"
-#include "kcompositejob_p.h"
+#include "kcompoundjob.h"
+#include "kcompoundjob_p.h"
 
-KCompositeJobPrivate::KCompositeJobPrivate()
+KCompoundJobPrivate::KCompoundJobPrivate()
 {
 }
 
-KCompositeJobPrivate::~KCompositeJobPrivate()
+KCompoundJobPrivate::~KCompoundJobPrivate()
 {
 }
 
-KCompositeJob::KCompositeJob(QObject *parent)
-    : KJob(*new KCompositeJobPrivate, parent)
+KCompoundJob::KCompoundJob(QObject *parent)
+    : KJob(*new KCompoundJobPrivate, parent)
 {
 }
 
-KCompositeJob::KCompositeJob(KCompositeJobPrivate &dd, QObject *parent)
+KCompoundJob::KCompoundJob(KCompoundJobPrivate &dd, QObject *parent)
     : KJob(dd, parent)
 {
 }
 
-KCompositeJob::~KCompositeJob()
+KCompoundJob::~KCompoundJob()
 {
 }
 
-bool KCompositeJob::addSubjob(KJob *job)
+bool KCompoundJob::addSubjob(KJob *job)
 {
-    Q_D(KCompositeJob);
+    Q_D(KCompoundJob);
     if (job == nullptr || d->subjobs.contains(job)) {
         return false;
     }
 
     job->setParent(this);
     d->subjobs.append(job);
-    connect(job, &KJob::result, this, &KCompositeJob::slotResult);
+    connect(job, &KJob::result, this, &KCompoundJob::slotResult);
 
     // Forward information from that subjob.
-    connect(job, &KJob::infoMessage, this, &KCompositeJob::slotInfoMessage);
+    connect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
 
     return true;
 }
 
-bool KCompositeJob::removeSubjob(KJob *job)
+bool KCompoundJob::removeSubjob(KJob *job)
 {
-    Q_D(KCompositeJob);
+    Q_D(KCompoundJob);
     // remove only Subjobs that are on the list
     if (d->subjobs.removeAll(job) > 0) {
         job->setParent(nullptr);
-        disconnect(job, &KJob::result, this, &KCompositeJob::slotResult);
-        disconnect(job, &KJob::infoMessage, this, &KCompositeJob::slotInfoMessage);
+        disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
+        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
         return true;
     }
     return false;
 }
 
-bool KCompositeJob::hasSubjobs() const
+bool KCompoundJob::hasSubjobs() const
 {
     return !d_func()->subjobs.isEmpty();
 }
 
-const QList<KJob *> &KCompositeJob::subjobs() const
+const QList<KJob *> &KCompoundJob::subjobs() const
 {
     return d_func()->subjobs;
 }
 
-void KCompositeJob::clearSubjobs()
+void KCompoundJob::clearSubjobs()
 {
-    Q_D(KCompositeJob);
+    Q_D(KCompoundJob);
     for (KJob *job : std::as_const(d->subjobs)) {
         job->setParent(nullptr);
-        disconnect(job, &KJob::result, this, &KCompositeJob::slotResult);
-        disconnect(job, &KJob::infoMessage, this, &KCompositeJob::slotInfoMessage);
+        disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
+        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
     }
     d->subjobs.clear();
 }
 
-void KCompositeJob::slotResult(KJob *job)
+void KCompoundJob::slotResult(KJob *job)
 {
     // Did job have an error ?
     if (job->error() && !error()) {
@@ -97,9 +97,9 @@ void KCompositeJob::slotResult(KJob *job)
     removeSubjob(job);
 }
 
-void KCompositeJob::slotInfoMessage(KJob *job, const QString &plain, const QString &rich)
+void KCompoundJob::slotInfoMessage(KJob *job, const QString &plain, const QString &rich)
 {
     Q_EMIT infoMessage(job, plain, rich);
 }
 
-#include "moc_kcompositejob.cpp"
+#include "moc_kcompoundjob.cpp"

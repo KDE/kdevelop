@@ -5,13 +5,13 @@
     SPDX-License-Identifier: LGPL-2.0-only
 */
 
-#ifndef KCOMPOSITEJOBTEST_H
-#define KCOMPOSITEJOBTEST_H
+#ifndef KCOMPOUNDJOBTEST_H
+#define KCOMPOUNDJOBTEST_H
 
 #include <QEventLoop>
 #include <QObject>
 
-#include "kcompositejob.h"
+#include "kcompoundjob.h"
 
 class TestJob : public KJob
 {
@@ -27,13 +27,13 @@ private Q_SLOTS:
     void doEmit();
 };
 
-class CompositeJob : public KCompositeJob
+class CompositeJob : public KCompoundJob
 {
     Q_OBJECT
 
 public:
     explicit CompositeJob(QObject *parent = nullptr)
-        : KCompositeJob(parent)
+        : KCompoundJob(parent)
     {
     }
 
@@ -44,12 +44,12 @@ protected Q_SLOTS:
     void slotResult(KJob *job) override;
 };
 
-class KCompositeJobTest : public QObject
+class KCompoundJobTest : public QObject
 {
     Q_OBJECT
 
 public:
-    KCompositeJobTest();
+    KCompoundJobTest();
 
 private Q_SLOTS:
     void testDeletionDuringExecution();
@@ -58,4 +58,4 @@ private:
     QEventLoop loop;
 };
 
-#endif // KCOMPOSITEJOBTEST_H
+#endif // KCOMPOUNDJOBTEST_H
