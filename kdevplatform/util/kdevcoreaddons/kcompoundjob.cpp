@@ -18,13 +18,15 @@ KCompoundJobPrivate::~KCompoundJobPrivate()
 }
 
 KCompoundJob::KCompoundJob(QObject *parent)
-    : KJob(*new KCompoundJobPrivate, parent)
+    : KCompoundJob(*new KCompoundJobPrivate, parent)
 {
 }
 
 KCompoundJob::KCompoundJob(KCompoundJobPrivate &dd, QObject *parent)
-    : KJob(dd, parent)
+    : KJob(parent)
+    , d_ptr(&dd)
 {
+    d_ptr->q_ptr = this;
 }
 
 KCompoundJob::~KCompoundJob()

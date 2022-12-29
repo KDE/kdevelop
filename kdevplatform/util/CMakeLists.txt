@@ -17,6 +17,7 @@ set(KDevPlatformUtil_LIB_SRCS
     environmentprofilelist.cpp
     jobstatus.cpp
     activetooltip.cpp
+    kdevcoreaddons/kcompoundjob.cpp
     executecompositejob.cpp
     shellutils.cpp
     multilevellistview.cpp
@@ -100,3 +101,7 @@ install( FILES
     texteditorhelpers.h
     ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util COMPONENT Devel)
+
+install( FILES
+    kdevcoreaddons/kcompoundjob.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util/kdevcoreaddons COMPONENT Devel)

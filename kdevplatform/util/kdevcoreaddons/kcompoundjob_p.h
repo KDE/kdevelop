@@ -11,16 +11,16 @@
 
 #include "kcompoundjob.h"
 
-#include "kjob_p.h"
-
 // This is a private class, but it's exported for
 // KIO::Job's usage. Other Job classes in kdelibs may
 // use it too.
-class KCOREADDONS_EXPORT KCompoundJobPrivate : public KJobPrivate
+class KDEVPLATFORMUTIL_EXPORT KCompoundJobPrivate
 {
 public:
     KCompoundJobPrivate();
-    ~KCompoundJobPrivate() override;
+    virtual ~KCompoundJobPrivate();
+
+    KJob *q_ptr = nullptr;
 
     QList<KJob *> subjobs;
 

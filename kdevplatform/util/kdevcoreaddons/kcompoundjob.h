@@ -9,8 +9,9 @@
 #ifndef KCOMPOUNDJOB_H
 #define KCOMPOUNDJOB_H
 
-#include <kcoreaddons_export.h>
-#include <kjob.h>
+#include <util/utilexport.h>
+
+#include <KJob>
 
 #include <QList>
 
@@ -21,7 +22,7 @@ class KCompoundJobPrivate;
  * The base class for all jobs able to be composed of one
  * or more subjobs.
  */
-class KCOREADDONS_EXPORT KCompoundJob : public KJob
+class KDEVPLATFORMUTIL_EXPORT KCompoundJob : public KJob
 {
     Q_OBJECT
 
@@ -104,6 +105,7 @@ protected Q_SLOTS:
     virtual void slotInfoMessage(KJob *job, const QString &plain, const QString &rich);
 
 protected:
+    std::unique_ptr<KCompoundJobPrivate> const d_ptr;
     KCompoundJob(KCompoundJobPrivate &dd, QObject *parent);
 
 private:
