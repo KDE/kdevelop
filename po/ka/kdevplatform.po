@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-11-04 07:22+0100\n"
+"PO-Revision-Date: 2022-12-28 09:20+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -121,7 +121,7 @@ msgstr ""
 #: debugger/breakpoint/breakpointmodel.cpp:114
 #, kde-format
 msgid "Breakpoint"
-msgstr ""
+msgstr "გამართვის წერტილი"
 
 #: debugger/breakpoint/breakpointmodel.cpp:156
 #, kde-format
@@ -271,7 +271,7 @@ msgstr[1] "%2 (%1-ჯერ)"
 #, kde-format
 msgctxt "#thread-id at function-name or address"
 msgid "#%1 at %2 (crashed)"
-msgstr ""
+msgstr "#%1 მისამართზე %2 (ავარია)"
 
 #: debugger/framestack/framestackmodel.cpp:180
 #, kde-format
@@ -994,7 +994,7 @@ msgstr ""
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
-msgstr ""
+msgstr "<ანონიმური>"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
 #, kde-format
@@ -1567,7 +1567,7 @@ msgstr "<i>%1</i> საქაღალდის წაშლა შეუძლ
 #: project/helper.cpp:68
 #, kde-format
 msgid "Cannot remove file <i>%1</i>."
-msgstr ""
+msgstr "შეცდომა ფაილის წაშლისას: <i>%1</i>."
 
 #: project/helper.cpp:86
 #, kde-format
@@ -1634,7 +1634,7 @@ msgstr "აირჩიეთ..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Select an Item"
-msgstr ""
+msgstr "აირჩიეთ ელემენტი"
 
 #: project/projectitemlineedit.cpp:192
 #, kde-format
@@ -1709,8 +1709,8 @@ msgstr ""
 #, kde-format
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "წინა სესია ავარიულად დასრულდა."
+msgstr[1] "წინა %1 სესია ავარიულად დასრულდა."
 
 #: serialization/itemrepositoryregistry.cpp:77
 #, kde-format
@@ -2416,7 +2416,7 @@ msgstr ""
 #: shell/mainwindow.cpp:445
 #, kde-format
 msgid " (read only)"
-msgstr "(მხოლოდ-კითხვადი)"
+msgstr " (მხოლოდ-კითხვადი)"
 
 #: shell/mainwindow_p.cpp:221
 #, kde-format
@@ -2632,13 +2632,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Top/Bottom"
-msgstr ""
+msgstr "ხედის ზედა/ქვედაზე გაყოფა"
 
 #: shell/mainwindow_p.cpp:351
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Split View Left/Right"
-msgstr ""
+msgstr "ხედის მარჯვენა/მარცხენაზე გაყოფა"
 
 #: shell/mainwindow_p.cpp:355
 #, kde-format
@@ -4554,7 +4554,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show close buttons on tabs"
-msgstr ""
+msgstr "ჩანართებზე დახურვის ღილაკების ჩვენება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/uiconfig.ui:145
@@ -4893,7 +4893,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "შენახვა საკუჭნაოში"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:321
 #, kde-format

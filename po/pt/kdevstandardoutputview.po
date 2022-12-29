@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2020-10-16 09:56+0100\n"
+"PO-Revision-Date: 2022-12-28 18:41+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -109,7 +109,7 @@ msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
 "error"
 msgid "Filter regular expression pattern error at offset %1: %2"
-msgstr ""
+msgstr "Erro do padrão de expressão regular de filtragem na posição %1: %2"
 
 #: standardoutputview.cpp:101
 #, kde-format
