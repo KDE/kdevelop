@@ -70,7 +70,7 @@ public:
      * The just returned must be started in one way or another for this method
      * to have any affect. The job will then auto-delete itself upon completion.
      */
-    Q_REQUIRED_RESULT KIO::Job* eventuallyReadFolder(ProjectFolderItem* item);
+    Q_REQUIRED_RESULT KJob* eventuallyReadFolder(ProjectFolderItem* item);
     void addJobItems(FileManagerListJob* job,
                      ProjectFolderItem* baseItem,
                      const KIO::UDSEntryList& entries);
@@ -102,7 +102,7 @@ void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
         // see also addLotsOfFiles test
         for (FileManagerListJob* job : *projectJobIt) {
             qCDebug(FILEMANAGER) << "killing project job:" << job;
-            job->abort();
+            job->kill();
         }
         m_projectJobs.remove(project);
     }
@@ -121,7 +121,7 @@ void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
     m_filters.remove(project);
 }
 
-KIO::Job* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderItem* item)
+KJob* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderItem* item)
 {
     auto* listJob = new FileManagerListJob( item );
     m_projectJobs[ item->project() ] << listJob;
@@ -620,7 +620,7 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
                 emit folderRemoved(item->folder());
             }
             delete item;
-            KIO::Job *readJob = d->eventuallyReadFolder(newParent);
+            auto* const readJob = d->eventuallyReadFolder(newParent);
             // reload first level synchronously, deeper levels will run async
             // this is required for code that expects the new item to exist after
             // this method finished
@@ -645,7 +645,7 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const Path::List& items, Pro
 
         success &= copyUrl(newParent->project(), item.toUrl(), newParent->path().toUrl());
         if ( success ) {
-            KIO::Job *readJob = d->eventuallyReadFolder(newParent);
+            auto* const readJob = d->eventuallyReadFolder(newParent);
             // reload first level synchronously, deeper levels will run async
             // this is required for code that expects the new item to exist after
             // this method finished

@@ -11,7 +11,9 @@
 
 #include "path.h"
 #include "debug.h"
-// Qt
+
+#include <KIO/ListJob>
+
 #include <QtConcurrentRun>
 #include <QDir>
 
@@ -47,10 +49,12 @@ private:
 };
 
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
-    : KIO::Job(), m_item(item), m_aborted(false), m_listing(1)
+    : m_item(item)
+    , m_listing(1)
 {
+    setCapabilities(Killable);
+
     qRegisterMetaType<KIO::UDSEntryList>("KIO::UDSEntryList");
-    qRegisterMetaType<KIO::Job*>();
     qRegisterMetaType<KJob*>();
 
     /* the following line is not an error in judgment, apparently starting a
@@ -68,7 +72,7 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
 FileManagerListJob::~FileManagerListJob()
 {
     // abort and lock to ensure our background list job is stopped
-    m_aborted = true;
+    doKill();
     m_listing.acquire();
     Q_ASSERT(m_listing.available() == 0);
 }
@@ -89,19 +93,19 @@ void FileManagerListJob::handleRemovedItem(ProjectBaseItem* item)
     m_listQueue.removeAll(folder);
 
     if (isChildItem(item, m_item)) {
-        abort();
+        kill();
     }
 }
 
-void FileManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
+void FileManagerListJob::remoteFolderSubjobEntriesFound(KJob* job, const KIO::UDSEntryList& foundEntries)
 {
     Q_UNUSED(job);
-    entryList.append(entriesIn);
+    entryList.append(foundEntries);
 }
 
 void FileManagerListJob::startNextJob()
 {
-    if ( m_listQueue.isEmpty() || m_aborted ) {
+    if (m_listQueue.empty() || isCanceled()) {
         return;
     }
 
@@ -116,12 +120,12 @@ void FileManagerListJob::startNextJob()
         m_listing.acquire();
         QtConcurrent::run([this] (const Path& path) {
             SemaReleaser lock(&m_listing);
-            if (m_aborted) {
+            if (isCanceled()) {
                 return;
             }
             QDir dir(path.toLocalFile());
             const auto entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden);
-            if (m_aborted) {
+            if (isCanceled()) {
                 return;
             }
             KIO::UDSEntryList results;
@@ -141,31 +145,29 @@ void FileManagerListJob::startNextJob()
     } else {
         KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
         job->addMetaData(QStringLiteral("details"), QStringLiteral("0"));
-        job->setParentJob( this );
-        connect( job, &KIO::ListJob::entries,
-                this, &FileManagerListJob::slotEntries );
-        connect( job, &KIO::ListJob::result, this, &FileManagerListJob::slotResult );
+        connect(job, &KIO::ListJob::entries, this, &FileManagerListJob::remoteFolderSubjobEntriesFound);
+        connect(job, &KJob::finished, this, &FileManagerListJob::remoteFolderSubjobFinished);
+
+        m_remoteFolderSubjob = job;
     }
 }
 
-void FileManagerListJob::slotResult(KJob* job)
+void FileManagerListJob::remoteFolderSubjobFinished(KJob* job)
 {
-    if (m_aborted) {
-        return;
-    }
-
     if( job && job->error() ) {
         qCDebug(FILEMANAGER) << "error in list job:" << job->error() << job->errorString();
     }
+
+    Q_ASSERT(m_remoteFolderSubjob == job);
+    m_remoteFolderSubjob = nullptr;
 
     handleResults(entryList);
     entryList.clear();
 }
 
-
 void FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
 {
-    if (m_aborted) {
+    if (isCanceled()) {
         return;
     }
 
@@ -190,18 +192,23 @@ void FileManagerListJob::handleResults(const KIO::UDSEntryList& entriesIn)
     }
 }
 
-void FileManagerListJob::abort()
-{
-    m_aborted = true;
-
-    bool killed = kill();
-    Q_ASSERT(killed);
-    Q_UNUSED(killed);
-}
-
 void FileManagerListJob::start()
 {
     startNextJob();
+}
+
+bool FileManagerListJob::doKill()
+{
+    m_canceled.store(true, std::memory_order_relaxed);
+    if (m_remoteFolderSubjob) {
+        m_remoteFolderSubjob->kill();
+    }
+    return true;
+}
+
+bool FileManagerListJob::isCanceled() const
+{
+    return m_canceled.load(std::memory_order_relaxed);
 }
 
 #include "moc_filemanagerlistjob.cpp"

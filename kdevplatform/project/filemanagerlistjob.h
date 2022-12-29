@@ -7,9 +7,13 @@
 #ifndef KDEVPLATFORM_FILEMANAGERLISTJOB_H
 #define KDEVPLATFORM_FILEMANAGERLISTJOB_H
 
-#include <KIO/Job>
+#include <KIO/UDSEntry>
+#include <KJob>
+
 #include <QQueue>
 #include <QSemaphore>
+
+#include <atomic>
 
 // uncomment to time import jobs
 // #define TIME_IMPORT_JOB
@@ -24,7 +28,7 @@ namespace KDevelop
 class ProjectFolderItem;
 class ProjectBaseItem;
 
-class FileManagerListJob : public KIO::Job
+class FileManagerListJob : public KJob
 {
     Q_OBJECT
 
@@ -35,7 +39,6 @@ public:
     void addSubDir(ProjectFolderItem* item);
     void handleRemovedItem(ProjectBaseItem* item);
 
-    void abort();
     void start() override;
 
 Q_SIGNALS:
@@ -43,20 +46,29 @@ Q_SIGNALS:
                  const KIO::UDSEntryList& entries);
     void nextJob();
 
+protected:
+    bool doKill() override;
+
 private Q_SLOTS:
-    void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
-    void slotResult(KJob* job) override;
+    void remoteFolderSubjobEntriesFound(KJob* job, const KIO::UDSEntryList& foundEntries);
+    void remoteFolderSubjobFinished(KJob* job);
     void handleResults(const KIO::UDSEntryList& entries);
     void startNextJob();
 
 private:
+    bool isCanceled() const;
 
     QQueue<ProjectFolderItem*> m_listQueue;
     /// current base dir
     ProjectFolderItem* m_item;
+
+    std::atomic<bool> m_canceled = false;
+
+    // This data is used when the currently processed folder is remote.
+    KJob* m_remoteFolderSubjob = nullptr;
     KIO::UDSEntryList entryList;
-    // kill does not delete the job instantaneously
-    QAtomicInt m_aborted;
+
+    // This data is used when the currently processed folder is local.
     QSemaphore m_listing;
 
 #ifdef TIME_IMPORT_JOB
