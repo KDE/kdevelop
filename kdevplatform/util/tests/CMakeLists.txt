@@ -28,6 +28,9 @@ ecm_add_test(test_foregroundlock.cpp
 ecm_add_test(../kdevcoreaddons/kcompoundjobtest.cpp
     LINK_LIBRARIES Qt5::Test KDev::Util)
 
+ecm_add_test(../kdevcoreaddons/ksequentialcompoundjobtest.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Util)
+
 ecm_add_test(test_executecompositejob.cpp
     LINK_LIBRARIES Qt5::Test KDev::Util)
 

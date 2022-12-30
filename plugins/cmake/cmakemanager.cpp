@@ -249,7 +249,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item, bool forceConfigure
     Q_ASSERT(!jobs.contains(nullptr));
     auto* composite = new ExecuteCompositeJob(this, jobs);
     // even if the cmake call failed, we want to load the project so that the project can be worked on
-    composite->setAbortOnError(false);
+    composite->setAbortOnSubjobError(false);
     return composite;
 }
 

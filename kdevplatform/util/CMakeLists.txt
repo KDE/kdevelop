@@ -18,6 +18,7 @@ set(KDevPlatformUtil_LIB_SRCS
     jobstatus.cpp
     activetooltip.cpp
     kdevcoreaddons/kcompoundjob.cpp
+    kdevcoreaddons/ksequentialcompoundjob.cpp
     executecompositejob.cpp
     shellutils.cpp
     multilevellistview.cpp
@@ -104,4 +105,6 @@ install( FILES
 
 install( FILES
     kdevcoreaddons/kcompoundjob.h
+    kdevcoreaddons/ksequentialcompoundjob.h
+    kdevcoreaddons/ksimplesequentialcompoundjob.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/util/kdevcoreaddons COMPONENT Devel)

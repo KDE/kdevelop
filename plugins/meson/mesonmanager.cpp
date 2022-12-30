@@ -323,7 +323,7 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 
     Q_ASSERT(!jobs.contains(nullptr));
     auto composite = new ExecuteCompositeJob(this, jobs);
-    composite->setAbortOnError(false);
+    composite->setAbortOnSubjobError(false);
     return composite;
 }
 
