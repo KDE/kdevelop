@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-11-13 00:10+0100\n"
+"PO-Revision-Date: 2022-12-22 22:21+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -418,7 +418,7 @@ msgstr "Variabili del debugger"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Ridimensiona automaticamente colonne al clic"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format

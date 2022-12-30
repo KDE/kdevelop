@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-12-28 09:20+0100\n"
+"PO-Revision-Date: 2022-12-29 10:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -77,29 +77,29 @@ msgstr "შემდეგი მოხვედრა"
 #: debugger/breakpoint/breakpointdetails.cpp:112
 #, kde-format
 msgid "Breakpoint is <a href=\"pending\">pending</a>"
-msgstr ""
+msgstr "გამართვის წერტილი <a href=\"pending\">ელოდება</a>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:115
 #, kde-format
 msgid "Breakpoint is <a href=\"dirty\">dirty</a>"
-msgstr ""
+msgstr "გამართვის წერტილი<a href=\"dirty\">ბინძურია</a>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:118
 #, kde-format
 msgid "Breakpoint is active"
-msgstr ""
+msgstr "გამართვის წერტილი აქტიურია"
 
 #: debugger/breakpoint/breakpointdetails.cpp:125
 #, kde-format
 msgid "Hit %1 time"
 msgid_plural "Hit %1 times"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "მიღწეულია %1-ჯერ"
+msgstr[1] "მიღწეულია %1-ჯერ"
 
 #: debugger/breakpoint/breakpointdetails.cpp:129
 #, kde-format
 msgid "Breakpoint has errors"
-msgstr ""
+msgstr "გამართვის წერტილის შეცდომები"
 
 #: debugger/breakpoint/breakpointdetails.cpp:142
 #, kde-format
@@ -126,7 +126,7 @@ msgstr "გამართვის წერტილი"
 #: debugger/breakpoint/breakpointmodel.cpp:156
 #, kde-format
 msgid "Breakpoint not found"
-msgstr ""
+msgstr "გამართვის წერტილი ვერ ვიპოვე"
 
 #: debugger/breakpoint/breakpointmodel.cpp:156
 #, kde-format
@@ -136,17 +136,17 @@ msgstr ""
 #: debugger/breakpoint/breakpointmodel.cpp:162
 #, kde-format
 msgid "&Breakpoint"
-msgstr ""
+msgstr "&გამართვის წერტილი"
 
 #: debugger/breakpoint/breakpointmodel.cpp:168
 #, kde-format
 msgid "&Disable Breakpoint"
-msgstr ""
+msgstr "&გამართვის წერტილის გამორთვა"
 
 #: debugger/breakpoint/breakpointmodel.cpp:169
 #, kde-format
 msgid "&Enable Breakpoint"
-msgstr ""
+msgstr "&გამართვის წერტილის ჩართვა"
 
 #: debugger/breakpoint/breakpointmodel.cpp:172
 #, kde-format
@@ -208,7 +208,7 @@ msgstr ""
 #: debugger/breakpoint/breakpointwidget.cpp:85
 #, kde-format
 msgid "Enter condition ..."
-msgstr ""
+msgstr "შეიყვანეთ პირობა ..."
 
 #: debugger/breakpoint/breakpointwidget.cpp:117
 #, kde-format
@@ -923,7 +923,7 @@ msgstr "ტიპი: "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:226
 #, kde-format
 msgid "Enum: "
-msgstr ""
+msgstr "სია: "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:228
 #, kde-format
@@ -988,7 +988,7 @@ msgstr "გამოყენების ჩვენება"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:357
 #, kde-format
 msgid "Show documentation for "
-msgstr ""
+msgstr "დოკუმენტაციის ჩვენება "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:463
 #, kde-format
