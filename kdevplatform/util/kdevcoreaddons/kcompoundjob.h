@@ -15,6 +15,8 @@
 
 #include <QList>
 
+namespace KDevCoreAddons
+{
 class KCompoundJobPrivate;
 /**
  * @class KCompoundJob kcompoundjob.h KCompoundJob
@@ -111,5 +113,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KCompoundJob)
 };
+
+} // namespace KDevCoreAddons
 
 #endif

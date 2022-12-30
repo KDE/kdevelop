@@ -13,6 +13,8 @@
 
 #include "kcompoundjob.h"
 
+using namespace KDevCoreAddons;
+
 class TestJob : public KJob
 {
     Q_OBJECT

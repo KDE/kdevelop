@@ -9,6 +9,8 @@
 #include "kcompoundjob.h"
 #include "kcompoundjob_p.h"
 
+using namespace KDevCoreAddons;
+
 KCompoundJobPrivate::KCompoundJobPrivate()
 {
 }

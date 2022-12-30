@@ -11,6 +11,8 @@
 
 #include "kcompoundjob.h"
 
+namespace KDevCoreAddons
+{
 // This is a private class, but it's exported for
 // KIO::Job's usage. Other Job classes in kdelibs may
 // use it too.
@@ -26,5 +28,7 @@ public:
 
     Q_DECLARE_PUBLIC(KCompoundJob)
 };
+
+} // namespace KDevCoreAddons
 
 #endif
