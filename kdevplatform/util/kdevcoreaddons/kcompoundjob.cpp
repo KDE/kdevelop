@@ -38,12 +38,12 @@ KCompoundJob::~KCompoundJob()
 bool KCompoundJob::addSubjob(KJob *job)
 {
     Q_D(KCompoundJob);
-    if (job == nullptr || d->subjobs.contains(job)) {
+    if (job == nullptr || d->m_subjobs.contains(job)) {
         return false;
     }
 
     job->setParent(this);
-    d->subjobs.append(job);
+    d->m_subjobs.append(job);
     connect(job, &KJob::result, this, &KCompoundJob::slotResult);
 
     // Forward information from that subjob.
@@ -56,7 +56,7 @@ bool KCompoundJob::removeSubjob(KJob *job)
 {
     Q_D(KCompoundJob);
     // remove only Subjobs that are on the list
-    if (d->subjobs.removeAll(job) > 0) {
+    if (d->m_subjobs.removeAll(job) > 0) {
         job->setParent(nullptr);
         disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
         disconnect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
@@ -67,23 +67,23 @@ bool KCompoundJob::removeSubjob(KJob *job)
 
 bool KCompoundJob::hasSubjobs() const
 {
-    return !d_func()->subjobs.isEmpty();
+    return !d_func()->m_subjobs.isEmpty();
 }
 
 const QList<KJob *> &KCompoundJob::subjobs() const
 {
-    return d_func()->subjobs;
+    return d_func()->m_subjobs;
 }
 
 void KCompoundJob::clearSubjobs()
 {
     Q_D(KCompoundJob);
-    for (KJob *job : std::as_const(d->subjobs)) {
+    for (KJob *job : std::as_const(d->m_subjobs)) {
         job->setParent(nullptr);
         disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
         disconnect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
     }
-    d->subjobs.clear();
+    d->m_subjobs.clear();
 }
 
 void KCompoundJob::slotResult(KJob *job)

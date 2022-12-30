@@ -24,7 +24,7 @@ public:
 
     KJob *q_ptr = nullptr;
 
-    QList<KJob *> subjobs;
+    QList<KJob *> m_subjobs;
 
     Q_DECLARE_PUBLIC(KCompoundJob)
 };
