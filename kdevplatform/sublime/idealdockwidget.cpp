@@ -12,6 +12,8 @@
 #include "document.h"
 #include "view.h"
 
+#include <util/scopeddialog.h>
+
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -82,8 +84,8 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     Q_ASSERT(senderWidget);
 
-    QMenu menu;
-    menu.addSection(windowIcon(), m_view->document()->title());
+    KDevelop::ScopedDialog<QMenu> menu(senderWidget);
+    menu->addSection(windowIcon(), m_view->document()->title());
 
     const QList<QAction*> viewActions = m_view->contextMenuActions();
     if(!viewActions.isEmpty()) {
@@ -92,20 +94,20 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         for (const auto action : viewActions) {
             if (!action->text().isEmpty() && !action->iconText().isEmpty()) {
                 // avoid adding empty menu items
-                menu.addAction(action);
+                menu->addAction(action);
             }
         }
-        menu.addSeparator();
+        menu->addSeparator();
     }
 
     ///TODO: can this be cleaned up?
     if(auto* toolBar = widget()->findChild<QToolBar*>()) {
-        menu.addAction(toolBar->toggleViewAction());
-        menu.addSeparator();
+        menu->addAction(toolBar->toggleViewAction());
+        menu->addSeparator();
     }
 
     /// start position menu
-    QMenu* positionMenu = menu.addMenu(i18nc("@title:menu", "Tool View Position"));
+    QMenu* positionMenu = menu->addMenu(i18nc("@title:menu", "Tool View Position"));
 
     auto* g = new QActionGroup(positionMenu);
 
@@ -128,15 +130,15 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         right->setChecked(true);
     /// end position menu
 
-    menu.addSeparator();
+    menu->addSeparator();
 
-    QAction *setShortcut = menu.addAction(QIcon::fromTheme(QStringLiteral("configure-shortcuts")), i18nc("@action:inmenu", "Assign Shortcut..."));
+    QAction *setShortcut = menu->addAction(QIcon::fromTheme(QStringLiteral("configure-shortcuts")), i18nc("@action:inmenu", "Assign Shortcut..."));
     setShortcut->setToolTip(i18nc("@info:tooltip", "Use this shortcut to trigger visibility of the tool view."));
 
-    menu.addSeparator();
-    QAction* remove = menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18nc("@action:inmenu", "Remove Tool View"));
+    menu->addSeparator();
+    QAction* remove = menu->addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18nc("@action:inmenu", "Remove Tool View"));
 
-    QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
+    QAction* triggered = menu->exec(senderWidget->mapToGlobal(point));
 
     if (triggered)
     {
