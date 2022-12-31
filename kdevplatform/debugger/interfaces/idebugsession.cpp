@@ -44,9 +44,8 @@ public:
     QString m_addr;
 };
 
-IDebugSession::IDebugSession(QObject* parent)
-    : QObject(parent)
-    , d_ptr(new IDebugSessionPrivate(this))
+IDebugSession::IDebugSession()
+    : d_ptr(new IDebugSessionPrivate(this))
 {
     connect(this, &IDebugSession::stateChanged,
             this, [this](IDebugSession::DebuggerState state) { Q_D(IDebugSession); d->slotStateChanged(state); });

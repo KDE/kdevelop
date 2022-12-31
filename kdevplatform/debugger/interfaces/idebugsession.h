@@ -25,7 +25,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
 {
     Q_OBJECT
 public:
-    IDebugSession(QObject* parent = nullptr);
+    IDebugSession();
     ~IDebugSession() override;
 
     enum DebuggerState {
