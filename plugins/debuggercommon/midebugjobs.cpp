@@ -45,6 +45,17 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
     qCDebug(DEBUGGERCOMMON) << "created debug job" << this << "with" << m_session;
 }
 
+template<class JobBase>
+MIDebugJobBase<JobBase>::~MIDebugJobBase()
+{
+    // Don't print m_session unconditionally, because it can be already destroyed if this job is finished.
+    qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this;
+    if (!JobBase::isFinished()) {
+        qCDebug(DEBUGGERCOMMON) << "debug job destroyed before it finished, stopping debugger of" << m_session;
+        m_session->stopDebugger();
+    }
+}
+
 template<typename JobBase>
 void MIDebugJobBase<JobBase>::done()
 {

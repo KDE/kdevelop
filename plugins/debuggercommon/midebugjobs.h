@@ -29,6 +29,7 @@ class MIDebugJobBase : public JobBase
 {
 public:
     explicit MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* parent);
+    ~MIDebugJobBase() override;
 
 protected:
     void done();
