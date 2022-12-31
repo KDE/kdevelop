@@ -31,19 +31,39 @@
 using namespace KDevMI;
 using namespace KDevelop;
 
+template<class JobBase>
+MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* parent)
+    : JobBase(parent)
+{
+    Q_ASSERT(plugin);
+
+    JobBase::setCapabilities(KJob::Killable);
+
+    m_session = plugin->createSession();
+    QObject::connect(m_session, &MIDebugSession::finished, this, &MIDebugJobBase::done);
+}
+
+template<typename JobBase>
+void MIDebugJobBase<JobBase>::done()
+{
+    JobBase::emitResult();
+}
+
+template<typename JobBase>
+bool MIDebugJobBase<JobBase>::doKill()
+{
+    m_session->stopDebugger();
+    return true;
+}
+
 MIDebugJob::MIDebugJob(MIDebuggerPlugin* p, ILaunchConfiguration* launchcfg,
                    IExecutePlugin* execute, QObject* parent)
-    : KDevelop::OutputJob(parent)
+    : MIDebugJobBase(p, parent)
     , m_launchcfg(launchcfg)
     , m_execute(execute)
 {
-    setCapabilities(Killable);
-
-    m_session = p->createSession();
     connect(m_session, &MIDebugSession::inferiorStdoutLines, this, &MIDebugJob::stdoutReceived);
     connect(m_session, &MIDebugSession::inferiorStderrLines, this, &MIDebugJob::stderrReceived);
-
-    connect(m_session, &MIDebugSession::finished, this, &MIDebugJob::done);
 
     if (launchcfg->project()) {
         setObjectName(i18nc("ProjectName: run configuration name", "%1: %2",
@@ -106,12 +126,6 @@ void MIDebugJob::start()
     }
 }
 
-bool MIDebugJob::doKill()
-{
-    m_session->stopDebugger();
-    return true;
-}
-
 void MIDebugJob::stderrReceived(const QStringList& l)
 {
     if (OutputModel* m = model()) {
@@ -131,19 +145,9 @@ OutputModel* MIDebugJob::model()
     return qobject_cast<OutputModel*>(OutputJob::model());
 }
 
-void MIDebugJob::done()
-{
-    emitResult();
-}
-
 MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent)
-    : KJob(parent)
+    : MIDebugJobBase(plugin, parent)
 {
-    setCapabilities(Killable);
-
-    m_session = plugin->createSession();
-    connect(m_session, &MIDebugSession::finished, this, &MIExamineCoreJob::done);
-
     setObjectName(i18n("Debug core file"));
 }
 
@@ -162,26 +166,10 @@ void MIExamineCoreJob::start()
     delete dlg;
 }
 
-bool MIExamineCoreJob::doKill()
-{
-    m_session->stopDebugger();
-    return true;
-}
-
-void MIExamineCoreJob::done()
-{
-    emitResult();
-}
-
 MIAttachProcessJob::MIAttachProcessJob(MIDebuggerPlugin *plugin, int pid, QObject *parent)
-    : KJob(parent)
+    : MIDebugJobBase(plugin, parent)
     , m_pid(pid)
 {
-    setCapabilities(Killable);
-
-    m_session = plugin->createSession();
-    connect(m_session, &MIDebugSession::finished, this, &MIAttachProcessJob::done);
-
     setObjectName(i18n("Debug process %1", pid));
 }
 
@@ -190,15 +178,4 @@ void MIAttachProcessJob::start()
     if (!m_session->attachToProcess(m_pid)) {
         done();
     }
-}
-
-bool MIAttachProcessJob::doKill()
-{
-    m_session->stopDebugger();
-    return true;
-}
-
-void MIAttachProcessJob::done()
-{
-    emitResult();
 }

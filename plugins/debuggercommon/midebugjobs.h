@@ -24,7 +24,20 @@ namespace KDevMI {
 class MIDebuggerPlugin;
 class MIDebugSession;
 
-class MIDebugJob : public KDevelop::OutputJob
+template<class JobBase>
+class MIDebugJobBase : public JobBase
+{
+public:
+    explicit MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* parent);
+
+protected:
+    void done();
+    bool doKill() override;
+
+    MIDebugSession* m_session;
+};
+
+class MIDebugJob : public MIDebugJobBase<KDevelop::OutputJob>
 {
     Q_OBJECT
 public:
@@ -32,41 +45,27 @@ public:
              QObject* parent = nullptr);
     void start() override;
 
-protected:
-    bool doKill() override;
-
 private Q_SLOTS:
     void stdoutReceived(const QStringList&);
     void stderrReceived(const QStringList&);
-    void done();
 
 private:
     KDevelop::OutputModel* model();
 
-    MIDebugSession* m_session;
     KDevelop::ILaunchConfiguration* m_launchcfg;
     IExecutePlugin* m_execute;
 };
 
-class MIExamineCoreJob : public KJob
+class MIExamineCoreJob : public MIDebugJobBase<KJob>
 {
     Q_OBJECT
 public:
     explicit MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent = nullptr);
 
     void start() override;
-
-protected:
-    bool doKill() override;
-
-private Q_SLOTS:
-    void done();
-
-private:
-    MIDebugSession *m_session;
 };
 
-class MIAttachProcessJob : public KJob
+class MIAttachProcessJob : public MIDebugJobBase<KJob>
 {
     Q_OBJECT
 public:
@@ -74,15 +73,8 @@ public:
 
     void start() override;
 
-protected:
-    bool doKill() override;
-
-private Q_SLOTS:
-    void done();
-
 private:
     int m_pid;
-    MIDebugSession *m_session;
 };
 
 } // end of namespace KDevMI
