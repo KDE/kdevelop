@@ -1,21 +1,21 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Steve Allewell <steve.allewell@gmail.com>, 2018, 2019, 2020.
+# Steve Allewell <steve.allewell@gmail.com>, 2018, 2019, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2020-09-27 13:39+0100\n"
+"PO-Revision-Date: 2022-12-31 15:44+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
-"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: config/globalconfigpage.cpp:29
 #, kde-format
@@ -76,6 +76,7 @@ msgstr "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
 msgstr ""
+"Configure a native application launch to perform Heaptrack analysis on."
 
 #: plugin.cpp:110
 #, kde-format
