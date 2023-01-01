@@ -41,17 +41,21 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
 
     m_session = plugin->createSession();
     QObject::connect(m_session, &MIDebugSession::finished, this, &MIDebugJobBase::done);
+
+    qCDebug(DEBUGGERCOMMON) << "created debug job" << this << "with" << m_session;
 }
 
 template<typename JobBase>
 void MIDebugJobBase<JobBase>::done()
 {
+    qCDebug(DEBUGGERCOMMON) << "finishing debug job" << this << "with" << m_session;
     JobBase::emitResult();
 }
 
 template<typename JobBase>
 bool MIDebugJobBase<JobBase>::doKill()
 {
+    qCDebug(DEBUGGERCOMMON) << "killing debug job" << this << "and stopping debugger of" << m_session;
     m_session->stopDebugger();
     return true;
 }

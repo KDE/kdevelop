@@ -57,6 +57,8 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     , m_tty(nullptr)
     , m_plugin(plugin)
 {
+    qCDebug(DEBUGGERCOMMON) << "Creating" << this;
+
     // setup signals
     connect(m_procLineMaker, &ProcessLineMaker::receivedStdoutLines,
             this, &MIDebugSession::inferiorStdoutLines);
@@ -80,7 +82,7 @@ MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
 
 MIDebugSession::~MIDebugSession()
 {
-    qCDebug(DEBUGGERCOMMON) << "Destroying MIDebugSession";
+    qCDebug(DEBUGGERCOMMON) << "Destroying" << this;
     // Deleting the session involves shutting down gdb nicely.
     // When were attached to a process, we must first detach so that the process
     // can continue running as it was before being attached. gdb is quite slow to
