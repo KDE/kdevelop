@@ -11,6 +11,21 @@
 
 #include <QFileInfo>
 
+namespace {
+struct PrintPosition
+{
+    const QUrl& url;
+    const int line;
+    const QString& addr;
+};
+
+QDebug operator<<(QDebug debug, const PrintPosition& p)
+{
+    const QDebugStateSaver saver(debug);
+    debug.noquote().nospace() << p.url.toString(QUrl::PreferLocalFile) << ':' << p.line << ", addr: " << p.addr;
+    return debug;
+}
+} // unnamed namespace
 
 namespace KDevelop {
 
@@ -73,7 +88,9 @@ void IDebugSession::clearCurrentPosition()
 {
     Q_D(IDebugSession);
 
-    qCDebug(DEBUGGER);
+    // Pad output with spaces to align the printed position and facilitate comparison with setCurrentPosition().
+    qCDebug(DEBUGGER) << "clearing current position:  " << PrintPosition{d->m_url, d->m_line, d->m_addr};
+
     d->m_url.clear();
     d->m_addr.clear();
     d->m_line = -1;
@@ -84,7 +101,7 @@ void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString&
 {
     Q_D(IDebugSession);
 
-    qCDebug(DEBUGGER) << url << line << addr;
+    qCDebug(DEBUGGER) << "setting current position to:" << PrintPosition{url, line, addr};
 
     if (url.isEmpty() || !QFileInfo::exists(convertToLocalUrl(qMakePair(url,line)).first.path())) {
         clearCurrentPosition();
