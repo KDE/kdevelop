@@ -312,7 +312,7 @@ Core::Core(CorePrivate* dd, QObject* parent)
 
 Core::~Core()
 {
-    qCDebug(SHELL);
+    qCDebug(SHELL) << "Destroying Core";
 
     //Cleanup already called before mass destruction of GUI
     delete d;
@@ -326,7 +326,7 @@ Core::Setup Core::setupFlags() const
 
 void Core::shutdown()
 {
-    qCDebug(SHELL);
+    qCDebug(SHELL) << "Shutting down Core";
 
     if (!d->m_shuttingDown) {
         cleanup();
@@ -343,7 +343,7 @@ bool Core::shuttingDown() const
 
 void Core::cleanup()
 {
-    qCDebug(SHELL);
+    qCDebug(SHELL) << "Starting Core cleanup";
 
     d->m_shuttingDown = true;
     emit aboutToShutdown();
