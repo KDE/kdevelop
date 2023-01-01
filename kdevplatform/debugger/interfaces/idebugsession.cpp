@@ -25,7 +25,7 @@ public:
 
     /// Current position in debugged program, gets set when the state changes
     QUrl m_url;
-    int m_line;
+    int m_line = -1;
     QString m_addr;
 };
 
