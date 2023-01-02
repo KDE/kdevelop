@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-12-30 06:31+0100\n"
+"PO-Revision-Date: 2023-01-01 08:02+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -634,8 +634,8 @@ msgstr "წვდომების არქონის გამო ფაი
 #, kde-format
 msgid "Process 1 file in %2"
 msgid_plural "Process %1 files in %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ფაილის დამუშავება %2-ში"
+msgstr[1] "%1 ფაილის დამუშავება %2-ში"
 
 #: language/classmodel/allclassesfolder.cpp:22
 #, kde-format
@@ -760,7 +760,7 @@ msgstr ""
 #: language/codegen/codegenerator.cpp:179
 #, kde-format
 msgid "Error Gathering user information: %1"
-msgstr ""
+msgstr "შეცდომა მომხმარებლის ინფორმაციის შეგროვებისას: %1"
 
 #: language/codegen/codegenerator.cpp:186
 #, kde-format
@@ -833,7 +833,7 @@ msgstr ""
 #: language/duchain/aliasdeclaration.cpp:50
 #, kde-format
 msgid "Lost alias %1"
-msgstr ""
+msgstr "%1 მეტსახელი დაიკარგა"
 
 #: language/duchain/classfunctiondeclaration.cpp:94
 #, kde-format
@@ -858,7 +858,7 @@ msgstr ""
 #: language/duchain/namespacealiasdeclaration.cpp:94
 #, kde-format
 msgid "Import %1 as %2"
-msgstr ""
+msgstr "%1-ის %2-ად შემოტანა"
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
 #, kde-format
@@ -999,7 +999,7 @@ msgstr "<ანონიმური>"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
 #, kde-format
 msgid "Overrides a "
-msgstr ""
+msgstr "გადაფარავს "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:481
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:508
@@ -1021,12 +1021,12 @@ msgstr "დამალავს "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:531
 #, kde-format
 msgid "Overridden in "
-msgstr ""
+msgstr "გადაფარულია "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
 #, kde-format
 msgid "Overriders possible, show all"
-msgstr ""
+msgstr "გადაფარვა, თუ შესაძლებელია. ყველას ჩვენება"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
 #, kde-format
@@ -1036,7 +1036,7 @@ msgstr ""
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
 #, kde-format
 msgid "Inherited by "
-msgstr ""
+msgstr "მემკვიდრეობით "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
 #, kde-format
@@ -1287,8 +1287,8 @@ msgstr "გაფართოება"
 #, kde-format
 msgid "1 use found"
 msgid_plural "%1 uses found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ნაპოვნია 1 გამოყენება"
+msgstr[1] "ნაპოვნია %1 გამოყენება"
 
 #: language/duchain/navigation/useswidget.cpp:627
 #, kde-format
@@ -2530,7 +2530,7 @@ msgstr "ჰორიზონტალურად გაყოფა"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
-msgstr ""
+msgstr "მიმდინარე ხედის ჰორიზონტალურად გაყოფა."
 
 #: shell/mainwindow_p.cpp:273
 #, kde-format
@@ -2548,43 +2548,43 @@ msgstr "ვერტიკალურად გაყოფა"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
-msgstr ""
+msgstr "მიმდინარე ხედის ვერტიკალურად გაყოფა."
 
 #: shell/mainwindow_p.cpp:280
 #, kde-format
 msgctxt "@action"
 msgid "&Next Split View"
-msgstr ""
+msgstr "&შემდეგი გაყოფილი ხედი"
 
 #: shell/mainwindow_p.cpp:283
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next split view"
-msgstr ""
+msgstr "შემდეგი გაყოფილი ხედი"
 
 #: shell/mainwindow_p.cpp:284
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the next split view."
-msgstr ""
+msgstr "შემდეგ გაყოფილ ხედზე გადართვა."
 
 #: shell/mainwindow_p.cpp:288
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Split View"
-msgstr ""
+msgstr "&წინა გაყოფილი ხედი"
 
 #: shell/mainwindow_p.cpp:291
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous split view"
-msgstr ""
+msgstr "წინა გაყოფილი ხედი"
 
 #: shell/mainwindow_p.cpp:292
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Switches to the previous split view."
-msgstr ""
+msgstr "წინა გაყოფილ ხედზე გადართვა."
 
 #: shell/mainwindow_p.cpp:300
 #, kde-format
@@ -4492,7 +4492,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Tabbed Browsing"
-msgstr ""
+msgstr "ჩანართებიანი ბრაუზერი"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:92

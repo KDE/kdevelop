@@ -2109,7 +2109,7 @@ msgstr "Mostra la posició actual de l'execució"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
-msgstr "Salta a la línia d'execució de l'editor."
+msgstr "Salta fins a la línia d'execució en l'editor."
 
 #: shell/debugcontroller.cpp:411
 #, kde-format
