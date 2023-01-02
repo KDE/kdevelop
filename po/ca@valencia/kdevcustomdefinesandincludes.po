@@ -154,7 +154,7 @@ msgid ""
 "Add the currently displayed URL to the list of includes if it is not in the "
 "list yet."
 msgstr ""
-"Afig l'URL que es mostra actualment en la llista dels «include» si encara no "
+"Afig l'URL que es mostra actualment a la llista dels «include» si encara no "
 "es troba en la llista."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, includePathRequester)
