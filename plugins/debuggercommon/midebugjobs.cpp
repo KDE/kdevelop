@@ -151,6 +151,8 @@ void MIDebugJob::stdoutReceived(const QStringList& l)
 
 void MIDebugJob::finishWithError(int errorCode, const QString& errorText)
 {
+    qCDebug(DEBUGGERCOMMON) << "failing" << this << "and stopping debugger of" << m_session;
+    m_session->stopDebugger();
     setError(errorCode);
     setErrorText(errorText);
     emitResult();
