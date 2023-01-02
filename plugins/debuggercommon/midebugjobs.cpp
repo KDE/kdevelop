@@ -97,24 +97,18 @@ void MIDebugJob::start()
     // check if the config is valid
     QString executable = m_execute->executable(m_launchcfg, err).toLocalFile();
     if (!err.isEmpty()) {
-        setError(-1);
-        setErrorText(err);
-        emitResult();
+        finishWithError(-1, err);
         return;
     }
 
     if (!QFileInfo(executable).isExecutable()) {
-        setError(-1);
-        setErrorText(i18n("'%1' is not an executable", executable));
-        emitResult();
+        finishWithError(-1, i18n("'%1' is not an executable", executable));
         return;
     }
 
     QStringList arguments = m_execute->arguments(m_launchcfg, err);
     if (!err.isEmpty()) {
-        setError(-1);
-        setErrorText(err);
-        emitResult();
+        finishWithError(-1, err);
         return;
     }
 
@@ -153,6 +147,13 @@ void MIDebugJob::stdoutReceived(const QStringList& l)
     if (OutputModel* m = model()) {
         m->appendLines(l);
     }
+}
+
+void MIDebugJob::finishWithError(int errorCode, const QString& errorText)
+{
+    setError(errorCode);
+    setErrorText(errorText);
+    emitResult();
 }
 
 OutputModel* MIDebugJob::model()

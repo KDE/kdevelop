@@ -51,6 +51,7 @@ private Q_SLOTS:
     void stderrReceived(const QStringList&);
 
 private:
+    void finishWithError(int errorCode, const QString& errorText);
     KDevelop::OutputModel* model();
 
     KDevelop::ILaunchConfiguration* m_launchcfg;
