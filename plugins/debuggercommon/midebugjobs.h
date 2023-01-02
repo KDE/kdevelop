@@ -42,6 +42,13 @@ class MIDebugJob : public MIDebugJobBase<KDevelop::OutputJob>
 {
     Q_OBJECT
 public:
+    enum {
+        // Add a "random" number to KJob::UserDefinedError and hopefully avoid clashes with OutputJob's error codes.
+        InvalidExecutable = UserDefinedError + 231,
+        ExecutableIsNotExecutable,
+        InvalidArguments
+    };
+
     MIDebugJob(MIDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* plugin,
              QObject* parent = nullptr);
     void start() override;

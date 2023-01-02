@@ -97,18 +97,18 @@ void MIDebugJob::start()
     // check if the config is valid
     QString executable = m_execute->executable(m_launchcfg, err).toLocalFile();
     if (!err.isEmpty()) {
-        finishWithError(-1, err);
+        finishWithError(InvalidExecutable, err);
         return;
     }
 
     if (!QFileInfo(executable).isExecutable()) {
-        finishWithError(-1, i18n("'%1' is not an executable", executable));
+        finishWithError(ExecutableIsNotExecutable, i18n("'%1' is not an executable", executable));
         return;
     }
 
     QStringList arguments = m_execute->arguments(m_launchcfg, err);
     if (!err.isEmpty()) {
-        finishWithError(-1, err);
+        finishWithError(InvalidArguments, err);
         return;
     }
 
