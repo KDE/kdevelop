@@ -239,7 +239,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     QString tty(m_tty->getSlave());
 #ifndef Q_OS_WIN
     if (tty.isEmpty()) {
-        auto* message = new Sublime::Message(m_tty->lastError(), Sublime::Message::Information);
+        auto* const message = new Sublime::Message(m_tty->lastError(), Sublime::Message::Error);
         ICore::self()->uiController()->postMessage(message);
 
         m_tty.reset(nullptr);
