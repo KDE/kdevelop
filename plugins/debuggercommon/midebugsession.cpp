@@ -243,6 +243,16 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         ICore::self()->uiController()->postMessage(message);
 
         m_tty.reset(nullptr);
+
+        qCDebug(DEBUGGERCOMMON) << "no TTY slave, stopping debugger";
+        // Cannot simply call stopDebugger() here, because for some reason the interruptDebugger() call in
+        // stopDebugger() makes the "Debugger Crashed" error dialog appear. KDevelop itself crashes then
+        // unless the error dialog is dismissed promptly - before the GDB process is killed at the 5-second
+        // timeout set up in stopDebugger(). Duplicate the relevant parts of stopDebugger() definition here.
+        m_commandQueue->clear();
+        setDebuggerStateOn(s_shuttingDown);
+        addGdbExitCommand();
+        emit reset();
         return false;
     }
 #endif
@@ -502,8 +512,7 @@ void MIDebugSession::stopDebugger()
     }
 
     // Now try to stop debugger running.
-    addCommand(GdbExit);
-    emit debuggerUserCommandOutput(QStringLiteral("(gdb) quit"));
+    addGdbExitCommand();
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
     QTimer::singleShot(5000, this, [this]() {
@@ -514,6 +523,12 @@ void MIDebugSession::stopDebugger()
     });
 
     emit reset();
+}
+
+void MIDebugSession::addGdbExitCommand()
+{
+    addCommand(GdbExit);
+    emit debuggerUserCommandOutput(QStringLiteral("(gdb) quit"));
 }
 
 void MIDebugSession::killDebuggerNow()

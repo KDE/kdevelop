@@ -344,6 +344,7 @@ protected:
     QPointer<MIDebuggerPlugin> m_plugin;
 
 private:
+    void addGdbExitCommand();
     void killDebuggerImpl();
 };
 
