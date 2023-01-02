@@ -20,13 +20,13 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iuicontroller.h>
 #include <outputview/outputmodel.h>
+#include <util/scopeddialog.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 
 #include <QFileInfo>
-#include <QPointer>
 
 using namespace KDevMI;
 using namespace KDevelop;
@@ -171,17 +171,15 @@ MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent)
 
 void MIExamineCoreJob::start()
 {
-    QPointer<SelectCoreDialog> dlg = new SelectCoreDialog(ICore::self()->uiController()->activeMainWindow());
+    ScopedDialog<SelectCoreDialog> dlg(ICore::self()->uiController()->activeMainWindow());
     if (dlg->exec() == QDialog::Rejected) {
         done();
-        delete dlg;
         return;
     }
 
     if (!m_session->examineCoreFile(dlg->executableFile(), dlg->core())) {
         done();
     }
-    delete dlg;
 }
 
 MIAttachProcessJob::MIAttachProcessJob(MIDebuggerPlugin *plugin, int pid, QObject *parent)
