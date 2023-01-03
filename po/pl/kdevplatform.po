@@ -16,20 +16,20 @@
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006, 2007.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2010, 2013.
 # Michał Smoczyk <msmoczyk@wp.pl>, 2008.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2022-12-11 06:58+0100\n"
+"PO-Revision-Date: 2023-01-02 20:50+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -5103,18 +5103,18 @@ msgstr "Wybierz widok narzędzia do dodania"
 #: shell/workingsets/workingsettooltipwidget.cpp:74
 #, kde-format
 msgid "<b>Active Working Set</b>"
-msgstr "<b>Bieżący zestaw pracy</b>"
+msgstr "<b>Bieżący pakiet pracy</b>"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:76
 #, kde-format
 msgid "<b>Working Set</b>"
-msgstr "<b>Zestaw pracy</b>"
+msgstr "<b>Pakiet pracy</b>"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
-msgstr "Usuń ten zestaw pracy. Nie ma to wpływu na zawarte dokumenty."
+msgstr "Usuń ten pakiet pracy. Nie ma to wpływu na zawarte w nim dokumenty."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:120
 #, kde-format
@@ -5135,8 +5135,8 @@ msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
 msgstr ""
-"Dodaj wszystkie dokumenty, które są częścią tego zestawu pracy, do bieżącego "
-"zestawu pracy."
+"Dodaj wszystkie dokumenty, które są częścią tego pakietu pracy, do bieżącego "
+"pakietu pracy."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:136
 #, kde-format
@@ -5151,8 +5151,8 @@ msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
-"Usuń wszystkie dokumenty, które są częścią tego zestawu pracy, z bieżącego "
-"zestawu pracy."
+"Usuń wszystkie dokumenty, które są częścią tego pakietu pracy, z bieżącego "
+"pakietu pracy."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:170
 #, kde-format
@@ -5164,13 +5164,13 @@ msgstr "Naciśnij, aby otworzyć i aktywować ten dokument."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
-msgstr "Usuń plik z bieżącego zestawu pracy"
+msgstr "Usuń plik z bieżącego pakietu pracy"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
-msgstr "Dodaj ten plik do bieżącego zestawu pracy"
+msgstr "Dodaj ten plik do bieżącego pakietu pracy"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:315
 #, kde-format
