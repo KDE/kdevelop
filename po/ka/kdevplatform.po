@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2023-01-01 08:02+0100\n"
+"PO-Revision-Date: 2023-01-02 05:11+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4958,13 +4958,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Toolbar"
-msgstr ""
+msgstr "%1 პანელი"
 
 #: sublime/idealdockwidget.cpp:108
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
-msgstr ""
+msgstr "პანელის ხედის მდებარეობა"
 
 #: sublime/idealdockwidget.cpp:112
 #, kde-format
@@ -4994,7 +4994,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr ""
+msgstr "მალსახმობის მინიჭება..."
 
 #: sublime/idealdockwidget.cpp:134
 #, kde-format
@@ -5018,7 +5018,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Concentration Mode"
-msgstr ""
+msgstr "კონცენტრაციის რეჟიმი"
 
 #: sublime/mainwindow_p.cpp:80
 #, kde-format
@@ -5834,7 +5834,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr ""
+msgstr "სხვაობები რევიზიებს შორის:"
 
 #: vcs/widgets/vcseventwidget.cpp:78
 #, kde-format
