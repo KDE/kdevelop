@@ -173,6 +173,9 @@ void MIExamineCoreJob::start()
 {
     ScopedDialog<SelectCoreDialog> dlg(ICore::self()->uiController()->activeMainWindow());
     if (dlg->exec() == QDialog::Rejected) {
+        qCDebug(DEBUGGERCOMMON) << "Select Core File dialog rejected, finishing" << this << "and stopping debugger of"
+                                << m_session;
+        m_session->stopDebugger();
         done();
         return;
     }
