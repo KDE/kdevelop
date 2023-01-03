@@ -115,6 +115,10 @@ DebugController::DebugController(QObject *parent)
 
     setComponentName(QStringLiteral("kdevdebugger"), i18n("Debugger"));
     setXMLFile(QStringLiteral("kdevdebuggershellui.rc"));
+
+    if (const auto* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
+        connect(mainWindow, &Sublime::MainWindow::areaChanged, this, &DebugController::areaChanged);
+    }
 }
 
 void DebugController::initialize()
@@ -338,7 +342,6 @@ void DebugController::addSession(IDebugSession* session)
     if (oldArea->objectName() != QLatin1String("debug")) {
         ICore::self()->uiController()->switchToArea(QStringLiteral("debug"), IUiController::ThisWindow);
         mainWindow->area()->setWorkingSet(oldArea->workingSet(), oldArea->workingSetPersistent(), oldArea);
-        connect(mainWindow, &Sublime::MainWindow::areaChanged, this, &DebugController::areaChanged);
     }
 }
 
