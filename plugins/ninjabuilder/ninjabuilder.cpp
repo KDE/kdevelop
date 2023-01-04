@@ -125,6 +125,8 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
     jobArguments << args;
 
     auto* job = new NinjaJob(item, commandType, jobArguments, signal, this);
+    job->setEnvironmentProfile(group.readEntry("Default Ninja Environment Profile", QString()));
+
     m_activeNinjaJobs.append(job);
     return job;
 }
