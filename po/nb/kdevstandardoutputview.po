@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2010-12-29 20:51+0100\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19,88 +19,96 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Generator: Lokalize 1.1\n"
 
-#: outputwidget.cpp:53
+#: outputwidget.cpp:43
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enter a case-insensitive regular expression to filter the output view"
+msgstr ""
+
+#: outputwidget.cpp:61
 #, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr ""
 
-#: outputwidget.cpp:64
+#: outputwidget.cpp:72
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr ""
 
-#: outputwidget.cpp:70
+#: outputwidget.cpp:78
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr ""
 
-#: outputwidget.cpp:81
+#: outputwidget.cpp:89
 #, kde-format
 msgctxt "@action"
 msgid "Previous Output"
 msgstr ""
 
-#: outputwidget.cpp:84
+#: outputwidget.cpp:92
 #, kde-format
 msgctxt "@action"
 msgid "Next Output"
 msgstr ""
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:97
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr ""
 
-#: outputwidget.cpp:91
+#: outputwidget.cpp:99
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr ""
 
-#: outputwidget.cpp:105
+#: outputwidget.cpp:113
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr ""
 
-#: outputwidget.cpp:109
+#: outputwidget.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr ""
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:121
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr ""
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:125
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr ""
 
-#: outputwidget.cpp:130
+#: outputwidget.cpp:138
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr ""
 
-#: outputwidget.cpp:141
+#: outputwidget.cpp:149
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr ""
 
-#: outputwidget.cpp:144
+#: outputwidget.cpp:724
 #, kde-format
-msgctxt "@info:tooltip"
-msgid "Enter a case-insensitive regular expression to filter the output view"
+msgctxt ""
+"@info:tooltip %1 - position in the pattern, %2 - textual description of the "
+"error"
+msgid "Filter regular expression pattern error at offset %1: %2"
 msgstr ""
 
 #: standardoutputview.cpp:101

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2023-01-02 05:11+0100\n"
+"PO-Revision-Date: 2023-01-03 09:21+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -790,7 +790,7 @@ msgstr ""
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
-msgstr ""
+msgstr "დოკუმენტში ტექსტის ჩანაცვლების შეცდომა: %1"
 
 #: language/codegen/documentchangeset.cpp:467
 #, kde-format
