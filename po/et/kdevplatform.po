@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-01-05 00:46+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -5567,14 +5567,14 @@ msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 tööriistariba"
 
-#: sublime/idealdockwidget.cpp:108
+#: sublime/idealdockwidget.cpp:110
 #, fuzzy, kde-format
 #| msgid "Tool View Position"
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Tööriistavaate asukoht"
 
-#: sublime/idealdockwidget.cpp:112
+#: sublime/idealdockwidget.cpp:114
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Left"
@@ -5582,7 +5582,7 @@ msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Vasakul"
 
-#: sublime/idealdockwidget.cpp:113
+#: sublime/idealdockwidget.cpp:115
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Bottom"
@@ -5590,7 +5590,7 @@ msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "All"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:116
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Right"
@@ -5598,7 +5598,7 @@ msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Paremal"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:117
 #, fuzzy, kde-format
 #| msgctxt "tool view position"
 #| msgid "Detached"
@@ -5606,28 +5606,28 @@ msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Eraldiseisev"
 
-#: sublime/idealdockwidget.cpp:133
+#: sublime/idealdockwidget.cpp:135
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut..."
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Omista kiirklahv..."
 
-#: sublime/idealdockwidget.cpp:134
+#: sublime/idealdockwidget.cpp:136
 #, fuzzy, kde-format
 #| msgid "Use this shortcut to trigger visibility of the tool view."
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr "Selle kiirklahvi kasutamine tööriistavaate nähtavuse lülitamiseks."
 
-#: sublime/idealdockwidget.cpp:137
+#: sublime/idealdockwidget.cpp:139
 #, fuzzy, kde-format
 #| msgid "Remove Tool View"
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Eemalda tööriistavaade"
 
-#: sublime/idealdockwidget.cpp:148
+#: sublime/idealdockwidget.cpp:150
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut For '%1' Tool View"
 msgctxt "@title:window"

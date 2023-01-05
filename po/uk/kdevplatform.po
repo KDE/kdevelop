@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-01-05 00:46+0000\n"
 "PO-Revision-Date: 2022-12-22 05:29+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -5206,43 +5206,43 @@ msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "Панель інструментів %1"
 
-#: sublime/idealdockwidget.cpp:108
+#: sublime/idealdockwidget.cpp:110
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Розташування панелі інструментів"
 
-#: sublime/idealdockwidget.cpp:112
+#: sublime/idealdockwidget.cpp:114
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Ліворуч"
 
-#: sublime/idealdockwidget.cpp:113
+#: sublime/idealdockwidget.cpp:115
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Внизу"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:116
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Праворуч"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:117
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr "Від’єднано"
 
-#: sublime/idealdockwidget.cpp:133
+#: sublime/idealdockwidget.cpp:135
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "Призначити скорочення…"
 
-#: sublime/idealdockwidget.cpp:134
+#: sublime/idealdockwidget.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
@@ -5250,13 +5250,13 @@ msgstr ""
 "Це клавіатурне скорочення призначено для вмикання або вимикання видимості "
 "панелі інструментів."
 
-#: sublime/idealdockwidget.cpp:137
+#: sublime/idealdockwidget.cpp:139
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Вилучити панель інструментів"
 
-#: sublime/idealdockwidget.cpp:148
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"

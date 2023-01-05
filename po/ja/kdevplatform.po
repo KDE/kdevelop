@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-01-05 00:46+0000\n"
 "PO-Revision-Date: 2010-11-02 00:53-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -5367,61 +5367,61 @@ msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 ツールバー"
 
-#: sublime/idealdockwidget.cpp:108
+#: sublime/idealdockwidget.cpp:110
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "位置"
 
-#: sublime/idealdockwidget.cpp:112
+#: sublime/idealdockwidget.cpp:114
 #, fuzzy, kde-format
 #| msgid "Left"
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "左"
 
-#: sublime/idealdockwidget.cpp:113
+#: sublime/idealdockwidget.cpp:115
 #, fuzzy, kde-format
 #| msgid "Bottom"
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "下"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:116
 #, fuzzy, kde-format
 #| msgid "Right"
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "右"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:117
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:133
+#: sublime/idealdockwidget.cpp:135
 #, fuzzy, kde-format
 #| msgid "Assign Shortcut..."
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "ショートカットを割り当て..."
 
-#: sublime/idealdockwidget.cpp:134
+#: sublime/idealdockwidget.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:137
+#: sublime/idealdockwidget.cpp:139
 #, fuzzy, kde-format
 #| msgid "Remove view"
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "ビューを削除"
 
-#: sublime/idealdockwidget.cpp:148
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-01-05 00:46+0000\n"
 "PO-Revision-Date: 2009-11-15 12:06+0100\n"
 "Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -5248,14 +5248,14 @@ msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:108
+#: sublime/idealdockwidget.cpp:110
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "Pozicio"
 
-#: sublime/idealdockwidget.cpp:112
+#: sublime/idealdockwidget.cpp:114
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Left"
@@ -5263,7 +5263,7 @@ msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "Maldekstre"
 
-#: sublime/idealdockwidget.cpp:113
+#: sublime/idealdockwidget.cpp:115
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Bottom"
@@ -5271,7 +5271,7 @@ msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "Malsupre"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:116
 #, fuzzy, kde-format
 #| msgctxt "toolview position"
 #| msgid "Right"
@@ -5279,32 +5279,32 @@ msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "Dekstre"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:117
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:133
+#: sublime/idealdockwidget.cpp:135
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:134
+#: sublime/idealdockwidget.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:137
+#: sublime/idealdockwidget.cpp:139
 #, fuzzy, kde-format
 #| msgid "Remove All"
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr "Forigi ĉiujn"
 
-#: sublime/idealdockwidget.cpp:148
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"

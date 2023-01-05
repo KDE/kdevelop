@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2023-01-03 09:21+0100\n"
+"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"PO-Revision-Date: 2023-01-04 07:00+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -816,7 +816,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Refactoring"
-msgstr ""
+msgstr "რედაქტორინგი"
 
 #. i18n: ectx: property (text), widget (QPushButton, abortButton)
 #: language/codegen/progressdialogs/refactoringdialog.ui:27
@@ -828,7 +828,7 @@ msgstr "გაუქმება"
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
 msgid "Alias %1 as %2"
-msgstr ""
+msgstr "%1-ის ალტერნატიული სახელი, როგორც %2"
 
 #: language/duchain/aliasdeclaration.cpp:50
 #, kde-format
@@ -878,17 +878,17 @@ msgstr "%1-ზე დაბრუნება<br />"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:115
 #, kde-format
 msgid "enumerator "
-msgstr ""
+msgstr "დამთვლელის ელემენტი "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:150
 #, kde-format
 msgid "namespace %1 "
-msgstr ""
+msgstr "სახელების სივრცე %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:161
 #, kde-format
 msgid "enumeration %1 "
-msgstr ""
+msgstr "ჩამონათვალი %1 "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:170
 #, kde-format
@@ -1205,7 +1205,7 @@ msgstr " -ში "
 #: language/duchain/navigation/problemnavigationcontext.cpp:196
 #, kde-format
 msgid "Solution (%1)"
-msgstr ""
+msgstr "ამოხსნა (%1)"
 
 #: language/duchain/navigation/usescollector.cpp:414
 #, kde-format
@@ -1414,22 +1414,22 @@ msgstr ""
 #: outputview/outputexecutejob.cpp:208
 #, kde-format
 msgid "Invalid build directory '%1'"
-msgstr ""
+msgstr "აგების არასწორი საქაღალდე '%1'"
 
 #: outputview/outputexecutejob.cpp:210
 #, kde-format
 msgid "Invalid working directory '%1'"
-msgstr ""
+msgstr "არასწორი სამუშაო საქაღალდე '%1'"
 
 #: outputview/outputexecutejob.cpp:217
 #, kde-format
 msgid "Build directory '%1' is not a local path"
-msgstr ""
+msgstr "აგების საქაღალდე '%1' ლოკალური ბილიკი არაა"
 
 #: outputview/outputexecutejob.cpp:219
 #, kde-format
 msgid "Working directory '%1' is not a local path"
-msgstr ""
+msgstr "სამუშაო საქაღალდე '%1' ლოკალური ბილიკი არაა"
 
 #: outputview/outputexecutejob.cpp:238
 #, kde-format
@@ -2440,7 +2440,7 @@ msgstr "შეტყობინებების მორგება…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure notifications"
-msgstr ""
+msgstr "შეტყობინებების მორგება"
 
 #: shell/mainwindow_p.cpp:227
 #, kde-format
@@ -2614,13 +2614,13 @@ msgstr "ცარიელი ფაილის შექმნა."
 #, kde-format
 msgctxt "@action"
 msgid "&Add Tool View..."
-msgstr ""
+msgstr "&პანელის დამატება..."
 
 #: shell/mainwindow_p.cpp:311
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
-msgstr ""
+msgstr "&პანელის დამატება"
 
 #: shell/mainwindow_p.cpp:312
 #, kde-format
@@ -2662,7 +2662,7 @@ msgstr "ყველას თავიდან ჩატვირთვა"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Tool View"
-msgstr ""
+msgstr "&პანელის დამატება"
 
 #: shell/mainwindow_p.cpp:427
 #, kde-format
@@ -2673,7 +2673,7 @@ msgstr ""
 #: shell/openprojectdialog.cpp:112
 #, kde-format
 msgid "%1|All Project Files (%1)"
-msgstr ""
+msgstr "%1|ყველა პროექტის ფაილი (%1)"
 
 #: shell/openprojectdialog.cpp:121
 #, kde-format
@@ -2698,7 +2698,7 @@ msgstr "პროექტის გახსნა"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Information"
-msgstr ""
+msgstr "პროექტის ინფორმაცია"
 
 #: shell/openprojectdialog.cpp:205
 #, kde-format
@@ -2714,7 +2714,7 @@ msgstr "მონიშნული URL არასწორია"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
-msgstr ""
+msgstr "არსებული ფაილის გახსნა \"%1\""
 
 #: shell/partcontroller.cpp:252
 #, kde-format
@@ -3098,7 +3098,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
-msgstr ""
+msgstr "პროექტის დამატება მიმდინარე სესიაში"
 
 #: shell/projectcontroller.cpp:865
 #, kde-format
@@ -3393,12 +3393,12 @@ msgstr "ჰოსტს სისტემა"
 #: shell/runtimecontroller.cpp:80
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr ""
+msgstr "გაშვების გარემოს არჩევის უფლება"
 
 #: shell/runtimecontroller.cpp:84
 #, kde-format
 msgid "Runtime: %1"
-msgstr ""
+msgstr "გაშვების გარემო: %1"
 
 #: shell/savedialog.cpp:44
 #, kde-format
@@ -3421,12 +3421,12 @@ msgstr "&არაფერი შეინახო"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
-msgstr ""
+msgstr "ყველა ცვლილების მოცილება"
 
 #: shell/session.cpp:178
 #, kde-format
 msgid "(no projects)"
-msgstr ""
+msgstr "(პროექტების გარეშე)"
 
 #: shell/sessionchooserdialog.cpp:37
 #, kde-format
@@ -3655,17 +3655,17 @@ msgstr ""
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
 msgid "Analyzers"
-msgstr ""
+msgstr "ანალიზატორები"
 
 #: shell/settings/analyzerspreferences.cpp:35
 #, kde-format
 msgid "Configure Analyzers"
-msgstr ""
+msgstr "ანალიზატორების მორგება"
 
 #: shell/settings/bgpreferences.cpp:73
 #, kde-format
 msgid "Configure Background Parser"
-msgstr ""
+msgstr "ფონურის დამმუშავებლის მორგება"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:20
@@ -4204,13 +4204,13 @@ msgstr "ტესტირება"
 #, kde-format
 msgctxt "@title:group"
 msgid "Analyzers"
-msgstr ""
+msgstr "ანალიზატორები"
 
 #: shell/settings/pluginpreferences.cpp:44
 #, kde-format
 msgctxt "@title:group"
 msgid "Runtimes"
-msgstr ""
+msgstr "გაშვების გარემოები"
 
 #: shell/settings/pluginpreferences.cpp:45
 #, kde-format
@@ -4325,7 +4325,7 @@ msgstr ""
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
 msgid "Runtimes"
-msgstr ""
+msgstr "გაშვების გარემოები"
 
 #: shell/settings/runtimespreferences.cpp:33
 #, kde-format
@@ -4960,55 +4960,55 @@ msgctxt "@title:window"
 msgid "%1 Toolbar"
 msgstr "%1 პანელი"
 
-#: sublime/idealdockwidget.cpp:108
+#: sublime/idealdockwidget.cpp:110
 #, kde-format
 msgctxt "@title:menu"
 msgid "Tool View Position"
 msgstr "პანელის ხედის მდებარეობა"
 
-#: sublime/idealdockwidget.cpp:112
+#: sublime/idealdockwidget.cpp:114
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Left"
 msgstr "მარცხენა"
 
-#: sublime/idealdockwidget.cpp:113
+#: sublime/idealdockwidget.cpp:115
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Bottom"
 msgstr "ბოლოში"
 
-#: sublime/idealdockwidget.cpp:114
+#: sublime/idealdockwidget.cpp:116
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Right"
 msgstr "მარჯვენა"
 
-#: sublime/idealdockwidget.cpp:115
+#: sublime/idealdockwidget.cpp:117
 #, kde-format
 msgctxt "@option:radio tool view position"
 msgid "Detached"
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:133
+#: sublime/idealdockwidget.cpp:135
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
 msgstr "მალსახმობის მინიჭება..."
 
-#: sublime/idealdockwidget.cpp:134
+#: sublime/idealdockwidget.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:137
+#: sublime/idealdockwidget.cpp:139
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove Tool View"
 msgstr ""
 
-#: sublime/idealdockwidget.cpp:148
+#: sublime/idealdockwidget.cpp:150
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
