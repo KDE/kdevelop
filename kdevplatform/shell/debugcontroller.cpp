@@ -111,6 +111,8 @@ DebugController::DebugController(QObject *parent)
       m_breakpointModel(new BreakpointModel(this)),
       m_variableCollection(new VariableCollection(this))
 {
+    qCDebug(SHELL) << "creating debug controller";
+
     setComponentName(QStringLiteral("kdevdebugger"), i18n("Debugger"));
     setXMLFile(QStringLiteral("kdevdebuggershellui.rc"));
 }
@@ -166,6 +168,8 @@ void DebugController::cleanup()
 
 DebugController::~DebugController()
 {
+    qCDebug(SHELL) << "destroying debug controller";
+
     // The longest possible time interval has been allotted for previous and
     // the current debug sessions to stop their debugger processes: stopDebugger()
     // was called on the sessions in addSession() and cleanup() respectively.
@@ -177,6 +181,8 @@ DebugController::~DebugController()
     // call to BreakpointModel::updateState(). Therefore we must force all debug
     // sessions to synchronously finalize their states now.
     emit killAllDebuggersNow();
+
+    qCDebug(SHELL) << "destroyed debug controller";
 }
 
 BreakpointModel* DebugController::breakpointModel()

@@ -10,9 +10,15 @@
 
 #include <KPluginFactory>
 
+#include "../mibreakpointcontroller.h"
 #include "../midebugger.h"
 #include "../midebuggerplugin.h"
 #include "../midebugsession.h"
+
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <tests/testframestackmodel.h>
+#include <tests/testvariablecontroller.h>
 
 #include <QObject>
 #include <QTimer>
@@ -28,8 +34,13 @@ class TestDebugSession : public KDevMI::MIDebugSession
 {
     Q_OBJECT
 public:
-    explicit TestDebugSession(KDevMI::MIDebuggerPlugin *plugin = nullptr) : KDevMI::MIDebugSession(plugin)
-    {}
+    explicit TestDebugSession(KDevMI::MIDebuggerPlugin* plugin = nullptr)
+        : KDevMI::MIDebugSession(plugin)
+        , m_breakpointController{new KDevMI::MIBreakpointController(this)}
+        , m_variableController{new KDevelop::TestVariableController(this)}
+        , m_frameStackModel{new KDevelop::TestFrameStackModel(this)}
+    {
+    }
 
 protected:
     KDevMI::MIDebugger *createDebugger() const override
@@ -43,9 +54,24 @@ protected:
     void configInferior(KDevelop::ILaunchConfiguration *, IExecutePlugin *, const QString &) override {}
     bool execInferior(KDevelop::ILaunchConfiguration *, IExecutePlugin *, const QString &) override { return false; }
     bool loadCoreFile(KDevelop::ILaunchConfiguration *, const QString &, const QString &) override { return false; }
-    KDevMI::MIBreakpointController * breakpointController() const override { return nullptr; }
-    KDevelop::IFrameStackModel* frameStackModel() const override { return nullptr; }
-    KDevelop::IVariableController* variableController() const override { return nullptr; }
+
+    KDevMI::MIBreakpointController* breakpointController() const override
+    {
+        return m_breakpointController;
+    }
+    KDevelop::IVariableController* variableController() const override
+    {
+        return m_variableController;
+    }
+    KDevelop::IFrameStackModel* frameStackModel() const override
+    {
+        return m_frameStackModel;
+    }
+
+private:
+    KDevMI::MIBreakpointController* const m_breakpointController;
+    KDevelop::IVariableController* const m_variableController;
+    KDevelop::IFrameStackModel* const m_frameStackModel;
 };
 
 class TestDebuggerPlugin : public KDevMI::MIDebuggerPlugin
@@ -58,6 +84,7 @@ public:
     KDevMI::MIDebugSession *createSession() override
     {
         auto* session = new TestDebugSession(this);
+        KDevelop::ICore::self()->debugController()->addSession(session);
         connect(session, &TestDebugSession::showMessage, this, &TestDebuggerPlugin::showStatusMessage);
         return session;
     }

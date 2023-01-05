@@ -148,6 +148,10 @@ void TestMIDBus::debug()
 void TestMIDBus::cleanupTestCase()
 {
     KDevelop::TestCore::shutdown();
+    // Wait until the debug session is deleted via event loop. DebugController::debuggerStateChanged(),
+    // invoked from ~CorePrivate(), calls session->deleteLater(). So an additional processing of
+    // events is needed after the one in TestCore::shutdown(), in which Core is deleted.
+    QTest::qWait(1);
 }
 
 
