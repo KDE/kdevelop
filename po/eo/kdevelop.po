@@ -1,6 +1,7 @@
 # translation of kdevelop.po to Esperanto
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Heiko Evermann <heiko@evermann.de>, 2002
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 # Minuskloj: ĉ ĝ ĵ ĥ ŝ ŭ   Majuskloj: Ĉ Ĝ Ĵ Ĥ Ŝ Ŭ
 #
@@ -9,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:44+0000\n"
-"PO-Revision-Date: 2008-01-02 18:01+0100\n"
+"PO-Revision-Date: 2023-01-05 14:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -31,11 +32,10 @@ msgstr "heiko@evermann.de, okellogg@users.sourceforge.net"
 
 #. i18n: ectx: Menu (session)
 #: kdevelopui.rc:6
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Session"
-msgstr "&Agordo"
+msgstr "Seanco"
 
 #. i18n: ectx: Menu (project)
 #: kdevelopui.rc:10
@@ -46,34 +46,31 @@ msgstr "&Projekto"
 
 #. i18n: ectx: Menu (run)
 #: kdevelopui.rc:29
-#, fuzzy, kde-format
-#| msgid "&Run"
+#, kde-format
 msgctxt "@title:menu"
 msgid "&Run"
 msgstr "&Ruligi"
 
 #. i18n: ectx: Menu (debug_core_menu)
 #: kdevelopui.rc:39
-#, fuzzy, kde-format
-#| msgid "Examine Core File..."
+#, kde-format
 msgctxt "@title:menu"
 msgid "Examine Core File"
-msgstr "Ekzameni kerndosieron..."
+msgstr "Ekzameni Kerndosieron"
 
 #. i18n: ectx: Menu (debug_attach_menu)
 #: kdevelopui.rc:43
-#, fuzzy, kde-format
-#| msgid "Attach to Process"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Attach to Process"
-msgstr "Konekti al procezo"
+msgstr "Konekti al Procezo"
 
 #. i18n: ectx: Menu (navigation)
 #: kdevelopui.rc:65
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Navigation"
-msgstr ""
+msgstr "&Navigo"
 
 #. i18n: ectx: Menu (file)
 #: kdevelopui.rc:89
@@ -101,14 +98,14 @@ msgstr "Kodo"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current File With"
-msgstr ""
+msgstr "Analizi Aktualan Dosieron Kun"
 
 #. i18n: ectx: Menu (analyze_project)
 #: kdevelopui.rc:119
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze Current Project With"
-msgstr ""
+msgstr "Analizi Aktualan Projekton Kun"
 
 #. i18n: ectx: Menu (window)
 #: kdevelopui.rc:128
@@ -119,19 +116,17 @@ msgstr "&Fenestro"
 
 #. i18n: ectx: Menu (settings)
 #: kdevelopui.rc:170
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Settings"
-msgstr "&Agordo"
+msgstr "Agordo"
 
 #. i18n: ectx: Menu (help)
 #: kdevelopui.rc:179
-#, fuzzy, kde-format
-#| msgid "&Help"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Help"
-msgstr "&Helpo"
+msgstr "Helpo"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevelopui.rc:186
@@ -145,28 +140,24 @@ msgid "Code"
 msgstr "Kodo"
 
 #: kdevideextension.cpp:47
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "KDevelop Project Files"
-msgstr "QMake-projektdosieroj"
+msgstr "KDevelop Projektdosieroj"
 
 #: main.cpp:85
-#, fuzzy, kde-format
-#| msgid "Could not open file '%1'"
+#, kde-format
 msgid "Could not open %1"
-msgstr "Ne eblis malfermi dosieron '%1'"
+msgstr "Ne eblis malfermi %1"
 
 #: main.cpp:219
-#, fuzzy, kde-format
-#| msgid "Could not open file '%1'"
+#, kde-format
 msgid "Could not open file '%1'."
-msgstr "Ne eblis malfermi dosieron '%1'"
+msgstr "Ne eblis malfermi dosieron '%1'."
 
 #: main.cpp:242
-#, fuzzy, kde-format
-#| msgid "Could not read project file: %1"
+#, kde-format
 msgid "Could not open project '%1': %2"
-msgstr "Ne eblis legi projektdosieron: %1"
+msgstr "Ne eblis malfermi projekton '%1': %2"
 
 #: main.cpp:273
 #, kde-format
@@ -188,7 +179,7 @@ msgstr "KDevelop"
 #: main.cpp:380
 #, kde-format
 msgid "The KDevelop Integrated Development Environment"
-msgstr ""
+msgstr "La KDevelop Programada Medio"
 
 #: main.cpp:381
 #, kde-format
@@ -285,10 +276,9 @@ msgid "Vladimir Prus"
 msgstr "Vladimir Prus"
 
 #: main.cpp:392
-#, fuzzy, kde-format
-#| msgid "generating"
+#, kde-format
 msgid "GDB integration"
-msgstr "generanta"
+msgstr "GDB integriĝo"
 
 #: main.cpp:393
 #, kde-format
@@ -452,10 +442,9 @@ msgid "John Birch"
 msgstr "John Birch"
 
 #: main.cpp:414
-#, fuzzy, kde-format
-#| msgid "Debugger status"
+#, kde-format
 msgid "Debugger frontend"
-msgstr "Sencimigilstato"
+msgstr "Sencimigilfasado"
 
 #: main.cpp:415
 #, kde-format
@@ -473,10 +462,9 @@ msgid "Kurt Granroth"
 msgstr "Kurt Granroth"
 
 #: main.cpp:416
-#, fuzzy, kde-format
-#| msgid "Application Name:"
+#, kde-format
 msgid "KDE application templates"
-msgstr "Aplikaĵnomo:"
+msgstr "KDE aplikaĵa ŝablonoj"
 
 #: main.cpp:417
 #, kde-format
@@ -534,10 +522,9 @@ msgid "Jakob Simon-Gaarde"
 msgstr "Jakob Simon-Gaarde"
 
 #: main.cpp:422
-#, fuzzy, kde-format
-#| msgid "QMake Binary:"
+#, kde-format
 msgid "QMake projectmanager"
-msgstr "QMake programo:"
+msgstr "QMake projektmastrumilo"
 
 #: main.cpp:423
 #, kde-format
@@ -662,10 +649,9 @@ msgid "Stephane Ancelot"
 msgstr "Stephane Ancelot"
 
 #: main.cpp:435 main.cpp:436 main.cpp:439
-#, fuzzy, kde-format
-#| msgid "Watches"
+#, kde-format
 msgid "Patches"
-msgstr "Observpunktoj"
+msgstr "Flikoj"
 
 #: main.cpp:436
 #, kde-format
@@ -715,10 +701,9 @@ msgid "Andreas Koepfle"
 msgstr "Andreas Koepfle"
 
 #: main.cpp:441
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "QMake project manager patches"
-msgstr "QMake-projektdosieroj"
+msgstr "QMake projektmastrumilaj flikoj"
 
 #: main.cpp:442
 #, kde-format
@@ -807,19 +792,17 @@ msgstr ""
 #: main.cpp:515
 #, kde-format
 msgid "Hash"
-msgstr ""
+msgstr "Haketaĵo"
 
 #: main.cpp:515
-#, fuzzy, kde-format
-#| msgid "Open Project"
+#, kde-format
 msgid "Name: Opened Projects"
-msgstr "Malfermi Projekton"
+msgstr "Nomo: Malfermitaj Projektoj"
 
 #: main.cpp:524
-#, fuzzy, kde-format
-#| msgid "Running"
+#, kde-format
 msgid "[running]"
-msgstr "Rulanta"
+msgstr "[rulanta]"
 
 #: main.cpp:626
 #, kde-format
@@ -833,17 +816,15 @@ msgid "Specify the executable you want to debug."
 msgstr ""
 
 #: main.cpp:643
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgctxt "@info:shell"
 msgid "Specified executable does not exist."
-msgstr "Aplikaĵo ne ekzistas"
+msgstr "Specifita rulaĵo ne ekzistas."
 
 #: main.cpp:649
-#, fuzzy, kde-format
-#| msgid "&Debug"
+#, kde-format
 msgid "Debug %1"
-msgstr "&Sencimigi"
+msgstr "Sencimigi %1"
 
 #: main.cpp:657
 #, kde-format
@@ -877,10 +858,8 @@ msgid "Cannot find launcher %1"
 msgstr ""
 
 #: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
-#, fuzzy
-#| msgid "KDevelop"
 msgid "KDevelop Sessions"
-msgstr "KDevelop"
+msgstr "KDevelop Seancoj"
 
 #: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
 msgid "Arbitrary String Which Says Something"
@@ -899,1868 +878,4 @@ msgstr ""
 #: plasma/runner/kdevelopsessions.cpp:102
 #, kde-format
 msgid "Open KDevelop Session"
-msgstr ""
-
-#~ msgid "Files to load"
-#~ msgstr "Dosieroj ŝargendaj"
-
-#~ msgid "&File"
-#~ msgstr "&Dosiero"
-
-#~ msgid "&Edit"
-#~ msgstr "R&edakti"
-
-#, fuzzy
-#~| msgid "Advanced"
-#~ msgid "&Advanced"
-#~ msgstr "Pluaĵoj"
-
-#~ msgid "&View"
-#~ msgstr "&Rigardi"
-
-#~ msgid "&Code Folding"
-#~ msgstr "&Kodfaldado"
-
-#~ msgid "&Tools"
-#~ msgstr "&Iloj"
-
-#, fuzzy
-#~| msgid "Importoptions:"
-#~ msgid "Word Completion"
-#~ msgstr "Import-opcioj:"
-
-#~ msgid "&Settings"
-#~ msgstr "&Agordo"
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgctxt "@title:menu"
-#~ msgid "Editor"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Project options"
-#~ msgid "Deprecated options:"
-#~ msgstr "Projektopcioj"
-
-#~ msgid "HTML documentation component"
-#~ msgstr "HTML-dokumentada modulo"
-
-#, fuzzy
-#~| msgid "KDevelop"
-#~ msgid "Develop"
-#~ msgstr "KDevelop"
-
-#, fuzzy
-#~| msgid "Abort on first error:"
-#~ msgid "Configure a new Launcher"
-#~ msgstr "Ĉesigi je unua eraro:"
-
-#, fuzzy
-#~| msgid "Debugger Toolbar"
-#~ msgid "Debug your program"
-#~ msgstr "Sencimigila ilobreto"
-
-#, fuzzy
-#~| msgid "&Debug"
-#~ msgid "Debug Area"
-#~ msgstr "&Sencimigi"
-
-#, fuzzy
-#~| msgid "&New Project..."
-#~ msgid "New Project"
-#~ msgstr "&Nova projekto..."
-
-#~ msgid "Open project"
-#~ msgstr "Malfermi projekton"
-
-#, fuzzy
-#~| msgid "Open project"
-#~ msgid "Fetch project"
-#~ msgstr "Malfermi projekton"
-
-#, fuzzy
-#~| msgid "Open &Recent Project"
-#~ msgid "Recent Projects"
-#~ msgstr "Malfermi Lasttempan P&rojekton"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgid "Sessions"
-#~ msgstr "&Agordo"
-
-#, fuzzy
-#~| msgid "Documentation index view"
-#~ msgid "Documentation for KDevelop users"
-#~ msgstr "Dokumentad-indeksa rigardo"
-
-#, fuzzy
-#~| msgid "Starting GUI"
-#~ msgid "Starting"
-#~ msgstr "Lanĉante GUI"
-
-#, fuzzy
-#~| msgid "KDevelop"
-#~ msgid "Learn KDevelop!"
-#~ msgstr "KDevelop"
-
-#, fuzzy
-#~| msgid "Restart program"
-#~ msgid "Execute your program"
-#~ msgstr "Restarti programon"
-
-#, fuzzy
-#~| msgid "Remove Profile"
-#~ msgid "Remove lock file"
-#~ msgstr "Forigi Profilon"
-
-#, fuzzy
-#~| msgid "Import existing project"
-#~ msgid "Import project"
-#~ msgstr "Importi ekzistantan projekton"
-
-#, fuzzy
-#~ msgid "%1"
-#~ msgstr "%1"
-
-#, fuzzy
-#~| msgid "Project to load"
-#~ msgid "Url to project to load"
-#~ msgstr "Projekto ŝargenda"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgid "Session contents"
-#~ msgstr "&Agordo"
-
-#, fuzzy
-#~| msgid "Files to load"
-#~ msgid "Session to load"
-#~ msgstr "Dosieroj ŝargendaj"
-
-#~ msgid "Profile to load"
-#~ msgstr "Profilo ŝargenda"
-
-#~ msgid "Version %1"
-#~ msgstr "Versio %1"
-
-#, fuzzy
-#~| msgid "&File"
-#~ msgctxt "@title:menu"
-#~ msgid "File"
-#~ msgstr "&Dosiero"
-
-#, fuzzy
-#~| msgid "&View"
-#~ msgctxt "@title:menu"
-#~ msgid "View"
-#~ msgstr "&Rigardi"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Project"
-#~ msgstr "Projekto"
-
-#~ msgid "Run"
-#~ msgstr "Lanĉi"
-
-#~ msgid "Cancel"
-#~ msgstr "Ĉesigi"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgid "Rename %1"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Create New Project"
-#~ msgid "Create Class"
-#~ msgstr "Krei Novan Projekton"
-
-#, fuzzy
-#~| msgid "&Name:"
-#~ msgid "New name:"
-#~ msgstr "&Nomo:"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgid "Rename"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Class"
-#~ msgid "Uses"
-#~ msgstr "Klaso"
-
-#, fuzzy
-#~| msgid "Cache Values"
-#~ msgid "Cached: "
-#~ msgstr "Kaŝmemor-Valoroj"
-
-#~ msgid "make-process failed"
-#~ msgstr "\"make\"-procezo malsukcesis"
-
-#~ msgid "output: %1"
-#~ msgstr "eligo: %1"
-
-#~ msgid "Recursive make-call failed"
-#~ msgstr "Rekursia \"make\"-alvoko malsukcesis"
-
-#~ msgid "Recursive make-call malformed"
-#~ msgstr "Rekursia \"make\"-alvoko misformita"
-
-#~ msgid "Output was: %1"
-#~ msgstr "Eligo estas: %1"
-
-#~ msgid "Folder: \"%1\"  Command: \"%2\"Output: \"%3\""
-#~ msgstr "Dosierujo: \"%1\"  Komando: \"%2\" Eligo: \"%3\""
-
-#, fuzzy
-#~| msgid "Function"
-#~ msgid "Function macro"
-#~ msgstr "Funkcio"
-
-#, fuzzy
-#~| msgid "Process exited"
-#~ msgid "Preprocessed body:"
-#~ msgstr "Procezo ĉesiĝis"
-
-#~ msgctxt "Headers included into this header"
-#~ msgid "Included"
-#~ msgstr "Inkluditoj"
-
-#~ msgctxt "Count of files this header was included into"
-#~ msgid "Included by"
-#~ msgstr "Inkluditaj de"
-
-#~ msgctxt "Count of macros defined in this header"
-#~ msgid "Defined macros"
-#~ msgstr "Makrooj difinitaj"
-
-#~ msgid "Declarations:"
-#~ msgstr "Deklaroj:"
-
-#~ msgid "not parsed yet"
-#~ msgstr "ankoraŭ ne parsita"
-
-#, fuzzy
-#~| msgid "Include Path"
-#~ msgid "In %1th include-path"
-#~ msgstr "Inkludpado"
-
-#~ msgid "Included through"
-#~ msgstr "Inkluditaj per"
-
-#~ msgid "Directory %1"
-#~ msgstr "Dosierujo %1"
-
-#~ msgid "Includes"
-#~ msgstr "Inkluditoj"
-
-#~ msgid "Include Path"
-#~ msgstr "Inkludpado"
-
-#~ msgid "Includers"
-#~ msgstr "Inkludantoj"
-
-#~ msgid "Files"
-#~ msgstr "Dosieroj"
-
-#, fuzzy
-#~| msgid "Create New Project"
-#~ msgid "Create &New Class"
-#~ msgstr "Krei Novan Projekton"
-
-#, fuzzy
-#~| msgid "Build-manager did not return an include-path"
-#~ msgid "Build manager for project %1 did not return a build directory"
-#~ msgstr "Konstru-administrilo ne redonis inkludpadon"
-
-#~ msgid "Build-manager did not return an include-path"
-#~ msgstr "Konstru-administrilo ne redonis inkludpadon"
-
-#~ msgid "Include-path resolver:"
-#~ msgstr "Inkludpadsolvilo:"
-
-#, fuzzy
-#~| msgid "&Build System"
-#~ msgid "Building uses"
-#~ msgstr "&Konstrusistemo"
-
-#, fuzzy
-#~| msgid "Reload"
-#~ msgid "Ready"
-#~ msgstr "Reŝargi"
-
-#, fuzzy
-#~| msgid "Format"
-#~ msgid "Formals: %1"
-#~ msgstr "Formato"
-
-#, fuzzy
-#~| msgid "Step into the next statement"
-#~ msgid "Unterminated #if statement"
-#~ msgstr "Paŝi en la sekvontan ordonon"
-
-#, fuzzy
-#~| msgid "Character"
-#~ msgid "character %1"
-#~ msgstr "Tekstosigno"
-
-#, fuzzy
-#~| msgid "Evaluate: %1"
-#~ msgid "invalid input: %1"
-#~ msgstr "Komputi: %1"
-
-#, fuzzy
-#~| msgid "Generator:"
-#~ msgid "Generate Stub Class"
-#~ msgstr "Generilo:"
-
-#, fuzzy
-#~| msgid "Generator:"
-#~ msgid "Generate Stub"
-#~ msgstr "Generilo:"
-
-#, fuzzy
-#~| msgid "Comment"
-#~ msgid "Implement"
-#~ msgstr "Komento"
-
-#~ msgid "Add"
-#~ msgstr "Aldoni"
-
-#, fuzzy
-#~| msgid "Make executable:"
-#~ msgid "Test executable crashed."
-#~ msgstr "Make-programo:"
-
-#, fuzzy
-#~| msgid "Name"
-#~ msgid "Test root."
-#~ msgstr "Nomo"
-
-#, fuzzy
-#~| msgid "Add Profile"
-#~ msgid "profile"
-#~ msgstr "Aldoni Profilon"
-
-#, fuzzy
-#~| msgid "Name"
-#~ msgid "QTest verbose output"
-#~ msgstr "Nomo"
-
-#, fuzzy
-#~| msgid "Make executable:"
-#~ msgid "Test executable timed out."
-#~ msgstr "Make-programo:"
-
-#, fuzzy
-#~| msgid "TextLabel"
-#~ msgid "xTest"
-#~ msgstr "TekstEtikedo"
-
-#, fuzzy
-#~| msgid "Name"
-#~ msgid "QTest test"
-#~ msgstr "Nomo"
-
-#, fuzzy
-#~| msgid "Class"
-#~ msgid "Class name:"
-#~ msgstr "Klaso"
-
-#~ msgid "Search"
-#~ msgstr "Serĉi"
-
-#~ msgid "Find In Files"
-#~ msgstr "Trovi en dosieroj"
-
-#, fuzzy
-#~| msgid "Could not create temporary file to upload."
-#~ msgid "Unable to create a temporary file for search."
-#~ msgstr "Ne eblis krei dumtempan dosieron por la alŝuto."
-
-#, fuzzy
-#~| msgid "Find In Files"
-#~ msgid "Find in Files"
-#~ msgstr "Trovi en dosieroj"
-
-#, fuzzy
-#~| msgid "Profile to load"
-#~ msgid "Process failed to start."
-#~ msgstr "Profilo ŝargenda"
-
-#, fuzzy
-#~| msgid "Process exited"
-#~ msgid "Process crashed."
-#~ msgstr "Procezo ĉesiĝis"
-
-#, fuzzy
-#~| msgid "Process exited"
-#~ msgid "Process timed out."
-#~ msgstr "Procezo ĉesiĝis"
-
-#~ msgid "Find in Fi&les..."
-#~ msgstr "Trovi en Dos&ieroj..."
-
-#~ msgctxt "No Version Control Support chosen"
-#~ msgid "None"
-#~ msgstr "Neniu"
-
-#~ msgid "Create New Project"
-#~ msgstr "Krei Novan Projekton"
-
-#~ msgctxt "Page for general configuration options"
-#~ msgid "General"
-#~ msgstr "Ĝenerala"
-
-#~ msgctxt "Page for version control options"
-#~ msgid "Version Control"
-#~ msgstr "Versiokontrolo"
-
-#, fuzzy
-#~| msgid "Project to load"
-#~ msgid "Project Wizard"
-#~ msgstr "Projekto ŝargenda"
-
-#, fuzzy
-#~| msgid "Import Existing Project"
-#~ msgid "&Import Existing Project..."
-#~ msgstr "Importi ekzistantan projekton"
-
-#, fuzzy
-#~| msgid "Couldn't import project"
-#~ msgid "Could not import project into"
-#~ msgstr "Ne eblis importi projekton"
-
-#, fuzzy
-#~| msgid "Couldn't checkout imported project"
-#~ msgid "Could not checkout imported project"
-#~ msgstr "Ne eblis elpreni importitan projekton"
-
-#, fuzzy
-#~| msgid "Couldn't import project"
-#~ msgid "Could not import project"
-#~ msgstr "Ne eblis importi projekton"
-
-#, fuzzy
-#~| msgid "Couldn't create new project"
-#~ msgid "Could not create new project"
-#~ msgstr "Ne eblis krei novan projekton"
-
-#~ msgid "Project import error"
-#~ msgstr "Projektimport-eraro"
-
-#~ msgid "Could not create temporary file to upload."
-#~ msgstr "Ne eblis krei dumtempan dosieron por la alŝuto."
-
-#~ msgid "Invalid Location"
-#~ msgstr "Nevalida situo"
-
-#, fuzzy
-#~| msgid "Project &name:"
-#~ msgid "Empty project name"
-#~ msgstr "Projekt&nomo:"
-
-#, fuzzy
-#~| msgid "Project Templates"
-#~ msgid "Invalid project name"
-#~ msgstr "Projektŝablonoj"
-
-#, fuzzy
-#~| msgid "Project Templates"
-#~ msgid "Invalid Project Template"
-#~ msgstr "Projektŝablonoj"
-
-#~ msgid "Project Templates"
-#~ msgstr "Projektŝablonoj"
-
-#~ msgid "Document View"
-#~ msgstr "Dokumentrigardo"
-
-#~ msgid "Documents"
-#~ msgstr "Dokumentoj"
-
-#~ msgid "Disabled"
-#~ msgstr "Malŝaltita"
-
-#~ msgid "Pending (add)"
-#~ msgstr "Atendanta (aldonon)"
-
-#~ msgid "Pending (clear)"
-#~ msgstr "Atendanta (vakigon)"
-
-#~ msgid "Pending (modify)"
-#~ msgstr "Atendanta (modifon)"
-
-#~ msgid "Active"
-#~ msgstr "Aktiva"
-
-#~ msgctxt "Code breakpoint"
-#~ msgid "Code"
-#~ msgstr "Kodo"
-
-#~ msgid "Internal error"
-#~ msgstr "Interna eraro"
-
-#~ msgid "Running program"
-#~ msgstr "Rulanta programo"
-
-#, fuzzy
-#~| msgid "Interrupt application"
-#~ msgid "Could not run application"
-#~ msgstr "Interrompi aplikaĵon"
-
-#~ msgid "Debugger status"
-#~ msgstr "Sencimigilstato"
-
-#~ msgid "Disassemble View"
-#~ msgstr "Retrokompila rigardo"
-
-#~ msgid "Address"
-#~ msgstr "Adreso"
-
-#~ msgid "Function"
-#~ msgstr "Funkcio"
-
-#~ msgid "Offset"
-#~ msgstr "Deŝovo"
-
-#~ msgid "Instruction"
-#~ msgstr "Instrukcio"
-
-#~ msgid "Could not locate the debugging shell '%1'."
-#~ msgstr "Ne eblis trovi la sencimigilŝelon '%1'."
-
-#, fuzzy
-#~| msgid "Debugging &shell:"
-#~ msgid "Debugging Shell Not Found"
-#~ msgstr "&Sencimigila ŝelo:"
-
-#, fuzzy
-#~| msgid "Internal error"
-#~ msgid "Internal debugger error"
-#~ msgstr "Interna eraro"
-
-#~ msgid "Could not start debugger"
-#~ msgstr "Ne eblis starti sencimigilon"
-
-#~ msgid "Debugger Breakpoints"
-#~ msgstr "Sencimigilaj haltpunktoj"
-
-#~ msgctxt "New breakpoint"
-#~ msgid "New"
-#~ msgstr "Nova"
-
-#~ msgctxt "Data breakpoint"
-#~ msgid "Data write"
-#~ msgstr "Datumskriba"
-
-#~ msgctxt "Data read breakpoint"
-#~ msgid "Data read"
-#~ msgstr "Datumlega"
-
-#~ msgid "Show text"
-#~ msgstr "Montri tekston"
-
-#~ msgid "Edit"
-#~ msgstr "Redakti"
-
-#~ msgid "Disable"
-#~ msgstr "Malŝalti"
-
-#~ msgid "Delete"
-#~ msgstr "Forigi"
-
-#~ msgid "Disable all"
-#~ msgstr "Malŝalti ĉiujn"
-
-#~ msgid "Enable all"
-#~ msgstr "Ŝalti ĉiujn"
-
-#~ msgid "Delete all"
-#~ msgstr "Forigi ĉiujn"
-
-#~ msgid "Enable"
-#~ msgstr "Ŝalti"
-
-#~ msgid "GDB Output"
-#~ msgstr "GDB-eligo"
-
-#~ msgid "&GDB cmd:"
-#~ msgstr "&GDB kdo:"
-
-#~ msgid "Show Internal Commands"
-#~ msgstr "Montri internajn komandojn"
-
-#~ msgid "Copy All"
-#~ msgstr "Kopii ĉiujn"
-
-#, fuzzy
-#~| msgid "Ignore Count"
-#~ msgid "Ignore"
-#~ msgstr "Ignornombrilo"
-
-#~ msgid "Recent"
-#~ msgstr "Lasttempaj"
-
-#~ msgid "Debugger Variables"
-#~ msgstr "Sencimigilaj variabloj"
-
-#~ msgid "Recent Expressions"
-#~ msgstr "Lasttempe uzataj esprimoj"
-
-#~ msgid "Remove All"
-#~ msgstr "Forigi ĉiujn"
-
-#~ msgid "Re-evaluate All"
-#~ msgstr "Rekomputi ĉiujn"
-
-#~ msgid "Format"
-#~ msgstr "Formato"
-
-#~ msgid "Natural"
-#~ msgstr "Natura"
-
-#~ msgid "Hexadecimal"
-#~ msgstr "Deksesuma"
-
-#~ msgid "Decimal"
-#~ msgstr "Dekuma"
-
-#~ msgid "Character"
-#~ msgstr "Tekstosigno"
-
-#~ msgid "Binary"
-#~ msgstr "Duuma"
-
-#~ msgid "Remember Value"
-#~ msgstr "Memori valoron"
-
-#~ msgid "Remove Watch Variable"
-#~ msgstr "Forigi observovariablon"
-
-#~ msgid "Watch Variable"
-#~ msgstr "Observovariablo"
-
-#~ msgid "Reevaluate Expression"
-#~ msgstr "Rekomputi esprimon"
-
-#~ msgid "Remove Expression"
-#~ msgstr "Forigi esprimon"
-
-#~ msgid "Data write breakpoint"
-#~ msgstr "Datumskriba haltpunkto"
-
-#~ msgid "Copy Value"
-#~ msgstr "Kopii valoron"
-
-#~ msgid "Invalid"
-#~ msgstr "Nevalida"
-
-#, fuzzy
-#~| msgid "&Watch"
-#~ msgid "Watchpoint"
-#~ msgstr "Obser&vi"
-
-#~ msgid "Start"
-#~ msgstr "Starti"
-
-#~ msgid "Amount"
-#~ msgstr "Kvanto"
-
-#~ msgid "Memory view"
-#~ msgstr "Memorrigardo"
-
-#~ msgid "Change memory range"
-#~ msgstr "Ŝanĝi memorgamon"
-
-#~ msgid "Reload"
-#~ msgstr "Reŝargi"
-
-#~ msgid "Close this view"
-#~ msgstr "Fermi tiun rigardon"
-
-#~ msgid "Special debugger views"
-#~ msgstr "Specialaj sencimigilrigardoj"
-
-#~ msgid "Breakpoint"
-#~ msgstr "Haltpunkto"
-
-#~ msgid " temporary"
-#~ msgstr " dumtempa"
-
-#~ msgid "Enabled"
-#~ msgstr "Ŝaltita"
-
-#~ msgid "Type"
-#~ msgstr "Tipo"
-
-#, fuzzy
-#~| msgid "Start"
-#~ msgid "Status"
-#~ msgstr "Starti"
-
-#~ msgid "Location"
-#~ msgstr "Situo"
-
-#~ msgid "Condition"
-#~ msgstr "Kondiĉoj"
-
-#~ msgid "Ignore Count"
-#~ msgstr "Ignornombrilo"
-
-#~ msgid "Hits"
-#~ msgstr "Trafoj"
-
-#~ msgid "Tracing"
-#~ msgstr "Spurado"
-
-#~ msgid "Frame"
-#~ msgstr "Framo"
-
-#, fuzzy
-#~| msgid "Debugger"
-#~ msgid "C++ Debugger"
-#~ msgstr "Sencimigilo"
-
-#~ msgid "Breakpoints"
-#~ msgstr "Haltpunktoj"
-
-#~ msgid "Variables"
-#~ msgstr "Variabloj"
-
-#~ msgid "Frame Stack"
-#~ msgstr "Framstako"
-
-#~ msgid "Disassemble"
-#~ msgstr "Malkompili"
-
-#~ msgid "GDB"
-#~ msgstr "GDB"
-
-#~ msgid "Debug views"
-#~ msgstr "Sencimigilaj rigardoj"
-
-#~ msgid "&Start"
-#~ msgstr "&Starti"
-
-#~ msgid "Start in debugger"
-#~ msgstr "Starti en sencimigilo"
-
-#~ msgid "&Restart"
-#~ msgstr "&Restarti"
-
-#~ msgid "Sto&p"
-#~ msgstr "Hal&ti"
-
-#~ msgid "Stop debugger"
-#~ msgstr "Halti sencimigilon"
-
-#~ msgid "Interrupt"
-#~ msgstr "Interrompi"
-
-#~ msgid "Interrupt application"
-#~ msgstr "Interrompi aplikaĵon"
-
-#~ msgid "Run to &Cursor"
-#~ msgstr "Ruli ĝis &kursoro"
-
-#~ msgid "Run to cursor"
-#~ msgstr "Ruli ĝis kursoro"
-
-#~ msgid "Set E&xecution Position to Cursor"
-#~ msgstr "Meti ruligan pozicion al la kursoro"
-
-#~ msgid "Jump to cursor"
-#~ msgstr "Salti al kursoro"
-
-#~ msgid "Step &Over"
-#~ msgstr "Transpaŝ&o"
-
-#~ msgid "Step over the next line"
-#~ msgstr "Transpaŝi la sekvontan linion"
-
-#~ msgid "Step over Ins&truction"
-#~ msgstr "Transpaŝi ins&trukcion"
-
-#~ msgid "Step over instruction"
-#~ msgstr "Transpaŝi instrukcion"
-
-#~ msgid "Step &Into"
-#~ msgstr "Paŝ&i Enen"
-
-#~ msgid "Step into the next statement"
-#~ msgstr "Paŝi en la sekvontan ordonon"
-
-#~ msgid "Step into I&nstruction"
-#~ msgstr "Paŝi en la i&nstrukcion"
-
-#, fuzzy
-#~| msgid "Step into I&nstruction"
-#~ msgid "Step into instruction"
-#~ msgstr "Paŝi en la i&nstrukcion"
-
-#~ msgid "Step O&ut"
-#~ msgstr "Paŝi E&len"
-
-#~ msgid "Viewers"
-#~ msgstr "Rigardiloj"
-
-#~ msgid "Debugger viewers"
-#~ msgstr "Sencimigilaj rigardiloj"
-
-#~ msgid "Examine core file"
-#~ msgstr "Ekzameni kerndosieron"
-
-#~ msgid "Attach to process"
-#~ msgstr "Konekti al procezo"
-
-#~ msgid "Toggle Breakpoint"
-#~ msgstr "Komuti haltpunkton"
-
-#~ msgid "Toggle breakpoint"
-#~ msgstr "Komuti haltpunkton"
-
-#~ msgid "Evaluate: %1"
-#~ msgstr "Komputi: %1"
-
-#~ msgid "Watch: %1"
-#~ msgstr "Observi: %1"
-
-#~ msgid "Choose a core file to examine..."
-#~ msgstr "Elekti kerndosieron ekzamenendan..."
-
-#, fuzzy
-#~| msgid "Examine core file"
-#~ msgid "Examining core file %1"
-#~ msgstr "Ekzameni kerndosieron"
-
-#~ msgid "Attaching to process %1"
-#~ msgstr "Konekti al procezo %1"
-
-#~ msgid "Debugger"
-#~ msgstr "Sencimigilo"
-
-#~ msgid "&Continue"
-#~ msgstr "&Daŭrigi"
-
-#~ msgid "Process exited"
-#~ msgstr "Procezo ĉesiĝis"
-
-#~ msgid "Variable"
-#~ msgstr "Variablo"
-
-#~ msgid "Value"
-#~ msgstr "Valoro"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "CMake Manager"
-#~ msgstr "CMake-Programo:"
-
-#, fuzzy
-#~| msgid "Could not start debugger"
-#~ msgid "Could not save the change."
-#~ msgstr "Ne eblis starti sencimigilon"
-
-#, fuzzy
-#~| msgid "Could not read project file: %1"
-#~ msgid "Could not remove: %1.\n"
-#~ msgstr "Ne eblis legi projektdosieron: %1"
-
-#~ msgid "Name"
-#~ msgstr "Nomo"
-
-#~ msgid "Comment"
-#~ msgstr "Komento"
-
-#~ msgid "&Cancel"
-#~ msgstr "&Ĉesigi"
-
-#~ msgid "CMake process killed"
-#~ msgstr "CMake-procezo ĉesigita"
-
-#, fuzzy
-#~| msgid "TextLabel"
-#~ msgid "Text"
-#~ msgstr "TekstEtikedo"
-
-#, fuzzy
-#~| msgid "Function"
-#~ msgid "Action"
-#~ msgstr "Funkcio"
-
-#, fuzzy
-#~| msgid "Cancel"
-#~ msgid "Change"
-#~ msgstr "Ĉesigi"
-
-#, fuzzy
-#~| msgid "Interrupt"
-#~ msgid "Insert"
-#~ msgstr "Interrompi"
-
-#~ msgid "Remove"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "Custom Makefile Manager"
-#~ msgstr "CMake-Programo:"
-
-#~ msgid "Build &Target"
-#~ msgstr "Kons&trui Celon"
-
-#~ msgid "Build target"
-#~ msgstr "Konstrui celon"
-
-#~ msgid "Build this project"
-#~ msgstr "Konstrui tiun projekton"
-
-#~ msgid "Build this target"
-#~ msgstr "Konstrui tiun celon"
-
-#~ msgid "Build this directory"
-#~ msgstr "Konstrui tiun dosierujon"
-
-#~ msgid "Parse QMake project files"
-#~ msgstr "Parsi QMake-projektdosierojn"
-
-#~ msgid "KDE XMLGUI Definitions"
-#~ msgstr "KDE-XMLGUI-Difinoj"
-
-#, fuzzy
-#~| msgid "Number of simultaneous jobs:"
-#~ msgid "Number of times visited."
-#~ msgstr "Nombro da samtempaj taskoj:"
-
-#, fuzzy
-#~| msgid "Source"
-#~ msgid "source"
-#~ msgstr "Fonto"
-
-#, fuzzy
-#~| msgid "Instruction"
-#~ msgid "Instrumented Lines:"
-#~ msgstr "Instrukcio"
-
-#, fuzzy
-#~| msgid "&Restart"
-#~ msgid "Reset Data"
-#~ msgstr "&Restarti"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "CMake Builder"
-#~ msgstr "CMake-Programo:"
-
-#, fuzzy
-#~| msgid "Watch: %1"
-#~ msgid "CMake: %1"
-#~ msgstr "Observi: %1"
-
-#, fuzzy
-#~| msgid "QMake Binary:"
-#~ msgid "QMake Builder"
-#~ msgstr "QMake programo:"
-
-#, fuzzy
-#~| msgid "QMake project files"
-#~ msgid "No project specified."
-#~ msgstr "QMake-projektdosieroj"
-
-#, fuzzy
-#~| msgid "Watch: %1"
-#~ msgid "QMake: %1"
-#~ msgstr "Observi: %1"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "Make Builder"
-#~ msgstr "CMake-Programo:"
-
-#~ msgid "compiling"
-#~ msgstr "kompilanta"
-
-#~ msgid "generating"
-#~ msgstr "generanta"
-
-#~ msgctxt "Linking object files into a library or executable"
-#~ msgid "linking"
-#~ msgstr "bindanta"
-
-#~ msgid "built"
-#~ msgstr "konstruita"
-
-#~ msgid "installing"
-#~ msgstr "instalanta"
-
-#~ msgid "creating"
-#~ msgstr "kreanta"
-
-#, fuzzy
-#~| msgid "Watch: %1"
-#~ msgid "Make: %1"
-#~ msgstr "Observi: %1"
-
-#, fuzzy
-#~| msgid "Could not create language plugin for %1."
-#~ msgid "Could not create build command for target '%1'"
-#~ msgstr "Ne eblis krei lingvokromaĵon por %1."
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind Output"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Memory &leak check"
-#~ msgid "&Valgrind Memory Leak Check"
-#~ msgstr "Memor&lika kontrolo"
-
-#, fuzzy
-#~| msgid "Could not open file '%1'"
-#~ msgid "Could not open valgrind output: %1"
-#~ msgstr "Ne eblis malfermi dosieron '%1'"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Memcheck)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Callgrind)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Cachegrind)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Helgrind)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Massif)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (DRD)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Omega)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind (Lackey)"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valid Location"
-#~ msgid "Valgrind communication error"
-#~ msgstr "Valida situo"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind crashed."
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Valgrind Warning"
-#~ msgid "Valgrind Error"
-#~ msgstr "Fina Situo:"
-
-#, fuzzy
-#~| msgid "Process exited"
-#~ msgid "Valgrind process timed out."
-#~ msgstr "Procezo ĉesiĝis"
-
-#, fuzzy
-#~| msgid "make-process failed"
-#~ msgid "Write to Valgrind process failed."
-#~ msgstr "\"make\"-procezo malsukcesis"
-
-#, fuzzy
-#~| msgid "make-process failed"
-#~ msgid "Read from Valgrind process failed."
-#~ msgstr "\"make\"-procezo malsukcesis"
-
-#, fuzzy
-#~| msgid "make-process failed"
-#~ msgid "Unknown Valgrind process error."
-#~ msgstr "\"make\"-procezo malsukcesis"
-
-#, fuzzy
-#~| msgid "Watch: %1"
-#~ msgid "at: %1"
-#~ msgstr "Observi: %1"
-
-#, fuzzy
-#~| msgid "Watch: %1"
-#~ msgid "by: %1"
-#~ msgstr "Observi: %1"
-
-#~ msgid "Source"
-#~ msgstr "Fonto"
-
-#, fuzzy
-#~| msgid "Project"
-#~ msgid "Object"
-#~ msgstr "Projekto"
-
-#~ msgid "Widget Box"
-#~ msgstr "Fenestraĵ-skatolo"
-
-#~ msgid "Property Editor"
-#~ msgstr "Trajtoredaktilo"
-
-#~ msgid "Action Editor"
-#~ msgstr "Agoredaktilo"
-
-#~ msgid "Object Inspector"
-#~ msgstr "Objektinspektilo"
-
-#, fuzzy
-#~| msgid "Documents"
-#~ msgid "Close Document"
-#~ msgstr "Dokumentoj"
-
-#, fuzzy
-#~| msgid "Project"
-#~ msgid "Protected"
-#~ msgstr "Projekto"
-
-#, fuzzy
-#~| msgid "Options"
-#~ msgid "C++ Options"
-#~ msgstr "Opcioj"
-
-#~ msgid "Tracing Configuration"
-#~ msgstr "Agordo de spurado"
-
-#~ msgid "Enable tracing"
-#~ msgstr "Ŝalti spuradon"
-
-#~ msgid "Custom format string"
-#~ msgstr "Propra formatoteksto"
-
-#~ msgid "Expressions to print:"
-#~ msgstr "Esprimoj montrendaj:"
-
-#~ msgid "Command"
-#~ msgstr "Komando"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Lanĉi"
-
-#~ msgid "Debugger Configuration"
-#~ msgstr "Agordo de sencimigilo"
-
-#~ msgid "Debugger executable:"
-#~ msgstr "Sencimigilprogramo:"
-
-#~ msgid "Gdb executable"
-#~ msgstr "Gdb-programo"
-
-#~ msgid "Options"
-#~ msgstr "Opcioj"
-
-#~ msgid "Display static &members"
-#~ msgstr "Montri statikajn &membrojn"
-
-#~ msgid "Display &demangled names"
-#~ msgstr "Montri &malkompilitajn nomojn"
-
-#~ msgid "Try setting &breakpoints on library loading"
-#~ msgstr "Provi meti &haltpunktojn dum ŝargado de biblioteko"
-
-#~ msgid "E&nable floating toolbar"
-#~ msgstr "Ŝalti ŝveba&ntan ilobreton"
-
-#~ msgid "Start Debugger With"
-#~ msgstr "Starti sencimigilon kun"
-
-#~ msgid "Framestack"
-#~ msgstr "Framstako"
-
-#~ msgid "Remote Debugging"
-#~ msgstr "Fora sencimigado"
-
-#~ msgid "&Config gdb script:"
-#~ msgstr "&Gdb-a agordskripto:"
-
-#~ msgid "Gdb configure script"
-#~ msgstr "Gdb-agordoskripto"
-
-#~ msgctxt "Shell script to be executed at run time"
-#~ msgid "R&un shell script:"
-#~ msgstr "Lanĉi ŝelskript&on:"
-
-#~ msgid "Script to start remote application"
-#~ msgstr "Skripto por starti foran aplikaĵon"
-
-#~ msgctxt "Gdb script to be executed at run time."
-#~ msgid "Run &gdb script:"
-#~ msgstr "Lanĉi &gdb-skripton:"
-
-#~ msgid "Script to connect with remote application"
-#~ msgstr "Skripto por konekti al fora aplikaĵo"
-
-#~ msgid "Profile Editor for The KDevelop Platform"
-#~ msgstr "Profilredaktilo por la KDevelop-platformo"
-
-#~ msgid "Add Profile"
-#~ msgstr "Aldoni Profilon"
-
-#~ msgid "Description"
-#~ msgstr "Priskribo"
-
-#~ msgid "Properties"
-#~ msgstr "Ecoj"
-
-#~ msgid "Derived properties:"
-#~ msgstr "Derivitaj ecoj:"
-
-#~ msgid "Own properties:"
-#~ msgstr "Propraj ecoj:"
-
-#~ msgid "Enabled:"
-#~ msgstr "Ŝaltita:"
-
-#~ msgid "Plugin Name"
-#~ msgstr "Nomo de Kromprogramo"
-
-#~ msgid "Disabled:"
-#~ msgstr "Malŝaltita:"
-
-#~ msgid "Available plugins:"
-#~ msgstr "Disponeblaj kromaĵoj:"
-
-#~ msgid "Generic Name"
-#~ msgstr "Komuna Nomo"
-
-#~ msgid "List of Plugins to Be Loaded"
-#~ msgstr "Listo de kromaĵoj ŝargendaj"
-
-#~ msgid "&Name:"
-#~ msgstr "&Nomo:"
-
-#~ msgid "&Generic name:"
-#~ msgstr "&Komuna nomo:"
-
-#~ msgid "&Description:"
-#~ msgstr "&Priskribo:"
-
-#~ msgid "Build Directory Creator"
-#~ msgstr "Konstrudosierujo-Kreisto"
-
-#~ msgid "CMake &Binary:"
-#~ msgstr "CMake-&Programo:"
-
-#~ msgid "&Build Directory:"
-#~ msgstr "&Konstrudosierujo:"
-
-#~ msgid "&Installation Prefix:"
-#~ msgstr "&Instalprefikso:"
-
-#~ msgid "Build &type:"
-#~ msgstr "Kontru&tipo:"
-
-#~ msgid "debug"
-#~ msgstr "sencimiga"
-
-#~ msgid "release"
-#~ msgstr "eldona"
-
-#~ msgid "Generator:"
-#~ msgstr "Generilo:"
-
-#~ msgid "TextLabel"
-#~ msgstr "TekstEtikedo"
-
-#~ msgid "Comment:"
-#~ msgstr "Kommento"
-
-#~ msgid "Show Advanced"
-#~ msgstr "Montri pluajn"
-
-#~ msgid "CMake Directory"
-#~ msgstr "CMake-Dosierujo"
-
-#~ msgid "Show Advanced Values"
-#~ msgstr "Montri pluajn valorojn"
-
-#~ msgid "Viewer"
-#~ msgstr "Rigardilo"
-
-#~ msgid "Parse Tree"
-#~ msgstr "Pars-Arbo"
-
-#~ msgid "Value 1"
-#~ msgstr "Valoro 1"
-
-#~ msgid "Value 2"
-#~ msgstr "Valoro 2"
-
-#~ msgid "Add All From Directory"
-#~ msgstr "Aldoni ĉiujn de dosierujo"
-
-#~ msgid "Choose File to Add..."
-#~ msgstr "Elekti aldonendan dosieron..."
-
-#~ msgid "CMake Binary:"
-#~ msgstr "CMake-Programo:"
-
-#~ msgid "QMake Binary:"
-#~ msgstr "QMake programo:"
-
-#, fuzzy
-#~| msgid "&View"
-#~ msgid "View"
-#~ msgstr "&Rigardi"
-
-#~ msgid "Abort on first error:"
-#~ msgstr "Ĉesigi je unua eraro:"
-
-#~ msgid "Number of simultaneous jobs:"
-#~ msgstr "Nombro da samtempaj taskoj:"
-
-#~ msgid "Make executable:"
-#~ msgstr "Make-programo:"
-
-#~ msgid "Default make target:"
-#~ msgstr "Apriora \"make\"-celo:"
-
-#~ msgid "Additional make options:"
-#~ msgstr "Pluaj \"make\"-opcioj:"
-
-#, fuzzy
-#~| msgid "Active Environment Profile: "
-#~ msgid "Active Environment Profile:"
-#~ msgstr "Profilo de Aktiva Metiejo: "
-
-#~ msgid "Pattern:"
-#~ msgstr "Ŝablono:"
-
-#~ msgid "Template:"
-#~ msgstr "Ŝablono:"
-
-#~ msgid "Regular Expression:"
-#~ msgstr "Regula Esprimo:"
-
-#~ msgid "Case Sensitive:"
-#~ msgstr "Usklecdistinga:"
-
-#~ msgid "Directory:"
-#~ msgstr "Dosierujo:"
-
-#~ msgid "Recursive:"
-#~ msgstr "Rekursia:"
-
-#~ msgid "Limit to project files:"
-#~ msgstr "Limigo al projektdosieroj:"
-
-#~ msgid "Files:"
-#~ msgstr "Dosieroj:"
-
-#~ msgid "Exclude:"
-#~ msgstr "Elbari:"
-
-#, fuzzy
-#~| msgid "Directory:"
-#~ msgid "&Directory:"
-#~ msgstr "Dosierujo:"
-
-#~ msgid "Choose directory to import"
-#~ msgstr "Elekti dosierujon importendan"
-
-#~ msgid "&Fetch from:"
-#~ msgstr "&Ekpreni de:"
-
-#~ msgid "Fetch &Module"
-#~ msgstr "Ekpreni &modulon"
-
-#~ msgid "Project &name:"
-#~ msgstr "Projekt&nomo:"
-
-#, fuzzy
-#~| msgid "&Build System"
-#~ msgid "&Build System:"
-#~ msgstr "&Konstrusistemo"
-
-#~ msgid "None"
-#~ msgstr "Neniu"
-
-#~ msgid "Version Control System:"
-#~ msgstr "Versiokontrola sistemo:"
-
-#~ msgid "Location:"
-#~ msgstr "Situo:"
-
-#~ msgid "(invalid)"
-#~ msgstr "(nevalida)"
-
-#, fuzzy
-#~| msgid "generating"
-#~ msgid "Indentation"
-#~ msgstr "generanta"
-
-#, fuzzy
-#~| msgid "Watches"
-#~ msgid "Spaces"
-#~ msgstr "Observpunktoj"
-
-#, fuzzy
-#~| msgid "Breakpoints"
-#~ msgid "Brackets"
-#~ msgstr "Haltpunktoj"
-
-#, fuzzy
-#~| msgid "Class"
-#~ msgid "Cases"
-#~ msgstr "Klaso"
-
-#~ msgid "Class"
-#~ msgstr "Klaso"
-
-#, fuzzy
-#~| msgid "TextLabel"
-#~ msgid "Labels"
-#~ msgstr "TekstEtikedo"
-
-#, fuzzy
-#~| msgid "Namespace alias"
-#~ msgid "Namespaces"
-#~ msgstr "Alinomo de nomspaco"
-
-#, fuzzy
-#~| msgid "Watches"
-#~ msgid "Switches"
-#~ msgstr "Observpunktoj"
-
-#, fuzzy
-#~| msgid "None"
-#~ msgid "No change"
-#~ msgstr "Neniu"
-
-#, fuzzy
-#~| msgid "Breakpoint"
-#~ msgid "Break"
-#~ msgstr "Haltpunkto"
-
-#, fuzzy
-#~| msgid "Step into the next statement"
-#~ msgid "&Keep one-line statements"
-#~ msgstr "Paŝi en la sekvontan ordonon"
-
-#~ msgid "&Executable:"
-#~ msgstr "Komandodosi&ero:"
-
-#, fuzzy
-#~| msgid "Extra &Parameters"
-#~ msgid "Extra &Parameters:"
-#~ msgstr "Pluaj &parametroj"
-
-#~ msgid "Display stack to &depth:"
-#~ msgstr "Montri stakon ĝis profun&deco:"
-
-#, fuzzy
-#~| msgid "Maximum &frame stack size"
-#~ msgid "Maximum &frame stack size:"
-#~ msgstr "Maksimuma &framstaka grandeco"
-
-#~ msgid " bytes"
-#~ msgstr " bajtoj"
-
-#~ msgid "Limit &identical error display"
-#~ msgstr "Limigi &identan eraromontradon"
-
-#~ msgid "Leak Summary:"
-#~ msgstr "Likresumo:"
-
-#~ msgid "Summary"
-#~ msgstr "Resumo"
-
-#~ msgid "Full"
-#~ msgstr "Plena"
-
-#~ msgid "Low"
-#~ msgstr "Malalta"
-
-#~ msgid "Medium"
-#~ msgstr "Meza"
-
-#~ msgid "High"
-#~ msgstr "Alta"
-
-#~ msgid "Show Reachable Blocks"
-#~ msgstr "Montri atingeblajn blokjn"
-
-#, fuzzy
-#~| msgid "Free block list size"
-#~ msgid "Free block list size:"
-#~ msgstr "Grandeco de la listo de liberaj blokoj"
-
-#~ msgid "Separate Thread Reporting"
-#~ msgstr "Raporti pri fadenoj aparte"
-
-#~ msgid "Full Cache Simulation"
-#~ msgstr "Plena simulado de kaŝmemoro"
-
-#, fuzzy
-#~| msgid "Extra Synchronization Events"
-#~ msgid "Extra Synchronization Events:"
-#~ msgstr "Pluaj sinkronigoeventoj"
-
-#~ msgid "None (Locks Only)"
-#~ msgstr "Nenion (nur ŝlosojn)"
-
-#~ msgid "Threads"
-#~ msgstr "Fadenojn"
-
-#~ msgid "All"
-#~ msgstr "Ĉion"
-
-#~ msgid "&Parameters:"
-#~ msgstr "&Parametroj:"
-
-#~ msgid "&Trace children"
-#~ msgstr "&Spuri infanojn"
-
-#~ msgid "E&xecutable:"
-#~ msgstr "&Programo:"
-
-#~ msgid "Additional p&arameters:"
-#~ msgstr "Pluaj p&arametroj:"
-
-#~ msgid "Executable:"
-#~ msgstr "Programo:"
-
-#~ msgid "&Show still reachable blocks"
-#~ msgstr "&Montri ankoraŭ atingeblajn blokojn"
-
-#, fuzzy
-#~| msgid "Form"
-#~ msgctxt "@title:menu"
-#~ msgid "Form"
-#~ msgstr "Formo"
-
-#~ msgid "Core"
-#~ msgstr "Kerno"
-
-#~ msgctxt "list of global plugins"
-#~ msgid "Global"
-#~ msgstr "Ĉiea"
-
-#~ msgid "Project"
-#~ msgstr "Projekto"
-
-#~ msgid "Core Plugins"
-#~ msgstr "Kernkromaĵoj"
-
-#~ msgid "Global Plugins"
-#~ msgstr "Ĉieaj Kromprogramoj"
-
-#~ msgid "Project Plugins"
-#~ msgstr "Projektkromaĵoj"
-
-#~ msgid "Remove selected profile and all its subprofiles?"
-#~ msgstr "Ĉu forigi la elektitan profilon kaj ties subprofilojn?"
-
-#~ msgid "Enable Plugin"
-#~ msgstr "Ŝalti kromaĵon"
-
-#~ msgid "Disable Plugin"
-#~ msgstr "Malŝalti kromaĵon"
-
-#~ msgid "The document type seems to be: '%1'."
-#~ msgstr "La dokumenttipo ŝajnas esti: '%1'."
-
-#~ msgid "&Open Project..."
-#~ msgstr "Malfermi pr&ojekton..."
-
-#~ msgid "Open recent project"
-#~ msgstr "Malfermi lasttempan projekton"
-
-#~ msgid "C&lose Project"
-#~ msgstr "&Fermi projekton"
-
-#~ msgid "Close project"
-#~ msgstr "Fermi projekton"
-
-#~ msgid "Project &Options"
-#~ msgstr "Projekt&opcioj"
-
-#~ msgid "Are you sure you want to reopen the current project?"
-#~ msgstr "Ĉu vi certas ke vi volas remalfermi la aktualan projekton?"
-
-#~ msgid "Loading project plugins..."
-#~ msgstr "Ŝarganta projektkromaĵojn..."
-
-#~ msgid "Project loaded."
-#~ msgstr "Projekto ŝargita."
-
-#~ msgid "Could not create project management plugin %1."
-#~ msgstr "Ne eblis krei projektadministran kromaĵon %1."
-
-#~ msgid "Could not create language plugin for %1."
-#~ msgstr "Ne eblis krei lingvokromaĵon por %1."
-
-#, fuzzy
-#~| msgid "Form"
-#~ msgid "Form"
-#~ msgstr "Formo"
-
-#~ msgid "Valid Location"
-#~ msgstr "Valida situo"
-
-#~ msgctxt "An unknown c++ declaration that is unknown"
-#~ msgid "Unknown"
-#~ msgstr "Nekonata"
-
-#~ msgid "Namespace import"
-#~ msgstr "Importo de nomspaco"
-
-#~ msgid "Namespace alias"
-#~ msgstr "Alinomo de nomspaco"
-
-#~ msgid "Forward Declaration"
-#~ msgstr "Anonca deklaro"
-
-#, fuzzy
-#~| msgid "Generator:"
-#~ msgid "enumerator"
-#~ msgstr "Generilo:"
-
-#~ msgid "resolved forward-declaration"
-#~ msgstr "plenumita anoncdeklaro"
-
-#, fuzzy
-#~| msgid "resolved forward-declaration"
-#~ msgid "(unresolved forward-declaration)"
-#~ msgstr "plenumita anoncdeklaro"
-
-#~ msgid "Container: "
-#~ msgstr "Ujo:"
-
-#~ msgid "Scope: "
-#~ msgstr "Videblo: "
-
-#~ msgid "Access: "
-#~ msgstr "Aliro: "
-
-#~ msgid "Kind: "
-#~ msgstr "Speco: "
-
-#~ msgid "Modifiers: "
-#~ msgstr "Modifiloj: "
-
-#~ msgid "Def.: "
-#~ msgstr "Def.:"
-
-#~ msgid "Decl.: "
-#~ msgstr "Dekl.:"
-
-#, fuzzy
-#~| msgid "Def.: "
-#~ msgid " Def.: "
-#~ msgstr "Def.:"
-
-#, fuzzy
-#~| msgid "Decl.: "
-#~ msgid " Decl.: "
-#~ msgstr "Dekl.:"
-
-#, fuzzy
-#~| msgid "&Restart"
-#~ msgid "Result"
-#~ msgstr "&Restarti"
-
-#, fuzzy
-#~| msgid "Name"
-#~ msgid "File Name"
-#~ msgstr "Nomo"
-
-#~ msgid "Maintainer"
-#~ msgstr "Vartisto"
-
-#, fuzzy
-#~| msgid "Delete all"
-#~ msgid "Delete style"
-#~ msgstr "Forigi ĉiujn"
-
-#, fuzzy
-#~| msgid "Are you sure you want to reopen the current project?"
-#~ msgid "Are you sure you want to delete this style?"
-#~ msgstr "Ĉu vi certas ke vi volas remalfermi la aktualan projekton?"
-
-#, fuzzy
-#~| msgid "&Run"
-#~ msgid "QxRunner"
-#~ msgstr "&Ruligi"
-
-#, fuzzy
-#~| msgid "Sto&p"
-#~ msgid "S&top"
-#~ msgstr "Hal&ti"
-
-#, fuzzy
-#~| msgid "Delete all"
-#~ msgid "Select &All"
-#~ msgstr "Forigi ĉiujn"
-
-#, fuzzy
-#~| msgid "Delete all"
-#~ msgid "&Unselect All"
-#~ msgstr "Forigi ĉiujn"
-
-#, fuzzy
-#~| msgid "Amount"
-#~ msgid "&About"
-#~ msgstr "Kvanto"
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgid "E&xit"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Copy All"
-#~ msgid "&Collapse All"
-#~ msgstr "Kopii ĉiujn"
-
-#, fuzzy
-#~| msgid "&Restart"
-#~ msgid "&Results"
-#~ msgstr "&Restarti"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgid "&Settings..."
-#~ msgstr "&Agordo"
-
-#, fuzzy
-#~| msgid "&Tools"
-#~ msgid "&Toolbars"
-#~ msgstr "&Iloj"
-
-#, fuzzy
-#~| msgid "Debugger Toolbar"
-#~ msgid "Ru&nner Toolbar"
-#~ msgstr "Sencimigila ilobreto"
-
-#, fuzzy
-#~| msgid "Run"
-#~ msgid "Ran"
-#~ msgstr "Lanĉi"
-
-#, fuzzy
-#~| msgid "Delete"
-#~ msgid "Selected:"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Run"
-#~ msgid "Run:"
-#~ msgstr "Lanĉi"
-
-#, fuzzy
-#~| msgid "Access: "
-#~ msgid "Success"
-#~ msgstr "Aliro: "
-
-#, fuzzy
-#~| msgid "Options"
-#~ msgid "Exceptions"
-#~ msgstr "Opcioj"
-
-#, fuzzy
-#~| msgid "Natural"
-#~ msgid "Fatals"
-#~ msgstr "Natura"
-
-#, fuzzy
-#~| msgid "Code"
-#~ msgid "Close"
-#~ msgstr "Kodo"
-
-#, fuzzy
-#~| msgid "Files to load"
-#~ msgid "Failed to comply."
-#~ msgstr "Dosieroj ŝargendaj"
-
-#~ msgid "&Directory"
-#~ msgstr "&Dosierujo"
-
-#, fuzzy
-#~| msgid "Summary"
-#~ msgid "dummy"
-#~ msgstr "Resumo"
-
-#, fuzzy
-#~| msgid "<Loading...>"
-#~ msgid "Stopping..."
-#~ msgstr "<Ŝargante...>"
-
-#, fuzzy
-#~| msgid "Delete"
-#~ msgctxt "@info:tooltip"
-#~ msgid "Deselect Item"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Delete"
-#~ msgctxt "@info:tooltip"
-#~ msgid "Select Item"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Bu&ild"
-#~ msgid "Build"
-#~ msgstr "Munt&i"
-
-#~ msgctxt "@title:meu"
-#~ msgid "Project"
-#~ msgstr "Projekto"
-
-#~ msgid "&Evaluate"
-#~ msgstr "&Komputi"
-
-#~ msgid "&Build"
-#~ msgstr "&Konstrui"
-
-#~ msgid "F&orm"
-#~ msgstr "F&ormo"
-
-#~ msgid "Thread %1"
-#~ msgstr "Fadeno %1"
-
-#~ msgid "Build Toolbar"
-#~ msgstr "Muntado-ilobreto"
-
-#~ msgid "Browser Toolbar"
-#~ msgstr "Foliumil-ilobreto"
-
-#~ msgid "Extra Toolbar"
-#~ msgstr "Plua ilobreto"
-
-#~ msgid "(bad forward-declaration)"
-#~ msgstr "(malbona anoncdeklaro)"
-
-#~ msgid "(forward-declaration)"
-#~ msgstr "(anonca deklaro)"
+msgstr "Malfermi KDevelop Seancon"

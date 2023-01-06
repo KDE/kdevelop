@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:46+0000\n"
-"PO-Revision-Date: 2023-01-04 07:00+0100\n"
+"PO-Revision-Date: 2023-01-05 05:34+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1646,28 +1646,28 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a dependency to add to the list"
-msgstr ""
+msgstr "შეიყვანეთ დამოკიდებულება სიაში დასამატებლად"
 
 #. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:35
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr ""
+msgstr "შეიყვანეთ დამოკიდებულება სიაში დასამატებლად..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add the listed target to the dependency list"
-msgstr ""
+msgstr "ჩამოთვლილი სამიზნის დამოკიდებულებების სიაში ჩამატება"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "List of indirect dependent targets."
-msgstr ""
+msgstr "არაპირდაპირ დამოკიდებული სამიზნეების სია."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:71

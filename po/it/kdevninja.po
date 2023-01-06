@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevninja\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"POT-Creation-Date: 2023-01-06 00:46+0000\n"
 "PO-Revision-Date: 2020-07-25 16:34+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Unable to find ninja executable. Is it installed on the system?"
 msgstr "Impossibile trovare l'eseguibile ninja. È installato nel sistema?"
 
-#: ninjabuilder.cpp:197
+#: ninjabuilder.cpp:199
 #, kde-format
 msgid "Cannot specify prefix in %1, on ninja"
 msgstr "Impossibile specificare il prefisso in %1 per ninja"
