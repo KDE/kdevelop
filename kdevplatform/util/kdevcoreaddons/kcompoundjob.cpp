@@ -11,13 +11,8 @@
 
 using namespace KDevCoreAddons;
 
-KCompoundJobPrivate::KCompoundJobPrivate()
-{
-}
-
-KCompoundJobPrivate::~KCompoundJobPrivate()
-{
-}
+KCompoundJobPrivate::KCompoundJobPrivate() = default;
+KCompoundJobPrivate::~KCompoundJobPrivate() = default;
 
 KCompoundJob::KCompoundJob(QObject *parent)
     : KCompoundJob(*new KCompoundJobPrivate, parent)
@@ -31,9 +26,7 @@ KCompoundJob::KCompoundJob(KCompoundJobPrivate &dd, QObject *parent)
     d_ptr->q_ptr = this;
 }
 
-KCompoundJob::~KCompoundJob()
-{
-}
+KCompoundJob::~KCompoundJob() = default;
 
 bool KCompoundJob::addSubjob(KJob *job)
 {
