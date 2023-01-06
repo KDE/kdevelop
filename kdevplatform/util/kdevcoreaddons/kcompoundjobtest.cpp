@@ -8,6 +8,7 @@
 #include "kcompoundjobtest.h"
 
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <QTest>
 #include <QTimer>
 
@@ -57,6 +58,11 @@ void CompositeJob::slotResult(KJob *job)
 KCompoundJobTest::KCompoundJobTest()
     : loop(this)
 {
+}
+
+void KCompoundJobTest::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 /**

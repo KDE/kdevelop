@@ -54,6 +54,8 @@ public:
     KCompoundJobTest();
 
 private Q_SLOTS:
+    void initTestCase();
+
     void testDeletionDuringExecution();
 
 private:
