@@ -47,7 +47,7 @@ protected:
      * is emitted. This has obviously to be called before
      * the result has been emitted by the job.
      *
-     * Note that the composite job takes ownership of @p job
+     * Note that the compound job takes ownership of @p job
      *
      * @param job the subjob to add
      * @return true if the job has been added correctly, false otherwise

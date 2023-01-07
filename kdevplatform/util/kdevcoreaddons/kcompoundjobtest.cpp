@@ -27,7 +27,7 @@ void TestJob::doEmit()
     emitResult();
 }
 
-void CompositeJob::start()
+void TestCompoundJob::start()
 {
     if (hasSubjobs()) {
         subjobs().first()->start();
@@ -36,12 +36,12 @@ void CompositeJob::start()
     }
 }
 
-bool CompositeJob::addSubjob(KJob *job)
+bool TestCompoundJob::addSubjob(KJob *job)
 {
     return KCompoundJob::addSubjob(job);
 }
 
-void CompositeJob::slotResult(KJob *job)
+void TestCompoundJob::slotResult(KJob *job)
 {
     KCompoundJob::slotResult(job);
 
@@ -66,7 +66,7 @@ void KCompoundJobTest::initTestCase()
 }
 
 /**
- * In case a composite job is deleted during execution
+ * In case a compound job is deleted during execution
  * we still want to assure that we don't crash
  *
  * see bug: https://bugs.kde.org/show_bug.cgi?id=230692
@@ -76,11 +76,11 @@ void KCompoundJobTest::testDeletionDuringExecution()
     QObject *someParent = new QObject;
     KJob *job = new TestJob(someParent);
 
-    CompositeJob *compositeJob = new CompositeJob;
-    compositeJob->setAutoDelete(false);
-    QVERIFY(compositeJob->addSubjob(job));
+    auto *compoundJob = new TestCompoundJob;
+    compoundJob->setAutoDelete(false);
+    QVERIFY(compoundJob->addSubjob(job));
 
-    QCOMPARE(job->parent(), compositeJob);
+    QCOMPARE(job->parent(), compoundJob);
 
     QSignalSpy destroyed_spy(job, &QObject::destroyed);
     // check if job got reparented properly
@@ -90,11 +90,11 @@ void KCompoundJobTest::testDeletionDuringExecution()
     QCOMPARE(destroyed_spy.size(), 0);
 
     // start async, the subjob takes 1 second to finish
-    compositeJob->start();
+    compoundJob->start();
 
     // delete the job during the execution
-    delete compositeJob;
-    compositeJob = nullptr;
+    delete compoundJob;
+    compoundJob = nullptr;
     // at this point, the subjob should be deleted, too
     QCOMPARE(destroyed_spy.size(), 1);
 }

@@ -29,12 +29,12 @@ private Q_SLOTS:
     void doEmit();
 };
 
-class CompositeJob : public KCompoundJob
+class TestCompoundJob : public KCompoundJob
 {
     Q_OBJECT
 
 public:
-    explicit CompositeJob(QObject *parent = nullptr)
+    explicit TestCompoundJob(QObject *parent = nullptr)
         : KCompoundJob(parent)
     {
     }
