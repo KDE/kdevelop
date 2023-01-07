@@ -1,4 +1,5 @@
 # Translation of kdevfilemanager into esperanto.
+# mesaĝoj por "kdevelop"
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
 #
 msgid ""
@@ -6,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-18 00:51+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"PO-Revision-Date: 2023-06-01 10:00+0100\n"
 "Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -17,8 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "Filesystem"
+#, kde-format
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Dosiersistemo"
@@ -27,44 +27,27 @@ msgstr "Dosiersistemo"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
-msgstr ""
+msgstr "Legosignoj"
 
 #: filemanager.cpp:134
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
-msgstr ""
+msgstr "Aktuala Dokumentdosierujo"
 
 #: filemanager.cpp:165
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
-msgstr ""
+msgstr "Nova Dosiero..."
 
 #: filemanager.cpp:172
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
-msgstr ""
+msgstr "Krei Novan Dosieron"
 
 #: filemanager.cpp:188
 #, kde-format
 msgid "Unable to create file '%1'"
-msgstr ""
-
-#~ msgid "Filesystem"
-#~ msgstr "Dosiersistemo"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "Filename:"
-#~ msgstr "Dosiernomo:"
-
-#~ msgid "Filesystem Browser"
-#~ msgstr "Dosiersistema foliumilo"
+msgstr "Neebla krei dosieron '%1'"

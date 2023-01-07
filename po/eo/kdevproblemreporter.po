@@ -1,13 +1,16 @@
 # Translation of kdevproblemreporter into esperanto.
+# mesaĝoj por "kdevelop"
+# Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevproblemreporter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-30 00:45+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-06 12:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,211 +22,209 @@ msgstr ""
 #: problemreporterplugin.cpp:94
 #, kde-format
 msgid "Parser"
-msgstr ""
+msgstr "Parsilo"
 
 #: problemreporterplugin.cpp:95 problemreporterplugin.cpp:188
 #: problemsview.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Problems"
-msgstr ""
+msgstr "Problemoj"
 
 #: problemreporterplugin.cpp:229
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve Problem"
-msgstr ""
+msgstr "Solvi Problemojn"
 
 #: problemreporterplugin.cpp:231
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Solve: %1"
-msgstr ""
+msgstr "Solvi: %1"
 
 #: problemsview.cpp:36
 #, kde-format
 msgctxt "@action"
 msgid "Force Full Update"
-msgstr ""
+msgstr "Devigi Plenan Ĝisdatigon"
 
 #: problemsview.cpp:47
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Which files to display the problems for"
-msgstr ""
+msgstr "Dosieroj por kiuj montrendas la problemoj"
 
 #: problemsview.cpp:53
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Document"
-msgstr ""
+msgstr "Aktuala Dokumento"
 
 #: problemsview.cpp:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current document"
-msgstr ""
+msgstr "Montri problemojn en aktuala dokumento"
 
 #: problemsview.cpp:57
 #, kde-format
 msgctxt "@option:check"
 msgid "Open Documents"
-msgstr ""
+msgstr "Malfermi Dokumentojn"
 
 #: problemsview.cpp:58
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all open documents"
-msgstr ""
+msgstr "Montri problemojn en ĉiuj malfermataj dokumentoj"
 
 #: problemsview.cpp:61
 #, kde-format
 msgctxt "@option:check"
 msgid "Current Project"
-msgstr ""
+msgstr "Aktuala Projekto"
 
 #: problemsview.cpp:62
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current project"
-msgstr ""
+msgstr "Montri problemojn en aktuala projekto"
 
 #: problemsview.cpp:65
 #, kde-format
 msgctxt "@option:check"
 msgid "All Projects"
-msgstr ""
+msgstr "Ĉiuj Projektoj"
 
 #: problemsview.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all projects"
-msgstr ""
+msgstr "Montri problemojn en ĉiuj projektoj"
 
 #: problemsview.cpp:69
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Path"
-msgstr ""
+msgstr "Dokumentoj en Dosierujvojo"
 
 #: problemsview.cpp:70
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in a specific path"
-msgstr ""
+msgstr "Montri problemojn de ĉiuj dosieroj en specifa vojo"
 
 #: problemsview.cpp:73
 #, kde-format
 msgctxt "@option:check"
 msgid "Documents In Current Path"
-msgstr ""
+msgstr "Dokumentoj en Aktuala Dosierujvojo"
 
 #: problemsview.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems from all files in the path of the current document"
-msgstr ""
+msgstr "Montri problemojn el ĉiuj dosieroj en la vojo de la aktuala dokumento"
 
 #: problemsview.cpp:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Show All"
-msgstr ""
+msgstr "Montri Ĉiujn"
 
 #: problemsview.cpp:79
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display all problems"
-msgstr ""
+msgstr "Montri ĉiujn problemojn"
 
 #: problemsview.cpp:100
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Path Filter..."
-msgstr ""
+msgstr "Dosierujvoja Filtro..."
 
 #: problemsview.cpp:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Imports"
-msgstr ""
+msgstr "Montri Importojn"
 
 #: problemsview.cpp:133
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in imported files"
-msgstr ""
+msgstr "Montri problemojn en importitaj dosieroj"
 
 #: problemsview.cpp:143
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display errors"
-msgstr ""
+msgstr "Montri erarojn"
 
 #: problemsview.cpp:145
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Errors"
-msgstr ""
+msgstr "Montri Erarojn"
 
 #: problemsview.cpp:148
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display warnings"
-msgstr ""
+msgstr "Montri avertojn"
 
 #: problemsview.cpp:150
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Warnings"
-msgstr ""
+msgstr "Montri Avertojn"
 
 #: problemsview.cpp:153
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display hints"
-msgstr ""
+msgstr "Montri konsiletojn"
 
 #: problemsview.cpp:155
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Hints"
-msgstr ""
+msgstr "Montri Konsiletojn"
 
 #: problemsview.cpp:175
 #, kde-format
 msgctxt "@title:menu"
 msgid "Grouping"
-msgstr ""
+msgstr "Grupigo"
 
 #: problemsview.cpp:180
 #, kde-format
 msgctxt "@option:check"
 msgid "None"
-msgstr ""
+msgstr "Neniu"
 
 #: problemsview.cpp:181
 #, kde-format
 msgctxt "@option:check"
 msgid "Path"
-msgstr ""
+msgstr "Vojo"
 
 #: problemsview.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Severity"
-msgstr ""
+msgstr "Severeco"
 
 #: problemsview.cpp:210
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
-msgstr ""
+msgstr "Serĉi..."
 
 #: problemsview.cpp:453
-#, fuzzy, kde-format
-#| msgctxt "%1: tab name, %2: number of problems"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt "@title:tab %1: tab name, %2: number of problems"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
@@ -232,52 +233,28 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Scope: %1"
-msgstr ""
+msgstr "Amplekso: %1"
 
 #: problemtreeview.cpp:94
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Problems"
-msgstr ""
+msgstr "Problemoj"
 
 #: problemtreeview.cpp:205
 #, kde-format
 msgctxt "@title:menu"
 msgid "Problem"
-msgstr ""
+msgstr "Problemo"
 
 #: problemtreeview.cpp:207
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Description"
-msgstr ""
+msgstr "&Kopii Priskribon"
 
 #: problemtreeview.cpp:226
 #, kde-format
 msgctxt "@title:menu"
 msgid "Solve: %1"
-msgstr ""
-
-#~ msgctxt "@title:column source of problem"
-#~ msgid "Source"
-#~ msgstr "Fonto"
-
-#~ msgctxt "@title:column file where problem was found"
-#~ msgid "File"
-#~ msgstr "Dosiero"
-
-#~ msgctxt "@title:column line number with problem"
-#~ msgid "Line"
-#~ msgstr "Linio"
-
-#~ msgctxt "@title:column column number with problem"
-#~ msgid "Column"
-#~ msgstr "Kolumno"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
+msgstr "Solvi: %1"

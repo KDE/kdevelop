@@ -1,13 +1,16 @@
 # Translation of kdevcmakebuilder into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 01:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,29 +22,28 @@ msgstr ""
 #: cmakebuilder.cpp:105
 #, kde-format
 msgid "Could not find the make builder. Check your installation"
-msgstr ""
+msgstr "Ne troveblis la 'make' konstruilo. Kontrolu vian instalaĵon."
 
 #: cmakebuilder.cpp:129 cmakebuilder.cpp:155 cmakebuilder.cpp:182
 #, kde-format
 msgid "Could not find a builder for %1"
-msgstr ""
+msgstr "Ne troveblis konstruilo por %1"
 
 #: cmakebuilder.cpp:195
 #, kde-format
 msgid "No build directory configured, cannot install"
-msgstr ""
+msgstr "Dosierujo de kunmetado ne agordita, ne eblas instali"
 
 #: cmakebuilder.cpp:205
 #, kde-format
 msgid "No build directory configured, cannot configure"
-msgstr ""
+msgstr "Dosierujo de kunmetado ne agordita, ne eblas agordi"
 
 #: cmakebuilderpreferences.cpp:40
-#, fuzzy, kde-format
-#| msgid "CMake: %1"
+#, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
-msgstr "CMake: %1"
+msgstr "CMake"
 
 #: cmakebuilderpreferences.cpp:45
 #, kde-format
@@ -61,13 +63,12 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default generator:"
-msgstr ""
+msgstr "Defaŭlta generilo:"
 
 #: cmakejob.cpp:38 prunejob.cpp:25
-#, fuzzy, kde-format
-#| msgid "CMake: %1"
+#, kde-format
 msgid "CMake"
-msgstr "CMake: %1"
+msgstr "CMake"
 
 #: cmakejob.cpp:56
 #, kde-format
@@ -97,30 +98,14 @@ msgstr ""
 #: prunejob.cpp:57
 #, kde-format
 msgid "%1> rm -rf %2"
-msgstr ""
+msgstr "%1> rm -rf %2"
 
 #: prunejob.cpp:72
 #, kde-format
 msgid "** Prune successful **"
-msgstr ""
+msgstr "** Stuco sukcesa **"
 
 #: prunejob.cpp:74
 #, kde-format
 msgid "** Prune failed: %1 **"
-msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "CMake Builder"
-#~ msgstr "CMake-Programo:"
-
-#~ msgid "CMake Binary:"
-#~ msgstr "CMake-Programo:"
+msgstr "** Stuco malsukcesis: %1 **"

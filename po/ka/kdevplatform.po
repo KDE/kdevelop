@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:46+0000\n"
-"PO-Revision-Date: 2023-01-05 05:34+0100\n"
+"PO-Revision-Date: 2023-01-06 07:20+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2030,7 +2030,7 @@ msgstr "მიმდინარე ხაზის ჩვენება"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
-msgstr ""
+msgstr "გაშვების მიმდინარე მიმდინარეობის ჩვენება"
 
 #: shell/debugcontroller.cpp:299
 #, kde-format
@@ -2872,7 +2872,7 @@ msgstr ""
 #: shell/project.cpp:268
 #, kde-format
 msgid "Unable to get project file: %1"
-msgstr ""
+msgstr "პროექტის ფაილის მიღების შეცდომა: %1"
 
 #: shell/project.cpp:308
 #, kde-format
@@ -2919,7 +2919,7 @@ msgstr "არასწორი მდებარეობა: %1"
 #: shell/projectcontroller.cpp:313
 #, kde-format
 msgid "Already opening %1, not opening again"
-msgstr ""
+msgstr "%1-ს უკვე ვხსნი. თავიდან არ გავხსნი"
 
 #: shell/projectcontroller.cpp:470
 #, kde-format
