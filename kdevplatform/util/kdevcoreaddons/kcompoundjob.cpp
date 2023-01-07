@@ -40,7 +40,7 @@ bool KCompoundJob::addSubjob(KJob *job)
     connect(job, &KJob::result, this, &KCompoundJob::slotResult);
 
     // Forward information from that subjob.
-    connect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
+    connect(job, &KJob::infoMessage, this, &KCompoundJob::subjobInfoMessage);
 
     return true;
 }
@@ -52,7 +52,7 @@ bool KCompoundJob::removeSubjob(KJob *job)
     if (d->m_subjobs.removeAll(job) > 0) {
         job->setParent(nullptr);
         disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
-        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
+        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::subjobInfoMessage);
         return true;
     }
     return false;
@@ -74,7 +74,7 @@ void KCompoundJob::clearSubjobs()
     for (KJob *job : std::as_const(d->m_subjobs)) {
         job->setParent(nullptr);
         disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
-        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::slotInfoMessage);
+        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::subjobInfoMessage);
     }
     d->m_subjobs.clear();
 }
@@ -94,7 +94,7 @@ void KCompoundJob::slotResult(KJob *job)
     removeSubjob(job);
 }
 
-void KCompoundJob::slotInfoMessage(KJob *job, const QString &plain, const QString &rich)
+void KCompoundJob::subjobInfoMessage(KJob *job, const QString &plain, const QString &rich)
 {
     Q_EMIT infoMessage(job, plain, rich);
 }
