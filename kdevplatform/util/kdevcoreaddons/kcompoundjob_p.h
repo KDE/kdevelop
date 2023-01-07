@@ -21,6 +21,8 @@ public:
     KCompoundJobPrivate();
     virtual ~KCompoundJobPrivate();
 
+    void disconnectSubjob(KJob *job);
+
     KJob *q_ptr = nullptr;
 
     QList<KJob *> m_subjobs;

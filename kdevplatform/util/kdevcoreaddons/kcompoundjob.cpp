@@ -14,6 +14,14 @@ using namespace KDevCoreAddons;
 KCompoundJobPrivate::KCompoundJobPrivate() = default;
 KCompoundJobPrivate::~KCompoundJobPrivate() = default;
 
+void KCompoundJobPrivate::disconnectSubjob(KJob *job)
+{
+    Q_Q(KCompoundJob);
+    job->setParent(nullptr);
+    QObject::disconnect(job, &KJob::result, q, &KCompoundJob::slotResult);
+    QObject::disconnect(job, &KJob::infoMessage, q, &KCompoundJob::subjobInfoMessage);
+}
+
 KCompoundJob::KCompoundJob(QObject *parent)
     : KCompoundJob(*new KCompoundJobPrivate, parent)
 {
@@ -50,9 +58,7 @@ bool KCompoundJob::removeSubjob(KJob *job)
     Q_D(KCompoundJob);
     // remove only Subjobs that are on the list
     if (d->m_subjobs.removeAll(job) > 0) {
-        job->setParent(nullptr);
-        disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
-        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::subjobInfoMessage);
+        d->disconnectSubjob(job);
         return true;
     }
     return false;
@@ -72,9 +78,7 @@ void KCompoundJob::clearSubjobs()
 {
     Q_D(KCompoundJob);
     for (KJob *job : std::as_const(d->m_subjobs)) {
-        job->setParent(nullptr);
-        disconnect(job, &KJob::result, this, &KCompoundJob::slotResult);
-        disconnect(job, &KJob::infoMessage, this, &KCompoundJob::subjobInfoMessage);
+        d->disconnectSubjob(job);
     }
     d->m_subjobs.clear();
 }
