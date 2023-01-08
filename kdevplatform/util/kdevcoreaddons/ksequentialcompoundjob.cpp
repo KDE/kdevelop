@@ -32,6 +32,13 @@ void KSequentialCompoundJobPrivate::startNextSubjob()
     job->start();
 }
 
+void KSequentialCompoundJobPrivate::disconnectSubjob(KJob *job)
+{
+    Q_Q(KSequentialCompoundJob);
+    QObject::disconnect(job, &KJob::percentChanged, q, &KSequentialCompoundJob::subjobPercentChanged);
+    KCompoundJobPrivate::disconnectSubjob(job);
+}
+
 KSequentialCompoundJob::KSequentialCompoundJob(QObject *parent)
     : KSequentialCompoundJob(*new KSequentialCompoundJobPrivate, parent)
 {
@@ -81,8 +88,6 @@ void KSequentialCompoundJob::subjobPercentChanged(KJob *job, unsigned long perce
 void KSequentialCompoundJob::subjobFinished(KJob *job)
 {
     Q_D(KSequentialCompoundJob);
-    disconnect(job, &KJob::percentChanged, this, &KSequentialCompoundJob::subjobPercentChanged);
-
     if (d->m_killingSubjob || isFinished()) {
         // doKill() will return true and this compound job will finish, or already finished
         removeSubjob(job);

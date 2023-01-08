@@ -33,6 +33,8 @@ public:
      */
     void startNextSubjob();
 
+    void disconnectSubjob(KJob *job) override;
+
     bool m_abortOnSubjobError = true;
 
     bool m_killingSubjob = false;
