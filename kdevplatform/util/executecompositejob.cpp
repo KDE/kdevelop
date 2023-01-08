@@ -14,13 +14,13 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
 {
     qCDebug(UTIL) << "execute composite" << jobs;
     for (KJob* job : jobs) {
-        if (!job) {
-            qCWarning(UTIL) << "Added null job!";
-            continue;
+        if (addSubjob(job)) {
+            if (objectName().isEmpty()) {
+                setObjectName(job->objectName());
+            }
+        } else {
+            qCWarning(UTIL) << "failed to add null or duplicate subjob" << job;
         }
-        addSubjob(job);
-        if (objectName().isEmpty())
-            setObjectName(job->objectName());
     }
 }
 
