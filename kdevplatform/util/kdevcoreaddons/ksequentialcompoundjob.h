@@ -80,7 +80,7 @@ protected Q_SLOTS:
      */
     virtual void subjobPercentChanged(KJob *job, unsigned long percent);
 
-    void slotResult(KJob *job) override;
+    void subjobFinished(KJob *job) override;
 
 protected:
     /**

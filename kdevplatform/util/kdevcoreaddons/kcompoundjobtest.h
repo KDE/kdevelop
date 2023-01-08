@@ -1,6 +1,7 @@
 /*
     This file is part of the KDE project
     SPDX-FileCopyrightText: 2013 Kevin Funk <kevin@kfunk.org>
+    SPDX-FileCopyrightText: 2023 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -8,7 +9,6 @@
 #ifndef KCOMPOUNDJOBTEST_H
 #define KCOMPOUNDJOBTEST_H
 
-#include <QEventLoop>
 #include <QObject>
 
 #include "kcompoundjob.h"
@@ -25,8 +25,18 @@ public:
     /// Takes 1 second to finish
     void start() override;
 
-private Q_SLOTS:
-    void doEmit();
+    using KJob::emitResult;
+};
+
+class KillableTestJob : public TestJob
+{
+    Q_OBJECT
+
+public:
+    explicit KillableTestJob(QObject *parent = nullptr);
+
+protected:
+    bool doKill() override;
 };
 
 class TestCompoundJob : public KCompoundJob
@@ -40,10 +50,12 @@ public:
     }
 
     void start() override;
-    bool addSubjob(KJob *job) override;
+
+    using KCompoundJob::addSubjob;
+    using KCompoundJob::clearSubjobs;
 
 protected Q_SLOTS:
-    void slotResult(KJob *job) override;
+    void subjobFinished(KJob *job) override;
 };
 
 class KCompoundJobTest : public QObject
@@ -51,6 +63,9 @@ class KCompoundJobTest : public QObject
     Q_OBJECT
 
 public:
+    enum class Action { Finish, KillVerbosely, KillQuietly, Destroy };
+    Q_ENUM(Action)
+
     KCompoundJobTest();
 
 private Q_SLOTS:
@@ -59,8 +74,8 @@ private Q_SLOTS:
     void testDeletionDuringExecution_data();
     void testDeletionDuringExecution();
 
-private:
-    QEventLoop loop;
+    void testFinishingSubjob_data();
+    void testFinishingSubjob();
 };
 
 #endif // KCOMPOUNDJOBTEST_H

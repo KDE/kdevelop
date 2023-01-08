@@ -78,33 +78,54 @@ void KSequentialCompoundJob::subjobPercentChanged(KJob *job, unsigned long perce
     setPercent(totalPercent);
 }
 
-void KSequentialCompoundJob::slotResult(KJob *job)
+void KSequentialCompoundJob::subjobFinished(KJob *job)
 {
     Q_D(KSequentialCompoundJob);
     disconnect(job, &KJob::percentChanged, this, &KSequentialCompoundJob::subjobPercentChanged);
 
+    if (d->m_killingSubjob || isFinished()) {
+        // doKill() will return true and this compound job will finish, or already finished
+        removeSubjob(job);
+        return;
+    }
+
     Q_ASSERT(d->m_jobIndex < d->m_jobCount); // invariant
-    const auto totalPercent = d->m_jobIndex == -1 ? 100 : static_cast<unsigned long>(100.0 * (d->m_jobIndex + 1) / d->m_jobCount);
+    // Note: isCurrentlyRunningSubjob(job) must be checked before calling removeSubjob(job).
+    if (!d->isCurrentlyRunningSubjob(job)) {
+        qCDebug(UTIL) << "unstarted subjob finished:" << job;
+        removeSubjob(job);
+        return;
+    }
+
+    const bool registeredSubjob = removeSubjob(job);
+    Q_ASSERT(registeredSubjob); // because isCurrentlyRunningSubjob(job) returned true
+
+    Q_ASSERT(d->m_jobIndex >= 0); // because isCurrentlyRunningSubjob(job) returned true
+    const unsigned long totalPercent = 100.0 * (d->m_jobIndex + 1) / d->m_jobCount;
     qCDebug(UTIL) << "subjob finished:" << job << "; total percent:" << totalPercent;
     setPercent(totalPercent);
 
-    bool emitDone = false;
-    if (d->m_abortOnSubjobError && job->error()) {
-        qCDebug(UTIL) << "aborting on subjob error:" << job->error() << job->errorText();
-        KCompoundJob::slotResult(job); // calls emitResult()
-        emitDone = true;
-    } else {
-        removeSubjob(job);
+    int error = job->error();
+    if (!error && d->m_killingFailed) {
+        error = KilledJobError;
     }
 
-    if (!d->m_subjobs.empty() && !error() && !d->m_killing) {
-        qCDebug(UTIL) << "remaining subjobs:" << d->m_subjobs;
-        d->startNextSubjob();
-    } else if (!emitDone) {
-        setError(job->error());
-        setErrorText(job->errorString());
-        emitResult();
+    // Abort if job is the subjob we failed to kill and in case of error.
+    const bool abort = d->m_killingFailed || (d->m_abortOnSubjobError && error);
+    if (abort) {
+        qCDebug(UTIL) << "aborting on subjob error:" << error << job->errorText();
     }
+
+    // Finish in order to abort, or if all subjobs have finished. Propagate the last-run subjob's error.
+    if (abort || d->m_subjobs.empty()) {
+        setError(error);
+        setErrorText(job->errorText());
+        emitResult();
+        return;
+    }
+
+    qCDebug(UTIL) << "remaining subjobs:" << d->m_subjobs;
+    d->startNextSubjob();
 }
 
 bool KSequentialCompoundJob::addSubjob(KJob *job)
@@ -121,17 +142,38 @@ bool KSequentialCompoundJob::addSubjob(KJob *job)
 bool KSequentialCompoundJob::doKill()
 {
     Q_D(KSequentialCompoundJob);
-    qCDebug(UTIL) << "killing subjobs:" << d->m_subjobs.size();
-    d->m_killing = true;
-    while (!d->m_subjobs.empty()) {
-        auto *const job = d->m_subjobs.front();
-        if (!job || job->kill()) {
-            removeSubjob(job);
-        } else {
-            return false;
+    // Don't check isFinished() here, because KJob::kill() calls doKill() only if the job has not finished.
+    if (d->m_killingSubjob) {
+        qCDebug(UTIL) << "killing sequential compound job recursively fails";
+        return false;
+    }
+    if (d->m_jobIndex == -1) {
+        qCDebug(UTIL) << "killing unstarted sequential compound job";
+        // Any unstarted subjobs will be deleted along with this compound job, which is their parent.
+        return true;
+    }
+    if (d->m_subjobs.empty()) {
+        qCDebug(UTIL) << "killing sequential compound job with zero remaining subjobs";
+        return true;
+    }
+
+    auto *const job = d->m_subjobs.front();
+    qCDebug(UTIL) << "killing running subjob" << job;
+
+    d->m_killingSubjob = true;
+    const bool killed = job->kill();
+    d->m_killingSubjob = false;
+
+    d->m_killingFailed = !killed;
+    if (d->m_killingFailed) {
+        qCDebug(UTIL) << "failed to kill subjob" << job;
+        if (d->m_subjobs.empty() || d->m_subjobs.constFirst() != job) {
+            qCDebug(UTIL) << "... but the subjob finished or was removed, assume killed. Remaining subjobs:" << d->m_subjobs;
+            return true;
         }
     }
-    return true;
+
+    return killed;
 }
 
 #include "moc_ksequentialcompoundjob.cpp"

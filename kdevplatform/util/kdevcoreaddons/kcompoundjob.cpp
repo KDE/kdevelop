@@ -18,7 +18,7 @@ void KCompoundJobPrivate::disconnectSubjob(KJob *job)
 {
     Q_Q(KCompoundJob);
     job->setParent(nullptr);
-    QObject::disconnect(job, &KJob::result, q, &KCompoundJob::slotResult);
+    QObject::disconnect(job, &KJob::finished, q, &KCompoundJob::subjobFinished);
     QObject::disconnect(job, &KJob::infoMessage, q, &KCompoundJob::subjobInfoMessage);
 }
 
@@ -45,7 +45,7 @@ bool KCompoundJob::addSubjob(KJob *job)
 
     job->setParent(this);
     d->m_subjobs.append(job);
-    connect(job, &KJob::result, this, &KCompoundJob::slotResult);
+    connect(job, &KJob::finished, this, &KCompoundJob::subjobFinished);
 
     // Forward information from that subjob.
     connect(job, &KJob::infoMessage, this, &KCompoundJob::subjobInfoMessage);
@@ -83,7 +83,7 @@ void KCompoundJob::clearSubjobs()
     d->m_subjobs.clear();
 }
 
-void KCompoundJob::slotResult(KJob *job)
+void KCompoundJob::subjobFinished(KJob *job)
 {
     // Did job have an error ?
     if (job->error() && !isFinished() && !error()) {

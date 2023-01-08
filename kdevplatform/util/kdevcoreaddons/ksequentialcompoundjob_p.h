@@ -35,7 +35,8 @@ public:
 
     bool m_abortOnSubjobError = true;
 
-    bool m_killing = false;
+    bool m_killingSubjob = false;
+    bool m_killingFailed = false;
 
     int m_jobIndex = -1;
     int m_jobCount = 0;

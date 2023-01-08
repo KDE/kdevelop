@@ -1,6 +1,7 @@
 /*
     This file is part of the KDE project
     SPDX-FileCopyrightText: 2013 Kevin Funk <kevin@kfunk.org>
+    SPDX-FileCopyrightText: 2023 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -9,6 +10,8 @@
 
 #include "ksequentialcompoundjob.h"
 
+#include <QEventLoop>
+#include <QMetaEnum>
 #include <QSignalSpy>
 #include <QStandardPaths>
 #include <QTest>
@@ -20,9 +23,21 @@ class TestSequentialCompoundJob : public KSequentialCompoundJob
 {
 public:
     using KSequentialCompoundJob::addSubjob;
+    using KSequentialCompoundJob::clearSubjobs;
 };
 
-}
+struct JobSpies {
+    QSignalSpy finished;
+    QSignalSpy result;
+    QSignalSpy destroyed;
+    explicit JobSpies(KJob *job)
+        : finished(job, &KJob::finished)
+        , result(job, &KJob::result)
+        , destroyed(job, &QObject::destroyed)
+    {
+    }
+};
+} // namespace
 
 TestJob::TestJob(QObject *parent)
     : KJob(parent)
@@ -31,12 +46,18 @@ TestJob::TestJob(QObject *parent)
 
 void TestJob::start()
 {
-    QTimer::singleShot(1000, this, &TestJob::doEmit);
+    QTimer::singleShot(1000, this, &TestJob::emitResult);
 }
 
-void TestJob::doEmit()
+KillableTestJob::KillableTestJob(QObject *parent)
+    : TestJob(parent)
 {
-    emitResult();
+    setCapabilities(Killable);
+}
+
+bool KillableTestJob::doKill()
+{
+    return true;
 }
 
 void TestCompoundJob::start()
@@ -48,27 +69,22 @@ void TestCompoundJob::start()
     }
 }
 
-bool TestCompoundJob::addSubjob(KJob *job)
+void TestCompoundJob::subjobFinished(KJob *job)
 {
-    return KCompoundJob::addSubjob(job);
-}
+    KCompoundJob::subjobFinished(job);
 
-void TestCompoundJob::slotResult(KJob *job)
-{
-    KCompoundJob::slotResult(job);
-
-    if (!error() && hasSubjobs()) {
+    if (error()) {
+        return; // KCompoundJob::subjobFinished() must have called emitResult().
+    }
+    if (hasSubjobs()) {
         // start next
         subjobs().first()->start();
     } else {
-        setError(job->error());
-        setErrorText(job->errorText());
         emitResult();
     }
 }
 
 KCompoundJobTest::KCompoundJobTest()
-    : loop(this)
 {
 }
 
@@ -126,6 +142,98 @@ void KCompoundJobTest::testDeletionDuringExecution()
         ::testDeletionDuringExecution<TestSequentialCompoundJob>();
     } else {
         ::testDeletionDuringExecution<TestCompoundJob>();
+    }
+}
+
+template<class CompoundJob>
+static void testFinishingSubjob()
+{
+    auto *const job = new KillableTestJob;
+    auto *const compoundJob = new CompoundJob;
+    QVERIFY(compoundJob->addSubjob(job));
+
+    JobSpies jobSpies(job);
+    JobSpies compoundJobSpies(compoundJob);
+
+    compoundJob->start();
+
+    using Action = KCompoundJobTest::Action;
+    QFETCH(const Action, action);
+    switch (action) {
+    case Action::Finish:
+        job->emitResult();
+        break;
+    case Action::KillVerbosely:
+        QVERIFY(job->kill(KJob::EmitResult));
+        break;
+    case Action::KillQuietly:
+        QVERIFY(job->kill(KJob::Quietly));
+        break;
+    case Action::Destroy:
+        job->deleteLater();
+        break;
+    }
+
+    QEventLoop loop;
+    QTimer::singleShot(100, &loop, &QEventLoop::quit);
+    QObject::connect(compoundJob, &QObject::destroyed, &loop, &QEventLoop::quit);
+    QCOMPARE(loop.exec(), 0);
+
+    // The following 3 comparisons verify that KJob works as expected.
+    QCOMPARE(jobSpies.finished.size(), 1); // KJob::finished() is always emitted.
+    // KJob::result() is not emitted when a job is killed quietly or destroyed.
+    QCOMPARE(jobSpies.result.size(), action == Action::Finish || action == Action::KillVerbosely);
+    // An auto-delete job is destroyed via deleteLater() when finished.
+    QCOMPARE(jobSpies.destroyed.size(), 1);
+
+    // KCompoundJob must listen to &KJob::finished signal to invoke subjobFinished()
+    // no matter how a subjob is finished - normally, killed or destroyed.
+    // CompoundJob calls emitResult() and is destroyed when its last subjob finishes.
+    QFETCH(const bool, crashOnFailure);
+    if (crashOnFailure) {
+        if (compoundJobSpies.destroyed.empty()) {
+            // compoundJob is still alive. This must be a bug.
+            // The clearSubjobs() call will segfault if the already destroyed job
+            // has not been removed from the subjob list.
+            compoundJob->clearSubjobs();
+            delete compoundJob;
+        }
+    } else {
+        QCOMPARE(compoundJobSpies.finished.size(), 1);
+        QCOMPARE(compoundJobSpies.result.size(), 1);
+        QCOMPARE(compoundJobSpies.destroyed.size(), 1);
+    }
+}
+
+void KCompoundJobTest::testFinishingSubjob_data()
+{
+    QTest::addColumn<bool>("useSequentialCompoundJob");
+    QTest::addColumn<Action>("action");
+    QTest::addColumn<bool>("crashOnFailure");
+
+    const auto actionName = [](Action action) {
+        return QMetaEnum::fromType<Action>().valueToKey(static_cast<int>(action));
+    };
+
+    for (bool useSequentialCompoundJob : {false, true}) {
+        const char *const sequentialStr = useSequentialCompoundJob ? "sequential-" : "";
+        for (bool crashOnFailure : {false, true}) {
+            const char *const failureStr = crashOnFailure ? "segfault-on-failure" : "compound-job-destroyed";
+            for (Action action : {Action::Finish, Action::KillVerbosely, Action::KillQuietly, Action::Destroy}) {
+                const QByteArray dataTag = QByteArray{actionName(action)} + "-a-subjob-" + sequentialStr + failureStr;
+                QTest::newRow(dataTag.constData()) << useSequentialCompoundJob << action << crashOnFailure;
+            }
+        }
+    }
+}
+
+void KCompoundJobTest::testFinishingSubjob()
+{
+    QFETCH(const bool, useSequentialCompoundJob);
+    if (useSequentialCompoundJob) {
+        ::testFinishingSubjob<TestSequentialCompoundJob>();
+    } else {
+        ::testFinishingSubjob<TestCompoundJob>();
     }
 }
 
