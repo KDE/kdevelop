@@ -86,7 +86,7 @@ void KCompoundJob::clearSubjobs()
 void KCompoundJob::slotResult(KJob *job)
 {
     // Did job have an error ?
-    if (job->error() && !error()) {
+    if (job->error() && !isFinished() && !error()) {
         // Store it in the parent only if first error
         setError(job->error());
         setErrorText(job->errorText());
