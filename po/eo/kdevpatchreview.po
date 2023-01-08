@@ -1,13 +1,16 @@
 # Translation of kdevpatchreview into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevpatchreview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-13 00:44+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,127 +22,125 @@ msgstr ""
 #: localpatchsource.cpp:34
 #, kde-format
 msgid "Custom Patch"
-msgstr ""
+msgstr "Propra Fliko"
 
 #. i18n: ectx: property (title), widget (QGroupBox, localPatchOptions)
 #: localpatchwidget.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Patch"
-msgstr ""
+msgstr "Fliko"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: localpatchwidget.ui:38
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Base directory:"
-msgstr ""
+msgstr "Bazdosierujo:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, baseDir)
 #: localpatchwidget.ui:45
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch/base"
-msgstr ""
+msgstr "/vojo/al/flika/bazo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, fileTab)
 #: localpatchwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@title:tab"
 msgid "From File"
-msgstr "Dosiero"
+msgstr "El Dosiero"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, filename)
 #: localpatchwidget.ui:62
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/patch"
-msgstr ""
+msgstr "/vojo/al/fliko"
 
 #. i18n: ectx: attribute (title), widget (QWidget, commandTab)
 #: localpatchwidget.ui:70
 #, kde-format
 msgctxt "@title:tab"
 msgid "From Command"
-msgstr ""
+msgstr "El Komando"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, command)
 #: localpatchwidget.ui:76
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter command to take output from..."
-msgstr ""
+msgstr "Enigu komandon kies eligo estu prenata..."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, applied)
 #: localpatchwidget.ui:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Patch is already applied on local version"
-msgstr ""
+msgstr "Fliko jam estas aplikita al loka versio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, applied)
 #: localpatchwidget.ui:90
 #, kde-format
 msgctxt "@option:check"
 msgid "Already applied"
-msgstr ""
+msgstr "Jam aplikita"
 
 #: patchhighlighter.cpp:83
 #, kde-format
 msgid "<b><span style=\"color:red\">Conflict</span></b><br/>"
-msgstr ""
+msgstr "<b><span style=\"color:red\">Konflikto</span></b><br/>"
 
 #: patchhighlighter.cpp:91
 #, kde-format
 msgid "Applied.<br/>"
-msgstr ""
+msgstr "Aplikata."
 
 #: patchhighlighter.cpp:94 patchhighlighter.cpp:109
 #, kde-format
 msgid "Insertion<br/>"
-msgstr ""
+msgstr "Enmeto<br/>"
 
 #: patchhighlighter.cpp:97 patchhighlighter.cpp:106
 #, kde-format
 msgid "Removal<br/>"
-msgstr ""
+msgstr "Forigo<br/>"
 
 #: patchhighlighter.cpp:98
 #, kde-format
 msgid "Previous:<br/>"
-msgstr ""
+msgstr "Antaŭa:<br/>"
 
 #: patchhighlighter.cpp:103
 #, kde-format
 msgid "Reverted.<br/>"
-msgstr ""
+msgstr "Malfarita.<br/>"
 
 #: patchhighlighter.cpp:111
 #, kde-format
 msgid "Alternative:<br/>"
-msgstr ""
+msgstr "Alternativo:<br/>"
 
 #: patchhighlighter.cpp:201
 #, kde-format
 msgid "Could not apply the change: Text should be \"%1\", but is \"%2\"."
-msgstr ""
+msgstr "Ne povis apliki la ŝanĝon: Teksto devus esti \"%1\", sed estas \"%2\"."
 
 #: patchhighlighter.cpp:411 patchhighlighter.cpp:418
 #, kde-format
 msgctxt "@item"
 msgid "Insertion"
-msgstr ""
+msgstr "Enmeto"
 
 #: patchhighlighter.cpp:413 patchhighlighter.cpp:420
 #, kde-format
 msgctxt "@item"
 msgid "Removal"
-msgstr ""
+msgstr "Forigo"
 
 #: patchhighlighter.cpp:415 patchhighlighter.cpp:422
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgctxt "@item"
 msgid "Change"
 msgstr "Ŝanĝi"
@@ -148,19 +149,19 @@ msgstr "Ŝanĝi"
 #, kde-format
 msgctxt "@title:window"
 msgid "Kompare Model Update"
-msgstr ""
+msgstr "Kompari Model-ĝisdatigon"
 
 #: patchreview.cpp:457
 #, kde-format
 msgctxt "@title complete patch"
 msgid "Overview"
-msgstr ""
+msgstr "Superrigardo"
 
 #: patchreview.cpp:463 patchreview.cpp:539
 #, kde-format
 msgctxt "@title:window"
 msgid "Patch Review"
-msgstr ""
+msgstr "Flikrevizio"
 
 #: patchreview.cpp:470
 #, kde-format
@@ -171,49 +172,45 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Finish Review"
-msgstr ""
+msgstr "Fini Revizion"
 
 #: patchreview.cpp:603
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Review Patch"
-msgstr ""
+msgstr "Revizii Flikon"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousFile)
 #: patchreview.ui:21
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous file"
-msgstr "Dosiero"
+msgstr "Antaŭa dosiero"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousHunk)
 #: patchreview.ui:32
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Previous difference"
-msgstr "Dosiero"
+msgstr "Antaŭa diferenco"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextHunk)
 #: patchreview.ui:43
-#, fuzzy, kde-format
-#| msgid "File"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Next difference"
-msgstr "Dosiero"
+msgstr "Sekva diferenco"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, nextFile)
 #: patchreview.ui:54
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Next file"
-msgstr ""
+msgstr "Sekva dosiero"
 
 #. i18n: ectx: property (text), widget (QToolButton, updateButton)
 #: patchreview.ui:78
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgctxt "@action:button"
 msgid "Update"
 msgstr "Ĝisdatigi"
@@ -223,36 +220,35 @@ msgstr "Ĝisdatigi"
 #, kde-format
 msgctxt "@action:button"
 msgid "Run Tests"
-msgstr ""
+msgstr "Lanĉi Testojn"
 
 #. i18n: ectx: property (text), widget (QToolButton, exportReview)
 #: patchreview.ui:126
 #, kde-format
 msgctxt "@action:button"
 msgid "Export Diff..."
-msgstr ""
+msgstr "Eksporti Diff-on..."
 
 #. i18n: ectx: property (text), widget (QToolButton, cancelReview)
 #: patchreview.ui:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel Review"
-msgstr ""
+msgstr "Nuligi Revizion"
 
 #. i18n: ectx: property (text), widget (QToolButton, finishReview)
 #: patchreview.ui:156
 #, kde-format
 msgctxt "@action:button"
 msgid "Finish Review"
-msgstr ""
+msgstr "Fini Revizion"
 
 #. i18n: ectx: property (title), widget (QGroupBox, filesGroup)
 #: patchreview.ui:175
-#, fuzzy, kde-format
-#| msgid "Change"
+#, kde-format
 msgctxt "@title:group"
 msgid "Changes"
-msgstr "Ŝanĝi"
+msgstr "Ŝanĝoj"
 
 #: patchreviewtoolview.cpp:80
 #, kde-format
@@ -278,13 +274,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Select All"
-msgstr ""
+msgstr "Elekti Ĉion"
 
 #: patchreviewtoolview.cpp:256
 #, kde-format
 msgctxt "@action"
 msgid "Deselect All"
-msgstr ""
+msgstr "Malelekti Ĉion"
 
 #: patchreviewtoolview.cpp:554
 #, kde-format
@@ -302,28 +298,3 @@ msgstr[1] ""
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr ""
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "..."
-#~ msgid "Send..."
-#~ msgstr "..."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "Show"
-#~ msgstr "Montri"
-
-#, fuzzy
-#~| msgid "Update"
-#~ msgctxt "VCS file status"
-#~ msgid "Up To Date"
-#~ msgstr "Ĝisdatigi"

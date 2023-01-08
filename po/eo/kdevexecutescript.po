@@ -1,13 +1,16 @@
 # Translation of kdevexecutescript into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecutescript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -97,27 +100,24 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: scriptappconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Interpreter:"
+#, kde-format
 msgctxt "@title:group"
 msgid "Interpreter"
-msgstr "Interpretilo:"
+msgstr "Interpretilo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: scriptappconfig.ui:44
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Script interpreter:"
-msgstr "Skripto"
+msgstr "Skriptinterpretilo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: scriptappconfig.ui:95
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@title:group"
 msgid "Script file"
-msgstr "Skripto"
+msgstr "Skriptdosiero"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runCurrentFile)
 #: scriptappconfig.ui:101
@@ -135,11 +135,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scriptLabel)
 #: scriptappconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Script file:"
-msgstr "Skripto"
+msgstr "Skriptdosiero:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: scriptappconfig.ui:133
@@ -153,20 +152,18 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/script"
-msgstr ""
+msgstr "/vojo/al/skripto"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: scriptappconfig.ui:148
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Konduto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: scriptappconfig.ui:160
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Arguments:"
 msgstr "Argumentoj:"
@@ -183,7 +180,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Working directory:"
-msgstr ""
+msgstr "Labordosierujo:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: scriptappconfig.ui:187
@@ -194,8 +191,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: scriptappconfig.ui:194
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
 msgstr "Mediovariabloj:"
@@ -209,11 +205,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: scriptappconfig.ui:224
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
-msgstr "Skripto"
+msgstr "Eliga filtro:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:231
@@ -228,36 +223,35 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
-msgstr ""
+msgstr "Neniu Filtro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:240
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr ""
+msgstr "Programtradukila Filtro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:245
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
-msgstr "Skripto"
+msgstr "Skripterara Filtro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilteringMode)
 #: scriptappconfig.ui:250
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr ""
+msgstr "Statikanaliza Filtro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: scriptappconfig.ui:267
 #, kde-format
 msgctxt "@title:group"
 msgid "Execute on Host"
-msgstr ""
+msgstr "Lanĉi sur Komputilo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, remoteHostCheckbox)
 #: scriptappconfig.ui:273
@@ -335,17 +329,3 @@ msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
 msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "Author"
-#~ msgstr "Aŭtoro"
-
-#~ msgid "Script"
-#~ msgstr "Skripto"

@@ -1,13 +1,16 @@
 # Translation of kdevqmakebuilder into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -17,11 +20,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: qmakebuilderpreferences.cpp:81
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgctxt "@title:tab"
 msgid "QMake"
-msgstr "QMake: %1"
+msgstr "QMake"
 
 #: qmakebuilderpreferences.cpp:140
 #, kde-format
@@ -34,32 +36,30 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "Ne forigi"
 
 #: qmakebuilderpreferences.cpp:149
 #, kde-format
 msgid "Could not remove: %1."
-msgstr ""
+msgstr "Ne eblis forigi: %1."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: qmakeconfig.ui:77
 #, kde-format
 msgctxt "@title:group"
 msgid "Build Settings"
-msgstr ""
+msgstr "Konstruila Argordo"
 
 #: qmakejob.cpp:32
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgctxt "@title:window"
 msgid "QMake"
-msgstr "QMake: %1"
+msgstr "QMake"
 
 #: qmakejob.cpp:43
-#, fuzzy, kde-format
-#| msgid "QMake project files"
+#, kde-format
 msgid "No project specified."
-msgstr "QMake-projektdosieroj"
+msgstr "Neniu projekto specifita."
 
 #: qmakejob.cpp:82
 #, kde-format
@@ -67,23 +67,6 @@ msgid "QMake: %1"
 msgstr "QMake: %1"
 
 #: qmakejob.cpp:92
-#, fuzzy, kde-format
-#| msgid "Abort on first error:"
+#, kde-format
 msgid "Configure error"
-msgstr "Ĉesigi je unua eraro:"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#, fuzzy
-#~| msgid "QMake Binary:"
-#~ msgid "QMake Builder"
-#~ msgstr "QMake programo:"
-
-#~ msgid "QMake Binary:"
-#~ msgstr "QMake programo:"
+msgstr "Agorda eraro"

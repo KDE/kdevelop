@@ -1,13 +1,16 @@
 # Translation of kdevmakebuilder into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -17,86 +20,79 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: makebuilderpreferences.cpp:70
-#, fuzzy, kde-format
-#| msgid "Make: %1"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Make"
-msgstr "Make: %1"
+msgstr "Make"
 
 #: makebuilderpreferences.cpp:75
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Make Settings"
-msgstr ""
+msgstr "Agordi Make-metojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: makeconfig.ui:32
-#, fuzzy, kde-format
-#| msgid "Abort on first error:"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Abort on first error:"
-msgstr "Ĉesigi je unua eraro:"
+msgstr "Ĉesigi je unu&a eraro:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: makeconfig.ui:52
 #, kde-format
 msgctxt "@option:check"
 msgid "&Display commands but do not execute them:"
-msgstr ""
+msgstr "Montri koman&dojn sed ne plenumigi ilin:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_31)
 #: makeconfig.ui:72
 #, kde-format
 msgctxt "@option:check"
 msgid "Insta&ll as root:"
-msgstr ""
+msgstr "Insta&li kiel radikulo:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: makeconfig.ui:95
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Root installation &command:"
-msgstr ""
+msgstr "Radika instal&komando:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: makeconfig.ui:133
-#, fuzzy, kde-format
-#| msgid "Number of simultaneous jobs:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "&Number of simultaneous jobs:"
-msgstr "Nombro da samtempaj taskoj:"
+msgstr "&Nombro de samtempaj taskoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: makeconfig.ui:156
-#, fuzzy, kde-format
-#| msgid "Make executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Make executable:"
-msgstr "Make-programo:"
+msgstr "&Make-programo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: makeconfig.ui:179
-#, fuzzy, kde-format
-#| msgid "Default make target:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Default make &target:"
-msgstr "Apriora \"make\"-celo:"
+msgstr "Defaŭl&ta \"make\"-celo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: makeconfig.ui:199
-#, fuzzy, kde-format
-#| msgid "Additional make options:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Additional ma&ke options:"
-msgstr "Pluaj \"make\"-opcioj:"
+msgstr "Pluaj \"ma&ke\"-opcioj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: makeconfig.ui:219
-#, fuzzy, kde-format
-#| msgid "Active Environment Profile: "
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Active environment &profile:"
-msgstr "Profilo de Aktiva Metiejo: "
+msgstr "&Profilo de aktiva mediejo: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: makeconfig.ui:263
@@ -106,80 +102,26 @@ msgid "Override number of &jobs:"
 msgstr ""
 
 #: makejob.cpp:80
-#, fuzzy, kde-format
-#| msgid "Make: %1"
+#, kde-format
 msgid "Make (%1): %2"
-msgstr "Make: %1"
+msgstr "Make: (%1): %2"
 
 #: makejob.cpp:82
-#, fuzzy, kde-format
-#| msgid "Make: %1"
+#, kde-format
 msgid "Make (%1)"
-msgstr "Make: %1"
+msgstr "Make (%1)"
 
 #: makejob.cpp:84
-#, fuzzy, kde-format
-#| msgid "Make: %1"
+#, kde-format
 msgid "Make"
-msgstr "Make: %1"
+msgstr "Make"
 
 #: makejob.cpp:98
 #, kde-format
 msgid "Build item no longer available"
-msgstr ""
+msgstr "Konstruelemento ne plu disponeblas"
 
 #: makejob.cpp:105
 #, kde-format
 msgid "Internal error: cannot build a file item"
-msgstr ""
-
-#~ msgid "kdesu"
-#~ msgstr "kdesu"
-
-#~ msgid "kdesudo"
-#~ msgstr "kdesudo"
-
-#, fuzzy
-#~| msgid "kdesudo"
-#~ msgid "sudo"
-#~ msgstr "kdesudo"
-
-#~ msgid "View"
-#~ msgstr "Vido"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "Make Builder"
-#~ msgstr "CMake-Programo:"
-
-#, fuzzy
-#~| msgid "Could not create language plugin for %1."
-#~ msgid "Could not create build command for targets '%1'"
-#~ msgstr "Ne eblis krei lingvokromaĵon por %1."
-
-#~ msgid "compiling"
-#~ msgstr "kompilanta"
-
-#~ msgid "generating"
-#~ msgstr "generanta"
-
-#~ msgctxt "Linking object files into a library or executable"
-#~ msgid "linking"
-#~ msgstr "bindanta"
-
-#~ msgid "built"
-#~ msgstr "konstruita"
-
-#~ msgid "installing"
-#~ msgstr "instalanta"
-
-#~ msgid "creating"
-#~ msgstr "kreanta"
+msgstr "Interna eraro: ne povas konstrui dosierelementon"

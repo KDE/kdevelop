@@ -1,13 +1,16 @@
 # Translation of kdevexecute into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -94,35 +97,31 @@ msgid "Compiled Binary"
 msgstr ""
 
 #: nativeappconfig.cpp:322
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Project Executables"
-msgstr "Programo:"
+msgstr "Projektaj Programoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: nativeappconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@title:group"
 msgid "Executable"
-msgstr "Programo:"
+msgstr "Programo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: nativeappconfig.ui:41
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Project &target:"
-msgstr "Programo:"
+msgstr "Projek&ta celo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: nativeappconfig.ui:81
-#, fuzzy, kde-format
-#| msgid "Executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&xecutable:"
-msgstr "Programo:"
+msgstr "&Programo:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:106
@@ -143,15 +142,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
-msgstr ""
+msgstr "Konduto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: nativeappconfig.ui:127
-#, fuzzy, kde-format
-#| msgid "Arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Ar&guments:"
-msgstr "Argumentoj:"
+msgstr "Ar&gumentoj:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, arguments)
 #: nativeappconfig.ui:137
@@ -179,11 +177,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
-#, fuzzy, kde-format
-#| msgid "Environment:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "E&nvironment:"
-msgstr "Mediovariabloj:"
+msgstr "&Mediovariabloj:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: nativeappconfig.ui:179
@@ -242,11 +239,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: nativeappconfig.ui:278
-#, fuzzy, kde-format
-#| msgid "Action:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Act&ion:"
-msgstr "Ago:"
+msgstr "A&go:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:288
@@ -269,33 +265,31 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:298
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Do Nothing"
 msgstr "Nenion fari"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:303
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build"
-msgstr "Munt&i"
+msgstr "Konstrui"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:308
 #, kde-format
 msgctxt "@item:inlistbox dependency action"
 msgid "Build and Install"
-msgstr ""
+msgstr "Konstrui kaj Instali"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: nativeappconfig.ui:316
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Targets:"
-msgstr ""
+msgstr "Celoj:"
 
 #: nativeappjob.cpp:66
 #, kde-format
@@ -308,7 +302,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Job Already Running"
-msgstr ""
+msgstr "Tasko Jam Rulanta"
 
 #: nativeappjob.cpp:143
 #, kde-format
@@ -319,32 +313,16 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Kill All Instances"
-msgstr ""
+msgstr "Ĉesigi Ĉiujn Instancojn"
 
 #: nativeappjob.cpp:146
 #, kde-format
 msgctxt "@action:button"
 msgid "Start Another"
-msgstr ""
+msgstr "Lanĉi Pluan"
 
 #: nativeappjob.cpp:149
 #, kde-format
 msgctxt "@option:check"
 msgid "Remember choice"
-msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#, fuzzy
-#~| msgid "Action:"
-#~ msgid "Application"
-#~ msgstr "Ago:"
-
-#~ msgid "Not implemented"
-#~ msgstr "Ne realigita"
+msgstr "Memori elekton"

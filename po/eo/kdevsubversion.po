@@ -1,13 +1,16 @@
 # Translation of kdevsubversion into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -17,8 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: kdevsvnplugin.cpp:334
-#, fuzzy, kde-format
-#| msgid "Copy..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy..."
 msgstr "Kopii..."
@@ -27,7 +29,7 @@ msgstr "Kopii..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Move..."
-msgstr ""
+msgstr "Movi..."
 
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
@@ -35,11 +37,10 @@ msgid "Please select only one item for this operation"
 msgstr ""
 
 #: kdevsvnplugin.cpp:370
-#, fuzzy, kde-format
-#| msgid "Destination"
+#, kde-format
 msgctxt "@label"
 msgid "Destination file/directory"
-msgstr "Celo"
+msgstr "Cela dosiero/dosierujo"
 
 #: kdevsvnplugin.cpp:382
 #, kde-format
@@ -49,7 +50,7 @@ msgstr ""
 #: kdevsvnplugin.cpp:406
 #, kde-format
 msgid "Destination file/directory"
-msgstr ""
+msgstr "Cela dosiero/dosierujo"
 
 #: kdevsvnplugin.cpp:418
 #, kde-format
@@ -100,7 +101,7 @@ msgstr "Subversion"
 #: svncommitjob.cpp:125
 #, kde-format
 msgid "Committing..."
-msgstr ""
+msgstr "Enmetanta..."
 
 #: svncommitjob.cpp:129
 #, kde-format
@@ -151,65 +152,65 @@ msgstr ""
 #, kde-format
 msgctxt "A file was marked to be added to svn"
 msgid "Added %1"
-msgstr ""
+msgstr "Aldonis %1"
 
 #: svninternaljobbase.cpp:89
 #, kde-format
 msgctxt "A file was marked for deletion from svn"
 msgid "Deleted %1"
-msgstr ""
+msgstr "Forigis %1"
 
 #: svninternaljobbase.cpp:93
 #, kde-format
 msgctxt "A file was deleted during an svn update operation"
 msgid "Deleted %1"
-msgstr ""
+msgstr "Forigis %1"
 
 #: svninternaljobbase.cpp:96
 #, kde-format
 msgctxt "A file was added during an svn update operation"
 msgid "Added %1"
-msgstr ""
+msgstr "Aldonis %1"
 
 #: svninternaljobbase.cpp:136
 #, kde-format
 msgid "Revision %1"
-msgstr ""
+msgstr "Revizio %1"
 
 #: svninternaljobbase.cpp:139
 #, kde-format
 msgid "Updating externals: %1"
-msgstr ""
+msgstr "Ĝisdatiganta eksternaĵojn: %1"
 
 #: svninternaljobbase.cpp:147
 #, kde-format
 msgid "Sending %1"
-msgstr "Sendante %1"
+msgstr "Sendanta %1"
 
 #: svninternaljobbase.cpp:151
 #, kde-format
 msgid "Adding %1 using mimetype %2."
-msgstr ""
+msgstr "Aldonanta %1 uzante MIMEtipon %2."
 
 #: svninternaljobbase.cpp:153
 #, kde-format
 msgid "Adding %1."
-msgstr ""
+msgstr "Aldonanta %1."
 
 #: svninternaljobbase.cpp:157
 #, kde-format
 msgid "Deleting %1."
-msgstr ""
+msgstr "Foriganta %1."
 
 #: svninternaljobbase.cpp:160
 #, kde-format
 msgid "Replacing %1."
-msgstr ""
+msgstr "Anstataŭiganta %1."
 
 #: svninternaljobbase.cpp:165
 #, kde-format
 msgid "Transmitting file data "
-msgstr ""
+msgstr "Transdonanta dosierdatumojn "
 
 #: svninternaljobbase.cpp:171
 #, kde-format
@@ -229,7 +230,7 @@ msgstr ""
 #: svninternaljobbase.cpp:180
 #, kde-format
 msgid "Copied %1"
-msgstr ""
+msgstr "Kopiis %1"
 
 #: svninternaljobbase.cpp:235
 #, kde-format
@@ -254,12 +255,12 @@ msgstr ""
 #: svninternaljobbase.cpp:251
 #, kde-format
 msgid "Other unknown error."
-msgstr ""
+msgstr "Alia nekonata eraro."
 
 #: svnjobbase.cpp:74
 #, kde-format
 msgid "Enter Login for: %1"
-msgstr ""
+msgstr "Enigu ensaluton por: %1"
 
 #: svnjobbase.cpp:160
 #, kde-format
@@ -359,27 +360,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
-#, fuzzy, kde-format
-#| msgid "Subversion"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr "Subversion"
+msgstr "Fontdosierujo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/importmetadatawidget.ui:27
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Repository:"
 msgstr "Deponejo:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Repository:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Repository location"
-msgstr "Deponejo:"
+msgstr "Deponejloko:"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, dest)
 #: ui/importmetadatawidget.ui:37
@@ -418,8 +416,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
-#, fuzzy, kde-format
-#| msgid "Hostname:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Hostname:"
 msgstr "Komputilo:"
@@ -481,43 +478,3 @@ msgstr ""
 #, kde-format
 msgid "fingerprint"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Repository:"
-#~ msgid "Repository Url:"
-#~ msgstr "Deponejo:"
-
-#~ msgid "Recursive:"
-#~ msgstr "Rekursia:"
-
-#~ msgid "Source"
-#~ msgstr "Fonto"
-
-#~ msgid "Destination"
-#~ msgstr "Celo"
-
-#, fuzzy
-#~| msgid "Recursive:"
-#~ msgid "Non Recursive"
-#~ msgstr "Rekursia:"
-
-#~ msgid "Select"
-#~ msgstr "Elekti"
-
-#, fuzzy
-#~| msgid "Recursive:"
-#~ msgid "Recursive"
-#~ msgstr "Rekursia:"
-
-#, fuzzy
-#~| msgid "Recursive:"
-#~ msgid "Non recursive"
-#~ msgstr "Rekursia:"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:46+0000\n"
-"PO-Revision-Date: 2023-01-06 07:20+0100\n"
+"PO-Revision-Date: 2023-01-07 08:18+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -676,7 +676,7 @@ msgstr "კურსორის ქვეშ დეკლარაცია ა
 #: language/codegen/basicrefactoring.cpp:226
 #, kde-format
 msgid "Declaration is located in non-writable file %1."
-msgstr ""
+msgstr "აღწერა არაჩაწერად ფაილში მდებარეობს %1."
 
 #: language/codegen/basicrefactoring.cpp:295
 #, kde-format
@@ -755,7 +755,7 @@ msgstr "მონიშნული დიაპაზონისთვის �
 #: language/codegen/codegenerator.cpp:172
 #, kde-format
 msgid "Error checking conditions to generate code: %1"
-msgstr ""
+msgstr "კოდის დასაგენერირებელი პიროებების შემოწმების შეცდომა: %1"
 
 #: language/codegen/codegenerator.cpp:179
 #, kde-format
@@ -1210,7 +1210,7 @@ msgstr "ამოხსნა (%1)"
 #: language/duchain/navigation/usescollector.cpp:414
 #, kde-format
 msgid "%1 still needs an update!"
-msgstr ""
+msgstr "%1 -ის განახლება აუცილებელია!"
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:41
 #, kde-format

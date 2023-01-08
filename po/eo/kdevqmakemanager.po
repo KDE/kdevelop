@@ -1,13 +1,16 @@
 # Translation of kdevqmake into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,76 +22,75 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Axel Rousseau"
+msgstr "Axel Rousseau, Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "axel@esperanto-jeunes.org"
+msgstr "axel@esperanto-jeunes.org, okellogg@users.sourceforge.net"
 
 #: qmakebuilddirchooser.cpp:124
 #, kde-format
 msgid "Please specify path to QMake executable."
-msgstr ""
+msgstr "Bv. difini vojon al QMake-programo."
 
 #: qmakebuilddirchooser.cpp:129
 #, kde-format
 msgid "QMake executable \"%1\" does not exist."
-msgstr ""
+msgstr "QMake-programo \"%1\" ne ekzistas."
 
 #: qmakebuilddirchooser.cpp:132
 #, kde-format
 msgid "QMake executable is not a file."
-msgstr ""
+msgstr "QMake-programo ne estas dosiero."
 
 #: qmakebuilddirchooser.cpp:135
 #, kde-format
 msgid "QMake executable is not executable."
-msgstr ""
+msgstr "QMake-programo ne estas lanĉebla."
 
 #: qmakebuilddirchooser.cpp:140
 #, kde-format
 msgid "QMake executable cannot be queried for variables."
-msgstr ""
+msgstr "Ne eblas informpeti QMake-programon pri variabloj. "
 
 #: qmakebuilddirchooser.cpp:143
 #, kde-format
 msgid "No basic MkSpec file could be found for the given QMake executable."
-msgstr ""
+msgstr "Ne troveblas MkSpec-dosiero por la donata QMake-programo."
 
 #: qmakebuilddirchooser.cpp:150
 #, kde-format
 msgid "Please specify a build folder."
-msgstr ""
+msgstr "Bv. difinu konstrudosierujon."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: qmakebuilddirchooser.ui:23
 #, kde-format
 msgctxt "@label:textbox"
 msgid "QMake &executable:"
-msgstr ""
+msgstr "QMak&e programo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qmakebuilddirchooser.ui:46
-#, fuzzy, kde-format
-#| msgid "Abort on first error:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
-msgstr "Ĉesigi je unua eraro:"
+msgstr "Konstru&dosierujo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62
 #, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
-msgstr ""
+msgstr "&Instali al (cela.vojo):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
 #, kde-format
 msgctxt "@labal:listbox"
 msgid "Build &type:"
-msgstr ""
+msgstr "Konstru&tipo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
 #: qmakebuilddirchooser.ui:115
@@ -102,60 +104,36 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "Pluaj argumentoj:"
 
 #: qmakebuilddirchooserdialog.cpp:22
-#, fuzzy, kde-format
-#| msgid "Abort on first error:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory"
-msgstr "Ĉesigi je unua eraro:"
+msgstr "Agordi Konstrudosierujon"
 
 #: qmakejob.cpp:33
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgid "Run QMake in %1"
-msgstr "QMake: %1"
+msgstr "Lanĉi QMake en %1"
 
 #: qmakejob.cpp:137
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
-msgstr ""
+msgstr "*** Eliris kun revenkodo: %1 ***"
 
 #: qmakejob.cpp:139
 #, kde-format
 msgid "*** Process aborted ***"
-msgstr ""
+msgstr "*** Procezo ĉesigis ***"
 
 #: qmakejob.cpp:141
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
-msgstr ""
+msgstr "*** Paneis kun revenkodo: %1 ***"
 
 #: qmakemanager.cpp:75
-#, fuzzy, kde-format
-#| msgid "QMake: %1"
+#, kde-format
 msgctxt "@action"
 msgid "Run QMake"
-msgstr "QMake: %1"
-
-#, fuzzy
-#~| msgid "QMake Binary:"
-#~ msgid "QMake &binary:"
-#~ msgstr "QMake programo:"
-
-#~ msgid "Parse QMake project files"
-#~ msgstr "Parsi QMake-projektdosierojn"
-
-#, fuzzy
-#~| msgid "QMake Binary:"
-#~ msgid "QMake Builder"
-#~ msgstr "QMake programo:"
-
-#, fuzzy
-#~| msgid "QMake project files"
-#~ msgid "No project specified."
-#~ msgstr "QMake-projektdosieroj"
-
-#~ msgid "QMake: %1"
-#~ msgstr "QMake: %1"
+msgstr "Lanĉi QMake"

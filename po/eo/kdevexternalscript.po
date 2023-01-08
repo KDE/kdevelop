@@ -1,13 +1,16 @@
 # Translation of kdevexternalscript into esperanto.
+# Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2010.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2010-06-20 20:01+0200\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -116,21 +119,20 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New External Script"
-msgstr ""
+msgstr "Crei novan eksternan skripton"
 
 #: editexternalscript.cpp:108
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit External Script '%1'"
-msgstr ""
+msgstr "Redakti eksternan skripton '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: editexternalscript.ui:19
-#, fuzzy, kde-format
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Name:"
-msgstr "Nomo:"
+msgstr "&Nomo:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, nameEdit)
 #: editexternalscript.ui:30
@@ -143,237 +145,234 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
-#, fuzzy, kde-format
-#| msgid "Command:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Command:"
-msgstr "Komando:"
+msgstr "&Komando:"
 
 #. i18n: ectx: property (text), widget (QLabel, stdinLabel)
 #: editexternalscript.ui:51
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Input:"
-msgstr ""
+msgstr "En&igo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:62
-#, fuzzy, kde-format
-#| msgid "nothing"
+#, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Nothing"
-msgstr "nenio"
+msgstr "Nenio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:67
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Nothing"
-msgstr ""
+msgstr "Elekto en Aktuala Dosiero aŭ Nenio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:72
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Selection in Current File or Whole File"
-msgstr ""
+msgstr "Elekto en Aktuala Dosiero aŭ Tuta Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdinCombo)
 #: editexternalscript.ui:77
 #, kde-format
 msgctxt "@item:inlistbox input source"
 msgid "Contents of Current File"
-msgstr ""
+msgstr "Enhavo de Aktuala Dosiero"
 
 #. i18n: ectx: property (text), widget (QLabel, stdoutLabel)
 #: editexternalscript.ui:85
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Output:"
-msgstr ""
+msgstr "Elig&o:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:96
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Ignore"
-msgstr ""
+msgstr "Ignori"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:101
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Insert at Cursor Position of Current File"
-msgstr ""
+msgstr "Enmeti ĉe Kursorpozicio de Aktuala Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:106
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
-msgstr ""
+msgstr "Anstataŭigi Elekton de Aktuala Dosiero aŭ Enmeti ĉe Kursorpozicio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:111
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Selection of Current File or Whole File"
-msgstr ""
+msgstr "Anstataŭigi Elekton de Aktuala Dosiero aŭ Tuta Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:116
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Replace Contents of Current File"
-msgstr ""
+msgstr "Anstataŭigi Enhavon de Aktuala Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stdoutCombo)
 #: editexternalscript.ui:121
 #, kde-format
 msgctxt "@item:inlistbox handle output"
 msgid "Create New File"
-msgstr ""
+msgstr "Krei Novan Dosieron"
 
 #. i18n: ectx: property (text), widget (QLabel, stderrLabel)
 #: editexternalscript.ui:129
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Errors:"
-msgstr ""
+msgstr "Eraroj:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:140
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Ignore"
-msgstr ""
+msgstr "Ignori"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:145
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Merge with Normal Output"
-msgstr ""
+msgstr "Kunfandi kun Normala Eligo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:150
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Insert at Cursor Position of Current File"
-msgstr ""
+msgstr "Enmeti ĉe Kursorpozicio de Aktuala Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:155
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Insert at Cursor Position"
-msgstr ""
+msgstr "Anstataŭigi Elekton de Aktuala Dosiero aŭ Enmeti ĉe Kursorpozicio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:160
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Selection of Current File or Whole File"
-msgstr ""
+msgstr "Anstataŭigi Elekton de Aktuala Dosiero aŭ Tuta Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:165
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Replace Contents of Current File"
-msgstr ""
+msgstr "Anstataŭigi Enhavon de Aktuala Dosiero"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, stderrCombo)
 #: editexternalscript.ui:170
 #, kde-format
 msgctxt "@item:inlistbox handle errors"
 msgid "Create New File"
-msgstr ""
+msgstr "Krei Novan Dosieron"
 
 #. i18n: ectx: property (text), widget (QLabel, saveLabel)
 #: editexternalscript.ui:178
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Save &mode:"
-msgstr ""
+msgstr "Konservoreĝi&mo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:189
-#, fuzzy, kde-format
-#| msgid "nothing"
+#, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Nothing"
-msgstr "nenio"
+msgstr "Konservi Nenion"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:194
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save Active Document"
-msgstr ""
+msgstr "Konservi Aktualan Dokumenton"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, saveCombo)
 #: editexternalscript.ui:199
 #, kde-format
 msgctxt "@item:inlistbox save mode"
 msgid "Save All Open Documents"
-msgstr ""
+msgstr "Konservi Ĉiujn Malfermatajn Dokumentojn"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: editexternalscript.ui:207
 #, kde-format
 msgctxt "@option:check"
 msgid "Show out&put:"
-msgstr ""
+msgstr "&Montri eligon"
 
 #. i18n: ectx: property (text), widget (QLabel, outputFilterLabel)
 #: editexternalscript.ui:224
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Output filter:"
-msgstr ""
+msgstr "Eliga filtro:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:235
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "No Filter"
-msgstr ""
+msgstr "Neniu Filtro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:240
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Compiler Filter"
-msgstr ""
+msgstr "Programtradukila Filtro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:245
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Script Error Filter"
-msgstr ""
+msgstr "Skripterara Filtro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, outputFilterCombo)
 #: editexternalscript.ui:250
 #, kde-format
 msgctxt "@item:inlistbox output filter"
 msgid "Static Analysis Filter"
-msgstr ""
+msgstr "Statikanaliza Filtro"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defines shortcuts you can use to execute this script."
-msgstr ""
+msgstr "Difinas fulmoklavojn kiujn vi povas uzi por lanĉi tiun skripton."
 
 #. i18n: ectx: property (text), widget (QLabel, shortcutLabel)
 #: editexternalscript.ui:261
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Shortcut:"
-msgstr ""
+msgstr "Fulmoklavo"
 
 #: externalscriptjob.cpp:88
 #, kde-format
@@ -385,12 +384,12 @@ msgstr ""
 #: externalscriptjob.cpp:224
 #, kde-format
 msgid "Running external script: %1"
-msgstr ""
+msgstr "Ruliganta eksternan skripton: %1"
 
 #: externalscriptjob.cpp:268
 #, kde-format
 msgid "*** Killed Application ***"
-msgstr ""
+msgstr "*** Ĉesigis Aplikaĵon ***"
 
 #: externalscriptjob.cpp:348
 #, kde-format
@@ -418,61 +417,63 @@ msgid ""
 "*** Could not start program '%1'. Make sure that the path is specified "
 "correctly ***"
 msgstr ""
+"*** Ne eblis lanĉi programon '%1'. Certigu ke la dosiervojo estas specifita "
+"ĝuste ***"
 
 #: externalscriptplugin.cpp:125
 #, kde-format
 msgid "External Scripts"
-msgstr ""
+msgstr "Eksternaj Skriptoj"
 
 #: externalscriptplugin.cpp:136
 #, kde-format
 msgid "Quick Compile"
-msgstr ""
+msgstr "Rapida Programtraduko"
 
 #: externalscriptplugin.cpp:142
 #, kde-format
 msgid "Sort Selection"
-msgstr ""
+msgstr "Ordigi Elekton"
 
 #: externalscriptplugin.cpp:150
 #, kde-format
 msgid "Google Selection"
-msgstr ""
+msgstr "Google-Elekto"
 
 #: externalscriptplugin.cpp:156
 #, kde-format
 msgid "Paste to Hastebin"
-msgstr ""
+msgstr "Glui al Hastebin"
 
 #: externalscriptplugin.cpp:238
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Scripts"
-msgstr ""
+msgstr "Eksternaj Skriptoj"
 
 #: externalscriptview.cpp:31
 #, kde-format
 msgctxt "@title:window"
 msgid "External Scripts"
-msgstr ""
+msgstr "Eksternaj Skriptoj"
 
 #: externalscriptview.cpp:49
 #, kde-format
 msgctxt "@action"
 msgid "Add External Script"
-msgstr ""
+msgstr "Aldoni Eksternan Skripton"
 
 #: externalscriptview.cpp:54
 #, kde-format
 msgctxt "@action"
 msgid "Edit External Script"
-msgstr ""
+msgstr "Redakti Eksternan Skripton"
 
 #: externalscriptview.cpp:59
 #, kde-format
 msgctxt "@action"
 msgid "Remove External Script"
-msgstr ""
+msgstr "Forigi Eksternan Skripton"
 
 #: externalscriptview.cpp:146
 #, kde-format
@@ -485,25 +486,17 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Confirm External Script Removal"
-msgstr ""
+msgstr "Konfirmi Forigon de Eksterna Skripto"
 
 #: externalscriptview.cpp:150
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "Forigi"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterText)
 #: externalscriptview.ui:35
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Filter..."
-msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
+msgstr "Filtro..."

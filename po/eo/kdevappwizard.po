@@ -1,13 +1,16 @@
 # Translation of kdevappwizard into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -17,41 +20,34 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: appwizarddialog.cpp:23
-#, fuzzy, kde-format
-#| msgid "Create New Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New Project"
 msgstr "Krei Novan Projekton"
 
 #: appwizarddialog.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "Page for general configuration options"
-#| msgid "General"
+#, kde-format
 msgctxt "@title:tab Page for general configuration options"
 msgid "General"
 msgstr "Ĝenerala"
 
 #: appwizarddialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "Page for version control options"
-#| msgid "Version Control"
+#, kde-format
 msgctxt "@title:tab Page for version control options"
 msgid "Version Control"
 msgstr "Versiokontrolo"
 
 #: appwizardplugin.cpp:69
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@action"
 msgid "New from Template..."
-msgstr "Projektŝablonoj"
+msgstr "Nova el Projektŝablono..."
 
 #: appwizardplugin.cpp:71
-#, fuzzy, kde-format
-#| msgid "Couldn't create new project"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Generate a new project from a template"
-msgstr "Ne eblis krei novan projekton"
+msgstr "Generi novan projekton el ŝablono"
 
 #: appwizardplugin.cpp:72
 #, kde-format
@@ -62,10 +58,9 @@ msgid ""
 msgstr ""
 
 #: appwizardplugin.cpp:106
-#, fuzzy, kde-format
-#| msgid "Couldn't create new project"
+#, kde-format
 msgid "Could not create project from template."
-msgstr "Ne eblis krei novan projekton"
+msgstr "Ne eblis krei novan projekton el ŝablono."
 
 #: appwizardplugin.cpp:134
 #, kde-format
@@ -73,11 +68,10 @@ msgid "Please see the Version Control tool view."
 msgstr ""
 
 #: appwizardplugin.cpp:136
-#, fuzzy, kde-format
-#| msgid "Version Control System:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Version Control System Error"
-msgstr "Versiokontrola sistemo:"
+msgstr "Versiokontrola sistemeraro"
 
 #: appwizardplugin.cpp:152
 #, kde-format
@@ -101,27 +95,24 @@ msgid "Could not import project into %1."
 msgstr ""
 
 #: appwizardplugin.cpp:199
-#, fuzzy, kde-format
-#| msgid "Couldn't import project"
+#, kde-format
 msgid "Could not import project"
 msgstr "Ne eblis importi projekton"
 
 #: appwizardplugin.cpp:207
-#, fuzzy, kde-format
-#| msgid "Couldn't checkout imported project"
+#, kde-format
 msgid "Could not checkout imported project"
 msgstr "Ne eblis elpreni importitan projekton"
 
 #: appwizardplugin.cpp:332
-#, fuzzy, kde-format
-#| msgid "Couldn't create new project"
+#, kde-format
 msgid "Could not create new project"
 msgstr "Ne eblis krei novan projekton"
 
 #: appwizardplugin.cpp:467
 #, kde-format
 msgid "The file %1 cannot be created."
-msgstr ""
+msgstr "La dosieron %1 ne eblas krei."
 
 #: appwizardplugin.cpp:570
 #, kde-format
@@ -132,44 +123,40 @@ msgstr "Projektŝablonoj"
 #, kde-format
 msgctxt "@title:column"
 msgid "Category"
-msgstr ""
+msgstr "Kategorio"
 
 #: projectselectionpage.cpp:57
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@title:column"
 msgid "Project Type"
-msgstr "Projektŝablonoj"
+msgstr "Projektotipo"
 
 #: projectselectionpage.cpp:67
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@action:button"
 msgid "Get More Templates"
-msgstr "Projektŝablonoj"
+msgstr "Ekhavi Pluajn Ŝablonojn"
 
 #: projectselectionpage.cpp:74
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template from File"
-msgstr ""
+msgstr "Ŝargi Ŝablonoj el Dosiero"
 
 #: projectselectionpage.cpp:170
 #, kde-format
 msgid "Invalid location"
-msgstr ""
+msgstr "Nevalida loko"
 
 #: projectselectionpage.cpp:177
-#, fuzzy, kde-format
-#| msgid "Project &name:"
+#, kde-format
 msgid "Empty project name"
-msgstr "Projekt&nomo:"
+msgstr "Malplena projektnomo"
 
 #: projectselectionpage.cpp:198
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgid "Invalid project name"
-msgstr "Projektŝablonoj"
+msgstr "Nevalida projektnomo"
 
 #: projectselectionpage.cpp:217
 #, kde-format
@@ -201,57 +188,34 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:group"
 msgid "Properties"
-msgstr "Ecoj"
+msgstr "Trajtoj"
 
 #. i18n: ectx: property (text), widget (QLabel, projectNameLabel)
 #: projectselectionpage.ui:44
-#, fuzzy, kde-format
-#| msgid "Project Templates"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Project name:"
-msgstr "Projektŝablonoj"
+msgstr "Projektnomo:"
 
 #. i18n: ectx: property (text), widget (QLabel, locationLabel)
 #: projectselectionpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Location:"
 msgstr "Loko:"
 
 #: projectvcspage.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "No Version Control Support chosen"
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox No Version Control Support chosen"
 msgid "None"
 msgstr "Neniu"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectvcspage.ui:30
-#, fuzzy, kde-format
-#| msgid "Version Control System:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Version control system:"
 msgstr "Versiokontrola sistemo:"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Project"
-#~ msgstr "Projekto"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#, fuzzy
-#~| msgid "Project to load"
-#~ msgid "Project Wizard"
-#~ msgstr "Projekto ŝargenda"

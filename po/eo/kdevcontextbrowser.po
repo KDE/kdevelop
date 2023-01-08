@@ -1,13 +1,16 @@
 # Translation of kdevcontextbrowser into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcontextbrowser\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-07-09 00:43+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -20,27 +23,25 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go back in context history"
-msgstr ""
+msgstr "Iri reen en kunteksthistorio"
 
 #: contextbrowser.cpp:176
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go forward in context history"
-msgstr ""
+msgstr "Iri antaŭen en kunteksthistorio"
 
 #: contextbrowser.cpp:192
-#, fuzzy, kde-format
-#| msgid "Border Outline"
+#, kde-format
 msgctxt "item quick open item type"
 msgid "Outline"
-msgstr "Randlinio"
+msgstr "Skemo"
 
 #: contextbrowser.cpp:193
-#, fuzzy, kde-format
-#| msgid "Border Outline"
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Outline"
-msgstr "Randlinio"
+msgstr "Skemo"
 
 #: contextbrowser.cpp:194
 #, kde-format
@@ -52,104 +53,93 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Source &Browse Mode"
-msgstr ""
+msgstr "&Fontfoliuma Reĝimo"
 
 #: contextbrowser.cpp:241
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Visited Context"
-msgstr ""
+msgstr "&Antaŭa Vizitata Kunteksto"
 
 #: contextbrowser.cpp:247
 #, kde-format
 msgctxt "@action"
 msgid "&Next Visited Context"
-msgstr ""
+msgstr "S&ekva Vizitata Kunteksto"
 
 #: contextbrowser.cpp:253
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Use"
-msgstr ""
+msgstr "&Antaŭa Uzo"
 
 #: contextbrowser.cpp:259
 #, kde-format
 msgctxt "@action"
 msgid "&Next Use"
-msgstr ""
+msgstr "S&ekva Uzo"
 
 #: contextbrowser.cpp:265
-#, fuzzy, kde-format
-#| msgid "Context Browser"
+#, kde-format
 msgctxt "@action"
 msgid "Context Browser"
-msgstr "Kunteksta foliumilo"
+msgstr "Kunteksta Foliumilo"
 
 #: contextbrowser.cpp:296 contextbrowser.cpp:376 contextbrowserview.cpp:172
-#, fuzzy, kde-format
-#| msgid "Context Browser"
+#, kde-format
 msgctxt "@title:window"
 msgid "Code Browser"
-msgstr "Kunteksta foliumilo"
+msgstr "Kodfoliumilo"
 
 #: contextbrowser.cpp:312
 #, kde-format
 msgctxt "@action"
 msgid "Find Uses"
-msgstr ""
+msgstr "Trovi uzojn"
 
 #: contextbrowser.cpp:1567
 #, kde-format
 msgid "(changed)"
-msgstr ""
+msgstr "(ŝanĝita)"
 
 #: contextbrowserview.cpp:178
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show declaration menu"
-msgstr ""
+msgstr "Montri deklaran menuon"
 
 #: contextbrowserview.cpp:181
 #, kde-format
 msgctxt "@action"
 msgid "Declaration Menu"
-msgstr ""
+msgstr "Deklara Menuo"
 
 #: contextbrowserview.cpp:185
 #, kde-format
 msgctxt "@action"
 msgid "Lock Current View"
-msgstr ""
+msgstr "Ŝlosi Aktualan Vidon"
 
 #: contextbrowserview.cpp:186
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock current view"
-msgstr ""
+msgstr "Ŝlosi aktualan vidon"
 
 #: contextbrowserview.cpp:187
 #, kde-format
 msgctxt "@action"
 msgid "Unlock Current View"
-msgstr ""
+msgstr "Malŝlosi Aktualan Vidon"
 
 #: contextbrowserview.cpp:189
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unlock current view"
-msgstr ""
+msgstr "Malŝlosi aktualan vidon"
 
 #. i18n: ectx: ToolBar (KDevCodebrowserToolBar)
 #: kdevcontextbrowser.rc:25
-#, fuzzy, kde-format
-#| msgid "Context Browser"
+#, kde-format
 msgid "Code Browser Toolbar"
-msgstr "Kunteksta foliumilo"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
+msgstr "Kodfoliumila Ilobreto"
