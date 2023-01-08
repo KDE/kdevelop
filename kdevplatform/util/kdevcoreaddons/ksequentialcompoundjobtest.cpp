@@ -46,7 +46,7 @@ void KSequentialCompoundJobTest::runOneJob()
     QCOMPARE(slaveSpy.finished.count(), 0);
     QCOMPARE(masterSpy.finished.count(), 0);
 
-    slave->callEmitResult();
+    slave->emitResult();
 
     QCOMPARE(masterSpy.finished.count(), 1);
     QCOMPARE(masterSpy.result.count(), 1);
@@ -83,14 +83,14 @@ void KSequentialCompoundJobTest::runTwoJobs()
     QCOMPARE(slave2Spy.finished.count(), 0);
     QCOMPARE(masterSpy.finished.count(), 0);
 
-    slave1->callEmitResult();
+    slave1->emitResult();
     QCOMPARE(started1Spy.count(), 1);
     QCOMPARE(slave1Spy.finished.count(), 1);
     QCOMPARE(started2Spy.count(), 1);
     QCOMPARE(slave2Spy.finished.count(), 0);
     QCOMPARE(masterSpy.finished.count(), 0);
 
-    slave2->callEmitResult();
+    slave2->emitResult();
 
     QCOMPARE(masterSpy.finished.count(), 1);
     QCOMPARE(masterSpy.result.count(), 1);

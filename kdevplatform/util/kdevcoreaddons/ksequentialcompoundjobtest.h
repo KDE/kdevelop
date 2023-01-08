@@ -21,10 +21,7 @@ public:
         Q_EMIT started(this);
     }
 
-    void callEmitResult()
-    {
-        emitResult();
-    }
+    using KJob::emitResult;
 
 Q_SIGNALS:
     void started(KJob *job);
