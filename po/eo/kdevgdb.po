@@ -1,13 +1,16 @@
 # Translation of kdevgdb into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-08 03:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -22,30 +25,26 @@ msgid "GDB"
 msgstr "GDB"
 
 #: debuggerplugin.cpp:113
-#, fuzzy, kde-format
-#| msgid "Disassemble View"
+#, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers"
-msgstr "Retrokompila rigardo"
+msgstr "Retrokompilo/Reĝistroj"
 
 #: debuggerplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "GDB"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB"
 msgstr "GDB"
 
 #: debuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory"
 msgstr "Memorrigardo"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, DebuggerTracingDialog)
 #: debuggertracingdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Tracing Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Tracing Configuration"
 msgstr "Agordo de spurado"
@@ -65,8 +64,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
-#, fuzzy, kde-format
-#| msgid "Expressions to print:"
+#, kde-format
 msgctxt "@label"
 msgid "Expressions to print:"
 msgstr "Esprimoj montrendaj:"
@@ -84,16 +82,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
-#, fuzzy, kde-format
-#| msgid "Enable tracing"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable tracing"
 msgstr "Ŝalti spuradon"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableCustomFormat)
 #: debuggertracingdialog.ui:60
-#, fuzzy, kde-format
-#| msgid "Custom format string"
+#, kde-format
 msgctxt "@option:check"
 msgid "Custom format string"
 msgstr "Propra formatoteksto"
@@ -111,10 +107,9 @@ msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
 msgstr ""
 
 #: debugsession.cpp:294
-#, fuzzy, kde-format
-#| msgid "Could not start debugger"
+#, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr "Ne eblis starti sencimigilon"
+msgstr "<b>Ne eblis starti sencimigilon:</b><br />"
 
 #: debugsession.cpp:308
 #, kde-format
@@ -129,8 +124,7 @@ msgid "Could not locate the debugging shell '%1'."
 msgstr "Ne eblis trovi la sencimigilŝelon '%1'."
 
 #: gdbconfigpage.cpp:93
-#, fuzzy, kde-format
-#| msgid "Debugger Configuration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
 msgstr "Agordo de sencimigilo"
@@ -155,24 +149,21 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: gdbconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Debugger"
+#, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
 msgstr "Sencimigilo"
 
 #. i18n: ectx: property (text), widget (QLabel, gdbPath_label)
 #: gdbconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "Debugger executable:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger e&xecutable:"
-msgstr "Sencimigilprogramo:"
+msgstr "Sencimigil&programo:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
-#, fuzzy, kde-format
-#| msgid "Gdb executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Gdb executable"
 msgstr "Gdb-programo"
@@ -212,28 +203,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
-#, fuzzy, kde-format
-#| msgctxt "Shell script to be executed at run time"
-#| msgid "R&un shell script:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "She&ll script:"
-msgstr "Lanĉi ŝelskript&on:"
+msgstr "Ŝe&lskripto:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: gdbconfigpage.ui:87
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Options"
 msgstr "Opcioj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: gdbconfigpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Display static &members"
+#, kde-format
 msgctxt "@option:check"
 msgid "Display static &members:"
-msgstr "Montri statikajn &membrojn"
+msgstr "Montri statikajn &membrojn:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_displayStaticMembers)
 #: gdbconfigpage.ui:111
@@ -250,11 +237,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
-#, fuzzy, kde-format
-#| msgid "Display &demangled names"
+#, kde-format
 msgctxt "@option:check"
 msgid "Display &demangled names:"
-msgstr "Montri &malkompilitajn nomojn"
+msgstr "Montri &malkompilitajn nomojn:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_asmDemangle)
 #: gdbconfigpage.ui:133
@@ -268,33 +254,31 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
-#, fuzzy, kde-format
-#| msgid "Special debugger views"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "S&tart debugger with:"
-msgstr "Specialaj sencimigilrigardoj"
+msgstr "S&tartigi sencimigilon kun:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
-#, fuzzy, kde-format
-#| msgid "Application does not exist"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr "Aplikaĵo ne ekzistas"
+msgstr "Eligo de Aplikaĵo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:159
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "GDB Console"
-msgstr ""
+msgstr "GDB-Konzolo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:164
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr ""
+msgstr "Framstako"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:178
@@ -310,11 +294,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
-#, fuzzy, kde-format
-#| msgid "Remote Debugging"
+#, kde-format
 msgctxt "@title:group"
 msgid "Remote Debugging"
-msgstr "Fora sencimigado"
+msgstr "Fora Sencimigado"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, runShellScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runShellScript)
@@ -333,12 +316,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
-#, fuzzy, kde-format
-#| msgctxt "Shell script to be executed at run time"
-#| msgid "R&un shell script:"
+#, kde-format
 msgctxt "@label:chooser Shell script to be executed at run time"
 msgid "R&un shell script:"
-msgstr "Lanĉi ŝelskript&on:"
+msgstr "R&uligi ŝelskripton:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, configGdbScript_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_configGdbScript)
@@ -350,11 +331,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
-#, fuzzy, kde-format
-#| msgid "Gdb configure script"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Gdb &config script:"
-msgstr "Gdb-agordoskripto"
+msgstr "Gdb-&agordoskripto:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_runGdbScript)
 #. i18n: ectx: property (toolTip), widget (QLabel, runGdbScript_label)
@@ -370,16 +350,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
-#, fuzzy, kde-format
-#| msgctxt "Gdb script to be executed at run time."
-#| msgid "Run &gdb script:"
+#, kde-format
 msgctxt "@label:chooser Gdb script to be executed at run time."
 msgid "Run &gdb script:"
 msgstr "Lanĉi &gdb-skripton:"
 
 #: gdboutputwidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "GDB Output"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB-eligo"
@@ -393,11 +370,10 @@ msgid ""
 msgstr ""
 
 #: gdboutputwidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "&GDB cmd:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "&GDB command:"
-msgstr "&GDB kdo:"
+msgstr "&GDB komando:"
 
 #: gdboutputwidget.cpp:63
 #, kde-format
@@ -406,11 +382,10 @@ msgid "Pause execution of the app to enter GDB commands"
 msgstr ""
 
 #: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
-#, fuzzy, kde-format
-#| msgid "Show Internal Commands"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
-msgstr "Montri internajn komandojn"
+msgstr "Montri Internajn Komandojn"
 
 #: gdboutputwidget.cpp:376 gdboutputwidget.cpp:424
 #, kde-format
@@ -422,35 +397,31 @@ msgid ""
 msgstr ""
 
 #: gdboutputwidget.cpp:381
-#, fuzzy, kde-format
-#| msgid "Copy All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
-msgstr "Kopii ĉiujn"
+msgstr "Kopii Ĉiujn"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevgdbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr "Sencimigila ilobreto"
+msgstr "Sencimigila Ilobreto"
 
 #: memviewdlg.cpp:66
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Start:"
-msgstr "Lanĉi"
+msgstr "Starto:"
 
 #: memviewdlg.cpp:69
-#, fuzzy, kde-format
-#| msgid "Amount"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
-msgstr "Kvanto"
+msgstr "Kvanto:"
 
 #: memviewdlg.cpp:96
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory View"
 msgstr "Memorrigardo"
@@ -463,86 +434,79 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: memviewdlg.cpp:262
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action::inmenu"
 msgid "&Reload"
-msgstr "Reŝargi"
+msgstr "&Reŝargi"
 
 #: memviewdlg.cpp:271
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Format"
-msgstr ""
+msgstr "&Formato"
 
 #: memviewdlg.cpp:274
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
-msgstr ""
+msgstr "&Binara"
 
 #: memviewdlg.cpp:279
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
-msgstr ""
+msgstr "&Oktala"
 
 #: memviewdlg.cpp:284
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
-msgstr ""
+msgstr "&Decimala"
 
 #: memviewdlg.cpp:289
 #, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
-msgstr ""
+msgstr "Dekses&uma:"
 
 #: memviewdlg.cpp:303
 #, kde-format
 msgctxt "@title:menu"
 msgid "&Grouping"
-msgstr ""
+msgstr "&Grupigo"
 
 #: memviewdlg.cpp:306
-#, fuzzy, kde-format
-#| msgid "&0"
+#, kde-format
 msgctxt "@item:inmenu no byte grouping"
 msgid "&0"
 msgstr "&0"
 
 #: memviewdlg.cpp:311
-#, fuzzy, kde-format
-#| msgid "&1"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&1"
 msgstr "&1"
 
 #: memviewdlg.cpp:316
-#, fuzzy, kde-format
-#| msgid "&2"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&2"
 msgstr "&2"
 
 #: memviewdlg.cpp:321
-#, fuzzy, kde-format
-#| msgid "&4"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&4"
 msgstr "&4"
 
 #: memviewdlg.cpp:326
-#, fuzzy, kde-format
-#| msgid "&8"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "&8"
 msgstr "&8"
 
 #: memviewdlg.cpp:331
-#, fuzzy, kde-format
-#| msgid "1&6"
+#, kde-format
 msgctxt "@item:inmenu byte group size"
 msgid "1&6"
 msgstr "1&6"
@@ -551,226 +515,34 @@ msgstr "1&6"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Write Changes"
-msgstr ""
+msgstr "Skribi Ŝanĝojn"
 
 #: memviewdlg.cpp:348
-#, fuzzy, kde-format
-#| msgid "Change memory range"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Change Memory Range"
-msgstr "Ŝanĝi memorgamon"
+msgstr "Ŝanĝi Memorgamon"
 
 #: memviewdlg.cpp:352
-#, fuzzy, kde-format
-#| msgid "Close this view"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
-msgstr "Fermi tiun rigardon"
+msgstr "Fermi Rigardon"
 
 #: memviewdlg.cpp:419
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory Viewer"
-msgstr "Memorrigardo"
+msgstr "Memorrigardilo"
 
 #: memviewdlg.cpp:423
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@action"
 msgid "New Memory Viewer"
-msgstr "Memorrigardo"
+msgstr "Nova Memorrigardilo"
 
 #: memviewdlg.cpp:424
-#, fuzzy, kde-format
-#| msgid "Memory view"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Open a new memory viewer"
-msgstr "Memorrigardo"
-
-#, fuzzy
-#~| msgid "Debugging &shell:"
-#~ msgid "Debugging Shell Not Found"
-#~ msgstr "&Sencimigila ŝelo:"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Lanĉi"
-
-#~ msgid "OK"
-#~ msgstr "Bone"
-
-#~ msgid "Cancel"
-#~ msgstr "Rezigni"
-
-#, fuzzy
-#~| msgid "Address"
-#~ msgid "Address Selector"
-#~ msgstr "Adreso"
-
-#, fuzzy
-#~| msgid "Disassemble"
-#~ msgid "Disassembly flavor"
-#~ msgstr "Malkompili"
-
-#~ msgid "Address"
-#~ msgstr "Adreso"
-
-#~ msgid "Function"
-#~ msgstr "Funkcio"
-
-#~ msgid "Instruction"
-#~ msgstr "Instrukcio"
-
-#, fuzzy
-#~| msgid "Disassemble View"
-#~ msgid "Disassemble/Registers View"
-#~ msgstr "Retrokompila rigardo"
-
-#, fuzzy
-#~| msgid "Address"
-#~ msgid "Address selector"
-#~ msgstr "Adreso"
-
-#~ msgid "Examine Core File..."
-#~ msgstr "Ekzameni kerndosieron..."
-
-#~ msgid "Examine core file"
-#~ msgstr "Ekzameni kerndosieron"
-
-#~ msgid "Attach to Process"
-#~ msgstr "Konekti al procezo"
-
-#~ msgid "KDevelop"
-#~ msgstr "KDevelop"
-
-#~ msgid "Evaluate: %1"
-#~ msgstr "Komputi: %1"
-
-#~ msgid "Watch: %1"
-#~ msgstr "Observi: %1"
-
-#~ msgid "Choose a core file to examine..."
-#~ msgstr "Elekti kerndosieron ekzamenendan..."
-
-#, fuzzy
-#~| msgid "Examine core file"
-#~ msgid "Examining core file %1"
-#~ msgstr "Ekzameni kerndosieron"
-
-#, fuzzy
-#~| msgid "Examine core file"
-#~ msgid "Debug core file"
-#~ msgstr "Ekzameni kerndosieron"
-
-#~ msgid "Attaching to process %1"
-#~ msgstr "Konekti al procezo %1"
-
-#, fuzzy
-#~| msgid "Attaching to process %1"
-#~ msgid "Debug process %1"
-#~ msgstr "Konekti al procezo %1"
-
-#~ msgctxt "ProjectName: run configuration name"
-#~ msgid "%1: %2"
-#~ msgstr "%1: %2"
-
-#~ msgid "Executable:"
-#~ msgstr "Programo:"
-
-#, fuzzy
-#~| msgid "Examine Core File..."
-#~ msgid "Core File:"
-#~ msgstr "Ekzameni kerndosieron..."
-
-#~ msgid "Process exited"
-#~ msgstr "Procezo ĉesiĝis"
-
-#, fuzzy
-#~| msgid "Debugger Toolbar"
-#~ msgid "Debugger error"
-#~ msgstr "Sencimigila ilobreto"
-
-#~ msgid "Internal error"
-#~ msgstr "Interna eraro"
-
-#~ msgid "Running program"
-#~ msgstr "Rulanta programo"
-
-#~ msgid "Warning"
-#~ msgstr "Averto"
-
-#~ msgid "Debugger status"
-#~ msgstr "Sencimigilstato"
-
-#, fuzzy
-#~| msgid "Could not start debugger"
-#~ msgid "<b>Could not attach debugger:</b><br />"
-#~ msgstr "Ne eblis starti sencimigilon"
-
-#, fuzzy
-#~| msgid "Internal error"
-#~ msgid "Internal debugger error"
-#~ msgstr "Interna eraro"
-
-#~ msgid "Could not start debugger"
-#~ msgstr "Ne eblis starti sencimigilon"
-
-#, fuzzy
-#~| msgid "Warning"
-#~ msgid "(running)"
-#~ msgstr "Averto"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "Debugging &shell:"
-#~ msgstr "&Sencimigila ŝelo:"
-
-#~ msgid "Script to start remote application"
-#~ msgstr "Skripto por starti foran aplikaĵon"
-
-#~ msgid "&Config gdb script:"
-#~ msgstr "&Gdb-a agordskripto:"
-
-#~ msgid "Script to connect with remote application"
-#~ msgstr "Skripto por konekti al fora aplikaĵo"
-
-#, fuzzy
-#~| msgid "Address"
-#~ msgid "End Address:"
-#~ msgstr "Adreso"
-
-#~ msgid "Offset"
-#~ msgstr "Deŝovo"
-
-#~ msgid "Watches"
-#~ msgstr "Observoj"
-
-#~ msgid "Recent"
-#~ msgstr "Lasttempaj"
-
-#~ msgid "Try setting &breakpoints on library loading"
-#~ msgstr "Provi meti &haltpunktojn dum ŝargado de biblioteko"
-
-#~ msgid "E&nable floating toolbar"
-#~ msgstr "Ŝalti ŝveba&ntan ilobreton"
-
-#~ msgid "Debug views"
-#~ msgstr "Sencimigilaj rigardoj"
-
-#~ msgid "Viewers"
-#~ msgstr "Rigardiloj"
-
-#~ msgid "Debugger viewers"
-#~ msgstr "Sencimigilaj rigardiloj"
-
-#, fuzzy
-#~| msgid "Interrupt application"
-#~ msgid "Could not run application"
-#~ msgstr "Interrompi aplikaĵon"
+msgstr "Malfermi novan memorrigardilon"

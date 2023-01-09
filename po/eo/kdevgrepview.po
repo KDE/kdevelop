@@ -1,13 +1,16 @@
 # Translation of kdevgrepview into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-08 03:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -20,33 +23,31 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Files"
-msgstr ""
+msgstr "Ĉiuj Malfermataj Dosieroj"
 
 #: grepdialog.cpp:53
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "All Open Projects"
-msgstr ""
+msgstr "Ĉiuj Malfermataj Projektoj"
 
 #: grepdialog.cpp:185 grepdialog.cpp:525 grepviewplugin.cpp:91
-#, fuzzy, kde-format
-#| msgid "Find In Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace in Files"
-msgstr "Trovi en dosieroj"
+msgstr "Trovi/Anstataŭigi en Dosieroj"
 
 #: grepdialog.cpp:193
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@action:button"
 msgid "Search..."
-msgstr "Serĉi"
+msgstr "Serĉi..."
 
 #: grepdialog.cpp:260
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Directory to Search in"
-msgstr ""
+msgstr "Elekti Dosierujon en kiu Serĉi"
 
 #: grepdialog.cpp:516
 #, kde-format
@@ -68,21 +69,19 @@ msgid "Search \"%1\" in %2 (at time %3)"
 msgstr ""
 
 #: grepjob.cpp:97
-#, fuzzy, kde-format
-#| msgid "Find In Files"
+#, kde-format
 msgid "Find in Files"
-msgstr "Trovi en dosieroj"
+msgstr "Trovi en Dosieroj"
 
 #: grepjob.cpp:113 grepjob.cpp:216
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgid "Search aborted"
-msgstr "Serĉi"
+msgstr "Serĉo ĉesigata"
 
 #: grepjob.cpp:122
 #, kde-format
 msgid "No files found matching the wildcard patterns"
-msgstr ""
+msgstr "Trovis neniujn dosierojn kongruantajn al la ĵokerŝablonoj"
 
 #: grepjob.cpp:140
 #, kde-format
@@ -160,111 +159,103 @@ msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
 msgstr ""
 
 #: grepoutputview.cpp:72
-#, fuzzy, kde-format
-#| msgid "Find In Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Find/Replace Output View"
-msgstr "Trovi en dosieroj"
+msgstr "Trova/Anstataŭiga Rezultovido"
 
 #: grepoutputview.cpp:75
 #, kde-format
 msgctxt "@action"
 msgid "&Previous Item"
-msgstr ""
+msgstr "&Antaŭa Ero"
 
 #: grepoutputview.cpp:76
 #, kde-format
 msgctxt "@action"
 msgid "&Next Item"
-msgstr ""
+msgstr "S&ekva Ero"
 
 #: grepoutputview.cpp:81
 #, kde-format
 msgctxt "@action"
 msgid "C&ollapse All"
-msgstr ""
+msgstr "Maletendi Ĉi&on"
 
 #: grepoutputview.cpp:83
 #, kde-format
 msgctxt "@action"
 msgid "&Expand All"
-msgstr ""
+msgstr "&Etendi Ĉion"
 
 #: grepoutputview.cpp:87
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@action"
 msgid "New &Search"
-msgstr "Serĉi"
+msgstr "Nova &Serĉi"
 
 #: grepoutputview.cpp:88
 #, kde-format
 msgctxt "@action"
 msgid "Refresh"
-msgstr ""
+msgstr "Refreŝigi"
 
 #: grepoutputview.cpp:90
 #, kde-format
 msgctxt "@action"
 msgid "Clear Search History"
-msgstr ""
+msgstr "Viŝi Serĉhistorion"
 
 #: grepoutputview.cpp:325
 #, kde-format
 msgid "Do you want to replace with an empty string?"
-msgstr ""
+msgstr "Ĉu vi volas anstataŭigi kun malplena ĉeno?"
 
 #: grepoutputview.cpp:326
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Start Replacement"
-msgstr "Ŝablono:"
+msgstr "Komenci Anstataŭigon"
 
 #: grepoutputview.cpp:327
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@action:button"
 msgid "Replace"
-msgstr "Ŝablono:"
+msgstr "Anstataŭigi"
 
 #. i18n: ectx: property (text), widget (QLabel, replacementLabel)
 #: grepoutputview.ui:41
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Replacement &text:"
-msgstr "Ŝablono:"
+msgstr "Anstataŭiga &teksto:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementCombo)
 #: grepoutputview.ui:57
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement pattern"
-msgstr "Ŝablono:"
+msgstr "Enigi la anstataŭigan ŝablonon"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, applyButton)
 #: grepoutputview.ui:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Apply replacement on selected items"
-msgstr ""
+msgstr "Apliki anstataŭigon al elektataj elementoj"
 
 #. i18n: ectx: property (text), widget (QPushButton, applyButton)
 #: grepoutputview.ui:79
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@action:button"
 msgid "&Replace"
-msgstr "Ŝablono:"
+msgstr "&Anstataŭigi"
 
 #: grepviewplugin.cpp:76
-#, fuzzy, kde-format
-#| msgid "Find in Fi&les..."
+#, kde-format
 msgctxt "@action"
 msgid "Find/Replace in Fi&les..."
-msgstr "Trovi en Dos&ieroj..."
+msgstr "Trovi/Anstataŭigi en Dos&ieroj..."
 
 #: grepviewplugin.cpp:79
 #, kde-format
@@ -283,18 +274,16 @@ msgid ""
 msgstr ""
 
 #: grepviewplugin.cpp:129 grepviewplugin.cpp:152
-#, fuzzy, kde-format
-#| msgid "Find In Files"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Find/Replace in This Folder..."
-msgstr "Trovi en dosieroj"
+msgstr "Trovi/Anstataŭigi en Tiu Dosiero..."
 
 #: grepviewplugin.cpp:140
-#, fuzzy, kde-format
-#| msgid "Find in Fi&les..."
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Find/Replace in Files..."
-msgstr "Trovi en Dos&ieroj..."
+msgstr "Trovi/Anstataŭigi en Dos&ieroj..."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patternCombo)
 #: grepwidget.ui:35
@@ -394,16 +383,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Template:"
 msgstr "Ŝablono:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, templateEdit)
 #: grepwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the regular expression template."
 msgstr "Ŝablono:"
@@ -448,49 +435,45 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Pattern:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Pattern:"
 msgstr "Ŝablono:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: grepwidget.ui:144
-#, fuzzy, kde-format
-#| msgid "Files:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Files:"
 msgstr "Dosieroj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: grepwidget.ui:157
-#, fuzzy, kde-format
-#| msgid "Case Sensitive:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Case sensitive:"
 msgstr "Usklecdistinga:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, caseSensitiveCheck)
 #: grepwidget.ui:176
-#, fuzzy, kde-format
-#| msgid "Case Sensitive:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Case-sensitive searching."
-msgstr "Usklecdistinga:"
+msgstr "Usklecdistinga serĉado."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: grepwidget.ui:189
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Location(s):"
-msgstr ""
+msgstr "Loko(j):"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, filesCombo)
 #: grepwidget.ui:202
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files filter"
-msgstr ""
+msgstr "Dosieraj filtroj"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, filesCombo)
 #: grepwidget.ui:205
@@ -503,8 +486,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:218
-#, fuzzy, kde-format
-#| msgid "Exclude:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Exclude:"
 msgstr "Elbari:"
@@ -514,7 +496,7 @@ msgstr "Elbari:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Files pattern to exclude"
-msgstr ""
+msgstr "Dosierŝablono elbarenda"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, excludeCombo)
 #: grepwidget.ui:234
@@ -529,43 +511,38 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:314
-#, fuzzy, kde-format
-#| msgid "Regular Expression:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Regular expression:"
-msgstr "Regula Esprimo:"
+msgstr "Regula esprimo:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, regexCheck)
 #: grepwidget.ui:327
-#, fuzzy, kde-format
-#| msgid "Regular Expression:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable or disable regular expression."
-msgstr "Regula Esprimo:"
+msgstr "Ebligi aŭ malebligi regulan esprimon."
 
 #. i18n: ectx: property (text), widget (QLabel, limitToProjectLabel)
 #: grepwidget.ui:340
-#, fuzzy, kde-format
-#| msgid "Limit to project files:"
+#, kde-format
 msgctxt "@option:check"
 msgid "Limit to project files:"
-msgstr "Limigo al projektdosieroj:"
+msgstr "Limigi al projektdosieroj:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, replacementTemplateEdit)
 #: grepwidget.ui:369
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the replacement template"
-msgstr "Ŝablono:"
+msgstr "Enigi la anstataŭigan ŝablonon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: grepwidget.ui:376
-#, fuzzy, kde-format
-#| msgid "Template:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Replacement template:"
-msgstr "Ŝablono:"
+msgstr "Anstataŭiga ŝablono:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, searchPaths)
 #: grepwidget.ui:389
@@ -582,69 +559,3 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Find In Files"
-#~ msgid "Find-Replace In Files"
-#~ msgstr "Trovi en dosieroj"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Edit"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Find In Files"
-#~ msgid "Find/Replace"
-#~ msgstr "Trovi en dosieroj"
-
-#, fuzzy
-#~| msgid "Find In Files"
-#~ msgid "&Find/Replace in Files"
-#~ msgstr "Trovi en dosieroj"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "Recursive:"
-#~ msgstr "Rekursia:"
-
-#, fuzzy
-#~| msgid "Find In Files"
-#~ msgid "Find/Replace In Files"
-#~ msgstr "Trovi en dosieroj"
-
-#~ msgid "%s"
-#~ msgstr "%s"
-
-#~ msgid "Directory:"
-#~ msgstr "Dosierujo:"
-
-#, fuzzy
-#~| msgid "Find In Files"
-#~ msgid "Find in Files aborted"
-#~ msgstr "Trovi en dosieroj"
-
-#, fuzzy
-#~| msgid "Could not create temporary file to upload."
-#~ msgid "Unable to create a temporary file for search."
-#~ msgstr "Ne eblis krei dumtempan dosieron por la alŝuto."
-
-#, fuzzy
-#~| msgid "Profile to load"
-#~ msgid "Process failed to start."
-#~ msgstr "Profilo ŝargenda"
-
-#, fuzzy
-#~| msgid "Process exited"
-#~ msgid "Process crashed."
-#~ msgstr "Procezo ĉesiĝis"
-
-#, fuzzy
-#~| msgid "Process exited"
-#~ msgid "Process timed out."
-#~ msgstr "Procezo ĉesiĝis"

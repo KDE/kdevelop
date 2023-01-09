@@ -1,13 +1,16 @@
 # Translation of kdevcmake into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:45+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-08 03:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -17,18 +20,16 @@ msgstr ""
 "X-Generator: pology\n"
 
 #: cmakebuilddirchooser.cpp:29
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "&Konstrudosierujo:"
+msgstr "Agordi Konstrudosierujon - %1"
 
 #: cmakebuilddirchooser.cpp:87
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr "&Konstrudosierujo:"
+msgstr "Agordi Konstrudosierujon por %1"
 
 #: cmakebuilddirchooser.cpp:197
 #, kde-format
@@ -67,32 +68,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Available build directories:"
-msgstr "&Konstrudosierujo:"
+msgstr "Disponeblaj konstrudosierujoj:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, availableBuildDirs)
 #: cmakebuilddirchooser.ui:40
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "New build directory"
-msgstr "&Konstrudosierujo:"
+msgstr "Nove konstrudosierujo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: cmakebuilddirchooser.ui:48
-#, fuzzy, kde-format
-#| msgid "&Build Directory:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Build &directory:"
-msgstr "&Konstrudosierujo:"
+msgstr "Konstru&dosierujo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: cmakebuilddirchooser.ui:84
-#, fuzzy, kde-format
-#| msgid "&Installation Prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Installation prefix:"
 msgstr "&Instalprefikso:"
@@ -115,8 +112,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build &type:"
 msgstr "Kontru&tipo:"
@@ -127,30 +123,28 @@ msgstr "Kontru&tipo:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Extra arguments:"
-msgstr ""
+msgstr "Pluaj argumentoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: cmakebuilddirchooser.ui:182
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake &executable:"
-msgstr ""
+msgstr "CMake-programo:"
 
 #: cmakecodecompletionmodel.cpp:189
 #, kde-format
 msgid "INVALID"
-msgstr ""
+msgstr "NEVALIDA"
 
 #: cmakecodecompletionmodel.cpp:197
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@item"
 msgid "Command"
 msgstr "Komando"
 
 #: cmakecodecompletionmodel.cpp:198
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@item"
 msgid "Variable"
 msgstr "Variablo"
@@ -159,11 +153,10 @@ msgstr "Variablo"
 #, kde-format
 msgctxt "@item"
 msgid "Macro"
-msgstr ""
+msgstr "Makroo"
 
 #: cmakecodecompletionmodel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Path"
+#, kde-format
 msgctxt "@item"
 msgid "Path"
 msgstr "Vojo"
@@ -172,47 +165,42 @@ msgstr "Vojo"
 #, kde-format
 msgctxt "@item"
 msgid "Target"
-msgstr ""
+msgstr "Celo"
 
 #: cmakecodecompletionmodel.cpp:253
 #, kde-format
 msgid "wrong"
-msgstr ""
+msgstr "malĝusta"
 
 #: cmakecommandscontents.cpp:29
-#, fuzzy, kde-format
-#| msgid "Command"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Commands"
-msgstr "Komando"
+msgstr "Komandoj"
 
 #: cmakecommandscontents.cpp:30
-#, fuzzy, kde-format
-#| msgid "Variable"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Variables"
-msgstr "Variablo"
+msgstr "Variabloj"
 
 #: cmakecommandscontents.cpp:31
-#, fuzzy, kde-format
-#| msgid "Module"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Modules"
-msgstr "Modulo"
+msgstr "Moduloj"
 
 #: cmakecommandscontents.cpp:32
-#, fuzzy, kde-format
-#| msgid "Property"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Properties"
-msgstr "Eco"
+msgstr "Trajtoj"
 
 #: cmakecommandscontents.cpp:33
-#, fuzzy, kde-format
-#| msgid "Policy"
+#, kde-format
 msgctxt "@item cmake"
 msgid "Policies"
-msgstr "Konduto"
+msgstr "Politikoj"
 
 #: cmakecommandscontents.cpp:102
 #, kde-format
@@ -227,18 +215,17 @@ msgstr ""
 #: cmakedocumentation.cpp:81
 #, kde-format
 msgid "<br /><em>Cache Value:</em> %1\n"
-msgstr ""
+msgstr "<br /><em>Kaŝmemora Valoro:</em> %1\n"
 
 #: cmakedocumentation.cpp:84
 #, kde-format
 msgid "<br /><em>Cache Documentation:</em> %1\n"
-msgstr ""
+msgstr "<br /><em>Kaŝmemora Dokumentaro:</em> %1\n"
 
 #: cmakehelpdocumentation.cpp:21
-#, fuzzy, kde-format
-#| msgid "CMake Binary:"
+#, kde-format
 msgid "CMake Content Page"
-msgstr "CMake-Programo:"
+msgstr "CMake-Enhavpaĝo"
 
 #: cmakemanager.cpp:646
 #, kde-format
@@ -254,48 +241,42 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
-#, fuzzy, kde-format
-#| msgid "Show Advanced Values"
+#, kde-format
 msgctxt "@title:group"
 msgid "Cache Values"
-msgstr "Montri pluajn valorojn"
+msgstr "Kaŝmemoraj Valoroj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: settings/cmakebuildsettings.ui:89
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgctxt "@label"
 msgid "Comment:"
 msgstr "Komento:"
 
 #. i18n: ectx: property (text), widget (QPushButton, showAdvanced)
 #: settings/cmakebuildsettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Show Advanced"
+#, kde-format
 msgctxt "@action:button"
 msgid "Show Advanced"
 msgstr "Montri pluajn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, advancedBox)
 #: settings/cmakebuildsettings.ui:125
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:group"
 msgid "Advanced"
 msgstr "Plie"
 
 #. i18n: ectx: property (text), widget (QLabel, installationPrefixLabel)
 #: settings/cmakebuildsettings.ui:134
-#, fuzzy, kde-format
-#| msgid "&Installation Prefix:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
 msgstr "&Instalprefikso:"
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
 msgstr "Kontru&tipo:"
@@ -305,7 +286,7 @@ msgstr "Kontru&tipo:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
-msgstr ""
+msgstr "Agordi medion:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
@@ -316,8 +297,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
-#, fuzzy, kde-format
-#| msgid "Show Advanced Values"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show advanced values"
 msgstr "Montri pluajn valorojn"
@@ -330,36 +310,31 @@ msgid "CMake executable:"
 msgstr ""
 
 #: settings/cmakecachemodel.cpp:36
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nomo"
 
 #: settings/cmakecachemodel.cpp:37
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Tipo"
 
 #: settings/cmakecachemodel.cpp:38
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valoro"
 
 #: settings/cmakecachemodel.cpp:39
-#, fuzzy, kde-format
-#| msgid "Comment"
+#, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "Komento"
 
 #: settings/cmakecachemodel.cpp:40
-#, fuzzy, kde-format
-#| msgid "Advanced"
+#, kde-format
 msgctxt "@title:column"
 msgid "Advanced"
 msgstr "Plie"
@@ -381,13 +356,12 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "Ne Forigi"
 
 #: settings/cmakepreferences.cpp:354
-#, fuzzy, kde-format
-#| msgid "Could not read project file: %1"
+#, kde-format
 msgid "Could not remove: %1"
-msgstr "Ne eblis legi projektdosieron: %1"
+msgstr "Ne eblis forigi: %1"
 
 #: settings/cmakepreferences.cpp:400
 #, kde-format
@@ -399,122 +373,28 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"
-msgstr ""
+msgstr "Agordi CMake-metojn"
 
 #: testing/ctestfindjob.cpp:23
 #, kde-format
 msgid "Parse test suite %1"
-msgstr ""
+msgstr "Parsi testaron %1"
 
 #: testing/ctestrunjob.cpp:75
 #, kde-format
 msgid "CTest"
-msgstr ""
+msgstr "CTest"
 
 #: testing/ctestrunjob.cpp:117
 #, kde-format
 msgctxt "running test %1, %2 test case"
 msgid "CTest %1: %2"
-msgstr ""
+msgstr "CTest %1: %2"
 
 #: testing/ctestrunjob.cpp:119
 #, kde-format
 msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
-msgstr[0] ""
-msgstr[1] ""
-
-#~ msgid "Add"
-#~ msgstr "Aldoni"
-
-#~ msgid "Remove"
-#~ msgstr "Forigi"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#~ msgid "CMake &Binary:"
-#~ msgstr "CMake-&Programo:"
-
-#, fuzzy
-#~| msgid "Build &type:"
-#~ msgid "Build Type:"
-#~ msgstr "Kontru&tipo:"
-
-#, fuzzy
-#~| msgid "CMake &Binary:"
-#~ msgid "CMake Binary:"
-#~ msgstr "CMake-&Programo:"
-
-#, fuzzy
-#~| msgid "&Installation Prefix:"
-#~ msgid "Installation Prefix"
-#~ msgstr "&Instalprefikso:"
-
-#, fuzzy
-#~| msgid "CMake &Binary:"
-#~ msgid "CMake Binary"
-#~ msgstr "CMake-&Programo:"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "CMake Manager"
-#~ msgstr "CMake-Programo:"
-
-#, fuzzy
-#~| msgid "Could not start debugger"
-#~ msgid "Could not save the change."
-#~ msgstr "Ne eblis starti sencimigilon"
-
-#, fuzzy
-#~| msgid "CMake Binary:"
-#~ msgid "CMakeLists changes failed."
-#~ msgstr "CMake-Programo:"
-
-#~ msgid "CMake Directory"
-#~ msgstr "CMake-Dosierujo"
-
-#~ msgid "General"
-#~ msgstr "Ĝeneralo"
-
-#~ msgid "(C) 2007 %{AUTHOR}"
-#~ msgstr "(C) 2007 %{AUTHOR}"
-
-#~ msgid "%{AUTHOR}"
-#~ msgstr "%{AUTHOR}"
-
-#~ msgid "Document to open"
-#~ msgstr "La dosiero malfermiĝi"
-
-#~ msgid "&Move"
-#~ msgstr "&Movi"
-
-#~ msgid "kapp4_base"
-#~ msgstr "kapp4_base"
-
-#~ msgid "Background color:"
-#~ msgstr "Fona koloro:"
-
-#~ msgid "Foreground color:"
-#~ msgstr "Malfona koloro:"
-
-#~ msgid "debug"
-#~ msgstr "sencimiga"
-
-#~ msgid "release"
-#~ msgstr "eldona"
-
-#~ msgid "RelWithDebInfo"
-#~ msgstr "RelWithDebInfo"
-
-#~ msgid "MinSizeRel"
-#~ msgstr "MinSizeRel"
-
-#~ msgid "Status:"
-#~ msgstr "Stato:"
+msgstr[0] "CTest %2 (%1)"
+msgstr[1] "CTest %2 (%1)"

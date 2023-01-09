@@ -1,13 +1,16 @@
 # Translation of kdevprojectmanagerview into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-08 03:30+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -89,18 +92,16 @@ msgid "Main Toolbar"
 msgstr ""
 
 #: projectbuildsetwidget.cpp:123
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Build Set"
-msgstr "Munt&i"
+msgstr "Konstruaranĝo"
 
 #: projectbuildsetwidget.cpp:124
-#, fuzzy, kde-format
-#| msgid "Remove Folder"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from Build Set"
-msgstr "Elpreni dosierujon"
+msgstr "Elpreni de Konstruaranĝo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, topButton)
 #: projectbuildsetwidget.ui:35
@@ -139,11 +140,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectbuildsetwidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@title"
 msgid "Build Sequence"
-msgstr "Munt&i"
+msgstr "Sinsekvo de Konstruo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addItemButton)
 #: projectbuildsetwidget.ui:200
@@ -160,8 +160,7 @@ msgid "Remove currently selected item from the build set."
 msgstr ""
 
 #: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@title:window"
 msgid "Projects"
 msgstr "Projektoj"
@@ -198,188 +197,163 @@ msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
 #: projectmanagerview.ui:33
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Project Overview"
-msgstr "Projektoj"
+msgstr "Projekta Superrigardo"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectBuildSetWidget, buildSetView)
 #: projectmanagerview.ui:53
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Build Items:"
-msgstr "Munt&i"
+msgstr "Konstruendaĵoj:"
 
 #: projectmanagerviewplugin.cpp:143
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@action"
 msgid "Build All Projects"
-msgstr "Projektoj"
+msgstr "Konstrui Ĉiujn Projektojn"
 
 #: projectmanagerviewplugin.cpp:148
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@action"
 msgid "Build Selection"
-msgstr "Munt&i"
+msgstr "Konstrui Elekton"
 
 #: projectmanagerviewplugin.cpp:149
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Build"
-msgstr "Munt&i"
+msgstr "Konstrui"
 
 #: projectmanagerviewplugin.cpp:155
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action"
 msgid "Install Selection"
-msgstr "Agordi"
+msgstr "Instali Elekton"
 
 #: projectmanagerviewplugin.cpp:156
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Install"
 msgstr "Instali"
 
 #: projectmanagerviewplugin.cpp:162
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action"
 msgid "Clean Selection"
-msgstr "Agordi"
+msgstr "Forviŝi Elekton"
 
 #: projectmanagerviewplugin.cpp:163
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Clean"
 msgstr "Forviŝi"
 
 #: projectmanagerviewplugin.cpp:168
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action"
 msgid "Configure Selection"
-msgstr "Agordi"
+msgstr "Agordi Elekton"
 
 #: projectmanagerviewplugin.cpp:170
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action:intoolbar"
 msgid "Configure"
 msgstr "Agordi"
 
 #: projectmanagerviewplugin.cpp:175
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action"
 msgid "Prune Selection"
-msgstr "Agordi"
+msgstr "Stuci Elekton"
 
 #: projectmanagerviewplugin.cpp:176
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Prune"
-msgstr ""
+msgstr "Stuci"
 
 #: projectmanagerviewplugin.cpp:282
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create &File..."
-msgstr "Krei dosierujon"
+msgstr "Krei &Dosieron..."
 
 #: projectmanagerviewplugin.cpp:288
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Create F&older..."
-msgstr "Krei dosierujon"
+msgstr "Krei D&osierujon..."
 
 #: projectmanagerviewplugin.cpp:295
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Build"
-msgstr "Munt&i"
+msgstr "&Konstrui"
 
 #: projectmanagerviewplugin.cpp:299
-#, fuzzy, kde-format
-#| msgid "Install"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Install"
-msgstr "Instali"
+msgstr "&Instali"
 
 #: projectmanagerviewplugin.cpp:303
-#, fuzzy, kde-format
-#| msgid "Clean"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Clean"
-msgstr "Forviŝi"
+msgstr "&Forviŝi"
 
 #: projectmanagerviewplugin.cpp:307
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Set"
-msgstr "Munt&i"
+msgstr "&Aldoni al Konstruaranĝo"
 
 #: projectmanagerviewplugin.cpp:314
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "C&lose Project"
 msgid_plural "Close Projects"
-msgstr[0] "Projektoj"
-msgstr[1] "Projektoj"
+msgstr[0] "Fermi Projekton"
+msgstr[1] "Fermi Projektojn"
 
 #: projectmanagerviewplugin.cpp:320
-#, fuzzy, kde-format
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Reload"
-msgstr "Reŝargi"
+msgstr "&Reŝargi"
 
 #: projectmanagerviewplugin.cpp:351
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remo&ve"
-msgstr "Alinomi"
+msgstr "&Forigi"
 
 #: projectmanagerviewplugin.cpp:355
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Re&name..."
-msgstr "Alinomi"
+msgstr "Ali&nomi..."
 
 #: projectmanagerviewplugin.cpp:361
-#, fuzzy, kde-format
-#| msgid "Remove Folder"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Remove from &Target"
-msgstr "Elpreni dosierujon"
+msgstr "Elpreni de &Celo"
 
 #: projectmanagerviewplugin.cpp:548
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create Folder in %1"
-msgstr "Krei dosierujon"
+msgstr "Krei dosierujon en %1"
 
 #: projectmanagerviewplugin.cpp:549
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Folder name:"
-msgstr "Dosiernomo"
+msgstr "Dosiernomo:"
 
 #: projectmanagerviewplugin.cpp:600
 #, kde-format
@@ -395,8 +369,7 @@ msgid "Delete Files"
 msgstr ""
 
 #: projectmanagerviewplugin.cpp:655
-#, fuzzy, kde-format
-#| msgid "Rename"
+#, kde-format
 msgctxt "@window:title"
 msgid "Rename"
 msgstr "Alinomi"
@@ -405,7 +378,7 @@ msgstr "Alinomi"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "New name for '%1':"
-msgstr ""
+msgstr "Nove nomo por %1:"
 
 #: projectmanagerviewplugin.cpp:668
 #, kde-format
@@ -423,98 +396,55 @@ msgid "'%1' is not a valid file name"
 msgstr ""
 
 #: projectmanagerviewplugin.cpp:688
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create File in %1"
-msgstr "Krei dosierujon"
+msgstr "Krei Dosieron en %1"
 
 #: projectmanagerviewplugin.cpp:688
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "File name:"
-msgstr "Dosiernomo"
+msgstr "Dosiernomo:"
 
 #: projecttreeview.cpp:151
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Move Here"
-msgstr ""
+msgstr "&Movi Tien-ĉi"
 
 #: projecttreeview.cpp:157
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Copy Here"
-msgstr ""
+msgstr "&Kopii Tien-ĉi"
 
 #: projecttreeview.cpp:163 projecttreeview.cpp:224
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "C&ancel"
-msgstr ""
+msgstr "Re&zigni"
 
 #: projecttreeview.cpp:218
-#, fuzzy, kde-format
-#| msgid "Bu&ild"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "&Add to Build Target"
-msgstr "Munt&i"
+msgstr "&Aldoni al Konstrucelo"
 
 #: projecttreeview.cpp:348
 #, kde-format
 msgctxt "@title:menu"
 msgid "Analyze with"
-msgstr ""
+msgstr "Analizi per"
 
 #: projecttreeview.cpp:364
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Open Configuration..."
-msgstr "Agordi"
+msgstr "Malfermi Agordon..."
 
 #: vcsoverlayproxymodel.cpp:105
 #, kde-format
 msgctxt "Version control: Currently not on a branch"
 msgid "(no branch)"
-msgstr ""
-
-#, fuzzy
-#~| msgid "Rename"
-#~ msgid "Rename..."
-#~ msgstr "Alinomi"
-
-#, fuzzy
-#~| msgid "Projects"
-#~ msgid "Project Manager"
-#~ msgstr "Projektoj"
-
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "Bu&ild"
-#~ msgctxt "@action"
-#~ msgid "Build"
-#~ msgstr "Munt&i"
-
-#~ msgctxt "@action"
-#~ msgid "Install"
-#~ msgstr "Instalu"
-
-#~ msgctxt "@action"
-#~ msgid "Clean"
-#~ msgstr "Forviŝi"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Run"
-#~ msgstr "Lanĉi"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
+msgstr "(neniu branĉo)"
