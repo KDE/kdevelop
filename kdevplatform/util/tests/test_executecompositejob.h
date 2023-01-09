@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2014 Milian Wolff <mail@milianw.de>
+    SPDX-FileCopyrightText: 2023 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 */
@@ -9,27 +10,6 @@
 
 #include <QObject>
 
-#include <KJob>
-
-class TestJob : public KJob
-{
-    Q_OBJECT
-
-public:
-    void start() override
-    {
-        emit started(this);
-    }
-
-    void callEmitResult()
-    {
-        emitResult();
-    }
-
-Q_SIGNALS:
-    void started(KJob* job);
-};
-
 class TestExecuteCompositeJob : public QObject
 {
     Q_OBJECT
@@ -37,8 +17,8 @@ class TestExecuteCompositeJob : public QObject
 private Q_SLOTS:
     void initTestCase();
 
-    void runOneJob();
-    void runTwoJobs();
+    void create_data();
+    void create();
 };
 
 #endif // KDEVPLATFORM_TEST_EXECUTECOMPOSITEJOB_H

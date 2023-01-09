@@ -1,29 +1,34 @@
 /*
     SPDX-FileCopyrightText: 2014 Milian Wolff <mail@milianw.de>
+    SPDX-FileCopyrightText: 2023 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 */
 
 #include "test_executecompositejob.h"
 
-#include <QTest>
-#include <QSignalSpy>
-#include <QStandardPaths>
-
 #include <util/executecompositejob.h>
 
-QTEST_MAIN(TestExecuteCompositeJob)
+#include <QStandardPaths>
+#include <QStringList>
+#include <QTest>
+
+#include <utility>
 
 using namespace KDevelop;
 
-struct JobSpy
+class TestJob : public KJob
 {
-    explicit JobSpy(KJob* job)
-        : finished(job, &KJob::finished)
-        , result(job, &KJob::result)
-    {}
-    QSignalSpy finished;
-    QSignalSpy result;
+    void start() override
+    {
+    }
+};
+
+class TestCompositeJob : public ExecuteCompositeJob
+{
+public:
+    using ExecuteCompositeJob::ExecuteCompositeJob;
+    using ExecuteCompositeJob::subjobs;
 };
 
 void TestExecuteCompositeJob::initTestCase()
@@ -31,81 +36,42 @@ void TestExecuteCompositeJob::initTestCase()
     QStandardPaths::setTestModeEnabled(true);
 }
 
-void TestExecuteCompositeJob::runOneJob()
+void TestExecuteCompositeJob::create_data()
 {
-    QPointer<TestJob> slave(new TestJob);
+    QTest::addColumn<QStringList>("subjobNames");
+    QTest::addColumn<QString>("expectedCompositeJobName");
 
-    QPointer<ExecuteCompositeJob> master(new ExecuteCompositeJob(nullptr, {slave.data()}));
-    JobSpy masterSpy(master.data());
-
-    QSignalSpy startedSpy(slave.data(), SIGNAL(started(KJob*)));
-    JobSpy slaveSpy(slave.data());
-
-    master->start();
-    QCOMPARE(startedSpy.count(), 1);
-    QCOMPARE(slaveSpy.finished.count(), 0);
-    QCOMPARE(masterSpy.finished.count(), 0);
-
-    slave->callEmitResult();
-
-    QCOMPARE(masterSpy.finished.count(), 1);
-    QCOMPARE(masterSpy.result.count(), 1);
-
-    QCOMPARE(startedSpy.count(), 1);
-    QCOMPARE(slaveSpy.finished.count(), 1);
-    QCOMPARE(slaveSpy.result.count(), 1);
-
-    QTest::qWait(10);
-
-    QVERIFY(!slave);
-    QVERIFY(!master);
+    QTest::newRow("no subjobs") << QStringList{} << "";
+    QTest::newRow("empty-named subjob") << QStringList{""} << "";
+    QTest::newRow("named subjob") << QStringList{"run as"} << "run as";
+    QTest::newRow("two empty-named subjobs") << QStringList{"", ""} << "";
+    QTest::newRow("empty-named and named") << QStringList{"", "pick"} << "pick";
+    QTest::newRow("named and empty-named") << QStringList{"take", ""} << "take";
+    QTest::newRow("two named subjobs") << QStringList{"x", "y"} << "x";
+    QTest::newRow("three empty-named subjobs") << QStringList{"", "", ""} << "";
+    QTest::newRow("empty-named and two named") << QStringList{"", "y", "x"} << "y";
 }
 
-void TestExecuteCompositeJob::runTwoJobs()
+void TestExecuteCompositeJob::create()
 {
-    QPointer<TestJob> slave1(new TestJob);
-    QPointer<TestJob> slave2(new TestJob);
+    QFETCH(const QStringList, subjobNames);
+    QFETCH(const QString, expectedCompositeJobName);
 
-    QPointer<ExecuteCompositeJob> master(new ExecuteCompositeJob(nullptr, {slave1.data(), slave2.data()}));
-    JobSpy masterSpy(master.data());
+    QList<KJob*> subjobs;
+    for (auto& name : subjobNames) {
+        subjobs.push_back(new TestJob);
+        subjobs.back()->setObjectName(name);
+    }
+    QCOMPARE(subjobs.size(), subjobNames.size());
 
-    QSignalSpy started1Spy(slave1.data(), SIGNAL(started(KJob*)));
-    QSignalSpy started2Spy(slave2.data(), SIGNAL(started(KJob*)));
-    JobSpy slave1Spy(slave1.data());
-    JobSpy slave2Spy(slave2.data());
-
-    master->start();
-    QCOMPARE(started1Spy.count(), 1);
-    QCOMPARE(slave1Spy.finished.count(), 0);
-    QCOMPARE(started2Spy.count(), 0);
-    QCOMPARE(slave2Spy.finished.count(), 0);
-    QCOMPARE(masterSpy.finished.count(), 0);
-
-    slave1->callEmitResult();
-    QCOMPARE(started1Spy.count(), 1);
-    QCOMPARE(slave1Spy.finished.count(), 1);
-    QCOMPARE(started2Spy.count(), 1);
-    QCOMPARE(slave2Spy.finished.count(), 0);
-    QCOMPARE(masterSpy.finished.count(), 0);
-
-    slave2->callEmitResult();
-
-    QCOMPARE(masterSpy.finished.count(), 1);
-    QCOMPARE(masterSpy.result.count(), 1);
-
-    QCOMPARE(started1Spy.count(), 1);
-    QCOMPARE(slave1Spy.finished.count(), 1);
-    QCOMPARE(slave1Spy.result.count(), 1);
-
-    QCOMPARE(started2Spy.count(), 1);
-    QCOMPARE(slave2Spy.finished.count(), 1);
-    QCOMPARE(slave2Spy.result.count(), 1);
-
-    QTest::qWait(10);
-
-    QVERIFY(!slave1);
-    QVERIFY(!slave2);
-    QVERIFY(!master);
+    TestCompositeJob compositeJob(nullptr, std::as_const(subjobs));
+    QCOMPARE(compositeJob.subjobs(), subjobs);
+    QCOMPARE(compositeJob.objectName(), expectedCompositeJobName);
+    for (auto& subjob : std::as_const(subjobs)) {
+        QCOMPARE(subjob->parent(), &compositeJob);
+    }
 }
+
+QTEST_GUILESS_MAIN(TestExecuteCompositeJob)
 
 #include "moc_test_executecompositejob.cpp"
