@@ -7,10 +7,22 @@
 
 #include "kcompoundjobtest.h"
 
+#include "ksequentialcompoundjob.h"
+
 #include <QSignalSpy>
 #include <QStandardPaths>
 #include <QTest>
 #include <QTimer>
+
+namespace
+{
+class TestSequentialCompoundJob : public KSequentialCompoundJob
+{
+public:
+    using KSequentialCompoundJob::addSubjob;
+};
+
+}
 
 TestJob::TestJob(QObject *parent)
     : KJob(parent)
@@ -71,12 +83,13 @@ void KCompoundJobTest::initTestCase()
  *
  * see bug: https://bugs.kde.org/show_bug.cgi?id=230692
  */
-void KCompoundJobTest::testDeletionDuringExecution()
+template<class CompoundJob>
+static void testDeletionDuringExecution()
 {
     QObject *someParent = new QObject;
     KJob *job = new TestJob(someParent);
 
-    auto *compoundJob = new TestCompoundJob;
+    auto *compoundJob = new CompoundJob;
     compoundJob->setAutoDelete(false);
     QVERIFY(compoundJob->addSubjob(job));
 
@@ -97,6 +110,23 @@ void KCompoundJobTest::testDeletionDuringExecution()
     compoundJob = nullptr;
     // at this point, the subjob should be deleted, too
     QCOMPARE(destroyed_spy.size(), 1);
+}
+
+void KCompoundJobTest::testDeletionDuringExecution_data()
+{
+    QTest::addColumn<bool>("useSequentialCompoundJob");
+    QTest::newRow("CompoundJob") << false;
+    QTest::newRow("SequentialCompoundJob") << true;
+}
+
+void KCompoundJobTest::testDeletionDuringExecution()
+{
+    QFETCH(const bool, useSequentialCompoundJob);
+    if (useSequentialCompoundJob) {
+        ::testDeletionDuringExecution<TestSequentialCompoundJob>();
+    } else {
+        ::testDeletionDuringExecution<TestCompoundJob>();
+    }
 }
 
 QTEST_GUILESS_MAIN(KCompoundJobTest)

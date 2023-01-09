@@ -56,6 +56,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
 
+    void testDeletionDuringExecution_data();
     void testDeletionDuringExecution();
 
 private:
