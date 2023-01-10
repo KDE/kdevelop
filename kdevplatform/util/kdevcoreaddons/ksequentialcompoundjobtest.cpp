@@ -55,7 +55,7 @@ void KSequentialCompoundJobTest::runOneJob()
     QCOMPARE(slaveSpy.finished.count(), 1);
     QCOMPARE(slaveSpy.result.count(), 1);
 
-    QTest::qWait(10);
+    QTest::qWait(1);
 
     QVERIFY(!slave);
     QVERIFY(!master);
@@ -103,7 +103,7 @@ void KSequentialCompoundJobTest::runTwoJobs()
     QCOMPARE(slave2Spy.finished.count(), 1);
     QCOMPARE(slave2Spy.result.count(), 1);
 
-    QTest::qWait(10);
+    QTest::qWait(1);
 
     QVERIFY(!slave1);
     QVERIFY(!slave2);
