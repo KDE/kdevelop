@@ -216,8 +216,7 @@ protected:
 
             if (!delay) {
                 for (Declaration* decl : dec) {
-                    // gcc 4.0.1 doesn't eath this // if( needClass && !decl->abstractType().cast<StructureType>() )
-                    if (needClass && !decl->abstractType().cast(static_cast<StructureType*>(nullptr)))
+                    if (needClass && !decl->abstractType().cast<StructureType>())
                         continue;
 
                     if (decl->abstractType()) {
