@@ -105,6 +105,7 @@ private:
     {
         ClangParsingEnvironment environment;
         environment.setTranslationUnitUrl(IndexedString(fileName));
+        environment.setParserSettings(ClangSettingsManager::self()->parserSettings(fileName));
         environment.addIncludes(toPathList(m_includePaths));
         environment.addParserArguments(m_customArgs);
         return environment;
