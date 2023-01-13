@@ -9,7 +9,6 @@
 #include <debug.h>
 #include <ghprovidermodel.h>
 
-#include <KIO/Scheduler>
 #include <KIO/TransferJob>
 #include <KIO/StoredTransferJob>
 
