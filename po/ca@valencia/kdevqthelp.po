@@ -50,8 +50,8 @@ msgstr "Obtín la documentació nova"
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
-"L'ordre «qmake -query» no ha pogut proporcionar un camí a un fitxer QtHelp "
-"(QCH)."
+"L'ordre «qmake -query» no ha pogut proporcionar un camí cap a un fitxer "
+"QtHelp (QCH)."
 
 #: qthelpconfig.cpp:206
 #, kde-format
