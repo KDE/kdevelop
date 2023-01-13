@@ -22,14 +22,32 @@ class TypePtr
     using Base = QExplicitlySharedDataPointer<T>;
 
 public:
-    using Base::QExplicitlySharedDataPointer;
     TypePtr<T>() = default;
+    explicit TypePtr(T* data) noexcept
+        : Base(data)
+    {
+    }
+    TypePtr<T>& operator=(T* data) noexcept
+    {
+        Base::operator=(data);
+        return *this;
+    }
     TypePtr<T>(const TypePtr<T>&) = default;
-    TypePtr<T>(TypePtr<T>&&) = default;
-
-    using Base::operator=;
     TypePtr<T>& operator=(const TypePtr<T>&) = default;
+    TypePtr<T>(TypePtr<T>&&) = default;
     TypePtr<T>& operator=(TypePtr<T>&&) = default;
+
+    template<class X>
+    TypePtr(const TypePtr<X>& o) noexcept
+        : Base(o)
+    {
+    }
+
+    template<class X>
+    TypePtr(TypePtr<X>&& o) noexcept
+        : Base(std::move(o))
+    {
+    }
 
     ///Uses dynamic_cast to cast this pointer to the given type
     template<class U>

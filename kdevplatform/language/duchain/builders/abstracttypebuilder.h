@@ -110,19 +110,12 @@ protected:
     }
 
     /**
-     * Simulates that the given type was created.
-     * After calling, this type will be the last type.
-     * */
-    template <class T2>
-    void injectType(const TypePtr<T2>& type)
-    { injectType(AbstractType::Ptr::staticCast(type)); }
-
-    /**
      * Opens the given \a type, and sets it to be the current type.
      */
-    template <class T2>
-    void openType(const TypePtr<T2>& type)
-    { openAbstractType(AbstractType::Ptr::staticCast(type)); }
+    void openType(const AbstractType::Ptr& type)
+    {
+        openAbstractType(type);
+    }
 
     /**
      * Opens the given \a type, and sets it to be the current type.

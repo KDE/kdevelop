@@ -305,8 +305,10 @@ public:
      *
      * \param type the type to assign.
      */
-    template <class T>
-    void setType(TypePtr<T> type) { setAbstractType(AbstractType::Ptr::staticCast(type)); }
+    void setType(AbstractType::Ptr type)
+    {
+        setAbstractType(std::move(type));
+    }
 
     /**
      * Set this declaration's \a type.

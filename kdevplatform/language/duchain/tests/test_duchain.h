@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testLockForReadWrite();
     void testProblemSerialization();
     void testIdentifiers();
+    void testTypePtr();
     ///NOTE: these are not "automated"!
 //     void testImportCache();
 

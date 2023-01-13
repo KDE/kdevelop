@@ -434,5 +434,5 @@ void ExpressionVisitor::instantiateCurrentDeclaration()
         type->setDeclaration(decl.data());
     }
 
-    encounter(AbstractType::Ptr::staticCast(type), decl);
+    encounter(type, decl);
 }

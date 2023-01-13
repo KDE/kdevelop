@@ -294,7 +294,7 @@ AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
                 IndexedTypeIdentifier ti(newTypeName);
                 ti.setIsConstant(type->modifiers() & AbstractType::ConstModifier);
                 ret->setIdentifier(ti);
-                return ret.cast<AbstractType>();
+                return ret;
             }
             newType->exchangeTypes(this);
 

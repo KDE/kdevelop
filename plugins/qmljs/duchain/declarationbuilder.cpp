@@ -367,13 +367,13 @@ void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
     if (func_declaration->topContext() == topContext()) {
         new_func_type->setReturnType(func_type->returnType());
         new_func_type->setDeclaration(func_declaration);
-        func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
+        func_declaration->setAbstractType(new_func_type);
 
         if (expr.declaration) {
             // expr.declaration is the variable that contains the function, while
             // func_declaration is the declaration of the function. They can be
             // different and both need to be updated
-            expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+            expr.declaration->setAbstractType(new_func_type);
         }
     }
 
@@ -631,7 +631,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
             enumerator->setValue((int)value->value);
         }
 
-        type.type = AbstractType::Ptr::staticCast(enumerator);
+        type.type = enumerator;
         type.declaration = nullptr;
         inSymbolTable = true;
     } else {
@@ -1291,9 +1291,8 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
             if (node->typeModifier == QLatin1String("list")) {
                 // QML list, noted "list<type>" in the source file
                 ArrayType::Ptr array(new ArrayType);
-
                 array->setElementType(type);
-                type = array.cast<AbstractType>();
+                type = array;
             }
         }
 

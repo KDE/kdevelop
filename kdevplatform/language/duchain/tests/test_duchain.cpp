@@ -906,6 +906,26 @@ void TestDUChain::testIdentifiers()
     ///@todo create a big randomized test for the identifier repository(check that indices are the same)
 }
 
+void TestDUChain::testTypePtr()
+{
+    AbstractType::Ptr abstractT;
+    QVERIFY(!abstractT);
+
+    IntegralType::Ptr integralT(new IntegralType(IntegralType::TypeDouble));
+
+    abstractT = integralT;
+    QCOMPARE(abstractT, integralT);
+
+    DelayedType::Ptr delayedT(new DelayedType);
+    QVERIFY(abstractT != delayedT);
+
+    auto abstractT2 = abstractT;
+    QCOMPARE(abstractT2, integralT);
+
+    auto abstractT3 = AbstractType::Ptr(integralT);
+    QCOMPARE(abstractT2, integralT);
+}
+
 #if 0
 
 ///NOTE: the "unit tests" below are not automated, they - so far - require

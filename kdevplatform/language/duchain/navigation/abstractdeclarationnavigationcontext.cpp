@@ -619,7 +619,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
             modifyHtml() += QStringLiteral("trait ");
             break;
         }
-        eventuallyMakeTypeLinks(klass.cast<AbstractType>());
+        eventuallyMakeTypeLinks(klass);
 
         FOREACH_FUNCTION(const BaseClassInstance &base, classDecl->baseClasses) {
             modifyHtml() += QLatin1String(", ") + stringFromAccess(base.access) + QLatin1Char(' ') +
@@ -629,7 +629,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
     } else {
         /// @todo How can we get here? and should this really be a class?
         modifyHtml() += QStringLiteral("class ");
-        eventuallyMakeTypeLinks(klass.cast<AbstractType>());
+        eventuallyMakeTypeLinks(klass);
     }
     modifyHtml() += QStringLiteral(" ");
 }

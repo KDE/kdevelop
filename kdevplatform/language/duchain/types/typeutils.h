@@ -120,7 +120,7 @@ KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const K
     if (ret->typesSize() == 1) {
         return ret->types()[0].abstractType();
     } else {
-        return KDevelop::AbstractType::Ptr::staticCast(ret);
+        return ret;
     }
 }
 }
