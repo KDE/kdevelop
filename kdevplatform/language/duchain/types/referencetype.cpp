@@ -37,8 +37,7 @@ bool ReferenceType::equals(const AbstractType* _rhs) const
     if (!AbstractType::equals(_rhs))
         return false;
 
-    Q_ASSERT(fastCast<const ReferenceType*>(_rhs));
-
+    Q_ASSERT(dynamic_cast<const ReferenceType*>(_rhs));
     const auto* rhs = static_cast<const ReferenceType*>(_rhs);
 
     return d_func()->m_baseType == rhs->d_func()->m_baseType;

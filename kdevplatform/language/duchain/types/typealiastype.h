@@ -65,15 +65,6 @@ protected:
 
     void accept0 (KDevelop::TypeVisitor* v) const override;
 };
-
-template <>
-inline TypeAliasType* fastCast<TypeAliasType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeIntegral)
-        return nullptr;
-    else
-        return static_cast<TypeAliasType*>(from);
-}
 }
 
 #endif // KDEVPLATFORM_TYPEALIASTYPE_H

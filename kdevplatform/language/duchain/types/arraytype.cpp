@@ -32,8 +32,7 @@ bool ArrayType::equals(const AbstractType* _rhs) const
     if (!AbstractType::equals(_rhs))
         return false;
 
-    Q_ASSERT(fastCast<const ArrayType*>(_rhs));
-
+    Q_ASSERT(dynamic_cast<const ArrayType*>(_rhs));
     const auto* rhs = static_cast<const ArrayType*>(_rhs);
 
     TYPE_D(ArrayType);

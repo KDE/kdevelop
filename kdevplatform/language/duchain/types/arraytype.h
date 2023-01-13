@@ -82,15 +82,6 @@ protected:
 
     TYPE_DECLARE_DATA(ArrayType)
 };
-
-template <>
-inline ArrayType* fastCast<ArrayType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeArray)
-        return nullptr;
-    else
-        return static_cast<ArrayType*>(from);
-}
 }
 
 #endif // KDEVPLATFORM_TYPESYSTEM_H

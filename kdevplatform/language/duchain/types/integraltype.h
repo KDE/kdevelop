@@ -103,15 +103,6 @@ protected:
 
     TYPE_DECLARE_DATA(IntegralType)
 };
-
-template <>
-inline IntegralType* fastCast<IntegralType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeIntegral)
-        return nullptr;
-    else
-        return static_cast<IntegralType*>(from);
-}
 }
 
 #endif

@@ -83,15 +83,6 @@ protected:
     void accept0 (KDevelop::TypeVisitor* v) const override;
     TYPE_DECLARE_DATA(DelayedType)
 };
-
-template <>
-inline DelayedType* fastCast<DelayedType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeDelayed)
-        return nullptr;
-    else
-        return static_cast<DelayedType*>(from);
-}
 }
 
 #endif

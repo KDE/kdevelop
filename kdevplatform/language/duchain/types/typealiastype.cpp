@@ -18,24 +18,27 @@ AbstractType* TypeAliasType::clone() const
 
 bool TypeAliasType::equals(const AbstractType* _rhs) const
 {
-    if (!fastCast<const TypeAliasType*>(_rhs))
-        return false;
-    const auto* rhs = static_cast<const TypeAliasType*>(_rhs);
-
-    if (this == rhs)
+    if (this == _rhs)
         return true;
 
-    if (AbstractType::equals(rhs) && IdentifiedType::equals(rhs)) {
-        if (( bool )d_func()->m_type != ( bool )rhs->d_func()->m_type)
-            return false;
-
-        if (!d_func()->m_type)
-            return true;
-
-        return d_func()->m_type == rhs->d_func()->m_type;
-    } else {
+    if (!AbstractType::equals(_rhs)) {
         return false;
     }
+
+    Q_ASSERT(dynamic_cast<const TypeAliasType*>(_rhs));
+    const auto* rhs = static_cast<const TypeAliasType*>(_rhs);
+
+    if (!IdentifiedType::equals(rhs)) {
+        return false;
+    }
+
+    if (static_cast<bool>(d_func()->m_type) != static_cast<bool>(rhs->d_func()->m_type))
+        return false;
+
+    if (!d_func()->m_type)
+        return true;
+
+    return d_func()->m_type == rhs->d_func()->m_type;
 }
 AbstractType::Ptr TypeAliasType::type() const
 {

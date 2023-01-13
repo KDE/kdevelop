@@ -40,7 +40,7 @@ bool EnumerationType::equals(const AbstractType* _rhs) const
     if (!EnumerationTypeBase::equals(_rhs))
         return false;
 
-    Q_ASSERT(fastCast<const EnumerationType*>(_rhs));
+    Q_ASSERT(dynamic_cast<const EnumerationType*>(_rhs));
 
     // Nothing enumeration type-specific to compare
     return true;

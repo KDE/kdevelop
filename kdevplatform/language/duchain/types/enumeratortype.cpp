@@ -45,7 +45,7 @@ bool EnumeratorType::equals(const AbstractType* _rhs) const
     if (!EnumeratorTypeBase::equals(_rhs))
         return false;
 
-    Q_ASSERT(fastCast<const EnumeratorType*>(_rhs));
+    Q_ASSERT(dynamic_cast<const EnumeratorType*>(_rhs));
 
     // Nothing Enumerator-type specific to compare
     return true;

@@ -101,15 +101,6 @@ private:
     template <class ValueType>
     void setValueInternal(ValueType value);
 };
-
-template <>
-inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
-        return nullptr;
-    else
-        return dynamic_cast<ConstantIntegralType*>(from);
-}
 }
 
 #endif // KDEVPLATFORM_CONSTANTINTEGRALTYPE_H

@@ -51,8 +51,7 @@ bool ConstantIntegralType::equals(const AbstractType* _rhs) const
     if (!IntegralType::equals(_rhs))
         return false;
 
-    Q_ASSERT(fastCast<const ConstantIntegralType*>(_rhs));
-
+    Q_ASSERT(dynamic_cast<const ConstantIntegralType*>(_rhs));
     const auto* rhs = static_cast<const ConstantIntegralType*>(_rhs);
 
     return d_func()->m_value == rhs->d_func()->m_value;

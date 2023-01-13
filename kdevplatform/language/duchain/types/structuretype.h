@@ -63,15 +63,6 @@ protected:
 
     TYPE_DECLARE_DATA(StructureType)
 };
-
-template <>
-inline StructureType* fastCast<StructureType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeStructure)
-        return nullptr;
-    else
-        return static_cast<StructureType*>(from);
-}
 }
 
 #endif

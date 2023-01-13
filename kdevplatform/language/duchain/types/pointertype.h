@@ -74,15 +74,6 @@ protected:
 
     TYPE_DECLARE_DATA(PointerType)
 };
-
-template <>
-inline PointerType* fastCast<PointerType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypePointer)
-        return nullptr;
-    else
-        return static_cast<PointerType*>(from);
-}
 }
 
 #endif

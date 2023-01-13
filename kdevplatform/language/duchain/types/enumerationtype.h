@@ -52,15 +52,6 @@ public:
 protected:
     TYPE_DECLARE_DATA(EnumerationType);
 };
-
-template <>
-inline EnumerationType* fastCast<EnumerationType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != KDevelop::AbstractType::TypeEnumeration)
-        return nullptr;
-    else
-        return static_cast<EnumerationType*>(from);
-}
 }
 
 #endif // KDEVPLATFORM_ENUMERATIONTYPE_H

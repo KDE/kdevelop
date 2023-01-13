@@ -125,15 +125,6 @@ protected:
 
     TYPE_DECLARE_DATA(FunctionType)
 };
-
-template <>
-inline FunctionType* fastCast<FunctionType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeFunction)
-        return nullptr;
-    else
-        return static_cast<FunctionType*>(from);
-}
 }
 
 #endif

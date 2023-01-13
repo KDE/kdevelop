@@ -37,8 +37,7 @@ bool FunctionType::equals(const AbstractType* _rhs) const
     if (!AbstractType::equals(_rhs))
         return false;
 
-    Q_ASSERT(fastCast<const FunctionType*>(_rhs));
-
+    Q_ASSERT(dynamic_cast<const FunctionType*>(_rhs));
     const auto* rhs = static_cast<const FunctionType*>(_rhs);
 
     TYPE_D(FunctionType);

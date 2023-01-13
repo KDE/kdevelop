@@ -304,21 +304,6 @@ protected:
 
     friend class AbstractTypeDataRequest;
 };
-
-/**
- * You can use these instead of dynamic_cast, for basic types it has better performance because it checks the whichType() member
- */
-template <class To>
-inline To fastCast(AbstractType* from)
-{
-    return dynamic_cast<To>(from);
-}
-
-template <class To>
-inline const To fastCast(const AbstractType* from)
-{
-    return const_cast<const To>(fastCast<To>(const_cast<AbstractType*>(from))); //Hack so we don't need to define the functions twice, once for const, and once for not const
-}
 }
 
 #endif

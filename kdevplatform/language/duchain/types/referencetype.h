@@ -88,15 +88,6 @@ protected:
 
     TYPE_DECLARE_DATA(ReferenceType)
 };
-
-template <>
-inline ReferenceType* fastCast<ReferenceType*>(AbstractType* from)
-{
-    if (!from || from->whichType() != AbstractType::TypeReference)
-        return nullptr;
-    else
-        return static_cast<ReferenceType*>(from);
-}
 }
 
 #endif // KDEVPLATFORM_TYPESYSTEM_H
