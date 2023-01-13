@@ -289,8 +289,11 @@ public:
      *
      * \returns this declaration's type as \a T, or null if there is no type or it is not of type \a T.
      */
-    template <class T>
-    TypePtr<T> type() const { return TypePtr<T>::dynamicCast(abstractType()); }
+    template<class T>
+    TypePtr<T> type() const
+    {
+        return abstractType().dynamicCast<T>();
+    }
 
     /**
      * Access this declaration's type.

@@ -31,7 +31,7 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
         BaseClassInstance baseClass = classDecl->baseClasses()[0];
 
         type = baseClass.baseClass.abstractType();
-        idType = TypePtr<StructureType>::dynamicCast(type).constData();
+        idType = type.dynamicCast<StructureType>().constData();
     }
 
     if (type) {
@@ -41,9 +41,7 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
 
 void DeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType::Ptr type)
 {
-    auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(type);
-
-    if (funcType) {
+    if (auto funcType = type.dynamicCast<QmlJS::FunctionType>()) {
         // Don't let eventuallyMakeTypeLinks cast funcType to an identified type
         // and try to print it! The function most of the time has no name.
         modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());

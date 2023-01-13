@@ -40,8 +40,8 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
     }
 
     auto* classDecl = dynamic_cast<ClassDeclaration *>(decl);
-    StructureType::Ptr declType = StructureType::Ptr::dynamicCast(decl->abstractType());
-    auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
+    auto declType = decl->abstractType().dynamicCast<StructureType>();
+    auto funcType = decl->abstractType().dynamicCast<QmlJS::FunctionType>();
 
     if (role == CodeCompletionModel::BestMatchesCount) {
         return 5;
@@ -58,7 +58,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
           return QVariant();
         }
 
-        QmlJS::FunctionType::Ptr declFunc = QmlJS::FunctionType::Ptr::dynamicCast(declType);
+        auto declFunc = declType.dynamicCast<QmlJS::FunctionType>();
 
         if (declType->equals(referenceType.constData())) {
             // Perfect type match

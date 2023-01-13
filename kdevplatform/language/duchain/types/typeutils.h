@@ -79,8 +79,8 @@ KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const K
     static_assert(std::is_base_of<KDevelop::UnsureType, LanguageUnsureType>::value,
                   "LanguageUnsureType must inherit from KDevelop::UnsureType");
 
-    auto unsure = LanguageUnsureType::Ptr::dynamicCast(type);
-    auto newUnsure = LanguageUnsureType::Ptr::dynamicCast(newType);
+    auto unsure = type.dynamicCast<LanguageUnsureType>();
+    auto newUnsure = newType.dynamicCast<LanguageUnsureType>();
     typename LanguageUnsureType::Ptr ret;
 
     // both types are unsure, so join the list of possible types.
@@ -99,11 +99,11 @@ KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const K
         }
         ret = unsure;
     } else if (newUnsure) {
-        KDevelop::UnsureType::Ptr createdUnsureType(static_cast<KDevelop::UnsureType*>(newUnsure->clone()));
+        auto createdUnsureType = KDevelop::AbstractType::Ptr(newUnsure->clone()).staticCast<LanguageUnsureType>();
         if (isUsefulType(type)) {
             createdUnsureType->addType(type->indexed());
         }
-        ret = LanguageUnsureType::Ptr::staticCast(createdUnsureType);
+        ret = createdUnsureType;
     } else {
         unsure = typename LanguageUnsureType::Ptr(new LanguageUnsureType());
         if (isUsefulType(type)) {

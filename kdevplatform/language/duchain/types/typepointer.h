@@ -49,50 +49,37 @@ public:
     {
     }
 
-    ///Uses dynamic_cast to cast this pointer to the given type
+    /**
+     * Convert TypePtr<T> to TypePtr<U>, using a @c dynamic_cast.
+     * This will compile whenever T* and U* are compatible, i.e.
+     * T is a subclass of U or vice-versa.
+     * Example syntax:
+     * @code
+     *   TypePtr<T> tPtr;
+     *   TypePtr<U> uPtr = tPtr.dynamicCast<U>();
+     * @endcode
+     * Since a dynamic_cast is used, if U derives from T, and tPtr isn't an instance of U, uPtr will be 0.
+     */
     template<class U>
     TypePtr<U> dynamicCast() const
     {
         return TypePtr<U>(dynamic_cast<U*>(Base::data()));
     }
 
-    ///Uses static_cast to cast this pointer to the given type
+    /**
+     * Convert TypePtr<T> to TypePtr<U>, using a @c static_cast.
+     * This will compile whenever T* and U* are compatible, i.e.
+     * T is a subclass of U or vice-versa.
+     * Example syntax:
+     * @code
+     *   TypePtr<T> tPtr;
+     *   TypePtr<U> uPtr = tPtr.staticCast<U>();
+     * @endcode
+     */
     template<class U>
     TypePtr<U> staticCast() const
     {
         return TypePtr<U>(static_cast<U*>(Base::data()));
-    }
-
-    /**
-     * Convert TypePtr<U> to TypePtr<T>, using a static_cast.
-     * This will compile whenever T* and U* are compatible, i.e.
-     * T is a subclass of U or vice-versa.
-     * Example syntax:
-     * @code
-     *   TypePtr<T> tPtr;
-     *   TypePtr<U> uPtr = TypePtr<U>::staticCast( tPtr );
-     * @endcode
-     */
-    template <class U>
-    static TypePtr<T> staticCast(const TypePtr<U>& o)
-    {
-        return TypePtr<T>(static_cast<T*>(o.data()));
-    }
-    /**
-     * Convert TypePtr<U> to TypePtr<T>, using a dynamic_cast.
-     * This will compile whenever T* and U* are compatible, i.e.
-     * T is a subclass of U or vice-versa.
-     * Example syntax:
-     * @code
-     *   TypePtr<T> tPtr;
-     *   TypePtr<U> uPtr = TypePtr<U>::dynamicCast( tPtr );
-     * @endcode
-     * Since a dynamic_cast is used, if U derives from T, and tPtr isn't an instance of U, uPtr will be 0.
-     */
-    template <class U>
-    static TypePtr<T> dynamicCast(const TypePtr<U>& o)
-    {
-        return TypePtr<T>(dynamic_cast<T*>(o.data()));
     }
 };
 }

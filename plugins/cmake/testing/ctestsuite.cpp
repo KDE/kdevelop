@@ -125,15 +125,15 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
             auto type = (*it)->abstractType();
             // Strip pointer and reference types to finally get to the structure type of the test class
             while (type && (type->whichType() == AbstractType::TypePointer || type->whichType() == AbstractType::TypeReference)) {
-                if (const auto ptype = TypePtr<PointerType>::dynamicCast(type)) {
+                if (const auto ptype = type.dynamicCast<PointerType>()) {
                     type = ptype->baseType();
-                } else if (const auto rtype = TypePtr<ReferenceType>::dynamicCast(type)) {
+                } else if (const auto rtype = type.dynamicCast<ReferenceType>()) {
                     type = rtype->baseType();
                 } else {
                     type = nullptr;
                 }
             }
-            const auto structureType = TypePtr<StructureType>::dynamicCast(type);
+            const auto structureType = type.dynamicCast<StructureType>();
             if (!structureType) {
                 continue;
             }

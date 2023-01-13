@@ -309,7 +309,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
 void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::AST::ArgumentList* arguments)
 {
     ContextBuilder::ExpressionType expr = findType(base);
-    QmlJS::FunctionType::Ptr func_type = QmlJS::FunctionType::Ptr::dynamicCast(expr.type);
+    auto func_type = expr.type.dynamicCast<QmlJS::FunctionType>();
     DUChainWriteLocker lock;
 
     if (!func_type) {
@@ -1443,7 +1443,7 @@ void DeclarationBuilder::registerBaseClasses()
         for (uint i=0; i<classdecl->baseClassesSize(); ++i)
         {
             const BaseClassInstance &baseClass = classdecl->baseClasses()[i];
-            StructureType::Ptr baseType = StructureType::Ptr::dynamicCast(baseClass.baseClass.abstractType());
+            auto baseType = baseClass.baseClass.abstractType().dynamicCast<StructureType>();
             TopDUContext* topctx = topContext();
 
             if (baseType && baseType->declaration(topctx)) {
@@ -1456,9 +1456,9 @@ void DeclarationBuilder::registerBaseClasses()
 static bool enumContainsEnumerator(const AbstractType::Ptr& a, const AbstractType::Ptr& b)
 {
     Q_ASSERT(a->whichType() == AbstractType::TypeEnumeration);
-    auto aEnum = EnumerationType::Ptr::staticCast(a);
+    auto aEnum = a.staticCast<EnumerationType>();
     Q_ASSERT(b->whichType() == AbstractType::TypeEnumerator);
-    auto bEnumerator = EnumeratorType::Ptr::staticCast(b);
+    auto bEnumerator = b.staticCast<EnumeratorType>();
     return bEnumerator->qualifiedIdentifier().beginsWith(aEnum->qualifiedIdentifier());
 }
 
@@ -1482,13 +1482,13 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
         return true;
     }
 
-    const auto bIntegral = IntegralType::Ptr::dynamicCast(b);
+    const auto bIntegral = b.dynamicCast<IntegralType>();
     if (bIntegral && (bIntegral->dataType() == IntegralType::TypeString || bIntegral->dataType() == IntegralType::TypeMixed)) {
         // In QML/JS, a string can be converted to nearly everything else, similarly ignore mixed types
         return true;
     }
 
-    const auto aIntegral = IntegralType::Ptr::dynamicCast(a);
+    const auto aIntegral = a.dynamicCast<IntegralType>();
     if (aIntegral && (aIntegral->dataType() == IntegralType::TypeString || aIntegral->dataType() == IntegralType::TypeMixed)) {
         // In QML/JS, nearly everything can be to a string, similarly ignore mixed types
         return true;
@@ -1514,8 +1514,8 @@ bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const Abstrac
     }
 
     {
-        auto aStruct = StructureType::Ptr::dynamicCast(a);
-        auto bStruct = StructureType::Ptr::dynamicCast(b);
+        auto aStruct = a.dynamicCast<StructureType>();
+        auto bStruct = b.dynamicCast<StructureType>();
         if (aStruct && bStruct) {
             auto top = currentContext()->topContext();
             auto aDecl = dynamic_cast<ClassDeclaration*>(aStruct->declaration(top));

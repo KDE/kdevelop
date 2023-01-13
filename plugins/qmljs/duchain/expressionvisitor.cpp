@@ -244,8 +244,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
     // Find the type of the function called
     node->base->accept(this);
 
-    QmlJS::FunctionType::Ptr func = QmlJS::FunctionType::Ptr::dynamicCast(m_lastType);
-
+    auto func = m_lastType.dynamicCast<QmlJS::FunctionType>();
     if (func && func->returnType()) {
         encounter(func->returnType());
     } else {
@@ -425,7 +424,7 @@ void ExpressionVisitor::instantiateCurrentDeclaration()
 
     {
         DUChainReadLocker lock;
-        auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
+        auto funcType = decl->abstractType().dynamicCast<QmlJS::FunctionType>();
 
         if (funcType) {
             decl = funcType->declaration(topContext());

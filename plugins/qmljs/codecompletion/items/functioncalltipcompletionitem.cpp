@@ -29,7 +29,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
         return;
     }
 
-    QmlJS::FunctionType::Ptr func = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
+    auto func = decl->abstractType().dynamicCast<QmlJS::FunctionType>();
 
     if (!func) {
         return;

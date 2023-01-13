@@ -45,8 +45,11 @@ public:
      *
      * \returns the type pointer, or null if this index is invalid.
      */
-    template <class T>
-    TypePtr<T> type() const { return TypePtr<T>::dynamicCast(abstractType()); }
+    template<class T>
+    TypePtr<T> type() const
+    {
+        return abstractType().dynamicCast<T>();
+    }
 
     /// Determine if the type is valid. \returns true if valid, otherwise false.
     bool isValid() const

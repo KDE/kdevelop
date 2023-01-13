@@ -154,7 +154,7 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
 
     // The internal context of declarations having a function type is the prototype
     // context of the function (if any), or the internal context of Function
-    auto functionType = QmlJS::FunctionType::Ptr::dynamicCast(declaration->abstractType());
+    auto functionType = declaration->abstractType().dynamicCast<QmlJS::FunctionType>();
 
     if (functionType) {
         Declaration* decl = functionType->declaration(declaration->topContext());
@@ -182,8 +182,8 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
 
     default:
     {
-        auto structureType = StructureType::Ptr::dynamicCast(declaration->abstractType());
-        auto integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
+        auto structureType = declaration->abstractType().dynamicCast<StructureType>();
+        auto integralType = declaration->abstractType().dynamicCast<IntegralType>();
 
         static const IndexedIdentifier indexedObject(Identifier(QStringLiteral("Object")));
         if (structureType) {
