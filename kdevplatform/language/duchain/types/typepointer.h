@@ -51,9 +51,16 @@ public:
 
     ///Uses dynamic_cast to cast this pointer to the given type
     template<class U>
-    TypePtr<U> cast() const
+    TypePtr<U> dynamicCast() const
     {
         return TypePtr<U>(dynamic_cast<U*>(Base::data()));
+    }
+
+    ///Uses static_cast to cast this pointer to the given type
+    template<class U>
+    TypePtr<U> staticCast() const
+    {
+        return TypePtr<U>(static_cast<U*>(Base::data()));
     }
 
     /**

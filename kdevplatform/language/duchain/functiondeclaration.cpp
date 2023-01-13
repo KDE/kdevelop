@@ -56,7 +56,7 @@ bool FunctionDeclaration::isFunctionDeclaration() const
 
 void FunctionDeclaration::setAbstractType(AbstractType::Ptr type)
 {
-    if (type && !type.cast<FunctionType>()) {
+    if (type && !type.dynamicCast<FunctionType>()) {
         qCDebug(LANGUAGE) << "wrong type attached to function declaration:" << type->toString();
     }
     Declaration::setAbstractType(type);
@@ -68,7 +68,7 @@ QString FunctionDeclaration::toString() const
     if (!type)
         return Declaration::toString();
 
-    TypePtr<FunctionType> function = type.cast<FunctionType>();
+    auto function = type.dynamicCast<FunctionType>();
     if (function) {
         return QStringLiteral("%1 %2 %3").arg(function->partToString(FunctionType::SignatureReturn),
                                               identifier().toString(),

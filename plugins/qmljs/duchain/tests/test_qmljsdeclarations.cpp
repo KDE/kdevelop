@@ -103,8 +103,8 @@ void TestDeclarations::testFunction()
 
     FunctionType::Ptr funType = fooDec->type<FunctionType>();
     QVERIFY(funType);
-    QVERIFY(funType->returnType().cast<IntegralType>());
-    QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
+    QVERIFY(funType->returnType().dynamicCast<IntegralType>());
+    QCOMPARE(funType->returnType().dynamicCast<IntegralType>()->dataType(), (uint)IntegralType::TypeVoid);
 
     QCOMPARE(argCtx->childContexts().size(), 2);
     DUContext* bodyCtx = argCtx->childContexts().at(1);

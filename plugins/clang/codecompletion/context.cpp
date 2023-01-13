@@ -266,7 +266,7 @@ public:
             if (functionType->indexedArgumentsSize() && didAddParentheses) {
                 view->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
             }
-            auto returnTypeIntegral = functionType->returnType().cast<IntegralType>();
+            auto returnTypeIntegral = functionType->returnType().dynamicCast<IntegralType>();
             if ( restEmpty && !funcptr && returnTypeIntegral && returnTypeIntegral->dataType() == IntegralType::TypeVoid ) {
                 // function returns void and rest of line is empty -- nothing can be done with the result
                 if (functionType->indexedArgumentsSize() ) {
@@ -552,11 +552,11 @@ int adjustPriorityForType(const AbstractType::Ptr& type, int completionPriority)
         } else if (whichType == AbstractType::TypeDelayed) {
             completionPriority += modifier;
         } else if (whichType == AbstractType::TypeAlias) {
-            auto aliasedType = type.cast<TypeAliasType>();
-            return adjustPriorityForType(aliasedType ? aliasedType->type() : AbstractType::Ptr(), completionPriority);
+            auto aliasedType = type.staticCast<TypeAliasType>();
+            return adjustPriorityForType(aliasedType->type(), completionPriority);
         } else if (whichType == AbstractType::TypeFunction) {
-            auto functionType = type.cast<FunctionType>();
-            return adjustPriorityForType(functionType ? functionType->returnType() : AbstractType::Ptr(), completionPriority);
+            auto functionType = type.staticCast<FunctionType>();
+            return adjustPriorityForType(functionType->returnType(), completionPriority);
         }
     } else {
         completionPriority += modifier;
@@ -805,7 +805,7 @@ private:
                     }
 
                     if (localDecl->abstractType()->whichType() == AbstractType::TypeIntegral) {
-                        if (auto integralType = declaration->abstractType().cast<IntegralType>()) {
+                        if (auto integralType = declaration->abstractType().dynamicCast<IntegralType>()) {
                             if (integralType->dataType() == IntegralType::TypeVoid) {
                                 continue;
                             }

@@ -167,8 +167,11 @@ protected:
      *
      * \returns the current type being parsed.
      */
-    template <class T2>
-    TypePtr<T2> currentType() { return currentAbstractType().template cast<T2>(); }
+    template<class T2>
+    TypePtr<T2> currentType()
+    {
+        return currentAbstractType().template dynamicCast<T2>();
+    }
 
     /**
      * Search for a type with the identifier given by \a name.
@@ -209,7 +212,7 @@ protected:
 
             if (!delay) {
                 for (Declaration* decl : dec) {
-                    if (needClass && !decl->abstractType().cast<StructureType>())
+                    if (needClass && !decl->abstractType().dynamicCast<StructureType>())
                         continue;
 
                     if (decl->abstractType()) {

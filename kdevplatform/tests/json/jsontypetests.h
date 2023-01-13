@@ -37,7 +37,7 @@ TypeTest(isConst)
 {
     VERIFY_TYPE(bool);
     bool typeIsConst = false;
-    if (DelayedType::Ptr delayed = type.cast<DelayedType>())
+    if (auto delayed = type.dynamicCast<DelayedType>())
         typeIsConst = delayed->identifier().isConstant();
     else
         typeIsConst = (type->modifiers() & AbstractType::ConstModifier);
@@ -54,7 +54,7 @@ TypeTest(isConst)
 TypeTest(plainValue)
 {
     VERIFY_TYPE(qint64);
-    auto constantIntegralType = type.cast<ConstantIntegralType>();
+    auto constantIntegralType = type.dynamicCast<ConstantIntegralType>();
     VERIFY_NOT_NULL(constantIntegralType);
     return compareValues(constantIntegralType->plainValue(), value,
                          QStringLiteral("ConstantIntegralType's plainValue"));

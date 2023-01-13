@@ -37,7 +37,7 @@ CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject* parent)
 
 bool isFunction(const Declaration* decl)
 {
-    return decl->abstractType().cast<FunctionType>();
+    return decl->abstractType().dynamicCast<FunctionType>();
 }
 
 bool isPathChar(QChar c)
@@ -240,8 +240,8 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                 FunctionType::Ptr func;
                 
                 if(m_declarations[pos].data())
-                    func = m_declarations[pos].data()->abstractType().cast<FunctionType>();
-                
+                    func = m_declarations[pos].data()->abstractType().dynamicCast<FunctionType>();
+
                 if(!func)
                     return QVariant();
 
@@ -249,7 +249,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                 const auto arguments = func->arguments();
                 args.reserve(arguments.size());
                 for (const AbstractType::Ptr& t : arguments) {
-                    DelayedType::Ptr delay = t.cast<DelayedType>();
+                    auto delay = t.dynamicCast<DelayedType>();
                     args.append(delay ? delay->identifier().toString() : i18n("wrong"));
                 }
                 return QString(QLatin1Char('(') + args.join(QLatin1String(", ")) + QLatin1Char(')'));

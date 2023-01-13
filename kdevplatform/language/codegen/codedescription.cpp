@@ -128,7 +128,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
             ++i;
         }
 
-        FunctionType::Ptr functionType = declaration->abstractType().cast<FunctionType>();
+        auto functionType = declaration->abstractType().dynamicCast<FunctionType>();
 
         if (functionType) {
             isConst = (functionType->modifiers() & AbstractType::ConstModifier);

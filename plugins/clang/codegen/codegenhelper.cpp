@@ -71,8 +71,7 @@ uint buildIdentifierForType(const AbstractType::Ptr& type, IndexedTypeIdentifier
     if (!type) {
         return pointerLevel;
     }
-    TypePtr<ReferenceType> refType = type.cast<ReferenceType>();
-    if (refType) {
+    if (auto refType = type.dynamicCast<ReferenceType>()) {
         id.setIsReference(true);
         if (refType->modifiers() & AbstractType::ConstModifier) {
             id.setIsConstant(true);
@@ -80,9 +79,8 @@ uint buildIdentifierForType(const AbstractType::Ptr& type, IndexedTypeIdentifier
 
         return buildIdentifierForType(refType->baseType(), id, pointerLevel, top);
     }
-    TypePtr<PointerType> pointerType = type.cast<PointerType>();
 
-    if (pointerType) {
+    if (auto pointerType = type.dynamicCast<PointerType>()) {
         ++pointerLevel;
         uint maxPointerLevel = buildIdentifierForType(pointerType->baseType(), id, pointerLevel, top);
         if (type->modifiers() & AbstractType::ConstModifier) {
@@ -173,8 +171,7 @@ AbstractType::Ptr shortenTypeForViewing(const AbstractType::Ptr& type)
 
             AbstractType::Ptr newType(type->clone());
 
-            TypeAliasType::Ptr alias = type.cast<TypeAliasType>();
-            if (alias) {
+            if (auto alias = type.dynamicCast<TypeAliasType>()) {
                 //If the aliased type has less involved template arguments, prefer it
                 AbstractType::Ptr shortenedTarget = exchange(alias->type());
                 if (shortenedTarget && shortenedTarget->toString().count(QLatin1Char('<')) < alias->toString().count(QLatin1Char('<'))
@@ -312,8 +309,8 @@ AbstractType::Ptr typeForShortenedString(Declaration* decl)
 {
     AbstractType::Ptr type = decl->abstractType();
     if (decl->isTypeAlias()) {
-        if (type.cast<TypeAliasType>()) {
-            type = type.cast<TypeAliasType>()->type();
+        if (auto alias = type.dynamicCast<TypeAliasType>()) {
+            type = alias->type();
         }
     }
 
@@ -349,7 +346,7 @@ IndexedTypeIdentifier shortenedTypeIdentifier(const AbstractType::Ptr& type_, DU
     bool isRValue = false;
 
     auto type = type_;
-    if (const auto& refType = type.cast<ReferenceType>()) {
+    if (auto refType = type.dynamicCast<ReferenceType>()) {
         isReference = true;
         type = refType->baseType();
         isRValue = refType->isRValue();
@@ -420,8 +417,7 @@ QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Sig
         AbstractType::Ptr type = item.first.abstractType();
 
         QString arrayAppendix;
-        ArrayType::Ptr arrayType;
-        while ((arrayType = type.cast<ArrayType>())) {
+        while (auto arrayType = type.dynamicCast<ArrayType>()) {
             type = arrayType->elementType();
             //note: we have to prepend since we iterate from outside, i.e. from right to left.
             if (arrayType->dimension()) {

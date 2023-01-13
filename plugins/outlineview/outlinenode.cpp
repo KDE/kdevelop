@@ -85,7 +85,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         AbstractType::WhichType typeEnum = type->whichType();
         switch (typeEnum) {
         case AbstractType::TypeFunction: {
-            FunctionType::Ptr func = type.cast<FunctionType>();
+            auto func = type.staticCast<FunctionType>();
             // func->partToString() does not add the argument names -> do it manually
             if (DUContext* fCtx = DUChainUtils::functionContext(decl)) {
                 m_cachedText += QLatin1Char('(');
@@ -139,7 +139,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         }
         case AbstractType::TypeAlias: {
             //append the type it aliases
-            TypeAliasType::Ptr alias = type.cast<TypeAliasType>();
+            auto alias = type.staticCast<TypeAliasType>();
             if (AbstractType::Ptr targetType = alias->type()) {
                 m_cachedText += QLatin1String(" : ") + targetType->toString();
             }

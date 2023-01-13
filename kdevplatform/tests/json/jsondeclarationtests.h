@@ -168,9 +168,8 @@ DeclarationTest(targetType)
 ///@returns the
 DeclarationTest(returnType)
 {
-    FunctionType::Ptr functionType = decl->abstractType().cast<FunctionType>();
     AbstractType::Ptr returnType;
-    if (functionType) {
+    if (auto functionType = decl->abstractType().dynamicCast<FunctionType>()) {
         returnType = functionType->returnType();
     }
     return testObject(returnType, value, QStringLiteral("Declaration's return type"));

@@ -65,7 +65,7 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
 
         // when function returns void, also add a semicolon
         if (funcType) {
-            if (IntegralType::Ptr type = funcType->returnType().cast<IntegralType>()) {
+            if (auto type = funcType->returnType().dynamicCast<IntegralType>()) {
                 if (type->dataType() == IntegralType::TypeVoid) {
                     const QChar nextChar = view->document()->characterAt(pos);
                     if (nextChar != QLatin1Char(';') && nextChar != QLatin1Char(')') && nextChar != QLatin1Char(',')) {

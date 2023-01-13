@@ -117,8 +117,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             AbstractType::Ptr useType = d->m_declaration->abstractType();
             if (d->m_declaration->isTypeAlias()) {
                 //Do not show the own name as type of typedefs
-                if (useType.cast<TypeAliasType>())
-                    useType = useType.cast<TypeAliasType>()->type();
+                if (auto alias = useType.dynamicCast<TypeAliasType>())
+                    useType = alias->type();
             }
 
             eventuallyMakeTypeLinks(useType);
@@ -141,8 +141,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
             modifyHtml() += QStringLiteral("<br>");
         } else {
-            if (d->m_declaration->kind() == Declaration::Type &&
-                d->m_declaration->abstractType().cast<StructureType>()) {
+            if (d->m_declaration->kind() == Declaration::Type
+                && d->m_declaration->abstractType().dynamicCast<StructureType>()) {
                 htmlClass();
             }
             if (d->m_declaration->kind() == Declaration::Namespace) {
@@ -198,9 +198,9 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             modifyHtml() += QStringLiteral("<br />");
         }
     } else {
-        AbstractType::Ptr showType = d->m_declaration->abstractType();
-        if (showType && showType.cast<FunctionType>()) {
-            showType = showType.cast<FunctionType>()->returnType();
+        auto showType = d->m_declaration->abstractType();
+        if (auto functionType = showType.dynamicCast<FunctionType>()) {
+            showType = functionType->returnType();
             if (showType)
                 modifyHtml() += labelHighlight(i18n("Returns: "));
         } else if (showType) {
@@ -222,7 +222,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             if (definition && definition->declaration())
                 decl = definition->declaration();
 
-            if (decl->abstractType().cast<EnumerationType>())
+            if (decl->abstractType().dynamicCast<EnumerationType>())
                 modifyHtml() += labelHighlight(i18n("Enum: "));
             else
                 modifyHtml() += labelHighlight(i18n("Container: "));
@@ -380,7 +380,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
     const auto* classFunDecl =
         dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
-    const FunctionType::Ptr type = d->m_declaration->abstractType().cast<FunctionType>();
+    const auto type = d->m_declaration->abstractType().dynamicCast<FunctionType>();
     if (!type) {
         modifyHtml() += errorHighlight(QStringLiteral("Invalid type<br />"));
         return;
@@ -597,7 +597,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
 {
     Q_D(AbstractDeclarationNavigationContext);
 
-    StructureType::Ptr klass = d->m_declaration->abstractType().cast<StructureType>();
+    auto klass = d->m_declaration->abstractType().dynamicCast<StructureType>();
     Q_ASSERT(klass);
 
     ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(klass->declaration(topContext().data()));
