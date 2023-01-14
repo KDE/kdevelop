@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2023-01-12 10:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2736,17 +2736,17 @@ msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "工程信息"
 
-#: shell/openprojectdialog.cpp:205
+#: shell/openprojectdialog.cpp:207
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "将“%1”作为工程打开"
 
-#: shell/openprojectdialog.cpp:209
+#: shell/openprojectdialog.cpp:211
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "选中的 URL 无效"
 
-#: shell/openprojectdialog.cpp:254
+#: shell/openprojectdialog.cpp:256
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -3429,17 +3429,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 作为..."
 
-#: shell/runtimecontroller.cpp:25
+#: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
 msgstr "主机系统"
 
-#: shell/runtimecontroller.cpp:80
+#: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "允许选择运行时"
 
-#: shell/runtimecontroller.cpp:84
+#: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
 msgstr "运行时：%1"

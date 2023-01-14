@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2013-11-20 06:31+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -2910,19 +2910,19 @@ msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Жоба мәліметі"
 
-#: shell/openprojectdialog.cpp:205
+#: shell/openprojectdialog.cpp:207
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "%1 дегенді жоба ретінде ашу"
 
-#: shell/openprojectdialog.cpp:209
+#: shell/openprojectdialog.cpp:211
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "Таңдаған ULR дұрыс емес."
 
-#: shell/openprojectdialog.cpp:254
+#: shell/openprojectdialog.cpp:256
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -3678,17 +3678,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 дегенді былай..."
 
-#: shell/runtimecontroller.cpp:25
+#: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
 msgstr ""
 
-#: shell/runtimecontroller.cpp:80
+#: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr ""
 
-#: shell/runtimecontroller.cpp:84
+#: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
 msgstr ""

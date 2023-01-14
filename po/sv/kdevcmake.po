@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:45+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2022-08-03 09:56+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -225,12 +225,18 @@ msgstr "<br /><em>Cache-värde:</em> %1\n"
 msgid "<br /><em>Cache Documentation:</em> %1\n"
 msgstr "<br /><em>Cache-dokumentation:</em> %1\n"
 
+#: cmakefileapiimportjob.cpp:41
+#, kde-format
+msgctxt "error message"
+msgid "invalid CMake file API project data"
+msgstr ""
+
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
 msgid "CMake Content Page"
 msgstr "CMake innehållssida"
 
-#: cmakemanager.cpp:646
+#: cmakemanager.cpp:642
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

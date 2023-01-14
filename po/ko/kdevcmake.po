@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:45+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2022-07-13 13:05+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -221,12 +221,18 @@ msgstr "<br /><em>캐시 값:</em> %1\n"
 msgid "<br /><em>Cache Documentation:</em> %1\n"
 msgstr "<br /><em>캐시 문서:</em> %1\n"
 
+#: cmakefileapiimportjob.cpp:41
+#, kde-format
+msgctxt "error message"
+msgid "invalid CMake file API project data"
+msgstr ""
+
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
 msgid "CMake Content Page"
 msgstr "CMake 내용 페이지"
 
-#: cmakemanager.cpp:646
+#: cmakemanager.cpp:642
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "

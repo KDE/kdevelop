@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2014-04-23 15:00+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -2933,19 +2933,19 @@ msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "專案資訊"
 
-#: shell/openprojectdialog.cpp:205
+#: shell/openprojectdialog.cpp:207
 #, fuzzy, kde-format
 #| msgid "open %1 as project"
 msgid "Open \"%1\" as project"
 msgstr "以專案開啟 %1"
 
-#: shell/openprojectdialog.cpp:209
+#: shell/openprojectdialog.cpp:211
 #, fuzzy, kde-format
 #| msgid "Selected URL is invalid."
 msgid "Selected URL is invalid"
 msgstr "選取的網址不合法。"
 
-#: shell/openprojectdialog.cpp:254
+#: shell/openprojectdialog.cpp:256
 #, fuzzy, kde-format
 #| msgid "Open Existing File"
 msgctxt "@item:inlistbox"
@@ -3713,17 +3713,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 為..."
 
-#: shell/runtimecontroller.cpp:25
+#: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
 msgstr ""
 
-#: shell/runtimecontroller.cpp:80
+#: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr ""
 
-#: shell/runtimecontroller.cpp:84
+#: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
 msgstr ""

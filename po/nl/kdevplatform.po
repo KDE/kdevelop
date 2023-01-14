@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2022-12-22 13:27+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -2795,17 +2795,17 @@ msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Projectinformatie"
 
-#: shell/openprojectdialog.cpp:205
+#: shell/openprojectdialog.cpp:207
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "%1 als project openen"
 
-#: shell/openprojectdialog.cpp:209
+#: shell/openprojectdialog.cpp:211
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "Geselecteerde URL is ongeldig"
 
-#: shell/openprojectdialog.cpp:254
+#: shell/openprojectdialog.cpp:256
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -3519,17 +3519,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 als..."
 
-#: shell/runtimecontroller.cpp:25
+#: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
 msgstr "Hostsysteem"
 
-#: shell/runtimecontroller.cpp:80
+#: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "Stelt u in staat om een runtime te selecteren"
 
-#: shell/runtimecontroller.cpp:84
+#: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
 msgstr "Runtime: %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2022-07-06 09:33+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -2789,17 +2789,17 @@ msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Layihə haqqında məlumat"
 
-#: shell/openprojectdialog.cpp:205
+#: shell/openprojectdialog.cpp:207
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "\"%1\", layihə kimi açılsın"
 
-#: shell/openprojectdialog.cpp:209
+#: shell/openprojectdialog.cpp:211
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "Seçilmiş URL yararsızdır"
 
-#: shell/openprojectdialog.cpp:254
+#: shell/openprojectdialog.cpp:256
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Open existing file \"%1\""
@@ -3510,17 +3510,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "%1 bu şəkildə..."
 
-#: shell/runtimecontroller.cpp:25
+#: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
 msgstr "Host sistemi"
 
-#: shell/runtimecontroller.cpp:80
+#: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "İcra olunma vaxtını seçməyə icazə verir"
 
-#: shell/runtimecontroller.cpp:84
+#: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
 msgstr "İcra vaxtı: %1"

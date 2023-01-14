@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:46+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2022-04-17 20:55+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -2924,17 +2924,17 @@ msgctxt "@title:tab"
 msgid "Project Information"
 msgstr "Informácie projektu"
 
-#: shell/openprojectdialog.cpp:205
+#: shell/openprojectdialog.cpp:207
 #, kde-format
 msgid "Open \"%1\" as project"
 msgstr "Otvoriť \"%1\" ako projekt"
 
-#: shell/openprojectdialog.cpp:209
+#: shell/openprojectdialog.cpp:211
 #, kde-format
 msgid "Selected URL is invalid"
 msgstr "Vybrané URL je neplatné"
 
-#: shell/openprojectdialog.cpp:254
+#: shell/openprojectdialog.cpp:256
 #, fuzzy, kde-format
 #| msgid "Open existing file \"%1\""
 msgctxt "@item:inlistbox"
@@ -3707,17 +3707,17 @@ msgctxt "@title:menu"
 msgid "%1 As..."
 msgstr "Ako"
 
-#: shell/runtimecontroller.cpp:25
+#: shell/runtimecontroller.cpp:26
 #, kde-format
 msgid "Host System"
 msgstr "Hostiteľský systém"
 
-#: shell/runtimecontroller.cpp:80
+#: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
 msgstr "Umožní vybrať behové prostredie"
 
-#: shell/runtimecontroller.cpp:84
+#: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
 msgstr "Behové prostredie: %1"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:45+0000\n"
+"POT-Creation-Date: 2023-01-14 11:29+0000\n"
 "PO-Revision-Date: 2022-12-10 18:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -226,12 +226,18 @@ msgstr "<br /><em>Önbellek Değeri:</em> %1\n"
 msgid "<br /><em>Cache Documentation:</em> %1\n"
 msgstr "<br /><em>Önbellek Belgelendirmesi:</em> %1\n"
 
+#: cmakefileapiimportjob.cpp:41
+#, kde-format
+msgctxt "error message"
+msgid "invalid CMake file API project data"
+msgstr ""
+
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
 msgid "CMake Content Page"
 msgstr "CMake İçindekiler Sayfası"
 
-#: cmakemanager.cpp:646
+#: cmakemanager.cpp:642
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
