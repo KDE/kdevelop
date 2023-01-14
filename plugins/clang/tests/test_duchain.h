@@ -105,6 +105,8 @@ private Q_SLOTS:
     void testBitWidth();
     void testBitWidthUpdate();
 
+    void testTypeForwardDeclaration();
+
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;
     KDevelop::TestProjectController* m_projectController;

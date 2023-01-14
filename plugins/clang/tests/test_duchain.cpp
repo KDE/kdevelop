@@ -2649,3 +2649,64 @@ void TestDUChain::testBitWidthUpdate()
     }
 #endif
 }
+
+void TestDUChain::testTypeForwardDeclaration()
+{
+    TestFile file(QStringLiteral(R"(
+        struct foo
+        {
+            struct bar;
+            bar *ptr1;
+            const bar *ptr2;
+            bar &ref1;
+            const bar &ref2;
+        };
+        struct foo::bar {
+            void f1(bar&);
+            void f2(const bar&);
+        };
+    )"),
+                  QStringLiteral("cpp"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(1000));
+
+    DUChainReadLocker lock;
+    const auto top = file.topContext();
+    QVERIFY(top);
+
+    const auto decls = top->localDeclarations();
+    QCOMPARE(decls.size(), 1);
+
+    const auto foo = decls[0];
+    QCOMPARE(foo->qualifiedIdentifier(), QualifiedIdentifier(u"foo"));
+
+    QVERIFY(foo->internalContext());
+    const auto fooDecls = foo->internalContext()->localDeclarations();
+    QCOMPARE(fooDecls.size(), 5);
+
+    const auto bar = fooDecls[0];
+    QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier(u"foo::bar"));
+
+    auto barForward = dynamic_cast<ForwardDeclaration*>(bar);
+    QVERIFY(barForward);
+
+    auto barDecl = barForward->resolve(top);
+    QVERIFY(barDecl);
+
+    auto checkIdType = [top, barDecl](const Declaration* decl) {
+        auto target = TypeUtils::targetType(decl->abstractType(), top);
+        auto type = dynamic_cast<const IdentifiedType*>(target.data());
+        if (!type) {
+            return false;
+        }
+        auto typeDecl = type->declaration(top);
+        return type && typeDecl == barDecl;
+    };
+
+    QVERIFY(checkIdType(fooDecls[1]));
+    QEXPECT_FAIL("", "bogus type generated, not due to cache", Continue);
+    QVERIFY(checkIdType(fooDecls[2]));
+    QVERIFY(checkIdType(fooDecls[3]));
+    QEXPECT_FAIL("", "bogus type generated, not due to cache", Continue);
+    QVERIFY(checkIdType(fooDecls[4]));
+}

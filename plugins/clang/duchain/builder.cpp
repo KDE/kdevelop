@@ -18,6 +18,7 @@
 #include "util/clangtypes.h"
 
 #include <util/pushvalue.h>
+#include <util/owningrawpointercontainer.h>
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
@@ -43,13 +44,43 @@
 #include <unordered_map>
 #include <typeinfo>
 #include <memory>
+#include <optional>
 
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
 
+constexpr auto DEBUG_TYPE_CACHE = false;
+
 using namespace KDevelop;
 
 namespace {
+/**
+ * A wrapper for CXType suitable for usage as a QHash key
+ *
+ * Sadly, there is no clang_hashCursor equivalent for CXType, so instead we hash the
+ * string representation of the type and use that. Thankfully, at least there's an
+ * efficient way to test types for equality, so we don't need to hold on to the string.
+ */
+class HashableClangType
+{
+public:
+    HashableClangType() = default;
+    explicit HashableClangType(CXType type);
+
+    bool operator==(const HashableClangType& rhs) const noexcept
+    {
+        return hash == rhs.hash && clang_equalTypes(type, rhs.type);
+    }
+
+    friend uint qHash(const HashableClangType& typeKey) noexcept
+    {
+        return typeKey.hash;
+    }
+
+private:
+    CXType type = {};
+    uint hash = 0;
+};
 
 #if CINDEX_VERSION_MINOR >= 100
 // TODO: this is ugly, can we find a better alternative?
@@ -337,7 +368,12 @@ struct Visitor
 {
     explicit Visitor(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update);
 
+    /// creates a new type suitable for @p type in @p parent
+    /// this uses a cache internally and only calls @c makeTypeNonCached when needed
+    /// in the fast path, we will just clone a type from the cache
     std::unique_ptr<AbstractType> makeType(CXType type, CXCursor parent);
+    /// always creates a new type suitable for @p type in @p parent
+    std::unique_ptr<AbstractType> makeTypeNonCached(CXType type, CXCursor parent);
 
     //BEGIN dispatch*
     template<CXCursorKind CK, Decision IsInClass = CursorKindTraits::isInClass(CK),
@@ -604,6 +640,7 @@ struct Visitor
         } else { // fallback, at least give the spelling to the user
             t->setDeclarationId(DeclarationId(
                 IndexedQualifiedIdentifier(QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString()))));
+            m_typeIsNotCachable = true;
         }
         return t;
     }
@@ -795,6 +832,7 @@ struct Visitor
             Identifier id(tStr);
             id.clearTemplateIdentifiers();
             cst->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))));
+            m_typeIsNotCachable = true;
         }
 
         return cst;
@@ -884,6 +922,18 @@ struct Visitor
     void setTypeModifiers(CXType type, AbstractType* kdevType) const;
     void setTypeSize(CXType type, AbstractType* kdevType) const;
 
+    /**
+     * @return a clone of a cached kdevelop type representation for the @p clangType
+     * @sa cacheTypeClone
+     */
+    std::optional<std::unique_ptr<KDevelop::AbstractType>> cachedTypeClone(const HashableClangType& clangType) const;
+
+    /**
+     * store a clone of the @p kdevType in the cache to represent @p clangType
+     * @sa cachedTypeClone
+     */
+    void cacheTypeClone(const HashableClangType& clangType, const std::unique_ptr<KDevelop::AbstractType>& kdevType);
+
     const CXFile m_file;
     const IncludeFileContexts& m_includes;
 
@@ -894,9 +944,19 @@ struct Visitor
     /// At these location offsets (cf. @ref clang_getExpansionLocation) we encountered macro expansions
     QSet<unsigned int> m_macroExpansionLocations;
     mutable QHash<CXCursor, DeclarationPointer> m_cursorToDeclarationCache;
+    /// Ideally this cache should be shared for all files in the TU but that is not possible as it would cause
+    /// problems as indicated when `DEBUG_TYPE_CACHE=true`: right now, we repeatedly visit the AST, once per file
+    /// in the TU. When the .cpp declares a type that is referenced in an included file, this would not get properly
+    /// resolved. If we then cache this, we would use the tainted and broken type everywhere
+    /// Solving this requires visiting the AST just once and then building multiple contexts per-file in one go
+    KDevelop::OwningRawPointerContainer<QHash<HashableClangType, const KDevelop::AbstractType*>> m_typeCache;
     CurrentContext* m_parentContext;
 
     const bool m_update;
+    /// When we build an identified type for which we fail to resolve the declaration, e.g. because its
+    /// a forward declaration, we must not cache. Instead we will try again in the future, hoping we can
+    /// resolve the type at a future point
+    bool m_typeIsNotCachable = false;
 };
 
 //BEGIN setTypeModifiers
@@ -1416,6 +1476,30 @@ void Visitor::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
 
 std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
 {
+    std::unique_ptr<AbstractType> ret;
+    if (type.kind == CXType_Invalid) {
+        return ret;
+    }
+
+    const auto cacheKey = HashableClangType(type);
+    if (auto cached = cachedTypeClone(cacheKey)) {
+        if (DEBUG_TYPE_CACHE) {
+            auto nonCached = makeTypeNonCached(type, parent);
+            Q_ASSERT(static_cast<bool>(nonCached) == static_cast<bool>(*cached));
+            Q_ASSERT(!nonCached || nonCached->equals(cached->get()));
+        }
+        ret = std::move(*cached);
+    } else {
+        ret = makeTypeNonCached(type, parent);
+        if (!m_typeIsNotCachable)
+            cacheTypeClone(cacheKey, ret);
+    }
+
+    return ret;
+}
+
+std::unique_ptr<AbstractType> Visitor::makeTypeNonCached(CXType type, CXCursor parent)
+{
 #define UseKind(TypeKind)                                                                                              \
     case TypeKind:                                                                                                     \
         return dispatchType<TypeKind>(type, parent)
@@ -1681,6 +1765,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
         }
     }
 
+    /// reset the flag when we finish visiting a cursor
+    const auto typeIsNotCachableGuard = QScopedValueRollback(visitor->m_typeIsNotCachable);
+
 #define UseCursorKind(CursorKind, ...)                                                                                 \
     case CursorKind:                                                                                                   \
         return visitor->dispatchCursor<CursorKind>(__VA_ARGS__);
@@ -1748,6 +1835,34 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     }
 }
 
+HashableClangType::HashableClangType(CXType type)
+    : type(type)
+    , hash(qHash(ClangString(clang_getTypeSpelling(type)).toByteArray()))
+{
+}
+
+std::optional<std::unique_ptr<KDevelop::AbstractType>>
+Visitor::cachedTypeClone(const HashableClangType& clangType) const
+{
+    const auto cachedTypeIt = m_typeCache->constFind(clangType);
+    if (cachedTypeIt != m_typeCache->constEnd()) {
+        auto type = cachedTypeIt.value();
+        // clone, the type might get mutated in the code calling this function
+        // e.g. const modifiers might get added or similar
+        // we want to keep the state in the cache pristine
+        return std::unique_ptr<KDevelop::AbstractType>(type ? type->clone() : nullptr);
+    }
+    return std::nullopt;
+}
+
+void Visitor::cacheTypeClone(const HashableClangType& clangType,
+                             const std::unique_ptr<KDevelop::AbstractType>& kdevType)
+{
+    // clone, the type might get mutated in the code calling this function
+    // e.g. const modifiers might get added or similar
+    // we want to store the pristine state in the cache
+    m_typeCache->insert(clangType, kdevType ? kdevType->clone() : nullptr);
+}
 }
 
 namespace Builder {
