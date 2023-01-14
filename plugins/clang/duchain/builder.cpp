@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <typeinfo>
-
+#include <memory>
 
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
@@ -155,9 +155,9 @@ QByteArray makeComment(CXComment comment)
 }
 #endif
 
-AbstractType* createDelayedType(CXType type)
+std::unique_ptr<DelayedType> createDelayedType(CXType type)
 {
-    auto t = new DelayedType;
+    auto t = std::make_unique<DelayedType>();
 
     QString typeName = ClangString(clang_getTypeSpelling(type)).toString();
     typeName.remove(QStringLiteral("const "));
@@ -165,6 +165,11 @@ AbstractType* createDelayedType(CXType type)
 
     t->setIdentifier(IndexedTypeIdentifier(typeName));
     return t;
+}
+
+AbstractType::Ptr toTypePtr(std::unique_ptr<AbstractType> type)
+{
+    return AbstractType::Ptr(type.release());
 }
 
 void contextImportDecl(DUContext* context, const DeclarationPointer& decl)
@@ -331,13 +336,9 @@ struct Visitor
     explicit Visitor(CXTranslationUnit tu, CXFile file,
                      const IncludeFileContexts& includes, const bool update);
 
-    AbstractType *makeType(CXType type, CXCursor parent);
-    AbstractType::Ptr makeAbsType(CXType type, CXCursor parent)
-    {
-        return AbstractType::Ptr(makeType(type, parent));
-    }
+    std::unique_ptr<AbstractType> makeType(CXType type, CXCursor parent);
 
-//BEGIN dispatch*
+    //BEGIN dispatch*
     template<CXCursorKind CK,
       Decision IsInClass = CursorKindTraits::isInClass(CK),
       EnableIf<IsInClass == Decision::Maybe> = dummy>
@@ -362,14 +363,14 @@ struct Visitor
     }
 
     template<CXTypeKind TK>
-    AbstractType *dispatchType(CXType type, CXCursor cursor)
+    std::unique_ptr<AbstractType> dispatchType(CXType type, CXCursor cursor)
     {
         IF_DEBUG(clangDebug() << "TK:" << type.kind;)
 
         auto kdevType = createType<TK>(type, cursor);
         if (kdevType) {
-            setTypeModifiers<TK>(type, kdevType);
-            setTypeSize(type, kdevType);
+            setTypeModifiers<TK>(type, kdevType.get());
+            setTypeSize(type, kdevType.get());
         }
         return kdevType;
     }
@@ -456,13 +457,13 @@ struct Visitor
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         auto type = createType<CK>(cursor);
         if (type) {
-            setTypeSize(clang_getCursorType(cursor), type);
+            setTypeSize(clang_getCursorType(cursor), type.get());
         }
 
         DUChainWriteLocker lock;
         if (context)
             decl->setInternalContext(context);
-        setDeclType<CK>(decl, type);
+        setDeclType(decl, std::move(type));
         setDeclInCtxtData<CK>(cursor, decl);
         return decl;
     }
@@ -509,23 +510,23 @@ struct Visitor
     }
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != -1> = dummy>
-    AbstractType *createType(CXType, CXCursor)
+    std::unique_ptr<IntegralType> createType(CXType, CXCursor)
     {
         // TODO: would be nice to instantiate a ConstantIntegralType here and set a value if possible
         // but unfortunately libclang doesn't offer API to that
         // also see https://marc.info/?l=cfe-commits&m=131609142917881&w=2
-        return new IntegralType(CursorKindTraits::integralType(TK));
+        return std::make_unique<IntegralType>(CursorKindTraits::integralType(TK));
     }
 
-    template <CXTypeKind TK, EnableIf<CursorKindTraits::isOpenCLType(TK)> = dummy>
-    AbstractType* createType(CXType, CXCursor)
+    template<CXTypeKind TK, EnableIf<CursorKindTraits::isOpenCLType(TK)> = dummy>
+    std::unique_ptr<StructureType> createType(CXType, CXCursor)
     {
-        return new StructureType();
+        return std::make_unique<StructureType>();
     }
 
 #if CINDEX_VERSION_MINOR >= 60
-    template <CXTypeKind TK, EnableIf<TK == CXType_Atomic> = dummy>
-    AbstractType* createType(CXType type, CXCursor parent)
+    template<CXTypeKind TK, EnableIf<TK == CXType_Atomic> = dummy>
+    std::unique_ptr<AbstractType> createType(CXType type, CXCursor parent)
     {
         // Decompose the atomic type.
         return makeType(clang_Type_getValueType(type), parent);
@@ -533,54 +534,55 @@ struct Visitor
 #endif
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::isPointerType(TK)> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<PointerType> createType(CXType type, CXCursor parent)
     {
-        auto ptr = new PointerType;
-        ptr->setBaseType(makeAbsType(clang_getPointeeType(type), parent));
+        auto ptr = std::make_unique<PointerType>();
+        ptr->setBaseType(toTypePtr(makeType(clang_getPointeeType(type), parent)));
         return ptr;
     }
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::isArrayType(TK)> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<ArrayType> createType(CXType type, CXCursor parent)
     {
-        auto arr = new ArrayType;
+        auto arr = std::make_unique<ArrayType>();
         arr->setDimension((TK == CXType_IncompleteArray || TK == CXType_VariableArray || TK == CXType_DependentSizedArray) ? 0 : clang_getArraySize(type));
-        arr->setElementType(makeAbsType(clang_getArrayElementType(type), parent));
+        arr->setElementType(toTypePtr(makeType(clang_getArrayElementType(type), parent)));
         return arr;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_RValueReference || TK == CXType_LValueReference> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<ReferenceType> createType(CXType type, CXCursor parent)
     {
-        auto ref = new ReferenceType;
+        auto ref = std::make_unique<ReferenceType>();
         ref->setIsRValue(type.kind == CXType_RValueReference);
-        ref->setBaseType(makeAbsType(clang_getPointeeType(type), parent));
+        ref->setBaseType(toTypePtr(makeType(clang_getPointeeType(type), parent)));
         return ref;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_FunctionProto || TK == CXType_FunctionNoProto> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<FunctionType> createType(CXType type, CXCursor parent)
     {
-        auto func = new FunctionType;
-        func->setReturnType(makeAbsType(clang_getResultType(type), parent));
+        auto func = std::make_unique<FunctionType>();
+        func->setReturnType(toTypePtr(makeType(clang_getResultType(type), parent)));
         const int numArgs = clang_getNumArgTypes(type);
         for (int i = 0; i < numArgs; ++i) {
-            func->addArgument(makeAbsType(clang_getArgType(type, i), parent));
+            func->addArgument(toTypePtr(makeType(clang_getArgType(type, i), parent)));
         }
 
         if (clang_isFunctionTypeVariadic(type)) {
-            auto type = new DelayedType;
+            auto type = std::make_unique<DelayedType>();
             static const auto id = IndexedTypeIdentifier(QStringLiteral("..."));
             type->setIdentifier(id);
             type->setKind(DelayedType::Unresolved);
-            func->addArgument(AbstractType::Ptr(type));
+            func->addArgument(toTypePtr(std::move(type)));
         }
 
         return func;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Record || TK == CXType_ObjCInterface || TK == CXType_ObjCClass> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    template<CXTypeKind TK,
+             EnableIf<TK == CXType_Record || TK == CXType_ObjCInterface || TK == CXType_ObjCClass> = dummy>
+    std::unique_ptr<AbstractType> createType(CXType type, CXCursor parent)
     {
         DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type));
         DUChainReadLocker lock;
@@ -594,7 +596,7 @@ struct Visitor
             return createClassTemplateSpecializationType(type, decl);
         }
 
-        auto t = new StructureType;
+        auto t = std::make_unique<StructureType>();
         if (decl) {
             t->setDeclaration(decl.data());
         } else {    // fallback, at least give the spelling to the user
@@ -604,40 +606,40 @@ struct Visitor
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Enum> = dummy>
-    AbstractType *createType(CXType type, CXCursor)
+    std::unique_ptr<EnumerationType> createType(CXType type, CXCursor)
     {
-        auto t = new EnumerationType;
-        setIdTypeDecl(clang_getTypeDeclaration(type), t);
+        auto t = std::make_unique<EnumerationType>();
+        setIdTypeDecl(clang_getTypeDeclaration(type), t.get());
         return t;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Typedef> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<TypeAliasType> createType(CXType type, CXCursor parent)
     {
-        auto t = new TypeAliasType;
+        auto t = std::make_unique<TypeAliasType>();
         CXCursor location = clang_getTypeDeclaration(type);
-        t->setType(makeAbsType(clang_getTypedefDeclUnderlyingType(location), parent));
-        setIdTypeDecl(location, t);
+        t->setType(toTypePtr(makeType(clang_getTypedefDeclUnderlyingType(location), parent)));
+        setIdTypeDecl(location, t.get());
         return t;
     }
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::delayedTypeName(TK) != nullptr> = dummy>
-    AbstractType *createType(CXType, CXCursor /*parent*/)
+    std::unique_ptr<DelayedType> createType(CXType, CXCursor /*parent*/)
     {
-        auto t = new DelayedType;
+        auto t = std::make_unique<DelayedType>();
         static const IndexedTypeIdentifier id(CursorKindTraits::delayedTypeName(TK));
         t->setIdentifier(id);
         return t;
     }
 
-    template <CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_ExtVector || TK == CXType_Complex> = dummy>
-    AbstractType* createType(CXType type, CXCursor /*parent*/)
+    template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_ExtVector || TK == CXType_Complex> = dummy>
+    std::unique_ptr<AbstractType> createType(CXType type, CXCursor /*parent*/)
     {
         return createDelayedType(type);
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Unexposed> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<AbstractType> createType(CXType type, CXCursor parent)
     {
         auto numTA = clang_Type_getNumTemplateArguments(type);
         // TODO: We should really expose more types to libclang!
@@ -650,34 +652,39 @@ struct Visitor
 
         type = clang_getCanonicalType(type);
         bool isElaboratedType = type.kind != CXType_FunctionProto && type.kind != CXType_FunctionNoProto && type.kind != CXType_Unexposed && type.kind != CXType_Invalid && type.kind != CXType_Record;
+        if (!isElaboratedType) {
+            return createDelayedType(oldType);
+        }
 
-        return !isElaboratedType ? createDelayedType(oldType) : makeType(type, parent);
+        return makeType(type, parent);
     }
 
-    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && !CursorKindTraits::isAliasType(CK) && CK != CXCursor_EnumConstantDecl> = dummy>
-    typename IdType<CK>::Type *createType(CXCursor)
+    template<CXCursorKind CK,
+             EnableIf<CursorKindTraits::isIdentifiedType(CK) && !CursorKindTraits::isAliasType(CK)
+                      && CK != CXCursor_EnumConstantDecl> = dummy>
+    std::unique_ptr<typename IdType<CK>::Type> createType(CXCursor)
     {
-        return new typename IdType<CK>::Type;
+        return std::make_unique<typename IdType<CK>::Type>();
     }
 
     template<CXCursorKind CK, EnableIf<CK == CXCursor_EnumConstantDecl> = dummy>
-    EnumeratorType *createType(CXCursor cursor)
+    std::unique_ptr<EnumeratorType> createType(CXCursor cursor)
     {
-        auto type = new EnumeratorType;
+        auto type = std::make_unique<EnumeratorType>();
         type->setValue<quint64>(clang_getEnumConstantDeclUnsignedValue(cursor));
         return type;
     }
 
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isAliasType(CK)> = dummy>
-    TypeAliasType *createType(CXCursor cursor)
+    std::unique_ptr<TypeAliasType> createType(CXCursor cursor)
     {
-        auto type = new TypeAliasType;
-        type->setType(makeAbsType(clang_getTypedefDeclUnderlyingType(cursor), cursor));
+        auto type = std::make_unique<TypeAliasType>();
+        type->setType(toTypePtr(makeType(clang_getTypedefDeclUnderlyingType(cursor), cursor)));
         return type;
     }
 
-    template <CXCursorKind CK, EnableIf<CK == CXCursor_FunctionDecl> = dummy>
-    AbstractType* createType(CXCursor cursor)
+    template<CXCursorKind CK, EnableIf<CK == CXCursor_FunctionDecl> = dummy>
+    std::unique_ptr<AbstractType> createType(CXCursor cursor)
     {
         auto clangType = clang_getCursorType(cursor);
 
@@ -692,16 +699,18 @@ struct Visitor
     }
 
     template<CXCursorKind CK, EnableIf<CK == CXCursor_LabelStmt> = dummy>
-    AbstractType *createType(CXCursor)
+    std::unique_ptr<DelayedType> createType(CXCursor)
     {
-        auto t = new DelayedType;
+        auto t = std::make_unique<DelayedType>();
         static const IndexedTypeIdentifier id(QStringLiteral("Label"));
         t->setIdentifier(id);
         return t;
     }
 
-    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_FunctionDecl && CK != CXCursor_LabelStmt> = dummy>
-    AbstractType *createType(CXCursor cursor)
+    template<CXCursorKind CK,
+             EnableIf<!CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_FunctionDecl
+                      && CK != CXCursor_LabelStmt> = dummy>
+    std::unique_ptr<AbstractType> createType(CXCursor cursor)
     {
         auto clangType = clang_getCursorType(cursor);
         return makeType(clangType, cursor);
@@ -709,18 +718,19 @@ struct Visitor
 
 #if CINDEX_VERSION_MINOR >= 32
     template<CXTypeKind TK, EnableIf<TK == CXType_Auto> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<AbstractType> createType(CXType type, CXCursor parent)
     {
         auto deducedType = clang_getCanonicalType(type);
         bool isDeduced = deducedType.kind != CXType_Invalid && deducedType.kind != CXType_Auto;
-
-        return !isDeduced ? createDelayedType(type) : makeType(deducedType, parent);
+        if (!isDeduced)
+            return createDelayedType(type);
+        return makeType(deducedType, parent);
     }
 #endif
 
 #if CINDEX_VERSION_MINOR >= 34
     template<CXTypeKind TK, EnableIf<TK == CXType_Elaborated> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    std::unique_ptr<AbstractType> createType(CXType type, CXCursor parent)
     {
         auto underyingType = clang_Type_getNamedType(type);
         return makeType(underyingType, parent);
@@ -728,7 +738,8 @@ struct Visitor
 #endif
 
     /// @param declaration an optional declaration that will be associated with created type
-    AbstractType* createClassTemplateSpecializationType(CXType type, const DeclarationPointer& declaration = {})
+    std::unique_ptr<AbstractType> createClassTemplateSpecializationType(CXType type,
+                                                                        const DeclarationPointer& declaration = {})
     {
         auto numTA = clang_Type_getNumTemplateArguments(type);
         Q_ASSERT(numTA != -1);
@@ -749,18 +760,18 @@ struct Visitor
             ++iter;
         }
 
-        auto cst = new ClassSpecializationType;
+        auto cst = std::make_unique<ClassSpecializationType>();
 
         for (int i = 0; i < numTA; i++) {
             auto argumentType = clang_Type_getTemplateArgumentAsType(type, i);
-            AbstractType::Ptr currentType;
+            std::unique_ptr<AbstractType> currentType;
             if (argumentType.kind == CXType_Invalid) {
                 if(i >= typesStr.size()){
                     currentType = createDelayedType(argumentType);
                 } else {
-                    auto t = new DelayedType;
+                    auto t = std::make_unique<DelayedType>();
                     t->setIdentifier(IndexedTypeIdentifier(typesStr[i]));
-                    currentType = t;
+                    currentType = std::move(t);
                 }
             } else {
                 currentType = makeType(argumentType, typeDecl);
@@ -856,23 +867,12 @@ struct Visitor
 //END setDeclInCtxtData
 
 //BEGIN setDeclType
-    template<CXCursorKind CK>
-    void setDeclType(Declaration *decl, typename IdType<CK>::Type *type)
+    template<typename Type>
+    void setDeclType(Declaration* decl, std::unique_ptr<Type> type)
     {
-        setDeclType<CK>(decl, static_cast<IdentifiedType*>(type));
-        setDeclType<CK>(decl, static_cast<AbstractType*>(type));
-    }
-
-    template<CXCursorKind CK>
-    void setDeclType(Declaration *decl, IdentifiedType *type)
-    {
-        type->setDeclaration(decl);
-    }
-
-    template<CXCursorKind CK>
-    void setDeclType(Declaration *decl, AbstractType *type)
-    {
-        decl->setAbstractType(AbstractType::Ptr(type));
+        if constexpr (std::is_base_of_v<IdentifiedType, Type>)
+            type->setDeclaration(decl);
+        decl->setAbstractType(toTypePtr(std::move(type)));
     }
 //END setDeclType
 
@@ -1398,7 +1398,7 @@ void Visitor::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
     }
 }
 
-AbstractType *Visitor::makeType(CXType type, CXCursor parent)
+std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
 {
 #define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type, parent)
     switch (type.kind) {
@@ -1502,10 +1502,10 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_OCLQueue);
     UseKind(CXType_OCLReserveID);
     case CXType_Invalid:
-        return nullptr;
+        return {};
     default:
         qCWarning(KDEV_CLANG) << "Unhandled type:" << type.kind << clang_getTypeSpelling(type);
-        return nullptr;
+        return {};
     }
 #undef UseKind
 }
