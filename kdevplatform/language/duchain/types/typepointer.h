@@ -22,20 +22,20 @@ class TypePtr
     using Base = QExplicitlySharedDataPointer<T>;
 
 public:
-    TypePtr<T>() = default;
+    TypePtr() = default;
     explicit TypePtr(T* data) noexcept
         : Base(data)
     {
     }
-    TypePtr<T>& operator=(T* data) noexcept
+    TypePtr& operator=(T* data) noexcept
     {
         Base::operator=(data);
         return *this;
     }
-    TypePtr<T>(const TypePtr<T>&) = default;
-    TypePtr<T>& operator=(const TypePtr<T>&) = default;
-    TypePtr<T>(TypePtr<T>&&) = default;
-    TypePtr<T>& operator=(TypePtr<T>&&) = default;
+    TypePtr(const TypePtr&) = default;
+    TypePtr& operator=(const TypePtr&) = default;
+    TypePtr(TypePtr&&) = default;
+    TypePtr& operator=(TypePtr&&) = default;
 
     template<class X>
     TypePtr(const TypePtr<X>& o) noexcept
