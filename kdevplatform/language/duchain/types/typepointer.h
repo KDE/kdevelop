@@ -79,6 +79,7 @@ public:
     template<class U>
     TypePtr<U> staticCast() const
     {
+        Q_ASSERT(!Base::data() || dynamic_cast<U*>(Base::data()));
         return TypePtr<U>(static_cast<U*>(Base::data()));
     }
 };

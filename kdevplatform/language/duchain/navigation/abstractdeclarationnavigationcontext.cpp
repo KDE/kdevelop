@@ -597,8 +597,8 @@ void AbstractDeclarationNavigationContext::htmlClass()
 {
     Q_D(AbstractDeclarationNavigationContext);
 
-    auto klass = d->m_declaration->abstractType().dynamicCast<StructureType>();
-    Q_ASSERT(klass);
+    Q_ASSERT(d->m_declaration->abstractType());
+    auto klass = d->m_declaration->abstractType().staticCast<StructureType>();
 
     ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(klass->declaration(topContext().data()));
     if (classDecl) {
