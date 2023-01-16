@@ -1,7 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevcmake package.
 # Simone Solinas <ksolsim@gmail.com>, 2010, 2010, 2011, 2012, 2013, 2014.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2019, 2020, 2022.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2019, 2020, 2022, 2023.
 #
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
