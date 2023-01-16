@@ -32,12 +32,6 @@ bool TypeAliasType::equals(const AbstractType* _rhs) const
         return false;
     }
 
-    if (static_cast<bool>(d_func()->m_type) != static_cast<bool>(rhs->d_func()->m_type))
-        return false;
-
-    if (!d_func()->m_type)
-        return true;
-
     return d_func()->m_type == rhs->d_func()->m_type;
 }
 AbstractType::Ptr TypeAliasType::type() const
