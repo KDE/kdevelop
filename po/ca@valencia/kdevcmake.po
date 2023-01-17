@@ -26,13 +26,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configuració d'un directori de construcció - %1"
+msgstr "Configureu un directori de construcció - %1"
 
 #: cmakebuilddirchooser.cpp:87
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr "Configuració d'un directori de construcció per a %1"
+msgstr "Configureu un directori de construcció per a %1"
 
 #: cmakebuilddirchooser.cpp:197
 #, kde-format
@@ -315,7 +315,7 @@ msgstr "Tipus de construcció:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
-msgstr "Configuració de l'entorn:"
+msgstr "Configureu l'entorn:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213

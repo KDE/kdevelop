@@ -269,7 +269,7 @@ msgstr "desconegut"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build configuration:"
-msgstr "Configuració de la construcció:"
+msgstr "Configureu la construcció:"
 
 #. i18n: ectx: property (text), widget (QPushButton, addConfig)
 #: custombuildsystemconfigwidget.ui:54

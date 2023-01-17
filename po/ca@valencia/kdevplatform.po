@@ -1225,7 +1225,7 @@ msgstr "Espai de nom"
 #: language/duchain/navigation/abstractnavigationcontext.cpp:514
 #, kde-format
 msgid "Namespace import"
-msgstr "Importació de l'espai de nom"
+msgstr "Importeu l'espai de nom"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:516
 #, kde-format
@@ -6095,7 +6095,7 @@ msgstr "Per: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
-msgstr "Selecció dels fitxers que s'han de publicar"
+msgstr "Seleccioneu els fitxers que s'han de publicar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
