@@ -15,3 +15,12 @@ Dependencies:
 - 'on': ['Linux', 'FreeBSD']
   'require':
     'plasma/libksysguard': '@stable'
+
+Options:
+  cppcheck-ignore-files:
+    # Windows CI nodes are killed by the OOM killer, because cppcheck
+    # uses far in excess of 8GB of RAM when it tries to process file
+    # plugins/clang/tests/files/kdev_ignored/mangle-ms-back-references-pr13207.cpp
+    # Disable checking the directory that contains this file until the cppcheck
+    # bug is fixed and a fixed cppcheck version is installed on CI servers.
+    - plugins/clang/tests/files/kdev_ignored/

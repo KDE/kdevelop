@@ -156,14 +156,20 @@ void TestFiles::cleanup()
 void TestFiles::testFiles_data()
 {
     QTest::addColumn<QString>("fileName");
-    const QString testDirPath = TEST_FILES_DIR;
     auto patterns = QStringList{"*.h", "*.cpp", "*.c", "*.cl"};
     if (isCudaAvailable()) {
         patterns.append("*.cu");
     }
-    const QStringList files = QDir(testDirPath).entryList(patterns, QDir::Files);
-    for (const QString& file : files) {
-        QTest::newRow(file.toUtf8().constData()) << QString(testDirPath + '/' + file);
+
+    const auto mainDir = QStringLiteral(TEST_FILES_DIR);
+    // The kdev_ignored subdirectory contains a .kdev_ignore file and thus is explicitly excluded in KDevelop
+    // project filter. This prevents freezing the background parser of an older unoptimized KDevelop version.
+    const auto ignoredDir = QStringLiteral(TEST_FILES_DIR "/kdev_ignored");
+    for (const auto& testDirPath : {mainDir, ignoredDir}) {
+        const auto files = QDir(testDirPath).entryList(patterns, QDir::Files);
+        for (const auto& file : files) {
+            QTest::newRow(file.toUtf8().constData()) << QString(testDirPath + '/' + file);
+        }
     }
 }
 
