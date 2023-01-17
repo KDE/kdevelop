@@ -100,11 +100,20 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     autoSyncSubAction->setCheckable(true);
     autoSyncSubAction->setChecked(pmviewConfig.readEntry<bool>(syncCurrentDocumentKey, true));
     connect(autoSyncSubAction, &QAction::triggered, this, &ProjectManagerView::toggleSyncCurrentDocument);
-    connect(ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this, [autoSyncSubAction, this] {
-        if (autoSyncSubAction->isChecked()) {
-            locateCurrentDocument();
-        }
-    });
+    connect(ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this,
+            [autoSyncSubAction, this] {
+                // DocumentController::cleanup() closes open documents one by one on shutdown. When the
+                // active document is closed, some other document is activated and the locateCurrentDocument()
+                // call here selects it. Afterwards ProjectTreeView::saveState() saves the selected row.
+                // ProjectTreeView::restoreState() restores the saved row on next KDevelop start.
+                // Don't change selection during shutdown to prevent saving and restoring a random row.
+                // TODO: the issue is general, because many slots are connected to the same signal
+                // IDocumentController::documentActivated. Should this signal be blocked on shutdown
+                // in order to avoid useless work and undesirable side effects?
+                if (autoSyncSubAction->isChecked() && !ICore::self()->shuttingDown()) {
+                    locateCurrentDocument();
+                }
+            });
     syncActionMenu->addAction(autoSyncSubAction);
 
     const auto updateSyncAction = [syncActionMenu, syncSubAction, autoSyncSubAction] {
