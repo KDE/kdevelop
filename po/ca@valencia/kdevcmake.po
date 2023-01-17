@@ -1,24 +1,24 @@
 # Translation of kdevcmake.po to Catalan (Valencian)
-# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# Copyright (C) 2009-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-14 11:29+0000\n"
-"PO-Revision-Date: 2022-09-04 11:52+0200\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2023-01-15 11:19+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -26,13 +26,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configuració d'un directori de construcció - %1"
+msgstr "Configureu un directori de construcció - %1"
 
 #: cmakebuilddirchooser.cpp:87
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
-msgstr "Configuració d'un directori de construcció per a %1"
+msgstr "Configureu un directori de construcció per a %1"
 
 #: cmakebuilddirchooser.cpp:197
 #, kde-format
@@ -236,7 +236,7 @@ msgstr "<br /><em>Documentació a la memòria cau:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "Dades de projecte no vàlides segons la API del fitxer de CMake"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -311,7 +311,7 @@ msgstr "Tipus de construcció:"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Configure environment:"
-msgstr "Configuració de l'entorn:"
+msgstr "Configureu l'entorn:"
 
 #. i18n: ectx: property (toolTip), widget (KDevelop::EnvironmentSelectionWidget, environment)
 #: settings/cmakebuildsettings.ui:213
@@ -425,10 +425,3 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
-
-#~ msgid ""
-#~ "KDevelop has found several possible root directories for your project, "
-#~ "please select the correct one."
-#~ msgstr ""
-#~ "KDevelop ha trobat diversos directoris arrel possibles per al vostre "
-#~ "projecte. Seleccioneu el correcte."

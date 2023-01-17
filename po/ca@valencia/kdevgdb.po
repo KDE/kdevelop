@@ -50,7 +50,7 @@ msgstr "Memòria"
 #, kde-format
 msgctxt "@title:window"
 msgid "Tracing Configuration"
-msgstr "Configuració del traçat"
+msgstr "Configureu el traçat"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, customFormat)
 #: debuggertracingdialog.ui:26

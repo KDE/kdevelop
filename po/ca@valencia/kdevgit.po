@@ -168,7 +168,7 @@ msgstr "Intenta mantindre la llargària de la línia per davall de %1 caràcters
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Name and Email for Git"
-msgstr "Configuració del nom i el correu per a Git"
+msgstr "Configureu el nom i el correu per a Git"
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: gitnameemaildialog.ui:23

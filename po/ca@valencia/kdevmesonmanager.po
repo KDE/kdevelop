@@ -311,7 +311,7 @@ msgstr "Meson"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Configuration"
-msgstr "Configuració del projecte Meson"
+msgstr "Configureu el projecte Meson"
 
 #. i18n: ectx: property (text), widget (QToolButton, b_addDir)
 #. i18n: ectx: property (text), widget (QToolButton, b_rmDir)
@@ -385,7 +385,7 @@ msgstr "Últim"
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
-msgstr "Configuració d'un directori de construcció - %1"
+msgstr "Configureu un directori de construcció - %1"
 
 #: settings/mesonnewbuilddir.cpp:137
 #, kde-format
@@ -546,19 +546,19 @@ msgstr "Projecte"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Meson Project Settings"
-msgstr "Configuració del projecte Meson"
+msgstr "Configureu el projecte Meson"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, MesonRewriterPage)
 #: settings/mesonrewriterpage.ui:14
 #, kde-format
 msgid "Meson project settings"
-msgstr "Configuració del projecte Meson"
+msgstr "Configureu el projecte Meson"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, t_project)
 #: settings/mesonrewriterpage.ui:39
 #, kde-format
 msgid "Project settings"
-msgstr "Configuració del projecte"
+msgstr "Configureu el projecte"
 
 #. i18n: ectx: property (text), widget (QLabel, l_project)
 #: settings/mesonrewriterpage.ui:74

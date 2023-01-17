@@ -118,7 +118,7 @@ msgstr "Interromp la sessió actual"
 #, kde-format
 msgctxt "@title:tab"
 msgid "LLDB Configuration"
-msgstr "Configuració de LLDB"
+msgstr "Configureu LLDB"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
 #: widgets/lldbconfigpage.ui:29
