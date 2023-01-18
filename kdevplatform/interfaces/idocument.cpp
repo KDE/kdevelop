@@ -68,7 +68,16 @@ void IDocument::notifyStateChanged()
 
 void IDocument::notifyActivated()
 {
-    emit core()->documentController()->documentActivated(this);
+    // DocumentController::cleanup() closes open documents one by one on shutdown. When the active document is closed,
+    // another still-open document is activated and this function is called. Emitting the documentActivated signal then
+    // results in useless work, such as UI updates and parsing activated documents with higher priority. It also causes
+    // undesirable side effects, for example, a wrong ProjectTreeView row is selected, then saved and restored on next
+    // KDevelop start. Don't emit the signal while shutting down to speed up shutdown and prevent bugs. cleanup() closes
+    // documents without checking whether they should be saved (Discard mode), so temporary UI inconsistencies caused by
+    // skipped signals should be brief and harmless.
+    if (!core()->shuttingDown()) {
+        emit core()->documentController()->documentActivated(this);
+    }
 }
 
 void IDocument::notifyContentChanged()
