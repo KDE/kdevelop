@@ -39,11 +39,10 @@ public:
     ~StandardOutputView() override;
 
     int standardToolView( KDevelop::IOutputView::StandardToolView view ) override;
-    int registerToolView( const QString& title,
-                          KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
-                          const QIcon& icon = QIcon(),
-                          KDevelop::IOutputView::Options option = ShowItemsButton,
-                          const QList<QAction*>& actionList = QList<QAction*>()) override;
+    int registerToolView(const QByteArray& configSubgroupName, const QString& title,
+                         KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
+                         const QIcon& icon = QIcon(), KDevelop::IOutputView::Options option = ShowItemsButton,
+                         const QList<QAction*>& actionList = QList<QAction*>()) override;
 
     int registerOutputInToolView( int toolViewId, const QString& title,
                                   KDevelop::IOutputView::Behaviours behaviour

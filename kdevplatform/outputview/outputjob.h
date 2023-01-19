@@ -44,6 +44,7 @@ public:
     void setTitle(const QString& title);
 
 protected:
+    /// NOTE: if a standard tool view is not set, a new unshared and unconfigurable tool view is created for the job.
     void setStandardToolView(IOutputView::StandardToolView standard);
     void setToolTitle(const QString& title);
     void setToolIcon(const QIcon& icon);

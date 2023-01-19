@@ -34,6 +34,7 @@
 #include <util/expandablelineedit.h>
 
 #include "outputmodel.h"
+#include "outputwidgetconfig.h"
 #include "toolviewdata.h"
 #include <debug.h>
 
@@ -45,7 +46,7 @@ QString validFilterInputToolTip()
 }
 
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
-    : QWidget( parent )
+    : QWidget(parent)
     , m_tabwidget(nullptr)
     , m_stackwidget(nullptr)
     , data(tvdata)
@@ -57,6 +58,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     , m_focusOnSelect(nullptr)
     , m_filterInput(nullptr)
     , m_filterAction(nullptr)
+    , m_outputWidgetConfig(nullptr)
 {
     setWindowTitle(i18nc("@title:window", "Output View"));
     setWindowIcon(tvdata->icon);
@@ -166,6 +168,35 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
             connect(m_stackwidget, &QStackedWidget::currentChanged,
                     this, &OutputWidget::updateFilter);
         }
+    }
+
+    if (!data->configSubgroupName.isEmpty()
+        && (data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView)) {
+        m_outputWidgetConfig = new OutputWidgetConfig(data->configSubgroupName, data->title, this);
+        connect(m_outputWidgetConfig, &OutputWidgetConfig::settingsChanged, this, [this]() {
+            const auto maxViewCount = m_outputWidgetConfig->maxViewCount();
+            // don't close views when view limit is not enabled
+            if (!maxViewCount.has_value()) {
+                return;
+            }
+            if (data->type & KDevelop::IOutputView::MultipleView) {
+                closeFirstViewsWhileTooMany(*m_tabwidget, *maxViewCount);
+            } else {
+                closeFirstViewsWhileTooMany(*m_stackwidget, *maxViewCount);
+            }
+        });
+
+        QAction* const openConfigAction = KStandardAction::preferences(
+            m_outputWidgetConfig,
+            [this]() {
+                m_outputWidgetConfig->openDialog(this);
+            },
+            this);
+        openConfigAction->setText(
+            i18nc("@action %1: output type, e.g. Build or Run", "Configure %1 Output", data->title));
+        openConfigAction->setShortcut(QKeySequence());
+        openConfigAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        insertAction(separator, openConfigAction);
     }
 
     addActions(data->actionList);
@@ -310,6 +341,30 @@ bool OutputWidget::closeView(const QWidget* view)
     data->plugin->removeOutput(id);
     enableActions();
     return true;
+}
+
+template<class ViewContainer>
+void OutputWidget::closeFirstViewIfTooMany(const ViewContainer& viewContainer)
+{
+    if (!m_outputWidgetConfig) {
+        return;
+    }
+    const auto maxViewCount = m_outputWidgetConfig->maxViewCount();
+    Q_ASSERT(!maxViewCount.has_value() || *maxViewCount > 0);
+    if (maxViewCount.has_value() && viewContainer.count() > *maxViewCount) {
+        closeView(viewContainer.widget(0));
+    }
+}
+
+template<class ViewContainer>
+void OutputWidget::closeFirstViewsWhileTooMany(const ViewContainer& viewContainer, int maxViewCount)
+{
+    Q_ASSERT(maxViewCount > 0);
+    while (viewContainer.count() > maxViewCount) {
+        if (!closeView(viewContainer.widget(0))) {
+            break; // Closing a view usually succeeds. Prevent endless loop if it fails.
+        }
+    }
 }
 
 void OutputWidget::closeActiveView()
@@ -518,10 +573,12 @@ QTreeView* OutputWidget::createListView(int id)
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
                 m_tabwidget->addTab(listview, data->outputdata.value(id)->title);
+                closeFirstViewIfTooMany(*m_tabwidget);
             } else
             {
                 const int index = m_stackwidget->addWidget(listview);
                 m_stackwidget->setCurrentIndex(index);
+                closeFirstViewIfTooMany(*m_stackwidget);
             }
         } else
         {

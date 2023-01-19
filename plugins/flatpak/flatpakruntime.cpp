@@ -44,6 +44,8 @@ static KJob* createExecuteJob(const QStringList &program, const QString &title, 
     process->setJobName(title);
     process->setWorkingDirectory(wd);
     process->setCheckExitCode(checkExitCode);
+    // TODO: call process->setStandardToolView(IOutputView::?); to prevent creating a new tool view for each
+    // job in OutputJob::startOutput(). Such nonstandard and unshared tool views are also not configurable.
     *process << program;
     return process;
 }

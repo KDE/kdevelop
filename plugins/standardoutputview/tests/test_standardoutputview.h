@@ -35,7 +35,6 @@ private:
     KDevelop::UiController* m_controller;
     int toolViewId;
     int outputId[5];
-    static const QString toolViewTitle;
 
 private Q_SLOTS:
     void initTestCase();

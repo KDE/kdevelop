@@ -126,6 +126,8 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
                 auto process = new OutputExecuteJob;
                 process->setExecuteOnHost(true);
                 process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
+                // TODO: call process->setStandardToolView(IOutputView::?); to prevent creating a new tool view for each
+                // job in OutputJob::startOutput(). Such nonstandard and unshared tool views are also not configurable.
                 *process << QStringList{QStringLiteral("docker"), QStringLiteral("build"), QStringLiteral("--tag"), name, dir.toLocalFile()};
                 connect(process, &KJob::finished, this, [name] (KJob* job) {
                     if (job->error() != 0)

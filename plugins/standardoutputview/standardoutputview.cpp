@@ -96,31 +96,38 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     int ret = -1;
     switch( view )
     {
-        case KDevelop::IOutputView::BuildView:
-        {
-            ret = registerToolView( i18nc("@title:window", "Build"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("run-build")), KDevelop::IOutputView::AddFilterAction );
-            break;
-        }
-        case KDevelop::IOutputView::RunView:
-        {
-            ret = registerToolView( i18nc("@title:window", "Run"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("system-run")), KDevelop::IOutputView::AddFilterAction );
-            break;
-        }
-        case KDevelop::IOutputView::DebugView:
-        {
-            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("debug-step-into")), KDevelop::IOutputView::AddFilterAction );
-            break;
-        }
-        case KDevelop::IOutputView::TestView:
-        {
-            ret = registerToolView( i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
-            break;
-        }
-        case KDevelop::IOutputView::VcsView:
-        {
-            ret = registerToolView( i18nc("@title:window", "Version Control"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
-            break;
-        }
+    case KDevelop::IOutputView::BuildView:
+        ret = registerToolView(QByteArrayLiteral("Build"), i18nc("@title:window", "Build"),
+                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("run-build")),
+                               KDevelop::IOutputView::AddFilterAction);
+        break;
+    case KDevelop::IOutputView::RunView:
+        ret = registerToolView(QByteArrayLiteral("Run"), i18nc("@title:window", "Run"),
+                               KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("system-run")),
+                               KDevelop::IOutputView::AddFilterAction);
+        break;
+    case KDevelop::IOutputView::DebugView:
+        ret = registerToolView(QByteArrayLiteral("Debug"), i18nc("@title:window", "Debug"),
+                               KDevelop::IOutputView::MultipleView, QIcon::fromTheme(QStringLiteral("debug-step-into")),
+                               KDevelop::IOutputView::AddFilterAction);
+        break;
+    case KDevelop::IOutputView::TestView:
+        // TODO: pass QByteArrayLiteral("Test") instead of QByteArray() and make the settings work.
+        // The settings are disabled for the Test output tool view, because all Test output views are currently
+        // unclosable and there is only one output tool view option right now: output view number limit, which
+        // automatically closes its views and has no effect if the views are not closable.
+        // AllowUserClose output view behavior is enabled by default, but 3 output jobs - CompileAnalyzeJob,
+        // cppcheck::Job and Heaptrack::Job - disable it by calling `setBehaviours(KDevelop::IOutputView::AutoScroll);`.
+        // 1cd05dd39bb67cbec7ce39a0237b64fb42e5fc95 introduced the first unclosable view in the cppcheck plugin with
+        // no surviving explanation. Other Test output views followed the example later. Ideally all output views should
+        // become closable, if there is no good reason to prevent closing and destroying them.
+        ret = registerToolView(QByteArray(), i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView,
+                               QIcon::fromTheme(QStringLiteral("system-run")));
+        break;
+    case KDevelop::IOutputView::VcsView:
+        ret = registerToolView(QByteArrayLiteral("VersionControl"), i18nc("@title:window", "Version Control"),
+                               KDevelop::IOutputView::HistoryView, QIcon::fromTheme(QStringLiteral("system-run")));
+        break;
     }
 
     Q_ASSERT(ret != -1);
@@ -128,10 +135,9 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     return ret;
 }
 
-int StandardOutputView::registerToolView( const QString& title,
-                                          KDevelop::IOutputView::ViewType type,
-                                          const QIcon& icon, Options option,
-                                          const QList<QAction*>& actionList )
+int StandardOutputView::registerToolView(const QByteArray& configSubgroupName, const QString& title,
+                                         KDevelop::IOutputView::ViewType type, const QIcon& icon, Options option,
+                                         const QList<QAction*>& actionList)
 {
     // try to reuse existing tool view
     for (ToolViewData* d : qAsConst(m_toolViews)) {
@@ -145,6 +151,7 @@ int StandardOutputView::registerToolView( const QString& title,
     qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Registering view" << title << "with type:" << type << "id:" << newid;
     auto* tvdata = new ToolViewData( this );
     tvdata->toolViewId = newid;
+    tvdata->configSubgroupName = configSubgroupName;
     tvdata->type = type;
     tvdata->title = title;
     tvdata->icon = icon;

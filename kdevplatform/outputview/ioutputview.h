@@ -75,6 +75,8 @@ public:
     /**
      * Register a new tool view for output with the given title, behaviour and type.
      * If there already exists a tool view with this title and type return the existing id
+     * @param configSubgroupName the name of the config group used to save settings related to the view.
+     *                           An empty name disables settings for the tool view.
      * @param title the Title to be displayed on the tool view
      * @param type the type of view that should be created
      * @param icon the icon of the tool view
@@ -83,9 +85,9 @@ public:
      * @returns an tool view id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView,
-                                  const QIcon& icon = QIcon(), Options option = ShowItemsButton,
-                                  const QList<QAction*>& actionList = QList<QAction*>()) = 0;
+    virtual int registerToolView(const QByteArray& configSubgroupName, const QString& title, ViewType type = OneView,
+                                 const QIcon& icon = QIcon(), Options option = ShowItemsButton,
+                                 const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given tool view. How this new view is created depends

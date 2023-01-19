@@ -31,6 +31,7 @@ class QToolButton;
 class QTreeView;
 class QWidgetAction;
 class ToolViewData;
+class OutputWidgetConfig;
 
 class OutputWidget : public QWidget, public KDevelop::IToolViewActionListener
 {
@@ -97,6 +98,11 @@ private:
      */
     bool closeView(const QWidget* view);
 
+    template<class ViewContainer>
+    void closeFirstViewIfTooMany(const ViewContainer& viewContainer);
+    template<class ViewContainer>
+    void closeFirstViewsWhileTooMany(const ViewContainer& viewContainer, int maxViewCount);
+
     struct FilteredView {
         QTreeView* view = nullptr;
         QSortFilterProxyModel* proxyModel = nullptr;
@@ -127,6 +133,7 @@ private:
     KToggleAction* m_focusOnSelect;
     KExpandableLineEdit* m_filterInput;
     QWidgetAction* m_filterAction;
+    OutputWidgetConfig* m_outputWidgetConfig;
 };
 
 #endif

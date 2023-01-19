@@ -11,6 +11,7 @@ declare_qt_logging_category(standardoutputview_LOG_PART_SRCS
 set(standardoutputview_LIB_SRCS
     standardoutputview.cpp
     outputwidget.cpp
+    outputwidgetconfig.cpp
     toolviewdata.cpp
     standardoutputviewmetadata.cpp
     ${standardoutputview_LOG_PART_SRCS}

@@ -9,6 +9,7 @@ set(test_standardOutputView_SRCS
     # a) results in that the compiler optimized the data structure differently,
     # b) results in separate staticMetaObject instances for the QObject subclasses, qobject_cast e.g. fails
     ../outputwidget.cpp
+    ../outputwidgetconfig.cpp
     ../toolviewdata.cpp
     ../standardoutputview.cpp
     ${standardoutputview_LOG_PART_SRCS}
