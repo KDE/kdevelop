@@ -114,7 +114,7 @@ void AbstractType::exchangeTypes(TypeExchanger* /*exchanger */)
 
 IndexedType AbstractType::indexed() const
 {
-    return IndexedType(AbstractType::Ptr(const_cast<AbstractType*>(this)));
+    return IndexedType(this);
 }
 
 bool AbstractType::equals(const AbstractType* rhs) const

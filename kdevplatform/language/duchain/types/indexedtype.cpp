@@ -10,7 +10,7 @@
 #include <serialization/referencecounting.h>
 
 namespace KDevelop {
-IndexedType::IndexedType(const AbstractType::Ptr& type)
+IndexedType::IndexedType(const AbstractType* type)
     : m_index(TypeRepository::indexForType(type))
 {
     if (m_index && shouldDoDUChainReferenceCounting(this))

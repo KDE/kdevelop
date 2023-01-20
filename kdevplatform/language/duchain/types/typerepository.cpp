@@ -110,7 +110,7 @@ void initTypeRepository()
     LockedItemRepository::initialize<AbstractType>();
 }
 
-uint TypeRepository::indexForType(const AbstractType::Ptr& input)
+uint TypeRepository::indexForType(const AbstractType* input)
 {
     if (!input)
         return 0;
@@ -121,13 +121,13 @@ uint TypeRepository::indexForType(const AbstractType::Ptr& input)
         });
 #ifdef DEBUG_TYPE_REPOSITORY
     AbstractType::Ptr t = typeForIndex(i);
-    if (!t->equals(input.data())) {
+    if (!t->equals(input)) {
         qCWarning(LANGUAGE) << "found type in repository does not equal source type:" << input->toString() <<
             t->toString();
-        t->equals(input.data());
+        t->equals(input);
     }
 #ifdef ASSERT_ON_PROBLEM
-    Q_ASSERT(t->equals(input.data()));
+    Q_ASSERT(t->equals(input));
     Q_ASSERT(input->equals(t.data()));
 #endif
 #endif

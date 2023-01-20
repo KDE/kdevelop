@@ -26,7 +26,19 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType
 {
 public:
     IndexedType(const IndexedType& rhs);
-    explicit IndexedType(const AbstractType::Ptr& type);
+    /**
+     * Construct an indexed type from the @p type
+     */
+    explicit IndexedType(const AbstractType* type);
+    /**
+     * Construct an indexed type from the data in the @c TypePtr @p type
+     *
+     * NOTE: This is required to ensure we don't call `IndexedType(uint)` with a `TypePtr` casted implicitly to bool.
+     */
+    explicit IndexedType(const AbstractType::Ptr& type)
+        : IndexedType(type.data())
+    {
+    }
     explicit IndexedType(uint index = 0);
 
     ~IndexedType();
