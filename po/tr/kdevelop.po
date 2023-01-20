@@ -12,13 +12,13 @@
 # Uğur Çetin <jnmbk@users.sourceforge.net>, 2008.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:44+0000\n"
-"PO-Revision-Date: 2022-11-22 16:51+0300\n"
+"PO-Revision-Date: 2023-01-19 22:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -740,8 +740,7 @@ msgstr "Sascha Cunz"
 #, kde-format
 msgid "Cleanup and bugfixes for qEditor, AutoMake and much other stuff"
 msgstr ""
-"qEditor ve AutoMake kod temizlemeleri ve hata düzeltmeleri, ve daha birçok "
-"şey"
+"qEditor ve AutoMake kod temizlemeleri ve hata düzeltmeleri ve daha birçok şey"
 
 #: main.cpp:443
 #, kde-format

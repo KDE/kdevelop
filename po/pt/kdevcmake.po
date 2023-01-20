@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-14 11:29+0000\n"
-"PO-Revision-Date: 2022-07-09 13:01+0100\n"
+"PO-Revision-Date: 2023-01-19 02:32+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -231,7 +231,7 @@ msgstr "<br /><em>Documentação em 'Cache':</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "dados inválidos do projecto da API de ficheiros do CMake"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -420,10 +420,3 @@ msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
 msgstr[1] "CTest %2 (%1)"
-
-#~ msgid ""
-#~ "KDevelop has found several possible root directories for your project, "
-#~ "please select the correct one."
-#~ msgstr ""
-#~ "O KDevelop encontrou diferentes raizes para o seu projecto; seleccione "
-#~ "por favor a correcta."
