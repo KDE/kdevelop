@@ -385,8 +385,8 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
         return;
     QModelIndex sourceIndex = index;
     QModelIndex viewIndex = index;
-    auto fvIt = findFilteredView(view);
-    if (fvIt != m_views.end() && fvIt->proxyModel) {
+    const auto fvIt = constFindFilteredView(view);
+    if (fvIt != m_views.cend() && fvIt->proxyModel) {
         auto proxy = fvIt->proxyModel;
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
@@ -434,8 +434,8 @@ void OutputWidget::selectItem(SelectionMode selectionMode)
     eventuallyDoFocus();
 
     auto index = view->currentIndex();
-    auto fvIt = findFilteredView(view);
-    if (fvIt != m_views.end() && fvIt->proxyModel) {
+    const auto fvIt = constFindFilteredView(view);
+    if (fvIt != m_views.cend() && fvIt->proxyModel) {
         auto proxy = fvIt->proxyModel;
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
@@ -521,7 +521,7 @@ QTreeView* OutputWidget::createListView(int id)
                 layout()->addWidget(listview);
             } else
             {
-                listview = m_views.begin().value().view;
+                listview = m_views.cbegin().value().view;
                 newView = false;
             }
         }
@@ -669,16 +669,16 @@ void OutputWidget::outputFilter(const QString& filter)
     }
     proxyModel->setFilterRegularExpression(regex);
 
-    updateFilterInputAppearance(fvIt);
+    updateFilterInputAppearance(constIterator(fvIt));
 }
 
 void OutputWidget::updateFilter(int index)
 {
     QWidget *view = (data->type & KDevelop::IOutputView::MultipleView)
         ? m_tabwidget->widget(index) : m_stackwidget->widget(index);
-    auto fvIt = findFilteredView(qobject_cast<QAbstractItemView*>(view));
+    const auto fvIt = constFindFilteredView(qobject_cast<QAbstractItemView*>(view));
 
-    const QString filterText = fvIt == m_views.end() ? QString{} : fvIt->filter.pattern();
+    const QString filterText = fvIt == m_views.cend() ? QString{} : fvIt->filter.pattern();
     if (filterText.isEmpty()) {
         m_filterInput->clear();
     } else {
@@ -699,19 +699,32 @@ void OutputWidget::setTitle(int outputId, const QString& title)
     }
 }
 
-OutputWidget::FilteredViewIterator OutputWidget::findFilteredView(QAbstractItemView* view)
+auto OutputWidget::constIterator(FilteredViews::iterator it) -> FilteredViews::const_iterator
 {
-    for (auto it = m_views.begin(); it != m_views.end(); ++it) {
-        if (it->view == view) {
-            return it;
-        }
-    }
-    return m_views.end();
+    return static_cast<FilteredViews::const_iterator>(it);
 }
 
-void OutputWidget::updateFilterInputAppearance(FilteredViewIterator currentView)
+template<typename ForwardIt>
+ForwardIt OutputWidget::findFilteredView(ForwardIt first, ForwardIt last, const QAbstractItemView* view)
 {
-    if (currentView == m_views.end() || currentView->filter.isValid()) {
+    return std::find_if(first, last, [view](const FilteredView& filteredView) {
+        return filteredView.view == view;
+    });
+}
+
+auto OutputWidget::findFilteredView(const QAbstractItemView* view) -> FilteredViews::iterator
+{
+    return findFilteredView(m_views.begin(), m_views.end(), view);
+}
+
+auto OutputWidget::constFindFilteredView(const QAbstractItemView* view) const -> FilteredViews::const_iterator
+{
+    return findFilteredView(m_views.cbegin(), m_views.cend(), view);
+}
+
+void OutputWidget::updateFilterInputAppearance(FilteredViews::const_iterator currentView)
+{
+    if (currentView == m_views.cend() || currentView->filter.isValid()) {
         m_filterInput->setPalette(QPalette{});
         m_filterInput->setToolTip(validFilterInputToolTip());
     } else {

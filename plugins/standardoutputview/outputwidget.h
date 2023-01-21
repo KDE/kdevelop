@@ -97,13 +97,18 @@ private:
         /// from always valid (if proxyModel != nullptr) proxyModel->filterRegularExpression().
         QRegularExpression filter;
     };
-    using FilteredViewCollection = QHash<int, FilteredView>;
-    using FilteredViewIterator = FilteredViewCollection::iterator;
+    using FilteredViews = QHash<int, FilteredView>;
 
-    FilteredViewIterator findFilteredView(QAbstractItemView* view);
-    void updateFilterInputAppearance(FilteredViewIterator currentView);
+    static FilteredViews::const_iterator constIterator(FilteredViews::iterator it);
+    template<typename ForwardIt>
+    static ForwardIt findFilteredView(ForwardIt first, ForwardIt last, const QAbstractItemView* view);
 
-    FilteredViewCollection m_views;
+    FilteredViews::iterator findFilteredView(const QAbstractItemView* view);
+    FilteredViews::const_iterator constFindFilteredView(const QAbstractItemView* view) const;
+
+    void updateFilterInputAppearance(FilteredViews::const_iterator currentView);
+
+    FilteredViews m_views;
     QTabWidget* m_tabwidget;
     QStackedWidget* m_stackwidget;
     const ToolViewData* data;
