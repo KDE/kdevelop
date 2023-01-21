@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-14 11:29+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2014-04-23 15:00+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -1910,126 +1910,126 @@ msgid ""
 "\">this article</a> for more information."
 msgstr ""
 
-#: shell/debugcontroller.cpp:114
+#: shell/debugcontroller.cpp:116
 #, fuzzy, kde-format
 #| msgid "Debugger:"
 msgid "Debugger"
 msgstr "除錯器："
 
-#: shell/debugcontroller.cpp:132
+#: shell/debugcontroller.cpp:134
 #, fuzzy, kde-format
 #| msgid "Frame Stack"
 msgctxt "@title:window"
 msgid "Frame Stack"
 msgstr "框架堆疊"
 
-#: shell/debugcontroller.cpp:137
+#: shell/debugcontroller.cpp:139
 #, fuzzy, kde-format
 #| msgid "Breakpoints"
 msgctxt "@title:window"
 msgid "Breakpoints"
 msgstr "中斷點"
 
-#: shell/debugcontroller.cpp:142
+#: shell/debugcontroller.cpp:144
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgctxt "@title:window"
 msgid "Variables"
 msgstr "變數"
 
-#: shell/debugcontroller.cpp:218
+#: shell/debugcontroller.cpp:224
 #, kde-format
 msgid "&Restart"
 msgstr "重新啟動 (&R)"
 
-#: shell/debugcontroller.cpp:219
+#: shell/debugcontroller.cpp:225
 #, kde-format
 msgid "Restart program"
 msgstr "重新開始執行程式"
 
-#: shell/debugcontroller.cpp:220
+#: shell/debugcontroller.cpp:226
 #, kde-format
 msgid "Restarts applications from the beginning."
 msgstr "重新開始執行應用程式。"
 
-#: shell/debugcontroller.cpp:226
+#: shell/debugcontroller.cpp:232
 #, fuzzy, kde-format
 #| msgid "Interrupt"
 msgctxt "@action"
 msgid "Interrupt"
 msgstr "中斷"
 
-#: shell/debugcontroller.cpp:227
+#: shell/debugcontroller.cpp:233
 #, fuzzy, kde-format
 #| msgid "Interrupt application"
 msgctxt "@info:tooltip"
 msgid "Interrupt application"
 msgstr "中斷應用程式"
 
-#: shell/debugcontroller.cpp:228
+#: shell/debugcontroller.cpp:234
 #, fuzzy, kde-format
 #| msgid "Interrupts the debugged process or current debugger command."
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
 msgstr "中斷已除錯的行程或目前執行的除錯器指令。"
 
-#: shell/debugcontroller.cpp:232
+#: shell/debugcontroller.cpp:238
 #, fuzzy, kde-format
 #| msgid "Run to &Cursor"
 msgctxt "@action"
 msgid "Run to &Cursor"
 msgstr "執行到游標處(&C)"
 
-#: shell/debugcontroller.cpp:233
+#: shell/debugcontroller.cpp:239
 #, fuzzy, kde-format
 #| msgid "Run to cursor"
 msgctxt "@info:tooltip"
 msgid "Run to cursor"
 msgstr "執行到游標處"
 
-#: shell/debugcontroller.cpp:234
+#: shell/debugcontroller.cpp:240
 #, fuzzy, kde-format
 #| msgid "Continues execution until the cursor position is reached."
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
 msgstr "繼續執行到游標位置所在。"
 
-#: shell/debugcontroller.cpp:239
+#: shell/debugcontroller.cpp:245
 #, fuzzy, kde-format
 #| msgid "Set E&xecution Position to Cursor"
 msgctxt "@action"
 msgid "Set E&xecution Position to Cursor"
 msgstr "將執行位置設到游標處(&X)"
 
-#: shell/debugcontroller.cpp:240
+#: shell/debugcontroller.cpp:246
 #, fuzzy, kde-format
 #| msgid "Jump to cursor"
 msgctxt "@info:tooltip"
 msgid "Jump to cursor"
 msgstr "跳到游標處"
 
-#: shell/debugcontroller.cpp:241
+#: shell/debugcontroller.cpp:247
 #, fuzzy, kde-format
 #| msgid "Continue execution from the current cursor position."
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
 msgstr "從目前游標位置繼續執行。"
 
-#: shell/debugcontroller.cpp:245
+#: shell/debugcontroller.cpp:251
 #, fuzzy, kde-format
 #| msgid "Step &Over"
 msgctxt "@action"
 msgid "Step &Over"
 msgstr "單步執行(&O)"
 
-#: shell/debugcontroller.cpp:247
+#: shell/debugcontroller.cpp:253
 #, fuzzy, kde-format
 #| msgid "Step over the next line"
 msgctxt "@info:tooltip"
 msgid "Step over the next line"
 msgstr "單步執行到下一行"
 
-#: shell/debugcontroller.cpp:248
+#: shell/debugcontroller.cpp:254
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes one line of source in the current source file. If the source "
@@ -2043,42 +2043,42 @@ msgid ""
 msgstr ""
 "執行一行源碼。如果該行源碼是呼叫函式，則會把整個函式執行完畢後停在下一行。"
 
-#: shell/debugcontroller.cpp:256
+#: shell/debugcontroller.cpp:262
 #, fuzzy, kde-format
 #| msgid "Step over Ins&truction"
 msgctxt "@action"
 msgid "Step over Ins&truction"
 msgstr "單步執行指令(&T)"
 
-#: shell/debugcontroller.cpp:257
+#: shell/debugcontroller.cpp:263
 #, fuzzy, kde-format
 #| msgid "Step over instruction"
 msgctxt "@info:tooltip"
 msgid "Step over instruction"
 msgstr "單步執行指令"
 
-#: shell/debugcontroller.cpp:258
+#: shell/debugcontroller.cpp:264
 #, fuzzy, kde-format
 #| msgid "Steps over the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps over the next assembly instruction."
 msgstr "單步執行到下一個組譯指令。"
 
-#: shell/debugcontroller.cpp:263
+#: shell/debugcontroller.cpp:269
 #, fuzzy, kde-format
 #| msgid "Step &Into"
 msgctxt "@action"
 msgid "Step &Into"
 msgstr "單步跳入(&I)"
 
-#: shell/debugcontroller.cpp:265
+#: shell/debugcontroller.cpp:271
 #, fuzzy, kde-format
 #| msgid "Step into the next statement"
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
 msgstr "單步跳入下一個敘述"
 
-#: shell/debugcontroller.cpp:266
+#: shell/debugcontroller.cpp:272
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes exactly one line of source. If the source line is a call to a "
@@ -2089,42 +2089,42 @@ msgid ""
 "function then execution will stop after the function has been entered."
 msgstr "執行源碼中一行敘述。如果程式碼是呼叫某個函式，則會停在進入函式的點。"
 
-#: shell/debugcontroller.cpp:273
+#: shell/debugcontroller.cpp:279
 #, fuzzy, kde-format
 #| msgid "Step into I&nstruction"
 msgctxt "@action"
 msgid "Step into I&nstruction"
 msgstr "單步跳入指令(&N)"
 
-#: shell/debugcontroller.cpp:274
+#: shell/debugcontroller.cpp:280
 #, fuzzy, kde-format
 #| msgid "Step into instruction"
 msgctxt "@info:tooltip"
 msgid "Step into instruction"
 msgstr "單步跳入指令"
 
-#: shell/debugcontroller.cpp:275
+#: shell/debugcontroller.cpp:281
 #, fuzzy, kde-format
 #| msgid "Steps into the next assembly instruction."
 msgctxt "@info:whatsthis"
 msgid "Steps into the next assembly instruction."
 msgstr "單步跳入下一個組譯指令。"
 
-#: shell/debugcontroller.cpp:279
+#: shell/debugcontroller.cpp:285
 #, fuzzy, kde-format
 #| msgid "Step O&ut"
 msgctxt "@action"
 msgid "Step O&ut"
 msgstr "單步跳出(&U)"
 
-#: shell/debugcontroller.cpp:281
+#: shell/debugcontroller.cpp:287
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Step out of the current function"
 msgstr "單步跳出目前的函式"
 
-#: shell/debugcontroller.cpp:282
+#: shell/debugcontroller.cpp:288
 #, fuzzy, kde-format
 #| msgid ""
 #| "Executes the application until the currently executing function is "
@@ -2141,73 +2141,73 @@ msgstr ""
 "執行應用程式，直到目前的函式執行完畢。除錯器會顯示呼叫該函式的地方。如果是在"
 "最外層的框架（也就是 main()），則這個操作不會發生作用。"
 
-#: shell/debugcontroller.cpp:290
+#: shell/debugcontroller.cpp:296
 #, fuzzy, kde-format
 #| msgid "Toggle Breakpoint"
 msgctxt "@action"
 msgid "Toggle Breakpoint"
 msgstr "切換中斷點"
 
-#: shell/debugcontroller.cpp:291
+#: shell/debugcontroller.cpp:297
 #, kde-format
 msgid "Ctrl+Alt+B"
 msgstr "Ctrl+Alt+B"
 
-#: shell/debugcontroller.cpp:292
+#: shell/debugcontroller.cpp:298
 #, fuzzy, kde-format
 #| msgid "Toggle breakpoint"
 msgctxt "@info:tooltip"
 msgid "Toggle breakpoint"
 msgstr "切換中斷點"
 
-#: shell/debugcontroller.cpp:293
+#: shell/debugcontroller.cpp:299
 #, fuzzy, kde-format
 #| msgid "Toggles the breakpoint at the current line in editor."
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
 msgstr "對編輯器中目前的行切換中斷點。"
 
-#: shell/debugcontroller.cpp:297
+#: shell/debugcontroller.cpp:303
 #, fuzzy, kde-format
 #| msgid "Show Documentation"
 msgctxt "@action"
 msgid "Show Current Line"
 msgstr "顯示文件"
 
-#: shell/debugcontroller.cpp:298
+#: shell/debugcontroller.cpp:304
 #, fuzzy, kde-format
 #| msgid "Step out of the current function"
 msgctxt "@info:tooltip"
 msgid "Show the current execution position"
 msgstr "單步跳出目前的函式"
 
-#: shell/debugcontroller.cpp:299
+#: shell/debugcontroller.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
 msgstr ""
 
-#: shell/debugcontroller.cpp:411
+#: shell/debugcontroller.cpp:417
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "除錯"
 
-#: shell/debugcontroller.cpp:461 shell/runcontroller.cpp:440
+#: shell/debugcontroller.cpp:467 shell/runcontroller.cpp:440
 #, fuzzy, kde-format
 #| msgid "Debug Launch"
 msgctxt "@action"
 msgid "Debug Launch"
 msgstr "除錯啟動"
 
-#: shell/debugcontroller.cpp:463 shell/runcontroller.cpp:443
+#: shell/debugcontroller.cpp:469 shell/runcontroller.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Debug current launch"
 msgstr "除錯目前的啟動"
 
-#: shell/debugcontroller.cpp:464 shell/runcontroller.cpp:444
+#: shell/debugcontroller.cpp:470 shell/runcontroller.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2215,21 +2215,21 @@ msgid ""
 "configuration inside a Debugger."
 msgstr "在除錯器內執行目前作用中的目標，或是目前啟動設定裡指定的程式。"
 
-#: shell/debugcontroller.cpp:467
+#: shell/debugcontroller.cpp:473
 #, fuzzy, kde-format
 #| msgid "&Continue"
 msgctxt "@action"
 msgid "&Continue"
 msgstr "繼續(&C)"
 
-#: shell/debugcontroller.cpp:469
+#: shell/debugcontroller.cpp:475
 #, fuzzy, kde-format
 #| msgid "Continue application execution"
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
 msgstr "繼續執行應用程式"
 
-#: shell/debugcontroller.cpp:470
+#: shell/debugcontroller.cpp:476
 #, fuzzy, kde-format
 #| msgid ""
 #| "Continues the execution of your application in the debugger. This only "

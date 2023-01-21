@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2014-02-27 11:05+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -95,7 +95,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "內部除錯器錯誤"
 
-#: midebugger.cpp:336 midebugsession.cpp:415
+#: midebugger.cpp:336 midebugsession.cpp:413
 #, kde-format
 msgid "Process exited"
 msgstr "行程已離開"
@@ -253,115 +253,115 @@ msgstr "未附加到行程 %1：不能將除錯器本身附加到自己身上。
 msgid "Debugger"
 msgstr "除錯器"
 
-#: midebugjobs.cpp:49
+#: midebugjobs.cpp:84
 #, fuzzy, kde-format
 #| msgid "%1 (uid: %2)"
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1（使用者代碼：%2）"
 
-#: midebugjobs.cpp:73
+#: midebugjobs.cpp:108
 #, fuzzy, kde-format
 #| msgid "Could not find kdesu executable"
 msgid "'%1' is not an executable"
 msgstr "找不到 kdesu 執行檔"
 
-#: midebugjobs.cpp:147
+#: midebugjobs.cpp:166
 #, kde-format
 msgid "Debug core file"
 msgstr "除錯 Core 檔"
 
-#: midebugjobs.cpp:185
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug process %1"
 msgstr "除錯行程 %1"
 
-#: midebugsession.cpp:210
+#: midebugsession.cpp:208
 #, kde-format
 msgid "Running program"
 msgstr "執行程式中"
 
-#: midebugsession.cpp:287
+#: midebugsession.cpp:285
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "附加到行程 %1 中"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:316
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>無法附加除錯器：</b><br />"
 
-#: midebugsession.cpp:328
+#: midebugsession.cpp:326
 #, kde-format
 msgid "Examining core file %1"
 msgstr "檢視 core 檔 %1 中"
 
-#: midebugsession.cpp:400
+#: midebugsession.cpp:398
 #, kde-format
 msgid "Debugger stopped"
 msgstr "除錯器已停止"
 
-#: midebugsession.cpp:420
+#: midebugsession.cpp:418
 #, kde-format
 msgid "Application is running"
 msgstr "應用程式執行中"
 
-#: midebugsession.cpp:425
+#: midebugsession.cpp:423
 #, kde-format
 msgid "Application is paused"
 msgstr "應用程式已暫停"
 
-#: midebugsession.cpp:735
+#: midebugsession.cpp:733
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr "<b>在除錯器未執行時送出了 GDB 指令</b><br/>指令為<br/> %1"
 
-#: midebugsession.cpp:847
+#: midebugsession.cpp:845
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>不合法的除錯器指令</b><br/>%1"
 
-#: midebugsession.cpp:985
+#: midebugsession.cpp:981
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "不正常結束，離開狀態為：%1"
 
-#: midebugsession.cpp:987
+#: midebugsession.cpp:983
 #, kde-format
 msgid "Exited normally"
 msgstr "正常離開"
 
-#: midebugsession.cpp:994
+#: midebugsession.cpp:990
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "因遇到信號 %1 而離開"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1025
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "程式接收到信號 %1（%2）"
 
-#: midebugsession.cpp:1161
+#: midebugsession.cpp:1157
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "佇列中有 %1 個指令\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1158
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
 msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "gdb 已處理 %1 個指令\n"
 
-#: midebugsession.cpp:1163
+#: midebugsession.cpp:1159
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "除錯器狀態：%1\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -372,7 +372,7 @@ msgstr ""
 "目前的指令文字：%2\n"
 "目前的指令原始文字：%3\n"
 
-#: midebugsession.cpp:1242
+#: midebugsession.cpp:1238
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>除錯器錯誤</b><p>除錯器回報了以下的錯誤：<p><tt>%1"

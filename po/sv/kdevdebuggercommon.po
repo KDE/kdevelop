@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2022-08-03 09:56+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -88,7 +88,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Internt fel i avlusaren"
 
-#: midebugger.cpp:336 midebugsession.cpp:415
+#: midebugger.cpp:336 midebugsession.cpp:413
 #, kde-format
 msgid "Process exited"
 msgstr "Processen avslutades"
@@ -235,63 +235,63 @@ msgstr ""
 msgid "Debugger"
 msgstr "Avlusare"
 
-#: midebugjobs.cpp:49
+#: midebugjobs.cpp:84
 #, kde-format
 msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr "%1: %2"
 
-#: midebugjobs.cpp:73
+#: midebugjobs.cpp:108
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr "'%1' är inte ett körbart program"
 
-#: midebugjobs.cpp:147
+#: midebugjobs.cpp:166
 #, kde-format
 msgid "Debug core file"
 msgstr "Avlusa minnesdump"
 
-#: midebugjobs.cpp:185
+#: midebugjobs.cpp:188
 #, kde-format
 msgid "Debug process %1"
 msgstr "Avlusa processen %1"
 
-#: midebugsession.cpp:210
+#: midebugsession.cpp:208
 #, kde-format
 msgid "Running program"
 msgstr "Kör programmet"
 
-#: midebugsession.cpp:287
+#: midebugsession.cpp:285
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Ansluter till processen %1"
 
-#: midebugsession.cpp:318
+#: midebugsession.cpp:316
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Kunde inte ansluta avlusaren:</b><br />"
 
-#: midebugsession.cpp:328
+#: midebugsession.cpp:326
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Undersöker minnesdump %1"
 
-#: midebugsession.cpp:400
+#: midebugsession.cpp:398
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Avlusare stoppad"
 
-#: midebugsession.cpp:420
+#: midebugsession.cpp:418
 #, kde-format
 msgid "Application is running"
 msgstr "Programmet kör"
 
-#: midebugsession.cpp:425
+#: midebugsession.cpp:423
 #, kde-format
 msgid "Application is paused"
 msgstr "Programmet gör paus"
 
-#: midebugsession.cpp:735
+#: midebugsession.cpp:733
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -300,39 +300,39 @@ msgstr ""
 "<b>Kommando till gdb skickat när avlusaren inte kör</b><br>Kommandot är:<br>"
 "%1"
 
-#: midebugsession.cpp:847
+#: midebugsession.cpp:845
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Felaktigt kommando till avlusaren</b><br>%1"
 
-#: midebugsession.cpp:985
+#: midebugsession.cpp:981
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Avslutades med returkoden: %1"
 
-#: midebugsession.cpp:987
+#: midebugsession.cpp:983
 #, kde-format
 msgid "Exited normally"
 msgstr "Avslutade normalt"
 
-#: midebugsession.cpp:994
+#: midebugsession.cpp:990
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Avslutades med signal %1"
 
-#: midebugsession.cpp:1029
+#: midebugsession.cpp:1025
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programmet tog emot signalen %1 (%2)"
 
-#: midebugsession.cpp:1161
+#: midebugsession.cpp:1157
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 kommando i kö\n"
 msgstr[1] "%1 kommandon i kö\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1158
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -340,12 +340,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 kommando behandlas av gdb\n"
 msgstr[1] "%1 kommandon behandlas av gdb\n"
 
-#: midebugsession.cpp:1163
+#: midebugsession.cpp:1159
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Avlusarens status: %1\n"
 
-#: midebugsession.cpp:1166
+#: midebugsession.cpp:1162
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -356,7 +356,7 @@ msgstr ""
 "Nuvarande kommandotext: '%2'\n"
 "Nuvarande kommandots originaltext: '%3'\n"
 
-#: midebugsession.cpp:1242
+#: midebugsession.cpp:1238
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr "<b>Fel i avlusaren</b><p>Avlusaren rapporterade följande fel:<p><tt>%1"
