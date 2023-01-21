@@ -294,21 +294,21 @@ void OutputWidget::removeOutput( int id )
 
 void OutputWidget::closeActiveView()
 {
-    QWidget* widget = m_tabwidget->currentWidget();
-    if( !widget )
+    const auto* const view = m_tabwidget->currentWidget();
+    if (!view) {
         return;
-    const auto ids = m_views.keys();
-    for (int id : ids) {
-        if (m_views.value(id).view == widget)
-        {
-            OutputData* od = data->outputdata.value(id);
-            if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
-            {
-                data->plugin->removeOutput( id );
-            }
-        }
     }
-    enableActions();
+
+    const auto fvIt = constFindFilteredView(static_cast<const QAbstractItemView*>(view));
+    if (fvIt == m_views.cend()) {
+        return;
+    }
+
+    const auto id = fvIt.key();
+    if (data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AllowUserClose) {
+        data->plugin->removeOutput(id);
+        enableActions();
+    }
 }
 
 void OutputWidget::closeOtherViews()
