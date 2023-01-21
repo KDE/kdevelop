@@ -292,22 +292,30 @@ void OutputWidget::removeOutput( int id )
     enableActions();
 }
 
-void OutputWidget::closeActiveView()
+bool OutputWidget::closeView(const QWidget* view)
 {
-    const auto* const view = m_tabwidget->currentWidget();
-    if (!view) {
-        return;
-    }
+    Q_ASSERT(view);
+    Q_ASSERT(qobject_cast<const QAbstractItemView*>(view));
 
     const auto fvIt = constFindFilteredView(static_cast<const QAbstractItemView*>(view));
     if (fvIt == m_views.cend()) {
-        return;
+        return false;
     }
 
     const auto id = fvIt.key();
-    if (data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AllowUserClose) {
-        data->plugin->removeOutput(id);
-        enableActions();
+    if (!(data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AllowUserClose)) {
+        return false;
+    }
+
+    data->plugin->removeOutput(id);
+    enableActions();
+    return true;
+}
+
+void OutputWidget::closeActiveView()
+{
+    if (const auto* view = m_tabwidget->currentWidget()) {
+        closeView(view);
     }
 }
 

@@ -90,6 +90,13 @@ private:
     void eventuallyDoFocus();
     int currentOutputIndex();
 
+    /**
+     * Closes @p view and destroys all associated objects
+     * @param view a nonnull widget in @a m_tabwidget or @a m_stackwidget
+     * @return @c true if the view was closed successfully, @c false otherwise
+     */
+    bool closeView(const QWidget* view);
+
     struct FilteredView {
         QTreeView* view = nullptr;
         QSortFilterProxyModel* proxyModel = nullptr;
