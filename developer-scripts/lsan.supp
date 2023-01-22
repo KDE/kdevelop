@@ -5,3 +5,4 @@ leak:libqoffscreen.so
 leak:QDesktopWidget
 leak:QOpenGLContext::setScreen
 leak:QScroller::grabGesture
+leak:radeonsi_dri.so
