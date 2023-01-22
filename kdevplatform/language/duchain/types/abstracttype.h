@@ -196,7 +196,6 @@ public:
      * */
     virtual uint hash() const;
 
-    ///This can also be called on zero types, those can then be reconstructed from the zero index
     IndexedType indexed() const;
 
     /// Enumeration of major data types.
