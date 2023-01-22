@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-22 00:55+0000\n"
 "PO-Revision-Date: 2014-09-08 22:56+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -89,7 +89,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Belső hibakereső hiba"
 
-#: midebugger.cpp:336 midebugsession.cpp:413
+#: midebugger.cpp:336 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "A folyamat kiléptetve"
@@ -266,17 +266,17 @@ msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:108
+#: midebugjobs.cpp:105
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:166
+#: midebugjobs.cpp:169
 #, kde-format
 msgid "Debug core file"
 msgstr "Magfájl hibakeresése"
 
-#: midebugjobs.cpp:188
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr "A(z) %1 folyamat hibakeresése"
@@ -286,37 +286,37 @@ msgstr "A(z) %1 folyamat hibakeresése"
 msgid "Running program"
 msgstr "Futó program"
 
-#: midebugsession.cpp:285
+#: midebugsession.cpp:295
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Csatolás a(z) %1 folyamathoz"
 
-#: midebugsession.cpp:316
+#: midebugsession.cpp:326
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Nem sikerült csatolni a hibakeresőt:</b><br />"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:336
 #, kde-format
 msgid "Examining core file %1"
 msgstr "A(z) %1 magfájl vizsgálata"
 
-#: midebugsession.cpp:398
+#: midebugsession.cpp:408
 #, kde-format
 msgid "Debugger stopped"
 msgstr "A hibakereső leállítva"
 
-#: midebugsession.cpp:418
+#: midebugsession.cpp:428
 #, kde-format
 msgid "Application is running"
 msgstr "Az alkalmazás fut"
 
-#: midebugsession.cpp:423
+#: midebugsession.cpp:433
 #, kde-format
 msgid "Application is paused"
 msgstr "Az alkalmazás szüneteltetve"
 
-#: midebugsession.cpp:733
+#: midebugsession.cpp:748
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -325,39 +325,39 @@ msgstr ""
 "<b>Gdb parancs lett küldve, amikor a hibakereső nem futott</b><br>A parancs "
 "ez volt:<br> %1"
 
-#: midebugsession.cpp:845
+#: midebugsession.cpp:860
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Érvénytelen hibakereső parancs</b><br>%1"
 
-#: midebugsession.cpp:981
+#: midebugsession.cpp:996
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Kilépett ezzel a visszatérési kóddal: %1"
 
-#: midebugsession.cpp:983
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited normally"
 msgstr "Normálisan lépett ki"
 
-#: midebugsession.cpp:990
+#: midebugsession.cpp:1005
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Kilépett a(z) %1 szignálnál"
 
-#: midebugsession.cpp:1025
+#: midebugsession.cpp:1040
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "A program a következő szignált kapta: %1 (%2)"
 
-#: midebugsession.cpp:1157
+#: midebugsession.cpp:1172
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 parancs a sorban\n"
 msgstr[1] "%1 parancs a sorban\n"
 
-#: midebugsession.cpp:1158
+#: midebugsession.cpp:1173
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -365,12 +365,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 parancsot dolgoz fel a gdb\n"
 msgstr[1] "%1 parancsot dolgoz fel a gdb\n"
 
-#: midebugsession.cpp:1159
+#: midebugsession.cpp:1174
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Hibakereső állapot: %1\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1177
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -381,7 +381,7 @@ msgstr ""
 "Jelenlegi parancs szöveg: „%2”\n"
 "Jelenlegi parancs eredeti szöveg: „%3”\n"
 
-#: midebugsession.cpp:1238
+#: midebugsession.cpp:1253
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""

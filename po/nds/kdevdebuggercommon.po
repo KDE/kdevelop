@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcppdebugger\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-22 00:55+0000\n"
 "PO-Revision-Date: 2012-01-25 22:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -97,7 +97,7 @@ msgctxt "@title:window"
 msgid "Internal Debugger Error"
 msgstr "Intern Fehlersöök-Fehler"
 
-#: midebugger.cpp:336 midebugsession.cpp:413
+#: midebugger.cpp:336 midebugsession.cpp:423
 #, kde-format
 msgid "Process exited"
 msgstr "Perzess verlaten"
@@ -267,17 +267,17 @@ msgctxt "ProjectName: run configuration name"
 msgid "%1: %2"
 msgstr ""
 
-#: midebugjobs.cpp:108
+#: midebugjobs.cpp:105
 #, kde-format
 msgid "'%1' is not an executable"
 msgstr ""
 
-#: midebugjobs.cpp:166
+#: midebugjobs.cpp:169
 #, kde-format
 msgid "Debug core file"
 msgstr "Fehlersöök binnen Karndatei"
 
-#: midebugjobs.cpp:188
+#: midebugjobs.cpp:192
 #, kde-format
 msgid "Debug process %1"
 msgstr "Fehlersöök in Perzess \"%1\""
@@ -287,37 +287,37 @@ msgstr "Fehlersöök in Perzess \"%1\""
 msgid "Running program"
 msgstr "Programm warrt utföhrt"
 
-#: midebugsession.cpp:285
+#: midebugsession.cpp:295
 #, kde-format
 msgid "Attaching to process %1"
 msgstr "Perzess \"%1\" warrt grepen"
 
-#: midebugsession.cpp:316
+#: midebugsession.cpp:326
 #, kde-format
 msgid "<b>Could not attach debugger:</b><br />"
 msgstr "<b>Fehlersöker lett sik nich griepen:</b><br />"
 
-#: midebugsession.cpp:326
+#: midebugsession.cpp:336
 #, kde-format
 msgid "Examining core file %1"
 msgstr "Karndatei \"%1\" warrt bekeken"
 
-#: midebugsession.cpp:398
+#: midebugsession.cpp:408
 #, kde-format
 msgid "Debugger stopped"
 msgstr "Fehlersöker anhollen"
 
-#: midebugsession.cpp:418
+#: midebugsession.cpp:428
 #, kde-format
 msgid "Application is running"
 msgstr "Programm löppt"
 
-#: midebugsession.cpp:423
+#: midebugsession.cpp:433
 #, kde-format
 msgid "Application is paused"
 msgstr "Programm wöör ophollen"
 
-#: midebugsession.cpp:733
+#: midebugsession.cpp:748
 #, kde-format
 msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
@@ -326,39 +326,39 @@ msgstr ""
 "<b>\"gdb\"-Befehl geven, man de Fehlersöker löppt nich.</b><br>De Befehl "
 "weer:<br> %1"
 
-#: midebugsession.cpp:845
+#: midebugsession.cpp:860
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
 msgstr "<b>Leeg Fehlersöök-Befehl</b><br>%1"
 
-#: midebugsession.cpp:981
+#: midebugsession.cpp:996
 #, kde-format
 msgid "Exited with return code: %1"
 msgstr "Mit Utstiegkode %1 afslaten"
 
-#: midebugsession.cpp:983
+#: midebugsession.cpp:998
 #, kde-format
 msgid "Exited normally"
 msgstr "Normaal beendt"
 
-#: midebugsession.cpp:990
+#: midebugsession.cpp:1005
 #, kde-format
 msgid "Exited on signal %1"
 msgstr "Na Signaal %1 verlaten"
 
-#: midebugsession.cpp:1025
+#: midebugsession.cpp:1040
 #, kde-format
 msgid "Program received signal %1 (%2)"
 msgstr "Programm hett Signaal %1 (%2) kregen"
 
-#: midebugsession.cpp:1157
+#: midebugsession.cpp:1172
 #, kde-format
 msgid "1 command in queue\n"
 msgid_plural "%1 commands in queue\n"
 msgstr[0] "1 Befehl in de Reeg\n"
 msgstr[1] "%1 Befehlen in de Reeg\n"
 
-#: midebugsession.cpp:1158
+#: midebugsession.cpp:1173
 #, kde-format
 msgctxt "Only the 0 and 1 cases need to be translated"
 msgid "1 command being processed by gdb\n"
@@ -366,12 +366,12 @@ msgid_plural "%1 commands being processed by gdb\n"
 msgstr[0] "1 Befehl warrt vun \"gdb\" afarbeidt\n"
 msgstr[1] "%1 Befehlen warrt vun \"gdb\" afarbeidt\n"
 
-#: midebugsession.cpp:1159
+#: midebugsession.cpp:1174
 #, kde-format
 msgid "Debugger state: %1\n"
 msgstr "Fehlersöker-Status: %1\n"
 
-#: midebugsession.cpp:1162
+#: midebugsession.cpp:1177
 #, kde-format
 msgid ""
 "Current command class: '%1'\n"
@@ -382,7 +382,7 @@ msgstr ""
 "Aktuell Befehltext: \"%2\"\n"
 "Aktuell Befehl-Orginaaltext: \"%3\"\n"
 
-#: midebugsession.cpp:1238
+#: midebugsession.cpp:1253
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
 msgstr ""
