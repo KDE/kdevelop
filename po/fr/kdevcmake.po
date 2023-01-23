@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-14 11:29+0000\n"
+"POT-Creation-Date: 2023-01-23 00:55+0000\n"
 "PO-Revision-Date: 2023-01-14 19:10+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -248,7 +248,33 @@ msgstr "Données de projet « API »  non valables dans le fichier « CMake 
 msgid "CMake Content Page"
 msgstr "Page de contenu de CMake"
 
-#: cmakemanager.cpp:642
+#: cmakemanager.cpp:650
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to configure project '%1' (error message: %2). As a result, "
+#| "KDevelop's code understanding will likely be broken.\n"
+#| "\n"
+#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
+#| "are correct, and KDevelop is configured to use the correct CMake version "
+#| "and settings. Then right-click the project item in the projects tool view "
+#| "and click 'Reload'."
+msgid ""
+"Configured project '%1' with outdated CMake data. As a result, KDevelop's "
+"code understanding may be wrong.\n"
+"\n"
+"To fix this issue, please right-click the project item in the projects tool "
+"view and click 'Reload'."
+msgstr ""
+"Impossible de configurer le projet « %1 » (message d'erreur : %2). Par "
+"conséquent, il est probable que la compréhension du code par KDevelop soit "
+"incorrecte.\n"
+"\n"
+"Pour corriger ce problème, assurez-vous que les fichiers CMakeLists.txt du "
+"projet soient corrects et que KDevelop soit configuré pour utiliser la bonne "
+"version et les bons paramètres de CMake. Effectuez ensuite un clic droit sur "
+"l'élément du projet dans la vue projets et cliquez sur « Recharger »."
+
+#: cmakemanager.cpp:661
 #, kde-format
 msgid ""
 "Failed to configure project '%1' (error message: %2). As a result, "
