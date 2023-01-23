@@ -314,6 +314,7 @@ bool OutputWidget::closeView(const QWidget* view)
 
 void OutputWidget::closeActiveView()
 {
+    Q_ASSERT(m_tabwidget);
     if (const auto* view = m_tabwidget->currentWidget()) {
         closeView(view);
     }
@@ -321,6 +322,7 @@ void OutputWidget::closeActiveView()
 
 void OutputWidget::closeOtherViews()
 {
+    Q_ASSERT(m_tabwidget);
     QWidget* widget = m_tabwidget->currentWidget();
     if (!widget)
         return;
