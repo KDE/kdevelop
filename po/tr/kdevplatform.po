@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-22 00:55+0000\n"
-"PO-Revision-Date: 2022-12-23 20:43+0300\n"
+"PO-Revision-Date: 2023-01-23 20:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1547,7 +1547,7 @@ msgid ""
 "KDevelop.\n"
 "The project has to be closed."
 msgstr ""
-"<b>%1</b> projesinin taban klasörü silinmiş veya KDevelop'un dışına "
+"<b>%1</b> projesinin taban klasörü silinmiş veya K Geliştir'un dışına "
 "taşınmış.\n"
 "Proje kapatılmalı."
 
@@ -1781,8 +1781,9 @@ msgid ""
 msgstr ""
 "Çökme, önbellekteki verinin bozulmasından kaynaklanmış olabilir.\n"
 "\n"
-"KDevelop'un önbelleği temizlemesini istiyorsanız Temizle düğmesine, çökmenin "
-"kaynağının başka bir yer olduğundan eminseniz Sürdür düğmesine tıklayın."
+"K Geliştir'un önbelleği temizlemesini istiyorsanız Temizle düğmesine, "
+"çökmenin kaynağının başka bir yer olduğundan eminseniz Sürdür düğmesine "
+"tıklayın."
 
 #: serialization/itemrepositoryregistry.cpp:81
 #, kde-format
@@ -2197,7 +2198,7 @@ msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
 "Do you want to open it as plain text?"
 msgstr ""
-"KDevelop, %2 türündeki '%1' dosyası için düzenleyiciyi bulamadı.\n"
+"K Geliştir, %2 türündeki '%1' dosyası için düzenleyiciyi bulamadı.\n"
 "Düz metin dosyası olarak açmak istiyor musunuz?"
 
 #: shell/documentcontroller.cpp:316
@@ -2773,7 +2774,7 @@ msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
-"Bir projeyi açmak için yapı sistemi dosyası, KDevelop projesi veya bir "
+"Bir projeyi açmak için yapı sistemi dosyası, K Geliştir projesi veya bir "
 "klasör açın"
 
 #: shell/openprojectdialog.cpp:136 shell/openprojectdialog.cpp:156
@@ -3106,10 +3107,11 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
-"Var olan bir KDevelop projesi açın veya başka bir projeyi KDevelop'a içe "
-"aktarın. Bu girdi, bir KDevelop proje dosyasının seçilebilmesini veya bir "
-"var olan dizinin KDevelop içinde açılabilmesini sağlar. Henüz bir KDevelop "
-"proje dosyası olmayan var olan bir dizini açarken bu dosya oluşturulacaktır."
+"Var olan bir K Geliştir projesi açın veya başka bir projeyi K Geliştir'a içe "
+"aktarın. Bu girdi, bir K Geliştir proje dosyasının seçilebilmesini veya bir "
+"var olan dizinin K Geliştir içinde açılabilmesini sağlar. Henüz bir K "
+"Geliştir proje dosyası olmayan var olan bir dizini açarken bu dosya "
+"oluşturulacaktır."
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3129,7 +3131,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
-"Kullanıcıyı, proje getirme ve KDevelop'a içe aktarma konusunda kullanıcıyı "
+"Kullanıcıyı, proje getirme ve K Geliştir'a içe aktarma konusunda kullanıcıyı "
 "yönlendirir."
 
 #: shell/projectcontroller.cpp:586
@@ -3650,7 +3652,7 @@ msgstr "Yeni Oturum Başlat"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr "Boş bir oturumla yeni bir KDevelop örneği başlat"
+msgstr "Boş bir oturumla yeni bir K Geliştir örneği başlat"
 
 #: shell/sessioncontroller.cpp:268
 #, kde-format
@@ -3810,8 +3812,8 @@ msgid ""
 "KDevelop's functionality.</p>"
 msgstr ""
 "<p>Arka plan ayrıştırıcısını etkinleştirir veya kapatır.<br>Emin değilseniz "
-"etkinleştirin. Arka plan ayrıştırıcısını kapatmak KDevelop'un işlevselliğini "
-"önemli ölçüde etkiler.</p>"
+"etkinleştirin. Arka plan ayrıştırıcısını kapatmak K Geliştir'un "
+"işlevselliğini önemli ölçüde etkiler.</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
@@ -4137,7 +4139,7 @@ msgstr ""
 "yoğunluğuna bağlı olarak seçili düzenleyici temasına uyum sağlayacaktır. "
 "Renkler üzerinde tam denetime iye olmak istiyorsanız renk kaynağı olarak "
 "düzenleyici temasını kullanabilirsiniz. Sonrasında, Düzenleyici  &gt; Renk "
-"Temaları &gt; Vurgulama Metin Biçemleri &gt; KDevelop/Anlamsal Renkler "
+"Temaları &gt; Vurgulama Metin Biçemleri &gt; K Geliştir/Anlamsal Renkler "
 "altından renklere ince ayar çekebilirsiniz.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
@@ -4419,7 +4421,7 @@ msgid ""
 "may\n"
 "        be slower."
 msgstr ""
-"Eğer bu seçenek ayarlanmışsa KDevelop var olan yapı\n"
+"Eğer bu seçenek ayarlanmışsa K Geliştir var olan yapı\n"
 "        sisteminde bulunan bütün kodu uygun dil desteği parçalarına\n"
 "        ayrıştırmak için programlar. Bu daha karmaşık bir destektir; ancak\n"
 "        daha yavaş olabilir."

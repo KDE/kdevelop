@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-22 00:55+0000\n"
-"PO-Revision-Date: 2023-01-07 08:18+0100\n"
+"PO-Revision-Date: 2023-01-23 06:36+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4095,14 +4095,14 @@ msgstr "შედომები"
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Warnings and Errors"
-msgstr ""
+msgstr "გაფრთხილებები და შეცდომები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:319
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Hints, Warnings and Errors"
-msgstr ""
+msgstr "მინიშნებები, გაფრთხილებები და შეცდომები"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
@@ -4131,7 +4131,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Project Parsing"
-msgstr ""
+msgstr "პროექტის დამუშავება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KPluralHandlingSpinBox, kcfg_minFilesForSimplifiedParsing)
@@ -4398,7 +4398,7 @@ msgstr "ნიმუშები"
 #: shell/settings/templateconfig.cpp:44
 #, kde-format
 msgid "Configure Templates"
-msgstr ""
+msgstr "შაბლონების მორგება"
 
 #: shell/settings/templatepage.cpp:28
 #, kde-format
@@ -4418,7 +4418,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Clone Template"
-msgstr ""
+msgstr "შაბლონის კლონირება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, UiConfig)
 #: shell/settings/uiconfig.ui:14 shell/settings/uipreferences.cpp:45
@@ -5146,7 +5146,7 @@ msgstr ""
 #: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Number of threads to use"
-msgstr ""
+msgstr "გამოყენებადი ნაკადების რაოდენობა"
 
 #: util/duchainify/main.cpp:279
 #, kde-format

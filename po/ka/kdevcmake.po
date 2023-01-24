@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-23 00:55+0000\n"
-"PO-Revision-Date: 2022-09-12 09:38+0200\n"
+"PO-Revision-Date: 2023-01-23 06:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -227,7 +227,7 @@ msgstr "<br /><em>ქეშის დოკუმენტაცია:</em> %1\
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "cmake-ის ფაილის API-ის პროექტის მონაცემები არასწორია"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format

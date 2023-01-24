@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014, 2015.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-22 00:55+0000\n"
-"PO-Revision-Date: 2022-10-20 12:14+0300\n"
+"PO-Revision-Date: 2023-01-23 20:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #: dialogs/processselection.cpp:28
 #, kde-format
@@ -117,7 +117,7 @@ msgid ""
 "without KDevelop and report a bug.<br>"
 msgstr ""
 "<b>Hata ayıklayıcı çöktü.</b><p>Hata ayıklama süreci '%1', çöktü.<br>Bu "
-"yüzden hata ayıklama oturumu sonlandırıldı.<br>Çöküşü KDevelop dışında "
+"yüzden hata ayıklama oturumu sonlandırıldı.<br>Çöküşü K Geliştir dışında "
 "yinelemeye ve bir hata raporu girmeye çalışın.<br>"
 
 #: midebugger.cpp:363
@@ -168,7 +168,7 @@ msgstr "<b>Sürece iliştir</b><p>Hata ayıklayıcıyı bir sürece iliştirir.<
 #: midebuggerplugin.cpp:139
 #, kde-format
 msgid "KDevelop (%1) - %2"
-msgstr "KDevelop (%1) - %2"
+msgstr "K Geliştir (%1) - %2"
 
 #: midebuggerplugin.cpp:213
 #, kde-format
@@ -538,7 +538,7 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
-"KDevelop tarafından işletilen iç komutların gösterimini denetler.<br>Bu "
+"K Geliştir tarafından işletilen iç komutların gösterimini denetler.<br>Bu "
 "seçenek, yalnızca ilerideki komutları etkileyecektir; zaten çalıştırılmış "
 "olan komutların çıktı görüntüsünü değiştirmeyecektir."
 

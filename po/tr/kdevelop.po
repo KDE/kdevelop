@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:44+0000\n"
-"PO-Revision-Date: 2023-01-19 22:40+0300\n"
+"PO-Revision-Date: 2023-01-23 20:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -152,7 +152,7 @@ msgstr "Kod"
 #: kdevideextension.cpp:47
 #, kde-format
 msgid "KDevelop Project Files"
-msgstr "KDevelop Proje Dosyaları"
+msgstr "K Geliştir Proje Dosyaları"
 
 #: main.cpp:85
 #, kde-format
@@ -186,17 +186,17 @@ msgstr ""
 #: main.cpp:378
 #, kde-format
 msgid "KDevelop"
-msgstr "KDevelop"
+msgstr "K Geliştir"
 
 #: main.cpp:380
 #, kde-format
 msgid "The KDevelop Integrated Development Environment"
-msgstr "KDevelop Tümleşik Geliştirme Ortamı"
+msgstr "K Geliştir Tümleşik Geliştirme Ortamı"
 
 #: main.cpp:381
 #, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
-msgstr "Telif hakkı 1999-%1, KDevelop geliştiricileri"
+msgstr "Telif hakkı 1999-%1, K Geliştir geliştiricileri"
 
 #: main.cpp:384
 #, kde-format
@@ -755,7 +755,7 @@ msgstr "Ruby dili için sanatsal çalışmalar"
 #: main.cpp:466
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
-msgstr "Verilen adla KDevelop'u yeni bir oturum ile başlat."
+msgstr "Verilen adla K Geliştir'u yeni bir oturum ile başlat."
 
 #: main.cpp:469
 #, kde-format
@@ -763,7 +763,7 @@ msgid ""
 "Open KDevelop with the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"KDevelop'u verilen oturumla başlat.\n"
+"K Geliştir'u verilen oturumla başlat.\n"
 "Oturumu özet veya ad belirterek açabilirsiniz."
 
 #: main.cpp:473
@@ -794,7 +794,7 @@ msgstr "Kullanılabilir oturumları listele ve çık."
 #: main.cpp:483
 #, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr "KDevelop'u aç ve verilen <depo URL>'sinden projeyi getir."
+msgstr "K Geliştir'u aç ve verilen <depo URL>'sinden projeyi getir."
 
 #: main.cpp:486
 #, kde-format
@@ -802,7 +802,7 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
-"KDevelop'u aç ve verilen projeyi yükle. <proje>, bir .kdev4 dosyası veya "
+"K Geliştir'u aç ve verilen projeyi yükle. <proje>, bir .kdev4 dosyası veya "
 "dizin yolu olabilir."
 
 #: main.cpp:489
@@ -812,7 +812,7 @@ msgid ""
 "The executable that should be debugged must follow - including arguments.\n"
 "Example: kdevelop --debug gdb myapp --foo bar"
 msgstr ""
-"Belirtilen hata ayıklayıcı ile KDevelop içinde bir uygulamanın hatalarını "
+"Belirtilen hata ayıklayıcı ile K Geliştir içinde bir uygulamanın hatalarını "
 "ayıklamayı başlatır.\n"
 "Hata ayıklaması yapılacak yürütülebilir, şu argümanları içermelidir.\n"
 "Örnek: kdevelop --debug gdb myapp --foo bar"
@@ -899,7 +899,7 @@ msgstr "%1 çalıştırıcısı bulunamadı"
 
 #: plasma/applet/package/contents/ui/kdevelopsessions.qml:55
 msgid "KDevelop Sessions"
-msgstr "KDevelop Oturumları"
+msgstr "K Geliştir Oturumları"
 
 #: plasma/applet/package/contents/ui/kdevelopsessions.qml:75
 msgid "Arbitrary String Which Says Something"
@@ -908,14 +908,14 @@ msgstr "Bir Şeyler Anlatan İsteğe Bağlı Dizi"
 #: plasma/runner/kdevelopsessions.cpp:24
 #, kde-format
 msgid "Finds KDevelop sessions matching :q:."
-msgstr ":q: ile eşleşen KDevelop oturumlarını bulur."
+msgstr ":q: ile eşleşen K Geliştir oturumlarını bulur."
 
 #: plasma/runner/kdevelopsessions.cpp:28
 #, kde-format
 msgid "Lists all the KDevelop editor sessions in your account."
-msgstr "Hesabınızdaki tüm KDevelop oturumlarını listeler."
+msgstr "Hesabınızdaki tüm K Geliştir oturumlarını listeler."
 
 #: plasma/runner/kdevelopsessions.cpp:102
 #, kde-format
 msgid "Open KDevelop Session"
-msgstr "KDevelop Oturumu Aç"
+msgstr "K Geliştir Oturumu Aç"
