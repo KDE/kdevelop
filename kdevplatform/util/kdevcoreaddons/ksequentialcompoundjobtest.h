@@ -22,7 +22,15 @@ public:
         Q_EMIT started(this);
     }
 
+    void emitInfoMessage(const QString &info)
+    {
+        Q_EMIT infoMessage(this, info);
+    }
+
     using KJob::emitResult;
+    using KJob::setError;
+    using KJob::setErrorText;
+    using KJob::setPercent;
 
 Q_SIGNALS:
     void started(KJob *job);
@@ -37,6 +45,19 @@ private Q_SLOTS:
     void runZeroJobs();
     void runOneJob();
     void runTwoJobs();
+
+    void addRemoveClearSubjob_data();
+    void addRemoveClearSubjob();
+    void addClearSubjobs();
+
+    void subjobPercentChanged();
+
+    void abortOnSubjobError();
+    void disableAbortOnSubjobError_data();
+    void disableAbortOnSubjobError();
+
+    void finishWrongSubjob_data();
+    void finishWrongSubjob();
 };
 
 #endif // KSEQUENTIALCOMPOUNDJOBTEST_H
