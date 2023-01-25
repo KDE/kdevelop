@@ -36,6 +36,34 @@ Q_SIGNALS:
     void started(KJob *job);
 };
 
+class KillableTestJob : public TestJob
+{
+    Q_OBJECT
+public:
+    explicit KillableTestJob()
+    {
+        setCapabilities(Killable);
+    }
+
+    void setKillingSucceeds(bool succeeds)
+    {
+        m_killingSucceeds = succeeds;
+    }
+
+Q_SIGNALS:
+    void killed(bool successfully);
+
+protected:
+    bool doKill() override
+    {
+        Q_EMIT killed(m_killingSucceeds);
+        return m_killingSucceeds;
+    }
+
+private:
+    bool m_killingSucceeds = true;
+};
+
 class KSequentialCompoundJobTest : public QObject
 {
     Q_OBJECT
@@ -58,6 +86,17 @@ private Q_SLOTS:
 
     void finishWrongSubjob_data();
     void finishWrongSubjob();
+
+    void killUnstartedCompoundJob_data();
+    void killUnstartedCompoundJob();
+    void killFinishedCompoundJob_data();
+    void killFinishedCompoundJob();
+
+    void killRunningCompoundJob();
+    void killingSubjobFails();
+
+    void killRunningCompoundJobRepeatedly_data();
+    void killRunningCompoundJobRepeatedly();
 };
 
 #endif // KSEQUENTIALCOMPOUNDJOBTEST_H

@@ -14,6 +14,9 @@
 #include <QStandardPaths>
 #include <QTest>
 
+#include <memory>
+#include <vector>
+
 using namespace KDevCoreAddons;
 
 class PublicSequentialCompoundJob : public KSequentialCompoundJob
@@ -39,6 +42,29 @@ struct JobSpy {
     QSignalSpy finished;
     QSignalSpy result;
 };
+
+struct KillableTestJobSpy : public JobSpy {
+    explicit KillableTestJobSpy(KillableTestJob *job)
+        : JobSpy(job)
+        , started(job, &KillableTestJob::started)
+        , killed(job, &KillableTestJob::killed)
+        , job(job)
+    {
+    }
+
+    QSignalSpy started;
+    QSignalSpy killed;
+    QPointer<KillableTestJob> job;
+};
+
+std::vector<std::unique_ptr<KillableTestJobSpy>> generateKillableTestJobSpies(int subjobCount)
+{
+    std::vector<std::unique_ptr<KillableTestJobSpy>> jobSpies;
+    for (int j = 0; j < subjobCount; ++j) {
+        jobSpies.push_back(std::make_unique<KillableTestJobSpy>(new KillableTestJob));
+    }
+    return jobSpies;
+}
 
 void KSequentialCompoundJobTest::initTestCase()
 {
@@ -647,6 +673,344 @@ void KSequentialCompoundJobTest::finishWrongSubjob()
     QTest::qWait(1);
     QVERIFY(!subjob1);
     QVERIFY(!compoundJob);
+}
+
+void KSequentialCompoundJobTest::killUnstartedCompoundJob_data()
+{
+    QTest::addColumn<int>("subjobCount");
+    QTest::addColumn<KJob::KillVerbosity>("killVerbosity");
+    for (int subjobCount : {0, 1, 4}) {
+        QTest::addRow("kill-quietly-%d-subjobs", subjobCount) << subjobCount << KJob::Quietly;
+        QTest::addRow("emit-result-%d-subjobs", subjobCount) << subjobCount << KJob::EmitResult;
+    }
+}
+
+void KSequentialCompoundJobTest::killUnstartedCompoundJob()
+{
+    QPointer compoundJob(new KSimpleSequentialCompoundJob);
+    JobSpy compoundSpy(compoundJob);
+    QVERIFY(compoundJob->capabilities() & KJob::Killable);
+
+    QFETCH(const int, subjobCount);
+    auto subjobSpies = generateKillableTestJobSpies(subjobCount);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(compoundJob->addSubjob(spy->job));
+    }
+
+    QCOMPARE(compoundSpy.finished.count(), 0);
+    QFETCH(const KJob::KillVerbosity, killVerbosity);
+    QVERIFY(compoundJob->kill(killVerbosity));
+    QCOMPARE(compoundSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.result.count(), killVerbosity == KJob::EmitResult);
+    QCOMPARE(compoundJob->error(), KJob::KilledJobError);
+
+    QVERIFY(compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(spy->job);
+        // no need to kill unstarted subjobs, just destroy them
+        QCOMPARE(spy->job->error(), 0);
+        QCOMPARE(spy->job->errorText(), "");
+    }
+    QTest::qWait(1);
+    QVERIFY(!compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(!spy->job);
+        QCOMPARE(spy->started.count(), 0);
+        QCOMPARE(spy->killed.count(), 0); // no need to kill unstarted subjobs, just destroy them
+        QCOMPARE(spy->finished.count(), 1);
+        QCOMPARE(spy->result.count(), 0);
+    }
+}
+
+void KSequentialCompoundJobTest::killFinishedCompoundJob_data()
+{
+    killUnstartedCompoundJob_data();
+}
+
+void KSequentialCompoundJobTest::killFinishedCompoundJob()
+{
+    QPointer compoundJob(new KSimpleSequentialCompoundJob);
+    JobSpy compoundSpy(compoundJob);
+    QVERIFY(compoundJob->capabilities() & KJob::Killable);
+
+    QFETCH(const int, subjobCount);
+    auto subjobSpies = generateKillableTestJobSpies(subjobCount);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(compoundJob->addSubjob(spy->job));
+    }
+
+    compoundJob->start();
+    for (std::size_t i = 0; i < subjobSpies.size(); ++i) {
+        QCOMPARE(compoundSpy.finished.count(), 0);
+        auto &spy = subjobSpies[i];
+        QCOMPARE(spy->started.count(), 1);
+        QCOMPARE(spy->finished.count(), 0);
+        QCOMPARE(spy->result.count(), 0);
+        spy->job->emitResult();
+        QCOMPARE(spy->started.count(), 1);
+        QCOMPARE(spy->finished.count(), 1);
+        QCOMPARE(spy->result.count(), 1);
+    }
+    QCOMPARE(compoundSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.result.count(), 1);
+
+    QFETCH(const KJob::KillVerbosity, killVerbosity);
+    QVERIFY(compoundJob->kill(killVerbosity));
+    QCOMPARE(compoundSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.result.count(), 1);
+    QCOMPARE(compoundJob->error(), 0);
+    QCOMPARE(compoundJob->errorText(), "");
+
+    QVERIFY(compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(spy->job);
+        QCOMPARE(spy->job->error(), 0);
+        QCOMPARE(spy->job->errorText(), "");
+    }
+    QTest::qWait(1);
+    QVERIFY(!compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(!spy->job);
+        QCOMPARE(spy->started.count(), 1);
+        QCOMPARE(spy->killed.count(), 0);
+        QCOMPARE(spy->finished.count(), 1);
+        QCOMPARE(spy->result.count(), 1);
+    }
+}
+
+void KSequentialCompoundJobTest::killRunningCompoundJob()
+{
+    QPointer compoundJob(new KSimpleSequentialCompoundJob);
+    JobSpy compoundSpy(compoundJob);
+    QVERIFY(compoundJob->capabilities() & KJob::Killable);
+
+    auto subjobSpies = generateKillableTestJobSpies(3);
+    QCOMPARE(subjobSpies.size(), 3);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(compoundJob->addSubjob(spy->job));
+    }
+    const auto &firstSubjobSpy = *subjobSpies.front();
+
+    compoundJob->start();
+    QCOMPARE(firstSubjobSpy.started.count(), 1);
+    QCOMPARE(firstSubjobSpy.finished.count(), 0);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+
+    QVERIFY(compoundJob->kill());
+    QCOMPARE(firstSubjobSpy.started.count(), 1);
+    QCOMPARE(firstSubjobSpy.killed.count(), 1);
+    QCOMPARE(firstSubjobSpy.killed.constLast().constFirst(), true);
+    QCOMPARE(firstSubjobSpy.finished.count(), 1);
+    QCOMPARE(firstSubjobSpy.result.count(), 0); // kill the running subjob quietly
+    QCOMPARE(compoundSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.result.count(), 0);
+
+    QCOMPARE(firstSubjobSpy.job->error(), KJob::KilledJobError);
+    QCOMPARE(compoundJob->error(), KJob::KilledJobError);
+    QCOMPARE(compoundJob->errorText(), firstSubjobSpy.job->errorText());
+
+    QVERIFY(compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(spy->job);
+        if (spy.get() != &firstSubjobSpy) {
+            QCOMPARE(spy->job->error(), 0);
+            QCOMPARE(spy->job->errorText(), "");
+        }
+    }
+    QTest::qWait(1);
+    QVERIFY(!compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(!spy->job);
+        const bool isFirstSubjob = spy.get() == &firstSubjobSpy;
+        QCOMPARE(spy->started.count(), isFirstSubjob); // don't start subjobs once killed
+        QCOMPARE(spy->killed.count(), isFirstSubjob); // no need to kill unstarted subjobs, just destroy them
+        QCOMPARE(spy->finished.count(), 1);
+        QCOMPARE(spy->result.count(), 0);
+    }
+}
+
+void KSequentialCompoundJobTest::killingSubjobFails()
+{
+    QPointer compoundJob(new PublicSequentialCompoundJob);
+    JobSpy compoundSpy(compoundJob);
+    QVERIFY(compoundJob->capabilities() & KJob::Killable);
+
+    auto subjobSpies = generateKillableTestJobSpies(7);
+    QCOMPARE(subjobSpies.size(), 7);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(compoundJob->addSubjob(spy->job));
+    }
+    const auto &firstSubjobSpy = *subjobSpies.front();
+    firstSubjobSpy.job->setKillingSucceeds(false);
+
+    compoundJob->start();
+    QCOMPARE(firstSubjobSpy.started.count(), 1);
+    QCOMPARE(firstSubjobSpy.finished.count(), 0);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+
+    QVERIFY(!compoundJob->kill());
+    QCOMPARE(firstSubjobSpy.started.count(), 1);
+    QCOMPARE(firstSubjobSpy.killed.count(), 1);
+    QCOMPARE(firstSubjobSpy.killed.constLast().constFirst(), false);
+    QCOMPARE(firstSubjobSpy.finished.count(), 0);
+    QCOMPARE(firstSubjobSpy.result.count(), 0);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+    QCOMPARE(compoundJob->subjobs().count(), subjobSpies.size());
+
+    QCOMPARE(firstSubjobSpy.job->error(), 0);
+    QCOMPARE(firstSubjobSpy.job->errorText(), "");
+    QCOMPARE(compoundJob->error(), 0);
+    QCOMPARE(compoundJob->errorText(), "");
+
+    // unstarted subjobs are simply removed when finished, their errors are ignored
+
+    const auto &finishedSubjobSpy = *subjobSpies[3];
+    finishedSubjobSpy.job->emitResult();
+    QCOMPARE(finishedSubjobSpy.started.count(), 0);
+    QCOMPARE(finishedSubjobSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+    QCOMPARE(compoundJob->subjobs().count(), subjobSpies.size() - 1);
+    QVERIFY(!compoundJob->subjobs().contains(finishedSubjobSpy.job));
+
+    const auto &errorSubjobSpy = *subjobSpies[1];
+    errorSubjobSpy.job->setError(142);
+    errorSubjobSpy.job->emitResult();
+    QCOMPARE(errorSubjobSpy.started.count(), 0);
+    QCOMPARE(errorSubjobSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+    QCOMPARE(compoundJob->subjobs().count(), subjobSpies.size() - 2);
+    QVERIFY(!compoundJob->subjobs().contains(errorSubjobSpy.job));
+
+    const auto &killedSubjobSpy = *subjobSpies[4];
+    QVERIFY(killedSubjobSpy.job->kill());
+    QCOMPARE(killedSubjobSpy.started.count(), 0);
+    QCOMPARE(killedSubjobSpy.finished.count(), 1);
+    QCOMPARE(killedSubjobSpy.result.count(), 0);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+    QCOMPARE(compoundJob->subjobs().count(), subjobSpies.size() - 3);
+    QVERIFY(!compoundJob->subjobs().contains(killedSubjobSpy.job));
+
+    QCOMPARE(compoundJob->error(), 0);
+    QCOMPARE(compoundJob->errorText(), "");
+
+    firstSubjobSpy.job->emitResult();
+    QCOMPARE(firstSubjobSpy.started.count(), 1);
+    QCOMPARE(firstSubjobSpy.killed.count(), 1);
+    QCOMPARE(firstSubjobSpy.finished.count(), 1);
+    QCOMPARE(firstSubjobSpy.result.count(), 1);
+    QCOMPARE(compoundSpy.finished.count(), 1);
+    QCOMPARE(compoundSpy.result.count(), 1);
+
+    QCOMPARE(firstSubjobSpy.job->error(), 0);
+    // the compound job was killed, so it should report KilledJobError, even if the killed subjob does not
+    QCOMPARE(compoundJob->error(), KJob::KilledJobError);
+    QCOMPARE(compoundJob->errorText(), firstSubjobSpy.job->errorText());
+
+    QVERIFY(compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(spy->job);
+    }
+    QTest::qWait(1);
+    QVERIFY(!compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(!spy->job);
+        const bool isFirstSubjob = spy.get() == &firstSubjobSpy;
+        QCOMPARE(spy->started.count(), isFirstSubjob); // don't start subjobs once killed
+        QCOMPARE(spy->killed.count(), isFirstSubjob || spy.get() == &killedSubjobSpy);
+        QCOMPARE(spy->finished.count(), 1);
+        QCOMPARE(spy->result.count(), isFirstSubjob || spy.get() == &finishedSubjobSpy || spy.get() == &errorSubjobSpy);
+    }
+}
+
+void KSequentialCompoundJobTest::killRunningCompoundJobRepeatedly_data()
+{
+    QTest::addColumn<int>("killAttempts");
+    QTest::addColumn<int>("successfulKillAttempts");
+    QTest::addColumn<bool>("destroyKilledSubjob");
+    for (int killAttempts = 1; killAttempts <= 3; ++killAttempts) {
+        for (int successfulKillAttempts = 0; successfulKillAttempts <= killAttempts; ++successfulKillAttempts) {
+            QTest::addRow("attempts-%d-successful-%d", killAttempts, successfulKillAttempts) << killAttempts << successfulKillAttempts << false;
+            if (successfulKillAttempts == 0) {
+                QTest::addRow("attempts-%d-successful-%d-destroy-killed-subjob", killAttempts, successfulKillAttempts)
+                    << killAttempts << successfulKillAttempts << true;
+            }
+        }
+    }
+}
+
+void KSequentialCompoundJobTest::killRunningCompoundJobRepeatedly()
+{
+    QPointer compoundJob(new KSimpleSequentialCompoundJob);
+    JobSpy compoundSpy(compoundJob);
+    QVERIFY(compoundJob->capabilities() & KJob::Killable);
+
+    // The number of subjobs is independent from and unrelated to the number of kill attempts.
+    auto subjobSpies = generateKillableTestJobSpies(3);
+    QCOMPARE(subjobSpies.size(), 3);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(compoundJob->addSubjob(spy->job));
+    }
+    const auto &firstSubjobSpy = *subjobSpies.front();
+
+    compoundJob->start();
+    QCOMPARE(firstSubjobSpy.started.count(), 1);
+    QCOMPARE(firstSubjobSpy.finished.count(), 0);
+    QCOMPARE(compoundSpy.finished.count(), 0);
+
+    QFETCH(const int, killAttempts);
+    QFETCH(const int, successfulKillAttempts);
+    for (int attempt = 0; attempt < killAttempts; ++attempt) {
+        const bool killingSucceeds = attempt >= killAttempts - successfulKillAttempts;
+        firstSubjobSpy.job->setKillingSucceeds(killingSucceeds);
+        QCOMPARE(compoundJob->kill(), killingSucceeds);
+        // KJob::kill() calls KSequentialCompoundJob::doKill() only if the job has not finished,
+        // i.e. if the previous killing failed.
+        const int subjobKillCount = std::min(attempt, killAttempts - successfulKillAttempts) + 1;
+
+        QCOMPARE(firstSubjobSpy.started.count(), 1);
+        QCOMPARE(firstSubjobSpy.killed.count(), subjobKillCount);
+        if (attempt < subjobKillCount) {
+            QCOMPARE(firstSubjobSpy.killed.at(attempt).constFirst(), killingSucceeds);
+        }
+        QCOMPARE(firstSubjobSpy.finished.count(), killingSucceeds);
+        QCOMPARE(firstSubjobSpy.result.count(), 0); // kill the running subjob quietly
+        QCOMPARE(compoundSpy.finished.count(), killingSucceeds);
+        QCOMPARE(compoundSpy.result.count(), 0);
+
+        const auto error = killingSucceeds ? KJob::KilledJobError : KJob::NoError;
+        QCOMPARE(firstSubjobSpy.job->error(), error);
+        QCOMPARE(compoundJob->error(), error);
+    }
+
+    QFETCH(const bool, destroyKilledSubjob);
+    if (destroyKilledSubjob) {
+        delete firstSubjobSpy.job;
+        QVERIFY(compoundJob);
+        QCOMPARE(compoundSpy.result.count(), 1);
+    } else if (successfulKillAttempts == 0) {
+        delete compoundJob;
+        QVERIFY(!compoundJob);
+        QCOMPARE(compoundSpy.result.count(), 0);
+    } else {
+        QVERIFY(compoundJob);
+        QCOMPARE(compoundSpy.result.count(), 0); // killed quietly in the loop above
+    }
+
+    QCOMPARE(compoundSpy.finished.count(), 1);
+    QTest::qWait(1);
+    QVERIFY(!compoundJob);
+    for (const auto &spy : subjobSpies) {
+        QVERIFY(!spy->job);
+        const bool isFirstSubjob = spy.get() == &firstSubjobSpy;
+        QCOMPARE(spy->started.count(), isFirstSubjob); // don't start subjobs once killed
+        if (isFirstSubjob) {
+            QVERIFY(spy->killed.count() <= killAttempts);
+        } else {
+            QCOMPARE(spy->killed.count(), 0);
+        }
+        QCOMPARE(spy->finished.count(), 1);
+        QCOMPARE(spy->result.count(), 0);
+    }
 }
 
 QTEST_GUILESS_MAIN(KSequentialCompoundJobTest)
