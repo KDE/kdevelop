@@ -117,7 +117,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     for (MakeJob* makeJob : makeJobs) {
         if(item && makeJob->item() && makeJob->item()->project() == item->project() && makeJob->commandType() == c) {
             qCDebug(KDEV_MAKEBUILDER) << "killing running make job, due to new started build on same project:" << makeJob;
-            makeJob->kill(KJob::EmitResult);
+            makeJob->kill();
         }
     }
 

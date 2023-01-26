@@ -90,7 +90,7 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
     for (NinjaJob* ninjaJob : ninjaJobs) {
         if (item && ninjaJob->item() && ninjaJob->item()->project() == item->project() && ninjaJob->commandType() == commandType) {
             qCDebug(NINJABUILDER) << "killing running ninja job, due to new started build on same project:" << ninjaJob;
-            ninjaJob->kill(KJob::EmitResult);
+            ninjaJob->kill();
         }
     }
 

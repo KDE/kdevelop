@@ -98,7 +98,7 @@ bool Plugin::isRunning()
 void Plugin::killCppcheck()
 {
     if (m_job) {
-        m_job->kill(KJob::EmitResult);
+        m_job->kill();
     }
 }
 

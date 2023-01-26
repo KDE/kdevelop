@@ -226,7 +226,7 @@ bool CompileAnalyzer::isRunning() const
 void CompileAnalyzer::killJob()
 {
     if (m_job) {
-        m_job->kill(KJob::EmitResult);
+        m_job->kill();
     }
 }
 

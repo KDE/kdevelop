@@ -99,6 +99,8 @@ void OutputJob::outputViewRemoved(int toolViewId, int id)
         // might be used in composite jobs and that one depends
         // on result being emitted to know whether a subjob
         // is done.
+        // NOTE: ExecuteCompositeJob no longer needs the result signal, but this class is widely used.
+        // After more than ten years of emitting result here, other code may now rely on this behavior.
         kill( KJob::EmitResult );
     }
 }

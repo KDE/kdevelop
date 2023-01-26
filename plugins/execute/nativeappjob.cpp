@@ -161,11 +161,11 @@ void NativeAppJob::start()
             case killAllInstances:
                 for (auto & job : currentJobs) {
                     if (job)
-                        job->kill(EmitResult);
+                        job->kill();
                 }
                 break;
             default: // cancel starting a new job
-                kill(EmitResult);
+                kill();
                 return;
         }
     }
