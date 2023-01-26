@@ -48,9 +48,11 @@ MIDebugJobBase<JobBase>::MIDebugJobBase(MIDebuggerPlugin* plugin, QObject* paren
 template<class JobBase>
 MIDebugJobBase<JobBase>::~MIDebugJobBase()
 {
-    // Don't print m_session unconditionally, because it can be already destroyed if this job is finished.
+    // Don't print m_session unconditionally, because it can be already destroyed.
     qCDebug(DEBUGGERCOMMON) << "destroying debug job" << this;
-    if (!JobBase::isFinished()) {
+    // If this job is destroyed before it starts, m_session can be already destroyed even if this job is not finished.
+    // For example, this occurs when the user starts debugging and immediately exits KDevelop.
+    if (m_session && !JobBase::isFinished()) {
         qCDebug(DEBUGGERCOMMON) << "debug job destroyed before it finished, stopping debugger of" << m_session;
         m_session->stopDebugger();
     }

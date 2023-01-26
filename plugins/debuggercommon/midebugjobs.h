@@ -12,6 +12,8 @@
 
 #include <outputview/outputjob.h>
 
+#include <QPointer>
+
 class IExecutePlugin;
 namespace KDevelop
 {
@@ -35,7 +37,7 @@ protected:
     void done();
     bool doKill() override;
 
-    MIDebugSession* m_session;
+    QPointer<MIDebugSession> m_session;
 };
 
 class MIDebugJob : public MIDebugJobBase<KDevelop::OutputJob>
