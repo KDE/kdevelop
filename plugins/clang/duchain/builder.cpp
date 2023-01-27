@@ -68,14 +68,17 @@ bool jsonTestRun()
 CXCursor findEmbeddedTypeAlias(CXCursor aliasTemplate)
 {
     auto result = clang_getNullCursor();
-    clang_visitChildren(aliasTemplate, [] (CXCursor cursor, CXCursor, CXClientData data) {
-        if (clang_getCursorKind(cursor) == CXCursor_TypeAliasDecl) {
-            auto res = reinterpret_cast<CXCursor*>(data);
-            *res = cursor;
-            return CXChildVisit_Break;
-        }
-        return CXChildVisit_Continue;
-    }, &result);
+    clang_visitChildren(
+        aliasTemplate,
+        [](CXCursor cursor, CXCursor, CXClientData data) {
+            if (clang_getCursorKind(cursor) == CXCursor_TypeAliasDecl) {
+                auto res = reinterpret_cast<CXCursor*>(data);
+                *res = cursor;
+                return CXChildVisit_Break;
+            }
+            return CXChildVisit_Continue;
+        },
+        &result);
     return result;
 }
 
@@ -226,63 +229,62 @@ struct DeclType;
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isInClass)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isInClass)>::type>
 {
     using Type = Declaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
-struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CK == CXCursor_MacroDefinition>::type>
+struct DeclType<CK, isDefinition, isInClass, typename std::enable_if<CK == CXCursor_MacroDefinition>::type>
 {
     using Type = MacroDefinition;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevForwardDeclaration(CK, isDefinition)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevForwardDeclaration(CK, isDefinition)>::type>
 {
     using Type = ForwardDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevClassDeclaration(CK, isDefinition)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevClassDeclaration(CK, isDefinition)>::type>
 {
     using Type = ClassDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevClassFunctionDeclaration(CK, isInClass)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevClassFunctionDeclaration(CK, isInClass)>::type>
 {
     using Type = ClassFunctionDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevFunctionDeclaration(CK, isDefinition, isInClass)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevFunctionDeclaration(CK, isDefinition, isInClass)>::type>
 {
     using Type = FunctionDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevFunctionDefinition(CK, isDefinition, isInClass)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevFunctionDefinition(CK, isDefinition, isInClass)>::type>
 {
     using Type = FunctionDefinition;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
 {
     using Type = NamespaceAliasDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
-    typename std::enable_if<CursorKindTraits::isKDevClassMemberDeclaration(CK, isInClass)>::type>
+                typename std::enable_if<CursorKindTraits::isKDevClassMemberDeclaration(CK, isInClass)>::type>
 {
     using Type = ClassMemberDeclaration;
 };
@@ -333,33 +335,29 @@ struct CurrentContext
 //BEGIN Visitor
 struct Visitor
 {
-    explicit Visitor(CXTranslationUnit tu, CXFile file,
-                     const IncludeFileContexts& includes, const bool update);
+    explicit Visitor(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update);
 
     std::unique_ptr<AbstractType> makeType(CXType type, CXCursor parent);
 
     //BEGIN dispatch*
-    template<CXCursorKind CK,
-      Decision IsInClass = CursorKindTraits::isInClass(CK),
-      EnableIf<IsInClass == Decision::Maybe> = dummy>
+    template<CXCursorKind CK, Decision IsInClass = CursorKindTraits::isInClass(CK),
+             EnableIf<IsInClass == Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent);
 
-    template<CXCursorKind CK,
-        Decision IsInClass = CursorKindTraits::isInClass(CK),
-        Decision IsDefinition = CursorKindTraits::isDefinition(CK),
-        EnableIf<IsDefinition == Decision::Maybe && IsInClass != Decision::Maybe> = dummy>
+    template<CXCursorKind CK, Decision IsInClass = CursorKindTraits::isInClass(CK),
+             Decision IsDefinition = CursorKindTraits::isDefinition(CK),
+             EnableIf<IsDefinition == Decision::Maybe && IsInClass != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent);
 
-    template<CXCursorKind CK,
-        Decision IsInClass = CursorKindTraits::isInClass(CK),
-        Decision IsDefinition = CursorKindTraits::isDefinition(CK),
-        EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
+    template<CXCursorKind CK, Decision IsInClass = CursorKindTraits::isInClass(CK),
+             Decision IsDefinition = CursorKindTraits::isDefinition(CK),
+             EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent);
 
     CXChildVisitResult dispatchTypeAliasTemplate(CXCursor cursor, CXCursor parent)
     {
         return CursorKindTraits::isClass(clang_getCursorKind(parent)) ? buildTypeAliasTemplateDecl<true>(cursor)
-            : buildTypeAliasTemplateDecl<false>(cursor);
+                                                                      : buildTypeAliasTemplateDecl<false>(cursor);
     }
 
     template<CXTypeKind TK>
@@ -374,9 +372,9 @@ struct Visitor
         }
         return kdevType;
     }
-//BEGIN dispatch*
+    //BEGIN dispatch*
 
-//BEGIN build*
+    //BEGIN build*
     template<CXCursorKind CK, class DeclType, bool hasContext>
     CXChildVisitResult buildDeclaration(CXCursor cursor);
 
@@ -391,9 +389,9 @@ struct Visitor
     CXChildVisitResult buildCXXBaseSpecifier(CXCursor cursor);
     CXChildVisitResult buildParmDecl(CXCursor cursor);
 
-//END build*
+    //END build*
 
-//BEGIN create*
+    //BEGIN create*
     template<CXCursorKind CK, class DeclType>
     DeclType* createDeclarationCommon(CXCursor cursor, const Identifier& id)
     {
@@ -452,7 +450,7 @@ struct Visitor
     }
 
     template<CXCursorKind CK, class DeclType>
-    Declaration* createDeclaration(CXCursor cursor, const Identifier& id, DUContext *context)
+    Declaration* createDeclaration(CXCursor cursor, const Identifier& id, DUContext* context)
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         auto type = createType<CK>(cursor);
@@ -499,7 +497,8 @@ struct Visitor
         if (CK == CXCursor_CXXMethod) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
             // only import the semantic parent if it differs from the lexical parent
-            if (!clang_Cursor_isNull(semParent) && !clang_equalCursors(semParent, clang_getCursorLexicalParent(cursor))) {
+            if (!clang_Cursor_isNull(semParent)
+                && !clang_equalCursors(semParent, clang_getCursorLexicalParent(cursor))) {
                 auto semParentDecl = findDeclaration(semParent);
                 if (semParentDecl) {
                     contextImportDecl(context, semParentDecl);
@@ -545,7 +544,10 @@ struct Visitor
     std::unique_ptr<ArrayType> createType(CXType type, CXCursor parent)
     {
         auto arr = std::make_unique<ArrayType>();
-        arr->setDimension((TK == CXType_IncompleteArray || TK == CXType_VariableArray || TK == CXType_DependentSizedArray) ? 0 : clang_getArraySize(type));
+        arr->setDimension(
+            (TK == CXType_IncompleteArray || TK == CXType_VariableArray || TK == CXType_DependentSizedArray)
+                ? 0
+                : clang_getArraySize(type));
         arr->setElementType(toTypePtr(makeType(clang_getArrayElementType(type), parent)));
         return arr;
     }
@@ -599,8 +601,9 @@ struct Visitor
         auto t = std::make_unique<StructureType>();
         if (decl) {
             t->setDeclaration(decl.data());
-        } else {    // fallback, at least give the spelling to the user
-            t->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString()))));
+        } else { // fallback, at least give the spelling to the user
+            t->setDeclarationId(DeclarationId(
+                IndexedQualifiedIdentifier(QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString()))));
         }
         return t;
     }
@@ -651,7 +654,8 @@ struct Visitor
         auto oldType = type;
 
         type = clang_getCanonicalType(type);
-        bool isElaboratedType = type.kind != CXType_FunctionProto && type.kind != CXType_FunctionNoProto && type.kind != CXType_Unexposed && type.kind != CXType_Invalid && type.kind != CXType_Record;
+        bool isElaboratedType = type.kind != CXType_FunctionProto && type.kind != CXType_FunctionNoProto
+            && type.kind != CXType_Unexposed && type.kind != CXType_Invalid && type.kind != CXType_Record;
         if (!isElaboratedType) {
             return createDelayedType(oldType);
         }
@@ -766,7 +770,7 @@ struct Visitor
             auto argumentType = clang_Type_getTemplateArgumentAsType(type, i);
             std::unique_ptr<AbstractType> currentType;
             if (argumentType.kind == CXType_Invalid) {
-                if(i >= typesStr.size()){
+                if (i >= typesStr.size()) {
                     currentType = createDelayedType(argumentType);
                 } else {
                     auto t = std::make_unique<DelayedType>();
@@ -796,17 +800,17 @@ struct Visitor
         return cst;
     }
 
-//END create*
+    //END create*
 
-//BEGIN setDeclData
+    //BEGIN setDeclData
     template<CXCursorKind CK>
-    void setDeclData(CXCursor cursor, Declaration *decl, bool setComment = true) const;
+    void setDeclData(CXCursor cursor, Declaration* decl, bool setComment = true) const;
 
     template<CXCursorKind CK>
     void setDeclData(CXCursor cursor, MacroDefinition* decl) const;
 
     template<CXCursorKind CK>
-    void setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const;
+    void setDeclData(CXCursor cursor, ClassMemberDeclaration* decl) const;
 
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)> = dummy>
     void setDeclData(CXCursor cursor, ClassDeclaration* decl) const;
@@ -821,17 +825,17 @@ struct Visitor
     void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const;
 
     template<CXCursorKind CK>
-    void setDeclData(CXCursor cursor, FunctionDeclaration *decl, bool setComment = true) const;
+    void setDeclData(CXCursor cursor, FunctionDeclaration* decl, bool setComment = true) const;
 
     template<CXCursorKind CK>
-    void setDeclData(CXCursor cursor, FunctionDefinition *decl) const;
+    void setDeclData(CXCursor cursor, FunctionDefinition* decl) const;
 
     template<CXCursorKind CK>
-    void setDeclData(CXCursor cursor, NamespaceAliasDeclaration *decl) const;
+    void setDeclData(CXCursor cursor, NamespaceAliasDeclaration* decl) const;
 
-//END setDeclData
+    //END setDeclData
 
-//BEGIN setDeclInCtxtData
+    //BEGIN setDeclInCtxtData
     template<CXCursorKind CK>
     void setDeclInCtxtData(CXCursor, Declaration*)
     {
@@ -839,7 +843,7 @@ struct Visitor
     }
 
     template<CXCursorKind CK>
-    void setDeclInCtxtData(CXCursor cursor, ClassFunctionDeclaration *decl)
+    void setDeclInCtxtData(CXCursor cursor, ClassFunctionDeclaration* decl)
     {
         // HACK to retrieve function-constness
         // This looks like a bug in Clang -- In theory setTypeModifiers should take care of setting the const modifier
@@ -855,7 +859,7 @@ struct Visitor
     }
 
     template<CXCursorKind CK>
-    void setDeclInCtxtData(CXCursor cursor, FunctionDefinition *def)
+    void setDeclInCtxtData(CXCursor cursor, FunctionDefinition* def)
     {
         setDeclInCtxtData<CK>(cursor, static_cast<FunctionDeclaration*>(def));
 
@@ -864,9 +868,9 @@ struct Visitor
             def->setDeclaration(decl.data());
         }
     }
-//END setDeclInCtxtData
+    //END setDeclInCtxtData
 
-//BEGIN setDeclType
+    //BEGIN setDeclType
     template<typename Type>
     void setDeclType(Declaration* decl, std::unique_ptr<Type> type)
     {
@@ -874,14 +878,14 @@ struct Visitor
             type->setDeclaration(decl);
         decl->setAbstractType(toTypePtr(std::move(type)));
     }
-//END setDeclType
+    //END setDeclType
 
     template<CXTypeKind TK>
     void setTypeModifiers(CXType type, AbstractType* kdevType) const;
     void setTypeSize(CXType type, AbstractType* kdevType) const;
 
     const CXFile m_file;
-    const IncludeFileContexts &m_includes;
+    const IncludeFileContexts& m_includes;
 
     DeclarationPointer findDeclaration(CXCursor cursor) const;
     void setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const;
@@ -890,7 +894,7 @@ struct Visitor
     /// At these location offsets (cf. @ref clang_getExpansionLocation) we encountered macro expansions
     QSet<unsigned int> m_macroExpansionLocations;
     mutable QHash<CXCursor, DeclarationPointer> m_cursorToDeclarationCache;
-    CurrentContext *m_parentContext;
+    CurrentContext* m_parentContext;
 
     const bool m_update;
 };
@@ -923,9 +927,8 @@ void Visitor::setTypeModifiers(CXType type, AbstractType* kdevType) const
     if (TK == CXType_SChar) {
         modifiers |= AbstractType::SignedModifier;
     }
-    if (TK == CXType_UChar || TK == CXType_UInt || TK == CXType_UShort
-        || TK == CXType_UInt128 || TK == CXType_ULong || TK == CXType_ULongLong)
-    {
+    if (TK == CXType_UChar || TK == CXType_UInt || TK == CXType_UShort || TK == CXType_UInt128 || TK == CXType_ULong
+        || TK == CXType_ULongLong) {
         modifiers |= AbstractType::UnsignedModifier;
     }
     kdevType->setModifiers(modifiers);
@@ -938,7 +941,6 @@ void Visitor::setTypeSize(CXType type, AbstractType* kdevType) const
         // clang_Type_getSizeOf is unstable, see https://bugs.kde.org/show_bug.cgi?id=431391
         return;
     }
-
 
     if (kdevType->whichType() == AbstractType::TypeFunction)
         return;
@@ -961,14 +963,12 @@ void Visitor::setTypeSize(CXType type, AbstractType* kdevType) const
 
 //BEGIN dispatchCursor
 
-template<CXCursorKind CK, Decision IsInClass,
-         EnableIf<IsInClass == Decision::Maybe>>
+template<CXCursorKind CK, Decision IsInClass, EnableIf<IsInClass == Decision::Maybe>>
 CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
 {
     const bool decision = CursorKindTraits::isClass(clang_getCursorKind(parent));
-    return decision ?
-        dispatchCursor<CK, Decision::True, CursorKindTraits::isDefinition(CK)>(cursor, parent) :
-        dispatchCursor<CK, Decision::False, CursorKindTraits::isDefinition(CK)>(cursor, parent);
+    return decision ? dispatchCursor<CK, Decision::True, CursorKindTraits::isDefinition(CK)>(cursor, parent)
+                    : dispatchCursor<CK, Decision::False, CursorKindTraits::isDefinition(CK)>(cursor, parent);
 }
 
 template<CXCursorKind CK, Decision IsInClass, Decision IsDefinition,
@@ -978,9 +978,8 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
     IF_DEBUG(clangDebug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
 
     const bool isDefinition = clang_isCursorDefinition(cursor);
-    return isDefinition ?
-        dispatchCursor<CK, IsInClass, Decision::True>(cursor, parent) :
-        dispatchCursor<CK, IsInClass, Decision::False>(cursor, parent);
+    return isDefinition ? dispatchCursor<CK, IsInClass, Decision::True>(cursor, parent)
+                        : dispatchCursor<CK, IsInClass, Decision::False>(cursor, parent);
 }
 
 template<CXCursorKind CK, Decision IsInClass, Decision IsDefinition,
@@ -992,8 +991,7 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
     // We may end up visiting the same cursor twice in some cases
     // see discussion on https://git.reviewboard.kde.org/r/119526/
     // TODO: Investigate why this is happening in libclang
-    if ((CursorKindTraits::isClass(CK) || CK == CXCursor_EnumDecl) &&
-            clang_getCursorKind(parent) == CXCursor_VarDecl) {
+    if ((CursorKindTraits::isClass(CK) || CK == CXCursor_EnumDecl) && clang_getCursorKind(parent) == CXCursor_VarDecl) {
         return CXChildVisit_Continue;
     }
 
@@ -1002,7 +1000,8 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
     // always build a context for class templates and functions, otherwise we "leak"
     // the function/template parameter declarations into the surrounding context,
     // which can lead to interesting bugs, like https://bugs.kde.org/show_bug.cgi?id=368067
-    constexpr bool hasContext = isDefinition || CursorKindTraits::isFunction(CK) || CursorKindTraits::isClassTemplate(CK);
+    constexpr bool hasContext =
+        isDefinition || CursorKindTraits::isFunction(CK) || CursorKindTraits::isClassTemplate(CK);
 
     return buildDeclaration<CK, typename DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
 }
@@ -1011,7 +1010,7 @@ CXChildVisitResult Visitor::dispatchCursor(CXCursor cursor, CXCursor parent)
 
 //BEGIN setDeclData
 template<CXCursorKind CK>
-void Visitor::setDeclData(CXCursor cursor, Declaration *decl, bool setComment) const
+void Visitor::setDeclData(CXCursor cursor, Declaration* decl, bool setComment) const
 {
     if (setComment)
 #if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
@@ -1024,7 +1023,8 @@ void Visitor::setDeclData(CXCursor cursor, Declaration *decl, bool setComment) c
     }
     if (CK == CXCursor_Namespace)
         decl->setKind(Declaration::Namespace);
-    if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK) || CursorKindTraits::isAliasType(CK))
+    if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK)
+        || CursorKindTraits::isAliasType(CK))
         decl->setKind(Declaration::Type);
 
     int isAlwaysDeprecated;
@@ -1134,7 +1134,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
 }
 
 template<CXCursorKind CK>
-void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
+void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration* decl) const
 {
     setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
     //A CXCursor_VarDecl in a class is static (otherwise it'd be a CXCursor_FieldDecl)
@@ -1167,10 +1167,18 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
 {
     CXCursorKind kind = clang_getTemplateCursorKind(cursor);
     switch (kind) {
-        case CXCursor_UnionDecl: setDeclData<CXCursor_UnionDecl>(cursor, decl); break;
-        case CXCursor_StructDecl: setDeclData<CXCursor_StructDecl>(cursor, decl); break;
-        case CXCursor_ClassDecl: setDeclData<CXCursor_ClassDecl>(cursor, decl); break;
-        default: Q_ASSERT(false); break;
+    case CXCursor_UnionDecl:
+        setDeclData<CXCursor_UnionDecl>(cursor, decl);
+        break;
+    case CXCursor_StructDecl:
+        setDeclData<CXCursor_StructDecl>(cursor, decl);
+        break;
+    case CXCursor_ClassDecl:
+        setDeclData<CXCursor_ClassDecl>(cursor, decl);
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
     }
 }
 
@@ -1222,32 +1230,35 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 }
 
 template<CXCursorKind CK>
-void Visitor::setDeclData(CXCursor cursor, FunctionDeclaration *decl, bool setComment) const
+void Visitor::setDeclData(CXCursor cursor, FunctionDeclaration* decl, bool setComment) const
 {
     setDeclData<CK>(cursor, static_cast<AbstractFunctionDeclaration*>(decl));
     setDeclData<CK>(cursor, static_cast<Declaration*>(decl), setComment);
 }
 
 template<CXCursorKind CK>
-void Visitor::setDeclData(CXCursor cursor, FunctionDefinition *decl) const
+void Visitor::setDeclData(CXCursor cursor, FunctionDefinition* decl) const
 {
     bool setComment = clang_equalCursors(clang_getCanonicalCursor(cursor), cursor);
     setDeclData<CK>(cursor, static_cast<FunctionDeclaration*>(decl), setComment);
 }
 
 template<CXCursorKind CK>
-void Visitor::setDeclData(CXCursor cursor, NamespaceAliasDeclaration *decl) const
+void Visitor::setDeclData(CXCursor cursor, NamespaceAliasDeclaration* decl) const
 {
     setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
-    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor parent, CXClientData data) -> CXChildVisitResult {
-        if (clang_getCursorKind(cursor) == CXCursor_NamespaceRef) {
-            const auto id = QualifiedIdentifier(ClangString(clang_getCursorSpelling(cursor)).toString());
-            reinterpret_cast<NamespaceAliasDeclaration*>(data)->setImportIdentifier(id);
-            return CXChildVisit_Break;
-        } else {
-            return visitCursor(cursor, parent, data);
-        }
-    }, decl);
+    clang_visitChildren(
+        cursor,
+        [](CXCursor cursor, CXCursor parent, CXClientData data) -> CXChildVisitResult {
+            if (clang_getCursorKind(cursor) == CXCursor_NamespaceRef) {
+                const auto id = QualifiedIdentifier(ClangString(clang_getCursorSpelling(cursor)).toString());
+                reinterpret_cast<NamespaceAliasDeclaration*>(data)->setImportIdentifier(id);
+                return CXChildVisit_Break;
+            } else {
+                return visitCursor(cursor, parent, data);
+            }
+        },
+        decl);
 }
 //END setDeclData
 
@@ -1261,7 +1272,8 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
         // this is useful to skip e.g. friend declarations
         return CXChildVisit_Recurse;
     }
-    IF_DEBUG(clangDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
+    IF_DEBUG(clangDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name()
+                          << "- hasContext:" << hasContext;)
 
     // Code path for class declarations that may be defined "out-of-line", e.g.
     // "SomeNameSpace::SomeClass {};"
@@ -1278,7 +1290,8 @@ CXChildVisitResult Visitor::buildDeclaration(CXCursor cursor)
     }
 
     // if helperContext is null, this is a no-op
-    PushValue<CurrentContext*> pushCurrent(m_parentContext, helperContext.isNull() ? m_parentContext : helperContext.data());
+    PushValue<CurrentContext*> pushCurrent(m_parentContext,
+                                           helperContext.isNull() ? m_parentContext : helperContext.data());
 
     if (hasContext) {
         auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, QualifiedIdentifier(id));
@@ -1300,8 +1313,8 @@ CXChildVisitResult Visitor::buildParmDecl(CXCursor cursor)
 CXChildVisitResult Visitor::buildUse(CXCursor cursor)
 {
     m_uses[m_parentContext->context].push_back(cursor);
-    return cursor.kind == CXCursor_DeclRefExpr || cursor.kind == CXCursor_MemberRefExpr ?
-        CXChildVisit_Recurse : CXChildVisit_Continue;
+    return cursor.kind == CXCursor_DeclRefExpr || cursor.kind == CXCursor_MemberRefExpr ? CXChildVisit_Recurse
+                                                                                        : CXChildVisit_Continue;
 }
 
 CXChildVisitResult Visitor::buildMacroExpansion(CXCursor cursor)
@@ -1319,9 +1332,9 @@ CXChildVisitResult Visitor::buildMacroExpansion(CXCursor cursor)
 template<CXCursorKind CK>
 CXChildVisitResult Visitor::buildCompoundStatement(CXCursor cursor)
 {
-    if (CK == CXCursor_LambdaExpr || m_parentContext->context->type() == DUContext::Function)
-    {
-        auto context = createContext<CK, CK == CXCursor_LambdaExpr ? DUContext::Function : DUContext::Other>(cursor);
+    if (CK == CXCursor_LambdaExpr || m_parentContext->context->type() == DUContext::Function) {
+        auto context = createContext < CK,
+             CK == CXCursor_LambdaExpr ? DUContext::Function : DUContext::Other > (cursor);
         CurrentContext newParent(context, m_parentContext->keepAliveContexts);
         PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
         clang_visitChildren(cursor, &visitCursor, this);
@@ -1366,11 +1379,14 @@ CXChildVisitResult Visitor::buildTypeAliasTemplateDecl(CXCursor cursor)
     createDeclaration<CXCursor_TypeAliasDecl, DeclType>(aliasDecl, id, context);
     CurrentContext newParent(context, m_parentContext->keepAliveContexts);
     PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
-    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor parent, CXClientData data) {
-        // NOTE: immediately recurse into embedded alias decl
-        return clang_getCursorKind(cursor) == CXCursor_TypeAliasDecl ?
-            CXChildVisit_Recurse : visitCursor(cursor, parent, data);
-    }, this);
+    clang_visitChildren(
+        cursor,
+        [](CXCursor cursor, CXCursor parent, CXClientData data) {
+            // NOTE: immediately recurse into embedded alias decl
+            return clang_getCursorKind(cursor) == CXCursor_TypeAliasDecl ? CXChildVisit_Recurse
+                                                                         : visitCursor(cursor, parent, data);
+        },
+        this);
     return CXChildVisit_Continue;
 }
 //END build*
@@ -1400,107 +1416,109 @@ void Visitor::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
 
 std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
 {
-#define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type, parent)
+#define UseKind(TypeKind)                                                                                              \
+    case TypeKind:                                                                                                     \
+        return dispatchType<TypeKind>(type, parent)
     switch (type.kind) {
-    UseKind(CXType_Void);
-    UseKind(CXType_Bool);
-    UseKind(CXType_Short);
-    UseKind(CXType_UShort);
-    UseKind(CXType_Int);
-    UseKind(CXType_UInt);
-    UseKind(CXType_Long);
-    UseKind(CXType_ULong);
-    UseKind(CXType_LongLong);
-    UseKind(CXType_ULongLong);
-    UseKind(CXType_Half);
-    UseKind(CXType_Float);
-    UseKind(CXType_LongDouble);
-    UseKind(CXType_Double);
-    UseKind(CXType_Char_U);
-    UseKind(CXType_Char_S);
-    UseKind(CXType_UChar);
-    UseKind(CXType_SChar);
-    UseKind(CXType_Char16);
-    UseKind(CXType_Char32);
-    UseKind(CXType_Pointer);
-    UseKind(CXType_BlockPointer);
-    UseKind(CXType_MemberPointer);
-    UseKind(CXType_ObjCObjectPointer);
-    UseKind(CXType_ConstantArray);
-    UseKind(CXType_VariableArray);
-    UseKind(CXType_IncompleteArray);
-    UseKind(CXType_DependentSizedArray);
-    UseKind(CXType_LValueReference);
-    UseKind(CXType_RValueReference);
-    UseKind(CXType_FunctionNoProto);
-    UseKind(CXType_FunctionProto);
-    UseKind(CXType_Record);
-    UseKind(CXType_Enum);
-    UseKind(CXType_Typedef);
-    UseKind(CXType_Int128);
-    UseKind(CXType_UInt128);
-    UseKind(CXType_Vector);
-    UseKind(CXType_ExtVector);
-    UseKind(CXType_Unexposed);
-    UseKind(CXType_WChar);
-    UseKind(CXType_ObjCInterface);
-    UseKind(CXType_ObjCId);
-    UseKind(CXType_ObjCClass);
-    UseKind(CXType_ObjCSel);
-    UseKind(CXType_NullPtr);
+        UseKind(CXType_Void);
+        UseKind(CXType_Bool);
+        UseKind(CXType_Short);
+        UseKind(CXType_UShort);
+        UseKind(CXType_Int);
+        UseKind(CXType_UInt);
+        UseKind(CXType_Long);
+        UseKind(CXType_ULong);
+        UseKind(CXType_LongLong);
+        UseKind(CXType_ULongLong);
+        UseKind(CXType_Half);
+        UseKind(CXType_Float);
+        UseKind(CXType_LongDouble);
+        UseKind(CXType_Double);
+        UseKind(CXType_Char_U);
+        UseKind(CXType_Char_S);
+        UseKind(CXType_UChar);
+        UseKind(CXType_SChar);
+        UseKind(CXType_Char16);
+        UseKind(CXType_Char32);
+        UseKind(CXType_Pointer);
+        UseKind(CXType_BlockPointer);
+        UseKind(CXType_MemberPointer);
+        UseKind(CXType_ObjCObjectPointer);
+        UseKind(CXType_ConstantArray);
+        UseKind(CXType_VariableArray);
+        UseKind(CXType_IncompleteArray);
+        UseKind(CXType_DependentSizedArray);
+        UseKind(CXType_LValueReference);
+        UseKind(CXType_RValueReference);
+        UseKind(CXType_FunctionNoProto);
+        UseKind(CXType_FunctionProto);
+        UseKind(CXType_Record);
+        UseKind(CXType_Enum);
+        UseKind(CXType_Typedef);
+        UseKind(CXType_Int128);
+        UseKind(CXType_UInt128);
+        UseKind(CXType_Vector);
+        UseKind(CXType_ExtVector);
+        UseKind(CXType_Unexposed);
+        UseKind(CXType_WChar);
+        UseKind(CXType_ObjCInterface);
+        UseKind(CXType_ObjCId);
+        UseKind(CXType_ObjCClass);
+        UseKind(CXType_ObjCSel);
+        UseKind(CXType_NullPtr);
 #if CINDEX_VERSION_MINOR >= 32
-    UseKind(CXType_Auto);
+        UseKind(CXType_Auto);
 #endif
 #if CINDEX_VERSION_MINOR >= 34
-    UseKind(CXType_Elaborated);
+        UseKind(CXType_Elaborated);
 #endif
 #if CINDEX_VERSION_MINOR >= 38
-    UseKind(CXType_Float128);
+        UseKind(CXType_Float128);
 #endif
 #if CINDEX_VERSION_MINOR >= 60
-    UseKind(CXType_Atomic);
+        UseKind(CXType_Atomic);
 #endif
-    UseKind(CXType_Complex);
-    UseKind(CXType_OCLImage1dRO);
-    UseKind(CXType_OCLImage1dArrayRO);
-    UseKind(CXType_OCLImage1dBufferRO);
-    UseKind(CXType_OCLImage2dRO);
-    UseKind(CXType_OCLImage2dArrayRO);
-    UseKind(CXType_OCLImage2dDepthRO);
-    UseKind(CXType_OCLImage2dArrayDepthRO);
-    UseKind(CXType_OCLImage2dMSAARO);
-    UseKind(CXType_OCLImage2dArrayMSAARO);
-    UseKind(CXType_OCLImage2dMSAADepthRO);
-    UseKind(CXType_OCLImage2dArrayMSAADepthRO);
-    UseKind(CXType_OCLImage3dRO);
-    UseKind(CXType_OCLImage1dWO);
-    UseKind(CXType_OCLImage1dArrayWO);
-    UseKind(CXType_OCLImage1dBufferWO);
-    UseKind(CXType_OCLImage2dWO);
-    UseKind(CXType_OCLImage2dArrayWO);
-    UseKind(CXType_OCLImage2dDepthWO);
-    UseKind(CXType_OCLImage2dArrayDepthWO);
-    UseKind(CXType_OCLImage2dMSAAWO);
-    UseKind(CXType_OCLImage2dArrayMSAAWO);
-    UseKind(CXType_OCLImage2dMSAADepthWO);
-    UseKind(CXType_OCLImage2dArrayMSAADepthWO);
-    UseKind(CXType_OCLImage3dWO);
-    UseKind(CXType_OCLImage1dRW);
-    UseKind(CXType_OCLImage1dArrayRW);
-    UseKind(CXType_OCLImage1dBufferRW);
-    UseKind(CXType_OCLImage2dRW);
-    UseKind(CXType_OCLImage2dArrayRW);
-    UseKind(CXType_OCLImage2dDepthRW);
-    UseKind(CXType_OCLImage2dArrayDepthRW);
-    UseKind(CXType_OCLImage2dMSAARW);
-    UseKind(CXType_OCLImage2dArrayMSAARW);
-    UseKind(CXType_OCLImage2dMSAADepthRW);
-    UseKind(CXType_OCLImage2dArrayMSAADepthRW);
-    UseKind(CXType_OCLImage3dRW);
-    UseKind(CXType_OCLSampler);
-    UseKind(CXType_OCLEvent);
-    UseKind(CXType_OCLQueue);
-    UseKind(CXType_OCLReserveID);
+        UseKind(CXType_Complex);
+        UseKind(CXType_OCLImage1dRO);
+        UseKind(CXType_OCLImage1dArrayRO);
+        UseKind(CXType_OCLImage1dBufferRO);
+        UseKind(CXType_OCLImage2dRO);
+        UseKind(CXType_OCLImage2dArrayRO);
+        UseKind(CXType_OCLImage2dDepthRO);
+        UseKind(CXType_OCLImage2dArrayDepthRO);
+        UseKind(CXType_OCLImage2dMSAARO);
+        UseKind(CXType_OCLImage2dArrayMSAARO);
+        UseKind(CXType_OCLImage2dMSAADepthRO);
+        UseKind(CXType_OCLImage2dArrayMSAADepthRO);
+        UseKind(CXType_OCLImage3dRO);
+        UseKind(CXType_OCLImage1dWO);
+        UseKind(CXType_OCLImage1dArrayWO);
+        UseKind(CXType_OCLImage1dBufferWO);
+        UseKind(CXType_OCLImage2dWO);
+        UseKind(CXType_OCLImage2dArrayWO);
+        UseKind(CXType_OCLImage2dDepthWO);
+        UseKind(CXType_OCLImage2dArrayDepthWO);
+        UseKind(CXType_OCLImage2dMSAAWO);
+        UseKind(CXType_OCLImage2dArrayMSAAWO);
+        UseKind(CXType_OCLImage2dMSAADepthWO);
+        UseKind(CXType_OCLImage2dArrayMSAADepthWO);
+        UseKind(CXType_OCLImage3dWO);
+        UseKind(CXType_OCLImage1dRW);
+        UseKind(CXType_OCLImage1dArrayRW);
+        UseKind(CXType_OCLImage1dBufferRW);
+        UseKind(CXType_OCLImage2dRW);
+        UseKind(CXType_OCLImage2dArrayRW);
+        UseKind(CXType_OCLImage2dDepthRW);
+        UseKind(CXType_OCLImage2dArrayDepthRW);
+        UseKind(CXType_OCLImage2dMSAARW);
+        UseKind(CXType_OCLImage2dArrayMSAARW);
+        UseKind(CXType_OCLImage2dMSAADepthRW);
+        UseKind(CXType_OCLImage2dArrayMSAADepthRW);
+        UseKind(CXType_OCLImage3dRW);
+        UseKind(CXType_OCLSampler);
+        UseKind(CXType_OCLEvent);
+        UseKind(CXType_OCLQueue);
+        UseKind(CXType_OCLReserveID);
     case CXType_Invalid:
         return {};
     default:
@@ -1510,7 +1528,8 @@ std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
 #undef UseKind
 }
 
-RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCursorKind, CXSourceRange useRange, const QSet<unsigned int>& macroExpansionLocations)
+RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCursorKind, CXSourceRange useRange,
+                                      const QSet<unsigned int>& macroExpansionLocations)
 {
     auto range = ClangRange(useRange).toRangeInRevision();
 
@@ -1553,8 +1572,7 @@ RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCu
     return range;
 }
 
-Visitor::Visitor(CXTranslationUnit tu, CXFile file,
-                 const IncludeFileContexts& includes, const bool update)
+Visitor::Visitor(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
     : m_file(file)
     , m_includes(includes)
     , m_parentContext(nullptr)
@@ -1593,8 +1611,8 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
         DUChainWriteLocker lock;
         top->deleteUsesRecursively();
     }
-    for (const auto &contextUses : m_uses) {
-        for (const auto &cursor : contextUses.second) {
+    for (const auto& contextUses : m_uses) {
+        for (const auto& cursor : contextUses.second) {
             auto referenced = referencedCursor(cursor);
             if (clang_Cursor_isNull(referenced)) {
                 continue;
@@ -1614,7 +1632,8 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
 
             if (!used) { // as a last resort, try to resolve the forward declaration
                 DUChainReadLocker lock;
-                DeclarationPointer decl = ClangHelpers::findForwardDeclaration(clang_getCursorType(referenced), contextUses.first, referenced);
+                DeclarationPointer decl = ClangHelpers::findForwardDeclaration(clang_getCursorType(referenced),
+                                                                               contextUses.first, referenced);
                 used = decl;
                 if (!used) {
                     continue;
@@ -1644,7 +1663,7 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
 
 CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
-    auto *visitor = static_cast<Visitor*>(data);
+    auto* visitor = static_cast<Visitor*>(data);
 
     const auto kind = clang_getCursorKind(cursor);
 
@@ -1662,43 +1681,44 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
         }
     }
 
-#define UseCursorKind(CursorKind, ...) case CursorKind: return visitor->dispatchCursor<CursorKind>(__VA_ARGS__);
-    switch (kind)
-    {
-    UseCursorKind(CXCursor_UnexposedDecl, cursor, parent);
-    UseCursorKind(CXCursor_StructDecl, cursor, parent);
-    UseCursorKind(CXCursor_UnionDecl, cursor, parent);
-    UseCursorKind(CXCursor_ClassDecl, cursor, parent);
-    UseCursorKind(CXCursor_EnumDecl, cursor, parent);
-    UseCursorKind(CXCursor_FieldDecl, cursor, parent);
-    UseCursorKind(CXCursor_EnumConstantDecl, cursor, parent);
-    UseCursorKind(CXCursor_FunctionDecl, cursor, parent);
-    UseCursorKind(CXCursor_VarDecl, cursor, parent);
-    UseCursorKind(CXCursor_TypeAliasDecl, cursor, parent);
-    UseCursorKind(CXCursor_TypedefDecl, cursor, parent);
-    UseCursorKind(CXCursor_CXXMethod, cursor, parent);
-    UseCursorKind(CXCursor_Namespace, cursor, parent);
-    UseCursorKind(CXCursor_NamespaceAlias, cursor, parent);
-    UseCursorKind(CXCursor_Constructor, cursor, parent);
-    UseCursorKind(CXCursor_Destructor, cursor, parent);
-    UseCursorKind(CXCursor_ConversionFunction, cursor, parent);
-    UseCursorKind(CXCursor_TemplateTypeParameter, cursor, parent);
-    UseCursorKind(CXCursor_NonTypeTemplateParameter, cursor, parent);
-    UseCursorKind(CXCursor_TemplateTemplateParameter, cursor, parent);
-    UseCursorKind(CXCursor_FunctionTemplate, cursor, parent);
-    UseCursorKind(CXCursor_ClassTemplate, cursor, parent);
-    UseCursorKind(CXCursor_ClassTemplatePartialSpecialization, cursor, parent);
-    UseCursorKind(CXCursor_ObjCInterfaceDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCCategoryDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCProtocolDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCPropertyDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCIvarDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCInstanceMethodDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCClassMethodDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCImplementationDecl, cursor, parent);
-    UseCursorKind(CXCursor_ObjCCategoryImplDecl, cursor, parent);
-    UseCursorKind(CXCursor_MacroDefinition, cursor, parent);
-    UseCursorKind(CXCursor_LabelStmt, cursor, parent);
+#define UseCursorKind(CursorKind, ...)                                                                                 \
+    case CursorKind:                                                                                                   \
+        return visitor->dispatchCursor<CursorKind>(__VA_ARGS__);
+    switch (kind) {
+        UseCursorKind(CXCursor_UnexposedDecl, cursor, parent);
+        UseCursorKind(CXCursor_StructDecl, cursor, parent);
+        UseCursorKind(CXCursor_UnionDecl, cursor, parent);
+        UseCursorKind(CXCursor_ClassDecl, cursor, parent);
+        UseCursorKind(CXCursor_EnumDecl, cursor, parent);
+        UseCursorKind(CXCursor_FieldDecl, cursor, parent);
+        UseCursorKind(CXCursor_EnumConstantDecl, cursor, parent);
+        UseCursorKind(CXCursor_FunctionDecl, cursor, parent);
+        UseCursorKind(CXCursor_VarDecl, cursor, parent);
+        UseCursorKind(CXCursor_TypeAliasDecl, cursor, parent);
+        UseCursorKind(CXCursor_TypedefDecl, cursor, parent);
+        UseCursorKind(CXCursor_CXXMethod, cursor, parent);
+        UseCursorKind(CXCursor_Namespace, cursor, parent);
+        UseCursorKind(CXCursor_NamespaceAlias, cursor, parent);
+        UseCursorKind(CXCursor_Constructor, cursor, parent);
+        UseCursorKind(CXCursor_Destructor, cursor, parent);
+        UseCursorKind(CXCursor_ConversionFunction, cursor, parent);
+        UseCursorKind(CXCursor_TemplateTypeParameter, cursor, parent);
+        UseCursorKind(CXCursor_NonTypeTemplateParameter, cursor, parent);
+        UseCursorKind(CXCursor_TemplateTemplateParameter, cursor, parent);
+        UseCursorKind(CXCursor_FunctionTemplate, cursor, parent);
+        UseCursorKind(CXCursor_ClassTemplate, cursor, parent);
+        UseCursorKind(CXCursor_ClassTemplatePartialSpecialization, cursor, parent);
+        UseCursorKind(CXCursor_ObjCInterfaceDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCCategoryDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCProtocolDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCPropertyDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCIvarDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCInstanceMethodDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCClassMethodDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCImplementationDecl, cursor, parent);
+        UseCursorKind(CXCursor_ObjCCategoryImplDecl, cursor, parent);
+        UseCursorKind(CXCursor_MacroDefinition, cursor, parent);
+        UseCursorKind(CXCursor_LabelStmt, cursor, parent);
     case CXCursor_TypeRef:
     case CXCursor_TemplateRef:
     case CXCursor_NamespaceRef:
