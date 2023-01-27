@@ -38,7 +38,7 @@ using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 using UnsavedRevisions = QHash<KDevelop::IndexedString, KDevelop::ModificationRevision>;
 
 namespace ClangHelpers {
-
+KDevelop::QualifiedIdentifier qualifiedCursorIdentifier(CXCursor cursor);
 KDevelop::DeclarationPointer findDeclaration(CXSourceLocation cursor, const KDevelop::QualifiedIdentifier& id, const KDevelop::ReferencedTopDUContext& top);
 KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);

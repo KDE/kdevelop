@@ -247,15 +247,8 @@ DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, cons
     return {};
 }
 
-DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeFileContexts& includes)
+QualifiedIdentifier ClangHelpers::qualifiedCursorIdentifier(CXCursor cursor)
 {
-    auto location = clang_getCursorLocation(cursor);
-    CXFile file = nullptr;
-    clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
-    if (!file) {
-        return {};
-    }
-
     // build a qualified identifier by following the chain of semantic parents
     QList<Identifier> ids;
     CXCursor currentCursor = cursor;
@@ -270,8 +263,19 @@ DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeF
     {
         qid.push(ids[i]);
     }
+    return qid;
+}
 
-    return findDeclaration(location, qid, includes.value(file));
+DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeFileContexts& includes)
+{
+    auto location = clang_getCursorLocation(cursor);
+    CXFile file = nullptr;
+    clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
+    if (!file) {
+        return {};
+    }
+
+    return findDeclaration(location, qualifiedCursorIdentifier(cursor), includes.value(file));
 }
 
 DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileContexts& includes)

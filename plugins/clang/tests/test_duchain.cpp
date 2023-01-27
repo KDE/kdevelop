@@ -2704,9 +2704,7 @@ void TestDUChain::testTypeForwardDeclaration()
     };
 
     QVERIFY(checkIdType(fooDecls[1]));
-    QEXPECT_FAIL("", "bogus type generated, not due to cache", Continue);
     QVERIFY(checkIdType(fooDecls[2]));
     QVERIFY(checkIdType(fooDecls[3]));
-    QEXPECT_FAIL("", "bogus type generated, not due to cache", Continue);
     QVERIFY(checkIdType(fooDecls[4]));
 }

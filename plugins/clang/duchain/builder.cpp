@@ -622,7 +622,8 @@ struct Visitor
              EnableIf<TK == CXType_Record || TK == CXType_ObjCInterface || TK == CXType_ObjCClass> = dummy>
     std::unique_ptr<AbstractType> createType(CXType type, CXCursor parent)
     {
-        DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type));
+        auto typeDecl = clang_getTypeDeclaration(type);
+        auto decl = findDeclaration(typeDecl);
         DUChainReadLocker lock;
 
         if (!decl) {
@@ -638,8 +639,10 @@ struct Visitor
         if (decl) {
             t->setDeclaration(decl.data());
         } else { // fallback, at least give the spelling to the user
-            t->setDeclarationId(DeclarationId(
-                IndexedQualifiedIdentifier(QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString()))));
+            auto typeQid = ClangHelpers::qualifiedCursorIdentifier(typeDecl);
+            if (typeQid.isEmpty())
+                typeQid = QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString());
+            t->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(typeQid)));
             m_typeIsNotCachable = true;
         }
         return t;
