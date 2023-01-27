@@ -101,7 +101,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     autoResizeColumnsAction->setIcon(QIcon::fromTheme(QStringLiteral("resizecol")));
     autoResizeColumnsAction->setCheckable(true);
     autoResizeColumnsAction->setChecked(autoResizeColumns);
-    connect(autoResizeColumnsAction, &QAction::triggered, [this](bool on) {
+    connect(autoResizeColumnsAction, &QAction::triggered, this, [this](bool on) {
         m_varTree->setAutoResizeColumns(on);
         variablesViewConfigGroup().writeEntry(autoResizeColumnsKey, on);
     });
