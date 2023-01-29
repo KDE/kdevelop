@@ -1494,14 +1494,14 @@ std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
             Q_ASSERT(!nonCached || nonCached->equals(cached->get()));
         }
         ret = std::move(*cached);
-        qCritical() << "Retrieving from cache" << ret->toString();
+        qCritical() << "Retrieving from cache" << ClangString(clang_getTypeSpelling(type)).toString();
     } else {
         ret = makeTypeNonCached(type, parent);
         if (!m_typeIsNotCachable) {
-            qCritical() << "Inserting into cache" << ret->toString();
+            qCritical() << "Inserting into cache" << ClangString(clang_getTypeSpelling(type)).toString();
             cacheTypeClone(cacheKey, ret);
         } else {
-            qCritical() << "Not inserting into cache" << ret->toString();
+            qCritical() << "Not inserting into cache" << ClangString(clang_getTypeSpelling(type)).toString();
         }
     }
 
@@ -1778,10 +1778,15 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     /// reset the flag when we finish visiting a cursor
     const auto typeIsNotCachableGuard = QScopedValueRollback(visitor->m_typeIsNotCachable);
 
+    const auto kindSpelling = ClangString(clang_getCursorKindSpelling(kind)).toString();
+    const bool print =
+        !kindSpelling.startsWith(QLatin1String("macro")) && kindSpelling != QLatin1String("UnexposedDecl");
     const auto fileName = ClangString(clang_getFileName(file)).toString();
-    qCritical() << "visitCursor" << kind << location << fileName << visitor->m_typeIsNotCachable;
+    if (print)
+        qCritical() << "visitCursor" << kind << location << fileName << visitor->m_typeIsNotCachable;
     auto cleanup = qScopeGuard([=] {
-        qCritical() << "END  Cursor" << kind << location << fileName << visitor->m_typeIsNotCachable;
+        if (print)
+            qCritical() << "END  Cursor" << kind << location << fileName << visitor->m_typeIsNotCachable;
     });
 
 #define UseCursorKind(CursorKind, ...)                                                                                 \
