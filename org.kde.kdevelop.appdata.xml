@@ -165,10 +165,10 @@
     <category>IDE</category>
   </categories>
   <releases>
+    <release version="5.10.221202" date="2023-02-02"/>
     <release version="5.10.221201" date="2023-01-05"/>
     <release version="5.10.221200" date="2022-12-08"/>
     <release version="5.9.220803" date="2022-11-03"/>
-    <release version="5.9.220802" date="2022-10-13"/>
   </releases>
   <custom>
     <value key="KDE::irc">#kdevelop</value>
