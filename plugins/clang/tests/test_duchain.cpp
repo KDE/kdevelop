@@ -2653,18 +2653,29 @@ void TestDUChain::testBitWidthUpdate()
 void TestDUChain::testTypeForwardDeclaration()
 {
     TestFile file(QStringLiteral(R"(
+class foo;
+foo*fooI;
         struct foo
         {
+            template <class T1> struct tem{};
             struct bar;
+            using tembar = tem<bar>;
+            tem<bar> tb1;
+            tembar tb2;
             bar *ptr1;
             const bar *ptr2;
             bar &ref1;
             const bar &ref2;
+
+struct bar {
+                void f1(bar&);
+                void f2(const bar&);
+                void f3(const bar*);
+            };
+            tem<bar> ta1;
+            tembar ta2;
         };
-        struct foo::bar {
-            void f1(bar&);
-            void f2(const bar&);
-        };
+foo*fooJ;
     )"),
                   QStringLiteral("cpp"));
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -2675,16 +2686,18 @@ void TestDUChain::testTypeForwardDeclaration()
     QVERIFY(top);
 
     const auto decls = top->localDeclarations();
-    QCOMPARE(decls.size(), 1);
+    QCOMPARE(decls.size(), 4);
 
-    const auto foo = decls[0];
+    const auto foo = decls[2];
     QCOMPARE(foo->qualifiedIdentifier(), QualifiedIdentifier(u"foo"));
 
     QVERIFY(foo->internalContext());
     const auto fooDecls = foo->internalContext()->localDeclarations();
-    QCOMPARE(fooDecls.size(), 5);
+    QCOMPARE(fooDecls.size(), 12);
 
-    const auto bar = fooDecls[0];
+    const auto bar = fooDecls[1];
+    for (int i = 0; i < 12; ++i)
+        qCritical() << fooDecls[i]->qualifiedIdentifier();
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier(u"foo::bar"));
 
     auto barForward = dynamic_cast<ForwardDeclaration*>(bar);
@@ -2703,8 +2716,6 @@ void TestDUChain::testTypeForwardDeclaration()
         return type && typeDecl == barDecl;
     };
 
-    QVERIFY(checkIdType(fooDecls[1]));
-    QVERIFY(checkIdType(fooDecls[2]));
-    QVERIFY(checkIdType(fooDecls[3]));
-    QVERIFY(checkIdType(fooDecls[4]));
+    for (int i = 5; i < 10; ++i)
+        QVERIFY(checkIdType(fooDecls[i]));
 }
