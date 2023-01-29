@@ -1491,7 +1491,10 @@ std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
         if (DEBUG_TYPE_CACHE) {
             auto nonCached = makeTypeNonCached(type, parent);
             Q_ASSERT(static_cast<bool>(nonCached) == static_cast<bool>(*cached));
-            Q_ASSERT(!nonCached || nonCached->equals(cached->get()));
+            if (nonCached && !nonCached->equals(cached->get())) {
+                qFatal("Clang type cache bug: %s != %s", qUtf8Printable(nonCached->toString()),
+                       qUtf8Printable((*cached)->toString()));
+            }
         }
         ret = std::move(*cached);
         qCritical() << "Retrieving from cache" << ClangString(clang_getTypeSpelling(type)).toString();
