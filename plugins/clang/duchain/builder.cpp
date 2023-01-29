@@ -49,7 +49,7 @@
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
 
-constexpr auto DEBUG_TYPE_CACHE = true;
+constexpr auto DEBUG_TYPE_CACHE = false;
 
 using namespace KDevelop;
 
@@ -1497,7 +1497,7 @@ std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
             }
         }
         ret = std::move(*cached);
-        qCritical() << "Retrieving from cache" << ClangString(clang_getTypeSpelling(type)).toString();
+        // qCritical() << "Retrieving from cache" << ClangString(clang_getTypeSpelling(type)).toString();
     } else {
         ret = makeTypeNonCached(type, parent);
         if (!m_typeIsNotCachable) {

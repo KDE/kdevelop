@@ -2659,8 +2659,25 @@ foo*fooI;
         {
             template <class T1> struct tem{};
             struct bar;
-            using tembar = tem<bar>;
-            tem<bar> tb1;
+
+template <class T1, class T2, class T3, class T4, class T5, class T6, class T7,
+          class T8, class T9, class T10>
+struct Fooob {};
+
+using A0 = Fooob<bar, bar, bar, bar, bar, bar, bar, bar, bar, bar>;
+using A1 = Fooob<A0, A0, A0, A0, A0, A0, A0, A0, A0, A0>;
+using A2 = Fooob<A1, A1, A1, A1, A1, A1, A1, A1, A1, A1>;
+using A3 = Fooob<A2, A2, A2, A2, A2, A2, A2, A2, A2, A2>;
+using A4 = Fooob<A3, A3, A3, A3, A3, A3, A3, A3, A3, A3>;
+using A5 = Fooob<A4, A4, A4, A4, A4, A4, A4, A4, A4, A4>;
+using A6 = Fooob<A5, A5, A5, A5, A5, A5, A5, A5, A5, A5>;
+using A7 = Fooob<A6, A6, A6, A6, A6, A6, A6, A6, A6, A6>;
+using A8 = Fooob<A7, A7, A7, A7, A7, A7, A7, A7, A7, A7>;
+using A9 = Fooob<A8, A8, A8, A8, A8, A8, A8, A8, A8, A8>;
+using A10 = Fooob<A9, A9, A9, A9, A9, A9, A9, A9, A9, A9>;
+
+            using tembar = tem<const bar>;
+            tem<const bar> tb1;
             tembar tb2;
             bar *ptr1;
             const bar *ptr2;
@@ -2693,10 +2710,10 @@ foo*fooJ;
 
     QVERIFY(foo->internalContext());
     const auto fooDecls = foo->internalContext()->localDeclarations();
-    QCOMPARE(fooDecls.size(), 12);
+    QCOMPARE(fooDecls.size(), 24);
 
     const auto bar = fooDecls[1];
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < 24; ++i)
         qCritical() << fooDecls[i]->qualifiedIdentifier();
     QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier(u"foo::bar"));
 
@@ -2716,6 +2733,6 @@ foo*fooJ;
         return type && typeDecl == barDecl;
     };
 
-    for (int i = 5; i < 10; ++i)
+    for (int i = 17; i < 22; ++i)
         QVERIFY(checkIdType(fooDecls[i]));
 }
