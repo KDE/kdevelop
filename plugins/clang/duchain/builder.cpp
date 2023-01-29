@@ -16,7 +16,7 @@
 #include "types/classspecializationtype.h"
 #include "util/clangutils.h"
 #include "util/clangtypes.h"
-
+#include <QScopeGuard>
 #include <util/pushvalue.h>
 #include <util/owningrawpointercontainer.h>
 
@@ -49,7 +49,7 @@
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
 
-constexpr auto DEBUG_TYPE_CACHE = false;
+constexpr auto DEBUG_TYPE_CACHE = true;
 
 using namespace KDevelop;
 
@@ -643,6 +643,7 @@ struct Visitor
             if (typeQid.isEmpty())
                 typeQid = QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString());
             t->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(typeQid)));
+            qCritical() << "Disabling cache because of" << typeQid;
             m_typeIsNotCachable = true;
         }
         return t;
@@ -835,6 +836,7 @@ struct Visitor
             Identifier id(tStr);
             id.clearTemplateIdentifiers();
             cst->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))));
+            qCritical() << "Disabling cache because of" << QualifiedIdentifier(id);
             m_typeIsNotCachable = true;
         }
 
@@ -1492,10 +1494,15 @@ std::unique_ptr<AbstractType> Visitor::makeType(CXType type, CXCursor parent)
             Q_ASSERT(!nonCached || nonCached->equals(cached->get()));
         }
         ret = std::move(*cached);
+        qCritical() << "Retrieving from cache" << ret->toString();
     } else {
         ret = makeTypeNonCached(type, parent);
-        if (!m_typeIsNotCachable)
+        if (!m_typeIsNotCachable) {
+            qCritical() << "Inserting into cache" << ret->toString();
             cacheTypeClone(cacheKey, ret);
+        } else {
+            qCritical() << "Not inserting into cache" << ret->toString();
+        }
     }
 
     return ret;
@@ -1770,6 +1777,12 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
 
     /// reset the flag when we finish visiting a cursor
     const auto typeIsNotCachableGuard = QScopedValueRollback(visitor->m_typeIsNotCachable);
+
+    const auto fileName = ClangString(clang_getFileName(file)).toString();
+    qCritical() << "visitCursor" << kind << location << fileName << visitor->m_typeIsNotCachable;
+    auto cleanup = qScopeGuard([=] {
+        qCritical() << "END  Cursor" << kind << location << fileName << visitor->m_typeIsNotCachable;
+    });
 
 #define UseCursorKind(CursorKind, ...)                                                                                 \
     case CursorKind:                                                                                                   \
