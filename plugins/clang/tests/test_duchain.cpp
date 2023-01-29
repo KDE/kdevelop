@@ -2664,7 +2664,7 @@ template <class T1, class T2, class T3, class T4, class T5, class T6, class T7,
           class T8, class T9, class T10>
 struct Fooob {};
 
-using A0 = Fooob<bar, bar, bar, bar, bar, bar, bar, bar, bar, bar>;
+using A0 = Fooob<const bar, const bar, const bar, const bar, const bar, const bar, const bar, const bar, const bar, const bar>;
 using A1 = Fooob<A0, A0, A0, A0, A0, A0, A0, A0, A0, A0>;
 using A2 = Fooob<A1, A1, A1, A1, A1, A1, A1, A1, A1, A1>;
 using A3 = Fooob<A2, A2, A2, A2, A2, A2, A2, A2, A2, A2>;
