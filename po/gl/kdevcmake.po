@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-23 00:55+0000\n"
+"POT-Creation-Date: 2023-01-31 00:57+0000\n"
 "PO-Revision-Date: 2020-02-16 09:30+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -30,45 +30,45 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Configurar un directorio de construción - %1"
 
-#: cmakebuilddirchooser.cpp:87
+#: cmakebuilddirchooser.cpp:88
 #, fuzzy, kde-format
 #| msgid "Configure a build directory for %1"
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Configurar un directorio de construción para %1"
 
-#: cmakebuilddirchooser.cpp:197
+#: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "Debe especificar un directorio de construción."
 
-#: cmakebuilddirchooser.cpp:204
+#: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "Usando o directorio de construción xa creado."
 
-#: cmakebuilddirchooser.cpp:215
+#: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "Creando un novo directorio de construción."
 
-#: cmakebuilddirchooser.cpp:221
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
 msgstr "O directorio de construción xa está configurado."
 
-#: cmakebuilddirchooser.cpp:223
+#: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr ""
 "Este directorio de construción é para %1, pero o directorio do proxecto é %2."
 
-#: cmakebuilddirchooser.cpp:226
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "Non pode escoller un directorio de construción relativo."
 
-#: cmakebuilddirchooser.cpp:228
+#: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "O directorio de construción escollido non está baleiro."
@@ -435,7 +435,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Cadeas"
 
-#: settings/cmakepreferences.cpp:345
+#: settings/cmakepreferences.cpp:346
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -447,25 +447,25 @@ msgstr ""
 "Estase a piques de retirar o directorio %1 da lista de KDevelop.\n"
 "Quere que KDevelop o elimine tamén do sistema de ficheiros?"
 
-#: settings/cmakepreferences.cpp:349
+#: settings/cmakepreferences.cpp:350
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:354
+#: settings/cmakepreferences.cpp:355
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Non se puido retirar: %1"
 
-#: settings/cmakepreferences.cpp:400
+#: settings/cmakepreferences.cpp:401
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:405
+#: settings/cmakepreferences.cpp:406
 #, fuzzy, kde-format
 #| msgid "Configure CMake settings"
 msgctxt "@title:tab"

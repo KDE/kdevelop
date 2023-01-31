@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-23 00:55+0000\n"
+"POT-Creation-Date: 2023-01-31 00:57+0000\n"
 "PO-Revision-Date: 2014-06-07 16:23+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -26,44 +26,44 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Konfigurér en byggemappe for %1"
 
-#: cmakebuilddirchooser.cpp:87
+#: cmakebuilddirchooser.cpp:88
 #, fuzzy, kde-format
 #| msgid "Configure a build directory for %1"
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Konfigurér en byggemappe for %1"
 
-#: cmakebuilddirchooser.cpp:197
+#: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "Du skal angive en byggemappe."
 
-#: cmakebuilddirchooser.cpp:204
+#: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "Bruger en eksisterende byggemappe."
 
-#: cmakebuilddirchooser.cpp:215
+#: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "Opretter en ny byggemappe."
 
-#: cmakebuilddirchooser.cpp:221
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
 msgstr "Byggemappen er allerede konfigureret."
 
-#: cmakebuilddirchooser.cpp:223
+#: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr "Denne byggemappe er til %1, men projektmappen er %2."
 
-#: cmakebuilddirchooser.cpp:226
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "Du må ikke vælge en relativ byggemappe."
 
-#: cmakebuilddirchooser.cpp:228
+#: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "Den valgte byggemappe er ikke tom."
@@ -393,7 +393,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:345
+#: settings/cmakepreferences.cpp:346
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -405,25 +405,25 @@ msgstr ""
 "Mappen \"%1\" er ved at blive fjernet fra KDevelops liste\n"
 "Vil du også have KDevelop til at fjerne den fra filsystemet?"
 
-#: settings/cmakepreferences.cpp:349
+#: settings/cmakepreferences.cpp:350
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:354
+#: settings/cmakepreferences.cpp:355
 #, fuzzy, kde-format
 #| msgid "Could not remove: %1.\n"
 msgid "Could not remove: %1"
 msgstr "Kunne ikke fjerne: %1\n"
 
-#: settings/cmakepreferences.cpp:400
+#: settings/cmakepreferences.cpp:401
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:405
+#: settings/cmakepreferences.cpp:406
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

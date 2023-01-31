@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-23 00:55+0000\n"
+"POT-Creation-Date: 2023-01-31 00:57+0000\n"
 "PO-Revision-Date: 2014-01-15 10:50+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -25,44 +25,44 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "設定 %1 的編譯目錄"
 
-#: cmakebuilddirchooser.cpp:87
+#: cmakebuilddirchooser.cpp:88
 #, fuzzy, kde-format
 #| msgid "Configure a build directory for %1"
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "設定 %1 的編譯目錄"
 
-#: cmakebuilddirchooser.cpp:197
+#: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "您必須指定編譯目錄。"
 
-#: cmakebuilddirchooser.cpp:204
+#: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "使用已建立的編譯目錄。"
 
-#: cmakebuilddirchooser.cpp:215
+#: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "建立新的編譯目錄。"
 
-#: cmakebuilddirchooser.cpp:221
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
 msgstr "編譯目錄已設定"
 
-#: cmakebuilddirchooser.cpp:223
+#: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr "此編譯目錄是專案 %1 用的，但是專案目錄為 %2。"
 
-#: cmakebuilddirchooser.cpp:226
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "您不能選擇一個相對的編譯目錄。"
 
-#: cmakebuilddirchooser.cpp:228
+#: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "選取的編譯目錄非空白。"
@@ -392,7 +392,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:345
+#: settings/cmakepreferences.cpp:346
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -404,25 +404,25 @@ msgstr ""
 "目錄 %1 即將要從 KDevelop 的清單中移除。\n"
 "您要 KDevelop 順便把該目錄從檔案系統中砍掉嗎？"
 
-#: settings/cmakepreferences.cpp:349
+#: settings/cmakepreferences.cpp:350
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:354
+#: settings/cmakepreferences.cpp:355
 #, fuzzy, kde-format
 #| msgid "Could not remove: %1.\n"
 msgid "Could not remove: %1"
 msgstr "無法移除： %1 。\n"
 
-#: settings/cmakepreferences.cpp:400
+#: settings/cmakepreferences.cpp:401
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:405
+#: settings/cmakepreferences.cpp:406
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

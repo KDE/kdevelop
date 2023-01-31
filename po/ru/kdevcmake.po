@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-23 00:55+0000\n"
+"POT-Creation-Date: 2023-01-31 00:57+0000\n"
 "PO-Revision-Date: 2022-03-04 16:57+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -32,43 +32,43 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Настройка каталога сборки — %1"
 
-#: cmakebuilddirchooser.cpp:87
+#: cmakebuilddirchooser.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Настройка каталога сборки для %1"
 
-#: cmakebuilddirchooser.cpp:197
+#: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "Необходимо указать каталог сборки."
 
-#: cmakebuilddirchooser.cpp:204
+#: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "Используется уже имеющийся каталог сборки."
 
-#: cmakebuilddirchooser.cpp:215
+#: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "Создание нового каталога сборки."
 
-#: cmakebuilddirchooser.cpp:221
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
 msgstr "Каталог сборки уже настроен."
 
-#: cmakebuilddirchooser.cpp:223
+#: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr "Это каталог сборки для %1, но каталог проекта — %2."
 
-#: cmakebuilddirchooser.cpp:226
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "Для каталога сборки нужно указать абсолютный путь."
 
-#: cmakebuilddirchooser.cpp:228
+#: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "Выбранный каталог сборки не пуст."
@@ -396,7 +396,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Строки"
 
-#: settings/cmakepreferences.cpp:345
+#: settings/cmakepreferences.cpp:346
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -408,24 +408,24 @@ msgstr ""
 "Каталог %1 будет удалён из списка KDevelop.\n"
 "Удалить его также из файловой системы?"
 
-#: settings/cmakepreferences.cpp:349
+#: settings/cmakepreferences.cpp:350
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:354
+#: settings/cmakepreferences.cpp:355
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Не удалось удалить: %1"
 
-#: settings/cmakepreferences.cpp:400
+#: settings/cmakepreferences.cpp:401
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:405
+#: settings/cmakepreferences.cpp:406
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure CMake Settings"

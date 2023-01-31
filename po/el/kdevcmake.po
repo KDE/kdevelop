@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-23 00:55+0000\n"
+"POT-Creation-Date: 2023-01-31 00:57+0000\n"
 "PO-Revision-Date: 2019-08-27 10:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -26,46 +26,46 @@ msgctxt "@title:window"
 msgid "Configure a Build Directory - %1"
 msgstr "Διαμόρφωση καταλόγου κατασκευής - %1"
 
-#: cmakebuilddirchooser.cpp:87
+#: cmakebuilddirchooser.cpp:88
 #, fuzzy, kde-format
 #| msgid "Configure a build directory for %1"
 msgctxt "@title:window"
 msgid "Configure a Build Directory for %1"
 msgstr "Διαμόρφωση καταλόγου κατασκευής για το %1"
 
-#: cmakebuilddirchooser.cpp:197
+#: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
 msgstr "Θα πρέπει να ορίσετε κατάλογο κατασκευής."
 
-#: cmakebuilddirchooser.cpp:204
+#: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
 msgstr "Χρήση ενός υπάρχοντος καταλόγου κατασκευής."
 
-#: cmakebuilddirchooser.cpp:215
+#: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
 msgstr "Δημιουργία νέου καταλόγου κατασκευής."
 
-#: cmakebuilddirchooser.cpp:221
+#: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
 msgstr "Ο κατάλογος κατασκευής ήδη διαμορφώθηκε."
 
-#: cmakebuilddirchooser.cpp:223
+#: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr ""
 "Ο επιλεγμένος κατάλογος κατασκευής είναι για το %1, αλλά ο κατάλογος έργου "
 "είναι ο %2."
 
-#: cmakebuilddirchooser.cpp:226
+#: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
 msgstr "Δεν μπορείτε να επιλέξετε ένα σχετικό κατάλογο κατασκευής."
 
-#: cmakebuilddirchooser.cpp:228
+#: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
 msgstr "Ο επιλεγμένος κατάλογος κατασκευής δεν είναι κενός."
@@ -438,7 +438,7 @@ msgctxt "@title:column"
 msgid "Strings"
 msgstr "Συμβολοσειρές"
 
-#: settings/cmakepreferences.cpp:345
+#: settings/cmakepreferences.cpp:346
 #, fuzzy, kde-format
 #| msgid ""
 #| "The %1 directory is about to be removed in KDevelop's list.\n"
@@ -450,25 +450,25 @@ msgstr ""
 "Ο κατάλογος %1 πρόκειται να αφαιρεθεί από τη λίστα του KDevelop.\n"
 "Επιθυμείτε την αφαίρεσή του από το σύστημα αρχείων επίσης;"
 
-#: settings/cmakepreferences.cpp:349
+#: settings/cmakepreferences.cpp:350
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
 msgstr ""
 
-#: settings/cmakepreferences.cpp:354
+#: settings/cmakepreferences.cpp:355
 #, kde-format
 msgid "Could not remove: %1"
 msgstr "Αδυναμία αφαίρεσης: %1"
 
-#: settings/cmakepreferences.cpp:400
+#: settings/cmakepreferences.cpp:401
 #, fuzzy, kde-format
 #| msgid "CMake"
 msgctxt "@title:tab"
 msgid "CMake"
 msgstr "CMake"
 
-#: settings/cmakepreferences.cpp:405
+#: settings/cmakepreferences.cpp:406
 #, fuzzy, kde-format
 #| msgid "Configure CMake settings"
 msgctxt "@title:tab"
