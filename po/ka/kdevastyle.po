@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2022-04-24 19:23+0200\n"
+"PO-Revision-Date: 2023-02-05 09:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: astyle_plugin.cpp:227
 #, kde-format
@@ -374,7 +374,7 @@ msgstr "პირობების(if-else) დაშლა"
 #, kde-format
 msgctxt "@title:group"
 msgid "Padding"
-msgstr ""
+msgstr "შევსება"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
 #: astyle_preferences.ui:450
