@@ -38,14 +38,16 @@ void FilterModel::setFilters(const SerializedFilters& filters)
 void FilterModel::moveFilterUp(int row)
 {
     beginMoveRows(QModelIndex(), row, row, QModelIndex(), row - 1);
-    qSwap(m_filters[row], m_filters[row - 1]);
+    using std::swap;
+    swap(m_filters[row], m_filters[row - 1]);
     endMoveRows();
 }
 
 void FilterModel::moveFilterDown(int row)
 {
     beginMoveRows(QModelIndex(), row, row, QModelIndex(), row + 2);
-    qSwap(m_filters[row], m_filters[row + 1]);
+    using std::swap;
+    swap(m_filters[row], m_filters[row + 1]);
     endMoveRows();
 }
 
