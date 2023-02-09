@@ -58,7 +58,11 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
     l->addWidget(urlnav);
     dirop = new KDirOperator( urlnav->locationUrl(), this);
+#if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
     dirop->setView( KFile::Tree );
+#else
+    dirop->setViewMode(KFile::Tree);
+#endif
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, &KDirOperator::urlEntered, this, &FileManager::updateNav);
     connect(dirop, &KDirOperator::contextMenuAboutToShow, this, &FileManager::fillContextMenu);
