@@ -133,7 +133,6 @@ ecm_set_disabled_deprecation_versions(
     KF 5.91
     KSERVICE 5.81 # KMimeTypeTrader
     KCOREADDONS 5.85 # KPluginLoader::factory()
-    KRUNNER 5.87 # K_EXPORT_PLASMA_RUNNER_WITH_JSON
     KI18N 5.88 # I18N_NOOP
 )
 

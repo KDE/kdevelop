@@ -14,7 +14,7 @@
 #include <QDebug>
 #include <QCollator>
 
-K_EXPORT_PLASMA_RUNNER_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
+K_PLUGIN_CLASS_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
 
 KDevelopSessions::KDevelopSessions(QObject* parent, const KPluginMetaData& metaData, const QVariantList& args)
     : Plasma::AbstractRunner(parent, metaData, args)
