@@ -1,22 +1,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2013, 2016, 2017, 2020.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-06-28 14:10+0200\n"
-"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
+"PO-Revision-Date: 2023-02-08 14:27+0100\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: committoolview.cpp:206 committoolview.cpp:207
 #, kde-format
@@ -296,7 +296,7 @@ msgstr "Úschovna"
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "Ponechat"
 
 #: rebasedialog.cpp:25
 #, kde-format
@@ -626,12 +626,12 @@ msgstr ""
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1 vytvořeno dne %2"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23

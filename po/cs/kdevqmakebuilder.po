@@ -1,13 +1,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Vít Pelčák <vit@pelcak.org>, 2011, 2015, 2020.
+# Vít Pelčák <vit@pelcak.org>, 2011, 2015, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2020-09-16 15:49+0200\n"
+"PO-Revision-Date: 2023-02-08 14:28+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: qmakebuilderpreferences.cpp:81
 #, kde-format
@@ -34,7 +34,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "Nemazat"
 
 #: qmakebuilderpreferences.cpp:149
 #, kde-format
