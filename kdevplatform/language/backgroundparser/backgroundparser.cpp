@@ -895,7 +895,7 @@ bool BackgroundParser::waitForIdle() const
     Q_D(const BackgroundParser);
 
     QList<IndexedString> runningParseJobsUrls;
-    forever {
+    while (true) {
         {
             QMutexLocker lock(&d->m_mutex);
             if (d->m_parseJobs.isEmpty()) {

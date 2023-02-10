@@ -33,7 +33,7 @@ bool askUser(const QString& mainText,
         out << mainText << Qt::endl;
         QTextStream in(stdin);
         QString input;
-        forever {
+        while (true) {
             if (ttyDefaultToYes) {
                 out << ttyPrompt << QLatin1String(": [Y/n] ") << Qt::flush;
             } else {

@@ -230,7 +230,7 @@ QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int leve
     // find all proxies between the source and our view
     QVector<QAbstractProxyModel*> proxies;
     proxies << proxy;
-    forever {
+    while (true) {
         auto* child = qobject_cast<QAbstractProxyModel*>(proxy->sourceModel());
         if (child) {
             proxy = child;
