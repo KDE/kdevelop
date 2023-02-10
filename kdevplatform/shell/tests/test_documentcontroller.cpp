@@ -19,6 +19,7 @@
 #include <languagecontroller.h>
 #include <documentcontroller.h>
 #include <tests/testcore.h>
+#include <tests/testhelpers.h>
 
 #include <QTest>
 #include <QSignalSpy>
@@ -147,17 +148,10 @@ void TestDocumentController::testCloseAllDocuments()
     QVERIFY(m_subject->openDocuments().empty());
 }
 
-
-
 QUrl TestDocumentController::createFile(const QTemporaryDir& dir, const QString& filename)
 {
     QFile file(dir.path() + filename);
-    bool success = file.open(QIODevice::WriteOnly | QIODevice::Text);
-    if(!success)
-    {
-        QWARN(QString("Failed to create file: " + dir.path() + filename).toLatin1().data());
-        return QUrl();
-    }
+    QVERIFY_RETURN(file.open(QIODevice::WriteOnly | QIODevice::Text), QUrl{});
     file.close();
     return QUrl::fromLocalFile(dir.path() + filename);
 }
