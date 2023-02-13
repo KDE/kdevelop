@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"POT-Creation-Date: 2023-02-13 00:55+0000\n"
 "PO-Revision-Date: 2020-01-15 23:18+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17,28 +17,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.08.1\n"
 
-#: filtermodel.cpp:74
+#: filtermodel.cpp:76
 #, fuzzy, kde-format
 #| msgid "Pattern"
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "Muster"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:78
 #, fuzzy, kde-format
 #| msgid "Targets"
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "Sihtmärgid"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:80
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@title:column"
 msgid "Action"
 msgstr "Toiming"
 
-#: filtermodel.cpp:107
+#: filtermodel.cpp:109
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -59,7 +59,7 @@ msgstr ""
 "<code>\"*\"</code>, lisatakse vaikimisi ette <code>\"*/\"</code>, nii et "
 "need leiavad kõik antud mustrile vastavad elemendid suhtelises asukohas."
 
-#: filtermodel.cpp:119
+#: filtermodel.cpp:121
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -69,28 +69,28 @@ msgstr ""
 "<br />Filter võib rakenduda ainult failidele, ainult kataloogidele või "
 "mõlematele."
 
-#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
 #, fuzzy, kde-format
 #| msgid "Files and Folders"
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "Failid ja kataloogid"
 
-#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, fuzzy, kde-format
 #| msgid "Folders"
 msgctxt "@item"
 msgid "Folders"
 msgstr "Kataloogid"
 
-#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
 #, fuzzy, kde-format
 #| msgid "Files"
 msgctxt "@item"
 msgid "Files"
 msgstr "Failid"
 
-#: filtermodel.cpp:141
+#: filtermodel.cpp:143
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -106,14 +106,14 @@ msgstr ""
 "mustriga <code>\"*\"</code> ja siis rakendada kaasavat mustrit <code>\".cpp"
 "\"</code>."
 
-#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, fuzzy, kde-format
 #| msgid "Include"
 msgctxt "@item"
 msgid "Include"
 msgstr "Kaasa arvatud"
 
-#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
 #, fuzzy, kde-format
 #| msgid "Exclude"
 msgctxt "@item"

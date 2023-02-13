@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectfilter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"POT-Creation-Date: 2023-02-13 00:55+0000\n"
 "PO-Revision-Date: 2020-07-20 12:38+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -13,25 +13,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-POFile-SpellExtra: cpp inclusivos\n"
 
-#: filtermodel.cpp:74
+#: filtermodel.cpp:76
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "Padrão"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:78
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "Alvos"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:80
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "Acção"
 
-#: filtermodel.cpp:107
+#: filtermodel.cpp:109
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -54,7 +54,7 @@ msgstr ""
 "isso, poderão corresponder a qualquer item com uma localização relativa que "
 "termina no padrão indicado."
 
-#: filtermodel.cpp:119
+#: filtermodel.cpp:121
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -63,25 +63,25 @@ msgstr ""
 "O alvo define qual o tipo de item a que corresponde o filtro.<br />Os "
 "filtros aplicam-se apenas aos ficheiros, às pastas ou a ambos."
 
-#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "Ficheiros e Pastas"
 
-#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "Pastas"
 
-#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "Ficheiros"
 
-#: filtermodel.cpp:141
+#: filtermodel.cpp:143
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -97,13 +97,13 @@ msgstr ""
 "com <code>\"*\"</code> e depois aplicar um padrão inclusivo <code>\"*.cpp\"</"
 "code>."
 
-#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "Incluir"
 
-#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

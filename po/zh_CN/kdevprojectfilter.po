@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"POT-Creation-Date: 2023-02-13 00:55+0000\n"
 "PO-Revision-Date: 2023-02-07 11:01\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,25 +17,25 @@ msgstr ""
 "X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevprojectfilter.pot\n"
 "X-Crowdin-File-ID: 4903\n"
 
-#: filtermodel.cpp:74
+#: filtermodel.cpp:76
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "模式"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:78
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "目标"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:80
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "操作"
 
-#: filtermodel.cpp:107
+#: filtermodel.cpp:109
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -53,7 +53,7 @@ msgstr ""
 "<code>/</code> 或 <code>*</code> 开头的模式将不明确地前缀 <code>*/</code>，因"
 "此能够匹配任何以此模式结尾的路径。"
 
-#: filtermodel.cpp:119
+#: filtermodel.cpp:121
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -61,25 +61,25 @@ msgid ""
 msgstr ""
 "目标定义过滤器匹配的项的类型。<br />过滤器可以过滤文件，文件夹或两者全部。"
 
-#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "文件和文件夹"
 
-#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "文件夹"
 
-#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "文件"
 
-#: filtermodel.cpp:141
+#: filtermodel.cpp:143
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -92,13 +92,13 @@ msgstr ""
 "项。<br />例如，要包含工程中所有以 <code>.cpp</code> 结尾的文件，您可以通过 "
 "<code>*</code> 排除所有的文件，然后应用包含模式 <code>*.cpp</code>。"
 
-#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "包含"
 
-#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"

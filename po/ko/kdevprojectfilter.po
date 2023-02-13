@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-01-26 00:43+0000\n"
+"POT-Creation-Date: 2023-02-13 00:55+0000\n"
 "PO-Revision-Date: 2020-10-04 20:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -14,25 +14,25 @@ msgstr ""
 "X-Generator: Lokalize 19.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: filtermodel.cpp:74
+#: filtermodel.cpp:76
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "패턴"
 
-#: filtermodel.cpp:76
+#: filtermodel.cpp:78
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "대상"
 
-#: filtermodel.cpp:78
+#: filtermodel.cpp:80
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "작업"
 
-#: filtermodel.cpp:107
+#: filtermodel.cpp:109
 #, kde-format
 msgid ""
 "The wildcard pattern defines whether a file or folder is included in a "
@@ -52,7 +52,7 @@ msgstr ""
 "호로 시작하지 않는 패턴은 명시적으로 맨 앞에 <code>\"*/\"</code> 문자열이 붙"
 "으며 상대 경로가 주어진 패턴으로 끝나는 모든 항목과 일치합니다."
 
-#: filtermodel.cpp:119
+#: filtermodel.cpp:121
 #, kde-format
 msgid ""
 "The target defines what type of item the filter is matched against.<br /"
@@ -61,25 +61,25 @@ msgstr ""
 "대상은 필터를 일치시킬 항목 종류를 결정합니다.<br />필터를 파일에만, 폴더에"
 "만 적용하거나 둘 다에 적용할 수 있습니다."
 
-#: filtermodel.cpp:125 projectfilterconfigpage.cpp:46
+#: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "파일과 폴더"
 
-#: filtermodel.cpp:130 projectfilterconfigpage.cpp:45
+#: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "폴더"
 
-#: filtermodel.cpp:135 projectfilterconfigpage.cpp:44
+#: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "파일"
 
-#: filtermodel.cpp:141
+#: filtermodel.cpp:143
 #, kde-format
 msgid ""
 "Filters by default exclude items from the project. Inclusive patterns can be "
@@ -94,13 +94,13 @@ msgstr ""
 "시키려면 모든 파일을 <code>\"*\"</code> 패턴으로 제외시키고 <code>\"*.cpp\"</"
 "code> 패턴이 들어가도록 할 수 있습니다."
 
-#: filtermodel.cpp:147 projectfilterconfigpage.cpp:51
+#: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "포함"
 
-#: filtermodel.cpp:152 projectfilterconfigpage.cpp:50
+#: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"
