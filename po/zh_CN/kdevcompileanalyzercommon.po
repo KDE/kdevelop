@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-02-07 11:06\n"
+"PO-Revision-Date: 2023-02-15 11:07\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -92,7 +92,7 @@ msgstr "没有要检查的内容：编译数据库文件“%1”不包含任何�
 #: compileanalyzeutils.cpp:57
 #, kde-format
 msgid "Could not open compilation database file for reading: '%1'"
-msgstr "无法打开并读取编译数据库文件：“%1”"
+msgstr "无法打开编译数据库文件进行读取：“%1”"
 
 #: compileanalyzeutils.cpp:65
 #, kde-format
