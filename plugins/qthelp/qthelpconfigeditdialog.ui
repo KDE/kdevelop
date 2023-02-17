@@ -26,9 +26,6 @@
      <property name="iconSize">
       <number>16</number>
      </property>
-     <property name="strictIconSize">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
    <item row="1" column="0">
