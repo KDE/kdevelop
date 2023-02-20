@@ -142,7 +142,31 @@ void TestProjectFilter::match_data()
             {QStringLiteral("qrc_foo.cpp"), File, Invalid},
             {QStringLiteral("foo.cpp~"), File, Invalid},
             {QStringLiteral(".foo.cpp.kate-swp"), File, Invalid},
-            {QStringLiteral(".foo.cpp.swp"), File, Invalid}
+            {QStringLiteral(".foo.cpp.swp"), File, Invalid},
+
+            // Default code quality tools explicitly checked
+            {QStringLiteral(".bumpversion.cfg"), File, Valid},
+            {QStringLiteral(".clang-format"), File, Valid},
+            {QStringLiteral(".clippy.toml"), File, Valid},
+            {QStringLiteral(".codespellrc"), File, Valid},
+            {QStringLiteral(".isort.cfg"), File, Valid},
+            {QStringLiteral(".mypy.ini"), File, Valid},
+            {QStringLiteral(".pydocstyle"), File, Valid},
+            {QStringLiteral(".pydocstyle.ini"), File, Valid},
+            {QStringLiteral(".pydocstylerc"), File, Valid},
+            {QStringLiteral(".pydocstylerc.ini"), File, Valid},
+            {QStringLiteral(".pylintrc"), File, Valid},
+            {QStringLiteral(".readthedocs.yaml"), File, Valid},
+            {QStringLiteral(".readthedocs.yml"), File, Valid},
+            {QStringLiteral(".yamllint"), File, Valid},
+            {QStringLiteral(".yamllint.yaml"), File, Valid},
+            {QStringLiteral(".yamllint.yml"), File, Valid},
+
+            // Code quality tool similar files that should remain hidden
+            {QStringLiteral(".mypy_cache"), Folder, Invalid},
+            {QStringLiteral(".pylint.d"), Folder, Invalid},
+            {QStringLiteral(".pytest_cache"), File, Invalid},
+            {QStringLiteral(".tox"), File, Invalid},
         };
         ADD_TESTS("default", project, filter, tests);
     }

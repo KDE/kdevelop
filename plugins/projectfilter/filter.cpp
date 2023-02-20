@@ -61,7 +61,7 @@ SerializedFilters defaultFilters()
     ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
     // but do show some with special meaning
 
-    static const std::array<QString, 10> configFiles = {
+    static const std::array<QString, 19> configFiles = {
         // Version control
         QStringLiteral(".gitignore"),
         QStringLiteral(".gitmodules"),
@@ -75,17 +75,35 @@ SerializedFilters defaultFilters()
         // https://travis-ci.org/
         QStringLiteral(".travis.yml"),
 
-        // Linting configs
+        // Code quality configs
 
+        //   https://github.com/c4urself/bump2version/
+        QStringLiteral(".bumpversion.cfg"),
+        //   https://clang.llvm.org/docs/ClangFormat.html
+        QStringLiteral(".clang-format"),
+        //   https://github.com/rust-lang/rust-clippy#configure-the-behavior-of-some-lints
+        QStringLiteral(".clippy.toml"),
+        //   https://github.com/codespell-project/codespell#using-a-config-file
+        QStringLiteral(".codespellrc"),
         //   https://editorconfig.org/
         QStringLiteral(".editorconfig"),
+        //   https://pycqa.github.io/isort/docs/configuration/config_files.html
+        QStringLiteral(".isort.cfg"),
+        //   https://mypy.readthedocs.io/en/stable/config_file.html
+        QStringLiteral(".mypy.ini"),
         //   https://pep8.readthedocs.io
         QStringLiteral(".pep8"),
         //   https://prettier.io/
         QStringLiteral(".prettierignore"),
         QStringLiteral(".prettierrc*"),
-        //   https://clang.llvm.org/docs/ClangFormat.html
-        QStringLiteral(".clang-format"),
+        //   https://www.pydocstyle.org/en/stable/usage.html#configuration-files
+        QStringLiteral(".pydocstyle*"),
+        //   https://pylint.readthedocs.io/en/stable/user_guide/usage/run.html#command-line-options
+        QStringLiteral(".pylintrc"),
+        //   https://docs.readthedocs.io/en/stable/config-file/v2.html
+        QStringLiteral(".readthedocs.y*ml"),
+        //   https://yamllint.readthedocs.io/en/stable/configuration.html#configuration
+        QStringLiteral(".yamllint*"),
     };
     for (const QString& file : configFiles) {
         ret << SerializedFilter(file, Filter::Files, Filter::Inclusive);
