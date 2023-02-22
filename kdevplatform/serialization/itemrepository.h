@@ -16,6 +16,8 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 
+#include <memory>
+
 #include "referencecounting.h"
 #include "abstractitemrepository.h"
 #include "itemrepositoryregistry.h"
@@ -131,7 +133,7 @@ public:
         }
     }
 
-    void initialize(int monsterBucketExtent)
+    void initialize(int monsterBucketExtent, std::unique_ptr<short unsigned int[]> nextBucketHashToRestore = {})
     {
         if (!m_data) {
             m_monsterBucketExtent = monsterBucketExtent;
@@ -143,8 +145,14 @@ public:
             //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
             m_objectMap = new short unsigned int[ObjectMapSize];
             memset(m_objectMap, 0, ObjectMapSize * sizeof(short unsigned int));
-            m_nextBucketHash = new short unsigned int[NextBucketHashSize];
-            memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
+
+            if (nextBucketHashToRestore) {
+                m_nextBucketHash = nextBucketHashToRestore.release();
+            } else {
+                m_nextBucketHash = new short unsigned int[NextBucketHashSize];
+                memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
+            }
+
             m_changed = true;
             m_dirty = false;
             m_lastUsed = 0;
@@ -617,11 +625,28 @@ public:
     ///Returns true if this bucket has no nextBucketForHash links
     bool noNextBuckets() const
     {
+        if (!m_nextBucketHash)
+            return true;
+
         for (int a = 0; a < NextBucketHashSize; ++a)
             if (m_nextBucketHash[a])
                 return false;
 
         return true;
+    }
+
+    std::unique_ptr<short unsigned int[]> takeNextBucketHash()
+    {
+        if (m_mappedData == m_data) {
+            // mmapped data, we need to copy the next bucket hash
+            auto ret = std::make_unique<short unsigned int[]>(NextBucketHashSize);
+            memcpy(ret.get(), m_nextBucketHash, NextBucketHashSize * sizeof(short unsigned int));
+            memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
+            return ret;
+        }
+
+        // otherwise we can just take the pointer directly
+        return std::unique_ptr<short unsigned int[]>(std::exchange(m_nextBucketHash, nullptr));
     }
 
     uint available() const
@@ -2028,6 +2053,11 @@ private:
             bucketPtr = m_buckets.at(bucketNumber);
         }
 
+        // the bucket may have encountered hash clashes in the past, we need to keep that data alive
+        // note that all following buckets that got merged with the first bucket to create the monster
+        // are guaranteed to _not_ have any next buckets, which is asserted in `deleteBucket`
+        auto oldNextBucketHash = bucketPtr->takeNextBucketHash();
+
         if (extent) {
             //Convert to monster-bucket
 #ifdef DEBUG_MONSTERBUCKETS
@@ -2043,7 +2073,7 @@ private:
 
             m_buckets[bucketNumber] = new MyBucket();
 
-            m_buckets[bucketNumber]->initialize(extent);
+            m_buckets[bucketNumber]->initialize(extent, std::move(oldNextBucketHash));
 
 #ifdef DEBUG_MONSTERBUCKETS
 
@@ -2062,10 +2092,12 @@ private:
                 Q_ASSERT(!m_buckets[index]);
                 m_buckets[index] = new MyBucket();
 
-                m_buckets[index]->initialize(0);
+                m_buckets[index]->initialize(
+                    0, index == bucketNumber ? std::move(oldNextBucketHash) : std::unique_ptr<short unsigned int[]>());
                 Q_ASSERT(!m_buckets[index]->monsterBucketExtent());
             }
         }
+
         return m_buckets[bucketNumber];
     }
 

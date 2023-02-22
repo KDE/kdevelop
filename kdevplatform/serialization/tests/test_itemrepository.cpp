@@ -6,6 +6,12 @@
 #include <cstdlib>
 #include <ctime>
 
+#include <algorithm>
+#include <memory>
+#include <numeric>
+#include <utility>
+#include <vector>
+
 using namespace KDevelop;
 
 struct TestItem
@@ -239,37 +245,79 @@ private Q_SLOTS:
             QCOMPARE(qString, strings[i]);
         }
     }
+    void deleteClashingMonsterBucket_data()
+    {
+        QTest::addColumn<QVector<uint>>("itemSizes");
+        int testIndex = 0;
+
+        auto addRow = [&testIndex](QVector<uint> itemSizes) {
+            QTest::addRow("%d", testIndex++) << itemSizes;
+        };
+
+        const auto big = ItemRepositoryBucketSize + 10;
+        const auto small = 20;
+        addRow({small, big});
+        addRow({small, small + 1});
+        addRow({big, big + 1});
+        addRow({small, small + 1, small + 2});
+        addRow({small, small + 1, big});
+        addRow({small, big, big + 1});
+        addRow({big, big + 1, big + 2});
+    }
     void deleteClashingMonsterBucket()
     {
+        QFETCH(QVector<uint>, itemSizes);
+
+        std::vector<std::size_t> originalItemIds(itemSizes.size());
+        std::iota(originalItemIds.begin(), originalItemIds.end(), 0);
+
         QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
-        const uint hash = 1235;
 
-        QScopedArrayPointer<TestItem> monsterItem(createItem(hash, ItemRepositoryBucketSize + 10));
-        QScopedArrayPointer<TestItem> smallItem(createItem(hash, 20));
-        QVERIFY(!monsterItem->equals(smallItem.data()));
+        // repeat the below for multiple hashes
+        for (auto hash : {1235u, 1236u}) {
+            // one permutation for the insertion order
+            auto itemIdsToCreate = originalItemIds;
+            do {
+                // one permutation for the deletion order
+                auto itemIdsToDelete = originalItemIds;
+                do {
+                    std::vector<uint> repoIndices;
+                    repoIndices.reserve(itemSizes.size());
+                    std::vector<std::unique_ptr<TestItem[]>> items;
+                    items.reserve(itemSizes.size());
 
-        uint smallIndex = repository.index(TestItemRequest(*smallItem, true));
-        uint monsterIndex = repository.index(TestItemRequest(*monsterItem, true));
-        QVERIFY(monsterIndex != smallIndex);
+                    // create items
+                    for (auto itemId : itemIdsToCreate) {
+                        std::unique_ptr<TestItem[]> item(createItem(hash, itemSizes[itemId]));
+                        const auto itemRequest = TestItemRequest(*item.get(), true);
 
-        repository.deleteItem(smallIndex);
-        QVERIFY(!repository.findIndex(TestItemRequest(*smallItem, true)));
-        QCOMPARE(monsterIndex, repository.findIndex(TestItemRequest(*monsterItem, true)));
-        repository.deleteItem(monsterIndex);
+                        QVERIFY(!repository.findIndex(itemRequest));
 
-        // now in reverse order, with different data see: https://bugs.kde.org/show_bug.cgi?id=272408
+                        for (const auto& otherItem : items)
+                            QVERIFY(!otherItem.get()->equals(item.get()));
 
-        monsterItem.reset(createItem(hash + 1, ItemRepositoryBucketSize + 10));
-        smallItem.reset(createItem(hash + 1, 20));
-        QVERIFY(!monsterItem->equals(smallItem.data()));
-        monsterIndex = repository.index(TestItemRequest(*monsterItem, true));
-        smallIndex = repository.index(TestItemRequest(*smallItem, true));
+                        auto index = repository.index(itemRequest);
+                        QVERIFY(index);
+                        QCOMPARE(repository.findIndex(itemRequest), index);
 
-        repository.deleteItem(monsterIndex);
-        QCOMPARE(smallIndex, repository.findIndex(TestItemRequest(*smallItem, true)));
-        QVERIFY(!repository.findIndex(TestItemRequest(*monsterItem, true)));
-        repository.deleteItem(smallIndex);
+                        items.push_back(std::move(item));
+                        repoIndices.push_back(index);
+                    }
+
+                    // delete items
+                    for (auto itemId : itemIdsToDelete) {
+                        const auto& item = items[itemId];
+                        const auto itemRequest = TestItemRequest(*item.get(), true);
+                        const auto index = repoIndices[itemId];
+
+                        QCOMPARE(repository.findIndex(itemRequest), index);
+                        repository.deleteItem(index);
+                        QCOMPARE(repository.findIndex(itemRequest), 0);
+                    }
+                } while (std::next_permutation(itemIdsToDelete.begin(), itemIdsToDelete.end()));
+            } while (std::next_permutation(itemIdsToCreate.begin(), itemIdsToCreate.end()));
+        }
     }
     void usePermissiveModuloWhenRemovingClashLinks()
     {
