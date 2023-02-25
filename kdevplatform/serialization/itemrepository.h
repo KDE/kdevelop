@@ -201,7 +201,7 @@ public:
 
         file->seek(offset);
 
-        file->write(reinterpret_cast<const char*>(&m_monsterBucketExtent), sizeof(unsigned int));
+        file->write(reinterpret_cast<const char*>(&m_monsterBucketExtent), sizeof(int));
         file->write(reinterpret_cast<const char*>(&m_available), sizeof(unsigned int));
         file->write(reinterpret_cast<const char*>(m_objectMap), sizeof(short unsigned int) * ObjectMapSize);
         file->write(reinterpret_cast<const char*>(m_nextBucketHash), sizeof(short unsigned int) * NextBucketHashSize);
@@ -229,7 +229,7 @@ public:
             short unsigned int* m = new short unsigned int[ObjectMapSize];
             short unsigned int* h = new short unsigned int[NextBucketHashSize];
 
-            file->read(reinterpret_cast<char*>(&monsterBucketExtent), sizeof(unsigned int));
+            file->read(reinterpret_cast<char*>(&monsterBucketExtent), sizeof(int));
             Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
 
             char* d = new char[dataSize()];
@@ -2263,8 +2263,8 @@ private:
                     VERIFY(res);
                     offset += BucketStartOffset;
                     m_file->seek(offset);
-                    uint monsterBucketExtent;
-                    m_file->read(reinterpret_cast<char*>((&monsterBucketExtent)), sizeof(unsigned int));
+                    int monsterBucketExtent;
+                    m_file->read(reinterpret_cast<char*>((&monsterBucketExtent)), sizeof(int));
                     m_file->seek(offset);
                     ///FIXME: use the data here instead of copying it again in prepareChange
                     QByteArray data = m_file->read((1 + monsterBucketExtent) * MyBucket::DataSize);
