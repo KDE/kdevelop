@@ -1770,12 +1770,41 @@ public:
     void unlock() final { m_mutex->unlock(); }
 
 private:
+    void writeMetadata()
+    {
+        using namespace ItemRepositoryUtils;
+
+        Q_ASSERT(m_file);
+        Q_ASSERT(m_dynamicFile);
+
+        m_file->seek(0);
+        writeValue(m_file, m_repositoryVersion);
+        uint hashSize = bucketHashSize;
+        writeValue(m_file, hashSize);
+        uint itemRepositoryVersion = staticItemRepositoryVersion();
+        writeValue(m_file, itemRepositoryVersion);
+        writeValue(m_file, m_statBucketHashClashes);
+        writeValue(m_file, m_statItemCount);
+
+        const uint bucketCount = static_cast<uint>(m_buckets.size());
+        writeValue(m_file, bucketCount);
+        writeValue(m_file, m_currentBucket);
+        writeValues(m_file, bucketHashSize, m_firstBucketForHash);
+        Q_ASSERT(m_file->pos() == BucketStartOffset);
+
+        m_dynamicFile->seek(0);
+        const uint freeSpaceBucketsSize = static_cast<uint>(m_freeSpaceBuckets.size());
+        writeValue(m_dynamicFile, freeSpaceBucketsSize);
+        writeValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
+
+        Q_ASSERT(m_buckets.size() == m_monsterBucketTailMarker.size());
+        writeValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
+    }
+
     ///Synchronizes the state on disk to the one in memory, and does some memory-management.
     ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
     void store() final
     {
-        using namespace ItemRepositoryUtils;
-
         if (m_file) {
             if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
                 qFatal("cannot re-open repository file for storing");
@@ -1801,30 +1830,7 @@ private:
             }
 
             if (m_metaDataChanged) {
-                Q_ASSERT(m_dynamicFile);
-
-                m_file->seek(0);
-                writeValue(m_file, m_repositoryVersion);
-                uint hashSize = bucketHashSize;
-                writeValue(m_file, hashSize);
-                uint itemRepositoryVersion  = staticItemRepositoryVersion();
-                writeValue(m_file, itemRepositoryVersion);
-                writeValue(m_file, m_statBucketHashClashes);
-                writeValue(m_file, m_statItemCount);
-
-                const uint bucketCount = static_cast<uint>(m_buckets.size());
-                writeValue(m_file, bucketCount);
-                writeValue(m_file, m_currentBucket);
-                writeValues(m_file, bucketHashSize, m_firstBucketForHash);
-                Q_ASSERT(m_file->pos() == BucketStartOffset);
-
-                m_dynamicFile->seek(0);
-                const uint freeSpaceBucketsSize = static_cast<uint>(m_freeSpaceBuckets.size());
-                writeValue(m_dynamicFile, freeSpaceBucketsSize);
-                writeValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
-
-                Q_ASSERT(m_buckets.size() == m_monsterBucketTailMarker.size());
-                writeValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
+                writeMetadata();
             }
             //To protect us from inconsistency due to crashes. flush() is not enough. We need to close.
             m_file->close();
@@ -1854,31 +1860,22 @@ private:
         m_metaDataChanged = true;
         if (m_file->size() == 0) {
             m_file->resize(0);
-            writeValue(m_file, m_repositoryVersion);
-            uint hashSize = bucketHashSize;
-            writeValue(m_file, hashSize);
-            uint itemRepositoryVersion = staticItemRepositoryVersion();
-            writeValue(m_file, itemRepositoryVersion);
 
             m_statBucketHashClashes = m_statItemCount = 0;
-
-            writeValue(m_file, m_statBucketHashClashes);
-            writeValue(m_file, m_statItemCount);
 
             Q_ASSERT(m_buckets.isEmpty());
             Q_ASSERT(m_freeSpaceBuckets.isEmpty());
             allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
 
-            uint bucketCount = m_buckets.size();
-            writeValue(m_file, bucketCount);
-
             std::fill_n(m_firstBucketForHash, bucketHashSize, 0);
 
             // Skip the first bucket, we won't use it so we have the zero indices for special purposes
             Q_ASSERT(m_currentBucket == 1);
-            writeValue(m_file, m_currentBucket);
 
-            writeValues(m_file, bucketHashSize, m_firstBucketForHash);
+            // -1 because the 0 bucket is reserved for special purposes
+            Q_ASSERT(m_freeSpaceBuckets.size() == m_buckets.size() - 1);
+
+            writeMetadata();
 
             // We have completely initialized the file now
             if (m_file->pos() != BucketStartOffset) {
@@ -1887,15 +1884,6 @@ private:
                 abort();
             }
 
-            const uint freeSpaceBucketsSize = m_freeSpaceBuckets.size();
-            writeValue(m_dynamicFile, freeSpaceBucketsSize);
-            writeValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
-
-            Q_ASSERT(static_cast<uint>(m_monsterBucketTailMarker.size()) == bucketCount);
-            writeValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
-
-            // -1 because the 0 bucket is reserved for special purposes
-            Q_ASSERT(m_freeSpaceBuckets.size() == m_buckets.size() - 1);
         } else {
             m_file->close();
             bool res = m_file->open(QFile::ReadOnly); // Re-open in read-only mode, so we create a read-only m_fileMap
