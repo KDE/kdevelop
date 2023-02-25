@@ -318,9 +318,12 @@ public:
         unsigned int totalSize = itemSize + AdditionalSpacePerItem;
 
         if (m_monsterBucketExtent) {
-            ///This is a monster-bucket. Other rules are applied here. Only one item can be allocated, and that must be bigger than the bucket data
+            /// This is a monster-bucket. Other rules are applied here:
+            /// Only one item can be allocated, and that must be bigger than the bucket data
+            if (!m_available)
+                return 0;
+
             Q_ASSERT(totalSize > ItemRepositoryBucketSize);
-            Q_ASSERT(m_available);
             m_available = 0;
 
             insertedAt = AdditionalSpacePerItem;
