@@ -1,8 +1,10 @@
 #include "itemrepositorytestbase.h"
 
 #include <QTest>
-#include <serialization/itemrepository.h>
+
 #include <serialization/indexedstring.h>
+#include <serialization/itemrepository.h>
+
 #include <cstdlib>
 #include <ctime>
 
