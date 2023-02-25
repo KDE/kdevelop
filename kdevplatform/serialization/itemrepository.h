@@ -1231,6 +1231,18 @@ public:
             }
         }
 
+        auto advanceToNextBucket = [&]() {
+            //This should never happen when we picked a bucket for re-use
+            Q_ASSERT(!pickedBucketInChain);
+            Q_ASSERT(useBucket == m_currentBucket);
+            // note: the bucket may be empty and/or in the free list, but it might still be too small
+            // for a monster bucket request
+
+            ++m_currentBucket;
+            Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
+            useBucket = m_currentBucket;
+        };
+
         //The item isn't in the repository yet, find a new bucket for it
         while (1) {
             if (useBucket >= m_buckets.size()) {
@@ -1247,6 +1259,12 @@ public:
             if (!useBucket) {
                 Q_ASSERT(m_currentBucket);
                 useBucket = m_currentBucket;
+            }
+
+            // don't put an item into the tail of a monster bucket
+            if (m_monsterBucketTailMarker[useBucket]) {
+                advanceToNextBucket();
+                continue;
             }
 
             auto* bucketPtr = bucketForIndex(useBucket);
@@ -1289,8 +1307,7 @@ public:
                             if (totalAvailableSpace > totalSize) {
                                 Q_ASSERT(extent);
                                 ///We can merge these buckets into one monster-bucket that can hold the data
-                                Q_ASSERT(( uint )m_freeSpaceBuckets[a - extent] == ( uint )rangeStart);
-                                m_freeSpaceBuckets.remove(a - extent, extent + 1);
+                                Q_ASSERT((uint)m_freeSpaceBuckets[a - extent] == (uint)rangeStart);
                                 useBucket = rangeStart;
                                 convertMonsterBucket(rangeStart, extent);
 
@@ -1408,16 +1425,7 @@ public:
                 Q_ASSERT(m_currentBucket < m_buckets.size());
                 return createIndex(useBucket, indexInBucket);
             } else {
-                //This should never happen when we picked a bucket for re-use
-                Q_ASSERT(!pickedBucketInChain);
-                Q_ASSERT(useBucket == m_currentBucket);
-
-                if (!bucketForIndex(useBucket)->isEmpty())
-                    putIntoFreeList(useBucket, bucketPtr);
-
-                ++m_currentBucket;
-                Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
-                useBucket = m_currentBucket;
+                advanceToNextBucket();
             }
         }
         //We haven't found a bucket that already contains the item, so append it to the current bucket
@@ -1503,7 +1511,6 @@ public:
 
         if (bucketPtr->monsterBucketExtent()) {
             //Convert the monster-bucket back to multiple normal buckets, and put them into the free list
-            uint newBuckets = bucketPtr->monsterBucketExtent() + 1;
             Q_ASSERT(bucketPtr->isEmpty());
             if (!previousBucketPtr) {
                 // see https://bugs.kde.org/show_bug.cgi?id=272408
@@ -1513,12 +1520,6 @@ public:
                 bucketPtr->setNextBucketForHash(hash, 0);
             }
             convertMonsterBucket(bucket, 0);
-            for (uint created = bucket; created < bucket + newBuckets; ++created) {
-                putIntoFreeList(created, bucketForIndex(created));
-#ifdef DEBUG_MONSTERBUCKETS
-                Q_ASSERT(m_freeSpaceBuckets.indexOf(created) != -1);
-#endif
-            }
         } else {
             putIntoFreeList(bucket, bucketPtr);
         }
@@ -1635,6 +1636,8 @@ public:
         ret.longestInBucketChain = 0;
 
         for (int a = 1; a < m_currentBucket + 1; ++a) {
+            Q_ASSERT(!m_monsterBucketTailMarker[a]);
+
             MyBucket* bucket = bucketForIndex(a);
             if (bucket) {
                 ++bucketCount;
@@ -1774,6 +1777,10 @@ private:
                 const uint freeSpaceBucketsSize = static_cast<uint>(m_freeSpaceBuckets.size());
                 m_dynamicFile->write(reinterpret_cast<const char*>(&freeSpaceBucketsSize), sizeof(uint));
                 m_dynamicFile->write(reinterpret_cast<const char*>(m_freeSpaceBuckets.data()), sizeof(uint) * freeSpaceBucketsSize);
+
+                Q_ASSERT(m_buckets.size() == m_monsterBucketTailMarker.size());
+                m_dynamicFile->write(reinterpret_cast<const char*>(m_monsterBucketTailMarker.data()),
+                                     sizeof(bool) * bucketCount);
             }
             //To protect us from inconsistency due to crashes. flush() is not enough. We need to close.
             m_file->close();
@@ -1813,6 +1820,7 @@ private:
             m_file->write(reinterpret_cast<const char*>(&m_statItemCount), sizeof(uint));
 
             Q_ASSERT(m_buckets.isEmpty());
+            Q_ASSERT(m_freeSpaceBuckets.isEmpty());
             allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
 
             uint bucketCount = m_buckets.size();
@@ -1832,9 +1840,17 @@ private:
                 abort();
             }
 
-            const uint freeSpaceBucketsSize = 0;
+            const uint freeSpaceBucketsSize = m_freeSpaceBuckets.size();
             m_dynamicFile->write(reinterpret_cast<const char*>(&freeSpaceBucketsSize), sizeof(uint));
-            m_freeSpaceBuckets.clear();
+            m_dynamicFile->write(reinterpret_cast<const char*>(m_freeSpaceBuckets.data()),
+                                 sizeof(uint) * freeSpaceBucketsSize);
+
+            Q_ASSERT(static_cast<uint>(m_monsterBucketTailMarker.size()) == bucketCount);
+            m_dynamicFile->write(reinterpret_cast<const char*>(m_monsterBucketTailMarker.data()),
+                                 sizeof(bool) * bucketCount);
+
+            // -1 because the 0 bucket is reserved for special purposes
+            Q_ASSERT(m_freeSpaceBuckets.size() == m_buckets.size() - 1);
         } else {
             m_file->close();
             bool res = m_file->open(QFile::ReadOnly); // Re-open in read-only mode, so we create a read-only m_fileMap
@@ -1866,6 +1882,7 @@ private:
             m_file->read(reinterpret_cast<char*>(&bucketCount), sizeof(uint));
 
             Q_ASSERT(m_buckets.isEmpty());
+            Q_ASSERT(m_freeSpaceBuckets.isEmpty());
             // not calling allocateNextBuckets here, as we load buckets from file here, not new/next ones
             m_buckets.resize(bucketCount);
 
@@ -1881,6 +1898,9 @@ private:
             m_freeSpaceBuckets.resize(freeSpaceBucketsSize);
             m_dynamicFile->read(reinterpret_cast<char*>(m_freeSpaceBuckets.data()),
                                 sizeof(uint) * freeSpaceBucketsSize);
+
+            m_monsterBucketTailMarker.resize(bucketCount);
+            m_dynamicFile->read(reinterpret_cast<char*>(m_monsterBucketTailMarker.data()), sizeof(bool) * bucketCount);
         }
 
         m_fileMapSize = 0;
@@ -2043,6 +2063,8 @@ private:
     ///              When it is nonzero, it is converted to a monster-bucket.
     MyBucket* convertMonsterBucket(int bucketNumber, int extent)
     {
+        m_metaDataChanged = true;
+
         Q_ASSERT(bucketNumber);
         auto* bucketPtr = bucketForIndex(bucketNumber);
 
@@ -2053,15 +2075,33 @@ private:
 
         if (extent) {
             //Convert to monster-bucket
-#ifdef DEBUG_MONSTERBUCKETS
-            for (int index = bucketNumber; index < bucketNumber + 1 + extent; ++index) {
-                Q_ASSERT(bucketPtr->isEmpty());
-                Q_ASSERT(!bucketPtr->monsterBucketExtent());
-                Q_ASSERT(m_freeSpaceBuckets.indexOf(index) == -1);
-            }
+            Q_ASSERT(bucketPtr->isEmpty());
 
+            const auto monsterStart = bucketNumber;
+            const auto monsterEnd = monsterStart + extent + 1;
+
+            // NOTE: see assertion below, when we get here then the entry for `bucketNumber in `m_freeSpaceBuckets`
+            //       will be followed by the entries for the following buckets, because they are all free and thus
+            //       the second level ordering by bucket index is all that matters
+            const auto freeSpaceIndex = m_freeSpaceBuckets.indexOf(bucketNumber);
+            Q_ASSERT(freeSpaceIndex != -1);
+
+#ifdef DEBUG_MONSTERBUCKETS
+            for (int offset = 0; offset < extent + 1; ++offset) {
+                auto bucket = bucketForIndex(bucketNumber + offset);
+                Q_ASSERT(bucket->isEmpty());
+                Q_ASSERT(!bucket->monsterBucketExtent());
+                Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber + offset]);
+                // verify that the m_freeSpaceBuckets is ordered the way we expect it to
+                Q_ASSERT(m_freeSpaceBuckets[freeSpaceIndex + offset] == static_cast<uint>(bucketNumber + offset));
+            }
 #endif
-            for (int index = bucketNumber; index < bucketNumber + 1 + extent; ++index)
+
+            // the following buckets are not free anymore, they get merged into the monster
+            // NOTE: we assert above that the order of the entries is correct
+            m_freeSpaceBuckets.remove(freeSpaceIndex, extent + 1);
+
+            for (int index = monsterStart; index < monsterEnd; ++index)
                 deleteBucket(index);
 
             bucketPtr = new MyBucket();
@@ -2070,26 +2110,61 @@ private:
             Q_ASSERT(!m_buckets[bucketNumber]);
             m_buckets[bucketNumber] = bucketPtr;
 
+            // mark the tail of the monster bucket
+            std::fill(std::next(m_monsterBucketTailMarker.begin(), monsterStart + 1),
+                      std::next(m_monsterBucketTailMarker.begin(), monsterEnd), true);
+
 #ifdef DEBUG_MONSTERBUCKETS
-
-            for (int index = bucketNumber + 1; index < bucketNumber + 1 + extent; ++index) {
+            // all following buckets are deleted and not marked as free anymore
+            for (int index = monsterStart + 1; index < monsterEnd; ++index) {
                 Q_ASSERT(!m_buckets[index]);
-            }
+                Q_ASSERT(!m_freeSpaceBuckets.contains(index));
 
+                // all tail buckets are marked as part of the monster now
+                Q_ASSERT(m_monsterBucketTailMarker[index]);
+            }
 #endif
+
+            // but the new monster bucket is still free
+            Q_ASSERT(bucketPtr->isEmpty());
+            // and it itself is not marked as a tail, to allow us to still look things up in it directly
+            Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber]);
+            // monster buckets don't get put into the m_freeSpaceBuckets list
+            Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
         } else {
+            const auto oldExtent = bucketPtr->monsterBucketExtent();
+            const auto oldMonsterStart = bucketNumber;
+            const auto oldMonsterEnd = oldMonsterStart + oldExtent + 1;
+
             Q_ASSERT(bucketPtr->monsterBucketExtent());
             Q_ASSERT(bucketPtr->isEmpty());
-            const int oldExtent = bucketPtr->monsterBucketExtent();
-            deleteBucket(bucketNumber); //Delete the monster-bucket
+            // while empty, a monster bucket never is put into the m_freeSpaceBuckets list
+            Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
+            // the monster itself is not a tail
+            Q_ASSERT(!m_monsterBucketTailMarker[bucketNumber]);
 
-            for (int index = bucketNumber; index < bucketNumber + 1 + oldExtent; ++index) {
+#ifdef DEBUG_MONSTERBUCKETS
+            // all buckets that are part of the monster are marked as such
+            for (int index = oldMonsterStart + 1; index < oldMonsterEnd; ++index) {
+                Q_ASSERT(m_monsterBucketTailMarker[index]);
+            }
+#endif
+
+            // delete the monster bucket
+            deleteBucket(bucketNumber);
+
+            // remove markers for the tail of the monster bucket
+            std::fill(std::next(m_monsterBucketTailMarker.begin(), oldMonsterStart + 1),
+                      std::next(m_monsterBucketTailMarker.begin(), oldMonsterEnd), false);
+
+            // recreate non-monster buckets
+            for (int index = oldMonsterStart; index < oldMonsterEnd; ++index) {
                 auto& bucket = m_buckets[index];
                 Q_ASSERT(!bucket);
 
                 bucket = new MyBucket();
 
-                if (index == bucketNumber) {
+                if (index == oldMonsterStart) {
                     bucket->initialize(0, std::move(oldNextBucketHash));
                     bucketPtr = bucket;
                 } else {
@@ -2097,6 +2172,12 @@ private:
                 }
 
                 Q_ASSERT(!bucket->monsterBucketExtent());
+                Q_ASSERT(!m_freeSpaceBuckets.contains(index));
+
+                putIntoFreeList(index, bucket);
+
+                Q_ASSERT(m_freeSpaceBuckets.contains(index));
+                Q_ASSERT(!m_monsterBucketTailMarker[index]);
             }
         }
 
@@ -2151,6 +2232,7 @@ private:
     {
         Q_ASSERT(bucketNumber);
 #ifdef DEBUG_MONSTERBUCKETS
+        // ensure that the previous N buckets are no monster buckets that overlap the requested bucket
         for (int offset = 1; offset < 5; ++offset) {
             int test = bucketNumber - offset;
             if (test >= 0 && m_buckets[test]) {
@@ -2209,6 +2291,7 @@ private:
         //       we still want to verify that we only delete empty buckets though
         Q_ASSERT(bucketForIndex(bucketNumber)->isEmpty());
         Q_ASSERT(bucketForIndex(bucketNumber)->noNextBuckets());
+        Q_ASSERT(!m_freeSpaceBuckets.contains(bucketNumber));
 
         auto& bucket = m_buckets[bucketNumber];
         delete bucket;
@@ -2279,16 +2362,15 @@ private:
             }
 
             m_freeSpaceBuckets.insert(insertPos, bucket);
+
             updateFreeSpaceOrder(insertPos);
         } else if (indexInFree != -1) {
             ///Re-order so the order in m_freeSpaceBuckets is correct(sorted by largest free item size)
             updateFreeSpaceOrder(indexInFree);
         }
-#ifdef DEBUG_MONSTERBUCKETS
-        if (bucketPtr->isEmpty()) {
-            Q_ASSERT(m_freeSpaceBuckets.contains(bucket));
-        }
-#endif
+
+        // empty buckets definitely should be in the free space list
+        Q_ASSERT(!bucketPtr->isEmpty() || m_freeSpaceBuckets.contains(bucket));
     }
 
     void verifyIndex(uint index) const
@@ -2314,6 +2396,27 @@ private:
         Q_ASSERT(numNewBuckets > 0);
         const auto oldSize = m_buckets.size();
         m_buckets.resize(oldSize + numNewBuckets);
+        m_monsterBucketTailMarker.resize(m_buckets.size());
+
+        // the buckets we just created can by definition not yet exist and must be empty
+        // meaning we can bypass loading from file _and_ we must add them to the freeSpaceBuckets too
+        for (int i = oldSize; i < (oldSize + numNewBuckets); ++i) {
+            if (i == 0) // see below, the zero bucket is reserved for special purposes
+                continue;
+
+            auto& bucket = m_buckets[i];
+            Q_ASSERT(!bucket);
+
+            bucket = new MyBucket;
+            bucket->initialize(0);
+
+            Q_ASSERT(bucket->isEmpty());
+            Q_ASSERT(!bucket->monsterBucketExtent());
+            Q_ASSERT(!m_monsterBucketTailMarker[i]);
+
+            putIntoFreeList(i, bucket);
+            Q_ASSERT(m_freeSpaceBuckets.contains(i));
+        }
 
         // Skip the first bucket, we won't use it so we have the zero indices for special purposes
         if (m_currentBucket == 0)
@@ -2329,6 +2432,10 @@ private:
 
     //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
     QVector<uint> m_freeSpaceBuckets;
+    // every bucket that is part of a monster bucket but not the "main" bucket gets marked in this list,
+    // this allows us to ensure we don't try to put an entry into such a bucket later on, which would corrupt data
+    QVector<bool> m_monsterBucketTailMarker;
+    //List of hash map buckets that actually hold the data of the item repository
     mutable QVector<MyBucket*> m_buckets;
     uint m_statBucketHashClashes = 0;
     uint m_statItemCount = 0;

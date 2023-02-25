@@ -2,6 +2,15 @@
 
 #include <QTest>
 
+// enable various debug facilities in the ItemRepository code
+// make sure to keep this block on the top, to ensure the include of itemrepository.h
+// below picks it up correctly
+
+#define DEBUG_MONSTERBUCKETS 1
+#define DEBUG_ITEMREPOSITORY_LOADING 1
+#define DEBUG_ITEM_REACHABILITY 1
+#define DEBUG_INCORRECT_DELETE 1
+
 #include <serialization/indexedstring.h>
 #include <serialization/itemrepository.h>
 
@@ -202,6 +211,9 @@ private Q_SLOTS:
                     }
                 }
             }
+
+            // calling statistics here does some extended tests and shouldn't crash or assert
+            repository.statistics();
         }
 
         // cleanup
