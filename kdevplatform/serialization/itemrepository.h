@@ -16,6 +16,7 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 
+#include <algorithm>
 #include <memory>
 
 #include "referencecounting.h"
@@ -140,17 +141,17 @@ public:
             m_available = ItemRepositoryBucketSize;
             m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
 #ifndef QT_NO_DEBUG
-            memset(m_data, 0, (ItemRepositoryBucketSize + monsterBucketExtent * DataSize) * sizeof(char));
+            std::fill_n(m_data, ItemRepositoryBucketSize + monsterBucketExtent * DataSize, 0);
 #endif
             //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
             m_objectMap = new short unsigned int[ObjectMapSize];
-            memset(m_objectMap, 0, ObjectMapSize * sizeof(short unsigned int));
+            std::fill_n(m_objectMap, ObjectMapSize, 0);
 
             if (nextBucketHashToRestore) {
                 m_nextBucketHash = nextBucketHashToRestore.release();
             } else {
                 m_nextBucketHash = new short unsigned int[NextBucketHashSize];
-                memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
+                std::fill_n(m_nextBucketHash, NextBucketHashSize, 0);
             }
 
             m_changed = true;
@@ -240,9 +241,9 @@ public:
 
             Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
             Q_ASSERT(available == m_available);
-            Q_ASSERT(memcmp(d, m_data, ItemRepositoryBucketSize + monsterBucketExtent * DataSize) == 0);
-            Q_ASSERT(memcmp(m, m_objectMap, sizeof(short unsigned int) * ObjectMapSize) == 0);
-            Q_ASSERT(memcmp(h, m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize) == 0);
+            Q_ASSERT(std::equal(d, std::next(d, ItemRepositoryBucketSize + monsterBucketExtent * DataSize), m_data));
+            Q_ASSERT(std::equal(m, std::next(m, ObjectMapSize), m_objectMap));
+            Q_ASSERT(std::equal(h, std::next(h, NextBucketHashSize), m_nextBucketHash));
             Q_ASSERT(m_largestFreeItem == largestFree);
             Q_ASSERT(m_freeItemCount == freeItemCount);
             Q_ASSERT(m_dirty == dirty);
@@ -560,7 +561,8 @@ public:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
 #endif
-        memset(item, 0, size); //For debugging, so we notice the data is wrong
+        //For debugging, so we notice the data is wrong
+        std::fill_n(reinterpret_cast<char*>(item), size, 0);
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
 #pragma GCC diagnostic pop
 #endif
@@ -640,8 +642,8 @@ public:
         if (m_mappedData == m_data) {
             // mmapped data, we need to copy the next bucket hash
             auto ret = std::make_unique<short unsigned int[]>(NextBucketHashSize);
-            memcpy(ret.get(), m_nextBucketHash, NextBucketHashSize * sizeof(short unsigned int));
-            memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
+            std::copy_n(m_nextBucketHash, NextBucketHashSize, ret.get());
+            std::fill_n(m_nextBucketHash, NextBucketHashSize, 0);
             return ret;
         }
 
@@ -842,9 +844,9 @@ private:
             m_objectMap = new short unsigned int[ObjectMapSize];
             m_nextBucketHash = new short unsigned int[NextBucketHashSize];
 
-            memcpy(m_data, m_mappedData, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
-            memcpy(m_objectMap, oldObjectMap, ObjectMapSize * sizeof(short unsigned int));
-            memcpy(m_nextBucketHash, oldNextBucketHash, NextBucketHashSize * sizeof(short unsigned int));
+            std::copy_n(m_mappedData, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize, m_data);
+            std::copy_n(oldObjectMap, ObjectMapSize, m_objectMap);
+            std::copy_n(oldNextBucketHash, NextBucketHashSize, m_nextBucketHash);
         }
     }
 
@@ -1822,7 +1824,7 @@ private:
             uint bucketCount = m_buckets.size();
             m_file->write(reinterpret_cast<const char*>(&bucketCount), sizeof(uint));
 
-            memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
+            std::fill_n(m_firstBucketForHash, bucketHashSize, 0);
 
             m_currentBucket
                 = 1; // Skip the first bucket, we won't use it so we have the zero indices for special purposes
@@ -1925,7 +1927,7 @@ private:
         qDeleteAll(m_buckets);
         m_buckets.clear();
 
-        memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
+        std::fill_n(m_firstBucketForHash, bucketHashSize, 0);
     }
 
     int finalCleanup() final
