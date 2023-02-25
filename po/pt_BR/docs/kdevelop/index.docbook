@@ -15,7 +15,7 @@
 <author>
 <personname
 ><firstname
->Esta documentação foi convertida a partir da Base de Usuários do KDE, da página <ulink url=" http://userbase.kde.org/KDevelop4/Manual"
+>Esta documentação foi convertida a partir da Base de Usuários do KDE, da página <ulink url=" https://userbase.kde.org/KDevelop4/Manual"
 >KDevelop4/Manual</ulink
 >.</firstname
 > <surname
@@ -84,9 +84,9 @@
 ><title
 >O que é o &kdevelop;?</title>
 <para
->O <ulink url="http://www.KDevelop.org"
+>O <ulink url="https://www.kdevelop.org"
 >&kdevelop;</ulink
-> é um ambiente de desenvolvimento integrado (IDE) para o C++ (e outras linguagens) e que é uma das muitas <ulink url="http://www.kde.org/applications/"
+> é um ambiente de desenvolvimento integrado (IDE) para o C++ (e outras linguagens) e que é uma das muitas <ulink url="https://kde.org/applications/"
 >aplicações do KDE</ulink
 >. Como tal, é executado em &Linux; (mesmo que execute um dos outros ambientes de trabalho, como o GNOME) mas também está disponível para outras variantes do &UNIX; e para o Windows.</para>
 <para
@@ -214,9 +214,9 @@ double xpto2 ()
 ><para
 >Vá para <menuchoice
 ><guimenu
->Projetos</guimenu
+>Projeto</guimenu
 ><guimenuitem
->Obter o projeto</guimenuitem
+>Obter projeto</guimenuitem
 ></menuchoice
 > para importar um projeto </para
 ></listitem>
@@ -230,12 +230,18 @@ double xpto2 ()
 <listitem
 ><para
 >Na janela, em <guilabel
->Selecionar a origem</guilabel
+>Selecionar origem</guilabel
 >, opte por usar o <guilabel
+>Do sistema de arquivos</guilabel
+>, <guilabel
 >Subversion</guilabel
 >, <guilabel
 >Git</guilabel
-> ou alguma das outras opções </para
+>, <guilabel
+>GitHub</guilabel
+> ou <guilabel
+>KDE</guilabel
+> </para
 ></listitem>
 <listitem
 ><para
@@ -262,7 +268,7 @@ double xpto2 ()
 ><para
 ><note
 ><para
->O problema com a barra de progresso foi comunicado como sendo o <ulink url="http://bugs.kde.org/show_bug.cgi?id=256832"
+>O problema com a barra de progresso foi comunicado como sendo o <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832"
 >erro 256832 do &kdevelop;</ulink
 >.</para
 ></note
@@ -448,7 +454,7 @@ double xpto2 ()
 >Navegador de código</guilabel
 >: Dependendo da posição do seu cursor num arquivo, esta ferramenta mostra as coisas que estejam relacionadas entre si. Por exemplo, se estiver numa linha <varname
 >#include</varname
->, irá mostrar informações sobre o arquivo que está incluindo, como as classes que estão declaradas nesse arquivo; se estiver numa linha vazia ao nível do arquivo, irá mostrar as classes e funções declaradas e definidas no arquivo actual (tudo como hiperligações: se clicar nelas, irá para o ponto do arquivo onde se encontra de fato a declaração ou definição); se estiver na definição de uma função, ela mostra onde se encontra a declaração e oferece uma lista dos locais onde é usada a função. </para
+>, irá mostrar informações sobre o arquivo que está incluindo, como as classes que estão declaradas nesse arquivo; se estiver numa linha vazia ao nível do arquivo, irá mostrar as classes e funções declaradas e definidas no arquivo atual (tudo como hiperligações: se clicar nelas, irá para o ponto do arquivo onde se encontra de fato a declaração ou definição); se estiver na definição de uma função, ela mostra onde se encontra a declaração e oferece uma lista dos locais onde é usada a função. </para
 ></listitem>
 <listitem
 ><para
@@ -475,7 +481,7 @@ double xpto2 ()
       = triangulacao.begin_active();
    celula != triangulacao.end();
    ++celula)</programlisting
-> Esta é uma expressão estranha mas terá quase sempre este aspecto sempre que precisar de um ciclo &mdash; o que a tornará uma boa candidato para um trecho.</para>
+>Esta é uma expressão estranha mas terá quase sempre este aspecto sempre que precisar de um ciclo &mdash; o que a tornará uma boa candidato para um trecho.</para>
 <itemizedlist>
 <listitem
 ><para
@@ -487,7 +493,7 @@ double xpto2 ()
 ></listitem>
 </itemizedlist>
 <para
->Uma lista completa das ferramentas e janelas está descrita <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
+>Uma lista completa das ferramentas e janelas está descrita <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list"
 >aqui</ulink
 >.</para>
 <para
@@ -874,6 +880,12 @@ double xpto2 ()
 > Se clicar nas ligações para a declaração de um símbolo ou se expandir a lista de utilizações, poderá saltar para esses locais, abrindo se necessário o respectivo arquivo e colocando o cursor na posição correspondente. Você poderá obter um efeito semelhante se usar a ferramenta do <guilabel
 >Navegador de código</guilabel
 >, que também foi descrita anteriormente. </para
+></listitem>
+<listitem
+><para
+>Um modo rápido de saltar para a declaração de um símbolo sem ter que clicar nos links da dica é habilitar temporariamente <guilabel
+>Modo de navegação no código</guilabel
+> segurando a tecla &Alt; ou &Ctrl;. Neste modo, é possível clicar em qualquer símbolo no editor para saltar para sua declaração. </para
 ></listitem>
 <listitem
 ><para
@@ -1761,7 +1773,7 @@ void xpto()
 <para
 ><note
 ><para
->Os trechos são muito mais poderosos do que se explicou aqui. Para uma descrição completa do que pode fazer com eles, veja a <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
+>Os trechos são muito mais poderosos do que se explicou aqui. Para uma descrição completa do que pode fazer com eles, veja a <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets"
 >documentação detalhada sobre a ferramenta de Trechos</ulink
 >.</para
 ></note
@@ -2328,8 +2340,8 @@ void xpto()
 >Novo a partir de modelo...</guimenuitem
 ></menuchoice
 >, você pode também baixar arquivos de modelo adicionais clicando no botão <guilabel
->Obter mais modelos...</guilabel
->. Isto abre a janela para obter coisas novas, de onde você pode instalar modelos adicionais. bem como atualizá-los ou removê-los. Existe também um módulo de configuração para modelos, que pode ser acessado clicando em <menuchoice
+>Baixar mais modelos...</guilabel
+>. Isto abre a janela para baixar novidades, de onde você pode instalar modelos adicionais. bem como atualizá-los ou removê-los. Existe também um módulo de configuração para modelos, que pode ser acessado clicando em <menuchoice
 ><guimenu
 >Configurações</guimenu
 ><guisubmenu
@@ -2354,9 +2366,9 @@ void xpto()
 </screenshot>
 </para>
 <para
->É claro, se nenhum dos modelos disponíveis for adequado para o seu projeto, você sempre pode criar novos. A maneira mais fácil é provavelmente copiar e modificar um modelo existente, enquanto este rápido <ulink url="http://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
+>É claro, se nenhum dos modelos disponíveis for adequado para o seu projeto, você sempre pode criar novos. A maneira mais fácil é provavelmente copiar e modificar um modelo existente, enquanto este rápido <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template"
 >tutorial</ulink
-> e o <ulink url="http://techbase.kde.org/Projects/KDevelop4/File_template_specification"
+> e o <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification"
 >documento de especificação</ulink
 > mais extenso estão aqui para auxiliá-lo. Para copiar um modelo instalado, abra o gerenciador de modelos clicando em <menuchoice
 ><guimenu
@@ -2405,7 +2417,7 @@ void xpto()
 <para
 >Muitos projetos descrevem como os arquivos de código devem ser compilados (e quais os arquivos que terão que ser recompilados assim que um arquivo de código ou de inclusão mudar), usando os arquivos Makefile que são interpretados pelo programa <guilabel
 >make</guilabel
-> (veja, por exemplo, o <ulink url="http://www.gnu.org/software/make/"
+> (veja, por exemplo, o <ulink url="https://www.gnu.org/software/make/"
 >'make' da GNU</ulink
 >). Para os projetos simples, é normalmente muito simples configurar um destes arquivos manualmente. Os projetos maiores normalmente integram os seus arquivos Makefile com as <guilabel
 >'autotools' da GNU</guilabel
@@ -2938,9 +2950,9 @@ void xpto()
 ><title
 >Lidar com sistemas de controle de versões</title>
 <para
->Se você estiver lidando com projetos maiores, será provável que o código-fonte seja gerenciado por um sistema de controle de versões como o <ulink url="http://subversion.apache.org"
+>Se você estiver lidando com projetos maiores, será provável que o código-fonte seja gerenciado por um sistema de controle de versões como o <ulink url="https://subversion.apache.org/"
 >subversion</ulink
-> ou o <ulink url="http://git-scm.com/"
+> ou o <ulink url="https://git-scm.com/"
 >git</ulink
 >. A seguinte descrição será feita com o <guilabel
 >subversion</guilabel
@@ -3269,127 +3281,12 @@ void xpto()
 </itemizedlist>
 </sect1>
 </chapter>
-<chapter id="building-kdevelop-from-sources"
-><title
->Compilar o &kdevelop; a partir do código-fonte</title>
-<para
->Se você quiser ter as últimas funcionalidades e correções de erros, poderá compilar você mesmo o &kdevelop; a partir do código-fonte.</para>
-<para
->Existe um artigo mais detalhado <ulink url="http://techbase.kde.org/KDevelop4/HowToCompile"
->aqui</ulink
->.</para>
-<para
->Observe que você <emphasis
->poderá</emphasis
-> compilar uma versão instável. Para ajudar os programadores a corrigir erros, por favor mantenha o <varname
->RelWithDebInfo</varname
-> e comunique os erros em http://bugs.kde.org, seja manualmente ou com o Dr. Konqi.</para>
-<sect1 id="requirements"
-><title
->Requisitos</title>
-<itemizedlist>
-<listitem
-><para
->kdelibs-devel &gt;= 4.3 - http://www.kde.org </para
-></listitem>
-<listitem
-><para
->qt-devel &gt;= 4.5.2 - http://qt-project.org/ </para
-></listitem>
-<listitem
-><para
->boost-devel &gt;= 1.35 - http://www.boost.org </para
-></listitem>
-<listitem
-><para
->g++ &gt;= 4.0 - http://gcc.gnu.org </para
-></listitem>
-<listitem
-><para
->CMake &gt;= 2.6.2 - http://www.cmake.org </para
-></listitem>
-<listitem
-><para
->qjson-devel </para
-></listitem>
-</itemizedlist>
-</sect1>
-<sect1 id="install-for-all-users"
-><title
->Instalar para todos os usuários</title>
-<para
-><programlisting
->mkdir kdevgit
-cd kdevgit
-git clone git://anongit.kde.org/kdevplatform
-git clone git://anongit.kde.org/kdevelop
-cd kdevplatform
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-make &amp;&amp; sudo make install
-kbuildsycoca4
-cd ../..
-cd kdevelop
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-make &amp;&amp; sudo make install
-kbuildsycoca4
-</programlisting>
-</para>
-</sect1>
-<sect1 id="install-for-local-user"
-><title
->Instalar para o usuário local</title>
-<para
-><programlisting
->mkdir kdevgit
-cd kdevgit
-git clone git://anongit.kde.org/kdevplatform
-git clone git://anongit.kde.org/kdevelop
-cd kdevplatform
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/kdevelop4 ..
-make &amp;&amp; make install
-</programlisting>
-</para>
-<para
->a seguinte linha é necessária para que o <application
->kbuildsycoca4</application
-> encontre todos os arquivos '.desktop' </para>
-<para
-><programlisting
->export KDEDIRS=$HOME/kdevelop4:/usr
-kbuildsycoca4
-cd ../..
-cd kdevelop
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/kdevelop4 ..
-make &amp;&amp; make install
-kbuildsycoca4
-</programlisting>
-</para>
-<para
->Lembre-se por favor: Sempre que fizer alguma atualização de pacotes ou da distribuição que invoque o <application
->kbuildsycoca4</application
->, terá que executar as seguintes linhas após a atualização:</para>
-<para
-><programlisting
->export KDEDIRS=$HOME/kdevelop4:/usr
-kbuildsycoca4
-</programlisting>
-</para>
-</sect1>
-</chapter>
 <!--userbase-content-->
 <chapter id="credits">
 <title
 >Créditos e licença</title>
     <para
->'Copyright' da Documentação veja o <ulink url="http://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
+>'Copyright' da Documentação veja o <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history"
 >histórico da página KDevelop4/Manual</ulink
 > da Base de Usuários</para>
     <para
@@ -3398,7 +3295,6 @@ kbuildsycoca4
 > e André Marcelo Alvarenga <email
 >alvarenga@kde.org</email
 ></para
-> 
-&underFDL; </chapter>
+> &underFDL; </chapter>
 &documentation.index;
 </book>
