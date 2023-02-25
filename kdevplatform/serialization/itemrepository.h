@@ -1247,11 +1247,7 @@ public:
                     m_buckets.resize(m_buckets.size() + 10);
                 }
             }
-            MyBucket* bucketPtr = m_buckets.at(useBucket);
-            if (!bucketPtr) {
-                initializeBucket(useBucket);
-                bucketPtr = m_buckets.at(useBucket);
-            }
+            auto* bucketPtr = bucketForIndex(useBucket);
 
             ENSURE_REACHABLE(useBucket);
             Q_ASSERT_X(!bucketPtr->findIndex(
@@ -1538,11 +1534,7 @@ public:
 
         unsigned short bucket = (index >> 16);
 
-        MyBucket* bucketPtr = m_buckets.at(bucket);
-        if (!bucketPtr) {
-            initializeBucket(bucket);
-            bucketPtr = m_buckets.at(bucket);
-        }
+        auto* bucketPtr = bucketForIndex(bucket);
         bucketPtr->prepareChange();
         unsigned short indexInBucket = index & 0xffff;
         return MyDynamicItem(const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket)),
@@ -1562,11 +1554,7 @@ public:
 
         unsigned short bucket = (index >> 16);
 
-        MyBucket* bucketPtr = m_buckets.at(bucket);
-        if (!bucketPtr) {
-            initializeBucket(bucket);
-            bucketPtr = m_buckets.at(bucket);
-        }
+        auto* bucketPtr = bucketForIndex(bucket);
         bucketPtr->prepareChange();
         unsigned short indexInBucket = index & 0xffff;
         return const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket));
@@ -1579,11 +1567,7 @@ public:
 
         unsigned short bucket = (index >> 16);
 
-        const MyBucket* bucketPtr = m_buckets.at(bucket);
-        if (!bucketPtr) {
-            initializeBucket(bucket);
-            bucketPtr = m_buckets.at(bucket);
-        }
+        const auto* bucketPtr = bucketForIndex(bucket);
         unsigned short indexInBucket = index & 0xffff;
         Q_ASSERT(m_currentBucket < m_buckets.size());
         return bucketPtr->itemFromIndex(indexInBucket);
@@ -1975,11 +1959,7 @@ private:
         unsigned short bucketIndex = m_firstBucketForHash[hash % bucketHashSize];
 
         while (bucketIndex) {
-            auto* bucketPtr = m_buckets.at(bucketIndex);
-            if (!bucketPtr) {
-                initializeBucket(bucketIndex);
-                bucketPtr = m_buckets.at(bucketIndex);
-            }
+            auto* bucketPtr = bucketForIndex(bucketIndex);
 
             if (auto visitResult = visitor(bucketIndex, bucketPtr)) {
                 return visitResult;
@@ -2049,11 +2029,7 @@ private:
     MyBucket* convertMonsterBucket(int bucketNumber, int extent)
     {
         Q_ASSERT(bucketNumber);
-        MyBucket* bucketPtr = m_buckets.at(bucketNumber);
-        if (!bucketPtr) {
-            initializeBucket(bucketNumber);
-            bucketPtr = m_buckets.at(bucketNumber);
-        }
+        auto* bucketPtr = bucketForIndex(bucketNumber);
 
         // the bucket may have encountered hash clashes in the past, we need to keep that data alive
         // note that all following buckets that got merged with the first bucket to create the monster
