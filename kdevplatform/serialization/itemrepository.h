@@ -18,6 +18,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <type_traits>
 
 #include "referencecounting.h"
 #include "abstractitemrepository.h"
@@ -66,6 +67,34 @@ class TestItemRepository;
 class BenchItemRepository;
 
 namespace KDevelop {
+namespace ItemRepositoryUtils {
+template<class T>
+void readValue(char*& from, T* to)
+{
+    Q_ASSERT(from);
+    Q_ASSERT(to);
+    static_assert(std::is_integral_v<T>);
+
+    *to = *reinterpret_cast<T*>(from);
+    from += sizeof(T);
+}
+
+template<class T>
+void readValues(QIODevice* file, uint numValues, T* to)
+{
+    Q_ASSERT(file);
+    Q_ASSERT(to);
+    static_assert(std::is_integral_v<T>);
+
+    file->read(reinterpret_cast<char*>(to), sizeof(T) * numValues);
+}
+
+template<class T>
+void readValue(QIODevice* file, T* to)
+{
+    readValues(file, 1, to);
+}
+}
 /**
  * This file implements a generic bucket-based indexing repository, that can be used for example to index strings.
  *
@@ -161,27 +190,22 @@ public:
         }
     }
 
-    template <class T>
-    void readValue(char*& from, T& to)
-    {
-        to = *reinterpret_cast<T*>(from);
-        from += sizeof(T);
-    }
-
     void initializeFromMap(char* current)
     {
+        using namespace ItemRepositoryUtils;
+
         if (!m_data) {
             char* start = current;
-            readValue(current, m_monsterBucketExtent);
+            readValue(current, &m_monsterBucketExtent);
             Q_ASSERT(current - start == 4);
-            readValue(current, m_available);
+            readValue(current, &m_available);
             m_objectMap = reinterpret_cast<short unsigned int*>(current);
             current += sizeof(short unsigned int) * ObjectMapSize;
             m_nextBucketHash = reinterpret_cast<short unsigned int*>(current);
             current += sizeof(short unsigned int) * NextBucketHashSize;
-            readValue(current, m_largestFreeItem);
-            readValue(current, m_freeItemCount);
-            readValue(current, m_dirty);
+            readValue(current, &m_largestFreeItem);
+            readValue(current, &m_freeItemCount);
+            readValue(current, &m_dirty);
             m_data = current;
             m_mappedData = current;
 
@@ -193,6 +217,8 @@ public:
 
     void store(QFile* file, size_t offset)
     {
+        using namespace ItemRepositoryUtils;
+
         if (!m_data)
             return;
 
@@ -229,18 +255,18 @@ public:
             short unsigned int* m = new short unsigned int[ObjectMapSize];
             short unsigned int* h = new short unsigned int[NextBucketHashSize];
 
-            file->read(reinterpret_cast<char*>(&monsterBucketExtent), sizeof(int));
+            readValue(file, &monsterBucketExtent);
             Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
 
             char* d = new char[dataSize()];
 
-            file->read(reinterpret_cast<char*>(&available), sizeof(unsigned int));
-            file->read(reinterpret_cast<char*>(m), sizeof(short unsigned int) * ObjectMapSize);
-            file->read(reinterpret_cast<char*>(h), sizeof(short unsigned int) * NextBucketHashSize);
-            file->read(reinterpret_cast<char*>(&largestFree), sizeof(short unsigned int));
-            file->read(reinterpret_cast<char*>(&freeItemCount), sizeof(unsigned int));
-            file->read(reinterpret_cast<char*>(&dirty), sizeof(bool));
-            file->read(d, ItemRepositoryBucketSize + monsterBucketExtent * DataSize);
+            readValue(file, &available);
+            readValues(file, ObjectMapSize, m);
+            readValues(file, NextBucketHashSize, h);
+            readValue(file, &largestFree);
+            readValue(file, &freeItemCount);
+            readValue(file, &dirty);
+            readValues(file, dataSize(), d);
 
             Q_ASSERT(available == m_available);
             Q_ASSERT(std::equal(d, std::next(d, dataSize()), m_data));
@@ -1793,6 +1819,8 @@ private:
 
     bool open(const QString& path) final
     {
+        using namespace ItemRepositoryUtils;
+
         close();
         // qDebug() << "opening repository" << m_repositoryName << "at" << path;
         QDir dir(path);
@@ -1859,11 +1887,11 @@ private:
             // Check that the version is correct
             uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
 
-            m_file->read(reinterpret_cast<char*>(&storedVersion), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&hashSize), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&itemRepositoryVersion), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&m_statBucketHashClashes), sizeof(uint));
-            m_file->read(reinterpret_cast<char*>(&m_statItemCount), sizeof(uint));
+            readValue(m_file, &storedVersion);
+            readValue(m_file, &hashSize);
+            readValue(m_file, &itemRepositoryVersion);
+            readValue(m_file, &m_statBucketHashClashes);
+            readValue(m_file, &m_statItemCount);
 
             if (storedVersion != m_repositoryVersion || hashSize != bucketHashSize
                 || itemRepositoryVersion != staticItemRepositoryVersion()) {
@@ -1880,28 +1908,27 @@ private:
             m_metaDataChanged = false;
 
             uint bucketCount = 0;
-            m_file->read(reinterpret_cast<char*>(&bucketCount), sizeof(uint));
+            readValue(m_file, &bucketCount);
 
             Q_ASSERT(m_buckets.isEmpty());
             Q_ASSERT(m_freeSpaceBuckets.isEmpty());
             // not calling allocateNextBuckets here, as we load buckets from file here, not new/next ones
             m_buckets.resize(bucketCount);
 
-            m_file->read(reinterpret_cast<char*>(&m_currentBucket), sizeof(uint));
+            readValue(m_file, &m_currentBucket);
             Q_ASSERT(m_currentBucket);
 
-            m_file->read(reinterpret_cast<char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
+            readValues(m_file, bucketHashSize, m_firstBucketForHash);
 
             Q_ASSERT(m_file->pos() == BucketStartOffset);
 
             uint freeSpaceBucketsSize = 0;
-            m_dynamicFile->read(reinterpret_cast<char*>(&freeSpaceBucketsSize), sizeof(uint));
+            readValue(m_dynamicFile, &freeSpaceBucketsSize);
             m_freeSpaceBuckets.resize(freeSpaceBucketsSize);
-            m_dynamicFile->read(reinterpret_cast<char*>(m_freeSpaceBuckets.data()),
-                                sizeof(uint) * freeSpaceBucketsSize);
+            readValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
 
             m_monsterBucketTailMarker.resize(bucketCount);
-            m_dynamicFile->read(reinterpret_cast<char*>(m_monsterBucketTailMarker.data()), sizeof(bool) * bucketCount);
+            readValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
         }
 
         m_fileMapSize = 0;
@@ -2231,6 +2258,8 @@ private:
 
     inline MyBucket* initializeBucket(int bucketNumber) const
     {
+        using namespace ItemRepositoryUtils;
+
         Q_ASSERT(bucketNumber);
 #ifdef DEBUG_MONSTERBUCKETS
         // ensure that the previous N buckets are no monster buckets that overlap the requested bucket
@@ -2264,7 +2293,7 @@ private:
                     offset += BucketStartOffset;
                     m_file->seek(offset);
                     int monsterBucketExtent;
-                    m_file->read(reinterpret_cast<char*>((&monsterBucketExtent)), sizeof(int));
+                    readValue(m_file, &monsterBucketExtent);
                     m_file->seek(offset);
                     ///FIXME: use the data here instead of copying it again in prepareChange
                     QByteArray data = m_file->read((1 + monsterBucketExtent) * MyBucket::DataSize);
