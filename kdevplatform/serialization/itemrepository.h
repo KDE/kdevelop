@@ -237,7 +237,7 @@ public:
             file->read(reinterpret_cast<char*>(&largestFree), sizeof(short unsigned int));
             file->read(reinterpret_cast<char*>(&freeItemCount), sizeof(unsigned int));
             file->read(reinterpret_cast<char*>(&dirty), sizeof(bool));
-            file->read(d, ItemRepositoryBucketSize);
+            file->read(d, ItemRepositoryBucketSize + monsterBucketExtent * DataSize);
 
             Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
             Q_ASSERT(available == m_available);
