@@ -88,7 +88,8 @@ namespace KDevelop {
 
 enum {
     ItemRepositoryBucketSize = 1 << 16,
-    ItemRepositoryBucketLimit = 1 << 16
+    ItemRepositoryBucketLimit = 1 << 16,
+    ItemRepositoryBucketLinearGrowthFactor = 10,
 };
 
 /**
@@ -1243,8 +1244,7 @@ public:
                         request.itemSize();
                     return 0;
                 } else {
-                    //Allocate new buckets
-                    m_buckets.resize(m_buckets.size() + 10);
+                    allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
                 }
             }
             auto* bucketPtr = bucketForIndex(useBucket);
@@ -1304,7 +1304,7 @@ public:
                     Q_ASSERT(needMonsterExtent);
                     const auto currentBucketIncrease = needMonsterExtent + 1;
                     if (m_currentBucket + currentBucketIncrease >= m_buckets.size()) {
-                        m_buckets.resize(m_buckets.size() + 10 + currentBucketIncrease);
+                        allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor + currentBucketIncrease);
                     }
                     useBucket = m_currentBucket;
 
@@ -1805,8 +1805,9 @@ private:
             m_file->write(reinterpret_cast<const char*>(&m_statBucketHashClashes), sizeof(uint));
             m_file->write(reinterpret_cast<const char*>(&m_statItemCount), sizeof(uint));
 
-            m_buckets.resize(10);
-            m_buckets.fill(nullptr);
+            Q_ASSERT(m_buckets.isEmpty());
+            allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
+
             uint bucketCount = m_buckets.size();
             m_file->write(reinterpret_cast<const char*>(&bucketCount), sizeof(uint));
 
@@ -1856,9 +1857,12 @@ private:
 
             uint bucketCount = 0;
             m_file->read(reinterpret_cast<char*>(&bucketCount), sizeof(uint));
-            m_buckets.resize(bucketCount);
-            m_file->read(reinterpret_cast<char*>(&m_currentBucket), sizeof(uint));
 
+            Q_ASSERT(m_buckets.isEmpty());
+            // not calling allocateNextBuckets here, as we load buckets from file here, not new/next ones
+            m_buckets.resize(bucketCount);
+
+            m_file->read(reinterpret_cast<char*>(&m_currentBucket), sizeof(uint));
             m_file->read(reinterpret_cast<char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
 
             Q_ASSERT(m_file->pos() == BucketStartOffset);
@@ -2293,6 +2297,13 @@ private:
         Q_UNUSED(index);
     }
 
+    void allocateNextBuckets(int numNewBuckets)
+    {
+        Q_ASSERT(numNewBuckets > 0);
+        const auto oldSize = m_buckets.size();
+        m_buckets.resize(oldSize + numNewBuckets);
+    }
+
     bool m_metaDataChanged = true;
     bool m_unloadingEnabled = true;
     // Skip the first bucket, we won't use it so we have the zero indices for special purposes
@@ -2300,7 +2311,7 @@ private:
 
     //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
     QVector<uint> m_freeSpaceBuckets;
-    mutable QVector<MyBucket*> m_buckets = QVector<MyBucket*>(10, nullptr);
+    mutable QVector<MyBucket*> m_buckets;
     uint m_statBucketHashClashes = 0;
     uint m_statItemCount = 0;
     //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
