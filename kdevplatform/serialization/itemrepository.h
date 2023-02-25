@@ -94,6 +94,22 @@ void readValue(QIODevice* file, T* to)
 {
     readValues(file, 1, to);
 }
+
+template<class T>
+void writeValues(QIODevice* file, uint numValues, const T* from)
+{
+    Q_ASSERT(file);
+    Q_ASSERT(from);
+    static_assert(std::is_integral_v<T>);
+
+    file->write(reinterpret_cast<const char*>(from), sizeof(T) * numValues);
+}
+
+template<class T>
+void writeValue(QIODevice* file, const T& from)
+{
+    writeValues(file, 1, &from);
+}
 }
 /**
  * This file implements a generic bucket-based indexing repository, that can be used for example to index strings.
@@ -227,14 +243,14 @@ public:
 
         file->seek(offset);
 
-        file->write(reinterpret_cast<const char*>(&m_monsterBucketExtent), sizeof(int));
-        file->write(reinterpret_cast<const char*>(&m_available), sizeof(unsigned int));
-        file->write(reinterpret_cast<const char*>(m_objectMap), sizeof(short unsigned int) * ObjectMapSize);
-        file->write(reinterpret_cast<const char*>(m_nextBucketHash), sizeof(short unsigned int) * NextBucketHashSize);
-        file->write(reinterpret_cast<const char*>(&m_largestFreeItem), sizeof(short unsigned int));
-        file->write(reinterpret_cast<const char*>(&m_freeItemCount), sizeof(unsigned int));
-        file->write(reinterpret_cast<const char*>(&m_dirty), sizeof(bool));
-        file->write(m_data, dataSize());
+        writeValue(file, m_monsterBucketExtent);
+        writeValue(file, m_available);
+        writeValues(file, ObjectMapSize, m_objectMap);
+        writeValues(file, NextBucketHashSize, m_nextBucketHash);
+        writeValue(file, m_largestFreeItem);
+        writeValue(file, m_freeItemCount);
+        writeValue(file, m_dirty);
+        writeValues(file, dataSize(), m_data);
 
         if (static_cast<size_t>(file->pos()) != offset + (1 + m_monsterBucketExtent) * DataSize) {
             KMessageBox::error(nullptr, i18n("Failed writing to %1, probably the disk is full", file->fileName()));
@@ -1758,6 +1774,8 @@ private:
     ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
     void store() final
     {
+        using namespace ItemRepositoryUtils;
+
         if (m_file) {
             if (!m_file->open(QFile::ReadWrite) || !m_dynamicFile->open(QFile::ReadWrite)) {
                 qFatal("cannot re-open repository file for storing");
@@ -1786,28 +1804,27 @@ private:
                 Q_ASSERT(m_dynamicFile);
 
                 m_file->seek(0);
-                m_file->write(reinterpret_cast<const char*>(&m_repositoryVersion), sizeof(uint));
+                writeValue(m_file, m_repositoryVersion);
                 uint hashSize = bucketHashSize;
-                m_file->write(reinterpret_cast<const char*>(&hashSize), sizeof(uint));
+                writeValue(m_file, hashSize);
                 uint itemRepositoryVersion  = staticItemRepositoryVersion();
-                m_file->write(reinterpret_cast<const char*>(&itemRepositoryVersion), sizeof(uint));
-                m_file->write(reinterpret_cast<const char*>(&m_statBucketHashClashes), sizeof(uint));
-                m_file->write(reinterpret_cast<const char*>(&m_statItemCount), sizeof(uint));
+                writeValue(m_file, itemRepositoryVersion);
+                writeValue(m_file, m_statBucketHashClashes);
+                writeValue(m_file, m_statItemCount);
 
                 const uint bucketCount = static_cast<uint>(m_buckets.size());
-                m_file->write(reinterpret_cast<const char*>(&bucketCount), sizeof(uint));
-                m_file->write(reinterpret_cast<const char*>(&m_currentBucket), sizeof(uint));
-                m_file->write(reinterpret_cast<const char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
+                writeValue(m_file, bucketCount);
+                writeValue(m_file, m_currentBucket);
+                writeValues(m_file, bucketHashSize, m_firstBucketForHash);
                 Q_ASSERT(m_file->pos() == BucketStartOffset);
 
                 m_dynamicFile->seek(0);
                 const uint freeSpaceBucketsSize = static_cast<uint>(m_freeSpaceBuckets.size());
-                m_dynamicFile->write(reinterpret_cast<const char*>(&freeSpaceBucketsSize), sizeof(uint));
-                m_dynamicFile->write(reinterpret_cast<const char*>(m_freeSpaceBuckets.data()), sizeof(uint) * freeSpaceBucketsSize);
+                writeValue(m_dynamicFile, freeSpaceBucketsSize);
+                writeValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
 
                 Q_ASSERT(m_buckets.size() == m_monsterBucketTailMarker.size());
-                m_dynamicFile->write(reinterpret_cast<const char*>(m_monsterBucketTailMarker.data()),
-                                     sizeof(bool) * bucketCount);
+                writeValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
             }
             //To protect us from inconsistency due to crashes. flush() is not enough. We need to close.
             m_file->close();
@@ -1837,31 +1854,32 @@ private:
         m_metaDataChanged = true;
         if (m_file->size() == 0) {
             m_file->resize(0);
-            m_file->write(reinterpret_cast<const char*>(&m_repositoryVersion), sizeof(uint));
+            writeValue(m_file, m_repositoryVersion);
             uint hashSize = bucketHashSize;
-            m_file->write(reinterpret_cast<const char*>(&hashSize), sizeof(uint));
+            writeValue(m_file, hashSize);
             uint itemRepositoryVersion = staticItemRepositoryVersion();
-            m_file->write(reinterpret_cast<const char*>(&itemRepositoryVersion), sizeof(uint));
+            writeValue(m_file, itemRepositoryVersion);
 
             m_statBucketHashClashes = m_statItemCount = 0;
 
-            m_file->write(reinterpret_cast<const char*>(&m_statBucketHashClashes), sizeof(uint));
-            m_file->write(reinterpret_cast<const char*>(&m_statItemCount), sizeof(uint));
+            writeValue(m_file, m_statBucketHashClashes);
+            writeValue(m_file, m_statItemCount);
 
             Q_ASSERT(m_buckets.isEmpty());
             Q_ASSERT(m_freeSpaceBuckets.isEmpty());
             allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
 
             uint bucketCount = m_buckets.size();
-            m_file->write(reinterpret_cast<const char*>(&bucketCount), sizeof(uint));
+            writeValue(m_file, bucketCount);
 
             std::fill_n(m_firstBucketForHash, bucketHashSize, 0);
 
             // Skip the first bucket, we won't use it so we have the zero indices for special purposes
             Q_ASSERT(m_currentBucket == 1);
-            m_file->write(reinterpret_cast<const char*>(&m_currentBucket), sizeof(uint));
-            m_file->write(reinterpret_cast<const char*>(m_firstBucketForHash),
-                          sizeof(short unsigned int) * bucketHashSize);
+            writeValue(m_file, m_currentBucket);
+
+            writeValues(m_file, bucketHashSize, m_firstBucketForHash);
+
             // We have completely initialized the file now
             if (m_file->pos() != BucketStartOffset) {
                 KMessageBox::error(nullptr,
@@ -1870,13 +1888,11 @@ private:
             }
 
             const uint freeSpaceBucketsSize = m_freeSpaceBuckets.size();
-            m_dynamicFile->write(reinterpret_cast<const char*>(&freeSpaceBucketsSize), sizeof(uint));
-            m_dynamicFile->write(reinterpret_cast<const char*>(m_freeSpaceBuckets.data()),
-                                 sizeof(uint) * freeSpaceBucketsSize);
+            writeValue(m_dynamicFile, freeSpaceBucketsSize);
+            writeValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
 
             Q_ASSERT(static_cast<uint>(m_monsterBucketTailMarker.size()) == bucketCount);
-            m_dynamicFile->write(reinterpret_cast<const char*>(m_monsterBucketTailMarker.data()),
-                                 sizeof(bool) * bucketCount);
+            writeValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
 
             // -1 because the 0 bucket is reserved for special purposes
             Q_ASSERT(m_freeSpaceBuckets.size() == m_buckets.size() - 1);
