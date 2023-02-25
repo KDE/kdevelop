@@ -140,9 +140,9 @@ public:
         if (!m_data) {
             m_monsterBucketExtent = monsterBucketExtent;
             m_available = ItemRepositoryBucketSize;
-            m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
+            m_data = new char[dataSize()];
 #ifndef QT_NO_DEBUG
-            std::fill_n(m_data, ItemRepositoryBucketSize + monsterBucketExtent * DataSize, 0);
+            std::fill_n(m_data, dataSize(), 0);
 #endif
             //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
             m_objectMap = new short unsigned int[ObjectMapSize];
@@ -208,7 +208,7 @@ public:
         file->write(reinterpret_cast<const char*>(&m_largestFreeItem), sizeof(short unsigned int));
         file->write(reinterpret_cast<const char*>(&m_freeItemCount), sizeof(unsigned int));
         file->write(reinterpret_cast<const char*>(&m_dirty), sizeof(bool));
-        file->write(m_data, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
+        file->write(m_data, dataSize());
 
         if (static_cast<size_t>(file->pos()) != offset + (1 + m_monsterBucketExtent) * DataSize) {
             KMessageBox::error(nullptr, i18n("Failed writing to %1, probably the disk is full", file->fileName()));
@@ -230,7 +230,9 @@ public:
             short unsigned int* h = new short unsigned int[NextBucketHashSize];
 
             file->read(reinterpret_cast<char*>(&monsterBucketExtent), sizeof(unsigned int));
-            char* d = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
+            Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
+
+            char* d = new char[dataSize()];
 
             file->read(reinterpret_cast<char*>(&available), sizeof(unsigned int));
             file->read(reinterpret_cast<char*>(m), sizeof(short unsigned int) * ObjectMapSize);
@@ -240,9 +242,8 @@ public:
             file->read(reinterpret_cast<char*>(&dirty), sizeof(bool));
             file->read(d, ItemRepositoryBucketSize + monsterBucketExtent * DataSize);
 
-            Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
             Q_ASSERT(available == m_available);
-            Q_ASSERT(std::equal(d, std::next(d, ItemRepositoryBucketSize + monsterBucketExtent * DataSize), m_data));
+            Q_ASSERT(std::equal(d, std::next(d, dataSize()), m_data));
             Q_ASSERT(std::equal(m, std::next(m, ObjectMapSize), m_objectMap));
             Q_ASSERT(std::equal(h, std::next(h, NextBucketHashSize), m_nextBucketHash));
             Q_ASSERT(m_largestFreeItem == largestFree);
@@ -844,11 +845,11 @@ private:
             short unsigned int* oldObjectMap = m_objectMap;
             short unsigned int* oldNextBucketHash = m_nextBucketHash;
 
-            m_data = new char[ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize];
+            m_data = new char[dataSize()];
             m_objectMap = new short unsigned int[ObjectMapSize];
             m_nextBucketHash = new short unsigned int[NextBucketHashSize];
 
-            std::copy_n(m_mappedData, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize, m_data);
+            std::copy_n(m_mappedData, dataSize(), m_data);
             std::copy_n(oldObjectMap, ObjectMapSize, m_objectMap);
             std::copy_n(oldNextBucketHash, NextBucketHashSize, m_nextBucketHash);
         }
