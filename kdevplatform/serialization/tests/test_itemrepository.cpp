@@ -135,7 +135,7 @@ private Q_SLOTS:
         uint totalInsertions = 0, totalDeletions = 0;
         uint maxSize = 0;
         uint totalSize = 0;
-        srand(time(nullptr));
+        srand(12345);
         uint highestSeenIndex = 0;
 
         for (uint a = 0; a < cycles; ++a) {
@@ -221,6 +221,7 @@ private Q_SLOTS:
     }
     void testLeaks()
     {
+        srand(12345);
         QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
         QList<TestItem*> items;
