@@ -1215,7 +1215,6 @@ public:
 
         const bool pickedBucketInChain = bucketInChainWithSpace;
         int useBucket = bucketInChainWithSpace;
-        int reOrderFreeSpaceBucketIndex = -1;
 
         if (!pickedBucketInChain) {
             //Try finding an existing bucket with deleted space to store the data into
@@ -1226,7 +1225,6 @@ public:
                 if (bucketPtr->canAllocateItem(size)) {
                     //The item fits into the bucket.
                     useBucket = m_freeSpaceBuckets[a];
-                    reOrderFreeSpaceBucketIndex = a;
                     break;
                 }
             }
@@ -1234,8 +1232,6 @@ public:
             if (!useBucket) {
                 useBucket = m_currentBucket;
             }
-        } else {
-            reOrderFreeSpaceBucketIndex = m_freeSpaceBuckets.indexOf(useBucket);
         }
 
         //The item isn't in the repository yet, find a new bucket for it
@@ -1399,6 +1395,7 @@ public:
                     }
                 }
 
+                const auto reOrderFreeSpaceBucketIndex = m_freeSpaceBuckets.indexOf(useBucket);
                 if (reOrderFreeSpaceBucketIndex != -1)
                     updateFreeSpaceOrder(reOrderFreeSpaceBucketIndex);
 
@@ -1407,7 +1404,6 @@ public:
             } else {
                 //This should never happen when we picked a bucket for re-use
                 Q_ASSERT(!pickedBucketInChain);
-                Q_ASSERT(reOrderFreeSpaceBucketIndex == -1);
                 Q_ASSERT(useBucket == m_currentBucket);
 
                 if (!bucketForIndex(useBucket)->isEmpty())
