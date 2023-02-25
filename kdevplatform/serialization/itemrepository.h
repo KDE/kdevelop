@@ -1702,7 +1702,8 @@ public:
     {
         for (int a = 1; a <= m_currentBucket; ++a) {
             if (!onlyInMemory || m_buckets.at(a)) {
-                if (bucketForIndex(a) && !bucketForIndex(a)->visitAllItems(visitor))
+                auto bucket = bucketForIndex(a);
+                if (bucket && !bucket->visitAllItems(visitor))
                     return;
             }
         }
@@ -1727,17 +1728,18 @@ private:
             }
 
             for (int a = 0; a < m_buckets.size(); ++a) {
-                if (m_buckets[a]) {
-                    if (m_buckets[a]->changed()) {
+                auto& bucket = m_buckets[a];
+                if (bucket) {
+                    if (bucket->changed()) {
                         storeBucket(a);
                     }
                     if (m_unloadingEnabled) {
                         const int unloadAfterTicks = 2;
-                        if (m_buckets[a]->lastUsed() > unloadAfterTicks) {
-                            delete m_buckets[a];
-                            m_buckets[a] = nullptr;
+                        if (bucket->lastUsed() > unloadAfterTicks) {
+                            delete bucket;
+                            bucket = nullptr;
                         } else {
-                            m_buckets[a]->tick();
+                            bucket->tick();
                         }
                     }
                 }
@@ -2049,9 +2051,11 @@ private:
             for (int index = bucketNumber; index < bucketNumber + 1 + extent; ++index)
                 deleteBucket(index);
 
-            m_buckets[bucketNumber] = new MyBucket();
+            bucketPtr = new MyBucket();
+            bucketPtr->initialize(extent, std::move(oldNextBucketHash));
 
-            m_buckets[bucketNumber]->initialize(extent, std::move(oldNextBucketHash));
+            Q_ASSERT(!m_buckets[bucketNumber]);
+            m_buckets[bucketNumber] = bucketPtr;
 
 #ifdef DEBUG_MONSTERBUCKETS
 
@@ -2067,24 +2071,31 @@ private:
             deleteBucket(bucketNumber); //Delete the monster-bucket
 
             for (int index = bucketNumber; index < bucketNumber + 1 + oldExtent; ++index) {
-                Q_ASSERT(!m_buckets[index]);
-                m_buckets[index] = new MyBucket();
+                auto& bucket = m_buckets[index];
+                Q_ASSERT(!bucket);
 
-                m_buckets[index]->initialize(
-                    0, index == bucketNumber ? std::move(oldNextBucketHash) : std::unique_ptr<short unsigned int[]>());
-                Q_ASSERT(!m_buckets[index]->monsterBucketExtent());
+                bucket = new MyBucket();
+
+                if (index == bucketNumber) {
+                    bucket->initialize(0, std::move(oldNextBucketHash));
+                    bucketPtr = bucket;
+                } else {
+                    bucket->initialize(0);
+                }
+
+                Q_ASSERT(!bucket->monsterBucketExtent());
             }
         }
 
-        return m_buckets[bucketNumber];
+        Q_ASSERT(bucketPtr == m_buckets[bucketNumber]);
+        return bucketPtr;
     }
 
     MyBucket* bucketForIndex(short unsigned int index) const
     {
         MyBucket* bucketPtr = m_buckets.at(index);
         if (!bucketPtr) {
-            initializeBucket(index);
-            bucketPtr = m_buckets.at(index);
+            bucketPtr = initializeBucket(index);
         }
         return bucketPtr;
     }
@@ -2122,7 +2133,7 @@ private:
         return bucketPtr->visitAllItems(visitor);
     }
 
-    inline void initializeBucket(int bucketNumber) const
+    inline MyBucket* initializeBucket(int bucketNumber) const
     {
         Q_ASSERT(bucketNumber);
 #ifdef DEBUG_MONSTERBUCKETS
@@ -2135,8 +2146,9 @@ private:
 
 #endif
 
-        if (!m_buckets[bucketNumber]) {
-            m_buckets[bucketNumber] = new MyBucket();
+        auto& bucket = m_buckets[bucketNumber];
+        if (!bucket) {
+            bucket = new MyBucket();
 
             bool doMMapLoading = ( bool )m_fileMap;
 
@@ -2144,7 +2156,7 @@ private:
             if (m_file && offset < m_fileMapSize && doMMapLoading &&
                 *reinterpret_cast<uint*>(m_fileMap + offset) == 0) {
 //         qDebug() << "loading bucket mmap:" << bucketNumber;
-                m_buckets[bucketNumber]->initializeFromMap(reinterpret_cast<char*>(m_fileMap + offset));
+                bucket->initializeFromMap(reinterpret_cast<char*>(m_fileMap + offset));
             } else if (m_file) {
                 //Either memory-mapping is disabled, or the item is not in the existing memory-map,
                 //so we have to load it the classical way.
@@ -2159,35 +2171,45 @@ private:
                     m_file->seek(offset);
                     ///FIXME: use the data here instead of copying it again in prepareChange
                     QByteArray data = m_file->read((1 + monsterBucketExtent) * MyBucket::DataSize);
-                    m_buckets[bucketNumber]->initializeFromMap(data.data());
-                    m_buckets[bucketNumber]->prepareChange();
+                    bucket->initializeFromMap(data.data());
+                    bucket->prepareChange();
                 } else {
-                    m_buckets[bucketNumber]->initialize(0);
+                    bucket->initialize(0);
                 }
 
                 m_file->close();
             } else {
-                m_buckets[bucketNumber]->initialize(0);
+                bucket->initialize(0);
             }
         } else {
-            m_buckets[bucketNumber]->initialize(0);
+            bucket->initialize(0);
         }
+
+        return bucket;
     }
 
     ///Can only be called on empty buckets
     void deleteBucket(int bucketNumber)
     {
+        // NOTE: use bucketForIndex in the assertions here, as the bucket may not be initialized
+        //       we still want to verify that we only delete empty buckets though
         Q_ASSERT(bucketForIndex(bucketNumber)->isEmpty());
         Q_ASSERT(bucketForIndex(bucketNumber)->noNextBuckets());
-        delete m_buckets[bucketNumber];
-        m_buckets[bucketNumber] = nullptr;
+
+        auto& bucket = m_buckets[bucketNumber];
+        delete bucket;
+        bucket = nullptr;
     }
 
     //m_file must be opened
     void storeBucket(int bucketNumber) const
     {
-        if (m_file && m_buckets[bucketNumber]) {
-            m_buckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber - 1) * MyBucket::DataSize);
+        if (!m_file) {
+            return;
+        }
+        auto& bucket = m_buckets[bucketNumber];
+        if (bucket) {
+            bucket->store(m_file, BucketStartOffset + (bucketNumber - 1) * MyBucket::DataSize);
         }
     }
 
