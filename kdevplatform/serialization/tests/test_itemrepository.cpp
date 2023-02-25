@@ -129,6 +129,10 @@ private Q_SLOTS:
     {
         QMutex mutex;
         ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"), &mutex);
+
+        // calling statistics here does some extended tests and shouldn't crash or assert
+        repository.statistics();
+
         uint itemId = 0;
         QHash<uint, TestItem*> realItemsByIndex;
         QHash<uint, TestItem*> realItemsById;

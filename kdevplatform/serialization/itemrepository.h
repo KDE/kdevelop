@@ -1192,6 +1192,7 @@ public:
 
         if (foundIndexInBucket) {
             // 'request' is already present, return the existing index
+            Q_ASSERT(m_currentBucket);
             Q_ASSERT(m_currentBucket < m_buckets.size());
             return createIndex(lastBucketWalked, foundIndexInBucket);
         }
@@ -1228,10 +1229,6 @@ public:
                     break;
                 }
             }
-
-            if (!useBucket) {
-                useBucket = m_currentBucket;
-            }
         }
 
         //The item isn't in the repository yet, find a new bucket for it
@@ -1246,6 +1243,12 @@ public:
                     allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor);
                 }
             }
+
+            if (!useBucket) {
+                Q_ASSERT(m_currentBucket);
+                useBucket = m_currentBucket;
+            }
+
             auto* bucketPtr = bucketForIndex(useBucket);
 
             ENSURE_REACHABLE(useBucket);
@@ -1302,6 +1305,7 @@ public:
                     int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
                     Q_ASSERT(needMonsterExtent);
                     const auto currentBucketIncrease = needMonsterExtent + 1;
+                    Q_ASSERT(m_currentBucket);
                     if (m_currentBucket + currentBucketIncrease >= m_buckets.size()) {
                         allocateNextBuckets(ItemRepositoryBucketLinearGrowthFactor + currentBucketIncrease);
                     }
@@ -1319,6 +1323,8 @@ public:
                 indexInBucket = bucketPtr->index(request, size);
                 Q_ASSERT(indexInBucket);
             }
+
+            Q_ASSERT(m_currentBucket);
 
             if (indexInBucket) {
                 ++m_statItemCount;
@@ -1517,6 +1523,7 @@ public:
             putIntoFreeList(bucket, bucketPtr);
         }
 
+        Q_ASSERT(m_currentBucket);
         Q_ASSERT(m_currentBucket < m_buckets.size());
     }
 
@@ -1568,6 +1575,7 @@ public:
 
         const auto* bucketPtr = bucketForIndex(bucket);
         unsigned short indexInBucket = index & 0xffff;
+        Q_ASSERT(m_currentBucket);
         Q_ASSERT(m_currentBucket < m_buckets.size());
         return bucketPtr->itemFromIndex(indexInBucket);
     }
@@ -1579,7 +1587,7 @@ public:
 
     ItemRepositoryStatistics statistics() const
     {
-        Q_ASSERT(m_currentBucket < m_buckets.size());
+        Q_ASSERT(!m_currentBucket || m_currentBucket < m_buckets.size());
         ItemRepositoryStatistics ret;
         uint loadedBuckets = 0;
         for (auto* bucket : m_buckets) {
@@ -1684,8 +1692,8 @@ public:
         ret.lostSpace = lostSpace;
 
         ret.freeUnreachableSpace = freeUnreachableSpace;
-        ret.averageInBucketHashSize = totalInBucketHashSize / bucketCount;
-        ret.averageInBucketUsedSlotCount = totalInBucketUsedSlotCount / bucketCount;
+        ret.averageInBucketHashSize = bucketCount ? (totalInBucketHashSize / bucketCount) : 0;
+        ret.averageInBucketUsedSlotCount = bucketCount ? (totalInBucketUsedSlotCount / bucketCount) : 0;
         ret.averageInBucketSlotChainLength = float( totalInBucketChainLengths ) / totalInBucketUsedSlotCount;
 
         //If m_statBucketHashClashes is high, the bucket-hash needs to be bigger
@@ -1812,8 +1820,8 @@ private:
 
             std::fill_n(m_firstBucketForHash, bucketHashSize, 0);
 
-            m_currentBucket
-                = 1; // Skip the first bucket, we won't use it so we have the zero indices for special purposes
+            // Skip the first bucket, we won't use it so we have the zero indices for special purposes
+            Q_ASSERT(m_currentBucket == 1);
             m_file->write(reinterpret_cast<const char*>(&m_currentBucket), sizeof(uint));
             m_file->write(reinterpret_cast<const char*>(m_firstBucketForHash),
                           sizeof(short unsigned int) * bucketHashSize);
@@ -1862,6 +1870,8 @@ private:
             m_buckets.resize(bucketCount);
 
             m_file->read(reinterpret_cast<char*>(&m_currentBucket), sizeof(uint));
+            Q_ASSERT(m_currentBucket);
+
             m_file->read(reinterpret_cast<char*>(m_firstBucketForHash), sizeof(short unsigned int) * bucketHashSize);
 
             Q_ASSERT(m_file->pos() == BucketStartOffset);
@@ -2096,6 +2106,7 @@ private:
 
     MyBucket* bucketForIndex(short unsigned int index) const
     {
+        Q_ASSERT(index);
         MyBucket* bucketPtr = m_buckets.at(index);
         if (!bucketPtr) {
             bucketPtr = initializeBucket(index);
@@ -2250,6 +2261,8 @@ private:
 
     void putIntoFreeList(unsigned short bucket, MyBucket* bucketPtr)
     {
+        Q_ASSERT(bucket);
+
         Q_ASSERT(!bucketPtr->monsterBucketExtent());
         int indexInFree = m_freeSpaceBuckets.indexOf(bucket);
 
@@ -2301,12 +2314,18 @@ private:
         Q_ASSERT(numNewBuckets > 0);
         const auto oldSize = m_buckets.size();
         m_buckets.resize(oldSize + numNewBuckets);
+
+        // Skip the first bucket, we won't use it so we have the zero indices for special purposes
+        if (m_currentBucket == 0)
+            m_currentBucket = 1;
     }
 
     bool m_metaDataChanged = true;
     bool m_unloadingEnabled = true;
-    // Skip the first bucket, we won't use it so we have the zero indices for special purposes
-    mutable int m_currentBucket = 1;
+    // an unused, empty repo has no bucket yet
+    // on first use this will then get incremented directly as we never use the zero-bucket index
+    // that value is reserved for special purposes instead
+    mutable int m_currentBucket = 0;
 
     //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
     QVector<uint> m_freeSpaceBuckets;
