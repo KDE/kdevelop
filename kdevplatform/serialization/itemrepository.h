@@ -190,14 +190,14 @@ public:
             std::fill_n(m_data, dataSize(), 0);
 #endif
             //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
-            m_objectMap = new short unsigned int[ObjectMapSize];
-            std::fill_n(m_objectMap, ObjectMapSize, 0);
+            // NOTE: the `()` at the end of `new int[...]()` ensures the data is zero-initialized, see e.g.:
+            //       https://stackoverflow.com/questions/7546620/operator-new-initializes-memory-to-zero
+            m_objectMap = new short unsigned int[ObjectMapSize]();
 
             if (nextBucketHashToRestore) {
                 m_nextBucketHash = nextBucketHashToRestore.release();
             } else {
-                m_nextBucketHash = new short unsigned int[NextBucketHashSize];
-                std::fill_n(m_nextBucketHash, NextBucketHashSize, 0);
+                m_nextBucketHash = new short unsigned int[NextBucketHashSize]();
             }
 
             m_changed = true;
