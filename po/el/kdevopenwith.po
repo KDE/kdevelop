@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevopenwith\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"POT-Creation-Date: 2023-02-28 00:56+0000\n"
 "PO-Revision-Date: 2017-04-27 17:55+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -20,69 +20,69 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: openwithplugin.cpp:134
+#: openwithplugin.cpp:139
 #, fuzzy, kde-format
 #| msgid "Other..."
 msgctxt "@item:menu"
 msgid "Other..."
 msgstr "Άλλο..."
 
-#: openwithplugin.cpp:145
+#: openwithplugin.cpp:150
 #, fuzzy, kde-format
 #| msgid "Open With"
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Άνοιγμα με"
 
-#: openwithplugin.cpp:150
+#: openwithplugin.cpp:155
 #, fuzzy, kde-format
 #| msgid "Embedded Editors"
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Ενσωματωμένοι επεξεργαστές"
 
-#: openwithplugin.cpp:154
+#: openwithplugin.cpp:159
 #, fuzzy, kde-format
 #| msgid "External Applications"
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Εξωτερικές εφαρμογές"
 
-#: openwithplugin.cpp:161
+#: openwithplugin.cpp:166
 #, fuzzy, kde-format
 #| msgid "Open"
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: openwithplugin.cpp:181
+#: openwithplugin.cpp:186
 #, fuzzy, kde-format
 #| msgid "Default Editor"
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Προκαθορισμένος επεξεργαστής"
 
-#: openwithplugin.cpp:259
+#: openwithplugin.cpp:272
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
 msgstr "Θέλετε να ανοίγετε όλα τα %1 αρχεία ως προεπιλογή με το %2;"
 
-#: openwithplugin.cpp:261
+#: openwithplugin.cpp:274
 #, fuzzy, kde-format
 #| msgid "Set as default?"
 msgctxt "@title:window"
 msgid "Set as Default?"
 msgstr "Να οριστεί ως προκαθορισμένο;"
 
-#: openwithplugin.cpp:262
+#: openwithplugin.cpp:275
 #, fuzzy, kde-format
 #| msgid "Set as default?"
 msgctxt "@action:button"
 msgid "Set as Default"
 msgstr "Να οριστεί ως προκαθορισμένο;"
 
-#: openwithplugin.cpp:263
+#: openwithplugin.cpp:276
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"

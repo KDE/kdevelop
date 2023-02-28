@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:51+0000\n"
+"POT-Creation-Date: 2023-02-28 00:56+0000\n"
 "PO-Revision-Date: 2022-04-17 20:45+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -22,31 +22,31 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "Súborový systém"
 
-#: filemanager.cpp:127
+#: filemanager.cpp:131
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: filemanager.cpp:134
+#: filemanager.cpp:138
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Adresár aktuálneho dokumentu"
 
-#: filemanager.cpp:165
+#: filemanager.cpp:169
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "Nový súbor..."
 
-#: filemanager.cpp:172
+#: filemanager.cpp:176
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Vytvoriť nový súbor"
 
-#: filemanager.cpp:188
+#: filemanager.cpp:192
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Nepodarilo sa vytvoriť súbor '%1'"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:51+0000\n"
+"POT-Creation-Date: 2023-02-28 00:56+0000\n"
 "PO-Revision-Date: 2022-03-10 11:18+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -30,31 +30,31 @@ msgctxt "@title:window"
 msgid "File System"
 msgstr "Файловая система"
 
-#: filemanager.cpp:127
+#: filemanager.cpp:131
 #, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: filemanager.cpp:134
+#: filemanager.cpp:138
 #, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Каталог текущего документа"
 
-#: filemanager.cpp:165
+#: filemanager.cpp:169
 #, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "Создать файл..."
 
-#: filemanager.cpp:172
+#: filemanager.cpp:176
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Создание нового файла"
 
-#: filemanager.cpp:188
+#: filemanager.cpp:192
 #, kde-format
 msgid "Unable to create file '%1'"
 msgstr "Не удалось создать файл «%1»"
