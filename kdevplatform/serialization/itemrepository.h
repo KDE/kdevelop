@@ -1899,8 +1899,6 @@ private:
 
         m_metaDataChanged = true;
         if (m_file->size() == 0) {
-            m_file->resize(0);
-
             m_statBucketHashClashes = m_statItemCount = 0;
 
             Q_ASSERT(m_buckets.isEmpty());
