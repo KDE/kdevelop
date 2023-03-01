@@ -123,6 +123,13 @@ void readValue(QIODevice* file, T* to)
     readValues(file, 1, to);
 }
 
+template<typename T>
+void readList(QIODevice* file, QVector<T>* to)
+{
+    Q_ASSERT(to);
+    readValues(file, to->size(), to->data());
+}
+
 template<class T>
 void writeValues(QIODevice* file, uint numValues, const T* from)
 {
@@ -137,6 +144,12 @@ template<class T>
 void writeValue(QIODevice* file, const T& from)
 {
     writeValues(file, 1, &from);
+}
+
+template<typename T>
+void writeList(QIODevice* file, const QVector<T>& from)
+{
+    writeValues(file, from.size(), from.data());
 }
 }
 /**
@@ -1821,12 +1834,11 @@ private:
         Q_ASSERT(m_file->pos() == BucketStartOffset);
 
         m_dynamicFile->seek(0);
-        const uint freeSpaceBucketsSize = static_cast<uint>(m_freeSpaceBuckets.size());
-        writeValue(m_dynamicFile, freeSpaceBucketsSize);
-        writeValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
+        writeValue(m_dynamicFile, static_cast<uint>(m_freeSpaceBuckets.size()));
+        writeList(m_dynamicFile, m_freeSpaceBuckets);
 
         Q_ASSERT(m_buckets.size() == m_monsterBucketTailMarker.size());
-        writeValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
+        writeList(m_dynamicFile, m_monsterBucketTailMarker);
     }
 
     ///Synchronizes the state on disk to the one in memory, and does some memory-management.
@@ -1957,10 +1969,10 @@ private:
             uint freeSpaceBucketsSize = 0;
             readValue(m_dynamicFile, &freeSpaceBucketsSize);
             m_freeSpaceBuckets.resize(freeSpaceBucketsSize);
-            readValues(m_dynamicFile, freeSpaceBucketsSize, m_freeSpaceBuckets.data());
+            readList(m_dynamicFile, &m_freeSpaceBuckets);
 
             m_monsterBucketTailMarker.resize(bucketCount);
-            readValues(m_dynamicFile, bucketCount, m_monsterBucketTailMarker.data());
+            readList(m_dynamicFile, &m_monsterBucketTailMarker);
         }
 
         m_fileMapSize = 0;
