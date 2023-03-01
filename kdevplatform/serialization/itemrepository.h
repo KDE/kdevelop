@@ -68,16 +68,44 @@ class BenchItemRepository;
 
 namespace KDevelop {
 namespace ItemRepositoryUtils {
-template<class T>
-void readValue(char*& from, T* to)
+class FileMap
 {
-    Q_ASSERT(from);
-    Q_ASSERT(to);
-    static_assert(std::is_integral_v<T>);
+    Q_DISABLE_COPY_MOVE(FileMap)
+public:
+    explicit FileMap(char* data)
+        : m_data(data)
+    {
+        Q_ASSERT(m_data);
+    }
 
-    *to = *reinterpret_cast<T*>(from);
-    from += sizeof(T);
-}
+    template<typename T>
+    void readValue(T* to)
+    {
+        Q_ASSERT(to);
+        static_assert(std::is_integral_v<T>);
+
+        *to = *reinterpret_cast<T*>(m_data);
+        m_data += sizeof(T);
+    }
+
+    template<typename T>
+    void readArray(T** to, uint size)
+    {
+        Q_ASSERT(to);
+        static_assert(std::is_integral_v<T>);
+
+        *to = reinterpret_cast<T*>(m_data);
+        m_data += sizeof(T) * size;
+    }
+
+    char* current() const
+    {
+        return m_data;
+    }
+
+private:
+    char* m_data;
+};
 
 template<class T>
 void readValues(QIODevice* file, uint numValues, T* to)
@@ -206,29 +234,29 @@ public:
         }
     }
 
-    void initializeFromMap(char* current)
+    void initializeFromMap(char* fileMapData)
     {
-        using namespace ItemRepositoryUtils;
-
-        if (!m_data) {
-            char* start = current;
-            readValue(current, &m_monsterBucketExtent);
-            Q_ASSERT(current - start == 4);
-            readValue(current, &m_available);
-            m_objectMap = reinterpret_cast<short unsigned int*>(current);
-            current += sizeof(short unsigned int) * ObjectMapSize;
-            m_nextBucketHash = reinterpret_cast<short unsigned int*>(current);
-            current += sizeof(short unsigned int) * NextBucketHashSize;
-            readValue(current, &m_largestFreeItem);
-            readValue(current, &m_freeItemCount);
-            readValue(current, &m_dirty);
-            m_data = current;
-            m_mappedData = current;
-
-            m_changed = false;
-            m_lastUsed = 0;
-            VERIFY(current - start == (DataSize - ItemRepositoryBucketSize));
+        if (m_data) {
+            return;
         }
+
+        ItemRepositoryUtils::FileMap fileMap(fileMapData);
+
+        fileMap.readValue(&m_monsterBucketExtent);
+        Q_ASSERT(fileMap.current() - fileMapData == 4);
+        fileMap.readValue(&m_available);
+        fileMap.readArray(&m_objectMap, ObjectMapSize);
+        fileMap.readArray(&m_nextBucketHash, NextBucketHashSize);
+        fileMap.readValue(&m_largestFreeItem);
+        fileMap.readValue(&m_freeItemCount);
+        fileMap.readValue(&m_dirty);
+
+        m_data = fileMap.current();
+        m_mappedData = m_data;
+
+        m_changed = false;
+        m_lastUsed = 0;
+        Q_ASSERT(fileMap.current() - fileMapData == DataSize - ItemRepositoryBucketSize);
     }
 
     void store(QFile* file, size_t offset)
