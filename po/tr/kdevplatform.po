@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2023-01-31 01:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1747,7 +1747,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Seçili bağımlılığı listede aşağı taşı"
 
-#: serialization/itemrepository.h:204 serialization/itemrepository.h:1810
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "%1 konumuna yazılamıyor, disk dolu olabilir"

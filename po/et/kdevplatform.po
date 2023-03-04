@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:55+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2020-05-09 10:23+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1786,7 +1786,7 @@ msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
 msgstr "Valitud sõltuvuse liigutamine loendis tahapoole."
 
-#: serialization/itemrepository.h:204 serialization/itemrepository.h:1810
+#: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
 msgstr "Kirjutamine asukohta %1 nurjus, arvatavasti on ketas täis"

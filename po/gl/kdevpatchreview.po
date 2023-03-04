@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:44+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2020-02-16 09:29+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -274,7 +274,7 @@ msgctxt "@title:group"
 msgid "Changes"
 msgstr "Cambios"
 
-#: patchreviewtoolview.cpp:80
+#: patchreviewtoolview.cpp:85
 #, kde-format
 msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
@@ -282,12 +282,12 @@ msgid_plural "%2 (%1 hunks)"
 msgstr[0] "%2 (1 bloque)"
 msgstr[1] "%2 (%1 bloques)"
 
-#: patchreviewtoolview.cpp:220
+#: patchreviewtoolview.cpp:225
 #, kde-format
 msgid "<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>"
 msgstr "<qt>Atopará unha nova solicitude en:<br /><a href='%1'>%1</a> </qt>"
 
-#: patchreviewtoolview.cpp:223
+#: patchreviewtoolview.cpp:228
 #, kde-format
 msgid ""
 "Couldn't export the patch.\n"
@@ -296,33 +296,33 @@ msgstr ""
 "Non foi posíbel exportar o parche.\n"
 "%1"
 
-#: patchreviewtoolview.cpp:254
+#: patchreviewtoolview.cpp:259
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgctxt "@action"
 msgid "Select All"
 msgstr "Escoller todo"
 
-#: patchreviewtoolview.cpp:256
+#: patchreviewtoolview.cpp:261
 #, fuzzy, kde-format
 #| msgid "Deselect All"
 msgctxt "@action"
 msgid "Deselect All"
 msgstr "Anular toda a selección"
 
-#: patchreviewtoolview.cpp:554
+#: patchreviewtoolview.cpp:559
 #, kde-format
 msgid "Running tests: %p%"
 msgstr "Probas en execución: %p%"
 
-#: patchreviewtoolview.cpp:582
+#: patchreviewtoolview.cpp:587
 #, kde-format
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] "Pasou a proba"
 msgstr[1] "Pasou as %1 probas completas"
 
-#: patchreviewtoolview.cpp:586
+#: patchreviewtoolview.cpp:591
 #, kde-format
 msgid "Test results: %1 passed, %2 failed, %3 errors"
 msgstr "Resultados das probas: %1 superadas, %2 non superadas, %3 erros"
