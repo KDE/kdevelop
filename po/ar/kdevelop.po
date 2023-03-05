@@ -472,7 +472,7 @@ msgstr "Kurt Granroth"
 #: main.cpp:416
 #, kde-format
 msgid "KDE application templates"
-msgstr "قوالب تطبيقات كدي"
+msgstr "قوالب تطبيقات كِيدِي"
 
 #: main.cpp:417
 #, kde-format
@@ -1228,7 +1228,7 @@ msgstr "افتح جلسة مطوّرك"
 
 #, fuzzy
 #~ msgid "KDE forwarding header generator"
-#~ msgstr "كدي عنوان رأسي مولِّد"
+#~ msgstr "كِيدِي عنوان رأسي مولِّد"
 
 #, fuzzy
 #~ msgid ""
@@ -1244,7 +1244,7 @@ msgstr "افتح جلسة مطوّرك"
 #~ msgid ""
 #~ "KDE include directory - headers go into <placeholder>includes</"
 #~ "placeholder>/KDE"
-#~ msgstr "كدي تضمين دليل اذهب<placeholder></placeholder> كدي"
+#~ msgstr "كِيدِي تضمين دليل اذهب<placeholder></placeholder> كِيدِي"
 
 #, fuzzy
 #~ msgid "Build information from the cmake XML generator"
@@ -1954,7 +1954,7 @@ msgstr "افتح جلسة مطوّرك"
 
 #, fuzzy
 #~ msgid "KDE XMLGUI Definitions"
-#~ msgstr "كدي تعريفات"
+#~ msgstr "كِيدِي تعريفات"
 
 #, fuzzy
 #~ msgid "Installed headers"

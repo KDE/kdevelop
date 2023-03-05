@@ -1,11 +1,12 @@
 # Translation of kdevkonsole to Norwegian Nynorsk
 #
+# Karl Ove Hufthammer <karl@huftis.org>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2008-11-26 17:46+0100\n"
+"PO-Revision-Date: 2023-03-04 15:48+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -16,19 +17,20 @@ msgstr ""
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: kdevkonsoleview.cpp:107
 #, kde-format
 msgid "Terminal"
-msgstr ""
+msgstr "Terminal"
 
 #: kdevkonsoleview.cpp:110 kdevkonsoleviewplugin.cpp:62
 #, kde-format
 msgctxt "@title:window"
 msgid "Terminal"
-msgstr ""
+msgstr "Terminal"
 
 #: kdevkonsoleviewplugin.cpp:60
 #, kde-format
 msgid "Failed to load 'konsolepart' plugin"
-msgstr ""
+msgstr "Klarte ikkje lasta «konsolepart»-tillegg"
