@@ -71,6 +71,7 @@
     "X-KDevelop-Mode": "NoGUI",
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-qml",
-        "application/javascript"
+        "application/javascript",
+        "text/javascript"
     ]
 }
