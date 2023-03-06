@@ -171,6 +171,10 @@ void TestProjectFilter::match_data()
             {QStringLiteral(".pylint.d"), Folder, Invalid},
             {QStringLiteral(".pytest_cache"), File, Invalid},
             {QStringLiteral(".tox"), File, Invalid},
+
+            // hidden folders that should remain visible
+            {QStringLiteral(".circleci"), Folder, Valid},
+            {QStringLiteral(".circleci/somefile"), File, Valid},
         };
         addTests("default", project, filter, tests);
     }

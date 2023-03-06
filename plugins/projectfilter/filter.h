@@ -29,11 +29,18 @@ public:
     };
     Q_DECLARE_FLAGS(Targets, Target)
 
-    enum Type {
+    enum Type : quint8 {
         /// Hides matched targets.
         Exclusive,
         /// Reverses the match to be inclusive and negates the previously applied exclusive filters.
         Inclusive
+    };
+
+    enum PatternStyle : quint8 {
+        /// old QRegExp-like WildcardUnix style
+        Wildcard,
+        /// full power regular expression
+        RegularExpression,
     };
 
     Filter();
@@ -49,6 +56,7 @@ public:
     QRegularExpression pattern;
     Targets targets;
     Type type = Exclusive;
+    PatternStyle style = Wildcard;
 };
 
 using Filters = QVector<Filter>;
@@ -60,10 +68,12 @@ using Filters = QVector<Filter>;
 struct SerializedFilter
 {
     SerializedFilter();
-    SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type = Filter::Exclusive);
+    SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type = Filter::Exclusive,
+                     Filter::PatternStyle style = Filter::Wildcard);
     QString pattern;
     Filter::Targets targets;
     Filter::Type type = Filter::Exclusive;
+    Filter::PatternStyle style = Filter::Wildcard;
 };
 
 using SerializedFilters = QVector<SerializedFilter>;

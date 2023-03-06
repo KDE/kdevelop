@@ -104,18 +104,29 @@ Filter::Filter(const SerializedFilter& filter)
     , targets(filter.targets)
     , type(filter.type)
 {
-    QString pattern = filter.pattern;
-    if (!filter.pattern.startsWith(QLatin1Char('/')) && !filter.pattern.startsWith(QLatin1Char('*'))) {
-        // implicitly match against trailing relative path
-        pattern.prepend(QLatin1String("*/"));
+    switch (filter.style) {
+    case Wildcard: {
+        auto wildcardPattern = filter.pattern;
+        if (!filter.pattern.startsWith(QLatin1Char('/')) && !filter.pattern.startsWith(QLatin1Char('*'))) {
+            // implicitly match against trailing relative path
+            wildcardPattern.prepend(QLatin1String("*/"));
+        }
+
+        if (wildcardPattern.endsWith(QLatin1Char('/')) && targets != Filter::Files) {
+            // implicitly match against folders
+            targets = Filter::Folders;
+            wildcardPattern.chop(1);
+        }
+
+        pattern.setPattern(wildcardToPattern(wildcardPattern));
+        break;
     }
-    if (pattern.endsWith(QLatin1Char('/')) && targets != Filter::Files) {
-        // implicitly match against folders
-        targets = Filter::Folders;
-        pattern.chop(1);
+    case RegularExpression:
+        pattern.setPattern(filter.pattern);
+        break;
     }
-    this->pattern.setPattern(wildcardToPattern(pattern));
-    this->pattern.optimize();
+
+    pattern.optimize();
 }
 
 SerializedFilter::SerializedFilter()
@@ -125,10 +136,12 @@ SerializedFilter::SerializedFilter()
 
 }
 
-SerializedFilter::SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type)
+SerializedFilter::SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type,
+                                   Filter::PatternStyle style)
     : pattern(pattern)
     , targets(targets)
     , type(type)
+    , style(style)
 {
 
 }
@@ -140,8 +153,10 @@ SerializedFilters defaultFilters()
     SerializedFilters ret;
     ret.reserve(41);
 
-    // filter hidden files
-    ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
+    // filter hidden files/folders but (potentially) allow files within hidden folders, if the folders
+    // get matched by a specific inclusion rule further below
+    ret << SerializedFilter(QStringLiteral("/\\.[^/]*$"), Filter::Targets(Filter::Files | Filter::Folders),
+                            Filter::Exclusive, Filter::RegularExpression);
     // but do show some with special meaning
 
     static const std::array<QString, 19> configFiles = {
@@ -254,7 +269,8 @@ SerializedFilters readFilters(const KSharedConfigPtr& config)
         const QString pattern = subConfig.readEntry("pattern", QString());
         Filter::Targets targets(subConfig.readEntry("targets", 0));
         Filter::Type type = static_cast<Filter::Type>(subConfig.readEntry("inclusive", 0));
-        filters << SerializedFilter(pattern, targets, type);
+        Filter::PatternStyle style = static_cast<Filter::PatternStyle>(subConfig.readEntry("style", 0));
+        filters << SerializedFilter(pattern, targets, type, style);
     }
 
     return filters;
@@ -274,6 +290,7 @@ void writeFilters(const SerializedFilters& filters, KSharedConfigPtr config)
         subGroup.writeEntry("pattern", filter.pattern);
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
         subGroup.writeEntry("inclusive", static_cast<int>(filter.type));
+        subGroup.writeEntry("style", static_cast<int>(filter.style));
     }
     config->sync();
 }
