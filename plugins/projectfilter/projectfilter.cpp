@@ -29,7 +29,7 @@ bool ProjectFilter::isValid( const Path &path, const bool isFolder ) const
 {
     if (!isFolder && path == m_projectFile) {
         // do not show the project file
-        ///TODO: enable egain once the project page is ready for consumption
+        ///TODO: enable again once the project page is ready for consumption
         return false;
     } else if (isFolder && path == m_project) {
         // always show the project root
