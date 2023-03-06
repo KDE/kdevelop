@@ -37,23 +37,23 @@ struct MatchTest
     bool shouldMatch;
 };
 
-void addTests(const QString& tag, const TestProject& project, const TestFilter& filter, MatchTest* tests, uint numTests)
+void addTests(const char* tag, const TestProject& project, const TestFilter& filter, MatchTest* tests, uint numTests)
 {
     for (uint i = 0; i < numTests; ++i) {
         const MatchTest& test = tests[i];
-        QTest::addRow("%ls:%ls", qUtf16Printable(tag), qUtf16Printable(test.path))
+        QTest::addRow("%s:%s", tag, qUtf8Printable(test.path))
             << filter << Path(project.path(), test.path) << test.isFolder << test.shouldMatch;
 
         if (test.isFolder) {
             // also test folder with trailing slash - should not make a difference
-            QTest::addRow("%ls:%ls/", qUtf16Printable(tag), qUtf16Printable(test.path))
+            QTest::addRow("%s:%s/", tag, qUtf8Printable(test.path))
                 << filter << Path(project.path(), test.path) << test.isFolder << test.shouldMatch;
         }
     }
 }
 
 ///FIXME: remove once we can use c++11
-#define ADD_TESTS(tag, project, filter, tests) addTests(QStringLiteral(tag), project, filter, tests, sizeof(tests) / sizeof(tests[0]))
+#define ADD_TESTS(tag, project, filter, tests) addTests(tag, project, filter, tests, sizeof(tests) / sizeof(tests[0]))
 
 struct BenchData
 {
