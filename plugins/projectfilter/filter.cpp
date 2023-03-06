@@ -12,13 +12,95 @@
 
 using namespace KDevelop;
 
+namespace {
+// loosely based on QRegularExpression::wildcardToRegularExpression
+// but here we actually allow patterns to include slashes and we always assume that inputs use the
+// Qt-internal way to represent paths with forward slashes, i.e. no native windows paths with backslashes
+// furthermore we support escaping like in WildcardUnix
+QString wildcardToPattern(const QString& pattern)
+{
+    QString ret;
+    if (pattern.isEmpty())
+        return ret;
+
+    const auto inputLength = pattern.length();
+    // +6 for anchor
+    ret.reserve(inputLength + 6 + inputLength / 16);
+
+    // anchor
+    ret += QLatin1String("^.*");
+
+    auto it = pattern.begin();
+    const auto end = pattern.end();
+    while (it != end) {
+        const auto c = *it;
+        ++it;
+
+        switch (c.unicode()) {
+        case '*':
+            ret += QLatin1String(".*");
+            break;
+        case '?':
+            ret += QLatin1Char('.');
+            break;
+        case '\\':
+            // escape, as supported by QRegExp::WildcardUnix
+            ret += c;
+            if (it != end) {
+                ret += *it;
+                ++it;
+            }
+            break;
+        case '/':
+        case '$':
+        case '(':
+        case ')':
+        case '+':
+        case '.':
+        case '^':
+        case '{':
+        case '|':
+        case '}':
+            ret += QLatin1Char('\\');
+            ret += c;
+            break;
+        case '[':
+            ret += c;
+            // Support for the [!abc] or [!a-c] syntax
+            if (it != end) {
+                if (*it == QLatin1Char('!')) {
+                    ret += QLatin1Char('^');
+                    ++it;
+                }
+
+                while (it != end && *it != QLatin1Char(']')) {
+                    if (*it == QLatin1Char('\\'))
+                        ret += QLatin1Char('\\');
+                    ret += *it;
+                    ++it;
+                }
+            }
+            break;
+        default:
+            ret += c;
+            break;
+        }
+    }
+
+    // anchor
+    ret += QLatin1String(".*$");
+
+    return ret;
+}
+}
+
 Filter::Filter()
     : targets(Files | Folders)
 {
 }
 
 Filter::Filter(const SerializedFilter& filter)
-    : pattern(QString(), Qt::CaseSensitive, QRegExp::WildcardUnix)
+    : pattern(QString(), QRegularExpression::DontCaptureOption)
     , targets(filter.targets)
     , type(filter.type)
 {
@@ -32,7 +114,8 @@ Filter::Filter(const SerializedFilter& filter)
         targets = Filter::Folders;
         pattern.chop(1);
     }
-    this->pattern.setPattern(pattern);
+    this->pattern.setPattern(wildcardToPattern(pattern));
+    this->pattern.optimize();
 }
 
 SerializedFilter::SerializedFilter()

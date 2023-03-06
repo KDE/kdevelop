@@ -296,7 +296,9 @@ void TestProjectFilter::match_data()
             {QStringLiteral("foo/asdf_bar"), Folder, Invalid},
             {QStringLiteral("foo/asdf_bar"), File, Invalid},
             {QStringLiteral("asdf/bar"), File, Valid},
-            {QStringLiteral("asdf/foo/bar"), File, Valid},
+            // NOTE: backwards incompat change, but I believe the old behavior was broken: `/*bar` should have matched
+            //       with the star matching zero chars in this case. why QRegExp didn't do it like that is mysterious
+            {QStringLiteral("asdf/foo/bar"), File, Invalid},
         };
         addTests("relative", project, filter, tests);
     }

@@ -7,7 +7,7 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QVector>
 #include <KSharedConfig>
 
@@ -46,7 +46,7 @@ public:
             && filter.type == type;
     }
 
-    QRegExp pattern;
+    QRegularExpression pattern;
     Targets targets;
     Type type = Exclusive;
 };
