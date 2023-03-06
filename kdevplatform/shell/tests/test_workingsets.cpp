@@ -222,7 +222,14 @@ void TestWorkingSetController::restoreSplits()
                                                          ->parentWidget()   // splitter containing a single container
                                                          ->parentWidget()); // splitter containing lower containers
     QVERIFY(splitter_bottom);
-    splitter_bottom->repaint();
+
+    QVERIFY(splitter_bottom->isVisible());
+    // ensure the splitter handle is visible, which is esp. required for running the test with the offscreen QPA
+    splitter_bottom->handle(0)->setVisible(true);
+    QVERIFY(splitter_bottom->handle(0)->isVisible());
+
+    QApplication::processEvents();
+
     splitter_bottom->setSizes({1, 1000});
     auto sizes_bottom = splitter_bottom->sizes();
     QVERIFY(sizes_bottom.at(0) < sizes_bottom.at(1));
