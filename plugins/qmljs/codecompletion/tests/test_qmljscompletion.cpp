@@ -70,7 +70,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
 
     // Simulate that the user has entered invokeCode where %INVOKE is, put
     // the cursor where %CURSOR is, and then asked for completions
-    Q_ASSERT(initCode.indexOf("%INVOKE") != -1);
+    QVERIFY_RETURN(initCode.indexOf("%INVOKE") != -1, completion_data);
 
     // Create a file containing the given code, with "%INVOKE" removed
     completion_data.file = QSharedPointer<TestFile>(new TestFile(QString(initCode).remove(QLatin1String("%INVOKE")),
@@ -85,7 +85,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
 
     if (!completion_data.file->topContext()) {
       qWarning() << "file contents are: " << completion_data.file->fileContents();
-      Q_ASSERT_X(false, Q_FUNC_INFO, "Failed to parse initCode.");
+      QVERIFY_RETURN(false, completion_data);
     }
 
     QString allCode = QString(initCode).replace(QLatin1String("%INVOKE"), invokeCode);
@@ -99,7 +99,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
             break;
         }
     }
-    Q_ASSERT(completion_data.cursorAt.isValid());
+    QVERIFY_RETURN(completion_data.cursorAt.isValid(), completion_data);
 
     // codeCompletionContext only gets passed the text until the place where completion is invoked
     completion_data.snip = allCode.mid(0, allCode.indexOf(QLatin1String("%CURSOR")));
@@ -107,7 +107,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
 
     DUChainReadLocker lock;
     completion_data.contextAtCursor = DUContextPointer(completion_data.file->topContext()->findContextAt(completion_data.cursorAt, true));
-    Q_ASSERT(completion_data.contextAtCursor);
+    QVERIFY_RETURN(completion_data.contextAtCursor, completion_data);
 
     runCompletion(&completion_data);
 
