@@ -37,7 +37,8 @@ struct MatchTest
     bool shouldMatch;
 };
 
-void addTests(const char* tag, const TestProject& project, const TestFilter& filter, MatchTest* tests, uint numTests)
+void addTests(const char* tag, const TestProject& project, const TestFilter& filter, const MatchTest* tests,
+              uint numTests)
 {
     for (uint i = 0; i < numTests; ++i) {
         const MatchTest& test = tests[i];
@@ -52,8 +53,11 @@ void addTests(const char* tag, const TestProject& project, const TestFilter& fil
     }
 }
 
-///FIXME: remove once we can use c++11
-#define ADD_TESTS(tag, project, filter, tests) addTests(tag, project, filter, tests, sizeof(tests) / sizeof(tests[0]))
+template<typename T>
+void addTests(const char* tag, const TestProject& project, const TestFilter& filter, const T& tests)
+{
+    addTests(tag, project, filter, tests, std::size(tests));
+}
 
 struct BenchData
 {
@@ -168,7 +172,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral(".pytest_cache"), File, Invalid},
             {QStringLiteral(".tox"), File, Invalid},
         };
-        ADD_TESTS("default", project, filter, tests);
+        addTests("default", project, filter, tests);
     }
     {
         // test exclude files, basename
@@ -191,7 +195,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("folder/file.cpp"), File, Invalid},
             {QStringLiteral("folder/folder.cpp"), Folder, Valid}
         };
-        ADD_TESTS("exclude:*.cpp", project, filter, tests);
+        addTests("exclude:*.cpp", project, filter, tests);
     }
     {
         // test excludes on folders
@@ -214,7 +218,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("folder/foo"), Folder, Invalid},
             {QStringLiteral("folder/foo"), File, Valid}
         };
-        ADD_TESTS("exclude:foo", project, filter, tests);
+        addTests("exclude:foo", project, filter, tests);
     }
     {
         // test includes
@@ -238,7 +242,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("folder/file.cpp"), File, Valid},
             {QStringLiteral("folder/.file.cpp"), File, Valid}
         };
-        ADD_TESTS("include:*.cpp", project, filter, tests);
+        addTests("include:*.cpp", project, filter, tests);
         project.projectConfiguration();
     }
     {
@@ -267,7 +271,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("folder/file.ex.inc"), File, Invalid},
             {QStringLiteral("bar"), Folder, Invalid},
         };
-        ADD_TESTS("mixed", project, filter, tests);
+        addTests("mixed", project, filter, tests);
     }
     {
         // relative path
@@ -294,7 +298,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("asdf/bar"), File, Valid},
             {QStringLiteral("asdf/foo/bar"), File, Valid},
         };
-        ADD_TESTS("relative", project, filter, tests);
+        addTests("relative", project, filter, tests);
     }
     {
         // trailing slash
@@ -316,7 +320,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("foo/bar"), File, Valid},
             {QStringLiteral("foo/bar"), Folder, Invalid}
         };
-        ADD_TESTS("trailingslash", project, filter, tests);
+        addTests("trailingslash", project, filter, tests);
     }
     {
         // escaping
@@ -337,7 +341,7 @@ void TestProjectFilter::match_data()
             {QStringLiteral("foo*bar"), File, Invalid},
             {QStringLiteral("foo/bar"), Folder, Valid}
         };
-        ADD_TESTS("escaping", project, filter, tests);
+        addTests("escaping", project, filter, tests);
     }
 }
 
