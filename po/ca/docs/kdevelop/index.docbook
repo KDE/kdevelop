@@ -2985,7 +2985,7 @@ void foo()
 ><guimenu
 >Subversion</guimenu
 ><guimenuitem
->Publica</guimenuitem
+>Comet</guimenuitem
 ></menuchoice
 >. Això us aconseguirà el mode <guilabel
 >Revisió</guilabel
@@ -2995,12 +2995,12 @@ void foo()
 >Depuració</guilabel
 > com es pot veure a la cantonada superior dreta de la finestra principal del &kdevelop;. La imatge de la dreta us ho mostra. En el mode <guilabel
 >Revisió</guilabel
->, la part superior mostra els diffs per al subdirectori sencer/projecte i cada fitxer canviat amb els canvis ressaltats (vegeu les diferents pestanyes en aquesta part de la finestra). Per omissió, tots els fitxers amb canvis pertanyen al conjunt de canvis que esteu a punt de publicar, però es poden desseleccionar alguns fitxers si les seves modificacions no estan relacionades amb el que voleu publicar. Per exemple, a l'exemple de la dreta no tinc seleccionat <varname
+>, la part superior mostra els diffs per al subdirectori sencer/projecte i cada fitxer canviat amb els canvis ressaltats (vegeu les diferents pestanyes en aquesta part de la finestra). Per omissió, tots els fitxers amb canvis pertanyen al conjunt de canvis que esteu a punt de cometre, però es poden desseleccionar alguns fitxers si les seves modificacions no estan relacionades amb el que voleu cometre. Per exemple, a l'exemple de la dreta no tinc seleccionat <varname
 >step-32.cc</varname
 > i <varname
 >step-32.prm</varname
-> pel fet que els canvis en aquests fitxers no tenen res a veure amb els altres que vaig fer per a aquest projecte i encara no vull publicar-los (posteriorment puc voler fer-ho en una altra publicació). Després de revisar els canvis podeu introduir un missatge de publicació en el quadre de text i prémer <guilabel
->Publica</guilabel
+> pel fet que els canvis en aquests fitxers no tenen res a veure amb els altres que vaig fer per a aquest projecte i encara no vull cometre'ls (posteriorment puc voler fer-ho en una altra comissió). Després de revisar els canvis podeu introduir un missatge de comissió en el quadre de text i prémer <guilabel
+>Comet</guilabel
 > a la dreta per enviar-ho tot. </para
 ></listitem>
 <listitem
@@ -3009,7 +3009,7 @@ void foo()
 ><guimenu
 >Subversion</guimenu
 ><guimenuitem
->Publica</guimenuitem
+>Comet</guimenuitem
 ></menuchoice
 >. </para
 ></listitem>

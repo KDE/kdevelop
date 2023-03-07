@@ -1,17 +1,17 @@
 # Translation of kdevgit.po to Catalan (Valencian)
-# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# Copyright (C) 2009-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2015, 2016, 2017, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2016, 2017, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-09-26 10:41+0200\n"
+"PO-Revision-Date: 2023-03-06 12:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -51,7 +51,7 @@ msgstr "Revertix les edicions sense marcar"
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
 msgstr ""
-"No s'ha pogut fer l'entrega. Vegeu la vista d'eina del Control de versions."
+"No s'ha pogut fer la comissió. Vegeu la vista d'eina del Control de versions."
 
 #: diffviewsctrl.cpp:51
 #, kde-format
@@ -180,8 +180,8 @@ msgid ""
 "only, or globally for all Git projects.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Encara no heu configurat el nom i correu electrònic "
-"associats amb les vostres publicacions a Git.<br/>Els valors que introduïu "
-"ací s'escriuran a la configuració de Git, ja siga localment només per al "
+"associats amb les vostres comissions a Git.<br/>Els valors que introduïu ací "
+"s'escriuran a la configuració de Git, ja siga localment només per al "
 "projecte actual, o de forma global per a tots els projectes amb Git.</p></"
 "body></html>"
 
@@ -215,7 +215,7 @@ msgstr ""
 #: gitplugin.cpp:191
 #, kde-format
 msgid "Git Commit"
-msgstr "Publicació de Git («commit»)"
+msgstr "Comissió de Git («commit»)"
 
 #: gitplugin.cpp:243
 #, kde-format
@@ -250,7 +250,7 @@ msgstr "Aplica («pop») una modificació temporal"
 #: gitplugin.cpp:280
 #, kde-format
 msgid "error: %1"
-msgstr "error: %1"
+msgstr "s'ha produït un error: %1"
 
 #: gitplugin.cpp:379 gitplugin.cpp:390
 #, kde-format
@@ -272,7 +272,7 @@ msgstr "No es poden revertir els canvis"
 msgid ""
 "The following files have uncommitted changes, which will be lost. Continue?"
 msgstr ""
-"Els fitxers següents tenen canvis sense entregar que es perdran. Voleu "
+"Els fitxers següents tenen canvis sense cometre que es perdran. Voleu "
 "continuar?"
 
 #: gitplugin.cpp:523
@@ -380,7 +380,7 @@ msgstr "Marcat"
 #: repostatusmodel.cpp:84
 #, kde-format
 msgid "Files with changes staged for commit"
-msgstr "Fitxers amb canvis marcats per a publicació"
+msgstr "Fitxers amb canvis marcats per a cometre"
 
 #: repostatusmodel.cpp:89
 #, kde-format
@@ -575,37 +575,37 @@ msgstr "%1 (%2)"
 #: simplecommitform.cpp:40
 #, kde-format
 msgid "Commit"
-msgstr "Publica"
+msgstr "Comet"
 
 #: simplecommitform.cpp:65
 #, kde-format
 msgid "Extended commit description"
-msgstr "Descripció estesa de l'entrega"
+msgstr "Descripció ampliada de la comissió"
 
 #: simplecommitform.cpp:73
 #, kde-format
 msgid "Commit summary"
-msgstr "Resum de l'entrega"
+msgstr "Resum de la comissió"
 
 #: simplecommitform.cpp:88 simplecommitform.cpp:172
 #, kde-format
 msgid "To commit changes, please write a commit message first"
-msgstr "Per a publicar els canvis, primer cal escriure un missatge d'entrega"
+msgstr "Per a cometre els canvis, primer cal escriure un missatge de comissió"
 
 #: simplecommitform.cpp:91 simplecommitform.cpp:169
 #, kde-format
 msgid "Commit changes to <b>%1</b> on branch <b>%2</b>"
-msgstr "Publica els canvis a <b>%1</b> en la branca <b>%2</b>"
+msgstr "Comet els canvis a <b>%1</b> en la branca <b>%2</b>"
 
 #: simplecommitform.cpp:122
 #, kde-format
 msgid "To commit changes, please select a project first"
-msgstr "Per a publicar els canvis, primer cal seleccionar un projecte"
+msgstr "Per a cometre els canvis, primer cal seleccionar un projecte"
 
 #: simplecommitform.cpp:163
 #, kde-format
 msgid "Please stage some changes before committing."
-msgstr "Marqueu alguns canvis abans de publicar."
+msgstr "Marqueu alguns canvis abans de cometre."
 
 #: stashmanagerdialog.cpp:31
 #, kde-format
