@@ -1,17 +1,17 @@
 # Translation of kdevplatform.po to Catalan (Valencian)
-# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# Copyright (C) 2009-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2022-12-22 15:59+0100\n"
+"PO-Revision-Date: 2023-03-06 12:45+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3175,13 +3175,13 @@ msgstr "Obri la configuració..."
 #, kde-format
 msgctxt "@action"
 msgid "Commit Current Project..."
-msgstr "Publica el projecte actual..."
+msgstr "Comet el projecte actual..."
 
 #: shell/projectcontroller.cpp:601
 #, kde-format
 msgctxt "@action"
 msgid "Commit..."
-msgstr "Publica..."
+msgstr "Comet..."
 
 #: shell/projectcontroller.cpp:612
 #, kde-format
@@ -5651,7 +5651,7 @@ msgstr "No s'ha pogut obtindre la diferència"
 #: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgid "There are no committed differences."
-msgstr "No hi ha cap diferència entregada (commit)."
+msgstr "No hi ha cap diferència comesa (commit)."
 
 #: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
 #, kde-format
@@ -5696,7 +5696,7 @@ msgid ""
 "and the last commit on the selected branch.</p>"
 msgstr ""
 "<p>Mostra els canvis entre la branca actual (o l'àrea d'espera, si no està "
-"buida) i l'última entrega en la branca seleccionada.</p>"
+"buida) i l'última comissió en la branca seleccionada.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
@@ -5739,7 +5739,7 @@ msgstr "Directori d'origen:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr "Missatge de publicació:"
+msgstr "Missatge de comissió:"
 
 #: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
@@ -5764,7 +5764,7 @@ msgstr "Data:"
 #: vcs/models/vcsannotationmodel.cpp:118
 #, kde-format
 msgid "Commit message:"
-msgstr "Missatge de publicació:"
+msgstr "Missatge de comissió:"
 
 #: vcs/models/vcseventmodel.cpp:88
 #, kde-format
@@ -5908,7 +5908,7 @@ msgstr "Revisió d'origen"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Commit..."
-msgstr "Publica..."
+msgstr "Comet..."
 
 #: vcs/vcspluginhelper.cpp:85
 #, kde-format
@@ -6060,14 +6060,14 @@ msgstr "Per: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
-msgstr "Seleccioneu els fitxers que s'han de publicar"
+msgstr "Seleccioneu els fitxers a cometre"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Commit files:"
-msgstr "Fitxers que s'han de publicar:"
+msgstr "Fitxers que s'han de cometre:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, recursiveChk)
 #: vcs/widgets/vcscommitdialog.ui:33
@@ -6091,19 +6091,19 @@ msgstr ""
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
 msgid "Unable to commit"
-msgstr "No s'ha pogut publicar"
+msgstr "No s'ha pogut cometre"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
 msgctxt "@title:window"
 msgid "Commit Unsuccessful"
-msgstr "Publicació incorrecta"
+msgstr "Comissió incorrecta"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:224
 #, kde-format
 msgctxt "@action:button To make a commit"
 msgid "Commit"
-msgstr "Publica"
+msgstr "Comet"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:257
 #, kde-format
@@ -6113,7 +6113,7 @@ msgid ""
 "With message:\n"
 " <pre>%2</pre></qt>"
 msgstr ""
-"<qt>Fitxers que es publicaran:\n"
+"<qt>Fitxers que es cometran:\n"
 "<ul>%1</ul>\n"
 "Amb el missatge:\n"
 " <pre>%2</pre></qt>"
@@ -6122,7 +6122,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
-msgstr "Quant a la publicació al repositori"
+msgstr "Quant a la comissió al repositori"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
 #, kde-format
