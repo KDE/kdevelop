@@ -133,6 +133,7 @@ msgstr ""
 "X-POFile-SpellExtra: Wolff Niko cs bin sessions list session aplicacao Co\n"
 "X-POFile-SpellExtra: Brauch Sven Clang QA Funk Olivier JG Kevin AppImage\n"
 "X-POFile-SpellExtra: Friedrich Kossebau\n"
+"X-POFile-IgnoreConsistency: Patches\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
