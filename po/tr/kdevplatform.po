@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-05 00:44+0000\n"
-"PO-Revision-Date: 2023-01-31 01:06+0300\n"
+"PO-Revision-Date: 2023-03-07 20:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2830,7 +2830,7 @@ msgstr "%1 ögesini proje olarak aç"
 #: shell/openprojectdialog.cpp:209
 #, kde-format
 msgid "Selected URL is invalid"
-msgstr "Seçilen adres geçersiz"
+msgstr "Seçili URL geçersiz"
 
 #: shell/openprojectdialog.cpp:254
 #, kde-format
