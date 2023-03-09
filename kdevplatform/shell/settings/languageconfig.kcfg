@@ -45,8 +45,8 @@
     <choice name="MinimalWhenAutomatic" />
     <choice name="AlwaysFull" />
     </choices>
-    </entry>
     <default>MinimalWhenAutomatic</default>
+    </entry>
     <entry name="problemInlineNotesLevel" key="problemInlineNotesLevel" type ="Enum">
     <choices name="KDevelop::ICompletionSettings::ProblemInlineNotesLevel" />
     <default>KDevelop::ICompletionSettings::WarningsAndErrorsProblemInlineNotesLevel</default>
