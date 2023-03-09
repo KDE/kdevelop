@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
 "PO-Revision-Date: 2020-11-26 06:58+0100\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -155,42 +155,42 @@ msgid "Select an icon"
 msgstr "Symbol auswählen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: qthelpconfigeditdialog.ui:37
+#: qthelpconfigeditdialog.ui:34
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Name:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
-#: qthelpconfigeditdialog.ui:44
+#: qthelpconfigeditdialog.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a name"
 msgstr "Geben Sie einen Namen ein"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
-#: qthelpconfigeditdialog.ui:47
+#: qthelpconfigeditdialog.ui:44
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
 msgstr "Namen auswählen ..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: qthelpconfigeditdialog.ui:54
+#: qthelpconfigeditdialog.ui:51
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
 msgstr "Pfad:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:67
+#: qthelpconfigeditdialog.ui:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
 msgstr "Qt-Hilfedatei auswählen ..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:73
+#: qthelpconfigeditdialog.ui:70
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."

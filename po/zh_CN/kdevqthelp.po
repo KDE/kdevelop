@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
 "PO-Revision-Date: 2023-02-24 12:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -155,42 +155,42 @@ msgid "Select an icon"
 msgstr "选择图标"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: qthelpconfigeditdialog.ui:37
+#: qthelpconfigeditdialog.ui:34
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "名称："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
-#: qthelpconfigeditdialog.ui:44
+#: qthelpconfigeditdialog.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a name"
 msgstr "输入名称"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
-#: qthelpconfigeditdialog.ui:47
+#: qthelpconfigeditdialog.ui:44
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
 msgstr "选择名称..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: qthelpconfigeditdialog.ui:54
+#: qthelpconfigeditdialog.ui:51
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
 msgstr "路径："
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:67
+#: qthelpconfigeditdialog.ui:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
 msgstr "选择 Qt Help 文件..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
-#: qthelpconfigeditdialog.ui:73
+#: qthelpconfigeditdialog.ui:70
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
