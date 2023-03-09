@@ -39,6 +39,9 @@ public:
     };
     Q_ENUM(GlobalColorSource)
 
+    enum class PrecompiledPreambleStorage { Memory, SessionTemporaryDirectory };
+    Q_ENUM(PrecompiledPreambleStorage)
+
     virtual int minFilesForSimplifiedParsing() const = 0;
 
     virtual CompletionLevel completionLevel() const = 0;
@@ -57,6 +60,8 @@ public:
     virtual bool showMultiLineSelectionInformation() const = 0;
 
     virtual QStringList todoMarkerWords() const = 0;
+
+    virtual PrecompiledPreambleStorage precompiledPreambleStorage() const = 0;
 
 Q_SIGNALS:
     void settingsChanged(ICompletionSettings*);

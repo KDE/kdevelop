@@ -43,6 +43,8 @@ public:
 
     QStringList todoMarkerWords() const override;
 
+    PrecompiledPreambleStorage precompiledPreambleStorage() const override;
+
     static CompletionSettings& self();
 
 private:

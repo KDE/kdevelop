@@ -410,6 +410,47 @@ parsed in simplified mode, increasing the efficiency by gathering less informati
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string comment="@title:group">Storage and Memory Use</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_4">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_precompiledPreambleStorage">
+        <property name="text">
+         <string comment="@label">Store precompiled preambles in:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_precompiledPreambleStorage</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="kcfg_precompiledPreambleStorage">
+        <property name="toolTip">
+         <string>&lt;p&gt;Precompiled preambles remain in the temporary directory after KDevelop crashes and are deleted only when the same session is started again.&lt;br&gt;
+When the preambles are stored in memory, they are guaranteed to disappear on exit even if KDevelop crashes.&lt;br&gt;
+Choosing the Session Temporary Directory storage makes sense on systems where RAM is limited and the temporary directory does not use tmpfs, because the preamble files can occupy gigabytes of space.&lt;br&gt;
+Changing this option takes effect after restarting KDevelop.&lt;br&gt;
+This option has effect only if KDevelop has been built against Clang version 17 or later.
+&lt;/p&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string comment="@item:inlistbox">Memory</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string comment="@item:inlistbox">Session Temporary Directory</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

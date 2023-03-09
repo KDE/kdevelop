@@ -104,6 +104,11 @@ ICompletionSettings::CompletionLevel CompletionSettings::completionLevel() const
     return m_level;
 }
 
+auto CompletionSettings::precompiledPreambleStorage() const -> PrecompiledPreambleStorage
+{
+    return static_cast<PrecompiledPreambleStorage>(LanguageConfig::precompiledPreambleStorage());
+}
+
 CompletionSettings::CompletionSettings()
     : m_todoMarkerWords(QStringLiteral("TODO FIXME"))
     , m_languageGroup(KSharedConfig::openConfig(), "Language Support"){}

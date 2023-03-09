@@ -10,7 +10,9 @@
 #include "clangparsingenvironment.h"
 #include "documentfinderhelpers.h"
 
+#include <interfaces/icompletionsettings.h>
 #include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 #include <util/path.h>
 #include <util/clangtypes.h>
@@ -34,6 +36,9 @@ CXIndex createIndex()
 
     CXIndex index;
 #if CINDEX_VERSION_MINOR >= 64
+    const bool storePreamblesInMemory =
+        ICore::self()->languageController()->completionSettings()->precompiledPreambleStorage()
+        == ICompletionSettings::PrecompiledPreambleStorage::Memory;
     // When KDevelop crashes, libclang leaves preamble-*.pch files in its temporary directory.
     // These files occupy from tens of megabytes to gigabytes and are not automatically removed
     // until system restart. Set the preamble storage path to the active session's temporary
@@ -47,6 +52,7 @@ CXIndex createIndex()
     options.ThreadBackgroundPriorityForIndexing = CXChoice_Enabled;
     options.ExcludeDeclarationsFromPCH = excludeDeclarationsFromPCH;
     options.DisplayDiagnostics = displayDiagnostics;
+    options.StorePreamblesInMemory = storePreamblesInMemory;
     options.PreambleStoragePath = preambleStoragePath.constData();
 
     index = clang_createIndexWithOptions(&options);
@@ -55,7 +61,7 @@ CXIndex createIndex()
     }
     qCWarning(KDEV_CLANG) << "clang_createIndexWithOptions() failed. CINDEX_VERSION_MINOR =" << CINDEX_VERSION_MINOR
                           << ", sizeof(CXIndexOptions) =" << options.Size;
-    // Fall back to using older API. Setting the preamble storage path is not essential.
+    // Fall back to using older API. Configuring the preamble storage is not essential.
 #endif
     index = clang_createIndex(excludeDeclarationsFromPCH, displayDiagnostics);
     // Demote the priority of the clang parse threads to reduce potential UI lockups.
