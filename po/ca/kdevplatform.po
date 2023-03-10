@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-03-06 12:45+0100\n"
+"PO-Revision-Date: 2023-03-09 14:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -3296,7 +3296,7 @@ msgstr "%1: %p%"
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
-"Heu d'especificar un directori vàlid o inexistent per a obtenir («check "
+"Heu d'especificar un directori vàlid o inexistent per a extreure («check "
 "out») un projecte"
 
 #: shell/projectsourcepage.cpp:251
@@ -5699,14 +5699,14 @@ msgstr "Compara amb la branca"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
-msgstr "Baixa a la branca seleccionada"
+msgstr "Extreu a la branca seleccionada"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
 #, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr "Baixa"
+msgstr "Extreu"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
