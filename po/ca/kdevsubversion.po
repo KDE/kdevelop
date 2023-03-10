@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-03-06 12:47+0100\n"
+"PO-Revision-Date: 2023-03-09 12:49+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -88,12 +88,12 @@ msgstr "No hi ha prou informació per a responsabilitzar la ubicació"
 #: svncheckoutjob.cpp:84
 #, kde-format
 msgid "Subversion Checkout"
-msgstr "Obtén (checkout) del subversion"
+msgstr "Extracció (checkout) del subversion"
 
 #: svncheckoutjob.cpp:96
 #, kde-format
 msgid "Not enough information to checkout"
-msgstr "No hi ha prou informació per a obtenir"
+msgstr "No hi ha prou informació per a l'extracció"
 
 #: svncommitjob.cpp:109
 #, kde-format
