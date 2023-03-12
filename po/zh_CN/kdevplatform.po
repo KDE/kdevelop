@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-02-24 12:43\n"
+"PO-Revision-Date: 2023-03-11 04:55\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevplatform.pot\n"
-"X-Crowdin-File-ID: 4867\n"
+"X-Crowdin-File: /kf5-stable/messages/kdevelop/kdevplatform.pot\n"
+"X-Crowdin-File-ID: 3940\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5937,3 +5937,27 @@ msgstr "与上个修订版的差异"
 msgctxt "@title:window"
 msgid "Difference between Revisions"
 msgstr "修订版之间的差异"
+
+#~ msgid "Recent Expressions"
+#~ msgstr "最近表达式"
+
+#~ msgid "Remove All"
+#~ msgstr "全部删除"
+
+#~ msgid "Re-evaluate All"
+#~ msgstr "全部重算"
+
+#~ msgid "Remember Value"
+#~ msgstr "记住值"
+
+#~ msgid "Watch Variable"
+#~ msgstr "监视变量"
+
+#~ msgid "Reevaluate Expression"
+#~ msgstr "重算表达式"
+
+#~ msgid "Remove Expression"
+#~ msgstr "删除表达式"
+
+#~ msgid "Data write breakpoint"
+#~ msgstr "数据写入断点"

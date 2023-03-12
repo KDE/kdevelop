@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2023-02-24 12:43\n"
+"PO-Revision-Date: 2023-03-11 04:55\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kdevelop/kdevcmake.pot\n"
-"X-Crowdin-File-ID: 4864\n"
+"X-Crowdin-File: /kf5-stable/messages/kdevelop/kdevcmake.pot\n"
+"X-Crowdin-File-ID: 3971\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -232,7 +232,15 @@ msgid "CMake Content Page"
 msgstr "CMake 内容页面"
 
 #: cmakemanager.cpp:650
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to configure project '%1' (error message: %2). As a result, "
+#| "KDevelop's code understanding will likely be broken.\n"
+#| "\n"
+#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
+#| "are correct, and KDevelop is configured to use the correct CMake version "
+#| "and settings. Then right-click the project item in the projects tool view "
+#| "and click 'Reload'."
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
 "code understanding may be wrong.\n"
@@ -240,6 +248,10 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
+"配置工程“%1”失败 (错误消息：%2)。因此，KDevelop 的代码解析可能会出问题。\n"
+"\n"
+"要解决此问题，请确保工程的 CMakeLists.txt 文件正确无误，并且 KDevelop 配置了"
+"正确的 CMake 版本和设置。然后右击工程点击“重新加载”。"
 
 #: cmakemanager.cpp:661
 #, kde-format
@@ -415,3 +427,8 @@ msgctxt "running test %1, %2 number of test cases"
 msgid "CTest %2 (%1)"
 msgid_plural "CTest %2 (%1)"
 msgstr[0] "CTest %2 (%1)"
+
+#~ msgid ""
+#~ "KDevelop has found several possible root directories for your project, "
+#~ "please select the correct one."
+#~ msgstr "KDevelop 发现有多个目录可能作为工程的根目录，请选择正确的根目录。"
