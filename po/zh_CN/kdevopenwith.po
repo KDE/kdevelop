@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-28 00:56+0000\n"
-"PO-Revision-Date: 2023-02-24 12:43\n"
+"PO-Revision-Date: 2023-03-11 04:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -63,16 +63,16 @@ msgstr "您想要默认使用 %2 打开所有 %1 个文件吗？"
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
-msgstr "设为默认？"
+msgstr "设置为默认？"
 
 #: openwithplugin.cpp:275
 #, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr ""
+msgstr "设置为默认"
 
 #: openwithplugin.cpp:276
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
-msgstr ""
+msgstr "不设置"
