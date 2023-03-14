@@ -71,13 +71,18 @@ public:
      */
     void setBitOffsetOf(int64_t bitOffsetOf);
 
+    enum BitWidthSpecialValue {
+        NotABitField = -1, ///< this member is not a bit-field or a parsing error occurred
+        ValueDependentBitWidth = -2 ///< bit width depends on a template parameter
+    };
+
     /**
-     * \returns The width in bits or -1 if unknown or not applicable.
+     * \returns The width in bits or a BitWidthSpecialValue.
      */
     int bitWidth() const;
 
     /**
-     * Set the width to given number of bits. Use -1 to represent unknown offset.
+     * Set the width to a given number of bits or to a BitWidthSpecialValue.
      */
     void setBitWidth(int bitWidth);
 

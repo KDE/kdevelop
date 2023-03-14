@@ -1154,7 +1154,12 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
 #endif
 
 #if CINDEX_VERSION_MINOR >= 16
-    decl->setBitWidth(clang_getFieldDeclBitWidth(cursor));
+    if (clang_Cursor_isBitField(cursor)) {
+        const auto bitWidth = clang_getFieldDeclBitWidth(cursor);
+        decl->setBitWidth(bitWidth == -1 ? ClassMemberDeclaration::ValueDependentBitWidth : bitWidth);
+    } else {
+        decl->setBitWidth(ClassMemberDeclaration::NotABitField);
+    }
 #endif
 
     if (clang_isCursorDefinition(cursor)) {

@@ -56,6 +56,13 @@ QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
 
+namespace KDevelop {
+char* toString(ClassMemberDeclaration::BitWidthSpecialValue bitWidth)
+{
+    return QTest::toString(QString::number(bitWidth));
+}
+}
+
 TestDUChain::~TestDUChain() = default;
 
 void TestDUChain::initTestCase()
@@ -2533,12 +2540,15 @@ void TestDUChain::testBitWidth()
 {
 #if CINDEX_VERSION_MINOR >= 16
     TestFile file(QStringLiteral(R"(
+        #include <climits>
+
         struct foo {
             int a;
             unsigned int b:1;
             unsigned char c:7;
             int d:32;
             int e[2];
+            unsigned       length    : (sizeof(int)*CHAR_BIT - 1);
 
             // error case
             int f:0;
@@ -2556,12 +2566,12 @@ void TestDUChain::testBitWidth()
         auto fooContext = file.topContext()->childContexts().first();
         QVERIFY(fooContext);
         QCOMPARE(fooContext->type(), DUContext::Class);
-        QCOMPARE(fooContext->localDeclarations().size(), 8);
+        QCOMPARE(fooContext->localDeclarations().size(), 9);
         QCOMPARE(fooContext->childContexts().size(), 0);
 
         auto varA = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(0));
         QVERIFY(varA);
-        QCOMPARE(varA->bitWidth(), -1);
+        QCOMPARE(varA->bitWidth(), ClassMemberDeclaration::NotABitField);
         auto varB = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(1));
         QVERIFY(varB);
         QCOMPARE(varB->bitWidth(), 1);
@@ -2573,7 +2583,10 @@ void TestDUChain::testBitWidth()
         QCOMPARE(varD->bitWidth(), 32);
         auto varE = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(4));
         QVERIFY(varE);
-        QCOMPARE(varE->bitWidth(), -1);
+        QCOMPARE(varE->bitWidth(), ClassMemberDeclaration::NotABitField);
+        const auto varLength = dynamic_cast<const ClassMemberDeclaration*>(fooContext->localDeclarations().at(5));
+        QVERIFY(varLength);
+        QCOMPARE(varLength->bitWidth(), sizeof(int) * CHAR_BIT - 1);
 
         // error case
         auto top = file.topContext();
@@ -2581,19 +2594,73 @@ void TestDUChain::testBitWidth()
         QCOMPARE(top->problems().count(), 3);
 
         // error: named bit-field 'f' has zero width
-        auto varF = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(5));
+        auto varF = dynamic_cast<ClassMemberDeclaration*>(fooContext->localDeclarations().at(6));
         QVERIFY(varF);
-        QCOMPARE(varF->bitWidth(), -1);
+        QCOMPARE(varF->bitWidth(), ClassMemberDeclaration::NotABitField);
         // error: bit-field 'g' has negative width (-1)
-        auto varG = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(6));
+        auto varG = dynamic_cast<ClassMemberDeclaration*>(fooContext->localDeclarations().at(7));
         QVERIFY(varG);
-        QCOMPARE(varG->bitWidth(), -1);
+        QCOMPARE(varG->bitWidth(), ClassMemberDeclaration::NotABitField);
         // warning: width of bit-field 'h' (33 bits) exceeds the width of its type; value will be truncated to 32 bits
-        auto varH = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(7));
+        auto varH = dynamic_cast<ClassMemberDeclaration*>(fooContext->localDeclarations().at(8));
         QVERIFY(varH);
         QCOMPARE(varH->bitWidth(), 33);
     }
 #endif
+}
+
+void TestDUChain::testValueDependentBitWidth()
+{
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(17, 0, 0)) {
+        QSKIP("Parsing value-dependent bit-fields may cause an assertion failure or a crash in libclang version < 17");
+    }
+
+    TestFile file(QStringLiteral(R"(
+        #include <climits>
+
+        template<class T, unsigned I>
+        struct Str {
+            typedef typename T::size_type size_type;
+
+            int w : sizeof(double);
+            int x : sizeof(T);
+            short y : I + 1;
+            unsigned       length1   : (sizeof(size_type)*CHAR_BIT - 1);
+            size_type      length2   : (sizeof(size_type)*CHAR_BIT - 1);
+            size_type z = 5;
+        };
+    )"),
+                  QStringLiteral("cpp"));
+
+    QVERIFY(file.parseAndWait());
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+        QCOMPARE(file.topContext()->childContexts().size(), 1);
+
+        const auto strContext = file.topContext()->childContexts().constFirst();
+        QVERIFY(strContext);
+        QCOMPARE(strContext->type(), DUContext::Class);
+        QCOMPARE(strContext->childContexts().size(), 0);
+
+        const auto strDeclarations = strContext->localDeclarations();
+        QCOMPARE(strDeclarations.size(), 9);
+
+        const auto varW = dynamic_cast<const ClassMemberDeclaration*>(strDeclarations.at(3));
+        QVERIFY(varW);
+        QCOMPARE(varW->bitWidth(), sizeof(double));
+
+        for (int i = 4; i < strDeclarations.size() - 1; ++i) {
+            const auto member = dynamic_cast<const ClassMemberDeclaration*>(strDeclarations.at(i));
+            QVERIFY(member);
+            QCOMPARE(member->bitWidth(), ClassMemberDeclaration::ValueDependentBitWidth);
+        }
+
+        const auto varZ = dynamic_cast<const ClassMemberDeclaration*>(strDeclarations.constLast());
+        QVERIFY(varZ);
+        QCOMPARE(varZ->bitWidth(), ClassMemberDeclaration::NotABitField);
+    }
 }
 
 void TestDUChain::testBitWidthUpdate()
@@ -2645,7 +2712,7 @@ void TestDUChain::testBitWidthUpdate()
         QCOMPARE(fooContext->childContexts().size(), 0);
 
         const auto varI = dynamic_cast<ClassMemberDeclaration *>(fooContext->localDeclarations().at(0));
-        QCOMPARE(varI->bitWidth(), -1);
+        QCOMPARE(varI->bitWidth(), ClassMemberDeclaration::NotABitField);
     }
 #endif
 }

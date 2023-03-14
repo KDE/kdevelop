@@ -21,7 +21,7 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
     , m_isRegister(false)
     , m_isExtern(false)
     , m_isMutable(false)
-    , m_bitWidth(-1)
+    , m_bitWidth(ClassMemberDeclaration::NotABitField)
     , m_bitOffsetOf(-1)
 {
 }

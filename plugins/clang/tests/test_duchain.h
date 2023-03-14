@@ -103,6 +103,7 @@ private Q_SLOTS:
     void testSizeAlignOf();
     void testSizeAlignOfUpdate();
     void testBitWidth();
+    void testValueDependentBitWidth();
     void testBitWidthUpdate();
 
 private:

@@ -127,9 +127,17 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
                                                                        d->m_declaration).toHtmlEscaped(),
                                                                    d->m_declaration);
 
-            const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(d->m_declaration.data());
-            if (memberDecl && memberDecl->bitWidth() > 0) {
-                modifyHtml() += QLatin1String(" :") + QString::number(memberDecl->bitWidth());
+            if (auto memberDecl = dynamic_cast<const ClassMemberDeclaration*>(d->m_declaration.data())) {
+                const auto bitWidth = memberDecl->bitWidth();
+                switch (bitWidth) {
+                case ClassMemberDeclaration::NotABitField:
+                    break;
+                case ClassMemberDeclaration::ValueDependentBitWidth:
+                    modifyHtml() += i18n(" :[value-dependent]");
+                    break;
+                default:
+                    modifyHtml() += QLatin1String(" :") + QString::number(bitWidth);
+                }
             }
 
             if (auto integralType = d->m_declaration->type<ConstantIntegralType>()) {
