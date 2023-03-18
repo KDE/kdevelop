@@ -1,5 +1,5 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2022.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2020, 2022, 2023.
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
 # Rolf Eike Beer <kde@opensource.sf-tec.de>, 2013.
@@ -9,25 +9,25 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2022-09-29 23:24+0200\n"
-"Last-Translator: Alois Spitzbart <spitz234@hotmail.com>\n"
+"PO-Revision-Date: 2023-03-17 23:04+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Frederik Schwarzer,Gerhard Stengel"
+msgstr "Deutsches KDE-Übersetzerteam,Frederik Schwarzer,Gerhard Stengel"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "schwarzer@kde.org,gstengel@gmx.net"
+msgstr "kde-i18n-de@kde.org,schwarzer@kde.org,gstengel@gmx.net"
 
 #: debugger/breakpoint/breakpoint.cpp:144
 #, kde-format
@@ -412,7 +412,7 @@ msgstr "Debugger-Variablen"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Spaltengröße durch Klick automatisch einstellen"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -1827,10 +1827,9 @@ msgid "Running %1"
 msgstr "%1 wird ausgeführt"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Farbschema"
+msgstr "&Fenster-Farbschema"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -5496,12 +5495,10 @@ msgid "Some Files are Write-Protected"
 msgstr "Einige Dateien sind schreibgeschützt"
 
 #: util/shellutils.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed Setting Permissions"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "Fehler beim Setzen der Zugriffsrechte"
+msgstr "Schreibberechtigungen einstellen"
 
 #: util/shellutils.cpp:84
 #, kde-format
@@ -5592,20 +5589,16 @@ msgstr ""
 "Bitte wählen Sie einen anderen Namen."
 
 #: vcs/dvcs/ui/branchmanager.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "Currently at the branch \"%1\".\n"
-#| "To remove it, please change to another branch."
+#, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
 "„%1“ ist der aktuelle Zweig.\n"
-"Um ihn zu entfernen, wechseln Sie bitte in einen anderen Zweig."
+"Um ihn zu löschen, wechseln Sie bitte in einen anderen Zweig."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
+#, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
 msgstr "Möchten Sie den Zweig „%1“ unwiderruflich löschen?"
 

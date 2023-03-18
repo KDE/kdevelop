@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2017.
-# Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2020, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2020-07-20 02:08+0200\n"
-"PO-Revision-Date: 2020-08-19 17:08+0200\n"
+"PO-Revision-Date: 2023-03-17 22:50+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -16,13 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, label)
 #: androidpreferences.ui:29
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Android KDE extra-cmake-modules toolchain file"
-msgstr ""
+msgstr "extra-cmake-modules-Toolchain-Datei für Android KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: androidpreferences.ui:32

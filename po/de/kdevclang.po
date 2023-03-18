@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Burkhard Lück <lueck@hube-lueck.de>, 2016, 2017, 2018.
-# Frederik Schwarzer <schwarzer@kde.org>, 2018, 2020, 2022.
+# Frederik Schwarzer <schwarzer@kde.org>, 2018, 2020, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-07-24 15:08+0200\n"
+"PO-Revision-Date: 2023-03-17 21:01+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: clangsettings/sessionsettings/sessionsettings.cpp:36
 #, kde-format
@@ -85,6 +85,11 @@ msgid ""
 "this.\n"
 "See also: https://bugs.kde.org/show_bug.cgi?id=393779"
 msgstr ""
+"Der in Clang integrierte Include-Pfad \"%1\" ist ungültig (fehlender cpuid.h-"
+"Header).\n"
+"Versuchen Sie, die Umgebungsvariable KDEV_CLANG_BUILTIN_DIR manuell "
+"festzulegen, um das Problem zu beheben.\n"
+"Siehe auch: https://bugs.kde.org/show_bug.cgi?id=393779"
 
 #: clangsupport.cpp:278
 #, kde-format
@@ -111,7 +116,7 @@ msgstr "%1 implementieren"
 #: codecompletion/context.cpp:1350
 #, kde-format
 msgid "Special"
-msgstr ""
+msgstr "Speziell"
 
 #: codecompletion/context.cpp:1351
 #, kde-format
@@ -269,7 +274,7 @@ msgstr "#pragma once einfügen"
 #: duchain/headerguardassistant.cpp:46
 #, kde-format
 msgid "Add macro-based #ifndef/#define/#endif header guard"
-msgstr ""
+msgstr "Fügt den makrobasierten #ifndef/#define/#endif-Header-Guard hinzu"
 
 #: duchain/macrodefinition.cpp:112
 #, kde-format
@@ -308,7 +313,7 @@ msgstr "Vorkommen anzeigen"
 #: duchain/macronavigationcontext.cpp:75
 #, kde-format
 msgid "Body: "
-msgstr ""
+msgstr "Körper: "
 
 #: duchain/missingincludepathproblem.cpp:35
 #, kde-format
@@ -323,17 +328,17 @@ msgstr "Projekt öffnen"
 #: duchain/parsesession.cpp:543
 #, kde-format
 msgid "Requested here: %1"
-msgstr ""
+msgstr "Hier angefordert: %1"
 
 #: duchain/parsesession.cpp:584
 #, kde-format
 msgid "In included file: %1"
-msgstr ""
+msgstr "In Include-Datei: %1"
 
 #: duchain/parsesession.cpp:607
 #, kde-format
 msgid "Header is not guarded against multiple inclusions"
-msgstr ""
+msgstr "Der Header ist nicht gegen mehrfaches Inkludieren geschützt"
 
 #: duchain/parsesession.cpp:608
 #, kde-format
@@ -341,6 +346,9 @@ msgid ""
 "The given header is not guarded against multiple inclusions, either with the "
 "conventional #ifndef/#define/#endif macro guards or with #pragma once."
 msgstr ""
+"Der angegebene Header ist nicht gegen mehrfaches Inkludieren geschützt, "
+"weder mit dem herkömmlichen #ifndef/#define/#endif-Include-Guard noch mit "
+"#pragma once."
 
 #: duchain/unknowndeclarationproblem.cpp:373
 #, kde-format
@@ -360,7 +368,7 @@ msgstr "Vorwärtsdeklarieren als „struct“"
 #: util/clangutils.cpp:189
 #, kde-format
 msgid "<parse error>"
-msgstr ""
+msgstr "<Parserfehler>"
 
 #~ msgid "1 Byte"
 #~ msgid_plural "%1 Bytes"

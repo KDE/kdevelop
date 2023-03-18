@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2018, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2020, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2021-04-15 14:36+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2023-03-17 21:03+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: analyzer.cpp:29
 #, kde-format
@@ -38,7 +39,7 @@ msgstr "Alle Überprüfungen"
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr ""
+msgstr "Geben Sie den Namen des neuen Prüfsatzes ein"
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
@@ -86,7 +87,7 @@ msgstr "Als Standard verwenden"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr ""
+msgstr "Namen des Prüfsatzes bearbeiten"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
@@ -144,7 +145,7 @@ msgstr "Der vollständige Pfad zur Clang-Tidy-Programmdatei"
 #, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr ""
+msgstr "Analysejobs parallel ausführen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/clangtidypreferences.ui:81
@@ -186,14 +187,14 @@ msgstr "Includes"
 #, kde-format
 msgctxt "@option:check"
 msgid "&Check system headers:"
-msgstr ""
+msgstr "&Systemheader prüfen:"
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/clangtidyprojectconfigpage.ui:92
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header fi&lter:"
-msgstr ""
+msgstr "Header-Fi&lter:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/clangtidyprojectconfigpage.ui:105
@@ -204,6 +205,9 @@ msgid ""
 "from. Diagnostics from the main file of each translation unit are always "
 "displayed. Can be used together with -line-filter."
 msgstr ""
+"Regulärer Ausdruck, der mit den Namen der Header übereinstimmt, um Diagnosen "
+"auszugeben. Diagnosen aus der Hauptdatei jeder Übersetzungseinheit werden "
+"immer angezeigt. Kann zusammen mit -line-filter verwendet werden."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: config/clangtidyprojectconfigpage.ui:119

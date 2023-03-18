@@ -1,11 +1,11 @@
-# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2020, 2023.
 # Burkhard Lück <lueck@hube-lueck.de>, 2011, 2013, 2016, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevperforce\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2020-08-22 09:33+0200\n"
+"PO-Revision-Date: 2023-03-17 22:40+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -13,6 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: perforceplugin.cpp:108
 #, kde-format
@@ -63,16 +64,18 @@ msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
+"Perforce-Programmdatei kann nicht gefunden werden. Ist Perforce auf dem "
+"System installiert? Ist es im PATH?"
 
 #: ui/perforceimportmetadatawidget.cpp:152
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
-msgstr ""
+msgstr "P4-Client Exitcode fehlgeschlagen: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:196
 #, kde-format
 msgid "P4 Client failed with error code: %1"
-msgstr ""
+msgstr "P4-Client Fehlercode fehlgeschlagen: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: ui/perforceimportmetadatawidget.ui:29
@@ -104,6 +107,10 @@ msgid ""
 "running on the same host. Port numbers must be in the range 1024 through "
 "32767"
 msgstr ""
+"Das Format von P4PORT für Perforce-Anwendungen ist Protokoll:Host:Port oder "
+"nur der Port, wenn sowohl die Perforce-Anwendung als auch der "
+"Versionierungsdienst auf demselben Host ausgeführt werden. Portnummern "
+"müssen im Bereich von 1024 bis 32767 liegen."
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90
@@ -133,7 +140,7 @@ msgstr "P4-Programm"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Name of current client workspace on the Perforce server"
-msgstr ""
+msgstr "Name des aktuellen Client-Arbeitsbereichs auf dem Perforce-Server"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4config)
 #: ui/perforceimportmetadatawidget.ui:118

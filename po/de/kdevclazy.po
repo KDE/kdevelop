@@ -1,21 +1,22 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2018, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2020, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2021-04-15 14:37+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2023-03-17 21:49+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -50,13 +51,15 @@ msgstr "Stufe 3"
 #, kde-format
 msgctxt "@item level of checks"
 msgid "Manual Level"
-msgstr ""
+msgstr "Manueller Level"
 
 #: checksdb.cpp:37
 #, kde-format
 msgid ""
 "Very stable checks, 99.99% safe, mostly no false-positives, very desirable."
 msgstr ""
+"Sehr stabile Prüfungen, 99,99 % sicher, meist keine Fehlalarme, sehr "
+"wünschenswert."
 
 #: checksdb.cpp:40
 #, kde-format
@@ -64,6 +67,8 @@ msgid ""
 "The default level. Very similar to level 0, slightly more false-positives "
 "but very few."
 msgstr ""
+"Die Standardstufe. Sehr ähnlich zu Stufe 0, etwas mehr Fehlalarme aber sehr "
+"wenige."
 
 #: checksdb.cpp:43
 #, kde-format
@@ -71,11 +76,13 @@ msgid ""
 "Also very few false-positives, but contains noisy checks which not everyone "
 "agree should be default."
 msgstr ""
+"Auch sehr wenige Fehlalarme, enthält aber Checks mit vielen Ausgaben, die "
+"nicht jeder voreingestellt sehen möchte."
 
 #: checksdb.cpp:46
 #, kde-format
 msgid "Contains checks with high rate of false-positives."
-msgstr ""
+msgstr "Enthält Prüfungen mit hohem Anteil an falsch-positiven Ergebnissen."
 
 #: checksdb.cpp:49
 #, kde-format
@@ -83,6 +90,9 @@ msgid ""
 "Checks here need to be enabled explicitly, as they don't belong to any "
 "level. Checks here are very stable and have very few false-positives."
 msgstr ""
+"Checks müssen hier explizit aktiviert werden, da sie zu keinem Level gehören."
+"Die Überprüfungen hier sind sehr stabil und weisen nur sehr wenige "
+"Fehlalarme auf."
 
 #: checksdb.cpp:54
 #, kde-format
@@ -90,12 +100,14 @@ msgid ""
 "Unable to load Clazy checks information from '%1'. Please check your "
 "settings."
 msgstr ""
+"Die Clazy-Checks-Informationen von „%1“ können nicht geladen werden. Bitte "
+"überprüfen Sie Ihre Einstellungen."
 
 #: config/checksetmanagewidget.cpp:89
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter Name of New Check Set"
-msgstr ""
+msgstr "Geben Sie den Namen des neuen Prüfsatzes ein"
 
 #: config/checksetmanagewidget.cpp:95
 #, kde-format
@@ -143,7 +155,7 @@ msgstr "Als Standard verwenden"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit name of check set"
-msgstr ""
+msgstr "Namen des Prüfsatzes bearbeiten"
 
 #: config/checksetselectioncombobox.cpp:26
 #, kde-format
@@ -167,7 +179,7 @@ msgstr "%1 (Standardauswahl)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search checks..."
-msgstr ""
+msgstr "Überprüfungen suchen ..."
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: config/checkswidget.ui:31
@@ -182,6 +194,8 @@ msgstr "Überprüfungen zurücksetzen"
 msgid ""
 "Since nothing is selected Clazy will use all checks from levels 0 and 1."
 msgstr ""
+"Da nichts ausgewählt ist, verwendet Clazy alle Überprüfungen der Stufen 0 "
+"und 1."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: config/commandlinewidget.ui:29
@@ -208,8 +222,8 @@ msgstr "Zeilen umbrechen"
 #, kde-format
 msgid "1 check detected"
 msgid_plural "%1 checks detected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 Überprüfung erkannt"
+msgstr[1] "%1 Überprüfungen erkannt"
 
 #: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
 #, kde-format
@@ -263,7 +277,7 @@ msgstr "Pfad zur Clazy-Dokumentation."
 #, kde-format
 msgctxt "@option:check"
 msgid "Run analysis jobs in parallel"
-msgstr ""
+msgstr "Analysejobs parallel ausführen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
 #: config/globalconfigpage.ui:94
@@ -322,6 +336,8 @@ msgid ""
 "Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
 "is missing."
 msgstr ""
+"Für Nicht-Qt-Dateien oder mit anderen Worten, wenn -DQT_CORE_LIB fehlt, "
+"keine Warnungen ausgeben."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
 #: config/projectconfigpage.ui:81
@@ -335,7 +351,7 @@ msgstr "Nur Qt"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disable checks not compatible with Qt 4."
-msgstr ""
+msgstr "Deaktiviert Überprüfungen, die nicht mit Qt 4 kompatibel sind."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
 #: config/projectconfigpage.ui:91
@@ -351,6 +367,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "For running clazy on Qt itself, optional, but honors specific guidelines."
 msgstr ""
+"Zum Ausführen von Clazy auf Qt selbst. Optional, berücksichtigt jedoch "
+"bestimmte Richtlinien."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
 #: config/projectconfigpage.ui:101
@@ -368,13 +386,17 @@ msgid ""
 "None of the built-in checks benefit from this, but can be useful for custom "
 "checks."
 msgstr ""
+"Zum Betrachten von implizitem Code wie vom Compiler generierten "
+"Konstruktoren.\n"
+"Keine der eingebauten Überprüfungen profitiert davon, kann aber für "
+"benutzerdefinierte Überprüfungen nützlich sein."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
 #: config/projectconfigpage.ui:112
 #, kde-format
 msgctxt "@option:check"
 msgid "Visit implicit code"
-msgstr ""
+msgstr "Impliziten Code betrachten"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:129
@@ -385,20 +407,23 @@ msgid ""
 "includes.\n"
 "Useful for performance reasons."
 msgstr ""
+"Nur Warnungen für die aktuell zu kompilierende Datei ausgeben und alle "
+"Includes ignorieren.\n"
+"Nützlich aus Performance-Gründen."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
 #: config/projectconfigpage.ui:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Ignore included files"
-msgstr ""
+msgstr "Include-Dateien ignorieren"
 
 #. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
 #: config/projectconfigpage.ui:141
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Header filter:"
-msgstr ""
+msgstr "Header-Filter:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
 #: config/projectconfigpage.ui:149
@@ -409,13 +434,17 @@ msgid ""
 "from.\n"
 "Diagnostics from the main file of each translation unit are always displayed."
 msgstr ""
+"Regulärer Ausdruck, der mit den Namen der Header übereinstimmt, zu denen "
+"Diagnosen ausgegeben werden sollen.\n"
+"Diagnosen aus der Hauptdatei jeder Übersetzungseinheit werden immer "
+"angezeigt."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
 #: config/projectconfigpage.ui:172
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable all fix-its"
-msgstr ""
+msgstr "Slle Fix-Its aktivieren"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:179
@@ -423,6 +452,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Fix-its will be applied to a separate file (for unit-test use only)."
 msgstr ""
+"Fix-its werden auf eine separate Datei angewendet (nur für Komponententests)."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:182
@@ -440,6 +470,10 @@ msgid ""
 "parallel checking, which can lead to multiple fix-it applying for header "
 "files."
 msgstr ""
+"Bitte sichern Sie Ihren Code, bevor Fix-Its angewendet werden. Für bessere "
+"Ergebnisse parallele Überprüfungen\n"
+" deaktivieren, die dazu führen kann, dass mehrere Fix-its auf Header-Dateien "
+"angewendet werden."
 
 #. i18n: ectx: attribute (title), widget (QWidget, extraTab)
 #: config/projectconfigpage.ui:209
@@ -453,21 +487,21 @@ msgstr "Weitere Parameter"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler append:"
-msgstr ""
+msgstr "Compiler-Zusatz hinten:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
 #: config/projectconfigpage.ui:222
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to append to the compiler command line."
-msgstr ""
+msgstr "Zusätzliche Parameter zum Anhängen an die Compiler-Befehlszeile."
 
 #. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
 #: config/projectconfigpage.ui:232
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Compiler prepend:"
-msgstr ""
+msgstr "Compiler-Zusatz vorne:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
 #: config/projectconfigpage.ui:239
@@ -475,13 +509,14 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Additional parameters to prepend to the compiler command line."
 msgstr ""
+"Zusätzliche Parameter, die der Compiler-Befehlszeile vorangestellt werden."
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
 #: config/projectconfigpage.ui:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Additional parameters to clazy-standalone."
-msgstr ""
+msgstr "Zusätzliche Parameter für clazy-standalone."
 
 #. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
 #: config/projectconfigpage.ui:259
@@ -498,7 +533,7 @@ msgstr "Clazy-Analyse (%1)"
 #: job.cpp:135
 #, kde-format
 msgid "Unknown Level"
-msgstr ""
+msgstr "Unbekannter Level"
 
 #: job.cpp:201
 #, kde-format
@@ -537,21 +572,23 @@ msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
 "already installed."
 msgstr ""
+"Der Clazy-Standalone-Pfad kann nicht erkannt werden. Legen Sie den Pfad "
+"manuell fest, wenn Clazy bereits installiert."
 
 #: jobparameters.cpp:42
 #, kde-format
 msgid "clazy-standalone path is empty."
-msgstr ""
+msgstr "Der Clay-Standalone-Pfad ist leer."
 
 #: jobparameters.cpp:50
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
-msgstr ""
+msgstr "Der Clazy-Standalone-Pfad „%1“ ist nicht vorhanden."
 
 #: jobparameters.cpp:55
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
-msgstr ""
+msgstr "Der Clazy-Standalone-Pfad „%1“ ist nicht ausführbar."
 
 #: jobparameters.cpp:64
 #, kde-format

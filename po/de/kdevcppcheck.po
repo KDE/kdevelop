@@ -1,11 +1,11 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2013, 2015, 2016, 2017, 2018.
-# Frederik Schwarzer <schwarzer@kde.org>, 2015, 2016, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2015, 2016, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2020-08-19 17:30+0200\n"
+"PO-Revision-Date: 2023-03-17 22:26+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -13,6 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: config/globalconfigpage.cpp:34 config/projectconfigpage.cpp:60
 #, kde-format
@@ -95,6 +96,9 @@ msgid ""
 "are false positives with this option. Each result must be carefully "
 "investigated before you know if it is good or bad."
 msgstr ""
+"Cppcheck-Report zulassen, obwohl die Analyse nicht schlüssig ist. Bei dieser "
+"Option gibt es Fehlalarme. Jedes Ergebnis muss sorgfältig geprüft werden "
+"bevor Sie wissen, ob es gut oder schlecht ist."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_inconclusiveAnalysis)
 #: config/projectconfigpage.ui:63
@@ -160,6 +164,12 @@ msgid ""
 "that is effective.<br/><br/>Be careful with using this option - it can "
 "dramatically slow checking.</p>"
 msgstr ""
+"<p>Überprüfung von Dateien mit vielen Konfigurationen erzwingen. Wenn eine "
+"solche Datei gefunden wird, wird eine Fehlermeldung ausgegeben. Also gibt es "
+"keinen Grund, dies voreingestellt zu verwenden.Wenn dies zusammen mit „--max-"
+"configs=“ verwendet wird, wird die letzte Option verwendet.<br/><br/>Wählen "
+"Sie diese Option mit Bedacht - sie kann die Püfung drastisch verlangsamen.</"
+"p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_forceCheck)
 #: config/projectconfigpage.ui:112
@@ -190,6 +200,8 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
+"Alle Soding-Style-Überprüfungen aktivieren. Alle Nachrichten mit dem "
+"Schweregrad „Stil“, „Leistung“ und „Portabilität“ sind aktiviert."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)
 #: config/projectconfigpage.ui:135
@@ -206,6 +218,8 @@ msgid ""
 "Check Cppcheck configuration. The normal code analysis is disabled by this "
 "flag."
 msgstr ""
+"Cppcheck-Konfiguration prüfen. Die normale Codeanalyse wird dadurch "
+"deaktiviert."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkConfig)
 #: config/projectconfigpage.ui:148
@@ -229,6 +243,8 @@ msgid ""
 "Add 'project' include directories to Cppcheck arguments. This option adds "
 "only paths related with project's root and build directories."
 msgstr ""
+"Projekt-Include-Ordner zu CppCheck-Argumenten hinzufügen. Diese Option fügt "
+"nur Pfade im Zusammenhang mit den Root- und Build-Ordnern des Projekts hinzu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useProjectIncludes)
 #: config/projectconfigpage.ui:167
@@ -245,6 +261,9 @@ msgid ""
 "<p>Add other, 'system' include directories to Cppcheck arguments.<br/><br/"
 ">Be careful with using this option - it can dramatically slow checking.</p>"
 msgstr ""
+"<p>Weitere „System“-Include-Ordner zu CppCheck-Argumenten hinzufügen.<br/"
+"><br/>Wählen Sie diese Option mit Bedacht - sie kann die Überprüfung "
+"erheblich verlangsamen.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useSystemIncludes)
 #: config/projectconfigpage.ui:183
@@ -279,6 +298,20 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html>\n"
+"\n"
+"<p>Definiert eine durch Semikolons getrennte Liste ignorierter Include-"
+"Ordner.</p>\n"
+"\n"
+"<p>Sie können die folgenden Platzhalter verwenden:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Wird durch die Adresse des Basisordners des Projekts "
+"ersetzt.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Wird durch die Adresse des Build-Ordners des "
+"Projekts ersetzt.</p>\n"
+"\n"
+"</html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabExtra)
 #: config/projectconfigpage.ui:241
@@ -313,6 +346,19 @@ msgid ""
 "\n"
 "</html>"
 msgstr ""
+"<html>\n"
+"\n"
+"<p>Definiert zusätzliche Parameter für CppCheck (siehe Dokumentation).</p>\n"
+"\n"
+"<p>Sie können die folgenden Platzhalter verwenden:</p>\n"
+"\n"
+"<p><b><tt>%p</tt></b> - Wird durch die Adresse des Basisordners des Projekts "
+"ersetzt.</p>\n"
+"\n"
+"<p><b><tt>%b</tt></b> - Wird durch die Adresse des Build-Ordners des "
+"Projekts ersetzt.</p>\n"
+"\n"
+"</html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: config/projectconfigpage.ui:308
@@ -380,6 +426,13 @@ msgid ""
 "'XX' value can be found in any project's moc-generated file or in the "
 "<QtCore/qobjectdefs.h> header file."
 msgstr ""
+"Es scheint, dass dieses Projekt die Qt-Bibliothek verwendet. Damit CppCheck "
+"richtig funktioniert, muss der Wert zum Definieren von Q_MOC_OUTPUT_REVISION "
+"gesetzt werden. Leider kann das Plugin diesen Wert nicht automatisch finden "
+"- Sie sollten ihn manuelldurch Hinzufügen von „-DQ_MOC_OUTPUT_REVISION=XX“ "
+"zu den zusätzlichen Parametern setzen. Der „XX“-Wert kann in der moc-"
+"generierten Datei eines beliebigen Projekts oder in der Header-Datei <QtCore/"
+"qobjectdefs.h> gefunden werden."
 
 #: parser.cpp:220
 #, kde-format
@@ -424,13 +477,13 @@ msgstr "Analyse gestartet ..."
 #, kde-format
 msgctxt "@info:tooltip %1 is the path of the file"
 msgid "Re-run last Cppcheck analysis (%1)"
-msgstr "Letzte Cppcheck-Analyse nochmal ausführen (%1)"
+msgstr "Letzte Cppcheck-Analyse noch einmal ausführen (%1)"
 
 #: problemmodel.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last Cppcheck analysis"
-msgstr "Letzte Cppcheck-Analyse nochmal ausführen"
+msgstr "Letzte Cppcheck-Analyse noch einmal ausführen"
 
 #~ msgid "Cppcheck Error"
 #~ msgstr "Cppcheck-Fehler"
