@@ -1,20 +1,22 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
 # Burkhard Lück <lueck@hube-lueck.de>, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2020-02-03 07:46+0100\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2023-03-17 21:54+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: compileanalyzeproblemmodel.cpp:84
 #, kde-format
@@ -30,13 +32,13 @@ msgstr "Analyse gestartet ..."
 #, kde-format
 msgctxt "@info:tooltip %2 is the path of the file"
 msgid "Re-run last %1 analysis (%2)"
-msgstr ""
+msgstr "Letzte %1-Analyse erneut ausführen (%2)"
 
 #: compileanalyzeproblemmodel.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-run last %1 analysis"
-msgstr ""
+msgstr "Die letzte %1-Analyse erneut ausführen"
 
 #: compileanalyzer.cpp:74
 #, kde-format
@@ -53,7 +55,7 @@ msgstr "Aktuelles Projekt analysieren mit %1"
 #: compileanalyzer.cpp:161
 #, kde-format
 msgid "No suitable active file, unable to deduce project."
-msgstr ""
+msgstr "Keine passende aktive Datei, Projekt kann nicht abgeleitet werden."
 
 #: compileanalyzer.cpp:173
 #, kde-format
@@ -67,6 +69,9 @@ msgid ""
 "\n"
 "%2"
 msgstr ""
+"Die Überprüfung von „%1“ kann nicht gestartet werden:\n"
+"\n"
+"%2"
 
 #: compileanalyzer.cpp:216
 #, kde-format
@@ -77,23 +82,26 @@ msgstr "Test"
 #: compileanalyzeutils.cpp:45
 #, kde-format
 msgid "Compilation database file not found: '%1'"
-msgstr ""
+msgstr "Kompilierungsdatenbankdatei nicht gefunden: „%1“"
 
 #: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
 #, kde-format
 msgid ""
 "Nothing to check: compilation database file '%1' contains no matching items."
 msgstr ""
+"Nichts zu prüfen: Kompilierungsdatenbankdatei „%1“ enthält keine "
+"übereinstimmenden Elemente."
 
 #: compileanalyzeutils.cpp:57
 #, kde-format
 msgid "Could not open compilation database file for reading: '%1'"
 msgstr ""
+"Kompilierungsdatenbankdatei konnte nicht zum Lesen geöffnet werden: „%1“"
 
 #: compileanalyzeutils.cpp:65
 #, kde-format
 msgid "JSON error during parsing compilation database file '%1': %2"
-msgstr ""
+msgstr "JSON-Fehler beim Einlesen der Kompilierungsdatenbankdatei „%1“: %2"
 
 #: compileanalyzeutils.cpp:70
 #, kde-format
@@ -101,3 +109,5 @@ msgid ""
 "JSON error during parsing compilation database file '%1': document is not an "
 "array."
 msgstr ""
+"JSON-Fehler beim Einlesen der Kompilierungsdatenbankdatei '%1': Dokument ist "
+"kein Array."

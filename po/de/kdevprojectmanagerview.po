@@ -1,12 +1,12 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020, 2022.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020, 2022, 2023.
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-04-15 03:44+0200\n"
+"PO-Revision-Date: 2023-03-17 23:05+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: cutcopypastehelpers.cpp:78
 #, kde-format
@@ -178,21 +178,17 @@ msgstr ""
 "Sucht das aktuelle Dokument in der Projekt-Baumansicht und wählt es aus."
 
 #: projectmanagerview.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
-msgstr "Aktuelles Dokument suchen"
+msgstr "Aktuelles Dokument automatisch auswählen"
 
 #: projectmanagerview.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Locates the current document in the project tree and selects it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
 msgstr ""
-"Sucht das aktuelle Dokument in der Projekt-Baumansicht und wählt es aus."
+"Wählt das aktuelle Dokument in der Projekt-Baumansicht automatisch aus."
 
 #: projectmanagerview.cpp:118
 #, kde-format

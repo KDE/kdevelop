@@ -1,58 +1,61 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-#
-# Frederik Schwarzer <schwarzer@kde.org>, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2020, 2023.
 # Burkhard Lück <lueck@hube-lueck.de>, 2021.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2021-04-15 14:40+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2023-03-17 22:49+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: scratchpad.cpp:104 scratchpadview.cpp:87
 #, kde-format
 msgctxt "@title:window"
 msgid "Scratchpad"
-msgstr ""
+msgstr "Notizblock"
 
 #: scratchpad.cpp:141 scratchpad.cpp:220 scratchpadjob.cpp:33
 #, kde-format
 msgctxt "prefix to distinguish scratch tabs"
 msgid "scratch:%1"
-msgstr ""
+msgstr "notiz:%1"
 
 #: scratchpad.cpp:168
 #, kde-format
 msgid "Failed to remove scratch: %1"
-msgstr ""
+msgstr "Notiz kann nicht entfernt werden: %1"
 
 #: scratchpad.cpp:175
 #, kde-format
 msgid "Failed to create scratch: Name already in use"
-msgstr ""
+msgstr "Notiz kann nicht erstellt werden: Name wird bereits verwendet"
 
 #: scratchpad.cpp:187
 #, kde-format
 msgid "Failed to create new scratch"
-msgstr ""
+msgstr "Neue Notiz kann nicht erstellt werden"
 
 #: scratchpad.cpp:196
 #, kde-format
 msgid "Failed to rename scratch: Names must not include path separator"
 msgstr ""
+"Notiz kann nicht umbenannt werden: Namen dürfen kein Pfadtrennzeichen "
+"enthalten"
 
 #: scratchpad.cpp:226
 #, kde-format
 msgid "Failed renaming scratch."
-msgstr ""
+msgstr "Notiz kann nicht umbenannt werden."
 
 #: scratchpadjob.cpp:57
 #, kde-format
@@ -67,7 +70,7 @@ msgstr "Der Prozess wurde mit dem Rückgabewert %1 beendet."
 #: scratchpadjob.cpp:80
 #, kde-format
 msgid "Failed to run scratch: %1"
-msgstr ""
+msgstr "Notiz-Ausführung fehlgeschlagen: %1"
 
 #: scratchpadview.cpp:100
 #, kde-format
@@ -75,36 +78,40 @@ msgid ""
 "Scratchpad lets you quickly run and experiment with code without a full "
 "project, and even store todos. Create a new scratch to start."
 msgstr ""
+"Mit Notizblock können Sie Code schnell ausführen und mit ihm "
+"experimentieren, ohne ein vollständiges Projekt zu erstellen oder Todos zu "
+"speichern. Erstellen Sie eine neue Notiz, um zu beginnen."
 
 #: scratchpadview.cpp:114
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command to run this scratch. '$f' will expand to the scratch path."
 msgstr ""
+"Befehl zum Ausführen dieser Notiz. „$f“ wird zum Scratch-Pfad erweitert."
 
 #: scratchpadview.cpp:137
 #, kde-format
 msgctxt "@action"
 msgid "New Scratch"
-msgstr ""
+msgstr "Neue Notiz"
 
 #: scratchpadview.cpp:141
 #, kde-format
 msgctxt "@action"
 msgid "Remove Scratch"
-msgstr ""
+msgstr "Notiz entfernen"
 
 #: scratchpadview.cpp:149
 #, kde-format
 msgctxt "@action"
 msgid "Rename Scratch"
-msgstr ""
+msgstr "Notiz umbenennen"
 
 #: scratchpadview.cpp:158
 #, kde-format
 msgctxt "@action"
 msgid "Run Scratch"
-msgstr ""
+msgstr "Notiz ausführen"
 
 #: scratchpadview.cpp:164
 #, kde-format
@@ -116,10 +123,10 @@ msgstr "Filter ..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Create New Scratch"
-msgstr ""
+msgstr "Eine neue Notiz anlegen"
 
 #: scratchpadview.cpp:205
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name for scratch file:"
-msgstr ""
+msgstr "Name der Notiz-Datei:"

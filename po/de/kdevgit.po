@@ -1,19 +1,20 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2009, 2013, 2014, 2017, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020.
+# Frederik Schwarzer <schwarzer@kde.org>, 2009, 2010, 2011, 2016, 2020, 2023.
 # Gerhard Stengel <gstengel@gmx.net>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2021-05-31 16:06+0200\n"
-"Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
+"PO-Revision-Date: 2023-03-17 23:10+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: committoolview.cpp:206 committoolview.cpp:207
 #, kde-format
@@ -28,39 +29,37 @@ msgstr "Aktualisieren"
 #: committoolview.cpp:225
 #, kde-format
 msgid "Stage selected"
-msgstr ""
+msgstr "Ausgewählte in die Stage legen"
 
 #: committoolview.cpp:227
 #, kde-format
 msgid "Unstage selected"
-msgstr ""
+msgstr "Ausgewählte aus der Stage nehmen"
 
 #: committoolview.cpp:229
 #, kde-format
 msgid "Revert unstaged edits"
-msgstr ""
+msgstr "Änderungen zurücknehmen, die nicht in der Stage liegen"
 
 #: committoolview.cpp:482
 #, kde-format
 msgid "Committing failed. See Version Control tool view."
-msgstr ""
+msgstr "Commit fehlgeschlagen. Siehe Werkzeugansicht Versionsverwaltung."
 
 #: diffviewsctrl.cpp:51
 #, kde-format
 msgid "Stage selected lines or hunk"
-msgstr ""
+msgstr "Ausgewählte Zeilen oder Block in die Stage legen"
 
 #: diffviewsctrl.cpp:53
 #, kde-format
 msgid "Unstage selected lines or hunk"
-msgstr ""
+msgstr "Ausgewählte Zeilen oder Block aus der Stage nehmen"
 
 #: diffviewsctrl.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgid "Revert selected lines or hunk"
-msgstr "Den ausgewählten Zweig löschen"
+msgstr "Ausgewählte Zeilen oder Block zurücknehmen"
 
 #: diffviewsctrl.cpp:57
 #, kde-format
@@ -70,46 +69,42 @@ msgstr "Gehe zur Quelltextzeile"
 #: diffviewsctrl.cpp:102
 #, kde-format
 msgid "Unstage selected lines"
-msgstr ""
+msgstr "Ausgewählte Zeilen aus der Stage nehmen"
 
 #: diffviewsctrl.cpp:103
 #, kde-format
 msgid "Stage selected lines"
-msgstr ""
+msgstr "Ausgewählte Zeilen in die Stage legen"
 
 #: diffviewsctrl.cpp:104
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgid "Revert selected lines"
-msgstr "Den ausgewählten Zweig löschen"
+msgstr "Ausgewählte Zeilen zurücknehmen"
 
 #: diffviewsctrl.cpp:106
 #, kde-format
 msgid "Unstage selected hunk"
-msgstr ""
+msgstr "Ausgewählten Block aus der Stage nehmen"
 
 #: diffviewsctrl.cpp:107
 #, kde-format
 msgid "Stage selected hunk"
-msgstr ""
+msgstr "Ausgewählten Block in die Stage legen"
 
 #: diffviewsctrl.cpp:108
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgid "Revert selected hunk"
-msgstr "Den ausgewählten Zweig löschen"
+msgstr "Ausgewähltem Block zurücknehmen"
 
 #: diffviewsctrl.cpp:118 diffviewsctrl.cpp:124
 #, kde-format
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: diffviewsctrl.cpp:119 diffviewsctrl.cpp:125
 #, kde-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: diffviewsctrl.cpp:171
 #, kde-format
@@ -142,7 +137,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
-msgstr ""
+msgstr "Zurücksetzen"
 
 #: gitmessagehighlighter.cpp:66
 #, kde-format
@@ -255,10 +250,9 @@ msgid "Did not specify the list of files"
 msgstr "Liste der Dateien ist nicht angegeben"
 
 #: gitplugin.cpp:452
-#, fuzzy, kde-format
-#| msgid "Could not revert changes"
+#, kde-format
 msgid "Could not reset changes (empty list of paths)"
-msgstr "Änderungen können nicht rückgängig gemacht werden"
+msgstr "Änderungen können nicht verworfen werden (leere Pfadliste)"
 
 #: gitplugin.cpp:487
 #, kde-format
@@ -301,18 +295,16 @@ msgstr ""
 "verschieben?"
 
 #: gitplugin.cpp:859
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Pop Stash"
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "Aus dem Stash herausnehmen"
+msgstr "Stash"
 
 #: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "Behalten"
 
 #: rebasedialog.cpp:25
 #, kde-format
@@ -352,7 +344,7 @@ msgstr "Abbrechen"
 #, kde-format
 msgctxt "Files in a vcs which have changes staged for commit"
 msgid "Staged changes"
-msgstr ""
+msgstr "Änderungen in der Stage"
 
 #: repostatusmodel.cpp:67
 #, kde-format
@@ -564,11 +556,9 @@ msgid " (untracked)"
 msgstr ""
 
 #: repostatusmodel.cpp:580
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Base branch:"
+#, kde-format
 msgid "no branch"
-msgstr "Basis-Zweig"
+msgstr "Kein Zweig"
 
 #: repostatusmodel.cpp:581
 #, kde-format
@@ -645,21 +635,19 @@ msgstr "Name für den neuen Zweig:"
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1 erstellt am %2"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr "Den ausgewählten Zweig löschen"
+msgstr "Den ausgewählten Stash entfernen"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:37
