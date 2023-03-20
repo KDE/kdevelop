@@ -323,7 +323,7 @@ msgstr "Ek Parametreler"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Ex&tra parameters:"
-msgstr "Ek& parametreler:"
+msgstr "&Ek parametreler:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraParameters)
 #: config/projectconfigpage.ui:274

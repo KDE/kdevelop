@@ -52,7 +52,7 @@ msgstr ""
 "harf ayrımı olmadan eşleştirilir. Göreceli yol, bir eğik çizgi ile başlar, "
 "klasör yolu sonlarındaki eğik çizgiler kaldırılır.<br /><code>\"/\"</code> "
 "ile biten dizgiler örtük olarak yalnızca klasörlerle eşleştirilir.<br /"
-">Açıkça code>\"/\"</code> veya <code>\"*\"</code> ile başlamayan dizgilerin "
+">Açıkça <code>\"/\"</code> veya <code>\"*\"</code> ile başlamayan dizgilerin "
 "başına, örtük olarak <code>\"*/\"</code> getirilir ve verilen dizginin "
 "üzerindeki herhangi bir göreceli bir yol bitişi ile eşleştirilir."
 

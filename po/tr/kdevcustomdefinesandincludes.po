@@ -199,7 +199,7 @@ msgstr "*.h üstbilgilerini düz C olarak ayrıştır"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C++ profi&le:"
-msgstr "C++ profil&:"
+msgstr "C++ profi&li:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
