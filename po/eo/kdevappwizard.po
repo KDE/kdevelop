@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"PO-Revision-Date: 2023-03-20 22:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -79,10 +79,9 @@ msgid "Could not initialize DVCS repository"
 msgstr ""
 
 #: appwizardplugin.cpp:161
-#, fuzzy, kde-format
-#| msgid "Couldn't checkout imported project"
+#, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr "Ne eblis elpreni importitan projekton"
+msgstr ""
 
 #: appwizardplugin.cpp:174
 #, kde-format
@@ -161,17 +160,17 @@ msgstr "Nevalida projektnomo"
 #: projectselectionpage.cpp:217
 #, kde-format
 msgid "Unable to create subdirectories, missing permissions on: %1"
-msgstr ""
+msgstr "Ne eblas krei subdosierujojn, mankas permesoj ĉe: %1"
 
 #: projectselectionpage.cpp:232
 #, kde-format
 msgid "Invalid project template, please choose a leaf item"
-msgstr ""
+msgstr "Nevalida projektŝablono, bonvolu elekti folian eron"
 
 #: projectselectionpage.cpp:245
 #, kde-format
 msgid "Path already exists and contains files. Open it as a project."
-msgstr ""
+msgstr "Vojo jam ekzistas kaj enhavas dosierojn. Malfermu ĝin kiel projekton."
 
 #: projectselectionpage.cpp:292
 #, kde-format
@@ -179,12 +178,14 @@ msgid ""
 "The specified path already exists and contains files. Are you sure you want "
 "to proceed?"
 msgstr ""
+"La specifita vojo jam ekzistas kaj enhavas dosierojn. Ĉu vi certas ke vi "
+"volas procedi?"
 
 #: projectselectionpage.cpp:308
 #, kde-format
 msgctxt "@title:window"
 msgid "Load Template from File"
-msgstr ""
+msgstr "Ŝargi Ŝablonon el Dosiero"
 
 #. i18n: ectx: property (title), widget (QGroupBox, propertiesBox)
 #: projectselectionpage.ui:38

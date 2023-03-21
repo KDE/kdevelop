@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"PO-Revision-Date: 2023-03-20 22:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -93,10 +93,9 @@ msgid "Not enough information to checkout"
 msgstr ""
 
 #: svncommitjob.cpp:109
-#, fuzzy, kde-format
-#| msgid "Subversion"
+#, kde-format
 msgid "Subversion Commit"
-msgstr "Subversion"
+msgstr ""
 
 #: svncommitjob.cpp:125
 #, kde-format
@@ -391,7 +390,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Commit message:"
-msgstr ""
+msgstr "Enmeta mesaĝo:"
 
 #. i18n: ectx: property (text), widget (QLabel, msgLabel)
 #: ui/ssltrustdialog.ui:17
@@ -425,46 +424,46 @@ msgstr "Komputilo:"
 #: ui/ssltrustdialog.ui:77
 #, kde-format
 msgid "someserver"
-msgstr ""
+msgstr "someserver"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ui/ssltrustdialog.ui:84
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Issuer:"
-msgstr ""
+msgstr "Eldonanto:"
 
 #. i18n: ectx: property (text), widget (QLabel, issuer)
 #: ui/ssltrustdialog.ui:97
 #, kde-format
 msgid "someissuer"
-msgstr ""
+msgstr "someissuer"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ui/ssltrustdialog.ui:104
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Valid from:"
-msgstr ""
+msgstr "Valida ekde:"
 
 #. i18n: ectx: property (text), widget (QLabel, validFrom)
 #: ui/ssltrustdialog.ui:117
 #, kde-format
 msgid "validfrom"
-msgstr ""
+msgstr "validfrom"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: ui/ssltrustdialog.ui:124
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Valid until:"
-msgstr ""
+msgstr "Valida ĝis:"
 
 #. i18n: ectx: property (text), widget (QLabel, validUntil)
 #: ui/ssltrustdialog.ui:137
 #, kde-format
 msgid "validuntil"
-msgstr ""
+msgstr "validuntil"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ui/ssltrustdialog.ui:144
