@@ -111,7 +111,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "&Load Qt API documentation:"
-msgstr "Carrega &la documentació de la API de les Qt:"
+msgstr "Carrega &la documentació de l'API de les Qt:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
 #: qthelpconfig.ui:46
