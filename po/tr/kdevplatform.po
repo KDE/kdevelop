@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-03-07 20:31+0300\n"
+"PO-Revision-Date: 2023-03-27 17:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5271,7 +5271,7 @@ msgstr "Alt Sabit Alanı Göster"
 #, kde-format
 msgctxt "@action"
 msgid "Focus Editor"
-msgstr "Düzenleyiciyi Odakla"
+msgstr "Düzenleyiciye Odaklan"
 
 #: sublime/mainwindow_p.cpp:111
 #, kde-format
