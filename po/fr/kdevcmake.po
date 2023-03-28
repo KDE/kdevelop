@@ -241,7 +241,7 @@ msgstr "<br /><em>Documentation en cache :</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr "Données de projet « API »  non valables dans le fichier « CMake »"
+msgstr "Données de projet « API » non valables dans le fichier « CMake »"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format

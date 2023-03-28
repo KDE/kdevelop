@@ -1782,7 +1782,7 @@ void foo()
 >) i <guilabel
 >Revisió</guilabel
 > (vegeu <link linkend="working-with-version-control-systems"
->Treballar amb sistemes pel control de versions</link
+>Treballar amb sistemes de control de versions</link
 >).</para>
 <para>
 <screenshot>
@@ -2910,7 +2910,7 @@ void foo()
 </chapter>
 <chapter id="working-with-version-control-systems"
 ><title
->Treballar amb sistemes pel control de versions</title>
+>Treballar amb sistemes de control de versions</title>
 <para
 >Si esteu treballant amb projectes molt grans, el més probable és que el codi font sigui gestionat per un sistema per al control de versions com <ulink url="https://subversion.apache.org"
 >subversion</ulink
