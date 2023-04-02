@@ -1,12 +1,11 @@
-# Translation of kdevbazaar into esperanto.
+# Translation of plasma_applet_kdevelopsessions.pot into esperanto.
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the kdevelop package.
-# Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
 # Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevbazaar\n"
+"Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
 "PO-Revision-Date: 2023-04-01 21:46+0100\n"
@@ -16,12 +15,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: bazaarplugin.cpp:36
-#, kde-format
-msgid "Unable to find Bazaar (bzr) executable. Is it installed on the system?"
-msgstr ""
-"Ne eblas trovi Bazaar (bzr) binarprogramon. Ĉu ĝi estas instalita en la "
-"sistemo?"
+#: package/contents/ui/kdevelopsessions.qml:55
+msgid "KDevelop Sessions"
+msgstr "KDevelop-Seancoj"
+
+#: package/contents/ui/kdevelopsessions.qml:75
+msgid "Arbitrary String Which Says Something"
+msgstr "Arbitra ĉeno kiu diras ion"

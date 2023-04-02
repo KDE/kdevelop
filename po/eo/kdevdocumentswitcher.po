@@ -1,13 +1,16 @@
 # Translation of kdevdocumentswitcher into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevdocumentswitcher\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-04-01 21:46+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -20,36 +23,28 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views"
-msgstr ""
+msgstr "Laste Uzitaj Vidoj"
 
 #: documentswitcherplugin.cpp:68
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views."
-msgstr ""
+msgstr "Malfermas liston por trairi la laste uzitajn vidojn."
 
 #: documentswitcherplugin.cpp:69 documentswitcherplugin.cpp:77
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Walk through the list of last used views"
-msgstr ""
+msgstr "Trairi la liston de laste uzitaj vidoj"
 
 #: documentswitcherplugin.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "Last Used Views (Reverse)"
-msgstr ""
+msgstr "Laste Uzitaj Vidoj (Renverse)"
 
 #: documentswitcherplugin.cpp:76
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a list to walk through the list of last used views in reverse."
-msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
+msgstr "Malfermas liston por trairi la laste uzitajn vidojn renverse."

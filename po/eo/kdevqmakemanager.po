@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevqmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"PO-Revision-Date: 2023-04-01 21:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -97,7 +97,7 @@ msgstr "Konstru&tipo:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "(Use default from .pro file)"
-msgstr ""
+msgstr "(Uzi defaŭlton el .pro-dosiero)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: qmakebuilddirchooser.ui:123

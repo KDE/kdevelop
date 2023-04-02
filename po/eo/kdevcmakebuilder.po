@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevcmakebuilder\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-01-07 01:00+0100\n"
+"PO-Revision-Date: 2023-04-01 21:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -49,14 +49,14 @@ msgstr "CMake"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Global CMake Settings"
-msgstr ""
+msgstr "Meti Ĉieajn CMake-Agordojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: cmakebuilderpreferences.ui:20
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Default CMake executable:"
-msgstr ""
+msgstr "Defaŭlta CMake-binarprogramo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: cmakebuilderpreferences.ui:37
@@ -73,12 +73,12 @@ msgstr "CMake"
 #: cmakejob.cpp:56
 #, kde-format
 msgid "Internal error: no project specified to configure."
-msgstr ""
+msgstr "Interna eraro: neniu projekto por agordi."
 
 #: cmakejob.cpp:63
 #, kde-format
 msgid "Failed to create build directory %1."
-msgstr ""
+msgstr "Malsukcesis krei konstrudosierujon %1."
 
 #: cmakejob.cpp:139
 #, kde-format
@@ -88,12 +88,12 @@ msgstr "CMake: %1"
 #: prunejob.cpp:39
 #, kde-format
 msgid "No build directory configured, cannot clear the build directory"
-msgstr ""
+msgstr "Neniu konstrudosierujo agordita, ne eblas malplenigi tian."
 
 #: prunejob.cpp:45
 #, kde-format
 msgid "Wrong build directory, cannot clear the build directory"
-msgstr ""
+msgstr "Malĝusta konstrudosierujo, ne eblas malplenigi ĝin"
 
 #: prunejob.cpp:57
 #, kde-format
