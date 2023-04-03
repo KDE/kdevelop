@@ -1,0 +1,112 @@
+# Translation of kdevcompileanalyzercommon.po into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevcompileanalyzercommon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+
+#: compileanalyzeproblemmodel.cpp:84
+#, kde-format
+msgid "Analysis completed, no problems detected."
+msgstr "Analizo finiĝis, neniuj problemoj detektitaj."
+
+#: compileanalyzeproblemmodel.cpp:107
+#, kde-format
+msgid "Analysis started..."
+msgstr "Analizo komenciĝis..."
+
+#: compileanalyzeproblemmodel.cpp:110
+#, kde-format
+msgctxt "@info:tooltip %2 is the path of the file"
+msgid "Re-run last %1 analysis (%2)"
+msgstr "Refari la lastan %1 analizon (%2)"
+
+#: compileanalyzeproblemmodel.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Re-run last %1 analysis"
+msgstr "Refari la lastan %1 analizon"
+
+#: compileanalyzer.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current File with %1"
+msgstr "Analizi Aktualan Dosieron kun %1"
+
+#: compileanalyzer.cpp:79
+#, kde-format
+msgctxt "@action"
+msgid "Analyze Current Project with %1"
+msgstr "Analizi Aktualan Projekton kun %1"
+
+#: compileanalyzer.cpp:161
+#, kde-format
+msgid "No suitable active file, unable to deduce project."
+msgstr "Neniu taŭga aktiva dosiero, ne povas dedukti projekton."
+
+#: compileanalyzer.cpp:173
+#, kde-format
+msgid "Active file isn't in a project."
+msgstr "Aktiva dosiero ne estas en projekto."
+
+#: compileanalyzer.cpp:186
+#, kde-format
+msgid ""
+"Unable to start check for '%1':\n"
+"\n"
+"%2"
+msgstr ""
+"Ne eblas komenci kontrolon pri '%1':\n"
+"\n"
+"%2"
+
+#: compileanalyzer.cpp:216
+#, kde-format
+msgctxt "@title:window"
+msgid "Test"
+msgstr "Testo"
+
+#: compileanalyzeutils.cpp:45
+#, kde-format
+msgid "Compilation database file not found: '%1'"
+msgstr "Kompildatumbaza dosiero ne trovita: '%1'"
+
+#: compileanalyzeutils.cpp:51 compileanalyzeutils.cpp:110
+#, kde-format
+msgid ""
+"Nothing to check: compilation database file '%1' contains no matching items."
+msgstr ""
+"Nenio por kontroli: kompila datumbaza dosiero '%1' enhavas neniujn kongruajn "
+"erojn."
+
+#: compileanalyzeutils.cpp:57
+#, kde-format
+msgid "Could not open compilation database file for reading: '%1'"
+msgstr "Ne eblis malfermi kompilan datumbazan dosieron por legado: '%1'"
+
+#: compileanalyzeutils.cpp:65
+#, kde-format
+msgid "JSON error during parsing compilation database file '%1': %2"
+msgstr "JSON-eraro dum analizado de kompila datumbaza dosiero '%1': %2"
+
+#: compileanalyzeutils.cpp:70
+#, kde-format
+msgid ""
+"JSON error during parsing compilation database file '%1': document is not an "
+"array."
+msgstr ""
+"JSON-eraro dum analizado de kompila datumbaza dosiero '%1': dokumento ne "
+"estas tabelo."

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2023-01-08 03:30+0100\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -34,37 +34,38 @@ msgstr "Agordi Konstrudosierujon por %1"
 #: cmakebuilddirchooser.cpp:198
 #, kde-format
 msgid "You need to specify a build directory."
-msgstr ""
+msgstr "Vi devas specifi konstruan dosierujon."
 
 #: cmakebuilddirchooser.cpp:205
 #, kde-format
 msgid "Using an already created build directory."
-msgstr ""
+msgstr "Uzante jam kreitan konstruan dosierujon."
 
 #: cmakebuilddirchooser.cpp:216
 #, kde-format
 msgid "Creating a new build directory."
-msgstr ""
+msgstr "Kreante novan konstruan dosierujon."
 
 #: cmakebuilddirchooser.cpp:222
 #, kde-format
 msgid "Build directory already configured."
-msgstr ""
+msgstr "Konstrua dosierujo jam agordita."
 
 #: cmakebuilddirchooser.cpp:224
 #, kde-format
 msgid "This build directory is for %1, but the project directory is %2."
 msgstr ""
+"Ĉi tiu konstrua dosierujo estas por %1, sed la projekta dosierujo estas %2."
 
 #: cmakebuilddirchooser.cpp:227
 #, kde-format
 msgid "You may not select a relative build directory."
-msgstr ""
+msgstr "Vi ne rajtas elekti relativan konstrudosierujon."
 
 #: cmakebuilddirchooser.cpp:229
 #, kde-format
 msgid "The selected build directory is not empty."
-msgstr ""
+msgstr "La elektita konstrua dosierujo ne estas malplena."
 
 #. i18n: ectx: property (text), widget (QLabel, availableLabel)
 #: cmakebuilddirchooser.ui:32
@@ -102,13 +103,15 @@ msgid ""
 "The prefix under which the project will be installed. Leaving this empty "
 "will let CMake use its default install prefix."
 msgstr ""
+"La prefikso sub kiu la projekto estos instalita. Lasi ĉi tion malplena "
+"permesos al CMake uzi ĝian defaŭltan instalan prefikson."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, installPrefix)
 #: cmakebuilddirchooser.ui:112
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "CMake's default install prefix"
-msgstr ""
+msgstr "La defaŭlta instala prefikso de CMake"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: cmakebuilddirchooser.ui:119
@@ -205,12 +208,12 @@ msgstr "Politikoj"
 #: cmakecommandscontents.cpp:102
 #, kde-format
 msgid "<p>For better CMake documentation rendering, install rst2html.</p>"
-msgstr ""
+msgstr "<p>Por pli bona bildigo de dokumentado de CMake, instalu rst2html.</p>"
 
 #: cmakedocumentation.cpp:46 cmakemanager.cpp:78
 #, kde-format
 msgid "Unable to find a CMake executable. Is one installed on the system?"
-msgstr ""
+msgstr "Ne eblas trovi ruleblan CMake. Ĉu oni instalis en la sistemo?"
 
 #: cmakedocumentation.cpp:81
 #, kde-format
@@ -226,7 +229,7 @@ msgstr "<br /><em>Kaŝmemora Dokumentaro:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "nevalidaj datumoj de projekto de API de CMake-dosiero"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -242,6 +245,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
+"Agordita projekto '%1' kun malaktualaj datumoj de CMake. Kiel rezulto, la "
+"kodokompreno de KDevelop eble estas malĝusta.\n"
+"\n"
+"Por solvi ĉi tiun problemon, bonvolu dekstre alklaki la projektan objekton "
+"en la projektila ilo-vido kaj alklaku 'Reŝargi'."
 
 #: cmakemanager.cpp:661
 #, kde-format
@@ -254,6 +262,13 @@ msgid ""
 "settings. Then right-click the project item in the projects tool view and "
 "click 'Reload'."
 msgstr ""
+"Malsukcesis agordi projekton '%1' (erarmesaĝo: %2). Kiel rezulto, la "
+"kodkompreno de KDevelop verŝajne estos rompita.\n"
+"\n"
+"Por solvi ĉi tiun problemon, bonvolu certigi, ke la dosieroj CMakeLists.txt "
+"de la projekto estas ĝustaj, kaj KDevelop estas agordita por uzi la ĝustajn "
+"versiojn kaj agordojn de CMake. Tiam dekstre alklaku la projektan objekton "
+"en la projekta ilo-vido kaj alklaku 'Reŝargi'."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: settings/cmakebuildsettings.ui:74
@@ -309,7 +324,7 @@ msgstr "Agordi medion:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "Elekti medion uzendan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showInternal)
 #: settings/cmakebuildsettings.ui:225
@@ -323,7 +338,7 @@ msgstr "Montri pluajn valorojn"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "CMake executable:"
-msgstr ""
+msgstr "CMake binarprogramo:"
 
 #: settings/cmakecachemodel.cpp:36
 #, kde-format
@@ -359,7 +374,7 @@ msgstr "Plie"
 #, kde-format
 msgctxt "@title:column"
 msgid "Strings"
-msgstr ""
+msgstr "Kordoj"
 
 #: settings/cmakepreferences.cpp:346
 #, kde-format
@@ -367,6 +382,8 @@ msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
+"La dosierujo %1 estas forigota en la listo de KDevelop.\n"
+"Ĉu vi volas, ke KDevelop forigu ĝin ankaŭ en la dosiersistemo?"
 
 #: settings/cmakepreferences.cpp:350
 #, kde-format
@@ -383,7 +400,7 @@ msgstr "Ne eblis forigi: %1"
 #, kde-format
 msgctxt "@title:tab"
 msgid "CMake"
-msgstr ""
+msgstr "CMake"
 
 #: settings/cmakepreferences.cpp:406
 #, kde-format

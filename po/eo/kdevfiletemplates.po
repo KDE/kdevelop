@@ -1,0 +1,507 @@
+# Translation of kdevfiletemplates.pot into esperanto.
+# Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevfiletemplates\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-11-26 00:44+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: classidentifierpage.cpp:31
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Class name, including any namespaces"
+msgstr "Klasnomo, inkluzive de ajnaj nomspacoj"
+
+#: classidentifierpage.cpp:32
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Inheritance type and base class name"
+msgstr "Heredspeco kaj bazklasa nomo"
+
+#: classmemberspage.cpp:29
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Variable type and identifier"
+msgstr "Variebla tipo kaj identigilo"
+
+#: filetemplatesplugin.cpp:69
+#, kde-format
+msgctxt "@action"
+msgid "New from Template..."
+msgstr "Nova el Ŝablono..."
+
+#: filetemplatesplugin.cpp:71
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Allows you to create new source code files, such as classes or unit tests, "
+"using templates."
+msgstr ""
+"Ebligas al vi krei novajn fontkoddosierojn, kiel klasojn aŭ unutestojn, "
+"uzante ŝablonojn."
+
+#: filetemplatesplugin.cpp:72
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Create new files from a template"
+msgstr "Krei novajn dosierojn el ŝablono"
+
+#: filetemplatesplugin.cpp:76 filetemplatesplugin.cpp:308
+#, kde-format
+msgctxt "@title:window"
+msgid "Template Preview"
+msgstr "Ŝablona Antaŭrigardo"
+
+#: filetemplatesplugin.cpp:115
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Create from Template..."
+msgstr "Krei el Ŝablono..."
+
+#: filetemplatesplugin.cpp:135
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Show Template Preview"
+msgstr "Montri Ŝablonan Antaŭrigardon"
+
+#: filetemplatesplugin.cpp:147
+#, kde-format
+msgid "File Templates"
+msgstr "Dosieraj Ŝablonoj"
+
+#: licensepage.cpp:85
+#, kde-format
+msgctxt "@item:inlistbox other license"
+msgid "Other"
+msgstr "Alia"
+
+#: licensepage.cpp:143
+#, kde-format
+msgid "Could not load previous license"
+msgstr "Ne eblis ŝargi antaŭan permesilon"
+
+#: licensepage.cpp:158
+#, kde-format
+msgid "The specified license already exists. Please provide a different name."
+msgstr "La specifita permesilo jam ekzistas. Bonvolu doni alian nomon."
+
+#: licensepage.cpp:170
+#, kde-format
+msgid "Failed to write custom license template to file %1."
+msgstr "Malsukcesis skribi laŭmendan permesilan ŝablonon al dosiero %1."
+
+#: outputpage.cpp:117
+#, kde-format
+msgid "Invalid output file: %2"
+msgid_plural "Invalid output files: %2"
+msgstr[0] ""
+msgstr[1] ""
+
+#: outputpage.cpp:171
+#, kde-format
+msgctxt "@title:group"
+msgid "Output File"
+msgid_plural "Output Files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: outputpage.cpp:172
+#, kde-format
+msgctxt "@title:group"
+msgid "Location within Existing File"
+msgid_plural "Location within Existing Files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: outputpage.cpp:178
+#, kde-format
+msgctxt "@label:chooser file name arg"
+msgid "%1:"
+msgstr "%1:"
+
+#: outputpage.cpp:194
+#, kde-format
+msgid "Line: "
+msgstr "Linio:"
+
+#: outputpage.cpp:200
+#, kde-format
+msgid "Column: "
+msgstr "Kolumno:"
+
+#: overridespage.cpp:37
+#, kde-format
+msgctxt "@item access policy"
+msgid "Public"
+msgstr "Publiko"
+
+#: overridespage.cpp:39
+#, kde-format
+msgctxt "@item access policy"
+msgid "Protected"
+msgstr "Protektata"
+
+#: overridespage.cpp:41
+#, kde-format
+msgctxt "@item access policy"
+msgid "Private"
+msgstr "Privata"
+
+#: overridespage.cpp:51
+#, kde-format
+msgctxt "@item function property"
+msgid "Constructor"
+msgstr "Konstruilo"
+
+#: overridespage.cpp:53
+#, kde-format
+msgctxt "@item function property"
+msgid "Destructor"
+msgstr "Malkonstruilo"
+
+#: overridespage.cpp:55
+#, kde-format
+msgctxt "@item function property"
+msgid "Signal"
+msgstr "Signalo"
+
+#: overridespage.cpp:57
+#, kde-format
+msgctxt "@item function property"
+msgid "Slot"
+msgstr "Konektingo"
+
+#: overridespage.cpp:59
+#, kde-format
+msgctxt "@item function property"
+msgid "Abstract function"
+msgstr "Abstrakta funkcio"
+
+#: templateclassassistant.cpp:190
+#, kde-format
+msgid ""
+"Choose one target to add the file or cancel if you do not want to do so."
+msgstr ""
+"Elekti unu celon por aldoni la dosieron aŭ nuligi se vi ne volas fari tion."
+
+#: templateclassassistant.cpp:280 templateclassassistant.cpp:527
+#, kde-kuit-format
+msgctxt "@title:window"
+msgid "Create Files from Template in <filename>%1</filename>"
+msgstr "Krei dosierojn el Ŝablono en <filename>%1</filename>"
+
+#: templateclassassistant.cpp:284 templateclassassistant.cpp:531
+#, kde-format
+msgctxt "@title:window"
+msgid "Create Files from Template"
+msgstr "Krei dosierojn el Ŝablono"
+
+#: templateclassassistant.cpp:289
+#, kde-format
+msgctxt "@title:tab"
+msgid "Language and Template"
+msgstr "Lingvo kaj Ŝablono"
+
+#: templateclassassistant.cpp:319
+#, kde-kuit-format
+msgctxt "@title:window"
+msgid ""
+"Create Files from Template <filename>%1</filename> in <filename>%2</filename>"
+msgstr ""
+"Krei Dosierojn el Ŝablono <filename>%1</filename> en <filename>%2</filename>"
+
+#: templateclassassistant.cpp:325
+#, kde-kuit-format
+msgctxt "@title:window"
+msgid "Create Files from Template <filename>%1</filename>"
+msgstr "Krei dosierojn el Ŝablono <filename>%1</filename>"
+
+#: templateclassassistant.cpp:331
+#, kde-format
+msgctxt "@title:tab"
+msgid "Class Basics"
+msgstr "Klasaj Bazoj"
+
+#: templateclassassistant.cpp:337
+#, kde-format
+msgctxt "@title:tab"
+msgid "Override Methods"
+msgstr "Anstataŭigi Metodojn"
+
+#: templateclassassistant.cpp:342
+#, kde-format
+msgctxt "@title:tab"
+msgid "Class Members"
+msgstr "Klasanoj"
+
+#: templateclassassistant.cpp:370
+#, kde-format
+msgctxt "@title:tab"
+msgid "Test Cases"
+msgstr "Testkazoj"
+
+#: templateclassassistant.cpp:380
+#, kde-format
+msgctxt "@title:tab"
+msgid "License"
+msgstr "Permesilo"
+
+#: templateclassassistant.cpp:386
+#, kde-format
+msgctxt "@title:tab"
+msgid "Output"
+msgstr "Eligo"
+
+#: templateclassassistant.cpp:396
+#, kde-format
+msgctxt "@title:tab"
+msgid "Template Options"
+msgstr "Ŝablonaj Opcioj"
+
+#: templateclassassistant.cpp:479
+#, kde-format
+msgctxt "@item default declarations"
+msgid "Default"
+msgstr "Defaŭlto"
+
+#: templateoptionspage.cpp:124
+#, kde-format
+msgctxt "@label"
+msgid "%1:"
+msgstr "%1:"
+
+#: templatepreviewtoolview.cpp:92
+#, kde-kuit-format
+msgid ""
+"The active text document is not a <application>KDevelop</application> "
+"template"
+msgstr ""
+"La aktiva tekstdokumento ne estas ŝablono <application>KDevelop</application>"
+
+#: templatepreviewtoolview.cpp:94
+#, kde-format
+msgid "No active text document."
+msgstr "Neniu aktiva tekstdokumento."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: templatepreviewtoolview.ui:30
+#, kde-format
+msgctxt "@title:group"
+msgid "Template Type"
+msgstr "Ŝablona Tipo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, projectRadioButton)
+#: templatepreviewtoolview.ui:39
+#, kde-format
+msgctxt "@option:radio"
+msgid "Project template"
+msgstr "Projekta ŝablono"
+
+#. i18n: ectx: property (text), widget (QRadioButton, classRadioButton)
+#: templatepreviewtoolview.ui:49
+#, kde-format
+msgctxt "@option:radio"
+msgid "Class template"
+msgstr "Klasŝablono"
+
+#. i18n: ectx: property (text), widget (QLabel, emptyLinesPolicyLabel)
+#: templatepreviewtoolview.ui:61
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Empty lines policy:"
+msgstr "Politiko de &Malplenaj linioj:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:78
+#, kde-format
+msgctxt "@item:inlistbox empty line policy"
+msgid "Keep Empty Lines"
+msgstr "Konservi Malplenajn Liniojn"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:83
+#, kde-format
+msgctxt "@item:inlistbox empty line policy"
+msgid "Remove Repeated Empty Lines"
+msgstr "Forigi Ripetajn Malplenajn Liniojn"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, emptyLinesPolicyComboBox)
+#: templatepreviewtoolview.ui:88
+#, kde-format
+msgctxt "@item:inlistbox empty line policy"
+msgid "Remove All Empty Lines"
+msgstr "Forigi Ĉiujn Malplenajn Liniojn"
+
+#: templateselectionpage.cpp:73
+#, kde-format
+msgctxt "%1: template comment"
+msgid "<b>Preview:</b> %1"
+msgstr "<b>Antaŭrigardo:</b> %1"
+
+#: templateselectionpage.cpp:202
+#, kde-format
+msgctxt "@title:column"
+msgid "Language"
+msgstr "Lingvo"
+
+#: templateselectionpage.cpp:203
+#, kde-format
+msgctxt "@title:column"
+msgid "Framework"
+msgstr "Kadro"
+
+#: templateselectionpage.cpp:204
+#, kde-format
+msgctxt "@title:column"
+msgid "Template"
+msgstr "Ŝablono"
+
+#: templateselectionpage.cpp:239
+#, kde-format
+msgctxt "@action:button"
+msgid "Get More Templates..."
+msgstr "Akiri pliajn ŝablonojn..."
+
+#: templateselectionpage.cpp:246
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template from File"
+msgstr "Ŝargi Ŝablonon el Dosiero"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/licensechooser.ui:29
+#, kde-format
+msgid "Choose the license under which to place the generated content."
+msgstr "Elektu la permesilon sub kiu meti la generitan enhavon."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui/licensechooser.ui:44
+#, kde-format
+msgctxt "@label:listbox"
+msgid "License type:"
+msgstr "Tipo de permesilo:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, saveLicense)
+#: ui/licensechooser.ui:64
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Enable if you want to save this license for future use"
+msgstr "Ebligu se vi volas konservi ĉi tiun permesilon por estonta uzo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, saveLicense)
+#: ui/licensechooser.ui:67
+#, kde-format
+msgctxt "@option:check"
+msgid "Save license"
+msgstr "Konservi permesilon"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui/licensechooser.ui:94
+#, kde-format
+msgid ""
+"<p>You can use <code>&lt;year&gt;</code>, <code>&lt;month&gt;</code>, "
+"<code>&lt;day&gt;</code> and <code>&lt;copyright holder&gt;</code> as "
+"placeholders.</p>"
+msgstr ""
+"<p>Vi povas uzi <code>&lt;year&gt;</code>, <code>&lt;month&gt;</code>, "
+"<code>&lt;day&gt;</code> kaj <code>&lt;copyright holder&gt;</code> kiel "
+"anstataŭaĵojn.</p>"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/newclass.ui:29
+#, kde-format
+msgid "Identify the class and any classes from which it is to inherit."
+msgstr "Identigi la klason kaj iujn ajn klasojn de kiuj ĝi devas heredi."
+
+#. i18n: ectx: property (text), widget (QLabel, identifierLabel)
+#: ui/newclass.ui:35 ui/testcases.ui:35
+#, kde-format
+msgctxt "@label:textbox"
+msgid "&Identifier:"
+msgstr "&Identigilo:"
+
+#. i18n: ectx: property (text), widget (QLabel, inheritanceLabel)
+#: ui/newclass.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "In&heritance:"
+msgstr "&Heredo:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: ui/outputlocation.ui:29
+#, kde-format
+msgid "Choose where to save the generated content."
+msgstr "Elektu kie konservi la generitan enhavon."
+
+#. i18n: ectx: property (text), widget (QCheckBox, lowerFilenameCheckBox)
+#: ui/outputlocation.ui:59
+#, kde-format
+msgctxt "@option:check"
+msgid "Lower case file names"
+msgstr "Minuskligi dosiernomojn"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/overridevirtuals.ui:20
+#, kde-format
+msgid "Select any methods you would like to override in the new class."
+msgstr "Elektu iujn ajn metodojn, kiujn vi ŝatus superregi en la nova klaso."
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:42
+#, kde-format
+msgctxt "@title:column"
+msgid "Superclass -> Function"
+msgstr "Superklaso -> Funkcio"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:47
+#, kde-format
+msgctxt "@title:column"
+msgid "Access"
+msgstr "Aliro"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, overridesTree)
+#: ui/overridevirtuals.ui:52
+#, kde-format
+msgctxt "@title:column"
+msgid "Properties"
+msgstr "Proprecoj"
+
+#. i18n: ectx: property (text), widget (QPushButton, selectAllPushButton)
+#: ui/overridevirtuals.ui:62
+#, kde-format
+msgctxt "@action:button"
+msgid "Select &All"
+msgstr "El&ekti Ĉion"
+
+#. i18n: ectx: property (text), widget (QPushButton, deselectAllPushButton)
+#: ui/overridevirtuals.ui:69
+#, kde-format
+msgctxt "@action:button"
+msgid "&Deselect All"
+msgstr "&Malelekti Ĉion"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui/testcases.ui:29
+#, kde-format
+msgid "Set the test name and its test cases."
+msgstr "Agordu la testnomon kaj ĝiajn testkazojn."
+
+#. i18n: ectx: property (text), widget (QLabel, testCasesLabel)
+#: ui/testcases.ui:48
+#, kde-format
+msgctxt "@label:listbox"
+msgid "&Test cases:"
+msgstr "&Testkazoj:"

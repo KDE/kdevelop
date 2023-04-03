@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevexecute\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: executeplugin.cpp:68
@@ -25,6 +25,8 @@ msgid ""
 "There is a quoting error in the arguments for the launch configuration '%1'. "
 "Aborting start."
 msgstr ""
+"Estas citila eraro en la argumentoj por la lanĉa agordo '%1'. Ĉesigante "
+"starton."
 
 #: executeplugin.cpp:72
 #, kde-format
@@ -32,16 +34,18 @@ msgid ""
 "A shell meta character was included in the arguments for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
+"Ŝela metasigno estis inkluzivita en la argumentoj por la lanĉa agordo '%1', "
+"ĉi tio ne estas subtenata nuntempe. Ĉesigante starton."
 
 #: executeplugin.cpp:99
 #, kde-format
 msgid "Couldn't resolve the dependency: %1"
-msgstr ""
+msgstr "Ne eblis solvi la dependecon: %1"
 
 #: executeplugin.cpp:154
 #, kde-format
 msgid "No valid executable specified"
-msgstr ""
+msgstr "Neniu valida binarprogramo specifita"
 
 #: executeplugin.cpp:164
 #, kde-format
@@ -49,6 +53,8 @@ msgid ""
 "There is a quoting error in the executable for the launch configuration "
 "'%1'. Aborting start."
 msgstr ""
+"Estas citi eraro en la binarprogramo por la lanĉa agordo '%1'. Malsukcesa "
+"komenco."
 
 #: executeplugin.cpp:169
 #, kde-format
@@ -56,45 +62,47 @@ msgid ""
 "A shell meta character was included in the executable for the launch "
 "configuration '%1', this is not supported currently. Aborting start."
 msgstr ""
+"Ŝela metasigno estis inkluzivita en la binarprogramo por la lanĉa agordo "
+"'%1', ĉi tio ne estas subtenata nuntempe. Rezignante lanĉon."
 
 #: nativeappconfig.cpp:104
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Ask If Running"
-msgstr ""
+msgstr "Demandi Ĉu Rulanta"
 
 #: nativeappconfig.cpp:105
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Kill All Instances"
-msgstr ""
+msgstr "Mortigi Ĉiujn Instancojn"
 
 #: nativeappconfig.cpp:106
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Start Another"
-msgstr ""
+msgstr "Komenci Alian"
 
 #: nativeappconfig.cpp:156
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Native Application"
-msgstr ""
+msgstr "Agordi Denaskan Aplikon"
 
 #: nativeappconfig.cpp:166
 #, kde-format
 msgid "Executes Native Applications"
-msgstr ""
+msgstr "Lanĉas Denaskajn Aplikojn"
 
 #: nativeappconfig.cpp:176
 #, kde-format
 msgid "Native Application"
-msgstr ""
+msgstr "Denaska Apliko"
 
 #: nativeappconfig.cpp:241
 #, kde-format
 msgid "Compiled Binary"
-msgstr ""
+msgstr "Kompilita Binarprogramo"
 
 #: nativeappconfig.cpp:322
 #, kde-format
@@ -128,7 +136,7 @@ msgstr "&Programo:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "executable or /path/to/executable"
-msgstr ""
+msgstr "binarprogramo aŭ /vojo/al/binarprogramo"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, executablePath)
 #: nativeappconfig.ui:109
@@ -136,6 +144,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Enter the executable name or the absolute path to the executable file"
 msgstr ""
+"Enigi la plenumeblan nomon aŭ la absolutan vojon al la plenumebla dosiero"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: nativeappconfig.ui:121
@@ -160,20 +169,23 @@ msgid ""
 "pass arguments containing space characters by putting them in double-quotes."
 "</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Enigu argumentojn por doni al la efektivigebla.<br/>Vi "
+"povas pasigi argumentojn enhavantajn spacsignojn metante ilin inter citiloj."
+"</p></body></body></p> html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: nativeappconfig.ui:144
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Working &directory:"
-msgstr ""
+msgstr "Labora &dosierujo:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, workingDirectory)
 #: nativeappconfig.ui:154
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a working directory for the executable"
-msgstr ""
+msgstr "Elekti labordosierujon por la binarprogramo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: nativeappconfig.ui:161
@@ -187,7 +199,7 @@ msgstr "&Mediovariabloj:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an environment to be used"
-msgstr ""
+msgstr "Elekti medion por esti uzata"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:206
@@ -199,13 +211,17 @@ msgid ""
 "interact with applications requiring user input from a terminal emulator. To "
 "run such applications, you should use an external terminal.</p>"
 msgstr ""
+"<p>Defaŭlte aplikaĵoj estos rulitaj en la fono kaj nur ilia eligo estos "
+"montrata en ila vido. Ĉi tio malebligas interagi kun aplikaĵoj postulantaj "
+"uzantan enigon de fina emulilo. Por ruli tiajn aplikaĵojn, vi devus uzi "
+"eksteran terminalon.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, runInTerminal)
 #: nativeappconfig.ui:209
 #, kde-format
 msgctxt "@option:check"
 msgid "Use external terminal:"
-msgstr ""
+msgstr "Uzi eksteran terminalon:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, terminal)
 #: nativeappconfig.ui:234
@@ -222,20 +238,29 @@ msgid ""
 "</dl>\n"
 "<p>The arguments defined above will get appended to this command.</p>"
 msgstr ""
+"<p>Difinas la komandon por lanĉi la eksteran terminalan emulilon. Uzu la "
+"jenajn anstataŭaĵojn:</p>\n"
+"<dl>\n"
+"<dt><code>%exe</code></dt>\n"
+"<dd>La vojo al la ruleblaĵo supre elektita.</dd>\n"
+"<dt><code>%workdir</code></dt>\n"
+"<dd>La vojo al la labordosierujo elektita supre.</dd>\n"
+"</dl>\n"
+"<p>La argumentoj supre difinitaj estos aldonita al ĉi tiu komando.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: nativeappconfig.ui:259
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Restart"
-msgstr ""
+msgstr "Rekomenci"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: nativeappconfig.ui:272
 #, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
-msgstr ""
+msgstr "Dependecoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: nativeappconfig.ui:278
@@ -252,6 +277,7 @@ msgid ""
 "Specifies the action to take for the dependencies before starting the "
 "executable."
 msgstr ""
+"Specifas la agon farendan por la dependecoj antaŭ ol lanĉi la binarprogramon."
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:291
@@ -262,6 +288,9 @@ msgid ""
 "allows there to be parts of a project, upon which the executable does not "
 "directly depend, to be built and/or installed before running the application."
 msgstr ""
+"La elektita ago estos rulita antaŭ ol la plenumebla estas komencita. Ĉi tio "
+"permesas ekzisti partoj de projekto, sur kiuj la efektivigebla ne rekte "
+"dependas, esti konstruitaj kaj/aŭ instalitaj antaŭ ol ruli la aplikaĵon."
 
 #. i18n: ectx: property (text), item, widget (KComboBox, dependencyAction)
 #: nativeappconfig.ui:298
@@ -297,6 +326,8 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
+"Neniu medioprofilo specifita, aspektas kiel rompita agordo, bonvolu kontroli "
+"rulagordon '%1'. Uzante defaŭltan medioprofilon."
 
 #: nativeappjob.cpp:142
 #, kde-format
@@ -307,7 +338,7 @@ msgstr "Tasko Jam Rulanta"
 #: nativeappjob.cpp:143
 #, kde-format
 msgid "'%1' is already being executed."
-msgstr ""
+msgstr "'%1' jam estas rulanta."
 
 #: nativeappjob.cpp:145
 #, kde-format

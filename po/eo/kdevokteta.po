@@ -1,0 +1,67 @@
+# Translation of kdevokteta into esperanto.
+# Copyright (C) 2011 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevokteta\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (permission)
+#: kdevokteta.rc:10
+#, kde-format
+msgctxt "@title:menu"
+msgid "Permissions"
+msgstr ""
+
+#. i18n: ectx: Menu (view)
+#: kdevokteta.rc:39
+#, kde-format
+msgid "View"
+msgstr ""
+
+#. i18n: ectx: Menu (bookmarks)
+#: kdevokteta.rc:57
+#, kde-format
+msgid "Bookmarks"
+msgstr ""
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: kdevokteta.rc:77
+#, kde-format
+msgid "Main Toolbar"
+msgstr ""
+
+#: oktetadocument.cpp:125
+#, kde-format
+msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
+msgstr ""
+
+#: oktetadocument.cpp:126
+#, kde-format
+msgctxt "@title:window"
+msgid "Close Document"
+msgstr ""
+
+#: oktetaplugin.cpp:97
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Hex Editor"
+msgstr ""
+
+#: oktetawidget.cpp:138
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Manage Byte Array View Profiles..."
+msgstr ""

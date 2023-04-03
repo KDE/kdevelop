@@ -1,0 +1,122 @@
+# translation of kdevexecuteplasmoid.pot to Esperanto
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+# Minuskloj: ĉ ĝ ĵ ĥ ŝ ŭ   Majuskloj: Ĉ Ĝ Ĵ Ĥ Ŝ Ŭ
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: plasmoidexecutionconfig.cpp:117
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Plasmoid Execution"
+msgstr "Agordi Plasmoid-Ruladon"
+
+#: plasmoidexecutionconfig.cpp:127
+#, kde-format
+msgid "Display a plasmoid"
+msgstr "Montri plasmoidon"
+
+#: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
+#, kde-format
+msgid "Plasmoid Launcher"
+msgstr "Plasmoida Lanĉilo"
+
+#: plasmoidexecutionconfig.cpp:183
+#, kde-format
+msgid "Could not resolve the dependency: %1"
+msgstr "Ne eblis solvi la dependecon: %1"
+
+#: plasmoidexecutionconfig.cpp:297
+#, kde-format
+msgctxt "@title:menu"
+msgid "Plasmoids"
+msgstr "Plasmoidoj"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plasmoidexecutionconfig.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Plasmoid"
+msgstr "Plasmoido"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasmoidexecutionconfig.ui:35
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Path or name:"
+msgstr "Vojo aŭ nomo:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: plasmoidexecutionconfig.ui:67
+#, kde-format
+msgctxt "@title:group"
+msgid "Behavior"
+msgstr "Konduto"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plasmoidexecutionconfig.ui:73
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Form factor:"
+msgstr "Formfaktoro:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plasmoidexecutionconfig.ui:107
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Theme:"
+msgstr "Etoso:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plasmoidexecutionconfig.ui:123
+#, kde-format
+msgctxt "@title:group"
+msgid "Dependencies"
+msgstr "Dependecoj"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plasmoidexecutionconfig.ui:132
+#, kde-format
+msgctxt "@label:chooser"
+msgid "&Targets:"
+msgstr "&Celoj:"
+
+#: plasmoidexecutionjob.cpp:35
+#, kde-format
+msgid "Plasmoid Viewer"
+msgstr "Plasmoida Vidilo"
+
+#: plasmoidexecutionjob.cpp:70
+#, kde-format
+msgid "** Killed **"
+msgstr "** Mortigita **"
+
+#: plasmoidexecutionjob.cpp:83 plasmoidexecutionjob.cpp:95
+#, kde-format
+msgid "*** Failed ***"
+msgstr "*** Malsukcesis ***"
+
+#: plasmoidexecutionjob.cpp:85
+#, kde-format
+msgid "*** Finished ***"
+msgstr "*** Finita ***"
+
+#: plasmoidexecutionjob.cpp:94
+#, kde-format
+msgid "Plasmoid failed to execute on %1"
+msgstr "Plasmoid malsukcesis plenumi sur %1"

@@ -1,0 +1,608 @@
+# Translation of kdevclazy.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevclazy\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-09 00:15+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: analyzer.cpp:30
+#, kde-format
+msgid "Clazy"
+msgstr "Clazy"
+
+#: checksdb.cpp:28
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 0"
+msgstr "Nivelo 0"
+
+#: checksdb.cpp:29
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 1"
+msgstr "Nivelo 1"
+
+#: checksdb.cpp:30
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 2"
+msgstr "Nivelo 2"
+
+#: checksdb.cpp:31
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Level 3"
+msgstr "Nivelo 3"
+
+#: checksdb.cpp:32
+#, kde-format
+msgctxt "@item level of checks"
+msgid "Manual Level"
+msgstr "Permana Nivelo"
+
+#: checksdb.cpp:37
+#, kde-format
+msgid ""
+"Very stable checks, 99.99% safe, mostly no false-positives, very desirable."
+msgstr ""
+"Tre stabilaj kontroloj, 99,99% sekuraj, plejparte neniuj falsaj pozitivoj, "
+"tre dezirindaj."
+
+#: checksdb.cpp:40
+#, kde-format
+msgid ""
+"The default level. Very similar to level 0, slightly more false-positives "
+"but very few."
+msgstr ""
+"La defaŭlta nivelo. Tre simila al nivelo 0, iomete pli da falsaj pozitivoj "
+"sed tre malmultaj."
+
+#: checksdb.cpp:43
+#, kde-format
+msgid ""
+"Also very few false-positives, but contains noisy checks which not everyone "
+"agree should be default."
+msgstr ""
+"Ankaŭ tre malmultaj falsaj pozitivoj, sed enhavas bruajn kontrolojn, kiujn "
+"ne ĉiuj konsentas, ke ili estu defaŭltaj."
+
+#: checksdb.cpp:46
+#, kde-format
+msgid "Contains checks with high rate of false-positives."
+msgstr "Enhavas kontrolojn kun alta indico de falsaj pozitivoj."
+
+#: checksdb.cpp:49
+#, kde-format
+msgid ""
+"Checks here need to be enabled explicitly, as they don't belong to any "
+"level. Checks here are very stable and have very few false-positives."
+msgstr ""
+"Kontroloj ĉi tie devas esti ebligitaj eksplicite, ĉar ili apartenas al neniu "
+"nivelo. Kontroloj ĉi tie estas tre stabilaj kaj havas tre malmultajn falsajn "
+"pozitivojn."
+
+#: checksdb.cpp:54
+#, kde-format
+msgid ""
+"Unable to load Clazy checks information from '%1'. Please check your "
+"settings."
+msgstr ""
+"Ne eblas ŝargi informojn pri Clazy kontroloj de '%1'. Bonvolu kontroli viajn "
+"agordojn."
+
+#: config/checksetmanagewidget.cpp:89
+#, kde-format
+msgctxt "@title:window"
+msgid "Enter Name of New Check Set"
+msgstr "Enigu la Nomon de Nova Kontrolaro"
+
+#: config/checksetmanagewidget.cpp:95
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Name:"
+msgstr "Nomo:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: config/checksetmanagewidget.ui:31
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Check set:"
+msgstr "Kontrolaro:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, addCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:48
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Add check set"
+msgstr "Aldoni kontrolaron"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, cloneCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:58
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Clone check set"
+msgstr "Kloni kontrolaron"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, removeCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:68
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Remove check set"
+msgstr "Forigi kontrolaron"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, setAsDefaultCheckSetSelectionButton)
+#: config/checksetmanagewidget.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Set as default"
+msgstr "Agordi kiel defaŭlton"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, editCheckSetSelectionNameButton)
+#: config/checksetmanagewidget.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Edit name of check set"
+msgstr "Redakti nomon de kontrolaro"
+
+#: config/checksetselectioncombobox.cpp:26
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Custom"
+msgstr "Propra"
+
+#: config/checksetselectioncombobox.cpp:30
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Use default (currently: %1)"
+msgstr "Uzi defaŭlton (aktuale: %1)"
+
+#: config/checksetselectionlistmodel.cpp:64
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "%1 (default selection)"
+msgstr "%1 (defaŭlta elekto)"
+
+#: config/checkswidget.cpp:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search checks..."
+msgstr "Serĉi kontrolojn..."
+
+#. i18n: ectx: property (text), widget (QPushButton, resetButton)
+#: config/checkswidget.ui:31
+#, kde-format
+msgctxt "@action:button"
+msgid "Reset Checks"
+msgstr "Restarigi Kontrolojn"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, messageLabel)
+#: config/checkswidget.ui:74
+#, kde-format
+msgid ""
+"Since nothing is selected Clazy will use all checks from levels 0 and 1."
+msgstr ""
+"Ĉar nenio estas elektita, Clazy uzos ĉiujn kontrolojn de la niveloj 0 kaj 1."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/commandlinewidget.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Command Line"
+msgstr "Komandlinio"
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, cmdFilter)
+#: config/commandlinewidget.ui:37
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Search..."
+msgstr "Serĉi..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, cmdBreak)
+#: config/commandlinewidget.ui:47
+#, kde-format
+msgctxt "@option:check"
+msgid "Break lines"
+msgstr "Rompi liniojn"
+
+#: config/globalconfigpage.cpp:29
+#, kde-format
+msgid "1 check detected"
+msgid_plural "%1 checks detected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: config/globalconfigpage.cpp:79 config/projectconfigpage.cpp:106
+#, kde-format
+msgctxt "@title:tab"
+msgid "Clazy"
+msgstr "Clazy"
+
+#: config/globalconfigpage.cpp:84
+#, kde-format
+msgctxt "@title:tab"
+msgid "Configure Clazy Settings"
+msgstr "Meti Clazy-Agordojn"
+
+#. i18n: ectx: property (title), widget (QGroupBox, pathBox)
+#: config/globalconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Paths"
+msgstr "Vojetoj"
+
+#. i18n: ectx: property (text), widget (QLabel, executableLabel)
+#: config/globalconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "clazy-standalone:"
+msgstr "clazy-standalone:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_executablePath)
+#: config/globalconfigpage.ui:42
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy-standalone executable."
+msgstr "Vojo al clazy-standalone binarprogramo."
+
+#. i18n: ectx: property (text), widget (QLabel, docsLabel)
+#: config/globalconfigpage.ui:52
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Documentation:"
+msgstr "Dokumentado:"
+
+#. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_docsPath)
+#: config/globalconfigpage.ui:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Path to clazy documentation directory."
+msgstr "Vojo al clazy-dokumentara dosierujo."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsEnabled)
+#: config/globalconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Run analysis jobs in parallel"
+msgstr "Lanĉi analizotaskojn paralele"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_parallelJobsAutoCount)
+#: config/globalconfigpage.ui:94
+#, kde-format
+msgctxt "@option:check"
+msgid "Use all CPU cores"
+msgstr "Uzi ĉiujn CPU-kernojn"
+
+#. i18n: ectx: property (text), widget (QLabel, parallelJobsFixedCountLabel)
+#: config/globalconfigpage.ui:114
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum number of threads:"
+msgstr "Maksimuma nombro da fadenoj:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: config/globalconfigpage.ui:133
+#, kde-format
+msgctxt "@title:group"
+msgid "Output"
+msgstr "Eligo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_hideOutputView)
+#: config/globalconfigpage.ui:139
+#, kde-format
+msgctxt "@option:check"
+msgid "Hide output view during check"
+msgstr "Kaŝi eligvidon dum kontrolo"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_verboseOutput)
+#: config/globalconfigpage.ui:146
+#, kde-format
+msgctxt "@option:check"
+msgid "Verbose output"
+msgstr "Vorta eligo"
+
+#. i18n: ectx: attribute (title), widget (QWidget, checksTab)
+#: config/projectconfigpage.ui:39
+#, kde-format
+msgctxt "@title:tab"
+msgid "Checks"
+msgstr "Kontroloj"
+
+#. i18n: ectx: attribute (title), widget (QWidget, optionsTab)
+#: config/projectconfigpage.ui:66
+#, kde-format
+msgctxt "@title:tab"
+msgid "Options"
+msgstr "Opcioj"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:78
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB "
+"is missing."
+msgstr ""
+"Ne elsendi avertojn por ne-Qt dosieroj, aŭ alivorte, se -DQT_CORE_LIB mankas."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_onlyQt)
+#: config/projectconfigpage.ui:81
+#, kde-format
+msgctxt "@option:check"
+msgid "Only Qt"
+msgstr "Nur Qt"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Disable checks not compatible with Qt 4."
+msgstr "Malebligi kontrolojn ne kongruajn kun Qt 4."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
+#: config/projectconfigpage.ui:91
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt4 compatible"
+msgstr "Qt4 kongrua"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:98
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For running clazy on Qt itself, optional, but honors specific guidelines."
+msgstr ""
+"Por ruli clazy sur Qt mem, nedeviga, sed honoras specifajn gvidliniojn."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_qtDeveloper)
+#: config/projectconfigpage.ui:101
+#, kde-format
+msgctxt "@option:check"
+msgid "Qt developer"
+msgstr "Qt developer"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:109
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"For visiting implicit code like compiler generated constructors.\n"
+"None of the built-in checks benefit from this, but can be useful for custom "
+"checks."
+msgstr ""
+"Por vizitado de implica kodo kiel kompililgeneritaj konstruktoroj.\n"
+"Neniu el la enkonstruitaj kontroloj profitas de tio, sed povas esti utila "
+"por propraj kontroloj."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_visitImplicitCode)
+#: config/projectconfigpage.ui:112
+#, kde-format
+msgctxt "@option:check"
+msgid "Visit implicit code"
+msgstr "Viziti implican kodon"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:129
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Only emit warnings for the current file being compiled and ignore any "
+"includes.\n"
+"Useful for performance reasons."
+msgstr ""
+"Nur elsendu avertojn por la nuna dosiero kompilita kaj ignoru iujn ajn "
+"inkludojn.\n"
+"Utile pro agado-kialoj."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ignoreIncludedFiles)
+#: config/projectconfigpage.ui:132
+#, kde-format
+msgctxt "@option:check"
+msgid "Ignore included files"
+msgstr "Ignori inkluzivitajn dosierojn"
+
+#. i18n: ectx: property (text), widget (QLabel, headerFilterLabel)
+#: config/projectconfigpage.ui:141
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Header filter:"
+msgstr "Kapa filtrilo:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_headerFilter)
+#: config/projectconfigpage.ui:149
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Regular expression matching the names of the headers to output diagnostics "
+"from.\n"
+"Diagnostics from the main file of each translation unit are always displayed."
+msgstr ""
+"Regula esprimo kongrua kun la nomoj de la kaplinioj el kiuj eligi "
+"diagnozon.\n"
+"Diagnozo de la ĉefdosiero de ĉiu tradukunuo ĉiam estas montrataj."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_enableAllFixits)
+#: config/projectconfigpage.ui:172
+#, kde-format
+msgctxt "@option:check"
+msgid "Enable all fix-its"
+msgstr "Ebligi ĉiujn riparojn"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:179
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fix-its will be applied to a separate file (for unit-test use only)."
+msgstr "Fix-its estos aplikitaj al aparta dosiero (nur por unutesta uzo)."
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_noInplaceFixits)
+#: config/projectconfigpage.ui:182
+#, kde-format
+msgctxt "@option:check"
+msgid "No-inplace fix-its"
+msgstr "Ne-enlokaj riparoj"
+
+#. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
+#: config/projectconfigpage.ui:192
+#, kde-format
+msgid ""
+"Please backup your code before fix-its applying. For better results also "
+"disable \n"
+"parallel checking, which can lead to multiple fix-it applying for header "
+"files."
+msgstr ""
+"Bonvolu sekurigi vian kodon antaŭ ol ripari ĝin. Por pli bonaj rezultoj "
+"ankaŭ malŝaltu \n"
+"paralelan kontrolon, kiu povas konduki al multobla riparo kandidatiĝanta por "
+"kapdosieroj."
+
+#. i18n: ectx: attribute (title), widget (QWidget, extraTab)
+#: config/projectconfigpage.ui:209
+#, kde-format
+msgctxt "@title:tab"
+msgid "Extra Parameters"
+msgstr "Ekstraj Parametroj"
+
+#. i18n: ectx: property (text), widget (QLabel, extraAppendLabel)
+#: config/projectconfigpage.ui:215
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler append:"
+msgstr "Kompililo aldonas:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraAppend)
+#: config/projectconfigpage.ui:222
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to append to the compiler command line."
+msgstr "Pliaj parametroj aldonendaj al la kompillinio."
+
+#. i18n: ectx: property (text), widget (QLabel, extraPrependLabel)
+#: config/projectconfigpage.ui:232
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Compiler prepend:"
+msgstr "Kompililo antaŭmetas:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraPrepend)
+#: config/projectconfigpage.ui:239
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to prepend to the compiler command line."
+msgstr "Pliaj parametroj por antaŭmeti al la kompillinio."
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_extraClazy)
+#: config/projectconfigpage.ui:249
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Additional parameters to clazy-standalone."
+msgstr "Pliaj parametroj al clazy-standalone."
+
+#. i18n: ectx: property (text), widget (QLabel, extraClazyLabel)
+#: config/projectconfigpage.ui:259
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Extra parameters:"
+msgstr "Kromaj parametroj:"
+
+#: job.cpp:105
+#, kde-format
+msgid "Clazy Analysis (%1)"
+msgstr "Clazy Analizo (%1)"
+
+#: job.cpp:135
+#, kde-format
+msgid "Unknown Level"
+msgstr "Nekonata Nivelo"
+
+#: job.cpp:201
+#, kde-format
+msgid "Failed to start Clazy analysis process."
+msgstr "Malsukcesis komenci Clazy-analizan procezon."
+
+#: job.cpp:206
+#, kde-format
+msgid "Clazy analysis process crashed."
+msgstr "Clazy analizprocezo paneis."
+
+#: job.cpp:211
+#, kde-format
+msgid "Clazy analysis process timed out."
+msgstr "Clazy analizprocezo eltempiĝis."
+
+#: job.cpp:215
+#, kde-format
+msgid "Write to Clazy analysis process failed."
+msgstr "Skribado al Clazy-analizprocezo malsukcesis."
+
+#: job.cpp:219
+#, kde-format
+msgid "Read from Clazy analysis process failed."
+msgstr "Legado el Clazy-analizprocezo malsukcesis."
+
+#: job.cpp:229
+#, kde-format
+msgctxt "@title:window"
+msgid "Clazy Error"
+msgstr "Clazy-Eraro"
+
+#: jobparameters.cpp:39
+#, kde-format
+msgid ""
+"clazy-standalone path cannot be detected. Set the path manually if Clazy is "
+"already installed."
+msgstr ""
+"clazy-standalone vojo ne povas esti detektita. Agordu la vojon permane se "
+"Clazy jam estas instalita."
+
+#: jobparameters.cpp:42
+#, kde-format
+msgid "clazy-standalone path is empty."
+msgstr "clazy-standalone vojo estas malplena."
+
+#: jobparameters.cpp:50
+#, kde-format
+msgid "clazy-standalone path '%1' does not exists."
+msgstr "clazy-standalone vojo '%1' ne ekzistas."
+
+#: jobparameters.cpp:55
+#, kde-format
+msgid "clazy-standalone path '%1' is not an executable."
+msgstr "clazy-standalone vojo '%1' ne estas efektivigebla."
+
+#: jobparameters.cpp:64
+#, kde-format
+msgid ""
+"Clazy documentation path cannot be detected. Set the path manually if Clazy "
+"is already installed."
+msgstr ""
+"Clazy-dokumentara vojo ne povas esti detektita. Agordu la vojon permane se "
+"Clazy jam estas instalita."
+
+#: jobparameters.cpp:67
+#, kde-format
+msgid "Clazy documentation path is empty."
+msgstr "Clazy-dokumentarvojo estas malplena."
+
+#: jobparameters.cpp:75
+#, kde-format
+msgid "Clazy documentation path '%1' does not exists."
+msgstr "Clazy dokumentada vojo '%1' ne ekzistas."
+
+#: jobparameters.cpp:80
+#, kde-format
+msgid "Clazy documentation path '%1' is not a directory."
+msgstr "Clazy-dokumentarvojo '%1' ne estas dosierujo."

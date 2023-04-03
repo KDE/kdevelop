@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kdevexternalscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-01-07 15:30+0100\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: editexternalscript.cpp:30
@@ -52,6 +52,35 @@ msgid ""
 "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous "
 "commands that could lead to data loss.</p>\n"
 msgstr ""
+"<p>Difinas la komandon kiu devus esti efektivigita kiam ĉi tiu skripto estas "
+"rulita. Bazaj ŝelfunkcioj de via platformo devus esti disponeblaj.</p>\n"
+"<p>Estas kelkaj anstataŭiloj, kiujn vi povas uzi en la komando:</p>\n"
+"<dl>\n"
+"  <dt><code>%u </code></dt>\n"
+"  <dd>Anstataŭiĝas per la URL de la aktiva dokumento.</dd>\n"
+"  <dt><code>%f</code></dt>\n"
+"  <dd> Estas anstataŭigita per la loka dosiervojo al la aktiva dokumento.</"
+"dd>\n"
+"  <dt><code>%n</code></dt>\n"
+"  <dd>Estas anstataŭigita per la nomo de la aktiva dokumento, inkluzive de "
+"ĝia etendo.</dd>\n"
+"  <dt><code>%b</code></dt>\n"
+"  <dd>Anstataŭiĝas per la nomo de la aktiva dokumento sen ĝia etendaĵo.</"
+"dd>\n"
+"  <dt ><code>%d</code></dt>\n"
+"  <dd>Anstataŭiĝas per la vojo al la dosierujo de la aktiva dokumento.</dd>\n"
+"  <dt><code>%p</code> </dt>\n"
+"  <dd>Estas anstataŭigita per la URL al la projekto de la aktiva dokumento.</"
+"dd>\n"
+"  <dt><code>%s</code></dt>\n"
+"  <dd>Atingas anstataŭigita per la ŝelo eskapita enhavo de la elekto en la "
+"aktiva dokumento.</dd>\n"
+"  <dt><code>%i</code></dt>\n"
+"  <dd>Estas anstataŭigita per la PID de la nuna funkcianta KDevelop-procezo."
+"</dd>\n"
+"</dl>\n"
+"<p><b>RIMARKO:</b> Estas via respondeco malhelpi ruli danĝerajn komandojn, "
+"kiuj povus kaŭzi perdon de datumoj.</p>\n"
 
 #: editexternalscript.cpp:56
 #, kde-format
@@ -60,6 +89,8 @@ msgid ""
 "<p>Defines what the external script should get as input (via <code>STDIN</"
 "code>).</p>"
 msgstr ""
+"<p>Difinas kion la ekstera skripto devus ricevi kiel enigo (per <code>STDIN</"
+"code>).</p>"
 
 #: editexternalscript.cpp:62
 #, kde-format
@@ -68,6 +99,8 @@ msgid ""
 "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of "
 "the script.</p>"
 msgstr ""
+"<p>Difinas kion fari kun la eligo (t.e. <code>STDOUT</code>) de la skripto.</"
+"p>"
 
 #: editexternalscript.cpp:68
 #, kde-format
@@ -77,12 +110,15 @@ msgid ""
 "the script.</p><p>Note: if the action is the same as that chosen for the "
 "output, the channels will be merged and handled together.</p>"
 msgstr ""
+"<p>Difinas kion fari kun la eraroj (t.e. <code>STDERR</code>) de la skripto."
+"</p><p>Noto: se la ago estas la sama kiel tiu elektita por la eligo, la "
+"kanaloj estos kunfandita kaj pritraktata kune.</p>"
 
 #: editexternalscript.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Defines the name of the script. Just for displaying purposes.</p>"
-msgstr ""
+msgstr "<p>Difinas la nomon de la skripto. Nur por montri celoj.</p>"
 
 #: editexternalscript.cpp:82
 #, kde-format
@@ -90,6 +126,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines the shortcut(s) you can use to execute this external script.</p>"
 msgstr ""
+"<p>Difinas la ŝparvojo(j)n, kiun vi povas uzi por lanĉi ĉi tiun eksteran "
+"skripton.</p>"
 
 #: editexternalscript.cpp:88
 #, kde-format
@@ -98,6 +136,8 @@ msgid ""
 "<p>Defines whether documents should be saved before the script gets executed."
 "</p>"
 msgstr ""
+"<p>Difinas ĉu dokumentoj estu konservitaj antaŭ ol la skripto estas lanĉata."
+"</p>"
 
 #: editexternalscript.cpp:94
 #, kde-format
@@ -105,7 +145,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Defines whether the output of the script should be shown in a tool view.</"
 "p>"
-msgstr ""
+msgstr "<p>Difinas ĉu la eligo de la skripto estu montrata en ila vido.</p>"
 
 #: editexternalscript.cpp:98
 #, kde-format
@@ -114,6 +154,8 @@ msgid ""
 "<p>Defines what type of filtering should be applied to the output. E.g. to "
 "indicate errors by red text.</p>"
 msgstr ""
+"<p>Difinas kian tipon de filtrado estu aplikata al la eligo. ekz. por indiki "
+"erarojn per ruĝa teksto.</p>"
 
 #: editexternalscript.cpp:106
 #, kde-format
@@ -142,6 +184,8 @@ msgid ""
 "<p>The name will also be used as the identifier during code completion.</p>\n"
 "  <p><b>Note:</b> No spaces allowed.</p>"
 msgstr ""
+"<p>La nomo ankaŭ estos uzata kiel la identigilo dum kodkompletigo.</p>\n"
+"  <p><b>Noto:</b> Neniuj spacoj permesitaj.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, commandLabel)
 #: editexternalscript.ui:37
@@ -380,6 +424,8 @@ msgid ""
 "Cannot run script '%1' since it tries to access the editor contents but no "
 "document is open."
 msgstr ""
+"Ne povas ruli skripton '%1' ĉar ĝi provas aliri la enhavon de la redaktilo "
+"sed neniu dokumento estas malfermita."
 
 #: externalscriptjob.cpp:224
 #, kde-format
@@ -394,22 +440,22 @@ msgstr "*** Ĉesigis Aplikaĵon ***"
 #: externalscriptjob.cpp:348
 #, kde-format
 msgid "*** Exited normally ***"
-msgstr ""
+msgstr "*** Eliris normale ***"
 
 #: externalscriptjob.cpp:351
 #, kde-format
 msgid "*** Exited with return code: %1 ***"
-msgstr ""
+msgstr "*** Eliris kun revenkodo: %1 ***"
 
 #: externalscriptjob.cpp:354
 #, kde-format
 msgid "*** Process aborted ***"
-msgstr ""
+msgstr "*** Procezo ĉesigita ***"
 
 #: externalscriptjob.cpp:356
 #, kde-format
 msgid "*** Crashed with return code: %1 ***"
-msgstr ""
+msgstr "*** paneis kun revenkodo: %1 ***"
 
 #: externalscriptjob.cpp:368
 #, kde-format
@@ -481,6 +527,8 @@ msgid ""
 "<p>Do you really want to remove the external script configuration for <i>%1</"
 "i>?</p><p><i>Note:</i> The script itself will not be removed.</p>"
 msgstr ""
+"<p>Ĉu vi vere volas forigi la eksteran skripto-agordon por <i>%1</i>?</"
+"p><p><i>Noto:</i> La skripto mem ne estos forigita.</p> p>"
 
 #: externalscriptview.cpp:149
 #, kde-format

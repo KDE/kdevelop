@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevappwizard\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -56,6 +56,8 @@ msgid ""
 "This starts KDevelop's application wizard. It helps you to generate a "
 "skeleton for your application from a set of templates."
 msgstr ""
+"Ĉi tio startigas la aplikosorĉiston de KDevelop. Ĝi helpas vin generi "
+"skeleton por via aplikaĵo el aro da ŝablonoj."
 
 #: appwizardplugin.cpp:106
 #, kde-format
@@ -65,7 +67,7 @@ msgstr "Ne eblis krei novan projekton el ŝablono."
 #: appwizardplugin.cpp:134
 #, kde-format
 msgid "Please see the Version Control tool view."
-msgstr ""
+msgstr "Bonvolu vidu la perspektivon de la Versiokontrolilo."
 
 #: appwizardplugin.cpp:136
 #, kde-format
@@ -76,22 +78,22 @@ msgstr "Versiokontrola sistemeraro"
 #: appwizardplugin.cpp:152
 #, kde-format
 msgid "Could not initialize DVCS repository"
-msgstr ""
+msgstr "Ne eblis pravalorizi DVCS-deponejon"
 
 #: appwizardplugin.cpp:161
 #, kde-format
 msgid "Could not check status of the DVCS repository"
-msgstr ""
+msgstr "Ne eblis kontroli staton de la DVCS-deponejo"
 
 #: appwizardplugin.cpp:174
 #, kde-format
 msgid "Could not add files to the DVCS repository"
-msgstr ""
+msgstr "Ne eblis aldoni dosierojn al la DVCS-deponejo"
 
 #: appwizardplugin.cpp:182
 #, kde-format
 msgid "Could not import project into %1."
-msgstr ""
+msgstr "Ne eblis importi projekton en %1."
 
 #: appwizardplugin.cpp:199
 #, kde-format

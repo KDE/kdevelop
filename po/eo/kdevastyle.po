@@ -1,0 +1,561 @@
+# Translation of kdevastyle.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevastyle\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: astyle_plugin.cpp:227
+#, kde-format
+msgid ""
+"<b>Artistic Style</b> is a source code indenter, formatter, and beautifier "
+"for the C, C++, C# and Java programming languages.<br />Home Page: <a href="
+"\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>"
+msgstr ""
+"<b>Arta Stilo</b> estas fontkoda endentigilo, formatilo kaj plibeligilo por "
+"la programlingvoj C, C++, C# kaj Java.<br />Hejmpaĝo: <a href=\"http://"
+"astyle. sourceforge.net/\">http://astyle.sourceforge.net</a>"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabIndentqtion)
+#: astyle_preferences.ui:33
+#, kde-format
+msgctxt "@title:tab"
+msgid "Indentation"
+msgstr "Deŝovo"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:48
+#, kde-format
+msgctxt "@item:inlistbox Indentation type"
+msgid "Tabs"
+msgstr "Taboj"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:53
+#, kde-format
+msgctxt "@item:inlistbox Indentation type"
+msgid "Force tabs"
+msgstr "Devigi tabojn"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbIndentType)
+#: astyle_preferences.ui:58
+#, kde-format
+msgctxt "@item:inlistbox Indentation type"
+msgid "Spaces"
+msgstr "Spacoj"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpNuberSpaces)
+#: astyle_preferences.ui:86
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Number of spaces that will be converted to a tab.\n"
+"The number of spaces per tab is controlled by the editor."
+msgstr ""
+"Nombro da spacoj, kiuj estos konvertitaj al tabo.\n"
+"La nombro da spacoj per tabo estas regata de la redaktilo."
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkConvertTabs)
+#: astyle_preferences.ui:104
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Convert tabs to spaces."
+msgstr "Konverti tabojn al spacoj."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkConvertTabs)
+#: astyle_preferences.ui:107
+#, kde-format
+msgctxt "@option:check"
+msgid "Con&vert tabs into spaces"
+msgstr "Kon&verti tabojn en spacojn"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkFillEmptyLines)
+#: astyle_preferences.ui:114
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fill empty lines with the white space of their previous lines."
+msgstr ""
+"Plenigi malplenajn liniojn per la blanka spaco de iliaj antaŭaj linioj."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkFillEmptyLines)
+#: astyle_preferences.ui:117
+#, kde-format
+msgctxt "@option:check"
+msgid "Fill empt&y lines"
+msgstr "Plenigi malplena&jn liniojn"
+
+#. i18n: ectx: property (text), widget (QLabel, lblIndentObjects)
+#: astyle_preferences.ui:139
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Indent:"
+msgstr "Deŝovo:"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:153
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Blocks"
+msgstr "Blokoj"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:158
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Brackets"
+msgstr "Krampoj"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:163
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Cases"
+msgstr "Kazoj"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:168
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Class"
+msgstr "Klaso"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:173
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Labels"
+msgstr "Etikedoj"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:178
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Namespaces"
+msgstr "Nomspacoj"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:183
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preprocessor directives"
+msgstr "Direktivoj pri antaŭprocesoro"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, listIdentObjects)
+#: astyle_preferences.ui:188
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Switches"
+msgstr "Ŝaltiloj"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpMaxStatement)
+#. i18n: ectx: property (toolTip), widget (QLabel, TextLabel2_2)
+#: astyle_preferences.ui:201 astyle_preferences.ui:243
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Indent a maximal # spaces in a continuous statement,\n"
+"relative to the previous line."
+msgstr ""
+"Indentu maksimuman # spacojn en kontinua deklaro,\n"
+"rilate al la antaŭa linio."
+
+#. i18n: ectx: property (toolTip), widget (QLabel, TextLabel3_2)
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpMinConditional)
+#: astyle_preferences.ui:212 astyle_preferences.ui:226
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Indent a minimal # spaces in a continuous conditional\n"
+"belonging to a conditional header."
+msgstr ""
+"Indentu minimumajn # spacojn en kontinua kondiĉo\n"
+"apartenanta al kondiĉa kaplinio."
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: astyle_preferences.ui:215
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Minimum in conditional:"
+msgstr "Minimumo en kondiĉo:"
+
+#. i18n: ectx: property (specialValueText), widget (QSpinBox, inpMinConditional)
+#: astyle_preferences.ui:229
+#, kde-format
+msgctxt "@item"
+msgid "Twice current"
+msgstr "Dufoje aktuala"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2_2)
+#: astyle_preferences.ui:246
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum in statement:"
+msgstr "Maksimumo en deklaro:"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, inpContinuation)
+#: astyle_preferences.ui:256
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Number of indents"
+msgstr "Nombro da strekoj"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAfterParens)
+#: astyle_preferences.ui:269
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Indent, instead of align, continuation lines following lines that contain an "
+"opening paren '(' or an assignment '='."
+msgstr ""
+"Deŝengu, anstataŭ vicigi, daŭrigliniojn sekvantajn liniojn, kiuj enhavas "
+"komencan gepatron '(' aŭ taskon '='."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAfterParens)
+#: astyle_preferences.ui:272
+#, kde-format
+msgctxt "@option:check"
+msgid "Continuation lines:"
+msgstr "Daŭrigaj linioj:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabOther)
+#: astyle_preferences.ui:295
+#, kde-format
+msgctxt "@title:tab"
+msgid "Other"
+msgstr "Alia"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpBrackets)
+#: astyle_preferences.ui:301
+#, kde-format
+msgctxt "@title:group"
+msgid "Brackets"
+msgstr "Krampoj"
+
+#. i18n: ectx: property (text), widget (QLabel, lblBrackets)
+#: astyle_preferences.ui:315
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Type:"
+msgstr "Tipo:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBracketsCloseHeaders)
+#: astyle_preferences.ui:326
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Break brackets before closing headers (e.g. 'else', 'catch', ...)\n"
+"from their immediately preceding closing brackets."
+msgstr ""
+"Rompu krampojn antaŭ fermo de kaplinioj (ekz. 'alia', 'kapti', ...)\n"
+"de iliaj tuj antaŭaj fermaj krampoj."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBracketsCloseHeaders)
+#: astyle_preferences.ui:329
+#, kde-format
+msgctxt "@option:check"
+msgid "Brea&k closing headers"
+msgstr "Rompi fermadon de &kapdosieroj"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:343
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "No change"
+msgstr "Neniu ŝanĝo"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:348
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Attach"
+msgstr "Alligi"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:353
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Break"
+msgstr "Rompo"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:358
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Linux"
+msgstr "Linukso"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbBrackets)
+#: astyle_preferences.ui:363
+#, kde-format
+msgctxt "@item:inlistbox brackets style"
+msgid "Run-In"
+msgstr "Run-In"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpBlocks)
+#: astyle_preferences.ui:376
+#, kde-format
+msgctxt "@title:group"
+msgid "Blocks"
+msgstr "Blokoj"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreak)
+#: astyle_preferences.ui:391
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Insert empty lines around unrelated blocks, labels, classes,...\n"
+"Known problems:\n"
+"\n"
+"1. If a statement is NOT part of a block, \n"
+"the following statements are all double spaced. \n"
+"Statements enclosed in a block are formatted \n"
+"correctly.\n"
+"\n"
+"2. Comments are broken from the block.\n"
+msgstr ""
+"Enmetu malplenajn liniojn ĉirkaŭ senrilataj blokoj, etikedoj, klasoj,...\n"
+"Konataj problemoj:\n"
+"\n"
+"1. Se deklaro NE estas parto de bloko, \n"
+"la sekvaj deklaroj estas ĉiuj duoble interspacigitaj. \n"
+"Deklaroj enfermitaj en bloko estas formatitaj \n"
+"ĝuste.\n"
+"\n"
+"2. Komentoj estas rompitaj de la bloko.\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreak)
+#: astyle_preferences.ui:394
+#, kde-format
+msgctxt "@option:check break unrelated blocks by a newline"
+msgid "&Break blocks"
+msgstr "&Rompi blokojn"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockBreakAll)
+#: astyle_preferences.ui:412
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Like --break-blocks, except also insert empty lines \n"
+"around closing headers (e.g. 'else', 'catch', ...).\n"
+"\n"
+"Known problems:\n"
+"\n"
+"1. If a statement is NOT part of a block, \n"
+"the following statements are all double spaced. \n"
+"Statements enclosed in a block are formatted \n"
+"correctly.\n"
+"\n"
+"2. Comments are broken from the block.\n"
+msgstr ""
+"Kiel --break-blocks, krom ankaŭ enmeti malplenajn liniojn \n"
+"ĉirkaŭ fermaj kaplinioj (ekz. 'else', 'catch', ...).\n"
+"\n"
+"Konataj problemoj:\n"
+"\n"
+"1. Se deklaro NE estas parto de bloko, \n"
+"la sekvaj deklaroj estas ĉiuj duoble interspacigitaj. \n"
+"Deklaroj enfermitaj en bloko estas formatitaj \n"
+"ĝuste.\n"
+"\n"
+"2. Komentoj estas rompitaj de la bloko.\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockBreakAll)
+#: astyle_preferences.ui:415
+#, kde-format
+msgctxt "@option:check break all blocks with a newline"
+msgid "Break all bl&ocks"
+msgstr "Rompi ĉiujn blokojn"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkBlockIfElse)
+#: astyle_preferences.ui:422
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Break 'else if()' statements into two different lines."
+msgstr "Rompi 'else if()' deklarojn en du malsamajn liniojn."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlockIfElse)
+#: astyle_preferences.ui:425
+#, kde-format
+msgctxt "@option:check break else if() into separate lines"
+msgid "Break i&f-else"
+msgstr "Rompi i&f-else"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpPadding)
+#: astyle_preferences.ui:435
+#, kde-format
+msgctxt "@title:group"
+msgid "Padding"
+msgstr "Ŝtopado"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:450
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "No change"
+msgstr "Neniu ŝanĝo"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:455
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Unpad"
+msgstr "Malŝtopi"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:460
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Inside only"
+msgstr "Nur interne"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:465
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Outside only"
+msgstr "Nur ekstere"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, cbParenthesisPadding)
+#: astyle_preferences.ui:470
+#, kde-format
+msgctxt "@item:inlistbox parenthesis padding"
+msgid "Inside and outside"
+msgstr "Interne kaj ekstere"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadOperators)
+#: astyle_preferences.ui:480
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Insert space padding around operators.\n"
+"Once padded, operators stay padded.\n"
+"There is no unpad operator option."
+msgstr ""
+"Enmetu spacan ŝtopaĵon ĉirkaŭ operatoroj.\n"
+"Unufoje ŝtopitaj, operatoroj restas ŝtopitaj.\n"
+"Ne ekzistas opcio por malŝtopi operatoron."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPadOperators)
+#: astyle_preferences.ui:483
+#, kde-format
+msgctxt "@option:check"
+msgid "&Add spaces around operators"
+msgstr "&Aldoni spacojn ĉirkaŭ operatoroj"
+
+#. i18n: ectx: property (text), widget (QLabel, lblParenthesis)
+#: astyle_preferences.ui:490
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Pad parenthesis:"
+msgstr "Ŝtopi krampon:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkPadParenthesisHeader)
+#: astyle_preferences.ui:497
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Insert space padding after parenthesis headers (e.g. 'if', 'for', "
+"'while', ...)"
+msgstr ""
+"Enmeti spacoŝtopon post krampitaj titoloj (ekz. 'if', 'for', 'while', ...)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPadParenthesisHeader)
+#: astyle_preferences.ui:500
+#, kde-format
+msgctxt "@option:check"
+msgid "Add spaces after parenthesis &headers"
+msgstr "Aldoni spacojn post krampaj &kapoj"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpOneLiners)
+#: astyle_preferences.ui:512
+#, kde-format
+msgctxt "@title:group"
+msgid "One Liners"
+msgstr "Unuliniaĵoj"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepStatements)
+#: astyle_preferences.ui:519
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not break lines containing multiple statements into\n"
+"multiple single-statement lines."
+msgstr ""
+"Ne rompi liniojn enhavantajn plurajn ordonojn en\n"
+"multoblajn unusol-deklarojn."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKeepStatements)
+#: astyle_preferences.ui:522
+#, kde-format
+msgctxt "@option:check"
+msgid "&Keep one-line statements"
+msgstr "&Konservi unuliniajn ordonojn"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkKeepBlocks)
+#: astyle_preferences.ui:529
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Do not break blocks residing completely on one line."
+msgstr "Ne rompi blokojn loĝantajn tute sur unu linio."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkKeepBlocks)
+#: astyle_preferences.ui:532
+#, kde-format
+msgctxt "@option:check"
+msgid "Keep o&ne-line blocks"
+msgstr "Konservi u&nuliniajn blokojn"
+
+#. i18n: ectx: property (title), widget (QGroupBox, gpOther)
+#: astyle_preferences.ui:542
+#, kde-format
+msgctxt "@title:group"
+msgid "Other"
+msgstr "Alia"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPointerAlign)
+#: astyle_preferences.ui:548
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Pointer Alignment:"
+msgstr "Ĝisrandigo de montriloj:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:556
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "No change"
+msgstr "Neniu ŝanĝo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:561
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Name"
+msgstr "Nomo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:566
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Middle"
+msgstr "Mezo"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPointerAlign)
+#: astyle_preferences.ui:571
+#, kde-format
+msgctxt "@item:inlistbox pointer alignment"
+msgid "Type"
+msgstr "Tipo"

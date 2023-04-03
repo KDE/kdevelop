@@ -1,4 +1,4 @@
-# Translation of kdevgdb into esperanto.
+# Translation of kdevdebuggercommon.pot into esperanto.
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the kdevelop package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevgdb\n"
+"Project-Id-Version: kdevdebuggercommon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-22 00:55+0000\n"
-"PO-Revision-Date: 2023-01-08 03:30+0100\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 
 #: dialogs/processselection.cpp:28
 #, kde-format
@@ -69,6 +69,9 @@ msgid ""
 "reply from the debugger. Please submit a bug report. The debug session will "
 "now end to prevent potential crash"
 msgstr ""
+"<p>La sencimigilo-komponento renkontis internan eraron dum prilaborado de la "
+"respondo de la erarserĉilo. Bonvolu sendi cimraporton. La sencimsesio nun "
+"finiĝos por malhelpi eblan paneon"
 
 #: midebugger.cpp:321
 #, kde-format
@@ -76,6 +79,8 @@ msgid ""
 "The exception is: %1\n"
 "The MI response is: %2"
 msgstr ""
+"La escepto estas: %1\n"
+"La respondo de MI estas: %2"
 
 #: midebugger.cpp:324
 #, kde-format
@@ -94,11 +99,13 @@ msgid ""
 "<b>Could not start debugger.</b><p>Could not run '%1'. Make sure that the "
 "path name is specified correctly."
 msgstr ""
+"<b>Ne eblis lanĉi sencimigilon.</b><p>Ne eblis ruli '%1'. Certigu, ke la "
+"vojo nomo estas ĝuste specifita."
 
 #: midebugger.cpp:353
 #, kde-format
 msgid "Process failed to start"
-msgstr ""
+msgstr "Procezo malsukcesis komenci"
 
 #: midebugger.cpp:358
 #, kde-format
@@ -107,6 +114,9 @@ msgid ""
 "that the debug session has to be ended.<br>Try to reproduce the crash "
 "without KDevelop and report a bug.<br>"
 msgstr ""
+"<b>Elĉimilo paneis.</b><p>La sencimigilo-procezo '%1' paneis.<br>Pro tio la "
+"sencimiga seanco devas esti finita.<br>Provu reprodukti la paneon sen "
+"KDevelop kaj raportu cimon.<br>"
 
 #: midebugger.cpp:363
 #, kde-format
@@ -134,6 +144,10 @@ msgid ""
 "The core file contains an image of the program memory at the time it "
 "crashed, allowing you to do a post-mortem analysis.</p>"
 msgstr ""
+"<b>Ekzameni kerndosieron</b><p>Ĉi tio ŝargas kernan dosieron, kiu estas "
+"kutime kreita post kiam la aplikaĵo paneis, ekz. kun segmenta faŭlto. La "
+"kerndosiero enhavas bildon de la programmemoro en la tempo kiam ĝi paneis, "
+"permesante al vi fari postmortan analizon.</p>"
 
 #: midebuggerplugin.cpp:124
 #, kde-format
@@ -147,6 +161,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"
 msgstr ""
+"<b>Alligi al procezo</b><p>Alligas la erarserĉilon al funkcianta procezo.</p>"
 
 #: midebuggerplugin.cpp:139
 #, kde-format
@@ -166,6 +181,7 @@ msgid ""
 "<b>Evaluate expression</b><p>Shows the value of the expression under the "
 "cursor.</p>"
 msgstr ""
+"<b>Taksi esprimon</b><p>Montras la valoron de la esprimo sub la kursoro.</p>"
 
 #: midebuggerplugin.cpp:223
 #, kde-format
@@ -180,6 +196,8 @@ msgid ""
 "<b>Watch expression</b><p>Adds the expression under the cursor to the "
 "Variables/Watch list.</p>"
 msgstr ""
+"<b>Rigardi esprimon</b><p>Aldonas la esprimon sub la kursoro al la Variabloj/"
+"Atentolisto.</p>"
 
 #: midebuggerplugin.cpp:238
 #, kde-format
@@ -192,22 +210,25 @@ msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue?"
 msgstr ""
+"Programo jam estas sencimigita. Ĉu vi volas ĉesigi la nunan funkcian "
+"sencimigan seancon kaj daŭrigi?"
 
 #: midebuggerplugin.cpp:245 midebuggerplugin.cpp:265
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "Ĉesigi Aktualan Seancon"
 
 #: midebuggerplugin.cpp:258
 #, kde-format
 msgid "Choose a process to attach to..."
-msgstr ""
+msgstr "Elektu procezon al kiu ligiĝi..."
 
 #: midebuggerplugin.cpp:282
 #, kde-format
 msgid "Not attaching to process %1: cannot attach the debugger to itself."
 msgstr ""
+"Ne alkroĉante al la procezo %1: ne povas alligi la erarserĉilon al si mem."
 
 #: midebuggerplugin.cpp:302
 #, kde-format
@@ -223,7 +244,7 @@ msgstr "%1: %2"
 #: midebugjobs.cpp:105
 #, kde-format
 msgid "'%1' is not an executable"
-msgstr ""
+msgstr "'%1' ne estas efektivigebla"
 
 #: midebugjobs.cpp:169
 #, kde-format
@@ -276,31 +297,33 @@ msgid ""
 "<b>Gdb command sent when debugger is not running</b><br>The command was:<br> "
 "%1"
 msgstr ""
+"<b>Gdb-komando sendita kiam sencimigilo ne funkcias</b><br>La komando estis:"
+"<br> %1"
 
 #: midebugsession.cpp:860
 #, kde-format
 msgid "<b>Invalid debugger command</b><br>%1"
-msgstr ""
+msgstr "<b>Nevalida erarĉimilo komando</b><br>%1"
 
 #: midebugsession.cpp:996
 #, kde-format
 msgid "Exited with return code: %1"
-msgstr ""
+msgstr "Eliris kun revenkodo: %1"
 
 #: midebugsession.cpp:998
 #, kde-format
 msgid "Exited normally"
-msgstr ""
+msgstr "Eliris normale"
 
 #: midebugsession.cpp:1005
 #, kde-format
 msgid "Exited on signal %1"
-msgstr ""
+msgstr "Eliris sur signalo %1"
 
 #: midebugsession.cpp:1040
 #, kde-format
 msgid "Program received signal %1 (%2)"
-msgstr ""
+msgstr "Programo ricevis signalon %1 (%2)"
 
 #: midebugsession.cpp:1172
 #, kde-format
@@ -329,11 +352,14 @@ msgid ""
 "Current command text: '%2'\n"
 "Current command original text: '%3'\n"
 msgstr ""
+"Aktuala komanda klaso: '%1'\n"
+"Nuna komanda teksto: '%2'\n"
+"Nuna komanda originala teksto: '%3'\n"
 
 #: midebugsession.cpp:1253
 #, kde-format
 msgid "<b>Debugger error</b><p>Debugger reported the following error:<p><tt>%1"
-msgstr ""
+msgstr "<b>Erarmilo</b><p>Senĉimilo raportis la jenan eraron:<p><tt>%1"
 
 #: miframestackmodel.cpp:69
 #, kde-format
@@ -385,27 +411,27 @@ msgstr "Flagoj"
 #: registers/registercontroller_arm.cpp:100
 #, kde-format
 msgid "VFP single-word"
-msgstr ""
+msgstr "VFP unuvorte"
 
 #: registers/registercontroller_arm.cpp:100
 #, kde-format
 msgid "VFP double-word"
-msgstr ""
+msgstr "VFP duobla vorto"
 
 #: registers/registercontroller_arm.cpp:100
 #, kde-format
 msgid "VFP quad-word"
-msgstr ""
+msgstr "VFP kvarobla vorto"
 
 #: registers/registercontroller_x86.cpp:100
 #, kde-format
 msgid "FPU"
-msgstr ""
+msgstr "FPU"
 
 #: registers/registercontroller_x86.cpp:100
 #, kde-format
 msgid "XMM"
-msgstr ""
+msgstr "XMM"
 
 #: registers/registercontroller_x86.cpp:100
 #, kde-format
@@ -438,16 +464,20 @@ msgid ""
 "As root you may need to \"chmod ug+rw\" tty* and pty* devices and/or add the "
 "user to the tty group using \"usermod -aG tty username\"."
 msgstr ""
+"Ne povas uzi la tty* aŭ pty*-aparatojn.\n"
+"Kontrolu la agordojn ĉe /dev/tty* kaj /dev/pty*\n"
+"Kiel radiko vi eble bezonos \"chmod ug+rw\" tty* kaj pty*-aparatojn kaj/aŭ "
+"aldonu la uzanton al la tty-grupo uzante \"usermod -aG tty uzantnomo\"."
 
 #: stty.cpp:295
 #, kde-format
 msgid "%1 is incorrect terminal name"
-msgstr ""
+msgstr "%1 estas malĝusta fina nomo"
 
 #: stty.cpp:301
 #, kde-format
 msgid "Can't create a temporary file"
-msgstr ""
+msgstr "Ne povas krei provizoran dosieron"
 
 #: stty.cpp:348
 #, kde-format
@@ -456,6 +486,9 @@ msgid ""
 "accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do "
 "sleep 3600;done\""
 msgstr ""
+"Ne povas ricevi %1 tty/pty. Kontrolu, ke %1 estas efektive terminalo kaj ke "
+"ĝi akceptas ĉi tiujn argumentojn: -e sh -c \"tty> %2 ;exec<&-;exec>&-;"
+"while :;do sleep 3600;done\""
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
 #: widgets/debuggerconsoleview.cpp:47 widgets/debuggerconsoleview.ui:14
@@ -471,6 +504,8 @@ msgid ""
 "<b>Debugger Console</b><p>Shows all debugger commands being executed. You "
 "can also issue any other debugger command while debugging.</p>"
 msgstr ""
+"<b>Senĉimiga Konzolo</b><p>Montras ĉiujn sencimigajn komandojn plenumatajn. "
+"Vi ankaŭ povas eldoni ajnan alian erarserĉilan komandon dum sencimigado.</p>"
 
 #: widgets/debuggerconsoleview.cpp:58
 #, kde-format
@@ -483,7 +518,7 @@ msgstr "Ripeti lastan komandon je premo de Return"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter debugger commands"
-msgstr ""
+msgstr "Paŭzi la rulon de la aplikaĵo por enigi komandojn de erarserĉilo"
 
 #: widgets/debuggerconsoleview.cpp:72
 #, kde-format
@@ -499,39 +534,42 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
+"Kontrolas ĉu ordonoj eldonitaj interne de KDevelop estos montritaj aŭ ne."
+"<br>Ĉi tiu opcio influos nur estontajn komandojn, ĝi ne aldonos aŭ forigos "
+"jam eldonitajn komandojn de la vido."
 
 #: widgets/debuggerconsoleview.cpp:137
 #, kde-format
 msgctxt "@label:listbox"
 msgid "&Command:"
-msgstr ""
+msgstr "&Komando:"
 
 #: widgets/debuggerconsoleview.cpp:159
 #, kde-format
 msgctxt "@title:window"
 msgid "%1 Command Bar"
-msgstr ""
+msgstr "%1 Komandbreto"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:53
 #, kde-format
 msgctxt "@action"
 msgid "Interrupt"
-msgstr ""
+msgstr "Interrompi"
 
 #. i18n: ectx: property (text), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:70
 #, kde-format
 msgctxt "@action"
 msgid "Repeat"
-msgstr ""
+msgstr "Ripeti"
 
 #. i18n: ectx: property (toolTip), widget (QToolBar, toolBar)
 #: widgets/debuggerconsoleview.ui:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Repeat last sent command when hit <Return>"
-msgstr ""
+msgstr "Ripeti la lastan senditan komandon je premo de <Return>"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, SelectAddressDialog)
 #: widgets/disassemblewidget.cpp:44 widgets/selectaddressdialog.ui:14
@@ -556,7 +594,7 @@ msgstr "Salti al &Kursoro"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Sets the execution pointer to the current cursor position."
-msgstr ""
+msgstr "Agordas la rulmontrilon al la nuna kursora pozicio."
 
 #: widgets/disassemblewidget.cpp:96
 #, kde-format
@@ -568,25 +606,25 @@ msgstr "&Ruli al Kursoro"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
-msgstr ""
+msgstr "Daŭrigas ruladon ĝis kiam la pozicio de la kursoro estas atingita."
 
 #: widgets/disassemblewidget.cpp:100
 #, kde-format
 msgctxt "@option:check"
 msgid "&AT&&T"
-msgstr ""
+msgstr "&AT&&T"
 
 #: widgets/disassemblewidget.cpp:101
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."
-msgstr ""
+msgstr "GDB uzos la malmuntan guston de AT&T (ekz. mov 0xc(%ebp),%eax)."
 
 #: widgets/disassemblewidget.cpp:105
 #, kde-format
 msgctxt "@option:check"
 msgid "&Intel"
-msgstr ""
+msgstr "&Intel"
 
 #: widgets/disassemblewidget.cpp:106
 #, kde-format
@@ -595,6 +633,7 @@ msgid ""
 "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp"
 "+0xc])."
 msgstr ""
+"GDB uzos la Intel-malmuntan guston (ekz. mov eax, DWORD PTR [ebp+0xc])."
 
 #: widgets/disassemblewidget.cpp:143
 #, kde-format
@@ -611,6 +650,10 @@ msgid ""
 "instruction by instruction using the debuggers toolbar buttons of \"step over"
 "\" instruction and \"step into\" instruction."
 msgstr ""
+"<b>Afiŝado de maŝinkodo</b><p>Vido de maŝinkodo en vian ruliĝantan "
+"plenumeblan kun la nuna instrukcio elstarigita. Vi povas paŝi instrukcion "
+"post instrukcio uzante la ilobretobutonojn de elĉimiloj de instrukcio \"paŝi "
+"super\" kaj \"enpaŝi\" instrukcion."
 
 #: widgets/disassemblewidget.cpp:190
 #, kde-format
@@ -641,11 +684,11 @@ msgstr "Retrokompila rigardo"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the address to disassemble around"
-msgstr ""
+msgstr "Elektu la adreson ĉirkaŭ kiu retrotraduki"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/selectaddressdialog.ui:23
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Address to disassemble around:"
-msgstr ""
+msgstr "Adreso por retrotraduki ĉirkaŭe:"

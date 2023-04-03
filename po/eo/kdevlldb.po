@@ -1,0 +1,240 @@
+# Translation of kdevlldb into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the kdevelop package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevlldb\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-11-02 00:46+0000\n"
+"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: controllers/framestackmodel.cpp:85
+#, kde-format
+msgid "(running)"
+msgstr ""
+
+#: debuggerplugin.cpp:28 lldblauncher.cpp:45
+#, kde-format
+msgid "LLDB"
+msgstr ""
+
+#: debuggerplugin.cpp:93
+#, kde-format
+msgctxt "@title:window"
+msgid "LLDB Console"
+msgstr ""
+
+#: debugsession.cpp:137
+#, kde-format
+msgid "Attempting to execute user command on unsupported LLDB version"
+msgstr ""
+
+#: debugsession.cpp:336
+#, kde-format
+msgid "<b>Could not start debugger:</b><br />"
+msgstr ""
+
+#: debugsession.cpp:347
+#, kde-format
+msgid "<b>Error connecting to remote target:</b><br />"
+msgstr ""
+
+#: debugsession.cpp:360
+#, kde-format
+msgid ""
+"<b>Failed to load core file</b><p>Debugger reported the following error:"
+"<p><tt>%1"
+msgstr ""
+
+#: debugsession.cpp:391
+#, kde-format
+msgid ""
+"<b>Your lldb-mi version is unsupported, as it lacks an essential patch.</"
+"b><br/>See https://llvm.org/bugs/show_bug.cgi?id=28026 for more information."
+"<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
+"continue?"
+msgstr ""
+
+#: debugsession.cpp:395
+#, kde-format
+msgid "LLDB Version Unsupported"
+msgstr ""
+
+#: debugsession.cpp:441
+#, kde-format
+msgid ""
+"<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
+msgstr ""
+
+#. i18n: ectx: ToolBar (debugToolBar)
+#: kdevlldbui.rc:19
+#, kde-format
+msgid "Debugger Toolbar"
+msgstr ""
+
+#: lldblauncher.cpp:50
+#, kde-format
+msgid "Debug a native application in LLDB"
+msgstr ""
+
+#: lldblauncher.cpp:75
+#, kde-format
+msgid ""
+"A program is already being debugged. Do you want to abort the currently "
+"running debug session and continue with the launch?"
+msgstr ""
+
+#: lldblauncher.cpp:77
+#, kde-format
+msgctxt "@action:button"
+msgid "Abort Current Session"
+msgstr ""
+
+#: widgets/lldbconfigpage.cpp:67
+#, kde-format
+msgctxt "@title:tab"
+msgid "LLDB Configuration"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
+#: widgets/lldbconfigpage.ui:29
+#, kde-format
+msgctxt "@title:group"
+msgid "Debugger"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/lldbconfigpage.ui:35
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Debugger executable:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
+#: widgets/lldbconfigpage.ui:42
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "Override path to lldb-mi executable..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/lldbconfigpage.ui:49
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Additional arguments:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/lldbconfigpage.ui:60
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Environment:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
+#: widgets/lldbconfigpage.ui:85
+#, kde-format
+msgctxt "@option:check"
+msgid "Inherit system environment"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
+#: widgets/lldbconfigpage.ui:95
+#, kde-format
+msgctxt "@title:group"
+msgid "Options"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: widgets/lldbconfigpage.ui:101
+#, kde-format
+msgctxt "@label:chooser"
+msgid "Config script:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
+#: widgets/lldbconfigpage.ui:108
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/lldb/config/script"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: widgets/lldbconfigpage.ui:115
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Start debugger with:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:123
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Application Output"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:128
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "LLDB Console"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
+#: widgets/lldbconfigpage.ui:133
+#, kde-format
+msgctxt "@item:inlistbox start debugger with"
+msgid "Frame Stack"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: widgets/lldbconfigpage.ui:141
+#, kde-format
+msgctxt "@option:check"
+msgid "Break on start:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
+#: widgets/lldbconfigpage.ui:158
+#, kde-format
+msgctxt "@title:group"
+msgid "Remo&te Debugging"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: widgets/lldbconfigpage.ui:167
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote server:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
+#: widgets/lldbconfigpage.ui:174
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "host:port"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: widgets/lldbconfigpage.ui:181
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Remote work path:"
+msgstr ""
+
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
+#: widgets/lldbconfigpage.ui:188
+#, kde-format
+msgctxt "@info:placeholder"
+msgid "/path/to/a/on-device/writable/directory"
+msgstr ""
