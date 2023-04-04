@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevqthelp\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-09 00:44+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -23,200 +23,193 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Modify Entry"
-msgstr ""
+msgstr "Modifi Eniron"
 
 #: qthelpconfig.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Entry"
-msgstr ""
+msgstr "Aldoni Novan Eniron"
 
 #: qthelpconfig.cpp:67
 #, kde-format
 msgid "Name cannot be empty."
-msgstr ""
+msgstr "Nomo ne povas esti malplena."
 
 #: qthelpconfig.cpp:102
 #, kde-format
 msgctxt "@action:button Allow user to get some API documentation with GHNS"
 msgid "Get New Documentation"
-msgstr ""
+msgstr "Akiri Novan Dokumentaron"
 
 #: qthelpconfig.cpp:118
 #, kde-format
 msgid ""
 "The command \"qmake -query\" could not provide a path to a QtHelp file (QCH)."
 msgstr ""
+"La komando \"qmake -query\" ne povis provizi vojon al QtHelp-dosiero (QCH)."
 
 #: qthelpconfig.cpp:206
 #, kde-format
 msgid "Documentation provided by GHNS"
-msgstr ""
+msgstr "Dokumentaro provizita de GHNS"
 
 #: qthelpconfig.cpp:232
 #, kde-format
 msgid "Qt Compressed Help file is not valid."
-msgstr ""
+msgstr "Qt Compressed Help-dosiero ne validas."
 
 #: qthelpconfig.cpp:241
 #, kde-format
 msgid "Documentation already imported"
-msgstr ""
+msgstr "Dokumentaro jam importita"
 
 #: qthelpconfig.cpp:293
 #, kde-format
 msgctxt "@title:tab"
 msgid "Qt Help"
-msgstr ""
+msgstr "Qt Helpo"
 
 #: qthelpconfig.cpp:298
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Qt Help Settings"
-msgstr ""
+msgstr "Agordi Qt Helpaj Agordoj"
 
 #: qthelpconfig.cpp:323
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Modify"
-msgstr ""
+msgstr "Modifi"
 
 #: qthelpconfig.cpp:329
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete"
-msgstr ""
+msgstr "Forigi"
 
 #: qthelpconfig.cpp:335
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Please uninstall this via GHNS."
-msgstr ""
+msgstr "Bonvolu malinstali ĉi tion per GHNS."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxAutoLoad)
 #: qthelpconfig.ui:23
 #, kde-format
 msgctxt "@title:group"
 msgid "Load Qt Help Documentation from System Locations"
-msgstr ""
+msgstr "Ŝargi Qt-Helpan Dokumentadon de Sistemaj Lokoj"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadQtApiDocs)
 #: qthelpconfig.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "&Load Qt API documentation:"
-msgstr ""
+msgstr "Ŝargi Qt-API-do&kumentadon:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLoadFromDirectory)
 #: qthelpconfig.ui:46
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Load Qt Help files from directory:"
-msgstr ""
+msgstr "Ŝargi Qt Helpdosierojn el dosierujo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxQchManage)
 #: qthelpconfig.ui:69
 #, kde-format
 msgctxt "@title:group"
 msgid "Install Additional Documentation Files"
-msgstr ""
+msgstr "Instali Pliajn Dokumentajn Dosierojn"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:104
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr ""
+msgstr "Nomo"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, qchTable)
 #: qthelpconfig.ui:109
 #, kde-format
 msgctxt "@title:column"
 msgid "Path"
-msgstr ""
+msgstr "Vojo"
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #: qthelpconfig.ui:134
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "Aldoni"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qthelpconfigeditdialog.ui:17
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Icon:"
-msgstr ""
+msgstr "Piktogramo:"
 
 #. i18n: ectx: property (toolTip), widget (KIconButton, qchIcon)
 #: qthelpconfigeditdialog.ui:24
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an icon"
-msgstr ""
+msgstr "Elekti piktogramon"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qthelpconfigeditdialog.ui:34
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr ""
+msgstr "Nomo:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:41
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a name"
-msgstr ""
+msgstr "Enigu nomon"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, qchName)
 #: qthelpconfigeditdialog.ui:44
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a name..."
-msgstr ""
+msgstr "Elekti nomon..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qthelpconfigeditdialog.ui:51
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Path:"
-msgstr ""
+msgstr "Vojo:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a Qt Help file..."
-msgstr ""
+msgstr "Elekti Qt-Helpdosieron..."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, qchRequester)
 #: qthelpconfigeditdialog.ui:70
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select a Qt Help file..."
-msgstr ""
+msgstr "Elektu Qt-Helpdosieron..."
 
 #: qthelpdocumentation.cpp:181
 #, kde-format
 msgid "Could not find any documentation for '%1'"
-msgstr ""
+msgstr "Ne eblis trovi ajnan dokumentadon por '%1'"
 
 #: qthelpdocumentation.cpp:276
 #, kde-format
 msgid "QtHelp Home Page"
-msgstr ""
+msgstr "QtHelp Hejmpaĝo"
 
 #: qthelpqtdoc.cpp:142
 #, kde-format
 msgid "QtHelp"
-msgstr ""
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
+msgstr "QtHelp"

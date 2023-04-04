@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevprojectmanagerview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -43,53 +43,54 @@ msgstr[1] ""
 #: cutcopypastehelpers.cpp:93
 #, kde-format
 msgid "Move item %1 into %2"
-msgstr ""
+msgstr "Movi elementon %1 en %2"
 
 #: cutcopypastehelpers.cpp:96
 #, kde-format
 msgid "Copy item %1 into %2"
-msgstr ""
+msgstr "Kopii eron %1 en %2"
 
 #: cutcopypastehelpers.cpp:99
 #, kde-format
 msgid "Delete item %1"
-msgstr ""
+msgstr "Forigi elementon %1"
 
 #: cutcopypastehelpers.cpp:108
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation succeeded"
-msgstr ""
+msgstr "Suboperacio sukcesis"
 
 #: cutcopypastehelpers.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation failed"
-msgstr ""
+msgstr "Suboperacio malsukcesis"
 
 #: cutcopypastehelpers.cpp:116
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Suboperation skipped to prevent data loss"
-msgstr ""
+msgstr "Suboperacio saltis por malhelpi datumperdon"
 
 #: cutcopypastehelpers.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Paste Failed"
-msgstr ""
+msgstr "Alglui Fiaskis"
 
 #: cutcopypastehelpers.cpp:323
 #, kde-format
 msgid ""
 "Failed to paste. Below is a list of suboperations that have been attempted."
 msgstr ""
+"Malsukcesis alglui. Malsupre estas listo de suboperacioj kiuj estis provitaj."
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevprojectmanagerview.rc:26
 #, kde-format
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Ĉefa Ilobreto"
 
 #: projectbuildsetwidget.cpp:123
 #, kde-format
@@ -108,35 +109,35 @@ msgstr "Elpreni de Konstruaranĝo"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the top"
-msgstr ""
+msgstr "Movi la elektitajn erojn al la supro"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, upButton)
 #: projectbuildsetwidget.ui:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items up"
-msgstr ""
+msgstr "Movi la elektitajn erojn supren"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, downButton)
 #: projectbuildsetwidget.ui:83
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected item down"
-msgstr ""
+msgstr "Movi la elektitan objekton malsupren"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bottomButton)
 #: projectbuildsetwidget.ui:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected items to the bottom"
-msgstr ""
+msgstr "Movi la elektitajn erojn al la fundo"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: projectbuildsetwidget.ui:177
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "These items will be built in the order they are listed."
-msgstr ""
+msgstr "Ĉi tiuj aĵoj estos konstruitaj en la ordo en kiu ili estas listigitaj."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectbuildsetwidget.ui:180
@@ -150,14 +151,14 @@ msgstr "Sinsekvo de Konstruo"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add currently selected items from project tree view to the build set."
-msgstr ""
+msgstr "Aldoni aktuale elektitajn erojn de projektarba vido al la konstruaro."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeItemButton)
 #: projectbuildsetwidget.ui:216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove currently selected item from the build set."
-msgstr ""
+msgstr "Forigi aktuale elektitan objekton el la konstruaro."
 
 #: projectmanagerview.cpp:73 projectmanagerviewplugin.cpp:191
 #, kde-format
@@ -169,31 +170,31 @@ msgstr "Projektoj"
 #, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
-msgstr ""
+msgstr "Trovi Nunan Dokumenton"
 
 #: projectmanagerview.cpp:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Locates the current document in the project tree and selects it."
-msgstr ""
+msgstr "Lokas la nunan dokumenton en la projektarbo kaj elektas ĝin."
 
 #: projectmanagerview.cpp:98
 #, kde-format
 msgctxt "@action"
 msgid "Auto-Select Current Document"
-msgstr ""
+msgstr "Aŭtomate Elekti Aktualan Dokumenton"
 
 #: projectmanagerview.cpp:99
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically select the current document in the project tree."
-msgstr ""
+msgstr "Aŭtomate elekti la nunan dokumenton en la projektarbo."
 
 #: projectmanagerview.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Show Build Targets"
-msgstr ""
+msgstr "Montri Konstruajn Celojn"
 
 #. i18n: ectx: property (whatsThis), widget (ProjectTreeView, projectTreeView)
 #: projectmanagerview.ui:33
@@ -366,7 +367,7 @@ msgstr[1] ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Files"
-msgstr ""
+msgstr "Forigi dosierojn"
 
 #: projectmanagerviewplugin.cpp:655
 #, kde-format
@@ -383,17 +384,17 @@ msgstr "Nove nomo por %1:"
 #: projectmanagerviewplugin.cpp:668
 #, kde-format
 msgid "There is already a file named '%1'"
-msgstr ""
+msgstr "Jam estas dosiero nomita '%1'"
 
 #: projectmanagerviewplugin.cpp:671
 #, kde-format
 msgid "Could not rename '%1'"
-msgstr ""
+msgstr "Ne eblis renomi '%1'"
 
 #: projectmanagerviewplugin.cpp:674
 #, kde-format
 msgid "'%1' is not a valid file name"
-msgstr ""
+msgstr "'%1' ne estas valida dosiernomo"
 
 #: projectmanagerviewplugin.cpp:688
 #, kde-format

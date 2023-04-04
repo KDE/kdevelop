@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevlldb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -21,33 +21,33 @@ msgstr ""
 #: controllers/framestackmodel.cpp:85
 #, kde-format
 msgid "(running)"
-msgstr ""
+msgstr "(rulanta)"
 
 #: debuggerplugin.cpp:28 lldblauncher.cpp:45
 #, kde-format
 msgid "LLDB"
-msgstr ""
+msgstr "LLDB"
 
 #: debuggerplugin.cpp:93
 #, kde-format
 msgctxt "@title:window"
 msgid "LLDB Console"
-msgstr ""
+msgstr "LLDB-konzolo"
 
 #: debugsession.cpp:137
 #, kde-format
 msgid "Attempting to execute user command on unsupported LLDB version"
-msgstr ""
+msgstr "Provante ruli uzantokomandon en nesubtenata LLDB-versio"
 
 #: debugsession.cpp:336
 #, kde-format
 msgid "<b>Could not start debugger:</b><br />"
-msgstr ""
+msgstr "<b>Ne eblis lanĉi sencimigilon:</b><br />"
 
 #: debugsession.cpp:347
 #, kde-format
 msgid "<b>Error connecting to remote target:</b><br />"
-msgstr ""
+msgstr "<b>Eraro konektante al fora celo:</b><br />"
 
 #: debugsession.cpp:360
 #, kde-format
@@ -55,6 +55,8 @@ msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 msgstr ""
+"<b>Malsukcesis ŝargi kerna dosiero</b><p>Elĉimilo raportis la jenan eraron:"
+"<p><tt>%1"
 
 #: debugsession.cpp:391
 #, kde-format
@@ -64,28 +66,32 @@ msgid ""
 "<br/>Debugger console will be disabled to prevent crash.<br/>Do you want to "
 "continue?"
 msgstr ""
+"<b>Via lldb-mi versio estas nesubtenata, ĉar mankas al ĝi esenca flikaĵo.</"
+"b><br/>Vidu https://llvm.org/bugs/show_bug.cgi?id=28026 por pliaj informoj."
+"<br />Elĉimilo konzolo estos malŝaltita por malhelpi paneon.<br/>Ĉu vi volas "
+"daŭrigi?"
 
 #: debugsession.cpp:395
 #, kde-format
 msgid "LLDB Version Unsupported"
-msgstr ""
+msgstr "LLDB-Versio Nesubtenata"
 
 #: debugsession.cpp:441
 #, kde-format
 msgid ""
 "<b>You need lldb-mi from LLDB 3.8.1 or higher.</b><br />You are using: %1"
-msgstr ""
+msgstr "<b>Vi bezonas lldb-mi de LLDB 3.8.1 aŭ pli alta.</b><br />Vi uzas: %1"
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: kdevlldbui.rc:19
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr ""
+msgstr "Sencimiga Ilobreto"
 
 #: lldblauncher.cpp:50
 #, kde-format
 msgid "Debug a native application in LLDB"
-msgstr ""
+msgstr "Sencimigi denaskan aplikaĵon en LLDB"
 
 #: lldblauncher.cpp:75
 #, kde-format
@@ -93,148 +99,150 @@ msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
+"Sencimigo de programo jam estas survoje. Ĉu vi volas ĉesigi la aktuale "
+"rulantan sencimigseancon kaj daŭrigi kun la lanĉo?"
 
 #: lldblauncher.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "Ĉesigi Nunan Seancon"
 
 #: widgets/lldbconfigpage.cpp:67
 #, kde-format
 msgctxt "@title:tab"
 msgid "LLDB Configuration"
-msgstr ""
+msgstr "LLDB-agordo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupDebugger)
 #: widgets/lldbconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Debugger"
-msgstr ""
+msgstr "Erarserĉilo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/lldbconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Debugger executable:"
-msgstr ""
+msgstr "Sencimigilo rulebla:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineDebuggerExec)
 #: widgets/lldbconfigpage.ui:42
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to lldb-mi executable..."
-msgstr ""
+msgstr "Anstataŭigi vojon al lldb-mi rulebla..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/lldbconfigpage.ui:49
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional arguments:"
-msgstr ""
+msgstr "Pliaj argumentoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: widgets/lldbconfigpage.ui:60
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Environment:"
-msgstr ""
+msgstr "Medio:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkInheritSystem)
 #: widgets/lldbconfigpage.ui:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Inherit system environment"
-msgstr ""
+msgstr "Heredi sisteman medion"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupOptions)
 #: widgets/lldbconfigpage.ui:95
 #, kde-format
 msgctxt "@title:group"
 msgid "Options"
-msgstr ""
+msgstr "Opcioj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: widgets/lldbconfigpage.ui:101
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Config script:"
-msgstr ""
+msgstr "Agorda skripto:"
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, lineConfigScript)
 #: widgets/lldbconfigpage.ui:108
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/lldb/config/script"
-msgstr ""
+msgstr "/path/to/lldb/config/script"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: widgets/lldbconfigpage.ui:115
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Start debugger with:"
-msgstr ""
+msgstr "Komenci erarserĉilon per:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:123
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
-msgstr ""
+msgstr "Aplika Eligo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:128
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "LLDB Console"
-msgstr ""
+msgstr "LLDB-konzolo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboStartWith)
 #: widgets/lldbconfigpage.ui:133
 #, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr ""
+msgstr "Kadra Stako"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: widgets/lldbconfigpage.ui:141
 #, kde-format
 msgctxt "@option:check"
 msgid "Break on start:"
-msgstr ""
+msgstr "Paŭzo ĉe komenco:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupRemote)
 #: widgets/lldbconfigpage.ui:158
 #, kde-format
 msgctxt "@title:group"
 msgid "Remo&te Debugging"
-msgstr ""
+msgstr "Fora Sencimigado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: widgets/lldbconfigpage.ui:167
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote server:"
-msgstr ""
+msgstr "Fora servilo:"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineRemoteServer)
 #: widgets/lldbconfigpage.ui:174
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "host:port"
-msgstr ""
+msgstr "gastiganto:porto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: widgets/lldbconfigpage.ui:181
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Remote work path:"
-msgstr ""
+msgstr "Vojo de Fora Laboro:"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lineOnDevPath)
 #: widgets/lldbconfigpage.ui:188
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "/path/to/a/on-device/writable/directory"
-msgstr ""
+msgstr "/path/to/a/on-device/writable/directory"

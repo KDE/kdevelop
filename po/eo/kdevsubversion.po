@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevsubversion\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -34,7 +34,7 @@ msgstr "Movi..."
 #: kdevsvnplugin.cpp:356 kdevsvnplugin.cpp:392
 #, kde-format
 msgid "Please select only one item for this operation"
-msgstr ""
+msgstr "Bonvolu elekti nur unu elementon por ĉi tiu operacio"
 
 #: kdevsvnplugin.cpp:370
 #, kde-format
@@ -45,7 +45,7 @@ msgstr "Cela dosiero/dosierujo"
 #: kdevsvnplugin.cpp:382
 #, kde-format
 msgid "Copying only works on local files"
-msgstr ""
+msgstr "Kopiado funkcias nur je lokaj dosieroj"
 
 #: kdevsvnplugin.cpp:406
 #, kde-format
@@ -55,7 +55,7 @@ msgstr "Cela dosiero/dosierujo"
 #: kdevsvnplugin.cpp:418
 #, kde-format
 msgid "Moving only works on local files/dirs"
-msgstr ""
+msgstr "Movado funkcias nur je lokaj dosieroj/direktoroj"
 
 #: kdevsvnplugin.cpp:425
 #, kde-format
@@ -65,37 +65,37 @@ msgstr "Subversion"
 #: svnaddjob.cpp:73
 #, kde-format
 msgid "Subversion Add"
-msgstr ""
+msgstr "Subversion Add"
 
 #: svnaddjob.cpp:85
 #, kde-format
 msgid "Not enough information to add file"
-msgstr ""
+msgstr "Ne sufiĉas informoj por aldoni dosieron"
 
 #: svnblamejob.cpp:130
 #, kde-format
 msgid "Subversion Annotate"
-msgstr ""
+msgstr "Subversion Annotate"
 
 #: svnblamejob.cpp:144
 #, kde-format
 msgid "Not enough information to blame location"
-msgstr ""
+msgstr "Ne sufiĉas informoj por kulpigi lokon"
 
 #: svncheckoutjob.cpp:84
 #, kde-format
 msgid "Subversion Checkout"
-msgstr ""
+msgstr "Subversion Checkout"
 
 #: svncheckoutjob.cpp:96
 #, kde-format
 msgid "Not enough information to checkout"
-msgstr ""
+msgstr "Ne sufiĉas informoj por elpreni"
 
 #: svncommitjob.cpp:109
 #, kde-format
 msgid "Subversion Commit"
-msgstr ""
+msgstr "Subversion Commit"
 
 #: svncommitjob.cpp:125
 #, kde-format
@@ -105,47 +105,47 @@ msgstr "Enmetanta..."
 #: svncommitjob.cpp:129
 #, kde-format
 msgid "Not enough information to execute commit"
-msgstr ""
+msgstr "Ne sufiĉas informoj por efektivigi enmeton"
 
 #: svncopyjob.cpp:71
 #, kde-format
 msgid "Subversion Copy"
-msgstr ""
+msgstr "Subversion Copy"
 
 #: svncopyjob.cpp:83
 #, kde-format
 msgid "Not enough information to copy file"
-msgstr ""
+msgstr "Ne sufiĉas informoj por kopii dosieron"
 
 #: svndiffjob.cpp:253
 #, kde-format
 msgid "Subversion Diff"
-msgstr ""
+msgstr "Subversion Diff"
 
 #: svndiffjob.cpp:270
 #, kde-format
 msgid "Not enough information given to execute diff"
-msgstr ""
+msgstr "Ne sufiĉaj informoj donitaj por efektivigi diff"
 
 #: svnimportjob.cpp:86
 #, kde-format
 msgid "Subversion Import"
-msgstr ""
+msgstr "Subversion Import"
 
 #: svnimportjob.cpp:99
 #, kde-format
 msgid "Not enough information to import"
-msgstr ""
+msgstr "Ne sufiĉas informoj por importi"
 
 #: svninfojob.cpp:81
 #, kde-format
 msgid "Subversion Info"
-msgstr ""
+msgstr "Subversion Info"
 
 #: svninfojob.cpp:113
 #, kde-format
 msgid "Not enough information to execute info job"
-msgstr ""
+msgstr "Ne sufiĉas informoj por plenumi informtaskon"
 
 #: svninternaljobbase.cpp:86
 #, kde-format
@@ -214,17 +214,17 @@ msgstr "Transdonanta dosierdatumojn "
 #: svninternaljobbase.cpp:171
 #, kde-format
 msgid "Blame finished for revision %1, path %2"
-msgstr ""
+msgstr "Blame finiĝis por revizio %1, vojo %2"
 
 #: svninternaljobbase.cpp:174
 #, kde-format
 msgid "Reverted working copy %1"
-msgstr ""
+msgstr "Malfaris ŝanĝojn en laborkopio %1"
 
 #: svninternaljobbase.cpp:177
 #, kde-format
 msgid "Reverting failed on working copy %1"
-msgstr ""
+msgstr "Malfaro malsukcesis en laborkopio %1"
 
 #: svninternaljobbase.cpp:180
 #, kde-format
@@ -234,7 +234,7 @@ msgstr "Kopiis %1"
 #: svninternaljobbase.cpp:235
 #, kde-format
 msgid "Certificate is not yet valid."
-msgstr ""
+msgstr "Atestilo ankoraŭ ne validas."
 
 #: svninternaljobbase.cpp:239
 #, kde-format
@@ -245,11 +245,12 @@ msgstr "Atestilo malvalidiĝis."
 #, kde-format
 msgid "Certificate's CN (hostname) doesn't match the remote hostname."
 msgstr ""
+"La CN (gastigantonomo) de atestilo ne kongruas kun la fora gastiga nomo."
 
 #: svninternaljobbase.cpp:247
 #, kde-format
 msgid "Certificate authority is unknown."
-msgstr ""
+msgstr "Atestila aŭtoritato estas nekonata."
 
 #: svninternaljobbase.cpp:251
 #, kde-format
@@ -272,90 +273,92 @@ msgid ""
 "Error executing Job:\n"
 "%1"
 msgstr ""
+"Eraro dum rulo de Tasko:\n"
+"%1"
 
 #: svnlogjob.cpp:105
 #, kde-format
 msgid "Subversion Log"
-msgstr ""
+msgstr "Subversion Log"
 
 #: svnlogjob.cpp:120
 #, kde-format
 msgid "Not enough information to log location"
-msgstr ""
+msgstr "Ne sufiĉas informoj por protokoli lokon"
 
 #: svnmovejob.cpp:83
 #, kde-format
 msgid "Subversion Move"
-msgstr ""
+msgstr "Subversion Move"
 
 #: svnmovejob.cpp:95
 #, kde-format
 msgid "Not enough information to move file"
-msgstr ""
+msgstr "Ne sufiĉas informoj por movi dosieron"
 
 #: svnremovejob.cpp:76
 #, kde-format
 msgid "Subversion Remove"
-msgstr ""
+msgstr "Subversion Remove"
 
 #: svnremovejob.cpp:88
 #, kde-format
 msgid "Not enough information to execute remove job"
-msgstr ""
+msgstr "Ne sufiĉas informoj por efektivigi forigon"
 
 #: svnrevertjob.cpp:74
 #, kde-format
 msgid "Subversion Revert"
-msgstr ""
+msgstr "Subversion Revert"
 
 #: svnrevertjob.cpp:86
 #, kde-format
 msgid "Not enough information to execute revert"
-msgstr ""
+msgstr "Ne sufiĉas informoj por efektivigi malfaron"
 
 #: svnssldialog.cpp:28
 #, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate"
-msgstr ""
+msgstr "Atestilo de SSL-Servilo"
 
 #: svnssldialog.cpp:30
 #, kde-format
 msgctxt "@action:button"
 msgid "Trust Permanently"
-msgstr ""
+msgstr "Fidi Porĉiame"
 
 #: svnssldialog.cpp:31
 #, kde-format
 msgctxt "@action:button"
 msgid "Trust Temporarily"
-msgstr ""
+msgstr "Fidi Provizore"
 
 #: svnssldialog.cpp:62
 #, kde-format
 msgctxt "@title:window"
 msgid "SSL Server Certificate: %1"
-msgstr ""
+msgstr "Atestilo de SSL-Servilo: %1"
 
 #: svnstatusjob.cpp:117
 #, kde-format
 msgid "Subversion Status"
-msgstr ""
+msgstr "Subversion Status"
 
 #: svnstatusjob.cpp:131
 #, kde-format
 msgid "Not enough information to execute status job"
-msgstr ""
+msgstr "Ne sufiĉas informoj por plenumi statustaskon"
 
 #: svnupdatejob.cpp:107
 #, kde-format
 msgid "Subversion Update"
-msgstr ""
+msgstr "Subversion Update"
 
 #: svnupdatejob.cpp:120
 #, kde-format
 msgid "Not enough Information to execute update"
-msgstr ""
+msgstr "Ne sufiĉas Informoj por efektivigi ĝisdatigon"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForSrc)
 #: ui/importmetadatawidget.ui:20
@@ -383,7 +386,7 @@ msgstr "Deponejloko:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the repository into which the source directory is imported"
-msgstr ""
+msgstr "Elektu la deponejon, en kiu la fonta dosierujo estas importita"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/importmetadatawidget.ui:57
@@ -399,19 +402,21 @@ msgid ""
 "There were errors validating the server certificate.\n"
 "Do you want to trust this certificate?"
 msgstr ""
+"Estis eraroj validigante la servilatestilon.\n"
+"Ĉu vi volas fidi ĉi tiun atestilon?"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ui/ssltrustdialog.ui:30
 #, kde-format
 msgid "Reasons why the validation failed"
-msgstr ""
+msgstr "Kialoj kial la validumado malsukcesis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ui/ssltrustdialog.ui:52
 #, kde-format
 msgctxt "@title:group"
 msgid "Certificate Information"
-msgstr ""
+msgstr "Atestila Informo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ui/ssltrustdialog.ui:64
@@ -470,10 +475,10 @@ msgstr "validuntil"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Fingerprint:"
-msgstr ""
+msgstr "Fingrospuro:"
 
 #. i18n: ectx: property (text), widget (QLabel, fingerprint)
 #: ui/ssltrustdialog.ui:157
 #, kde-format
 msgid "fingerprint"
-msgstr ""
+msgstr "fingrospuro"

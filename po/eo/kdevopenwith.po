@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevopenwith\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-28 00:56+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,58 +22,58 @@ msgstr ""
 #, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
-msgstr ""
+msgstr "Alia..."
 
 #: openwithplugin.cpp:150
 #, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
-msgstr ""
+msgstr "Malfermi Per"
 
 #: openwithplugin.cpp:155
 #, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
-msgstr ""
+msgstr "Enkonstruitaj Redaktiloj"
 
 #: openwithplugin.cpp:159
 #, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
-msgstr ""
+msgstr "Eksteraj Aplikaĵoj"
 
 #: openwithplugin.cpp:166
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
-msgstr ""
+msgstr "Malfermi"
 
 #: openwithplugin.cpp:186
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
-msgstr ""
+msgstr "Defaŭlta Redaktilo"
 
 #: openwithplugin.cpp:272
 #, kde-format
 msgctxt "%1: mime type name, %2: app/part name"
 msgid "Do you want to open all '%1' files by default with %2?"
-msgstr ""
+msgstr "Ĉu vi volas malfermi ĉiujn '%1' dosierojn defaŭlte kun %2?"
 
 #: openwithplugin.cpp:274
 #, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
-msgstr ""
+msgstr "Ĉu agordita kiel defaŭlta?"
 
 #: openwithplugin.cpp:275
 #, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr ""
+msgstr "Meti kiel Defaŭlto"
 
 #: openwithplugin.cpp:276
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
-msgstr ""
+msgstr "Ne Meti"

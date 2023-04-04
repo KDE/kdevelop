@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevsourceformatter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,27 +22,27 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Source Formatter"
-msgstr ""
+msgstr "Fontformanto"
 
 #: config/projectconfigpage.cpp:49
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Source Formatter"
-msgstr ""
+msgstr "Agordi Fontan Formatilon"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
 #: config/projectconfigpage.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "&Use default"
-msgstr ""
+msgstr "&Uzi defaŭlton"
 
 #. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
 #: config/projectconfigpage.ui:36
 #, kde-format
 msgctxt "@title:group"
 msgid "General"
-msgstr ""
+msgstr "Ĝenerala"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:42
@@ -52,13 +52,15 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without a Kate modeline."
 msgstr ""
+"Anstataŭigi la redaktan deŝovreĝimon laŭ la formatstilo por dokumentoj sen "
+"Kate-modelo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:45
 #, kde-format
 msgctxt "@option:check"
 msgid "Override editor indentation mode"
-msgstr ""
+msgstr "Anstataŭigi redaktilan deŝovreĝimon"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:52
@@ -66,18 +68,18 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr ""
+msgstr "Aldoni Kate-modeline laŭ la formata stilo al formatitaj dokumentoj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:55
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate modeline"
-msgstr ""
+msgstr "Aldoni Kate-modeline"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
 #: config/projectconfigpage.ui:65
 #, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
-msgstr ""
+msgstr "Formataj Stiloj"

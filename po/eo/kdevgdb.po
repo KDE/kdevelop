@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -61,6 +61,12 @@ msgid ""
 "If custom format string is not enabled, names and values of all expressions "
 "will be printed, using \"%d\" as format specifier for all expressions."
 msgstr ""
+"<b>Persona formata ĉeno</b>\n"
+"<p>Specifiu C-stilan formatan ĉenon, kiu estos uzata dum presado de la "
+"elektita esprimo. Ekzemple:\n"
+"<p align=\"center\"> <tt>Spurpunkto 1: g = %d</tt></p>\n"
+"Se propra formatoĉeno ne estas ebligita, nomoj kaj valoroj de ĉiuj esprimoj "
+"estos presita, uzante \"%d\" kiel formatspecifilon por ĉiuj esprimoj."
 
 #. i18n: ectx: property (text), widget (QLabel, expressionsLabel)
 #: debuggertracingdialog.ui:36
@@ -79,6 +85,10 @@ msgid ""
 "expressions and continue execution when breakpoint is hit. You can think of "
 "it as printf debugging that does not require modifying the source.</p>"
 msgstr ""
+"<b>Ebligi spuradon</b>\n"
+"<p>Spurado estas mekanismo por aŭtomate presi valorojn de la elektitaj "
+"esprimoj kaj daŭrigi ruladon kiam paŭzpunkto estas trafita. Vi povas pensi "
+"pri ĝi kiel printf-sencimigado, kiu ne postulas modifadon de la fonto.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, enable)
 #: debuggertracingdialog.ui:50
@@ -100,11 +110,13 @@ msgid ""
 "No environment profile specified, looks like a broken configuration, please "
 "check run configuration '%1'. Using default environment profile."
 msgstr ""
+"Neniu medioprofilo specifita, aspektas kiel rompita agordo, bonvolu kontroli "
+"rulagordon '%1'. Uzante defaŭltan medioprofilon."
 
 #: debugsession.cpp:281
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr ""
+msgstr "<b>Vi bezonas gdb 7.0.0 aŭ pli altan.</b><br />Vi uzas: %1"
 
 #: debugsession.cpp:294
 #, kde-format
@@ -117,6 +129,8 @@ msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 msgstr ""
+"<b>Malsukcesis ŝargi kerna dosiero</b><p>Elĉimilo raportis la jenan eraron:"
+"<p><tt>%1"
 
 #: gdb.cpp:68
 #, kde-format
@@ -135,17 +149,19 @@ msgid ""
 "A program is already being debugged. Do you want to abort the currently "
 "running debug session and continue with the launch?"
 msgstr ""
+"Programo jam estas sencimigita. Ĉu vi volas ĉesigi la nunan funkciantan "
+"sencimigan seancon kaj daŭrigi kun la lanĉo?"
 
 #: gdbconfigpage.cpp:136
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "Ĉesigi Nunan Seancon"
 
 #: gdbconfigpage.cpp:162
 #, kde-format
 msgid "Executes a native application in GDB"
-msgstr ""
+msgstr "Efektivigas denaskan aplikaĵon en GDB"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: gdbconfigpage.ui:29
@@ -179,13 +195,17 @@ msgid ""
 "\"arm-gdb\"), by typing the name here, or specify full path to the gdb "
 "executable."
 msgstr ""
+"Por ruli \"gdb\" plenumeblan de $PATH, lasu ĉi tiun kampon malplena. Por "
+"ruli propran gdb, ekzemple, por malsama arkitekturo, enigu la ruleblan nomon "
+"ĉi tie. Vi povas aŭ lanĉi gdb de $PATH, sed kun malsama nomo (diru, \"arm-gdb"
+"\"), tajpante la nomon ĉi tie, aŭ specifi plenan vojon al la rulebla gdb."
 
 #. i18n: ectx: property (placeholderText), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:54
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr ""
+msgstr "Anstataŭigi vojon al gdb binarprogramo..."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -200,6 +220,12 @@ msgid ""
 "debuggerArguments. So script.sh <span style=\" font-weight:600;\">must</"
 "span> invoke &quot;debugger&quot; executable manually.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Se vi volas ke gdb estu lanĉata per speciala ŝel-"
+"skripto, kiu ekzemple taŭge fiksas la bibliotekan vojon, enigu ĝin ĉi tie "
+"ekz.: /path/to/script.sh -- scriptArguments</p><p>Noto: via skripto estos "
+"alvokita tiel: /path/to/script.sh --scriptArguments debugger --"
+"debuggerArguments. Do script.sh <span style=\" font-weight:600;\">devas</"
+"span> alvoki &quot;debugger&quot; ruleblan permane.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, debuggingShell_label)
 #: gdbconfigpage.ui:64
@@ -234,6 +260,12 @@ msgid ""
 "but if you need to debug into these values then\n"
 "check this option."
 msgstr ""
+"Montri senmovajn membrojn malrapidigas GDB en\n"
+"produktado de datumoj kun Qt-bazita kodo.\n"
+"Ĝi povas ŝanĝi la \"signaturon\" de la datumoj\n"
+"kiujn QString kaj amikoj fidas,\n"
+"sed se vi bezonas sencimigi ĉi tiujn valorojn tiam\n"
+"kontrolu ĉi tiu opcio."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: gdbconfigpage.ui:121
@@ -251,6 +283,9 @@ msgid ""
 "can select to see the methods' mangled names.\n"
 "However, non-mangled names are easier to read."
 msgstr ""
+"Kiam vi montras la malmuntitan kodon, vi\n"
+"povas elekti por vidi la disrompitajn nomojn de la metodoj.\n"
+"Tamen, ne-mangle nomoj estas pli facile legeblaj."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: gdbconfigpage.ui:143
@@ -291,6 +326,11 @@ msgid ""
 "\ttarget remote ...\tconnect to the remote debugger\n"
 "\tcontinue\t[optional] run debugging to the first breakpoint"
 msgstr ""
+"Ĉi tiu skripto estas destinita al la realaj komandoj bezonataj por konektiĝi "
+"al malproksime ruliĝanta rulebla.\n"
+"\tŝela dormo 5\tatendu ke fora programo komenciĝu\n"
+"\tcelilo fora ...\tkonekti al la fora erarserĉilo\n"
+"\tdaŭrigu\t [laŭvola] ruli sencimigon al la unua paŭzpunkto"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
@@ -313,6 +353,13 @@ msgid ""
 "contains the gdb stub:</p><p>2b) Execute &quot;application&quot; on target.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skripto por lanĉi foran aplikaĵon</p><p></p><p>Ĉi tiu "
+"ŝela skripto estas rulita post kiam la skripto Gdb Config estis akirita de "
+"gdb.</ p><p>Ĝi celo estas efektive komenci la foran procezon.</p><p>1) Trovu "
+"manieron efektivigi komandon malproksime - rsh, ssh, telnet, ...</p><p>2a ) "
+"Efektivigu \"gdbserver ... aplikaĵo\" ĉe celo.</p><p>aŭ se via ruleblaĵo "
+"enhavas la gdb-stumpon:</p><p>2b) Lanĉu \"aplikaĵo\" ĉe la celo.</p></p> "
+"korpo></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runShellScript_label)
 #: gdbconfigpage.ui:190
@@ -327,7 +374,7 @@ msgstr "R&uligi ŝelskripton:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This script is sourced by gdb when the debugging starts."
-msgstr ""
+msgstr "Ĉi tiu skripto estas fontita de gdb kiam la senararigado komenciĝas."
 
 #. i18n: ectx: property (text), widget (QLabel, configGdbScript_label)
 #: gdbconfigpage.ui:213
@@ -347,6 +394,10 @@ msgid ""
 "\ttarget remote ...\t#connect to the remote debugger</p><p>\tcontinue"
 "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Skripto por konekti kun fora aplikaĵo</p><p>Ekzemple:</"
+"p><p>\tshell dormo 5\t #atendu la foran programon komenci</p><p>\tcelfora ..."
+"\t#konekti al la fora erarserĉilo</p><p>\tdaŭrigi\t#[laŭvola] ruli "
+"sencimigon al la unua paŭzpunkto.</p></body> </html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
@@ -368,6 +419,8 @@ msgid ""
 "<b>GDB output</b><p>Shows all GDB commands being executed. You can also "
 "issue any other GDB command while debugging.</p>"
 msgstr ""
+"<b>GDB-eligo</b><p>Montras ĉiujn GDB-komandojn efektivigitajn. Vi ankaŭ "
+"povas elsendi ajnan alian GDB-komandon dum senararigado.</p>"
 
 #: gdboutputwidget.cpp:58
 #, kde-format
@@ -379,7 +432,7 @@ msgstr "&GDB komando:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pause execution of the app to enter GDB commands"
-msgstr ""
+msgstr "Paŭzi la ruladon de la aplikaĵo por enigi GDB-komandojn"
 
 #: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
 #, kde-format
@@ -395,6 +448,9 @@ msgid ""
 "<br>This option will affect only future commands, it will not add or remove "
 "already issued commands from the view."
 msgstr ""
+"Kontrolas ĉu ordonoj eldonitaj interne de KDevelop estos montritaj aŭ ne."
+"<br>Ĉi tiu opcio influos nur estontajn komandojn, ĝi ne aldonos aŭ forigos "
+"jam eldonitajn komandojn de la vido."
 
 #: gdboutputwidget.cpp:381
 #, kde-format

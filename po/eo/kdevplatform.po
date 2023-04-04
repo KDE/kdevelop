@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -33,25 +33,25 @@ msgstr "axel@esperanto-jeunes.org, okellogg@users.sourceforge.net"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Error"
-msgstr ""
+msgstr "Eraro"
 
 #: debugger/breakpoint/breakpoint.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
-msgstr ""
+msgstr "Malpura"
 
 #: debugger/breakpoint/breakpoint.cpp:152
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pending"
-msgstr ""
+msgstr "Decidota"
 
 #: debugger/breakpoint/breakpoint.cpp:154
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr ""
+msgstr "Pura"
 
 #: debugger/breakpoint/breakpoint.cpp:186
 #, kde-format
@@ -63,7 +63,7 @@ msgstr "%1 (%2)"
 #: debugger/breakpoint/breakpointdetails.cpp:127
 #, kde-format
 msgid "Not hit yet"
-msgstr ""
+msgstr "Ankoraŭ ne trafita"
 
 #: debugger/breakpoint/breakpointdetails.cpp:52
 #, kde-format
@@ -73,22 +73,22 @@ msgstr "Ignori"
 #: debugger/breakpoint/breakpointdetails.cpp:60
 #, kde-format
 msgid "next hits"
-msgstr ""
+msgstr "sekvaj trafoj"
 
 #: debugger/breakpoint/breakpointdetails.cpp:112
 #, kde-format
 msgid "Breakpoint is <a href=\"pending\">pending</a>"
-msgstr ""
+msgstr "Paŭzpunkto estas <a href=\"pending\">pritraktota</a>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:115
 #, kde-format
 msgid "Breakpoint is <a href=\"dirty\">dirty</a>"
-msgstr ""
+msgstr "Paŭzpunkto estas <a href=\"dirty\">malpura</a>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:118
 #, kde-format
 msgid "Breakpoint is active"
-msgstr ""
+msgstr "Paŭzpunkto estas aktiva"
 
 #: debugger/breakpoint/breakpointdetails.cpp:125
 #, kde-format
@@ -100,7 +100,7 @@ msgstr[1] ""
 #: debugger/breakpoint/breakpointdetails.cpp:129
 #, kde-format
 msgid "Breakpoint has errors"
-msgstr ""
+msgstr "Paŭzpunkto havas erarojn"
 
 #: debugger/breakpoint/breakpointdetails.cpp:142
 #, kde-format
@@ -111,6 +111,11 @@ msgid ""
 "common case is a breakpoint in a shared library: GDB will insert this "
 "breakpoint only when the library is loaded.</p>"
 msgstr ""
+"<b>Paŭzopunkto estas pritraktata</b><p>Atendeblaj paŭzpunktoj estas tiuj "
+"kiuj estis pasitaj al GDB, sed kiuj ankoraŭ ne estas instalitaj en la celo, "
+"ĉar GDB ne povas trovi la funkcion aŭ dosieron al kiu la paŭzpunkto rilatas. "
+"La plej ofta kazo estas paŭzpunkto en komuna biblioteko: GDB enigos ĉi tiun "
+"paŭzpunkton nur kiam la biblioteko estas ŝargita.</p>"
 
 #: debugger/breakpoint/breakpointdetails.cpp:155
 #, kde-format
@@ -118,6 +123,8 @@ msgid ""
 "<b>Breakpoint is dirty</b><p>The breakpoint has not yet been passed to the "
 "debugger.</p>"
 msgstr ""
+"<b>La paŭzpunkto estas malpura</b><p>La paŭzpunkto ankoraŭ ne estas "
+"transdonita al la erarseĉilo.</p>"
 
 #: debugger/breakpoint/breakpointmodel.cpp:114
 #, kde-format
@@ -132,7 +139,7 @@ msgstr "Haltopunkto ne trovata"
 #: debugger/breakpoint/breakpointmodel.cpp:156
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
-msgstr ""
+msgstr "Ne eblis trovi paŭzpunkton ĉe %1:%2"
 
 #: debugger/breakpoint/breakpointmodel.cpp:162
 #, kde-format
@@ -195,6 +202,9 @@ msgid ""
 "breakpoint item allows you to change the breakpoint and will take you to the "
 "source in the editor window."
 msgstr ""
+"Montras liston de paŭzpunktoj kun ilia nuna stato. Klako sur paŭzpunkto "
+"ebligas vin ŝanĝi la paŭzpunkton kaj kondukos vin al la fonto en la "
+"redaktila fenestro."
 
 #: debugger/breakpoint/breakpointwidget.cpp:75
 #, kde-format
@@ -304,38 +314,42 @@ msgid ""
 "get to this point in your program. By clicking on an item you can see the "
 "values in any of the previous calling functions."
 msgstr ""
+"<b>Kadra stako</b>Ofte nomata \"voka stako\", ĉi tio estas listo montranta "
+"kiu funkcio estas nuntempe aktiva, kaj kio vokis ĉiun funkcion por atingi ĉi "
+"tiun punkton en via programo. Alklakante eron vi povas vidi la valorojn en "
+"iu ajn el la antaŭaj alvokaj funkcioj."
 
 #: debugger/framestack/framestackwidget.cpp:102
 #, kde-format
 msgid "Threads:"
-msgstr ""
+msgstr "Fadenoj:"
 
 #: debugger/framestack/framestackwidget.cpp:223
 #, kde-format
 msgctxt "#frame function() at file"
 msgid "#%1 %2() at %3\n"
-msgstr ""
+msgstr "#%1 %2() ĉe %3\n"
 
 #: debugger/framestack/framestackwidget.cpp:226
 #, kde-format
 msgctxt "#frame function() at file:line"
 msgid "#%1 %2() at %3:%4\n"
-msgstr ""
+msgstr "#%1 %2() ĉe %3:%4\n"
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:74
 #, kde-format
 msgid "Breakpoint hit: %1"
-msgstr ""
+msgstr "Trafo de rompo: %1"
 
 #: debugger/interfaces/ibreakpointcontroller.cpp:81
 #, kde-format
 msgid "Watchpoint hit: %1"
-msgstr ""
+msgstr "Gvatopunkto trafo: %1"
 
 #: debugger/util/pathmappings.cpp:86
 #, kde-format
 msgid "Remote Path"
-msgstr ""
+msgstr "Fora Vojo"
 
 #: debugger/util/pathmappings.cpp:88
 #, kde-format
@@ -351,12 +365,12 @@ msgstr "Forigi"
 #: language/duchain/problem.cpp:190 shell/filteredproblemstore.cpp:155
 #, kde-format
 msgid "Error"
-msgstr ""
+msgstr "Eraro"
 
 #: debugger/variable/variablecollection.cpp:233
 #, kde-format
 msgid "Auto"
-msgstr ""
+msgstr "Aŭtomate"
 
 #. i18n: ectx: property (text), widget (QLabel, configName)
 #: debugger/variable/variablecollection.cpp:408
@@ -396,7 +410,7 @@ msgstr "Sencimigilaj variabloj"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Aŭtomate regrandigi kolumnojn alklakante"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -410,11 +424,19 @@ msgid ""
 "descriptive names by clicking on the name column.<br />To change the value "
 "of a variable or an expression, click on the value.<br />"
 msgstr ""
+"<b>Arbo de variablo</b>La arbo de variablo ebligas al vi vidi la valorojn de "
+"lokaj variabloj kaj arbitraj esprimoj.<br />Lokaj variabloj estas montrataj "
+"aŭtomate kaj estas ĝisdatigitaj dum vi trapasas vian programon. Por ĉiu "
+"esprimo, kiun vi enigas, vi povas aŭ taksi ĝin unufoje, aŭ \"spekti\" ĝin "
+"(igi ĝin aŭtomate ĝisdatigita). Esprimoj kiuj ne estas aŭtomate ĝisdatigitaj "
+"povas esti ĝisdatigitaj permane de la kunteksta menuo. Esprimoj povas esti "
+"renomitaj al pli priskribaj nomoj klakante sur la nomkolumno.<br />Por ŝanĝi "
+"la valoron de variablo aŭ esprimo, alklaku la valoron.<br />"
 
 #: debugger/variable/variablewidget.cpp:130
 #, kde-format
 msgid "<b>Expression entry</b>Type in expression to watch."
-msgstr ""
+msgstr "<b>Esprimo enskribo</b>Tajpu esprimon por spekti."
 
 #: debugger/variable/variablewidget.cpp:207
 #, kde-format
@@ -459,7 +481,7 @@ msgstr "&Kopii valoron"
 #: debugger/variable/variablewidget.cpp:259
 #, kde-format
 msgid "&Stop on Change"
-msgstr ""
+msgstr "&Halti ĉe Ŝanĝo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: documentation/documentationfindwidget.ui:43
@@ -473,21 +495,21 @@ msgstr "Trovi:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to next match"
-msgstr ""
+msgstr "Salti al la sekva kongruo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, previousButton)
 #: documentation/documentationfindwidget.ui:71
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Jump to previous match"
-msgstr ""
+msgstr "Salti al antaŭa kongruo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, matchCase)
 #: documentation/documentationfindwidget.ui:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Match case sensitive"
-msgstr ""
+msgstr "Kongrua distinga majuskloj"
 
 #: documentation/documentationview.cpp:38
 #: shell/settings/documentationpreferences.cpp:25
@@ -531,7 +553,7 @@ msgstr "Trovi en Teksto..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Find in text of current documentation page"
-msgstr ""
+msgstr "Trovi en teksto de nuna dokumentarpaĝo"
 
 #: interfaces/contextmenuextension.cpp:133
 #, kde-format
@@ -563,6 +585,9 @@ msgid ""
 "The executable %1 cannot be found. Please make sure it is installed and can "
 "be executed. <br />The plugin will not work until you fix this problem."
 msgstr ""
+"La rulebla %1 ne troveblas. Bonvolu certigi, ke ĝi estas instalita kaj povas "
+"esti efektivigita. <br />La kromaĵo ne funkcios ĝis vi riparos ĉi tiun "
+"problemon."
 
 #: language/assistant/renameaction.cpp:69
 #, kde-format
@@ -576,7 +601,7 @@ msgstr "Alinomi \"%1\" al \"%2\""
 #: language/codegen/basicrefactoring.cpp:365
 #, kde-format
 msgid "Failed to apply changes: %1"
-msgstr ""
+msgstr "Malsukcesis apliki ŝanĝojn: %1"
 
 #: language/assistant/renameassistant.cpp:106
 #, kde-format
@@ -586,7 +611,7 @@ msgstr "Alinomi"
 #: language/assistant/renamefileaction.cpp:50
 #, kde-format
 msgid "Rename file from \"%1\" to \"%2\"."
-msgstr ""
+msgstr "Alinomi dosieron de \"%1\" al \"%2\"."
 
 #: language/backgroundparser/backgroundparser.cpp:305
 #, kde-format
@@ -603,33 +628,33 @@ msgstr "Enfona Parsilo"
 #, kde-format
 msgctxt "%1: filename"
 msgid "Skipped file that is too large: '%1'"
-msgstr ""
+msgstr "Preterpasita dosiero, kiu estas tro granda: '%1'"
 
 #: language/backgroundparser/parsejob.cpp:315
 #, kde-format
 msgctxt "%1: file size, %2: limit file size"
 msgid "The file is %1 and exceeds the limit of %2."
-msgstr ""
+msgstr "La dosiero estas %1 kaj superas la limon de %2."
 
 #: language/backgroundparser/parsejob.cpp:327
 #, kde-format
 msgid "Could not open file '%1'"
-msgstr ""
+msgstr "Ne eblis malfermi dosieron '%1'"
 
 #: language/backgroundparser/parsejob.cpp:330
 #, kde-format
 msgid "File could not be read from disk."
-msgstr ""
+msgstr "Dosiero ne legeblas el disko."
 
 #: language/backgroundparser/parsejob.cpp:333
 #, kde-format
 msgid "File could not be opened."
-msgstr ""
+msgstr "Dosiero ne povis esti malfermita."
 
 #: language/backgroundparser/parsejob.cpp:336
 #, kde-format
 msgid "File could not be read from disk due to permissions."
-msgstr ""
+msgstr "Dosiero ne eblis legi el disko pro permesoj."
 
 #: language/backgroundparser/parseprojectjob.cpp:74
 #, kde-format
@@ -641,17 +666,17 @@ msgstr[1] ""
 #: language/classmodel/allclassesfolder.cpp:22
 #, kde-format
 msgid "All projects classes"
-msgstr ""
+msgstr "Ĉiuj projektoj klasoj"
 
 #: language/classmodel/classmodelnode.cpp:343
 #, kde-format
 msgid "Base classes"
-msgstr ""
+msgstr "Bazaj klasoj"
 
 #: language/classmodel/classmodelnode.cpp:374
 #, kde-format
 msgid "Derived classes"
-msgstr ""
+msgstr "Derivaj klasoj"
 
 #: language/classmodel/projectfolder.cpp:18
 #, kde-format
@@ -661,7 +686,7 @@ msgstr "Klasoj en projekto %1"
 #: language/codecompletion/codecompletionitem.cpp:126
 #, kde-format
 msgid "not implemented"
-msgstr ""
+msgstr "ne efektivigita"
 
 #: language/codegen/basicrefactoring.cpp:90
 #, kde-format
@@ -672,12 +697,12 @@ msgstr "Alinomi \"%1\"..."
 #: language/codegen/basicrefactoring.cpp:220
 #, kde-format
 msgid "No declaration under cursor"
-msgstr ""
+msgstr "Neniu deklaro sub kursoro"
 
 #: language/codegen/basicrefactoring.cpp:226
 #, kde-format
 msgid "Declaration is located in non-writable file %1."
-msgstr ""
+msgstr "Deklaro troviĝas en ne-skribebla dosiero %1."
 
 #: language/codegen/basicrefactoring.cpp:295
 #, kde-format
@@ -700,7 +725,7 @@ msgstr "Deklarinformoj"
 #: language/codegen/basicrefactoring.cpp:308
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\""
-msgstr ""
+msgstr "Alinomante \"%1\" al \"%2\""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: language/codegen/basicrefactoring.ui:14
@@ -723,6 +748,8 @@ msgid ""
 "<html><head/><body><p>&quot;Note: All overloaded functions, overloads, "
 "forward-declarations, etc. will be renamed too&quot;</p></body></html>"
 msgstr ""
+"<html><head/><body><p>&quot;Noto: Ĉiuj troŝarĝitaj funkcioj, troŝarĝoj, "
+"antaŭen-deklaroj ktp ankaŭ estos renomitaj&quot;</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, goButton)
 #: language/codegen/basicrefactoring.ui:38
@@ -741,32 +768,32 @@ msgstr "&Rezigni"
 #: language/codegen/codegenerator.cpp:133
 #, kde-format
 msgid "Could not find an open document"
-msgstr ""
+msgstr "Ne eblis trovi malfermitan dokumenton"
 
 #: language/codegen/codegenerator.cpp:150
 #, kde-format
 msgid "Could not find the chain for the selected document: %1"
-msgstr ""
+msgstr "Ne eblis trovi la ĉenon por la elektita dokumento: %1"
 
 #: language/codegen/codegenerator.cpp:167
 #, kde-format
 msgid "Error finding context for selection range"
-msgstr ""
+msgstr "Eraro trovi kuntekston por elekta intervalo"
 
 #: language/codegen/codegenerator.cpp:172
 #, kde-format
 msgid "Error checking conditions to generate code: %1"
-msgstr ""
+msgstr "Eraro kontrolante kondiĉojn por generi kodon: %1"
 
 #: language/codegen/codegenerator.cpp:179
 #, kde-format
 msgid "Error Gathering user information: %1"
-msgstr ""
+msgstr "Eraro dum kolektado de uzantinformoj: %1"
 
 #: language/codegen/codegenerator.cpp:186
 #, kde-format
 msgid "Error generating code: %1"
-msgstr ""
+msgstr "Eraro dum generado de kodo: %1"
 
 #: language/codegen/documentchangeset.cpp:112
 #, kde-format
@@ -777,7 +804,7 @@ msgstr "%1:%2->%3:%4"
 #: language/codegen/documentchangeset.cpp:252
 #, kde-format
 msgid "Could not rename '%1' to '%2'"
-msgstr ""
+msgstr "Ne eblis renomi '%1' al '%2'"
 
 #: language/codegen/documentchangeset.cpp:342
 #, kde-format
@@ -787,11 +814,12 @@ msgctxt ""
 msgid ""
 "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
 msgstr ""
+"Malkonsekvenca ŝanĝo en %1 inter %2, trovita %3 (renkontita \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:363
 #, kde-format
 msgid "Could not replace text in the document: %1"
-msgstr ""
+msgstr "Ne eblis anstataŭigi tekston en la dokumento: %1"
 
 #: language/codegen/documentchangeset.cpp:467
 #, kde-format
@@ -799,7 +827,7 @@ msgctxt ""
 "Inconsistent change in <document> at <range> = <oldText> (encountered "
 "<encountered>) -> <newText>"
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
-msgstr ""
+msgstr "Malkonsekvenca ŝanĝo en %1 ĉe %2 = \"%3\"(renkontita \"%4\") -> \"%5\""
 
 #: language/codegen/documentchangeset.cpp:539
 #, kde-format
@@ -811,6 +839,8 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
+"Nekonsekvenca ŝanĝpeto ĉe %1; intersekcantaj ŝanĝoj: \"%2\"->\"%3\"@%4 & "
+"\"%5\"->\"%6\"@%7"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
@@ -839,27 +869,27 @@ msgstr "Perdita kromnomo %1"
 #: language/duchain/classfunctiondeclaration.cpp:94
 #, kde-format
 msgid "invalid member-function %1 type %2"
-msgstr ""
+msgstr "nevalida membrofunkcio %1 tipo %2"
 
 #: language/duchain/declarationid.cpp:204
 #, kde-format
 msgid "(unknown direct declaration)"
-msgstr ""
+msgstr "(nekonata rekta deklaro)"
 
 #: language/duchain/declarationid.cpp:207
 #, kde-format
 msgid "(missing)"
-msgstr ""
+msgstr "(mankas)"
 
 #: language/duchain/forwarddeclaration.cpp:50
 #, kde-format
 msgid "context-free forward-declaration %1"
-msgstr ""
+msgstr "senkunteksta antaŭen-deklaro %1"
 
 #: language/duchain/namespacealiasdeclaration.cpp:94
 #, kde-format
 msgid "Import %1 as %2"
-msgstr ""
+msgstr "Importi %1 kiel %2"
 
 #: language/duchain/namespacealiasdeclaration.cpp:96
 #, kde-format
@@ -904,27 +934,27 @@ msgstr ") "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
 #, kde-format
 msgid "(unresolved forward-declaration) "
-msgstr ""
+msgstr "(nesolvita antaŭen-deklaro)"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
 #, kde-format
 msgid "possible resolution from"
-msgstr ""
+msgstr "ebla rezolucio de"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:205
 #, kde-format
 msgid "Returns: "
-msgstr ""
+msgstr "Revenoj:"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:207
 #, kde-format
 msgid "Type: "
-msgstr ""
+msgstr "Tipo:"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:226
 #, kde-format
 msgid "Enum: "
-msgstr ""
+msgstr "Enumo:"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:228
 #, kde-format
@@ -934,27 +964,27 @@ msgstr "Ujo:"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:236
 #, kde-format
 msgid "Scope: %1 "
-msgstr ""
+msgstr "Amplekso: %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:254
 #, kde-format
 msgid "Access: %1 "
-msgstr ""
+msgstr "Aliro: %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:273
 #, kde-format
 msgid "Kind: %1 %2 "
-msgstr ""
+msgstr "Speco: %1 %2"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:275
 #, kde-format
 msgid "Kind: %1 "
-msgstr ""
+msgstr "Speco: %1"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
 #, kde-format
 msgid "Deprecated"
-msgstr ""
+msgstr "Malrekomendita"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:279
 #, kde-format
@@ -995,65 +1025,65 @@ msgstr "Montri dokumentaron por "
 #, kde-format
 msgctxt "An anonymous declaration (class, function, etc.)"
 msgid "<anonymous>"
-msgstr ""
+msgstr "<anonima>"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:480
 #, kde-format
 msgid "Overrides a "
-msgstr ""
+msgstr "Anstataŭigas a"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:481
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:508
 #, kde-format
 msgid "function"
-msgstr ""
+msgstr "funkcio"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:483
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:511
 #, kde-format
 msgid " from "
-msgstr ""
+msgstr "de"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:507
 #, kde-format
 msgid "Hides a "
-msgstr ""
+msgstr "Kaŝas a"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:531
 #, kde-format
 msgid "Overridden in "
-msgstr ""
+msgstr "Forigita en"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
 #, kde-format
 msgid "Overriders possible, show all"
-msgstr ""
+msgstr "Eblas superregantoj, montri ĉion"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
 #, kde-format
 msgid "More overriders possible, show all"
-msgstr ""
+msgstr "Pli da superregantoj eblas, montri ĉiujn"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
 #, kde-format
 msgid "Inherited by "
-msgstr ""
+msgstr "Heredita de"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
 #, kde-format
 msgid "Inheriters possible, show all"
-msgstr ""
+msgstr "Eblaj heredantoj, montri ĉiujn"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:575
 #, kde-format
 msgid "More inheriters possible, show all"
-msgstr ""
+msgstr "Pli da heredantoj eblas, montri ĉion"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:782
 #, kde-format
 msgctxt "A declaration that is unknown"
 msgid "Unknown"
-msgstr ""
+msgstr "Nekonata"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:808
 #, kde-format
@@ -1071,7 +1101,7 @@ msgstr "anonca"
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
-msgstr ""
+msgstr "konstanta"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:871
 #, kde-format
@@ -1106,7 +1136,7 @@ msgstr "grando: %1 bajtoj"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "vicigita al: %1 bajtoj"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
@@ -1122,18 +1152,18 @@ msgstr "ankoraŭ ne parsita"
 #, kde-format
 msgctxt "Files included into this file"
 msgid "Includes"
-msgstr ""
+msgstr "Inkluzivas"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
 #, kde-format
 msgctxt "Count of files this file was included into"
 msgid "Included by"
-msgstr ""
+msgstr "Inkluzivita de"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:502
 #, kde-format
 msgid "Typedef"
-msgstr ""
+msgstr "Typedef"
 
 #: language/duchain/navigation/abstractnavigationcontext.cpp:505
 #, kde-format
@@ -1171,21 +1201,23 @@ msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
+"(Prenu <em>Alt</em> por montri. Navigu per sagoklavoj, aktivigu premante "
+"<em>Enter</em>)"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:196
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
-msgstr ""
+msgstr "(Prenu <em>Alt</em> por montri ĉi tiun konsileton)"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:85
 #, kde-format
 msgid "Problem"
-msgstr ""
+msgstr "Problemo"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:114
 #, kde-format
 msgid "Problem in <i>%1</i>"
-msgstr ""
+msgstr "Problemo en <i>%1</i>"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:118
 #, kde-format
@@ -1211,17 +1243,17 @@ msgstr "Solvo %1"
 #: language/duchain/navigation/usescollector.cpp:414
 #, kde-format
 msgid "%1 still needs an update!"
-msgstr ""
+msgstr "%1 ankoraŭ bezonas ĝisdatigon!"
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:41
 #, kde-format
 msgid "Uses of "
-msgstr ""
+msgstr "Uzoj de"
 
 #: language/duchain/navigation/usesnavigationcontext.cpp:46
 #, kde-format
 msgid "Uses of %1"
-msgstr ""
+msgstr "Uzoj de %1"
 
 #: language/duchain/navigation/useswidget.cpp:129
 #, kde-format
@@ -1276,13 +1308,13 @@ msgstr[1] ""
 #, kde-format
 msgctxt "Refers to closing a UI element"
 msgid "Collapse"
-msgstr ""
+msgstr "Kolapso"
 
 #: language/duchain/navigation/useswidget.cpp:540
 #, kde-format
 msgctxt "Refers to opening a UI element"
 msgid "Expand"
-msgstr ""
+msgstr "Vastigi"
 
 #: language/duchain/navigation/useswidget.cpp:625
 #, kde-format
@@ -1294,57 +1326,57 @@ msgstr[1] ""
 #: language/duchain/navigation/useswidget.cpp:627
 #, kde-format
 msgid "Expand all"
-msgstr ""
+msgstr "Plivastigi ĉion"
 
 #: language/duchain/navigation/useswidget.cpp:629
 #, kde-format
 msgid "Collapse all"
-msgstr ""
+msgstr "Malvistigi ĉion"
 
 #: language/duchain/problem.cpp:192 shell/filteredproblemstore.cpp:156
 #, kde-format
 msgid "Warning"
-msgstr ""
+msgstr "Averto"
 
 #: language/duchain/problem.cpp:194 shell/filteredproblemstore.cpp:157
 #, kde-format
 msgid "Hint"
-msgstr ""
+msgstr "Sugesto"
 
 #: language/duchain/problem.cpp:203 shell/problem.cpp:76
 #, kde-format
 msgid "Disk"
-msgstr ""
+msgstr "Disko"
 
 #: language/duchain/problem.cpp:205 shell/problem.cpp:77
 #, kde-format
 msgid "Preprocessor"
-msgstr ""
+msgstr "Antaŭprocesoro"
 
 #: language/duchain/problem.cpp:207 shell/problem.cpp:78
 #, kde-format
 msgid "Lexer"
-msgstr ""
+msgstr "Lexer"
 
 #: language/duchain/problem.cpp:209 shell/problem.cpp:79
 #, kde-format
 msgid "Parser"
-msgstr ""
+msgstr "Analizilo"
 
 #: language/duchain/problem.cpp:211
 #, kde-format
 msgid "Definition-Use Chain"
-msgstr ""
+msgstr "Difino-Uzo Ĉeno"
 
 #: language/duchain/problem.cpp:213 shell/problem.cpp:81
 #, kde-format
 msgid "Semantic analysis"
-msgstr ""
+msgstr "Semantika analizo"
 
 #: language/duchain/problem.cpp:215
 #, kde-format
 msgid "To-do"
-msgstr ""
+msgstr "Farenda"
 
 #: language/duchain/problem.cpp:218 shell/problem.cpp:75
 #, kde-format
@@ -1386,86 +1418,88 @@ msgid ""
 "files or - to read from STDIN, the latter is the default if nothing is "
 "provided"
 msgstr ""
+"dosierojn aŭ - por legi de STDIN, ĉi-lasta estas la defaŭlta se nenio estas "
+"provizita"
 
 #: language/util/debuglanguageparserhelper.h:186
 #, kde-format
 msgid "print generated AST tree"
-msgstr ""
+msgstr "presi generitan AST-arbon"
 
 #: language/util/debuglanguageparserhelper.h:187
 #, kde-format
 msgid "print generated token stream"
-msgstr ""
+msgstr "presi generitan tokenfluon"
 
 #: language/util/debuglanguageparserhelper.h:188
 #, kde-format
 msgid "code to parse"
-msgstr ""
+msgstr "kodo por analizi"
 
 #: outputview/outputexecutejob.cpp:194
 #, kde-format
 msgid "No build directory specified for a builder job."
-msgstr ""
+msgstr "Neniu konstrua dosierujo specifita por konstrutasko."
 
 #: outputview/outputexecutejob.cpp:196
 #, kde-format
 msgid "No working directory specified for a process."
-msgstr ""
+msgstr "Neniu labordosierujo specifita por procezo."
 
 #: outputview/outputexecutejob.cpp:208
 #, kde-format
 msgid "Invalid build directory '%1'"
-msgstr ""
+msgstr "Nevalida konstrua dosierujo '%1'"
 
 #: outputview/outputexecutejob.cpp:210
 #, kde-format
 msgid "Invalid working directory '%1'"
-msgstr ""
+msgstr "Nevalida labordosierujo '%1'"
 
 #: outputview/outputexecutejob.cpp:217
 #, kde-format
 msgid "Build directory '%1' is not a local path"
-msgstr ""
+msgstr "Konstrua dosierujo '%1' ne estas loka vojo"
 
 #: outputview/outputexecutejob.cpp:219
 #, kde-format
 msgid "Working directory '%1' is not a local path"
-msgstr ""
+msgstr "Labordosierujo '%1' ne estas loka vojo"
 
 #: outputview/outputexecutejob.cpp:238
 #, kde-format
 msgid "Build directory '%1' does not exist or is not a directory"
-msgstr ""
+msgstr "Konstrua dosierujo '%1' ne ekzistas aŭ ne estas dosierujo"
 
 #: outputview/outputexecutejob.cpp:240
 #, kde-format
 msgid "Working directory '%1' does not exist or is not a directory"
-msgstr ""
+msgstr "Labora dosierujo '%1' ne ekzistas aŭ ne estas dosierujo"
 
 #: outputview/outputexecutejob.cpp:301
 #, kde-format
 msgid "Failed to specify program to start: %1"
-msgstr ""
+msgstr "Malsukcesis specifi programon por komenci: %1"
 
 #: outputview/outputexecutejob.cpp:302
 #, kde-format
 msgid "*** %1 ***"
-msgstr ""
+msgstr "*** %1 ***"
 
 #: outputview/outputexecutejob.cpp:328
 #, kde-format
 msgid "*** Killed process ***"
-msgstr ""
+msgstr "*** Mortigita procezo ***"
 
 #: outputview/outputexecutejob.cpp:332
 #, kde-format
 msgid "*** Warning: could not kill the process ***"
-msgstr ""
+msgstr "*** Averto: ne povis mortigi la procezon ***"
 
 #: outputview/outputexecutejob.cpp:354
 #, kde-format
 msgid "%1 has failed to start"
-msgstr ""
+msgstr "%1 malsukcesis komenci"
 
 #: outputview/outputexecutejob.cpp:358
 #, kde-format
@@ -1475,32 +1509,32 @@ msgstr "%1 paneis"
 #: outputview/outputexecutejob.cpp:362
 #, kde-format
 msgid "Read error"
-msgstr ""
+msgstr "Leg-eraro"
 
 #: outputview/outputexecutejob.cpp:366
 #, kde-format
 msgid "Write error"
-msgstr ""
+msgstr "Skriberaro"
 
 #: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
-msgstr ""
+msgstr "Atendado de la procezo finiĝis"
 
 #: outputview/outputexecutejob.cpp:374
 #, kde-format
 msgid "Exit code %1"
-msgstr ""
+msgstr "Elirkodo %1"
 
 #: outputview/outputexecutejob.cpp:387
 #, kde-format
 msgid "*** Failure: %1 ***"
-msgstr ""
+msgstr "*** Fiasko: %1 ***"
 
 #: outputview/outputexecutejob.cpp:405
 #, kde-format
 msgid "*** Finished ***"
-msgstr ""
+msgstr "*** Finita ***"
 
 #: project/abstractfilemanagerplugin.cpp:325
 #, kde-format
@@ -1509,12 +1543,15 @@ msgid ""
 "KDevelop.\n"
 "The project has to be closed."
 msgstr ""
+"La baza dosierujo de projekto <b>%1</b> estis forigita aŭ movita ekster "
+"KDevelop.\n"
+"La projekto devas esti fermita."
 
 #: project/abstractfilemanagerplugin.cpp:328
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Folder Deleted"
-msgstr ""
+msgstr "Projekta Dosierujo Forigita"
 
 #: project/abstractfilemanagerplugin.cpp:354
 #, kde-format
@@ -1523,6 +1560,9 @@ msgid ""
 "hidden.\n"
 "Do you want to continue?"
 msgstr ""
+"Vi provis renomi '%1' al '%2', sed ĉi-lasta estas filtrita kaj estos "
+"kaŝita.\n"
+"Ĉu vi volas daŭrigi?"
 
 #: project/builderjob.cpp:76
 #, kde-format
@@ -1563,27 +1603,27 @@ msgstr "Diversaj eroj"
 #: project/helper.cpp:67
 #, kde-format
 msgid "Cannot remove folder <i>%1</i>."
-msgstr ""
+msgstr "Ne povas forigi dosierujon <i>%1</i>."
 
 #: project/helper.cpp:68
 #, kde-format
 msgid "Cannot remove file <i>%1</i>."
-msgstr ""
+msgstr "Ne povas forigi dosieron <i>%1</i>."
 
 #: project/helper.cpp:86
 #, kde-format
 msgid "The file <i>%1</i> already exists."
-msgstr ""
+msgstr "La dosiero <i>%1</i> jam ekzistas."
 
 #: project/helper.cpp:96
 #, kde-format
 msgid "Cannot create file <i>%1</i>."
-msgstr ""
+msgstr "Ne povas krei dosieron <i>%1</i>."
 
 #: project/helper.cpp:115
 #, kde-format
 msgid "Cannot create folder <i>%1</i>."
-msgstr ""
+msgstr "Ne povas krei dosierujon <i>%1</i>."
 
 #: project/importprojectjob.cpp:53
 #, kde-format
@@ -1593,7 +1633,7 @@ msgstr "Projektimporto: %1"
 #: project/importprojectjob.cpp:85
 #, kde-format
 msgid "Project import canceled."
-msgstr ""
+msgstr "Projektimporto nuligita."
 
 #: project/projectbuildsetmodel.cpp:286
 #, kde-format
@@ -1611,7 +1651,7 @@ msgstr "Vojo"
 #, kde-format
 msgctxt "@item:intext"
 msgid "no branch"
-msgstr ""
+msgstr "neniu branĉo"
 
 #: project/projectchangesmodel.cpp:275
 #, kde-format
@@ -1623,7 +1663,7 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the path to an item from the projects tree..."
-msgstr ""
+msgstr "Enigu la vojon al ero de la projekto-arbo..."
 
 #: project/projectitemlineedit.cpp:158
 #, kde-format
@@ -1640,35 +1680,35 @@ msgstr "Elekti Elementon"
 #: project/projectitemlineedit.cpp:192
 #, kde-format
 msgid "Select the item you want to get the path from."
-msgstr ""
+msgstr "Elektu la objekton de kiu vi volas ricevi la vojon."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a dependency to add to the list"
-msgstr ""
+msgstr "Enigu dependecon aldonendan al la listo"
 
 #. i18n: ectx: property (placeholderText), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:35
 #, kde-format
 msgctxt "@info:placedholder"
 msgid "Enter a dependency to add to the list..."
-msgstr ""
+msgstr "Enigu dependecon por aldoni al la listo..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, addDependency)
 #: project/widgets/dependencieswidget.ui:55
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add the listed target to the dependency list"
-msgstr ""
+msgstr "Aldoni la listigitan celon al la dependeca listo"
 
 #. i18n: ectx: property (toolTip), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:68
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "List of indirect dependent targets."
-msgstr ""
+msgstr "Listo de nerektaj dependaj celoj."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, dependencies)
 #: project/widgets/dependencieswidget.ui:71
@@ -1679,32 +1719,34 @@ msgid ""
 "depend on, but for which an action needs to be taken before running the "
 "application."
 msgstr ""
+"Ĉi tiu listo devus enhavi celojn, de kiuj la aplikaĵo ne rekte dependas, sed "
+"por kiuj ago devas esti farita antaŭ ol ruli la aplikaĵon."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, removeDependency)
 #: project/widgets/dependencieswidget.ui:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected dependencies from the list"
-msgstr ""
+msgstr "Forigi la elektitajn dependecojn el la listo"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepUp)
 #: project/widgets/dependencieswidget.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency up in the list"
-msgstr ""
+msgstr "Movi la elektitan dependecon supren en la listo"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, moveDepDown)
 #: project/widgets/dependencieswidget.ui:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move the selected dependency down in the list"
-msgstr ""
+msgstr "Movi la elektitan dependecon malsupren en la listo"
 
 #: serialization/itemrepository.h:297 serialization/itemrepository.h:1921
 #, kde-format
 msgid "Failed writing to %1, probably the disk is full"
-msgstr ""
+msgstr "Malsukcesis skribado al %1, verŝajne la disko estas plena"
 
 #: serialization/itemrepositoryregistry.cpp:75
 #, kde-format
@@ -1733,12 +1775,16 @@ msgid ""
 "Press Clear if you want KDevelop to clear the cache, otherwise press "
 "Continue if you are sure the crash has another origin."
 msgstr ""
+"La paneo povas esti kaŭzita de korupto de kaŝmemoritaj datumoj.\n"
+"\n"
+"Premu Malplenigi se vi volas ke KDevelop malplenigu la kaŝmemoron, alie "
+"premu Daŭrigi se vi certas, ke la paneo havas alian originon."
 
 #: serialization/itemrepositoryregistry.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Cache"
-msgstr ""
+msgstr "Malplenigi Kaŝmemoron"
 
 #: serialization/itemrepositoryregistry.cpp:82
 #, kde-format
@@ -1753,12 +1799,15 @@ msgid ""
 "configuration for a specific use case. From here you can also navigate back "
 "to the default code area."
 msgstr ""
+"Efektivigi agojn por ŝanĝi la areon.<br />Areo estas ila vido-agordo por "
+"specifa uzokazo. De ĉi tie vi ankaŭ povas navigi reen al la defaŭlta koda "
+"areo."
 
 #: shell/areadisplay.cpp:70
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Back to Code"
-msgstr ""
+msgstr "Reen al Kodo"
 
 #: shell/checkerstatus.cpp:37
 #, kde-format
@@ -1769,7 +1818,7 @@ msgstr "Ruliganta %1"
 #: shell/colorschemechooser.cpp:44
 #, kde-format
 msgid "&Window Color Scheme"
-msgstr ""
+msgstr "&Fenestra Kolorskemo"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -1783,18 +1832,20 @@ msgid ""
 "The settings of the current module have changed.\n"
 "Do you want to apply the changes or discard them?"
 msgstr ""
+"La agordoj de la nuna modulo ŝanĝiĝis.\n"
+"Ĉu vi volas apliki la ŝanĝojn aŭ forĵeti ilin?"
 
 #: shell/configdialog.cpp:87
 #, kde-format
 msgctxt "@title:window"
 msgid "Apply Settings"
-msgstr ""
+msgstr "Apliki Agordojn"
 
 #: shell/core.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "No Plugins Found"
-msgstr ""
+msgstr "Neniuj Kromaĵoj Trovitaj"
 
 #: shell/core.cpp:115
 #, kde-format
@@ -1804,6 +1855,11 @@ msgid ""
 "org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment"
 "\">this article</a> for more information."
 msgstr ""
+"<p>Ne eblis trovi ajnajn kromaĵojn dum lanĉo.<br/>Bonvolu certigi, ke "
+"QT_PLUGIN_PATH estas ĝuste agordita.</p>Referencu al <a href=\"https://"
+"community.kde.org/Guidelines_and_HOWTOs/"
+"Build_from_source#Set_up_the_runtime_environment\">ĉi tiu artikolo</a> por "
+"pliaj informoj."
 
 #: shell/debugcontroller.cpp:116
 #, kde-format
@@ -1841,7 +1897,7 @@ msgstr "Restarti programon"
 #: shell/debugcontroller.cpp:230
 #, kde-format
 msgid "Restarts applications from the beginning."
-msgstr ""
+msgstr "Rekomencas aplikojn de la komenco."
 
 #: shell/debugcontroller.cpp:236
 #, kde-format
@@ -1859,7 +1915,7 @@ msgstr "Interrompi aplikaĵon"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Interrupts the debugged process or current debugger command."
-msgstr ""
+msgstr "Interrompas la sencimigitan procezon aŭ nunan erarĉimilan komandon."
 
 #: shell/debugcontroller.cpp:242
 #, kde-format
@@ -1877,7 +1933,7 @@ msgstr "Ruli ĝis kursoro"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continues execution until the cursor position is reached."
-msgstr ""
+msgstr "Daŭrigas ruladon ĝis kiam la pozicio de la kursoro estas atingita."
 
 #: shell/debugcontroller.cpp:249
 #, kde-format
@@ -1895,7 +1951,7 @@ msgstr "Salti al kursoro"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Continue execution from the current cursor position."
-msgstr ""
+msgstr "Daŭrigi ruladon ekde la aktuala kursora pozicio."
 
 #: shell/debugcontroller.cpp:255
 #, kde-format
@@ -1917,6 +1973,9 @@ msgid ""
 "is a call to a function the whole function is executed and the app will stop "
 "at the line following the function call."
 msgstr ""
+"Efektivigas unu fontlinion en la nuna fontdosiero. Se la fontlinio estas "
+"alvoko al funkcio, la tuta funkcio estas plenumata kaj la app haltos ĉe la "
+"linio sekvanta la funkciovokon."
 
 #: shell/debugcontroller.cpp:266
 #, kde-format
@@ -1955,6 +2014,8 @@ msgid ""
 "Executes exactly one line of source. If the source line is a call to a "
 "function then execution will stop after the function has been entered."
 msgstr ""
+"Plenumas precize unu linion de fonto. Se la fontlinio estas alvoko al "
+"funkcio, tiam rulado ĉesos post kiam la funkcio estis enigita."
 
 #: shell/debugcontroller.cpp:283
 #, kde-format
@@ -1995,6 +2056,10 @@ msgid ""
 "to that function. If program execution is in the outermost frame (i.e. in "
 "main()) then this operation has no effect."
 msgstr ""
+"Ruligas la aplikaĵon ĝis iam la aktuale plenumata funkcio finiĝos. La "
+"erarserĉilo tiam montros la linion post la origina voko al tiu funkcio. Se "
+"programrulado estas en la plej ekstera kadro (t.e. en main()) tiam ĉi tiu "
+"operacio ne havas efikon."
 
 #: shell/debugcontroller.cpp:300
 #, kde-format
@@ -2005,7 +2070,7 @@ msgstr "Komuti Haltpunkton"
 #: shell/debugcontroller.cpp:301
 #, kde-format
 msgid "Ctrl+Alt+B"
-msgstr ""
+msgstr "Ctrl+Alt+B"
 
 #: shell/debugcontroller.cpp:302
 #, kde-format
@@ -2017,13 +2082,13 @@ msgstr "Komuti haltpunkton"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Toggles the breakpoint at the current line in editor."
-msgstr ""
+msgstr "Ŝaltas la paŭzpunkton ĉe la nuna linio en redaktilo."
 
 #: shell/debugcontroller.cpp:307
 #, kde-format
 msgctxt "@action"
 msgid "Show Current Line"
-msgstr ""
+msgstr "Montri Aktualan Linion"
 
 #: shell/debugcontroller.cpp:308
 #, kde-format
@@ -2035,7 +2100,7 @@ msgstr "Motri la aktualan rulpozicion"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
-msgstr ""
+msgstr "Saltas al la plenumata linio en la redaktilo."
 
 #: shell/debugcontroller.cpp:420
 #, kde-format
@@ -2062,6 +2127,8 @@ msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration inside a Debugger."
 msgstr ""
+"Efektivigas la celon aŭ la programon specifitan en nuntempe aktiva lanĉa "
+"agordo ene de Erarseĉilo."
 
 #: shell/debugcontroller.cpp:476
 #, kde-format
@@ -2073,7 +2140,7 @@ msgstr "&Daŭrigi"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue application execution"
-msgstr ""
+msgstr "Daŭrigi plenumon de aplikaĵo"
 
 #: shell/debugcontroller.cpp:479
 #, kde-format
@@ -2083,12 +2150,15 @@ msgid ""
 "effect when the application has been halted by the debugger (i.e. a "
 "breakpoint has been activated or the interrupt was pressed)."
 msgstr ""
+"Daŭrigas la ruladon de via aplikaĵo en la erarserĉilo. Ĉi tio nur "
+"efektiviĝas kiam la aplikaĵo estas haltigita de la erarserĉilo (t.e. "
+"paŭzpunkto estis aktivigita aŭ la interrompo estis premita)."
 
 #. i18n: ectx: ToolBar (debugToolBar)
 #: shell/debugger/kdevdebuggershellui.rc:25
 #, kde-format
 msgid "Debugger Toolbar"
-msgstr ""
+msgstr "Sencimiga Ilobreto"
 
 #: shell/documentationcontroller.cpp:114
 #, kde-format
@@ -2116,7 +2186,7 @@ msgstr "Malfermi dosieron"
 #: shell/documentcontroller.cpp:119
 #, kde-format
 msgid "*|Text File\n"
-msgstr ""
+msgstr "*|Tekstodosiero\n"
 
 #: shell/documentcontroller.cpp:313
 #, kde-format
@@ -2124,24 +2194,26 @@ msgid ""
 "KDevelop could not find the editor for file '%1' of type %2.\n"
 "Do you want to open it as plain text?"
 msgstr ""
+"KDevelop ne povis trovi la redaktilon por dosiero '%1' de tipo %2.\n"
+"Ĉu vi volas malfermi ĝin kiel simpla teksto?"
 
 #: shell/documentcontroller.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Could Not Find Editor"
-msgstr ""
+msgstr "Ne Povis Trovi Redaktilon"
 
 #: shell/documentcontroller.cpp:317
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "Malfermi kiel Plata Teksto"
 
 #: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "Ne Malfermi"
 
 #: shell/documentcontroller.cpp:601
 #, kde-format
@@ -2159,7 +2231,7 @@ msgstr "Malfermi dosieron"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens a file for editing."
-msgstr ""
+msgstr "Malfermas dosieron por redakti."
 
 #: shell/documentcontroller.cpp:609
 #, kde-format
@@ -2189,6 +2261,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Save all open documents, prompting for additional information when necessary."
 msgstr ""
+"Konservi ĉiujn malfermitajn dokumentojn, petante pliajn informojn kiam "
+"necese."
 
 #: shell/documentcontroller.cpp:623
 #, kde-format
@@ -2200,13 +2274,15 @@ msgstr "Reŝargi Ĉiujn"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Revert all open documents"
-msgstr ""
+msgstr "Reverti ĉiujn malfermitajn dokumentojn"
 
 #: shell/documentcontroller.cpp:626
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Revert all open documents, returning to the previously saved state."
 msgstr ""
+"Reverti ĉiujn malfermitajn dokumentojn, revenante al la antaŭe konservita "
+"stato."
 
 #: shell/documentcontroller.cpp:632
 #, kde-format
@@ -2245,6 +2321,7 @@ msgid ""
 "Close all open documents, prompting for additional information when "
 "necessary."
 msgstr ""
+"Fermi ĉiujn malfermitajn dokumentojn, petante pliajn informojn kiam necese."
 
 #: shell/documentcontroller.cpp:649
 #, kde-format
@@ -2265,12 +2342,14 @@ msgid ""
 "Close all open documents, with the exception of the currently active "
 "document."
 msgstr ""
+"Fermi ĉiujn malfermitajn dokumentojn, escepte de la nuntempe aktiva "
+"dokumento."
 
 #: shell/documentcontroller.cpp:657
 #, kde-format
 msgctxt "@action"
 msgid "Show Annotate on Current Document"
-msgstr ""
+msgstr "Montri Komenti en Aktuala Dokumento"
 
 #: shell/documentcontroller.cpp:658
 #, kde-format
@@ -2284,6 +2363,8 @@ msgid ""
 "Could not annotate the document because it is not part of a version-"
 "controlled project."
 msgstr ""
+"Ne eblis komenti la dokumenton ĉar ĝi ne estas parto de versio-kontrolita "
+"projekto."
 
 #: shell/editorconfigpage.cpp:86
 #, kde-format
@@ -2325,6 +2406,8 @@ msgstr "Forigi elektatan lanĉagordon."
 msgid ""
 "No launch configurations available. (Is any of the Execute plugins loaded?)"
 msgstr ""
+"Neniuj lanĉaj agordoj haveblaj. (Ĉu iu el la Execute-aldonaĵoj estas "
+"ŝarĝita?)"
 
 #: shell/launchconfigurationdialog.cpp:197
 #, kde-format
@@ -2343,6 +2426,7 @@ msgstr "Forigi Agordon"
 msgid ""
 "Selected Launch Configuration has unsaved changes. Do you want to save it?"
 msgstr ""
+"Elektita Lanĉa Agordo havas nekonservitajn ŝanĝojn. Ĉu vi volas konservi ĝin?"
 
 #: shell/launchconfigurationdialog.cpp:254
 #, kde-format
@@ -2354,7 +2438,7 @@ msgstr "Nekonservitaj Ŝanĝoj"
 #, kde-format
 msgctxt "%1 is a launcher name"
 msgid "No configuration is needed for '%1'"
-msgstr ""
+msgstr "Neniu agordo necesas por '%1'"
 
 #: shell/launchconfigurationdialog.cpp:370
 #, kde-format
@@ -2362,6 +2446,8 @@ msgid ""
 "<i>Select a configuration to edit from the left,<br>or click the \"Add\" "
 "button to add a new one.</i>"
 msgstr ""
+"<i>Elektu agordon por redakti de maldekstre,<br>aŭ alklaku la butonon "
+"\"Aldoni\" por aldoni novan.</i>"
 
 #: shell/launchconfigurationdialog.cpp:438
 #, kde-format
@@ -2412,12 +2498,12 @@ msgstr "Ŝargitaj Kromprogramoj"
 #: shell/loadedpluginsdialog.cpp:286
 #, kde-format
 msgid "<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>"
-msgstr ""
+msgstr "<html><font size=\"4\">Aldonaĵoj ŝargitaj por <b>%1</b></font></html>"
 
 #: shell/mainwindow.cpp:445
 #, kde-format
 msgid " (read only)"
-msgstr ""
+msgstr "(nurlegebla)"
 
 #: shell/mainwindow_p.cpp:221
 #, kde-format
@@ -2429,7 +2515,7 @@ msgstr "Agordi %1"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Lets you customize %1."
-msgstr ""
+msgstr "Permesas al vi personecigi %1."
 
 #: shell/mainwindow_p.cpp:225
 #, kde-format
@@ -2447,7 +2533,7 @@ msgstr "Agordi sciigojn"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog that lets you configure notifications."
-msgstr ""
+msgstr "Montras dialogon, kiu ebligas al vi agordi sciigojn."
 
 #: shell/mainwindow_p.cpp:231
 #, kde-format
@@ -2459,13 +2545,13 @@ msgstr "Ŝargitaj Kromprogramoj"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show a list of all loaded plugins"
-msgstr ""
+msgstr "Montri liston de ĉiuj ŝargitaj kromprogramoj"
 
 #: shell/mainwindow_p.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Shows a dialog with information about all loaded plugins."
-msgstr ""
+msgstr "Montras dialogon kun informoj pri ĉiuj ŝarĝitaj kromprogramoj."
 
 #: shell/mainwindow_p.cpp:236
 #, kde-format
@@ -2531,7 +2617,7 @@ msgstr "Dividi horizontale"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view horizontally."
-msgstr ""
+msgstr "Dividas la nunan vidon horizontale."
 
 #: shell/mainwindow_p.cpp:273
 #, kde-format
@@ -2549,7 +2635,7 @@ msgstr "Dividi vertikale"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Splits the current view vertically."
-msgstr ""
+msgstr "Dividas la nunan vidon vertikale."
 
 #: shell/mainwindow_p.cpp:280
 #, kde-format
@@ -2621,13 +2707,13 @@ msgstr "&Aldoni Ilrigardon..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add tool view"
-msgstr ""
+msgstr "Aldoni ilan vidon"
 
 #: shell/mainwindow_p.cpp:312
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Adds a new tool view to this window."
-msgstr ""
+msgstr "Aldonas novan ilan vidon al ĉi tiu fenestro."
 
 #: shell/mainwindow_p.cpp:348
 #, kde-format
@@ -2674,7 +2760,7 @@ msgstr "Ŝlosi la Panelon Nekaŝe"
 #: shell/openprojectdialog.cpp:112
 #, kde-format
 msgid "%1|All Project Files (%1)"
-msgstr ""
+msgstr "%1|Ĉiuj Projektdosieroj (%1)"
 
 #: shell/openprojectdialog.cpp:121
 #, kde-format
@@ -2688,6 +2774,8 @@ msgid ""
 "Select a build system setup file, existing KDevelop project, or any folder "
 "to open as a project"
 msgstr ""
+"Elektu konstrusisteman agorddosieron, ekzistantan KDevelop-projekton aŭ "
+"ajnan dosierujon por malfermi kiel projekto"
 
 #: shell/openprojectdialog.cpp:136 shell/openprojectdialog.cpp:156
 #, kde-format
@@ -2709,7 +2797,7 @@ msgstr "Malfermi \"%1\" kiel projekto"
 #: shell/openprojectdialog.cpp:211
 #, kde-format
 msgid "Selected URL is invalid"
-msgstr ""
+msgstr "Elektita URL estas nevalida"
 
 #: shell/openprojectdialog.cpp:256
 #, kde-format
@@ -2721,12 +2809,13 @@ msgstr "Malfermi ekzistantant dosieron \"%1\""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Use this command to show or hide the view's statusbar."
-msgstr ""
+msgstr "Uzu ĉi tiun komandon por montri aŭ kaŝi la statusbreton de la vido."
 
 #: shell/partdocument.cpp:104
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
+"La dokumento \"%1\" havas nekonservitajn ŝanĝojn. Ĉu vi ŝatus konservi ilin?"
 
 #: shell/partdocument.cpp:105 shell/partdocument.cpp:114
 #, kde-format
@@ -2741,6 +2830,9 @@ msgid ""
 "process.\n"
 "Do you want to overwrite the external changes?"
 msgstr ""
+"La dokumento \"%1\" havas nekonservitajn ŝanĝojn kaj estis modifita de "
+"ekstera procezo.\n"
+"Ĉu vi volas anstataŭigi la eksterajn ŝanĝojn?"
 
 #: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
@@ -2785,7 +2877,7 @@ msgstr "Eraro"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Re-parse all watched documents"
-msgstr ""
+msgstr "Reanalizi ĉiujn rigarditajn dokumentojn"
 
 #: shell/problemmodel.cpp:319
 #, kde-format
@@ -2821,7 +2913,7 @@ msgstr "Kolumno"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Cancel this operation"
-msgstr ""
+msgstr "Nuligi ĉi tiun operacion"
 
 #: shell/progresswidget/progressmanager.cpp:87
 #, kde-format
@@ -2833,19 +2925,19 @@ msgstr "Ĉesiganta..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open detailed progress dialog"
-msgstr ""
+msgstr "Malfermi detalan progresdialogon"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:337
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide detailed progress window"
-msgstr ""
+msgstr "Kaŝi detalan progresfenestron"
 
 #: shell/progresswidget/statusbarprogresswidget.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show detailed progress window"
-msgstr ""
+msgstr "Montri detalan progresfenestron"
 
 #: shell/project.cpp:99
 #, kde-format
@@ -2864,21 +2956,24 @@ msgid ""
 "Unable to load the project file %1.<br>The project has been removed from the "
 "session."
 msgstr ""
+"Ne eblas ŝargi la projektdosieron %1.<br>La projekto estis forigita de la "
+"seanco."
 
 #: shell/project.cpp:252
 #, kde-format
 msgid "Unable to create hidden dir (%1) for developer file"
-msgstr ""
+msgstr "Ne eblas krei kaŝitan diraĵon (%1) por programista dosiero"
 
 #: shell/project.cpp:268
 #, kde-format
 msgid "Unable to get project file: %1"
-msgstr ""
+msgstr "Ne eblas akiri projektdosieron: %1"
 
 #: shell/project.cpp:308
 #, kde-format
 msgid "Could not load %1, a project with the same name '%2' is already open."
 msgstr ""
+"Ne eblis ŝargi %1, projekto kun la sama nomo '%2' jam estas malfermita."
 
 #: shell/project.cpp:339
 #, kde-format
@@ -2886,6 +2981,9 @@ msgid ""
 "Could not load project management plugin <b>%1</b>.<br>Check that the "
 "required programs are installed, or see console output for more information."
 msgstr ""
+"Ne eblis ŝargi projekt-administran kromprogramon <b>%1</b>.<br>Kontrolu ke "
+"la bezonataj programoj estas instalitaj, aŭ vidu konzola eligo por pliaj "
+"informoj."
 
 #: shell/project.cpp:349
 #, kde-format
@@ -2893,6 +2991,8 @@ msgid ""
 "The project importing plugin (%1) does not support the IProjectFileManager "
 "interface."
 msgstr ""
+"La projekt-importa kromaĵo (%1) ne subtenas la interfacon "
+"IProjectFileManager."
 
 #: shell/project.cpp:402
 #, kde-format
@@ -2905,6 +3005,8 @@ msgid ""
 "Could not store developer specific project configuration.\n"
 "Attention: The project settings you changed will be lost."
 msgstr ""
+"Ne eblis konservi programistospecifan projektagordon.\n"
+"Atentu: La projektaj agordoj, kiujn vi ŝanĝis, estos perditaj."
 
 #: shell/projectcontroller.cpp:160
 #, kde-format
@@ -2920,7 +3022,7 @@ msgstr "Nevalida Loko: %1"
 #: shell/projectcontroller.cpp:313
 #, kde-format
 msgid "Already opening %1, not opening again"
-msgstr ""
+msgstr "Jam malfermante %1, ne malfermante denove"
 
 #: shell/projectcontroller.cpp:470
 #, kde-format
@@ -2934,6 +3036,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Continue to open the project and use the just provided project configuration"
 msgstr ""
+"Daŭrigi malfermon de la projekto kaj uzi la ĵus provizitan projektan agordon"
 
 #: shell/projectcontroller.cpp:472
 #, kde-format
@@ -2945,7 +3048,7 @@ msgstr "Malfermi Ekzistantan Dosieron"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Continue to open the project but use the existing project configuration"
-msgstr ""
+msgstr "Daŭrigi malfermon de la projekto sed uzi la ekzistantan projektagordon"
 
 #: shell/projectcontroller.cpp:475
 #, kde-format
@@ -2959,28 +3062,30 @@ msgid ""
 "There already exists a project configuration file at %1.\n"
 "Do you want to override it or open the existing file?"
 msgstr ""
+"Jam ekzistas projekta agorda dosiero ĉe %1.\n"
+"Ĉu vi volas anstataŭi ĝin aŭ malfermi la ekzistantan dosieron?"
 
 #: shell/projectcontroller.cpp:481
 #, kde-format
 msgctxt "@title:window"
 msgid "Override Existing Project Configuration"
-msgstr ""
+msgstr "Anstataŭigi Ekzistantan Projektan Agordon"
 
 #: shell/projectcontroller.cpp:499
 #, kde-format
 msgid "Unable to create configuration file %1"
-msgstr ""
+msgstr "Ne eblas krei agordan dosieron %1"
 
 #: shell/projectcontroller.cpp:513
 #, kde-format
 msgid "Reopen the current project?"
-msgstr ""
+msgstr "Ĉu remalfermi la nunan projekton?"
 
 #: shell/projectcontroller.cpp:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "Remalfermi"
 
 #: shell/projectcontroller.cpp:555
 #, kde-format
@@ -3004,6 +3109,11 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
+"Malfermi ekzistantan KDevelop-projekton aŭ importi ekzistantan Projekton en "
+"KDevelop. Ĉi tiu eniro permesas elekti projektdosieron de KDevelop aŭ "
+"ekzistantan dosierujon por malfermi ĝin en KDevelop. Malfermante ekzistantan "
+"dosierujon kiu ankoraŭ ne havas KDevelop-projektdosieron, la dosiero estos "
+"kreita."
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3023,6 +3133,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
+"Gvidas la uzanton tra la projekt-kolektado kaj poste importas ĝin en "
+"KDevelop."
 
 #: shell/projectcontroller.cpp:586
 #, kde-format
@@ -3034,7 +3146,7 @@ msgstr "Fermi Projekto(j)n"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Closes all currently selected projects"
-msgstr ""
+msgstr "Fermas ĉiujn aktuale elektitajn projektojn"
 
 #: shell/projectcontroller.cpp:594
 #, kde-format
@@ -3070,23 +3182,23 @@ msgstr "Malfermas lasttempe malfermitan projekton"
 #, kde-format
 msgctxt "@action"
 msgid "Open Project for Current File"
-msgstr ""
+msgstr "Malfermi Projekton por Aktuala Dosiero"
 
 #: shell/projectcontroller.cpp:769
 #, kde-format
 msgid "Project already open: %1"
-msgstr ""
+msgstr "Projekto jam malfermita: %1"
 
 #: shell/projectcontroller.cpp:773
 #, kde-format
 msgid "No active document"
-msgstr ""
+msgstr "Neniu aktiva dokumento"
 
 #: shell/projectcontroller.cpp:854
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Already Open"
-msgstr ""
+msgstr "Projekto Jam Malfermita"
 
 #: shell/projectcontroller.cpp:857
 #, kde-format
@@ -3094,12 +3206,14 @@ msgid ""
 "The project you're trying to open is already open in at least one other "
 "session.<br>What do you want to do?"
 msgstr ""
+"La projekto, kiun vi provas malfermi, estas jam malfermita en almenaŭ unu "
+"alia seanco.<br>Kion vi volas fari?"
 
 #: shell/projectcontroller.cpp:861
 #, kde-format
 msgctxt "@option:radio"
 msgid "Add project to current session"
-msgstr ""
+msgstr "Aldoni projekton al nuna seanco"
 
 #: shell/projectcontroller.cpp:865
 #, kde-format
@@ -3110,7 +3224,7 @@ msgstr "Malfermi seancon %1"
 #: shell/projectcontroller.cpp:926
 #, kde-format
 msgid "No enabled plugin supports this repository URL: %1"
-msgstr ""
+msgstr "Neniu ebligita kromaĵo subtenas ĉi tiun deponejan URL: %1"
 
 #: shell/projectcontroller.cpp:1230
 #, kde-format
@@ -3124,7 +3238,7 @@ msgstr "Reparsi la Tutan Projekton"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the Management Plugin to use for this project"
-msgstr ""
+msgstr "Elekti la Administran Kromaĵon uzendan por ĉi tiu projekto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectinfopage.ui:32
@@ -3139,7 +3253,7 @@ msgstr "Projektmastrumilo:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Provide a name for the project"
-msgstr ""
+msgstr "Provizi nomon por la projekto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/projectinfopage.ui:42 shell/settings/environmentwidget.cpp:175
@@ -3157,29 +3271,30 @@ msgstr "El Dosiersistemo"
 #: shell/projectsourcepage.cpp:179
 #, kde-format
 msgid "Could not create the directory: %1"
-msgstr ""
+msgstr "Ne eblis krei la dosierujon: %1"
 
 #: shell/projectsourcepage.cpp:208
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
-msgstr ""
+msgstr "%1 : %p%"
 
 #: shell/projectsourcepage.cpp:249
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
+"Vi devas specifi validan aŭ neekzistantan dosierujon por kontroli projekton"
 
 #: shell/projectsourcepage.cpp:251
 #, kde-format
 msgid "You need to specify the source for your remote project"
-msgstr ""
+msgstr "Vi devas specifi la fonton por via fora projekto"
 
 #: shell/projectsourcepage.cpp:253
 #, kde-format
 msgid "You need to specify an empty folder as your project destination"
-msgstr ""
+msgstr "Vi devas specifi malplenan dosierujon kiel via projektcelo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/projectsourcepage.ui:37
@@ -3244,7 +3359,7 @@ msgstr "Lanĉi"
 #: shell/runcontroller.cpp:405
 #, kde-format
 msgid "The current launch configuration does not support the '%1' mode."
-msgstr ""
+msgstr "La nuna lanĉa agordo ne subtenas la reĝimon '%1'."
 
 #: shell/runcontroller.cpp:425
 #, kde-format
@@ -3265,6 +3380,8 @@ msgid ""
 "Opens a dialog to setup new launch configurations, or to change the existing "
 "ones."
 msgstr ""
+"Malfermas dialogon por agordi novajn lanĉajn agordojn, aŭ por ŝanĝi la "
+"ekzistantajn."
 
 #: shell/runcontroller.cpp:432
 #, kde-format
@@ -3291,6 +3408,8 @@ msgid ""
 "Executes the target or the program specified in currently active launch "
 "configuration."
 msgstr ""
+"Efektivigas la celon aŭ la programon specifitan en nuntempe aktiva lanĉa "
+"agordo."
 
 #: shell/runcontroller.cpp:442
 #, kde-format
@@ -3319,13 +3438,13 @@ msgstr "Halti Ĉiujn"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop all currently running jobs"
-msgstr ""
+msgstr "Ĉesi ĉiujn aktualajn taskojn"
 
 #: shell/runcontroller.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Requests that all running jobs are stopped."
-msgstr ""
+msgstr "Petas, ke ĉiuj rulantaj taskoj estu ĉesigataj."
 
 #: shell/runcontroller.cpp:467
 #, kde-format
@@ -3343,13 +3462,13 @@ msgstr "Halti"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Menu allowing to stop individual jobs"
-msgstr ""
+msgstr "Menuo permesanta ĉesigi individuajn taskojn"
 
 #: shell/runcontroller.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of jobs that can be stopped individually."
-msgstr ""
+msgstr "Listo de taskoj, kiuj povas esti ĉesigitaj individue."
 
 #: shell/runcontroller.cpp:475
 #, kde-format
@@ -3367,7 +3486,7 @@ msgstr "Aktuala lanĉagordo"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
-msgstr ""
+msgstr "Elektu kiun lanĉan agordon ruliĝu kiam ruliĝo estas alvokita."
 
 #: shell/runcontroller.cpp:588
 #, kde-format
@@ -3394,7 +3513,7 @@ msgstr "Gastiganta Sistemo"
 #: shell/runtimecontroller.cpp:86
 #, kde-format
 msgid "Allows to select a runtime"
-msgstr ""
+msgstr "Permesas elekti rultempon"
 
 #: shell/runtimecontroller.cpp:90
 #, kde-format
@@ -3405,24 +3524,24 @@ msgstr "Rultempo: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Modified Files?"
-msgstr ""
+msgstr "Ĉu konservi modifitajn dosierojn?"
 
 #: shell/savedialog.cpp:47
 #, kde-format
 msgid "The following files have been modified. Save them?"
-msgstr ""
+msgstr "La sekvaj dosieroj estis modifitaj. Ĉu konservi ilin?"
 
 #: shell/savedialog.cpp:65
 #, kde-format
 msgctxt "@action:button"
 msgid "Save &None"
-msgstr ""
+msgstr "Konservi &Nenion"
 
 #: shell/savedialog.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard all modifications"
-msgstr ""
+msgstr "Forĵeti ĉiujn modifojn"
 
 #: shell/session.cpp:178
 #, kde-format
@@ -3454,11 +3573,13 @@ msgid ""
 "Active session.\n"
 "pid %1, app %2, host %3"
 msgstr ""
+"Aktiva seanco.\n"
+"pid %1, aplikaĵo %2, gastiganto %3"
 
 #: shell/sessionchooserdialog.cpp:97
 #, kde-format
 msgid "Running"
-msgstr ""
+msgstr "Rulante"
 
 #: shell/sessionchooserdialog.cpp:192
 #, kde-format
@@ -3470,13 +3591,13 @@ msgstr "Neebla Forigi Seancon"
 #, kde-format
 msgctxt "@info"
 msgid "<p>Cannot delete a locked session."
-msgstr ""
+msgstr "<p>Ne povas forigi ŝlositan seancon."
 
 #: shell/sessionchooserdialog.cpp:196
 #, kde-format
 msgctxt "@info"
 msgid "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4)."
-msgstr ""
+msgstr "<p>La seanco <b>%1</b> estas ŝlosita de %2 sur %3 (PID %4)."
 
 #: shell/sessionchooserdialog.cpp:204
 #, kde-format
@@ -3485,6 +3606,8 @@ msgid ""
 "The session <b>%1</b> and all contained settings will be deleted. The "
 "projects will stay unaffected. Do you really want to continue?"
 msgstr ""
+"La seanco <b>%1</b> kaj ĉiuj enhavitaj agordoj estos forigitaj. La projektoj "
+"restos netuŝitaj. Ĉu vi vere volas daŭrigi?"
 
 #: shell/sessionchooserdialog.cpp:205
 #, kde-format
@@ -3498,6 +3621,8 @@ msgid ""
 "The current session and all contained settings will be deleted. The projects "
 "will stay unaffected. Do you really want to continue?"
 msgstr ""
+"La nuna seanco kaj ĉiuj enhavitaj agordoj estos forigitaj. La projektoj "
+"restos netuŝitaj. Ĉu vi vere volas daŭrigi?"
 
 #: shell/sessioncontroller.cpp:142
 #, kde-format
@@ -3526,7 +3651,7 @@ msgstr "Komenci Novan Seancon"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start a new KDevelop instance with an empty session"
-msgstr ""
+msgstr "Komenci novan ekzemplon de KDevelop kun malplena seanco"
 
 #: shell/sessioncontroller.cpp:268
 #, kde-format
@@ -3593,12 +3718,14 @@ msgid ""
 "Running %1 instance (PID: %2) detected, making this one visible instead of "
 "starting a new one"
 msgstr ""
+"Rulanta instanco %1 (PID: %2) detektita, igante ĉi tiun videbla anstataŭ "
+"komenci novan"
 
 #: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
-msgstr ""
+msgstr "Rulanta instanco %1 (PID: %2) ŝajne estas interrompita"
 
 #: shell/sessionlock.cpp:165
 #, kde-format
@@ -3607,6 +3734,7 @@ msgid ""
 "The given application did not respond to a DBUS call, it may have crashed or "
 "is hanging."
 msgstr ""
+"La donita aplikaĵo ne respondis al DBUS-voko, ĝi eble paneis aŭ pendas."
 
 #: shell/sessionlock.cpp:170
 #, kde-format
@@ -3614,12 +3742,14 @@ msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr ""
+"Malsukcesis ŝlosi la seancon <em>%1</em>, jam ŝlosita de %2 sur %3 (PID %4)."
 
 #: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
 msgstr ""
+"Malsukcesis ŝlosi la seancon <em>%1</em> (ŝlosi dosieron nedisponebla)."
 
 #: shell/sessionlock.cpp:178
 #, kde-format
@@ -3628,6 +3758,7 @@ msgid ""
 "<p>Please, close the offending application instance or choose another "
 "session to launch.</p>"
 msgstr ""
+"<p>Bonvolu fermi la ofendan aplikaĵon aŭ elekti alian seancon por lanĉi.</p>"
 
 #: shell/sessionlock.cpp:184
 #, kde-format
@@ -3645,18 +3776,18 @@ msgstr "Elekti Alian Seancon"
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
-msgstr ""
+msgstr "Malsukcesis Ŝlosi Seancon %1"
 
 #: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
-msgstr ""
+msgstr "La seanco %1 jam estas aktiva en alia funkcianta okazo."
 
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
 msgid "Analyzers"
-msgstr ""
+msgstr "Analiziloj"
 
 #: shell/settings/analyzerspreferences.cpp:35
 #, kde-format
@@ -3677,13 +3808,16 @@ msgid ""
 "enabled. Disabling the background parser will disable large parts of "
 "KDevelop's functionality.</p>"
 msgstr ""
+"<p>Ebligas aŭ malŝaltas la fonan analizilon.<br>Se necerta, lasu ĝin "
+"ebligita. Malŝalti la fonan analizilon malŝaltos grandajn partojn de la "
+"funkcioj de KDevelop.</p>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, kcfg_enable)
 #: shell/settings/bgpreferences.ui:23
 #, kde-format
 msgctxt "@title:group"
 msgid "Enable Background Parser"
-msgstr ""
+msgstr "Ebligi Fonan Analizilon"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_delay)
@@ -3692,20 +3826,22 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "The time to wait before the document is re-analyzed when you edit it."
 msgstr ""
+"La tempo por atendi antaŭ ol la dokumento estas re-analizita kiam vi "
+"redaktas ĝin."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/bgpreferences.ui:38
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Delay:"
-msgstr ""
+msgstr "Prokrasto:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_delay)
 #: shell/settings/bgpreferences.ui:48
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " ms"
-msgstr ""
+msgstr "ms"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, kcfg_threads)
@@ -3716,20 +3852,22 @@ msgid ""
 "The maximum number of parallel instances the background parser uses. If "
 "unsure, select 1 or 2."
 msgstr ""
+"La maksimuma nombro da paralelaj okazoj kiujn la fona analizilo uzas. Se ne "
+"certas, elektu 1 aŭ 2."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/bgpreferences.ui:64
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum number of threads:"
-msgstr ""
+msgstr "Maksimuma nombro da fadenoj:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, kcfg_threads)
 #: shell/settings/bgpreferences.ui:74
 #, kde-format
 msgctxt "@item:valuesuffix"
 msgid " threads"
-msgstr ""
+msgstr "fadenoj"
 
 #: shell/settings/documentationpreferences.cpp:35
 #, kde-format
@@ -3753,17 +3891,17 @@ msgstr "Antaŭrigardo:"
 #: shell/settings/environmentpreferences.cpp:79
 #, kde-format
 msgid "Environment"
-msgstr ""
+msgstr "Medio"
 
 #: shell/settings/environmentpreferences.cpp:84
 #, kde-format
 msgid "Configure Environment Variables"
-msgstr ""
+msgstr "Agordi Mediajn Variablojn"
 
 #: shell/settings/environmentprofilelistmodel.cpp:48
 #, kde-format
 msgid "%1 (default profile)"
-msgstr ""
+msgstr "%1 (defaŭlta profilo)"
 
 #: shell/settings/environmentprofilemodel.cpp:91
 #, kde-format
@@ -3793,7 +3931,7 @@ msgstr "Enigu Nomon de Nova Media Profilo"
 #, kde-format
 msgctxt "@title:window"
 msgid "Batch Edit Mode"
-msgstr ""
+msgstr "Loka Redakta Reĝimo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/environmentwidget.ui:22
@@ -3842,7 +3980,7 @@ msgstr "Forigi variablon"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Batch edit mode"
-msgstr ""
+msgstr "Loka redakta reĝimo"
 
 #: shell/settings/languagepreferences.cpp:35
 #, kde-format
@@ -3860,7 +3998,7 @@ msgstr "Lingvosubteno"
 #: shell/settings/languagepreferences.cpp:82
 #, kde-format
 msgid "Configure Code-Completion and Semantic Highlighting"
-msgstr ""
+msgstr "Agordi Kodkompletigon kaj Semantikan Markadon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/languagepreferences.ui:29
@@ -3877,6 +4015,7 @@ msgstr "Kodkompletigo"
 msgctxt "@info:tooltip"
 msgid "If disabled, the code completion widget will never show automatically."
 msgstr ""
+"Se malŝaltita, la fenestraĵo de kompletigo de kodo neniam montros aŭtomate."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: shell/settings/languagepreferences.ui:38
@@ -3893,13 +4032,14 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "codecompletion item."
 msgstr ""
+"Elektu ĉu montri pliajn informojn por la aktuale elektita kodkompletiga ero."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: shell/settings/languagepreferences.ui:61
 #, kde-format
 msgctxt "@label"
 msgid "Additional information for current item:"
-msgstr ""
+msgstr "Pliaj informoj por aktuala ero:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_showMultiLineSelectionInformation)
 #: shell/settings/languagepreferences.ui:71
@@ -3909,6 +4049,7 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "code completion item."
 msgstr ""
+"Elektu ĉu montri pliajn informojn por la nun elektita kodkompletiga ero."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_completionDetail)
@@ -3919,13 +4060,15 @@ msgid ""
 "<p>The code completion UI has a minimal mode and a detailed mode.<br>Choose "
 "in what cases full code completion will be displayed.</p>"
 msgstr ""
+"<p>La kodkompletiga UI havas minimuman reĝimon kaj detalan reĝimon."
+"<br>Elektu en kiuj kazoj la plena kodkompletiĝo estos montrata.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/settings/languagepreferences.ui:84
 #, kde-format
 msgctxt "@label"
 msgid "Detailed completion:"
-msgstr ""
+msgstr "Detala kompletigo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:101
@@ -3939,21 +4082,21 @@ msgstr "Neniam"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "When Invoked Manually"
-msgstr ""
+msgstr "Kiam Alvokita Mane"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_completionDetail)
 #: shell/settings/languagepreferences.ui:111
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "Ĉiam"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: shell/settings/languagepreferences.ui:122
 #, kde-format
 msgctxt "@title:group"
 msgid "Semantic Code Highlighting"
-msgstr ""
+msgstr "Semantika Kodo Emfazado"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, localColorizationLabel)
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_localColorization)
@@ -3964,13 +4107,15 @@ msgid ""
 "<p>This setting decides about the intensity of colors for local variables, "
 "for example function arguments, variables and the like.</p>"
 msgstr ""
+"<p>Ĉi tiu agordo decidas pri la intenseco de koloroj por lokaj variabloj, "
+"ekzemple funkcio-argumentoj, variabloj kaj similaj.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, localColorizationLabel)
 #: shell/settings/languagepreferences.ui:134
 #, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr ""
+msgstr "Loka koloriga intenseco:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -3985,6 +4130,12 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Defaŭlte, la tutmondaj koloroj por tipoj, funkcioj, nomspacoj kaj tiel "
+"plu estas aŭtomate generitaj kaj adaptiĝos al la elektita redaktilo-temo "
+"surbaze de la tutmonda koloriga intenseco. Se vi volas havi plenan kontrolon "
+"de la koloroj, vi povas anstataŭe uzi la redaktilan temon kiel kolorfonton. "
+"Vi povas poste agordi la kolorojn en la agordoj sub Redaktilo &gt; Koloraj "
+"Temoj &gt; Emfazigi Tekstajn Stilojn &gt; KDevelop/Semantikaj Koloroj.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
@@ -4013,13 +4164,15 @@ msgid ""
 "<p>This settings lets you change the intensity of globally accessible types, "
 "for example classes, methods, functions etc.</p>"
 msgstr ""
+"<p>Ĉi tiu agordo permesas ŝanĝi la intensecon de tutmonde alireblaj tipoj, "
+"ekzemple klasoj, metodoj, funkcioj ktp.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorizationLabel)
 #: shell/settings/languagepreferences.ui:221
 #, kde-format
 msgctxt "@label:slider"
 msgid "Global colorization intensity:"
-msgstr ""
+msgstr "Tutmonda koloriga intenseco:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
@@ -4030,13 +4183,15 @@ msgid ""
 "<p>Highlight semantic problems, such as non-existent or inaccessible "
 "declarations.</p>"
 msgstr ""
+"<p>Elstarigi semantikajn problemojn, kiel neekzistantajn aŭ nealireblajn "
+"deklarojn.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/languagepreferences.ui:234
 #, kde-format
 msgctxt "@label"
 msgid "Highlight semantic problems:"
-msgstr ""
+msgstr "Emfazi semantikajn problemojn:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightProblematicLines)
@@ -4047,13 +4202,15 @@ msgid ""
 "<p>When enabled, lines with errors will get additionally highlighted and "
 "their positions get marked in the scrollbar.</p>"
 msgstr ""
+"<p>Kiam ĝi estas ebligita, linioj kun eraroj estos plie elstarigitaj kaj "
+"iliaj pozicioj estas markitaj en la rulumbreto.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/languagepreferences.ui:257
 #, kde-format
 msgctxt "@label"
 msgid "Highlight problematic lines:"
-msgstr ""
+msgstr "Emfazi problemajn liniojn:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:277
@@ -4062,6 +4219,8 @@ msgid ""
 "<html><head/><body><p>Use bold font for declarations such as classes, "
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Uzi grasan tiparon por deklaroj kiel klasoj, funkcioj, "
+"lokaj variabloj ktp.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
@@ -4075,35 +4234,35 @@ msgstr "Grasa tiparo por deklaroj:"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Problems shown as inline notes:"
-msgstr ""
+msgstr "Problemoj montritaj kiel enliniaj notoj:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:304
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "None"
-msgstr ""
+msgstr "Neniu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:309
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Errors"
-msgstr ""
+msgstr "Eraroj"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:314
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Warnings and Errors"
-msgstr ""
+msgstr "Avertoj kaj Eraroj"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_problemInlineNotesLevel)
 #: shell/settings/languagepreferences.ui:319
 #, kde-format
 msgctxt "@item:inlistbox inline problems shown"
 msgid "Hints, Warnings and Errors"
-msgstr ""
+msgstr "Sugestoj, Avertoj kaj Eraroj"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:327
@@ -4111,13 +4270,14 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Space-separated list of words that make a comment represent a TODO item"
 msgstr ""
+"Spac-disigita listo de vortoj kiuj faras komenton reprezentas TODO-eron"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/languagepreferences.ui:330
 #, kde-format
 msgctxt "@label:textbox"
 msgid "TODO marker words:"
-msgstr ""
+msgstr "TODO-markvortoj:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, kcfg_todoMarkerWords)
 #: shell/settings/languagepreferences.ui:340
@@ -4126,6 +4286,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Space-separated list of words that make a comment represent a TODO item."
 msgstr ""
+"Spac-disigita listo de vortoj kiuj faras komenton reprezentas TODO-eron."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/languagepreferences.ui:369
@@ -4145,13 +4306,18 @@ msgid ""
 "information. Global code navigation and quickopen capabilities will be "
 "reduced.</p>"
 msgstr ""
+"<p>Kiam projekto enhavas pli da dosieroj ol ĉi tiu nombro, la projekto "
+"estos\n"
+"analizata en simpligita reĝimo, pliigante la efikecon per kolektado de "
+"malpli da informoj. Tutmonda koda navigado kaj rapidaj kapabloj estos "
+"reduktitaj.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: shell/settings/languagepreferences.ui:382
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
-msgstr ""
+msgstr "Minimuma projekta grandeco por simpligita analizado:"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
@@ -4236,6 +4402,7 @@ msgid ""
 "Schedule all project source code to be parsed by the language support in the "
 "background"
 msgstr ""
+"Plani la tutan projektan fontkodon analizendan de la lingvosubteno en la fono"
 
 #. i18n: ectx: whatsthis, entry (parseAllProjectSources), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:15
@@ -4248,18 +4415,22 @@ msgid ""
 "may\n"
 "        be slower."
 msgstr ""
+"Se ĉi tiu opcio estas agordita, KDevelop planos ĉiun fontkodon\n"
+"        trovitan de la nuna konstrusistemo por analizo per la taŭga lingva\n"
+"        subtenparto. Ĉi tio ebligos pli kompletan lingvosubtenon, sed eble\n"
+"        estos pli malrapida."
 
 #. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:19
 #, kde-format
 msgid "Chooses the base directory where new projects are created."
-msgstr ""
+msgstr "Elektas la bazan dosierujon kie novaj projektoj estas kreitaj."
 
 #. i18n: ectx: label, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:23
 #, kde-format
 msgid "Save all open documents before building anything"
-msgstr ""
+msgstr "Konservi ĉiujn malfermitajn dokumentojn antaŭ ol konstrui ion ajn"
 
 #. i18n: ectx: whatsthis, entry (saveDocuments), group (Project Manager)
 #: shell/settings/projectconfig.kcfg:24
@@ -4268,6 +4439,8 @@ msgid ""
 "If this option is set all open documents will be automatically saved before "
 "any build is started."
 msgstr ""
+"Se ĉi tiu opcio estas agordita, ĉiuj malfermitaj dokumentoj estos aŭtomate "
+"konservitaj antaŭ ol iu konstruo estas komencita."
 
 #: shell/settings/projectpreferences.cpp:44
 #, kde-format
@@ -4286,7 +4459,7 @@ msgstr "Agordi Projektojn"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select the base directory where new projects are to be created"
-msgstr ""
+msgstr "Elekti la bazan dosierujon kie novaj projektoj estas kreotaj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: shell/settings/projectpreferences.ui:25
@@ -4301,13 +4474,14 @@ msgstr "Baza dosierujo por projektoj:"
 msgctxt "@info:tolltip"
 msgid "Parse all files in a project after the project has been opened"
 msgstr ""
+"Analizi ĉiujn dosierojn en projekto post kiam la projekto estis malfermita"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_parseAllProjectSources)
 #: shell/settings/projectpreferences.ui:50
 #, kde-format
 msgctxt "@option:check"
 msgid "Schedule all project files for parsing"
-msgstr ""
+msgstr "Plani ĉiujn projektodosierojn por analizado"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:57
@@ -4315,18 +4489,19 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Save all modified documents when the \"build\" action is triggered"
 msgstr ""
+"Konservi ĉiujn modifitajn dokumentojn kiam la ago \"konstrui\" estas ekigita"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_saveDocuments)
 #: shell/settings/projectpreferences.ui:60
 #, kde-format
 msgctxt "@option:check"
 msgid "Save all documents before building"
-msgstr ""
+msgstr "Konservi ĉiujn dokumentojn antaŭ ol konstrui"
 
 #: shell/settings/runtimespreferences.cpp:23
 #, kde-format
 msgid "Runtimes"
-msgstr ""
+msgstr "Rultempoj"
 
 #: shell/settings/runtimespreferences.cpp:33
 #, kde-format
@@ -4359,13 +4534,15 @@ msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without Kate modeline."
 msgstr ""
+"Anstataŭigi la redaktilan deŝovtreĝimon laŭ la formatstilo por dokumentoj "
+"sen Kate-modelo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateOverrideIndentation)
 #: shell/settings/sourceformattersettings.ui:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr ""
+msgstr "Anstataŭigi Kate Indentation Mode"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
@@ -4373,14 +4550,14 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr ""
+msgstr "Aldoni Kate-modelon laŭ la formata stilo al formatitaj dokumentoj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:39
 #, kde-format
 msgctxt "@option:check"
 msgid "Add Kate Modeline"
-msgstr ""
+msgstr "Aldoni Kate Modeline"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: shell/settings/sourceformattersettings.ui:55
@@ -4430,7 +4607,7 @@ msgstr "Uzant-interfaco"
 #, kde-format
 msgctxt "@title:group"
 msgid "Dock Window Behavior"
-msgstr ""
+msgstr "Doka Fenestro-Konduto"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomLeftCornerOwner)
@@ -4440,13 +4617,15 @@ msgid ""
 "<p>Controls whether the bottom left corner is occupied by the dock at the "
 "left, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>Regas ĉu la malsupra maldekstra angulo estas okupata de la doko "
+"maldekstre, aŭ de la doko malsupre.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom left corner occupied by:"
-msgstr ""
+msgstr "Malsupra maldekstra angulo okupata de:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_BottomRightCornerOwner)
@@ -4456,13 +4635,15 @@ msgid ""
 "<p>Controls whether the bottom right corner is occupied by the dock at the "
 "right, or by the dock at the bottom.</p>"
 msgstr ""
+"<p>Regas ĉu la malsupra dekstra angulo estas okupata de la doko dekstre, aŭ "
+"de la doko malsupre.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Bottom right corner occupied by:"
-msgstr ""
+msgstr "Malsupra dekstra angulo okupata de:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_BottomLeftCornerOwner)
 #: shell/settings/uiconfig.ui:53
@@ -4498,14 +4679,14 @@ msgstr "Foliumado kun Langetoj"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Controls whether to open new tabs next to the active one."
-msgstr ""
+msgstr "Kontrolas ĉu malfermi novajn langetojn apud la aktiva."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarOpenAfterCurrent)
 #: shell/settings/uiconfig.ui:95
 #, kde-format
 msgctxt "@option:check"
 msgid "Open new tab after current"
-msgstr ""
+msgstr "Malfermi novan langeton post nuna"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:106
@@ -4515,13 +4696,16 @@ msgid ""
 "When enabled, plugins can group related files side by side.\n"
 "For example, a header file will be opened next to the implementation file."
 msgstr ""
+"Kiam estas ebligitaj, kromprogramoj povas grupigi rilatajn dosierojn unu "
+"apud la alia.\n"
+"Ekzemple, kapdosiero estos malfermita apud la efektiviga dosiero."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarArrangeBuddies)
 #: shell/settings/uiconfig.ui:109
 #, kde-format
 msgctxt "@option:check"
 msgid "Arrange related documents side by side"
-msgstr ""
+msgstr "Aranĝi rilatajn dokumentojn flanko-ĉe-flanke"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:116
@@ -4531,6 +4715,8 @@ msgid ""
 "Enables or disables the display of the tab bar at the top of the editor "
 "window."
 msgstr ""
+"Ebligas aŭ malŝaltas la montradon de la langeto ĉe la supro de la redaktila "
+"fenestro."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_TabBarVisibility)
 #: shell/settings/uiconfig.ui:119
@@ -4547,20 +4733,22 @@ msgid ""
 "Enables or disables the display of a close button in each tab in the tab bar "
 "at the top of the editor window."
 msgstr ""
+"Ebligas aŭ malŝaltas la montradon de fermbutono en ĉiu langeto en la "
+"langetobreto ĉe la supro de la redaktila fenestro."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_CloseButtonsOnTabs)
 #: shell/settings/uiconfig.ui:132
 #, kde-format
 msgctxt "@option:check"
 msgid "Show close buttons on tabs"
-msgstr ""
+msgstr "Montri fermajn butonojn sur langetoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: shell/settings/uiconfig.ui:145
 #, kde-format
 msgctxt "@title:group"
 msgid "Coloring"
-msgstr ""
+msgstr "Kolorigo"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:151
@@ -4570,13 +4758,15 @@ msgid ""
 "When enabled, tabs and other widgets are colored based on the project "
 "affiliation"
 msgstr ""
+"Kiam ĝi estas ebligita, langetoj kaj aliaj fenestraĵoj estas koloraj laŭ la "
+"projekta aliĝo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ColorizeByProject)
 #: shell/settings/uiconfig.ui:154
 #, kde-format
 msgctxt "@option:check"
 msgid "Color widgets based on the project affiliation"
-msgstr ""
+msgstr "Koloraj fenestraĵoj bazitaj sur la projekto-aliiĝo"
 
 #: shell/settings/uipreferences.cpp:55
 #, kde-format
@@ -4605,19 +4795,19 @@ msgstr "Reformati Dosierojn..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr ""
+msgstr "Formati dosiero(j)n uzante la agordita(j)n fontformatilon(j)"
 
 #: shell/sourceformattercontroller.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr ""
+msgstr "Formata funkcieco uzante la agordita(j)n fontformatilon(j)."
 
 #: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "Reformati elekton aŭ dosieron uzante <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:606
 #, kde-format
@@ -4626,12 +4816,14 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"Reformatas elektitan tekston aŭ la tutan dosieron se nenio estas elektita, "
+"uzante <i>%1</i> ilon kun <b>%2</b> stilo."
 
 #: shell/sourceformattercontroller.cpp:608
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "Reformati nunan linion uzante <i>%1</i> (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:611
 #, kde-format
@@ -4640,12 +4832,14 @@ msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
+"Fontoformatado de linio sub kursoro uzante <i>%1</i> ilon kun <b>%2</b> "
+"stilo."
 
 #: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
-msgstr ""
+msgstr "Reformati elekton aŭ dosieron per la agordita fontformatilo"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4654,12 +4848,14 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Reformatas elektitan tekston aŭ la tutan dosieron se nenio estas elektita, "
+"uzante la agordita fontformatilo."
 
 #: shell/sourceformattercontroller.cpp:619
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr ""
+msgstr "Reformati nunan linion per la agordita fontformatilo"
 
 #: shell/sourceformattercontroller.cpp:621
 #, kde-format
@@ -4667,7 +4863,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
-msgstr ""
+msgstr "Fontformatigado de linio sub kursoro uzante la agordita fontformatilo."
 
 #: shell/sourceformattercontroller.cpp:856
 #, kde-format
@@ -4678,7 +4874,7 @@ msgstr "Reformati Dosierojn?"
 #: shell/sourceformattercontroller.cpp:857
 #, kde-format
 msgid "Reformat all files in the selected folder?"
-msgstr ""
+msgstr "Ĉu reformati ĉiujn dosierojn en la elektita dosierujo?"
 
 #: shell/sourceformattercontroller.cpp:861
 #, kde-format
@@ -4710,6 +4906,9 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
+"La stilo %1 estas uzata ankaŭ por la sekvaj lingvoj:\n"
+"%2.\n"
+"Ĉu vi certas, ke vi volas forigi ĝin?"
 
 #: shell/sourceformatterselectionedit.cpp:485
 #, kde-format
@@ -4730,14 +4929,14 @@ msgstr "Nova Stilo"
 #: shell/sourceformatterselectionedit.cpp:624
 #, kde-format
 msgid "No language selected"
-msgstr ""
+msgstr "Neniu lingvo elektita"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: shell/sourceformatterselectionedit.ui:29
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Language:"
-msgstr ""
+msgstr "Lingvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/sourceformatterselectionedit.ui:102
@@ -4784,12 +4983,15 @@ msgid ""
 "\n"
 "Are you sure you want to overwrite it? (External changes will be lost.)"
 msgstr ""
+"La dosiero \"%1\" estas modifita sur disko.\n"
+"\n"
+"Ĉu vi certas, ke vi volas anstataŭigi ĝin? (Eksteraj ŝanĝoj perdiĝos.)"
 
 #: shell/textdocument.cpp:441
 #, kde-format
 msgctxt "@title:window"
 msgid "Document Externally Modified"
-msgstr ""
+msgstr "Dokumento Ekstere Modifita"
 
 #: shell/textdocument.cpp:705
 #, kde-format
@@ -4823,18 +5025,18 @@ msgstr "Elekti Ilrigardon Aldonendan"
 #: shell/workingsets/workingsettooltipwidget.cpp:74
 #, kde-format
 msgid "<b>Active Working Set</b>"
-msgstr ""
+msgstr "<b>Aktiva Labora Aro</b>"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:76
 #, kde-format
 msgid "<b>Working Set</b>"
-msgstr ""
+msgstr "<b>Labora aro</b>"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this working set. The contained documents are not affected."
-msgstr ""
+msgstr "Forigi ĉi tiun laboran aron. La enhavitaj dokumentoj ne estas tuŝitaj."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:120
 #, kde-format
@@ -4855,6 +5057,8 @@ msgid ""
 "Add all documents that are part of this working set to the currently active "
 "working set"
 msgstr ""
+"Aldoni ĉiujn dokumentojn kiuj estas parto de ĉi laboraro al la nuntempe "
+"aktiva laboraro"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:136
 #, kde-format
@@ -4869,30 +5073,32 @@ msgid ""
 "Remove all documents that are part of this working set from the currently "
 "active working set"
 msgstr ""
+"Forigi ĉiujn dokumentojn kiuj estas parto de ĉi laboraro el la nuntempe "
+"aktiva laboraro"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Click to open and activate this document."
-msgstr ""
+msgstr "Klaku por malfermi kaj aktivigi ĉi tiun dokumenton."
 
 #: shell/workingsets/workingsettooltipwidget.cpp:281
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove this file from the current working set"
-msgstr ""
+msgstr "Forigi ĉi tiun dosieron el la nuna laboraro"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add this file to the current working set"
-msgstr ""
+msgstr "Aldoni ĉi tiun dosieron al la nuna laboraro"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:315
 #, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr ""
+msgstr "Stash"
 
 #: shell/workingsets/workingsettooltipwidget.cpp:321
 #, kde-format
@@ -4903,19 +5109,19 @@ msgstr "Reŝargi"
 #: sublime/container.cpp:285
 #, kde-format
 msgid "Line: 00000 Col: 000"
-msgstr ""
+msgstr "Linio: 00000 Col: 000"
 
 #: sublime/container.cpp:319
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sorted list of opened documents"
-msgstr ""
+msgstr "Montri ordigitan liston de malfermitaj dokumentoj"
 
 #: sublime/container.cpp:331
 #, kde-format
 msgctxt "@info"
 msgid "(Press Ctrl+Tab to switch)"
-msgstr ""
+msgstr "(Premu Ctrl+Tab por ŝanĝi)"
 
 #: sublime/container.cpp:724
 #, kde-format
@@ -4945,13 +5151,13 @@ msgstr "Fermi Ĉiujn"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle '%1' tool view"
-msgstr ""
+msgstr "Baskuligi '%1' ilan vidon"
 
 #: sublime/idealbuttonbarwidget.cpp:99
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Right click to add new tool views."
-msgstr ""
+msgstr "Dekstre alklaku por aldoni novajn ilajn vidojn."
 
 #: sublime/idealcontroller.cpp:94
 #, kde-format
@@ -4993,13 +5199,13 @@ msgstr "Nekonektita"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Assign Shortcut..."
-msgstr ""
+msgstr "Asigni Ŝparvojon..."
 
 #: sublime/idealdockwidget.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Use this shortcut to trigger visibility of the tool view."
-msgstr ""
+msgstr "Uzu ĉi tiun ŝparvojon por ekigi videblecon de la ila vido."
 
 #: sublime/idealdockwidget.cpp:139
 #, kde-format
@@ -5011,7 +5217,7 @@ msgstr "Forigi Ilrigardon"
 #, kde-format
 msgctxt "@title:window"
 msgid "Assign Shortcut For '%1' Tool View"
-msgstr ""
+msgstr "Asigni Ŝparvojon Por '%1' Ila Vido"
 
 #: sublime/mainwindow_p.cpp:78
 #, kde-format
@@ -5024,6 +5230,8 @@ msgstr "Koncentriĝa Reĝimo"
 msgctxt "@info:tooltip"
 msgid "Remove most of the controls so you can focus on what matters"
 msgstr ""
+"Forigi la plej multajn kontrolojn por ke vi povu koncentriĝi pri tio, kio "
+"gravas"
 
 #: sublime/mainwindow_p.cpp:87
 #, kde-format
@@ -5113,27 +5321,28 @@ msgstr "DUĉenkonstrua aplikaĵo"
 #: util/duchainify/main.cpp:257
 #, kde-format
 msgid "(c) 2009 David Nolden"
-msgstr ""
+msgstr "(c) 2009 David Nolden"
 
 #: util/duchainify/main.cpp:263
 #, kde-format
 msgid "file or directory"
-msgstr ""
+msgstr "dosiero aŭ dosierujo"
 
 #: util/duchainify/main.cpp:266
 #, kde-format
 msgid "Show warnings"
-msgstr ""
+msgstr "Montri avertojn"
 
 #: util/duchainify/main.cpp:268
 #, kde-format
 msgid "Show warnings and debug output"
-msgstr ""
+msgstr "Montru avertojn kaj sencimigi eligon"
 
 #: util/duchainify/main.cpp:270
 #, kde-format
 msgid "Enforce an update of the top-contexts corresponding to the given files"
 msgstr ""
+"Devigi ĝisdatigon de la supraj kuntekstoj respondaj al la donitaj dosieroj"
 
 #: util/duchainify/main.cpp:274
 #, kde-format
@@ -5141,11 +5350,13 @@ msgid ""
 "Enforce an update of the top-contexts corresponding to the given files and "
 "all included files"
 msgstr ""
+"Devigi ĝisdatigon de la supraj kuntekstoj respondaj al la donitaj dosieroj "
+"kaj ĉiuj inkluzivitaj dosieroj"
 
 #: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Number of threads to use"
-msgstr ""
+msgstr "Nombro da fadenoj por uzi"
 
 #: util/duchainify/main.cpp:279
 #, kde-format
@@ -5154,42 +5365,47 @@ msgid ""
 "declarations (default), all-declarations, all-declarations-and-uses, all-"
 "declarations-and-uses-and-AST"
 msgstr ""
+"Karakterizaĵoj por konstrui. Opcioj: malplenaj, simpligitaj-videblaj-"
+"deklaroj, videblaj-deklaroj (defaŭlte), ĉiuj-deklaroj, ĉiuj-deklaroj-kaj-"
+"uzoj, ĉiuj-deklaroj-kaj-uzoj-kaj-AST"
 
 #: util/duchainify/main.cpp:283
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
-msgstr ""
+msgstr "Presi kompletan Difinon-Uzu Ĉenon sur sukcesa analizo"
 
 #: util/duchainify/main.cpp:285
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
-msgstr ""
+msgstr "Presi kompletan DUChain Difinojn deponejon sur sukcesa analizo"
 
 #: util/duchainify/main.cpp:288
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
+"Presi kompletan DUChain PersistentSymbolTable-deponejon sur sukcesa analizo"
 
 #: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
+"Nombro difinanta la maksimuman profundon kie deklaraj detaloj estas presitaj"
 
 #: util/duchainify/main.cpp:294
 #, kde-format
 msgid "Dump DUChain graph (in .dot format)"
-msgstr ""
+msgstr "Forĵeti DUChain-grafeon (en .dot-formato)"
 
 #: util/duchainify/main.cpp:296
 #, kde-format
 msgid "Print problems encountered during parsing"
-msgstr ""
+msgstr "Presaj problemoj renkontitaj dum analizado"
 
 #: util/duchainify/main.cpp:298
 #, kde-format
 msgid "Recursively dump errors from imported contexts."
-msgstr ""
+msgstr "Rikure deponi erarojn de importitaj kuntekstoj."
 
 #: util/environmentselectionmodel.cpp:40
 #, kde-format
@@ -5201,23 +5417,23 @@ msgstr "Profilo"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr ""
+msgstr "Uzi defaŭltan profilon (aktuale: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "%1 (does not exist)"
-msgstr ""
+msgstr "%1 (ne ekzistas)"
 
 #: util/jobstatus.cpp:29
 #, kde-format
 msgid "Task aborted"
-msgstr ""
+msgstr "Tasko ĉesigita"
 
 #: util/projecttestjob.cpp:81
 #, kde-format
 msgid "Run all tests in %1"
-msgstr ""
+msgstr "Ruli ĉiujn testojn en %1"
 
 #: util/shellutils.cpp:79
 #, kde-format
@@ -5225,12 +5441,14 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
+"Vi ne havas skribpermesojn por la sekvaj dosieroj; aldoni skribi permesojn "
+"por posedanto antaŭ konservi?"
 
 #: util/shellutils.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Some Files are Write-Protected"
-msgstr ""
+msgstr "Iuj dosieroj estas skribprotektitaj"
 
 #: util/shellutils.cpp:83
 #, kde-format
@@ -5247,23 +5465,23 @@ msgstr "Ignori"
 #: util/shellutils.cpp:96
 #, kde-format
 msgid "Failed adding write permissions for some files."
-msgstr ""
+msgstr "Malsukcesis aldoni skribpermesojn por iuj dosieroj."
 
 #: util/shellutils.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed Setting Permissions"
-msgstr ""
+msgstr "Malsukcesis Agordo de Permesiloj"
 
 #: vcs/dvcs/dvcsjob.cpp:173
 #, kde-format
 msgid "Working Directory does not exist: %1"
-msgstr ""
+msgstr "Labora Dosierujo ne ekzistas: %1"
 
 #: vcs/dvcs/dvcsjob.cpp:182
 #, kde-format
 msgid "Working Directory is not absolute: %1"
-msgstr ""
+msgstr "Labora Dosierujo ne estas absoluta: %1"
 
 #: vcs/dvcs/dvcsjob.cpp:232
 #, kde-format
@@ -5271,16 +5489,18 @@ msgid ""
 "Process '%1' exited with status %2\n"
 "%3"
 msgstr ""
+"Procezo '%1' eliris kun stato %2\n"
+"%3"
 
 #: vcs/dvcs/dvcsjob.cpp:263
 #, kde-format
 msgid "Command finished with error %1."
-msgstr ""
+msgstr "Komando finiĝis kun eraro %1."
 
 #: vcs/dvcs/dvcsjob.cpp:277
 #, kde-format
 msgid "Command exited with value %1."
-msgstr ""
+msgstr "Komando eliris kun valoro %1."
 
 #: vcs/dvcs/dvcsplugin.cpp:95
 #, kde-format
@@ -5298,7 +5518,7 @@ msgstr "Branĉadministrilo"
 #, kde-format
 msgid ""
 "You must select a base branch from the list before creating a new branch."
-msgstr ""
+msgstr "Vi devas elekti bazan branĉon el la listo antaŭ ol krei novan branĉon."
 
 #: vcs/dvcs/ui/branchmanager.cpp:112
 #, kde-format
@@ -5310,7 +5530,7 @@ msgstr "Nova Branĉo"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name of the new branch:"
-msgstr ""
+msgstr "Nomo de la nova branĉo:"
 
 #: vcs/dvcs/ui/branchmanager.cpp:119
 #, kde-format
@@ -5318,6 +5538,8 @@ msgid ""
 "Branch \"%1\" already exists.\n"
 "Please, choose another name."
 msgstr ""
+"Branĉo \"%1\" jam ekzistas.\n"
+"Bonvolu elekti alian nomon."
 
 #: vcs/dvcs/ui/branchmanager.cpp:133
 #, kde-format
@@ -5325,6 +5547,8 @@ msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
 msgstr ""
+"Aktuale ĉe la branĉo \"%1\".\n"
+"Por forigi ĝin, bonvolu ŝanĝi al alia branĉo."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
 #, kde-format
@@ -5334,7 +5558,7 @@ msgstr "Ĉu vi certas ke vi volas nemalfareble forigi la branĉon '%1'?"
 #: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format
 msgid "Already on branch \"%1\"\n"
-msgstr ""
+msgstr "Jam sur branĉo \"%1\"\n"
 
 #: vcs/dvcs/ui/branchmanager.cpp:181
 #, kde-format
@@ -5342,40 +5566,42 @@ msgid ""
 "Branch \"%1\" doesn't exists.\n"
 "Please, choose another name."
 msgstr ""
+"Branĉo \"%1\" ne ekzistas.\n"
+"Bonvolu elekti alian nomon."
 
 #: vcs/dvcs/ui/branchmanager.cpp:189
 #, kde-format
 msgid "You must select a branch to merge into current one from the list."
-msgstr ""
+msgstr "Vi devas elekti branĉon por kunfandi en nunan el la listo."
 
 #: vcs/dvcs/ui/branchmanager.cpp:227 vcs/widgets/vcsdiffpatchsources.cpp:299
 #, kde-format
 msgid "Could not create a patch for the current version."
-msgstr ""
+msgstr "Ne eblis krei flikilon por la nuna versio."
 
 #: vcs/dvcs/ui/branchmanager.cpp:262
 #, kde-format
 msgctxt "@titlew:indow"
 msgid "Unable to Retrieve Diff"
-msgstr ""
+msgstr "Ne eblas Reakiri Diff"
 
 #: vcs/dvcs/ui/branchmanager.cpp:269
 #, kde-format
 msgid "There are no committed differences."
-msgstr ""
+msgstr "Ne estas engaĝitaj diferencoj."
 
 #: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
-msgstr ""
+msgstr "VCS-subteno"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:31
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Creates new branch based on the selected branch"
-msgstr ""
+msgstr "Kreas novan branĉon surbaze de la elektita branĉo"
 
 #. i18n: ectx: property (text), widget (QPushButton, newButton)
 #: vcs/dvcs/ui/branchmanager.ui:34
@@ -5389,7 +5615,7 @@ msgstr "Nova"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The same as git branch -D"
-msgstr ""
+msgstr "La sama kiel git-branĉo -D"
 
 #. i18n: ectx: property (text), widget (QPushButton, renameButton)
 #: vcs/dvcs/ui/branchmanager.ui:51 vcs/models/brancheslistmodel.cpp:70
@@ -5406,34 +5632,36 @@ msgid ""
 "<p>Show changes between the current branch (or staging area, if not empty) "
 "and the last commit on the selected branch.</p>"
 msgstr ""
+"<p>Montri ŝanĝojn inter la nuna branĉo (aŭ ensceniga areo, se ne malplena) "
+"kaj la lasta kompromiso sur la elektita branĉo.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Compare to Branch"
-msgstr ""
+msgstr "Kompari al Branĉo"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:103
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
-msgstr ""
+msgstr "Elpreni al la elektita branĉo"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
 #, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr ""
+msgstr "Checkout"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
 #, kde-format
 msgctxt "@action:button merge a branch"
 msgid "Merge"
-msgstr ""
+msgstr "Kunfandi"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: vcs/dvcs/ui/dvcsimportmetadatawidget.ui:19
@@ -5453,7 +5681,7 @@ msgstr "Enmeta mesaĝo:"
 #: vcs/models/brancheslistmodel.cpp:64
 #, kde-format
 msgid "Branch \"%1\" already exists."
-msgstr ""
+msgstr "Branĉo \"%1\" jam ekzistas."
 
 #: vcs/models/brancheslistmodel.cpp:69
 #, kde-format
@@ -5575,13 +5803,13 @@ msgstr "Ŝanĝita"
 #, kde-format
 msgctxt "@item"
 msgid "Copied"
-msgstr ""
+msgstr "Kopiita"
 
 #: vcs/models/vcsitemeventmodel.cpp:54
 #, kde-format
 msgctxt "@item"
 msgid "Replaced"
-msgstr ""
+msgstr "Anstataŭita"
 
 #: vcs/models/vcsitemeventmodel.cpp:61
 #, kde-format
@@ -5682,19 +5910,19 @@ msgstr "Tiri"
 #: vcs/vcspluginhelper.cpp:292
 #, kde-format
 msgid "There are no differences."
-msgstr ""
+msgstr "Ne estas diferencoj."
 
 #: vcs/vcspluginhelper.cpp:299
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
-msgstr ""
+msgstr "Ne eblas Akiri Diferencoj"
 
 #: vcs/vcspluginhelper.cpp:367
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
-msgstr ""
+msgstr "%2 Historio (%1)"
 
 #: vcs/vcspluginhelper.cpp:439
 #, kde-format
@@ -5702,6 +5930,8 @@ msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
+"Ne povas montri komentariojn, mankas interfaco KTextEditor::"
+"AnnotationInterface por la redaktilo."
 
 #: vcs/vcspluginhelper.cpp:443
 #, kde-format
@@ -5710,6 +5940,9 @@ msgid ""
 "not a text document:\n"
 "%1"
 msgstr ""
+"Ne povas efektivigi komentagon ĉar la dokumento ne estis trovita, aŭ ne "
+"estis tekstdokumento:\n"
+"%1"
 
 #: vcs/vcspluginhelper.cpp:476 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
@@ -5721,7 +5954,7 @@ msgstr "Kopii Revizian Id"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Enter the repository URL..."
-msgstr ""
+msgstr "Enigu la deponejan URL..."
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:55
 #, kde-format
@@ -5751,20 +5984,20 @@ msgstr[1] ""
 #, kde-format
 msgctxt "@item age"
 msgid "Today"
-msgstr ""
+msgstr "Hodiaŭ"
 
 #: vcs/widgets/vcsannotationitemdelegate.cpp:285
 #, kde-format
 msgctxt "By: commit author"
 msgid "By: %1"
-msgstr ""
+msgstr "De: %1"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VcsCommitDialog)
 #: vcs/widgets/vcscommitdialog.ui:17
 #, kde-format
 msgctxt "@title:window"
 msgid "Select Files to Commit"
-msgstr ""
+msgstr "Elekti Dosierojn por Enmeti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: vcs/widgets/vcscommitdialog.ui:23
@@ -5788,18 +6021,18 @@ msgstr "Malnovaj Mesaĝoj"
 #: vcs/widgets/vcsdiffpatchsources.cpp:109
 #, kde-format
 msgid "For more detailed information please see the Version Control tool view."
-msgstr ""
+msgstr "Por pli detalaj informoj bonvolu vidi la ilan vido de Versiokontrolo."
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
 msgid "Unable to commit"
-msgstr ""
+msgstr "Ne eblas enmeti"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:111
 #, kde-format
 msgctxt "@title:window"
 msgid "Commit Unsuccessful"
-msgstr ""
+msgstr "Enmeto Malsukcesa"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:224
 #, kde-format
@@ -5815,46 +6048,50 @@ msgid ""
 "With message:\n"
 " <pre>%2</pre></qt>"
 msgstr ""
+"<qt>Dosieroj estos enmetataj:\n"
+"<ul>%1</ul>\n"
+"Kun mesaĝo:\n"
+" <pre>%2</pre></qt>"
 
 #: vcs/widgets/vcsdiffpatchsources.cpp:259
 #, kde-format
 msgctxt "@title:window"
 msgid "About to Commit to Repository"
-msgstr ""
+msgstr "Pri Devontigo al Deponejo"
 
 #: vcs/widgets/vcsdiffwidget.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
-msgstr ""
+msgstr "Diferenco inter revizio %1 kaj %2:"
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revisions:"
-msgstr ""
+msgstr "Diferenco inter revizioj:"
 
 #: vcs/widgets/vcseventwidget.cpp:78
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff to Previous Revision"
-msgstr ""
+msgstr "Diferenco al Antaŭa Revizio"
 
 #: vcs/widgets/vcseventwidget.cpp:81
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Diff between Revisions"
-msgstr ""
+msgstr "Diferenco inter Revizioj"
 
 #: vcs/widgets/vcseventwidget.cpp:138
 #, kde-format
 msgctxt "@title:window"
 msgid "Difference To Previous"
-msgstr ""
+msgstr "Diferenco Al Antaŭa"
 
 #: vcs/widgets/vcseventwidget.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Difference between Revisions"
-msgstr ""
+msgstr "Diferenco inter Revizioj"

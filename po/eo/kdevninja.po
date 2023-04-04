@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevninja\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-06 00:46+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -21,92 +21,92 @@ msgstr ""
 #: ninjabuilder.cpp:30
 #, kde-format
 msgid "Unable to find ninja executable. Is it installed on the system?"
-msgstr ""
+msgstr "Ne eblas trovi ninja ruleblan. Ĉu ĝi estas instalita en la sistemo?"
 
 #: ninjabuilder.cpp:199
 #, kde-format
 msgid "Cannot specify prefix in %1, on ninja"
-msgstr ""
+msgstr "Ne povas specifi prefikson en %1, ĉe ninja"
 
 #: ninjabuilderpreferences.cpp:35
 #, kde-format
 msgctxt "@title:tab"
 msgid "Ninja"
-msgstr ""
+msgstr "Ninja"
 
 #: ninjabuilderpreferences.cpp:40
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Ninja settings"
-msgstr ""
+msgstr "Meti Ninja-agordojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: ninjaconfig.ui:32
 #, kde-format
 msgctxt "@option:check"
 msgid "&Display commands but do not execute them:"
-msgstr ""
+msgstr "Montri koman&dojn sed ne plenumi ilin:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_31)
 #: ninjaconfig.ui:52
 #, kde-format
 msgctxt "@option:check"
 msgid "Install as &root:"
-msgstr ""
+msgstr "Instali kiel &radiko:"
 
 #. i18n: ectx: property (text), widget (QLabel, rootinstallationcommandLabel)
 #: ninjaconfig.ui:75
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Root installation &command:"
-msgstr ""
+msgstr "Radika instalada &komando:"
 
 #. i18n: ectx: property (text), widget (QLabel, jobOverrideLabel)
 #: ninjaconfig.ui:110
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "&Number of simultaneous jobs:"
-msgstr ""
+msgstr "&Nombro de samtempaj taskoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: ninjaconfig.ui:133
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Count of &errors to be tolerated:"
-msgstr ""
+msgstr "Nombro de &eraroj tolerendaj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: ninjaconfig.ui:153
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Additional ninja &options:"
-msgstr ""
+msgstr "Pliaj ninja-&opcioj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: ninjaconfig.ui:173
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Active environment &profile:"
-msgstr ""
+msgstr "&Profilo de aktiva medio:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ninjaconfig.ui:208
 #, kde-format
 msgctxt "@option:check"
 msgid "O&verride number of jobs:"
-msgstr ""
+msgstr "S&uperregi nombron da taskoj:"
 
 #: ninjajob.cpp:72
 #, kde-format
 msgid "Ninja"
-msgstr ""
+msgstr "Ninja"
 
 #: ninjajob.cpp:94
 #, kde-format
 msgid "Ninja (%1): %2"
-msgstr ""
+msgstr "Ninja (%1): %2"
 
 #: ninjajob.cpp:96
 #, kde-format
 msgid "Ninja (%1)"
-msgstr ""
+msgstr "Ninja (%1)"

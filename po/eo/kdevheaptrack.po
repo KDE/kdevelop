@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevheaptrack\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,78 +22,78 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Heaptrack"
-msgstr ""
+msgstr "Heaptrack"
 
 #: config/globalconfigpage.cpp:34
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Heaptrack Settings"
-msgstr ""
+msgstr "Meti Heaptrack-Agordojn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:29
 #, kde-format
 msgctxt "@title:group"
 msgid "Executables"
-msgstr ""
+msgstr "Binarprogramoj"
 
 #. i18n: ectx: property (text), widget (QLabel, heaptrackExecutableLabel)
 #: config/globalconfigpage.ui:35
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Heaptrack:"
-msgstr ""
+msgstr "Heaptrack:"
 
 #. i18n: ectx: property (text), widget (QLabel, heaptrackGuiExecutableLabel)
 #: config/globalconfigpage.ui:51
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Visualizer:"
-msgstr ""
+msgstr "Vidilo:"
 
 #: job.cpp:100
 #, kde-format
 msgid "Heaptrack Analysis (%1)"
-msgstr ""
+msgstr "Analizo de Heaptrack (%1)"
 
 #: plugin.cpp:58
 #, kde-format
 msgctxt "@action"
 msgid "Run Heaptrack Analysis"
-msgstr ""
+msgstr "Ruli Heaptrack-Analizon"
 
 #: plugin.cpp:67
 #, kde-format
 msgctxt "@action"
 msgid "Attach to Process with Heaptrack"
-msgstr ""
+msgstr "Alkroĉigi al Procezu per Heaptrack"
 
 #: plugin.cpp:94
 #, kde-format
 msgid "Unable to start Heaptrack analysis - \"%1\" plugin is not loaded."
-msgstr ""
+msgstr "Ne eblas komenci Heaptrack-analizon - \"%1\" kromaĵo ne estas ŝargita."
 
 #: plugin.cpp:104
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
-msgstr ""
+msgstr "Agordi lanĉon de denaska aplikaĵo al kiu apliki Heaptrack-analizon."
 
 #: plugin.cpp:110
 #, kde-format
 msgid "Heaptrack analysis can be started only for native applications."
-msgstr ""
+msgstr "Heaptrack-analizo povas esti komencita nur por denaskaj aplikoj."
 
 #: visualizer.cpp:33
 #, kde-format
 msgid "Failed to start Heaptrack visualizer from \"%1\"."
-msgstr ""
+msgstr "Malsukcesis lanĉi Heaptrack-vidigilon de \"%1\"."
 
 #: visualizer.cpp:35
 #, kde-format
 msgid "Check your settings and install the visualizer if necessary."
-msgstr ""
+msgstr "Kontrolu viajn agordojn kaj instalu la vidigilon se necese."
 
 #: visualizer.cpp:37
 #, kde-format
 msgid "Error during Heaptrack visualizer execution:"
-msgstr ""
+msgstr "Eraro dum la rulo de la bildigilo Heaptrack:"

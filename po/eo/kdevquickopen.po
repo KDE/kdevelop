@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -67,7 +67,7 @@ msgstr "Projekto %1"
 #: projectfilequickopen.cpp:159
 #, kde-format
 msgid "Not parsed yet"
-msgstr ""
+msgstr "Ankoraŭ ne analizita"
 
 #: projectfilequickopen.cpp:178
 #, kde-format
@@ -111,7 +111,7 @@ msgstr "Inkludantoj"
 #, kde-format
 msgctxt "@item quick open scope"
 msgid "Currently Open"
-msgstr ""
+msgstr "Aktuale Malfermita"
 
 #: quickopenplugin.cpp:64
 #, kde-format
@@ -159,7 +159,7 @@ msgstr "Rapide Malfermi &Funkcion"
 #, kde-format
 msgctxt "@action"
 msgid "Quick Open &Already Open File"
-msgstr ""
+msgstr "Rapida Malfermo J&am Malferma Dosiero"
 
 #: quickopenplugin.cpp:308
 #, kde-format
@@ -235,6 +235,8 @@ msgid ""
 "Search for files, classes, functions and more, allowing you to quickly "
 "navigate in your source code."
 msgstr ""
+"Serĉu dosierojn, klasojn, funkciojn kaj pli, ebligante vin rapide navigi en "
+"via fontkodo."
 
 #. i18n: ectx: property (text), widget (QLabel, searchLabel)
 #: quickopenwidget.ui:37

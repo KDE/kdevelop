@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-12-18 00:42+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,72 +22,72 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Rebuild Environment"
-msgstr ""
+msgstr "Rekonstrui Medion"
 
 #: flatpakplugin.cpp:46
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Recompiles all dependencies for a fresh environment."
-msgstr ""
+msgstr "Rekompilas ĉiujn dependecojn por freŝa medio."
 
 #: flatpakplugin.cpp:51
 #, kde-format
 msgctxt "@action"
 msgid "Export Flatpak Bundle..."
-msgstr ""
+msgstr "Eksporti Flatpak Bundle..."
 
 #: flatpakplugin.cpp:52
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Exports the current build into a 'bundle.flatpak' file."
-msgstr ""
+msgstr "Eksportas la nunan konstruaĵon en dosieron 'bundle.flatpak'."
 
 #: flatpakplugin.cpp:57
 #, kde-format
 msgctxt "@action"
 msgid "Send to Device..."
-msgstr ""
+msgstr "Sendi al Aparato..."
 
 #: flatpakplugin.cpp:92
 #, kde-format
 msgctxt "@title:window"
 msgid "Export %1"
-msgstr ""
+msgstr "Eksporti %1"
 
 #: flatpakplugin.cpp:92
 #, kde-format
 msgid "Flatpak Bundle (*.flatpak)"
-msgstr ""
+msgstr "Flatpak Bundle (*.flatpak)"
 
 #: flatpakplugin.cpp:176
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Build Flatpak %1 for %2"
-msgstr ""
+msgstr "Konstrui Flatpak %1 por %2"
 
 #: flatpakplugin.cpp:198
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Tag Name"
-msgstr ""
+msgstr "Elekti Etikedan Nomon"
 
 #: flatpakplugin.cpp:199
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Device hostname:"
-msgstr ""
+msgstr "Aparato gastiga nomo:"
 
 #: flatpakruntime.cpp:53
 #, kde-format
 msgid "Flatpak"
-msgstr ""
+msgstr "Flatpak"
 
 #: flatpakruntime.cpp:144
 #, kde-format
 msgid "Bundling"
-msgstr ""
+msgstr "Bundling"
 
 #: flatpakruntime.cpp:166
 #, kde-format
 msgid "Run on Device"
-msgstr ""
+msgstr "Ruli sur Aparato"

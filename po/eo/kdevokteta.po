@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevokteta\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -23,45 +23,46 @@ msgstr ""
 #, kde-format
 msgctxt "@title:menu"
 msgid "Permissions"
-msgstr ""
+msgstr "Permesoj"
 
 #. i18n: ectx: Menu (view)
 #: kdevokteta.rc:39
 #, kde-format
 msgid "View"
-msgstr ""
+msgstr "Vido"
 
 #. i18n: ectx: Menu (bookmarks)
 #: kdevokteta.rc:57
 #, kde-format
 msgid "Bookmarks"
-msgstr ""
+msgstr "Legosignoj"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: kdevokteta.rc:77
 #, kde-format
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Ĉefa Ilobreto"
 
 #: oktetadocument.cpp:125
 #, kde-format
 msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr ""
+"La dokumento \"%1\" havas nekonservitajn ŝanĝojn. Ĉu vi ŝatus konservi ilin?"
 
 #: oktetadocument.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
-msgstr ""
+msgstr "Fermi Dokumenton"
 
 #: oktetaplugin.cpp:97
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
-msgstr ""
+msgstr "Deksesuma Redaktilo"
 
 #: oktetawidget.cpp:138
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Manage Byte Array View Profiles..."
-msgstr ""
+msgstr "Administri Profilojn de Bajttabelaj Perspektivoj..."

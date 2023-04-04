@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgrepview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -60,13 +60,13 @@ msgstr[1] ""
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2"
-msgstr ""
+msgstr "Serĉu \"%1\" en %2"
 
 #: grepdialog.cpp:537
 #, kde-format
 msgctxt "@item search result"
 msgid "Search \"%1\" in %2 (at time %3)"
-msgstr ""
+msgstr "Serĉu \"%1\" en %2 (je la tempo %3)"
 
 #: grepjob.cpp:97
 #, kde-format
@@ -89,7 +89,7 @@ msgctxt ""
 "Capture is the text which is \"captured\" with () in regular expressions see "
 "https://doc.qt.io/qt-5/qregexp.html#capturedTexts"
 msgid "Captures are not allowed in pattern string"
-msgstr ""
+msgstr "Kaptoj ne estas permesitaj en ŝablonoŝnuro"
 
 #: grepjob.cpp:161
 #, kde-format
@@ -101,27 +101,27 @@ msgstr[1] ""
 #: grepjob.cpp:182
 #, kde-format
 msgid "Collecting files..."
-msgstr ""
+msgstr "Kolektante dosierojn..."
 
 #: grepjob.cpp:260
 #, kde-format
 msgid "Failed: %1"
-msgstr ""
+msgstr "Malsukcesis: %1"
 
 #: grepjob.cpp:263
 #, kde-format
 msgid "No results found"
-msgstr ""
+msgstr "Neniuj rezultoj trovitaj"
 
 #: grepjob.cpp:282
 #, kde-format
 msgid "Grep: %1"
-msgstr ""
+msgstr "Grep: %1"
 
 #: grepoutputdelegate.cpp:73 grepoutputdelegate.cpp:140
 #, kde-format
 msgid "Line %1: "
-msgstr ""
+msgstr "Linio %1:"
 
 #: grepoutputmodel.cpp:377
 #, kde-format
@@ -141,7 +141,7 @@ msgstr[1] ""
 #, kde-format
 msgctxt "%1 is e.g. '4 matches', %2 is e.g. '1 file'"
 msgid "<b>%1 in %2</b>"
-msgstr ""
+msgstr "<b>%1 en %2</b>"
 
 #: grepoutputmodel.cpp:382
 #, kde-format
@@ -156,7 +156,7 @@ msgctxt ""
 "%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are "
 "its row and column"
 msgid "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5"
-msgstr ""
+msgstr "Malsukcesis anstataŭigi <b>%1</b> per <b>%2</b> en %3:%4:%5"
 
 #: grepoutputview.cpp:72
 #, kde-format
@@ -261,7 +261,7 @@ msgstr "Trovi/Anstataŭigi en Dos&ieroj..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Search for expressions over several files"
-msgstr ""
+msgstr "Serĉu esprimojn en pluraj dosieroj"
 
 #: grepviewplugin.cpp:81
 #, kde-format
@@ -272,6 +272,10 @@ msgid ""
 "you specify. Matches will be displayed, you can switch to a match directly. "
 "You can also do replacement."
 msgstr ""
+"Malfermas la dialogon 'Trovu/Anstataŭigi en Dosieroj'. Tie vi povas enigi "
+"regulan esprimon, kiu tiam estas serĉata ene de ĉiuj dosieroj en la "
+"dosierujoj kiujn vi specifas. Kongruoj aperos, vi povas rekte ŝanĝi al "
+"kongruo. Vi ankaŭ povas fari anstataŭigon."
 
 #: grepviewplugin.cpp:129 grepviewplugin.cpp:152
 #, kde-format
@@ -290,7 +294,7 @@ msgstr "Trovi/Anstataŭigi en Dos&ieroj..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the regular expression you want to search for"
-msgstr ""
+msgstr "Enigu la regulan esprimon, kiun vi volas serĉi"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, patternCombo)
 #: grepwidget.ui:59
@@ -380,6 +384,93 @@ msgid ""
 "underline; color:#0057ae;\">www.pcre.org</span></a> or <span style=\" font-"
 "style:italic;\">man pcresyntax.</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html> <head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Enigu la regulan esprimo, "
+"kiun vi volas serĉi ĉi tie.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent :0; text-indent:0px;\">Se vi ne kontrolas "
+"\"Regula Esprimo\" sube, ĉi tio estas konsiderata kiel kruda ĉeno. Tio "
+"signifas, ke ĉiuj metasignoj estas ellasitaj.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block- indent:0; text-indent:0px;\">Eblaj metasignoj estas:</"
+"p>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin- "
+"dekstre: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block -indent:0; text-"
+"indent:0px;\"><span style=\" font-weight:600;\">.</span> - Kongruas kun ajna "
+"signo</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" tiparo- "
+"weight:600;\">^</span> - Kongruas kun la komenco de linio</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin -"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">$</span> - Kongruas kun la fino de linio </li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">\\b</span> - Kongruas kun vortlimo</li>\n"
+"<li style=\" margin- supro:0px; rando-malsupro:12px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
+"font-weight:600;\">\\s</span> - Kongruas kun iu ajn blankspaca signo</li></"
+"ul>\n"
+"<p style= \" margin-top:0px; marĝeno-malsupro:0px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\">La jenaj ripetaj "
+"operatoroj ekzistas:</p>\n"
+"<ul style=\"margin-top: 0px; marĝeno-malsupro: 0px; marĝeno-maldekstra: 0px; "
+"marĝeno-dekstra: 0px; -qt-list-indent: 1;\"><li stilo=\" margin-top:12px; "
+"marĝeno-malsupro:0px; marĝeno-maldekstra:0px; marĝeno-dekstra:0px; -qt-block-"
+"indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">?</span> - La "
+"antaŭa ero maksimume kongruas</li>\n"
+"<li style=\" marĝeno-supro:0px; marĝeno-malsupro:0px; marĝeno-"
+"maldekstra:0px; marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><span style=\" font-weight:600;\">*</span> - La antaŭa ero kongruas nul "
+"aŭ pli fojojn</li>\n"
+"<li style=\\ \" margin-top:0px; marĝeno-malsupro:0px; marĝeno-"
+"maldekstra:0px; marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><span style=\" font-weight:600;\">+</span> - La antaŭa ero kongruas unu "
+"aŭ plurajn fojojn</li>\n"
+"<li style=\\ \" margin-top:0px; marĝeno-malsupro:0px; marĝeno-"
+"maldekstra:0px; marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><span style=\" font-weight:600;\">{</span><span style=\" font-weight:600; "
+"font-style:kursivo;\">n</span><span style=\" font-weight:600;\">}</span> - "
+"La antaŭa ero estas ĝuste egalita <span style=\" font-style :kursivo;\">n</"
+"span> fojojn</li>\n"
+"<li style=\" margin-top:0px; marĝeno-malsupro:0px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
+"font-weight:600;\">{</span><span style=\" font-weight:600; font-style:"
+"kursivo;\">n</span><span style=\" font-weight:600;\">,}</span> - La antaŭa "
+"ero kongruas kun <span style=\" font-style :kursivo;\">n</span> aŭ pli da "
+"fojoj</li>\n"
+"<li style=\" margin-top:0px; marĝeno-malsupro:0px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
+"font-weight:600;\">{,</span><span style=\" font-weight:600; font-style:"
+"kursivo;\">n</span><span style=\" font-weight:600;\">}</span> - La antaŭa "
+"ero maksimume kongruas <span style=\" font- stilo:kursivo;\">n</span> "
+"fojojn</li>\n"
+"<li style=\" margin-top:0px; rando-malsupro:12px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
+"font-weight:600;\">{</span><span style=\" font-weight:600; font-style:"
+"kursivo;\">n</span><span style=\" font-weight:600;\">,</span><span style=\" "
+"font-weight:600; font-style:italic;\">m</span><span style=\" font-weight:600;"
+"\">}</span> - La antaŭa ero kongruas almenaŭ kun <span style=\" font- stilo:"
+"kursivo;\">n</span>, sed maksimume <span style=\" font-style:kursivo;\">m</"
+"span> fojojn.</li></ul>\n"
+"<p stilo=\" margin-top:0px; marĝeno-malsupro:0px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\">Krome, "
+"malantaŭaj referencoj al krampitaj subesprimoj haveblas per la notacio "
+"\\<span style=\" font-style:italic;\">n</span>.</p>\n"
+"<p stilo=\" margin-top:12px; rando-malsupro:12px; marĝeno-maldekstra:0px; "
+"marĝeno-dekstra:0px; -qt-block-indent:0; text-indent:0px;\">Por plia "
+"referenco, rigardu <a href=\"https://www.pcre.org/\"><span style=\" text-"
+"decoration: substreko; color:#0057ae;\">www.pcre.org</span></a> aŭ <span "
+"style=\" font-style:italic;\">man pcresyntax.</span></p></p></p> korpo></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: grepwidget.ui:69
@@ -403,27 +494,29 @@ msgid ""
 "This is the regular expression template. <i>%s</i> will be replaced by the "
 "pattern, while <i>%%</i> will be replaced by <i>%</i>."
 msgstr ""
+"Ĉi tiu estas la ŝablono pri regula esprimo. <i>%s</i> estos anstataŭigita "
+"per la ŝablono, dum <i>%%</i> estos anstataŭigita per <i>%</i>."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, syncButton)
 #: grepwidget.ui:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Quickly select location from a set of directories"
-msgstr ""
+msgstr "Rapide elekti lokon el aro da dosierujoj"
 
 #. i18n: ectx: property (text), widget (QPushButton, syncButton)
 #: grepwidget.ui:95
 #, kde-format
 msgctxt "@action:button"
 msgid "Quick Select"
-msgstr ""
+msgstr "Rapida Elekto"
 
 #. i18n: ectx: property (text), widget (QLabel, depthLabel)
 #: grepwidget.ui:102
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Depth:"
-msgstr ""
+msgstr "Profundo:"
 
 #. i18n: Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, depthSpin)
@@ -431,7 +524,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item full recursion"
 msgid "Full"
-msgstr ""
+msgstr "Plena"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: grepwidget.ui:131
@@ -483,6 +576,8 @@ msgid ""
 "Enter the file name pattern of the files to search here. You may give "
 "several patterns separated by commas or spaces."
 msgstr ""
+"Enigu la dosiernoman ŝablonon de la dosieroj por serĉi ĉi tie. Vi povas doni "
+"plurajn ŝablonojn apartigitajn per komoj aŭ spacoj."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: grepwidget.ui:218
@@ -508,6 +603,10 @@ msgid ""
 "is internally surrounded by asterisks, so that each pattern can match parts "
 "of the file paths.</p>"
 msgstr ""
+"Enigu la dosiernoman ŝablonon de la dosieroj por ekskludi de la serĉo ĉi "
+"tie. Vi povas doni plurajn ŝablonojn apartigitajn per komoj aŭ spacoj.<p>Ĉiu "
+"ŝablono estas interne ĉirkaŭita de asteriskoj, tiel ke ĉiu ŝablono povas "
+"kongrui kun partoj de la dosiervojoj.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: grepwidget.ui:314
@@ -552,10 +651,12 @@ msgid ""
 "Select the location where you want to search. It can be a directory, a file, "
 "or a semicolon separated (without spaces) list of directories/files."
 msgstr ""
+"Elektu la lokon, kie vi volas serĉi. Ĝi povas esti dosierujo, dosiero aŭ "
+"punktokomo disigita (sen spacoj) listo de dosierujoj/dosieroj."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, directorySelector)
 #: grepwidget.ui:414
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select a directory to search in"
-msgstr ""
+msgstr "Elekti dosierujon en kiu serĉi"

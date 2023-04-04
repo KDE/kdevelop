@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevprojectfilter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-13 00:55+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,19 +22,19 @@ msgstr ""
 #, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
-msgstr ""
+msgstr "Ŝablono"
 
 #: filtermodel.cpp:78
 #, kde-format
 msgctxt "@title:column"
 msgid "Targets"
-msgstr ""
+msgstr "Celoj"
 
 #: filtermodel.cpp:80
 #, kde-format
 msgctxt "@title:column"
 msgid "Action"
-msgstr ""
+msgstr "Ago"
 
 #: filtermodel.cpp:109
 #, kde-format
@@ -48,6 +48,15 @@ msgid ""
 "code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and "
 "thus match any item with a relative path ending on the given pattern."
 msgstr ""
+"La ĵokera ŝablono difinas ĉu dosiero aŭ dosierujo estas inkluzivita en "
+"projekto aŭ ne.<br />La ŝablono estas kongruata usklecdistinge kun la vojo "
+"de la elemento relativa al la projekta radiko. La relativa vojo komenciĝas "
+"per antaŭen oblikvo, postaj oblikvoj de dosierujoj estas forigitaj.<br /"
+">Ŝablonoj finiĝantaj kun <code>\"/\"</code> estas implicite konsiderataj "
+"kongruaj nur kun dosierujoj.<br />Ŝablonoj kiuj ne eksplicite komenciĝas per "
+"aŭ <code>\"/\"</code> aŭ <code>\"*\"</code> implicite ricevas <code>\"*/\"</"
+"code> antaŭmetita kaj tiel kongruas kun ajna ero kun relativa vojo finiĝanta "
+"kun la donita ŝablono."
 
 #: filtermodel.cpp:121
 #, kde-format
@@ -55,24 +64,26 @@ msgid ""
 "The target defines what type of item the filter is matched against.<br /"
 ">Filters either apply only to files, only to folders or to both."
 msgstr ""
+"La celo difinas al kiu tipo de elemento la filtrilo estas kongrua.<br /"
+">Filtriloj aŭ validas nur por dosieroj, nur por dosierujoj aŭ por ambaŭ."
 
 #: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
 #, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
-msgstr ""
+msgstr "Dosieroj kaj Dosierujoj"
 
 #: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
 #, kde-format
 msgctxt "@item"
 msgid "Folders"
-msgstr ""
+msgstr "Dosierujoj"
 
 #: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
 #, kde-format
 msgctxt "@item"
 msgid "Files"
-msgstr ""
+msgstr "Dosieroj"
 
 #: filtermodel.cpp:143
 #, kde-format
@@ -83,18 +94,23 @@ msgid ""
 "project, you could exclude all files via <code>\"*\"</code> and then apply "
 "an inclusive <code>\"*.cpp\"</code> pattern."
 msgstr ""
+"Filtriloj defaŭlte ekskludas erojn de la projekto. Inkluzivaj ŝablonoj povas "
+"esti uzataj por inkluzivi erojn, kiuj estis kongruaj per antaŭaj ekskluzivaj "
+"ŝablonoj.<br />Ekz. por nur inkluzivi dosierojn finiĝantajn je <code>\".cpp"
+"\"</code> en via projekto, vi povus ekskludi ĉiujn dosierojn per <code>\"*"
+"\"</code> kaj poste apliki inkluzivan <code>\"*.cpp\"</code> ŝablonon."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
 #, kde-format
 msgctxt "@item"
 msgid "Include"
-msgstr ""
+msgstr "Inkluzivi"
 
 #: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
 #, kde-format
 msgctxt "@item"
 msgid "Exclude"
-msgstr ""
+msgstr "Ekskludi"
 
 #: projectfilterconfigpage.cpp:172
 #, kde-format
@@ -102,23 +118,26 @@ msgid ""
 "A filter with an empty pattern will match all items. Use <code>\"*\"</code> "
 "to make this explicit."
 msgstr ""
+"Filtrilo kun malplena ŝablono kongruos kun ĉiuj eroj. Uzu <code>\"*\"</code> "
+"por fari ĉi tion eksplicita."
 
 #: projectfilterconfigpage.cpp:175
 #, kde-format
 msgid "A filter ending on <code>\"/\"</code> can never match a file."
 msgstr ""
+"Filtrilo finiĝanta ĉe <code>\"/\"</code> neniam povas kongrui kun dosiero."
 
 #: projectfilterconfigpage.cpp:198
 #, kde-format
 msgctxt "@title:tab"
 msgid "Configure Project Filter"
-msgstr ""
+msgstr "Agordi Projektan Filtrilon"
 
 #: projectfilterconfigpage.cpp:208
 #, kde-format
 msgctxt "@title:tab"
 msgid "Project Filter"
-msgstr ""
+msgstr "Projekta Filtrilo"
 
 #: projectfilterprovider.cpp:76
 #, kde-format
@@ -141,7 +160,7 @@ msgstr[1] ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"
-msgstr ""
+msgstr "Projekta Filtrilo Aldonita"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projectfiltersettings.ui:20
@@ -150,31 +169,33 @@ msgid ""
 "Configure which files and folders inside the project folder should be "
 "included or excluded:"
 msgstr ""
+"Agordi kiuj dosieroj kaj dosierujoj en la projekta dosierujo estu "
+"inkluzivitaj aŭ ekskluditaj:"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
 #, kde-format
 msgctxt "@action:button"
 msgid "Add"
-msgstr ""
+msgstr "Aldoni"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: projectfiltersettings.ui:49
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
-msgstr ""
+msgstr "Forigi"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveUp)
 #: projectfiltersettings.ui:61
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
-msgstr ""
+msgstr "Movi Supren"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
 #: projectfiltersettings.ui:73
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Down"
-msgstr ""
+msgstr "Movi Malsupren"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevperforce\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-03 22:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,42 +22,44 @@ msgstr ""
 #, kde-format
 msgid "The variable P4CONFIG is not set. Is perforce installed on the system?"
 msgstr ""
+"La variablo P4CONFIG ne estas agordita. Ĉu perforce estas instalita sur la "
+"sistemo?"
 
 #: perforceplugin.cpp:122
 #, kde-format
 msgid "Perforce"
-msgstr ""
+msgstr "Perforce"
 
 #: perforceplugin.cpp:232 perforceplugin.cpp:249
 #, kde-format
 msgid "Please select only one item for this operation"
-msgstr ""
+msgstr "Bonvolu elekti nur unu eron por ĉi tiu operacio"
 
 #: perforceplugin.cpp:282
 #, kde-format
 msgid "No files or message specified"
-msgstr ""
+msgstr "Neniuj dosieroj aŭ mesaĝo specifitaj"
 
 #: perforceplugin.cpp:365 perforceplugin.cpp:381
 #, kde-format
 msgid "Please select a file for this operation"
-msgstr ""
+msgstr "Bonvolu elekti dosieron por ĉi tiu operacio"
 
 #: perforceplugin.cpp:366 perforceplugin.cpp:382
 #, kde-format
 msgid "Directory not supported for this operation"
-msgstr ""
+msgstr "Dosierujo ne subtenata por ĉi tiu operacio"
 
 #: perforceplugin.cpp:462
 #, kde-format
 msgctxt "@action::inmenu"
 msgid "Edit"
-msgstr ""
+msgstr "Redakti"
 
 #: perforceplugin.cpp:671
 #, kde-format
 msgid "error: %1"
-msgstr ""
+msgstr "eraro: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:124
 #, kde-format
@@ -65,36 +67,38 @@ msgid ""
 "Unable to find perforce executable. Is it installed on the system? Is it in "
 "your PATH?"
 msgstr ""
+"Ne eblas trovi perforce binarprogramon. Ĉu ĝi estas instalita en la sistemo? "
+"Ĉu ĝi estas en via VOJO?"
 
 #: ui/perforceimportmetadatawidget.cpp:152
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
-msgstr ""
+msgstr "P4 Kliento malsukcesis kun elirkodo: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:196
 #, kde-format
 msgid "P4 Client failed with error code: %1"
-msgstr ""
+msgstr "P4 Kliento malsukcesis kun erarkodo: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: ui/perforceimportmetadatawidget.ui:29
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Source directory:"
-msgstr ""
+msgstr "Fonta dosierujo:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelExec)
 #: ui/perforceimportmetadatawidget.ui:39
 #, kde-format
 msgctxt "@label:textbox"
 msgid "P4 executable:"
-msgstr ""
+msgstr "P4 rulebla:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4port)
 #: ui/perforceimportmetadatawidget.ui:49
 #, kde-format
 msgid "P4 Port"
-msgstr ""
+msgstr "P4 Haveno"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, p4portEdit)
 #: ui/perforceimportmetadatawidget.ui:68
@@ -106,12 +110,15 @@ msgid ""
 "running on the same host. Port numbers must be in the range 1024 through "
 "32767"
 msgstr ""
+"La formato de P4PORT por Perforce-aplikoj estas protocol:host:port, aŭ "
+"haveno memstare se kaj la Perforce-aplikaĵo kaj versio-servo funkcias sur la "
+"sama gastiganto. Havenaj nombroj devas esti en la intervalo 1024 ĝis 32767"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4user)
 #: ui/perforceimportmetadatawidget.ui:90
 #, kde-format
 msgid "P4 User"
-msgstr ""
+msgstr "P4 Uzanto"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, p4userEdit)
 #: ui/perforceimportmetadatawidget.ui:97
@@ -121,25 +128,27 @@ msgid ""
 "Current Perforce user name. By default, the Perforce username is the same as "
 "the OS username"
 msgstr ""
+"Nuna uzantnomo de Perforce. Defaŭlte, la uzantnomo de Perforce estas la sama "
+"kiel la uzantnomo de OS"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4client)
 #: ui/perforceimportmetadatawidget.ui:104
 #, kde-format
 msgid "P4 Client"
-msgstr ""
+msgstr "P4 Kliento"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, p4clientEdit)
 #: ui/perforceimportmetadatawidget.ui:111
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Name of current client workspace on the Perforce server"
-msgstr ""
+msgstr "Nomo de nuna klienta laborspaco sur la Perforce-servilo"
 
 #. i18n: ectx: property (text), widget (QLabel, labelP4config)
 #: ui/perforceimportmetadatawidget.ui:118
 #, kde-format
 msgid "P4 Config"
-msgstr ""
+msgstr "P4 Agordo"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, p4configEdit)
 #: ui/perforceimportmetadatawidget.ui:128
@@ -149,24 +158,26 @@ msgid ""
 "Contains a file name without a path. The specified file is used to store "
 "other Perforce environment variables "
 msgstr ""
+"Enhavas dosiernomon sen vojo. La specifita dosiero estas uzata por konservi "
+"aliajn mediovariablojn de Perforce"
 
 #. i18n: ectx: property (text), widget (QPushButton, testP4setupButton)
 #: ui/perforceimportmetadatawidget.ui:141
 #, kde-format
 msgctxt "@action:button"
 msgid "Test"
-msgstr ""
+msgstr "Testo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonConfig)
 #: ui/perforceimportmetadatawidget.ui:197
 #, kde-format
 msgctxt "@option:radio"
 msgid "Config File"
-msgstr ""
+msgstr "Agorda Dosiero"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonVariables)
 #: ui/perforceimportmetadatawidget.ui:213
 #, kde-format
 msgctxt "@option:radio"
 msgid "User/Port Config"
-msgstr ""
+msgstr "Uzanto/Porta Agordo"
