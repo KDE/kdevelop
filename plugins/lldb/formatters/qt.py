@@ -11,7 +11,7 @@ from __future__ import print_function
 import time
 import datetime as dt
 import string
-from urlparse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 import locale
 import lldb
@@ -173,8 +173,7 @@ class QStringFormatter(HiddenMemberProvider):
 
     def _update(self):
         printable, dataPointer, byteLength = printableQString(self.valobj)
-        strLength = byteLength / 2
-        self._num_children = strLength
+        strLength = int(byteLength / 2)
 
         if printable is not None:
             for idx in range(0, strLength):
@@ -182,7 +181,7 @@ class QStringFormatter(HiddenMemberProvider):
                                                          dataPointer + idx * self._qchar_size,
                                                          self._qchar_type)
                 self._addChild(var)
-            # self._addChild(('(content)', quote(printable)), hidden=True)
+            self._num_children = strLength
 
 
 def QCharSummaryProvider(valobj, internal_dict):
