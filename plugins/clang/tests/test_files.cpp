@@ -88,8 +88,9 @@ void expandTestFilesDir(QVariantMap& testData)
     *rangeIt = range.replace(regexp, "[\\1, \\1]");
 }
 
-/// libclang 16.0.0 and later does not qualify template arguments redundantly.
-void adjustTemplateArgumentQualification(QVariantMap& testData)
+/// libclang 16.0.0 and later does not qualify template arguments redundantly
+/// and does not spell out default template argument values.
+void adjustTemplateArguments(QVariantMap& testData)
 {
     if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(16, 0, 0)) {
         return; // nothing to adjust
@@ -108,20 +109,24 @@ void adjustTemplateArgumentQualification(QVariantMap& testData)
     QCOMPARE(toStringIt->userType(), QMetaType::QString);
     auto typeString = toStringIt->toString();
 
-    static const QLatin1String qualifiedTemplateArgument("FormattingBug::X");
-    static const QLatin1String unqualifiedTemplateArgument("X");
-    if (typeString.contains(qualifiedTemplateArgument)) {
-        typeString.replace(qualifiedTemplateArgument, unqualifiedTemplateArgument);
-        qDebug() << "Removing template argument qualification:" << toStringIt->toString() << "=>" << typeString;
+    const auto replaceInTypeString = [&](const char* before, const char* after, const char* replacementDescription) {
+        if (!typeString.contains(QLatin1String{before}))
+            return;
+        typeString.replace(QLatin1String{before}, QLatin1String{after});
+        qDebug() << replacementDescription << toStringIt->toString() << "=>" << typeString;
         *toStringIt = typeString;
         *typeIt = typeData;
-    }
+    };
+
+    replaceInTypeString("FormattingBug::X", "X", "Removing template argument qualification:");
+    replaceInTypeString("SpacedDefaultParam< 20 >", "SpacedDefaultParam<  >",
+                        "Unspecifying default template argument:");
 }
 
 void adjustTestData(QVariantMap& testData)
 {
     expandTestFilesDir(testData);
-    adjustTemplateArgumentQualification(testData);
+    adjustTemplateArguments(testData);
 }
 } // unnamed namespace
 
