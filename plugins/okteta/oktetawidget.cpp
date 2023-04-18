@@ -9,11 +9,8 @@
 // plugin
 #include "oktetadocument.h"
 #include "oktetaplugin.h"
-#include <config-kdevokteta.h>
 // Okteta Kasten
 #include <Kasten/Okteta/ByteArrayView>
-
-#if USE_KASTEN_CONTROLLER_FACTORIES
 // Okteta Kasten controllers
 #include <Kasten/Okteta/OverwriteModeControllerFactory>
 #include <Kasten/Okteta/GotoOffsetControllerFactory>
@@ -39,32 +36,6 @@
 #include <Kasten/SelectControllerFactory>
 // Kasten
 #include <Kasten/AbstractXmlGuiController>
-#else
-// Okteta Kasten controllers
-#include <Kasten/Okteta/OverwriteModeController>
-#include <Kasten/Okteta/GotoOffsetController>
-#include <Kasten/Okteta/SelectRangeController>
-#include <Kasten/Okteta/SearchController>
-#include <Kasten/Okteta/ReplaceController>
-#include <Kasten/Okteta/BookmarksController>
-#include <Kasten/Okteta/PrintController>
-#include <Kasten/Okteta/ViewConfigController>
-#include <Kasten/Okteta/ViewModeController>
-#include <Kasten/Okteta/ViewStatusController>
-#include <Kasten/Okteta/ViewProfileController>
-#include <Kasten/Okteta/ViewProfilesManageController>
-// Kasten controllers
-#include <Kasten/ReadOnlyController>
-#include <Kasten/ClipboardController>
-#include <Kasten/InsertController>
-#include <Kasten/CopyAsController>
-#include <Kasten/ExportController>
-#include <Kasten/VersionController>
-#include <Kasten/ZoomController>
-#include <Kasten/ZoomBarController>
-#include <Kasten/SelectController>
-#endif
-
 // KDevelop
 #include <sublime/view.h>
 // KF
@@ -100,7 +71,6 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
 {
     Kasten::ByteArrayViewProfileManager* viewProfileManager = plugin->viewProfileManager();
     mControllers = {
-#if USE_KASTEN_CONTROLLER_FACTORIES
         Kasten::VersionControllerFactory().create(this),
         Kasten::ReadOnlyControllerFactory().create(this),
         Kasten::ZoomControllerFactory().create(this),
@@ -115,22 +85,6 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
         Kasten::ViewModeControllerFactory().create(this),
         Kasten::ViewProfileControllerFactory(viewProfileManager, mByteArrayView->widget()).create(this),
         Kasten::ViewProfilesManageControllerFactory(viewProfileManager, mByteArrayView->widget()).create(this),
-#else
-        new Kasten::VersionController(this),
-        new Kasten::ReadOnlyController(this),
-        new Kasten::ZoomController(this),
-        new Kasten::SelectController(this),
-        new Kasten::ClipboardController(this),
-        new Kasten::OverwriteModeController(this),
-        new Kasten::SearchController(this,this),
-        new Kasten::ReplaceController(this,this),
-        new Kasten::BookmarksController(this),
-        new Kasten::PrintController(this),
-        new Kasten::ViewConfigController(this),
-        new Kasten::ViewModeController(this),
-        new Kasten::ViewProfileController(viewProfileManager, mByteArrayView->widget(), this),
-        new Kasten::ViewProfilesManageController(this, viewProfileManager, mByteArrayView->widget()),
-#endif
     };
     // update the text of the viewprofiles_manage action, to make clear this is just for byte arrays
     QAction* viewprofilesManageAction = actionCollection()->action(QStringLiteral("settings_viewprofiles_manage"));
