@@ -22,6 +22,11 @@ public:
     explicit ProblemHighlighter(KTextEditor::Document* document);
     ~ProblemHighlighter() override;
 
+    KTextEditor::Document* document() const
+    {
+        return m_document;
+    }
+
     void setProblems(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 private Q_SLOTS:

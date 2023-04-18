@@ -42,6 +42,7 @@ private Q_SLOTS:
     void updateHighlight(const KDevelop::IndexedString& url);
     void documentClosed(KDevelop::IDocument*);
     void textDocumentCreated(KDevelop::IDocument* document);
+    void documentUrlChanged(KDevelop::IDocument* document);
     void documentActivated(KDevelop::IDocument* document);
     void showModel(const QString& id);
 
