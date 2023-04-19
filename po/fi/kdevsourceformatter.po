@@ -1,7 +1,7 @@
 # Copyright © 2011, 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2018.
+# Tommi Nieminen <translator@legisign.org>, 2018, 2023.
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2018-08-19 17:07+0200\n"
+"PO-Revision-Date: 2023-04-17 13:29+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -21,83 +21,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2013-01-13 20:43:14+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: config/projectconfigpage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Source Formatter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Source Formatter"
 msgstr "Lähdekoodin muotoilu"
 
 #: config/projectconfigpage.cpp:49
-#, fuzzy, kde-format
-#| msgid "Configure Source Formatter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Source Formatter"
 msgstr "Lähdekoodin muotoilun asetukset"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_useDefault)
 #: config/projectconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "&Use default"
+#, kde-format
 msgctxt "@option:check"
 msgid "&Use default"
 msgstr "Käytä &oletusta"
 
 #. i18n: ectx: property (title), widget (QGroupBox, generalGroupBox)
 #: config/projectconfigpage.ui:36
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgctxt "@title:group"
 msgid "General"
-msgstr "Yleistä"
+msgstr "Perusasetukset"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:42
-#, fuzzy, kde-format
-#| msgid ""
-#| "Override the editor indentation mode according to the formatting style "
-#| "for documents without Kate modeline."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Override the editor indentation mode according to the formatting style for "
 "documents without a Kate modeline."
 msgstr ""
 "Ohita muokkaimen sisennystapa muotoilutyylin mukaisesti tiedostoille ilman "
-"Kate-tilariviä"
+"Kate-tilariviä."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_overrideKateIndentation)
 #: config/projectconfigpage.ui:45
-#, fuzzy, kde-format
-#| msgid "Override Kate Indentation Mode"
+#, kde-format
 msgctxt "@option:check"
 msgid "Override editor indentation mode"
-msgstr "Ohita Katen sisennystapa"
+msgstr "Ohita muokkaimen sisennystapa"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:52
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add a Kate modeline according to the formatting style to formatted "
-#| "documents."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Add a Kate modeline according to the formatting style to formatted documents."
-msgstr "Lisää muotoilutyylin mukainen Kate-tilarivi muotoiltuihin tiedostoihin"
+msgstr ""
+"Lisää muotoilutyylin mukainen Kate-tilarivi muotoiltuihin tiedostoihin."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_modelinesEnabled)
 #: config/projectconfigpage.ui:55
-#, fuzzy, kde-format
-#| msgid "Add Kate Modeline"
+#, kde-format
 msgctxt "@option:check"
 msgid "Add Kate modeline"
 msgstr "Lisää Kate-tilarivi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formattinStylesGroupBox)
 #: config/projectconfigpage.ui:65
-#, fuzzy, kde-format
-#| msgid "Formatting Styles"
+#, kde-format
 msgctxt "@title:group"
 msgid "Formatting Styles"
 msgstr "Muotoilutyylit"

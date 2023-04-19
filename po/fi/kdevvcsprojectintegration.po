@@ -1,6 +1,7 @@
 # Copyright © 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2015.
+# Tommi Nieminen <translator@legisign.org>, 2023.
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -8,8 +9,8 @@ msgstr ""
 "Project-Id-Version: kdevvcsprojectintegration\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2015-10-14 14:06+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2023-04-17 13:30+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -17,49 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:34+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: vcschangesview.cpp:84
-#, fuzzy, kde-format
-#| msgid "Refresh"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Refresh"
-msgstr "Päivitä"
+msgstr "Virkistä"
 
 #: vcschangesviewplugin.cpp:62
-#, fuzzy, kde-format
-#| msgid "Project Changes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Changes"
 msgstr "Projektin muutokset"
 
 #: vcschangesviewplugin.cpp:65
-#, fuzzy, kde-format
-#| msgid "Locate Current Document"
+#, kde-format
 msgctxt "@action"
 msgid "Locate Current Document"
-msgstr "Paikallista nykyinen tiedosto"
+msgstr "Paikanna nykyinen tiedosto"
 
 #: vcschangesviewplugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "Locates the current document and selects it."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Locate the current document and select it"
-msgstr "Paikallistaa nykyisen tiedoston ja valitsee sen."
+msgstr "Paikanna ja valitse nykyinen tiedosto"
 
 #: vcschangesviewplugin.cpp:70
-#, fuzzy, kde-format
-#| msgid "Reload View"
+#, kde-format
 msgctxt "@action"
 msgid "Reload View"
-msgstr "Päivitä näkymä"
+msgstr "Virkistä näkymä"
 
 #: vcschangesviewplugin.cpp:72
-#, fuzzy, kde-format
-#| msgid "Refreshes the view for all projects, in case anything changed."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Refresh the view for all projects, in case anything changed"
-msgstr "Päivittää kaikkien projektien näkymän muutosten varalta."
+msgstr "Virkistää kaikkien projektien näkymät muutosten varalta"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the extragear package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2009.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015.
+# Tommi Nieminen <translator@legisign.org>, 2023.
 #
 # KDE Finnish translation sprint participants:
 msgid ""
@@ -10,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kdevfilemanager\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-28 00:56+0000\n"
-"PO-Revision-Date: 2015-10-14 14:05+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2023-04-17 16:09+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -19,39 +20,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: filemanager.cpp:47 kdevfilemanagerplugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "File System"
+#, kde-format
 msgctxt "@title:window"
 msgid "File System"
 msgstr "Tiedostojärjestelmä"
 
 #: filemanager.cpp:131
-#, fuzzy, kde-format
-#| msgid "Bookmarks"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
 #: filemanager.cpp:138
-#, fuzzy, kde-format
-#| msgid "Current Document Directory"
+#, kde-format
 msgctxt "@action switch to directory of current document"
 msgid "Current Document Directory"
 msgstr "Nykyinen tiedostokansio"
 
 #: filemanager.cpp:169
-#, fuzzy, kde-format
-#| msgid "New File..."
+#, kde-format
 msgctxt "@action"
 msgid "New File..."
 msgstr "Uusi tiedosto…"
 
 #: filemanager.cpp:176
-#, fuzzy, kde-format
-#| msgid "Create New File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Create New File"
 msgstr "Luo uusi tiedosto"
@@ -59,7 +55,7 @@ msgstr "Luo uusi tiedosto"
 #: filemanager.cpp:192
 #, kde-format
 msgid "Unable to create file '%1'"
-msgstr "Tiedoston ”%1” luonti epäonnistui"
+msgstr "Tiedoston ”%1” luominen epäonnistui"
 
 #~ msgid "Filesystem"
 #~ msgstr "Tiedostojärjestelmä"
