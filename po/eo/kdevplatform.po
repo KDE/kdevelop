@@ -1790,7 +1790,7 @@ msgstr "Malplenigi Kaŝmemoron"
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue"
-msgstr "&Daŭrigi"
+msgstr "Daŭrigi"
 
 #: shell/areadisplay.cpp:44
 #, kde-format

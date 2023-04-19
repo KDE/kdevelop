@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the kdevelop package.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
+# Tommi Nieminen <translator@legisign.org>, 2023.
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -11,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2016-01-07 18:24+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2023-04-17 16:09+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:30+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: debuggerplugin.cpp:41 gdbconfigpage.cpp:116
 #, kde-format
@@ -28,22 +29,19 @@ msgid "GDB"
 msgstr "GDB"
 
 #: debuggerplugin.cpp:113
-#, fuzzy, kde-format
-#| msgid "Disassemble/Registers"
+#, kde-format
 msgctxt "@title:window"
 msgid "Disassemble/Registers"
-msgstr "Purettu binaarikoodi/rekisterit"
+msgstr "Disassembler/rekisterit"
 
 #: debuggerplugin.cpp:117
-#, fuzzy, kde-format
-#| msgid "GDB"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB"
 msgstr "GDB"
 
 #: debuggerplugin.cpp:126
-#, fuzzy, kde-format
-#| msgid "Memory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Memory"
 msgstr "Muisti"
@@ -168,11 +166,10 @@ msgid "Could not locate the debugging shell '%1'."
 msgstr "Ei voitu paikallistaa virheenpaikannuskomentotulkkia ”%1”."
 
 #: gdbconfigpage.cpp:93
-#, fuzzy, kde-format
-#| msgid "GDB Configuration"
+#, kde-format
 msgctxt "@title:tab"
 msgid "GDB Configuration"
-msgstr "GDB-asetus"
+msgstr "GDB-asetukset"
 
 #: gdbconfigpage.cpp:134
 #, kde-format
@@ -187,7 +184,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Abort Current Session"
-msgstr ""
+msgstr "Keskeytä nykyinen istunto"
 
 #: gdbconfigpage.cpp:162
 #, fuzzy, kde-format
@@ -213,8 +210,7 @@ msgstr "&Virheenpaikantimen ohjelmatiedosto:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_gdbPath)
 #: gdbconfigpage.ui:48
-#, fuzzy, kde-format
-#| msgid "Gdb executable"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Gdb executable"
 msgstr "Gdb-ohjelmatiedosto"
@@ -248,7 +244,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Override path to gdb executable..."
-msgstr ""
+msgstr "Ohita gdb-ohjelmatiedoston sijainti…"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, debuggingShell_label)
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, kcfg_debuggingShell)
@@ -288,11 +284,10 @@ msgstr "Komentotulkki&skripti:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: gdbconfigpage.ui:87
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title:group"
 msgid "Options"
-msgstr "Valitsimet"
+msgstr "Valinnat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: gdbconfigpage.ui:96
@@ -363,27 +358,24 @@ msgstr "Kä&ynnistä virheenpaikannin näkymällä:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:154
-#, fuzzy, kde-format
-#| msgid "Application Output"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Application Output"
 msgstr "Sovelluksen tuloste"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:159
-#, fuzzy, kde-format
-#| msgid "GDB Console"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "GDB Console"
-msgstr "GDB-pääte"
+msgstr "GDB-konsoli"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_startWith)
 #: gdbconfigpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Frame Stack"
+#, kde-format
 msgctxt "@item:inlistbox start debugger with"
 msgid "Frame Stack"
-msgstr "Kutsupino"
+msgstr "Kehyspino"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:178
@@ -508,8 +500,7 @@ msgid "Run &gdb script:"
 msgstr "Suorita &gdb-skripti:"
 
 #: gdboutputwidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "GDB Output"
+#, kde-format
 msgctxt "@title:window"
 msgid "GDB Output"
 msgstr "GDB-tuloste"
@@ -542,8 +533,7 @@ msgid "Pause execution of the app to enter GDB commands"
 msgstr "Tauota sovelluksen suorittaminen gdb-komentojen kirjoittamiseksi"
 
 #: gdboutputwidget.cpp:369 gdboutputwidget.cpp:417
-#, fuzzy, kde-format
-#| msgid "Show Internal Commands"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Internal Commands"
 msgstr "Näytä sisäiset komennot"
@@ -565,8 +555,7 @@ msgstr ""
 "poista jo julkaistuja komentoja näkymästä."
 
 #: gdboutputwidget.cpp:381
-#, fuzzy, kde-format
-#| msgid "Copy All"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy All"
 msgstr "Kopioi kaikki"
@@ -586,11 +575,10 @@ msgid "Start:"
 msgstr "Alku"
 
 #: memviewdlg.cpp:69
-#, fuzzy, kde-format
-#| msgid "Amount"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Amount:"
-msgstr "Määrä"
+msgstr "Määrä:"
 
 #: memviewdlg.cpp:96
 #, fuzzy, kde-format
@@ -621,29 +609,25 @@ msgid "&Format"
 msgstr "&Muoto"
 
 #: memviewdlg.cpp:274
-#, fuzzy, kde-format
-#| msgid "&Binary"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Binary"
 msgstr "&Binaari"
 
 #: memviewdlg.cpp:279
-#, fuzzy, kde-format
-#| msgid "&Octal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Octal"
 msgstr "&Oktaali"
 
 #: memviewdlg.cpp:284
-#, fuzzy, kde-format
-#| msgid "&Decimal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Decimal"
 msgstr "&Desimaali"
 
 #: memviewdlg.cpp:289
-#, fuzzy, kde-format
-#| msgid "&Hexadecimal"
+#, kde-format
 msgctxt "@item:inmenu display format"
 msgid "&Hexadecimal"
 msgstr "&Heksadesimaali"
@@ -712,11 +696,10 @@ msgid "Change Memory Range"
 msgstr "Vaihda muistialuetta"
 
 #: memviewdlg.cpp:352
-#, fuzzy, kde-format
-#| msgid "Close this view"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Close View"
-msgstr "Sulje tämä näkymä"
+msgstr "Sulje näkymä"
 
 #: memviewdlg.cpp:419
 #, fuzzy, kde-format

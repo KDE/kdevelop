@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevcmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-04-18 06:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -303,14 +303,14 @@ msgstr "Plie"
 #, kde-format
 msgctxt "@label:chooser"
 msgid "Installation prefix:"
-msgstr "&Instalprefikso:"
+msgstr "Instalprefikso:"
 
 #. i18n: ectx: property (text), widget (QLabel, buildTypeLabel)
 #: settings/cmakebuildsettings.ui:144
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Build type:"
-msgstr "Kontru&tipo:"
+msgstr "Kontrutipo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: settings/cmakebuildsettings.ui:198

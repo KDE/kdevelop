@@ -1,39 +1,37 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2015.
+# Tommi Nieminen <translator@legisign.org>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-13 00:55+0000\n"
-"PO-Revision-Date: 2015-01-11 20:38+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
-"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"PO-Revision-Date: 2023-04-17 16:45+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: filtermodel.cpp:76
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "@title:column"
 msgid "Pattern"
 msgstr "Kuvio"
 
 #: filtermodel.cpp:78
-#, fuzzy, kde-format
-#| msgid "Targets"
+#, kde-format
 msgctxt "@title:column"
 msgid "Targets"
 msgstr "Kohteet"
 
 #: filtermodel.cpp:80
-#, fuzzy, kde-format
-#| msgid "Action"
+#, kde-format
 msgctxt "@title:column"
 msgid "Action"
 msgstr "Toiminto"
@@ -71,22 +69,19 @@ msgstr ""
 "käytetään joko vain tiedostoihin, vain kansioihin tai molempiin."
 
 #: filtermodel.cpp:127 projectfilterconfigpage.cpp:46
-#, fuzzy, kde-format
-#| msgid "Files and Folders"
+#, kde-format
 msgctxt "@item"
 msgid "Files and Folders"
 msgstr "Tiedostot ja kansiot"
 
 #: filtermodel.cpp:132 projectfilterconfigpage.cpp:45
-#, fuzzy, kde-format
-#| msgid "Folders"
+#, kde-format
 msgctxt "@item"
 msgid "Folders"
 msgstr "Kansiot"
 
 #: filtermodel.cpp:137 projectfilterconfigpage.cpp:44
-#, fuzzy, kde-format
-#| msgid "Files"
+#, kde-format
 msgctxt "@item"
 msgid "Files"
 msgstr "Tiedostot"
@@ -108,15 +103,13 @@ msgstr ""
 "<code>\"*.cpp\"</code>."
 
 #: filtermodel.cpp:149 projectfilterconfigpage.cpp:51
-#, fuzzy, kde-format
-#| msgid "Include"
+#, kde-format
 msgctxt "@item"
 msgid "Include"
 msgstr "Ota mukaan"
 
 #: filtermodel.cpp:154 projectfilterconfigpage.cpp:50
-#, fuzzy, kde-format
-#| msgid "Exclude"
+#, kde-format
 msgctxt "@item"
 msgid "Exclude"
 msgstr "Jätä pois"
@@ -138,23 +131,19 @@ msgstr ""
 "tiedostoa."
 
 #: projectfilterconfigpage.cpp:198
-#, fuzzy, kde-format
-#| msgid "Configure Project Filter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Project Filter"
 msgstr "Projektisuodattimen asetukset"
 
 #: projectfilterconfigpage.cpp:208
-#, fuzzy, kde-format
-#| msgid "Project Filter"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Project Filter"
 msgstr "Projektisuodatin"
 
 #: projectfilterprovider.cpp:76
-#, fuzzy, kde-format
-#| msgid "Exclude Item From Project"
-#| msgid_plural "Exclude Items From Project"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
@@ -175,8 +164,7 @@ msgstr[1] ""
 "asetuksia."
 
 #: projectfilterprovider.cpp:117
-#, fuzzy, kde-format
-#| msgid "Project Filter Added"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Filter Added"
 msgstr "Lisättiin projektisuodatin"
@@ -193,32 +181,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: projectfiltersettings.ui:34
-#, fuzzy, kde-format
-#| msgid "Add"
+#, kde-format
 msgctxt "@action:button"
 msgid "Add"
 msgstr "Lisää"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: projectfiltersettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Poista"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveUp)
 #: projectfiltersettings.ui:61
-#, fuzzy, kde-format
-#| msgid "Move Up"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
 msgstr "Siirrä ylemmäs"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
 #: projectfiltersettings.ui:73
-#, fuzzy, kde-format
-#| msgid "Move Down"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move Down"
 msgstr "Siirrä alemmas"

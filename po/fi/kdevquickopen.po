@@ -1,6 +1,7 @@
 # Copyright © 2011 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevplatform package.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2015.
+# Tommi Nieminen <translator@legisign.org>, 2023.
 #
 # KDE Finnish translation sprint participants:
 # Author: Lliehu
@@ -9,8 +10,8 @@ msgstr ""
 "Project-Id-Version: kdevquickopen\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-08-29 00:44+0000\n"
-"PO-Revision-Date: 2015-02-10 15:41+0200\n"
-"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"PO-Revision-Date: 2023-04-17 16:16+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:20:33+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: actionsquickopenprovider.cpp:36
 #, kde-format
@@ -71,188 +72,162 @@ msgid "Not parsed yet"
 msgstr "Ei vielä jäsennetty"
 
 #: projectfilequickopen.cpp:178
-#, fuzzy, kde-format
-#| msgid "none"
+#, kde-format
 msgctxt "@item no project"
 msgid "none"
 msgstr "ei mitään"
 
 #: projectitemquickopen.cpp:345 projectitemquickopen.cpp:356
 #: quickopenplugin.cpp:66
-#, fuzzy, kde-format
-#| msgid "Classes"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Classes"
 msgstr "Luokat"
 
 #: projectitemquickopen.cpp:346 projectitemquickopen.cpp:359
 #: quickopenplugin.cpp:65
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Functions"
 msgstr "Funktiot"
 
 #: projectitemquickopen.cpp:354 quickopenplugin.cpp:59
-#, fuzzy, kde-format
-#| msgid "Project"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Project"
 msgstr "Projekti"
 
 #: quickopenplugin.cpp:60
-#, fuzzy, kde-format
-#| msgid "Includes"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Includes"
-msgstr "Sisältävät"
+msgstr "Sisällytykset"
 
 #: quickopenplugin.cpp:61
-#, fuzzy, kde-format
-#| msgid "Includers"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Includers"
 msgstr "Sisällyttäjät"
 
 #: quickopenplugin.cpp:62
-#, fuzzy, kde-format
-#| msgid "Currently Open"
+#, kde-format
 msgctxt "@item quick open scope"
 msgid "Currently Open"
-msgstr "Avoinna olevat"
+msgstr "Nyt auki"
 
 #: quickopenplugin.cpp:64
-#, fuzzy, kde-format
-#| msgid "Files"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Files"
 msgstr "Tiedostot"
 
 #: quickopenplugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "Documentation"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Documentation"
-msgstr "Dokumentaatio"
+msgstr "Ohjeistus"
 
 #: quickopenplugin.cpp:68
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@item quick open item type"
 msgid "Actions"
 msgstr "Toiminnot"
 
 #: quickopenplugin.cpp:279
-#, fuzzy, kde-format
-#| msgid "&Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "&Quick Open"
 msgstr "&Pika-avaus"
 
 #: quickopenplugin.cpp:285
-#, fuzzy, kde-format
-#| msgid "Quick Open &File"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &File"
-msgstr "&Tiedoston pika-avaus"
+msgstr "Pika-avaa &tiedosto"
 
 #: quickopenplugin.cpp:291
-#, fuzzy, kde-format
-#| msgid "Quick Open &Class"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Class"
-msgstr "&Luokan pika-avaus"
+msgstr "Pika-avaa &luokka"
 
 #: quickopenplugin.cpp:297
-#, fuzzy, kde-format
-#| msgid "Quick Open &Function"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Function"
-msgstr "&Funktion pika-avaus"
+msgstr "Pika-avaa &funktio"
 
 #: quickopenplugin.cpp:303
-#, fuzzy, kde-format
-#| msgid "Quick Open &Already Open File"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Already Open File"
-msgstr "&Avoinna olevan tiedoston pika-avaus"
+msgstr "Pika-avaa &jo avoin tiedosto"
 
 #: quickopenplugin.cpp:308
-#, fuzzy, kde-format
-#| msgid "Quick Open &Documentation"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Documentation"
-msgstr "&Dokumentaation pika-avaus"
+msgstr "Pika-avauksen &ohje"
 
 #: quickopenplugin.cpp:314
-#, fuzzy, kde-format
-#| msgid "Quick Open &Actions"
+#, kde-format
 msgctxt "@action"
 msgid "Quick Open &Actions"
-msgstr "T&oiminnon pika-avaus"
+msgstr "Pika-avaustoiminnot"
 
 #: quickopenplugin.cpp:319
-#, fuzzy, kde-format
-#| msgid "Jump to Declaration"
+#, kde-format
 msgctxt "@action"
 msgid "Jump to Declaration"
 msgstr "Hyppää esittelyyn"
 
 #: quickopenplugin.cpp:325
-#, fuzzy, kde-format
-#| msgid "Jump to Definition"
+#, kde-format
 msgctxt "@action"
 msgid "Jump to Definition"
 msgstr "Hyppää määrittelyyn"
 
 #: quickopenplugin.cpp:330
-#, fuzzy, kde-format
-#| msgid "Embedded Quick Open"
+#, kde-format
 msgctxt "@action"
 msgid "Embedded Quick Open"
 msgstr "Upotettu pika-avaus"
 
 #: quickopenplugin.cpp:337
-#, fuzzy, kde-format
-#| msgid "Next Function"
+#, kde-format
 msgctxt "@action jump to"
 msgid "Next Function"
 msgstr "Seuraava funktio"
 
 #: quickopenplugin.cpp:342
-#, fuzzy, kde-format
-#| msgid "Previous Function"
+#, kde-format
 msgctxt "@action jump to"
 msgid "Previous Function"
 msgstr "Edellinen funktio"
 
 # Tämä ei ehkä paras suomennos, mutta oli kirjoitushetkellä käytössä enkä keksinyt parempaa
 #: quickopenplugin.cpp:347
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgctxt "@action open outline quick open menu"
 msgid "Outline"
 msgstr "Rakenne"
 
 #: quickopenplugin.cpp:498
-#, fuzzy, kde-format
-#| msgid "Quick Open"
+#, kde-format
 msgctxt "@title:window"
 msgid "Quick Open"
 msgstr "Pika-avaus"
 
 # Tämä ei ehkä paras suomennos, mutta oli kirjoitushetkellä käytössä enkä keksinyt parempaa
 #: quickopenplugin.cpp:832
-#, fuzzy, kde-format
-#| msgid "Outline"
+#, kde-format
 msgctxt "@title:window"
 msgid "Outline"
 msgstr "Rakenne"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, searchLine)
 #: quickopenplugin.cpp:942 quickopenwidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Quick Open..."
+#, kde-format
 msgctxt "@info:placeholder"
 msgid "Quick Open..."
 msgstr "Pika-avaus…"
@@ -272,24 +247,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, searchLabel)
 #: quickopenwidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Search:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Search:"
-msgstr "Hae:"
+msgstr "Etsi:"
 
 #. i18n: ectx: property (text), widget (QPushButton, okButton)
 #: quickopenwidget.ui:54
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "@action:button"
 msgid "Open"
 msgstr "Avaa"
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelButton)
 #: quickopenwidget.ui:61
-#, fuzzy, kde-format
-#| msgid "Cancel"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel"
 msgstr "Peru"
