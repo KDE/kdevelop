@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2023-01-23 20:11+0300\n"
+"PO-Revision-Date: 2023-04-21 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #: cmakebuilddirchooser.cpp:29
 #, kde-format
@@ -267,7 +267,7 @@ msgstr ""
 "Geliştir'un kod anlayışı büyük olasılıkla bozuk olacak.\n"
 "\n"
 "Bu sorunu çözmek için, projenin 'CMakeLists.txt' dosyalarının doğru "
-"olduğundan ve K Geliştir'un doğru CMake sürümünü ve ayarlarını kullanmak "
+"olduğundan ve K Geliştir'in doğru CMake sürümünü ve ayarlarını kullanmak "
 "için yapılandırıldığından emin olun. Sonrasında, proje araç görünümünde "
 "proje ögesine sağ tıklayın ve 'Yenile'yi seçin."
 
@@ -383,8 +383,8 @@ msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
 msgstr ""
-"%1 dizini, K Geliştir'un listesinden kaldırılmak üzere.\n"
-"K Geliştir'un bu dizini dosya sisteminden de silmesini istiyor musunuz?"
+"%1 dizini, K Geliştir'in listesinden kaldırılmak üzere.\n"
+"K Geliştir'in bu dizini dosya sisteminden de silmesini istiyor musunuz?"
 
 #: settings/cmakepreferences.cpp:350
 #, kde-format

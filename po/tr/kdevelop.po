@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:44+0000\n"
-"PO-Revision-Date: 2023-03-21 21:20+0300\n"
+"PO-Revision-Date: 2023-04-21 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -755,7 +755,7 @@ msgstr "Ruby dili için sanatsal çalışmalar"
 #: main.cpp:466
 #, kde-format
 msgid "Open KDevelop with a new session using the given name."
-msgstr "Verilen adla K Geliştir'u yeni bir oturum ile başlat."
+msgstr "Verilen adla K Geliştir'i yeni bir oturum ile başlat."
 
 #: main.cpp:469
 #, kde-format
@@ -763,7 +763,7 @@ msgid ""
 "Open KDevelop with the given session.\n"
 "You can pass either hash or the name of the session."
 msgstr ""
-"K Geliştir'u verilen oturumla başlat.\n"
+"K Geliştir'i verilen oturumla başlat.\n"
 "Oturumu özet veya ad belirterek açabilirsiniz."
 
 #: main.cpp:473
@@ -794,7 +794,7 @@ msgstr "Kullanılabilir oturumları listele ve çık."
 #: main.cpp:483
 #, kde-format
 msgid "Open KDevelop and fetch the project from the given <repo url>."
-msgstr "K Geliştir'u aç ve verilen <depo URL>'sinden projeyi getir."
+msgstr "K Geliştir'i aç ve verilen <depo URL>'sinden projeyi getir."
 
 #: main.cpp:486
 #, kde-format
@@ -802,7 +802,7 @@ msgid ""
 "Open KDevelop and load the given project. <project> can be either a .kdev4 "
 "file or a directory path."
 msgstr ""
-"K Geliştir'u aç ve verilen projeyi yükle. <proje>, bir .kdev4 dosyası veya "
+"K Geliştir'i aç ve verilen projeyi yükle. <proje>, bir .kdev4 dosyası veya "
 "dizin yolu olabilir."
 
 #: main.cpp:489
