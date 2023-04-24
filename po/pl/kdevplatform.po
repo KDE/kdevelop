@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-04-01 09:11+0200\n"
+"PO-Revision-Date: 2023-04-23 12:21+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -369,7 +369,7 @@ msgstr "Zdalna ścieżka"
 #: debugger/util/pathmappings.cpp:88
 #, kde-format
 msgid "Local Path"
-msgstr "Lokalna ścieżka"
+msgstr "Ścieżka miejscowa"
 
 #: debugger/util/pathmappings.cpp:217
 #, kde-format
@@ -440,7 +440,7 @@ msgid ""
 "of a variable or an expression, click on the value.<br />"
 msgstr ""
 "<b>Drzewo zmiennych</b>Drzewo zmiennych pozwala zobaczyć wartości zmiennych "
-"lokalnych i wybranych wyrażeń.<br />Zmienne lokalne są wyświetlane "
+"miejscowych i wybranych wyrażeń.<br />Zmienne miejscowe są wyświetlane "
 "automatycznie i uaktualniane podczas działania programu. Podane wyrażenia "
 "można obliczyć raz lub \"obserwować je\" (automatycznie uaktualniać). "
 "Wyrażenia, które nie są uaktualniane automatycznie mogą być uaktualnione za "
@@ -1480,12 +1480,12 @@ msgstr "Nieprawidłowy katalog pracy '%1'"
 #: outputview/outputexecutejob.cpp:217
 #, kde-format
 msgid "Build directory '%1' is not a local path"
-msgstr "Katalog budowania '%1' nie jest ścieżką lokalną"
+msgstr "Katalog budowania '%1' nie jest ścieżką miejscową"
 
 #: outputview/outputexecutejob.cpp:219
 #, kde-format
 msgid "Working directory '%1' is not a local path"
-msgstr "Katalog pracy '%1' nie jest ścieżką lokalną"
+msgstr "Katalog pracy '%1' nie jest ścieżką miejscową"
 
 #: outputview/outputexecutejob.cpp:238
 #, kde-format
@@ -4147,7 +4147,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Local colorization intensity:"
-msgstr "Lokalna jaskrawość zabarwiania:"
+msgstr "Miejscowa jaskrawość zabarwiania:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kcfg_globalColorSource)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_9)
@@ -4252,7 +4252,7 @@ msgid ""
 "functions, local variables, etc.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Używaj wytłuszczonej czcionki dla deklaracji takich "
-"jak klasy, funkcje, zmienne lokalne, itp.</p></body></html>"
+"jak klasy, funkcje, zmienne miejscowe, itp.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, boldDeclarationsLabel)
 #: shell/settings/languagepreferences.ui:280
