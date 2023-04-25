@@ -1,14 +1,15 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
 # Tommi Nieminen <translator@legisign.org>, 2023.
+# Lasse Liehu <lasse.liehu@iki.fi>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-17 13:33+0300\n"
-"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"PO-Revision-Date: 2023-04-19 23:34+0300\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@iki.fi>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -192,7 +193,7 @@ msgstr "Jäsennä *.h-otsakkeet perus-C:nä"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "C++ profi&le:"
-msgstr "C&++-profiili:"
+msgstr "C++-profii&li:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsCpp)
 #. i18n: ectx: property (toolTip), widget (QComboBox, languageStandardsC)
