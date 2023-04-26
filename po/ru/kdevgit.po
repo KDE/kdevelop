@@ -6,20 +6,20 @@
 # Alexander Wolf <alex.v.wolf@gmail.com>, 2011.
 # Alexander Potashev <aspotashev@gmail.com>, 2011, 2019.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
-# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevgit\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-03-10 17:57+0300\n"
+"PO-Revision-Date: 2023-04-25 10:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -150,7 +150,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Revert"
-msgstr ""
+msgstr "Отменить"
 
 # well-spelled: симв
 #: gitmessagehighlighter.cpp:66
@@ -306,18 +306,16 @@ msgstr ""
 "Обнаружены незафиксированные изменения, хотите сначала убрать их в запасник?"
 
 #: gitplugin.cpp:859
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Pop Stash"
+#, kde-format
 msgctxt "@action:button"
 msgid "Stash"
-msgstr "Использовать запасник"
+msgstr "Поместить в запасник"
 
 #: gitplugin.cpp:860
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep"
-msgstr ""
+msgstr "Сохранить"
 
 #: rebasedialog.cpp:25
 #, kde-format
@@ -648,21 +646,19 @@ msgstr "Имя новой ветви:"
 #, kde-format
 msgctxt "%1: stack depth, %2: branch, %3: parent description"
 msgid "%1. %2: %3"
-msgstr ""
+msgstr "%1. %2: %3"
 
 #: stashmanagerdialog.cpp:159
 #, kde-format
 msgid "%1 created on %2"
-msgstr ""
+msgstr "%1 создано %2"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, drop)
 #: stashmanagerdialog.ui:23
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Remove the selected branch"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected stash"
-msgstr "Удалить выбранную ветвь"
+msgstr "Удалить выбранный запасник"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pop)
 #: stashmanagerdialog.ui:37

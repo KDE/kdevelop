@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Alexander Potashev <aspotashev@gmail.com>, 2016.
-# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2022-03-05 14:59+0300\n"
+"PO-Revision-Date: 2023-04-25 09:44+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: compilerprovider/compilerprovider.cpp:32
 #, kde-format
@@ -289,8 +289,7 @@ msgid "Select Project Path"
 msgstr "Выбор пути к проекту"
 
 #: kcm_widget/projectpathswidget.cpp:184
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to remove the configuration for the path '%1'?"
+#, kde-format
 msgid "Are you sure you want to delete the configuration for the path '%1'?"
 msgstr "Удалить конфигурацию для пути «%1»?"
 
@@ -298,7 +297,7 @@ msgstr "Удалить конфигурацию для пути «%1»?"
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Path Configuration"
-msgstr ""
+msgstr "Удаление конфигурации пути"
 
 #: kcm_widget/projectpathswidget.cpp:224
 #, kde-format

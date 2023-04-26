@@ -5,13 +5,13 @@
 # Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
 # Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2016.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
-# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2022-03-15 10:16+0300\n"
+"PO-Revision-Date: 2023-04-25 11:06+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -426,7 +426,7 @@ msgstr "Переменные отладчика"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-resize columns on click"
-msgstr ""
+msgstr "Автоматически изменять размер столбцов по щелчку"
 
 #: debugger/variable/variablewidget.cpp:116
 #, kde-format
@@ -1847,10 +1847,9 @@ msgid "Running %1"
 msgstr "Выполняется %1"
 
 #: shell/colorschemechooser.cpp:44
-#, fuzzy, kde-format
-#| msgid "&Color Scheme"
+#, kde-format
 msgid "&Window Color Scheme"
-msgstr "&Цветовая схема"
+msgstr "&Цветовая схема окна"
 
 #: shell/configdialog.cpp:31
 #, kde-format
@@ -2240,13 +2239,13 @@ msgstr "Подходящий редактор не найден"
 #, kde-format
 msgctxt "@action:button"
 msgid "Open as Plain Text"
-msgstr ""
+msgstr "Открыть как обычный текст"
 
 #: shell/documentcontroller.cpp:318
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Open"
-msgstr ""
+msgstr "Не открывать"
 
 #: shell/documentcontroller.cpp:601
 #, kde-format
@@ -2857,11 +2856,7 @@ msgid "Close Document"
 msgstr "Закрытие документа"
 
 #: shell/partdocument.cpp:111
-#, fuzzy, kde-format
-#| msgid ""
-#| "The document \"%1\" has unsaved changes and was modified by an external "
-#| "process.\n"
-#| "Do you want to override the external changes?"
+#, kde-format
 msgid ""
 "The document \"%1\" has unsaved changes and was modified by an external "
 "process.\n"
@@ -2869,13 +2864,13 @@ msgid ""
 msgstr ""
 "В документе «%1» есть несохранённые изменения и он был изменён внешним "
 "процессом.\n"
-"Вы хотите заменить внешние изменения?"
+"Перезаписать внешние изменения?"
 
 #: shell/partdocument.cpp:115 shell/textdocument.cpp:442
 #, kde-format
 msgctxt "@action:button"
 msgid "Overwrite External Changes"
-msgstr ""
+msgstr "Перезаписать внешние изменения"
 
 #: shell/problem.cpp:40
 #, kde-format
@@ -3120,7 +3115,7 @@ msgstr "Открыть текущий проект заново?"
 #, kde-format
 msgctxt "@action:button"
 msgid "Reopen"
-msgstr ""
+msgstr "Открыть заново"
 
 #: shell/projectcontroller.cpp:555
 #, kde-format
@@ -3135,14 +3130,7 @@ msgid "Open or import project"
 msgstr "Открыть или импортировать проект"
 
 #: shell/projectcontroller.cpp:557
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Open an existing KDevelop 4 project or import an existing Project into "
-#| "KDevelop 4. This entry allows one to select a KDevelop4 project file or "
-#| "an existing directory to open it in KDevelop. When opening an existing "
-#| "directory that does not yet have a KDevelop4 project file, the file will "
-#| "be created."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Open an existing KDevelop project or import an existing Project into "
@@ -3151,9 +3139,9 @@ msgid ""
 "directory that does not yet have a KDevelop project file, the file will be "
 "created."
 msgstr ""
-"Открывает или импортирует существующий проект KDevelop 4. Возможно выбрать "
-"файл проекта KDevelop 4 или существующий каталог (если в этом каталоге не "
-"найдётся файл проекта KDevelop 4, он будет создан)."
+"Открывает или импортирует существующий проект KDevelop. Возможно выбрать "
+"файл проекта KDevelop или существующий каталог (если в этом каталоге не "
+"найдётся файл проекта KDevelop, он будет создан)."
 
 #: shell/projectcontroller.cpp:568
 #, kde-format
@@ -3168,16 +3156,12 @@ msgid "Fetch project"
 msgstr "Получить проект"
 
 #: shell/projectcontroller.cpp:571
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Guides the user through the project fetch and then imports it into "
-#| "KDevelop 4."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Guides the user through the project fetch and then imports it into KDevelop."
 msgstr ""
-"Помогает пользователю получить внешний проект и импортирует его в KDevelop 4."
+"Помогает пользователю получить внешний проект и импортирует его в KDevelop."
 
 #: shell/projectcontroller.cpp:586
 #, kde-format
@@ -4183,28 +4167,31 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>По умолчанию глобальные цвета для типов, функций, пространств имён и т.д. "
+"будут созданы автоматически и адаптированы к выбранной теме редактора на "
+"основе общей интенсивности раскраски. Чтобы получить полный контроль над "
+"цветами, можно использовать в качестве источника цвета редактор тем. Затем "
+"будет можно скорректировать каждый цвет в параметрах на странице «Редактор "
+"&gt; Цветовые темы &gt; Стили подсветки текста &gt; KDevelop/Семантические "
+"цвета».</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
 #, kde-format
 msgid "Auto-Generated"
-msgstr ""
+msgstr "Автоматическое создание"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:175
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Focus Editor"
+#, kde-format
 msgid "From Editor Theme"
-msgstr "Перейти в редактор"
+msgstr "Из темы редактора"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Global colorization intensity:"
+#, kde-format
 msgid "Global colors:"
-msgstr "Интенсивность цвета глобальных объектов:"
+msgstr "Глобальные цвета:"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, kcfg_globalColorization)
 #. i18n: ectx: property (toolTip), widget (QLabel, globalColorizationLabel)
@@ -5522,16 +5509,13 @@ msgid "Some Files are Write-Protected"
 msgstr "Некоторые файлы защищены от записи"
 
 #: util/shellutils.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed Setting Permissions"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "Ошибка установки разрешений"
+msgstr "Установить права доступа на запись"
 
 #: util/shellutils.cpp:84
-#, fuzzy, kde-format
-#| msgid "Ignore"
+#, kde-format
 msgctxt "@action:button"
 msgid "Ignore"
 msgstr "Пропустить"
@@ -5617,10 +5601,7 @@ msgstr ""
 "Выберите другое имя."
 
 #: vcs/dvcs/ui/branchmanager.cpp:133
-#, fuzzy, kde-format
-#| msgid ""
-#| "Currently at the branch \"%1\".\n"
-#| "To remove it, please change to another branch."
+#, kde-format
 msgid ""
 "Currently at the branch \"%1\".\n"
 "To delete it, please change to another branch."
@@ -5629,10 +5610,9 @@ msgstr ""
 "Чтобы удалить её, необходимо сначала переключиться на другую."
 
 #: vcs/dvcs/ui/branchmanager.cpp:140
-#, fuzzy, kde-format
-#| msgid "Are you sure you want to irreversibly remove the branch '%1'?"
+#, kde-format
 msgid "Are you sure you want to irreversibly delete the branch '%1'?"
-msgstr "Вы действительно хотите необратимо удалить ветвь «%1«?"
+msgstr "Действительно необратимо удалить ветвь «%1»?"
 
 #: vcs/dvcs/ui/branchmanager.cpp:160 vcs/dvcs/ui/branchmanager.cpp:239
 #, kde-format

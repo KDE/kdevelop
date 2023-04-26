@@ -6,20 +6,20 @@
 # Alexey Morozov <morozov@gmail.com>, 2011.
 # Yury G. Kudryashov <urkud.urkud@gmail.com>, 2012.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
-# Olesya Gerasimenko <translation-team@basealt.ru>, 2022.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:57+0000\n"
-"PO-Revision-Date: 2022-03-04 16:57+0300\n"
+"PO-Revision-Date: 2023-04-25 09:43+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -237,7 +237,7 @@ msgstr "<br /><em>Кэшированная документация:</em> %1\n"
 #, kde-format
 msgctxt "error message"
 msgid "invalid CMake file API project data"
-msgstr ""
+msgstr "некорректные данные о программном интерфейсе проекта в файле CMake"
 
 #: cmakehelpdocumentation.cpp:21
 #, kde-format
@@ -245,15 +245,7 @@ msgid "CMake Content Page"
 msgstr "Страница содержимого CMake"
 
 #: cmakemanager.cpp:650
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to configure project '%1' (error message: %2). As a result, "
-#| "KDevelop's code understanding will likely be broken.\n"
-#| "\n"
-#| "To fix this issue, please ensure that the project's CMakeLists.txt files "
-#| "are correct, and KDevelop is configured to use the correct CMake version "
-#| "and settings. Then right-click the project item in the projects tool view "
-#| "and click 'Reload'."
+#, kde-format
 msgid ""
 "Configured project '%1' with outdated CMake data. As a result, KDevelop's "
 "code understanding may be wrong.\n"
@@ -261,14 +253,11 @@ msgid ""
 "To fix this issue, please right-click the project item in the projects tool "
 "view and click 'Reload'."
 msgstr ""
-"Не удалось настроить проект «%1» (сообщение об ошибке: %2). В результате "
-"возможность разобраться с кодом в KDevelop, вероятно, будет неполной.\n"
+"В настроенном проекте «%1» устаревшие данные CMake. В результате при работе "
+"с кодом в KDevelop могут возникать ошибки.\n"
 "\n"
-"Чтобы устранить эту проблему, убедитесь, что в файлах CMakeLists.txt проекта "
-"нет ошибок, программа KDevelop настроена на использование надлежащей версии "
-"CMake и указаны правильные параметры работы. Затем щёлкните правой кнопкой "
-"мыши по пункту проекта на панели инструмента просмотра проектов и выберите "
-"пункт «Перезагрузить»."
+"Чтобы устранить эту проблему, щёлкните правой кнопкой мыши по пункту проекта "
+"на панели инструмента просмотра проектов и выберите пункт «Перезагрузить»."
 
 #: cmakemanager.cpp:661
 #, kde-format
@@ -397,10 +386,7 @@ msgid "Strings"
 msgstr "Строки"
 
 #: settings/cmakepreferences.cpp:346
-#, fuzzy, kde-format
-#| msgid ""
-#| "The %1 directory is about to be removed in KDevelop's list.\n"
-#| "Do you want KDevelop to remove it in the file system as well?"
+#, kde-format
 msgid ""
 "The %1 directory is about to be removed in KDevelop's list.\n"
 "Do you want KDevelop to delete it in the file system as well?"
@@ -412,7 +398,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Delete"
-msgstr ""
+msgstr "Не удалять"
 
 #: settings/cmakepreferences.cpp:355
 #, kde-format
