@@ -70,12 +70,12 @@ msgstr ""
 #: ui/perforceimportmetadatawidget.cpp:152
 #, kde-format
 msgid "P4 Client failed with exit code: %1"
-msgstr "P4-Client Exitcode fehlgeschlagen: %1"
+msgstr "P4-Client fehlgeschlagen mit Exitcode: %1"
 
 #: ui/perforceimportmetadatawidget.cpp:196
 #, kde-format
 msgid "P4 Client failed with error code: %1"
-msgstr "P4-Client Fehlercode fehlgeschlagen: %1"
+msgstr "P4-Client fehlgeschlagen mit Fehlercode: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelUrl)
 #: ui/perforceimportmetadatawidget.ui:29

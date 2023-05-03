@@ -4,20 +4,21 @@
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
 # Rolf Eike Beer <kde@opensource.sf-tec.de>, 2013.
 # Alois Spitzbart <spitz234@hotmail.com>, 2022.
+# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-03-17 23:04+0100\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2023-04-30 18:41+0200\n"
+"Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -39,7 +40,7 @@ msgstr "Fehler"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Dirty"
-msgstr "noch nicht an GDB übermittelt"
+msgstr "noch nicht übermittelt"
 
 #: debugger/breakpoint/breakpoint.cpp:152
 #, kde-format
@@ -51,7 +52,7 @@ msgstr "auf Symbole wartend"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Clean"
-msgstr "an GDB übermittelt"
+msgstr "Übermittelt"
 
 #: debugger/breakpoint/breakpoint.cpp:186
 #, kde-format
@@ -140,7 +141,7 @@ msgstr "Haltepunkt wurde nicht gefunden"
 #: debugger/breakpoint/breakpointmodel.cpp:156
 #, kde-format
 msgid "Couldn't find breakpoint at %1:%2"
-msgstr "Haltepunkt in %1 wurde nicht gefunden:%2"
+msgstr "Bei %1:%2 wurde kein Haltepunkt gefunden"
 
 #: debugger/breakpoint/breakpointmodel.cpp:162
 #, kde-format
@@ -277,7 +278,7 @@ msgstr "Alle entfe&rnen"
 msgid "%2"
 msgid_plural "%2 (repeated %1 times)"
 msgstr[0] "%2"
-msgstr[1] "%2 (%1 mal wiederholt)"
+msgstr[1] "%2 (%1 Mal wiederholt)"
 
 #: debugger/framestack/framestackmodel.cpp:178
 #, kde-format
@@ -315,10 +316,10 @@ msgid ""
 "get to this point in your program. By clicking on an item you can see the "
 "values in any of the previous calling functions."
 msgstr ""
-"<b>Liste der Stackframes</b>Wird oft auch als „Aufrufliste“ bezeichnet. Es "
-"ist eine Liste, die zeigt, welche Funktion gerade aktiv ist und welche "
-"Funktionen vorher aufgerufen worden sind, um zu dieser Stelle im Programm zu "
-"gelangen. Indem Sie auf einen Eintrag klicken, können Sie die "
+"<b>Liste der Stackframes</b>Wird oft auch als „Aufrufstapel“ (call stack) "
+"bezeichnet. Es ist eine Liste, die zeigt, welche Funktion gerade aktiv ist "
+"und welche Funktionen vorher aufgerufen worden sind, um zu dieser Stelle im "
+"Programm zu gelangen. Indem Sie auf einen Eintrag klicken, können Sie die "
 "Funktionsargumente der vorhergehenden Aufrufe sehen."
 
 #: debugger/framestack/framestackwidget.cpp:102
@@ -440,8 +441,8 @@ msgstr ""
 #, kde-format
 msgid "<b>Expression entry</b>Type in expression to watch."
 msgstr ""
-"<b>Eingabe des Ausdrucks</b>Geben Sie den Ausdruck ein, der überwacht werden "
-"soll."
+"<b>Eingabe eines Ausdrucks</b>Geben Sie den Ausdruck ein, der überwacht "
+"werden soll."
 
 #: debugger/variable/variablewidget.cpp:207
 #, kde-format
@@ -838,6 +839,7 @@ msgctxt ""
 "<encountered>) -> <newText>"
 msgid "Inconsistent change in %1 at %2 = \"%3\"(encountered \"%4\") -> \"%5\""
 msgstr ""
+"Inkonsistente Änderung in %1 im Bereich %2 = „%3“(„%4“ angetroffen) -> „%5“"
 
 #: language/codegen/documentchangeset.cpp:539
 #, kde-format
@@ -849,6 +851,8 @@ msgid ""
 "Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4 & "
 "\"%5\"->\"%6\"@%7 "
 msgstr ""
+"Inkonsistente Änderungsanfrage in %1; überschneidende Änderungen: „%2“->„%3“@"
+"%4 & „%5“->„%6“@%7 "
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RefactoringDialog)
 #: language/codegen/progressdialogs/refactoringdialog.ui:14
@@ -867,7 +871,7 @@ msgstr "&Abbrechen"
 #: language/duchain/aliasdeclaration.cpp:47
 #, kde-format
 msgid "Alias %1 as %2"
-msgstr "Alias %1 als %2"
+msgstr "Alias von %1 als %2"
 
 #: language/duchain/aliasdeclaration.cpp:50
 #, kde-format
@@ -887,7 +891,7 @@ msgstr "(Unbekannte Funktions-Deklaration)"
 #: language/duchain/declarationid.cpp:207
 #, kde-format
 msgid "(missing)"
-msgstr "(Fehlt)"
+msgstr "(fehlt)"
 
 #: language/duchain/forwarddeclaration.cpp:50
 #, kde-format
@@ -942,7 +946,7 @@ msgstr ") "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:175
 #, kde-format
 msgid "(unresolved forward-declaration) "
-msgstr " (nicht aufgelöste Vorwärtsdeklaration) "
+msgstr "(nicht aufgelöste Vorwärtsdeklaration) "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:190
 #, kde-format
@@ -1109,7 +1113,7 @@ msgstr "vorwärts"
 #, kde-format
 msgctxt "a variable that won't change, const"
 msgid "constant"
-msgstr "constant"
+msgstr "Konstante"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:871
 #, kde-format
@@ -1123,7 +1127,7 @@ msgstr[1] "%1 Bytes"
 msgid "1 Bit"
 msgid_plural "%1 Bits"
 msgstr[0] "1 Bit"
-msgstr[1] "%1 Bit"
+msgstr[1] "%1 Bits"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:874
 #, fuzzy, kde-format
@@ -1145,7 +1149,7 @@ msgstr "Größe: %1 Byte"
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:884
 #, kde-format
 msgid "aligned to: %1 Bytes"
-msgstr ""
+msgstr "ausgerichtet an: %1 Bytes"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:87
 #, kde-format
@@ -1161,7 +1165,7 @@ msgstr "Noch nicht eingelesen"
 #, kde-format
 msgctxt "Files included into this file"
 msgid "Includes"
-msgstr "Includes"
+msgstr "Inkludiert"
 
 #: language/duchain/navigation/abstractincludenavigationcontext.cpp:106
 #, kde-format
@@ -1268,7 +1272,7 @@ msgstr "Vorkommen von %1"
 #, kde-format
 msgctxt "refers to a line in source code"
 msgid "Line <b>%1</b>:"
-msgstr "Zeile <b>%1</b>;"
+msgstr "Zeile <b>%1</b>:"
 
 #: language/duchain/navigation/useswidget.cpp:210
 #: language/duchain/navigation/useswidget.cpp:217
@@ -1309,8 +1313,8 @@ msgstr "Deklaration"
 msgctxt "%1: number of uses, %2: filename with uses"
 msgid "%2: 1 use"
 msgid_plural "%2: %1 uses"
-msgstr[0] "%2: ein Mal benutzt"
-msgstr[1] "%2: %1 Mal benutzt"
+msgstr[0] "%2: 1 Vorkommen"
+msgstr[1] "%2: %1 Vorkommen"
 
 #: language/duchain/navigation/useswidget.cpp:503
 #: language/duchain/navigation/useswidget.cpp:544
@@ -1528,7 +1532,7 @@ msgstr "Schreibfehler"
 #: outputview/outputexecutejob.cpp:370
 #, kde-format
 msgid "Waiting for the process has timed out"
-msgstr "Es wird auf die Zeitüberschreitung des Prozesses gewartet"
+msgstr "Zeitüberschreitung beim Warten auf den Prozess"
 
 #: outputview/outputexecutejob.cpp:374
 #, kde-format
@@ -1689,7 +1693,7 @@ msgstr "Eintrag auswählen"
 #: project/projectitemlineedit.cpp:192
 #, kde-format
 msgid "Select the item you want to get the path from."
-msgstr "Wählen Sie einen Eintrag mit dem dazugehörigen Pfad aus."
+msgstr "Wählen Sie einen Eintrag, von dem Sie den Pfad haben möchten."
 
 #. i18n: ectx: property (toolTip), widget (ProjectItemLineEdit, targetDependency)
 #: project/widgets/dependencieswidget.ui:32
@@ -1764,7 +1768,7 @@ msgstr "Schreiben in %1 fehlgeschlagen, möglicherweise ist die Festplatte voll"
 msgid "The previous session crashed."
 msgid_plural "Session crashed %1 times in a row."
 msgstr[0] "Die vorherige Sitzung ist abgestürzt."
-msgstr[1] "Die Sitzung ist %1 Mal hintereinander abgestürzt"
+msgstr[1] "Die Sitzung ist %1 Mal hintereinander abgestürzt."
 
 #: serialization/itemrepositoryregistry.cpp:77
 #, kde-format
@@ -1788,6 +1792,7 @@ msgid ""
 msgstr ""
 "Der Absturz ist möglicherweise durch korrupte Daten im Zwischenspeicher "
 "verursacht worden.\n"
+"\n"
 "Drücken Sie Leeren, wenn KDevelop den Zwischenspeicher leeren soll, oder "
 "Fortsetzen, wenn Sie sicher sind, dass der Absturz eine andere Ursache hat."
 
@@ -1877,11 +1882,12 @@ msgstr ""
 msgid "Debugger"
 msgstr "Debugger"
 
+# TODO: Liste → Stapel
 #: shell/debugcontroller.cpp:138
 #, kde-format
 msgctxt "@title:window"
 msgid "Frame Stack"
-msgstr "Aufrufliste"
+msgstr "Aufrufstapel"
 
 #: shell/debugcontroller.cpp:143
 #, kde-format
@@ -2016,7 +2022,7 @@ msgstr "&Einzelschritt"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Step into the next statement"
-msgstr "Einzelschritt in die nächste Anweisung"
+msgstr "Einzelschritt in den nächsten Ausdruck"
 
 #: shell/debugcontroller.cpp:276
 #, kde-format
@@ -2112,7 +2118,7 @@ msgstr "Aktuelle Ausführungsposition anzeigen"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Jumps to the execution line in the editor."
-msgstr ""
+msgstr "Geht zur ausgeführten Zeile im Editor."
 
 #: shell/debugcontroller.cpp:420
 #, kde-format
@@ -2254,7 +2260,7 @@ msgid ""
 "open them again."
 msgstr ""
 "Hier werden Dokumente angezeigt, die Sie zuletzt geöffnet haben. Diese "
-"Dateien können von hier aus wieder leicht geöffnet werden."
+"Dateien können von hier aus leicht wieder geöffnet werden."
 
 #: shell/documentcontroller.cpp:614
 #, kde-format
@@ -2345,7 +2351,7 @@ msgstr "Alle a&nderen schließen"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other documents"
-msgstr "Alle Dokumente außer der aktuellen Datei schließen."
+msgstr "Alle Dokumente außer der aktuellen Datei schließen"
 
 #: shell/documentcontroller.cpp:652
 #, kde-format
@@ -2365,7 +2371,7 @@ msgstr "Anmerkungen zum aktuellen Dokument anzeigen"
 #, kde-format
 msgctxt "@action"
 msgid "Annotate"
-msgstr "Anmerkung"
+msgstr "Anmerkungen"
 
 #: shell/documentcontroller.cpp:1277
 #, kde-format
@@ -3192,7 +3198,7 @@ msgstr "Kürzlich verwendetes Projekt öffnen"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Opens recently opened project."
-msgstr "Kürzlich verwendetes Projekt öffnen"
+msgstr "Kürzlich verwendetes Projekt öffnen."
 
 #: shell/projectcontroller.cpp:618
 #, kde-format
@@ -3246,7 +3252,7 @@ msgstr "Kein aktiviertes Modul unterstützt diese Repository-URL: %1"
 #, kde-format
 msgctxt "@action"
 msgid "Reparse the Entire Project"
-msgstr "Das aktuelle Projekt erneut einlesen"
+msgstr "Das gesamte Projekt erneut einlesen"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (QComboBox, managerCombo)
@@ -3294,15 +3300,15 @@ msgstr "Ordner kann nicht erstellt werden: %1"
 #, kde-format
 msgctxt "Format of the progress bar text. progress and info"
 msgid "%1 : %p%"
-msgstr "%1 : %p%"
+msgstr "%1 : %p %"
 
 #: shell/projectsourcepage.cpp:249
 #, kde-format
 msgid ""
 "You need to specify a valid or nonexistent directory to check out a project"
 msgstr ""
-"Um ein Projekt auszulesen, müssen Sie einen gültigen oder nicht vorhandenen "
-"Ordner angeben"
+"Um ein Projekt auszuchecken, müssen Sie einen gültigen oder nicht "
+"vorhandenen Ordner angeben"
 
 #: shell/projectsourcepage.cpp:251
 #, kde-format
@@ -3502,8 +3508,7 @@ msgstr "Aktuelle Startkonfiguration"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which launch configuration to run when run is invoked."
-msgstr ""
-"Wählt aus, welche Startkonfiguration beim Programmstart verwendet wird."
+msgstr "Wählt aus, welche Startkonfiguration bei „Ausführen“ verwendet wird."
 
 #: shell/runcontroller.cpp:588
 #, kde-format
@@ -3535,7 +3540,7 @@ msgstr "Ermöglicht die Auswahl einer Laufzeitumgebung"
 #: shell/runtimecontroller.cpp:90
 #, kde-format
 msgid "Runtime: %1"
-msgstr "Laufzeit: %1"
+msgstr "Laufzeitumgebung: %1"
 
 #: shell/savedialog.cpp:44
 #, kde-format
@@ -3736,12 +3741,15 @@ msgid ""
 "Running %1 instance (PID: %2) detected, making this one visible instead of "
 "starting a new one"
 msgstr ""
+"Laufende Instanz von %1 (PID: %2) erkannt, es wird diese angezeigt anstatt "
+"eine neue zu starten."
 
 #: shell/sessionlock.cpp:159
 #, kde-format
 msgctxt "@info:shell"
 msgid "Running %1 instance (PID: %2) is apparently hung"
-msgstr "Die laufende Instanz %1 (PID: %2) ist anscheinend hängen geblieben."
+msgstr ""
+"Die laufende Instanz von %1 (PID: %2) ist anscheinend hängen geblieben."
 
 #: shell/sessionlock.cpp:165
 #, kde-format
@@ -3759,14 +3767,15 @@ msgctxt "@info"
 msgid ""
 "Failed to lock the session <em>%1</em>, already locked by %2 on %3 (PID %4)."
 msgstr ""
-"Sperren der Sitzung <em>%1</em> fehlgeschlagen. ist bereits durch %2 auf %3 "
+"Sperren der Sitzung <em>%1</em> fehlgeschlagen, da bereits durch %2 auf %3 "
 "(PID %4) gesperrt."
 
 #: shell/sessionlock.cpp:174
 #, kde-format
 msgctxt "@info"
 msgid "Failed to lock the session <em>%1</em> (lock-file unavailable)."
-msgstr "Sperren der Sitzung <em>%1</em> (Sperrdatei nicht verfügbar)."
+msgstr ""
+"Sperren der Sitzung <em>%1</em> fehlgeschlagen (Sperrdatei nicht verfügbar)."
 
 #: shell/sessionlock.cpp:178
 #, kde-format
@@ -3794,13 +3803,13 @@ msgstr "Andere Sitzung auswählen"
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to Lock Session %1"
-msgstr "Sperren der Sitzung %1 fehlgeschlagen."
+msgstr "Sperren der Sitzung %1 fehlgeschlagen"
 
 #: shell/sessionlock.cpp:197
 #, kde-format
 msgctxt "@info"
 msgid "The session %1 is already active in another running instance."
-msgstr "Die Sitzung %1 ist bereits in einer weiteren laufenden Instanz aktiv"
+msgstr "Die Sitzung %1 ist bereits in einer anderen laufenden Instanz aktiv."
 
 #: shell/settings/analyzerspreferences.cpp:25
 #, kde-format
@@ -4051,7 +4060,7 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "codecompletion item."
 msgstr ""
-"Wählen Sie ob zusätzliche Informationen zum aktuell ausgewählten "
+"Wählen Sie, ob zusätzliche Informationen zum aktuell ausgewählten "
 "Quelltextvervollständigungs-Element angezeigt werden sollen."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
@@ -4069,7 +4078,7 @@ msgid ""
 "Choose whether to display additional information for the currently selected "
 "code completion item."
 msgstr ""
-"Wählen Sie ob zusätzliche Informationen zum aktuell ausgewählten "
+"Wählen Sie, ob zusätzliche Informationen zum aktuell ausgewählten "
 "Quelltextvervollständigungs-Element angezeigt werden sollen."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
@@ -4082,7 +4091,7 @@ msgid ""
 "in what cases full code completion will be displayed.</p>"
 msgstr ""
 "<p>Das Fenster der Quelltextvervollständigung hat einen minimalen und einen "
-"ausführlichen Modus.<br> Wählen Sie aus, in welchen Fällen die ausführliche "
+"ausführlichen Modus.<br>Wählen Sie aus, in welchen Fällen die ausführliche "
 "Quelltextvervollständigung angezeigt wird.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -4152,6 +4161,13 @@ msgid ""
 "then fine tune the colors in the settings under Editor &gt; Color Themes "
 "&gt; Highlighting Text Styles &gt; KDevelop/Semantic Colors.</p>"
 msgstr ""
+"<p>Standardmäßig werden die globalen Farben für Typen, Funktionen, "
+"Namensräume und so weiter automatisch erzeugt und an das gewählte Editor-"
+"Farbschema mittels der globalen Einfärbungsintensität angepasst. Wenn Sie "
+"volle Kontrolle über die Farben haben möchten, können Sie stattdessen das "
+"Farbschema des Editors als Farbquelle verwenden. In dem Fall können Sie Farb-"
+"Feineinstellungen unter Editor &gt; Farbschemata &gt; Textstile für "
+"Hervorhebungen &gt; KDevelop/Semantic Colors vornehmen.</p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_globalColorSource)
 #: shell/settings/languagepreferences.ui:170
@@ -4163,7 +4179,7 @@ msgstr "Automatisch generiert"
 #: shell/settings/languagepreferences.ui:175
 #, kde-format
 msgid "From Editor Theme"
-msgstr "Aus Editor-Design"
+msgstr "Aus Editor-Farbschema"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: shell/settings/languagepreferences.ui:186
@@ -4188,7 +4204,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Global colorization intensity:"
-msgstr "Intensität der Einfärbung globaler Typen:"
+msgstr "Globale Intensität der Einfärbung:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_highlightSemanticProblems)
@@ -4243,7 +4259,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Bold font for declarations:"
-msgstr "Fettschrift für Vorwärtsdeklaration:"
+msgstr "Fettschrift für Deklarationen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: shell/settings/languagepreferences.ui:293
@@ -4334,13 +4350,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Minimum project size for simplified parsing:"
-msgstr "Mindestgröße des Projekts für vereinfachtes Parsing:"
+msgstr "Mindestgröße des Projekts für vereinfachtes Parsen:"
 
 #: shell/settings/pluginpreferences.cpp:35
 #, kde-format
 msgctxt "@title:group"
 msgid "Core"
-msgstr "Core"
+msgstr "Kern"
 
 #: shell/settings/pluginpreferences.cpp:36
 #, kde-format
@@ -4437,7 +4453,7 @@ msgstr ""
 "Quelltextes,\n"
 "        der vom aktuellen Build-System gefunden wird, in der passenden "
 "Sprachunterstützung ein.\n"
-"Das ermöglicht zwar eine vollständigere Sprachunterstützung,\n"
+"        Das ermöglicht zwar eine vollständigere Sprachunterstützung,\n"
 "        ist aber langsamer."
 
 #. i18n: ectx: whatsthis, entry (projectsBaseDirectory), group (Project Manager)
@@ -4560,7 +4576,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Override Kate Indentation Mode"
-msgstr "Kate-Einrückungsmodus überschreiben"
+msgstr "Kate-Einrückungsmodus übergehen"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkKateModelines)
 #: shell/settings/sourceformattersettings.ui:36
@@ -4638,7 +4654,7 @@ msgid ""
 "left, or by the dock at the bottom.</p>"
 msgstr ""
 "<p>Legt fest, ob die untere linke Ecke vom linken oder vom unteren Dock "
-"belegt wird,</p>"
+"belegt wird.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: shell/settings/uiconfig.ui:32
@@ -4656,7 +4672,7 @@ msgid ""
 "right, or by the dock at the bottom.</p>"
 msgstr ""
 "<p>Legt fest, ob die untere rechte Ecke vom rechten oder vom unteren Dock "
-"belegt wird,</p>"
+"belegt wird.</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: shell/settings/uiconfig.ui:42
@@ -4818,21 +4834,22 @@ msgstr "Dateien neu formatieren ..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Format file(s) using the configured source formatter(s)"
-msgstr "Datei(en) mit dem eingerichteten Quelltextformatierer(n) formatieren"
+msgstr ""
+"Datei(en) mit dem/den eingerichteten Quelltextformatierer(n) formatieren"
 
 #: shell/sourceformattercontroller.cpp:245
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Formatting functionality using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Formatting functionality using the configured source formatter(s)."
-msgstr "Dateien mit der <b>astyle</b>-Bibliothek formatieren."
+msgstr ""
+"Formatierungsfunktion mittels des/der eingerichteten Quelltext-"
+"Formatierer(s)."
 
 #: shell/sourceformattercontroller.cpp:603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using <i>%1</i> (<b>%2</b>)"
-msgstr ""
+msgstr "Datei oder Auswahl mit <i>%1</i> neu formatieren (<b>%2</b>)"
 
 #: shell/sourceformattercontroller.cpp:606
 #, kde-format
@@ -4841,32 +4858,31 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using <i>"
 "%1</i> tool with <b>%2</b> style."
 msgstr ""
+"Der ausgewählte Text oder, falls nichts ausgewählt ist, die gesamte Datei "
+"wird mit <i>%1</i> und dem <b>%2</b>-Stil neu formatiert."
 
 #: shell/sourceformattercontroller.cpp:608
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using <i>%1</i> (<b>%2</b>)"
-msgstr "Aktuelle Zeile mit AStyle neu formatieren"
+msgstr "Aktuelle Zeile mit <i>%1</i> (<b>%2</b>) neu formatieren"
 
 #: shell/sourceformattercontroller.cpp:611
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using <i>%1</i> tool with <b>%2</b> "
 "style."
 msgstr ""
-"Zeile unter dem Cursor mit der <b>astyle</b>-Bibliothek neu formatieren."
+"Zeile unter dem Cursor mit <i>%1</i> und dem <b>%2</b>-Stil neu formatieren."
 
 #: shell/sourceformattercontroller.cpp:615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat selection or file using the configured source formatter"
 msgstr ""
+"Auswahl oder Datei mit dem eingerichteten Quelltext-Formatierer neu "
+"formatieren"
 
 #: shell/sourceformattercontroller.cpp:617
 #, kde-format
@@ -4875,26 +4891,25 @@ msgid ""
 "Reformats selected text or the entire file if nothing is selected, using the "
 "configured source formatter."
 msgstr ""
+"Der ausgewählte Text oder, falls nichts ausgewählt ist, die gesamte Datei "
+"wird mit dem eingerichteten Quelltext-Formatierer neu formatiert."
 
 #: shell/sourceformattercontroller.cpp:619
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reformat current line using AStyle"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reformat current line using the configured source formatter"
-msgstr "Aktuelle Zeile mit AStyle neu formatieren"
+msgstr ""
+"Aktuelle Zeile mit dem eingerichteten Quelltext-Formatierer neu formatieren"
 
 #: shell/sourceformattercontroller.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Source reformatting of line under cursor using <b>astyle</b> library."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Source reformatting of line under cursor using the configured source "
 "formatter."
 msgstr ""
-"Zeile unter dem Cursor mit der <b>astyle</b>-Bibliothek neu formatieren."
+"Zeile unter dem Cursor mit dem eingerichteten Quelltext-Formatierer neu "
+"formatieren."
 
 #: shell/sourceformattercontroller.cpp:856
 #, kde-format
@@ -5418,23 +5433,23 @@ msgstr ""
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
-"Vollständige Definition-Use-Chain (Sprachunabhängige Strukturierung der "
-"Quelltexte) beim erfolgreichen Einlesen ausgeben"
+"Vollständiges Definitions-Repository der DUChain beim erfolgreichen Einlesen "
+"ausgeben"
 
 #: util/duchainify/main.cpp:288
 #, kde-format
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
-"Vollständige DUChain-PersistentSymbolTable (Sprachunabhängige Strukturierung "
-"der Quelltexte) beim erfolgreichen Einlesen ausgeben"
+"Vollständige PersistentSymbolTable der DUChain beim erfolgreichen Einlesen "
+"ausgeben"
 
 #: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
 "Zahl, die die maximale Tiefe angibt, in der Deklarationsdetails ausgegeben "
-"werden."
+"werden"
 
 #: util/duchainify/main.cpp:294
 #, kde-format
@@ -5485,8 +5500,8 @@ msgid ""
 "You don't have write permissions for the following files; add write "
 "permissions for owner before saving?"
 msgstr ""
-"Sie haben nicht die nötigen Rechte zum Schreiben der folgenden Dateien. "
-"Möchten Sie die Schreibrechte für den Benutzer vor dem Speichern setzen?"
+"Sie haben kein Schreibrecht für die folgenden Dateien. Möchten Sie das "
+"Schreibrecht für den Benutzer vor dem Speichern setzen?"
 
 #: util/shellutils.cpp:82
 #, kde-format
@@ -5498,7 +5513,7 @@ msgstr "Einige Dateien sind schreibgeschützt"
 #, kde-format
 msgctxt "@action:button"
 msgid "Set Write Permissions"
-msgstr "Schreibberechtigungen einstellen"
+msgstr "Schreibberechtigungen setzen"
 
 #: util/shellutils.cpp:84
 #, kde-format
@@ -5534,13 +5549,13 @@ msgid ""
 "Process '%1' exited with status %2\n"
 "%3"
 msgstr ""
-"Der Prozess '%1' wurde mit Status %2 beendet\n"
+"Der Prozess „%1“ wurde mit Status %2 beendet\n"
 "%3"
 
 #: vcs/dvcs/dvcsjob.cpp:263
 #, kde-format
 msgid "Command finished with error %1."
-msgstr "Befehl mit Fehlernummer %1 beendet."
+msgstr "Befehl mit Fehler %1 beendet."
 
 #: vcs/dvcs/dvcsjob.cpp:277
 #, kde-format
@@ -5681,6 +5696,8 @@ msgid ""
 "<p>Show changes between the current branch (or staging area, if not empty) "
 "and the last commit on the selected branch.</p>"
 msgstr ""
+"<p>Unterschiede zwischen dem aktuellen Zweig (oder dem Index, falls nicht "
+"leer) und dem letzten Commit auf dem ausgewählten Zweig anzeigen.</p>"
 
 #. i18n: ectx: property (text), widget (QPushButton, diffButton)
 #: vcs/dvcs/ui/branchmanager.ui:80
@@ -5694,14 +5711,14 @@ msgstr "Mit Zweig vergleichen"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Checkout to the selected branch"
-msgstr "In den ausgewählten Zweig auslesen"
+msgstr "In den ausgewählten Zweig auschecken"
 
 #. i18n: ectx: property (text), widget (QPushButton, checkoutButton)
 #: vcs/dvcs/ui/branchmanager.ui:106
 #, kde-format
 msgctxt "@action:button checkout a version"
 msgid "Checkout"
-msgstr "Auslesen"
+msgstr "Auschecken"
 
 #. i18n: ectx: property (text), widget (QPushButton, mergeButton)
 #: vcs/dvcs/ui/branchmanager.ui:116
@@ -5952,12 +5969,12 @@ msgstr "Push"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Pull"
-msgstr "Aktualisieren"
+msgstr "Pull"
 
 #: vcs/vcspluginhelper.cpp:292
 #, kde-format
 msgid "There are no differences."
-msgstr "Es gibt keine Unterschiede"
+msgstr "Es gibt keine Unterschiede."
 
 #: vcs/vcspluginhelper.cpp:299
 #, kde-format
@@ -5977,8 +5994,8 @@ msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
-"Kann keine Kommentare anzeigen, Interface KTextEditor::AnnotationInterface "
-"für den Editor fehlt."
+"Anmerkungen können nicht angezeigt werden, Interface KTextEditor::"
+"AnnotationInterface für den Editor fehlt."
 
 #: vcs/vcspluginhelper.cpp:443
 #, kde-format
@@ -5987,7 +6004,7 @@ msgid ""
 "not a text document:\n"
 "%1"
 msgstr ""
-"Kann die Aktion Kommentieren nicht ausführen, weil das Dokument nicht "
+"Die Aktion Anmerkungen kann nicht ausgeführt werden, weil das Dokument nicht "
 "gefunden wurde oder kein Textdokument ist:\n"
 "%1"
 
@@ -6112,7 +6129,7 @@ msgstr "Im Begriff in das Archiv einzuspielen"
 #, kde-format
 msgctxt "@label"
 msgid "Difference between revision %1 and %2:"
-msgstr "Unterschiede zwischen Revision %1 und %2:"
+msgstr "Unterschied zwischen Revision %1 und %2:"
 
 #. i18n: ectx: property (text), widget (QLabel, revLabel)
 #: vcs/widgets/vcsdiffwidget.ui:28

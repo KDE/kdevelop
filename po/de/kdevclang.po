@@ -353,7 +353,7 @@ msgstr ""
 #: duchain/unknowndeclarationproblem.cpp:373
 #, kde-format
 msgid "Insert '%1'"
-msgstr "%1 einfügen"
+msgstr "„%1“ einfügen"
 
 #: duchain/unknowndeclarationproblem.cpp:433
 #, kde-format

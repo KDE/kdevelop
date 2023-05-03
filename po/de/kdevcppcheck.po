@@ -200,7 +200,7 @@ msgid ""
 "Enable all coding style checks. All messages with the severities 'style', "
 "'performance' and 'portability' are enabled."
 msgstr ""
-"Alle Soding-Style-Überprüfungen aktivieren. Alle Nachrichten mit dem "
+"Alle Coding-Style-Überprüfungen aktivieren. Alle Nachrichten mit dem "
 "Schweregrad „Stil“, „Leistung“ und „Portabilität“ sind aktiviert."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_checkStyle)

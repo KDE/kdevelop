@@ -47,4 +47,4 @@ msgstr "„docker run“-Argumente:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Projects volume:"
-msgstr "Projekt-Volume:"
+msgstr "Projekte-Volume:"

@@ -2,21 +2,22 @@
 # This file is distributed under the same license as the kdevelop package.
 # Burkhard Lück <lueck@hube-lueck.de>, 2018, 2020, 2021.
 # Frederik Schwarzer <schwarzer@kde.org>, 2020, 2023.
+# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2023-03-17 21:49+0100\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2023-04-30 18:43+0200\n"
+"Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #: analyzer.cpp:30
 #, kde-format
@@ -90,8 +91,8 @@ msgid ""
 "Checks here need to be enabled explicitly, as they don't belong to any "
 "level. Checks here are very stable and have very few false-positives."
 msgstr ""
-"Checks müssen hier explizit aktiviert werden, da sie zu keinem Level gehören."
-"Die Überprüfungen hier sind sehr stabil und weisen nur sehr wenige "
+"Checks müssen hier explizit aktiviert werden, da sie zu keinem Level "
+"gehören. Die Überprüfungen hier sind sehr stabil und weisen nur sehr wenige "
 "Fehlalarme auf."
 
 #: checksdb.cpp:54
@@ -351,7 +352,7 @@ msgstr "Nur Qt"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disable checks not compatible with Qt 4."
-msgstr "Deaktiviert Überprüfungen, die nicht mit Qt 4 kompatibel sind."
+msgstr "Überprüfungen deaktivieren, die nicht mit Qt 4 kompatibel sind."
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_qt4Compat)
 #: config/projectconfigpage.ui:91
@@ -444,7 +445,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable all fix-its"
-msgstr "Slle Fix-Its aktivieren"
+msgstr "Alle Fix-Its aktivieren"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, kcfg_noInplaceFixits)
 #: config/projectconfigpage.ui:179
@@ -459,7 +460,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "No-inplace fix-its"
-msgstr ""
+msgstr "Nicht ersetzende Fix-its"
 
 #. i18n: ectx: property (text), widget (KMessageWidget, kmessagewidget)
 #: config/projectconfigpage.ui:192
@@ -572,23 +573,23 @@ msgid ""
 "clazy-standalone path cannot be detected. Set the path manually if Clazy is "
 "already installed."
 msgstr ""
-"Der Clazy-Standalone-Pfad kann nicht erkannt werden. Legen Sie den Pfad "
-"manuell fest, wenn Clazy bereits installiert."
+"Der Pfad zu clazy-standalone kann nicht erkannt werden. Legen Sie den Pfad "
+"manuell fest, falls Clazy bereits installiert ist."
 
 #: jobparameters.cpp:42
 #, kde-format
 msgid "clazy-standalone path is empty."
-msgstr "Der Clay-Standalone-Pfad ist leer."
+msgstr "Der Pfad zu clazy-standalone ist leer."
 
 #: jobparameters.cpp:50
 #, kde-format
 msgid "clazy-standalone path '%1' does not exists."
-msgstr "Der Clazy-Standalone-Pfad „%1“ ist nicht vorhanden."
+msgstr "Der Pfad zu clazy-standalone, „%1“, ist nicht vorhanden."
 
 #: jobparameters.cpp:55
 #, kde-format
 msgid "clazy-standalone path '%1' is not an executable."
-msgstr "Der Clazy-Standalone-Pfad „%1“ ist nicht ausführbar."
+msgstr "Der Pfad zu clazy-standalone, „%1“, ist nicht ausführbar."
 
 #: jobparameters.cpp:64
 #, kde-format
