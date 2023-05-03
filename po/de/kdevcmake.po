@@ -4,6 +4,7 @@
 # Jonathan Kolberg <bulldog98@kubuntu-de.org>, 2010.
 # Gerhard Stengel <gstengel@gmx.net>, 2010, 2011, 2012.
 # Alois Spitzbart <spitz234@hotmail.com>, 2022.
+# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevcmake\n"
