@@ -190,7 +190,7 @@ msgstr "مطوّرك - بيئة التّطوير المتكاملة"
 #: main.cpp:381
 #, kde-format
 msgid "Copyright 1999-%1, The KDevelop developers"
-msgstr "الحقوق محفوظة ١٩٩٩-%1، مطوّري «مطوّرك»"
+msgstr "الحقوق محفوظة 1999-%1، مطوّري «مطوّرك»"
 
 #: main.cpp:384
 #, kde-format
@@ -377,7 +377,7 @@ msgstr "Harald Fernengel"
 #: main.cpp:405
 #, kde-format
 msgid "Ported to Qt 3, patches, valgrind, diff and perforce support"
-msgstr "النّقل إلى «كيوت ٣»، دعم valgrind والفروق وperforce"
+msgstr "النّقل إلى «كيوت 3»، دعم valgrind والفروق وperforce"
 
 #: main.cpp:406
 #, kde-format
