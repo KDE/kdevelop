@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-05-24 00:45+0000\n"
 "PO-Revision-Date: 2022-12-30 23:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 22.12.0\n"
 
-#: outputwidget.cpp:43
+#: outputwidget.cpp:44
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
@@ -29,85 +29,91 @@ msgstr ""
 "Çıktı görünümünü süzmek için BÜYÜK/küçük harf duyarsız bir düzenli ifade "
 "girin"
 
-#: outputwidget.cpp:61
+#: outputwidget.cpp:63
 #, kde-format
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "Çıktı Görünümü"
 
-#: outputwidget.cpp:72
+#: outputwidget.cpp:74
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "Geçerli etkin çıktı görünümünü kapat"
 
-#: outputwidget.cpp:78
+#: outputwidget.cpp:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "Tüm diğer çıktı görünümlerini kapat"
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:91
 #, kde-format
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "Önceki Çıktı"
 
-#: outputwidget.cpp:92
+#: outputwidget.cpp:94
 #, kde-format
 msgctxt "@action"
 msgid "Next Output"
 msgstr "Sonraki Çıktı"
 
-#: outputwidget.cpp:97
+#: outputwidget.cpp:99
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr "Etkinleştirilmiş Ögeyi Seç"
 
-#: outputwidget.cpp:99
+#: outputwidget.cpp:101
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr "Ögeyi Seçerken Odaklan"
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:115
 #, kde-format
 msgctxt "@action"
 msgid "First Item"
 msgstr "İlk Öge"
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:119
 #, kde-format
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "Önceki Öge"
 
-#: outputwidget.cpp:121
+#: outputwidget.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Next Item"
 msgstr "Sonraki Öge"
 
-#: outputwidget.cpp:125
+#: outputwidget.cpp:127
 #, kde-format
 msgctxt "@action"
 msgid "Last Item"
 msgstr "Son Öge"
 
-#: outputwidget.cpp:138
+#: outputwidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr "Temizle"
 
-#: outputwidget.cpp:149
+#: outputwidget.cpp:151
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr "Ara..."
 
-#: outputwidget.cpp:724
+#: outputwidget.cpp:196
+#, kde-format
+msgctxt "@action %1: output type, e.g. Build or Run"
+msgid "Configure %1 Output"
+msgstr ""
+
+#: outputwidget.cpp:804
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
@@ -115,31 +121,63 @@ msgctxt ""
 msgid "Filter regular expression pattern error at offset %1: %2"
 msgstr "%1 ofsetinde düzenli ifade dizgisi süzme hatası: %2"
 
-#: standardoutputview.cpp:101
+#: outputwidgetconfig.cpp:64
+#, kde-format
+msgctxt "@title:window %1: output type, e.g. Build or Run"
+msgid "Configure %1 Output"
+msgstr ""
+
+#: outputwidgetconfig.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Limit the number of output views"
+msgstr ""
+
+#: outputwidgetconfig.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically close oldest output views"
+msgstr ""
+
+#: outputwidgetconfig.cpp:81
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum output view count"
+msgstr ""
+
+#: outputwidgetconfig.cpp:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The oldest output view is closed when\n"
+"the number of views exceeds this value"
+msgstr ""
+
+#: standardoutputview.cpp:100
 #, kde-format
 msgctxt "@title:window"
 msgid "Build"
 msgstr "Yapı"
 
-#: standardoutputview.cpp:106
+#: standardoutputview.cpp:105
 #, kde-format
 msgctxt "@title:window"
 msgid "Run"
 msgstr "Çalıştır"
 
-#: standardoutputview.cpp:111
+#: standardoutputview.cpp:110
 #, kde-format
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "Hata Ayıkla"
 
-#: standardoutputview.cpp:116
+#: standardoutputview.cpp:124
 #, kde-format
 msgctxt "@title:window"
 msgid "Test"
 msgstr "Sına"
 
-#: standardoutputview.cpp:121
+#: standardoutputview.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"

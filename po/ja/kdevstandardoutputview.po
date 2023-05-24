@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
+"POT-Creation-Date: 2023-05-24 00:45+0000\n"
 "PO-Revision-Date: 2008-12-12 00:37+0900\n"
 "Last-Translator: Yukiko Bando <ybando@k6.dion.ne.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16,100 +16,106 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: outputwidget.cpp:43
+#: outputwidget.cpp:44
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter a case-insensitive regular expression to filter the output view"
 msgstr ""
 
-#: outputwidget.cpp:61
+#: outputwidget.cpp:63
 #, fuzzy, kde-format
 #| msgid "Output View"
 msgctxt "@title:window"
 msgid "Output View"
 msgstr "出力ビュー"
 
-#: outputwidget.cpp:72
+#: outputwidget.cpp:74
 #, fuzzy, kde-format
 #| msgid "Close the currently active output view"
 msgctxt "@info:tooltip"
 msgid "Close the currently active output view"
 msgstr "現在アクティブな出力ビューを閉じます"
 
-#: outputwidget.cpp:78
+#: outputwidget.cpp:80
 #, fuzzy, kde-format
 #| msgid "Close the currently active output view"
 msgctxt "@info:tooltip"
 msgid "Close all other output views"
 msgstr "現在アクティブな出力ビューを閉じます"
 
-#: outputwidget.cpp:89
+#: outputwidget.cpp:91
 #, fuzzy, kde-format
 #| msgid "Previous"
 msgctxt "@action"
 msgid "Previous Output"
 msgstr "前へ"
 
-#: outputwidget.cpp:92
+#: outputwidget.cpp:94
 #, fuzzy, kde-format
 #| msgid "Previous"
 msgctxt "@action"
 msgid "Next Output"
 msgstr "前へ"
 
-#: outputwidget.cpp:97
+#: outputwidget.cpp:99
 #, kde-format
 msgctxt "@action"
 msgid "Select Activated Item"
 msgstr ""
 
-#: outputwidget.cpp:99
+#: outputwidget.cpp:101
 #, kde-format
 msgctxt "@action"
 msgid "Focus when Selecting Item"
 msgstr ""
 
-#: outputwidget.cpp:113
+#: outputwidget.cpp:115
 #, fuzzy, kde-format
 #| msgid "Next"
 msgctxt "@action"
 msgid "First Item"
 msgstr "次へ"
 
-#: outputwidget.cpp:117
+#: outputwidget.cpp:119
 #, fuzzy, kde-format
 #| msgid "Previous"
 msgctxt "@action"
 msgid "Previous Item"
 msgstr "前へ"
 
-#: outputwidget.cpp:121
+#: outputwidget.cpp:123
 #, fuzzy, kde-format
 #| msgid "Next"
 msgctxt "@action"
 msgid "Next Item"
 msgstr "次へ"
 
-#: outputwidget.cpp:125
+#: outputwidget.cpp:127
 #, fuzzy, kde-format
 #| msgid "Next"
 msgctxt "@action"
 msgid "Last Item"
 msgstr "次へ"
 
-#: outputwidget.cpp:138
+#: outputwidget.cpp:140
 #, kde-format
 msgctxt "@action"
 msgid "Clear"
 msgstr ""
 
-#: outputwidget.cpp:149
+#: outputwidget.cpp:151
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Search..."
 msgstr ""
 
-#: outputwidget.cpp:724
+#: outputwidget.cpp:196
+#, kde-format
+msgctxt "@action %1: output type, e.g. Build or Run"
+msgid "Configure %1 Output"
+msgstr ""
+
+#: outputwidget.cpp:804
 #, kde-format
 msgctxt ""
 "@info:tooltip %1 - position in the pattern, %2 - textual description of the "
@@ -117,35 +123,67 @@ msgctxt ""
 msgid "Filter regular expression pattern error at offset %1: %2"
 msgstr ""
 
-#: standardoutputview.cpp:101
+#: outputwidgetconfig.cpp:64
+#, kde-format
+msgctxt "@title:window %1: output type, e.g. Build or Run"
+msgid "Configure %1 Output"
+msgstr ""
+
+#: outputwidgetconfig.cpp:74
+#, kde-format
+msgctxt "@option:check"
+msgid "Limit the number of output views"
+msgstr ""
+
+#: outputwidgetconfig.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Automatically close oldest output views"
+msgstr ""
+
+#: outputwidgetconfig.cpp:81
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Maximum output view count"
+msgstr ""
+
+#: outputwidgetconfig.cpp:83
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The oldest output view is closed when\n"
+"the number of views exceeds this value"
+msgstr ""
+
+#: standardoutputview.cpp:100
 #, fuzzy, kde-format
 #| msgid "Build"
 msgctxt "@title:window"
 msgid "Build"
 msgstr "ビルド"
 
-#: standardoutputview.cpp:106
+#: standardoutputview.cpp:105
 #, fuzzy, kde-format
 #| msgid "Run"
 msgctxt "@title:window"
 msgid "Run"
 msgstr "実行"
 
-#: standardoutputview.cpp:111
+#: standardoutputview.cpp:110
 #, fuzzy, kde-format
 #| msgid "Debug"
 msgctxt "@title:window"
 msgid "Debug"
 msgstr "デバッグ"
 
-#: standardoutputview.cpp:116
+#: standardoutputview.cpp:124
 #, fuzzy, kde-format
 #| msgid "Test"
 msgctxt "@title:window"
 msgid "Test"
 msgstr "テスト"
 
-#: standardoutputview.cpp:121
+#: standardoutputview.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Version Control"

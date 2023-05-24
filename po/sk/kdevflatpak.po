@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevflatpak\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"POT-Creation-Date: 2023-05-24 00:45+0000\n"
 "PO-Revision-Date: 2022-04-17 20:47+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -75,17 +75,17 @@ msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "Názov hostiteľa zariadenia:"
 
-#: flatpakruntime.cpp:53
+#: flatpakruntime.cpp:55
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:144
+#: flatpakruntime.cpp:146
 #, kde-format
 msgid "Bundling"
 msgstr "Zabalenie"
 
-#: flatpakruntime.cpp:166
+#: flatpakruntime.cpp:168
 #, kde-format
 msgid "Run on Device"
 msgstr "Spustiť na zariadení"

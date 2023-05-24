@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"POT-Creation-Date: 2023-05-24 00:45+0000\n"
 "PO-Revision-Date: 2019-09-30 19:20+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -85,17 +85,17 @@ msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "裝置主機名稱"
 
-#: flatpakruntime.cpp:53
+#: flatpakruntime.cpp:55
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:144
+#: flatpakruntime.cpp:146
 #, kde-format
 msgid "Bundling"
 msgstr "正在包裝成 Bundle"
 
-#: flatpakruntime.cpp:166
+#: flatpakruntime.cpp:168
 #, kde-format
 msgid "Run on Device"
 msgstr "在裝置執行"

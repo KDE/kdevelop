@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-12-18 00:42+0000\n"
+"POT-Creation-Date: 2023-05-24 00:45+0000\n"
 "PO-Revision-Date: 2023-05-22 14:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -76,17 +76,17 @@ msgctxt "@label:textbox"
 msgid "Device hostname:"
 msgstr "设备主机名："
 
-#: flatpakruntime.cpp:53
+#: flatpakruntime.cpp:55
 #, kde-format
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: flatpakruntime.cpp:144
+#: flatpakruntime.cpp:146
 #, kde-format
 msgid "Bundling"
 msgstr "打包"
 
-#: flatpakruntime.cpp:166
+#: flatpakruntime.cpp:168
 #, kde-format
 msgid "Run on Device"
 msgstr "在设备上运行"
