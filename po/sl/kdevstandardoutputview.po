@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2023-01-03 16:35+0100\n"
+"PO-Revision-Date: 2023-05-24 08:54+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -107,7 +107,7 @@ msgstr "Poišči..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Konfiguriraj %1 izhod"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -121,25 +121,25 @@ msgstr "Filtriraj vzorec napake regularnega izraza pri odmiku %1: %2"
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Konfiguriraj %1 izhod"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Omeji število izhodnih pogledov"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Samodejno zapri najstarejše izhodne poglede"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Največji števec izhodnih pogledov"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -148,6 +148,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"Najstarejši izhodni pogled je zaprt, ko\n"
+"število pogledov preseže to vrednost"
 
 #: standardoutputview.cpp:100
 #, kde-format

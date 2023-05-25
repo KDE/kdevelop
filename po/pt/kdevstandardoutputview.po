@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2022-12-28 18:41+0000\n"
+"PO-Revision-Date: 2023-05-24 19:04+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -107,7 +107,7 @@ msgstr "Procurar..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configurar o Resultado da %1"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -121,25 +121,25 @@ msgstr "Erro do padrão de expressão regular de filtragem na posição %1: %2"
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configurar o Resultado da %1"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Limitar o número de áreas de resultados"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Fechar automaticamente as áreas de resultados mais antigas"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Número máximo de áreas de resultados"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -148,6 +148,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"A área de resultados mais antiga é fechada\n"
+"quando se atingir o número áreas aqui indicado"
 
 #: standardoutputview.cpp:100
 #, kde-format

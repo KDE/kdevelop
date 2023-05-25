@@ -1,17 +1,17 @@
 # Translation of kdevstandardoutputview.po to Catalan (Valencian)
-# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# Copyright (C) 2009-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Manuel Tortosa <manutortosa@gmail.com>, 2009, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2012, 2015, 2020, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2012, 2015, 2020, 2022, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2016, 2017, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2022-12-28 06:01+0100\n"
+"PO-Revision-Date: 2023-05-24 13:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -112,7 +112,7 @@ msgstr "Busca..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configura l'eixida %1"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -128,25 +128,25 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configureu l'eixida %1"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Limita el nombre de vistes de l'eixida"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Tanca automàticament les vistes d'eixida més antigues"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Nombre màxim de vistes d'eixida"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -155,6 +155,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"La vista d'eixida més antiga es tancarà quan\n"
+"el nombre de vistes excedisca este valor"
 
 #: standardoutputview.cpp:100
 #, kde-format

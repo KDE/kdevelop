@@ -5,13 +5,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2014.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2022-12-30 23:50+0300\n"
+"PO-Revision-Date: 2023-05-24 13:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -111,7 +111,7 @@ msgstr "Ara..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1 Çıktısını Yapılandır"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -125,25 +125,25 @@ msgstr "%1 ofsetinde düzenli ifade dizgisi süzme hatası: %2"
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "%1 Çıktısını Yapılandır"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Çıktı görünümlerinin sayısını sınırla"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "En eski çıktı görünümünü kendiliğinden kapat"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "En çok çıktı görünümü sayısı"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -152,6 +152,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"Görünüm sayısı bu değeri aştığında en\n"
+"eski çıktı görünümü kapatılır"
 
 #: standardoutputview.cpp:100
 #, kde-format
