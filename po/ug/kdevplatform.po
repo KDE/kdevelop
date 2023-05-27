@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevplatform\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-05-27 00:45+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -2352,20 +2352,20 @@ msgid ""
 "controlled project."
 msgstr ""
 
-#: shell/editorconfigpage.cpp:86
+#: shell/editorconfigpage.cpp:94
 #, fuzzy, kde-format
 #| msgid "Edit"
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "تەھرىرلەش"
 
-#: shell/editorconfigpage.cpp:96
+#: shell/editorconfigpage.cpp:104
 #, fuzzy, kde-format
 #| msgid "Configure Editor..."
 msgid "Configure Text Editor"
 msgstr "تەھرىرلىگۈچنى سەپلەش…"
 
-#: shell/environmentconfigurebutton.cpp:74
+#: shell/environmentconfigurebutton.cpp:73
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Configure notifications"
@@ -5640,7 +5640,7 @@ msgstr ""
 msgid "There are no committed differences."
 msgstr ""
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5954,7 +5954,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "ئەسلىگە ياندۇر"
 
-#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:481
+#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
 #, fuzzy, kde-format
 #| msgid "History..."
 msgctxt "@action:inmenu revision history"
@@ -5993,31 +5993,31 @@ msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "تارت"
 
-#: vcs/vcspluginhelper.cpp:292
+#: vcs/vcspluginhelper.cpp:284
 #, kde-format
 msgid "There are no differences."
 msgstr ""
 
-#: vcs/vcspluginhelper.cpp:299
+#: vcs/vcspluginhelper.cpp:291
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr ""
 
-#: vcs/vcspluginhelper.cpp:367
+#: vcs/vcspluginhelper.cpp:359
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr ""
 
-#: vcs/vcspluginhelper.cpp:439
+#: vcs/vcspluginhelper.cpp:431
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
 
-#: vcs/vcspluginhelper.cpp:443
+#: vcs/vcspluginhelper.cpp:435
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -6025,7 +6025,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: vcs/vcspluginhelper.cpp:476 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Revision"
 msgctxt "@action:inmenu"

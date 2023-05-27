@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-05-27 00:45+0000\n"
 "PO-Revision-Date: 2022-12-31 15:45+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -2363,18 +2363,18 @@ msgstr ""
 "Could not annotate the document because it is not part of a version-"
 "controlled project."
 
-#: shell/editorconfigpage.cpp:86
+#: shell/editorconfigpage.cpp:94
 #, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "Editor"
 
-#: shell/editorconfigpage.cpp:96
+#: shell/editorconfigpage.cpp:104
 #, kde-format
 msgid "Configure Text Editor"
 msgstr "Configure Text Editor"
 
-#: shell/environmentconfigurebutton.cpp:74
+#: shell/environmentconfigurebutton.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
@@ -5583,7 +5583,7 @@ msgstr "Unable to Retrieve Diff"
 msgid "There are no committed differences."
 msgstr "There are no committed differences."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5864,7 +5864,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "Revert"
 
-#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:481
+#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
@@ -5900,24 +5900,24 @@ msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "Pull"
 
-#: vcs/vcspluginhelper.cpp:292
+#: vcs/vcspluginhelper.cpp:284
 #, kde-format
 msgid "There are no differences."
 msgstr "There are no differences."
 
-#: vcs/vcspluginhelper.cpp:299
+#: vcs/vcspluginhelper.cpp:291
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "Unable to Get Differences"
 
-#: vcs/vcspluginhelper.cpp:367
+#: vcs/vcspluginhelper.cpp:359
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 History (%1)"
 
-#: vcs/vcspluginhelper.cpp:439
+#: vcs/vcspluginhelper.cpp:431
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -5926,7 +5926,7 @@ msgstr ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 
-#: vcs/vcspluginhelper.cpp:443
+#: vcs/vcspluginhelper.cpp:435
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -5937,7 +5937,7 @@ msgstr ""
 "not a text document:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:476 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

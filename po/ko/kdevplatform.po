@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-05-27 00:45+0000\n"
 "PO-Revision-Date: 2022-07-13 13:28+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2333,18 +2333,18 @@ msgstr ""
 "이 문서가 버전 관리되는 프로젝트에 속해 있지 않기 때문에 문서의 작성자를 표시"
 "할 수 없습니다."
 
-#: shell/editorconfigpage.cpp:86
+#: shell/editorconfigpage.cpp:94
 #, kde-format
 msgctxt "@title:tab"
 msgid "Editor"
 msgstr "편집기"
 
-#: shell/editorconfigpage.cpp:96
+#: shell/editorconfigpage.cpp:104
 #, kde-format
 msgid "Configure Text Editor"
 msgstr "텍스트 편집기 설정"
 
-#: shell/environmentconfigurebutton.cpp:74
+#: shell/environmentconfigurebutton.cpp:73
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure environment variables"
@@ -5513,7 +5513,7 @@ msgstr "차이점을 가져올 수 없음"
 msgid "There are no committed differences."
 msgstr "커밋된 차이점이 없습니다."
 
-#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:293
+#: vcs/dvcs/ui/branchmanager.cpp:270 vcs/vcspluginhelper.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "VCS Support"
@@ -5794,7 +5794,7 @@ msgctxt "@action:inmenu"
 msgid "Revert"
 msgstr "되돌리기"
 
-#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:481
+#: vcs/vcspluginhelper.cpp:89 vcs/vcspluginhelper.cpp:473
 #, kde-format
 msgctxt "@action:inmenu revision history"
 msgid "History..."
@@ -5830,24 +5830,24 @@ msgctxt "@action:inmenu"
 msgid "Pull"
 msgstr "풀"
 
-#: vcs/vcspluginhelper.cpp:292
+#: vcs/vcspluginhelper.cpp:284
 #, kde-format
 msgid "There are no differences."
 msgstr "차이점이 없습니다."
 
-#: vcs/vcspluginhelper.cpp:299
+#: vcs/vcspluginhelper.cpp:291
 #, kde-format
 msgctxt "@title:window"
 msgid "Unable to Get Differences"
 msgstr "차이점을 가져올 수 없음"
 
-#: vcs/vcspluginhelper.cpp:367
+#: vcs/vcspluginhelper.cpp:359
 #, kde-format
 msgctxt "@title:window %1: path or URL, %2: name of a version control system"
 msgid "%2 History (%1)"
 msgstr "%2 과거 기록(%1)"
 
-#: vcs/vcspluginhelper.cpp:439
+#: vcs/vcspluginhelper.cpp:431
 #, kde-format
 msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
@@ -5856,7 +5856,7 @@ msgstr ""
 "작성자를 표시할 수 없습니다. 편집기에 KTextEditor::AnnotationInterface 인터페"
 "이스가 없습니다."
 
-#: vcs/vcspluginhelper.cpp:443
+#: vcs/vcspluginhelper.cpp:435
 #, kde-format
 msgid ""
 "Cannot execute annotate action because the document was not found, or was "
@@ -5867,7 +5867,7 @@ msgstr ""
 "수 없습니다:\n"
 "%1"
 
-#: vcs/vcspluginhelper.cpp:476 vcs/widgets/vcseventwidget.cpp:46
+#: vcs/vcspluginhelper.cpp:468 vcs/widgets/vcseventwidget.cpp:46
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Copy Revision Id"

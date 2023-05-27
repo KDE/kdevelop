@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdevstandardoutputview package.
 # Solinas Simone <ksolsim@gmail.com>, 2009, 2010, 2012, 2013, 2014, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2020, 2022.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2016, 2017, 2020, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2022-12-30 00:40+0100\n"
+"PO-Revision-Date: 2023-05-26 22:57+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: outputwidget.cpp:44
 #, kde-format
@@ -108,7 +108,7 @@ msgstr "Cerca..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configura output di tipo %1"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -123,25 +123,25 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Configura output di tipo %1"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Limita il numero di viste di output"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Chiudi automaticamente la vista di output più vecchia"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Numero totale delle viste di output"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -150,6 +150,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"La vista di output più vecchia viene chiusa\n"
+"quando il totale delle viste supera questo valore"
 
 #: standardoutputview.cpp:100
 #, kde-format
