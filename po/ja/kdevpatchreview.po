@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -251,7 +251,6 @@ msgctxt "%1: number of changed hunks, %2: file name"
 msgid "%2 (1 hunk)"
 msgid_plural "%2 (%1 hunks)"
 msgstr[0] ""
-msgstr[1] ""
 
 #: patchreviewtoolview.cpp:225
 #, kde-format
@@ -287,7 +286,6 @@ msgstr ""
 msgid "Test passed"
 msgid_plural "All %1 tests passed"
 msgstr[0] ""
-msgstr[1] ""
 
 #: patchreviewtoolview.cpp:591
 #, kde-format

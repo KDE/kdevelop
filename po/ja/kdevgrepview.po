@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -53,7 +53,6 @@ msgstr ""
 msgid "%2, and %1 more item"
 msgid_plural "%2, and %1 more items"
 msgstr[0] ""
-msgstr[1] ""
 
 #: grepdialog.cpp:532
 #, kde-format
@@ -96,7 +95,6 @@ msgstr ""
 msgid "Searching for <b>%2</b> in one file"
 msgid_plural "Searching for <b>%2</b> in %1 files"
 msgstr[0] ""
-msgstr[1] ""
 
 #: grepjob.cpp:182
 #, kde-format
@@ -128,14 +126,12 @@ msgstr ""
 msgid "<b>1</b> match"
 msgid_plural "<b>%1</b> matches"
 msgstr[0] ""
-msgstr[1] ""
 
 #: grepoutputmodel.cpp:378
 #, kde-format
 msgid "<b>1</b> file"
 msgid_plural "<b>%1</b> files"
 msgstr[0] ""
-msgstr[1] ""
 
 #: grepoutputmodel.cpp:380
 #, kde-format
@@ -148,7 +144,6 @@ msgstr ""
 msgid "%2: 1 match"
 msgid_plural "%2: %1 matches"
 msgstr[0] ""
-msgstr[1] ""
 
 #: grepoutputmodel.cpp:452
 #, kde-format
