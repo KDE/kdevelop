@@ -21,13 +21,14 @@ public:
     explicit AStyleStringIterator(const QString &string);
     ~AStyleStringIterator() override;
 
-    astyle::streamoff tellg() override;
+    std::streamoff tellg() override;
     int getStreamLength() const override;
     bool hasMoreLines() const override;
     std::string nextLine(bool emptyLineWasDeleted = false) override;
     std::string peekNextLine() override;
     void peekReset() override;
-    astyle::streamoff getPeekStart() const override;
+    std::streamoff getPeekStart() const override;
+
 private:
     QString m_content;
     QTextStream m_is;

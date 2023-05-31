@@ -22,7 +22,7 @@ AStyleStringIterator::~AStyleStringIterator()
 {
 }
 
-astyle::streamoff AStyleStringIterator::tellg()
+std::streamoff AStyleStringIterator::tellg()
 {
   return m_is.pos();
 }
@@ -59,7 +59,7 @@ void AStyleStringIterator::peekReset()
     m_peekStart = -1; // invalid
 }
 
-astyle::streamoff AStyleStringIterator::getPeekStart() const
+std::streamoff AStyleStringIterator::getPeekStart() const
 {
     // NOTE: we're not entirely sure if this is the correct implementation.
     // we're trying to work-around https://bugs.kde.org/show_bug.cgi?id=399048
