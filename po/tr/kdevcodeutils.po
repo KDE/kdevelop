@@ -5,13 +5,13 @@
 # Serdar Soytetir, 2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2013, 2021.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-kdevelop-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2022-08-30 13:02+0300\n"
+"PO-Revision-Date: 2023-06-04 01:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.0\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n: action name; 'Document' is a verb
 #: codeutilsplugin.cpp:49
@@ -32,7 +32,7 @@ msgstr "Belge Beyanı"
 #, kde-format
 msgctxt "default shortcut for \"Document Declaration\""
 msgid "Alt+Shift+d"
-msgstr "Alt+Shift+d"
+msgstr "Seçenek+Üst Karakter+D"
 
 #: codeutilsplugin.cpp:52
 #, kde-format
