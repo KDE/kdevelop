@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevgdb\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-10 04:45+0100\n"
+"PO-Revision-Date: 2023-06-04 23:16+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -129,7 +129,7 @@ msgid ""
 "<b>Failed to load core file</b><p>Debugger reported the following error:"
 "<p><tt>%1"
 msgstr ""
-"<b>Malsukcesis ŝargi kerna dosiero</b><p>Elĉimilo raportis la jenan eraron:"
+"<b>Malsukcesis ŝargi kerndosieron</b><p>Sencimilo raportis la jenan eraron:"
 "<p><tt>%1"
 
 #: gdb.cpp:68
@@ -328,9 +328,9 @@ msgid ""
 msgstr ""
 "Ĉi tiu skripto estas destinita al la realaj komandoj bezonataj por konektiĝi "
 "al malproksime ruliĝanta rulebla.\n"
-"\tŝela dormo 5\tatendu ke fora programo komenciĝu\n"
-"\tcelilo fora ...\tkonekti al la fora erarserĉilo\n"
-"\tdaŭrigu\t [laŭvola] ruli sencimigon al la unua paŭzpunkto"
+"\tshell sleep 5\tatendu ke fora programo komenciĝu\n"
+"\ttarget remote ...\tkonekti al la fora erarserĉilo\n"
+"\tcontinue\t [laŭvola] ruli sencimigon ĝis la unua paŭzpunkto"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: gdbconfigpage.ui:181
@@ -395,9 +395,9 @@ msgid ""
 "\t#[optional] run debugging to the first breakpoint.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Skripto por konekti kun fora aplikaĵo</p><p>Ekzemple:</"
-"p><p>\tshell dormo 5\t #atendu la foran programon komenci</p><p>\tcelfora ..."
-"\t#konekti al la fora erarserĉilo</p><p>\tdaŭrigi\t#[laŭvola] ruli "
-"sencimigon al la unua paŭzpunkto.</p></body> </html>"
+"p><p>\tshell sleep 5\t #atendu la foran programon komenci</p><p>\ttarget "
+"remote ...\t#konekti al la fora erarserĉilo</p><p>\tcontinue\t#[laŭvola] "
+"ruli sencimigon ĝis la unua paŭzpunkto.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, runGdbScript_label)
 #: gdbconfigpage.ui:236
@@ -486,8 +486,8 @@ msgstr "Memorrigardo"
 #, kde-format
 msgid "%2 (1 byte)"
 msgid_plural "%2 (%1 bytes)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 (1 bajto)"
+msgstr[1] "%2 (%1 bajtoj)"
 
 #: memviewdlg.cpp:262
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevfiletemplates\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:44+0000\n"
-"PO-Revision-Date: 2023-04-02 22:05+0100\n"
+"PO-Revision-Date: 2023-06-04 23:16+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -106,24 +106,24 @@ msgstr "Malsukcesis skribi laŭmendan permesilan ŝablonon al dosiero %1."
 #, kde-format
 msgid "Invalid output file: %2"
 msgid_plural "Invalid output files: %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Nevalida eligdosiero: %2"
+msgstr[1] "Nevalidaj eligdosieroj: %2"
 
 #: outputpage.cpp:171
 #, kde-format
 msgctxt "@title:group"
 msgid "Output File"
 msgid_plural "Output Files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eligdosiero"
+msgstr[1] "Eligdosieroj"
 
 #: outputpage.cpp:172
 #, kde-format
 msgctxt "@title:group"
 msgid "Location within Existing File"
 msgid_plural "Location within Existing Files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Loko ene de ekzistanta dosiero"
+msgstr[1] "Loko ene de ekzistantaj dosieroj"
 
 #: outputpage.cpp:178
 #, kde-format
