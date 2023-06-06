@@ -42,7 +42,10 @@ public:
 	void setContent( const QString& content );
 	void setCaption( const QString& caption );
 	QString content() const;
-	QString caption() const;
+	const QString& caption() const
+	{
+		return m_caption;
+	}
 
 	QString description() const;
 	void setDescription( const QString& desc );

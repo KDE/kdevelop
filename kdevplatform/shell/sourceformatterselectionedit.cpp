@@ -63,6 +63,8 @@ void updateLabel(QLabel& label, const QString& text)
 // comparison, i.e. don't modify the style's name.
 using StyleMap = SourceFormatterController::StyleMap;
 
+enum class StyleCategory { UserDefined, Predefined };
+
 /**
  * This class encapsulates an ISourceFormatter and its styles.
  *
@@ -111,6 +113,9 @@ public:
         }
     }
 
+    template<typename StyleAndCategoryUser>
+    void forEachSupportingStyleInUiOrder(const QString& supportedLanguageName, StyleAndCategoryUser callback);
+
     void assertExistingStyle(const SourceFormatterStyle& style)
     {
         Q_ASSERT(findStyle(style.name()) == &style);
@@ -142,7 +147,8 @@ public:
         const QString newStyleName = userStyleNamePrefix + QString::number(maxUserStyleIndex + 1);
 
         const auto oldStyleCount = m_styles.size();
-        const auto newStyleIt = m_styles.try_emplace(m_userStyleRange.last(), newStyleName, newStyleName);
+        const auto newStyleIt =
+            m_styles.try_emplace(std::as_const(m_userStyleRange).last(), newStyleName, newStyleName);
         Q_ASSERT(newStyleIt->second.name() == newStyleIt->first);
         Q_ASSERT(m_styles.size() == oldStyleCount + 1);
 
@@ -153,9 +159,10 @@ private:
     class UserStyleRange
     {
     public:
-        using iterator = StyleMap::const_iterator;
+        using iterator = StyleMap::iterator;
+        using const_iterator = StyleMap::const_iterator;
 
-        explicit UserStyleRange(const StyleMap& styles)
+        explicit UserStyleRange(StyleMap& styles)
         {
             const auto firstUserStyle = styles.lower_bound(userStyleNamePrefix);
 
@@ -169,12 +176,20 @@ private:
             });
         }
 
-        iterator first(const StyleMap& styles) const
+        iterator first(StyleMap& styles)
+        {
+            return m_lastBeforeUserStyles == styles.end() ? styles.begin() : std::next(m_lastBeforeUserStyles);
+        }
+        const_iterator first(const StyleMap& styles) const
         {
             return m_lastBeforeUserStyles == styles.cend() ? styles.cbegin() : std::next(m_lastBeforeUserStyles);
         }
 
-        iterator last() const
+        iterator last()
+        {
+            return m_firstAfterUserStyles;
+        }
+        const_iterator last() const
         {
             return m_firstAfterUserStyles;
         }
@@ -193,6 +208,54 @@ private:
     StyleMap m_styles;
     UserStyleRange m_userStyleRange{m_styles};
 };
+
+template<typename StyleAndCategoryUser>
+void FormatterData::forEachSupportingStyleInUiOrder(const QString& supportedLanguageName, StyleAndCategoryUser callback)
+{
+    std::vector<SourceFormatterStyle*> filteredStyles;
+    // Few if any styles are filtered out => reserve the maximum possible size.
+    filteredStyles.reserve(m_styles.size());
+
+    const auto filterStyles = [&supportedLanguageName, &filteredStyles](StyleMap::iterator first,
+                                                                        StyleMap::iterator last) {
+        for (; first != last; ++first) {
+            auto& style = first->second;
+            // Filter out styles that do not support the selected language.
+            if (style.supportsLanguage(supportedLanguageName)) {
+                filteredStyles.push_back(&style);
+            }
+        }
+    };
+
+    const auto sortAndUseFilteredStyles = [&callback, &filteredStyles](StyleCategory category) {
+        const auto compareForUi = [](const SourceFormatterStyle* a, const SourceFormatterStyle* b) {
+            const auto& left = a->caption();
+            const auto& right = b->caption();
+            const int ciResult = QString::compare(left, right, Qt::CaseInsensitive);
+            if (ciResult != 0) {
+                return ciResult < 0;
+            }
+            return left < right; // compare case-sensitively as a fallback
+        };
+        // Stable sort ensures that styles with equal captions are ordered predictably (by style name).
+        std::stable_sort(filteredStyles.begin(), filteredStyles.end(), compareForUi);
+
+        for (auto* style : filteredStyles) {
+            callback(*style, category);
+        }
+    };
+
+    const auto firstUserStyle = m_userStyleRange.first(m_styles);
+
+    // User-defined styles are more likely to be selected => show them on top of the list.
+    filterStyles(firstUserStyle, m_userStyleRange.last());
+    sortAndUseFilteredStyles(StyleCategory::UserDefined);
+
+    filteredStyles.clear();
+    filterStyles(m_styles.begin(), firstUserStyle);
+    filterStyles(m_userStyleRange.last(), m_styles.end());
+    sortAndUseFilteredStyles(StyleCategory::Predefined);
+}
 
 class LanguageSettings
 {
@@ -505,7 +568,7 @@ public:
     /// @pre languages.empty() OR model-UI matches: language, formatter, style
     void updatePreview();
 
-    QListWidgetItem& addStyleItem(SourceFormatterStyle& style);
+    QListWidgetItem& addStyleItem(SourceFormatterStyle& style, StyleCategory category);
 
     /**
      * Add the names of @a languages to @a ui.cbLanguages.
@@ -555,16 +618,13 @@ void SourceFormatterSelectionEditPrivate::updateUiForCurrentFormatter()
         const QSignalBlocker blocker(ui.styleList);
         ui.styleList->clear();
 
-        currentFormatter().forEachStyle([this](SourceFormatterStyle& style) {
-            if (!style.supportsLanguage(currentLanguage().name())) {
-                // do not list items which do not support the selected language
-                return;
-            }
-            auto& item = addStyleItem(style);
-            if (&style == currentLanguage().selectedStyle()) {
-                ui.styleList->setCurrentItem(&item);
-            }
-        });
+        currentFormatter().forEachSupportingStyleInUiOrder(currentLanguage().name(),
+                                                           [this](SourceFormatterStyle& style, StyleCategory category) {
+                                                               auto& item = addStyleItem(style, category);
+                                                               if (&style == currentLanguage().selectedStyle()) {
+                                                                   ui.styleList->setCurrentItem(&item);
+                                                               }
+                                                           });
     }
     Q_ASSERT_X(currentLanguage().selectedStyle() == styleSelectedInUi(), Q_FUNC_INFO,
                "The selected style is not among the supporting styles!");
@@ -637,11 +697,14 @@ void SourceFormatterSelectionEditPrivate::updatePreview()
     document->setReadWrite(false);
 }
 
-QListWidgetItem& SourceFormatterSelectionEditPrivate::addStyleItem(SourceFormatterStyle& style)
+QListWidgetItem& SourceFormatterSelectionEditPrivate::addStyleItem(SourceFormatterStyle& style, StyleCategory category)
 {
+    Q_ASSERT_X((category == StyleCategory::UserDefined) == isUserDefinedStyle(style), Q_FUNC_INFO,
+               "Wrong style category!");
+
     auto* const item = new QListWidgetItem(style.caption());
     item->setData(styleItemDataRole, QVariant::fromValue(&style));
-    if (isUserDefinedStyle(style)) {
+    if (category == StyleCategory::UserDefined) {
         item->setFlags(item->flags() | Qt::ItemIsEditable);
     }
     ui.styleList->addItem(item);
@@ -1063,7 +1126,7 @@ void SourceFormatterSelectionEdit::newStyle()
 
     d->currentLanguage().setSelectedStyle(&newStyle);
 
-    auto& newStyleItem = d->addStyleItem(newStyle);
+    auto& newStyleItem = d->addStyleItem(newStyle, StyleCategory::UserDefined);
     {
         const QSignalBlocker blocker(d->ui.styleList);
         // An edited item is not automatically selected, which results in weird UI behavior:

@@ -61,11 +61,6 @@ QString SourceFormatterStyle::content() const
 	return m_content;
 }
 
-QString SourceFormatterStyle::caption() const
-{
-	return m_caption;
-}
-
 QString SourceFormatterStyle::description() const
 {
 	return m_description;
