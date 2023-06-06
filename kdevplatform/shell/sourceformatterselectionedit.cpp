@@ -35,6 +35,7 @@
 
 #include <algorithm>
 #include <array>
+#include <iterator>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -102,14 +103,12 @@ public:
     }
 
     template<typename ConstStyleUser>
-    StyleMap::const_iterator forEachUserDefinedStyle(ConstStyleUser callback) const
+    void forEachUserDefinedStyle(ConstStyleUser callback) const
     {
-        auto userStyleIt = m_styles.lower_bound(userStyleNamePrefix);
-        for (const auto end = m_styles.end(); userStyleIt != end && userStyleIt->first.startsWith(userStyleNamePrefix);
-             ++userStyleIt) {
-            callback(userStyleIt->second);
+        for (auto it = m_userStyleRange.first(m_styles); it != m_userStyleRange.last(); ++it) {
+            Q_ASSERT(it->first.startsWith(userStyleNamePrefix));
+            callback(it->second);
         }
-        return userStyleIt;
     }
 
     void assertExistingStyle(const SourceFormatterStyle& style)
@@ -125,6 +124,7 @@ public:
     void removeStyle(const SourceFormatterStyle& style)
     {
         assertExistingStyle(style);
+        Q_ASSERT_X(style.name().startsWith(userStyleNamePrefix), Q_FUNC_INFO, "Cannot remove a predefined style.");
         const auto removedCount = m_styles.erase(style.name());
         Q_ASSERT(removedCount == 1);
     }
@@ -132,7 +132,7 @@ public:
     SourceFormatterStyle& addNewStyle()
     {
         int maxUserStyleIndex = 0;
-        const auto userStyleEnd = forEachUserDefinedStyle([&maxUserStyleIndex](const SourceFormatterStyle& userStyle) {
+        forEachUserDefinedStyle([&maxUserStyleIndex](const SourceFormatterStyle& userStyle) {
             const int index = QStringView{userStyle.name()}.mid(userStyleNamePrefix.size()).toInt();
             // index == 0 if conversion to int fails. Ignore such invalid user-defined style names.
             maxUserStyleIndex = std::max(maxUserStyleIndex, index);
@@ -142,7 +142,7 @@ public:
         const QString newStyleName = userStyleNamePrefix + QString::number(maxUserStyleIndex + 1);
 
         const auto oldStyleCount = m_styles.size();
-        const auto newStyleIt = m_styles.try_emplace(userStyleEnd, newStyleName, newStyleName);
+        const auto newStyleIt = m_styles.try_emplace(m_userStyleRange.last(), newStyleName, newStyleName);
         Q_ASSERT(newStyleIt->second.name() == newStyleIt->first);
         Q_ASSERT(m_styles.size() == oldStyleCount + 1);
 
@@ -150,9 +150,48 @@ public:
     }
 
 private:
+    class UserStyleRange
+    {
+    public:
+        using iterator = StyleMap::const_iterator;
+
+        explicit UserStyleRange(const StyleMap& styles)
+        {
+            const auto firstUserStyle = styles.lower_bound(userStyleNamePrefix);
+
+            // m_lastBeforeUserStyles == styles.end() means that EITHER the first style is user-defined
+            // OR there are no user-defined styles and the first predefined style name would compare
+            // greater than any user-defined style name.
+            m_lastBeforeUserStyles = firstUserStyle == styles.begin() ? styles.end() : std::prev(firstUserStyle);
+
+            m_firstAfterUserStyles = std::find_if_not(firstUserStyle, styles.end(), [](const auto& pair) {
+                return pair.first.startsWith(userStyleNamePrefix);
+            });
+        }
+
+        iterator first(const StyleMap& styles) const
+        {
+            return m_lastBeforeUserStyles == styles.cend() ? styles.cbegin() : std::next(m_lastBeforeUserStyles);
+        }
+
+        iterator last() const
+        {
+            return m_firstAfterUserStyles;
+        }
+
+    private:
+        // The stored iterators point to predefined styles or equal styles.end(). They stay valid and
+        // correct because only user-defined styles are inserted and erased. Furthermore, user-defined
+        // styles are always positioned between these two iterators OR from the beginning until
+        // m_firstAfterUserStyles if m_lastBeforeUserStyles == styles.end().
+        iterator m_lastBeforeUserStyles;
+        iterator m_firstAfterUserStyles;
+    };
+
     const ISourceFormatter& m_formatter;
     const QString m_name; ///< cached m_formatter.name()
     StyleMap m_styles;
+    UserStyleRange m_userStyleRange{m_styles};
 };
 
 class LanguageSettings
