@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kdevprojectfilter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-13 00:55+0000\n"
-"PO-Revision-Date: 2023-04-03 22:10+0100\n"
+"PO-Revision-Date: 2023-06-06 22:02+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -144,8 +144,8 @@ msgstr "Projekta Filtrilo"
 msgctxt "@action:inmenu"
 msgid "Exclude Item from Project"
 msgid_plural "Exclude Items from Project"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ekskludi eron el projekto"
+msgstr[1] "Ekskludi erojn el projekto"
 
 #: projectfilterprovider.cpp:115
 #, kde-format
@@ -154,7 +154,11 @@ msgid ""
 msgid_plural ""
 "A filter for the items was added. To undo, use the project filter settings."
 msgstr[0] ""
+"Filtrilo por la ero estis aldonita. Por malfari, uzu ja projektfiltrilajn "
+"agordojn."
 msgstr[1] ""
+"Filtrilo por la eroj estis aldonita. Por malfari, uzu ja projektfiltrilajn "
+"agordojn."
 
 #: projectfilterprovider.cpp:117
 #, kde-format

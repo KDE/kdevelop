@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kdevstandardoutputview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-24 00:45+0000\n"
-"PO-Revision-Date: 2023-04-03 22:10+0100\n"
+"PO-Revision-Date: 2023-06-06 22:02+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -107,7 +107,7 @@ msgstr "Serĉi..."
 #, kde-format
 msgctxt "@action %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Agordi %1 Eligon"
 
 #: outputwidget.cpp:804
 #, kde-format
@@ -121,25 +121,25 @@ msgstr "Eraro de filtrila regula esprimo ĉe deŝovo %1: %2"
 #, kde-format
 msgctxt "@title:window %1: output type, e.g. Build or Run"
 msgid "Configure %1 Output"
-msgstr ""
+msgstr "Agordi %1 Eligon"
 
 #: outputwidgetconfig.cpp:74
 #, kde-format
 msgctxt "@option:check"
 msgid "Limit the number of output views"
-msgstr ""
+msgstr "Limigi la nombron da eligoperspektivoj"
 
 #: outputwidgetconfig.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Automatically close oldest output views"
-msgstr ""
+msgstr "Aŭtomate fermi plej malnovajn eligoperspektivojn"
 
 #: outputwidgetconfig.cpp:81
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Maximum output view count"
-msgstr ""
+msgstr "Maksimuma nombro da eligoperspektivoj"
 
 #: outputwidgetconfig.cpp:83
 #, kde-format
@@ -148,6 +148,8 @@ msgid ""
 "The oldest output view is closed when\n"
 "the number of views exceeds this value"
 msgstr ""
+"La plej malnova eligoperspektivo estas fermata kiam\n"
+"la nombro da perspektivoj superas ĉi valoron"
 
 #: standardoutputview.cpp:100
 #, kde-format
