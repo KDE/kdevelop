@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2023-06-08 00:45+0000\n"
 "PO-Revision-Date: 2019-08-27 13:13+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -108,14 +108,14 @@ msgstr ""
 "υποκατάλογο <b>subdir</b> με χρήση του εργαλείου <b>uncrustify</b> με το "
 "αρχείο διαμόρφωσης config-file <b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:537
+#: customscript_plugin.cpp:534
 #, fuzzy, kde-format
 #| msgid "Command:"
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Εντολή:"
 
-#: customscript_plugin.cpp:546
+#: customscript_plugin.cpp:543
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -130,19 +130,19 @@ msgstr ""
 "προσθέσετε την <b>$TMPFILE</b> στην εντολή, <br />ένα προσωρινό αρχείο "
 "χρησιμοποιείται για τη μεταφορά του κώδικαa."
 
-#: customscript_plugin.cpp:558
+#: customscript_plugin.cpp:555
 #, fuzzy, kde-format
 #| msgid "More Variables"
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Περισσότερες μεταβλητές"
 
-#: customscript_plugin.cpp:568
+#: customscript_plugin.cpp:565
 #, kde-format
 msgid "Style: %1"
 msgstr "Στιλ: %1"
 
-#: customscript_plugin.cpp:581
+#: customscript_plugin.cpp:578
 #, fuzzy, kde-format
 #| msgid ""
 #| "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -172,7 +172,7 @@ msgstr ""
 "${PROJECT_NAME}</b> θα αντικατασταθεί από τη διαδρομή <br />του τρέχοντος "
 "έργου με το όνομα που ταιριάζει."
 
-#: customscript_plugin.cpp:593
+#: customscript_plugin.cpp:590
 #, fuzzy, kde-format
 #| msgid "Variable Replacements"
 msgctxt "@title:window"

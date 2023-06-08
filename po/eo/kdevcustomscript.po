@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2023-06-08 00:45+0000\n"
 "PO-Revision-Date: 2023-04-17 06:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -108,13 +108,13 @@ msgstr ""
 "<b>subdir</b> b> uzante la ilon <b>uncrustify</b> kun la agorda dosiero "
 "<b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:537
+#: customscript_plugin.cpp:534
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Komando:"
 
-#: customscript_plugin.cpp:546
+#: customscript_plugin.cpp:543
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -129,18 +129,18 @@ msgstr ""
 "$TMPFILE</b> en la komandon, tiam <br />provizora dosiero estas uzata por "
 "transdoni la kodon."
 
-#: customscript_plugin.cpp:558
+#: customscript_plugin.cpp:555
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Pli da Variaĵoj"
 
-#: customscript_plugin.cpp:568
+#: customscript_plugin.cpp:565
 #, kde-format
 msgid "Style: %1"
 msgstr "Stilo: %1"
 
-#: customscript_plugin.cpp:581
+#: customscript_plugin.cpp:578
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -161,7 +161,7 @@ msgstr ""
 "name&gt}</b> estos anstataŭigita per la vojo de <br />aktuale malfermita "
 "projekto kies nomo estas &lt;projektnomo&gt;."
 
-#: customscript_plugin.cpp:593
+#: customscript_plugin.cpp:590
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"

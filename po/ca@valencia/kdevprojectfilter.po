@@ -200,11 +200,11 @@ msgstr "Elimina"
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Up"
-msgstr "Mou amunt"
+msgstr "Mou cap amunt"
 
 #. i18n: ectx: property (text), widget (QPushButton, moveDown)
 #: projectfiltersettings.ui:73
 #, kde-format
 msgctxt "@action:button"
 msgid "Move Down"
-msgstr "Mou avall"
+msgstr "Mou cap avall"

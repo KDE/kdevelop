@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdevcustomscript\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-05 00:44+0000\n"
+"POT-Creation-Date: 2023-06-08 00:45+0000\n"
 "PO-Revision-Date: 2022-04-17 20:46+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -107,13 +107,13 @@ msgstr ""
 "podadresári <b>subdir</b> pomocou nástroja <b>uncrustify</b> s konfiguračným "
 "súborom <b>uncrustify.config</b>."
 
-#: customscript_plugin.cpp:537
+#: customscript_plugin.cpp:534
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Command:"
 msgstr "Príkaz:"
 
-#: customscript_plugin.cpp:546
+#: customscript_plugin.cpp:543
 #, kde-format
 msgid ""
 "<i>You can enter an arbitrary shell command.</i><br />The unformatted source-"
@@ -127,18 +127,18 @@ msgstr ""
 "výsledok sa načíta zo štandardného výstupu.<br /><br />Ak pridáte <b>"
 "$TMPFILE</b> do príkazu, potom <br />sa na prenos kódu použije dočasný súbor."
 
-#: customscript_plugin.cpp:558
+#: customscript_plugin.cpp:555
 #, kde-format
 msgctxt "@action:button"
 msgid "More Variables"
 msgstr "Viac premenných"
 
-#: customscript_plugin.cpp:568
+#: customscript_plugin.cpp:565
 #, kde-format
 msgid "Style: %1"
 msgstr "Štýl: %1"
 
-#: customscript_plugin.cpp:581
+#: customscript_plugin.cpp:578
 #, kde-format
 msgid ""
 "<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br /"
@@ -157,7 +157,7 @@ msgstr ""
 "<br /> iba v $TMPFILE.<br /><br /><b>${PROJECT_NAME}</b> sa nahradí cestou "
 "<br />aktuálne otvoreného súboru projektu s daným názvom."
 
-#: customscript_plugin.cpp:593
+#: customscript_plugin.cpp:590
 #, kde-format
 msgctxt "@title:window"
 msgid "Variable Replacements"
