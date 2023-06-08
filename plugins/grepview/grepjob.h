@@ -29,6 +29,8 @@ class QRegExp;
 class GrepViewPlugin;
 class FindReplaceTest; //FIXME: this is useful only for tests
 
+class QDebug;
+
 struct GrepJobSettings
 {
     bool fromHistory = false;
@@ -49,6 +51,7 @@ struct GrepJobSettings
 
 Q_DECLARE_TYPEINFO(GrepJobSettings, Q_MOVABLE_TYPE);
 
+QDebug operator<<(QDebug debug, const GrepJobSettings&);
 
 class GrepJob : public KJob, public KDevelop::IStatus
 {

@@ -39,6 +39,7 @@
 #include <util/path.h>
 #include <util/wildcardhelpers.h>
 
+#include "debug.h"
 #include "grepviewplugin.h"
 #include "grepoutputview.h"
 #include "grepfindthread.h"
@@ -553,9 +554,9 @@ void GrepDialog::startSearch()
 
         connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
 
+        qCDebug(PLUGIN_GREPVIEW) << "starting search with settings" << m_settings;
         job->setOutputModel(outputModel);
         job->setDirectoryChoice(choice);
-
         job->setSettings(m_settings);
 
         ICore::self()->runController()->registerJob(job);

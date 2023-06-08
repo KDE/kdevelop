@@ -12,6 +12,7 @@
 #include "grepoutputmodel.h"
 #include "greputil.h"
 
+#include <QDebug>
 #include <QFile>
 #include <QList>
 #include <QRegExp>
@@ -26,6 +27,45 @@
 
 using namespace KDevelop;
 
+QDebug operator<<(QDebug debug, const GrepJobSettings& s)
+{
+    const QDebugStateSaver saver(debug);
+
+    debug.nospace() << '{';
+
+    bool firstDataMember = true;
+    const auto printDataMember = [&debug, &firstDataMember](const char* name, const auto& value) {
+        if (firstDataMember) {
+            firstDataMember = false;
+        } else {
+            // Separate the members with vertical bars,
+            // because commas and semicolons separate items within string data members.
+            debug << " | ";
+        }
+        debug << name << ": " << value;
+    };
+
+#define p(memberName) printDataMember(#memberName, s.memberName)
+    p(fromHistory);
+
+    p(projectFilesOnly);
+    p(caseSensitive);
+    p(regexp);
+
+    p(depth);
+
+    p(pattern);
+    p(searchTemplate);
+    p(replacementTemplate);
+    p(files);
+    p(exclude);
+    p(searchPaths);
+#undef p
+
+    debug << '}';
+
+    return debug;
+}
 
 GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 {
