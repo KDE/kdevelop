@@ -373,12 +373,16 @@ void GrepDialog::templateTypeComboActivated(int index)
 
 void GrepDialog::setSettings(const GrepJobSettings& settings)
 {
-    patternCombo->setEditText(settings.pattern);
-    patternComboEditTextChanged(settings.pattern);
+    if (m_show) {
+        patternCombo->setEditText(settings.pattern);
+        patternComboEditTextChanged(settings.pattern);
+    }
     m_settings.pattern = settings.pattern;
 
-    limitToProjectCheck->setEnabled(settings.projectFilesOnly);
-    limitToProjectLabel->setEnabled(settings.projectFilesOnly);
+    if (m_show) {
+        limitToProjectCheck->setEnabled(settings.projectFilesOnly);
+        limitToProjectLabel->setEnabled(settings.projectFilesOnly);
+    }
     m_settings.projectFilesOnly = settings.projectFilesOnly;
 
     // Note: everything else is set by a user
