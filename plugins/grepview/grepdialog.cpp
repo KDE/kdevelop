@@ -45,6 +45,7 @@
 #include "grepfindthread.h"
 #include "greputil.h"
 
+#include <utility>
 
 using namespace KDevelop;
 
@@ -140,7 +141,7 @@ QList<QUrl> getDirectoryChoice(const QString& text)
             ret << project->path().toUrl();
         }
     } else {
-        const QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
+        const QStringList semicolonSeparatedFileList = text.split(pathsSeparator(), Qt::SkipEmptyParts);
         if (!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0])) {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
@@ -149,7 +150,10 @@ QList<QUrl> getDirectoryChoice(const QString& text)
                 ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
             }
         } else {
-            ret << QUrl::fromUserInput(text).adjusted(QUrl::StripTrailingSlash);
+            auto url = QUrl::fromUserInput(text).adjusted(QUrl::StripTrailingSlash);
+            if (!url.isEmpty()) {
+                ret.push_back(std::move(url));
+            }
         }
     }
     return ret;
