@@ -121,6 +121,11 @@ inline QStringList excludepatterns()
     };
 }
 
+KConfigGroup dialogConfigGroup()
+{
+    return ICore::self()->activeSession()->config()->group("GrepDialog");
+}
+
 ///Separator used to separate search paths.
 inline QString pathsSeparator() { return (QStringLiteral(";")); }
 
@@ -200,7 +205,7 @@ GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget
     connect(searchButton, &QPushButton::clicked, this, &GrepDialog::startSearch);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &GrepDialog::reject);
 
-    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
+    const auto cg = dialogConfigGroup();
 
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
@@ -358,7 +363,7 @@ void GrepDialog::closeEvent(QCloseEvent* closeEvent)
         return;
     }
 
-    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
+    auto cg = dialogConfigGroup();
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
     cg.writeEntry("regexp", regexCheck->isChecked());
