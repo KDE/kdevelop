@@ -168,7 +168,6 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
     m_currentDialogs << dlg;
 
     GrepJobSettings dlgSettings = dlg->settings();
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
 
     if(!pattern.isEmpty())
     {
@@ -177,7 +176,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
     }
     else if(!setLastUsed)
     {
-        QString pattern = patternFromSelection(doc);
+        QString pattern = patternFromSelection(core()->documentController()->activeDocument());
         if (!pattern.isEmpty()) {
             dlgSettings.pattern = pattern;
             dlg->setSettings(dlgSettings);
