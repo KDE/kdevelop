@@ -126,6 +126,70 @@ KConfigGroup dialogConfigGroup()
     return ICore::self()->activeSession()->config()->group("GrepDialog");
 }
 
+class DialogConfigReader
+{
+public:
+    DialogConfigReader()
+        : m_config{dialogConfigGroup()}
+    {
+    }
+
+    QStringList patternList() const
+    {
+        return m_config.readEntry("LastSearchItems", QStringList{});
+    }
+    int templateIndex() const
+    {
+        return m_config.readEntry("LastUsedTemplateIndex", 0);
+    }
+    QStringList templateStringList() const
+    {
+        return m_config.readEntry("LastUsedTemplateString", template_str());
+    }
+    QStringList replacementTemplateStringList() const
+    {
+        return m_config.readEntry("LastUsedReplacementTemplateString", repl_template());
+    }
+    bool isRegex() const
+    {
+        return m_config.readEntry("regexp", false);
+    }
+    bool isCaseSensitive() const
+    {
+        return m_config.readEntry("case_sens", true);
+    }
+    QStringList searchPathsList(const GrepViewPlugin& plugin) const
+    {
+        const bool isAnyProjectOpen = plugin.core()->projectController()->projectCount() != 0;
+        return m_config.readEntry("SearchPaths",
+                                  QStringList{isAnyProjectOpen ? allOpenProjectsString() : QDir::homePath()});
+    }
+    int depth() const
+    {
+        return m_config.readEntry("depth", -1);
+    }
+    bool limitToProjectFiles() const
+    {
+        return m_config.readEntry("search_project_files", true);
+    }
+    QStringList filePatternsList() const
+    {
+        return m_config.readEntry("file_patterns", filepatterns());
+    }
+    QStringList excludePatternsList() const
+    {
+        return m_config.readEntry("exclude_patterns", excludepatterns());
+    }
+
+private:
+    KConfigGroup m_config;
+};
+
+QString searchTemplateFromTemplateString(const QString& templateString)
+{
+    return templateString.isEmpty() ? QStringLiteral("%s") : templateString;
+}
+
 ///Separator used to separate search paths.
 inline QString pathsSeparator() { return (QStringLiteral(";")); }
 
@@ -205,15 +269,15 @@ GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget
     connect(searchButton, &QPushButton::clicked, this, &GrepDialog::startSearch);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &GrepDialog::reject);
 
-    const auto cg = dialogConfigGroup();
+    const DialogConfigReader configReader;
 
-    patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
+    patternCombo->addItems(configReader.patternList());
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
     patternCombo->setCompleter(nullptr);
 
     templateTypeCombo->addItems(template_desc());
-    templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
-    templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str()) );
+    templateTypeCombo->setCurrentIndex(configReader.templateIndex());
+    templateEdit->addItems(configReader.templateStringList());
     templateEdit->setEditable(true);
     templateEdit->setCompletionMode(KCompletion::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
@@ -221,7 +285,7 @@ GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget
             comp, QOverload<const QString&>::of(&KCompletion::addItem));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
-    replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template()) );
+    replacementTemplateEdit->addItems(configReader.replacementTemplateStringList());
     replacementTemplateEdit->setEditable(true);
     replacementTemplateEdit->setCompletionMode(KCompletion::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
@@ -230,26 +294,23 @@ GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget
     for(int i=0; i<replacementTemplateEdit->count(); i++)
         comp->addItem(replacementTemplateEdit->itemText(i));
 
-    regexCheck->setChecked(cg.readEntry("regexp", false ));
+    regexCheck->setChecked(configReader.isRegex());
 
-    caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
+    caseSensitiveCheck->setChecked(configReader.isCaseSensitive());
 
     searchPaths->setCompletionObject(new KUrlCompletion());
     searchPaths->setAutoDeleteCompletionObject(true);
-
-    QList<IProject*> projects = m_plugin->core()->projectController()->projects();
-
-    searchPaths->addItems(cg.readEntry("SearchPaths", QStringList(!projects.isEmpty() ? allOpenProjectsString() : QDir::homePath() ) ));
+    searchPaths->addItems(configReader.searchPathsList(*m_plugin));
     searchPaths->setInsertPolicy(QComboBox::InsertAtTop);
 
     syncButton->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     syncButton->setMenu(createSyncButtonMenu());
 
-    depthSpin->setValue(cg.readEntry("depth", -1));
-    limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
+    depthSpin->setValue(configReader.depth());
+    limitToProjectCheck->setChecked(configReader.limitToProjectFiles());
 
-    filesCombo->addItems(cg.readEntry("file_patterns", filepatterns()));
-    excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns()) );
+    filesCombo->addItems(configReader.filePatternsList());
+    excludeCombo->addItems(configReader.excludePatternsList());
 
     connect(templateTypeCombo, QOverload<int>::of(&KComboBox::activated),
             this, &GrepDialog::templateTypeComboActivated);
@@ -348,6 +409,28 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
 GrepDialog::~GrepDialog()
 {
+}
+
+void GrepDialog::setLastUsedSettings()
+{
+    Q_ASSERT_X(!m_show, Q_FUNC_INFO, "Precondition");
+
+    const auto currentItem = [](const QStringList& itemList) {
+        return itemList.value(0); // the first item (if any) in the list stored in config is current
+    };
+
+    const DialogConfigReader configReader;
+
+    m_settings.pattern = currentItem(configReader.patternList());
+    m_settings.searchTemplate = searchTemplateFromTemplateString(currentItem(configReader.templateStringList()));
+    m_settings.replacementTemplate = currentItem(configReader.replacementTemplateStringList());
+    m_settings.regexp = configReader.isRegex();
+    m_settings.caseSensitive = configReader.isCaseSensitive();
+    m_settings.searchPaths = currentItem(configReader.searchPathsList(*m_plugin));
+    m_settings.depth = configReader.depth();
+    m_settings.projectFilesOnly = configReader.limitToProjectFiles() && directoriesInProject(m_settings.searchPaths);
+    m_settings.files = currentItem(configReader.filePatternsList());
+    m_settings.exclude = currentItem(configReader.excludePatternsList());
 }
 
 void GrepDialog::setVisible(bool visible)
@@ -568,7 +651,8 @@ void GrepDialog::startSearch()
 
     m_plugin->rememberSearchDirectory(descriptionOrUrl);
 
-    // if m_show is false, the dialog is closed somewhere else
+    // If m_show is false, the dialog is closed somewhere else,
+    // or not closed but still destroyed via deleteLater() in GrepViewPlugin::showDialog().
     if (m_show)
         close();
 }
@@ -583,7 +667,7 @@ void GrepDialog::updateSettings()
     m_settings.depth = depthSpin->value();
 
     m_settings.pattern = patternCombo->currentText();
-    m_settings.searchTemplate = templateEdit->currentText().isEmpty() ? QStringLiteral("%s") : templateEdit->currentText();
+    m_settings.searchTemplate = searchTemplateFromTemplateString(templateEdit->currentText());
     m_settings.replacementTemplate = replacementTemplateEdit->currentText();
     m_settings.files = filesCombo->currentText();
     m_settings.exclude = excludeCombo->currentText();

@@ -30,6 +30,10 @@ public:
                         bool show = true);
     ~GrepDialog() override;
 
+    /// Read last used settings from config.
+    /// @pre @c show == @c false has been passed to the constructor.
+    void setLastUsedSettings();
+
     void setPattern(const QString& pattern);
 
     ///Rerun all grep jobs from a list of settings, called by GrepOutputView

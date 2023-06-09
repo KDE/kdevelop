@@ -169,6 +169,11 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
     auto* const dlg = new GrepDialog(this, nullptr, core()->uiController()->activeMainWindow(), show);
     m_currentDialogs << dlg;
 
+    if (!show) {
+        // The UI is uninitialized, so the settings must be read from config.
+        dlg->setLastUsedSettings();
+    }
+
     if(!pattern.isEmpty())
     {
         dlg->setPattern(pattern);
