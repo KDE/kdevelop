@@ -254,6 +254,8 @@ GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget
     directorySelector->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );
 
+    Q_ASSERT(searchPaths->lineEdit());
+    connect(searchPaths->lineEdit(), &QLineEdit::editingFinished, this, &GrepDialog::updateLimitToProjectEnabled);
     updateLimitToProjectEnabled();
 }
 
