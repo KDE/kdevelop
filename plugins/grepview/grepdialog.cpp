@@ -253,6 +253,8 @@ GrepDialog::GrepDialog(GrepViewPlugin* plugin, GrepOutputView* toolView, QWidget
 
     directorySelector->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );
+
+    updateLimitToProjectEnabled();
 }
 
 void GrepDialog::selectDirectoryDialog()
@@ -372,26 +374,13 @@ void GrepDialog::templateTypeComboActivated(int index)
     replacementTemplateEdit->setCurrentItem( repl_template().at(index), true );
 }
 
-void GrepDialog::setSettings(const GrepJobSettings& settings)
+void GrepDialog::setPattern(const QString& pattern)
 {
     if (m_show) {
-        patternCombo->setEditText(settings.pattern);
-        patternComboEditTextChanged(settings.pattern);
+        patternCombo->setEditText(pattern);
+        patternComboEditTextChanged(pattern);
     }
-    m_settings.pattern = settings.pattern;
-
-    if (m_show) {
-        limitToProjectCheck->setEnabled(settings.projectFilesOnly);
-        limitToProjectLabel->setEnabled(settings.projectFilesOnly);
-    }
-    m_settings.projectFilesOnly = settings.projectFilesOnly;
-
-    // Note: everything else is set by a user
-}
-
-GrepJobSettings GrepDialog::settings() const
-{
-    return m_settings;
+    m_settings.pattern = pattern;
 }
 
 void GrepDialog::historySearch(QVector<GrepJobSettings> &settingsHistory)
@@ -410,27 +399,31 @@ void GrepDialog::historySearch(QVector<GrepJobSettings> &settingsHistory)
 
 void GrepDialog::setSearchLocations(const QString& dir)
 {
-    if (!dir.isEmpty()) {
-        if (m_show) {
-            if (QDir::isAbsolutePath(dir)) {
-                static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir( QUrl::fromLocalFile(dir) );
-            }
-
-            if (searchPaths->contains(dir)) {
-                searchPaths->removeItem(searchPaths->findText(dir));
-            }
-
-            searchPaths->insertItem(0, dir);
-            searchPaths->setCurrentItem(dir);
-
-            if (searchPaths->count() > pathsMaxCount) {
-                searchPaths->removeItem(searchPaths->count() - 1);
-            }
-        } else {
-            m_settings.searchPaths = dir;
-        }
+    if (dir.isEmpty()) {
+        return; // ignore an attempt to set invalid empty search location
     }
-    m_settings.projectFilesOnly = directoriesInProject(dir);
+
+    if (!m_show) {
+        m_settings.searchPaths = dir;
+        return;
+    }
+
+    if (QDir::isAbsolutePath(dir)) {
+        static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir(QUrl::fromLocalFile(dir));
+    }
+
+    if (searchPaths->contains(dir)) {
+        searchPaths->removeItem(searchPaths->findText(dir));
+    }
+
+    searchPaths->insertItem(0, dir);
+    searchPaths->setCurrentItem(dir);
+
+    if (searchPaths->count() > pathsMaxCount) {
+        searchPaths->removeItem(searchPaths->count() - 1);
+    }
+
+    updateLimitToProjectEnabled();
 }
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
@@ -571,8 +564,7 @@ void GrepDialog::startSearch()
 
 void GrepDialog::updateSettings()
 {
-    if (limitToProjectCheck->isEnabled())
-        m_settings.projectFilesOnly = limitToProjectCheck->isChecked();
+    m_settings.projectFilesOnly = limitToProjectCheck->isEnabled() && limitToProjectCheck->isChecked();
 
     m_settings.caseSensitive = caseSensitiveCheck->isChecked();
     m_settings.regexp = regexCheck->isChecked();
@@ -586,6 +578,14 @@ void GrepDialog::updateSettings()
     m_settings.exclude = excludeCombo->currentText();
 
     m_settings.searchPaths = searchPaths->currentText();
+}
+
+void GrepDialog::updateLimitToProjectEnabled()
+{
+    Q_ASSERT_X(m_show, Q_FUNC_INFO, "The UI must be initialized.");
+    const bool enabled = directoriesInProject(searchPaths->currentText());
+    limitToProjectLabel->setEnabled(enabled);
+    limitToProjectCheck->setEnabled(enabled);
 }
 
 #include "moc_grepdialog.cpp"

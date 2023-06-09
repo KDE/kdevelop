@@ -30,8 +30,8 @@ public:
                         bool show = true);
     ~GrepDialog() override;
 
-    void setSettings(const GrepJobSettings &settings);
-    GrepJobSettings settings() const;
+    void setPattern(const QString& pattern);
+
     ///Rerun all grep jobs from a list of settings, called by GrepOutputView
     void historySearch(QVector<GrepJobSettings> &settingsHistory);
 
@@ -71,6 +71,8 @@ private:
     bool isPartOfChoice(const QUrl& url) const;
     ///Checks what a user has entered into the dialog and saves the data in m_settings
     void updateSettings();
+    /// Enables/disables limit-to-project UI depending on current search paths.
+    void updateLimitToProjectEnabled();
 
     GrepViewPlugin * m_plugin;
     GrepOutputView* const m_toolView;

@@ -36,6 +36,8 @@
 #include <util/path.h>
 #include <language/interfaces/editorcontext.h>
 
+#include <utility>
+
 static QString patternFromSelection(const KDevelop::IDocument* doc)
 {
     if (!doc)
@@ -167,19 +169,15 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
     auto* const dlg = new GrepDialog(this, nullptr, core()->uiController()->activeMainWindow(), show);
     m_currentDialogs << dlg;
 
-    GrepJobSettings dlgSettings = dlg->settings();
-
     if(!pattern.isEmpty())
     {
-        dlgSettings.pattern = pattern;
-        dlg->setSettings(dlgSettings);
+        dlg->setPattern(pattern);
     }
     else if(!setLastUsed)
     {
         QString pattern = patternFromSelection(core()->documentController()->activeDocument());
         if (!pattern.isEmpty()) {
-            dlgSettings.pattern = pattern;
-            dlg->setSettings(dlgSettings);
+            dlg->setPattern(std::move(pattern));
         }
     }
 
