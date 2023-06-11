@@ -79,7 +79,6 @@ int skipRedundantWhiteSpace(const QString& context, const QString& text, int tab
         ++textWhitespaceEnd;
 
     QString contextWhiteSpace = context.mid(contextPosition);
-    contextPosition = 0;
     QString textWhiteSpace = text.left(textWhitespaceEnd);
 
     // Step 1: Remove redundant newlines
@@ -87,7 +86,6 @@ int skipRedundantWhiteSpace(const QString& context, const QString& text, int tab
         int contextOffset = contextWhiteSpace.indexOf(QLatin1Char('\n')) + 1;
         int textOffset = textWhiteSpace.indexOf(QLatin1Char('\n')) + 1;
 
-        contextPosition += contextOffset;
         contextWhiteSpace.remove(0, contextOffset);
 
         textPosition += textOffset;
