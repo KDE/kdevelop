@@ -8,7 +8,10 @@
 #define KDEVPLATFORM_FORMATTINGHELPERS_H
 
 #include "utilexport.h"
-#include <QString>
+
+#include <QStringView>
+
+class QString;
 
 namespace KDevelop {
 /**
@@ -26,9 +29,9 @@ namespace KDevelop {
  * @return The re-formatted version of @p text
  * */
 KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& text,
-                                                                const QString& leftContext, const QString& rightContext,
+                                                                QStringView leftContext, QStringView rightContext,
                                                                 int tabWidth = 4,
-                                                                const QString& fuzzyCharacters = QStringLiteral( "{}()/*\\\"" ));
+                                                                QStringView fuzzyCharacters = u"{}()/*\\\"");
 }
 
 #endif // KDEVPLATFORM_FORMATTINGHELPERS_H

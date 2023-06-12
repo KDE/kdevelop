@@ -9,12 +9,13 @@
 #include "debug.h"
 
 #include <QString>
+#include <QStringView>
 
 namespace KDevelop {
 
 ///Matches the given prefix to the given text, ignoring all whitespace
 ///Returns -1 if mismatched, else the position in @p text where the @p prefix match ends
-int matchPrefixIgnoringWhitespace(const QString& text, const QString& prefix, const QString& fuzzyCharacters)
+int matchPrefixIgnoringWhitespace(QStringView text, QStringView prefix, QStringView fuzzyCharacters)
 {
     int prefixPos = 0;
     int textPos = 0;
@@ -51,7 +52,7 @@ skipWhiteSpace:
     return textPos;
 }
 
-static QString reverse(const QString& str)
+static QString reverse(QStringView str)
 {
     QString ret;
     ret.reserve(str.length());
@@ -62,7 +63,7 @@ static QString reverse(const QString& str)
 }
 
 // Returns the text start position with all whitespace that is redundant in the given context skipped
-int skipRedundantWhiteSpace(const QString& context, const QString& text, int tabWidth)
+int skipRedundantWhiteSpace(QStringView context, QStringView text, int tabWidth)
 {
     if (context.isEmpty() || !context[context.size() - 1].isSpace() || text.isEmpty() || !text[0].isSpace())
         return 0;
@@ -78,18 +79,18 @@ int skipRedundantWhiteSpace(const QString& context, const QString& text, int tab
     while (textWhitespaceEnd < text.size() && text[textWhitespaceEnd].isSpace())
         ++textWhitespaceEnd;
 
-    QString contextWhiteSpace = context.mid(contextPosition);
-    QString textWhiteSpace = text.left(textWhitespaceEnd);
+    auto contextWhiteSpace = context.mid(contextPosition);
+    auto textWhiteSpace = text.left(textWhitespaceEnd);
 
     // Step 1: Remove redundant newlines
     while (contextWhiteSpace.contains(QLatin1Char('\n')) && textWhiteSpace.contains(QLatin1Char('\n'))) {
         int contextOffset = contextWhiteSpace.indexOf(QLatin1Char('\n')) + 1;
         int textOffset = textWhiteSpace.indexOf(QLatin1Char('\n')) + 1;
 
-        contextWhiteSpace.remove(0, contextOffset);
+        contextWhiteSpace = contextWhiteSpace.mid(contextOffset);
 
         textPosition += textOffset;
-        textWhiteSpace.remove(0, textOffset);
+        textWhiteSpace = textWhiteSpace.mid(textOffset);
     }
 
     int contextOffset = 0;
@@ -121,13 +122,18 @@ int skipRedundantWhiteSpace(const QString& context, const QString& text, int tab
 }
 
 QString extractFormattedTextFromContext(const QString& _formattedMergedText, const QString& text,
-                                        const QString& leftContext, const QString& rightContext, int tabWidth,
-                                        const QString& fuzzyCharacters)
+                                        QStringView leftContext, QStringView rightContext, int tabWidth,
+                                        QStringView fuzzyCharacters)
 {
-    QString formattedMergedText = _formattedMergedText;
+    if (leftContext.isEmpty() && rightContext.isEmpty()) {
+        return _formattedMergedText; // fast path, nothing to do
+    }
+
+    QStringView formattedMergedText = _formattedMergedText;
     //Now remove "leftContext" and "rightContext" from the sides
+
     if (!leftContext.isEmpty()) {
-        int endOfLeftContext = matchPrefixIgnoringWhitespace(formattedMergedText, leftContext, QString());
+        int endOfLeftContext = matchPrefixIgnoringWhitespace(formattedMergedText, leftContext, QStringView{});
         if (endOfLeftContext == -1) {
             // Try 2: Ignore the fuzzy characters while matching
             endOfLeftContext = matchPrefixIgnoringWhitespace(formattedMergedText, leftContext, fuzzyCharacters);
@@ -150,7 +156,7 @@ QString extractFormattedTextFromContext(const QString& _formattedMergedText, con
     }
 
     if (!rightContext.isEmpty()) {
-        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, QString());
+        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, QStringView{});
         if (endOfText == -1) {
             // Try 2: Ignore the fuzzy characters while matching
             endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, fuzzyCharacters);
@@ -172,7 +178,7 @@ QString extractFormattedTextFromContext(const QString& _formattedMergedText, con
         formattedMergedText.chop(skip);
     }
 
-    return formattedMergedText;
+    return formattedMergedText.toString();
 }
 
 }
