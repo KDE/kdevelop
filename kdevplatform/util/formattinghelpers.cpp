@@ -150,16 +150,21 @@ QString extractFormattedTextFromContext(const QString& _formattedMergedText, con
     }
 
     if (!rightContext.isEmpty()) {
-        //Add a whitespace behind the text for matching, so that we definitely capture all trailing whitespace
-        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text + QLatin1Char(' '), QString());
+        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, QString());
         if (endOfText == -1) {
             // Try 2: Ignore the fuzzy characters while matching
-            endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text + QLatin1Char(' '), fuzzyCharacters);
+            endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, fuzzyCharacters);
             if (endOfText == -1) {
                 qCWarning(UTIL) << "problem matching the text while formatting";
                 return text;
             }
         }
+
+        // Include all trailing whitespace
+        while (endOfText < formattedMergedText.size() && formattedMergedText.at(endOfText).isSpace()) {
+            ++endOfText;
+        }
+
         formattedMergedText.truncate(endOfText);
 
         int skip = skipRedundantWhiteSpace(reverse(rightContext), reverse(formattedMergedText), tabWidth);
