@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2019 Bernd Buschinski <b.buschinski@gmail.com>
+    SPDX-FileCopyrightText: 2023 Igor Kushnir <igorkuo@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
 */
@@ -133,6 +134,90 @@ void TestFormattingHelpers::testFuzzyMatching_data()
         << QStringLiteral("")
         << QStringLiteral("\n\nvoid foo() {\nstring a = \"very long\";\n}")
         << expectedOutput;
+
+    QString formattedMergedText;
+    QString leftContext;
+    QString rightContext;
+    const auto addNewRow = [&](const char* dataTag) {
+        QTest::newRow(dataTag) << formattedMergedText << selectedText << leftContext << rightContext << expectedOutput;
+    };
+
+    // The following 3 test data rows contain adapted code samples from https://bugs.kde.org/show_bug.cgi?id=365437
+    // In all these tests an inserted brace is at the left-context-text boundary. extractFormattedTextFromContext()
+    // gives up formatting, prints a warning and returns selectedText. Ideally it would figure out that the brace
+    // belongs to the left context and return formatted selectedText (without the redundant brace complained about in
+    // the bug report of course). But this ideal requires non-trivial implementation and could even worsen a good enough
+    // existing formatting, because whitespace at context-text boundaries depends on whether braces are present.
+
+    leftContext = R"(
+	if (param) {
+		if (string.isEmpty())
+			)";
+    selectedText = "stat";
+    rightContext = R"( = true;
+		else
+			stat = false;
+	}
+)";
+    formattedMergedText = R"(
+    if ( param ) {
+        if ( string.isEmpty() ) {
+            stat = true;
+        } else {
+            stat = false;
+        }
+    }
+)";
+    expectedOutput = selectedText;
+    addNewRow("insert-braces-around-renamed-variable");
+
+    leftContext = R"(
+    if (condition)
+        value = 5;
+    else
+        value = -1;
+    )";
+    selectedText = "global_renamed_member";
+    rightContext = " += value;";
+    formattedMergedText = R"(
+    if ( condition ) {
+        value = 5;
+    } else {
+        value = -1;
+    }
+    global_renamed_member += value;)";
+    expectedOutput = selectedText;
+    addNewRow("insert-braces-before-renamed-variable");
+
+    leftContext = R"(
+			if (condition2) {
+				if (! condition3)
+					one_line_of_code;
+
+//				one_line_of_code;
+			}
+			else {
+				if (condition4)
+					one_line_of_code;
+			})";
+    selectedText = R"(
+			some_more_code;)";
+    rightContext = QString();
+    formattedMergedText = R"(
+    if ( condition2 ) {
+        if ( ! condition3 ) {
+            one_line_of_code;
+        }
+
+//				one_line_of_code;
+    } else {
+        if ( condition4 ) {
+            one_line_of_code;
+        }
+    }
+    some_more_code;)";
+    expectedOutput = selectedText;
+    addNewRow("insert-braces-before-final-closing-brace-in-left-context");
 }
 
 #include "moc_test_formattinghelpers.cpp"
