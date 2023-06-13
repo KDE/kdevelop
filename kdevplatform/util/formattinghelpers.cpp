@@ -133,14 +133,10 @@ QString extractFormattedTextFromContext(const QString& _formattedMergedText, con
     //Now remove "leftContext" and "rightContext" from the sides
 
     if (!leftContext.isEmpty()) {
-        int endOfLeftContext = matchPrefixIgnoringWhitespace(formattedMergedText, leftContext, QStringView{});
+        int endOfLeftContext = matchPrefixIgnoringWhitespace(formattedMergedText, leftContext, fuzzyCharacters);
         if (endOfLeftContext == -1) {
-            // Try 2: Ignore the fuzzy characters while matching
-            endOfLeftContext = matchPrefixIgnoringWhitespace(formattedMergedText, leftContext, fuzzyCharacters);
-            if (endOfLeftContext == -1) {
-                qCWarning(UTIL) << "problem matching the left context";
-                return text;
-            }
+            qCWarning(UTIL) << "problem matching the left context";
+            return text;
         }
 
         int startOfWhiteSpace = endOfLeftContext;
@@ -156,14 +152,10 @@ QString extractFormattedTextFromContext(const QString& _formattedMergedText, con
     }
 
     if (!rightContext.isEmpty()) {
-        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, QStringView{});
+        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, fuzzyCharacters);
         if (endOfText == -1) {
-            // Try 2: Ignore the fuzzy characters while matching
-            endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text, fuzzyCharacters);
-            if (endOfText == -1) {
-                qCWarning(UTIL) << "problem matching the text while formatting";
-                return text;
-            }
+            qCWarning(UTIL) << "problem matching the text while formatting";
+            return text;
         }
 
         // Include all trailing whitespace
