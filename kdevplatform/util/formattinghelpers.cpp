@@ -139,12 +139,12 @@ QString extractFormattedTextFromContext(const QString& _formattedMergedText, con
             return text;
         }
 
-        int startOfWhiteSpace = endOfLeftContext;
         // Include all leading whitespace
-        while (startOfWhiteSpace > 0 && formattedMergedText[startOfWhiteSpace - 1].isSpace())
-            --startOfWhiteSpace;
+        while (endOfLeftContext > 0 && formattedMergedText[endOfLeftContext - 1].isSpace()) {
+            --endOfLeftContext;
+        }
 
-        formattedMergedText = formattedMergedText.mid(startOfWhiteSpace);
+        formattedMergedText = formattedMergedText.mid(endOfLeftContext);
 
         int skip = skipRedundantWhiteSpace(leftContext, formattedMergedText, tabWidth);
 
