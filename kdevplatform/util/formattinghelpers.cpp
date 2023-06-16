@@ -117,8 +117,11 @@ int skipRedundantWhiteSpace(QStringView context, QStringView text, int tabWidth)
             }
         }
     }
+    textPosition += textOffset;
 
-    return textPosition + textOffset;
+    Q_ASSERT(textPosition >= 0);
+    Q_ASSERT(textPosition <= text.size());
+    return textPosition;
 }
 
 QString extractFormattedTextFromContext(const QString& _formattedMergedText, const QString& text,
