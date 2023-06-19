@@ -218,6 +218,53 @@ void TestFormattingHelpers::testFuzzyMatching_data()
     some_more_code;)";
     expectedOutput = selectedText;
     addNewRow("insert-braces-before-final-closing-brace-in-left-context");
+
+    leftContext = R"(
+    if (x)
+    {
+        ++z;
+    }
+    )";
+    selectedText = "//comment";
+    rightContext = "\n";
+    formattedMergedText = R"(
+    if (x)
+        ++z;
+    // comment
+)";
+    expectedOutput = "// comment";
+    addNewRow("remove-braces-in-prefix-before-comment-in-text");
+
+    for (auto* str : {&selectedText, &formattedMergedText, &expectedOutput}) {
+        str->replace("comment", "}");
+    }
+    addNewRow("remove-braces-in-prefix-before-commented-out-closing-brace-in-text");
+
+    leftContext = R"(
+    if (x)
+    {)";
+    selectedText = R"(
+        //c
+        ;)";
+    rightContext = "\n}";
+    formattedMergedText = R"(
+    if (x)
+        // c
+        ;)";
+    expectedOutput = R"(
+        // c
+        ;)";
+    addNewRow("remove-braces-around-comment-text");
+
+    for (auto* str : {&selectedText, &formattedMergedText, &expectedOutput}) {
+        str->replace('c', '}');
+    }
+    addNewRow("remove-braces-around-commented-out-closing-brace-text");
+
+    for (auto* str : {&selectedText, &formattedMergedText, &expectedOutput}) {
+        str->replace('}', '{');
+    }
+    addNewRow("remove-braces-around-commented-out-opening-brace-text");
 }
 
 #include "moc_test_formattinghelpers.cpp"

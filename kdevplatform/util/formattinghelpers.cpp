@@ -604,10 +604,11 @@ private:
 
     /**
      * Implements the fuzzy prefix and fuzzy text characters case of skipToMatchingPositions()
-     * by selecting the likeliest of the 3 possibilities:
+     * by selecting the likeliest of the 4 possibilities:
      * 1) the formatter kept *m_prefixFirst but inserted fuzzy characters before it in text;
      * 2) the formatter kept *m_textFirst but removed fuzzy characters before it in prefix;
-     * 3) the formatter replaced *m_prefixFirst with *m_textFirst.
+     * 3) the formatter replaced *m_prefixFirst with *m_textFirst;
+     * 4) the formatter removed all (fuzzy and whitespace) characters in the range [m_prefixFirst, m_prefixLast).
      */
     bool selectFuzzyInsertionRemovalOrReplacement()
     {
@@ -622,7 +623,56 @@ private:
         auto insertionResult = findUntilNeitherFuzzyNorWhitespace(m_textFirst, m_textLast, *m_prefixFirst);
         auto removalResult = findUntilNeitherFuzzyNorWhitespace(m_prefixFirst, m_prefixLast, *m_textFirst);
 
-        if (!insertionResult.found && !removalResult.found) {
+        if (removalResult.location == m_prefixLast) {
+            Q_ASSERT(!removalResult.found);
+            // The formatter could have removed all remaining characters in prefix (the 4th possibility). When
+            // removalResult.found is true, this possibility is strictly worse than the one stored in removalResult
+            // (the 2nd possibility). In this scope removalResult.found is false, therefore, the 2nd possibility is
+            // unavailable and the 4th possibility is essentially stored in removalResult instead.
+
+            if (!insertionResult.found) {
+                // The formatter must have removed *m_prefixFirst, because insertionResult.found is false, and so the
+                // 1st possibility is unavailable. Choose among the (roughly) 3rd and the 4th possibilities like this:
+                // 1. Skip fuzzy characters in prefix, starting from *m_prefixFirst.
+                // 2. When only one fuzzy character absent from the range
+                //    [m_textFirst, insertionResult.location) remains in prefix (the loop condition),
+                //    leave insertionResult.found == false and thus select the 4th possibility.
+                // 3. When the findUntilNeitherFuzzyNorWhitespace() call below finds a prefix's fuzzy
+                //    character in text, insertionResult.found is set to true and the code below chooses
+                //    between the 3rd and the 4th possibility (with an increased value of m_prefixFirst).
+
+                // skippedFuzzySet is a set of skipped fuzzy characters in prefix that are absent from
+                // the range [m_textFirst, insertionResult.location). This set is used only for optimization:
+                // to avoid searching for the same fuzzy character in text more than once.
+                QVarLengthArray<QChar, 4> skippedFuzzySet{*m_prefixFirst};
+                while (--removalResult.fuzzyCount > 0) {
+                    const auto result = m_fuzzyMatcher.add(&*m_prefixFirst, /*isInserted=*/false);
+                    if (result == FuzzyMatchResult::MatchingFailed) {
+                        setResult(HasMatched::No);
+                        return false;
+                    }
+                    Q_ASSERT(result == FuzzyMatchResult::Fuzzy);
+                    ++m_prefixFirst;
+
+                    skipWhitespace(m_prefixFirst, m_prefixLast);
+                    Q_ASSERT_X(m_prefixFirst != m_prefixLast, Q_FUNC_INFO, "Wrong value of removalResult.fuzzyCount?");
+                    Q_ASSERT(isFuzzy(*m_prefixFirst));
+
+                    if (skippedFuzzySet.indexOf(*m_prefixFirst) != -1) {
+                        continue; // do not fruitlessly search for the same fuzzy character in text again
+                    }
+
+                    insertionResult = findUntilNeitherFuzzyNorWhitespace(m_textFirst, m_textLast, *m_prefixFirst);
+                    if (insertionResult.found) {
+                        break; // let the code below choose between valid insertion and valid removal
+                    }
+                    skippedFuzzySet.push_back(*m_prefixFirst);
+                }
+            }
+
+            // Mark removalResult as valid in order to let the code below consider the 4th possibility stored in it.
+            removalResult.found = true;
+        } else if (!insertionResult.found && !removalResult.found) {
             // *m_textFirst replaces *m_prefixFirst
             bool isInserted = false;
             for (auto it : {m_prefixFirst, m_textFirst}) {
@@ -667,8 +717,11 @@ private:
         Q_ASSERT(result == FuzzyMatchResult::Fuzzy);
         Q_ASSERT(*first == last);
 
-        Q_ASSERT(m_prefixFirst != m_prefixLast);
         Q_ASSERT(m_textFirst != m_textLast);
+        if (m_prefixFirst == m_prefixLast) {
+            setResult(HasMatched::Yes);
+            return false;
+        }
         Q_ASSERT(*m_prefixFirst == *m_textFirst);
         return true;
     }
