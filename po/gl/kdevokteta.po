@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Xosé <xosecalvo@gmail.com>, 2012, 2013.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-20 02:58+0000\n"
-"PO-Revision-Date: 2020-02-16 09:30+0100\n"
+"PO-Revision-Date: 2023-06-18 13:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (permission)
 #: kdevokteta.rc:10
@@ -49,18 +49,16 @@ msgid "The document \"%1\" has unsaved changes. Would you like to save them?"
 msgstr "O documento «%1» ten cambios sen gardar. Desexa gardalos?"
 
 #: oktetadocument.cpp:126
-#, fuzzy, kde-format
-#| msgid "Close Document"
+#, kde-format
 msgctxt "@title:window"
 msgid "Close Document"
 msgstr "Pechar o documento"
 
 #: oktetaplugin.cpp:92
-#, fuzzy, kde-format
-#| msgid "Hex Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Hex Editor"
-msgstr "Editor Hexadecimal"
+msgstr "Editor de binario"
 
 #: oktetawidget.cpp:138
 #, kde-format

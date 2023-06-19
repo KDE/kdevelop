@@ -3,14 +3,14 @@
 # Xosé <xosecalvo@gmail.com>, 2012, 2013.
 # Marce Villarino <mvillarino@kde-espana.org>, 2013.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-28 00:56+0000\n"
-"PO-Revision-Date: 2019-10-27 07:41+0100\n"
+"PO-Revision-Date: 2023-06-18 18:33+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -18,46 +18,40 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: openwithplugin.cpp:139
-#, fuzzy, kde-format
-#| msgid "Other..."
+#, kde-format
 msgctxt "@item:menu"
 msgid "Other..."
-msgstr "Outro…"
+msgstr "Outra…"
 
 #: openwithplugin.cpp:150
-#, fuzzy, kde-format
-#| msgid "Open With"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Open With"
 msgstr "Abrir con"
 
 #: openwithplugin.cpp:155
-#, fuzzy, kde-format
-#| msgid "Embedded Editors"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Embedded Editors"
 msgstr "Editores incorporados"
 
 #: openwithplugin.cpp:159
-#, fuzzy, kde-format
-#| msgid "External Applications"
+#, kde-format
 msgctxt "@title:menu"
 msgid "External Applications"
 msgstr "Aplicacións externas"
 
 #: openwithplugin.cpp:166
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Open"
 msgstr "Abrir"
 
 #: openwithplugin.cpp:186
-#, fuzzy, kde-format
-#| msgid "Default Editor"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Default Editor"
 msgstr "Editor por omisión"
@@ -69,24 +63,22 @@ msgid "Do you want to open all '%1' files by default with %2?"
 msgstr "Quere abrir todos os ficheiros «%1» por omisión con %2?"
 
 #: openwithplugin.cpp:274
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@title:window"
 msgid "Set as Default?"
-msgstr "Estabelecer como predeterminado?"
+msgstr "Facer predeterminada?"
 
 #: openwithplugin.cpp:275
-#, fuzzy, kde-format
-#| msgid "Set as default?"
+#, kde-format
 msgctxt "@action:button"
 msgid "Set as Default"
-msgstr "Estabelecer como predeterminado?"
+msgstr "Facer predeterminada"
 
 #: openwithplugin.cpp:276
 #, kde-format
 msgctxt "@action:button"
 msgid "Do Not Set"
-msgstr ""
+msgstr "Non facer predeterminada"
 
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"
