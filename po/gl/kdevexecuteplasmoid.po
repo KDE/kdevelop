@@ -1,39 +1,39 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Marce Villarino <mvillarino@kde-espana.org>, 2013.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2017-07-29 20:38+0100\n"
+"PO-Revision-Date: 2023-06-18 19:42+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: plasmoidexecutionconfig.cpp:117
-#, fuzzy, kde-format
-#| msgid "Configure Plasmoid Execution"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Plasmoid Execution"
-msgstr "Configurar a execución do plasmoide"
+msgstr "Configurar a execución do trebello"
 
 #: plasmoidexecutionconfig.cpp:127
 #, kde-format
 msgid "Display a plasmoid"
-msgstr "Mostrar un plasmoide"
+msgstr "Amosar un trebello"
 
 #: plasmoidexecutionconfig.cpp:137 plasmoidexecutionconfig.cpp:226
 #, kde-format
 msgid "Plasmoid Launcher"
-msgstr "Iniciador de plasmoides"
+msgstr "Iniciador de trebellos"
 
 #: plasmoidexecutionconfig.cpp:183
 #, kde-format
@@ -41,64 +41,56 @@ msgid "Could not resolve the dependency: %1"
 msgstr "Non se puido satisfacer a dependencia: %1"
 
 #: plasmoidexecutionconfig.cpp:297
-#, fuzzy, kde-format
-#| msgid "Plasmoids"
+#, kde-format
 msgctxt "@title:menu"
 msgid "Plasmoids"
-msgstr "Plasmoides"
+msgstr "Trebellos"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plasmoidexecutionconfig.ui:29
-#, fuzzy, kde-format
-#| msgid "Plasmoid"
+#, kde-format
 msgctxt "@title:group"
 msgid "Plasmoid"
-msgstr "Plasmoide"
+msgstr "Trebello"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasmoidexecutionconfig.ui:35
-#, fuzzy, kde-format
-#| msgid "Path or name:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Path or name:"
 msgstr "Ruta ou nome:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plasmoidexecutionconfig.ui:67
-#, fuzzy, kde-format
-#| msgid "Behavior"
+#, kde-format
 msgctxt "@title:group"
 msgid "Behavior"
 msgstr "Comportamento"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plasmoidexecutionconfig.ui:73
-#, fuzzy, kde-format
-#| msgid "Form factor:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Form factor:"
 msgstr "Forma:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plasmoidexecutionconfig.ui:107
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Theme:"
 msgstr "Tema:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plasmoidexecutionconfig.ui:123
-#, fuzzy, kde-format
-#| msgid "Dependencies"
+#, kde-format
 msgctxt "@title:group"
 msgid "Dependencies"
 msgstr "Dependencias"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plasmoidexecutionconfig.ui:132
-#, fuzzy, kde-format
-#| msgid "&Targets:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "&Targets:"
 msgstr "&Obxectivos:"
@@ -106,7 +98,7 @@ msgstr "&Obxectivos:"
 #: plasmoidexecutionjob.cpp:35
 #, kde-format
 msgid "Plasmoid Viewer"
-msgstr "Visor de plasmoides"
+msgstr "Visor de trebellos"
 
 #: plasmoidexecutionjob.cpp:70
 #, kde-format
@@ -126,7 +118,7 @@ msgstr "*** Rematou ***"
 #: plasmoidexecutionjob.cpp:94
 #, kde-format
 msgid "Plasmoid failed to execute on %1"
-msgstr "Non foi posíbel executar o plasmoide en %1"
+msgstr "Non foi posíbel executar o trebello en %1"
 
 #~ msgid "planar"
 #~ msgstr "planar"
