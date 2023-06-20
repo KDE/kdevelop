@@ -179,7 +179,7 @@ msgid ""
 "Cannot open unknown session %1. See `--list-sessions` switch for available "
 "sessions or use `-n` to create a new one."
 msgstr ""
-"Non foi posíbel abrir a sesión descoñecida %1. Empregue a opción «--list-"
+"Non foi posíbel abrir a sesión descoñecida %1. Use a opción «--list-"
 "sessions» para ver as sesións dispoñíbeis ou use «-n» para crear unha nova."
 
 #: main.cpp:378

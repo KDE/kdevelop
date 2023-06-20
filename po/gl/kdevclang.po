@@ -323,7 +323,7 @@ msgstr "Definido en: %1"
 #: duchain/macronavigationcontext.cpp:72
 #, kde-format
 msgid "Show uses"
-msgstr "Mostrar os usos"
+msgstr "Amosar os usos"
 
 #: duchain/macronavigationcontext.cpp:75
 #, kde-format

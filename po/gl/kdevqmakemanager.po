@@ -1,23 +1,24 @@
 # translation of kdevqmake.po to galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2008.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevqmake\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-09 00:15+0000\n"
-"PO-Revision-Date: 2017-07-29 20:35+0100\n"
+"PO-Revision-Date: 2023-06-19 08:13+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -68,58 +69,51 @@ msgstr "Indique un cartafol de construción."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: qmakebuilddirchooser.ui:23
-#, fuzzy, kde-format
-#| msgid "QMake &executable:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "QMake &executable:"
 msgstr "O &executábel de QMake:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: qmakebuilddirchooser.ui:46
-#, fuzzy, kde-format
-#| msgid "&Build directory:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Build directory:"
 msgstr "&Directorio de construción:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: qmakebuilddirchooser.ui:62
-#, fuzzy, kde-format
-#| msgid "&Install to (target.path):"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "&Install to (target.path):"
 msgstr "&Instalar en (ruta):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: qmakebuilddirchooser.ui:85
-#, fuzzy, kde-format
-#| msgid "Build &type:"
+#, kde-format
 msgctxt "@labal:listbox"
 msgid "Build &type:"
 msgstr "&Tipo de construción:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_buildType)
 #: qmakebuilddirchooser.ui:115
-#, fuzzy, kde-format
-#| msgid "(Use default from .pro file)"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "(Use default from .pro file)"
 msgstr "(Usar o predeterminado do ficheiro «.pro»)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: qmakebuilddirchooser.ui:123
-#, fuzzy, kde-format
-#| msgid "Extra arguments:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Extra arguments:"
 msgstr "Argumentos adicionais:"
 
 #: qmakebuilddirchooserdialog.cpp:22
-#, fuzzy, kde-format
-#| msgid "Configure a build directory"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure a Build Directory"
-msgstr "Configurar un directorio de construción"
+msgstr "Configurar un cartafol de construción"
 
 #: qmakejob.cpp:33
 #, kde-format
@@ -142,8 +136,7 @@ msgid "*** Crashed with return code: %1 ***"
 msgstr "*** Quebrou co código de retorno: %1 ***"
 
 #: qmakemanager.cpp:75
-#, fuzzy, kde-format
-#| msgid "Run QMake"
+#, kde-format
 msgctxt "@action"
 msgid "Run QMake"
 msgstr "Executar QMake"

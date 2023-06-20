@@ -431,7 +431,7 @@ msgid ""
 msgstr ""
 "<b>Árbore da variábeis</b>A árbore de variábeis permite ver os valores das "
 "variábeis locais e expresións arbitrarias.<br />As variábeis locais son "
-"mostradas automaticamente e son actualizadas mentres circula polo programa. "
+"amosadas automaticamente e son actualizadas mentres circula polo programa. "
 "Por cada expresión que insira, pode ou avaliala unha vez, ou "
 "«vixiala» (facer que se actualice automaticamente). As expresións que non se "
 "actualicen automaticamente poden actualizarse manualmente no menú de "
@@ -1048,12 +1048,12 @@ msgstr " Decl.: "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:319
 #, kde-format
 msgid "Show uses"
-msgstr "Mostrar os usos"
+msgstr "Amosar os usos"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:357
 #, kde-format
 msgid "Show documentation for "
-msgstr "Mostrar a documentación sobre "
+msgstr "Amosar a documentación sobre "
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:463
 #, kde-format
@@ -1091,12 +1091,12 @@ msgstr "Anulada en "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:548
 #, kde-format
 msgid "Overriders possible, show all"
-msgstr "Posíbeis anuladores; mostralos todos"
+msgstr "Posíbeis anuladores; amosalos todos"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:549
 #, kde-format
 msgid "More overriders possible, show all"
-msgstr "Máis posíbeis anuladores; mostralos todos"
+msgstr "Máis posíbeis anuladores; amosalos todos"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:559
 #, kde-format
@@ -1106,12 +1106,12 @@ msgstr "Herdada por "
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:574
 #, kde-format
 msgid "Inheriters possible, show all"
-msgstr "Posíbeis herdeiros, mostralos todos"
+msgstr "Posíbeis herdeiros, amosalos todos"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:575
 #, kde-format
 msgid "More inheriters possible, show all"
-msgstr "Máis posíbeis herdeiros, mostralos todos"
+msgstr "Máis posíbeis herdeiros, amosalos todos"
 
 #: language/duchain/navigation/abstractdeclarationnavigationcontext.cpp:782
 #, kde-format
@@ -1235,13 +1235,13 @@ msgid ""
 "(Hold <em>Alt</em> to show. Navigate via arrow keys, activate by pressing "
 "<em>Enter</em>)"
 msgstr ""
-"(Manteña premida <em>Alt</em> para mostrar. Navegue coas teclas de frecha, "
+"(Manteña premida <em>Alt</em> para amosar. Navegue coas teclas de frecha, "
 "active premendo <em>Intro</em>)"
 
 #: language/duchain/navigation/abstractnavigationwidget.cpp:196
 #, kde-format
 msgid "(Hold <em>Alt</em> to show this tooltip)"
-msgstr "(Manteña premida <em>Alt</em> para mostrar esta axuda)"
+msgstr "(Manteña premida <em>Alt</em> para amosar esta axuda)"
 
 #: language/duchain/navigation/problemnavigationcontext.cpp:85
 #, kde-format
@@ -4009,7 +4009,7 @@ msgid ""
 "Running %1 instance (PID: %2) detected, making this one visible instead of "
 "starting a new one"
 msgstr ""
-"Detectouse unha instancia de %1 en execución (PID: %2), mostrarase en vez de "
+"Detectouse unha instancia de %1 en execución (PID: %2), amosarase en vez de "
 "iniciar unha nova"
 
 #: shell/sessionlock.cpp:159
@@ -5325,7 +5325,7 @@ msgid ""
 "%2.\n"
 "Are you sure you want to delete it?"
 msgstr ""
-"O estilo %1 xa se emprega para as linguaxes seguintes:\n"
+"O estilo %1 xa se usa para as linguaxes seguintes:\n"
 "%2.\n"
 "Está seguro de que quere eliminalo?"
 
@@ -5808,12 +5808,12 @@ msgstr "ficheiro ou directorio"
 #: util/duchainify/main.cpp:266
 #, kde-format
 msgid "Show warnings"
-msgstr "Mostrar os avisos"
+msgstr "Amosar os avisos"
 
 #: util/duchainify/main.cpp:268
 #, kde-format
 msgid "Show warnings and debug output"
-msgstr "Mostrar os avisos e a saída de depuración"
+msgstr "Amosar os avisos e a saída de depuración"
 
 #: util/duchainify/main.cpp:270
 #, kde-format
@@ -5834,7 +5834,7 @@ msgstr ""
 #: util/duchainify/main.cpp:276
 #, kde-format
 msgid "Number of threads to use"
-msgstr "Número de fíos que empregar"
+msgstr "Número de fíos que usar"
 
 # skip-rule: normalization-ble
 #: util/duchainify/main.cpp:279
@@ -5852,13 +5852,13 @@ msgstr ""
 #, kde-format
 msgid "Print complete Definition-Use Chain on successful parse"
 msgstr ""
-"Mostrar a cadea de definición e uso completa tras unha análise sen problemas."
+"Amosar a cadea de definición e uso completa tras unha análise sen problemas."
 
 #: util/duchainify/main.cpp:285
 #, kde-format
 msgid "Print complete DUChain Definitions repository on successful parse"
 msgstr ""
-"Mostrar o repositorio Definitions de DUChain completo tras unha análise sen "
+"Amosar o repositorio Definitions de DUChain completo tras unha análise sen "
 "problemas."
 
 # skip-rule: normalization-ble
@@ -5867,14 +5867,14 @@ msgstr ""
 msgid ""
 "Print complete DUChain PersistentSymbolTable repository on successful parse"
 msgstr ""
-"Mostrar o repositorio PersistentSymbolTable de DUChain completo tras unha "
+"Amosar o repositorio PersistentSymbolTable de DUChain completo tras unha "
 "análise sen problemas."
 
 #: util/duchainify/main.cpp:291
 #, kde-format
 msgid "Number defining the maximum depth where declaration details are printed"
 msgstr ""
-"Número que define a profundidade máxima ata a que se mostrar detalles de "
+"Número que define a profundidade máxima ata a que se amosar detalles de "
 "declaracións."
 
 #: util/duchainify/main.cpp:294
@@ -5902,7 +5902,7 @@ msgstr "Perfil"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Use default profile (currently: %1)"
-msgstr "Empregar o perfil predeterminado (actual: %1)"
+msgstr "Usar o perfil predeterminado (actual: %1)"
 
 #: util/environmentselectionmodel.cpp:55
 #, kde-format
@@ -6482,7 +6482,7 @@ msgid ""
 "Cannot display annotations, missing interface KTextEditor::"
 "AnnotationInterface for the editor."
 msgstr ""
-"Non é posíbel mostrar as anotacións; falta a interface KTextEditor::"
+"Non é posíbel amosar as anotacións; falta a interface KTextEditor::"
 "AnnotationInterface do editor."
 
 #: vcs/vcspluginhelper.cpp:435
