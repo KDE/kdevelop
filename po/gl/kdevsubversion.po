@@ -194,7 +194,7 @@ msgstr "Estase a enviar %1"
 #: svninternaljobbase.cpp:151
 #, kde-format
 msgid "Adding %1 using mimetype %2."
-msgstr "Estase a engadir %1 empregando o tipo mime %2."
+msgstr "Estase a engadir %1 usando o tipo mime %2."
 
 #: svninternaljobbase.cpp:153
 #, kde-format

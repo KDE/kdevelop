@@ -60,7 +60,7 @@ msgstr "Forzar a actualización completa"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Which files to display the problems for"
-msgstr "Os ficheiros dos que mostrar os problemas"
+msgstr "Os ficheiros dos que amosar os problemas"
 
 #: problemsview.cpp:53
 #, fuzzy, kde-format
@@ -73,7 +73,7 @@ msgstr "Documento actual"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current document"
-msgstr "Mostrar os problemas do documento actual"
+msgstr "Amosar os problemas do documento actual"
 
 #: problemsview.cpp:57
 #, fuzzy, kde-format
@@ -86,7 +86,7 @@ msgstr "Abrir documentos"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all open documents"
-msgstr "Mostrar os problemas de todos os documentos abertos"
+msgstr "Amosar os problemas de todos os documentos abertos"
 
 #: problemsview.cpp:61
 #, fuzzy, kde-format
@@ -99,7 +99,7 @@ msgstr "Proxecto actual"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in current project"
-msgstr "Mostrar os problemas do proxecto actual"
+msgstr "Amosar os problemas do proxecto actual"
 
 #: problemsview.cpp:65
 #, fuzzy, kde-format
@@ -112,7 +112,7 @@ msgstr "Todos os proxectos"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in all projects"
-msgstr "Mostrar os problemas de todos os proxectos"
+msgstr "Amosar os problemas de todos os proxectos"
 
 #: problemsview.cpp:69
 #, kde-format
@@ -174,13 +174,13 @@ msgstr "Mostrar as importacións"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display problems in imported files"
-msgstr "Mostrar os problemas dos ficheiros importados"
+msgstr "Amosar os problemas dos ficheiros importados"
 
 #: problemsview.cpp:143
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display errors"
-msgstr "Mostrar os erros"
+msgstr "Amosar os erros"
 
 #: problemsview.cpp:145
 #, fuzzy, kde-format
@@ -193,7 +193,7 @@ msgstr "Mostrar os erros"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display warnings"
-msgstr "Mostrar os avisos"
+msgstr "Amosar os avisos"
 
 #: problemsview.cpp:150
 #, fuzzy, kde-format
@@ -206,7 +206,7 @@ msgstr "Mostrar os avisos"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display hints"
-msgstr "Mostrar os consellos"
+msgstr "Amosar os consellos"
 
 #: problemsview.cpp:155
 #, fuzzy, kde-format

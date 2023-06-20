@@ -143,7 +143,7 @@ msgstr ""
 #: debugsession.cpp:281
 #, kde-format
 msgid "<b>You need gdb 7.0.0 or higher.</b><br />You are using: %1"
-msgstr "<b>Precisa o gdb 7.0.0 ou superior.</b><br />Está a empregar: %1"
+msgstr "<b>Precisa o gdb 7.0.0 ou superior.</b><br />Está a usar: %1"
 
 #: debugsession.cpp:294
 #, kde-format

@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kdevelop package.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kdevelop\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2020-02-16 09:30+0100\n"
+"PO-Revision-Date: 2023-06-19 08:22+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,42 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: config/globalconfigpage.cpp:29
-#, fuzzy, kde-format
-#| msgid "Heaptrack"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Heaptrack"
 msgstr "Heaptrack"
 
 #: config/globalconfigpage.cpp:34
-#, fuzzy, kde-format
-#| msgid "Configure Heaptrack Settings"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Configure Heaptrack Settings"
 msgstr "Configurar Heaptrack"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathsGroupBox)
 #: config/globalconfigpage.ui:29
-#, fuzzy, kde-format
-#| msgid "Executables"
+#, kde-format
 msgctxt "@title:group"
 msgid "Executables"
 msgstr "Executábeis"
 
 #. i18n: ectx: property (text), widget (QLabel, heaptrackExecutableLabel)
 #: config/globalconfigpage.ui:35
-#, fuzzy, kde-format
-#| msgid "Heaptrack:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Heaptrack:"
 msgstr "Heaptrack:"
 
 #. i18n: ectx: property (text), widget (QLabel, heaptrackGuiExecutableLabel)
 #: config/globalconfigpage.ui:51
-#, fuzzy, kde-format
-#| msgid "Visualizer:"
+#, kde-format
 msgctxt "@label:chooser"
 msgid "Visualizer:"
 msgstr "Visualizador:"
@@ -61,15 +56,13 @@ msgid "Heaptrack Analysis (%1)"
 msgstr "Análise de Heaptrack (%1)"
 
 #: plugin.cpp:58
-#, fuzzy, kde-format
-#| msgid "Run Heaptrack Analysis"
+#, kde-format
 msgctxt "@action"
 msgid "Run Heaptrack Analysis"
 msgstr "Executar a análise de Heaptrack"
 
 #: plugin.cpp:67
-#, fuzzy, kde-format
-#| msgid "Attach to Process with Heaptrack"
+#, kde-format
 msgctxt "@action"
 msgid "Attach to Process with Heaptrack"
 msgstr "Anexar a un proceso con Heaptrack"
@@ -85,6 +78,8 @@ msgstr ""
 #, kde-format
 msgid "Configure a native application launch to perform Heaptrack analysis on."
 msgstr ""
+"Configurar un inicio de aplicación nativa no que realizar unha análise con "
+"Heaptrack."
 
 #: plugin.cpp:110
 #, kde-format
